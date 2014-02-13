@@ -1,0 +1,4 @@
+iOS Facebook SDK Revision Log
+
+Version				Updated By 				Date
+3.8					Steven Hendrie			19/9/13

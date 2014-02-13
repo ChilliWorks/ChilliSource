@@ -1,0 +1,113 @@
+//
+//  RemoteNotificationSystem.cpp
+//  MoFlow
+//
+//  Created by Robert Henning on 22/01/2014.
+//  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
+//
+
+#include <moFlo/Platform/iOS/RemoteNotificationSystem.h>
+
+#include <UIKit/UIKit.h>
+
+#include <moFlo/Core/Application.h>
+#include <moFlo/Core/BaseEncoding.h>
+#include <moFlo/Core/Notifications/NotificationScheduler.h>
+
+namespace moFlo
+{
+    namespace iOSPlatform
+    {
+        namespace
+        {
+            const std::string kstrProviderID = "Apple";
+        }
+        //-------------------------------------------------------------------------
+        /// Request Remote Token
+        //-------------------------------------------------------------------------
+        void CRemoteNotificationSystem::RequestRemoteToken(const Core::RemoteTokenReceivedDelegate& inDelegate)
+        {
+            mDelegate = inDelegate;
+            UIRemoteNotificationType Types = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert;
+            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:Types];
+        }
+        //-------------------------------------------------------------------------
+        /// Get Remote Token
+        //-------------------------------------------------------------------------
+        const std::string& CRemoteNotificationSystem::GetRemoteToken() const
+        {
+            return mstrToken;
+        }
+        //-------------------------------------------------------------------------
+        /// Get Provider ID
+        //-------------------------------------------------------------------------
+        const std::string& CRemoteNotificationSystem::GetProviderID() const
+        {
+            return kstrProviderID;
+        }
+        //-------------------------------------------------------------------------
+        /// On Remote Token Received
+        //-------------------------------------------------------------------------
+        void CRemoteNotificationSystem::OnRemoteTokenReceived(NSData* inpToken)
+        {
+            mstrToken = moFlo::CBaseEncoding::Base64Encode((const s8*)[inpToken bytes], inpToken.length);
+            
+            if(mDelegate != NULL)
+            {
+                mDelegate(mstrToken);
+                mDelegate = NULL;
+            }
+        }
+        //-------------------------------------------------------------------------
+        /// On Remote Notification Received
+        //-------------------------------------------------------------------------
+        void CRemoteNotificationSystem::OnRemoteNotificationReceived(UIApplication* inpApplication, NSDictionary* inpPayload)
+        {
+            inpApplication.applicationIconBadgeNumber = 0;
+            
+            NSLog(@"Recieved Remote Notification %@", inpPayload);
+            
+            Notification sNotification;
+            sNotification.bDismissed = false;
+            sNotification.eType = NOTICE_PUSH;
+            sNotification.TriggerTime = Core::CApplication::GetSystemTime();
+            sNotification.ID = 0;
+            sNotification.ePriority = NOTICE_STANDARD;
+            
+            // Add the message
+            NSObject* pApsObject = [inpPayload objectForKey:@"aps"];
+            if(pApsObject != nil && [pApsObject isKindOfClass:[NSDictionary class]])
+            {
+                NSDictionary* pApsDictionary = (NSDictionary*)pApsObject;
+                NSObject* pAlertObject = [pApsDictionary objectForKey:@"alert"];
+                if(pAlertObject != nil && [pAlertObject isKindOfClass:[NSDictionary class]])
+                {
+                    NSDictionary* pAlertDictionary = (NSDictionary*)pAlertObject;
+                    NSObject* pBodyObject = [pAlertDictionary objectForKey:@"body"];
+                    if(pBodyObject != nil && [pBodyObject isKindOfClass:[NSString class]])
+                    {
+                        NSString* pstrBody = (NSString*) pBodyObject;
+                        sNotification.sParams.SetValueForKey("message", Core::CStringUtils::NSStringToString(pstrBody));
+                    }
+                }
+            }
+            
+            // Get the extra data
+            for(NSString* key in inpPayload)
+            {
+                if([key isKindOfClass:[NSString class]])
+                {
+                    NSObject* pPayloadObject = [inpPayload objectForKey:key];
+                    if([pPayloadObject isKindOfClass:[NSString class]])
+                    {
+                        NSString* pstrPayloadString = (NSString*)pPayloadObject;
+                        sNotification.sParams.SetValueForKey(Core::CStringUtils::NSStringToString(key),
+                                                             Core::CStringUtils::NSStringToString(pstrPayloadString));
+                    }
+                }
+            }
+            
+            CNotificationScheduler::OnNotificationReceived(sNotification);
+        }
+    }
+}
