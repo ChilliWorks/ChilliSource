@@ -9,14 +9,14 @@
 #ifndef MO_FLOW_CORE_REFLECTION_REFLECTION_H_
 #define MO_FLOW_CORE_REFLECTION_REFLECTION_H_
 
-#include <moFlo/Core/Reflection/Property.h>
-#include <moFlo/Core/Reflection/Instance.h>
-#include <moFlo/Core/Reflection/MetaClass.h>
-//#include <moFlo/Core/Reflection/Method.h>
-#include <moFlo/Core/Reflection/Registry.h>
+#include <ChilliSource/Core/Reflection/Property.h>
+#include <ChilliSource/Core/Reflection/Instance.h>
+#include <ChilliSource/Core/Reflection/MetaClass.h>
+//#include <ChilliSource/Core/Reflection/Method.h>
+#include <ChilliSource/Core/Reflection/Registry.h>
 
 #ifdef ENABLE_MOFLOW_REFLECTION
-#include <moFlo/Core/Reflection/Reflection.h>
+#include <ChilliSource/Core/Reflection/Reflection.h>
 
 //--------------------------------------------------------
 /// Declare Meta Class

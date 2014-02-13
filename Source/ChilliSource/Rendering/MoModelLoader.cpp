@@ -7,14 +7,14 @@
  *
  */
 
-#include <moFlo/Rendering/MoModelLoader.h>
-#include <moFlo/Rendering/Mesh.h>
-#include <moFlo/Rendering/SubMesh.h>
+#include <ChilliSource/Rendering/MoModelLoader.h>
+#include <ChilliSource/Rendering/Mesh.h>
+#include <ChilliSource/Rendering/SubMesh.h>
 
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Core/Application.h>
 
 #include <stdexcept>
-#include <moFlo/Rendering/MeshManager.h>
+#include <ChilliSource/Rendering/MeshManager.h>
 
 namespace moFlo
 {

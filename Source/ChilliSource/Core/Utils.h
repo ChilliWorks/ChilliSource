@@ -13,8 +13,8 @@
 #ifndef _MO_FLO_CORE_UTILS_H_
 #define _MO_FLO_CORE_UTILS_H_
 
-#include <moFlo/Core/FileIO/FileStream.h>
-#include <moFlo/Core/JSON/forwards.h>
+#include <ChilliSource/Core/FileIO/FileStream.h>
+#include <ChilliSource/Core/JSON/forwards.h>
 
 #define BYTE_SWAP_2(src) moFlo::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(src))
 #define BYTE_SWAP_4(src) moFlo::Core::CUtils::Endian4ByteSwap(reinterpret_cast<u32*>(src))

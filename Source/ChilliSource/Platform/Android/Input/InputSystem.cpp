@@ -7,10 +7,10 @@
  *
  */
 
-#include <moFlo/Platform/Android/Input/InputSystem.h>
+#include <ChilliSource/Platform/Android/Input/InputSystem.h>
 
-#include <moFlo/Core/Timer.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Core/Timer.h>
+#include <ChilliSource/Core/Application.h>
 
 using namespace moFlo::Input;
 using namespace moFlo::Core;

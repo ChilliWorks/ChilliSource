@@ -6,8 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Rendering/Particles/Effectors/ColourChangerParticleEffector.h>
-#include <moFlo/Rendering/Particles/Emitters/ParticleEmitter.h>
+#include <ChilliSource/Rendering/Particles/Effectors/ColourChangerParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 
 namespace moFlo
 {

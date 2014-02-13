@@ -10,8 +10,8 @@
 #ifndef _MOFLO_ANDROIDPLATFORM_IMAGELOADING_PNGIMAGE_
 #define _MOFLO_ANDROIDPLATFORM_IMAGELOADING_PNGIMAGE_
 
-#include <moFlo/Core/FileIO/FileSystem.h>
-#include <moFlo/Core/Image.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Image.h>
 
 namespace moFlo
 {

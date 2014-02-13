@@ -7,19 +7,19 @@
  *
  */
 
-#include <moFlo/Platform/Android/Video/VideoPlayerActivity.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <moFlo/Platform/Android/JavaInterface/VideoPlayerJavaInterface.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/Screen.h>
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/Math/MathUtils.h>
-#include <moFlo/Core/ApplicationEvents.h>
-#include <moFlo/Core/TaskScheduler.h>
-#include <moFlo/Core/LocalisedText.h>
-#include <moFlo/Video/Subtitles.h>
-#include <moFlo/Video/SubtitlesManager.h>
-#include <moFlo/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Platform/Android/Video/VideoPlayerActivity.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/JavaInterface/VideoPlayerJavaInterface.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/ApplicationEvents.h>
+#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/LocalisedText.h>
+#include <ChilliSource/Video/Subtitles.h>
+#include <ChilliSource/Video/SubtitlesManager.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
 
 namespace moFlo
 {

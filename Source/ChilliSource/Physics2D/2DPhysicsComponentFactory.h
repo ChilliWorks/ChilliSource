@@ -14,16 +14,16 @@
 #ifndef _MOFLO_PHYSICS2D_I2DPHYSICSCOMPONENTFACTORY_H
 #define _MOFLO_PHYSICS2D_I2DPHYSICSCOMPONENTFACTORY_H
 
-#include <moFlo/Physics2D/ForwardDeclarations.h>
-#include <moFlo/Physics2D/PhysicsMaterial.h>
-#include <moFlo/Core/ComponentFactory.h>
-#include <moFlo/Core/Math/Vector2.h>
+#include <ChilliSource/Physics2D/ForwardDeclarations.h>
+#include <ChilliSource/Physics2D/PhysicsMaterial.h>
+#include <ChilliSource/Core/ComponentFactory.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <vector>
 
-#include <moFlo/Physics2D/2DPhysicsComponent.h>
-#include <moFlo/Physics2D/2DCharacterComponent.h>
-#include <moFlo/Physics2D/2DTriggerComponent.h>
-#include <moFlo/Physics2D/2DVehicleComponent.h>
+#include <ChilliSource/Physics2D/2DPhysicsComponent.h>
+#include <ChilliSource/Physics2D/2DCharacterComponent.h>
+#include <ChilliSource/Physics2D/2DTriggerComponent.h>
+#include <ChilliSource/Physics2D/2DVehicleComponent.h>
 
 namespace moFlo
 {

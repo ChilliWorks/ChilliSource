@@ -13,13 +13,13 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_SYSTEM_H_
 #define _MO_FLO_AUDIO_AUDIO_SYSTEM_H_
 
-#include <moFlo/Audio/AudioManager.h>
-#include <moFlo/Audio/AudioComponentFactory.h>
+#include <ChilliSource/Audio/AudioManager.h>
+#include <ChilliSource/Audio/AudioComponentFactory.h>
 
-#include <moFlo/Core/System.h>
-#include <moFlo/Core/SystemConcepts.h>
-#include <moFlo/Core/Math/MathUtils.h>
-#include <moFlo/Core/GenericEvent.h>
+#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/SystemConcepts.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/GenericEvent.h>
 
 namespace moFlo
 {

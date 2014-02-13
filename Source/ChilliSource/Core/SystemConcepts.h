@@ -14,8 +14,8 @@
 #ifndef _MOFLO_CORE_SYSTEMCONCEPTS_H_
 #define _MOFLO_CORE_SYSTEMCONCEPTS_H_
 
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/QueryableInterface.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/QueryableInterface.h>
 
 namespace moFlo
 {

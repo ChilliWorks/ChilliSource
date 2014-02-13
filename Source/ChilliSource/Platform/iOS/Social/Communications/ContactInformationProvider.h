@@ -10,7 +10,7 @@
 #ifndef _MOFLO_PLATFORM_IOS_SOCIAL_COMMUNICATIONS_CCONTACTINFORMATIONSERVICE_H_
 #define _MOFLO_PLATFORM_IOS_SOCIAL_COMMUNICATIONS_CCONTACTINFORMATIONSERVICE_H_
 
-#include <moFlo/Social/Communications/ContactInformationProvider.h>
+#include <ChilliSource/Social/Communications/ContactInformationProvider.h>
 #include <vector>
 
 namespace moFlo{

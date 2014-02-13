@@ -7,14 +7,14 @@
  *
  */
 
-#include <moFlo/Platform/Android/FileIO/FileSystem.h>
-#include <moFlo/Core/Utils.h>
-#include <moFlo/Core/FileIO/FileStream.h>
-#include <moFlo/Platform/Android/FileIO/FileStreamAndroidAPK.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <moFlo/Platform/Android/JavaInterface/CoreJavaInterface.h>
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Platform/Android/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Utils.h>
+#include <ChilliSource/Core/FileIO/FileStream.h>
+#include <ChilliSource/Platform/Android/FileIO/FileStreamAndroidAPK.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/JavaInterface/CoreJavaInterface.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Application.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>

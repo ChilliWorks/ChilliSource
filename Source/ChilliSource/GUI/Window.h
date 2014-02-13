@@ -16,13 +16,13 @@
 #ifndef _MOFLO_GUIWINDOW_H_
 #define _MOFLO_GUIWINDOW_H_
 
-#include <moFlo/GUI/ForwardDeclarations.h>
-#include <moFlo/GUI/GUIView.h>
+#include <ChilliSource/GUI/ForwardDeclarations.h>
+#include <ChilliSource/GUI/GUIView.h>
 
-#include <moFlo/Input/ForwardDeclarations.h>
+#include <ChilliSource/Input/ForwardDeclarations.h>
 
-#include <moFlo/Core/Scene.h>
-#include <moFlo/Core/Screen.h>
+#include <ChilliSource/Core/Scene.h>
+#include <ChilliSource/Core/Screen.h>
 
 namespace moFlo
 {

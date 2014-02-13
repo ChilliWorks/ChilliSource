@@ -10,9 +10,9 @@
 #ifndef _MOFLO_CORE_ENTITYANIMATIONCONTROLLER_H_
 #define _MOFLO_CORE_ENTITYANIMATIONCONTROLLER_H_
 
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/Entity.h>
-#include <moFlo/Core/EntityAnimation.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/Entity.h>
+#include <ChilliSource/Core/EntityAnimation.h>
 
 namespace moFlo
 {

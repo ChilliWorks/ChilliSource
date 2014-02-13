@@ -13,11 +13,11 @@
 #ifndef _MO_FLO_AUDIO_WINDOWS_FMOD_FMOD_SYSTEM_H_
 #define _MO_FLO_AUDIO_WINDOWS_FMOD_FMOD_SYSTEM_H_
 
-#include <moFlo/Platform/Windows/FMOD/fmod.hpp>
-#include <moFlo/Platform/Windows/FMOD/fmod_errors.h>
-#include <moFlo/Platform/Windows/FMOD/fmod_event.hpp>
+#include <ChilliSource/Platform/Windows/FMOD/fmod.hpp>
+#include <ChilliSource/Platform/Windows/FMOD/fmod_errors.h>
+#include <ChilliSource/Platform/Windows/FMOD/fmod_event.hpp>
 
-#include <moFlo/Audio/AudioSystem.h>
+#include <ChilliSource/Audio/AudioSystem.h>
 
 namespace moFlo
 {

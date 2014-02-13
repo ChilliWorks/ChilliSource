@@ -8,12 +8,12 @@
  */
 
 
-#include <moFlo/Social/Facebook/FacebookPostSystem.h>
+#include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
 
 #ifdef TARGET_OS_IPHONE
-#include <moFlo/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
+#include <ChilliSource/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
 #elif TARGET_ANDROID
-#include <moFlo/Platform/Android/Social/Facebook/FacebookPostSystem.h>
+#include <ChilliSource/Platform/Android/Social/Facebook/FacebookPostSystem.h>
 #endif
 
 /*

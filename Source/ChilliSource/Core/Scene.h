@@ -10,14 +10,14 @@
 #ifndef _MO_FLO_CORE_SCENE_H_
 #define _MO_FLO_CORE_SCENE_H_
 
-#include <moFlo/Core/Entity.h>
-#include <moFlo/Core/Math/Shapes.h>
-#include <moFlo/Core/Octree.h>
-#include <moFlo/Core/VolumeComponent.h>
+#include <ChilliSource/Core/Entity.h>
+#include <ChilliSource/Core/Math/Shapes.h>
+#include <ChilliSource/Core/Octree.h>
+#include <ChilliSource/Core/VolumeComponent.h>
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Input/ForwardDeclarations.h>
-#include <moFlo/GUI/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Input/ForwardDeclarations.h>
+#include <ChilliSource/GUI/ForwardDeclarations.h>
 
 namespace moFlo
 {

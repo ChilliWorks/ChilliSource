@@ -7,10 +7,10 @@
  *
  */
 
-#include <moFlo/Physics3D/BulletPhysics/BulletComponentFactory.h>
-#include <moFlo/Physics3D/BulletPhysics/BulletPhysicsSystem.h>
-#include <moFlo/Physics3D/BulletPhysics/BulletPhysicsComponent.h>
-#include <moFlo/Physics3D/BulletPhysics/BulletBodyHolder.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletComponentFactory.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletPhysicsSystem.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletPhysicsComponent.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletBodyHolder.h>
 
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 
@@ -21,9 +21,9 @@
 #include <LinearMath/btDefaultMotionState.h>
 #include <BulletDynamics/Dynamics/btRigidBody.h>
 
-#include <moFlo/Physics3D/3DPhysicsSystem.h>
-#include <moFlo/Physics3D/BulletPhysics/BulletCollisionMesh.h>
-#include <moFlo/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Physics3D/3DPhysicsSystem.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletCollisionMesh.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
 
 namespace moFlo
 {

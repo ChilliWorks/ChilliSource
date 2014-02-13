@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Tag Games Ltd. All rights reserved.
 //
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
 
 #ifndef MOFLOW_RENDERING_SKINNEDANIMATIONGROUP_H_
 #define MOFLOW_RENDERING_SKINNEDANIMATIONGROUP_H_

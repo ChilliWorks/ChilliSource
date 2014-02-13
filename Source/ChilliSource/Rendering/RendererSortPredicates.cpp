@@ -7,12 +7,12 @@
  *
  */
 
-#include <moFlo/Rendering/RendererSortPredicates.h>
-#include <moFlo/Rendering/Renderer.h>
-#include <moFlo/Rendering/Components/StaticMeshComponent.h>
+#include <ChilliSource/Rendering/RendererSortPredicates.h>
+#include <ChilliSource/Rendering/Renderer.h>
+#include <ChilliSource/Rendering/Components/StaticMeshComponent.h>
 
-#include <moFlo/Core/Entity.h>
-#include <moFlo/Core/Transform.h>
+#include <ChilliSource/Core/Entity.h>
+#include <ChilliSource/Core/Transform.h>
 
 using namespace moFlo::Core;
 

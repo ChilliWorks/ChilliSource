@@ -7,12 +7,12 @@
 *
 */
 
-#include <moFlo/Platform/Windows/HttpConnectionSystemWindows.h>
+#include <ChilliSource/Platform/Windows/HttpConnectionSystemWindows.h>
 
-#include <moFlo/Core/TaskScheduler.h>
-#include <moFlo/Core/Thread.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/Thread.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
 
 #include <Windows.h>
 #include <winhttp.h>

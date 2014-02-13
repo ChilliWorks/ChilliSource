@@ -9,10 +9,10 @@
 #ifndef _MO_FLO_CORE_TRANSFORM_H_
 #define _MO_FLO_CORE_TRANSFORM_H_
 
-#include <moFlo/Core/Math/Matrix4x4.h>
-#include <moFlo/Core/Math/Vector3.h>
-#include <moFlo/Core/Math/Quaternion.h>
-#include <moFlo/Core/GenericEvent.h>
+#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/GenericEvent.h>
 
 namespace moFlo
 {

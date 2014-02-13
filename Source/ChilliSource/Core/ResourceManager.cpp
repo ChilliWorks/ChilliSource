@@ -7,8 +7,8 @@
  *
  */
 
-#include <moFlo/Core/ResourceManager.h>
-#include <moFlo/Core/ResourceProvider.h>
+#include <ChilliSource/Core/ResourceManager.h>
+#include <ChilliSource/Core/ResourceProvider.h>
 
 namespace moFlo
 {

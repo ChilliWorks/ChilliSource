@@ -10,10 +10,10 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAYEXPANSION_GOOGLEPLAYEXPANSIONSYSTEM_H
 #define _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAYEXPANSION_GOOGLEPLAYEXPANSIONSYSTEM_H
 
-#include <moFlo/Core/FastDelegate.h>
-#include <moFlo/Core/System.h>
-#include <moFlo/Core/JSON/json.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Core/FastDelegate.h>
+#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/JSON/json.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
 
 namespace moFlo
 {

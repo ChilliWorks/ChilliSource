@@ -6,9 +6,9 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
 
-#include <moFlo/Rendering/Particles/Emitters/ParticleEmitter.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 
 namespace moFlo
 {

@@ -6,16 +6,16 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Platform/Android/GooglePlay/GooglePlayIAPJavaInterface.h>
+#include <ChilliSource/Platform/Android/GooglePlay/GooglePlayIAPJavaInterface.h>
 
 #include <jni.h>
-#include <moFlo/Platform/Android/ForwardDeclarations.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 
-#include <moFlo/Core/Utils.h>
-#include <moFlo/Core/JSON/json.h>
-#include <moFlo/Core/TaskScheduler.h>
+#include <ChilliSource/Core/Utils.h>
+#include <ChilliSource/Core/JSON/json.h>
+#include <ChilliSource/Core/TaskScheduler.h>
 
 const std::string kstrPendingCacheFile = "GoogleIAPPendingTransactions.json";
 

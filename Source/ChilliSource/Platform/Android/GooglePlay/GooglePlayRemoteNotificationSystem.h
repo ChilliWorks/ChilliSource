@@ -9,9 +9,9 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAY_REMOTENOTIFICATIONSYSTEM_H_
 #define _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAY_REMOTENOTIFICATIONSYSTEM_H_
 
-#include <moFlo/Core/Notifications/RemoteNotificationSystem.h>
+#include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
 
-#include <moFlo/Platform/Android/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
+#include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
 
 namespace moFlo
 {

@@ -1,8 +1,8 @@
-#include <moFlo/Core/TweakableConstants.h>
-#include <moFlo/Core/XML/tinyxml.h>
+#include <ChilliSource/Core/TweakableConstants.h>
+#include <ChilliSource/Core/XML/tinyxml.h>
 #include <climits>
 #include <cfloat>
-#include <moFlo/Core/StringConverter.h>
+#include <ChilliSource/Core/StringConverter.h>
 
 namespace moFlo
 {

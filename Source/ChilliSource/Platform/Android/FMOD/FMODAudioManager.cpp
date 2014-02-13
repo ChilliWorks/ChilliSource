@@ -7,8 +7,8 @@
  *
  */
 
-#include <moFlo/Platform/Android/FMOD/FMODAudioManager.h>
-#include <moFlo/Platform/Android/FMOD/FMODAudioResource.h>
+#include <ChilliSource/Platform/Android/FMOD/FMODAudioManager.h>
+#include <ChilliSource/Platform/Android/FMOD/FMODAudioResource.h>
 
 namespace moFlo
 {

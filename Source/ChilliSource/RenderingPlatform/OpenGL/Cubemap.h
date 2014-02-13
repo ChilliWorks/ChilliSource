@@ -10,11 +10,11 @@
 #ifndef _MOFLOW_OPENGL_CUBEMAP_H_
 #define _MOFLOW_OPENGL_CUBEMAP_H_
 
-#include <moFlo/Core/Image.h>
-#include <moFlo/RenderingPlatform/OpenGL/ForwardDeclarations.h>
-#include <moFlo/RenderingPlatform/OpenGL/GLIncludes.h>
-#include <moFlo/Rendering/Cubemap.h>
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Core/Image.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/ForwardDeclarations.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/GLIncludes.h>
+#include <ChilliSource/Rendering/Cubemap.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace moFlo
 {

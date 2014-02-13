@@ -10,12 +10,12 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Core/ResourceGroupManager.h>
-#include <moFlo/Core/ResourceManager.h>
-#include <moFlo/Core/ResourceManagerDispenser.h>
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/Image.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Core/ResourceGroupManager.h>
+#include <ChilliSource/Core/ResourceManager.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Image.h>
+#include <ChilliSource/Core/Application.h>
 
 namespace moFlo
 {

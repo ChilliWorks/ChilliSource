@@ -7,17 +7,17 @@
  *
  */
 
-#include <moFlo/Rendering/SubMesh.h>
-#include <moFlo/Rendering/VertexLayouts.h>
-#include <moFlo/Rendering/RenderSystem.h>
-#include <moFlo/Rendering/Texture.h>
+#include <ChilliSource/Rendering/SubMesh.h>
+#include <ChilliSource/Rendering/VertexLayouts.h>
+#include <ChilliSource/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/Texture.h>
 
 #include <limits>
-#include <moFlo/Rendering/SkinnedAnimationGroup.h>
-#include <moFlo/Rendering/SkinnedAnimation.h>
+#include <ChilliSource/Rendering/SkinnedAnimationGroup.h>
+#include <ChilliSource/Rendering/SkinnedAnimation.h>
 
 #ifdef DEBUG_STATS
-#include <moFlo/Core/DebugStats.h>
+#include <ChilliSource/Core/DebugStats.h>
 #endif
 
 namespace moFlo

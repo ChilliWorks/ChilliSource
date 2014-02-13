@@ -10,9 +10,9 @@
 #ifndef _MOFLO_PLATFORM_WINDOWS_HTTPCONNECTIONSYSTEM_H_
 #define _MOFLO_PLATFORM_WINDOWS_HTTPCONNECTIONSYSTEM_H_
 
-#include <moFlo/Core/SystemConcepts.h>
+#include <ChilliSource/Core/SystemConcepts.h>
 
-#include <moFlo/Networking/HttpConnectionSystem.h>
+#include <ChilliSource/Networking/HttpConnectionSystem.h>
 
 namespace moFlo
 {

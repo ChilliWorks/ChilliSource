@@ -7,11 +7,11 @@
  *
  */
 
-#include <moFlo/Platform/Android/Social/Communications/EmailCompositionActivity.h>
-#include <moFlo/Platform/Android/JavaInterface/EmailCompositionJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Platform/Android/Social/Communications/EmailCompositionActivity.h>
+#include <ChilliSource/Platform/Android/JavaInterface/EmailCompositionJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
 
 namespace moFlo
 {

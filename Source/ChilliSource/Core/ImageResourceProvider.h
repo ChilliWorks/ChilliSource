@@ -10,8 +10,8 @@
 #ifndef _MO_FLO_CORE_IMAGE_RESOURCE_PROVIDER_H_
 #define _MO_FLO_CORE_IMAGE_RESOURCE_PROVIDER_H_
 
-#include <moFlo/Core/ResourceProvider.h>
-#include <moFlo/Core/Image.h>
+#include <ChilliSource/Core/ResourceProvider.h>
+#include <ChilliSource/Core/Image.h>
 
 namespace moFlo
 {

@@ -7,13 +7,13 @@
  *
  */
 
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/Screen.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Screen.h>
 
-#include <moFlo/Social/Twitter/TwitterPostSystem.h>
+#include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 
-#include <moFlo/Platform/Android/JavaInterface/TwitterAuthenticationActivityJavaInterface.h>
-#include <moFlo/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/Platform/Android/JavaInterface/TwitterAuthenticationActivityJavaInterface.h>
+#include <ChilliSource/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
 
 namespace moFlo
 {

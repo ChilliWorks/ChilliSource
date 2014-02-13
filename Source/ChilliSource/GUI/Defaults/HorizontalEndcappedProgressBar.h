@@ -10,10 +10,10 @@
 #ifndef _MOFLOW_GUI_DEFAULTS_HORIZONTALENDCAPPEDPROGRESSBAR_H_
 #define _MOFLOW_GUI_DEFAULTS_HORIZONTALENDCAPPEDPROGRESSBAR_H_
 
-#include <moFlo/GUI/ProgressBar.h>
-#include <moFlo/GUI/Defaults/HorizontalStretchableImage.h>
+#include <ChilliSource/GUI/ProgressBar.h>
+#include <ChilliSource/GUI/Defaults/HorizontalStretchableImage.h>
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace moFlo
 {

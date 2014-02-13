@@ -10,7 +10,7 @@
 #define _MO_FLO_PLATFORM_IOS_INPUT_VIRTUAL_KEYBOARD_DELEGATE_H_
 
 #include <UIKit/UIKit.h>
-#include <moFlo/Platform/iOS/Input/VirtualKeyboard.h>
+#include <ChilliSource/Platform/iOS/Input/VirtualKeyboard.h>
 
 using namespace moFlo::iOSPlatform;
 

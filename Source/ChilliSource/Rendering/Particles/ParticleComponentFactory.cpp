@@ -7,16 +7,16 @@
  *
  */
 
-#include <moFlo/Rendering/MaterialManager.h>
-#include <moFlo/Rendering/Material.h>
+#include <ChilliSource/Rendering/MaterialManager.h>
+#include <ChilliSource/Rendering/Material.h>
 
-#include <moFlo/Rendering/Particles/ParticleComponent.h>
-#include <moFlo/Rendering/Particles/ParticleComponentFactory.h>
-#include <moFlo/Rendering/Particles/ParticleSystem.h>
+#include <ChilliSource/Rendering/Particles/ParticleComponent.h>
+#include <ChilliSource/Rendering/Particles/ParticleComponentFactory.h>
+#include <ChilliSource/Rendering/Particles/ParticleSystem.h>
 
-#include <moFlo/Core/ParamDictionary.h>
-#include <moFlo/Core/XML/XMLUtils.h>
-#include <moFlo/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/ParamDictionary.h>
+#include <ChilliSource/Core/XML/XMLUtils.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
 
 namespace moFlo
 {

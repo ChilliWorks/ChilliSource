@@ -7,11 +7,11 @@
  *
  */
 
-#include <moFlo/Core/JSON/json.h>
-#include <moFlo/Core/LocalDataStore.h>
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/TweakableConstants.h>
-#include <moFlo/Networking/MoConnectSystem.h>
+#include <ChilliSource/Core/JSON/json.h>
+#include <ChilliSource/Core/LocalDataStore.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/TweakableConstants.h>
+#include <ChilliSource/Networking/MoConnectSystem.h>
 
 namespace moFlo
 {

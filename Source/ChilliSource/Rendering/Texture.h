@@ -10,7 +10,7 @@
 #ifndef _MOFLO_RENDERING_ITEXTURE_H_
 #define _MOFLO_RENDERING_ITEXTURE_H_
 
-#include <moFlo/Core/Resource.h>
+#include <ChilliSource/Core/Resource.h>
 
 namespace moFlo
 {

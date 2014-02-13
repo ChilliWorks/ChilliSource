@@ -11,9 +11,9 @@
  */
 
 
-#include <moFlo/Core/Math/Vector3.h>
-#include <moFlo/Core/Math/Shapes.h>
-#include <moFlo/Core/Math/ShapeIntersection.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Shapes.h>
+#include <ChilliSource/Core/Math/ShapeIntersection.h>
 #include <limits>
 namespace moFlo
 {

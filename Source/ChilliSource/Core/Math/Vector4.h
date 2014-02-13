@@ -2,7 +2,7 @@
 #define _MO_FLO_CORE_VECTOR_4_H_
 
 #include <math.h>
-#include <moFlo/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 //=================================================
 // Tag - Vector 4
 //

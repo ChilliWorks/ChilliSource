@@ -11,20 +11,20 @@
 #ifndef _MOFLO_RENDERING_IRENDERSYSTEM_H
 #define _MOFLO_RENDERING_IRENDERSYSTEM_H
 
-#include <moFlo/Core/System.h>
-#include <moFlo/Core/SystemConcepts.h>
-#include <moFlo/Core/Colour.h>
+#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/SystemConcepts.h>
+#include <ChilliSource/Core/Colour.h>
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Rendering/Components/LightComponent.h>
-#include <moFlo/Rendering/RenderTarget.h>
-#include <moFlo/Rendering/Material.h>
-#include <moFlo/Rendering/TextureManager.h>
-#include <moFlo/Rendering/MeshManager.h>
-#include <moFlo/Rendering/SkinnedAnimationManager.h>
-#include <moFlo/Rendering/MaterialManager.h>
-#include <moFlo/Rendering/SpriteSheetManager.h>
-#include <moFlo/Rendering/FontManager.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/Components/LightComponent.h>
+#include <ChilliSource/Rendering/RenderTarget.h>
+#include <ChilliSource/Rendering/Material.h>
+#include <ChilliSource/Rendering/TextureManager.h>
+#include <ChilliSource/Rendering/MeshManager.h>
+#include <ChilliSource/Rendering/SkinnedAnimationManager.h>
+#include <ChilliSource/Rendering/MaterialManager.h>
+#include <ChilliSource/Rendering/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/FontManager.h>
 
 namespace moFlo
 {

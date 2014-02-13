@@ -6,12 +6,12 @@
 //  Copyright (c) 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Platform/iOS/EAGLView.h>
-#include <moFlo/Platform/iOS/HttpConnectionSystem.h>
-#include <moFlo/Platform/iOS/PlatformSystem.h>
-#include <moFlo/Platform/iOS/Social/Twitter/TwitterPostSystem.h>
-#include <moFlo/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Platform/iOS/EAGLView.h>
+#include <ChilliSource/Platform/iOS/HttpConnectionSystem.h>
+#include <ChilliSource/Platform/iOS/PlatformSystem.h>
+#include <ChilliSource/Platform/iOS/Social/Twitter/TwitterPostSystem.h>
+#include <ChilliSource/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
 
 #include <UIKit/UIKit.h>
 

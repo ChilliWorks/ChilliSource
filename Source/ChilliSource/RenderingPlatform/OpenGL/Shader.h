@@ -13,9 +13,9 @@
 #ifndef _MOFLOW_OPENGL_SHADER_H_
 #define _MOFLOW_OPENGL_SHADER_H_
 
-#include <moFlo/RenderingPlatform/OpenGL/GLIncludes.h>
-#include <moFlo/Rendering/Shader.h>
-#include <moFlo/Core/ForwardDeclarations.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/GLIncludes.h>
+#include <ChilliSource/Rendering/Shader.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
 
 namespace moFlo
 {

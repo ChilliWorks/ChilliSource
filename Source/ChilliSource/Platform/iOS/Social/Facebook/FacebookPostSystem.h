@@ -10,8 +10,8 @@
 #ifndef _MOFLO_PLATFORM_IOS_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
 #define _MOFLO_PLATFORM_IOS_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
 
-#include <moFlo/Social/Facebook/FacebookPostSystem.h>
-#include <moFlo/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
+#include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
 
 namespace moFlo
 {

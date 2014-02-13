@@ -10,10 +10,10 @@
 #ifndef _MO_FLO_RENDERING_PARTICLE_COMPONENT_H_
 #define _MO_FLO_RENDERING_PARTICLE_COMPONENT_H_
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Rendering/Components/RenderComponent.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/Components/RenderComponent.h>
 
-#include <moFlo/Rendering/Particles/Emitters/ParticleEmitter.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 
 namespace moFlo
 {

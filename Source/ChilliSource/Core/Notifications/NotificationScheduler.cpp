@@ -6,9 +6,9 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Core/Notifications/NotificationScheduler.h>
-#include <moFlo/Core/Notifications/LocalNotificationScheduler.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
+#include <ChilliSource/Core/Notifications/LocalNotificationScheduler.h>
+#include <ChilliSource/Core/Application.h>
 
 namespace moFlo
 {

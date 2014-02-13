@@ -10,10 +10,10 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_PLAYER_H_
 #define _MO_FLO_AUDIO_AUDIO_PLAYER_H_
 
-#include <moFlo/Audio/ForwardDeclarations.h>
-#include <moFlo/Audio/AudioComponent.h>
+#include <ChilliSource/Audio/ForwardDeclarations.h>
+#include <ChilliSource/Audio/AudioComponent.h>
 
-#include <moFlo/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
 
 namespace moFlo
 {

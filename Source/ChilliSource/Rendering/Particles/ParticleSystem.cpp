@@ -7,18 +7,18 @@
  *
  */
 
-#include <moFlo/Rendering/Particles/ParticleSystem.h>
+#include <ChilliSource/Rendering/Particles/ParticleSystem.h>
 
-#include <moFlo/Rendering/Particles/Emitters/PointParticleEmitter.h>
-#include <moFlo/Rendering/Particles/Emitters/RingParticleEmitter.h>
-#include <moFlo/Rendering/Particles/Emitters/ConeParticleEmitter.h>
+#include <ChilliSource/Rendering/Particles/Emitters/PointParticleEmitter.h>
+#include <ChilliSource/Rendering/Particles/Emitters/RingParticleEmitter.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ConeParticleEmitter.h>
 
-#include <moFlo/Rendering/Particles/Effectors/ColourChangerParticleEffector.h>
-#include <moFlo/Rendering/Particles/Effectors/LinearForceParticleEffector.h>
-#include <moFlo/Rendering/Particles/Effectors/SpinnerParticleEffector.h>
-#include <moFlo/Rendering/Particles/Effectors/ScalerParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/Effectors/ColourChangerParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/Effectors/LinearForceParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/Effectors/SpinnerParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/Effectors/ScalerParticleEffector.h>
 
-#include <moFlo/Rendering/Particles/ParticleComponent.h>
+#include <ChilliSource/Rendering/Particles/ParticleComponent.h>
 
 namespace moFlo
 {

@@ -7,8 +7,8 @@
  *
  */
 
-#include <moFlo/Platform/Android/JavaInterface/JavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 
 namespace moFlo
 {

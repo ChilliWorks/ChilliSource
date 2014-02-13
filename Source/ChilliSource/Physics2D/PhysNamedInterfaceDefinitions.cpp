@@ -12,12 +12,12 @@
  */
 
 
-#include <moFlo/Physics2D/2DPhysicsSystem.h>
-#include <moFlo/Physics2D/2DPhysicsComponent.h>
-#include <moFlo/Physics2D/2DTriggerComponent.h>
-#include <moFlo/Physics2D/2DCharacterComponent.h>
-#include <moFlo/Physics2D/2DVehicleComponent.h>
-#include <moFlo/Physics2D/2DPhysicsComponentFactory.h>
+#include <ChilliSource/Physics2D/2DPhysicsSystem.h>
+#include <ChilliSource/Physics2D/2DPhysicsComponent.h>
+#include <ChilliSource/Physics2D/2DTriggerComponent.h>
+#include <ChilliSource/Physics2D/2DCharacterComponent.h>
+#include <ChilliSource/Physics2D/2DVehicleComponent.h>
+#include <ChilliSource/Physics2D/2DPhysicsComponentFactory.h>
 
 namespace moFlo
 {

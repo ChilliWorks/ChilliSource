@@ -6,10 +6,10 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/GUI/ProgressBar.h>
+#include <ChilliSource/GUI/ProgressBar.h>
 
-#include <moFlo/Core/Math/MathUtils.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Application.h>
 
 namespace moFlo
 {

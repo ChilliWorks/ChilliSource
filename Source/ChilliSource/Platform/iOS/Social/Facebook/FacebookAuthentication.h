@@ -10,7 +10,7 @@
 #ifndef _MOFLO_PLATFORM_IOS_SOCIAL_FACEBOOKAUTHENTICATION_H_
 #define _MOFLO_PLATFORM_IOS_SOCIAL_FACEBOOKAUTHENTICATION_H_
 
-#include <moFlo/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
 
 #include <FacebookSDK/FacebookSDK.h>
 

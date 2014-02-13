@@ -14,7 +14,7 @@
 #include <cstdio>
 #include <fstream>
 
-#include <moFlo/Core/Cryptographic/SHA1.h>
+#include <ChilliSource/Core/Cryptographic/SHA1.h>
 
 namespace moFlo
 {

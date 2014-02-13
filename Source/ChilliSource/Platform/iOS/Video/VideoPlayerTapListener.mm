@@ -6,10 +6,10 @@
 //  Copyright 2012 Tag Games. All rights reserved.
 //
 
-#import <moFlo/Platform/iOS/Video/VideoPlayerTapListener.h>
+#import <ChilliSource/Platform/iOS/Video/VideoPlayerTapListener.h>
 #import <QuartzCore/QuartzCore.h>
-#include <moFlo/Platform/iOS/Input/TouchScreen.h>
-#include <moFlo/Core/Screen.h>
+#include <ChilliSource/Platform/iOS/Input/TouchScreen.h>
+#include <ChilliSource/Core/Screen.h>
 
 
 using namespace moFlo;

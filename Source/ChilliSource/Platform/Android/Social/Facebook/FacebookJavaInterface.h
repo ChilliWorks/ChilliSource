@@ -9,7 +9,7 @@
 #ifndef _MOFLO_PLATFORM_ANDROID_FACEBOOK_JAVA_INTERFACE_
 #define _MOFLO_PLATFORM_ANDROID_FACEBOOK_JAVA_INTERFACE_
 
-#include <moFlo/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
 
 namespace moFlo
 {

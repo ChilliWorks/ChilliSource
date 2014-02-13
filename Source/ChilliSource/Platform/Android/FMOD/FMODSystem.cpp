@@ -10,16 +10,16 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Platform/Android/FMOD/FMODSystem.h>
-#include <moFlo/Platform/Android/FMOD/FMODAudioListener.h>
-#include <moFlo/Platform/Android/FMOD/FMODAudioComponent.h>
-#include <moFlo/Platform/Android/FMOD/FMODAudioResource.h>
-#include <moFlo/Platform/Android/FMOD/FMODAudioComponentFactory.h>
-#include <moFlo/Platform/Android/FMOD/FMODAudioManager.h>
+#include <ChilliSource/Platform/Android/FMOD/FMODSystem.h>
+#include <ChilliSource/Platform/Android/FMOD/FMODAudioListener.h>
+#include <ChilliSource/Platform/Android/FMOD/FMODAudioComponent.h>
+#include <ChilliSource/Platform/Android/FMOD/FMODAudioResource.h>
+#include <ChilliSource/Platform/Android/FMOD/FMODAudioComponentFactory.h>
+#include <ChilliSource/Platform/Android/FMOD/FMODAudioManager.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/ApplicationEvents.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/ApplicationEvents.h>
+#include <ChilliSource/Core/Application.h>
 
 namespace moFlo
 {

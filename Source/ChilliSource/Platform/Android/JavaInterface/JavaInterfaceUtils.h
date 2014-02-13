@@ -11,7 +11,7 @@
 #define _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_JAVAINTERFACEUTILS_H_
 
 #include <jni.h>
-#include <moFlo/Core/Containers/UTF8String.h>
+#include <ChilliSource/Core/Containers/UTF8String.h>
 
 namespace moFlo
 {

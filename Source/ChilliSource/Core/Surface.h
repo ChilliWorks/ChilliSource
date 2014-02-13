@@ -9,12 +9,12 @@
 #ifndef _MOFLOW_RENDERING_SURFACE_H_
 #define _MOFLOW_RENDERING_SURFACE_H_
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/GUI/ForwardDeclarations.h>
-#include <moFlo/Core/CustomCreator.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/GUI/ForwardDeclarations.h>
+#include <ChilliSource/Core/CustomCreator.h>
 
-#include <moFlo/Input/ForwardDeclarations.h>
-#include <moFlo/Input/TouchScreen.h>
+#include <ChilliSource/Input/ForwardDeclarations.h>
+#include <ChilliSource/Input/TouchScreen.h>
 
 namespace moFlo
 {

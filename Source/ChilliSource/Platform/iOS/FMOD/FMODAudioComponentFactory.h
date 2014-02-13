@@ -13,9 +13,9 @@
 #ifndef _MO_FLO_PLATFORM_IOS_FMOD_FMOD_AUDIO_COMPONENT_FACTORY_H_
 #define _MO_FLO_PLATFORM_IOS_FMOD_FMOD_AUDIO_COMPONENT_FACTORY_H_
 
-#include <moFlo/Audio/ForwardDeclarations.h>
-#include <moFlo/Audio/AudioComponentFactory.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Audio/ForwardDeclarations.h>
+#include <ChilliSource/Audio/AudioComponentFactory.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
 
 namespace moFlo
 {

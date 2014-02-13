@@ -7,14 +7,14 @@
  *
  */
 
-#include <moFlo/Platform/Android/HttpConnectionSystem.h>
+#include <ChilliSource/Platform/Android/HttpConnectionSystem.h>
 
-#include <moFlo/Core/TaskScheduler.h>
-#include <moFlo/Core/Thread.h>
-#include <moFlo/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/Thread.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
 
 #include <sstream>
-#include <moFlo/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>
 
 namespace moFlo
 {

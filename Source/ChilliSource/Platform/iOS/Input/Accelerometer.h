@@ -14,7 +14,7 @@
 #ifndef MOFLOW_PLATFORM_IOS_ACCELEROMETER_H
 #define MOFLOW_PLATFORM_IOS_ACCELEROMETER_H
 
-#include <moFlo/Input/Accelerometer.h>
+#include <ChilliSource/Input/Accelerometer.h>
 #include <UIKit/UIKit.h>
 
 namespace moFlo

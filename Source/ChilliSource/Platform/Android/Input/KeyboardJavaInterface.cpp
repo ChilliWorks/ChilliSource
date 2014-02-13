@@ -6,13 +6,13 @@
 //  Copyright 2014 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Platform/Android/Input/KeyboardJavaInterface.h>
+#include <ChilliSource/Platform/Android/Input/KeyboardJavaInterface.h>
 
 #include <jni.h>
 
-#include <moFlo/Core/TaskScheduler.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 
 
 //-----------------------------------------------

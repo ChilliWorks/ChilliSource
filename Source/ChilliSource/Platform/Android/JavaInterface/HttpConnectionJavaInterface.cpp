@@ -7,9 +7,9 @@
  */
 
 //includes
-#include <moFlo/Networking/HttpConnectionSystem.h>
-#include <moFlo/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/CoreJavaInterface.h>
+#include <ChilliSource/Networking/HttpConnectionSystem.h>
+#include <ChilliSource/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/CoreJavaInterface.h>
 
 namespace moFlo
 {

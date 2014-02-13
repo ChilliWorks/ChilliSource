@@ -10,14 +10,14 @@
 #ifndef _MO_FLO_RENDERING_PARTICLE_SYSTEM_H_
 #define _MO_FLO_RENDERING_PARTICLE_SYSTEM_H_
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
-#include <moFlo/Rendering/Particles/ParticleComponentFactory.h>
-#include <moFlo/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
-#include <moFlo/Rendering/Particles/Effectors/ParticleEffectorFactory.h>
+#include <ChilliSource/Rendering/Particles/ParticleComponentFactory.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
+#include <ChilliSource/Rendering/Particles/Effectors/ParticleEffectorFactory.h>
 
-#include <moFlo/Core/System.h>
-#include <moFlo/Core/SystemConcepts.h>
+#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/SystemConcepts.h>
 
 namespace moFlo
 {

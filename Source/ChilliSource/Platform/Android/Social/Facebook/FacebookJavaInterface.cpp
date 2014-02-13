@@ -3,17 +3,17 @@
  * moFlow
  *
  * Created by Robert Henning on 01/05/2012
- * Copyright ©2012 Tag Games Limited - All rights reserved
+ * Copyright ï¿½2012 Tag Games Limited - All rights reserved
  */
 
-#include <moFlo/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
-#include <moFlo/Platform/Android/Social/Facebook/FacebookAuthentication.h>
-#include <moFlo/Platform/Android/Social/Facebook/FacebookPostSystem.h>
+#include <ChilliSource/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
+#include <ChilliSource/Platform/Android/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Platform/Android/Social/Facebook/FacebookPostSystem.h>
 
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 
-#include <moFlo/Core/TaskScheduler.h>
+#include <ChilliSource/Core/TaskScheduler.h>
 
 #include <jni.h>
 

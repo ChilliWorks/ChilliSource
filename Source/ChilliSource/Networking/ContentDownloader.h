@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_NETWORKING_CONTENT_DOWNLOADER_H_
 #define _MOFLOW_NETWORKING_CONTENT_DOWNLOADER_H_
 
-#include <moFlo/Core/FastDelegate.h>
+#include <ChilliSource/Core/FastDelegate.h>
 
 namespace moFlo
 {

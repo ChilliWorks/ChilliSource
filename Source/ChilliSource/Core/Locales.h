@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_CORE_LOCALES_H_
 #define _MO_FLO_CORE_LOCALES_H_
 
-#include <moFlo/Core/MoFloLocale.h>
+#include <ChilliSource/Core/MoFloLocale.h>
 
 namespace moFlo
 {

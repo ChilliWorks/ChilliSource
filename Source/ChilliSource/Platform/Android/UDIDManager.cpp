@@ -7,12 +7,12 @@
  *
  */
 
-#include <moFlo/Platform/Android/UDIDManager.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <moFlo/Platform/Android/JavaInterface/CoreJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/SharedPreferencesJavaInterface.h>
-#include <moFlo/Core/LocalDataStore.h>
-#include <moFlo/Core/HashMD5.h>
+#include <ChilliSource/Platform/Android/UDIDManager.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/JavaInterface/CoreJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/SharedPreferencesJavaInterface.h>
+#include <ChilliSource/Core/LocalDataStore.h>
+#include <ChilliSource/Core/HashMD5.h>
 #include <ctime>
 #include <cstdlib>
 

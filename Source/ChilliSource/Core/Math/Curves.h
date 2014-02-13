@@ -14,7 +14,7 @@
 #ifndef _MOFLO_CORE_MATH_CURVES_H_
 #define _MOFLO_CORE_MATH_CURVES_H_
 
-#include <moFlo/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
 
 namespace moFlo
 {

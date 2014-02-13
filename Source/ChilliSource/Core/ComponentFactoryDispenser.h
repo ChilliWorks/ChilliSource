@@ -9,14 +9,14 @@
 #ifndef _MO_FLO_CORE_FACTORY_DISPENSER_H_
 #define _MO_FLO_CORE_FACTORY_DISPENSER_H_
 
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/QueryableInterface.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/QueryableInterface.h>
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
-#include <moFlo/Audio/ForwardDeclarations.h>
+#include <ChilliSource/Audio/ForwardDeclarations.h>
 
-#include <moFlo/GUI/ForwardDeclarations.h>
+#include <ChilliSource/GUI/ForwardDeclarations.h>
 
 #define GET_COMPONENT_FACTORY(FACTORY_TYPE) moFlo::Core::CComponentFactoryDispenser::GetSingletonPtr()->GetFactoryWithInterface<FACTORY_TYPE>() 
 

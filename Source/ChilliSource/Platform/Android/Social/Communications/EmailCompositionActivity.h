@@ -10,8 +10,8 @@
 #ifndef MOFLOW_PLATFORM_ANDROID_SOCIAL_COMMUNICATIONS_EMAILCOMPOSITIONSCREEN_H
 #define MOFLOW_PLATFORM_ANDROID_SOCIAL_COMMUNICATIONS_EMAILCOMPOSITIONSCREEN_H
 
-#include <moFlo/Platform/Android/ForwardDeclarations.h>
-#include <moFlo/Social/Communications/EmailCompositionActivity.h>
+#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Social/Communications/EmailCompositionActivity.h>
 
 namespace moFlo
 {

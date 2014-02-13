@@ -9,8 +9,8 @@
 #ifndef MOFLOW_RENDERING_MATERIALFACTORY_H
 #define MOFLOW_RENDERING_MATERIALFACTORY_H
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Core/System.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Core/System.h>
 
 namespace moFlo
 {

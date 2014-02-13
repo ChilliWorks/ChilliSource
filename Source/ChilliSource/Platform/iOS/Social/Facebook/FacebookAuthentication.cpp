@@ -7,8 +7,8 @@
  *
  */
 
-#include <moFlo/Platform/iOS/Social/Facebook/FacebookAuthentication.h>
-#include <moFlo/Core/LocalDataStore.h>
+#include <ChilliSource/Platform/iOS/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Core/LocalDataStore.h>
 
 #ifdef __IPHONE_6_0
 #	include <Accounts/Accounts.h>

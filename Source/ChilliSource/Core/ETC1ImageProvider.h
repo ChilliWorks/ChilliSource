@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_CORE_ETC1IMAGEPROVIDER_H_
 #define _MOFLOW_CORE_ETC1IMAGEPROVIDER_H_
 
-#include <moFlo/Core/ImageResourceProvider.h>
+#include <ChilliSource/Core/ImageResourceProvider.h>
 
 namespace moFlo
 {

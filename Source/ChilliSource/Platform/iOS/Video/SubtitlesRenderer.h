@@ -9,9 +9,9 @@
 #ifndef _MOFLOW_PLATFORM_IOS_VIDEO_SUBTITLESRENDERER_H_
 #define _MOFLOW_PLATFORM_IOS_VIDEO_SUBTITLESRENDERER_H_
 
-#include <moFlo/Video/ForwardDeclarations.h>
-#include <moFlo/Video/Subtitles.h>
-#include <moFlo/Platform/iOS/Video/VideoPlayerActivity.h>
+#include <ChilliSource/Video/ForwardDeclarations.h>
+#include <ChilliSource/Video/Subtitles.h>
+#include <ChilliSource/Platform/iOS/Video/VideoPlayerActivity.h>
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 

@@ -9,8 +9,8 @@
 #ifndef _MO_FLO_PLATFORM_IOS_LOCAL_NOTIFICATION_SCHEDULER_H_
 #define _MO_FLO_PLATFORM_IOS_LOCAL_NOTIFICATION_SCHEDULER_H_
 
-#include <moFlo/Core/Notifications/NotificationScheduler.h>
-#include <moFlo/Core/Notifications/LocalNotificationScheduler.h>
+#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
+#include <ChilliSource/Core/Notifications/LocalNotificationScheduler.h>
 
 @class UIApplication;
 @class UILocalNotification;

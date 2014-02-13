@@ -9,14 +9,14 @@
 
 #ifdef DEBUG_STATS
 
-#include <moFlo/GUI/Defaults/DebugStatsView.h>
+#include <ChilliSource/GUI/Defaults/DebugStatsView.h>
 
-#include <moFlo/Core/ResourceManagerDispenser.h>
-#include <moFlo/Core/DebugStats.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/DebugStats.h>
+#include <ChilliSource/Core/Application.h>
 
-#include <moFlo/Rendering/TextureManager.h>
-#include <moFlo/Rendering/Font.h>
+#include <ChilliSource/Rendering/TextureManager.h>
+#include <ChilliSource/Rendering/Font.h>
 
 namespace moFlo
 {

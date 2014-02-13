@@ -7,9 +7,9 @@
  *
  */
 
-#include <moFlo/Core/ParamDictionary.h>
-#include <moFlo/Core/XML/XMLUtils.h>
-#include <moFlo/Core/XML/rapidxml_utils.hpp>
+#include <ChilliSource/Core/ParamDictionary.h>
+#include <ChilliSource/Core/XML/XMLUtils.h>
+#include <ChilliSource/Core/XML/rapidxml_utils.hpp>
 
 namespace moFlo{
 	namespace Core{

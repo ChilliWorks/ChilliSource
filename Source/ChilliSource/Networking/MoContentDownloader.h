@@ -9,9 +9,9 @@
 #ifndef _MOFLOW_NETWORKING_MO_CONTENT_DOWNLOADER_H_
 #define _MOFLOW_NETWORKING_MO_CONTENT_DOWNLOADER_H_
 
-#include <moFlo/Networking/ForwardDeclarations.h>
-#include <moFlo/Networking/ContentDownloader.h>
-#include <moFlo/Networking/HttpConnectionSystem.h>
+#include <ChilliSource/Networking/ForwardDeclarations.h>
+#include <ChilliSource/Networking/ContentDownloader.h>
+#include <ChilliSource/Networking/HttpConnectionSystem.h>
 
 namespace moFlo
 {

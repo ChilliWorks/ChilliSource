@@ -7,9 +7,9 @@
  *
  */
 
-#include <moFlo/RenderingPlatform/OpenGL/CubemapManager.h>
-#include <moFlo/RenderingPlatform/OpenGL/Cubemap.h>
-#include <moFlo/Core/ImageResourceProvider.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/CubemapManager.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/Cubemap.h>
+#include <ChilliSource/Core/ImageResourceProvider.h>
 
 namespace moFlo
 {

@@ -8,7 +8,7 @@
  */
 
 #include "WebViewJavaInterface.h"
-#include <moFlo/Platform/Android/WebViewActivity.h>
+#include <ChilliSource/Platform/Android/WebViewActivity.h>
 
 //function definitions
 extern "C"

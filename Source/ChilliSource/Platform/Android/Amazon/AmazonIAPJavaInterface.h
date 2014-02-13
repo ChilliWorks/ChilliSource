@@ -9,8 +9,8 @@
 #ifndef MOFLOW_PLATFORM_ANDROID_AMAZON_AMAZONIAPJAVAINTERFACE_H
 #define MOFLOW_PLATFORM_ANDROID_AMAZON_AMAZONIAPJAVAINTERFACE_H
 
-#include <moFlo/Platform/Android/JavaInterface/JavaInterface.h>
-#include <moFlo/Networking/IAPSystem.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Networking/IAPSystem.h>
 
 namespace moFlo
 {

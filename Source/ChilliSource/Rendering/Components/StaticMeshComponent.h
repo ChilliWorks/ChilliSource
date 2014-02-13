@@ -10,8 +10,8 @@
 #ifndef _MO_FLO_RENDERING_STATIC_MESH_COMPONENT_H_
 #define _MO_FLO_RENDERING_STATIC_MESH_COMPONENT_H_
 
-#include <moFlo/Rendering/Components/RenderComponent.h>
-#include <moFlo/Rendering/Mesh.h>
+#include <ChilliSource/Rendering/Components/RenderComponent.h>
+#include <ChilliSource/Rendering/Mesh.h>
 
 namespace moFlo
 {

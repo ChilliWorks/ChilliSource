@@ -13,11 +13,11 @@
 #ifndef _MO_FLO_AUDIO_WINDOWS_FMOD_FMOD_AUDIO_RESOURCE_H_
 #define _MO_FLO_AUDIO_WINDOWS_FMOD_FMOD_AUDIO_RESOURCE_H_
 
-#include <moFlo/Audio/AudioResource.h>
-#include <moFlo/Audio/ForwardDeclarations.h>
+#include <ChilliSource/Audio/AudioResource.h>
+#include <ChilliSource/Audio/ForwardDeclarations.h>
 
-#include <moFlo/Platform/Windows/FMOD/fmod.hpp>
-#include <moFlo/Platform/Windows/FMOD/fmod_errors.h>
+#include <ChilliSource/Platform/Windows/FMOD/fmod.hpp>
+#include <ChilliSource/Platform/Windows/FMOD/fmod_errors.h>
 
 namespace moFlo 
 {

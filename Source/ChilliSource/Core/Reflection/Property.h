@@ -9,13 +9,13 @@
 #ifndef MO_FLOW_CORE_REFLECTION_PROPERTY_HPP_
 #define MO_FLOW_CORE_REFLECTION_PROPERTY_HPP_
 
-#include <moFlo/Core/Reflection/ForwardDeclarations.h>
-#include <moFlo/Core/Reflection/Instance.h>
-#include <moFlo/Core/Reflection/MetaClass.h>
+#include <ChilliSource/Core/Reflection/ForwardDeclarations.h>
+#include <ChilliSource/Core/Reflection/Instance.h>
+#include <ChilliSource/Core/Reflection/MetaClass.h>
 
-#include <moFlo/Core/HashCRC32.h>
+#include <ChilliSource/Core/HashCRC32.h>
 
-#include <moFlo/Core/FastDelegate.h>
+#include <ChilliSource/Core/FastDelegate.h>
 
 namespace moFlo
 {

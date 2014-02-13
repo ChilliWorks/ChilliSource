@@ -10,9 +10,9 @@
 #ifndef MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_EMAILCOMPOSITION_H
 #define MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_EMAILCOMPOSITION_H
 
-#include <moFlo/Platform/Android/ForwardDeclarations.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterface.h>
-#include <moFlo/Social/Communications/EmailCompositionActivity.h>
+#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Social/Communications/EmailCompositionActivity.h>
 
 namespace moFlo
 {

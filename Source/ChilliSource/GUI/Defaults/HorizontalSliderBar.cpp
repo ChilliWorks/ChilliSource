@@ -6,15 +6,15 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/GUI/Defaults/HorizontalSliderBar.h>
-#include <moFlo/GUI/ImageView.h>
+#include <ChilliSource/GUI/Defaults/HorizontalSliderBar.h>
+#include <ChilliSource/GUI/ImageView.h>
 
-#include <moFlo/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
 
-#include <moFlo/Rendering/SpriteSheet.h>
-#include <moFlo/Rendering/SpriteSheetManager.h>
-#include <moFlo/Rendering/TextureManager.h>
-#include <moFlo/Rendering/Texture.h>
+#include <ChilliSource/Rendering/SpriteSheet.h>
+#include <ChilliSource/Rendering/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/TextureManager.h>
+#include <ChilliSource/Rendering/Texture.h>
 
 namespace moFlo
 {

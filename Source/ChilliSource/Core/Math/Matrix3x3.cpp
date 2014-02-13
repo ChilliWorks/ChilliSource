@@ -7,7 +7,7 @@
  *
  */
 
-#include <moFlo/Core/Math/Matrix3x3.h>
+#include <ChilliSource/Core/Math/Matrix3x3.h>
 
 namespace moFlo
 {

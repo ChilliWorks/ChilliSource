@@ -10,10 +10,10 @@
 #ifndef _MO_FLO_CORE_TASK_SCHEDULER_H_
 #define _MO_FLO_CORE_TASK_SCHEDULER_H_
 
-#include <moFlo/Core/boost/threadpool.hpp>
+#include <ChilliSource/Core/boost/threadpool.hpp>
 
-#include <moFlo/Core/Tasks.hpp>
-#include <moFlo/Core/Thread.h>
+#include <ChilliSource/Core/Tasks.hpp>
+#include <ChilliSource/Core/Thread.h>
 
 namespace moFlo
 {

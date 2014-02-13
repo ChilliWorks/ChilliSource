@@ -10,7 +10,7 @@
 #ifndef _MOFLO_SOCIAL_FACEBOOK_FACEBOOKAUTHENTICATION_H_
 #define _MOFLO_SOCIAL_FACEBOOK_FACEBOOKAUTHENTICATION_H_
 
-#include <moFlo/Core/System.h>
+#include <ChilliSource/Core/System.h>
 
 namespace moFlo
 {

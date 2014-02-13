@@ -7,18 +7,18 @@
  *
  */
 
-#include <moFlo/Rendering/CanvasRenderer.h>
-#include <moFlo/Rendering/Material.h>
-#include <moFlo/Rendering/MaterialFactory.h>
-#include <moFlo/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Material.h>
+#include <ChilliSource/Rendering/MaterialFactory.h>
+#include <ChilliSource/Rendering/RenderSystem.h>
 
-#include <moFlo/Core/Screen.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/Math/MathUtils.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Application.h>
 
 #ifdef DEBUG_STATS
-#include <moFlo/Core/DebugStats.h>
+#include <ChilliSource/Core/DebugStats.h>
 #endif
 
 #define MAX_KERN_RATIO 0.25

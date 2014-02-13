@@ -7,7 +7,7 @@
  *
  */
 
-#include <moFlo/Rendering/Components/AmbientLightComponent.h>
+#include <ChilliSource/Rendering/Components/AmbientLightComponent.h>
 
 namespace moFlo
 {

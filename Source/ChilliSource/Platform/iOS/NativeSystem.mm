@@ -6,10 +6,10 @@
 //  Copyright 2010 Tag Games. All rights reserved.
 //
 
-#import <moFlo/Core/PlatformSystem.h>
-#import <moFlo/Platform/iOS/NativeSystem.h>
+#import <ChilliSource/Core/PlatformSystem.h>
+#import <ChilliSource/Platform/iOS/NativeSystem.h>
 
-#import <moFlo/Core/Application.h>
+#import <ChilliSource/Core/Application.h>
 
 #import <mach/mach.h>
 #import <mach/mach_time.h>

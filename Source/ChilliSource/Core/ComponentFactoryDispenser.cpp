@@ -6,14 +6,14 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Core/ComponentFactoryDispenser.h>
-#include <moFlo/Core/ComponentFactory.h>
+#include <ChilliSource/Core/ComponentFactoryDispenser.h>
+#include <ChilliSource/Core/ComponentFactory.h>
 
-#include <moFlo/Audio/AudioComponentFactory.h>
-#include <moFlo/Audio/AudioComponent.h>
+#include <ChilliSource/Audio/AudioComponentFactory.h>
+#include <ChilliSource/Audio/AudioComponent.h>
 
-#include <moFlo/Rendering/RenderComponentFactory.h>
-#include <moFlo/Rendering/Components/SpriteComponent.h>
+#include <ChilliSource/Rendering/RenderComponentFactory.h>
+#include <ChilliSource/Rendering/Components/SpriteComponent.h>
 
 namespace moFlo
 {

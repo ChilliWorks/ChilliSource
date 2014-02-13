@@ -6,10 +6,10 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Networking/MoContentDownloader.h>
+#include <ChilliSource/Networking/MoContentDownloader.h>
 
-#include <moFlo/Core/Device.h>
-#include <moFlo/Core/JSON/json.h>
+#include <ChilliSource/Core/Device.h>
+#include <ChilliSource/Core/JSON/json.h>
 
 namespace moFlo
 {

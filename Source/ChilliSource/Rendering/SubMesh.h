@@ -10,15 +10,15 @@
 #ifndef _MO_FLO_RENDERING_SUB_MESH_H_
 #define _MO_FLO_RENDERING_SUB_MESH_H_
 
-#include <moFlo/Rendering/MeshBuffer.h>
-#include <moFlo/Rendering/Mesh.h>
+#include <ChilliSource/Rendering/MeshBuffer.h>
+#include <ChilliSource/Rendering/Mesh.h>
 
-#include <moFlo/Core/Math/Vector2.h>
-#include <moFlo/Core/Math/Vector3.h>
-#include <moFlo/Core/Math/Vector4.h>
-#include <moFlo/Core/Math/Matrix4x4.h>
-#include <moFlo/Core/Math/Shapes.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Vector4.h>
+#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Shapes.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
 
 namespace moFlo
 {

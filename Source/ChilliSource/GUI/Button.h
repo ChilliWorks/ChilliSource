@@ -9,10 +9,10 @@
 #ifndef _MOFLO_GUI_BUTTON_H_
 #define _MOFLO_GUI_BUTTON_H_
 
-#include <moFlo/GUI/GUIView.h>
+#include <ChilliSource/GUI/GUIView.h>
 
 #ifdef ENABLE_MOFLOW_REFLECTION
-#include <moFlo/Core/Reflection/Reflection.h>
+#include <ChilliSource/Core/Reflection/Reflection.h>
 #define DECLARE_ACTION 
 #else
 

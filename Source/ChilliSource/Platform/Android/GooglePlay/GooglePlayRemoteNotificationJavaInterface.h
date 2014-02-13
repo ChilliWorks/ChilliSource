@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAY_GOOGLEPLAYREMOTENOTIFICATIONJAVAINTERFACE_H_
 #define _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAY_GOOGLEPLAYREMOTENOTIFICATIONJAVAINTERFACE_H_
 
-#include <moFlo/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
 
 namespace moFlo
 {

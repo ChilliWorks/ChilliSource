@@ -14,8 +14,8 @@
 #ifndef _MOFLO_PLATFORM_IOS_IMAGELOADER_H_
 #define _MOFLO_PLATFORM_IOS_IMAGELOADER_H_
 
-#include <moFlo/Core/ImageResourceProvider.h>
-#include <moFlo/Core/Image.h>
+#include <ChilliSource/Core/ImageResourceProvider.h>
+#include <ChilliSource/Core/Image.h>
 
 #include <string>
 

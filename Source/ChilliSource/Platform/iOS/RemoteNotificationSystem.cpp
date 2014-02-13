@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
-#include <moFlo/Platform/iOS/RemoteNotificationSystem.h>
+#include <ChilliSource/Platform/iOS/RemoteNotificationSystem.h>
 
 #include <UIKit/UIKit.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/BaseEncoding.h>
-#include <moFlo/Core/Notifications/NotificationScheduler.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/BaseEncoding.h>
+#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
 namespace moFlo
 {

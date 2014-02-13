@@ -10,10 +10,10 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Input/Gestures.h>
-#include <moFlo/Input/InputSystem.h>
+#include <ChilliSource/Input/Gestures.h>
+#include <ChilliSource/Input/InputSystem.h>
 
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Core/Application.h>
 
 namespace moFlo
 {

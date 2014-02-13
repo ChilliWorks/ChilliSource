@@ -6,10 +6,10 @@
 //  Copyright (c) 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Core/Reflection/Registry.h>
-#include <moFlo/Core/Reflection/MetaClass.h>
+#include <ChilliSource/Core/Reflection/Registry.h>
+#include <ChilliSource/Core/Reflection/MetaClass.h>
 
-#include <moFlo/Core/HashCRC32.h>
+#include <ChilliSource/Core/HashCRC32.h>
 
 namespace moFlo
 {

@@ -8,8 +8,8 @@
  */
 
 
-#include <moFlo/Platform/Android/Social/Communications/ContactInformationProvider.h>
-#include <moFlo/Platform/Android/JavaInterface/ContactInformationProviderJavaInterface.h>
+#include <ChilliSource/Platform/Android/Social/Communications/ContactInformationProvider.h>
+#include <ChilliSource/Platform/Android/JavaInterface/ContactInformationProviderJavaInterface.h>
 
 namespace moFlo
 {

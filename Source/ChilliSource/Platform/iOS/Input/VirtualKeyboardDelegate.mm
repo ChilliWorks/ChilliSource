@@ -6,7 +6,7 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Platform/iOS/Input/VirtualKeyboardDelegate.h>
+#include <ChilliSource/Platform/iOS/Input/VirtualKeyboardDelegate.h>
 
 @implementation VirtualKeyboardDelegate
 

@@ -7,14 +7,14 @@
  *
  */
 
-#include <moFlo/Rendering/DynamicSpriteBatcher.h>
-#include <moFlo/Rendering/RenderSystem.h>
-#include <moFlo/Rendering/RenderComponentFactory.h>
+#include <ChilliSource/Rendering/DynamicSpriteBatcher.h>
+#include <ChilliSource/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/RenderComponentFactory.h>
 
-#include <moFlo/Input/InputSystem.h>
+#include <ChilliSource/Input/InputSystem.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
 
 namespace moFlo
 {

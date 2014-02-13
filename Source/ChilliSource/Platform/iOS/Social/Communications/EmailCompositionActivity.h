@@ -10,7 +10,7 @@
 #ifndef MOFLOW_PLATFORM_IOS_SOCIAL_COMMUNICATIONS_EMAILCOMPOSITIONSCREEN_H
 #define MOFLOW_PLATFORM_IOS_SOCIAL_COMMUNICATIONS_EMAILCOMPOSITIONSCREEN_H
 
-#include <moFlo/Social/Communications/EmailCompositionActivity.h>
+#include <ChilliSource/Social/Communications/EmailCompositionActivity.h>
 #include <MessageUI/MessageUI.h>
 
 @class EmailDelegate;

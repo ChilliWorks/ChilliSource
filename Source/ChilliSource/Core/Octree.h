@@ -36,12 +36,12 @@
 #ifndef _MO_FLO_CORE_OCTREE_H_
 #define _MO_FLO_CORE_OCTREE_H_
 
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/Math/Vector3.h>
-#include <moFlo/Core/Math/Shapes.h>
-#include <moFlo/Core/Component.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Shapes.h>
+#include <ChilliSource/Core/Component.h>
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 const u32 kudwMaximumTreeDepth  = 5;
 const u32 kudwNumChildNodes     = 8;

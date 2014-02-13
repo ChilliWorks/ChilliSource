@@ -9,7 +9,7 @@
 #ifndef MOFLOW_CORE_IMAGEFORMATCONVERTER_H
 #define MOFLOW_CORE_IMAGEFORMATCONVERTER_H
 
-#include <moFlo/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
 
 namespace moFlo
 {

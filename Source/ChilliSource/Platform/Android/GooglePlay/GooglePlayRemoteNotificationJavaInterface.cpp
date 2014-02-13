@@ -6,17 +6,17 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
-#include <moFlo/Platform/Android/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
+#include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
 
 #include <jni.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/ParamDictionary.h>
-#include <moFlo/Core/TaskScheduler.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/ParamDictionary.h>
+#include <ChilliSource/Core/TaskScheduler.h>
 
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
-#include <moFlo/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
 
 extern "C"
 {

@@ -7,17 +7,17 @@
  *
  */
 
-#include <moFlo/Platform/Android/WebViewActivity.h>
-#include <moFlo/Platform/Android/FileIO/FileSystem.h>
+#include <ChilliSource/Platform/Android/WebViewActivity.h>
+#include <ChilliSource/Platform/Android/FileIO/FileSystem.h>
 
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/Screen.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Application.h>
 
-#include <moFlo/Core/FileIO/FileSystem.h>
-#include <moFlo/Core/FileIO/FileStream.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/FileIO/FileStream.h>
 
-#include <moFlo/Platform/Android/JavaInterface/WebViewJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/WebViewJavaInterface.h>
 
 namespace moFlo
 {

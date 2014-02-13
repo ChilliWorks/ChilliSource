@@ -10,7 +10,7 @@
 #ifndef _MOFLO_PLATFORM_IOS_SOCIAL_COMMUNICATIONS_SMSCOMPOSITIONSCREEN_H_
 #define _MOFLO_PLATFORM_IOS_SOCIAL_COMMUNICATIONS_SMSCOMPOSITIONSCREEN_H_
 
-#include <moFlo/Social/Communications/SMSCompositionActivity.h>
+#include <ChilliSource/Social/Communications/SMSCompositionActivity.h>
 #include <MessageUI/MessageUI.h>
 
 @class SMSDelegate;

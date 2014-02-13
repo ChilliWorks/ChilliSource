@@ -10,11 +10,11 @@
 #ifndef _MOFLO_CORE_ENTITYANIMATION_H_
 #define _MOFLO_CORE_ENTITYANIMATION_H_
 
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/GenericAnimation.h>
-#include <moFlo/Core/GenericEvent.h>
-#include <moFlo/Core/SceneAnimation/SceneDescription.h>
-#include <moFlo/Core/SceneAnimation/SceneAnimation.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/GenericAnimation.h>
+#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/SceneAnimation/SceneDescription.h>
+#include <ChilliSource/Core/SceneAnimation/SceneAnimation.h>
 
 namespace moFlo
 {

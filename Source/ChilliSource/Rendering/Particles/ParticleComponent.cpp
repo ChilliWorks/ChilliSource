@@ -7,9 +7,9 @@
  *
  */
 
-#include <moFlo/Rendering/Particles/ParticleComponent.h>
-#include <moFlo/Rendering/Particles/ParticleSystem.h>
-#include <moFlo/Rendering/Particles/Effectors/ParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/ParticleComponent.h>
+#include <ChilliSource/Rendering/Particles/ParticleSystem.h>
+#include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
 
 namespace moFlo
 {

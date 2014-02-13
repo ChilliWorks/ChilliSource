@@ -14,9 +14,9 @@
 #ifndef _MOFLO_CORE_XML_XMLUTILS_H_
 #define _MOFLO_CORE_XML_XMLUTILS_H_
 
-#include <moFlo/Core/XML/tinyxml.h>
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/StringConverter.h>
+#include <ChilliSource/Core/XML/tinyxml.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/StringConverter.h>
 
 namespace moFlo
 {

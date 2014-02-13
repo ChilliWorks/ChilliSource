@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 Tag Games Ltd. All rights reserved.
 //
 
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Core/System.h>
-#include <moFlo/Core/SystemConcepts.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/SystemConcepts.h>
 
 namespace moFlo
 {

@@ -14,9 +14,9 @@
 #ifndef _MOFLO_INPUT_INPUTSYSTEM_H_
 #define _MOFLO_INPUT_INPUTSYSTEM_H_
 
-#include <moFlo/Input/ForwardDeclarations.h>
-#include <moFlo/Core/System.h>
-#include <moFlo/Core/SystemConcepts.h>
+#include <ChilliSource/Input/ForwardDeclarations.h>
+#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/SystemConcepts.h>
 
 namespace moFlo
 {

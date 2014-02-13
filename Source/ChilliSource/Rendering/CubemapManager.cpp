@@ -7,13 +7,13 @@
  *
  */
 
-#include <moFlo/Rendering/CubemapManager.h>
-#include <moFlo/Rendering/Cubemap.h>
+#include <ChilliSource/Rendering/CubemapManager.h>
+#include <ChilliSource/Rendering/Cubemap.h>
 
-#include <moFlo/Core/ImageResourceProvider.h>
-#include <moFlo/Core/Image.h>
-#include <moFlo/Core/Colour.h>
-#include <moFlo/Core/TaskScheduler.h>
+#include <ChilliSource/Core/ImageResourceProvider.h>
+#include <ChilliSource/Core/Image.h>
+#include <ChilliSource/Core/Colour.h>
+#include <ChilliSource/Core/TaskScheduler.h>
 
 namespace moFlo
 {

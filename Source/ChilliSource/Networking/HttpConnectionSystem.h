@@ -10,9 +10,9 @@
 #ifndef _MOFLOW_NETWORKING_HTTPCONNECTIONSYSTEM_H_
 #define _MOFLOW_NETWORKING_HTTPCONNECTIONSYSTEM_H_
 
-#include <moFlo/Core/FastDelegate.h>
-#include <moFlo/Core/ParamDictionary.h>
-#include <moFlo/Core/System.h>
+#include <ChilliSource/Core/FastDelegate.h>
+#include <ChilliSource/Core/ParamDictionary.h>
+#include <ChilliSource/Core/System.h>
 
 namespace moFlo
 {

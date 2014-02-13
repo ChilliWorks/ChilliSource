@@ -10,13 +10,13 @@
 #ifndef _MO_FLO_RENDERING_PARTICLE_COMPONENT_FACTORY_H_
 #define _MO_FLO_RENDERING_PARTICLE_COMPONENT_FACTORY_H_
 
-#include <moFlo/Core/ComponentFactory.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/ComponentFactory.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
  
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
-#include <moFlo/Rendering/Particles/Effectors/ParticleEffectorFactory.h>
-#include <moFlo/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
+#include <ChilliSource/Rendering/Particles/Effectors/ParticleEffectorFactory.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
 
 namespace moFlo
 {

@@ -10,11 +10,11 @@
 * Copyright ©2010 Tag Games Limited - All rights reserved 
 */
 
-#include <moFlo/Core/Logging.h>
+#include <ChilliSource/Core/Logging.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
-#include <moFlo/Core/FileIO/FileStream.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/FileIO/FileStream.h>
 
 #include <iostream>
 

@@ -10,10 +10,10 @@
 #ifndef _MO_FLO_CORE_WEB_VIEW_ACTIVITY_H_
 #define _MO_FLO_CORE_WEB_VIEW_ACTIVITY_H_
 
-#include <moFlo/Core/Activity.h>
-#include <moFlo/Core/GenericEvent.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
-#include <moFlo/Core/Math/UnifiedCoordinates.h>
+#include <ChilliSource/Core/Activity.h>
+#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 
 namespace moFlo
 {

@@ -6,7 +6,7 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Core/StringUtils.h>
+#include <ChilliSource/Core/StringUtils.h>
 #include <algorithm>
 #include <cctype>
 

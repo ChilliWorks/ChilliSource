@@ -9,7 +9,7 @@
 #ifndef _MOFLO_GUI_VerticalStretchableImageVIEW_H_
 #define _MOFLO_GUI_VerticalStretchableImageVIEW_H_
 
-#include <moFlo/GUI/GUIView.h>
+#include <ChilliSource/GUI/GUIView.h>
 
 //=============================================================
 /// GUI - Stretchable Image 

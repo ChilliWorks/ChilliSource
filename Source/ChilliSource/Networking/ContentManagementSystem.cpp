@@ -6,17 +6,17 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Networking/ContentManagementSystem.h>
+#include <ChilliSource/Networking/ContentManagementSystem.h>
 
-#include <moFlo/Core/TweakableConstants.h>
-#include <moFlo/Core/HashMD5.h>
-#include <moFlo/Core/BaseEncoding.h>
-#include <moFlo/Core/TaskScheduler.h>
-#include <moFlo/Core/LocalDataStore.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
-#include <moFlo/Core/FileIO/FileStream.h>
-#include <moFlo/Core/Minizip/unzip.h>
+#include <ChilliSource/Core/TweakableConstants.h>
+#include <ChilliSource/Core/HashMD5.h>
+#include <ChilliSource/Core/BaseEncoding.h>
+#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/LocalDataStore.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/FileIO/FileStream.h>
+#include <ChilliSource/Core/Minizip/unzip.h>
 
 namespace moFlo
 {

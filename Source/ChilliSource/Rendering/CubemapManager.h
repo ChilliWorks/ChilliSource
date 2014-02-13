@@ -10,10 +10,10 @@
 #ifndef _MOFLO_RENDERING_CUBEMAPMANAGER_H_
 #define _MOFLO_RENDERING_CUBEMAPMANAGER_H_
 
-#include <moFlo/Core/ResourceManager.h>
-#include <moFlo/Core/Image.h>
+#include <ChilliSource/Core/ResourceManager.h>
+#include <ChilliSource/Core/Image.h>
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace moFlo
 {	

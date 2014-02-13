@@ -7,23 +7,23 @@
  *
  */
 
-#include <moFlo/Rendering/Renderer.h>
-#include <moFlo/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/Renderer.h>
+#include <ChilliSource/Rendering/RenderSystem.h>
 
-#include <moFlo/Rendering/Texture.h>
-#include <moFlo/Rendering/Components/RenderComponent.h>
-#include <moFlo/Rendering/Components/CameraComponent.h>
-#include <moFlo/Rendering/Components/LightComponent.h>
-#include <moFlo/Rendering/Components/DirectionalLightComponent.h>
-#include <moFlo/Rendering/Components/PointLightComponent.h>
-#include <moFlo/Rendering/Components/AmbientLightComponent.h>
-#include <moFlo/Rendering/RendererSortPredicates.h>
-#include <moFlo/Rendering/CullingPredicates.h>
-#include <moFlo/Rendering/MaterialFactory.h>
+#include <ChilliSource/Rendering/Texture.h>
+#include <ChilliSource/Rendering/Components/RenderComponent.h>
+#include <ChilliSource/Rendering/Components/CameraComponent.h>
+#include <ChilliSource/Rendering/Components/LightComponent.h>
+#include <ChilliSource/Rendering/Components/DirectionalLightComponent.h>
+#include <ChilliSource/Rendering/Components/PointLightComponent.h>
+#include <ChilliSource/Rendering/Components/AmbientLightComponent.h>
+#include <ChilliSource/Rendering/RendererSortPredicates.h>
+#include <ChilliSource/Rendering/CullingPredicates.h>
+#include <ChilliSource/Rendering/MaterialFactory.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/Math/ShapeIntersection.h>
-#include <moFlo/GUI/Window.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Math/ShapeIntersection.h>
+#include <ChilliSource/GUI/Window.h>
 
 namespace moFlo
 {

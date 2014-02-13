@@ -10,10 +10,10 @@
 #ifndef _MO_FLO_RENDERING_SPRITE_BATCH_H_
 #define _MO_FLO_RENDERING_SPRITE_BATCH_H_
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Rendering/MeshBuffer.h>
-#include <moFlo/Rendering/Material.h>
-#include <moFlo/Rendering/Components/SpriteComponent.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/MeshBuffer.h>
+#include <ChilliSource/Rendering/Material.h>
+#include <ChilliSource/Rendering/Components/SpriteComponent.h>
 
 namespace moFlo
 {

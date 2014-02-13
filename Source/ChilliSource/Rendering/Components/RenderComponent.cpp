@@ -10,9 +10,9 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Rendering/Components/RenderComponent.h>
-#include <moFlo/Core/Entity.h>
-#include <moFlo/Rendering/Material.h>
+#include <ChilliSource/Rendering/Components/RenderComponent.h>
+#include <ChilliSource/Core/Entity.h>
+#include <ChilliSource/Rendering/Material.h>
 
 namespace moFlo
 {

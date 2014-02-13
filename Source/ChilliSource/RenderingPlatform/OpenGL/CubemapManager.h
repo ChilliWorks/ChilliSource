@@ -10,9 +10,9 @@
 #ifndef _MOFLOW_OPENGL_CUBEMAPMANAGER_H_
 #define _MOFLOW_OPENGL_CUBEMAPMANAGER_H_
 
-#include <moFlo/RenderingPlatform/OpenGL/ForwardDeclarations.h>
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Rendering/CubemapManager.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/CubemapManager.h>
 
 namespace moFlo
 {

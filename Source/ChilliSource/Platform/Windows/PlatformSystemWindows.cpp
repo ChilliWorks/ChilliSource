@@ -12,32 +12,32 @@
 
 #define WIN32_LEAN_AND_MEAN
 
-#include <moFlo/Platform/Windows/PlatformSystemWindows.h>
-#include <moFlo/Platform/Windows/ImageLoaderWindows.h>
-#include <moFlo/Platform/Windows/Input/InputSystemWindows.h>
-#include <moFlo/Platform/Windows/FileIO/FileSystemWindows.h>
-#include <moFlo/Platform/Windows/HttpConnectionSystemWindows.h>
-#include <moFlo/Platform/Windows/FMOD/FMODSystemWindows.h>
-#include <moFlo/Platform/Windows/FMOD/FMODAudioLoaderWindows.h>
+#include <ChilliSource/Platform/Windows/PlatformSystemWindows.h>
+#include <ChilliSource/Platform/Windows/ImageLoaderWindows.h>
+#include <ChilliSource/Platform/Windows/Input/InputSystemWindows.h>
+#include <ChilliSource/Platform/Windows/FileIO/FileSystemWindows.h>
+#include <ChilliSource/Platform/Windows/HttpConnectionSystemWindows.h>
+#include <ChilliSource/Platform/Windows/FMOD/FMODSystemWindows.h>
+#include <ChilliSource/Platform/Windows/FMOD/FMODAudioLoaderWindows.h>
 
-#include <moFlo/RenderingPlatform/OpenGL/RenderSystem.h>
-#include <moFlo/RenderingPlatform/OpenGL/RenderCapabilities.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/RenderSystem.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/RenderCapabilities.h>
 
-#include <moFlo/Rendering/MaterialLoader.h>
-#include <moFlo/Rendering/MaterialFactory.h>
-#include <moFlo/Rendering/SpriteSheetLoader.h>
-#include <moFlo/Rendering/XMLSpriteSheetLoader.h>
-#include <moFlo/Rendering/FontLoader.h>
-#include <moFlo/Rendering/Renderer.h>
-#include <moFlo/Rendering/ComponentUpdaters/AnimatedMeshComponentUpdater.h>
+#include <ChilliSource/Rendering/MaterialLoader.h>
+#include <ChilliSource/Rendering/MaterialFactory.h>
+#include <ChilliSource/Rendering/SpriteSheetLoader.h>
+#include <ChilliSource/Rendering/XMLSpriteSheetLoader.h>
+#include <ChilliSource/Rendering/FontLoader.h>
+#include <ChilliSource/Rendering/Renderer.h>
+#include <ChilliSource/Rendering/ComponentUpdaters/AnimatedMeshComponentUpdater.h>
 
-#include <moFlo/Audio/AudioLoader.h>
-#include <moFlo/Audio/AudioPlayer.h>
+#include <ChilliSource/Audio/AudioLoader.h>
+#include <ChilliSource/Audio/AudioPlayer.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/MoImageProvider.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/MoImageProvider.h>
 
-#include <moFlo/GUI/GUIViewFactory.h>
+#include <ChilliSource/GUI/GUIViewFactory.h>
 
 #include <windows.h>
 

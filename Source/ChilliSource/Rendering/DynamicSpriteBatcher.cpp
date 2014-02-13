@@ -7,13 +7,13 @@
  *
  */
 
-#include <moFlo/Rendering/DynamicSpriteBatcher.h>
-#include <moFlo/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/DynamicSpriteBatcher.h>
+#include <ChilliSource/Rendering/RenderSystem.h>
 
-#include <moFlo/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
 
 #ifdef DEBUG_STATS
-#include <moFlo/Core/DebugStats.h>
+#include <ChilliSource/Core/DebugStats.h>
 #endif
 
 namespace moFlo

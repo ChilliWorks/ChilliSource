@@ -7,10 +7,10 @@
  *
  */
 
-#include <moFlo/Platform/Android/JavaInterface/LocalNotificationJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
-#include <moFlo/Platform/Android/LocalNotificationScheduler.h>
+#include <ChilliSource/Platform/Android/JavaInterface/LocalNotificationJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Platform/Android/LocalNotificationScheduler.h>
 
 #include <jni.h>
 

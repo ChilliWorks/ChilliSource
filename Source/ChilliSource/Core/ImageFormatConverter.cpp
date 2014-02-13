@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Tag Games Ltd. All rights reserved.
 //
 
-#include <moFlo/Core/ImageFormatConverter.h>
-#include <moFlo/Core/Image.h>
+#include <ChilliSource/Core/ImageFormatConverter.h>
+#include <ChilliSource/Core/Image.h>
 
 namespace moFlo
 {

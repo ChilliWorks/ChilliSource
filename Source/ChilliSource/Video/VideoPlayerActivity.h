@@ -9,9 +9,9 @@
 #ifndef _MO_FLO_VIDEO_VIDEO_PLAYER_H_
 #define _MO_FLO_VIDEO_VIDEO_PLAYER_H_
 
-#include <moFlo/Core/Activity.h>
-#include <moFlo/Core/GenericEvent.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Activity.h>
+#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
 
 namespace moFlo
 {

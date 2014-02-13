@@ -10,8 +10,8 @@
 #ifndef _MO_FLO_STATE_
 #define _MO_FLO_STATE_
 
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/Notifications/NotificationScheduler.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
 namespace moFlo
 {

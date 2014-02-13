@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Core/LaunchingActions.h>
-#include <moFlo/Core/BaseEncoding.h>
-#include <moFlo/Core/JSON/json.h>
+#include <ChilliSource/Core/LaunchingActions.h>
+#include <ChilliSource/Core/BaseEncoding.h>
+#include <ChilliSource/Core/JSON/json.h>
 
 namespace moFlo
 {

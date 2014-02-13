@@ -10,9 +10,9 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_LOCALNOTIFCATIONSJAVAINTERFACE_H_
 #define _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_LOCALNOTIFCATIONSJAVAINTERFACE_H_
 
-#include <moFlo/Platform/Android/ForwardDeclarations.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterface.h>
-#include <moFlo/Core/Notifications/NotificationScheduler.h>
+#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
 namespace moFlo
 {

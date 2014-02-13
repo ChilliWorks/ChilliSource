@@ -6,16 +6,16 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Platform/Android/GooglePlayExpansion/GooglePlayExpansionSystem.h>
+#include <ChilliSource/Platform/Android/GooglePlayExpansion/GooglePlayExpansionSystem.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/TaskScheduler.h>
-#include <moFlo/Core/Utils.h>
-#include <moFlo/Core/ApplicationEvents.h>
-#include <moFlo/Core/Minizip/unzip.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/Utils.h>
+#include <ChilliSource/Core/ApplicationEvents.h>
+#include <ChilliSource/Core/Minizip/unzip.h>
 
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 
 #include <jni.h>
 

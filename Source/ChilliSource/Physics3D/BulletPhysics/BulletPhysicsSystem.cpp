@@ -7,11 +7,11 @@
  *
  */
 
-#include <moFlo/Physics3D/BulletPhysics/BulletPhysicsSystem.h>
-#include <moFlo/Physics3D/BulletPhysics/BulletComponentFactory.h>
-#include <moFlo/Physics3D/BulletPhysics/BulletPhysicsComponent.h>
-#include <moFlo/Core/ResourceManagerDispenser.h>
-#include <moFlo/Core/Component.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletPhysicsSystem.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletComponentFactory.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletPhysicsComponent.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Component.h>
 
 namespace moFlo
 {

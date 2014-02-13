@@ -10,9 +10,9 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Rendering/ShaderManager.h>
-#include <moFlo/Rendering/Shader.h>
-#include <moFlo/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/ShaderManager.h>
+#include <ChilliSource/Rendering/Shader.h>
+#include <ChilliSource/Rendering/RenderSystem.h>
 
 namespace moFlo
 {

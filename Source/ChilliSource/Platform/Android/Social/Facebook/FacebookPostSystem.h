@@ -3,15 +3,15 @@
  * moFlow
  *
  * Created by Robert Henning on 03/05/2012
- * Copyright ©2012 Tag Games Limited - All rights reserved
+ * Copyright ï¿½2012 Tag Games Limited - All rights reserved
  */
 
 #ifndef _MOFLO_PLATFORM_ANDROID_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
 #define _MOFLO_PLATFORM_ANDROID_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
 
-#include <moFlo/Social/Facebook/FacebookPostSystem.h>
-#include <moFlo/Platform/Android/Social/Facebook/FacebookAuthentication.h>
-#include <moFlo/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
+#include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
+#include <ChilliSource/Platform/Android/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
 
 namespace moFlo
 {

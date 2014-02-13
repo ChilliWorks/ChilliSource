@@ -19,15 +19,15 @@
 #ifndef _TAG_FOUNDATION_H_
 #define _TAG_FOUNDATION_H_
 
-#include <moFlo/Core/boost/bind.hpp>
-#include <moFlo/Core/boost/tr1/memory.hpp>
-#include <moFlo/Core/boost/unordered_map.hpp>
-#include <moFlo/Core/boost/circular_buffer.hpp>
-#include <moFlo/Core/boost/static_assert.hpp>
-#include <moFlo/Core/boost/smart_ptr/shared_array.hpp>
-#include <moFlo/Core/boost/smart_ptr/shared_ptr.hpp>
-#include <moFlo/Core/boost/enable_shared_from_this.hpp>
-#include <moFlo/Core/boost/thread/future.hpp>
+#include <ChilliSource/Core/boost/bind.hpp>
+#include <ChilliSource/Core/boost/tr1/memory.hpp>
+#include <ChilliSource/Core/boost/unordered_map.hpp>
+#include <ChilliSource/Core/boost/circular_buffer.hpp>
+#include <ChilliSource/Core/boost/static_assert.hpp>
+#include <ChilliSource/Core/boost/smart_ptr/shared_array.hpp>
+#include <ChilliSource/Core/boost/smart_ptr/shared_ptr.hpp>
+#include <ChilliSource/Core/boost/enable_shared_from_this.hpp>
+#include <ChilliSource/Core/boost/thread/future.hpp>
 
 #define SHARED_PTR boost::shared_ptr
 #define SHARED_ARRAY_PTR boost::shared_array
@@ -43,7 +43,7 @@
 #define RING_BUFFER boost::circular_buffer
 
 #ifdef RDE_VECTOR
-#include <moFlo/RDESTL/vector.h>
+#include <ChilliSource/RDESTL/vector.h>
 #define DYNAMIC_ARRAY rde::vector
 #else
 #include <vector>
@@ -144,10 +144,10 @@ template <> struct CompileTimeChecker<false>{};
 #endif
 
 
-#include <moFlo/Core/Logging.h>
-#include <moFlo/BuildProperties.h>
-#include <moFlo/Core/StringConverter.h>
-#include <moFlo/Core/LocalisedText.h>
+#include <ChilliSource/Core/Logging.h>
+#include <ChilliSource/BuildProperties.h>
+#include <ChilliSource/Core/StringConverter.h>
+#include <ChilliSource/Core/LocalisedText.h>
 
 //---Missing OpenGL definitions
 #define GL_GLEXT_PROTOTYPES

@@ -13,8 +13,8 @@
 #ifndef _MOFLOW_OPENGL_SHADERMANAGER_H_
 #define _MOFLOW_OPENGL_SHADERMANAGER_H_
 
-#include <moFlo/Rendering/ShaderManager.h>
-#include <moFlo/RenderingPlatform/OpenGL/Shader.h>
+#include <ChilliSource/Rendering/ShaderManager.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/Shader.h>
 
 namespace moFlo
 {

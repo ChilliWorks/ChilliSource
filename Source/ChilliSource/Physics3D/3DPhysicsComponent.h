@@ -10,9 +10,9 @@
 #ifndef _MOFLO_PHYSICS3D_3DPHYSICSCOMPONENT_H_
 #define _MOFLO_PHYSICS3D_3DPHYSICSCOMPONENT_H_
 
-#include <moFlo/Physics3D/ForwardDeclarations.h>
-#include <moFlo/Core/Component.h>
-#include <moFlo/Core/Transform.h>
+#include <ChilliSource/Physics3D/ForwardDeclarations.h>
+#include <ChilliSource/Core/Component.h>
+#include <ChilliSource/Core/Transform.h>
 
 
 namespace moFlo

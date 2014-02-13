@@ -3,14 +3,14 @@
  * moFlo
  *
  * Created by Ian Copland on 01/12/2011
- * Copyright ©2011 Tag Games Limited - All rights reserved
+ * Copyright ï¿½2011 Tag Games Limited - All rights reserved
  */
 
 #ifndef _MOFLO_PLATFORM_ANDROID_INPUT_SHAREDPREFERENCES_INTERFACE_JAVA_INTERFACE_
 #define _MOFLO_PLATFORM_ANDROID_INPUT_SHAREDPREFERENCES_INTERFACE_JAVA_INTERFACE_
 
 #include <jni.h>
-#include <moFlo/Platform/Android/JavaInterface/_JavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
 
 namespace moFlo
 {

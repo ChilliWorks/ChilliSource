@@ -32,7 +32,7 @@
  
  */
 
-#include <moFlo/Core/BaseEncoding.h>
+#include <ChilliSource/Core/BaseEncoding.h>
 
 namespace moFlo
 {

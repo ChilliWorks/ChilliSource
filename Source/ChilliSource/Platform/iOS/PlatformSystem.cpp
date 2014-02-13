@@ -10,47 +10,47 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
 
-#include <moFlo/Platform/iOS/PlatformSystem.h>
-#include <moFlo/Platform/iOS/NativeSystem.h>
-#include <moFlo/Platform/iOS/ImageLoader.h>
-#include <moFlo/Platform/iOS/Input/InputSystem.h>
-#include <moFlo/Platform/iOS/Video/VideoPlayerActivity.h>
-#include <moFlo/Platform/iOS/FMOD/FMODSystem.h>
-#include <moFlo/Platform/iOS/FMOD/FMODAudioLoader.h>
-#include <moFlo/Platform/iOS/HttpConnectionSystem.h>
-#include <moFlo/Platform/iOS/ToastNotification.h>
-#include <moFlo/Platform/iOS/IAPSystem.h>
-#include <moFlo/Platform/iOS/WebViewActivity.h>
+#include <ChilliSource/Platform/iOS/PlatformSystem.h>
+#include <ChilliSource/Platform/iOS/NativeSystem.h>
+#include <ChilliSource/Platform/iOS/ImageLoader.h>
+#include <ChilliSource/Platform/iOS/Input/InputSystem.h>
+#include <ChilliSource/Platform/iOS/Video/VideoPlayerActivity.h>
+#include <ChilliSource/Platform/iOS/FMOD/FMODSystem.h>
+#include <ChilliSource/Platform/iOS/FMOD/FMODAudioLoader.h>
+#include <ChilliSource/Platform/iOS/HttpConnectionSystem.h>
+#include <ChilliSource/Platform/iOS/ToastNotification.h>
+#include <ChilliSource/Platform/iOS/IAPSystem.h>
+#include <ChilliSource/Platform/iOS/WebViewActivity.h>
 
-#include <moFlo/Platform/iOS/Social/Communications/SMSCompositionActivity.h>
-#include <moFlo/Platform/iOS/Social/Communications/EmailCompositionActivity.h>
-#include <moFlo/Platform/iOS/Social/Communications/ContactInformationProvider.h>
+#include <ChilliSource/Platform/iOS/Social/Communications/SMSCompositionActivity.h>
+#include <ChilliSource/Platform/iOS/Social/Communications/EmailCompositionActivity.h>
+#include <ChilliSource/Platform/iOS/Social/Communications/ContactInformationProvider.h>
 
-#include <moFlo/Platform/iOS/LocalNotificationScheduler.h>
-#include <moFlo/Platform/iOS/FileIO/FileSystem.h>
-#include <moFlo/Platform/iOS/NSString+MD5Addition.h>
-#include <moFlo/Platform/iOS/UIDevice+IdentifierAddition.h>
+#include <ChilliSource/Platform/iOS/LocalNotificationScheduler.h>
+#include <ChilliSource/Platform/iOS/FileIO/FileSystem.h>
+#include <ChilliSource/Platform/iOS/NSString+MD5Addition.h>
+#include <ChilliSource/Platform/iOS/UIDevice+IdentifierAddition.h>
 
-#include <moFlo/Rendering/Renderer.h>
-#include <moFlo/Rendering/FontLoader.h>
-#include <moFlo/Rendering/SpriteSheetLoader.h>
-#include <moFlo/Rendering/XMLSpriteSheetLoader.h>
-#include <moFlo/Rendering/MaterialLoader.h>
-#include <moFlo/Rendering/MaterialFactory.h>
-#include <moFlo/Rendering/ComponentUpdaters/AnimatedMeshComponentUpdater.h>
+#include <ChilliSource/Rendering/Renderer.h>
+#include <ChilliSource/Rendering/FontLoader.h>
+#include <ChilliSource/Rendering/SpriteSheetLoader.h>
+#include <ChilliSource/Rendering/XMLSpriteSheetLoader.h>
+#include <ChilliSource/Rendering/MaterialLoader.h>
+#include <ChilliSource/Rendering/MaterialFactory.h>
+#include <ChilliSource/Rendering/ComponentUpdaters/AnimatedMeshComponentUpdater.h>
 
-#include <moFlo/Audio/AudioPlayer.h>
-#include <moFlo/Audio/AudioLoader.h>
+#include <ChilliSource/Audio/AudioPlayer.h>
+#include <ChilliSource/Audio/AudioLoader.h>
 
-#include <moFlo/GUI/GUIViewFactory.h>
+#include <ChilliSource/GUI/GUIViewFactory.h>
 
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/MoImageProvider.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/MoImageProvider.h>
 
-#include <moFlo/RenderingPlatform/OpenGL/RenderSystem.h>
-#include <moFlo/RenderingPlatform/OpenGL/RenderCapabilities.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/RenderSystem.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/RenderCapabilities.h>
 
 #include <UIKit/UIKit.h>
 #include <sys/types.h>

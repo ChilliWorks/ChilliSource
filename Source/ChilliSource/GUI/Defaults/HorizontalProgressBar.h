@@ -9,7 +9,7 @@
 #ifndef _MOFLO_GUI_DEFAULTS_HORIZONTALPROGRESSBAR_H_
 #define _MOFLO_GUI_DEFAULTS_HORIZONTALPROGRESSBAR_H_
 
-#include <moFlo/GUI/ProgressBar.h>
+#include <ChilliSource/GUI/ProgressBar.h>
 
 namespace moFlo
 {

@@ -10,13 +10,13 @@
 #ifndef _MO_FLO_RENDERING_CAMERA_COMPONENT_H_
 #define _MO_FLO_RENDERING_CAMERA_COMPONENT_H_
 
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/Component.h>
-#include <moFlo/Core/Colour.h>
-#include <moFlo/Core/Screen.h>
-#include <moFlo/Core/Math/Shapes.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/Component.h>
+#include <ChilliSource/Core/Colour.h>
+#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Math/Shapes.h>
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace moFlo
 {

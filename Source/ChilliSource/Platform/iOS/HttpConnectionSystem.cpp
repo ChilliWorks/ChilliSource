@@ -7,15 +7,15 @@
  *
  */
 
-#include <moFlo/Platform/iOS/HttpConnectionSystem.h>
-#include <moFlo/Platform/iOS/MoFloReachability.h>
+#include <ChilliSource/Platform/iOS/HttpConnectionSystem.h>
+#include <ChilliSource/Platform/iOS/MoFloReachability.h>
 
-#include <moFlo/Core/TaskScheduler.h>
-#include <moFlo/Core/Thread.h>
-#include <moFlo/Core/Math/MathUtils.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/HashCRC32.h>
+#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/Thread.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/HashCRC32.h>
 
 #include <sstream>
 

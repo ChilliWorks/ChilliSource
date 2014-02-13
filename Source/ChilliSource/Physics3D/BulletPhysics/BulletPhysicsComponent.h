@@ -10,11 +10,11 @@
 #ifndef _MOFLOW_PHYSICS3D_BULLETPHYSICS_BULLETPHYSICSCOMPONENT_H_
 #define _MOFLOW_PHYSICS3D_BULLETPHYSICS_BULLETPHYSICSCOMPONENT_H_
 
-#include <moFlo/Physics3D/3DPhysicsComponent.h>
-#include <moFlo/Physics3D/BulletPhysics/ForwardDeclarations.h>
-#include <moFlo/Physics3D/BulletPhysics/BulletBodyHolder.h>
+#include <ChilliSource/Physics3D/3DPhysicsComponent.h>
+#include <ChilliSource/Physics3D/BulletPhysics/ForwardDeclarations.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletBodyHolder.h>
 #include <LinearMath/btMotionState.h>
-#include <moFlo/Core/Transform.h>
+#include <ChilliSource/Core/Transform.h>
 
 namespace moFlo
 {

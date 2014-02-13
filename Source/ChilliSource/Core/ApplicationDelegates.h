@@ -10,8 +10,8 @@
 #ifndef _MOFLOW_CORE_APPLICATIONDELEGATES_H_
 #define _MOFLOW_CORE_APPLICATIONDELEGATES_H_
 
-#include <moFlo/Core/CustomCreator.h>
-#include <moFlo/Core/Screen.h>
+#include <ChilliSource/Core/CustomCreator.h>
+#include <ChilliSource/Core/Screen.h>
 
 namespace moFlo
 {

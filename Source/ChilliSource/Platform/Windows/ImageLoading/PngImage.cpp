@@ -7,9 +7,9 @@
 *
 */
 
-#include <moFlo/Platform/Windows/ImageLoading/PngImage.h>
-#include <moFlo/Platform/Windows/ImageLoading/LibPng/png.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Platform/Windows/ImageLoading/PngImage.h>
+#include <ChilliSource/Platform/Windows/ImageLoading/LibPng/png.h>
+#include <ChilliSource/Core/Application.h>
 
 //----------------------------------------------------------------------------------
 /// Read Png Data

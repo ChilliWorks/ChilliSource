@@ -10,10 +10,10 @@
 #ifndef _MOFLOW_VIDEO_MOSUBTITLESLOADER_H_
 #define _MOFLOW_VIDEO_MOSUBTITLESLOADER_H_
 
-#include <moFlo/Video/ForwardDeclarations.h>
-#include <moFlo/Core/ResourceProvider.h>
-#include <moFlo/Core/JSON/json.h>
-#include <moFlo/Video/Subtitles.h>
+#include <ChilliSource/Video/ForwardDeclarations.h>
+#include <ChilliSource/Core/ResourceProvider.h>
+#include <ChilliSource/Core/JSON/json.h>
+#include <ChilliSource/Video/Subtitles.h>
 
 namespace moFlo
 {

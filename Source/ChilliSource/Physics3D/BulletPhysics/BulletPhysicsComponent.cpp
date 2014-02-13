@@ -12,10 +12,10 @@
 #include <BulletDynamics/Dynamics/btRigidBody.h>
 #include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 
-#include <moFlo/Physics3D/BulletPhysics/BulletPhysicsComponent.h>
-#include <moFlo/Physics3D/BulletPhysics/BulletPhysicsSystem.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletPhysicsComponent.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletPhysicsSystem.h>
 
-#include <moFlo/Core/Entity.h>
+#include <ChilliSource/Core/Entity.h>
 
 namespace moFlo
 {

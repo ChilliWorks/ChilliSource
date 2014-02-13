@@ -7,7 +7,7 @@
  *
  */
 
-#include <moFlo/Physics3D/BulletPhysics/ForwardDeclarations.h>
+#include <ChilliSource/Physics3D/BulletPhysics/ForwardDeclarations.h>
 
 #ifndef _MOFLOW_PHYSICS3D_BULLETPHYSICS_BULLETBODYHOLDER_H_
 #define _MOFLOW_PHYSICS3D_BULLETPHYSICS_BULLETBODYHOLDER_H_

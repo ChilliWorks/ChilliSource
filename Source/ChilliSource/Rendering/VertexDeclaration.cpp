@@ -7,7 +7,7 @@
 *
 */
 
-#include <moFlo/Rendering/VertexDeclaration.h>
+#include <ChilliSource/Rendering/VertexDeclaration.h>
 
 namespace moFlo
 {

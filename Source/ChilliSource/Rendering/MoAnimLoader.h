@@ -11,9 +11,9 @@
 #ifndef _MO_FLO_RENDERING_MOANIM_LOADER_H_
 #define _MO_FLO_RENDERING_MOANIM_LOADER_H_
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Core/ResourceProvider.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Core/ResourceProvider.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
 
 namespace moFlo
 {

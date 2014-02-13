@@ -10,11 +10,11 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Rendering/MaterialManager.h>
-#include <moFlo/Rendering/Material.h>
+#include <ChilliSource/Rendering/MaterialManager.h>
+#include <ChilliSource/Rendering/Material.h>
 
-#include <moFlo/Core/ResourceProvider.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Core/ResourceProvider.h>
+#include <ChilliSource/Core/Application.h>
 
 namespace moFlo
 {

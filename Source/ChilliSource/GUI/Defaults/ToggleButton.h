@@ -9,11 +9,11 @@
 #ifndef _MOFLO_GUI_DEFAULTS_TOGGLEBUTTON_H_
 #define _MOFLO_GUI_DEFAULTS_TOGGLEBUTTON_H_
 
-#include <moFlo/GUI/ForwardDeclarations.h>
-#include <moFlo/GUI/Button.h>
-#include <moFlo/Core/Math/Shapes.h>
+#include <ChilliSource/GUI/ForwardDeclarations.h>
+#include <ChilliSource/GUI/Button.h>
+#include <ChilliSource/Core/Math/Shapes.h>
 
-#include <moFlo/Audio/ForwardDeclarations.h>
+#include <ChilliSource/Audio/ForwardDeclarations.h>
 
 namespace moFlo
 {

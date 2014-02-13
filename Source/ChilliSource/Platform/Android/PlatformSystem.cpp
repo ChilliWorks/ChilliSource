@@ -10,50 +10,50 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Platform/Android/PlatformSystem.h>
-#include <moFlo/Platform/Android/ImageLoader.h>
-#include <moFlo/Platform/Android/Input/InputSystem.h>
-#include <moFlo/Platform/Android/WebViewActivity.h>
-#include <moFlo/Platform/Android/Video/VideoPlayerActivity.h>
+#include <ChilliSource/Platform/Android/PlatformSystem.h>
+#include <ChilliSource/Platform/Android/ImageLoader.h>
+#include <ChilliSource/Platform/Android/Input/InputSystem.h>
+#include <ChilliSource/Platform/Android/WebViewActivity.h>
+#include <ChilliSource/Platform/Android/Video/VideoPlayerActivity.h>
 
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <moFlo/Platform/Android/JavaInterface/CoreJavaInterface.h>
-#include <moFlo/Platform/Android/FMOD/FMODSystem.h>
-#include <moFlo/Platform/Android/FMOD/FMODAudioLoader.h>
-#include <moFlo/Platform/Android/HttpConnectionSystem.h>
-#include <moFlo/Platform/Android/FileIO/FileSystem.h>
-#include <moFlo/Platform/Android/LocalNotificationScheduler.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/JavaInterface/CoreJavaInterface.h>
+#include <ChilliSource/Platform/Android/FMOD/FMODSystem.h>
+#include <ChilliSource/Platform/Android/FMOD/FMODAudioLoader.h>
+#include <ChilliSource/Platform/Android/HttpConnectionSystem.h>
+#include <ChilliSource/Platform/Android/FileIO/FileSystem.h>
+#include <ChilliSource/Platform/Android/LocalNotificationScheduler.h>
 
-#include <moFlo/Platform/Android/Social/Communications/EmailCompositionActivity.h>
-#include <moFlo/Platform/Android/Social/Communications/SMSCompositionActivity.h>
-#include <moFlo/Platform/Android/Social/Communications/ContactInformationProvider.h>
+#include <ChilliSource/Platform/Android/Social/Communications/EmailCompositionActivity.h>
+#include <ChilliSource/Platform/Android/Social/Communications/SMSCompositionActivity.h>
+#include <ChilliSource/Platform/Android/Social/Communications/ContactInformationProvider.h>
 
-#include <moFlo/Networking/IAPSystem.h>
+#include <ChilliSource/Networking/IAPSystem.h>
 
-#include <moFlo/Rendering/RenderSystem.h>
-#include <moFlo/Rendering/Renderer.h>
-#include <moFlo/Rendering/SpriteSheetLoader.h>
-#include <moFlo/Rendering/XMLSpriteSheetLoader.h>
-#include <moFlo/Rendering/MaterialLoader.h>
- #include <moFlo/Rendering/MaterialFactory.h>
-#include <moFlo/Rendering/FontLoader.h>
-#include <moFlo/Rendering/ComponentUpdaters/AnimatedMeshComponentUpdater.h>
+#include <ChilliSource/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/Renderer.h>
+#include <ChilliSource/Rendering/SpriteSheetLoader.h>
+#include <ChilliSource/Rendering/XMLSpriteSheetLoader.h>
+#include <ChilliSource/Rendering/MaterialLoader.h>
+ #include <ChilliSource/Rendering/MaterialFactory.h>
+#include <ChilliSource/Rendering/FontLoader.h>
+#include <ChilliSource/Rendering/ComponentUpdaters/AnimatedMeshComponentUpdater.h>
 
-#include <moFlo/Core/Utils.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
-#include <moFlo/Core/Notifications/NotificationScheduler.h>
-#include <moFlo/Core/MoImageProvider.h>
-#include <moFlo/Core/ETC1ImageProvider.h>
+#include <ChilliSource/Core/Utils.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
+#include <ChilliSource/Core/MoImageProvider.h>
+#include <ChilliSource/Core/ETC1ImageProvider.h>
 
-#include <moFlo/Audio/AudioSystem.h>
-#include <moFlo/Audio/AudioPlayer.h>
+#include <ChilliSource/Audio/AudioSystem.h>
+#include <ChilliSource/Audio/AudioPlayer.h>
 
-#include <moFlo/GUI/GUIViewFactory.h>
+#include <ChilliSource/GUI/GUIViewFactory.h>
 
-#include <moFlo/Input/InputSystem.h>
+#include <ChilliSource/Input/InputSystem.h>
 
-#include <moFlo/RenderingPlatform/OpenGL/RenderSystem.h>
-#include <moFlo/RenderingPlatform/OpenGL/RenderCapabilities.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/RenderSystem.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/RenderCapabilities.h>
 
 namespace moFlo 
 {

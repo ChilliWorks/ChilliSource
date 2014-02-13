@@ -13,10 +13,10 @@
 #ifndef _MO_FLO_RENDERING_SPRITE_DATA_H_
 #define _MO_FLO_RENDERING_SPRITE_DATA_H_
 
-#include <moFlo/Core/Math/Shapes.h>
+#include <ChilliSource/Core/Math/Shapes.h>
 
-#include <moFlo/Core/Resource.h>
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Core/Resource.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace moFlo
 {

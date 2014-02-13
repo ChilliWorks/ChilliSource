@@ -10,10 +10,10 @@
 #ifndef _MO_FLO_RENDERING_SKELETALANIMATION_H_
 #define _MO_FLO_RENDERING_SKELETALANIMATION_H_
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
-#include <moFlo/Core/Resource.h>
-#include <moFlo/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Resource.h>
+#include <ChilliSource/Core/Math/Matrix4x4.h>
 
 namespace moFlo
 {

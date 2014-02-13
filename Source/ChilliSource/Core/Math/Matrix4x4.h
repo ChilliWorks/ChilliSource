@@ -10,10 +10,10 @@
 #ifndef _MO_FLO_CORE_MATH_MATRIX_4X4_H_
 #define _MO_FLO_CORE_MATH_MATRIX_4X4_H_
 
-#include <moFlo/Core/Math/Matrix3x3.h>
-#include <moFlo/Core/Math/Vector2.h>
-#include <moFlo/Core/Math/Vector3.h>
-#include <moFlo/Core/Math/Vector4.h>
+#include <ChilliSource/Core/Math/Matrix3x3.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Vector4.h>
 
 #if defined TARGET_OS_IPHONE && defined ENABLE_QUICK_MATH
     #include <Accelerate/Accelerate.h>

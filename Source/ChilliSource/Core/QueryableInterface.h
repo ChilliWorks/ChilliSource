@@ -15,8 +15,8 @@ Get * File: QueryableInterface.h
 #ifndef _MOFLO_CORE_QUERYABLE_INTERFACE_H_
 #define _MOFLO_CORE_QUERYABLE_INTERFACE_H_
 
-#include <moFlo/Core/HashCRC32.h>
-#include <moFlo/Core/StringUtils.h>
+#include <ChilliSource/Core/HashCRC32.h>
+#include <ChilliSource/Core/StringUtils.h>
 
 namespace moFlo
 {

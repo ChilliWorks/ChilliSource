@@ -16,8 +16,8 @@
 
 #include <jni.h>
 #include <map>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterface.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Core/Application.h>
 
 extern moFlo::Core::CApplication* (*BootFunctionPtr)();
 

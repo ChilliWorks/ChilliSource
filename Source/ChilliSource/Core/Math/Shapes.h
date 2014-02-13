@@ -11,9 +11,9 @@
 #define _MOFLO_CORE_MATHS_SHAPES_H_
 
 
-#include <moFlo/Core/Math/Vector2.h>
-#include <moFlo/Core/Math/Vector3.h>
-#include <moFlo/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
 
 namespace moFlo
 {

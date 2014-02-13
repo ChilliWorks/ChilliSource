@@ -13,8 +13,8 @@
 #ifndef _MO_FLO_RENDERING_SHADER_MANAGER_H_
 #define _MO_FLO_RENDERING_SHADER_MANAGER_H_
 
-#include <moFlo/Core/ResourceManager.h>
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Core/ResourceManager.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace moFlo
 {

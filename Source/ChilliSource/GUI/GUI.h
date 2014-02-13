@@ -9,15 +9,15 @@
 #ifndef _MOFLO_GUI_GUI_H_
 #define _MOFLO_GUI_GUI_H_
 
-#include <moFlo/GUI/GUIViewFactory.h>
-#include <moFlo/GUI/GUIView.h>
-#include <moFlo/GUI/ImageView.h>
-#include <moFlo/GUI/Label.h>
-#include <moFlo/GUI/EditableLabel.h>
-#include <moFlo/GUI/FormattedLabel.h>
-#include <moFlo/GUI/ScrollView.h>
-#include <moFlo/GUI/GridView.h>
-#include <moFlo/GUI/ImageView.h>
-#include <moFlo/GUI/StretchableImage.h>
+#include <ChilliSource/GUI/GUIViewFactory.h>
+#include <ChilliSource/GUI/GUIView.h>
+#include <ChilliSource/GUI/ImageView.h>
+#include <ChilliSource/GUI/Label.h>
+#include <ChilliSource/GUI/EditableLabel.h>
+#include <ChilliSource/GUI/FormattedLabel.h>
+#include <ChilliSource/GUI/ScrollView.h>
+#include <ChilliSource/GUI/GridView.h>
+#include <ChilliSource/GUI/ImageView.h>
+#include <ChilliSource/GUI/StretchableImage.h>
 
 #endif

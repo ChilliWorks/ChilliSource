@@ -13,7 +13,7 @@
 #ifndef _MO_FLO_AUDIO_SOUND_EVENT_H_
 #define _MO_FLO_AUDIO_SOUND_EVENT_H_
 
-#include <moFlo/Audio/AudioComponent.h>
+#include <ChilliSource/Audio/AudioComponent.h>
 
 namespace moFlo
 {

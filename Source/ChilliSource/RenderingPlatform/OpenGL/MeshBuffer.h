@@ -10,9 +10,9 @@
 #ifndef _MOFLOW_OPENGL_MESHBUFFER_H_
 #define _MOFLOW_OPENGL_MESHBUFFER_H_
 
-#include <moFlo/Rendering/MeshBuffer.h>
-#include <moFlo/RenderingPlatform/OpenGL/ForwardDeclarations.h>
-#include <moFlo/RenderingPlatform/OpenGL/GLIncludes.h>
+#include <ChilliSource/Rendering/MeshBuffer.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/ForwardDeclarations.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/GLIncludes.h>
 
 namespace moFlo
 {

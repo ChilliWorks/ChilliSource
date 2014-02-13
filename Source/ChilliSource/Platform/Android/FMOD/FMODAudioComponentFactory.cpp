@@ -10,10 +10,10 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
  
-#include <moFlo/Platform/Android/FMOD/FMODAudioComponentFactory.h>
-#include <moFlo/Platform/Android/FMOD/FMODAudioComponent.h>
+#include <ChilliSource/Platform/Android/FMOD/FMODAudioComponentFactory.h>
+#include <ChilliSource/Platform/Android/FMOD/FMODAudioComponent.h>
 
-#include <moFlo/Audio/AudioManager.h>
+#include <ChilliSource/Audio/AudioManager.h>
 
 
 

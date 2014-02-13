@@ -7,9 +7,9 @@
  *
  */
 
-#include <moFlo/Rendering/Components/PointLightComponent.h>
+#include <ChilliSource/Rendering/Components/PointLightComponent.h>
 
-#include <moFlo/Core/Entity.h>
+#include <ChilliSource/Core/Entity.h>
 
 #include <limits.h>
 

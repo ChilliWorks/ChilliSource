@@ -9,10 +9,10 @@
 #ifndef _MOFLO_NETWORKING_MOMETRICS_SESSION_H_
 #define _MOFLO_NETWORKING_MOMETRICS_SESSION_H_
 
-#include <moFlo/Networking/ForwardDeclarations.h>
-#include <moFlo/Networking/HttpConnectionSystem.h>
+#include <ChilliSource/Networking/ForwardDeclarations.h>
+#include <ChilliSource/Networking/HttpConnectionSystem.h>
 
-#include <moFlo/Core/JSON/json.h>
+#include <ChilliSource/Core/JSON/json.h>
 
 #include <queue>
 

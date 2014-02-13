@@ -10,9 +10,9 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_VIDEOPLAYERJAVAINTERFACE_H_
 #define _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_VIDEOPLAYERJAVAINTERFACE_H_
 
-#include <moFlo/Platform/Android/ForwardDeclarations.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterface.h>
-#include <moFlo/Core/FastDelegate.h>
+#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Core/FastDelegate.h>
 #include <jni.h>
 
 namespace moFlo

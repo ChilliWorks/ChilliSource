@@ -11,7 +11,7 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Core/Math/Curves.h>
+#include <ChilliSource/Core/Math/Curves.h>
 
 namespace moFlo
 {

@@ -10,12 +10,12 @@
 #ifndef _MO_FLO_CORE_ENTITY_H_
 #define _MO_FLO_CORE_ENTITY_H_
 
-#include <moFlo/BuildProperties.h>
+#include <ChilliSource/BuildProperties.h>
 
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/Component.h>
-#include <moFlo/Core/Transform.h>
-#include <moFlo/Core/JSON/json.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/Component.h>
+#include <ChilliSource/Core/Transform.h>
+#include <ChilliSource/Core/JSON/json.h>
 
 #include <list>
 

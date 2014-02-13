@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Rendering/Particles/Emitters/ConeParticleEmitter.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ConeParticleEmitter.h>
 
-#include <moFlo/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
 
 namespace moFlo
 {

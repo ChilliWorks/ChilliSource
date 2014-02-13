@@ -9,13 +9,13 @@
 
 
 
-#include <moFlo/Platform/iOS/ImageLoader.h>
+#include <ChilliSource/Platform/iOS/ImageLoader.h>
 
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/Screen.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Screen.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Platform/iOS/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Platform/iOS/FileIO/FileSystem.h>
 
 #import <UIKit/UIKit.h>
 

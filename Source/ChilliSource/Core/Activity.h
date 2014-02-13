@@ -10,7 +10,7 @@
 #ifndef _MOFLO_CORE_ACTIVITY_H_
 #define _MOFLO_CORE_ACTIVITY_H_
 
-#include <moFlo/Core/QueryableInterface.h>
+#include <ChilliSource/Core/QueryableInterface.h>
 
 namespace moFlo{
 

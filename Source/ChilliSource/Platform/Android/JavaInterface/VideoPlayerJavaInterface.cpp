@@ -7,9 +7,9 @@
  *
  */
 
-#include <moFlo/Platform/Android/JavaInterface/VideoPlayerJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Platform/Android/JavaInterface/VideoPlayerJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 #include <jni.h>
 
 //------------------------------------------

@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Tag Games Ltd. All rights reserved.
 //
 
-#include <moFlo/Physics3D/BulletPhysics/BulletCollisionMesh.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletCollisionMesh.h>
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
 

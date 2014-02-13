@@ -7,9 +7,9 @@
  *
  */
 
-#include <moFlo/Platform/Android/LocalNotificationScheduler.h>
-#include <moFlo/Platform/Android/JavaInterface/LocalNotificationJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/LocalNotificationScheduler.h>
+#include <ChilliSource/Platform/Android/JavaInterface/LocalNotificationJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 
 namespace moFlo
 {

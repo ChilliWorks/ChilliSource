@@ -7,9 +7,9 @@
  *
  */
 
-#include <moFlo/Core/LocalisedText.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/StringUtils.h>
+#include <ChilliSource/Core/LocalisedText.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/StringUtils.h>
 
 namespace moFlo
 {

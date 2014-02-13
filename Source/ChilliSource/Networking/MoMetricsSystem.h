@@ -10,10 +10,10 @@
 #ifndef _MOFLO_NETWORKING_MOMETRICSSYSTEM_H_
 #define _MOFLO_NETWORKING_MOMETRICSSYSTEM_H_
 
-#include <moFlo/Networking/ForwardDeclarations.h>
-#include <moFlo/Core/System.h>
+#include <ChilliSource/Networking/ForwardDeclarations.h>
+#include <ChilliSource/Core/System.h>
 
-#include <moFlo/Networking/MoMetricsSession.h>
+#include <ChilliSource/Networking/MoMetricsSession.h>
 
 #define RECORD_METRICS_EVENT(type, params, summarise)\
 moFlo::Networking::CMoMetricsSystem::GetSingleton().RecordEvent(type, params, summarise)

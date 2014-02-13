@@ -10,12 +10,12 @@
 #ifndef _MOFLO_PHYSICS3D_I3DPHYSICSSYSTEM_H
 #define _MOFLO_PHYSICS3D_I3DPHYSICSSYSTEM_H
 
-#include <moFlo/Physics3D/ForwardDeclarations.h>
-#include <moFlo/Core/System.h>
-#include <moFlo/Core/SystemConcepts.h>
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/Component.h>
-#include <moFlo/Core/Math/Vector3.h>
+#include <ChilliSource/Physics3D/ForwardDeclarations.h>
+#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/SystemConcepts.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/Component.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 
 namespace moFlo
 {

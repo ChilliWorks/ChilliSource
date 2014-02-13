@@ -7,9 +7,9 @@
  *
  */
 
-#include <moFlo/Core/Entity.h>
-#include <moFlo/Core/Scene.h>
-#include <moFlo/Core/StringUtils.h>
+#include <ChilliSource/Core/Entity.h>
+#include <ChilliSource/Core/Scene.h>
+#include <ChilliSource/Core/StringUtils.h>
 
 #include <algorithm>
 

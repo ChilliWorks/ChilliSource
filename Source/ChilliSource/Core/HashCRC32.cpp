@@ -6,7 +6,7 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Core/HashCRC32.h>
+#include <ChilliSource/Core/HashCRC32.h>
 
 const u32 kaudwCRC32Lookup[256] = 
 {

@@ -14,8 +14,8 @@
 #ifndef _MOFLO_CORE_COMPONENTFACTORY_H
 #define _MOFLO_CORE_COMPONENTFACTORY_H
 
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/Component.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/Component.h>
 
 
 namespace moFlo

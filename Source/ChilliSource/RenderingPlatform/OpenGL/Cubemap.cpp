@@ -7,14 +7,14 @@
  *
  */
 
-#include <moFlo/RenderingPlatform/OpenGL/Cubemap.h>
-#include <moFlo/RenderingPlatform/OpenGL/CubemapManager.h>
-#include <moFlo/RenderingPlatform/OpenGL/Texture.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/Cubemap.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/CubemapManager.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/Texture.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/ImageFormatConverter.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/ImageFormatConverter.h>
 
-#include <moFlo/Rendering/RenderCapabilities.h>
+#include <ChilliSource/Rendering/RenderCapabilities.h>
 
 namespace moFlo
 {

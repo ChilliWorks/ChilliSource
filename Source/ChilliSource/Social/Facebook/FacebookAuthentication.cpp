@@ -10,9 +10,9 @@
 #include "FacebookAuthentication.h"
 
 #ifdef TARGET_OS_IPHONE
-#include <moFlo/Platform/iOS/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Platform/iOS/Social/Facebook/FacebookAuthentication.h>
 #elif TARGET_ANDROID
-#include <moFlo/Platform/Android/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Platform/Android/Social/Facebook/FacebookAuthentication.h>
 #endif
 
 namespace moFlo

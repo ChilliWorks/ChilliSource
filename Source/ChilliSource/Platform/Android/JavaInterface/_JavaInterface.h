@@ -8,7 +8,7 @@
  *
  * Author: Ian Copland
  * Version 1.0 - moFlo
- * Copyright ©2010 Tag Games Limited - All rights reserved
+ * Copyright ï¿½2010 Tag Games Limited - All rights reserved
  */
 
 #ifndef _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE__JAVAINTERFACE_
@@ -16,7 +16,7 @@
 
 #include <jni.h>
 #include <map>
-#include <moFlo/Core/Containers/UTF8String.h>
+#include <ChilliSource/Core/Containers/UTF8String.h>
 
 namespace moFlo
 {

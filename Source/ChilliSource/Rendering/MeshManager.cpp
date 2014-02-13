@@ -7,10 +7,10 @@
  *
  */
 
-#include <moFlo/Rendering/MeshManager.h>
-#include <moFlo/Core/ResourceProvider.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Rendering/SubMesh.h>
+#include <ChilliSource/Rendering/MeshManager.h>
+#include <ChilliSource/Core/ResourceProvider.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Rendering/SubMesh.h>
 
 namespace moFlo
 {

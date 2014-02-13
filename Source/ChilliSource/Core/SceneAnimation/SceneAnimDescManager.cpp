@@ -8,9 +8,9 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Core/SceneAnimation/SceneAnimDescManager.h>
-#include <moFlo/Core/SceneAnimation/SceneAnimation.h>
-#include <moFlo/Core/SceneAnimation/SceneAnimationProvider.h>
+#include <ChilliSource/Core/SceneAnimation/SceneAnimDescManager.h>
+#include <ChilliSource/Core/SceneAnimation/SceneAnimation.h>
+#include <ChilliSource/Core/SceneAnimation/SceneAnimationProvider.h>
 
 namespace moFlo
 {

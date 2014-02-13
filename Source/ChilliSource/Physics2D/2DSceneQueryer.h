@@ -10,9 +10,9 @@
 #ifndef _MOFLO_PHYSICS2D_2DSCENEQUERYER_H_
 #define _MOFLO_PHYSICS2D_2DSCENEQUERYER_H_
 
-#include <moFlo/Physics2D/ForwardDeclarations.h>
-#include <moFlo/Core/Math/Vector2.h>
-#include <moFlo/Core/Math/Shapes.h>
+#include <ChilliSource/Physics2D/ForwardDeclarations.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Shapes.h>
 #include <vector>
 
 namespace moFlo {

@@ -13,10 +13,10 @@
 #ifndef MOFLO_CORE_THREAD_H_
 #define MOFLO_CORE_THREAD_H_
 
-#include <moFlo/Core/Tasks.hpp>
+#include <ChilliSource/Core/Tasks.hpp>
 
-#include <moFlo/Core/boost/thread.hpp>
-#include <moFlo/Core/boost/thread/condition.hpp>
+#include <ChilliSource/Core/boost/thread.hpp>
+#include <ChilliSource/Core/boost/thread/condition.hpp>
 
 namespace moFlo
 {

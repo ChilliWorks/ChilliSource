@@ -10,17 +10,17 @@
 #ifndef _MO_FLO_RENDERING_CANVAS_H_
 #define _MO_FLO_RENDERING_CANVAS_H_
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Rendering/DynamicSpriteBatcher.h>
-#include <moFlo/Rendering/Components/SpriteComponent.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/DynamicSpriteBatcher.h>
+#include <ChilliSource/Rendering/Components/SpriteComponent.h>
 
-#include <moFlo/Rendering/Font.h>
-#include <moFlo/GUI/Label.h>
-#include <moFlo/Core/Surface.h>
+#include <ChilliSource/Rendering/Font.h>
+#include <ChilliSource/GUI/Label.h>
+#include <ChilliSource/Core/Surface.h>
 
-#include <moFlo/Core/Math/Shapes.h>
-#include <moFlo/Core/AlignmentAnchors.h>
-#include <moFlo/Core/Math/Matrix3x3.h>
+#include <ChilliSource/Core/Math/Shapes.h>
+#include <ChilliSource/Core/AlignmentAnchors.h>
+#include <ChilliSource/Core/Math/Matrix3x3.h>
 
 namespace moFlo
 {

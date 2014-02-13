@@ -10,10 +10,10 @@
 #ifndef _MOFLOW_VIDEO_SUBTITLES_H_
 #define _MOFLOW_VIDEO_SUBTITLES_H_
 
-#include <moFlo/Video/ForwardDeclarations.h>
-#include <moFlo/Core/Resource.h>
-#include <moFlo/Core/Math/Shapes.h>
-#include <moFlo/Core/AlignmentAnchors.h>
+#include <ChilliSource/Video/ForwardDeclarations.h>
+#include <ChilliSource/Core/Resource.h>
+#include <ChilliSource/Core/Math/Shapes.h>
+#include <ChilliSource/Core/AlignmentAnchors.h>
 
 namespace moFlo
 {

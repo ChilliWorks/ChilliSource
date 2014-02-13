@@ -11,14 +11,14 @@
 #define _MOFLOW_PHYSICS3D_BULLETPHYSICS_BULLETPHYSICSSYSTEM_H_
 
 
-#include <moFlo/Physics3D/3DPhysicsSystem.h>
-#include <moFlo/Physics3D/3DPhysicsComponent.h>
+#include <ChilliSource/Physics3D/3DPhysicsSystem.h>
+#include <ChilliSource/Physics3D/3DPhysicsComponent.h>
 
-#include <moFlo/Physics3D/BulletPhysics/ForwardDeclarations.h>
+#include <ChilliSource/Physics3D/BulletPhysics/ForwardDeclarations.h>
 #include <btBulletDynamicsCommon.h>
 
-#include <moFlo/Physics3D/BulletPhysics/BulletDebugDraw.h>
-#include <moFlo/Physics3D/BulletPhysics/BulletCollisionMeshManager.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletDebugDraw.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletCollisionMeshManager.h>
 
 namespace moFlo
 {

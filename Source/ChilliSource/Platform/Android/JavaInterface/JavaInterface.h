@@ -10,8 +10,8 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_JAVAINTERFACE_H_
 #define _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_JAVAINTERFACE_H_
 
-#include <moFlo/Platform/Android/ForwardDeclarations.h>
-#include <moFlo/Core/QueryableInterface.h>
+#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Core/QueryableInterface.h>
 #include <jni.h>
 
 namespace moFlo

@@ -7,9 +7,9 @@
  *
  */
 
-#include <moFlo/Rendering/Texture.h>
-#include <moFlo/Rendering/Cubemap.h>
-#include <moFlo/Rendering/Shader.h>
+#include <ChilliSource/Rendering/Texture.h>
+#include <ChilliSource/Rendering/Cubemap.h>
+#include <ChilliSource/Rendering/Shader.h>
 
 namespace moFlo 
 {

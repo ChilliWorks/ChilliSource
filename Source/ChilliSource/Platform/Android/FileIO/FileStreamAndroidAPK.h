@@ -10,12 +10,12 @@
 #ifndef _MOFLO_PLATFORM_ANDROID_FILEIO_FILE_STREAM_ANDROID_APK_
 #define _MOFLO_PLATFORM_ANDROID_FILEIO_FILE_STREAM_ANDROID_APK_
 
-#include <moFlo/Core/FileIO/FileStream.h>
+#include <ChilliSource/Core/FileIO/FileStream.h>
 #include <fstream>
 #include <ios>
-#include <moFlo/Core/Minizip/unzip.h>
+#include <ChilliSource/Core/Minizip/unzip.h>
 #include <sstream>
-#include <moFlo/Core/Thread.h>
+#include <ChilliSource/Core/Thread.h>
 
 namespace moFlo
 {

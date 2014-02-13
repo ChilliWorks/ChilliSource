@@ -10,7 +10,7 @@
 #ifndef _MOFLO_RENDERING_SKELETON_H_
 #define _MOFLO_RENDERING_SKELETON_H_
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace moFlo
 {

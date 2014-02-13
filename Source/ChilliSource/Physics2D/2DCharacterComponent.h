@@ -16,10 +16,10 @@
 #ifndef _MOFLO_PHYSICS2D_2DCHARACTERCOMPONENT_H_
 #define _MOFLO_PHYSICS2D_2DCHARACTERCOMPONENT_H_
 
-#include <moFlo/Physics2D/ForwardDeclarations.h>
-#include <moFlo/Core/Component.h>
-#include <moFlo/Core/FastDelegate.h>
-#include <moFlo/Physics2D/2DSceneQueryer.h>
+#include <ChilliSource/Physics2D/ForwardDeclarations.h>
+#include <ChilliSource/Core/Component.h>
+#include <ChilliSource/Core/FastDelegate.h>
+#include <ChilliSource/Physics2D/2DSceneQueryer.h>
 
 namespace moFlo
 {

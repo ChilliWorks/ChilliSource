@@ -10,8 +10,8 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Platform/Windows/FMOD/FMODAudioResourceWindows.h>
-#include <moFlo/Platform/Windows/FMOD/FMODSystemWindows.h>
+#include <ChilliSource/Platform/Windows/FMOD/FMODAudioResourceWindows.h>
+#include <ChilliSource/Platform/Windows/FMOD/FMODSystemWindows.h>
 
 namespace moFlo
 {

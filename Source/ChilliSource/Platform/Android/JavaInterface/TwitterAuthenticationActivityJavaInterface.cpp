@@ -7,7 +7,7 @@
  *
  */
 
-#include <moFlo/Platform/Android/JavaInterface/TwitterAuthenticationActivityJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/TwitterAuthenticationActivityJavaInterface.h>
 
 //function definitions
 extern "C"

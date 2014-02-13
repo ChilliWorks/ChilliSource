@@ -7,17 +7,17 @@
  *
  */
 
-#include <moFlo/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
+#include <ChilliSource/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
 
 #include <FacebookSDK/FacebookSDK.h>
 
 #ifdef __IPHONE_6_0
 #include <UIKit/UIKit.h>
 #include <Social/Social.h>
-#include <moFlo/Platform/iOS/EAGLView.h>
-#include <moFlo/Platform/iOS/Social/Facebook/FacebookUtils.h>
-    #include <moFlo/Platform/iOS/Social/Facebook/FacebookUtils.h>
-    #include <moFlo/Platform/iOS/Social/Facebook/FacebookUtils.h>
+#include <ChilliSource/Platform/iOS/EAGLView.h>
+#include <ChilliSource/Platform/iOS/Social/Facebook/FacebookUtils.h>
+    #include <ChilliSource/Platform/iOS/Social/Facebook/FacebookUtils.h>
+    #include <ChilliSource/Platform/iOS/Social/Facebook/FacebookUtils.h>
 #endif
 
 namespace moFlo

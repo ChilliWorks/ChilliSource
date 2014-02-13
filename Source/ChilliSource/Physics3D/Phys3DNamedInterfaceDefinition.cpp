@@ -7,9 +7,9 @@
  *
  */
 
-#include <moFlo/Physics3D/3DPhysicsSystem.h>
-#include <moFlo/Physics3D/3DPhysicsComponent.h>
-#include <moFlo/Physics3D/3DPhysicsComponentFactory.h>
+#include <ChilliSource/Physics3D/3DPhysicsSystem.h>
+#include <ChilliSource/Physics3D/3DPhysicsComponent.h>
+#include <ChilliSource/Physics3D/3DPhysicsComponentFactory.h>
 
 namespace moFlo
 {

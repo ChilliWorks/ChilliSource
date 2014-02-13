@@ -13,11 +13,11 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_MANAGER_H_
 #define _MO_FLO_AUDIO_AUDIO_MANAGER_H_
 
-#include <moFlo/Core/ResourceManager.h>
+#include <ChilliSource/Core/ResourceManager.h>
 
-#include <moFlo/Audio/ForwardDeclarations.h>
-#include <moFlo/Audio/AudioResource.h>
-#include <moFlo/Audio/AudioListener.h>
+#include <ChilliSource/Audio/ForwardDeclarations.h>
+#include <ChilliSource/Audio/AudioResource.h>
+#include <ChilliSource/Audio/AudioListener.h>
 
 namespace moFlo 
 {

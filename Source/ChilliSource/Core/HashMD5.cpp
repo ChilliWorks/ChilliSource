@@ -39,7 +39,7 @@
  */
 
 
-#include <moFlo/Core/HashMD5.h>
+#include <ChilliSource/Core/HashMD5.h>
 #include <cstdio>
 
 #define S11 7

@@ -12,8 +12,8 @@
 
 #ifdef DEBUG_STATS
 
-#include <moFlo/GUI/ImageView.h>
-#include <moFlo/GUI/Label.h>
+#include <ChilliSource/GUI/ImageView.h>
+#include <ChilliSource/GUI/Label.h>
 
 #define DECLARE_DEBUG_STAT(NAME) \
 LabelPtr mpLabel##NAME; \

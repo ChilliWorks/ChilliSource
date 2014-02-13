@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Networking/MoMetricsSession.h>
+#include <ChilliSource/Networking/MoMetricsSession.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/Device.h>
-#include <moFlo/Core/Utils.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Device.h>
+#include <ChilliSource/Core/Utils.h>
 
 namespace moFlo
 {

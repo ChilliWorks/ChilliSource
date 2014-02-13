@@ -8,10 +8,10 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Core/SceneAnimation/SceneProvider.h>
-#include <moFlo/Core/SceneAnimation/SceneDescription.h>
-#include <moFlo/Core/TaskScheduler.h>
-#include <moFlo/Core/Tasks.hpp>
+#include <ChilliSource/Core/SceneAnimation/SceneProvider.h>
+#include <ChilliSource/Core/SceneAnimation/SceneDescription.h>
+#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/Tasks.hpp>
 
 namespace moFlo
 {

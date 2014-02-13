@@ -7,9 +7,9 @@
  *
  */
 
-#include <moFlo/Platform/Android/ImageLoading/PngImage.h>
-#include <moFlo/Platform/Android/ImageLoading/LibPng/png.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Platform/Android/ImageLoading/PngImage.h>
+#include <ChilliSource/Platform/Android/ImageLoading/LibPng/png.h>
+#include <ChilliSource/Core/Application.h>
 
 namespace moFlo
 {

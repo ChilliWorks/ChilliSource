@@ -7,23 +7,23 @@
  *
  */
 
-#include <moFlo/Platform/Android/ApplicationDelegates.h>
-#include <moFlo/Input/InputSystem.h>
-#include <moFlo/Input/TouchScreen.h>
-#include <moFlo/Core/Math/MathUtils.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/ApplicationEvents.h>
-#include <moFlo/Core/TaskScheduler.h>
-#include <moFlo/Core/ResourceManagerDispenser.h>
-#include <moFlo/Core/Screen.h>
-#include <moFlo/Core/StateManager.h>
-#include <moFlo/Core/PlatformSystem.h>
-#include <moFlo/Rendering/RenderSystem.h>
-#include <moFlo/Rendering/Renderer.h>
-#include <moFlo/Rendering/Components/CameraComponent.h>
+#include <ChilliSource/Platform/Android/ApplicationDelegates.h>
+#include <ChilliSource/Input/InputSystem.h>
+#include <ChilliSource/Input/TouchScreen.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/ApplicationEvents.h>
+#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/StateManager.h>
+#include <ChilliSource/Core/PlatformSystem.h>
+#include <ChilliSource/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/Renderer.h>
+#include <ChilliSource/Rendering/Components/CameraComponent.h>
 
 #ifdef DEBUG_STATS
-#include <moFlo/Core/DebugStats.h>
+#include <ChilliSource/Core/DebugStats.h>
 #endif
 
 namespace moFlo

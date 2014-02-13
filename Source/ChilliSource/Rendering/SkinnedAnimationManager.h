@@ -10,8 +10,8 @@
 #ifndef _MO_FLO_RENDERING_SKELETALANIMATIONMANAGER_H_
 #define _MO_FLO_RENDERING_SKELETALANIMATIONMANAGER_H_
 
-#include <moFlo/Core/ResourceManager.h>
-#include <moFlo/Rendering/SkinnedAnimation.h>
+#include <ChilliSource/Core/ResourceManager.h>
+#include <ChilliSource/Rendering/SkinnedAnimation.h>
 
 namespace moFlo
 {

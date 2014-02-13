@@ -7,7 +7,7 @@
  *
  */
 
-#include <moFlo/Core/MoFloLocale.h>
+#include <ChilliSource/Core/MoFloLocale.h>
 
 namespace moFlo
 {

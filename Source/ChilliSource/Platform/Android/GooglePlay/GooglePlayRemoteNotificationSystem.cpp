@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
-#include <moFlo/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
+#include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/BaseEncoding.h>
-#include <moFlo/Core/Notifications/NotificationScheduler.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/BaseEncoding.h>
+#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <moFlo/Platform/Android/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
 
 namespace moFlo
 {

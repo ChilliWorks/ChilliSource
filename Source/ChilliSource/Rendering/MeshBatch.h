@@ -10,8 +10,8 @@
 #ifndef _MO_FLO_RENDERING_MESH_BATCH_H_
 #define _MO_FLO_RENDERING_MESH_BATCH_H_
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Rendering/VertexLayouts.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/VertexLayouts.h>
 
 namespace moFlo
 {

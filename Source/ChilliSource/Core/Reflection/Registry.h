@@ -9,7 +9,7 @@
 #ifndef MO_FLOW_CORE_REFLECTION_REGISTRY_HPP_
 #define MO_FLOW_CORE_REFLECTION_REGISTRY_HPP_
 
-#include <moFlo/Core/Reflection/ForwardDeclarations.h>
+#include <ChilliSource/Core/Reflection/ForwardDeclarations.h>
 
 namespace moFlo
 {

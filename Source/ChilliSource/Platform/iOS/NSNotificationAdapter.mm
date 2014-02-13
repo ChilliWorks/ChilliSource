@@ -6,7 +6,7 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#import <moFlo/Platform/iOS/NSNotificationAdapter.h>
+#import <ChilliSource/Platform/iOS/NSNotificationAdapter.h>
 
 #import <GameKit/GameKit.h>
 #import <MediaPlayer/MediaPlayer.h>

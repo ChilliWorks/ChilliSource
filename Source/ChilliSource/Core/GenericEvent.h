@@ -10,7 +10,7 @@
 #ifndef _MOFLO_CORE_GENERICEVENT_H_
 #define _MOFLO_CORE_GENERICEVENT_H_
 
-#include <moFlo/Core/GenericEventImpl.h>
+#include <ChilliSource/Core/GenericEventImpl.h>
 
 namespace moFlo
 {

@@ -10,11 +10,11 @@
 #ifndef _MOFLO_PLATFORM_ANDROID_FILEIO_FILESYSTEM_
 #define _MOFLO_PLATFORM_ANDROID_FILEIO_FILESYSTEM_
 
-#include <moFlo/Core/FileIO/FileSystem.h>
-#include <moFlo/Core/FileIO/FileStream.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/FileIO/FileStream.h>
 #include <string>
-#include <moFlo/Core/Minizip/unzip.h>
-#include <moFlo/Core/Thread.h>
+#include <ChilliSource/Core/Minizip/unzip.h>
+#include <ChilliSource/Core/Thread.h>
 
 namespace moFlo
 {

@@ -8,8 +8,8 @@
  */
 
 
-#include <moFlo/Core/GenericAnimation.h>
-#include <moFlo/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/GenericAnimation.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
 
 namespace moFlo{
 	IAnimation::IAnimation(f32 infDuration, f32 infStartDelay)

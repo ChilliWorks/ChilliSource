@@ -10,13 +10,13 @@
 
 
 
-#include <moFlo/Platform/Windows/ImageLoaderWindows.h>
-#include <moFlo/Platform/Windows/ImageLoading/PngImage.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Platform/Windows/ImageLoaderWindows.h>
+#include <ChilliSource/Platform/Windows/ImageLoading/PngImage.h>
+#include <ChilliSource/Core/Application.h>
 
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/Screen.h>
-#include <moFlo/Core/Image.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Image.h>
 
 namespace moFlo
 {

@@ -6,9 +6,9 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/GUI/SliderBar.h>
+#include <ChilliSource/GUI/SliderBar.h>
 
-#include <moFlo/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
 
 namespace moFlo
 {

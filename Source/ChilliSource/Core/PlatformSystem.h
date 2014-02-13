@@ -10,15 +10,15 @@
 #ifndef _MOFLOW_CORE_PLATFORMSYSTEM_H_
 #define _MOFLOW_CORE_PLATFORMSYSTEM_H_
 
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/Locales.h>
-#include <moFlo/Core/CustomCreator.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/Locales.h>
+#include <ChilliSource/Core/CustomCreator.h>
+#include <ChilliSource/Core/Application.h>
 
-#include <moFlo/Input/ForwardDeclarations.h>
-#include <moFlo/Audio/ForwardDeclarations.h>
-#include <moFlo/Networking/ForwardDeclarations.h>
-#include <moFlo/Video/ForwardDeclarations.h>
+#include <ChilliSource/Input/ForwardDeclarations.h>
+#include <ChilliSource/Audio/ForwardDeclarations.h>
+#include <ChilliSource/Networking/ForwardDeclarations.h>
+#include <ChilliSource/Video/ForwardDeclarations.h>
 
 namespace moFlo
 {

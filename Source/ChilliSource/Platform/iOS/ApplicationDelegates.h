@@ -11,7 +11,7 @@
 #ifndef _MOFLOW_IOSPLATFORM_APPLICATIONDELEGATES_H_
 #define _MOFLOW_IOSPLATFORM_APPLICATIONDELEGATES_H_
 
-#include <moFlo/Core/ApplicationDelegates.h>
+#include <ChilliSource/Core/ApplicationDelegates.h>
 
 namespace moFlo
 {

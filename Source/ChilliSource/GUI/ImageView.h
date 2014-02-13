@@ -9,11 +9,11 @@
 #ifndef _MOFLO_GUI_IMAGEVIEW_H_
 #define _MOFLO_GUI_IMAGEVIEW_H_
 
-#include <moFlo/GUI/GUIView.h>
+#include <ChilliSource/GUI/GUIView.h>
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
-#include <moFlo/Core/Math/Shapes.h>
+#include <ChilliSource/Core/Math/Shapes.h>
 
 namespace moFlo
 {

@@ -7,14 +7,14 @@
  *
  */
 
-#include <moFlo/Rendering/Components/StaticMeshComponent.h>
-#include <moFlo/Rendering/SubMesh.h>
-#include <moFlo/Rendering/MeshBatch.h>
-#include <moFlo/Rendering/MeshBuffer.h>
-#include <moFlo/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/Components/StaticMeshComponent.h>
+#include <ChilliSource/Rendering/SubMesh.h>
+#include <ChilliSource/Rendering/MeshBatch.h>
+#include <ChilliSource/Rendering/MeshBuffer.h>
+#include <ChilliSource/Rendering/RenderSystem.h>
 
 #ifdef DEBUG_STATS
-#include <moFlo/Core/DebugStats.h>
+#include <ChilliSource/Core/DebugStats.h>
 #endif
 
 namespace moFlo

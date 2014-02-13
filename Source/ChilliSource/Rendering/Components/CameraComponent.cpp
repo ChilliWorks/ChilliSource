@@ -7,12 +7,12 @@
 *
 */
 
-#include <moFlo/Rendering/Components/CameraComponent.h>
-#include <moFlo/Core/Screen.h>
-#include <moFlo/Core/Math/MathUtils.h>
-#include <moFlo/Core/Entity.h>
-#include <moFlo/Core/ApplicationEvents.h>
-#include <moFlo/Core/Screen.h>
+#include <ChilliSource/Rendering/Components/CameraComponent.h>
+#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Entity.h>
+#include <ChilliSource/Core/ApplicationEvents.h>
+#include <ChilliSource/Core/Screen.h>
 
 namespace moFlo
 {

@@ -7,8 +7,8 @@
  *
  */
 
-#include <moFlo/Platform/Android/FileIO/FileStreamAndroidAPK.h>
-#include <moFlo/Platform/Android/FileIO/FileSystem.h>
+#include <ChilliSource/Platform/Android/FileIO/FileStreamAndroidAPK.h>
+#include <ChilliSource/Platform/Android/FileIO/FileSystem.h>
 
 namespace moFlo
 {

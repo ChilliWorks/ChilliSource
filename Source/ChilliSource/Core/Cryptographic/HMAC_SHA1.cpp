@@ -11,7 +11,7 @@
 //*                 Comfort to RFC 2104
 //*
 //******************************************************************************
-#include <moFlo/Core/Cryptographic/HMAC_SHA1.h>
+#include <ChilliSource/Core/Cryptographic/HMAC_SHA1.h>
 #include <iostream>
 #include <memory>
 

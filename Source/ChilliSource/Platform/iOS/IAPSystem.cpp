@@ -6,10 +6,10 @@
 //  Copyright (c) 2013 Tag Games Ltd. All rights reserved.
 //
 
-#include <moFlo/Platform/iOS/IAPSystem.h>
+#include <ChilliSource/Platform/iOS/IAPSystem.h>
 
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/BaseEncoding.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/BaseEncoding.h>
 
 namespace moFlo
 {

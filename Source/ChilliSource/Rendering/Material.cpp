@@ -7,12 +7,12 @@
  *
  */
 
-#include <moFlo/Rendering/Material.h>
-#include <moFlo/Rendering/TextureManager.h>
-#include <moFlo/Rendering/ShaderManager.h>
-#include <moFlo/Rendering/Texture.h>
+#include <ChilliSource/Rendering/Material.h>
+#include <ChilliSource/Rendering/TextureManager.h>
+#include <ChilliSource/Rendering/ShaderManager.h>
+#include <ChilliSource/Rendering/Texture.h>
 
-#include <moFlo/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
 
 namespace moFlo
 {

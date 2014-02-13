@@ -7,7 +7,7 @@
  *
  */
 
-#include <moFlo/Core/ImageResourceProvider.h>
+#include <ChilliSource/Core/ImageResourceProvider.h>
 
 namespace moFlo
 {

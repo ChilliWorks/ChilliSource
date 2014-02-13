@@ -7,16 +7,16 @@
  *
  */
 
-#include <moFlo/RenderingPlatform/OpenGL/Texture.h>
-#include <moFlo/RenderingPlatform/OpenGL/RenderTarget.h>
-#include <moFlo/RenderingPlatform/OpenGL/RenderCapabilities.h>
-#include <moFlo/RenderingPlatform/OpenGL/TextureManager.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/Texture.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/RenderTarget.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/RenderCapabilities.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/TextureManager.h>
 
-#include <moFlo/Core/Math/MathUtils.h>
-#include <moFlo/Core/ImageFormatConverter.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/ImageFormatConverter.h>
+#include <ChilliSource/Core/Application.h>
 
-#include <moFlo/RenderingPlatform/OpenGL/RenderTarget.h>
+#include <ChilliSource/RenderingPlatform/OpenGL/RenderTarget.h>
 
 namespace moFlo
 {

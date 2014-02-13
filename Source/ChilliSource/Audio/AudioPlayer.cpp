@@ -6,13 +6,13 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Audio/AudioPlayer.h>
-#include <moFlo/Audio/AudioComponent.h>
-#include <moFlo/Audio/AudioComponentFactory.h>
-#include <moFlo/Audio/AudioManager.h>
+#include <ChilliSource/Audio/AudioPlayer.h>
+#include <ChilliSource/Audio/AudioComponent.h>
+#include <ChilliSource/Audio/AudioComponentFactory.h>
+#include <ChilliSource/Audio/AudioManager.h>
 
-#include <moFlo/Core/ResourceManagerDispenser.h>
-#include <moFlo/Core/ComponentFactoryDispenser.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/ComponentFactoryDispenser.h>
 
 namespace moFlo
 {

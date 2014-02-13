@@ -7,13 +7,13 @@
  *
  */
 
-#include <moFlo/Rendering/Components/SpriteComponent.h>
-#include <moFlo/Rendering/SpriteBatch.h>
-#include <moFlo/Rendering/VertexLayouts.h>
-#include <moFlo/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/Components/SpriteComponent.h>
+#include <ChilliSource/Rendering/SpriteBatch.h>
+#include <ChilliSource/Rendering/VertexLayouts.h>
+#include <ChilliSource/Rendering/RenderSystem.h>
 
 #ifdef DEBUG_STATS
-#include <moFlo/Core/DebugStats.h>
+#include <ChilliSource/Core/DebugStats.h>
 #endif
 
 namespace moFlo

@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Core/Cryptographic/AESEncrypt.h>
-#include <moFlo/Core/Cryptographic/aes.h>
+#include <ChilliSource/Core/Cryptographic/AESEncrypt.h>
+#include <ChilliSource/Core/Cryptographic/aes.h>
 
 namespace moFlo
 {

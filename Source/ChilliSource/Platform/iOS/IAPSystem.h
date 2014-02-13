@@ -9,9 +9,9 @@
 #ifndef _MOFLOW_PLATFORM_IOS_IAPSYSTEM_
 #define _MOFLOW_PLATFORM_IOS_IAPSYSTEM_
 
-#include <moFlo/Networking/IAPSystem.h>
+#include <ChilliSource/Networking/IAPSystem.h>
 
-#include <moFlo/Platform/iOS/StoreKitIAPSystem.h>
+#include <ChilliSource/Platform/iOS/StoreKitIAPSystem.h>
 
 namespace moFlo
 {

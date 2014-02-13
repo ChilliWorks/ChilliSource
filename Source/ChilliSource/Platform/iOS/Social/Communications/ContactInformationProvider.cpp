@@ -7,8 +7,8 @@
  *
  */
 
-#include <moFlo/Platform/iOS/Social/Communications/ContactInformationProvider.h>
-#include <moFlo/Core/StringUtils.h>
+#include <ChilliSource/Platform/iOS/Social/Communications/ContactInformationProvider.h>
+#include <ChilliSource/Core/StringUtils.h>
 
 #include <AddressBook/AddressBook.h>
 #include <Foundation/NSString.h>

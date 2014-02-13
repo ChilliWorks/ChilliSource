@@ -9,10 +9,10 @@
 #ifndef _MO_FLO_CORE_NOTIFICATION_SCHEDULER_H_
 #define _MO_FLO_CORE_NOTIFICATION_SCHEDULER_H_
 
-#include <moFlo/Core/ParamDictionary.h>
-#include <moFlo/Core/GenericEvent.h>
-#include <moFlo/Core/FastDelegate.h>
-#include <moFlo/Core/Notifications/RemoteNotificationSystem.h>
+#include <ChilliSource/Core/ParamDictionary.h>
+#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/FastDelegate.h>
+#include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
 #include <queue>
 
 namespace moFlo

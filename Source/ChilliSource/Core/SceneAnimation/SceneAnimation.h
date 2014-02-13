@@ -12,10 +12,10 @@
 #ifndef MoshiMonsters_SceneAnimation_h
 #define MoshiMonsters_SceneAnimation_h
 
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/Resource.h>
-#include <moFlo/Core/SceneAnimation/ForwardDeclarations.h>
-#include <moFlo/Core/EntityAnimation.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/Resource.h>
+#include <ChilliSource/Core/SceneAnimation/ForwardDeclarations.h>
+#include <ChilliSource/Core/EntityAnimation.h>
 
 namespace  moFlo
 {

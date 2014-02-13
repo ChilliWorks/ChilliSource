@@ -7,8 +7,8 @@
  *
  */
 
-#include <moFlo/Platform/Windows/FMOD/FMODAudioManagerWindows.h>
-#include <moFlo/Platform/Windows/FMOD/FMODAudioResourceWindows.h>
+#include <ChilliSource/Platform/Windows/FMOD/FMODAudioManagerWindows.h>
+#include <ChilliSource/Platform/Windows/FMOD/FMODAudioResourceWindows.h>
 
 namespace moFlo
 {

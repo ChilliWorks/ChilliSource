@@ -9,11 +9,11 @@
 #ifndef _MO_FLO_GUI_GUI_EDITABLE_LABEL
 #define _MO_FLO_GUI_GUI_EDITABLE_LABEL
 
-#include <moFlo/GUI/Label.h>
+#include <ChilliSource/GUI/Label.h>
 
-#include <moFlo/Core/GenericEvent.h>
+#include <ChilliSource/Core/GenericEvent.h>
 
-#include <moFlo/Input/VirtualKeyboard.h>
+#include <ChilliSource/Input/VirtualKeyboard.h>
 
 namespace moFlo
 {

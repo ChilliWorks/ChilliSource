@@ -6,9 +6,9 @@
 //  Copyright 2013 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Platform/Android/Input/Accelerometer.h>
-#include <moFlo/Platform/Android/JavaInterface/AccelerometerJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/Input/Accelerometer.h>
+#include <ChilliSource/Platform/Android/JavaInterface/AccelerometerJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 
 
 namespace moFlo

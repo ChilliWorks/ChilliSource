@@ -3,17 +3,17 @@
 //  moFlow
 //
 //  Created by Ian Copland in 2011
-//  Copyright ©2010 Tag Games Limited. All rights reserved.
+//  Copyright ï¿½2010 Tag Games Limited. All rights reserved.
 //
 
 #ifndef _MO_FLO_PLATFORM_ANDROID_VIRTUAL_KEYBOARD_H_
 #define _MO_FLO_PLATFORM_ANDROID_VIRTUAL_KEYBOARD_H_
 
-#include <moFlo/Core/FastDelegate.h>
-#include <moFlo/Core/GenericEvent.h>
-#include <moFlo/Core/SystemConcepts.h>
-#include <moFlo/Input/VirtualKeyboard.h>
-#include <moFlo/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Core/FastDelegate.h>
+#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/SystemConcepts.h>
+#include <ChilliSource/Input/VirtualKeyboard.h>
+#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
 
 namespace moFlo
 {

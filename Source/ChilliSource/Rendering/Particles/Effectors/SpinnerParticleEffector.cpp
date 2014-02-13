@@ -6,10 +6,10 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Rendering/Particles/Effectors/SpinnerParticleEffector.h>
-#include <moFlo/Rendering/Particles/Emitters/ParticleEmitter.h>
+#include <ChilliSource/Rendering/Particles/Effectors/SpinnerParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 
-#include <moFlo/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
 
 namespace moFlo
 {

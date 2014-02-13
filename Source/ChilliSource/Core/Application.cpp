@@ -7,38 +7,38 @@
  *
  */
 
-#include <moFlo/Revision.h>
+#include <ChilliSource/Revision.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/ApplicationEvents.h>
-#include <moFlo/Core/ApplicationDelegates.h>
-#include <moFlo/Core/SystemConcepts.h>
-#include <moFlo/Core/ResourceProvider.h>
-#include <moFlo/Core/ComponentFactory.h>
-#include <moFlo/Core/CoreTimer.h>
-#include <moFlo/Core/TweakableConstants.h>
-#include <moFlo/Core/LocalDataStore.h>
-#include <moFlo/Core/LocalisedText.h>
-#include <moFlo/Core/StateManager.h>
-#include <moFlo/Core/ResourceGroupManager.h>
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/Screen.h>
-#include <moFlo/Core/Logging.h>
-#include <moFlo/Core/Device.h>
-#include <moFlo/Core/System.h>
-#include <moFlo/Core/Utils.h>
-#include <moFlo/Core/ResourceManager.h>
-#include <moFlo/Core/ResourceManagerDispenser.h>
-#include <moFlo/Core/ComponentFactoryDispenser.h>
-#include <moFlo/Core/TaskScheduler.h>
-#include <moFlo/Core/PlatformSystem.h>
-#include <moFlo/Core/Notifications/NotificationScheduler.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/ApplicationEvents.h>
+#include <ChilliSource/Core/ApplicationDelegates.h>
+#include <ChilliSource/Core/SystemConcepts.h>
+#include <ChilliSource/Core/ResourceProvider.h>
+#include <ChilliSource/Core/ComponentFactory.h>
+#include <ChilliSource/Core/CoreTimer.h>
+#include <ChilliSource/Core/TweakableConstants.h>
+#include <ChilliSource/Core/LocalDataStore.h>
+#include <ChilliSource/Core/LocalisedText.h>
+#include <ChilliSource/Core/StateManager.h>
+#include <ChilliSource/Core/ResourceGroupManager.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Logging.h>
+#include <ChilliSource/Core/Device.h>
+#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/Utils.h>
+#include <ChilliSource/Core/ResourceManager.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/ComponentFactoryDispenser.h>
+#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/PlatformSystem.h>
+#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
-#include <moFlo/Audio/ForwardDeclarations.h>
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Rendering/Material.h>
-#include <moFlo/Rendering/Font.h>
-#include <moFlo/Rendering/Mesh.h>
+#include <ChilliSource/Audio/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/Material.h>
+#include <ChilliSource/Rendering/Font.h>
+#include <ChilliSource/Rendering/Mesh.h>
 
 #include <ctime>
 

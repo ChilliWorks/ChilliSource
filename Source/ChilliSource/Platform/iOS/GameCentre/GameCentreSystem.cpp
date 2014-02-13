@@ -7,16 +7,16 @@
  *
  */
 
-#include <moFlo/Platform/iOS/GameCentre/GameCentreSystem.h>
-#include <moFlo/Platform/iOS/GameCentre/GameCentreDelegates.h>
+#include <ChilliSource/Platform/iOS/GameCentre/GameCentreSystem.h>
+#include <ChilliSource/Platform/iOS/GameCentre/GameCentreDelegates.h>
 
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/FastDelegate.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/FastDelegate.h>
 
 #include <Foundation/Foundation.h>
 #include <UIKit/UIKit.h>
 #include <GameKit/GameKit.h>
-#include <moFlo/Platform/iOS/GameCentre/GKAchievementHandler.h>
+#include <ChilliSource/Platform/iOS/GameCentre/GKAchievementHandler.h>
 
 #import <sys/utsname.h>
 

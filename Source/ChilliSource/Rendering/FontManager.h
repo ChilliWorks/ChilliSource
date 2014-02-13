@@ -13,11 +13,11 @@
 #ifndef _MO_FLO_GUI_FONT_MANAGER_H_
 #define _MO_FLO_GUI_FONT_MANAGER_H_
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Rendering/Font.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/Font.h>
 
-#include <moFlo/Core/ResourceManager.h>
-#include <moFlo/Core/Image.h>
+#include <ChilliSource/Core/ResourceManager.h>
+#include <ChilliSource/Core/Image.h>
 
 namespace moFlo
 {

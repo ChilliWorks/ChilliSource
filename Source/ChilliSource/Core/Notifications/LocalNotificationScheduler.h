@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_CORE_LOCALNOTIFICATIONSCHEDULER_H_
 #define _MOFLOW_CORE_LOCALNOTIFICATIONSCHEDULER_H_
 
-#include <moFlo/Core/Notifications/NotificationScheduler.h>
+#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
 namespace moFlo
 {

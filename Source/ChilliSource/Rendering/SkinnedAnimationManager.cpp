@@ -7,9 +7,9 @@
  *
  */
 
-#include <moFlo/Rendering/SkinnedAnimationManager.h>
-#include <moFlo/Core/ResourceProvider.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Rendering/SkinnedAnimationManager.h>
+#include <ChilliSource/Core/ResourceProvider.h>
+#include <ChilliSource/Core/Application.h>
 
 
 namespace moFlo

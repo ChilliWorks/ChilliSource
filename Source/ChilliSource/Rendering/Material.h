@@ -10,13 +10,13 @@
 #ifndef _MO_FLO_RENDERING_MATERIAL_H_
 #define _MO_FLO_RENDERING_MATERIAL_H_
 
-#include <moFlo/Rendering/Shader.h>
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/Shader.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
-#include <moFlo/Core/Colour.h>
-#include <moFlo/Core/StringUtils.h>
+#include <ChilliSource/Core/Colour.h>
+#include <ChilliSource/Core/StringUtils.h>
 
-#include <moFlo/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
 
 namespace moFlo
 {

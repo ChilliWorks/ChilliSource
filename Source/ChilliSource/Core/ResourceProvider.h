@@ -10,10 +10,10 @@
 #ifndef _MOFLO_CORE_RESOURCEPROVIDER_H_
 #define _MOFLO_CORE_RESOURCEPROVIDER_H_
 
-#include <moFlo/Core/System.h>
-#include <moFlo/Core/QueryableInterface.h>
-#include <moFlo/Core/Resource.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/QueryableInterface.h>
+#include <ChilliSource/Core/Resource.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
 
 namespace moFlo
 {

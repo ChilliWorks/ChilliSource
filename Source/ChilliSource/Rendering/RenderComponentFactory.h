@@ -10,11 +10,11 @@
 #ifndef _MO_FLO_RENDERING_RENDER_COMPONENT_FACTORY_H_
 #define _MO_FLO_RENDERING_RENDER_COMPONENT_FACTORY_H_
 
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/ComponentFactory.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/ComponentFactory.h>
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
 
 namespace moFlo
 {

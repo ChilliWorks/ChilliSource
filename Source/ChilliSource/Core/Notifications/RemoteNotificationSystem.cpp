@@ -6,15 +6,15 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
-#include <moFlo/Core/Notifications/RemoteNotificationSystem.h>
+#include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
 
 #ifdef TARGET_OS_IPHONE
-#	include <moFlo/Platform/iOS/RemoteNotificationSystem.h>
+#	include <ChilliSource/Platform/iOS/RemoteNotificationSystem.h>
 #elif defined(TARGET_ANDROID)
 #	ifdef MOFLOWSKU_REMOTENOTIFICATIONMETHOD_GOOGLEPLAY
-#		include <moFlo/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
+#		include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
 #	elif defined(MOFLOWSKU_REMOTENOTIFICATIONMETHOD_AMAZON)
-#		include <moFlo/Platform/Android/Amazon/AmazonRemoteNotificationSystem.h>
+#		include <ChilliSource/Platform/Android/Amazon/AmazonRemoteNotificationSystem.h>
 #	endif
 #endif
 

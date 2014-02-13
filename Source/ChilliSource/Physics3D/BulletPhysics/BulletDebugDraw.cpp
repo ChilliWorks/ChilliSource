@@ -7,11 +7,11 @@
 //
 
 #include <iostream>
-#include <moFlo/Physics3D/BulletPhysics/BulletDebugDraw.h>
-#include <moFlo/Core/ResourceManagerDispenser.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Rendering/RenderComponentFactory.h>
-#include <moFlo/Rendering/RenderSystem.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletDebugDraw.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Rendering/RenderComponentFactory.h>
+#include <ChilliSource/Rendering/RenderSystem.h>
 
 namespace moFlo
 {

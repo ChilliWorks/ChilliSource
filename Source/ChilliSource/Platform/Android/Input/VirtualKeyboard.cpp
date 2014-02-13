@@ -6,10 +6,10 @@
 //  Copyright �2010 Tag Games Limited. All rights reserved.
 //
 
-#include <moFlo/Platform/Android/Input/VirtualKeyboard.h>
-#include <moFlo/Platform/Android/Input/KeyboardJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <moFlo/Core/Utils.h>
+#include <ChilliSource/Platform/Android/Input/VirtualKeyboard.h>
+#include <ChilliSource/Platform/Android/Input/KeyboardJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Core/Utils.h>
 
 namespace moFlo
 {

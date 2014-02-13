@@ -6,20 +6,20 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Platform/iOS/Video/VideoPlayerActivity.h>
-#include <moFlo/Platform/iOS/Video/VideoPlayerTapListener.h>
-#include <moFlo/Platform/iOS/NSNotificationAdapter.h>
-#include <moFlo/Platform/iOS/EAGLView.h>
-#include <moFlo/Platform/iOS/FileIO/FileSystem.h>
-#include <moFlo/Platform/iOS/Video/SubtitlesRenderer.h>
+#include <ChilliSource/Platform/iOS/Video/VideoPlayerActivity.h>
+#include <ChilliSource/Platform/iOS/Video/VideoPlayerTapListener.h>
+#include <ChilliSource/Platform/iOS/NSNotificationAdapter.h>
+#include <ChilliSource/Platform/iOS/EAGLView.h>
+#include <ChilliSource/Platform/iOS/FileIO/FileSystem.h>
+#include <ChilliSource/Platform/iOS/Video/SubtitlesRenderer.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/Screen.h>
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/Math/MathUtils.h>
-#include <moFlo/Core/ApplicationEvents.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/ApplicationEvents.h>
 
-#include <moFlo/Input/InputSystem.h>
+#include <ChilliSource/Input/InputSystem.h>
 
 #include <MediaPlayer/MediaPlayer.h>
 

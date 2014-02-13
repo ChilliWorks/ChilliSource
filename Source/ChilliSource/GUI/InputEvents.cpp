@@ -6,8 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/GUI/InputEvents.h>
-#include <moFlo/GUI/GUIView.h>
+#include <ChilliSource/GUI/InputEvents.h>
+#include <ChilliSource/GUI/GUIView.h>
 
 #include <algorithm>
 

@@ -10,8 +10,8 @@
 #ifndef _MOFLOW_ANDROID_LOCAL_NOTIFICATION_SCHEDULER_H_
 #define _MOFLOW_ANDROID_LOCAL_NOTIFICATION_SCHEDULER_H_
 
-#include <moFlo/Core/Notifications/LocalNotificationScheduler.h>
-#include <moFlo/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Core/Notifications/LocalNotificationScheduler.h>
+#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
 
 namespace moFlo
 {

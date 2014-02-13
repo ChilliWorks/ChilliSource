@@ -6,9 +6,9 @@
  * Copyright �2012 Tag Games Limited - All rights reserved
  */
 
-#include <moFlo/Platform/Android/Social/Facebook/FacebookAuthentication.h>
-#include <moFlo/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 
 namespace moFlo
 {

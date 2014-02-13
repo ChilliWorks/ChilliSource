@@ -10,8 +10,8 @@
 #ifndef _MOFLO_PLATFORM_IOS_FILEIO_FILESYSTEM_
 #define _MOFLO_PLATFORM_IOS_FILEIO_FILESYSTEM_
 
-#include <moFlo/Core/FileIO/FileSystem.h>
-#include <moFlo/Core/FileIO/FileStream.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/FileIO/FileStream.h>
 #include <string>
 
 

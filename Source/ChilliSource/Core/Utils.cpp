@@ -6,9 +6,9 @@
 //
 //
 
-#include <moFlo/Core/Utils.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/JSON/json.h>
+#include <ChilliSource/Core/Utils.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/JSON/json.h>
 #include <zlib.h>
 
 using namespace moFlo::Core;

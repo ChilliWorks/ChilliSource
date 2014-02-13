@@ -10,10 +10,10 @@
 #ifndef _MO_FLO_CORE_TASKS_H_
 #define _MO_FLO_CORE_TASKS_H_
 
-#include <moFlo/Core/FastDelegate.h>
+#include <ChilliSource/Core/FastDelegate.h>
 
-#include <moFlo/Core/boost/thread/condition.hpp>
-#include <moFlo/Core/boost/type_traits/remove_reference.hpp>
+#include <ChilliSource/Core/boost/thread/condition.hpp>
+#include <ChilliSource/Core/boost/type_traits/remove_reference.hpp>
 
 namespace moFlo
 {

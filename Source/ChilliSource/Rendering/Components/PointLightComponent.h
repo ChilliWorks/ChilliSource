@@ -10,7 +10,7 @@
 #ifndef _MOFLOW_RENDERING_COMPONENTS_POINTLIGHTCOMPONENT_H_
 #define _MOFLOW_RENDERING_COMPONENTS_POINTLIGHTCOMPONENT_H_
 
-#include <moFlo/Rendering/Components/LightComponent.h>
+#include <ChilliSource/Rendering/Components/LightComponent.h>
 
 namespace moFlo
 {

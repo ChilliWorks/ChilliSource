@@ -7,7 +7,7 @@
  *
  */
 
-#include <moFlo/Core/Timer.h>
+#include <ChilliSource/Core/Timer.h>
 
 namespace moFlo
 {

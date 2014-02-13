@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_CORE_SCREEN_H_
 #define _MO_FLO_CORE_SCREEN_H_
 
-#include <moFlo/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 
 namespace moFlo
 {

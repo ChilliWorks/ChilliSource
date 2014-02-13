@@ -10,9 +10,9 @@
 #ifndef _MO_FLO_PLATFORM_ANDROID_WEB_VIEW_ACTIVITY_H_
 #define _MO_FLO_PLATFORM_ANDROID_WEB_VIEW_ACTIVITY_H_
 
-#include <moFlo/Core/WebViewActivity.h>
-#include <moFlo/Core/Math/UnifiedCoordinates.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/WebViewActivity.h>
+#include <ChilliSource/Core/Math/UnifiedCoordinates.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
 
 namespace moFlo
 {

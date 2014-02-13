@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Platform/Android/GooglePlay/GooglePlayIAPSystem.h>
+#include <ChilliSource/Platform/Android/GooglePlay/GooglePlayIAPSystem.h>
 
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 
 namespace moFlo
 {

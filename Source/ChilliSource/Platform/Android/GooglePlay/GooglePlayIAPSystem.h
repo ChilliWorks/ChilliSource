@@ -9,9 +9,9 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAY_GOOGLEPLAYIAPSYSTEM_H_
 #define _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAY_GOOGLEPLAYIAPSYSTEM_H_
 
-#include <moFlo/Networking/IAPSystem.h>
+#include <ChilliSource/Networking/IAPSystem.h>
 
-#include <moFlo/Platform/Android/GooglePlay/GooglePlayIAPJavaInterface.h>
+#include <ChilliSource/Platform/Android/GooglePlay/GooglePlayIAPJavaInterface.h>
 
 namespace moFlo
 {

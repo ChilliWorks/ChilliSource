@@ -14,11 +14,11 @@
 #ifndef _MOFLO_CORE_STRINGCONVERTER_H_
 #define _MOFLO_CORE_STRINGCONVERTER_H_
 
-#include <moFlo/Core/Math/Vector2.h>
-#include <moFlo/Core/Math/Vector4.h>
-#include <moFlo/Core/Math/Quaternion.h>
-#include <moFlo/Core/Colour.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Vector4.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/Colour.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
 
 namespace moFlo
 {

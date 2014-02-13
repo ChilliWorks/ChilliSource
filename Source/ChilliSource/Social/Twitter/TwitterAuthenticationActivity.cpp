@@ -7,12 +7,12 @@
  *
  */
 
-#include <moFlo/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
 
 #ifdef TARGET_OS_IPHONE
-#include <moFlo/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
 #elif TARGET_ANDROID
-#include <moFlo/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
 #endif
 
 namespace moFlo

@@ -3,19 +3,19 @@
 //  moFlow
 //
 //  Created by Scott Downie on 26/11/2010
-//  Copyright ©2010 Tag Games Limited. All rights reserved.
+//  Copyright ï¿½2010 Tag Games Limited. All rights reserved.
 //
 
 #ifndef _MO_FLO_PLATFORM_IOS_VIRTUAL_KEYBOARD_H_
 #define _MO_FLO_PLATFORM_IOS_VIRTUAL_KEYBOARD_H_
 
 #include <UIKit/UIKit.h>
-#include <moFlo/Platform/iOS/EAGLView.h>
+#include <ChilliSource/Platform/iOS/EAGLView.h>
 
-#include <moFlo/Core/FastDelegate.h>
-#include <moFlo/Core/GenericEvent.h>
+#include <ChilliSource/Core/FastDelegate.h>
+#include <ChilliSource/Core/GenericEvent.h>
 
-#include <moFlo/Input/VirtualKeyboard.h>
+#include <ChilliSource/Input/VirtualKeyboard.h>
 
 namespace moFlo
 {

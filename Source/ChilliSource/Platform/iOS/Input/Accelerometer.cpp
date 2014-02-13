@@ -11,7 +11,7 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Platform/iOS/Input/Accelerometer.h>
+#include <ChilliSource/Platform/iOS/Input/Accelerometer.h>
 #import <UIKit/UIAccelerometer.h>
 
 moFloAccelerometerDelegate* gpDelegateInstance = nil;

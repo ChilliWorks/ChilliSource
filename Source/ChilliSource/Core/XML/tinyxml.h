@@ -47,7 +47,7 @@ distribution.
 #define TIXML_MOFLO
 
 #ifdef TIXML_MOFLO
-	#include <moFlo/Core/FileIO/FileSystem.h>
+	#include <ChilliSource/Core/FileIO/FileSystem.h>
 #endif
 
 // Help out windows:

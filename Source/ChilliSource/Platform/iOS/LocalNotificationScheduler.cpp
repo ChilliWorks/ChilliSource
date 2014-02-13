@@ -6,7 +6,7 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Platform/iOS/LocalNotificationScheduler.h>
+#include <ChilliSource/Platform/iOS/LocalNotificationScheduler.h>
 
 #import <UIKit/UIKit.h>
 

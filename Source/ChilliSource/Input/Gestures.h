@@ -13,14 +13,14 @@
 #ifndef _MO_FLO_INPUT_GESTURES_H_
 #define _MO_FLO_INPUT_GESTURES_H_
 
-#include <moFlo/Core/Math/Vector2.h>
-#include <moFlo/Core/Timer.h>
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/FastDelegate.h>
-#include <moFlo/Core/Surface.h>
-#include <moFlo/Core/Math/Shapes.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Timer.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/FastDelegate.h>
+#include <ChilliSource/Core/Surface.h>
+#include <ChilliSource/Core/Math/Shapes.h>
 
-#include <moFlo/Input/ForwardDeclarations.h>
+#include <ChilliSource/Input/ForwardDeclarations.h>
 
 namespace moFlo
 {

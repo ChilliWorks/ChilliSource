@@ -37,7 +37,7 @@
 		34AA973C D4C4DAA4 F61EEB2B DBAD2731 6534016F
 */
 
-#include <moFlo/Core/Cryptographic/SHA1.h>
+#include <ChilliSource/Core/Cryptographic/SHA1.h>
 
 #ifdef SHA1_UTILITY_FUNCTIONS
 #define SHA1_MAX_FILE_BUFFER 8000

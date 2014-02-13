@@ -8,8 +8,8 @@
  */
 
 
-#include <moFlo/Core/SystemConcepts.h>
-#include <moFlo/Core/ResourceProvider.h>
+#include <ChilliSource/Core/SystemConcepts.h>
+#include <ChilliSource/Core/ResourceProvider.h>
 
 namespace moFlo
 {

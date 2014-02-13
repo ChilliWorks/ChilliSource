@@ -6,12 +6,12 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Rendering/Particles/Emitters/PointParticleEmitter.h>
-#include <moFlo/Rendering/Particles/Effectors/ParticleEffector.h>
-#include <moFlo/Rendering/Particles/ParticleComponent.h>
+#include <ChilliSource/Rendering/Particles/Emitters/PointParticleEmitter.h>
+#include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/ParticleComponent.h>
 
-#include <moFlo/Core/Math/MathUtils.h>
-#include <moFlo/Core/Entity.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Entity.h>
 
 namespace moFlo
 {

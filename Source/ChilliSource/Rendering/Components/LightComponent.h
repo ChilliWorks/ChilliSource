@@ -10,9 +10,9 @@
 #ifndef _MOFLOW_RENDERING_COMPONENTS_LIGHTCOMPONENT_H_
 #define _MOFLOW_RENDERING_COMPONENTS_LIGHTCOMPONENT_H_
 
-#include <moFlo/Core/Component.h>
+#include <ChilliSource/Core/Component.h>
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace moFlo
 {

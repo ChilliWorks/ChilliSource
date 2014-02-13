@@ -7,8 +7,8 @@
 #include <OpenGLES/EAGL.h>
 #include <OpenGLES/EAGLDrawable.h>
 #elif TARGET_WINDOWS
-#include <moFlo/Platform/Windows/OpenGL/glew.h>
-#include <moFlo/Platform/Windows/OpenGL/glfw.h>
+#include <ChilliSource/Platform/Windows/OpenGL/glew.h>
+#include <ChilliSource/Platform/Windows/OpenGL/glfw.h>
 #else
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>

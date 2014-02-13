@@ -10,10 +10,10 @@
 #ifndef _MOFLOW_NETWORKING_OAUTHSYSTEM_H_
 #define _MOFLOW_NETWORKING_OAUTHSYSTEM_H_
 
-#include <moFlo/Core/BaseEncoding.h>
-#include <moFlo/Core/System.h>
+#include <ChilliSource/Core/BaseEncoding.h>
+#include <ChilliSource/Core/System.h>
 
-#include <moFlo/Networking/ForwardDeclarations.h>
+#include <ChilliSource/Networking/ForwardDeclarations.h>
 
 #include "time.h"
 #include <cstdlib>

@@ -2,8 +2,8 @@
 #ifndef _MO_FLO_WINDOWSPLATFORM_INPUT_MOUSE_H_
 #define _MO_FLO_WINDOWSPLATFORM_INPUT_MOUSE_H_
 
-#include <moFlo/Input/ForwardDeclarations.h>
-#include <moFlo/Input/Mouse.h>
+#include <ChilliSource/Input/ForwardDeclarations.h>
+#include <ChilliSource/Input/Mouse.h>
 
 namespace moFlo
 {

@@ -6,8 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Rendering/Particles/Effectors/ParticleEffectorFactory.h>
-#include <moFlo/Rendering/Particles/Effectors/ParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/Effectors/ParticleEffectorFactory.h>
+#include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
 
 namespace moFlo
 {

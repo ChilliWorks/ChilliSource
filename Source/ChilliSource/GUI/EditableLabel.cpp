@@ -6,11 +6,11 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/GUI/EditableLabel.h>
+#include <ChilliSource/GUI/EditableLabel.h>
 
-#include <moFlo/Core/Screen.h>
+#include <ChilliSource/Core/Screen.h>
 
-#include <moFlo/Rendering/CanvasRenderer.h>
+#include <ChilliSource/Rendering/CanvasRenderer.h>
 
 namespace moFlo
 {

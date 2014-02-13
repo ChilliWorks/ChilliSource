@@ -6,14 +6,14 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/GUI/GUIView.h>
+#include <ChilliSource/GUI/GUIView.h>
 
-#include <moFlo/Core/StringConverter.h>
-#include <moFlo/Core/Math/MathUtils.h>
-#include <moFlo/Core/Screen.h>
-#include <moFlo/Core/BitOps.h>
+#include <ChilliSource/Core/StringConverter.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/BitOps.h>
 
-#include <moFlo/Rendering/CanvasRenderer.h>
+#include <ChilliSource/Rendering/CanvasRenderer.h>
 
 #include <algorithm>
 #include <limits>

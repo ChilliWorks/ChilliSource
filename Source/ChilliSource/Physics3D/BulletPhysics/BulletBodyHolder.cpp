@@ -7,7 +7,7 @@
  *
  */
 
-#include <moFlo/Physics3D/BulletPhysics/BulletBodyHolder.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletBodyHolder.h>
 #include <BulletCollision/CollisionShapes/btCollisionShape.h>
 #include <BulletCollision/CollisionShapes/btSphereShape.h>
 

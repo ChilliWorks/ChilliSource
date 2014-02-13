@@ -7,9 +7,9 @@
  *
  */
 
-#include <moFlo/Platform/Android/JavaInterface/EmailCompositionJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Platform/Android/JavaInterface/EmailCompositionJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 #include <Platform/Android/Social/Communications/EmailCompositionActivity.h>
 
 //function definitions

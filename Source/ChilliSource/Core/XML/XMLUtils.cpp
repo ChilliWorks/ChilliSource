@@ -11,7 +11,7 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Core/XML/XMLUtils.h>
+#include <ChilliSource/Core/XML/XMLUtils.h>
 
 namespace moFlo
 {

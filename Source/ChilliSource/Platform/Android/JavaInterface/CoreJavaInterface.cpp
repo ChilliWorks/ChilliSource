@@ -7,21 +7,21 @@
  *
  */
 
-#include <moFlo/Platform/Android/ForwardDeclarations.h>
-#include <moFlo/Platform/Android/JavaInterface/CoreJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
-#include <moFlo/Core/ApplicationEvents.h>
-#include <moFlo/Core/PlatformSystem.h>
-#include <moFlo/Core/LaunchingActions.h>
+#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Platform/Android/JavaInterface/CoreJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Core/ApplicationEvents.h>
+#include <ChilliSource/Core/PlatformSystem.h>
+#include <ChilliSource/Core/LaunchingActions.h>
 
-#include <moFlo/Platform/Android/JavaInterface/TouchInputJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/SharedPreferencesJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/WebViewJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/ContactInformationProviderJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/SMSCompositionJavaInterface.h>
-#include <moFlo/Platform/Android/JavaInterface/TwitterAuthenticationActivityJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/TouchInputJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/SharedPreferencesJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/WebViewJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/ContactInformationProviderJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/SMSCompositionJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/TwitterAuthenticationActivityJavaInterface.h>
 
 //--------------------------------------------------------------------------------------
 /// Globals

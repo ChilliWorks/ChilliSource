@@ -7,7 +7,7 @@
  *
  */
 
-#include <moFlo/Rendering/Skeleton.h>
+#include <ChilliSource/Rendering/Skeleton.h>
 
 namespace moFlo
 {

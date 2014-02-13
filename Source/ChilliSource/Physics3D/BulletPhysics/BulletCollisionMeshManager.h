@@ -9,8 +9,8 @@
 #ifndef _MOFLOW_PHYSICS3D_BULLETPHYSICS_BULLETCOLLISIONMESHMANAGER_H_
 #define _MOFLOW_PHYSICS3D_BULLETPHYSICS_BULLETCOLLISIONMESHMANAGER_H_
 
-#include <moFlo/Physics3D/BulletPhysics/ForwardDeclarations.h>
-#include <moFlo/Core/ResourceManager.h>
+#include <ChilliSource/Physics3D/BulletPhysics/ForwardDeclarations.h>
+#include <ChilliSource/Core/ResourceManager.h>
 
 namespace moFlo
 {

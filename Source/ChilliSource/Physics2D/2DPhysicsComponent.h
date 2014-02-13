@@ -14,11 +14,11 @@
 #ifndef _MOFLO_PHYSICS2D_2DPHYSICSCOMPONENT_H_
 #define _MOFLO_PHYSICS2D_2DPHYSICSCOMPONENT_H_
 
-#include <moFlo/Physics2D/ForwardDeclarations.h>
-#include <moFlo/Core/Math/Vector2.h>
-#include <moFlo/Core/Component.h>
-#include <moFlo/Core/FastDelegate.h>
-#include <moFlo/Core/Math/Shapes.h>
+#include <ChilliSource/Physics2D/ForwardDeclarations.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Component.h>
+#include <ChilliSource/Core/FastDelegate.h>
+#include <ChilliSource/Core/Math/Shapes.h>
 
 namespace moFlo
 {

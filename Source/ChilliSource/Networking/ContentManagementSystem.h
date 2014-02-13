@@ -6,12 +6,12 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Networking/ForwardDeclarations.h>
-#include <moFlo/Networking/ContentDownloader.h>
+#include <ChilliSource/Networking/ForwardDeclarations.h>
+#include <ChilliSource/Networking/ContentDownloader.h>
 
-#include <moFlo/Core/System.h>
-#include <moFlo/Core/GenericEvent.h>
-#include <moFlo/Core/XML/XMLUtils.h>
+#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/XML/XMLUtils.h>
 
 namespace moFlo
 {

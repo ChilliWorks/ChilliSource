@@ -6,9 +6,9 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Audio/AudioSystem.h>
+#include <ChilliSource/Audio/AudioSystem.h>
 
-#include <moFlo/Platform/Android/FMOD/FMODAudioComponent.h>
+#include <ChilliSource/Platform/Android/FMOD/FMODAudioComponent.h>
 
 namespace moFlo
 {

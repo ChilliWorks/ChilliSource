@@ -9,12 +9,12 @@
 #ifndef _MOFLO_GUI_GUIVIEWFACTORY_H_
 #define _MOFLO_GUI_GUIVIEWFACTORY_H_
 
-#include <moFlo/Core/FastDelegate.h>
-#include <moFlo/Core/ParamDictionary.h>
+#include <ChilliSource/Core/FastDelegate.h>
+#include <ChilliSource/Core/ParamDictionary.h>
 
-#include <moFlo/GUI/ForwardDeclarations.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
-#include <moFlo/Core/XML/rapidxml_forward.h>
+#include <ChilliSource/GUI/ForwardDeclarations.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/XML/rapidxml_forward.h>
 
 namespace moFlo
 {

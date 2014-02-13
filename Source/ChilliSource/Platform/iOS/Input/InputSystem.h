@@ -16,11 +16,11 @@
 
 #include <UIKit/UIKit.h>
 
-#include <moFlo/Input/InputSystem.h>
+#include <ChilliSource/Input/InputSystem.h>
 
-#include <moFlo/Platform/iOS/Input/TouchScreen.h>
-#include <moFlo/Platform/iOS/Input/Accelerometer.h>
-#include <moFlo/Platform/iOS/Input/VirtualKeyboard.h>
+#include <ChilliSource/Platform/iOS/Input/TouchScreen.h>
+#include <ChilliSource/Platform/iOS/Input/Accelerometer.h>
+#include <ChilliSource/Platform/iOS/Input/VirtualKeyboard.h>
 
 namespace moFlo
 {

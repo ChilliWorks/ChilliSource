@@ -6,7 +6,7 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Video/VideoPlayerActivity.h>
+#include <ChilliSource/Video/VideoPlayerActivity.h>
 
 namespace moFlo
 {

@@ -10,13 +10,13 @@
 
 
 
-#include <moFlo/Platform/Android/ImageLoader.h>
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Platform/Android/ImageLoader.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Application.h>
 
-#include <moFlo/Core/Image.h>
+#include <ChilliSource/Core/Image.h>
 
-#include <moFlo/Platform/Android/ImageLoading/PngImage.h>
+#include <ChilliSource/Platform/Android/ImageLoading/PngImage.h>
 
 namespace moFlo
 {

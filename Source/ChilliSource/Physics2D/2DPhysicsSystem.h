@@ -14,9 +14,9 @@
 #ifndef _MOFLO_PHYSICS2D_I2DPHYSICSSYSTEM_H
 #define _MOFLO_PHYSICS2D_I2DPHYSICSSYSTEM_H
 
-#include <moFlo/Physics2D/ForwardDeclarations.h>
-#include <moFlo/Core/System.h>
-#include <moFlo/Core/SystemConcepts.h>
+#include <ChilliSource/Physics2D/ForwardDeclarations.h>
+#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/SystemConcepts.h>
 
 namespace moFlo
 {

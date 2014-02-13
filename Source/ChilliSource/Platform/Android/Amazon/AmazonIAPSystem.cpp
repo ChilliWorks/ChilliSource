@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Platform/Android/Amazon/AmazonIAPSystem.h>
-#include <moFlo/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <moFlo/Core/Device.h>
+#include <ChilliSource/Platform/Android/Amazon/AmazonIAPSystem.h>
+#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Core/Device.h>
 
 namespace moFlo
 {

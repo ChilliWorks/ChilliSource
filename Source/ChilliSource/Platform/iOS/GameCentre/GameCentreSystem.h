@@ -10,10 +10,10 @@
 #ifndef _MO_FLO_IOS_PLATFORM_GAME_CENTRE_H_
 #define _MO_FLO_IOS_PLATFORM_GAME_CENTRE_H_
 
-#include <moFlo/Core/System.h>
-#include <moFlo/Core/GenericEvent.h>
-#include <moFlo/Core/Containers/WorkerQueue.h>
-#include <moFlo/Core/Containers/UTF8String.h>
+#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/Containers/WorkerQueue.h>
+#include <ChilliSource/Core/Containers/UTF8String.h>
 
 @class NSArray;
 

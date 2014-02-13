@@ -7,8 +7,8 @@
  *
  */
 
-#include <moFlo/Platform/iOS/Input/TouchScreen.h>
-#include <moFlo/Core/Screen.h>
+#include <ChilliSource/Platform/iOS/Input/TouchScreen.h>
+#include <ChilliSource/Core/Screen.h>
 
 moFlo::iOSPlatform::CTouchScreen* gpTouchScreenInstance = NULL;
 

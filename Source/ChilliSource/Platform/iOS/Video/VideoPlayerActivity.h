@@ -9,9 +9,9 @@
 #ifndef _MO_FLO_PLATFORM_IOS_VIDEO_VIDEO_PLAYER_H_
 #define _MO_FLO_PLATFORM_IOS_VIDEO_VIDEO_PLAYER_H_
 
-#include <moFlo/Video/VideoPlayerActivity.h>
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Input/Gestures.h>
+#include <ChilliSource/Video/VideoPlayerActivity.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Input/Gestures.h>
 
 @class MPMoviePlayerController;
 @class CVideoPlayerTapListener;

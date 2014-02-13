@@ -10,9 +10,9 @@
 #ifndef _MOFLO_GUI_DEFAULTS_HORIZONTALSTRETCHABLEIMAGE_H_
 #define _MOFLO_GUI_DEFAULTS_HORIZONTALSTRETCHABLEIMAGE_H_
 
-#include <moFlo/GUI/GUIView.h>
+#include <ChilliSource/GUI/GUIView.h>
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace moFlo
 {

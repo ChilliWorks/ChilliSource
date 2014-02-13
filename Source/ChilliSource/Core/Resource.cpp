@@ -10,8 +10,8 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Core/Resource.h>
-#include <moFlo/Core/ResourceManager.h>
+#include <ChilliSource/Core/Resource.h>
+#include <ChilliSource/Core/ResourceManager.h>
 
 namespace moFlo
 {

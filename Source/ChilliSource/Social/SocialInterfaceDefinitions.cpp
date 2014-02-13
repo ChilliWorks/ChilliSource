@@ -7,9 +7,9 @@
  *
  */
 
-#include <moFlo/Social/Communications/ContactInformationProvider.h>
-#include <moFlo/Social/Communications/SMSCompositionActivity.h>
-#include <moFlo/Social/Communications/EmailCompositionActivity.h>
+#include <ChilliSource/Social/Communications/ContactInformationProvider.h>
+#include <ChilliSource/Social/Communications/SMSCompositionActivity.h>
+#include <ChilliSource/Social/Communications/EmailCompositionActivity.h>
 
 namespace moFlo{
 

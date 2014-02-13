@@ -7,17 +7,17 @@
  *
  */
 
-#include <moFlo/Platform/iOS/FileIO/FileSystem.h>
-#include <moFlo/Core/FileIO/FileStream.h>
+#include <ChilliSource/Platform/iOS/FileIO/FileSystem.h>
+#include <ChilliSource/Core/FileIO/FileStream.h>
 
 #include <UIKit/UIKit.h>
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
-#include <moFlo/Core/Utils.h>
-#include <moFlo/Core/StringUtils.h>
+#include <ChilliSource/Core/Utils.h>
+#include <ChilliSource/Core/StringUtils.h>
 
-#include <moFlo/Core/boost/filesystem.hpp>
+#include <ChilliSource/Core/boost/filesystem.hpp>
 
 #include <iostream>
 

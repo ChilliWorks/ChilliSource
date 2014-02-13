@@ -7,8 +7,8 @@
  *
  */
 
-#include <moFlo/Core/DebugStats.h>
-#include <moFlo/GUI/Defaults/DebugStatsView.h>
+#include <ChilliSource/Core/DebugStats.h>
+#include <ChilliSource/GUI/Defaults/DebugStatsView.h>
 
 #ifdef DEBUG_STATS
 

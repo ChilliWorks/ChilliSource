@@ -10,10 +10,10 @@
 #ifndef _MOFLO_PLATFORM_ANDROID_JAVAINTERFACE_CONTACTIONINFOPROVIDER_H_
 #define _MOFLO_PLATFORM_ANDROID_JAVAINTERFACE_CONTACTIONINFOPROVIDER_H_
 
-#include <moFlo/Social/Communications/ContactInformationProvider.h>
+#include <ChilliSource/Social/Communications/ContactInformationProvider.h>
 #include <Platform/Android/Social/Communications/ContactInformationProvider.h>
 #include <vector>
-#include <moFlo/Platform/Android/JavaInterface/_JavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
 
 namespace moFlo
 {

@@ -7,8 +7,8 @@
  *
  */
 
-#include <moFlo/Core/Math/Matrix4x4.h>
-#include <moFlo/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
 
 namespace moFlo
 {

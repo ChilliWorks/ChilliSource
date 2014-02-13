@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Core/ETC1ImageProvider.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/Utils.h>
+#include <ChilliSource/Core/ETC1ImageProvider.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Utils.h>
 
 const std::string ETC1Extension("pkm");
 

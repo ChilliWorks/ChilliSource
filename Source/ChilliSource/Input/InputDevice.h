@@ -14,7 +14,7 @@
 #ifndef _MOFLO_INPUT_INPUTDEVICE_H_
 #define _MOFLO_INPUT_INPUTDEVICE_H_
 
-#include <moFlo/Core/QueryableInterface.h>
+#include <ChilliSource/Core/QueryableInterface.h>
 
 namespace moFlo
 {

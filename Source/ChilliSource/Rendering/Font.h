@@ -9,13 +9,13 @@
 #ifndef _MO_FLO_RENDERING_FONT_H_
 #define _MO_FLO_RENDERING_FONT_H_
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Rendering/SpriteSheet.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/SpriteSheet.h>
 
-#include <moFlo/Core/Math/Shapes.h>
-#include <moFlo/Core/Resource.h>
+#include <ChilliSource/Core/Math/Shapes.h>
+#include <ChilliSource/Core/Resource.h>
 
-#include <moFlo/Core/Containers/UTF8String.h>
+#include <ChilliSource/Core/Containers/UTF8String.h>
 
 namespace moFlo
 {

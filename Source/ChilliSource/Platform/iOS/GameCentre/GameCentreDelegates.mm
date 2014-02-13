@@ -6,8 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#import <moFlo/Platform/iOS/GameCentre/GameCentreDelegates.h>
-#import <moFlo/Platform/iOS/GameCentre/GameCentreSystem.h>
+#import <ChilliSource/Platform/iOS/GameCentre/GameCentreDelegates.h>
+#import <ChilliSource/Platform/iOS/GameCentre/GameCentreSystem.h>
 
 GameCentreTurnBasedMatchmakerViewControllerDelegate * gameCentreTurnBasedMatchmakerViewControllerDelegate = nil;
 GameCentreTurnBasedEventHandlerDelegate * gameCentreTurnBasedEventHandlerInstance = nil;

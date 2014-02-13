@@ -13,11 +13,11 @@
 #ifndef _MO_FLO_RENDERING_SPRITE_MANAGER_H_
 #define _MO_FLO_RENDERING_SPRITE_MANAGER_H_
 
-#include <moFlo/Core/ResourceManager.h>
-#include <moFlo/Core/Image.h>
+#include <ChilliSource/Core/ResourceManager.h>
+#include <ChilliSource/Core/Image.h>
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Rendering/SpriteSheet.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/SpriteSheet.h>
 
 namespace moFlo
 {

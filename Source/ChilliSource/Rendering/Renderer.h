@@ -10,11 +10,11 @@
 #ifndef _MO_FLO_RENDERING_RENDERER_H_
 #define _MO_FLO_RENDERING_RENDERER_H_
 
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/Component.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/Component.h>
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/Rendering/CanvasRenderer.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/CanvasRenderer.h>
 
 namespace moFlo
 {

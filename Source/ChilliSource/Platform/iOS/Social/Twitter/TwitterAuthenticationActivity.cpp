@@ -7,13 +7,13 @@
  *
  */
 
-#include <moFlo/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
-#include <moFlo/Platform/iOS/EAGLView.h>
+#include <ChilliSource/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/Platform/iOS/EAGLView.h>
 
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/Screen.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Screen.h>
 
-#include <moFlo/Social/Twitter/TwitterPostSystem.h>
+#include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 
 #include <UIKit/UIKit.h>
 

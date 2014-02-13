@@ -3,7 +3,7 @@
  * moFlow
  *
  * Created by Ian Copland on 09/11/2011
- * Copyright ©2010 Tag Games Limited - All rights reserved
+ * Copyright ï¿½2010 Tag Games Limited - All rights reserved
  */
 
 #ifndef _MOFLO_PLATFORM_ANDROID_INPUT_HTTPCONNECTION_INTERFACE_JAVA_INTERFACE_
@@ -11,8 +11,8 @@
 
 #include <jni.h>
 #include <map>
-#include <moFlo/Core/ParamDictionary.h>
-#include <moFlo/Platform/Android/JavaInterface/_JavaInterface.h>
+#include <ChilliSource/Core/ParamDictionary.h>
+#include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
 
 namespace moFlo
 {

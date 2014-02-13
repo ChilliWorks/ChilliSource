@@ -7,9 +7,9 @@
  *
  */
 
-#include <moFlo/Rendering/Components/DirectionalLightComponent.h>
+#include <ChilliSource/Rendering/Components/DirectionalLightComponent.h>
 
-#include <moFlo/Core/Entity.h>
+#include <ChilliSource/Core/Entity.h>
 
 namespace moFlo
 {

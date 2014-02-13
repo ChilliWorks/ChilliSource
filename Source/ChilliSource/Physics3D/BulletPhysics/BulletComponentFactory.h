@@ -10,10 +10,10 @@
 #ifndef _MOFLOW_PHYSICS3D_BULLETPHYSICS_BULLETCOMPONENTFACTORY_H_
 #define _MOFLOW_PHYSICS3D_BULLETPHYSICS_BULLETCOMPONENTFACTORY_H_
 
-#include <moFlo/Physics3D/BulletPhysics/ForwardDeclarations.h>
-#include <moFlo/Physics3D/ForwardDeclarations.h>
-#include <moFlo/Physics3D/3DPhysicsComponentFactory.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Physics3D/BulletPhysics/ForwardDeclarations.h>
+#include <ChilliSource/Physics3D/ForwardDeclarations.h>
+#include <ChilliSource/Physics3D/3DPhysicsComponentFactory.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
 
 namespace moFlo
 {

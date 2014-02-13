@@ -10,16 +10,16 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Platform/Windows/FMOD/FMODSystemWindows.h>
-#include <moFlo/Platform/Windows/FMOD/FMODAudioManagerWindows.h>
-#include <moFlo/Platform/Windows/FMOD/FMODAudioListenerWindows.h>
-#include <moFlo/Platform/Windows/FMOD/FMODAudioComponentWindows.h>
-#include <moFlo/Platform/Windows/FMOD/FMODAudioResourceWindows.h>
-#include <moFlo/Platform/Windows/FMOD/FMODAudioComponentFactoryWindows.h>
+#include <ChilliSource/Platform/Windows/FMOD/FMODSystemWindows.h>
+#include <ChilliSource/Platform/Windows/FMOD/FMODAudioManagerWindows.h>
+#include <ChilliSource/Platform/Windows/FMOD/FMODAudioListenerWindows.h>
+#include <ChilliSource/Platform/Windows/FMOD/FMODAudioComponentWindows.h>
+#include <ChilliSource/Platform/Windows/FMOD/FMODAudioResourceWindows.h>
+#include <ChilliSource/Platform/Windows/FMOD/FMODAudioComponentFactoryWindows.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Platform/Windows/FileIO/FileSystemWindows.h>
-#include <moFlo/Core/ApplicationEvents.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Platform/Windows/FileIO/FileSystemWindows.h>
+#include <ChilliSource/Core/ApplicationEvents.h>
 
 namespace moFlo
 {

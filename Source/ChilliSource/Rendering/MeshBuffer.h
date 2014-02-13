@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_RENDERING_MESH_BUFFER
 #define _MO_FLO_RENDERING_MESH_BUFFER
 
-#include <moFlo/Rendering/VertexDeclaration.h>
+#include <ChilliSource/Rendering/VertexDeclaration.h>
 
 namespace moFlo
 {

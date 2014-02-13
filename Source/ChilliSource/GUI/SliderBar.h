@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_GUI_SLIDER_BAR_H_
 #define _MO_FLO_GUI_SLIDER_BAR_H_
 
-#include <moFlo/GUI/GUIView.h>
+#include <ChilliSource/GUI/GUIView.h>
 
 namespace moFlo
 {

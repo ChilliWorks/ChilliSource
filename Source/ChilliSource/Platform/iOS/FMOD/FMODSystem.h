@@ -13,11 +13,11 @@
 #ifndef _MO_FLO_AUDIO_FMOD_FMOD_SYSTEM_H_
 #define _MO_FLO_AUDIO_FMOD_FMOD_SYSTEM_H_
 
-#include <moFlo/Platform/iOS/FMOD/fmod.hpp>
-#include <moFlo/Platform/iOS/FMOD/fmod_errors.h>
-#include <moFlo/Platform/iOS/FMOD/fmod_event.hpp>
+#include <ChilliSource/Platform/iOS/FMOD/fmod.hpp>
+#include <ChilliSource/Platform/iOS/FMOD/fmod_errors.h>
+#include <ChilliSource/Platform/iOS/FMOD/fmod_event.hpp>
 
-#include <moFlo/Audio/AudioSystem.h>
+#include <ChilliSource/Audio/AudioSystem.h>
 
 namespace moFlo
 {

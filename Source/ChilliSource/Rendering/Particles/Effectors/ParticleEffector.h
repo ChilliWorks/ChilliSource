@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_RENDERING__PARTICLES_PARTICLE_EFFECTOR_H_
 #define _MO_FLO_RENDERING__PARTICLES_PARTICLE_EFFECTOR_H_
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace moFlo
 {

@@ -10,8 +10,8 @@
 #ifndef _MOFLO_CORE_FILEIO_FILE_SYSTEM_
 #define _MOFLO_CORE_FILEIO_FILE_SYSTEM_
 
-#include <moFlo/Core/FileIO/FileStream.h>
-#include <moFlo/Core/System.h>
+#include <ChilliSource/Core/FileIO/FileStream.h>
+#include <ChilliSource/Core/System.h>
 #include <string>
 
 namespace moFlo

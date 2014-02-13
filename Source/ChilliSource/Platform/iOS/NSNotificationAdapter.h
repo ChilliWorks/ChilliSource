@@ -11,7 +11,7 @@
 
 #import <Foundation/Foundation.h>
 
-#include <moFlo/Core/GenericEvent.h>
+#include <ChilliSource/Core/GenericEvent.h>
 
 typedef fastdelegate::FastDelegate0<> NotificationEventDelegate;
 

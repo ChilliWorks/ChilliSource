@@ -9,7 +9,7 @@
 
 #include "ContactInformationProviderJavaInterface.h"
 #include <Platform/Android/Social/Communications/ContactInformationProvider.h>
-#include <moFlo/Core/StringUtils.h>
+#include <ChilliSource/Core/StringUtils.h>
 
 //function definitions
 extern "C"

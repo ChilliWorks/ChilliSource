@@ -7,22 +7,22 @@
  *
  */
 
-#include <moFlo/Rendering/Components/StaticMeshComponent.h>
-#include <moFlo/Rendering/Components/LightComponent.h>
-#include <moFlo/Rendering/Components/DirectionalLightComponent.h>
-#include <moFlo/Rendering/Components/PointLightComponent.h>
-#include <moFlo/Rendering/Material.h>
-#include <moFlo/Rendering/MaterialFactory.h>
-#include <moFlo/Rendering/MaterialManager.h>
-#include <moFlo/Rendering/RenderSystem.h>
-#include <moFlo/Rendering/DynamicSpriteBatcher.h>
+#include <ChilliSource/Rendering/Components/StaticMeshComponent.h>
+#include <ChilliSource/Rendering/Components/LightComponent.h>
+#include <ChilliSource/Rendering/Components/DirectionalLightComponent.h>
+#include <ChilliSource/Rendering/Components/PointLightComponent.h>
+#include <ChilliSource/Rendering/Material.h>
+#include <ChilliSource/Rendering/MaterialFactory.h>
+#include <ChilliSource/Rendering/MaterialManager.h>
+#include <ChilliSource/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/DynamicSpriteBatcher.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/Entity.h>
-#include <moFlo/Core/Math/Matrix4x4.h>
-#include <moFlo/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Entity.h>
+#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
 
-#include <moFlo/Rendering/SubMesh.h>
+#include <ChilliSource/Rendering/SubMesh.h>
 
 #include <limits>
 

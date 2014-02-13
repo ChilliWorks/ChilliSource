@@ -7,12 +7,12 @@
  *
  */
 
-#include <moFlo/Rendering/MoAnimLoader.h>
-#include <moFlo/Rendering/SkinnedAnimation.h>
-#include <moFlo/Core/Math/Vector3.h>
-#include <moFlo/Core/Math/Quaternion.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/TaskScheduler.h>
+#include <ChilliSource/Rendering/MoAnimLoader.h>
+#include <ChilliSource/Rendering/SkinnedAnimation.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/TaskScheduler.h>
 
 #include <stdexcept>
 

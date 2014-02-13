@@ -7,7 +7,7 @@
 //
 
 
-#include <moFlo/Platform/iOS/StoreKitIAPSystem.h>
+#include <ChilliSource/Platform/iOS/StoreKitIAPSystem.h>
 
 @implementation StoreKitIAPSystem
 

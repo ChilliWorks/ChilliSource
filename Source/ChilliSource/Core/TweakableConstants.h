@@ -2,7 +2,7 @@
 #define _MOFLO_CORE_TWEAKABLECONSTANTS_H
 
 #include <string>
-#include <moFlo/Core/XML/tinyxml.h>
+#include <ChilliSource/Core/XML/tinyxml.h>
 
 #define USETWEAKABLECONSTANTS
 

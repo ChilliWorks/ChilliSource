@@ -9,7 +9,7 @@
 #ifndef _MO_FLO_RENDERING_PARTICLES_EMITTERS_RING_PARTICLE_EMITTER_H_
 #define _MO_FLO_RENDERING_PARTICLES_EMITTERS_RING_PARTICLE_EMITTER_H_
 
-#include <moFlo/Rendering/Particles/Emitters/ParticleEmitter.h>
+#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 
 namespace moFlo
 {

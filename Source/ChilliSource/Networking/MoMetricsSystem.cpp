@@ -7,13 +7,13 @@
  *
  */
 
-#include <moFlo/Networking/MoMetricsSystem.h>
+#include <ChilliSource/Networking/MoMetricsSystem.h>
 
-#include <moFlo/Core/ApplicationEvents.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/Device.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/Utils.h>
+#include <ChilliSource/Core/ApplicationEvents.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Device.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Utils.h>
 
 namespace moFlo
 {

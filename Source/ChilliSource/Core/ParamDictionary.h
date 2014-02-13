@@ -12,7 +12,7 @@
 
 class TiXmlElement;
 
-#include <moFlo/Core/XML/rapidxml_forward.h>
+#include <ChilliSource/Core/XML/rapidxml_forward.h>
 
 namespace moFlo
 {

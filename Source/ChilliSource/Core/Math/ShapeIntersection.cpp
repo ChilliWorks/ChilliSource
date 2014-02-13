@@ -10,9 +10,9 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Core/Math/ShapeIntersection.h>
-#include <moFlo/Core/Math/Shapes.h>
-#include <moFlo/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Math/ShapeIntersection.h>
+#include <ChilliSource/Core/Math/Shapes.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
 
 namespace moFlo
 {

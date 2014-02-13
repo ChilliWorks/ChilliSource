@@ -1,6 +1,6 @@
 
-#include <moFlo/Core/Math/Quaternion.h>
-#include <moFlo/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
 
 using namespace moFlo::Core;
 

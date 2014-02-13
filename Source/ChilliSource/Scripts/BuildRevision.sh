@@ -10,15 +10,15 @@ svn --version
 
 WORKSPACE=$1
 APP_REV=$(svn info "$WORKSPACE" | grep "Revision" | cut -f2 -d' ')
-MOFLOW_REV=$(svn info "$WORKSPACE/Classes/moFlo" | grep "Revision" | cut -f2 -d' ')
+MOFLOW_REV=$(svn info "$WORKSPACE/ChilliSource/Source/ChilliSource" | grep "Revision" | cut -f2 -d' ')
 
-if test $(grep -E "$APP_REV|$MOFLOW_REV" "$WORKSPACE/Classes/moFlo/Revision.h" | wc -l) -eq 2;
+if test $(grep -E "$APP_REV|$MOFLOW_REV" "$WORKSPACE/ChilliSource/Source/ChilliSource/Revision.h" | wc -l) -eq 2;
     then echo "Revision.h up to date"
 else
     echo "Rebuilding Revision.h"
-    echo "#ifndef _MO_FLO_REVISION_H" > "$WORKSPACE/Classes/moFlo/Revision.h"
-    echo "#define _MO_FLO_REVISION_H" >> "$WORKSPACE/Classes/moFlo/Revision.h"
-    echo "#define APP_REVISION_NUMBER \"$APP_REV\"" >> "$WORKSPACE/Classes/moFlo/Revision.h"
-    echo "#define MOFLOW_REVISION_NUMBER \"$MOFLOW_REV\"" >> "$WORKSPACE/Classes/moFlo/Revision.h"
-    echo "#endif" >> "$WORKSPACE/Classes/moFlo/Revision.h"
+    echo "#ifndef _MO_FLO_REVISION_H" > "$WORKSPACE/ChilliSource/Source/ChilliSource/Revision.h"
+    echo "#define _MO_FLO_REVISION_H" >> "$WORKSPACE/ChilliSource/Source/ChilliSource/Revision.h"
+    echo "#define APP_REVISION_NUMBER \"$APP_REV\"" >> "$WORKSPACE/ChilliSource/Source/ChilliSource/Revision.h"
+    echo "#define MOFLOW_REVISION_NUMBER \"$MOFLOW_REV\"" >> "$WORKSPACE/ChilliSource/Source/ChilliSource/Revision.h"
+    echo "#endif" >> "$WORKSPACE/ChilliSource/Source/ChilliSource/Revision.h"
 fi

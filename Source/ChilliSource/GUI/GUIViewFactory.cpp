@@ -6,26 +6,26 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <moFlo/GUI/GUIViewFactory.h>
+#include <ChilliSource/GUI/GUIViewFactory.h>
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/GUI/GUI.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/GUI/GUI.h>
 
-#include <moFlo/GUI/Defaults/HighlightButton.h>
-#include <moFlo/GUI/Defaults/ToggleButton.h>
-#include <moFlo/GUI/Defaults/HorizontalProgressBar.h>
-#include <moFlo/GUI/Defaults/HorizontalSliderBar.h>
-#include <moFlo/GUI/Defaults/VerticalSliderBar.h>
-#include <moFlo/GUI/Defaults/HorizontalEndcappedProgressBar.h>
-#include <moFlo/GUI/Defaults/VerticalEndcappedProgressBar.h>
+#include <ChilliSource/GUI/Defaults/HighlightButton.h>
+#include <ChilliSource/GUI/Defaults/ToggleButton.h>
+#include <ChilliSource/GUI/Defaults/HorizontalProgressBar.h>
+#include <ChilliSource/GUI/Defaults/HorizontalSliderBar.h>
+#include <ChilliSource/GUI/Defaults/VerticalSliderBar.h>
+#include <ChilliSource/GUI/Defaults/HorizontalEndcappedProgressBar.h>
+#include <ChilliSource/GUI/Defaults/VerticalEndcappedProgressBar.h>
 
-#include <moFlo/GUI/Defaults/HorizontalClippingProgressBar.h>
-#include <moFlo/GUI/Defaults/StretchableHighlightButton.h>
-#include <moFlo/GUI/Defaults/VerticalStretchableImage.h>
-#include <moFlo/GUI/HorizontalList.h>
-#include <moFlo/GUI/VerticalList.h>
+#include <ChilliSource/GUI/Defaults/HorizontalClippingProgressBar.h>
+#include <ChilliSource/GUI/Defaults/StretchableHighlightButton.h>
+#include <ChilliSource/GUI/Defaults/VerticalStretchableImage.h>
+#include <ChilliSource/GUI/HorizontalList.h>
+#include <ChilliSource/GUI/VerticalList.h>
 
-#include <moFlo/Core/XML/rapidxml.hpp>
+#include <ChilliSource/Core/XML/rapidxml.hpp>
 
 namespace moFlo
 {

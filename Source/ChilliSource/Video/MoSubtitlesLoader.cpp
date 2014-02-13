@@ -7,13 +7,13 @@
  *
  */
 
-#include <moFlo/Video/MoSubtitlesLoader.h>
-#include <moFlo/Video/Subtitles.h>
-#include <moFlo/Core/TaskScheduler.h>
-#include <moFlo/Core/JSON/json.h>
-#include <moFlo/Core/FileIO/FileStream.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/Utils.h>
+#include <ChilliSource/Video/MoSubtitlesLoader.h>
+#include <ChilliSource/Video/Subtitles.h>
+#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/JSON/json.h>
+#include <ChilliSource/Core/FileIO/FileStream.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Utils.h>
 
 namespace moFlo
 {

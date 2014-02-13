@@ -10,10 +10,10 @@
 #ifndef _MO_FLO_CORE_LOCALISED_TEXT_H_
 #define _MO_FLO_CORE_LOCALISED_TEXT_H_
 
-#include <moFlo/Core/ForwardDeclarations.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
-#include <moFlo/Core/Containers/HashedArray.h>
-#include <moFlo/Core/Containers/UTF8String.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Containers/HashedArray.h>
+#include <ChilliSource/Core/Containers/UTF8String.h>
 
 namespace moFlo
 {

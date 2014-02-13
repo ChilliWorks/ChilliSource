@@ -14,8 +14,8 @@
 #ifndef _MO_FLO_AUDIO_FMOD_FMOD_AUDIO_LOADER_H_
 #define _MO_FLO_AUDIO_FMOD_FMOD_AUDIO_LOADER_H_
 
-#include <moFlo/Audio/AudioLoader.h>
-#include <moFlo/Platform/Android/FMOD/FMODSystem.h>
+#include <ChilliSource/Audio/AudioLoader.h>
+#include <ChilliSource/Platform/Android/FMOD/FMODSystem.h>
 
 namespace moFlo
 {

@@ -10,12 +10,12 @@
 #ifndef _MO_FLO_ANDROIDPLATFORM_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
 #define _MO_FLO_ANDROIDPLATFORM_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
 
-#include <moFlo/Core/GenericEvent.h>
-#include <moFlo/Core/System.h>
-#include <moFlo/Networking/OAuthSystem.h>
-#include <moFlo/Social/Twitter/TwitterAuthenticationActivity.h>
-#include <moFlo/Social/Twitter/TwitterPostSystem.h>
-#include <moFlo/Platform/Android/HttpConnectionSystem.h>
+#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Networking/OAuthSystem.h>
+#include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
+#include <ChilliSource/Platform/Android/HttpConnectionSystem.h>
 
 namespace moFlo
 {

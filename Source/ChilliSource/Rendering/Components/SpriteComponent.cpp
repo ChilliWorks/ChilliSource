@@ -7,14 +7,14 @@
  *
  */
 
-#include <moFlo/Rendering/Components/SpriteComponent.h>
-#include <moFlo/Rendering/Material.h>
-#include <moFlo/Rendering/RenderSystem.h>
-#include <moFlo/Rendering/DynamicSpriteBatcher.h>
-#include <moFlo/Rendering/Components/DirectionalLightComponent.h>
-#include <moFlo/Rendering/Components/PointLightComponent.h>
+#include <ChilliSource/Rendering/Components/SpriteComponent.h>
+#include <ChilliSource/Rendering/Material.h>
+#include <ChilliSource/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/DynamicSpriteBatcher.h>
+#include <ChilliSource/Rendering/Components/DirectionalLightComponent.h>
+#include <ChilliSource/Rendering/Components/PointLightComponent.h>
 
-#include <moFlo/Core/Entity.h>
+#include <ChilliSource/Core/Entity.h>
 
 namespace moFlo
 {

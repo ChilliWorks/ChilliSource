@@ -9,8 +9,8 @@
 #ifndef _MOFLOW_CORE_CONTAINERS_HASHED_ARRAY_H_
 #define _MOFLOW_CORE_CONTAINERS_HASHED_ARRAY_H_
 
-#include <moFlo/Core/FastDelegate.h>
-#include <moFlo/Core/HashCRC32.h>
+#include <ChilliSource/Core/FastDelegate.h>
+#include <ChilliSource/Core/HashCRC32.h>
 
 namespace moFlo
 {

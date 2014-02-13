@@ -7,12 +7,12 @@
  *
  */
 
-#include <moFlo/GUI/Defaults/HorizontalEndcappedProgressBar.h>
+#include <ChilliSource/GUI/Defaults/HorizontalEndcappedProgressBar.h>
 
-#include <moFlo/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
 
-#include <moFlo/Rendering/SpriteSheet.h>
-#include <moFlo/Rendering/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/SpriteSheet.h>
+#include <ChilliSource/Rendering/SpriteSheetManager.h>
 
 namespace moFlo
 {

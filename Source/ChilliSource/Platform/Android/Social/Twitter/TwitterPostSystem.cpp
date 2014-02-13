@@ -7,11 +7,11 @@
  *
  */
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Platform/Android/HttpConnectionSystem.h>
-#include <moFlo/Platform/Android/PlatformSystem.h>
-#include <moFlo/Platform/Android/Social/Twitter/TwitterPostSystem.h>
-#include <moFlo/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Platform/Android/HttpConnectionSystem.h>
+#include <ChilliSource/Platform/Android/PlatformSystem.h>
+#include <ChilliSource/Platform/Android/Social/Twitter/TwitterPostSystem.h>
+#include <ChilliSource/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
 
 namespace moFlo
 {

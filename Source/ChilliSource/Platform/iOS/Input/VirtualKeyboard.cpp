@@ -3,13 +3,13 @@
 //  moFlow
 //
 //  Created by Scott Downie on 26/11/2010
-//  Copyright ©2010 Tag Games Limited. All rights reserved.
+//  Copyright ï¿½2010 Tag Games Limited. All rights reserved.
 //
 
-#include <moFlo/Platform/iOS/Input/VirtualKeyboard.h>
-#include <moFlo/Platform/iOS/Input/VirtualKeyboardDelegate.h>
+#include <ChilliSource/Platform/iOS/Input/VirtualKeyboard.h>
+#include <ChilliSource/Platform/iOS/Input/VirtualKeyboardDelegate.h>
 
-#include <moFlo/Core/StringUtils.h>
+#include <ChilliSource/Core/StringUtils.h>
 
 VirtualKeyboardDelegate* gpDelegate = nil;
 

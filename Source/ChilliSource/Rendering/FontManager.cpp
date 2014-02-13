@@ -10,14 +10,14 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Rendering/FontManager.h>
+#include <ChilliSource/Rendering/FontManager.h>
 
-#include <moFlo/Rendering/TextureManager.h>
-#include <moFlo/Rendering/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/TextureManager.h>
+#include <ChilliSource/Rendering/SpriteSheetManager.h>
 
-#include <moFlo/Core/ResourceProvider.h>
-#include <moFlo/Core/ResourceManagerDispenser.h>
-#include <moFlo/Core/Image.h>
+#include <ChilliSource/Core/ResourceProvider.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Image.h>
 
 namespace moFlo
 {

@@ -10,13 +10,13 @@
 #ifndef _MO_FLO_RENDERING_MOMODEL_LOADER_H_
 #define _MO_FLO_RENDERING_MOMODEL_LOADER_H_
 
-#include <moFlo/Core/ResourceProvider.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
-#include <moFlo/Core/Math/Quaternion.h>
-#include <moFlo/Rendering/MeshManager.h>
-#include <moFlo/Core/Math/Vector3.h>
-#include <moFlo/Rendering/VertexDeclaration.h>
-#include <moFlo/Rendering/MeshDescriptor.h>
+#include <ChilliSource/Core/ResourceProvider.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
+#include <ChilliSource/Rendering/MeshManager.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Rendering/VertexDeclaration.h>
+#include <ChilliSource/Rendering/MeshDescriptor.h>
 
 namespace moFlo
 {

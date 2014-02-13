@@ -7,11 +7,11 @@
  *
  */
 
-#include <moFlo/Rendering/XMLSpriteSheetLoader.h>
-#include <moFlo/Rendering/SpriteSheet.h>
+#include <ChilliSource/Rendering/XMLSpriteSheetLoader.h>
+#include <ChilliSource/Rendering/SpriteSheet.h>
 
-#include <moFlo/Core/XML/XMLUtils.h>
-#include <moFlo/Core/Screen.h>
+#include <ChilliSource/Core/XML/XMLUtils.h>
+#include <ChilliSource/Core/Screen.h>
 
 namespace moFlo
 {

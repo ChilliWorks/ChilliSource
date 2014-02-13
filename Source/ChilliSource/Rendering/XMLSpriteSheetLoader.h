@@ -10,8 +10,8 @@
 #ifndef _MOFLO_RENDERING_SPRITE_LOADER_H_
 #define _MOFLO_RENDERING_SPRITE_LOADER_H_
 
-#include <moFlo/Core/ResourceProvider.h>
-#include <moFlo/Rendering/SpriteSheetManager.h>
+#include <ChilliSource/Core/ResourceProvider.h>
+#include <ChilliSource/Rendering/SpriteSheetManager.h>
 
 
 namespace moFlo

@@ -7,15 +7,15 @@
  *
  */
 
-#include <moFlo/Rendering/Mesh.h>
-#include <moFlo/Rendering/SubMesh.h>
-#include <moFlo/Rendering/VertexLayouts.h>
-#include <moFlo/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/Mesh.h>
+#include <ChilliSource/Rendering/SubMesh.h>
+#include <ChilliSource/Rendering/VertexLayouts.h>
+#include <ChilliSource/Rendering/RenderSystem.h>
 #include <limits>
-#include <moFlo/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Matrix4x4.h>
 
 #ifdef DEBUG_STATS
-#include <moFlo/Core/DebugStats.h>
+#include <ChilliSource/Core/DebugStats.h>
 #endif
 
 namespace moFlo

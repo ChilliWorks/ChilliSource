@@ -6,8 +6,8 @@
 //  Copyright 2010 Tag Games. All rights reserved.
 //
 
-#import <moFlo/Platform/iOS/EAGLView.h>
-#import <moFlo/Platform/iOS/Input/TouchScreen.h>
+#import <ChilliSource/Platform/iOS/EAGLView.h>
+#import <ChilliSource/Platform/iOS/Input/TouchScreen.h>
 
 static EAGLView* gpGLView = nil;
 

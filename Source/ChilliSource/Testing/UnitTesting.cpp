@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Testing/UnitTesting.h>
+#include <ChilliSource/Testing/UnitTesting.h>
 
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Core/Application.h>
 
 namespace moFlo
 {

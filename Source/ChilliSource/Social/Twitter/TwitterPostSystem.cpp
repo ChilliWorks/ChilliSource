@@ -7,14 +7,14 @@
  *
  */
 
-#include <moFlo/Core/BaseEncoding.h>
-#include <moFlo/Core/LocalDataStore.h>
-#include <moFlo/Social/Twitter/TwitterPostSystem.h>
+#include <ChilliSource/Core/BaseEncoding.h>
+#include <ChilliSource/Core/LocalDataStore.h>
+#include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 
 #ifdef TARGET_OS_IPHONE
-#include <moFlo/Platform/iOS/Social/Twitter/TwitterPostSystem.h>
+#include <ChilliSource/Platform/iOS/Social/Twitter/TwitterPostSystem.h>
 #elif TARGET_ANDROID
-#include <moFlo/Platform/Android/Social/Twitter/TwitterPostSystem.h>
+#include <ChilliSource/Platform/Android/Social/Twitter/TwitterPostSystem.h>
 #endif
 
 namespace moFlo

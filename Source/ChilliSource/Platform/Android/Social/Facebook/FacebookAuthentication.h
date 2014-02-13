@@ -9,8 +9,8 @@
 #ifndef _MOFLO_PLATFORM_ANDROID_SOCIAL_FACEBOOKAUTHENTICATION_H_
 #define _MOFLO_PLATFORM_ANDROID_SOCIAL_FACEBOOKAUTHENTICATION_H_
 
-#include <moFlo/Social/Facebook/FacebookAuthentication.h>
-#include <moFlo/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
+#include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
 
 namespace moFlo
 {

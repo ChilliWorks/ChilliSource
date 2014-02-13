@@ -10,10 +10,10 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Audio/AudioManager.h>
-#include <moFlo/Audio/AudioLoader.h>
+#include <ChilliSource/Audio/AudioManager.h>
+#include <ChilliSource/Audio/AudioLoader.h>
 
-#include <moFlo/Core/ResourceProvider.h>
+#include <ChilliSource/Core/ResourceProvider.h>
 
 namespace moFlo
 {

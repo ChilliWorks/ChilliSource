@@ -8,15 +8,15 @@
  *
  * Author: Ian Copland
  * Version 1.0 - moFlo
- * Copyright ©2010 Tag Games Limited - All rights reserved
+ * Copyright ï¿½2010 Tag Games Limited - All rights reserved
  */
 
 #ifndef _MOFLO_PLATFORM_ANDROID_TOUCH_INPUT_JAVA_INTERFACE_JAVA_INTERFACE_
 #define _MOFLO_PLATFORM_ANDROID_TOUCH_INPUT_JAVA_INTERFACE_JAVA_INTERFACE_
 
 #include <map>
-#include <moFlo/Platform/Android/JavaInterface/_JavaInterface.h>
-#include <moFlo/Platform/Android/Input/TouchScreen.h>
+#include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
+#include <ChilliSource/Platform/Android/Input/TouchScreen.h>
 #include <jni.h>
 
 namespace moFlo

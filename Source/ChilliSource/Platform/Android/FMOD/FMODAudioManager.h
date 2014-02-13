@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_PLATFORM_IOS_FMOD_FMOD_AUDIO_MANAGER_H_
 #define _MO_FLO_PLATFORM_IOS_FMOD_FMOD_AUDIO_MANAGER_H_
 
-#include <moFlo/Audio/AudioManager.h>
+#include <ChilliSource/Audio/AudioManager.h>
 
 namespace moFlo
 {

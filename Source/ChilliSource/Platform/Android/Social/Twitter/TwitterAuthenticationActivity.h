@@ -10,8 +10,8 @@
 #ifndef _MO_FLO_PLATFORM_ANDROID_SOCIAL_TWITTER_TWITTER_AUTHENTICATION_ACTIVITY_H_
 #define _MO_FLO_PLATFORM_ANDROID_SOCIAL_TWITTER_TWITTER_AUTHENTICATION_ACTIVITY_H_
 
-#include <moFlo/Social/Twitter/TwitterAuthenticationActivity.h>
-#include <moFlo/Core/Math/UnifiedCoordinates.h>
+#include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 
 //@class UIView;
 //@class UILabel;

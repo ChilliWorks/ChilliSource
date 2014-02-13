@@ -9,8 +9,8 @@
 #ifndef MoshiMonsters_SceneAnimDescManager_h
 #define MoshiMonsters_SceneAnimDescManager_h
 
-#include <moFlo/Core/ResourceManager.h>
-#include <moFlo/Core/SceneAnimation/SceneAnimation.h>
+#include <ChilliSource/Core/ResourceManager.h>
+#include <ChilliSource/Core/SceneAnimation/SceneAnimation.h>
 
 namespace  moFlo 
 {

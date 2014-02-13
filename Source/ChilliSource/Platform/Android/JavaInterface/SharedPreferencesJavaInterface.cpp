@@ -3,10 +3,10 @@
  * moFlo
  *
  * Created by Ian Copland on 01/12/2011
- * Copyright ©2011 Tag Games Limited - All rights reserved
+ * Copyright ï¿½2011 Tag Games Limited - All rights reserved
  */
 
-#include <moFlo/Platform/Android/JavaInterface/SharedPreferencesJavaInterface.h>
+#include <ChilliSource/Platform/Android/JavaInterface/SharedPreferencesJavaInterface.h>
 
 namespace moFlo
 {

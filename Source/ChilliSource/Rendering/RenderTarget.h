@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_RENDERING_RENDER_TARGET_H_
 #define _MO_FLO_RENDERING_RENDER_TARGET_H_
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace moFlo
 {

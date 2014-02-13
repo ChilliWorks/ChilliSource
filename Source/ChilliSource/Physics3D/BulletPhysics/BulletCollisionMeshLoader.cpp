@@ -6,12 +6,12 @@
 //  Copyright (c) 2012 Tag Games Ltd. All rights reserved.
 //
 
-#include <moFlo/Physics3D/BulletPhysics/BulletCollisionMeshLoader.h>
-#include <moFlo/Physics3D/BulletPhysics/BulletCollisionMesh.h>
-#include <moFlo/Core/TaskScheduler.h>
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/FileIO/FileSystem.h>
-#include <moFlo/Core/FileIO/FileStream.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletCollisionMeshLoader.h>
+#include <ChilliSource/Physics3D/BulletPhysics/BulletCollisionMesh.h>
+#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/FileIO/FileStream.h>
 
 
 namespace moFlo

@@ -16,21 +16,21 @@
 #ifndef _MO_FLO_GUI_GUI_VIEW_H_
 #define _MO_FLO_GUI_GUI_VIEW_H_
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
-#include <moFlo/GUI/ForwardDeclarations.h>
-#include <moFlo/GUI/InputEvents.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/GUI/ForwardDeclarations.h>
+#include <ChilliSource/GUI/InputEvents.h>
 
-#include <moFlo/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
-#include <moFlo/Core/AlignmentAnchors.h>
-#include <moFlo/Core/ParamDictionary.h>
-#include <moFlo/Core/Surface.h>
-#include <moFlo/Core/Math/Matrix3x3.h>
-#include <moFlo/Core/Math/UnifiedCoordinates.h>
+#include <ChilliSource/Core/AlignmentAnchors.h>
+#include <ChilliSource/Core/ParamDictionary.h>
+#include <ChilliSource/Core/Surface.h>
+#include <ChilliSource/Core/Math/Matrix3x3.h>
+#include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 
-#include <moFlo/Input/TouchScreen.h>
+#include <ChilliSource/Input/TouchScreen.h>
 
-#include <moFlo/Core/Reflection/Reflection.h>
+#include <ChilliSource/Core/Reflection/Reflection.h>
 
 namespace moFlo
 {

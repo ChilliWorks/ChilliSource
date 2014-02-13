@@ -10,9 +10,9 @@
 #ifndef _MO_FLO_PLATFORM_FMOD_FMOD_AUDIO_COMPONENT_H_
 #define _MO_FLO_PLATFORM_FMOD_FMOD_AUDIO_COMPONENT_H_
 
-#include <moFlo/Audio/AudioComponent.h>
+#include <ChilliSource/Audio/AudioComponent.h>
 
-#include <moFlo/Platform/iOS/FMOD/fmod.hpp>
+#include <ChilliSource/Platform/iOS/FMOD/fmod.hpp>
 
 namespace moFlo
 {

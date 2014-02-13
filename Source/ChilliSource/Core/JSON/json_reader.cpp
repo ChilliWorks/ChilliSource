@@ -4,8 +4,8 @@
 // See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
 
 #if !defined(JSON_IS_AMALGAMATION)
-# include <moFlo/Core/JSON/reader.h>
-# include <moFlo/Core/JSON/value.h>
+# include <ChilliSource/Core/JSON/reader.h>
+# include <ChilliSource/Core/JSON/value.h>
 # include "json_tool.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
 #include <utility>

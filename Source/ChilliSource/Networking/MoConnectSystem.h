@@ -12,13 +12,13 @@
 
 #include <vector>
 
-#include <moFlo/Core/GenericEvent.h>
-#include <moFlo/Core/JSON/json.h>
-#include <moFlo/Core/System.h>
-#include <moFlo/Networking/ForwardDeclarations.h>
-#include <moFlo/Networking/HttpConnectionSystem.h>
-#include <moFlo/Networking/IAPSystem.h>
-#include <moFlo/Networking/OAuthSystem.h>
+#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/JSON/json.h>
+#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Networking/ForwardDeclarations.h>
+#include <ChilliSource/Networking/HttpConnectionSystem.h>
+#include <ChilliSource/Networking/IAPSystem.h>
+#include <ChilliSource/Networking/OAuthSystem.h>
 
 namespace moFlo
 {

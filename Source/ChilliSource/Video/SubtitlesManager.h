@@ -10,8 +10,8 @@
 #ifndef _MOFLOW_VIDEO_SUBTITLESMANAGER_H_
 #define _MOFLOW_VIDEO_SUBTITLESMANAGER_H_
 
-#include <moFlo/Video/ForwardDeclarations.h>
-#include <moFlo/Core/ResourceManager.h>
+#include <ChilliSource/Video/ForwardDeclarations.h>
+#include <ChilliSource/Core/ResourceManager.h>
 
 
 namespace moFlo

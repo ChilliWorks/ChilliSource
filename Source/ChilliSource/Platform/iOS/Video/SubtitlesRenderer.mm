@@ -6,15 +6,15 @@
 //  Copyright 2013 Tag Games. All rights reserved.
 //
 
-#include <moFlo/Platform/iOS/Video/SubtitlesRenderer.h>
-#include <moFlo/Core/ResourceManagerDispenser.h>
-#include <moFlo/Core/ResourceManager.h>
-#include <moFlo/Core/Screen.h>
-#include <moFlo/Core/StringUtils.h>
-#include <moFlo/Core/Containers/UTF8String.h>
-#include <moFlo/Core/LocalisedText.h>
-#include <moFlo/Video/VideoPlayerActivity.h>
-#include <moFlo/Video/Subtitles.h>
+#include <ChilliSource/Platform/iOS/Video/SubtitlesRenderer.h>
+#include <ChilliSource/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/ResourceManager.h>
+#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Containers/UTF8String.h>
+#include <ChilliSource/Core/LocalisedText.h>
+#include <ChilliSource/Video/VideoPlayerActivity.h>
+#include <ChilliSource/Video/Subtitles.h>
 
 #import <QuartzCore/QuartzCore.h>
 

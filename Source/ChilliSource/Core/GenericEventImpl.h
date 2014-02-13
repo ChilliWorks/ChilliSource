@@ -10,7 +10,7 @@
 #ifndef _MOFLO_CORE_GENERICEVENTIMPL_H_
 #define _MOFLO_CORE_GENERICEVENTIMPL_H_
 
-#include <moFlo/Core/Thread.h>
+#include <ChilliSource/Core/Thread.h>
 
 namespace moFlo
 {

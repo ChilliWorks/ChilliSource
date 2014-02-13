@@ -10,9 +10,9 @@
 #ifndef _MO_FLO_RENDERING_PARTICLES_EFFECTORS_SCALER_PARTICLE_EFFECTOR_H_
 #define _MO_FLO_RENDERING_PARTICLES_EFFECTORS_SCALER_PARTICLE_EFFECTOR_H_
 
-#include <moFlo/Rendering/Particles/Effectors/ParticleEffector.h>
+#include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
 
-#include <moFlo/Core/ParamDictionary.h>
+#include <ChilliSource/Core/ParamDictionary.h>
 
 namespace moFlo
 {

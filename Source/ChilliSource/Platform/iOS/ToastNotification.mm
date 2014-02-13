@@ -1,7 +1,7 @@
 
 
 #import <GameKit/GameKit.h>
-#import <moFlo/Platform/iOS/ToastNotification.h>
+#import <ChilliSource/Platform/iOS/ToastNotification.h>
 
 #pragma mark -
 

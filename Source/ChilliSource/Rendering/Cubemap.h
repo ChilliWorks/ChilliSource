@@ -10,8 +10,8 @@
 #ifndef _MOFLO_RENDERING_CUBEMAP_H_
 #define _MOFLO_RENDERING_CUBEMAP_H_
 
-#include <moFlo/Core/Resource.h>
-#include <moFlo/Rendering/Texture.h>
+#include <ChilliSource/Core/Resource.h>
+#include <ChilliSource/Rendering/Texture.h>
 
 namespace moFlo
 {

@@ -8,13 +8,13 @@
  *  Copyright 2011 Tag Games. All rights reserved.
  */
 
-#include <moFlo/Core/Application.h>
-#include <moFlo/Core/ApplicationEvents.h>
-#include <moFlo/Core/LocalDataStore.h>
-#include <moFlo/Core/StringConverter.h>
-#include <moFlo/Core/Cryptographic/aes.h>
-#include <moFlo/Core/Cryptographic/AESEncrypt.h>
-#include <moFlo/Core/XML/XMLUtils.h>
+#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/ApplicationEvents.h>
+#include <ChilliSource/Core/LocalDataStore.h>
+#include <ChilliSource/Core/StringConverter.h>
+#include <ChilliSource/Core/Cryptographic/aes.h>
+#include <ChilliSource/Core/Cryptographic/AESEncrypt.h>
+#include <ChilliSource/Core/XML/XMLUtils.h>
 
 namespace moFlo
 {

@@ -10,9 +10,9 @@
 #ifndef _MOFLO_SOCIAL_COMMUNICATIONS_SMSCOMPOSITIONSCREEN_H_
 #define _MOFLO_SOCIAL_COMMUNICATIONS_SMSCOMPOSITIONSCREEN_H_
 
-#include <moFlo/Core/Activity.h>
-#include <moFlo/Core/Containers/UTF8String.h>
-#include <moFlo/Core/GenericEvent.h>
+#include <ChilliSource/Core/Activity.h>
+#include <ChilliSource/Core/Containers/UTF8String.h>
+#include <ChilliSource/Core/GenericEvent.h>
 #include <vector>
 
 namespace moFlo {

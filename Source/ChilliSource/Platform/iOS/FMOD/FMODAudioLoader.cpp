@@ -10,11 +10,11 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <moFlo/Platform/iOS/FMOD/FMODAudioLoader.h>
-#include <moFlo/Platform/iOS/FMOD/FMODAudioResource.h>
-#include <moFlo/Platform/iOS/FileIO/FileSystem.h>
+#include <ChilliSource/Platform/iOS/FMOD/FMODAudioLoader.h>
+#include <ChilliSource/Platform/iOS/FMOD/FMODAudioResource.h>
+#include <ChilliSource/Platform/iOS/FileIO/FileSystem.h>
 
-#include <moFlo/Core/Application.h>
+#include <ChilliSource/Core/Application.h>
 
 namespace moFlo
 {
