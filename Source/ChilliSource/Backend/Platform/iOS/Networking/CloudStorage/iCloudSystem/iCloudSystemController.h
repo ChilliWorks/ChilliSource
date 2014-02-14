@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <ChilliSource/Backend/Platform/iOS/Networking/CloudStorage/iCloudSystem/ICloudSystem.h>
-#import <ChilliSource/Core/FastDelegate.h>
-#import <ChilliSource/CloudStorage/CloudStorageSystem.h>
+#import <ChilliSource/Core/Main/FastDelegate.h>
+#import <ChilliSource/Networking/CloudStorage/CloudStorageSystem.h>
 
 @interface CiCloudSystemController : NSObject
 {

@@ -10,8 +10,8 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <ChilliSource/Backend/Platform/iOS/FMOD/FMODAudioLoader.h>
-#include <ChilliSource/Backend/Platform/iOS/FMOD/FMODAudioResource.h>
+#include <ChilliSource/Backend/Audio/FMOD/Main/FMODAudioLoader.h>
+#include <ChilliSource/Backend/Audio/FMOD/Main/FMODAudioResource.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
 
 #include <ChilliSource/Core/Main/Application.h>

@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Tag Games Ltd. All rights reserved.
 //
 
-#include <ChilliSource/Backend/Platform/iOS/IAPSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/Networking/IAP/IAPSystem.h>
 
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>

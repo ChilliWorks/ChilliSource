@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Video/Main/VideoPlayerActivity.h>
 #include <ChilliSource/Backend/Platform/iOS/Video/Main/VideoPlayerTapListener.h>
-#include <ChilliSource/Backend/Platform/iOS/NSNotificationAdapter.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/Notification/NSNotificationAdapter.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Main/EAGLView.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Video/Main/SubtitlesRenderer.h>

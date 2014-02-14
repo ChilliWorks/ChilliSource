@@ -13,9 +13,9 @@
 #ifndef _MO_FLO_AUDIO_FMOD_FMOD_SYSTEM_H_
 #define _MO_FLO_AUDIO_FMOD_FMOD_SYSTEM_H_
 
-#include <ChilliSource/Backend/Platform/iOS/FMOD/fmod.hpp>
-#include <ChilliSource/Backend/Platform/iOS/FMOD/fmod_errors.h>
-#include <ChilliSource/Backend/Platform/iOS/FMOD/fmod_event.hpp>
+#include <ChilliSource/Backend/Audio/FMOD/Main/fmod.hpp>
+#include <ChilliSource/Backend/Audio/FMOD/Main/fmod_errors.h>
+#include <ChilliSource/Backend/Audio/FMOD/Main/fmod_event.hpp>
 
 #include <ChilliSource/Audio/Main/AudioSystem.h>
 

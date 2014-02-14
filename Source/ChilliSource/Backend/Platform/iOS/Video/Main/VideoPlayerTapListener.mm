@@ -6,7 +6,7 @@
 //  Copyright 2012 Tag Games. All rights reserved.
 //
 
-#import <ChilliSource/Backend/Platform/iOS/Video/VideoPlayerTapListener.h>
+#import <ChilliSource/Backend/Platform/iOS/Video/Main/VideoPlayerTapListener.h>
 #import <QuartzCore/QuartzCore.h>
 #include <ChilliSource/Backend/Platform/iOS/Input/Pointer/TouchScreen.h>
 #include <ChilliSource/Core/Main/Screen.h>

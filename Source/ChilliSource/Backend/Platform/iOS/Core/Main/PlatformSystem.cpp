@@ -17,11 +17,11 @@
 #include <ChilliSource/Backend/Platform/iOS/Core/Image/ImageLoader.h>
 #include <ChilliSource/Backend/Platform/iOS/Input/Main/InputSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Video/Main/VideoPlayerActivity.h>
-#include <ChilliSource/Backend/Platform/iOS/FMOD/FMODSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/FMOD/FMODAudioLoader.h>
+#include <ChilliSource/Backend/Audio/FMOD/Main/FMODSystem.h>
+#include <ChilliSource/Backend/Audio/FMOD/Main/FMODAudioLoader.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/HTTP/HttpConnectionSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/ToastNotification.h>
-#include <ChilliSource/Backend/Platform/iOS/IAPSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/Notification/ToastNotification.h>
+#include <ChilliSource/Backend/Platform/iOS/Networking/IAP/IAPSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Web/Main/WebViewActivity.h>
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Communications/SMSCompositionActivity.h>
@@ -30,8 +30,8 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Core/Notification/LocalNotificationScheduler.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/NSString+MD5Addition.h>
-#include <ChilliSource/Backend/Platform/iOS/UIDevice+IdentifierAddition.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSString+MD5Addition.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/Main/UIDevice+IdentifierAddition.h>
 
 #include <ChilliSource/Rendering/Main/Renderer.h>
 #include <ChilliSource/Rendering/Font/FontLoader.h>

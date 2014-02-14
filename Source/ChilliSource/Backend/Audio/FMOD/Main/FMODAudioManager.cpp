@@ -7,8 +7,8 @@
  *
  */
 
-#include <ChilliSource/Backend/Platform/iOS/FMOD/FMODAudioManager.h>
-#include <ChilliSource/Backend/Platform/iOS/FMOD/FMODAudioResource.h>
+#include <ChilliSource/Backend/Audio/FMOD/Main/FMODAudioManager.h>
+#include <ChilliSource/Backend/Audio/FMOD/Main/FMODAudioResource.h>
 
 namespace moFlo
 {

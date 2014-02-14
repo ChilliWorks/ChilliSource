@@ -15,7 +15,7 @@
 #define _MO_FLO_AUDIO_FMOD_FMOD_AUDIO_LOADER_H_
 
 #include <ChilliSource/Audio/Main/AudioLoader.h>
-#include <ChilliSource/Backend/Platform/iOS/FMOD/FMODSystem.h>
+#include <ChilliSource/Backend/Audio/FMOD/Main/FMODSystem.h>
 
 namespace moFlo
 {

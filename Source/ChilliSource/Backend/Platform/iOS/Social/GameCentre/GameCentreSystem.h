@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/Main/GenericEvent.h>
-#include <ChilliSource/Core/Containers/WorkerQueue.h>
+#include <ChilliSource/Core/Container/WorkerQueue.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 
 @class NSArray;

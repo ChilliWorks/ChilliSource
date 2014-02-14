@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/String/StringConverter.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Main/Screen.h>
-#include <ChilliSource/Core/BitOps.h>
+#include <ChilliSource/Core/Main/BitOps.h>
 
 #include <ChilliSource/Rendering/Main/CanvasRenderer.h>
 

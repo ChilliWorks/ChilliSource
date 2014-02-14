@@ -13,7 +13,7 @@
 
 #include <ChilliSource/Core/Main/GenericEvent.h>
 
-#include <ChilliSource/Input/VirtualKeyboard.h>
+#include <ChilliSource/Input/Keyboard/VirtualKeyboard.h>
 
 namespace moFlo
 {

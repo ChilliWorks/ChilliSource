@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Audio/Main/AudioSystem.h>
 
-#include <ChilliSource/Backend/Platform/iOS/FMOD/FMODAudioComponent.h>
+#include <ChilliSource/Backend/Audio/FMOD/3D/FMODAudioComponent.h>
 
 namespace moFlo
 {

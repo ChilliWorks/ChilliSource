@@ -10,18 +10,18 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <ChilliSource/Backend/Platform/iOS/FMOD/FMODSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/FMOD/FMODAudioManager.h>
-#include <ChilliSource/Backend/Platform/iOS/FMOD/FMODAudioListener.h>
-#include <ChilliSource/Backend/Platform/iOS/FMOD/FMODAudioComponent.h>
-#include <ChilliSource/Backend/Platform/iOS/FMOD/FMODAudioResource.h>
-#include <ChilliSource/Backend/Platform/iOS/FMOD/FMODAudioComponentFactory.h>
+#include <ChilliSource/Backend/Audio/FMOD/Main/FMODSystem.h>
+#include <ChilliSource/Backend/Audio/FMOD/Main/FMODAudioManager.h>
+#include <ChilliSource/Backend/Audio/FMOD/3D/FMODAudioListener.h>
+#include <ChilliSource/Backend/Audio/FMOD/3D/FMODAudioComponent.h>
+#include <ChilliSource/Backend/Audio/FMOD/Main/FMODAudioResource.h>
+#include <ChilliSource/Backend/Audio/FMOD/3D/FMODAudioComponentFactory.h>
 
 #include <ChilliSource/Core/Main/Application.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Main/ApplicationEvents.h>
 
-#include <ChilliSource/Backend/Platform/iOS/FMOD/fmodiphone.h>
+#include <ChilliSource/Backend/Audio/FMOD/Main/fmodiphone.h>
 
 namespace moFlo
 {

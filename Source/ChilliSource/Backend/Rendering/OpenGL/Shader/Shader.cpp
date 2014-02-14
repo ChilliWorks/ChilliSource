@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Main/Application.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Shader.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
 
 namespace moFlo
 {

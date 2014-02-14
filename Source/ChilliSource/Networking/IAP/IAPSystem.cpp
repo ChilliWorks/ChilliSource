@@ -9,7 +9,7 @@
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 
 #ifdef TARGET_OS_IPHONE
-#	include <ChilliSource/Backend/Platform/iOS/IAPSystem.h>
+#	include <ChilliSource/Backend/Platform/iOS/Networking/IAP/IAPSystem.h>
 #elif defined(TARGET_ANDROID)
 #	ifdef MOFLOWSKU_IAPMETHOD_GOOGLEPLAY
 #		include <ChilliSource/Backend/Platform/Android/GooglePlay/GooglePlayIAPSystem.h>

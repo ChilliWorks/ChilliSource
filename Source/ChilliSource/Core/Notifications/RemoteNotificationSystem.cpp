@@ -9,7 +9,7 @@
 #include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
 
 #ifdef TARGET_OS_IPHONE
-#	include <ChilliSource/Backend/Platform/iOS/RemoteNotificationSystem.h>
+#	include <ChilliSource/Backend/Platform/iOS/Core/Notification/RemoteNotificationSystem.h>
 #elif defined(TARGET_ANDROID)
 #	ifdef MOFLOWSKU_REMOTENOTIFICATIONMETHOD_GOOGLEPLAY
 #		include <ChilliSource/Backend/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>

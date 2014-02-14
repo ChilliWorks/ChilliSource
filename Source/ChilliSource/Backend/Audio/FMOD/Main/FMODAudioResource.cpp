@@ -10,8 +10,8 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <ChilliSource/Backend/Platform/iOS/FMOD/FMODAudioResource.h>
-#include <ChilliSource/Backend/Platform/iOS/FMOD/FMODSystem.h>
+#include <ChilliSource/Backend/Audio/FMOD/Main/FMODAudioResource.h>
+#include <ChilliSource/Backend/Audio/FMOD/Main/FMODSystem.h>
 
 namespace moFlo
 {

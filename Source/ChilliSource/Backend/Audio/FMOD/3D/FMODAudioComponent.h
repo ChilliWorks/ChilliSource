@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Audio/3D/AudioComponent.h>
 
-#include <ChilliSource/Backend/Platform/iOS/FMOD/fmod.hpp>
+#include <ChilliSource/Backend/Audio/FMOD/Main/fmod.hpp>
 
 namespace moFlo
 {
