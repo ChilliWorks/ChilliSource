@@ -16,8 +16,8 @@
 #include <ChilliSource/Audio/Base/AudioResource.h>
 #include <ChilliSource/Audio/ForwardDeclarations.h>
 
-#include <ChilliSource/Backend/Audio/FMOD/Base/fmod.hpp>
-#include <ChilliSource/Backend/Audio/FMOD/Base/fmod_errors.h>
+#include <fmod.hpp>
+#include <fmod_errors.h>
 
 namespace moFlo 
 {

@@ -21,7 +21,7 @@
 #include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
 
-#include <ChilliSource/Backend/Audio/FMOD/Base/fmodiphone.h>
+#include <fmodiphone.h>
 
 namespace moFlo
 {

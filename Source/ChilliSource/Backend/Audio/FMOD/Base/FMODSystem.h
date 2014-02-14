@@ -13,9 +13,9 @@
 #ifndef _MO_FLO_AUDIO_FMOD_FMOD_SYSTEM_H_
 #define _MO_FLO_AUDIO_FMOD_FMOD_SYSTEM_H_
 
-#include <ChilliSource/Backend/Audio/FMOD/Base/fmod.hpp>
-#include <ChilliSource/Backend/Audio/FMOD/Base/fmod_errors.h>
-#include <ChilliSource/Backend/Audio/FMOD/Base/fmod_event.hpp>
+#include <fmod.hpp>
+#include <fmod_errors.h>
+#include <fmod_event.hpp>
 
 #include <ChilliSource/Audio/Base/AudioSystem.h>
 
