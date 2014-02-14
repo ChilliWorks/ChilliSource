@@ -7,12 +7,12 @@
  *
  */
 
-#include <ChilliSource/GUI/Defaults/HorizontalStretchableImage.h>
+#include <ChilliSource/Rendering/GUI/Defaults/HorizontalStretchableImage.h>
 
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 #include <ChilliSource/Rendering/CanvasRenderer.h>
-#include <ChilliSource/Rendering/SpriteSheet.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/SpriteSheetManager.h>
 
 namespace moFlo

@@ -6,8 +6,8 @@
  *  Copyright 2012 Tag Games. All rights reserved.
  *
  */
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/BaseEncoding.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/Cryptographic/HMAC_SHA1.h>
 #include <ChilliSource/Networking/OAuthSystem.h>
 

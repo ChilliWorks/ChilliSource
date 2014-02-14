@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Platform/Android/Input/Accelerometer.h>
 #include <ChilliSource/Platform/Android/JavaInterface/AccelerometerJavaInterface.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 
 
 namespace moFlo

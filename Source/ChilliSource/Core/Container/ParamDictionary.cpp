@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Core/ParamDictionary.h>
+#include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
 #include <ChilliSource/Core/XML/rapidxml_utils.hpp>
 

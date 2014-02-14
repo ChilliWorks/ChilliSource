@@ -8,8 +8,8 @@
 
 #include <ChilliSource/Platform/Android/Input/VirtualKeyboard.h>
 #include <ChilliSource/Platform/Android/Input/KeyboardJavaInterface.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Core/Utils.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Core/Main/Utils.h>
 
 namespace moFlo
 {

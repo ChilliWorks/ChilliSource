@@ -17,9 +17,9 @@
 #include <ChilliSource/Platform/Windows/FMOD/FMODAudioResourceWindows.h>
 #include <ChilliSource/Platform/Windows/FMOD/FMODAudioComponentFactoryWindows.h>
 
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Main/Application.h>
 #include <ChilliSource/Platform/Windows/FileIO/FileSystemWindows.h>
-#include <ChilliSource/Core/ApplicationEvents.h>
+#include <ChilliSource/Core/Main/ApplicationEvents.h>
 
 namespace moFlo
 {

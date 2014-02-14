@@ -3,7 +3,7 @@
 #define _MO_FLO_WINDOWSPLATFORM_INPUT_MOUSE_H_
 
 #include <ChilliSource/Input/ForwardDeclarations.h>
-#include <ChilliSource/Input/Mouse.h>
+#include <ChilliSource/Input/Pointer/Mouse.h>
 
 namespace moFlo
 {

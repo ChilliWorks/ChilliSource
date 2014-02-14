@@ -10,11 +10,11 @@
 #ifndef _MOFLO_CORE_SCENEDESCRIPTION_H_
 #define _MOFLO_CORE_SCENEDESCRIPTION_H_
 
-#include <ChilliSource/Core/Resource.h>
+#include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/XML/rapidxml_utils.hpp>
-#include <ChilliSource/Core/ParamDictionary.h>
-#include <ChilliSource/Core/FastDelegate.h>
-#include <ChilliSource/Core/SceneAnimation/ForwardDeclarations.h>
+#include <ChilliSource/Core/Container/ParamDictionary.h>
+#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/Scene/ForwardDeclarations.h>
 
 namespace moFlo
 {

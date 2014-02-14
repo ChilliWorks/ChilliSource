@@ -13,9 +13,9 @@
 #ifndef _MO_FLO_PLATFORM_IOS_PLATFORM_SYSTEM_H_
 #define _MO_FLO_PLATFORM_IOS_PLATFORM_SYSTEM_H_
 
-#include <ChilliSource/Core/PlatformSystem.h>
-#include <ChilliSource/Core/FastDelegate.h>
-#include <ChilliSource/Core/CustomCreator.h>
+#include <ChilliSource/Core/Main/PlatformSystem.h>
+#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/Main/CustomCreator.h>
 
 namespace moFlo
 {

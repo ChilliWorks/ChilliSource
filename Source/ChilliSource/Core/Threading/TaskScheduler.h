@@ -12,8 +12,8 @@
 
 #include <ChilliSource/Core/boost/threadpool.hpp>
 
-#include <ChilliSource/Core/Tasks.hpp>
-#include <ChilliSource/Core/Thread.h>
+#include <ChilliSource/Core/Threading/Tasks.hpp>
+#include <ChilliSource/Core/Threading/Thread.h>
 
 namespace moFlo
 {

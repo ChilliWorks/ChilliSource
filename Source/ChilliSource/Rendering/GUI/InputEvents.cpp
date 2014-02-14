@@ -6,8 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/GUI/InputEvents.h>
-#include <ChilliSource/GUI/GUIView.h>
+#include <ChilliSource/Rendering/GUI/InputEvents.h>
+#include <ChilliSource/Rendering/GUI/GUIView.h>
 
 #include <algorithm>
 

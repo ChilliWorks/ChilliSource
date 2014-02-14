@@ -10,12 +10,12 @@
 #include <ChilliSource/Platform/iOS/HttpConnectionSystem.h>
 #include <ChilliSource/Platform/iOS/MoFloReachability.h>
 
-#include <ChilliSource/Core/TaskScheduler.h>
-#include <ChilliSource/Core/Thread.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Core/Threading/Thread.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/StringUtils.h>
-#include <ChilliSource/Core/HashCRC32.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
 #include <sstream>
 

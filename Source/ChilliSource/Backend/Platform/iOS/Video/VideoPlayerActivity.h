@@ -11,7 +11,7 @@
 
 #include <ChilliSource/Video/VideoPlayerActivity.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Input/Gestures.h>
+#include <ChilliSource/Input/Gestures/Gestures.h>
 
 @class MPMoviePlayerController;
 @class CVideoPlayerTapListener;

@@ -9,17 +9,17 @@
 #include <ChilliSource/Platform/iOS/Video/VideoPlayerActivity.h>
 #include <ChilliSource/Platform/iOS/Video/VideoPlayerTapListener.h>
 #include <ChilliSource/Platform/iOS/NSNotificationAdapter.h>
-#include <ChilliSource/Platform/iOS/EAGLView.h>
+#include <ChilliSource/Backend/Platform/iOS/EAGLView.h>
 #include <ChilliSource/Platform/iOS/FileIO/FileSystem.h>
 #include <ChilliSource/Platform/iOS/Video/SubtitlesRenderer.h>
 
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/Screen.h>
-#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/ApplicationEvents.h>
+#include <ChilliSource/Core/Main/ApplicationEvents.h>
 
-#include <ChilliSource/Input/InputSystem.h>
+#include <ChilliSource/Input/Main/InputSystem.h>
 
 #include <MediaPlayer/MediaPlayer.h>
 

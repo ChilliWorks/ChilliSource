@@ -14,10 +14,10 @@
 #define _MO_FLO_INPUT_GESTURES_H_
 
 #include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Core/Timer.h>
+#include <ChilliSource/Core/Time/Timer.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/FastDelegate.h>
-#include <ChilliSource/Core/Surface.h>
+#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/Main/Surface.h>
 #include <ChilliSource/Core/Math/Shapes.h>
 
 #include <ChilliSource/Input/ForwardDeclarations.h>

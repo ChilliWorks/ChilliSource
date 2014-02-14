@@ -7,11 +7,11 @@
  *
  */
 
-#include <ChilliSource/RenderingPlatform/OpenGL/RenderTarget.h>
-#include <ChilliSource/RenderingPlatform/OpenGL/Texture.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/RenderTarget.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Texture.h>
 
 #ifdef TARGET_OS_IPHONE
-#include <ChilliSource/Platform/iOS/EAGLView.h>
+#include <ChilliSource/Backend/Platform/iOS/EAGLView.h>
 #include <OpenGLES/EAGL.h>
 #include <OpenGLES/EAGLDrawable.h>
 #endif

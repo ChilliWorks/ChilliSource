@@ -10,11 +10,11 @@
 #ifndef _MO_FLO_STATE_MANAGER_H_
 #define _MO_FLO_STATE_MANAGER_H_
 
-#include <ChilliSource/Core/State.h>
-#include <ChilliSource/Core/Scene.h>
+#include <ChilliSource/Core/State/State.h>
+#include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
-#include <ChilliSource/Core/ApplicationDelegates.h>
+#include <ChilliSource/Core/Main/ApplicationDelegates.h>
 
 #include <vector>
 #include <queue>

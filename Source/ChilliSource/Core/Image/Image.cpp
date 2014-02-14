@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Core/Image.h>
+#include <ChilliSource/Core/Image/Image.h>
 
 #define PVR_TEXTURE_FLAG_TYPE_MASK	0xff
 

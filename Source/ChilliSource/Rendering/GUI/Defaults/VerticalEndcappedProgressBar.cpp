@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/GUI/Defaults/VerticalEndcappedProgressBar.h>
+#include <ChilliSource/Rendering/GUI/Defaults/VerticalEndcappedProgressBar.h>
 
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
-#include <ChilliSource/Rendering/SpriteSheet.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/SpriteSheetManager.h>
 
 namespace moFlo

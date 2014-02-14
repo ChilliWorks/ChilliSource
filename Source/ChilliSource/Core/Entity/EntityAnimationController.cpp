@@ -9,7 +9,7 @@
 
 // INCLUDED FILES
 #include <string>
-#include "EntityAnimationController.h"
+#include <ChilliSource/Core/Entity/EntityAnimationController.h>
 
 using namespace std;
 

@@ -9,8 +9,8 @@
 #include <ChilliSource/Networking/ForwardDeclarations.h>
 #include <ChilliSource/Networking/ContentDownloader.h>
 
-#include <ChilliSource/Core/System.h>
-#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/Main/GenericEvent.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
 
 namespace moFlo

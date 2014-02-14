@@ -9,8 +9,8 @@
 
 #include <ChilliSource/Platform/Android/HttpConnectionSystem.h>
 
-#include <ChilliSource/Core/TaskScheduler.h>
-#include <ChilliSource/Core/Thread.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Core/Threading/Thread.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
 #include <sstream>

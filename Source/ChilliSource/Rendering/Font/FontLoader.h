@@ -14,7 +14,7 @@
 #define _MO_FLO_RENDERING_FONT_LOADER_H_
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProvider.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 

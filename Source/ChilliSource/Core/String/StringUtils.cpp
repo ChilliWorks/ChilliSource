@@ -6,7 +6,7 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 #include <algorithm>
 #include <cctype>
 

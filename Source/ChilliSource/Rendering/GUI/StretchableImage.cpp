@@ -6,14 +6,14 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/GUI/StretchableImage.h>
+#include <ChilliSource/Rendering/GUI/StretchableImage.h>
 
-#include <ChilliSource/Rendering/SpriteSheet.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/SpriteSheetManager.h>
 #include <ChilliSource/Rendering/CanvasRenderer.h>
 
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Main/Screen.h>
 
 namespace moFlo
 {

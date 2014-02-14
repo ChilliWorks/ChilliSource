@@ -11,7 +11,7 @@
  */
 
 
-#include <ChilliSource/Rendering/MeshBuffer.h>
+#include <ChilliSource/Rendering/Main/MeshBuffer.h>
 
 namespace moFlo
 {

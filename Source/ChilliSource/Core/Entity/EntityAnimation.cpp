@@ -8,7 +8,7 @@
  */
 
 // INCLUDED FILES
-#include <ChilliSource/Core/Entity.h>
+#include <ChilliSource/Core/Entity/Entity.h>
 
 #include "EntityAnimation.h"
 #include <float.h>

@@ -12,11 +12,11 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_COMPONENT_H_
 #define _MO_FLO_AUDIO_AUDIO_COMPONENT_H_
 
-#include <ChilliSource/Core/Component.h>
-#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/Entity/Component.h>
+#include <ChilliSource/Core/Main/GenericEvent.h>
 
 #include <ChilliSource/Audio/ForwardDeclarations.h>
-#include <ChilliSource/Audio/AudioResource.h>
+#include <ChilliSource/Audio/Main/AudioResource.h>
 
 namespace moFlo
 {

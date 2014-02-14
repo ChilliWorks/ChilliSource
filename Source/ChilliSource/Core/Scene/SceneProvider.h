@@ -9,7 +9,7 @@
 #ifndef MoshiMonsters_SceneProvider_h
 #define MoshiMonsters_SceneProvider_h
 
-#include <ChilliSource/Core/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProvider.h>
 
 namespace moFlo 
 {

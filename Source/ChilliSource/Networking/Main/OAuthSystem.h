@@ -10,8 +10,8 @@
 #ifndef _MOFLOW_NETWORKING_OAUTHSYSTEM_H_
 #define _MOFLOW_NETWORKING_OAUTHSYSTEM_H_
 
-#include <ChilliSource/Core/BaseEncoding.h>
-#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
+#include <ChilliSource/Core/System/System.h>
 
 #include <ChilliSource/Networking/ForwardDeclarations.h>
 

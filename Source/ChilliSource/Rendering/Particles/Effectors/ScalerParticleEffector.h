@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
 
-#include <ChilliSource/Core/ParamDictionary.h>
+#include <ChilliSource/Core/Container/ParamDictionary.h>
 
 namespace moFlo
 {

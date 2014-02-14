@@ -9,7 +9,7 @@
 #include <ChilliSource/Platform/iOS/Input/VirtualKeyboard.h>
 #include <ChilliSource/Platform/iOS/Input/VirtualKeyboardDelegate.h>
 
-#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
 VirtualKeyboardDelegate* gpDelegate = nil;
 

@@ -9,10 +9,10 @@
 #ifndef _MOFLO_GUI_LABEL_H_
 #define _MOFLO_GUI_LABEL_H_
 
-#include <ChilliSource/GUI/ForwardDeclarations.h>
-#include <ChilliSource/GUI/GUIView.h>
+#include <ChilliSource/Rendering/GUI/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/GUI/GUIView.h>
 
-#include <ChilliSource/Rendering/Font.h>
+#include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 #define DEBUG_STRING_CLIPPING 0

@@ -10,7 +10,7 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <ChilliSource/Core/Thread.h>
+#include <ChilliSource/Core/Threading/Thread.h>
 
 namespace moFlo
 {

@@ -11,12 +11,12 @@
  */
 
 #include <ChilliSource/Rendering/SpriteSheetLoader.h>
-#include <ChilliSource/Rendering/SpriteSheet.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/Utils.h>
-#include <ChilliSource/Core/Screen.h>
-#include <ChilliSource/Core/HashCRC32.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
 namespace moFlo
 {

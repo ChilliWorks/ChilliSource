@@ -17,18 +17,18 @@
 #define _MO_FLO_GUI_GUI_VIEW_H_
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/GUI/ForwardDeclarations.h>
-#include <ChilliSource/GUI/InputEvents.h>
+#include <ChilliSource/Rendering/GUI/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/GUI/InputEvents.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 
-#include <ChilliSource/Core/AlignmentAnchors.h>
-#include <ChilliSource/Core/ParamDictionary.h>
-#include <ChilliSource/Core/Surface.h>
+#include <ChilliSource/Core/Main/AlignmentAnchors.h>
+#include <ChilliSource/Core/Container/ParamDictionary.h>
+#include <ChilliSource/Core/Main/Surface.h>
 #include <ChilliSource/Core/Math/Matrix3x3.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 
-#include <ChilliSource/Input/TouchScreen.h>
+#include <ChilliSource/Input/Pointer/TouchScreen.h>
 
 #include <ChilliSource/Core/Reflection/Reflection.h>
 

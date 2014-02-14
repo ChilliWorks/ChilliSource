@@ -6,10 +6,10 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Core/FileIO/FileSystem.h>
-#include <ChilliSource/Core/StringUtils.h>
-#include <ChilliSource/Core/HashMD5.h>
-#include <ChilliSource/Core/HashCRC32.h>
+#include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/Cryptographic/HashMD5.h>
+#include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
 namespace moFlo
 {

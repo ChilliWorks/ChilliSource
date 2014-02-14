@@ -7,13 +7,13 @@
  *
  */
 
-#include <ChilliSource/Rendering/CubemapManager.h>
-#include <ChilliSource/Rendering/Cubemap.h>
+#include <ChilliSource/Rendering/Texture/CubemapManager.h>
+#include <ChilliSource/Rendering/Texture/Cubemap.h>
 
-#include <ChilliSource/Core/ImageResourceProvider.h>
-#include <ChilliSource/Core/Image.h>
-#include <ChilliSource/Core/Colour.h>
-#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/Image/ImageResourceProvider.h>
+#include <ChilliSource/Core/Image/Image.h>
+#include <ChilliSource/Core/Main/Colour.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace moFlo
 {

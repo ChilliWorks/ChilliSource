@@ -17,9 +17,9 @@
 #include <ChilliSource/Platform/iOS/FMOD/FMODAudioResource.h>
 #include <ChilliSource/Platform/iOS/FMOD/FMODAudioComponentFactory.h>
 
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Main/Application.h>
 #include <ChilliSource/Platform/iOS/FileIO/FileSystem.h>
-#include <ChilliSource/Core/ApplicationEvents.h>
+#include <ChilliSource/Core/Main/ApplicationEvents.h>
 
 #include <ChilliSource/Platform/iOS/FMOD/fmodiphone.h>
 

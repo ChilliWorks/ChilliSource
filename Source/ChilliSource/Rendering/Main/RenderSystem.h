@@ -11,15 +11,15 @@
 #ifndef _MOFLO_RENDERING_IRENDERSYSTEM_H
 #define _MOFLO_RENDERING_IRENDERSYSTEM_H
 
-#include <ChilliSource/Core/System.h>
-#include <ChilliSource/Core/SystemConcepts.h>
-#include <ChilliSource/Core/Colour.h>
+#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/System/SystemConcepts.h>
+#include <ChilliSource/Core/Main/Colour.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/Components/LightComponent.h>
-#include <ChilliSource/Rendering/RenderTarget.h>
-#include <ChilliSource/Rendering/Material.h>
-#include <ChilliSource/Rendering/TextureManager.h>
+#include <ChilliSource/Rendering/Lighting/LightComponent.h>
+#include <ChilliSource/Rendering/Main/RenderTarget.h>
+#include <ChilliSource/Rendering/Material/Material.h>
+#include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/MeshManager.h>
 #include <ChilliSource/Rendering/SkinnedAnimationManager.h>
 #include <ChilliSource/Rendering/MaterialManager.h>

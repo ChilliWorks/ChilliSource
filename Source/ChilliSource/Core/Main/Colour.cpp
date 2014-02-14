@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Core/Colour.h>
+#include <ChilliSource/Core/Main/Colour.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
 namespace moFlo

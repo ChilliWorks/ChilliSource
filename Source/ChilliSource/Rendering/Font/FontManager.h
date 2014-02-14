@@ -14,10 +14,10 @@
 #define _MO_FLO_GUI_FONT_MANAGER_H_
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/Font.h>
+#include <ChilliSource/Rendering/Font/Font.h>
 
-#include <ChilliSource/Core/ResourceManager.h>
-#include <ChilliSource/Core/Image.h>
+#include <ChilliSource/Core/Resource/ResourceManager.h>
+#include <ChilliSource/Core/Image/Image.h>
 
 namespace moFlo
 {

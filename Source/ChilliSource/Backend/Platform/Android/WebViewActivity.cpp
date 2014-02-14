@@ -10,12 +10,12 @@
 #include <ChilliSource/Platform/Android/WebViewActivity.h>
 #include <ChilliSource/Platform/Android/FileIO/FileSystem.h>
 
-#include <ChilliSource/Core/StringUtils.h>
-#include <ChilliSource/Core/Screen.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Main/Application.h>
 
-#include <ChilliSource/Core/FileIO/FileSystem.h>
-#include <ChilliSource/Core/FileIO/FileStream.h>
+#include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/File/FileStream.h>
 
 #include <ChilliSource/Platform/Android/JavaInterface/WebViewJavaInterface.h>
 

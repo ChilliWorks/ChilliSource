@@ -11,8 +11,8 @@
 #define _MO_FLO_CORE_WEB_VIEW_ACTIVITY_H_
 
 #include <ChilliSource/Core/Activity.h>
-#include <ChilliSource/Core/GenericEvent.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 
 namespace moFlo

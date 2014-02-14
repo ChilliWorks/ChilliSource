@@ -8,7 +8,7 @@
  */
 
 
-#include <ChilliSource/Core/GenericAnimation.h>
+#include <ChilliSource/Core/Main/GenericAnimation.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
 namespace moFlo{

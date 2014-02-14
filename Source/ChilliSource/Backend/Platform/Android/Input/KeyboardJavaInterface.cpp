@@ -10,9 +10,9 @@
 
 #include <jni.h>
 
-#include <ChilliSource/Core/TaskScheduler.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 
 
 //-----------------------------------------------

@@ -9,8 +9,8 @@
 #ifndef _MO_FLO_CORE_APPLICATION_EVENTS_H_
 #define _MO_FLO_CORE_APPLICATION_EVENTS_H_
 
-#include <ChilliSource/Core/GenericEvent.h>
-#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/Main/Screen.h>
 
 namespace moFlo
 {

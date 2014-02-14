@@ -6,21 +6,21 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/GUI/Defaults/StretchableHighlightButton.h>
-#include <ChilliSource/GUI/ImageView.h>
+#include <ChilliSource/Rendering/GUI/Defaults/StretchableHighlightButton.h>
+#include <ChilliSource/Rendering/GUI/ImageView.h>
 
-#include <ChilliSource/Rendering/SpriteSheet.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/SpriteSheetManager.h>
-#include <ChilliSource/Rendering/TextureManager.h>
-#include <ChilliSource/Rendering/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureManager.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/CanvasRenderer.h>
 
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/ComponentFactoryDispenser.h>
-#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
+#include <ChilliSource/Core/Main/Screen.h>
 
-#include <ChilliSource/Audio/AudioComponent.h>
-#include <ChilliSource/Audio/AudioComponentFactory.h>
+#include <ChilliSource/Audio/3D/AudioComponent.h>
+#include <ChilliSource/Audio/3D/AudioComponentFactory.h>
 
 namespace moFlo
 {

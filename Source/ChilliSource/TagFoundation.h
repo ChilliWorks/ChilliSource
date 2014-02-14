@@ -144,10 +144,10 @@ template <> struct CompileTimeChecker<false>{};
 #endif
 
 
-#include <ChilliSource/Core/Logging.h>
+#include <ChilliSource/Core/Main/Logging.h>
 #include <ChilliSource/BuildProperties.h>
-#include <ChilliSource/Core/StringConverter.h>
-#include <ChilliSource/Core/LocalisedText.h>
+#include <ChilliSource/Core/String/StringConverter.h>
+#include <ChilliSource/Core/Locale/LocalisedText.h>
 
 //---Missing OpenGL definitions
 #define GL_GLEXT_PROTOTYPES

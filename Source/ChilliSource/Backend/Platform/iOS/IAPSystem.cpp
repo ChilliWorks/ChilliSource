@@ -8,8 +8,8 @@
 
 #include <ChilliSource/Platform/iOS/IAPSystem.h>
 
-#include <ChilliSource/Core/StringUtils.h>
-#include <ChilliSource/Core/BaseEncoding.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 
 namespace moFlo
 {

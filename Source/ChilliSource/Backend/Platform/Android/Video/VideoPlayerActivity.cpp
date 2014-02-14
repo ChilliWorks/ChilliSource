@@ -8,18 +8,18 @@
  */
 
 #include <ChilliSource/Platform/Android/Video/VideoPlayerActivity.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Platform/Android/JavaInterface/VideoPlayerJavaInterface.h>
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/Screen.h>
-#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/ApplicationEvents.h>
-#include <ChilliSource/Core/TaskScheduler.h>
-#include <ChilliSource/Core/LocalisedText.h>
+#include <ChilliSource/Core/Main/ApplicationEvents.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Core/Locale/LocalisedText.h>
 #include <ChilliSource/Video/Subtitles.h>
 #include <ChilliSource/Video/SubtitlesManager.h>
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 namespace moFlo
 {

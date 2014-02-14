@@ -9,15 +9,15 @@
 
 #include <ChilliSource/Rendering/SubMesh.h>
 #include <ChilliSource/Rendering/VertexLayouts.h>
-#include <ChilliSource/Rendering/RenderSystem.h>
-#include <ChilliSource/Rendering/Texture.h>
+#include <ChilliSource/Rendering/Main/RenderSystem.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 
 #include <limits>
 #include <ChilliSource/Rendering/SkinnedAnimationGroup.h>
 #include <ChilliSource/Rendering/SkinnedAnimation.h>
 
 #ifdef DEBUG_STATS
-#include <ChilliSource/Core/DebugStats.h>
+#include <ChilliSource/Core/Main/DebugStats.h>
 #endif
 
 namespace moFlo

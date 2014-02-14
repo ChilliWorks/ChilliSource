@@ -8,10 +8,10 @@
  */
 
 #include <ChilliSource/Core/JSON/json.h>
-#include <ChilliSource/Core/LocalDataStore.h>
-#include <ChilliSource/Core/StringUtils.h>
-#include <ChilliSource/Core/TweakableConstants.h>
-#include <ChilliSource/Networking/MoConnectSystem.h>
+#include <ChilliSource/Core/File/LocalDataStore.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/File/TweakableConstants.h>
+#include <ChilliSource/Networking/AccountManagement/MoConnectSystem.h>
 
 namespace moFlo
 {

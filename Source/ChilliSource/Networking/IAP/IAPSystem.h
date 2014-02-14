@@ -9,8 +9,8 @@
 #ifndef _MOFLOW_NETWORKING_IAPSYSTEM_H_
 #define _MOFLOW_NETWORKING_IAPSYSTEM_H_
 
-#include <ChilliSource/Core/System.h>
-#include <ChilliSource/Core/ParamDictionary.h>
+#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/Container/ParamDictionary.h>
 
 namespace moFlo
 {

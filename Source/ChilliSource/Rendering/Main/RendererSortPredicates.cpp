@@ -11,8 +11,8 @@
 #include <ChilliSource/Rendering/Renderer.h>
 #include <ChilliSource/Rendering/Components/StaticMeshComponent.h>
 
-#include <ChilliSource/Core/Entity.h>
-#include <ChilliSource/Core/Transform.h>
+#include <ChilliSource/Core/Entity/Entity.h>
+#include <ChilliSource/Core/Entity/Transform.h>
 
 using namespace moFlo::Core;
 

@@ -9,36 +9,36 @@
 
 #include <ChilliSource/Revision.h>
 
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/ApplicationEvents.h>
-#include <ChilliSource/Core/ApplicationDelegates.h>
-#include <ChilliSource/Core/SystemConcepts.h>
-#include <ChilliSource/Core/ResourceProvider.h>
-#include <ChilliSource/Core/ComponentFactory.h>
-#include <ChilliSource/Core/CoreTimer.h>
-#include <ChilliSource/Core/TweakableConstants.h>
-#include <ChilliSource/Core/LocalDataStore.h>
-#include <ChilliSource/Core/LocalisedText.h>
-#include <ChilliSource/Core/StateManager.h>
-#include <ChilliSource/Core/ResourceGroupManager.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Main/ApplicationEvents.h>
+#include <ChilliSource/Core/Main/ApplicationDelegates.h>
+#include <ChilliSource/Core/System/SystemConcepts.h>
+#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Main/ComponentFactory.h>
+#include <ChilliSource/Core/Time/CoreTimer.h>
+#include <ChilliSource/Core/File/TweakableConstants.h>
+#include <ChilliSource/Core/File/LocalDataStore.h>
+#include <ChilliSource/Core/Locale/LocalisedText.h>
+#include <ChilliSource/Core/State/StateManager.h>
+#include <ChilliSource/Core/Resource/ResourceGroupManager.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/Screen.h>
-#include <ChilliSource/Core/Logging.h>
-#include <ChilliSource/Core/Device.h>
-#include <ChilliSource/Core/System.h>
-#include <ChilliSource/Core/Utils.h>
-#include <ChilliSource/Core/ResourceManager.h>
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/ComponentFactoryDispenser.h>
-#include <ChilliSource/Core/TaskScheduler.h>
-#include <ChilliSource/Core/PlatformSystem.h>
+#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Main/Logging.h>
+#include <ChilliSource/Core/Main/Device.h>
+#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/Resource/ResourceManager.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Core/Main/PlatformSystem.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
 #include <ChilliSource/Audio/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/Material.h>
-#include <ChilliSource/Rendering/Font.h>
-#include <ChilliSource/Rendering/Mesh.h>
+#include <ChilliSource/Rendering/Material/Material.h>
+#include <ChilliSource/Rendering/Font/Font.h>
+#include <ChilliSource/Rendering/Model/Mesh.h>
 
 #include <ctime>
 

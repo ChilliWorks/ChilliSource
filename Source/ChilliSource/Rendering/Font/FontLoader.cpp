@@ -10,11 +10,11 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/Utils.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Main/Utils.h>
 
 #include <ChilliSource/Rendering/FontLoader.h>
-#include <ChilliSource/Rendering/Font.h>
+#include <ChilliSource/Rendering/Font/Font.h>
 
 namespace moFlo
 {

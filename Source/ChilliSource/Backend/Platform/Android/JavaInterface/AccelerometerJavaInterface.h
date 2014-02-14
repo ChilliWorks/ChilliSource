@@ -10,9 +10,9 @@
 #ifndef MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_ACCELEROMETERJAVAINTERFACE_H
 #define MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_ACCELEROMETERJAVAINTERFACE_H
 
-#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
-#include <ChilliSource/Core/FastDelegate.h>
+#include <ChilliSource/Core/Main/FastDelegate.h>
 
 namespace moFlo
 {

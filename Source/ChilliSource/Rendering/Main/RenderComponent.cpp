@@ -11,8 +11,8 @@
  */
 
 #include <ChilliSource/Rendering/Components/RenderComponent.h>
-#include <ChilliSource/Core/Entity.h>
-#include <ChilliSource/Rendering/Material.h>
+#include <ChilliSource/Core/Entity/Entity.h>
+#include <ChilliSource/Rendering/Material/Material.h>
 
 namespace moFlo
 {

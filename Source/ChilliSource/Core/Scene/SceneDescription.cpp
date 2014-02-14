@@ -7,13 +7,13 @@
  *
  */
 
-#include <ChilliSource/Core/SceneAnimation/SceneDescription.h>
+#include <ChilliSource/Core/Scene/SceneDescription.h>
 
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/Utils.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
-#include <ChilliSource/Core/ComponentFactoryDispenser.h>
-#include <ChilliSource/Core/ComponentFactory.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
+#include <ChilliSource/Core/Main/ComponentFactory.h>
 
 namespace moFlo
 {

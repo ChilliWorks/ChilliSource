@@ -11,7 +11,7 @@
 #define _MO_FLO_CORE_TIMER_H_
 
 #include <vector>
-#include <ChilliSource/Core/CoreTimer.h>
+#include <ChilliSource/Core/Time/CoreTimer.h>
 
 namespace moFlo
 {

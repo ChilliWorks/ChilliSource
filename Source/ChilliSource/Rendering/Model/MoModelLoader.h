@@ -10,8 +10,8 @@
 #ifndef _MO_FLO_RENDERING_MOMODEL_LOADER_H_
 #define _MO_FLO_RENDERING_MOMODEL_LOADER_H_
 
-#include <ChilliSource/Core/ResourceProvider.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Rendering/MeshManager.h>
 #include <ChilliSource/Core/Math/Vector3.h>

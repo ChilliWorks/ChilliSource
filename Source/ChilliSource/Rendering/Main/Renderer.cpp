@@ -8,22 +8,22 @@
  */
 
 #include <ChilliSource/Rendering/Renderer.h>
-#include <ChilliSource/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/Main/RenderSystem.h>
 
-#include <ChilliSource/Rendering/Texture.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Components/RenderComponent.h>
 #include <ChilliSource/Rendering/Components/CameraComponent.h>
-#include <ChilliSource/Rendering/Components/LightComponent.h>
-#include <ChilliSource/Rendering/Components/DirectionalLightComponent.h>
-#include <ChilliSource/Rendering/Components/PointLightComponent.h>
-#include <ChilliSource/Rendering/Components/AmbientLightComponent.h>
+#include <ChilliSource/Rendering/Lighting/LightComponent.h>
+#include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
+#include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
+#include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
 #include <ChilliSource/Rendering/RendererSortPredicates.h>
 #include <ChilliSource/Rendering/CullingPredicates.h>
 #include <ChilliSource/Rendering/MaterialFactory.h>
 
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Main/Application.h>
 #include <ChilliSource/Core/Math/ShapeIntersection.h>
-#include <ChilliSource/GUI/Window.h>
+#include <ChilliSource/Rendering/GUI/Window.h>
 
 namespace moFlo
 {

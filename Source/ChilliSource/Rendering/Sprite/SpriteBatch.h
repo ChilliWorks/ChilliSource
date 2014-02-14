@@ -11,9 +11,9 @@
 #define _MO_FLO_RENDERING_SPRITE_BATCH_H_
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/MeshBuffer.h>
-#include <ChilliSource/Rendering/Material.h>
-#include <ChilliSource/Rendering/Components/SpriteComponent.h>
+#include <ChilliSource/Rendering/Main/MeshBuffer.h>
+#include <ChilliSource/Rendering/Material/Material.h>
+#include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 
 namespace moFlo
 {

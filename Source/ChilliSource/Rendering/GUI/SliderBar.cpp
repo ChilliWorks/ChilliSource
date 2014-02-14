@@ -6,7 +6,7 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/GUI/SliderBar.h>
+#include <ChilliSource/Rendering/GUI/SliderBar.h>
 
 #include <ChilliSource/Core/Math/MathUtils.h>
 

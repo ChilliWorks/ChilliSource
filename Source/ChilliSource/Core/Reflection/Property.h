@@ -13,9 +13,9 @@
 #include <ChilliSource/Core/Reflection/Instance.h>
 #include <ChilliSource/Core/Reflection/MetaClass.h>
 
-#include <ChilliSource/Core/HashCRC32.h>
+#include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
-#include <ChilliSource/Core/FastDelegate.h>
+#include <ChilliSource/Core/Main/FastDelegate.h>
 
 namespace moFlo
 {

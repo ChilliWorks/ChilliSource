@@ -9,10 +9,10 @@
 #ifndef _MOFLO_CLOUDSTORAGESYSTEM_H
 #define _MOFLO_CLOUDSTORAGESYSTEM_H
 
-#include <ChilliSource/Core/System.h>
-#include <ChilliSource/Core/FastDelegate.h>
-#include <ChilliSource/Core/GenericEvent.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 
 namespace moFlo 
 {

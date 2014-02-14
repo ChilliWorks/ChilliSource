@@ -8,12 +8,12 @@
  */
 
 #include <ChilliSource/Rendering/DynamicSpriteBatcher.h>
-#include <ChilliSource/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/Main/RenderSystem.h>
 
 #include <ChilliSource/Core/Math/MathUtils.h>
 
 #ifdef DEBUG_STATS
-#include <ChilliSource/Core/DebugStats.h>
+#include <ChilliSource/Core/Main/DebugStats.h>
 #endif
 
 namespace moFlo

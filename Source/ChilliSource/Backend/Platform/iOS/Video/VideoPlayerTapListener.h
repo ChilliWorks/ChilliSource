@@ -11,7 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #include <MediaPlayer/MediaPlayer.h>
-#include <ChilliSource/Core/FastDelegate.h>
+#include <ChilliSource/Core/Main/FastDelegate.h>
 
 @class UIView;
 @class UITapGestureRecognizer;

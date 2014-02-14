@@ -17,7 +17,7 @@
 #include <ChilliSource/Platform/iOS/FMOD/fmod_errors.h>
 #include <ChilliSource/Platform/iOS/FMOD/fmod_event.hpp>
 
-#include <ChilliSource/Audio/AudioSystem.h>
+#include <ChilliSource/Audio/Main/AudioSystem.h>
 
 namespace moFlo
 {

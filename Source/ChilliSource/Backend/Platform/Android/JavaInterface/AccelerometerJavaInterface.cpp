@@ -6,10 +6,10 @@
 //  Copyright 2013 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Platform/Android/JavaInterface/AccelerometerJavaInterface.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 #include <jni.h>
 
 //------------------------------------------

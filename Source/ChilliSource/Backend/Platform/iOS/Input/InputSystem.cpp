@@ -9,8 +9,8 @@
 
 #include <ChilliSource/Platform/iOS/Input/InputSystem.h>
 
-#include <ChilliSource/Core/Timer.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Time/Timer.h>
+#include <ChilliSource/Core/Main/Application.h>
 
 using namespace moFlo::Input;
 using namespace moFlo::Core;

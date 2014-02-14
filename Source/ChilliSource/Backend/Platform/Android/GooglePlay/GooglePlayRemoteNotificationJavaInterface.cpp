@@ -10,12 +10,12 @@
 
 #include <jni.h>
 
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/ParamDictionary.h>
-#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Container/ParamDictionary.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 #include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
 
 extern "C"

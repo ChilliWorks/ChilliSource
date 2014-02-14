@@ -10,13 +10,13 @@
 #define _MO_FLO_CORE_FACTORY_DISPENSER_H_
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/QueryableInterface.h>
+#include <ChilliSource/Core/Main/QueryableInterface.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 #include <ChilliSource/Audio/ForwardDeclarations.h>
 
-#include <ChilliSource/GUI/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/GUI/ForwardDeclarations.h>
 
 #define GET_COMPONENT_FACTORY(FACTORY_TYPE) moFlo::Core::CComponentFactoryDispenser::GetSingletonPtr()->GetFactoryWithInterface<FACTORY_TYPE>() 
 

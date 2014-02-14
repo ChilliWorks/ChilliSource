@@ -8,7 +8,7 @@
 
 #include <algorithm>
 
-#include <ChilliSource/GUI/Button.h>
+#include <ChilliSource/Rendering/GUI/Button.h>
 
 namespace moFlo
 {

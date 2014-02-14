@@ -8,8 +8,8 @@
  */
 
 #include <ChilliSource/Rendering/SkinnedAnimationManager.h>
-#include <ChilliSource/Core/ResourceProvider.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Main/Application.h>
 
 
 namespace moFlo

@@ -39,7 +39,7 @@
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Shapes.h>
-#include <ChilliSource/Core/Component.h>
+#include <ChilliSource/Core/Entity/Component.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 

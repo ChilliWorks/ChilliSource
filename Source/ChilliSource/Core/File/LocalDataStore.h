@@ -15,7 +15,7 @@
 #ifndef _MOFLO_CORE_LOCALDATASTORE_H_
 #define _MOFLO_CORE_LOCALDATASTORE_H_
 
-#include <ChilliSource/Core/ParamDictionary.h>
+#include <ChilliSource/Core/Container/ParamDictionary.h>
 
 namespace moFlo
 {

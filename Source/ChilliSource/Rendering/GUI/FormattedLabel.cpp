@@ -6,9 +6,9 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/GUI/FormattedLabel.h>
+#include <ChilliSource/Rendering/GUI/FormattedLabel.h>
 
-#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
 namespace moFlo
 {

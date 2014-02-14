@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Core/HashMD5.h>
+#include <ChilliSource/Core/Cryptographic/HashMD5.h>
 #include <ChilliSource/Core/Cryptographic/SHA1.h>
-#include <ChilliSource/Core/FileIO/FileStream.h>
+#include <ChilliSource/Core/File/FileStream.h>
 
 namespace moFlo
 {

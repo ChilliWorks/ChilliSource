@@ -13,7 +13,7 @@
 #ifndef _MO_FLO_CORE_CORE_TIMER_H_
 #define _MO_FLO_CORE_CORE_TIMER_H_
 
-#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/Main/GenericEvent.h>
 
 namespace moFlo
 {

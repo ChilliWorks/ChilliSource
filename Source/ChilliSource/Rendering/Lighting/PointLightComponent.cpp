@@ -7,9 +7,9 @@
  *
  */
 
-#include <ChilliSource/Rendering/Components/PointLightComponent.h>
+#include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
 
-#include <ChilliSource/Core/Entity.h>
+#include <ChilliSource/Core/Entity/Entity.h>
 
 #include <limits.h>
 

@@ -9,11 +9,11 @@
 #ifndef _MO_FLO_GUI_INPUT_EVENTS_H_
 #define _MO_FLO_GUI_INPUT_EVENTS_H_
 
-#include <ChilliSource/GUI/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/GUI/ForwardDeclarations.h>
 
-#include <ChilliSource/Input/TouchScreen.h>
+#include <ChilliSource/Input/Pointer/TouchScreen.h>
 
-#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/Main/GenericEvent.h>
 
 namespace moFlo
 {

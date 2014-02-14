@@ -12,9 +12,9 @@
 
 #include <vector>
 
-#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/Main/GenericEvent.h>
 #include <ChilliSource/Core/JSON/json.h>
-#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Networking/ForwardDeclarations.h>
 #include <ChilliSource/Networking/HttpConnectionSystem.h>
 #include <ChilliSource/Networking/IAPSystem.h>

@@ -8,22 +8,22 @@
  */
 
 #include <ChilliSource/Platform/iOS/ApplicationDelegates.h>
-#include <ChilliSource/Input/InputSystem.h>
-#include <ChilliSource/Input/TouchScreen.h>
+#include <ChilliSource/Input/Main/InputSystem.h>
+#include <ChilliSource/Input/Pointer/TouchScreen.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/ApplicationEvents.h>
-#include <ChilliSource/Core/TaskScheduler.h>
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/Screen.h>
-#include <ChilliSource/Core/StateManager.h>
-#include <ChilliSource/Core/PlatformSystem.h>
-#include <ChilliSource/Rendering/RenderSystem.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Main/ApplicationEvents.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/State/StateManager.h>
+#include <ChilliSource/Core/Main/PlatformSystem.h>
+#include <ChilliSource/Rendering/Main/RenderSystem.h>
 #include <ChilliSource/Rendering/Renderer.h>
 #include <ChilliSource/Rendering/Components/CameraComponent.h>
 
 #ifdef DEBUG_STATS
-#include <ChilliSource/Core/DebugStats.h>
+#include <ChilliSource/Core/Main/DebugStats.h>
 #endif
 
 namespace moFlo

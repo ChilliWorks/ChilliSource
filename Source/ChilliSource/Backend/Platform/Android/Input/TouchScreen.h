@@ -14,7 +14,7 @@
 #ifndef _MOFLO_PLATFORM_ANDROID_TOUCHSCREEN_H_
 #define _MOFLO_PLATFORM_ANDROID_TOUCHSCREEN_H_
 
-#include <ChilliSource/Input/TouchScreen.h>
+#include <ChilliSource/Input/Pointer/TouchScreen.h>
 
 namespace moFlo
 {

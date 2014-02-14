@@ -9,8 +9,8 @@
 #ifndef _MOFLOW_GUI_DEFAULTS_VERTICALENDCAPPEDPROGRESSBAR_H_
 #define _MOFLOW_GUI_DEFAULTS_VERTICALENDCAPPEDPROGRESSBAR_H_
 
-#include <ChilliSource/GUI/ProgressBar.h>
-#include <ChilliSource/GUI/Defaults/VerticalStretchableImage.h>
+#include <ChilliSource/Rendering/GUI/ProgressBar.h>
+#include <ChilliSource/Rendering/GUI/Defaults/VerticalStretchableImage.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 

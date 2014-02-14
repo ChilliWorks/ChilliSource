@@ -12,14 +12,14 @@
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/DynamicSpriteBatcher.h>
-#include <ChilliSource/Rendering/Components/SpriteComponent.h>
+#include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 
-#include <ChilliSource/Rendering/Font.h>
-#include <ChilliSource/GUI/Label.h>
-#include <ChilliSource/Core/Surface.h>
+#include <ChilliSource/Rendering/Font/Font.h>
+#include <ChilliSource/Rendering/GUI/Label.h>
+#include <ChilliSource/Core/Main/Surface.h>
 
 #include <ChilliSource/Core/Math/Shapes.h>
-#include <ChilliSource/Core/AlignmentAnchors.h>
+#include <ChilliSource/Core/Main/AlignmentAnchors.h>
 #include <ChilliSource/Core/Math/Matrix3x3.h>
 
 namespace moFlo

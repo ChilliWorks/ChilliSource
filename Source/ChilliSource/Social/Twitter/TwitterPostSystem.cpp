@@ -7,8 +7,8 @@
  *
  */
 
-#include <ChilliSource/Core/BaseEncoding.h>
-#include <ChilliSource/Core/LocalDataStore.h>
+#include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
+#include <ChilliSource/Core/File/LocalDataStore.h>
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 
 #ifdef TARGET_OS_IPHONE

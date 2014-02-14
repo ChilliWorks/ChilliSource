@@ -10,9 +10,9 @@
 #ifndef _MOFLOW_OPENGL_RENDERTARGET_H_
 #define _MOFLOW_OPENGL_RENDERTARGET_H_
 
-#include <ChilliSource/Rendering/RenderTarget.h>
+#include <ChilliSource/Rendering/Main/RenderTarget.h>
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/RenderingPlatform/OpenGL/GLIncludes.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/GLIncludes.h>
 
 #ifdef TARGET_OS_IPHONE
 @class EAGLContext;

@@ -11,10 +11,10 @@
 #define _MOFLOW_RENDERING_MESHDESCRIPTOR_H_
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/MeshBuffer.h>
+#include <ChilliSource/Rendering/Main/MeshBuffer.h>
 #include <ChilliSource/Rendering/VertexDeclaration.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 
 namespace moFlo
 {

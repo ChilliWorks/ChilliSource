@@ -8,11 +8,11 @@
  */
 
 #include <ChilliSource/Platform/Android/UDIDManager.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Platform/Android/JavaInterface/CoreJavaInterface.h>
 #include <ChilliSource/Platform/Android/JavaInterface/SharedPreferencesJavaInterface.h>
-#include <ChilliSource/Core/LocalDataStore.h>
-#include <ChilliSource/Core/HashMD5.h>
+#include <ChilliSource/Core/File/LocalDataStore.h>
+#include <ChilliSource/Core/Cryptographic/HashMD5.h>
 #include <ctime>
 #include <cstdlib>
 

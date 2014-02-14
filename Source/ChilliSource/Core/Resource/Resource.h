@@ -11,10 +11,10 @@
 #ifndef _MOFLO_CORE_RESOURCE_H_
 #define _MOFLO_CORE_RESOURCE_H_
 
-#include <ChilliSource/Core/QueryableInterface.h>
-#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Main/QueryableInterface.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/boost/thread/condition.hpp>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 
 namespace moFlo
 {

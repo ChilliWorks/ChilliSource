@@ -10,7 +10,7 @@
 #ifndef _MOFLOW_RENDERING_AMBIENTLIGHTCOMPONENT_H_
 #define _MOFLOW_RENDERING_AMBIENTLIGHTCOMPONENT_H_
 
-#include <ChilliSource/Rendering/Components/LightComponent.h>
+#include <ChilliSource/Rendering/Lighting/LightComponent.h>
 
 namespace moFlo
 {

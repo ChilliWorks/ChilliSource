@@ -14,8 +14,8 @@
 #ifndef _MOFLO_PLATFORM_ANDROID_IMAGELOADER_H_
 #define _MOFLO_PLATFORM_ANDROID_IMAGELOADER_H_
 
-#include <ChilliSource/Core/ImageResourceProvider.h>
-#include <ChilliSource/Core/Image.h>
+#include <ChilliSource/Core/Image/ImageResourceProvider.h>
+#include <ChilliSource/Core/Image/Image.h>
 
 namespace moFlo
 {

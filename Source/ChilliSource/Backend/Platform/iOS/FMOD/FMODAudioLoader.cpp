@@ -14,7 +14,7 @@
 #include <ChilliSource/Platform/iOS/FMOD/FMODAudioResource.h>
 #include <ChilliSource/Platform/iOS/FileIO/FileSystem.h>
 
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Main/Application.h>
 
 namespace moFlo
 {

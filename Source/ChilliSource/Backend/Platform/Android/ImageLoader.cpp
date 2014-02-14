@@ -11,10 +11,10 @@
 
 
 #include <ChilliSource/Platform/Android/ImageLoader.h>
-#include <ChilliSource/Core/StringUtils.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/Main/Application.h>
 
-#include <ChilliSource/Core/Image.h>
+#include <ChilliSource/Core/Image/Image.h>
 
 #include <ChilliSource/Platform/Android/ImageLoading/PngImage.h>
 

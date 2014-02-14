@@ -9,8 +9,8 @@
 #ifndef MOFLO_PLATFORM_ANDROID_ACCELEROMETER_H
 #define MOFLO_PLATFORM_ANDROID_ACCELEROMETER_H
 
-#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Input/Accelerometer.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Input/Accelerometer/Accelerometer.h>
 
 namespace moFlo
 {

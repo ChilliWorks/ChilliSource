@@ -13,7 +13,7 @@
 
 #include <ChilliSource/Core/WebViewActivity.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 
 #include <Foundation/NSObject.h>
 #include <UIKit/UIWebView.h>

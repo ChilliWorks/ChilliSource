@@ -10,7 +10,7 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 
 #include <ChilliSource/Platform/iOS/PlatformSystem.h>
 #include <ChilliSource/Platform/iOS/NativeSystem.h>
@@ -41,16 +41,16 @@
 #include <ChilliSource/Rendering/MaterialFactory.h>
 #include <ChilliSource/Rendering/ComponentUpdaters/AnimatedMeshComponentUpdater.h>
 
-#include <ChilliSource/Audio/AudioPlayer.h>
-#include <ChilliSource/Audio/AudioLoader.h>
+#include <ChilliSource/Audio/Main/AudioPlayer.h>
+#include <ChilliSource/Audio/Main/AudioLoader.h>
 
-#include <ChilliSource/GUI/GUIViewFactory.h>
+#include <ChilliSource/Rendering/GUI/GUIViewFactory.h>
 
-#include <ChilliSource/Core/StringUtils.h>
-#include <ChilliSource/Core/MoImageProvider.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/Image/MoImageProvider.h>
 
-#include <ChilliSource/RenderingPlatform/OpenGL/RenderSystem.h>
-#include <ChilliSource/RenderingPlatform/OpenGL/RenderCapabilities.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/RenderSystem.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/RenderCapabilities.h>
 
 #include <UIKit/UIKit.h>
 #include <sys/types.h>

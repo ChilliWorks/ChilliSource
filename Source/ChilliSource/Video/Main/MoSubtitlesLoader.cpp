@@ -9,11 +9,11 @@
 
 #include <ChilliSource/Video/MoSubtitlesLoader.h>
 #include <ChilliSource/Video/Subtitles.h>
-#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/JSON/json.h>
-#include <ChilliSource/Core/FileIO/FileStream.h>
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/Utils.h>
+#include <ChilliSource/Core/File/FileStream.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Main/Utils.h>
 
 namespace moFlo
 {

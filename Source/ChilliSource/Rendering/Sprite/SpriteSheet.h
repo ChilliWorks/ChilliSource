@@ -15,7 +15,7 @@
 
 #include <ChilliSource/Core/Math/Shapes.h>
 
-#include <ChilliSource/Core/Resource.h>
+#include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace moFlo

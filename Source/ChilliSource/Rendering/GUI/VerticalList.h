@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_GUI_VERTICAL_LIST_H_
 #define _MOFLOW_GUI_VERTICAL_LIST_H_
 
-#include <ChilliSource/GUI/GUIView.h>
+#include <ChilliSource/Rendering/GUI/GUIView.h>
 
 namespace moFlo
 {

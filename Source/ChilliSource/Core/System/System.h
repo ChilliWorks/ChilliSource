@@ -15,7 +15,7 @@
 #define _MOFLO_CORE_SYSTEM_H
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/QueryableInterface.h>
+#include <ChilliSource/Core/Main/QueryableInterface.h>
 
 namespace moFlo
 {

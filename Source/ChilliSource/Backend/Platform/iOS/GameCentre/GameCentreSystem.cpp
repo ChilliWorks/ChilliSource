@@ -10,8 +10,8 @@
 #include <ChilliSource/Platform/iOS/GameCentre/GameCentreSystem.h>
 #include <ChilliSource/Platform/iOS/GameCentre/GameCentreDelegates.h>
 
-#include <ChilliSource/Core/StringUtils.h>
-#include <ChilliSource/Core/FastDelegate.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/Main/FastDelegate.h>
 
 #include <Foundation/Foundation.h>
 #include <UIKit/UIKit.h>

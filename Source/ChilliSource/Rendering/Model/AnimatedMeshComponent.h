@@ -12,11 +12,11 @@
 
 #include <ChilliSource/Rendering/Components/RenderComponent.h>
 #include <ChilliSource/Rendering/SkinnedAnimationGroup.h>
-#include <ChilliSource/Rendering/Mesh.h>
+#include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
-#include <ChilliSource/Core/FastDelegate.h>
-#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/Main/GenericEvent.h>
 
 namespace moFlo
 {

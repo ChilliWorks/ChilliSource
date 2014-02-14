@@ -10,7 +10,7 @@
 #ifndef _MOFLO_SOCIAL_COMMUNICATIONS_CONTACTINFORMATIONPROVIDER_H_
 #define _MOFLO_SOCIAL_COMMUNICATIONS_CONTACTINFORMATIONPROVIDER_H_
 
-#include <ChilliSource/Core/Containers/UTF8String.h>
+#include <ChilliSource/Core/String/UTF8String.h>
 #include <ChilliSource/Core/InformationProvider.h>
 
 namespace moFlo{

@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Video/VideoPlayerActivity.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Video/Subtitles.h>
 
 namespace moFlo

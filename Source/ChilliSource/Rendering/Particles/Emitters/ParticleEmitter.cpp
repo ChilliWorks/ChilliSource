@@ -9,12 +9,12 @@
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 #include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
 #include <ChilliSource/Rendering/Particles/ParticleComponent.h>
-#include <ChilliSource/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/Main/RenderSystem.h>
 #include <ChilliSource/Rendering/DynamicSpriteBatcher.h>
 #include <ChilliSource/Rendering/Components/CameraComponent.h>
 
-#include <ChilliSource/Core/Entity.h>
-#include <ChilliSource/Core/StringConverter.h>
+#include <ChilliSource/Core/Entity/Entity.h>
+#include <ChilliSource/Core/String/StringConverter.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
 namespace moFlo

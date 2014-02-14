@@ -11,7 +11,7 @@
 #include <ChilliSource/Rendering/Particles/ParticleComponent.h>
 
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Entity.h>
+#include <ChilliSource/Core/Entity/Entity.h>
 
 namespace moFlo
 {

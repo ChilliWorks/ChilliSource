@@ -8,10 +8,10 @@
 */
 
 #include <ChilliSource/Platform/Windows/FileIO/FileSystemWindows.h>
-#include <ChilliSource/Core/FileIO/FileStream.h>
+#include <ChilliSource/Core/File/FileStream.h>
 
-#include <ChilliSource/Core/Utils.h>
-#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
 #include <ChilliSource/Core/boost/filesystem.hpp>
 

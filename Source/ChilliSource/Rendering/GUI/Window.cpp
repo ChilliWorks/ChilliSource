@@ -6,15 +6,15 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/GUI/Window.h>
+#include <ChilliSource/Rendering/GUI/Window.h>
 
-#include <ChilliSource/Core/ApplicationEvents.h>
+#include <ChilliSource/Core/Main/ApplicationEvents.h>
 
-#include <ChilliSource/Input/InputSystem.h>
+#include <ChilliSource/Input/Main/InputSystem.h>
 
 #ifdef DEBUG_STATS
-#include <ChilliSource/GUI/Defaults/DebugStatsView.h>
-#include <ChilliSource/Core/DebugStats.h>
+#include <ChilliSource/Rendering/GUI/Defaults/DebugStatsView.h>
+#include <ChilliSource/Core/Main/DebugStats.h>
 #endif
 
 namespace moFlo

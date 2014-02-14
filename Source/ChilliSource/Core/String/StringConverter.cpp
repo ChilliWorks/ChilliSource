@@ -11,11 +11,11 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <ChilliSource/Core/StringConverter.h>
+#include <ChilliSource/Core/String/StringConverter.h>
 
 #include <sstream>
-#include <ChilliSource/Core/Containers/UTF8String.h>
-#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/String/UTF8String.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
 using std::stringstream;
 using std::istringstream;

@@ -7,10 +7,10 @@
  *
  */
 
-#include <ChilliSource/Core/StateManager.h>
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/ComponentFactoryDispenser.h>
+#include <ChilliSource/Core/State/StateManager.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 
 namespace moFlo
 {

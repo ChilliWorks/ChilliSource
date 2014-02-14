@@ -8,8 +8,8 @@
  */
 
 #include <ChilliSource/Rendering/MeshManager.h>
-#include <ChilliSource/Core/ResourceProvider.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Main/Application.h>
 #include <ChilliSource/Rendering/SubMesh.h>
 
 namespace moFlo

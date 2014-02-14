@@ -6,8 +6,8 @@
 //
 //
 
-#include <ChilliSource/Core/Utils.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/Main/Application.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <zlib.h>
 

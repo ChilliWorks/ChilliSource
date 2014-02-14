@@ -7,16 +7,16 @@
 //
 
 #include <ChilliSource/Rendering/MaterialFactory.h>
-#include <ChilliSource/Rendering/Material.h>
-#include <ChilliSource/Rendering/Shader.h>
-#include <ChilliSource/Rendering/ShaderManager.h>
-#include <ChilliSource/Rendering/Texture.h>
-#include <ChilliSource/Rendering/TextureManager.h>
-#include <ChilliSource/Rendering/Cubemap.h>
-#include <ChilliSource/Rendering/CubemapManager.h>
-#include <ChilliSource/Rendering/RenderCapabilities.h>
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Rendering/Material/Material.h>
+#include <ChilliSource/Rendering/Shader/Shader.h>
+#include <ChilliSource/Rendering/Shader/ShaderManager.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureManager.h>
+#include <ChilliSource/Rendering/Texture/Cubemap.h>
+#include <ChilliSource/Rendering/Texture/CubemapManager.h>
+#include <ChilliSource/Rendering/Main/RenderCapabilities.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Main/Application.h>
 
 namespace moFlo
 {

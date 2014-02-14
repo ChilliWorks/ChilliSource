@@ -11,9 +11,9 @@
 #define _MO_FLO_AUDIO_AUDIO_PLAYER_H_
 
 #include <ChilliSource/Audio/ForwardDeclarations.h>
-#include <ChilliSource/Audio/AudioComponent.h>
+#include <ChilliSource/Audio/3D/AudioComponent.h>
 
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 
 namespace moFlo
 {

@@ -8,10 +8,10 @@
  */
 
 #include <ChilliSource/Platform/iOS/Social/Communications/EmailCompositionActivity.h>
-#include <ChilliSource/Platform/iOS/EAGLView.h>
-#include <ChilliSource/Core/StringUtils.h>
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/EAGLView.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 
 namespace moFlo
 {

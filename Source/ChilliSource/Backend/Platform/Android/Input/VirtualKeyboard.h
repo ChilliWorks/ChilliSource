@@ -9,11 +9,11 @@
 #ifndef _MO_FLO_PLATFORM_ANDROID_VIRTUAL_KEYBOARD_H_
 #define _MO_FLO_PLATFORM_ANDROID_VIRTUAL_KEYBOARD_H_
 
-#include <ChilliSource/Core/FastDelegate.h>
-#include <ChilliSource/Core/GenericEvent.h>
-#include <ChilliSource/Core/SystemConcepts.h>
+#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Input/VirtualKeyboard.h>
-#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 
 namespace moFlo
 {

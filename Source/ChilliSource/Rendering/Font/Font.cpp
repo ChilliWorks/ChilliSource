@@ -6,14 +6,14 @@
 //  Copyright (c) 2010 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Rendering/Font.h>
+#include <ChilliSource/Rendering/Font/Font.h>
 
-#include <ChilliSource/Core/Containers/UTF8String.h>
+#include <ChilliSource/Core/String/UTF8String.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
-#include <ChilliSource/Rendering/Material.h>
-#include <ChilliSource/Rendering/Texture.h>
-#include <ChilliSource/Rendering/Components/SpriteComponent.h>
+#include <ChilliSource/Rendering/Material/Material.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 
 namespace moFlo
 {

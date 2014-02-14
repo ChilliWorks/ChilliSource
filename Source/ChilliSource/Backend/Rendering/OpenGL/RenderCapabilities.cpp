@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
-#include <ChilliSource/RenderingPlatform/OpenGL/RenderCapabilities.h>
-#include <ChilliSource/RenderingPlatform/OpenGL/RenderSystem.h>
-#include <ChilliSource/RenderingPlatform/OpenGL/GLIncludes.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/RenderCapabilities.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/RenderSystem.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/GLIncludes.h>
 
 namespace moFlo
 {

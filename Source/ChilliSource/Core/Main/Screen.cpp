@@ -7,7 +7,7 @@
 *
 */
 
-#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Main/Screen.h>
 
 namespace moFlo
 {

@@ -13,12 +13,12 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_COMPONENT_FACTORY_H_
 #define _MO_FLO_AUDIO_AUDIO_COMPONENT_FACTORY_H_
 
-#include <ChilliSource/Core/ComponentFactory.h>
+#include <ChilliSource/Core/Main/ComponentFactory.h>
 
 #include <ChilliSource/Audio/ForwardDeclarations.h>
-#include <ChilliSource/Audio/AudioComponent.h>
-#include <ChilliSource/Audio/AudioListenerComponent.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Audio/3D/AudioComponent.h>
+#include <ChilliSource/Audio/3D/AudioListenerComponent.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 
 namespace moFlo
 {

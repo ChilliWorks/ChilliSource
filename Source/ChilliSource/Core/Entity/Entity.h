@@ -13,8 +13,8 @@
 #include <ChilliSource/BuildProperties.h>
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/Component.h>
-#include <ChilliSource/Core/Transform.h>
+#include <ChilliSource/Core/Entity/Component.h>
+#include <ChilliSource/Core/Entity/Transform.h>
 #include <ChilliSource/Core/JSON/json.h>
 
 #include <list>

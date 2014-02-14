@@ -8,14 +8,14 @@
  */
 
 #include <ChilliSource/Platform/iOS/FileIO/FileSystem.h>
-#include <ChilliSource/Core/FileIO/FileStream.h>
+#include <ChilliSource/Core/File/FileStream.h>
 
 #include <UIKit/UIKit.h>
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
-#include <ChilliSource/Core/Utils.h>
-#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
 #include <ChilliSource/Core/boost/filesystem.hpp>
 

@@ -11,8 +11,8 @@
 #define _MOFLO_CORE_ENTITYANIMATIONCONTROLLER_H_
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/Entity.h>
-#include <ChilliSource/Core/EntityAnimation.h>
+#include <ChilliSource/Core/Entity/Entity.h>
+#include <ChilliSource/Core/Entity/EntityAnimation.h>
 
 namespace moFlo
 {

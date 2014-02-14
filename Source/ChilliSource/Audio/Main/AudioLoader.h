@@ -13,9 +13,9 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_LOADER_H_
 #define _MO_FLO_AUDIO_AUDIO_LOADER_H_
 
-#include <ChilliSource/Core/ResourceProvider.h>
-#include <ChilliSource/Audio/AudioManager.h>
-#include <ChilliSource/Audio/AudioSystem.h>
+#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Audio/Main/AudioManager.h>
+#include <ChilliSource/Audio/Main/AudioSystem.h>
 
 namespace moFlo
 {

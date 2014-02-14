@@ -10,7 +10,7 @@
 #ifndef _MOFLO_CORE_IMAGE_H_
 #define _MOFLO_CORE_IMAGE_H_
 
-#include <ChilliSource/Core/Resource.h>
+#include <ChilliSource/Core/Resource/Resource.h>
 
 namespace moFlo
 {

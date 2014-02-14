@@ -10,9 +10,9 @@
 #define _MO_FLO_RENDERING_PARTICLES_PARTICLE_EMITTER_H_
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/Components/SpriteComponent.h>
+#include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 
-#include <ChilliSource/Core/ParamDictionary.h>
+#include <ChilliSource/Core/Container/ParamDictionary.h>
 
 namespace moFlo
 {

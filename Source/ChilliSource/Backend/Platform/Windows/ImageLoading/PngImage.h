@@ -10,7 +10,7 @@
 #ifndef _MOFLO_WINDOWSPLATFORM_IMAGELOADING_PNGIMAGE_
 #define _MOFLO_WINDOWSPLATFORM_IMAGELOADING_PNGIMAGE_
 
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 
 namespace moFlo
 {

@@ -10,11 +10,11 @@
 #define _MO_FLO_CORE_RESOURCE_MANAGER_DISPENSER_H_
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/QueryableInterface.h>
+#include <ChilliSource/Core/Main/QueryableInterface.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 
-#include <ChilliSource/GUI/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/GUI/ForwardDeclarations.h>
 
 #define GET_RESOURCE_MANAGER(TYPE) moFlo::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<TYPE>() 
 #define LOAD_RESOURCE(TYPE, LOCATION, FILENAME) SHARED_PTR_CAST<TYPE>(moFlo::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(TYPE::InterfaceID)->GetResourceFromFile(LOCATION, FILENAME))

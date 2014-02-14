@@ -9,7 +9,7 @@
 #ifndef _MO_FLO_GUI_FORMATTED_LABEL_H_
 #define _MO_FLO_GUI_FORMATTED_LABEL_H_
 
-#include <ChilliSource/GUI/Label.h>
+#include <ChilliSource/Rendering/GUI/Label.h>
 
 namespace moFlo
 {

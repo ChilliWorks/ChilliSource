@@ -8,25 +8,25 @@
  */
 
 
-#include <ChilliSource/Rendering/RenderComponentFactory.h>
-#include <ChilliSource/Rendering/RenderSystem.h>
-#include <ChilliSource/Rendering/Texture.h>
+#include <ChilliSource/Rendering/Main/RenderComponentFactory.h>
+#include <ChilliSource/Rendering/Main/RenderSystem.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 
 #include <ChilliSource/Rendering/Components/CameraComponent.h>
 #include <ChilliSource/Rendering/Components/StaticMeshComponent.h>
 #include <ChilliSource/Rendering/Components/AnimatedMeshComponent.h>
-#include <ChilliSource/Rendering/Components/SpriteComponent.h>
-#include <ChilliSource/Rendering/Components/LightComponent.h>
-#include <ChilliSource/Rendering/Components/AmbientLightComponent.h>
-#include <ChilliSource/Rendering/Components/DirectionalLightComponent.h>
-#include <ChilliSource/Rendering/Components/PointLightComponent.h>
-#include <ChilliSource/Rendering/RenderCapabilities.h>
+#include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
+#include <ChilliSource/Rendering/Lighting/LightComponent.h>
+#include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
+#include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
+#include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
+#include <ChilliSource/Rendering/Main/RenderCapabilities.h>
 
-#include <ChilliSource/Core/AlignmentAnchors.h>
-#include <ChilliSource/Core/ParamDictionary.h>
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/Screen.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Main/AlignmentAnchors.h>
+#include <ChilliSource/Core/Container/ParamDictionary.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Main/Application.h>
 
 namespace moFlo
 {

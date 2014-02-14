@@ -7,9 +7,9 @@
  *
  */
 
-#include <ChilliSource/Rendering/Components/LightComponent.h>
+#include <ChilliSource/Rendering/Lighting/LightComponent.h>
 
-#include <ChilliSource/Core/Entity.h>
+#include <ChilliSource/Core/Entity/Entity.h>
 
 #include <limits>
 

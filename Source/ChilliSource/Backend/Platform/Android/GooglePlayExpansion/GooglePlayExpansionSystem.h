@@ -10,8 +10,8 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAYEXPANSION_GOOGLEPLAYEXPANSIONSYSTEM_H
 #define _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAYEXPANSION_GOOGLEPLAYEXPANSIONSYSTEM_H
 
-#include <ChilliSource/Core/FastDelegate.h>
-#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
 

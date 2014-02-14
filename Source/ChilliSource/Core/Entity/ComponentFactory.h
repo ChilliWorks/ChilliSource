@@ -15,7 +15,7 @@
 #define _MOFLO_CORE_COMPONENTFACTORY_H
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/Component.h>
+#include <ChilliSource/Core/Entity/Component.h>
 
 
 namespace moFlo

@@ -7,10 +7,10 @@
  *
  */
 
-#include <ChilliSource/Core/Scene.h>
-#include <ChilliSource/Core/Surface.h>
+#include <ChilliSource/Core/Scene/Scene.h>
+#include <ChilliSource/Core/Main/Surface.h>
 
-#include <ChilliSource/GUI/Window.h>
+#include <ChilliSource/Rendering/GUI/Window.h>
 
 namespace moFlo
 {

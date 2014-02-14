@@ -7,7 +7,7 @@
 //
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 
 #ifndef MOFLOW_RENDERING_SKINNEDANIMATIONGROUP_H_
 #define MOFLOW_RENDERING_SKINNEDANIMATIONGROUP_H_

@@ -10,7 +10,7 @@
 #define MOFLOW_RENDERING_MATERIALFACTORY_H
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/System/System.h>
 
 namespace moFlo
 {

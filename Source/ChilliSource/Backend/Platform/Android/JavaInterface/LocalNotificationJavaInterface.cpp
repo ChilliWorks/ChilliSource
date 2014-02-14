@@ -8,8 +8,8 @@
  */
 
 #include <ChilliSource/Platform/Android/JavaInterface/LocalNotificationJavaInterface.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 #include <ChilliSource/Platform/Android/LocalNotificationScheduler.h>
 
 #include <jni.h>

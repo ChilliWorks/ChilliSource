@@ -9,9 +9,9 @@
 #ifndef _MO_FLO_GUI_GUI_EDITABLE_LABEL
 #define _MO_FLO_GUI_GUI_EDITABLE_LABEL
 
-#include <ChilliSource/GUI/Label.h>
+#include <ChilliSource/Rendering/GUI/Label.h>
 
-#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/Main/GenericEvent.h>
 
 #include <ChilliSource/Input/VirtualKeyboard.h>
 

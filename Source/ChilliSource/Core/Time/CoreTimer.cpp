@@ -10,7 +10,7 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <ChilliSource/Core/CoreTimer.h>
+#include <ChilliSource/Core/Time/CoreTimer.h>
 
 namespace moFlo
 {

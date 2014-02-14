@@ -7,13 +7,13 @@
  *
  */
 
-#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Platform/Android/JavaInterface/CoreJavaInterface.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
-#include <ChilliSource/Core/ApplicationEvents.h>
-#include <ChilliSource/Core/PlatformSystem.h>
-#include <ChilliSource/Core/LaunchingActions.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Core/Main/ApplicationEvents.h>
+#include <ChilliSource/Core/Main/PlatformSystem.h>
+#include <ChilliSource/Core/Main/LaunchingActions.h>
 
 #include <ChilliSource/Platform/Android/JavaInterface/TouchInputJavaInterface.h>
 #include <ChilliSource/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>

@@ -8,11 +8,11 @@
 */
 
 #include <ChilliSource/Rendering/Components/CameraComponent.h>
-#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Main/Screen.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Entity.h>
-#include <ChilliSource/Core/ApplicationEvents.h>
-#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Entity/Entity.h>
+#include <ChilliSource/Core/Main/ApplicationEvents.h>
+#include <ChilliSource/Core/Main/Screen.h>
 
 namespace moFlo
 {

@@ -7,8 +7,8 @@
  *
  */
 
-#include <ChilliSource/RenderingPlatform/OpenGL/MeshBuffer.h>
-#include <ChilliSource/RenderingPlatform/OpenGL/RenderSystem.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/MeshBuffer.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/RenderSystem.h>
 
 namespace moFlo
 {

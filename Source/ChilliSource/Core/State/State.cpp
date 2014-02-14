@@ -8,9 +8,9 @@
  */
 
 
-#include <ChilliSource/Core/State.h>
-#include <ChilliSource/Core/StateManager.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/State/State.h>
+#include <ChilliSource/Core/State/StateManager.h>
+#include <ChilliSource/Core/Main/Application.h>
 
 namespace moFlo
 {

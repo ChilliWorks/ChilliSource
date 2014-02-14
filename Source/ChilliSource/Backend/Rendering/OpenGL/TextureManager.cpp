@@ -7,9 +7,9 @@
  *
  */
 
-#include <ChilliSource/RenderingPlatform/OpenGL/TextureManager.h>
-#include <ChilliSource/RenderingPlatform/OpenGL/Texture.h>
-#include <ChilliSource/Core/ImageResourceProvider.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/TextureManager.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Texture.h>
+#include <ChilliSource/Core/Image/ImageResourceProvider.h>
 
 namespace moFlo
 {

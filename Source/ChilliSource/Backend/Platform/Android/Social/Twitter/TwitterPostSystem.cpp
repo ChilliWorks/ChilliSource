@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Main/Application.h>
 #include <ChilliSource/Platform/Android/HttpConnectionSystem.h>
 #include <ChilliSource/Platform/Android/PlatformSystem.h>
 #include <ChilliSource/Platform/Android/Social/Twitter/TwitterPostSystem.h>

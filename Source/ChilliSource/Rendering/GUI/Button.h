@@ -9,7 +9,7 @@
 #ifndef _MOFLO_GUI_BUTTON_H_
 #define _MOFLO_GUI_BUTTON_H_
 
-#include <ChilliSource/GUI/GUIView.h>
+#include <ChilliSource/Rendering/GUI/GUIView.h>
 
 #ifdef ENABLE_MOFLOW_REFLECTION
 #include <ChilliSource/Core/Reflection/Reflection.h>

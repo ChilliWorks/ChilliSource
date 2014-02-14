@@ -9,13 +9,13 @@
 #include <ChilliSource/Platform/Android/GooglePlay/GooglePlayIAPJavaInterface.h>
 
 #include <jni.h>
-#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 
-#include <ChilliSource/Core/Utils.h>
+#include <ChilliSource/Core/Main/Utils.h>
 #include <ChilliSource/Core/JSON/json.h>
-#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 const std::string kstrPendingCacheFile = "GoogleIAPPendingTransactions.json";
 

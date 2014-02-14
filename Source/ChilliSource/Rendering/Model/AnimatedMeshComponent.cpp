@@ -9,19 +9,19 @@
 
 #include <ChilliSource/Rendering/Components/AnimatedMeshComponent.h>
 #include <ChilliSource/Rendering/ComponentUpdaters/AnimatedMeshComponentUpdater.h>
-#include <ChilliSource/Rendering/Components/LightComponent.h>
-#include <ChilliSource/Rendering/Components/DirectionalLightComponent.h>
-#include <ChilliSource/Rendering/Components/PointLightComponent.h>
-#include <ChilliSource/Rendering/Material.h>
+#include <ChilliSource/Rendering/Lighting/LightComponent.h>
+#include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
+#include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
+#include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/MaterialFactory.h>
-#include <ChilliSource/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/Main/RenderSystem.h>
 #include <ChilliSource/Rendering/DynamicSpriteBatcher.h>
 
-#include <ChilliSource/Core/Entity.h>
+#include <ChilliSource/Core/Entity/Entity.h>
 
 #include <ChilliSource/Rendering/SubMesh.h>
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Main/Application.h>
 
 namespace moFlo
 {

@@ -14,7 +14,7 @@
 #ifndef _MOFLO_CORE_GENERICANIMATION_H_
 #define _MOFLO_CORE_GENERICANIMATION_H_
 
-#include <ChilliSource/Core/FastDelegate.h>
+#include <ChilliSource/Core/Main/FastDelegate.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
 namespace moFlo

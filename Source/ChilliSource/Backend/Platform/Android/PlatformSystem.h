@@ -13,7 +13,7 @@
 #ifndef _MO_FLO_PLATFORM_ANDROID_PLATFORM_SYSTEM_H_
 #define _MO_FLO_PLATFORM_ANDROID_PLATFORM_SYSTEM_H_
 
-#include <ChilliSource/Core/PlatformSystem.h>
+#include <ChilliSource/Core/Main/PlatformSystem.h>
 #include <ChilliSource/Platform/Android/UDIDManager.h>
 
 namespace moFlo

@@ -13,7 +13,7 @@
 #ifndef _MO_FLO_RENDERING_SHADER_H_
 #define _MO_FLO_RENDERING_SHADER_H_
 
-#include <ChilliSource/Core/Resource.h>
+#include <ChilliSource/Core/Resource/Resource.h>
 
 namespace moFlo
 {

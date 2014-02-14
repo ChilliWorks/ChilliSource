@@ -8,14 +8,14 @@
 
 #include <ChilliSource/Platform/Android/GooglePlayExpansion/GooglePlayExpansionSystem.h>
 
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/TaskScheduler.h>
-#include <ChilliSource/Core/Utils.h>
-#include <ChilliSource/Core/ApplicationEvents.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/Main/ApplicationEvents.h>
 #include <ChilliSource/Core/Minizip/unzip.h>
 
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 
 #include <jni.h>
 

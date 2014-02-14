@@ -7,8 +7,8 @@
 //
 
 #include <ChilliSource/Platform/Android/Amazon/AmazonIAPSystem.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Core/Device.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Core/Main/Device.h>
 
 namespace moFlo
 {

@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Core/PerformanceTimer.h>
+#include <ChilliSource/Core/Time/PerformanceTimer.h>
 
 namespace moFlo
 {

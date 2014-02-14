@@ -11,9 +11,9 @@
 #define _MOFLOW_CORE_PLATFORMSYSTEM_H_
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/Locales.h>
-#include <ChilliSource/Core/CustomCreator.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Locale/Locales.h>
+#include <ChilliSource/Core/Main/CustomCreator.h>
+#include <ChilliSource/Core/Main/Application.h>
 
 #include <ChilliSource/Input/ForwardDeclarations.h>
 #include <ChilliSource/Audio/ForwardDeclarations.h>

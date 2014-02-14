@@ -11,9 +11,9 @@
 #define _MO_FLO_CORE_LOCALISED_TEXT_H_
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Containers/HashedArray.h>
-#include <ChilliSource/Core/Containers/UTF8String.h>
+#include <ChilliSource/Core/String/UTF8String.h>
 
 namespace moFlo
 {

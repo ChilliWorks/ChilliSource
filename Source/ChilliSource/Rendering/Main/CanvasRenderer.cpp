@@ -8,17 +8,17 @@
  */
 
 #include <ChilliSource/Rendering/CanvasRenderer.h>
-#include <ChilliSource/Rendering/Material.h>
+#include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/MaterialFactory.h>
-#include <ChilliSource/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/Main/RenderSystem.h>
 
-#include <ChilliSource/Core/Screen.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Main/Application.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Main/Application.h>
 
 #ifdef DEBUG_STATS
-#include <ChilliSource/Core/DebugStats.h>
+#include <ChilliSource/Core/Main/DebugStats.h>
 #endif
 
 #define MAX_KERN_RATIO 0.25

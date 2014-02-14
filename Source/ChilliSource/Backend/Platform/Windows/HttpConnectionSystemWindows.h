@@ -10,7 +10,7 @@
 #ifndef _MOFLO_PLATFORM_WINDOWS_HTTPCONNECTIONSYSTEM_H_
 #define _MOFLO_PLATFORM_WINDOWS_HTTPCONNECTIONSYSTEM_H_
 
-#include <ChilliSource/Core/SystemConcepts.h>
+#include <ChilliSource/Core/System/SystemConcepts.h>
 
 #include <ChilliSource/Networking/HttpConnectionSystem.h>
 

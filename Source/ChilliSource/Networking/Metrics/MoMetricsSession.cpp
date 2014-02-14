@@ -8,9 +8,9 @@
 
 #include <ChilliSource/Networking/MoMetricsSession.h>
 
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/Device.h>
-#include <ChilliSource/Core/Utils.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Main/Device.h>
+#include <ChilliSource/Core/Main/Utils.h>
 
 namespace moFlo
 {

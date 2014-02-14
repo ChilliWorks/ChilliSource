@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_CORE_TASKS_H_
 #define _MO_FLO_CORE_TASKS_H_
 
-#include <ChilliSource/Core/FastDelegate.h>
+#include <ChilliSource/Core/Main/FastDelegate.h>
 
 #include <ChilliSource/Core/boost/thread/condition.hpp>
 #include <ChilliSource/Core/boost/type_traits/remove_reference.hpp>

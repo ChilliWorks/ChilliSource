@@ -9,7 +9,7 @@
 #ifndef _MO_FLO_GUI_DEFAULTS_HORIZONTAL_SLIDER_BAR_H_
 #define _MO_FLO_GUI_DEFAULTS_HORIZONTAL_SLIDER_BAR_H_
 
-#include <ChilliSource/GUI/SliderBar.h>
+#include <ChilliSource/Rendering/GUI/SliderBar.h>
 
 namespace moFlo
 {

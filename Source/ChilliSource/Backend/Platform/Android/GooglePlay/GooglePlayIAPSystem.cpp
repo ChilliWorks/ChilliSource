@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Platform/Android/GooglePlay/GooglePlayIAPSystem.h>
 
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 
 namespace moFlo
 {

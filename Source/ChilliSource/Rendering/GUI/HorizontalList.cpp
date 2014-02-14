@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/GUI/HorizontalList.h>
+#include <ChilliSource/Rendering/GUI/HorizontalList.h>
 
-#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Main/Screen.h>
 
 namespace moFlo
 {

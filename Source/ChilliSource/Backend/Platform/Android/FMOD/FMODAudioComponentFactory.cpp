@@ -13,7 +13,7 @@
 #include <ChilliSource/Platform/Android/FMOD/FMODAudioComponentFactory.h>
 #include <ChilliSource/Platform/Android/FMOD/FMODAudioComponent.h>
 
-#include <ChilliSource/Audio/AudioManager.h>
+#include <ChilliSource/Audio/Main/AudioManager.h>
 
 
 

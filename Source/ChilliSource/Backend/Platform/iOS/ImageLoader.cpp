@@ -11,10 +11,10 @@
 
 #include <ChilliSource/Platform/iOS/ImageLoader.h>
 
-#include <ChilliSource/Core/StringUtils.h>
-#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/Main/Screen.h>
 
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Main/Application.h>
 #include <ChilliSource/Platform/iOS/FileIO/FileSystem.h>
 
 #import <UIKit/UIKit.h>

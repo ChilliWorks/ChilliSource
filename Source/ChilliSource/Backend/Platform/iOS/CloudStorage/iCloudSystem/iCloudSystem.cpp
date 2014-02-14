@@ -8,8 +8,8 @@
 
 #include <ChilliSource/Platform/iOS/CloudStorage/iCloudSystem/iCloudSystem.h>
 #include <ChilliSource/Platform/iOS/CloudStorage/iCloudSystem/ICloudSystemController.h>
-#include <ChilliSource/Core/FileIO/FileStream.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/File/FileStream.h>
+#include <ChilliSource/Core/Main/Application.h>
 #include <sys/stat.h>
 #import <UIKit/UIKit.h>
 #import <sys/utsname.h>

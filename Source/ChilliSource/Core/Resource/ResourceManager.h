@@ -11,10 +11,10 @@
 #define _MOFLO_CORE_RESOURCEMANAGER_H_
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/QueryableInterface.h>
-#include <ChilliSource/Core/Resource.h>
-#include <ChilliSource/Core/TaskScheduler.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Main/QueryableInterface.h>
+#include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 
 namespace moFlo
 {

@@ -10,8 +10,8 @@
 #ifndef _MO_FLO_RENDERING_PARTICLE_COMPONENT_FACTORY_H_
 #define _MO_FLO_RENDERING_PARTICLE_COMPONENT_FACTORY_H_
 
-#include <ChilliSource/Core/ComponentFactory.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Main/ComponentFactory.h>
+#include <ChilliSource/Core/File/FileSystem.h>
  
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 

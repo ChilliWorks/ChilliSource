@@ -6,7 +6,7 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Core/Device.h>
+#include <ChilliSource/Core/Main/Device.h>
 
 namespace moFlo
 {

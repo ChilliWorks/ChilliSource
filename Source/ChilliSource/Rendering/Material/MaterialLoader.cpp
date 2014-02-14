@@ -6,22 +6,22 @@
 //  Copyright 2010 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
-#include <ChilliSource/Rendering/ShaderManager.h>
-#include <ChilliSource/Rendering/Shader.h>
-#include <ChilliSource/Rendering/TextureManager.h>
-#include <ChilliSource/Rendering/Texture.h>
-#include <ChilliSource/Rendering/CubemapManager.h>
-#include <ChilliSource/Rendering/Cubemap.h>
+#include <ChilliSource/Rendering/Shader/ShaderManager.h>
+#include <ChilliSource/Rendering/Shader/Shader.h>
+#include <ChilliSource/Rendering/Texture/TextureManager.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/CubemapManager.h>
+#include <ChilliSource/Rendering/Texture/Cubemap.h>
 #include <ChilliSource/Rendering/MaterialLoader.h>
-#include <ChilliSource/Rendering/Material.h>
-#include <ChilliSource/Rendering/RenderCapabilities.h>
+#include <ChilliSource/Rendering/Material/Material.h>
+#include <ChilliSource/Rendering/Main/RenderCapabilities.h>
 
 #include <ChilliSource/Core/XML/XMLUtils.h>
-#include <ChilliSource/Core/Colour.h>
-#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/Main/Colour.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace moFlo
 {

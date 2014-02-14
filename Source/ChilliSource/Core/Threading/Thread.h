@@ -13,7 +13,7 @@
 #ifndef MOFLO_CORE_THREAD_H_
 #define MOFLO_CORE_THREAD_H_
 
-#include <ChilliSource/Core/Tasks.hpp>
+#include <ChilliSource/Core/Threading/Tasks.hpp>
 
 #include <ChilliSource/Core/boost/thread.hpp>
 #include <ChilliSource/Core/boost/thread/condition.hpp>

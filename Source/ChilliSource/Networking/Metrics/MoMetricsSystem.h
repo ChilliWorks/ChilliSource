@@ -11,7 +11,7 @@
 #define _MOFLO_NETWORKING_MOMETRICSSYSTEM_H_
 
 #include <ChilliSource/Networking/ForwardDeclarations.h>
-#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/System/System.h>
 
 #include <ChilliSource/Networking/MoMetricsSession.h>
 

@@ -11,7 +11,7 @@
 #define _MOFLOW_VIDEO_SUBTITLESMANAGER_H_
 
 #include <ChilliSource/Video/ForwardDeclarations.h>
-#include <ChilliSource/Core/ResourceManager.h>
+#include <ChilliSource/Core/Resource/ResourceManager.h>
 
 
 namespace moFlo

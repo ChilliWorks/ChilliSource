@@ -6,7 +6,7 @@
 // Copyright 2013 Tag Games Limited. All rights reserved
 //
 
-#include <ChilliSource/Input/Accelerometer.h>
+#include <ChilliSource/Input/Accelerometer/Accelerometer.h>
 
 namespace moFlo
 {

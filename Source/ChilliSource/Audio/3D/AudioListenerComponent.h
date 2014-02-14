@@ -13,9 +13,9 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_LISTENER_COMPONENT_H_
 #define _MO_FLO_AUDIO_AUDIO_LISTENER_COMPONENT_H_
 
-#include <ChilliSource/Core/Component.h>
+#include <ChilliSource/Core/Entity/Component.h>
 
-#include <ChilliSource/Audio/AudioListener.h>
+#include <ChilliSource/Audio/3D/AudioListener.h>
 
 namespace moFlo
 {

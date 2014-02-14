@@ -13,7 +13,7 @@
 #ifndef _MO_FLO_AUDIO_WINDOWS_FMOD_FMOD_AUDIO_LISTENER_H_
 #define _MO_FLO_AUDIO_WINDOWS_FMOD_FMOD_AUDIO_LISTENER_H_
 
-#include <ChilliSource/Audio/AudioListener.h>
+#include <ChilliSource/Audio/3D/AudioListener.h>
 #include <ChilliSource/Platform/Windows/FMOD/fmod.hpp>
 #include <ChilliSource/Platform/Windows/FMOD/fmod_errors.h>
 

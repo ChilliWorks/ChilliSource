@@ -16,7 +16,7 @@
 
 #include <UIKit/UIKit.h>
 
-#include <ChilliSource/Input/InputSystem.h>
+#include <ChilliSource/Input/Main/InputSystem.h>
 
 #include <ChilliSource/Platform/iOS/Input/TouchScreen.h>
 #include <ChilliSource/Platform/iOS/Input/Accelerometer.h>

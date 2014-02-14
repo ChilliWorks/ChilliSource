@@ -11,8 +11,8 @@
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 
-#include <ChilliSource/Core/FastDelegate.h>
-#include <ChilliSource/Core/ParamDictionary.h>
+#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/Container/ParamDictionary.h>
 
 namespace moFlo
 {

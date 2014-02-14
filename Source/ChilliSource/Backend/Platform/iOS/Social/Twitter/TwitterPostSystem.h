@@ -10,8 +10,8 @@
 #ifndef _MO_FLO_IOSPLATFORM_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
 #define _MO_FLO_IOSPLATFORM_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
 
-#include <ChilliSource/Core/GenericEvent.h>
-#include <ChilliSource/Core/System.h>
+#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Networking/OAuthSystem.h>
 #include <ChilliSource/Platform/iOS/HttpConnectionSystem.h>
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>

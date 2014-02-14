@@ -8,11 +8,11 @@
 
 #include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
 
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/BaseEncoding.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
 
 namespace moFlo

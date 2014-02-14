@@ -3,9 +3,9 @@
 
 #include <ChilliSource/Platform/Windows/OpenGL/glfw.h>
 
-#include <ChilliSource/Input/TouchScreen.h>
+#include <ChilliSource/Input/Pointer/TouchScreen.h>
 
-#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Main/Screen.h>
 
 namespace moFlo
 {

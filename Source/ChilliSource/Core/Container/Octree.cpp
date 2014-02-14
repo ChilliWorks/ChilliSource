@@ -7,13 +7,14 @@
  *
  */
 
-#include <ChilliSource/Core/Octree.h>
+#include <ChilliSource/Core/Container/Octree.h>
 
 #include <ChilliSource/Core/Math/Shapes.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/VolumeComponent.h>
+#include <ChilliSource/Core/Main/VolumeComponent.h>
 
 #include <limits>
+
 namespace moFlo
 {
 	namespace Core

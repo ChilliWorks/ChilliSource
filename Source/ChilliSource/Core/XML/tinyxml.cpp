@@ -31,7 +31,7 @@ distribution.
 #include "tinyxml.h"
 
 #ifdef TIXML_MOFLO
-	#include <ChilliSource/Core/Application.h>
+	#include <ChilliSource/Core/Main/Application.h>
 #endif
 
 bool TiXmlBase::condenseWhiteSpace = true;

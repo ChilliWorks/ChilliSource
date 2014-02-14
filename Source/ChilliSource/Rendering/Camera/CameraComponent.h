@@ -11,9 +11,9 @@
 #define _MO_FLO_RENDERING_CAMERA_COMPONENT_H_
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/Component.h>
-#include <ChilliSource/Core/Colour.h>
-#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Entity/Component.h>
+#include <ChilliSource/Core/Main/Colour.h>
+#include <ChilliSource/Core/Main/Screen.h>
 #include <ChilliSource/Core/Math/Shapes.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>

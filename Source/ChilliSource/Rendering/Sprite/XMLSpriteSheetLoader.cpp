@@ -8,10 +8,10 @@
  */
 
 #include <ChilliSource/Rendering/XMLSpriteSheetLoader.h>
-#include <ChilliSource/Rendering/SpriteSheet.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 
 #include <ChilliSource/Core/XML/XMLUtils.h>
-#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Main/Screen.h>
 
 namespace moFlo
 {

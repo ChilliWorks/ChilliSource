@@ -11,7 +11,7 @@
 #define _MOFLOW_ANDROID_LOCAL_NOTIFICATION_SCHEDULER_H_
 
 #include <ChilliSource/Core/Notifications/LocalNotificationScheduler.h>
-#include <ChilliSource/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 
 namespace moFlo
 {

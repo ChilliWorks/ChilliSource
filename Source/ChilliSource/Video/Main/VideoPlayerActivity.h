@@ -10,8 +10,8 @@
 #define _MO_FLO_VIDEO_VIDEO_PLAYER_H_
 
 #include <ChilliSource/Core/Activity.h>
-#include <ChilliSource/Core/GenericEvent.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 
 namespace moFlo
 {

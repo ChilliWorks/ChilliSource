@@ -8,8 +8,8 @@
  */
 
 #include <ChilliSource/Platform/Android/JavaInterface/EmailCompositionJavaInterface.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 #include <Platform/Android/Social/Communications/EmailCompositionActivity.h>
 
 //function definitions

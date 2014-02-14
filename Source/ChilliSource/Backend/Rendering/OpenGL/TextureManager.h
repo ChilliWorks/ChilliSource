@@ -10,9 +10,9 @@
 #ifndef _MOFLOW_OPENGL_TEXTUREMANAGER_H_
 #define _MOFLOW_OPENGL_TEXTUREMANAGER_H_
 
-#include <ChilliSource/RenderingPlatform/OpenGL/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/TextureManager.h>
+#include <ChilliSource/Rendering/Texture/TextureManager.h>
 
 namespace moFlo
 {

@@ -10,11 +10,11 @@
 #include <ChilliSource/Rendering/Components/StaticMeshComponent.h>
 #include <ChilliSource/Rendering/SubMesh.h>
 #include <ChilliSource/Rendering/MeshBatch.h>
-#include <ChilliSource/Rendering/MeshBuffer.h>
-#include <ChilliSource/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/Main/MeshBuffer.h>
+#include <ChilliSource/Rendering/Main/RenderSystem.h>
 
 #ifdef DEBUG_STATS
-#include <ChilliSource/Core/DebugStats.h>
+#include <ChilliSource/Core/Main/DebugStats.h>
 #endif
 
 namespace moFlo

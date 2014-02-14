@@ -11,7 +11,7 @@
 #define _MO_FLO_RENDERING_RENDERER_H_
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/Component.h>
+#include <ChilliSource/Core/Entity/Component.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/CanvasRenderer.h>

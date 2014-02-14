@@ -13,7 +13,7 @@
 #ifndef _MO_FLO_AUDIO_WINDOWS_FMOD_FMOD_AUDIO_RESOURCE_H_
 #define _MO_FLO_AUDIO_WINDOWS_FMOD_FMOD_AUDIO_RESOURCE_H_
 
-#include <ChilliSource/Audio/AudioResource.h>
+#include <ChilliSource/Audio/Main/AudioResource.h>
 #include <ChilliSource/Audio/ForwardDeclarations.h>
 
 #include <ChilliSource/Platform/Windows/FMOD/fmod.hpp>

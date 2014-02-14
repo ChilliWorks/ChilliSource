@@ -9,12 +9,12 @@
 #include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
 
 #ifdef TARGET_OS_IPHONE
-#	include <ChilliSource/Platform/iOS/RemoteNotificationSystem.h>
+#	include <ChilliSource/Backend/Platform/iOS/RemoteNotificationSystem.h>
 #elif defined(TARGET_ANDROID)
 #	ifdef MOFLOWSKU_REMOTENOTIFICATIONMETHOD_GOOGLEPLAY
-#		include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
+#		include <ChilliSource/Backend/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
 #	elif defined(MOFLOWSKU_REMOTENOTIFICATIONMETHOD_AMAZON)
-#		include <ChilliSource/Platform/Android/Amazon/AmazonRemoteNotificationSystem.h>
+#		include <ChilliSource/Backend/Platform/Android/Amazon/AmazonRemoteNotificationSystem.h>
 #	endif
 #endif
 

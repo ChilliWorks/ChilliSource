@@ -10,8 +10,8 @@
 
 #include <UIKit/UIKit.h>
 
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/BaseEncoding.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
 namespace moFlo

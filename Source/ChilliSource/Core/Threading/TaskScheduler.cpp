@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Core/TaskScheduler.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace moFlo
 {

@@ -11,7 +11,7 @@
 #define _MO_FLO_SOCIAL_TWITTER_TWITTER_AUTHENTICATION_ACTIVITY_H_
 
 #include <ChilliSource/Core/Activity.h>
-#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/Main/GenericEvent.h>
 
 namespace moFlo
 {

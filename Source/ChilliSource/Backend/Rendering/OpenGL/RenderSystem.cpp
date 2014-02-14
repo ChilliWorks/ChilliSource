@@ -7,29 +7,29 @@
  *
  */
 
-#include <ChilliSource/RenderingPlatform/OpenGL/RenderSystem.h>
-#include <ChilliSource/RenderingPlatform/OpenGL/Texture.h>
-#include <ChilliSource/RenderingPlatform/OpenGL/Cubemap.h>
-#include <ChilliSource/RenderingPlatform/OpenGL/MeshBuffer.h>
-#include <ChilliSource/RenderingPlatform/OpenGL/RenderCapabilities.h>
-#include <ChilliSource/RenderingPlatform/OpenGL/RenderTarget.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/RenderSystem.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Texture.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Cubemap.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/MeshBuffer.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/RenderCapabilities.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/RenderTarget.h>
 
-#include <ChilliSource/Rendering/Components/LightComponent.h>
-#include <ChilliSource/Rendering/Components/AmbientLightComponent.h>
-#include <ChilliSource/Rendering/Components/DirectionalLightComponent.h>
-#include <ChilliSource/Rendering/Components/PointLightComponent.h>
+#include <ChilliSource/Rendering/Lighting/LightComponent.h>
+#include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
+#include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
+#include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
 
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/PlatformSystem.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Main/PlatformSystem.h>
 
 #ifdef TARGET_OS_IPHONE
 #include <UIKit/UIKit.h>
 #else
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Main/Application.h>
 #endif
 
 #ifdef DEBUG_STATS
-#include <ChilliSource/Core/DebugStats.h>
+#include <ChilliSource/Core/Main/DebugStats.h>
 #endif
 
 namespace moFlo

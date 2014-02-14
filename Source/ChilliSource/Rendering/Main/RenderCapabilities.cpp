@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
-#include <ChilliSource/Rendering/RenderCapabilities.h>
+#include <ChilliSource/Rendering/Main/RenderCapabilities.h>
 
 namespace moFlo
 {

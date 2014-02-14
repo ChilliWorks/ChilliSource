@@ -11,7 +11,7 @@
 
 #include <jni.h>
 #include <map>
-#include <ChilliSource/Core/ParamDictionary.h>
+#include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
 
 namespace moFlo

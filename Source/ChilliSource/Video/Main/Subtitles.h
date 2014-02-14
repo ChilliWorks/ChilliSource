@@ -11,9 +11,9 @@
 #define _MOFLOW_VIDEO_SUBTITLES_H_
 
 #include <ChilliSource/Video/ForwardDeclarations.h>
-#include <ChilliSource/Core/Resource.h>
+#include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/Math/Shapes.h>
-#include <ChilliSource/Core/AlignmentAnchors.h>
+#include <ChilliSource/Core/Main/AlignmentAnchors.h>
 
 namespace moFlo
 {

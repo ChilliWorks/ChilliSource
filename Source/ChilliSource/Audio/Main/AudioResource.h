@@ -13,7 +13,7 @@
 #ifndef _MO_FLO_AUDIO_RESOURCE_H_
 #define _MO_FLO_AUDIO_RESOURCE_H_
 
-#include <ChilliSource/Core/Resource.h>
+#include <ChilliSource/Core/Resource/Resource.h>
 
 namespace moFlo 
 {

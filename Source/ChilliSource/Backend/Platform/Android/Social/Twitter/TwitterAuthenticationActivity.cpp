@@ -7,8 +7,8 @@
  *
  */
 
-#include <ChilliSource/Core/StringUtils.h>
-#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/Main/Screen.h>
 
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 

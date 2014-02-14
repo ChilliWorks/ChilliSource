@@ -10,7 +10,7 @@
 #include <ChilliSource/Core/Reflection/Property.h>
 #include <ChilliSource/Core/Reflection/Instance.h>
 
-#include <ChilliSource/Core/HashCRC32.h>
+#include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
 namespace moFlo
 {

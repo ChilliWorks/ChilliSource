@@ -1,4 +1,4 @@
-#include <ChilliSource/Core/StaticMemPool.h>
+#include <ChilliSource/Core/Container/StaticMemPool.h>
 
 namespace moFlo
 {

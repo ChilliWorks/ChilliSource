@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Platform/Android/FMOD/FMODAudioLoader.h>
 #include <ChilliSource/Platform/Android/FMOD/FMODAudioResource.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Main/Application.h>
 
 namespace moFlo
 {

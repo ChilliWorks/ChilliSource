@@ -10,8 +10,8 @@
 #ifndef _MO_FLO_RENDERING_MESH_MANAGER_H_
 #define _MO_FLO_RENDERING_MESH_MANAGER_H_
 
-#include <ChilliSource/Core/ResourceManager.h>
-#include <ChilliSource/Rendering/Mesh.h>
+#include <ChilliSource/Core/Resource/ResourceManager.h>
+#include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Rendering/MeshDescriptor.h>
 
 namespace moFlo

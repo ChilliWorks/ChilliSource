@@ -6,15 +6,15 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/GUI/Label.h>
+#include <ChilliSource/Rendering/GUI/Label.h>
 
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/LocalisedText.h>
-#include <ChilliSource/Core/Screen.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Locale/LocalisedText.h>
+#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Main/Application.h>
 
-#include <ChilliSource/Rendering/Texture.h>
-#include <ChilliSource/Rendering/TextureManager.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/CanvasRenderer.h>
 #include <ChilliSource/Rendering/FontManager.h>
 

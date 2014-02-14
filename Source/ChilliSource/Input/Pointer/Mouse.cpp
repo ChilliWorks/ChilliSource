@@ -1,5 +1,5 @@
 
-#include <ChilliSource/Input/Mouse.h>
+#include <ChilliSource/Input/Pointer/Mouse.h>
 
 namespace moFlo
 {

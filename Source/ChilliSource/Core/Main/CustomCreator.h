@@ -10,8 +10,8 @@
 #ifndef _MOFLOW_CORE_CUSTOMCREATOR_H_
 #define _MOFLOW_CORE_CUSTOMCREATOR_H_
 
-#include <ChilliSource/Core/FastDelegate.h>
-#include <ChilliSource/Core/StaticConstructor.h>
+#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/Main/StaticConstructor.h>
 
 //==================================================
 /// This should be used by child classes to specify

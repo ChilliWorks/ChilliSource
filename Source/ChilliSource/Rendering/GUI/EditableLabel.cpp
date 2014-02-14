@@ -6,9 +6,9 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/GUI/EditableLabel.h>
+#include <ChilliSource/Rendering/GUI/EditableLabel.h>
 
-#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Main/Screen.h>
 
 #include <ChilliSource/Rendering/CanvasRenderer.h>
 

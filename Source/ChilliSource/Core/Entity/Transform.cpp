@@ -6,7 +6,7 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Core/Transform.h>
+#include <ChilliSource/Core/Entity/Transform.h>
 
 namespace moFlo
 {

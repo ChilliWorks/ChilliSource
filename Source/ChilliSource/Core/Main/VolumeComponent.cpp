@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Core/VolumeComponent.h>
+#include <ChilliSource/Core/Main/VolumeComponent.h>
 
 namespace moFlo
 {

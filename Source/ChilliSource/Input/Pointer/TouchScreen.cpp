@@ -11,9 +11,9 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved
  */
 
-#include <ChilliSource/Input/TouchScreen.h>
-#include <ChilliSource/Input/InputSystem.h>
-#include <ChilliSource/Input/Accelerometer.h>
+#include <ChilliSource/Input/Pointer/TouchScreen.h>
+#include <ChilliSource/Input/Main/InputSystem.h>
+#include <ChilliSource/Input/Accelerometer/Accelerometer.h>
 #include <algorithm>
 
 namespace moFlo

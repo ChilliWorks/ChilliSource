@@ -9,9 +9,9 @@
 
 #include <ChilliSource/Platform/Windows/HttpConnectionSystemWindows.h>
 
-#include <ChilliSource/Core/TaskScheduler.h>
-#include <ChilliSource/Core/Thread.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Core/Threading/Thread.h>
+#include <ChilliSource/Core/Main/Application.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
 #include <Windows.h>

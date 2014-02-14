@@ -10,8 +10,8 @@
 #define _MOFLO_CORE_STRINGUTILITIES_H_
 
 #include <sstream>
-#include <ChilliSource/Core/Containers/UTF8String.h>
-#include <ChilliSource/Core/ParamDictionary.h>
+#include <ChilliSource/Core/String/UTF8String.h>
+#include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <string>
 
 #if (TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE) && __OBJC__

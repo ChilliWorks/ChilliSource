@@ -17,8 +17,8 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
-#include <ChilliSource/Core/Colour.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Main/Colour.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 
 namespace moFlo
 {

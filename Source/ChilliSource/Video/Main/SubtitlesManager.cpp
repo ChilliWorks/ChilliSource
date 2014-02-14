@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Video/SubtitlesManager.h>
 #include <ChilliSource/Video/Subtitles.h>
-#include <ChilliSource/Core/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceProvider.h>
 
 namespace moFlo
 {

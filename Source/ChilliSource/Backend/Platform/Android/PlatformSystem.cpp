@@ -16,7 +16,7 @@
 #include <ChilliSource/Platform/Android/WebViewActivity.h>
 #include <ChilliSource/Platform/Android/Video/VideoPlayerActivity.h>
 
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Platform/Android/JavaInterface/CoreJavaInterface.h>
 #include <ChilliSource/Platform/Android/FMOD/FMODSystem.h>
 #include <ChilliSource/Platform/Android/FMOD/FMODAudioLoader.h>
@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Networking/IAPSystem.h>
 
-#include <ChilliSource/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/Main/RenderSystem.h>
 #include <ChilliSource/Rendering/Renderer.h>
 #include <ChilliSource/Rendering/SpriteSheetLoader.h>
 #include <ChilliSource/Rendering/XMLSpriteSheetLoader.h>
@@ -39,21 +39,21 @@
 #include <ChilliSource/Rendering/FontLoader.h>
 #include <ChilliSource/Rendering/ComponentUpdaters/AnimatedMeshComponentUpdater.h>
 
-#include <ChilliSource/Core/Utils.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
-#include <ChilliSource/Core/MoImageProvider.h>
-#include <ChilliSource/Core/ETC1ImageProvider.h>
+#include <ChilliSource/Core/Image/MoImageProvider.h>
+#include <ChilliSource/Core/Image/ETC1ImageProvider.h>
 
-#include <ChilliSource/Audio/AudioSystem.h>
-#include <ChilliSource/Audio/AudioPlayer.h>
+#include <ChilliSource/Audio/Main/AudioSystem.h>
+#include <ChilliSource/Audio/Main/AudioPlayer.h>
 
-#include <ChilliSource/GUI/GUIViewFactory.h>
+#include <ChilliSource/Rendering/GUI/GUIViewFactory.h>
 
-#include <ChilliSource/Input/InputSystem.h>
+#include <ChilliSource/Input/Main/InputSystem.h>
 
-#include <ChilliSource/RenderingPlatform/OpenGL/RenderSystem.h>
-#include <ChilliSource/RenderingPlatform/OpenGL/RenderCapabilities.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/RenderSystem.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/RenderCapabilities.h>
 
 namespace moFlo 
 {

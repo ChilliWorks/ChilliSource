@@ -7,12 +7,12 @@
 //
 
 #include <ChilliSource/Platform/iOS/Video/SubtitlesRenderer.h>
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/ResourceManager.h>
-#include <ChilliSource/Core/Screen.h>
-#include <ChilliSource/Core/StringUtils.h>
-#include <ChilliSource/Core/Containers/UTF8String.h>
-#include <ChilliSource/Core/LocalisedText.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Resource/ResourceManager.h>
+#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/String/UTF8String.h>
+#include <ChilliSource/Core/Locale/LocalisedText.h>
 #include <ChilliSource/Video/VideoPlayerActivity.h>
 #include <ChilliSource/Video/Subtitles.h>
 

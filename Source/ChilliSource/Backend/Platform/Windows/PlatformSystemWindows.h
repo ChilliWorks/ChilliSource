@@ -13,9 +13,9 @@
 #ifndef _MO_FLO_PLATFORM_WINDOWS_PLATFORM_SYSTEM_H_
 #define _MO_FLO_PLATFORM_WINDOWS_PLATFORM_SYSTEM_H_
 
-#include <ChilliSource/Core/PlatformSystem.h>
-#include <ChilliSource/Core/ApplicationEvents.h>
-#include <ChilliSource/Core/CustomCreator.h>
+#include <ChilliSource/Core/Main/PlatformSystem.h>
+#include <ChilliSource/Core/Main/ApplicationEvents.h>
+#include <ChilliSource/Core/Main/CustomCreator.h>
 
 namespace moFlo
 {

@@ -10,9 +10,9 @@
 #ifndef _MO_FLO_CORE_DEVICE_H_
 #define _MO_FLO_CORE_DEVICE_H_
 
-#include <ChilliSource/Core/Locales.h>
+#include <ChilliSource/Core/Locale/Locales.h>
 
-#include <ChilliSource/Core/PlatformSystem.h>
+#include <ChilliSource/Core/Main/PlatformSystem.h>
 
 namespace moFlo
 {

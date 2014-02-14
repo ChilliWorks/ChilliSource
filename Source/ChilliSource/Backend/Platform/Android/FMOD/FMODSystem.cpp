@@ -17,9 +17,9 @@
 #include <ChilliSource/Platform/Android/FMOD/FMODAudioComponentFactory.h>
 #include <ChilliSource/Platform/Android/FMOD/FMODAudioManager.h>
 
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/ApplicationEvents.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Main/ApplicationEvents.h>
+#include <ChilliSource/Core/Main/Application.h>
 
 namespace moFlo
 {

@@ -8,13 +8,13 @@
  */
 
 #include <ChilliSource/Rendering/DynamicSpriteBatcher.h>
-#include <ChilliSource/Rendering/RenderSystem.h>
-#include <ChilliSource/Rendering/RenderComponentFactory.h>
+#include <ChilliSource/Rendering/Main/RenderSystem.h>
+#include <ChilliSource/Rendering/Main/RenderComponentFactory.h>
 
-#include <ChilliSource/Input/InputSystem.h>
+#include <ChilliSource/Input/Main/InputSystem.h>
 
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 namespace moFlo
 {

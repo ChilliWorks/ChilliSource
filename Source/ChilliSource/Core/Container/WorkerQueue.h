@@ -11,7 +11,7 @@
 
 #include <queue>
 
-#include <ChilliSource/Core/Thread.h>
+#include <ChilliSource/Core/Threading/Thread.h>
 
 namespace moFlo
 {

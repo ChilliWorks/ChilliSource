@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Platform/Windows/ImageLoading/PngImage.h>
 #include <ChilliSource/Platform/Windows/ImageLoading/LibPng/png.h>
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Main/Application.h>
 
 //----------------------------------------------------------------------------------
 /// Read Png Data

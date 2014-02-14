@@ -10,7 +10,7 @@
 #ifndef _MOFLOW_RENDERING_COMPONENTS_LIGHTCOMPONENT_H_
 #define _MOFLOW_RENDERING_COMPONENTS_LIGHTCOMPONENT_H_
 
-#include <ChilliSource/Core/Component.h>
+#include <ChilliSource/Core/Entity/Component.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 

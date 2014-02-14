@@ -6,7 +6,7 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Core/AlignmentAnchors.h>
+#include <ChilliSource/Core/Main/AlignmentAnchors.h>
 
 namespace moFlo
 {

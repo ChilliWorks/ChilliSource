@@ -11,17 +11,17 @@
 #define _MOFLOW_OPENGL_ES2_RENDER_SYSTEM_H_
 
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Colour.h>
+#include <ChilliSource/Core/Main/Colour.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/RenderSystem.h>
+#include <ChilliSource/Rendering/Main/RenderSystem.h>
 
-#include <ChilliSource/RenderingPlatform/OpenGL/ForwardDeclarations.h>
-#include <ChilliSource/RenderingPlatform/OpenGL/TextureManager.h>
-#include <ChilliSource/RenderingPlatform/OpenGL/CubemapManager.h>
-#include <ChilliSource/RenderingPlatform/OpenGL/ShaderManager.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/TextureManager.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/CubemapManager.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/ShaderManager.h>
 
-#include <ChilliSource/RenderingPlatform/OpenGL/GLIncludes.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/GLIncludes.h>
 
 namespace moFlo
 {

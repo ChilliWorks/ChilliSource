@@ -6,24 +6,24 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/GUI/GUIViewFactory.h>
+#include <ChilliSource/Rendering/GUI/GUIViewFactory.h>
 
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/GUI/GUI.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Rendering/GUI/GUI.h>
 
-#include <ChilliSource/GUI/Defaults/HighlightButton.h>
-#include <ChilliSource/GUI/Defaults/ToggleButton.h>
-#include <ChilliSource/GUI/Defaults/HorizontalProgressBar.h>
-#include <ChilliSource/GUI/Defaults/HorizontalSliderBar.h>
-#include <ChilliSource/GUI/Defaults/VerticalSliderBar.h>
-#include <ChilliSource/GUI/Defaults/HorizontalEndcappedProgressBar.h>
-#include <ChilliSource/GUI/Defaults/VerticalEndcappedProgressBar.h>
+#include <ChilliSource/Rendering/GUI/Defaults/HighlightButton.h>
+#include <ChilliSource/Rendering/GUI/Defaults/ToggleButton.h>
+#include <ChilliSource/Rendering/GUI/Defaults/HorizontalProgressBar.h>
+#include <ChilliSource/Rendering/GUI/Defaults/HorizontalSliderBar.h>
+#include <ChilliSource/Rendering/GUI/Defaults/VerticalSliderBar.h>
+#include <ChilliSource/Rendering/GUI/Defaults/HorizontalEndcappedProgressBar.h>
+#include <ChilliSource/Rendering/GUI/Defaults/VerticalEndcappedProgressBar.h>
 
-#include <ChilliSource/GUI/Defaults/HorizontalClippingProgressBar.h>
-#include <ChilliSource/GUI/Defaults/StretchableHighlightButton.h>
-#include <ChilliSource/GUI/Defaults/VerticalStretchableImage.h>
-#include <ChilliSource/GUI/HorizontalList.h>
-#include <ChilliSource/GUI/VerticalList.h>
+#include <ChilliSource/Rendering/GUI/Defaults/HorizontalClippingProgressBar.h>
+#include <ChilliSource/Rendering/GUI/Defaults/StretchableHighlightButton.h>
+#include <ChilliSource/Rendering/GUI/Defaults/VerticalStretchableImage.h>
+#include <ChilliSource/Rendering/GUI/HorizontalList.h>
+#include <ChilliSource/Rendering/GUI/VerticalList.h>
 
 #include <ChilliSource/Core/XML/rapidxml.hpp>
 

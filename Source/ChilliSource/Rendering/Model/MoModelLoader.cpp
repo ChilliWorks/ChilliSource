@@ -8,10 +8,10 @@
  */
 
 #include <ChilliSource/Rendering/MoModelLoader.h>
-#include <ChilliSource/Rendering/Mesh.h>
+#include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Rendering/SubMesh.h>
 
-#include <ChilliSource/Core/Application.h>
+#include <ChilliSource/Core/Main/Application.h>
 
 #include <stdexcept>
 #include <ChilliSource/Rendering/MeshManager.h>

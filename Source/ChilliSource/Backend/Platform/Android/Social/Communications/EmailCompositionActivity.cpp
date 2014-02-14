@@ -9,9 +9,9 @@
 
 #include <ChilliSource/Platform/Android/Social/Communications/EmailCompositionActivity.h>
 #include <ChilliSource/Platform/Android/JavaInterface/EmailCompositionJavaInterface.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Core/Application.h>
-#include <ChilliSource/Core/FileIO/FileSystem.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 
 namespace moFlo
 {

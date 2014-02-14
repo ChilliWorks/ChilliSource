@@ -13,9 +13,9 @@
 #include <ChilliSource/Rendering/Components/RenderComponent.h>
 
 #include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Core/Colour.h>
+#include <ChilliSource/Core/Main/Colour.h>
 #include <ChilliSource/Core/Math/Shapes.h>
-#include <ChilliSource/Core/AlignmentAnchors.h>
+#include <ChilliSource/Core/Main/AlignmentAnchors.h>
 
 namespace moFlo
 {

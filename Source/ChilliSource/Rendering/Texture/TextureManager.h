@@ -10,8 +10,8 @@
 #ifndef _MOFLO_RENDERING_TEXTUREMANAGER_H_
 #define _MOFLO_RENDERING_TEXTUREMANAGER_H_
 
-#include <ChilliSource/Core/ResourceManager.h>
-#include <ChilliSource/Core/Image.h>
+#include <ChilliSource/Core/Resource/ResourceManager.h>
+#include <ChilliSource/Core/Image/Image.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 

@@ -6,15 +6,15 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/GUI/ScrollView.h>
+#include <ChilliSource/Rendering/GUI/ScrollView.h>
 
 #include <ChilliSource/Core/Math/MathUtils.h>
 
 #if DEBUG_DRAWING
     #include <ChilliSource/Rendering/CanvasRenderer.h>
-    #include <ChilliSource/Core/ResourceManagerDispenser.h>
-    #include <ChilliSource/Rendering/Texture.h>
-    #include <ChilliSource/Rendering/TextureManager.h>
+    #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+    #include <ChilliSource/Rendering/Texture/Texture.h>
+    #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #endif
 
 namespace moFlo

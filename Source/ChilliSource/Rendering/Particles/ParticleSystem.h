@@ -16,8 +16,8 @@
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
 #include <ChilliSource/Rendering/Particles/Effectors/ParticleEffectorFactory.h>
 
-#include <ChilliSource/Core/System.h>
-#include <ChilliSource/Core/SystemConcepts.h>
+#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/System/SystemConcepts.h>
 
 namespace moFlo
 {

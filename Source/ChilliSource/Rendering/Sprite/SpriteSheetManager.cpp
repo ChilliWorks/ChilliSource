@@ -11,11 +11,11 @@
  */
 
 #include <ChilliSource/Rendering/SpriteSheetManager.h>
-#include <ChilliSource/Rendering/TextureManager.h>
-#include <ChilliSource/Rendering/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureManager.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 
-#include <ChilliSource/Core/ResourceProvider.h>
-#include <ChilliSource/Core/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 namespace moFlo
 {

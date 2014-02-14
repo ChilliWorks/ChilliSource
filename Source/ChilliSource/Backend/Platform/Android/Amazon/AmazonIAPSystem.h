@@ -10,7 +10,7 @@
 #define MOFLOW_PLATFORM_ANDROID_AMAZON_AMAZONIAPSYSTEM_H
 
 #include <ChilliSource/Networking/IAPSystem.h>
-#include <ChilliSource/Platform/Android/Amazon/AmazonIAPJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Amazon/AmazonIAPJavaInterface.h>
 
 namespace moFlo
 {

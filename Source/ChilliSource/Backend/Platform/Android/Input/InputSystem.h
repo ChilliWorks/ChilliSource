@@ -14,7 +14,7 @@
 #ifndef _MOFLO_PLATFORM_ANDROID_INPUTSYSTEM_H_
 #define _MOFLO_PLATFORM_ANDROID_INPUTSYSTEM_H_
 
-#include <ChilliSource/Input/InputSystem.h>
+#include <ChilliSource/Input/Main/InputSystem.h>
 
 #include <ChilliSource/Platform/Android/Input/TouchScreen.h>
 #include <ChilliSource/Platform/Android/Input/Accelerometer.h>

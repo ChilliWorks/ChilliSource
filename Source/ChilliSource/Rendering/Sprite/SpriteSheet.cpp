@@ -10,11 +10,11 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <ChilliSource/Rendering/SpriteSheet.h>
-#include <ChilliSource/Rendering/Texture.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 
-#include <ChilliSource/Core/Screen.h>
-#include <ChilliSource/Core/HashCRC32.h>
+#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
 namespace moFlo
 {

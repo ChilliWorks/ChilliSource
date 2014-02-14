@@ -10,10 +10,10 @@
 #define _MO_FLO_PLATFORM_IOS_VIRTUAL_KEYBOARD_H_
 
 #include <UIKit/UIKit.h>
-#include <ChilliSource/Platform/iOS/EAGLView.h>
+#include <ChilliSource/Backend/Platform/iOS/EAGLView.h>
 
-#include <ChilliSource/Core/FastDelegate.h>
-#include <ChilliSource/Core/GenericEvent.h>
+#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/Main/GenericEvent.h>
 
 #include <ChilliSource/Input/VirtualKeyboard.h>
 

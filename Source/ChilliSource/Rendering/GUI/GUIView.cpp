@@ -6,11 +6,11 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/GUI/GUIView.h>
+#include <ChilliSource/Rendering/GUI/GUIView.h>
 
-#include <ChilliSource/Core/StringConverter.h>
+#include <ChilliSource/Core/String/StringConverter.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Screen.h>
+#include <ChilliSource/Core/Main/Screen.h>
 #include <ChilliSource/Core/BitOps.h>
 
 #include <ChilliSource/Rendering/CanvasRenderer.h>

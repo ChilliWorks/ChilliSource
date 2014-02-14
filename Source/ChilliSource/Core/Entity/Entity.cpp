@@ -7,9 +7,9 @@
  *
  */
 
-#include <ChilliSource/Core/Entity.h>
-#include <ChilliSource/Core/Scene.h>
-#include <ChilliSource/Core/StringUtils.h>
+#include <ChilliSource/Core/Entity/Entity.h>
+#include <ChilliSource/Core/Scene/Scene.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
 #include <algorithm>
 
