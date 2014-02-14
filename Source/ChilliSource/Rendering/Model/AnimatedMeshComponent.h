@@ -10,8 +10,8 @@
 #ifndef _MO_FLO_RENDERING_ANIMATED_MESH_COMPONENT_H_
 #define _MO_FLO_RENDERING_ANIMATED_MESH_COMPONENT_H_
 
-#include <ChilliSource/Rendering/Components/RenderComponent.h>
-#include <ChilliSource/Rendering/SkinnedAnimationGroup.h>
+#include <ChilliSource/Rendering/Main/RenderComponent.h>
+#include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>

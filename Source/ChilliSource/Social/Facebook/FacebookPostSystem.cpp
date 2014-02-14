@@ -11,9 +11,9 @@
 #include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
 
 #ifdef TARGET_OS_IPHONE
-#include <ChilliSource/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
 #elif TARGET_ANDROID
-#include <ChilliSource/Platform/Android/Social/Facebook/FacebookPostSystem.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookPostSystem.h>
 #endif
 
 /*

@@ -10,7 +10,7 @@
 #define _MOFLO_NETWORKING_MOMETRICS_SESSION_H_
 
 #include <ChilliSource/Networking/ForwardDeclarations.h>
-#include <ChilliSource/Networking/HttpConnectionSystem.h>
+#include <ChilliSource/Networking/HTTP/HttpConnectionSystem.h>
 
 #include <ChilliSource/Core/JSON/json.h>
 

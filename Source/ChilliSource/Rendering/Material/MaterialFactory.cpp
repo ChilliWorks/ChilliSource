@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Tag Games Ltd. All rights reserved.
 //
 
-#include <ChilliSource/Rendering/MaterialFactory.h>
+#include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 #include <ChilliSource/Rendering/Shader/ShaderManager.h>

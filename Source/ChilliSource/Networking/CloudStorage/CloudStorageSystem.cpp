@@ -6,7 +6,7 @@
 //
 //
 
-#include <ChilliSource/CloudStorage/CloudStorage/CloudStorageSystem.h>
+#include <ChilliSource/Networking/CloudStorage/CloudStorageSystem.h>
 
 namespace moFlo
 {

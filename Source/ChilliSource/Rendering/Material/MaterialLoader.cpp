@@ -15,7 +15,7 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/CubemapManager.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
-#include <ChilliSource/Rendering/MaterialLoader.h>
+#include <ChilliSource/Rendering/Material/MaterialLoader.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Main/RenderCapabilities.h>
 

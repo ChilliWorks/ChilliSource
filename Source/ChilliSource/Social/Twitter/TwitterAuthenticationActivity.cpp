@@ -10,9 +10,9 @@
 #include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
 
 #ifdef TARGET_OS_IPHONE
-#include <ChilliSource/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
 #elif TARGET_ANDROID
-#include <ChilliSource/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
 #endif
 
 namespace moFlo

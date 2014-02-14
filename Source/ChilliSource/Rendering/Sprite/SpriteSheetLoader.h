@@ -14,7 +14,7 @@
 #define _MO_FLO_RENDERING_SPRITE_LOADER_H_
 
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
-#include <ChilliSource/Rendering/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 
 
 namespace moFlo

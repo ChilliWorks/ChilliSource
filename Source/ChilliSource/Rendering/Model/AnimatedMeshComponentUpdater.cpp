@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Tag Games Ltd. All rights reserved.
 //
 
-#include <ChilliSource/Rendering/ComponentUpdaters/AnimatedMeshComponentUpdater.h>
-#include <ChilliSource/Rendering/Components/AnimatedMeshComponent.h>
+#include <ChilliSource/Rendering/Model/AnimatedMeshComponentUpdater.h>
+#include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
 
 namespace moFlo
 {

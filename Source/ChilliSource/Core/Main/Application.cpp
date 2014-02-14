@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Main/ApplicationDelegates.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
-#include <ChilliSource/Core/Main/ComponentFactory.h>
+#include <ChilliSource/Core/Entity/ComponentFactory.h>
 #include <ChilliSource/Core/Time/CoreTimer.h>
 #include <ChilliSource/Core/File/TweakableConstants.h>
 #include <ChilliSource/Core/File/LocalDataStore.h>

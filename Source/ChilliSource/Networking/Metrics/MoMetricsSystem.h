@@ -13,7 +13,7 @@
 #include <ChilliSource/Networking/ForwardDeclarations.h>
 #include <ChilliSource/Core/System/System.h>
 
-#include <ChilliSource/Networking/MoMetricsSession.h>
+#include <ChilliSource/Networking/Metrics/MoMetricsSession.h>
 
 #define RECORD_METRICS_EVENT(type, params, summarise)\
 moFlo::Networking::CMoMetricsSystem::GetSingleton().RecordEvent(type, params, summarise)

@@ -7,9 +7,9 @@
  *
  */
 
-#include <ChilliSource/Rendering/RendererSortPredicates.h>
-#include <ChilliSource/Rendering/Renderer.h>
-#include <ChilliSource/Rendering/Components/StaticMeshComponent.h>
+#include <ChilliSource/Rendering/Main/RendererSortPredicates.h>
+#include <ChilliSource/Rendering/Main/Renderer.h>
+#include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
 
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Entity/Transform.h>

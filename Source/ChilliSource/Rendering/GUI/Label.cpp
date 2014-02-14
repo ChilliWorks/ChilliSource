@@ -15,8 +15,8 @@
 
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
-#include <ChilliSource/Rendering/CanvasRenderer.h>
-#include <ChilliSource/Rendering/FontManager.h>
+#include <ChilliSource/Rendering/Main/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Font/FontManager.h>
 
 namespace moFlo
 {

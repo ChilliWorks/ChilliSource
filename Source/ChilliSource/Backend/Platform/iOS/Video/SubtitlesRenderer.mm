@@ -13,8 +13,8 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 #include <ChilliSource/Core/Locale/LocalisedText.h>
-#include <ChilliSource/Video/VideoPlayerActivity.h>
-#include <ChilliSource/Video/Subtitles.h>
+#include <ChilliSource/Video/Main/VideoPlayerActivity.h>
+#include <ChilliSource/Video/Main/Subtitles.h>
 
 #import <QuartzCore/QuartzCore.h>
 

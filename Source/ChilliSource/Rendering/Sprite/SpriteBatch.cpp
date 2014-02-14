@@ -8,8 +8,8 @@
  */
 
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
-#include <ChilliSource/Rendering/SpriteBatch.h>
-#include <ChilliSource/Rendering/VertexLayouts.h>
+#include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
+#include <ChilliSource/Rendering/Main/VertexLayouts.h>
 #include <ChilliSource/Rendering/Main/RenderSystem.h>
 
 #ifdef DEBUG_STATS

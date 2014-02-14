@@ -11,7 +11,7 @@
 
 #include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
 
-#include <ChilliSource/Networking/IAPSystem.h>
+#include <ChilliSource/Networking/IAP/IAPSystem.h>
 
 namespace moFlo
 {

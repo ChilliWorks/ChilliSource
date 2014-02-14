@@ -6,15 +6,15 @@
 //  Copyright (c) 2013 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Networking/IAPSystem.h>
+#include <ChilliSource/Networking/IAP/IAPSystem.h>
 
 #ifdef TARGET_OS_IPHONE
-#	include <ChilliSource/Platform/iOS/IAPSystem.h>
+#	include <ChilliSource/Backend/Platform/iOS/IAPSystem.h>
 #elif defined(TARGET_ANDROID)
 #	ifdef MOFLOWSKU_IAPMETHOD_GOOGLEPLAY
-#		include <ChilliSource/Platform/Android/GooglePlay/GooglePlayIAPSystem.h>
+#		include <ChilliSource/Backend/Platform/Android/GooglePlay/GooglePlayIAPSystem.h>
 #	elif defined(MOFLOWSKU_IAPMETHOD_AMAZON)
-#		include <ChilliSource/Platform/Android/Amazon/AmazonIAPSystem.h>
+#		include <ChilliSource/Backend/Platform/Android/Amazon/AmazonIAPSystem.h>
 #	endif
 #endif
 

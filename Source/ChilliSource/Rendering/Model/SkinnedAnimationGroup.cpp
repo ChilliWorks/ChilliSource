@@ -6,12 +6,12 @@
 //  Copyright (c) 2012 Tag Games Ltd. All rights reserved.
 //
 
-#include <ChilliSource/Rendering/SkinnedAnimationGroup.h>
+#include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Rendering/SkinnedAnimation.h>
-#include <ChilliSource/Rendering/Skeleton.h>
+#include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
+#include <ChilliSource/Rendering/Model/Skeleton.h>
 
 namespace moFlo
 {

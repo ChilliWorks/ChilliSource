@@ -7,12 +7,12 @@
  *
  */
 
-#include "FacebookAuthentication.h"
+#include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
 
 #ifdef TARGET_OS_IPHONE
-#include <ChilliSource/Platform/iOS/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookAuthentication.h>
 #elif TARGET_ANDROID
-#include <ChilliSource/Platform/Android/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthentication.h>
 #endif
 
 namespace moFlo

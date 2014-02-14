@@ -17,8 +17,8 @@
 #include <ChilliSource/Core/Main/ApplicationEvents.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/Locale/LocalisedText.h>
-#include <ChilliSource/Video/Subtitles.h>
-#include <ChilliSource/Video/SubtitlesManager.h>
+#include <ChilliSource/Video/Main/Subtitles.h>
+#include <ChilliSource/Video/Main/SubtitlesManager.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 namespace moFlo

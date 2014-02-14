@@ -10,10 +10,10 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_VIDEO_VIDEOPLAYER_H_
 #define _MOFLOW_PLATFORM_ANDROID_VIDEO_VIDEOPLAYER_H_
 
-#include <ChilliSource/Video/VideoPlayerActivity.h>
+#include <ChilliSource/Video/Main/VideoPlayerActivity.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Video/Subtitles.h>
+#include <ChilliSource/Video/Main/Subtitles.h>
 
 namespace moFlo
 {

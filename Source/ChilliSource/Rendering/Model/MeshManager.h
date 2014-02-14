@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Core/Resource/ResourceManager.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
-#include <ChilliSource/Rendering/MeshDescriptor.h>
+#include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 
 namespace moFlo
 {

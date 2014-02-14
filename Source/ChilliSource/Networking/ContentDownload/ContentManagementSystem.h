@@ -7,7 +7,7 @@
 //
 
 #include <ChilliSource/Networking/ForwardDeclarations.h>
-#include <ChilliSource/Networking/ContentDownloader.h>
+#include <ChilliSource/Networking/ContentDownload/ContentDownloader.h>
 
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/Main/GenericEvent.h>

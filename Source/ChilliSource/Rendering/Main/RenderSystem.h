@@ -20,11 +20,11 @@
 #include <ChilliSource/Rendering/Main/RenderTarget.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
-#include <ChilliSource/Rendering/MeshManager.h>
-#include <ChilliSource/Rendering/SkinnedAnimationManager.h>
-#include <ChilliSource/Rendering/MaterialManager.h>
-#include <ChilliSource/Rendering/SpriteSheetManager.h>
-#include <ChilliSource/Rendering/FontManager.h>
+#include <ChilliSource/Rendering/Model/MeshManager.h>
+#include <ChilliSource/Rendering/Model/SkinnedAnimationManager.h>
+#include <ChilliSource/Rendering/Material/MaterialManager.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/Font/FontManager.h>
 
 namespace moFlo
 {

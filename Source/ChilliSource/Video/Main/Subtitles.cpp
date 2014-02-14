@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Video/Subtitles.h>
+#include <ChilliSource/Video/Main/Subtitles.h>
 
 namespace moFlo
 {

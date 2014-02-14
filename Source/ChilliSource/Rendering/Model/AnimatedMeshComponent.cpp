@@ -7,19 +7,19 @@
  *
  */
 
-#include <ChilliSource/Rendering/Components/AnimatedMeshComponent.h>
-#include <ChilliSource/Rendering/ComponentUpdaters/AnimatedMeshComponentUpdater.h>
+#include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
+#include <ChilliSource/Rendering/Model/AnimatedMeshComponentUpdater.h>
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
 #include <ChilliSource/Rendering/Material/Material.h>
-#include <ChilliSource/Rendering/MaterialFactory.h>
+#include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Main/RenderSystem.h>
-#include <ChilliSource/Rendering/DynamicSpriteBatcher.h>
+#include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 
 #include <ChilliSource/Core/Entity/Entity.h>
 
-#include <ChilliSource/Rendering/SubMesh.h>
+#include <ChilliSource/Rendering/Model/SubMesh.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Main/Application.h>
 

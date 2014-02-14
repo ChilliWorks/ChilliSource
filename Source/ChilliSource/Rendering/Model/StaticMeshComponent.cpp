@@ -7,22 +7,19 @@
  *
  */
 
-#include <ChilliSource/Rendering/Components/StaticMeshComponent.h>
-#include <ChilliSource/Rendering/Lighting/LightComponent.h>
-#include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
-#include <ChilliSource/Rendering/Components/PointLightComponent.h>
+#include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
 #include <ChilliSource/Rendering/Material/Material.h>
-#include <ChilliSource/Rendering/MaterialFactory.h>
-#include <ChilliSource/Rendering/MaterialManager.h>
+#include <ChilliSource/Rendering/Material/MaterialFactory.h>
+#include <ChilliSource/Rendering/Material/MaterialManager.h>
 #include <ChilliSource/Rendering/Main/RenderSystem.h>
-#include <ChilliSource/Rendering/DynamicSpriteBatcher.h>
+#include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 
 #include <ChilliSource/Core/Main/Application.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
-#include <ChilliSource/Rendering/SubMesh.h>
+#include <ChilliSource/Rendering/Model/SubMesh.h>
 
 #include <limits>
 

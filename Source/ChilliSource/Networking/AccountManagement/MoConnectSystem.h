@@ -16,9 +16,9 @@
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Networking/ForwardDeclarations.h>
-#include <ChilliSource/Networking/HttpConnectionSystem.h>
-#include <ChilliSource/Networking/IAPSystem.h>
-#include <ChilliSource/Networking/OAuthSystem.h>
+#include <ChilliSource/Networking/HTTP/HttpConnectionSystem.h>
+#include <ChilliSource/Networking/IAP/IAPSystem.h>
+#include <ChilliSource/Networking/Main/OAuthSystem.h>
 
 namespace moFlo
 {

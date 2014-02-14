@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Networking/MoMetricsSession.h>
+#include <ChilliSource/Networking/Metrics/MoMetricsSession.h>
 
 #include <ChilliSource/Core/Main/Application.h>
 #include <ChilliSource/Core/Main/Device.h>

@@ -18,7 +18,7 @@
 #if DEBUG_DRAWING
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
-#include <ChilliSource/Rendering/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Main/CanvasRenderer.h>
 #endif
 
 bool moFlo::GUI::CGridView::mbDrawDebug = false;

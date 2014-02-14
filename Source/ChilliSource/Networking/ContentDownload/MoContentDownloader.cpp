@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Networking/MoContentDownloader.h>
+#include <ChilliSource/Networking/ContentDownload/MoContentDownloader.h>
 
 #include <ChilliSource/Core/Main/Device.h>
 #include <ChilliSource/Core/JSON/json.h>

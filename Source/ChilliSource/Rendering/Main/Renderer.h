@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Entity/Component.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Main/CanvasRenderer.h>
 
 namespace moFlo
 {

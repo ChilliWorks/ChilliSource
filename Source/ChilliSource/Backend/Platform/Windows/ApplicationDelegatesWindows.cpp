@@ -19,8 +19,8 @@
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/Main/PlatformSystem.h>
 #include <ChilliSource/Rendering/Main/RenderSystem.h>
-#include <ChilliSource/Rendering/Renderer.h>
-#include <ChilliSource/Rendering/Components/CameraComponent.h>
+#include <ChilliSource/Rendering/Main/Renderer.h>
+#include <ChilliSource/Rendering/Camera/CameraComponent.h>
 
 #ifdef DEBUG_STATS
 #include <ChilliSource/Core/Main/DebugStats.h>

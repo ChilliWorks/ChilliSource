@@ -10,7 +10,7 @@
 #ifndef _MOFLO_SOCIAL_COMMUNICATIONS_EMAILCOMPOSITIONACTIVITY_H_
 #define _MOFLO_SOCIAL_COMMUNICATIONS_EMAILCOMPOSITIONACTIVITY_H_
 
-#include <ChilliSource/Core/Activity.h>
+#include <ChilliSource/Core/Main/Activity.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 #include <ChilliSource/Core/Main/GenericEvent.h>
 #include <vector>

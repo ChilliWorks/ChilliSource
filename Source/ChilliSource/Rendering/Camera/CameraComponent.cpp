@@ -7,7 +7,7 @@
 *
 */
 
-#include <ChilliSource/Rendering/Components/CameraComponent.h>
+#include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Core/Main/Screen.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Entity/Entity.h>

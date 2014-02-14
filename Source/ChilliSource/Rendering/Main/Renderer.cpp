@@ -7,19 +7,19 @@
  *
  */
 
-#include <ChilliSource/Rendering/Renderer.h>
+#include <ChilliSource/Rendering/Main/Renderer.h>
 #include <ChilliSource/Rendering/Main/RenderSystem.h>
 
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Rendering/Components/RenderComponent.h>
-#include <ChilliSource/Rendering/Components/CameraComponent.h>
+#include <ChilliSource/Rendering/Main/RenderComponent.h>
+#include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
-#include <ChilliSource/Rendering/RendererSortPredicates.h>
-#include <ChilliSource/Rendering/CullingPredicates.h>
-#include <ChilliSource/Rendering/MaterialFactory.h>
+#include <ChilliSource/Rendering/Main/RendererSortPredicates.h>
+#include <ChilliSource/Rendering/Main/CullingPredicates.h>
+#include <ChilliSource/Rendering/Material/MaterialFactory.h>
 
 #include <ChilliSource/Core/Main/Application.h>
 #include <ChilliSource/Core/Math/ShapeIntersection.h>

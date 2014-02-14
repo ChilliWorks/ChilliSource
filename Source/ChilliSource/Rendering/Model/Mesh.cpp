@@ -8,8 +8,8 @@
  */
 
 #include <ChilliSource/Rendering/Model/Mesh.h>
-#include <ChilliSource/Rendering/SubMesh.h>
-#include <ChilliSource/Rendering/VertexLayouts.h>
+#include <ChilliSource/Rendering/Model/SubMesh.h>
+#include <ChilliSource/Rendering/Main/VertexLayouts.h>
 #include <ChilliSource/Rendering/Main/RenderSystem.h>
 #include <limits>
 #include <ChilliSource/Core/Math/Matrix4x4.h>

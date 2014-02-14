@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Networking/MoMetricsSystem.h>
+#include <ChilliSource/Networking/Metrics/MoMetricsSystem.h>
 
 #include <ChilliSource/Core/Main/ApplicationEvents.h>
 #include <ChilliSource/Core/Main/Application.h>

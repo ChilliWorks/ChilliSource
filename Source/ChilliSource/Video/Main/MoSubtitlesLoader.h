@@ -13,7 +13,7 @@
 #include <ChilliSource/Video/ForwardDeclarations.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Core/JSON/json.h>
-#include <ChilliSource/Video/Subtitles.h>
+#include <ChilliSource/Video/Main/Subtitles.h>
 
 namespace moFlo
 {

@@ -7,7 +7,7 @@
 //
 
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
-#include <ChilliSource/Core/Main/ComponentFactory.h>
+#include <ChilliSource/Core/Entity/ComponentFactory.h>
 
 #include <ChilliSource/Audio/3D/AudioComponentFactory.h>
 #include <ChilliSource/Audio/3D/AudioComponent.h>

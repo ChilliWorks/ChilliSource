@@ -9,10 +9,10 @@
 #include <ChilliSource/Rendering/GUI/ImageView.h>
 
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
-#include <ChilliSource/Rendering/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Rendering/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Main/CanvasRenderer.h>
 
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Main/Screen.h>

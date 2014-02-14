@@ -7,8 +7,8 @@
  *
  */
 
-#include <ChilliSource/Video/MoSubtitlesLoader.h>
-#include <ChilliSource/Video/Subtitles.h>
+#include <ChilliSource/Video/Main/MoSubtitlesLoader.h>
+#include <ChilliSource/Video/Main/Subtitles.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/File/FileStream.h>

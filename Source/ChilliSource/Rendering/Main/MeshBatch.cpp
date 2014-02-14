@@ -7,9 +7,9 @@
  *
  */
 
-#include <ChilliSource/Rendering/Components/StaticMeshComponent.h>
-#include <ChilliSource/Rendering/SubMesh.h>
-#include <ChilliSource/Rendering/MeshBatch.h>
+#include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
+#include <ChilliSource/Rendering/Model/SubMesh.h>
+#include <ChilliSource/Rendering/Main/MeshBatch.h>
 #include <ChilliSource/Rendering/Main/MeshBuffer.h>
 #include <ChilliSource/Rendering/Main/RenderSystem.h>
 

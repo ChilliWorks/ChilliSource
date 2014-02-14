@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Rendering/XMLSpriteSheetLoader.h>
+#include <ChilliSource/Rendering/Sprite/XMLSpriteSheetLoader.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 
 #include <ChilliSource/Core/XML/XMLUtils.h>

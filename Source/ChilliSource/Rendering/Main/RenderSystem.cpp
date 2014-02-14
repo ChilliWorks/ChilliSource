@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Rendering/DynamicSpriteBatcher.h>
+#include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 #include <ChilliSource/Rendering/Main/RenderSystem.h>
 #include <ChilliSource/Rendering/Main/RenderComponentFactory.h>
 

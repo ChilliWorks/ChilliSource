@@ -6,9 +6,9 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Rendering/CullingPredicates.h>
-#include <ChilliSource/Rendering/Components/CameraComponent.h>
-#include <ChilliSource/Rendering/Components/RenderComponent.h>
+#include <ChilliSource/Rendering/Main/CullingPredicates.h>
+#include <ChilliSource/Rendering/Camera/CameraComponent.h>
+#include <ChilliSource/Rendering/Main/RenderComponent.h>
 
 namespace moFlo
 {

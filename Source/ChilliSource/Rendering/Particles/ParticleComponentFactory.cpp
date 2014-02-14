@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Rendering/MaterialManager.h>
+#include <ChilliSource/Rendering/Material/MaterialManager.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 
 #include <ChilliSource/Rendering/Particles/ParticleComponent.h>

@@ -10,7 +10,7 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <ChilliSource/Rendering/SpriteSheetLoader.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheetLoader.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 
 #include <ChilliSource/Core/Main/Application.h>

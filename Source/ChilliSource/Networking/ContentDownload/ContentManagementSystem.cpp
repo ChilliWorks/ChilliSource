@@ -6,7 +6,7 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Networking/ContentDownloading/ContentManagementSystem.h>
+#include <ChilliSource/Networking/ContentDownload/ContentManagementSystem.h>
 
 #include <ChilliSource/Core/File/TweakableConstants.h>
 #include <ChilliSource/Core/Cryptographic/HashMD5.h>

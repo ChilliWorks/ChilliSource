@@ -7,7 +7,7 @@
  *
  */
 
-#include "MeshDescriptor.h"
+#include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 
 namespace moFlo
 {

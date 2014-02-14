@@ -7,9 +7,9 @@
  *
  */
 
-#include <ChilliSource/Rendering/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Main/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Material/Material.h>
-#include <ChilliSource/Rendering/MaterialFactory.h>
+#include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Main/RenderSystem.h>
 
 #include <ChilliSource/Core/Main/Screen.h>

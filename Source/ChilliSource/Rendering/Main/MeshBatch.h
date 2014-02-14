@@ -11,7 +11,7 @@
 #define _MO_FLO_RENDERING_MESH_BATCH_H_
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/VertexLayouts.h>
+#include <ChilliSource/Rendering/Main/VertexLayouts.h>
 
 namespace moFlo
 {

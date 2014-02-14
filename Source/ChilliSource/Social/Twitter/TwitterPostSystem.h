@@ -12,8 +12,8 @@
 
 #include <ChilliSource/Core/Main/FastDelegate.h>
 #include <ChilliSource/Core/System/System.h>
-#include <ChilliSource/Networking/HttpConnectionSystem.h>
-#include <ChilliSource/Networking/OAuthSystem.h>
+#include <ChilliSource/Networking/HTTP/HttpConnectionSystem.h>
+#include <ChilliSource/Networking/Main/OAuthSystem.h>
 #include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
 
 namespace moFlo

@@ -9,7 +9,7 @@
 #ifndef _MO_FLO_PLATFORM_IOS_VIDEO_VIDEO_PLAYER_H_
 #define _MO_FLO_PLATFORM_IOS_VIDEO_VIDEO_PLAYER_H_
 
-#include <ChilliSource/Video/VideoPlayerActivity.h>
+#include <ChilliSource/Video/Main/VideoPlayerActivity.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Input/Gestures/Gestures.h>
 

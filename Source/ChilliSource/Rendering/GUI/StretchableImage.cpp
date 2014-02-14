@@ -9,8 +9,8 @@
 #include <ChilliSource/Rendering/GUI/StretchableImage.h>
 
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
-#include <ChilliSource/Rendering/SpriteSheetManager.h>
-#include <ChilliSource/Rendering/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/Main/CanvasRenderer.h>
 
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Main/Screen.h>

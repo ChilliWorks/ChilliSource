@@ -11,7 +11,7 @@
 #define _MO_FLO_RENDERING_CANVAS_H_
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/DynamicSpriteBatcher.h>
+#include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 
 #include <ChilliSource/Rendering/Font/Font.h>

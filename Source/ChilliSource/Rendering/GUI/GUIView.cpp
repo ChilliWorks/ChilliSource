@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Main/Screen.h>
 #include <ChilliSource/Core/BitOps.h>
 
-#include <ChilliSource/Rendering/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Main/CanvasRenderer.h>
 
 #include <algorithm>
 #include <limits>

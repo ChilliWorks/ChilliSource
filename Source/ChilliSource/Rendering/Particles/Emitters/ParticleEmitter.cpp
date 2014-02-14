@@ -10,8 +10,8 @@
 #include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
 #include <ChilliSource/Rendering/Particles/ParticleComponent.h>
 #include <ChilliSource/Rendering/Main/RenderSystem.h>
-#include <ChilliSource/Rendering/DynamicSpriteBatcher.h>
-#include <ChilliSource/Rendering/Components/CameraComponent.h>
+#include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
+#include <ChilliSource/Rendering/Camera/CameraComponent.h>
 
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/String/StringConverter.h>

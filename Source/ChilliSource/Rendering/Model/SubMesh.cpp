@@ -7,14 +7,14 @@
  *
  */
 
-#include <ChilliSource/Rendering/SubMesh.h>
-#include <ChilliSource/Rendering/VertexLayouts.h>
+#include <ChilliSource/Rendering/Model/SubMesh.h>
+#include <ChilliSource/Rendering/Main/VertexLayouts.h>
 #include <ChilliSource/Rendering/Main/RenderSystem.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 #include <limits>
-#include <ChilliSource/Rendering/SkinnedAnimationGroup.h>
-#include <ChilliSource/Rendering/SkinnedAnimation.h>
+#include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
+#include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 
 #ifdef DEBUG_STATS
 #include <ChilliSource/Core/Main/DebugStats.h>

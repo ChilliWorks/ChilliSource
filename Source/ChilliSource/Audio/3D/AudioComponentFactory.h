@@ -13,7 +13,7 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_COMPONENT_FACTORY_H_
 #define _MO_FLO_AUDIO_AUDIO_COMPONENT_FACTORY_H_
 
-#include <ChilliSource/Core/Main/ComponentFactory.h>
+#include <ChilliSource/Core/Entity/ComponentFactory.h>
 
 #include <ChilliSource/Audio/ForwardDeclarations.h>
 #include <ChilliSource/Audio/3D/AudioComponent.h>

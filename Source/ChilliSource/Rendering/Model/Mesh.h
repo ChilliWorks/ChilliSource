@@ -20,7 +20,7 @@
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 #include <ChilliSource/Core/Math/Shapes.h>
-#include <ChilliSource/Rendering/Skeleton.h>
+#include <ChilliSource/Rendering/Model/Skeleton.h>
 
 namespace moFlo
 {

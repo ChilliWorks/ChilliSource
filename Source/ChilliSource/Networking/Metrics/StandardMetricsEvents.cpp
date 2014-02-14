@@ -7,7 +7,7 @@
  *
  */
 
-#include "StandardMetricsEvents.h"
+#include <ChilliSource/Networking/Metrics/StandardMetricsEvents.h>
 
 #undef	METRICS_EVENT
 #undef _MOFLOW_NETWORKING_STANDARDMETRICSEVENTS_H_

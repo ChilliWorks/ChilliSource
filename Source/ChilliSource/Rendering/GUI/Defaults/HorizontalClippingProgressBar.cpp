@@ -10,7 +10,7 @@
 #include <ChilliSource/Rendering/GUI/ImageView.h>
 
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
-#include <ChilliSource/Rendering/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 

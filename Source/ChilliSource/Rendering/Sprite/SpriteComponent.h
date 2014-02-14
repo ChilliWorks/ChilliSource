@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_RENDERING_SPRITE_COMPONENT_H_
 #define _MO_FLO_RENDERING_SPRITE_COMPONENT_H_
 
-#include <ChilliSource/Rendering/Components/RenderComponent.h>
+#include <ChilliSource/Rendering/Main/RenderComponent.h>
 
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Main/Colour.h>

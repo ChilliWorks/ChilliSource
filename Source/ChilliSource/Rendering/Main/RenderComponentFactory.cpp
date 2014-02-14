@@ -12,9 +12,9 @@
 #include <ChilliSource/Rendering/Main/RenderSystem.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
-#include <ChilliSource/Rendering/Components/CameraComponent.h>
-#include <ChilliSource/Rendering/Components/StaticMeshComponent.h>
-#include <ChilliSource/Rendering/Components/AnimatedMeshComponent.h>
+#include <ChilliSource/Rendering/Camera/CameraComponent.h>
+#include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
+#include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>

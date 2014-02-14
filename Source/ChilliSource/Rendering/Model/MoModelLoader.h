@@ -13,10 +13,10 @@
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
-#include <ChilliSource/Rendering/MeshManager.h>
+#include <ChilliSource/Rendering/Model/MeshManager.h>
 #include <ChilliSource/Core/Math/Vector3.h>
-#include <ChilliSource/Rendering/VertexDeclaration.h>
-#include <ChilliSource/Rendering/MeshDescriptor.h>
+#include <ChilliSource/Rendering/Main/VertexDeclaration.h>
+#include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 
 namespace moFlo
 {

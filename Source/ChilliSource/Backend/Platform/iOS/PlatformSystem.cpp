@@ -33,13 +33,13 @@
 #include <ChilliSource/Platform/iOS/NSString+MD5Addition.h>
 #include <ChilliSource/Platform/iOS/UIDevice+IdentifierAddition.h>
 
-#include <ChilliSource/Rendering/Renderer.h>
-#include <ChilliSource/Rendering/FontLoader.h>
-#include <ChilliSource/Rendering/SpriteSheetLoader.h>
-#include <ChilliSource/Rendering/XMLSpriteSheetLoader.h>
-#include <ChilliSource/Rendering/MaterialLoader.h>
-#include <ChilliSource/Rendering/MaterialFactory.h>
-#include <ChilliSource/Rendering/ComponentUpdaters/AnimatedMeshComponentUpdater.h>
+#include <ChilliSource/Rendering/Main/Renderer.h>
+#include <ChilliSource/Rendering/Font/FontLoader.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheetLoader.h>
+#include <ChilliSource/Rendering/Sprite/XMLSpriteSheetLoader.h>
+#include <ChilliSource/Rendering/Material/MaterialLoader.h>
+#include <ChilliSource/Rendering/Material/MaterialFactory.h>
+#include <ChilliSource/Rendering/Model/AnimatedMeshComponentUpdater.h>
 
 #include <ChilliSource/Audio/Main/AudioPlayer.h>
 #include <ChilliSource/Audio/Main/AudioLoader.h>

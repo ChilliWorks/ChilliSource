@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Rendering/SkinnedAnimationManager.h>
+#include <ChilliSource/Rendering/Model/SkinnedAnimationManager.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Core/Main/Application.h>
 

@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAY_GOOGLEPLAYIAPSYSTEM_H_
 #define _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAY_GOOGLEPLAYIAPSYSTEM_H_
 
-#include <ChilliSource/Networking/IAPSystem.h>
+#include <ChilliSource/Networking/IAP/IAPSystem.h>
 
 #include <ChilliSource/Platform/Android/GooglePlay/GooglePlayIAPJavaInterface.h>
 

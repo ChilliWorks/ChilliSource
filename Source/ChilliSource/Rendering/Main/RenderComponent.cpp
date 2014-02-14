@@ -10,7 +10,7 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <ChilliSource/Rendering/Components/RenderComponent.h>
+#include <ChilliSource/Rendering/Main/RenderComponent.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 

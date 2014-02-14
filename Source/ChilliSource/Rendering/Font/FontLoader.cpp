@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Main/Application.h>
 #include <ChilliSource/Core/Main/Utils.h>
 
-#include <ChilliSource/Rendering/FontLoader.h>
+#include <ChilliSource/Rendering/Font/FontLoader.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 
 namespace moFlo

@@ -7,8 +7,8 @@
  *
  */
 
-#include <ChilliSource/Rendering/MoAnimLoader.h>
-#include <ChilliSource/Rendering/SkinnedAnimation.h>
+#include <ChilliSource/Rendering/Model/MoAnimLoader.h>
+#include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Core/Main/Application.h>

@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Core/WebViewActivity.h>
+#include <ChilliSource/Web/Main/WebViewActivity.h>
 
 namespace moFlo
 {

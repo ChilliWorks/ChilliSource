@@ -28,16 +28,16 @@
 #include <ChilliSource/Platform/Android/Social/Communications/SMSCompositionActivity.h>
 #include <ChilliSource/Platform/Android/Social/Communications/ContactInformationProvider.h>
 
-#include <ChilliSource/Networking/IAPSystem.h>
+#include <ChilliSource/Networking/IAP/IAPSystem.h>
 
 #include <ChilliSource/Rendering/Main/RenderSystem.h>
-#include <ChilliSource/Rendering/Renderer.h>
-#include <ChilliSource/Rendering/SpriteSheetLoader.h>
-#include <ChilliSource/Rendering/XMLSpriteSheetLoader.h>
-#include <ChilliSource/Rendering/MaterialLoader.h>
- #include <ChilliSource/Rendering/MaterialFactory.h>
-#include <ChilliSource/Rendering/FontLoader.h>
-#include <ChilliSource/Rendering/ComponentUpdaters/AnimatedMeshComponentUpdater.h>
+#include <ChilliSource/Rendering/Main/Renderer.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheetLoader.h>
+#include <ChilliSource/Rendering/Sprite/XMLSpriteSheetLoader.h>
+#include <ChilliSource/Rendering/Material/MaterialLoader.h>
+ #include <ChilliSource/Rendering/Material/MaterialFactory.h>
+#include <ChilliSource/Rendering/Font/FontLoader.h>
+#include <ChilliSource/Rendering/Model/AnimatedMeshComponentUpdater.h>
 
 #include <ChilliSource/Core/Main/Utils.h>
 #include <ChilliSource/Core/File/FileSystem.h>

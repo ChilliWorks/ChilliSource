@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Rendering/SkinnedAnimation.h>
+#include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 
 namespace moFlo
 {

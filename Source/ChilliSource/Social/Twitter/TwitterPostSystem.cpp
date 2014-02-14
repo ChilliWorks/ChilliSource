@@ -12,9 +12,9 @@
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 
 #ifdef TARGET_OS_IPHONE
-#include <ChilliSource/Platform/iOS/Social/Twitter/TwitterPostSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterPostSystem.h>
 #elif TARGET_ANDROID
-#include <ChilliSource/Platform/Android/Social/Twitter/TwitterPostSystem.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterPostSystem.h>
 #endif
 
 namespace moFlo

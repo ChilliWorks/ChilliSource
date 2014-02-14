@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/Containers/HashedArray.h>
+#include <ChilliSource/Core/Container/HashedArray.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 
 namespace moFlo

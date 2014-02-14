@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_PLATFORM_IOS_IAPSYSTEM_
 #define _MOFLOW_PLATFORM_IOS_IAPSYSTEM_
 
-#include <ChilliSource/Networking/IAPSystem.h>
+#include <ChilliSource/Networking/IAP/IAPSystem.h>
 
 #include <ChilliSource/Platform/iOS/StoreKitIAPSystem.h>
 

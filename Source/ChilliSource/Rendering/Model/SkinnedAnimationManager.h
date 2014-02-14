@@ -11,7 +11,7 @@
 #define _MO_FLO_RENDERING_SKELETALANIMATIONMANAGER_H_
 
 #include <ChilliSource/Core/Resource/ResourceManager.h>
-#include <ChilliSource/Rendering/SkinnedAnimation.h>
+#include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 
 namespace moFlo
 {

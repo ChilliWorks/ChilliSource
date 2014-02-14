@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
-#include <ChilliSource/Rendering/SpriteSheetManager.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 
 namespace moFlo
 {
