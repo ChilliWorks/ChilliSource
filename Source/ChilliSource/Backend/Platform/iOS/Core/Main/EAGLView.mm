@@ -1,0 +1,118 @@
+//
+//  EAGLView.mm
+//  moFlo - iOS
+//
+//  Created by Scott Downie on 28/09/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
+
+#import <ChilliSource/Backend/Platform/iOS/Core/Main/EAGLView.h>
+#import <ChilliSource/Backend/Platform/iOS/Input/Pointer/TouchScreen.h>
+
+static EAGLView* gpGLView = nil;
+
+@implementation EAGLView
+
+@synthesize viewController;
+
++ (Class)layerClass 
+{
+    return [CAEAGLLayer class];
+}
+
+
+//----------------------------------------------------------
+/// Init With Frame
+///
+/// Create the view with the given bounds
+///
+/// @param Whether the application is landscape or portrait
+/// @param Backing colour mode
+/// @return The initialised view
+//----------------------------------------------------------
+-(id) init:(BOOL)landscape andColourMode:(EAGLColourMode::Mode)ineMode
+{
+    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+    
+    if(landscape)
+    {
+        std::swap(screenSize.width, screenSize.height);
+    }
+    
+	if(!(self = [super initWithFrame:CGRectMake(0, 0, screenSize.width, screenSize.height)])) 
+	{
+		return nil;
+	}
+	
+	self.multipleTouchEnabled = YES;
+    
+    NSString* strColourMode = nil;
+    switch(ineMode)
+    {
+        case EAGLColourMode::RGB565:
+            strColourMode = kEAGLColorFormatRGB565;
+            break;
+        case EAGLColourMode::RGBA8:
+            strColourMode = kEAGLColorFormatRGBA8;
+            break;
+    }
+	
+	// Get the layer
+	CAEAGLLayer* pLayer			= (CAEAGLLayer*)self.layer;
+	pLayer.opaque				= YES;
+	pLayer.drawableProperties	= [NSDictionary dictionaryWithObjectsAndKeys:
+								   [NSNumber numberWithBool:NO], 
+								   kEAGLDrawablePropertyRetainedBacking, 
+								   strColourMode, 
+								   kEAGLDrawablePropertyColorFormat, 
+								   nil];
+    
+	bool bIsiOS4_0 = ([[[UIDevice currentDevice] systemVersion] floatValue] >= 4.0f);
+    if(bIsiOS4_0)
+    {
+        f32 fScale = [UIScreen mainScreen].scale;
+        self.contentScaleFactor = fScale;
+        self.layer.contentsScale = fScale;
+    }
+    
+	gpGLView = self;
+	
+    return self;
+}
+
++(EAGLView*) sharedInstance
+{
+	return gpGLView;
+}
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event 
+{
+	for (UITouch* touch in touches)
+    {
+		TouchBegan(touch);
+	}
+	
+}
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	for (UITouch* touch in touches)
+    {
+		TouchEnded(touch);
+	}
+}
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	for (UITouch* touch in touches)
+    {
+		TouchEnded(touch);
+	}
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+	for (UITouch* touch in touches)
+    {
+		TouchMoved(touch);
+	}
+}
+
+@end

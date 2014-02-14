@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Platform/iOS/Social/Communications/ContactInformationProvider.h>
+#include <ChilliSource/Backend/Platform/iOS/Social/Communications/ContactInformationProvider.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 #include <AddressBook/AddressBook.h>

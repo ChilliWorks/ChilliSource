@@ -7,11 +7,11 @@
 //
 
 #include <ChilliSource/Core/Main/Application.h>
-#include <ChilliSource/Backend/Platform/iOS/EAGLView.h>
-#include <ChilliSource/Platform/iOS/HttpConnectionSystem.h>
-#include <ChilliSource/Platform/iOS/PlatformSystem.h>
-#include <ChilliSource/Platform/iOS/Social/Twitter/TwitterPostSystem.h>
-#include <ChilliSource/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/Main/EAGLView.h>
+#include <ChilliSource/Backend/Platform/iOS/Networking/HTTP/HttpConnectionSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/Main/PlatformSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterPostSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
 
 #include <UIKit/UIKit.h>
 

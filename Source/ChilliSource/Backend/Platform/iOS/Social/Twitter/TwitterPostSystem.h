@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Main/GenericEvent.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Networking/Main/OAuthSystem.h>
-#include <ChilliSource/Platform/iOS/HttpConnectionSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/Networking/HTTP/HttpConnectionSystem.h>
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 
 namespace moFlo

@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Platform/iOS/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookAuthentication.h>
 #include <ChilliSource/Core/File/LocalDataStore.h>
 
 #ifdef __IPHONE_6_0
