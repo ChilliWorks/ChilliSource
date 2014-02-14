@@ -11,7 +11,7 @@
 
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
-#include <ChilliSource/Rendering/Main/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 

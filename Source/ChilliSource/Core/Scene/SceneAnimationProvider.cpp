@@ -10,7 +10,7 @@
 
 #include <ChilliSource/Core/Scene/SceneAnimationProvider.h>
 #include <ChilliSource/Core/Scene/SceneAnimation.h>
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 
 namespace moFlo{
     namespace Core

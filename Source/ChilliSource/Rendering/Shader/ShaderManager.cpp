@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Rendering/Shader/ShaderManager.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
-#include <ChilliSource/Rendering/Main/RenderSystem.h>
+#include <ChilliSource/Rendering/Base/RenderSystem.h>
 
 namespace moFlo
 {

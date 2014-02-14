@@ -11,7 +11,7 @@
 #include <ChilliSource/Backend/Platform/iOS/Social/GameCentre/GameCentreDelegates.h>
 
 #include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 
 #include <Foundation/Foundation.h>
 #include <UIKit/UIKit.h>

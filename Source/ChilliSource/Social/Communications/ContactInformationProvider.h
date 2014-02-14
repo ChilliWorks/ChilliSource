@@ -11,7 +11,7 @@
 #define _MOFLO_SOCIAL_COMMUNICATIONS_CONTACTINFORMATIONPROVIDER_H_
 
 #include <ChilliSource/Core/String/UTF8String.h>
-#include <ChilliSource/Core/Main/InformationProvider.h>
+#include <ChilliSource/Core/Base/InformationProvider.h>
 
 namespace moFlo{
 

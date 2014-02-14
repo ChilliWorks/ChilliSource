@@ -11,9 +11,9 @@
  */
 
 #include <ChilliSource/Input/Gestures/Gestures.h>
-#include <ChilliSource/Input/Main/InputSystem.h>
+#include <ChilliSource/Input/Base/InputSystem.h>
 
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 
 namespace moFlo
 {

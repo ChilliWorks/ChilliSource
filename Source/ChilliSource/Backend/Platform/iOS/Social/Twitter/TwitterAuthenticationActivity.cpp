@@ -8,10 +8,10 @@
  */
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/Main/EAGLView.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 
 #include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Base/Screen.h>
 
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 

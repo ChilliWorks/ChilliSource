@@ -9,8 +9,8 @@
 
 #include <ChilliSource/Core/Scene/SceneDescription.h>
 
-#include <ChilliSource/Core/Main/Application.h>
-#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/Entity/ComponentFactory.h>

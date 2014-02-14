@@ -11,7 +11,7 @@
 
 #include <ChilliSource/Rendering/GUI/Label.h>
 
-#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
 
 #include <ChilliSource/Input/Keyboard/VirtualKeyboard.h>
 

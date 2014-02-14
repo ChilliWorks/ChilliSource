@@ -10,12 +10,12 @@
 #ifndef _MO_FLO_RENDERING_SPRITE_COMPONENT_H_
 #define _MO_FLO_RENDERING_SPRITE_COMPONENT_H_
 
-#include <ChilliSource/Rendering/Main/RenderComponent.h>
+#include <ChilliSource/Rendering/Base/RenderComponent.h>
 
 #include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Core/Main/Colour.h>
-#include <ChilliSource/Core/Math/Shapes.h>
-#include <ChilliSource/Core/Main/AlignmentAnchors.h>
+#include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 
 namespace moFlo
 {

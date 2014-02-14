@@ -10,7 +10,7 @@
 #include <ChilliSource/Networking/ContentDownload/ContentDownloader.h>
 
 #include <ChilliSource/Core/System/System.h>
-#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
 
 namespace moFlo

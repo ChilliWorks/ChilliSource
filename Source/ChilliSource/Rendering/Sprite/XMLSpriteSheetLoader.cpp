@@ -11,7 +11,7 @@
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 
 #include <ChilliSource/Core/XML/XMLUtils.h>
-#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Base/Screen.h>
 
 namespace moFlo
 {

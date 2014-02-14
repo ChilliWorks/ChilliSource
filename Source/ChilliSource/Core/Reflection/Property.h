@@ -15,7 +15,7 @@
 
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
-#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 
 namespace moFlo
 {

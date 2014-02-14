@@ -10,8 +10,8 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <ChilliSource/Core/Main/Application.h>
-#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/Utils.h>
 
 #include <ChilliSource/Rendering/Font/FontLoader.h>
 #include <ChilliSource/Rendering/Font/Font.h>

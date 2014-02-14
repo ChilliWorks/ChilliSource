@@ -6,7 +6,7 @@
 //  Copyright 2010 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 #include <ChilliSource/Rendering/Shader/ShaderManager.h>
@@ -17,10 +17,10 @@
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
 #include <ChilliSource/Rendering/Material/MaterialLoader.h>
 #include <ChilliSource/Rendering/Material/Material.h>
-#include <ChilliSource/Rendering/Main/RenderCapabilities.h>
+#include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 
 #include <ChilliSource/Core/XML/XMLUtils.h>
-#include <ChilliSource/Core/Main/Colour.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace moFlo

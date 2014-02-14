@@ -12,9 +12,9 @@
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Entity/Component.h>
-#include <ChilliSource/Core/Main/Colour.h>
-#include <ChilliSource/Core/Main/Screen.h>
-#include <ChilliSource/Core/Math/Shapes.h>
+#include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 

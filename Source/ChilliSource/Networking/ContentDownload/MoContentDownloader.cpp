@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Networking/ContentDownload/MoContentDownloader.h>
 
-#include <ChilliSource/Core/Main/Device.h>
+#include <ChilliSource/Core/Base/Device.h>
 #include <ChilliSource/Core/JSON/json.h>
 
 namespace moFlo

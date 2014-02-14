@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_CORE_OBJECT_POOL_H
 #define _MOFLOW_CORE_OBJECT_POOL_H
 
-#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 
 #include <new>
 

@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Communications/SMSCompositionActivity.h>
 #include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/Main/EAGLView.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 
 namespace moFlo{
 	namespace iOSPlatform {

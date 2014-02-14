@@ -8,7 +8,7 @@
  */
 
 #include <ChilliSource/Core/Scene/Scene.h>
-#include <ChilliSource/Core/Main/Surface.h>
+#include <ChilliSource/Core/Base/Surface.h>
 
 #include <ChilliSource/Rendering/GUI/Window.h>
 

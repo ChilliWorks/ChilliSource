@@ -8,13 +8,13 @@
 
 #include <ChilliSource/Rendering/GUI/Window.h>
 
-#include <ChilliSource/Core/Main/ApplicationEvents.h>
+#include <ChilliSource/Core/Base/ApplicationEvents.h>
 
-#include <ChilliSource/Input/Main/InputSystem.h>
+#include <ChilliSource/Input/Base/InputSystem.h>
 
 #ifdef DEBUG_STATS
 #include <ChilliSource/Rendering/GUI/Defaults/DebugStatsView.h>
-#include <ChilliSource/Core/Main/DebugStats.h>
+#include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
 namespace moFlo

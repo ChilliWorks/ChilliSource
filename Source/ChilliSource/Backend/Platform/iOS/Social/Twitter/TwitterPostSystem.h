@@ -10,10 +10,10 @@
 #ifndef _MO_FLO_IOSPLATFORM_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
 #define _MO_FLO_IOSPLATFORM_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
 
-#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/System/System.h>
-#include <ChilliSource/Networking/Main/OAuthSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Networking/HTTP/HttpConnectionSystem.h>
+#include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 
 namespace moFlo

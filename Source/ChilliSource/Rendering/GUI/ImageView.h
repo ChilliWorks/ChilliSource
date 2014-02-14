@@ -13,7 +13,7 @@
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 
-#include <ChilliSource/Core/Math/Shapes.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
 
 namespace moFlo
 {

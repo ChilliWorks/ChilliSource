@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
-#include <ChilliSource/Core/Main/ApplicationDelegates.h>
+#include <ChilliSource/Core/Base/ApplicationDelegates.h>
 
 #include <vector>
 #include <queue>

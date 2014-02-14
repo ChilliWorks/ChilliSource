@@ -9,8 +9,8 @@
 #ifndef _MO_FLO_INPUT_VIRTUAL_KEYBOARD_H_
 #define _MO_FLO_INPUT_VIRTUAL_KEYBOARD_H_
 
-#include <ChilliSource/Core/Main/FastDelegate.h>
-#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 
 namespace moFlo

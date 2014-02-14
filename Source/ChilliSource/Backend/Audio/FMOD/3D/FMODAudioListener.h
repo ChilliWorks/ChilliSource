@@ -14,8 +14,8 @@
 #define _MO_FLO_AUDIO_FMOD_FMOD_AUDIO_LISTENER_H_
 
 #include <ChilliSource/Audio/3D/AudioListener.h>
-#include <ChilliSource/Backend/Audio/FMOD/Main/fmod.hpp>
-#include <ChilliSource/Backend/Audio/FMOD/Main/fmod_errors.h>
+#include <ChilliSource/Backend/Audio/FMOD/Base/fmod.hpp>
+#include <ChilliSource/Backend/Audio/FMOD/Base/fmod_errors.h>
 
 namespace moFlo
 {

@@ -9,9 +9,9 @@
 #ifndef MOFLOW_INPUT_ACCELEROMETER_H
 #define MOFLOW_INPUT_ACCELEROMETER_H
 
-#include <ChilliSource/Input/Main/InputDevice.h>
+#include <ChilliSource/Input/Base/InputDevice.h>
 #include <ChilliSource/Core/Math/Vector3.h>
-#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
 
 namespace moFlo
 {

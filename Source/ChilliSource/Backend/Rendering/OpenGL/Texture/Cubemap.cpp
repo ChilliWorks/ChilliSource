@@ -11,10 +11,10 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/CubemapManager.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
 
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/ImageFormatConverter.h>
 
-#include <ChilliSource/Rendering/Main/RenderCapabilities.h>
+#include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 
 namespace moFlo
 {

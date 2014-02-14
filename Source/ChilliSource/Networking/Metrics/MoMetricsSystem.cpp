@@ -9,11 +9,11 @@
 
 #include <ChilliSource/Networking/Metrics/MoMetricsSystem.h>
 
-#include <ChilliSource/Core/Main/ApplicationEvents.h>
-#include <ChilliSource/Core/Main/Application.h>
-#include <ChilliSource/Core/Main/Device.h>
-#include <ChilliSource/Core/Main/Application.h>
-#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/Base/ApplicationEvents.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/Device.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/Utils.h>
 
 namespace moFlo
 {

@@ -7,8 +7,8 @@
 //
 
 #include <ChilliSource/Core/Image/ETC1ImageProvider.h>
-#include <ChilliSource/Core/Main/Application.h>
-#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/Utils.h>
 
 const std::string ETC1Extension("pkm");
 

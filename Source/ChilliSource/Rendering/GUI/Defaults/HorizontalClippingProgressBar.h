@@ -9,7 +9,7 @@
 #ifndef _MOFLO_GUI_DEFAULTS_HORIZONTAL_CLIPPING_PROGRESS_BAR_H_
 #define _MOFLO_GUI_DEFAULTS_HORIZONTAL_CLIPPING_PROGRESS_BAR_H_
 
-#include <ChilliSource/Core/Math/Shapes.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/GUI/ProgressBar.h>
 
 namespace moFlo

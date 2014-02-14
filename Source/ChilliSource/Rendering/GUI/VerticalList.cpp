@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Rendering/GUI/VerticalList.h>
 
-#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Base/Screen.h>
 
 namespace moFlo
 {

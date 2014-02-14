@@ -11,8 +11,8 @@
 #define _MOFLO_CORE_ENTITYANIMATION_H_
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/Main/GenericAnimation.h>
-#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/Animation/GenericAnimation.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/Scene/SceneDescription.h>
 #include <ChilliSource/Core/Scene/SceneAnimation.h>
 

@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 #include <ChilliSource/Core/Notifications/LocalNotificationScheduler.h>
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 
 namespace moFlo
 {

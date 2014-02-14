@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Core/Image/ImageResourceProvider.h>
 #include <ChilliSource/Core/Image/Image.h>
-#include <ChilliSource/Core/Main/Colour.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace moFlo

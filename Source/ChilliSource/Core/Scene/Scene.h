@@ -11,9 +11,9 @@
 #define _MO_FLO_CORE_SCENE_H_
 
 #include <ChilliSource/Core/Entity/Entity.h>
-#include <ChilliSource/Core/Math/Shapes.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/Container/Octree.h>
-#include <ChilliSource/Core/Main/VolumeComponent.h>
+#include <ChilliSource/Core/Volume/VolumeComponent.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Input/ForwardDeclarations.h>

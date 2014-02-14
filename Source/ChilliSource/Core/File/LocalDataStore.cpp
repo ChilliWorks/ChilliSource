@@ -8,8 +8,8 @@
  *  Copyright 2011 Tag Games. All rights reserved.
  */
 
-#include <ChilliSource/Core/Main/Application.h>
-#include <ChilliSource/Core/Main/ApplicationEvents.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/File/LocalDataStore.h>
 #include <ChilliSource/Core/String/StringConverter.h>
 #include <ChilliSource/Core/Cryptographic/aes.h>

@@ -13,7 +13,7 @@
 #include <ChilliSource/Backend/Audio/FMOD/3D/FMODAudioComponentFactory.h>
 #include <ChilliSource/Backend/Audio/FMOD/3D/FMODAudioComponent.h>
 
-#include <ChilliSource/Audio/Main/AudioManager.h>
+#include <ChilliSource/Audio/Base/AudioManager.h>
 
 namespace moFlo
 {

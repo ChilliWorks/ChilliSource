@@ -6,7 +6,7 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Audio/Main/AudioSystem.h>
+#include <ChilliSource/Audio/Base/AudioSystem.h>
 
 #include <ChilliSource/Backend/Audio/FMOD/3D/FMODAudioComponent.h>
 

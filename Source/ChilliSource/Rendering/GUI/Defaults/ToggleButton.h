@@ -11,7 +11,7 @@
 
 #include <ChilliSource/Rendering/GUI/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/GUI/Button.h>
-#include <ChilliSource/Core/Math/Shapes.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
 
 #include <ChilliSource/Audio/ForwardDeclarations.h>
 

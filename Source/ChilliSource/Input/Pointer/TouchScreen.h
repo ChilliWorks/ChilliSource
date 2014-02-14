@@ -14,11 +14,11 @@
 #ifndef _MOFLO_INPUT_TOUCHSCREEN_H_
 #define _MOFLO_INPUT_TOUCHSCREEN_H_
 
-#include <ChilliSource/Input/Main/InputDevice.h>
-#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Input/Base/InputDevice.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
-#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
 
 #include <ChilliSource/Core/boost/thread/condition.hpp>
 

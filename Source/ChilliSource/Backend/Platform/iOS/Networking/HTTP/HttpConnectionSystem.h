@@ -11,7 +11,7 @@
 #define _MOFLO_PLATFORM_IOS_HTTPCONNECTIONSYSTEM_H_
 
 #include <ChilliSource/Core/System/SystemConcepts.h>
-#include <ChilliSource/Networking/HTTP/HttpConnectionSystem.h>
+#include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
 #include <vector>
 #import <Foundation/Foundation.h>
 

@@ -11,7 +11,7 @@
 #define _MOFLO_CORE_RESOURCEPROVIDER_H_
 
 #include <ChilliSource/Core/System/System.h>
-#include <ChilliSource/Core/Main/QueryableInterface.h>
+#include <ChilliSource/Core/Base/QueryableInterface.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 

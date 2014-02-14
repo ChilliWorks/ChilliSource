@@ -13,7 +13,7 @@
 
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
 
-#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
 
 namespace moFlo
 {

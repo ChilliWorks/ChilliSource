@@ -3,9 +3,9 @@
 #define _MO_FLO_INPUT_MOUSE_H_
 
 #include <ChilliSource/Input/ForwardDeclarations.h>
-#include <ChilliSource/Input/Main/InputDevice.h>
+#include <ChilliSource/Input/Base/InputDevice.h>
 
-#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
 
 namespace moFlo
 {

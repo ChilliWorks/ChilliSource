@@ -7,13 +7,13 @@
  *
  */
 
-#include <ChilliSource/Backend/Platform/iOS/Networking/HTTP/HttpConnectionSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Networking/Main/MoFloReachability.h>
+#include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/Networking/Base/MoFloReachability.h>
 
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/Threading/Thread.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 

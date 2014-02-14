@@ -13,7 +13,7 @@
 #include <ChilliSource/Rendering/Shader/Shader.h>
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 
-#include <ChilliSource/Core/Main/Colour.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 #include <ChilliSource/Core/File/FileSystem.h>

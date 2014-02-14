@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Rendering/Model/MeshManager.h>
 #include <ChilliSource/Core/Math/Vector3.h>
-#include <ChilliSource/Rendering/Main/VertexDeclaration.h>
+#include <ChilliSource/Rendering/Base/VertexDeclaration.h>
 #include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 
 namespace moFlo

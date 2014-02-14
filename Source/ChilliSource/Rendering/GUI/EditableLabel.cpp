@@ -8,9 +8,9 @@
 
 #include <ChilliSource/Rendering/GUI/EditableLabel.h>
 
-#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Base/Screen.h>
 
-#include <ChilliSource/Rendering/Main/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
 namespace moFlo
 {

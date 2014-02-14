@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Rendering/GUI/GUIViewFactory.h>
 
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/GUI/GUI.h>
 
 #include <ChilliSource/Rendering/GUI/Defaults/HighlightButton.h>

@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Networking/HTTP/HttpConnectionSystem.h>
+#include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
 
 namespace moFlo
 {

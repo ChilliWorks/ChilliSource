@@ -10,10 +10,10 @@
 
 #include <ChilliSource/Core/String/StringConverter.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Main/Screen.h>
-#include <ChilliSource/Core/Main/BitOps.h>
+#include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Base/BitOps.h>
 
-#include <ChilliSource/Rendering/Main/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
 #include <algorithm>
 #include <limits>

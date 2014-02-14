@@ -10,7 +10,7 @@
 #define _MO_FLO_CORE_FACTORY_DISPENSER_H_
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/Main/QueryableInterface.h>
+#include <ChilliSource/Core/Base/QueryableInterface.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 

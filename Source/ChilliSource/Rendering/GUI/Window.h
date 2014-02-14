@@ -22,7 +22,7 @@
 #include <ChilliSource/Input/ForwardDeclarations.h>
 
 #include <ChilliSource/Core/Scene/Scene.h>
-#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Base/Screen.h>
 
 namespace moFlo
 {

@@ -10,10 +10,10 @@
 #ifndef _MO_FLO_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
 #define _MO_FLO_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
 
-#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/System/System.h>
-#include <ChilliSource/Networking/HTTP/HttpConnectionSystem.h>
-#include <ChilliSource/Networking/Main/OAuthSystem.h>
+#include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
+#include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
 #include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
 
 namespace moFlo

@@ -10,7 +10,7 @@
 #ifndef _MOFLOW_NETWORKING_HTTPCONNECTIONSYSTEM_H_
 #define _MOFLOW_NETWORKING_HTTPCONNECTIONSYSTEM_H_
 
-#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/System/System.h>
 

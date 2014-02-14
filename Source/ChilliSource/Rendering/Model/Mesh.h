@@ -11,15 +11,15 @@
 #define _MO_FLO_RENDERING_MESH_H_
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/Main/MeshBuffer.h>
+#include <ChilliSource/Rendering/Base/MeshBuffer.h>
 
 #include <ChilliSource/Core/Resource/Resource.h>
-#include <ChilliSource/Core/Main/Colour.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
-#include <ChilliSource/Core/Math/Shapes.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Model/Skeleton.h>
 
 namespace moFlo

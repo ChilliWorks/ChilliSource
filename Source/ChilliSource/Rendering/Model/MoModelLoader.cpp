@@ -11,7 +11,7 @@
 #include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Rendering/Model/SubMesh.h>
 
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 
 #include <stdexcept>
 #include <ChilliSource/Rendering/Model/MeshManager.h>

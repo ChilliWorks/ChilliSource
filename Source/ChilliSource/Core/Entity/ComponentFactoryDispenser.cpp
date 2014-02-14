@@ -12,7 +12,7 @@
 #include <ChilliSource/Audio/3D/AudioComponentFactory.h>
 #include <ChilliSource/Audio/3D/AudioComponent.h>
 
-#include <ChilliSource/Rendering/Main/RenderComponentFactory.h>
+#include <ChilliSource/Rendering/Base/RenderComponentFactory.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 
 namespace moFlo

@@ -16,9 +16,9 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Time/Timer.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/Main/FastDelegate.h>
-#include <ChilliSource/Core/Main/Surface.h>
-#include <ChilliSource/Core/Math/Shapes.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
+#include <ChilliSource/Core/Base/Surface.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
 
 #include <ChilliSource/Input/ForwardDeclarations.h>
 

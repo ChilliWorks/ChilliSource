@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Rendering/Model/SkinnedAnimationManager.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 
 
 namespace moFlo

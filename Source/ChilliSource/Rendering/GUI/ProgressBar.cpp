@@ -9,7 +9,7 @@
 #include <ChilliSource/Rendering/GUI/ProgressBar.h>
 
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 
 namespace moFlo
 {

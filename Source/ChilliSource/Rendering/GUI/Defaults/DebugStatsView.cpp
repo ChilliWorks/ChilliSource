@@ -12,8 +12,8 @@
 #include <ChilliSource/Rendering/GUI/Defaults/DebugStatsView.h>
 
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/Main/DebugStats.h>
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Debugging/Base/DebugStats.h>
+#include <ChilliSource/Core/Base/Application.h>
 
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Font/Font.h>

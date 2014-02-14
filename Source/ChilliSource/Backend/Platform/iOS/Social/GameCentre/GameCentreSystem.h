@@ -11,7 +11,7 @@
 #define _MO_FLO_IOS_PLATFORM_GAME_CENTRE_H_
 
 #include <ChilliSource/Core/System/System.h>
-#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/Container/WorkerQueue.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 

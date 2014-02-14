@@ -6,10 +6,10 @@
 //  Copyright (c) 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Core/Main/Application.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/Main/EAGLView.h>
-#include <ChilliSource/Backend/Platform/iOS/Networking/HTTP/HttpConnectionSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/Main/PlatformSystem.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
+#include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterPostSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
 

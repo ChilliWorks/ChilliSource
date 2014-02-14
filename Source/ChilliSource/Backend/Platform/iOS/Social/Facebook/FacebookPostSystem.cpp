@@ -14,7 +14,7 @@
 #ifdef __IPHONE_6_0
 #include <UIKit/UIKit.h>
 #include <Social/Social.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/Main/EAGLView.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookUtils.h>
     #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookUtils.h>
     #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookUtils.h>

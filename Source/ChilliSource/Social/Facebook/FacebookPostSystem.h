@@ -10,7 +10,7 @@
 #ifndef _MOFLO_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
 #define _MOFLO_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
 
-#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/JSON/json.h>
 

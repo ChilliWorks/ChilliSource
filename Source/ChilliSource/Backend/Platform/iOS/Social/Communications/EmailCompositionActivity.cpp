@@ -8,9 +8,9 @@
  */
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailCompositionActivity.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/Main/EAGLView.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace moFlo

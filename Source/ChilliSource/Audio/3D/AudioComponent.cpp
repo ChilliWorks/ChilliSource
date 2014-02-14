@@ -11,7 +11,7 @@
  */
 
 #include <ChilliSource/Audio/3D/AudioComponent.h>
-#include <ChilliSource/Audio/Main/AudioSystem.h>
+#include <ChilliSource/Audio/Base/AudioSystem.h>
 
 #include <ChilliSource/Core/Entity/Entity.h>
 

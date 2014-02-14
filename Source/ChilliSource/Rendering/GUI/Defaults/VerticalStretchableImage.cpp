@@ -10,10 +10,10 @@
 
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
-#include <ChilliSource/Rendering/Main/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Base/Screen.h>
 
 namespace moFlo
 {

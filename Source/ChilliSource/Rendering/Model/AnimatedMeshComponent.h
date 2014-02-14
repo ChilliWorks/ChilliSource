@@ -10,13 +10,13 @@
 #ifndef _MO_FLO_RENDERING_ANIMATED_MESH_COMPONENT_H_
 #define _MO_FLO_RENDERING_ANIMATED_MESH_COMPONENT_H_
 
-#include <ChilliSource/Rendering/Main/RenderComponent.h>
+#include <ChilliSource/Rendering/Base/RenderComponent.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/Main/FastDelegate.h>
-#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
 
 namespace moFlo
 {

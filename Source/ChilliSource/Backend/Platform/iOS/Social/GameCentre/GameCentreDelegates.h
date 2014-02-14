@@ -12,7 +12,7 @@
 #import <Foundation/Foundation.h>
 #import <GameKit/GameKit.h>
 #import <GameKit/GKTurnBasedMatch.h>
-#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
 
 typedef fastdelegate::FastDelegate0<> GKNotificationEventDelegate;
 typedef fastdelegate::FastDelegate0<> GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent;

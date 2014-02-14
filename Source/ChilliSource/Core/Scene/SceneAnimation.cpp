@@ -9,7 +9,7 @@
 //
 
 #include <ChilliSource/Core/Scene/SceneAnimation.h>
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Entity/EntityAnimationController.h>
 

@@ -12,7 +12,7 @@
  */
 
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
-#include <ChilliSource/Input/Main/InputSystem.h>
+#include <ChilliSource/Input/Base/InputSystem.h>
 #include <ChilliSource/Input/Accelerometer/Accelerometer.h>
 #include <algorithm>
 

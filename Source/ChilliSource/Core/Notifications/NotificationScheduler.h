@@ -10,8 +10,8 @@
 #define _MO_FLO_CORE_NOTIFICATION_SCHEDULER_H_
 
 #include <ChilliSource/Core/Container/ParamDictionary.h>
-#include <ChilliSource/Core/Main/GenericEvent.h>
-#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
 #include <queue>
 

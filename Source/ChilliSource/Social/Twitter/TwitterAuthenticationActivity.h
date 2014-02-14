@@ -10,8 +10,8 @@
 #ifndef _MO_FLO_SOCIAL_TWITTER_TWITTER_AUTHENTICATION_ACTIVITY_H_
 #define _MO_FLO_SOCIAL_TWITTER_TWITTER_AUTHENTICATION_ACTIVITY_H_
 
-#include <ChilliSource/Core/Main/Activity.h>
-#include <ChilliSource/Core/Main/GenericEvent.h>
+#include <ChilliSource/Core/Base/Activity.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
 
 namespace moFlo
 {

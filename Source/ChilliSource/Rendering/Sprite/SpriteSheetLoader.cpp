@@ -13,9 +13,9 @@
 #include <ChilliSource/Rendering/Sprite/SpriteSheetLoader.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 
-#include <ChilliSource/Core/Main/Application.h>
-#include <ChilliSource/Core/Main/Utils.h>
-#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
 namespace moFlo
