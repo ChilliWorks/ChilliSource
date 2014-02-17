@@ -17,8 +17,6 @@
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
-#include <ChilliSource/Core/boost/filesystem.hpp>
-
 #include <iostream>
 
 namespace moFlo
@@ -257,16 +255,35 @@ namespace moFlo
             
             //get the path to the file
             std::string strPath, strName;
-            moFlo::Core::CStringUtils::SplitFilename(instrDestinationFilepath, strName, strPath);
+            Core::CStringUtils::SplitFilename(instrDestinationFilepath, strName, strPath);
             
             //create the output directory
             CreateDirectory(ineDestinationStorageLocation, strPath);
             
-            //try and copy the files
-            boost::filesystem::path SrcPath(strSrcPath);
-            boost::filesystem::path DstPath(GetStorageLocationDirectory(ineDestinationStorageLocation) + instrDestinationFilepath);
-            boost::filesystem::copy_file(SrcPath, DstPath, boost::filesystem::copy_option::overwrite_if_exists);
-            return DoesFileExist(Core::SL_CACHE, instrDestinationFilepath);
+            std::string strDstPath = GetStorageLocationDirectory(ineDestinationStorageLocation) + instrDestinationFilepath;
+            std::string strDstAtomicPath = strDstPath + ".tmp";
+            
+            NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
+            
+			NSString* pSrcPath = [[NSString alloc] initWithCString:strSrcPath.c_str() encoding:NSUTF8StringEncoding];
+            NSString* pDstPath = [[NSString alloc] initWithCString:strDstPath.c_str() encoding:NSUTF8StringEncoding];
+            NSString* pDstAtomicPath = [[NSString alloc] initWithCString:strDstAtomicPath.c_str() encoding:NSUTF8StringEncoding];
+            
+            NSURL* pDstURL = [NSURL URLWithString:[pDstPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            NSURL* pDstAtomicURL = [NSURL URLWithString:[pDstAtomicPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            
+            NSError* pCopyError = nil;
+            [[NSFileManager defaultManager] copyItemAtPath:pSrcPath toPath:pDstAtomicPath error:&pCopyError];
+    
+            NSError* pReplaceError = nil;
+            [[NSFileManager defaultManager] replaceItemAtURL:pDstURL withItemAtURL:pDstAtomicURL backupItemName:nil options:NSFileManagerItemReplacementUsingNewMetadataOnly resultingItemURL:nil error:&pReplaceError];
+            
+            [pSrcPath release];
+            [pDstPath release];
+            [pDstAtomicPath release];
+			[pPool release];
+            
+            return pCopyError == nil && pReplaceError == nil;
         }
         //--------------------------------------------------------------
         /// Copy Directory
