@@ -96,7 +96,7 @@ namespace moFlo{
 				break;
 
 			default :
-				assert(false);
+                FATAL_LOG("Cannot play animation with given mode");
 				break;
 		}
 

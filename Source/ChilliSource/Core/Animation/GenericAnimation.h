@@ -206,7 +206,6 @@ namespace moFlo
         /** set the number of desired bounces in the animation, calculates ratio of total distance against initial bounce */
         void SetNumBounces(u32 inudwBounces)
         {
-            assert(inudwBounces > 0 && "if overriding bounce animation, must have positive num bounces");
             mudwNumBounces = inudwBounces;
             
             for(int i=1; i < mudwNumBounces+1; ++i)
