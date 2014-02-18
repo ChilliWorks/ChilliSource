@@ -79,7 +79,7 @@ namespace moFlo
 				mpBusyMessage.hidden = NO;
 				mpBusyMessage.text = @"Contacting Twitter...";
 				mpBusyMessage.textColor = [UIColor whiteColor];
-				mpBusyMessage.textAlignment = UITextAlignmentCenter;
+				mpBusyMessage.textAlignment = NSTextAlignmentCenter;
 				[mpBaseView addSubview:mpBusyMessage];
 			}
 			
@@ -113,7 +113,7 @@ namespace moFlo
 				CGFloat fHeight = kfDefaultLabelPointHeight;
 				CGFloat fY = (kfDefaultPaddingPointSizeTop + ((kfDefaultButtonPointHeight / 2) - (kfDefaultLabelPointHeight / 2)));
 				mpPINLabel = [[UILabel alloc] initWithFrame:CGRectMake(mvAbsolutePositionTopLeft.x, fY, fWidth, fHeight)];
-				mpPINLabel.textAlignment = UITextAlignmentLeft;
+				mpPINLabel.textAlignment = NSTextAlignmentLeft;
 				mpPINLabel.textColor = [UIColor whiteColor];
 				mpPINLabel.backgroundColor = [UIColor clearColor];
 				mpPINLabel.text = @"PIN:";

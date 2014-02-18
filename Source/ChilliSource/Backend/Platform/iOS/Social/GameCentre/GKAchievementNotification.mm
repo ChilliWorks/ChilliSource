@@ -99,7 +99,7 @@
 		
         // create the text label
         UILabel *tTextLabel = [[UILabel alloc] initWithFrame:r1];
-        tTextLabel.textAlignment = UITextAlignmentCenter;
+        tTextLabel.textAlignment = NSTextAlignmentCenter;
         tTextLabel.backgroundColor = [UIColor clearColor];
         tTextLabel.textColor = [UIColor whiteColor];
         tTextLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:15.0f];
@@ -109,7 +109,7 @@
 
         // detail label
         UILabel *tDetailLabel = [[UILabel alloc] initWithFrame:r2];
-        tDetailLabel.textAlignment = UITextAlignmentCenter;
+        tDetailLabel.textAlignment = NSTextAlignmentCenter;
         tDetailLabel.adjustsFontSizeToFitWidth = YES;
         tDetailLabel.minimumFontSize = 10.0f;
         tDetailLabel.backgroundColor = [UIColor clearColor];

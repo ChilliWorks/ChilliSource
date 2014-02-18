@@ -10,9 +10,13 @@
 #define _MOFLO_PLATFORM_IOS_ICLOUDSYSTEM_H
 
 #include <ChilliSource/Networking/Cloud/CloudStorageSystem.h>
+
 #import <UIKit/UIKit.h>
+
 #include <ChilliSource/Backend/Platform/iOS/Networking/Cloud/iCloudSystem/MoFlowUIDocument.h>
 #include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
+
+#include <map>
 
 namespace moFlo
 {
