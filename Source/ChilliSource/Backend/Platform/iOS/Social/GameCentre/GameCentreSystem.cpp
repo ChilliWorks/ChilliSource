@@ -250,7 +250,7 @@ namespace moFlo
 				AuthenticateClient();
 				
 				//Spawn a new thread to handle the request processing
-				mRequestThread.Start(Task0(this, &CGameCentreSystem::ProcessRequestQueue));
+				mRequestThread = std::thread(std::bind(&CGameCentreSystem::ProcessRequestQueue, this));
 			}
 		}
 		//----------------------------------------------------------
@@ -603,7 +603,7 @@ namespace moFlo
 			//exceeds the limit notify the application that this request is borked
 			if(++inpRequest->mudwNumRequestAttempts <= kudwGameCentreRequestAttemptLimit || !mbIsGameCentreSupported)
 			{
-				mRequestQueue.Push(inpRequest, true);
+				mRequestQueue.push(inpRequest);
 			}
 			else
 			{
@@ -626,7 +626,8 @@ namespace moFlo
 			while(mbProcessRequests)
 			{
 				//This method will cause the thread to sleep if the queue is empty
-				IGameCentreRequest* pRequest = mRequestQueue.Pop(true);
+				IGameCentreRequest* pRequest = mRequestQueue.front();
+                mRequestQueue.pop();
 				
 				if(mudwNumOpenRequests <= kudwGameCentreMaxOpenRequests)
 				{
@@ -673,14 +674,14 @@ namespace moFlo
 				else
 				{
 					//Give up our time slice we are doing nothing
-					mRequestThread.Yield();
+                    std::this_thread::yield();
 				}
 			}
 			
 			//Purge the pool
 			[pool release];
 			
-			mRequestThread.Stop();
+			mRequestThread.join();
 		}
 		//---------------------------------------------------------------------
 		/// Process Leaderboard Info Request

@@ -14,10 +14,10 @@
 #ifndef _MOFLO_PLATFORM_WINDOWS_INPUTSYSTEM_H_
 #define _MOFLO_PLATFORM_WINDOWS_INPUTSYSTEM_H_
 
-#include <ChilliSource/Input/Main/InputSystem.h>
+#include <ChilliSource/Input/Base/InputSystem.h>
 
-#include <ChilliSource/Platform/Windows/Input/MouseWindows.h>
-#include <ChilliSource/Platform/Windows/Input/TouchscreenWindows.h>
+#include <ChilliSource/Backend/Platform/Windows/Input/MouseWindows.h>
+#include <ChilliSource/Backend/Platform/Windows/Input/TouchscreenWindows.h>
 
 namespace moFlo
 {

@@ -11,7 +11,7 @@
 #ifndef _MOFLOW_WINDOWSPLATFORM_APPLICATIONDELEGATES_H_
 #define _MOFLOW_WINDOWSPLATFORM_APPLICATIONDELEGATES_H_
 
-#include <ChilliSource/Core/Main/ApplicationDelegates.h>
+#include <ChilliSource/Core/Base/ApplicationDelegates.h>
 
 namespace moFlo
 {

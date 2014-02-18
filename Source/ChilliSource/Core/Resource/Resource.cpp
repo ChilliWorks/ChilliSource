@@ -22,8 +22,8 @@ namespace moFlo
 		///
 		/// Default
 		//-------------------------------------------------------
-		IResource::IResource(): mpOwningResMgr(NULL), mbIsHighRes(false), mbIsLoaded(false), mpMutex(new boost::mutex()),
-				mpCondition(new boost::condition()), meStorageLocation(SL_NONE), mstrFilename("")
+		IResource::IResource(): mpOwningResMgr(NULL), mbIsHighRes(false), mbIsLoaded(false), mpMutex(new std::mutex()),
+				mpCondition(new std::condition_variable()), meStorageLocation(SL_NONE), mstrFilename("")
 		{
 		}
 		//-------------------------------------------------------
@@ -128,7 +128,7 @@ namespace moFlo
 		//-------------------------------------------------------
 		void IResource::WaitTilLoaded()
 		{
-			boost::mutex::scoped_lock Lock(*mpMutex);
+            std::unique_lock<std::mutex> Lock(*mpMutex);
 
 			while(mbIsLoaded == false)
 			{

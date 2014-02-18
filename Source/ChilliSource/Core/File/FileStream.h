@@ -377,9 +377,6 @@ namespace moFlo
 			std::string mstrFilename;
 			std::fstream mFileStream;
 		};
-		
-		//define smart pointer
-		typedef SHARED_PTR<IFileStream> FileStreamPtr;
 	}
 }
 

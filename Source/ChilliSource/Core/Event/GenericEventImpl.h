@@ -10,7 +10,7 @@
 #ifndef _MOFLO_CORE_GENERICEVENTIMPL_H_
 #define _MOFLO_CORE_GENERICEVENTIMPL_H_
 
-#include <ChilliSource/Core/Threading/Thread.h>
+#include <thread>
 
 namespace moFlo
 {
@@ -122,7 +122,7 @@ namespace moFlo
         DelegateList maDelegates;
         
 #ifdef MOFLOW_THREAD_SAFE_EVENTS
-        CThread::RecursiveMutex mMutex;
+        std::thread::RecursiveMutex mMutex;
 #endif
         
         bool mbIsInvoking;
@@ -226,7 +226,7 @@ namespace moFlo
 	template<typename DelegateType> void IEventImpl<DelegateType>::AddListener(const DelegateType& inDelegate)
 	{
 #ifdef MOFLOW_THREAD_SAFE_EVENTS
-        CThread::RecursiveScopedLock lock(mMutex);
+        std::thread::RecursiveScopedLock lock(mMutex);
 #endif
 		
         DelegateListItr it = FindDelegate(maDelegates.begin(), maDelegates.end(), inDelegate);
@@ -259,7 +259,7 @@ namespace moFlo
 	template<typename DelegateType> void IEventImpl<DelegateType>::RemoveListener(const DelegateType& inDelegate)
 	{
 #ifdef MOFLOW_THREAD_SAFE_EVENTS
-        CThread::RecursiveScopedLock lock(mMutex);
+        std::thread::RecursiveScopedLock lock(mMutex);
 #endif
         
         DelegateListItr it = FindDelegate(maDelegates.begin(), maDelegates.end(), inDelegate);
@@ -283,7 +283,7 @@ namespace moFlo
     template<typename DelegateType> void IEventImpl<DelegateType>::RemoveAllListeners()
 	{
 #ifdef MOFLOW_THREAD_SAFE_EVENTS
-        CThread::RecursiveScopedLock lock(mMutex);
+        std::thread::RecursiveScopedLock lock(mMutex);
 #endif
         
         if(mbIsInvoking)
@@ -370,7 +370,7 @@ namespace moFlo
     template<typename DelegateType> void CEvent0Impl<DelegateType>::Invoke()
     {
 #ifdef MOFLOW_THREAD_SAFE_EVENTS
-        CThread::RecursiveScopedLock lock(this->mMutex);
+        std::thread::RecursiveScopedLock lock(this->mMutex);
 #endif
         
 		if(this->mbIsInvoking)
@@ -409,7 +409,7 @@ namespace moFlo
     template<typename DelegateType> template <typename P1Type> void CEvent1Impl<DelegateType>::Invoke(P1Type inP1)
     {
 #ifdef MOFLOW_THREAD_SAFE_EVENTS
-        CThread::RecursiveScopedLock lock(this->mMutex);
+        std::thread::RecursiveScopedLock lock(this->mMutex);
 #endif
         
 		if(this->mbIsInvoking)
@@ -448,7 +448,7 @@ namespace moFlo
     template<typename DelegateType> template <typename P1Type, typename P2Type> void CEvent2Impl<DelegateType>::Invoke(P1Type inP1, P2Type inP2)
     {
 #ifdef MOFLOW_THREAD_SAFE_EVENTS
-        CThread::RecursiveScopedLock lock(this->mMutex);
+        std::thread::RecursiveScopedLock lock(this->mMutex);
 #endif
         
 		if(this->mbIsInvoking)
@@ -487,7 +487,7 @@ namespace moFlo
     template<typename DelegateType> template <typename P1Type, typename P2Type, typename P3Type> void CEvent3Impl<DelegateType>::Invoke(P1Type inP1, P2Type inP2, P3Type inP3)
     {
 #ifdef MOFLOW_THREAD_SAFE_EVENTS
-        CThread::RecursiveScopedLock lock(this->mMutex);
+        std::thread::RecursiveScopedLock lock(this->mMutex);
 #endif
         
 		if(this->mbIsInvoking)
@@ -526,7 +526,7 @@ namespace moFlo
     template<typename DelegateType> template <typename P1Type, typename P2Type, typename P3Type, typename P4Type> void CEvent4Impl<DelegateType>::Invoke(P1Type inP1, P2Type inP2, P3Type inP3, P4Type inP4)
     {
 #ifdef MOFLOW_THREAD_SAFE_EVENTS
-        CThread::RecursiveScopedLock lock(this->mMutex);
+        std::thread::RecursiveScopedLock lock(this->mMutex);
 #endif
         
 		if(this->mbIsInvoking)

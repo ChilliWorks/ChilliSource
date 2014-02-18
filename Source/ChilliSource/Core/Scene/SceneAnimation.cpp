@@ -21,11 +21,11 @@ namespace moFlo
 		{
 			inStream->Read((s8*)&udwKeyframeCount,sizeof(u32));
             
-			afKeyframeTimes = SHARED_ARRAY_PTR<f32>(new f32[udwKeyframeCount]);
-			inStream->Read((s8*)&afKeyframeTimes[0],udwKeyframeCount * sizeof(f32));
+			afKeyframeTimes = SHARED_PTR<f32>(new f32[udwKeyframeCount], ArrayDeleter<f32>());
+			inStream->Read((s8*)afKeyframeTimes.get(),udwKeyframeCount * sizeof(f32));
             
-            aKeyframeValues = SHARED_ARRAY_PTR<EntityTransform>(new EntityTransform[udwKeyframeCount]);
-			inStream->Read((s8*)&aKeyframeValues[0],udwKeyframeCount * sizeof(EntityTransform));
+            aKeyframeValues = SHARED_PTR<EntityTransform>(new EntityTransform[udwKeyframeCount], ArrayDeleter<EntityTransform>());
+			inStream->Read((s8*)aKeyframeValues.get(),udwKeyframeCount * sizeof(EntityTransform));
             
 			u32 nNameLength;
 			inStream->Read((s8*)&nNameLength,sizeof(u32));
@@ -43,8 +43,8 @@ namespace moFlo
 			u32 nEntries = udwKeyframeCount;
 			inStream->Write((s8*)&nEntries,(s32)sizeof(u32));
             
-			inStream->Write((s8*)&afKeyframeTimes[0],(s32)(nEntries * sizeof(f32)));
-			inStream->Write((s8*)&aKeyframeValues[0],(s32)(nEntries * sizeof(EntityTransform)));
+			inStream->Write((s8*)afKeyframeTimes.get(),(s32)(nEntries * sizeof(f32)));
+			inStream->Write((s8*)aKeyframeValues.get(),(s32)(nEntries * sizeof(EntityTransform)));
 			
 			u32 nNameLength = strName.length();
 			inStream->Write((s8*)&nNameLength,sizeof(u32));

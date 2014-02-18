@@ -19,39 +19,38 @@
 #ifndef _TAG_FOUNDATION_H_
 #define _TAG_FOUNDATION_H_
 
-#include <ChilliSource/Core/boost/bind.hpp>
-#include <ChilliSource/Core/boost/tr1/memory.hpp>
-#include <ChilliSource/Core/boost/unordered_map.hpp>
-#include <ChilliSource/Core/boost/circular_buffer.hpp>
-#include <ChilliSource/Core/boost/static_assert.hpp>
-#include <ChilliSource/Core/boost/smart_ptr/shared_array.hpp>
-#include <ChilliSource/Core/boost/smart_ptr/shared_ptr.hpp>
-#include <ChilliSource/Core/boost/enable_shared_from_this.hpp>
-#include <ChilliSource/Core/boost/thread/future.hpp>
+//TODO: Better way to not include the headers from here but still be able to swap libs easily
+#include <memory>
 
-#define SHARED_PTR boost::shared_ptr
-#define SHARED_ARRAY_PTR boost::shared_array
-#define WEAK_PTR boost::weak_ptr
-#define WEAK_ARRAY_PTR boost::weak_array
-#define UNIQUE_PTR boost::scoped_ptr
-#define UNIQUE_ARRAY_PTR boost::scoped_array
-#define SHARED_PTR_CAST boost::static_pointer_cast
-#define ENABLE_SHARED_FROM_THIS boost::enable_shared_from_this
-#define SHARED_FUTURE boost::shared_future
-#define MAKE_SHARED_PTR boost::make_shared
-#define HASH_MAP boost::unordered_map
-#define RING_BUFFER boost::circular_buffer
+template <typename T> class ArrayDeleter
+{
+public:
+    void operator () (T* in_arrayObject) const
+    {
+        delete[] in_arrayObject;
+    }
+};
 
-#ifdef RDE_VECTOR
-#include <ChilliSource/RDESTL/vector.h>
-#define DYNAMIC_ARRAY rde::vector
-#else
+#define SHARED_PTR std::shared_ptr
+#define WEAK_PTR std::weak_ptr
+#define WEAK_ARRAY_PTR std::weak_array
+#define UNIQUE_PTR std::unique_ptr
+#define UNIQUE_ARRAY_PTR std::unique_array
+#define SHARED_PTR_CAST std::static_pointer_cast
+#define ENABLE_SHARED_FROM_THIS std::enable_shared_from_this
+#define SHARED_FUTURE std::shared_future
+#define MAKE_SHARED_PTR std::make_shared
+
+//TODO: Better way to not include the headers from here but still be able to swap libs easily
+#include <unordered_map>
+#define HASH_MAP std::unordered_map
+
+//TODO: Better way to not include the headers from here but still be able to swap libs easily
 #include <vector>
 #define DYNAMIC_ARRAY std::vector
-#endif
 
 #include <string>
-#include <boost/cstdint.hpp>
+#include <cstdint>
 
 typedef char         		s8;
 typedef int_least16_t		s16;
@@ -99,11 +98,6 @@ template <bool> struct CompileTimeChecker
 };
 template <> struct CompileTimeChecker<false>{};
 
-#define STATIC_ASSERT(EXPR, MSG)\
-{\
-    class ASSERT_ERROR_##MSG; \
-    (void)sizeof(CompileTimeChecker<(EXPR) != 0>((ASSERT_ERROR_##MSG)));\
-}
 
 //---Macros
 #define SAFE_DELETE(x)						{if(x) delete(x); x = NULL;}

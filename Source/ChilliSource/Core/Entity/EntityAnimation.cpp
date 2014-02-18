@@ -29,7 +29,7 @@ namespace moFlo
             
             if(mfOutTime < 0 && mudwFrameCount > 1)
             {
-                mfOutTime = inpAnimData->afKeyframeTimes[mudwFrameCount-1];
+                mfOutTime = inpAnimData->afKeyframeTimes.get()[mudwFrameCount-1];
             } 
             else if(inpAnimData->udwKeyframeCount == 1)
             {
@@ -38,7 +38,7 @@ namespace moFlo
             
             if(mfInTime < 0 && mudwFrameCount > 0)
             {
-                mfInTime = inpAnimData->afKeyframeTimes[0];
+                mfInTime = inpAnimData->afKeyframeTimes.get()[0];
             } 
             else
             {
@@ -82,7 +82,7 @@ namespace moFlo
         {
             if(inudwFrameNumber < mudwFrameCount)
             {
-                mfAnimPos = mpafFrameTimes[inudwFrameNumber] - mfInTime;
+                mfAnimPos = mpafFrameTimes.get()[inudwFrameNumber] - mfInTime;
                 UpdateInternal();
             }
         }
@@ -103,8 +103,8 @@ namespace moFlo
 			u32 highIndex = lowIndex + 1;
             std::min(highIndex, mudwFrameCount-1);
             
-            f32 fMin = mpafFrameTimes[lowIndex];
-            f32 fMax = mpafFrameTimes[highIndex];
+            f32 fMin = mpafFrameTimes.get()[lowIndex];
+            f32 fMax = mpafFrameTimes.get()[highIndex];
             f32 fProgression = ( mudwFrameCount == 1 ? 1.0f : CMathUtils::NormalisedRange(fAdjustedAnimPos, fMin, fMax) );
             
             fProgression = CMathUtils::Clamp(fProgression, 0.0f, 1.0f);
@@ -119,18 +119,18 @@ namespace moFlo
         {
             u32 udwFrame = inudwLowFrame + floor(infT + 0.5f);
             // Interpolate translation
-			CVector3 vLerpedTranslation =(mpasFrameValues)[udwFrame].vTranslation;
+			CVector3 vLerpedTranslation = mpasFrameValues.get()[udwFrame].vTranslation;
             
 			// Interpolate scale
-			CVector3 vLerpedScale =(mpasFrameValues)[udwFrame].vScale;
+			CVector3 vLerpedScale = mpasFrameValues.get()[udwFrame].vScale;
             
 			// Interpolate orientation
-			CQuaternion qLerpedOrientation = (mpasFrameValues)[udwFrame].qOrientation;
+			CQuaternion qLerpedOrientation = mpasFrameValues.get()[udwFrame].qOrientation;
             
             mpTarget->Transform().SetPositionScaleOrientation(vLerpedTranslation, vLerpedScale, qLerpedOrientation);
             
             //Interpolate Opacity
-            f32 fOpacity =(mpasFrameValues)[udwFrame].fOpacity;
+            f32 fOpacity = mpasFrameValues.get()[udwFrame].fOpacity;
             
             if(mpTarget->Transform().GetLocalOpacity() != fOpacity)
             {
@@ -141,18 +141,18 @@ namespace moFlo
         void CEntityAnimation::Lerp(u32 inudwLowFrame, u32 inudwHighFrame, f32 infT)
         {
             // Interpolate translation
-			CVector3 vLerpedTranslation = CMathUtils::Lerp(infT, (mpasFrameValues)[inudwLowFrame].vTranslation, (mpasFrameValues)[inudwHighFrame].vTranslation);
+			CVector3 vLerpedTranslation = CMathUtils::Lerp(infT, mpasFrameValues.get()[inudwLowFrame].vTranslation, mpasFrameValues.get()[inudwHighFrame].vTranslation);
             
 			// Interpolate scale
-			CVector3 vLerpedScale = CMathUtils::Lerp(infT, (mpasFrameValues)[inudwLowFrame].vScale, (mpasFrameValues)[inudwHighFrame].vScale);
+			CVector3 vLerpedScale = CMathUtils::Lerp(infT, mpasFrameValues.get()[inudwLowFrame].vScale, mpasFrameValues.get()[inudwHighFrame].vScale);
             
 			// Interpolate orientation
-			CQuaternion qLerpedOrientation = CQuaternion::Slerp((mpasFrameValues)[inudwLowFrame].qOrientation, (mpasFrameValues)[inudwHighFrame].qOrientation, infT);
+			CQuaternion qLerpedOrientation = CQuaternion::Slerp(mpasFrameValues.get()[inudwLowFrame].qOrientation, mpasFrameValues.get()[inudwHighFrame].qOrientation, infT);
             
             mpTarget->Transform().SetPositionScaleOrientation(vLerpedTranslation, vLerpedScale, qLerpedOrientation);
             
             //Interpolate Opacity
-            f32 fOpacity = CMathUtils::Lerp(infT, (mpasFrameValues)[inudwLowFrame].fOpacity, (mpasFrameValues)[inudwHighFrame].fOpacity);
+            f32 fOpacity = CMathUtils::Lerp(infT, mpasFrameValues.get()[inudwLowFrame].fOpacity, mpasFrameValues.get()[inudwHighFrame].fOpacity);
             
             if(mpTarget->Transform().GetLocalOpacity() != fOpacity)
             {

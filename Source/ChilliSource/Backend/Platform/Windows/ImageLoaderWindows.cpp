@@ -8,14 +8,12 @@
 *
 */
 
+#include <ChilliSource/Backend/Platform/Windows/ImageLoaderWindows.h>
+#include <ChilliSource/Backend/Platform/Windows/ImageLoading/PngImage.h>
 
-
-#include <ChilliSource/Platform/Windows/ImageLoaderWindows.h>
-#include <ChilliSource/Platform/Windows/ImageLoading/PngImage.h>
-#include <ChilliSource/Core/Main/Application.h>
-
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Image/Image.h>
 
 namespace moFlo

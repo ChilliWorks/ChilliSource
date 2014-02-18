@@ -13,8 +13,9 @@
 
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 #include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Core/boost/thread/condition.hpp>
 #include <ChilliSource/Core/File/FileSystem.h>
+
+#include <thread>
 
 namespace moFlo
 {
@@ -112,8 +113,8 @@ namespace moFlo
 			
 			IResourceManager* mpOwningResMgr;
 
-			SHARED_PTR<boost::condition> mpCondition;
-			SHARED_PTR<boost::mutex> mpMutex;
+			SHARED_PTR<std::condition_variable> mpCondition;
+			SHARED_PTR<std::mutex> mpMutex;
 		};
 	}
 }

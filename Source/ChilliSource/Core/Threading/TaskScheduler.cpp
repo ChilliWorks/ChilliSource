@@ -11,9 +11,9 @@
 
 namespace moFlo
 {
-	boost::threadpool::pool* CTaskScheduler::pThreadPool = NULL;
+	Core::ThreadPool* CTaskScheduler::pThreadPool = NULL;
 	
-	CThread::RecursiveMutex CTaskScheduler::MainThreadTaskMutex;
+	std::recursive_mutex CTaskScheduler::MainThreadTaskMutex;
 	DYNAMIC_ARRAY<CTaskScheduler::GenericTaskType> CTaskScheduler::MainThreadTasks;
 
 	//-------------------------------------------------
@@ -27,16 +27,7 @@ namespace moFlo
 	//------------------------------------------------
 	void CTaskScheduler::Init(u32 udwNumThreads)
 	{
-		pThreadPool = new boost::threadpool::pool(udwNumThreads);
-	}
-	//----------------------------------------------------
-	/// Get Num Active Tasks
-	///
-	/// @return Number of tasks currently being executed
-	//----------------------------------------------------
-	u32 CTaskScheduler::GetNumActiveTasks() 
-	{
-		return pThreadPool->active();
+		pThreadPool = new Core::ThreadPool(udwNumThreads);
 	}
 	//----------------------------------------------------
 	/// Get Num Pending Tasks
@@ -45,7 +36,7 @@ namespace moFlo
 	//----------------------------------------------------
 	u32 CTaskScheduler::GetNumPendingTasks() 
 	{
-		return pThreadPool->pending();
+		return pThreadPool->GetNumQueuedTasks();
 	}
 	//----------------------------------------------------
 	/// Clear
@@ -54,18 +45,7 @@ namespace moFlo
 	//----------------------------------------------------
 	void CTaskScheduler::Clear()
 	{
-		pThreadPool->clear();
-	}
-	//----------------------------------------------------
-	/// Wait
-	///
-	/// This will cause the main thread to block
-	/// until the queue is empty and all tasks have been
-	/// processed
-	//----------------------------------------------------
-	void CTaskScheduler::Wait()
-	{
-		pThreadPool->wait();
+		pThreadPool->ClearQueuedTasks();
 	}
 	//----------------------------------------------------
 	/// Execute Main Thread Tasks
@@ -75,7 +55,7 @@ namespace moFlo
 	//----------------------------------------------------
 	void CTaskScheduler::ExecuteMainThreadTasks()
 	{
-		CThread::RecursiveScopedLock Lock(MainThreadTaskMutex);
+		std::unique_lock<std::recursive_mutex> Lock(MainThreadTaskMutex);
 		
 		for (u32 i = 0; i < MainThreadTasks.size(); ++i)
 		{

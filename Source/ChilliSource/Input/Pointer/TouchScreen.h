@@ -20,7 +20,7 @@
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
-#include <ChilliSource/Core/boost/thread/condition.hpp>
+#include <thread>
 
 namespace moFlo
 {
@@ -125,7 +125,7 @@ namespace moFlo
 			Core::CMatrix4x4 mTouchTransformMatrix;
 			
 			u32 mudwOrientedScreenHeight;
-			boost::mutex mMutex;
+			std::mutex mMutex;
             
             bool mbIsEnabled;
 		};

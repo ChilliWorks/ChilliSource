@@ -15,6 +15,8 @@
 #include <ChilliSource/Core/Container/WorkerQueue.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 
+#include <thread>
+
 @class NSArray;
 
 namespace moFlo
@@ -329,8 +331,8 @@ namespace moFlo
 			
 		private:
 			
-			CThread mRequestThread;
-            Core::CWorkerQueue<IGameCentreRequest*> mRequestQueue;
+            std::thread mRequestThread;
+            Core::WorkerQueue<IGameCentreRequest*> mRequestQueue;
 			
 			LeaderboardsInfo mLeaderboardsInfo;
             

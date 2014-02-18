@@ -12,8 +12,8 @@
 
 #include <ChilliSource/Core/Base/FastDelegate.h>
 
-#include <ChilliSource/Core/boost/thread/condition.hpp>
-#include <ChilliSource/Core/boost/type_traits/remove_reference.hpp>
+#include <thread>
+#include <type_traits>
 
 namespace moFlo
 {
@@ -46,7 +46,7 @@ namespace moFlo
 			//The task thread should have locked the mutex by this point
 			//and the thread that scheduled the task should be the
 			//once calling this method
-			boost::mutex::scoped_lock Lock(mMutex);
+			std::unique_lock<std::mutex> Lock(mMutex);
 			
 			while(mudwCounter)
 			{
@@ -68,7 +68,7 @@ namespace moFlo
 			//The thread updating the counter needs
 			//exculsive access. If we have dependent tasks
 			//then multiple threads may need to access this
-			boost::mutex::scoped_lock Lock(mMutex);
+			std::unique_lock<std::mutex> Lock(mMutex);
 			
 			if((--mudwCounter) == 0)
 			{
@@ -78,8 +78,8 @@ namespace moFlo
 		
 	private:
 		
-		boost::condition mCondition;
-		boost::mutex mMutex;
+		std::condition_variable mCondition;
+		std::mutex mMutex;
 		
 		u32 mudwCounter;
 	};
@@ -124,7 +124,7 @@ namespace moFlo
 	template <typename T> struct Task1
 	{
 		fastdelegate::FastDelegate1<T> TaskDelegate;
-		typename boost::remove_reference<T>::type Arg1;
+		typename std::remove_reference<T>::type Arg1;
 		CWaitCondition* pWaitCondition;
 		
 		Task1(const fastdelegate::FastDelegate1<T>& inTaskDelegate, 
@@ -162,8 +162,8 @@ namespace moFlo
 	template <typename T1, typename T2> struct Task2
 	{
 		fastdelegate::FastDelegate2<T1, T2> TaskDelegate;
-		typename boost::remove_reference<T1>::type Arg1;
-		typename boost::remove_reference<T2>::type Arg2;
+		typename std::remove_reference<T1>::type Arg1;
+		typename std::remove_reference<T2>::type Arg2;
 		CWaitCondition* pWaitCondition;
 		
 		Task2(const fastdelegate::FastDelegate2<T1, T2>& inTaskDelegate, 
@@ -201,9 +201,9 @@ namespace moFlo
 	template <typename T1, typename T2, typename T3> struct Task3
 	{
 		fastdelegate::FastDelegate3<T1, T2, T3> TaskDelegate;
-		typename boost::remove_reference<T1>::type Arg1;
-		typename boost::remove_reference<T2>::type Arg2;
-		typename boost::remove_reference<T3>::type Arg3;
+		typename std::remove_reference<T1>::type Arg1;
+		typename std::remove_reference<T2>::type Arg2;
+		typename std::remove_reference<T3>::type Arg3;
 		CWaitCondition* pWaitCondition;
 		
 		Task3(const fastdelegate::FastDelegate3<T1, T2, T3>& inTaskDelegate, 
@@ -241,10 +241,10 @@ namespace moFlo
 	template <typename T1, typename T2, typename T3, typename T4> struct Task4
 	{
 		fastdelegate::FastDelegate4<T1, T2, T3, T4> TaskDelegate;
-		typename boost::remove_reference<T1>::type Arg1;
-		typename boost::remove_reference<T2>::type Arg2;
-		typename boost::remove_reference<T3>::type Arg3;
-		typename boost::remove_reference<T4>::type Arg4;
+		typename std::remove_reference<T1>::type Arg1;
+		typename std::remove_reference<T2>::type Arg2;
+		typename std::remove_reference<T3>::type Arg3;
+		typename std::remove_reference<T4>::type Arg4;
 		CWaitCondition* pWaitCondition;
 		
 		Task4(const fastdelegate::FastDelegate4<T1, T2, T3, T4>& inTaskDelegate,
@@ -282,11 +282,11 @@ namespace moFlo
 	template <typename T1, typename T2, typename T3, typename T4, typename T5> struct Task5
 	{
 		fastdelegate::FastDelegate5<T1, T2, T3, T4, T5> TaskDelegate;
-		typename boost::remove_reference<T1>::type Arg1;
-		typename boost::remove_reference<T2>::type Arg2;
-		typename boost::remove_reference<T3>::type Arg3;
-		typename boost::remove_reference<T4>::type Arg4;
-        typename boost::remove_reference<T5>::type Arg5;
+		typename std::remove_reference<T1>::type Arg1;
+		typename std::remove_reference<T2>::type Arg2;
+		typename std::remove_reference<T3>::type Arg3;
+		typename std::remove_reference<T4>::type Arg4;
+        typename std::remove_reference<T5>::type Arg5;
 		CWaitCondition* pWaitCondition;
 		
 		Task5(const fastdelegate::FastDelegate4<T1, T2, T3, T4, T5>& inTaskDelegate,

@@ -14,7 +14,9 @@
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
 #include <ChilliSource/Input/Base/InputSystem.h>
 #include <ChilliSource/Input/Accelerometer/Accelerometer.h>
+
 #include <algorithm>
+#include <thread>
 
 namespace moFlo
 {
@@ -78,7 +80,7 @@ namespace moFlo
         //-----------------------------------------------------------
         void ITouchScreen::FlushBufferedInput()
         {
-        	boost::mutex::scoped_lock Lock(mMutex);
+        	std::unique_lock<std::mutex> Lock(mMutex);
 
         	for(TouchListItr pTouch = mBufferedTouches.begin(); pTouch != mBufferedTouches.end(); ++pTouch)
             {
@@ -120,7 +122,7 @@ namespace moFlo
 			NewTouch.TimeStamp = inTimeStamp;
             NewTouch.eType = TOUCH_BEGAN;
 
-            boost::mutex::scoped_lock Lock(mMutex);
+            std::unique_lock<std::mutex> Lock(mMutex);
             mOpenTouches.push_back(NewTouch);
             mBufferedTouches.push_back(NewTouch);
 
@@ -148,7 +150,7 @@ namespace moFlo
 					NewTouch.vLocation = TransformedPosition2;
                     pTouch->vLocation = TransformedPosition2;
 
-                    boost::mutex::scoped_lock Lock(mMutex);
+                    std::unique_lock<std::mutex> Lock(mMutex);
                     mBufferedTouches.push_back(NewTouch);
 					return;
 				}
@@ -170,7 +172,7 @@ namespace moFlo
                     NewTouch.vPreviousLocation = pTouch->vPreviousLocation;
 					NewTouch.vLocation = pTouch->vPreviousLocation;
                     
-					boost::mutex::scoped_lock Lock(mMutex);
+					std::unique_lock<std::mutex>  Lock(mMutex);
 					mBufferedTouches.push_back(NewTouch);
                     mOpenTouches.erase(pTouch);
 					return;

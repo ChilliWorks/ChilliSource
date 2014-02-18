@@ -7,19 +7,19 @@
  *
  */
 
-#include <ChilliSource/Platform/Windows/ApplicationDelegatesWindows.h>
-#include <ChilliSource/Input/Main/InputSystem.h>
+#include <ChilliSource/Backend/Platform/Windows/ApplicationDelegatesWindows.h>
+#include <ChilliSource/Input/Base/InputSystem.h>
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Main/Application.h>
-#include <ChilliSource/Core/Main/ApplicationEvents.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/State/StateManager.h>
-#include <ChilliSource/Core/Main/PlatformSystem.h>
-#include <ChilliSource/Rendering/Main/RenderSystem.h>
-#include <ChilliSource/Rendering/Main/Renderer.h>
+#include <ChilliSource/Core/Base/PlatformSystem.h>
+#include <ChilliSource/Rendering/Base/RenderSystem.h>
+#include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 
 #ifdef DEBUG_STATS

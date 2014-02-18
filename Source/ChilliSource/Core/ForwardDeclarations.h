@@ -101,6 +101,8 @@ namespace moFlo
 		class IWFileStream;
 		class CFileSystemFactory;
         
+        typedef SHARED_PTR<IFileStream> FileStreamPtr;
+        
 		typedef SHARED_PTR<IResource> ResourcePtr;
 		typedef WEAK_PTR<IResource> ResourceWeakPtr;
 

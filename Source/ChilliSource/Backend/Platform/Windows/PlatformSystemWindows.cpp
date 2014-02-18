@@ -12,16 +12,16 @@
 
 #define WIN32_LEAN_AND_MEAN
 
-#include <ChilliSource/Platform/Windows/PlatformSystemWindows.h>
-#include <ChilliSource/Platform/Windows/ImageLoaderWindows.h>
-#include <ChilliSource/Platform/Windows/Input/InputSystemWindows.h>
-#include <ChilliSource/Platform/Windows/FileIO/FileSystemWindows.h>
-#include <ChilliSource/Platform/Windows/HttpConnectionSystemWindows.h>
-#include <ChilliSource/Platform/Windows/FMOD/FMODSystemWindows.h>
-#include <ChilliSource/Platform/Windows/FMOD/FMODAudioLoaderWindows.h>
+#include <ChilliSource/Backend/Platform/Windows/PlatformSystemWindows.h>
+#include <ChilliSource/Backend/Platform/Windows/ImageLoaderWindows.h>
+#include <ChilliSource/Backend/Platform/Windows/Input/InputSystemWindows.h>
+#include <ChilliSource/Backend/Platform/Windows/FileIO/FileSystemWindows.h>
+#include <ChilliSource/Backend/Platform/Windows/HttpConnectionSystemWindows.h>
+#include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
+#include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioLoader.h>
 
-#include <ChilliSource/Backend/Rendering/OpenGL/RenderSystem.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/RenderCapabilities.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
 
 #include <ChilliSource/Rendering/Material/MaterialLoader.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>

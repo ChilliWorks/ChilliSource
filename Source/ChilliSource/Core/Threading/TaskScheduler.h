@@ -10,10 +10,8 @@
 #ifndef _MO_FLO_CORE_TASK_SCHEDULER_H_
 #define _MO_FLO_CORE_TASK_SCHEDULER_H_
 
-#include <ChilliSource/Core/boost/threadpool.hpp>
-
+#include <ChilliSource/Core/Threading/ThreadPool.h>
 #include <ChilliSource/Core/Threading/Tasks.hpp>
-#include <ChilliSource/Core/Threading/Thread.h>
 
 namespace moFlo
 {
@@ -21,7 +19,7 @@ namespace moFlo
 	{
 	public:
 	
-		typedef boost::threadpool::task_func GenericTaskType;
+		typedef std::function<void()> GenericTaskType;
 		
 		//-------------------------------------------------
 		/// Init
@@ -44,7 +42,7 @@ namespace moFlo
 		//------------------------------------------------
 		static void ScheduleTask(const GenericTaskType& insTask)
 		{
-			pThreadPool->schedule(insTask);
+			pThreadPool->Schedule(insTask);
 		}
 		//------------------------------------------------
 		/// For Each
@@ -66,7 +64,7 @@ namespace moFlo
 			for(; inIt != inItEnd; ++inIt)
 			{
 				TArg Value = (*inIt);
-				pThreadPool->schedule(Task1<TArg>(inpSender, func, Value, inpWaitCondition));
+				pThreadPool->Schedule(Task1<TArg>(inpSender, func, Value, inpWaitCondition));
 			}
 		}
 		//------------------------------------------------
@@ -89,7 +87,7 @@ namespace moFlo
 			for(; inIt != inItEnd; ++inIt)
 			{
 				TArg Value = (*inIt);
-				pThreadPool->schedule(Task1<TArg>(inpSender, func, Value, inpWaitCondition));
+				pThreadPool->Schedule(Task1<TArg>(inpSender, func, Value, inpWaitCondition));
 			}
 		}
 		//----------------------------------------------------
@@ -100,15 +98,9 @@ namespace moFlo
 		//----------------------------------------------------
 		static void ScheduleMainThreadTask(const GenericTaskType& insTask)
 		{
-			CThread::RecursiveScopedLock Lock(MainThreadTaskMutex);
+			std::unique_lock<std::recursive_mutex> Lock(MainThreadTaskMutex);
 			MainThreadTasks.push_back(insTask);
 		}
-		//----------------------------------------------------
-		/// Get Num Active Tasks
-		///
-		/// @return Number of tasks currently being executed
-		//----------------------------------------------------
-		static u32 GetNumActiveTasks();
 		//----------------------------------------------------
 		/// Get Num Pending Tasks
 		///
@@ -122,14 +114,6 @@ namespace moFlo
 		//----------------------------------------------------
 		static void Clear();
 		//----------------------------------------------------
-		/// Wait
-		///
-		/// This will cause the main thread to block
-		/// until the queue is empty and all tasks have been
-		/// processed
-		//----------------------------------------------------
-		static void Wait();
-		//----------------------------------------------------
 		/// Execute Main Thread Tasks
 		///
 		/// Execute any tasks that have been scehduled
@@ -139,9 +123,9 @@ namespace moFlo
 		
 	private:
 	
-		static boost::threadpool::pool* pThreadPool;
+		static Core::ThreadPool* pThreadPool;
 		
-		static CThread::RecursiveMutex MainThreadTaskMutex;
+		static std::recursive_mutex MainThreadTaskMutex;
 		static DYNAMIC_ARRAY<GenericTaskType> MainThreadTasks;
 	};
 }

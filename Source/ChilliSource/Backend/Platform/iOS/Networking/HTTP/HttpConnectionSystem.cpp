@@ -11,14 +11,13 @@
 #include <ChilliSource/Backend/Platform/iOS/Networking/Base/MoFloReachability.h>
 
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Core/Threading/Thread.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
 #include <sstream>
-
+#include <thread>
 
 #ifdef DEBUG
 #include <sys/socket.h>
@@ -526,7 +525,8 @@ namespace moFlo
                         
                         if(!mbReceivedResponse)
                         {
-                            CThread::Sleep(kudwReadThreadSleepInMS);
+                            std::chrono::milliseconds sleepDuration(kudwReadThreadSleepInMS);
+                            std::this_thread::sleep_for(sleepDuration);
                         }
 					}
 					break;

@@ -135,7 +135,7 @@ namespace moFlo
             CDevice::Init(pPlatformSystem);
 
 			//Set up the task scheduler
-			CTaskScheduler::Init(Core::CDevice::GetNumCPUCores() * 4);
+			CTaskScheduler::Init(Core::CDevice::GetNumCPUCores() * 2);
 
 			//System setup
 			pPlatformSystem->CreateDefaultSystems(mSystems);

@@ -45,11 +45,11 @@ namespace  moFlo
             void SaveToBinaryFile(STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath);
             struct EntityAnimationDesc
 			{
-				std::string                         strTargetPath;
-				std::string                         strName;
-                u32                                 udwKeyframeCount;
-				SHARED_ARRAY_PTR<f32>               afKeyframeTimes;
-				SHARED_ARRAY_PTR<EntityTransform>	aKeyframeValues;
+				std::string strTargetPath;
+				std::string strName;
+                u32 udwKeyframeCount;
+				SHARED_PTR<f32> afKeyframeTimes;
+				SHARED_PTR<EntityTransform>	aKeyframeValues;
                 
 				void FromBinaryStream(const Core::FileStreamPtr & inStream);
 				void ToBinaryStream(const Core::FileStreamPtr & inStream);

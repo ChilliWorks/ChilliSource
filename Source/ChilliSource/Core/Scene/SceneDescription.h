@@ -32,9 +32,6 @@ namespace moFlo
 			void FromXml(rapidxml::xml_node<> * inpEl);
 		};
 		
-        typedef SHARED_ARRAY_PTR<EntityTransform>       EntityTransformArrayPtr;
-        typedef SHARED_ARRAY_PTR<const EntityTransform> EntityTransformArrayCPtr;
-        
 		class CSceneDesc : public IResource
 		{
 		public:

@@ -25,9 +25,9 @@ namespace moFlo
 		 */
 		struct EntityAnimationData
 		{
-            u32                                 udwKeyframeCount;
-			SHARED_ARRAY_PTR<f32>               afKeyframeTimes;
-			SHARED_ARRAY_PTR<EntityTransform>	aKeyframeValues;
+            u32 udwKeyframeCount;
+			SHARED_PTR<f32> afKeyframeTimes;
+			SHARED_PTR<EntityTransform>	aKeyframeValues;
 		};
 		
 		/*
@@ -60,12 +60,12 @@ namespace moFlo
             
             typedef fastdelegate::FastDelegate3<u32, u32, f32> InterpolateDelegate;
             
-            u32                                     mudwFrameCount;
-            const SHARED_ARRAY_PTR<f32>             mpafFrameTimes;		// Array of pointers to frame times
-			const SHARED_ARRAY_PTR<EntityTransform>	mpasFrameValues;	// Corresponding array of pointers to keyframes
-            f32                                     mfInTime;           // Float for the start of the animation
-            f32                                     mfOutTime;          // Float for the end of the animation
-            InterpolateDelegate                     mInterpolateDelegate;
+            u32 mudwFrameCount;
+            const SHARED_PTR<f32> mpafFrameTimes; // Array of pointers to frame times
+			const SHARED_PTR<EntityTransform> mpasFrameValues; // Corresponding array of pointers to keyframes
+            f32 mfInTime; // Float for the start of the animation
+            f32 mfOutTime; // Float for the end of the animation
+            InterpolateDelegate mInterpolateDelegate;
 		};
 		
 		typedef SHARED_PTR<CEntityAnimation> EntityAnimationPtr;
