@@ -16,10 +16,17 @@ using namespace moFlo::Input;
 using namespace moFlo::Core;
 using namespace moFlo::iOSPlatform;
 
+CInputSystem::CInputSystem()
+{
+    if(CAccelerometer::SupportedByDevice() == true)
+    {
+        mpAccelerometer = new CAccelerometer();
+    }
+}
 
 CInputSystem::~CInputSystem()
 {
-	
+	SAFE_DELETE(mpAccelerometer);
 }
 
 bool CInputSystem::IsA(Core::InterfaceIDType inInterfaceID) const
@@ -42,7 +49,7 @@ IInputDevice * CInputSystem::GetDeviceWithInterface(Core::InterfaceIDType inInte
 }
 IAccelerometer * CInputSystem::GetAccelerometerPtr()
 {
-	return &mAccelerometer;
+	return mpAccelerometer;
 }
 
 ITouchScreen * CInputSystem::GetTouchScreenPtr()

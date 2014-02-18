@@ -12,32 +12,41 @@
  */
 
 #include <ChilliSource/Backend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
-#import <UIKit/UIAccelerometer.h>
-
-moFloAccelerometerDelegate* gpDelegateInstance = nil;
-moFlo::iOSPlatform::CAccelerometer* gpAccelerometerInstance = NULL;
+#import <CoreMotion/CoreMotion.h>
 
 namespace moFlo
 {
 	namespace iOSPlatform
 	{
-        const f32 kfUpdateFrequency = 30.0f;
-        
         //----------------------------------------------------
         /// Constructor
         //----------------------------------------------------
         CAccelerometer::CAccelerometer()
-            : mbIsUpdating(false)
+        : mbIsUpdating(false)
         {
-            InitAccelerometer();
-			gpAccelerometerInstance = this;
+            m_motionManager = [[CMMotionManager alloc] init];
+            m_motionManager.accelerometerUpdateInterval = 0.033;
+        }
+        //-------------------------------------------------------
+        /// Supported By Device
+        //-------------------------------------------------------
+        bool CAccelerometer::SupportedByDevice()
+        {
+            if(NSClassFromString(@"CMMotionManager") == nil)
+                return false;
+            
+            CMMotionManager* manager = [[CMMotionManager alloc] init];
+            bool supported = manager.accelerometerAvailable;
+            [manager release];
+            
+            return supported;
         }
         //----------------------------------------------------
         /// Is A
         //----------------------------------------------------
         bool CAccelerometer::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == IAccelerometer::InterfaceID;
+            return inInterfaceID == IAccelerometer::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
         }
         //----------------------------------------------------
         /// Is Updating
@@ -51,10 +60,17 @@ namespace moFlo
         //----------------------------------------------------
         void CAccelerometer::StartUpdating()
         {
-            if (false == mbIsUpdating)
+            mbIsUpdating = true;
+            [m_motionManager startAccelerometerUpdates];
+        }
+        //----------------------------------------------------
+        /// Update
+        //----------------------------------------------------
+        void CAccelerometer::Update(f32 infDT)
+        {
+            if(mbIsUpdating)
             {
-                mbIsUpdating = true;
-                SetAccelerometerUpdateFrequency(kfUpdateFrequency);
+                mAccelerationUpdatedEvent.Invoke(GetAcceleration());
             }
         }
         //----------------------------------------------------
@@ -62,6 +78,7 @@ namespace moFlo
         //----------------------------------------------------
         const Core::CVector3& CAccelerometer::GetAcceleration() const
         {
+            mvAcceleration = Core::CVector3(m_motionManager.accelerometerData.acceleration.x, m_motionManager.accelerometerData.acceleration.y, m_motionManager.accelerometerData.acceleration.z);
             return mvAcceleration;
         }
         //----------------------------------------------------
@@ -69,68 +86,15 @@ namespace moFlo
         //----------------------------------------------------
         void CAccelerometer::StopUpdating()
         {
-            if (true == mbIsUpdating)
-            {
-                SetAccelerometerUpdateFrequency(0.0f);
-                mbIsUpdating = false;
-            }
-        }
-        //----------------------------------------------------
-        /// Stop Updating
-        //----------------------------------------------------
-        void CAccelerometer::SetAcceleration(const Core::CVector3& invDirection)
-        {
-            mvAcceleration = invDirection;
-            mAccelerationUpdatedEvent.Invoke(mvAcceleration);
+            mbIsUpdating = false;
+            [m_motionManager stopAccelerometerUpdates];
         }
         //----------------------------------------------------
         /// Destructor
         //----------------------------------------------------
         CAccelerometer::~CAccelerometer()
         {
+            [m_motionManager release];
         }
 	}
 }
-
-extern "C"
-{
-	void InitAccelerometer()
-	{
-		if (gpDelegateInstance == NULL || gpDelegateInstance == nil)
-        {
-			gpDelegateInstance = [[moFloAccelerometerDelegate alloc] init];
-		}
-	}
-	void SetAccelerometerUpdateFrequency(f32 infFrequency)
-	{
-		[gpDelegateInstance setUpdateFrequency:infFrequency];
-	}
-}
-
-@implementation moFloAccelerometerDelegate
-- (id) init
-{
-	if ((self = [super init]))
-    {
-		[[UIAccelerometer sharedAccelerometer] setDelegate:self];
-	}
-	return self;
-}
-- (void)setUpdateFrequency:(f32) frequency
-{
-	if (frequency <= 0.0f)
-    {
-		[[UIAccelerometer sharedAccelerometer] setUpdateInterval: 0.0f];
-	}
-    else
-    {
-		[[UIAccelerometer sharedAccelerometer] setUpdateInterval: 1.0f / frequency];
-	}
-	
-}
-- (void)accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration
-{
-	gpAccelerometerInstance->SetAcceleration(moFlo::Core::CVector3((f32)acceleration.x,(f32)acceleration.y,(f32)acceleration.z));
-}
-
-@end

@@ -14,14 +14,16 @@
 #ifndef MOFLOW_PLATFORM_IOS_ACCELEROMETER_H
 #define MOFLOW_PLATFORM_IOS_ACCELEROMETER_H
 
+#include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Input/Accelerometer/Accelerometer.h>
-#include <UIKit/UIKit.h>
+
+@class CMMotionManager;
 
 namespace moFlo
 {
 	namespace iOSPlatform
 	{
-		class CAccelerometer : public Input::IAccelerometer
+		class CAccelerometer : public Input::IAccelerometer, public Core::IUpdateable
 		{
 		public:
 			//----------------------------------------------------
@@ -34,6 +36,14 @@ namespace moFlo
 			/// @return Whether this object is of given type
 			//----------------------------------------------------
             bool IsA(Core::InterfaceIDType inInterfaceID) const;
+            //-------------------------------------------------------
+            /// Supported By Device
+            ///
+            /// This checks whether or not the current iOS device
+            /// supports accelerometer. This should always be checked before
+            /// creating an instance of the class.
+            //-------------------------------------------------------
+            static bool SupportedByDevice();
             //----------------------------------------------------
 			/// Is Updating
 			///
@@ -47,6 +57,12 @@ namespace moFlo
 			/// Start listening for accelerometer changes.
 			//----------------------------------------------------
 			void StartUpdating();
+            //----------------------------------------------------
+            /// Update
+            ///
+            /// @param Time since last update
+            //----------------------------------------------------
+            void Update(f32 infDT);
 			//----------------------------------------------------
 			/// Get Acceleration
 			///
@@ -59,34 +75,18 @@ namespace moFlo
 			/// Stop listening for accelerometer changes.
 			//----------------------------------------------------
 			void StopUpdating();
-            //----------------------------------------------------
-			/// Set Acceleration
-			///
-			/// @param The new acceleration.
-			//----------------------------------------------------
-			void SetAcceleration(const Core::CVector3& invAcceleration);
 			//----------------------------------------------------
 			/// Destructor
 			//----------------------------------------------------
 			~CAccelerometer();
 		protected:
-			Core::CVector3 mvAcceleration;
+            
+			mutable Core::CVector3 mvAcceleration;
             bool mbIsUpdating;
+            
+            CMMotionManager* m_motionManager;
 		};
 	}
 }
-
-extern "C"
-{
-	void InitAccelerometer();
-	void SetAccelerometerUpdateFrequency(f32 infFrequency);
-};
-
-@interface moFloAccelerometerDelegate : NSObject <UIAccelerometerDelegate>
-{
-}
-- (void)setUpdateFrequency:(f32) frequency;
-- (void)accelerometer:(UIAccelerometer*)accelerometer didAccelerate:(UIAcceleration*)acceleration;
-@end
 
 #endif

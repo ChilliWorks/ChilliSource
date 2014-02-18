@@ -29,6 +29,7 @@ namespace moFlo
 		class CInputSystem : public Input::IInputSystem
 		{
 		public:
+            CInputSystem();
 			virtual ~CInputSystem();
 			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const;
 			
@@ -52,7 +53,7 @@ namespace moFlo
 			
 		protected:
 			CTouchScreen mTouchScreen;
-			CAccelerometer mAccelerometer;
+			CAccelerometer* mpAccelerometer;
 			CVirtualKeyboard mVirtualKeyboard;
 		};
 	}
