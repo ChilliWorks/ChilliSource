@@ -33,8 +33,8 @@ namespace moFlo
 			mvMaxBounds = moFlo::Core::CVector3(0.0f, 0.0f, 0.0f);
 			mpVertexData = NULL;
 			mpIndexData = NULL;
-            ePrimitiveType = TRIS;
-			meMaterialStorageLocation = moFlo::Core::SL_NONE;
+            ePrimitiveType = PrimitiveType::k_tri;
+			meMaterialStorageLocation = Core::StorageLocation::k_none;
 		}
 		//-------------------------------------------------------------------------
 		/// Container for information required to build a mesh.

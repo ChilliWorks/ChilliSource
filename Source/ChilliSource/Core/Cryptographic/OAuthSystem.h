@@ -59,13 +59,13 @@ namespace moFlo
 
 			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const;
 
-			typedef enum OAuthHttpRequestType
+            enum class OAuthHttpRequestType
 			{
-			    eOAuthHttpInvalid = 0,
-			    eOAuthHttpGet,
-			    eOAuthHttpPost,
-			    eOAuthHttpDelete
-			} eOAuthHttpRequestType;
+			    k_httpInvalid,
+			    k_httpGet,
+			    k_httpPost,
+			    k_httpDelete
+			};
 
 			typedef std::list<std::string> OAuthKeyValueList;
 			typedef std::map<std::string, std::string> OAuthKeyValuePairsMap;
@@ -94,7 +94,7 @@ namespace moFlo
 		    void GetOAuthPin(std::string& outstrOAuthPin);
 		    void SetOAuthPin(const std::string& instrAuthPin);
 
-		    bool GetOAuthHeader(const eOAuthHttpRequestType ineType,
+		    bool GetOAuthHeader(const OAuthHttpRequestType ineType,
 		                        const std::string& instrRawUrl,
 		                        const std::string& instrRawData,
 		                        std::string& outstrOAuthHttpHeader,
@@ -124,7 +124,7 @@ namespace moFlo
 		                                         std::string& outstrRawParams,
 		                                         const std::string& instrParamsSeperator);
 
-		    bool GetSignature(const eOAuthHttpRequestType ineType,
+		    bool GetSignature(const OAuthHttpRequestType ineType,
 		                      const std::string& instrRawUrl,
 		                      const OAuthKeyValuePairsMap& inmapRawKeyValuePairs,
 		                      std::string& outstrOAuthSignature);

@@ -33,22 +33,22 @@ namespace moFlo
                 switch(ineFormat)
                 {
                     default:
-                    case Core::CImage::RGBA_8888:
+                    case Core::CImage::Format::k_RGBA8888:
                         return GL_RGBA;
                         break;
-                    case Core::CImage::RGB_888:
+                    case Core::CImage::Format::k_RGB888:
                         return GL_RGB;
                         break;
-                    case Core::CImage::RGBA_4444:
+                    case Core::CImage::Format::k_RGBA4444:
                         return GL_RGBA;
                         break;
-                    case Core::CImage::RGB_565:
+                    case Core::CImage::Format::k_RGB565:
                         return GL_RGB;
                         break;
-                    case Core::CImage::LUMA_88:
+                    case Core::CImage::Format::k_LumA88:
                         return GL_LUMINANCE_ALPHA;
                         break;
-                    case Core::CImage::LUM_8:
+                    case Core::CImage::Format::k_Lum8:
                         return GL_LUMINANCE;
                         break;
                 };
@@ -64,22 +64,22 @@ namespace moFlo
                 switch(ineFormat)
                 {
                     default:
-                    case Core::CImage::RGBA_8888:
+                    case Core::CImage::Format::k_RGBA8888:
                         return GL_UNSIGNED_BYTE;
                         break;
-                    case Core::CImage::RGB_888:
+                    case Core::CImage::Format::k_RGB888:
                         return GL_UNSIGNED_BYTE;
                         break;
-                    case Core::CImage::RGBA_4444:
+                    case Core::CImage::Format::k_RGBA4444:
                         return GL_UNSIGNED_SHORT_4_4_4_4;
                         break;
-                    case Core::CImage::RGB_565:
+                    case Core::CImage::Format::k_RGB565:
                         return GL_UNSIGNED_SHORT_5_6_5;
                         break;
-                    case Core::CImage::LUMA_88:
+                    case Core::CImage::Format::k_LumA88:
                         return GL_UNSIGNED_BYTE;
                         break;
-                    case Core::CImage::LUM_8:
+                    case Core::CImage::Format::k_Lum8:
                         return GL_UNSIGNED_BYTE;
                         break;
                 };
@@ -119,9 +119,9 @@ namespace moFlo
 		//--------------------------------------------------
         CCubemap::CCubemap(CCubemapManager* inpManager)
         :mpCubemapManager(inpManager),
-        meSFilter(Rendering::ITexture::TEX_FILTER_LINEAR), meTFilter(Rendering::ITexture::TEX_FILTER_LINEAR),
-        meSWrapMode(Rendering::ITexture::TEX_WRAP_CLAMP), meTWrapMode(Rendering::ITexture::TEX_WRAP_CLAMP),
-        mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), meImageFormat(Core::CImage::RGBA_8888),
+        meSFilter(Rendering::ITexture::Filter::k_linear), meTFilter(Rendering::ITexture::Filter::k_linear),
+        meSWrapMode(Rendering::ITexture::WrapMode::k_clamp), meTWrapMode(Rendering::ITexture::WrapMode::k_clamp),
+        mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), meImageFormat(Core::CImage::Format::k_RGBA8888),
         mpRenderCapabilities(NULL)
         {
             mpRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
@@ -147,41 +147,41 @@ namespace moFlo
             switch(pSourceImage->GetCompression())
             {
                 default:
-                case Core::COMPRESSION_NONE:
+                case Core::ImageCompression::k_none:
                     CubemapImage2D(inapSourceImages);
                     break;
-                case Core::COMPRESSION_ETC1:
+                case Core::ImageCompression::k_ETC1:
 #ifdef TARGET_ANDROID
                     CubemapCompressedImage2D(GL_ETC1_RGB8_OES, inapSourceImages);
 #endif
                     break;
-                case Core::COMPRESSION_PVR_2BPP:
+                case Core::ImageCompression::k_PVR2Bpp:
 #ifndef TARGET_OS_IPHONE
                     FATAL_LOG("PVR compressed textures are only supported on iOS.");
 #else
                     switch(pSourceImage->GetFormat())
                     {
                         default:
-                        case Core::CImage::RGBA_8888:
+                        case Core::CImage::Format::k_RGBA8888:
                             CubemapCompressedImage2D(GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG, inapSourceImages);
                             break;
-                        case Core::CImage::RGB_888:
+                        case Core::CImage::Format::k_RGB888:
                             CubemapCompressedImage2D(GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, inapSourceImages);                            
                             break;
                     };
 #endif
                     break;
-                case Core::COMPRESSION_PVR_4BPP:
+                case Core::ImageCompression::k_PVR4Bpp:
 #ifndef TARGET_OS_IPHONE
                     FATAL_LOG("PVR compressed textures are only supported on iOS.");
 #else
                     switch(pSourceImage->GetFormat())
                     {
                         default:
-                        case Core::CImage::RGBA_8888:
+                        case Core::CImage::Format::k_RGBA8888:
                             CubemapCompressedImage2D(GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG, inapSourceImages);
                             break;
-                        case Core::CImage::RGB_888:
+                        case Core::CImage::Format::k_RGB888:
                             CubemapCompressedImage2D(GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG, inapSourceImages);
                             break;
                     };
@@ -258,20 +258,20 @@ namespace moFlo
             switch(meSWrapMode)
             {
                 default:
-                case Rendering::ITexture::TEX_WRAP_CLAMP:
+                case Rendering::ITexture::WrapMode::k_clamp:
                     glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
                     break;
-                case Rendering::ITexture::TEX_WRAP_REPEAT:
+                case Rendering::ITexture::WrapMode::k_repeat:
                     glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_S,GL_REPEAT);
                     break;
             };
             switch(meTWrapMode)
             {
                 default:
-                case Rendering::ITexture::TEX_WRAP_CLAMP:
+                case Rendering::ITexture::WrapMode::k_clamp:
                     glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
                     break;
-                case Rendering::ITexture::TEX_WRAP_REPEAT:
+                case Rendering::ITexture::WrapMode::k_repeat:
                     glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_T,GL_REPEAT);
                     break;
             };
@@ -281,20 +281,20 @@ namespace moFlo
                 switch (meSFilter)
                 {
                     default:
-                    case Rendering::ITexture::TEX_FILTER_POINT:
+                    case Rendering::ITexture::Filter::k_point:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER,  GL_NEAREST);
                         break;
-                    case Rendering::ITexture::TEX_FILTER_LINEAR:
+                    case Rendering::ITexture::Filter::k_linear:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER,  GL_LINEAR);
                         break;
                 }
                 switch (meTFilter)
                 {
                     default:
-                    case Rendering::ITexture::TEX_FILTER_POINT:
+                    case Rendering::ITexture::Filter::k_point:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                         break;
-                    case Rendering::ITexture::TEX_FILTER_LINEAR:
+                    case Rendering::ITexture::Filter::k_linear:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                         break;
                 }
@@ -304,20 +304,20 @@ namespace moFlo
                 switch (meSFilter)
                 {
                     default:
-                    case Rendering::ITexture::TEX_FILTER_POINT:
+                    case Rendering::ITexture::Filter::k_point:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER,  GL_NEAREST_MIPMAP_NEAREST);
                         break;
-                    case Rendering::ITexture::TEX_FILTER_LINEAR:
+                    case Rendering::ITexture::Filter::k_linear:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER,  GL_LINEAR_MIPMAP_NEAREST);
                         break;
                 }
                 switch (meTFilter)
                 {
                     default:
-                    case Rendering::ITexture::TEX_FILTER_POINT:
+                    case Rendering::ITexture::Filter::k_point:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                         break;
-                    case Rendering::ITexture::TEX_FILTER_LINEAR:
+                    case Rendering::ITexture::Filter::k_linear:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                         break;
                 }

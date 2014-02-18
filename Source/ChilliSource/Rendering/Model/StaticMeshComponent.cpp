@@ -331,7 +331,7 @@ namespace moFlo
             }
             
             DYNAMIC_ARRAY<MaterialPtr> aMaterials;
-            mspShadowMapMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            mspShadowMapMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             aMaterials.push_back(mspShadowMapMaterial);
             
 			mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), aMaterials);
@@ -375,7 +375,7 @@ namespace moFlo
 					//get the material name
 					SubMeshPtr subMesh = mpModel->GetSubMeshAtIndex(i);
 					std::string matName = subMesh->GetDefaultMaterialName();
-                    Core::STORAGE_LOCATION eStorageLocation = subMesh->GetDefaultMaterialStorageLocation();
+                    Core::StorageLocation eStorageLocation = subMesh->GetDefaultMaterialStorageLocation();
                     
 					//try and load the material
 					MaterialPtr pMaterial;

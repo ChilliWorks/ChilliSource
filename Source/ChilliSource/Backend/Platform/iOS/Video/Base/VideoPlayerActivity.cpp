@@ -75,7 +75,7 @@ namespace moFlo
         //--------------------------------------------------------------
         CVideoPlayerActivity::CVideoPlayerActivity()
         : mpMoviePlayerController(nil), mpTapListener(nil), mbKeepAppRunning(false), mbIsAppSuspended(false), mbPlaying(false), mbCanDismissWithTap(false), mpVideoOverlayView(nil), mpSubtitlesRenderer(nil),
-        meSubtitlesLocation(Core::SL_NONE)
+        meSubtitlesLocation(Core::StorageLocation::k_none)
         
         {
             moFlo::Core::CApplicationEvents::GetResumeEvent() += moFlo::Core::ApplicationSystemDelegate(this, &CVideoPlayerActivity::OnResume);
@@ -101,7 +101,7 @@ namespace moFlo
         /// @param Whether to allow dismissing of the video
         /// @param Background colour
         //--------------------------------------------------------------
-        void CVideoPlayerActivity::Present(Core::STORAGE_LOCATION ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour)
+        void CVideoPlayerActivity::Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour)
         {
             mBackgroundColour = inBackgroundColour;
             
@@ -131,8 +131,8 @@ namespace moFlo
         /// @param Whether or not the video can be dismissed by tapping.
         /// @param Background colour
         //--------------------------------------------------------------
-        void CVideoPlayerActivity::PresentWithSubtitles(Core::STORAGE_LOCATION ineVideoLocation, const std::string& instrVideoFilename,
-                                                        Core::STORAGE_LOCATION ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
+        void CVideoPlayerActivity::PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
+                                                        Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
                                                         bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour)
         {
             //setup the subtitles
@@ -389,7 +389,7 @@ namespace moFlo
                 }
                 
                 //create the subtitles renderer
-                if (meSubtitlesLocation != Core::SL_NONE && mstrSubtitlesFilename.size() != 0 && mpSubtitlesRenderer == nil)
+                if (meSubtitlesLocation != Core::StorageLocation::k_none && mstrSubtitlesFilename.size() != 0 && mpSubtitlesRenderer == nil)
                 {
                     mpSubtitlesRenderer = [[CSubtitlesRenderer alloc] InitWithVideoPlayer:this View:mpVideoOverlayView StorageLocation:meSubtitlesLocation Filename:mstrSubtitlesFilename];
                 }
@@ -426,7 +426,7 @@ namespace moFlo
                 
                 //reset the overlay options
                 mbCanDismissWithTap = false;
-                meSubtitlesLocation = Core::SL_NONE;
+                meSubtitlesLocation = Core::StorageLocation::k_none;
                 mstrSubtitlesFilename = "";
             }
         }

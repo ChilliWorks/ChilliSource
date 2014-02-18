@@ -47,7 +47,7 @@ namespace moFlo
             /// @param Whether or not the video can be dismissed by tapping.
             /// @param Background colour
             //--------------------------------------------------------------
-            void Present(Core::STORAGE_LOCATION ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour);
+            void Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour);
             //--------------------------------------------------------------
             /// Present With Subtitles
             ///
@@ -60,8 +60,8 @@ namespace moFlo
             /// @param Whether or not the video can be dismissed by tapping.
             /// @param Background colour
             //--------------------------------------------------------------
-            void PresentWithSubtitles(Core::STORAGE_LOCATION ineVideoLocation, const std::string& instrVideoFilename,
-                                      Core::STORAGE_LOCATION ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
+            void PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
+                                      Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
                                       bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour);
             //--------------------------------------------------------------
             /// Is Playing
@@ -189,7 +189,7 @@ namespace moFlo
             MPMoviePlayerController* mpMoviePlayerController;
             
             bool mbCanDismissWithTap;
-            Core::STORAGE_LOCATION meSubtitlesLocation;
+            Core::StorageLocation meSubtitlesLocation;
             std::string mstrSubtitlesFilename;
             UIView* mpVideoOverlayView;
             CVideoPlayerTapListener* mpTapListener;

@@ -73,7 +73,7 @@ namespace moFlo
             /// @param SyncConflictDelegate - Delegate to call when conflict between local and cloud is detected (Note:: if none is provided the sync to cloud will be cancelled automatically)
             /// @return False if iCloud not enabled on system or < iOS 5.0
             //-------------------------------------------------------------
-            bool SyncFileToCloud(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFilePath, ICloudStorageSystem::OnSyncFileCompletedDelegate ineSyncCompleteDelegate = NULL, ICloudStorageSystem::OnSyncConflictDelegate ineSyncConflictDelegate = NULL);
+            bool SyncFileToCloud(moFlo::Core::StorageLocation ineStorageLocation, const std::string& instrFilePath, ICloudStorageSystem::OnSyncFileCompletedDelegate ineSyncCompleteDelegate = NULL, ICloudStorageSystem::OnSyncConflictDelegate ineSyncConflictDelegate = NULL);
             
             //////////////////////
             //  File Queries    //
@@ -98,7 +98,7 @@ namespace moFlo
             //-------------------------------------------------------------
             /// CloudFileSyncRequest
             /// A struct to wrap up nessesary iCloud request data
-            /// @param STORAGE_LOCATION - Local storage area of file, 
+            /// @param StorageLocation - Local storage area of file, 
             /// @param LocalFilePath - Path to file 
             /// @param OnSyncConflictDelegate - Function to call if a conflict is detected
             /// @param OnSyncFileCompletedDelegate - Function to call when the file is written succesfully
@@ -106,12 +106,12 @@ namespace moFlo
             struct CloudFileSyncRequest 
             {
                 std::string mstrLocalFilePath;
-                moFlo::Core::STORAGE_LOCATION meLocalStorageLocation;
+                moFlo::Core::StorageLocation meLocalStorageLocation;
                 
                 moFlo::ICloudStorageSystem::OnSyncConflictDelegate mpcSyncConflictDelegate;
                 moFlo::ICloudStorageSystem::OnSyncFileCompletedDelegate mpcSyncCompletedDelegate;
 
-                CloudFileSyncRequest(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrLocalFilePath, moFlo::ICloudStorageSystem::OnSyncConflictDelegate incSyncConflictDelegate = NULL,
+                CloudFileSyncRequest(moFlo::Core::StorageLocation ineStorageLocation, const std::string& instrLocalFilePath, moFlo::ICloudStorageSystem::OnSyncConflictDelegate incSyncConflictDelegate = NULL,
                                      moFlo::ICloudStorageSystem::OnSyncFileCompletedDelegate incSyncCompletedDelegate = NULL)
                 {
                     mstrLocalFilePath = instrLocalFilePath;

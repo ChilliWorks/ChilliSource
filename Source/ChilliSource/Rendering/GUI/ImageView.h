@@ -57,7 +57,7 @@ namespace moFlo
             ///
             /// @param Sprite sheet name
             //--------------------------------------------------------
-            void SetSpriteSheet(const std::string& instrSpriteSheet, Core::STORAGE_LOCATION ineLocation = Core::SL_PACKAGE);
+            void SetSpriteSheet(const std::string& instrSpriteSheet, Core::StorageLocation ineLocation = Core::StorageLocation::k_package);
             //--------------------------------------------------------
             /// Set Sprite Sheet
             ///

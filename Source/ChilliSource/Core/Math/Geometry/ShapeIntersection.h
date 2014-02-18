@@ -23,11 +23,11 @@ namespace moFlo
 		{
 		public:
             
-            enum Result
+            enum class Result
             {
-                OUTSIDE,
-                INSIDE,
-                INTERSECT,
+                k_outside,
+                k_inside,
+                k_intersect
             };
             
 			//----------------------------------------------------------------

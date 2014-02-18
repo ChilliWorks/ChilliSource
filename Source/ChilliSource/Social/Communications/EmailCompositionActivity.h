@@ -28,11 +28,11 @@ namespace moFlo
             ///
             /// An enum describing the result of the email intent.
             //-------------------------------------------------------
-			enum SendResult
+			enum class SendResult
             {
-				SR_SUCCEED,
-				SR_FAILED, // User failed to use the 
-				SR_CANCELLED, // User cancelled sending the SMS
+                k_succeed,
+                k_failed,
+                k_cancelled
 			};
 			typedef fastdelegate::FastDelegate1<SendResult> SendResultDelegate;
             //-------------------------------------------------------
@@ -43,7 +43,7 @@ namespace moFlo
             //-------------------------------------------------------
             struct Attachment
             {
-                Core::STORAGE_LOCATION meStorageLocation;
+                Core::StorageLocation meStorageLocation;
                 std::string mstrFilename;
                 std::string mstrMIMEType;
             };

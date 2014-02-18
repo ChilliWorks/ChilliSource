@@ -210,7 +210,7 @@ namespace moFlo
                 
                 Core::CMatrix4x4::Multiply(&matLocal, &matTransform, &matTransformedLocal);
                 
-                UpdateSpriteData(matTransformedLocal, outCharCache[nChar].vSize, outCharCache[nChar].sUVs, insColour, Core::ALIGN_MIDDLE_CENTRE);
+                UpdateSpriteData(matTransformedLocal, outCharCache[nChar].vSize, outCharCache[nChar].sUVs, insColour, Core::AlignmentAnchor::k_middleCentre);
 				
                 mOverlayBatcher.Render(mpRenderSystem, msCachedSprite);
 			}
@@ -290,7 +290,7 @@ namespace moFlo
 				
                 Core::CMatrix4x4::Multiply(&matLocal, &matTransform, &matTransformedLocal);
                 
-				UpdateSpriteData(matTransformedLocal, outCharCache[nChar].vSize, outCharCache[nChar].sUVs, insColour, Core::ALIGN_MIDDLE_CENTRE);
+				UpdateSpriteData(matTransformedLocal, outCharCache[nChar].vSize, outCharCache[nChar].sUVs, insColour, Core::AlignmentAnchor::k_middleCentre);
 				
                 for(u32 i = 0; i <kudwVertsPerSprite; i++)
                 {
@@ -601,15 +601,15 @@ namespace moFlo
                     //We are out of room so we can either over-run the label or clip the text
                     switch(ineBehaviour)
                     {
-                        case GUI::OVERFLOW_NONE:
-                        case GUI::OVERFLOW_CLIP:
+                        case GUI::TextOverflowBehaviour::k_none:
+                        case GUI::TextOverflowBehaviour::k_clip:
                             //Don't process any further characters
                             it = (UTF8String::iterator)inText.end();
                             bClipped=true;
                             break;
-                        case GUI::OVERFLOW_FOLLOW:
+                        case GUI::TextOverflowBehaviour::k_follow:
                             //Shunt the text backwards so it appears to scroll
-                            ineHorizontalJustification = GUI::JUSTIFY_RIGHT;
+                            ineHorizontalJustification = GUI::TextJustification::k_right;
                             break;
                     }
                 }
@@ -635,14 +635,14 @@ namespace moFlo
             
             switch(ineVerticalJustification)
             {
-                case GUI::JUSTIFY_TOP:
+                case GUI::TextJustification::k_top:
                 default:
                     fOffsetY = (invBounds.y * 0.5f);
                     break;
-                case GUI::JUSTIFY_CENTRE:
+                case GUI::TextJustification::k_centre:
                     fOffsetY = (fHeight * 0.5f);
                     break;
-                case GUI::JUSTIFY_BOTTOM:
+                case GUI::TextJustification::k_bottom:
                     fOffsetY = -((invBounds.y * 0.5f) - fHeight);
                     break;
             };
@@ -658,19 +658,19 @@ namespace moFlo
 		//----------------------------------------------------
 		/// Build Character
 		//----------------------------------------------------
-		CharacterResults CCanvasRenderer::BuildCharacter(const FontPtr& inpFont, UTF8String::Char inCharacter, UTF8String::Char inNextCharacter,
+		CharacterResult CCanvasRenderer::BuildCharacter(const FontPtr& inpFont, UTF8String::Char inCharacter, UTF8String::Char inNextCharacter,
                                                          const Core::CVector2& invCursor, f32 infTextScale, f32 infCharSpacing,
                                                          f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound)
 		{
 			CFont::CharacterInfo sInfo;
-			CharacterResults Result = inpFont->GetInfoForCharacter(inCharacter, sInfo);
+			CharacterResult Result = inpFont->GetInfoForCharacter(inCharacter, sInfo);
             
             sInfo.vSize *= infTextScale;
             sInfo.vOffset *= infTextScale;
 			
 			switch(Result)
 			{
-				case CHAR_OK:
+				case CharacterResult::k_ok:
 				{
 					PlacedCharacter sOutCharacter;
 					sOutCharacter.sUVs = sInfo.sUVs;
@@ -698,23 +698,23 @@ namespace moFlo
 					outCharacters.push_back(sOutCharacter);
 					break;
 				}
-				case CHAR_SPACE:
+				case CharacterResult::k_space:
 				{
 					//No sprite just space. The cursor will increment anyway
 					outfCharacterWidth = inpFont->GetAttributes().SpaceSpacing * infTextScale;
 					break;
 				}
-				case CHAR_TAB:
+				case CharacterResult::k_tab:
 				{
 					outfCharacterWidth = inpFont->GetAttributes().TabSpacing * infTextScale;
 					break;
 				}
-				case CHAR_RETURN:
+				case CharacterResult::k_return:
 				{
 					outfCharacterWidth = 0.0f;
 					break;
 				}
-				case CHAR_INVALID:
+				case CharacterResult::k_invalid:
 				default:
 				{
 					outfCharacterWidth = 0.0f;
@@ -742,14 +742,14 @@ namespace moFlo
                 
                 switch(ineHorizontalJustification)
                 {
-                    case GUI::JUSTIFY_LEFT:
+                    case GUI::TextJustification::k_left:
                     default:
                         fOffsetX = -(invBounds.x * 0.5f);
                         break;
-                    case GUI::JUSTIFY_CENTRE:
+                    case GUI::TextJustification::k_centre:
                         fOffsetX = -(outvCursor.x * 0.5f);
                         break;
-                    case GUI::JUSTIFY_RIGHT:
+                    case GUI::TextJustification::k_right:
                         fOffsetX = (invBounds.x * 0.5f) - outvCursor.x;
                         break;
                 };
@@ -775,15 +775,15 @@ namespace moFlo
 		{
 			Core::CColour::ByteColour Col = Core::CColour::ColourToByteColour(insTintColour);
 			
-			msCachedSprite.sVerts[CSpriteComponent::VERT_TOP_LEFT].Col = Col;
-            msCachedSprite.sVerts[CSpriteComponent::VERT_BOTTOM_LEFT].Col = Col;
-            msCachedSprite.sVerts[CSpriteComponent::VERT_TOP_RIGHT].Col = Col;
-            msCachedSprite.sVerts[CSpriteComponent::VERT_BOTTOM_RIGHT].Col = Col;
+			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topLeft].Col = Col;
+            msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft].Col = Col;
+            msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topRight].Col = Col;
+            msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight].Col = Col;
 			
-			msCachedSprite.sVerts[CSpriteComponent::VERT_TOP_LEFT].vTex = inUVs.TopLeft();
-			msCachedSprite.sVerts[CSpriteComponent::VERT_BOTTOM_LEFT].vTex = inUVs.BottomLeft();
-			msCachedSprite.sVerts[CSpriteComponent::VERT_TOP_RIGHT].vTex = inUVs.TopRight();
-			msCachedSprite.sVerts[CSpriteComponent::VERT_BOTTOM_RIGHT].vTex = inUVs.BottomRight();
+			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topLeft].vTex = inUVs.TopLeft();
+			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft].vTex = inUVs.BottomLeft();
+			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topRight].vTex = inUVs.TopRight();
+			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight].vTex = inUVs.BottomRight();
 			
 			Core::CVector2 vHalfSize(invSize.x * 0.5f, invSize.y * 0.5f);
 			Core::CVector2 vAlignedPos;
@@ -794,37 +794,37 @@ namespace moFlo
 			
             const Core::CMatrix4x4 &matTransform(inTransform);
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[CSpriteComponent::VERT_TOP_LEFT].vPos);
+            Core::CMatrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topLeft].vPos);
             
             vTemp.x = vHalfSize.x;
             vTemp.y = vHalfSize.y;
 			
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[CSpriteComponent::VERT_TOP_RIGHT].vPos);
+            Core::CMatrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topRight].vPos);
             
             vTemp.x = -vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 			
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[CSpriteComponent::VERT_BOTTOM_LEFT].vPos);
+            Core::CMatrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft].vPos);
             
             vTemp.x = vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 			
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[CSpriteComponent::VERT_BOTTOM_RIGHT].vPos);
+            Core::CMatrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight].vPos);
 
-			msCachedSprite.sVerts[CSpriteComponent::VERT_TOP_LEFT].vPos.z = -mfNearClippingDistance;
-			msCachedSprite.sVerts[CSpriteComponent::VERT_TOP_LEFT].vPos.w = 1.0f;
+			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topLeft].vPos.z = -mfNearClippingDistance;
+			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topLeft].vPos.w = 1.0f;
 			
-			msCachedSprite.sVerts[CSpriteComponent::VERT_BOTTOM_LEFT].vPos.z = -mfNearClippingDistance;
-			msCachedSprite.sVerts[CSpriteComponent::VERT_BOTTOM_LEFT].vPos.w = 1.0f;
+			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft].vPos.z = -mfNearClippingDistance;
+			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft].vPos.w = 1.0f;
 			
-			msCachedSprite.sVerts[CSpriteComponent::VERT_TOP_RIGHT].vPos.z = -mfNearClippingDistance;
-			msCachedSprite.sVerts[CSpriteComponent::VERT_TOP_RIGHT].vPos.w = 1.0f;
+			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topRight].vPos.z = -mfNearClippingDistance;
+			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topRight].vPos.w = 1.0f;
 			
-			msCachedSprite.sVerts[CSpriteComponent::VERT_BOTTOM_RIGHT].vPos.z = -mfNearClippingDistance;
-			msCachedSprite.sVerts[CSpriteComponent::VERT_BOTTOM_RIGHT].vPos.w = 1.0f;
+			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight].vPos.z = -mfNearClippingDistance;
+			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight].vPos.w = 1.0f;
 		}
 	}
 }

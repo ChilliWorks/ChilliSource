@@ -60,7 +60,7 @@ namespace moFlo
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Async Create Resource From File
 			///
@@ -69,7 +69,7 @@ namespace moFlo
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			bool AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// ReadAnimationTask
 			///
@@ -79,7 +79,7 @@ namespace moFlo
 			/// @param Filename
 			/// @param the output resource pointer
 			//----------------------------------------------------------------------------
-			void ReadAnimationTask(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource);
+			void ReadAnimationTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Create Skinned Animation From File
 			///
@@ -90,7 +90,7 @@ namespace moFlo
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool CreateSkinnedAnimationFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource);
+			bool CreateSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Read Header
 			///

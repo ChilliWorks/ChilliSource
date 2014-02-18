@@ -181,7 +181,7 @@ namespace moFlo
 			//--------------------------------------------------------
 			template <typename T> void Set(CInstance* inpInstance, const T& inValue)
 			{
-				MOFLOW_ASSERT(meAccessType != PROP_READ_ONLY, "This property is read only and cannot be assigned");
+				MOFLOW_ASSERT(meAccessType != PropAccess::k_readOnly, "This property is read only and cannot be assigned");
 
 				if(!CallSetterConstRef((void*)(&inValue), inpInstance))
 				{
@@ -203,7 +203,7 @@ namespace moFlo
 			//--------------------------------------------------------
 			template <typename T> void Get(CInstance* inpInstance, T& outValue) 
 			{
-				MOFLOW_ASSERT(meAccessType != PROP_WRITE_ONLY, "This property is write only and cannot be read");
+				MOFLOW_ASSERT(meAccessType != PropAccess::k_writeOnly, "This property is write only and cannot be read");
 
 				if(!CallGetterConstRefConst((void*)(&outValue), inpInstance))
 				{
@@ -230,7 +230,7 @@ namespace moFlo
 			//--------------------------------------------------------
 			template <typename T> void Set(const T& inValue)
 			{
-				MOFLOW_ASSERT(meAccessType != PROP_READ_ONLY, "This property is read only and cannot be assigned");
+				MOFLOW_ASSERT(meAccessType != PropAccess::k_readOnly, "This property is read only and cannot be assigned");
 
 				MOFLOW_ASSERT(mpStaticValue, "To access the property without an instance it must be static");
 				*(static_cast<T*>(mpStaticValue)) = inValue;
@@ -245,7 +245,7 @@ namespace moFlo
 			//--------------------------------------------------------
 			template <typename T> void Get(T& outValue) const
 			{
-				MOFLOW_ASSERT(meAccessType != PROP_WRITE_ONLY, "This property is write only and cannot be read");
+				MOFLOW_ASSERT(meAccessType != PropAccess::k_writeOnly, "This property is write only and cannot be read");
 
 				MOFLOW_ASSERT(mpStaticValue, "To access the property without an instance it must be static");
 				outValue = *(static_cast<T*>(mpStaticValue));

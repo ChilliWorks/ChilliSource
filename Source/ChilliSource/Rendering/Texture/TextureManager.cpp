@@ -74,9 +74,9 @@ namespace moFlo
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr ITextureManager::GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr ITextureManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
-			return GetTextureFromFile(ineStorageLocation, instrFilePath, Core::CImage::FORMAT_DEFAULT, false);
+			return GetTextureFromFile(ineStorageLocation, instrFilePath, Core::CImage::Format::k_default, false);
 		}
 		//-----------------------------------------------------------------
 		/// Async Get Resource From File
@@ -86,9 +86,9 @@ namespace moFlo
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr ITextureManager::AsyncGetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr ITextureManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
-			return AsyncGetTextureFromFile(ineStorageLocation, instrFilePath, Core::CImage::FORMAT_DEFAULT, false);
+			return AsyncGetTextureFromFile(ineStorageLocation, instrFilePath, Core::CImage::Format::k_default, false);
 		}
 		//----------------------------------------------------------------
 		/// Get Texture From File
@@ -102,7 +102,7 @@ namespace moFlo
 		/// @param Generate mip-maps. Default = false
 		/// @return A handle to the texture
 		//----------------------------------------------------------------
-		TexturePtr ITextureManager::GetTextureFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
+		TexturePtr ITextureManager::GetTextureFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -156,7 +156,7 @@ namespace moFlo
 		/// @param Enable mip-mapping
 		/// @return Generic pointer to resource type
 		//-----------------------------------------------------------------
-		TexturePtr ITextureManager::AsyncGetTextureFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
+		TexturePtr ITextureManager::AsyncGetTextureFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -278,7 +278,7 @@ namespace moFlo
 			pImage->SetData(pData);
 			pImage->SetWidth(2);
 			pImage->SetHeight(2);
-			pImage->SetFormat(Core::CImage::FORMAT_DEFAULT);
+			pImage->SetFormat(Core::CImage::Format::k_default);
 
 			CreateTextureFromImage(pImage, false, mpDefaultTexture);
 

@@ -38,10 +38,10 @@ namespace moFlo
     
 	namespace SystemConfirmDialog
 	{
-		enum Result
+		enum class Result
 		{
-			CONFIRM,
-			CANCEL
+			k_confirm,
+			k_cancel
 		};
 
 		typedef fastdelegate::FastDelegate2<u32, Result> Delegate;
@@ -321,7 +321,7 @@ namespace moFlo
             /// @param Storage location
             /// @param File path excluding name (i.e. if root then "")
             //--------------------------------------------------------------------------------------------------
-            static void RefreshMasterText(STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory);
+            static void RefreshMasterText(StorageLocation ineStorageLocation, const std::string& instrDirectory);
             //--------------------------------------------------------------------------------------------------
 			/// Get Default Font
 			///

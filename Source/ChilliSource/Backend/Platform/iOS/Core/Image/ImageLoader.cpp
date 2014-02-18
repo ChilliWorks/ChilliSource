@@ -67,9 +67,9 @@ namespace moFlo
 		/// @param Out: Resource
 		/// @return Whether the resource loaded 
 		//----------------------------------------------------------------
-		bool ImageLoader::CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool ImageLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
-			return CreateImageFromFile(ineStorageLocation, inFilePath, Core::CImage::FORMAT_DEFAULT, outpResource);
+			return CreateImageFromFile(ineStorageLocation, inFilePath, Core::CImage::Format::k_default, outpResource);
 		}
 		//----------------------------------------------------------------
 		/// Create Image From File
@@ -80,9 +80,9 @@ namespace moFlo
 		/// @param Out: Resource
 		/// @return Whether the resource loaded 
 		//----------------------------------------------------------------
-		bool ImageLoader::CreateImageFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
+		bool ImageLoader::CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
 		{
-			Core::FileStreamPtr pImageFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FM_READ_BINARY);
+			Core::FileStreamPtr pImageFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
    
             if(pImageFile && !pImageFile->IsBad())
 			{
@@ -156,14 +156,14 @@ namespace moFlo
 			if(CGColorSpaceGetModel(ColorSpaceInfo) == kCGColorSpaceModelMonochrome)
 			{
 				//If the inFormat is specified as LUM_8 then we should try to load as such, even if it has alpha
-				if(bHasAlpha && ineFormat != Core::CImage::LUM_8)					
+				if(bHasAlpha && ineFormat != Core::CImage::Format::k_Lum8)
 				{
-					ineFormat = Core::CImage::LUMA_88;
+					ineFormat = Core::CImage::Format::k_LumA88;
 					ColorSpaceInfo = CGColorSpaceCreateDeviceRGB();
 				}
 				else 
 				{
-					ineFormat = Core::CImage::LUM_8;
+					ineFormat = Core::CImage::Format::k_Lum8;
                     ColorSpaceInfo = CGColorSpaceCreateDeviceRGB();
 				}
 			}
@@ -184,7 +184,7 @@ namespace moFlo
             CFRelease(pData);
 
 	
-			if(ineFormat == Core::CImage::FORMAT_DEFAULT)
+			if(ineFormat == Core::CImage::Format::k_default)
 			{
 				ineFormat = meDefaultFormat;
 			}
@@ -192,7 +192,7 @@ namespace moFlo
 			//We always load the image as RGBA_8888 but we convert on the fly to the correct format
 			switch(ineFormat)
 			{
-				case Core::CImage::RGBA_4444:
+				case Core::CImage::Format::k_RGBA4444:
 				{
 					DEBUG_LOG("Converting to RGBA_4444");
 				
@@ -202,7 +202,7 @@ namespace moFlo
 					pubyBitmapData8888 = pubyBitmapData4444;
 					break;
 				}
-				case Core::CImage::RGB_565:
+				case Core::CImage::Format::k_RGB565:
 				{
 					DEBUG_LOG("Converting to RGBA_565");
 					
@@ -212,7 +212,7 @@ namespace moFlo
 					pubyBitmapData8888 = pubyBitmapData565;
 					break;
 				}
-				case Core::CImage::LUMA_88:
+				case Core::CImage::Format::k_LumA88:
 				{
 					DEBUG_LOG("Converting to LUMA_88");
 					
@@ -222,7 +222,7 @@ namespace moFlo
 					pubyBitmapData8888 = pubyBitmapData88;
 					break;
 				}
-                case Core::CImage::LUM_8:
+                case Core::CImage::Format::k_Lum8:
                 {
                     DEBUG_LOG("Converting to LUM_8");
                     
@@ -290,7 +290,7 @@ namespace moFlo
 			//We always load the image as RGBA_8888 but we convert on the fly to the correct format
 			switch(ineFormat)
 			{
-				case Core::CImage::RGBA_4444:
+				case Core::CImage::Format::k_RGBA4444:
 				{
 					DEBUG_LOG("Converting to RGBA_4444");
 					
@@ -300,9 +300,9 @@ namespace moFlo
 					pubyBitmapData8888 = pubyBitmapData4444;
 					break;
 				}
-				case Core::CImage::RGB_565:
+				case Core::CImage::Format::k_RGB565:
 				{
-					DEBUG_LOG("Converting to RGBA_565");
+					DEBUG_LOG("Converting to RGB_565");
 					
 					u8* pubyBitmapData565 = RGBA8888ToRGB565(pubyBitmapData8888, udwArea);
 					
@@ -337,7 +337,7 @@ namespace moFlo
           
 			outpImage->SetData((u8*)pData);
             outpImage->UnpackPVRData();
-			outpImage->SetFormat(Core::CImage::RGBA_8888);
+			outpImage->SetFormat(Core::CImage::Format::k_RGBA8888);
 		}
 		//----------------------------------------------------------------
 		/// RGBA8888 To RGB565

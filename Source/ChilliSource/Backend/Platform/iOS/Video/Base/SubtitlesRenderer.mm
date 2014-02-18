@@ -22,7 +22,7 @@
 //--------------------------------------------------------
 /// init With Video Player
 //--------------------------------------------------------
--(id) InitWithVideoPlayer:(moFlo::iOSPlatform::CVideoPlayerActivity*)inpVideoPlayer View:(UIView*)inpView StorageLocation:(moFlo::Core::STORAGE_LOCATION)ineStorageLocation Filename:(std::string)instrFilename
+-(id) InitWithVideoPlayer:(moFlo::iOSPlatform::CVideoPlayerActivity*)inpVideoPlayer View:(UIView*)inpView StorageLocation:(moFlo::Core::StorageLocation)ineStorageLocation Filename:(std::string)instrFilename
 {
     if(!(self = [super init]))
 	{
@@ -174,16 +174,16 @@
     
     switch (ineAnchor)
     {
-        case moFlo::Core::ALIGN_TOP_LEFT:
-        case moFlo::Core::ALIGN_TOP_CENTRE:
-        case moFlo::Core::ALIGN_TOP_RIGHT:
+        case moFlo::Core::AlignmentAnchor::k_topLeft:
+        case moFlo::Core::AlignmentAnchor::k_topCentre:
+        case moFlo::Core::AlignmentAnchor::k_topRight:
         {
             inpView.contentOffset = (CGPoint){.x = 0.0f, .y = 0.0f};
             break;
         }
-        case moFlo::Core::ALIGN_MIDDLE_LEFT:
-        case moFlo::Core::ALIGN_MIDDLE_CENTRE:
-        case moFlo::Core::ALIGN_MIDDLE_RIGHT:
+        case moFlo::Core::AlignmentAnchor::k_middleLeft:
+        case moFlo::Core::AlignmentAnchor::k_middleCentre:
+        case moFlo::Core::AlignmentAnchor::k_middleRight:
         {
             f32 fBoxSize = [inpView bounds].size.height;
             f32 fContentSize = [inpView contentSize].height;
@@ -196,9 +196,9 @@
             break;
             break;
         }
-        case moFlo::Core::ALIGN_BOTTOM_LEFT:
-        case moFlo::Core::ALIGN_BOTTOM_CENTRE:
-        case moFlo::Core::ALIGN_BOTTOM_RIGHT:
+        case moFlo::Core::AlignmentAnchor::k_bottomLeft:
+        case moFlo::Core::AlignmentAnchor::k_bottomCentre:
+        case moFlo::Core::AlignmentAnchor::k_bottomRight:
         {
             f32 fBoxSize = [inpView bounds].size.height;
             f32 fContentSize = [inpView contentSize].height;
@@ -222,17 +222,17 @@
 {
     switch (ineAnchor)
     {
-        case moFlo::Core::ALIGN_TOP_LEFT:
-        case moFlo::Core::ALIGN_MIDDLE_LEFT:
-        case moFlo::Core::ALIGN_BOTTOM_LEFT:
+        case moFlo::Core::AlignmentAnchor::k_topLeft:
+        case moFlo::Core::AlignmentAnchor::k_middleLeft:
+        case moFlo::Core::AlignmentAnchor::k_bottomLeft:
             return NSTextAlignmentLeft;
-        case moFlo::Core::ALIGN_TOP_CENTRE:
-        case moFlo::Core::ALIGN_MIDDLE_CENTRE:
-        case moFlo::Core::ALIGN_BOTTOM_CENTRE:
+        case moFlo::Core::AlignmentAnchor::k_topCentre:
+        case moFlo::Core::AlignmentAnchor::k_middleCentre:
+        case moFlo::Core::AlignmentAnchor::k_bottomCentre:
             return NSTextAlignmentCenter;
-        case moFlo::Core::ALIGN_TOP_RIGHT:
-        case moFlo::Core::ALIGN_MIDDLE_RIGHT:
-        case moFlo::Core::ALIGN_BOTTOM_RIGHT:
+        case moFlo::Core::AlignmentAnchor::k_topRight:
+        case moFlo::Core::AlignmentAnchor::k_middleRight:
+        case moFlo::Core::AlignmentAnchor::k_bottomRight:
             return NSTextAlignmentRight;
         default:
             WARNING_LOG("Could not convert alignment anchor to NSTextAlignment.");

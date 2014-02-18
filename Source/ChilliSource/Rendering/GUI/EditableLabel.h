@@ -142,11 +142,11 @@ namespace moFlo
 			//-------------------------------------------------
 			void SetKeyboardInputTypeNumeric();
             //-------------------------------------------------
-			/// SetKeyboardInputTypeAscii
+			/// SetKeyboardInputTypeText
             ///
-            /// change displayed keys to ascii entry
+            /// change displayed keys to text entry
 			//-------------------------------------------------
-			void SetKeyboardInputTypeAscii();
+			void SetKeyboardInputTypeText();
             //------------------------
             /// Set Keyboard Capitalisation Method
             ///

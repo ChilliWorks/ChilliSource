@@ -65,11 +65,11 @@ namespace moFlo
 			}
 			
 			BufferDescription desc;
-			desc.eUsageFlag = STATIC;
+			desc.eUsageFlag = BufferUsage::k_static;
 			desc.VertexDataCapacity = VBufferSize; 
 			desc.IndexDataCapacity  = IBufferSize;
-			desc.ePrimitiveType = TRIS;
-			desc.eAccessFlag = READ;
+			desc.ePrimitiveType = PrimitiveType::k_tri;
+			desc.eAccessFlag = BufferAccess::k_read;
 			desc.VertexLayout = VertexLayout::kMesh;
 			desc.IndexSize = 2;
 			

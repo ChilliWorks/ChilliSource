@@ -20,10 +20,10 @@ namespace moFlo
 		typedef fastdelegate::FastDelegate0<> KeyboardEventDelegate;
 		typedef fastdelegate::FastDelegate2<const UTF8String&, bool*> TextInputEventDelegate;
         
-        enum KeyboardType
+        enum class KeyboardType
 		{
-        	KEYBOARD_TEXT,
-			KEYBOARD_NUMERIC
+        	k_text,
+			k_numeric
 		};
 		
         //-------------------------------------------------------
@@ -39,12 +39,12 @@ namespace moFlo
         ///	   of each sentence.
         ///  - KEYBOARD_CAPS_ALL will capitalise every letter.
         //-------------------------------------------------------
-        enum KeyboardCapitalisation
+        enum class KeyboardCapitalisation
         {
-            KEYBOARD_CAPS_NONE,
-            KEYBOARD_CAPS_WORDS,
-            KEYBOARD_CAPS_SENTENCES,
-            KEYBOARD_CAPS_ALL
+            k_none,
+            k_words,
+            k_sentences,
+            k_all
         };
         
 		class IVirtualKeyboard 

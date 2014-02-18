@@ -66,7 +66,7 @@ namespace moFlo
 			/// @param Out: Resource object
 			/// @return Whether the resource was loaded 
 			//-------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
 			//-------------------------------------------------------------------------
 			/// Async Create Resource From File
 			///
@@ -75,7 +75,7 @@ namespace moFlo
 			/// @param Out: Resource object
 			/// @return Whether the resource was loaded
 			//-------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			bool AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
             //-------------------------------------------------------------------------
 			/// Load MoSubtitles Task
             ///
@@ -85,7 +85,7 @@ namespace moFlo
 			/// @param Filename
 			/// @param Out: Resource object
 			//-------------------------------------------------------------------------
-			void LoadMoSubtitlesTask(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, SubtitlesPtr& outpResource);
+			void LoadMoSubtitlesTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, SubtitlesPtr& outpResource);
             //-------------------------------------------------------------------------
 			/// Load MoSubtitles
 			///
@@ -93,7 +93,7 @@ namespace moFlo
 			/// @param Filename
 			/// @param Out: Resource object
 			//-------------------------------------------------------------------------
-			bool LoadMoSubtitles(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, SubtitlesPtr& outpResource);
+			bool LoadMoSubtitles(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, SubtitlesPtr& outpResource);
             //-------------------------------------------------------------------------
 			/// Load Style
 			///

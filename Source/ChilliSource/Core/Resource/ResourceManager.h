@@ -22,16 +22,16 @@ namespace moFlo
 	{
         struct ResourceDesc
         {
-            ResourceDesc(std::string instrFileName, Core::STORAGE_LOCATION ineStorageLocation)
+            ResourceDesc(std::string instrFileName, Core::StorageLocation ineStorageLocation)
             :strFileName(instrFileName), eStorageLocation(ineStorageLocation)
             {}
             
             ResourceDesc()
-            :strFileName(""), eStorageLocation(Core::SL_NONE)
+            :strFileName(""), eStorageLocation(Core::StorageLocation::k_none)
             {}
             
             std::string strFileName;
-            Core::STORAGE_LOCATION eStorageLocation;
+            Core::StorageLocation eStorageLocation;
         };
         
 		class IResourceManager : public IQueryableInterface
@@ -113,7 +113,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return Generic pointer to resource type
 			//-----------------------------------------------------------------
-			virtual ResourcePtr GetResourceFromFile(STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath) = 0;
+			virtual ResourcePtr GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath) = 0;
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -126,7 +126,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return Generic pointer to resource type
 			//-----------------------------------------------------------------
-			virtual ResourcePtr AsyncGetResourceFromFile(STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath) {return ResourcePtr();};
+			virtual ResourcePtr AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath) {return ResourcePtr();};
 			//-----------------------------------------------------------------
 			/// Get Resource Provider By Extension
 			///

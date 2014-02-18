@@ -366,7 +366,7 @@ namespace moFlo
 		* @remarks: internal method
 		*
 		*--*/
-		bool COAuthSystem::GetSignature(const eOAuthHttpRequestType ineType,
+		bool COAuthSystem::GetSignature(const OAuthHttpRequestType ineType,
 										const std::string& instrRawUrl,
 										const OAuthKeyValuePairsMap& inmapRawKeyValuePairs,
 										std::string& outstrOAuthSignature)
@@ -385,19 +385,19 @@ namespace moFlo
 		    /* Start constructing base signature string. Refer http://dev.twitter.com/auth#intro */
 		    switch(ineType)
 		    {
-		    case eOAuthHttpGet:
+                case OAuthHttpRequestType::k_httpGet:
 		        {
 		        	strSigBase.assign("GET&");
 		        }
 		        break;
 
-		    case eOAuthHttpPost:
+		    case OAuthHttpRequestType::k_httpPost:
 		        {
 		        	strSigBase.assign("POST&");
 		        }
 		        break;
 
-		    case eOAuthHttpDelete:
+		    case OAuthHttpRequestType::k_httpDelete:
 		        {
 		        	strSigBase.assign("DELETE&");
 		        }
@@ -468,7 +468,7 @@ namespace moFlo
 		* @output: outstrOAuthHttpHeader - OAuth header
 		*
 		*--*/
-		bool COAuthSystem::GetOAuthHeader(const eOAuthHttpRequestType ineType,
+		bool COAuthSystem::GetOAuthHeader(const OAuthHttpRequestType ineType,
 										  const std::string& instrRawUrl,
 										  const std::string& instrRawData,
 										  std::string& outstrOAuthHttpHeader,

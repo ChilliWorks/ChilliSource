@@ -34,30 +34,30 @@ namespace moFlo
 			
 			switch(mBufferDesc.eUsageFlag)
 			{
-				case Rendering::DYNAMIC:
+				case Rendering::BufferUsage::k_dynamic:
 					mBufferUsage = GL_DYNAMIC_DRAW;
 					break;
-				case Rendering::STATIC:
+				case Rendering::BufferUsage::k_static:
 					mBufferUsage = GL_STATIC_DRAW;
 					break;
 			};
 			switch(mBufferDesc.eAccessFlag)
 			{
-				case Rendering::WRITE:
+				case Rendering::BufferAccess::k_write:
 #ifdef MOFLOW_OPENGL
 					mBufferAccess = GL_WRITE_ONLY;
 #elif defined MOFLOW_OPENGLES2
 					mBufferAccess = GL_WRITE_ONLY_OES;
 #endif
 					break;
-				case Rendering::READ:
+				case Rendering::BufferAccess::k_read:
 #ifdef MOFLOW_OPENGL
 					mBufferAccess = GL_WRITE_ONLY;
 #elif defined MOFLOW_OPENGLES2
 					mBufferAccess = GL_WRITE_ONLY_OES;
 #endif
 					break;
-				case Rendering::READ_WRITE:
+				case Rendering::BufferAccess::k_readWrite:
 				default:
 #ifdef MOFLOW_OPENGL
 					mBufferAccess = GL_WRITE_ONLY;
@@ -107,7 +107,7 @@ namespace moFlo
 		{
 			if(mbMapBufferAvailable)
 			{
-				if (mBufferDesc.eUsageFlag == Rendering::DYNAMIC)
+				if (mBufferDesc.eUsageFlag == Rendering::BufferUsage::k_dynamic)
 				{
 					glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, NULL, mBufferUsage);
 				}

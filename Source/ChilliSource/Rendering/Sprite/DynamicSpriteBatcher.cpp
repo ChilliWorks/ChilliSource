@@ -32,7 +32,7 @@ namespace moFlo
 		{
             for(u32 i=0; i<kudwNumBuffers; ++i)
             {
-                mpBatch[i] = new CSpriteBatch(kudwMaxSpritesInDynamicBatch, inpRenderSystem, DYNAMIC);
+                mpBatch[i] = new CSpriteBatch(kudwMaxSpritesInDynamicBatch, inpRenderSystem, BufferUsage::k_dynamic);
             }
             
             maRenderCommands.reserve(50);

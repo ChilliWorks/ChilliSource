@@ -80,10 +80,10 @@ namespace moFlo
 			/// A number of overloads 
 			//---------------------------------------------------------------------------
 			SpriteComponentPtr CreateSpriteComponent(const Core::CVector2 &invDims, const MaterialPtr& inMaterial);
-			SpriteComponentPtr CreateSpriteComponent(const Core::CVector2 &invDims, Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrMaterialFilePath);
+			SpriteComponentPtr CreateSpriteComponent(const Core::CVector2 &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath);
 			SpriteComponentPtr CreateSpriteComponent(const SpriteSheetPtr& pSpriteSheet, u32 inTpageIndex, const MaterialPtr& inpMaterial);
-			SpriteComponentPtr CreateSpriteComponent(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrSpriteSheet, u32 inTpageIndex, const MaterialPtr& inpMaterial);
-            SpriteComponentPtr CreateSpriteComponent(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrSpriteSheet, const std::string& inTpageID, const MaterialPtr& inpMaterial);
+			SpriteComponentPtr CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheet, u32 inTpageIndex, const MaterialPtr& inpMaterial);
+            SpriteComponentPtr CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheet, const std::string& inTpageID, const MaterialPtr& inpMaterial);
 
             //---------------------------------------------------------------------------
 			/// Create Static Mesh Component
@@ -92,10 +92,10 @@ namespace moFlo
 			//---------------------------------------------------------------------------
             StaticMeshComponentPtr CreateStaticMeshComponent(const MeshPtr& inpModel);
 			StaticMeshComponentPtr CreateStaticMeshComponent(const MeshPtr& inpModel, const MaterialPtr& inpMaterial);
-			StaticMeshComponentPtr CreateStaticMeshComponent(const MeshPtr& inpModel, Core::STORAGE_LOCATION ineStorageLocation, const std::string & insMaterialName);
-			StaticMeshComponentPtr CreateStaticMeshComponent(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrModelFileName);
-			StaticMeshComponentPtr CreateStaticMeshComponent(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrModelFileName, const MaterialPtr& inpMaterial);
-			StaticMeshComponentPtr CreateStaticMeshComponent(Core::STORAGE_LOCATION ineModelStorageLocation, const std::string& instrModelFileName, Core::STORAGE_LOCATION ineMaterialStorageLocation, const std::string& instrMaterialFileName);
+			StaticMeshComponentPtr CreateStaticMeshComponent(const MeshPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName);
+			StaticMeshComponentPtr CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName);
+			StaticMeshComponentPtr CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName, const MaterialPtr& inpMaterial);
+			StaticMeshComponentPtr CreateStaticMeshComponent(Core::StorageLocation ineModelStorageLocation, const std::string& instrModelFileName, Core::StorageLocation ineMaterialStorageLocation, const std::string& instrMaterialFileName);
             
             //---------------------------------------------------------------------------
 			/// Create Animated Mesh Component
@@ -104,10 +104,10 @@ namespace moFlo
 			//---------------------------------------------------------------------------
             AnimatedMeshComponentPtr CreateAnimatedMeshComponent(const MeshPtr& inpModel);
 			AnimatedMeshComponentPtr CreateAnimatedMeshComponent(const MeshPtr& inpModel, const MaterialPtr& inpMaterial);
-			AnimatedMeshComponentPtr CreateAnimatedMeshComponent(const MeshPtr& inpModel, Core::STORAGE_LOCATION ineStorageLocation, const std::string & insMaterialName);
-			AnimatedMeshComponentPtr CreateAnimatedMeshComponent(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrModelFileName);
-			AnimatedMeshComponentPtr CreateAnimatedMeshComponent(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrModelFileName, const MaterialPtr& inpMaterial);
-			AnimatedMeshComponentPtr CreateAnimatedMeshComponent(Core::STORAGE_LOCATION ineModelStorageLocation, const std::string& instrModelFileName, Core::STORAGE_LOCATION ineMaterialStorageLocation, const std::string& instrMaterialFileName);
+			AnimatedMeshComponentPtr CreateAnimatedMeshComponent(const MeshPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName);
+			AnimatedMeshComponentPtr CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName);
+			AnimatedMeshComponentPtr CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName, const MaterialPtr& inpMaterial);
+			AnimatedMeshComponentPtr CreateAnimatedMeshComponent(Core::StorageLocation ineModelStorageLocation, const std::string& instrModelFileName, Core::StorageLocation ineMaterialStorageLocation, const std::string& instrMaterialFileName);
 			
 			//---------------------------------------------------------------------------
 			/// Create Camera Component

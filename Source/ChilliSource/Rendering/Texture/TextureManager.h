@@ -66,7 +66,7 @@ namespace moFlo
 			/// @param Generate mip-maps. Default = false
 			/// @return A handle to the texture
 			//----------------------------------------------------------------
-			TexturePtr GetTextureFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat = Core::CImage::FORMAT_DEFAULT, bool inbWithMipsMaps = false);
+			TexturePtr GetTextureFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default, bool inbWithMipsMaps = false);
 			//-----------------------------------------------------------------
 			/// Async Get Texture From File
 			///
@@ -81,7 +81,7 @@ namespace moFlo
 			/// @param Enable mip-mapping
 			/// @return Generic pointer to resource type
 			//-----------------------------------------------------------------
-			TexturePtr AsyncGetTextureFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat = Core::CImage::FORMAT_DEFAULT, bool inbWithMipsMaps = false);
+			TexturePtr AsyncGetTextureFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default, bool inbWithMipsMaps = false);
 			//----------------------------------------------------------------
 			/// Create Empty Texture
 			///
@@ -99,7 +99,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -108,7 +108,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr AsyncGetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
 			//-----------------------------------------------------------------
 			/// GetDefaultTexture
 			///
@@ -147,7 +147,7 @@ namespace moFlo
 				std::string strFilename;
 				Core::CImage::Format eImageFormat;
 				bool bUseMipmaps;
-                Core::STORAGE_LOCATION eStorageLocation;
+                Core::StorageLocation eStorageLocation;
 				Core::ResourcePtr pImageResource;
 				TexturePtr pTextureResource;
 			};

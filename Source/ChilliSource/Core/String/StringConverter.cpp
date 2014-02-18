@@ -225,17 +225,17 @@ namespace moFlo
 			return stream.str();
 		}
         //-----------------------------------------------------------------------
-        std::string CStringConverter::ToString(STORAGE_LOCATION instrStorageLocation)
+        std::string CStringConverter::ToString(StorageLocation instrStorageLocation)
         {
             switch (instrStorageLocation)
             {
-                case SL_PACKAGE:
+                case StorageLocation::k_package:
                     return "Package";
-                case SL_SAVEDATA:
+                case StorageLocation::k_saveData:
                     return "SaveData";
-                case SL_CACHE:
+                case StorageLocation::k_cache:
                     return "Cache";
-                case SL_DLC:
+                case StorageLocation::k_DLC:
                     return "DLC";
                 default:
                     return "";
@@ -390,15 +390,15 @@ namespace moFlo
             return cRet;
 		}
 		//-----------------------------------------------------------------------
-        STORAGE_LOCATION CStringConverter::ParseStorageLocation(const std::string &instrStorageLocation)
+        StorageLocation CStringConverter::ParseStorageLocation(const std::string &instrStorageLocation)
 		{
-			if(instrStorageLocation == "Package")		return SL_PACKAGE;
-			if(instrStorageLocation == "SaveData")		return SL_SAVEDATA;
-			if(instrStorageLocation == "Cache")         return SL_CACHE;
-			if(instrStorageLocation == "DLC")           return SL_DLC;
+			if(instrStorageLocation == "Package")		return StorageLocation::k_package;
+			if(instrStorageLocation == "SaveData")		return StorageLocation::k_saveData;
+			if(instrStorageLocation == "Cache")         return StorageLocation::k_cache;
+			if(instrStorageLocation == "DLC")           return StorageLocation::k_DLC;
 			
 			//No test function found
-			return SL_PACKAGE;
+			return StorageLocation::k_package;
 		}
 		//-----------------------------------------------------------------------
 		bool  CStringConverter::isNumber(const std::string& val)

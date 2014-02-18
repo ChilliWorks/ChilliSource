@@ -62,7 +62,7 @@ namespace moFlo
     //----------------------------------------------
     void FlushBuffer()
     {
-        Core::FileStreamPtr pLogFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(Core::SL_CACHE, kstrFileName, Core::FM_WRITE_APPEND);
+        Core::FileStreamPtr pLogFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FM_WRITE_APPEND);
         pLogFile->Write(gstrLogBuffer);
         gstrLogBuffer.clear();
         pLogFile->Close();
@@ -78,7 +78,7 @@ namespace moFlo
     {
 #ifdef MOFLOW_LOG_TO_FILE
         //Clear the old file
-        Core::FileStreamPtr pLogFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(Core::SL_CACHE, kstrFileName, Core::FM_WRITE);
+        Core::FileStreamPtr pLogFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FM_WRITE);
         pLogFile->Write("MoFlow Log File");
         pLogFile->Close();
 #endif
@@ -239,7 +239,7 @@ namespace moFlo
     void CLogging::GetLogData(std::stringstream& outStream)
     {
         //Clear the old file
-        Core::FileStreamPtr pLogFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(Core::SL_CACHE, kstrFileName, Core::FM_READ);
+        Core::FileStreamPtr pLogFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FM_READ);
         pLogFile->Get(outStream);
         outStream << gstrLogBuffer;
         pLogFile->Close();

@@ -39,12 +39,12 @@ namespace moFlo
 		{
 		public: 
 			
-            enum Verts
+            enum class Verts
             {
-                VERT_TOP_LEFT,
-                VERT_BOTTOM_LEFT,
-                VERT_TOP_RIGHT,
-                VERT_BOTTOM_RIGHT,
+                k_topLeft,
+                k_bottomLeft,
+                k_topRight,
+                k_bottomRight
             };
             
             struct SpriteVertex
@@ -230,7 +230,7 @@ namespace moFlo
             ///
 			/// Controls where in the sprite it's origin is assumed to be
 			///
-			/// @param Alignment to set origin to be (ALIGN_MIDDLE_CENTRE) by default
+			/// @param Alignment to set origin to be (AlignmentAnchor::k_middleCentre) by default
 			//-----------------------------------------------------------
 			void SetOriginAlignment(Core::AlignmentAnchor ineAlignment);
 			//-----------------------------------------------------------

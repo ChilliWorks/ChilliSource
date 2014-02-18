@@ -23,7 +23,7 @@ namespace moFlo
 		/// Default
 		//-------------------------------------------------------
 		IResource::IResource(): mpOwningResMgr(NULL), mbIsHighRes(false), mbIsLoaded(false), mpMutex(new std::mutex()),
-				mpCondition(new std::condition_variable()), meStorageLocation(SL_NONE), mstrFilename("")
+        mpCondition(new std::condition_variable()), meStorageLocation(StorageLocation::k_none), mstrFilename("")
 		{
 		}
 		//-------------------------------------------------------
@@ -90,7 +90,7 @@ namespace moFlo
 		///
 		/// @param The storage location of the resource.
 		//-------------------------------------------------------
-		void IResource::SetStorageLocation(STORAGE_LOCATION ineStorageLocation)
+		void IResource::SetStorageLocation(StorageLocation ineStorageLocation)
 		{
 			meStorageLocation = ineStorageLocation;
 		}
@@ -99,7 +99,7 @@ namespace moFlo
 		///
 		/// @return The storage location of the resource.
 		//-------------------------------------------------------
-		const STORAGE_LOCATION& IResource::GetStorageLocation() const
+		const StorageLocation& IResource::GetStorageLocation() const
 		{
 			return meStorageLocation;
 		}

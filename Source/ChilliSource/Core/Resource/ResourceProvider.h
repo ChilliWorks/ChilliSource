@@ -29,13 +29,13 @@ namespace moFlo
 			virtual bool CanCreateResourceFromFileWithExtension(const std::string & inExtension) const = 0;
 			
 			//---Filepath is relative to the resources directory - either the documents or the package
-			virtual bool CreateResourceFromFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource) = 0;
-			virtual bool AsyncCreateResourceFromFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource) 
+			virtual bool CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource) = 0;
+			virtual bool AsyncCreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
             {
                 WARNING_LOG("No implementation for AsyncCreateResourceFromFile"); 
                 return false;
             };
-			virtual bool StreamResourceFromFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
+			virtual bool StreamResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
             {
                 WARNING_LOG("No implementation for StreamResourceFromFile"); 
                 return false;

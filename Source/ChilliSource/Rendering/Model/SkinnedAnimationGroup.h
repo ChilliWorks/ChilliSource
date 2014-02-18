@@ -21,13 +21,10 @@ namespace moFlo
 		///
 		/// Describes the different types of animation blend.
 		//===============================================================
-        namespace AnimationBlendType
+        enum class AnimationBlendType
         {
-            enum ENUM
-            {
-                LINEAR
-            };
-        }
+            k_linear
+        };
         //===============================================================
 		/// Skinned Animation Group
 		///
@@ -73,7 +70,7 @@ namespace moFlo
             /// @param the playback position.
             /// @param the blendline position.
 			//----------------------------------------------------------
-			void BuildAnimationData(AnimationBlendType::ENUM ineBlendType, f32 infPlaybackPosition, f32 infBlendlinePosition);
+			void BuildAnimationData(AnimationBlendType ineBlendType, f32 infPlaybackPosition, f32 infBlendlinePosition);
             //----------------------------------------------------------
 			/// Blend Group
             ///
@@ -83,7 +80,7 @@ namespace moFlo
             /// @param the playback position.
             /// @param the blendline position.
 			//----------------------------------------------------------
-			void BlendGroup(AnimationBlendType::ENUM ineBlendType, const SkinnedAnimationGroupPtr& inpAnimationGroup, f32 infBlendFactor);
+			void BlendGroup(AnimationBlendType ineBlendType, const SkinnedAnimationGroupPtr& inpAnimationGroup, f32 infBlendFactor);
             //----------------------------------------------------------
 			/// Build Matrices
             ///

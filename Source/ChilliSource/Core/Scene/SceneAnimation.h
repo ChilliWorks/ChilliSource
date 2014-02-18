@@ -32,7 +32,7 @@ namespace  moFlo
             /// @param Path to file
             /// @return Success
             //---------------------------------------------------------------
-            bool LoadFromBinaryFile(STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath);
+            bool LoadFromBinaryFile(StorageLocation ineStorageLocation, const std::string & inFilePath);
             //--------------------------------------------------------------
             /// SaveToBinaryFile
             ///
@@ -42,7 +42,7 @@ namespace  moFlo
             /// @param Path to file
             /// @return Success
             //---------------------------------------------------------------
-            void SaveToBinaryFile(STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath);
+            void SaveToBinaryFile(StorageLocation ineStorageLocation, const std::string & inFilePath);
             struct EntityAnimationDesc
 			{
 				std::string strTargetPath;
@@ -88,8 +88,8 @@ namespace  moFlo
             /// @param Playback mode
             /// @return Success
             //---------------------------------------------------------------
-            bool PlayAnimation(const EntityPtr& inpRootNode, DYNAMIC_ARRAY<EntityAnimationPtr>& outEntityAnimList, moFlo::AnimationPlayMode inePlayMode = moFlo::ANIM_PLAYONCE, InterpolationType ineInterType = INTERPOLATION_LINEAR) const;
-            bool PlayAnimation(CEntity* inpRootNode, DYNAMIC_ARRAY<EntityAnimationPtr>& outEntityAnimList, moFlo::AnimationPlayMode inePlayMode = moFlo::ANIM_PLAYONCE, InterpolationType ineInterType = INTERPOLATION_LINEAR) const;
+            bool PlayAnimation(const EntityPtr& inpRootNode, DYNAMIC_ARRAY<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode = AnimationPlayMode::k_once, InterpolationType ineInterType = InterpolationType::k_linear) const;
+            bool PlayAnimation(CEntity* inpRootNode, DYNAMIC_ARRAY<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode = AnimationPlayMode::k_once, InterpolationType ineInterType = InterpolationType::k_linear) const;
             
             //--------------------------------------------------------------
             /// SetSceneAnimDesc

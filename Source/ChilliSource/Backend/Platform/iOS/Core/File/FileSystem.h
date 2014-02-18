@@ -38,7 +38,7 @@ namespace moFlo
             /// @param The filepath.
             /// @param The file mode.
             //--------------------------------------------------------------
-            Core::FileStreamPtr CreateFileStream(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFilepath, Core::FILE_MODE ineFileMode) const;
+            Core::FileStreamPtr CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const;
             //--------------------------------------------------------------
             /// Create File
             ///
@@ -51,7 +51,7 @@ namespace moFlo
             /// @param The size of the data.
             /// @return Whether or not the file was successfully created.
             //--------------------------------------------------------------
-            bool CreateFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const;
+            bool CreateFile(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const;
             //--------------------------------------------------------------
             /// Create Directory
             ///
@@ -64,7 +64,7 @@ namespace moFlo
             ///         to create the directory due to it already existing
             ///         is still considered successful.
             //--------------------------------------------------------------
-            bool CreateDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory) const;
+            bool CreateDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const;
             //--------------------------------------------------------------
             /// Copy File
             ///
@@ -76,8 +76,8 @@ namespace moFlo
             /// @param The destination directory.
             /// @return Whether or not the file was successfully copied.
             //--------------------------------------------------------------
-            bool CopyFile(Core::STORAGE_LOCATION ineSourceStorageLocation, const std::string& instrSourceFilepath, 
-                          Core::STORAGE_LOCATION ineDestinationStorageLocation, const std::string& instrDestinationFilepath) const;
+            bool CopyFile(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceFilepath,
+                          Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationFilepath) const;
             //--------------------------------------------------------------
             /// Copy Directory
             ///
@@ -90,8 +90,8 @@ namespace moFlo
             /// @param The destination directory.
             /// @return Whether or not the files were successfully copied.
             //--------------------------------------------------------------
-            bool CopyDirectory(Core::STORAGE_LOCATION ineSourceStorageLocation, const std::string& instrSourceDirectory, 
-                               Core::STORAGE_LOCATION ineDestinationStorageLocation, const std::string& instrDestinationDirectory) const;
+            bool CopyDirectory(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceDirectory,
+                               Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationDirectory) const;
             //--------------------------------------------------------------
             /// Delete File
             ///
@@ -101,7 +101,7 @@ namespace moFlo
             /// @param The filepath.
             /// @return Whether or not the file was successfully deleted.
             //--------------------------------------------------------------
-            bool DeleteFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFilepath) const;
+            bool DeleteFile(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const;
             //--------------------------------------------------------------
             /// Delete Directory
             ///
@@ -111,7 +111,7 @@ namespace moFlo
             /// @param The directory.
             /// @return Whether or not the directory was successfully deleted.
             //--------------------------------------------------------------
-            bool DeleteDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory) const;
+            bool DeleteDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const;
             //--------------------------------------------------------------
             /// Get File Names With Extension In Directory
             ///
@@ -125,7 +125,7 @@ namespace moFlo
             /// @param The extension
             /// @param Output dynamic array containing the filenames.
             //--------------------------------------------------------------
-            void GetFileNamesWithExtensionInDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
+            void GetFileNamesWithExtensionInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
                                                       const std::string& instrExtension, DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath = false) const;
             //--------------------------------------------------------------
             /// Get Path For Files With Name In Directory
@@ -140,7 +140,7 @@ namespace moFlo
             /// @param The name
             /// @param Output dynamic array containing the filenames.
             //--------------------------------------------------------------
-            void GetPathForFilesWithNameInDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
+            void GetPathForFilesWithNameInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
                                                                  const std::string& instrName, DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath = false) const;
             //--------------------------------------------------------------
             /// Get File Names In Directory
@@ -153,7 +153,7 @@ namespace moFlo
             /// @param Flag to determine whether or not to recurse into sub directories
             /// @param Output dynamic array containing the filenames.
             //--------------------------------------------------------------
-            void GetFileNamesInDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
+            void GetFileNamesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
                                          DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath = false) const;
             //--------------------------------------------------------------
             /// Get Directories In Directory
@@ -166,7 +166,7 @@ namespace moFlo
             /// @param Flag to determine whether or not to recurse into sub directories
             /// @param Output dynamic array containing the dir names.
             //--------------------------------------------------------------
-            void GetDirectoriesInDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories, 
+            void GetDirectoriesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
                                            DYNAMIC_ARRAY<std::string> &outstrDirectories, bool inbAppendFullPath = false) const;
             //--------------------------------------------------------------
             /// Does File Exist
@@ -177,7 +177,7 @@ namespace moFlo
             /// @param The filepath
             /// @return Whether or not it exists.
             //--------------------------------------------------------------
-            bool DoesFileExist(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFilepath) const;
+            bool DoesFileExist(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const;
             //--------------------------------------------------------------
 			/// Does File Exist In Cached DLC
 			///
@@ -201,7 +201,7 @@ namespace moFlo
             /// @param The directory
             /// @return Whether or not it exists.
             //--------------------------------------------------------------
-            bool DoesDirectoryExist(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory) const;
+            bool DoesDirectoryExist(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const;
             //--------------------------------------------------------------
 			/// Get Directory For DLC File
 			///
@@ -223,7 +223,7 @@ namespace moFlo
 			/// @return whether or not the storage location is available on
             ///         this device.
 			//--------------------------------------------------------------
-			bool IsStorageLocationAvailable(Core::STORAGE_LOCATION ineStorageLocation) const;
+			bool IsStorageLocationAvailable(Core::StorageLocation ineStorageLocation) const;
             //--------------------------------------------------------------
 			/// Get Storage Location Directory
 			///
@@ -231,7 +231,7 @@ namespace moFlo
 			/// @return The directory. returns an empty string if the location
             ///         is not available.
 			//--------------------------------------------------------------
-			std::string GetStorageLocationDirectory(Core::STORAGE_LOCATION ineStorageLocation) const;
+			std::string GetStorageLocationDirectory(Core::StorageLocation ineStorageLocation) const;
 
 		private:
             //--------------------------------------------------------------
@@ -278,7 +278,7 @@ namespace moFlo
             /// @param File name to append
             /// @param Out: All the paths for the given location
             //------------------------------------------------------------
-            void GetPathsForStorageLocation(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFileName, DYNAMIC_ARRAY<std::string>& outaPaths) const;
+            void GetPathsForStorageLocation(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, DYNAMIC_ARRAY<std::string>& outaPaths) const;
             //--------------------------------------------------------------
             /// Create Hashed Bundle File List
             ///

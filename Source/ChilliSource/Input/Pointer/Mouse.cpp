@@ -14,7 +14,7 @@ namespace moFlo
 		//------------------------------------------------------
 		IMouse::IMouse() : mpTouchProxy(NULL)
 		{
-			memset(mbaButtonsDown, false, sizeof(bool) * MOUSE_NUM_BUTTON);
+			memset(mbaButtonsDown, false, sizeof(bool) * (u32)MouseInputType::k_total);
 		}
 		//------------------------------------------------------
 		/// Constructor
@@ -25,7 +25,7 @@ namespace moFlo
 		//------------------------------------------------------
 		IMouse::IMouse(ITouchScreen* inpTouchProxy) : mpTouchProxy(inpTouchProxy)
 		{
-			memset(mbaButtonsDown, false, sizeof(bool) * MOUSE_NUM_BUTTON);
+			memset(mbaButtonsDown, false, sizeof(bool) * (u32)MouseInputType::k_total);
 		}
 		//------------------------------------------------------
 		/// Is Button Down
@@ -35,7 +35,7 @@ namespace moFlo
 		//------------------------------------------------------
 		bool IMouse::IsButtonDown(MouseInputType ineButton) const
 		{
-			return mbaButtonsDown[ineButton];
+			return mbaButtonsDown[(u32)ineButton];
 		}
 		//------------------------------------------------------
 		/// Get Mouse Pressed Event

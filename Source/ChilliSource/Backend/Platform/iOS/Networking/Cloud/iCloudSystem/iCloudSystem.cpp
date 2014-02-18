@@ -43,9 +43,9 @@ namespace moFlo
             {
                 std::string strPath = GetCloudStoragePath();
                 
-                for(u32 i = 0; i < eSharedTotal; ++i)
+                for(u32 i=0; i<(u32)CloudStorageArea::k_total; ++i)
                 {
-                    CreateDirectory(CloudStorageArea(eSharedDocuments + i), "");
+                    CreateDirectory(CloudStorageArea((u32)CloudStorageArea::k_sharedDocuments + i), "");
                 }
             }
             
@@ -205,7 +205,7 @@ namespace moFlo
         
 #pragma mark File/Folder Queries
         
-        bool CiCloudSystem::SyncFileToCloud(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFilePath, ICloudStorageSystem::OnSyncFileCompletedDelegate inSyncCompleteDelegate, ICloudStorageSystem::OnSyncConflictDelegate inSyncConflictDelegate)
+        bool CiCloudSystem::SyncFileToCloud(moFlo::Core::StorageLocation ineStorageLocation, const std::string& instrFilePath, ICloudStorageSystem::OnSyncFileCompletedDelegate inSyncCompleteDelegate, ICloudStorageSystem::OnSyncConflictDelegate inSyncConflictDelegate)
         {
             if(!IsCloudStorageEnabled())
                 return false;
@@ -280,7 +280,7 @@ namespace moFlo
             
             
             //We want to copy our local copies contents straight to the server
-            FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath, moFlo::Core::FM_READ);
+            FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath, moFlo::Core::FileMode::k_read);
             
             std::string strLocalContents = "";
             
@@ -295,7 +295,7 @@ namespace moFlo
             if(!bExists)
             {
                 //Cloud version exists, local version does not - create local from cloud
-                FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath, moFlo::Core::FM_WRITE);
+                FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath, moFlo::Core::FileMode::k_write);
                 pFileStream->Write(strCloudContents);
                 pFileStream->Close();
                 
@@ -396,9 +396,9 @@ namespace moFlo
         {
             switch (ineChoice)
             {
-                case ICloudStorageSystem::eCopyCloudToLocal:
+                case ICloudStorageSystem::FileConflictChoice::k_copyCloudToLocal:
                 {
-                    FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, moFlo::Core::FM_WRITE);
+                    FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, moFlo::Core::FileMode::k_write);
                     
                     if(pFileStream)
                     {
@@ -427,10 +427,10 @@ namespace moFlo
                     
                     break;
                 }
-                case ICloudStorageSystem::eCopyLocalToCloud:
+                case ICloudStorageSystem::FileConflictChoice::k_copyLocalToCloud:
                 {
                     //We want to copy our local copies contents straight to the server
-                    FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, moFlo::Core::FM_READ);
+                    FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, moFlo::Core::FileMode::k_read);
                     
                     if(pFileStream)
                     {

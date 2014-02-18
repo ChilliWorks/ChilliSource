@@ -64,7 +64,7 @@ namespace moFlo
         //----------------------------------------------------------
         /// Build Animation Data
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::BuildAnimationData(AnimationBlendType::ENUM ineBlendType, f32 infPlaybackPosition, f32 infBlendlinePosition)
+        void CSkinnedAnimationGroup::BuildAnimationData(AnimationBlendType ineBlendType, f32 infPlaybackPosition, f32 infBlendlinePosition)
         {
             //check how many animations we have. if we only have 1 then dont try and blend. If we have none then error.
             if (mAnimations.size() > 1)
@@ -101,7 +101,7 @@ namespace moFlo
                     f32 fFactor = (infBlendlinePosition - pAnimItem1->fBlendlinePosition) / (pAnimItem2->fBlendlinePosition - pAnimItem1->fBlendlinePosition);
                     switch (ineBlendType)
                     {
-                        case AnimationBlendType::LINEAR:
+                        case AnimationBlendType::k_linear:
                             mCurrentAnimationData = LerpBetweenFrames(pFrame1, pFrame2, fFactor);
                             break;
                         default:
@@ -140,11 +140,11 @@ namespace moFlo
         //----------------------------------------------------------
         /// Blend Group
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::BlendGroup(AnimationBlendType::ENUM ineBlendType, const SkinnedAnimationGroupPtr& inpAnimationGroup, f32 infBlendFactor)
+        void CSkinnedAnimationGroup::BlendGroup(AnimationBlendType ineBlendType, const SkinnedAnimationGroupPtr& inpAnimationGroup, f32 infBlendFactor)
         {
             switch (ineBlendType)
             {
-                case AnimationBlendType::LINEAR:
+                case AnimationBlendType::k_linear:
                     mCurrentAnimationData = LerpBetweenFrames(mCurrentAnimationData, inpAnimationGroup->mCurrentAnimationData, infBlendFactor);
                     break;
                 default:

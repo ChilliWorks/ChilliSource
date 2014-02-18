@@ -252,7 +252,15 @@ namespace moFlo
             //---------------------------------------------------------
             void PushHierarchy(const StatePtr& inpState);
 			
-			enum StateOperationAction{PUSH_STATE, POP_STATE, POP_TO_TARGET_STATE, POP_TO_TARGET_STATE_UNIQUE, CLEAR_STACK};
+			enum class StateOperationAction
+            {
+                k_push,
+                k_pop,
+                k_popTo,
+                k_popToUnique,
+                k_clear
+            };
+            
 			struct StateOperation
 			{
 				StateOperation(StateOperationAction ineAction) : eAction(ineAction), pRawState(NULL){}

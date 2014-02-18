@@ -68,7 +68,7 @@ namespace moFlo
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr IMaterialManager::GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr IMaterialManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetMaterialFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -80,7 +80,7 @@ namespace moFlo
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr IMaterialManager::AsyncGetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr IMaterialManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetMaterialFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -96,7 +96,7 @@ namespace moFlo
 		/// @param Material type
 		/// @return A handle to the Material
 		//----------------------------------------------------------------
-		MaterialPtr IMaterialManager::GetMaterialFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath)
+		MaterialPtr IMaterialManager::GetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -141,7 +141,7 @@ namespace moFlo
 		/// @param Material type
 		/// @return A handle to the Material
 		//----------------------------------------------------------------
-		MaterialPtr IMaterialManager::AsyncGetMaterialFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath)
+		MaterialPtr IMaterialManager::AsyncGetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			

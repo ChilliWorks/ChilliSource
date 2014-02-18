@@ -56,21 +56,21 @@ namespace moFlo
 		//-----------------------------------------------------------------
 		/// Get Resource From File
 		//-----------------------------------------------------------------
-		Core::ResourcePtr CSkinnedAnimationManager::GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr CSkinnedAnimationManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetSkinnedAnimationFromFile(ineStorageLocation, instrFilePath);
 		}
 		//-----------------------------------------------------------------
 		/// Async Get Resource From File
 		//-----------------------------------------------------------------
-		Core::ResourcePtr CSkinnedAnimationManager::AsyncGetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr CSkinnedAnimationManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetSkinnedAnimationFromFile(ineStorageLocation, instrFilePath);
 		}
 		//-----------------------------------------------------------------
 		/// Get Skinned Animation From File
 		//-----------------------------------------------------------------
-		SkinnedAnimationPtr CSkinnedAnimationManager::GetSkinnedAnimationFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		SkinnedAnimationPtr CSkinnedAnimationManager::GetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
 			
@@ -114,7 +114,7 @@ namespace moFlo
 		//-----------------------------------------------------------------
 		/// Async Get Skinned Animation From File
 		//-----------------------------------------------------------------
-		SkinnedAnimationPtr CSkinnedAnimationManager::AsyncGetSkinnedAnimationFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		SkinnedAnimationPtr CSkinnedAnimationManager::AsyncGetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
 			

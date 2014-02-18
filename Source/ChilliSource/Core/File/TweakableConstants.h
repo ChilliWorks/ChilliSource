@@ -35,7 +35,7 @@ namespace moFlo
 			static CTweakableConstants & GetSingleton();
 			static CTweakableConstants * GetSingletonPtr();
 			
-			void AddSourceFile(STORAGE_LOCATION ineStorageLocation, const std::string & inFileName, bool inbLoadNow = true);
+			void AddSourceFile(StorageLocation ineStorageLocation, const std::string & inFileName, bool inbLoadNow = true);
 			
 			void Reload();
 			
@@ -61,7 +61,7 @@ namespace moFlo
 		protected:
 			static CTweakableConstants * msSingleton;
 			void LoadValues();
-			void LoadFile(STORAGE_LOCATION ineStorageLocation, const std::string & inFileName);
+			void LoadFile(StorageLocation ineStorageLocation, const std::string & inFileName);
 			
 			void ParseFileElement(TiXmlElement * inpElement, const std::string & outCurrentNamespace);
 			

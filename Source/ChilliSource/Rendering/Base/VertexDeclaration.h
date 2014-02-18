@@ -14,25 +14,25 @@ namespace moFlo
 {
 	namespace Rendering
 	{
-		enum TYPE			{FLOAT2, FLOAT3, FLOAT4, BYTE4};
-		enum SEMANTIC		{POSITION, NORMAL, UV, COLOUR, WEIGHTS, JOINT_INDICES};
+		enum class VertexDataType {k_float2, k_float3, k_float4, k_byte4};
+		enum class VertexDataSemantic {k_position, k_normal, k_uv, k_colour, k_weight, k_jointIndex};
 		
 		struct VertexElement
 		{
-			TYPE eType;
-			SEMANTIC eSemantic;
+			VertexDataType eType;
+			VertexDataSemantic eSemantic;
 			
 			const u16 Size() const 
 			{
 				switch(eType)
 				{
-					case FLOAT2:
+					case VertexDataType::k_float2:
 						return sizeof(f32) * 2;
-					case FLOAT3:
+					case VertexDataType::k_float3:
 						return sizeof(f32) * 3;
-					case FLOAT4:
+					case VertexDataType::k_float4:
 						return sizeof(f32) * 4;
-                    case BYTE4:
+                    case VertexDataType::k_byte4:
                         return sizeof(u8) * 4;
 					default:
 						return 0;
@@ -42,13 +42,13 @@ namespace moFlo
 			{
 				switch(eType)
 				{
-					case FLOAT2:
+					case VertexDataType::k_float2:
 						return 2;
-					case FLOAT3:
+					case VertexDataType::k_float3:
 						return 3;
-					case FLOAT4:
+					case VertexDataType::k_float4:
 						return 4;
-                    case BYTE4:
+                    case VertexDataType::k_byte4:
                         return 4;
 					default:
 						return 0;

@@ -45,7 +45,7 @@ namespace moFlo
 		{
 			std::string strValue;
 
-            Core::STORAGE_LOCATION eSpriteSheetLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SpriteSheetLocation", strValue))
             {
                 eSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -268,7 +268,7 @@ namespace moFlo
                 if (ActAsSpacer == false)
                 {
                     Core::CVector2 vPanelPos = GetAbsoluteScreenSpacePosition();
-                    Core::CVector2 vTopLeft = GetAbsoluteAnchorPoint(Core::ALIGN_TOP_LEFT);
+                    Core::CVector2 vTopLeft = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topLeft);
                     Core::CVector2 vPatchPos;
                     
                     Core::CColour AbsColour = GetAbsoluteColour();
@@ -288,7 +288,7 @@ namespace moFlo
                     // Record size the caps need to shrink
                     f32 fShrinkX = (vPatchSize.x < 0 ? vPatchSize.x : 0) * 0.5f;
                     vPatchPos.x = vTopLeft.x + SpriteSheet->GetSizeForFrame(mudwLeftCapIndex).x + fShrinkX;
-                    vPatchPos.y = GetAbsoluteAnchorPoint(Core::ALIGN_TOP_CENTRE).y;
+                    vPatchPos.y = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topCentre).y;
                     // Clamp the size of the middle
                     vPatchSize.x = (vPatchSize.x < 0 ? 0 : vPatchSize.x);
                     
@@ -302,17 +302,17 @@ namespace moFlo
                                        SpriteSheet->GetTexture(), 
                                        SpriteSheet->GetUVsForFrame(mudwLeftCapIndex), 
                                        AbsColour, 
-                                       Core::ALIGN_TOP_LEFT);
+                                       Core::AlignmentAnchor::k_topLeft);
                     
                     //Draw the right cap
-                    matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::ALIGN_TOP_RIGHT));
+                    matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topRight));
                     Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                     inpCanvas->DrawBox(matTransform, 
                                        Core::CVector2(SpriteSheet->GetSizeForFrame(mudwRightCapIndex).x + fShrinkX,vPanelSize.y),
                                        SpriteSheet->GetTexture(), 
                                        SpriteSheet->GetUVsForFrame(mudwRightCapIndex), 
                                        AbsColour, 
-                                       Core::ALIGN_TOP_RIGHT);
+                                       Core::AlignmentAnchor::k_topRight);
                     
                     // Draw the centre going from left to right cap
                     matPatchTransform.Translate(vPatchPos);
@@ -322,7 +322,7 @@ namespace moFlo
                                        SpriteSheet->GetTexture(),
                                        SpriteSheet->GetUVsForFrame(mudwCentreIndex),
                                        AbsColour,
-                                       Core::ALIGN_TOP_LEFT);
+                                       Core::AlignmentAnchor::k_topLeft);
 				}
                 
 				//Render subviews

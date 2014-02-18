@@ -76,7 +76,7 @@ namespace moFlo
 			std::string strValue;
             
 			//---Bar Sprite sheet
-            Core::STORAGE_LOCATION eBarSpriteSheetLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eBarSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("BarSpriteSheetLocation", strValue))
             {
                 eBarSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -86,7 +86,7 @@ namespace moFlo
 				SetBarSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eBarSpriteSheetLocation, strValue));
 			}
 			//---Slider Sprite sheet
-            Core::STORAGE_LOCATION eSliderSpriteSheetLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eSliderSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SliderSpriteSheetLocation", strValue))
             {
                 eSliderSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);

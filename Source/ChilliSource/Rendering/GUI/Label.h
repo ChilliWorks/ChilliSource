@@ -21,20 +21,20 @@ namespace moFlo
 {
     namespace GUI
     {
-		enum TextJustification
+		enum class TextJustification
         {
-            JUSTIFY_LEFT,
-            JUSTIFY_RIGHT,
-            JUSTIFY_CENTRE,
-			JUSTIFY_TOP,
-			JUSTIFY_BOTTOM
+            k_left,
+            k_right,
+            k_centre,
+            k_top,
+            k_bottom
         };
 		
-		enum TextOverflowBehaviour
+		enum class TextOverflowBehaviour
 		{
-			OVERFLOW_NONE,
-			OVERFLOW_CLIP,
-			OVERFLOW_FOLLOW
+            k_none,
+            k_clip,
+            k_follow
 		};
 		
         class CLabel : public CGUIView

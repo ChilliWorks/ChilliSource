@@ -27,10 +27,10 @@ namespace moFlo
         
         struct IAPProductRegInfo
         {
-            enum Type
+            enum class Type
             {
-                MANAGED,
-                UNMANAGED
+                k_managed,
+                k_unmanaged
             };
             
             std::string strID;
@@ -46,14 +46,14 @@ namespace moFlo
             std::string strTransactionID;
             std::string strReceipt;
             
-            enum Status
+            enum class Status
             {
-                SUCCEEDED,
-                FAILED,
-                CANCELLED,
-                REFUNDED,
-                RESTORED,
-                RESUMED
+                k_succeeded,
+                k_failed,
+                k_cancelled,
+                k_refunded,
+                k_restored,
+                k_resumed
             };
         };
         

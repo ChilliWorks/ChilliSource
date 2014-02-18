@@ -87,12 +87,12 @@ namespace moFlo
             
         private:
             
-            enum Action
+            enum class Action
             {
-                CREATE_SESSION,
-                UPDATE_LOCATION,
-                FLUSH_BATCH,
-                CLOSE_SESSION
+                k_createSession,
+                k_updateLocation,
+                k_flushBatch,
+                k_closeSession
             };
             
             bool CanPerformNextAction() const;

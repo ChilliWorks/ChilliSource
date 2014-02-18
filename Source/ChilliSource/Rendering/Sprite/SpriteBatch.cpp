@@ -32,8 +32,8 @@ namespace moFlo
 			desc.eUsageFlag = ineUsage;
 			desc.VertexDataCapacity = (inudwCapacity + 1) * kudwVertsPerSprite * sizeof(CSpriteComponent::SpriteVertex); 
 			desc.IndexDataCapacity  = (inudwCapacity + 1) * sizeof(u16) * kudwIndicesPerSprite;
-			desc.ePrimitiveType = TRIS;
-			desc.eAccessFlag = READ;
+			desc.ePrimitiveType = PrimitiveType::k_tri;
+			desc.eAccessFlag = BufferAccess::k_read;
 			desc.VertexLayout = VertexLayout::kSprite;
 			
 			mpSpriteBuffer = inpRenderSystem->CreateBuffer(desc);
@@ -88,10 +88,10 @@ namespace moFlo
 		void CSpriteBatch::MapSpriteIntoBuffer(CSpriteComponent::SpriteVertex* inpBuffer, const CSpriteComponent::SpriteData &inpSprite)
         {
 			//---Map the vertex data into the buffer	
-			inpBuffer[CSpriteComponent::VERT_TOP_LEFT] = inpSprite.sVerts[CSpriteComponent::VERT_TOP_LEFT];
-			inpBuffer[CSpriteComponent::VERT_BOTTOM_LEFT] = inpSprite.sVerts[CSpriteComponent::VERT_BOTTOM_LEFT];
-			inpBuffer[CSpriteComponent::VERT_TOP_RIGHT] = inpSprite.sVerts[CSpriteComponent::VERT_TOP_RIGHT];
-			inpBuffer[CSpriteComponent::VERT_BOTTOM_RIGHT] = inpSprite.sVerts[CSpriteComponent::VERT_BOTTOM_RIGHT];
+			inpBuffer[(u32)CSpriteComponent::Verts::k_topLeft] = inpSprite.sVerts[(u32)CSpriteComponent::Verts::k_topLeft];
+			inpBuffer[(u32)CSpriteComponent::Verts::k_bottomLeft] = inpSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft];
+			inpBuffer[(u32)CSpriteComponent::Verts::k_topRight] = inpSprite.sVerts[(u32)CSpriteComponent::Verts::k_topRight];
+			inpBuffer[(u32)CSpriteComponent::Verts::k_bottomRight] = inpSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight];
 		}
         //------------------------------------------------------
         /// Remap Sprite

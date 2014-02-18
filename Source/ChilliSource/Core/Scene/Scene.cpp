@@ -62,7 +62,7 @@ namespace moFlo
 		void CScene::BecomeInactive()
 		{
 			Input::TouchInfo sInfo;
-			sInfo.eType = Input::TOUCH_ENDED;
+			sInfo.eType = Input::TouchInputType::k_ended;
 			mpRootWindow->_OnTouchEnded(sInfo);
 			//((ISurface*)mpRootWindow)->EnableUserInteraction(false);
             mpRootWindow->UnlistenFromTouches();

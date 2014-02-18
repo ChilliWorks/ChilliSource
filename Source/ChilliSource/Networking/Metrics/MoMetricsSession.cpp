@@ -109,7 +109,7 @@ namespace moFlo
             mQueuedEvents.clear();
             
             Json::Value jSession;
-            Core::CUtils::ReadJson(Core::SL_CACHE, instrID + ".mosession", &jSession);
+            Core::CUtils::ReadJson(Core::StorageLocation::k_cache, instrID + ".mosession", &jSession);
             
             mstrID = jSession["ID"].asString();
             mstrToken = jSession["Token"].asString();
@@ -144,7 +144,7 @@ namespace moFlo
                 QueueEvent(sEvent);
             }
             
-            Core::CApplication::GetFileSystemPtr()->DeleteFile(Core::SL_CACHE,  instrID + ".mosession");
+            Core::CApplication::GetFileSystemPtr()->DeleteFile(Core::StorageLocation::k_cache,  instrID + ".mosession");
         }
         
         void CMoMetricsSession::SaveToCache()
@@ -187,7 +187,7 @@ namespace moFlo
                 jSession["Country"] = msLocation.strCountry;
             }
             
-            Core::CUtils::StringToFile(Core::SL_CACHE, mstrID + ".mosession", jSession.toUnformattedString());
+            Core::CUtils::StringToFile(Core::StorageLocation::k_cache, mstrID + ".mosession", jSession.toUnformattedString());
             
 			mQueuedEvents.clear();
         }
@@ -229,16 +229,16 @@ namespace moFlo
             
             switch(mQueuedActions.front())
             {
-                case CREATE_SESSION:
+                case Action::k_createSession:
                     MakeSessionRequest();
                     break;
-                case UPDATE_LOCATION:
+                case Action::k_updateLocation:
                     MakeLocationUpdateRequest(msLocation);
                     break;
-                case FLUSH_BATCH:
+                case Action::k_flushBatch:
                     MakeFlushRequest(kudwMaxEventsPerBatch);
                     break;
-                case CLOSE_SESSION:
+                case Action::k_closeSession:
                     MakeCloseRequest();
                     break;
             }
@@ -265,7 +265,7 @@ namespace moFlo
         
         void CMoMetricsSession::RequestAuthTokens()
         {
-            QueueAction(CREATE_SESSION);
+            QueueAction(Action::k_createSession);
         }
         
         void CMoMetricsSession::MakeSessionRequest()
@@ -298,7 +298,7 @@ namespace moFlo
         
         void CMoMetricsSession::OnAuthTokensRequestComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
 		{
-			if (ineResult == IHttpRequest::TIMEOUT || inpRequest->GetResponseCode() == kHTTPBusy)
+			if (ineResult == IHttpRequest::CompletionResult::k_timeout || inpRequest->GetResponseCode() == kHTTPBusy)
             {
                 OnActionRetry();
                 return;
@@ -326,7 +326,7 @@ namespace moFlo
         {
             msLocation = insLocation;
             
-            QueueAction(UPDATE_LOCATION);
+            QueueAction(Action::k_updateLocation);
         }
         
         void CMoMetricsSession::MakeLocationUpdateRequest(const MetricsLocation& insLocation)
@@ -350,7 +350,7 @@ namespace moFlo
         
         void CMoMetricsSession::OnLocationUpdateRequestComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
         {
-            if (ineResult == IHttpRequest::COMPLETED)
+            if (ineResult == IHttpRequest::CompletionResult::k_completed)
             {
                 if(inpRequest->GetResponseCode() == kHTTPBusy)
                 {
@@ -415,7 +415,7 @@ namespace moFlo
             }
             
             HttpRequestDetails sRequestDetails;
-			sRequestDetails.eType = HttpRequestDetails::POST;
+			sRequestDetails.eType = HttpRequestDetails::Type::k_post;
             sRequestDetails.strURL = mstrRealmUrl + sRequest.strEndpoint;
             std::string strRequestID;
             GenerateRequestID(strRequestID);
@@ -470,7 +470,7 @@ namespace moFlo
             
 			if (bMeetsBatchRequirement && !mbRequestInProgress && IsOpen())
             {
-                QueueAction(FLUSH_BATCH);
+                QueueAction(Action::k_flushBatch);
 			}
 		}
         
@@ -480,12 +480,12 @@ namespace moFlo
             u32 udwNumRemaining = mQueuedEvents.size()%kudwMaxEventsPerBatch;
             for(u32 i=0; i<udwNumFullBatched; ++i)
             {
-                QueueAction(FLUSH_BATCH);
+                QueueAction(Action::k_flushBatch);
             }
             
             if(udwNumRemaining > 0)
             {
-                QueueAction(FLUSH_BATCH);
+                QueueAction(Action::k_flushBatch);
             }
         }
         
@@ -564,7 +564,7 @@ namespace moFlo
 		
 		void CMoMetricsSession::FlushEventsRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
         {
-			if (ineResult == IHttpRequest::COMPLETED)
+			if (ineResult == IHttpRequest::CompletionResult::k_completed)
             {
                 if(inpRequest->GetResponseCode() == kHTTPBusy)
                 {
@@ -587,7 +587,7 @@ namespace moFlo
         
         void CMoMetricsSession::RequestClose()
         {
-            QueueAction(CLOSE_SESSION);
+            QueueAction(Action::k_closeSession);
         }
         
         void CMoMetricsSession::MakeCloseRequest()
@@ -605,7 +605,7 @@ namespace moFlo
         
         void CMoMetricsSession::OnCloseRequestComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
         {
-            if (ineResult == IHttpRequest::COMPLETED)
+            if (ineResult == IHttpRequest::CompletionResult::k_completed)
             {
                 if(inpRequest->GetResponseCode() == kHTTPBusy)
                 {

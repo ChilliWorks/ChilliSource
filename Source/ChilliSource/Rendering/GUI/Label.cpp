@@ -53,8 +53,8 @@ namespace moFlo
         ///
         /// Default
         //-------------------------------------------------------
-        CLabel::CLabel() : MaxNumLines(0), TextScale(1.0f), CharacterSpacing(0.0f), LineSpacing(1.0f), HorizontalJustification(JUSTIFY_LEFT),
-		VerticalJustification(JUSTIFY_CENTRE), Background(true), Autosizing(false), ScalableFont(false), ScalableHeight(0), TextOutlined(false), FlipVertical(false), mbLastDrawWasClipped(false), mbLastDrawHadInvalidCharacter(false)
+        CLabel::CLabel() : MaxNumLines(0), TextScale(1.0f), CharacterSpacing(0.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
+		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), ScalableFont(false), ScalableHeight(0), TextOutlined(false), FlipVertical(false), mbLastDrawWasClipped(false), mbLastDrawHadInvalidCharacter(false)
         {
             SetColour(Core::CColour(0.18f, 0.3f, 0.4f, 0.6f));
             Rendering::ITextureManager* pMgr = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::ITextureManager>();
@@ -75,8 +75,8 @@ namespace moFlo
         /// From param dictionary
         //-------------------------------------------------------
         CLabel::CLabel(const Core::ParamDictionary& insParams) 
-        : CGUIView(insParams), MaxNumLines(0), TextScale(1.0f), CharacterSpacing(0.0f), LineSpacing(1.0f), HorizontalJustification(JUSTIFY_LEFT),
-		VerticalJustification(JUSTIFY_CENTRE), Background(true), Autosizing(false), ScalableFont(false), ScalableHeight(0), TextOutlined(false), FlipVertical(false)
+        : CGUIView(insParams), MaxNumLines(0), TextScale(1.0f), CharacterSpacing(0.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
+		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), ScalableFont(false), ScalableHeight(0), TextOutlined(false), FlipVertical(false)
         {
             std::string strValue;
             
@@ -137,7 +137,7 @@ namespace moFlo
                 VerticalJustification = JustificationFromString(strValue);
             }
             //---Font
-            Core::STORAGE_LOCATION eFontLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eFontLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("FontLocation", strValue))
             {
                 eFontLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -563,26 +563,28 @@ namespace moFlo
         {
             if(instrJustification == "Left")
             {
-                return JUSTIFY_LEFT;
+                return TextJustification::k_left;
             }
             else if(instrJustification == "Right")
             {
-                return JUSTIFY_RIGHT;
+                return TextJustification::k_right;
             }
             else if(instrJustification == "Centre")
             {
-                return JUSTIFY_CENTRE;
+                return TextJustification::k_centre;
             }
 			else if(instrJustification == "Top")
             {
-                return JUSTIFY_TOP;
+                return TextJustification::k_top;
             }
             else if(instrJustification == "Bottom")
             {
-                return JUSTIFY_BOTTOM;
+                return TextJustification::k_bottom;
             }
             
-            return JUSTIFY_LEFT;
+            FATAL_LOG("No justification matches type");
+            
+            return TextJustification::k_left;
         }
         //-------------------------------------------------------
         /// Draw
@@ -597,8 +599,8 @@ namespace moFlo
             if(Visible)
             {
                 //Check if this is on screen
-                Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_TOP_RIGHT);
-                Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_BOTTOM_LEFT);
+                Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
+                Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft);
                 
                 if(vTopRight.y < 0 || vBottomLeft.y > Core::CScreen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::CScreen::GetOrientedWidth())
                 {
@@ -633,12 +635,12 @@ namespace moFlo
                     if(TextOutlined)
                     {
                         inpCanvas->DrawDistanceOutlinedString(Text, GetTransform(), TextScale * fAssetTextScale, Font, mCachedChars, TextColour * GetInheritedOpacity(), TextOutlineColour * GetAbsoluteColour(),
-                                          vAbsoluteLabelSize, fCharacterSpacingScaled, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, OVERFLOW_CLIP, MaxNumLines);
+                                          vAbsoluteLabelSize, fCharacterSpacingScaled, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, TextOverflowBehaviour::k_clip, MaxNumLines);
                     }
                     else
                     {
                         inpCanvas->DrawDistanceString(Text, GetTransform(), TextScale * fAssetTextScale, Font, mCachedChars, TextColour * GetAbsoluteColour(),
-                                                      vAbsoluteLabelSize, fCharacterSpacingScaled, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, OVERFLOW_CLIP, MaxNumLines);
+                                                      vAbsoluteLabelSize, fCharacterSpacingScaled, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, TextOverflowBehaviour::k_clip, MaxNumLines);
                     }
                 }
                 else
@@ -668,7 +670,7 @@ namespace moFlo
                     }
 #endif
                     inpCanvas->DrawString(Text, GetTransform(), TextScale * fAssetTextScale, Font, mCachedChars, sDrawColour,
-                                          vAbsoluteLabelSize, CharacterSpacing, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, OVERFLOW_CLIP, MaxNumLines,&mbLastDrawWasClipped,&mbLastDrawHadInvalidCharacter);
+                                          vAbsoluteLabelSize, CharacterSpacing, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, TextOverflowBehaviour::k_clip, MaxNumLines,&mbLastDrawWasClipped,&mbLastDrawHadInvalidCharacter);
                     
                 }
             
@@ -884,7 +886,7 @@ namespace moFlo
         void CLabel::OnTransformChanged(u32 inudwInvalidFlags)
         {
             CGUIView::OnTransformChanged(inudwInvalidFlags);
-            if ((inudwInvalidFlags & ABS_SIZE_CACHE) == ABS_SIZE_CACHE)
+            if ((inudwInvalidFlags & (u32)TransformCache::k_absSize) == (u32)TransformCache::k_absSize)
             {
                 mCachedChars.clear();
             }

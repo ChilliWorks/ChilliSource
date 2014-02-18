@@ -51,7 +51,7 @@ namespace moFlo
                 {
                     AuthenticateResponse sResponse;
                     sResponse.strToken = GetActiveToken();
-                    sResponse.eResult = IFacebookAuthenticationSystem::AR_SUCCESS;
+                    sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_success;
                     mAuthenticateDelegate(sResponse);
                 }
                 
@@ -93,7 +93,7 @@ namespace moFlo
                      if(mAuthenticateDelegate)
                      {
                          AuthenticateResponse sResponse;
-                         sResponse.eResult = IFacebookAuthenticationSystem::AR_FAILED;
+                         sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_failed;
                          mAuthenticateDelegate(sResponse);
                      }
                  }
@@ -113,7 +113,7 @@ namespace moFlo
                     if(mAuthenticateDelegate)
                     {
                         sResponse.strToken = moCore::CStringUtils::NSStringToString([[inpSession accessTokenData] accessToken]);
-                        sResponse.eResult = IFacebookAuthenticationSystem::AR_SUCCESS;
+                        sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_success;
                         mAuthenticateDelegate(sResponse);
                     }
                     break;
@@ -128,7 +128,7 @@ namespace moFlo
                 {
                     if(mAuthenticateDelegate)
                     {
-                        sResponse.eResult = IFacebookAuthenticationSystem::AR_FAILED;
+                        sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_failed;
                         mAuthenticateDelegate(sResponse);
                     }
                     break;
@@ -160,13 +160,13 @@ namespace moFlo
                      NSLog(@"%@", error.localizedDescription);
                      if(mAuthoriseReadDelegate)
                      {
-                         sResponse.eResult = IFacebookAuthenticationSystem::AR_FAILED;
+                         sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_failed;
                          mAuthoriseReadDelegate(sResponse);
                      }
                  }
                  else if(mAuthoriseReadDelegate)
                  {
-                     sResponse.eResult = IFacebookAuthenticationSystem::AR_SUCCESS;
+                     sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_success;
                      sResponse.strToken = GetActiveToken();
                      mAuthoriseReadDelegate(sResponse);
                  }
@@ -192,7 +192,7 @@ namespace moFlo
                         NSLog(@"%@", error.localizedDescription);
                         if(mAuthoriseWriteDelegate)
                         {
-                            sResponse.eResult = IFacebookAuthenticationSystem::AR_FAILED;
+                            sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_failed;
                             mAuthoriseWriteDelegate(sResponse);
                         }
                     }
@@ -221,11 +221,11 @@ namespace moFlo
                         
                         if(bPermissionMismatch == NO)
                         {
-                            sResponse.eResult = IFacebookAuthenticationSystem::AR_SUCCESS;
+                            sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_success;
                         }
                         else
                         {
-                            sResponse.eResult = IFacebookAuthenticationSystem::AR_PERMISSION_MISMATCH;
+                            sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_permissionMismatch;
                         }
                         
                         sResponse.strToken = GetActiveToken();

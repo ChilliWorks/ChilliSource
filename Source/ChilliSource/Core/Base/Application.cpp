@@ -74,7 +74,7 @@ namespace moFlo
         DYNAMIC_ARRAY<IUpdateable*> CApplication::mUpdateableSystems;
         DYNAMIC_ARRAY<SystemPtr> CApplication::mSystems;
         
-        ScreenOrientation CApplication::meDefaultOrientation = LANDSCAPE_RIGHT;
+        ScreenOrientation CApplication::meDefaultOrientation = ScreenOrientation::k_landscapeRight;
         
         CResourceManagerDispenser* CApplication::mpResourceManagerDispenser = NULL;
 		
@@ -365,7 +365,7 @@ namespace moFlo
         void CApplication::LoadDefaultResources()
         {
             Json::Value jRoot;
-            if(CUtils::ReadJson(SL_PACKAGE, "App.config", &jRoot) == true)
+            if(CUtils::ReadJson(StorageLocation::k_package, "App.config", &jRoot) == true)
             {
                 if(jRoot.isMember("MaxFPS"))
                 {
@@ -375,28 +375,28 @@ namespace moFlo
                 
                 if(jRoot.isMember("MasterText"))
                 {
-                    STORAGE_LOCATION eStorageLocation = GetStorageLocationFromString(jRoot["MasterText"].get("Location", "Package").asString());
+                    StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["MasterText"].get("Location", "Package").asString());
                     std::string strPath = jRoot["MasterText"].get("Path", "").asString();
                     RefreshMasterText(eStorageLocation, strPath);
                 }
                 
                 if(jRoot.isMember("DefaultMesh"))
                 {
-                    STORAGE_LOCATION eStorageLocation = GetStorageLocationFromString(jRoot["DefaultMesh"].get("Location", "Package").asString());
+                    StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultMesh"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultMesh"].get("Path", "").asString();
                     pDefaultMesh = LOAD_RESOURCE(Rendering::CMesh, eStorageLocation, strPath);
                 }
                 
                 if(jRoot.isMember("DefaultFont"))
                 {
-                    STORAGE_LOCATION eStorageLocation = GetStorageLocationFromString(jRoot["DefaultFont"].get("Location", "Package").asString());
+                    StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultFont"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultFont"].get("Path", "").asString();
                     pDefaultFont = LOAD_RESOURCE(Rendering::CFont, eStorageLocation, strPath);
                 }
                 
                 if(jRoot.isMember("DefaultMaterial"))
                 {
-                    STORAGE_LOCATION eStorageLocation = GetStorageLocationFromString(jRoot["DefaultMaterial"].get("Location", "Package").asString());
+                    StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultMaterial"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultMaterial"].get("Path", "").asString();
                     pDefaultMaterial = LOAD_RESOURCE(Rendering::CMaterial, eStorageLocation, strPath);
                 }
@@ -449,7 +449,7 @@ namespace moFlo
         /// @param Storage location
         /// @param File path excluding name (i.e. if root then "")
         //--------------------------------------------------------------------------------------------------
-        void CApplication::RefreshMasterText(STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory)
+        void CApplication::RefreshMasterText(StorageLocation ineStorageLocation, const std::string& instrDirectory)
         {
             //Load any localised text from file 
             if(!Core::CLocalisedText::LoadTextFromFile(ineStorageLocation, instrDirectory, Core::CDevice::GetLanguage().GetLanguageCode() + ".mofloloca"))

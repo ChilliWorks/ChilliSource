@@ -56,7 +56,7 @@ namespace moFlo
             struct TextureDesc
             {
                 std::string mstrFile;
-                Core::STORAGE_LOCATION meLocation;
+                Core::StorageLocation meLocation;
                 bool mbMipMapped;
             };
             
@@ -68,7 +68,7 @@ namespace moFlo
 			/// @param Out: Resource object
 			/// @return Whether the resource was loaded 
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Async Create Resource From File
 			///
@@ -77,7 +77,7 @@ namespace moFlo
 			/// @param Out: Resource object
 			/// @return Whether the resource was loaded 
 			//----------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			bool AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Build Material Task
 			///
@@ -85,7 +85,7 @@ namespace moFlo
 			/// @param Filename
 			/// @param Out: Resource object
 			//----------------------------------------------------------------------------
-			void BuildMaterialTask(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			void BuildMaterialTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Set Loaded Task
 			///
@@ -103,8 +103,8 @@ namespace moFlo
 			/// @param Out: Resource object
 			/// @return Whether the resource was loaded 
 			//----------------------------------------------------------------------------
-            bool BuildMaterialFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath,
-                                       DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::STORAGE_LOCATION, std::string> > >& outaShaderFiles,
+            bool BuildMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath,
+                                       DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles,
                                        DYNAMIC_ARRAY<TextureDesc>& outaTextureFiles,
                                        DYNAMIC_ARRAY<TextureDesc>& outaCubemapFiles,
                                        Core::ResourcePtr& outpResource);
@@ -134,7 +134,7 @@ namespace moFlo
             /// @param Material type
             /// @param Out: Shader files
             //----------------------------------------------------------------------------
-            void GetShaderFilesForMaterialType(const std::string& instrType, DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::STORAGE_LOCATION, std::string> > >& outaShaderFiles) const;
+            void GetShaderFilesForMaterialType(const std::string& instrType, DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles) const;
 
             IRenderCapabilities* mpRenderCapabilities;
 		};

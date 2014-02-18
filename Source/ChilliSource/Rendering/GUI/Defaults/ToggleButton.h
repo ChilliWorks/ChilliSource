@@ -155,13 +155,13 @@ namespace moFlo
             ///
             /// @param Audio effect played when the button is selected
             //-----------------------------------------------------------
-            static void SetDefaultSelectAudioEffect(Core::STORAGE_LOCATION ineLocation, const std::string instrAudioEffect);
+            static void SetDefaultSelectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect);
 			//-----------------------------------------------------------
             /// Set Default De-Select Audio Effect
             ///
             /// @param Audio effect played when the button is selected
             //-----------------------------------------------------------
-            static void SetDefaultDeselectAudioEffect(Core::STORAGE_LOCATION ineLocation, const std::string instrAudioEffect);
+            static void SetDefaultDeselectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect);
             //-----------------------------------------------------------
             /// Set Select Audio Effect
             ///

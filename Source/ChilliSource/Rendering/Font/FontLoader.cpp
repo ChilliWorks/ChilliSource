@@ -64,7 +64,7 @@ namespace moFlo
 		/// @param Out: Resource object
 		/// @return Whether the resource was created successfully
 		//----------------------------------------------------------------------------
-		bool CFontLoader::CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string& inFilePath, Core::ResourcePtr& outpResource)  
+		bool CFontLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string& inFilePath, Core::ResourcePtr& outpResource)
 		{
             bool bResult = false;
             
@@ -74,7 +74,7 @@ namespace moFlo
             std::string strGlyphs;
 			
 			//Open the characters for reading only
-			moFlo::Core::FileStreamPtr pGlyphsStream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, moFlo::Core::FM_READ);
+			Core::FileStreamPtr pGlyphsStream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_read);
 
 			if(pGlyphsStream && !pGlyphsStream->IsBad())
 			{
@@ -100,26 +100,26 @@ namespace moFlo
         //----------------------------------------------------------------------------
         /// Has Kerning Info
         //----------------------------------------------------------------------------
-        const bool CFontLoader::HasKerningInfo(const moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string& inFilePath) const
+        const bool CFontLoader::HasKerningInfo(const Core::StorageLocation ineStorageLocation, const std::string& inFilePath) const
         {
             // Get the kerning file
             std::string strFileName, strExtension;
 			Core::CStringUtils::SplitBaseFilename(inFilePath, strFileName, strExtension);
             const std::string stdKerningFilePath(strFileName+"."+kstrKerningExtension);
-			moFlo::Core::FileStreamPtr pKerningStream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, stdKerningFilePath, moFlo::Core::FM_READ);
+			moFlo::Core::FileStreamPtr pKerningStream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, stdKerningFilePath, Core::FileMode::k_read);
             
             return (pKerningStream && !pKerningStream->IsBad());
         }
         //----------------------------------------------------------------------------
         /// Load Kerning Info
         //----------------------------------------------------------------------------
-        bool CFontLoader::LoadKerningInfo(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string& inFilePath, CFont* inpFont)
+        bool CFontLoader::LoadKerningInfo(Core::StorageLocation ineStorageLocation, const std::string& inFilePath, CFont* inpFont)
         {
             // Get the kerning file
             std::string strFileName, strExtension;
 			Core::CStringUtils::SplitBaseFilename(inFilePath, strFileName, strExtension);
             const std::string stdKerningFilePath(strFileName+"."+kstrKerningExtension);
-			moFlo::Core::FileStreamPtr pKerningStream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, stdKerningFilePath, moFlo::Core::FM_READ);
+			Core::FileStreamPtr pKerningStream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, stdKerningFilePath, Core::FileMode::k_read);
             
 			if(pKerningStream && !pKerningStream->IsBad())
             {

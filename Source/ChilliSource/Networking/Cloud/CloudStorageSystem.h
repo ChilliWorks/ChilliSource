@@ -20,20 +20,26 @@ namespace moFlo
     {
     public:
         
-        enum CloudStorageArea { eSharedDocuments = 0, eSharedSaveData, eSharedCache, eSharedTotal } ;
+        enum class CloudStorageArea
+        {
+            k_sharedDocuments,
+            k_sharedSaveData,
+            k_sharedCache,
+            k_total
+        };
         
         struct FileSyncConflict 
         {
             std::string mstrLocalFilePath;
             std::string mstrCloudFilePath;
             
-            moFlo::Core::STORAGE_LOCATION meLocalFileLocation;
+            moFlo::Core::StorageLocation meLocalFileLocation;
             CloudStorageArea meCloudStorageLocation;
              
             std::string mstrLocalContents;
             std::string mstrCloudContents;
             
-            FileSyncConflict(moFlo::Core::STORAGE_LOCATION ineLocalStorageLocation, const std::string& instrFile, CloudStorageArea ineCloudStorageLocation, const std::string& instrCloudFile,
+            FileSyncConflict(moFlo::Core::StorageLocation ineLocalStorageLocation, const std::string& instrFile, CloudStorageArea ineCloudStorageLocation, const std::string& instrCloudFile,
                              const std::string& instrLocalContents, const std::string& instrCloudContents)
             {
                 mstrLocalFilePath = instrFile;
@@ -81,7 +87,12 @@ namespace moFlo
             }
         };
         
-        enum FileConflictChoice { eCopyLocalToCloud, eCopyCloudToLocal, eDoNothing };
+        enum class FileConflictChoice
+        {
+            k_copyLocalToCloud,
+            k_copyCloudToLocal,
+            k_doNothing
+        };
         
         //--------------------------------------------------------------------------------------------------------//
         //                                  Typedefs                                                              //
@@ -138,14 +149,15 @@ namespace moFlo
         //Helper function to return a string version of the enum for use in creating the url
         const std::string GetStringForStorageArea(CloudStorageArea ineArea) const
         {
-            switch (ineArea) {
-                case eSharedDocuments:
+            switch (ineArea)
+            {
+                case CloudStorageArea::k_sharedDocuments:
                     return "SharedDocuments";
                     break;
-                case eSharedCache:
+                case CloudStorageArea::k_sharedCache:
                     return "SharedCache";
                     break;
-                case eSharedSaveData:
+                case CloudStorageArea::k_sharedSaveData:
                     return "SharedSaveData";
                     break;
                 default:
@@ -154,22 +166,22 @@ namespace moFlo
             }
         }
         
-        const CloudStorageArea GetCloudStorageAreaForStorageArea(moFlo::Core::STORAGE_LOCATION ineStorageArea)
+        const CloudStorageArea GetCloudStorageAreaForStorageArea(moFlo::Core::StorageLocation ineStorageArea)
         {
             switch (ineStorageArea) {
-                case moFlo::Core::SL_PACKAGE:
-                    return eSharedDocuments;
-                case moFlo::Core::SL_SAVEDATA:
-                    return eSharedSaveData;
-                case moFlo::Core::SL_CACHE:
-                    return eSharedCache;
+                case Core::StorageLocation::k_package:
+                    return CloudStorageArea::k_sharedDocuments;
+                case Core::StorageLocation::k_saveData:
+                    return CloudStorageArea::k_sharedSaveData;
+                case Core::StorageLocation::k_cache:
+                    return CloudStorageArea::k_sharedCache;
                 default:
-                    return eSharedDocuments;
+                    return CloudStorageArea::k_sharedDocuments;
             }
         }
         
         
-        std::vector<FileSyncConflict*> mvsCachedConflicts;
+        DYNAMIC_ARRAY<FileSyncConflict*> mvsCachedConflicts;
         
         OnQueryFilesCompletedDelegate mOnQueryFilesCompletedDelegate;
     };

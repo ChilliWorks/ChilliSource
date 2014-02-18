@@ -69,10 +69,10 @@ namespace moFlo
             
             Notification sNotification;
             sNotification.bDismissed = false;
-            sNotification.eType = NOTICE_PUSH;
+            sNotification.eType = NotificationType::k_push;
             sNotification.TriggerTime = Core::CApplication::GetSystemTime();
             sNotification.ID = 0;
-            sNotification.ePriority = NOTICE_STANDARD;
+            sNotification.ePriority = NotificationPriority::k_standard;
             
             // Add the message
             NSObject* pApsObject = [inpPayload objectForKey:@"aps"];

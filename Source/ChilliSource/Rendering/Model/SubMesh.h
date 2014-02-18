@@ -50,7 +50,7 @@ namespace moFlo
 			///
 			/// @param the storage location of the default material.
 			//-----------------------------------------------------------------
-            Core::STORAGE_LOCATION GetDefaultMaterialStorageLocation();
+            Core::StorageLocation GetDefaultMaterialStorageLocation();
 			//-----------------------------------------------------------------
 			/// Get Internal Mesh Buffer
 			///
@@ -101,8 +101,8 @@ namespace moFlo
             /// @param the primitive type. defaults to "TRIS".
 			//-----------------------------------------------------------------
 			void Prepare(IRenderSystem* inpRenderSystem, CVertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes,
-						 u32 inudwVertexCapacityInBytes, u32 inudwIndexCapacityInBytes, BufferAccess inAccessFlag = READ, 
-						 PrimitiveType inPrimativeType = TRIS);
+						 u32 inudwVertexCapacityInBytes, u32 inudwIndexCapacityInBytes, BufferAccess inAccessFlag = BufferAccess::k_read,
+						 PrimitiveType inPrimativeType = PrimitiveType::k_tri);
 			//-----------------------------------------------------------------
 			/// Alter Buffer Declaration
 			///
@@ -139,7 +139,7 @@ namespace moFlo
 			/// 
 			/// @param the material storage location
 			//-----------------------------------------------------------------
-			void SetDefaultMaterialStorageLocation(Core::STORAGE_LOCATION ineStorageLocation);
+			void SetDefaultMaterialStorageLocation(Core::StorageLocation ineStorageLocation);
 			//-----------------------------------------------------------------
 			/// Set Inverse Bind Pose
 			/// 
@@ -165,7 +165,7 @@ namespace moFlo
 			
 			std::string mstrName;
 			std::string mstrDefaultMaterialName;
-            Core::STORAGE_LOCATION meDefaultStorageLocation;
+            Core::StorageLocation meDefaultStorageLocation;
 			Core::AABB mBoundingBox;
 			
 			//Used to create hardware buffers and render

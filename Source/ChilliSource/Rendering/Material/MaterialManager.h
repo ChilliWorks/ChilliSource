@@ -64,7 +64,7 @@ namespace moFlo
 			/// @param File name
 			/// @return A handle to the Material
 			//----------------------------------------------------------------
-			MaterialPtr GetMaterialFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePathMaterial);
+			MaterialPtr GetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePathMaterial);
 			//----------------------------------------------------------------
 			/// Async Get Material From File
 			///
@@ -76,7 +76,7 @@ namespace moFlo
 			/// @param File name
 			/// @return A handle to the Material
 			//----------------------------------------------------------------
-			MaterialPtr AsyncGetMaterialFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePathMaterial);
+			MaterialPtr AsyncGetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePathMaterial);
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///
@@ -85,7 +85,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -94,7 +94,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr AsyncGetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
 		};
 	}
 }

@@ -41,11 +41,11 @@ namespace moFlo
 			
 			DECLARE_NAMED_INTERFACE(IFacebookPostSystem);
 			
-			enum PostResult
+			enum class PostResult
 			{
-				PR_SUCCESS,
-				PR_CANCELLED,
-				PR_FAILED
+                k_success,
+                k_cancelled,
+                k_failed
 			};
 			
 			typedef fastdelegate::FastDelegate1<const PostResult&> PostResultDelegate;

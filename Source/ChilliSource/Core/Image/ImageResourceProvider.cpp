@@ -11,7 +11,7 @@
 
 namespace moFlo
 {
-	Core::CImage::Format IImageResourceProvider::meDefaultFormat = Core::CImage::RGBA_8888;
+	Core::CImage::Format IImageResourceProvider::meDefaultFormat = Core::CImage::Format::k_RGBA8888;
 	//--------------------------------------------------
 	/// Set Default Format
 	///

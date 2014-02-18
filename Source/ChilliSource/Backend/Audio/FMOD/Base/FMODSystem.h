@@ -40,7 +40,7 @@ namespace moFlo
             /// @param Location
 			/// @param File path
 			//-------------------------------------------------------
-			void LoadEventData(Core::STORAGE_LOCATION ineLocation, const std::string& instrFilePath);
+			void LoadEventData(Core::StorageLocation ineLocation, const std::string& instrFilePath);
 			//-------------------------------------------------------
 			/// Unload Event Data
 			///

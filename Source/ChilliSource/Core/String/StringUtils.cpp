@@ -18,7 +18,7 @@ namespace moFlo
 {
 	namespace Core
 	{
-		const std::string kastrTimeFormat[moFlo::Core::NUM_TIME_FORMATS] =
+		const std::string kastrTimeFormat[(u32)StringTimeFormat::k_total] =
 		{
 			"YYYY-MM-DD-HH:MM",
 		};
@@ -446,9 +446,9 @@ namespace moFlo
 		TimeIntervalSecs CStringUtils::ToTimestamp(const std::string& instrSource, moFlo::Core::StringTimeFormat ineFormat)
 		{
 			std::string strTime = instrSource;
-			std::string strFormat = moFlo::Core::kastrTimeFormat[ineFormat];
+			std::string strFormat = moFlo::Core::kastrTimeFormat[(u32)ineFormat];
 			
-			if(moFlo::Core::TIME_FORMAT_YYYYDDMMHHMM == ineFormat)
+			if(StringTimeFormat::k_YYYYDDMMHHMM == ineFormat)
 			{
 				std::string::size_type pos = strFormat.find('-');
 				std::string strYear = strTime.substr(0, pos);

@@ -79,7 +79,7 @@ namespace moFlo
 			/// @param Whether the sample loops or not
 			/// @return Audio Component
 			//--------------------------------------------------------
-			Audio::AudioComponentPtr CreateAudioComponent(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop = false);
+			Audio::AudioComponentPtr CreateAudioComponent(Core::StorageLocation ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop = false);
 			//--------------------------------------------------------
 			/// Create 3D Audio Component
 			///
@@ -98,7 +98,7 @@ namespace moFlo
 			/// @param Whether the sample loops or not
 			/// @return Audio Component
 			//--------------------------------------------------------
-			Audio::AudioComponentPtr Create3DAudioComponent(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop = false);
+			Audio::AudioComponentPtr Create3DAudioComponent(Core::StorageLocation ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop = false);
 			//--------------------------------------------------------
 			/// Create Listener Component
 			///

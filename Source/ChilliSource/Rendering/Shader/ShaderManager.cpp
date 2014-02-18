@@ -76,7 +76,7 @@ namespace moFlo
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr IShaderManager::GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr IShaderManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetShaderFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -88,7 +88,7 @@ namespace moFlo
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr IShaderManager::AsyncGetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr IShaderManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetShaderFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -103,7 +103,7 @@ namespace moFlo
 		/// @param File name
 		/// @return A handle to the Shader
 		//----------------------------------------------------------------
-		ShaderPtr IShaderManager::GetShaderFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath)
+		ShaderPtr IShaderManager::GetShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
             if(mpRenderSystem)
             {
@@ -135,7 +135,7 @@ namespace moFlo
 		/// @param File name
 		/// @return A handle to the Shader
 		//----------------------------------------------------------------
-		ShaderPtr IShaderManager::AsyncGetShaderFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath)
+		ShaderPtr IShaderManager::AsyncGetShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
             if(mpRenderSystem)
             {

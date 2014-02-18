@@ -25,7 +25,7 @@ namespace moFlo
         ,mfInTime(infInTime)
         ,mfOutTime(infOutTime)
 		{
-            SetInterpolationMode(INTERPOLATION_LINEAR);
+            SetInterpolationMode(InterpolationType::k_linear);
             
             if(mfOutTime < 0 && mudwFrameCount > 1)
             {
@@ -64,10 +64,10 @@ namespace moFlo
         {
             switch (ineType)
             {
-                case INTERPOLATION_LINEAR:
+                case InterpolationType::k_linear:
                     mInterpolateDelegate = fastdelegate::MakeDelegate(this, &CEntityAnimation::Lerp);
                     break;
-                case INTERPOLATION_STEP:
+                case InterpolationType::k_step:
                     mInterpolateDelegate = fastdelegate::MakeDelegate(this, &CEntityAnimation::Step);
                     break;
             }

@@ -74,9 +74,9 @@ namespace moFlo
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr ICubemapManager::GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr ICubemapManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
-			return GetCubemapFromFile(ineStorageLocation, instrFilePath, Core::CImage::FORMAT_DEFAULT, false);
+			return GetCubemapFromFile(ineStorageLocation, instrFilePath, Core::CImage::Format::k_default, false);
 		}
 		//-----------------------------------------------------------------
 		/// Async Get Resource From File
@@ -86,9 +86,9 @@ namespace moFlo
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr ICubemapManager::AsyncGetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr ICubemapManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
-			return AsyncGetCubemapFromFile(ineStorageLocation, instrFilePath, Core::CImage::FORMAT_DEFAULT, false);
+			return AsyncGetCubemapFromFile(ineStorageLocation, instrFilePath, Core::CImage::Format::k_default, false);
 		}
 		//----------------------------------------------------------------
 		/// Get Cubemap From File
@@ -102,7 +102,7 @@ namespace moFlo
 		/// @param Generate mip-maps. Default = false
 		/// @return A handle to the Cubemap
 		//----------------------------------------------------------------
-		CubemapPtr ICubemapManager::GetCubemapFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
+		CubemapPtr ICubemapManager::GetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -178,7 +178,7 @@ namespace moFlo
 		/// @param Enable mip-mapping
 		/// @return Generic pointer to resource type
 		//-----------------------------------------------------------------
-		CubemapPtr ICubemapManager::AsyncGetCubemapFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
+		CubemapPtr ICubemapManager::AsyncGetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			

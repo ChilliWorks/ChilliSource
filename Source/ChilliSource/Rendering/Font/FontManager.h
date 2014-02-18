@@ -65,7 +65,7 @@ namespace moFlo
 			/// @param File name
 			/// @param Image format
 			//----------------------------------------------------------------
-			FontPtr GetFontFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat = Core::CImage::FORMAT_DEFAULT);
+			FontPtr GetFontFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default);
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///
@@ -76,7 +76,7 @@ namespace moFlo
             /// @param The storage location to load from
 			/// @param File name
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
 			
 		private:
 			

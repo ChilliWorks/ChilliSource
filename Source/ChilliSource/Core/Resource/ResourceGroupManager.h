@@ -83,13 +83,13 @@ namespace moFlo
 			class CResourceGroup
 			{
 			public:
-				CResourceGroup() : meCurrentStatus(NOT_LOADED){}
+				CResourceGroup() : meCurrentStatus(Status::k_notLoaded){}
 				
 				std::string mstrDirectory;
 				
 				DYNAMIC_ARRAY<ResourcePtr> mResources;
 				
-				enum Status{LOADED, NOT_LOADED};
+				enum class Status{k_loaded, k_notLoaded};
 				Status meCurrentStatus;
 			};
 			

@@ -46,7 +46,7 @@ namespace moFlo
 		///
 		/// @param HTML file name
 		//-----------------------------------------------
-		virtual void PresentFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFile, f32 infDismissButtonScale = 0.075f) = 0;
+		virtual void PresentFromFile(Core::StorageLocation ineStorageLocation, const std::string& instrFile, f32 infDismissButtonScale = 0.075f) = 0;
 		//-----------------------------------------------
 		/// Present In External Browser
 		///

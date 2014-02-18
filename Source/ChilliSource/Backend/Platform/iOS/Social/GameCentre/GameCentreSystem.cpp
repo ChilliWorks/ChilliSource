@@ -769,10 +769,10 @@ namespace moFlo
 			switch(pRequest->mePlayerScope)
 			{
 				default:
-				case GC_LB_GLOBAL:
+				case PlayerScope::k_global:
 					pLeaderboardRequest.playerScope = GKLeaderboardPlayerScopeGlobal;
 					break;
-				case GC_LB_FRIENDS:
+				case PlayerScope::k_friends:
 					pLeaderboardRequest.playerScope = GKLeaderboardPlayerScopeFriendsOnly;
 					break;
 			};
@@ -781,13 +781,13 @@ namespace moFlo
 			switch(pRequest->meTimeScope)
 			{
 				default:
-				case GC_LB_ALL_TIME:
+				case TimeScope::k_allTime:
 					pLeaderboardRequest.timeScope = GKLeaderboardTimeScopeAllTime;
 					break;
-				case GC_LB_ALL_TODAY:
+				case TimeScope::k_allToday:
 					pLeaderboardRequest.timeScope = GKLeaderboardTimeScopeToday;
 					break;
-				case GC_LB_ALL_WEEK:
+				case TimeScope::k_allWeek:
 					pLeaderboardRequest.timeScope = GKLeaderboardTimeScopeWeek;
 					break;
 			};

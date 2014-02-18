@@ -11,13 +11,13 @@
 
 namespace StoreKitIAP
 {
-    enum TransactionResult
+    enum class TransactionResult
     {
-        SUCCEEDED,
-        FAILED,
-        CANCELLED,
-        RESTORED,
-        RESUMED
+        k_succeeded,
+        k_failed,
+        k_cancelled,
+        k_restored,
+        k_resumed
     };
     
     typedef fastdelegate::FastDelegate1<NSArray*> ProductsDelegate;

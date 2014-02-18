@@ -13,11 +13,11 @@ namespace moFlo
 {
     namespace Reflect
     {
-        enum PropAccess
+        enum class PropAccess
         {
-            PROP_READ_ONLY,
-            PROP_WRITE_ONLY,
-            PROP_READ_WRITE
+            k_readOnly,
+            k_writeOnly,
+            k_readWrite
         };
         
         //---Forward Declarations

@@ -38,9 +38,9 @@ namespace moFlo
             mstrDocumentsPath = RetrieveDocumentsPath();
             mstrLibraryPath = RetrieveLibraryPath();
             
-            CreateDirectory(Core::SL_SAVEDATA, "");
-            CreateDirectory(Core::SL_CACHE, "");
-            CreateDirectory(Core::SL_DLC, "");
+            CreateDirectory(Core::StorageLocation::k_saveData, "");
+            CreateDirectory(Core::StorageLocation::k_cache, "");
+            CreateDirectory(Core::StorageLocation::k_DLC, "");
             
             CreateHashedBundleFileList();
 		}
@@ -129,7 +129,7 @@ namespace moFlo
         //--------------------------------------------------------------
         /// Create File Stream
         //--------------------------------------------------------------
-        Core::FileStreamPtr CFileSystem::CreateFileStream(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFilepath, Core::FILE_MODE ineFileMode) const
+        Core::FileStreamPtr CFileSystem::CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const
         {
             //create the file stream
             Core::FileStreamPtr newFilestream = Core::FileStreamPtr(new Core::IFileStream());
@@ -142,7 +142,7 @@ namespace moFlo
             }
             
             //if this is not a read stream, insure that the storage location is writable.
-            if (ineFileMode != Core::FM_READ && ineFileMode != Core::FM_READ_BINARY)
+            if (ineFileMode != Core::FileMode::k_read && ineFileMode != Core::FileMode::k_readBinary)
             {
                 if(IsStorageLocationWritable(ineStorageLocation) == true)
                 {
@@ -166,9 +166,9 @@ namespace moFlo
         //--------------------------------------------------------------
         /// Create File
         //--------------------------------------------------------------
-        bool CFileSystem::CreateFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const
+        bool CFileSystem::CreateFile(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const
         {
-            Core::FileStreamPtr pFileStream = CreateFileStream(ineStorageLocation, instrDirectory, Core::FM_WRITE_BINARY);
+            Core::FileStreamPtr pFileStream = CreateFileStream(ineStorageLocation, instrDirectory, Core::FileMode::k_writeBinary);
 			
             if (pFileStream.get() == NULL || pFileStream->IsOpen() == false || pFileStream->IsBad() == true)
             {
@@ -183,7 +183,7 @@ namespace moFlo
         //--------------------------------------------------------------
         /// Create Directory
         //--------------------------------------------------------------
-        bool CFileSystem::CreateDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory) const
+        bool CFileSystem::CreateDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
         {
             //check the requested storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -220,8 +220,8 @@ namespace moFlo
         //--------------------------------------------------------------
         /// Copy File
         //--------------------------------------------------------------
-        bool CFileSystem::CopyFile(Core::STORAGE_LOCATION ineSourceStorageLocation, const std::string& instrSourceFilepath, 
-                                   Core::STORAGE_LOCATION ineDestinationStorageLocation, const std::string& instrDestinationFilepath) const
+        bool CFileSystem::CopyFile(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceFilepath, 
+                                   Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationFilepath) const
         {
             //check the requested source storage location is available
             if (IsStorageLocationAvailable(ineSourceStorageLocation) == false)
@@ -288,8 +288,8 @@ namespace moFlo
         //--------------------------------------------------------------
         /// Copy Directory
         //--------------------------------------------------------------
-        bool CFileSystem::CopyDirectory(Core::STORAGE_LOCATION ineSourceStorageLocation, const std::string& instrSourceDirectory, 
-                                        Core::STORAGE_LOCATION ineDestinationStorageLocation, const std::string& instrDestinationDirectory) const
+        bool CFileSystem::CopyDirectory(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceDirectory, 
+                                        Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationDirectory) const
         {
             //check the requested source storage location is available
             if (IsStorageLocationAvailable(ineSourceStorageLocation) == false)
@@ -340,7 +340,7 @@ namespace moFlo
         //--------------------------------------------------------------
         /// Delete File
         //--------------------------------------------------------------
-        bool CFileSystem::DeleteFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFilepath) const
+        bool CFileSystem::DeleteFile(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const
         {
             //check the requested storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -372,7 +372,7 @@ namespace moFlo
         //--------------------------------------------------------------
         /// Delete Directory
         //--------------------------------------------------------------
-        bool CFileSystem::DeleteDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory) const
+        bool CFileSystem::DeleteDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
         {
             //check the requested storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -491,7 +491,7 @@ namespace moFlo
         //--------------------------------------------------------------
         /// Get File Names With Extension In Directory
         //--------------------------------------------------------------
-        void CFileSystem::GetFileNamesWithExtensionInDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
+        void CFileSystem::GetFileNamesWithExtensionInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
                                                   const std::string& instrExtension, DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath) const
         {
             //Check that this storage location is available
@@ -543,7 +543,7 @@ namespace moFlo
         /// @param The name
         /// @param Output dynamic array containing the filenames.
         //--------------------------------------------------------------
-        void CFileSystem::GetPathForFilesWithNameInDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
+        void CFileSystem::GetPathForFilesWithNameInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
                                                         const std::string& instrName, DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath) const
         {
             //Check that this storage location is available
@@ -585,7 +585,7 @@ namespace moFlo
         //--------------------------------------------------------------
         /// Get File Names In Directory
         //--------------------------------------------------------------
-        void CFileSystem::GetFileNamesInDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories, 
+        void CFileSystem::GetFileNamesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories, 
                                      DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath) const
         {
             //Check that this storage location is available
@@ -627,7 +627,7 @@ namespace moFlo
         //--------------------------------------------------------------
         /// Get Directories In Directory
         //--------------------------------------------------------------
-        void CFileSystem::GetDirectoriesInDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
+        void CFileSystem::GetDirectoriesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
                                                     DYNAMIC_ARRAY<std::string> &outstrDirectories, bool inbAppendFullPath) const
         {
             //Check that this storage location is available
@@ -673,22 +673,22 @@ namespace moFlo
         /// @param File name to append
         /// @param Out: All the paths for the given location
         //------------------------------------------------------------
-        void CFileSystem::GetPathsForStorageLocation(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFileName, DYNAMIC_ARRAY<std::string>& outaPaths) const
+        void CFileSystem::GetPathsForStorageLocation(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, DYNAMIC_ARRAY<std::string>& outaPaths) const
         {
             switch(ineStorageLocation)
             {
-                case Core::SL_PACKAGE:
+                case Core::StorageLocation::k_package:
                     for(u32 i=0; i<3; ++i)
                     {
                         outaPaths.push_back(GetStorageLocationDirectory(ineStorageLocation) + mastrResourceDirectory[i] + instrFileName);
                     }
                     break;
-                case Core::SL_DLC:
+                case Core::StorageLocation::k_DLC:
                     for(u32 i=0; i<3; ++i)
                     {
-                        outaPaths.push_back(GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrFileName);
+                        outaPaths.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrFileName);
                     }
-                    outaPaths.push_back(GetStorageLocationDirectory(Core::SL_DLC) + instrFileName);
+                    outaPaths.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrFileName);
                     break;
                 default:
                     outaPaths.push_back(GetStorageLocationDirectory(ineStorageLocation) + instrFileName);
@@ -698,7 +698,7 @@ namespace moFlo
         //--------------------------------------------------------------
         /// Does File Exist
         //--------------------------------------------------------------
-        bool CFileSystem::DoesFileExist(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFilepath) const
+        bool CFileSystem::DoesFileExist(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const
         {
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -707,7 +707,7 @@ namespace moFlo
                 return false;
             }
             
-            if(ineStorageLocation == Core::SL_PACKAGE)
+            if(ineStorageLocation == Core::StorageLocation::k_package)
             {
                 for(u32 i=0; i<3; ++i)
                 {
@@ -724,14 +724,14 @@ namespace moFlo
             std::string path = GetStorageLocationDirectory(ineStorageLocation) + instrFilepath;
             
             //if its a DLC stream, make sure that it exists in the DLC cache, if not fall back on the package
-            if (ineStorageLocation == Core::SL_DLC)
+            if (ineStorageLocation == Core::StorageLocation::k_DLC)
             {
                 if (DoesItemExistInDLCCache(instrFilepath, false) == true)
                 {
                     return true;
                 }
                 
-                return DoesFileExist(Core::SL_PACKAGE, mstrPackageDLCPath + instrFilepath);
+                return DoesFileExist(Core::StorageLocation::k_package, mstrPackageDLCPath + instrFilepath);
             }
             
             //return whether or not the file exists
@@ -755,12 +755,12 @@ namespace moFlo
         //--------------------------------------------------------------
         bool CFileSystem::DoesFileExistInPackageDLC(const std::string& instrFilepath) const
         {
-            return DoesFileExist(moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_PACKAGE) + mstrPackageDLCPath + instrFilepath));
+            return DoesFileExist(moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mstrPackageDLCPath + instrFilepath));
         }
         //--------------------------------------------------------------
         /// Does Directory Exist
         //--------------------------------------------------------------
-        bool CFileSystem::DoesDirectoryExist(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory) const
+        bool CFileSystem::DoesDirectoryExist(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
         {
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -769,7 +769,7 @@ namespace moFlo
                 return false;
             }
             
-            if(ineStorageLocation == Core::SL_PACKAGE)
+            if(ineStorageLocation == Core::StorageLocation::k_package)
             {
                 for(u32 i=0; i<3; ++i)
                 {
@@ -786,14 +786,14 @@ namespace moFlo
             std::string path = GetStorageLocationDirectory(ineStorageLocation) + instrDirectory;
             
             //if its a DLC stream, make sure that it exists in the DLC cache, if not fall back on the package
-            if (ineStorageLocation == Core::SL_DLC)
+            if (ineStorageLocation == Core::StorageLocation::k_DLC)
             {
                 if (DoesItemExistInDLCCache(instrDirectory, true) == true)
                 {
                     return true;
                 }
                 
-                return DoesDirectoryExist(Core::SL_PACKAGE, mstrPackageDLCPath + instrDirectory);
+                return DoesDirectoryExist(Core::StorageLocation::k_package, mstrPackageDLCPath + instrDirectory);
             }
             
             //return whether or not the dir exists
@@ -802,14 +802,14 @@ namespace moFlo
         //--------------------------------------------------------------
         /// Is Storage Location Available
         //--------------------------------------------------------------
-        bool CFileSystem::IsStorageLocationAvailable(Core::STORAGE_LOCATION ineStorageLocation) const
+        bool CFileSystem::IsStorageLocationAvailable(Core::StorageLocation ineStorageLocation) const
         {
             switch (ineStorageLocation) 
             {
-                case Core::SL_PACKAGE:
-                case Core::SL_SAVEDATA:
-                case Core::SL_CACHE:
-                case Core::SL_DLC:
+                case Core::StorageLocation::k_package:
+                case Core::StorageLocation::k_saveData:
+                case Core::StorageLocation::k_cache:
+                case Core::StorageLocation::k_DLC:
                     return true;
                 default:
                     return false;
@@ -818,22 +818,22 @@ namespace moFlo
         //--------------------------------------------------------------
         /// Get Storage Location Directory
         //--------------------------------------------------------------
-        std::string CFileSystem::GetStorageLocationDirectory(Core::STORAGE_LOCATION ineStorageLocation) const
+        std::string CFileSystem::GetStorageLocationDirectory(Core::StorageLocation ineStorageLocation) const
         {
             //get the storage location path
             std::string strStorageLocationPath;
             switch (ineStorageLocation) 
             {
-                case Core::SL_PACKAGE:
+                case Core::StorageLocation::k_package:
                     strStorageLocationPath = mstrBundlePath;
                     break;
-                case Core::SL_SAVEDATA:
+                case Core::StorageLocation::k_saveData:
                     strStorageLocationPath = mstrDocumentsPath + kstrSaveDataPath;
                     break;
-                case Core::SL_CACHE:
+                case Core::StorageLocation::k_cache:
                     strStorageLocationPath = mstrLibraryPath + kstrCachePath;
                     break;
-                case Core::SL_DLC:
+                case Core::StorageLocation::k_DLC:
                     strStorageLocationPath = mstrLibraryPath + kstrDLCPath;
                     break;
                 default:
@@ -849,7 +849,7 @@ namespace moFlo
         bool CFileSystem::DoesItemExistInDLCCache(const std::string& instrPath, bool inbFolder) const
         {
             //Check that this storage location is available
-            if (IsStorageLocationAvailable(Core::SL_DLC) == false)
+            if (IsStorageLocationAvailable(Core::StorageLocation::k_DLC) == false)
             {
                 ERROR_LOG("Requested Storage Location is not available!");
                 return false;
@@ -858,11 +858,11 @@ namespace moFlo
             //return whether or not the file exists
             if(inbFolder)
             {
-                return DoesFolderExist(moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_DLC) + instrPath));
+                return DoesFolderExist(moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath));
             }
             else
             {
-                return DoesFileExist(moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_DLC) + instrPath));
+                return DoesFileExist(moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath));
             }
         }
         //--------------------------------------------------------------
@@ -874,7 +874,7 @@ namespace moFlo
         std::string CFileSystem::GetDirectoryForDLCFile(const std::string& instrFilePath) const
         {
             std::string strResult;
-            std::string strPath = moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_DLC) + instrFilePath);
+            std::string strPath = moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrFilePath);
             
             if(DoesFileExist(strPath))
             {
@@ -895,14 +895,14 @@ namespace moFlo
         //--------------------------------------------------------------
         std::string CFileSystem::GetDirectoryForPackageFile(const std::string& instrFilePath) const
         {
-            std::string strResult = GetStorageLocationDirectory(Core::SL_PACKAGE) + instrFilePath;
+            std::string strResult = GetStorageLocationDirectory(Core::StorageLocation::k_package) + instrFilePath;
             
             for(u32 i=0; i<3; ++i)
             {
                 std::string strPath = moFlo::Core::CStringUtils::StandardisePath(mastrResourceDirectory[i] + instrFilePath);
                 if(DoesFileExistInHashedStore(strPath))
                 {
-                    strResult = GetStorageLocationDirectory(Core::SL_PACKAGE) + strPath;
+                    strResult = GetStorageLocationDirectory(Core::StorageLocation::k_package) + strPath;
                     break;
                 }
             }

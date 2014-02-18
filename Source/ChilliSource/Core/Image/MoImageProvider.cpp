@@ -39,20 +39,20 @@ namespace moFlo
     //----------------------------------------------------------------
     /// Create Resource From File
     //----------------------------------------------------------------
-    bool CMoImageProvider::CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+    bool CMoImageProvider::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
     {
-        return CreateImageFromFile(ineStorageLocation, inFilePath, Core::CImage::FORMAT_DEFAULT, outpResource);
+        return CreateImageFromFile(ineStorageLocation, inFilePath, Core::CImage::Format::k_default, outpResource);
     }
     //----------------------------------------------------------------
     /// Create Image From File
     //----------------------------------------------------------------
-    bool CMoImageProvider::CreateImageFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
+    bool CMoImageProvider::CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
     {
     	//ensure the extension is correct.
     	if (moFlo::Core::CStringUtils::EndsWith(inFilePath, MoImageExtension, true) == false)
     		return false;
 
-        Core::FileStreamPtr pImageFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FM_READ_BINARY);
+        Core::FileStreamPtr pImageFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
 
         if(pImageFile && !pImageFile->IsBad())
         {
@@ -188,27 +188,27 @@ namespace moFlo
         switch(inudwFormat)
         {
             case 1:
-                outFormat = Core::CImage::LUM_8;
+                outFormat = Core::CImage::Format::k_Lum8;
                 outudwImageSize = inudwWidth * inudwHeight * 1;
                 return true;
             case 2:
-                outFormat = Core::CImage::LUMA_88;
+                outFormat = Core::CImage::Format::k_LumA88;
                 outudwImageSize = inudwWidth * inudwHeight * 2;
                 return true;
             case 3:
-                outFormat = Core::CImage::RGB_565;
+                outFormat = Core::CImage::Format::k_RGB565;
                 outudwImageSize = inudwWidth * inudwHeight * 2;
                 return true;
             case 4:
-                outFormat = Core::CImage::RGBA_4444;
+                outFormat = Core::CImage::Format::k_RGBA4444;
                 outudwImageSize = inudwWidth * inudwHeight * 2;
                 return true;
             case 5:
-                outFormat = Core::CImage::RGB_888;
+                outFormat = Core::CImage::Format::k_RGB888;
                 outudwImageSize = inudwWidth * inudwHeight * 3;
                 return true;
             case 6:
-                outFormat = Core::CImage::RGBA_8888;
+                outFormat = Core::CImage::Format::k_RGBA8888;
                 outudwImageSize = inudwWidth * inudwHeight * 4;
                 return true;
             default:

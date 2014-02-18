@@ -26,7 +26,7 @@ namespace moFlo
 		/// @param File path to resource
 		/// @return Instantiated resource
 		//----------------------------------------------------------------
-		virtual bool CreateImageFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource) = 0;
+		virtual bool CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource) = 0;
 		//--------------------------------------------------
 		/// Set Default Format
 		///

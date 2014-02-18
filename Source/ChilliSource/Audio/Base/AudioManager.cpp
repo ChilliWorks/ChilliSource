@@ -84,7 +84,7 @@ namespace moFlo
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr IAudioManager::GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr IAudioManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetSoundFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -97,7 +97,7 @@ namespace moFlo
         /// @param the file path
         /// @return The audio resource pointer
 		//----------------------------------------------------------------
-		AudioResourcePtr IAudioManager::StreamSoundFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath)
+		AudioResourcePtr IAudioManager::StreamSoundFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
 		{
 			Core::ResourcePtr pResource = CreateAudioResource();
 			
@@ -129,7 +129,7 @@ namespace moFlo
         /// @param the file path
         /// @return the audio resource pointer
 		//----------------------------------------------------------------
-		AudioResourcePtr IAudioManager::GetSoundFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath)
+		AudioResourcePtr IAudioManager::GetSoundFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
 		{
 			MapStringToSoundEffectPtrItr pExistingResource = mMapFileNamesToSoundEffect.find(inFilePath);
 			

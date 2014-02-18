@@ -55,10 +55,10 @@ namespace moFlo
         {
             CMaterial* pMaterial = new CMaterial();
             
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/GUI"));
-            pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/GUI"));
+            pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             pMaterial->SetTransparent(true);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(false);
             
 			return MaterialPtr(pMaterial);
@@ -70,10 +70,10 @@ namespace moFlo
         {
             CMaterial* pMaterial = new CMaterial();
             
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/GUIDistanceFont"));
-            pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/GUIDistanceFont"));
+            pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             pMaterial->SetTransparent(true);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(false);
             
 			return MaterialPtr(pMaterial);
@@ -84,10 +84,10 @@ namespace moFlo
         MaterialPtr CMaterialFactory::CreateGUIDistanceFontOutlined() const
         {
             CMaterial* pMaterial = new CMaterial();
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/GUIDistanceFontOutlined"));
-            pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/GUIDistanceFontOutlined"));
+            pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             pMaterial->SetTransparent(true);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(false);
 			return MaterialPtr(pMaterial);
         }
@@ -97,11 +97,11 @@ namespace moFlo
         MaterialPtr CMaterialFactory::CreateSprite(const TexturePtr& inpTex) const
         {
             CMaterial* pMaterial = new CMaterial();
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/Sprite"));
-            pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/Sprite"));
+            pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             pMaterial->SetTexture(inpTex);
             pMaterial->SetTransparent(false);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(false);
 			return MaterialPtr(pMaterial);
         }
@@ -111,11 +111,11 @@ namespace moFlo
         MaterialPtr CMaterialFactory::CreateStatic(const TexturePtr& inpTex) const
         {
             CMaterial* pMaterial = new CMaterial();
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/Static"));
-            pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/Static"));
+            pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             pMaterial->SetTexture(inpTex);
             pMaterial->SetTransparent(false);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
 			return MaterialPtr(pMaterial);
         }
@@ -125,11 +125,11 @@ namespace moFlo
         MaterialPtr CMaterialFactory::CreateStaticAmbient(const TexturePtr& inpTex) const
         {
             CMaterial* pMaterial = new CMaterial();
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/StaticAmbient"));
-            pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
+            pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             pMaterial->SetTexture(inpTex);
             pMaterial->SetTransparent(false);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
 			return MaterialPtr(pMaterial);
         }
@@ -139,13 +139,13 @@ namespace moFlo
         MaterialPtr CMaterialFactory::CreateStaticBlinn(const TexturePtr& inpTex) const
         {
             CMaterial* pMaterial = new CMaterial();
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/StaticAmbient"));
-            pMaterial->SetShaderProgram(SP_DIRECTIONAL, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/StaticBlinnDirectional"));
-            pMaterial->SetShaderProgram(SP_POINT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/StaticBlinnPoint"));
-            pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
+            pMaterial->SetShaderProgram(ShaderPass::k_directional, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnDirectional"));
+            pMaterial->SetShaderProgram(ShaderPass::k_point, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPoint"));
+            pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             pMaterial->SetTexture(inpTex);
             pMaterial->SetTransparent(false);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
 			return MaterialPtr(pMaterial);
         }
@@ -160,13 +160,13 @@ namespace moFlo
 			}
 
             CMaterial* pMaterial = new CMaterial();
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/StaticAmbient"));
-            pMaterial->SetShaderProgram(SP_DIRECTIONAL, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/StaticBlinnShadowedDirectional"));
-            pMaterial->SetShaderProgram(SP_POINT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/StaticBlinnPoint"));
-            pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
+            pMaterial->SetShaderProgram(ShaderPass::k_directional, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnShadowedDirectional"));
+            pMaterial->SetShaderProgram(ShaderPass::k_point, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPoint"));
+            pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             pMaterial->SetTexture(inpTex);
             pMaterial->SetTransparent(false);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
 			return MaterialPtr(pMaterial);
         }
@@ -176,13 +176,13 @@ namespace moFlo
         MaterialPtr CMaterialFactory::CreateStaticBlinnPerVertex(const TexturePtr& inpTex) const
         {
             CMaterial* pMaterial = new CMaterial();
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/StaticAmbient"));
-            pMaterial->SetShaderProgram(SP_DIRECTIONAL, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/StaticBlinnPerVertexDirectional"));
-            pMaterial->SetShaderProgram(SP_POINT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/StaticBlinnPerVertexPoint"));
-            pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
+            pMaterial->SetShaderProgram(ShaderPass::k_directional, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexDirectional"));
+            pMaterial->SetShaderProgram(ShaderPass::k_point, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexPoint"));
+            pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             pMaterial->SetTexture(inpTex);
             pMaterial->SetTransparent(false);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
 			return MaterialPtr(pMaterial);
         }
@@ -197,13 +197,13 @@ namespace moFlo
 			}
 
             CMaterial* pMaterial = new CMaterial();
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/StaticAmbient"));
-            pMaterial->SetShaderProgram(SP_DIRECTIONAL, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/StaticBlinnPerVertexShadowedDirectional"));
-            pMaterial->SetShaderProgram(SP_POINT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/StaticBlinnPerVertexPoint"));
-            pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
+            pMaterial->SetShaderProgram(ShaderPass::k_directional, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexShadowedDirectional"));
+            pMaterial->SetShaderProgram(ShaderPass::k_point, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexPoint"));
+            pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             pMaterial->SetTexture(inpTex);
             pMaterial->SetTransparent(false);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
 			return MaterialPtr(pMaterial);
         }
@@ -213,9 +213,9 @@ namespace moFlo
         MaterialPtr CMaterialFactory::CreateStaticDirectionalShadowMap() const
         {
             CMaterial* pMaterial = new CMaterial();
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/StaticDirectionalShadowMap"));
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticDirectionalShadowMap"));
             pMaterial->SetTransparent(false);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
             
 #ifdef MOFLOW_SHADOW_DEBUG
@@ -232,11 +232,11 @@ namespace moFlo
         MaterialPtr CMaterialFactory::CreateAnimated(const TexturePtr& inpTex) const
         {
             CMaterial* pMaterial = new CMaterial();
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/Animated"));
-            pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/Animated"));
+            pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             pMaterial->SetTexture(inpTex);
             pMaterial->SetTransparent(false);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
 			return MaterialPtr(pMaterial);
         }
@@ -246,11 +246,11 @@ namespace moFlo
         MaterialPtr CMaterialFactory::CreateAnimatedAmbient(const TexturePtr& inpTex) const
         {
             CMaterial* pMaterial = new CMaterial();
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/AnimatedAmbient"));
-            pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
+            pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             pMaterial->SetTexture(inpTex);
             pMaterial->SetTransparent(false);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
 			return MaterialPtr(pMaterial);
         }
@@ -260,13 +260,13 @@ namespace moFlo
         MaterialPtr CMaterialFactory::CreateAnimatedBlinn(const TexturePtr& inpTex) const
         {
             CMaterial* pMaterial = new CMaterial();
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/AnimatedAmbient"));
-            pMaterial->SetShaderProgram(SP_DIRECTIONAL, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/AnimatedBlinnDirectional"));
-            pMaterial->SetShaderProgram(SP_POINT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/AnimatedBlinnPoint"));
-            pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
+            pMaterial->SetShaderProgram(ShaderPass::k_directional, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnDirectional"));
+            pMaterial->SetShaderProgram(ShaderPass::k_point, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPoint"));
+            pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             pMaterial->SetTexture(inpTex);
             pMaterial->SetTransparent(false);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
 			return MaterialPtr(pMaterial);
         }
@@ -281,13 +281,13 @@ namespace moFlo
 			}
 
             CMaterial* pMaterial = new CMaterial();
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/AnimatedAmbient"));
-            pMaterial->SetShaderProgram(SP_DIRECTIONAL, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/AnimatedBlinnShadowedDirectional"));
-            pMaterial->SetShaderProgram(SP_POINT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/AnimatedBlinnPoint"));
-            pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
+            pMaterial->SetShaderProgram(ShaderPass::k_directional, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnShadowedDirectional"));
+            pMaterial->SetShaderProgram(ShaderPass::k_point, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPoint"));
+            pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             pMaterial->SetTexture(inpTex);
             pMaterial->SetTransparent(false);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
 			return MaterialPtr(pMaterial);
         }
@@ -297,13 +297,13 @@ namespace moFlo
         MaterialPtr CMaterialFactory::CreateAnimatedBlinnPerVertex(const TexturePtr& inpTex) const
         {
             CMaterial* pMaterial = new CMaterial();
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/AnimatedAmbient"));
-            pMaterial->SetShaderProgram(SP_DIRECTIONAL, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/AnimatedBlinnPerVertexDirectional"));
-            pMaterial->SetShaderProgram(SP_POINT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/AnimatedBlinnPerVertexPoint"));
-            pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
+            pMaterial->SetShaderProgram(ShaderPass::k_directional, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexDirectional"));
+            pMaterial->SetShaderProgram(ShaderPass::k_point, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexPoint"));
+            pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             pMaterial->SetTexture(inpTex);
             pMaterial->SetTransparent(false);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
 			return MaterialPtr(pMaterial);
         }
@@ -318,13 +318,13 @@ namespace moFlo
         	}
 
             CMaterial* pMaterial = new CMaterial();
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/AnimatedAmbient"));
-            pMaterial->SetShaderProgram(SP_DIRECTIONAL, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/AnimatedBlinnPerVertexShadowedDirectional"));
-            pMaterial->SetShaderProgram(SP_POINT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/AnimatedBlinnPerVertexPoint"));
-            pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
+            pMaterial->SetShaderProgram(ShaderPass::k_directional, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexShadowedDirectional"));
+            pMaterial->SetShaderProgram(ShaderPass::k_point, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexPoint"));
+            pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             pMaterial->SetTexture(inpTex);
             pMaterial->SetTransparent(false);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
 			return MaterialPtr(pMaterial);
         }
@@ -334,9 +334,9 @@ namespace moFlo
         MaterialPtr CMaterialFactory::CreateAnimatedDirectionalShadowMap() const
         {
             CMaterial* pMaterial = new CMaterial();
-            pMaterial->SetShaderProgram(SP_AMBIENT, GetShaderManager()->GetShaderFromFile(Core::SL_PACKAGE, "Core/AnimatedDirectionalShadowMap"));
+            pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedDirectionalShadowMap"));
             pMaterial->SetTransparent(false);
-            pMaterial->SetCullFace(CF_FRONT);
+            pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
             
 #ifdef MOFLOW_SHADOW_DEBUG

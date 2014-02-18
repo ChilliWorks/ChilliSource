@@ -110,10 +110,10 @@ namespace moFlo
 		/// @param Out contents of file
 		/// @return Success
 		//----------------------------------------------------------
-		bool CShader::ReadShaderFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath, std::stringstream& outstrContents)
+		bool CShader::ReadShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, std::stringstream& outstrContents)
 		{
 			//Open the shader file for reading only
-			moFlo::Core::FileStreamPtr shaderStream = moFlo::Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilePath, moFlo::Core::FM_READ);
+			moFlo::Core::FileStreamPtr shaderStream = moFlo::Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilePath, moFlo::Core::FileMode::k_read);
             
             if (shaderStream == NULL || shaderStream->IsBad() == true)
 			{
@@ -140,7 +140,7 @@ namespace moFlo
 		/// @param The shader file path
 		/// @return Success or failure
 		//----------------------------------------------------------
-		bool CShader::LoadAndCompileShader(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrShaderFile, Rendering::ShaderType ineShaderType)
+		bool CShader::LoadAndCompileShader(Core::StorageLocation ineStorageLocation, const std::string& instrShaderFile, Rendering::ShaderType ineShaderType)
 		{
             maAttributes.clear();
             maUniforms.clear();
@@ -158,14 +158,14 @@ namespace moFlo
 			
 			switch(ineShaderType)
 			{
-				case Rendering::SHADER_TYPE_COMBINED:
+				case Rendering::ShaderType::k_combined:
 					ERROR_LOG("OpenGL ES 2.0 does not support combined vertex and pixel shaders");
 					return false;
-				case Rendering::SHADER_TYPE_VERTEX:
+				case Rendering::ShaderType::k_vertex:
 					GLShaderType = GL_VERTEX_SHADER;
 					pGLShader = &mGLVertexShader;
 					break;
-				case Rendering::SHADER_TYPE_FRAGMENT:
+				case Rendering::ShaderType::k_fragment:
 					GLShaderType = GL_FRAGMENT_SHADER;
 					pGLShader = &mGLPixelShader;
 					break;
@@ -232,14 +232,14 @@ namespace moFlo
 			
 			switch(ineShaderType)
 			{
-				case Rendering::SHADER_TYPE_COMBINED:
+				case Rendering::ShaderType::k_combined:
 					ERROR_LOG("OpenGL ES 2.0 does not support combined vertex and pixel shaders");
 					return false;
-				case Rendering::SHADER_TYPE_VERTEX:
+				case Rendering::ShaderType::k_vertex:
 					GLShaderType = GL_VERTEX_SHADER;
 					pGLShader = &mGLVertexShader;
 					break;
-				case Rendering::SHADER_TYPE_FRAGMENT:
+				case Rendering::ShaderType::k_fragment:
 					GLShaderType = GL_FRAGMENT_SHADER;
 					pGLShader = &mGLPixelShader;
 					break;

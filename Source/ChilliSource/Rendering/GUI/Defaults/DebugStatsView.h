@@ -23,20 +23,20 @@ LabelPtr mpValue##NAME
 mpLabel##NAME = LabelPtr(new CLabel()); \
 mpLabel##NAME->SetText(#NAME); \
 mpLabel##NAME->SetTextScale(mfTextScale); \
-mpLabel##NAME->SetAlignmentToParent(Core::ALIGN_TOP_LEFT); \
+mpLabel##NAME->SetAlignmentToParent(Core::AlignmentAnchor::k_topLeft); \
 mpLabel##NAME->SetOffsetFromParentAlignment(0.0f, 0.0f, 5.0f, 0.0f); \
 mpLabel##NAME->EnableAlignmentToParent(true); \
 mpLabel##NAME->SetSize(0.0f, 0.0f, 90.0f, 20.0f); \
 mpLabel##NAME->SetHorizontalJustification(JUSTIFY_LEFT); \
-mpLabel##NAME->SetLocalAlignment(Core::ALIGN_TOP_LEFT); \
+mpLabel##NAME->SetLocalAlignment(Core::AlignmentAnchor::k_topLeft); \
 mpLabel##NAME->EnableUserInteraction(false); \
 mpLabel##NAME->EnableTouchConsumption(false); \
 mpLabel##NAME->EnableBackground(false); \
 AddSubview(mpLabel##NAME); \
 mpValue##NAME = LabelPtr(new CLabel()); \
 mpValue##NAME->SetTextScale(mfTextScale); \
-mpValue##NAME->SetLocalAlignment(Core::ALIGN_MIDDLE_LEFT); \
-mpValue##NAME->SetAlignmentToParent(Core::ALIGN_MIDDLE_RIGHT); \
+mpValue##NAME->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft); \
+mpValue##NAME->SetAlignmentToParent(Core::AlignmentAnchor::k_middleRight); \
 mpValue##NAME->SetOffsetFromParentAlignment(0.0f, 0.0f, 10.0f, 0.0f); \
 mpValue##NAME->EnableAlignmentToParent(true); \
 mpValue##NAME->SetSize(0.0f, 0.0f, 90.0f, 20.0f); \

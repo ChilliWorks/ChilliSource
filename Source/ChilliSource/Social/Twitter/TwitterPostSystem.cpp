@@ -101,7 +101,7 @@ namespace moFlo
 			{
 				if(mCompletionDelegate)
 				{
-					mCompletionDelegate(Social::ITwitterPostSystem::PR_FAILED);
+					mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_failed);
 				}
 				bResult = false;
 			}
@@ -113,14 +113,14 @@ namespace moFlo
 				std::string strStatusURL = Social::TwitterURL::TWITTER_STATUS_UPDATE_URL;
 				std::string strOAuthHeader;
 
-				if(mpOAuthSystem->GetOAuthHeader(Networking::COAuthSystem::eOAuthHttpPost,
+				if(mpOAuthSystem->GetOAuthHeader(Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost,
 												 strStatusURL,
 												 strStatus, strOAuthHeader))
 				{
 					Networking::HttpRequestDetails sHttpRequest;
 					sHttpRequest.strURL = Social::TwitterURL::TWITTER_STATUS_UPDATE_URL;
 					sHttpRequest.strBody = strStatus;
-					sHttpRequest.eType = Networking::HttpRequestDetails::POST;
+					sHttpRequest.eType = Networking::HttpRequestDetails::Type::k_post;
 					sHttpRequest.sHeaders.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
 					sHttpRequest.sHeaders.SetValueForKey(Social::TwitterOAuthAPIHeaders::TWITTER_OAUTH_REQUEST_HEADER_AUTHORIZATION, strOAuthHeader);
 
@@ -136,50 +136,46 @@ namespace moFlo
 		//------------------------------------------------------------------------
 		void ITwitterPostSystem::OnStatusUpdateComplete(Networking::HttpRequestPtr inpRequest, Networking::IHttpRequest::CompletionResult ineResult)
 		{
-			if(ineResult == moFlo::Networking::IHttpRequest::COMPLETED)
+			if(ineResult == moFlo::Networking::IHttpRequest::CompletionResult::k_completed)
 			{
 				if(mCompletionDelegate)
 				{
-					mCompletionDelegate(Social::ITwitterPostSystem::PR_SUCCESS);
+					mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_success);
 				}
 			}
-			else
-			if(ineResult == moFlo::Networking::IHttpRequest::FAILED)
+			else if(ineResult == moFlo::Networking::IHttpRequest::CompletionResult::k_failed)
 			{
 				if(mCompletionDelegate)
 				{
-					mCompletionDelegate(Social::ITwitterPostSystem::PR_FAILED);
+					mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_failed);
 				}
 			}
-			else
-			if(ineResult == moFlo::Networking::IHttpRequest::CANCELLED)
+			else if(ineResult == moFlo::Networking::IHttpRequest::CompletionResult::k_cancelled)
 			{
 				if(mCompletionDelegate)
 				{
-					mCompletionDelegate(Social::ITwitterPostSystem::PR_CANCELLED);
+					mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_cancelled);
 				}
 			}
-			else
-			if(ineResult == moFlo::Networking::IHttpRequest::TIMEOUT)
+			else if(ineResult == moFlo::Networking::IHttpRequest::CompletionResult::k_timeout)
 			{
 				if(mCompletionDelegate)
 				{
-					mCompletionDelegate(Social::ITwitterPostSystem::PR_FAILED);
+					mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_failed);
 				}
 			}
-			else
-			if(ineResult == moFlo::Networking::IHttpRequest::FLUSHED)
+			else if(ineResult == moFlo::Networking::IHttpRequest::CompletionResult::k_flushed)
 			{
 				if(mCompletionDelegate)
 				{
-					mCompletionDelegate(Social::ITwitterPostSystem::PR_FAILED);
+					mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_failed);
 				}
 			}
 			else
 			{
 				if(mCompletionDelegate)
 				{
-					mCompletionDelegate(Social::ITwitterPostSystem::PR_FAILED);
+					mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_failed);
 				}
 			}
 		}
@@ -200,13 +196,13 @@ namespace moFlo
 				std::string strURL = Social::TwitterOAuthAPIURLs::TWITTER_OAUTH_REQUEST_TOKEN_URL + Social::TwitterDefault::TWITTER_URL_SEP_QUESTION_MARK + Networking::OAUTHLIB_CALLBACK_KEY + "=oob";
 				std::string strOAuthHeader;
 
-				if(mpOAuthSystem->GetOAuthHeader(Networking::COAuthSystem::eOAuthHttpGet,
+				if(mpOAuthSystem->GetOAuthHeader(Networking::COAuthSystem::OAuthHttpRequestType::k_httpGet,
 												 strURL,
 												 std::string(""), strOAuthHeader))
 				{
 					Networking::HttpRequestDetails sHttpRequest;
 					sHttpRequest.strURL = Social::TwitterOAuthAPIURLs::TWITTER_OAUTH_REQUEST_TOKEN_URL;
-					sHttpRequest.eType = Networking::HttpRequestDetails::GET;
+					sHttpRequest.eType = Networking::HttpRequestDetails::Type::k_get;
 					sHttpRequest.sHeaders.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
 					sHttpRequest.sHeaders.SetValueForKey(Social::TwitterOAuthAPIHeaders::TWITTER_OAUTH_REQUEST_HEADER_AUTHORIZATION, strOAuthHeader);
 
@@ -222,7 +218,7 @@ namespace moFlo
 		//------------------------------------------------------------------------
 		void ITwitterPostSystem::OnRequestOAuthTokenComplete(moFlo::Networking::HttpRequestPtr inpRequest, moFlo::Networking::IHttpRequest::CompletionResult ineResult)
 		{
-			if(ineResult == moFlo::Networking::IHttpRequest::COMPLETED)
+			if(ineResult == moFlo::Networking::IHttpRequest::CompletionResult::k_completed)
 			{
 				// Tell OAuth system to save access token and secret from web response
 				mpOAuthSystem->ExtractOAuthTokenKeySecret(inpRequest->GetResponseString());
@@ -253,13 +249,13 @@ namespace moFlo
 			{
 				std::string strOAuthHeader;
 
-				if(mpOAuthSystem->GetOAuthHeader(Networking::COAuthSystem::eOAuthHttpGet,
+				if(mpOAuthSystem->GetOAuthHeader(Networking::COAuthSystem::OAuthHttpRequestType::k_httpGet,
 												 Social::TwitterOAuthAPIURLs::TWITTER_OAUTH_ACCESS_TOKEN_URL,
 												 std::string(""), strOAuthHeader, true))
 				{
 					Networking::HttpRequestDetails sHttpRequest;
 					sHttpRequest.strURL = Social::TwitterOAuthAPIURLs::TWITTER_OAUTH_ACCESS_TOKEN_URL;
-					sHttpRequest.eType = Networking::HttpRequestDetails::GET;
+					sHttpRequest.eType = Networking::HttpRequestDetails::Type::k_get;
 					sHttpRequest.sHeaders.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
 					sHttpRequest.sHeaders.SetValueForKey(Social::TwitterOAuthAPIHeaders::TWITTER_OAUTH_REQUEST_HEADER_AUTHORIZATION, strOAuthHeader);
 
@@ -275,7 +271,7 @@ namespace moFlo
 		//------------------------------------------------------------------------
 		void ITwitterPostSystem::OnRequestOAuthAccessTokenComplete(moFlo::Networking::HttpRequestPtr inpRequest, moFlo::Networking::IHttpRequest::CompletionResult ineResult)
 		{
-			if(ineResult == moFlo::Networking::IHttpRequest::COMPLETED)
+			if(ineResult == moFlo::Networking::IHttpRequest::CompletionResult::k_completed)
 			{
 				DEBUG_LOG("CTwitterPostSystem::OnRequestOAuthAccessTokenComplete() - Got response:\n"+inpRequest->GetResponseString());
 				// Tell OAuth system to save access token and secret from web response
@@ -295,7 +291,7 @@ namespace moFlo
 
 			moFlo::Core::CLocalDataStore& pLocalData = moFlo::Core::CLocalDataStore::GetSingleton();
 
-			if(pLocalData.TryGetValue(Social::TwitterDataStore::kstrDataStoreKey[Social::TwitterDataStore::DATA_STORE_KEY_OAUTH_TOKEN], strTokenKey))
+			if(pLocalData.TryGetValue(Social::TwitterDataStore::kstrDataStoreKey[(u32)Social::TwitterDataStore::DataStoreKey::k_OAuthToken], strTokenKey))
 			{
 				mstrSavedOAuthTokenKey.assign(strTokenKey);
 			}
@@ -304,7 +300,7 @@ namespace moFlo
 				mstrSavedOAuthTokenKey.clear();
 			}
 
-			if(pLocalData.TryGetValue(Social::TwitterDataStore::kstrDataStoreKey[Social::TwitterDataStore::DATA_STORE_KEY_OAUTH_SECRET], strSecretKey))
+			if(pLocalData.TryGetValue(Social::TwitterDataStore::kstrDataStoreKey[(u32)Social::TwitterDataStore::DataStoreKey::k_OAuthSecret], strSecretKey))
 			{
 				mstrSavedOAuthTokenSecret.assign(strSecretKey);
 			}
@@ -331,8 +327,8 @@ namespace moFlo
 			mpOAuthSystem->GetOAuthTokenKey(mstrSavedOAuthTokenKey);
 			mpOAuthSystem->GetOAuthTokenSecret(mstrSavedOAuthTokenSecret);
 
-			pLocalData.SetValueForKey(Social::TwitterDataStore::kstrDataStoreKey[Social::TwitterDataStore::DATA_STORE_KEY_OAUTH_TOKEN], mstrSavedOAuthTokenKey);
-			pLocalData.SetValueForKey(Social::TwitterDataStore::kstrDataStoreKey[Social::TwitterDataStore::DATA_STORE_KEY_OAUTH_SECRET], mstrSavedOAuthTokenSecret);
+			pLocalData.SetValueForKey(Social::TwitterDataStore::kstrDataStoreKey[(u32)Social::TwitterDataStore::DataStoreKey::k_OAuthToken], mstrSavedOAuthTokenKey);
+			pLocalData.SetValueForKey(Social::TwitterDataStore::kstrDataStoreKey[(u32)Social::TwitterDataStore::DataStoreKey::k_OAuthSecret], mstrSavedOAuthTokenSecret);
 			pLocalData.Synchronise();
 		}
 	}

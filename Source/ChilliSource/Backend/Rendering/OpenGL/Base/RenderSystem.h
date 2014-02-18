@@ -452,7 +452,7 @@ namespace moFlo
             void CreateAttribStateCache();
 			
 		private:
-			s32 GetLocationForVertexSemantic(moRendering::SEMANTIC ineSemantic);
+			s32 GetLocationForVertexSemantic(Rendering::VertexDataSemantic ineSemantic);
             bool ApplyVertexAttributePointr(Rendering::IMeshBuffer* inpBuffer,
                                             GLuint inudwLocation, GLint indwSize, GLenum ineType, GLboolean inbNormalized, GLsizei indwStride, const GLvoid* inpOffset);
             

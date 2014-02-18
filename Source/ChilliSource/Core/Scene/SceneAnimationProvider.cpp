@@ -35,12 +35,12 @@ namespace moFlo{
             return inExtension == kMoSceneAnimExtension;
         }
         
-        bool CSceneAnimationProvider::CreateResourceFromFile(STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
+        bool CSceneAnimationProvider::CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
         {
             return LoadMoSceneAnim(ineStorageLocation, inFilePath, outpResource);
         }
         
-        bool CSceneAnimationProvider::LoadMoSceneAnim(STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
+        bool CSceneAnimationProvider::LoadMoSceneAnim(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
         {
             CSceneAnimation * pSceneAnim = reinterpret_cast<CSceneAnimation*>(outpResource.get());
             

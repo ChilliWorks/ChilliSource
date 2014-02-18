@@ -38,14 +38,14 @@ namespace moFlo
             /// @param Filename of effect
             /// @param Whether this sound should be streamed
             //------------------------------------------------
-            static void AddEffect(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrEffect);
+            static void AddEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffect);
             //------------------------------------------------
             /// Remove Effect
             ///
             /// @param The storage location to load from
             /// @param Filename of effect
             //------------------------------------------------
-            static void RemoveEffect(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrEffect);
+            static void RemoveEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffect);
             //------------------------------------------------
             /// Play 
             ///
@@ -56,7 +56,7 @@ namespace moFlo
             /// @param Whether to loop or not
             /// @return ID of file provide access
             //------------------------------------------------
-            static u32 PlayEffect(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrEffectFile,
+            static u32 PlayEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffectFile,
                                   bool inbLooping, moAudio::AudioEventDelegate inAudioFinishedEvent = NULL);
             //------------------------------------------------
             /// Play 
@@ -67,7 +67,7 @@ namespace moFlo
             /// @param Sound effect file
             /// @param Whether to loop or not
             //------------------------------------------------
-            static void PlayMusic(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrEffectFile, bool inbLooping);
+            static void PlayMusic(Core::StorageLocation ineStorageLocation, const std::string& instrEffectFile, bool inbLooping);
             //------------------------------------------------
             /// Resume
             ///

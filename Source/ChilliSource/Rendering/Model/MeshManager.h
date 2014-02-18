@@ -62,7 +62,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -71,7 +71,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr AsyncGetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
 			//----------------------------------------------------------------
 			/// Get Model From File
 			///
@@ -82,7 +82,7 @@ namespace moFlo
             /// @param the filepath
             /// @return the resource pointer to the mesh
 			//----------------------------------------------------------------
-			MeshPtr GetModelFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath);
+			MeshPtr GetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath);
 			//----------------------------------------------------------------
 			/// Async Get Model From File
 			///
@@ -93,7 +93,7 @@ namespace moFlo
             /// @param the filepath
             /// @return the resource pointer to the mesh
 			//----------------------------------------------------------------
-			MeshPtr AsyncGetModelFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath);
+			MeshPtr AsyncGetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath);
 			//----------------------------------------------------------------
 			/// Create Empty Model
 			///

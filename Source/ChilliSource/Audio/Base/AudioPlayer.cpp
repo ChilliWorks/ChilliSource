@@ -51,7 +51,7 @@ namespace moFlo
         //------------------------------------------------
         /// Add Effect
         //------------------------------------------------
-        void CAudioPlayer::AddEffect(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrEffect)
+        void CAudioPlayer::AddEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffect)
         {
             MapNameToResource::iterator pIt = mmapNamesToResources.find(instrEffect);
             
@@ -73,7 +73,7 @@ namespace moFlo
         //------------------------------------------------
         /// Remove Effect
         //------------------------------------------------
-        void CAudioPlayer::RemoveEffect(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrEffect)
+        void CAudioPlayer::RemoveEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffect)
         {
             MapNameToResource::iterator pIt = mmapNamesToResources.find(instrEffect);
             
@@ -103,7 +103,7 @@ namespace moFlo
         //------------------------------------------------
         /// Play Effect
         //------------------------------------------------
-        u32 CAudioPlayer::PlayEffect(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrEffectFile,
+        u32 CAudioPlayer::PlayEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffectFile,
                                      bool inbLooping, moAudio::AudioEventDelegate inAudioFinishedEvent)
         {
             MapNameToResource::iterator pIt = mmapNamesToResources.find(instrEffectFile);
@@ -135,7 +135,7 @@ namespace moFlo
         //------------------------------------------------
         /// Play Music
         //------------------------------------------------
-        void CAudioPlayer::PlayMusic(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrEffectFile, bool inbLooping)
+        void CAudioPlayer::PlayMusic(Core::StorageLocation ineStorageLocation, const std::string& instrEffectFile, bool inbLooping)
         {
             mpMusicComponent = mpAudioComponentFactory->CreateAudioComponent(ineStorageLocation, instrEffectFile, true, inbLooping);
             mpMusicComponent->Play();

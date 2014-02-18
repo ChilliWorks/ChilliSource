@@ -15,7 +15,7 @@ namespace moFlo{
 	IAnimation::IAnimation(f32 infDuration, f32 infStartDelay)
 	:mfAnimPos(0), mfDuration(infDuration),mfTimeScaleFactor(1.0f), mfStartDelay(infStartDelay )
 	{
-		mePlayMode = ANIM_PLAYONCE;
+		mePlayMode = AnimationPlayMode::k_once;
 		mbForward = true;
 		mbPlaying = false;
 		mbFinished = false;
@@ -73,24 +73,21 @@ namespace moFlo{
 	
 	void IAnimation::Play(AnimationPlayMode inePlayMode)
 	{
-		enum AnimationPlayMode{ANIM_PLAYONCE, ANIM_PLAYLOOPING, ANIM_PINGPONG, ANIM_PINGPONG_LOOPING,
-            ANIM_PLAYONCE_REVERSE, ANIM_PLAYLOOPING_REVERSE, ANIM_PINGPONG_REVERSE, ANIM_PINGPONG_LOOPING_REVERSE, ANIM_PLAYHALF_KEEP_MID_FRAME};
-        
 		switch (inePlayMode)
 		{
-			case ANIM_PLAYONCE :
-			case ANIM_PLAYLOOPING :
-			case ANIM_PINGPONG :
-			case ANIM_PINGPONG_LOOPING :
-            case ANIM_PLAYHALF_KEEP_MID_FRAME:
+			case AnimationPlayMode::k_once :
+			case AnimationPlayMode::k_looping :
+			case AnimationPlayMode::k_pingPong :
+			case AnimationPlayMode::k_pingPongLooping :
+            case AnimationPlayMode::k_stopHalf:
 				mfAnimPos = 0.0f;
 				mbForward = true;
 				break;
 				
-			case ANIM_PLAYONCE_REVERSE :
-			case ANIM_PLAYLOOPING_REVERSE :
-			case ANIM_PINGPONG_REVERSE :
-			case ANIM_PINGPONG_LOOPING_REVERSE :
+			case AnimationPlayMode::k_onceReverse :
+			case AnimationPlayMode::k_loopingReverse :
+			case AnimationPlayMode::k_pingPongReverse :
+			case AnimationPlayMode::k_pingPongLoopingReverse :
 				mfAnimPos = mfDuration;
 				mbForward = false;
 				break;
@@ -159,27 +156,27 @@ namespace moFlo{
 		f32 fProgression = GetProgression();
 		
         bool bTriggerComplete = false;
-		if (mePlayMode == ANIM_PLAYONCE && fProgression >= 1.0f)
+		if (mePlayMode == AnimationPlayMode::k_once && fProgression >= 1.0f)
 		{
 			mbPlaying = false;
 			mbFinished = true;
             bTriggerComplete = true;
 		}
-		else if (mePlayMode == ANIM_PLAYLOOPING && fProgression >= 1.0f)
+		else if (mePlayMode == AnimationPlayMode::k_looping && fProgression >= 1.0f)
 		{
 			mfAnimPos = 0;
 			mbLooped = true;
 		}
-		else if ((mePlayMode == ANIM_PINGPONG || mePlayMode == ANIM_PINGPONG_LOOPING) && fProgression >= 1.0f && mbForward == true)
+		else if ((mePlayMode == AnimationPlayMode::k_pingPong || mePlayMode == AnimationPlayMode::k_pingPongLooping) && fProgression >= 1.0f && mbForward == true)
 		{
 			mbForward = false;				
 			mfAnimPos = mfDuration;
 		}
-		else if ((mePlayMode == ANIM_PINGPONG || mePlayMode == ANIM_PINGPONG_LOOPING) && fProgression <= 0.0f && mbForward == false)
+		else if ((mePlayMode == AnimationPlayMode::k_pingPong || mePlayMode == AnimationPlayMode::k_pingPongLooping) && fProgression <= 0.0f && mbForward == false)
 		{
 			mbForward = true;
 			mfAnimPos = 0;
-			if(mePlayMode == ANIM_PINGPONG)
+			if(mePlayMode == AnimationPlayMode::k_pingPong)
 			{
 				mbPlaying = false;
 				mbFinished = true;
@@ -190,34 +187,34 @@ namespace moFlo{
 				mbLooped = true;
 			}
 		}
-		else if (mePlayMode == ANIM_PLAYONCE_REVERSE && fProgression <= 0.0f)
+		else if (mePlayMode == AnimationPlayMode::k_onceReverse && fProgression <= 0.0f)
 		{
 			mbPlaying = false;
 			mbFinished = true;
             bTriggerComplete = true;
 		} 
-		else if (mePlayMode == ANIM_PLAYLOOPING_REVERSE && fProgression <= 0.0f)
+		else if (mePlayMode == AnimationPlayMode::k_loopingReverse && fProgression <= 0.0f)
 		{
 			mfAnimPos = mfDuration;
 			mbLooped = true;
 		} 
-		else if ((mePlayMode == ANIM_PINGPONG_REVERSE || mePlayMode == ANIM_PINGPONG_LOOPING_REVERSE) && fProgression <= 0.0f && mbForward == false)
+		else if ((mePlayMode == AnimationPlayMode::k_pingPongReverse || mePlayMode == AnimationPlayMode::k_pingPongLoopingReverse) && fProgression <= 0.0f && mbForward == false)
 		{
 			mbForward = !mbForward;				
 			mfAnimPos = 0.0f;
 		} 
-		else if ((mePlayMode == ANIM_PINGPONG_REVERSE || mePlayMode == ANIM_PINGPONG_LOOPING_REVERSE) && fProgression >= 1.0f && mbForward == true)
+		else if ((mePlayMode == AnimationPlayMode::k_pingPongReverse || mePlayMode == AnimationPlayMode::k_pingPongLoopingReverse) && fProgression >= 1.0f && mbForward == true)
 		{
 			mbForward = !mbForward;
 			mfAnimPos = mfDuration;
-			if(mePlayMode == ANIM_PINGPONG_REVERSE)
+			if(mePlayMode == AnimationPlayMode::k_pingPongReverse)
 			{
 				mbPlaying = false;
 				mbFinished = true;
                 bTriggerComplete = true;
 			}
 		}
-        else if (mePlayMode == ANIM_PLAYHALF_KEEP_MID_FRAME && fProgression > 0.5f)
+        else if (mePlayMode == AnimationPlayMode::k_stopHalf && fProgression > 0.5f)
         {
             mfAnimPos = mfDuration*0.5f;
         }

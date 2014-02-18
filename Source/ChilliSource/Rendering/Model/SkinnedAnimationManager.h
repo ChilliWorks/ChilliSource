@@ -61,7 +61,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -70,7 +70,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr AsyncGetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
 			//-----------------------------------------------------------------
 			/// Get Skinned Animation From File
 			///
@@ -80,7 +80,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return a pointer to the skeletal animation.
 			//-----------------------------------------------------------------
-			SkinnedAnimationPtr GetSkinnedAnimationFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+			SkinnedAnimationPtr GetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
 			//-----------------------------------------------------------------
 			/// Async Get Skinned Animation From File
 			///
@@ -91,7 +91,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return a pointer to the skeletal animation.
 			//-----------------------------------------------------------------
-			SkinnedAnimationPtr AsyncGetSkinnedAnimationFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+			SkinnedAnimationPtr AsyncGetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
 		private:
 			
 		};

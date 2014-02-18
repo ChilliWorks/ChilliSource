@@ -16,29 +16,29 @@ namespace moFlo
 {
 	namespace Core
 	{
-		enum ImageCompression
+		enum class ImageCompression
 		{
-			COMPRESSION_NONE,
-			COMPRESSION_PVR_4BPP,
-			COMPRESSION_PVR_2BPP,
-			COMPRESSION_ETC1
+            k_none,
+            k_PVR4Bpp,
+            k_PVR2Bpp,
+            k_ETC1
 		};
 		
 		class CImage : public IResource
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(CImage);
-			enum Format
+			enum class Format
 			{
-				RGBA_4444,
-				RGBA_8888,
-				RGB_888,
-				RGB_565,
-				LUMA_88,
-				LUM_8,
-                DEPTH_16,
-                DEPTH_32,
-				FORMAT_DEFAULT
+				k_RGBA4444,
+				k_RGBA8888,
+				k_RGB888,
+				k_RGB565,
+				k_LumA88,
+				k_Lum8,
+                k_Depth16,
+                k_Depth32,
+                k_default
 			};
 			
 			///@param inpData - The passed pointer becomes owned by the CImage and should have been allocated using malloc

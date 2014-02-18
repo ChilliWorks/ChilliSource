@@ -44,13 +44,13 @@ namespace moFlo
 		};
 		
 		//---Font Values
-		enum CharacterResults
+		enum class CharacterResult
 		{
-			CHAR_SPACE,
-			CHAR_TAB,
-			CHAR_RETURN,
-			CHAR_INVALID,
-			CHAR_OK,
+            k_space,
+            k_tab,
+            k_return,
+            k_invalid,
+            k_ok
 		};
 		
 		//Details how a particular character must be drawn
@@ -170,7 +170,7 @@ namespace moFlo
 			/// @param info struct to be filled with data for the character
 			/// @return Success or invisible chars
 			//-------------------------------------------
-			CharacterResults GetInfoForCharacter(UTF8String::Char inChar, CharacterInfo& outInfo) const;
+			CharacterResult GetInfoForCharacter(UTF8String::Char inChar, CharacterInfo& outInfo) const;
 			//-------------------------------------------
 			/// Get Attributes
 			///

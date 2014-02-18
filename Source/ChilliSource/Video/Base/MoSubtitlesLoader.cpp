@@ -86,7 +86,7 @@ namespace moFlo
 		//--------------------------------------------------------------
 		// Create Resource From File
 		//--------------------------------------------------------------
-		bool CMoSubtitlesLoader::CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool CMoSubtitlesLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
             SubtitlesPtr pSubtitles = SHARED_PTR_CAST<CSubtitles>(outpResource);
             
@@ -95,12 +95,12 @@ namespace moFlo
 		//--------------------------------------------------------------
 		// Async Create Resource From File
 		//--------------------------------------------------------------
-		bool CMoSubtitlesLoader::AsyncCreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool CMoSubtitlesLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
 			SubtitlesPtr pSubtitles = SHARED_PTR_CAST<CSubtitles>(outpResource);
 			
 			//Load model as task
-			Task3<Core::STORAGE_LOCATION, const std::string&, SubtitlesPtr&> task(this, &CMoSubtitlesLoader::LoadMoSubtitlesTask,ineStorageLocation, inFilePath, pSubtitles);
+			Task3<Core::StorageLocation, const std::string&, SubtitlesPtr&> task(this, &CMoSubtitlesLoader::LoadMoSubtitlesTask,ineStorageLocation, inFilePath, pSubtitles);
 			CTaskScheduler::ScheduleTask(task);
 			
 			return true;
@@ -108,14 +108,14 @@ namespace moFlo
         //--------------------------------------------------------------
         // Load MoSubtitles Task
         //--------------------------------------------------------------
-        void CMoSubtitlesLoader::LoadMoSubtitlesTask(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, SubtitlesPtr& outpResource)
+        void CMoSubtitlesLoader::LoadMoSubtitlesTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, SubtitlesPtr& outpResource)
         {
             LoadMoSubtitles(ineStorageLocation, inFilePath, outpResource);
         }
         //--------------------------------------------------------------
         // Load MoSubtitles
         //--------------------------------------------------------------
-        bool CMoSubtitlesLoader::LoadMoSubtitles(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, SubtitlesPtr& outpResource)
+        bool CMoSubtitlesLoader::LoadMoSubtitles(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, SubtitlesPtr& outpResource)
         {
             //read the JSON
             Json::Value root;

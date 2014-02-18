@@ -146,13 +146,13 @@ namespace moFlo
 			
 			switch (mBufferDesc.ePrimitiveType) 
 			{
-				case TRIS:
+				case PrimitiveType::k_tri:
 					nPrimitives = mIndexCount/3;
 					break;
-				case TRI_STRIP:
+				case PrimitiveType::k_triStrip:
 					nPrimitives = (mIndexCount - 2);
 					break;
-				case LINE:
+				case PrimitiveType::k_line:
 					nPrimitives = mIndexCount/2;
 					break; 
 			}

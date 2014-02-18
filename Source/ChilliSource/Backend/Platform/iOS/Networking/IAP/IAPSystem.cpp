@@ -71,26 +71,26 @@ namespace moFlo
             pTransaction->strProductID = Core::CStringUtils::NSStringToString(inProductID);
             
             bool bHasReceipt = false;
-            Networking::IAPTransaction::Status eResult = Networking::IAPTransaction::FAILED;
+            Networking::IAPTransaction::Status eResult = Networking::IAPTransaction::Status::k_failed;
             switch(ineResult)
             {
-                case StoreKitIAP::SUCCEEDED:
+                case StoreKitIAP::TransactionResult::k_succeeded:
                     bHasReceipt = true;
-                    eResult = Networking::IAPTransaction::SUCCEEDED;
+                    eResult = Networking::IAPTransaction::Status::k_succeeded;
                     break;
-                case StoreKitIAP::FAILED:
-                    eResult = Networking::IAPTransaction::FAILED;
+                case StoreKitIAP::TransactionResult::k_failed:
+                    eResult = Networking::IAPTransaction::Status::k_failed;
                     break;
-                case StoreKitIAP::CANCELLED:
-                    eResult = Networking::IAPTransaction::CANCELLED;
+                case StoreKitIAP::TransactionResult::k_cancelled:
+                    eResult = Networking::IAPTransaction::Status::k_cancelled;
                     break;
-                case StoreKitIAP::RESTORED:
+                case StoreKitIAP::TransactionResult::k_restored:
                     bHasReceipt = true;
-                    eResult = Networking::IAPTransaction::RESTORED;
+                    eResult = Networking::IAPTransaction::Status::k_restored;
                     break;
-                case StoreKitIAP::RESUMED:
+                case StoreKitIAP::TransactionResult::k_resumed:
                     bHasReceipt = true;
-                    eResult = Networking::IAPTransaction::RESUMED;
+                    eResult = Networking::IAPTransaction::Status::k_resumed;
                     break;
             }
             

@@ -58,7 +58,7 @@ namespace moFlo
 			/// @param Out: Resource object
 			/// @return Whether the resource loaded
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::STORAGE_LOCATION ineLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			bool CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
 		};
 	}
 }

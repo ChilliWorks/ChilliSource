@@ -28,13 +28,13 @@ namespace  moFlo
             
             bool ManagesResourceOfType(InterfaceIDType inInterfaceID) const;
             
-            SceneAnimationPtr GetSceneAnimationFromFile(STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+            SceneAnimationPtr GetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath);
             
-            SceneAnimationPtr AsyncGetSceneAnimationFromFile(STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+            SceneAnimationPtr AsyncGetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath);
             
-            ResourcePtr GetResourceFromFile(STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+            ResourcePtr GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath);
             
-            ResourcePtr AsyncGetResourceFromFile(STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+            ResourcePtr AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath);
             
         };
     }

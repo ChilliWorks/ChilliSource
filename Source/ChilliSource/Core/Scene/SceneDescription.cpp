@@ -143,7 +143,7 @@ namespace moFlo
             return pResult;
         }
         
-		bool CSceneDesc::LoadFromFile(STORAGE_LOCATION ineStorageLocation, const std::string & incName)
+		bool CSceneDesc::LoadFromFile(StorageLocation ineStorageLocation, const std::string & incName)
 		{
             std::string strFile;
             bool bReadFile = CUtils::FileToString(ineStorageLocation, incName, strFile);
@@ -171,7 +171,7 @@ namespace moFlo
             return true;		
 		}
 		
-		void CSceneDesc::WriteToFile(STORAGE_LOCATION ineStorageLocation, const std::string & incName)
+		void CSceneDesc::WriteToFile(StorageLocation ineStorageLocation, const std::string & incName)
 		{
             rapidxml::xml_document<> doc;
             

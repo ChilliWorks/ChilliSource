@@ -27,14 +27,11 @@ namespace moFlo
 		///
 		/// Describes the different types of animation playback.
 		//===============================================================
-        namespace AnimationPlaybackType
+        enum class AnimationPlaybackType
         {
-            enum ENUM
-            {
-                ONCE,
-                LOOPING
-            };
-        }
+            k_once,
+            k_looping
+        };
         //===============================================================
 		/// Events
 		//===============================================================
@@ -177,7 +174,7 @@ namespace moFlo
 			/// @param the animation filename
             /// @param the position of the animation on the blendline.
 			//----------------------------------------------------------
-			void AttachAnimation(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrAnimation, f32 infBlendlinePosition = 0.0f);
+			void AttachAnimation(Core::StorageLocation ineStorageLocation, const std::string& instrAnimation, f32 infBlendlinePosition = 0.0f);
             //----------------------------------------------------------
 			/// Attach Animation
 			///
@@ -216,7 +213,7 @@ namespace moFlo
             /// @param The animation fade type.
             /// @param the time to fade out over.
 			//----------------------------------------------------------
-			void FadeOut(AnimationBlendType::ENUM ineFadeType, f32 infFadeOutTime);
+			void FadeOut(AnimationBlendType ineFadeType, f32 infFadeOutTime);
             //----------------------------------------------------------
 			/// Clear Animations
 			///
@@ -267,7 +264,7 @@ namespace moFlo
             ///
             /// @param The playback type.
 			//----------------------------------------------------------
-			void SetPlaybackType(AnimationPlaybackType::ENUM inePlaybackType);
+			void SetPlaybackType(AnimationPlaybackType inePlaybackType);
             //----------------------------------------------------------
 			/// Set Playback Speed Multiplier
 			///
@@ -301,7 +298,7 @@ namespace moFlo
             ///
             /// @param The blend type.
 			//----------------------------------------------------------
-			void SetBlendType(AnimationBlendType::ENUM ineBlendType);
+			void SetBlendType(AnimationBlendType ineBlendType);
             //----------------------------------------------------------
 			/// Get Animation Changed Event
             ///
@@ -335,7 +332,7 @@ namespace moFlo
             ///
             /// @return the current playback type.
 			//----------------------------------------------------------
-            AnimationPlaybackType::ENUM GetPlaybackType() const;
+            AnimationPlaybackType GetPlaybackType() const;
             //----------------------------------------------------------
 			/// Get Animation Length
             ///
@@ -367,7 +364,7 @@ namespace moFlo
             ///
             /// @return the blend type used for all animation blending.
 			//----------------------------------------------------------
-            AnimationBlendType::ENUM GetBlendType() const;
+            AnimationBlendType GetBlendType() const;
             //----------------------------------------------------------
 			/// Has Finished
             ///
@@ -464,9 +461,9 @@ namespace moFlo
 			f32 mfPlaybackPosition;
 			f32 mfPlaybackSpeedMultiplier;
             f32 mfBlendlinePosition;
-            AnimationBlendType::ENUM meBlendType;
-            AnimationPlaybackType::ENUM mePlaybackType;
-            AnimationBlendType::ENUM meFadeType;
+            AnimationBlendType meBlendType;
+            AnimationPlaybackType mePlaybackType;
+            AnimationBlendType meFadeType;
             f32 mfFadeTimer;
             f32 mfFadeMaxTime;
             f32 mfFadePlaybackPosition;

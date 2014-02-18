@@ -62,7 +62,7 @@ namespace moFlo
             std::string strValue;
             
             //---Texture
-            Core::STORAGE_LOCATION eTextureLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("TextureLocation", strValue))
             {
                 eTextureLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -72,7 +72,7 @@ namespace moFlo
                 Texture = LOAD_RESOURCE(Rendering::ITexture, eTextureLocation, strValue);
             }
             //---Sprite sheet
-            Core::STORAGE_LOCATION eSpriteSheetLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SpriteSheetLocation", strValue))
             {
                 eSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -250,7 +250,7 @@ namespace moFlo
         ///
         /// @param Sprite sheet name
         //--------------------------------------------------------
-        void CImageView::SetSpriteSheet(const std::string& instrSpriteSheet, Core::STORAGE_LOCATION ineLocation)
+        void CImageView::SetSpriteSheet(const std::string& instrSpriteSheet, Core::StorageLocation ineLocation)
         {
             SpriteSheet = LOAD_RESOURCE(Rendering::CSpriteSheet, ineLocation, instrSpriteSheet);
         }

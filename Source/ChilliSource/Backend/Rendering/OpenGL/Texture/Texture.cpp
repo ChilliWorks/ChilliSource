@@ -31,9 +31,9 @@ namespace moFlo
 		/// @param Source image to create texture from
 		//---------------------------------------------------------------
 		CTexture::CTexture(CTextureManager* inpTextureManager)
-            : meSFilter(TEX_FILTER_LINEAR), meTFilter(TEX_FILTER_LINEAR), meSWrapMode(TEX_WRAP_CLAMP), meTWrapMode(TEX_WRAP_CLAMP), mGLTexID(0),
-            mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), mdwTextureSlot(0), meImageFormat(Core::CImage::RGBA_8888), mpTextureManager(inpTextureManager),
-            mpRenderCapabilities(NULL)
+        : meSFilter(Filter::k_linear), meTFilter(Filter::k_linear), meSWrapMode(WrapMode::k_clamp), meTWrapMode(WrapMode::k_clamp), mGLTexID(0),
+        mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), mdwTextureSlot(0), meImageFormat(Core::CImage::Format::k_RGBA8888), mpTextureManager(inpTextureManager),
+        mpRenderCapabilities(NULL)
 		{
             mpRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
             MOFLOW_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
@@ -63,28 +63,28 @@ namespace moFlo
 			switch (ineFormat)
             {
                 default:
-                case Core::CImage::RGBA_8888:
+                case Core::CImage::Format::k_RGBA8888:
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, inudwWidth, inudwHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
                     break;
-                case Core::CImage::RGB_888:
+                case Core::CImage::Format::k_RGB888:
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, inudwWidth, inudwHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
                     break;
-                case Core::CImage::RGBA_4444:
+                case Core::CImage::Format::k_RGBA4444:
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, inudwWidth, inudwHeight, 0, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, NULL);
                     break;
-                case Core::CImage::RGB_565:
+                case Core::CImage::Format::k_RGB565:
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, inudwWidth, inudwHeight, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, NULL);
                     break;
-                case Core::CImage::LUMA_88:
+                case Core::CImage::Format::k_LumA88:
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE_ALPHA, inudwWidth, inudwHeight, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, NULL);
                     break;
-                case Core::CImage::LUM_8:
+                case Core::CImage::Format::k_Lum8:
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, inudwWidth, inudwHeight, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
                     break;
-                case Core::CImage::DEPTH_16:
+                case Core::CImage::Format::k_Depth16:
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, inudwWidth, inudwHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, NULL);
                     break;
-                case Core::CImage::DEPTH_32:
+                case Core::CImage::Format::k_Depth32:
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, inudwWidth, inudwHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL);
                     break;
             };
@@ -116,62 +116,62 @@ namespace moFlo
 			switch(pSourceImage->GetCompression())
 			{
 				default:
-				case Core::COMPRESSION_NONE:
+				case Core::ImageCompression::k_none:
 					switch(pSourceImage->GetFormat())
                     {
                         default:
-                        case Core::CImage::RGBA_8888:	
+                        case Core::CImage::Format::k_RGBA8888:
                             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, pSourceImage->GetData());
                             break;
-                        case Core::CImage::RGB_888:	
+                        case Core::CImage::Format::k_RGB888:
                             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, pSourceImage->GetData());
                             break;
-                        case Core::CImage::RGBA_4444:
+                        case Core::CImage::Format::k_RGBA4444:
                             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, pSourceImage->GetData());
                             break;
-                        case Core::CImage::RGB_565:
+                        case Core::CImage::Format::k_RGB565:
                             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, pSourceImage->GetData());
                             break;
-                        case Core::CImage::LUMA_88:
+                        case Core::CImage::Format::k_LumA88:
                             glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE_ALPHA, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, pSourceImage->GetData());
                             break;
-                        case Core::CImage::LUM_8:
+                        case Core::CImage::Format::k_Lum8:
                             glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, pSourceImage->GetData());
                             break;
                     };
 					break;
-				case Core::COMPRESSION_ETC1:
+				case Core::ImageCompression::k_ETC1:
 #ifdef TARGET_ANDROID
 					glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_ETC1_RGB8_OES, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, pSourceImage->GetDataLength(), pSourceImage->GetData());
 #endif
 					break;
-				case Core::COMPRESSION_PVR_2BPP:
+				case Core::ImageCompression::k_PVR2Bpp:
 #ifndef TARGET_OS_IPHONE
                     FATAL_LOG("PVR compressed textures are only supported on iOS.");
 #else
 					switch(pSourceImage->GetFormat())
                     {
                         default:
-                        case Core::CImage::RGBA_8888:	
+                        case Core::CImage::Format::k_RGBA8888:
                             glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, pSourceImage->GetDataLength(), pSourceImage->GetData());
                             break;
-                        case Core::CImage::RGB_888:	
+                        case Core::CImage::Format::k_RGB888:
                             glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, pSourceImage->GetDataLength(), pSourceImage->GetData());
                             break;
                     };
 #endif
 					break;
-				case Core::COMPRESSION_PVR_4BPP:
+				case Core::ImageCompression::k_PVR4Bpp:
 #ifndef TARGET_OS_IPHONE
                     FATAL_LOG("PVR compressed textures are only supported on iOS.");
 #else
 					switch(pSourceImage->GetFormat())
                     {
                         default:
-                        case Core::CImage::RGBA_8888:	
+                        case Core::CImage::Format::k_RGBA8888:
                             glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, pSourceImage->GetDataLength(), pSourceImage->GetData());
                             break;
-                        case Core::CImage::RGB_888:	
+                        case Core::CImage::Format::k_RGB888:
                             glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, pSourceImage->GetDataLength(), pSourceImage->GetData());
                             break;
                     };
@@ -232,9 +232,9 @@ namespace moFlo
             glReadPixels(0, 0, GetWidth(), GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, pData);
             
             outpImage = Core::ImagePtr(new Core::CImage());
-            outpImage->SetCompression(moFlo::Core::COMPRESSION_NONE);
+            outpImage->SetCompression(Core::ImageCompression::k_none);
             outpImage->SetDataLength(udwSize);
-            outpImage->SetFormat(Core::CImage::RGBA_8888);
+            outpImage->SetFormat(Core::CImage::Format::k_RGBA8888);
             outpImage->SetWidth(GetWidth());
             outpImage->SetHeight(GetHeight());
             outpImage->SetData((u8*)pData);
@@ -242,25 +242,25 @@ namespace moFlo
             //convert the RGBA8888 data taken from the texture to the intended format.
             switch (meImageFormat)
             {
-                case Core::CImage::RGB_888:
+                case Core::CImage::Format::k_RGBA8888:
                     ImageFormatConverter::RGBA8888ToRGB888(outpImage.get());
                     break;
-                case Core::CImage::RGBA_4444:
+                case Core::CImage::Format::k_RGBA4444:
                     ImageFormatConverter::RGBA8888ToRGBA4444(outpImage.get());
                     break;
-                case Core::CImage::RGB_565:
+                case Core::CImage::Format::k_RGB565:
                     ImageFormatConverter::RGBA8888ToRGB565(outpImage.get());
                     break;
-                case Core::CImage::LUMA_88:
+                case Core::CImage::Format::k_LumA88:
                     ImageFormatConverter::RGBA8888ToLUMA88(outpImage.get());
                     break;
-                case Core::CImage::LUM_8:
+                case Core::CImage::Format::k_Lum8:
                     ImageFormatConverter::RGBA8888ToLUM8(outpImage.get());
                     break;
-                case Core::CImage::DEPTH_32:
+                case Core::CImage::Format::k_Depth32:
                     ImageFormatConverter::RGBA8888ToDepth32(outpImage.get());
                     break;
-                case Core::CImage::DEPTH_16:
+                case Core::CImage::Format::k_Depth16:
                     ImageFormatConverter::RGBA8888ToDepth16(outpImage.get());
                     break;
                 default:
@@ -402,20 +402,20 @@ namespace moFlo
             switch(meSWrapMode)
             {
                 default:
-                case TEX_WRAP_CLAMP:
+                case WrapMode::k_clamp:
                     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
                     break;
-                case TEX_WRAP_REPEAT:
+                case WrapMode::k_repeat:
                     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
                     break;
             };
             switch(meTWrapMode)
             {
                 default:
-                case TEX_WRAP_CLAMP:
+                case WrapMode::k_clamp:
                     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
                     break;
-                case TEX_WRAP_REPEAT:
+                case WrapMode::k_repeat:
                     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
                     break;
             };
@@ -425,20 +425,20 @@ namespace moFlo
                 switch (meSFilter)
                 {
                     default:
-                    case TEX_FILTER_POINT:
+                    case Filter::k_point:
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,  GL_NEAREST);
                         break;
-                    case TEX_FILTER_LINEAR:
+                    case Filter::k_linear:
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,  GL_LINEAR);
                         break;
                 }
                 switch (meTFilter)
                 {
                     default:
-                    case TEX_FILTER_POINT:
+                    case Filter::k_point:
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                         break;
-                    case TEX_FILTER_LINEAR:
+                    case Filter::k_linear:
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                         break;
                 }
@@ -448,20 +448,20 @@ namespace moFlo
                 switch (meSFilter)
                 {
                     default:
-                    case TEX_FILTER_POINT:
+                    case Filter::k_point:
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,  GL_NEAREST_MIPMAP_NEAREST);
                         break;
-                    case TEX_FILTER_LINEAR:
+                    case Filter::k_linear:
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,  GL_LINEAR_MIPMAP_NEAREST);
                         break;
                 }
                 switch (meTFilter)
                 {
                     default:
-                    case TEX_FILTER_POINT:
+                    case Filter::k_point:
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                         break;
-                    case TEX_FILTER_LINEAR:
+                    case Filter::k_linear:
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                         break;
                 }

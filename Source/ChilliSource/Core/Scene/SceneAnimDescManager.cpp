@@ -38,17 +38,17 @@ namespace moFlo
             return inInterfaceID == CSceneAnimation::InterfaceID;
         }
         
-        ResourcePtr CSceneAnimDescManager::GetResourceFromFile(STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+        ResourcePtr CSceneAnimDescManager::GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             return GetSceneAnimationFromFile(ineStorageLocation, instrFilePath);
         }
         
-        ResourcePtr CSceneAnimDescManager::AsyncGetResourceFromFile(STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+        ResourcePtr CSceneAnimDescManager::AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             return AsyncGetSceneAnimationFromFile(ineStorageLocation, instrFilePath);
         }
         
-        SceneAnimationPtr CSceneAnimDescManager::GetSceneAnimationFromFile(STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+        SceneAnimationPtr CSceneAnimDescManager::GetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
             
@@ -80,7 +80,7 @@ namespace moFlo
             return SceneAnimationPtr();
         }
         
-        SceneAnimationPtr CSceneAnimDescManager::AsyncGetSceneAnimationFromFile(STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+        SceneAnimationPtr CSceneAnimDescManager::AsyncGetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
             

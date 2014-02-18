@@ -13,7 +13,7 @@
 
 using namespace moFlo::Core;
 
-bool CUtils::ReadJson(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrPath, Json::Value *outpJson)
+bool CUtils::ReadJson(moFlo::Core::StorageLocation ineStorageLocation, const std::string &instrPath, Json::Value *outpJson)
 {
     if(!outpJson)
     {
@@ -38,9 +38,9 @@ bool CUtils::ReadJson(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const st
     return true;
 }
 
-bool CUtils::FileToString(STORAGE_LOCATION ineStorageLocation, const std::string & instrPath, std::string & outstrFileContent)
+bool CUtils::FileToString(StorageLocation ineStorageLocation, const std::string & instrPath, std::string & outstrFileContent)
 {
-    FileStreamPtr pFile = CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrPath, FM_READ);
+    FileStreamPtr pFile = CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_read);
     
     if(!pFile || pFile->IsOpen() == false)
     {
@@ -53,9 +53,9 @@ bool CUtils::FileToString(STORAGE_LOCATION ineStorageLocation, const std::string
     return true;
 }
 
-FileStreamPtr CUtils::StringToFile(STORAGE_LOCATION ineStorageLocation, const std::string & instrPath, const std::string& instrFileOut)
+FileStreamPtr CUtils::StringToFile(StorageLocation ineStorageLocation, const std::string & instrPath, const std::string& instrFileOut)
 {
-    FileStreamPtr pFile = CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrPath, FM_WRITE);
+    FileStreamPtr pFile = CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_write);
     
     if(!pFile || pFile->IsOpen() == false)
     {

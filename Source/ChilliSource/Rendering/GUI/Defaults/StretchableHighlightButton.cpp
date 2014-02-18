@@ -63,7 +63,7 @@ namespace moFlo
             memset(&msCurrentIndices, 0, sizeof(u32) * 9);
             
             //---Sprite sheet
-            Core::STORAGE_LOCATION eNormalSpriteSheetLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eNormalSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("NormalSpriteSheetLocation", strValue))
             {
                 eNormalSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -73,7 +73,7 @@ namespace moFlo
                 SetNormalSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eNormalSpriteSheetLocation, strValue));
             }
             //---Sprite sheet
-            Core::STORAGE_LOCATION eHighlightSpriteSheetLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eHighlightSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("HighlightSpriteSheetLocation", strValue))
             {
                 eHighlightSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -98,8 +98,8 @@ namespace moFlo
                 SetHighlightColour(Core::CStringConverter::ParseColourValue(strValue));
             }
             //---Audio effect
-            Core::STORAGE_LOCATION eSelectAudioLocation = Core::SL_PACKAGE;
-            Core::STORAGE_LOCATION eDeselectAudioLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eSelectAudioLocation = Core::StorageLocation::k_package;
+            Core::StorageLocation eDeselectAudioLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SelectAudioEffectLocation", strValue))
             {
                 eSelectAudioLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -382,8 +382,8 @@ namespace moFlo
         void CStretchableHighlightButton::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
             //Check if this is on screen
-			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_TOP_RIGHT);
-			Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_BOTTOM_LEFT);
+			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
+			Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft);
 			
 			if(vTopRight.y < 0 || vBottomLeft.y > Core::CScreen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::CScreen::GetOrientedWidth())
 			{
@@ -395,7 +395,7 @@ namespace moFlo
             {			
                 Core::CVector2 vPanelSize = GetAbsoluteSize();
                 Core::CVector2 vPanelPos = GetAbsoluteScreenSpacePosition();
-                Core::CVector2 vTopLeft = GetAbsoluteAnchorPoint(Core::ALIGN_TOP_LEFT);
+                Core::CVector2 vTopLeft = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topLeft);
                 Core::CVector2 vPatchPos;
                 
                 Core::CColour AbsColour = GetAbsoluteColour() * mCurrentColour;
@@ -466,40 +466,40 @@ namespace moFlo
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwTopLeft), 
                                    AbsColour, 
-                                   Core::ALIGN_TOP_LEFT);
+                                   Core::AlignmentAnchor::k_topLeft);
                 
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::ALIGN_TOP_RIGHT));
+                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topRight));
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vTRPatchSize,  
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwTopRight), 
                                    AbsColour, 
-                                   Core::ALIGN_TOP_RIGHT);
+                                   Core::AlignmentAnchor::k_topRight);
                 
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::ALIGN_BOTTOM_LEFT));
+                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_bottomLeft));
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vBLPatchSize, 
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwBottomLeft), 
                                    AbsColour, 
-                                   Core::ALIGN_BOTTOM_LEFT);
+                                   Core::AlignmentAnchor::k_bottomLeft);
                 
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::ALIGN_BOTTOM_RIGHT));
+                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_bottomRight));
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vBRPatchSize,  
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwBottomRight), 
                                    AbsColour, 
-                                   Core::ALIGN_BOTTOM_RIGHT);
+                                   Core::AlignmentAnchor::k_bottomRight);
                 
                 //Draw the top and bottom 
                 vTCPatchSize.x = vPanelSize.x - (vTLPatchSize.x + vTRPatchSize.x);
                 vTCPatchSize.y = vTLPatchSize.y;
                 vPatchPos.x = vTopLeft.x + vTLPatchSize.x;
-                vPatchPos.y = GetAbsoluteAnchorPoint(Core::ALIGN_TOP_CENTRE).y;
+                vPatchPos.y = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topCentre).y;
                 
                 matPatchTransform.Translate(vPatchPos);
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
@@ -508,13 +508,13 @@ namespace moFlo
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwTopCentre), 
                                    AbsColour, 
-                                   Core::ALIGN_TOP_LEFT);
+                                   Core::AlignmentAnchor::k_topLeft);
                 
                 
                 vBCPatchSize.x = vPanelSize.x - (vBLPatchSize.x + vBRPatchSize.x);
                 vBCPatchSize.y = vBLPatchSize.y;
                 vPatchPos.x = vTopLeft.x + vBLPatchSize.x;
-                vPatchPos.y = GetAbsoluteAnchorPoint(Core::ALIGN_BOTTOM_CENTRE).y;
+                vPatchPos.y = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_bottomCentre).y;
                 
                 matPatchTransform.Translate(vPatchPos);
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
@@ -523,12 +523,12 @@ namespace moFlo
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwBottomCentre), 
                                    AbsColour, 
-                                   Core::ALIGN_BOTTOM_LEFT);
+                                   Core::AlignmentAnchor::k_bottomLeft);
                 
                 //Draw the left and right
                 vMLPatchSize.y = vPanelSize.y - (vTLPatchSize.y + vBLPatchSize.y);
                 vBCPatchSize.x = vTLPatchSize.x;
-                vPatchPos.x = GetAbsoluteAnchorPoint(Core::ALIGN_MIDDLE_LEFT).x;
+                vPatchPos.x = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_middleLeft).x;
                 vPatchPos.y = vTopLeft.y - vTLPatchSize.y;
                 
                 matPatchTransform.Translate(vPatchPos);
@@ -538,11 +538,11 @@ namespace moFlo
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwLeftCentre), 
                                    AbsColour, 
-                                   Core::ALIGN_TOP_LEFT);
+                                   Core::AlignmentAnchor::k_topLeft);
                 
                 vMRPatchSize.y = vPanelSize.y - (vTRPatchSize.y + vBRPatchSize.y);
                 vMRPatchSize.x = vTRPatchSize.x;
-                vPatchPos.x = GetAbsoluteAnchorPoint(Core::ALIGN_MIDDLE_RIGHT).x;
+                vPatchPos.x = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_middleRight).x;
                 vPatchPos.y = vTopLeft.y - vTRPatchSize.y;
                 
                 matPatchTransform.Translate(vPatchPos);
@@ -552,7 +552,7 @@ namespace moFlo
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwRightCentre), 
                                    AbsColour, 
-                                   Core::ALIGN_TOP_RIGHT);
+                                   Core::AlignmentAnchor::k_topRight);
                 
                 //Draw the centre
                 vMCPatchSize.x = vPanelSize.x - (vMLPatchSize.x + vMRPatchSize.x);
@@ -567,7 +567,7 @@ namespace moFlo
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwMiddleCentre), 
                                    AbsColour, 
-                                   Core::ALIGN_TOP_LEFT);
+                                   Core::AlignmentAnchor::k_topLeft);
                 
                 //Render subviews
                 CGUIView::Draw(inpCanvas);

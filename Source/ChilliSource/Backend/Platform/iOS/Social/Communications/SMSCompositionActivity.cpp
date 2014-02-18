@@ -109,13 +109,13 @@ namespace moFlo{
 	ISMSCompositionActivity::SendResult eResult;
 	switch (result) {
 		case MessageComposeResultSent:
-			eResult = ISMSCompositionActivity::SR_SUCCEED;
+			eResult = ISMSCompositionActivity::SendResult::k_succeed;
 			break;
 		case MessageComposeResultCancelled:
-			eResult = ISMSCompositionActivity::SR_CANCELLED;
+			eResult = ISMSCompositionActivity::SendResult::k_cancelled;
 			break;
 		case MessageComposeResultFailed:
-			eResult = ISMSCompositionActivity::SR_FAILED;
+			eResult = ISMSCompositionActivity::SendResult::k_failed;
 	}
 	
 	if (mCallback){

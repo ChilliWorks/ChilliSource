@@ -41,11 +41,7 @@ namespace moFlo
         //---------------------------------------------------
         void RGBA8888ToRGB888(Core::CImage* inpImage)
         {
-            if (inpImage->GetFormat() != Core::CImage::RGBA_8888)
-            {
-                ERROR_LOG("Cannot convert an image that is not in RGBA8888 format.");
-                return;
-            }
+            MOFLOW_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
             
             u8* pOriginalImageData = (u8*)inpImage->GetData();
             u32 udwBytesPerPixel = 3;
@@ -62,7 +58,7 @@ namespace moFlo
 			}
             
             inpImage->SetData(pubyBitmapData888);
-            inpImage->SetFormat(Core::CImage::RGB_888);
+            inpImage->SetFormat(Core::CImage::Format::k_RGB888);
             free(pOriginalImageData);
         }
         //---------------------------------------------------
@@ -70,11 +66,7 @@ namespace moFlo
         //---------------------------------------------------
         void RGBA8888ToRGBA4444(Core::CImage* inpImage)
         {
-            if (inpImage->GetFormat() != Core::CImage::RGBA_8888)
-            {
-                ERROR_LOG("Cannot convert an image that is not in RGBA8888 format.");
-                return;
-            }
+            MOFLOW_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
             
             u8* pOriginalImageData = (u8*)inpImage->GetData();
             u32 udwBytesPerPixel = 2;
@@ -93,7 +85,7 @@ namespace moFlo
 			}
             
             inpImage->SetData(pubyBitmapData4444);
-            inpImage->SetFormat(Core::CImage::RGBA_4444);
+            inpImage->SetFormat(Core::CImage::Format::k_RGBA4444);
             free(pOriginalImageData);
         }
         //---------------------------------------------------
@@ -101,11 +93,7 @@ namespace moFlo
         //---------------------------------------------------
         void RGBA8888ToRGB565(Core::CImage* inpImage)
         {
-            if (inpImage->GetFormat() != Core::CImage::RGBA_8888)
-            {
-                ERROR_LOG("Cannot convert an image that is not in RGBA8888 format.");
-                return;
-            }
+            MOFLOW_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
             
             u8* pOriginalImageData = (u8*)inpImage->GetData();
             u32 udwBytesPerPixel = 2;
@@ -122,7 +110,7 @@ namespace moFlo
 			}
             
             inpImage->SetData(pubyBitmapData565);
-            inpImage->SetFormat(Core::CImage::RGB_565);
+            inpImage->SetFormat(Core::CImage::Format::k_RGB565);
             free(pOriginalImageData);
         }
         //---------------------------------------------------
@@ -130,11 +118,7 @@ namespace moFlo
         //---------------------------------------------------
         void RGBA8888ToLUMA88(Core::CImage* inpImage)
         {
-            if (inpImage->GetFormat() != Core::CImage::RGBA_8888)
-            {
-                ERROR_LOG("Cannot convert an image that is not in RGBA8888 format.");
-                return;
-            }
+            MOFLOW_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
             
             u8* pOriginalImageData = (u8*)inpImage->GetData();
 			u32 udwArea = inpImage->GetWidth() * inpImage->GetHeight();
@@ -151,7 +135,7 @@ namespace moFlo
 			}
             
             inpImage->SetData(pubyBitmapData88);
-            inpImage->SetFormat(Core::CImage::LUMA_88);
+            inpImage->SetFormat(Core::CImage::Format::k_LumA88);
             free(pOriginalImageData);
         }
         //---------------------------------------------------
@@ -159,11 +143,7 @@ namespace moFlo
         //---------------------------------------------------
         void RGBA8888ToLUM8(Core::CImage* inpImage)
         {
-            if (inpImage->GetFormat() != Core::CImage::RGBA_8888)
-            {
-                ERROR_LOG("Cannot convert an image that is not in RGBA8888 format.");
-                return;
-            }
+            MOFLOW_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
             
             u8* pOriginalImageData = (u8*)inpImage->GetData();
 			u32 udwArea = inpImage->GetWidth() * inpImage->GetHeight();
@@ -180,7 +160,7 @@ namespace moFlo
 			}
             
             inpImage->SetData(pubyBitmapData8);
-            inpImage->SetFormat(Core::CImage::LUMA_88);
+            inpImage->SetFormat(Core::CImage::Format::k_Lum8);
             free(pOriginalImageData);
         }
         //---------------------------------------------------
@@ -188,24 +168,16 @@ namespace moFlo
         //---------------------------------------------------
         void RGBA8888ToDepth32(Core::CImage* inpImage)
         {
-            if (inpImage->GetFormat() != Core::CImage::RGBA_8888)
-            {
-                ERROR_LOG("Cannot convert an image that is not in RGBA8888 format.");
-                return;
-            }
+            MOFLOW_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
             
-            inpImage->SetFormat(Core::CImage::DEPTH_32);
+            inpImage->SetFormat(Core::CImage::Format::k_Depth32);
         }
         //---------------------------------------------------
         /// RGBA8888 To Depth 16
         //---------------------------------------------------
         void RGBA8888ToDepth16(Core::CImage* inpImage)
         {
-            if (inpImage->GetFormat() != Core::CImage::RGBA_8888)
-            {
-                ERROR_LOG("Cannot convert an image that is not in RGBA8888 format.");
-                return;
-            }
+            MOFLOW_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
             
             u8* pOriginalImageData = (u8*)inpImage->GetData();
             u32 udwBytesPerPixel = 2;
@@ -224,7 +196,7 @@ namespace moFlo
 			}
             
             inpImage->SetData(pubyBitmapData16);
-            inpImage->SetFormat(Core::CImage::DEPTH_16);
+            inpImage->SetFormat(Core::CImage::Format::k_Depth16);
             free(pOriginalImageData);
         }
     }

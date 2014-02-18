@@ -26,16 +26,16 @@ namespace moFlo
 			virtual ~ITexture(){}
 			DECLARE_NAMED_INTERFACE(ITexture);
 			
-			enum Filter
+			enum class Filter
 			{
-				TEX_FILTER_POINT, 
-				TEX_FILTER_LINEAR
+                k_point,
+                k_linear
 			};
 			
-			enum WrapMode
+			enum class WrapMode
 			{
-				TEX_WRAP_CLAMP,
-				TEX_WRAP_REPEAT
+                k_clamp,
+                k_repeat
 			};
 			
 			virtual void Bind(u32 inSlot = 0) = 0;

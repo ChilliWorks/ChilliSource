@@ -15,7 +15,7 @@ namespace moFlo
 	{
 		CVector2 CScreen::mvRawDims;
 		CVector2 CScreen::mvOrientedDims;
-		ScreenOrientation CScreen::mOrientation = ORIENTATION_UNDEFINED; 
+		ScreenOrientation CScreen::mOrientation = ScreenOrientation::k_undefined;
 		bool CScreen::mbIsHighDefinition = false;
         f32 CScreen::mfDensityScale = kfDefaultNormalResScreenDensity;
         f32 CScreen::mfInverseDensityScale = kfDefaultNormalResScreenDensity;
@@ -84,7 +84,7 @@ namespace moFlo
 		//----------------------------------------------------------------
 		bool CScreen::IsPortraitOrientation(ScreenOrientation inOrientation)
 		{
-			return inOrientation == PORTRAIT_UP || inOrientation == PORTRAIT_DOWN;
+			return inOrientation == ScreenOrientation::k_portraitUp || inOrientation == ScreenOrientation::k_portraitDown;
 		}
 		//----------------------------------------------------------------
 		/// Is Landscape Orientation
@@ -94,7 +94,7 @@ namespace moFlo
 		//----------------------------------------------------------------
 		bool CScreen::IsLandscapeOrientation(ScreenOrientation inOrientation)
 		{
-			return inOrientation == LANDSCAPE_LEFT || inOrientation == LANDSCAPE_RIGHT;
+			return inOrientation == ScreenOrientation::k_landscapeLeft || inOrientation == ScreenOrientation::k_landscapeRight;
 		}
 		//----------------------------------------------------------------
 		/// Have Same Aspect Ratio

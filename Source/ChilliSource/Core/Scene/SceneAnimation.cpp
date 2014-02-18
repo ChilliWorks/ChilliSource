@@ -56,9 +56,9 @@ namespace moFlo
 		}
         
         
-        bool CSceneAnimationDesc::LoadFromBinaryFile(STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath)
+        bool CSceneAnimationDesc::LoadFromBinaryFile(StorageLocation ineStorageLocation, const std::string & inFilePath)
         {
-            Core::FileStreamPtr AnimFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FM_READ_BINARY);
+            Core::FileStreamPtr AnimFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
             if (AnimFile->IsOpen())
             {
                 u32 nAnimations;
@@ -72,9 +72,9 @@ namespace moFlo
             return false;
         }
         
-        void CSceneAnimationDesc::SaveToBinaryFile(STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath)
+        void CSceneAnimationDesc::SaveToBinaryFile(StorageLocation ineStorageLocation, const std::string & inFilePath)
         {
-            Core::FileStreamPtr AnimFile= Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FM_WRITE_BINARY);
+            Core::FileStreamPtr AnimFile= Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_writeBinary);
 			
 			u32 nAnimations = asEntityAnimations.size();
 			AnimFile->Write((s8*)&nAnimations, (s32)sizeof(u32));

@@ -68,7 +68,7 @@ namespace moFlo
 		///
 		/// @param HTML file name
 		//-----------------------------------------------
-		void CWebViewActivity::PresentFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFile, f32 infDismissButtonScale)
+		void CWebViewActivity::PresentFromFile(Core::StorageLocation ineStorageLocation, const std::string& instrFile, f32 infDismissButtonScale)
 		{
             mfDismissButtonScale = infDismissButtonScale;
             
@@ -101,16 +101,16 @@ namespace moFlo
                     default:
                         strPath = pFileSystem->GetStorageLocationDirectory(ineStorageLocation);
                         break;
-                    case Core::SL_PACKAGE:
+                    case Core::StorageLocation::k_package:
                         strPath = Core::CApplication::GetFileSystemPtr()->GetDirectoryForPackageFile(strFile);
                         break;
-                    case Core::SL_DLC:
+                    case Core::StorageLocation::k_DLC:
                         strPath = Core::CApplication::GetFileSystemPtr()->GetDirectoryForDLCFile(strFile);
                         break;
                 }
 
                 std::string strHTMLFileContents;
-                Core::FileStreamPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FM_READ);
+                Core::FileStreamPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FileMode::k_read);
                 pHTMLFile->GetAll(strHTMLFileContents);
                 
                 NSString* pstrHTML = Core::CStringUtils::StringToNSString(strHTMLFileContents);

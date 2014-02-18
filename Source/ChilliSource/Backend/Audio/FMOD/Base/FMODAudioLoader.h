@@ -46,7 +46,7 @@ namespace moFlo
 			/// @param Out: Resource object
 			/// @return Success
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
 			
 			//----------------------------------------------------------------------------
 			/// Stream Resource From File
@@ -56,7 +56,7 @@ namespace moFlo
 			/// @param Out: Resource object
 			/// @return Success
 			//----------------------------------------------------------------------------
-			bool StreamResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			bool StreamResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
 			
 			//----------------------------------------------------------------------------
 			/// Create Audio Listener

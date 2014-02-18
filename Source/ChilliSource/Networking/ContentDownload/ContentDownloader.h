@@ -17,11 +17,11 @@ namespace moFlo
     {
         namespace ContentDownloader
         {
-            enum Result
+            enum class Result
             {
-                SUCCEEDED,
-                FAILED,
-                FLUSHED
+                k_succeeded,
+                k_failed,
+                k_flushed
             };
             
             typedef fastdelegate::FastDelegate2<Result, const std::string&> Delegate;

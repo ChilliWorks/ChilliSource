@@ -67,9 +67,9 @@ namespace moFlo
 		/// @param Out: Resource object
 		/// @return Whether the resource loaded
 		//----------------------------------------------------------------------------
-		bool CSpriteSheetLoader::CreateResourceFromFile(Core::STORAGE_LOCATION ineLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool CSpriteSheetLoader::CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
-			moFlo::Core::FileStreamPtr binary_file = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath, moFlo::Core::FM_READ_BINARY);
+			moFlo::Core::FileStreamPtr binary_file = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath, moFlo::Core::FileMode::k_readBinary);
 			
 			//If we have not successfully loaded the high res then just load the default
 			if(binary_file->IsOpen() == false)
@@ -157,7 +157,7 @@ namespace moFlo
             
             //Get the name of the file and append the high res identifier to it
             Core::CStringUtils::SplitBaseFilename(inFilePath, strName, strExtension);
-            Core::FileStreamPtr idFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, strName + ".mospriteid", Core::FM_READ);
+            Core::FileStreamPtr idFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, strName + ".mospriteid", Core::FileMode::k_read);
             
             DYNAMIC_ARRAY<u32> IDLookup;
             DYNAMIC_ARRAY<std::string> IDStringLookup;

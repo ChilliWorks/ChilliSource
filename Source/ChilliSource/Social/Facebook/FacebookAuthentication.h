@@ -24,11 +24,11 @@ namespace moFlo
 		{
 		public:
             
-            enum AuthenticateResult
+            enum class AuthenticateResult
             {
-                AR_SUCCESS,
-                AR_FAILED,
-                AR_PERMISSION_MISMATCH,
+                k_success,
+                k_failed,
+                k_permissionMismatch
             };
             
             struct AuthenticateResponse

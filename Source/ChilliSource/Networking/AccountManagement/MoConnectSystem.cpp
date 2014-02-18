@@ -129,7 +129,7 @@ namespace moFlo
 		{
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrMoConnectURL + "/ping";
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::POST;
+			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
 			mpHttpConnectionSystem->MakeRequest(requestDetails, IHttpRequest::CompletionDelegate(this, &CMoConnectSystem::TimeRequestCompletes));
 			mTimeRequestCallback = inDelegate;
 		}
@@ -143,7 +143,7 @@ namespace moFlo
 			
 			Json::Reader cReader;
 			Json::Value cJResponse;
-			if(ineResult == IHttpRequest::COMPLETED && inpRequest->GetResponseCode() == kHTTPResponseOK)
+			if(ineResult == IHttpRequest::CompletionResult::k_completed && inpRequest->GetResponseCode() == kHTTPResponseOK)
 			{
 				if(cReader.parse(inpRequest->GetResponseString(), cJResponse))
 				{
@@ -171,7 +171,7 @@ namespace moFlo
 		void CMoConnectSystem::GenerateAuthenticationHeader(const std::string& instrURL, Core::ParamDictionary& outsHeader) const
         {
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::eOAuthHttpPost, instrURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, instrURL, "", strOAuthHeader);
             outsHeader.SetValueForKey("Authorization", strOAuthHeader);
             outsHeader.SetValueForKey("Content-Type", "application/json");
 		}
@@ -191,13 +191,13 @@ namespace moFlo
 			
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrMoConnectURL + "/user/create";
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::POST;
+			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
             
             mpOAuthSystem->SetOAuthTokenKey("");
             mpOAuthSystem->SetOAuthTokenSecret("");
             
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::eOAuthHttpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             DEBUG_LOG(strOAuthHeader);
             
             mpOAuthSystem->SetOAuthTokenKey(mstrOAuthToken);
@@ -214,9 +214,9 @@ namespace moFlo
         //------------------------
 		void CMoConnectSystem::AccountCreateRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
         {
-			AccountCreateResult eResult = ACR_NOSERVER_RESPONSE;
+			AccountCreateResult eResult = AccountCreateResult::k_noServerResponse;
 			
-			if(IHttpRequest::COMPLETED == ineResult && inpRequest->GetResponseCode() == kHTTPResponseOK)
+			if(IHttpRequest::CompletionResult::k_completed == ineResult && inpRequest->GetResponseCode() == kHTTPResponseOK)
             {
 				Json::Reader cReader;
 				Json::Value cJResponse;
@@ -224,7 +224,7 @@ namespace moFlo
                 {
 					if(cJResponse.isMember("Error"))
                     {
-						eResult = ACR_SERVER_REFUSES;
+						eResult = AccountCreateResult::k_serverRefuses;
 					}
                     else
                     {
@@ -246,7 +246,7 @@ namespace moFlo
                         mpOAuthSystem->SetOAuthTokenSecret(mstrOAuthTokenSecret);
                         
 						OnUserChanged();
-						eResult = ACR_SUCCESS;
+						eResult = AccountCreateResult::k_success;
 					}
 				}
 			}
@@ -297,7 +297,7 @@ namespace moFlo
             {
 				HttpRequestDetails requestDetails;
 				requestDetails.strURL = mstrRealm + "/login/register";
-				requestDetails.eType = moFlo::Networking::HttpRequestDetails::POST;
+				requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
 				
 				Json::FastWriter cWriter;
 				requestDetails.strBody = cWriter.write(injData);
@@ -312,7 +312,7 @@ namespace moFlo
 			}
             else if(inDel)
             {
-				inDel(this, RLR_AUTH_FAILED);
+				inDel(this, RegisterLoginResult::k_authFailed);
 			}
 		}
         //------------------------
@@ -320,7 +320,7 @@ namespace moFlo
         //------------------------
 		void CMoConnectSystem::RegisterLoginRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
         {
-			RegisterLoginResult eResult = RLR_NOSERVER_RESPONSE;
+			RegisterLoginResult eResult = RegisterLoginResult::k_noServerResponse;
 			
 			if(inpRequest->GetResponseCode() == kHTTPRedirect)
             {
@@ -331,7 +331,7 @@ namespace moFlo
 				return;
 			}
 			
-			if(ineResult == IHttpRequest::COMPLETED)
+			if(ineResult == IHttpRequest::CompletionResult::k_completed)
             {
 				DEBUG_LOG("RegisterLoginResponse:" + inpRequest->GetResponseString());
 				Json::Reader cReader;
@@ -342,21 +342,23 @@ namespace moFlo
                     mastrCurrentAccountLogins.pop_back();
                     s32 dwResponse = cJResponse["Error"]["Code"].asInt();
                     
-                    switch(dwResponse)
+                    switch(RegisterLoginResult(dwResponse))
                     {
-                        case RLR_AUTH_FAILED:
-                        case RLR_UNKNOWN_CREDENTIALS_TYPE:
-                        case RLR_ALREADY_USED:
-                        case RLR_INVALID_FORM:
-                        case RLR_INVALID_TYPE:
-                        case RLR_TYPE_ALREADY_USED:
+                        default:
+                            break;
+                        case RegisterLoginResult::k_authFailed:
+                        case RegisterLoginResult::k_unknownCredentialType:
+                        case RegisterLoginResult::k_credentialAlreadyUsed:
+                        case RegisterLoginResult::k_invalidForm:
+                        case RegisterLoginResult::k_invalidType:
+                        case RegisterLoginResult::k_typeAlreadyUsed:
                             eResult = (RegisterLoginResult)dwResponse;
                             break;
                     }
 				}
                 else
                 {
-					eResult = RLR_SUCCESS;
+					eResult = RegisterLoginResult::k_success;
 				}
 			}
 			
@@ -412,13 +414,13 @@ namespace moFlo
         {
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrMoConnectURL + "/user/login";
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::POST;
+			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
             
             mpOAuthSystem->SetOAuthTokenKey("");
             mpOAuthSystem->SetOAuthTokenSecret("");
             
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::eOAuthHttpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             
             mpOAuthSystem->SetOAuthTokenKey(mstrOAuthToken);
             mpOAuthSystem->SetOAuthTokenSecret(mstrOAuthTokenSecret);
@@ -447,10 +449,10 @@ namespace moFlo
         //------------------------
 		void CMoConnectSystem::SignInRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
         {
-			SignInResult eResult = SIR_NOSERVER_RESPONSE;
+			SignInResult eResult = SignInResult::k_noServerResponse;
             DYNAMIC_ARRAY<SignedInUser> asUsers;
             
-			if(ineResult == IHttpRequest::COMPLETED)
+			if(ineResult == IHttpRequest::CompletionResult::k_completed)
             {
 				Json::Reader cReader;
 				Json::Value cJResponse;
@@ -483,7 +485,7 @@ namespace moFlo
                         mpOAuthSystem->SetOAuthTokenKey(mstrOAuthToken);
                         mpOAuthSystem->SetOAuthTokenSecret(mstrOAuthTokenSecret);
                         
-						eResult = SIR_SUCCESS;
+						eResult = SignInResult::k_success;
 						OnUserChanged();
                         
                         asUsers.push_back(sUser);
@@ -501,10 +503,10 @@ namespace moFlo
         //------------------------
 		void CMoConnectSystem::RetrieveAccountsRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
         {
-			SignInResult eResult = SIR_NOSERVER_RESPONSE;
+			SignInResult eResult = SignInResult::k_noServerResponse;
             DYNAMIC_ARRAY<SignedInUser> asUsers;
 			
-			if(ineResult == IHttpRequest::COMPLETED)
+			if(ineResult == IHttpRequest::CompletionResult::k_completed)
             {
 				Json::Reader cReader;
 				Json::Value cJResponse;
@@ -517,7 +519,7 @@ namespace moFlo
 					}
                     else
                     {
-						eResult = SIR_SUCCESS;
+						eResult = SignInResult::k_success;
                         
                         SignedInUser sUser;
 						sUser.strUserID = cJResponse["UserID"].asString();
@@ -551,7 +553,7 @@ namespace moFlo
 				return;
 			}
 			
-			if(ineResult == IHttpRequest::COMPLETED)
+			if(ineResult == IHttpRequest::CompletionResult::k_completed)
             {
 				Json::Reader cReader;
 				Json::Value cJResponse;
@@ -585,7 +587,7 @@ namespace moFlo
         {
             HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrRealm + "/push/register";
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::POST;
+			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
 			
 			Json::Value cRegistrationDetails(Json::objectValue);
 			cRegistrationDetails["Service"]     = GetPushNotificationTypeAsString(ineType) + kstrEnvironment;
@@ -597,7 +599,7 @@ namespace moFlo
 			cRegistrationMsg["Data"] = cRegistrationDetails;
             
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::eOAuthHttpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             DEBUG_LOG(strOAuthHeader);
             
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
@@ -617,9 +619,9 @@ namespace moFlo
         {
             switch(ineType)
             {
-                case PNT_APPLE_APNS:
+                case PushNotificationType::k_appleAPNS:
                     return kstrPushNotificationAppleAPNS;
-                case PNT_GOOGLE_GCM:
+                case PushNotificationType::k_googleGCM:
                     return kstrPushNotificationGoogleGCM;
                     default:
                     ERROR_LOG("Unsupported push notification type!");
@@ -633,31 +635,28 @@ namespace moFlo
         //------------------------
         void CMoConnectSystem::PushNotificationRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
         {
-            PushNotificationResult eResult = PNR_SUCCESS;
+            PushNotificationResult eResult = PushNotificationResult::k_success;
             
-            if(ineResult != IHttpRequest::COMPLETED)
+            if(ineResult != IHttpRequest::CompletionResult::k_completed)
             {
-                if(ineResult == IHttpRequest::FAILED)
+                if(ineResult == IHttpRequest::CompletionResult::k_failed)
                 {
                     ERROR_LOG("Push notification registration failed!");
                 }
-                else
-                if(ineResult == IHttpRequest::CANCELLED)
+                else if(ineResult == IHttpRequest::CompletionResult::k_cancelled)
                 {
                     ERROR_LOG("Push notification registration was cancelled.");
                 }
-                else
-                if(ineResult == IHttpRequest::TIMEOUT)
+                else if(ineResult == IHttpRequest::CompletionResult::k_timeout)
                 {
                     ERROR_LOG("Push notification registration timed out.");
                 }
-                else
-                if(ineResult == IHttpRequest::FLUSHED)
+                else if(ineResult == IHttpRequest::CompletionResult::k_flushed)
                 {
                     ERROR_LOG("Push notification registration buffer need to be flushed.");
                 }
                 
-                eResult = PNR_FAILED;
+                eResult = PushNotificationResult::k_failed;
             }
             
             if(NULL != mPushNotificationCallback)
@@ -672,10 +671,10 @@ namespace moFlo
         {
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrRealm + "/me";
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::POST;
+			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
 			
 			std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::eOAuthHttpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");
@@ -692,7 +691,7 @@ namespace moFlo
             Json::Value jResponse;
             switch (ineResult)
             {
-                case IHttpRequest::COMPLETED:
+                case IHttpRequest::CompletionResult::k_completed:
                 {
                     Json::Reader cReader;
                     cReader.parse(inpRequest->GetResponseString(), jResponse);
@@ -710,7 +709,7 @@ namespace moFlo
         {
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrRealm + "/me/abandon";
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::POST;
+			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
             
             // Ask to abandon a particular account
             if(!insSignedUser.strToken.empty())
@@ -721,7 +720,7 @@ namespace moFlo
             }
             
 			std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::eOAuthHttpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             
             // Put the token back
             mpOAuthSystem->SetOAuthTokenKey(mstrOAuthToken);
@@ -923,7 +922,7 @@ namespace moFlo
             
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrRealm + instrMethod;
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::POST;
+			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
 			requestDetails.strBody = sNewRequest.cPayload.toUnformattedString();
             GenerateAuthenticationHeader(requestDetails.strURL, requestDetails.sHeaders);
             sNewRequest.pHttpRequest = mpHttpConnectionSystem->MakeRequest(requestDetails, IHttpRequest::CompletionDelegate(this,&CMoConnectSystem::GeneralRequestCompletes));
@@ -963,7 +962,7 @@ namespace moFlo
         //------------------------
 		void CMoConnectSystem::GeneralRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
         {
-			RequestResult eRequestResult = RR_SUCCESS;
+			RequestResult eRequestResult = RequestResult::k_success;
 			Json::Value cJResponse;
 			RequestInfo* pRequest = FindRequestWithHttpRequest(inpRequest);
 			
@@ -977,14 +976,14 @@ namespace moFlo
 			
 			switch(ineResult)
             {
-				case IHttpRequest::CANCELLED:
-					eRequestResult = RR_CANCELLED;
+				case IHttpRequest::CompletionResult::k_cancelled:
+					eRequestResult = RequestResult::k_cancelled;
 					break;
-				case IHttpRequest::TIMEOUT:
-					eRequestResult = RR_FAILED_NO_RESPONSE;
+				case IHttpRequest::CompletionResult::k_timeout:
+					eRequestResult = RequestResult::k_failedNoResponse;
 					break;
-				case IHttpRequest::FAILED:
-					eRequestResult = RR_FAILED_NO_RESPONSE;
+				case IHttpRequest::CompletionResult::k_failed:
+					eRequestResult = RequestResult::k_failedNoResponse;
 					break;
                 default:
                     break;
@@ -1007,11 +1006,11 @@ namespace moFlo
                     {
 						if(inpRequest->GetResponseCode() == 503)
                         {
-							eRequestResult = RR_FAILED_INTERNAL_SERVER_ERROR;
+							eRequestResult = RequestResult::k_failedInternalServerError;
 						}
                         else
                         {
-							eRequestResult = RR_FAILED_CLIENT_ERROR;
+							eRequestResult = RequestResult::k_failedClientError;
 						}
 					}
 				}
@@ -1076,7 +1075,7 @@ namespace moFlo
 
             requestDetails.strURL = mstrRealm + "/iap/production";
             
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::POST;
+			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
 			
 			Json::Value cIAPDetails(Json::objectValue);
 			cIAPDetails["Service"]     = GetIAPTypeAsString(ineType) + kstrEnvironment;
@@ -1087,7 +1086,7 @@ namespace moFlo
 			cIAPMsg["Data"] = cIAPDetails;
       
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::eOAuthHttpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             DEBUG_LOG(strOAuthHeader);
             
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
@@ -1107,9 +1106,9 @@ namespace moFlo
         {
             switch(ineType)
             {
-                case IAPT_APPLE:
+                case IAPType::k_apple:
                     return kstrIAPApple;
-                case PNT_GOOGLE_GCM:
+                case IAPType::k_google:
                     return kstrIAPnGoogle;
                 default:
                     ERROR_LOG("Unsupported push notification type!");
@@ -1128,7 +1127,7 @@ namespace moFlo
             sIAP.ddwTimeCreated = 0;
             sIAP.bRedeemed = false;
             
-            if(IHttpRequest::COMPLETED == ineResult)
+            if(IHttpRequest::CompletionResult::k_completed == ineResult)
             {
                 DEBUG_LOG("CMoConnectSystem::OnRecieptValidationResponse");
                 if(kHTTPResponseOK == inpRequest->GetResponseCode())
@@ -1188,7 +1187,7 @@ namespace moFlo
             }
             else
             {
-                ERROR_LOG("Unable to validate IAP receipt as HTTP request did not complete. Instead we got result:"+STRING_CAST(ineResult));
+                ERROR_LOG("Unable to validate IAP receipt as HTTP request did not complete. Instead we got result: "+STRING_CAST((u32)ineResult));
             }
             
             mValidateReceiptDelegate(bIsValid, ineResult, sIAP);
@@ -1201,7 +1200,7 @@ namespace moFlo
             DEBUG_LOG("CMoConnectSystem::RedeemIAP");
             HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrRealm + "/iap/redeem";
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::POST;
+			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
 			
 			Json::Value cIAPDetails(Json::objectValue);
 			cIAPDetails["IAPRecordID"] = instrReceiptId;
@@ -1210,7 +1209,7 @@ namespace moFlo
 			cIAPMsg["Data"] = cIAPDetails;
             
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::eOAuthHttpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             DEBUG_LOG(strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");
@@ -1225,7 +1224,7 @@ namespace moFlo
         //------------------------
         void CMoConnectSystem::OnIAPRedeemedResponse(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
         {
-            if(IHttpRequest::COMPLETED == ineResult)
+            if(IHttpRequest::CompletionResult::k_completed == ineResult)
             {
                 Json::Reader cReader;
                 Json::Value cJResponse;

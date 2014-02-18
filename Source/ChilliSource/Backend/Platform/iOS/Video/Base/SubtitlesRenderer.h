@@ -40,7 +40,7 @@
 /// @param The subtitles storage location.
 /// @param The subtitles filename.
 //--------------------------------------------------------
--(id) InitWithVideoPlayer:(moFlo::iOSPlatform::CVideoPlayerActivity*)inpVideoPlayer View:(UIView*)inpView StorageLocation:(moFlo::Core::STORAGE_LOCATION)ineStorageLocation Filename:(std::string)instrFilename;
+-(id) InitWithVideoPlayer:(moFlo::iOSPlatform::CVideoPlayerActivity*)inpVideoPlayer View:(UIView*)inpView StorageLocation:(moFlo::Core::StorageLocation)ineStorageLocation Filename:(std::string)instrFilename;
 //--------------------------------------------------------
 /// On Update
 ///

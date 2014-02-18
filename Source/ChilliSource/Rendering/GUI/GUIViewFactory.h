@@ -53,7 +53,7 @@ namespace moFlo
 			/// @param Optional dynamic array to which views will be pushed
             /// @return GUI View
             //--------------------------------------------------------
-            static GUIViewPtr CreateGUIViewFromScript(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrScriptFile, DYNAMIC_ARRAY<GUIViewPtr>* outpViews = NULL);
+            static GUIViewPtr CreateGUIViewFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile, DYNAMIC_ARRAY<GUIViewPtr>* outpViews = NULL);
 			//--------------------------------------------------------
             /// Create GUI View 
             ///

@@ -77,9 +77,9 @@ namespace moFlo
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr ISpriteSheetManager::GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr ISpriteSheetManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
-			return GetSpriteSheetFromFile(ineStorageLocation, instrFilePath, Core::CImage::FORMAT_DEFAULT, false);
+			return GetSpriteSheetFromFile(ineStorageLocation, instrFilePath, Core::CImage::Format::k_default, false);
 		}
 		//----------------------------------------------------------------
 		/// Get Sprite Data From File
@@ -92,7 +92,7 @@ namespace moFlo
         /// @param whether or not to use mipmaps
         /// @return The sprites sheet resource pointer
 		//----------------------------------------------------------------
-		SpriteSheetPtr ISpriteSheetManager::GetSpriteSheetFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
+		SpriteSheetPtr ISpriteSheetManager::GetSpriteSheetFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
 		{
             //It's the texture that is passed in so we need to load the binary file
             std::string strSpriteSheetFile;

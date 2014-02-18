@@ -26,16 +26,16 @@ namespace moFlo
 		typedef u32 GameCentreRequestID;
 		
         //---Flags
-		enum PlayerScope
+		enum class PlayerScope
 		{
-			GC_LB_GLOBAL,
-			GC_LB_FRIENDS,
+            k_global,
+            k_friends
 		};
-		enum TimeScope
+		enum class TimeScope
 		{
-			GC_LB_ALL_TIME,
-			GC_LB_ALL_TODAY,
-			GC_LB_ALL_WEEK,
+            k_allTime,
+            k_allToday,
+            k_allWeek
 		};
         
         //---Containers

@@ -117,12 +117,12 @@ namespace moFlo
             f32 fDist = CVector3::DotProduct(&inSphere.vOrigin, &inPlane.mvNormal) + inPlane.mfD;
             
             if(fDist < -inSphere.fRadius)
-                return OUTSIDE;
+                return Result::k_outside;
             
             if(std::fabs(fDist) < inSphere.fRadius)
-                return INTERSECT;
+                return Result::k_intersect;
             
-            return INSIDE;
+            return Result::k_inside;
         }
 		//----------------------------------------------------------------
 		/// Sphere vs Sphere

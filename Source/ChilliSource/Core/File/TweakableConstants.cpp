@@ -52,7 +52,7 @@ namespace moFlo
 		CTweakableConstants *   CTweakableConstants::GetSingletonPtr(){
 			return msSingleton;
 		}
-		void CTweakableConstants::AddSourceFile(STORAGE_LOCATION ineStorageLocation, const std::string & fileName, bool loadNow)
+		void CTweakableConstants::AddSourceFile(StorageLocation ineStorageLocation, const std::string & fileName, bool loadNow)
         {
 			bool bAlreadyExists = false;
             
@@ -185,7 +185,7 @@ namespace moFlo
 			
 		}
 		
-		void CTweakableConstants::LoadFile(STORAGE_LOCATION ineStorageLocation, const std::string & fileName){
+		void CTweakableConstants::LoadFile(StorageLocation ineStorageLocation, const std::string & fileName){
 			TiXmlDocument Document;
 			Document.LoadFile(ineStorageLocation, fileName);
 			

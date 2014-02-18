@@ -26,12 +26,12 @@ namespace moFlo
             bool CanCreateResourceFromFileWithExtension(const std::string & inExtension) const;
             
             //---Filepath is relative to the resources directory - either the documents or the package
-            bool CreateResourceFromFile(STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource);
-            bool AsyncCreateResourceFromFile(STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource);
+            bool CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource);
+            bool AsyncCreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource);
             
         private:
-            bool LoadMoScene(STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource);
-            void LoadAsyncMoScene(STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource);
+            bool LoadMoScene(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource);
+            void LoadAsyncMoScene(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource);
             
         };
     }

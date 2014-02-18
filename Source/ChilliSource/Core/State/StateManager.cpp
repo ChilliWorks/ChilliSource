@@ -93,7 +93,7 @@ namespace moFlo
 			{
 				switch(mStateOperationQueue.front().eAction) 
 				{
-					case PUSH_STATE:
+					case StateOperationAction::k_push:
                     {
                         StatePtr pPushed = mStateOperationQueue.front().pState;
                         StatePtr pTop;
@@ -124,7 +124,7 @@ namespace moFlo
                         mbStartState = true;
 						break;
                     }
-					case POP_TO_TARGET_STATE:
+					case StateOperationAction::k_popTo:
                     {
 						IState * pTargetState = mStateOperationQueue.front().pRawState;
 						bool bTopStateStopped = false;
@@ -152,7 +152,7 @@ namespace moFlo
                         
                         break;
                     }
-					case POP_TO_TARGET_STATE_UNIQUE:
+					case StateOperationAction::k_popToUnique:
                     {
 						IState * pTargetState = mStateOperationQueue.front().pRawState;
 						bool bTopStateStopped = false;
@@ -183,7 +183,7 @@ namespace moFlo
                         
                         break;
                     }
-					case CLEAR_STACK:
+					case StateOperationAction::k_clear:
                         
                         if(!mStateHierarchy.empty())
                         {
@@ -203,7 +203,7 @@ namespace moFlo
                             PopHierarchy();
 						}
 						break;
-					case POP_STATE:
+					case StateOperationAction::k_pop:
                     {
                         if(mStateHierarchy.empty())
                         {
@@ -331,7 +331,7 @@ namespace moFlo
 		//---------------------------------------------------------
 		void CStateManager::Push(const StatePtr &inpState)
 		{
-			mStateOperationQueue.push_back(StateOperation(PUSH_STATE,inpState));
+			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_push, inpState));
 		}
 		//---------------------------------------------------------
 		/// Pop
@@ -342,7 +342,7 @@ namespace moFlo
 		//---------------------------------------------------------
 		void CStateManager::Pop()
 		{
-			mStateOperationQueue.push_back(StateOperation(POP_STATE));
+			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_pop));
 		}
 		//---------------------------------------------------------
 		/// PopToState
@@ -354,7 +354,7 @@ namespace moFlo
 		//---------------------------------------------------------
 		void CStateManager::PopToState(IState * inpTarget)
         {
-			mStateOperationQueue.push_back(StateOperation(POP_TO_TARGET_STATE, inpTarget));
+			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_popTo, inpTarget));
 		}
 		//---------------------------------------------------------
 		/// Pop To State Unique
@@ -365,7 +365,7 @@ namespace moFlo
 		//---------------------------------------------------------
 		void CStateManager::PopToStateUnique(IState * inpTarget)
 		{
-			mStateOperationQueue.push_back(StateOperation(POP_TO_TARGET_STATE_UNIQUE, inpTarget));
+			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_popToUnique, inpTarget));
 		}
 		//---------------------------------------------------------
 		/// ClearStack
@@ -374,7 +374,7 @@ namespace moFlo
 		//---------------------------------------------------------
 		void CStateManager::ClearStack()
 		{
-			mStateOperationQueue.push_back(StateOperation(CLEAR_STACK));
+			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_clear));
 		}
 		//---------------------------------------------------------
 		/// Get Stack Count
@@ -395,8 +395,8 @@ namespace moFlo
 		//---------------------------------------------------------
 		void CStateManager::Change(const StatePtr &inpState)
 		{
-			mStateOperationQueue.push_back(StateOperation(POP_STATE));
-            mStateOperationQueue.push_back(StateOperation(PUSH_STATE, inpState));
+			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_pop));
+            mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_push, inpState));
 		}
 		//------------------------------------------------------------------
 		/// Get Factory Producing
@@ -482,7 +482,7 @@ namespace moFlo
             
             for (std::list<StateOperation>::const_iterator it = mStateOperationQueue.begin(); it != mStateOperationQueue.end(); ++it)
             {
-                if (((*it).eAction == PUSH_STATE || (*it).eAction == POP_TO_TARGET_STATE) && (*it).pState.get() == inpState)
+                if (((*it).eAction == StateOperationAction::k_push || (*it).eAction == StateOperationAction::k_popTo) && (*it).pState.get() == inpState)
                 {
                     bIsPending = true;
                     break;

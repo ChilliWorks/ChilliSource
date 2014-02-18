@@ -19,11 +19,11 @@ namespace moFlo
 {
 	namespace Rendering
 	{
-		enum ShaderType
+		enum class ShaderType
 		{
-			SHADER_TYPE_COMBINED,
-			SHADER_TYPE_VERTEX,
-			SHADER_TYPE_FRAGMENT,
+            k_combined,
+            k_vertex,
+            k_fragment
 		};
 		
 		class IShader : public Core::IResource

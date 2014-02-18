@@ -113,7 +113,7 @@ namespace moFlo
         /// @param The filepath
         /// @return Particle Component
         //--------------------------------------------------------
-        ParticleComponentPtr CParticleComponentFactory::CreateParticleComponentFromScript(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrScriptFile)
+        ParticleComponentPtr CParticleComponentFactory::CreateParticleComponentFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile)
 		{
 			ParticleComponentPtr pParticleComp(new CParticleComponent());
             
@@ -135,7 +135,7 @@ namespace moFlo
                 TiXmlElement* pMaterialEl = Core::XMLUtils::FirstChildElementWithName(pDocRoot, "material");
                 if(pMaterialEl)
                 {
-                    pMaterial = mpMaterialMgr->GetMaterialFromFile(Core::SL_PACKAGE, Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pMaterialEl, "filename", ""));
+                    pMaterial = mpMaterialMgr->GetMaterialFromFile(Core::StorageLocation::k_package, Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pMaterialEl, "filename", ""));
                     if(pMaterial)
                     {
                         pParticleComp->SetMaterial(pMaterial);

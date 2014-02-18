@@ -45,8 +45,8 @@ namespace moFlo
 		//----------------------------------------------------------
 		CRenderSystem::CRenderSystem()
 		: mpDefaultRenderTarget(NULL), mpCurrentMaterial(NULL), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0), mpVertexAttribs(NULL),
-        mbEmissiveSet(false), mbAmbientSet(false), mbDiffuseSet(false), mbSpecularSet(false), mudwNumBoundTextures(0), mSrcBlendFunc(Rendering::AB_UNKNOWN), mDstBlendFunc(Rendering::AB_UNKNOWN),
-        meCurrentCullFace(Rendering::CF_FRONT), meDepthFunc(Rendering::DF_LESS), mpLightComponent(NULL), mbBlendFunctionLocked(false), mpaTextureHandles(NULL), mbInvalidateLigthingCache(true),
+        mbEmissiveSet(false), mbAmbientSet(false), mbDiffuseSet(false), mbSpecularSet(false), mudwNumBoundTextures(0), mSrcBlendFunc(Rendering::AlphaBlend::k_unknown), mDstBlendFunc(Rendering::AlphaBlend::k_unknown),
+        meCurrentCullFace(Rendering::CullFace::k_front), meDepthFunc(Rendering::DepthFunction::k_less), mpLightComponent(NULL), mbBlendFunctionLocked(false), mpaTextureHandles(NULL), mbInvalidateLigthingCache(true),
         mpRenderCapabilities(NULL)
 		{
 			//Register the GL texture and shader managers
@@ -871,10 +871,10 @@ namespace moFlo
             {
                 switch (ineCullface)
                 {
-                    case Rendering::CF_FRONT:
+                    case Rendering::CullFace::k_front:
                         glCullFace(GL_FRONT);
                         break;
-                    case Rendering::CF_BACK:
+                    case Rendering::CullFace::k_back:
                         glCullFace(GL_BACK);
                         break;
                 }
@@ -891,13 +891,13 @@ namespace moFlo
             {
                 switch (ineFunc)
                 {
-                    case Rendering::DF_LESS:
+                    case Rendering::DepthFunction::k_less:
                         glDepthFunc(GL_LESS);
                         break;
-                    case Rendering::DF_EQUAL:
+                    case Rendering::DepthFunction::k_equal:
                         glDepthFunc(GL_EQUAL);
                         break;
-                    case Rendering::DF_LEQUAL:
+                    case Rendering::DepthFunction::k_lequal:
                         glDepthFunc(GL_LEQUAL);
                         break;
                 }
@@ -937,63 +937,64 @@ namespace moFlo
 				GLenum SrcFunc = GL_SRC_ALPHA;
 				switch(ineSrcFunc)
 				{
-					case Rendering::AB_ZERO:
+					case Rendering::AlphaBlend::k_zero:
 						SrcFunc = GL_ZERO;
 						break;
-					case Rendering::AB_ONE:
+					case Rendering::AlphaBlend::k_one:
 						SrcFunc = GL_ONE;
 						break;
-					case Rendering::AB_SOURCE_COL:
+					case Rendering::AlphaBlend::k_sourceCol:
 						SrcFunc = GL_SRC_COLOR;
 						break;
-					case Rendering::AB_ONE_MINUS_SOURCE_COL:
+					case Rendering::AlphaBlend::k_oneMinusSourceCol:
 						SrcFunc = GL_ONE_MINUS_SRC_COLOR;
 						break;
-					case Rendering::AB_SOURCE_ALPHA:
+					case Rendering::AlphaBlend::k_sourceAlpha:
 						SrcFunc = GL_SRC_ALPHA;
 						break;
-					case Rendering::AB_ONE_MINUS_SOURCE_ALPHA:
+					case Rendering::AlphaBlend::k_oneMinusSourceAlpha:
 						SrcFunc = GL_ONE_MINUS_SRC_ALPHA;
 						break;
-					case Rendering::AB_DEST_ALPHA:
+					case Rendering::AlphaBlend::k_destAlpha:
 						SrcFunc = GL_DST_ALPHA;
 						break;
-					case Rendering::AB_ONE_MINUS_DEST_ALPHA:
+					case Rendering::AlphaBlend::k_oneMinusDestAlpha:
 						SrcFunc = GL_ONE_MINUS_DST_ALPHA;
 						break;
-					case Rendering::AB_UNKNOWN:
+					case Rendering::AlphaBlend::k_unknown:
 					default:
 						ERROR_LOG("Open GL ES Unknown blend function");
 						break;
 				};
+                
 				GLenum DstFunc = GL_ONE_MINUS_SRC_ALPHA;
-				switch(ineDstFunc)
+                switch(ineDstFunc)
 				{
-					case Rendering::AB_ZERO:
+					case Rendering::AlphaBlend::k_zero:
 						DstFunc = GL_ZERO;
 						break;
-					case Rendering::AB_ONE:
+					case Rendering::AlphaBlend::k_one:
 						DstFunc = GL_ONE;
 						break;
-					case Rendering::AB_SOURCE_COL:
+					case Rendering::AlphaBlend::k_sourceCol:
 						DstFunc = GL_SRC_COLOR;
 						break;
-					case Rendering::AB_ONE_MINUS_SOURCE_COL:
+					case Rendering::AlphaBlend::k_oneMinusSourceCol:
 						DstFunc = GL_ONE_MINUS_SRC_COLOR;
 						break;
-					case Rendering::AB_SOURCE_ALPHA:
+					case Rendering::AlphaBlend::k_sourceAlpha:
 						DstFunc = GL_SRC_ALPHA;
 						break;
-					case Rendering::AB_ONE_MINUS_SOURCE_ALPHA:
+					case Rendering::AlphaBlend::k_oneMinusSourceAlpha:
 						DstFunc = GL_ONE_MINUS_SRC_ALPHA;
 						break;
-					case Rendering::AB_DEST_ALPHA:
+					case Rendering::AlphaBlend::k_destAlpha:
 						DstFunc = GL_DST_ALPHA;
 						break;
-					case Rendering::AB_ONE_MINUS_DEST_ALPHA:
+					case Rendering::AlphaBlend::k_oneMinusDestAlpha:
 						DstFunc = GL_ONE_MINUS_DST_ALPHA;
 						break;
-					case Rendering::AB_UNKNOWN:
+					case Rendering::AlphaBlend::k_unknown:
 					default:
 						ERROR_LOG("Open GL ES Unknown blend function");
 						break;
@@ -1016,22 +1017,22 @@ namespace moFlo
             }
         }
         
-        s32 CRenderSystem::GetLocationForVertexSemantic(moRendering::SEMANTIC ineSemantic)
+        s32 CRenderSystem::GetLocationForVertexSemantic(moRendering::VertexDataSemantic ineSemantic)
         {
             //Determine what client states are required and get their currently bound locations
             switch(ineSemantic)
             {
-                case Rendering::POSITION:
+                case Rendering::VertexDataSemantic::k_position:
                     return mwPosAttributeLocation;
-                case Rendering::NORMAL:
+                case Rendering::VertexDataSemantic::k_normal:
                     return  mwNormAttributeLocation;
-                case Rendering::UV:
+                case Rendering::VertexDataSemantic::k_uv:
                     return mwTexAttributeLocation;
-                case Rendering::COLOUR:
+                case Rendering::VertexDataSemantic::k_colour:
                     return mwColAttributeLocation;
-                case Rendering::WEIGHTS:
+                case Rendering::VertexDataSemantic::k_weight:
                     return mwWeiAttributeLocation;
-                case Rendering::JOINT_INDICES:
+                case Rendering::VertexDataSemantic::k_jointIndex:
                     return mwJIAttributeLocation;
                 default:
                     return -1;
@@ -1142,12 +1143,12 @@ namespace moFlo
                 
                 
                 // Specific settings for those that differ from default
-                if(Element.eSemantic == Rendering::COLOUR)
+                if(Element.eSemantic == Rendering::VertexDataSemantic::k_colour)
                 {
                     eType = GL_UNSIGNED_BYTE;
                     bNormalise = GL_TRUE;
                 }
-                else if(Element.eSemantic == Rendering::JOINT_INDICES)
+                else if(Element.eSemantic == Rendering::VertexDataSemantic::k_jointIndex)
                 {
                     eType = GL_UNSIGNED_BYTE;
                 }
@@ -1162,11 +1163,11 @@ namespace moFlo
 		{
 			switch(inType)
 			{
-				case Rendering::TRIS:
+				case Rendering::PrimitiveType::k_tri:
 					return GL_TRIANGLES;
-				case Rendering::TRI_STRIP:
+				case Rendering::PrimitiveType::k_triStrip:
 					return GL_TRIANGLE_STRIP;
-				case Rendering::LINE:
+				case Rendering::PrimitiveType::k_line:
 					return GL_LINES;
 				default:
 					ERROR_LOG("Invalid primitive type OpenGLES");
@@ -1198,8 +1199,8 @@ namespace moFlo
             CRenderTarget::ClearCache();
             
             //Set the default blend function and alpha function
-			SetBlendFunction(Rendering::AB_SOURCE_ALPHA, Rendering::AB_ONE_MINUS_SOURCE_ALPHA);
-            SetDepthFunction(Rendering::DF_LEQUAL);
+			SetBlendFunction(Rendering::AlphaBlend::k_sourceAlpha, Rendering::AlphaBlend::k_oneMinusSourceAlpha);
+            SetDepthFunction(Rendering::DepthFunction::k_lequal);
             
 			//we're using pre-multiplied alpha and therefore require a different blend mode
             glBlendEquation(GL_FUNC_ADD);

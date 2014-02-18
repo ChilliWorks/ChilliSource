@@ -74,7 +74,7 @@ namespace moFlo
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr CMeshManager::GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr CMeshManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetModelFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -86,7 +86,7 @@ namespace moFlo
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr CMeshManager::AsyncGetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr CMeshManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetModelFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -99,7 +99,7 @@ namespace moFlo
         /// @param the filepath
         /// @return the resource pointer to the mesh
 		//----------------------------------------------------------------
-		MeshPtr CMeshManager::GetModelFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath)
+		MeshPtr CMeshManager::GetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -150,7 +150,7 @@ namespace moFlo
         /// @param the filepath
         /// @return the resource pointer to the mesh
 		//----------------------------------------------------------------
-		MeshPtr CMeshManager::AsyncGetModelFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath)
+		MeshPtr CMeshManager::AsyncGetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -214,8 +214,8 @@ namespace moFlo
 			//create vertex declaration
 			s8 dwNumVertexElements = 1;
 			VertexElement* apVertElements = new VertexElement[dwNumVertexElements];
-			apVertElements[0].eType = FLOAT3;
-			apVertElements[0].eSemantic = POSITION;
+			apVertElements[0].eType = VertexDataType::k_float3;
+			apVertElements[0].eSemantic = VertexDataSemantic::k_position;
 			CVertexDeclaration vertDeclaration(dwNumVertexElements, apVertElements);
 			
 			for (int i = 0; i < indwNumSubMeshes; i++)
@@ -259,7 +259,7 @@ namespace moFlo
 				{
 					newSubMesh = outpResource->CreateSubMesh(it->mstrName);
 					newSubMesh->Prepare(inpRenderSystem, inMeshDescriptor.mVertexDeclaration, inMeshDescriptor.mudwIndexSize, 
-										udwVertexDataCapacity, udwIndexDataCapacity, READ, it->ePrimitiveType);
+										udwVertexDataCapacity, udwIndexDataCapacity, BufferAccess::k_read, it->ePrimitiveType);
 				}
 				else 
 				{

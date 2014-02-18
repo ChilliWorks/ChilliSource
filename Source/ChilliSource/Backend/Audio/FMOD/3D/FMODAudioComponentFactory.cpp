@@ -100,7 +100,7 @@ namespace moFlo
 		/// @param Whether the sample loops or not
 		/// @return Audio Component
 		//--------------------------------------------------------
-		Audio::AudioComponentPtr CFMODAudioComponentFactory::CreateAudioComponent(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop)
+		Audio::AudioComponentPtr CFMODAudioComponentFactory::CreateAudioComponent(Core::StorageLocation ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop)
 		{
 			//Load the audio with our audio manager
 			Audio::AudioResourcePtr pAudioSample;
@@ -145,7 +145,7 @@ namespace moFlo
 		/// @param Whether the sample loops or not
 		/// @return Audio Component
 		//--------------------------------------------------------
-		Audio::AudioComponentPtr CFMODAudioComponentFactory::Create3DAudioComponent(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop)
+		Audio::AudioComponentPtr CFMODAudioComponentFactory::Create3DAudioComponent(Core::StorageLocation ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop)
 		{
 			//Load the audio with our audio manager
 			Audio::AudioResourcePtr pAudioSample;

@@ -72,10 +72,10 @@ namespace moFlo
                 return (inValue << 1) | (inValue >> (sizeof(T)*8 -1));
             }
             
-            static bool ReadJson(STORAGE_LOCATION ineStorageLocation, const std::string & instrPath, Json::Value * outpJson);
+            static bool ReadJson(StorageLocation ineStorageLocation, const std::string & instrPath, Json::Value * outpJson);
             
-            static bool          FileToString(STORAGE_LOCATION ineStorageLocation, const std::string & instrPath, std::string & outstrFileContent);
-            static FileStreamPtr StringToFile(STORAGE_LOCATION ineStorageLocation, const std::string & instrPath, const std::string& instrFileOut);
+            static bool          FileToString(StorageLocation ineStorageLocation, const std::string & instrPath, std::string & outstrFileContent);
+            static FileStreamPtr StringToFile(StorageLocation ineStorageLocation, const std::string & instrPath, const std::string& instrFileOut);
             
             static bool ZlibCompressString(const std::string &instrUncompressed, std::string& outstrCompressed);
 

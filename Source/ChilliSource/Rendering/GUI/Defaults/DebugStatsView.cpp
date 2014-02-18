@@ -47,9 +47,9 @@ namespace moFlo
 			EnableAlignmentToParent(true);
 			
 			SetSize(0.0f, 0.0f, 200.0f, mSubviews.size() * 22.0f);
-			SetAlignmentToParent(Core::ALIGN_TOP_LEFT);
+			SetAlignmentToParent(Core::AlignmentAnchor::k_topLeft);
 			SetOffsetFromParentAlignment(0.0f, 0.0f, 10.0f, -10.0f);
-			SetLocalAlignment(Core::ALIGN_TOP_LEFT);
+			SetLocalAlignment(Core::AlignmentAnchor::k_topLeft);
 			
 			SetTexture(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::ITextureManager>()->GetDefaultTexture());
 			SetColour(Core::CColour(0.41f, 0.41f, 0.41f, 0.8f));

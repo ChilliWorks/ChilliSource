@@ -26,11 +26,11 @@ namespace moFlo
 {
 	namespace Input
 	{
-        enum TouchInputType
+        enum class TouchInputType
         {
-            TOUCH_BEGAN,
-            TOUCH_MOVED,
-            TOUCH_ENDED,
+            k_began,
+            k_moved,
+            k_ended
         };
 		struct TouchInfo
 		{

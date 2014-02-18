@@ -25,7 +25,7 @@ namespace moFlo
 		//------------------------------------------------
 		CMaterial::CMaterial() 
         :
-        mSrcBlendFunc(AB_ONE), mDstBlendFunc(AB_ONE_MINUS_SOURCE_ALPHA), meCullFace(CF_FRONT),
+        mSrcBlendFunc(AlphaBlend::k_one), mDstBlendFunc(AlphaBlend::k_oneMinusSourceAlpha), meCullFace(CullFace::k_front),
         mAmbient(0.2f, 0.2f, 0.2f, 1.0f), mEmissive(1.0f, 1.0f, 1.0f, 1.0f), mSpecular(1.0f, 1.0f, 1.0f, 0.05f),
         mbIsScissoringEnabled(false), mbIsAlphaBlended(false), mbIsColourWriteEnabled(true), mbIsDepthWriteEnabled(true), mbIsDepthTestEnabled(true), mbIsCullingEnabled(true),
         mbIsCacheValid(false)
@@ -74,7 +74,7 @@ namespace moFlo
         void CMaterial::SetActiveShaderProgram(ShaderPass inePass)
         {
             mbIsCacheValid = false;
-            mpActiveShaderProgram = maShaderPrograms[inePass];
+            mpActiveShaderProgram = maShaderPrograms[(u32)inePass];
         }
         //----------------------------------------------------------
         /// Get Active Shader Program
@@ -89,7 +89,7 @@ namespace moFlo
         void CMaterial::SetShaderProgram(ShaderPass inePass, const ShaderPtr &inpShaderProgram)
         {
             mbIsCacheValid = false;
-            maShaderPrograms[inePass] = inpShaderProgram;
+            maShaderPrograms[(u32)inePass] = inpShaderProgram;
         }
         //----------------------------------------------------------
         /// Clear Textures

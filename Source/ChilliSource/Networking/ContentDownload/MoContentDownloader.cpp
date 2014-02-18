@@ -63,7 +63,7 @@ namespace moFlo
                 
                 HttpRequestDetails RequestDetails;
 				RequestDetails.strURL = mstrAssetServerURL;
-				RequestDetails.eType = moFlo::Networking::HttpRequestDetails::POST;
+				RequestDetails.eType = HttpRequestDetails::Type::k_post;
                 RequestDetails.strBody = JWriter.write(JDeviceData);
                 
                 mpHttpConnectionSystem->MakeRequest(RequestDetails, IHttpRequest::CompletionDelegate(this, &CMoContentDownloader::OnContentManifestDownloadComplete));
@@ -88,7 +88,7 @@ namespace moFlo
             
             HttpRequestDetails RequestDetails;
             RequestDetails.strURL = instrURL;
-            RequestDetails.eType = moFlo::Networking::HttpRequestDetails::GET;
+            RequestDetails.eType = HttpRequestDetails::Type::k_get;
             mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(RequestDetails, IHttpRequest::CompletionDelegate(this, &CMoContentDownloader::OnContentDownloadComplete));
         }
         //----------------------------------------------------------------
@@ -103,7 +103,7 @@ namespace moFlo
         {
             switch(ineResult)
             {
-                case IHttpRequest::COMPLETED:
+                case IHttpRequest::CompletionResult::k_completed:
                 {
                     //Check the response code for errors
                     switch(inpRequest->GetResponseCode())
@@ -111,27 +111,27 @@ namespace moFlo
                         default:   //OK 
                         case Networking::kHTTPResponseOK:
                         {
-                            mOnContentManifestDownloadCompleteDelegate(ContentDownloader::SUCCEEDED, inpRequest->GetResponseString());
+                            mOnContentManifestDownloadCompleteDelegate(ContentDownloader::Result::k_succeeded, inpRequest->GetResponseString());
                             break;
                         }
                         case Networking::kHTTPError:      //Error
                         case Networking::kHTTPBusy:       //Temporary error try again later
                         case Networking::kHTTPNotFound:   //End point doesn't exist
                         {
-                            mOnContentManifestDownloadCompleteDelegate(ContentDownloader::FAILED, inpRequest->GetResponseString());
+                            mOnContentManifestDownloadCompleteDelegate(ContentDownloader::Result::k_failed, inpRequest->GetResponseString());
                             break;
                         }
                     }
                     break;
                 }
-                case IHttpRequest::TIMEOUT:
-                case IHttpRequest::FAILED:
-                case IHttpRequest::CANCELLED:
+                case IHttpRequest::CompletionResult::k_timeout:
+                case IHttpRequest::CompletionResult::k_failed:
+                case IHttpRequest::CompletionResult::k_cancelled:
                 {
-                    mOnContentManifestDownloadCompleteDelegate(ContentDownloader::FAILED, inpRequest->GetResponseString());
+                    mOnContentManifestDownloadCompleteDelegate(ContentDownloader::Result::k_failed, inpRequest->GetResponseString());
                     break;
                 }
-                case IHttpRequest::FLUSHED:
+                case IHttpRequest::CompletionResult::k_flushed:
                 {
                     //Check the response code for errors
                     switch(inpRequest->GetResponseCode())
@@ -139,14 +139,14 @@ namespace moFlo
                         default:   //OK 
                         case Networking::kHTTPResponseOK:
                         {
-                            mOnContentManifestDownloadCompleteDelegate(ContentDownloader::FLUSHED, inpRequest->GetResponseString());
+                            mOnContentManifestDownloadCompleteDelegate(ContentDownloader::Result::k_flushed, inpRequest->GetResponseString());
                             break;
                         }
                         case Networking::kHTTPError:      //Error
                         case Networking::kHTTPBusy:       //Temporary error try again later
                         case Networking::kHTTPNotFound:   //End point doesn't exist
                         {
-                            mOnContentManifestDownloadCompleteDelegate(ContentDownloader::FAILED, inpRequest->GetResponseString());
+                            mOnContentManifestDownloadCompleteDelegate(ContentDownloader::Result::k_failed, inpRequest->GetResponseString());
                             break;
                         }
                     }
@@ -169,7 +169,7 @@ namespace moFlo
             
             switch(ineResult)
             {
-                case IHttpRequest::COMPLETED:
+                case IHttpRequest::CompletionResult::k_completed:
                 {
                     // Check the response code for errors
                     switch(inpRequest->GetResponseCode())
@@ -177,7 +177,7 @@ namespace moFlo
                         default:   //OK
                         case Networking::kHTTPResponseOK:
                         {
-                            mOnContentDownloadCompleteDelegate(ContentDownloader::SUCCEEDED, inpRequest->GetResponseString());
+                            mOnContentDownloadCompleteDelegate(ContentDownloader::Result::k_succeeded, inpRequest->GetResponseString());
                             break;
                         }
                         case Networking::kHTTPMovedTemporarily:      // Redirected
@@ -189,7 +189,7 @@ namespace moFlo
                                 HttpRequestDetails RequestDetails = inpRequest->GetDetails();
                                 RequestDetails.strURL = RequestDetails.strRedirectionURL;
                                 RequestDetails.strRedirectionURL = "";
-                                RequestDetails.eType = moFlo::Networking::HttpRequestDetails::GET;
+                                RequestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_get;
                                 mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(RequestDetails, IHttpRequest::CompletionDelegate(this, &CMoContentDownloader::OnContentDownloadComplete));
                                 break;
                             }
@@ -197,16 +197,16 @@ namespace moFlo
                     }
                     break;
                 }
-                case IHttpRequest::TIMEOUT:
-                case IHttpRequest::FAILED:
-                case IHttpRequest::CANCELLED:
+                case IHttpRequest::CompletionResult::k_timeout:
+                case IHttpRequest::CompletionResult::k_failed:
+                case IHttpRequest::CompletionResult::k_cancelled:
                 {
-                    mOnContentDownloadCompleteDelegate(ContentDownloader::FAILED, inpRequest->GetResponseString());
+                    mOnContentDownloadCompleteDelegate(ContentDownloader::Result::k_failed, inpRequest->GetResponseString());
                     break;
                 }
-                case IHttpRequest::FLUSHED:
+                case IHttpRequest::CompletionResult::k_flushed:
                 {
-                    mOnContentDownloadCompleteDelegate(ContentDownloader::FLUSHED, inpRequest->GetResponseString());
+                    mOnContentDownloadCompleteDelegate(ContentDownloader::Result::k_flushed, inpRequest->GetResponseString());
                     break;
                 }
             }

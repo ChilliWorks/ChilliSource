@@ -95,11 +95,11 @@ namespace moFlo
 		/// @param Optional dynamic array to which views will be pushed
 		/// @return GUI View
 		//--------------------------------------------------------
-		GUIViewPtr CGUIViewFactory::CreateGUIViewFromScript(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrScriptFile, DYNAMIC_ARRAY<GUIViewPtr>* outpViews)
+		GUIViewPtr CGUIViewFactory::CreateGUIViewFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile, DYNAMIC_ARRAY<GUIViewPtr>* outpViews)
 		{
 			GUIViewPtr pRootView;
 
-            Core::FileStreamPtr pFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrScriptFile, Core::FM_READ);
+            Core::FileStreamPtr pFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrScriptFile, Core::FileMode::k_read);
             assert(pFile);
             
             std::string strFile;
@@ -139,7 +139,7 @@ namespace moFlo
             std::string strType;
             std::string strSource;
             bool bExtern = false;
-            Core::STORAGE_LOCATION eStorageLoc;
+            Core::StorageLocation eStorageLoc;
             
             for(rapidxml::xml_attribute<> * pAttr = inpViewElement->first_attribute(); pAttr != NULL; pAttr = pAttr->next_attribute())
             {

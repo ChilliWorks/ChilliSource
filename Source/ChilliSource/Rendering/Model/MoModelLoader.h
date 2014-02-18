@@ -66,7 +66,7 @@ namespace moFlo
 			/// @param Filename
 			/// @param The path to this files materials. Assumed to be the same directory as the file if left blank.
 			//----------------------------------------------------------------------------
-			void PopulateExistingMeshFromFile(const MeshPtr& inpMesh, Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath = "");
+			void PopulateExistingMeshFromFile(const MeshPtr& inpMesh, Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath = "");
 			//----------------------------------------------------------------------------
 			/// Async Populate Existing Mesh From File
 			///
@@ -81,7 +81,7 @@ namespace moFlo
 			/// @param Filename
 			/// @param The path to this files materials. Assumed to be the same directory as the file if left blank.
 			//----------------------------------------------------------------------------
-			void AsyncPopulateExistingMeshFromFile(const MeshPtr& inpMesh, Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath = "");
+			void AsyncPopulateExistingMeshFromFile(const MeshPtr& inpMesh, Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath = "");
 		private:
             //----------------------------------------------------------------------------
             /// Mesh Data Quantities
@@ -102,7 +102,7 @@ namespace moFlo
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Async Create Resource From File
 			///
@@ -111,7 +111,7 @@ namespace moFlo
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			bool AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Create Mesh From File
 			///
@@ -121,7 +121,7 @@ namespace moFlo
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool CreateMeshFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource);
+			bool CreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Async Create Mesh From File
 			///
@@ -131,7 +131,7 @@ namespace moFlo
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool AsyncCreateMeshFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource);
+			bool AsyncCreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// LoadMeshDataTask
 			///
@@ -140,7 +140,7 @@ namespace moFlo
 			/// @param The path to this files materials. Assumed to be the same directory as the file if left blank.
 			/// @param the output resource pointer
 			//----------------------------------------------------------------------------
-			void LoadMeshDataTask(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource);
+			void LoadMeshDataTask(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Build Mesh Task
 			///
@@ -156,7 +156,7 @@ namespace moFlo
 			/// @param The path to this files materials. Assumed to be the same directory as the file if left blank.
 			/// @param the output resource pointer
 			//----------------------------------------------------------------------------
-			void LoadDataForExistingMeshTask(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath,  const std::string& instrMaterialPath, const MeshPtr& outpResource);
+			void LoadDataForExistingMeshTask(Core::StorageLocation ineStorageLocation, const std::string &inFilePath,  const std::string& instrMaterialPath, const MeshPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Build Existing Mesh Task
 			///
@@ -186,7 +186,7 @@ namespace moFlo
 			/// @param The output MoModelDeclaration
 			/// @return true if successful, false if not
 			//----------------------------------------------------------------------------
-			bool ReadFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, MeshDescriptor& outDeclaration);
+			bool ReadFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, MeshDescriptor& outDeclaration);
 			//-----------------------------------------------------------------------------
 			/// Read Global Header
 			///

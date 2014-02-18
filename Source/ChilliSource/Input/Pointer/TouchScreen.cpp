@@ -86,15 +86,15 @@ namespace moFlo
             {
             	switch((*pTouch).eType)
                 {
-                    case TOUCH_BEGAN:
+                    case TouchInputType::k_began:
                         AddActiveTouch(*pTouch);
                         mTouchBeganEvent.Invoke(*pTouch);
                         break;
-                    case TOUCH_MOVED:
+                    case TouchInputType::k_moved:
                         UpdateActiveTouch(*pTouch);
                         mTouchMovedEvent.Invoke(*pTouch);
                         break;
-                    case TOUCH_ENDED:
+                    case TouchInputType::k_ended:
                         mTouchEndedEvent.Invoke(*pTouch);
                         RemoveActiveTouch(*pTouch);
                         break;
@@ -120,7 +120,7 @@ namespace moFlo
 			NewTouch.vLocation = TransformedPosition2;
 			NewTouch.vPreviousLocation = TransformedPosition2;
 			NewTouch.TimeStamp = inTimeStamp;
-            NewTouch.eType = TOUCH_BEGAN;
+            NewTouch.eType = TouchInputType::k_began;
 
             std::unique_lock<std::mutex> Lock(mMutex);
             mOpenTouches.push_back(NewTouch);
@@ -138,7 +138,7 @@ namespace moFlo
             TouchInfo NewTouch;
             NewTouch.ID = inID;
 			NewTouch.TimeStamp = inTimeStamp;
-            NewTouch.eType = TOUCH_MOVED;
+            NewTouch.eType = TouchInputType::k_moved;
             
 			for (TouchListItr pTouch = mOpenTouches.begin(); pTouch != mOpenTouches.end(); ++pTouch)
 			{
@@ -163,7 +163,7 @@ namespace moFlo
             TouchInfo NewTouch;
             NewTouch.ID = inID;
 			NewTouch.TimeStamp = inTimeStamp;
-            NewTouch.eType = TOUCH_ENDED;
+            NewTouch.eType = TouchInputType::k_ended;
             
 			for (TouchListItr pTouch = mOpenTouches.begin(); pTouch != mOpenTouches.end(); ++pTouch)
 			{

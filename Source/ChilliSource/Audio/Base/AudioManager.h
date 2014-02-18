@@ -71,7 +71,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
 			//----------------------------------------------------------------
 			/// Get Sound From File
 			///
@@ -82,7 +82,7 @@ namespace moFlo
             /// @param the file path
             /// @return the audio resource pointer
 			//----------------------------------------------------------------
-			AudioResourcePtr GetSoundFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath);
+			AudioResourcePtr GetSoundFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath);
 			//----------------------------------------------------------------
 			/// Stream Sound From File
 			///
@@ -92,7 +92,7 @@ namespace moFlo
             /// @param the file path
             /// @return the audio resource pointer
 			//----------------------------------------------------------------
-			AudioResourcePtr StreamSoundFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath);
+			AudioResourcePtr StreamSoundFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath);
 			//----------------------------------------------------------------
 			/// Create Listener
 			///

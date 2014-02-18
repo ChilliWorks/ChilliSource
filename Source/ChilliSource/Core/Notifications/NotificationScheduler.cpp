@@ -45,16 +45,16 @@ namespace moFlo
     /// @param Notification 
     /// @param Priority (High priority will leap-frog lower priority in the queue
     //------------------------------------------------------------------------------
-    void CNotificationScheduler::ScheduleNotification(NotificationType ineType, const Notification& insNotification, NotificationPriority inePriority,Notification::NotificationPresentedDelegate inpDelegate)
+    void CNotificationScheduler::ScheduleNotification(NotificationType ineType, const Notification& insNotification, NotificationPriority inePriority, Notification::NotificationPresentedDelegate inpDelegate)
     {
         switch(ineType)
         {
-            case NOTICE_APP:
+            case NotificationType::k_app:
                 if(bAppNotificationsEnabled)
                 {
                     switch(inePriority)
                     {
-                        case NOTICE_STANDARD:
+                        case NotificationPriority::k_standard:
                         {
                             Notification sNotification(insNotification);
                             sNotification.eType = ineType;
@@ -69,7 +69,7 @@ namespace moFlo
                             NotificationQueue.push_back(sNotification);
                             break;
                         }
-                        case NOTICE_HIGH:
+                        case NotificationPriority::k_high:
                         {
                             Notification sNotification(insNotification);
                             sNotification.eType = ineType;
@@ -87,10 +87,10 @@ namespace moFlo
                     }
                 }
                 break;
-            case NOTICE_PUSH:
+            case NotificationType::k_push:
                 ERROR_LOG("Push notifications can not be scheduled within the app");
                 break;
-            case NOTICE_SYSTEM:
+            case NotificationType::k_system:
                 ERROR_LOG("System notifications must be scheduled with a time");
                 break;
         }
@@ -111,7 +111,7 @@ namespace moFlo
     {
         switch(ineType)
         {
-            case NOTICE_APP:
+            case NotificationType::k_app:
                 if(bAppNotificationsEnabled)
                 {
                     Notification sNotification(insNotification);
@@ -123,10 +123,10 @@ namespace moFlo
                     TimedAppNotifications.push_back(sNotification);
                 }
                 break;
-            case NOTICE_PUSH:
+            case NotificationType::k_push:
                 ERROR_LOG("Push notifications can not be scheduled within the app");
                 break;
-            case NOTICE_SYSTEM:
+            case NotificationType::k_system:
                 if(bSystemNotificationsEnabled)
                 {
                     Notification sNotification(insNotification);
@@ -155,7 +155,7 @@ namespace moFlo
     {
         switch(ineType)
         {
-            case NOTICE_APP:
+            case NotificationType::k_app:
                 if(bAppNotificationsEnabled)
                 {
                     Notification sNotification(insNotification);
@@ -168,10 +168,10 @@ namespace moFlo
                     break;
                 }
                 break;
-            case NOTICE_PUSH:
+            case NotificationType::k_push:
                 ERROR_LOG("Push notifications can not be scheduled within the app");
                 break;
-            case NOTICE_SYSTEM:
+            case NotificationType::k_system:
                 if(bSystemNotificationsEnabled)
                 {
                     Notification sNotification(insNotification);
@@ -201,13 +201,13 @@ namespace moFlo
     {
         switch(ineType)
         {
-            case NOTICE_APP:
+            case NotificationType::k_app:
                 WARNING_LOG("CNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod is not implemented for type NOTICE_APP");
                 break;
-            case NOTICE_PUSH:
-                ERROR_LOG("Push notifications can not be checked within the app");
+            case NotificationType::k_push:
+                FATAL_LOG("Push notifications can not be checked within the app");
                 break;
-            case NOTICE_SYSTEM:
+            case NotificationType::k_system:
                 return mspLocalNotificationScheduler->TryGetNotificationsScheduledWithinTimePeriod(inTime, inPeriod, outaNotifications);
         }
         
@@ -225,13 +225,13 @@ namespace moFlo
 	{
         switch(ineType)
         {
-            case NOTICE_APP:
+            case NotificationType::k_app:
                 bAppNotificationsEnabled = inbEnabled;
                 break;
-            case NOTICE_PUSH:
+            case NotificationType::k_push:
                 bPushNotificationsEnabled = inbEnabled;
                 break;
-            case NOTICE_SYSTEM:
+            case NotificationType::k_system:
                 bSystemNotificationsEnabled = inbEnabled;
                 break;
         }
@@ -254,7 +254,7 @@ namespace moFlo
     {
         switch(ineType)
         {
-            case NOTICE_APP:
+            case NotificationType::k_app:
                 for(DYNAMIC_ARRAY<Notification>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end(); /*No Increment*/)
                 {  
                     if(inID == it->ID)
@@ -267,10 +267,10 @@ namespace moFlo
                     }
                 }
                 break;
-            case NOTICE_PUSH:
-                ERROR_LOG("Push notifications can not be cancelled within the app");
+            case NotificationType::k_push:
+                FATAL_LOG("Push notifications can not be cancelled within the app");
                 break;
-            case NOTICE_SYSTEM:
+            case NotificationType::k_system:
             	mspLocalNotificationScheduler->CancelByID(inID);
                 break;
         }
@@ -286,13 +286,13 @@ namespace moFlo
     {
         switch(ineType)
         {
-            case NOTICE_APP:
+            case NotificationType::k_app:
                 TimedAppNotifications.clear();
                 break;
-            case NOTICE_PUSH:
-                WARNING_LOG("Push notifications can not be cancelled within the app");
+            case NotificationType::k_push:
+                FATAL_LOG("Push notifications can not be cancelled within the app");
                 break;
-            case NOTICE_SYSTEM:
+            case NotificationType::k_system:
             	mspLocalNotificationScheduler->CancelAll();
                 break;
         }
@@ -318,10 +318,10 @@ namespace moFlo
                 //This notification should be triggered
                 switch(it->ePriority)
                 {
-                    case NOTICE_STANDARD:
+                    case NotificationPriority::k_standard:
                         NotificationQueue.push_back((*it));
                         break;
-                    case NOTICE_HIGH:
+                    case NotificationPriority::k_high:
                         NotificationQueue.push_front((*it));
                         break;
                 }
@@ -370,7 +370,7 @@ namespace moFlo
         {
             switch(insNotification.ePriority)
             {
-                case NOTICE_STANDARD:
+                case NotificationPriority::k_standard:
                 {
                     Notification notification = insNotification;
                     notification.bDismissed = false;
@@ -378,7 +378,7 @@ namespace moFlo
                     NotificationQueue.push_back(notification);
                     break;
                 }
-                case NOTICE_HIGH:
+                case NotificationPriority::k_high:
                 {
                     Notification notification = insNotification;
                     notification.bDismissed = false;
@@ -399,13 +399,13 @@ namespace moFlo
     {
         switch(ineType)
         {
-            case NOTICE_APP:
+            case NotificationType::k_app:
                 return bAppNotificationsEnabled;
                 break;
-            case NOTICE_PUSH:
+            case NotificationType::k_push:
                 return bPushNotificationsEnabled;
                 break;
-            case NOTICE_SYSTEM:
+            case NotificationType::k_system:
                 return bSystemNotificationsEnabled;
                 break;
         }

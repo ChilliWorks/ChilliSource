@@ -66,7 +66,7 @@ namespace moFlo
 			/// @param File name
 			/// @return A handle to the Shader
 			//----------------------------------------------------------------
-			ShaderPtr GetShaderFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath);
+			ShaderPtr GetShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath);
 			//----------------------------------------------------------------
 			/// Async Get Shader From File
 			///
@@ -78,7 +78,7 @@ namespace moFlo
 			/// @param File name
 			/// @return A handle to the Shader
 			//----------------------------------------------------------------
-			ShaderPtr AsyncGetShaderFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath);
+			ShaderPtr AsyncGetShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath);
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///
@@ -87,7 +87,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -96,7 +96,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr AsyncGetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
             //-----------------------------------------------------------------
             /// Set Render System
             ///
@@ -124,7 +124,7 @@ namespace moFlo
 			/// @param Out: Shader resource
 			/// @return Success
 			//---------------------------------------------------------
-			virtual bool CreateShaderProgramFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath, ShaderPtr& outpShader) = 0;
+			virtual bool CreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ShaderPtr& outpShader) = 0;
 			//---------------------------------------------------------
 			/// Async Create Shader Program From File
 			///
@@ -136,7 +136,7 @@ namespace moFlo
 			/// @param Out: Shader resource
 			/// @return Success
 			//---------------------------------------------------------
-			virtual bool AsyncCreateShaderProgramFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath, ShaderPtr& outpShader) = 0;
+			virtual bool AsyncCreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ShaderPtr& outpShader) = 0;
             
         protected:
             

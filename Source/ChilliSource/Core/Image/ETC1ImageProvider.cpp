@@ -38,20 +38,20 @@ namespace moFlo
 	//----------------------------------------------------------------
 	/// Create Resource From File
 	//----------------------------------------------------------------
-	bool CETC1ImageProvider::CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+	bool CETC1ImageProvider::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 	{
-		return CreateImageFromFile(ineStorageLocation, inFilePath, Core::CImage::FORMAT_DEFAULT, outpResource);
+		return CreateImageFromFile(ineStorageLocation, inFilePath, Core::CImage::Format::k_default, outpResource);
 	}
 	//----------------------------------------------------------------
 	/// Create Image From File
 	//----------------------------------------------------------------
-	bool CETC1ImageProvider::CreateImageFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
+	bool CETC1ImageProvider::CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
 	{
 		//ensure the extension is correct.
 		if (moFlo::Core::CStringUtils::EndsWith(inFilePath, ETC1Extension, true) == false)
 			return false;
 
-		Core::FileStreamPtr pImageFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FM_READ_BINARY);
+		Core::FileStreamPtr pImageFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
 
 		if (pImageFile != NULL && pImageFile->IsOpen() == true && pImageFile->IsBad() == false)
 		{
@@ -77,9 +77,9 @@ namespace moFlo
 
 			//get the size of the rest of the data
 			const u32 kstrHeaderSize = 16;
-			pImageFile->SeekG(0, Core::SD_END);
+			pImageFile->SeekG(0, Core::SeekDir::k_end);
 			u32 dwDataSize = pImageFile->TellG() - kstrHeaderSize;
-			pImageFile->SeekG(kstrHeaderSize, Core::SD_BEGINNING);
+			pImageFile->SeekG(kstrHeaderSize, Core::SeekDir::k_beginning);
 
 			//read the rest of the data
 			u8* pData = new u8[dwDataSize];
@@ -88,12 +88,12 @@ namespace moFlo
 
 			//setup the output image
 			Core::CImage* outpImage = (Core::CImage*)outpResource.get();
-			outpImage->SetFormat(Core::CImage::RGBA_8888);
+			outpImage->SetFormat(Core::CImage::Format::k_RGBA8888);
 			outpImage->SetData(pData);
 			outpImage->SetDataLength(dwDataSize);
 			outpImage->SetWidth(sHeader.wTextureWidth);
 			outpImage->SetHeight(sHeader.wTextureHeight);
-			outpImage->SetCompression(Core::COMPRESSION_ETC1);
+			outpImage->SetCompression(Core::ImageCompression::k_ETC1);
 
 			return true;
 		}

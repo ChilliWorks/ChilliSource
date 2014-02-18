@@ -35,7 +35,7 @@ namespace moFlo
         : mpContentDownloader(inpContentDownloader), mpServerManifest(NULL), 
         muRunningToDownloadTotal(0), muRunningDownloadedTotal(0), mbDLCCachePurged(false)
         {
-            mstrContentDirectory = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(Core::SL_DLC);
+            mstrContentDirectory = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_DLC);
         }
         //-----------------------------------------------------------
         /// Load Local Manifest 
@@ -48,7 +48,7 @@ namespace moFlo
         void CContentManagementSystem::LoadLocalManifest(TiXmlDocument* inpCurrentManifest)
         {
             //The manifest lives in the documents directory
-            inpCurrentManifest->LoadFile(Core::SL_DLC, "ContentManifest.moman");
+            inpCurrentManifest->LoadFile(Core::StorageLocation::k_DLC, "ContentManifest.moman");
             
             //If there is no DLC we should check to see if there ever was any
             if(!inpCurrentManifest->RootElement() && Core::CLocalDataStore::GetSingletonPtr()->HasValueForKey("MOCMSCachedDLC"))
@@ -64,7 +64,7 @@ namespace moFlo
         //-----------------------------------------------------------
         std::string CContentManagementSystem::GetManifestChecksumForFile(const std::string& instrFilename)
         {
-            return CalculateChecksum(Core::SL_DLC, instrFilename);
+            return CalculateChecksum(Core::StorageLocation::k_DLC, instrFilename);
         }
 		//-----------------------------------------------------------
 		/// Calculate Checksum
@@ -77,7 +77,7 @@ namespace moFlo
 		/// @param File path
 		/// @return Checksum string
 		//-----------------------------------------------------------
-		std::string CContentManagementSystem::CalculateChecksum(Core::STORAGE_LOCATION ineLocation, const std::string& instrFilePath)
+		std::string CContentManagementSystem::CalculateChecksum(Core::StorageLocation ineLocation, const std::string& instrFilePath)
 		{
             std::string strMD5Checksum = Core::CApplication::GetFileSystemPtr()->GetFileMD5Checksum(ineLocation, instrFilePath);
 			std::string strBase64Encoded = CBaseEncoding::Base64Encode(strMD5Checksum);
@@ -141,11 +141,11 @@ namespace moFlo
                 ERROR_LOG("CMS: Internet not reachable");
                 if(mbDLCCachePurged)
                 {
-                    inDelegate(UPDATE_CHECK_FAILED_BLOCKING);
+                    inDelegate(UpdateResult::k_updateCheckFailedBlocking);
                 }
                 else
                 {
-                    inDelegate(UPDATE_CHECK_FAILED);
+                    inDelegate(UpdateResult::k_updateCheckFailed);
                 }
             }
         }
@@ -170,13 +170,13 @@ namespace moFlo
             {
             	//Add a temp directory so that the packages are stored atomically and only overwrite
                 //the originals on full success
-                Core::CApplication::GetFileSystemPtr()->CreateDirectory(Core::SL_DLC, "Temp");
+                Core::CApplication::GetFileSystemPtr()->CreateDirectory(Core::StorageLocation::k_DLC, "Temp");
                 mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, ContentDownloader::Delegate(this, &CContentManagementSystem::OnContentDownloadComplete));
             }
             else
             {
             	DEBUG_LOG("CMS: Content update finished");
-                mOnDownloadCompleteDelegate(CContentManagementSystem::CONTENT_SUCCEEDED);
+                mOnDownloadCompleteDelegate(Result::k_contentSucceeded);
             }
         }
         //-----------------------------------------------------------
@@ -231,7 +231,7 @@ namespace moFlo
 				}
                 
                 //Save the new content manifest
-                mpServerManifest->SaveFile(Core::SL_DLC, "ContentManifest.moman");
+                mpServerManifest->SaveFile(Core::StorageLocation::k_DLC, "ContentManifest.moman");
                 
                 DEBUG_LOG("CMS: Installing content updates complete");
                 
@@ -242,12 +242,12 @@ namespace moFlo
                 Core::CLocalDataStore::GetSingletonPtr()->SetValueForKey("MOCMSCachedDLC", true);
                 
                 //Tell the delegate all is good
-                inDelegate(CContentManagementSystem::CONTENT_SUCCEEDED);
+                inDelegate(Result::k_contentSucceeded);
             }
             else
             {
                 //Tell the delegate all is bad
-                inDelegate(CContentManagementSystem::CONTENT_FAILED);
+                inDelegate(Result::k_contentFailed);
             }
             
             ClearDownloadData();
@@ -265,18 +265,18 @@ namespace moFlo
         {
             switch(ineResult)
             {
-                case ContentDownloader::SUCCEEDED:
+                case ContentDownloader::Result::k_succeeded:
                     DEBUG_LOG("CMS: Content manifest download complete");
                     mstrServerManifestData += instrManifest;
                     BuildDownloadList(mstrServerManifestData); 
                     mstrServerManifestData.clear();
                     break;
-                case ContentDownloader::FAILED:
+                case ContentDownloader::Result::k_failed:
                     DEBUG_LOG("CMS: Content manifest download failed: " + instrManifest);
                     mstrServerManifestData.clear();
-                    mbDLCCachePurged ? mOnUpdateCheckCompleteDelegate(UPDATE_CHECK_FAILED_BLOCKING) : mOnUpdateCheckCompleteDelegate(UPDATE_CHECK_FAILED);
+                    mbDLCCachePurged ? mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateCheckFailedBlocking) : mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateCheckFailed);
                     break;
-                case ContentDownloader::FLUSHED:
+                case ContentDownloader::Result::k_flushed:
                     DEBUG_LOG("CMS: Content manifest download flushed");
                     mstrServerManifestData += instrManifest;
                     break;
@@ -298,7 +298,7 @@ namespace moFlo
         {
         	switch(ineResult)
             {
-                case ContentDownloader::SUCCEEDED:
+                case ContentDownloader::Result::k_succeeded:
                 {
                     DEBUG_LOG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package download complete");
                     if(SavePackageToFile(mPackageDetails[mudwCurrentPackageDownload], instrData, true))
@@ -309,7 +309,7 @@ namespace moFlo
                         if(mudwCurrentPackageDownload >= (mPackageDetails.size() - 1))
                         {
                             DEBUG_LOG("CMS: Content update finished");
-                            mOnDownloadCompleteDelegate(CContentManagementSystem::CONTENT_SUCCEEDED);
+                            mOnDownloadCompleteDelegate(Result::k_contentSucceeded);
                         }
                         else
                         {
@@ -319,7 +319,7 @@ namespace moFlo
                         break;
                     }
                 }
-                case ContentDownloader::FAILED:
+                case ContentDownloader::Result::k_failed:
                 {
                 	DEBUG_LOG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package download failed");
                     
@@ -328,11 +328,11 @@ namespace moFlo
                     
                     if(mOnDownloadCompleteDelegate)
                     {
-                        mOnDownloadCompleteDelegate(CContentManagementSystem::CONTENT_FAILED);
+                        mOnDownloadCompleteDelegate(Result::k_contentFailed);
                     }
                     break;
                 }
-                case ContentDownloader::FLUSHED:
+                case ContentDownloader::Result::k_flushed:
                 {
                 	DEBUG_LOG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package exceeds buffer size and is being flushed");
                     SavePackageToFile(mPackageDetails[mudwCurrentPackageDownload], instrData, false);
@@ -360,11 +360,11 @@ namespace moFlo
                 ERROR_LOG("CMS: Server content manifest is invalid");
                 if(mbDLCCachePurged)
                 {
-                    mOnUpdateCheckCompleteDelegate(UPDATE_CHECK_FAILED_BLOCKING);
+                    mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateCheckFailedBlocking);
                 }
                 else
                 {
-                    mOnUpdateCheckCompleteDelegate(UPDATE_CHECK_FAILED);
+                    mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateCheckFailed);
                 }
 
                 return;
@@ -374,7 +374,7 @@ namespace moFlo
             if(!Core::XMLUtils::GetAttributeValueOrDefault<bool>(mpServerManifest->RootElement(), "DLCEnabled", false))
             {
                 DEBUG_LOG("CMS: DLC disabled by server");
-				mOnUpdateCheckCompleteDelegate(UPDATE_NOT_AVAILABLE);
+				mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateNotAvailable);
                 return;
             }
             
@@ -504,15 +504,15 @@ namespace moFlo
             
             if(bRequiresUpdating && mbDLCCachePurged)
             {
-                mOnUpdateCheckCompleteDelegate(UPDATE_AVAILABLE_BLOCKING);
+                mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateAvailableBlocking);
             }
             else if(bRequiresUpdating && !mbDLCCachePurged)
             {
-                mOnUpdateCheckCompleteDelegate(UPDATE_AVAILABLE);
+                mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateAvailable);
             }
             else
             {
-                mOnUpdateCheckCompleteDelegate(UPDATE_NOT_AVAILABLE);
+                mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateNotAvailable);
             }
             
             SAFE_DELETE(pCurrentManifest);
@@ -560,7 +560,7 @@ namespace moFlo
                 {
                     //It exists in the bundle let's remove the old version from DLC cache
                     //Remove old content
-                    Core::CApplication::GetFileSystemPtr()->DeleteFile(Core::SL_DLC, strPackageID + "/" + strFileName);
+                    Core::CApplication::GetFileSystemPtr()->DeleteFile(Core::StorageLocation::k_DLC, strPackageID + "/" + strFileName);
                     
                     //On to the next file
                     pFileEl = Core::XMLUtils::NextSiblingElementWithName(pFileEl);
@@ -582,14 +582,14 @@ namespace moFlo
             std::string strFile = "Temp/" + insPackageDetails.strID + ".packzip";
 
             //Append to the file as it can take multiple writes
-            Core::FileStreamPtr pFileStream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(Core::SL_DLC, strFile, Core::FM_WRITE_BINARY_APPEND);
+            Core::FileStreamPtr pFileStream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_DLC, strFile, Core::FileMode::k_writeBinaryAppend);
 			pFileStream->Write((s8*)instrZippedPackage.data(), (s32)instrZippedPackage.size());
             pFileStream->Close();
             
             //Check if the full file has been written and perform a checksum validation 
             if(inbFullyDownloaded)
             {
-                std::string strChecksum = CalculateChecksum(Core::SL_DLC, strFile);
+                std::string strChecksum = CalculateChecksum(Core::StorageLocation::k_DLC, strFile);
                 DEBUG_LOG("CMS: Package Checksum: " + strChecksum + " Pristine Checksum: " + insPackageDetails.strChecksum);
                 if(strChecksum != insPackageDetails.strChecksum)
                 {
@@ -694,12 +694,12 @@ namespace moFlo
                 {
                     //There is a nested folder so we need to create the directory structure
                     std::string strPath = GetPathExcludingFileName(strFilePath);
-                    Core::CApplication::GetFileSystemPtr()->CreateDirectory(Core::SL_DLC, "/" + strPath);
+                    Core::CApplication::GetFileSystemPtr()->CreateDirectory(Core::StorageLocation::k_DLC, "/" + strPath);
                 }
                 
                 if(IsFile(strFilePath))
                 {
-                    Core::CApplication::GetFileSystemPtr()->CreateFile(Core::SL_DLC, "/" + strFilePath, pbyDataBuffer, FileInfo.uncompressed_size);
+                    Core::CApplication::GetFileSystemPtr()->CreateFile(Core::StorageLocation::k_DLC, "/" + strFilePath, pbyDataBuffer, FileInfo.uncompressed_size);
                 }
                 
                 //Close current file and jump to the next
@@ -749,20 +749,20 @@ namespace moFlo
         {
             if(inbCheckOnlyBundle)
             {
-                if(Core::CApplication::GetFileSystemPtr()->DoesFileExist(Core::SL_PACKAGE, Core::CApplication::GetFileSystemPtr()->GetPackageDLCDirectory() + instrFilename))
+                if(Core::CApplication::GetFileSystemPtr()->DoesFileExist(Core::StorageLocation::k_package, Core::CApplication::GetFileSystemPtr()->GetPackageDLCDirectory() + instrFilename))
                 {
                     //Check if the file has become corrupted
-                    return (CalculateChecksum(Core::SL_PACKAGE, Core::CApplication::GetFileSystemPtr()->GetPackageDLCDirectory() + instrFilename) == instrChecksum);
+                    return (CalculateChecksum(Core::StorageLocation::k_package, Core::CApplication::GetFileSystemPtr()->GetPackageDLCDirectory() + instrFilename) == instrChecksum);
                 }
                 
                 return false;
             }
             else
             {
-                if(Core::CApplication::GetFileSystemPtr()->DoesFileExist(Core::SL_DLC, instrFilename))
+                if(Core::CApplication::GetFileSystemPtr()->DoesFileExist(Core::StorageLocation::k_DLC, instrFilename))
                 {
                     //Check if the file has become corrupted
-                    return (CalculateChecksum(Core::SL_DLC, instrFilename) == instrChecksum);
+                    return (CalculateChecksum(Core::StorageLocation::k_DLC, instrFilename) == instrChecksum);
                 }
                 
                 return false;
@@ -777,7 +777,7 @@ namespace moFlo
         //-----------------------------------------------------------
         void CContentManagementSystem::DeleteDirectory(const std::string& instrDirectory) const
         {
-            moFlo::Core::CApplication::GetFileSystemPtr()->DeleteDirectory(moFlo::Core::SL_DLC, instrDirectory);
+            moFlo::Core::CApplication::GetFileSystemPtr()->DeleteDirectory(Core::StorageLocation::k_DLC, instrDirectory);
         }
     }
 }

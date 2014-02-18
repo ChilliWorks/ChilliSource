@@ -48,9 +48,9 @@ namespace moFlo
             mfProgressAbsHeight = 0.0f;
             mfProgressRelHeight = 1.0f;
             mpProgressImage->SetSize(UnifiedVector2(Core::CVector2(0.0f, 1.0f), Core::CVector2(0, 0)));
-            mpProgressImage->SetLocalAlignment(Core::ALIGN_MIDDLE_LEFT);
+            mpProgressImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
             mpProgressImage->EnableAlignmentToParent(true);
-            mpProgressImage->SetAlignmentToParent(Core::ALIGN_MIDDLE_LEFT);
+            mpProgressImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
             mpBackgroundImage->AddSubview(mpProgressImage);
         }
         //------------------------------------------------------
@@ -69,15 +69,15 @@ namespace moFlo
             AddSubview(mpBackgroundImage);
             
             mpProgressImage->SetSize(0.0f, 1.0f, 0, 0);
-            mpProgressImage->SetLocalAlignment(Core::ALIGN_MIDDLE_LEFT);
+            mpProgressImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
             mpProgressImage->EnableAlignmentToParent(true);
-            mpProgressImage->SetAlignmentToParent(Core::ALIGN_MIDDLE_LEFT);
+            mpProgressImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
             mpBackgroundImage->AddSubview(mpProgressImage);
             
             std::string strValue;
 
             //---Background Texture
-            Core::STORAGE_LOCATION eBackgroundTextureLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eBackgroundTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("BackgroundTextureLocation", strValue))
             {
                 eBackgroundTextureLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -87,7 +87,7 @@ namespace moFlo
                 mpBackgroundImage->SetTexture(LOAD_RESOURCE(Rendering::ITexture, eBackgroundTextureLocation, strValue));
             }
             //---Progress Texture
-            Core::STORAGE_LOCATION eProgressTextureLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eProgressTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("ProgressTextureLocation", strValue))
             {
                 eProgressTextureLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -97,7 +97,7 @@ namespace moFlo
                 mpProgressImage->SetTexture(LOAD_RESOURCE(Rendering::ITexture, eProgressTextureLocation, strValue));
             }
             //---Background sprite sheet
-            Core::STORAGE_LOCATION eBackgroundSpriteSheetLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eBackgroundSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("BackgroundSpriteSheetLocation", strValue))
             {
                 eBackgroundSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -107,7 +107,7 @@ namespace moFlo
                 SetBackgroundSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eBackgroundSpriteSheetLocation, strValue));
             }
 			//---Progress sprite sheet
-            Core::STORAGE_LOCATION eProgressSpriteSheetLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eProgressSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("ProgressSpriteSheetLocation", strValue))
             {
                 eProgressSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);

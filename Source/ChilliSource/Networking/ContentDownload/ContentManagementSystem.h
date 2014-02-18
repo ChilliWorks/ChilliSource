@@ -22,19 +22,19 @@ namespace moFlo
         public:
             DECLARE_NAMED_INTERFACE(CContentManagementSystem);
             
-            enum UpdateResult
+            enum class UpdateResult
             {
-                UPDATE_AVAILABLE,               //There are updates available to download and we are connected
-                UPDATE_AVAILABLE_BLOCKING,      //There are updates available to download and we must download them as the old assets have been purged
-                UPDATE_CHECK_FAILED,            //The downloading of the content manifest has failed
-                UPDATE_CHECK_FAILED_BLOCKING,   //The DLC on the cache has been cleared and a download is required but the manifest has failed
-                UPDATE_NOT_AVAILABLE,           //There are no updates available
+                k_updateAvailable,             //There are updates available to download and we are connected
+                k_updateAvailableBlocking,     //There are updates available to download and we must download them as the old assets have been purged
+                k_updateCheckFailed,           //The downloading of the content manifest has failed
+                k_updateCheckFailedBlocking,   //The DLC on the cache has been cleared and a download is required but the manifest has failed
+                k_updateNotAvailable,          //There are no updates available
             };
             
-            enum Result
+            enum class Result
             {
-                CONTENT_SUCCEEDED,
-                CONTENT_FAILED
+                k_contentSucceeded,
+                k_contentFailed
             };
             
             typedef fastdelegate::FastDelegate1<UpdateResult> CheckForUpdateDelegate;
@@ -241,7 +241,7 @@ namespace moFlo
             /// @param File path
             /// @return Checksum string
             //-----------------------------------------------------------
-            static std::string CalculateChecksum(Core::STORAGE_LOCATION ineLocation, const std::string& instrFilePath);
+            static std::string CalculateChecksum(Core::StorageLocation ineLocation, const std::string& instrFilePath);
             //-----------------------------------------------------------
             /// Download Next Package
             ///

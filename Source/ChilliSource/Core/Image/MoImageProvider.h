@@ -46,7 +46,7 @@ namespace moFlo
         /// @param Out: Resource
         /// @return Whether the resource loaded
         //----------------------------------------------------------------
-        bool CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+        bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
         //----------------------------------------------------------------
         /// Create Image From File
         ///
@@ -56,7 +56,7 @@ namespace moFlo
         /// @param Out: Resource
         /// @return Whether the resource loaded
         //----------------------------------------------------------------
-        bool CreateImageFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource);
+        bool CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource);
     private:
         struct ImageHeaderVersion2
         {

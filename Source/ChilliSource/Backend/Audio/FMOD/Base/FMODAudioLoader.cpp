@@ -33,8 +33,8 @@ namespace moFlo
 		CFMODAudioLoader::CFMODAudioLoader(Audio::IAudioSystem* inpFMODSystem) 
 		: CAudioLoader(inpFMODSystem), mpFMODSystem(static_cast<CFMODSystem*>(inpFMODSystem))
 		{
-			mstrBundlePath = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(Core::SL_PACKAGE) + "/";
-			mstrDocumentsPath = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(Core::SL_CACHE) + "/";
+			mstrBundlePath = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_package) + "/";
+			mstrDocumentsPath = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_cache) + "/";
             mstrDLCPath = Core::CApplication::GetFileSystemPtr()->GetPackageDLCDirectory() + "/";
 		}
 		//----------------------------------------------------------------------------
@@ -57,7 +57,7 @@ namespace moFlo
 		/// @param Out: Resource object
 		/// @return Success
 		//----------------------------------------------------------------------------
-		bool CFMODAudioLoader::CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool CFMODAudioLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
             std::string strFilePath;
             static_cast<iOSPlatform::CFileSystem*>(Core::CApplication::GetFileSystemPtr())->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
@@ -79,7 +79,7 @@ namespace moFlo
 		/// @param Out: Resource object
 		/// @return Success
 		//----------------------------------------------------------------------------
-		bool CFMODAudioLoader::StreamResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool CFMODAudioLoader::StreamResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
             std::string strFilePath;
             static_cast<iOSPlatform::CFileSystem*>(Core::CApplication::GetFileSystemPtr())->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);

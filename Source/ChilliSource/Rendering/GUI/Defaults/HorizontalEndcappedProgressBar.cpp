@@ -32,16 +32,16 @@ namespace moFlo
 		{
 
 			mpBGImage = HorizontalStretchableImagePtr(new CHorizontalStretchableImage());
-			mpBGImage->SetLocalAlignment(Core::ALIGN_MIDDLE_LEFT);
+			mpBGImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
 			mpBGImage->EnableAlignmentToParent(true);
-			mpBGImage->SetAlignmentToParent(Core::ALIGN_MIDDLE_LEFT);
+			mpBGImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
             mpBGImage->EnableTouchConsumption(false);
 			AddSubview(mpBGImage);
 			
 			mpFillImage = HorizontalStretchableImagePtr(new CHorizontalStretchableImage());
-			mpFillImage->SetLocalAlignment(Core::ALIGN_MIDDLE_LEFT);
+			mpFillImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
 			mpFillImage->EnableAlignmentToParent(true);
-			mpFillImage->SetAlignmentToParent(Core::ALIGN_MIDDLE_LEFT);
+			mpFillImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
             mpFillImage->EnableTouchConsumption(false);
 			AddSubview(mpFillImage);
 		}
@@ -54,23 +54,23 @@ namespace moFlo
 		: CProgressBar(insParams), HeightFromImage(false)
 		{
 			mpBGImage = HorizontalStretchableImagePtr(new CHorizontalStretchableImage());
-			mpBGImage->SetLocalAlignment(Core::ALIGN_MIDDLE_LEFT);
+			mpBGImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
 			mpBGImage->EnableAlignmentToParent(true);
-			mpBGImage->SetAlignmentToParent(Core::ALIGN_MIDDLE_LEFT);
+			mpBGImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
             mpBGImage->EnableTouchConsumption(false);
 			AddSubview(mpBGImage);
 			
 			mpFillImage = HorizontalStretchableImagePtr(new CHorizontalStretchableImage());
-			mpFillImage->SetLocalAlignment(Core::ALIGN_MIDDLE_LEFT);
+			mpFillImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
 			mpFillImage->EnableAlignmentToParent(true);
-			mpFillImage->SetAlignmentToParent(Core::ALIGN_MIDDLE_LEFT);
+			mpFillImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
             mpFillImage->EnableTouchConsumption(false);
 			AddSubview(mpFillImage);
 			
 			std::string strValue;
 			
 			//---Sprite sheet
-            Core::STORAGE_LOCATION eSpriteSheetLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SpriteSheetLocation", strValue))
             {
                 eSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);

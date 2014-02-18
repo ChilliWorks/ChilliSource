@@ -64,9 +64,9 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// Create Resource From File
 		//----------------------------------------------------------------------------
-		bool CMaterialLoader::CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool CMaterialLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
-            DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::STORAGE_LOCATION, std::string> > > aShaderFiles;
+            DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > > aShaderFiles;
             DYNAMIC_ARRAY<TextureDesc> aTextureFiles;
             DYNAMIC_ARRAY<TextureDesc> aCubemapFiles;
             if(BuildMaterialFromFile(ineStorageLocation, inFilePath, aShaderFiles, aTextureFiles, aCubemapFiles, outpResource) == true)
@@ -91,7 +91,7 @@ namespace moFlo
                 {
                     for(u32 i=0; i<aTextureFiles.size(); ++i)
                     {
-                        pMaterial->AddTexture(pTextureManager->GetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::CImage::FORMAT_DEFAULT, aTextureFiles[i].mbMipMapped));
+                        pMaterial->AddTexture(pTextureManager->GetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::CImage::Format::k_default, aTextureFiles[i].mbMipMapped));
                     }
                 }
                 
@@ -100,11 +100,11 @@ namespace moFlo
                 {
                     for(u32 i=0; i<aCubemapFiles.size(); ++i)
                     {
-                        pMaterial->SetCubemap(pCubemapManager->GetCubemapFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile, Core::CImage::FORMAT_DEFAULT, aCubemapFiles[i].mbMipMapped));
+                        pMaterial->SetCubemap(pCubemapManager->GetCubemapFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile, Core::CImage::Format::k_default, aCubemapFiles[i].mbMipMapped));
                     }
                 }
                 
-                pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+                pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
                 
                 return true;
             }
@@ -114,10 +114,10 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// Async Create Resource From File
 		//----------------------------------------------------------------------------
-		bool CMaterialLoader::AsyncCreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool CMaterialLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
 			//Start the material building task.
-			Task3<Core::STORAGE_LOCATION, const std::string&, Core::ResourcePtr&> BuildMaterialTask(this, &CMaterialLoader::BuildMaterialTask, ineStorageLocation, inFilePath, outpResource);
+			Task3<Core::StorageLocation, const std::string&, Core::ResourcePtr&> BuildMaterialTask(this, &CMaterialLoader::BuildMaterialTask, ineStorageLocation, inFilePath, outpResource);
 			CTaskScheduler::ScheduleTask(BuildMaterialTask);
 			
 			return true;
@@ -125,10 +125,10 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// Build Material Task
 		//----------------------------------------------------------------------------
-		void CMaterialLoader::BuildMaterialTask(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		void CMaterialLoader::BuildMaterialTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
 			//build the material
-            DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::STORAGE_LOCATION, std::string> > > aShaderFiles;
+            DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > > aShaderFiles;
             DYNAMIC_ARRAY<TextureDesc> aTextureFiles;
             DYNAMIC_ARRAY<TextureDesc> aCubemapFiles;
 			if(BuildMaterialFromFile(ineStorageLocation, inFilePath, aShaderFiles, aTextureFiles, aCubemapFiles, outpResource) == true)
@@ -151,7 +151,7 @@ namespace moFlo
                 {
                     for(u32 i=0; i<aTextureFiles.size(); ++i)
                     {
-                        TexturePtr pTexture = pTextureManager->AsyncGetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::CImage::FORMAT_DEFAULT, aTextureFiles[i].mbMipMapped);
+                        TexturePtr pTexture = pTextureManager->AsyncGetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::CImage::Format::k_default, aTextureFiles[i].mbMipMapped);
                         pMaterial->AddTexture(pTexture);
                         pTexture->WaitTilLoaded();
                     }
@@ -162,13 +162,13 @@ namespace moFlo
                 {
                     for(u32 i=0; i<aCubemapFiles.size(); ++i)
                     {
-                        CubemapPtr pCubemap = pCubemapManager->AsyncGetCubemapFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile, Core::CImage::FORMAT_DEFAULT, aCubemapFiles[i].mbMipMapped);
+                        CubemapPtr pCubemap = pCubemapManager->AsyncGetCubemapFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile, Core::CImage::Format::k_default, aCubemapFiles[i].mbMipMapped);
                         pMaterial->SetCubemap(pCubemap);
                         pCubemap->WaitTilLoaded();
                     }
                 }
                 
-                pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+                pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
                 
                 CTaskScheduler::ScheduleMainThreadTask(Task1<Core::ResourcePtr&>(this, &CMaterialLoader::SetLoadedTask, outpResource));
 			}
@@ -183,8 +183,8 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// Build Material From File
 		//----------------------------------------------------------------------------
-		bool CMaterialLoader::BuildMaterialFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath,
-                                                    DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::STORAGE_LOCATION, std::string> > >& outaShaderFiles,
+		bool CMaterialLoader::BuildMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath,
+                                                    DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles,
                                                     DYNAMIC_ARRAY<TextureDesc>& outaTextureFiles,
                                                     DYNAMIC_ARRAY<TextureDesc>& outaCubemapFiles,
                                                     Core::ResourcePtr& outpResource)
@@ -192,9 +192,9 @@ namespace moFlo
             const u32 kudwNumShaderNodes = 3;
             const std::pair<std::string, ShaderPass> kaShaderNodes[kudwNumShaderNodes] =
             {
-                std::make_pair("AmbientLightPass", SP_AMBIENT),
-                std::make_pair("DirectionalLightPass", SP_DIRECTIONAL),
-                std::make_pair("PointLightPass", SP_POINT)
+                std::make_pair("AmbientLightPass", ShaderPass::k_ambient),
+                std::make_pair("DirectionalLightPass", ShaderPass::k_directional),
+                std::make_pair("PointLightPass", ShaderPass::k_point)
             };
             
 			CMaterial* pMaterial = (CMaterial*)(outpResource.get());
@@ -250,7 +250,7 @@ namespace moFlo
 					const std::string strDstFunc = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pBlendFuncEl, "dst", "One");
 					AlphaBlend eDstFunc = ConvertStringToBlendFunction(strDstFunc);
 					
-					if(eSrcFunc != AB_UNKNOWN && eDstFunc != AB_UNKNOWN)
+					if(eSrcFunc != AlphaBlend::k_unknown && eDstFunc != AlphaBlend::k_unknown)
 					{
 						pMaterial->SetBlendFunction(eSrcFunc, eDstFunc);
 					}
@@ -405,130 +405,130 @@ namespace moFlo
         //----------------------------------------------------------------------------
 		/// Get Shader Files For Material Type
 		//----------------------------------------------------------------------------
-        void CMaterialLoader::GetShaderFilesForMaterialType(const std::string& instrType, DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::STORAGE_LOCATION, std::string> > >& outaShaderFiles) const
+        void CMaterialLoader::GetShaderFilesForMaterialType(const std::string& instrType, DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles) const
         {
             if(instrType == "Sprite")
             {
-                outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/Sprite")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/Sprite")));
                 return;
             }
             if(instrType == "Static")
             {
-                outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/Static")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/Static")));
                 return;
             }
             if(instrType == "StaticAmbient")
             {
-                outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/StaticAmbient")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/StaticAmbient")));
                 return;
             }
             if(instrType == "StaticBlinn")
             {
-                outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/StaticAmbient")));
-                outaShaderFiles.push_back(std::make_pair(SP_DIRECTIONAL, std::make_pair(Core::SL_PACKAGE, "Core/StaticBlinnDirectional")));
-                outaShaderFiles.push_back(std::make_pair(SP_POINT, std::make_pair(Core::SL_PACKAGE, "Core/StaticBlinnPoint")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/StaticAmbient")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_directional, std::make_pair(Core::StorageLocation::k_package, "Core/StaticBlinnDirectional")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_point, std::make_pair(Core::StorageLocation::k_package, "Core/StaticBlinnPoint")));
                 return;
             }
             if(instrType == "StaticBlinnShadowed")
             {
             	if (mpRenderCapabilities->IsShadowMappingSupported() == true)
             	{
-            		outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/StaticAmbient")));
-                	outaShaderFiles.push_back(std::make_pair(SP_DIRECTIONAL, std::make_pair(Core::SL_PACKAGE, "Core/StaticBlinnShadowedDirectional")));
-                	outaShaderFiles.push_back(std::make_pair(SP_POINT, std::make_pair(Core::SL_PACKAGE, "Core/StaticBlinnPoint")));
+            		outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/StaticAmbient")));
+                	outaShaderFiles.push_back(std::make_pair(ShaderPass::k_directional, std::make_pair(Core::StorageLocation::k_package, "Core/StaticBlinnShadowedDirectional")));
+                	outaShaderFiles.push_back(std::make_pair(ShaderPass::k_point, std::make_pair(Core::StorageLocation::k_package, "Core/StaticBlinnPoint")));
             	}
             	else
             	{
-            		outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/StaticAmbient")));
-					outaShaderFiles.push_back(std::make_pair(SP_DIRECTIONAL, std::make_pair(Core::SL_PACKAGE, "Core/StaticBlinnDirectional")));
-					outaShaderFiles.push_back(std::make_pair(SP_POINT, std::make_pair(Core::SL_PACKAGE, "Core/StaticBlinnPoint")));
+            		outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/StaticAmbient")));
+					outaShaderFiles.push_back(std::make_pair(ShaderPass::k_directional, std::make_pair(Core::StorageLocation::k_package, "Core/StaticBlinnDirectional")));
+					outaShaderFiles.push_back(std::make_pair(ShaderPass::k_point, std::make_pair(Core::StorageLocation::k_package, "Core/StaticBlinnPoint")));
             	}
                 return;
             }
             if(instrType == "StaticBlinnPerVertex")
             {
-                outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/StaticAmbient")));
-                outaShaderFiles.push_back(std::make_pair(SP_DIRECTIONAL, std::make_pair(Core::SL_PACKAGE, "Core/StaticBlinnPerVertexDirectional")));
-                outaShaderFiles.push_back(std::make_pair(SP_POINT, std::make_pair(Core::SL_PACKAGE, "Core/StaticBlinnPerVertexPoint")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/StaticAmbient")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_directional, std::make_pair(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexDirectional")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_point, std::make_pair(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexPoint")));
                 return;
             }
             if(instrType == "StaticBlinnPerVertexShadowed")
             {
             	if (mpRenderCapabilities->IsShadowMappingSupported() == true)
             	{
-            		outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/StaticAmbient")));
-                	outaShaderFiles.push_back(std::make_pair(SP_DIRECTIONAL, std::make_pair(Core::SL_PACKAGE, "Core/StaticBlinnPerVertexShadowedDirectional")));
-                	outaShaderFiles.push_back(std::make_pair(SP_POINT, std::make_pair(Core::SL_PACKAGE, "Core/StaticBlinnPerVertexPoint")));
+            		outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/StaticAmbient")));
+                	outaShaderFiles.push_back(std::make_pair(ShaderPass::k_directional, std::make_pair(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexShadowedDirectional")));
+                	outaShaderFiles.push_back(std::make_pair(ShaderPass::k_point, std::make_pair(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexPoint")));
             	}
             	else
             	{
-            		outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/StaticAmbient")));
-					outaShaderFiles.push_back(std::make_pair(SP_DIRECTIONAL, std::make_pair(Core::SL_PACKAGE, "Core/StaticBlinnPerVertexDirectional")));
-					outaShaderFiles.push_back(std::make_pair(SP_POINT, std::make_pair(Core::SL_PACKAGE, "Core/StaticBlinnPerVertexPoint")));
+            		outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/StaticAmbient")));
+					outaShaderFiles.push_back(std::make_pair(ShaderPass::k_directional, std::make_pair(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexDirectional")));
+					outaShaderFiles.push_back(std::make_pair(ShaderPass::k_point, std::make_pair(Core::StorageLocation::k_package, "Core/StaticBlinnPerVertexPoint")));
             	}
                 return;
             }
             if(instrType == "Animated")
             {
-                outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/Animated")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/Animated")));
                 return;
             }
             if(instrType == "AnimatedAmbient")
             {
-                outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedAmbient")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedAmbient")));
                 return;
             }
             if(instrType == "AnimatedBlinn")
             {
-                outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedAmbient")));
-                outaShaderFiles.push_back(std::make_pair(SP_DIRECTIONAL, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedBlinnDirectional")));
-                outaShaderFiles.push_back(std::make_pair(SP_POINT, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedBlinnPoint")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedAmbient")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_directional, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedBlinnDirectional")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_point, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedBlinnPoint")));
                 return;
             }
             if(instrType == "AnimatedBlinnShadowed")
             {
             	if (mpRenderCapabilities->IsShadowMappingSupported() == true)
             	{
-            		outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedAmbient")));
-            		outaShaderFiles.push_back(std::make_pair(SP_DIRECTIONAL, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedBlinnShadowedDirectional")));
-            		outaShaderFiles.push_back(std::make_pair(SP_POINT, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedBlinnPoint")));
+            		outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedAmbient")));
+            		outaShaderFiles.push_back(std::make_pair(ShaderPass::k_directional, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedBlinnShadowedDirectional")));
+            		outaShaderFiles.push_back(std::make_pair(ShaderPass::k_point, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedBlinnPoint")));
             	}
             	else
             	{
-            		outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedAmbient")));
-					outaShaderFiles.push_back(std::make_pair(SP_DIRECTIONAL, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedBlinnDirectional")));
-					outaShaderFiles.push_back(std::make_pair(SP_POINT, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedBlinnPoint")));
+            		outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedAmbient")));
+					outaShaderFiles.push_back(std::make_pair(ShaderPass::k_directional, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedBlinnDirectional")));
+					outaShaderFiles.push_back(std::make_pair(ShaderPass::k_point, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedBlinnPoint")));
             	}
                 return;
             }
             if(instrType == "AnimatedBlinnPerVertex")
             {
-                outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedAmbient")));
-                outaShaderFiles.push_back(std::make_pair(SP_DIRECTIONAL, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedBlinnPerVertexDirectional")));
-                outaShaderFiles.push_back(std::make_pair(SP_POINT, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedBlinnPerVertexPoint")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedAmbient")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_directional, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexDirectional")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_point, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexPoint")));
                 return;
             }
             if(instrType == "AnimatedBlinnPerVertexShadowed")
             {
             	if (mpRenderCapabilities->IsShadowMappingSupported() == true)
             	{
-            		outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedAmbient")));
-                	outaShaderFiles.push_back(std::make_pair(SP_DIRECTIONAL, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedBlinnPerVertexShadowedDirectional")));
-                	outaShaderFiles.push_back(std::make_pair(SP_POINT, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedBlinnPerVertexPoint")));
+            		outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedAmbient")));
+                	outaShaderFiles.push_back(std::make_pair(ShaderPass::k_directional, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexShadowedDirectional")));
+                	outaShaderFiles.push_back(std::make_pair(ShaderPass::k_point, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexPoint")));
             	}
             	else
             	{
-            		outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedAmbient")));
-					outaShaderFiles.push_back(std::make_pair(SP_DIRECTIONAL, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedBlinnPerVertexDirectional")));
-					outaShaderFiles.push_back(std::make_pair(SP_POINT, std::make_pair(Core::SL_PACKAGE, "Core/AnimatedBlinnPerVertexPoint")));
+            		outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedAmbient")));
+					outaShaderFiles.push_back(std::make_pair(ShaderPass::k_directional, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexDirectional")));
+					outaShaderFiles.push_back(std::make_pair(ShaderPass::k_point, std::make_pair(Core::StorageLocation::k_package, "Core/AnimatedBlinnPerVertexPoint")));
             	}
                 return;
             }
             if(instrType == "Custom")
             {
-                outaShaderFiles.push_back(std::make_pair(SP_AMBIENT, std::make_pair(Core::SL_PACKAGE, "")));
-                outaShaderFiles.push_back(std::make_pair(SP_DIRECTIONAL, std::make_pair(Core::SL_PACKAGE, "")));
-                outaShaderFiles.push_back(std::make_pair(SP_POINT, std::make_pair(Core::SL_PACKAGE, "")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_ambient, std::make_pair(Core::StorageLocation::k_package, "")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_directional, std::make_pair(Core::StorageLocation::k_package, "")));
+                outaShaderFiles.push_back(std::make_pair(ShaderPass::k_point, std::make_pair(Core::StorageLocation::k_package, "")));
             }
         }
 		//----------------------------------------------------------------------------
@@ -536,27 +536,27 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		AlphaBlend CMaterialLoader::ConvertStringToBlendFunction(const std::string &instrFunc)
 		{
-			if(instrFunc == "Zero")					return AB_ZERO;
-			if(instrFunc == "One")					return AB_ONE;
-			if(instrFunc == "SourceColour")			return AB_SOURCE_COL;
-			if(instrFunc == "OneMinusSourceColour")	return AB_ONE_MINUS_SOURCE_COL;
-			if(instrFunc == "SourceAlpha")			return AB_SOURCE_ALPHA;
-			if(instrFunc == "OneMinusSourceAlpha")	return AB_ONE_MINUS_SOURCE_ALPHA;
-			if(instrFunc == "DestAlpha")			return AB_DEST_ALPHA;
-			if(instrFunc == "OneMinusDestAlpha")	return AB_ONE_MINUS_DEST_ALPHA;
+			if(instrFunc == "Zero")					return AlphaBlend::k_zero;
+			if(instrFunc == "One")					return AlphaBlend::k_one;
+			if(instrFunc == "SourceColour")			return AlphaBlend::k_sourceCol;
+			if(instrFunc == "OneMinusSourceColour")	return AlphaBlend::k_oneMinusSourceCol;
+			if(instrFunc == "SourceAlpha")			return AlphaBlend::k_sourceAlpha;
+			if(instrFunc == "OneMinusSourceAlpha")	return AlphaBlend::k_oneMinusSourceAlpha;
+			if(instrFunc == "DestAlpha")			return AlphaBlend::k_destAlpha;
+			if(instrFunc == "OneMinusDestAlpha")	return AlphaBlend::k_oneMinusDestAlpha;
 			
 			//No blend function found
-			return AB_UNKNOWN;
+			return AlphaBlend::k_unknown;
 		}
         //----------------------------------------------------------------------------
 		/// Convert String To Cull Face
 		//----------------------------------------------------------------------------
 		CullFace CMaterialLoader::ConvertStringToCullFace(const std::string &instrFace)
 		{
-			if(instrFace == "Front")    return CF_FRONT;
-			if(instrFace == "Back")		return CF_BACK;
+			if(instrFace == "Front")    return CullFace::k_front;
+			if(instrFace == "Back")		return CullFace::k_back;
 
-			return CF_FRONT;
+			return CullFace::k_front;
 		}
 	}
 }

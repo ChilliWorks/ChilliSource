@@ -121,7 +121,7 @@ namespace moFlo
         //-------------------------------------------------
         void CParticleComponent::Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass)
         {
-            if (ineShaderPass == SP_AMBIENT)
+            if (ineShaderPass == ShaderPass::k_ambient)
             {
                 for(DYNAMIC_ARRAY<CParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
                 {

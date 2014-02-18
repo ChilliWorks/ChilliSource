@@ -25,29 +25,29 @@ namespace moFlo
 		///
 		/// FileMode is used to specify how the file is going to be opened and read.
 		//=================================================================
-		enum FILE_MODE
+		enum class FileMode
 		{
-			FM_READ,
-			FM_READ_BINARY,
-			FM_WRITE,
-			FM_WRITE_APPEND,
-			FM_WRITE_AT_END,
-			FM_WRITE_TRUNCATE,
-			FM_WRITE_BINARY,
-			FM_WRITE_BINARY_APPEND,
-			FM_WRITE_BINARY_AT_END,
-			FM_WRITE_BINARY_TRUNCATE
+            k_read,
+            k_readBinary,
+            k_write,
+            k_writeAppend,
+            k_writeAtEnd,
+            k_writeTruncate,
+            k_writeBinary,
+            k_writeBinaryAppend,
+            k_writeBinaryAtEnd,
+            k_writeBinaryTruncate
 		};
 		//=================================================================
 		/// Seek Dir
 		///
 		/// An enum describing from where a seek should occur.
 		//=================================================================
-		enum SEEK_DIR
+		enum class SeekDir
 		{
-			SD_BEGINNING,
-			SD_CURRENT,
-			SD_END
+            k_beginning,
+            k_current,
+            k_end
 		};
 		//=================================================================
 		/// IFileStream
@@ -240,7 +240,7 @@ namespace moFlo
 			/// @param the new position.
 			/// @param the direction from which to seek.
 			//--------------------------------------------------------------------------------------------------
-			virtual void SeekG(s32 indwPosition, SEEK_DIR ineDir);
+			virtual void SeekG(s32 indwPosition, SeekDir ineDir);
 			//--------------------------------------------------------------------------------------------------
 			/// Sync
 			///
@@ -313,7 +313,7 @@ namespace moFlo
 			/// @param the new position.
 			/// @param the direction from which to seek.
 			//--------------------------------------------------------------------------------------------------
-			virtual void SeekP(s32 indwPosition, SEEK_DIR ineDir);
+			virtual void SeekP(s32 indwPosition, SeekDir ineDir);
 			//--------------------------------------------------------------------------------------------------
 			/// Flush
 			///
@@ -345,7 +345,7 @@ namespace moFlo
 			/// @param The path to the file to be opened.
 			/// @param The file mode with which the file should be opened.
 			//--------------------------------------------------------------------------------------------------
-			virtual void Open(const std::string& instrFilename, FILE_MODE ineMode);
+			virtual void Open(const std::string& instrFilename, FileMode ineMode);
             //--------------------------------------------------------------------------------------------------
 			/// Open Encrypted
 			///
@@ -357,7 +357,7 @@ namespace moFlo
             /// @param Private AES key
 			/// @param The file mode with which the file should be opened.
 			//--------------------------------------------------------------------------------------------------
-            void OpenEncrypted(const std::string& instrFilename, const std::string& instrPrivateKey, FILE_MODE ineMode);
+            void OpenEncrypted(const std::string& instrFilename, const std::string& instrPrivateKey, FileMode ineMode);
             //--------------------------------------------------------------------------------------------------
 			/// Constructor
 			///
@@ -372,7 +372,7 @@ namespace moFlo
             //--------------------------------------------------------------------------------------------------
             std::ios_base::openmode GetFileMode() const;
             
-            Core::FILE_MODE meFileMode;
+            Core::FileMode meFileMode;
         
 			std::string mstrFilename;
 			std::fstream mFileStream;

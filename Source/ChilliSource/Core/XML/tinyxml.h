@@ -1416,13 +1416,13 @@ public:
 
 #ifdef TIXML_MOFLO
     //TinyXML calls that have been altered to work with MoFlow's File IO system
-	bool LoadFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
-	bool LoadFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const char * filename, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
-	bool LoadFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string& filename, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
+	bool LoadFile(moFlo::Core::StorageLocation ineStorageLocation, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
+	bool LoadFile(moFlo::Core::StorageLocation ineStorageLocation, const char * filename, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
+	bool LoadFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string& filename, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
 	bool LoadFile( moFlo::Core::FileStreamPtr file, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
-	bool SaveFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation);
-	bool SaveFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const char * filename);
-	bool SaveFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string& filename);
+	bool SaveFile(moFlo::Core::StorageLocation ineStorageLocation);
+	bool SaveFile(moFlo::Core::StorageLocation ineStorageLocation, const char * filename);
+	bool SaveFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string& filename);
 	bool SaveFile(moFlo::Core::FileStreamPtr file);
 #else
 	

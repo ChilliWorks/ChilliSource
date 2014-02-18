@@ -64,20 +64,20 @@ namespace moFlo
 		/// @param File name
 		/// @return Success
 		//----------------------------------------------------------------------------
-        bool CLocalisedText::LoadTextFromFile(STORAGE_LOCATION ineLocation, const std::string & inFilePath, const std::string & inFileName)
+        bool CLocalisedText::LoadTextFromFile(StorageLocation ineLocation, const std::string & inFilePath, const std::string & inFileName)
 		{
             SAFE_DELETE_ARRAY(mpText);
             SAFE_DELETE(mpTextLookup);
             mudwLineCount = 0;
             
-			FileStreamPtr localFile = CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath + inFileName, FM_READ);
+			FileStreamPtr localFile = CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath + inFileName, FileMode::k_read);
             // Load localised text
 			if(LoadLocalisedText(localFile) == false)
             {
                 return false;
             }
             
-			FileStreamPtr idFile = CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath + "TagText.id", FM_READ);
+			FileStreamPtr idFile = CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath + "TagText.id", FileMode::k_read);
             // Load in string IDs
             if(LoadTextID(idFile) == false)
             {

@@ -82,13 +82,13 @@ namespace moFlo
 			///
 			/// @param The storage location of the resource.
 			//-------------------------------------------------------
-			void SetStorageLocation(STORAGE_LOCATION ineStorageLocation);
+			void SetStorageLocation(StorageLocation ineStorageLocation);
 			//-------------------------------------------------------
 			/// Get Storage Location
 			///
 			/// @return The storage location of the resource.
 			//-------------------------------------------------------
-			const STORAGE_LOCATION& GetStorageLocation() const;
+			const StorageLocation& GetStorageLocation() const;
 			//-------------------------------------------------------
 			/// Wait Til Loaded
 			///
@@ -106,7 +106,7 @@ namespace moFlo
 			
 			std::string mstrName;
 			std::string mstrFilename;
-			STORAGE_LOCATION meStorageLocation;
+			StorageLocation meStorageLocation;
 			
 			bool mbIsHighRes;
 			bool mbIsLoaded;

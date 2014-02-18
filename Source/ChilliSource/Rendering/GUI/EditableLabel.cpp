@@ -337,8 +337,8 @@ namespace moFlo
         void CEditableLabel::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
 			//Check if this is on screen
-			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_TOP_RIGHT);
-			Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_BOTTOM_LEFT);
+			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
+			Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft);
 			
 			if(vTopRight.y < 0 || vBottomLeft.y > Core::CScreen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::CScreen::GetOrientedWidth())
 			{
@@ -396,18 +396,18 @@ namespace moFlo
                     if(TextOutlined)
                     {
                         inpCanvas->DrawDistanceOutlinedString(strutf8DisplayString, GetTransform(), TextScale * fAssetTextScale, Font, mCachedChars, TextColour * GetInheritedOpacity(), TextOutlineColour * GetInheritedOpacity(),
-                                                              vAbsoluteLabelSize, fCharacterSpacingScaled, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, OVERFLOW_CLIP, MaxNumLines);
+                                                              vAbsoluteLabelSize, fCharacterSpacingScaled, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, TextOverflowBehaviour::k_clip, MaxNumLines);
                     }
                     else
                     {
                         inpCanvas->DrawDistanceString(strutf8DisplayString, GetTransform(), TextScale * fAssetTextScale, Font, mCachedChars, TextColour * GetInheritedOpacity(),
-                                                      vAbsoluteLabelSize, fCharacterSpacingScaled, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, OVERFLOW_CLIP, MaxNumLines);
+                                                      vAbsoluteLabelSize, fCharacterSpacingScaled, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, TextOverflowBehaviour::k_clip, MaxNumLines);
                     }
                 }
                 else
                 {
                     inpCanvas->DrawString(strutf8DisplayString, GetTransform(), TextScale, Font, mCachedChars, TextColour,
-                                          vAbsoluteLabelSize, CharacterSpacing, LineSpacing, HorizontalJustification, VerticalJustification, false, OVERFLOW_FOLLOW, MaxNumLines);
+                                          vAbsoluteLabelSize, CharacterSpacing, LineSpacing, HorizontalJustification, VerticalJustification, false, TextOverflowBehaviour::k_follow, MaxNumLines);
                 }
             }
             //Draw the kids
@@ -445,17 +445,17 @@ namespace moFlo
         void CEditableLabel::SetKeyboardInputTypeNumeric()
         {
             if(mpKeyboard)
-                mpKeyboard->SetKeyboardType(moFlo::Input::KEYBOARD_NUMERIC);
+                mpKeyboard->SetKeyboardType(moFlo::Input::KeyboardType::k_numeric);
         }
         //-------------------------------------------------
-        /// SetKeyboardInputTypeAscii
+        /// SetKeyboardInputTypeText
         ///
-        /// Changes the displayed keys to ascii entry
+        /// Changes the displayed keys to Text entry
         //-------------------------------------------------
-        void CEditableLabel::SetKeyboardInputTypeAscii()
+        void CEditableLabel::SetKeyboardInputTypeText()
         {
             if(mpKeyboard)
-                 mpKeyboard->SetKeyboardType(moFlo::Input::KEYBOARD_TEXT);
+                mpKeyboard->SetKeyboardType(moFlo::Input::KeyboardType::k_text);
         }
         //------------------------
         /// Set Keyboard Capitalisation Method

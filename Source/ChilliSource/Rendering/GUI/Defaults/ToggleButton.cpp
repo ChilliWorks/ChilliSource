@@ -81,7 +81,7 @@ namespace moFlo
                 SetDeselectAudioEffect(mspDefaultDeSelectSound);
             
             //---Default
-            Core::STORAGE_LOCATION eOnTextureLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eOnTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("OnTextureLocation", strValue))
             {
                 eOnTextureLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -91,7 +91,7 @@ namespace moFlo
                 SetOnImage(LOAD_RESOURCE(Rendering::ITexture, eOnTextureLocation, strValue));
             }
             //---Off
-            Core::STORAGE_LOCATION eOffTextureLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eOffTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("OffTextureLocation", strValue))
             {
                 eOffTextureLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -101,7 +101,7 @@ namespace moFlo
                 SetOffImage(LOAD_RESOURCE(Rendering::ITexture, eOffTextureLocation, strValue));
             }
             //---Sprite sheet
-            Core::STORAGE_LOCATION eOnSpriteSheetLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eOnSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("OnSpriteSheetLocation", strValue))
             {
                 eOnSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -111,7 +111,7 @@ namespace moFlo
                 SetOnSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eOnSpriteSheetLocation, strValue));
             }
             //---Sprite sheet
-            Core::STORAGE_LOCATION eOffSpriteSheetLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eOffSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("OffSpriteSheetLocation", strValue))
             {
                 eOffSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -172,8 +172,8 @@ namespace moFlo
 				SetWidthMaintainingAspect(vSize.x, vSize.y);
 			}
             //---Audio effect
-            Core::STORAGE_LOCATION eSelectAudioLocation = Core::SL_PACKAGE;
-            Core::STORAGE_LOCATION eDeselectAudioLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eSelectAudioLocation = Core::StorageLocation::k_package;
+            Core::StorageLocation eDeselectAudioLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SelectAudioEffectLocation", strValue))
             {
                 eSelectAudioLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -462,13 +462,13 @@ namespace moFlo
 		{
 			mpDeselectAudioEffect = inpEffect;
 		}
-        void CToggleButton::SetDefaultSelectAudioEffect(Core::STORAGE_LOCATION ineLocation, const std::string instrAudioEffect)
+        void CToggleButton::SetDefaultSelectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
         {
             Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
             mspDefaultSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
         }
         
-        void CToggleButton::SetDefaultDeselectAudioEffect(Core::STORAGE_LOCATION ineLocation, const std::string instrAudioEffect)
+        void CToggleButton::SetDefaultDeselectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
         {
             Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
             mspDefaultDeSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);

@@ -56,9 +56,9 @@ namespace moFlo
         /// Default
         //-----------------------------------------------------
         CGUIView::CGUIView() : mpParentView(NULL), mpRootWindow(NULL), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
-			Rotation(0.0f), Opacity(1.0f), LocalAlignment(Core::ALIGN_MIDDLE_CENTRE), ParentalAlignment(Core::ALIGN_BOTTOM_LEFT), AlignedWithParent(false),
-			Scale(Core::CVector2::ONE), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches(TOUCH_TYPE_ALL),
-			AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
+        Rotation(0.0f), Opacity(1.0f), LocalAlignment(Core::AlignmentAnchor::k_middleCentre), ParentalAlignment(Core::AlignmentAnchor::k_bottomLeft), AlignedWithParent(false),
+        Scale(Core::CVector2::ONE), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
+        AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
         {
 
         }
@@ -71,9 +71,9 @@ namespace moFlo
         //------------------------------------------------------
         CGUIView::CGUIView(const Core::ParamDictionary& insParams) 
 		: mpParentView(NULL), mpRootWindow(NULL), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
-			Rotation(0.0f), Opacity(1.0f), LocalAlignment(Core::ALIGN_MIDDLE_CENTRE), ParentalAlignment(Core::ALIGN_BOTTOM_LEFT), AlignedWithParent(false),
-			Scale(Core::CVector2::ONE), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches(TOUCH_TYPE_ALL),
-			AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
+        Rotation(0.0f), Opacity(1.0f), LocalAlignment(Core::AlignmentAnchor::k_middleCentre), ParentalAlignment(Core::AlignmentAnchor::k_bottomLeft), AlignedWithParent(false),
+        Scale(Core::CVector2::ONE), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
+        AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
         {
             std::string strValue;
             
@@ -170,12 +170,12 @@ namespace moFlo
             //---Enable touch consumption
             if(insParams.TryGetValue("ConsumesTouchesBegan", strValue))
             {
-				EnableTouchConsumption(Core::CStringConverter::ParseBool(strValue), TOUCH_TYPE_BEGAN);
+				EnableTouchConsumption(Core::CStringConverter::ParseBool(strValue), TouchType::k_began);
             }
             //---Enable touch consumption
             if(insParams.TryGetValue("ConsumesTouchesMoved", strValue))
             {
-				EnableTouchConsumption(Core::CStringConverter::ParseBool(strValue), TOUCH_TYPE_MOVED);
+				EnableTouchConsumption(Core::CStringConverter::ParseBool(strValue), TouchType::k_moved);
             }
             //---Accept Touches Outside of Bounds
             if(insParams.TryGetValue("AcceptTouchesOutsideOfBounds", strValue))
@@ -473,7 +473,7 @@ namespace moFlo
         //-----------------------------------------------------
         void CGUIView::SetParentView(CGUIView* inpParentView)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_SIZE_CACHE|ABS_POS_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize|(u32)TransformCache::k_absPos);
             mpParentView = inpParentView;
         }
 		//-----------------------------------------------------
@@ -598,7 +598,7 @@ namespace moFlo
         //-----------------------------------------------------
         void CGUIView::SetLocalAlignment(Core::AlignmentAnchor ineAlignment)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_POS_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             LocalAlignment = ineAlignment;
         }
         //-----------------------------------------------------
@@ -624,7 +624,7 @@ namespace moFlo
         //-----------------------------------------------------
         void CGUIView::EnableRotationWithParent(bool inbEnable)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_POS_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             RotatedWithParent = inbEnable;
         }
 		//-----------------------------------------------------
@@ -646,7 +646,7 @@ namespace moFlo
         //-----------------------------------------------------
         void CGUIView::EnableAlignmentToParent(bool inbEnable)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_POS_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             AlignedWithParent = inbEnable;
         }
         //-----------------------------------------------------
@@ -670,7 +670,7 @@ namespace moFlo
         //-----------------------------------------------------
         void CGUIView::SetAlignmentToParent(Core::AlignmentAnchor ineAlignment)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_POS_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             ParentalAlignment = ineAlignment;
         }
         //-----------------------------------------------------
@@ -697,7 +697,7 @@ namespace moFlo
         //-----------------------------------------------------
         void CGUIView::SetOffsetFromParentAlignment(const UnifiedVector2& invOffset)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_POS_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedParentalOffset = invOffset;
         }
         //-----------------------------------------------------
@@ -712,7 +712,7 @@ namespace moFlo
         //-----------------------------------------------------
         void CGUIView::SetOffsetFromParentAlignment(f32 infRx, f32 infRy, f32 infAx, f32 infAy)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_POS_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedParentalOffset.vRelative.x = infRx;
             UnifiedParentalOffset.vRelative.y = infRy;
             UnifiedParentalOffset.vAbsolute.x = infAx;
@@ -758,7 +758,7 @@ namespace moFlo
         //-----------------------------------------------------
         void CGUIView::SetOffsetFromPosition(const UnifiedVector2& invOffset)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_POS_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedPositionOffset = invOffset;
         }
         //-----------------------------------------------------
@@ -771,7 +771,7 @@ namespace moFlo
         //-----------------------------------------------------
         void CGUIView::SetOffsetFromPosition(f32 infRx, f32 infRy, f32 infAx, f32 infAy)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_POS_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedPositionOffset.vRelative.x = infRx;
             UnifiedPositionOffset.vRelative.y = infRy;
             UnifiedPositionOffset.vAbsolute.x = infAx;
@@ -985,12 +985,12 @@ namespace moFlo
 			if(inbEnabled)
 			{
 				
-				ConsumesTouches |= ineType;
+				ConsumesTouches |= (u32)ineType;
 			}
 			else
 			{
 				
-				ConsumesTouches &= ~ineType;
+				ConsumesTouches &= ~(u32)ineType;
 			}
 		}
 		//-----------------------------------------------------
@@ -1002,7 +1002,7 @@ namespace moFlo
 		//-----------------------------------------------------
 		bool CGUIView::IsTouchConsumptionEnabled(TouchType ineType) const
 		{
-			return ineType & ConsumesTouches;
+			return (u32)ineType & ConsumesTouches;
 		}
         //-----------------------------------------------------
         /// Enable Inherited Scale
@@ -1140,7 +1140,7 @@ namespace moFlo
         //------------------------------------------------------
         void CGUIView::SetPosition(const UnifiedVector2& invPosition)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_POS_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedPosition = invPosition;
         }
         //-----------------------------------------------------
@@ -1155,7 +1155,7 @@ namespace moFlo
         //------------------------------------------------------
         void CGUIView::SetPosition(f32 fRx, f32 fRy, f32 fAx, f32 fAy)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_POS_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedPosition.vRelative.x = fRx;
             UnifiedPosition.vRelative.y = fRy;
             UnifiedPosition.vAbsolute.x = fAx;
@@ -1171,7 +1171,7 @@ namespace moFlo
         //------------------------------------------------------
         void CGUIView::MoveBy(const UnifiedVector2& invPosition)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_POS_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             if(!AlignedWithParent)
             {
                 UnifiedPosition += invPosition;
@@ -1191,7 +1191,7 @@ namespace moFlo
         //------------------------------------------------------
         void CGUIView::MoveBy(f32 fRx, f32 fRy, f32 fAx, f32 fAy)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_POS_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             if(!AlignedWithParent)
             {
                 UnifiedPosition.vRelative.x += fRx;
@@ -1217,7 +1217,7 @@ namespace moFlo
         //------------------------------------------------------
         void CGUIView::RotateTo(f32 infAngleInRadians)
         {
-			OnTransformChanged(TRANSFORM_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform);
             Rotation = infAngleInRadians;
         }
         //------------------------------------------------------
@@ -1229,7 +1229,7 @@ namespace moFlo
         //------------------------------------------------------
         void CGUIView::RotateBy(f32 infAngleInRadians)
         {
-			OnTransformChanged(TRANSFORM_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform);
             Rotation += infAngleInRadians;
         }
         //------------------------------------------------------
@@ -1241,7 +1241,7 @@ namespace moFlo
         //------------------------------------------------------
         void CGUIView::SetSize(const UnifiedVector2& invSize)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_SIZE_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize);
             UnifiedSize = invSize;
         }
         //------------------------------------------------------
@@ -1253,7 +1253,7 @@ namespace moFlo
         //------------------------------------------------------
         void CGUIView::SetSize(f32 fRx, f32 fRy, f32 fAx, f32 fAy)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_SIZE_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize);
             UnifiedSize.vRelative.x = fRx;
             UnifiedSize.vRelative.y = fRy;
             UnifiedSize.vAbsolute.x = fAx;
@@ -1268,7 +1268,7 @@ namespace moFlo
         //------------------------------------------------------
         void CGUIView::ScaleTo(const Core::CVector2& invScale)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_SIZE_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize);
             Scale = invScale;
         }
         //------------------------------------------------------
@@ -1280,7 +1280,7 @@ namespace moFlo
         //------------------------------------------------------
         void CGUIView::ScaleTo(f32 fScaleX, f32 fScaleY)
         {
-			OnTransformChanged(TRANSFORM_CACHE|ABS_SIZE_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize);
             Scale.x = fScaleX;
             Scale.y = fScaleY;
         }
@@ -1385,7 +1385,7 @@ namespace moFlo
         //------------------------------------------------------
         const Core::CVector2& CGUIView::GetAbsolutePosition() const
         {
-			if(!BITMASK_CHECK(mudwCacheValidaters, ABS_POS_CACHE))
+			if(!BITMASK_CHECK(mudwCacheValidaters, (u32)TransformCache::k_absPos))
 			{
 				//The absolute position is the position on screen and
 				//therefore must take out parents position into account 
@@ -1420,7 +1420,7 @@ namespace moFlo
 				mvAbsolutePosition += vAlignment;
 				
 				//BUG:
-				//BITMASK_SET(mudwCacheValidaters, ABS_POS_CACHE);
+				//BITMASK_SET(mudwCacheValidaters, (u32)TransformCache::k_absPos);
 			}
             
             return mvAbsolutePosition;
@@ -1457,10 +1457,10 @@ namespace moFlo
             //and the relative size of us
             if(mpParentView)
             {
-				if(!BITMASK_CHECK(mudwCacheValidaters, ABS_SIZE_CACHE))
+				if(!BITMASK_CHECK(mudwCacheValidaters, (u32)TransformCache::k_absSize))
 				{
 					mvAbsoluteSize = ((mpParentView->GetAbsoluteSize() * GetSize().GetRelative()) + GetSize().GetAbsolute()) * GetAbsoluteScale();
-					BITMASK_SET(mudwCacheValidaters, ABS_SIZE_CACHE);
+					BITMASK_SET(mudwCacheValidaters, (u32)TransformCache::k_absSize);
 				}
 				
                 return mvAbsoluteSize;
@@ -1509,7 +1509,7 @@ namespace moFlo
         //-----------------------------------------------------
         const Core::CMatrix3x3& CGUIView::GetTransform() const
         {
-			if(!BITMASK_CHECK(mudwCacheValidaters, TRANSFORM_CACHE))
+			if(!BITMASK_CHECK(mudwCacheValidaters, (u32)TransformCache::k_transform))
 			{
 				if(mpParentView)
 				{
@@ -1525,7 +1525,7 @@ namespace moFlo
 					mmatTransform.SetTransform(GetAbsolutePosition(), Core::CVector2::ONE, Rotation);
 				}
 				
-				BITMASK_SET(mudwCacheValidaters, TRANSFORM_CACHE);
+				BITMASK_SET(mudwCacheValidaters, (u32)TransformCache::k_transform);
 			}
             
             return mmatTransform;
@@ -1539,8 +1539,8 @@ namespace moFlo
         bool CGUIView::IsOnscreen() const
         {
             //Check if this is on screen
-            Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_TOP_RIGHT);
-            Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_BOTTOM_LEFT);
+            Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
+            Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft);
         
             return (vTopRight.y >= 0 && vBottomLeft.y <= Core::CScreen::GetOrientedHeight() && vTopRight.x >= 0 && vBottomLeft.x <= Core::CScreen::GetOrientedWidth());
         }
@@ -1583,7 +1583,7 @@ namespace moFlo
 				//Check if we force clip our children 
 				if(ClipSubviews)
 				{
-                    Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_BOTTOM_LEFT);
+                    Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft);
 					inpCanvas->EnableClippingToBounds(vBottomLeft, GetAbsoluteSize());
 				}
 				
@@ -1614,7 +1614,7 @@ namespace moFlo
         //----------------------------------------------------
         bool CGUIView::Contains(const Core::CVector2& invPoint) const
         {
-            Core::Rectangle sAbsoluteAABB(GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_BOTTOM_LEFT), GetAbsoluteSize());
+            Core::Rectangle sAbsoluteAABB(GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft), GetAbsoluteSize());
             return sAbsoluteAABB.Contains(invPoint);
         }
         //-----------------------------------------------------------
@@ -1645,7 +1645,7 @@ namespace moFlo
 		//-----------------------------------------------------------
 		void CGUIView::OnScreenOrientationChanged()
 		{
-			OnTransformChanged(TRANSFORM_CACHE|ABS_SIZE_CACHE|ABS_POS_CACHE);
+			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize|(u32)TransformCache::k_absPos);
 
 			for(CGUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
 			{
@@ -1695,7 +1695,7 @@ namespace moFlo
 					mInputEvents.OnTouchBegan(this, insTouchInfo);
                     mTouchBeganEvent.Invoke(insTouchInfo);
 					//We consume this touch as it is within us
-					if(IsTouchConsumptionEnabled(TOUCH_TYPE_BEGAN) && bContains)
+					if(IsTouchConsumptionEnabled(TouchType::k_began) && bContains)
 					{
                         mSubviewsCopy.clear();
 						return true;
@@ -1748,7 +1748,7 @@ namespace moFlo
                 if(mInputEvents.OnTouchMoved(this, insTouchInfo))
                 {
                     mTouchMovedEvent.Invoke(insTouchInfo);
-                    if(IsTouchConsumptionEnabled(TOUCH_TYPE_MOVED))
+                    if(IsTouchConsumptionEnabled(TouchType::k_moved))
                     {
                         mSubviewsCopy.clear();
                         return true;

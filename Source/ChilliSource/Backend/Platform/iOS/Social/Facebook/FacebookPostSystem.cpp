@@ -125,18 +125,18 @@ namespace moFlo
                              if (![urlParams valueForKey:@"request"])
                              {
                                  // User clicked the Cancel button
-                                 mRequestCompleteDelegate(Social::IFacebookPostSystem::PR_CANCELLED);
+                                 mRequestCompleteDelegate(Social::IFacebookPostSystem::PostResult::k_cancelled);
                              }
                              else
                              {
                                  // User clicked the Share button
-                                 mRequestCompleteDelegate(Social::IFacebookPostSystem::PR_SUCCESS);
+                                 mRequestCompleteDelegate(Social::IFacebookPostSystem::PostResult::k_success);
                              }
                          }
                          else
                          {
                              // User clicked the X button
-                             mRequestCompleteDelegate(Social::IFacebookPostSystem::PR_CANCELLED);
+                             mRequestCompleteDelegate(Social::IFacebookPostSystem::PostResult::k_cancelled);
                          }
                      }
                  }
@@ -146,7 +146,7 @@ namespace moFlo
                      NSLog(@"%@", error.description);
                      if(mRequestCompleteDelegate)
                      {
-                         mRequestCompleteDelegate(Social::IFacebookPostSystem::PR_FAILED);
+                         mRequestCompleteDelegate(Social::IFacebookPostSystem::PostResult::k_failed);
                      }
                  }
              }];
@@ -156,24 +156,24 @@ namespace moFlo
         {
             switch(insResponse.eResult)
             {
-                case IFacebookAuthenticationSystem::AR_SUCCESS:
+                case IFacebookAuthenticationSystem::AuthenticateResult::k_success:
                 {
                     Post(msPostDesc);
                     break;
                 }
-                case IFacebookAuthenticationSystem::AR_FAILED:
+                case IFacebookAuthenticationSystem::AuthenticateResult::k_failed:
                 {
                     if(mCompletionDelegate)
                     {
-                        mCompletionDelegate(Social::IFacebookPostSystem::PR_FAILED);
+                        mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_failed);
                     }
                     break;
                 }
-                case IFacebookAuthenticationSystem::AR_PERMISSION_MISMATCH:
+                case IFacebookAuthenticationSystem::AuthenticateResult::k_permissionMismatch:
                 {
                     if(mCompletionDelegate)
                     {
-                        mCompletionDelegate(Social::IFacebookPostSystem::PR_CANCELLED);
+                        mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_cancelled);
                     }
                     break;  
                 }                    
@@ -211,7 +211,7 @@ namespace moFlo
                             NSLog(@"%@", error.localizedDescription);
                             if(mCompletionDelegate)
                             {
-                                mCompletionDelegate(Social::IFacebookPostSystem::PR_FAILED);
+                                mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_failed);
                             }
                         }
                         else
@@ -220,14 +220,14 @@ namespace moFlo
                             {
                                 if(mCompletionDelegate)
                                 {
-                                    mCompletionDelegate(Social::IFacebookPostSystem::PR_SUCCESS);
+                                    mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_success);
                                 }
                             }
                             else
                             {
                                 if(mCompletionDelegate)
                                 {
-                                    mCompletionDelegate(Social::IFacebookPostSystem::PR_CANCELLED);
+                                    mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_cancelled);
                                 }
                             }
                         }
@@ -258,18 +258,18 @@ namespace moFlo
                             if (![urlParams valueForKey:@"post_id"])
                             {
                                 // User clicked the Cancel button
-                                mCompletionDelegate(Social::IFacebookPostSystem::PR_CANCELLED);
+                                mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_cancelled);
                             }
                             else
                             {
                                 // User clicked the Share button
-                                mCompletionDelegate(Social::IFacebookPostSystem::PR_SUCCESS);
+                                mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_success);
                             }
                         }
                         else
                         {
                             // User clicked the X button
-                            mCompletionDelegate(Social::IFacebookPostSystem::PR_CANCELLED);
+                            mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_cancelled);
                         }
                     }
                 }
@@ -279,7 +279,7 @@ namespace moFlo
                     NSLog(@"%@", error.description);
                     if(mCompletionDelegate)
                     {
-                        mCompletionDelegate(Social::IFacebookPostSystem::PR_FAILED);
+                        mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_failed);
                     }
                 }
                 

@@ -32,7 +32,12 @@ namespace moFlo
 		
 		struct HttpRequestDetails
         {
-			enum Type{GET,POST};
+			enum class Type
+            {
+                k_get,
+                k_post
+            };
+            
 			std::string strURL;
 			Core::ParamDictionary sHeaders;
 			std::string	strBody;
@@ -48,13 +53,13 @@ namespace moFlo
         {
 		public:
             virtual ~IHttpRequest(){}
-			enum CompletionResult
+			enum class CompletionResult
 			{
-				COMPLETED,  //The request completed and returned a result
-				FAILED,     //The request failed
-				CANCELLED,  //The request was cancelled
-				TIMEOUT,    //The request timed out
-                FLUSHED     //The request buffer is full and the buffer needs to be flushed
+                k_completed,    //The request completed and returned a result
+                k_failed,       //The request failed
+                k_cancelled,    //The request was cancelled
+                k_timeout,      //The request timed out
+                k_flushed       //The request buffer is full and the buffer needs to be flushed
 			};
             
 			typedef fastdelegate::FastDelegate2<HttpRequestPtr,CompletionResult> CompletionDelegate;

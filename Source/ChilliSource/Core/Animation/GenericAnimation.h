@@ -19,20 +19,20 @@
 
 namespace moFlo
 {
-	enum AnimationPlayMode
-	{
-		ANIM_PLAYONCE, 
-		ANIM_PLAYLOOPING, 
-		ANIM_PINGPONG, 
-		ANIM_PINGPONG_LOOPING, 
-		ANIM_PLAYONCE_REVERSE, 
-		ANIM_PLAYLOOPING_REVERSE, 
-		ANIM_PINGPONG_REVERSE, 
-		ANIM_PINGPONG_LOOPING_REVERSE,
-        ANIM_PLAYHALF_KEEP_MID_FRAME,
-		
-		ANIM_TOTAL,
-	};
+    enum class AnimationPlayMode
+    {
+        k_once,
+        k_looping,
+        k_pingPong,
+        k_pingPongLooping,
+        k_onceReverse,
+        k_loopingReverse,
+        k_pingPongReverse,
+        k_pingPongLoopingReverse,
+        k_stopHalf,
+        
+        k_Total
+    };
 
 	///<IAnimation is the base class for any kind of playable animation
 	class IAnimation
@@ -61,7 +61,7 @@ namespace moFlo
 		
 		AnimationPlayMode GetPlayMode() const;
 		
-		void Play(AnimationPlayMode inePlayMode = ANIM_PLAYONCE);
+		void Play(AnimationPlayMode inePlayMode = AnimationPlayMode::k_once);
 		
 		void Stop();
 		

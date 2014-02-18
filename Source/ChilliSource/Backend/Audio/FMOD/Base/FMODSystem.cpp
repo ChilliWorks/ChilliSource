@@ -69,7 +69,7 @@ namespace moFlo
         /// @param Location
 		/// @param File path
 		//-------------------------------------------------------
-		void CFMODSystem::LoadEventData(Core::STORAGE_LOCATION ineLocation, const std::string& instrFilePath)
+		void CFMODSystem::LoadEventData(Core::StorageLocation ineLocation, const std::string& instrFilePath)
 		{
             std::string strFilePath;
             Core::CApplication::GetFileSystemPtr()->GetBestPathToFile(ineLocation, instrFilePath, strFilePath);

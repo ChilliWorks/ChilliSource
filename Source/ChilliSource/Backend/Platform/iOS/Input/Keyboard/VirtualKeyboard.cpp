@@ -125,10 +125,10 @@ namespace moFlo
 
             switch (ineKeyboardType)
             {
-                case Input::KEYBOARD_TEXT:
+                case Input::KeyboardType::k_text:
                     mpTextView.keyboardType = UIKeyboardTypeASCIICapable;
                     break;
-                case Input::KEYBOARD_NUMERIC:
+                case Input::KeyboardType::k_numeric:
                     mpTextView.keyboardType = UIKeyboardTypeNumberPad;
                     break;
                 default:
@@ -149,16 +149,16 @@ namespace moFlo
             
             switch (ineKeyboardCapitalisation)
             {
-                case Input::KEYBOARD_CAPS_NONE:
+                case Input::KeyboardCapitalisation::k_none:
                     mpTextView.autocapitalizationType = UITextAutocapitalizationTypeNone;
                     break;
-                case Input::KEYBOARD_CAPS_WORDS:
+                case Input::KeyboardCapitalisation::k_words:
                     mpTextView.autocapitalizationType = UITextAutocapitalizationTypeWords;
                     break;
-                case Input::KEYBOARD_CAPS_SENTENCES:
+                case Input::KeyboardCapitalisation::k_sentences:
                     mpTextView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
                     break;
-                case Input::KEYBOARD_CAPS_ALL:
+                case Input::KeyboardCapitalisation::k_all:
                     mpTextView.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
                     break;
                 default:

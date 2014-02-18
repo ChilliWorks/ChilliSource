@@ -31,15 +31,15 @@ namespace moFlo
 		{
             
 			mpBGImage = VerticalStretchableImagePtr(new CVerticalStretchableImage());
-			mpBGImage->SetLocalAlignment(Core::ALIGN_BOTTOM_CENTRE);
+			mpBGImage->SetLocalAlignment(Core::AlignmentAnchor::k_bottomCentre);
 			mpBGImage->EnableAlignmentToParent(true);
-			mpBGImage->SetAlignmentToParent(Core::ALIGN_BOTTOM_CENTRE);
+			mpBGImage->SetAlignmentToParent(Core::AlignmentAnchor::k_bottomCentre);
 			AddSubview(mpBGImage);
 			
 			mpFillImage = VerticalStretchableImagePtr(new CVerticalStretchableImage());
-			mpFillImage->SetLocalAlignment(Core::ALIGN_BOTTOM_CENTRE);
+			mpFillImage->SetLocalAlignment(Core::AlignmentAnchor::k_bottomCentre);
 			mpFillImage->EnableAlignmentToParent(true);
-			mpFillImage->SetAlignmentToParent(Core::ALIGN_BOTTOM_CENTRE);
+			mpFillImage->SetAlignmentToParent(Core::AlignmentAnchor::k_bottomCentre);
 			AddSubview(mpFillImage);
 		}
 		//------------------------------------------------------
@@ -52,21 +52,21 @@ namespace moFlo
 		{
             
 			mpBGImage = VerticalStretchableImagePtr(new CVerticalStretchableImage());
-			mpBGImage->SetLocalAlignment(Core::ALIGN_BOTTOM_CENTRE);
+			mpBGImage->SetLocalAlignment(Core::AlignmentAnchor::k_bottomCentre);
 			mpBGImage->EnableAlignmentToParent(true);
-			mpBGImage->SetAlignmentToParent(Core::ALIGN_BOTTOM_CENTRE);
+			mpBGImage->SetAlignmentToParent(Core::AlignmentAnchor::k_bottomCentre);
 			AddSubview(mpBGImage);
 			
 			mpFillImage = VerticalStretchableImagePtr(new CVerticalStretchableImage());
-			mpFillImage->SetLocalAlignment(Core::ALIGN_BOTTOM_CENTRE);
+			mpFillImage->SetLocalAlignment(Core::AlignmentAnchor::k_bottomCentre);
 			mpFillImage->EnableAlignmentToParent(true);
-			mpFillImage->SetAlignmentToParent(Core::ALIGN_BOTTOM_CENTRE);
+			mpFillImage->SetAlignmentToParent(Core::AlignmentAnchor::k_bottomCentre);
 			AddSubview(mpFillImage);
 			
 			std::string strValue;
 			
 			//---Sprite sheet
-            Core::STORAGE_LOCATION eSpriteSheetLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SpriteSheetLocation", strValue))
             {
                 eSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);

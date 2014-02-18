@@ -48,7 +48,7 @@ namespace moFlo
 			/// @param Out: Shader resource
 			/// @return Success
 			//---------------------------------------------------------
-			bool CreateShaderProgramFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath, moFlo::Rendering::ShaderPtr& outpShader);
+			bool CreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, moFlo::Rendering::ShaderPtr& outpShader);
 			//---------------------------------------------------------
 			/// Async Create Shader Program From File
 			///
@@ -60,7 +60,7 @@ namespace moFlo
 			/// @param Out: Shader resource
 			/// @return Success
 			//---------------------------------------------------------
-			bool AsyncCreateShaderProgramFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath, moFlo::Rendering::ShaderPtr& outpShader);
+			bool AsyncCreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, moFlo::Rendering::ShaderPtr& outpShader);
 			//---------------------------------------------------------
 			/// Load Shader Task
 			///
@@ -69,7 +69,7 @@ namespace moFlo
             /// @param Pixel shader file path
 			/// @param Out: Shader resource
 			//---------------------------------------------------------
-			void LoadShaderTask(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrVSFilePath, const std::string &instrPSFilePath, moFlo::Rendering::ShaderPtr& outpShader);
+			void LoadShaderTask(Core::StorageLocation ineStorageLocation, const std::string &instrVSFilePath, const std::string &instrPSFilePath, moFlo::Rendering::ShaderPtr& outpShader);
 			//---------------------------------------------------------
 			/// Compile Shader Task
 			///

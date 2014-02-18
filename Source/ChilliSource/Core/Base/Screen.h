@@ -16,13 +16,13 @@ namespace moFlo
 {
 	namespace Core
 	{
-		enum ScreenOrientation
+		enum class ScreenOrientation
 		{
-			PORTRAIT_UP		= (1 << 0), //DEFAULT ORIENTATION FOR THE DEVICE
-			PORTRAIT_DOWN	= (1 << 1), //DEVICE ROTATED 180
-			LANDSCAPE_RIGHT	= (1 << 2), //DEVICE ROTATED 90 DEGREES CW
-			LANDSCAPE_LEFT	= (1 << 3),	//DEVICE ROTATED 90 DEGREES CCW
-			ORIENTATION_UNDEFINED = (1 << 4)
+			k_portraitUp     = (1 << 0), //DEFAULT ORIENTATION FOR THE DEVICE
+			k_portraitDown	 = (1 << 1), //DEVICE ROTATED 180
+			k_landscapeRight = (1 << 2), //DEVICE ROTATED 90 DEGREES CW
+			k_landscapeLeft	 = (1 << 3), //DEVICE ROTATED 90 DEGREES CCW
+			k_undefined      = (1 << 4)
 		};
         
         const f32 kfDefaultNormalResScreenDensity = 1.0f;

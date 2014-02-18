@@ -75,12 +75,12 @@ namespace moFlo
 			} 
 			
 			//Check we don't load twice!
-			if(pExistingResource->second->meCurrentStatus == CResourceGroup::NOT_LOADED)
+			if(pExistingResource->second->meCurrentStatus == CResourceGroup::Status::k_notLoaded)
 			{
 				DEBUG_LOG("Loading resource group " + instrGroupName + "...");
 				//Get the file names within that directory
 				DYNAMIC_ARRAY<std::string> FileNames;
-				moFlo::Core::CApplication::GetFileSystemPtr()->GetFileNamesInDirectory(SL_PACKAGE, pExistingResource->second->mstrDirectory, true, FileNames);
+				CApplication::GetFileSystemPtr()->GetFileNamesInDirectory(StorageLocation::k_package, pExistingResource->second->mstrDirectory, true, FileNames);
 				
 				//Load this bad boy. 
 				for(DYNAMIC_ARRAY<std::string>::const_iterator it = FileNames.begin(); it != FileNames.end(); ++it)
@@ -103,11 +103,11 @@ namespace moFlo
 					//Lock 'n' load. Tell the resource manager to load the resource into it's cache!
 					//Now they can be accesed via the resource manager with no loading time
 					//We should also track the resource and it's owning manager so that we can free the resource later
-					pExistingResource->second->mResources.push_back(pResMgr->GetResourceFromFile(SL_PACKAGE, *it));
+					pExistingResource->second->mResources.push_back(pResMgr->GetResourceFromFile(StorageLocation::k_package, *it));
 				}
 				
 				//Flag this loaded
-				pExistingResource->second->meCurrentStatus = CResourceGroup::LOADED;
+				pExistingResource->second->meCurrentStatus = CResourceGroup::Status::k_loaded;
 				DEBUG_LOG("Loading resource group " + instrGroupName + " complete\n");
 			}
 		}
@@ -125,7 +125,7 @@ namespace moFlo
 			if(pExistingResource != mMapNameToResourceGroup.end()) 
 			{
 				DEBUG_LOG("Unloading resource group " + instrGroupName);
-				pExistingResource->second->meCurrentStatus = CResourceGroup::NOT_LOADED;
+				pExistingResource->second->meCurrentStatus = CResourceGroup::Status::k_notLoaded;
 				
 				//Tell the resource manager to unload the object from it's cache
 				for(DYNAMIC_ARRAY<ResourcePtr>::iterator it = pExistingResource->second->mResources.begin(); it != pExistingResource->second->mResources.end(); ++it)
@@ -171,7 +171,7 @@ namespace moFlo
 		{
 			for(MapStringToResourceGroupItr it = mMapNameToResourceGroup.begin(); it != mMapNameToResourceGroup.end(); ++it)
 			{
-				it->second->meCurrentStatus = CResourceGroup::NOT_LOADED;
+				it->second->meCurrentStatus = CResourceGroup::Status::k_notLoaded;
 				it->second->mResources.clear();
 			}
 		}
@@ -184,7 +184,7 @@ namespace moFlo
 		{
 			for(MapStringToResourceGroupItr it = mMapNameToResourceGroup.begin(); it != mMapNameToResourceGroup.end(); ++it)
 			{
-				it->second->meCurrentStatus = CResourceGroup::NOT_LOADED;
+				it->second->meCurrentStatus = CResourceGroup::Status::k_notLoaded;
 				//Tell the resource manager to let it go!
 				for(DYNAMIC_ARRAY<ResourcePtr>::iterator jt = it->second->mResources.begin(); jt != it->second->mResources.end(); ++jt)
 				{

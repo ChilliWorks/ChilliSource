@@ -59,7 +59,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -69,7 +69,7 @@ namespace moFlo
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr AsyncGetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
             //----------------------------------------------------------------
 			/// Get Subtitles From File
 			///
@@ -81,7 +81,7 @@ namespace moFlo
 			/// @param File name
 			/// @return A handle to the Subtitles
 			//----------------------------------------------------------------
-			SubtitlesPtr GetSubtitlesFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePathMaterial);
+			SubtitlesPtr GetSubtitlesFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePathMaterial);
 			//----------------------------------------------------------------
 			/// Async Get Subtitles From File
 			///
@@ -93,7 +93,7 @@ namespace moFlo
 			/// @param File name
 			/// @return A handle to the Subtitles
 			//----------------------------------------------------------------
-			SubtitlesPtr AsyncGetSubtitlesFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePathMaterial);
+			SubtitlesPtr AsyncGetSubtitlesFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePathMaterial);
 		};
 	}
 }

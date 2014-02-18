@@ -63,7 +63,7 @@ namespace moFlo
 			/// @param Out: Resource object
 			/// @return Whether the resource was created successfully
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string& inFilePath, Core::ResourcePtr& outpResource);
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string& inFilePath, Core::ResourcePtr& outpResource);
             //----------------------------------------------------------------------------
 			/// Has Kerning Info
 			///
@@ -73,7 +73,7 @@ namespace moFlo
 			/// @param Filename of font
 			/// @return Whether a kerning info file is found
 			//----------------------------------------------------------------------------
-            const bool HasKerningInfo(const moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string& inFilePath) const;
+            const bool HasKerningInfo(const Core::StorageLocation ineStorageLocation, const std::string& inFilePath) const;
             //----------------------------------------------------------------------------
 			/// Load Kerning Info
 			///
@@ -84,7 +84,7 @@ namespace moFlo
 			/// @param Pointer to font resource
 			/// @return Whether the resource was created successfully
 			//----------------------------------------------------------------------------
-            bool LoadKerningInfo(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string& inFilePath, CFont* inpFont);
+            bool LoadKerningInfo(Core::StorageLocation ineStorageLocation, const std::string& inFilePath, CFont* inpFont);
 		};
 	}
 }

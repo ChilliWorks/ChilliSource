@@ -39,21 +39,23 @@ namespace moFlo
 		class CGUIView : public ISurface
 		{
 		protected:
-			enum TransformCache
+            
+			enum class TransformCache
 			{
-				TRANSFORM_CACHE = (1 << 0),
-				ABS_SIZE_CACHE = (1 << 1),
-				ABS_POS_CACHE = (1 << 2)
+                k_transform = (1 << 0),
+                k_absSize = (1 << 1),
+                k_absPos = (1 << 2)
 			};
 
 			mutable u32 mudwCacheValidaters;
 			
 		public:
-			enum TouchType
+            
+			enum class TouchType
 			{
-				TOUCH_TYPE_BEGAN = (1 << 0),
-				TOUCH_TYPE_MOVED = (1 << 1),
-				TOUCH_TYPE_ALL	 = TOUCH_TYPE_BEGAN | TOUCH_TYPE_MOVED
+                k_began = (1 << 0),
+                k_moved = (1 << 1),
+                k_all = k_began | k_moved
 			};
 
 		public:
@@ -363,7 +365,7 @@ namespace moFlo
 			/// touches
 			/// @param The type of touch concerned (BEGAN, MOVED or ALL)
 			//-----------------------------------------------------
-			void EnableTouchConsumption(bool inbEnabled, TouchType ineTouch = TOUCH_TYPE_ALL);
+			void EnableTouchConsumption(bool inbEnabled, TouchType ineTouch = TouchType::k_all);
 			//-----------------------------------------------------
 			/// Is Touch Consumption Enabled
 			///
@@ -371,7 +373,7 @@ namespace moFlo
 			/// @return Override to force a view to consome or route
 			/// touches
 			//-----------------------------------------------------
-			bool IsTouchConsumptionEnabled(TouchType ineTouch = TOUCH_TYPE_ALL) const;
+			bool IsTouchConsumptionEnabled(TouchType ineTouch = TouchType::k_all) const;
 			//-----------------------------------------------------
 			/// Enable Inherited Scale
 			///

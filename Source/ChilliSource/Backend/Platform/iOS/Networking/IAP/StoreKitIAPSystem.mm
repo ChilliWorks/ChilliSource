@@ -156,7 +156,7 @@
     
     if(mTransactionUpdateDelegate)
     {
-        mTransactionUpdateDelegate(inProductID, StoreKitIAP::FAILED, nil);
+        mTransactionUpdateDelegate(inProductID, StoreKitIAP::TransactionResult::k_failed, nil);
     }
 }
 //-------------------------------------------------------
@@ -174,29 +174,29 @@
             [mOpenTransactions addObject:pTransaction];
         }
         
-        StoreKitIAP::TransactionResult eResult = StoreKitIAP::FAILED;
+        StoreKitIAP::TransactionResult eResult = StoreKitIAP::TransactionResult::k_failed;
         
 		switch (pTransaction.transactionState)
         {
 			case SKPaymentTransactionStatePurchased:
                 //If this was not started by the user it is a past transaction resuming
                 //otherwise it is a vanilla transaction
-                eResult = StoreKitIAP::RESUMED;
+                eResult = StoreKitIAP::TransactionResult::k_resumed;
                 for(NSString* productID in mUserPurchasedProductIDs)
                 {
                     if([productID compare:pTransaction.payment.productIdentifier] == NSOrderedSame)
                     {
-                        eResult = StoreKitIAP::SUCCEEDED;
+                        eResult = StoreKitIAP::TransactionResult::k_succeeded;
                         break;
                     }
                 }
                 break;
 			case SKPaymentTransactionStateFailed:
 				NSLog(@"%@", [pTransaction.error localizedDescription]);
-                eResult = (pTransaction.error.code == SKErrorPaymentCancelled) ? StoreKitIAP::CANCELLED : StoreKitIAP::FAILED;
+                eResult = (pTransaction.error.code == SKErrorPaymentCancelled) ? StoreKitIAP::TransactionResult::k_cancelled : StoreKitIAP::TransactionResult::k_failed;
 				break;
             case SKPaymentTransactionStateRestored:
-                eResult = StoreKitIAP::RESTORED;
+                eResult = StoreKitIAP::TransactionResult::k_restored;
                 break;
 			default:
 				continue;

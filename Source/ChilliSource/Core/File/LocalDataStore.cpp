@@ -272,7 +272,7 @@ namespace moFlo
             
             // Write to disk
             IFileSystem* pFileSystem = CApplication::GetFileSystemPtr();
-            FileStreamPtr pFileStream = pFileSystem->CreateFileStream(SL_SAVEDATA, kstrLocalDataStoreEncryptedFilename, FM_WRITE_BINARY);
+            FileStreamPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, kstrLocalDataStoreEncryptedFilename, FileMode::k_writeBinary);
             if(pFileStream->IsOpen() && !pFileStream->IsBad())
             {
                 pFileStream->Write(pdwDocEncrypted, udwEncryptedSize);
@@ -296,9 +296,9 @@ namespace moFlo
 		void CLocalDataStore::RefreshFromFile()
         {
             IFileSystem* pFileSystem = CApplication::GetFileSystemPtr();
-            if(pFileSystem->DoesFileExist(SL_SAVEDATA, kstrLocalDataStoreEncryptedFilename))
+            if(pFileSystem->DoesFileExist(StorageLocation::k_saveData, kstrLocalDataStoreEncryptedFilename))
             {
-                FileStreamPtr pFileStream = pFileSystem->CreateFileStream(SL_SAVEDATA, kstrLocalDataStoreEncryptedFilename, FM_READ);
+                FileStreamPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, kstrLocalDataStoreEncryptedFilename, FileMode::k_read);
                 if(pFileStream->IsOpen() && !pFileStream->IsBad())
                 {
                     std::string strEncryptedXML;
@@ -322,15 +322,15 @@ namespace moFlo
                 }
             }
             else
-            if(pFileSystem->DoesFileExist(SL_SAVEDATA, kstrLocalDataStoreDeprecatedFilename))
+            if(pFileSystem->DoesFileExist(StorageLocation::k_saveData, kstrLocalDataStoreDeprecatedFilename))
             {
                 TiXmlDocument xmlDoc;
-                xmlDoc.LoadFile(SL_SAVEDATA, kstrLocalDataStoreDeprecatedFilename);
+                xmlDoc.LoadFile(StorageLocation::k_saveData, kstrLocalDataStoreDeprecatedFilename);
                 TiXmlElement* pRoot = xmlDoc.RootElement();
                 if(NULL != pRoot)
                 {
                     mBackingDictionary.FromXml(pRoot);
-                    pFileSystem->DeleteFile(SL_SAVEDATA, kstrLocalDataStoreDeprecatedFilename);
+                    pFileSystem->DeleteFile(StorageLocation::k_saveData, kstrLocalDataStoreDeprecatedFilename);
                 }
             }
             

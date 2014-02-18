@@ -21,21 +21,18 @@
 /// with no wrapper.
 //================================================================
 
-namespace EAGLColourMode
+enum class EAGLColourMode
 {
-    enum Mode
-    {
-        RGB565,
-        RGBA8
-    };
-}
+    k_RGB565,
+    k_RGBA8
+};
 
 @interface EAGLView : UIView 
 {
 
 }
 
--(id) init:(BOOL)landscape andColourMode:(EAGLColourMode::Mode)ineMode; 
+-(id) init:(BOOL)landscape andColourMode:(EAGLColourMode)ineMode; 
 +(EAGLView*) sharedInstance;
 
 @property (nonatomic, assign) UIViewController* viewController;

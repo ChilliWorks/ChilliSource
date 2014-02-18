@@ -56,25 +56,25 @@ namespace moFlo
 			typedef fastdelegate::FastDelegate1<TimeIntervalSecs> ServerTimeDelegate;
 			void GetServerTime(const ServerTimeDelegate& inDelegate);
 			
-			enum AccountCreateResult
+			enum class AccountCreateResult
             {
-				ACR_SUCCESS,
-				ACR_NOSERVER_RESPONSE,
-				ACR_SERVER_REFUSES
+                k_success,
+                k_noServerResponse,
+                k_serverRefuses
 			};
 			typedef fastdelegate::FastDelegate2<CMoConnectSystem*,AccountCreateResult> AccountCreateDelegate;
 			void CreateNewAccount(AccountCreateDelegate inDel);
 			
-			enum RegisterLoginResult
+			enum class RegisterLoginResult
             {
-				RLR_SUCCESS,
-				RLR_NOSERVER_RESPONSE,                  // Communication error/server tits up
-				RLR_ALREADY_USED = 1002,                // Credentials already in use
-				RLR_AUTH_FAILED = 1003,                 // moConnect details are wrong
-				RLR_UNKNOWN_CREDENTIALS_TYPE = 1004,    // moConnect doesn't know or accept this kind of credentials
-				RLR_TYPE_ALREADY_USED = 1005,           // This account already has credentials of this type registered
-				RLR_INVALID_FORM = 2000,                // The form is improperly formatted
-				RLR_INVALID_TYPE = 2001,                // A param in the form is invalidly formatted
+				k_success,
+				k_noServerResponse,              // Communication error/server tits up
+				k_credentialAlreadyUsed = 1002,  // Credentials already in use
+				k_authFailed = 1003,             // moConnect details are wrong
+				k_unknownCredentialType = 1004,  // moConnect doesn't know or accept this kind of credentials
+				k_typeAlreadyUsed = 1005,        // This account already has credentials of this type registered
+				k_invalidForm = 2000,            // The form is improperly formatted
+				k_invalidType = 2001,            // A param in the form is invalidly formatted
 			};
 			typedef fastdelegate::FastDelegate2<CMoConnectSystem*,RegisterLoginResult> RegisterLoginDelegate;
 			//-----------------------------------------------------------
@@ -99,13 +99,13 @@ namespace moFlo
 			//-----------------------------------------------------------
 			void RegisterLoginFacebook(const std::string& instrAccessToken, const RegisterLoginDelegate& inDel);
 			
-			enum SignInResult
+			enum class SignInResult
             {
-				SIR_SUCCESS,
-				SIR_NOSERVER_RESPONSE,
-				SIR_INVALID_CREDENTIALS = 1002,         //moConnect doesn't know or accept this kind of credentials
-				SIR_CREDENTIALS_NOT_FOUND = 1003,       //moConnect doesn't know or accept this kind of credentials
-				SIR_NO_APP_FOUND_FOR_CREDENTIALS = 1006 //moConnect found the credentials however they haven't been used with this Application yet.
+				k_success,
+				k_noServerResponse,
+				k_invalidCredential = 1002,        //moConnect doesn't know or accept this kind of credentials
+				k_credentialNotFound = 1003,       //moConnect doesn't know or accept this kind of credentials
+				k_noAppFoundForCredential = 1006   //moConnect found the credentials however they haven't been used with this Application yet.
 			};
             struct SignedInUser
             {
@@ -142,13 +142,13 @@ namespace moFlo
 			//-----------------------------------------------------------
 			void SignInViaFacebook(const std::string& instrAccessToken, const SignInDelegate& inDel, bool inbRetrieveAccountsOnly = false);
             
-			enum RequestResult
+			enum class RequestResult
             {
-				RR_SUCCESS,
-				RR_CANCELLED,
-				RR_FAILED_NO_RESPONSE,
-				RR_FAILED_INTERNAL_SERVER_ERROR,
-				RR_FAILED_CLIENT_ERROR
+                k_success,
+                k_cancelled,
+                k_failedNoResponse,
+                k_failedInternalServerError,
+                k_failedClientError
 			};
 			typedef fastdelegate::FastDelegate3<u32, RequestResult, Json::Value&> RequestResultDelegate;
 			u32 MakeRequest(const std::string& instrMethod, const RequestResultDelegate& inDelegate);
@@ -156,17 +156,17 @@ namespace moFlo
 			void CancelRequest(u32 inudwID);
 			void CancelAllRequests();
             
-            enum PushNotificationType
+            enum class PushNotificationType
             {
-                PNT_APPLE_APNS,
-                PNT_GOOGLE_GCM,
-                PNT_AMAZON_ADM,
-                PNT_UNDEFINED,
+                k_appleAPNS,
+                k_googleGCM,
+                k_amazonADM,
+                k_undefined
             };
-            enum PushNotificationResult
+            enum class PushNotificationResult
             {
-                PNR_SUCCESS,
-                PNR_FAILED,
+                k_success,
+                k_failed
             };
             typedef fastdelegate::FastDelegate1<const PushNotificationResult> PushNotificationResultDelegate;
             void RegisterForPushNotifications(const PushNotificationType ineType, const std::string& instrToken,
@@ -189,11 +189,11 @@ namespace moFlo
                 std::string strStatus;
                 bool bRedeemed;
             };
-            enum IAPType
+            enum class IAPType
             {
-                IAPT_APPLE,
-                IAPT_GOOGLE,
-                IAPT_UNDEFINED,
+                k_apple,
+                k_google,
+                k_undefined
             };
             
             typedef fastdelegate::FastDelegate3<const bool, const IHttpRequest::CompletionResult, const IAPReceipt> ValidateReceiptDelegate;

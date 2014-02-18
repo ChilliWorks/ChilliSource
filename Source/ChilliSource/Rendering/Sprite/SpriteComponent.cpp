@@ -25,7 +25,7 @@ namespace moFlo
 		/// Constructor
 		//----------------------------------------------------------
 		CSpriteComponent::CSpriteComponent() : mUVs(Core::CVector2(0, 0), Core::CVector2(1, 1)), mbFlippedVertical(false), mbFlippedHorizontal(false), 
-        mbCornerPosCacheValid(false), meAlignment(Core::ALIGN_MIDDLE_CENTRE), mbUVCacheValid(false), mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
+        mbCornerPosCacheValid(false), meAlignment(Core::AlignmentAnchor::k_middleCentre), mbUVCacheValid(false), mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
 		{
             mByteColourWithOpacity.r = 255;
             mByteColourWithOpacity.g = 255;
@@ -270,19 +270,19 @@ namespace moFlo
                 //We have been transformed so we need to recalculate our vertices
                 CalculateCornerPositions();
                 
-                mSpriteData.sVerts[VERT_TOP_LEFT].vPos = mavVertexPos[VERT_TOP_LEFT];
-                mSpriteData.sVerts[VERT_BOTTOM_LEFT].vPos = mavVertexPos[VERT_BOTTOM_LEFT];
-                mSpriteData.sVerts[VERT_TOP_RIGHT].vPos = mavVertexPos[VERT_TOP_RIGHT];
-                mSpriteData.sVerts[VERT_BOTTOM_RIGHT].vPos = mavVertexPos[VERT_BOTTOM_RIGHT];
+                mSpriteData.sVerts[(u32)Verts::k_topLeft].vPos = mavVertexPos[(u32)Verts::k_topLeft];
+                mSpriteData.sVerts[(u32)Verts::k_bottomLeft].vPos = mavVertexPos[(u32)Verts::k_bottomLeft];
+                mSpriteData.sVerts[(u32)Verts::k_topRight].vPos = mavVertexPos[(u32)Verts::k_topRight];
+                mSpriteData.sVerts[(u32)Verts::k_bottomRight].vPos = mavVertexPos[(u32)Verts::k_bottomRight];
             }
             
             //Update our vertex colours
             mSpriteData.pMaterial = mpMaterial;
             
-            mSpriteData.sVerts[VERT_TOP_LEFT].Col = mByteColourWithOpacity;
-            mSpriteData.sVerts[VERT_BOTTOM_LEFT].Col = mByteColourWithOpacity;
-            mSpriteData.sVerts[VERT_TOP_RIGHT].Col = mByteColourWithOpacity;
-            mSpriteData.sVerts[VERT_BOTTOM_RIGHT].Col = mByteColourWithOpacity;
+            mSpriteData.sVerts[(u32)Verts::k_topLeft].Col = mByteColourWithOpacity;
+            mSpriteData.sVerts[(u32)Verts::k_bottomLeft].Col = mByteColourWithOpacity;
+            mSpriteData.sVerts[(u32)Verts::k_topRight].Col = mByteColourWithOpacity;
+            mSpriteData.sVerts[(u32)Verts::k_bottomRight].Col = mByteColourWithOpacity;
             
             //Update our texture co-ordinates
             if(!mbUVCacheValid)
@@ -291,10 +291,10 @@ namespace moFlo
                 
                 Core::CRect TexCoords = GetCurrentFrame();
                 
-                mSpriteData.sVerts[VERT_TOP_LEFT].vTex = TexCoords.TopLeft();
-                mSpriteData.sVerts[VERT_BOTTOM_LEFT].vTex = TexCoords.BottomLeft();
-                mSpriteData.sVerts[VERT_TOP_RIGHT].vTex = TexCoords.TopRight();
-                mSpriteData.sVerts[VERT_BOTTOM_RIGHT].vTex = TexCoords.BottomRight();
+                mSpriteData.sVerts[(u32)Verts::k_topLeft].vTex = TexCoords.TopLeft();
+                mSpriteData.sVerts[(u32)Verts::k_bottomLeft].vTex = TexCoords.BottomLeft();
+                mSpriteData.sVerts[(u32)Verts::k_topRight].vTex = TexCoords.TopRight();
+                mSpriteData.sVerts[(u32)Verts::k_bottomRight].vTex = TexCoords.BottomRight();
             }
         }
         //-----------------------------------------------------------
@@ -333,7 +333,7 @@ namespace moFlo
 				CalculateCornerPositions();
 			}
 			
-			return mavVertexPos[VERT_TOP_LEFT];
+			return mavVertexPos[(u32)Verts::k_topLeft];
 		}
         //-----------------------------------------------------------
         /// Get Lower Left Corner Position
@@ -345,7 +345,7 @@ namespace moFlo
 				CalculateCornerPositions();
 			}
 			
-			return mavVertexPos[VERT_BOTTOM_LEFT];
+			return mavVertexPos[(u32)Verts::k_bottomLeft];
 		}
         //-----------------------------------------------------------
         /// Get Upper Right Corner Position
@@ -357,7 +357,7 @@ namespace moFlo
 				CalculateCornerPositions();
 			}
             
-			return mavVertexPos[VERT_TOP_RIGHT];
+			return mavVertexPos[(u32)Verts::k_topRight];
 		}
         //-----------------------------------------------------------
         /// Get Lower Right Corner Position
@@ -369,7 +369,7 @@ namespace moFlo
 				CalculateCornerPositions();
 			}
             
-			return mavVertexPos[VERT_BOTTOM_RIGHT];
+			return mavVertexPos[(u32)Verts::k_bottomRight];
 		}
 		//----------------------------------------------------
 		/// On Attached To Entity
@@ -401,25 +401,25 @@ namespace moFlo
             Core::CVector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
             Core::CVector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[VERT_TOP_LEFT]);
+            Core::CMatrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topLeft]);
             
             vTemp.x = vHalfSize.x;
             vTemp.y = vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[VERT_TOP_RIGHT]);
+            Core::CMatrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topRight]);
             
             vTemp.x = -vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[VERT_BOTTOM_LEFT]);
+            Core::CMatrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_bottomLeft]);
             
             vTemp.x = vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[VERT_BOTTOM_RIGHT]);
+            Core::CMatrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_bottomRight]);
             
 			mbCornerPosCacheValid = true;
             

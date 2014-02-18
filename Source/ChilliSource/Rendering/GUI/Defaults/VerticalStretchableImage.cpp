@@ -49,7 +49,7 @@ namespace moFlo
 			memset(&msIndices, 0, sizeof(u32) * 3);
             
             //---Sprite sheet
-            Core::STORAGE_LOCATION eSpriteSheetLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SpriteSheetLocation", strValue))
             {
                 eSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -221,8 +221,8 @@ namespace moFlo
         void CVerticalStretchableImage::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
 			//Check if this is on screen
-			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_TOP_RIGHT);
-			Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_BOTTOM_LEFT);
+			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
+			Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft);
 			
 			if(vTopRight.y < 0 || vBottomLeft.y > Core::CScreen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::CScreen::GetOrientedWidth())
 			{
@@ -234,7 +234,7 @@ namespace moFlo
             {			
                 Core::CVector2 vPanelSize = GetAbsoluteSize();
                 Core::CVector2 vPanelPos = GetAbsoluteScreenSpacePosition();
-                Core::CVector2 vTopLeft = GetAbsoluteAnchorPoint(Core::ALIGN_TOP_LEFT);
+                Core::CVector2 vTopLeft = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topLeft);
                 Core::CVector2 vPatchPos;
                 
                 Core::CColour AbsColour = GetAbsoluteColour();
@@ -296,17 +296,17 @@ namespace moFlo
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwTop), 
                                    AbsColour, 
-                                   Core::ALIGN_TOP_LEFT);
+                                   Core::AlignmentAnchor::k_topLeft);
                 
                 
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::ALIGN_BOTTOM_LEFT));
+                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_bottomLeft));
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vBPatchSize, 
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwBottom), 
                                    AbsColour, 
-                                   Core::ALIGN_BOTTOM_LEFT);
+                                   Core::AlignmentAnchor::k_bottomLeft);
 
  
                 //Draw the centre
@@ -322,7 +322,7 @@ namespace moFlo
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwMiddle), 
                                    AbsColour, 
-                                   Core::ALIGN_TOP_LEFT);
+                                   Core::AlignmentAnchor::k_topLeft);
                 
                 //Render subviews
                 CGUIView::Draw(inpCanvas);

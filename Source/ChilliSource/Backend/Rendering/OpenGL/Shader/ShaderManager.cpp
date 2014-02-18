@@ -50,7 +50,7 @@ namespace moFlo
 		/// @param Out: Shader resource
 		/// @return Success
 		//---------------------------------------------------------
-		bool CShaderManager::CreateShaderProgramFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath, moFlo::Rendering::ShaderPtr& outpShader)
+		bool CShaderManager::CreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, moFlo::Rendering::ShaderPtr& outpShader)
 		{
 			SHARED_PTR<CShader> pGLShader = SHARED_PTR_CAST<CShader>(outpShader);
 			
@@ -66,12 +66,12 @@ namespace moFlo
 			} 
 			
 			//Shader does not already exist
-			if(!pGLShader->LoadAndCompileShader(ineStorageLocation, instrFilePath + "." + kstrGLVertexShaderExtension, Rendering::SHADER_TYPE_VERTEX))
+			if(!pGLShader->LoadAndCompileShader(ineStorageLocation, instrFilePath + "." + kstrGLVertexShaderExtension, Rendering::ShaderType::k_vertex))
 			{
 				return false;
 			}
 
-			if(!pGLShader->LoadAndCompileShader(ineStorageLocation, instrFilePath + "." + kstrGLFragmentShaderExtension, Rendering::SHADER_TYPE_FRAGMENT))
+			if(!pGLShader->LoadAndCompileShader(ineStorageLocation, instrFilePath + "." + kstrGLFragmentShaderExtension, Rendering::ShaderType::k_fragment))
 			{
 				return false;
 			}
@@ -98,7 +98,7 @@ namespace moFlo
 		/// @param Out: Shader resource
 		/// @return Success
 		//---------------------------------------------------------
-		bool CShaderManager::AsyncCreateShaderProgramFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath, moFlo::Rendering::ShaderPtr& outpShader)
+		bool CShaderManager::AsyncCreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, moFlo::Rendering::ShaderPtr& outpShader)
 		{
 			SHARED_PTR<CShader> pGLShader = SHARED_PTR_CAST<CShader>(outpShader);
 			
@@ -118,7 +118,7 @@ namespace moFlo
 			mMapFilenameToResource.insert(std::make_pair(instrFilePath, outpShader));
 			
 			//create a task for loading the shader in the background
-			CTaskScheduler::ScheduleTask(Task4<Core::STORAGE_LOCATION, const std::string&, const std::string&, moFlo::Rendering::ShaderPtr&>(this, &CShaderManager::LoadShaderTask, ineStorageLocation, instrFilePath + "." + kstrGLVertexShaderExtension, instrFilePath + "." + kstrGLFragmentShaderExtension, outpShader));
+			CTaskScheduler::ScheduleTask(Task4<Core::StorageLocation, const std::string&, const std::string&, moFlo::Rendering::ShaderPtr&>(this, &CShaderManager::LoadShaderTask, ineStorageLocation, instrFilePath + "." + kstrGLVertexShaderExtension, instrFilePath + "." + kstrGLFragmentShaderExtension, outpShader));
 			
 			return true;
 		}
@@ -130,7 +130,7 @@ namespace moFlo
 		/// @param Pixel shader file path
 		/// @param Out: Shader resource
 		//---------------------------------------------------------
-		void CShaderManager::LoadShaderTask(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrVSFilePath, const std::string &instrPSFilePath, moFlo::Rendering::ShaderPtr& outpShader)
+		void CShaderManager::LoadShaderTask(Core::StorageLocation ineStorageLocation, const std::string &instrVSFilePath, const std::string &instrPSFilePath, moFlo::Rendering::ShaderPtr& outpShader)
 		{
 			SHARED_PTR<CShader> pGLShader = SHARED_PTR_CAST<CShader>(outpShader);
 			
@@ -175,13 +175,13 @@ namespace moFlo
 			//compile the VS
 			if (instrVS != "")
 			{
-				if (pGLShader->CompileShader(instrVS, Rendering::SHADER_TYPE_VERTEX) == false)
+				if (pGLShader->CompileShader(instrVS, Rendering::ShaderType::k_vertex) == false)
 					return;
 			}
 			//compile the VS
 			if (instrPS != "")
 			{
-				if (pGLShader->CompileShader(instrPS, Rendering::SHADER_TYPE_FRAGMENT) == false)
+				if (pGLShader->CompileShader(instrPS, Rendering::ShaderType::k_fragment) == false)
 					return;
 			}
 

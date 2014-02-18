@@ -22,10 +22,10 @@ namespace moFlo
 {
 	namespace Core
 	{
-		enum StringTimeFormat
+		enum class StringTimeFormat
 		{
-			TIME_FORMAT_YYYYDDMMHHMM = 0,
-			NUM_TIME_FORMATS
+            k_YYYYDDMMHHMM,
+            k_total
 		};
 		
 		/** Utility class for manipulating Strings.  */

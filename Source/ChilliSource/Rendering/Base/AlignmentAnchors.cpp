@@ -27,19 +27,19 @@ namespace moFlo
             //Vertical alignment
 			switch (ineAlignment) 
             {
-				case Core::ALIGN_TOP_LEFT:
-				case Core::ALIGN_TOP_CENTRE:
-				case Core::ALIGN_TOP_RIGHT:
+				case Core::AlignmentAnchor::k_topLeft:
+				case Core::AlignmentAnchor::k_topCentre:
+				case Core::AlignmentAnchor::k_topRight:
 					outvAlignmentPoint.y = -invHalfSize.y;
 					break;
-				case Core::ALIGN_MIDDLE_LEFT:
-				case Core::ALIGN_MIDDLE_CENTRE:
-				case Core::ALIGN_MIDDLE_RIGHT:
+				case Core::AlignmentAnchor::k_middleLeft:
+				case Core::AlignmentAnchor::k_middleCentre:
+				case Core::AlignmentAnchor::k_middleRight:
 					outvAlignmentPoint.y = 0;
 					break;				
-				case Core::ALIGN_BOTTOM_LEFT:
-				case Core::ALIGN_BOTTOM_CENTRE:
-				case Core::ALIGN_BOTTOM_RIGHT:
+				case Core::AlignmentAnchor::k_bottomLeft:
+				case Core::AlignmentAnchor::k_bottomCentre:
+				case Core::AlignmentAnchor::k_bottomRight:
 					outvAlignmentPoint.y = invHalfSize.y;
 					break;
                     
@@ -50,21 +50,21 @@ namespace moFlo
 			//Horizontal alignment
 			switch (ineAlignment) 
             {
-				case Core::ALIGN_TOP_LEFT:
-				case Core::ALIGN_MIDDLE_LEFT:
-				case Core::ALIGN_BOTTOM_LEFT:
+				case Core::AlignmentAnchor::k_topLeft:
+				case Core::AlignmentAnchor::k_middleLeft:
+				case Core::AlignmentAnchor::k_bottomLeft:
 					outvAlignmentPoint.x = invHalfSize.x;
 					break;
 					
-				case Core::ALIGN_TOP_CENTRE:
-				case Core::ALIGN_MIDDLE_CENTRE:
-				case Core::ALIGN_BOTTOM_CENTRE:
+				case Core::AlignmentAnchor::k_topCentre:
+				case Core::AlignmentAnchor::k_middleCentre:
+				case Core::AlignmentAnchor::k_bottomCentre:
 					outvAlignmentPoint.x = 0;
 					break;	
 					
-				case Core::ALIGN_TOP_RIGHT:
-				case Core::ALIGN_MIDDLE_RIGHT:
-				case Core::ALIGN_BOTTOM_RIGHT:
+				case Core::AlignmentAnchor::k_topRight:
+				case Core::AlignmentAnchor::k_middleRight:
+				case Core::AlignmentAnchor::k_bottomRight:
 					outvAlignmentPoint.x = -invHalfSize.x;
 					break;
                     
@@ -87,19 +87,19 @@ namespace moFlo
             //Vertical alignment
 			switch (ineAlignment) 
             {
-				case Core::ALIGN_TOP_LEFT:
-				case Core::ALIGN_TOP_CENTRE:
-				case Core::ALIGN_TOP_RIGHT:
+				case Core::AlignmentAnchor::k_topLeft:
+				case Core::AlignmentAnchor::k_topCentre:
+				case Core::AlignmentAnchor::k_topRight:
 					outvAlignmentPoint.y = invHalfSize.y;
 					break;
-				case Core::ALIGN_MIDDLE_LEFT:
-				case Core::ALIGN_MIDDLE_CENTRE:
-				case Core::ALIGN_MIDDLE_RIGHT:
+				case Core::AlignmentAnchor::k_middleLeft:
+				case Core::AlignmentAnchor::k_middleCentre:
+				case Core::AlignmentAnchor::k_middleRight:
 					outvAlignmentPoint.y = 0;
 					break;				
-				case Core::ALIGN_BOTTOM_LEFT:
-				case Core::ALIGN_BOTTOM_CENTRE:
-				case Core::ALIGN_BOTTOM_RIGHT:
+				case Core::AlignmentAnchor::k_bottomLeft:
+				case Core::AlignmentAnchor::k_bottomCentre:
+				case Core::AlignmentAnchor::k_bottomRight:
 					outvAlignmentPoint.y = -invHalfSize.y;
 					break;
                 default:
@@ -109,21 +109,21 @@ namespace moFlo
 			//Horizontal alignment
 			switch (ineAlignment) 
             {
-				case Core::ALIGN_TOP_LEFT:
-				case Core::ALIGN_MIDDLE_LEFT:
-				case Core::ALIGN_BOTTOM_LEFT:
+				case Core::AlignmentAnchor::k_topLeft:
+				case Core::AlignmentAnchor::k_middleLeft:
+				case Core::AlignmentAnchor::k_bottomLeft:
 					outvAlignmentPoint.x = -invHalfSize.x;
 					break;
 					
-				case Core::ALIGN_TOP_CENTRE:
-				case Core::ALIGN_MIDDLE_CENTRE:
-				case Core::ALIGN_BOTTOM_CENTRE:
+				case Core::AlignmentAnchor::k_topCentre:
+				case Core::AlignmentAnchor::k_middleCentre:
+				case Core::AlignmentAnchor::k_bottomCentre:
 					outvAlignmentPoint.x = 0;
 					break;	
 					
-				case Core::ALIGN_TOP_RIGHT:
-				case Core::ALIGN_MIDDLE_RIGHT:
-				case Core::ALIGN_BOTTOM_RIGHT:
+				case Core::AlignmentAnchor::k_topRight:
+				case Core::AlignmentAnchor::k_middleRight:
+				case Core::AlignmentAnchor::k_bottomRight:
 					outvAlignmentPoint.x = invHalfSize.x;
 					break;
                 default:
@@ -140,44 +140,44 @@ namespace moFlo
 		{
 			if(instrString == "MiddleCentre")
 			{
-				return ALIGN_MIDDLE_CENTRE;
+				return AlignmentAnchor::k_middleCentre;
 			}
 			else if(instrString == "TopLeft")
 			{
-				return ALIGN_TOP_LEFT;
+				return AlignmentAnchor::k_topLeft;
 			}
 			else if(instrString == "TopRight")
 			{
-				return ALIGN_TOP_RIGHT;
+				return AlignmentAnchor::k_topRight;
 			}
 			else if(instrString == "BottomLeft")
 			{
-				return ALIGN_BOTTOM_LEFT;
+				return AlignmentAnchor::k_bottomLeft;
 			}
 			else if(instrString == "BottomRight")
 			{
-				return ALIGN_BOTTOM_RIGHT;
+				return AlignmentAnchor::k_bottomRight;
 			}
 			else if(instrString == "MiddleLeft")
 			{
-				return ALIGN_MIDDLE_LEFT;
+				return AlignmentAnchor::k_middleLeft;
 			}
 			else if(instrString == "MiddleRight")
 			{
-				return ALIGN_MIDDLE_RIGHT;
+				return AlignmentAnchor::k_middleRight;
 			}
 			else if(instrString == "TopCentre")
 			{
-				return ALIGN_TOP_CENTRE;
+				return AlignmentAnchor::k_topCentre;
 			}
 			else if(instrString == "BottomCentre")
 			{
-				return ALIGN_BOTTOM_CENTRE;
+				return AlignmentAnchor::k_bottomCentre;
 			}
 			else
 			{
 				ERROR_LOG("Alignment Anchor: Invalid string " + instrString);
-				return ALIGN_MIDDLE_CENTRE;
+				return AlignmentAnchor::k_middleCentre;
 			}
 		}
 		//---------------------------------------------------------------
@@ -190,23 +190,23 @@ namespace moFlo
 		{
 			switch (ineAlignmentAnchor)
 			{
-			case ALIGN_TOP_LEFT:
+			case AlignmentAnchor::k_topLeft:
 				return "TopLeft";
-			case ALIGN_TOP_RIGHT:
+			case AlignmentAnchor::k_topRight:
 				return "TopRight";
-			case ALIGN_TOP_CENTRE:
+			case AlignmentAnchor::k_topCentre:
 				return "TopCentre";
-			case ALIGN_MIDDLE_LEFT:
+			case AlignmentAnchor::k_middleLeft:
 				return "MiddleLeft";
-			case ALIGN_MIDDLE_RIGHT:
+			case AlignmentAnchor::k_middleRight:
 				return "MiddleRight";
-			case ALIGN_MIDDLE_CENTRE:
+			case AlignmentAnchor::k_middleCentre:
 				return "MiddleCentre";
-			case ALIGN_BOTTOM_LEFT:
+			case AlignmentAnchor::k_bottomLeft:
 				return "BottomLeft";
-			case ALIGN_BOTTOM_RIGHT:
+			case AlignmentAnchor::k_bottomRight:
 				return "BottomRight";
-			case ALIGN_BOTTOM_CENTRE:
+			case AlignmentAnchor::k_bottomCentre:
 				return "BottomCentre";
 			default:
 				return "";

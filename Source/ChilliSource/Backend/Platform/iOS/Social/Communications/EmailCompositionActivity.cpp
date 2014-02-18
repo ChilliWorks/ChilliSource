@@ -63,7 +63,7 @@ namespace moFlo
         {
             Attachment emptyAttachment;
             emptyAttachment.mstrFilename = "";
-            emptyAttachment.meStorageLocation = Core::SL_NONE;
+            emptyAttachment.meStorageLocation = Core::StorageLocation::k_none;
             emptyAttachment.mstrMIMEType = "";
 			PresentWithAttachment(inastrRecipientAddresses, instrSubject, instrContents, emptyAttachment, inCallback, inbFormatAsHtml);
 		}
@@ -76,7 +76,7 @@ namespace moFlo
             if ([MFMailComposeViewController canSendMail] == false)
             {
                 [mpVC release];
-                inCallback(SR_FAILED);
+                inCallback(SendResult::k_failed);
                 return;
             }
             
@@ -99,11 +99,11 @@ namespace moFlo
             if (inAttachment.mstrFilename.size() > 0)
             {
                 std::string strFilename;
-				if (inAttachment.meStorageLocation == Core::SL_PACKAGE)
+				if (inAttachment.meStorageLocation == Core::StorageLocation::k_package)
 				{
 					strFilename = Core::CApplication::GetFileSystemPtr()->GetDirectoryForPackageFile(inAttachment.mstrFilename);
 				}
-				else if (inAttachment.meStorageLocation == Core::SL_DLC && Core::CApplication::GetFileSystemPtr()->DoesFileExistInCachedDLC(inAttachment.mstrFilename) == false)
+				else if (inAttachment.meStorageLocation == Core::StorageLocation::k_DLC && Core::CApplication::GetFileSystemPtr()->DoesFileExistInCachedDLC(inAttachment.mstrFilename) == false)
                 {
                     strFilename = Core::CApplication::GetFileSystemPtr()->GetPackageDLCDirectory() + inAttachment.mstrFilename;
                 }
@@ -192,13 +192,13 @@ namespace moFlo
         {
 			case MFMailComposeResultSaved:
 			case MFMailComposeResultSent:
-				eResult = IEmailCompositionActivity::SR_SUCCEED;
+				eResult = IEmailCompositionActivity::SendResult::k_succeed;
 				break;
 			case MFMailComposeResultCancelled:
-				eResult = IEmailCompositionActivity::SR_CANCELLED;
+				eResult = IEmailCompositionActivity::SendResult::k_cancelled;
 				break;
 			case MFMailComposeResultFailed:
-				eResult = IEmailCompositionActivity::SR_FAILED;
+				eResult = IEmailCompositionActivity::SendResult::k_failed;
 				break;
 		}
 	

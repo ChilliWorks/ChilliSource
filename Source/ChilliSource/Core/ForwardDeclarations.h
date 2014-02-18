@@ -110,10 +110,10 @@ namespace moFlo
 		typedef WEAK_PTR<CImage> ImageWeakPtr;
 
         
-        enum InterpolationType
+        enum class InterpolationType
         {
-            INTERPOLATION_STEP,
-            INTERPOLATION_LINEAR
+            k_step,
+            k_linear
         };
 	}
 }

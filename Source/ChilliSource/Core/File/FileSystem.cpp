@@ -18,20 +18,20 @@ namespace moFlo
         std::string IFileSystem::mastrResourceDirectory[3];
         f32 IFileSystem::mfAssetsDensity = 1.0f;
         
-        moFlo::Core::STORAGE_LOCATION GetStorageLocationFromString(const std::string & instrStorage)
+        moFlo::Core::StorageLocation GetStorageLocationFromString(const std::string & instrStorage)
         {
             if(instrStorage == "Package")
-                return SL_PACKAGE;
+                return StorageLocation::k_package;
             else if(instrStorage == "Cache")
-                return SL_CACHE;
+                return StorageLocation::k_cache;
             else if(instrStorage == "DLC")
-                return SL_DLC;
+                return StorageLocation::k_DLC;
             else if(instrStorage == "SaveData")
-            	return SL_SAVEDATA;
+            	return StorageLocation::k_saveData;
             else if(instrStorage == "Root")
-            	return SL_ROOT;
+            	return StorageLocation::k_Root;
             else
-                return SL_NONE;
+                return StorageLocation::k_none;
         }
         
     	DEFINE_NAMED_INTERFACE(IFileSystem);
@@ -52,14 +52,14 @@ namespace moFlo
         //--------------------------------------------------------------
         /// Is Storage Location Writeable
         //--------------------------------------------------------------
-        bool IFileSystem::IsStorageLocationWritable(STORAGE_LOCATION ineSourceStorageLocation) const
+        bool IFileSystem::IsStorageLocationWritable(StorageLocation ineSourceStorageLocation) const
         {
             switch (ineSourceStorageLocation)
             {
-                case SL_SAVEDATA:
-                case SL_CACHE:
-                case SL_DLC:
-                case SL_ROOT:
+                case StorageLocation::k_saveData:
+                case StorageLocation::k_cache:
+                case StorageLocation::k_DLC:
+                case StorageLocation::k_Root:
                     return true;
                 default:
                     return false;
@@ -141,7 +141,7 @@ namespace moFlo
         /// @param File path
         /// @return MD5 checksum
         //--------------------------------------------------------------
-        std::string IFileSystem::GetFileMD5Checksum(STORAGE_LOCATION ineLocation, const std::string& instrFilePath) const
+        std::string IFileSystem::GetFileMD5Checksum(StorageLocation ineLocation, const std::string& instrFilePath) const
         {
             const u32 kudwChunkSize = 256;
             s8 byData[kudwChunkSize];
@@ -149,7 +149,7 @@ namespace moFlo
             CHashMD5::MD5 Hash;
             s32 dwSize = kudwChunkSize;
             
-            FileStreamPtr pFile = CreateFileStream(ineLocation, instrFilePath, FM_READ_BINARY);
+            FileStreamPtr pFile = CreateFileStream(ineLocation, instrFilePath, FileMode::k_readBinary);
             
             if(!pFile->IsOpen() || pFile->IsBad())
             {
@@ -174,7 +174,7 @@ namespace moFlo
         /// @param File path
         /// @return MD5 checksum
         //--------------------------------------------------------------
-        std::string IFileSystem::GetDirectoryMD5Checksum(STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory) const
+        std::string IFileSystem::GetDirectoryMD5Checksum(StorageLocation ineStorageLocation, const std::string& instrDirectory) const
 		{
         	DYNAMIC_ARRAY<std::string> astrHashes;
 			DYNAMIC_ARRAY<std::string> astrFilenames;
@@ -217,18 +217,18 @@ namespace moFlo
         //--------------------------------------------------------------
 		/// Get File CRC32 Checksum
 		//--------------------------------------------------------------
-		u32 IFileSystem::GetFileCRC32Checksum(STORAGE_LOCATION ineStorageLocation, const std::string&  instrFilepath) const
+		u32 IFileSystem::GetFileCRC32Checksum(StorageLocation ineStorageLocation, const std::string&  instrFilepath) const
 		{
 			u32 udwOutput = 0;
 
 			//open the file
-			FileStreamPtr pFile = CreateFileStream(ineStorageLocation, instrFilepath, FM_READ_BINARY);
+			FileStreamPtr pFile = CreateFileStream(ineStorageLocation, instrFilepath, FileMode::k_readBinary);
 			if (pFile->IsOpen() == true && pFile->IsBad() == false)
 			{
 				//get the length of the file
-				pFile->SeekG(0, SD_END);
+				pFile->SeekG(0, SeekDir::k_end);
 				s32 dwLength = pFile->TellG();
-				pFile->SeekG(0, SD_BEGINNING);
+				pFile->SeekG(0, SeekDir::k_beginning);
 
 				//read contents of file
 				s8* abyContents = new s8[dwLength];
@@ -243,7 +243,7 @@ namespace moFlo
         //--------------------------------------------------------------
 		/// Get Directory CRC32 Checksum
 		//--------------------------------------------------------------
-		u32 IFileSystem::GetDirectoryCRC32Checksum(STORAGE_LOCATION ineStorageLocation, const std::string&  instrDirectory) const
+		u32 IFileSystem::GetDirectoryCRC32Checksum(StorageLocation ineStorageLocation, const std::string&  instrDirectory) const
 		{
 			DYNAMIC_ARRAY<u32> audwHashes;
 			DYNAMIC_ARRAY<std::string> astrFilenames;
@@ -278,14 +278,14 @@ namespace moFlo
         //--------------------------------------------------------------
 		/// Get File length
 		//--------------------------------------------------------------
-		u32 IFileSystem::GetFileSize(STORAGE_LOCATION ineStorageLocation, const std::string&  instrFilepath) const
+		u32 IFileSystem::GetFileSize(StorageLocation ineStorageLocation, const std::string&  instrFilepath) const
 		{
 			//open the file
-			FileStreamPtr pFile = CreateFileStream(ineStorageLocation, instrFilepath, FM_READ_BINARY);
+			FileStreamPtr pFile = CreateFileStream(ineStorageLocation, instrFilepath, FileMode::k_readBinary);
 			if (pFile->IsOpen() == true && pFile->IsBad() == false)
 			{
 				//get the length of the file
-				pFile->SeekG(0, SD_END);
+				pFile->SeekG(0, SeekDir::k_end);
 				s32 dwLength = pFile->TellG();
 				pFile->Close();
 				return dwLength;
@@ -297,7 +297,7 @@ namespace moFlo
         //--------------------------------------------------------------
 		/// Get Total File size of all Files in Directory
 		//--------------------------------------------------------------
-		u32 IFileSystem::GetDirectorySize(STORAGE_LOCATION ineStorageLocation, const std::string&  instrDirectory) const
+		u32 IFileSystem::GetDirectorySize(StorageLocation ineStorageLocation, const std::string&  instrDirectory) const
 		{
 			DYNAMIC_ARRAY<std::string> astrFilenames;
 			GetFileNamesInDirectory(ineStorageLocation, instrDirectory, true, astrFilenames);
@@ -325,13 +325,13 @@ namespace moFlo
         /// @param Out: The path to the most up to date file with the
         /// given name. This argument is unchanged if file is not found
         //--------------------------------------------------------------
-        void IFileSystem::GetBestPathToFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFileName, std::string& outFilePath) const
+        void IFileSystem::GetBestPathToFile(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, std::string& outFilePath) const
         {
-            if(ineStorageLocation == Core::SL_PACKAGE)
+            if(ineStorageLocation == Core::StorageLocation::k_package)
             {
                 outFilePath = GetDirectoryForPackageFile(instrFileName);
             }
-            else if(ineStorageLocation == Core::SL_DLC)
+            else if(ineStorageLocation == Core::StorageLocation::k_DLC)
             {
                 outFilePath = GetDirectoryForDLCFile(instrFileName);
             }

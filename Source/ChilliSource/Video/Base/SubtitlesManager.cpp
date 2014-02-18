@@ -48,21 +48,21 @@ namespace moFlo
 		//-----------------------------------------------------------------
 		/// Get Resource From File
 		//-----------------------------------------------------------------
-		Core::ResourcePtr CSubtitlesManager::GetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr CSubtitlesManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetSubtitlesFromFile(ineStorageLocation, instrFilePath);
 		}
 		//-----------------------------------------------------------------
 		/// Async Get Resource From File
 		//-----------------------------------------------------------------
-		Core::ResourcePtr CSubtitlesManager::AsyncGetResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr CSubtitlesManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetSubtitlesFromFile(ineStorageLocation, instrFilePath);
 		}
 		//----------------------------------------------------------------
 		/// Get Subtitles From File
 		//----------------------------------------------------------------
-		SubtitlesPtr CSubtitlesManager::GetSubtitlesFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath)
+		SubtitlesPtr CSubtitlesManager::GetSubtitlesFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -97,7 +97,7 @@ namespace moFlo
 		//----------------------------------------------------------------
 		/// Async Get Subtitles From File
 		//----------------------------------------------------------------
-		SubtitlesPtr CSubtitlesManager::AsyncGetSubtitlesFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath)
+		SubtitlesPtr CSubtitlesManager::AsyncGetSubtitlesFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			

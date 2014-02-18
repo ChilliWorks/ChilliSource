@@ -38,17 +38,17 @@ namespace moFlo
             return inInterfaceID == CSceneDesc::InterfaceID;
         }
         
-        ResourcePtr CSceneDescManager::GetResourceFromFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+        ResourcePtr CSceneDescManager::GetResourceFromFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             return GetSceneDescFromFile(ineStorageLocation, instrFilePath);
         }
         
-        ResourcePtr CSceneDescManager::AsyncGetResourceFromFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+        ResourcePtr CSceneDescManager::AsyncGetResourceFromFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             return AsyncGetSceneDescFromFile(ineStorageLocation, instrFilePath);
         }
         
-        SceneDescPtr CSceneDescManager::GetSceneDescFromFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+        SceneDescPtr CSceneDescManager::GetSceneDescFromFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
             
@@ -80,7 +80,7 @@ namespace moFlo
             return SceneDescPtr();
         }
         
-        SceneDescPtr CSceneDescManager::AsyncGetSceneDescFromFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+        SceneDescPtr CSceneDescManager::AsyncGetSceneDescFromFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
             

@@ -78,8 +78,8 @@ namespace moFlo
             typedef fastdelegate::FastDelegate1<const EntityDesc&, EntityPtr> CustomEntityDelegate;
             EntityPtr BuildScene(CustomEntityDelegate inCustomEntityDelegate = CustomEntityDelegate());
             
-			bool LoadFromFile(STORAGE_LOCATION ineStorageLocation, const std::string & incName);
-            void WriteToFile(STORAGE_LOCATION ineStorageLocation, const std::string & incName);
+			bool LoadFromFile(StorageLocation ineStorageLocation, const std::string & incName);
+            void WriteToFile(StorageLocation ineStorageLocation, const std::string & incName);
             CSceneDesc::EntityDesc*  GetDescriptionForEntityWithName(const std::string & instrName);
 			
         protected:

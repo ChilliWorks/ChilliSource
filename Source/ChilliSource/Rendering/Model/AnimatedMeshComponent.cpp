@@ -35,9 +35,9 @@ namespace moFlo
 		/// Constructor
 		//----------------------------------------------------------
 		CAnimatedMeshComponent::CAnimatedMeshComponent() 
-            : mfPlaybackPosition(0.0f), mfPlaybackSpeedMultiplier(1.0f), mfBlendlinePosition(0.0f), 
-            meBlendType(AnimationBlendType::LINEAR), mePlaybackType(AnimationPlaybackType::ONCE), meFadeType(AnimationBlendType::LINEAR), mfFadeTimer(0.0f), mfFadeMaxTime(0.0f), mfFadePlaybackPosition(0.0f), 
-            mfFadeBlendlinePosition(0.0f), mbFinished(false), mbAnimationDataDirty(true)
+        : mfPlaybackPosition(0.0f), mfPlaybackSpeedMultiplier(1.0f), mfBlendlinePosition(0.0f),
+        meBlendType(AnimationBlendType::k_linear), mePlaybackType(AnimationPlaybackType::k_once), meFadeType(AnimationBlendType::k_linear), mfFadeTimer(0.0f), mfFadeMaxTime(0.0f), mfFadePlaybackPosition(0.0f),
+        mfFadeBlendlinePosition(0.0f), mbFinished(false), mbAnimationDataDirty(true)
 		{
             mMaterials.push_back(mpMaterial);
 		}
@@ -310,7 +310,7 @@ namespace moFlo
 		//----------------------------------------------------------
         /// Attach Animation
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::AttachAnimation(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrAnimation, f32 infBlendlinePosition)
+        void CAnimatedMeshComponent::AttachAnimation(Core::StorageLocation ineStorageLocation, const std::string& instrAnimation, f32 infBlendlinePosition)
         {
             AttachAnimation(LOAD_RESOURCE(CSkinnedAnimation, ineStorageLocation, instrAnimation), infBlendlinePosition);
         }
@@ -348,7 +348,7 @@ namespace moFlo
         //----------------------------------------------------------
         /// Fade Out
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::FadeOut(AnimationBlendType::ENUM ineFadeType, f32 infFadeOutTime)
+        void CAnimatedMeshComponent::FadeOut(AnimationBlendType ineFadeType, f32 infFadeOutTime)
         {
             if (NULL != mActiveAnimationGroup && true == mActiveAnimationGroup->IsPrepared())
             {
@@ -469,7 +469,7 @@ namespace moFlo
         //----------------------------------------------------------
         /// Set Playback Type
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::SetPlaybackType(AnimationPlaybackType::ENUM inePlaybackType)
+        void CAnimatedMeshComponent::SetPlaybackType(AnimationPlaybackType inePlaybackType)
         {
             mePlaybackType = inePlaybackType;
             mbFinished = false;
@@ -501,7 +501,7 @@ namespace moFlo
         //----------------------------------------------------------
         /// Set Blend Type
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::SetBlendType(AnimationBlendType::ENUM ineBlendType)
+        void CAnimatedMeshComponent::SetBlendType(AnimationBlendType ineBlendType)
         {
             meBlendType = ineBlendType;
         }
@@ -536,7 +536,7 @@ namespace moFlo
         //----------------------------------------------------------
         /// Get Playback Type
         //----------------------------------------------------------
-        AnimationPlaybackType::ENUM CAnimatedMeshComponent::GetPlaybackType() const
+        AnimationPlaybackType CAnimatedMeshComponent::GetPlaybackType() const
         {
             return mePlaybackType;
         }
@@ -575,7 +575,7 @@ namespace moFlo
         //----------------------------------------------------------
         /// Get Blend Type
         //----------------------------------------------------------
-        AnimationBlendType::ENUM CAnimatedMeshComponent::GetBlendType() const
+        AnimationBlendType CAnimatedMeshComponent::GetBlendType() const
         {
             return meBlendType;
         }
@@ -666,7 +666,7 @@ namespace moFlo
                 }
                 
                 DYNAMIC_ARRAY<MaterialPtr> aMaterials;
-                mspShadowMapMaterial->SetActiveShaderProgram(SP_AMBIENT);
+                mspShadowMapMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
                 aMaterials.push_back(mspShadowMapMaterial);
                 
                 if (mbAnimationDataDirty == true)
@@ -730,7 +730,7 @@ namespace moFlo
                 
                 switch (mePlaybackType)
                 {
-                    case AnimationPlaybackType::ONCE:
+                    case AnimationPlaybackType::k_once:
                     {
                         if (mfPlaybackPosition >= mActiveAnimationGroup->GetAnimationLength())
                         {
@@ -740,7 +740,7 @@ namespace moFlo
                         }
                         break;
                     }
-                    case AnimationPlaybackType::LOOPING:
+                    case AnimationPlaybackType::k_looping:
                     {
                         while (mfPlaybackPosition >= mActiveAnimationGroup->GetAnimationLength() && mActiveAnimationGroup->GetAnimationLength() > 0.0f)
                         {
@@ -808,7 +808,7 @@ namespace moFlo
 					//get the material name
 					SubMeshPtr subMesh = mpModel->GetSubMeshAtIndex(i);
 					std::string matName = subMesh->GetDefaultMaterialName();
-                    Core::STORAGE_LOCATION eStorageLocation = subMesh->GetDefaultMaterialStorageLocation();
+                    Core::StorageLocation eStorageLocation = subMesh->GetDefaultMaterialStorageLocation();
                     
 					//try and load the material
 					MaterialPtr pMaterial;

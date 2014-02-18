@@ -11,12 +11,12 @@ namespace moFlo
 {
 	namespace Input
 	{
-		enum MouseInputType
+		enum class MouseInputType
 		{
-			MOUSE_LEFT_BUTTON,
-			MOUSE_RIGHT_BUTTON,
-			MOUSE_MIDDLE_BUTTON,
-			MOUSE_NUM_BUTTON,
+            k_leftButton,
+            k_rightButton,
+            k_middleButton,
+            k_total
 		};
 
 		typedef fastdelegate::FastDelegate1<const IMouse*> MouseEventDelegate;
@@ -69,7 +69,7 @@ namespace moFlo
 			CEvent1<MouseEventDelegate> mOnMouseReleasedEvent;
 
 			//Tracks the state of the mouse buttons
-			bool mbaButtonsDown[MOUSE_NUM_BUTTON];
+			bool mbaButtonsDown[(u32)MouseInputType::k_total];
 
 			ITouchScreen* mpTouchProxy;
 		};

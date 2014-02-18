@@ -166,11 +166,11 @@ static mach_timebase_info_data_t gMachtimeBase;
 	// NO = 0, YES = 1
 	if(buttonIndex == 0)
     {
-        moFlo::Core::CApplication::OnSystemConfirmDialogResult(alertView.tag, moFlo::SystemConfirmDialog::CANCEL);
+        moFlo::Core::CApplication::OnSystemConfirmDialogResult(alertView.tag, moFlo::SystemConfirmDialog::Result::k_cancel);
     }
     else 
     {
-        moFlo::Core::CApplication::OnSystemConfirmDialogResult(alertView.tag, moFlo::SystemConfirmDialog::CONFIRM);
+        moFlo::Core::CApplication::OnSystemConfirmDialogResult(alertView.tag, moFlo::SystemConfirmDialog::Result::k_confirm);
     }
 }
 //----------------------------------------------

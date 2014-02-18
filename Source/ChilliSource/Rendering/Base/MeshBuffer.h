@@ -16,9 +16,9 @@ namespace moFlo
 {
 	namespace Rendering
 	{
-		enum PrimitiveType	{TRIS, TRI_STRIP, LINE};
-		enum BufferUsage	{STATIC, DYNAMIC};
-		enum BufferAccess	{READ, WRITE, READ_WRITE, WRITE_DISCARD, WRITE_NO_OVERWRITE};
+		enum class PrimitiveType	{k_tri, k_triStrip, k_line};
+		enum class BufferUsage	{k_static, k_dynamic};
+		enum class BufferAccess	{k_read, k_write, k_readWrite, k_writeDiscard, k_writeNoOverwrite};
 		
 		struct BufferDescription
 		{

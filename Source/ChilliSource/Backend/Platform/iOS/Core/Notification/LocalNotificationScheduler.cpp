@@ -186,7 +186,7 @@ namespace moFlo
         void CLocalNotificationScheduler::ConvertUILocalNotificationToNotification(UILocalNotification* inpUILocal, Notification& outsNotification)
         {
             outsNotification.bDismissed = false;
-            outsNotification.eType = NOTICE_SYSTEM;
+            outsNotification.eType = NotificationType::k_system;
             outsNotification.TriggerTime = (TimeIntervalSecs)[inpUILocal.fireDate timeIntervalSince1970];
             
             outsNotification.ID = (NotificationID)[[inpUILocal.userInfo objectForKey:@"ID"] unsignedIntValue];

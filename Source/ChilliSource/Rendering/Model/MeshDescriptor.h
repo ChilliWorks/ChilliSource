@@ -46,7 +46,7 @@ namespace moFlo
 			moFlo::Core::CVector3 mvMaxBounds;
 			std::string mstrTextureName;
 			std::string mstrMaterialName;
-            Core::STORAGE_LOCATION meMaterialStorageLocation;
+            Core::StorageLocation meMaterialStorageLocation;
 			u8* mpVertexData;
 			u8* mpIndexData;
 			DYNAMIC_ARRAY<moFlo::Core::CMatrix4x4> mInverseBindPoseMatrices;

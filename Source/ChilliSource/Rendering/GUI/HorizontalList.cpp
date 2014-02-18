@@ -26,7 +26,7 @@ namespace moFlo
         /// Default
         //---------------------------------------------------------
         CHorizontalList::CHorizontalList()
-        : Justifiction(JUSTIFY_LEFT), AbsoluteSpacing(0.0f), RelativeSpacing(0.0f), meVerticalAlignmentAnchor(Core::ALIGN_MIDDLE_LEFT)
+        : HorizontalJustifiction(ItemHorizontalJustification::k_left), AbsoluteSpacing(0.0f), RelativeSpacing(0.0f), meVerticalAlignmentAnchor(Core::AlignmentAnchor::k_middleLeft)
         {
             
         }
@@ -36,24 +36,24 @@ namespace moFlo
         /// @param Dictionary of params
         //---------------------------------------------------------
         CHorizontalList::CHorizontalList(const Core::ParamDictionary& insParams)
-        : CGUIView(insParams), Justifiction(JUSTIFY_LEFT), AbsoluteSpacing(0.0f), meVerticalAlignmentAnchor(Core::ALIGN_MIDDLE_LEFT), RelativeSpacing(0.0f)
+        : CGUIView(insParams), HorizontalJustifiction(ItemHorizontalJustification::k_left), AbsoluteSpacing(0.0f), meVerticalAlignmentAnchor(Core::AlignmentAnchor::k_middleLeft), RelativeSpacing(0.0f)
         {
             std::string strValue;
             
             //---Set Justification
-            if(insParams.TryGetValue("Justification", strValue))
+            if(insParams.TryGetValue("HorizontalJustification", strValue))
             {
                 if(strValue == "Centre")
                 {
-                    Justifiction = JUSTIFY_CENTRE;
+                    SetHorizontalJustification(ItemHorizontalJustification::k_centre);
                 }
                 else if(strValue == "Left")
                 {
-                    Justifiction = JUSTIFY_LEFT;
+                    SetHorizontalJustification(ItemHorizontalJustification::k_left);
                 }
                 else if(strValue == "Right")
                 {
-                    Justifiction = JUSTIFY_RIGHT;
+                    SetHorizontalJustification(ItemHorizontalJustification::k_right);
                 }
             }
             //---Set Justification
@@ -61,15 +61,15 @@ namespace moFlo
             {
                 if(strValue == "Top")
                 {
-                    SetVerticalJustification( JUSTIFY_TOP );
+                    SetVerticalJustification(ItemVerticalJustification::k_top);
                 }
                 else if(strValue == "Middle")
                 {
-                    SetVerticalJustification( JUSTIFY_MIDDLE );
+                    SetVerticalJustification(ItemVerticalJustification::k_middle);
                 }
                 else if(strValue == "Bottom")
                 {
-                    SetVerticalJustification( JUSTIFY_BOTTOM );
+                    SetVerticalJustification(ItemVerticalJustification::k_bottom);
                 }
             }
             //---Set Spacing
@@ -122,22 +122,22 @@ namespace moFlo
             return RelativeSpacing;
         }
         //---------------------------------------------------------
-        /// Set Justification
+        /// Set Horizontal Justification
         ///
         /// @param Justification which will align the items within the list
         //---------------------------------------------------------
-        void CHorizontalList::SetJustification(ItemJustification ineJustification)
+        void CHorizontalList::SetHorizontalJustification(ItemHorizontalJustification ineJustification)
         {
-            Justifiction = ineJustification;
+            HorizontalJustifiction = ineJustification;
         }
         //---------------------------------------------------------
-        /// Get Justification
+        /// Get Horizontal Justification
         ///
         /// @return Justification which will align the items within the list
         //---------------------------------------------------------
-        CHorizontalList::ItemJustification CHorizontalList::GetJustification() const
+        CHorizontalList::ItemHorizontalJustification CHorizontalList::GetHorizontalJustification() const
         {
-            return Justifiction;
+            return HorizontalJustifiction;
         }
         //---------------------------------------------------------
         /// Set Vertical Justification
@@ -148,16 +148,16 @@ namespace moFlo
         {
             VerticalJustifiction = ineJustification;
             
-            switch( VerticalJustifiction )
+            switch(VerticalJustifiction)
             {
-                case JUSTIFY_TOP:
-                    meVerticalAlignmentAnchor = Core::ALIGN_TOP_LEFT;
+                case ItemVerticalJustification::k_top:
+                    meVerticalAlignmentAnchor = Core::AlignmentAnchor::k_topLeft;
                     break;
-                case JUSTIFY_MIDDLE:
-                    meVerticalAlignmentAnchor = Core::ALIGN_MIDDLE_LEFT;
+                case ItemVerticalJustification::k_middle:
+                    meVerticalAlignmentAnchor = Core::AlignmentAnchor::k_middleLeft;
                     break;
-                case JUSTIFY_BOTTOM:
-                    meVerticalAlignmentAnchor = Core::ALIGN_BOTTOM_LEFT;
+                case ItemVerticalJustification::k_bottom:
+                    meVerticalAlignmentAnchor = Core::AlignmentAnchor::k_bottomLeft;
                     break;
             }
             
@@ -230,8 +230,8 @@ namespace moFlo
             if(Visible)
             {
 				//Check if this is on screen
-				Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_TOP_RIGHT);
-				Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_BOTTOM_LEFT);
+				Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
+				Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft);
 				
 				if(vTopRight.y < 0 || vBottomLeft.y > Core::CScreen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::CScreen::GetOrientedWidth())
 				{
@@ -269,12 +269,12 @@ namespace moFlo
             
             fX -= fSpacing;
             
-            switch(Justifiction)
+            switch(HorizontalJustifiction)
             {
-                case JUSTIFY_LEFT:
+                case ItemHorizontalJustification::k_left:
                 default:
                     break;
-                case JUSTIFY_RIGHT:
+                case ItemHorizontalJustification::k_right:
                 {
                     f32 fOffset = GetAbsoluteSize().x - fX;
                     for(Subviews::iterator pView = maListSubviews.begin(); pView != maListSubviews.end(); ++pView)
@@ -283,7 +283,7 @@ namespace moFlo
                     }
                     break;
                 }
-                case JUSTIFY_CENTRE:
+                case ItemHorizontalJustification::k_centre:
                 {
                     f32 fHalfOffset = (GetAbsoluteSize().x * 0.5f) - (fX * 0.5f);
                     for(Subviews::iterator pView = maListSubviews.begin(); pView != maListSubviews.end(); ++pView)

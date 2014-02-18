@@ -795,22 +795,22 @@ namespace moFlo
             //the diagonal
             BoundingSphere.fRadius *= 1.412f;
             
-			if(Core::CIntersection::Intersects(BoundingSphere, mLeftClipPlane) == Core::CIntersection::OUTSIDE)
+			if(Core::CIntersection::Intersects(BoundingSphere, mLeftClipPlane) == Core::CIntersection::Result::k_outside)
                 return false;
 
-			if(Core::CIntersection::Intersects(BoundingSphere, mRightClipPlane) == Core::CIntersection::OUTSIDE)
+			if(Core::CIntersection::Intersects(BoundingSphere, mRightClipPlane) == Core::CIntersection::Result::k_outside)
                 return false;
 
-			if(Core::CIntersection::Intersects(BoundingSphere, mTopClipPlane) == Core::CIntersection::OUTSIDE)
+			if(Core::CIntersection::Intersects(BoundingSphere, mTopClipPlane) == Core::CIntersection::Result::k_outside)
                 return false;
 
-			if(Core::CIntersection::Intersects(BoundingSphere, mBottomClipPlane) == Core::CIntersection::OUTSIDE)
+			if(Core::CIntersection::Intersects(BoundingSphere, mBottomClipPlane) == Core::CIntersection::Result::k_outside)
                 return false;
         
-            if(Core::CIntersection::Intersects(BoundingSphere, mNearClipPlane) == Core::CIntersection::OUTSIDE)
+            if(Core::CIntersection::Intersects(BoundingSphere, mNearClipPlane) == Core::CIntersection::Result::k_outside)
                 return false;
     
-			if(Core::CIntersection::Intersects(BoundingSphere, mFarClipPlane) == Core::CIntersection::OUTSIDE)
+			if(Core::CIntersection::Intersects(BoundingSphere, mFarClipPlane) == Core::CIntersection::Result::k_outside)
                 return false;
 
 			return true;

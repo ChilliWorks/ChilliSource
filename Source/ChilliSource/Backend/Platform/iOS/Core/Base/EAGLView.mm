@@ -30,7 +30,7 @@ static EAGLView* gpGLView = nil;
 /// @param Backing colour mode
 /// @return The initialised view
 //----------------------------------------------------------
--(id) init:(BOOL)landscape andColourMode:(EAGLColourMode::Mode)ineMode
+-(id) init:(BOOL)landscape andColourMode:(EAGLColourMode)ineMode
 {
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     
@@ -49,10 +49,10 @@ static EAGLView* gpGLView = nil;
     NSString* strColourMode = nil;
     switch(ineMode)
     {
-        case EAGLColourMode::RGB565:
+        case EAGLColourMode::k_RGB565:
             strColourMode = kEAGLColorFormatRGB565;
             break;
-        case EAGLColourMode::RGBA8:
+        case EAGLColourMode::k_RGBA8:
             strColourMode = kEAGLColorFormatRGBA8;
             break;
     }

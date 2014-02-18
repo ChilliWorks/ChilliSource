@@ -110,7 +110,7 @@ namespace moFlo
         void CMoMetricsSystem::LoadPendingSessions()
         {
             Json::Value jSessions;
-            if(Core::CUtils::ReadJson(Core::SL_CACHE, "PendingSessions.mometrics", &jSessions))
+            if(Core::CUtils::ReadJson(Core::StorageLocation::k_cache, "PendingSessions.mometrics", &jSessions))
             {
                 if(jSessions.isMember("Closed"))
                 {
@@ -134,7 +134,7 @@ namespace moFlo
                     }
                 }
                 
-                Core::CApplication::GetFileSystemPtr()->DeleteFile(Core::SL_CACHE, "PendingSessions.mometrics");
+                Core::CApplication::GetFileSystemPtr()->DeleteFile(Core::StorageLocation::k_cache, "PendingSessions.mometrics");
             }
         }
         
@@ -193,7 +193,7 @@ namespace moFlo
             
             Destroy();
             
-            Core::CUtils::StringToFile(Core::SL_CACHE, "PendingSessions.mometrics", jSessions.toUnformattedString());
+            Core::CUtils::StringToFile(Core::StorageLocation::k_cache, "PendingSessions.mometrics", jSessions.toUnformattedString());
             
             mbSessionsStarted = false;
 		}

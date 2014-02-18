@@ -67,7 +67,7 @@ namespace moFlo
 		/// @param Out: Resource object
 		/// @return Whether the resource loaded
 		//----------------------------------------------------------------------------
-		bool CXMLSpriteSheetLoader::CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool CXMLSpriteSheetLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
 			using namespace Core;
             

@@ -72,7 +72,7 @@ namespace moFlo
             
 			switch(insRequestDetails.eType)
 			{
-				case HttpRequestDetails::POST:
+				case HttpRequestDetails::Type::k_post:
                 {
                     //Set message body if we're posting
 					pRequest = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("POST"), pURL, kCFHTTPVersion1_1);
@@ -81,7 +81,7 @@ namespace moFlo
                     CFRelease(pBodyRef);
 					break;
                 }
-				case HttpRequestDetails::GET:
+				case HttpRequestDetails::Type::k_get:
                 {
                     pRequest = CFHTTPMessageCreateRequest(kCFAllocatorDefault, CFSTR("GET"), pURL, kCFHTTPVersion1_1);
                     break;
@@ -409,7 +409,7 @@ namespace moFlo
                 
                 if(mCompletionDelegate)
                 {
-                    if(meRequestResult != IHttpRequest::CANCELLED)
+                    if(meRequestResult != IHttpRequest::CompletionResult::k_cancelled)
                     {
                         mCompletionDelegate(this, meRequestResult);
                     }
@@ -430,7 +430,7 @@ namespace moFlo
                 
                 if(mCompletionDelegate)
                 {
-                    mCompletionDelegate(this, IHttpRequest::TIMEOUT);
+                    mCompletionDelegate(this, IHttpRequest::CompletionResult::k_timeout);
                     mCompletionDelegate = NULL;
                 }
             }
@@ -498,13 +498,13 @@ namespace moFlo
                                             strBuffer.clear();
                                             strBuffer.str("");
                                             mudwBytesReadThisBlock = 0;
-                                            mCompletionDelegate(this, IHttpRequest::FLUSHED);
+                                            mCompletionDelegate(this, IHttpRequest::CompletionResult::k_flushed);
                                         }
 									}
 									else if(dwBytesRead < 0)
 									{
 										//error condition, log and diagnose
-                                        meRequestResult = IHttpRequest::FAILED;
+                                        meRequestResult = IHttpRequest::CompletionResult::k_failed;
 										mbCompleted = true;
 									}
 									else if(dwBytesRead == 0)
@@ -514,7 +514,7 @@ namespace moFlo
 										//Copy the buffer into the response
 										mResponseData = strBuffer.str();
 										mudwResponseCode = udwResponseCode;
-                                        meRequestResult = IHttpRequest::COMPLETED;
+                                        meRequestResult = IHttpRequest::CompletionResult::k_completed;
 										mbCompleted = true;
 									}
 								}
@@ -535,7 +535,7 @@ namespace moFlo
 				case kCFStreamStatusNotOpen:
                 default:
                 {
-                    meRequestResult = IHttpRequest::FAILED;
+                    meRequestResult = IHttpRequest::CompletionResult::k_failed;
                     mbCompleted = true;
 					break;
                 }
@@ -552,7 +552,7 @@ namespace moFlo
 		{
             mbCompleted = true;
             mbReceivedResponse = true;
-            meRequestResult = IHttpRequest::CANCELLED;
+            meRequestResult = IHttpRequest::CompletionResult::k_cancelled;
 		}
 		//----------------------------------------------------------------------------------------
 		/// Has Completed

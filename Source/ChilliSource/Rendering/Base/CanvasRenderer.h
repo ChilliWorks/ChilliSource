@@ -66,7 +66,7 @@ namespace moFlo
             /// @param Box origin alignment
             //-----------------------------------------------------------
 			void DrawBox(const Core::CMatrix3x3& inmatTransform, const Core::CVector2 & invSize, const TexturePtr & inpTexture, const Core::Rectangle& inUVs, 
-                         const Core::CColour & insTintColour, Core::AlignmentAnchor ineAlignment = Core::ALIGN_MIDDLE_CENTRE);
+                         const Core::CColour & insTintColour, Core::AlignmentAnchor ineAlignment = Core::AlignmentAnchor::k_middleCentre);
             //-----------------------------------------------------------
             /// Draw String
             ///
@@ -164,7 +164,7 @@ namespace moFlo
 			/// @param The width of the new character
 			/// @param List of characters that we can add too
 			//----------------------------------------------------
-			static CharacterResults BuildCharacter(const FontPtr& inpFont, UTF8String::Char inCharacter, UTF8String::Char inNextCharacter,
+			static CharacterResult BuildCharacter(const FontPtr& inpFont, UTF8String::Char inCharacter, UTF8String::Char inNextCharacter,
                                                    const Core::CVector2& invCursor, f32 infTextScale, f32 infCharSpacing,
                                                    f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound = NULL);
             //----------------------------------------------------

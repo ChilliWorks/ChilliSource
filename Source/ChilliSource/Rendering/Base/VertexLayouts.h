@@ -15,10 +15,9 @@ namespace moFlo
 	{
 		namespace VertexLayout
 		{
-			//static const VertexElement kMeshElements[]		= {{FLOAT4,POSITION},{FLOAT3,NORMAL},{FLOAT2,UV},{BYTE4,COLOUR}};
-            static const VertexElement kMeshElements[]		= {{FLOAT4,POSITION},{FLOAT3,NORMAL},{FLOAT2,UV}};
-			static const VertexElement kSpriteElements[]	= {{FLOAT4,POSITION},{FLOAT2,UV},{BYTE4,COLOUR}};
-			static const VertexElement kPosColElement[]		= {{FLOAT4,POSITION},{BYTE4,COLOUR}};
+            static const VertexElement kMeshElements[]	 = {{VertexDataType::k_float4, VertexDataSemantic::k_position}, {VertexDataType::k_float3, VertexDataSemantic::k_normal}, {VertexDataType::k_float2, VertexDataSemantic::k_uv}};
+			static const VertexElement kSpriteElements[] = {{VertexDataType::k_float4, VertexDataSemantic::k_position}, {VertexDataType::k_float2, VertexDataSemantic::k_uv},     {VertexDataType::k_byte4, VertexDataSemantic::k_colour}};
+			static const VertexElement kPosColElement[]	 = {{VertexDataType::k_float4, VertexDataSemantic::k_position}, {VertexDataType::k_byte4, VertexDataSemantic::k_colour}};
 			
 			//static const CVertexDeclaration kMesh(4,kMeshElements);
             static const CVertexDeclaration kMesh(3,kMeshElements);

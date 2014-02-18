@@ -37,26 +37,26 @@ namespace moFlo
             return inExtension == kMoSceneExtension;
         }
         
-        bool CSceneProvider::CreateResourceFromFile(STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
+        bool CSceneProvider::CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
         {
             return LoadMoScene(ineStorageLocation, inFilePath, outpResource);
         }
         
-        bool CSceneProvider::AsyncCreateResourceFromFile(STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
+        bool CSceneProvider::AsyncCreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
         {
-            Task3<STORAGE_LOCATION, const std::string&, ResourcePtr&> ReadFileTask(this, &CSceneProvider::LoadAsyncMoScene, ineStorageLocation, inFilePath, outpResource);
+            Task3<StorageLocation, const std::string&, ResourcePtr&> ReadFileTask(this, &CSceneProvider::LoadAsyncMoScene, ineStorageLocation, inFilePath, outpResource);
             CTaskScheduler::ScheduleTask(ReadFileTask);
             return true;
         }
         
-        bool CSceneProvider::LoadMoScene(STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
+        bool CSceneProvider::LoadMoScene(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
         {
             CSceneDesc * pSceneDesc = reinterpret_cast<CSceneDesc*>(outpResource.get());
             
             return pSceneDesc->LoadFromFile(ineStorageLocation, inFilePath);
         }
         
-        void CSceneProvider::LoadAsyncMoScene(STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
+        void CSceneProvider::LoadAsyncMoScene(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
         {
             CSceneDesc * pSceneDesc = reinterpret_cast<CSceneDesc*>(outpResource.get());
             pSceneDesc->LoadFromFile(ineStorageLocation, inFilePath);

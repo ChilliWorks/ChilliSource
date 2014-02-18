@@ -25,12 +25,11 @@ namespace moFlo {
 
 			DECLARE_NAMED_INTERFACE(ISMSCompositionActivity);
 			
-			enum SendResult{
-			
-				SR_SUCCEED,
-				SR_FAILED, // User failed to use the 
-				SR_CANCELLED, // User cancelled sending the SMS
-				
+			enum class SendResult
+            {
+                k_succeed,
+                k_failed,
+                k_cancelled
 			};
 			
 			typedef fastdelegate::FastDelegate1<SendResult> SendResultDelegate;

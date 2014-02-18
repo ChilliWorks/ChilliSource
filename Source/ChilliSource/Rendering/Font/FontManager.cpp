@@ -81,9 +81,9 @@ namespace moFlo
         /// @param The storage location to load from
 		/// @param File name
 		//-----------------------------------------------------------------
-		Core::ResourcePtr IFontManager::GetResourceFromFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr IFontManager::GetResourceFromFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
-			return GetFontFromFile(ineStorageLocation, instrFilePath, Core::CImage::FORMAT_DEFAULT);
+			return GetFontFromFile(ineStorageLocation, instrFilePath, Core::CImage::Format::k_default);
 		}
 		//----------------------------------------------------------------
 		/// Get Font From File
@@ -95,7 +95,7 @@ namespace moFlo
 		/// @param File name
 		/// @param Image format
 		//----------------------------------------------------------------
-		FontPtr IFontManager::GetFontFromFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat)
+		FontPtr IFontManager::GetFontFromFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat)
 		{
             //It's the texture that is passed in so we need to load the alphabet file
             std::string strFontFile;

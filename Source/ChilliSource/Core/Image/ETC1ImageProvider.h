@@ -53,7 +53,7 @@ namespace moFlo
 		/// @param Out: Resource
 		/// @return Whether the resource loaded
 		//----------------------------------------------------------------
-		bool CreateResourceFromFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, moFlo::Core::ResourcePtr& outpResource);
+		bool CreateResourceFromFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string & inFilePath, moFlo::Core::ResourcePtr& outpResource);
 		//----------------------------------------------------------------
 		/// Create Image From File
 		///
@@ -63,7 +63,7 @@ namespace moFlo
 		/// @param Out: Resource
 		/// @return Whether the resource loaded
 		//----------------------------------------------------------------
-		bool CreateImageFromFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, moFlo::Core::CImage::Format ineFormat, moFlo::Core::ResourcePtr& outpResource);
+		bool CreateImageFromFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string & inFilePath, moFlo::Core::CImage::Format ineFormat, moFlo::Core::ResourcePtr& outpResource);
 	private:
 		struct ETC1Header
 		{

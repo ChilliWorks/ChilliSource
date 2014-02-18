@@ -186,10 +186,10 @@ namespace moFlo
 					std::string strSpriteSheetIndex;
 					if (insParamDictionary.TryGetValue("SpriteSheet", strSpriteSheet) && insParamDictionary.TryGetValue("SpriteSheetIndex", strSpriteSheetIndex))
 					{
-						SpriteSheetPtr pSpriteSheet = mpSpriteSheetManager->GetSpriteSheetFromFile(Core::SL_PACKAGE, strSpriteSheet);
+						SpriteSheetPtr pSpriteSheet = mpSpriteSheetManager->GetSpriteSheetFromFile(Core::StorageLocation::k_package, strSpriteSheet);
 						u32 udwIndex = pSpriteSheet->GetFrameIndexByID(strSpriteSheetIndex);
 						
-						MaterialPtr pMaterial = mpMaterialManager->GetMaterialFromFile(Core::SL_PACKAGE, strMaterialName);
+						MaterialPtr pMaterial = mpMaterialManager->GetMaterialFromFile(Core::StorageLocation::k_package, strMaterialName);
 						pSprite = CreateSpriteComponent(pSpriteSheet, udwIndex, pMaterial);
 						
 						u32 udwTargetDensity = 1;
@@ -206,7 +206,7 @@ namespace moFlo
 					}
 					else
 					{
-						pSprite = CreateSpriteComponent(Core::CVector2::ZERO, Core::SL_PACKAGE, strMaterialName);
+						pSprite = CreateSpriteComponent(Core::CVector2::ZERO, Core::StorageLocation::k_package, strMaterialName);
 					}
 				
 					if (insParamDictionary.HasValue("Transparent"))
@@ -255,7 +255,7 @@ namespace moFlo
         /// @param Material file
         /// @return an instantiated sprite object
         //---------------------------------------------------------------------------
-        SpriteComponentPtr CRenderComponentFactory::CreateSpriteComponent(const Core::CVector2 &invDims, Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrMaterialFilePath)
+        SpriteComponentPtr CRenderComponentFactory::CreateSpriteComponent(const Core::CVector2 &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath)
         {
             SpriteComponentPtr pSprite(new CSpriteComponent());
             pSprite->SetMaterial(mpMaterialManager->GetMaterialFromFile(ineStorageLocation, instrMaterialFilePath));
@@ -302,7 +302,7 @@ namespace moFlo
         /// @param Material
         /// @return an instantiated sprite object
         //---------------------------------------------------------------------------
-        SpriteComponentPtr CRenderComponentFactory::CreateSpriteComponent(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrSpriteSheetTexture, u32 inTpageIndex, const MaterialPtr& inpMaterial)
+        SpriteComponentPtr CRenderComponentFactory::CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheetTexture, u32 inTpageIndex, const MaterialPtr& inpMaterial)
         {
             SpriteComponentPtr pSprite(new CSpriteComponent());
             pSprite->SetMaterial(inpMaterial);
@@ -320,7 +320,7 @@ namespace moFlo
         /// @param Material
         /// @return an instantiated sprite object
         //---------------------------------------------------------------------------
-        SpriteComponentPtr CRenderComponentFactory::CreateSpriteComponent(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrSpriteSheetTexture, const std::string& instrTpageID, const MaterialPtr& inpMaterial)
+        SpriteComponentPtr CRenderComponentFactory::CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheetTexture, const std::string& instrTpageID, const MaterialPtr& inpMaterial)
         {
             SpriteComponentPtr pSprite(new CSpriteComponent());
             pSprite->SetMaterial(inpMaterial);
@@ -366,7 +366,7 @@ namespace moFlo
         /// @param Material file
         /// @return Static mesh component
         //---------------------------------------------------------------------------
-		StaticMeshComponentPtr CRenderComponentFactory::CreateStaticMeshComponent(const MeshPtr& inpModel, Core::STORAGE_LOCATION ineStorageLocation, const std::string & insMaterialName)
+		StaticMeshComponentPtr CRenderComponentFactory::CreateStaticMeshComponent(const MeshPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName)
 		{
 			MaterialPtr pMaterial = mpMaterialManager->GetMaterialFromFile(ineStorageLocation, insMaterialName);
 			return CreateStaticMeshComponent(inpModel, pMaterial);
@@ -380,7 +380,7 @@ namespace moFlo
         /// @param Mesh file
         /// @return Static mesh component
         //---------------------------------------------------------------------------
-		StaticMeshComponentPtr CRenderComponentFactory::CreateStaticMeshComponent(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrModelFilePath)
+		StaticMeshComponentPtr CRenderComponentFactory::CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFilePath)
 		{
             MeshPtr pModel = mpMeshManager->GetModelFromFile(ineStorageLocation, instrModelFilePath);
             StaticMeshComponentPtr pResult(new CStaticMeshComponent());
@@ -395,7 +395,7 @@ namespace moFlo
         /// @param Material
         /// @return Static mesh component
         //---------------------------------------------------------------------------
-		StaticMeshComponentPtr CRenderComponentFactory::CreateStaticMeshComponent(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrModelFileName, const MaterialPtr& inpMaterial)
+		StaticMeshComponentPtr CRenderComponentFactory::CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName, const MaterialPtr& inpMaterial)
         {
 			MeshPtr pModel = mpMeshManager->GetModelFromFile(ineStorageLocation, instrModelFileName);
 			return CreateStaticMeshComponent(pModel, inpMaterial);
@@ -409,7 +409,7 @@ namespace moFlo
         /// @param Material file
         /// @return Static mesh component
         //---------------------------------------------------------------------------
-		StaticMeshComponentPtr CRenderComponentFactory::CreateStaticMeshComponent(Core::STORAGE_LOCATION ineModelStorageLocation, const std::string& instrModelFilePath, Core::STORAGE_LOCATION ineMaterialStorageLocation, const std::string& instrMaterialFilePath)
+		StaticMeshComponentPtr CRenderComponentFactory::CreateStaticMeshComponent(Core::StorageLocation ineModelStorageLocation, const std::string& instrModelFilePath, Core::StorageLocation ineMaterialStorageLocation, const std::string& instrMaterialFilePath)
 		{
 			MeshPtr pModel = mpMeshManager->GetModelFromFile(ineModelStorageLocation, instrModelFilePath);
 			MaterialPtr pMaterial = mpMaterialManager->GetMaterialFromFile(ineMaterialStorageLocation, instrMaterialFilePath);
@@ -458,7 +458,7 @@ namespace moFlo
         /// @param Material file
         /// @return Animated mesh component
         //---------------------------------------------------------------------------
-		AnimatedMeshComponentPtr CRenderComponentFactory::CreateAnimatedMeshComponent(const MeshPtr& inpModel, Core::STORAGE_LOCATION ineStorageLocation, const std::string & insMaterialName)
+		AnimatedMeshComponentPtr CRenderComponentFactory::CreateAnimatedMeshComponent(const MeshPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName)
 		{
 			MaterialPtr pMaterial = mpMaterialManager->GetMaterialFromFile(ineStorageLocation, insMaterialName);
 			return CreateAnimatedMeshComponent(inpModel, pMaterial);
@@ -472,7 +472,7 @@ namespace moFlo
         /// @param Mesh file
         /// @return Animated mesh component
         //---------------------------------------------------------------------------
-		AnimatedMeshComponentPtr CRenderComponentFactory::CreateAnimatedMeshComponent(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrModelFilePath)
+		AnimatedMeshComponentPtr CRenderComponentFactory::CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFilePath)
 		{
             MeshPtr pModel = mpMeshManager->GetModelFromFile(ineStorageLocation, instrModelFilePath);
             AnimatedMeshComponentPtr pResult(new CAnimatedMeshComponent());
@@ -487,7 +487,7 @@ namespace moFlo
         /// @param Material
         /// @return Animated mesh component
         //---------------------------------------------------------------------------
-		AnimatedMeshComponentPtr CRenderComponentFactory::CreateAnimatedMeshComponent(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrModelFileName, const MaterialPtr& inpMaterial)
+		AnimatedMeshComponentPtr CRenderComponentFactory::CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName, const MaterialPtr& inpMaterial)
         {
 			MeshPtr pModel = mpMeshManager->GetModelFromFile(ineStorageLocation, instrModelFileName);
 			return CreateAnimatedMeshComponent(pModel, inpMaterial);
@@ -501,7 +501,7 @@ namespace moFlo
         /// @param Material file
         /// @return Animated mesh component
         //---------------------------------------------------------------------------
-		AnimatedMeshComponentPtr CRenderComponentFactory::CreateAnimatedMeshComponent(Core::STORAGE_LOCATION ineModelStorageLocation, const std::string& instrModelFilePath, Core::STORAGE_LOCATION ineMaterialStorageLocation, const std::string& instrMaterialFilePath)
+		AnimatedMeshComponentPtr CRenderComponentFactory::CreateAnimatedMeshComponent(Core::StorageLocation ineModelStorageLocation, const std::string& instrModelFilePath, Core::StorageLocation ineMaterialStorageLocation, const std::string& instrMaterialFilePath)
 		{
 			MeshPtr pModel = mpMeshManager->GetModelFromFile(ineModelStorageLocation, instrModelFilePath);
 			MaterialPtr pMaterial = mpMaterialManager->GetMaterialFromFile(ineMaterialStorageLocation, instrMaterialFilePath);
@@ -564,11 +564,11 @@ namespace moFlo
             if(mpRenderCapabilities->IsShadowMappingSupported() == true && inudwShadowMapRes > 0)
             {
                 pShadowMap = mpTextureManager->CreateTextureResource();
-                mpTextureManager->CreateEmptyTexture(inudwShadowMapRes, inudwShadowMapRes, Core::CImage::DEPTH_16, pShadowMap);
+                mpTextureManager->CreateEmptyTexture(inudwShadowMapRes, inudwShadowMapRes, Core::CImage::Format::k_Depth16, pShadowMap);
 
 #ifdef MOFLOW_SHADOW_DEBUG
                 pShadowMapDebug = mpTextureManager->CreateTextureResource();
-                mpTextureManager->CreateEmptyTexture(inudwShadowMapRes, inudwShadowMapRes, Core::CImage::RGB_888, pShadowMapDebug);
+                mpTextureManager->CreateEmptyTexture(inudwShadowMapRes, inudwShadowMapRes, Core::CImage::Format::k_RGB888, pShadowMapDebug);
 #endif
             }
             

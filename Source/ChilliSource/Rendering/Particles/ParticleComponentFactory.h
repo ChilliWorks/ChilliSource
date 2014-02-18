@@ -70,7 +70,7 @@ namespace moFlo
             /// @param The filepath
             /// @return Particle Component
             //--------------------------------------------------------
-            ParticleComponentPtr CreateParticleComponentFromScript(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrScriptFile);
+            ParticleComponentPtr CreateParticleComponentFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile);
             //--------------------------------------------------------
             /// Register Emitter Type
             ///

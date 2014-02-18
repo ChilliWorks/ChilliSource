@@ -461,33 +461,33 @@ namespace moFlo
 		{
 			Core::CColour::ByteColour Col = Core::CColour::ColourToByteColour(insTintColour);
 			
-			outsData.sVerts[CSpriteComponent::VERT_TOP_LEFT].Col = Col;
-            outsData.sVerts[CSpriteComponent::VERT_BOTTOM_LEFT].Col = Col;
-            outsData.sVerts[CSpriteComponent::VERT_TOP_RIGHT].Col = Col;
-            outsData.sVerts[CSpriteComponent::VERT_BOTTOM_RIGHT].Col = Col;
+			outsData.sVerts[(u32)CSpriteComponent::Verts::k_topLeft].Col = Col;
+            outsData.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft].Col = Col;
+            outsData.sVerts[(u32)CSpriteComponent::Verts::k_topRight].Col = Col;
+            outsData.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight].Col = Col;
 			
-			outsData.sVerts[CSpriteComponent::VERT_TOP_LEFT].vTex = msParticleUVs.TopLeft();
-			outsData.sVerts[CSpriteComponent::VERT_BOTTOM_LEFT].vTex = msParticleUVs.BottomLeft();
-			outsData.sVerts[CSpriteComponent::VERT_TOP_RIGHT].vTex = msParticleUVs.TopRight();
-			outsData.sVerts[CSpriteComponent::VERT_BOTTOM_RIGHT].vTex = msParticleUVs.BottomRight();
+			outsData.sVerts[(u32)CSpriteComponent::Verts::k_topLeft].vTex = msParticleUVs.TopLeft();
+			outsData.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft].vTex = msParticleUVs.BottomLeft();
+			outsData.sVerts[(u32)CSpriteComponent::Verts::k_topRight].vTex = msParticleUVs.TopRight();
+			outsData.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight].vTex = msParticleUVs.BottomRight();
 			
 			outsData.pMaterial = mpMaterial;
-            outsData.pMaterial->SetActiveShaderProgram(SP_AMBIENT);
+            outsData.pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
 			
             Core::CVector3 vHalfRight = (0.5f * mvInitialScale.x * invScale.x) * invRight;
             Core::CVector3 vHalfUp = (0.5f * mvInitialScale.y * invScale.y) * invUp;
             
             Core::CVector4 vTemp(vHalfUp.x - vHalfRight.x, vHalfUp.y - vHalfRight.y, vHalfUp.z - vHalfRight.z, 1.0f);
-            outsData.sVerts[CSpriteComponent::VERT_TOP_LEFT].vPos = invPos + vTemp;
+            outsData.sVerts[(u32)CSpriteComponent::Verts::k_topLeft].vPos = invPos + vTemp;
             
             vTemp.x = vHalfUp.x + vHalfRight.x; vTemp.y = vHalfUp.y + vHalfRight.y; vTemp.z = vHalfUp.z + vHalfRight.z;
-            outsData.sVerts[CSpriteComponent::VERT_TOP_RIGHT].vPos = invPos + vTemp;
+            outsData.sVerts[(u32)CSpriteComponent::Verts::k_topRight].vPos = invPos + vTemp;
             
             vTemp.x = -vHalfUp.x - vHalfRight.x; vTemp.y = -vHalfUp.y - vHalfRight.y; vTemp.z = -vHalfUp.z - vHalfRight.z;
-            outsData.sVerts[CSpriteComponent::VERT_BOTTOM_LEFT].vPos = invPos + vTemp;
+            outsData.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft].vPos = invPos + vTemp;
             
             vTemp.x = -vHalfUp.x + vHalfRight.x; vTemp.y = -vHalfUp.y + vHalfRight.y; vTemp.z = -vHalfUp.z + vHalfRight.z;
-            outsData.sVerts[CSpriteComponent::VERT_BOTTOM_RIGHT].vPos = invPos + vTemp;
+            outsData.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight].vPos = invPos + vTemp;
 		}
         //-------------------------------------------------------
         /// Destructor

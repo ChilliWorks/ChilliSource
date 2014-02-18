@@ -37,7 +37,7 @@ distribution.
 bool TiXmlBase::condenseWhiteSpace = true;
 
 #ifdef TIXML_MOFLO
-moFlo::Core::FileStreamPtr TiXmlFOpen(moFlo::Core::STORAGE_LOCATION ineStorageLocation, std::string instrFilename, moFlo::Core::FILE_MODE ineFileMode)
+moFlo::Core::FileStreamPtr TiXmlFOpen(moFlo::Core::StorageLocation ineStorageLocation, std::string instrFilename, moFlo::Core::FileMode ineFileMode)
 {
     return moFlo::Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilename, ineFileMode);
 }
@@ -1005,7 +1005,7 @@ void TiXmlDocument::operator=( const TiXmlDocument& copy )
 
 #ifdef TIXML_MOFLO
 
-bool TiXmlDocument::LoadFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, TiXmlEncoding encoding)
+bool TiXmlDocument::LoadFile(moFlo::Core::StorageLocation ineStorageLocation, TiXmlEncoding encoding)
 {
 	// See STL_STRING_BUG below.
 	//StringToBuffer buf( value );
@@ -1013,14 +1013,14 @@ bool TiXmlDocument::LoadFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, T
 	return LoadFile(ineStorageLocation, Value(), encoding);
 }
 
-bool TiXmlDocument::LoadFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string& filename, TiXmlEncoding encoding)
+bool TiXmlDocument::LoadFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string& filename, TiXmlEncoding encoding)
 {
 	//		StringToBuffer f( filename );
 	//		return ( f.buffer && LoadFile( f.buffer, encoding ));
 	return LoadFile(ineStorageLocation, filename.c_str(), encoding );
 }
 
-bool TiXmlDocument::LoadFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const char* _filename, TiXmlEncoding encoding)
+bool TiXmlDocument::LoadFile(moFlo::Core::StorageLocation ineStorageLocation, const char* _filename, TiXmlEncoding encoding)
 {
 	// There was a really terrifying little bug here. The code:
 	//		value = filename
@@ -1033,7 +1033,7 @@ bool TiXmlDocument::LoadFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, c
 	value = filename;
 	
 	// reading in binary mode so that tinyxml can normalize the EOL
-	moFlo::Core::FileStreamPtr file = TiXmlFOpen(ineStorageLocation, value, moFlo::Core::FM_READ_BINARY);	
+	moFlo::Core::FileStreamPtr file = TiXmlFOpen(ineStorageLocation, value, moFlo::Core::FileMode::k_readBinary);
 	
 	if (file == NULL || file->IsBad() == false )
 	{
@@ -1063,9 +1063,9 @@ bool TiXmlDocument::LoadFile( moFlo::Core::FileStreamPtr file, TiXmlEncoding enc
 	location.Clear();
 	
 	// Get the file size, so we can pre-allocate the string. HUGE speed impact.
-	file->SeekG(0, moFlo::Core::SD_END);
+	file->SeekG(0, moFlo::Core::SeekDir::k_end);
 	long length = file->TellG();
-	file->SeekG(0, moFlo::Core::SD_BEGINNING);
+	file->SeekG(0, moFlo::Core::SeekDir::k_beginning);
 	
 	
 	// Strange case, but good to handle up front.
@@ -1165,22 +1165,22 @@ bool TiXmlDocument::LoadFile( moFlo::Core::FileStreamPtr file, TiXmlEncoding enc
 		return true;
 }
 
-bool TiXmlDocument::SaveFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation)
+bool TiXmlDocument::SaveFile(moFlo::Core::StorageLocation ineStorageLocation)
 {
 	return SaveFile(ineStorageLocation, Value());
 }
 
-bool TiXmlDocument::SaveFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const std::string& filename)
+bool TiXmlDocument::SaveFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string& filename)
 {
 	//		StringToBuffer f( filename );
 	//		return ( f.buffer && SaveFile( f.buffer ));
 	return SaveFile(ineStorageLocation, filename.c_str());
 }
 
-bool TiXmlDocument::SaveFile(moFlo::Core::STORAGE_LOCATION ineStorageLocation, const char * filename)
+bool TiXmlDocument::SaveFile(moFlo::Core::StorageLocation ineStorageLocation, const char * filename)
 {
 	// The old c stuff lives on...
-	moFlo::Core::FileStreamPtr fp = TiXmlFOpen(ineStorageLocation, filename, moFlo::Core::FM_WRITE);
+	moFlo::Core::FileStreamPtr fp = TiXmlFOpen(ineStorageLocation, filename, moFlo::Core::FileMode::k_write);
 	if (fp != NULL || fp->IsBad() == false )
 	{
 		bool result = SaveFile( fp );

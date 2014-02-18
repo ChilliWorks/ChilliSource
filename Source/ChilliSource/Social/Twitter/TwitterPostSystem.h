@@ -59,14 +59,14 @@ namespace moFlo
 		
 		namespace TwitterDataStore
 		{
-			enum DATA_STORE_KEY
+			enum class DataStoreKey
 			{
-				DATA_STORE_KEY_OAUTH_TOKEN,
-				DATA_STORE_KEY_OAUTH_SECRET,
-				NUM_DATA_STORE_KEYS,
+                k_OAuthToken,
+                k_OAuthSecret,
+                k_total
 			};
 			
-			const std::string	kstrDataStoreKey[NUM_DATA_STORE_KEYS]=
+			const std::string kstrDataStoreKey[(u32)DataStoreKey::k_total] =
 			{
 				"TwitterOAuthTokenKey",
 				"TwitterOAuthSecretKey",
@@ -75,7 +75,7 @@ namespace moFlo
 		
 		namespace TwitterPIN
 		{
-			const u32		kudwTwitterPINLength = 7;
+			const u32 kudwTwitterPINLength = 7;
 		}
 
 		struct TwitterPostDesc 
@@ -83,7 +83,7 @@ namespace moFlo
             UTF8String strText;
             UTF8String strUrl;
             
-            moCore::STORAGE_LOCATION eLocalImageStorageLocation;
+            moCore::StorageLocation eLocalImageStorageLocation;
             std::string strLocalImagePath;
 		};
 		
@@ -93,12 +93,12 @@ namespace moFlo
 			
 			DECLARE_NAMED_INTERFACE(ITwitterPostSystem);
 			
-			enum PostResult
+			enum class PostResult
 			{
-				PR_SUCCESS,
-				PR_CANCELLED,	
-				PR_FAILED,
-				PR_NOT_AUTHENTICATED,
+                k_success,
+                k_cancelled,
+                k_failed,
+                k_notAuthenticated
 			};
 			
 			typedef fastdelegate::FastDelegate1<const PostResult&> PostResultDelegate;

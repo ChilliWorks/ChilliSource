@@ -19,17 +19,17 @@ namespace moFlo
 {
 	class ILocalNotificationScheduler;
 	
-    enum NotificationType
+    enum class NotificationType
     {
-        NOTICE_SYSTEM,
-        NOTICE_APP,
-        NOTICE_PUSH
+        k_system,
+        k_app,
+        k_push
     };
     
-    enum NotificationPriority
+    enum class NotificationPriority
     {
-        NOTICE_STANDARD,
-        NOTICE_HIGH
+        k_standard,
+        k_high
     };
     
     typedef u32 NotificationID;
@@ -83,7 +83,7 @@ namespace moFlo
         /// @param Priority (High priority will leap-frog lower priority in the queue
         /// @param Delegate An optional callback delegate to allow application to track notifications
         //------------------------------------------------------------------------------
-        static void ScheduleNotification(NotificationType ineType, const Notification& insNotification, NotificationPriority inePriority = NOTICE_STANDARD,Notification::NotificationPresentedDelegate inpDelegate = NULL);
+        static void ScheduleNotification(NotificationType ineType, const Notification& insNotification, NotificationPriority inePriority = NotificationPriority::k_standard, Notification::NotificationPresentedDelegate inpDelegate = NULL);
         //------------------------------------------------------------------------------
         /// Schedule Notification For Time
         ///
@@ -95,7 +95,7 @@ namespace moFlo
         /// @param Time in seconds at which it should trigger
         /// @param Priority (High priority will leap-frog lower priority in the queue
         //------------------------------------------------------------------------------
-        static void ScheduleNotificationForTime(NotificationType ineType, const Notification& insNotification, TimeIntervalSecs inTime, NotificationPriority inePriority = NOTICE_STANDARD);
+        static void ScheduleNotificationForTime(NotificationType ineType, const Notification& insNotification, TimeIntervalSecs inTime, NotificationPriority inePriority = NotificationPriority::k_standard);
         //------------------------------------------------------------------------------
         /// Schedule Notification After Time
         ///
@@ -107,7 +107,7 @@ namespace moFlo
         /// @param Time in seconds at which it should trigger
         /// @param Priority (High priority will leap-frog lower priority in the queue
         //------------------------------------------------------------------------------
-        static void ScheduleNotificationAfterTime(NotificationType ineType, const Notification& insNotification, TimeIntervalSecs inTime, NotificationPriority inePriority = NOTICE_STANDARD);
+        static void ScheduleNotificationAfterTime(NotificationType ineType, const Notification& insNotification, TimeIntervalSecs inTime, NotificationPriority inePriority = NotificationPriority::k_standard);
         //-------------------------------------------------------------------------
         /// Try Get Notifications Scheduled Within Time Period
         ///

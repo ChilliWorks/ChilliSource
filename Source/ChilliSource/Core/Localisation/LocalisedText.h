@@ -48,7 +48,7 @@ namespace moFlo
 			/// @param File name
 			/// @return Success
 			//----------------------------------------------------------------------------
-			static bool LoadTextFromFile(STORAGE_LOCATION ineLocation, const std::string & inFilePath, const std::string & inFileName);
+			static bool LoadTextFromFile(StorageLocation ineLocation, const std::string & inFilePath, const std::string & inFileName);
 			
 		private:
    

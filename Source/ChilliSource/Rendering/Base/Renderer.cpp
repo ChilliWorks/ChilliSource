@@ -150,12 +150,12 @@ namespace moFlo
                 //Perform the ambient pass
                 mpRenderSystem->SetLight(pAmbientLight);
                 SortOpaque(mpActiveCamera, aCameraOpaqueCache);
-                Render(mpActiveCamera, SP_AMBIENT, aCameraOpaqueCache);
+                Render(mpActiveCamera, ShaderPass::k_ambient, aCameraOpaqueCache);
                 
                 //Perform the diffuse pass
                 if(aDirLightCache.empty() == false || aPointLightCache.empty() == false)
                 {
-                    mpRenderSystem->SetBlendFunction(AB_ONE, AB_ONE);
+                    mpRenderSystem->SetBlendFunction(AlphaBlend::k_one, AlphaBlend::k_one);
                     mpRenderSystem->LockBlendFunction();
                     
                     mpRenderSystem->EnableDepthWriting(false);
@@ -167,7 +167,7 @@ namespace moFlo
                     for(u32 i=0; i<aDirLightCache.size(); ++i)
                     {
                         mpRenderSystem->SetLight(aDirLightCache[i]);
-                        Render(mpActiveCamera, SP_DIRECTIONAL, aCameraOpaqueCache);
+                        Render(mpActiveCamera, ShaderPass::k_directional, aCameraOpaqueCache);
                     }
                     
                     for(u32 i=0; i<aPointLightCache.size(); ++i)
@@ -175,7 +175,7 @@ namespace moFlo
                         mpRenderSystem->SetLight(aPointLightCache[i]);
                         DYNAMIC_ARRAY<IRenderComponent*> aPointLightOpaqueCache;
                         CullRenderables(aPointLightCache[i], aCameraOpaqueCache, aPointLightOpaqueCache);
-                        Render(mpActiveCamera, SP_POINT, aPointLightOpaqueCache);
+                        Render(mpActiveCamera, ShaderPass::k_point, aPointLightOpaqueCache);
                     }
                     
                     mpRenderSystem->UnlockAlphaBlending();
@@ -184,7 +184,7 @@ namespace moFlo
                 }
 
                 SortTransparent(mpActiveCamera, aCameraTransparentCache);
-                Render(mpActiveCamera, SP_AMBIENT, aCameraTransparentCache);
+                Render(mpActiveCamera, ShaderPass::k_ambient, aCameraTransparentCache);
                 
                 mpRenderSystem->SetLight(NULL);
                 RenderUI(inpScene->GetWindowPtr());

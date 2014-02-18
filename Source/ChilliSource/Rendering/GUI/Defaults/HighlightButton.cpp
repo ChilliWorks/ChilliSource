@@ -85,7 +85,7 @@ namespace moFlo
                 SetDeselectAudioEffect(mspDefaultDeSelectSound);
             
             //---Default
-            Core::STORAGE_LOCATION eNormalTextureLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eNormalTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("NormalTextureLocation", strValue))
             {
                 eNormalTextureLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -95,7 +95,7 @@ namespace moFlo
                 SetNormalImage(LOAD_RESOURCE(Rendering::ITexture, eNormalTextureLocation, strValue));
             }
             //---Highlight
-            Core::STORAGE_LOCATION eHighlightTextureLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eHighlightTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("HighlightTextureLocation", strValue))
             {
                 eHighlightTextureLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -105,7 +105,7 @@ namespace moFlo
                 SetHighlightImage(LOAD_RESOURCE(Rendering::ITexture, eHighlightTextureLocation, strValue));
             }
             //---Sprite sheet
-            Core::STORAGE_LOCATION eNormalSpriteSheetLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eNormalSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("NormalSpriteSheetLocation", strValue))
             {
                 eNormalSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -115,7 +115,7 @@ namespace moFlo
                 SetNormalSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eNormalSpriteSheetLocation, strValue));
             }
             //---Sprite sheet
-            Core::STORAGE_LOCATION eHighlightSpriteSheetLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eHighlightSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("HighlightSpriteSheetLocation", strValue))
             {
                 eHighlightSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -203,8 +203,8 @@ namespace moFlo
                 SetFitMaintainingAspect(vSize.x, vSize.y, vSize.z, vSize.w);
             }
             //---Audio effect
-            Core::STORAGE_LOCATION eSelectAudioLocation = Core::SL_PACKAGE;
-            Core::STORAGE_LOCATION eDeselectAudioLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eSelectAudioLocation = Core::StorageLocation::k_package;
+            Core::StorageLocation eDeselectAudioLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SelectAudioEffectLocation", strValue))
             {
                 eSelectAudioLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -512,13 +512,13 @@ namespace moFlo
 		{
 			mpDeselectAudioEffect = inpEffect;
 		}
-        void CHighlightButton::SetDefaultSelectAudioEffect(Core::STORAGE_LOCATION ineLocation, const std::string instrAudioEffect)
+        void CHighlightButton::SetDefaultSelectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
         {
             Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
             mspDefaultSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
         }
         
-        void CHighlightButton::SetDefaultDeselectAudioEffect(Core::STORAGE_LOCATION ineLocation, const std::string instrAudioEffect)
+        void CHighlightButton::SetDefaultDeselectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
         {
             Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
             mspDefaultDeSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);

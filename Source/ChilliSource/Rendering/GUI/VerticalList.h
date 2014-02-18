@@ -24,18 +24,18 @@ namespace moFlo
             CVerticalList();
             CVerticalList(const Core::ParamDictionary& insParams);
             
-            enum ItemHorizontalJustification
+            enum class ItemHorizontalJustification
             {
-                JUSTIFY_LEFT,
-                JUSTIFY_RIGHT,
-                JUSTIFY_CENTRE
+                k_left,
+                k_right,
+                k_centre
             };
             
-            enum ItemJustification
+            enum class ItemVerticalJustification
             {
-                JUSTIFY_TOP,
-                JUSTIFY_MIDDLE,
-                JUSTIFY_BOTTOM
+                k_top,
+                k_middle,
+                k_bottom
             };
             
             //---------------------------------------------------------
@@ -65,17 +65,17 @@ namespace moFlo
             //---------------------------------------------------------
             f32 GetRelativeSpacing() const;
             //---------------------------------------------------------
-            /// Set Justification
+            /// Set Vertical Justification
             ///
             /// @param Justification which will align the items within the list
             //---------------------------------------------------------
-            void SetJustification(ItemJustification ineJustification);
+            void SetVerticalJustification(ItemVerticalJustification ineJustification);
             //---------------------------------------------------------
-            /// Get Justification
+            /// Get Vertical Justification
             ///
             /// @return Justification which will align the items within the list
             //---------------------------------------------------------
-            ItemJustification GetJustification() const;
+            ItemVerticalJustification GetVerticalJustification() const;
             //---------------------------------------------------------
             /// Set Horizontal Justification
             ///
@@ -137,7 +137,7 @@ namespace moFlo
         
             DECLARE_PROPERTY_A(f32, AbsoluteSpacing, SetAbsoluteSpacing, GetAbsoluteSpacing);
             DECLARE_PROPERTY_A(f32, RelativeSpacing, SetRelativeSpacing, GetRelativeSpacing);
-            DECLARE_PROPERTY_A(ItemJustification, Justifiction, SetJustification, GetJustification);
+            DECLARE_PROPERTY_A(ItemVerticalJustification, VerticalJustifiction, SetVerticalJustification, GetVerticalJustification);
             DECLARE_PROPERTY_A(ItemHorizontalJustification, HorizontalJustifiction, SetHorizontalJustification, GetHorizontalJustification);
         };
     }

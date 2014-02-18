@@ -68,7 +68,7 @@ namespace moFlo
 			/// @param The shader file path
 			/// @return Success or failure
 			//----------------------------------------------------------
-			bool LoadAndCompileShader(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrShaderFile, Rendering::ShaderType ineShaderType);
+			bool LoadAndCompileShader(Core::StorageLocation ineStorageLocation, const std::string& instrShaderFile, Rendering::ShaderType ineShaderType);
 			//----------------------------------------------------------
 			/// Compile Shader
 			///
@@ -93,7 +93,7 @@ namespace moFlo
 			/// @param Out contents of file
 			/// @return Success
 			//----------------------------------------------------------
-			bool ReadShaderFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &instrFilePath, std::stringstream& outstrContents);
+			bool ReadShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, std::stringstream& outstrContents);
 			
 			friend class CShaderManager;
 			

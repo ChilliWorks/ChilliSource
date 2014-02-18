@@ -176,13 +176,13 @@ namespace moFlo
 						switch(inResult)
 						{
 							case TWTweetComposeViewControllerResultDone:
-								mCompletionDelegate(Social::ITwitterPostSystem::PR_SUCCESS);
+								mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_success);
 								break;
 							case TWTweetComposeViewControllerResultCancelled:
-								mCompletionDelegate(Social::ITwitterPostSystem::PR_CANCELLED);
+								mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_cancelled);
 								break;
 							default:
-								mCompletionDelegate(Social::ITwitterPostSystem::PR_FAILED);
+								mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_failed);
 								break;
 						};
 					}
@@ -226,7 +226,7 @@ namespace moFlo
 				msDesc.strText = insDesc.strText;
 				if(mCompletionDelegate)
 				{
-					inResultCallback(Social::ITwitterPostSystem::PR_NOT_AUTHENTICATED);
+					inResultCallback(Social::ITwitterPostSystem::PostResult::k_notAuthenticated);
 				}
 				bResult = false;
 			}

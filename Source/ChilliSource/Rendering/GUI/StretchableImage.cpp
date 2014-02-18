@@ -52,7 +52,7 @@ namespace moFlo
 			memset(&msIndices, 0, sizeof(u32) * 9);
             
             //---Sprite sheet
-            Core::STORAGE_LOCATION eSpriteSheetLocation = Core::SL_PACKAGE;
+            Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SpriteSheetLocation", strValue))
             {
                 eSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
@@ -289,8 +289,8 @@ namespace moFlo
         void CStretchableImage::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
 			//Check if this is on screen
-			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_TOP_RIGHT);
-			Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_BOTTOM_LEFT);
+			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
+			Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft);
 			
 			if(vTopRight.y < 0 || vBottomLeft.y > Core::CScreen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::CScreen::GetOrientedWidth())
 			{
@@ -301,7 +301,7 @@ namespace moFlo
             if(Visible && SpriteSheet)
             {
                 Core::CVector2 vPanelPos = GetAbsoluteScreenSpacePosition();
-                Core::CVector2 vTopLeft = GetAbsoluteAnchorPoint(Core::ALIGN_TOP_LEFT);
+                Core::CVector2 vTopLeft = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topLeft);
                 Core::CVector2 vPatchPos;
                 
                 Core::CColour AbsColour = GetAbsoluteColour();
@@ -328,41 +328,41 @@ namespace moFlo
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwTopLeft), 
                                    AbsColour, 
-                                   Core::ALIGN_TOP_LEFT);
+                                   Core::AlignmentAnchor::k_topLeft);
                 
                 // Draw the top right corner
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::ALIGN_TOP_RIGHT));
+                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topRight));
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeTopRight,  
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwTopRight), 
                                    AbsColour, 
-                                   Core::ALIGN_TOP_RIGHT);
+                                   Core::AlignmentAnchor::k_topRight);
                 
                 // Draw the bottom left corner
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::ALIGN_BOTTOM_LEFT));
+                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_bottomLeft));
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeBottomLeft, 
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwBottomLeft), 
                                    AbsColour, 
-                                   Core::ALIGN_BOTTOM_LEFT);
+                                   Core::AlignmentAnchor::k_bottomLeft);
                 
                 // Draw the bottom right corner
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::ALIGN_BOTTOM_RIGHT));
+                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_bottomRight));
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeBottomRight,  
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwBottomRight), 
                                    AbsColour, 
-                                   Core::ALIGN_BOTTOM_RIGHT);
+                                   Core::AlignmentAnchor::k_bottomRight);
                 
                 // Draw the top
 				vPatchPos.x = vTopLeft.x + sPatchSize.vSizeTopLeft.x;
-				vPatchPos.y = GetAbsoluteAnchorPoint(Core::ALIGN_TOP_CENTRE).y;
+				vPatchPos.y = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topCentre).y;
                 matPatchTransform.Translate(vPatchPos);
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
@@ -370,11 +370,11 @@ namespace moFlo
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwTopCentre), 
                                    AbsColour, 
-                                   Core::ALIGN_TOP_LEFT);
+                                   Core::AlignmentAnchor::k_topLeft);
 				
                 // Draw the bottom
 				vPatchPos.x = vTopLeft.x + sPatchSize.vSizeBottomLeft.x;
-				vPatchPos.y = GetAbsoluteAnchorPoint(Core::ALIGN_BOTTOM_CENTRE).y;
+				vPatchPos.y = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_bottomCentre).y;
                 matPatchTransform.Translate(vPatchPos);
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
@@ -382,10 +382,10 @@ namespace moFlo
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwBottomCentre), 
                                    AbsColour, 
-                                   Core::ALIGN_BOTTOM_LEFT);
+                                   Core::AlignmentAnchor::k_bottomLeft);
                 
                 // Draw the left
-				vPatchPos.x = GetAbsoluteAnchorPoint(Core::ALIGN_MIDDLE_LEFT).x;
+				vPatchPos.x = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_middleLeft).x;
 				vPatchPos.y = vTopLeft.y - sPatchSize.vSizeTopLeft.y;
                 matPatchTransform.Translate(vPatchPos);
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
@@ -394,10 +394,10 @@ namespace moFlo
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwLeftCentre), 
                                    AbsColour, 
-                                   Core::ALIGN_TOP_LEFT);
+                                   Core::AlignmentAnchor::k_topLeft);
                 
                 // Draw the right
-				vPatchPos.x = GetAbsoluteAnchorPoint(Core::ALIGN_MIDDLE_RIGHT).x;
+				vPatchPos.x = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_middleRight).x;
 				vPatchPos.y = vTopLeft.y - sPatchSize.vSizeTopRight.y;
                 matPatchTransform.Translate(vPatchPos);
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
@@ -406,7 +406,7 @@ namespace moFlo
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwRightCentre), 
                                    AbsColour, 
-                                   Core::ALIGN_TOP_RIGHT);
+                                   Core::AlignmentAnchor::k_topRight);
                 
                 // Draw the centre
 				vPatchPos.x = vTopLeft.x + sPatchSize.vSizeTopLeft.x;
@@ -418,7 +418,7 @@ namespace moFlo
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwMiddleCentre), 
                                    AbsColour, 
-                                   Core::ALIGN_TOP_LEFT);
+                                   Core::AlignmentAnchor::k_topLeft);
                 
                 // Render subviews
                 CGUIView::Draw(inpCanvas);
@@ -605,7 +605,7 @@ namespace moFlo
 		{
 			bool bConsumed = CGUIView::OnTouchBegan(insTouchInfo);
 			
-			if (!CentreTouchConsumption && bConsumed && IsTouchConsumptionEnabled(TOUCH_TYPE_BEGAN))
+			if (!CentreTouchConsumption && bConsumed && IsTouchConsumptionEnabled(TouchType::k_began))
 			{
 				// If the patch contains the touch
 				if(Contains(insTouchInfo.vLocation))
@@ -615,7 +615,7 @@ namespace moFlo
 					CalculatePatchSize(sPatchSize);
 					
 					// Get the AABB of the centre
-					Core::Rectangle sMiddleAABB(GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_BOTTOM_LEFT) + sPatchSize.vSizeBottomLeft, sPatchSize.vSizeMiddleCentre);
+					Core::Rectangle sMiddleAABB(GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft) + sPatchSize.vSizeBottomLeft, sPatchSize.vSizeMiddleCentre);
 					
 					// If the touch is not located in the centre, we consume it
 					bool bContainsMiddle = sMiddleAABB.Contains(insTouchInfo.vLocation);
@@ -630,7 +630,7 @@ namespace moFlo
 		bool CStretchableImage::OnTouchMoved(const Input::TouchInfo & insTouchInfo)
 		{
 			// Special treatment if the middle image has to let the touch through
-			if (!CentreTouchConsumption && IsTouchConsumptionEnabled(TOUCH_TYPE_MOVED))
+			if (!CentreTouchConsumption && IsTouchConsumptionEnabled(TouchType::k_moved))
 			{
 				if(UserInteraction)
 				{
@@ -659,14 +659,14 @@ namespace moFlo
 					
 					//Check for input events
 					//If we contain this touch we can consume it
-					if(mInputEvents.OnTouchMoved(this, insTouchInfo) && IsTouchConsumptionEnabled(TOUCH_TYPE_MOVED))
+					if(mInputEvents.OnTouchMoved(this, insTouchInfo) && IsTouchConsumptionEnabled(TouchType::k_moved))
 					{
 						// Retrieve the patch sizes
 						PatchSize sPatchSize;
 						CalculatePatchSize(sPatchSize);
 						
 						// Get the AABB of the centre
-						Core::Rectangle sMiddleAABB(GetAbsoluteScreenSpaceAnchorPoint(Core::ALIGN_BOTTOM_LEFT) + sPatchSize.vSizeBottomLeft, sPatchSize.vSizeMiddleCentre);
+						Core::Rectangle sMiddleAABB(GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft) + sPatchSize.vSizeBottomLeft, sPatchSize.vSizeMiddleCentre);
 						
 						// If the touch is not located in the centre, we consume it
 						bool bContainsMiddle = sMiddleAABB.Contains(insTouchInfo.vLocation);

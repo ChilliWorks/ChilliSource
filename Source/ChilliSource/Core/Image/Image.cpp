@@ -61,44 +61,42 @@ namespace moFlo
             u32 udwMetaDataSize;
         };
 		
-        enum PVRTCFLAGS
+        enum class PVRTCFlags
         {
-            PVRTCFLAGS_NONE = 0x0,
-            PVRTCFLAGS_PRE_MULTIPLIED = 0x02
+            k_none = 0x0,
+            k_preMultiplied = 0x02
         };
         
         //Anything outside these is not supported on iDevices
-        enum PIXELFORMAT
+        enum class PixelFormat
         {
-            PIXELFORMAT_PVRTC_2BPP_RGB  = 0,
-            PIXELFORMAT_PVRTC_2BPP_RGBA = 1,
-            PIXELFORMAT_PVRTC_4BPP_RGB  = 2,
-            PIXELFORMAT_PVRTC_4BPP_RGBA = 3
-//            PIXELFORMAT_PVRTC2_2BPP     = 4, //Only supported in iPhone 4S and above GPU's
-//            PIXELFORMAT_PVRTC2_4BPP     = 5
+            k_2BppRGB,
+            k_2BppRGBA,
+            k_4BppRGB,
+            k_4BppRGBA
         };
         
-        enum COLOR_SPACE
+        enum class ColourSpace
         {
-            CHANNEL_TYPE_LINEAR_RGB = 0,
-            CHANNEL_TYPE_SRGB = 1
+            k_linearRGB,
+            k_SRGB
         };
         
-        enum CHANNEL_TYPE
+        enum class ChannelType
         {
-            CHANNEL_TYPE_UNSIGNED_BYTE_NORMALISED = 0,
-            CHANNEL_TYPE_SIGNED_BYTE_NORMALISED = 1,
-            CHANNEL_TYPE_UNSIGNED_BYTE = 2,
-            CHANNEL_TYPE_SIGNED_BYTE = 3,
-            CHANNEL_TYPE_UNSIGNED_SHORT_NORMALISED = 4,
-            CHANNEL_TYPE_SIGNED_SHORT_NORMALISED = 5,
-            CHANNEL_TYPE_UNSIGNED_SHORT = 6,
-            CHANNEL_TYPE_SIGNED_SHORT = 7,
-            CHANNEL_TYPE_UNSIGNED_INTEGER_NORMALISED = 8,
-            CHANNEL_TYPE_SIGNED_INTEGER_NORMALISED = 9,
-            CHANNEL_TYPE_UNSIGNED_INTEGER = 10,
-            CHANNEL_TYPE_SIGNED_INTEGER = 11,
-            CHANNEL_TYPE_FLOAT = 12
+            k_unsignedByteNormalised,
+            k_signedByteNormalised,
+            k_unsignedByte,
+            k_signedByte,
+            k_unsignedShortNormalised,
+            k_signedShortNormalised,
+            k_unsignedShort,
+            k_signedShort,
+            k_unsignedIntNormalised,
+            k_signedIntNormalised,
+            k_unsignedInt,
+            k_signedInt,
+            k_float
         };
 
         const u8 kBPP[] = 
@@ -118,7 +116,7 @@ namespace moFlo
 		//----------------------------------------------------------------
         u8 CImage::GetFormatBPP(CImage::Format ineFormat)
         {
-            return kBPP[ineFormat];
+            return kBPP[(u32)ineFormat];
         }
         
 		//----------------------------------------------------------------
@@ -127,7 +125,7 @@ namespace moFlo
 		/// Default
 		//----------------------------------------------------------------
 		CImage::CImage()
-		:meFormat(CImage::RGBA_8888), mudwWidth(0), mudwHeight(0), mpRawData(NULL), meCompression(COMPRESSION_NONE), mbHasAlpha(false), mudwDataLength(0), mpImageData(NULL)
+		:meFormat(CImage::Format::k_RGBA8888), mudwWidth(0), mudwHeight(0), mpRawData(NULL), meCompression(ImageCompression::k_none), mbHasAlpha(false), mudwDataLength(0), mpImageData(NULL)
 		{
 			
 		}
@@ -318,11 +316,11 @@ namespace moFlo
 			{
 				if (udwFormatFlags == kPVRTextureFlagTypePVRTC_4)
 				{
-					meCompression = COMPRESSION_PVR_4BPP;
+					meCompression = ImageCompression::k_PVR4Bpp;
 				}
 				else if(udwFormatFlags == kPVRTextureFlagTypePVRTC_2)
 				{
-					meCompression = COMPRESSION_PVR_2BPP;
+					meCompression = ImageCompression::k_PVR2Bpp;
 				}
 				
 				if(pPVRHeader->udwBitmaskAlpha > 0)
@@ -381,16 +379,16 @@ namespace moFlo
             //Where the most significant 4 bytes have been set to ‘0’ the least significant 4 bytes will contain a 32bit unsigned integer value identifying the pixel format.
             if(udwHigh32Bits == 0)
             {
-                if(udwLow32Bits == PIXELFORMAT_PVRTC_2BPP_RGB || udwLow32Bits == PIXELFORMAT_PVRTC_2BPP_RGBA)
+                if(udwLow32Bits == (u32)PixelFormat::k_2BppRGB || udwLow32Bits == (u32)PixelFormat::k_2BppRGBA)
                 {
-                    meCompression = COMPRESSION_PVR_2BPP;
+                    meCompression = ImageCompression::k_PVR2Bpp;
                     bSupported = true;
                     
                     //Pixel by pixel block size for 2bpp
 					udwBpp = 2;
                     
                     //Set if Alpha in image
-                    if(udwLow32Bits == PIXELFORMAT_PVRTC_2BPP_RGBA)
+                    if(udwLow32Bits == (u32)PixelFormat::k_2BppRGBA)
                     {
                         mbHasAlpha = true;
                     }
@@ -399,16 +397,16 @@ namespace moFlo
                         mbHasAlpha = false;
                     }
                 }
-                else if(udwLow32Bits == PIXELFORMAT_PVRTC_4BPP_RGB || udwLow32Bits == PIXELFORMAT_PVRTC_4BPP_RGBA)
+                else if(udwLow32Bits == (u32)PixelFormat::k_4BppRGB || udwLow32Bits == (u32)PixelFormat::k_4BppRGBA)
                 {
-                    meCompression = COMPRESSION_PVR_4BPP;
+                    meCompression = ImageCompression::k_PVR4Bpp;
                     bSupported = true;
                     
                     //Pixel by pixel block size for 4bpp
 					udwBpp = 4;
                     
                     //Set if Alpha in image
-                    if(udwLow32Bits == PIXELFORMAT_PVRTC_4BPP_RGBA)
+                    if(udwLow32Bits == (u32)PixelFormat::k_4BppRGBA)
                     {
                         mbHasAlpha = true;
                     }

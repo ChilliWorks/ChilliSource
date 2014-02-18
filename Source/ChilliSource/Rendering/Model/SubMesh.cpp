@@ -41,7 +41,7 @@ namespace moFlo
         //-----------------------------------------------------------------
         /// Get Default Material Storage Location
         //-----------------------------------------------------------------
-        Core::STORAGE_LOCATION CSubMesh::GetDefaultMaterialStorageLocation()
+        Core::StorageLocation CSubMesh::GetDefaultMaterialStorageLocation()
         {
             return meDefaultStorageLocation;
         }
@@ -95,7 +95,7 @@ namespace moFlo
 			mpRenderSystem = inpRenderSystem;
 			
 			BufferDescription desc;
-			desc.eUsageFlag = STATIC;
+			desc.eUsageFlag = BufferUsage::k_static;
 			desc.VertexDataCapacity = inudwVertexCapacityInBytes; 
 			desc.IndexDataCapacity  = inudwIndexCapacityInBytes;
 			desc.ePrimitiveType = inPrimativeType;
@@ -113,7 +113,7 @@ namespace moFlo
 		void CSubMesh::AlterBufferDeclaration(CVertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes)
 		{
 			BufferDescription desc;
-			desc.eUsageFlag = STATIC;
+			desc.eUsageFlag = BufferUsage::k_static;
 			desc.VertexDataCapacity = mpMeshBuffer->GetVertexCapacity(); 
 			desc.IndexDataCapacity  = mpMeshBuffer->GetIndexCapacity();
 			desc.ePrimitiveType = mpMeshBuffer->GetPrimitiveType();
@@ -178,7 +178,7 @@ namespace moFlo
         //-----------------------------------------------------------------
         /// Set Default Material Storage Location
         //-----------------------------------------------------------------
-        void CSubMesh::SetDefaultMaterialStorageLocation(Core::STORAGE_LOCATION ineStorageLocation)
+        void CSubMesh::SetDefaultMaterialStorageLocation(Core::StorageLocation ineStorageLocation)
         {
             meDefaultStorageLocation = ineStorageLocation;
         }

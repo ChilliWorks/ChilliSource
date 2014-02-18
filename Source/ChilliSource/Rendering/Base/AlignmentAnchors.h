@@ -17,19 +17,17 @@ namespace moFlo
     namespace Core
     {
         //---Anchor points for view alignment
-        enum AlignmentAnchor
+        enum class AlignmentAnchor
         {
-            ALIGN_TOP_LEFT,
-            ALIGN_TOP_RIGHT,
-            ALIGN_TOP_CENTRE,
-            ALIGN_MIDDLE_LEFT,
-            ALIGN_MIDDLE_RIGHT,
-            ALIGN_MIDDLE_CENTRE,
-            ALIGN_BOTTOM_LEFT,
-            ALIGN_BOTTOM_RIGHT,
-            ALIGN_BOTTOM_CENTRE,
-			
-            ALIGN_BOTTOM_TOTAL,
+            k_topLeft,
+            k_topRight,
+            k_topCentre,
+            k_middleLeft,
+            k_middleRight,
+            k_middleCentre,
+            k_bottomLeft,
+            k_bottomRight,
+            k_bottomCentre
         };
         
         //--------------------------------------------------------------

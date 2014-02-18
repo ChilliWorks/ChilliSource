@@ -26,9 +26,9 @@ namespace moFlo
 		const u32 kgMoAnimMaxVersion = 4;
 		const u32 kgMoAnimFileCheckValue = 7777;
 		
-		enum MO_ANIM_FEATURE
+		enum class MoAnimFeature
 		{
-			MAF_NONE
+			k_none
 		};
 		
 		//-------------------------------------------------------------------------
@@ -61,7 +61,7 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// Create Resource From File
 		//----------------------------------------------------------------------------
-		bool CMoAnimLoader::CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool CMoAnimLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
 			SkinnedAnimationPtr pAnim = SHARED_PTR_CAST<CSkinnedAnimation>(outpResource);
 			
@@ -70,12 +70,12 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// Async Create Resource From File
 		//----------------------------------------------------------------------------
-		bool CMoAnimLoader::AsyncCreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool CMoAnimLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
 			SkinnedAnimationPtr pAnim = SHARED_PTR_CAST<CSkinnedAnimation>(outpResource);
 			
 			//Load model as task
-			Task3<Core::STORAGE_LOCATION, const std::string&, const SkinnedAnimationPtr&> AnimTask(this, &CMoAnimLoader::ReadAnimationTask,ineStorageLocation, inFilePath, pAnim);
+			Task3<Core::StorageLocation, const std::string&, const SkinnedAnimationPtr&> AnimTask(this, &CMoAnimLoader::ReadAnimationTask,ineStorageLocation, inFilePath, pAnim);
 			CTaskScheduler::ScheduleTask(AnimTask);
 			
 			return true;
@@ -83,18 +83,18 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// ReadAnimationTask
 		//----------------------------------------------------------------------------
-		void CMoAnimLoader::ReadAnimationTask(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource)
+		void CMoAnimLoader::ReadAnimationTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource)
 		{
 			CreateSkinnedAnimationFromFile(ineStorageLocation, inFilePath, outpResource);
 		}
 		//----------------------------------------------------------------------------
 		/// Create Skinned Animation From File
 		//----------------------------------------------------------------------------
-		bool CMoAnimLoader::CreateSkinnedAnimationFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource)  
+		bool CMoAnimLoader::CreateSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource)  
 		{
             bool mbSuccess = true;
 			
-			moFlo::Core::FileStreamPtr stream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, moFlo::Core::FM_READ_BINARY);
+			Core::FileStreamPtr stream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
 			
 			u32 udwNumFrames = 0;
 			s32 dwNumSkeletonNodes = 0;

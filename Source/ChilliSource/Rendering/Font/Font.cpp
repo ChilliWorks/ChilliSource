@@ -52,7 +52,7 @@ namespace moFlo
 		void CFont::SetTexture(const Rendering::TexturePtr& inpTex)
 		{
 			mpTexture = inpTex;
-			mpTexture->SetFilter(Rendering::ITexture::TEX_FILTER_LINEAR, Rendering::ITexture::TEX_FILTER_LINEAR);
+			mpTexture->SetFilter(ITexture::Filter::k_linear, ITexture::Filter::k_linear);
 		}
 		//-------------------------------------------
 		/// Get Texture
@@ -138,7 +138,7 @@ namespace moFlo
 			//Just assign the width of a space based on the similar space character in the 
 			//font. This means it will scale relative to the font
 			CharacterInfo sInfo;
-			if(GetInfoForCharacter(kSimilarSpaceCharacter, sInfo) == CHAR_OK)
+			if(GetInfoForCharacter(kSimilarSpaceCharacter, sInfo) == CharacterResult::k_ok)
 			{
 				mAttributes.SpaceSpacing = sInfo.vSize.x;
 				mAttributes.TabSpacing = sInfo.vSize.x * kudwSpacesPerTab;
@@ -157,20 +157,20 @@ namespace moFlo
 		/// @param Frame to be filled with data 
 		/// @return Success or invisible chars
 		//-------------------------------------------
-		CharacterResults CFont::GetInfoForCharacter(UTF8String::Char inChar, CharacterInfo& outInfo) const
+		CharacterResult CFont::GetInfoForCharacter(UTF8String::Char inChar, CharacterInfo& outInfo) const
 		{
 			//Check for space character. That won't be in the glyph file or the font bitmap.
 			if(inChar == kSpaceCharacter)
 			{
-				return CHAR_SPACE;
+				return CharacterResult::k_space;
 			}
 			else if(inChar == kTabCharacter)
 			{
-				return CHAR_TAB;
+				return CharacterResult::k_tab;
 			}
 			else if(inChar == kReturnCharacter)
 			{
-				return CHAR_RETURN;
+				return CharacterResult::k_return;
 			}
 			
 			CharToCharInfoMap::const_iterator pCharEntry = mMapCharToCharInfo.find(inChar);
@@ -179,10 +179,10 @@ namespace moFlo
             {
 				outInfo = pCharEntry->second;
 				
-				return CHAR_OK;
+				return CharacterResult::k_ok;
 			}
 			
-			return CHAR_INVALID;
+			return CharacterResult::k_invalid;
 		}
         //-------------------------------------------
         /// Get Kerning Between Characters

@@ -72,7 +72,7 @@ namespace moFlo
         //--------------------------------------------------------------------------------------------------
 		/// Open
 		//--------------------------------------------------------------------------------------------------			
-		void IFileStream::Open(const std::string& instrFilename, Core::FILE_MODE ineMode)
+		void IFileStream::Open(const std::string& instrFilename, Core::FileMode ineMode)
 		{
 			mstrFilename = instrFilename;
 			meFileMode = ineMode;
@@ -234,18 +234,18 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------------------
 		/// SeekG
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::SeekG(s32 indwPosition, Core::SEEK_DIR ineDir)
+		void IFileStream::SeekG(s32 indwPosition, Core::SeekDir ineDir)
 		{
 			std::ios_base::seekdir dir;
 			switch (ineDir)
 			{
-				case Core::SD_BEGINNING:
+				case Core::SeekDir::k_beginning:
 					dir = std::ios_base::beg;
 					break;
-				case Core::SD_CURRENT:
+				case Core::SeekDir::k_current:
 					dir = std::ios_base::cur;
 					break;
-				case Core::SD_END:
+				case Core::SeekDir::k_end:
 					dir = std::ios_base::end;
 					break;
 			}
@@ -296,18 +296,18 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------------------
 		/// SeekP
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::SeekP(s32 indwPosition, Core::SEEK_DIR ineDir)
+		void IFileStream::SeekP(s32 indwPosition, Core::SeekDir ineDir)
 		{
 			std::ios_base::seekdir dir;
 			switch (ineDir)
 			{
-				case Core::SD_BEGINNING:
+				case Core::SeekDir::k_beginning:
 					dir = std::ios_base::beg;
 					break;
-				case Core::SD_CURRENT:
+				case Core::SeekDir::k_current:
 					dir = std::ios_base::cur;
 					break;
-				case Core::SD_END:
+				case Core::SeekDir::k_end:
 					dir = std::ios_base::end;
 					break;
 			}
@@ -327,25 +327,25 @@ namespace moFlo
 		{
 			switch (meFileMode)
 			{
-				case Core::FM_READ:
+				case Core::FileMode::k_read:
 					return (std::ios_base::in);
-				case Core::FM_READ_BINARY:
+				case Core::FileMode::k_readBinary:
 					return (std::ios_base::in | std::ios_base::binary);
-				case Core::FM_WRITE:
+				case Core::FileMode::k_write:
 					return (std::ios_base::out);
-				case Core::FM_WRITE_APPEND:
+				case Core::FileMode::k_writeAppend:
 					return (std::ios_base::out | std::ios_base::app);
-				case Core::FM_WRITE_AT_END:
+				case Core::FileMode::k_writeAtEnd:
 					return (std::ios_base::out | std::ios_base::ate);
-				case Core::FM_WRITE_TRUNCATE:
+				case Core::FileMode::k_writeTruncate:
 					return (std::ios_base::out | std::ios_base::trunc);
-				case Core::FM_WRITE_BINARY:
+				case Core::FileMode::k_writeBinary:
 					return (std::ios_base::out | std::ios_base::binary);
-				case Core::FM_WRITE_BINARY_APPEND:
+				case Core::FileMode::k_writeBinaryAppend:
 					return (std::ios_base::out | std::ios_base::binary | std::ios_base::app);
-				case Core::FM_WRITE_BINARY_AT_END:
+				case Core::FileMode::k_writeBinaryAtEnd:
 					return (std::ios_base::out | std::ios_base::binary | std::ios_base::ate);
-				case Core::FM_WRITE_BINARY_TRUNCATE:
+				case Core::FileMode::k_writeBinaryTruncate:
 					return (std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
 				default:
 					return (std::ios_base::in);

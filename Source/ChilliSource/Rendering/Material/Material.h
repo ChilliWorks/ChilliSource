@@ -36,45 +36,45 @@ namespace moFlo
 		/// Destination and source types for defining
 		/// blend functions
 		//============================================
-		enum AlphaBlend
+		enum class AlphaBlend
 		{
-			AB_UNKNOWN					= -1,
-			AB_ZERO						= (1 << 0),
-			AB_ONE						= (1 << 1),
-			AB_SOURCE_COL				= (1 << 2),
-			AB_ONE_MINUS_SOURCE_COL		= (1 << 3),
-			AB_SOURCE_ALPHA				= (1 << 4),
-			AB_ONE_MINUS_SOURCE_ALPHA	= (1 << 5),
-			AB_DEST_ALPHA				= (1 << 6),
-			AB_ONE_MINUS_DEST_ALPHA		= (1 << 7),
+			k_unknown               = -1,
+			k_zero					= (1 << 0),
+			k_one					= (1 << 1),
+			k_sourceCol				= (1 << 2),
+			k_oneMinusSourceCol		= (1 << 3),
+			k_sourceAlpha			= (1 << 4),
+			k_oneMinusSourceAlpha	= (1 << 5),
+			k_destAlpha				= (1 << 6),
+			k_oneMinusDestAlpha		= (1 << 7),
 		};
         
         //============================================
 		/// Cull Face
 		//============================================
-		enum CullFace
+		enum class CullFace
 		{
-            CF_FRONT,
-            CF_BACK
+            k_front,
+            k_back
 		};
         //============================================
 		/// Depth Function
 		//============================================
-        enum DepthFunction
+        enum class DepthFunction
         {
-            DF_LESS,
-            DF_EQUAL,
-            DF_LEQUAL
+            k_less,
+            k_equal,
+            k_lequal
         };
         //============================================
 		/// Shader Pass
 		//============================================
-        enum ShaderPass
+        enum class ShaderPass
         {
-            SP_AMBIENT,
-            SP_DIRECTIONAL,
-            SP_POINT,
-            SP_NUM_PASSES
+            k_ambient,
+            k_directional,
+            k_point,
+            k_total
         };
 		
 		class CMaterial : public Core::IResource
@@ -438,7 +438,7 @@ namespace moFlo
             
             CubemapPtr mpCubemap;
             
-            ShaderPtr maShaderPrograms[SP_NUM_PASSES];
+            ShaderPtr maShaderPrograms[(u32)ShaderPass::k_total];
             ShaderPtr mpActiveShaderProgram;
 			
 			Core::CColour mEmissive;

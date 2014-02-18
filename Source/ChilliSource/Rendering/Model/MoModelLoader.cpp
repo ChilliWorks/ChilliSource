@@ -26,23 +26,23 @@ namespace moFlo
 		const u32 kgMoModelMaxVersion = 11;
 		const u32 kgMoModelFileCheckValue = 6666;
 		
-		enum MO_MODEL_FEATURE
+		enum class MoModelFeature
 		{
-			MMF_NONE,
-			MMF_HAS_TEXTURE,
-			MMF_HAS_MATERIAL,
-			MMF_HAS_ANIMATION_DATA
+            k_none,
+            k_hasTexture,
+            k_hasMaterial,
+            k_hasAnimation
 		};
 		
-		enum MO_MODEL_VERTEX_ELEMENT
+		enum class MoModelVertexElement
 		{
-			MMVE_NONE,
-			MMVE_POSITION,
-			MMVE_NORMAL,
-			MMVE_TEXCOORD,
-			MMVE_COLOUR,
-			MMVE_WEIGHTS,
-			MMVE_JOINT_INDICES
+            k_none,
+            k_position,
+            k_normal,
+            k_texcoord,
+            k_colour,
+            k_weights,
+            k_jointIndices
 		};
 		
 		//-------------------------------------------------------------------------
@@ -75,7 +75,7 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// Create Resource From File
 		//----------------------------------------------------------------------------
-		bool CMoModelLoader::CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool CMoModelLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
 			MeshPtr pMesh = SHARED_PTR_CAST<CMesh>(outpResource);
 			
@@ -88,7 +88,7 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// Create Mesh From File
 		//----------------------------------------------------------------------------
-		bool CMoModelLoader::CreateMeshFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource)  
+		bool CMoModelLoader::CreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource)  
 		{
             MeshDescriptor descriptor;
 			
@@ -103,7 +103,7 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// Async Create Resource From File
 		//----------------------------------------------------------------------------
-		bool CMoModelLoader::AsyncCreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool CMoModelLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
 			MeshPtr pMesh = SHARED_PTR_CAST<CMesh>(outpResource);
 			
@@ -116,10 +116,10 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// Async Create Mesh From File
 		//----------------------------------------------------------------------------
-		bool CMoModelLoader::AsyncCreateMeshFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource)
+		bool CMoModelLoader::AsyncCreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource)
 		{
 			//Load model as task
-			Task4<Core::STORAGE_LOCATION, const std::string&, const std::string&, const MeshPtr&> MeshTask(this, &CMoModelLoader::LoadMeshDataTask, ineStorageLocation, inFilePath, instrMaterialPath, outpResource);
+			Task4<Core::StorageLocation, const std::string&, const std::string&, const MeshPtr&> MeshTask(this, &CMoModelLoader::LoadMeshDataTask, ineStorageLocation, inFilePath, instrMaterialPath, outpResource);
 			CTaskScheduler::ScheduleTask(MeshTask);
 			
 			return true;
@@ -127,7 +127,7 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// LoadMeshDataTask
 		//----------------------------------------------------------------------------
-		void CMoModelLoader::LoadMeshDataTask(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath, const std::string &instrMaterialPath, const MeshPtr& outpResource)
+		void CMoModelLoader::LoadMeshDataTask(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string &instrMaterialPath, const MeshPtr& outpResource)
 		{
 			//read the mesh data into a MoStaticDeclaration
 			MeshDescriptor descriptor;
@@ -149,7 +149,7 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// Populate Existing Mesh From File
 		//----------------------------------------------------------------------------
-		void CMoModelLoader::PopulateExistingMeshFromFile(const MeshPtr& inpMesh, Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath)
+		void CMoModelLoader::PopulateExistingMeshFromFile(const MeshPtr& inpMesh, Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath)
 		{
 			MeshDescriptor descriptor;
 			
@@ -170,7 +170,7 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// Async Populate Existing Mesh From File
 		//----------------------------------------------------------------------------
-		void CMoModelLoader::AsyncPopulateExistingMeshFromFile(const MeshPtr& inpMesh, Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath)
+		void CMoModelLoader::AsyncPopulateExistingMeshFromFile(const MeshPtr& inpMesh, Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath)
 		{
 			inpMesh->SetLoaded(false);
 			
@@ -182,13 +182,13 @@ namespace moFlo
 			}
 			
 			//Load image as a task. Once it completed we can load the texture as it should be done on the main thread
-			Task4<Core::STORAGE_LOCATION, const std::string&, const std::string&, const MeshPtr&> MeshTask(this, &CMoModelLoader::LoadDataForExistingMeshTask, ineStorageLocation, inFilePath, strMatPath, inpMesh);
+			Task4<Core::StorageLocation, const std::string&, const std::string&, const MeshPtr&> MeshTask(this, &CMoModelLoader::LoadDataForExistingMeshTask, ineStorageLocation, inFilePath, strMatPath, inpMesh);
 			CTaskScheduler::ScheduleTask(MeshTask);
 		}
 		//----------------------------------------------------------------------------
 		/// LoadDataForExistingMeshTask
 		//----------------------------------------------------------------------------
-		void CMoModelLoader::LoadDataForExistingMeshTask(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath, const MeshPtr& outpResource)
+		void CMoModelLoader::LoadDataForExistingMeshTask(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath, const MeshPtr& outpResource)
 		{
 			//read the mesh data into a MoStaticDeclaration
 			MeshDescriptor descriptor;
@@ -227,11 +227,11 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// Read File
 		//----------------------------------------------------------------------------
-		bool CMoModelLoader::ReadFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string &inFilePath, const std::string &inMaterialPath, MeshDescriptor& inMeshDescriptor)
+		bool CMoModelLoader::ReadFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string &inMaterialPath, MeshDescriptor& inMeshDescriptor)
 		{
 			bool mbSuccess = true;
 			
-			moFlo::Core::FileStreamPtr stream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, moFlo::Core::FM_READ_BINARY);
+			Core::FileStreamPtr stream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
 	
 			MeshDataQuantities quantities;
 			mbSuccess = ReadGlobalHeader(stream, inMeshDescriptor, inFilePath, quantities);
@@ -303,15 +303,15 @@ namespace moFlo
 			{
 				u32 dwFeatureType = (u32)ReadValue<u8>(inpStream);
 				
-				switch (dwFeatureType)
+				switch (MoModelFeature(dwFeatureType))
 				{
-					case MMF_HAS_TEXTURE:
+					case MoModelFeature::k_hasTexture:
 						inMeshDescriptor.mFeatures.mbHasTexture = true;
 						break;
-					case MMF_HAS_MATERIAL:
+					case MoModelFeature::k_hasMaterial:
 						inMeshDescriptor.mFeatures.mbHasMaterial = true;
 						break;
-					case MMF_HAS_ANIMATION_DATA:
+					case MoModelFeature::k_hasAnimation:
 						inMeshDescriptor.mFeatures.mbHasAnimationData = true;
                         
                         //A breaking change was made to animated models in version 11.
@@ -518,34 +518,34 @@ namespace moFlo
 			{
 				u8 dwVertexElement = ReadValue<u8>(inpStream);
 				
-				switch (dwVertexElement)
+				switch (MoModelVertexElement(dwVertexElement))
 				{
-					case MMVE_NONE:
+					case MoModelVertexElement::k_none:
 						ERROR_LOG("Unknown vertex type in vertex declaration!");
 						break;
-					case MMVE_POSITION:
-						apVertElements[i].eType = FLOAT4;
-						apVertElements[i].eSemantic = POSITION;
+					case MoModelVertexElement::k_position:
+						apVertElements[i].eType = VertexDataType::k_float4;
+						apVertElements[i].eSemantic = VertexDataSemantic::k_position;
 						break;
-					case MMVE_NORMAL:
-						apVertElements[i].eType = FLOAT3;
-						apVertElements[i].eSemantic = NORMAL;
+					case MoModelVertexElement::k_normal:
+						apVertElements[i].eType = VertexDataType::k_float3;
+						apVertElements[i].eSemantic = VertexDataSemantic::k_normal;
 						break;
-					case MMVE_TEXCOORD:
-						apVertElements[i].eType = FLOAT2;
-						apVertElements[i].eSemantic = UV;
+					case MoModelVertexElement::k_texcoord:
+						apVertElements[i].eType = VertexDataType::k_float2;
+						apVertElements[i].eSemantic = VertexDataSemantic::k_uv;
 						break;
-					case MMVE_COLOUR:
-						apVertElements[i].eType = BYTE4;
-						apVertElements[i].eSemantic = COLOUR;
+					case MoModelVertexElement::k_colour:
+						apVertElements[i].eType = VertexDataType::k_byte4;
+						apVertElements[i].eSemantic = VertexDataSemantic::k_colour;
 						break;
-					case MMVE_WEIGHTS:
-						apVertElements[i].eType = FLOAT4;
-						apVertElements[i].eSemantic = WEIGHTS;
+					case MoModelVertexElement::k_weights:
+						apVertElements[i].eType = VertexDataType::k_float4;
+						apVertElements[i].eSemantic = VertexDataSemantic::k_weight;
 						break;
-					case MMVE_JOINT_INDICES:
-						apVertElements[i].eType = BYTE4;
-						apVertElements[i].eSemantic = JOINT_INDICES;
+					case MoModelVertexElement::k_jointIndices:
+						apVertElements[i].eType = VertexDataType::k_byte4;
+						apVertElements[i].eSemantic = VertexDataSemantic::k_jointIndex;
 						break;
 				}
 			}

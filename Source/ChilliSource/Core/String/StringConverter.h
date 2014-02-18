@@ -104,7 +104,7 @@ namespace moFlo
 
             /** Converts a Storage Location to a string.
 			 */
-            static std::string ToString(STORAGE_LOCATION instrStorageLocation);
+            static std::string ToString(StorageLocation instrStorageLocation);
             
 			/** Converts a StringVector to a string.
 			 @remarks
@@ -192,7 +192,7 @@ namespace moFlo
             
             /** Parses a Storage Location out of a String.
 			 */
-            static STORAGE_LOCATION ParseStorageLocation(const std::string &instrFunc);
+            static StorageLocation ParseStorageLocation(const std::string &instrFunc);
             
 			/** Checks the std::string is a inValid number inValue. */
 			static bool isNumber(const std::string& inVal);		
