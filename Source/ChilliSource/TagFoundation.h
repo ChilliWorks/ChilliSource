@@ -41,7 +41,7 @@ public:
 #define SHARED_FUTURE std::shared_future
 #define MAKE_SHARED_PTR std::make_shared
 
-//TODO: Better way to not include the headers from here but still be able to swap libs easily
+//TODO: Better way to not include the headers from here but still be able to swap libs easily i.e. if we want to use a different STL implementation
 #include <unordered_map>
 #define HASH_MAP std::unordered_map
 
