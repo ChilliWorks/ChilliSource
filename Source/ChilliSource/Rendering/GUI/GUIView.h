@@ -24,7 +24,6 @@
 
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
-#include <ChilliSource/Core/Base/Surface.h>
 #include <ChilliSource/Core/Math/Matrix3x3.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 
@@ -36,7 +35,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CGUIView : public Core::ISurface
+		class CGUIView
 		{
 		protected:
             
@@ -862,7 +861,34 @@ namespace ChilliSource
 			/// @param The window the view is attached to
 			//-----------------------------------------------------
 			void SetRootWindow(CWindow* inpWindow);
-
+            //-----------------------------------------------------------
+            /// Get Touch Began Event
+            ///
+            /// Use this to register for touch notifications that
+            /// are not consumed by the GUI
+            ///
+            /// @return Touch began event
+            //-----------------------------------------------------------
+            Core::IEvent<Input::TouchEventDelegate> & GetTouchBeganEvent();
+            //-----------------------------------------------------------
+            /// Get Touch Moved Event
+            ///
+            /// Use this to register for touch notifications that
+            /// are not consumed by the GUI
+            ///
+            /// @return Touch moved event
+            //-----------------------------------------------------------
+            Core::IEvent<Input::TouchEventDelegate> & GetTouchMovedEvent();
+            //-----------------------------------------------------------
+            /// Get Touch End Event
+            ///
+            /// Use this to register for touch notifications that
+            /// are not consumed by the GUI
+            ///
+            /// @return Touch end event
+            //-----------------------------------------------------------
+            Core::IEvent<Input::TouchEventDelegate> & GetTouchEndEvent();
+            
 		protected:
 
 			//-----------------------------------------------------
@@ -908,6 +934,10 @@ namespace ChilliSource
 
 		protected:
 
+            Core::CEvent1<Input::TouchEventDelegate> mTouchBeganEvent;
+            Core::CEvent1<Input::TouchEventDelegate> mTouchMovedEvent;
+            Core::CEvent1<Input::TouchEventDelegate> mTouchEndedEvent;
+            
 			Subviews mSubviews;
 			Subviews mSubviewsCopy;
 

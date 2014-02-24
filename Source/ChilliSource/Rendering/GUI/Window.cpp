@@ -19,8 +19,6 @@
 
 namespace ChilliSource
 {
-    DEFINE_CREATABLE(Core::ISurface, Rendering::CWindow);
-    
 	namespace Rendering
 	{
 		//-----------------------------------------------
@@ -57,7 +55,15 @@ namespace ChilliSource
 			//The window is responsible for receiving input for this scene
             ListenForTouches();
 		}
-        
+        //-----------------------------------------------------
+        /// Get Input System
+        ///
+        /// @return pointer to the input system
+        //-----------------------------------------------------
+        Input::IInputSystem* CWindow::GetInputSystem()
+        {
+            return mpInputSystem;
+        }
         void CWindow::ListenForTouches()
         {
             if(mpInputSystem && mpInputSystem->GetTouchScreenPtr() && !mbListeningForTouches)
@@ -79,7 +85,6 @@ namespace ChilliSource
                 mbListeningForTouches=false;
 			}
         }
-        
 		//-----------------------------------------------------------
 		/// On Screen Orientation Changed
 		///

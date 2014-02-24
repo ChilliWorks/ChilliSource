@@ -59,8 +59,6 @@
 
 namespace ChilliSource 
 {
-    DEFINE_CREATABLE(Core::IPlatformSystem, iOS::CPlatformSystem);
-    
 	namespace iOS
 	{   
 		//-----------------------------------------

@@ -15,7 +15,6 @@
 
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
-#include <ChilliSource/Core/Base/CustomCreator.h>
 
 namespace ChilliSource
 {
@@ -29,7 +28,6 @@ namespace ChilliSource
 		//---------------------------------------------
 		class CPlatformSystem : public Core::IPlatformSystem
 		{
-			DECLARE_CREATABLE(Core::IPlatformSystem, CPlatformSystem);
 		public:
 			CPlatformSystem();
 			virtual ~CPlatformSystem();

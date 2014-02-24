@@ -48,12 +48,12 @@ namespace ChilliSource
 		///
 		/// Draw the UI
 		//----------------------------------------------------------
-		void CCanvasRenderer::Render(Core::ISurface* inpRootSurface, f32 infNearClipDistance)
+		void CCanvasRenderer::Render(CGUIView* inpView, f32 infNearClipDistance)
 		{
             //We use this to ensure our UI is never clipped
             mfNearClippingDistance = infNearClipDistance + 1.0f;
             
-            inpRootSurface->Draw(this);
+            inpView->Draw(this);
 			
 			mOverlayBatcher.ForceRender(mpRenderSystem);
             

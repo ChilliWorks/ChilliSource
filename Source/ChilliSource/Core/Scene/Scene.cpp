@@ -8,7 +8,6 @@
  */
 
 #include <ChilliSource/Core/Scene/Scene.h>
-#include <ChilliSource/Core/Base/Surface.h>
 
 #include <ChilliSource/Rendering/GUI/Window.h>
 
@@ -36,10 +35,10 @@ namespace ChilliSource
 		/// Create the scene graph object 
 		//--------------------------------------------------------------------------------------------------
 		CScene::CScene(Input::IInputSystem* inpInputSystem, f32 infWorldHalfSize) 
-        : /*mSpatialGraph(CVector3::ZERO, infWorldHalfSize),*/ mpRootWindow(NULL)
+        : mpRootWindow(nullptr)
 		{
-			mpRootWindow = (Rendering::CWindow*)ISurface::Create();
-			((ISurface*)mpRootWindow)->SetInputSystem(inpInputSystem);
+			mpRootWindow = new Rendering::CWindow();
+			mpRootWindow->SetInputSystem(inpInputSystem);
 		}
 		//-------------------------------------------------------
 		/// Become Active
@@ -49,7 +48,6 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void CScene::BecomeActive()
 		{
-			//((ISurface*)mpRootWindow)->EnableUserInteraction(true);
             mpRootWindow->ListenForTouches();
             
 		}
@@ -189,7 +187,7 @@ namespace ChilliSource
         //--------------------------------------------------------------------------------------------------		   
 		void CScene::Update(f32 infDT)
 		{
-			((ISurface*)mpRootWindow)->Update(infDT);
+			mpRootWindow->Update(infDT);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Destructor
@@ -199,7 +197,7 @@ namespace ChilliSource
 		CScene::~CScene()
 		{
 			RemoveAllEntities();
-            delete (ISurface*)(mpRootWindow);
+            delete mpRootWindow;
 		}
 	}
 }

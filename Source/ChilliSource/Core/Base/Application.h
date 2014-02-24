@@ -14,9 +14,7 @@
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/System/System.h>
-#include <ChilliSource/Core/Base/ApplicationDelegates.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/Base/CustomCreator.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Audio/ForwardDeclarations.h>
@@ -493,7 +491,17 @@ namespace ChilliSource
             /// Depedending on the device decide which folders resources should be loaded from
             //--------------------------------------------------------------------------------------------------
             void DetermineResourceDirectories();
-
+        
+        private:
+            //---------------------------------------------------
+            /// Resumes the application. This will be called when
+            /// at the start of the next update following Resume
+            /// being called.
+            ///
+            /// @author Ian Copland
+            //---------------------------------------------------
+            static void OnApplicationResumed();
+            
 		protected: //---Members
 			
 			static CStateManager mStateMgr;		//Handles the state updating and transitioning
@@ -516,7 +524,6 @@ namespace ChilliSource
             CComponentFactoryDispenser* mpComponentFactoryDispenser;
 		
 			static bool mbHasTouchInput;
-            static IApplicationDelegates* mpApplicationDelegates;
             static bool mbUpdateSystems;
 		private:
 			
@@ -530,6 +537,11 @@ namespace ChilliSource
             static Rendering::MaterialPtr pDefaultMaterial;
 			static f32 mfUpdateInterval;
             static f32 mfUpdateSpeed;
+            
+            static f32 s_updateIntervalRemainder;
+            static bool s_shouldInvokeResumeEvent;
+            static bool s_isFirstFrame;
+            static bool s_isSuspending;
 		};
 	}
 }

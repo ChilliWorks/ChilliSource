@@ -16,7 +16,6 @@
 
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/GUI/Label.h>
-#include <ChilliSource/Core/Base/Surface.h>
 
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
@@ -36,7 +35,7 @@ namespace ChilliSource
 			///
 			/// Draw UI 
 			//----------------------------------------------------------
-			void Render(Core::ISurface* inpRootSurface, f32 infNearClipDistance);
+			void Render(CGUIView* inpRootSurface, f32 infNearClipDistance);
             //----------------------------------------------------------
             /// Enable Clipping To Bounds
             ///

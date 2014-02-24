@@ -508,6 +508,42 @@ namespace ChilliSource
 				(*it)->SetRootWindow(inpWindow);
 			}
         }
+        //-----------------------------------------------------------
+        /// Get Touch Began Event
+        ///
+        /// Use this to register for touch notifications that
+        /// are not consumed by the GUI
+        ///
+        /// @return Touch began event
+        //-----------------------------------------------------------
+        Core::IEvent<Input::TouchEventDelegate> & CGUIView::GetTouchBeganEvent()
+        {
+            return mTouchBeganEvent;
+        }
+        //-----------------------------------------------------------
+        /// Get Touch Moved Event
+        ///
+        /// Use this to register for touch notifications that
+        /// are not consumed by the GUI
+        ///
+        /// @return Touch moved event
+        //-----------------------------------------------------------
+        Core::IEvent<Input::TouchEventDelegate> & CGUIView::GetTouchMovedEvent()
+        {
+            return mTouchMovedEvent;
+        }
+        //-----------------------------------------------------------
+        /// Get Touch End Event
+        ///
+        /// Use this to register for touch notifications that
+        /// are not consumed by the GUI
+        ///
+        /// @return Touch end event
+        //-----------------------------------------------------------
+        Core::IEvent<Input::TouchEventDelegate> & CGUIView::GetTouchEndEvent()
+        {
+            return mTouchEndedEvent;
+        }
         //-----------------------------------------------------
         /// Get Subviews
         ///

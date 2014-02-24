@@ -30,7 +30,6 @@ namespace ChilliSource
     {
         class CWindow : public CGUIView
         {
-        	DECLARE_CREATABLE(ISurface, CWindow);
         public:
             CWindow();
             virtual ~CWindow();
@@ -41,6 +40,12 @@ namespace ChilliSource
     		/// @param pointer to the input system
     		//-----------------------------------------------------
     		void SetInputSystem(Input::IInputSystem* inpInputSystem);
+            //-----------------------------------------------------
+            /// Get Input System
+            ///
+            /// @return pointer to the input system
+            //-----------------------------------------------------
+            Input::IInputSystem* GetInputSystem();
             void ListenForTouches();
             void UnlistenFromTouches();
             //-----------------------------------------------------------
@@ -123,6 +128,9 @@ namespace ChilliSource
             
 			// Granting friendly access for the Scene
 			friend void Core::CScene::BecomeInactive();
+            
+        private:
+            Input::IInputSystem* mpInputSystem;
         };
     }
 }

@@ -12,7 +12,6 @@
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Localisation/Locales.h>
-#include <ChilliSource/Core/Base/CustomCreator.h>
 #include <ChilliSource/Core/Base/Application.h>
 
 #include <ChilliSource/Input/ForwardDeclarations.h>
@@ -30,10 +29,20 @@ namespace ChilliSource
         /// Allows generic access to platform
         /// specific code via common function calls
         //---------------------------------------------
-        class IPlatformSystem : public ICustomCreator<IPlatformSystem>
+        class IPlatformSystem
         {
         public:
-
+            //-----------------------------------------
+            /// Creates a new platform specfic instance
+            /// of the platform system.
+            ///
+            /// @author Ian Copland
+            /// @return The new instance.
+            //-----------------------------------------
+            static IPlatformSystem* Create();
+            //-----------------------------------------
+            /// Destructor
+            //-----------------------------------------
             virtual ~IPlatformSystem(){}
             //-----------------------------------------
             /// Init
