@@ -1153,7 +1153,7 @@ namespace ChilliSource
                     eType = GL_UNSIGNED_BYTE;
                 }
                 
-                ApplyVertexAttributePointr(inpBuffer, dwLocation, uwNumComponents, eType, bNormalise, dwVertSize, (const GLvoid*) uwElementOffset);
+                ApplyVertexAttributePointr(inpBuffer, dwLocation, uwNumComponents, eType, bNormalise, dwVertSize, (const GLvoid*)(s32)uwElementOffset);
             }
 		}
 		//------------------------------------------------------------
