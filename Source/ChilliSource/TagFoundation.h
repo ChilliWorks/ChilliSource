@@ -22,6 +22,7 @@
 //TODO: Better way to not include the headers from here but still be able to swap libs easily
 #include <memory>
 
+//TODO: Remove the array deleter and put it in a more sutiable place. This is a functor for deleting shared arrays.
 template <typename T> class ArrayDeleter
 {
 public:
