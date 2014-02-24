@@ -16,7 +16,7 @@
 
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Input
 	{

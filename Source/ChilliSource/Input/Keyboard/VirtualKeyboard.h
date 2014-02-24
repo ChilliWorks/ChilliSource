@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Input
 	{

@@ -12,9 +12,9 @@
 #include <ChilliSource/Core/Time/Timer.h>
 #include <ChilliSource/Core/Main/Application.h>
 
-using namespace moFlo::Input;
-using namespace moFlo::Core;
-using namespace moFlo::WindowsPlatform;
+using namespace ChilliSource::Input;
+using namespace ChilliSource::Core;
+using namespace ChilliSource::WindowsPlatform;
 
 CInputSystem::CInputSystem() : mMouse(&mTouchScreen)
 {

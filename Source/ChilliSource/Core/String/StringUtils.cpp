@@ -14,7 +14,7 @@
 #import <Foundation/Foundation.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

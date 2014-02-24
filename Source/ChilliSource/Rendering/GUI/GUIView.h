@@ -32,9 +32,9 @@
 
 #include <ChilliSource/Core/Reflection/Reflection.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
 		class CGUIView : public ISurface
 		{

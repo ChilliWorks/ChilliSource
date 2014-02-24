@@ -9,7 +9,7 @@
 #include <ChilliSource/Core/Image/ImageFormatConverter.h>
 #include <ChilliSource/Core/Image/Image.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace ImageFormatConverter
     {

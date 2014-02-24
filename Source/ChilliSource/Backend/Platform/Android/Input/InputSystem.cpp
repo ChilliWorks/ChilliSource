@@ -12,9 +12,9 @@
 #include <ChilliSource/Core/Time/Timer.h>
 #include <ChilliSource/Core/Main/Application.h>
 
-using namespace moFlo::Input;
-using namespace moFlo::Core;
-using namespace moFlo::AndroidPlatform;
+using namespace ChilliSource::Input;
+using namespace ChilliSource::Core;
+using namespace ChilliSource::AndroidPlatform;
 
 CInputSystem::CInputSystem()
 : IInputSystem()

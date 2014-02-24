@@ -55,9 +55,9 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/RenderSystem.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/RenderCapabilities.h>
 
-namespace moFlo 
+namespace ChilliSource 
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		DEFINE_CREATABLE(IPlatformSystem, CPlatformSystem);
 

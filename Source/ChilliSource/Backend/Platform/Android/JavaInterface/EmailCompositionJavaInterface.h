@@ -14,9 +14,9 @@
 #include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
 #include <ChilliSource/Social/Communications/EmailCompositionActivity.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class CEmailCompositionJavaInterface: public moFlo::AndroidPlatform::IJavaInterface
 		{

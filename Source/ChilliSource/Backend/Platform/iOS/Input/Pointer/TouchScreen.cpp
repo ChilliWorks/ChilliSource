@@ -12,9 +12,9 @@
 
 moFlo::iOSPlatform::CTouchScreen* gpTouchScreenInstance = NULL;
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		CTouchScreen::CTouchScreen() 
 		{

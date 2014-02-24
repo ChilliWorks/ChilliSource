@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Core/Image/Image.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	class IImageResourceProvider : public Core::IResourceProvider
 	{

@@ -13,9 +13,9 @@
 
 #include <ChilliSource/Core/Main/ApplicationDelegates.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class CApplicationDelegates : public IApplicationDelegates
 		{

@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Base/Activity.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Social
 	{

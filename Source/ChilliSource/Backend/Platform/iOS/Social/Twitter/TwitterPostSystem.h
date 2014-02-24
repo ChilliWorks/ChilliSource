@@ -16,9 +16,9 @@
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
         class CTwitterPostSystem : public moFlo::Social::ITwitterPostSystem
         {

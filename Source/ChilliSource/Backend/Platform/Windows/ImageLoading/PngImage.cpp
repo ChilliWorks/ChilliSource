@@ -33,9 +33,9 @@ void ReadPngData(png_structp png_ptr, png_bytep data, png_size_t length)
 		png_error(png_ptr, "Read Error");
 }
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		//----------------------------------------------------------------------------------
 		/// Constructor

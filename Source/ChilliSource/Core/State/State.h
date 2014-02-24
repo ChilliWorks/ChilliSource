@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

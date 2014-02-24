@@ -13,7 +13,7 @@
 
 #include <ChilliSource/Core/XML/XMLUtils.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

@@ -16,7 +16,7 @@
 #include <ChilliSource/Rendering/Font/FontLoader.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

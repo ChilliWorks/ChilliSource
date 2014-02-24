@@ -7,9 +7,9 @@
 //includes
 #include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//declare private statics
 		std::map<std::string, MethodReference> _IJavaInterface::mStaticMethodRefMap;

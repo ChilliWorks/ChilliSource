@@ -5,9 +5,9 @@
 #include <ChilliSource/Input/ForwardDeclarations.h>
 #include <ChilliSource/Input/Pointer/Mouse.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		class CMouse : public Input::IMouse
 		{

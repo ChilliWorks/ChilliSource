@@ -18,7 +18,7 @@
 
 //typedef unsigned char BYTE ;
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

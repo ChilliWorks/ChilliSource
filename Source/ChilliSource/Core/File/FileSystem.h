@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/System/System.h>
 #include <string>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

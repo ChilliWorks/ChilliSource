@@ -16,7 +16,7 @@
 
 #include <ChilliSource/Core/Cryptographic/SHA1.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

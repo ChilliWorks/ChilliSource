@@ -22,7 +22,7 @@
 
 #include <ChilliSource/Input/ForwardDeclarations.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Input
 	{

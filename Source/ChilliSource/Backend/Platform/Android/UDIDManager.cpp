@@ -16,9 +16,9 @@
 #include <ctime>
 #include <cstdlib>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		const std::string kstrUDIDStorageKey = "UDID";
 		const std::string kstrSharedPrefsDocName = "MoFlowPreferences";

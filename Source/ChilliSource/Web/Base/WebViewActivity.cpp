@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Web/Base/WebViewActivity.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	DEFINE_NAMED_INTERFACE(IWebViewActivity);
 	//--------------------------------------------------------------

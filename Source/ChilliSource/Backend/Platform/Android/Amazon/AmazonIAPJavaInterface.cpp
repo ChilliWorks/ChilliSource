@@ -101,9 +101,9 @@ void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnTrans
 	}
 }
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		DEFINE_NAMED_INTERFACE(CAmazonIAPJavaInterface);
 		//--------------------------------------------------------------

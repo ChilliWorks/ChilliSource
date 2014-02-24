@@ -29,9 +29,9 @@ const CGFloat		kfDefaultButtonPointHeight		= 44.0f;
 const CGFloat		kfDefaultButtonPointWidth		= 80.0f;
 const CGFloat		kfDefaultPaddingPointSizeTop	= 5.0f;
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		//-----------------------------------------------
 		/// Constructor

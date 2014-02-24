@@ -22,7 +22,7 @@
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Core/Math/Matrix3x3.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

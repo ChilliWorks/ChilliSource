@@ -12,9 +12,9 @@
 
 #include <ChilliSource/Rendering/GUI/GUIView.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
 		class CSliderBar : public CGUIView
 		{

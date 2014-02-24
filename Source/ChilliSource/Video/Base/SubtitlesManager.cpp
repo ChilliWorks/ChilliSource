@@ -11,7 +11,7 @@
 #include <ChilliSource/Video/Base/Subtitles.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Video
 	{

@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Rendering/Base/VertexDeclaration.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

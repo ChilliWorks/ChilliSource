@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

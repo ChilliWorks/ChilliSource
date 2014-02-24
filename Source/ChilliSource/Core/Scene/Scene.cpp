@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Rendering/GUI/Window.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

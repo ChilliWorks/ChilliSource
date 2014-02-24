@@ -1,7 +1,7 @@
 
 #include <ChilliSource/Input/Pointer/Mouse.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Input
 	{

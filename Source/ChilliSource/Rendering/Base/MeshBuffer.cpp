@@ -13,7 +13,7 @@
 
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

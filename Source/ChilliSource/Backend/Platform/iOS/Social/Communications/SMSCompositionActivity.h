@@ -15,8 +15,8 @@
 
 @class SMSDelegate;
 
-namespace moFlo{
-	namespace iOSPlatform {
+namespace ChilliSource{
+	namespace iOS {
 		
 		class CSMSCompositionActivity : public Social::ISMSCompositionActivity 
 		{

@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Entity/EntityAnimation.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
     {

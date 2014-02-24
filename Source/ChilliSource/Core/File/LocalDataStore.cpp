@@ -16,7 +16,7 @@
 #include <ChilliSource/Core/Cryptographic/AESEncrypt.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
     {

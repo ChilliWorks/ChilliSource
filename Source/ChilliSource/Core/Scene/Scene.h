@@ -19,7 +19,7 @@
 #include <ChilliSource/Input/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/GUI/ForwardDeclarations.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

@@ -20,7 +20,7 @@ typedef WEAK_PTR<const prefix##x>        x##CWPtr;
 #define FORWARD_DECLARE_CLASS(x)        FORWARD_DECLARE_GENERIC(x,C)
 #define FORWARD_DECLARE_INTERFACE(x)    FORWARD_DECLARE_GENERIC(x,I)
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {        

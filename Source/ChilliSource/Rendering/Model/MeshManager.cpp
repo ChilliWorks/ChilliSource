@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Model/SubMesh.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

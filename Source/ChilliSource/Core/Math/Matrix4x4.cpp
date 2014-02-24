@@ -10,7 +10,7 @@
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

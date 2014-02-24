@@ -20,9 +20,9 @@
 #include <ChilliSource/Platform/Android/Input/Accelerometer.h>
 #include <ChilliSource/Platform/Android/Input/VirtualKeyboard.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class CInputSystem : public Input::IInputSystem
 		{

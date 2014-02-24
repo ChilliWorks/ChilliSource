@@ -31,9 +31,9 @@ void Java_com_taggames_moflow_nativeinterface_CWebViewNativeInterface_OnWebviewD
 	moFlo::AndroidPlatform::CWebViewActivity::OnWebViewDismissed(inudwIndex);
 }
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		void SCWebViewJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
 		{

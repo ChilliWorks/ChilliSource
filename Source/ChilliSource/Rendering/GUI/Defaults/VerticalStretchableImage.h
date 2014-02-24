@@ -17,9 +17,9 @@
 /// Creates a scalable image using the nine patch system
 //=============================================================
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         class CVerticalStretchableImage : public CGUIView
         {

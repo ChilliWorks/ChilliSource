@@ -16,7 +16,7 @@
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{

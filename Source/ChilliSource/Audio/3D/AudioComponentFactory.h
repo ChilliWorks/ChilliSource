@@ -20,7 +20,7 @@
 #include <ChilliSource/Audio/3D/AudioListenerComponent.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Audio
 	{

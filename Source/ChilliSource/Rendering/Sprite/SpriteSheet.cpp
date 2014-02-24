@@ -16,7 +16,7 @@
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

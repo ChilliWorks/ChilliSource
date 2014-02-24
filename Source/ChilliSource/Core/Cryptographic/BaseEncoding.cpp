@@ -34,7 +34,7 @@
 
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     //The printable characters that will be output
     const std::string kstrBaseEncodedChars("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/");

@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/String/UTF8String.h>
 #include <ChilliSource/Core/Base/InformationProvider.h>
 
-namespace moFlo{
+namespace ChilliSource{
 
 	namespace Social {
 		

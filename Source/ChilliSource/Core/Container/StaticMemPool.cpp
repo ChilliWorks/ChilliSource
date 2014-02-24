@@ -1,6 +1,6 @@
 #include <ChilliSource/Core/Container/StaticMemPool.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	//----------------------------------------------------------------------
 	/// Constructor

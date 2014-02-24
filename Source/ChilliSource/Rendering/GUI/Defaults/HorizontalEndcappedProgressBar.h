@@ -15,9 +15,9 @@
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
 		class CHorizontalEndcappedProgressBar : public moFlo::GUI::CProgressBar
 		{

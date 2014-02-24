@@ -81,9 +81,9 @@ void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnKeyboardDis
 	}
 }
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		namespace
 		{

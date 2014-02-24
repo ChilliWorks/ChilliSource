@@ -15,9 +15,9 @@
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
     {
 		namespace
 		{

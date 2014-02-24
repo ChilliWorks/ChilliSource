@@ -69,12 +69,12 @@ typedef u64                 TimeIntervalSecs;
 typedef u64                 TimeIntervalMs;
 typedef	const s8*			cString;
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core{}
     namespace Rendering{}
     namespace Networking{}
-    namespace GUI{}
+    namespace Rendering{}
     namespace Audio{}
     namespace Input{}
     namespace Physics2D{}

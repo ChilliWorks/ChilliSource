@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Core/Base/Screen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

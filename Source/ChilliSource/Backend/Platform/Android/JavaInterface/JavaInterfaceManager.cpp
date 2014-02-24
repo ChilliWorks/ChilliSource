@@ -9,9 +9,9 @@
 
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		CJavaInterfaceManager* CJavaInterfaceManager::mpJavaInterfaceManagerSingleton = NULL;
 

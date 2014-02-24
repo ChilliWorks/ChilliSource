@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/Base/Device.h>
 #include <ChilliSource/Core/JSON/json.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Networking
     {

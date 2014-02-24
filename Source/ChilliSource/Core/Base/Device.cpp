@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Core/Base/Device.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {

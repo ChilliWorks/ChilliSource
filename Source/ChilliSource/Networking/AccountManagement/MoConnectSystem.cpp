@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/File/TweakableConstants.h>
 #include <ChilliSource/Networking/AccountManagement/MoConnectSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	using namespace Core;
 	

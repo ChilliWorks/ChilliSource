@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Input/Accelerometer/Accelerometer.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Input
 	{

@@ -11,9 +11,9 @@
 
 #include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class SCWebViewJavaInterface : public moFlo::AndroidPlatform::_IJavaInterface
 		{

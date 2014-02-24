@@ -11,9 +11,9 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
         CIAPSystem::CIAPSystem()
         {

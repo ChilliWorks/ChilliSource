@@ -23,9 +23,9 @@
 @class UIActivityIndicatorView;
 @protocol UIWebViewDelegate;
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		class CWebViewActivity : public IWebViewActivity
 		{

@@ -19,9 +19,9 @@
 
 #include <iostream>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform 
+	namespace iOS 
 	{
         //constants
         const std::string kstrSaveDataPath  = "SaveData/";

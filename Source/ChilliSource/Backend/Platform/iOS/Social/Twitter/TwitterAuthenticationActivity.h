@@ -28,9 +28,9 @@
 @protocol UITextFieldDelegate;
 @protocol UIAlertViewDelegate;
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		class CTwitterAuthenticationActivity : public Social::ITwitterAuthenticationActivity
 		{

@@ -12,9 +12,9 @@
 
 #include <ChilliSource/Rendering/GUI/SliderBar.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         class CVerticalSliderBar : public CSliderBar
         {

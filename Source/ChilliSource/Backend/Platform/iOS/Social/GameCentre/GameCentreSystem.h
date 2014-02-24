@@ -19,9 +19,9 @@
 
 @class NSArray;
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		typedef u32 GameCentreRequestID;
 		

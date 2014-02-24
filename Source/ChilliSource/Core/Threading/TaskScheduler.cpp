@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	Core::ThreadPool* CTaskScheduler::pThreadPool = NULL;
 	

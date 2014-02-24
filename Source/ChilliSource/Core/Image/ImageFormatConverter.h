@@ -11,7 +11,7 @@
 
 #include <ChilliSource/Core/ForwardDeclarations.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     //=====================================================
     /// Image Format Converter

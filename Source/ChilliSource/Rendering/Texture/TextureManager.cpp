@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

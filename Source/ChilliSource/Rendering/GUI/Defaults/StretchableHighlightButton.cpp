@@ -22,9 +22,9 @@
 #include <ChilliSource/Audio/3D/AudioComponent.h>
 #include <ChilliSource/Audio/3D/AudioComponentFactory.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         DEFINE_META_CLASS(CStretchableHighlightButton);
         

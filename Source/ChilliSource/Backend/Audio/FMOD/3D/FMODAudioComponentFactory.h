@@ -17,9 +17,9 @@
 #include <ChilliSource/Audio/3D/AudioComponentFactory.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		class CFMODAudioComponentFactory : public Audio::IAudioComponentFactory
 		{

@@ -19,7 +19,7 @@
 
 #include <list>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core 
 	{

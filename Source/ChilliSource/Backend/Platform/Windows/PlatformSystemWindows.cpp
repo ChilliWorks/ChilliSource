@@ -41,7 +41,7 @@
 
 #include <windows.h>
 
-namespace moFlo 
+namespace ChilliSource 
 {
 	DEFINE_CREATABLE(IPlatformSystem, WindowsPlatform::CPlatformSystem);
 
@@ -49,7 +49,7 @@ namespace moFlo
 	//in FileSystemWindows.h
 	LARGE_INTEGER gFrequency;
 
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		//-----------------------------------------
 		/// Constructor

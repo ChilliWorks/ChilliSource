@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <vector>
 
-namespace moFlo 
+namespace ChilliSource 
 {
 	namespace Social 
 	{

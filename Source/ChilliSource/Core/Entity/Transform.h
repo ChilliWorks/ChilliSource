@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {

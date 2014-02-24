@@ -15,9 +15,9 @@
 #include <vector>
 #import <Foundation/Foundation.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		class CHttpConnectionSystem : public Networking::IHttpConnectionSystem, public Core::IUpdateable
 		{

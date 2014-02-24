@@ -18,7 +18,7 @@
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Base/Application.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {

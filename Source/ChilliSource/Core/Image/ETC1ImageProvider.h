@@ -11,7 +11,7 @@
 
 #include <ChilliSource/Core/Image/ImageResourceProvider.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	//====================================================================
 	/// ETC1 Image Provider

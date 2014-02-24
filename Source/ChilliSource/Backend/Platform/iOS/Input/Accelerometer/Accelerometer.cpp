@@ -14,9 +14,9 @@
 #include <ChilliSource/Backend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
 #import <CoreMotion/CoreMotion.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
         //----------------------------------------------------
         /// Constructor

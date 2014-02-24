@@ -13,9 +13,9 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Networking/IAP/StoreKitIAPSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
         class CIAPSystem : public Networking::IIAPSystem
         {

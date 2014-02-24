@@ -19,13 +19,13 @@ NSString *reqSysVer = @"5.0";
 
 std::string EMPTY_STD_STRING = "Empty";
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
     {
         DEFINE_NAMED_INTERFACE(CiCloudSystem);
         
-        using namespace moFlo::Core;
+        using namespace ChilliSource::Core;
         
         CiCloudSystem::CiCloudSystem(moFlo::Networking::IHttpConnectionSystem* inpcHttpConnectionSystem)
         {

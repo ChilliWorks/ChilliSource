@@ -10,7 +10,7 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/MeshBuffer.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{

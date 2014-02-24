@@ -25,9 +25,9 @@
 
 #include <AudioToolbox/AudioSession.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
         namespace
         {

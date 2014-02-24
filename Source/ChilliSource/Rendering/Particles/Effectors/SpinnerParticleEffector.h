@@ -14,7 +14,7 @@
 
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {

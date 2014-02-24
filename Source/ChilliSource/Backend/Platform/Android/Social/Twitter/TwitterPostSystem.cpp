@@ -13,9 +13,9 @@
 #include <ChilliSource/Platform/Android/Social/Twitter/TwitterPostSystem.h>
 #include <ChilliSource/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//------------------------------------------------------------------------
 		/// Constructor

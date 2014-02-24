@@ -17,7 +17,7 @@
 
 #include <thread>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

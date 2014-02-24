@@ -17,9 +17,9 @@
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         DEFINE_META_CLASS(CImageView)
 		

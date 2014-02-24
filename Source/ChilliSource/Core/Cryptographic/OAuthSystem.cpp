@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/Cryptographic/HMAC_SHA1.h>
 #include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Networking
 	{

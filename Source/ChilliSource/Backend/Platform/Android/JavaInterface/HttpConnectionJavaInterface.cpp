@@ -11,9 +11,9 @@
 #include <ChilliSource/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>
 #include <ChilliSource/Platform/Android/JavaInterface/CoreJavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//--------------------------------------------------------------------------------------
 		/// Setup Java Interface

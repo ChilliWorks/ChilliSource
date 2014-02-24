@@ -13,9 +13,9 @@
 
 #include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace AndroidPlatform
+    namespace Android
     {
         class CGooglePlayRemoteNotificationSystem : public Core::IRemoteNotificationSystem
         {

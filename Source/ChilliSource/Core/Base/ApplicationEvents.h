@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {

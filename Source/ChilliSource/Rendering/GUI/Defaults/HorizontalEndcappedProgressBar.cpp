@@ -14,9 +14,9 @@
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
 		DEFINE_META_CLASS(CHorizontalEndcappedProgressBar)
 		

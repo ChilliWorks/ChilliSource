@@ -19,9 +19,9 @@
 #include <ChilliSource/Platform/Android/Input/TouchScreen.h>
 #include <jni.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class SCTouchInputJavaInterface : public _IJavaInterface
 		{

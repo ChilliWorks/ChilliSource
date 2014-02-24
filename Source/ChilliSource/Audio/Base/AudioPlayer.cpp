@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Audio
     {

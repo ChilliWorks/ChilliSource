@@ -31,7 +31,7 @@
 		moFlo::ICustomCreator<inOutputType>::SetCreator(fastdelegate::FastDelegate0<inOutputType*>(&inInputType::_Create_));	\
 	});
 
-namespace moFlo
+namespace ChilliSource
 {
 	//================================================
 	/// This is used to allocate a base class without

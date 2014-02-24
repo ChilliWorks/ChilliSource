@@ -10,7 +10,7 @@
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Rendering/Base/RenderComponent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {

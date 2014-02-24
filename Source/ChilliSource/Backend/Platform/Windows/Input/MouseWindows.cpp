@@ -7,9 +7,9 @@
 
 #include <ChilliSource/Core/Main/Screen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		CMouse* gpMouseInstance = NULL;
 		//----------------------------------------------------

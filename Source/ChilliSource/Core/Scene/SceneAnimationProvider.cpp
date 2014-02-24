@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/Scene/SceneAnimation.h>
 #include <ChilliSource/Core/Base/Application.h>
 
-namespace moFlo{
+namespace ChilliSource{
     namespace Core
     {
         DEFINE_NAMED_INTERFACE(CSceneAnimationProvider);

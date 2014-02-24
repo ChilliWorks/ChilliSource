@@ -11,9 +11,9 @@
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Core/Main/Utils.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//-------------------------------------------
 		/// Constructor

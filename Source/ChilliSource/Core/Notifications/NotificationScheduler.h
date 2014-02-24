@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
 #include <queue>
 
-namespace moFlo
+namespace ChilliSource
 {
 	class ILocalNotificationScheduler;
 	

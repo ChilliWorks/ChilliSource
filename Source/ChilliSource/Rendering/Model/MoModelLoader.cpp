@@ -16,7 +16,7 @@
 #include <stdexcept>
 #include <ChilliSource/Rendering/Model/MeshManager.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

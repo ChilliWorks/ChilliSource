@@ -19,9 +19,9 @@
 #include <ChilliSource/Backend/Platform/Windows/Input/MouseWindows.h>
 #include <ChilliSource/Backend/Platform/Windows/Input/TouchscreenWindows.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		class CInputSystem : public Input::IInputSystem
 		{

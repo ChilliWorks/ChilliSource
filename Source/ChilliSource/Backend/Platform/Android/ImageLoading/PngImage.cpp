@@ -11,9 +11,9 @@
 #include <ChilliSource/Platform/Android/ImageLoading/LibPng/png.h>
 #include <ChilliSource/Core/Main/Application.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//----------------------------------------------------------------------------------
 		/// Read Png Data

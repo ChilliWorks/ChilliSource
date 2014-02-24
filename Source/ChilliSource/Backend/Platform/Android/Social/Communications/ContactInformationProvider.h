@@ -14,9 +14,9 @@
 #include <ChilliSource/Social/Communications/ContactInformationProvider.h>
 #include <vector>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class CContactInformationProvider: public moFlo::Social::IContactInformationProvider
 		{

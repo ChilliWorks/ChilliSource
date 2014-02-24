@@ -15,9 +15,9 @@
 
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         typedef fastdelegate::FastDelegate2<CGUIView*, const Input::TouchInfo&> GUIEventDelegate;
         

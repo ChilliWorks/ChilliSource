@@ -26,11 +26,11 @@
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
     DEFINE_CREATABLE(IApplicationDelegates, iOSPlatform::CApplicationDelegates);
     
-	namespace iOSPlatform
+	namespace iOS
 	{
 		//----------------------------------------------
 		/// Constructor

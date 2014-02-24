@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

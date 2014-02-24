@@ -36,9 +36,9 @@ void Java_com_taggames_moflow_nativeinterface_CEmailCompositionNativeInterface_O
 	}
 }
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 
 		DEFINE_NAMED_INTERFACE(CEmailCompositionJavaInterface);

@@ -11,7 +11,7 @@
 
 #include <ChilliSource/Core/Image/ImageResourceProvider.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     class CMoImageProvider : public IImageResourceProvider
     {

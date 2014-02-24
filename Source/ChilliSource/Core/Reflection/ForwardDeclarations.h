@@ -9,7 +9,7 @@
 #ifndef MO_FLOW_CORE_REFLECTION_FORWARD_DECLARATIONS_H_
 #define MO_FLOW_CORE_REFLECTION_FORWARD_DECLARATIONS_H_
 
-namespace moFlo 
+namespace ChilliSource 
 {
     namespace Reflect
     {

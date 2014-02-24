@@ -19,9 +19,9 @@
     #include <Twitter/Twitter.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
 		//------------------------------------------------------------------------
 		/// Constructor

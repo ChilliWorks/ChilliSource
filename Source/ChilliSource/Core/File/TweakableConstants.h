@@ -22,7 +22,7 @@
 #define TC_BOOLNS(namespace,name) ::moFlo::Core::CTweakableConstants::GetSingleton().GetBool(#namespace,#name)
 #define TC_SAMPLECURVENS(namespace,name,value) ::moFlo::Core::CTweakableConstants::GetSingleton().SampleCurve(#namespace,#name,value)
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

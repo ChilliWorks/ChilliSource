@@ -17,7 +17,7 @@
 #include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterPostSystem.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Social
 	{

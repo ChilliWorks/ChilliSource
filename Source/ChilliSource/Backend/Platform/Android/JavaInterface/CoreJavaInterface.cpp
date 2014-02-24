@@ -234,9 +234,9 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_ApplicationDi
 	moFlo::CLaunchingActions::ApplicationDidReceiveLaunchingURL(moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(instrURL));
 }
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		DEFINE_NAMED_INTERFACE(CCoreJavaInterface);
 

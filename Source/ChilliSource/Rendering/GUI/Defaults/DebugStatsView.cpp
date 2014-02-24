@@ -18,9 +18,9 @@
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
 		DebugStatsViewPtr CDebugStatsView::pInstance;
 		

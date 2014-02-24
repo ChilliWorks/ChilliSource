@@ -14,9 +14,9 @@
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Entity/Transform.h>
 
-using namespace moFlo::Core;
+using namespace ChilliSource::Core;
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
     {

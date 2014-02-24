@@ -13,7 +13,7 @@
 
 #include <ChilliSource/Core/Math/Geometry/Curves.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

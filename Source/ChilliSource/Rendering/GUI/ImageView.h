@@ -15,9 +15,9 @@
 
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         class CImageView : public CGUIView
         {

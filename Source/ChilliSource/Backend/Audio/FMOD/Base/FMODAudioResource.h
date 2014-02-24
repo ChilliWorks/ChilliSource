@@ -19,9 +19,9 @@
 #include <fmod.hpp>
 #include <fmod_errors.h>
 
-namespace moFlo 
+namespace ChilliSource 
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		class CFMODAudioResource : public Audio::IAudioResource 
 		{

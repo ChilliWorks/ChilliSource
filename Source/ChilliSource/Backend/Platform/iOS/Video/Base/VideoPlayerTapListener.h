@@ -17,9 +17,9 @@
 @class UITapGestureRecognizer;
 @class CADisplayLink;
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
         //========================================================
         /// Delegates

@@ -20,7 +20,7 @@
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 #include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Networking
     {

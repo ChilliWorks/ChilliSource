@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Core/System/System.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Social
 	{

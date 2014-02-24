@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/Minizip/unzip.h>
 #include <ChilliSource/Core/Image/MoImageProvider.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     const std::string MoImageExtension("moimage");
 	

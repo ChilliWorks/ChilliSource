@@ -23,9 +23,9 @@
 #include <cstdio>
 #include <jni.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform 
+	namespace Android 
 	{
 		const std::string kstrAssetsDir = "assets/";
 		const std::string kstrSaveDataDir = "files/SaveData/";

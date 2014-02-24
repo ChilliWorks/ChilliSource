@@ -14,9 +14,9 @@
 
 #include <fmod.hpp>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
         class CFMODAudioComponent : public Audio::CAudioComponent
         {

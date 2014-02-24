@@ -42,7 +42,7 @@
 
 #include <ctime>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

@@ -18,7 +18,7 @@
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

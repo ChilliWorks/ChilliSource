@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

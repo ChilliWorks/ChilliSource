@@ -10,7 +10,7 @@
 
 #include <ChilliSource/Core/Math/MathUtils.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {

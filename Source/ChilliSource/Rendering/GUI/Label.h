@@ -17,9 +17,9 @@
 
 #define DEBUG_STRING_CLIPPING 0
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
 		enum class TextJustification
         {

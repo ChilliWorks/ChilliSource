@@ -16,9 +16,9 @@
 #include <ChilliSource/Core/Main/PlatformSystem.h>
 #include <ChilliSource/Platform/Android/UDIDManager.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//=============================================
 		/// Delegates

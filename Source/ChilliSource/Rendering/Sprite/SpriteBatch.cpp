@@ -16,7 +16,7 @@
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

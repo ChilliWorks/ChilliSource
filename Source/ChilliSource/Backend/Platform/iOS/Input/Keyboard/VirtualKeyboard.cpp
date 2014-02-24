@@ -13,9 +13,9 @@
 
 VirtualKeyboardDelegate* gpDelegate = nil;
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		//-------------------------------------------
 		/// Constructor

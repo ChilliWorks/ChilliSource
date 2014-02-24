@@ -11,7 +11,7 @@
 
 #include <ChilliSource/Core/Reflection/ForwardDeclarations.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Reflect
     {

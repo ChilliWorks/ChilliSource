@@ -17,7 +17,7 @@
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     enum class AnimationPlayMode
     {

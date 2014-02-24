@@ -11,9 +11,9 @@
 
 #include <ChilliSource/Rendering/GUI/Label.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
 		//============================================================
 		/// Formatted Label

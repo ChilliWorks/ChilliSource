@@ -10,7 +10,7 @@
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/JSON/json.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     struct LaunchAction
     {

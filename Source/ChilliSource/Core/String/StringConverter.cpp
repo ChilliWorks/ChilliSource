@@ -21,7 +21,7 @@ using std::stringstream;
 using std::istringstream;
 
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

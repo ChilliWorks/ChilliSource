@@ -10,7 +10,7 @@
 #include <ChilliSource/Core/Notifications/LocalNotificationScheduler.h>
 #include <ChilliSource/Core/Base/Application.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     bool CNotificationScheduler::bSystemNotificationsEnabled = true;
     bool CNotificationScheduler::bAppNotificationsEnabled = true;

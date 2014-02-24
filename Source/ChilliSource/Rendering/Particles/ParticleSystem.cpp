@@ -20,7 +20,7 @@
 
 #include <ChilliSource/Rendering/Particles/ParticleComponent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Core/Image/ImageResourceProvider.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	Core::CImage::Format IImageResourceProvider::meDefaultFormat = Core::CImage::Format::k_RGBA8888;
 	//--------------------------------------------------

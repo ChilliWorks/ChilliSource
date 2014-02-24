@@ -19,9 +19,9 @@
 
 #import <UIKit/UIKit.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		const std::string PNGExtension("png");
 		const std::string JPGExtension("jpg");

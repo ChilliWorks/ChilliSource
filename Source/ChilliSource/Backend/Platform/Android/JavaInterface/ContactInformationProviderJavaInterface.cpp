@@ -54,10 +54,10 @@ void Java_com_taggames_moflow_nativeinterface_CContactInformationProviderNativeI
 }
 
 
-using namespace moFlo::Core;
-namespace moFlo
+using namespace ChilliSource::Core;
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		std::vector<UTF8String> SCContactInformationProviderJavaInterface::mastrNames;
 		std::vector<UTF8String> SCContactInformationProviderJavaInterface::mastrNumbers;

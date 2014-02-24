@@ -16,7 +16,7 @@
 #include <ChilliSource/Input/ForwardDeclarations.h>
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	class ISurface : public ICustomCreator<ISurface>
 	{

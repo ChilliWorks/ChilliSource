@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Core/Localisation/MoFloLocale.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {

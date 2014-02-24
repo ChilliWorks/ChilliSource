@@ -21,7 +21,7 @@
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Audio
 	{

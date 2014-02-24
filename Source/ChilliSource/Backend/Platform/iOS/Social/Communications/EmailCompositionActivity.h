@@ -15,9 +15,9 @@
 
 @class EmailDelegate;
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
     {
         class CEmailCompositionActivity : public Social::IEmailCompositionActivity
 		{

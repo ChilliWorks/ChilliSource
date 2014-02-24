@@ -12,7 +12,7 @@
 
 #ifdef DEBUG_STATS
 
-namespace moFlo
+namespace ChilliSource
 {
     CDebugStats::MapStringToString CDebugStats::mmapEvents;
     bool CDebugStats::mbEnabled = true;

@@ -20,9 +20,9 @@
 #include <ChilliSource/Audio/3D/AudioComponent.h>
 #include <ChilliSource/Audio/3D/AudioComponentFactory.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         Audio::AudioComponentPtr CHighlightButton::mspDefaultSelectSound;
         Audio::AudioComponentPtr CHighlightButton::mspDefaultDeSelectSound;

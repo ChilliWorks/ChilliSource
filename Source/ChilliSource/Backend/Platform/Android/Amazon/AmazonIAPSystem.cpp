@@ -10,9 +10,9 @@
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Core/Main/Device.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		namespace
 		{

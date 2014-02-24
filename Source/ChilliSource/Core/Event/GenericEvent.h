@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Core/Event/GenericEventImpl.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     //===============================================================
     /// IEvent

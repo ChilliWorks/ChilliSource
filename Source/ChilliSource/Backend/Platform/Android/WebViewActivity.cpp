@@ -19,9 +19,9 @@
 
 #include <ChilliSource/Platform/Android/JavaInterface/WebViewJavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		u32 CWebViewActivity::msudwCurrentIndex = 1;
 		CWebViewActivity::MapIndexToWebView CWebViewActivity::mmapIndexToWebView;

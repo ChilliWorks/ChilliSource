@@ -16,11 +16,11 @@
 #include <sstream>
 #include <ChilliSource/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	using namespace Networking;
 	
-	namespace AndroidPlatform
+	namespace Android
 	{
 		const u32 kudwBufferSize = 1024 * 50;
 		//--------------------------------------------------------------------------------------------------

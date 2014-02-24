@@ -26,12 +26,12 @@ NSArray* CreateNSArrayFromStringArray(const DYNAMIC_ARRAY<std::string> & inaStri
     return pResult;
 }
 
-namespace moFlo
+namespace ChilliSource
 {
 	using namespace Social;
 	using namespace Core;
     
-	namespace iOSPlatform
+	namespace iOS
 	{
 		DEFINE_NAMED_INTERFACE(CFacebookAuthenticationSystem);
 		

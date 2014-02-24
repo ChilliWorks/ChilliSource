@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_OPENGL_FORWARDDECLARATIONS_H_
 #define _MOFLOW_OPENGL_FORWARDDECLARATIONS_H_
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace OpenGL
     {

@@ -14,9 +14,9 @@
 
 #include <ChilliSource/Networking/HTTP/HttpConnectionSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform
+	namespace Windows
 	{	
 		//Windows typedefs so we don't have to include windows.h in the header
 		typedef void* HINTERNET;

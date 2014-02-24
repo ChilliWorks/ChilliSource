@@ -13,9 +13,9 @@
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioResource.h>
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		//-------------------------------------------------
 		/// Constructor

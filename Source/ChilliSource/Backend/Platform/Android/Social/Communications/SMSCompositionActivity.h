@@ -11,9 +11,9 @@
 
 #include <ChilliSource/Social/Communications/SMSCompositionActivity.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 
 		class CSMSCompositionActivity: public moFlo::Social::ISMSCompositionActivity

@@ -18,7 +18,7 @@
 #include <algorithm>
 #include <thread>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Input
 	{

@@ -30,9 +30,9 @@ void Java_com_taggames_moflow_nativeinterface_CSMSCompositionNativeInterface_OnS
 {
 	moFlo::AndroidPlatform::CSMSCompositionActivity::OnSMSClosed();
 }
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		void SCSMSCompositionJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
 		{

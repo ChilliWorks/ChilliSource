@@ -16,9 +16,9 @@
 @class UILocalNotification;
 @class NSDictionary;
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
         class CLocalNotificationScheduler : public ILocalNotificationScheduler
         {

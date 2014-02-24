@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	class IWebViewActivity : public IActivity
 	{

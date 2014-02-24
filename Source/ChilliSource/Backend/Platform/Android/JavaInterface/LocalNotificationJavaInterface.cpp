@@ -68,9 +68,9 @@ void Java_com_taggames_moflow_nativeinterface_CLocalNotificationNativeInterface_
 	moFlo::AndroidPlatform::CLocalNotificationScheduler::ApplicationDidReceiveLocalNotification(sNotification);
 }
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		DEFINE_NAMED_INTERFACE(CLocalNotificationJavaInterface);
 		//--------------------------------------------------------------------------------------

@@ -24,9 +24,9 @@
 #include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         class CWindow : public CGUIView
         {

@@ -9,7 +9,7 @@
 #include <ChilliSource/Rendering/Model/AnimatedMeshComponentUpdater.h>
 #include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {

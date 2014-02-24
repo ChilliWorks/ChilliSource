@@ -14,7 +14,7 @@
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

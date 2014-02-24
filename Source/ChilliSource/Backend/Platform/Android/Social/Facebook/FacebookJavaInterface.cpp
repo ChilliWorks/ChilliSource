@@ -112,9 +112,9 @@ void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnPostReq
 }
 
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		DEFINE_NAMED_INTERFACE(CFacebookJavaInterface);
 

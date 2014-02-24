@@ -24,7 +24,7 @@
 #include <list>
 #include <map>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Networking
 	{

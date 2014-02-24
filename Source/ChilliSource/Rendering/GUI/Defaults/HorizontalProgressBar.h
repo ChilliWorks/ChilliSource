@@ -11,9 +11,9 @@
 
 #include <ChilliSource/Rendering/GUI/ProgressBar.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
 		class CHorizontalProgressBar : public CProgressBar
 		{

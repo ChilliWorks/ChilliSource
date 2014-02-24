@@ -14,7 +14,7 @@
 #ifndef _MOFLO_INPUT_FORWARDDECLARATIONS_H_
 #define _MOFLO_INPUT_FORWARDDECLARATIONS_H_
 
-namespace moFlo 
+namespace ChilliSource 
 {
 	namespace Input 
 	{

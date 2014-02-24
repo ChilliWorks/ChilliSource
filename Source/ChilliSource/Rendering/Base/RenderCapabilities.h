@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_RENDERING_RENDERCAPABILITIES_H_
 #define _MOFLOW_RENDERING_RENDERCAPABILITIES_H_
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {

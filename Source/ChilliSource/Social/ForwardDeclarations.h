@@ -12,7 +12,7 @@
 #ifndef _MOFLO_SOCIAL_FORWARDDECLARATIONS_H_
 #define _MOFLO_SOCIAL_FORWARDDECLARATIONS_H_
 
-namespace moFlo{
+namespace ChilliSource{
 	namespace Social{
 	
 		//Communications

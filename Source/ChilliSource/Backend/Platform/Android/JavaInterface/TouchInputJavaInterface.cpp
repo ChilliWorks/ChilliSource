@@ -75,9 +75,9 @@ void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchMo
 }
 
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//create static member
 		moFlo::AndroidPlatform::CTouchScreen * SCTouchInputJavaInterface::mspTouchScreen = NULL;

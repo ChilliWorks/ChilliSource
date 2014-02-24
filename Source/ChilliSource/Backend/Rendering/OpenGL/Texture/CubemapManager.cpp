@@ -11,7 +11,7 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
 #include <ChilliSource/Core/Image/ImageResourceProvider.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{

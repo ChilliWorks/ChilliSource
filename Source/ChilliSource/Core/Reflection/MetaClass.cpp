@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Reflect
     {

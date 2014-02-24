@@ -1,7 +1,7 @@
 #ifndef _MO_FLO_CORE_STATIC_MEM_POOL_H_
 #define _MO_FLO_CORE_STATIC_MEM_POOL_H_
 
-namespace moFlo
+namespace ChilliSource
 {
 	//==================================================================================
 	/// Static Memory Pool

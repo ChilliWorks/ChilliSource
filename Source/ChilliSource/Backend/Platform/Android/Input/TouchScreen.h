@@ -16,9 +16,9 @@
 
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class CTouchScreen : public Input::ITouchScreen
 		{

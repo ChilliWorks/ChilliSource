@@ -16,7 +16,7 @@
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Scene/ForwardDeclarations.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

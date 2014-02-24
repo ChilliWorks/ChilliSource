@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {

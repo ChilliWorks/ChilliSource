@@ -107,9 +107,9 @@ void Java_com_taggames_moflow_googleplay_iap_CGooglePlayIAPNativeInterface_Nativ
 	}
 }
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		namespace
 		{

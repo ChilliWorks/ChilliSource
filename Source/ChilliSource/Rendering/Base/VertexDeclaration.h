@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_RENDERING_VERTEX_DECLARATION_H_
 #define _MO_FLO_RENDERING_VERTEX_DECLARATION_H_
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

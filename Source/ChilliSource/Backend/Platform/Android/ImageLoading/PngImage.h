@@ -13,9 +13,9 @@
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Image/Image.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//=======================================
 		/// PixelRGBA8888

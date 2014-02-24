@@ -23,7 +23,7 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{

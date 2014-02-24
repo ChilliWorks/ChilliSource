@@ -13,9 +13,9 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
     {
         //-------------------------------------------------------
         /// Constructor
@@ -173,7 +173,7 @@ namespace moFlo
 //-------------------------------------------------------
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result  error:(NSError*)error{
 	
-	using namespace moFlo::Social;
+	using namespace ChilliSource::Social;
 	
     if(controller.parentViewController)
     {

@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Base/CustomCreator.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	class IApplicationDelegates : public ICustomCreator<IApplicationDelegates>
 	{

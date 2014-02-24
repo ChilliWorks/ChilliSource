@@ -9,7 +9,7 @@
 #ifndef _MO_FLO_HASH_CRC_32_H_
 #define _MO_FLO_HASH_CRC_32_H_
 
-namespace moFlo
+namespace ChilliSource
 {
     class CHashCRC32
     {

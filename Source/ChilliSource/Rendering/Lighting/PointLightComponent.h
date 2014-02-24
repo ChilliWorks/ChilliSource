@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

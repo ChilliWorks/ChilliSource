@@ -19,7 +19,7 @@
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Image/Image.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

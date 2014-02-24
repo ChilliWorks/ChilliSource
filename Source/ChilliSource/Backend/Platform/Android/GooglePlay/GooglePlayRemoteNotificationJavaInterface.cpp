@@ -65,9 +65,9 @@ void Java_com_taggames_moflow_googleplay_remotenotifications_CGooglePlayRemoteNo
 	}
 }
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace AndroidPlatform
+    namespace Android
     {
     	DEFINE_NAMED_INTERFACE(CGooglePlayRemoteNotificationJavaInterface);
 

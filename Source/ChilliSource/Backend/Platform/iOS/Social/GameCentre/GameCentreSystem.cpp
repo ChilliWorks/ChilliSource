@@ -21,9 +21,9 @@
 #import <sys/utsname.h>
 
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		const f32 kfGameCentreMinOSVersion          = 4.0f;
         

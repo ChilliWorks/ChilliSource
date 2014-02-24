@@ -14,7 +14,7 @@
 #include <ChilliSource/Rendering/Shader/Shader.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

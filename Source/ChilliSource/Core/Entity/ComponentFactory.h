@@ -18,7 +18,7 @@
 #include <ChilliSource/Core/Entity/Component.h>
 
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{	

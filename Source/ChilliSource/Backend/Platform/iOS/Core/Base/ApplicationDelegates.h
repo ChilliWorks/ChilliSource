@@ -13,9 +13,9 @@
 
 #include <ChilliSource/Core/Base/ApplicationDelegates.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		class CApplicationDelegates : public IApplicationDelegates
 		{

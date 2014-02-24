@@ -17,9 +17,9 @@
 #include <ChilliSource/Audio/Base/AudioLoader.h>
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
         class CFMODSystem;
         

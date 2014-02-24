@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/Base/Application.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core 
 	{

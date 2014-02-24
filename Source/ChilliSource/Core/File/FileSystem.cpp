@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/Cryptographic/HashMD5.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {

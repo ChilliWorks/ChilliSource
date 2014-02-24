@@ -10,7 +10,7 @@
 #ifndef _MOFLO_CORE_FORWARDDECLARATIONS_H_
 #define _MOFLO_CORE_FORWARDDECLARATIONS_H_
 
-namespace moFlo 
+namespace ChilliSource 
 {
 	class IActivity;
 	class IInformationProvider;

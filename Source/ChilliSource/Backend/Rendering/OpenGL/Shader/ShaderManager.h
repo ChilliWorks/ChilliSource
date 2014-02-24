@@ -16,7 +16,7 @@
 #include <ChilliSource/Rendering/Shader/ShaderManager.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{

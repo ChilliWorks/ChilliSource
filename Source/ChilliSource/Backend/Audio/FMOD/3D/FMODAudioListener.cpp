@@ -12,9 +12,9 @@
 
 #include <ChilliSource/Backend/Audio/FMOD/3D/FMODAudioListener.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		//------------------------------------------------------------
 		/// Constructor

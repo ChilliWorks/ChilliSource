@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
-namespace moFlo{
+namespace ChilliSource{
 	
 	/*
 	 IInformationProvider is the base class for objects representing interfaces into a data store of some kind

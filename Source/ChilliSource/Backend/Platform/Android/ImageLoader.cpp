@@ -18,9 +18,9 @@
 
 #include <ChilliSource/Platform/Android/ImageLoading/PngImage.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		const std::string PNGExtension("png");
 		const std::string JPGExtension("jpg");

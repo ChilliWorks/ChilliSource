@@ -16,9 +16,9 @@
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Image/Image.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		const std::string PNGExtension("png");
 

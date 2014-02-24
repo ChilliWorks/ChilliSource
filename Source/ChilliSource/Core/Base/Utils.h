@@ -19,7 +19,7 @@
 #define BYTE_SWAP_2(src) moFlo::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(src))
 #define BYTE_SWAP_4(src) moFlo::Core::CUtils::Endian4ByteSwap(reinterpret_cast<u32*>(src))
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

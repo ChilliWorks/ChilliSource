@@ -16,7 +16,7 @@
 
 #include <stdexcept>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

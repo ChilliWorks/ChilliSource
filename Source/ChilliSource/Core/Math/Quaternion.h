@@ -6,7 +6,7 @@
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 #include <ChilliSource/Core/Math/Vector4.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

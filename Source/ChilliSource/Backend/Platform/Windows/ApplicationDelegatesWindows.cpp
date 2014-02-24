@@ -26,11 +26,11 @@
 #include <ChilliSource/Core/Main/DebugStats.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
     DEFINE_CREATABLE(IApplicationDelegates, WindowsPlatform::CApplicationDelegates);
     
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		//----------------------------------------------
 		/// Constructor

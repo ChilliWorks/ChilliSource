@@ -17,7 +17,7 @@
 #include <ChilliSource/Audio/Base/AudioManager.h>
 #include <ChilliSource/Audio/Base/AudioSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Audio
 	{

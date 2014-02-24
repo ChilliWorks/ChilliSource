@@ -17,9 +17,9 @@
 #include <sstream>
 #include <ChilliSource/Core/Threading/Thread.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//======================================================================================================
 		/// CFileStreamAPK

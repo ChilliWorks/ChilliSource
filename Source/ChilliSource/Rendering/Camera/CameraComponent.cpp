@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

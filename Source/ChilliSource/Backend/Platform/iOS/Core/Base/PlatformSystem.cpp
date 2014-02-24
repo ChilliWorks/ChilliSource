@@ -57,11 +57,11 @@
 #include <sys/sysctl.h>
 #include <AdSupport/ASIdentifierManager.h>
 
-namespace moFlo 
+namespace ChilliSource 
 {
     DEFINE_CREATABLE(IPlatformSystem, iOSPlatform::CPlatformSystem);
     
-	namespace iOSPlatform
+	namespace iOS
 	{   
 		//-----------------------------------------
 		/// Constructor

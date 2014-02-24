@@ -11,9 +11,9 @@
 
 #include <algorithm>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         //-----------------------------------------------------------
         /// Get Pressed Inside Event

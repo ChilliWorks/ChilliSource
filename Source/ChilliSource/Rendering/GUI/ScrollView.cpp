@@ -17,9 +17,9 @@
     #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
 		DEFINE_META_CLASS(CScrollView)
 

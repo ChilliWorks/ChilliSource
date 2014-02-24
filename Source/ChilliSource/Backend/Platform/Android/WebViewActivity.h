@@ -14,9 +14,9 @@
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class CWebViewActivity: public moFlo::IWebViewActivity
 		{

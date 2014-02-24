@@ -18,9 +18,9 @@
 
 #include <map>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
     {
         class CiCloudSystem : public moFlo::ICloudStorageSystem
         {

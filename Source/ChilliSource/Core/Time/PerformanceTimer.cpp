@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Core/Time/PerformanceTimer.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     void CPerformanceTimer::Start()
     {

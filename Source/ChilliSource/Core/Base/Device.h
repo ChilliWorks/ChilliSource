@@ -14,7 +14,7 @@
 
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {

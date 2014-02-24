@@ -11,9 +11,9 @@
 #include <ChilliSource/Platform/Android/Input/TouchScreen.h>
 #include <ChilliSource/Platform/Android/JavaInterface/TouchInputJavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		CTouchScreen::CTouchScreen()
 		{

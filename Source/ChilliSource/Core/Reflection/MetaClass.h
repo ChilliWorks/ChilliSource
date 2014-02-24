@@ -15,7 +15,7 @@
 
 #include <ChilliSource/Core/Base/FastDelegate.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Reflect
     {

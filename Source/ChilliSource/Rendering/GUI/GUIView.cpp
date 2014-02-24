@@ -18,9 +18,9 @@
 #include <algorithm>
 #include <limits>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         static GUIViewPtr pGUINull;
 

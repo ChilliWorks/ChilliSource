@@ -13,7 +13,7 @@
 #include "EntityAnimation.h"
 #include <float.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{		

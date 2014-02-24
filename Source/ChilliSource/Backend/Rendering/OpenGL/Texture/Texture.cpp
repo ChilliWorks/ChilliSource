@@ -18,7 +18,7 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderTarget.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{

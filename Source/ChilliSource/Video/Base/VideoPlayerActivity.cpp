@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Video/Base/VideoPlayerActivity.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Video
     {

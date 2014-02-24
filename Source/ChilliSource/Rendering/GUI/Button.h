@@ -18,9 +18,9 @@
 
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         typedef fastdelegate::FastDelegate1<IButton*> ButtonEventDelegate;
         

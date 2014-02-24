@@ -9,7 +9,7 @@
 #ifndef _MO_FLO_CORE_BASE_ENCODING_H_
 #define _MO_FLO_CORE_BASE_ENCODING_H_
 
-namespace moFlo
+namespace ChilliSource
 {
     class CBaseEncoding
     {

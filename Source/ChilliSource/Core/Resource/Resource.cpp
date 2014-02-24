@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/Resource/ResourceManager.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

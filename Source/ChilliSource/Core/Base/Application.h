@@ -24,7 +24,7 @@
 
 #include <limits>
 
-namespace moFlo
+namespace ChilliSource
 {
     const u32 kudwUndefinedMaxResolution = std::numeric_limits<u32>::max();
     const f32 kfUndefinedMaxDensity = std::numeric_limits<f32>::max();

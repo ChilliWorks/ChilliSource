@@ -18,7 +18,7 @@
 @class NSString;
 #endif
 
-namespace moFlo 
+namespace ChilliSource 
 {
 	namespace Core
 	{

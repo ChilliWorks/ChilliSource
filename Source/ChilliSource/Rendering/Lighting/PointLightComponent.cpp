@@ -13,7 +13,7 @@
 
 #include <limits.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

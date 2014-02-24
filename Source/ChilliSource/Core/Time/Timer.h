@@ -13,7 +13,7 @@
 #include <vector>
 #include <ChilliSource/Core/Time/CoreTimer.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core 
 	{

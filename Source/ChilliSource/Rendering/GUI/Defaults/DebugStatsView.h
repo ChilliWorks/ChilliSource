@@ -54,11 +54,11 @@ mpLabel##NAME->AddSubview(mpValue##NAME)
     mpValue##NAME->SetText(strValue);\
 }
 
-namespace moFlo
+namespace ChilliSource
 {
     class ISurface;
     
-	namespace GUI
+	namespace Rendering
 	{
 		class CDebugStatsView : public CImageView
 		{

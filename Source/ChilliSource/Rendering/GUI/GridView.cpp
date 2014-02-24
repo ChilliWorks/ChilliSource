@@ -23,9 +23,9 @@
 
 bool moFlo::GUI::CGridView::mbDrawDebug = false;
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
 		DEFINE_META_CLASS(CGridView)
 

@@ -11,8 +11,8 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 
-namespace moFlo{
-	namespace iOSPlatform {
+namespace ChilliSource{
+	namespace iOS {
 		bool CSMSCompositionActivity::IsA(Core::InterfaceIDType inID) const{
 			return inID == CSMSCompositionActivity::InterfaceID;
 		}
@@ -95,7 +95,7 @@ namespace moFlo{
 
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result 
 {
-	using namespace moFlo::Social;
+	using namespace ChilliSource::Social;
     
     if(controller.parentViewController)
     {

@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Threading/ThreadPool.h>
 #include <ChilliSource/Core/Threading/Tasks.hpp>
 
-namespace moFlo
+namespace ChilliSource
 {
 	class CTaskScheduler
 	{

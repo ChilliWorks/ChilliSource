@@ -11,7 +11,7 @@
 
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	class ILocalNotificationScheduler
 	{

@@ -25,11 +25,11 @@
 #include <netdb.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
 	using namespace Networking;
 	
-	namespace iOSPlatform
+	namespace iOS
 	{
 		const u32 kudwBufferSize = 1024 * 50;
         const u32 kudwKeepAliveTimeInSeconds = 120;

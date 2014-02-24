@@ -20,7 +20,7 @@
 #define LOAD_RESOURCE(TYPE, LOCATION, FILENAME) SHARED_PTR_CAST<TYPE>(moFlo::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(TYPE::InterfaceID)->GetResourceFromFile(LOCATION, FILENAME))
 #define ASYNC_LOAD_RESOURCE(TYPE, LOCATION, FILENAME) SHARED_PTR_CAST<TYPE>(moFlo::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(TYPE::InterfaceID)->AsyncGetResourceFromFile(LOCATION, FILENAME))
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {

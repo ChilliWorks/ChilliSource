@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Video
 	{

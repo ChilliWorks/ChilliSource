@@ -10,9 +10,9 @@
 #ifndef MOFLOW_PLATFORM_ANDROID_FORWARDDECLARATIONS_H
 #define MOFLOW_PLATFORM_ANDROID_FORWARDDECLARATIONS_H
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//forward declarations
 		class CJavaInterfaceManager;

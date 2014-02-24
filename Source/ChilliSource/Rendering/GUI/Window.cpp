@@ -17,11 +17,11 @@
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
     DEFINE_CREATABLE(ISurface, GUI::CWindow);
     
-	namespace GUI
+	namespace Rendering
 	{
 		//-----------------------------------------------
 		/// Constructor

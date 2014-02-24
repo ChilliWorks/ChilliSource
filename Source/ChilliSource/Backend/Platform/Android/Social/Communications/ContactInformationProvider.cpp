@@ -11,9 +11,9 @@
 #include <ChilliSource/Platform/Android/Social/Communications/ContactInformationProvider.h>
 #include <ChilliSource/Platform/Android/JavaInterface/ContactInformationProviderJavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 
 		bool CContactInformationProvider::IsA(Core::InterfaceIDType inID) const

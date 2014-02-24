@@ -26,9 +26,9 @@
 #include <ChilliSource/Core/Main/DebugStats.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		DEFINE_CREATABLE(IApplicationDelegates, CApplicationDelegates);
 

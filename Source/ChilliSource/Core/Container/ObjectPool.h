@@ -13,7 +13,7 @@
 
 #include <new>
 
-namespace moFlo
+namespace ChilliSource
 {
     template <typename T> class CObjectPool
     {

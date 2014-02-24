@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     const UnifiedVector2 UnifiedVector2::ZERO(Core::CVector2::ZERO, Core::CVector2::ZERO);
     

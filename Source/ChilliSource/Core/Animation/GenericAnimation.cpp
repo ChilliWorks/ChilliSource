@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/Animation/GenericAnimation.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
-namespace moFlo{
+namespace ChilliSource{
 	IAnimation::IAnimation(f32 infDuration, f32 infStartDelay)
 	:mfAnimPos(0), mfDuration(infDuration),mfTimeScaleFactor(1.0f), mfStartDelay(infStartDelay )
 	{

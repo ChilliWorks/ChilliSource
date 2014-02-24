@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/Entity/ComponentFactory.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core 
 	{

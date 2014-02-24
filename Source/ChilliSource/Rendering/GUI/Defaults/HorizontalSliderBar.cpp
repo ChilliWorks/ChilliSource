@@ -16,9 +16,9 @@
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
 		DEFINE_META_CLASS(CHorizontalSliderBar)
         

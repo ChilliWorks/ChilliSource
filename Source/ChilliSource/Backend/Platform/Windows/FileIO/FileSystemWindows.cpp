@@ -27,9 +27,9 @@
 #undef CopyFile
 #undef DeleteFile
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform 
+	namespace Windows 
 	{
 		//constants
 		const std::string kstrSaveDataPath  = "SaveData\\";

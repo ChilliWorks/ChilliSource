@@ -15,9 +15,9 @@
 #include <ChilliSource/Core/Main/FastDelegate.h>
 #include <jni.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//=================================================================
 		/// Delegates

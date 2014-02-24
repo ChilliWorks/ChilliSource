@@ -12,8 +12,8 @@
 #include <ChilliSource/Core/Base/Screen.h>
 
 
-using namespace moFlo;
-using namespace moFlo::iOSPlatform;
+using namespace ChilliSource;
+using namespace ChilliSource::iOSPlatform;
 
 @implementation CVideoPlayerTapListener
 //--------------------------------------------------------

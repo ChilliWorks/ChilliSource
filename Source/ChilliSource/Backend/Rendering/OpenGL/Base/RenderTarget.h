@@ -18,7 +18,7 @@
 @class EAGLContext;
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{

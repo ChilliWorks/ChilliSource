@@ -10,9 +10,9 @@
 
 #include <ChilliSource/Backend/Audio/FMOD/3D/FMODAudioComponent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
         //----------------------------------------------------
 		/// FMOD - On Channel Audio Complete Callback

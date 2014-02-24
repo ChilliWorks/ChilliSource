@@ -19,9 +19,9 @@
 
 #include <ChilliSource/Audio/Base/AudioSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		const u32 kudwMaxFMODChannels = 32;
 		

@@ -15,9 +15,9 @@
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Video/Main/Subtitles.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace AndroidPlatform
+    namespace Android
     {
     	//==================================================================
     	/// Video Player Activity

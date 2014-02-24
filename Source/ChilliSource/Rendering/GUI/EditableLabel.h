@@ -15,9 +15,9 @@
 
 #include <ChilliSource/Input/Keyboard/VirtualKeyboard.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
 		class CEditableLabel : public CLabel
 		{

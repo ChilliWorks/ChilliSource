@@ -12,9 +12,9 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/GUI/ProgressBar.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
 		class CHorizontalClippingProgressBar : public CProgressBar
 		{

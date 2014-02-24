@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Input
 	{

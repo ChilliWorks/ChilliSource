@@ -22,9 +22,9 @@
 #include <ChilliSource/Backend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
 #include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/VirtualKeyboard.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		class CInputSystem : public Input::IInputSystem
 		{

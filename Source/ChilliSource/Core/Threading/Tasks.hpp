@@ -15,7 +15,7 @@
 #include <thread>
 #include <type_traits>
 
-namespace moFlo
+namespace ChilliSource
 {
 	//==========================================================
 	/// Wait Condition

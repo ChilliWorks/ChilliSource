@@ -16,7 +16,7 @@
 #include <ChilliSource/Core/Scene/SceneDescription.h>
 #include <ChilliSource/Core/Scene/SceneAnimation.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

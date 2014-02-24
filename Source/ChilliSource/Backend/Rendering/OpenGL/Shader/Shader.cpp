@@ -16,7 +16,7 @@
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{

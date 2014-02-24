@@ -14,7 +14,7 @@
 #define PVRTC_VERSION_MATCHES 0x03525650
 #define PVRTC_VERSION_MISMATCH 0x50565203
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

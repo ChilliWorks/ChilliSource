@@ -9,7 +9,7 @@
 #ifndef _MOFLO_CORE_LAUNCHING_ACTIONS_H_
 #define _MOFLO_CORE_LAUNCHING_ACTIONS_H_
 
-namespace moFlo
+namespace ChilliSource
 {
     class CLaunchingActions
     {

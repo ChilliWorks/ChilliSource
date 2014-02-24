@@ -19,9 +19,9 @@
 #include <UIKit/UIKit.h>
 #include <QuartzCore/CALayer.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		//-----------------------------------------------
 		/// Constructor

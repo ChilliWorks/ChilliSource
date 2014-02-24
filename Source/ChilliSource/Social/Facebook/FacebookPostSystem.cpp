@@ -22,7 +22,7 @@
  */
 #define FACEBOOK_API_NOW_ACTUALLY_DOES_WHAT_IT_SAYS_WITH_ACTIONLINKS 0
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Social
 	{

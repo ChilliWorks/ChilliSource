@@ -12,7 +12,7 @@
 
 #include <thread>
 
-namespace moFlo
+namespace ChilliSource
 {
     //==============================================================
     /// IEventImpl

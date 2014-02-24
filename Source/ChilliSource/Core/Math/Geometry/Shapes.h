@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core 
 	{

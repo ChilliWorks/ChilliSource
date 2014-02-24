@@ -17,9 +17,9 @@
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 #include <ChilliSource/Platform/Android/HttpConnectionSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class CTwitterPostSystem: public moFlo::Social::ITwitterPostSystem
 		{

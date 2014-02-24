@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Video
 	{

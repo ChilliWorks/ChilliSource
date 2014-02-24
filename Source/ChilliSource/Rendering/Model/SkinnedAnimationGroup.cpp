@@ -13,7 +13,7 @@
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 #include <ChilliSource/Rendering/Model/Skeleton.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {

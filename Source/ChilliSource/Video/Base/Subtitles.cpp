@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Video/Base/Subtitles.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Video
 	{

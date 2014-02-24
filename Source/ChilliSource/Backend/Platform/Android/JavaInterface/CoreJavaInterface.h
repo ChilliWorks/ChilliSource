@@ -21,9 +21,9 @@
 
 extern moFlo::Core::CApplication* (*BootFunctionPtr)();
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class CCoreJavaInterface : public IJavaInterface
 		{

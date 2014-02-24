@@ -13,9 +13,9 @@
 #include <ChilliSource/Rendering/GUI/Button.h>
 #include <ChilliSource/Audio/ForwardDeclarations.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         //===========================================================
         /// Stretchable Highlight Button

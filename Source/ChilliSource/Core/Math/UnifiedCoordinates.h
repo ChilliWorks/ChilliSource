@@ -28,7 +28,7 @@
 /// width and height of the view once the relative term has 
 /// been applied.
 //--------------------------------------------------------------
-namespace moFlo
+namespace ChilliSource
 {
 	struct UnifiedScalar
 	{

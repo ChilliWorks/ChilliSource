@@ -21,9 +21,9 @@
 #include <ChilliSource/Video/Main/SubtitlesManager.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace AndroidPlatform
+    namespace Android
     {
         //--------------------------------------------------------------
         /// Constructor

@@ -65,7 +65,7 @@ aParams.push_back(p6);\
 moFlo::Networking::CMoMetricsSystem::GetSingleton().RecordEvent(type, aParams, summarise);}
 
 
-namespace moFlo 
+namespace ChilliSource 
 {
 	namespace Networking 
     {

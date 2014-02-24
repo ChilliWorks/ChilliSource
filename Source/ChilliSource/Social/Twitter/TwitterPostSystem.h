@@ -16,7 +16,7 @@
 #include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
 #include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Social
 	{

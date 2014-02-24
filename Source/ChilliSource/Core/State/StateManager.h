@@ -19,7 +19,7 @@
 #include <vector>
 #include <queue>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

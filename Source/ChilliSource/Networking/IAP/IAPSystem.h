@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Networking
     {

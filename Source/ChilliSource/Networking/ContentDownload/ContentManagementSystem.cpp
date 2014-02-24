@@ -18,7 +18,7 @@
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/Minizip/unzip.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Networking
     {

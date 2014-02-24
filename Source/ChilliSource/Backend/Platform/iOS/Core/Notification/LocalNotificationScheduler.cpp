@@ -10,9 +10,9 @@
 
 #import <UIKit/UIKit.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
         //------------------------------------------------------------------------------
         /// Schedule Notification 

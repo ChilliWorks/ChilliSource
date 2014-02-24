@@ -2,7 +2,7 @@
 #include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
-using namespace moFlo::Core;
+using namespace ChilliSource::Core;
 
 const CQuaternion CQuaternion::IDENTITY(0,0,0,1);
 const CQuaternion CQuaternion::ZERO(0,0,0,0);

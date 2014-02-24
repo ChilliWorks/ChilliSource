@@ -26,7 +26,7 @@
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 #include <ChilliSource/Rendering/Font/FontManager.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

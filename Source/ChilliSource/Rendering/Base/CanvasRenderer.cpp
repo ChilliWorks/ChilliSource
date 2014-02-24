@@ -23,7 +23,7 @@
 
 #define MAX_KERN_RATIO 0.25
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

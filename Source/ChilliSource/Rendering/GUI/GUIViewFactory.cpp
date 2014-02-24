@@ -27,9 +27,9 @@
 
 #include <ChilliSource/Core/XML/rapidxml.hpp>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
 		CGUIViewFactory::MapDelegateToString CGUIViewFactory::mmapDelegateToType;
 

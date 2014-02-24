@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	//====================================================
 	/// Description:

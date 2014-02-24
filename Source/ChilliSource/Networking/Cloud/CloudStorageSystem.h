@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace moFlo 
+namespace ChilliSource 
 {
     class ICloudStorageSystem : public moFlo::Core::ISystem
     {

@@ -10,12 +10,12 @@
 #include <ChilliSource/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	using namespace Social;
 	using namespace Core;
 
-	namespace AndroidPlatform
+	namespace Android
 	{
 		DEFINE_NAMED_INTERFACE(CFacebookAuthenticationSystem);
 

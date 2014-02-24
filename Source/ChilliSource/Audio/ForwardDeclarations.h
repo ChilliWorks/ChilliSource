@@ -13,7 +13,7 @@
 #ifndef _MOFLO_AUDIO_FORWARDDECLARATIONS_H_
 #define _MOFLO_AUDIO_FORWARDDECLARATIONS_H_
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Audio
 	{

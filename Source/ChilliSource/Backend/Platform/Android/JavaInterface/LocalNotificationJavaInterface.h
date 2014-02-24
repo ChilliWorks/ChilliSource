@@ -14,9 +14,9 @@
 #include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 
 		//=================================================================

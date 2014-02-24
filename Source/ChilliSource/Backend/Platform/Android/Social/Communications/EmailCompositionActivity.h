@@ -13,9 +13,9 @@
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Social/Communications/EmailCompositionActivity.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class CEmailCompositionActivity: public moFlo::Social::IEmailCompositionActivity
 		{

@@ -11,7 +11,7 @@
 #include <ChilliSource/Social/Communications/SMSCompositionActivity.h>
 #include <ChilliSource/Social/Communications/EmailCompositionActivity.h>
 
-namespace moFlo{
+namespace ChilliSource{
 
 	namespace Social{
 		DEFINE_NAMED_INTERFACE(IContactInformationProvider);

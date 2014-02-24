@@ -19,7 +19,7 @@
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

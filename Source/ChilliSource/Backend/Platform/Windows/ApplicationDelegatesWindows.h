@@ -13,9 +13,9 @@
 
 #include <ChilliSource/Core/Base/ApplicationDelegates.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		class CApplicationDelegates : public IApplicationDelegates
 		{

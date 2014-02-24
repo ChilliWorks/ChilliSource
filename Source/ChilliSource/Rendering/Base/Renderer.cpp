@@ -25,7 +25,7 @@
 #include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
 #include <ChilliSource/Rendering/GUI/Window.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

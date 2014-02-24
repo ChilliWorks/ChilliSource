@@ -17,9 +17,9 @@
 
 #include <ChilliSource/Input/Keyboard/VirtualKeyboard.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		class CVirtualKeyboard : public Input::IVirtualKeyboard
 		{

@@ -12,9 +12,9 @@
 #include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
 #include <ChilliSource/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class SCTwitterAuthenticationActivityJavaInterface : public moFlo::AndroidPlatform::_IJavaInterface
 		{

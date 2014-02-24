@@ -14,7 +14,7 @@ class TiXmlElement;
 
 #include <ChilliSource/Core/XML/rapidxml_forward.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core 
     {

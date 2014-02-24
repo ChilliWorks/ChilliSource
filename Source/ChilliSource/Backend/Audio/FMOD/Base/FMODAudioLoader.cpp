@@ -16,9 +16,9 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		const std::string kstrWAVExtension("wav");
 		const std::string kstrAACExtension("aac");

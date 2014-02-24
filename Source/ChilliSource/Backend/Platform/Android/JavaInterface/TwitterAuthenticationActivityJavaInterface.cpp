@@ -31,9 +31,9 @@ void Java_com_taggames_moflow_nativeinterface_CTwitterAuthenticationViewNativeIn
 	moFlo::AndroidPlatform::SCTwitterAuthenticationActivityJavaInterface::OnPINComplete(strPIN);
 }
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 
 		moFlo::AndroidPlatform::CTwitterAuthenticationActivity* SCTwitterAuthenticationActivityJavaInterface::mpActivity = NULL;

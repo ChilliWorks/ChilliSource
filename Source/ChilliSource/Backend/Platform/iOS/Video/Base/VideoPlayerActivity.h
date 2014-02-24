@@ -18,9 +18,9 @@
 @class CSubtitlesRenderer;
 @class UIView;
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
         class CVideoPlayerActivity : public Video::IVideoPlayerActivity
         {

@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
-namespace moFlo{
+namespace ChilliSource{
 
 	/*
 	 IActivity represents a class offering UI to perform a specific task

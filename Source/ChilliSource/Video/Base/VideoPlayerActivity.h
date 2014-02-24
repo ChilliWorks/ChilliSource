@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Video
     {

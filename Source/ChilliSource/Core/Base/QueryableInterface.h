@@ -18,7 +18,7 @@ Get * File: QueryableInterface.h
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

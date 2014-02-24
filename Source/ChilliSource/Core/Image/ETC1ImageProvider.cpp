@@ -12,7 +12,7 @@
 
 const std::string ETC1Extension("pkm");
 
-namespace moFlo
+namespace ChilliSource
 {
 	//----------------------------------------------------------------
 	/// Is A

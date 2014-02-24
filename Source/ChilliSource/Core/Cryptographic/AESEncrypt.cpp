@@ -9,7 +9,7 @@
 #include <ChilliSource/Core/Cryptographic/AESEncrypt.h>
 #include <ChilliSource/Core/Cryptographic/aes.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     const u32 kudwAESBlockSize = 16;
     

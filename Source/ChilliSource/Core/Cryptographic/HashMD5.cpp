@@ -59,7 +59,7 @@
 #define S43 15
 #define S44 21
 
-namespace moFlo
+namespace ChilliSource
 {
     //-------------------------------------------------------------
     /// Generate Hash Code

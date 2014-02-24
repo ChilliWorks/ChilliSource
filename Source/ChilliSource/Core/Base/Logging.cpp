@@ -44,7 +44,7 @@ extern "C"
 #import <Foundation/Foundation.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
 	bool CLogging::mbInitialised = false;
 

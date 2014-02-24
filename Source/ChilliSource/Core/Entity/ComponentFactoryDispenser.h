@@ -20,7 +20,7 @@
 
 #define GET_COMPONENT_FACTORY(FACTORY_TYPE) moFlo::Core::CComponentFactoryDispenser::GetSingletonPtr()->GetFactoryWithInterface<FACTORY_TYPE>() 
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {

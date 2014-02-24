@@ -12,7 +12,7 @@
 #ifndef MOFLOW_RENDERING_SKINNEDANIMATIONGROUP_H_
 #define MOFLOW_RENDERING_SKINNEDANIMATIONGROUP_H_
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {

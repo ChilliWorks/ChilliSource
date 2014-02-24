@@ -15,7 +15,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Input
 	{

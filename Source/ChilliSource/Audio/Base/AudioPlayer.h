@@ -15,7 +15,7 @@
 
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Audio
     {

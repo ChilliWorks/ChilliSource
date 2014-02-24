@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_CORE_AESENCRYPT_H_
 #define _MOFLOW_CORE_AESENCRYPT_H_
 
-namespace moFlo
+namespace ChilliSource
 {
     class CAESEncrypt
     {

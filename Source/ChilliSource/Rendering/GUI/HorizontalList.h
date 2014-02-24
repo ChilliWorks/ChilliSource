@@ -11,9 +11,9 @@
 
 #include <ChilliSource/Rendering/GUI/GUIView.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         class CHorizontalList : public moFlo::GUI::CGUIView
         {

@@ -14,9 +14,9 @@
 #include <ChilliSource/Core/Main/QueryableInterface.h>
 #include <jni.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//========================================================
 		/// Java Interface Manager

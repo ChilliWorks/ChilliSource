@@ -15,7 +15,7 @@
     #include <sys/time.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
     class CPerformanceTimer
     {

@@ -20,7 +20,7 @@
 #include <ChilliSource/Networking/ForwardDeclarations.h>
 #include <ChilliSource/Video/ForwardDeclarations.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	//---------------------------------------------
 	/// Platform Interface

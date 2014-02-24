@@ -17,9 +17,9 @@
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
 #include <UIKit/UIKit.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		class CTouchScreen : public Input::ITouchScreen
 		{

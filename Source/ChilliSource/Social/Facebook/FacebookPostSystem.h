@@ -16,7 +16,7 @@
 
 #include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Social
 	{
