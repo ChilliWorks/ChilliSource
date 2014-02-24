@@ -32,7 +32,7 @@ namespace ChilliSource
         class IPlatformSystem
         {
         public:
-            //-----------------------------------------
+            //----------------------------------------- 
             /// Creates a new platform specfic instance
             /// of the platform system.
             ///
