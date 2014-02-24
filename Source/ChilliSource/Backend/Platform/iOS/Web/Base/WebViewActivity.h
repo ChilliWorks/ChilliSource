@@ -27,7 +27,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CWebViewActivity : public IWebViewActivity
+		class CWebViewActivity : public Web::IWebViewActivity
 		{
 		public:
 			CWebViewActivity();
@@ -71,7 +71,7 @@ namespace ChilliSource
 			///
 			/// @param Unified Vector of size
 			//-----------------------------------------------
-			void SetSize(const ChilliSource::UnifiedVector2 & invSize);
+			void SetSize(const Core::UnifiedVector2 & invSize);
 			//-----------------------------------------------
 			/// Get Size
 			///
@@ -79,7 +79,7 @@ namespace ChilliSource
 			///
 			/// return Unified Vector of size
 			//-----------------------------------------------
-			ChilliSource::UnifiedVector2 GetSize() const;
+			Core::UnifiedVector2 GetSize() const;
             //-----------------------------------------------
             /// Display
             ///
@@ -135,9 +135,9 @@ namespace ChilliSource
             UIActivityIndicatorView* mpActivityIndicator;
 			UIWebDelegate* mpWebDelegate;
 			
-			ChilliSource::UnifiedVector2 mvUnifiedSize;
-			ChilliSource::Core::CVector2 mvAbsoluteSize;
-			ChilliSource::Core::CVector2 mvAbsolutePosition;
+			Core::UnifiedVector2 mvUnifiedSize;
+			Core::CVector2 mvAbsoluteSize;
+			Core::CVector2 mvAbsolutePosition;
             f32 mfDismissButtonScale;
 			
             std::string mstrAnchor;

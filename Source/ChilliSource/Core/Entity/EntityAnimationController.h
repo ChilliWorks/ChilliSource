@@ -112,7 +112,7 @@ namespace ChilliSource
 			///
             //----------------------------------------------
             typedef fastdelegate::FastDelegate1<CEntityAnimationController*> EventAnimationCompletion;
-            ChilliSource::IEvent<EventAnimationCompletion> & GetEventCompletion() { return mAnimationCompletionEvent; }
+            Core::IEvent<EventAnimationCompletion> & GetEventCompletion() { return mAnimationCompletionEvent; }
 			
             //----------------------------------------------
             /// Get Event Looped
@@ -120,7 +120,7 @@ namespace ChilliSource
             /// Return event to subscribe to for animation looped events
 			///
             //----------------------------------------------
-            ChilliSource::IEvent<EventAnimationCompletion> & GetEventLooped() { return mAnimationLoopedEvent; }
+            Core::IEvent<EventAnimationCompletion> & GetEventLooped() { return mAnimationLoopedEvent; }
             
 			bool GetIsFinished() const;
 		protected:

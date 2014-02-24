@@ -27,9 +27,9 @@ namespace ChilliSource
 		/// Allows generic access to platform 
 		/// specific code via common function calls
 		//---------------------------------------------
-		class CPlatformSystem : public IPlatformSystem
+		class CPlatformSystem : public Core::IPlatformSystem
 		{
-			DECLARE_CREATABLE(IPlatformSystem, CPlatformSystem);
+			DECLARE_CREATABLE(Core::IPlatformSystem, CPlatformSystem);
 		public:
 			CPlatformSystem();
 			virtual ~CPlatformSystem();
@@ -123,7 +123,7 @@ namespace ChilliSource
 			/// @param InterfaceID to generate
 			/// @return A handle to the given activity or NULL if the platform cannot support it
 			//-----------------------------------------
-            IActivity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const;
+            Core::IActivity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const;
 			
 			//==========================================
 			//---InformationProvider Creation
@@ -144,7 +144,7 @@ namespace ChilliSource
 			/// @param InterfaceID to generate
 			/// @return A handle to the given system or NULL if the platform cannot support it
 			//-----------------------------------------
-            IInformationProvider* CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const;
+            Core::IInformationProvider* CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const;
 			//-----------------------------------------------------------------------------------------------------------
 			/// Get Screen Dimensions
 			///
@@ -228,7 +228,7 @@ namespace ChilliSource
             ///
             /// @param Text
             //--------------------------------------------------------------------------------------------------
-            void MakeToast(const UTF8String& instrText) const;
+            void MakeToast(const Core::UTF8String& instrText) const;
             //--------------------------------------------------------------------------------------------------
             /// Show System Confirm Dialog
             ///
@@ -240,7 +240,7 @@ namespace ChilliSource
             /// @param Confirm text
             /// @param Cancel text
             //--------------------------------------------------------------------------------------------------
-            void ShowSystemConfirmDialog(u32 inudwID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm, const UTF8String& instrCancel) const;
+            void ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const;
             //--------------------------------------------------------------------------------------------------
             /// Show System Dialog
             ///
@@ -251,7 +251,7 @@ namespace ChilliSource
             /// @param Message text
             /// @param Confirm text
             //--------------------------------------------------------------------------------------------------
-            void ShowSystemDialog(u32 inudwID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm) const;
+            void ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const;
 		private:
 
             //--------------------------------------------
@@ -272,10 +272,10 @@ namespace ChilliSource
 			///
 			/// @return Ownership of the activity
 			//--------------------------------------------
-			IActivity* CreateSMSCompositionActivity() const;
-			IActivity* CreateEmailCompositionActivity() const;
-			IActivity * CreateDefaultVideoPlayerActivity() const;
-			IActivity * CreateWebViewActivity() const;
+			Core::IActivity* CreateSMSCompositionActivity() const;
+			Core::IActivity* CreateEmailCompositionActivity() const;
+			Core::IActivity * CreateDefaultVideoPlayerActivity() const;
+			Core::IActivity * CreateWebViewActivity() const;
 			
             //--------------------------------------------
             /// Create Information Providers
@@ -284,7 +284,7 @@ namespace ChilliSource
             ///
             /// @return Ownership of the info provider
             //--------------------------------------------
-			IInformationProvider* CreateContactInformationProvider() const;
+			Core::IInformationProvider* CreateContactInformationProvider() const;
 			
             typedef fastdelegate::FastDelegate1<DYNAMIC_ARRAY<Core::SystemPtr> &, Core::ISystem*> SystemCreationFunction;
             
@@ -311,7 +311,7 @@ namespace ChilliSource
             //-------------------------------------------
 			Core::ISystem* FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const DYNAMIC_ARRAY<Core::SystemPtr>& inSystems) const;
 			
-			typedef fastdelegate::FastDelegate0<IActivity*> ActivityCreationFunction;
+			typedef fastdelegate::FastDelegate0<Core::IActivity*> ActivityCreationFunction;
 			
 			//--------------------------------------------
             /// Add Activity Function
@@ -324,7 +324,7 @@ namespace ChilliSource
             //-------------------------------------------
             void AddActivityFunc(Core::InterfaceIDType inInterfaceID, ActivityCreationFunction inFunction);
 			
-			typedef fastdelegate::FastDelegate0<IInformationProvider*> InfoProviderCreationFunction;
+			typedef fastdelegate::FastDelegate0<Core::IInformationProvider*> InfoProviderCreationFunction;
 			
             //--------------------------------------------
             /// Add Info Provider Function

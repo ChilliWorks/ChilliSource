@@ -41,13 +41,13 @@ namespace ChilliSource
         //---Containers
 		struct LeaderboardsInfo
 		{
-			DYNAMIC_ARRAY<UTF8String> mNames;
+			DYNAMIC_ARRAY<Core::UTF8String> mNames;
 			DYNAMIC_ARRAY<std::string> mCategoryIDs;
 		};
         struct ScoreInfo
         {
-            UTF8String strPlayerName;       //The players game center alias
-            UTF8String strFormattedScore;   //The score correctly formatted according to iTunes leaderboard
+            Core::UTF8String strPlayerName;       //The players game center alias
+            Core::UTF8String strFormattedScore;   //The score correctly formatted according to iTunes leaderboard
             u64 uddwScore;                          //The raw score value
             bool bIsFriend;                         //Whether the player is a friend of the local player
         };
@@ -120,20 +120,20 @@ namespace ChilliSource
 			///
 			/// @return String identifier for local client
 			//--------------------------------------------------------------------
-			const UTF8String& GetLocalPlayerID() const;
+			const Core::UTF8String& GetLocalPlayerID() const;
 			//--------------------------------------------------------------------
 			/// Get Local Player Username
 			///
 			/// @return Username for local client
 			//--------------------------------------------------------------------
-			const UTF8String& GetLocalPlayerUsername() const;
+			const Core::UTF8String& GetLocalPlayerUsername() const;
 			
 			//---------------------------------------------------------------------
 			/// OnAuthenticationChangedEvent
 			///
 			/// Raised when the game centre user changes (new signin/signout)
 			//---------------------------------------------------------------------
-			IEvent<AuthenticationChangedDelegate> & OnAuthenticationChangedEvent();
+			Core::IEvent<AuthenticationChangedDelegate> & OnAuthenticationChangedEvent();
 			
 			///////////////////////////////////////////////////////////////////////////
 			// LEADERBOARDS
@@ -217,7 +217,7 @@ namespace ChilliSource
 			//---------------------------------------------------------------------
 			///Subscribe to achievement reset event
 			//---------------------------------------------------------------------
-			IEvent<AchievementsResetDelegate>& OnAchievementResetEvent();
+			Core::IEvent<AchievementsResetDelegate>& OnAchievementResetEvent();
 			
 		private:
             //--------------------------------------------------------------------
@@ -338,15 +338,15 @@ namespace ChilliSource
             
             HASH_MAP<std::string, LeaderboardScoreResults> mMapNameRequestToLeaderboardScoreResults;
 			HASH_MAP<std::string, LeaderboardScoreRequestDelegate> mMapRequestNameToRequestDelegate;
-			CEvent1<AuthenticationChangedDelegate> mAuthenticationChangedEvent;
-			CEvent1<LeaderboardsInfoRequestEventDelegate> mLeaderboardsInfoRequestEvent;
-			CEvent1<AchievementsResetDelegate> mAchievementsResetEvent;
+			Core::CEvent1<AuthenticationChangedDelegate> mAuthenticationChangedEvent;
+			Core::CEvent1<LeaderboardsInfoRequestEventDelegate> mLeaderboardsInfoRequestEvent;
+			Core::CEvent1<AchievementsResetDelegate> mAchievementsResetEvent;
 			
 			bool mbIsGameCentreSupported;
 			bool mbProcessRequests;
 
-			UTF8String mstrPlayerID;
-			UTF8String mstrPlayerName;
+			Core::UTF8String mstrPlayerID;
+			Core::UTF8String mstrPlayerName;
             
 			DYNAMIC_ARRAY<std::string> mastrCompletedAchievements;
 			NSArray * mpAchievementDescriptions;//<Cheeky little NSArray of GKAchivementDescription objects

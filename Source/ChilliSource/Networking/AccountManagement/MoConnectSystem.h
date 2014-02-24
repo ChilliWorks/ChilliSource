@@ -31,12 +31,12 @@ namespace ChilliSource
 			static const std::string kstrFacebookLoginType;
 			static const std::string kstrEmailLoginType;
             
-			CMoConnectSystem(IHttpConnectionSystem * inpHttpSystem, const std::string& instrMoConnectServerURL, COAuthSystem * inpOAuthSystem);
+			CMoConnectSystem(IHttpConnectionSystem * inpHttpSystem, const std::string& instrMoConnectServerURL, Core::COAuthSystem * inpOAuthSystem);
 			
 			DECLARE_NAMED_INTERFACE(CMoConnectSystem);
 			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const;
 			
-            COAuthSystem* GetOAuthSystem();
+            Core::COAuthSystem* GetOAuthSystem();
             
 			bool HasSignedInUser() const;
 			const std::string& GetCurrentUserID() const;
@@ -173,7 +173,7 @@ namespace ChilliSource
                                               const std::string& instrLanguage, const std::string& instrCountryCode, const PushNotificationResultDelegate& inDelegate);
 			
 			typedef fastdelegate::FastDelegate1<CMoConnectSystem*> EventDelegate;
-			IEvent<EventDelegate>& SignedInUserChangesEvent();
+			Core::IEvent<EventDelegate>& SignedInUserChangesEvent();
 			
             bool HasLoadedLoginTypes();
 			bool CurrentAccountHasLogin(const std::string& instrType);
@@ -280,9 +280,9 @@ namespace ChilliSource
 			DYNAMIC_ARRAY<std::string> mastrCurrentAccountLogins;
 			HttpRequestPtr mpPendingLoginsRequest;
             
-			CEvent1<EventDelegate> mSignedInUserChangesEvent;
+			Core::CEvent1<EventDelegate> mSignedInUserChangesEvent;
 			IHttpConnectionSystem* mpHttpConnectionSystem;
-            COAuthSystem*  mpOAuthSystem;
+            Core::COAuthSystem*  mpOAuthSystem;
             LocalUserProfileDelegate mLocalUserProfileDelegate;
 			
 			struct RequestInfo

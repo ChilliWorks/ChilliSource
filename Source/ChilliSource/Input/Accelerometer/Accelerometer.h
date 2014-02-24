@@ -62,7 +62,7 @@ namespace ChilliSource
 			/// acceleration is updated. The acceleration will not
 			/// necessarily have changed between updates.
 			//----------------------------------------------------
-			IEvent<AccelerationUpdatedDelegate>& GetAccelerationUpdatedEvent();
+			Core::IEvent<AccelerationUpdatedDelegate>& GetAccelerationUpdatedEvent();
 			//----------------------------------------------------
 			/// Stop Updating
 			///
@@ -74,7 +74,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			virtual ~IAccelerometer();
 		protected:
-			CEvent1<AccelerationUpdatedDelegate> mAccelerationUpdatedEvent;
+			Core::CEvent1<AccelerationUpdatedDelegate> mAccelerationUpdatedEvent;
 		};
 	}
 }

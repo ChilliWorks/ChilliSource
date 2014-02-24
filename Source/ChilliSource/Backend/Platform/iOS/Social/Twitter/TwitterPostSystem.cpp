@@ -27,7 +27,7 @@ namespace ChilliSource
 		/// Constructor
 		//------------------------------------------------------------------------
 		CTwitterPostSystem::CTwitterPostSystem(iOS::CHttpConnectionSystem* inpHttpConnectionSystem,
-											   Networking::COAuthSystem* inpOAuthSystem) : Social::ITwitterPostSystem(inpHttpConnectionSystem, inpOAuthSystem)
+											   Core::COAuthSystem* inpOAuthSystem) : Social::ITwitterPostSystem(inpHttpConnectionSystem, inpOAuthSystem)
 		{
 			
 		}
@@ -70,7 +70,7 @@ namespace ChilliSource
 					{
 						mpAuthenticationView = Core::CApplication::GetPlatformSystemPtr()->CreateActivityWithInterface<ChilliSource::Social::ITwitterAuthenticationActivity>();
 						mpAuthenticationView->SetAuthenticationPINResultDelegate(ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate(this, &ITwitterPostSystem::OnPINComplete));
-						mpAuthenticationView->GetDismissedEvent() += ChilliSource::ActivityDismissedEvent(this, &ITwitterPostSystem::OnAuthorisationDismissed);
+						mpAuthenticationView->GetDismissedEvent() += Core::ActivityDismissedEvent(this, &ITwitterPostSystem::OnAuthorisationDismissed);
 						mpAuthenticationView->Present();
 					}
 				}
@@ -250,12 +250,12 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Delegate called with the authorisation view is dismissed.
 		//------------------------------------------------------------------------
-		void CTwitterPostSystem::OnAuthorisationDismissed(ChilliSource::IActivity* inpActivity)
+		void CTwitterPostSystem::OnAuthorisationDismissed(Core::IActivity* inpActivity)
 		{
 			// User has cancelled
 			if(mpAuthenticationView)
 			{
-				mpAuthenticationView->GetDismissedEvent() -= ChilliSource::ActivityDismissedEvent(this, &CTwitterPostSystem::OnAuthorisationDismissed);
+				mpAuthenticationView->GetDismissedEvent() -= Core::ActivityDismissedEvent(this, &CTwitterPostSystem::OnAuthorisationDismissed);
 				SAFE_DELETE(mpAuthenticationView);
 			}
 		}

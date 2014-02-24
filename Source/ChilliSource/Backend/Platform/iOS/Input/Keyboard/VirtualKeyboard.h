@@ -54,7 +54,7 @@ namespace ChilliSource
             ///
             /// @param Text cache for keyboard
             //-------------------------------------------
-            void SetText(const UTF8String& instrText);
+            void SetText(const Core::UTF8String& instrText);
             //-------------------------------------------
             /// SetKeyboardType
             ///

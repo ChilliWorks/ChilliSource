@@ -109,7 +109,7 @@ namespace ChilliSource
 			/// complete notifications
 			/// @return Audio event 
 			//---------------------------------------------------------------------
-			IEvent<AudioEventDelegate>& GetAudioFinishedEvent();
+			Core::IEvent<AudioEventDelegate>& GetAudioFinishedEvent();
 			//---------------------------------------------------------------------
 			/// On Master Volume Changed
 			///
@@ -146,7 +146,7 @@ namespace ChilliSource
 			f32 mfCurrentVolume;
             f32 mfCurrentFrequency;
             
-			CEvent1<AudioEventDelegate> mOnPlaybackCompleteEvent;
+			Core::CEvent1<AudioEventDelegate> mOnPlaybackCompleteEvent;
 		};
 	}
 }

@@ -20,7 +20,7 @@ namespace ChilliSource {
 		
 		
 		
-		class ISMSCompositionActivity : public IActivity{
+		class ISMSCompositionActivity : public Core::IActivity{
 		public:
 
 			DECLARE_NAMED_INTERFACE(ISMSCompositionActivity);
@@ -34,7 +34,7 @@ namespace ChilliSource {
 			
 			typedef fastdelegate::FastDelegate1<SendResult> SendResultDelegate;
 			
-			virtual void Present(const DYNAMIC_ARRAY<CUTF8String> & inastrRecipientNumbers, const CUTF8String & instrContents, const SendResultDelegate & inCallback) = 0;
+			virtual void Present(const DYNAMIC_ARRAY<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const SendResultDelegate & inCallback) = 0;
 			virtual void Dismiss() = 0;
 		};
 		

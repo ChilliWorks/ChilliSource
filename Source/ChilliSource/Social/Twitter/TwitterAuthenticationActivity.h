@@ -17,7 +17,7 @@ namespace ChilliSource
 {
 	namespace Social
 	{
-		class ITwitterAuthenticationActivity : public IActivity
+		class ITwitterAuthenticationActivity : public Core::IActivity
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(ITwitterAuthenticationActivity);
@@ -74,7 +74,7 @@ namespace ChilliSource
 			/// @return Event triggered when activity is
 			/// dismissed
 			//-----------------------------------------------
-			IEvent<ActivityDismissedEvent>& GetDismissedEvent();
+			Core::IEvent<Core::ActivityDismissedEvent>& GetDismissedEvent();
 			//-----------------------------------------------
 			/// Set Authentication PIN Result Delegate
 			///
@@ -84,7 +84,7 @@ namespace ChilliSource
 			void SetAuthenticationPINResultDelegate(const ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate inCallback);
 		
 		protected:
-			CEvent1<ActivityDismissedEvent>													mOnDismissedEvent;
+			Core::CEvent1<Core::ActivityDismissedEvent>                                             mOnDismissedEvent;
 			ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate	mOnPINResultDelegate;
 			std::string																		mstrURL;
 			std::string																		mstrPIN;

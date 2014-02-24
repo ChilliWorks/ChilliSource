@@ -25,12 +25,12 @@ namespace ChilliSource
 		typedef u32 FontAlignment;
 		typedef f32 FontSpacing;
 		
-		typedef UTF8String CharacterSet;
+		typedef Core::UTF8String CharacterSet;
 		
-		const UTF8String::Char kSimilarSpaceCharacter = '-';
-		const UTF8String::Char kReturnCharacter = '\n';
-		const UTF8String::Char kTabCharacter = '\t';
-        const UTF8String::Char kSpaceCharacter = ' ';
+		const Core::UTF8String::Char kSimilarSpaceCharacter = '-';
+		const Core::UTF8String::Char kReturnCharacter = '\n';
+		const Core::UTF8String::Char kTabCharacter = '\t';
+        const Core::UTF8String::Char kSpaceCharacter = ' ';
         
         const u32 kudwSpacesPerTab = 5;
 		
@@ -170,7 +170,7 @@ namespace ChilliSource
 			/// @param info struct to be filled with data for the character
 			/// @return Success or invisible chars
 			//-------------------------------------------
-			CharacterResult GetInfoForCharacter(UTF8String::Char inChar, CharacterInfo& outInfo) const;
+			CharacterResult GetInfoForCharacter(Core::UTF8String::Char inChar, CharacterInfo& outInfo) const;
 			//-------------------------------------------
 			/// Get Attributes
 			///
@@ -197,7 +197,7 @@ namespace ChilliSource
             /// @param Second character to test
             /// @return Spacing between characters
             //-------------------------------------------
-            f32 GetKerningBetweenCharacters(UTF8String::Char inChar1, UTF8String::Char inChar2) const;
+            f32 GetKerningBetweenCharacters(Core::UTF8String::Char inChar1, Core::UTF8String::Char inChar2) const;
             //-------------------------------------------
             /// Set Global Kerning Offset
             ///
@@ -227,7 +227,7 @@ namespace ChilliSource
             //-------------------------------------------
             void SetKerningInfo(const DYNAMIC_ARRAY<CKernLookup>& inaFirstReg, const DYNAMIC_ARRAY<CKernPair>& inaPairs);
             
-			typedef HASH_MAP<UTF8String::Char, CharacterInfo> CharToCharInfoMap;
+			typedef HASH_MAP<Core::UTF8String::Char, CharacterInfo> CharToCharInfoMap;
 			
 			CharToCharInfoMap mMapCharToCharInfo;
 			

@@ -355,7 +355,7 @@ namespace ChilliSource
 		///
 		/// @return String identifier for local client
 		//--------------------------------------------------------------------
-		const UTF8String& CGameCentreSystem::GetLocalPlayerID() const
+		const Core::UTF8String& CGameCentreSystem::GetLocalPlayerID() const
 		{
 			return mstrPlayerID;
 		}
@@ -364,7 +364,7 @@ namespace ChilliSource
 		///
 		/// @return Username for local client
 		//--------------------------------------------------------------------
-		const UTF8String& CGameCentreSystem::GetLocalPlayerUsername() const
+		const Core::UTF8String& CGameCentreSystem::GetLocalPlayerUsername() const
 		{
 			return mstrPlayerName;
 		}
@@ -521,7 +521,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		///Subscribe to achievement reset event
 		//---------------------------------------------------------------------
-		IEvent<CGameCentreSystem::AchievementsResetDelegate>& CGameCentreSystem::OnAchievementResetEvent()
+		Core::IEvent<CGameCentreSystem::AchievementsResetDelegate>& CGameCentreSystem::OnAchievementResetEvent()
 		{
 			return mAchievementsResetEvent;
 		}
@@ -531,7 +531,7 @@ namespace ChilliSource
 		///
 		/// Raised when the game centre user changes (new signin/signout)
 		//---------------------------------------------------------------------
-		IEvent<CGameCentreSystem::AuthenticationChangedDelegate>& CGameCentreSystem::OnAuthenticationChangedEvent()
+		Core::IEvent<CGameCentreSystem::AuthenticationChangedDelegate>& CGameCentreSystem::OnAuthenticationChangedEvent()
 		{
 			return mAuthenticationChangedEvent;
 		}

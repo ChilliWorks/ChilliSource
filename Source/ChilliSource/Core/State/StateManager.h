@@ -178,7 +178,7 @@ namespace ChilliSource
 			///
 			/// @param Notification
 			//-------------------------------------------------------------------------
-			bool OnNotificationReceived(ChilliSource::Notification* inpsNotification);
+			bool OnNotificationReceived(Notification* inpsNotification);
 			//---------------------------------------------------------
 			/// Resume
 			///
@@ -282,7 +282,7 @@ namespace ChilliSource
             bool mbStartState;
 			
 			friend class CApplication;
-			friend class ChilliSource::IApplicationDelegates;
+			friend class IApplicationDelegates;
 		};
 	}
 }

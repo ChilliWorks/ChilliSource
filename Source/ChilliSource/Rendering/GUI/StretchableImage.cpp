@@ -638,11 +638,11 @@ namespace ChilliSource
 					{
 						if(!AlignedWithParent)
 						{
-							SetPosition(UnifiedVector2(Core::CVector2::ZERO, insTouchInfo.vLocation));
+							SetPosition(Core::UnifiedVector2(Core::CVector2::ZERO, insTouchInfo.vLocation));
 						}
 						else
 						{
-							SetOffsetFromParentAlignment(UnifiedVector2(Core::CVector2::ZERO, insTouchInfo.vLocation));
+							SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::CVector2::ZERO, insTouchInfo.vLocation));
 						}
 					}
 					

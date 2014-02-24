@@ -21,7 +21,7 @@ namespace ChilliSource
 	{
 		DEFINE_NAMED_INTERFACE(ITwitterAuthenticationActivity);
         
-        IActivity* ITwitterAuthenticationActivity::CreateTwitterAuthenticationActivity()
+        Core::IActivity* ITwitterAuthenticationActivity::CreateTwitterAuthenticationActivity()
         {
 #ifdef TARGET_OS_IPHONE
             return new ChilliSource::iOS::CTwitterAuthenticationActivity();
@@ -47,7 +47,7 @@ namespace ChilliSource
 		/// @return Event triggered when activity is
 		/// dismissed
 		//-----------------------------------------------
-		IEvent<ActivityDismissedEvent>& ITwitterAuthenticationActivity::GetDismissedEvent()
+		Core::IEvent<Core::ActivityDismissedEvent>& ITwitterAuthenticationActivity::GetDismissedEvent()
 		{
 			return mOnDismissedEvent;
 		}

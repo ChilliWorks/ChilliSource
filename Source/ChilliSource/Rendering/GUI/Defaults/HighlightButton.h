@@ -408,8 +408,8 @@ namespace ChilliSource
             
         private:
             
-            UnifiedVector2 mvFillMaintainTarget;
-            UnifiedVector2 mvFitMaintainTarget;
+            Core::UnifiedVector2 mvFillMaintainTarget;
+            Core::UnifiedVector2 mvFitMaintainTarget;
             
             bool mbFillMaintain;
             bool mbFitMaintain;

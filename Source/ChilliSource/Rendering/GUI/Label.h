@@ -50,13 +50,13 @@ namespace ChilliSource
             ///
             /// @param Text string
             //-------------------------------------------------------
-            virtual void SetText(const UTF8String& instrText);
+            virtual void SetText(const Core::UTF8String& instrText);
 			//-------------------------------------------------------
 			/// Get Text
 			///
 			/// @returnText string
 			//-------------------------------------------------------
-			const UTF8String& GetText() const;
+			const Core::UTF8String& GetText() const;
 			//-------------------------------------------------------
 			/// Set Text ID
 			///
@@ -229,7 +229,7 @@ namespace ChilliSource
             ///
             /// @param Unified vector
             //-------------------------------------------------------
-            void SetMaximumSize(const UnifiedVector2& invSize);
+            void SetMaximumSize(const Core::UnifiedVector2& invSize);
             //-------------------------------------------------------
             /// Set Minimum Size
             ///
@@ -237,7 +237,7 @@ namespace ChilliSource
             ///
             /// @param Unified vector
             //-------------------------------------------------------
-            void SetMinimumSize(const UnifiedVector2& invSize);
+            void SetMinimumSize(const Core::UnifiedVector2& invSize);
             //-------------------------------------------------------
             /// Set Maximum Size
             ///
@@ -262,7 +262,7 @@ namespace ChilliSource
 			///
 			/// @return Unified vector
 			//-------------------------------------------------------
-			const UnifiedVector2& GetMinimumSize() const;
+			const Core::UnifiedVector2& GetMinimumSize() const;
 			//-------------------------------------------------------
 			/// Get Maximum Size
 			///
@@ -270,7 +270,7 @@ namespace ChilliSource
 			///
 			/// @return Unified vector
 			//-------------------------------------------------------
-			const UnifiedVector2& GetMaximumSize() const;
+			const Core::UnifiedVector2& GetMaximumSize() const;
             //-------------------------------------------------------
             /// Enable Text Outline
             ///
@@ -391,7 +391,7 @@ namespace ChilliSource
 			void OnTransformChanged(u32 inudwInvalidFlags);
             
 			//---Properties
-			DECLARE_PROPERTY_A(UTF8String, Text, SetText, GetText);
+			DECLARE_PROPERTY_A(Core::UTF8String, Text, SetText, GetText);
 			DECLARE_PROPERTY_A(std::string, TextID, SetTextID, GetTextID);
 			DECLARE_PROPERTY_A(u32, MaxNumLines, SetNumberOfLines, GetNumberOfLines);
 			DECLARE_PROPERTY_A(f32, TextScale, SetTextScale, GetTextScale);
@@ -407,8 +407,8 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(bool, Background, EnableBackground, IsBackgroundEnabled);
 			DECLARE_PROPERTY_A(bool, Autosizing, EnableAutosizing, IsAutosizingEnabled);
             DECLARE_PROPERTY_A(bool, TextOutlined, EnableTextOutline, IsTextOutlineEnabled);
-			DECLARE_PROPERTY_A(UnifiedVector2, UnifiedMaxSize, SetMaximumSize, GetMaximumSize);
-			DECLARE_PROPERTY_A(UnifiedVector2, UnifiedMinSize, SetMinimumSize, GetMinimumSize);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedMaxSize, SetMaximumSize, GetMaximumSize);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedMinSize, SetMinimumSize, GetMinimumSize);
             DECLARE_PROPERTY_A(bool, FlipVertical, EnableVerticalFlip, IsVerticalFlipEnabled);
         };
     }

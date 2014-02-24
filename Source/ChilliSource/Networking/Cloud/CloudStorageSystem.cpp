@@ -10,5 +10,8 @@
 
 namespace ChilliSource
 {
-    DEFINE_NAMED_INTERFACE(ICloudStorageSystem);
+    namespace Networking
+    {
+        DEFINE_NAMED_INTERFACE(ICloudStorageSystem);
+    }
 }

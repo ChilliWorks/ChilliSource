@@ -36,7 +36,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CGUIView : public ISurface
+		class CGUIView : public Core::ISurface
 		{
 		protected:
             
@@ -494,7 +494,7 @@ namespace ChilliSource
 			///
 			/// @param Unified co-ordinates
 			//-----------------------------------------------------
-			void SetOffsetFromParentAlignment(const UnifiedVector2& invOffset);
+			void SetOffsetFromParentAlignment(const Core::UnifiedVector2& invOffset);
 			//-----------------------------------------------------
 			/// Set Offset From Parent Alignment
 			///
@@ -516,7 +516,7 @@ namespace ChilliSource
 			///
 			/// @return Unified co-ordinates
 			//-----------------------------------------------------
-			const UnifiedVector2& GetOffsetFromParentAlignment() const;
+			const Core::UnifiedVector2& GetOffsetFromParentAlignment() const;
 			//-----------------------------------------------------
 			/// Get Absolute Offset From Parent Alignment
 			///
@@ -537,7 +537,7 @@ namespace ChilliSource
 			///
 			/// @param Unified co-ordinates
 			//-----------------------------------------------------
-			void SetOffsetFromPosition(const UnifiedVector2& invOffset);
+			void SetOffsetFromPosition(const Core::UnifiedVector2& invOffset);
 			//-----------------------------------------------------
 			/// Set Offset From Position
 			///
@@ -555,7 +555,7 @@ namespace ChilliSource
 			///
 			/// @return Unified co-ordinates
 			//-----------------------------------------------------
-			const UnifiedVector2& GetOffsetFromPosition() const;
+			const Core::UnifiedVector2& GetOffsetFromPosition() const;
 			//-----------------------------------------------------
 			/// Get Absolute Offset From Position
 			///
@@ -599,7 +599,7 @@ namespace ChilliSource
 			///
 			/// @param Unified co-ordinates
 			//------------------------------------------------------
-			void SetPosition(const UnifiedVector2& invPosition);
+			void SetPosition(const Core::UnifiedVector2& invPosition);
 			//-----------------------------------------------------
 			/// Set Position
 			///
@@ -619,7 +619,7 @@ namespace ChilliSource
 			///
 			/// @param co-ordinates
 			//------------------------------------------------------
-			void MoveBy(const UnifiedVector2& invPosition);
+			void MoveBy(const Core::UnifiedVector2& invPosition);
 			//------------------------------------------------------
 			/// Move By
 			///
@@ -653,7 +653,7 @@ namespace ChilliSource
 			///
 			/// @param Unified co-ordinates 
 			//------------------------------------------------------
-			void SetSize(const UnifiedVector2& invSize);
+			void SetSize(const Core::UnifiedVector2& invSize);
 			//------------------------------------------------------
 			/// Set Size
 			///
@@ -696,7 +696,7 @@ namespace ChilliSource
 			///
 			/// @return Unified co-ordinates
 			//------------------------------------------------------
-			const UnifiedVector2& GetPosition() const;
+			const Core::UnifiedVector2& GetPosition() const;
 			//------------------------------------------------------
 			/// Get Rotation
 			///
@@ -712,7 +712,7 @@ namespace ChilliSource
 			///
 			/// @return Unified co-ordinates for dimensions
 			//------------------------------------------------------
-			const UnifiedVector2& GetSize() const;
+			const Core::UnifiedVector2& GetSize() const;
 			//------------------------------------------------------
 			/// Get Scale
 			///
@@ -922,10 +922,10 @@ namespace ChilliSource
 
 			//---Properties
 			DECLARE_PROPERTY_A(std::string, Name, SetName, GetName);
-			DECLARE_PROPERTY_A(UnifiedVector2, UnifiedPosition, SetPosition, GetPosition);
-			DECLARE_PROPERTY_A(UnifiedVector2, UnifiedSize, SetSize, GetSize);
-			DECLARE_PROPERTY_A(UnifiedVector2, UnifiedParentalOffset, SetOffsetFromParentAlignment, GetOffsetFromParentAlignment);
-			DECLARE_PROPERTY_A(UnifiedVector2, UnifiedPositionOffset, SetOffsetFromPosition, GetOffsetFromPosition);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedPosition, SetPosition, GetPosition);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedSize, SetSize, GetSize);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedParentalOffset, SetOffsetFromParentAlignment, GetOffsetFromParentAlignment);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedPositionOffset, SetOffsetFromPosition, GetOffsetFromPosition);
 			DECLARE_PROPERTY_A(Core::CVector2, Scale, ScaleTo, GetScale);
 			DECLARE_PROPERTY_A(f32, Rotation, RotateTo, GetRotation);
 			DECLARE_PROPERTY_A(f32, Opacity, SetOpacity, GetOpacity);

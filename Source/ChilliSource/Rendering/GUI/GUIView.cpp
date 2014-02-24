@@ -87,14 +87,14 @@ namespace ChilliSource
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
                 Core::CVector4 vRawPosition = Core::CStringConverter::ParseVector4(strValue);
-                SetPosition(UnifiedVector2(vRawPosition.x, vRawPosition.y, vRawPosition.z, vRawPosition.w));
+                SetPosition(Core::UnifiedVector2(vRawPosition.x, vRawPosition.y, vRawPosition.z, vRawPosition.w));
             }
             //---Unified size
             if(insParams.TryGetValue("UnifiedSize", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
                 Core::CVector4 vRawSize = Core::CStringConverter::ParseVector4(strValue);
-                SetSize(UnifiedVector2(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w));
+                SetSize(Core::UnifiedVector2(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w));
             }
             //---Unified scale
             if(insParams.TryGetValue("Scale", strValue))
@@ -148,14 +148,14 @@ namespace ChilliSource
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
                 Core::CVector4 vRawOffset = Core::CStringConverter::ParseVector4(strValue);
-                SetOffsetFromParentAlignment(UnifiedVector2(vRawOffset.x, vRawOffset.y, vRawOffset.z, vRawOffset.w));
+                SetOffsetFromParentAlignment(Core::UnifiedVector2(vRawOffset.x, vRawOffset.y, vRawOffset.z, vRawOffset.w));
             }
             //---Unified alignment offset
             if(insParams.TryGetValue("UnifiedPositionOffset", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
                 Core::CVector4 vRawOffset = Core::CStringConverter::ParseVector4(strValue);
-                SetOffsetFromPosition(UnifiedVector2(vRawOffset.x, vRawOffset.y, vRawOffset.z, vRawOffset.w));
+                SetOffsetFromPosition(Core::UnifiedVector2(vRawOffset.x, vRawOffset.y, vRawOffset.z, vRawOffset.w));
             }
             //---Enable user interaction
             if(insParams.TryGetValue("UserInteraction", strValue))
@@ -695,7 +695,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates
         //-----------------------------------------------------
-        void CGUIView::SetOffsetFromParentAlignment(const UnifiedVector2& invOffset)
+        void CGUIView::SetOffsetFromParentAlignment(const Core::UnifiedVector2& invOffset)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedParentalOffset = invOffset;
@@ -728,7 +728,7 @@ namespace ChilliSource
         ///
         /// @return Unified co-ordinates
         //-----------------------------------------------------
-        const UnifiedVector2& CGUIView::GetOffsetFromParentAlignment() const
+        const Core::UnifiedVector2& CGUIView::GetOffsetFromParentAlignment() const
         {
             return UnifiedParentalOffset;
         }
@@ -756,7 +756,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates
         //-----------------------------------------------------
-        void CGUIView::SetOffsetFromPosition(const UnifiedVector2& invOffset)
+        void CGUIView::SetOffsetFromPosition(const Core::UnifiedVector2& invOffset)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedPositionOffset = invOffset;
@@ -785,7 +785,7 @@ namespace ChilliSource
         ///
         /// @return Unified co-ordinates
         //-----------------------------------------------------
-        const UnifiedVector2& CGUIView::GetOffsetFromPosition() const
+        const Core::UnifiedVector2& CGUIView::GetOffsetFromPosition() const
         {
             return UnifiedPositionOffset;
         }
@@ -1138,7 +1138,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates
         //------------------------------------------------------
-        void CGUIView::SetPosition(const UnifiedVector2& invPosition)
+        void CGUIView::SetPosition(const Core::UnifiedVector2& invPosition)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedPosition = invPosition;
@@ -1169,7 +1169,7 @@ namespace ChilliSource
         ///
         /// @param co-ordinates
         //------------------------------------------------------
-        void CGUIView::MoveBy(const UnifiedVector2& invPosition)
+        void CGUIView::MoveBy(const Core::UnifiedVector2& invPosition)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             if(!AlignedWithParent)
@@ -1239,7 +1239,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates for scale factor
         //------------------------------------------------------
-        void CGUIView::SetSize(const UnifiedVector2& invSize)
+        void CGUIView::SetSize(const Core::UnifiedVector2& invSize)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize);
             UnifiedSize = invSize;
@@ -1305,7 +1305,7 @@ namespace ChilliSource
         ///
         /// @return Unified co-ordinates
         //------------------------------------------------------
-        const UnifiedVector2& CGUIView::GetPosition() const
+        const Core::UnifiedVector2& CGUIView::GetPosition() const
         {
             return UnifiedPosition;
         }
@@ -1327,7 +1327,7 @@ namespace ChilliSource
         ///
         /// @return Unified co-ordinates for dimensions
         //------------------------------------------------------
-        const UnifiedVector2& CGUIView::GetSize() const
+        const Core::UnifiedVector2& CGUIView::GetSize() const
         {
             return UnifiedSize;
         }
@@ -1724,11 +1724,11 @@ namespace ChilliSource
 				{
 					if(!AlignedWithParent)
 					{
-						SetPosition(UnifiedVector2(Core::CVector2::ZERO, insTouchInfo.vLocation));
+						SetPosition(Core::UnifiedVector2(Core::CVector2::ZERO, insTouchInfo.vLocation));
 					}
 					else
 					{
-						SetOffsetFromParentAlignment(UnifiedVector2(Core::CVector2::ZERO, insTouchInfo.vLocation));
+						SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::CVector2::ZERO, insTouchInfo.vLocation));
 					}
 				}
 

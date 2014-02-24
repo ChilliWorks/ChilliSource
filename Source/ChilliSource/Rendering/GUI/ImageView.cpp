@@ -417,7 +417,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         void CImageView::SetSizeFromImage()
         {
-            SetSize(UnifiedVector2(Core::CVector2::ZERO, GetSizeFromImage()));
+            SetSize(Core::UnifiedVector2(Core::CVector2::ZERO, GetSizeFromImage()));
         }
 		
         //--------------------------------------------------------
@@ -721,12 +721,12 @@ namespace ChilliSource
             }
             else if(HeightMaintain)
             {
-                UnifiedVector2 uvSize = GetSize();
+                Core::UnifiedVector2 uvSize = GetSize();
                 SetHeightMaintainingAspect(uvSize.GetRelative().y, uvSize.GetAbsolute().y);
             }
             else if(WidthMaintain)
             {
-                UnifiedVector2 uvSize = GetSize();
+                Core::UnifiedVector2 uvSize = GetSize();
                 SetWidthMaintainingAspect(uvSize.GetRelative().x, uvSize.GetAbsolute().x);
             }
         }

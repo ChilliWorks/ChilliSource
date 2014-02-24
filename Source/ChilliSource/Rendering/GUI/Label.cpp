@@ -65,7 +65,7 @@ namespace ChilliSource
             
             ConsumesTouches = false;
             
-			UnifiedSize = UnifiedVector2(0.2f, 0.05f, 0.0f, 0.0f);
+			UnifiedSize = Core::UnifiedVector2(0.2f, 0.05f, 0.0f, 0.0f);
             UnifiedMaxSize = GetSize();
             UnifiedMinSize = GetSize();
         }
@@ -91,7 +91,7 @@ namespace ChilliSource
             //---Text
             if(insParams.TryGetValue("Text", strValue))
             {
-                SetText(UTF8String(strValue));
+                SetText(Core::UTF8String(strValue));
             }
             //---Number of lines
             if(insParams.TryGetValue("NumLines", strValue))
@@ -200,7 +200,7 @@ namespace ChilliSource
         ///
         /// @param Text string
         //-------------------------------------------------------
-        void CLabel::SetText(const UTF8String& instrText)
+        void CLabel::SetText(const Core::UTF8String& instrText)
         {
             Text = instrText;
             
@@ -211,7 +211,7 @@ namespace ChilliSource
         ///
         /// @returnText string
         //-------------------------------------------------------
-        const UTF8String& CLabel::GetText() const
+        const Core::UTF8String& CLabel::GetText() const
         {
             return Text;
         }
@@ -270,7 +270,7 @@ namespace ChilliSource
         ///
         /// @param Unified vector
         //-------------------------------------------------------
-        void CLabel::SetMaximumSize(const UnifiedVector2& invSize)
+        void CLabel::SetMaximumSize(const Core::UnifiedVector2& invSize)
         {
             UnifiedMaxSize = invSize;
 
@@ -283,7 +283,7 @@ namespace ChilliSource
         ///
         /// @param Unified vector
         //-------------------------------------------------------
-        void CLabel::SetMinimumSize(const UnifiedVector2& invSize)
+        void CLabel::SetMinimumSize(const Core::UnifiedVector2& invSize)
         {
             UnifiedMinSize = invSize;
 
@@ -329,7 +329,7 @@ namespace ChilliSource
 		///
 		/// @return Unified vector
 		//-------------------------------------------------------
-		const UnifiedVector2& CLabel::GetMinimumSize() const
+		const Core::UnifiedVector2& CLabel::GetMinimumSize() const
 		{
 			return UnifiedMinSize;
 		}
@@ -340,7 +340,7 @@ namespace ChilliSource
 		///
 		/// @return Unified vector
 		//-------------------------------------------------------
-		const UnifiedVector2& CLabel::GetMaximumSize() const
+		const Core::UnifiedVector2& CLabel::GetMaximumSize() const
 		{
 			return UnifiedMaxSize;
 		}

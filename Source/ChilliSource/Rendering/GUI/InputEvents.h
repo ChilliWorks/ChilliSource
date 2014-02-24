@@ -33,7 +33,7 @@ namespace ChilliSource
             ///
             /// @return Event
             //-----------------------------------------------------------
-            IEvent<GUIEventDelegate>& GetPressedInsideEvent();
+            Core::IEvent<GUIEventDelegate>& GetPressedInsideEvent();
             //-----------------------------------------------------------
             /// Get Released Inside Event
             ///
@@ -42,7 +42,7 @@ namespace ChilliSource
             ///
             /// @return Event
             //-----------------------------------------------------------
-            IEvent<GUIEventDelegate>& GetReleasedInsideEvent();
+            Core::IEvent<GUIEventDelegate>& GetReleasedInsideEvent();
             //-----------------------------------------------------------
             /// Get Released Outside Event
             ///
@@ -51,7 +51,7 @@ namespace ChilliSource
             ///
             /// @return Event
             //-----------------------------------------------------------
-            IEvent<GUIEventDelegate>& GetReleasedOutsideEvent();
+            Core::IEvent<GUIEventDelegate>& GetReleasedOutsideEvent();
             //-----------------------------------------------------------
             /// Get Moved Outside Event
             ///
@@ -60,7 +60,7 @@ namespace ChilliSource
             ///
             /// @return Event
             //-----------------------------------------------------------
-            IEvent<GUIEventDelegate>& GetMovedOutsideEvent();
+            Core::IEvent<GUIEventDelegate>& GetMovedOutsideEvent();
             //-----------------------------------------------------------
             /// Get Moved Inside Event
             ///
@@ -69,7 +69,7 @@ namespace ChilliSource
             ///
             /// @return Event
             //-----------------------------------------------------------
-            IEvent<GUIEventDelegate>& GetMovedInsideEvent();
+            Core::IEvent<GUIEventDelegate>& GetMovedInsideEvent();
             //-----------------------------------------------------------
             /// Get Moved Within Event
             ///
@@ -78,7 +78,7 @@ namespace ChilliSource
             ///
             /// @return Event
             //-----------------------------------------------------------
-            IEvent<GUIEventDelegate>& GetMovedWithinEvent();
+            Core::IEvent<GUIEventDelegate>& GetMovedWithinEvent();
             
             //---Touch Delegates
             //-----------------------------------------------------------
@@ -111,12 +111,12 @@ namespace ChilliSource
         protected:
             
             //---View events
-            CEvent2<GUIEventDelegate> mTouchPressedInside;
-            CEvent2<GUIEventDelegate> mTouchReleasedInside;
-            CEvent2<GUIEventDelegate> mTouchReleasedOutside;
-            CEvent2<GUIEventDelegate> mTouchMoveEnter;
-            CEvent2<GUIEventDelegate> mTouchMoveExit;
-            CEvent2<GUIEventDelegate> mTouchMovedWithin;
+            Core::CEvent2<GUIEventDelegate> mTouchPressedInside;
+            Core::CEvent2<GUIEventDelegate> mTouchReleasedInside;
+            Core::CEvent2<GUIEventDelegate> mTouchReleasedOutside;
+            Core::CEvent2<GUIEventDelegate> mTouchMoveEnter;
+            Core::CEvent2<GUIEventDelegate> mTouchMoveExit;
+            Core::CEvent2<GUIEventDelegate> mTouchMovedWithin;
             
         private: 
             

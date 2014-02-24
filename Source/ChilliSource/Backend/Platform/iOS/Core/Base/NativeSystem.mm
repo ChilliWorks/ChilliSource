@@ -166,11 +166,11 @@ static mach_timebase_info_data_t gMachtimeBase;
 	// NO = 0, YES = 1
 	if(buttonIndex == 0)
     {
-        ChilliSource::Core::CApplication::OnSystemConfirmDialogResult(alertView.tag, ChilliSource::SystemConfirmDialog::Result::k_cancel);
+        ChilliSource::Core::CApplication::OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::SystemConfirmDialog::Result::k_cancel);
     }
     else 
     {
-        ChilliSource::Core::CApplication::OnSystemConfirmDialogResult(alertView.tag, ChilliSource::SystemConfirmDialog::Result::k_confirm);
+        ChilliSource::Core::CApplication::OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::SystemConfirmDialog::Result::k_confirm);
     }
 }
 //----------------------------------------------

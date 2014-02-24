@@ -118,17 +118,17 @@ template <> struct CompileTimeChecker<false>{};
 #define PARSE_QUATERNION(x)                 (Core::CStringConverter::ParseQuaternion(x))
 #define PARSE_COLOUR(x)                     (Core::CStringConverter::ParseColourValue(x))
 
-#define STRING_HASH(x)						ChilliSource::CHashCRC32::GenerateHashCode(x)
+#define STRING_HASH(x)						ChilliSource::Core::CHashCRC32::GenerateHashCode(x)
 #define GET_LOCALISED_TEXT(x)               ChilliSource::Core::CLocalisedText::GetText(x)
 
-#define DEBUG_LOG(x)						(ChilliSource::CLogging::LogVerbose(x))
-#define WARNING_LOG(x)						(ChilliSource::CLogging::LogWarning(x))
-#define ERROR_LOG(x)						(ChilliSource::CLogging::LogError(x))
-#define FATAL_LOG(x)						(ChilliSource::CLogging::LogFatal(x))
+#define DEBUG_LOG(x)						(ChilliSource::Core::CLogging::LogVerbose(x))
+#define WARNING_LOG(x)						(ChilliSource::Core::CLogging::LogWarning(x))
+#define ERROR_LOG(x)						(ChilliSource::Core::CLogging::LogError(x))
+#define FATAL_LOG(x)						(ChilliSource::Core::CLogging::LogFatal(x))
 
 
 #ifdef DEBUG
-    #define MOFLOW_ASSERT(x, msg) if((x) == 0){ChilliSource::CLogging::LogFatal(msg);}
+    #define MOFLOW_ASSERT(x, msg) if((x) == 0){ChilliSource::Core::CLogging::LogFatal(msg);}
 #else
     #define MOFLOW_ASSERT(x, msg)
 #endif

@@ -373,7 +373,7 @@ namespace ChilliSource
                 {
                     if(psRequest.mpcSyncConflictDelegate)
                     {
-                        FileSyncConflict* pConflict = new ChilliSource::ICloudStorageSystem::FileSyncConflict(psRequest.meLocalStorageLocation,
+                        FileSyncConflict* pConflict = new Networking::ICloudStorageSystem::FileSyncConflict(psRequest.meLocalStorageLocation,
                                                                     psRequest.mstrLocalFilePath,
                                                                     GetCloudStorageAreaForStorageArea(psRequest.meLocalStorageLocation),
                                                                     CStringUtils::NSStringToString([[incOpenedDoc fileURL] absoluteString]),
@@ -382,7 +382,7 @@ namespace ChilliSource
                         
                         mvsCachedConflicts.push_back(pConflict);
                         //Call the delegate
-                        psRequest.mpcSyncConflictDelegate(ChilliSource::ICloudStorageSystem::OnConflictResolvedDelegate(this, &CiCloudSystem::OnConflictResolved), pConflict);
+                        psRequest.mpcSyncConflictDelegate(Networking::ICloudStorageSystem::OnConflictResolvedDelegate(this, &CiCloudSystem::OnConflictResolved), pConflict);
                     }
                     else
                     {
@@ -392,7 +392,7 @@ namespace ChilliSource
             }
         }
         
-        void CiCloudSystem::OnConflictResolved(ChilliSource::ICloudStorageSystem::FileConflictChoice ineChoice, ChilliSource::ICloudStorageSystem::FileSyncConflict* insFileSyncConflict, ChilliSource::ICloudStorageSystem::OnSyncFileCompletedDelegate inpSyncCompleteDelegate)
+        void CiCloudSystem::OnConflictResolved(Networking::ICloudStorageSystem::FileConflictChoice ineChoice, Networking::ICloudStorageSystem::FileSyncConflict* insFileSyncConflict, Networking::ICloudStorageSystem::OnSyncFileCompletedDelegate inpSyncCompleteDelegate)
         {
             switch (ineChoice)
             {
@@ -469,11 +469,11 @@ namespace ChilliSource
         void CiCloudSystem::QueryForAllCloudFiles()
         {
             if(IsCloudStorageEnabled())
-                [[CiCloudSystemController sharedInstance] queryContentsOfICloudDirectory:(ChilliSource::ICloudStorageSystem::OnQueryFilesCompletedDelegate(this, &CiCloudSystem::QueryDidFinishGathering))];
+                [[CiCloudSystemController sharedInstance] queryContentsOfICloudDirectory:(Networking::ICloudStorageSystem::OnQueryFilesCompletedDelegate(this, &CiCloudSystem::QueryDidFinishGathering))];
         }
         
         //Callback from any query made to retrieve files from cloud
-        void CiCloudSystem::QueryDidFinishGathering(ChilliSource::ICloudStorageSystem::ICloudFileList invFileList)
+        void CiCloudSystem::QueryDidFinishGathering(Networking::ICloudStorageSystem::ICloudFileList invFileList)
         {
             mvCachedCloudFiles = invFileList;
             

@@ -50,7 +50,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------------
         void CRemoteNotificationSystem::OnRemoteTokenReceived(NSData* inpToken)
         {
-            mstrToken = ChilliSource::CBaseEncoding::Base64Encode((const s8*)[inpToken bytes], inpToken.length);
+            mstrToken = Core::CBaseEncoding::Base64Encode((const s8*)[inpToken bytes], inpToken.length);
             
             if(mDelegate != NULL)
             {
@@ -67,12 +67,12 @@ namespace ChilliSource
             
             NSLog(@"Recieved Remote Notification %@", inpPayload);
             
-            Notification sNotification;
+            Core::Notification sNotification;
             sNotification.bDismissed = false;
-            sNotification.eType = NotificationType::k_push;
+            sNotification.eType = Core::NotificationType::k_push;
             sNotification.TriggerTime = Core::CApplication::GetSystemTime();
             sNotification.ID = 0;
-            sNotification.ePriority = NotificationPriority::k_standard;
+            sNotification.ePriority = Core::NotificationPriority::k_standard;
             
             // Add the message
             NSObject* pApsObject = [inpPayload objectForKey:@"aps"];
@@ -107,7 +107,7 @@ namespace ChilliSource
                 }
             }
             
-            CNotificationScheduler::OnNotificationReceived(sNotification);
+            Core::CNotificationScheduler::OnNotificationReceived(sNotification);
         }
     }
 }

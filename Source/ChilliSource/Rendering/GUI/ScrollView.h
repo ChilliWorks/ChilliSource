@@ -108,7 +108,7 @@ namespace ChilliSource
             ///
             /// @param The new position
             //-----------------------------------------------------
-            void JumpTo(const UnifiedVector2& inuvPosition);
+            void JumpTo(const Core::UnifiedVector2& inuvPosition);
             //-----------------------------------------------------
             /// Set Velocity
             ///

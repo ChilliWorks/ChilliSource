@@ -50,7 +50,7 @@ namespace ChilliSource
         ///
         /// @param Text string
         //-------------------------------------------------------
-        void CFormattedLabel::SetText(const UTF8String& instrText, const Core::ParamDictionary& insParams,bool inbOverwriteText)
+        void CFormattedLabel::SetText(const Core::UTF8String& instrText, const Core::ParamDictionary& insParams,bool inbOverwriteText)
         {
 			mCachedChars.clear();
 			

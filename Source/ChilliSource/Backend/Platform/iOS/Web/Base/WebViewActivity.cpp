@@ -255,7 +255,7 @@ namespace ChilliSource
 		///
 		/// @param Unified Vector
 		//-----------------------------------------------
-		void CWebViewActivity::SetSize(const ChilliSource::UnifiedVector2 & invSize)
+		void CWebViewActivity::SetSize(const Core::UnifiedVector2 & invSize)
 		{
 			mvUnifiedSize = invSize;
 		}
@@ -266,7 +266,7 @@ namespace ChilliSource
 		///
 		/// return Unified Vector of size
 		//-----------------------------------------------
-		ChilliSource::UnifiedVector2 CWebViewActivity::GetSize() const 
+		Core::UnifiedVector2 CWebViewActivity::GetSize() const
         {
 			return mvUnifiedSize;			
 		}

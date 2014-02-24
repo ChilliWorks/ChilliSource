@@ -25,9 +25,9 @@ typedef fastdelegate::FastDelegate1<GKTurnBasedMatch*> HandleMatchEndedEventDele
 
 @interface GameCentreTurnBasedMatchmakerViewControllerDelegate : NSObject <GKTurnBasedMatchmakerViewControllerDelegate> 
 {
-    ChilliSource::CEvent0<GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent>    mWasCancelledEvent;
-    ChilliSource::CEvent0<GameCentreTurnBasedMatchmakerViewControllerDidFailEvent>         mDidFailEvent;
-    ChilliSource::CEvent1<GameCentreTurnBasedMatchmakerViewControllerDidFindMatchEvent>    mDidFindMatchEvent;
+    ChilliSource::Core::CEvent0<GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent>    mWasCancelledEvent;
+    ChilliSource::Core::CEvent0<GameCentreTurnBasedMatchmakerViewControllerDidFailEvent>         mDidFailEvent;
+    ChilliSource::Core::CEvent1<GameCentreTurnBasedMatchmakerViewControllerDidFindMatchEvent>    mDidFindMatchEvent;
 }
 
 +(GameCentreTurnBasedMatchmakerViewControllerDelegate*) instance;
@@ -44,22 +44,22 @@ typedef fastdelegate::FastDelegate1<GKTurnBasedMatch*> HandleMatchEndedEventDele
 // Called when a users chooses to quit a match and that player has the current turn.  The developer should call playerQuitInTurnWithOutcome:nextPlayer:matchData:completionHandler: on the match passing in appropriate values.  They can also update matchOutcome for other players as appropriate.
 - (void)turnBasedMatchmakerViewController:(GKTurnBasedMatchmakerViewController *)viewController playerQuitForMatch:(GKTurnBasedMatch *)match;
 
-- (ChilliSource::IEvent<GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent>&) GetWasCancelledEvent;
-- (ChilliSource::IEvent<GameCentreTurnBasedMatchmakerViewControllerDidFailEvent>&) GetDidFailEvent;
-- (ChilliSource::IEvent<GameCentreTurnBasedMatchmakerViewControllerDidFindMatchEvent>&) GetDidFindMatchEvent;
+- (ChilliSource::Core::IEvent<GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent>&) GetWasCancelledEvent;
+- (ChilliSource::Core::IEvent<GameCentreTurnBasedMatchmakerViewControllerDidFailEvent>&) GetDidFailEvent;
+- (ChilliSource::Core::IEvent<GameCentreTurnBasedMatchmakerViewControllerDidFindMatchEvent>&) GetDidFindMatchEvent;
 @end
 
 @interface GameCentreTurnBasedEventHandlerDelegate : NSObject <GKTurnBasedEventHandlerDelegate> 
 {
-    ChilliSource::CEvent1<HandleInviteFromGameCenterEventDelegate>     mHandleInviteFromGameCenterEvent;
-    ChilliSource::CEvent2<HandleTurnEventForMatchEventDelegate>        mHandleTurnEventForMatchEvent;
-    ChilliSource::CEvent1<HandleMatchEndedEventDelegate>               mHandleMatchEndedEvent;
+    ChilliSource::Core::CEvent1<HandleInviteFromGameCenterEventDelegate>     mHandleInviteFromGameCenterEvent;
+    ChilliSource::Core::CEvent2<HandleTurnEventForMatchEventDelegate>        mHandleTurnEventForMatchEvent;
+    ChilliSource::Core::CEvent1<HandleMatchEndedEventDelegate>               mHandleMatchEndedEvent;
 }
 +(GameCentreTurnBasedEventHandlerDelegate*) instance;
 
-- (ChilliSource::IEvent<HandleInviteFromGameCenterEventDelegate>&) GetHandleInviteFromGameCenterEvent;
-- (ChilliSource::IEvent<HandleTurnEventForMatchEventDelegate>&) GetHandleTurnEventForMatchEvent;
-- (ChilliSource::IEvent<HandleMatchEndedEventDelegate>&) GetHandleMatchEndedEvent;
+- (ChilliSource::Core::IEvent<HandleInviteFromGameCenterEventDelegate>&) GetHandleInviteFromGameCenterEvent;
+- (ChilliSource::Core::IEvent<HandleTurnEventForMatchEventDelegate>&) GetHandleTurnEventForMatchEvent;
+- (ChilliSource::Core::IEvent<HandleMatchEndedEventDelegate>&) GetHandleMatchEndedEvent;
 
 - (void)handleInviteFromGameCenter:(NSArray *)playersToInvite;		
 
@@ -96,7 +96,7 @@ typedef fastdelegate::FastDelegate1<GKTurnBasedMatch*> HandleMatchEndedEventDele
 @interface GameCentreAuthenticationListener : NSObject
 {
 	//---Game Kit
-	ChilliSource::CEvent0<GKNotificationEventDelegate> mGKPlayerAuthenticationChangeEvent;
+	ChilliSource::Core::CEvent0<GKNotificationEventDelegate> mGKPlayerAuthenticationChangeEvent;
 }
 //-----------------------------------------------
 /// Shared instance
@@ -115,7 +115,7 @@ typedef fastdelegate::FastDelegate1<GKTurnBasedMatch*> HandleMatchEndedEventDele
 ///
 /// @return Event Object
 //-----------------------------------------------
-- (ChilliSource::IEvent<GKNotificationEventDelegate>&) GetGKLocalAuthenticationChangedEvent;
+- (ChilliSource::Core::IEvent<GKNotificationEventDelegate>&) GetGKLocalAuthenticationChangedEvent;
 //-----------------------------------------------
 /// On Authentication Changed
 //-----------------------------------------------

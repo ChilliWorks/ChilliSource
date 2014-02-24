@@ -151,7 +151,7 @@ namespace ChilliSource
 			/// listen for this event
 			/// @return Audio event
 			//-------------------------------------------------------
-			IEvent<AudioVolumeEventDelegate>& GetMasterEffectVolumeChangedEvent();
+			Core::IEvent<AudioVolumeEventDelegate>& GetMasterEffectVolumeChangedEvent();
 			//-------------------------------------------------------
 			/// Get Master Stream Volume Changed Event
 			///
@@ -159,7 +159,7 @@ namespace ChilliSource
 			/// listen for this event
 			/// @return Audio event
 			//-------------------------------------------------------
-			IEvent<AudioVolumeEventDelegate>& GetMasterStreamVolumeChangedEvent();
+			Core::IEvent<AudioVolumeEventDelegate>& GetMasterStreamVolumeChangedEvent();
 			//----------------------------------------------------
 			/// Get Number Of Component Factories
 			///
@@ -181,8 +181,8 @@ namespace ChilliSource
 			
 		protected:
 			
-			CEvent0<AudioVolumeEventDelegate> mOnMasterEffectVolumeChangedEvent;
-			CEvent0<AudioVolumeEventDelegate> mOnMasterStreamVolumeChangedEvent;
+			Core::CEvent0<AudioVolumeEventDelegate> mOnMasterEffectVolumeChangedEvent;
+			Core::CEvent0<AudioVolumeEventDelegate> mOnMasterStreamVolumeChangedEvent;
 			
 			IAudioManager* mpAudioManager;
 			IAudioComponentFactory* mpAudioComponentFactory;

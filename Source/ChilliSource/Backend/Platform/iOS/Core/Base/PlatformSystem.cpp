@@ -59,7 +59,7 @@
 
 namespace ChilliSource 
 {
-    DEFINE_CREATABLE(IPlatformSystem, iOS::CPlatformSystem);
+    DEFINE_CREATABLE(Core::IPlatformSystem, iOS::CPlatformSystem);
     
 	namespace iOS
 	{   
@@ -78,7 +78,7 @@ namespace ChilliSource
  
             //---Activities
             AddActivityFunc(Video::IVideoPlayerActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateDefaultVideoPlayerActivity));
-			AddActivityFunc(IWebViewActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateWebViewActivity));
+			AddActivityFunc(Web::IWebViewActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateWebViewActivity));
 			
 			if(CSMSCompositionActivity::SupportedByDevice())
             {
@@ -88,10 +88,10 @@ namespace ChilliSource
             //---Info providers
 			AddInfoProviderFunc(Social::IContactInformationProvider::InterfaceID, InfoProviderCreationFunction(this, &CPlatformSystem::CreateContactInformationProvider));
 
-			CNotificationScheduler::Initialise(new CLocalNotificationScheduler());
+			Core::CNotificationScheduler::Initialise(new CLocalNotificationScheduler());
 			Core::CApplication::SetFileSystem(new iOS::CFileSystem());
 
-			ChilliSource::CLogging::Init();
+			Core::CLogging::Init();
 		}
         //--------------------------------------------
         /// Add System Function
@@ -191,7 +191,7 @@ namespace ChilliSource
 			OpenGL::CRenderCapabilities* pRenderCapabilities = new OpenGL::CRenderCapabilities();
             inaSystems.push_back(Core::SystemPtr(pRenderCapabilities));
             inaSystems.push_back(Core::SystemPtr(new iOS::ImageLoader()));
-            inaSystems.push_back(Core::SystemPtr(new CMoImageProvider()));
+            inaSystems.push_back(Core::SystemPtr(new Core::CMoImageProvider()));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CSpriteSheetLoader()));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CXMLSpriteSheetLoader()));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CMaterialLoader(pRenderCapabilities)));
@@ -327,7 +327,7 @@ namespace ChilliSource
 		/// @param InterfaceID to generate
 		/// @return A handle to the given activity or NULL if the platform cannot support it
 		//-----------------------------------------
-		IActivity* CPlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
+		Core::IActivity* CPlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
         {
 			MapInterfaceIDToActivityFunc::const_iterator pFunc(mmapInterfaceIDToActivityFunc.find(inInterfaceID));
 			
@@ -358,7 +358,7 @@ namespace ChilliSource
 		/// @param InterfaceID to generate
 		/// @return A handle to the given system or NULL if the platform cannot support it
 		//-----------------------------------------
-		IInformationProvider* CPlatformSystem::CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
+		Core::IInformationProvider* CPlatformSystem::CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
         {
 			MapInterfaceIDToInfoProviderFunc::const_iterator pFunc(mmapInterfaceIDToInfoProviderFunc.find(inInterfaceID));
 			if (pFunc != mmapInterfaceIDToInfoProviderFunc.end())
@@ -387,19 +387,19 @@ namespace ChilliSource
         ///
         /// @return Ownership of the activity
         //--------------------------------------------
-		IActivity* CPlatformSystem::CreateSMSCompositionActivity() const
+		Core::IActivity* CPlatformSystem::CreateSMSCompositionActivity() const
         {
 			return new CSMSCompositionActivity();
 		}
-		IActivity* CPlatformSystem::CreateEmailCompositionActivity() const
+		Core::IActivity* CPlatformSystem::CreateEmailCompositionActivity() const
         {
 			return new CEmailCompositionActivity();
 		}
-		IActivity * CPlatformSystem::CreateDefaultVideoPlayerActivity() const
+		Core::IActivity * CPlatformSystem::CreateDefaultVideoPlayerActivity() const
         {
             return new CVideoPlayerActivity();
         }
-		IActivity * CPlatformSystem::CreateWebViewActivity() const
+		Core::IActivity * CPlatformSystem::CreateWebViewActivity() const
         {
             return new CWebViewActivity();
         }
@@ -410,7 +410,7 @@ namespace ChilliSource
         ///
         /// @return Ownership of the info provider
         //--------------------------------------------
-		IInformationProvider* CPlatformSystem::CreateContactInformationProvider() const
+		Core::IInformationProvider* CPlatformSystem::CreateContactInformationProvider() const
         {
 			return new CContactInformationProvider();
 		}
@@ -628,7 +628,7 @@ namespace ChilliSource
         ///
         /// @param Text
         //--------------------------------------------------------------------------------------------------
-        void CPlatformSystem::MakeToast(const UTF8String& instrText) const
+        void CPlatformSystem::MakeToast(const Core::UTF8String& instrText) const
         {
             ToastNotification* pToast = [[ToastNotification alloc] initWithMessage:Core::CStringUtils::UTF8StringToNSString(instrText)];
             [[EAGLView sharedInstance] addSubview:pToast];
@@ -645,7 +645,7 @@ namespace ChilliSource
         /// @param Confirm text
         /// @param Cancel text
         //--------------------------------------------------------------------------------------------------
-        void CPlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm, const UTF8String& instrCancel) const
+        void CPlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const
         {
             iOSShowSystemConfirmDialog(inudwID, 
                                        Core::CStringUtils::UTF8StringToNSString(instrTitle), Core::CStringUtils::UTF8StringToNSString(instrMessage), 
@@ -661,7 +661,7 @@ namespace ChilliSource
         /// @param Message text
         /// @param Confirm text
         //--------------------------------------------------------------------------------------------------
-        void CPlatformSystem::ShowSystemDialog(u32 inudwID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm) const
+        void CPlatformSystem::ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const
         {
             iOSShowSystemDialog(inudwID,
                                 Core::CStringUtils::UTF8StringToNSString(instrTitle), Core::CStringUtils::UTF8StringToNSString(instrMessage),

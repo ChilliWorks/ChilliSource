@@ -117,8 +117,8 @@ namespace ChilliSource
 		bool CMaterialLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
 			//Start the material building task.
-			Task3<Core::StorageLocation, const std::string&, Core::ResourcePtr&> BuildMaterialTask(this, &CMaterialLoader::BuildMaterialTask, ineStorageLocation, inFilePath, outpResource);
-			CTaskScheduler::ScheduleTask(BuildMaterialTask);
+			Core::Task3<Core::StorageLocation, const std::string&, Core::ResourcePtr&> BuildMaterialTask(this, &CMaterialLoader::BuildMaterialTask, ineStorageLocation, inFilePath, outpResource);
+			Core::CTaskScheduler::ScheduleTask(BuildMaterialTask);
 			
 			return true;
 		}
@@ -170,7 +170,7 @@ namespace ChilliSource
                 
                 pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
                 
-                CTaskScheduler::ScheduleMainThreadTask(Task1<Core::ResourcePtr&>(this, &CMaterialLoader::SetLoadedTask, outpResource));
+                Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task1<Core::ResourcePtr&>(this, &CMaterialLoader::SetLoadedTask, outpResource));
 			}
 		}
 		//----------------------------------------------------------------------------

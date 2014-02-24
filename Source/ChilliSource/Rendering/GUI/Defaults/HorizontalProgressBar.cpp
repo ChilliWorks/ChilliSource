@@ -41,13 +41,13 @@ namespace ChilliSource
         {
 			SetSize(0.8f, 0.1f, 0.0f, 0.0f);
 
-            mpBackgroundImage->SetSize(UnifiedVector2(Core::CVector2(1.0f, 1.0f), Core::CVector2(0, 0)));
-            mpBackgroundImage->SetPosition(UnifiedVector2(Core::CVector2(0.5f, 0.5f), Core::CVector2(0, 0)));
+            mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::CVector2(1.0f, 1.0f), Core::CVector2(0, 0)));
+            mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::CVector2(0.5f, 0.5f), Core::CVector2(0, 0)));
             AddSubview(mpBackgroundImage);
             
             mfProgressAbsHeight = 0.0f;
             mfProgressRelHeight = 1.0f;
-            mpProgressImage->SetSize(UnifiedVector2(Core::CVector2(0.0f, 1.0f), Core::CVector2(0, 0)));
+            mpProgressImage->SetSize(Core::UnifiedVector2(Core::CVector2(0.0f, 1.0f), Core::CVector2(0, 0)));
             mpProgressImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
             mpProgressImage->EnableAlignmentToParent(true);
             mpProgressImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
@@ -64,8 +64,8 @@ namespace ChilliSource
             mfProgressAbsHeight = 0.0f;
             mfProgressRelHeight = 1.0f;
             
-            mpBackgroundImage->SetSize(UnifiedVector2(Core::CVector2(1.0f, 1.0f), Core::CVector2(0, 0)));
-            mpBackgroundImage->SetPosition(UnifiedVector2(Core::CVector2(0.5f, 0.5f), Core::CVector2(0, 0)));
+            mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::CVector2(1.0f, 1.0f), Core::CVector2(0, 0)));
+            mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::CVector2(0.5f, 0.5f), Core::CVector2(0, 0)));
             AddSubview(mpBackgroundImage);
             
             mpProgressImage->SetSize(0.0f, 1.0f, 0, 0);

@@ -12,18 +12,21 @@
 
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
-namespace ChilliSource{
-
-	/*
-	 IActivity represents a class offering UI to perform a specific task
-	*/
-	class IActivity : public Core::IQueryableInterface
-	{
-	public:
-		virtual ~IActivity(){}
-	};
-	
-	typedef fastdelegate::FastDelegate1<IActivity*> ActivityDismissedEvent;
+namespace ChilliSource
+{
+    namespace Core
+    {
+        /*
+         IActivity represents a class offering UI to perform a specific task
+        */
+        class IActivity : public Core::IQueryableInterface
+        {
+        public:
+            virtual ~IActivity(){}
+        };
+        
+        typedef fastdelegate::FastDelegate1<IActivity*> ActivityDismissedEvent;
+    }
 }
 
 

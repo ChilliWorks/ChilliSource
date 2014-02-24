@@ -11,5 +11,8 @@
 
 namespace ChilliSource
 {
-	DEFINE_NAMED_INTERFACE(IVolumeComponent);
+    namespace Core
+    {
+        DEFINE_NAMED_INTERFACE(IVolumeComponent);
+    }
 }

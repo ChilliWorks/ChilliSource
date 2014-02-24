@@ -23,7 +23,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{		
-		class ImageLoader : public IImageResourceProvider
+		class ImageLoader : public Core::IImageResourceProvider
 		{
 		public:
 			

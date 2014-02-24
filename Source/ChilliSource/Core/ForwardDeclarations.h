@@ -12,17 +12,7 @@
 
 namespace ChilliSource 
 {
-	class IActivity;
-	class IInformationProvider;
-	struct UnifiedVector2;
-	class IVolumeComponent;
-	class IPlatformSystem;
-	class IWebViewActivity;
-    
-    typedef SHARED_PTR<IVolumeComponent> VolumeComponentPtr;
-    typedef WEAK_PTR<IVolumeComponent> VolumeComponentWeakPtr;
-    
-	namespace Core 
+	namespace Core
 	{
 		class CApplication;
         class CResourceManagerDispenser;
@@ -109,6 +99,15 @@ namespace ChilliSource
         typedef SHARED_PTR<CImage> ImagePtr;
 		typedef WEAK_PTR<CImage> ImageWeakPtr;
 
+        class IActivity;
+        class IInformationProvider;
+        struct UnifiedVector2;
+        class IVolumeComponent;
+        class IPlatformSystem;
+        class IWebViewActivity;
+        
+        typedef SHARED_PTR<IVolumeComponent> VolumeComponentPtr;
+        typedef WEAK_PTR<IVolumeComponent> VolumeComponentWeakPtr;
         
         enum class InterpolationType
         {

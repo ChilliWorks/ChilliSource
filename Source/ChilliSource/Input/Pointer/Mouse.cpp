@@ -42,7 +42,7 @@ namespace ChilliSource
 		///
 		/// @return Event triggered on mouse button down
 		//------------------------------------------------------
-		IEvent<MouseEventDelegate> & IMouse::GetMousePressedEvent()
+		Core::IEvent<MouseEventDelegate> & IMouse::GetMousePressedEvent()
 		{
 			return mOnMousePressedEvent;
 		}
@@ -51,7 +51,7 @@ namespace ChilliSource
 		///
 		/// @return Event triggered on mouse moved
 		//------------------------------------------------------
-		IEvent<MouseEventDelegate> & IMouse::GetMouseMovedEvent()
+		Core::IEvent<MouseEventDelegate> & IMouse::GetMouseMovedEvent()
 		{
 			return mOnMouseMovedEvent;
 		}
@@ -60,7 +60,7 @@ namespace ChilliSource
 		///
 		/// @return Event triggered on mouse button up
 		//------------------------------------------------------
-		IEvent<MouseEventDelegate> & IMouse::GetMouseReleasedEvent()
+		Core::IEvent<MouseEventDelegate> & IMouse::GetMouseReleasedEvent()
 		{
 			return mOnMouseReleasedEvent;
 		}

@@ -19,15 +19,15 @@ namespace ChilliSource{
 		
 		struct ContactRecord {
 		
-			CUTF8String strName;
+			Core::CUTF8String strName;
 			bool bHasEmail;
-			CUTF8String strEmail;
+			Core::CUTF8String strEmail;
 			bool bHasMobileNumber;
-			CUTF8String strMobileNumber;
+			Core::CUTF8String strMobileNumber;
 			
 		};
 		
-		class IContactInformationProvider : public IInformationProvider{
+		class IContactInformationProvider : public Core::IInformationProvider{
 		public:
 			
 			DECLARE_NAMED_INTERFACE(IContactInformationProvider);

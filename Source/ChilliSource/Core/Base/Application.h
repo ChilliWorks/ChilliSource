@@ -26,28 +26,29 @@
 
 namespace ChilliSource
 {
-    const u32 kudwUndefinedMaxResolution = std::numeric_limits<u32>::max();
-    const f32 kfUndefinedMaxDensity = std::numeric_limits<f32>::max();
-    struct ResourceDirectoryInfo
-    {
-        std::string strDirectory;
-        u32 udwMaxRes;
-        f32 fMaxDensity;
-        f32 fResourcesDensity;
-    };
-    
-	namespace SystemConfirmDialog
-	{
-		enum class Result
-		{
-			k_confirm,
-			k_cancel
-		};
-
-		typedef fastdelegate::FastDelegate2<u32, Result> Delegate;
-	}
 	namespace Core
 	{
+        const u32 kudwUndefinedMaxResolution = std::numeric_limits<u32>::max();
+        const f32 kfUndefinedMaxDensity = std::numeric_limits<f32>::max();
+        struct ResourceDirectoryInfo
+        {
+            std::string strDirectory;
+            u32 udwMaxRes;
+            f32 fMaxDensity;
+            f32 fResourcesDensity;
+        };
+        
+        namespace SystemConfirmDialog
+        {
+            enum class Result
+            {
+                k_confirm,
+                k_cancel
+            };
+            
+            typedef fastdelegate::FastDelegate2<u32, Result> Delegate;
+        }
+        
 		//--------------------------------------------------------------------------------------------------
 		/// Description:
 		///
@@ -467,7 +468,7 @@ namespace ChilliSource
             /// @param Out: The name of the directory to fall back on for resolution dependant assets
             /// @param Out: The name of the directory to use as the default (i.e. for shared assets)
             //--------------------------------------------------------------------------------------------------
-            virtual void SetResourceDirectories(DYNAMIC_ARRAY<ChilliSource::ResourceDirectoryInfo>& outaResDependantDirectoryInfos, std::string& outstrResDefaultDirectory, std::string& outstrDefaultDirectory) = 0;
+            virtual void SetResourceDirectories(DYNAMIC_ARRAY<ResourceDirectoryInfo>& outaResDependantDirectoryInfos, std::string& outstrResDefaultDirectory, std::string& outstrDefaultDirectory) = 0;
 			//--------------------------------------------------------------------------------------------------
 			/// Create Systems
 			///
@@ -515,7 +516,7 @@ namespace ChilliSource
             CComponentFactoryDispenser* mpComponentFactoryDispenser;
 		
 			static bool mbHasTouchInput;
-            static ChilliSource::IApplicationDelegates* mpApplicationDelegates;
+            static IApplicationDelegates* mpApplicationDelegates;
             static bool mbUpdateSystems;
 		private:
 			

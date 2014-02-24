@@ -39,14 +39,14 @@ namespace ChilliSource
         BarSpriteSheetIndex(0), SliderSpriteSheetIndex(0), UnifiedSliderSize(0.15f, 1.5f, 0.0f, 0.0f)
         {
 			SetSize(0.8f, 0.1f, 0.0f, 0.0f);
-            mpBackgroundImage->SetSize(UnifiedVector2(Core::CVector2(1.0f, 1.0f), Core::CVector2(0, 0)));
-            mpBackgroundImage->SetPosition(UnifiedVector2(Core::CVector2(0.5f, 0.5f), Core::CVector2(0, 0)));
+            mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::CVector2(1.0f, 1.0f), Core::CVector2(0, 0)));
+            mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::CVector2(0.5f, 0.5f), Core::CVector2(0, 0)));
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
             
 			mpSliderImage->SetSize(UnifiedSliderSize);
-            mpSliderImage->SetSize(UnifiedVector2(Core::CVector2(0.15f, 1.5f), Core::CVector2(0, 0)));
-            mpSliderImage->SetPosition(UnifiedVector2(Core::CVector2(0.0f, 0.5f), Core::CVector2(0, 0)));
+            mpSliderImage->SetSize(Core::UnifiedVector2(Core::CVector2(0.15f, 1.5f), Core::CVector2(0, 0)));
+            mpSliderImage->SetPosition(Core::UnifiedVector2(Core::CVector2(0.0f, 0.5f), Core::CVector2(0, 0)));
             mpSliderImage->EnableUserInteraction(false);
             mpBackgroundImage->AddSubview(mpSliderImage);
             
@@ -62,13 +62,13 @@ namespace ChilliSource
         BarSpriteSheetIndex(0), SliderSpriteSheetIndex(0), UnifiedSliderSize(0.15f, 1.5f, 0.0f, 0.0f)
 		{
 			SetSize(0.8f, 0.1f, 0.0f, 0.0f);
-			mpBackgroundImage->SetSize(UnifiedVector2(Core::CVector2(1.0f, 1.0f), Core::CVector2(0, 0)));
-			mpBackgroundImage->SetPosition(UnifiedVector2(Core::CVector2(0.5f, 0.5f), Core::CVector2(0, 0)));
+			mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::CVector2(1.0f, 1.0f), Core::CVector2(0, 0)));
+			mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::CVector2(0.5f, 0.5f), Core::CVector2(0, 0)));
 			mpBackgroundImage->EnableUserInteraction(false);
 			AddSubview(mpBackgroundImage);
             
 			mpSliderImage->SetSize(UnifiedSliderSize);
-			mpSliderImage->SetPosition(UnifiedVector2(Core::CVector2(0.5f, 0.0f), Core::CVector2(0, 0)));
+			mpSliderImage->SetPosition(Core::UnifiedVector2(Core::CVector2(0.5f, 0.0f), Core::CVector2(0, 0)));
 			mpSliderImage->EnableUserInteraction(false);
 			mpSliderImage->EnableAcceptTouchesOutsideOfBounds(true);
 			mpBackgroundImage->AddSubview(mpSliderImage);
@@ -121,7 +121,7 @@ namespace ChilliSource
 			if(insParams.TryGetValue("UnifiedSliderSize", strValue))
 			{
 				Core::CVector4 vRawSize = Core::CStringConverter::ParseVector4(strValue);
-				SetSliderSize(UnifiedVector2(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w));
+				SetSliderSize(Core::UnifiedVector2(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w));
 			}
             
 			mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &CHorizontalSliderBar::OnSliderMoved);
@@ -257,7 +257,7 @@ namespace ChilliSource
 		///
 		/// @param The unified size of the slider
 		//--------------------------------------------------------
-		void CHorizontalSliderBar::SetSliderSize(const UnifiedVector2& invUnifiedSize)
+		void CHorizontalSliderBar::SetSliderSize(const Core::UnifiedVector2& invUnifiedSize)
 		{
 			UnifiedSliderSize = invUnifiedSize;
 			mpSliderImage->SetSize(invUnifiedSize);
@@ -267,7 +267,7 @@ namespace ChilliSource
 		///
 		/// @return The unified size of the slider
 		//--------------------------------------------------------
-		const UnifiedVector2& CHorizontalSliderBar::GetSliderSize() const
+		const Core::UnifiedVector2& CHorizontalSliderBar::GetSliderSize() const
 		{
 			return UnifiedSliderSize;
 		}

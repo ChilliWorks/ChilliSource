@@ -32,7 +32,7 @@ namespace ChilliSource
             /// to specific hashing function
             static InterfaceIDType InterfaceIDHash(const std::string& instrName)
             {
-                return ::ChilliSource::CHashCRC32::GenerateHashCode(instrName);
+                return Core::CHashCRC32::GenerateHashCode(instrName);
             }
             
 			IQueryableInterface(){}

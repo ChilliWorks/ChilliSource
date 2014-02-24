@@ -17,9 +17,9 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CApplicationDelegates : public IApplicationDelegates
+		class CApplicationDelegates : public Core::IApplicationDelegates
 		{
-			DECLARE_CREATABLE(IApplicationDelegates, CApplicationDelegates);
+			DECLARE_CREATABLE(Core::IApplicationDelegates, CApplicationDelegates);
 		public:
 			//----------------------------------------------
 			/// SetInvokeResumeEvent

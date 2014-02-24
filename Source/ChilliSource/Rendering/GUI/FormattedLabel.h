@@ -44,7 +44,7 @@ namespace ChilliSource
 			/// @param Params
             /// @param Bool Overwrite
 			//-------------------------------------------------------
-			void SetText(const UTF8String& instrText, const Core::ParamDictionary& insParams,bool inbOverwriteText = false);
+			void SetText(const Core::UTF8String& instrText, const Core::ParamDictionary& insParams,bool inbOverwriteText = false);
 		};
 	}
 }

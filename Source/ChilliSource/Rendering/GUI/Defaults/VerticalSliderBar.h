@@ -111,13 +111,13 @@ namespace ChilliSource
             ///
             /// @param The unified size of the slider
             //--------------------------------------------------------
-            void SetSliderSize(const UnifiedVector2& invUnifiedSize);
+            void SetSliderSize(const Core::UnifiedVector2& invUnifiedSize);
 			//--------------------------------------------------------
 			/// Get Slider Size
 			///
 			/// @return The unified size of the slider
 			//--------------------------------------------------------
-			const UnifiedVector2& GetSliderSize() const;
+			const Core::UnifiedVector2& GetSliderSize() const;
             
             //---Touch Delegates
             //-----------------------------------------------------------
@@ -140,7 +140,7 @@ namespace ChilliSource
             ImageViewPtr mpBackgroundImage;
             ImageViewPtr mpSliderImage;
 
-			DECLARE_PROPERTY_A(UnifiedVector2, UnifiedSliderSize, SetSliderSize, GetSliderSize);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedSliderSize, SetSliderSize, GetSliderSize);
 
 			DECLARE_PROPERTY_A(SpriteSheetPtr, BarSpriteSheet, SetBarSpriteSheet, GetBarSpriteSheet);
 			DECLARE_PROPERTY_A(SpriteSheetPtr, SliderSpriteSheet, SetSliderSpriteSheet, GetSliderSpriteSheet);

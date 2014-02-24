@@ -20,7 +20,7 @@ namespace ChilliSource
 		typedef fastdelegate::FastDelegate0<> VideoDismissedEventDelegate;
 		typedef fastdelegate::FastDelegate0<> VideoPlaybackEventDelegate;
         
-        class IVideoPlayerActivity : public IActivity
+        class IVideoPlayerActivity : public Core::IActivity
         {
         public:
             DECLARE_NAMED_INTERFACE(IVideoPlayerActivity);
@@ -77,13 +77,13 @@ namespace ChilliSource
             /// @return Event thats triggered when the video gets dismissed
             ///			by the player.
             //--------------------------------------------------------------
-            IEvent<VideoDismissedEventDelegate>& GetDismissedEvent();
+            Core::IEvent<VideoDismissedEventDelegate>& GetDismissedEvent();
             //--------------------------------------------------------------
             /// Get Playback Complete Event
             ///
             /// @return Event thats triggered when the video stops
             //--------------------------------------------------------------
-            IEvent<VideoPlaybackEventDelegate>& GetPlaybackCompleteEvent();
+            Core::IEvent<VideoPlaybackEventDelegate>& GetPlaybackCompleteEvent();
             //--------------------------------------------------------------
             /// Gets the current time of the video
             ///
@@ -93,8 +93,8 @@ namespace ChilliSource
             
         protected:
 
-            CEvent0<VideoDismissedEventDelegate> mOnDismissedEvent;
-            CEvent0<VideoPlaybackEventDelegate> mOnPlaybackCompleteEvent;
+            Core::CEvent0<VideoDismissedEventDelegate> mOnDismissedEvent;
+            Core::CEvent0<VideoPlaybackEventDelegate> mOnPlaybackCompleteEvent;
         };
     }
 }

@@ -41,7 +41,7 @@ namespace ChilliSource
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CGesture::CGesture(ISurface* inpSurface) : mbIsGestureInvalid(false), mpSurface(inpSurface), mpTouchDevice(NULL)
+		CGesture::CGesture(Core::ISurface* inpSurface) : mbIsGestureInvalid(false), mpSurface(inpSurface), mpTouchDevice(NULL)
 		{
 			//Register for touch notifications
 			inpSurface->GetTouchBeganEvent() += TouchEventDelegate(this, &CGesture::OnTouchBegan);
@@ -132,7 +132,7 @@ namespace ChilliSource
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CSwipeGesture::CSwipeGesture(ISurface* inpSurface)
+		CSwipeGesture::CSwipeGesture(Core::ISurface* inpSurface)
 		: CGesture(inpSurface), mMinDistanceRequiredSqrd(4000), mNumContactPointsRequired(1), mCurrentNumContactPoints(0), mMaxNumContactPoints(0), mfMaximumSwipeDuration(0.5f)
 		{
 		}
@@ -248,7 +248,7 @@ namespace ChilliSource
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CPinchGesture::CPinchGesture(ISurface* inpSurface) 
+		CPinchGesture::CPinchGesture(Core::ISurface* inpSurface)
 		: CGesture(inpSurface), mMinDistanceRequiredSqrd(6000), mfStartDisplacement(0.0f), mfCurrentDisplacement(0.0f), mbFirstTouchBegan(false), mbSecondTouchBegan(false), mCurrentTouches(0), mTouchID1(0), mfRatio(0.0f),
 		mTouchID2(0)
 		{
@@ -479,7 +479,7 @@ namespace ChilliSource
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CTapGesture::CTapGesture(ISurface* inpSurface) 
+		CTapGesture::CTapGesture(Core::ISurface* inpSurface)
 		: CGesture(inpSurface), mNumTapsRequired(1), mfMaximumTapDuration(0.15f), mfMaxTimeBetweenTaps(0.25f), mCurrentNumTaps(0), mfLastTapTime(0.0f), mfLastBeganTime(0.0f), mudwMaxDistAllowedSqrd(1000)
 		{
 		}
@@ -631,7 +631,7 @@ namespace ChilliSource
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//-----------------------------------------------------
-		CDragGesture::CDragGesture(ISurface* inpSurface) 
+		CDragGesture::CDragGesture(Core::ISurface* inpSurface)
 		: CGesture(inpSurface), mMinDistanceRequiredSqrd(2000), mfInitialHoldDuration(0.8f), mbFirstRun(true), mCurrentTouches(0), mbIsGestureActive(false), mCurrentID(0)
 		{
 		}
@@ -819,7 +819,7 @@ namespace ChilliSource
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//-----------------------------------------------------
-		CHoldGesture::CHoldGesture(ISurface* inpSurface) 
+		CHoldGesture::CHoldGesture(Core::ISurface* inpSurface)
 		: CGesture(inpSurface), mfMaxDistanceAllowedSqrd(100), mfHoldDuration(0.8f), mbIsGestureActive(false), mudwNumberOfTouch(0), mfInitialHoldTime(0.2f), mbIsGestureStarted(false)
 		{
 		}

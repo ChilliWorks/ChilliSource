@@ -77,7 +77,7 @@ NSNotificationAdapter* gpSharedInstance = nil;
 ///
 /// @return Event Object
 //-----------------------------------------------
--(ChilliSource::IEvent<NotificationEventDelegate>&) GetMPLoadStateChangeEvent
+-(ChilliSource::Core::IEvent<NotificationEventDelegate>&) GetMPLoadStateChangeEvent
 {
     return mMPLoadStateChangeEvent;
 }
@@ -86,7 +86,7 @@ NSNotificationAdapter* gpSharedInstance = nil;
 ///
 /// @return Event Object
 //-----------------------------------------------
--(ChilliSource::IEvent<NotificationEventDelegate>&) GetMPPlaybackDidFinishEvent
+-(ChilliSource::Core::IEvent<NotificationEventDelegate>&) GetMPPlaybackDidFinishEvent
 {
     return mMPPlaybackDidFinishEvent;
 }

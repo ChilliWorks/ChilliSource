@@ -151,11 +151,11 @@ namespace ChilliSource
 			UITwitterTextFieldDelegate*				mpPINDelegate;
 			UITwitterAlertDelegate*					mpAlertDelegate;
 			
-			ChilliSource::UnifiedVector2					mvUnifiedSize;
-			ChilliSource::Core::CVector2					mvPointSize;
-			ChilliSource::Core::CVector2					mvAbsoluteSize;
-			ChilliSource::Core::CVector2					mvAbsolutePositionTopLeft;
-			ChilliSource::Core::CVector2					mvAbsolutePositionCentre;
+			Core::UnifiedVector2                    mvUnifiedSize;
+			Core::CVector2                          mvPointSize;
+			Core::CVector2                          mvAbsoluteSize;
+			Core::CVector2                          mvAbsolutePositionTopLeft;
+			Core::CVector2                          mvAbsolutePositionCentre;
 		};
 	}
 }

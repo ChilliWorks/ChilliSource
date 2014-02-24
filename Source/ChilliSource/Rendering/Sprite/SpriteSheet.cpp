@@ -67,7 +67,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------
         u32 CSpriteSheet::GetFrameIndexByID(const std::string& inID) const
         {
-            u32 udwHashedString = CHashCRC32::GenerateHashCode(inID);
+            u32 udwHashedString = Core::CHashCRC32::GenerateHashCode(inID);
             for(u32 i=0; i<mIDLookups.size(); ++i)
             {
                 if(mIDLookups[i] == udwHashedString)
@@ -88,7 +88,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------
         bool CSpriteSheet::HasFrameWithID(const std::string& inID) const
         {
-            u32 udwHashedString = CHashCRC32::GenerateHashCode(inID);
+            u32 udwHashedString = Core::CHashCRC32::GenerateHashCode(inID);
             for(u32 i=0; i<mIDLookups.size(); ++i)
             {
                 if(mIDLookups[i] == udwHashedString)

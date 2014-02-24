@@ -80,8 +80,8 @@ namespace ChilliSource
 
 		struct TwitterPostDesc 
 		{
-            UTF8String strText;
-            UTF8String strUrl;
+            Core::UTF8String strText;
+            Core::UTF8String strUrl;
             
             Core::StorageLocation eLocalImageStorageLocation;
             std::string strLocalImagePath;
@@ -104,10 +104,10 @@ namespace ChilliSource
 			typedef fastdelegate::FastDelegate1<const PostResult&> PostResultDelegate;
 			
             //Create platform specific system
-            static ITwitterPostSystem* CreateSystem(Networking::IHttpConnectionSystem* inpHttpConnectionSystem, Networking::COAuthSystem* inpOAuthSystem);
+            static ITwitterPostSystem* CreateSystem(Networking::IHttpConnectionSystem* inpHttpConnectionSystem, Core::COAuthSystem* inpOAuthSystem);
             
 			ITwitterPostSystem(Networking::IHttpConnectionSystem* inpHttpConnectionSystem,
-							   Networking::COAuthSystem* inpOAuthSystem);
+							   Core::COAuthSystem* inpOAuthSystem);
 			//------------------------------------------------------------------------
 			/// Destructor
 			//------------------------------------------------------------------------
@@ -156,7 +156,7 @@ namespace ChilliSource
 			///
 			/// @param Pointer to IActivity that has been dismissed
 			//------------------------------------------------------------------------
-			virtual void OnAuthorisationDismissed(ChilliSource::IActivity* inpActivity) = 0;
+			virtual void OnAuthorisationDismissed(Core::IActivity* inpActivity) = 0;
 
         protected:
 			//------------------------------------------------------------------------
@@ -227,7 +227,7 @@ namespace ChilliSource
 			virtual void SaveOAuthTokenKeyAndSecretKey();
 
 			Networking::IHttpConnectionSystem*					mpHttpConnectionSystem;
-			Networking::COAuthSystem*							mpOAuthSystem;
+			Core::COAuthSystem*							mpOAuthSystem;
 
 			// Customer Key and Secret are used to generate OAuth tokens
 			// You can find them in the Twitter application. These values

@@ -10,24 +10,27 @@
 
 namespace ChilliSource
 {
-    const UnifiedVector2 UnifiedVector2::ZERO(Core::CVector2::ZERO, Core::CVector2::ZERO);
-    
-	//------------------------------------------------------
-	/// Get Absolute
-	///
-	/// @return Absolute vector
-	//------------------------------------------------------
-	const Core::CVector2& UnifiedVector2::GetAbsolute() const
-	{
-		return vAbsolute;
-	}
-	//------------------------------------------------------
-	/// Get Relative
-	///
-	/// @return Relative vector
-	//------------------------------------------------------
-	const Core::CVector2& UnifiedVector2::GetRelative() const
-	{
-		return vRelative;
-	}
+    namespace Core
+    {
+        const UnifiedVector2 UnifiedVector2::ZERO(Core::CVector2::ZERO, Core::CVector2::ZERO);
+        
+        //------------------------------------------------------
+        /// Get Absolute
+        ///
+        /// @return Absolute vector
+        //------------------------------------------------------
+        const Core::CVector2& UnifiedVector2::GetAbsolute() const
+        {
+            return vAbsolute;
+        }
+        //------------------------------------------------------
+        /// Get Relative
+        ///
+        /// @return Relative vector
+        //------------------------------------------------------
+        const Core::CVector2& UnifiedVector2::GetRelative() const
+        {
+            return vRelative;
+        }
+    }
 }

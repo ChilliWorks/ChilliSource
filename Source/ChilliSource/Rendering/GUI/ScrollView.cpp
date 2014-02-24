@@ -226,7 +226,7 @@ namespace ChilliSource
         void CScrollView::Reset()
         {
             mvVelocity = Core::CVector2::ZERO;
-            mpContainerView->SetOffsetFromParentAlignment(UnifiedVector2(Core::CVector2::ZERO, Core::CVector2::ZERO));
+            mpContainerView->SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::CVector2::ZERO, Core::CVector2::ZERO));
         }
         //-----------------------------------------------------
         /// Jump To
@@ -235,7 +235,7 @@ namespace ChilliSource
         ///
         /// @param The new position
         //-----------------------------------------------------
-        void CScrollView::JumpTo(const UnifiedVector2& inuvPosition)
+        void CScrollView::JumpTo(const Core::UnifiedVector2& inuvPosition)
         {
             Reset();
             Core::CVector2 vAbsPos = inuvPosition.GetAbsolute() + (inuvPosition.GetRelative()*mpContainerView->GetAbsoluteSize());

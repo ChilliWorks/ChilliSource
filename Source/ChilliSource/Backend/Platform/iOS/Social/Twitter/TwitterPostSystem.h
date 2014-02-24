@@ -24,7 +24,7 @@ namespace ChilliSource
         {
         public:
 			CTwitterPostSystem(iOS::CHttpConnectionSystem* inpHttpConnectionSystem,
-							   Networking::COAuthSystem* inpOAuthSystem);
+							   Core::COAuthSystem* inpOAuthSystem);
 			~CTwitterPostSystem();
 			//------------------------------------------------------------------------
             /// Is A
@@ -75,7 +75,7 @@ namespace ChilliSource
 			///
 			/// @param Pointer to IActivity that has been dismissed
 			//------------------------------------------------------------------------
-			void OnAuthorisationDismissed(ChilliSource::IActivity* inpActivity);
+			void OnAuthorisationDismissed(Core::IActivity* inpActivity);
 		private:
 			
 			//------------------------------------------------------------------------

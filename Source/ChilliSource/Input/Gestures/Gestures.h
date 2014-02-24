@@ -36,7 +36,7 @@ namespace ChilliSource
 		public:
 			typedef fastdelegate::FastDelegate1<const CGesture&> GestureEventDelegate;
 			
-            CGesture(ISurface* inpSurface);
+            CGesture(Core::ISurface* inpSurface);
             CGesture(ITouchScreen* inpTouchDevice);
 			virtual ~CGesture();
 			
@@ -92,7 +92,7 @@ namespace ChilliSource
 			u16 mNumContactPointsRequired;	
 			bool mbIsGestureInvalid;
 			Core::CTimer mTimer;
-			ISurface* mpSurface;
+			Core::ISurface* mpSurface;
             ITouchScreen* mpTouchDevice;
             
         private:
@@ -109,7 +109,7 @@ namespace ChilliSource
 		class CSwipeGesture : public CGesture
 		{
 		public:
-            CSwipeGesture(ISurface* inpSurface);
+            CSwipeGesture(Core::ISurface* inpSurface);
             CSwipeGesture(ITouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
@@ -188,7 +188,7 @@ namespace ChilliSource
 		class CPinchGesture : public CGesture
 		{
 		public:
-            CPinchGesture(ISurface* inpSurface);
+            CPinchGesture(Core::ISurface* inpSurface);
             CPinchGesture(ITouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
@@ -292,7 +292,7 @@ namespace ChilliSource
 		class CTapGesture : public CGesture
 		{
 		public:
-            CTapGesture(ISurface* inpSurface);
+            CTapGesture(Core::ISurface* inpSurface);
             CTapGesture(ITouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
@@ -370,7 +370,7 @@ namespace ChilliSource
 		class CDragGesture : public CGesture
 		{
 		public:
-			CDragGesture(ISurface* inpSurface);
+			CDragGesture(Core::ISurface* inpSurface);
             CDragGesture(ITouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
@@ -461,7 +461,7 @@ namespace ChilliSource
 		class CHoldGesture : public CGesture
 		{
 		public:
-			CHoldGesture(ISurface* inpSurface);
+			CHoldGesture(Core::ISurface* inpSurface);
             CHoldGesture(ITouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------

@@ -27,7 +27,6 @@ namespace ChilliSource
 		class IHttpRequest;
 		class IHttpConnectionSystem;
        
-        class COAuthSystem;
         class IIAPSystem;
 	}
 }

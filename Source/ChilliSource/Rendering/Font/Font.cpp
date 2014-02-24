@@ -130,7 +130,7 @@ namespace ChilliSource
                 
                 mfLineHeight = std::max((f32)sFrame.OriginalHeight, mfLineHeight);
 
-                UTF8String::Char Char = mCharacterSet[nChar];
+                Core::UTF8String::Char Char = mCharacterSet[nChar];
 				mMapCharToCharInfo.insert(std::make_pair(Char, sCI));
 			}
 		
@@ -157,7 +157,7 @@ namespace ChilliSource
 		/// @param Frame to be filled with data 
 		/// @return Success or invisible chars
 		//-------------------------------------------
-		CharacterResult CFont::GetInfoForCharacter(UTF8String::Char inChar, CharacterInfo& outInfo) const
+		CharacterResult CFont::GetInfoForCharacter(Core::UTF8String::Char inChar, CharacterInfo& outInfo) const
 		{
 			//Check for space character. That won't be in the glyph file or the font bitmap.
 			if(inChar == kSpaceCharacter)
@@ -187,7 +187,7 @@ namespace ChilliSource
         //-------------------------------------------
         /// Get Kerning Between Characters
         //-------------------------------------------
-        f32 CFont::GetKerningBetweenCharacters(UTF8String::Char inChar1, UTF8String::Char inChar2) const
+        f32 CFont::GetKerningBetweenCharacters(Core::UTF8String::Char inChar1, Core::UTF8String::Char inChar2) const
         {
             const CKernLookup* pLookup = &(*std::lower_bound(maFirstLookup.begin(), maFirstLookup.end(), CKernLookup(inChar1, 0, 0)));
 			if(NULL == pLookup || pLookup->wCharacter != inChar1)

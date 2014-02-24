@@ -118,7 +118,7 @@ namespace ChilliSource
             for(NSString* file in Contents)
             {
                 std::string strFile([file UTF8String]);
-                mHashedPackageFileNames.push_back(CHashCRC32::GenerateHashCode(strFile));
+                mHashedPackageFileNames.push_back(Core::CHashCRC32::GenerateHashCode(strFile));
             }
             
             std::sort(mHashedPackageFileNames.begin(), mHashedPackageFileNames.end());
@@ -919,7 +919,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         bool CFileSystem::DoesFileExistInHashedStore(const std::string& instrPath) const
         {
-            u32 udwHashedFile = CHashCRC32::GenerateHashCode(instrPath);
+            u32 udwHashedFile = Core::CHashCRC32::GenerateHashCode(instrPath);
             
             DYNAMIC_ARRAY<u32>::const_iterator it = std::lower_bound(mHashedPackageFileNames.begin(), mHashedPackageFileNames.end(), udwHashedFile);
             

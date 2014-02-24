@@ -183,7 +183,7 @@ namespace ChilliSource
                     }
                     else
                     {
-                        IDLookup.push_back(CHashCRC32::GenerateHashCode(strID));
+                        IDLookup.push_back(Core::CHashCRC32::GenerateHashCode(strID));
                         IDStringLookup.push_back(strID);
                         strID.clear();
                     }					

@@ -358,7 +358,7 @@ namespace ChilliSource
         void CRenderer::RenderUI(CWindow* inpWindow)
         {
             mpRenderSystem->ApplyCamera(Core::CVector3::ZERO, Core::CMatrix4x4::IDENTITY, CreateOverlayProjection(inpWindow), ChilliSource::Core::CColour::CORNFLOWER_BLUE);
-			mCanvas.Render((ISurface*)inpWindow, 1.0f);
+			mCanvas.Render((Core::ISurface*)inpWindow, 1.0f);
         }
         //----------------------------------------------------------
         /// Cull Renderables

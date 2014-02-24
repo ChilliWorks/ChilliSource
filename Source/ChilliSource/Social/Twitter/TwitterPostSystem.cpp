@@ -23,7 +23,7 @@ namespace ChilliSource
 	{
 		DEFINE_NAMED_INTERFACE(ITwitterPostSystem);
 
-        ITwitterPostSystem* ITwitterPostSystem::CreateSystem(Networking::IHttpConnectionSystem* inpHttpConnectionSystem, Networking::COAuthSystem* inpOAuthSystem)
+        ITwitterPostSystem* ITwitterPostSystem::CreateSystem(Networking::IHttpConnectionSystem* inpHttpConnectionSystem, Core::COAuthSystem* inpOAuthSystem)
         {
 #ifdef TARGET_OS_IPHONE
             return new ChilliSource::iOS::CTwitterPostSystem(static_cast<iOS::CHttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
@@ -37,7 +37,7 @@ namespace ChilliSource
 		/// Constructor
 		//------------------------------------------------------------------------
 		ITwitterPostSystem::ITwitterPostSystem(Networking::IHttpConnectionSystem* inpHttpConnectionSystem,
-											   Networking::COAuthSystem* inpOAuthSystem) : mstrCustomerKey(""),
+											   Core::COAuthSystem* inpOAuthSystem) : mstrCustomerKey(""),
 																						   mstrCustomerSecret(""),
 																						   mpAuthenticationView(NULL)
 		{
@@ -109,11 +109,11 @@ namespace ChilliSource
 			if(mpHttpConnectionSystem->CheckReachability())
 			{
 				// Construct our Tweet request URL
-				std::string strStatus = Social::TwitterDefault::TWITTER_STATUS_STRING + CBaseEncoding::URLEncode(insDesc.strText.ToASCII());
+				std::string strStatus = Social::TwitterDefault::TWITTER_STATUS_STRING + Core::CBaseEncoding::URLEncode(insDesc.strText.ToASCII());
 				std::string strStatusURL = Social::TwitterURL::TWITTER_STATUS_UPDATE_URL;
 				std::string strOAuthHeader;
 
-				if(mpOAuthSystem->GetOAuthHeader(Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost,
+				if(mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpPost,
 												 strStatusURL,
 												 strStatus, strOAuthHeader))
 				{
@@ -193,10 +193,10 @@ namespace ChilliSource
 			{
 				// Construct our OAuth request URL - 'oob' means out-of-band and tells Twitter we
 				// are on a mobile device.
-				std::string strURL = Social::TwitterOAuthAPIURLs::TWITTER_OAUTH_REQUEST_TOKEN_URL + Social::TwitterDefault::TWITTER_URL_SEP_QUESTION_MARK + Networking::OAUTHLIB_CALLBACK_KEY + "=oob";
+				std::string strURL = Social::TwitterOAuthAPIURLs::TWITTER_OAUTH_REQUEST_TOKEN_URL + Social::TwitterDefault::TWITTER_URL_SEP_QUESTION_MARK + Core::OAUTHLIB_CALLBACK_KEY + "=oob";
 				std::string strOAuthHeader;
 
-				if(mpOAuthSystem->GetOAuthHeader(Networking::COAuthSystem::OAuthHttpRequestType::k_httpGet,
+				if(mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpGet,
 												 strURL,
 												 std::string(""), strOAuthHeader))
 				{
@@ -249,7 +249,7 @@ namespace ChilliSource
 			{
 				std::string strOAuthHeader;
 
-				if(mpOAuthSystem->GetOAuthHeader(Networking::COAuthSystem::OAuthHttpRequestType::k_httpGet,
+				if(mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpGet,
 												 Social::TwitterOAuthAPIURLs::TWITTER_OAUTH_ACCESS_TOKEN_URL,
 												 std::string(""), strOAuthHeader, true))
 				{

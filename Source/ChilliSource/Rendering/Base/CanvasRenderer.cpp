@@ -48,7 +48,7 @@ namespace ChilliSource
 		///
 		/// Draw the UI
 		//----------------------------------------------------------
-		void CCanvasRenderer::Render(ISurface* inpRootSurface, f32 infNearClipDistance)
+		void CCanvasRenderer::Render(Core::ISurface* inpRootSurface, f32 infNearClipDistance)
 		{
             //We use this to ensure our UI is never clipped
             mfNearClippingDistance = infNearClipDistance + 1.0f;
@@ -172,7 +172,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Draw String
         //-----------------------------------------------------------
-		void CCanvasRenderer::DrawString(const UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
+		void CCanvasRenderer::DrawString(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                          const Core::CColour & insColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
 										 TextJustification ineHorizontalJustification, TextJustification ineVerticalJustification, bool inbFlipVertical, TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped, bool *outpInvalidCharacterFound)
 		{
@@ -222,7 +222,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Draw Distance Outlined String
         //-----------------------------------------------------------
-        void CCanvasRenderer::DrawDistanceOutlinedString(const UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
+        void CCanvasRenderer::DrawDistanceOutlinedString(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                                  const Core::CColour & insColour, const Core::CColour& insOutlineColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
                                                  TextJustification ineHorizontalJustification, TextJustification ineVerticalJustification, bool inbFlipVertical, TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
 		{
@@ -243,7 +243,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Draw Distance String
         //-----------------------------------------------------------
-        void CCanvasRenderer::DrawDistanceString(const UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
+        void CCanvasRenderer::DrawDistanceString(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                          const Core::CColour & insColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
 										 TextJustification ineHorizontalJustification, TextJustification ineVerticalJustification, bool inbFlipVertical, TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
 		{
@@ -264,7 +264,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Draw Distance String Internal
         //-----------------------------------------------------------
-        void CCanvasRenderer::DrawDistanceStringInternal(const UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
+        void CCanvasRenderer::DrawDistanceStringInternal(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                                  const Core::CColour & insColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
                                                  TextJustification ineHorizontalJustification, TextJustification ineVerticalJustification, bool inbFlipVertical, TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
         {
@@ -309,7 +309,7 @@ namespace ChilliSource
         /// Calculate the length of a string based on the font
         /// and attributes
         //------------------------------------------------------------
-        f32 CCanvasRenderer::CalculateStringWidth(const UTF8String& insString, const FontPtr& inpFont, f32 infSize, f32 infCharSpacing)
+        f32 CCanvasRenderer::CalculateStringWidth(const Core::UTF8String& insString, const FontPtr& inpFont, f32 infSize, f32 infCharSpacing)
         {
             Core::CVector2 vSize;
             
@@ -324,18 +324,18 @@ namespace ChilliSource
             CharacterList CurrentLine;
             
             //Loop round each character and get it's size
-            UTF8String::iterator it = (UTF8String::iterator)insString.begin();
+            Core::UTF8String::iterator it = (Core::UTF8String::iterator)insString.begin();
 			while(insString.end() != it)
 			{
                 //Get character for iterator codepoint and bump the iterator to the beginning of 
                 //the next character
-                UTF8String::Char Char = insString.next(it);
+                Core::UTF8String::Char Char = insString.next(it);
                 
                 // If kerning is supported, then we need the next character
-                UTF8String::Char NextChar = Char;
+                Core::UTF8String::Char NextChar = Char;
                 if(inpFont->SupportsKerning() && insString.end() != it)
                 {
-                    UTF8String::iterator it2 = it;
+                    Core::UTF8String::iterator it2 = it;
                     NextChar = insString.next(it2);
                 }
                 
@@ -353,7 +353,7 @@ namespace ChilliSource
         /// Calculate the height of a string based on the font, width
         /// and attributes
         //------------------------------------------------------------
-        f32 CCanvasRenderer::CalculateStringHeight(const UTF8String& insString, const FontPtr& inpFont, f32 infWidth, f32 infSize, f32 infCharSpacing, f32 infLineSpacing, u32 inudwNumLines)
+        f32 CCanvasRenderer::CalculateStringHeight(const Core::UTF8String& insString, const FontPtr& inpFont, f32 infWidth, f32 infSize, f32 infCharSpacing, f32 infLineSpacing, u32 inudwNumLines)
         {
             Core::CVector2 vCursorPos;
             
@@ -371,21 +371,21 @@ namespace ChilliSource
             u32 udwCurrentNumLines = 1;
 
             //Loop round each character and get it's size
-            UTF8String::iterator it = (UTF8String::iterator)insString.begin();
+            Core::UTF8String::iterator it = (Core::UTF8String::iterator)insString.begin();
 			while(it != insString.end())
 			{
                 //Get character for iterator codepoint and bump the iterator to the beginning of 
                 //the next character
-                UTF8String::Char Char = insString.next(it);
+                Core::UTF8String::Char Char = insString.next(it);
                 
                 //Decide whether to wrap or clip. If max num lines is zero this means wrap text infinetly
                 if(inudwNumLines == 0 || udwCurrentNumLines <= inudwNumLines)
                 {
                     // If kerning is supported, then we need the next character
-                    UTF8String::Char NextChar = Char;
+                    Core::UTF8String::Char NextChar = Char;
                     if(inpFont->SupportsKerning() && insString.end() != it)
                     {
-                        UTF8String::iterator it2 = it;
+                        Core::UTF8String::iterator it2 = it;
                         NextChar = insString.next(it2);
                     }
                     
@@ -393,7 +393,7 @@ namespace ChilliSource
                     BuildCharacter(inpFont, Char, NextChar, Core::CVector2::ZERO, infSize, infCharSpacing, fLastCharacterWidth, CurrentLine);
                     vCursorPos.x += fLastCharacterWidth;
 
-                    UTF8String sTemp;
+                    Core::UTF8String sTemp;
                     sTemp.appendChar(Char);
                     
                     //Added by Joe 9/1/14
@@ -432,8 +432,8 @@ namespace ChilliSource
                         //Find the length to the next space/tab from the cursor pos
                         //and if it exceed the bounds then wrap
                         f32 fLengthToNextSpace = vCursorPos.x;
-                        UTF8String::iterator jt = it;
-                        UTF8String::Char NextChar = 0;
+                        Core::UTF8String::iterator jt = it;
+                        Core::UTF8String::Char NextChar = 0;
                         
                         while(jt != insString.end() && NextChar != kSpaceCharacter && NextChar != kTabCharacter && NextChar != kReturnCharacter)
                         {
@@ -465,7 +465,7 @@ namespace ChilliSource
 		/// Construct a list of character sprites
 		/// from the given string
         //-------------------------------------------
-		void CCanvasRenderer::BuildString(const FontPtr& inpFont, const UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
+		void CCanvasRenderer::BuildString(const FontPtr& inpFont, const Core::UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
 										  const Core::CVector2& invBounds, u32 inudwNumLines, TextJustification ineHorizontalJustification, TextJustification ineVerticalJustification,
                                           bool inbFlipVertical, TextOverflowBehaviour ineBehaviour, bool * outpClipped, bool * outpInvalidCharacterFound)
 		{
@@ -489,18 +489,18 @@ namespace ChilliSource
             
             bool bNoMoreLines = false;
 			
-            UTF8String::iterator it = (UTF8String::iterator)inText.begin();
+            Core::UTF8String::iterator it = (Core::UTF8String::iterator)inText.begin();
             while(inText.end() != it)
 			{
                 //Get character for iterator codepoint and bump the iterator to the beginning of
                 //the next character
-                UTF8String::Char Char = inText.next(it);
+                Core::UTF8String::Char Char = inText.next(it);
                 
                 // If kerning is supported, then we need the next character
-                UTF8String::Char NextChar = Char;
+                Core::UTF8String::Char NextChar = Char;
                 if(inpFont->SupportsKerning() && inText.end() != it)
                 {
-                    UTF8String::iterator it2 = it;
+                    Core::UTF8String::iterator it2 = it;
                     NextChar = inText.next(it2);
                 }
                 
@@ -552,9 +552,9 @@ namespace ChilliSource
                         //Find the length to the next space/tab from the cursor pos
                         //and if it exceed the bounds then wrap
                         f32 fLengthToNextSpace = vCursorPos.x;
-                        UTF8String::iterator jt = it;
-                        UTF8String::Char LookAheadChar;
-                        UTF8String::Char LookAheadNextChar;
+                        Core::UTF8String::iterator jt = it;
+                        Core::UTF8String::Char LookAheadChar;
+                        Core::UTF8String::Char LookAheadNextChar;
                         CharacterList CurrentLineTemp;
                         
                         //This while loop exits through break statements only.
@@ -567,7 +567,7 @@ namespace ChilliSource
                                 break;
                             
                             LookAheadNextChar = LookAheadChar;
-                            UTF8String::iterator jt2 = jt;
+                            Core::UTF8String::iterator jt2 = jt;
                             if(jt!=inText.end())
                                 LookAheadNextChar=inText.next(jt2);
                             
@@ -604,7 +604,7 @@ namespace ChilliSource
                         case TextOverflowBehaviour::k_none:
                         case TextOverflowBehaviour::k_clip:
                             //Don't process any further characters
-                            it = (UTF8String::iterator)inText.end();
+                            it = (Core::UTF8String::iterator)inText.end();
                             bClipped=true;
                             break;
                         case TextOverflowBehaviour::k_follow:
@@ -658,7 +658,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		/// Build Character
 		//----------------------------------------------------
-		CharacterResult CCanvasRenderer::BuildCharacter(const FontPtr& inpFont, UTF8String::Char inCharacter, UTF8String::Char inNextCharacter,
+		CharacterResult CCanvasRenderer::BuildCharacter(const FontPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
                                                          const Core::CVector2& invCursor, f32 infTextScale, f32 infCharSpacing,
                                                          f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound)
 		{
@@ -686,9 +686,7 @@ namespace ChilliSource
                         
                         if(fKernAmount > (fCharWidth * MAX_KERN_RATIO))
                         {
-                            //DEBUG_LOG("discarded excessive kerning on "+STRING_CAST(inCharacter)+" and "+STRING_CAST(inNextCharacter)+" ("+STRING_CAST(fKernAmount)+"/"+STRING_CAST(fCharWidth)+")");
                             fKernAmount = fCharWidth * MAX_KERN_RATIO;
-                            //DEBUG_LOG("reduced kerning to "+STRING_CAST(fKernAmount));
                         }
                         
                         fCharWidth -= fKernAmount;

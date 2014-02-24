@@ -11,16 +11,19 @@
 
 namespace ChilliSource
 {
-    class CAESEncrypt
+    namespace Core
     {
-    public:
-        
-        static u32 CalculateAlignedSize(u32 inudwDataSize);
-        static void Encrypt(const u8* inpData, u32 inudwDataLength, const std::string& instrPrivateKey, u8* outpData);
-        static void Decrypt(const u8* inpData, u32 inudwDataLength, const std::string& instrPrivateKey, u8* outpData);
-        
-    private:
-    };
+        class CAESEncrypt
+        {
+        public:
+            
+            static u32 CalculateAlignedSize(u32 inudwDataSize);
+            static void Encrypt(const u8* inpData, u32 inudwDataLength, const std::string& instrPrivateKey, u8* outpData);
+            static void Decrypt(const u8* inpData, u32 inudwDataLength, const std::string& instrPrivateKey, u8* outpData);
+            
+        private:
+        };
+    }
 }
 
 #endif

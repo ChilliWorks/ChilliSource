@@ -64,7 +64,7 @@ namespace ChilliSource
         ///
         /// @param Keyboard Event Delegate
         //-------------------------------------------------
-        IEvent<Input::KeyboardEventDelegate>& CEditableLabel::GetKeyboardShowEvent()
+        Core::IEvent<Input::KeyboardEventDelegate>& CEditableLabel::GetKeyboardShowEvent()
         {
             return mOnKeyboardShowEvent;
         }
@@ -76,7 +76,7 @@ namespace ChilliSource
         ///
         /// @param Keyboard Event Delegate
         //-------------------------------------------------
-        IEvent<Input::KeyboardEventDelegate>& CEditableLabel::GetKeyboardHideEvent()
+        Core::IEvent<Input::KeyboardEventDelegate>& CEditableLabel::GetKeyboardHideEvent()
         {
             return mOnKeyboardHideEvent;
         }
@@ -88,7 +88,7 @@ namespace ChilliSource
         ///
         /// @param Text Change Event Delegate
         //-------------------------------------------------
-        IEvent<CEditableLabel::TextChangeEventDelegate>& CEditableLabel::GetTextChangeEvent()
+        Core::IEvent<CEditableLabel::TextChangeEventDelegate>& CEditableLabel::GetTextChangeEvent()
         {
             return mOnTextChangeEvent;
         }
@@ -230,7 +230,7 @@ namespace ChilliSource
         /// @param Contents of the keyboard
         /// @param Whether to accept the input
 		//----------------------------------------------------
-		void CEditableLabel::OnKeyboardTextChanged(const UTF8String& instrText, bool* inbRejectInput)
+		void CEditableLabel::OnKeyboardTextChanged(const Core::UTF8String& instrText, bool* inbRejectInput)
 		{
             //We can reject the text if it exceeds our input limit
             if(CharacterLimit > 0 && instrText.length() > CharacterLimit)
@@ -364,7 +364,7 @@ namespace ChilliSource
                 inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::CVector2::ZERO, Core::CVector2::ZERO), AbsCol);
             }
         
-            UTF8String strutf8DisplayString(Text);
+            Core::UTF8String strutf8DisplayString(Text);
             
             // handle separators if we're using one
             if(mutf8strSeparator.length() > 0)
@@ -376,7 +376,7 @@ namespace ChilliSource
             {
                 if(SecureEntry)
                 {
-                    UTF8String strSecureText;
+                    Core::UTF8String strSecureText;
                     u32 udwTextLength = strutf8DisplayString.length();
                     
                     for(u32 i=0; i<udwTextLength; ++i)
@@ -427,7 +427,7 @@ namespace ChilliSource
         /// Overridden set text method, updates cached separator string
         /// @param instrText text to set as entry
         //-------------------------------------------------------
-        void CEditableLabel::SetText(const UTF8String& instrText)
+        void CEditableLabel::SetText(const Core::UTF8String& instrText)
         {
             CLabel::SetText(instrText);
             
@@ -472,9 +472,9 @@ namespace ChilliSource
         ///
         /// override to permit last text length tracking
         //-------------------------------------------------
-        UTF8String CEditableLabel::GetTextWithSeparators() const
+        Core::UTF8String CEditableLabel::GetTextWithSeparators() const
         {
-            UTF8String strutf8Out("");
+            Core::UTF8String strutf8Out("");
             
             // put in spacers for readability
             for(u32 i(0), sep(0); i < Text.size(); ++i)
@@ -503,7 +503,7 @@ namespace ChilliSource
         ///
         /// Sets the separator that will be used in GetTextWithSeparators
         //-------------------------------------------------
-        void CEditableLabel::SetTextSeparator(const UTF8String& inutf8strSeparator)
+        void CEditableLabel::SetTextSeparator(const Core::UTF8String& inutf8strSeparator)
         {
             mutf8strSeparator = inutf8strSeparator;
         }

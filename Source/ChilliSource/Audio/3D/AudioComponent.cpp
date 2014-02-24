@@ -96,7 +96,7 @@ namespace ChilliSource
         /// complete notifications
         /// @return Audio event 
         //---------------------------------------------------------------------
-        IEvent<AudioEventDelegate>& CAudioComponent::GetAudioFinishedEvent()
+        Core::IEvent<AudioEventDelegate>& CAudioComponent::GetAudioFinishedEvent()
         {
             return mOnPlaybackCompleteEvent;
         }

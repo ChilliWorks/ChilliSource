@@ -126,7 +126,7 @@ namespace ChilliSource
                         {
                             Core::ResourcePtr pSourceImage(new Core::CImage());
                             std::string strFileName = strPath + STRING_CAST(i+1) + strExt;
-                            if(static_cast<IImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(ineStorageLocation, strFileName, ineFormat, pSourceImage))
+                            if(static_cast<Core::IImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(ineStorageLocation, strFileName, ineFormat, pSourceImage))
                             {
                                 Core::CImage* pImage = (Core::CImage*)(pSourceImage.get());
                                 pImage->SetName(strFileName);
@@ -204,8 +204,8 @@ namespace ChilliSource
 				Desc.pCubemapResource->SetStorageLocation(ineStorageLocation);
 
 				//Load image as a task. Once it completed we can load the Cubemap as it should be done on the main thread
-				Task1<ImageDesc&> ImageLoadTask(this, &ICubemapManager::ImageLoadTask, Desc);
-				CTaskScheduler::ScheduleTask(ImageLoadTask);
+				Core::Task1<ImageDesc&> ImageLoadTask(this, &ICubemapManager::ImageLoadTask, Desc);
+				Core::CTaskScheduler::ScheduleTask(ImageLoadTask);
 				
 				//add resource to the resource map
 				mMapFilenameToResource.insert(std::make_pair(inFilePath, SHARED_PTR_CAST<Core::IResource>(Desc.pCubemapResource)));
@@ -236,7 +236,7 @@ namespace ChilliSource
                 {
                     for(u32 i=0; i<6; ++i)
                     {
-                        if(static_cast<IImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(inDesc.eStorageLocation, inDesc.strFilenames[i], inDesc.eImageFormat, inDesc.pImageResources[i]))
+                        if(static_cast<Core::IImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(inDesc.eStorageLocation, inDesc.strFilenames[i], inDesc.eImageFormat, inDesc.pImageResources[i]))
                         {
                             DEBUG_LOG("Loading image " + inDesc.strFilenames[i]);
                             
@@ -247,7 +247,7 @@ namespace ChilliSource
                     }
                     
                     //Load the Cubemap from this image
-                    CTaskScheduler::ScheduleMainThreadTask(Task3<const DYNAMIC_ARRAY<Core::ResourcePtr>&, bool, CubemapPtr&>(this, &ICubemapManager::CubemapLoadTask, inDesc.pImageResources, inDesc.bUseMipmaps, inDesc.pCubemapResource));
+                    Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task3<const DYNAMIC_ARRAY<Core::ResourcePtr>&, bool, CubemapPtr&>(this, &ICubemapManager::CubemapLoadTask, inDesc.pImageResources, inDesc.bUseMipmaps, inDesc.pCubemapResource));
                     return;
                 }
 			}

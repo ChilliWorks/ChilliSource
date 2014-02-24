@@ -28,7 +28,7 @@
 
 namespace ChilliSource
 {
-    DEFINE_CREATABLE(IApplicationDelegates, iOS::CApplicationDelegates);
+    DEFINE_CREATABLE(Core::IApplicationDelegates, iOS::CApplicationDelegates);
     
 	namespace iOS
 	{
@@ -116,7 +116,7 @@ namespace ChilliSource
 			//Update the app time since start
 			Core::CApplication::SetAppElapsedTime(inuddwTimestamp);
             
-			CTaskScheduler::ExecuteMainThreadTasks();
+			Core::CTaskScheduler::ExecuteMainThreadTasks();
             
             //We do not need to render as often as we update so this callback will be triggered
             //less freqenctly than the update frequency suggests. We must work out how many times to update based on the time since last frame

@@ -13,7 +13,7 @@
 
 namespace ChilliSource
 {
-	namespace Networking
+	namespace Core
 	{
 		DEFINE_NAMED_INTERFACE(COAuthSystem);
         
@@ -442,7 +442,7 @@ namespace ChilliSource
 		                          (u8*)bypDigest);
 
 		    /* Do a base64 encode of signature - SHA 1 digest is 160 bits*/
-		    std::string strBase64String = ChilliSource::CBaseEncoding::Base64Encode((s8*)bypDigest, 20);
+		    std::string strBase64String = CBaseEncoding::Base64Encode((s8*)bypDigest, 20);
 		    //DEBUG_LOG("COAuthSystem::GetSignature() - Base64 of signature SHA1:\""+strBase64String+"\"");
 
 

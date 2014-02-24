@@ -119,8 +119,8 @@ namespace ChilliSource
 		bool CMoModelLoader::AsyncCreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource)
 		{
 			//Load model as task
-			Task4<Core::StorageLocation, const std::string&, const std::string&, const MeshPtr&> MeshTask(this, &CMoModelLoader::LoadMeshDataTask, ineStorageLocation, inFilePath, instrMaterialPath, outpResource);
-			CTaskScheduler::ScheduleTask(MeshTask);
+			Core::Task4<Core::StorageLocation, const std::string&, const std::string&, const MeshPtr&> MeshTask(this, &CMoModelLoader::LoadMeshDataTask, ineStorageLocation, inFilePath, instrMaterialPath, outpResource);
+			Core::CTaskScheduler::ScheduleTask(MeshTask);
 			
 			return true;
 		}
@@ -137,7 +137,7 @@ namespace ChilliSource
 			}
 			
 			//start a main thread task for loading the data into a mesh
-			CTaskScheduler::ScheduleMainThreadTask(Task2<MeshDescriptor&,const MeshPtr&>(this, &CMoModelLoader::BuildMeshTask, descriptor, outpResource));
+			Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task2<MeshDescriptor&,const MeshPtr&>(this, &CMoModelLoader::BuildMeshTask, descriptor, outpResource));
 		}
 		//----------------------------------------------------------------------------
 		/// Build Mesh Task
@@ -182,8 +182,8 @@ namespace ChilliSource
 			}
 			
 			//Load image as a task. Once it completed we can load the texture as it should be done on the main thread
-			Task4<Core::StorageLocation, const std::string&, const std::string&, const MeshPtr&> MeshTask(this, &CMoModelLoader::LoadDataForExistingMeshTask, ineStorageLocation, inFilePath, strMatPath, inpMesh);
-			CTaskScheduler::ScheduleTask(MeshTask);
+			Core::Task4<Core::StorageLocation, const std::string&, const std::string&, const MeshPtr&> MeshTask(this, &CMoModelLoader::LoadDataForExistingMeshTask, ineStorageLocation, inFilePath, strMatPath, inpMesh);
+			Core::CTaskScheduler::ScheduleTask(MeshTask);
 		}
 		//----------------------------------------------------------------------------
 		/// LoadDataForExistingMeshTask
@@ -198,7 +198,7 @@ namespace ChilliSource
 			}
 			
 			//start a main thread task for loading the data into a mesh
-			CTaskScheduler::ScheduleMainThreadTask(Task2<MeshDescriptor&, const MeshPtr&>(this, &CMoModelLoader::BuildExistingMeshTask, descriptor, outpResource));
+			Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task2<MeshDescriptor&, const MeshPtr&>(this, &CMoModelLoader::BuildExistingMeshTask, descriptor, outpResource));
 		}
 		//----------------------------------------------------------------------------
 		/// Build Existing Mesh Task

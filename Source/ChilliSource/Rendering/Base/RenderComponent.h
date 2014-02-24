@@ -25,7 +25,7 @@ namespace ChilliSource
 		///
 		/// Any object that can be rendered
 		//====================================================
-		class IRenderComponent : public IVolumeComponent
+		class IRenderComponent : public Core::IVolumeComponent
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(IRenderComponent);

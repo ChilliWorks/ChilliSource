@@ -13,46 +13,49 @@
 
 namespace ChilliSource
 {
-    namespace Reflect
+    namespace Core
     {
-        class CRegistry
+        namespace Reflect
         {
-        public:
-            ~CRegistry();
-            //------------------------------------------------------------
-            /// Add Class
-            ///
-            /// @param Meta-class
-            //------------------------------------------------------------
-            static void AddClass(CMetaClass* inpClass);
-			//------------------------------------------------------------
-			/// Remove Class
-			///
-			/// @param Meta-class
-			//------------------------------------------------------------
-			static void RemoveClass(CMetaClass* inpClass);
-            //------------------------------------------------------------
-            /// Get Class
-            ///
-            /// Get the meta-class with the given name ID
-            ///
-            /// @param Class name
-            /// @return Meta class
-            //------------------------------------------------------------
-            static CMetaClass* GetClass(const std::string& instrName);
-			//------------------------------------------------------------
-			/// Get Classes
-			///
-			/// Get all the meta-classes
-			///
-			/// @return Array of meta classes
-			//------------------------------------------------------------
-			static const DYNAMIC_ARRAY<CMetaClass*>& GetClasses();
-            
-        private:
-            
-            static DYNAMIC_ARRAY<CMetaClass*> MetaClasses;
-        };
+            class CRegistry
+            {
+            public:
+                ~CRegistry();
+                //------------------------------------------------------------
+                /// Add Class
+                ///
+                /// @param Meta-class
+                //------------------------------------------------------------
+                static void AddClass(CMetaClass* inpClass);
+                //------------------------------------------------------------
+                /// Remove Class
+                ///
+                /// @param Meta-class
+                //------------------------------------------------------------
+                static void RemoveClass(CMetaClass* inpClass);
+                //------------------------------------------------------------
+                /// Get Class
+                ///
+                /// Get the meta-class with the given name ID
+                ///
+                /// @param Class name
+                /// @return Meta class
+                //------------------------------------------------------------
+                static CMetaClass* GetClass(const std::string& instrName);
+                //------------------------------------------------------------
+                /// Get Classes
+                ///
+                /// Get all the meta-classes
+                ///
+                /// @return Array of meta classes
+                //------------------------------------------------------------
+                static const DYNAMIC_ARRAY<CMetaClass*>& GetClasses();
+                
+            private:
+                
+                static DYNAMIC_ARRAY<CMetaClass*> MetaClasses;
+            };
+        }
     }
 }
 

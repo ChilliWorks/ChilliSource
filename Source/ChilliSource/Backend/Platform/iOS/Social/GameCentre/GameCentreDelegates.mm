@@ -66,17 +66,17 @@ BOOL kbUseAnimationForDismiss = YES;
                                   matchData:match.matchData completionHandler:nil];    
 }
 
-- (ChilliSource::IEvent<GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent>&) GetWasCancelledEvent
+- (ChilliSource::Core::IEvent<GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent>&) GetWasCancelledEvent
 {
     return mWasCancelledEvent;
 }
 
-- (ChilliSource::IEvent<GameCentreTurnBasedMatchmakerViewControllerDidFailEvent>&) GetDidFailEvent
+- (ChilliSource::Core::IEvent<GameCentreTurnBasedMatchmakerViewControllerDidFailEvent>&) GetDidFailEvent
 {
     return mDidFailEvent;
 }
 
-- (ChilliSource::IEvent<GameCentreTurnBasedMatchmakerViewControllerDidFindMatchEvent>&) GetDidFindMatchEvent
+- (ChilliSource::Core::IEvent<GameCentreTurnBasedMatchmakerViewControllerDidFindMatchEvent>&) GetDidFindMatchEvent
 {
     return mDidFindMatchEvent;
 }
@@ -94,17 +94,17 @@ BOOL kbUseAnimationForDismiss = YES;
 	return gameCentreTurnBasedEventHandlerInstance;
 }
 
-- (ChilliSource::IEvent<HandleInviteFromGameCenterEventDelegate>&) GetHandleInviteFromGameCenterEvent
+- (ChilliSource::Core::IEvent<HandleInviteFromGameCenterEventDelegate>&) GetHandleInviteFromGameCenterEvent
 {
     return mHandleInviteFromGameCenterEvent;
 }
 
-- (ChilliSource::IEvent<HandleTurnEventForMatchEventDelegate>&) GetHandleTurnEventForMatchEvent
+- (ChilliSource::Core::IEvent<HandleTurnEventForMatchEventDelegate>&) GetHandleTurnEventForMatchEvent
 {
     return mHandleTurnEventForMatchEvent;
 }
 
-- (ChilliSource::IEvent<HandleMatchEndedEventDelegate>&) GetHandleMatchEndedEvent
+- (ChilliSource::Core::IEvent<HandleMatchEndedEventDelegate>&) GetHandleMatchEndedEvent
 {
     return mHandleMatchEndedEvent;
 }
@@ -237,7 +237,7 @@ BOOL kbUseAnimationForDismiss = YES;
 ///
 /// @return Event Object
 //-----------------------------------------------
-- (ChilliSource::IEvent<GKNotificationEventDelegate>&) GetGKLocalAuthenticationChangedEvent
+- (ChilliSource::Core::IEvent<GKNotificationEventDelegate>&) GetGKLocalAuthenticationChangedEvent
 {
 	return mGKPlayerAuthenticationChangeEvent;
 }

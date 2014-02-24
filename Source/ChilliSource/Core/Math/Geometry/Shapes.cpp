@@ -15,6 +15,7 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
 #include <limits>
+
 namespace ChilliSource
 {
 	namespace Core 

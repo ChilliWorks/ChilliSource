@@ -20,7 +20,7 @@ namespace ChilliSource
 {
     namespace iOS
     {
-        class CLocalNotificationScheduler : public ILocalNotificationScheduler
+        class CLocalNotificationScheduler : public Core::ILocalNotificationScheduler
         {
         public:
             CLocalNotificationScheduler(){};
@@ -33,7 +33,7 @@ namespace ChilliSource
             ///
             /// @param Notification 
             //------------------------------------------------------------------------------
-            void ScheduleNotification(const Notification& insNotification);
+            void ScheduleNotification(const Core::Notification& insNotification);
             //-------------------------------------------------------------------------
             /// Cancel By ID
             ///
@@ -41,7 +41,7 @@ namespace ChilliSource
             ///
             /// @param ID type
             //-------------------------------------------------------------------------
-            void CancelByID(NotificationID inID);
+            void CancelByID(Core::NotificationID inID);
             //-------------------------------------------------------------------------
             /// Cancel All 
             ///
@@ -59,7 +59,7 @@ namespace ChilliSource
             /// @param Out: Notifications that meet criteria
             /// @return Whether any notifications exist within that time period
             //-------------------------------------------------------------------------
-            bool TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, DYNAMIC_ARRAY<Notification>& outaNotifications);
+            bool TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, DYNAMIC_ARRAY<Core::Notification>& outaNotifications);
             //-------------------------------------------------------------------------
             /// Application Did Finish Launching With Options
             ///
@@ -97,7 +97,7 @@ namespace ChilliSource
             /// @param Apple UILocalNotification
             /// @param Out: moFlow notification
             //-------------------------------------------------------------------------
-            static void ConvertUILocalNotificationToNotification(UILocalNotification* inpUILocal, Notification& outsNotification);
+            static void ConvertUILocalNotificationToNotification(UILocalNotification* inpUILocal, Core::Notification& outsNotification);
         };
     }
 }

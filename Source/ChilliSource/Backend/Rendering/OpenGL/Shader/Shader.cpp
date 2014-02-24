@@ -59,7 +59,7 @@ namespace ChilliSource
         GLint CShader::GetAttributeLocation(const char * instrAttributeName)
         {
         	// Hash the name string
-            LocationLookup sItem( ChilliSource::CHashCRC32::GenerateHashCode(instrAttributeName), 0);
+            LocationLookup sItem( Core::CHashCRC32::GenerateHashCode(instrAttributeName), 0);
             
             // Binary search through a sorted array of items
             DYNAMIC_ARRAY<LocationLookup>::iterator it;
@@ -85,7 +85,7 @@ namespace ChilliSource
         GLint CShader::GetUniformLocation(const char * instrUniformName)
         {
         	// Hash the name string
-            LocationLookup sItem( ChilliSource::CHashCRC32::GenerateHashCode(instrUniformName), 0);
+            LocationLookup sItem( Core::CHashCRC32::GenerateHashCode(instrUniformName), 0);
             
             // Binary search through a sorted array of items
             DYNAMIC_ARRAY<LocationLookup>::iterator it;

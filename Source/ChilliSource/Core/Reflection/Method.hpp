@@ -14,39 +14,42 @@
 
 namespace ChilliSource
 {
-    namespace Reflect
+    namespace Core
     {
-        //===============================================================================
-        /// Method
-        ///
-        /// An exposed member function that can be invoked by name
-        //===============================================================================
-        template <typename T, typename RType> class CMethod
+        namespace Reflect
         {
-        public:
-            
-//            CMethod(const std::string& instrName, RType (T::* inpMethodPtr)(), CMetaClass<T>* inpClass)
-//            : mstrName(instrName), mpMethodPtr(inpMethodPtr), mpClass(inpClass){}
-//            
-//            RType Invoke() //Static
-//            {
-//                return (mpMethodPtr)();
-//            }
-//            
-//            //            {
-//            //                (pInstance->*mpMethodPtr)()
-//            //            }
-//            
-//        public:
-//            
-//            typedef RType ReturnType;
-//            
-//        private:
-//            
-//            RType (T::* mpMethodPtr)();
-//            std::string mstrName;
-//            CMetaClass<T>* mpClass;
-        };
+            //===============================================================================
+            /// Method
+            ///
+            /// An exposed member function that can be invoked by name
+            //===============================================================================
+            template <typename T, typename RType> class CMethod
+            {
+            public:
+                
+//                CMethod(const std::string& instrName, RType (T::* inpMethodPtr)(), CMetaClass<T>* inpClass)
+//                : mstrName(instrName), mpMethodPtr(inpMethodPtr), mpClass(inpClass){}
+//                
+//                RType Invoke() //Static
+//                {
+//                    return (mpMethodPtr)();
+//                }
+//                
+//                //            {
+//                //                (pInstance->*mpMethodPtr)()
+//                //            }
+//                
+//            public:
+//                
+//                typedef RType ReturnType;
+//                
+//            private:
+//                
+//                RType (T::* mpMethodPtr)();
+//                std::string mstrName;
+//                CMetaClass<T>* mpClass;
+            };
+        }
     }
 }
 
