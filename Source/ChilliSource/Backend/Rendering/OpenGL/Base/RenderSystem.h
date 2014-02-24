@@ -37,7 +37,7 @@ namespace ChilliSource
 		/// Creates and manages the OpenGL ES context and
 		/// handles the rendering of scene objects
 		//=======================================================
-		class CRenderSystem : public moFlo::Rendering::IRenderSystem
+		class CRenderSystem : public ChilliSource::Rendering::IRenderSystem
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(CRenderSystem);
@@ -50,7 +50,7 @@ namespace ChilliSource
 			/// @param Comparison Type
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			bool IsA(moFlo::Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const;
 			//----------------------------------------------------------
 			/// Init
 			///

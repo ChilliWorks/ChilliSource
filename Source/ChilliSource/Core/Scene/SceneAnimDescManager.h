@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/Resource/ResourceManager.h>
 #include <ChilliSource/Core/Scene/SceneAnimation.h>
 
-namespace  moFlo 
+namespace ChilliSource
 {
     namespace Core
     {

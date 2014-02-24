@@ -28,10 +28,10 @@ namespace ChilliSource
 		//---------------------------------------------------------------
     	CGooglePlayRemoteNotificationSystem::CGooglePlayRemoteNotificationSystem()
     	{
-    		if(NULL == (mpJavaInterface = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CGooglePlayRemoteNotificationJavaInterface>()))
+    		if(NULL == (mpJavaInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CGooglePlayRemoteNotificationJavaInterface>()))
     		{
     			mpJavaInterface = GooglePlayRemoteNotificationJavaInterfacePtr(new CGooglePlayRemoteNotificationJavaInterface());
-				moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
+				ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
     		}
     	}
 		//-------------------------------------------------------------------------
@@ -61,7 +61,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		void CGooglePlayRemoteNotificationSystem::OnRemoteTokenReceived(const std::string& instrToken)
 		{
-			mstrToken = moFlo::CBaseEncoding::Base64Encode(instrToken);
+			mstrToken = ChilliSource::CBaseEncoding::Base64Encode(instrToken);
 			if(mDelegate != NULL)
 			{
 				mDelegate(mstrToken);
@@ -73,7 +73,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		void CGooglePlayRemoteNotificationSystem::OnRemoteNotificationReceived(const Core::ParamDictionary& insParams)
 		{
-			moFlo::Notification sNotification;
+			ChilliSource::Notification sNotification;
 
 			sNotification.bDismissed = false;
 			sNotification.eType = NOTICE_PUSH;

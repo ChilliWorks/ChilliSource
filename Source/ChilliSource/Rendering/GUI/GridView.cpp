@@ -21,8 +21,6 @@
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #endif
 
-bool moFlo::GUI::CGridView::mbDrawDebug = false;
-
 namespace ChilliSource
 {
     namespace Rendering
@@ -37,6 +35,8 @@ namespace ChilliSource
 		DEFINE_PROPERTY(MaxNumRows);
 		DEFINE_PROPERTY(RowFill);
 
+        bool CGridView::mbDrawDebug = false;
+        
         //------------------------------------------------------
         /// Constructor
         ///
@@ -463,7 +463,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //-------------------------------------------------------
-        void CGridView::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void CGridView::Draw(CCanvasRenderer* inpCanvas)
         {
             //This is a container view and has no renderables
             //We will need to render our subviews though
@@ -483,9 +483,9 @@ namespace ChilliSource
                 LayoutContent();
 				
 #if DEBUG_DRAWING
-				if(moFlo::GUI::CGridView::mbDrawDebug)
+				if(CGridView::mbDrawDebug)
 				{
-					Rendering::ITextureManager* pMgr = (Rendering::ITextureManager*)(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Rendering::ITexture::InterfaceID));
+					ITextureManager* pMgr = (ITextureManager*)(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(ITexture::InterfaceID));
 					inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), pMgr->GetDefaultTexture(), Core::Rectangle(Core::CVector2::ZERO, Core::CVector2::ZERO), Core::CColour(1.0f,0.0f,0.0f,0.5f));
 				}
 #endif
@@ -504,9 +504,9 @@ namespace ChilliSource
 		void CGridView::EnableDebugDrawing(bool inbValue)
 		{
 #if DEBUG_DRAWING
-			moFlo::GUI::CGridView::mbDrawDebug = inbValue;
+			CGridView::mbDrawDebug = inbValue;
 #else
-			moFlo::GUI::CGridView::mbDrawDebug = false;
+			CGridView::mbDrawDebug = false;
 #endif
 		}
     }

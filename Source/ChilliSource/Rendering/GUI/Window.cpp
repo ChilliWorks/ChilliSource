@@ -19,7 +19,7 @@
 
 namespace ChilliSource
 {
-    DEFINE_CREATABLE(ISurface, GUI::CWindow);
+    DEFINE_CREATABLE(ISurface, Rendering::CWindow);
     
 	namespace Rendering
 	{
@@ -252,7 +252,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer
         //-----------------------------------------------------
-        void CWindow::Draw(Rendering::CCanvasRenderer * inpCanvas)
+        void CWindow::Draw(CCanvasRenderer * inpCanvas)
         {
             CGUIView::Draw(inpCanvas);
             

@@ -575,7 +575,7 @@ namespace ChilliSource
         ///
         /// @param Notification
         //-------------------------------------------------------------------------
-        bool CStateManager::OnNotificationReceived(moFlo::Notification* inpsNotification)
+        bool CStateManager::OnNotificationReceived(ChilliSource::Notification* inpsNotification)
         {
             if(mStateHierarchy.back()->ShouldReceiveNotifications())
             {

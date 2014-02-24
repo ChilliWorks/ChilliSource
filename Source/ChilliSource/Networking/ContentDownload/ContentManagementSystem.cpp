@@ -777,7 +777,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void CContentManagementSystem::DeleteDirectory(const std::string& instrDirectory) const
         {
-            moFlo::Core::CApplication::GetFileSystemPtr()->DeleteDirectory(Core::StorageLocation::k_DLC, instrDirectory);
+            ChilliSource::Core::CApplication::GetFileSystemPtr()->DeleteDirectory(Core::StorageLocation::k_DLC, instrDirectory);
         }
     }
 }

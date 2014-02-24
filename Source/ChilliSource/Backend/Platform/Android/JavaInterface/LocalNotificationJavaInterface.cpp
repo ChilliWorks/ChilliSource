@@ -22,9 +22,9 @@ extern "C"
 void Java_com_taggames_moflow_nativeinterface_CLocalNotificationNativeInterface_ApplicationDidReceiveLocalNotification(JNIEnv* inpEnv, jobject thiz, jobjectArray inastrKeys, jobjectArray inastrValues)
 {
 	DEBUG_LOG("GETTING NOTIFICATION");
-	moFlo::Notification sNotification;
+	ChilliSource::Notification sNotification;
 	sNotification.bDismissed = false;
-	sNotification.eType = moFlo::NOTICE_SYSTEM;
+	sNotification.eType = ChilliSource::NOTICE_SYSTEM;
 
 	u32 udwNumberOfParams = inpEnv->GetArrayLength(inastrKeys);
 	for(u32 udwKey = 0; udwKey < udwNumberOfParams; ++udwKey)
@@ -50,22 +50,22 @@ void Java_com_taggames_moflow_nativeinterface_CLocalNotificationNativeInterface_
 		DEBUG_LOG(strKey + " - " + strValue);
 		if(strKey == "NotificationID")
 		{
-			sNotification.ID = moFlo::Core::CStringConverter::ParseInt(strValue);
+			sNotification.ID = ChilliSource::Core::CStringConverter::ParseInt(strValue);
 			continue;
 		}
 		if(strKey == "TriggerTime")
 		{
-			sNotification.TriggerTime = moFlo::Core::CStringConverter::ParseUnsignedLong(strValue);
+			sNotification.TriggerTime = ChilliSource::Core::CStringConverter::ParseUnsignedLong(strValue);
 			continue;
 		}
 		if(strKey == "Priority")
 		{
-			sNotification.ePriority = (moFlo::NotificationPriority)moFlo::Core::CStringConverter::ParseInt(strValue);
+			sNotification.ePriority = (ChilliSource::NotificationPriority)ChilliSource::Core::CStringConverter::ParseInt(strValue);
 			continue;
 		}
 		sNotification.sParams.SetValueForKey(strKey,strValue);
 	}
-	moFlo::AndroidPlatform::CLocalNotificationScheduler::ApplicationDidReceiveLocalNotification(sNotification);
+	ChilliSource::Android::CLocalNotificationScheduler::ApplicationDidReceiveLocalNotification(sNotification);
 }
 
 namespace ChilliSource

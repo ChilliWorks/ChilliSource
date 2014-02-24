@@ -37,9 +37,9 @@ distribution.
 bool TiXmlBase::condenseWhiteSpace = true;
 
 #ifdef TIXML_MOFLO
-moFlo::Core::FileStreamPtr TiXmlFOpen(moFlo::Core::StorageLocation ineStorageLocation, std::string instrFilename, moFlo::Core::FileMode ineFileMode)
+ChilliSource::Core::FileStreamPtr TiXmlFOpen(ChilliSource::Core::StorageLocation ineStorageLocation, std::string instrFilename, ChilliSource::Core::FileMode ineFileMode)
 {
-    return moFlo::Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilename, ineFileMode);
+    return ChilliSource::Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilename, ineFileMode);
 }
 #else
 
@@ -780,7 +780,7 @@ void TiXmlElement::SetAttribute( const std::string& name, const std::string& _va
 #endif
 
 #ifdef TIXML_MOFLO
-void TiXmlElement::Print( moFlo::Core::FileStreamPtr cfile, int depth ) const
+void TiXmlElement::Print( ChilliSource::Core::FileStreamPtr cfile, int depth ) const
 {
 	int i;
 	assert( cfile );
@@ -1005,7 +1005,7 @@ void TiXmlDocument::operator=( const TiXmlDocument& copy )
 
 #ifdef TIXML_MOFLO
 
-bool TiXmlDocument::LoadFile(moFlo::Core::StorageLocation ineStorageLocation, TiXmlEncoding encoding)
+bool TiXmlDocument::LoadFile(ChilliSource::Core::StorageLocation ineStorageLocation, TiXmlEncoding encoding)
 {
 	// See STL_STRING_BUG below.
 	//StringToBuffer buf( value );
@@ -1013,14 +1013,14 @@ bool TiXmlDocument::LoadFile(moFlo::Core::StorageLocation ineStorageLocation, Ti
 	return LoadFile(ineStorageLocation, Value(), encoding);
 }
 
-bool TiXmlDocument::LoadFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string& filename, TiXmlEncoding encoding)
+bool TiXmlDocument::LoadFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string& filename, TiXmlEncoding encoding)
 {
 	//		StringToBuffer f( filename );
 	//		return ( f.buffer && LoadFile( f.buffer, encoding ));
 	return LoadFile(ineStorageLocation, filename.c_str(), encoding );
 }
 
-bool TiXmlDocument::LoadFile(moFlo::Core::StorageLocation ineStorageLocation, const char* _filename, TiXmlEncoding encoding)
+bool TiXmlDocument::LoadFile(ChilliSource::Core::StorageLocation ineStorageLocation, const char* _filename, TiXmlEncoding encoding)
 {
 	// There was a really terrifying little bug here. The code:
 	//		value = filename
@@ -1033,7 +1033,7 @@ bool TiXmlDocument::LoadFile(moFlo::Core::StorageLocation ineStorageLocation, co
 	value = filename;
 	
 	// reading in binary mode so that tinyxml can normalize the EOL
-	moFlo::Core::FileStreamPtr file = TiXmlFOpen(ineStorageLocation, value, moFlo::Core::FileMode::k_readBinary);
+	ChilliSource::Core::FileStreamPtr file = TiXmlFOpen(ineStorageLocation, value, ChilliSource::Core::FileMode::k_readBinary);
 	
 	if (file == NULL || file->IsBad() == false )
 	{
@@ -1050,7 +1050,7 @@ bool TiXmlDocument::LoadFile(moFlo::Core::StorageLocation ineStorageLocation, co
 }
 
 
-bool TiXmlDocument::LoadFile( moFlo::Core::FileStreamPtr file, TiXmlEncoding encoding )
+bool TiXmlDocument::LoadFile( ChilliSource::Core::FileStreamPtr file, TiXmlEncoding encoding )
 {
 	if ( file == NULL || file->IsBad() == true ) 
 	{
@@ -1063,9 +1063,9 @@ bool TiXmlDocument::LoadFile( moFlo::Core::FileStreamPtr file, TiXmlEncoding enc
 	location.Clear();
 	
 	// Get the file size, so we can pre-allocate the string. HUGE speed impact.
-	file->SeekG(0, moFlo::Core::SeekDir::k_end);
+	file->SeekG(0, ChilliSource::Core::SeekDir::k_end);
 	long length = file->TellG();
-	file->SeekG(0, moFlo::Core::SeekDir::k_beginning);
+	file->SeekG(0, ChilliSource::Core::SeekDir::k_beginning);
 	
 	
 	// Strange case, but good to handle up front.
@@ -1165,22 +1165,22 @@ bool TiXmlDocument::LoadFile( moFlo::Core::FileStreamPtr file, TiXmlEncoding enc
 		return true;
 }
 
-bool TiXmlDocument::SaveFile(moFlo::Core::StorageLocation ineStorageLocation)
+bool TiXmlDocument::SaveFile(ChilliSource::Core::StorageLocation ineStorageLocation)
 {
 	return SaveFile(ineStorageLocation, Value());
 }
 
-bool TiXmlDocument::SaveFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string& filename)
+bool TiXmlDocument::SaveFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string& filename)
 {
 	//		StringToBuffer f( filename );
 	//		return ( f.buffer && SaveFile( f.buffer ));
 	return SaveFile(ineStorageLocation, filename.c_str());
 }
 
-bool TiXmlDocument::SaveFile(moFlo::Core::StorageLocation ineStorageLocation, const char * filename)
+bool TiXmlDocument::SaveFile(ChilliSource::Core::StorageLocation ineStorageLocation, const char * filename)
 {
 	// The old c stuff lives on...
-	moFlo::Core::FileStreamPtr fp = TiXmlFOpen(ineStorageLocation, filename, moFlo::Core::FileMode::k_write);
+	ChilliSource::Core::FileStreamPtr fp = TiXmlFOpen(ineStorageLocation, filename, ChilliSource::Core::FileMode::k_write);
 	if (fp != NULL || fp->IsBad() == false )
 	{
 		bool result = SaveFile( fp );
@@ -1191,7 +1191,7 @@ bool TiXmlDocument::SaveFile(moFlo::Core::StorageLocation ineStorageLocation, co
 }
 
 
-bool TiXmlDocument::SaveFile( moFlo::Core::FileStreamPtr file )
+bool TiXmlDocument::SaveFile( ChilliSource::Core::FileStreamPtr file )
 {
 	if ( useMicrosoftBOM ) 
 	{
@@ -1442,7 +1442,7 @@ TiXmlNode* TiXmlDocument::Clone() const
 }
 
 #ifdef TIXML_MOFLO
-void TiXmlDocument::Print( moFlo::Core::FileStreamPtr cfile, int depth ) const
+void TiXmlDocument::Print( ChilliSource::Core::FileStreamPtr cfile, int depth ) const
 {
 	assert( cfile );
 	for ( const TiXmlNode* node=FirstChild(); node; node=node->NextSibling() )
@@ -1519,7 +1519,7 @@ TiXmlAttribute* TiXmlAttribute::Previous()
 */
 
 #ifdef TIXML_MOFLO
-void TiXmlAttribute::Print( moFlo::Core::FileStreamPtr cfile, int /*depth*/, TIXML_STRING* str ) const
+void TiXmlAttribute::Print( ChilliSource::Core::FileStreamPtr cfile, int /*depth*/, TIXML_STRING* str ) const
 {
 	TIXML_STRING n, v;
 
@@ -1633,7 +1633,7 @@ void TiXmlComment::operator=( const TiXmlComment& base )
 }
 
 #ifdef TIXML_MOFLO
-void TiXmlComment::Print( moFlo::Core::FileStreamPtr cfile, int depth ) const
+void TiXmlComment::Print( ChilliSource::Core::FileStreamPtr cfile, int depth ) const
 {
 	assert( cfile );
 	for ( int i=0; i<depth; i++ )
@@ -1681,7 +1681,7 @@ TiXmlNode* TiXmlComment::Clone() const
 }
 
 #ifdef TIXML_MOFLO
-void TiXmlText::Print( moFlo::Core::FileStreamPtr cfile, int depth ) const
+void TiXmlText::Print( ChilliSource::Core::FileStreamPtr cfile, int depth ) const
 {
 	assert( cfile );
 	if ( cdata )
@@ -1791,7 +1791,7 @@ void TiXmlDeclaration::operator=( const TiXmlDeclaration& copy )
 }
 
 #ifdef TIXML_MOFLO
-void TiXmlDeclaration::Print( moFlo::Core::FileStreamPtr cfile, int /*depth*/, TIXML_STRING* str ) const
+void TiXmlDeclaration::Print( ChilliSource::Core::FileStreamPtr cfile, int /*depth*/, TIXML_STRING* str ) const
 {
 	if ( cfile ) 
 	{
@@ -1888,7 +1888,7 @@ TiXmlNode* TiXmlDeclaration::Clone() const
 }
 
 #ifdef TIXML_MOFLO
-void TiXmlUnknown::Print( moFlo::Core::FileStreamPtr cfile, int depth ) const
+void TiXmlUnknown::Print( ChilliSource::Core::FileStreamPtr cfile, int depth ) const
 {
 	for ( int i=0; i<depth; i++ )
 	{
@@ -2208,7 +2208,7 @@ bool TiXmlPrinter::VisitEnter( const TiXmlElement& element, const TiXmlAttribute
 	{
 		buffer += " ";
 #ifdef TIXML_MOFLO
-		attrib->Print( moFlo::Core::FileStreamPtr(), 0, &buffer );
+		attrib->Print( ChilliSource::Core::FileStreamPtr(), 0, &buffer );
 #else
 		attrib->Print( 0, 0, &buffer );
 #endif
@@ -2297,7 +2297,7 @@ bool TiXmlPrinter::Visit( const TiXmlDeclaration& declaration )
 {
 	DoIndent();
 #ifdef TIXML_MOFLO
-	declaration.Print( moFlo::Core::FileStreamPtr(), 0, &buffer );
+	declaration.Print( ChilliSource::Core::FileStreamPtr(), 0, &buffer );
 #else
 	declaration.Print( 0, 0, &buffer );
 #endif

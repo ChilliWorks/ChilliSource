@@ -19,7 +19,7 @@ namespace ChilliSource
 	//----------------------------------------------------------------
 	bool CETC1ImageProvider::IsA(Core::InterfaceIDType inInterfaceID) const
 	{
-		return inInterfaceID == moFlo::Core::IResourceProvider::InterfaceID;
+		return inInterfaceID == ChilliSource::Core::IResourceProvider::InterfaceID;
 	}
 	//----------------------------------------------------------------
 	/// Can Create Resource Of Kind
@@ -48,7 +48,7 @@ namespace ChilliSource
 	bool CETC1ImageProvider::CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
 	{
 		//ensure the extension is correct.
-		if (moFlo::Core::CStringUtils::EndsWith(inFilePath, ETC1Extension, true) == false)
+		if (ChilliSource::Core::CStringUtils::EndsWith(inFilePath, ETC1Extension, true) == false)
 			return false;
 
 		Core::FileStreamPtr pImageFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
@@ -61,19 +61,19 @@ namespace ChilliSource
 			pImageFile->Read((s8*)sHeader.abyPKMTag, sizeof(u8) * 6);
 
 			pImageFile->Read((s8*)&sHeader.wNumberOfMipmaps, sizeof(u16));
-			sHeader.wNumberOfMipmaps = moFlo::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wNumberOfMipmaps));
+			sHeader.wNumberOfMipmaps = ChilliSource::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wNumberOfMipmaps));
 
 			pImageFile->Read((s8*)&sHeader.wTextureWidth, sizeof(u16));
-			sHeader.wTextureWidth = moFlo::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wTextureWidth));
+			sHeader.wTextureWidth = ChilliSource::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wTextureWidth));
 
 			pImageFile->Read((s8*)&sHeader.wTextureHeight, sizeof(u16));
-			sHeader.wTextureHeight = moFlo::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wTextureHeight));
+			sHeader.wTextureHeight = ChilliSource::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wTextureHeight));
 
 			pImageFile->Read((s8*)&sHeader.wOriginalWidth, sizeof(u16));
-			sHeader.wOriginalWidth = moFlo::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wOriginalWidth));
+			sHeader.wOriginalWidth = ChilliSource::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wOriginalWidth));
 
 			pImageFile->Read((s8*)&sHeader.wOriginalHeight, sizeof(u16));
-			sHeader.wOriginalHeight = moFlo::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wOriginalHeight));
+			sHeader.wOriginalHeight = ChilliSource::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wOriginalHeight));
 
 			//get the size of the rest of the data
 			const u32 kstrHeaderSize = 16;

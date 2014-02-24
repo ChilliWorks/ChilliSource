@@ -12,7 +12,7 @@
 #include <UIKit/UIKit.h>
 #include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/VirtualKeyboard.h>
 
-using namespace ChilliSource::iOSPlatform;
+using namespace ChilliSource::iOS;
 
 @interface VirtualKeyboardDelegate : NSObject<UITextFieldDelegate>
 {

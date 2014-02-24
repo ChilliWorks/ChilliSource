@@ -47,7 +47,7 @@ namespace ChilliSource
             /// @param Whether or not the video can be dismissed by tapping.
             /// @param Background colour
             //--------------------------------------------------------------
-            void Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour);
+            void Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour);
             //--------------------------------------------------------------
             /// Present With Subtitles
             ///
@@ -62,7 +62,7 @@ namespace ChilliSource
             //--------------------------------------------------------------
             void PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
                                       Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
-                                      bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour);
+                                      bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour);
             //--------------------------------------------------------------
             /// Is Playing
             ///
@@ -195,7 +195,7 @@ namespace ChilliSource
             CVideoPlayerTapListener* mpTapListener;
             CSubtitlesRenderer* mpSubtitlesRenderer;
             
-            moCore::CColour mBackgroundColour;
+            Core::CColour mBackgroundColour;
             
             bool mbIsAppSuspended;
             bool mbKeepAppRunning;

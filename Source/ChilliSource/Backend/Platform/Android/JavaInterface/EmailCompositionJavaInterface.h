@@ -18,7 +18,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CEmailCompositionJavaInterface: public moFlo::AndroidPlatform::IJavaInterface
+		class CEmailCompositionJavaInterface: public ChilliSource::Android::IJavaInterface
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(SCEmailCompositionJavaInterface);

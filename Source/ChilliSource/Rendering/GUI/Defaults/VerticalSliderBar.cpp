@@ -78,21 +78,21 @@ namespace ChilliSource
             Core::StorageLocation eBarSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("BarSpriteSheetLocation", strValue))
             {
-                eBarSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eBarSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("BarSpriteSheet", strValue))
             {
-                SetBarSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eBarSpriteSheetLocation, strValue));
+                SetBarSpriteSheet(LOAD_RESOURCE(CSpriteSheet, eBarSpriteSheetLocation, strValue));
             }
 			//---Slider Sprite sheet
             Core::StorageLocation eSliderSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SliderSpriteSheetLocation", strValue))
             {
-                eSliderSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSliderSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("SliderSpriteSheet", strValue))
 			{
-				SetSliderSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eSliderSpriteSheetLocation, strValue));
+				SetSliderSpriteSheet(LOAD_RESOURCE(CSpriteSheet, eSliderSpriteSheetLocation, strValue));
 			}
             //---Background index
             if(insParams.TryGetValue("BarSpriteSheetIndex", strValue))
@@ -130,7 +130,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet for the bar
         //--------------------------------------------------------
-        void CVerticalSliderBar::SetBarSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void CVerticalSliderBar::SetBarSpriteSheet(const SpriteSheetPtr& inpSpriteSheet)
         {
 			BarSpriteSheet = inpSpriteSheet;
             mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -145,7 +145,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet for the bar
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CVerticalSliderBar::GetBarSpriteSheet() const
+		const SpriteSheetPtr& CVerticalSliderBar::GetBarSpriteSheet() const
 		{
 			return BarSpriteSheet;
 		}
@@ -154,7 +154,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet for the slider
 		//--------------------------------------------------------
-		void CVerticalSliderBar::SetSliderSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void CVerticalSliderBar::SetSliderSpriteSheet(const SpriteSheetPtr& inpSpriteSheet)
 		{
 			SliderSpriteSheet = inpSpriteSheet;
 			mpSliderImage->SetSpriteSheet(inpSpriteSheet);
@@ -169,7 +169,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet for the slider
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CVerticalSliderBar::GetSliderSpriteSheet() const
+		const SpriteSheetPtr& CVerticalSliderBar::GetSliderSpriteSheet() const
 		{
 			return SliderSpriteSheet;
 		}
@@ -300,7 +300,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //------------------------------------------------------
-        void CVerticalSliderBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void CVerticalSliderBar::Draw(CCanvasRenderer* inpCanvas)
         {
             if(Visible)
             {

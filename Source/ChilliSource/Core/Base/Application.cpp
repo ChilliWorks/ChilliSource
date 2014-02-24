@@ -78,7 +78,7 @@ namespace ChilliSource
         
         CResourceManagerDispenser* CApplication::mpResourceManagerDispenser = NULL;
 		
-        moFlo::IApplicationDelegates* CApplication::mpApplicationDelegates = NULL;
+        ChilliSource::IApplicationDelegates* CApplication::mpApplicationDelegates = NULL;
 
         SystemConfirmDialog::Delegate CApplication::mActiveSysConfirmDelegate;
 
@@ -99,7 +99,7 @@ namespace ChilliSource
 #endif
             
 			pPlatformSystem = IPlatformSystem::Create();
-			mpApplicationDelegates = moFlo::IApplicationDelegates::Create();
+			mpApplicationDelegates = ChilliSource::IApplicationDelegates::Create();
 		}
         //--------------------------------------------------------------------------------------------------
         /// Resolution Sort Predicate

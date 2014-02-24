@@ -29,7 +29,7 @@ namespace ChilliSource
         
         bool CSceneProvider::CanCreateResourceOfKind(InterfaceIDType  inInterfaceID) const
         {
-            return inInterfaceID == moFlo::Core::CSceneDesc::InterfaceID;
+            return inInterfaceID == ChilliSource::Core::CSceneDesc::InterfaceID;
         }
         
         bool CSceneProvider::CanCreateResourceFromFileWithExtension(const std::string &inExtension) const

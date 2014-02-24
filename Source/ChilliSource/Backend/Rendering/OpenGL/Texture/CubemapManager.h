@@ -18,7 +18,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CCubemapManager : public moFlo::Rendering::ICubemapManager
+		class CCubemapManager : public ChilliSource::Rendering::ICubemapManager
 		{
 		public:
 			//----------------------------------------------------------------
@@ -26,7 +26,7 @@ namespace ChilliSource
 			///
 			/// @return Concrete Cubemap resource based on the render system
 			//----------------------------------------------------------------
-			moFlo::Rendering::CubemapPtr CreateCubemapResource();
+			ChilliSource::Rendering::CubemapPtr CreateCubemapResource();
 			//----------------------------------------------------------------
 			/// Create Cubemap From Image
 			///
@@ -35,7 +35,7 @@ namespace ChilliSource
 			/// @param Out: Cubemap resource
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateCubemapFromImages(const DYNAMIC_ARRAY<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, moFlo::Rendering::CubemapPtr& outpCubemap);
+			bool CreateCubemapFromImages(const DYNAMIC_ARRAY<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapPtr& outpCubemap);
 			//----------------------------------------------------------------
 			/// Restore
 			///

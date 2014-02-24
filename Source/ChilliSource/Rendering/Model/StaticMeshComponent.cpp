@@ -39,7 +39,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CStaticMeshComponent::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+		bool CStaticMeshComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return  (inInterfaceID == CStaticMeshComponent::InterfaceID) || 
                     (inInterfaceID == IRenderComponent::InterfaceID) ||

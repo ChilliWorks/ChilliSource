@@ -1,7 +1,7 @@
 /** 
  * File: TouchScreen.h
  * Date: 5 Oct 2010
- * Description: Concrete iOS3_x implementation of moflo::Input::ITouchScreen;
+ * Description: Concrete iOS3_x implementation of ChilliSource::Input::ITouchScreen;
  */
 
 /** 

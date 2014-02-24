@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CCubemap : public moFlo::Rendering::ICubemap
+		class CCubemap : public ChilliSource::Rendering::ICubemap
 		{
 		public:
 

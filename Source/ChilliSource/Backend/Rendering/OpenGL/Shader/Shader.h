@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CShader : public moFlo::Rendering::IShader
+		class CShader : public ChilliSource::Rendering::IShader
 		{
 		public:
 			

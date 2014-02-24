@@ -13,7 +13,7 @@
 
 
 using namespace ChilliSource;
-using namespace ChilliSource::iOSPlatform;
+using namespace ChilliSource::iOS;
 
 @implementation CVideoPlayerTapListener
 //--------------------------------------------------------

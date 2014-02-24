@@ -31,55 +31,55 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer pointer
 			//------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			void Draw(CCanvasRenderer* inpCanvas);
 			//------------------------------------------------------
 			/// Set Background Image
 			///
 			/// @param Texture representing the background
 			//------------------------------------------------------
-			void SetBackgroundImage(const Rendering::TexturePtr& inpTexture);
+			void SetBackgroundImage(const TexturePtr& inpTexture);
 			//------------------------------------------------------
 			/// Set Progress Image
 			///
 			/// @param Texture representing the bar
 			//------------------------------------------------------
-			void SetProgressImage(const Rendering::TexturePtr& inpTexture);
+			void SetProgressImage(const TexturePtr& inpTexture);
 			//------------------------------------------------------
 			/// Get Background Image
 			///
 			/// @return Texture representing the background
 			//------------------------------------------------------
-			const Rendering::TexturePtr& GetBackgroundImage() const;
+			const TexturePtr& GetBackgroundImage() const;
 			//------------------------------------------------------
 			/// Get Progress Image
 			///
 			/// @return Texture representing the bar
 			//------------------------------------------------------
-			const Rendering::TexturePtr& GetProgressImage() const;
+			const TexturePtr& GetProgressImage() const;
 			//--------------------------------------------------------
 			/// Set Background Sprite Sheet
 			///
 			/// @param Sprite sheet
 			//--------------------------------------------------------
-			void SetBackgroundSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetBackgroundSpriteSheet(const SpriteSheetPtr& inpSpriteSheet);
 			//--------------------------------------------------------
 			/// Set Progress Sprite Sheet
 			///
 			/// @param Sprite sheet
 			//--------------------------------------------------------
-			void SetProgressSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetProgressSpriteSheet(const SpriteSheetPtr& inpSpriteSheet);
 			//--------------------------------------------------------
 			/// Get Background Sprite Sheet
 			///
 			/// @return Sprite sheet
 			//--------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetBackgroundSpriteSheet() const;
+			const SpriteSheetPtr& GetBackgroundSpriteSheet() const;
 			//--------------------------------------------------------
 			/// Get Progress Sprite Sheet
 			///
 			/// @return Sprite sheet
 			//--------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetProgressSpriteSheet() const;
+			const SpriteSheetPtr& GetProgressSpriteSheet() const;
 			//--------------------------------------------------------
 			/// Set Background Sprite Sheet Index
 			///
@@ -140,11 +140,11 @@ namespace ChilliSource
 			ImageViewPtr mpBackgroundImage;
 			ImageViewPtr mpProgressImage;
 
-			DECLARE_PROPERTY_A(Rendering::TexturePtr, BackgroundTexture, SetBackgroundImage, GetBackgroundImage);
-			DECLARE_PROPERTY_A(Rendering::TexturePtr, ProgressTexture, SetProgressImage, GetProgressImage);
+			DECLARE_PROPERTY_A(TexturePtr, BackgroundTexture, SetBackgroundImage, GetBackgroundImage);
+			DECLARE_PROPERTY_A(TexturePtr, ProgressTexture, SetProgressImage, GetProgressImage);
 
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, BackgroundSpriteSheet, SetBackgroundSpriteSheet, GetBackgroundSpriteSheet);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, ProgressSpriteSheet, SetProgressSpriteSheet, GetProgressSpriteSheet);
+			DECLARE_PROPERTY_A(SpriteSheetPtr, BackgroundSpriteSheet, SetBackgroundSpriteSheet, GetBackgroundSpriteSheet);
+			DECLARE_PROPERTY_A(SpriteSheetPtr, ProgressSpriteSheet, SetProgressSpriteSheet, GetProgressSpriteSheet);
 
 			DECLARE_PROPERTY_A(u32, BackgroundSpriteSheetIndex, SetBackgroundSpriteSheetIndex, GetBackgroundSpriteSheetIndex);
 			DECLARE_PROPERTY_A(u32, ProgressSpriteSheetIndex, SetProgressSpriteSheetIndex, GetProgressSpriteSheetIndex);

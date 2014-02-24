@@ -49,7 +49,7 @@ namespace ChilliSource
 		///
 		/// @param Texture containing the font 
 		//-------------------------------------------
-		void CFont::SetTexture(const Rendering::TexturePtr& inpTex)
+		void CFont::SetTexture(const TexturePtr& inpTex)
 		{
 			mpTexture = inpTex;
 			mpTexture->SetFilter(ITexture::Filter::k_linear, ITexture::Filter::k_linear);
@@ -59,7 +59,7 @@ namespace ChilliSource
 		///
 		/// @return Font texture 
 		//-------------------------------------------
-		const Rendering::TexturePtr& CFont::GetTexture() const
+		const TexturePtr& CFont::GetTexture() const
 		{
 			return mpTexture;
 		}
@@ -98,7 +98,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite data containing UV's etc
 		//-------------------------------------------
-		void CFont::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpData)
+		void CFont::SetSpriteSheet(const SpriteSheetPtr& inpData)
 		{
 			mpCharacterData = inpData;
 			mpTexture = inpData->GetTexture();
@@ -112,7 +112,7 @@ namespace ChilliSource
             {
 				CharacterInfo sCI;
 				
-				Rendering::CSpriteSheet::Frame sFrame = mpCharacterData->GetSpriteFrameByID(nChar);
+				CSpriteSheet::Frame sFrame = mpCharacterData->GetSpriteFrameByID(nChar);
 				
 				//Get the UV co-ordinates of the character on the font tpage
 				mpCharacterData->GetUVsForFrame(nChar, sCI.sUVs);

@@ -452,7 +452,7 @@ namespace ChilliSource
             void ApplyDefaultMaterials();
             
 		private:
-            typedef DYNAMIC_ARRAY<std::pair<moCore::EntityWeakPtr, s32> > AttachedEntityList;
+            typedef DYNAMIC_ARRAY<std::pair<Core::EntityWeakPtr, s32> > AttachedEntityList;
             AttachedEntityList maAttachedEntities;
 			MeshPtr mpModel;
 			DYNAMIC_ARRAY<MaterialPtr> mMaterials;

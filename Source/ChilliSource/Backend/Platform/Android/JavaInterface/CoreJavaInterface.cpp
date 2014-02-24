@@ -26,7 +26,7 @@
 //--------------------------------------------------------------------------------------
 /// Globals
 //--------------------------------------------------------------------------------------
-moFlo::Core::CApplication* (*BootFunctionPtr)() = NULL;
+ChilliSource::Core::CApplication* (*BootFunctionPtr)() = NULL;
 //--------------------------------------------------------------------------------------
 /// C function declarations
 //--------------------------------------------------------------------------------------
@@ -58,10 +58,10 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_SetupCoreJava
 	//get the java VM and init the Java Interface Manager
 	JavaVM * pJavaVM;
 	inpEnv->GetJavaVM(&pJavaVM);
-	moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->Initialise(pJavaVM);
+	ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->Initialise(pJavaVM);
 
 	//add the core native interface
-	moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(moFlo::AndroidPlatform::JavaInterfacePtr(new moFlo::AndroidPlatform::CCoreJavaInterface()));
+	ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(ChilliSource::Android::JavaInterfacePtr(new ChilliSource::Android::CCoreJavaInterface()));
 }
 //--------------------------------------------------------------------------------------
 /// Initialise
@@ -74,19 +74,19 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_SetupCoreJava
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_Initialise(JNIEnv* inpEnv, jobject inThis)
 {
 	//create the application
-	moFlo::Core::CApplication* pApplication = BootFunctionPtr();
-	moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CCoreJavaInterface>()->SetApplication(pApplication);
+	ChilliSource::Core::CApplication* pApplication = BootFunctionPtr();
+	ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CCoreJavaInterface>()->SetApplication(pApplication);
 
 	//setup other interfaces
 	JavaVM * pJavaVM;
 	inpEnv->GetJavaVM(&pJavaVM);
-	moFlo::AndroidPlatform::SCTouchInputJavaInterface::SetupJavaInterface(pJavaVM);
-	moFlo::AndroidPlatform::SCHttpConnectionJavaInterface::SetupJavaInterface(pJavaVM);
-	moFlo::AndroidPlatform::SCSharedPreferencesJavaInterface::SetupJavaInterface(pJavaVM);
-	moFlo::AndroidPlatform::SCWebViewJavaInterface::SetupJavaInterface(pJavaVM);
-	moFlo::AndroidPlatform::SCSMSCompositionJavaInterface::SetupJavaInterface(pJavaVM);
-	moFlo::AndroidPlatform::SCContactInformationProviderJavaInterface::SetupJavaInterface(pJavaVM);
-	moFlo::AndroidPlatform::SCTwitterAuthenticationActivityJavaInterface::SetupJavaInterface(pJavaVM);
+	ChilliSource::Android::SCTouchInputJavaInterface::SetupJavaInterface(pJavaVM);
+	ChilliSource::Android::SCHttpConnectionJavaInterface::SetupJavaInterface(pJavaVM);
+	ChilliSource::Android::SCSharedPreferencesJavaInterface::SetupJavaInterface(pJavaVM);
+	ChilliSource::Android::SCWebViewJavaInterface::SetupJavaInterface(pJavaVM);
+	ChilliSource::Android::SCSMSCompositionJavaInterface::SetupJavaInterface(pJavaVM);
+	ChilliSource::Android::SCContactInformationProviderJavaInterface::SetupJavaInterface(pJavaVM);
+	ChilliSource::Android::SCTwitterAuthenticationActivityJavaInterface::SetupJavaInterface(pJavaVM);
     
 	//run the application
     pApplication->Run();
@@ -102,7 +102,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_Initialise(JN
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_Resume(JNIEnv* inpEnv, jobject inThis)
 {
-	moFlo::Core::CApplication::Resume();
+	ChilliSource::Core::CApplication::Resume();
 }
 //--------------------------------------------------------------------------------------
 /// Suspend
@@ -114,7 +114,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_Resume(JNIEnv
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_Suspend(JNIEnv* inpEnv, jobject inThis)
 {
-	moFlo::Core::CApplication::Suspend();
+	ChilliSource::Core::CApplication::Suspend();
 }
 //--------------------------------------------------------------------------------------
 /// Destroy
@@ -126,7 +126,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_Suspend(JNIEn
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_DestroyApplication(JNIEnv* inpEnv, jobject inThis)
 {
-	moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CCoreJavaInterface>()->DestroyApplication();
+	ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CCoreJavaInterface>()->DestroyApplication();
 }
 //--------------------------------------------------------------------------------------
 /// Frame Begin
@@ -139,7 +139,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_DestroyApplic
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_FrameBegin(JNIEnv* inpEnv, jobject inThis, f32 infDeltaTime, s64 inddwTimestamp)
 {
 	//Create the message with the time between frames
-	moFlo::Core::CApplication::OnFrameBegin((f32)infDeltaTime, (u64)inddwTimestamp);
+	ChilliSource::Core::CApplication::OnFrameBegin((f32)infDeltaTime, (u64)inddwTimestamp);
 }
 //--------------------------------------------------------------------------------------
 /// Memory Warning
@@ -152,7 +152,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_FrameBegin(JN
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_MemoryWarning(JNIEnv* inpEnv, jobject inThis)
 {
-	moFlo::Core::CApplication::OnApplicationMemoryWarning();
+	ChilliSource::Core::CApplication::OnApplicationMemoryWarning();
 }
 //--------------------------------------------------------------------------------------
 /// Orientation Changed
@@ -165,20 +165,20 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_MemoryWarning
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OrientationChanged(JNIEnv* inpEnv, jobject thiz, s32 indwOrientation)
 {
-	moFlo::Core::ScreenOrientation eScreenOrientation;
+	ChilliSource::Core::ScreenOrientation eScreenOrientation;
 
 	if (indwOrientation == 1)
 	{
-		eScreenOrientation = moFlo::Core::PORTRAIT_UP;
+		eScreenOrientation = ChilliSource::Core::PORTRAIT_UP;
 		DEBUG_LOG("Changing orientation to portrait");
 	}
 	else
 	{
-		eScreenOrientation = moFlo::Core::LANDSCAPE_LEFT;
+		eScreenOrientation = ChilliSource::Core::LANDSCAPE_LEFT;
 		DEBUG_LOG("Changing orientation to landscape");
 	}
 
-	moFlo::Core::CApplication::OnScreenChangedOrientation(eScreenOrientation);
+	ChilliSource::Core::CApplication::OnScreenChangedOrientation(eScreenOrientation);
 }
 //--------------------------------------------------------------------------------------
 /// On Back Pressed
@@ -191,7 +191,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OrientationCh
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OnBackPressed(JNIEnv* inpEnv, jobject inThis)
 {
-	moFlo::Core::CApplication::OnGoBack();
+	ChilliSource::Core::CApplication::OnGoBack();
 }
 //--------------------------------------------------------------------------------------
 /// On Dialog Confirm Pressed
@@ -205,7 +205,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OnBackPressed
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OnDialogConfirmPressed(JNIEnv* inpEnv, jobject inThis, s32 indwID)
 {
-	moFlo::Core::CApplication::OnSystemConfirmDialogResult((u32)indwID, moFlo::SystemConfirmDialog::CONFIRM);
+	ChilliSource::Core::CApplication::OnSystemConfirmDialogResult((u32)indwID, ChilliSource::SystemConfirmDialog::CONFIRM);
 }
 //--------------------------------------------------------------------------------------
 /// On Dialog Cancel Pressed
@@ -219,7 +219,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OnDialogConfi
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OnDialogCancelPressed(JNIEnv* inpEnv, jobject inThis, s32 indwID)
 {
-	moFlo::Core::CApplication::OnSystemConfirmDialogResult((u32)indwID, moFlo::SystemConfirmDialog::CANCEL);
+	ChilliSource::Core::CApplication::OnSystemConfirmDialogResult((u32)indwID, ChilliSource::SystemConfirmDialog::CANCEL);
 }
 //--------------------------------------------------------------------------------------
 /// Application Did Receive Launching URL
@@ -231,7 +231,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OnDialogCance
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_ApplicationDidReceiveLaunchingURL(JNIEnv* inpEnv, jobject inThis, jstring instrURL)
 {
-	moFlo::CLaunchingActions::ApplicationDidReceiveLaunchingURL(moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(instrURL));
+	ChilliSource::CLaunchingActions::ApplicationDidReceiveLaunchingURL(ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrURL));
 }
 
 namespace ChilliSource
@@ -286,7 +286,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		/// Set Application
 		//--------------------------------------------------------------------------------------
-		void CCoreJavaInterface::SetApplication(moFlo::Core::CApplication* inApplication)
+		void CCoreJavaInterface::SetApplication(ChilliSource::Core::CApplication* inApplication)
 		{
 			mApplication = inApplication;
 		}
@@ -301,7 +301,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		/// Get Application
 		//--------------------------------------------------------------------------------------
-		moFlo::Core::CApplication* CCoreJavaInterface::GetApplication()
+		ChilliSource::Core::CApplication* CCoreJavaInterface::GetApplication()
 		{
 			return mApplication;
 		}
@@ -402,12 +402,12 @@ namespace ChilliSource
 			// moFlow orientation
 			if(dwOSOrientation == dwOSConstOrientationProtrait)
 			{
-				dwResult = moFlo::Core::PORTRAIT_UP;
+				dwResult = ChilliSource::Core::PORTRAIT_UP;
 			}
 			else
 			if(dwOSOrientation == dwOSConstOrientationLandscape)
 			{
-				dwResult = moFlo::Core::LANDSCAPE_RIGHT;
+				dwResult = ChilliSource::Core::LANDSCAPE_RIGHT;
 			}
 
 			return dwResult;

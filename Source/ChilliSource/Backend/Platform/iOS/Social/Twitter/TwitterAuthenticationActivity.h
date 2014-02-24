@@ -151,38 +151,38 @@ namespace ChilliSource
 			UITwitterTextFieldDelegate*				mpPINDelegate;
 			UITwitterAlertDelegate*					mpAlertDelegate;
 			
-			moFlo::UnifiedVector2					mvUnifiedSize;
-			moFlo::Core::CVector2					mvPointSize;
-			moFlo::Core::CVector2					mvAbsoluteSize;
-			moFlo::Core::CVector2					mvAbsolutePositionTopLeft;
-			moFlo::Core::CVector2					mvAbsolutePositionCentre;
+			ChilliSource::UnifiedVector2					mvUnifiedSize;
+			ChilliSource::Core::CVector2					mvPointSize;
+			ChilliSource::Core::CVector2					mvAbsoluteSize;
+			ChilliSource::Core::CVector2					mvAbsolutePositionTopLeft;
+			ChilliSource::Core::CVector2					mvAbsolutePositionCentre;
 		};
 	}
 }
 
 @interface UITwitterAuthenticationWebDelegate : NSObject<UIWebViewDelegate>
 {
-	moFlo::iOSPlatform::CTwitterAuthenticationActivity* mpDelegate;
+	ChilliSource::iOS::CTwitterAuthenticationActivity* mpDelegate;
 }
--(void) SetCPPDelegate:(moFlo::iOSPlatform::CTwitterAuthenticationActivity*) inpDelegate;
+-(void) SetCPPDelegate:(ChilliSource::iOS::CTwitterAuthenticationActivity*) inpDelegate;
 
 @end
 
 @interface UITwitterTextFieldDelegate : NSObject<UITextFieldDelegate>
 {
-	moFlo::iOSPlatform::CTwitterAuthenticationActivity* mpDelegate;
+	ChilliSource::iOS::CTwitterAuthenticationActivity* mpDelegate;
 	UITextField* mpTextField;
 }
--(void) SetCPPDelegate:(moFlo::iOSPlatform::CTwitterAuthenticationActivity*) inpDelegate;
+-(void) SetCPPDelegate:(ChilliSource::iOS::CTwitterAuthenticationActivity*) inpDelegate;
 -(void) SetTextField:(UITextField*)inpTextField;
 
 @end
 
 @interface UITwitterAlertDelegate : NSObject<UIAlertViewDelegate>
 {
-	moFlo::iOSPlatform::CTwitterAuthenticationActivity* mpDelegate;
+	ChilliSource::iOS::CTwitterAuthenticationActivity* mpDelegate;
 }
--(void) SetCPPDelegate:(moFlo::iOSPlatform::CTwitterAuthenticationActivity*) inpDelegate;
+-(void) SetCPPDelegate:(ChilliSource::iOS::CTwitterAuthenticationActivity*) inpDelegate;
 
 @end
 

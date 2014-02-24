@@ -55,7 +55,7 @@ namespace ChilliSource
 			}
 
     		mpJavaInterface = GooglePlayIAPJavaInterfacePtr(new CGooglePlayIAPJavaInterface(strPublicKey));
-	        moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
+	        ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
 		}
         //---------------------------------------------------------------
         /// Register Products

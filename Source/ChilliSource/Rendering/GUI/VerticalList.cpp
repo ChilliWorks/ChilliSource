@@ -226,7 +226,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //-------------------------------------------------------
-        void CVerticalList::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void CVerticalList::Draw(CCanvasRenderer* inpCanvas)
         {
             //This is a container view and has no renderables
             //We will need to render our subviews though

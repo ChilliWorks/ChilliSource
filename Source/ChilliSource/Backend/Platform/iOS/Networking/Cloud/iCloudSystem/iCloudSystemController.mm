@@ -30,7 +30,7 @@ static id _instance;
     return self;
 }
 
-- (void)queryContentsOfICloudDirectory:(moFlo::ICloudStorageSystem::OnQueryFilesCompletedDelegate)incQueryFilesDelegate;
+- (void)queryContentsOfICloudDirectory:(ChilliSource::ICloudStorageSystem::OnQueryFilesCompletedDelegate)incQueryFilesDelegate;
 {
 	if(NSClassFromString(@"NSMetadataQuery") != nil)
 	{
@@ -47,7 +47,7 @@ static id _instance;
 	}
 }
 
-- (void)openDocument:(NSString*)instrFileName :(moFlo::iOSPlatform::CiCloudSystem::OnOpenCloudFileCompletedDelegate) incOpenFileCompleteDelegate :(BOOL)inbCreateIfNonExistant
+- (void)openDocument:(NSString*)instrFileName :(ChilliSource::iOS::CiCloudSystem::OnOpenCloudFileCompletedDelegate) incOpenFileCompleteDelegate :(BOOL)inbCreateIfNonExistant
 {
     NSURL *ubiq = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
     NSURL *ubiquitousPackage = [ubiq URLByAppendingPathComponent:instrFileName];
@@ -99,7 +99,7 @@ static id _instance;
     [doc release];
 }
 
-- (void)writeDocumentWithRelativePath:(NSString*)InstrFileName :(NSMutableData*)InstrContents :(moFlo::ICloudStorageSystem::OnSyncFileCompletedDelegate)InpCompleteDelegate
+- (void)writeDocumentWithRelativePath:(NSString*)InstrFileName :(NSMutableData*)InstrContents :(ChilliSource::ICloudStorageSystem::OnSyncFileCompletedDelegate)InpCompleteDelegate
 {
     NSURL *ubiq = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
     NSURL *ubiquitousPackage = [ubiq URLByAppendingPathComponent:InstrFileName];
@@ -131,7 +131,7 @@ static id _instance;
     }];
 }
 
-- (void)writeDocumentWithAbsolutePath:(NSString*)InstrFileName :(NSMutableData*)InstrContents :(moFlo::ICloudStorageSystem::OnSyncFileCompletedDelegate)InpCompleteDelegate
+- (void)writeDocumentWithAbsolutePath:(NSString*)InstrFileName :(NSMutableData*)InstrContents :(ChilliSource::ICloudStorageSystem::OnSyncFileCompletedDelegate)InpCompleteDelegate
 {
     NSLog(@"ICloudSystemController::writeDocument - Writing Document - %@ ", InstrFileName);
     MoFlowUIDocument *doc = [[MoFlowUIDocument alloc] initWithFileURL:([NSURL URLWithString:InstrFileName])];
@@ -170,7 +170,7 @@ static id _instance;
         //Clear out the cached contents
         mpcCachedResults.clear();
         
-        moFlo::ICloudStorageSystem::ICloudFileList mvFileList;
+        ChilliSource::ICloudStorageSystem::ICloudFileList mvFileList;
         
         NSEnumerator *e = [[[incNotification object] results] objectEnumerator];
         NSMetadataItem *result;

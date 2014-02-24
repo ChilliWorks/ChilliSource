@@ -20,7 +20,7 @@ namespace ChilliSource
         ///
         /// A system for updating animation mesh components.
         //======================================================
-        class CAnimatedMeshComponentUpdater : public moCore::ISystem, public moCore::IUpdateable
+        class CAnimatedMeshComponentUpdater : public Core::ISystem, public Core::IUpdateable
         {
         public:
             DECLARE_NAMED_INTERFACE(CAnimatedMeshComponentUpdater);

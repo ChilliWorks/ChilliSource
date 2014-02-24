@@ -22,7 +22,7 @@ namespace ChilliSource
         /// texture size. This should not be used prior to the render
         /// system being initialised.
         //===============================================================
-        class IRenderCapabilities : public moFlo::Core::ISystem
+        class IRenderCapabilities : public ChilliSource::Core::ISystem
         {
         public:
             DECLARE_NAMED_INTERFACE(IRenderCapabilities);

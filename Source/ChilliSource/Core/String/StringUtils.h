@@ -158,7 +158,7 @@ namespace ChilliSource
 			 @param format Format of source string
 			 @return unix timestamp or 0
 			 */
-			static TimeIntervalSecs ToTimestamp(const std::string& instrSource, moFlo::Core::StringTimeFormat ineFormat);
+			static TimeIntervalSecs ToTimestamp(const std::string& instrSource, ChilliSource::Core::StringTimeFormat ineFormat);
 			
 			/**
 			 //Given a classname in the form CClass or IClass would return Class. Useful for datadriven shenanigans

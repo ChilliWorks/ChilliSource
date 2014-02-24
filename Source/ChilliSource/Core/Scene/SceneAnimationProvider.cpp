@@ -27,7 +27,7 @@ namespace ChilliSource{
         
         bool CSceneAnimationProvider::CanCreateResourceOfKind(InterfaceIDType  inInterfaceID) const
         {
-            return inInterfaceID == moFlo::Core::CSceneAnimation::InterfaceID;
+            return inInterfaceID == ChilliSource::Core::CSceneAnimation::InterfaceID;
         }
         
         bool CSceneAnimationProvider::CanCreateResourceFromFileWithExtension(const std::string &inExtension) const

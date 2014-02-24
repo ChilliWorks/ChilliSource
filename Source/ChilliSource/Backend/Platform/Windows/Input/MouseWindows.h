@@ -25,7 +25,7 @@ namespace ChilliSource
 			/// 
 			/// @return Position of cursor on screen
 			//------------------------------------------------------
-			moFlo::Core::CVector2 GetPosition() const;
+			ChilliSource::Core::CVector2 GetPosition() const;
 
 		private:
 

@@ -18,7 +18,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CAmbientLightComponent::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+		bool CAmbientLightComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == ILightComponent::InterfaceID || inInterfaceID == CAmbientLightComponent::InterfaceID;
 		}

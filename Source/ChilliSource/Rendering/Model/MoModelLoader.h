@@ -198,7 +198,7 @@ namespace ChilliSource
             /// @param OUT: A struct containing info on the number of meshes, nodes and joints.
 			/// @return Whether the file is correct
 			//-----------------------------------------------------------------------------
-			bool ReadGlobalHeader(const moFlo::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, const std::string &inFilePath, MeshDataQuantities& outMeshDataQuantities);
+			bool ReadGlobalHeader(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, const std::string &inFilePath, MeshDataQuantities& outMeshDataQuantities);
 			//-----------------------------------------------------------------------------
 			/// Read Skeleton
 			///
@@ -208,7 +208,7 @@ namespace ChilliSource
 			/// @param the output MoModel Declaration
 			/// @return Whether the file is correct
 			//-----------------------------------------------------------------------------
-			bool ReadSkeletonData(const moFlo::Core::FileStreamPtr& inpStream, const MeshDataQuantities& inQuantities, MeshDescriptor& inMeshDescriptor);
+			bool ReadSkeletonData(const ChilliSource::Core::FileStreamPtr& inpStream, const MeshDataQuantities& inQuantities, MeshDescriptor& inMeshDescriptor);
 			//-----------------------------------------------------------------------------
 			/// Read Mesh Header
 			///
@@ -218,7 +218,7 @@ namespace ChilliSource
 			/// @param the output MoModel Declaration
 			/// @return Whether the file is correct
 			//-----------------------------------------------------------------------------
-			bool ReadMeshHeader(const moFlo::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, SubMeshDescriptor& outSubMeshDescriptor,
+			bool ReadMeshHeader(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, SubMeshDescriptor& outSubMeshDescriptor,
 								const std::string& instrMaterialPath);
 			//-----------------------------------------------------------------------------
 			/// Read Mesh Data
@@ -229,7 +229,7 @@ namespace ChilliSource
 			/// @param the output MoModel Declaration
 			/// @return Whether the file is correct
 			//-----------------------------------------------------------------------------
-			bool ReadMeshData(const moFlo::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, SubMeshDescriptor& outSubMeshDescriptor);
+			bool ReadMeshData(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, SubMeshDescriptor& outSubMeshDescriptor);
 			//-----------------------------------------------------------------------------
 			/// Read Vertex Declaration
 			///
@@ -239,7 +239,7 @@ namespace ChilliSource
 			/// @param File stream
 			/// @param MoModel declaration
 			//-----------------------------------------------------------------------------
-			void ReadVertexDeclaration(const moFlo::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor);
+			void ReadVertexDeclaration(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor);
 			//----------------------------------------------------------------------------
 			/// Read Value (Templated)
 			///
@@ -247,7 +247,7 @@ namespace ChilliSource
 			/// @param File stream
 			/// @return Value of type T
 			//----------------------------------------------------------------------------
-			template <typename T> T ReadValue(const moFlo::Core::FileStreamPtr& inpFileStream)
+			template <typename T> T ReadValue(const ChilliSource::Core::FileStreamPtr& inpFileStream)
 			{
 				T Value;
 				inpFileStream->Read(reinterpret_cast<s8*>(&Value), sizeof(T));

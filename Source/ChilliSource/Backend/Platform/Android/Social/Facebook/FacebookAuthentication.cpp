@@ -24,7 +24,7 @@ namespace ChilliSource
 		{
 			mpJavaInterface = SHARED_PTR<CFacebookJavaInterface>(new CFacebookJavaInterface());
 			mpJavaInterface->SetAuthenticationSystem(this);
-	        moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
+	        ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
 		}
 
 		bool CFacebookAuthenticationSystem::IsA(Core::InterfaceIDType inID) const

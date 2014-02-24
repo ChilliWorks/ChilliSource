@@ -100,7 +100,7 @@ namespace ChilliSource
                 
                 if(bHasReceipt)
                 {
-                    pTransaction->strReceipt = moFlo::CBaseEncoding::Base64Encode((s8*)[inpTransaction.transactionReceipt bytes], [inpTransaction.transactionReceipt length]);
+                    pTransaction->strReceipt = ChilliSource::CBaseEncoding::Base64Encode((s8*)[inpTransaction.transactionReceipt bytes], [inpTransaction.transactionReceipt length]);
                 }
             }
             

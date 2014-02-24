@@ -112,7 +112,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool ImageLoader::CreatePNGImageFromFile(Core::STORAGE_LOCATION ineLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::CImage* outpImage)
 		{
-			moFlo::WindowsPlatform::CPngImage image;
+			ChilliSource::Windows::CPngImage image;
 			image.Load(ineLocation, inFilePath);
 
 			if(image.IsLoaded())

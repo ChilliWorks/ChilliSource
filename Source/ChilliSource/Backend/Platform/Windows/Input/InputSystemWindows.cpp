@@ -29,7 +29,7 @@ CInputSystem::~CInputSystem()
 /// @param Interface type to compare
 /// @return Whether the system is of the given type
 //---------------------------------------------------------------
-bool CInputSystem::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+bool CInputSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 {
 	return inInterfaceID == IInputSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
 }
@@ -39,7 +39,7 @@ bool CInputSystem::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
 /// @param Interface of input type to create
 /// @return Whether the system can create input type
 //---------------------------------------------------------------
-bool CInputSystem::CanCreateDeviceWithInterface(moFlo::Core::InterfaceIDType inInterfaceID) const
+bool CInputSystem::CanCreateDeviceWithInterface(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 {
 	return inInterfaceID == ITouchScreen::InterfaceID || inInterfaceID == IMouse::InterfaceID;
 }
@@ -49,7 +49,7 @@ bool CInputSystem::CanCreateDeviceWithInterface(moFlo::Core::InterfaceIDType inI
 /// @param Interface of input type to retreive
 /// @return Pointer to input type or NULL
 //---------------------------------------------------------------
-IInputDevice * CInputSystem::GetDeviceWithInterface(moFlo::Core::InterfaceIDType inInterfaceID)
+IInputDevice * CInputSystem::GetDeviceWithInterface(ChilliSource::Core::InterfaceIDType inInterfaceID)
 {
 	if(inInterfaceID == ITouchScreen::InterfaceID) 
 	{

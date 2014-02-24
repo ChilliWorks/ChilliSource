@@ -75,7 +75,7 @@ namespace ChilliSource
 				strFile = instrFile;                    
 			}
 
-			AndroidPlatform::CFileSystem* pFileSystem = static_cast<AndroidPlatform::CFileSystem*>(Core::CApplication::GetFileSystemPtr());
+			Android::CFileSystem* pFileSystem = static_cast<Android::CFileSystem*>(Core::CApplication::GetFileSystemPtr());
 
 			Core::FileStreamPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FM_READ);
 			std::string strHTMLFileContents;
@@ -157,7 +157,7 @@ namespace ChilliSource
 		///
 		/// @param Unified Vector
 		//-----------------------------------------------
-		void CWebViewActivity::SetSize(const moFlo::UnifiedVector2 & invSize)
+		void CWebViewActivity::SetSize(const ChilliSource::UnifiedVector2 & invSize)
 		{
 			mvUnifiedSize = invSize;
 		}
@@ -168,7 +168,7 @@ namespace ChilliSource
 		///
 		/// return Unified Vector of size
 		//-----------------------------------------------
-		moFlo::UnifiedVector2 CWebViewActivity::GetSize() const {
+		ChilliSource::UnifiedVector2 CWebViewActivity::GetSize() const {
 			return mvUnifiedSize;
 		}
 

@@ -15,7 +15,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        class CSceneProvider : public moFlo::Core::IResourceProvider
+        class CSceneProvider : public ChilliSource::Core::IResourceProvider
         {
         public:
             DECLARE_NAMED_INTERFACE(CSceneProvider);

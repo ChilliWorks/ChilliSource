@@ -64,7 +64,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CMaterial::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+		bool CMaterial::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return (inInterfaceID == CMaterial::InterfaceID);
 		}
@@ -137,7 +137,7 @@ namespace ChilliSource
 		{
 			if(mTextures.size() <= inudwIndex)
 			{
-                Rendering::ITextureManager* pTextureManager = GET_RESOURCE_MANAGER(Rendering::ITextureManager);
+                ITextureManager* pTextureManager = GET_RESOURCE_MANAGER(ITextureManager);
 				return pTextureManager->GetDefaultTexture();
 			}
 			return mTextures[inudwIndex];

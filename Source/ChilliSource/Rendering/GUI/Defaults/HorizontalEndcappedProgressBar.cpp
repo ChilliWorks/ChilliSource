@@ -73,11 +73,11 @@ namespace ChilliSource
             Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SpriteSheetLocation", strValue))
             {
-                eSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("SpriteSheet", strValue))
 			{
-				SetSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eSpriteSheetLocation, strValue));
+				SetSpriteSheet(LOAD_RESOURCE(CSpriteSheet, eSpriteSheetLocation, strValue));
 			}
 			//---Sprite sheet ID
 			if(insParams.TryGetValue("BaseFillSpriteSheetIndexID", strValue))
@@ -147,7 +147,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite Sheet
 		//------------------------------------------------------------------------
-		void CHorizontalEndcappedProgressBar::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void CHorizontalEndcappedProgressBar::SetSpriteSheet(const SpriteSheetPtr& inpSpriteSheet)
 		{
 			SpriteSheet = inpSpriteSheet;
 			mpBGImage->SetSpriteSheet(inpSpriteSheet);
@@ -158,7 +158,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite Sheet
 		//------------------------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CHorizontalEndcappedProgressBar::GetSpriteSheet() const
+		const SpriteSheetPtr& CHorizontalEndcappedProgressBar::GetSpriteSheet() const
 		{
 			return SpriteSheet;
 		}
@@ -316,7 +316,7 @@ namespace ChilliSource
 		///
 		/// @param Renderer
 		//------------------------------------------------------------------------
-		void CHorizontalEndcappedProgressBar::Draw(moFlo::Rendering::CCanvasRenderer* inpCanvas)
+		void CHorizontalEndcappedProgressBar::Draw(CCanvasRenderer* inpCanvas)
 		{
 			if(Visible && SpriteSheet)
 			{

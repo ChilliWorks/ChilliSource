@@ -92,7 +92,7 @@ namespace ChilliSource
                     strFile = instrFile;
                 }
                 
-				iOSPlatform::CFileSystem* pFileSystem = static_cast<iOSPlatform::CFileSystem*>(Core::CApplication::GetFileSystemPtr());
+				iOS::CFileSystem* pFileSystem = static_cast<iOS::CFileSystem*>(Core::CApplication::GetFileSystemPtr());
 
 				std::string strPath;
                 
@@ -255,7 +255,7 @@ namespace ChilliSource
 		///
 		/// @param Unified Vector
 		//-----------------------------------------------
-		void CWebViewActivity::SetSize(const moFlo::UnifiedVector2 & invSize)
+		void CWebViewActivity::SetSize(const ChilliSource::UnifiedVector2 & invSize)
 		{
 			mvUnifiedSize = invSize;
 		}
@@ -266,7 +266,7 @@ namespace ChilliSource
 		///
 		/// return Unified Vector of size
 		//-----------------------------------------------
-		moFlo::UnifiedVector2 CWebViewActivity::GetSize() const 
+		ChilliSource::UnifiedVector2 CWebViewActivity::GetSize() const 
         {
 			return mvUnifiedSize;			
 		}
@@ -286,7 +286,7 @@ namespace ChilliSource
 @implementation UIWebDelegate
 
 
--(void) SetCPPDelegate:(moFlo::iOSPlatform::CWebViewActivity*) inpDelegate
+-(void) SetCPPDelegate:(ChilliSource::iOS::CWebViewActivity*) inpDelegate
 {
 	mpDelegate = inpDelegate;
 }
@@ -299,7 +299,7 @@ namespace ChilliSource
 {
 	if(navigationType == UIWebViewNavigationTypeLinkClicked)
 	{
-        std::string strScheme = moFlo::Core::CStringUtils::NSStringToString([[request URL] scheme]);
+        std::string strScheme = ChilliSource::Core::CStringUtils::NSStringToString([[request URL] scheme]);
         
         if(strScheme != "file")
         {
@@ -316,7 +316,7 @@ namespace ChilliSource
     if(mpDelegate->HasAnchor())
     {
         std::string strJavaScript = "window.location.href = '" + mpDelegate->GetAnchor() + "';";
-        [webView stringByEvaluatingJavaScriptFromString:moFlo::Core::CStringUtils::StringToNSString(strJavaScript)];
+        [webView stringByEvaluatingJavaScriptFromString:ChilliSource::Core::CStringUtils::StringToNSString(strJavaScript)];
     }
     
     mpDelegate->AddDismissButton();

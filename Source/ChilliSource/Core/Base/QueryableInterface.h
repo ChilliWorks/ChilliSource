@@ -32,7 +32,7 @@ namespace ChilliSource
             /// to specific hashing function
             static InterfaceIDType InterfaceIDHash(const std::string& instrName)
             {
-                return ::moFlo::CHashCRC32::GenerateHashCode(instrName);
+                return ::ChilliSource::CHashCRC32::GenerateHashCode(instrName);
             }
             
 			IQueryableInterface(){}
@@ -47,15 +47,15 @@ namespace ChilliSource
 		};
 		
 #define DECLARE_NAMED_INTERFACE(x) \
-static const ::moFlo::Core::InterfaceIDType InterfaceID; \
+static const ::ChilliSource::Core::InterfaceIDType InterfaceID; \
 static const ::std::string TypeName; \
-virtual ::moFlo::Core::InterfaceIDType GetInterfaceID() const; \
+virtual ::ChilliSource::Core::InterfaceIDType GetInterfaceID() const; \
 virtual const ::std::string& GetInterfaceTypeName() const;
         
 #define DEFINE_NAMED_INTERFACE(x) \
-const ::moFlo::Core::InterfaceIDType x::InterfaceID = ::moFlo::Core::IQueryableInterface::InterfaceIDHash(#x); \
-const ::std::string x::TypeName = ::moFlo::Core::CStringUtils::StandardiseClassName(#x); \
-::moFlo::Core::InterfaceIDType x::GetInterfaceID() const \
+const ::ChilliSource::Core::InterfaceIDType x::InterfaceID = ::ChilliSource::Core::IQueryableInterface::InterfaceIDHash(#x); \
+const ::std::string x::TypeName = ::ChilliSource::Core::CStringUtils::StandardiseClassName(#x); \
+::ChilliSource::Core::InterfaceIDType x::GetInterfaceID() const \
 { \
     return InterfaceID; \
 } \

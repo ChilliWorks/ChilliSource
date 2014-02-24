@@ -25,7 +25,7 @@ namespace ChilliSource
         //------------------------------------------------
         bool CAnimatedMeshComponentUpdater::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-            return (CAnimatedMeshComponentUpdater::InterfaceID == inInterfaceID || moCore::IUpdateable::InterfaceID == inInterfaceID);
+            return (CAnimatedMeshComponentUpdater::InterfaceID == inInterfaceID || Core::IUpdateable::InterfaceID == inInterfaceID);
         }
         //------------------------------------------------
         /// Add Component

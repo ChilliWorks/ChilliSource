@@ -55,11 +55,11 @@ namespace ChilliSource
             Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SpriteSheetLocation", strValue))
             {
-                eSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("SpriteSheet", strValue))
             {
-				SetSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eSpriteSheetLocation, strValue));
+				SetSpriteSheet(LOAD_RESOURCE(CSpriteSheet, eSpriteSheetLocation, strValue));
 			}
 			
 			//---Sprite sheet base name
@@ -175,7 +175,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet containing the nine patches
         //---------------------------------------------------------
-        void CStretchableImage::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void CStretchableImage::SetSpriteSheet(const SpriteSheetPtr& inpSpriteSheet)
         {
             SpriteSheet = inpSpriteSheet;
         }
@@ -184,7 +184,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet containing the nine patches
 		//---------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CStretchableImage::GetSpriteSheet() const
+		const SpriteSheetPtr& CStretchableImage::GetSpriteSheet() const
 		{
 			return SpriteSheet;
 		}
@@ -286,7 +286,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //---------------------------------------------------------
-        void CStretchableImage::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void CStretchableImage::Draw(CCanvasRenderer* inpCanvas)
         {
 			//Check if this is on screen
 			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);

@@ -17,7 +17,7 @@
 #include <ChilliSource/Core/Scene/ForwardDeclarations.h>
 #include <ChilliSource/Core/Entity/EntityAnimation.h>
 
-namespace  moFlo
+namespace ChilliSource
 {
     namespace Core 
     {
@@ -58,7 +58,7 @@ namespace  moFlo
             DYNAMIC_ARRAY<EntityAnimationDesc>	asEntityAnimations;
         };
         
-        class CSceneAnimation : public moFlo::Core::IResource
+        class CSceneAnimation : public ChilliSource::Core::IResource
         {
         public:
             DECLARE_NAMED_INTERFACE(CSceneAnimation);

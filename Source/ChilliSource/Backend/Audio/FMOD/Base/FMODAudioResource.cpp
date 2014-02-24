@@ -27,7 +27,7 @@ namespace ChilliSource
         //-------------------------------------------------
         /// Is A
         //-------------------------------------------------
-        bool CFMODAudioResource::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+        bool CFMODAudioResource::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
         {
             return (inInterfaceID == Audio::IAudioResource::InterfaceID);
         }

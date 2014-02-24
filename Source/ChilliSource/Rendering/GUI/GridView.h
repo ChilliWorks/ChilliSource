@@ -153,7 +153,7 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer pointer
 			//-------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			void Draw(CCanvasRenderer* inpCanvas);
 			//-------------------------------------------------------
 			/// Sets Debug Drawing
 			///

@@ -28,7 +28,7 @@
 
 namespace ChilliSource
 {
-    DEFINE_CREATABLE(IApplicationDelegates, WindowsPlatform::CApplicationDelegates);
+    DEFINE_CREATABLE(IApplicationDelegates, Windows::CApplicationDelegates);
     
 	namespace Windows
 	{
@@ -157,7 +157,7 @@ namespace ChilliSource
             
 			//Flip the screen
 			Core::CApplication::SetOrientation(ineOrientation);
-			moFlo::Core::CApplicationEvents::GetScreenOrientationChangedEvent().Invoke(ineOrientation);
+			ChilliSource::Core::CApplicationEvents::GetScreenOrientationChangedEvent().Invoke(ineOrientation);
             
 			DEBUG_LOG("Screen Oriented Notification");
 		}
@@ -190,7 +190,7 @@ namespace ChilliSource
 		{
 			DEBUG_LOG("Memory Warning. Clearing resource cache...");
 			Core::CResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
-			moFlo::Core::CApplicationEvents::GetLowMemoryEvent().Invoke();
+			ChilliSource::Core::CApplicationEvents::GetLowMemoryEvent().Invoke();
 		}
 		//----------------------------------------------
 		/// On Go Back
@@ -199,7 +199,7 @@ namespace ChilliSource
 		{
 			DEBUG_LOG("Go back event.");
 			Core::CApplication::GetStateManagerPtr()->GetActiveState()->OnGoBack();
-			moFlo::Core::CApplicationEvents::GetGoBackEvent().Invoke();
+			ChilliSource::Core::CApplicationEvents::GetGoBackEvent().Invoke();
 		}
 		//----------------------------------------------
 		/// On Set Orientiation

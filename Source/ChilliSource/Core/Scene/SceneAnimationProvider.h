@@ -14,7 +14,7 @@
 namespace ChilliSource {
     namespace Core
     {
-        class CSceneAnimationProvider : public moFlo::Core::IResourceProvider
+        class CSceneAnimationProvider : public ChilliSource::Core::IResourceProvider
         {
         public:
             DECLARE_NAMED_INTERFACE(CSceneAnimationProvider);

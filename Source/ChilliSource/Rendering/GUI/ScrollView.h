@@ -126,7 +126,7 @@ namespace ChilliSource
             ///
             /// @return Content size
             //-----------------------------------------------------
-            moCore::CVector2 GetAbsoluteContentSize() const;
+            Core::CVector2 GetAbsoluteContentSize() const;
             //-------------------------------------------------------
 			/// Draw
 			///
@@ -135,7 +135,7 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer pointer
 			//-------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			void Draw(CCanvasRenderer* inpCanvas);
 			//-------------------------------------------------------
 			/// Sets Debug Drawing
 			///
@@ -150,7 +150,7 @@ namespace ChilliSource
 			///
 			/// @return The current absolute position of the scroll view
 			//-----------------------------------------------------------
-            moCore::CVector2 GetAbsoluteContentPosition() const;
+            Core::CVector2 GetAbsoluteContentPosition() const;
          	//-----------------------------------------------------------
 			/// Get Container View
 			///

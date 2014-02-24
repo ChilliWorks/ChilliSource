@@ -67,7 +67,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		Core::InterfaceIDType ISpriteSheetManager::GetProviderType() const
 		{
-			return Rendering::CSpriteSheet::InterfaceID;
+			return CSpriteSheet::InterfaceID;
 		}
 		//-----------------------------------------------------------------
 		/// Get Resource From File

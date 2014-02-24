@@ -50,7 +50,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------------
         void CRemoteNotificationSystem::OnRemoteTokenReceived(NSData* inpToken)
         {
-            mstrToken = moFlo::CBaseEncoding::Base64Encode((const s8*)[inpToken bytes], inpToken.length);
+            mstrToken = ChilliSource::CBaseEncoding::Base64Encode((const s8*)[inpToken bytes], inpToken.length);
             
             if(mDelegate != NULL)
             {

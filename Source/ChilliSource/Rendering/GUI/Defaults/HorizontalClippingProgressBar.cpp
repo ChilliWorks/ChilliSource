@@ -76,41 +76,41 @@ namespace ChilliSource
             Core::StorageLocation eBackgroundTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("BackgroundTextureLocation", strValue))
             {
-                eBackgroundTextureLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eBackgroundTextureLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("BackgroundTexture", strValue))
             {
-                SetBackgroundImage(LOAD_RESOURCE(Rendering::ITexture, eBackgroundTextureLocation, strValue));
+                SetBackgroundImage(LOAD_RESOURCE(ITexture, eBackgroundTextureLocation, strValue));
             }
             //---Progress Texture
             Core::StorageLocation eProgressTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("ProgressTextureLocation", strValue))
             {
-                eProgressTextureLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eProgressTextureLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("ProgressTexture", strValue))
             {
-                SetProgressImage(LOAD_RESOURCE(Rendering::ITexture, eProgressTextureLocation, strValue));
+                SetProgressImage(LOAD_RESOURCE(ITexture, eProgressTextureLocation, strValue));
             }
             //---Background sprite sheet
             Core::StorageLocation eBackgroundSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("BackgroundSpriteSheetLocation", strValue))
             {
-                eBackgroundSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eBackgroundSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("BackgroundSpriteSheet", strValue))
             {
-                SetBackgroundSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eBackgroundSpriteSheetLocation, strValue));
+                SetBackgroundSpriteSheet(LOAD_RESOURCE(CSpriteSheet, eBackgroundSpriteSheetLocation, strValue));
             }
 			//---Progress sprite sheet
             Core::StorageLocation eProgressSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("ProgressSpriteSheetLocation", strValue))
             {
-                eProgressSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eProgressSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("ProgressSpriteSheet", strValue))
 			{
-				SetProgressSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eProgressSpriteSheetLocation, strValue));
+				SetProgressSpriteSheet(LOAD_RESOURCE(CSpriteSheet, eProgressSpriteSheetLocation, strValue));
 			}
             //---Background index
             if(insParams.TryGetValue("BackgroundSpriteSheetIndex", strValue))
@@ -154,7 +154,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet
 		//--------------------------------------------------------
-		void CHorizontalClippingProgressBar::SetBackgroundSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void CHorizontalClippingProgressBar::SetBackgroundSpriteSheet(const SpriteSheetPtr& inpSpriteSheet)
 		{
 			BackgroundSpriteSheet = inpSpriteSheet;
 			mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -169,7 +169,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet
 		//--------------------------------------------------------
-		void CHorizontalClippingProgressBar::SetProgressSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void CHorizontalClippingProgressBar::SetProgressSpriteSheet(const SpriteSheetPtr& inpSpriteSheet)
 		{
 			ProgressSpriteSheet = inpSpriteSheet;
 			mpProgressImage->SetSpriteSheet(inpSpriteSheet);
@@ -184,7 +184,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CHorizontalClippingProgressBar::GetBackgroundSpriteSheet() const
+		const SpriteSheetPtr& CHorizontalClippingProgressBar::GetBackgroundSpriteSheet() const
 		{
 			return BackgroundSpriteSheet;
 		}
@@ -193,7 +193,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CHorizontalClippingProgressBar::GetProgressSpriteSheet() const
+		const SpriteSheetPtr& CHorizontalClippingProgressBar::GetProgressSpriteSheet() const
 		{
 			return ProgressSpriteSheet;
 		}
@@ -280,7 +280,7 @@ namespace ChilliSource
         ///
         /// @param Texture representing the background
         //------------------------------------------------------
-        void CHorizontalClippingProgressBar::SetBackgroundImage(const Rendering::TexturePtr& inpTexture)
+        void CHorizontalClippingProgressBar::SetBackgroundImage(const TexturePtr& inpTexture)
         {
 			BackgroundTexture = inpTexture;
             mpBackgroundImage->SetTexture(inpTexture);
@@ -290,7 +290,7 @@ namespace ChilliSource
         ///
         /// @param Texture representing the bar
         //------------------------------------------------------
-        void CHorizontalClippingProgressBar::SetProgressImage(const Rendering::TexturePtr& inpTexture)
+        void CHorizontalClippingProgressBar::SetProgressImage(const TexturePtr& inpTexture)
         {
 			ProgressTexture = inpTexture;
             mpProgressImage->SetTexture(inpTexture);
@@ -325,7 +325,7 @@ namespace ChilliSource
 		///
 		/// @return Texture representing the background
 		//------------------------------------------------------
-		const Rendering::TexturePtr& CHorizontalClippingProgressBar::GetBackgroundImage() const
+		const TexturePtr& CHorizontalClippingProgressBar::GetBackgroundImage() const
 		{
 			return BackgroundTexture;
 		}
@@ -334,7 +334,7 @@ namespace ChilliSource
 		///
 		/// @return Texture representing the bar
 		//------------------------------------------------------
-		const Rendering::TexturePtr& CHorizontalClippingProgressBar::GetProgressImage() const
+		const TexturePtr& CHorizontalClippingProgressBar::GetProgressImage() const
 		{
 			return ProgressTexture;
 		}
@@ -346,7 +346,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //------------------------------------------------------
-        void CHorizontalClippingProgressBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void CHorizontalClippingProgressBar::Draw(CCanvasRenderer* inpCanvas)
         {
             if(Visible)
             {

@@ -52,7 +52,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool CMaterialLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == Rendering::CMaterial::InterfaceID);
+			return (inInterfaceID == CMaterial::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource From File With Extension
@@ -318,7 +318,7 @@ namespace ChilliSource
                             {
                                 if(outaShaderFiles[udwShaderFilesIndex].first == kaShaderNodes[i].second)
                                 {
-                                    outaShaderFiles[udwShaderFilesIndex].second.first = moFlo::Core::CStringConverter::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pShaderEl, "location", "Package"));
+                                    outaShaderFiles[udwShaderFilesIndex].second.first = ChilliSource::Core::CStringConverter::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pShaderEl, "location", "Package"));
                                     outaShaderFiles[udwShaderFilesIndex].second.second = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pShaderEl, "file-name", "");
                                     break;
                                 }

@@ -134,13 +134,13 @@ namespace ChilliSource
             ///
             /// @param Texture containing the font
             //-------------------------------------------
-            void SetTexture(const Rendering::TexturePtr& inpTex);
+            void SetTexture(const TexturePtr& inpTex);
 			//-------------------------------------------
 			/// Get Texture
 			///
 			/// @return Font texture 
 			//-------------------------------------------
-			const Rendering::TexturePtr& GetTexture() const;
+			const TexturePtr& GetTexture() const;
 			//-------------------------------------------
 			/// Set Character Data
 			///
@@ -149,7 +149,7 @@ namespace ChilliSource
 			///
 			/// @param Sprite data containing UV's etc
 			//-------------------------------------------
-			void SetSpriteSheet(const Rendering::SpriteSheetPtr& inpData);
+			void SetSpriteSheet(const SpriteSheetPtr& inpData);
 			//-------------------------------------------
 			/// Get Mode Character Height
 			///
@@ -244,10 +244,10 @@ namespace ChilliSource
             DYNAMIC_ARRAY<CKernPair> maPairs;
                     
 			//The font bitmap
-			Rendering::TexturePtr mpTexture;
+			TexturePtr mpTexture;
 			
 			//The location and width etc of each character on the tpage
-			Rendering::SpriteSheetPtr mpCharacterData;
+			SpriteSheetPtr mpCharacterData;
             
             f32 mfLineHeight;
             

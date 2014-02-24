@@ -198,7 +198,7 @@ namespace ChilliSource
             
             typedef fastdelegate::FastDelegate3<const bool, const IHttpRequest::CompletionResult, const IAPReceipt> ValidateReceiptDelegate;
             void ValidateIAPReceipt(const IAPType ineType,
-                                    const moFlo::Networking::IAPTransactionPtr& inpTransInfo,
+                                    const ChilliSource::Networking::IAPTransactionPtr& inpTransInfo,
                                     ValidateReceiptDelegate inDelegate);
             void RedeemIAP(const std::string& instrReceiptId);
             

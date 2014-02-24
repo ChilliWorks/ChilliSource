@@ -212,7 +212,7 @@ namespace ChilliSource
             CGooglePlayExpansionJavaInterface* mpJavaInterface;
         };
 
-        class CGooglePlayExpansionJavaInterface : public moFlo::AndroidPlatform::IJavaInterface
+        class CGooglePlayExpansionJavaInterface : public ChilliSource::Android::IJavaInterface
         {
         public:
 

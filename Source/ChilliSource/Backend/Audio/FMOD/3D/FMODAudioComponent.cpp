@@ -31,7 +31,7 @@ namespace ChilliSource
 					FMOD::Channel* pChannel = (FMOD::Channel*)inpChannel;
 					
 					//Grab the instance pointer so we can notify the correct resource 
-					moFlo::iOSPlatform::CFMODAudioComponent* pAudioResource = NULL;
+					ChilliSource::iOS::CFMODAudioComponent* pAudioResource = NULL;
 					pChannel->getUserData((void**)&pAudioResource);
 					
 					//Now trigger the real callback

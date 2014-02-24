@@ -98,14 +98,14 @@ namespace ChilliSource
 
 @interface EmailDelegate : NSObject<MFMailComposeViewControllerDelegate>
 {
-	moFlo::Social::IEmailCompositionActivity::SendResultDelegate mCallback;
+	ChilliSource::Social::IEmailCompositionActivity::SendResultDelegate mCallback;
 }
 //-------------------------------------------------------
 /// Init With Callback
 ///
 /// @param The send result callback.
 //-------------------------------------------------------
--(EmailDelegate*) initWithCallback:(moFlo::Social::IEmailCompositionActivity::SendResultDelegate)callback;
+-(EmailDelegate*) initWithCallback:(ChilliSource::Social::IEmailCompositionActivity::SendResultDelegate)callback;
 
 @end
 

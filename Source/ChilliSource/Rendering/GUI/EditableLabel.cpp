@@ -334,7 +334,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer
         //-------------------------------------------------------
-        void CEditableLabel::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void CEditableLabel::Draw(CCanvasRenderer* inpCanvas)
         {
 			//Check if this is on screen
 			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
@@ -445,7 +445,7 @@ namespace ChilliSource
         void CEditableLabel::SetKeyboardInputTypeNumeric()
         {
             if(mpKeyboard)
-                mpKeyboard->SetKeyboardType(moFlo::Input::KeyboardType::k_numeric);
+                mpKeyboard->SetKeyboardType(ChilliSource::Input::KeyboardType::k_numeric);
         }
         //-------------------------------------------------
         /// SetKeyboardInputTypeText
@@ -455,14 +455,14 @@ namespace ChilliSource
         void CEditableLabel::SetKeyboardInputTypeText()
         {
             if(mpKeyboard)
-                mpKeyboard->SetKeyboardType(moFlo::Input::KeyboardType::k_text);
+                mpKeyboard->SetKeyboardType(ChilliSource::Input::KeyboardType::k_text);
         }
         //------------------------
         /// Set Keyboard Capitalisation Method
         ///
         /// @param Capitalisation Type
         //------------------------
-        void CEditableLabel::SetKeyboardCapitalisationMethod(moInput::KeyboardCapitalisation ineCapitalisationType)
+        void CEditableLabel::SetKeyboardCapitalisationMethod(Input::KeyboardCapitalisation ineCapitalisationType)
         {
             if(mpKeyboard)
                 mpKeyboard->SetCapitalisationMethod(ineCapitalisationType);

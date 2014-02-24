@@ -37,7 +37,7 @@ namespace ChilliSource
 		/// @param Comparison Type
 		/// @return Whether the class matches the comparison type
 		//----------------------------------------------------------
-		bool CAudioComponent::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+		bool CAudioComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return (inInterfaceID == CAudioComponent::InterfaceID);
 		}

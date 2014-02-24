@@ -28,7 +28,7 @@
 	};																															\
 	DEFINE_STATIC_CONSTRUCTOR(inInputType,																						\
 	{																															\
-		moFlo::ICustomCreator<inOutputType>::SetCreator(fastdelegate::FastDelegate0<inOutputType*>(&inInputType::_Create_));	\
+		ChilliSource::ICustomCreator<inOutputType>::SetCreator(fastdelegate::FastDelegate0<inOutputType*>(&inInputType::_Create_));	\
 	});
 
 namespace ChilliSource

@@ -20,7 +20,7 @@ namespace ChilliSource
 		///
 		/// @return Concrete texture resource based on the render system
 		//----------------------------------------------------------------
-		moFlo::Rendering::TexturePtr CTextureManager::CreateTextureResource()
+		ChilliSource::Rendering::TexturePtr CTextureManager::CreateTextureResource()
 		{
 			Rendering::TexturePtr pTexture(new CTexture(this));
 			AddRestorableTexture(pTexture);
@@ -46,7 +46,7 @@ namespace ChilliSource
 		/// @param Out: Texture resource
 		/// @return Success
 		//----------------------------------------------------------------
-		bool CTextureManager::CreateTextureFromImage(Core::CImage * inpImage, bool inbWithMipsMaps, moFlo::Rendering::TexturePtr& outpTexture)
+		bool CTextureManager::CreateTextureFromImage(Core::CImage * inpImage, bool inbWithMipsMaps, ChilliSource::Rendering::TexturePtr& outpTexture)
 		{
 			SHARED_PTR_CAST<CTexture>(outpTexture)->Init(inpImage, inbWithMipsMaps);
 			return true;
@@ -58,7 +58,7 @@ namespace ChilliSource
 		/// @param Texture height
 		/// @return Texture resource
 		//----------------------------------------------------------------
-		bool CTextureManager::CreateEmptyTexture(u32 inudwWidth, u32 inudwHeight, Core::CImage::Format ineFormat, moFlo::Rendering::TexturePtr& outpTexture)
+		bool CTextureManager::CreateEmptyTexture(u32 inudwWidth, u32 inudwHeight, Core::CImage::Format ineFormat, ChilliSource::Rendering::TexturePtr& outpTexture)
 		{
 			SHARED_PTR_CAST<CTexture>(outpTexture)->Init(inudwWidth, inudwHeight, ineFormat);
 			outpTexture->SetLoaded(true);

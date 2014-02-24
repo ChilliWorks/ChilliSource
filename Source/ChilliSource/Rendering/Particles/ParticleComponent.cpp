@@ -31,7 +31,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CParticleComponent::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+		bool CParticleComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return (inInterfaceID == CParticleComponent::InterfaceID) || 
             (inInterfaceID == IRenderComponent::InterfaceID);

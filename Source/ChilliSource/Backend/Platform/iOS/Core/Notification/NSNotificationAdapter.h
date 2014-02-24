@@ -18,8 +18,8 @@ typedef fastdelegate::FastDelegate0<> NotificationEventDelegate;
 @interface NSNotificationAdapter : NSObject 
 {    
     //---Media Player
-    moFlo::CEvent0<NotificationEventDelegate> mMPLoadStateChangeEvent;
-    moFlo::CEvent0<NotificationEventDelegate> mMPPlaybackDidFinishEvent;
+    ChilliSource::CEvent0<NotificationEventDelegate> mMPLoadStateChangeEvent;
+    ChilliSource::CEvent0<NotificationEventDelegate> mMPPlaybackDidFinishEvent;
 }
 
 //-----------------------------------------------
@@ -52,13 +52,13 @@ typedef fastdelegate::FastDelegate0<> NotificationEventDelegate;
 ///
 /// @return Event Object
 //-----------------------------------------------
--(moFlo::IEvent<NotificationEventDelegate>&) GetMPLoadStateChangeEvent;
+-(ChilliSource::IEvent<NotificationEventDelegate>&) GetMPLoadStateChangeEvent;
 //-----------------------------------------------
 /// Get Movie Player Playback Did Finish Event
 ///
 /// @return Event Object
 //-----------------------------------------------
--(moFlo::IEvent<NotificationEventDelegate>&) GetMPPlaybackDidFinishEvent;
+-(ChilliSource::IEvent<NotificationEventDelegate>&) GetMPPlaybackDidFinishEvent;
 
 //---Notification callbacks
 //-----------------------------------------------

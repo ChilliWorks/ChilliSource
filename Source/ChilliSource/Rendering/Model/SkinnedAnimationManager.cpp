@@ -51,7 +51,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		Core::InterfaceIDType CSkinnedAnimationManager::GetProviderType() const
 		{
-			return Rendering::CSkinnedAnimation::InterfaceID;
+			return CSkinnedAnimation::InterfaceID;
 		}
 		//-----------------------------------------------------------------
 		/// Get Resource From File

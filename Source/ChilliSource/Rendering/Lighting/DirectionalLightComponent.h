@@ -108,8 +108,8 @@ namespace ChilliSource
             
             Core::CMatrix4x4 mmatProj;
             
-            moRendering::TexturePtr mpShadowMap;
-            moRendering::TexturePtr mpShadowMapDebug;
+            TexturePtr mpShadowMap;
+            TexturePtr mpShadowMapDebug;
             
             mutable Core::CVector3 mvDirection;
             

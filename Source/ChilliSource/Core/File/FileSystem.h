@@ -39,7 +39,7 @@ namespace ChilliSource
 		/// Parses a string and returns a storage
         /// location.
 		//============================================
-        moFlo::Core::StorageLocation GetStorageLocationFromString(const std::string & instrStorage);
+        ChilliSource::Core::StorageLocation GetStorageLocationFromString(const std::string & instrStorage);
         //============================================
 		/// Storage Location And Filename
 		///

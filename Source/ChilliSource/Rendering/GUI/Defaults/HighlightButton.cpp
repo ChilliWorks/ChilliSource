@@ -88,41 +88,41 @@ namespace ChilliSource
             Core::StorageLocation eNormalTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("NormalTextureLocation", strValue))
             {
-                eNormalTextureLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eNormalTextureLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("NormalTexture", strValue))
             {
-                SetNormalImage(LOAD_RESOURCE(Rendering::ITexture, eNormalTextureLocation, strValue));
+                SetNormalImage(LOAD_RESOURCE(ITexture, eNormalTextureLocation, strValue));
             }
             //---Highlight
             Core::StorageLocation eHighlightTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("HighlightTextureLocation", strValue))
             {
-                eHighlightTextureLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eHighlightTextureLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("HighlightTexture", strValue))
             {
-                SetHighlightImage(LOAD_RESOURCE(Rendering::ITexture, eHighlightTextureLocation, strValue));
+                SetHighlightImage(LOAD_RESOURCE(ITexture, eHighlightTextureLocation, strValue));
             }
             //---Sprite sheet
             Core::StorageLocation eNormalSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("NormalSpriteSheetLocation", strValue))
             {
-                eNormalSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eNormalSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("NormalSpriteSheet", strValue))
             {
-                SetNormalSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eNormalSpriteSheetLocation, strValue));
+                SetNormalSpriteSheet(LOAD_RESOURCE(CSpriteSheet, eNormalSpriteSheetLocation, strValue));
             }
             //---Sprite sheet
             Core::StorageLocation eHighlightSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("HighlightSpriteSheetLocation", strValue))
             {
-                eHighlightSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eHighlightSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("HighlightSpriteSheet", strValue))
             {
-                SetHighlightSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eHighlightSpriteSheetLocation, strValue));
+                SetHighlightSpriteSheet(LOAD_RESOURCE(CSpriteSheet, eHighlightSpriteSheetLocation, strValue));
             }
             //---Default index
             if(insParams.TryGetValue("NormalSpriteSheetIndex", strValue))
@@ -207,11 +207,11 @@ namespace ChilliSource
             Core::StorageLocation eDeselectAudioLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SelectAudioEffectLocation", strValue))
             {
-                eSelectAudioLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSelectAudioLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("DeselectAudioEffectLocation", strValue))
             {
-                eDeselectAudioLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eDeselectAudioLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("SelectAudioEffect", strValue))
             {
@@ -249,7 +249,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //-----------------------------------------------------------
-        void CHighlightButton::SetNormalImage(const Rendering::TexturePtr& inpTexture)
+        void CHighlightButton::SetNormalImage(const TexturePtr& inpTexture)
         {
             NormalTexture = inpTexture;
 			mpBackgroundImage->SetTexture(inpTexture);
@@ -265,7 +265,7 @@ namespace ChilliSource
 		///
 		/// @return Texture for non-selected button
 		//-----------------------------------------------------------
-		const Rendering::TexturePtr& CHighlightButton::GetNormalImage() const
+		const TexturePtr& CHighlightButton::GetNormalImage() const
 		{
 			return NormalTexture;
 		}
@@ -276,7 +276,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //-----------------------------------------------------------
-        void CHighlightButton::SetHighlightImage(const Rendering::TexturePtr& inpTexture)
+        void CHighlightButton::SetHighlightImage(const TexturePtr& inpTexture)
         {
             HighlightTexture = inpTexture;
             
@@ -290,7 +290,7 @@ namespace ChilliSource
 		///
 		/// @return Texture for selected button
 		//-----------------------------------------------------------
-		const Rendering::TexturePtr& CHighlightButton::GetHighlightImage() const
+		const TexturePtr& CHighlightButton::GetHighlightImage() const
 		{
 			return HighlightTexture;
 		}
@@ -329,7 +329,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet with default image
         //-----------------------------------------------------------
-        void CHighlightButton::SetNormalSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void CHighlightButton::SetNormalSpriteSheet(const SpriteSheetPtr& inpSpriteSheet)
         {
             NormalSpriteSheet = inpSpriteSheet;
             mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -344,7 +344,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet with default image
 		//-----------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CHighlightButton::GetNormalSpriteSheet() const 
+		const SpriteSheetPtr& CHighlightButton::GetNormalSpriteSheet() const 
 		{ 
 			return NormalSpriteSheet; 
 		}
@@ -353,7 +353,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet with highlight image
 		//-----------------------------------------------------------
-		void CHighlightButton::SetHighlightSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void CHighlightButton::SetHighlightSpriteSheet(const SpriteSheetPtr& inpSpriteSheet)
 		{
 			HighlightSpriteSheet = inpSpriteSheet;
 			mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -368,7 +368,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet with highlight image
 		//-----------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CHighlightButton::GetHighlightSpriteSheet() const 
+		const SpriteSheetPtr& CHighlightButton::GetHighlightSpriteSheet() const 
 		{ 
 			return HighlightSpriteSheet; 
 		}
@@ -617,7 +617,7 @@ namespace ChilliSource
 		///
 		/// @param Canvas renderer
 		//-----------------------------------------------------------
-		void CHighlightButton::Draw(Rendering::CCanvasRenderer* inpCanvasRenderer)
+		void CHighlightButton::Draw(CCanvasRenderer* inpCanvasRenderer)
 		{
 			SetSizeFromImage();
 			CGUIView::Draw(inpCanvasRenderer);

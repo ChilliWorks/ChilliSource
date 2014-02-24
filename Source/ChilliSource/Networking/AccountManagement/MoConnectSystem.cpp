@@ -129,7 +129,7 @@ namespace ChilliSource
 		{
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrMoConnectURL + "/ping";
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
+			requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
 			mpHttpConnectionSystem->MakeRequest(requestDetails, IHttpRequest::CompletionDelegate(this, &CMoConnectSystem::TimeRequestCompletes));
 			mTimeRequestCallback = inDelegate;
 		}
@@ -171,7 +171,7 @@ namespace ChilliSource
 		void CMoConnectSystem::GenerateAuthenticationHeader(const std::string& instrURL, Core::ParamDictionary& outsHeader) const
         {
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, instrURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(ChilliSource::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, instrURL, "", strOAuthHeader);
             outsHeader.SetValueForKey("Authorization", strOAuthHeader);
             outsHeader.SetValueForKey("Content-Type", "application/json");
 		}
@@ -191,13 +191,13 @@ namespace ChilliSource
 			
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrMoConnectURL + "/user/create";
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
+			requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
             
             mpOAuthSystem->SetOAuthTokenKey("");
             mpOAuthSystem->SetOAuthTokenSecret("");
             
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(ChilliSource::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             DEBUG_LOG(strOAuthHeader);
             
             mpOAuthSystem->SetOAuthTokenKey(mstrOAuthToken);
@@ -297,7 +297,7 @@ namespace ChilliSource
             {
 				HttpRequestDetails requestDetails;
 				requestDetails.strURL = mstrRealm + "/login/register";
-				requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
+				requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
 				
 				Json::FastWriter cWriter;
 				requestDetails.strBody = cWriter.write(injData);
@@ -414,13 +414,13 @@ namespace ChilliSource
         {
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrMoConnectURL + "/user/login";
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
+			requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
             
             mpOAuthSystem->SetOAuthTokenKey("");
             mpOAuthSystem->SetOAuthTokenSecret("");
             
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(ChilliSource::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             
             mpOAuthSystem->SetOAuthTokenKey(mstrOAuthToken);
             mpOAuthSystem->SetOAuthTokenSecret(mstrOAuthTokenSecret);
@@ -587,7 +587,7 @@ namespace ChilliSource
         {
             HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrRealm + "/push/register";
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
+			requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
 			
 			Json::Value cRegistrationDetails(Json::objectValue);
 			cRegistrationDetails["Service"]     = GetPushNotificationTypeAsString(ineType) + kstrEnvironment;
@@ -599,7 +599,7 @@ namespace ChilliSource
 			cRegistrationMsg["Data"] = cRegistrationDetails;
             
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(ChilliSource::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             DEBUG_LOG(strOAuthHeader);
             
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
@@ -671,10 +671,10 @@ namespace ChilliSource
         {
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrRealm + "/me";
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
+			requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
 			
 			std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(ChilliSource::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");
@@ -709,7 +709,7 @@ namespace ChilliSource
         {
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrRealm + "/me/abandon";
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
+			requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
             
             // Ask to abandon a particular account
             if(!insSignedUser.strToken.empty())
@@ -720,7 +720,7 @@ namespace ChilliSource
             }
             
 			std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(ChilliSource::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             
             // Put the token back
             mpOAuthSystem->SetOAuthTokenKey(mstrOAuthToken);
@@ -922,7 +922,7 @@ namespace ChilliSource
             
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrRealm + instrMethod;
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
+			requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
 			requestDetails.strBody = sNewRequest.cPayload.toUnformattedString();
             GenerateAuthenticationHeader(requestDetails.strURL, requestDetails.sHeaders);
             sNewRequest.pHttpRequest = mpHttpConnectionSystem->MakeRequest(requestDetails, IHttpRequest::CompletionDelegate(this,&CMoConnectSystem::GeneralRequestCompletes));
@@ -1075,7 +1075,7 @@ namespace ChilliSource
 
             requestDetails.strURL = mstrRealm + "/iap/production";
             
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
+			requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
 			
 			Json::Value cIAPDetails(Json::objectValue);
 			cIAPDetails["Service"]     = GetIAPTypeAsString(ineType) + kstrEnvironment;
@@ -1086,7 +1086,7 @@ namespace ChilliSource
 			cIAPMsg["Data"] = cIAPDetails;
       
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(ChilliSource::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             DEBUG_LOG(strOAuthHeader);
             
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
@@ -1200,7 +1200,7 @@ namespace ChilliSource
             DEBUG_LOG("CMoConnectSystem::RedeemIAP");
             HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrRealm + "/iap/redeem";
-			requestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_post;
+			requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
 			
 			Json::Value cIAPDetails(Json::objectValue);
 			cIAPDetails["IAPRecordID"] = instrReceiptId;
@@ -1209,7 +1209,7 @@ namespace ChilliSource
 			cIAPMsg["Data"] = cIAPDetails;
             
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(moFlo::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(ChilliSource::Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             DEBUG_LOG(strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");

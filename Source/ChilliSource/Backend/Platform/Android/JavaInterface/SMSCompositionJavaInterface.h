@@ -17,7 +17,7 @@ namespace ChilliSource
 	namespace Android
 	{
 
-		class SCSMSCompositionJavaInterface: public moFlo::AndroidPlatform::_IJavaInterface
+		class SCSMSCompositionJavaInterface: public ChilliSource::Android::_IJavaInterface
 		{
 		public:
 			//--------------------------------------------------------------------------------------

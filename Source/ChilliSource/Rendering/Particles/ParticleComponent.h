@@ -28,7 +28,7 @@ namespace ChilliSource
 		{
 		public:
             
-            typedef fastdelegate::FastDelegate1<moFlo::Rendering::CParticleComponent*> EmittersFinishedDelegate;
+            typedef fastdelegate::FastDelegate1<CParticleComponent*> EmittersFinishedDelegate;
 			
 			DECLARE_NAMED_INTERFACE(CParticleComponent);
 			
@@ -41,7 +41,7 @@ namespace ChilliSource
 			/// @param Comparison Type
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			bool IsA(moFlo::Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const;
 			
 			
 			//---------------------------------------------------

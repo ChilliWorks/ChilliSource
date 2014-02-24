@@ -184,7 +184,7 @@ CQuaternion CQuaternion::Slerp(const CQuaternion &q1, const CQuaternion &q2, flo
 	return result;
 }
 
-CQuaternion CQuaternion::NLerp(const moFlo::Core::CQuaternion &q1, const moFlo::Core::CQuaternion &q2, float t, bool inbShortestPath)
+CQuaternion CQuaternion::NLerp(const ChilliSource::Core::CQuaternion &q1, const ChilliSource::Core::CQuaternion &q2, float t, bool inbShortestPath)
 {
     const f32 fDot = q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.x * q2.x + q1.w * q2.w;
     CQuaternion rVal;

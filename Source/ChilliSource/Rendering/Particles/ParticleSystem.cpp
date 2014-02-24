@@ -52,7 +52,7 @@ namespace ChilliSource
 		/// @param Comparison Type
 		/// @return Whether the class matches the comparison type
 		//----------------------------------------------------------
-		bool CParticleSystem::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+		bool CParticleSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return (inInterfaceID == CParticleSystem::InterfaceID) || (inInterfaceID == Core::IUpdateable::InterfaceID) || (inInterfaceID == Core::IComponentProducer::InterfaceID);
 		}

@@ -95,9 +95,9 @@ namespace ChilliSource
 			
 			if(!mpWebView)
 			{
-				moFlo::UnifiedVector2 vWebViewUnifiedSize = moFlo::UnifiedVector2(0.0f, 0.0f, mvPointSize.x, (mvPointSize.y - (kfDefaultButtonPointHeight + (kfDefaultPaddingPointSizeTop * 2))));
-				moFlo::Core::CVector2 vWebAbsoluteSize = (mvPointSize * vWebViewUnifiedSize.GetRelative()) + vWebViewUnifiedSize.GetAbsolute();
-				moFlo::Core::CVector2 vWebAbsolutePosition = (mvPointSize - vWebAbsoluteSize);
+				ChilliSource::UnifiedVector2 vWebViewUnifiedSize = ChilliSource::UnifiedVector2(0.0f, 0.0f, mvPointSize.x, (mvPointSize.y - (kfDefaultButtonPointHeight + (kfDefaultPaddingPointSizeTop * 2))));
+				ChilliSource::Core::CVector2 vWebAbsoluteSize = (mvPointSize * vWebViewUnifiedSize.GetRelative()) + vWebViewUnifiedSize.GetAbsolute();
+				ChilliSource::Core::CVector2 vWebAbsolutePosition = (mvPointSize - vWebAbsoluteSize);
 				
 				//Create the view and present it, centered on screen
 				mpWebView = [[UIWebView alloc] initWithFrame:CGRectMake(vWebAbsolutePosition.x, vWebAbsolutePosition.y, vWebAbsoluteSize.x, vWebAbsoluteSize.y)];
@@ -375,7 +375,7 @@ namespace ChilliSource
 		{
 			if(mOnPINResultDelegate)
 			{
-				moFlo::Social::ITwitterAuthenticationActivity::AuthenticationPINResult sResult;
+				ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResult sResult;
 				
 				sResult.strPIN.assign(mstrPIN);
 				mOnPINResultDelegate(sResult);
@@ -467,7 +467,7 @@ namespace ChilliSource
 
 @implementation UITwitterAuthenticationWebDelegate
 
--(void) SetCPPDelegate:(moFlo::iOSPlatform::CTwitterAuthenticationActivity*) inpDelegate
+-(void) SetCPPDelegate:(ChilliSource::iOS::CTwitterAuthenticationActivity*) inpDelegate
 {
 	mpDelegate = inpDelegate;
 }
@@ -503,7 +503,7 @@ namespace ChilliSource
 
 @implementation UITwitterTextFieldDelegate
 
--(void) SetCPPDelegate:(moFlo::iOSPlatform::CTwitterAuthenticationActivity *) inpDelegate
+-(void) SetCPPDelegate:(ChilliSource::iOS::CTwitterAuthenticationActivity *) inpDelegate
 {
 	mpDelegate = inpDelegate;
 }
@@ -544,7 +544,7 @@ namespace ChilliSource
 
 @implementation UITwitterAlertDelegate
 
--(void) SetCPPDelegate:(moFlo::iOSPlatform::CTwitterAuthenticationActivity *) inpDelegate
+-(void) SetCPPDelegate:(ChilliSource::iOS::CTwitterAuthenticationActivity *) inpDelegate
 {
 	mpDelegate = inpDelegate;
 }

@@ -119,7 +119,7 @@ namespace ChilliSource
         {
             //read the JSON
             Json::Value root;
-            moFlo::Core::CUtils::ReadJson(ineStorageLocation, inFilePath, &root);
+            ChilliSource::Core::CUtils::ReadJson(ineStorageLocation, inFilePath, &root);
             
             //get the version number
             u32 udwVersionNumber = root.get(kstrTagVersionNumber, 0).asUInt();
@@ -239,7 +239,7 @@ namespace ChilliSource
         	f32 fLeft = (f32)inBoundsJson.get(kstrTagStyleBoundsLeft, kfDefaultLeft).asDouble();
         	f32 fRight = (f32)inBoundsJson.get(kstrTagStyleBoundsRight, kfDefaultRight).asDouble();
             
-            return Core::Rectangle(moFlo::Core::CVector2(fLeft, fTop), moFlo::Core::CVector2(fRight - fLeft, fBottom - fTop));
+            return Core::Rectangle(ChilliSource::Core::CVector2(fLeft, fTop), ChilliSource::Core::CVector2(fRight - fLeft, fBottom - fTop));
         }
         //-------------------------------------------------------------------------
         // Parse Time

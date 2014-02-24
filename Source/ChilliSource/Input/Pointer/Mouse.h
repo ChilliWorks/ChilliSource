@@ -42,7 +42,7 @@ namespace ChilliSource
 			/// 
 			/// @return Position of cursor on screen
 			//------------------------------------------------------
-			virtual moFlo::Core::CVector2 GetPosition() const = 0;
+			virtual ChilliSource::Core::CVector2 GetPosition() const = 0;
 			//------------------------------------------------------
 			/// Get Mouse Pressed Event
 			///

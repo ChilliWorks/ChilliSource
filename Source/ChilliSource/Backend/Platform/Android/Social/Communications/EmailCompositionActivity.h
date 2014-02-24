@@ -17,7 +17,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CEmailCompositionActivity: public moFlo::Social::IEmailCompositionActivity
+		class CEmailCompositionActivity: public ChilliSource::Social::IEmailCompositionActivity
 		{
 		public:
 			//-------------------------------------------------------

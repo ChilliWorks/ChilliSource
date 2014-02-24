@@ -97,7 +97,7 @@ namespace ChilliSource
             /// @param the index of the required matrix.
             /// @return the matrix.
 			//----------------------------------------------------------
-            const moCore::CMatrix4x4& GetMatrixAtIndex(s32 indwIndex) const;
+            const Core::CMatrix4x4& GetMatrixAtIndex(s32 indwIndex) const;
             //----------------------------------------------------------
 			/// Apply Inverse Bind Pose
             ///

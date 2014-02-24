@@ -25,7 +25,7 @@ namespace ChilliSource
 			CFacebookJavaInterface();
 
 			DECLARE_NAMED_INTERFACE(CFacebookJavaInterface);
-			bool IsA(moCore::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const;
 
 			//--------------------------------------------------------------------------------------
 			/// Set Authentication System

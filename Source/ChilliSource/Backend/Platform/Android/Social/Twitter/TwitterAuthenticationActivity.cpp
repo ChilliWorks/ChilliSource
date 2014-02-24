@@ -82,7 +82,7 @@ namespace ChilliSource
 		{
 			if(mOnPINResultDelegate)
 			{
-				moFlo::Social::ITwitterAuthenticationActivity::AuthenticationPINResult sResult;
+				ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResult sResult;
 
 				sResult.strPIN.assign(mstrPIN);
 				mOnPINResultDelegate(sResult);

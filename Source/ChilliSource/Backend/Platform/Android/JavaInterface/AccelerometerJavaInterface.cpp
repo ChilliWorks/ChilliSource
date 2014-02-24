@@ -33,7 +33,7 @@ extern "C"
 //-------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CAccelerometerNativeInterface_UpdateAcceleration(JNIEnv* inpEnv, jobject inThis, f32 infAccelerationX, f32 infAccelerationY, f32 infAccelerationZ)
 {
-	moFlo::AndroidPlatform::AccelerometerJavaInterfacePtr pAccelerometerJI = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CAccelerometerJavaInterface>();
+	ChilliSource::Android::AccelerometerJavaInterfacePtr pAccelerometerJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CAccelerometerJavaInterface>();
 	if (NULL != pAccelerometerJI)
 	{
 		pAccelerometerJI->UpdateAcceleration(infAccelerationX, infAccelerationY, infAccelerationZ);

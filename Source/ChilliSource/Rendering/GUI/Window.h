@@ -116,13 +116,13 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer
 			//-----------------------------------------------------
-            void Draw(Rendering::CCanvasRenderer * inpCanvas);
+            void Draw(CCanvasRenderer * inpCanvas);
 #endif
 			
             bool mbListeningForTouches;
             
 			// Granting friendly access for the Scene
-			friend void moCore::CScene::BecomeInactive();
+			friend void Core::CScene::BecomeInactive();
         };
     }
 }

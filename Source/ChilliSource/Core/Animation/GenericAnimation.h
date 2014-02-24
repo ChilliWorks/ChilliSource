@@ -242,7 +242,7 @@ namespace ChilliSource
 			
 			if (fAmplitude > 1.0f)
 			{
-				f32 fCeil = moFlo::Core::kPI - asinf(1.0f / fAmplitude);
+				f32 fCeil = ChilliSource::Core::kPI - asinf(1.0f / fAmplitude);
 				fValue = sin(fProg * fCeil * (f32)mudwNumBounces) * fAmplitude;
 			}
 			

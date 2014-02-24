@@ -183,13 +183,13 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Matrix At Index
         //----------------------------------------------------------
-        const moCore::CMatrix4x4& CSkinnedAnimationGroup::GetMatrixAtIndex(s32 indwIndex) const
+        const Core::CMatrix4x4& CSkinnedAnimationGroup::GetMatrixAtIndex(s32 indwIndex) const
         {
             if (indwIndex < mCurrentAnimationMatrices.size())
             {
                 return mCurrentAnimationMatrices[indwIndex];
             }
-            return moCore::CMatrix4x4::IDENTITY;
+            return Core::CMatrix4x4::IDENTITY;
         }
         //----------------------------------------------------------
         /// Apply Inverse Bind Pose

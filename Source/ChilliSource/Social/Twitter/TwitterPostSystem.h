@@ -83,11 +83,11 @@ namespace ChilliSource
             UTF8String strText;
             UTF8String strUrl;
             
-            moCore::StorageLocation eLocalImageStorageLocation;
+            Core::StorageLocation eLocalImageStorageLocation;
             std::string strLocalImagePath;
 		};
 		
-		class ITwitterPostSystem: public moFlo::Core::ISystem
+		class ITwitterPostSystem: public ChilliSource::Core::ISystem
 		{
 		public:
 			
@@ -150,13 +150,13 @@ namespace ChilliSource
 			///
 			/// @param PIN entered by user
 			//------------------------------------------------------------------------
-			virtual void OnPINComplete(const moFlo::Social::ITwitterAuthenticationActivity::AuthenticationPINResult &inResult) = 0;
+			virtual void OnPINComplete(const ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResult &inResult) = 0;
 			//------------------------------------------------------------------------
 			/// Delegate called with the authorisation view is dismissed.
 			///
 			/// @param Pointer to IActivity that has been dismissed
 			//------------------------------------------------------------------------
-			virtual void OnAuthorisationDismissed(moFlo::IActivity* inpActivity) = 0;
+			virtual void OnAuthorisationDismissed(ChilliSource::IActivity* inpActivity) = 0;
 
         protected:
 			//------------------------------------------------------------------------
@@ -216,7 +216,7 @@ namespace ChilliSource
 			/// @param HTTP request
 			/// @param The result from the request
 			//------------------------------------------------------------------------
-			virtual void OnRequestOAuthAccessTokenComplete(moFlo::Networking::HttpRequestPtr inpRequest, moFlo::Networking::IHttpRequest::CompletionResult ineResult);
+			virtual void OnRequestOAuthAccessTokenComplete(ChilliSource::Networking::HttpRequestPtr inpRequest, ChilliSource::Networking::IHttpRequest::CompletionResult ineResult);
 			//------------------------------------------------------------------------
 			/// Trys to load save token and secret keys
 			//------------------------------------------------------------------------
@@ -241,7 +241,7 @@ namespace ChilliSource
 			std::string											mstrSavedOAuthTokenSecret;
 
 			// View used during initial authorisation phase
-			moFlo::Social::ITwitterAuthenticationActivity*		mpAuthenticationView;
+			ChilliSource::Social::ITwitterAuthenticationActivity*		mpAuthenticationView;
 
 			// Post description
 			// This is used to store the Tweet to send if the

@@ -57,7 +57,7 @@ namespace ChilliSource
 		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), ScalableFont(false), ScalableHeight(0), TextOutlined(false), FlipVertical(false), mbLastDrawWasClipped(false), mbLastDrawHadInvalidCharacter(false)
         {
             SetColour(Core::CColour(0.18f, 0.3f, 0.4f, 0.6f));
-            Rendering::ITextureManager* pMgr = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::ITextureManager>();
+            ITextureManager* pMgr = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<ITextureManager>();
             mpWhiteTex = pMgr->GetDefaultTexture();
             
             //Grab the default font
@@ -140,11 +140,11 @@ namespace ChilliSource
             Core::StorageLocation eFontLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("FontLocation", strValue))
             {
-                eFontLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eFontLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("Font", strValue))
             {
-                Font = LOAD_RESOURCE(Rendering::CFont, eFontLocation, strValue);
+                Font = LOAD_RESOURCE(CFont, eFontLocation, strValue);
             }
             //---Text Colour
             if(insParams.TryGetValue("TextColour", strValue))
@@ -186,7 +186,7 @@ namespace ChilliSource
                 FlipVertical = true;
             }
             
-            Rendering::ITextureManager* pMgr = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::ITextureManager>();
+            ITextureManager* pMgr = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<ITextureManager>();
             mpWhiteTex = pMgr->GetDefaultTexture();
             
             if(!Font)
@@ -247,7 +247,7 @@ namespace ChilliSource
         ///
         /// @param Font used to display text
         //-------------------------------------------------------
-        void CLabel::SetFont(const Rendering::FontPtr& inpFont)
+        void CLabel::SetFont(const FontPtr& inpFont)
         {
             Font = inpFont;
             
@@ -258,7 +258,7 @@ namespace ChilliSource
         ///
         /// @return Font used to display text
         //-------------------------------------------------------
-        const Rendering::FontPtr& CLabel::GetFont() const
+        const FontPtr& CLabel::GetFont() const
         {
             return Font;
         }
@@ -594,7 +594,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer
         //-------------------------------------------------------
-        void CLabel::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void CLabel::Draw(CCanvasRenderer* inpCanvas)
         {
             if(Visible)
             {
@@ -645,7 +645,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                    moCore::CColour sDrawColour = TextColour * GetAbsoluteColour();
+                    Core::CColour sDrawColour = TextColour * GetAbsoluteColour();
 #if DEBUG_STRING_CLIPPING
                     if(mbLastDrawWasClipped || mbLastDrawHadInvalidCharacter)
                     {
@@ -653,7 +653,7 @@ namespace ChilliSource
                         sDrawColour.g = (mbLastDrawHadInvalidCharacter? 1.0 : 0.0);
                         sDrawColour.b = 0.0;
                         sDrawColour.a = 1.0;
-                        TimeIntervalSecs uqwMillis = moCore::CApplication::GetSystemTimeInMilliseconds() & 511;
+                        TimeIntervalSecs uqwMillis = Core::CApplication::GetSystemTimeInMilliseconds() & 511;
                         f32 fFade = ((f32)uqwMillis) / 511.0f;
                         
                         if(fFade<0.5){
@@ -692,7 +692,7 @@ namespace ChilliSource
         ///
         /// based on the text contents
         //-------------------------------------------------------
-        void CLabel::DoAutosizing(Rendering::CCanvasRenderer* inpCanvas)
+        void CLabel::DoAutosizing(CCanvasRenderer* inpCanvas)
         {
             if(Autosizing && mCachedChars.empty())
             {

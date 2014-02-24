@@ -22,14 +22,14 @@ namespace ChilliSource
 {
 	namespace iOS
     {
-        class CiCloudSystem : public moFlo::ICloudStorageSystem
+        class CiCloudSystem : public ChilliSource::ICloudStorageSystem
         {
         public:
             DECLARE_NAMED_INTERFACE(CiCloudSystem);
             
             typedef fastdelegate::FastDelegate2<MoFlowUIDocument* , BOOL> OnOpenCloudFileCompletedDelegate;
             
-            CiCloudSystem(moFlo::Networking::IHttpConnectionSystem* inpcHttpConnectionSystem);
+            CiCloudSystem(ChilliSource::Networking::IHttpConnectionSystem* inpcHttpConnectionSystem);
             
             //----------------------------------------------------------
             /// Is A
@@ -38,7 +38,7 @@ namespace ChilliSource
             /// @param Comparison Type
             /// @return Whether the class matches the comparison type
             //----------------------------------------------------------
-            bool IsA(moFlo::Core::InterfaceIDType inInterfaceID) const;
+            bool IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const;
             
             //Returns if the client meets the minimum OS version to use this feature
             static bool IsSupported();
@@ -62,7 +62,7 @@ namespace ChilliSource
             /// @return a pointer to the http connection system as used here
             ///
             //-------------------------------------------------------------            
-            moFlo::Networking::IHttpConnectionSystem* GetHttpConnectionSystem() const { return mpcHttpConnectionSystem; }
+            ChilliSource::Networking::IHttpConnectionSystem* GetHttpConnectionSystem() const { return mpcHttpConnectionSystem; }
             
             //-------------------------------------------------------------
             /// GetAppendedFilePathToStorageArea
@@ -73,7 +73,7 @@ namespace ChilliSource
             /// @param SyncConflictDelegate - Delegate to call when conflict between local and cloud is detected (Note:: if none is provided the sync to cloud will be cancelled automatically)
             /// @return False if iCloud not enabled on system or < iOS 5.0
             //-------------------------------------------------------------
-            bool SyncFileToCloud(moFlo::Core::StorageLocation ineStorageLocation, const std::string& instrFilePath, ICloudStorageSystem::OnSyncFileCompletedDelegate ineSyncCompleteDelegate = NULL, ICloudStorageSystem::OnSyncConflictDelegate ineSyncConflictDelegate = NULL);
+            bool SyncFileToCloud(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string& instrFilePath, ICloudStorageSystem::OnSyncFileCompletedDelegate ineSyncCompleteDelegate = NULL, ICloudStorageSystem::OnSyncConflictDelegate ineSyncConflictDelegate = NULL);
             
             //////////////////////
             //  File Queries    //
@@ -106,13 +106,13 @@ namespace ChilliSource
             struct CloudFileSyncRequest 
             {
                 std::string mstrLocalFilePath;
-                moFlo::Core::StorageLocation meLocalStorageLocation;
+                ChilliSource::Core::StorageLocation meLocalStorageLocation;
                 
-                moFlo::ICloudStorageSystem::OnSyncConflictDelegate mpcSyncConflictDelegate;
-                moFlo::ICloudStorageSystem::OnSyncFileCompletedDelegate mpcSyncCompletedDelegate;
+                ChilliSource::ICloudStorageSystem::OnSyncConflictDelegate mpcSyncConflictDelegate;
+                ChilliSource::ICloudStorageSystem::OnSyncFileCompletedDelegate mpcSyncCompletedDelegate;
 
-                CloudFileSyncRequest(moFlo::Core::StorageLocation ineStorageLocation, const std::string& instrLocalFilePath, moFlo::ICloudStorageSystem::OnSyncConflictDelegate incSyncConflictDelegate = NULL,
-                                     moFlo::ICloudStorageSystem::OnSyncFileCompletedDelegate incSyncCompletedDelegate = NULL)
+                CloudFileSyncRequest(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string& instrLocalFilePath, ChilliSource::ICloudStorageSystem::OnSyncConflictDelegate incSyncConflictDelegate = NULL,
+                                     ChilliSource::ICloudStorageSystem::OnSyncFileCompletedDelegate incSyncCompletedDelegate = NULL)
                 {
                     mstrLocalFilePath = instrLocalFilePath;
                     meLocalStorageLocation = ineStorageLocation;
@@ -140,7 +140,7 @@ namespace ChilliSource
             /// Called when QueryForAllCloudFiles completes
             /// @param invFileList - vector containing urls of all files currently in iCloud
             //-------------------------------------------------------------
-            void QueryDidFinishGathering(moFlo::ICloudStorageSystem::ICloudFileList invFileList);
+            void QueryDidFinishGathering(ChilliSource::ICloudStorageSystem::ICloudFileList invFileList);
             
             //-------------------------------------------------------------
             /// OnCloudFileOpened
@@ -157,17 +157,17 @@ namespace ChilliSource
             /// @param insFileSyncConflict - Struct containing details on the files in conflict
             /// @param inpSyncCompleteDelegate - delegate to call when the choice has been implemented
             //-------------------------------------------------------------
-            void OnConflictResolved(moFlo::ICloudStorageSystem::FileConflictChoice ineChoice, moFlo::ICloudStorageSystem::FileSyncConflict* insFileSyncConflict, moFlo::ICloudStorageSystem::OnSyncFileCompletedDelegate inpSyncCompleteDelegate);
+            void OnConflictResolved(ChilliSource::ICloudStorageSystem::FileConflictChoice ineChoice, ChilliSource::ICloudStorageSystem::FileSyncConflict* insFileSyncConflict, ChilliSource::ICloudStorageSystem::OnSyncFileCompletedDelegate inpSyncCompleteDelegate);
             
             FileToSyncDelegateMap mmFileToSyncDelegateMap;
             
-            moFlo::ICloudStorageSystem::ICloudFileList mvCachedCloudFiles;
+            ChilliSource::ICloudStorageSystem::ICloudFileList mvCachedCloudFiles;
             
             NSFileManager *mpcFileManager;
             
             std::string mstrICloudDirectoryPath;
             
-            moFlo::Networking::IHttpConnectionSystem* mpcHttpConnectionSystem;
+            ChilliSource::Networking::IHttpConnectionSystem* mpcHttpConnectionSystem;
         };
     }
 }

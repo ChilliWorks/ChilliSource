@@ -48,7 +48,7 @@ namespace ChilliSource
 			virtual void BeginFrame(IRenderTarget* inpActiveRenderTarget) = 0;
 			virtual void EndFrame(IRenderTarget* inpActiveRenderTarget) = 0;
 
-			virtual void ApplyMaterial(const Rendering::CMaterial& inMaterial) = 0;
+			virtual void ApplyMaterial(const CMaterial& inMaterial) = 0;
             virtual void ApplyJoints(const DYNAMIC_ARRAY<Core::CMatrix4x4>& inaJoints) = 0;
 			virtual void ApplyCamera(const Core::CVector3& invPosition, const Core::CMatrix4x4& inmatInvView, const Core::CMatrix4x4& inmatProj, const Core::CColour& inClearCol) = 0;
             virtual void SetLight(ILightComponent* inpLightComponent) = 0;
@@ -73,12 +73,12 @@ namespace ChilliSource
             virtual void SetCullFace(CullFace ineCullFace) = 0;
             virtual void SetScissorRegion(const Core::CVector2& invPosition, const Core::CVector2& invSize) = 0;
 			
-			virtual Rendering::IMeshBuffer* CreateBuffer(BufferDescription&) = 0;
-			virtual void RenderVertexBuffer(Rendering::IMeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::CMatrix4x4&) = 0;
-			virtual void RenderBuffer(Rendering::IMeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::CMatrix4x4&) = 0;
+			virtual IMeshBuffer* CreateBuffer(BufferDescription&) = 0;
+			virtual void RenderVertexBuffer(IMeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::CMatrix4x4&) = 0;
+			virtual void RenderBuffer(IMeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::CMatrix4x4&) = 0;
 			
-			virtual Rendering::IRenderTarget* CreateRenderTarget(u32 inWidth, u32 inHeight) = 0;
-			virtual Rendering::IRenderTarget* GetDefaultRenderTarget() = 0;
+			virtual IRenderTarget* CreateRenderTarget(u32 inWidth, u32 inHeight) = 0;
+			virtual IRenderTarget* GetDefaultRenderTarget() = 0;
 			
 			Core::IComponentFactory* GetComponentFactoryPtr(u32 inudwIndex);
 			Core::IComponentFactory& GetComponentFactory(u32 inudwIndex);

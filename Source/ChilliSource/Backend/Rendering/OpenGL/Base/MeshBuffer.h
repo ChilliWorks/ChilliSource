@@ -25,10 +25,10 @@ namespace ChilliSource
 		/// Concrete implementation of a vertex buffer object 
 		/// for OpenGL ES
 		//==========================================================
-		class CMeshBuffer : public moFlo::Rendering::IMeshBuffer
+		class CMeshBuffer : public ChilliSource::Rendering::IMeshBuffer
 		{
 		public:
-			CMeshBuffer(moFlo::Rendering::BufferDescription &inBuffDesc);
+			CMeshBuffer(ChilliSource::Rendering::BufferDescription &inBuffDesc);
 			virtual ~CMeshBuffer();
 			
             //-----------------------------------------------------

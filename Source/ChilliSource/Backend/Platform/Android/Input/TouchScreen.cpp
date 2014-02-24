@@ -17,11 +17,11 @@ namespace ChilliSource
 	{
 		CTouchScreen::CTouchScreen()
 		{
-			moFlo::AndroidPlatform::SCTouchInputJavaInterface::RegisterTouchScreen(this);
+			ChilliSource::Android::SCTouchInputJavaInterface::RegisterTouchScreen(this);
 		}
 		CTouchScreen::~CTouchScreen()
 		{
-			moFlo::AndroidPlatform::SCTouchInputJavaInterface::RegisterTouchScreen(NULL);
+			ChilliSource::Android::SCTouchInputJavaInterface::RegisterTouchScreen(NULL);
 		}
 		bool CTouchScreen::IsA(Core::InterfaceIDType inInterfaceID) const
 		{

@@ -82,7 +82,7 @@ namespace ChilliSource{
 
 @implementation SMSDelegate
 
--(SMSDelegate*) initWithCallback:(moFlo::Social::ISMSCompositionActivity::SendResultDelegate)callback{
+-(SMSDelegate*) initWithCallback:(ChilliSource::Social::ISMSCompositionActivity::SendResultDelegate)callback{
 	
 	if ((self = [super init])){
 	

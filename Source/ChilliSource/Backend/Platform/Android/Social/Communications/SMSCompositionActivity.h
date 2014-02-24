@@ -16,7 +16,7 @@ namespace ChilliSource
 	namespace Android
 	{
 
-		class CSMSCompositionActivity: public moFlo::Social::ISMSCompositionActivity
+		class CSMSCompositionActivity: public ChilliSource::Social::ISMSCompositionActivity
 		{
 		public:
 			virtual bool IsA(Core::InterfaceIDType inID) const;

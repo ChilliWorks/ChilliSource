@@ -19,7 +19,7 @@
 
 #include <jni.h>
 
-moFlo::AndroidPlatform::CGooglePlayExpansionSystem* gpActiveExpansionSystem = NULL;
+ChilliSource::Android::CGooglePlayExpansionSystem* gpActiveExpansionSystem = NULL;
 
 extern "C"
 {
@@ -35,7 +35,7 @@ void Java_com_taggames_moflow_nativeinterface_CExpansionDownloaderNativeInterfac
 {
 	if(gpActiveExpansionSystem)
 	{
-		gpActiveExpansionSystem->OnDownloadStatusChanged(moFlo::AndroidPlatform::DownloadStatus::DOWNLOADING);
+		gpActiveExpansionSystem->OnDownloadStatusChanged(ChilliSource::Android::DownloadStatus::DOWNLOADING);
 	}
 }
 
@@ -43,7 +43,7 @@ void Java_com_taggames_moflow_nativeinterface_CExpansionDownloaderNativeInterfac
 {
 	if(gpActiveExpansionSystem)
 	{
-		gpActiveExpansionSystem->OnDownloadStatusChanged(moFlo::AndroidPlatform::DownloadStatus::COMPLETE);
+		gpActiveExpansionSystem->OnDownloadStatusChanged(ChilliSource::Android::DownloadStatus::COMPLETE);
 	}
 }
 
@@ -51,7 +51,7 @@ void Java_com_taggames_moflow_nativeinterface_CExpansionDownloaderNativeInterfac
 {
 	if(gpActiveExpansionSystem)
 	{
-		gpActiveExpansionSystem->OnDownloadStatusChanged(moFlo::AndroidPlatform::DownloadStatus::FAILED);
+		gpActiveExpansionSystem->OnDownloadStatusChanged(ChilliSource::Android::DownloadStatus::FAILED);
 	}
 }
 
@@ -59,7 +59,7 @@ void Java_com_taggames_moflow_nativeinterface_CExpansionDownloaderNativeInterfac
 {
 	if(gpActiveExpansionSystem)
 	{
-		gpActiveExpansionSystem->OnDownloadStatusChanged(moFlo::AndroidPlatform::DownloadStatus::FAILED_INSUFFICIENT_STORAGE);
+		gpActiveExpansionSystem->OnDownloadStatusChanged(ChilliSource::Android::DownloadStatus::FAILED_INSUFFICIENT_STORAGE);
 	}
 }
 
@@ -67,7 +67,7 @@ void Java_com_taggames_moflow_nativeinterface_CExpansionDownloaderNativeInterfac
 {
 	if(gpActiveExpansionSystem)
 	{
-		gpActiveExpansionSystem->OnDownloadStatusChanged(moFlo::AndroidPlatform::DownloadStatus::PAUSED);
+		gpActiveExpansionSystem->OnDownloadStatusChanged(ChilliSource::Android::DownloadStatus::PAUSED);
 	}
 }
 
@@ -75,7 +75,7 @@ void Java_com_taggames_moflow_nativeinterface_CExpansionDownloaderNativeInterfac
 {
 	if(gpActiveExpansionSystem)
 	{
-		gpActiveExpansionSystem->OnDownloadStatusChanged(moFlo::AndroidPlatform::DownloadStatus::PAUSED_NO_WIFI);
+		gpActiveExpansionSystem->OnDownloadStatusChanged(ChilliSource::Android::DownloadStatus::PAUSED_NO_WIFI);
 	}
 }
 
@@ -92,7 +92,7 @@ namespace ChilliSource
     		gpActiveExpansionSystem = this;
 
     		mpJavaInterface = new CGooglePlayExpansionJavaInterface();
-	        moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(JavaInterfacePtr(mpJavaInterface));
+	        ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(JavaInterfacePtr(mpJavaInterface));
 
 			Core::CApplicationEvents::GetResumeEvent() += Core::ApplicationSystemDelegate(this, &CGooglePlayExpansionSystem::OnApplicationResume);
 			Core::CApplicationEvents::GetLateSuspendEvent() += Core::ApplicationSystemDelegate(this, &CGooglePlayExpansionSystem::OnApplicationSuspend);
@@ -675,62 +675,62 @@ namespace ChilliSource
 
     	void CGooglePlayExpansionJavaInterface::Init()
     	{
-    		JNIEnv* env = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+    		JNIEnv* env = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
     		env->CallVoidMethod(GetJavaObject(), GetMethodID("Init"));
     	}
     	void CGooglePlayExpansionJavaInterface::Download()
     	{
-    		JNIEnv* env = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+    		JNIEnv* env = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
     		env->CallVoidMethod(GetJavaObject(), GetMethodID("Download"));
     	}
     	void CGooglePlayExpansionJavaInterface::PauseDownload()
     	{
-    		JNIEnv* env = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+    		JNIEnv* env = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
     		env->CallVoidMethod(GetJavaObject(), GetMethodID("PauseDownload"));
     	}
     	void CGooglePlayExpansionJavaInterface::ResumeDownload()
     	{
-    		JNIEnv* env = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+    		JNIEnv* env = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
     		env->CallVoidMethod(GetJavaObject(), GetMethodID("ResumeDownload"));
     	}
     	f32 CGooglePlayExpansionJavaInterface::GetDownloadProgress()
     	{
-    		JNIEnv* env = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+    		JNIEnv* env = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
     		return env->CallFloatMethod(GetJavaObject(), GetMethodID("GetDownloadProgress"));
     	}
     	u64 CGooglePlayExpansionJavaInterface::GetExternalFreeStorageInBytes()
     	{
-    		JNIEnv* env = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+    		JNIEnv* env = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
     		return env->CallLongMethod(GetJavaObject(), GetMethodID("GetExternalFreeStorageInBytes"));
     	}
     	void CGooglePlayExpansionJavaInterface::KeepAppAwake()
     	{
-    		JNIEnv* env = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+    		JNIEnv* env = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
     		env->CallVoidMethod(GetJavaObject(), GetMethodID("KeepAppAwake"));
     	}
     	void CGooglePlayExpansionJavaInterface::AllowAppToSleep()
     	{
-    		JNIEnv* env = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+    		JNIEnv* env = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
     		env->CallVoidMethod(GetJavaObject(), GetMethodID("AllowAppToSleep"));
     	}
     	u32 CGooglePlayExpansionJavaInterface::GetNumExpansions()
     	{
-    		JNIEnv* env = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+    		JNIEnv* env = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
     		return env->CallIntMethod(GetJavaObject(), GetMethodID("GetNumExpansions"));
     	}
     	u32 CGooglePlayExpansionJavaInterface::GetExpansionVersionCode(u32 inudwIndex)
     	{
-    		JNIEnv* env = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+    		JNIEnv* env = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
     		return env->CallIntMethod(GetJavaObject(), GetMethodID("GetExpansionVersionCode"), inudwIndex);
     	}
     	u64 CGooglePlayExpansionJavaInterface::GetExpansionFileSizeInBytes(u32 inudwIndex)
     	{
-    		JNIEnv* env = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+    		JNIEnv* env = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
     		return env->CallLongMethod(GetJavaObject(), GetMethodID("GetExpansionFileSize"), inudwIndex);
     	}
     	std::string CGooglePlayExpansionJavaInterface::GetExpansionPath(u32 inudwIndex)
     	{
-    		JNIEnv* env = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+    		JNIEnv* env = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
     		jstring jstrZipPath = (jstring) env->CallObjectMethod(GetJavaObject(), GetMethodID("GetExpansionPath"), inudwIndex);
     		std::string strZipPath = JavaInterfaceUtils::CreateSTDStringFromJString(jstrZipPath);
     		return strZipPath;

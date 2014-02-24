@@ -31,7 +31,7 @@ extern "C"
 //-------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CVideoPlayerNativeInterface_Dismissed(JNIEnv* inpEnv, jobject inThis)
 {
-	moFlo::AndroidPlatform::VideoPlayerJavaInterfacePtr pVideoPJI = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CVideoPlayerJavaInterface>();
+	ChilliSource::Android::VideoPlayerJavaInterfacePtr pVideoPJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CVideoPlayerJavaInterface>();
 	if (pVideoPJI != NULL)
 		pVideoPJI->Dismissed();
 }
@@ -45,7 +45,7 @@ void Java_com_taggames_moflow_nativeinterface_CVideoPlayerNativeInterface_Dismis
 //-------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CVideoPlayerNativeInterface_Stopped(JNIEnv* inpEnv, jobject inThis)
 {
-	moFlo::AndroidPlatform::VideoPlayerJavaInterfacePtr pVideoPJI = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CVideoPlayerJavaInterface>();
+	ChilliSource::Android::VideoPlayerJavaInterfacePtr pVideoPJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CVideoPlayerJavaInterface>();
 	if (pVideoPJI != NULL)
 		pVideoPJI->Stopped();
 }
@@ -60,7 +60,7 @@ void Java_com_taggames_moflow_nativeinterface_CVideoPlayerNativeInterface_Stoppe
 //-------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CVideoPlayerNativeInterface_UpdateSubtitles(JNIEnv* inpEnv, jobject inThis)
 {
-	moFlo::AndroidPlatform::VideoPlayerJavaInterfacePtr pVideoPJI = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CVideoPlayerJavaInterface>();
+	ChilliSource::Android::VideoPlayerJavaInterfacePtr pVideoPJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CVideoPlayerJavaInterface>();
 	if (pVideoPJI != NULL)
 		pVideoPJI->UpdateSubtitles();
 }
@@ -102,7 +102,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Present
 		//--------------------------------------------------------------
-		void CVideoPlayerJavaInterface::Present(bool inbInAPK, std::string instrFilename, bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour,
+		void CVideoPlayerJavaInterface::Present(bool inbInAPK, std::string instrFilename, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour,
 												const OnVideoDismissedDelegate& inDismissedDelegate, const OnVideoStoppedDelegate& inStoppedDelegate)
 		{
 			mVideoDismissedDelegate = inDismissedDelegate;

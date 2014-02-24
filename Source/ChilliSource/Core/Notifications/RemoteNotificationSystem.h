@@ -17,7 +17,7 @@ namespace ChilliSource
     {
         typedef fastdelegate::FastDelegate1<const std::string&> RemoteTokenReceivedDelegate;
 		
-        class IRemoteNotificationSystem : public moFlo::Core::ISystem
+        class IRemoteNotificationSystem : public ChilliSource::Core::ISystem
         {
         public:
             DECLARE_NAMED_INTERFACE(IRemoteNotificationSystem);

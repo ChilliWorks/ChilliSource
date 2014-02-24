@@ -412,7 +412,7 @@ namespace ChilliSource
         {
             for(DYNAMIC_ARRAY<std::string>::const_iterator it = inastrDirs.begin(); it != inastrDirs.end(); ++it)
             {
-                std::string path = moFlo::Core::CStringUtils::StandardisePath(*it);
+                std::string path = ChilliSource::Core::CStringUtils::StandardisePath(*it);
                 NSString* Dir = [NSString stringWithCString:path.c_str() encoding:NSASCIIStringEncoding];
                 
                 if (inbRecursive == true)
@@ -480,12 +480,12 @@ namespace ChilliSource
             std::string strDir;
             if(instrDirectory.empty() == false)
             {
-                strDir = moFlo::Core::CStringUtils::StandardisePath(instrDirectory);
+                strDir = ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory);
             }
             
             for(NSString* FileNames in inpFilenames)
             {
-                outstrFileNames.push_back(strDir + moFlo::Core::CStringUtils::NSStringToString(FileNames));
+                outstrFileNames.push_back(strDir + ChilliSource::Core::CStringUtils::NSStringToString(FileNames));
             }
         }
         //--------------------------------------------------------------
@@ -735,7 +735,7 @@ namespace ChilliSource
             }
             
             //return whether or not the file exists
-			return DoesFileExist(moFlo::Core::CStringUtils::StandardisePath(path));
+			return DoesFileExist(ChilliSource::Core::CStringUtils::StandardisePath(path));
         }
         //--------------------------------------------------------------
         /// Does File Exist In Cached DLC
@@ -755,7 +755,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         bool CFileSystem::DoesFileExistInPackageDLC(const std::string& instrFilepath) const
         {
-            return DoesFileExist(moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mstrPackageDLCPath + instrFilepath));
+            return DoesFileExist(ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mstrPackageDLCPath + instrFilepath));
         }
         //--------------------------------------------------------------
         /// Does Directory Exist
@@ -797,7 +797,7 @@ namespace ChilliSource
             }
             
             //return whether or not the dir exists
-			return DoesFolderExist(moFlo::Core::CStringUtils::StandardisePath(path));
+			return DoesFolderExist(ChilliSource::Core::CStringUtils::StandardisePath(path));
         }
         //--------------------------------------------------------------
         /// Is Storage Location Available
@@ -858,11 +858,11 @@ namespace ChilliSource
             //return whether or not the file exists
             if(inbFolder)
             {
-                return DoesFolderExist(moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath));
+                return DoesFolderExist(ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath));
             }
             else
             {
-                return DoesFileExist(moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath));
+                return DoesFileExist(ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath));
             }
         }
         //--------------------------------------------------------------
@@ -874,7 +874,7 @@ namespace ChilliSource
         std::string CFileSystem::GetDirectoryForDLCFile(const std::string& instrFilePath) const
         {
             std::string strResult;
-            std::string strPath = moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrFilePath);
+            std::string strPath = ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrFilePath);
             
             if(DoesFileExist(strPath))
             {
@@ -899,7 +899,7 @@ namespace ChilliSource
             
             for(u32 i=0; i<3; ++i)
             {
-                std::string strPath = moFlo::Core::CStringUtils::StandardisePath(mastrResourceDirectory[i] + instrFilePath);
+                std::string strPath = ChilliSource::Core::CStringUtils::StandardisePath(mastrResourceDirectory[i] + instrFilePath);
                 if(DoesFileExistInHashedStore(strPath))
                 {
                     strResult = GetStorageLocationDirectory(Core::StorageLocation::k_package) + strPath;

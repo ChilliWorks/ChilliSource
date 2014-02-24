@@ -18,7 +18,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CTextureManager : public moFlo::Rendering::ITextureManager
+		class CTextureManager : public ChilliSource::Rendering::ITextureManager
 		{
 		public:
 			//----------------------------------------------------------------
@@ -26,7 +26,7 @@ namespace ChilliSource
 			///
 			/// @return Concrete texture resource based on the render system
 			//----------------------------------------------------------------
-			moFlo::Rendering::TexturePtr CreateTextureResource();
+			ChilliSource::Rendering::TexturePtr CreateTextureResource();
 			//----------------------------------------------------------------
 			/// Create Empty Texture
 			///
@@ -35,7 +35,7 @@ namespace ChilliSource
 			/// @param Out: Texture resource
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateEmptyTexture(u32 inudwWidth, u32 inudwHeight, Core::CImage::Format ineFormat, moFlo::Rendering::TexturePtr& outpTexture);
+			bool CreateEmptyTexture(u32 inudwWidth, u32 inudwHeight, Core::CImage::Format ineFormat, ChilliSource::Rendering::TexturePtr& outpTexture);
             //----------------------------------------------------------------
 			/// Create Image From Texture
 			///
@@ -53,7 +53,7 @@ namespace ChilliSource
 			/// @param Out: Texture resource
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateTextureFromImage(Core::CImage * inpImage, bool inbWithMipsMaps, moFlo::Rendering::TexturePtr& outpTexture);
+			bool CreateTextureFromImage(Core::CImage * inpImage, bool inbWithMipsMaps, ChilliSource::Rendering::TexturePtr& outpTexture);
 			//----------------------------------------------------------------
 			/// Backup
 			///

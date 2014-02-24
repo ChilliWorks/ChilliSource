@@ -80,7 +80,7 @@ namespace ChilliSource
 			
 		private:
 			
-            Rendering::ISpriteSheetManager* mpSpriteSheetManager;
+            ISpriteSheetManager* mpSpriteSheetManager;
 		};
 	}
 }

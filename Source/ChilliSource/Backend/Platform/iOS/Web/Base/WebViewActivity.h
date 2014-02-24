@@ -71,7 +71,7 @@ namespace ChilliSource
 			///
 			/// @param Unified Vector of size
 			//-----------------------------------------------
-			void SetSize(const moFlo::UnifiedVector2 & invSize);
+			void SetSize(const ChilliSource::UnifiedVector2 & invSize);
 			//-----------------------------------------------
 			/// Get Size
 			///
@@ -79,7 +79,7 @@ namespace ChilliSource
 			///
 			/// return Unified Vector of size
 			//-----------------------------------------------
-			moFlo::UnifiedVector2 GetSize() const;
+			ChilliSource::UnifiedVector2 GetSize() const;
             //-----------------------------------------------
             /// Display
             ///
@@ -135,9 +135,9 @@ namespace ChilliSource
             UIActivityIndicatorView* mpActivityIndicator;
 			UIWebDelegate* mpWebDelegate;
 			
-			moFlo::UnifiedVector2 mvUnifiedSize;
-			moFlo::Core::CVector2 mvAbsoluteSize;
-			moFlo::Core::CVector2 mvAbsolutePosition;
+			ChilliSource::UnifiedVector2 mvUnifiedSize;
+			ChilliSource::Core::CVector2 mvAbsoluteSize;
+			ChilliSource::Core::CVector2 mvAbsolutePosition;
             f32 mfDismissButtonScale;
 			
             std::string mstrAnchor;
@@ -147,9 +147,9 @@ namespace ChilliSource
 
 @interface UIWebDelegate : NSObject<UIWebViewDelegate>
 {
-	moFlo::iOSPlatform::CWebViewActivity* mpDelegate;
+	ChilliSource::iOS::CWebViewActivity* mpDelegate;
 }
--(void) SetCPPDelegate:(moFlo::iOSPlatform::CWebViewActivity*) inpDelegate;
+-(void) SetCPPDelegate:(ChilliSource::iOS::CWebViewActivity*) inpDelegate;
 -(void) OnDismissButtonPressed:(id)inpObject;
 
 @end

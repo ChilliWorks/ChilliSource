@@ -38,7 +38,7 @@ namespace ChilliSource
 		CScene::CScene(Input::IInputSystem* inpInputSystem, f32 infWorldHalfSize) 
         : /*mSpatialGraph(CVector3::ZERO, infWorldHalfSize),*/ mpRootWindow(NULL)
 		{
-			mpRootWindow = (GUI::CWindow*)ISurface::Create();
+			mpRootWindow = (Rendering::CWindow*)ISurface::Create();
 			((ISurface*)mpRootWindow)->SetInputSystem(inpInputSystem);
 		}
 		//-------------------------------------------------------
@@ -176,7 +176,7 @@ namespace ChilliSource
         ///
         /// @return The main window that all the scene's UI is attached to.
         //--------------------------------------------------------------------------------------------------
-        GUI::CWindow* CScene::GetWindowPtr()
+        Rendering::CWindow* CScene::GetWindowPtr()
         {
             return mpRootWindow;
         }

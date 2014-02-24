@@ -81,11 +81,11 @@ namespace ChilliSource
 			/// Sets the delegate to trigger when the user
 			/// confirms PIN entry
 			//-----------------------------------------------
-			void SetAuthenticationPINResultDelegate(const moFlo::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate inCallback);
+			void SetAuthenticationPINResultDelegate(const ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate inCallback);
 		
 		protected:
 			CEvent1<ActivityDismissedEvent>													mOnDismissedEvent;
-			moFlo::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate	mOnPINResultDelegate;
+			ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate	mOnPINResultDelegate;
 			std::string																		mstrURL;
 			std::string																		mstrPIN;
 		};

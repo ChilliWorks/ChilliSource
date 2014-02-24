@@ -36,12 +36,12 @@ extern "C"
 //-----------------------------------------------
 void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnTextAdded(JNIEnv* inpEnv, jobject inThis, jstring injstrText)
 {
-	moFlo::AndroidPlatform::KeyboardJavaInterfacePtr pKeyboardJI = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CKeyboardJavaInterface>();
+	ChilliSource::Android::KeyboardJavaInterfacePtr pKeyboardJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CKeyboardJavaInterface>();
 	if (pKeyboardJI != NULL)
 	{
-		moFlo::UTF8String strText = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateUTF8StringFromJString(injstrText);
-		moFlo::Task1<const moFlo::UTF8String&> task(pKeyboardJI.get(), &moFlo::AndroidPlatform::CKeyboardJavaInterface::OnTextAdded, strText);
-		moFlo::CTaskScheduler::ScheduleMainThreadTask(task);
+		ChilliSource::UTF8String strText = ChilliSource::Android::JavaInterfaceUtils::CreateUTF8StringFromJString(injstrText);
+		ChilliSource::Task1<const ChilliSource::UTF8String&> task(pKeyboardJI.get(), &ChilliSource::Android::CKeyboardJavaInterface::OnTextAdded, strText);
+		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(task);
 	}
 	inpEnv->DeleteLocalRef(injstrText);
 }
@@ -56,11 +56,11 @@ void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnTextAdded(J
 //-----------------------------------------------
 void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnTextDeleted(JNIEnv* inpEnv, jobject inThis)
 {
-	moFlo::AndroidPlatform::KeyboardJavaInterfacePtr pKeyboardJI = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CKeyboardJavaInterface>();
+	ChilliSource::Android::KeyboardJavaInterfacePtr pKeyboardJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CKeyboardJavaInterface>();
 	if (pKeyboardJI != NULL)
 	{
-		moFlo::Task0 task(pKeyboardJI.get(), &moFlo::AndroidPlatform::CKeyboardJavaInterface::OnTextDeleted);
-		moFlo::CTaskScheduler::ScheduleMainThreadTask(task);
+		ChilliSource::Task0 task(pKeyboardJI.get(), &ChilliSource::Android::CKeyboardJavaInterface::OnTextDeleted);
+		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(task);
 	}
 }
 //-----------------------------------------------
@@ -73,11 +73,11 @@ void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnTextDeleted
 //-----------------------------------------------
 void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnKeyboardDismissed(JNIEnv* inpEnv, jobject inThis)
 {
-	moFlo::AndroidPlatform::KeyboardJavaInterfacePtr pKeyboardJI = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CKeyboardJavaInterface>();
+	ChilliSource::Android::KeyboardJavaInterfacePtr pKeyboardJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CKeyboardJavaInterface>();
 	if (pKeyboardJI != NULL)
 	{
-		moFlo::Task0 task(pKeyboardJI.get(), &moFlo::AndroidPlatform::CKeyboardJavaInterface::OnKeyboardDismissed);
-		moFlo::CTaskScheduler::ScheduleMainThreadTask(task);
+		ChilliSource::Task0 task(pKeyboardJI.get(), &ChilliSource::Android::CKeyboardJavaInterface::OnKeyboardDismissed);
+		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(task);
 	}
 }
 

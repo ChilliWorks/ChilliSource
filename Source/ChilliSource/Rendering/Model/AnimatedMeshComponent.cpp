@@ -44,7 +44,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CAnimatedMeshComponent::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+		bool CAnimatedMeshComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return  (inInterfaceID == CAnimatedMeshComponent::InterfaceID) ||
                     (inInterfaceID == IRenderComponent::InterfaceID) ||
@@ -402,7 +402,7 @@ namespace ChilliSource
             //check that it has not already been added.
             for (AttachedEntityList::const_iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
             {
-                if (moCore::EntityPtr pEntity = it->first.lock())
+                if (Core::EntityPtr pEntity = it->first.lock())
                 {
                     if (pEntity.get() == inpEntity.get())
                     {
@@ -419,7 +419,7 @@ namespace ChilliSource
             }
             
             mpEntityOwner->AddChild(inpEntity);
-            maAttachedEntities.push_back(std::pair<moCore::EntityWeakPtr, s32>(moCore::EntityWeakPtr(inpEntity), dwNodeIndex));
+            maAttachedEntities.push_back(std::pair<Core::EntityWeakPtr, s32>(Core::EntityWeakPtr(inpEntity), dwNodeIndex));
         }
         //----------------------------------------------------------
         /// Detatch Entity
@@ -429,7 +429,7 @@ namespace ChilliSource
             AttachedEntityList::iterator it;
             for (it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
             {
-                if (moCore::EntityPtr pEntity = it->first.lock())
+                if (Core::EntityPtr pEntity = it->first.lock())
                 {
                     if (pEntity.get() == inpEntity)
                     {
@@ -451,7 +451,7 @@ namespace ChilliSource
         {
             for (AttachedEntityList::const_iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
             {
-                if (moCore::EntityPtr pEntity = it->first.lock())
+                if (Core::EntityPtr pEntity = it->first.lock())
                 {
                     pEntity->RemoveFromParent();
                 }
@@ -767,11 +767,11 @@ namespace ChilliSource
             {
                 for (AttachedEntityList::iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end();)
                 {
-                    if (moCore::EntityPtr pEntity = it->first.lock())
+                    if (Core::EntityPtr pEntity = it->first.lock())
                     {
                         s32 dwNodeIndex = it->second;
                         
-                        const moCore::CMatrix4x4& matTransform = mActiveAnimationGroup->GetMatrixAtIndex(dwNodeIndex);
+                        const Core::CMatrix4x4& matTransform = mActiveAnimationGroup->GetMatrixAtIndex(dwNodeIndex);
                         pEntity->Transform().SetLocalTransform(matTransform);
                         ++it;
                     }

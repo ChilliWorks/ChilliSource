@@ -467,7 +467,7 @@ namespace ChilliSource
             /// @param Out: The name of the directory to fall back on for resolution dependant assets
             /// @param Out: The name of the directory to use as the default (i.e. for shared assets)
             //--------------------------------------------------------------------------------------------------
-            virtual void SetResourceDirectories(DYNAMIC_ARRAY<moFlo::ResourceDirectoryInfo>& outaResDependantDirectoryInfos, std::string& outstrResDefaultDirectory, std::string& outstrDefaultDirectory) = 0;
+            virtual void SetResourceDirectories(DYNAMIC_ARRAY<ChilliSource::ResourceDirectoryInfo>& outaResDependantDirectoryInfos, std::string& outstrResDefaultDirectory, std::string& outstrDefaultDirectory) = 0;
 			//--------------------------------------------------------------------------------------------------
 			/// Create Systems
 			///
@@ -515,7 +515,7 @@ namespace ChilliSource
             CComponentFactoryDispenser* mpComponentFactoryDispenser;
 		
 			static bool mbHasTouchInput;
-            static moFlo::IApplicationDelegates* mpApplicationDelegates;
+            static ChilliSource::IApplicationDelegates* mpApplicationDelegates;
             static bool mbUpdateSystems;
 		private:
 			

@@ -154,7 +154,7 @@ namespace ChilliSource
 //-------------------------------------------------------
 /// Init With Callback
 //-------------------------------------------------------
--(EmailDelegate*) initWithCallback:(moFlo::Social::IEmailCompositionActivity::SendResultDelegate)callback{
+-(EmailDelegate*) initWithCallback:(ChilliSource::Social::IEmailCompositionActivity::SendResultDelegate)callback{
 	
 	if ((self = [super init])){
 		

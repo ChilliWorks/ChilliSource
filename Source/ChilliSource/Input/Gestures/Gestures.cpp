@@ -455,13 +455,13 @@ namespace ChilliSource
             }
 		}
         
-        void CPinchGesture::PopulateStartPositions(moFlo::Core::CVector2& outvFirstPosition, moFlo::Core::CVector2& outvSecondPosition) const
+        void CPinchGesture::PopulateStartPositions(ChilliSource::Core::CVector2& outvFirstPosition, ChilliSource::Core::CVector2& outvSecondPosition) const
         {
             outvFirstPosition = mvStartPos1;
             outvSecondPosition = mvStartPos2;
         }
         
-        void CPinchGesture::PopulateCurrentPositions(moFlo::Core::CVector2& outvFirstPosition, moFlo::Core::CVector2& outvSecondPosition) const
+        void CPinchGesture::PopulateCurrentPositions(ChilliSource::Core::CVector2& outvFirstPosition, ChilliSource::Core::CVector2& outvSecondPosition) const
         {
             outvFirstPosition = mvCurrentPos1;
             outvSecondPosition = mvCurrentPos2;
@@ -936,7 +936,7 @@ namespace ChilliSource
 				mTimer.Reset();
 				mTimer.Start();
 				
-				mTimer.RegisterPeriodicUpdateDelegate(moFlo::Core::TimeEventDelegate(this, &CHoldGesture::OnGestureUpdate), 0);
+				mTimer.RegisterPeriodicUpdateDelegate(ChilliSource::Core::TimeEventDelegate(this, &CHoldGesture::OnGestureUpdate), 0);
 				
 				// Set the starting location
 				mvLocation = Info.vLocation;
@@ -1032,7 +1032,7 @@ namespace ChilliSource
             mbIsGestureActive = false;
 			mbIsGestureStarted = false;
             
-            mTimer.DeregisterPeriodicUpdateDelegate(moFlo::Core::TimeEventDelegate(this, &CHoldGesture::OnGestureUpdate));
+            mTimer.DeregisterPeriodicUpdateDelegate(ChilliSource::Core::TimeEventDelegate(this, &CHoldGesture::OnGestureUpdate));
 			mTimer.Reset();
         }
         

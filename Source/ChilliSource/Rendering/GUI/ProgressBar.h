@@ -63,7 +63,7 @@ namespace ChilliSource
 			///
 			/// @param Renderer
 			//------------------------------------------------------------------------
-			virtual void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			virtual void Draw(CCanvasRenderer* inpCanvas);
 		private:
 
 			f32 mfProgress;

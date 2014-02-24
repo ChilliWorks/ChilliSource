@@ -140,7 +140,7 @@ namespace ChilliSource
             
         protected:
             
-            Rendering::IRenderSystem* mpRenderSystem;
+            IRenderSystem* mpRenderSystem;
 		};
 	}
 }

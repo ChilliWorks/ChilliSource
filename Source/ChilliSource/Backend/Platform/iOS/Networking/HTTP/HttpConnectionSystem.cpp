@@ -473,7 +473,7 @@ namespace ChilliSource
                                 {
                                     CFStringRef CFUrl = CFHTTPMessageCopyHeaderFieldValue(CFResponse, CFSTR("Location"));
                                     
-                                    std::string strCFUrl = moCore::CStringUtils::NSStringToString((NSString*)CFUrl);
+                                    std::string strCFUrl = Core::CStringUtils::NSStringToString((NSString*)CFUrl);
                                     
                                     msDetails.strRedirectionURL = strCFUrl;
                                     

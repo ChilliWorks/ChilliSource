@@ -19,7 +19,7 @@
 #include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
 #include <ChilliSource/Core/Main/Application.h>
 
-extern moFlo::Core::CApplication* (*BootFunctionPtr)();
+extern ChilliSource::Core::CApplication* (*BootFunctionPtr)();
 
 namespace ChilliSource
 {
@@ -46,7 +46,7 @@ namespace ChilliSource
 			///
 			/// @param the application pointer.
 			//--------------------------------------------------------------------------------------
-			void SetApplication(moFlo::Core::CApplication* inApplication);
+			void SetApplication(ChilliSource::Core::CApplication* inApplication);
 			//--------------------------------------------------------------------------------------
 			/// Destroy Application
 			///
@@ -58,7 +58,7 @@ namespace ChilliSource
 			///
 			/// @return returns the global instance of the MoFlow application.
 			//--------------------------------------------------------------------------------------
-			moFlo::Core::CApplication* GetApplication();
+			ChilliSource::Core::CApplication* GetApplication();
 			//-----------------------------------------
 			/// Set Max FPS
 			///
@@ -292,7 +292,7 @@ namespace ChilliSource
             f32 GetPhysicalScreenSize();
             
 		private:
-			moFlo::Core::CApplication* mApplication;
+			ChilliSource::Core::CApplication* mApplication;
 			s32 mdwScreenWidth;
 			s32 mdwScreenHeight;
 			std::string mstrDeviceModel;

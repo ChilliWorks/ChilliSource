@@ -143,7 +143,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Set Bounds
 		//-----------------------------------------------------------------
-		void CMesh::SetBounds(const moFlo::Core::CVector3& invMinBounds, const moFlo::Core::CVector3& invMaxBounds)
+		void CMesh::SetBounds(const ChilliSource::Core::CVector3& invMinBounds, const ChilliSource::Core::CVector3& invMaxBounds)
 		{
 			//Calculate the size of this meshes bounding box
 			Core::CVector3 vSize = invMaxBounds - invMinBounds;

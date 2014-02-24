@@ -44,7 +44,7 @@ namespace ChilliSource
     	//---------------------------------------------------------------
 		CAmazonIAPSystem::CAmazonIAPSystem(const Core::ParamDictionary& inParams)
 		{
-			mpJavaInterface = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CAmazonIAPJavaInterface>();
+			mpJavaInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CAmazonIAPJavaInterface>();
 			if (mpJavaInterface == NULL)
 			{
 				std::string strPrivateKey = "";
@@ -54,7 +54,7 @@ namespace ChilliSource
 				}
 
 				mpJavaInterface = AmazonIAPJavaInterfacePtr(new CAmazonIAPJavaInterface(strPrivateKey, Core::CDevice::GetUDID()));
-	        	moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
+	        	ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
 			}
 		}
         //---------------------------------------------------------------

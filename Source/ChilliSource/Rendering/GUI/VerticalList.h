@@ -15,7 +15,7 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        class CVerticalList : public moFlo::GUI::CGUIView
+        class CVerticalList : public CGUIView
         {
         public:
             
@@ -120,7 +120,7 @@ namespace ChilliSource
             ///
             /// @param Canvas renderer pointer
             //-------------------------------------------------------
-            void Draw(Rendering::CCanvasRenderer* inpCanvas);
+            void Draw(CCanvasRenderer* inpCanvas);
             //-------------------------------------------------------
             /// Layout Content
             ///

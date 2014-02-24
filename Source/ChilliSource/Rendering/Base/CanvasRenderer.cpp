@@ -174,7 +174,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
 		void CCanvasRenderer::DrawString(const UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                          const Core::CColour & insColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
-										 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped, bool *outpInvalidCharacterFound)
+										 TextJustification ineHorizontalJustification, TextJustification ineVerticalJustification, bool inbFlipVertical, TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped, bool *outpInvalidCharacterFound)
 		{
             //Flush buffer
             if(msCachedSprite.pMaterial != mpDefaultMaterial)
@@ -224,7 +224,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void CCanvasRenderer::DrawDistanceOutlinedString(const UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                                  const Core::CColour & insColour, const Core::CColour& insOutlineColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
-                                                 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
+                                                 TextJustification ineHorizontalJustification, TextJustification ineVerticalJustification, bool inbFlipVertical, TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
 		{
             //Flush buffer
             if(msCachedSprite.pMaterial != mpDistanceFontOutlined)
@@ -245,7 +245,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void CCanvasRenderer::DrawDistanceString(const UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                          const Core::CColour & insColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
-										 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
+										 TextJustification ineHorizontalJustification, TextJustification ineVerticalJustification, bool inbFlipVertical, TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
 		{
             //Flush buffer
             if(msCachedSprite.pMaterial != mpDistanceFont)
@@ -266,7 +266,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void CCanvasRenderer::DrawDistanceStringInternal(const UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                                  const Core::CColour & insColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
-                                                 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
+                                                 TextJustification ineHorizontalJustification, TextJustification ineVerticalJustification, bool inbFlipVertical, TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
         {
             //Get the data about how to draw each character
             //This will be in text space and will be in a single line
@@ -309,7 +309,7 @@ namespace ChilliSource
         /// Calculate the length of a string based on the font
         /// and attributes
         //------------------------------------------------------------
-        f32 CCanvasRenderer::CalculateStringWidth(const UTF8String& insString, const Rendering::FontPtr& inpFont, f32 infSize, f32 infCharSpacing)
+        f32 CCanvasRenderer::CalculateStringWidth(const UTF8String& insString, const FontPtr& inpFont, f32 infSize, f32 infCharSpacing)
         {
             Core::CVector2 vSize;
             
@@ -390,7 +390,7 @@ namespace ChilliSource
                     }
                     
                     //Construct the characters position and size from the font sheet to get the width
-                    BuildCharacter(inpFont, Char, NextChar, moCore::CVector2::ZERO, infSize, infCharSpacing, fLastCharacterWidth, CurrentLine);
+                    BuildCharacter(inpFont, Char, NextChar, Core::CVector2::ZERO, infSize, infCharSpacing, fLastCharacterWidth, CurrentLine);
                     vCursorPos.x += fLastCharacterWidth;
 
                     UTF8String sTemp;
@@ -466,8 +466,8 @@ namespace ChilliSource
 		/// from the given string
         //-------------------------------------------
 		void CCanvasRenderer::BuildString(const FontPtr& inpFont, const UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
-										  const Core::CVector2& invBounds, u32 inudwNumLines, GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification,
-                                          bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, bool * outpClipped, bool * outpInvalidCharacterFound)
+										  const Core::CVector2& invBounds, u32 inudwNumLines, TextJustification ineHorizontalJustification, TextJustification ineVerticalJustification,
+                                          bool inbFlipVertical, TextOverflowBehaviour ineBehaviour, bool * outpClipped, bool * outpInvalidCharacterFound)
 		{
             bool bClipped=false;
             
@@ -572,7 +572,7 @@ namespace ChilliSource
                                 LookAheadNextChar=inText.next(jt2);
                             
                             //Construct the characters position and size from the font sheet to get the width
-                            BuildCharacter(inpFont, LookAheadChar, LookAheadNextChar, moCore::CVector2::ZERO, infTextSize, infCharacterSpacing, fLastCharacterWidth, CurrentLineTemp, outpInvalidCharacterFound);
+                            BuildCharacter(inpFont, LookAheadChar, LookAheadNextChar, Core::CVector2::ZERO, infTextSize, infCharacterSpacing, fLastCharacterWidth, CurrentLineTemp, outpInvalidCharacterFound);
                             fLengthToNextSpace += fLastCharacterWidth;
                             
                             if(fLengthToNextSpace > invBounds.x)
@@ -601,15 +601,15 @@ namespace ChilliSource
                     //We are out of room so we can either over-run the label or clip the text
                     switch(ineBehaviour)
                     {
-                        case GUI::TextOverflowBehaviour::k_none:
-                        case GUI::TextOverflowBehaviour::k_clip:
+                        case TextOverflowBehaviour::k_none:
+                        case TextOverflowBehaviour::k_clip:
                             //Don't process any further characters
                             it = (UTF8String::iterator)inText.end();
                             bClipped=true;
                             break;
-                        case GUI::TextOverflowBehaviour::k_follow:
+                        case TextOverflowBehaviour::k_follow:
                             //Shunt the text backwards so it appears to scroll
-                            ineHorizontalJustification = GUI::TextJustification::k_right;
+                            ineHorizontalJustification = TextJustification::k_right;
                             break;
                     }
                 }
@@ -635,14 +635,14 @@ namespace ChilliSource
             
             switch(ineVerticalJustification)
             {
-                case GUI::TextJustification::k_top:
+                case TextJustification::k_top:
                 default:
                     fOffsetY = (invBounds.y * 0.5f);
                     break;
-                case GUI::TextJustification::k_centre:
+                case TextJustification::k_centre:
                     fOffsetY = (fHeight * 0.5f);
                     break;
-                case GUI::TextJustification::k_bottom:
+                case TextJustification::k_bottom:
                     fOffsetY = -((invBounds.y * 0.5f) - fHeight);
                     break;
             };
@@ -731,7 +731,7 @@ namespace ChilliSource
         //----------------------------------------------------
         /// Wrap
         //----------------------------------------------------
-        void CCanvasRenderer::Wrap(GUI::TextJustification ineHorizontalJustification, f32 infLineSpacing, const Core::CVector2& invBounds, 
+        void CCanvasRenderer::Wrap(TextJustification ineHorizontalJustification, f32 infLineSpacing, const Core::CVector2& invBounds, 
 								   CharacterList &inCurrentLine, Core::CVector2& outvCursor, CharacterList &outCharacters)
         {
             if(!inCurrentLine.empty())
@@ -742,14 +742,14 @@ namespace ChilliSource
                 
                 switch(ineHorizontalJustification)
                 {
-                    case GUI::TextJustification::k_left:
+                    case TextJustification::k_left:
                     default:
                         fOffsetX = -(invBounds.x * 0.5f);
                         break;
-                    case GUI::TextJustification::k_centre:
+                    case TextJustification::k_centre:
                         fOffsetX = -(outvCursor.x * 0.5f);
                         break;
-                    case GUI::TextJustification::k_right:
+                    case TextJustification::k_right:
                         fOffsetX = (invBounds.x * 0.5f) - outvCursor.x;
                         break;
                 };

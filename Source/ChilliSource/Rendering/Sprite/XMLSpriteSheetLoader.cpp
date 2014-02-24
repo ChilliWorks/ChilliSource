@@ -46,7 +46,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool CXMLSpriteSheetLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == Rendering::CSpriteSheet::InterfaceID);
+			return (inInterfaceID == CSpriteSheet::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource From File With Extension

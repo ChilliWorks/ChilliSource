@@ -34,7 +34,7 @@ extern "C"
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* inpEnv, jobject inThis, jobjectArray inaIDs, jobjectArray inaNames, jobjectArray inaDescs, jobjectArray inaPrices)
 {
-	moFlo::AndroidPlatform::AmazonIAPJavaInterfacePtr pInterface = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CAmazonIAPJavaInterface>();
+	ChilliSource::Android::AmazonIAPJavaInterfacePtr pInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CAmazonIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
 		u32 udwNumProducts = inpEnv->GetArrayLength(inaIDs);
@@ -45,21 +45,21 @@ void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnProdu
 		{
 			moNetworking::IAPProductDesc sDesc;
 			jstring jstrID = (jstring)inpEnv->GetObjectArrayElement(inaIDs, i);
-			sDesc.strID = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(jstrID);
+			sDesc.strID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrID);
 
 			jstring jstrName = (jstring)inpEnv->GetObjectArrayElement(inaNames, i);
-			sDesc.strName = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(jstrName);
+			sDesc.strName = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrName);
 
 			jstring jstrDesc = (jstring)inpEnv->GetObjectArrayElement(inaDescs, i);
-			sDesc.strDescription = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(jstrDesc);
+			sDesc.strDescription = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrDesc);
 
 			jstring jstrPrice = (jstring)inpEnv->GetObjectArrayElement(inaPrices, i);
-			sDesc.strFormattedPrice = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(jstrPrice);
+			sDesc.strFormattedPrice = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrPrice);
 
 			aProducts.push_back(sDesc);
 		}
 
-		moFlo::CTaskScheduler::ScheduleMainThreadTask(moFlo::Task1<const DYNAMIC_ARRAY<moNetworking::IAPProductDesc>&>(pInterface.get(), &moFlo::AndroidPlatform::CAmazonIAPJavaInterface::OnProductDescriptionsRequestComplete, aProducts));
+		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task1<const DYNAMIC_ARRAY<moNetworking::IAPProductDesc>&>(pInterface.get(), &ChilliSource::Android::CAmazonIAPJavaInterface::OnProductDescriptionsRequestComplete, aProducts));
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -74,14 +74,14 @@ void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnProdu
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* inpEnv, jobject inThis, jint inudwResult, jstring instrProductID, jstring instrTransactionID, jstring instrReceipt)
 {
-	moFlo::AndroidPlatform::AmazonIAPJavaInterfacePtr pInterface = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CAmazonIAPJavaInterface>();
+	ChilliSource::Android::AmazonIAPJavaInterfacePtr pInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CAmazonIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
 		moNetworking::IAPTransaction sTransaction;
-		sTransaction.strProductID = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
-		sTransaction.strTransactionID = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
-		sTransaction.strReceipt = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(instrReceipt);
-		moFlo::CTaskScheduler::ScheduleMainThreadTask(moFlo::Task2<u32, const moNetworking::IAPTransaction&>(pInterface.get(), &moFlo::AndroidPlatform::CAmazonIAPJavaInterface::OnTransactionStatusUpdated, inudwResult, sTransaction));
+		sTransaction.strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
+		sTransaction.strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
+		sTransaction.strReceipt = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrReceipt);
+		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task2<u32, const moNetworking::IAPTransaction&>(pInterface.get(), &ChilliSource::Android::CAmazonIAPJavaInterface::OnTransactionStatusUpdated, inudwResult, sTransaction));
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -92,12 +92,12 @@ void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnTrans
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID)
 {
-	moFlo::AndroidPlatform::AmazonIAPJavaInterfacePtr pInterface = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CAmazonIAPJavaInterface>();
+	ChilliSource::Android::AmazonIAPJavaInterfacePtr pInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CAmazonIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
-		std::string strProductID = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
-		std::string strTransactionID = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
-		moFlo::CTaskScheduler::ScheduleMainThreadTask(moFlo::Task2<const std::string&, const std::string&>(pInterface.get(), &moFlo::AndroidPlatform::CAmazonIAPJavaInterface::OnTransactionClosed, strProductID, strTransactionID));
+		std::string strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
+		std::string strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
+		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task2<const std::string&, const std::string&>(pInterface.get(), &ChilliSource::Android::CAmazonIAPJavaInterface::OnTransactionClosed, strProductID, strTransactionID));
 	}
 }
 

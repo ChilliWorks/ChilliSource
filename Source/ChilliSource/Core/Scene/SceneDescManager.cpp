@@ -38,17 +38,17 @@ namespace ChilliSource
             return inInterfaceID == CSceneDesc::InterfaceID;
         }
         
-        ResourcePtr CSceneDescManager::GetResourceFromFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        ResourcePtr CSceneDescManager::GetResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             return GetSceneDescFromFile(ineStorageLocation, instrFilePath);
         }
         
-        ResourcePtr CSceneDescManager::AsyncGetResourceFromFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        ResourcePtr CSceneDescManager::AsyncGetResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             return AsyncGetSceneDescFromFile(ineStorageLocation, instrFilePath);
         }
         
-        SceneDescPtr CSceneDescManager::GetSceneDescFromFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        SceneDescPtr CSceneDescManager::GetSceneDescFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
             
@@ -80,7 +80,7 @@ namespace ChilliSource
             return SceneDescPtr();
         }
         
-        SceneDescPtr CSceneDescManager::AsyncGetSceneDescFromFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        SceneDescPtr CSceneDescManager::AsyncGetSceneDescFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
             

@@ -27,8 +27,8 @@ extern "C"
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CTwitterAuthenticationViewNativeInterface_OnPINComplete(JNIEnv* inpEnv, jobject inpThis, jstring injstrPIN)
 {
-	std::string strPIN = moFlo::AndroidPlatform::_IJavaInterface::CreateSTDStringFromJString(injstrPIN);
-	moFlo::AndroidPlatform::SCTwitterAuthenticationActivityJavaInterface::OnPINComplete(strPIN);
+	std::string strPIN = ChilliSource::Android::_IJavaInterface::CreateSTDStringFromJString(injstrPIN);
+	ChilliSource::Android::SCTwitterAuthenticationActivityJavaInterface::OnPINComplete(strPIN);
 }
 
 namespace ChilliSource
@@ -36,7 +36,7 @@ namespace ChilliSource
 	namespace Android
 	{
 
-		moFlo::AndroidPlatform::CTwitterAuthenticationActivity* SCTwitterAuthenticationActivityJavaInterface::mpActivity = NULL;
+		ChilliSource::Android::CTwitterAuthenticationActivity* SCTwitterAuthenticationActivityJavaInterface::mpActivity = NULL;
 		//-----------------------------------------------
 		/// Setup Java Interface
 		//-----------------------------------------------
@@ -51,7 +51,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// Register Activity
 		//-----------------------------------------------
-		void SCTwitterAuthenticationActivityJavaInterface::RegisterActivity(moFlo::AndroidPlatform::CTwitterAuthenticationActivity* inpActivity)
+		void SCTwitterAuthenticationActivityJavaInterface::RegisterActivity(ChilliSource::Android::CTwitterAuthenticationActivity* inpActivity)
 		{
 			mpActivity = inpActivity;
 		}

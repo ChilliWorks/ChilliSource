@@ -443,10 +443,10 @@ namespace ChilliSource
 		
 		/** converts a string to a unix timestamp
 		 */
-		TimeIntervalSecs CStringUtils::ToTimestamp(const std::string& instrSource, moFlo::Core::StringTimeFormat ineFormat)
+		TimeIntervalSecs CStringUtils::ToTimestamp(const std::string& instrSource, ChilliSource::Core::StringTimeFormat ineFormat)
 		{
 			std::string strTime = instrSource;
-			std::string strFormat = moFlo::Core::kastrTimeFormat[(u32)ineFormat];
+			std::string strFormat = ChilliSource::Core::kastrTimeFormat[(u32)ineFormat];
 			
 			if(StringTimeFormat::k_YYYYDDMMHHMM == ineFormat)
 			{

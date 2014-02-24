@@ -84,41 +84,41 @@ namespace ChilliSource
             Core::StorageLocation eOnTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("OnTextureLocation", strValue))
             {
-                eOnTextureLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eOnTextureLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("OnTexture", strValue))
             {
-                SetOnImage(LOAD_RESOURCE(Rendering::ITexture, eOnTextureLocation, strValue));
+                SetOnImage(LOAD_RESOURCE(ITexture, eOnTextureLocation, strValue));
             }
             //---Off
             Core::StorageLocation eOffTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("OffTextureLocation", strValue))
             {
-                eOffTextureLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eOffTextureLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("OffTexture", strValue))
             {
-                SetOffImage(LOAD_RESOURCE(Rendering::ITexture, eOffTextureLocation, strValue));
+                SetOffImage(LOAD_RESOURCE(ITexture, eOffTextureLocation, strValue));
             }
             //---Sprite sheet
             Core::StorageLocation eOnSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("OnSpriteSheetLocation", strValue))
             {
-                eOnSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eOnSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("OnSpriteSheet", strValue))
             {
-                SetOnSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eOnSpriteSheetLocation, strValue));
+                SetOnSpriteSheet(LOAD_RESOURCE(CSpriteSheet, eOnSpriteSheetLocation, strValue));
             }
             //---Sprite sheet
             Core::StorageLocation eOffSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("OffSpriteSheetLocation", strValue))
             {
-                eOffSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eOffSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("OffSpriteSheet", strValue))
             {
-                SetOffSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eOffSpriteSheetLocation, strValue));
+                SetOffSpriteSheet(LOAD_RESOURCE(CSpriteSheet, eOffSpriteSheetLocation, strValue));
             }
             //---Default index
             if(insParams.TryGetValue("OnSpriteSheetIndex", strValue))
@@ -176,11 +176,11 @@ namespace ChilliSource
             Core::StorageLocation eDeselectAudioLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SelectAudioEffectLocation", strValue))
             {
-                eSelectAudioLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSelectAudioLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("DeselectAudioEffectLocation", strValue))
             {
-                eDeselectAudioLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eDeselectAudioLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             //---Audio effect
             if(insParams.TryGetValue("SelectAudioEffect", strValue))
@@ -219,7 +219,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //-----------------------------------------------------------
-        void CToggleButton::SetOnImage(const Rendering::TexturePtr& inpTexture)
+        void CToggleButton::SetOnImage(const TexturePtr& inpTexture)
         {
             OnTexture = inpTexture;
             
@@ -233,7 +233,7 @@ namespace ChilliSource
 		///
 		/// @return Texture for non-selected button
 		//-----------------------------------------------------------
-		const Rendering::TexturePtr& CToggleButton::GetOnImage() const
+		const TexturePtr& CToggleButton::GetOnImage() const
 		{
 			return OnTexture;
 		}
@@ -244,7 +244,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //-----------------------------------------------------------
-        void CToggleButton::SetOffImage(const Rendering::TexturePtr& inpTexture)
+        void CToggleButton::SetOffImage(const TexturePtr& inpTexture)
         {
             OffTexture = inpTexture;
             mpBackgroundImage->SetTexture(inpTexture);
@@ -260,7 +260,7 @@ namespace ChilliSource
 		///
 		/// @return Texture for selected button
 		//-----------------------------------------------------------
-		const Rendering::TexturePtr& CToggleButton::GetOffImage() const
+		const TexturePtr& CToggleButton::GetOffImage() const
 		{
 			return OffTexture;
 		}
@@ -299,7 +299,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet with default image
         //-----------------------------------------------------------
-        void CToggleButton::SetOnSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void CToggleButton::SetOnSpriteSheet(const SpriteSheetPtr& inpSpriteSheet)
         {
             OnSpriteSheet = inpSpriteSheet;
             mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -314,7 +314,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet with default image
 		//-----------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CToggleButton::GetOnSpriteSheet() const 
+		const SpriteSheetPtr& CToggleButton::GetOnSpriteSheet() const 
 		{ 
 			return OnSpriteSheet; 
 		}
@@ -323,7 +323,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet with Off image
 		//-----------------------------------------------------------
-		void CToggleButton::SetOffSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void CToggleButton::SetOffSpriteSheet(const SpriteSheetPtr& inpSpriteSheet)
 		{
 			OffSpriteSheet = inpSpriteSheet;
 			mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -338,7 +338,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet with Off image
 		//-----------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CToggleButton::GetOffSpriteSheet() const 
+		const SpriteSheetPtr& CToggleButton::GetOffSpriteSheet() const 
 		{ 
 			return OffSpriteSheet; 
 		}
@@ -611,7 +611,7 @@ namespace ChilliSource
 		///
 		/// @param Canvas renderer
 		//-----------------------------------------------------------
-		void CToggleButton::Draw(Rendering::CCanvasRenderer* inpCanvasRenderer)
+		void CToggleButton::Draw(CCanvasRenderer* inpCanvasRenderer)
 		{
 			SetSizeFromImage();
 			CGUIView::Draw(inpCanvasRenderer);

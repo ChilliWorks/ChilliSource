@@ -23,8 +23,8 @@ namespace ChilliSource
 		/// the given buffer description
 		/// @param Buffer desciption
 		//-----------------------------------------------------
-		CMeshBuffer::CMeshBuffer(moFlo::Rendering::BufferDescription &inBuffDesc) 
-        : moFlo::Rendering::IMeshBuffer(inBuffDesc), mVertexBuffer(0), mIndexBuffer(0), mBufferUsage(0), mBufferAccess(0),
+		CMeshBuffer::CMeshBuffer(ChilliSource::Rendering::BufferDescription &inBuffDesc) 
+        : ChilliSource::Rendering::IMeshBuffer(inBuffDesc), mVertexBuffer(0), mIndexBuffer(0), mBufferUsage(0), mBufferAccess(0),
           mpVertexData(NULL), mpIndexData(NULL), mpVertexDataBackup(NULL), mpIndexDataBackup(NULL), mbMapBufferAvailable(false), mbCacheValid(false)
 		{
 			glGenBuffers(1, &mVertexBuffer);

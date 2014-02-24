@@ -20,7 +20,7 @@ namespace ChilliSource
 	namespace Android
 	{
 
-		class SCContactInformationProviderJavaInterface : public moFlo::AndroidPlatform::_IJavaInterface
+		class SCContactInformationProviderJavaInterface : public ChilliSource::Android::_IJavaInterface
 		{
 		public:
 			//--------------------------------------------------------------------------------------

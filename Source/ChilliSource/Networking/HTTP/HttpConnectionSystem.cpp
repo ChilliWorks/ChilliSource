@@ -36,7 +36,7 @@ namespace ChilliSource
             }
             else
             {
-                moFlo::Networking::HttpRequestDetails sDetails;
+                ChilliSource::Networking::HttpRequestDetails sDetails;
                 
                 sDetails = inpRequest->GetDetails();
                 sDetails.strURL = sDetails.strRedirectionURL;

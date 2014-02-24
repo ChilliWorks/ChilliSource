@@ -16,7 +16,7 @@
 
 namespace ChilliSource 
 {
-    class ICloudStorageSystem : public moFlo::Core::ISystem
+    class ICloudStorageSystem : public ChilliSource::Core::ISystem
     {
     public:
         
@@ -33,13 +33,13 @@ namespace ChilliSource
             std::string mstrLocalFilePath;
             std::string mstrCloudFilePath;
             
-            moFlo::Core::StorageLocation meLocalFileLocation;
+            ChilliSource::Core::StorageLocation meLocalFileLocation;
             CloudStorageArea meCloudStorageLocation;
              
             std::string mstrLocalContents;
             std::string mstrCloudContents;
             
-            FileSyncConflict(moFlo::Core::StorageLocation ineLocalStorageLocation, const std::string& instrFile, CloudStorageArea ineCloudStorageLocation, const std::string& instrCloudFile,
+            FileSyncConflict(ChilliSource::Core::StorageLocation ineLocalStorageLocation, const std::string& instrFile, CloudStorageArea ineCloudStorageLocation, const std::string& instrCloudFile,
                              const std::string& instrLocalContents, const std::string& instrCloudContents)
             {
                 mstrLocalFilePath = instrFile;
@@ -166,7 +166,7 @@ namespace ChilliSource
             }
         }
         
-        const CloudStorageArea GetCloudStorageAreaForStorageArea(moFlo::Core::StorageLocation ineStorageArea)
+        const CloudStorageArea GetCloudStorageAreaForStorageArea(ChilliSource::Core::StorageLocation ineStorageArea)
         {
             switch (ineStorageArea) {
                 case Core::StorageLocation::k_package:

@@ -64,7 +64,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		Core::InterfaceIDType CMeshManager::GetProviderType() const
 		{
-			return Rendering::CMesh::InterfaceID;
+			return CMesh::InterfaceID;
 		}
 		//-----------------------------------------------------------------
 		/// Get Resource From File

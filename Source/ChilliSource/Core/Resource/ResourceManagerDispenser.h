@@ -16,9 +16,9 @@
 
 #include <ChilliSource/Rendering/GUI/ForwardDeclarations.h>
 
-#define GET_RESOURCE_MANAGER(TYPE) moFlo::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<TYPE>() 
-#define LOAD_RESOURCE(TYPE, LOCATION, FILENAME) SHARED_PTR_CAST<TYPE>(moFlo::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(TYPE::InterfaceID)->GetResourceFromFile(LOCATION, FILENAME))
-#define ASYNC_LOAD_RESOURCE(TYPE, LOCATION, FILENAME) SHARED_PTR_CAST<TYPE>(moFlo::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(TYPE::InterfaceID)->AsyncGetResourceFromFile(LOCATION, FILENAME))
+#define GET_RESOURCE_MANAGER(TYPE) ChilliSource::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<TYPE>() 
+#define LOAD_RESOURCE(TYPE, LOCATION, FILENAME) SHARED_PTR_CAST<TYPE>(ChilliSource::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(TYPE::InterfaceID)->GetResourceFromFile(LOCATION, FILENAME))
+#define ASYNC_LOAD_RESOURCE(TYPE, LOCATION, FILENAME) SHARED_PTR_CAST<TYPE>(ChilliSource::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(TYPE::InterfaceID)->AsyncGetResourceFromFile(LOCATION, FILENAME))
 
 namespace ChilliSource
 {

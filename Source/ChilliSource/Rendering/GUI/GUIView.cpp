@@ -1573,7 +1573,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer
         //----------------------------------------------------
-        void CGUIView::Draw(Rendering::CCanvasRenderer * inpCanvas)
+        void CGUIView::Draw(CCanvasRenderer * inpCanvas)
         {
 			if(Visible && (!ClipOffScreen || IsOnscreen()))
 			{

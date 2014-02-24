@@ -114,7 +114,7 @@ namespace ChilliSource
             ///
             /// @param Notification
             //---------------------------------------------------------------------
-            virtual bool OnReceiveNotification(moFlo::Notification* inpsNotification){return true;}
+            virtual bool OnReceiveNotification(ChilliSource::Notification* inpsNotification){return true;}
             
             //---------------------------------------------------------------------
             /// Get Name

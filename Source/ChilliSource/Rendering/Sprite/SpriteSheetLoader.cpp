@@ -46,7 +46,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool CSpriteSheetLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == Rendering::CSpriteSheet::InterfaceID);
+			return (inInterfaceID == CSpriteSheet::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource From File With Extension
@@ -69,7 +69,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool CSpriteSheetLoader::CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
-			moFlo::Core::FileStreamPtr binary_file = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath, moFlo::Core::FileMode::k_readBinary);
+			ChilliSource::Core::FileStreamPtr binary_file = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath, ChilliSource::Core::FileMode::k_readBinary);
 			
 			//If we have not successfully loaded the high res then just load the default
 			if(binary_file->IsOpen() == false)

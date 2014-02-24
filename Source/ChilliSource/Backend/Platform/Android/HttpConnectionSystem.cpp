@@ -97,7 +97,7 @@ namespace ChilliSource
 		{
 			//Begin the read loop
 			//Run this as a threaded task
-			moFlo::CTaskScheduler::ScheduleTask(Task0(this, &CHttpConnectionSystem::CHttpRequest::PerformRequest));
+			ChilliSource::CTaskScheduler::ScheduleTask(Task0(this, &CHttpConnectionSystem::CHttpRequest::PerformRequest));
 		}
 		//------------------------------------------------------------------
 		/// Update

@@ -141,14 +141,14 @@ namespace ChilliSource
 			///
 			/// Return start swipe position
 			//----------------------------------------------------
-            moFlo::Core::CVector2 GetStartPosition() const { return mvStartPos; }
+            ChilliSource::Core::CVector2 GetStartPosition() const { return mvStartPos; }
             
             //----------------------------------------------------
 			/// Get Swipe end position
 			///
 			/// Return end swipe position
 			//----------------------------------------------------
-            moFlo::Core::CVector2 GetEndPosition() const { return mvEndPos; }
+            ChilliSource::Core::CVector2 GetEndPosition() const { return mvEndPos; }
             
 		private:
 			
@@ -236,11 +236,11 @@ namespace ChilliSource
             //----------------------------------------------------
 			/// Populate Start Positions For First Touch
 			//----------------------------------------------------
-			void PopulateStartPositions(moFlo::Core::CVector2& outvFirstPosition, moFlo::Core::CVector2& outvSecondPosition) const;
+			void PopulateStartPositions(ChilliSource::Core::CVector2& outvFirstPosition, ChilliSource::Core::CVector2& outvSecondPosition) const;
             //----------------------------------------------------
 			/// Get Current Position
 			//----------------------------------------------------
-			void PopulateCurrentPositions(moFlo::Core::CVector2& outvFirstPosition, moFlo::Core::CVector2& outvSecondPosition) const;
+			void PopulateCurrentPositions(ChilliSource::Core::CVector2& outvFirstPosition, ChilliSource::Core::CVector2& outvSecondPosition) const;
             
 			
 		private:
@@ -408,7 +408,7 @@ namespace ChilliSource
 			///
 			/// Return start swipe position
 			//----------------------------------------------------
-            moFlo::Core::CVector2 GetStartPosition() const { return mvStartPos; }
+            ChilliSource::Core::CVector2 GetStartPosition() const { return mvStartPos; }
             //----------------------------------------------------
 			/// Get Touch ID
 			///

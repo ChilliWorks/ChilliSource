@@ -32,31 +32,31 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer pointer
 			//------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			void Draw(CCanvasRenderer* inpCanvas);
 			//--------------------------------------------------------
 			/// Set Bar Sprite Sheet
 			///
 			/// @param Sprite sheet for the bar
 			//--------------------------------------------------------
-			void SetBarSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetBarSpriteSheet(const SpriteSheetPtr& inpSpriteSheet);
 			//--------------------------------------------------------
 			/// Get Bar Sprite Sheet
 			///
 			/// @return Sprite sheet for the bar
 			//--------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetBarSpriteSheet() const;
+			const SpriteSheetPtr& GetBarSpriteSheet() const;
 			//--------------------------------------------------------
 			/// Set Slider Sprite Sheet
 			///
 			/// @param Sprite sheet for the slider
 			//--------------------------------------------------------
-			void SetSliderSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetSliderSpriteSheet(const SpriteSheetPtr& inpSpriteSheet);
 			//--------------------------------------------------------
 			/// Get Slider Sprite Sheet
 			///
 			/// @return Sprite sheet for the slider
 			//--------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetSliderSpriteSheet() const;
+			const SpriteSheetPtr& GetSliderSpriteSheet() const;
 			//--------------------------------------------------------
 			/// Set Bar Sprite Sheet Index
 			///
@@ -143,8 +143,8 @@ namespace ChilliSource
             
 			DECLARE_PROPERTY_A(UnifiedVector2, UnifiedSliderSize, SetSliderSize, GetSliderSize);
             
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, BarSpriteSheet, SetBarSpriteSheet, GetBarSpriteSheet);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, SliderSpriteSheet, SetSliderSpriteSheet, GetSliderSpriteSheet);
+			DECLARE_PROPERTY_A(SpriteSheetPtr, BarSpriteSheet, SetBarSpriteSheet, GetBarSpriteSheet);
+			DECLARE_PROPERTY_A(SpriteSheetPtr, SliderSpriteSheet, SetSliderSpriteSheet, GetSliderSpriteSheet);
             
 			DECLARE_PROPERTY_A(u32, BarSpriteSheetIndex, SetBarSpriteSheetIndex, GetBarSpriteSheetIndex);
 			DECLARE_PROPERTY_A(u32, SliderSpriteSheetIndex, SetSliderSpriteSheetIndex, GetSliderSpriteSheetIndex);

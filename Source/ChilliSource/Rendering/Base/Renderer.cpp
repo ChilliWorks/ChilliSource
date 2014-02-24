@@ -355,9 +355,9 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render UI
         //----------------------------------------------------------
-        void CRenderer::RenderUI(GUI::CWindow* inpWindow)
+        void CRenderer::RenderUI(CWindow* inpWindow)
         {
-            mpRenderSystem->ApplyCamera(Core::CVector3::ZERO, Core::CMatrix4x4::IDENTITY, CreateOverlayProjection(inpWindow), moFlo::Core::CColour::CORNFLOWER_BLUE);
+            mpRenderSystem->ApplyCamera(Core::CVector3::ZERO, Core::CMatrix4x4::IDENTITY, CreateOverlayProjection(inpWindow), ChilliSource::Core::CColour::CORNFLOWER_BLUE);
 			mCanvas.Render((ISurface*)inpWindow, 1.0f);
         }
         //----------------------------------------------------------
@@ -448,7 +448,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Create Overlay Projection
         //----------------------------------------------------------
-        Core::CMatrix4x4 CRenderer::CreateOverlayProjection(moGUI::CWindow* inpWindow) const
+        Core::CMatrix4x4 CRenderer::CreateOverlayProjection(CWindow* inpWindow) const
         {
             const Core::CVector2 kvOverlayDimensions(inpWindow->GetAbsoluteSize());
             const f32 kfOverlayNear = 1.0f;

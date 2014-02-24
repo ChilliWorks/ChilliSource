@@ -29,12 +29,12 @@ namespace ChilliSource
         IIAPSystem* IIAPSystem::Create(const Core::ParamDictionary& inParams)
         {
 #ifdef TARGET_OS_IPHONE
-        	return new iOSPlatform::CIAPSystem();
+        	return new iOS::CIAPSystem();
 #elif defined(TARGET_ANDROID)
 #	ifdef MOFLOWSKU_IAPMETHOD_GOOGLEPLAY
-        	return new AndroidPlatform::CGooglePlayIAPSystem(inParams);
+        	return new Android::CGooglePlayIAPSystem(inParams);
 #	elif defined(MOFLOWSKU_IAPMETHOD_AMAZON)
-        	return new AndroidPlatform::CAmazonIAPSystem(inParams);
+        	return new Android::CAmazonIAPSystem(inParams);
 #	endif
 #endif
         	return NULL;

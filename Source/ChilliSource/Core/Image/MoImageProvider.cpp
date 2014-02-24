@@ -49,7 +49,7 @@ namespace ChilliSource
     bool CMoImageProvider::CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
     {
     	//ensure the extension is correct.
-    	if (moFlo::Core::CStringUtils::EndsWith(inFilePath, MoImageExtension, true) == false)
+    	if (ChilliSource::Core::CStringUtils::EndsWith(inFilePath, MoImageExtension, true) == false)
     		return false;
 
         Core::FileStreamPtr pImageFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);

@@ -14,7 +14,7 @@
 
 using namespace ChilliSource::Input;
 using namespace ChilliSource::Core;
-using namespace ChilliSource::iOSPlatform;
+using namespace ChilliSource::iOS;
 
 CInputSystem::CInputSystem()
 {

@@ -42,9 +42,9 @@ namespace ChilliSource{
 
 @interface  SMSDelegate : NSObject<MFMessageComposeViewControllerDelegate>
 {
-	moFlo::Social::ISMSCompositionActivity::SendResultDelegate mCallback;
+	ChilliSource::Social::ISMSCompositionActivity::SendResultDelegate mCallback;
 }
--(SMSDelegate*) initWithCallback:(moFlo::Social::ISMSCompositionActivity::SendResultDelegate)callback;
+-(SMSDelegate*) initWithCallback:(ChilliSource::Social::ISMSCompositionActivity::SendResultDelegate)callback;
 
 	
 @end

@@ -152,7 +152,7 @@ namespace ChilliSource
             ///
             /// @param Capitalisation Type
             //------------------------
-            void SetKeyboardCapitalisationMethod(moInput::KeyboardCapitalisation ineCapitalisationType);
+            void SetKeyboardCapitalisationMethod(Input::KeyboardCapitalisation ineCapitalisationType);
             //-------------------------------------------------------
 			/// SetTextSeparator
 			///
@@ -222,7 +222,7 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer
 			//-------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			void Draw(CCanvasRenderer* inpCanvas);
 			//-------------------------------------------------------
 			/// Update
 			///

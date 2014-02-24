@@ -59,7 +59,7 @@
 
 namespace ChilliSource 
 {
-    DEFINE_CREATABLE(IPlatformSystem, iOSPlatform::CPlatformSystem);
+    DEFINE_CREATABLE(IPlatformSystem, iOS::CPlatformSystem);
     
 	namespace iOS
 	{   
@@ -89,9 +89,9 @@ namespace ChilliSource
 			AddInfoProviderFunc(Social::IContactInformationProvider::InterfaceID, InfoProviderCreationFunction(this, &CPlatformSystem::CreateContactInformationProvider));
 
 			CNotificationScheduler::Initialise(new CLocalNotificationScheduler());
-			Core::CApplication::SetFileSystem(new iOSPlatform::CFileSystem());
+			Core::CApplication::SetFileSystem(new iOS::CFileSystem());
 
-			moFlo::CLogging::Init();
+			ChilliSource::CLogging::Init();
 		}
         //--------------------------------------------
         /// Add System Function
@@ -161,7 +161,7 @@ namespace ChilliSource
 		void CPlatformSystem::Init()
 		{
             //Initialise GUI factory
-            GUI::CGUIViewFactory::RegisterDefaults();
+            Rendering::CGUIViewFactory::RegisterDefaults();
 		}
 		//-------------------------------------------------
 		/// Create Default Systems
@@ -178,19 +178,19 @@ namespace ChilliSource
             inaSystems.push_back(Core::SystemPtr(pRenderSystem));
 			Core::CApplication::SetRenderSystem(pRenderSystem);
             
-            Input::IInputSystem* pInputSystem = new iOSPlatform::CInputSystem();
+            Input::IInputSystem* pInputSystem = new iOS::CInputSystem();
             inaSystems.push_back(Core::SystemPtr(pInputSystem));
             Core::CApplication::SetInputSystem(pInputSystem);
             
-            Audio::IAudioSystem * pAudioSystem = new iOSPlatform::CFMODSystem();
+            Audio::IAudioSystem * pAudioSystem = new iOS::CFMODSystem();
 			inaSystems.push_back(Core::SystemPtr(pAudioSystem));
-			inaSystems.push_back(Core::SystemPtr(new iOSPlatform::CFMODAudioLoader(pAudioSystem)));
+			inaSystems.push_back(Core::SystemPtr(new iOS::CFMODAudioLoader(pAudioSystem)));
 			Core::CApplication::SetAudioSystem(pAudioSystem);
             
 			//create other important systems
 			OpenGL::CRenderCapabilities* pRenderCapabilities = new OpenGL::CRenderCapabilities();
             inaSystems.push_back(Core::SystemPtr(pRenderCapabilities));
-            inaSystems.push_back(Core::SystemPtr(new iOSPlatform::ImageLoader()));
+            inaSystems.push_back(Core::SystemPtr(new iOS::ImageLoader()));
             inaSystems.push_back(Core::SystemPtr(new CMoImageProvider()));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CSpriteSheetLoader()));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CXMLSpriteSheetLoader()));
@@ -451,7 +451,7 @@ namespace ChilliSource
 		{
 			NSString * nsType = [[UIDevice currentDevice] model];
 
-			return (moFlo::Core::CStringUtils::NSStringToString(nsType));
+			return (ChilliSource::Core::CStringUtils::NSStringToString(nsType));
 		}
 		//--------------------------------------------------------------
 		/// Get Device Model Type Name
@@ -468,7 +468,7 @@ namespace ChilliSource
 			free(machine);
 
 			std::string strOutput;
-			std::string strModelType = moFlo::Core::CStringUtils::NSStringToString(platform);
+			std::string strModelType = ChilliSource::Core::CStringUtils::NSStringToString(platform);
 			bool bRecord = false;
 			for(std::string::const_iterator it = strModelType.begin(); it != strModelType.end(); ++it)
 			{
@@ -501,7 +501,7 @@ namespace ChilliSource
         std::string CPlatformSystem::GetOSVersion() const
         {
             NSString* NSVersion = [[UIDevice currentDevice] systemVersion];
-			return moFlo::Core::CStringUtils::NSStringToString(NSVersion);
+			return ChilliSource::Core::CStringUtils::NSStringToString(NSVersion);
         }
         //--------------------------------------------------------------
 		/// Get Locale
@@ -518,7 +518,7 @@ namespace ChilliSource
 			std::string strLanguageCode = [pcLanguageCode UTF8String];
 
 			//Just default to english
-			return moFlo::Core::CLocale(strLanguageCode, strCountryCode);
+			return ChilliSource::Core::CLocale(strLanguageCode, strCountryCode);
 		}
         //--------------------------------------------------------------
 		/// Get Language
@@ -534,7 +534,7 @@ namespace ChilliSource
 			std::string strLocaleCode = [NSUserLocale UTF8String];
 
 			//break this locale into parts(language/country code/extra)
-			DYNAMIC_ARRAY<std::string> strLocaleBrokenUp = moFlo::Core::CStringUtils::Split(strLocaleCode, "-", 0);
+			DYNAMIC_ARRAY<std::string> strLocaleBrokenUp = ChilliSource::Core::CStringUtils::Split(strLocaleCode, "-", 0);
 
 			if (strLocaleBrokenUp.size() > 1)
 			{
@@ -584,12 +584,12 @@ namespace ChilliSource
                     uid = [UIDevice currentDevice].identifierForVendor;
                 }
                 
-                return moFlo::Core::CStringUtils::NSStringToString([uid UUIDString]);
+                return ChilliSource::Core::CStringUtils::NSStringToString([uid UUIDString]);
             }
             else
             {
                 NSString* strUDID = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
-                return moFlo::Core::CStringUtils::NSStringToString(strUDID);
+                return ChilliSource::Core::CStringUtils::NSStringToString(strUDID);
             }
         }
         //-------------------------------------------------
@@ -600,7 +600,7 @@ namespace ChilliSource
         std::string CPlatformSystem::GetAppVersion() const
         {
             NSString* strVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
-            return moFlo::Core::CStringUtils::NSStringToString(strVersion);
+            return ChilliSource::Core::CStringUtils::NSStringToString(strVersion);
         }
 		//--------------------------------------------------------------
 		/// Get Number Of CPU Cores
@@ -693,7 +693,7 @@ namespace ChilliSource
                 NSString *platform = [NSString stringWithCString:machine encoding:NSASCIIStringEncoding];
                 free(machine);
                 
-                std::string strDeviceName = moFlo::Core::CStringUtils::NSStringToString(platform);
+                std::string strDeviceName = ChilliSource::Core::CStringUtils::NSStringToString(platform);
                 
                 //3.5 inch screens
                 if (strDeviceName == "iPhone1,1" || strDeviceName == "iPhone1,2" || strDeviceName == "iPhone2,1" || strDeviceName == "iPhone3,1" || strDeviceName == "iPhone3,2" ||

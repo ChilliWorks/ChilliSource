@@ -100,7 +100,7 @@ namespace ChilliSource
 			/// @param the Skeletal Animation that this data is being loaded into.
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool ReadHeader(const moFlo::Core::FileStreamPtr& inpStream, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource, u32& outudwNumFrames, s32& outdwNumSkeletonNodes);
+			bool ReadHeader(const ChilliSource::Core::FileStreamPtr& inpStream, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource, u32& outudwNumFrames, s32& outdwNumSkeletonNodes);
 			//----------------------------------------------------------------------------
 			/// Read Animation Data
 			///
@@ -112,7 +112,7 @@ namespace ChilliSource
             /// @param The number of skeleton nodes.
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool ReadAnimationData(const moFlo::Core::FileStreamPtr& inpStream, u32 inudwNumFrames, s32 indwNumSkeletonNodes, const SkinnedAnimationPtr& outpResource);
+			bool ReadAnimationData(const ChilliSource::Core::FileStreamPtr& inpStream, u32 inudwNumFrames, s32 indwNumSkeletonNodes, const SkinnedAnimationPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Read Value (Templated)
 			///
@@ -120,7 +120,7 @@ namespace ChilliSource
 			/// @param File stream
 			/// @return Value of type T
 			//----------------------------------------------------------------------------
-			template <typename T> T ReadValue(const moFlo::Core::FileStreamPtr& inpFileStream)
+			template <typename T> T ReadValue(const ChilliSource::Core::FileStreamPtr& inpFileStream)
 			{
 				T Value;
 				inpFileStream->Read(reinterpret_cast<s8*>(&Value), sizeof(T));

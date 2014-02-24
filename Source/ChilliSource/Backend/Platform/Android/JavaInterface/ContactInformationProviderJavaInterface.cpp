@@ -32,23 +32,23 @@ extern "C"
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CContactInformationProviderNativeInterface_SetData(JNIEnv* inpEnv, jobject thiz, int inudwSize,jobjectArray instrNames,jobjectArray instrNumbers,jobjectArray instrEmails)
 {
-	JNIEnv* env = moFlo::AndroidPlatform::_IJavaInterface::GetJNIEnvironmentPtr();
+	JNIEnv* env = ChilliSource::Android::_IJavaInterface::GetJNIEnvironmentPtr();
 
 	for(int udwName = 0; udwName < inudwSize; ++udwName)
 	{
 		jstring jstrName = (jstring)inpEnv->GetObjectArrayElement(instrNames,udwName);
-		moFlo::UTF8String strName = moFlo::AndroidPlatform::_IJavaInterface::CreateUTF8StringFromJString(jstrName);
-		moFlo::AndroidPlatform::SCContactInformationProviderJavaInterface::mastrNames.push_back(strName);
+		ChilliSource::UTF8String strName = ChilliSource::Android::_IJavaInterface::CreateUTF8StringFromJString(jstrName);
+		ChilliSource::Android::SCContactInformationProviderJavaInterface::mastrNames.push_back(strName);
 		env->DeleteLocalRef(jstrName);
 
 		jstring jstrNumber =  (jstring)inpEnv->GetObjectArrayElement(instrNumbers,udwName);
-		moFlo::UTF8String strNumber = moFlo::AndroidPlatform::_IJavaInterface::CreateUTF8StringFromJString(jstrNumber);
-		moFlo::AndroidPlatform::SCContactInformationProviderJavaInterface::mastrNumbers.push_back(strNumber);
+		ChilliSource::UTF8String strNumber = ChilliSource::Android::_IJavaInterface::CreateUTF8StringFromJString(jstrNumber);
+		ChilliSource::Android::SCContactInformationProviderJavaInterface::mastrNumbers.push_back(strNumber);
 		env->DeleteLocalRef(jstrNumber);
 
 		jstring jstrEmail =  (jstring)inpEnv->GetObjectArrayElement(instrEmails,udwName);
-		moFlo::UTF8String strEmail = moFlo::AndroidPlatform::_IJavaInterface::CreateUTF8StringFromJString(jstrEmail);
-		moFlo::AndroidPlatform::SCContactInformationProviderJavaInterface::mastrEmails.push_back(strEmail);
+		ChilliSource::UTF8String strEmail = ChilliSource::Android::_IJavaInterface::CreateUTF8StringFromJString(jstrEmail);
+		ChilliSource::Android::SCContactInformationProviderJavaInterface::mastrEmails.push_back(strEmail);
 		env->DeleteLocalRef(jstrEmail);
 	}
 }

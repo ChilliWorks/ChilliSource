@@ -63,7 +63,7 @@ namespace ChilliSource
 			/// @param video dismissed delegate.
 			/// @param video stopped delegate.
 			//--------------------------------------------------------------
-			void Present(bool inbInAPK, std::string instrFilename, bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour,
+			void Present(bool inbInAPK, std::string instrFilename, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour,
 						const OnVideoDismissedDelegate& inDismissedDelegate, const OnVideoStoppedDelegate& inStoppedDelegate);
 			//--------------------------------------------------------------
 			/// Is Playing

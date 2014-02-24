@@ -102,7 +102,7 @@ namespace ChilliSource
 		};
 		
 		
-		class IHttpConnectionSystem : public moFlo::Core::ISystem
+		class IHttpConnectionSystem : public ChilliSource::Core::ISystem
         {
 		public:
 			DECLARE_NAMED_INTERFACE(IHttpConnectionSystem);

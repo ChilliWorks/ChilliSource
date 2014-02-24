@@ -10,7 +10,7 @@
 #include <ChilliSource/Backend/Platform/iOS/Input/Pointer/TouchScreen.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-moFlo::iOSPlatform::CTouchScreen* gpTouchScreenInstance = NULL;
+ChilliSource::iOS::CTouchScreen* gpTouchScreenInstance = NULL;
 
 namespace ChilliSource
 {

@@ -255,10 +255,10 @@ namespace ChilliSource
         ///
         /// @return Content size
         //-----------------------------------------------------
-        moCore::CVector2 CScrollView::GetAbsoluteContentSize() const
+        Core::CVector2 CScrollView::GetAbsoluteContentSize() const
         {
             if(!mpContainerView)
-                return moCore::CVector2::ZERO;
+                return Core::CVector2::ZERO;
             return mpContainerView->GetAbsoluteSize();
         }
         //-----------------------------------------------------------
@@ -267,10 +267,10 @@ namespace ChilliSource
         /// @return The current absolute position of the content
         /// from the top left corner of the scroll view
         //-----------------------------------------------------------
-        moCore::CVector2 CScrollView::GetAbsoluteContentPosition() const
+        Core::CVector2 CScrollView::GetAbsoluteContentPosition() const
         {
             if(!mpContainerView)
-                return moCore::CVector2::ZERO;
+                return Core::CVector2::ZERO;
             return mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topLeft) - GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topLeft);
         }
         //-----------------------------------------------------
@@ -363,12 +363,12 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //-------------------------------------------------------
-        void CScrollView::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void CScrollView::Draw(CCanvasRenderer* inpCanvas)
         {
 #if DEBUG_DRAWING
             if(mbDrawDebug)
             {
-                Rendering::ITextureManager* pMgr = (Rendering::ITextureManager*)(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Rendering::ITexture::InterfaceID));
+                ITextureManager* pMgr = (ITextureManager*)(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(ITexture::InterfaceID));
                 inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), pMgr->GetDefaultTexture(), Core::Rectangle(Core::CVector2::ZERO, Core::CVector2::ZERO), Core::CColour(1.0f,0.0f,0.0f,0.5f));
             }
 #endif
