@@ -9,7 +9,7 @@
 // 3-Dimensional Vector
 //=================================================
 
-namespace moFlo 
+namespace ChilliSource 
 {
 	namespace Core 
 	{

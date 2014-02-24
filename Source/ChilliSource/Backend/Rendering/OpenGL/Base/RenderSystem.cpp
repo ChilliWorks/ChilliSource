@@ -32,7 +32,7 @@
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{
@@ -68,7 +68,7 @@ namespace moFlo
         //----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CRenderSystem::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+		bool CRenderSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return	(inInterfaceID == IRenderSystem::InterfaceID) || (inInterfaceID == Core::IComponentProducer::InterfaceID);
 		}
@@ -1017,7 +1017,7 @@ namespace moFlo
             }
         }
         
-        s32 CRenderSystem::GetLocationForVertexSemantic(moRendering::VertexDataSemantic ineSemantic)
+        s32 CRenderSystem::GetLocationForVertexSemantic(Rendering::VertexDataSemantic ineSemantic)
         {
             //Determine what client states are required and get their currently bound locations
             switch(ineSemantic)
@@ -1072,14 +1072,14 @@ namespace moFlo
             
             
             // If mesh buffer has changed we need to reset all its vertex attributes
-            if(((moFlo::OpenGL::CMeshBuffer*)inpBuffer)->IsCacheValid() == false)
+            if(((ChilliSource::OpenGL::CMeshBuffer*)inpBuffer)->IsCacheValid() == false)
             {
                 for(u32 i =0; i < mdwMaxVertAttribs; i++)
                 {
                     if(mpVertexAttribs[i].pBuffer == inpBuffer)
                         mpVertexAttribs[i].pBuffer = NULL;
                 }
-                ((moFlo::OpenGL::CMeshBuffer*)inpBuffer)->SetCacheValid();
+                ((ChilliSource::OpenGL::CMeshBuffer*)inpBuffer)->SetCacheValid();
             }
             
             //Check if the total size of the vertex declaration has changed
@@ -1153,7 +1153,7 @@ namespace moFlo
                     eType = GL_UNSIGNED_BYTE;
                 }
                 
-                ApplyVertexAttributePointr(inpBuffer, dwLocation, uwNumComponents, eType, bNormalise, dwVertSize, (const GLvoid*) uwElementOffset);
+                ApplyVertexAttributePointr(inpBuffer, dwLocation, uwNumComponents, eType, bNormalise, dwVertSize, (const GLvoid*)(s32)uwElementOffset);
             }
 		}
 		//------------------------------------------------------------

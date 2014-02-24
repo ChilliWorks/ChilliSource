@@ -19,9 +19,9 @@
 #include <UIKit/UIKit.h>
 #include <QuartzCore/CALayer.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		//-----------------------------------------------
 		/// Constructor
@@ -92,7 +92,7 @@ namespace moFlo
                     strFile = instrFile;
                 }
                 
-				iOSPlatform::CFileSystem* pFileSystem = static_cast<iOSPlatform::CFileSystem*>(Core::CApplication::GetFileSystemPtr());
+				iOS::CFileSystem* pFileSystem = static_cast<iOS::CFileSystem*>(Core::CApplication::GetFileSystemPtr());
 
 				std::string strPath;
                 
@@ -255,7 +255,7 @@ namespace moFlo
 		///
 		/// @param Unified Vector
 		//-----------------------------------------------
-		void CWebViewActivity::SetSize(const moFlo::UnifiedVector2 & invSize)
+		void CWebViewActivity::SetSize(const Core::UnifiedVector2 & invSize)
 		{
 			mvUnifiedSize = invSize;
 		}
@@ -266,7 +266,7 @@ namespace moFlo
 		///
 		/// return Unified Vector of size
 		//-----------------------------------------------
-		moFlo::UnifiedVector2 CWebViewActivity::GetSize() const 
+		Core::UnifiedVector2 CWebViewActivity::GetSize() const
         {
 			return mvUnifiedSize;			
 		}
@@ -286,7 +286,7 @@ namespace moFlo
 @implementation UIWebDelegate
 
 
--(void) SetCPPDelegate:(moFlo::iOSPlatform::CWebViewActivity*) inpDelegate
+-(void) SetCPPDelegate:(ChilliSource::iOS::CWebViewActivity*) inpDelegate
 {
 	mpDelegate = inpDelegate;
 }
@@ -299,7 +299,7 @@ namespace moFlo
 {
 	if(navigationType == UIWebViewNavigationTypeLinkClicked)
 	{
-        std::string strScheme = moFlo::Core::CStringUtils::NSStringToString([[request URL] scheme]);
+        std::string strScheme = ChilliSource::Core::CStringUtils::NSStringToString([[request URL] scheme]);
         
         if(strScheme != "file")
         {
@@ -316,7 +316,7 @@ namespace moFlo
     if(mpDelegate->HasAnchor())
     {
         std::string strJavaScript = "window.location.href = '" + mpDelegate->GetAnchor() + "';";
-        [webView stringByEvaluatingJavaScriptFromString:moFlo::Core::CStringUtils::StringToNSString(strJavaScript)];
+        [webView stringByEvaluatingJavaScriptFromString:ChilliSource::Core::CStringUtils::StringToNSString(strJavaScript)];
     }
     
     mpDelegate->AddDismissButton();

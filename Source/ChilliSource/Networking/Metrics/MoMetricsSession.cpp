@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/Base/Device.h>
 #include <ChilliSource/Core/Base/Utils.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Networking
     {

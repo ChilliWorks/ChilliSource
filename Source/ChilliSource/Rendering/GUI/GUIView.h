@@ -24,7 +24,6 @@
 
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
-#include <ChilliSource/Core/Base/Surface.h>
 #include <ChilliSource/Core/Math/Matrix3x3.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 
@@ -32,11 +31,11 @@
 
 #include <ChilliSource/Core/Reflection/Reflection.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
-		class CGUIView : public ISurface
+		class CGUIView
 		{
 		protected:
             
@@ -494,7 +493,7 @@ namespace moFlo
 			///
 			/// @param Unified co-ordinates
 			//-----------------------------------------------------
-			void SetOffsetFromParentAlignment(const UnifiedVector2& invOffset);
+			void SetOffsetFromParentAlignment(const Core::UnifiedVector2& invOffset);
 			//-----------------------------------------------------
 			/// Set Offset From Parent Alignment
 			///
@@ -516,7 +515,7 @@ namespace moFlo
 			///
 			/// @return Unified co-ordinates
 			//-----------------------------------------------------
-			const UnifiedVector2& GetOffsetFromParentAlignment() const;
+			const Core::UnifiedVector2& GetOffsetFromParentAlignment() const;
 			//-----------------------------------------------------
 			/// Get Absolute Offset From Parent Alignment
 			///
@@ -537,7 +536,7 @@ namespace moFlo
 			///
 			/// @param Unified co-ordinates
 			//-----------------------------------------------------
-			void SetOffsetFromPosition(const UnifiedVector2& invOffset);
+			void SetOffsetFromPosition(const Core::UnifiedVector2& invOffset);
 			//-----------------------------------------------------
 			/// Set Offset From Position
 			///
@@ -555,7 +554,7 @@ namespace moFlo
 			///
 			/// @return Unified co-ordinates
 			//-----------------------------------------------------
-			const UnifiedVector2& GetOffsetFromPosition() const;
+			const Core::UnifiedVector2& GetOffsetFromPosition() const;
 			//-----------------------------------------------------
 			/// Get Absolute Offset From Position
 			///
@@ -599,7 +598,7 @@ namespace moFlo
 			///
 			/// @param Unified co-ordinates
 			//------------------------------------------------------
-			void SetPosition(const UnifiedVector2& invPosition);
+			void SetPosition(const Core::UnifiedVector2& invPosition);
 			//-----------------------------------------------------
 			/// Set Position
 			///
@@ -619,7 +618,7 @@ namespace moFlo
 			///
 			/// @param co-ordinates
 			//------------------------------------------------------
-			void MoveBy(const UnifiedVector2& invPosition);
+			void MoveBy(const Core::UnifiedVector2& invPosition);
 			//------------------------------------------------------
 			/// Move By
 			///
@@ -653,7 +652,7 @@ namespace moFlo
 			///
 			/// @param Unified co-ordinates 
 			//------------------------------------------------------
-			void SetSize(const UnifiedVector2& invSize);
+			void SetSize(const Core::UnifiedVector2& invSize);
 			//------------------------------------------------------
 			/// Set Size
 			///
@@ -696,7 +695,7 @@ namespace moFlo
 			///
 			/// @return Unified co-ordinates
 			//------------------------------------------------------
-			const UnifiedVector2& GetPosition() const;
+			const Core::UnifiedVector2& GetPosition() const;
 			//------------------------------------------------------
 			/// Get Rotation
 			///
@@ -712,7 +711,7 @@ namespace moFlo
 			///
 			/// @return Unified co-ordinates for dimensions
 			//------------------------------------------------------
-			const UnifiedVector2& GetSize() const;
+			const Core::UnifiedVector2& GetSize() const;
 			//------------------------------------------------------
 			/// Get Scale
 			///
@@ -781,7 +780,7 @@ namespace moFlo
 			///
 			/// @param Canvas renderer
 			//-----------------------------------------------------
-			virtual void Draw(Rendering::CCanvasRenderer * inpCanvas);
+			virtual void Draw(CCanvasRenderer * inpCanvas);
 			//----------------------------------------------------
 			/// Contains
 			///
@@ -862,7 +861,34 @@ namespace moFlo
 			/// @param The window the view is attached to
 			//-----------------------------------------------------
 			void SetRootWindow(CWindow* inpWindow);
-
+            //-----------------------------------------------------------
+            /// Get Touch Began Event
+            ///
+            /// Use this to register for touch notifications that
+            /// are not consumed by the GUI
+            ///
+            /// @return Touch began event
+            //-----------------------------------------------------------
+            Core::IEvent<Input::TouchEventDelegate> & GetTouchBeganEvent();
+            //-----------------------------------------------------------
+            /// Get Touch Moved Event
+            ///
+            /// Use this to register for touch notifications that
+            /// are not consumed by the GUI
+            ///
+            /// @return Touch moved event
+            //-----------------------------------------------------------
+            Core::IEvent<Input::TouchEventDelegate> & GetTouchMovedEvent();
+            //-----------------------------------------------------------
+            /// Get Touch End Event
+            ///
+            /// Use this to register for touch notifications that
+            /// are not consumed by the GUI
+            ///
+            /// @return Touch end event
+            //-----------------------------------------------------------
+            Core::IEvent<Input::TouchEventDelegate> & GetTouchEndEvent();
+            
 		protected:
 
 			//-----------------------------------------------------
@@ -908,6 +934,10 @@ namespace moFlo
 
 		protected:
 
+            Core::CEvent1<Input::TouchEventDelegate> mTouchBeganEvent;
+            Core::CEvent1<Input::TouchEventDelegate> mTouchMovedEvent;
+            Core::CEvent1<Input::TouchEventDelegate> mTouchEndedEvent;
+            
 			Subviews mSubviews;
 			Subviews mSubviewsCopy;
 
@@ -922,10 +952,10 @@ namespace moFlo
 
 			//---Properties
 			DECLARE_PROPERTY_A(std::string, Name, SetName, GetName);
-			DECLARE_PROPERTY_A(UnifiedVector2, UnifiedPosition, SetPosition, GetPosition);
-			DECLARE_PROPERTY_A(UnifiedVector2, UnifiedSize, SetSize, GetSize);
-			DECLARE_PROPERTY_A(UnifiedVector2, UnifiedParentalOffset, SetOffsetFromParentAlignment, GetOffsetFromParentAlignment);
-			DECLARE_PROPERTY_A(UnifiedVector2, UnifiedPositionOffset, SetOffsetFromPosition, GetOffsetFromPosition);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedPosition, SetPosition, GetPosition);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedSize, SetSize, GetSize);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedParentalOffset, SetOffsetFromParentAlignment, GetOffsetFromParentAlignment);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedPositionOffset, SetOffsetFromPosition, GetOffsetFromPosition);
 			DECLARE_PROPERTY_A(Core::CVector2, Scale, ScaleTo, GetScale);
 			DECLARE_PROPERTY_A(f32, Rotation, RotateTo, GetRotation);
 			DECLARE_PROPERTY_A(f32, Opacity, SetOpacity, GetOpacity);

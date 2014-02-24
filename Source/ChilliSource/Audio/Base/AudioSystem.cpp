@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Audio/Base/AudioSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Audio
 	{
@@ -136,7 +136,7 @@ namespace moFlo
 		/// listen for this event
 		/// @return Audio event
 		//-------------------------------------------------------
-		IEvent<AudioVolumeEventDelegate>& IAudioSystem::GetMasterEffectVolumeChangedEvent()
+		Core::IEvent<AudioVolumeEventDelegate>& IAudioSystem::GetMasterEffectVolumeChangedEvent()
 		{
 			return mOnMasterEffectVolumeChangedEvent;
 		}
@@ -147,7 +147,7 @@ namespace moFlo
 		/// listen for this event
 		/// @return Audio event
 		//-------------------------------------------------------
-		IEvent<AudioVolumeEventDelegate>& IAudioSystem::GetMasterStreamVolumeChangedEvent()
+		Core::IEvent<AudioVolumeEventDelegate>& IAudioSystem::GetMasterStreamVolumeChangedEvent()
 		{
 			return mOnMasterStreamVolumeChangedEvent;
 		}

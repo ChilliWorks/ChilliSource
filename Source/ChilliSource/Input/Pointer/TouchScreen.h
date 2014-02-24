@@ -22,7 +22,7 @@
 
 #include <thread>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Input
 	{
@@ -58,9 +58,9 @@ namespace moFlo
 			
 			DECLARE_NAMED_INTERFACE(ITouchScreen);
 			
-			IEvent<TouchEventDelegate> & GetTouchBeganEvent();
-			IEvent<TouchEventDelegate> & GetTouchMovedEvent();
-			IEvent<TouchEventDelegate> & GetTouchEndEvent();
+			Core::IEvent<TouchEventDelegate> & GetTouchBeganEvent();
+			Core::IEvent<TouchEventDelegate> & GetTouchMovedEvent();
+			Core::IEvent<TouchEventDelegate> & GetTouchEndEvent();
 			
             void Enable();
             void Disable();
@@ -110,9 +110,9 @@ namespace moFlo
             //-----------------------------------------------------------
             void RemoveActiveTouch(const TouchInfo& inTouchInfo);
             
-			CEvent1<TouchEventDelegate> mTouchBeganEvent;
-			CEvent1<TouchEventDelegate> mTouchMovedEvent;			
-			CEvent1<TouchEventDelegate> mTouchEndedEvent;
+			Core::CEvent1<TouchEventDelegate> mTouchBeganEvent;
+			Core::CEvent1<TouchEventDelegate> mTouchMovedEvent;
+			Core::CEvent1<TouchEventDelegate> mTouchEndedEvent;
 			
             
 			TouchList mOpenTouches;

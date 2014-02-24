@@ -55,9 +55,9 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/RenderSystem.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/RenderCapabilities.h>
 
-namespace moFlo 
+namespace ChilliSource 
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		DEFINE_CREATABLE(IPlatformSystem, CPlatformSystem);
 
@@ -81,8 +81,8 @@ namespace moFlo
 			AddInfoProviderFunc(Social::IContactInformationProvider::InterfaceID, InfoProviderCreationFunction(this, &CPlatformSystem::CreateContactInformationProvider));
 
 			CNotificationScheduler::Initialise(new CLocalNotificationScheduler());
-			Core::CApplication::SetFileSystem(new AndroidPlatform::CFileSystem());
-			moFlo::CLogging::Init();
+			Core::CApplication::SetFileSystem(new Android::CFileSystem());
+			ChilliSource::CLogging::Init();
 		}
 		//--------------------------------------------
 		/// Add System Function
@@ -126,7 +126,7 @@ namespace moFlo
 		void CPlatformSystem::Init()
 		{
             //Initialise GUI factory
-            GUI::CGUIViewFactory::RegisterDefaults();
+            Rendering::CGUIViewFactory::RegisterDefaults();
 		}
         //-----------------------------------------
         /// Set Max FPS
@@ -159,19 +159,19 @@ namespace moFlo
 			inaSystems.push_back(Core::SystemPtr(pRenderSystem));
 			Core::CApplication::SetRenderSystem(pRenderSystem);
 
-			Input::IInputSystem* pInputSystem = new AndroidPlatform::CInputSystem();
+			Input::IInputSystem* pInputSystem = new Android::CInputSystem();
 			inaSystems.push_back(Core::SystemPtr(pInputSystem));
 			Core::CApplication::SetInputSystem(pInputSystem);
 
-			Audio::IAudioSystem* pAudioSystem = new AndroidPlatform::CFMODSystem();
+			Audio::IAudioSystem* pAudioSystem = new Android::CFMODSystem();
 			inaSystems.push_back(Core::SystemPtr(pAudioSystem));
-			inaSystems.push_back(Core::SystemPtr(new AndroidPlatform::CFMODAudioLoader(pAudioSystem)));
+			inaSystems.push_back(Core::SystemPtr(new Android::CFMODAudioLoader(pAudioSystem)));
 			Core::CApplication::SetAudioSystem(pAudioSystem);
 
 			//create other important systems
 			OpenGL::CRenderCapabilities* pRenderCapabilities = new OpenGL::CRenderCapabilities();
 			inaSystems.push_back(Core::SystemPtr(pRenderCapabilities));
-			inaSystems.push_back(Core::SystemPtr(new AndroidPlatform::ImageLoader()));
+			inaSystems.push_back(Core::SystemPtr(new Android::ImageLoader()));
 			inaSystems.push_back(Core::SystemPtr(new CMoImageProvider()));
 			inaSystems.push_back(Core::SystemPtr(new CETC1ImageProvider()));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CSpriteSheetLoader()));
@@ -282,7 +282,7 @@ namespace moFlo
 		//--------------------------------------------
 		Core::ISystem * CPlatformSystem::CreateHttpConnectionSystem(DYNAMIC_ARRAY<Core::SystemPtr>& inSystems) const
 		{
-			return new AndroidPlatform::CHttpConnectionSystem();
+			return new Android::CHttpConnectionSystem();
 		}
 		//--------------------------------------------
 		/// Create Activities
@@ -333,7 +333,7 @@ namespace moFlo
 			if(dwOrientation < 0)
 				ERROR_LOG("CPlatformSystem::GetScreenDimensions() - Could not get orientation of device!");
 #endif
-			if(moFlo::Core::LANDSCAPE_RIGHT == dwOrientation)
+			if(ChilliSource::Core::LANDSCAPE_RIGHT == dwOrientation)
 			{
 				// Swap round as we want dimensions the other way
 				u32 udwSavedX = Result.x;
@@ -380,7 +380,7 @@ namespace moFlo
 			std::string strLocale = CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->GetDefaultLocaleCode();
 
 			//break this locale into parts(language/country code/extra)
-			DYNAMIC_ARRAY<std::string> strLocaleBrokenUp = moFlo::Core::CStringUtils::Split(strLocale, "_", 0);
+			DYNAMIC_ARRAY<std::string> strLocaleBrokenUp = ChilliSource::Core::CStringUtils::Split(strLocale, "_", 0);
 
 			if (strLocaleBrokenUp.size() > 1)
 			{

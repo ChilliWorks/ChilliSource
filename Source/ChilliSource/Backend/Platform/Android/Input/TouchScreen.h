@@ -1,7 +1,7 @@
 /** 
  * File: TouchScreen.h
  * Date: 5 Oct 2010
- * Description: Concrete Android implementation of moflo::Input::ITouchScreen;
+ * Description: Concrete Android implementation of ChilliSource::Input::ITouchScreen;
  */
 
 /** 
@@ -16,9 +16,9 @@
 
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class CTouchScreen : public Input::ITouchScreen
 		{

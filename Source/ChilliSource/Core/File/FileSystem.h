@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/System/System.h>
 #include <string>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{
@@ -39,7 +39,7 @@ namespace moFlo
 		/// Parses a string and returns a storage
         /// location.
 		//============================================
-        moFlo::Core::StorageLocation GetStorageLocationFromString(const std::string & instrStorage);
+        ChilliSource::Core::StorageLocation GetStorageLocationFromString(const std::string & instrStorage);
         //============================================
 		/// Storage Location And Filename
 		///

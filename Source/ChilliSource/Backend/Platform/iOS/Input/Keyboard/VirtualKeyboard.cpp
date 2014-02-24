@@ -13,9 +13,9 @@
 
 VirtualKeyboardDelegate* gpDelegate = nil;
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		//-------------------------------------------
 		/// Constructor
@@ -73,7 +73,7 @@ namespace moFlo
             //Inform subscripted to this event and receive if text was rejected lower down
             bool bRejectText = false;
             
-            mOnKeyboardTextChangeEvent.Invoke<const UTF8String&, bool*>(Core::CStringUtils::NSStringToUTF8String(inpstrText), &bRejectText);
+            mOnKeyboardTextChangeEvent.Invoke<const Core::UTF8String&, bool*>(Core::CStringUtils::NSStringToUTF8String(inpstrText), &bRejectText);
             
             if(!bRejectText)
             {
@@ -108,7 +108,7 @@ namespace moFlo
         ///
         /// @param Text cache for keyboard
         //-------------------------------------------
-		void CVirtualKeyboard::SetText(const UTF8String& instrText)
+		void CVirtualKeyboard::SetText(const Core::UTF8String& instrText)
         {
             mstrText = instrText;
             mpTextView.text = Core::CStringUtils::UTF8StringToNSString(mstrText);

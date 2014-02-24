@@ -14,11 +14,11 @@
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
-		class CVerticalEndcappedProgressBar : public moFlo::GUI::CProgressBar
+		class CVerticalEndcappedProgressBar : public CProgressBar
 		{
 		public:
             
@@ -32,13 +32,13 @@ namespace moFlo
 			///
 			/// @param Sprite Sheet
 			//------------------------------------------------------------------------
-			void SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetSpriteSheet(const SpriteSheetPtr& inpSpriteSheet);
 			//------------------------------------------------------------------------
 			/// Get Sprite Sheet
 			///
 			/// @return Sprite Sheet
 			//------------------------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetSpriteSheet() const;
+			const SpriteSheetPtr& GetSpriteSheet() const;
 			//---------------------------------------------------------
 			/// Set Base Fill Sprite Sheet Index ID
 			///
@@ -153,11 +153,11 @@ namespace moFlo
 			///
 			/// @param Renderer
 			//------------------------------------------------------------------------
-			virtual void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			virtual void Draw(CCanvasRenderer* inpCanvas);
             
 		private:
             
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
+			DECLARE_PROPERTY_A(SpriteSheetPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
             
 			DECLARE_PROPERTY_A(std::string, BaseFillSpriteSheetIndexID, SetBaseFillSpriteSheetIndexID, GetBaseFillSpriteSheetIndexID);
 			DECLARE_PROPERTY_A(std::string, BaseBackgroundSpriteSheetIndexID, SetBaseBackgroundSpriteSheetIndexID, GetBaseBackgroundSpriteSheetIndexID);

@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Video/Base/VideoPlayerActivity.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Video
     {
@@ -20,7 +20,7 @@ namespace moFlo
         /// @return Event thats triggered when the video gets dismissed
         ///			by the player.
         //--------------------------------------------------------------
-        IEvent<VideoDismissedEventDelegate>& IVideoPlayerActivity::GetDismissedEvent()
+        Core::IEvent<VideoDismissedEventDelegate>& IVideoPlayerActivity::GetDismissedEvent()
         {
             return mOnDismissedEvent;
         }
@@ -29,7 +29,7 @@ namespace moFlo
         ///
         /// @return Event thats triggered when the video stops
         //--------------------------------------------------------------
-        IEvent<VideoPlaybackEventDelegate>& IVideoPlayerActivity::GetPlaybackCompleteEvent()
+        Core::IEvent<VideoPlaybackEventDelegate>& IVideoPlayerActivity::GetPlaybackCompleteEvent()
         {
             return mOnPlaybackCompleteEvent;
         }

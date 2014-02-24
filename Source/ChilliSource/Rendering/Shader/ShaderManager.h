@@ -16,7 +16,7 @@
 #include <ChilliSource/Core/Resource/ResourceManager.h>
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -140,7 +140,7 @@ namespace moFlo
             
         protected:
             
-            Rendering::IRenderSystem* mpRenderSystem;
+            IRenderSystem* mpRenderSystem;
 		};
 	}
 }

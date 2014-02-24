@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Audio/3D/AudioComponentFactory.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Audio
 	{

@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/XML/XMLUtils.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -46,7 +46,7 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		bool CXMLSpriteSheetLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == Rendering::CSpriteSheet::InterfaceID);
+			return (inInterfaceID == CSpriteSheet::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource From File With Extension

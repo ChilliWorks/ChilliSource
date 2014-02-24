@@ -17,9 +17,9 @@
 
 #include <ChilliSource/Input/Keyboard/VirtualKeyboard.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		class CVirtualKeyboard : public Input::IVirtualKeyboard
 		{
@@ -54,7 +54,7 @@ namespace moFlo
             ///
             /// @param Text cache for keyboard
             //-------------------------------------------
-            void SetText(const UTF8String& instrText);
+            void SetText(const Core::UTF8String& instrText);
             //-------------------------------------------
             /// SetKeyboardType
             ///

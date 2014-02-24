@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Networking
     {
@@ -36,7 +36,7 @@ namespace moFlo
             }
             else
             {
-                moFlo::Networking::HttpRequestDetails sDetails;
+                ChilliSource::Networking::HttpRequestDetails sDetails;
                 
                 sDetails = inpRequest->GetDetails();
                 sDetails.strURL = sDetails.strRedirectionURL;

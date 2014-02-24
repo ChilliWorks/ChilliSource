@@ -18,9 +18,9 @@
 #include <map>
 #include <ChilliSource/Core/String/UTF8String.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		struct MethodReference
 		{

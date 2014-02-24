@@ -17,11 +17,11 @@
 #include <ChilliSource/Rendering/Shader/Shader.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CShader : public moFlo::Rendering::IShader
+		class CShader : public ChilliSource::Rendering::IShader
 		{
 		public:
 			

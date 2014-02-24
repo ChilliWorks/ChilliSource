@@ -18,11 +18,11 @@
 
 //typedef unsigned char BYTE ;
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{
-		class CHMAC_SHA1 : public moFlo::Core::CSHA1
+		class CHMAC_SHA1 : public ChilliSource::Core::CSHA1
 		{
 			private:
 				s8 m_ipad[64];

@@ -11,9 +11,9 @@
 #include <ChilliSource/Core/JSON/json.h>
 #include <zlib.h>
 
-using namespace moFlo::Core;
+using namespace ChilliSource::Core;
 
-bool CUtils::ReadJson(moFlo::Core::StorageLocation ineStorageLocation, const std::string &instrPath, Json::Value *outpJson)
+bool CUtils::ReadJson(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrPath, Json::Value *outpJson)
 {
     if(!outpJson)
     {

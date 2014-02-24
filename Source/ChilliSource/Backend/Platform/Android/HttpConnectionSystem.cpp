@@ -16,11 +16,11 @@
 #include <sstream>
 #include <ChilliSource/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	using namespace Networking;
 	
-	namespace AndroidPlatform
+	namespace Android
 	{
 		const u32 kudwBufferSize = 1024 * 50;
 		//--------------------------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ namespace moFlo
 		{
 			//Begin the read loop
 			//Run this as a threaded task
-			moFlo::CTaskScheduler::ScheduleTask(Task0(this, &CHttpConnectionSystem::CHttpRequest::PerformRequest));
+			ChilliSource::CTaskScheduler::ScheduleTask(Task0(this, &CHttpConnectionSystem::CHttpRequest::PerformRequest));
 		}
 		//------------------------------------------------------------------
 		/// Update

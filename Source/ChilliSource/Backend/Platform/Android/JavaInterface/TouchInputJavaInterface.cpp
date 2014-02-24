@@ -29,7 +29,7 @@ void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchMo
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchDown(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY)
 {
-	moFlo::AndroidPlatform::CTouchScreen* touchScreen = moFlo::AndroidPlatform::SCTouchInputJavaInterface::GetTouchScreen();
+	ChilliSource::Android::CTouchScreen* touchScreen = ChilliSource::Android::SCTouchInputJavaInterface::GetTouchScreen();
 	if (touchScreen != NULL)
 	{
 		touchScreen->OnTouchBegan(indwID, infX, infY);
@@ -48,7 +48,7 @@ void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchDo
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchUp(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY)
 {
-	moFlo::AndroidPlatform::CTouchScreen* touchScreen = moFlo::AndroidPlatform::SCTouchInputJavaInterface::GetTouchScreen();
+	ChilliSource::Android::CTouchScreen* touchScreen = ChilliSource::Android::SCTouchInputJavaInterface::GetTouchScreen();
 	if (touchScreen != NULL)
 	{
 		touchScreen->OnTouchEnded(indwID, infX, infY);
@@ -67,7 +67,7 @@ void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchUp
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchMoved(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY)
 {
-	moFlo::AndroidPlatform::CTouchScreen* touchScreen = moFlo::AndroidPlatform::SCTouchInputJavaInterface::GetTouchScreen();
+	ChilliSource::Android::CTouchScreen* touchScreen = ChilliSource::Android::SCTouchInputJavaInterface::GetTouchScreen();
 	if (touchScreen != NULL)
 	{
 		touchScreen->OnTouchMoved(indwID, infX, infY);
@@ -75,12 +75,12 @@ void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchMo
 }
 
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//create static member
-		moFlo::AndroidPlatform::CTouchScreen * SCTouchInputJavaInterface::mspTouchScreen = NULL;
+		ChilliSource::Android::CTouchScreen * SCTouchInputJavaInterface::mspTouchScreen = NULL;
 
 		//--------------------------------------------------------------------------------------
 		/// Setup Java Interface
@@ -92,14 +92,14 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------
 		/// Register Touch Screen
 		//--------------------------------------------------------------------------------------
-		void SCTouchInputJavaInterface::RegisterTouchScreen(moFlo::AndroidPlatform::CTouchScreen* inpTouchScreen)
+		void SCTouchInputJavaInterface::RegisterTouchScreen(ChilliSource::Android::CTouchScreen* inpTouchScreen)
 		{
 			mspTouchScreen = inpTouchScreen;
 		}
 		//--------------------------------------------------------------------------------------
 		/// Get Touch Screen
 		//--------------------------------------------------------------------------------------
-		moFlo::AndroidPlatform::CTouchScreen* SCTouchInputJavaInterface::GetTouchScreen()
+		ChilliSource::Android::CTouchScreen* SCTouchInputJavaInterface::GetTouchScreen()
 		{
 			return mspTouchScreen;
 		}

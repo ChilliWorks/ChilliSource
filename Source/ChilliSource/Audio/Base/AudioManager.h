@@ -19,7 +19,7 @@
 #include <ChilliSource/Audio/Base/AudioResource.h>
 #include <ChilliSource/Audio/3D/AudioListener.h>
 
-namespace moFlo 
+namespace ChilliSource 
 {
 	namespace Audio 
 	{

@@ -71,7 +71,7 @@ struct PropContainer##NAME\
 		Reflect::CProperty* pProp;\
 		PropContainer##NAME()\
 			{\
-			pProp = Reflect::CProperty::Create(#NAME, &ClassType::##NAME, #TYPE, ClassType::StaticMetaClass, moFlo::Reflect::PROP_READ_WRITE);\
+			pProp = Reflect::CProperty::Create(#NAME, &ClassType::##NAME, #TYPE, ClassType::StaticMetaClass, ChilliSource::Reflect::PROP_READ_WRITE);\
 			}\
 		};\
 		static PropContainer##NAME sProp##NAME;\
@@ -96,7 +96,7 @@ struct PropContainer##NAME\
 		Reflect::CProperty* pProp;\
 		PropContainer##NAME()\
 			{\
-			pProp = Reflect::CProperty::Create(#NAME, &ClassType::##NAME, #TYPE, ClassType::StaticMetaClass, moFlo::Reflect::PROP_READ_WRITE);\
+			pProp = Reflect::CProperty::Create(#NAME, &ClassType::##NAME, #TYPE, ClassType::StaticMetaClass, ChilliSource::Reflect::PROP_READ_WRITE);\
 			pProp->SetAccessor(&ClassType::##SETTER);\
 			pProp->SetAccessor(&ClassType::##GETTER);\
 			}\

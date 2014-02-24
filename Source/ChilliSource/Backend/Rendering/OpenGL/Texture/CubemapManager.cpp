@@ -11,7 +11,7 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
 #include <ChilliSource/Core/Image/ImageResourceProvider.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{
@@ -20,7 +20,7 @@ namespace moFlo
 		///
 		/// @return Concrete Cubemap resource based on the render system
 		//----------------------------------------------------------------
-		moFlo::Rendering::CubemapPtr CCubemapManager::CreateCubemapResource()
+		ChilliSource::Rendering::CubemapPtr CCubemapManager::CreateCubemapResource()
 		{
 			Rendering::CubemapPtr pCubemap(new CCubemap(this));
 			AddRestorableCubemap(pCubemap);
@@ -34,7 +34,7 @@ namespace moFlo
 		/// @param Out: Cubemap resource
 		/// @return Success
 		//----------------------------------------------------------------
-		bool CCubemapManager::CreateCubemapFromImages(const DYNAMIC_ARRAY<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, moFlo::Rendering::CubemapPtr& outpCubemap)
+		bool CCubemapManager::CreateCubemapFromImages(const DYNAMIC_ARRAY<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapPtr& outpCubemap)
 		{
 			SHARED_PTR_CAST<CCubemap>(outpCubemap)->Init(inaImages, inbWithMipsMaps);
 			return true;

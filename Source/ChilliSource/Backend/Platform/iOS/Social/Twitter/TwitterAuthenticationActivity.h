@@ -28,9 +28,9 @@
 @protocol UITextFieldDelegate;
 @protocol UIAlertViewDelegate;
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		class CTwitterAuthenticationActivity : public Social::ITwitterAuthenticationActivity
 		{
@@ -151,38 +151,38 @@ namespace moFlo
 			UITwitterTextFieldDelegate*				mpPINDelegate;
 			UITwitterAlertDelegate*					mpAlertDelegate;
 			
-			moFlo::UnifiedVector2					mvUnifiedSize;
-			moFlo::Core::CVector2					mvPointSize;
-			moFlo::Core::CVector2					mvAbsoluteSize;
-			moFlo::Core::CVector2					mvAbsolutePositionTopLeft;
-			moFlo::Core::CVector2					mvAbsolutePositionCentre;
+			Core::UnifiedVector2                    mvUnifiedSize;
+			Core::CVector2                          mvPointSize;
+			Core::CVector2                          mvAbsoluteSize;
+			Core::CVector2                          mvAbsolutePositionTopLeft;
+			Core::CVector2                          mvAbsolutePositionCentre;
 		};
 	}
 }
 
 @interface UITwitterAuthenticationWebDelegate : NSObject<UIWebViewDelegate>
 {
-	moFlo::iOSPlatform::CTwitterAuthenticationActivity* mpDelegate;
+	ChilliSource::iOS::CTwitterAuthenticationActivity* mpDelegate;
 }
--(void) SetCPPDelegate:(moFlo::iOSPlatform::CTwitterAuthenticationActivity*) inpDelegate;
+-(void) SetCPPDelegate:(ChilliSource::iOS::CTwitterAuthenticationActivity*) inpDelegate;
 
 @end
 
 @interface UITwitterTextFieldDelegate : NSObject<UITextFieldDelegate>
 {
-	moFlo::iOSPlatform::CTwitterAuthenticationActivity* mpDelegate;
+	ChilliSource::iOS::CTwitterAuthenticationActivity* mpDelegate;
 	UITextField* mpTextField;
 }
--(void) SetCPPDelegate:(moFlo::iOSPlatform::CTwitterAuthenticationActivity*) inpDelegate;
+-(void) SetCPPDelegate:(ChilliSource::iOS::CTwitterAuthenticationActivity*) inpDelegate;
 -(void) SetTextField:(UITextField*)inpTextField;
 
 @end
 
 @interface UITwitterAlertDelegate : NSObject<UIAlertViewDelegate>
 {
-	moFlo::iOSPlatform::CTwitterAuthenticationActivity* mpDelegate;
+	ChilliSource::iOS::CTwitterAuthenticationActivity* mpDelegate;
 }
--(void) SetCPPDelegate:(moFlo::iOSPlatform::CTwitterAuthenticationActivity*) inpDelegate;
+-(void) SetCPPDelegate:(ChilliSource::iOS::CTwitterAuthenticationActivity*) inpDelegate;
 
 @end
 

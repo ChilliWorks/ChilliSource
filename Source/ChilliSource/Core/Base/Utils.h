@@ -16,10 +16,10 @@
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/JSON/forwards.h>
 
-#define BYTE_SWAP_2(src) moFlo::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(src))
-#define BYTE_SWAP_4(src) moFlo::Core::CUtils::Endian4ByteSwap(reinterpret_cast<u32*>(src))
+#define BYTE_SWAP_2(src) ChilliSource::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(src))
+#define BYTE_SWAP_4(src) ChilliSource::Core::CUtils::Endian4ByteSwap(reinterpret_cast<u32*>(src))
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

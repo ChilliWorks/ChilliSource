@@ -18,11 +18,11 @@
 @class EAGLContext;
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CRenderTarget : public moFlo::Rendering::IRenderTarget
+		class CRenderTarget : public ChilliSource::Rendering::IRenderTarget
 		{
 		public:
 #ifdef TARGET_OS_IPHONE

@@ -13,7 +13,7 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_LISTENER_H_
 #define _MO_FLO_AUDIO_AUDIO_LISTENER_H_
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Audio
 	{

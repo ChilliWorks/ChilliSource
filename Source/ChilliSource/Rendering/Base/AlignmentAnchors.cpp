@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {

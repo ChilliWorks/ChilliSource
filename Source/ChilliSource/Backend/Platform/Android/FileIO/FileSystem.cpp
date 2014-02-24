@@ -23,9 +23,9 @@
 #include <cstdio>
 #include <jni.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform 
+	namespace Android 
 	{
 		const std::string kstrAssetsDir = "assets/";
 		const std::string kstrSaveDataDir = "files/SaveData/";
@@ -264,7 +264,7 @@ namespace moFlo
 
 				//get the path to the file
 				std::string strPath, strName;
-				moFlo::Core::CStringUtils::SplitFilename(instrDestinationFilepath, strName, strPath);
+				ChilliSource::Core::CStringUtils::SplitFilename(instrDestinationFilepath, strName, strPath);
 
 				//create the output directory
 				CreateDirectory(ineDestinationStorageLocation, strPath);
@@ -404,7 +404,7 @@ namespace moFlo
             for(DYNAMIC_ARRAY<DirInfo>::const_iterator it = inaDirs.begin(); it != inaDirs.end(); ++it)
             {
             	aZipPos.clear();
-                std::string path = moFlo::Core::CStringUtils::StandardisePath(it->strPath);
+                std::string path = ChilliSource::Core::CStringUtils::StandardisePath(it->strPath);
 
                 if(it->eLocation == Core::SL_PACKAGE)
                 {
@@ -428,7 +428,7 @@ namespace moFlo
         	std::string strDirectory;
         	if(instrDirectory.empty() == false)
         	{
-        		strDirectory = moFlo::Core::CStringUtils::StandardisePath(instrDirectory);
+        		strDirectory = ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory);
         	}
 
 			for (DYNAMIC_ARRAY<std::string>::const_iterator it = instrFileNames.begin(); it != instrFileNames.end(); ++it)
@@ -451,7 +451,7 @@ namespace moFlo
         	std::string strDirectory;
         	if(instrDirectory.empty() == false)
         	{
-        		strDirectory = moFlo::Core::CStringUtils::StandardisePath(instrDirectory);
+        		strDirectory = ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory);
         	}
 
 			for (DYNAMIC_ARRAY<std::string>::const_iterator it = instrFileNames.begin(); it != instrFileNames.end(); ++it)
@@ -474,7 +474,7 @@ namespace moFlo
         	std::string strDirectory;
         	if(instrDirectory.empty() == false)
         	{
-        		strDirectory = moFlo::Core::CStringUtils::StandardisePath(instrDirectory);
+        		strDirectory = ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory);
         	}
 
 			for (DYNAMIC_ARRAY<std::string>::const_iterator it = instrFileNames.begin(); it != instrFileNames.end(); ++it)
@@ -686,7 +686,7 @@ namespace moFlo
             }
             
             //return whether or not the file exists
-			return DoesFileExist(moFlo::Core::CStringUtils::StandardisePath(path));
+			return DoesFileExist(ChilliSource::Core::CStringUtils::StandardisePath(path));
 		}
 		//--------------------------------------------------------------
 		/// Does File Exist In Cached DLC
@@ -750,7 +750,7 @@ namespace moFlo
             }
             
             //return whether or not the dir exists
-			return DoesDirectoryExist(moFlo::Core::CStringUtils::StandardisePath(path));
+			return DoesDirectoryExist(ChilliSource::Core::CStringUtils::StandardisePath(path));
 		}
 		//--------------------------------------------------------------
 		/// Is Storage Location Available
@@ -827,7 +827,7 @@ namespace moFlo
 			CThread::ScopedLock lock(mMinizipMutex);
 
 			bool bSuccess = false;
-			std::string strSourceFile = moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_PACKAGE) + instrPath);
+			std::string strSourceFile = ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_PACKAGE) + instrPath);
 
 			unzFile unzip = unzOpen(mstrPathToAPK.c_str());
 			if (unzip != NULL)
@@ -845,10 +845,10 @@ namespace moFlo
 					const u32 dwFilenameLength = 256;
 					char cfilename[dwFilenameLength];
 					unzGetCurrentFileInfo(unzip, &info, cfilename, dwFilenameLength, NULL, 0, NULL, 0);
-					std::string strFilepath = moFlo::Core::CStringUtils::StandardisePath(std::string(cfilename));
+					std::string strFilepath = ChilliSource::Core::CStringUtils::StandardisePath(std::string(cfilename));
 
 					//check and see if this file is in the directory we want
-					if (moFlo::Core::CStringUtils::Match(strFilepath, strSourceFile))
+					if (ChilliSource::Core::CStringUtils::Match(strFilepath, strSourceFile))
 					{
 						//create the directory
 						std::string strOutputPath, strOutputFilename;
@@ -856,7 +856,7 @@ namespace moFlo
 						if (CreateDirectory(ineDestinationStorageLocation, strOutputPath) == true)
 						{
 							//get the filename
-							std::string strDestFile = moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(ineDestinationStorageLocation) + instrDestinationFilepath);
+							std::string strDestFile = ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(ineDestinationStorageLocation) + instrDestinationFilepath);
 
 							//load the file into memory
 							char * dataBuffer = new char[info.uncompressed_size];
@@ -898,7 +898,7 @@ namespace moFlo
 
 			//insure the input dir is correctly formatted
 			std::string directory = instrPath;
-			directory = moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_PACKAGE) + directory);
+			directory = ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_PACKAGE) + directory);
 
 			//open apk
 			unzFile unzipper = unzOpen(mstrPathToAPK.c_str());
@@ -922,7 +922,7 @@ namespace moFlo
 
 				//get the path and filename
 				std::string filename(cfilename);
-				filename = moFlo::Core::CStringUtils::StandardisePath(filename);
+				filename = ChilliSource::Core::CStringUtils::StandardisePath(filename);
 				std::string path = filename.substr(0, filename.rfind("/") + 1);
 
 				//if this file is at the same path as requested, then add it to the output
@@ -993,7 +993,7 @@ namespace moFlo
 
 			//insure the input dir is correctly formatted
 			std::string strDirectory = instrPath;
-			strDirectory = moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_PACKAGE) + strDirectory);
+			strDirectory = ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_PACKAGE) + strDirectory);
 
 			//open apk
 			unzFile unzipper = unzOpen(mstrPathToAPK.c_str());
@@ -1015,7 +1015,7 @@ namespace moFlo
 
 				//get the path and filename
 				std::string strFilename(cfilename);
-				strFilename = moFlo::Core::CStringUtils::StandardisePath(strFilename);
+				strFilename = ChilliSource::Core::CStringUtils::StandardisePath(strFilename);
 
 				// if this filename contains the path to the requested directory
 				if (Core::CStringUtils::Match(strFilename, strDirectory + "*") == true)
@@ -1253,7 +1253,7 @@ namespace moFlo
         {
         	if(DoesFileExistInCachedDLC(instrFilePath))
         	{
-        		return moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_DLC) + instrFilePath);
+        		return ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_DLC) + instrFilePath);
         	}
 
         	std::string strPath;
@@ -1282,7 +1282,7 @@ namespace moFlo
             unz_file_pos sZipPos;
             for(u32 i=0; i<3; ++i)
             {
-                std::string strPath = moFlo::Core::CStringUtils::StandardisePath(mastrResourceDirectory[i] + instrFilePath);
+                std::string strPath = ChilliSource::Core::CStringUtils::StandardisePath(mastrResourceDirectory[i] + instrFilePath);
 
                 if(DoesFileExistInAPKHashedStore(strPath, sZipPos))
                 {
@@ -1305,7 +1305,7 @@ namespace moFlo
 
             for(u32 i=0; i<3; ++i)
             {
-                std::string strPath = moFlo::Core::CStringUtils::StandardisePath(mastrResourceDirectory[i] + instrFilePath);
+                std::string strPath = ChilliSource::Core::CStringUtils::StandardisePath(mastrResourceDirectory[i] + instrFilePath);
 
                 if(DoesFileExistInAPKHashedStore(strPath, Result))
                 {

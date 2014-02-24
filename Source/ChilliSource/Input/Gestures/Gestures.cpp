@@ -15,7 +15,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Input
 	{
@@ -28,7 +28,7 @@ namespace moFlo
 		/// @param Touch screen device
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CGesture::CGesture(ITouchScreen* inpTouchDevice) : mbIsGestureInvalid(false), mpSurface(NULL), mpTouchDevice(inpTouchDevice)
+		CGesture::CGesture(ITouchScreen* inpTouchDevice) : mbIsGestureInvalid(false), mpView(nullptr), mpTouchDevice(inpTouchDevice)
 		{
 			//Register for touch notifications
 			inpTouchDevice->GetTouchBeganEvent() += TouchEventDelegate(this, &CGesture::OnTouchBegan);
@@ -41,12 +41,12 @@ namespace moFlo
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CGesture::CGesture(ISurface* inpSurface) : mbIsGestureInvalid(false), mpSurface(inpSurface), mpTouchDevice(NULL)
+		CGesture::CGesture(Rendering::CGUIView* inpView) : mbIsGestureInvalid(false), mpView(inpView), mpTouchDevice(NULL)
 		{
 			//Register for touch notifications
-			inpSurface->GetTouchBeganEvent() += TouchEventDelegate(this, &CGesture::OnTouchBegan);
-			inpSurface->GetTouchMovedEvent() += TouchEventDelegate(this, &CGesture::OnTouchMoved);
-			inpSurface->GetTouchEndEvent() += TouchEventDelegate(this, &CGesture::OnTouchEnded);
+			mpView->GetTouchBeganEvent() += TouchEventDelegate(this, &CGesture::OnTouchBegan);
+			mpView->GetTouchMovedEvent() += TouchEventDelegate(this, &CGesture::OnTouchMoved);
+			mpView->GetTouchEndEvent() += TouchEventDelegate(this, &CGesture::OnTouchEnded);
 		}
 		//----------------------------------------------------
 		/// Register Gesture Delegate
@@ -83,7 +83,7 @@ namespace moFlo
 		//----------------------------------------------------
 		void CGesture::SurfaceDestroyed()
         {
-            mpSurface = NULL;
+            mpView = NULL;
             mpTouchDevice = NULL;
         }
         //----------------------------------------------------
@@ -105,12 +105,12 @@ namespace moFlo
 		//----------------------------------------------------
 		CGesture::~CGesture()
 		{
-            if(mpSurface)
+            if(mpView)
             {
-                mpSurface->GetTouchBeganEvent() -= TouchEventDelegate(this, &CGesture::OnTouchBegan);
-                mpSurface->GetTouchMovedEvent() -= TouchEventDelegate(this, &CGesture::OnTouchMoved);
-                mpSurface->GetTouchEndEvent() -= TouchEventDelegate(this, &CGesture::OnTouchEnded);
-                mpSurface = NULL;
+                mpView->GetTouchBeganEvent() -= TouchEventDelegate(this, &CGesture::OnTouchBegan);
+                mpView->GetTouchMovedEvent() -= TouchEventDelegate(this, &CGesture::OnTouchMoved);
+                mpView->GetTouchEndEvent() -= TouchEventDelegate(this, &CGesture::OnTouchEnded);
+                mpView = NULL;
             }
             else if(mpTouchDevice)
             {
@@ -132,8 +132,8 @@ namespace moFlo
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CSwipeGesture::CSwipeGesture(ISurface* inpSurface)
-		: CGesture(inpSurface), mMinDistanceRequiredSqrd(4000), mNumContactPointsRequired(1), mCurrentNumContactPoints(0), mMaxNumContactPoints(0), mfMaximumSwipeDuration(0.5f)
+		CSwipeGesture::CSwipeGesture(Rendering::CGUIView* inpView)
+		: CGesture(inpView), mMinDistanceRequiredSqrd(4000), mNumContactPointsRequired(1), mCurrentNumContactPoints(0), mMaxNumContactPoints(0), mfMaximumSwipeDuration(0.5f)
 		{
 		}
         //----------------------------------------------------
@@ -248,8 +248,8 @@ namespace moFlo
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CPinchGesture::CPinchGesture(ISurface* inpSurface) 
-		: CGesture(inpSurface), mMinDistanceRequiredSqrd(6000), mfStartDisplacement(0.0f), mfCurrentDisplacement(0.0f), mbFirstTouchBegan(false), mbSecondTouchBegan(false), mCurrentTouches(0), mTouchID1(0), mfRatio(0.0f),
+		CPinchGesture::CPinchGesture(Rendering::CGUIView* inpView)
+		: CGesture(inpView), mMinDistanceRequiredSqrd(6000), mfStartDisplacement(0.0f), mfCurrentDisplacement(0.0f), mbFirstTouchBegan(false), mbSecondTouchBegan(false), mCurrentTouches(0), mTouchID1(0), mfRatio(0.0f),
 		mTouchID2(0)
 		{
 		}
@@ -361,9 +361,9 @@ namespace moFlo
 				// Need to set the first touch to the current first touch position
                 ITouchScreen* pTouchScreen = mpTouchDevice;
                 
-                if(mpSurface)
+                if(mpView)
                 {
-                    pTouchScreen = mpSurface->GetInputSystem()->GetTouchScreenPtr();
+                    pTouchScreen = Core::CApplication::GetInputSystemPtr()->GetTouchScreenPtr();
                 }
                 
 				ITouchScreen::TouchList& cTouchList = pTouchScreen->GetTouchList();
@@ -455,13 +455,13 @@ namespace moFlo
             }
 		}
         
-        void CPinchGesture::PopulateStartPositions(moFlo::Core::CVector2& outvFirstPosition, moFlo::Core::CVector2& outvSecondPosition) const
+        void CPinchGesture::PopulateStartPositions(ChilliSource::Core::CVector2& outvFirstPosition, ChilliSource::Core::CVector2& outvSecondPosition) const
         {
             outvFirstPosition = mvStartPos1;
             outvSecondPosition = mvStartPos2;
         }
         
-        void CPinchGesture::PopulateCurrentPositions(moFlo::Core::CVector2& outvFirstPosition, moFlo::Core::CVector2& outvSecondPosition) const
+        void CPinchGesture::PopulateCurrentPositions(ChilliSource::Core::CVector2& outvFirstPosition, ChilliSource::Core::CVector2& outvSecondPosition) const
         {
             outvFirstPosition = mvCurrentPos1;
             outvSecondPosition = mvCurrentPos2;
@@ -479,8 +479,8 @@ namespace moFlo
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CTapGesture::CTapGesture(ISurface* inpSurface) 
-		: CGesture(inpSurface), mNumTapsRequired(1), mfMaximumTapDuration(0.15f), mfMaxTimeBetweenTaps(0.25f), mCurrentNumTaps(0), mfLastTapTime(0.0f), mfLastBeganTime(0.0f), mudwMaxDistAllowedSqrd(1000)
+		CTapGesture::CTapGesture(Rendering::CGUIView* inpView)
+		: CGesture(inpView), mNumTapsRequired(1), mfMaximumTapDuration(0.15f), mfMaxTimeBetweenTaps(0.25f), mCurrentNumTaps(0), mfLastTapTime(0.0f), mfLastBeganTime(0.0f), mudwMaxDistAllowedSqrd(1000)
 		{
 		}
         //----------------------------------------------------
@@ -631,8 +631,8 @@ namespace moFlo
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//-----------------------------------------------------
-		CDragGesture::CDragGesture(ISurface* inpSurface) 
-		: CGesture(inpSurface), mMinDistanceRequiredSqrd(2000), mfInitialHoldDuration(0.8f), mbFirstRun(true), mCurrentTouches(0), mbIsGestureActive(false), mCurrentID(0)
+		CDragGesture::CDragGesture(Rendering::CGUIView* inpView)
+		: CGesture(inpView), mMinDistanceRequiredSqrd(2000), mfInitialHoldDuration(0.8f), mbFirstRun(true), mCurrentTouches(0), mbIsGestureActive(false), mCurrentID(0)
 		{
 		}
         //----------------------------------------------------
@@ -819,8 +819,8 @@ namespace moFlo
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//-----------------------------------------------------
-		CHoldGesture::CHoldGesture(ISurface* inpSurface) 
-		: CGesture(inpSurface), mfMaxDistanceAllowedSqrd(100), mfHoldDuration(0.8f), mbIsGestureActive(false), mudwNumberOfTouch(0), mfInitialHoldTime(0.2f), mbIsGestureStarted(false)
+		CHoldGesture::CHoldGesture(Rendering::CGUIView* inpView)
+		: CGesture(inpView), mfMaxDistanceAllowedSqrd(100), mfHoldDuration(0.8f), mbIsGestureActive(false), mudwNumberOfTouch(0), mfInitialHoldTime(0.2f), mbIsGestureStarted(false)
 		{
 		}
         //----------------------------------------------------
@@ -936,7 +936,7 @@ namespace moFlo
 				mTimer.Reset();
 				mTimer.Start();
 				
-				mTimer.RegisterPeriodicUpdateDelegate(moFlo::Core::TimeEventDelegate(this, &CHoldGesture::OnGestureUpdate), 0);
+				mTimer.RegisterPeriodicUpdateDelegate(ChilliSource::Core::TimeEventDelegate(this, &CHoldGesture::OnGestureUpdate), 0);
 				
 				// Set the starting location
 				mvLocation = Info.vLocation;
@@ -1032,7 +1032,7 @@ namespace moFlo
             mbIsGestureActive = false;
 			mbIsGestureStarted = false;
             
-            mTimer.DeregisterPeriodicUpdateDelegate(moFlo::Core::TimeEventDelegate(this, &CHoldGesture::OnGestureUpdate));
+            mTimer.DeregisterPeriodicUpdateDelegate(ChilliSource::Core::TimeEventDelegate(this, &CHoldGesture::OnGestureUpdate));
 			mTimer.Reset();
         }
         

@@ -12,17 +12,20 @@
 
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
-namespace moFlo{
-	
-	/*
-	 IInformationProvider is the base class for objects representing interfaces into a data store of some kind
-	 */
-	class IInformationProvider : public Core::IQueryableInterface{
-	public:
-		virtual ~IInformationProvider(){}
-		
-	};
-	
+namespace ChilliSource
+{
+	namespace Core
+    {
+        /*
+         IInformationProvider is the base class for objects representing interfaces into a data store of some kind
+         */
+        class IInformationProvider : public Core::IQueryableInterface
+            {
+        public:
+            virtual ~IInformationProvider(){}
+            
+        };
+	}
 }
 
 #endif

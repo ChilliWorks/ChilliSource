@@ -11,7 +11,7 @@
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 
-namespace moFlo 
+namespace ChilliSource 
 {
 	namespace Rendering
 	{

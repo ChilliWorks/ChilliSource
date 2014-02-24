@@ -7,7 +7,7 @@
  *
  */
 
-namespace moFlo {
+namespace ChilliSource {
 	
 	namespace Video {
 		

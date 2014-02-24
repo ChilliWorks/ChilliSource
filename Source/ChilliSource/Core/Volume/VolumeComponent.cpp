@@ -9,7 +9,10 @@
 
 #include <ChilliSource/Core/Volume/VolumeComponent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	DEFINE_NAMED_INTERFACE(IVolumeComponent);
+    namespace Core
+    {
+        DEFINE_NAMED_INTERFACE(IVolumeComponent);
+    }
 }

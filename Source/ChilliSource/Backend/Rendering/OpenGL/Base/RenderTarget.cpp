@@ -16,7 +16,7 @@
 #include <OpenGLES/EAGLDrawable.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{

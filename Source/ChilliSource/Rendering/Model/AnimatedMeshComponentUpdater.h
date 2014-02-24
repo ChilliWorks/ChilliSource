@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {
@@ -20,7 +20,7 @@ namespace moFlo
         ///
         /// A system for updating animation mesh components.
         //======================================================
-        class CAnimatedMeshComponentUpdater : public moCore::ISystem, public moCore::IUpdateable
+        class CAnimatedMeshComponentUpdater : public Core::ISystem, public Core::IUpdateable
         {
         public:
             DECLARE_NAMED_INTERFACE(CAnimatedMeshComponentUpdater);

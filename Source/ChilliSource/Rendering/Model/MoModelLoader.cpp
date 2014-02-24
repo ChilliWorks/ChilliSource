@@ -16,7 +16,7 @@
 #include <stdexcept>
 #include <ChilliSource/Rendering/Model/MeshManager.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -63,7 +63,7 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		bool CMoModelLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == Rendering::CMesh::InterfaceID);
+			return (inInterfaceID == CMesh::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource From File With Extension
@@ -81,7 +81,7 @@ namespace moFlo
 			
 			//get the path to the curent file
 			std::string filename, filepath;
-			moFlo::Core::CStringUtils::SplitFilename(inFilePath, filename, filepath);
+			ChilliSource::Core::CStringUtils::SplitFilename(inFilePath, filename, filepath);
 			
 			return CreateMeshFromFile(ineStorageLocation, inFilePath, filepath, pMesh);
 		}
@@ -109,7 +109,7 @@ namespace moFlo
 			
 			//get the path to the curent file
 			std::string filename, filepath;
-			moFlo::Core::CStringUtils::SplitFilename(inFilePath, filename, filepath);
+			ChilliSource::Core::CStringUtils::SplitFilename(inFilePath, filename, filepath);
 			
 			return AsyncCreateMeshFromFile(ineStorageLocation, inFilePath, filepath, pMesh);
 		}
@@ -119,8 +119,8 @@ namespace moFlo
 		bool CMoModelLoader::AsyncCreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource)
 		{
 			//Load model as task
-			Task4<Core::StorageLocation, const std::string&, const std::string&, const MeshPtr&> MeshTask(this, &CMoModelLoader::LoadMeshDataTask, ineStorageLocation, inFilePath, instrMaterialPath, outpResource);
-			CTaskScheduler::ScheduleTask(MeshTask);
+			Core::Task4<Core::StorageLocation, const std::string&, const std::string&, const MeshPtr&> MeshTask(this, &CMoModelLoader::LoadMeshDataTask, ineStorageLocation, inFilePath, instrMaterialPath, outpResource);
+			Core::CTaskScheduler::ScheduleTask(MeshTask);
 			
 			return true;
 		}
@@ -137,7 +137,7 @@ namespace moFlo
 			}
 			
 			//start a main thread task for loading the data into a mesh
-			CTaskScheduler::ScheduleMainThreadTask(Task2<MeshDescriptor&,const MeshPtr&>(this, &CMoModelLoader::BuildMeshTask, descriptor, outpResource));
+			Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task2<MeshDescriptor&,const MeshPtr&>(this, &CMoModelLoader::BuildMeshTask, descriptor, outpResource));
 		}
 		//----------------------------------------------------------------------------
 		/// Build Mesh Task
@@ -157,7 +157,7 @@ namespace moFlo
 			if (inMaterialPath.length() == 0)
 			{
 				std::string filename;
-				moFlo::Core::CStringUtils::SplitFilename(inFilePath, filename, strMatPath);
+				ChilliSource::Core::CStringUtils::SplitFilename(inFilePath, filename, strMatPath);
 			}
 			
 			if (ReadFile(ineStorageLocation, inFilePath, strMatPath, descriptor) == false)
@@ -178,12 +178,12 @@ namespace moFlo
 			if (inMaterialPath.length() == 0)
 			{
 				std::string filename;
-				moFlo::Core::CStringUtils::SplitFilename(inFilePath, filename, strMatPath);
+				ChilliSource::Core::CStringUtils::SplitFilename(inFilePath, filename, strMatPath);
 			}
 			
 			//Load image as a task. Once it completed we can load the texture as it should be done on the main thread
-			Task4<Core::StorageLocation, const std::string&, const std::string&, const MeshPtr&> MeshTask(this, &CMoModelLoader::LoadDataForExistingMeshTask, ineStorageLocation, inFilePath, strMatPath, inpMesh);
-			CTaskScheduler::ScheduleTask(MeshTask);
+			Core::Task4<Core::StorageLocation, const std::string&, const std::string&, const MeshPtr&> MeshTask(this, &CMoModelLoader::LoadDataForExistingMeshTask, ineStorageLocation, inFilePath, strMatPath, inpMesh);
+			Core::CTaskScheduler::ScheduleTask(MeshTask);
 		}
 		//----------------------------------------------------------------------------
 		/// LoadDataForExistingMeshTask
@@ -198,7 +198,7 @@ namespace moFlo
 			}
 			
 			//start a main thread task for loading the data into a mesh
-			CTaskScheduler::ScheduleMainThreadTask(Task2<MeshDescriptor&, const MeshPtr&>(this, &CMoModelLoader::BuildExistingMeshTask, descriptor, outpResource));
+			Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task2<MeshDescriptor&, const MeshPtr&>(this, &CMoModelLoader::BuildExistingMeshTask, descriptor, outpResource));
 		}
 		//----------------------------------------------------------------------------
 		/// Build Existing Mesh Task
@@ -212,7 +212,7 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		bool CMoModelLoader::BuildMesh(MeshDescriptor& inMeshDescriptor, const MeshPtr& outpResource, bool inbNeedsPrepared)
 		{
-			bool bSuccess = moFlo::Rendering::CMeshManager::BuildMesh(mpApp->GetRenderSystemPtr(), inMeshDescriptor, outpResource, inbNeedsPrepared);
+			bool bSuccess = CMeshManager::BuildMesh(mpApp->GetRenderSystemPtr(), inMeshDescriptor, outpResource, inbNeedsPrepared);
 			
 			//cleanup
 			for (DYNAMIC_ARRAY<SubMeshDescriptor>::const_iterator it = inMeshDescriptor.mMeshes.begin(); it != inMeshDescriptor.mMeshes.end(); ++it)
@@ -269,7 +269,7 @@ namespace moFlo
 		//-----------------------------------------------------------------------------
 		/// Read Global Header
 		//-----------------------------------------------------------------------------
-		bool CMoModelLoader::ReadGlobalHeader(const moFlo::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, const std::string &inFilePath, MeshDataQuantities& outMeshDataQuantities)
+		bool CMoModelLoader::ReadGlobalHeader(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, const std::string &inFilePath, MeshDataQuantities& outMeshDataQuantities)
 		{
 			//Check file for corruption
 			if(NULL == inpStream || true == inpStream->IsBad())
@@ -358,7 +358,7 @@ namespace moFlo
 		//-----------------------------------------------------------------------------
 		/// Read Skeleton
 		//-----------------------------------------------------------------------------
-		bool CMoModelLoader::ReadSkeletonData(const moFlo::Core::FileStreamPtr& inpStream, const MeshDataQuantities& inQuantities, MeshDescriptor& inMeshDescriptor)
+		bool CMoModelLoader::ReadSkeletonData(const ChilliSource::Core::FileStreamPtr& inpStream, const MeshDataQuantities& inQuantities, MeshDescriptor& inMeshDescriptor)
 		{
 			if (true == inMeshDescriptor.mFeatures.mbHasAnimationData)
 			{
@@ -407,7 +407,7 @@ namespace moFlo
 		//-----------------------------------------------------------------------------
 		/// Read Mesh Header
 		//-----------------------------------------------------------------------------
-		bool CMoModelLoader::ReadMeshHeader(const moFlo::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, SubMeshDescriptor& inSubMeshDescriptor, 
+		bool CMoModelLoader::ReadMeshHeader(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, SubMeshDescriptor& inSubMeshDescriptor, 
 											const std::string& instrMaterialPath)
 		{
 			//read mesh name
@@ -472,7 +472,7 @@ namespace moFlo
 					else 
 						strMaterialFilename += bySingleChar;
 				}
-				inSubMeshDescriptor.mstrMaterialName = moFlo::Core::CStringUtils::StandardisePath(instrMaterialPath) + strMaterialFilename;
+				inSubMeshDescriptor.mstrMaterialName = ChilliSource::Core::CStringUtils::StandardisePath(instrMaterialPath) + strMaterialFilename;
 			}
 			
 			return true;
@@ -480,14 +480,14 @@ namespace moFlo
 		//-----------------------------------------------------------------------------
 		/// Read Mesh Data
 		//-----------------------------------------------------------------------------
-		bool CMoModelLoader::ReadMeshData(const moFlo::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, SubMeshDescriptor& inSubMeshDescriptor)
+		bool CMoModelLoader::ReadMeshData(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, SubMeshDescriptor& inSubMeshDescriptor)
 		{
 			//read the inverse bind matrices
             if (true == inMeshDescriptor.mFeatures.mbHasAnimationData)
 			{
                 for (u32 i = 0; i < inMeshDescriptor.mpSkeleton->GetNumJoints(); i++)
                 {
-                    moFlo::Core::CMatrix4x4 IBPMat;
+                    ChilliSource::Core::CMatrix4x4 IBPMat;
                     for (u32 j = 0; j < 16; j++)
                     {
                         IBPMat.m[j] = ReadValue<f32>(inpStream);
@@ -509,7 +509,7 @@ namespace moFlo
 		//-----------------------------------------------------------------------------
 		/// Read Vertex Declaration
 		//-----------------------------------------------------------------------------
-		void CMoModelLoader::ReadVertexDeclaration(const moFlo::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor)
+		void CMoModelLoader::ReadVertexDeclaration(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor)
 		{
 			//build the vertex declaration from the file
 			u8 dwNumVertexElements = ReadValue<u8>(inpStream);

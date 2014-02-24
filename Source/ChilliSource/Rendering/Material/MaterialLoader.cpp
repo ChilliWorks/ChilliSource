@@ -23,7 +23,7 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -52,7 +52,7 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		bool CMaterialLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == Rendering::CMaterial::InterfaceID);
+			return (inInterfaceID == CMaterial::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource From File With Extension
@@ -117,8 +117,8 @@ namespace moFlo
 		bool CMaterialLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
 			//Start the material building task.
-			Task3<Core::StorageLocation, const std::string&, Core::ResourcePtr&> BuildMaterialTask(this, &CMaterialLoader::BuildMaterialTask, ineStorageLocation, inFilePath, outpResource);
-			CTaskScheduler::ScheduleTask(BuildMaterialTask);
+			Core::Task3<Core::StorageLocation, const std::string&, Core::ResourcePtr&> BuildMaterialTask(this, &CMaterialLoader::BuildMaterialTask, ineStorageLocation, inFilePath, outpResource);
+			Core::CTaskScheduler::ScheduleTask(BuildMaterialTask);
 			
 			return true;
 		}
@@ -170,7 +170,7 @@ namespace moFlo
                 
                 pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
                 
-                CTaskScheduler::ScheduleMainThreadTask(Task1<Core::ResourcePtr&>(this, &CMaterialLoader::SetLoadedTask, outpResource));
+                Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task1<Core::ResourcePtr&>(this, &CMaterialLoader::SetLoadedTask, outpResource));
 			}
 		}
 		//----------------------------------------------------------------------------
@@ -318,7 +318,7 @@ namespace moFlo
                             {
                                 if(outaShaderFiles[udwShaderFilesIndex].first == kaShaderNodes[i].second)
                                 {
-                                    outaShaderFiles[udwShaderFilesIndex].second.first = moFlo::Core::CStringConverter::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pShaderEl, "location", "Package"));
+                                    outaShaderFiles[udwShaderFilesIndex].second.first = ChilliSource::Core::CStringConverter::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pShaderEl, "location", "Package"));
                                     outaShaderFiles[udwShaderFilesIndex].second.second = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pShaderEl, "file-name", "");
                                     break;
                                 }

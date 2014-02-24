@@ -10,9 +10,9 @@
 
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		namespace
 		{
@@ -55,7 +55,7 @@ namespace moFlo
 			}
 
     		mpJavaInterface = GooglePlayIAPJavaInterfacePtr(new CGooglePlayIAPJavaInterface(strPublicKey));
-	        moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
+	        ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
 		}
         //---------------------------------------------------------------
         /// Register Products

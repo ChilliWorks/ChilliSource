@@ -15,7 +15,7 @@
 
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Audio
     {
@@ -57,7 +57,7 @@ namespace moFlo
             /// @return ID of file provide access
             //------------------------------------------------
             static u32 PlayEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffectFile,
-                                  bool inbLooping, moAudio::AudioEventDelegate inAudioFinishedEvent = NULL);
+                                  bool inbLooping, AudioEventDelegate inAudioFinishedEvent = NULL);
             //------------------------------------------------
             /// Play 
             ///
@@ -168,7 +168,7 @@ namespace moFlo
             /// @param Index of audio component to return
             /// @param Audio component or empty pointer of not found
             //------------------------------------------------
-            static moAudio::AudioComponentPtr GetAudioComponentAtIndex(const u32 inudwIndex);
+            static AudioComponentPtr GetAudioComponentAtIndex(const u32 inudwIndex);
             //------------------------------------------------
             /// Set Volume
             ///

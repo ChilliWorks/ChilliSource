@@ -11,9 +11,9 @@
 
 #include <algorithm>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         //-----------------------------------------------------------
         /// Get Pressed Inside Event
@@ -23,7 +23,7 @@ namespace moFlo
         ///
         /// @return Event
         //-----------------------------------------------------------
-        IEvent<GUIEventDelegate>& CInputEvents::GetPressedInsideEvent()
+        Core::IEvent<GUIEventDelegate>& CInputEvents::GetPressedInsideEvent()
         {
             return mTouchPressedInside;
         }
@@ -35,7 +35,7 @@ namespace moFlo
         ///
         /// @return Event
         //-----------------------------------------------------------
-        IEvent<GUIEventDelegate>& CInputEvents::GetReleasedInsideEvent()
+        Core::IEvent<GUIEventDelegate>& CInputEvents::GetReleasedInsideEvent()
         {
             return mTouchReleasedInside;
         }
@@ -47,7 +47,7 @@ namespace moFlo
         ///
         /// @return Event
         //-----------------------------------------------------------
-        IEvent<GUIEventDelegate>& CInputEvents::GetReleasedOutsideEvent()
+        Core::IEvent<GUIEventDelegate>& CInputEvents::GetReleasedOutsideEvent()
         {
             return mTouchReleasedOutside;
         }
@@ -59,7 +59,7 @@ namespace moFlo
         ///
         /// @return Event
         //-----------------------------------------------------------
-        IEvent<GUIEventDelegate>& CInputEvents::GetMovedOutsideEvent()
+        Core::IEvent<GUIEventDelegate>& CInputEvents::GetMovedOutsideEvent()
         {   
             return mTouchMoveExit;    
         }
@@ -71,7 +71,7 @@ namespace moFlo
         ///
         /// @return Event
         //-----------------------------------------------------------
-        IEvent<GUIEventDelegate>& CInputEvents::GetMovedInsideEvent()
+        Core::IEvent<GUIEventDelegate>& CInputEvents::GetMovedInsideEvent()
         {
             return mTouchMoveEnter;
         }
@@ -83,7 +83,7 @@ namespace moFlo
         ///
         /// @return Event
         //-----------------------------------------------------------
-        IEvent<GUIEventDelegate>& CInputEvents::GetMovedWithinEvent()
+        Core::IEvent<GUIEventDelegate>& CInputEvents::GetMovedWithinEvent()
         {
             return mTouchMovedWithin;
         }

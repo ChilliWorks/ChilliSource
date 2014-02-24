@@ -14,9 +14,7 @@
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/System/System.h>
-#include <ChilliSource/Core/Base/ApplicationDelegates.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/Base/CustomCreator.h>
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Audio/ForwardDeclarations.h>
@@ -24,30 +22,31 @@
 
 #include <limits>
 
-namespace moFlo
+namespace ChilliSource
 {
-    const u32 kudwUndefinedMaxResolution = std::numeric_limits<u32>::max();
-    const f32 kfUndefinedMaxDensity = std::numeric_limits<f32>::max();
-    struct ResourceDirectoryInfo
-    {
-        std::string strDirectory;
-        u32 udwMaxRes;
-        f32 fMaxDensity;
-        f32 fResourcesDensity;
-    };
-    
-	namespace SystemConfirmDialog
-	{
-		enum class Result
-		{
-			k_confirm,
-			k_cancel
-		};
-
-		typedef fastdelegate::FastDelegate2<u32, Result> Delegate;
-	}
 	namespace Core
 	{
+        const u32 kudwUndefinedMaxResolution = std::numeric_limits<u32>::max();
+        const f32 kfUndefinedMaxDensity = std::numeric_limits<f32>::max();
+        struct ResourceDirectoryInfo
+        {
+            std::string strDirectory;
+            u32 udwMaxRes;
+            f32 fMaxDensity;
+            f32 fResourcesDensity;
+        };
+        
+        namespace SystemConfirmDialog
+        {
+            enum class Result
+            {
+                k_confirm,
+                k_cancel
+            };
+            
+            typedef fastdelegate::FastDelegate2<u32, Result> Delegate;
+        }
+        
 		//--------------------------------------------------------------------------------------------------
 		/// Description:
 		///
@@ -467,7 +466,7 @@ namespace moFlo
             /// @param Out: The name of the directory to fall back on for resolution dependant assets
             /// @param Out: The name of the directory to use as the default (i.e. for shared assets)
             //--------------------------------------------------------------------------------------------------
-            virtual void SetResourceDirectories(DYNAMIC_ARRAY<moFlo::ResourceDirectoryInfo>& outaResDependantDirectoryInfos, std::string& outstrResDefaultDirectory, std::string& outstrDefaultDirectory) = 0;
+            virtual void SetResourceDirectories(DYNAMIC_ARRAY<ResourceDirectoryInfo>& outaResDependantDirectoryInfos, std::string& outstrResDefaultDirectory, std::string& outstrDefaultDirectory) = 0;
 			//--------------------------------------------------------------------------------------------------
 			/// Create Systems
 			///
@@ -492,7 +491,17 @@ namespace moFlo
             /// Depedending on the device decide which folders resources should be loaded from
             //--------------------------------------------------------------------------------------------------
             void DetermineResourceDirectories();
-
+        
+        private:
+            //---------------------------------------------------
+            /// Resumes the application. This will be called when
+            /// at the start of the next update following Resume
+            /// being called.
+            ///
+            /// @author Ian Copland
+            //---------------------------------------------------
+            static void OnApplicationResumed();
+            
 		protected: //---Members
 			
 			static CStateManager mStateMgr;		//Handles the state updating and transitioning
@@ -515,7 +524,6 @@ namespace moFlo
             CComponentFactoryDispenser* mpComponentFactoryDispenser;
 		
 			static bool mbHasTouchInput;
-            static moFlo::IApplicationDelegates* mpApplicationDelegates;
             static bool mbUpdateSystems;
 		private:
 			
@@ -529,6 +537,11 @@ namespace moFlo
             static Rendering::MaterialPtr pDefaultMaterial;
 			static f32 mfUpdateInterval;
             static f32 mfUpdateSpeed;
+            
+            static f32 s_updateIntervalRemainder;
+            static bool s_shouldInvokeResumeEvent;
+            static bool s_isFirstFrame;
+            static bool s_isSuspending;
 		};
 	}
 }

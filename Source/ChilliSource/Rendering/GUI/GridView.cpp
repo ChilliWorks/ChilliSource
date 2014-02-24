@@ -21,11 +21,9 @@
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #endif
 
-bool moFlo::GUI::CGridView::mbDrawDebug = false;
-
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
 		DEFINE_META_CLASS(CGridView)
 
@@ -37,6 +35,8 @@ namespace moFlo
 		DEFINE_PROPERTY(MaxNumRows);
 		DEFINE_PROPERTY(RowFill);
 
+        bool CGridView::mbDrawDebug = false;
+        
         //------------------------------------------------------
         /// Constructor
         ///
@@ -289,7 +289,7 @@ namespace moFlo
                 (*pView)->EnableAlignmentToParent(true);
                 (*pView)->SetAlignmentToParent(Core::AlignmentAnchor::k_topLeft);
                 (*pView)->SetLocalAlignment(Core::AlignmentAnchor::k_topLeft);
-                (*pView)->SetOffsetFromParentAlignment(UnifiedVector2(Core::CVector2(0.0f, 0.0f), vCellPosition));
+                (*pView)->SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::CVector2(0.0f, 0.0f), vCellPosition));
                 vCellPosition.x += (invCellSize.x + fColumnSpacing);
                 
                 //If we have a fixed column and row width we must wrap the content
@@ -333,7 +333,7 @@ namespace moFlo
                 (*pView)->EnableAlignmentToParent(true);
                 (*pView)->SetAlignmentToParent(Core::AlignmentAnchor::k_topLeft);
 				(*pView)->SetLocalAlignment(Core::AlignmentAnchor::k_topLeft);
-                (*pView)->SetOffsetFromParentAlignment(UnifiedVector2(Core::CVector2(0.0f, 0.0f), vCellPosition));
+                (*pView)->SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::CVector2(0.0f, 0.0f), vCellPosition));
                 vCellPosition.y -= (invCellSize.y + fRowSpacing);
                 
                 //If we have a fixed column and row width we must wrap the content
@@ -463,7 +463,7 @@ namespace moFlo
         ///
         /// @param Canvas renderer pointer
         //-------------------------------------------------------
-        void CGridView::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void CGridView::Draw(CCanvasRenderer* inpCanvas)
         {
             //This is a container view and has no renderables
             //We will need to render our subviews though
@@ -483,9 +483,9 @@ namespace moFlo
                 LayoutContent();
 				
 #if DEBUG_DRAWING
-				if(moFlo::GUI::CGridView::mbDrawDebug)
+				if(CGridView::mbDrawDebug)
 				{
-					Rendering::ITextureManager* pMgr = (Rendering::ITextureManager*)(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Rendering::ITexture::InterfaceID));
+					ITextureManager* pMgr = (ITextureManager*)(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(ITexture::InterfaceID));
 					inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), pMgr->GetDefaultTexture(), Core::Rectangle(Core::CVector2::ZERO, Core::CVector2::ZERO), Core::CColour(1.0f,0.0f,0.0f,0.5f));
 				}
 #endif
@@ -504,9 +504,9 @@ namespace moFlo
 		void CGridView::EnableDebugDrawing(bool inbValue)
 		{
 #if DEBUG_DRAWING
-			moFlo::GUI::CGridView::mbDrawDebug = inbValue;
+			CGridView::mbDrawDebug = inbValue;
 #else
-			moFlo::GUI::CGridView::mbDrawDebug = false;
+			CGridView::mbDrawDebug = false;
 #endif
 		}
     }

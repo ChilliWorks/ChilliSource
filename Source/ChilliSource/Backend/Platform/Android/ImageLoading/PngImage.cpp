@@ -11,9 +11,9 @@
 #include <ChilliSource/Platform/Android/ImageLoading/LibPng/png.h>
 #include <ChilliSource/Core/Main/Application.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//----------------------------------------------------------------------------------
 		/// Read Png Data
@@ -34,7 +34,7 @@ namespace moFlo
 				return;
 			}
 
-			moFlo::Core::IFileStream* pStream = (moFlo::Core::IFileStream*)png_get_io_ptr(inpPng);
+			ChilliSource::Core::IFileStream* pStream = (ChilliSource::Core::IFileStream*)png_get_io_ptr(inpPng);
 
 			if (pStream->IsBad() == true || pStream->IsOpen() == false)
 			{
@@ -84,10 +84,10 @@ namespace moFlo
 		void CPngImage::Load(Core::STORAGE_LOCATION ineStorageLocation, std::string instrFilename)
 		{
 			//create the file stream
-			moFlo::Core::FileStreamPtr stream = moFlo::Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilename, moFlo::Core::FM_READ_BINARY);
+			ChilliSource::Core::FileStreamPtr stream = ChilliSource::Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilename, ChilliSource::Core::FM_READ_BINARY);
 
 			//insure the stream is not broken
-			if (stream == moFlo::Core::FileStreamPtr() || stream->IsBad() == true || stream->IsOpen() == false)
+			if (stream == ChilliSource::Core::FileStreamPtr() || stream->IsBad() == true || stream->IsOpen() == false)
 			{
 				stream->Close();
 				return;

@@ -13,9 +13,9 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
     {
         //-------------------------------------------------------
         /// Constructor
@@ -59,7 +59,7 @@ namespace moFlo
         //-------------------------------------------------------
         /// Present
         //-------------------------------------------------------
-		void CEmailCompositionActivity::Present(const DYNAMIC_ARRAY<CUTF8String>& inastrRecipientAddresses, const CUTF8String& instrSubject, const CUTF8String& instrContents, const SendResultDelegate& inCallback, bool inbFormatAsHtml)
+		void CEmailCompositionActivity::Present(const DYNAMIC_ARRAY<Core::CUTF8String>& inastrRecipientAddresses, const Core::CUTF8String& instrSubject, const Core::CUTF8String& instrContents, const SendResultDelegate& inCallback, bool inbFormatAsHtml)
         {
             Attachment emptyAttachment;
             emptyAttachment.mstrFilename = "";
@@ -70,7 +70,7 @@ namespace moFlo
         //-------------------------------------------------------
         /// Present With Attachments
         //-------------------------------------------------------
-		void CEmailCompositionActivity::PresentWithAttachment(const DYNAMIC_ARRAY<CUTF8String> & inastrRecipientAddresses, const CUTF8String & instrSubject, const CUTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
+		void CEmailCompositionActivity::PresentWithAttachment(const DYNAMIC_ARRAY<Core::CUTF8String> & inastrRecipientAddresses, const Core::CUTF8String & instrSubject, const Core::CUTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
         {
 			mpVC = [[MFMailComposeViewController alloc] init];
             if ([MFMailComposeViewController canSendMail] == false)
@@ -154,7 +154,7 @@ namespace moFlo
 //-------------------------------------------------------
 /// Init With Callback
 //-------------------------------------------------------
--(EmailDelegate*) initWithCallback:(moFlo::Social::IEmailCompositionActivity::SendResultDelegate)callback{
+-(EmailDelegate*) initWithCallback:(ChilliSource::Social::IEmailCompositionActivity::SendResultDelegate)callback{
 	
 	if ((self = [super init])){
 		
@@ -173,7 +173,7 @@ namespace moFlo
 //-------------------------------------------------------
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result  error:(NSError*)error{
 	
-	using namespace moFlo::Social;
+	using namespace ChilliSource::Social;
 	
     if(controller.parentViewController)
     {

@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/Entity/ComponentFactory.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core 
 	{
@@ -89,7 +89,7 @@ namespace moFlo
             }
             else
             {
-                pResult = moFlo::Core::CreateEntity();
+                pResult = ChilliSource::Core::CreateEntity();
                 
                 for(u32 nComponent = 0; nComponent <insEntDesc.aComponents.size(); nComponent++)
                 {
@@ -106,7 +106,7 @@ namespace moFlo
             return pResult;
         }
         
-        void CSceneDesc::CreateContentsForEntity(moFlo::Core::CEntity &insEntity, CSceneDesc::EntityDesc & insEntDesc, CustomEntityDelegate &inCustomEntityDelegate)
+        void CSceneDesc::CreateContentsForEntity(ChilliSource::Core::CEntity &insEntity, CSceneDesc::EntityDesc & insEntDesc, CustomEntityDelegate &inCustomEntityDelegate)
         {
             for (u32 nEntity = 0; nEntity < insEntDesc.aChildEntities.size(); nEntity++) 
 			{
@@ -120,7 +120,7 @@ namespace moFlo
         }
         
         
-        ComponentPtr CSceneDesc::CreateComponent(moFlo::Core::CSceneDesc::ComponentDesc &insComponentDesc)
+        ComponentPtr CSceneDesc::CreateComponent(ChilliSource::Core::CSceneDesc::ComponentDesc &insComponentDesc)
         {
             ComponentPtr pResult;
             

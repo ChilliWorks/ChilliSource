@@ -18,7 +18,7 @@
 #include <algorithm>
 #include <thread>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Input
 	{
@@ -40,15 +40,15 @@ namespace moFlo
 		{
 			return (this->ID == inOther.ID);
 		}
-		IEvent<TouchEventDelegate> & ITouchScreen::GetTouchBeganEvent()
+		Core::IEvent<TouchEventDelegate> & ITouchScreen::GetTouchBeganEvent()
 		{
 			return mTouchBeganEvent;
 		}
-		IEvent<TouchEventDelegate> & ITouchScreen::GetTouchMovedEvent()
+		Core::IEvent<TouchEventDelegate> & ITouchScreen::GetTouchMovedEvent()
 		{
 			return mTouchMovedEvent;
 		}
-		IEvent<TouchEventDelegate> & ITouchScreen::GetTouchEndEvent()
+		Core::IEvent<TouchEventDelegate> & ITouchScreen::GetTouchEndEvent()
 		{
 			return mTouchEndedEvent;
 		}

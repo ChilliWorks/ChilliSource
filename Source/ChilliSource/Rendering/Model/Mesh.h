@@ -22,7 +22,7 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Model/Skeleton.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -133,7 +133,7 @@ namespace moFlo
 			/// @param the minimum bounds
 			/// @param the maximum bounds.
 			//-----------------------------------------------------------------
-			void SetBounds(const moFlo::Core::CVector3& invMinBounds, const moFlo::Core::CVector3& invMaxBounds);
+			void SetBounds(const ChilliSource::Core::CVector3& invMinBounds, const ChilliSource::Core::CVector3& invMaxBounds);
 			//-----------------------------------------------------------------
 			/// Calc Vertex And Index Counts
 			///

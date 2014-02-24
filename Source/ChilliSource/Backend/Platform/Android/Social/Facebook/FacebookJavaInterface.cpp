@@ -17,8 +17,8 @@
 
 #include <jni.h>
 
-moFlo::AndroidPlatform::CFacebookAuthenticationSystem* gpAndroidAuthSystem = NULL;
-moFlo::AndroidPlatform::CFacebookPostSystem* gpAndroidPostSystem = NULL;
+ChilliSource::Android::CFacebookAuthenticationSystem* gpAndroidAuthSystem = NULL;
+ChilliSource::Android::CFacebookPostSystem* gpAndroidPostSystem = NULL;
 
 //function definitions
 extern "C"
@@ -43,7 +43,7 @@ void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnAuthent
 {
 	if(gpAndroidAuthSystem)
 	{
-		moFlo::CTaskScheduler::ScheduleMainThreadTask(moFlo::Task1<bool>(gpAndroidAuthSystem, &moFlo::AndroidPlatform::CFacebookAuthenticationSystem::OnAuthenticationComplete, inbSuccess));
+		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task1<bool>(gpAndroidAuthSystem, &ChilliSource::Android::CFacebookAuthenticationSystem::OnAuthenticationComplete, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -59,7 +59,7 @@ void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnReadAut
 {
 	if(gpAndroidAuthSystem)
 	{
-		moFlo::CTaskScheduler::ScheduleMainThreadTask(moFlo::Task1<bool>(gpAndroidAuthSystem, &moFlo::AndroidPlatform::CFacebookAuthenticationSystem::OnAuthoriseReadPermissionsComplete, inbSuccess));
+		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task1<bool>(gpAndroidAuthSystem, &ChilliSource::Android::CFacebookAuthenticationSystem::OnAuthoriseReadPermissionsComplete, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -75,7 +75,7 @@ void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnWriteAu
 {
 	if(gpAndroidAuthSystem)
 	{
-		moFlo::CTaskScheduler::ScheduleMainThreadTask(moFlo::Task1<bool>(gpAndroidAuthSystem, &moFlo::AndroidPlatform::CFacebookAuthenticationSystem::OnAuthoriseWritePermissionsComplete, inbSuccess));
+		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task1<bool>(gpAndroidAuthSystem, &ChilliSource::Android::CFacebookAuthenticationSystem::OnAuthoriseWritePermissionsComplete, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -91,7 +91,7 @@ void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnPostToF
 {
 	if(gpAndroidPostSystem)
 	{
-		moFlo::CTaskScheduler::ScheduleMainThreadTask(moFlo::Task1<bool>(gpAndroidPostSystem, &moFlo::AndroidPlatform::CFacebookPostSystem::OnPostToFeedComplete, inbSuccess));
+		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task1<bool>(gpAndroidPostSystem, &ChilliSource::Android::CFacebookPostSystem::OnPostToFeedComplete, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -107,14 +107,14 @@ void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnPostReq
 {
 	if(gpAndroidPostSystem)
 	{
-		moFlo::CTaskScheduler::ScheduleMainThreadTask(moFlo::Task1<bool>(gpAndroidPostSystem, &moFlo::AndroidPlatform::CFacebookPostSystem::OnPostRequestComplete, inbSuccess));
+		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task1<bool>(gpAndroidPostSystem, &ChilliSource::Android::CFacebookPostSystem::OnPostRequestComplete, inbSuccess));
 	}
 }
 
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		DEFINE_NAMED_INTERFACE(CFacebookJavaInterface);
 
@@ -134,7 +134,7 @@ namespace moFlo
 			CreateMethodReference("MakeRequestToUser", "([Ljava/lang/String;)V");
 		}
 
-		bool CFacebookJavaInterface::IsA(moCore::InterfaceIDType inInterfaceID) const
+		bool CFacebookJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == CFacebookJavaInterface::InterfaceID;
 		}
@@ -169,7 +169,7 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------
 		void CFacebookJavaInterface::Authenticate(const DYNAMIC_ARRAY<std::string>& inaReadPerms)
 		{
-			JNIEnv* pEnv = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaPermissions = pEnv->NewObjectArray(inaReadPerms.size(), jStringClass, jstrEmptyString);
@@ -194,7 +194,7 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------
 		bool CFacebookJavaInterface::IsSignedIn()
 		{
-			JNIEnv* pEnv = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			return pEnv->CallBooleanMethod(GetJavaObject(), GetMethodID("IsSignedIn"));
 		}
 		//--------------------------------------------------------------------------------------
@@ -204,9 +204,9 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------
 		std::string CFacebookJavaInterface::GetActiveToken()
 		{
-			JNIEnv* pEnv = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrToken = (jstring)pEnv->CallObjectMethod(GetJavaObject(), GetMethodID("GetActiveToken"));
-			std::string strToken = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(jstrToken);
+			std::string strToken = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrToken);
 			pEnv->DeleteLocalRef(jstrToken);
 			return strToken;
 		}
@@ -218,8 +218,8 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------
 	    bool CFacebookJavaInterface::HasPermission(const std::string& instrPermission)
 	    {
-			JNIEnv* pEnv = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrPermission = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateJStringFromSTDString(instrPermission);
+			JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			jstring jstrPermission = ChilliSource::Android::JavaInterfaceUtils::CreateJStringFromSTDString(instrPermission);
 			bool bHasPermission = pEnv->CallBooleanMethod(GetJavaObject(), GetMethodID("HasPermission"), jstrPermission);
 			pEnv->DeleteLocalRef(jstrPermission);
 			return bHasPermission;
@@ -234,7 +234,7 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------
 	    void CFacebookJavaInterface::AuthoriseReadPermissions(const DYNAMIC_ARRAY<std::string>& inaReadPerms)
 	    {
-	    	JNIEnv* pEnv = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+	    	JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaPermissions = pEnv->NewObjectArray(inaReadPerms.size(), jStringClass, jstrEmptyString);
@@ -262,7 +262,7 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------
 	    void CFacebookJavaInterface::AuthoriseWritePermissions(const DYNAMIC_ARRAY<std::string>& inaWritePerms)
 	    {
-	    	JNIEnv* pEnv = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+	    	JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaPermissions = pEnv->NewObjectArray(inaWritePerms.size(), jStringClass, jstrEmptyString);
@@ -287,7 +287,7 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------
 	    void CFacebookJavaInterface::SignOut()
 	    {
-			JNIEnv* pEnv = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("SignOut"));
 	    }
 		//--------------------------------------------------------------------------------------
@@ -298,7 +298,7 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------
 	    void CFacebookJavaInterface::TryPostToFeed(const std::string& instrGraphPath, const DYNAMIC_ARRAY<std::string>& inaKeyValues)
 	    {
-	    	JNIEnv* pEnv = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+	    	JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaKeyValues = pEnv->NewObjectArray(inaKeyValues.size(), jStringClass, jstrEmptyString);
@@ -325,7 +325,7 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------
 	    void CFacebookJavaInterface::TryPostRequest(const DYNAMIC_ARRAY<std::string>& inaKeyValues)
 	    {
-	    	JNIEnv* pEnv = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+	    	JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaKeyValues = pEnv->NewObjectArray(inaKeyValues.size(), jStringClass, jstrEmptyString);
@@ -349,7 +349,7 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------
 	    void CFacebookJavaInterface::PublishInstall()
 	    {
-			JNIEnv* pEnv = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("PublishInstall"));
 	    }
 	}

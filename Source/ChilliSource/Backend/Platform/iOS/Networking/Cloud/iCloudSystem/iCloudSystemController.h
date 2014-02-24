@@ -14,7 +14,7 @@
 
 @interface CiCloudSystemController : NSObject
 {
-    moFlo::ICloudStorageSystem::OnQueryFilesCompletedDelegate mpcQueryFilesCompleteDelegate;
+    ChilliSource::Networking::ICloudStorageSystem::OnQueryFilesCompletedDelegate mpcQueryFilesCompleteDelegate;
     
     std::vector<NSURL*> mpcCachedResults;
     NSMutableArray *maOpenedFiles;
@@ -32,7 +32,7 @@
 /// @param incOpenFileCompleteDelegate - Delegate to call when the document has been opened/created, this is also called if there is an error (the system will handle it)
 /// @param inbCreateIfNonExistant - used to tell the system to create file on the cloud if it doesnt already
 //-------------------------------------------------------------
-- (void)openDocument:(NSString*)instrFileName :(moFlo::iOSPlatform::CiCloudSystem::OnOpenCloudFileCompletedDelegate) incOpenFileCompleteDelegate :(BOOL)inbCreateIfNonExistant;
+- (void)openDocument:(NSString*)instrFileName :(ChilliSource::iOS::CiCloudSystem::OnOpenCloudFileCompletedDelegate) incOpenFileCompleteDelegate :(BOOL)inbCreateIfNonExistant;
 
 //-------------------------------------------------------------
 /// writeDocumentWithRelativePath
@@ -41,7 +41,7 @@
 /// @param InstrContents - Contents to write
 /// @param InpCompleteDelegate - Delegate to call when completed
 //-------------------------------------------------------------
-- (void)writeDocumentWithRelativePath:(NSString*)InstrFileName :(NSMutableData*)InstrContents :(moFlo::ICloudStorageSystem::OnSyncFileCompletedDelegate)InpCompleteDelegate;
+- (void)writeDocumentWithRelativePath:(NSString*)InstrFileName :(NSMutableData*)InstrContents :(ChilliSource::Networking::ICloudStorageSystem::OnSyncFileCompletedDelegate)InpCompleteDelegate;
 
 //-------------------------------------------------------------
 /// writeDocumentWithAbsolutePath
@@ -50,10 +50,10 @@
 /// @param InstrContents - Contents to write
 /// @param InpCompleteDelegate - Delegate to call when completed
 //-------------------------------------------------------------
-- (void)writeDocumentWithAbsolutePath:(NSString*)InstrFileName :(NSMutableData*)InstrContents :(moFlo::ICloudStorageSystem::OnSyncFileCompletedDelegate)InpCompleteDelegate;
+- (void)writeDocumentWithAbsolutePath:(NSString*)InstrFileName :(NSMutableData*)InstrContents :(ChilliSource::Networking::ICloudStorageSystem::OnSyncFileCompletedDelegate)InpCompleteDelegate;
 
 //Querys iCloud for a list of files in cloud directory
-- (void)queryContentsOfICloudDirectory:(moFlo::ICloudStorageSystem::OnQueryFilesCompletedDelegate)incQueryFilesDelegate;
+- (void)queryContentsOfICloudDirectory:(ChilliSource::Networking::ICloudStorageSystem::OnQueryFilesCompletedDelegate)incQueryFilesDelegate;
 
 //-------------------------------------------------------------
 /// stringForState

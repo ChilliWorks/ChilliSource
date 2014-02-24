@@ -15,9 +15,9 @@
 
 #include <ChilliSource/Audio/ForwardDeclarations.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         class CToggleButton : public IButton
         {
@@ -41,13 +41,13 @@ namespace moFlo
             ///
             /// @param Texture shared pointer
             //-----------------------------------------------------------
-            void SetOnImage(const Rendering::TexturePtr& inpTexture);
+            void SetOnImage(const TexturePtr& inpTexture);
 			//-----------------------------------------------------------
 			/// Get On Image
 			///
 			/// @return Texture for non-selected button
 			//-----------------------------------------------------------
-			const Rendering::TexturePtr& GetOnImage() const;
+			const TexturePtr& GetOnImage() const;
             //-----------------------------------------------------------
             /// Set Off Image
             ///
@@ -55,13 +55,13 @@ namespace moFlo
             ///
             /// @param Texture shared pointer
             //-----------------------------------------------------------
-            void SetOffImage(const Rendering::TexturePtr& inpTexture);
+            void SetOffImage(const TexturePtr& inpTexture);
 			//-----------------------------------------------------------
 			/// Get Off Image
 			///
 			/// @return Texture for selected button
 			//-----------------------------------------------------------
-			const Rendering::TexturePtr& GetOffImage() const;
+			const TexturePtr& GetOffImage() const;
             //-----------------------------------------------------------
             /// Set On UVs
             ///
@@ -83,25 +83,25 @@ namespace moFlo
             ///
             /// @param Sprite sheet with with On image
             //-----------------------------------------------------------
-            void SetOnSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+            void SetOnSpriteSheet(const SpriteSheetPtr& inpSpriteSheet);
 			//-----------------------------------------------------------
 			/// Set Off Sprite Sheet
 			///
 			/// @param Sprite sheet with with Off image
 			//-----------------------------------------------------------
-			void SetOffSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetOffSpriteSheet(const SpriteSheetPtr& inpSpriteSheet);
             //-----------------------------------------------------------
             /// Get On Sprite Sheet
             ///
             /// @return Sprite sheet with default image
             //-----------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetOnSpriteSheet() const;
+			const SpriteSheetPtr& GetOnSpriteSheet() const;
 			//-----------------------------------------------------------
 			/// Get Off Sprite Sheet
 			///
 			/// @return Sprite sheet with Off image
 			//-----------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetOffSpriteSheet() const;
+			const SpriteSheetPtr& GetOffSpriteSheet() const;
             //-----------------------------------------------------------
             /// Set On Sprite Sheet Index
             ///
@@ -335,14 +335,14 @@ namespace moFlo
 			///
 			/// @param Canvas renderer
 			//-----------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvasRenderer);
+			void Draw(CCanvasRenderer* inpCanvasRenderer);
             
         protected:
 			//---Properties
-			DECLARE_PROPERTY_A(Rendering::TexturePtr, OnTexture, SetOnImage, GetOnImage);
-			DECLARE_PROPERTY_A(Rendering::TexturePtr, OffTexture, SetOffImage, GetOffImage);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, OnSpriteSheet, SetOnSpriteSheet, GetOnSpriteSheet);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, OffSpriteSheet, SetOffSpriteSheet, GetOffSpriteSheet);
+			DECLARE_PROPERTY_A(TexturePtr, OnTexture, SetOnImage, GetOnImage);
+			DECLARE_PROPERTY_A(TexturePtr, OffTexture, SetOffImage, GetOffImage);
+			DECLARE_PROPERTY_A(SpriteSheetPtr, OnSpriteSheet, SetOnSpriteSheet, GetOnSpriteSheet);
+			DECLARE_PROPERTY_A(SpriteSheetPtr, OffSpriteSheet, SetOffSpriteSheet, GetOffSpriteSheet);
 
 			DECLARE_PROPERTY_A(u32,OnSpriteSheetIndex, SetOnSpriteSheetIndex, GetOnSpriteSheetIndex);
 			DECLARE_PROPERTY_A(u32, OffSpriteSheetIndex, SetOffSpriteSheetIndex, GetOffSpriteSheetIndex);

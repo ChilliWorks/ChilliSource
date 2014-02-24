@@ -15,9 +15,9 @@
 
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         class CImageView : public CGUIView
         {
@@ -35,7 +35,7 @@ namespace moFlo
             ///
             /// @param Canvas renderer pointer
             //--------------------------------------------------------
-            virtual void Draw(Rendering::CCanvasRenderer* inpCanvas);
+            virtual void Draw(CCanvasRenderer* inpCanvas);
             //--------------------------------------------------------
             /// Set Texture
             ///
@@ -43,7 +43,7 @@ namespace moFlo
             ///
             /// @param Texture shared pointer
             //--------------------------------------------------------
-            void SetTexture(const Rendering::TexturePtr& inpTexture);
+            void SetTexture(const TexturePtr& inpTexture);
             //--------------------------------------------------------
             /// Get Texture
             ///
@@ -51,7 +51,7 @@ namespace moFlo
             ///
             /// @param Texture shared pointer
             //--------------------------------------------------------
-            const Rendering::TexturePtr& GetTexture() const;
+            const TexturePtr& GetTexture() const;
             //--------------------------------------------------------
             /// Set Sprite Sheet
             ///
@@ -63,13 +63,13 @@ namespace moFlo
             ///
             /// @param Sprite sheet
             //--------------------------------------------------------
-            void SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+            void SetSpriteSheet(const SpriteSheetPtr& inpSpriteSheet);
             //--------------------------------------------------------
             /// Get Sprite Sheet
             ///
             /// @param Sprite sheet
             //--------------------------------------------------------
-            const Rendering::SpriteSheetPtr& GetSpriteSheet() const;
+            const SpriteSheetPtr& GetSpriteSheet() const;
             //--------------------------------------------------------
             /// Set Sprite Sheet Index
             ///
@@ -345,15 +345,15 @@ namespace moFlo
 
         private:
             
-            UnifiedVector2 mvFillMaintainTarget;
-            UnifiedVector2 mvFitMaintainTarget;
+            Core::UnifiedVector2 mvFillMaintainTarget;
+            Core::UnifiedVector2 mvFitMaintainTarget;
             
             bool mbFillMaintain;
             bool mbFitMaintain;
             
 			//---Properties
-            DECLARE_PROPERTY_A(Rendering::TexturePtr, Texture, SetTexture, GetTexture);
-            DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
+            DECLARE_PROPERTY_A(TexturePtr, Texture, SetTexture, GetTexture);
+            DECLARE_PROPERTY_A(SpriteSheetPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
 
             DECLARE_PROPERTY_A(Core::Rectangle, UVs, SetUVs, GetUVs);
 			DECLARE_PROPERTY_A(Core::Rectangle, UVOffsets, SetUVOffsets, GetUVOffsets);

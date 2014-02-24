@@ -15,9 +15,9 @@
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
 		DEFINE_META_CLASS(CHorizontalStretchableImage)
 
@@ -48,12 +48,12 @@ namespace moFlo
             Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SpriteSheetLocation", strValue))
             {
-                eSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             
 			if(insParams.TryGetValue("SpriteSheet", strValue))
 			{
-				SetSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eSpriteSheetLocation, strValue));
+				SetSpriteSheet(LOAD_RESOURCE(CSpriteSheet, eSpriteSheetLocation, strValue));
 			}
 			
 			if(insParams.TryGetValue("BaseSpriteSheetIndexID", strValue))
@@ -77,7 +77,7 @@ namespace moFlo
 		///
 		/// @param Sprite sheet containing the patches
 		//---------------------------------------------------------
-		void CHorizontalStretchableImage::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void CHorizontalStretchableImage::SetSpriteSheet(const SpriteSheetPtr& inpSpriteSheet)
 		{
 			SpriteSheet = inpSpriteSheet;
 		}
@@ -86,7 +86,7 @@ namespace moFlo
 		///
 		/// @return Sprite sheet containing the patches
 		//---------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CHorizontalStretchableImage::GetSpriteSheet() const
+		const SpriteSheetPtr& CHorizontalStretchableImage::GetSpriteSheet() const
 		{
 			return SpriteSheet;
 		}
@@ -253,7 +253,7 @@ namespace moFlo
 		///
 		/// @param Canvas renderer pointer
 		//---------------------------------------------------------
-		void CHorizontalStretchableImage::Draw(moFlo::Rendering::CCanvasRenderer* inpCanvas)
+		void CHorizontalStretchableImage::Draw(CCanvasRenderer* inpCanvas)
 		{
 			if(Visible && SpriteSheet)
 			{

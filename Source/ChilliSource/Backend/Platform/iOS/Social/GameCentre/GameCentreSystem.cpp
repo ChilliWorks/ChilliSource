@@ -21,9 +21,9 @@
 #import <sys/utsname.h>
 
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		const f32 kfGameCentreMinOSVersion          = 4.0f;
         
@@ -285,7 +285,7 @@ namespace moFlo
             {
                 if (pcError)
                 {
-                    ERROR_LOG("Game Center - " + moFlo::Core::CStringUtils::NSStringToString([pcError localizedDescription]));
+                    ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pcError localizedDescription]));
                     
                     //Handle error by disabling game centre
                     mbIsGameCentreSupported = false;
@@ -355,7 +355,7 @@ namespace moFlo
 		///
 		/// @return String identifier for local client
 		//--------------------------------------------------------------------
-		const UTF8String& CGameCentreSystem::GetLocalPlayerID() const
+		const Core::UTF8String& CGameCentreSystem::GetLocalPlayerID() const
 		{
 			return mstrPlayerID;
 		}
@@ -364,7 +364,7 @@ namespace moFlo
 		///
 		/// @return Username for local client
 		//--------------------------------------------------------------------
-		const UTF8String& CGameCentreSystem::GetLocalPlayerUsername() const
+		const Core::UTF8String& CGameCentreSystem::GetLocalPlayerUsername() const
 		{
 			return mstrPlayerName;
 		}
@@ -521,7 +521,7 @@ namespace moFlo
 		//---------------------------------------------------------------------
 		///Subscribe to achievement reset event
 		//---------------------------------------------------------------------
-		IEvent<CGameCentreSystem::AchievementsResetDelegate>& CGameCentreSystem::OnAchievementResetEvent()
+		Core::IEvent<CGameCentreSystem::AchievementsResetDelegate>& CGameCentreSystem::OnAchievementResetEvent()
 		{
 			return mAchievementsResetEvent;
 		}
@@ -531,7 +531,7 @@ namespace moFlo
 		///
 		/// Raised when the game centre user changes (new signin/signout)
 		//---------------------------------------------------------------------
-		IEvent<CGameCentreSystem::AuthenticationChangedDelegate>& CGameCentreSystem::OnAuthenticationChangedEvent()
+		Core::IEvent<CGameCentreSystem::AuthenticationChangedDelegate>& CGameCentreSystem::OnAuthenticationChangedEvent()
 		{
 			return mAuthenticationChangedEvent;
 		}
@@ -698,7 +698,7 @@ namespace moFlo
 			 if(pError)
 			 {
 			 //Request failed. Let's try again later. It's already been popped from the queue
-			 ERROR_LOG("Game Center - " + moFlo::Core::CStringUtils::NSStringToString([pError localizedDescription]));
+			 ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
 			 mudwNumOpenRequests--;
 			 //let's add it back on
 			 AddRequestToQueue(pRequest);
@@ -736,7 +736,7 @@ namespace moFlo
 			 if(pError)
 			 {
 			 //Request failed. Let's try again later. It's already been popped from the queue
-			 ERROR_LOG("Game Center - " + moFlo::Core::CStringUtils::NSStringToString([pError localizedDescription]));
+			 ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
 			 mudwNumOpenRequests--;
 			 //let's add it back on
 			 AddRequestToQueue(pRequest);
@@ -763,7 +763,7 @@ namespace moFlo
 			GKLeaderboard* pLeaderboardRequest = [[[GKLeaderboard alloc] init] autorelease];
 			
 			//Set the leaderboard we are requesting from
-			pLeaderboardRequest.category = moFlo::Core::CStringUtils::StringToNSString(pRequest->mstrLeaderboardCategoryID);
+			pLeaderboardRequest.category = ChilliSource::Core::CStringUtils::StringToNSString(pRequest->mstrLeaderboardCategoryID);
 			
 			//Set the leaderboard section we wish to use
 			switch(pRequest->mePlayerScope)
@@ -801,7 +801,7 @@ namespace moFlo
 			 if(pError)
 			 {
 			 //Request failed. Let's try again later. It's already been popped from the queue
-			 ERROR_LOG("Game Center - " + moFlo::Core::CStringUtils::NSStringToString([pError localizedDescription]));
+			 ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
 			 mudwNumOpenRequests--;
 			 //let's add it back on
 			 AddRequestToQueue(pRequest);
@@ -833,7 +833,7 @@ namespace moFlo
 			 if(pError)
 			 {
 			 //Request failed. Let's try again later. It's already been popped from the queue
-			 ERROR_LOG("Game Center - " + moFlo::Core::CStringUtils::NSStringToString([pError localizedDescription]));
+			 ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
 			 mudwNumOpenRequests--;
 			 //let's add it back on
 			 AddRequestToQueue(pRequest);
@@ -863,7 +863,7 @@ namespace moFlo
 			[pAchievement reportAchievementWithCompletionHandler:^(NSError* pError)
 			 {
 			 if (pError){
-			 ERROR_LOG("Game Center - " + moFlo::Core::CStringUtils::NSStringToString([pError localizedDescription]));
+			 ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
 			 mudwNumOpenRequests--;
 			 AddRequestToQueue(pRequest);
 			 
@@ -887,7 +887,7 @@ namespace moFlo
 					HandleAchievementStatusArray(achievements);	
 
 				 } else {
-					 ERROR_LOG("Game Center:ProcessAchievementsStatusRequest- " + moFlo::Core::CStringUtils::NSStringToString([error localizedDescription]));
+					 ERROR_LOG("Game Center:ProcessAchievementsStatusRequest- " + ChilliSource::Core::CStringUtils::NSStringToString([error localizedDescription]));
 					 mudwNumOpenRequests--;
 					 AddRequestToQueue(pRequest);
 				 }
@@ -900,7 +900,7 @@ namespace moFlo
 
 			for (GKAchievement* a in inpAchievements){
 				if (a.completed){
-					mastrCompletedAchievements.push_back(moFlo::Core::CStringUtils::NSStringToString(a.identifier));
+					mastrCompletedAchievements.push_back(ChilliSource::Core::CStringUtils::NSStringToString(a.identifier));
 				}
 			}
 			
@@ -911,7 +911,7 @@ namespace moFlo
 			[GKAchievementDescription loadAchievementDescriptionsWithCompletionHandler:^(NSArray *descriptions, NSError *error)
 			 {
 			 if (error){
-			 ERROR_LOG("GameCentre:ProcessAchievementDescriptionsRequest - " + moFlo::Core::CStringUtils::NSStringToString([error localizedDescription]));
+			 ERROR_LOG("GameCentre:ProcessAchievementDescriptionsRequest - " + ChilliSource::Core::CStringUtils::NSStringToString([error localizedDescription]));
 			 mudwNumOpenRequests--;
 			 AddRequestToQueue(pRequest);
 			 
@@ -943,7 +943,7 @@ namespace moFlo
 				 if(pError)
 				 {
 				 //Request failed. Let's try again later. It's already been popped from the queue
-				 ERROR_LOG("Game Center - " + moFlo::Core::CStringUtils::NSStringToString([pError localizedDescription]));
+				 ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
 				 mudwNumOpenRequests--;
 				 //let's add it back on
 				 AddRequestToQueue(pRequest);
@@ -958,7 +958,7 @@ namespace moFlo
 				  {
 				  if(pError)
 				  {
-				  ERROR_LOG("Game Center - " + moFlo::Core::CStringUtils::NSStringToString([pError localizedDescription]));
+				  ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
 				  }
 				  else if(pPlayers)
 				  {
@@ -988,8 +988,8 @@ namespace moFlo
 		{
 			for(u32 i=0; i<[pCategories count]; ++i)
 			{
-				mLeaderboardsInfo.mCategoryIDs.push_back(moFlo::Core::CStringUtils::NSStringToString([pCategories objectAtIndex:i]));
-				mLeaderboardsInfo.mNames.push_back(moFlo::Core::CStringUtils::NSStringToUTF8String([pTitles objectAtIndex:i]));
+				mLeaderboardsInfo.mCategoryIDs.push_back(ChilliSource::Core::CStringUtils::NSStringToString([pCategories objectAtIndex:i]));
+				mLeaderboardsInfo.mNames.push_back(ChilliSource::Core::CStringUtils::NSStringToUTF8String([pTitles objectAtIndex:i]));
 			}
 			
 			mLeaderboardsInfoRequestEvent.Invoke(mLeaderboardsInfo);
@@ -1006,10 +1006,10 @@ namespace moFlo
 			if(mbIsGameCentreSupported)
 			{
 				//Get the players details
-				if(mstrPlayerID != moFlo::Core::CStringUtils::NSStringToUTF8String([GKLocalPlayer localPlayer].playerID))
+				if(mstrPlayerID != ChilliSource::Core::CStringUtils::NSStringToUTF8String([GKLocalPlayer localPlayer].playerID))
                 {
-                    mstrPlayerID = moFlo::Core::CStringUtils::NSStringToUTF8String([GKLocalPlayer localPlayer].playerID);
-                    mstrPlayerName = moFlo::Core::CStringUtils::NSStringToUTF8String([GKLocalPlayer localPlayer].alias);
+                    mstrPlayerID = ChilliSource::Core::CStringUtils::NSStringToUTF8String([GKLocalPlayer localPlayer].playerID);
+                    mstrPlayerName = ChilliSource::Core::CStringUtils::NSStringToUTF8String([GKLocalPlayer localPlayer].alias);
                     
                     DEBUG_LOG("Game Center - Local Player signs in");
     
@@ -1056,12 +1056,12 @@ namespace moFlo
 			
 			for(GKScore* pScore in inpScores)
 			{
-				sResultData.strCategoryName	= moFlo::Core::CStringUtils::NSStringToString(pScore.category);
+				sResultData.strCategoryName	= ChilliSource::Core::CStringUtils::NSStringToString(pScore.category);
 				
 				[paIdentifier addObject:pScore.playerID];
 				
 				ScoreInfo Data;
-				Data.strFormattedScore = moFlo::Core::CStringUtils::NSStringToUTF8String(pScore.formattedValue);
+				Data.strFormattedScore = ChilliSource::Core::CStringUtils::NSStringToUTF8String(pScore.formattedValue);
 				Data.uddwScore = (u64)pScore.value;
 				sResultData.aScores.push_back(Data);
 			}
@@ -1102,7 +1102,7 @@ namespace moFlo
 				for(ScoreContainer::iterator pScore = pLeaderboardScoreResult->second.aScores.begin(); pScore != pLeaderboardScoreResult->second.aScores.end(); ++pScore, ++i)
 				{
 					GKPlayer* pPlayer = [inpPlayers objectAtIndex:i];
-					pScore->strPlayerName = moFlo::Core::CStringUtils::NSStringToUTF8String(pPlayer.alias);
+					pScore->strPlayerName = ChilliSource::Core::CStringUtils::NSStringToUTF8String(pPlayer.alias);
 					pScore->bIsFriend = pPlayer.isFriend;
 				}
 				

@@ -16,9 +16,9 @@
 #include <ChilliSource/Core/Minizip/unzip.h>
 #include <ChilliSource/Core/Threading/Thread.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform 
+	namespace Android 
 	{
 		struct DirInfo
 		{

@@ -16,9 +16,9 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		const std::string kstrWAVExtension("wav");
 		const std::string kstrAACExtension("aac");
@@ -60,7 +60,7 @@ namespace moFlo
 		bool CFMODAudioLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
             std::string strFilePath;
-            static_cast<iOSPlatform::CFileSystem*>(Core::CApplication::GetFileSystemPtr())->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
+            static_cast<iOS::CFileSystem*>(Core::CApplication::GetFileSystemPtr())->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
             
             if(strFilePath.empty())
             {
@@ -82,7 +82,7 @@ namespace moFlo
 		bool CFMODAudioLoader::StreamResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
             std::string strFilePath;
-            static_cast<iOSPlatform::CFileSystem*>(Core::CApplication::GetFileSystemPtr())->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
+            static_cast<iOS::CFileSystem*>(Core::CApplication::GetFileSystemPtr())->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
             
             if(strFilePath.empty())
             {

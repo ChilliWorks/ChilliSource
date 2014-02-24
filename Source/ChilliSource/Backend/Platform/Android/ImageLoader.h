@@ -17,9 +17,9 @@
 #include <ChilliSource/Core/Image/ImageResourceProvider.h>
 #include <ChilliSource/Core/Image/Image.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class ImageLoader : public IImageResourceProvider
 		{

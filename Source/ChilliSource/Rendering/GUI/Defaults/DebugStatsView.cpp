@@ -18,9 +18,9 @@
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
 		DebugStatsViewPtr CDebugStatsView::pInstance;
 		
@@ -51,7 +51,7 @@ namespace moFlo
 			SetOffsetFromParentAlignment(0.0f, 0.0f, 10.0f, -10.0f);
 			SetLocalAlignment(Core::AlignmentAnchor::k_topLeft);
 			
-			SetTexture(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::ITextureManager>()->GetDefaultTexture());
+			SetTexture(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<ITextureManager>()->GetDefaultTexture());
 			SetColour(Core::CColour(0.41f, 0.41f, 0.41f, 0.8f));
 			
 			u32 i = 0;

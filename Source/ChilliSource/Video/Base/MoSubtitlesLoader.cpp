@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Video
 	{
@@ -100,8 +100,8 @@ namespace moFlo
 			SubtitlesPtr pSubtitles = SHARED_PTR_CAST<CSubtitles>(outpResource);
 			
 			//Load model as task
-			Task3<Core::StorageLocation, const std::string&, SubtitlesPtr&> task(this, &CMoSubtitlesLoader::LoadMoSubtitlesTask,ineStorageLocation, inFilePath, pSubtitles);
-			CTaskScheduler::ScheduleTask(task);
+            Core::Task3<Core::StorageLocation, const std::string&, SubtitlesPtr&> task(this, &CMoSubtitlesLoader::LoadMoSubtitlesTask,ineStorageLocation, inFilePath, pSubtitles);
+			Core::CTaskScheduler::ScheduleTask(task);
 			
 			return true;
 		}
@@ -119,7 +119,7 @@ namespace moFlo
         {
             //read the JSON
             Json::Value root;
-            moFlo::Core::CUtils::ReadJson(ineStorageLocation, inFilePath, &root);
+            ChilliSource::Core::CUtils::ReadJson(ineStorageLocation, inFilePath, &root);
             
             //get the version number
             u32 udwVersionNumber = root.get(kstrTagVersionNumber, 0).asUInt();
@@ -239,7 +239,7 @@ namespace moFlo
         	f32 fLeft = (f32)inBoundsJson.get(kstrTagStyleBoundsLeft, kfDefaultLeft).asDouble();
         	f32 fRight = (f32)inBoundsJson.get(kstrTagStyleBoundsRight, kfDefaultRight).asDouble();
             
-            return Core::Rectangle(moFlo::Core::CVector2(fLeft, fTop), moFlo::Core::CVector2(fRight - fLeft, fBottom - fTop));
+            return Core::Rectangle(ChilliSource::Core::CVector2(fLeft, fTop), ChilliSource::Core::CVector2(fRight - fLeft, fBottom - fTop));
         }
         //-------------------------------------------------------------------------
         // Parse Time

@@ -12,9 +12,9 @@
 #include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
 #include <ChilliSource/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class CFacebookAuthenticationSystem : public Social::IFacebookAuthenticationSystem
 		{

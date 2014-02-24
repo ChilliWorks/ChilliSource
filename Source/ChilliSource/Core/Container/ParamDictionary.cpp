@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/XML/XMLUtils.h>
 #include <ChilliSource/Core/XML/rapidxml_utils.hpp>
 
-namespace moFlo{
+namespace ChilliSource{
 	namespace Core{
 		bool ParamDictionary::TryGetValue(const std::string & inKey, std::string & outValue) const{
 			const_iterator pEntry = find(inKey);

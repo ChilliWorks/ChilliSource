@@ -11,14 +11,14 @@
 #include <ChilliSource/Core/Cryptographic/HashMD5.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {
         std::string IFileSystem::mastrResourceDirectory[3];
         f32 IFileSystem::mfAssetsDensity = 1.0f;
         
-        moFlo::Core::StorageLocation GetStorageLocationFromString(const std::string & instrStorage)
+        ChilliSource::Core::StorageLocation GetStorageLocationFromString(const std::string & instrStorage)
         {
             if(instrStorage == "Package")
                 return StorageLocation::k_package;

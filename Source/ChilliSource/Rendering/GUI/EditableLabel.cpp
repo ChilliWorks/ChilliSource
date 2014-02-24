@@ -12,9 +12,9 @@
 
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
 		DEFINE_META_CLASS(CEditableLabel)
 
@@ -64,7 +64,7 @@ namespace moFlo
         ///
         /// @param Keyboard Event Delegate
         //-------------------------------------------------
-        IEvent<Input::KeyboardEventDelegate>& CEditableLabel::GetKeyboardShowEvent()
+        Core::IEvent<Input::KeyboardEventDelegate>& CEditableLabel::GetKeyboardShowEvent()
         {
             return mOnKeyboardShowEvent;
         }
@@ -76,7 +76,7 @@ namespace moFlo
         ///
         /// @param Keyboard Event Delegate
         //-------------------------------------------------
-        IEvent<Input::KeyboardEventDelegate>& CEditableLabel::GetKeyboardHideEvent()
+        Core::IEvent<Input::KeyboardEventDelegate>& CEditableLabel::GetKeyboardHideEvent()
         {
             return mOnKeyboardHideEvent;
         }
@@ -88,7 +88,7 @@ namespace moFlo
         ///
         /// @param Text Change Event Delegate
         //-------------------------------------------------
-        IEvent<CEditableLabel::TextChangeEventDelegate>& CEditableLabel::GetTextChangeEvent()
+        Core::IEvent<CEditableLabel::TextChangeEventDelegate>& CEditableLabel::GetTextChangeEvent()
         {
             return mOnTextChangeEvent;
         }
@@ -230,7 +230,7 @@ namespace moFlo
         /// @param Contents of the keyboard
         /// @param Whether to accept the input
 		//----------------------------------------------------
-		void CEditableLabel::OnKeyboardTextChanged(const UTF8String& instrText, bool* inbRejectInput)
+		void CEditableLabel::OnKeyboardTextChanged(const Core::UTF8String& instrText, bool* inbRejectInput)
 		{
             //We can reject the text if it exceeds our input limit
             if(CharacterLimit > 0 && instrText.length() > CharacterLimit)
@@ -334,7 +334,7 @@ namespace moFlo
         ///
         /// @param Canvas renderer
         //-------------------------------------------------------
-        void CEditableLabel::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void CEditableLabel::Draw(CCanvasRenderer* inpCanvas)
         {
 			//Check if this is on screen
 			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
@@ -364,7 +364,7 @@ namespace moFlo
                 inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::CVector2::ZERO, Core::CVector2::ZERO), AbsCol);
             }
         
-            UTF8String strutf8DisplayString(Text);
+            Core::UTF8String strutf8DisplayString(Text);
             
             // handle separators if we're using one
             if(mutf8strSeparator.length() > 0)
@@ -376,7 +376,7 @@ namespace moFlo
             {
                 if(SecureEntry)
                 {
-                    UTF8String strSecureText;
+                    Core::UTF8String strSecureText;
                     u32 udwTextLength = strutf8DisplayString.length();
                     
                     for(u32 i=0; i<udwTextLength; ++i)
@@ -427,7 +427,7 @@ namespace moFlo
         /// Overridden set text method, updates cached separator string
         /// @param instrText text to set as entry
         //-------------------------------------------------------
-        void CEditableLabel::SetText(const UTF8String& instrText)
+        void CEditableLabel::SetText(const Core::UTF8String& instrText)
         {
             CLabel::SetText(instrText);
             
@@ -445,7 +445,7 @@ namespace moFlo
         void CEditableLabel::SetKeyboardInputTypeNumeric()
         {
             if(mpKeyboard)
-                mpKeyboard->SetKeyboardType(moFlo::Input::KeyboardType::k_numeric);
+                mpKeyboard->SetKeyboardType(ChilliSource::Input::KeyboardType::k_numeric);
         }
         //-------------------------------------------------
         /// SetKeyboardInputTypeText
@@ -455,14 +455,14 @@ namespace moFlo
         void CEditableLabel::SetKeyboardInputTypeText()
         {
             if(mpKeyboard)
-                mpKeyboard->SetKeyboardType(moFlo::Input::KeyboardType::k_text);
+                mpKeyboard->SetKeyboardType(ChilliSource::Input::KeyboardType::k_text);
         }
         //------------------------
         /// Set Keyboard Capitalisation Method
         ///
         /// @param Capitalisation Type
         //------------------------
-        void CEditableLabel::SetKeyboardCapitalisationMethod(moInput::KeyboardCapitalisation ineCapitalisationType)
+        void CEditableLabel::SetKeyboardCapitalisationMethod(Input::KeyboardCapitalisation ineCapitalisationType)
         {
             if(mpKeyboard)
                 mpKeyboard->SetCapitalisationMethod(ineCapitalisationType);
@@ -472,9 +472,9 @@ namespace moFlo
         ///
         /// override to permit last text length tracking
         //-------------------------------------------------
-        UTF8String CEditableLabel::GetTextWithSeparators() const
+        Core::UTF8String CEditableLabel::GetTextWithSeparators() const
         {
-            UTF8String strutf8Out("");
+            Core::UTF8String strutf8Out("");
             
             // put in spacers for readability
             for(u32 i(0), sep(0); i < Text.size(); ++i)
@@ -503,7 +503,7 @@ namespace moFlo
         ///
         /// Sets the separator that will be used in GetTextWithSeparators
         //-------------------------------------------------
-        void CEditableLabel::SetTextSeparator(const UTF8String& inutf8strSeparator)
+        void CEditableLabel::SetTextSeparator(const Core::UTF8String& inutf8strSeparator)
         {
             mutf8strSeparator = inutf8strSeparator;
         }

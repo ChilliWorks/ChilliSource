@@ -14,9 +14,9 @@
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Entity/Transform.h>
 
-using namespace moFlo::Core;
+using namespace ChilliSource::Core;
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
     {
@@ -46,8 +46,8 @@ namespace moFlo
         
         bool CMaterialSortPredicate::SortItem(IRenderComponent* p1, IRenderComponent* p2)
         {
-            moRendering::CMaterial * pM1= p1->GetMaterial().get();
-            moRendering::CMaterial * pM2= p2->GetMaterial().get();
+            CMaterial * pM1= p1->GetMaterial().get();
+            CMaterial * pM2= p2->GetMaterial().get();
             if(pM1 == pM2)
             {
                 bool bp1Mesh = p1->IsA(CStaticMeshComponent::InterfaceID);

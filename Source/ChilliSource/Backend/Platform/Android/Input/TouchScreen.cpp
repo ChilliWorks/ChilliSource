@@ -11,17 +11,17 @@
 #include <ChilliSource/Platform/Android/Input/TouchScreen.h>
 #include <ChilliSource/Platform/Android/JavaInterface/TouchInputJavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		CTouchScreen::CTouchScreen()
 		{
-			moFlo::AndroidPlatform::SCTouchInputJavaInterface::RegisterTouchScreen(this);
+			ChilliSource::Android::SCTouchInputJavaInterface::RegisterTouchScreen(this);
 		}
 		CTouchScreen::~CTouchScreen()
 		{
-			moFlo::AndroidPlatform::SCTouchInputJavaInterface::RegisterTouchScreen(NULL);
+			ChilliSource::Android::SCTouchInputJavaInterface::RegisterTouchScreen(NULL);
 		}
 		bool CTouchScreen::IsA(Core::InterfaceIDType inInterfaceID) const
 		{

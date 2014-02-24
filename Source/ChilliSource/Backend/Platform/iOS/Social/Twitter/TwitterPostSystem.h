@@ -16,15 +16,15 @@
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
-        class CTwitterPostSystem : public moFlo::Social::ITwitterPostSystem
+        class CTwitterPostSystem : public ChilliSource::Social::ITwitterPostSystem
         {
         public:
-			CTwitterPostSystem(iOSPlatform::CHttpConnectionSystem* inpHttpConnectionSystem,
-							   Networking::COAuthSystem* inpOAuthSystem);
+			CTwitterPostSystem(iOS::CHttpConnectionSystem* inpHttpConnectionSystem,
+							   Core::COAuthSystem* inpOAuthSystem);
 			~CTwitterPostSystem();
 			//------------------------------------------------------------------------
             /// Is A
@@ -69,13 +69,13 @@ namespace moFlo
 			///
 			/// @param PIN entered by user
 			//------------------------------------------------------------------------
-			void OnPINComplete(const moFlo::Social::ITwitterAuthenticationActivity::AuthenticationPINResult &inResult);
+			void OnPINComplete(const ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResult &inResult);
 			//------------------------------------------------------------------------
 			/// Delegate called with the authorisation view is dismissed.
 			///
 			/// @param Pointer to IActivity that has been dismissed
 			//------------------------------------------------------------------------
-			void OnAuthorisationDismissed(moFlo::IActivity* inpActivity);
+			void OnAuthorisationDismissed(Core::IActivity* inpActivity);
 		private:
 			
 			//------------------------------------------------------------------------

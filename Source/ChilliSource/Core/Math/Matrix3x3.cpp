@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Core/Math/Matrix3x3.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

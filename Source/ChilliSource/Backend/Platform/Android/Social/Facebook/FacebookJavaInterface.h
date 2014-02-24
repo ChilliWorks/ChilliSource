@@ -11,9 +11,9 @@
 
 #include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class CFacebookAuthenticationSystem;
 		class CFacebookPostSystem;
@@ -25,7 +25,7 @@ namespace moFlo
 			CFacebookJavaInterface();
 
 			DECLARE_NAMED_INTERFACE(CFacebookJavaInterface);
-			bool IsA(moCore::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const;
 
 			//--------------------------------------------------------------------------------------
 			/// Set Authentication System

@@ -12,9 +12,9 @@
 
 #include <ChilliSource/Audio/Base/AudioManager.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		class CFMODAudioManager : public Audio::IAudioManager
 		{

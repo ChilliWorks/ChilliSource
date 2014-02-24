@@ -8,11 +8,10 @@
  */
 
 #include <ChilliSource/Core/Scene/Scene.h>
-#include <ChilliSource/Core/Base/Surface.h>
 
 #include <ChilliSource/Rendering/GUI/Window.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{
@@ -36,10 +35,10 @@ namespace moFlo
 		/// Create the scene graph object 
 		//--------------------------------------------------------------------------------------------------
 		CScene::CScene(Input::IInputSystem* inpInputSystem, f32 infWorldHalfSize) 
-        : /*mSpatialGraph(CVector3::ZERO, infWorldHalfSize),*/ mpRootWindow(NULL)
+        : mpRootWindow(nullptr)
 		{
-			mpRootWindow = (GUI::CWindow*)ISurface::Create();
-			((ISurface*)mpRootWindow)->SetInputSystem(inpInputSystem);
+			mpRootWindow = new Rendering::CWindow();
+			mpRootWindow->SetInputSystem(inpInputSystem);
 		}
 		//-------------------------------------------------------
 		/// Become Active
@@ -49,7 +48,6 @@ namespace moFlo
 		//-------------------------------------------------------
 		void CScene::BecomeActive()
 		{
-			//((ISurface*)mpRootWindow)->EnableUserInteraction(true);
             mpRootWindow->ListenForTouches();
             
 		}
@@ -176,7 +174,7 @@ namespace moFlo
         ///
         /// @return The main window that all the scene's UI is attached to.
         //--------------------------------------------------------------------------------------------------
-        GUI::CWindow* CScene::GetWindowPtr()
+        Rendering::CWindow* CScene::GetWindowPtr()
         {
             return mpRootWindow;
         }
@@ -189,7 +187,7 @@ namespace moFlo
         //--------------------------------------------------------------------------------------------------		   
 		void CScene::Update(f32 infDT)
 		{
-			((ISurface*)mpRootWindow)->Update(infDT);
+			mpRootWindow->Update(infDT);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Destructor
@@ -199,7 +197,7 @@ namespace moFlo
 		CScene::~CScene()
 		{
 			RemoveAllEntities();
-            delete (ISurface*)(mpRootWindow);
+            delete mpRootWindow;
 		}
 	}
 }

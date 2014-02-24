@@ -11,9 +11,9 @@
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
 		DEFINE_META_CLASS(CProgressBar)
         
@@ -83,7 +83,7 @@ namespace moFlo
             if(mfAnimationTime != 0)
             {
                 f32 fTimeSinceValueSet = Core::CApplication::GetSystemTimeInMilliseconds() - mPreviousValueTimeStamp;
-                f32 fTimeRatio = moFlo::Core::CMathUtils::Min(fTimeSinceValueSet / mfAnimationTime, 1.0f);
+                f32 fTimeRatio = ChilliSource::Core::CMathUtils::Min(fTimeSinceValueSet / mfAnimationTime, 1.0f);
                 f32 fAnimatedProgress = Core::CMathUtils::Clamp(mfPreviousValue + (mfPreviousValueDiff * fTimeRatio), 0.0f, 1.0f);
                 return fAnimatedProgress;
                 
@@ -109,7 +109,7 @@ namespace moFlo
             return mfAnimationTime;
         }
         
-        void CProgressBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void CProgressBar::Draw(CCanvasRenderer* inpCanvas)
         {
             CGUIView::Draw(inpCanvas);
         }

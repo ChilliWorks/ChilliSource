@@ -15,7 +15,7 @@
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

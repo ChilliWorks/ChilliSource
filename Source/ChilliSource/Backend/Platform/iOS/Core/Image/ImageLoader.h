@@ -19,11 +19,11 @@
 
 #include <string>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{		
-		class ImageLoader : public IImageResourceProvider
+		class ImageLoader : public Core::IImageResourceProvider
 		{
 		public:
 			

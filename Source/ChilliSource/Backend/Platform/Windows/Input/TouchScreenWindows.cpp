@@ -1,9 +1,9 @@
 
 #include <ChilliSource/Platform/Windows/Input/TouchscreenWindows.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		//-------------------------------------------------------
 		/// Is A

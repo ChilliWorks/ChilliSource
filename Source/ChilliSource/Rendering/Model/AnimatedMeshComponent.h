@@ -18,7 +18,7 @@
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -36,11 +36,11 @@ namespace moFlo
 		/// Events
 		//===============================================================
         typedef fastdelegate::FastDelegate1<CAnimatedMeshComponent*> AnimationChangedDelegate;
-        typedef CEvent1<AnimationChangedDelegate> AnimationChangedEvent;
+        typedef Core::CEvent1<AnimationChangedDelegate> AnimationChangedEvent;
         typedef fastdelegate::FastDelegate1<CAnimatedMeshComponent*> AnimationCompletionDelegate;
-        typedef CEvent1<AnimationCompletionDelegate> AnimationCompletionEvent;
+        typedef Core::CEvent1<AnimationCompletionDelegate> AnimationCompletionEvent;
         typedef fastdelegate::FastDelegate1<CAnimatedMeshComponent*> AnimationLoopedDelegate;
-        typedef CEvent1<AnimationLoopedDelegate> AnimationLoopedEvent;
+        typedef Core::CEvent1<AnimationLoopedDelegate> AnimationLoopedEvent;
 		//===============================================================
 		/// Animated Mesh component
 		///
@@ -452,7 +452,7 @@ namespace moFlo
             void ApplyDefaultMaterials();
             
 		private:
-            typedef DYNAMIC_ARRAY<std::pair<moCore::EntityWeakPtr, s32> > AttachedEntityList;
+            typedef DYNAMIC_ARRAY<std::pair<Core::EntityWeakPtr, s32> > AttachedEntityList;
             AttachedEntityList maAttachedEntities;
 			MeshPtr mpModel;
 			DYNAMIC_ARRAY<MaterialPtr> mMaterials;

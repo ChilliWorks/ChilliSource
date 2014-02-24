@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {

@@ -15,9 +15,9 @@
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Video/Main/Subtitles.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace AndroidPlatform
+    namespace Android
     {
     	//==================================================================
     	/// Video Player Activity
@@ -49,7 +49,7 @@ namespace moFlo
 			/// 		taps.
 			/// @param Background colour
             //--------------------------------------------------------------
-            void Present(Core::STORAGE_LOCATION ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour);
+            void Present(Core::STORAGE_LOCATION ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour);
             //--------------------------------------------------------------
 			/// Present With Subtitles
 			///
@@ -64,7 +64,7 @@ namespace moFlo
 			//--------------------------------------------------------------
 			void PresentWithSubtitles(Core::STORAGE_LOCATION ineVideoLocation, const std::string& instrVideoFilename,
 									  Core::STORAGE_LOCATION ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
-									  bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour);
+									  bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour);
             //--------------------------------------------------------------
             /// Is Playing
             ///
@@ -126,13 +126,13 @@ namespace moFlo
 			///
 			/// Updates a single subtitle.
 			//---------------------------------------------------------------
-			void UpdateSubtitle(const moFlo::Video::CSubtitles::SubtitlePtr& inpSubtitle, s64 inlwSubtitleID, TimeIntervalMs inTimeMS);
+			void UpdateSubtitle(const ChilliSource::Video::CSubtitles::SubtitlePtr& inpSubtitle, s64 inlwSubtitleID, TimeIntervalMs inTimeMS);
             
         private:
             VideoPlayerJavaInterfacePtr mpVideoPlayerJavaInterface;
-            moFlo::Video::SubtitlesPtr mpSubtitles;
-            HASH_MAP<moFlo::Video::CSubtitles::SubtitlePtr, s64> maSubtitleMap;
-            DYNAMIC_ARRAY<moFlo::Video::CSubtitles::SubtitlePtr> maSubtitlesToRemove;
+            ChilliSource::Video::SubtitlesPtr mpSubtitles;
+            HASH_MAP<ChilliSource::Video::CSubtitles::SubtitlePtr, s64> maSubtitleMap;
+            DYNAMIC_ARRAY<ChilliSource::Video::CSubtitles::SubtitlePtr> maSubtitlesToRemove;
             TimeIntervalMs mCurrentSubtitleTimeMS;
         };
     }

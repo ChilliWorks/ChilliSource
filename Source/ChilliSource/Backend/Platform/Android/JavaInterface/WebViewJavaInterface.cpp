@@ -28,12 +28,12 @@ void Java_com_taggames_moflow_nativeinterface_CWebViewNativeInterface_OnWebviewD
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CWebViewNativeInterface_OnWebviewDismissed(JNIEnv* inpEnv, jobject thiz, u32 inudwIndex)
 {
-	moFlo::AndroidPlatform::CWebViewActivity::OnWebViewDismissed(inudwIndex);
+	ChilliSource::Android::CWebViewActivity::OnWebViewDismissed(inudwIndex);
 }
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		void SCWebViewJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
 		{
@@ -45,7 +45,7 @@ namespace moFlo
 			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CWebViewNativeInterface","Dismiss", "(I)V");
 			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CWebViewNativeInterface","AddDismissButton", "(IF)V");
 		}
-		void SCWebViewJavaInterface::Present(u32 inudwIndex, const std::string& instrURL, const moFlo::Core::CVector2& invSize)
+		void SCWebViewJavaInterface::Present(u32 inudwIndex, const std::string& instrURL, const ChilliSource::Core::CVector2& invSize)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("Present");
 
@@ -62,7 +62,7 @@ namespace moFlo
 				env->DeleteLocalRef(jstrURL);
 			}
 		}
-		void SCWebViewJavaInterface::PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const moFlo::Core::CVector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor)
+		void SCWebViewJavaInterface::PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const ChilliSource::Core::CVector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("PresentFromFile");
 

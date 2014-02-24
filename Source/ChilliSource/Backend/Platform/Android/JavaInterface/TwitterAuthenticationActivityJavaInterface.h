@@ -12,11 +12,11 @@
 #include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
 #include <ChilliSource/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
-		class SCTwitterAuthenticationActivityJavaInterface : public moFlo::AndroidPlatform::_IJavaInterface
+		class SCTwitterAuthenticationActivityJavaInterface : public ChilliSource::Android::_IJavaInterface
 		{
 		public:
 			//--------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ namespace moFlo
 			///
 			/// @param The Activity we want to talk to
 			//-----------------------------------------------
-			static void RegisterActivity(moFlo::AndroidPlatform::CTwitterAuthenticationActivity* inpActivity);
+			static void RegisterActivity(ChilliSource::Android::CTwitterAuthenticationActivity* inpActivity);
 			//-----------------------------------------------
 			/// Present
 			///
@@ -60,7 +60,7 @@ namespace moFlo
 			static void OnPINComplete(const std::string instrPIN);
 
 		private:
-			static moFlo::AndroidPlatform::CTwitterAuthenticationActivity*		mpActivity;
+			static ChilliSource::Android::CTwitterAuthenticationActivity*		mpActivity;
 		};
 	}
 }

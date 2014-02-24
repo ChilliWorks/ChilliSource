@@ -41,15 +41,15 @@
 
 #include <windows.h>
 
-namespace moFlo 
+namespace ChilliSource 
 {
-	DEFINE_CREATABLE(IPlatformSystem, WindowsPlatform::CPlatformSystem);
+	DEFINE_CREATABLE(IPlatformSystem, Windows::CPlatformSystem);
 
 	//This is global as LARGE_INTEGER is defined in windows.h. Including windows.h in PlatformSystemWindows.h will cause compiler errors
 	//in FileSystemWindows.h
 	LARGE_INTEGER gFrequency;
 
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		//-----------------------------------------
 		/// Constructor
@@ -59,8 +59,8 @@ namespace moFlo
 		CPlatformSystem::CPlatformSystem() : mbIsRunning(true), mbIsSuspended(false), muddwAppStartTime(0), mffAppPreviousTime(0.0)
 		{
 			//CNotificationScheduler::Initialise(new CLocalNotificationScheduler(), new CRemoteNotificationScheduler());
-			Core::CApplication::SetFileSystem(new WindowsPlatform::CFileSystem());
-			moFlo::CLogging::Init();
+			Core::CApplication::SetFileSystem(new Windows::CFileSystem());
+			ChilliSource::CLogging::Init();
 		}
 		//-----------------------------------------
 		/// Init
@@ -90,7 +90,7 @@ namespace moFlo
 			glfwSetWindowCloseCallback((GLFWwindowclosefun)&CPlatformSystem::OnWindowClosed);
 
             //Initialise GUI factory
-            GUI::CGUIViewFactory::RegisterDefaults();
+            Rendering::CGUIViewFactory::RegisterDefaults();
 		}
 		//-------------------------------------------------
 		/// Add Default Systems
@@ -107,19 +107,19 @@ namespace moFlo
 			inaSystems.push_back(Core::SystemPtr(pRenderSystem));
 			Core::CApplication::SetRenderSystem(pRenderSystem);
 
-			Input::IInputSystem* pInputSystem = new WindowsPlatform::CInputSystem();
+			Input::IInputSystem* pInputSystem = new Windows::CInputSystem();
 			inaSystems.push_back(Core::SystemPtr(pInputSystem));
 			Core::CApplication::SetInputSystem(pInputSystem);
 
-			Audio::IAudioSystem* pAudioSystem = new WindowsPlatform::CFMODSystem();
+			Audio::IAudioSystem* pAudioSystem = new Windows::CFMODSystem();
 			inaSystems.push_back(Core::SystemPtr(pAudioSystem));
-			inaSystems.push_back(Core::SystemPtr(new WindowsPlatform::CFMODAudioLoader(pAudioSystem)));
+			inaSystems.push_back(Core::SystemPtr(new Windows::CFMODAudioLoader(pAudioSystem)));
 			Core::CApplication::SetAudioSystem(pAudioSystem);
 
 			//create other important systems
 			OpenGL::CRenderCapabilities* pRenderCapabilities = new OpenGL::CRenderCapabilities();
 			inaSystems.push_back(Core::SystemPtr(pRenderCapabilities));
-			inaSystems.push_back(Core::SystemPtr(new WindowsPlatform::ImageLoader()));
+			inaSystems.push_back(Core::SystemPtr(new Windows::ImageLoader()));
 			inaSystems.push_back(Core::SystemPtr(new CMoImageProvider()));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CSpriteSheetLoader()));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CXMLSpriteSheetLoader()));
@@ -462,11 +462,11 @@ namespace moFlo
 		{
 			if(MessageBoxA(NULL, instrTitle.ToASCII().c_str(), instrMessage.ToASCII().c_str(), MB_OKCANCEL) == IDOK)
 			{
-				Core::CApplication::OnSystemConfirmDialogResult(inudwID, moFlo::SystemConfirmDialog::CONFIRM);
+				Core::CApplication::OnSystemConfirmDialogResult(inudwID, ChilliSource::SystemConfirmDialog::CONFIRM);
 			}
 			else
 			{
-				Core::CApplication::OnSystemConfirmDialogResult(inudwID, moFlo::SystemConfirmDialog::CANCEL);
+				Core::CApplication::OnSystemConfirmDialogResult(inudwID, ChilliSource::SystemConfirmDialog::CANCEL);
 			} 
 		}
 		//--------------------------------------------------------------------------------------------------

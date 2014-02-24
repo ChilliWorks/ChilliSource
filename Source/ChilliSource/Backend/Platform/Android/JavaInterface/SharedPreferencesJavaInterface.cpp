@@ -8,9 +8,9 @@
 
 #include <ChilliSource/Platform/Android/JavaInterface/SharedPreferencesJavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//create static member
 

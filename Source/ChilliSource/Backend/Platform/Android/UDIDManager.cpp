@@ -16,9 +16,9 @@
 #include <ctime>
 #include <cstdlib>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		const std::string kstrUDIDStorageKey = "UDID";
 		const std::string kstrSharedPrefsDocName = "MoFlowPreferences";
@@ -57,9 +57,9 @@ namespace moFlo
 			//load the UDID from the local data store
 			std::string strLDSUDID = "";
 			bool bLDSUDIDExists = false;
-			if (moFlo::Core::CLocalDataStore::GetSingletonPtr()->HasValueForKey(kstrUDIDStorageKey) == true)
+			if (ChilliSource::Core::CLocalDataStore::GetSingletonPtr()->HasValueForKey(kstrUDIDStorageKey) == true)
 			{
-				bLDSUDIDExists = moFlo::Core::CLocalDataStore::GetSingletonPtr()->TryGetValue(kstrUDIDStorageKey, strLDSUDID);
+				bLDSUDIDExists = ChilliSource::Core::CLocalDataStore::GetSingletonPtr()->TryGetValue(kstrUDIDStorageKey, strLDSUDID);
 			}
 
 			//load the UDID from the android data store
@@ -91,8 +91,8 @@ namespace moFlo
 		void CUDIDManager::SaveUDID()
 		{
 			//store in the local data store
-			moFlo::Core::CLocalDataStore::GetSingletonPtr()->SetValueForKey(kstrUDIDStorageKey, mstrUDID);
-			moFlo::Core::CLocalDataStore::GetSingletonPtr()->Synchronise();
+			ChilliSource::Core::CLocalDataStore::GetSingletonPtr()->SetValueForKey(kstrUDIDStorageKey, mstrUDID);
+			ChilliSource::Core::CLocalDataStore::GetSingletonPtr()->Synchronise();
 
 			//store in shared preferences
 			SCSharedPreferencesJavaInterface::SetString(kstrSharedPrefsDocName, kstrUDIDStorageKey, mstrUDID);
@@ -108,7 +108,7 @@ namespace moFlo
 			std::string strMacAddress = pCoreJI->GetMacAddress();
 			if (strMacAddress != "")
 			{
-				mstrUDID = "m-" + moFlo::CHashMD5::GenerateHexHashCode(strMacAddress);
+				mstrUDID = "m-" + ChilliSource::CHashMD5::GenerateHexHashCode(strMacAddress);
 				SaveUDID();
 				return;
 			}
@@ -117,7 +117,7 @@ namespace moFlo
 			std::string strAndroidID = pCoreJI->GetAndroidID();
 			if (strAndroidID != "")
 			{
-				mstrUDID = "a-" + moFlo::CHashMD5::GenerateHexHashCode(strAndroidID);
+				mstrUDID = "a-" + ChilliSource::CHashMD5::GenerateHexHashCode(strAndroidID);
 				SaveUDID();
 				return;
 			}
@@ -126,7 +126,7 @@ namespace moFlo
 			std::string strTelephonyID = pCoreJI->GetTelephonyDeviceID();
 			if (strTelephonyID != "")
 			{
-				mstrUDID = "t-" + moFlo::CHashMD5::GenerateHexHashCode(strTelephonyID);
+				mstrUDID = "t-" + ChilliSource::CHashMD5::GenerateHexHashCode(strTelephonyID);
 				SaveUDID();
 				return;
 			}
@@ -146,7 +146,7 @@ namespace moFlo
 				dwRandomNumber += rand();
 
 			//use this random number to generate a UDID
-			mstrUDID = "r-" + moFlo::CHashMD5::GenerateHexHashCode(STRING_CAST(dwRandomNumber));
+			mstrUDID = "r-" + ChilliSource::CHashMD5::GenerateHexHashCode(STRING_CAST(dwRandomNumber));
 			SaveUDID();
 		}
 		//-----------------------------------------

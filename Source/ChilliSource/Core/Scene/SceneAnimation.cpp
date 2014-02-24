@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Entity/EntityAnimationController.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {

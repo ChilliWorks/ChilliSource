@@ -18,9 +18,9 @@
 
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         typedef fastdelegate::FastDelegate1<IButton*> ButtonEventDelegate;
         
@@ -39,11 +39,11 @@ namespace moFlo
             /// @return Event triggered when the button is 
             /// activated
             //--------------------------------------------------
-            IEvent<ButtonEventDelegate>& GetActivatedEvent();
+            Core::IEvent<ButtonEventDelegate>& GetActivatedEvent();
             
         protected:
             
-            CEvent1<ButtonEventDelegate> mOnButtonActivatedEvent;
+            Core::CEvent1<ButtonEventDelegate> mOnButtonActivatedEvent;
         };
     }
 }

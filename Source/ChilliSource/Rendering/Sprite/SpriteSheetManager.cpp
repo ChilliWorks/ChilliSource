@@ -17,7 +17,7 @@
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -67,7 +67,7 @@ namespace moFlo
 		//----------------------------------------------------------------
 		Core::InterfaceIDType ISpriteSheetManager::GetProviderType() const
 		{
-			return Rendering::CSpriteSheet::InterfaceID;
+			return CSpriteSheet::InterfaceID;
 		}
 		//-----------------------------------------------------------------
 		/// Get Resource From File

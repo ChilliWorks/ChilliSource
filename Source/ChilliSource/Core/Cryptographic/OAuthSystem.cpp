@@ -11,9 +11,9 @@
 #include <ChilliSource/Core/Cryptographic/HMAC_SHA1.h>
 #include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace Networking
+	namespace Core
 	{
 		DEFINE_NAMED_INTERFACE(COAuthSystem);
         
@@ -420,7 +420,7 @@ namespace moFlo
 		    //DEBUG_LOG("COAuthSystem::GetSignature() - Signature string is: \""+strSigBase+"\"");
 
 		    /* Now, hash the signature base string using HMAC_SHA1 class */
-		    moFlo::Core::CHMAC_SHA1 objHMACSHA1;
+		    ChilliSource::Core::CHMAC_SHA1 objHMACSHA1;
 		    std::string strSecretSigningKey;
 		    u8 bypDigest[OAUTHLIB_BUFFSIZE_LARGE];
 
@@ -442,7 +442,7 @@ namespace moFlo
 		                          (u8*)bypDigest);
 
 		    /* Do a base64 encode of signature - SHA 1 digest is 160 bits*/
-		    std::string strBase64String = moFlo::CBaseEncoding::Base64Encode((s8*)bypDigest, 20);
+		    std::string strBase64String = CBaseEncoding::Base64Encode((s8*)bypDigest, 20);
 		    //DEBUG_LOG("COAuthSystem::GetSignature() - Base64 of signature SHA1:\""+strBase64String+"\"");
 
 

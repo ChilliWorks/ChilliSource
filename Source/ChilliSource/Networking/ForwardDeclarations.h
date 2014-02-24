@@ -10,7 +10,7 @@
 #ifndef _MOFLO_NETWORKING_FORWARDDECLARATIONS_H_
 #define _MOFLO_NETWORKING_FORWARDDECLARATIONS_H_
 
-namespace moFlo 
+namespace ChilliSource 
 {
 	namespace Networking 
     {
@@ -27,7 +27,6 @@ namespace moFlo
 		class IHttpRequest;
 		class IHttpConnectionSystem;
        
-        class COAuthSystem;
         class IIAPSystem;
 	}
 }

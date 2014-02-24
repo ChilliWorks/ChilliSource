@@ -9,7 +9,7 @@
 #include <ChilliSource/Rendering/Particles/Effectors/ScalerParticleEffector.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {

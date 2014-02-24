@@ -27,9 +27,9 @@
 #undef CopyFile
 #undef DeleteFile
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform 
+	namespace Windows 
 	{
 		//constants
 		const std::string kstrSaveDataPath  = "SaveData\\";
@@ -224,7 +224,7 @@ namespace moFlo
             
             //get the path to the file
             std::string strPath, strName;
-            moFlo::Core::CStringUtils::SplitFilename(instrDestinationFilepath, strName, strPath);
+            ChilliSource::Core::CStringUtils::SplitFilename(instrDestinationFilepath, strName, strPath);
             
             //create the output directory
             CreateDirectory(ineDestinationStorageLocation, strPath);
@@ -379,7 +379,7 @@ namespace moFlo
             
             for(std::vector<std::string>::iterator it = astrDirectoriesToCheck.begin(); it != astrDirectoriesToCheck.end(); ++it)
             {
-                std::string path = moFlo::Core::CStringUtils::StandardisePath(*it);
+                std::string path = ChilliSource::Core::CStringUtils::StandardisePath(*it);
                 boost::filesystem::path DstPath(path);
                 
                 if (inbRecurseIntoSubDirectories == true)
@@ -394,7 +394,7 @@ namespace moFlo
                         {
                             if(inbAppendFullPath)
                             {
-                                outstrFileNames.push_back(moFlo::Core::CStringUtils::StandardisePath(instrDirectory) + it->filename());
+                                outstrFileNames.push_back(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory) + it->filename());
                             }
                             else
                             {
@@ -418,7 +418,7 @@ namespace moFlo
                                 //Add to list
                                 if(inbAppendFullPath)
                                 {
-                                    outstrFileNames.push_back(moFlo::Core::CStringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
+                                    outstrFileNames.push_back(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
                                 }
                                 else
                                 {
@@ -481,7 +481,7 @@ namespace moFlo
             
             for(std::vector<std::string>::iterator it = astrDirectoriesToCheck.begin(); it != astrDirectoriesToCheck.end(); ++it)
             {
-                std::string path = moFlo::Core::CStringUtils::StandardisePath(*it);
+                std::string path = ChilliSource::Core::CStringUtils::StandardisePath(*it);
                 boost::filesystem::path DstPath(path);
                 
                 if (inbRecurseIntoSubDirectories == true)
@@ -496,7 +496,7 @@ namespace moFlo
                         {
                             if(inbAppendFullPath)
                             {
-                                outstrFileNames.push_back(moFlo::Core::CStringUtils::StandardisePath(instrDirectory) + it->filename());
+                                outstrFileNames.push_back(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory) + it->filename());
                             }
                             else
                             {
@@ -520,7 +520,7 @@ namespace moFlo
                                 //Add to list
                                 if(inbAppendFullPath)
                                 {
-                                    outstrFileNames.push_back(moFlo::Core::CStringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
+                                    outstrFileNames.push_back(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
                                 }
                                 else
                                 {
@@ -573,7 +573,7 @@ namespace moFlo
             
             for(std::vector<std::string>::iterator it = astrDirectoriesToCheck.begin(); it != astrDirectoriesToCheck.end(); ++it)
             {
-                std::string path = moFlo::Core::CStringUtils::StandardisePath(*it);
+                std::string path = ChilliSource::Core::CStringUtils::StandardisePath(*it);
                 boost::filesystem::path DstPath(path);
                 
                 if (inbRecurseIntoSubDirectories == true)
@@ -588,7 +588,7 @@ namespace moFlo
                         {
                             if(inbAppendFullPath)
                             {
-                                outstrFileNames.push_back(moFlo::Core::CStringUtils::StandardisePath(instrDirectory) + it->filename());
+                                outstrFileNames.push_back(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory) + it->filename());
                             }
                             else
                             {
@@ -612,7 +612,7 @@ namespace moFlo
                                 //Add to list
                                 if(inbAppendFullPath)
                                 {
-                                    outstrFileNames.push_back(moFlo::Core::CStringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
+                                    outstrFileNames.push_back(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
                                 }
                                 else
                                 {
@@ -665,7 +665,7 @@ namespace moFlo
             
             for(std::vector<std::string>::iterator it = astrDirectoriesToCheck.begin(); it != astrDirectoriesToCheck.end(); ++it)
             {
-                std::string path = moFlo::Core::CStringUtils::StandardisePath(*it);
+                std::string path = ChilliSource::Core::CStringUtils::StandardisePath(*it);
                 boost::filesystem::path DstPath(path);
                 
                 if (inbRecurseIntoSubDirectories == true)
@@ -680,7 +680,7 @@ namespace moFlo
                         {
                             if(inbAppendFullPath)
                             {
-                                outstrDirectories.push_back(moFlo::Core::CStringUtils::StandardisePath(instrDirectory) + it->filename());
+                                outstrDirectories.push_back(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory) + it->filename());
                             }
                             else
                             {
@@ -704,7 +704,7 @@ namespace moFlo
                                 //Add to list
                                 if(inbAppendFullPath)
                                 {
-                                    outstrDirectories.push_back(moFlo::Core::CStringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
+                                    outstrDirectories.push_back(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
                                 }
                                 else
                                 {
@@ -729,7 +729,7 @@ namespace moFlo
         std::string CFileSystem::GetDirectoryForDLCFile(const std::string& instrFilePath) const
         {
             std::string strResult;
-            std::string strPath = moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_DLC) + instrFilePath);
+            std::string strPath = ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_DLC) + instrFilePath);
             
             if(DoesFileExist(strPath))
             {
@@ -739,7 +739,7 @@ namespace moFlo
             {
                 for(u32 i=0; i<3; ++i)
                 {
-                    strPath = moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrFilePath);
+                    strPath = ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrFilePath);
                     if(DoesFileExist(strPath))
                     {
                         strResult = strPath;
@@ -762,7 +762,7 @@ namespace moFlo
             
             for(u32 i=0; i<3; ++i)
             {
-                std::string strPath = moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + instrFilePath);
+                std::string strPath = ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + instrFilePath);
                 if(DoesFileExist(strPath))
                 {
                     strResult = strPath;
@@ -812,7 +812,7 @@ namespace moFlo
             }
             
             //return whether or not the file exists
-			return DoesFileExist(moFlo::Core::CStringUtils::StandardisePath(path));
+			return DoesFileExist(ChilliSource::Core::CStringUtils::StandardisePath(path));
 		}
 		//--------------------------------------------------------------
 		/// Does Directory Exist
@@ -854,7 +854,7 @@ namespace moFlo
             }
             
             //return whether or not the dir exists
-			return DoesDirectoryExist(moFlo::Core::CStringUtils::StandardisePath(path));
+			return DoesDirectoryExist(ChilliSource::Core::CStringUtils::StandardisePath(path));
 		}
         //--------------------------------------------------------------
 		/// Does File Exist
@@ -862,7 +862,7 @@ namespace moFlo
 		bool CFileSystem::DoesFileExist(const std::string& instrFilepath) const
 		{
 			//return whether or not the file exists
-			boost::filesystem::path DstPath(moFlo::Core::CStringUtils::StandardisePath(instrFilepath));
+			boost::filesystem::path DstPath(ChilliSource::Core::CStringUtils::StandardisePath(instrFilepath));
 			return boost::filesystem::exists(DstPath);
 		}
 		//--------------------------------------------------------------
@@ -878,7 +878,7 @@ namespace moFlo
 		bool CFileSystem::DoesFileExistInPackageDLC(const std::string& instrFilepath) const
 		{
 			std::string path = GetStorageLocationDirectory(Core::SL_PACKAGE) + mstrPackageDLCPath + instrFilepath;
-			boost::filesystem::path DstPath(moFlo::Core::CStringUtils::StandardisePath(path));
+			boost::filesystem::path DstPath(ChilliSource::Core::CStringUtils::StandardisePath(path));
 			return boost::filesystem::exists(DstPath);
 		}
 		//--------------------------------------------------------------
@@ -887,7 +887,7 @@ namespace moFlo
 		bool CFileSystem::DoesDirectoryExist(const std::string& instrDirectory) const
 		{
 			//return whether or not the dir exists
-			boost::filesystem::path DstPath(moFlo::Core::CStringUtils::StandardisePath(instrDirectory));
+			boost::filesystem::path DstPath(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory));
 			return boost::filesystem::exists(DstPath);
 		}
 		//--------------------------------------------------------------
@@ -950,7 +950,7 @@ namespace moFlo
 				return false;
 			}
 
-			boost::filesystem::path DstPath(moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_DLC) + instrPath));
+			boost::filesystem::path DstPath(ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_DLC) + instrPath));
 			return boost::filesystem::exists(DstPath);
 		}
 	}

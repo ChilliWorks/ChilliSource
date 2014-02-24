@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Entity/EntityAnimation.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
     {
@@ -52,7 +52,7 @@ namespace moFlo
 			/// Creates and retains an EntityAnimation object with animdata with the given name and target entity.
 			/// Will return an empty pointer if it cannot find animdata with the given name or the target entity is NULL.
 			//----------------------------------------------
-			EntityAnimationPtr CreateAnimation(const std::string & instrAnimName, moFlo::Core::CEntity* inpAnimTarget, u32 inudwQueryFlags = 0);
+			EntityAnimationPtr CreateAnimation(const std::string & instrAnimName, ChilliSource::Core::CEntity* inpAnimTarget, u32 inudwQueryFlags = 0);
 			
 			//----------------------------------------------
 			/// CreateAnimation
@@ -60,7 +60,7 @@ namespace moFlo
 			/// Creates and retains an EntityAnimation object with animdata with the given name and target entity.
 			/// Will return an empty pointer if it cannot find animdata with the given name or the target entity is NULL.
 			//----------------------------------------------
-			EntityAnimationPtr CreateAndPlayAnimation(const std::string & instrAnimName, moFlo::Core::CEntity* inpAnimTarget, AnimationPlayMode inePlayMode);
+			EntityAnimationPtr CreateAndPlayAnimation(const std::string & instrAnimName, ChilliSource::Core::CEntity* inpAnimTarget, AnimationPlayMode inePlayMode);
             
             //----------------------------------------------
             /// Pause
@@ -112,7 +112,7 @@ namespace moFlo
 			///
             //----------------------------------------------
             typedef fastdelegate::FastDelegate1<CEntityAnimationController*> EventAnimationCompletion;
-            moFlo::IEvent<EventAnimationCompletion> & GetEventCompletion() { return mAnimationCompletionEvent; }
+            Core::IEvent<EventAnimationCompletion> & GetEventCompletion() { return mAnimationCompletionEvent; }
 			
             //----------------------------------------------
             /// Get Event Looped
@@ -120,7 +120,7 @@ namespace moFlo
             /// Return event to subscribe to for animation looped events
 			///
             //----------------------------------------------
-            moFlo::IEvent<EventAnimationCompletion> & GetEventLooped() { return mAnimationLoopedEvent; }
+            Core::IEvent<EventAnimationCompletion> & GetEventLooped() { return mAnimationLoopedEvent; }
             
 			bool GetIsFinished() const;
 		protected:

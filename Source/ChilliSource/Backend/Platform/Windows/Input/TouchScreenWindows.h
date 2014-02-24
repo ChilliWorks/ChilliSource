@@ -16,9 +16,9 @@
 
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		class CTouchScreen : public Input::ITouchScreen
 		{

@@ -20,7 +20,7 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -29,7 +29,7 @@ namespace moFlo
 		//===============================================
 		struct InverseBindPose
 		{
-			DYNAMIC_ARRAY<moFlo::Core::CMatrix4x4> mInverseBindPoseMatrices;
+			DYNAMIC_ARRAY<ChilliSource::Core::CMatrix4x4> mInverseBindPoseMatrices;
 		};
 		typedef SHARED_PTR<InverseBindPose> InverseBindPosePtr;
 		

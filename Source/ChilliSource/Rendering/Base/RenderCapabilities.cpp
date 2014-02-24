@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {

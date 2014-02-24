@@ -5,9 +5,9 @@
 #include <ChilliSource/Input/ForwardDeclarations.h>
 #include <ChilliSource/Input/Pointer/Mouse.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		class CMouse : public Input::IMouse
 		{
@@ -25,7 +25,7 @@ namespace moFlo
 			/// 
 			/// @return Position of cursor on screen
 			//------------------------------------------------------
-			moFlo::Core::CVector2 GetPosition() const;
+			ChilliSource::Core::CVector2 GetPosition() const;
 
 		private:
 

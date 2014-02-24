@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Rendering/Model/SubMesh.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -64,7 +64,7 @@ namespace moFlo
 		//----------------------------------------------------------------
 		Core::InterfaceIDType CMeshManager::GetProviderType() const
 		{
-			return Rendering::CMesh::InterfaceID;
+			return CMesh::InterfaceID;
 		}
 		//-----------------------------------------------------------------
 		/// Get Resource From File

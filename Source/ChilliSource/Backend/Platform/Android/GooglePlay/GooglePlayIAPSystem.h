@@ -13,9 +13,9 @@
 
 #include <ChilliSource/Platform/Android/GooglePlay/GooglePlayIAPJavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class CGooglePlayIAPSystem : public Networking::IIAPSystem
 		{

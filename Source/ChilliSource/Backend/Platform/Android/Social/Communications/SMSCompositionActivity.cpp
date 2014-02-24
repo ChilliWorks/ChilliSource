@@ -10,11 +10,11 @@
 #include "SMSCompositionActivity.h"
 #include "Platform/Android/JavaInterface/SMSCompositionJavaInterface.h"
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
-		moFlo::Social::ISMSCompositionActivity::SendResultDelegate CSMSCompositionActivity::mCallback;
+		ChilliSource::Social::ISMSCompositionActivity::SendResultDelegate CSMSCompositionActivity::mCallback;
 
 		bool CSMSCompositionActivity::IsA(Core::InterfaceIDType inID) const
 		{

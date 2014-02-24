@@ -10,7 +10,7 @@
 
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {

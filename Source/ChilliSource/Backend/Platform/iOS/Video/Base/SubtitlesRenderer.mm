@@ -22,7 +22,7 @@
 //--------------------------------------------------------
 /// init With Video Player
 //--------------------------------------------------------
--(id) InitWithVideoPlayer:(moFlo::iOSPlatform::CVideoPlayerActivity*)inpVideoPlayer View:(UIView*)inpView StorageLocation:(moFlo::Core::StorageLocation)ineStorageLocation Filename:(std::string)instrFilename
+-(id) InitWithVideoPlayer:(ChilliSource::iOS::CVideoPlayerActivity*)inpVideoPlayer View:(UIView*)inpView StorageLocation:(ChilliSource::Core::StorageLocation)ineStorageLocation Filename:(std::string)instrFilename
 {
     if(!(self = [super init]))
 	{
@@ -37,7 +37,7 @@
     [mpDisplayLink addToRunLoop: [NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
     
     //load the subtitles
-    mpSubtitles = LOAD_RESOURCE(moFlo::Video::CSubtitles, ineStorageLocation, instrFilename);
+    mpSubtitles = LOAD_RESOURCE(ChilliSource::Video::CSubtitles, ineStorageLocation, instrFilename);
     
     return self;
 }
@@ -53,13 +53,13 @@
     if (mCurrentTimeMS != currentTimeMS)
     {
         mCurrentTimeMS = currentTimeMS;
-        DYNAMIC_ARRAY<moFlo::Video::CSubtitles::SubtitlePtr> pSubtitleArray = mpSubtitles->GetSubtitlesAtTime(mCurrentTimeMS);
+        DYNAMIC_ARRAY<ChilliSource::Video::CSubtitles::SubtitlePtr> pSubtitleArray = mpSubtitles->GetSubtitlesAtTime(mCurrentTimeMS);
 
         //add any new subtitles
-        for (DYNAMIC_ARRAY<moFlo::Video::CSubtitles::SubtitlePtr>::iterator it = pSubtitleArray.begin(); it != pSubtitleArray.end(); ++it)
+        for (DYNAMIC_ARRAY<ChilliSource::Video::CSubtitles::SubtitlePtr>::iterator it = pSubtitleArray.begin(); it != pSubtitleArray.end(); ++it)
         {
             
-            HASH_MAP<moFlo::Video::CSubtitles::SubtitlePtr, UITextView*>::iterator mapEntry = maTextViewMap.find(*it);
+            HASH_MAP<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*>::iterator mapEntry = maTextViewMap.find(*it);
             if (mapEntry == maTextViewMap.end())
             {
                 [self AddTextView:*it];
@@ -67,15 +67,15 @@
         }
 
         //update the current text views
-        for (HASH_MAP<moFlo::Video::CSubtitles::SubtitlePtr, UITextView*>::iterator it = maTextViewMap.begin(); it != maTextViewMap.end(); ++it)
+        for (HASH_MAP<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*>::iterator it = maTextViewMap.begin(); it != maTextViewMap.end(); ++it)
         {
             [self UpdateTextView:it->second Subtitle:it->first Time:mCurrentTimeMS];
         }
 
         //removes any text views that are no longer needed.
-        for (DYNAMIC_ARRAY<moFlo::Video::CSubtitles::SubtitlePtr>::iterator it = maSubtitlesToRemove.begin(); it != maSubtitlesToRemove.end(); ++it)
+        for (DYNAMIC_ARRAY<ChilliSource::Video::CSubtitles::SubtitlePtr>::iterator it = maSubtitlesToRemove.begin(); it != maSubtitlesToRemove.end(); ++it)
         {
-            HASH_MAP<moFlo::Video::CSubtitles::SubtitlePtr, UITextView*>::iterator mapEntry = maTextViewMap.find(*it);
+            HASH_MAP<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*>::iterator mapEntry = maTextViewMap.find(*it);
             if (mapEntry != maTextViewMap.end())
             {
                 [mapEntry->second removeFromSuperview];
@@ -89,10 +89,10 @@
 //--------------------------------------------------------
 /// Add Text View
 //--------------------------------------------------------
--(void) AddTextView:(const moFlo::Video::CSubtitles::SubtitlePtr&)inpSubtitle
+-(void) AddTextView:(const ChilliSource::Video::CSubtitles::SubtitlePtr&)inpSubtitle
 {
     //get the style
-    moFlo::Video::CSubtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->strStyleName);
+    ChilliSource::Video::CSubtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->strStyleName);
     if (pStyle == NULL)
     {
         ERROR_LOG("Cannot find style '" + inpSubtitle->strStyleName + "' in subtitles.");
@@ -106,21 +106,21 @@
     pNewTextView.backgroundColor = [UIColor clearColor];
     
     //setup the text.
-    [pNewTextView setText: moFlo::Core::CStringUtils::UTF8StringToNSString(moFlo::Core::CLocalisedText::GetText(inpSubtitle->strTextID))];
-    [pNewTextView setFont:[UIFont fontWithName: moFlo::Core::CStringUtils::StringToNSString(pStyle->strFontName) size: pStyle->udwFontSize]];
+    [pNewTextView setText: ChilliSource::Core::CStringUtils::UTF8StringToNSString(ChilliSource::Core::CLocalisedText::GetText(inpSubtitle->strTextID))];
+    [pNewTextView setFont:[UIFont fontWithName: ChilliSource::Core::CStringUtils::StringToNSString(pStyle->strFontName) size: pStyle->udwFontSize]];
     [pNewTextView setTextColor:[UIColor colorWithRed:pStyle->Colour.r green:pStyle->Colour.g blue:pStyle->Colour.b alpha:0.0f]];
     [pNewTextView setEditable:NO];
     [pNewTextView setUserInteractionEnabled:NO];
     
     [self SetAlignment: pNewTextView WithAnchor: pStyle->eAlignment];
-    maTextViewMap.insert(std::pair<moFlo::Video::CSubtitles::SubtitlePtr, UITextView*>(inpSubtitle, pNewTextView));
+    maTextViewMap.insert(std::pair<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*>(inpSubtitle, pNewTextView));
 }
 //--------------------------------------------------------
 /// Update Text View
 //--------------------------------------------------------
--(void) UpdateTextView:(UITextView*)inpTextView Subtitle:(const moFlo::Video::CSubtitles::SubtitlePtr&)inpSubtitle Time:(TimeIntervalMs)inTimeMS
+-(void) UpdateTextView:(UITextView*)inpTextView Subtitle:(const ChilliSource::Video::CSubtitles::SubtitlePtr&)inpSubtitle Time:(TimeIntervalMs)inTimeMS
 {
-    moFlo::Video::CSubtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->strStyleName);
+    ChilliSource::Video::CSubtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->strStyleName);
     
     f32 fFade = 0.0f;
     s64 lwRelativeTime = ((s64)inTimeMS) - ((s64)inpSubtitle->StartTimeMS);
@@ -161,29 +161,29 @@
 //--------------------------------------------------------
 /// Remove Text View
 //--------------------------------------------------------
--(void) RemoveTextView:(const moFlo::Video::CSubtitles::SubtitlePtr&)inpSubtitle
+-(void) RemoveTextView:(const ChilliSource::Video::CSubtitles::SubtitlePtr&)inpSubtitle
 {
     maSubtitlesToRemove.push_back(inpSubtitle);
 }
 //--------------------------------------------------------
 /// Set Alignment
 //--------------------------------------------------------
--(void) SetAlignment:(UITextView*)inpView WithAnchor:(moFlo::Core::AlignmentAnchor)ineAnchor
+-(void) SetAlignment:(UITextView*)inpView WithAnchor:(ChilliSource::Core::AlignmentAnchor)ineAnchor
 {
     inpView.textAlignment = [self TextAlignmentFromAnchor: ineAnchor];
     
     switch (ineAnchor)
     {
-        case moFlo::Core::AlignmentAnchor::k_topLeft:
-        case moFlo::Core::AlignmentAnchor::k_topCentre:
-        case moFlo::Core::AlignmentAnchor::k_topRight:
+        case ChilliSource::Core::AlignmentAnchor::k_topLeft:
+        case ChilliSource::Core::AlignmentAnchor::k_topCentre:
+        case ChilliSource::Core::AlignmentAnchor::k_topRight:
         {
             inpView.contentOffset = (CGPoint){.x = 0.0f, .y = 0.0f};
             break;
         }
-        case moFlo::Core::AlignmentAnchor::k_middleLeft:
-        case moFlo::Core::AlignmentAnchor::k_middleCentre:
-        case moFlo::Core::AlignmentAnchor::k_middleRight:
+        case ChilliSource::Core::AlignmentAnchor::k_middleLeft:
+        case ChilliSource::Core::AlignmentAnchor::k_middleCentre:
+        case ChilliSource::Core::AlignmentAnchor::k_middleRight:
         {
             f32 fBoxSize = [inpView bounds].size.height;
             f32 fContentSize = [inpView contentSize].height;
@@ -196,9 +196,9 @@
             break;
             break;
         }
-        case moFlo::Core::AlignmentAnchor::k_bottomLeft:
-        case moFlo::Core::AlignmentAnchor::k_bottomCentre:
-        case moFlo::Core::AlignmentAnchor::k_bottomRight:
+        case ChilliSource::Core::AlignmentAnchor::k_bottomLeft:
+        case ChilliSource::Core::AlignmentAnchor::k_bottomCentre:
+        case ChilliSource::Core::AlignmentAnchor::k_bottomRight:
         {
             f32 fBoxSize = [inpView bounds].size.height;
             f32 fContentSize = [inpView contentSize].height;
@@ -218,21 +218,21 @@
 //--------------------------------------------------------
 /// Text Alignment From Anchor
 //--------------------------------------------------------
--(NSTextAlignment) TextAlignmentFromAnchor:(moFlo::Core::AlignmentAnchor)ineAnchor
+-(NSTextAlignment) TextAlignmentFromAnchor:(ChilliSource::Core::AlignmentAnchor)ineAnchor
 {
     switch (ineAnchor)
     {
-        case moFlo::Core::AlignmentAnchor::k_topLeft:
-        case moFlo::Core::AlignmentAnchor::k_middleLeft:
-        case moFlo::Core::AlignmentAnchor::k_bottomLeft:
+        case ChilliSource::Core::AlignmentAnchor::k_topLeft:
+        case ChilliSource::Core::AlignmentAnchor::k_middleLeft:
+        case ChilliSource::Core::AlignmentAnchor::k_bottomLeft:
             return NSTextAlignmentLeft;
-        case moFlo::Core::AlignmentAnchor::k_topCentre:
-        case moFlo::Core::AlignmentAnchor::k_middleCentre:
-        case moFlo::Core::AlignmentAnchor::k_bottomCentre:
+        case ChilliSource::Core::AlignmentAnchor::k_topCentre:
+        case ChilliSource::Core::AlignmentAnchor::k_middleCentre:
+        case ChilliSource::Core::AlignmentAnchor::k_bottomCentre:
             return NSTextAlignmentCenter;
-        case moFlo::Core::AlignmentAnchor::k_topRight:
-        case moFlo::Core::AlignmentAnchor::k_middleRight:
-        case moFlo::Core::AlignmentAnchor::k_bottomRight:
+        case ChilliSource::Core::AlignmentAnchor::k_topRight:
+        case ChilliSource::Core::AlignmentAnchor::k_middleRight:
+        case ChilliSource::Core::AlignmentAnchor::k_bottomRight:
             return NSTextAlignmentRight;
         default:
             WARNING_LOG("Could not convert alignment anchor to NSTextAlignment.");
@@ -245,14 +245,14 @@
 /// @return the rectangle in which the text box should
 /// appear on screen.
 //--------------------------------------------------------
--(CGRect) CalculateTextBoxRect:(const moFlo::Core::Rectangle&)inRelativeBounds
+-(CGRect) CalculateTextBoxRect:(const ChilliSource::Core::Rectangle&)inRelativeBounds
 {
-    moFlo::Core::CVector2 vScreenDimensions(moFlo::Core::CScreen::GetOrientedWidth() * moFlo::Core::CScreen::GetInverseDensity(), moFlo::Core::CScreen::GetOrientedHeight() * moFlo::Core::CScreen::GetInverseDensity());
-    moFlo::Core::CVector2 vVideoDimensions = mpVideoPlayer->GetVideoDimensions();
+    ChilliSource::Core::CVector2 vScreenDimensions(ChilliSource::Core::CScreen::GetOrientedWidth() * ChilliSource::Core::CScreen::GetInverseDensity(), ChilliSource::Core::CScreen::GetOrientedHeight() * ChilliSource::Core::CScreen::GetInverseDensity());
+    ChilliSource::Core::CVector2 vVideoDimensions = mpVideoPlayer->GetVideoDimensions();
     float fScreenAspectRatio = vScreenDimensions.x / vScreenDimensions.y;
     float fVideoAspectRatio = vVideoDimensions.x / vVideoDimensions.y;
     
-    moFlo::Core::CVector2 vVideoViewDimensions;
+    ChilliSource::Core::CVector2 vVideoViewDimensions;
     if (fScreenAspectRatio < fVideoAspectRatio)
     {
         vVideoViewDimensions.x = vScreenDimensions.x;
@@ -264,7 +264,7 @@
         vVideoViewDimensions.y = vScreenDimensions.y;
     }
     
-    moFlo::Core::CVector2 vVideoViewTopLeft = (vScreenDimensions - vVideoViewDimensions) * 0.5f;
+    ChilliSource::Core::CVector2 vVideoViewTopLeft = (vScreenDimensions - vVideoViewDimensions) * 0.5f;
     return CGRectMake(vVideoViewTopLeft.x + inRelativeBounds.Left() * vVideoViewDimensions.x, vVideoViewTopLeft.y + inRelativeBounds.Top() * vVideoViewDimensions.y, inRelativeBounds.vSize.x * vVideoViewDimensions.x, inRelativeBounds.vSize.y * vVideoViewDimensions.y);
     
 }

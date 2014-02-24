@@ -18,7 +18,7 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/String/StringConverter.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

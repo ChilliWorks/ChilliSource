@@ -6,7 +6,7 @@
 
 #include <ChilliSource/Core/Threading/ThreadPool.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {

@@ -15,9 +15,9 @@
 #include <string>
 
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform 
+	namespace Windows 
 	{
 		//--------------------------------------------------------------------------------------------------
 		/// Description:

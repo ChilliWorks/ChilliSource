@@ -26,31 +26,31 @@ extern "C"
 
 void Java_com_taggames_moflow_googleplay_remotenotifications_CGooglePlayRemoteNotificationNativeInterface_NativeOnRemoteTokenReceived(JNIEnv* inpEnv, jobject inThis, jstring instrToken)
 {
-	moFlo::AndroidPlatform::GooglePlayRemoteNotificationJavaInterfacePtr pInterface
-		= moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CGooglePlayRemoteNotificationJavaInterface>();
+	ChilliSource::Android::GooglePlayRemoteNotificationJavaInterfacePtr pInterface
+		= ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CGooglePlayRemoteNotificationJavaInterface>();
 	if(pInterface != NULL)
 	{
-		const std::string strToken = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(instrToken);
-		moFlo::CTaskScheduler::ScheduleMainThreadTask(moFlo::Task1<const std::string&>(pInterface.get(), &moFlo::AndroidPlatform::CGooglePlayRemoteNotificationJavaInterface::OnRemoteTokenReceived, strToken));
+		const std::string strToken = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrToken);
+		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task1<const std::string&>(pInterface.get(), &ChilliSource::Android::CGooglePlayRemoteNotificationJavaInterface::OnRemoteTokenReceived, strToken));
 	}
 }
 
 void Java_com_taggames_moflow_googleplay_remotenotifications_CGooglePlayRemoteNotificationNativeInterface_NativeOnRemoteNotificationReceived(JNIEnv* inpEnv, jobject inThis, jobjectArray inaKeys, jobjectArray inaValues)
 {
-	moFlo::AndroidPlatform::GooglePlayRemoteNotificationJavaInterfacePtr pInterface
-		= moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CGooglePlayRemoteNotificationJavaInterface>();
+	ChilliSource::Android::GooglePlayRemoteNotificationJavaInterfacePtr pInterface
+		= ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CGooglePlayRemoteNotificationJavaInterface>();
 	if(pInterface != NULL)
 	{
 		//Convert the incoming jarrays to a param dictionary
 		MOFLOW_ASSERT((inpEnv->GetArrayLength(inaKeys) == inpEnv->GetArrayLength(inaValues)), "CRemoteNotificationJavaInterface::NativeOnRemoteNotificationReceived has received a notification with different quantities of keys and values.");
 
 		u32 dwNumEntries = inpEnv->GetArrayLength(inaKeys);
-		moFlo::Core::ParamDictionary sParams;
+		ChilliSource::Core::ParamDictionary sParams;
 
 		for(u32 i = 0; i < dwNumEntries; ++i)
 		{
-			std::string strKey = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(static_cast<jstring>(inpEnv->GetObjectArrayElement(inaKeys, i)));
-			std::string strValue = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(static_cast<jstring>(inpEnv->GetObjectArrayElement(inaValues, i)));
+			std::string strKey = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(static_cast<jstring>(inpEnv->GetObjectArrayElement(inaKeys, i)));
+			std::string strValue = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(static_cast<jstring>(inpEnv->GetObjectArrayElement(inaValues, i)));
 
 			// Bail out on any keys we do not want to end up in the final params.
 			if(strKey == "collapse_key" || strKey == "from")
@@ -61,13 +61,13 @@ void Java_com_taggames_moflow_googleplay_remotenotifications_CGooglePlayRemoteNo
 			sParams.SetValueForKey(strKey, strValue);
 		}
 
-		moFlo::CTaskScheduler::ScheduleMainThreadTask(moFlo::Task1<const moFlo::Core::ParamDictionary&>(pInterface.get(), &moFlo::AndroidPlatform::CGooglePlayRemoteNotificationJavaInterface::OnRemoteNotificationReceived, sParams));
+		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task1<const ChilliSource::Core::ParamDictionary&>(pInterface.get(), &ChilliSource::Android::CGooglePlayRemoteNotificationJavaInterface::OnRemoteNotificationReceived, sParams));
 	}
 }
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace AndroidPlatform
+    namespace Android
     {
     	DEFINE_NAMED_INTERFACE(CGooglePlayRemoteNotificationJavaInterface);
 
@@ -99,7 +99,7 @@ namespace moFlo
 		//-------------------------------------------------------------------------
 		void CGooglePlayRemoteNotificationJavaInterface::OnRemoteTokenReceived(const std::string& instrToken)
 		{
-			moFlo::AndroidPlatform::CGooglePlayRemoteNotificationSystem* pRemoteNotificationSys = moCore::CApplication::GetSystemImplementing<moFlo::AndroidPlatform::CGooglePlayRemoteNotificationSystem>();
+			ChilliSource::Android::CGooglePlayRemoteNotificationSystem* pRemoteNotificationSys = Core::CApplication::GetSystemImplementing<ChilliSource::Android::CGooglePlayRemoteNotificationSystem>();
 			MOFLOW_ASSERT(pRemoteNotificationSys, "Unable to get remote notification system.");
 			pRemoteNotificationSys->OnRemoteTokenReceived(instrToken);
 		}
@@ -108,7 +108,7 @@ namespace moFlo
 		//-------------------------------------------------------------------------
 		void CGooglePlayRemoteNotificationJavaInterface::OnRemoteNotificationReceived(const Core::ParamDictionary& insParams)
 		{
-			moFlo::AndroidPlatform::CGooglePlayRemoteNotificationSystem* pRemoteNotificationSys = moCore::CApplication::GetSystemImplementing<moFlo::AndroidPlatform::CGooglePlayRemoteNotificationSystem>();
+			ChilliSource::Android::CGooglePlayRemoteNotificationSystem* pRemoteNotificationSys = Core::CApplication::GetSystemImplementing<ChilliSource::Android::CGooglePlayRemoteNotificationSystem>();
 			MOFLOW_ASSERT(pRemoteNotificationSys, "Unable to get remote notification system.");
 			pRemoteNotificationSys->OnRemoteNotificationReceived(insParams);
 		}

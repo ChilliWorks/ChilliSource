@@ -16,7 +16,7 @@
 
 #include <ChilliSource/Core/Cryptographic/SHA1.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{
@@ -336,7 +336,7 @@ namespace moFlo
             /// @param Type of checksum to report
             /// @return SHA1 checksum
             //--------------------------------------------------------------
-            std::string GetSHA1Checksum(moFlo::Core::CSHA1::ReportType ineReportType);
+            std::string GetSHA1Checksum(ChilliSource::Core::CSHA1::ReportType ineReportType);
             //--------------------------------------------------------------------------------------------------
 			/// Open
 			///

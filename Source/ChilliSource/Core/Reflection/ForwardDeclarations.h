@@ -9,22 +9,25 @@
 #ifndef MO_FLOW_CORE_REFLECTION_FORWARD_DECLARATIONS_H_
 #define MO_FLOW_CORE_REFLECTION_FORWARD_DECLARATIONS_H_
 
-namespace moFlo 
+namespace ChilliSource 
 {
-    namespace Reflect
+    namespace Core
     {
-        enum class PropAccess
+        namespace Reflect
         {
-            k_readOnly,
-            k_writeOnly,
-            k_readWrite
-        };
-        
-        //---Forward Declarations
-        class CInstance;
-        class CMetaClass;
-        class CProperty;
-        template <typename T, typename ReturnType = void> class CMethod;
+            enum class PropAccess
+            {
+                k_readOnly,
+                k_writeOnly,
+                k_readWrite
+            };
+            
+            //---Forward Declarations
+            class CInstance;
+            class CMetaClass;
+            class CProperty;
+            template <typename T, typename ReturnType = void> class CMethod;
+        }
     }
 }
 

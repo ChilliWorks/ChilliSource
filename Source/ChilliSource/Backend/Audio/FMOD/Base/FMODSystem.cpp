@@ -23,9 +23,9 @@
 
 #include <fmodiphone.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		//-------------------------------------------------------
 		/// Constructor

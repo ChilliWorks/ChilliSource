@@ -14,9 +14,9 @@
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
 		DEFINE_META_CLASS(CHorizontalEndcappedProgressBar)
 		
@@ -73,11 +73,11 @@ namespace moFlo
             Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SpriteSheetLocation", strValue))
             {
-                eSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("SpriteSheet", strValue))
 			{
-				SetSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eSpriteSheetLocation, strValue));
+				SetSpriteSheet(LOAD_RESOURCE(CSpriteSheet, eSpriteSheetLocation, strValue));
 			}
 			//---Sprite sheet ID
 			if(insParams.TryGetValue("BaseFillSpriteSheetIndexID", strValue))
@@ -147,7 +147,7 @@ namespace moFlo
 		///
 		/// @param Sprite Sheet
 		//------------------------------------------------------------------------
-		void CHorizontalEndcappedProgressBar::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void CHorizontalEndcappedProgressBar::SetSpriteSheet(const SpriteSheetPtr& inpSpriteSheet)
 		{
 			SpriteSheet = inpSpriteSheet;
 			mpBGImage->SetSpriteSheet(inpSpriteSheet);
@@ -158,7 +158,7 @@ namespace moFlo
 		///
 		/// @return Sprite Sheet
 		//------------------------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CHorizontalEndcappedProgressBar::GetSpriteSheet() const
+		const SpriteSheetPtr& CHorizontalEndcappedProgressBar::GetSpriteSheet() const
 		{
 			return SpriteSheet;
 		}
@@ -316,7 +316,7 @@ namespace moFlo
 		///
 		/// @param Renderer
 		//------------------------------------------------------------------------
-		void CHorizontalEndcappedProgressBar::Draw(moFlo::Rendering::CCanvasRenderer* inpCanvas)
+		void CHorizontalEndcappedProgressBar::Draw(CCanvasRenderer* inpCanvas)
 		{
 			if(Visible && SpriteSheet)
 			{
@@ -342,10 +342,10 @@ namespace moFlo
 				
 				f32 fFillDrawHeight = vMyAbsSize.y - (fBGImageHeight-fFillImageHeight);		
 				
-				mpBGImage->SetSize(UnifiedVector2(Core::CVector2::ZERO,vMyAbsSize));
+				mpBGImage->SetSize(Core::UnifiedVector2(Core::CVector2::ZERO,vMyAbsSize));
 				mpBGImage->Draw(inpCanvas);
 				
-				mpFillImage->SetSize(UnifiedVector2(Core::CVector2::ZERO,Core::CVector2(fFillWidth,fFillDrawHeight)));
+				mpFillImage->SetSize(Core::UnifiedVector2(Core::CVector2::ZERO,Core::CVector2(fFillWidth,fFillDrawHeight)));
 				mpFillImage->Draw(inpCanvas);
 			}
             

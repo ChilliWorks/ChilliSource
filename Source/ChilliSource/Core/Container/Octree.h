@@ -49,7 +49,7 @@ const u32 kudwTotalNumNodes     = 4681; //NOTE: If the depth is changed then thi
 
 const f32 kfLooseScale          = 2;    //NOTE: DO NO CHANGE THIS!
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

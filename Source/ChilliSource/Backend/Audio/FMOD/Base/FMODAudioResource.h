@@ -19,9 +19,9 @@
 #include <fmod.hpp>
 #include <fmod_errors.h>
 
-namespace moFlo 
+namespace ChilliSource 
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		class CFMODAudioResource : public Audio::IAudioResource 
 		{
@@ -35,7 +35,7 @@ namespace moFlo
             /// @param Comparison Type
             /// @return Whether the class matches the comparison type
             //----------------------------------------------------------
-            bool IsA(moFlo::Core::InterfaceIDType inInterfaceID) const;
+            bool IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const;
 			//----------------------------------------------------------
 			/// Get Length
 			///

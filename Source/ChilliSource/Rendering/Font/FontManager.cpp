@@ -19,7 +19,7 @@
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Image/Image.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -81,7 +81,7 @@ namespace moFlo
         /// @param The storage location to load from
 		/// @param File name
 		//-----------------------------------------------------------------
-		Core::ResourcePtr IFontManager::GetResourceFromFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr IFontManager::GetResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetFontFromFile(ineStorageLocation, instrFilePath, Core::CImage::Format::k_default);
 		}
@@ -95,7 +95,7 @@ namespace moFlo
 		/// @param File name
 		/// @param Image format
 		//----------------------------------------------------------------
-		FontPtr IFontManager::GetFontFromFile(moFlo::Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat)
+		FontPtr IFontManager::GetFontFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat)
 		{
             //It's the texture that is passed in so we need to load the alphabet file
             std::string strFontFile;
@@ -124,10 +124,10 @@ namespace moFlo
                         
                         if(!mpSpriteSheetManager)
                         {
-                            mpSpriteSheetManager = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::ISpriteSheetManager>();
+                            mpSpriteSheetManager = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<ISpriteSheetManager>();
                         }
                         
-                        Rendering::SpriteSheetPtr pFontData = mpSpriteSheetManager->GetSpriteSheetFromFile(ineStorageLocation, inFilePath, ineFormat, false);
+                        SpriteSheetPtr pFontData = mpSpriteSheetManager->GetSpriteSheetFromFile(ineStorageLocation, inFilePath, ineFormat, false);
                         pFont->SetSpriteSheet(pFontData);
 						return pFont;
 					}

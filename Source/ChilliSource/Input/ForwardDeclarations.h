@@ -1,7 +1,7 @@
 /** 
  * File: ForwardDeclarations.h
  * Date: 5 Oct 2010
- * Description: Forward declarations for classes in the moFlo::Input namespace;
+ * Description: Forward declarations for classes in the ChilliSource::Input namespace;
  */
 
 /** 
@@ -14,7 +14,7 @@
 #ifndef _MOFLO_INPUT_FORWARDDECLARATIONS_H_
 #define _MOFLO_INPUT_FORWARDDECLARATIONS_H_
 
-namespace moFlo 
+namespace ChilliSource 
 {
 	namespace Input 
 	{

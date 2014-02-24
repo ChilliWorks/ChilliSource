@@ -57,11 +57,9 @@
 #include <sys/sysctl.h>
 #include <AdSupport/ASIdentifierManager.h>
 
-namespace moFlo 
+namespace ChilliSource 
 {
-    DEFINE_CREATABLE(IPlatformSystem, iOSPlatform::CPlatformSystem);
-    
-	namespace iOSPlatform
+	namespace iOS
 	{   
 		//-----------------------------------------
 		/// Constructor
@@ -78,7 +76,7 @@ namespace moFlo
  
             //---Activities
             AddActivityFunc(Video::IVideoPlayerActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateDefaultVideoPlayerActivity));
-			AddActivityFunc(IWebViewActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateWebViewActivity));
+			AddActivityFunc(Web::IWebViewActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateWebViewActivity));
 			
 			if(CSMSCompositionActivity::SupportedByDevice())
             {
@@ -88,10 +86,10 @@ namespace moFlo
             //---Info providers
 			AddInfoProviderFunc(Social::IContactInformationProvider::InterfaceID, InfoProviderCreationFunction(this, &CPlatformSystem::CreateContactInformationProvider));
 
-			CNotificationScheduler::Initialise(new CLocalNotificationScheduler());
-			Core::CApplication::SetFileSystem(new iOSPlatform::CFileSystem());
+			Core::CNotificationScheduler::Initialise(new CLocalNotificationScheduler());
+			Core::CApplication::SetFileSystem(new iOS::CFileSystem());
 
-			moFlo::CLogging::Init();
+			Core::CLogging::Init();
 		}
         //--------------------------------------------
         /// Add System Function
@@ -161,7 +159,7 @@ namespace moFlo
 		void CPlatformSystem::Init()
 		{
             //Initialise GUI factory
-            GUI::CGUIViewFactory::RegisterDefaults();
+            Rendering::CGUIViewFactory::RegisterDefaults();
 		}
 		//-------------------------------------------------
 		/// Create Default Systems
@@ -178,20 +176,20 @@ namespace moFlo
             inaSystems.push_back(Core::SystemPtr(pRenderSystem));
 			Core::CApplication::SetRenderSystem(pRenderSystem);
             
-            Input::IInputSystem* pInputSystem = new iOSPlatform::CInputSystem();
+            Input::IInputSystem* pInputSystem = new iOS::CInputSystem();
             inaSystems.push_back(Core::SystemPtr(pInputSystem));
             Core::CApplication::SetInputSystem(pInputSystem);
             
-            Audio::IAudioSystem * pAudioSystem = new iOSPlatform::CFMODSystem();
+            Audio::IAudioSystem * pAudioSystem = new iOS::CFMODSystem();
 			inaSystems.push_back(Core::SystemPtr(pAudioSystem));
-			inaSystems.push_back(Core::SystemPtr(new iOSPlatform::CFMODAudioLoader(pAudioSystem)));
+			inaSystems.push_back(Core::SystemPtr(new iOS::CFMODAudioLoader(pAudioSystem)));
 			Core::CApplication::SetAudioSystem(pAudioSystem);
             
 			//create other important systems
 			OpenGL::CRenderCapabilities* pRenderCapabilities = new OpenGL::CRenderCapabilities();
             inaSystems.push_back(Core::SystemPtr(pRenderCapabilities));
-            inaSystems.push_back(Core::SystemPtr(new iOSPlatform::ImageLoader()));
-            inaSystems.push_back(Core::SystemPtr(new CMoImageProvider()));
+            inaSystems.push_back(Core::SystemPtr(new iOS::ImageLoader()));
+            inaSystems.push_back(Core::SystemPtr(new Core::CMoImageProvider()));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CSpriteSheetLoader()));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CXMLSpriteSheetLoader()));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CMaterialLoader(pRenderCapabilities)));
@@ -327,7 +325,7 @@ namespace moFlo
 		/// @param InterfaceID to generate
 		/// @return A handle to the given activity or NULL if the platform cannot support it
 		//-----------------------------------------
-		IActivity* CPlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
+		Core::IActivity* CPlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
         {
 			MapInterfaceIDToActivityFunc::const_iterator pFunc(mmapInterfaceIDToActivityFunc.find(inInterfaceID));
 			
@@ -358,7 +356,7 @@ namespace moFlo
 		/// @param InterfaceID to generate
 		/// @return A handle to the given system or NULL if the platform cannot support it
 		//-----------------------------------------
-		IInformationProvider* CPlatformSystem::CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
+		Core::IInformationProvider* CPlatformSystem::CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
         {
 			MapInterfaceIDToInfoProviderFunc::const_iterator pFunc(mmapInterfaceIDToInfoProviderFunc.find(inInterfaceID));
 			if (pFunc != mmapInterfaceIDToInfoProviderFunc.end())
@@ -387,19 +385,19 @@ namespace moFlo
         ///
         /// @return Ownership of the activity
         //--------------------------------------------
-		IActivity* CPlatformSystem::CreateSMSCompositionActivity() const
+		Core::IActivity* CPlatformSystem::CreateSMSCompositionActivity() const
         {
 			return new CSMSCompositionActivity();
 		}
-		IActivity* CPlatformSystem::CreateEmailCompositionActivity() const
+		Core::IActivity* CPlatformSystem::CreateEmailCompositionActivity() const
         {
 			return new CEmailCompositionActivity();
 		}
-		IActivity * CPlatformSystem::CreateDefaultVideoPlayerActivity() const
+		Core::IActivity * CPlatformSystem::CreateDefaultVideoPlayerActivity() const
         {
             return new CVideoPlayerActivity();
         }
-		IActivity * CPlatformSystem::CreateWebViewActivity() const
+		Core::IActivity * CPlatformSystem::CreateWebViewActivity() const
         {
             return new CWebViewActivity();
         }
@@ -410,7 +408,7 @@ namespace moFlo
         ///
         /// @return Ownership of the info provider
         //--------------------------------------------
-		IInformationProvider* CPlatformSystem::CreateContactInformationProvider() const
+		Core::IInformationProvider* CPlatformSystem::CreateContactInformationProvider() const
         {
 			return new CContactInformationProvider();
 		}
@@ -451,7 +449,7 @@ namespace moFlo
 		{
 			NSString * nsType = [[UIDevice currentDevice] model];
 
-			return (moFlo::Core::CStringUtils::NSStringToString(nsType));
+			return (ChilliSource::Core::CStringUtils::NSStringToString(nsType));
 		}
 		//--------------------------------------------------------------
 		/// Get Device Model Type Name
@@ -468,7 +466,7 @@ namespace moFlo
 			free(machine);
 
 			std::string strOutput;
-			std::string strModelType = moFlo::Core::CStringUtils::NSStringToString(platform);
+			std::string strModelType = ChilliSource::Core::CStringUtils::NSStringToString(platform);
 			bool bRecord = false;
 			for(std::string::const_iterator it = strModelType.begin(); it != strModelType.end(); ++it)
 			{
@@ -501,7 +499,7 @@ namespace moFlo
         std::string CPlatformSystem::GetOSVersion() const
         {
             NSString* NSVersion = [[UIDevice currentDevice] systemVersion];
-			return moFlo::Core::CStringUtils::NSStringToString(NSVersion);
+			return ChilliSource::Core::CStringUtils::NSStringToString(NSVersion);
         }
         //--------------------------------------------------------------
 		/// Get Locale
@@ -518,7 +516,7 @@ namespace moFlo
 			std::string strLanguageCode = [pcLanguageCode UTF8String];
 
 			//Just default to english
-			return moFlo::Core::CLocale(strLanguageCode, strCountryCode);
+			return ChilliSource::Core::CLocale(strLanguageCode, strCountryCode);
 		}
         //--------------------------------------------------------------
 		/// Get Language
@@ -534,7 +532,7 @@ namespace moFlo
 			std::string strLocaleCode = [NSUserLocale UTF8String];
 
 			//break this locale into parts(language/country code/extra)
-			DYNAMIC_ARRAY<std::string> strLocaleBrokenUp = moFlo::Core::CStringUtils::Split(strLocaleCode, "-", 0);
+			DYNAMIC_ARRAY<std::string> strLocaleBrokenUp = ChilliSource::Core::CStringUtils::Split(strLocaleCode, "-", 0);
 
 			if (strLocaleBrokenUp.size() > 1)
 			{
@@ -584,12 +582,12 @@ namespace moFlo
                     uid = [UIDevice currentDevice].identifierForVendor;
                 }
                 
-                return moFlo::Core::CStringUtils::NSStringToString([uid UUIDString]);
+                return ChilliSource::Core::CStringUtils::NSStringToString([uid UUIDString]);
             }
             else
             {
                 NSString* strUDID = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
-                return moFlo::Core::CStringUtils::NSStringToString(strUDID);
+                return ChilliSource::Core::CStringUtils::NSStringToString(strUDID);
             }
         }
         //-------------------------------------------------
@@ -600,7 +598,7 @@ namespace moFlo
         std::string CPlatformSystem::GetAppVersion() const
         {
             NSString* strVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
-            return moFlo::Core::CStringUtils::NSStringToString(strVersion);
+            return ChilliSource::Core::CStringUtils::NSStringToString(strVersion);
         }
 		//--------------------------------------------------------------
 		/// Get Number Of CPU Cores
@@ -628,7 +626,7 @@ namespace moFlo
         ///
         /// @param Text
         //--------------------------------------------------------------------------------------------------
-        void CPlatformSystem::MakeToast(const UTF8String& instrText) const
+        void CPlatformSystem::MakeToast(const Core::UTF8String& instrText) const
         {
             ToastNotification* pToast = [[ToastNotification alloc] initWithMessage:Core::CStringUtils::UTF8StringToNSString(instrText)];
             [[EAGLView sharedInstance] addSubview:pToast];
@@ -645,7 +643,7 @@ namespace moFlo
         /// @param Confirm text
         /// @param Cancel text
         //--------------------------------------------------------------------------------------------------
-        void CPlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm, const UTF8String& instrCancel) const
+        void CPlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const
         {
             iOSShowSystemConfirmDialog(inudwID, 
                                        Core::CStringUtils::UTF8StringToNSString(instrTitle), Core::CStringUtils::UTF8StringToNSString(instrMessage), 
@@ -661,7 +659,7 @@ namespace moFlo
         /// @param Message text
         /// @param Confirm text
         //--------------------------------------------------------------------------------------------------
-        void CPlatformSystem::ShowSystemDialog(u32 inudwID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm) const
+        void CPlatformSystem::ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const
         {
             iOSShowSystemDialog(inudwID,
                                 Core::CStringUtils::UTF8StringToNSString(instrTitle), Core::CStringUtils::UTF8StringToNSString(instrMessage),
@@ -693,7 +691,7 @@ namespace moFlo
                 NSString *platform = [NSString stringWithCString:machine encoding:NSASCIIStringEncoding];
                 free(machine);
                 
-                std::string strDeviceName = moFlo::Core::CStringUtils::NSStringToString(platform);
+                std::string strDeviceName = ChilliSource::Core::CStringUtils::NSStringToString(platform);
                 
                 //3.5 inch screens
                 if (strDeviceName == "iPhone1,1" || strDeviceName == "iPhone1,2" || strDeviceName == "iPhone2,1" || strDeviceName == "iPhone3,1" || strDeviceName == "iPhone3,2" ||

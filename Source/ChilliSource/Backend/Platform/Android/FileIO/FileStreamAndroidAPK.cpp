@@ -10,9 +10,9 @@
 #include <ChilliSource/Platform/Android/FileIO/FileStreamAndroidAPK.h>
 #include <ChilliSource/Platform/Android/FileIO/FileSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform 
+	namespace Android 
 	{
 		//--------------------------------------------------------------------------------------------------
 		/// Constructor

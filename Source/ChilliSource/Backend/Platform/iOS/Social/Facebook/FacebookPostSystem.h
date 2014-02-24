@@ -13,9 +13,9 @@
 #include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
 #include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		class CFacebookPostSystem : public Social::IFacebookPostSystem
 		{

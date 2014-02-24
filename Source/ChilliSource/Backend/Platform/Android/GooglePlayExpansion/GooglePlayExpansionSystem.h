@@ -15,9 +15,9 @@
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace AndroidPlatform
+    namespace Android
     {
     	class CGooglePlayExpansionJavaInterface;
 
@@ -212,7 +212,7 @@ namespace moFlo
             CGooglePlayExpansionJavaInterface* mpJavaInterface;
         };
 
-        class CGooglePlayExpansionJavaInterface : public moFlo::AndroidPlatform::IJavaInterface
+        class CGooglePlayExpansionJavaInterface : public ChilliSource::Android::IJavaInterface
         {
         public:
 

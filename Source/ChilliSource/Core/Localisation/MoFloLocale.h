@@ -11,7 +11,7 @@
 #define _MO_FLO_CORE_LOCALE_H_
 
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

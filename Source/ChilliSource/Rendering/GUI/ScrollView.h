@@ -11,9 +11,9 @@
 
 #include <ChilliSource/Rendering/GUI/GUIView.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         class CScrollView : public CGUIView
         {
@@ -108,7 +108,7 @@ namespace moFlo
             ///
             /// @param The new position
             //-----------------------------------------------------
-            void JumpTo(const UnifiedVector2& inuvPosition);
+            void JumpTo(const Core::UnifiedVector2& inuvPosition);
             //-----------------------------------------------------
             /// Set Velocity
             ///
@@ -126,7 +126,7 @@ namespace moFlo
             ///
             /// @return Content size
             //-----------------------------------------------------
-            moCore::CVector2 GetAbsoluteContentSize() const;
+            Core::CVector2 GetAbsoluteContentSize() const;
             //-------------------------------------------------------
 			/// Draw
 			///
@@ -135,7 +135,7 @@ namespace moFlo
 			///
 			/// @param Canvas renderer pointer
 			//-------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			void Draw(CCanvasRenderer* inpCanvas);
 			//-------------------------------------------------------
 			/// Sets Debug Drawing
 			///
@@ -150,7 +150,7 @@ namespace moFlo
 			///
 			/// @return The current absolute position of the scroll view
 			//-----------------------------------------------------------
-            moCore::CVector2 GetAbsoluteContentPosition() const;
+            Core::CVector2 GetAbsoluteContentPosition() const;
          	//-----------------------------------------------------------
 			/// Get Container View
 			///

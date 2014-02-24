@@ -10,9 +10,9 @@
 
 #include <ChilliSource/Rendering/GUI/Button.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
 		DEFINE_META_CLASS(IButton)
 
@@ -22,7 +22,7 @@ namespace moFlo
         /// @return Event triggered when the button is 
         /// activated
         //--------------------------------------------------
-        IEvent<ButtonEventDelegate>& IButton::GetActivatedEvent()
+        Core::IEvent<ButtonEventDelegate>& IButton::GetActivatedEvent()
         {
             return mOnButtonActivatedEvent;
         }

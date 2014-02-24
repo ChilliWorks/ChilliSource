@@ -26,16 +26,16 @@ void ReadPngData(png_structp png_ptr, png_bytep data, png_size_t length)
 	if (png_ptr == NULL)
 		return;
 
-	moFlo::Core::IFileStream* pStream = (moFlo::Core::IFileStream*)png_get_io_ptr(png_ptr);
+	ChilliSource::Core::IFileStream* pStream = (ChilliSource::Core::IFileStream*)png_get_io_ptr(png_ptr);
 	pStream->Read((s8*)data, length);
 
 	if (pStream->IsBad() == true)
 		png_error(png_ptr, "Read Error");
 }
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		//----------------------------------------------------------------------------------
 		/// Constructor
@@ -80,10 +80,10 @@ namespace moFlo
 		void CPngImage::Load(Core::STORAGE_LOCATION ineLocation, const std::string& instrFilename)
 		{
 			//create the file stream
-			moFlo::Core::FileStreamPtr stream = moFlo::Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, instrFilename, moFlo::Core::FM_READ_BINARY);
+			ChilliSource::Core::FileStreamPtr stream = ChilliSource::Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, instrFilename, ChilliSource::Core::FM_READ_BINARY);
 
 			//insure the stream is not broken
-			if (stream == moFlo::Core::FileStreamPtr() || stream->IsBad() == true || stream->IsOpen() == false)
+			if (stream == ChilliSource::Core::FileStreamPtr() || stream->IsBad() == true || stream->IsOpen() == false)
 			{
 				stream->Close();
 				return;

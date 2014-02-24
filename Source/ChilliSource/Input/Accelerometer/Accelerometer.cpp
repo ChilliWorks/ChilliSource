@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Input/Accelerometer/Accelerometer.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Input
 	{
@@ -22,7 +22,7 @@ namespace moFlo
 		//----------------------------------------------------
 		/// Get Acceleration Updated Event
 		//----------------------------------------------------
-		IEvent<IAccelerometer::AccelerationUpdatedDelegate>& IAccelerometer::GetAccelerationUpdatedEvent()
+		Core::IEvent<IAccelerometer::AccelerationUpdatedDelegate>& IAccelerometer::GetAccelerationUpdatedEvent()
 		{
 			return mAccelerationUpdatedEvent;
 		}

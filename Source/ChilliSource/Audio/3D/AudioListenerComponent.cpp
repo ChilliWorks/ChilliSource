@@ -14,7 +14,7 @@
 
 #include <ChilliSource/Core/Entity/Entity.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Audio
 	{
@@ -34,7 +34,7 @@ namespace moFlo
 		/// @param Comparison Type
 		/// @return Whether the class matches the comparison type
 		//----------------------------------------------------------
-		bool CAudioListenerComponent::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+		bool CAudioListenerComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return (inInterfaceID == CAudioListenerComponent::InterfaceID);
 		}

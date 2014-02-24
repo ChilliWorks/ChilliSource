@@ -19,7 +19,7 @@
 #include <vector>
 #include <queue>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{
@@ -178,7 +178,7 @@ namespace moFlo
 			///
 			/// @param Notification
 			//-------------------------------------------------------------------------
-			bool OnNotificationReceived(moFlo::Notification* inpsNotification);
+			bool OnNotificationReceived(Notification* inpsNotification);
 			//---------------------------------------------------------
 			/// Resume
 			///
@@ -282,7 +282,7 @@ namespace moFlo
             bool mbStartState;
 			
 			friend class CApplication;
-			friend class moFlo::IApplicationDelegates;
+			friend class IApplicationDelegates;
 		};
 	}
 }

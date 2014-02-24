@@ -39,7 +39,7 @@ extern "C"
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_googleplay_iap_CGooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* inpEnv, jobject inThis, jobjectArray inaIDs, jobjectArray inaNames, jobjectArray inaDescs, jobjectArray inaPrices)
 {
-	moFlo::AndroidPlatform::GooglePlayIAPJavaInterfacePtr pInterface = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CGooglePlayIAPJavaInterface>();
+	ChilliSource::Android::GooglePlayIAPJavaInterfacePtr pInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CGooglePlayIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
 		u32 udwNumProducts = inpEnv->GetArrayLength(inaIDs);
@@ -50,21 +50,21 @@ void Java_com_taggames_moflow_googleplay_iap_CGooglePlayIAPNativeInterface_Nativ
 		{
 			moNetworking::IAPProductDesc sDesc;
 			jstring jstrID = (jstring)inpEnv->GetObjectArrayElement(inaIDs, i);
-			sDesc.strID = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(jstrID);
+			sDesc.strID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrID);
 
 			jstring jstrName = (jstring)inpEnv->GetObjectArrayElement(inaNames, i);
-			sDesc.strName = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(jstrName);
+			sDesc.strName = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrName);
 
 			jstring jstrDesc = (jstring)inpEnv->GetObjectArrayElement(inaDescs, i);
-			sDesc.strDescription = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(jstrDesc);
+			sDesc.strDescription = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrDesc);
 
 			jstring jstrPrice = (jstring)inpEnv->GetObjectArrayElement(inaPrices, i);
-			sDesc.strFormattedPrice = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(jstrPrice);
+			sDesc.strFormattedPrice = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrPrice);
 
 			aProducts.push_back(sDesc);
 		}
 
-		moFlo::CTaskScheduler::ScheduleMainThreadTask(moFlo::Task1<const DYNAMIC_ARRAY<moNetworking::IAPProductDesc>&>(pInterface.get(), &moFlo::AndroidPlatform::CGooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete, aProducts));
+		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task1<const DYNAMIC_ARRAY<moNetworking::IAPProductDesc>&>(pInterface.get(), &ChilliSource::Android::CGooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete, aProducts));
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -79,15 +79,15 @@ void Java_com_taggames_moflow_googleplay_iap_CGooglePlayIAPNativeInterface_Nativ
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_googleplay_iap_CGooglePlayIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* inpEnv, jobject inThis, jint inudwResult, jstring instrProductID, jstring instrTransactionID, jstring instrReceipt)
 {
-	moFlo::AndroidPlatform::GooglePlayIAPJavaInterfacePtr pInterface = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CGooglePlayIAPJavaInterface>();
+	ChilliSource::Android::GooglePlayIAPJavaInterfacePtr pInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CGooglePlayIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
 		moNetworking::IAPTransaction sTransaction;
-		sTransaction.strProductID = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
-		sTransaction.strTransactionID = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
-		sTransaction.strReceipt = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(instrReceipt);
+		sTransaction.strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
+		sTransaction.strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
+		sTransaction.strReceipt = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrReceipt);
 
-		moFlo::CTaskScheduler::ScheduleMainThreadTask(moFlo::Task2<u32, const moNetworking::IAPTransaction&>(pInterface.get(), &moFlo::AndroidPlatform::CGooglePlayIAPJavaInterface::OnTransactionStatusUpdated, inudwResult, sTransaction));
+		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task2<u32, const moNetworking::IAPTransaction&>(pInterface.get(), &ChilliSource::Android::CGooglePlayIAPJavaInterface::OnTransactionStatusUpdated, inudwResult, sTransaction));
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -98,18 +98,18 @@ void Java_com_taggames_moflow_googleplay_iap_CGooglePlayIAPNativeInterface_Nativ
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_googleplay_iap_CGooglePlayIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID)
 {
-	moFlo::AndroidPlatform::GooglePlayIAPJavaInterfacePtr pInterface = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CGooglePlayIAPJavaInterface>();
+	ChilliSource::Android::GooglePlayIAPJavaInterfacePtr pInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CGooglePlayIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
-		const std::string strProductID = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
-		const std::string strTransactionID = moFlo::AndroidPlatform::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
-		moFlo::CTaskScheduler::ScheduleMainThreadTask(moFlo::Task2<std::string, std::string>(pInterface.get(), &moFlo::AndroidPlatform::CGooglePlayIAPJavaInterface::OnTransactionClosed, strProductID, strTransactionID));
+		const std::string strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
+		const std::string strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
+		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task2<std::string, std::string>(pInterface.get(), &ChilliSource::Android::CGooglePlayIAPJavaInterface::OnTransactionClosed, strProductID, strTransactionID));
 	}
 }
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		namespace
 		{

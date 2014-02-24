@@ -16,7 +16,7 @@
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -42,14 +42,14 @@ namespace moFlo
 			std::string mstrName;
 			u32 mudwNumVertices;
 			u32 mudwNumIndices;
-			moFlo::Core::CVector3 mvMinBounds;
-			moFlo::Core::CVector3 mvMaxBounds;
+			ChilliSource::Core::CVector3 mvMinBounds;
+			ChilliSource::Core::CVector3 mvMaxBounds;
 			std::string mstrTextureName;
 			std::string mstrMaterialName;
             Core::StorageLocation meMaterialStorageLocation;
 			u8* mpVertexData;
 			u8* mpIndexData;
-			DYNAMIC_ARRAY<moFlo::Core::CMatrix4x4> mInverseBindPoseMatrices;
+			DYNAMIC_ARRAY<ChilliSource::Core::CMatrix4x4> mInverseBindPoseMatrices;
 			PrimitiveType ePrimitiveType;            
 		};
 		//-------------------------------------------------------------------------
@@ -62,8 +62,8 @@ namespace moFlo
 			MeshFeatureDescriptor mFeatures;
 			CVertexDeclaration mVertexDeclaration;
 			u32 mudwIndexSize;
-			moFlo::Core::CVector3 mvMinBounds;
-			moFlo::Core::CVector3 mvMaxBounds;
+			ChilliSource::Core::CVector3 mvMinBounds;
+			ChilliSource::Core::CVector3 mvMaxBounds;
 			SkeletonPtr mpSkeleton;
 			DYNAMIC_ARRAY<SubMeshDescriptor> mMeshes;
 		};

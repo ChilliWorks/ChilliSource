@@ -15,9 +15,9 @@
 #include <ChilliSource/Input/VirtualKeyboard.h>
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class CVirtualKeyboard : public Input::IVirtualKeyboard
 		{

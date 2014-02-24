@@ -18,7 +18,7 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderTarget.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{
@@ -243,25 +243,25 @@ namespace moFlo
             switch (meImageFormat)
             {
                 case Core::CImage::Format::k_RGBA8888:
-                    ImageFormatConverter::RGBA8888ToRGB888(outpImage.get());
+                    Core::ImageFormatConverter::RGBA8888ToRGB888(outpImage.get());
                     break;
                 case Core::CImage::Format::k_RGBA4444:
-                    ImageFormatConverter::RGBA8888ToRGBA4444(outpImage.get());
+                    Core::ImageFormatConverter::RGBA8888ToRGBA4444(outpImage.get());
                     break;
                 case Core::CImage::Format::k_RGB565:
-                    ImageFormatConverter::RGBA8888ToRGB565(outpImage.get());
+                    Core::ImageFormatConverter::RGBA8888ToRGB565(outpImage.get());
                     break;
                 case Core::CImage::Format::k_LumA88:
-                    ImageFormatConverter::RGBA8888ToLUMA88(outpImage.get());
+                    Core::ImageFormatConverter::RGBA8888ToLUMA88(outpImage.get());
                     break;
                 case Core::CImage::Format::k_Lum8:
-                    ImageFormatConverter::RGBA8888ToLUM8(outpImage.get());
+                    Core::ImageFormatConverter::RGBA8888ToLUM8(outpImage.get());
                     break;
                 case Core::CImage::Format::k_Depth32:
-                    ImageFormatConverter::RGBA8888ToDepth32(outpImage.get());
+                    Core::ImageFormatConverter::RGBA8888ToDepth32(outpImage.get());
                     break;
                 case Core::CImage::Format::k_Depth16:
-                    ImageFormatConverter::RGBA8888ToDepth16(outpImage.get());
+                    Core::ImageFormatConverter::RGBA8888ToDepth16(outpImage.get());
                     break;
                 default:
                     break;

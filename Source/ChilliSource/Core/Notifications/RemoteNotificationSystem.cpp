@@ -18,7 +18,7 @@
 #	endif
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
     {
@@ -29,12 +29,12 @@ namespace moFlo
         IRemoteNotificationSystem* IRemoteNotificationSystem::Create()
         {
 #ifdef TARGET_OS_IPHONE
-        	return new iOSPlatform::CRemoteNotificationSystem();
+        	return new iOS::CRemoteNotificationSystem();
 #elif defined(TARGET_ANDROID)
 #	ifdef MOFLOWSKU_REMOTENOTIFICATIONMETHOD_GOOGLEPLAY
-        	return new AndroidPlatform::CGooglePlayRemoteNotificationSystem();
+        	return new Android::CGooglePlayRemoteNotificationSystem();
 #	elif defined(MOFLOWSKU_REMOTENOTIFICATIONMETHOD_AMAZON)
-        	return new AndroidPlatform::CAmazonRemoteNotificationSystem();
+        	return new Android::CAmazonRemoteNotificationSystem();
 #	endif
 #endif
         	return NULL;

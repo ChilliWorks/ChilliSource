@@ -8,7 +8,10 @@
 
 #include <ChilliSource/Networking/Cloud/CloudStorageSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    DEFINE_NAMED_INTERFACE(ICloudStorageSystem);
+    namespace Networking
+    {
+        DEFINE_NAMED_INTERFACE(ICloudStorageSystem);
+    }
 }

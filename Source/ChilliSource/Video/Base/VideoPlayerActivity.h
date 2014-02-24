@@ -13,14 +13,14 @@
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Video
     {
 		typedef fastdelegate::FastDelegate0<> VideoDismissedEventDelegate;
 		typedef fastdelegate::FastDelegate0<> VideoPlaybackEventDelegate;
         
-        class IVideoPlayerActivity : public IActivity
+        class IVideoPlayerActivity : public Core::IActivity
         {
         public:
             DECLARE_NAMED_INTERFACE(IVideoPlayerActivity);
@@ -37,7 +37,7 @@ namespace moFlo
             /// @param Whether or not the video can be dismissed by tapping.
             /// @param Background colour
             //--------------------------------------------------------------
-            virtual void Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour = moCore::CColour::BLACK) = 0;
+            virtual void Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour = Core::CColour::BLACK) = 0;
             //--------------------------------------------------------------
             /// Present With Subtitles
             ///
@@ -52,7 +52,7 @@ namespace moFlo
             //--------------------------------------------------------------
             virtual void PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
                                               Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
-                                              bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour = moCore::CColour::BLACK) = 0;
+                                              bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour = Core::CColour::BLACK) = 0;
             //--------------------------------------------------------------
             /// Is Playing
             ///
@@ -77,13 +77,13 @@ namespace moFlo
             /// @return Event thats triggered when the video gets dismissed
             ///			by the player.
             //--------------------------------------------------------------
-            IEvent<VideoDismissedEventDelegate>& GetDismissedEvent();
+            Core::IEvent<VideoDismissedEventDelegate>& GetDismissedEvent();
             //--------------------------------------------------------------
             /// Get Playback Complete Event
             ///
             /// @return Event thats triggered when the video stops
             //--------------------------------------------------------------
-            IEvent<VideoPlaybackEventDelegate>& GetPlaybackCompleteEvent();
+            Core::IEvent<VideoPlaybackEventDelegate>& GetPlaybackCompleteEvent();
             //--------------------------------------------------------------
             /// Gets the current time of the video
             ///
@@ -93,8 +93,8 @@ namespace moFlo
             
         protected:
 
-            CEvent0<VideoDismissedEventDelegate> mOnDismissedEvent;
-            CEvent0<VideoPlaybackEventDelegate> mOnPlaybackCompleteEvent;
+            Core::CEvent0<VideoDismissedEventDelegate> mOnDismissedEvent;
+            Core::CEvent0<VideoPlaybackEventDelegate> mOnPlaybackCompleteEvent;
         };
     }
 }

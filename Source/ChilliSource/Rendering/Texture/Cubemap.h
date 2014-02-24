@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

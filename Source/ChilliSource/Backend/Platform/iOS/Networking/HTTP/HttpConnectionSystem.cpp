@@ -25,11 +25,11 @@
 #include <netdb.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
 	using namespace Networking;
 	
-	namespace iOSPlatform
+	namespace iOS
 	{
 		const u32 kudwBufferSize = 1024 * 50;
         const u32 kudwKeepAliveTimeInSeconds = 120;
@@ -131,7 +131,7 @@ namespace moFlo
             //We use the scheme, host and port to identify connections by generating a hash that uniquely identifes
             //a connection. Then because CFNumber does not allow unsigned ints we must create an incremental counter
             //to act as a UDID!
-            ConnectionID PropID = CHashCRC32::GenerateHashCode(strScheme + strHostName + STRING_CAST(dwPortNum));
+            ConnectionID PropID = Core::CHashCRC32::GenerateHashCode(strScheme + strHostName + STRING_CAST(dwPortNum));
             ConnectionID StreamID = 0;
             bool bConnectionAlreadyExists = false;
             
@@ -388,7 +388,7 @@ namespace moFlo
 		{
 			//Begin the read loop
 			//Run this as a threaded task
-			CTaskScheduler::ScheduleTask(Task1<CFReadStreamRef>(this, &CHttpConnectionSystem::CHttpRequest::PollReadStream, mConnectionInfo.ReadStream));
+			Core::CTaskScheduler::ScheduleTask(Core::Task1<CFReadStreamRef>(this, &CHttpConnectionSystem::CHttpRequest::PollReadStream, mConnectionInfo.ReadStream));
 		}
 		//------------------------------------------------------------------
 		/// Update
@@ -473,7 +473,7 @@ namespace moFlo
                                 {
                                     CFStringRef CFUrl = CFHTTPMessageCopyHeaderFieldValue(CFResponse, CFSTR("Location"));
                                     
-                                    std::string strCFUrl = moCore::CStringUtils::NSStringToString((NSString*)CFUrl);
+                                    std::string strCFUrl = Core::CStringUtils::NSStringToString((NSString*)CFUrl);
                                     
                                     msDetails.strRedirectionURL = strCFUrl;
                                     

@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

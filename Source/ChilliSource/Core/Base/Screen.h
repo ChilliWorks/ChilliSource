@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Core/Math/Vector2.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

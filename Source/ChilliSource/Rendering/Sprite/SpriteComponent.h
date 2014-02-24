@@ -17,7 +17,7 @@
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -244,25 +244,25 @@ namespace moFlo
             ///
             /// @return Position of corner after transform
             //-----------------------------------------------------------
-            const moFlo::Core::CVector4 & GetUpperLeftCornerPos();
+            const ChilliSource::Core::CVector4 & GetUpperLeftCornerPos();
             //-----------------------------------------------------------
             /// Get Lower Left Corner Position
             ///
             /// @return Position of corner after transform
             //-----------------------------------------------------------
-			const moFlo::Core::CVector4 & GetLowerLeftCornerPos();
+			const ChilliSource::Core::CVector4 & GetLowerLeftCornerPos();
             //-----------------------------------------------------------
             /// Get Upper Right Corner Position
             ///
             /// @return Position of corner after transform
             //-----------------------------------------------------------
-			const moFlo::Core::CVector4 & GetUpperRightCornerPos();
+			const ChilliSource::Core::CVector4 & GetUpperRightCornerPos();
             //-----------------------------------------------------------
             /// Get Lower Right Corner Position
             ///
             /// @return Position of corner after transform
             //-----------------------------------------------------------
-			const moFlo::Core::CVector4 & GetLowerRightCornerPos();
+			const ChilliSource::Core::CVector4 & GetLowerRightCornerPos();
             //-----------------------------------------------------------
             /// Get Sprite Data
             ///

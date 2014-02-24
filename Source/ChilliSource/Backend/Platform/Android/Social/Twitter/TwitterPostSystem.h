@@ -17,14 +17,14 @@
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 #include <ChilliSource/Platform/Android/HttpConnectionSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
-		class CTwitterPostSystem: public moFlo::Social::ITwitterPostSystem
+		class CTwitterPostSystem: public ChilliSource::Social::ITwitterPostSystem
 		{
 		public:
-			CTwitterPostSystem(AndroidPlatform::CHttpConnectionSystem* inpHttpConnectionSystem,
+			CTwitterPostSystem(Android::CHttpConnectionSystem* inpHttpConnectionSystem,
 							   Networking::COAuthSystem* inpOAuthSystem);
 			~CTwitterPostSystem();
             //------------------------------------------------------------------------
@@ -66,13 +66,13 @@ namespace moFlo
 			///
 			/// @param PIN entered by user
 			//------------------------------------------------------------------------
-			void OnPINComplete(const moFlo::Social::ITwitterAuthenticationActivity::AuthenticationPINResult &inResult);
+			void OnPINComplete(const ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResult &inResult);
 			//------------------------------------------------------------------------
 			/// Delegate called with the authorisation view is dismissed.
 			///
 			/// @param Pointer to IActivity that has been dismissed
 			//------------------------------------------------------------------------
-			void OnAuthorisationDismissed(moFlo::IActivity* inpActivity);
+			void OnAuthorisationDismissed(ChilliSource::IActivity* inpActivity);
 		};
 	}
 }

@@ -18,9 +18,9 @@
 
 #include <ChilliSource/Rendering/GUI/ForwardDeclarations.h>
 
-#define GET_COMPONENT_FACTORY(FACTORY_TYPE) moFlo::Core::CComponentFactoryDispenser::GetSingletonPtr()->GetFactoryWithInterface<FACTORY_TYPE>() 
+#define GET_COMPONENT_FACTORY(FACTORY_TYPE) ChilliSource::Core::CComponentFactoryDispenser::GetSingletonPtr()->GetFactoryWithInterface<FACTORY_TYPE>() 
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {

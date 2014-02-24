@@ -13,7 +13,7 @@
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

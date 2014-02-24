@@ -13,9 +13,9 @@
 #include <AddressBook/AddressBook.h>
 #include <Foundation/NSString.h>
 
-namespace moFlo{
+namespace ChilliSource{
 
-	namespace iOSPlatform {
+	namespace iOS {
 		bool CContactInformationProvider::IsA(Core::InterfaceIDType inID) const{
 			return inID == CContactInformationProvider::InterfaceID;
 		}

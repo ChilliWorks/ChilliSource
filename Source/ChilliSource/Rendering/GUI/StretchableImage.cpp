@@ -15,9 +15,9 @@
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
 		DEFINE_META_CLASS(CStretchableImage)
 		
@@ -55,11 +55,11 @@ namespace moFlo
             Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SpriteSheetLocation", strValue))
             {
-                eSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("SpriteSheet", strValue))
             {
-				SetSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eSpriteSheetLocation, strValue));
+				SetSpriteSheet(LOAD_RESOURCE(CSpriteSheet, eSpriteSheetLocation, strValue));
 			}
 			
 			//---Sprite sheet base name
@@ -175,7 +175,7 @@ namespace moFlo
         ///
         /// @param Sprite sheet containing the nine patches
         //---------------------------------------------------------
-        void CStretchableImage::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void CStretchableImage::SetSpriteSheet(const SpriteSheetPtr& inpSpriteSheet)
         {
             SpriteSheet = inpSpriteSheet;
         }
@@ -184,7 +184,7 @@ namespace moFlo
 		///
 		/// @return Sprite sheet containing the nine patches
 		//---------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CStretchableImage::GetSpriteSheet() const
+		const SpriteSheetPtr& CStretchableImage::GetSpriteSheet() const
 		{
 			return SpriteSheet;
 		}
@@ -286,7 +286,7 @@ namespace moFlo
         ///
         /// @param Canvas renderer pointer
         //---------------------------------------------------------
-        void CStretchableImage::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void CStretchableImage::Draw(CCanvasRenderer* inpCanvas)
         {
 			//Check if this is on screen
 			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
@@ -638,11 +638,11 @@ namespace moFlo
 					{
 						if(!AlignedWithParent)
 						{
-							SetPosition(UnifiedVector2(Core::CVector2::ZERO, insTouchInfo.vLocation));
+							SetPosition(Core::UnifiedVector2(Core::CVector2::ZERO, insTouchInfo.vLocation));
 						}
 						else
 						{
-							SetOffsetFromParentAlignment(UnifiedVector2(Core::CVector2::ZERO, insTouchInfo.vLocation));
+							SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::CVector2::ZERO, insTouchInfo.vLocation));
 						}
 					}
 					

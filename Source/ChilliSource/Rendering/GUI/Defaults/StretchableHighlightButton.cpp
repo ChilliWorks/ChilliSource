@@ -22,9 +22,9 @@
 #include <ChilliSource/Audio/3D/AudioComponent.h>
 #include <ChilliSource/Audio/3D/AudioComponentFactory.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         DEFINE_META_CLASS(CStretchableHighlightButton);
         
@@ -66,21 +66,21 @@ namespace moFlo
             Core::StorageLocation eNormalSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("NormalSpriteSheetLocation", strValue))
             {
-                eNormalSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eNormalSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("NormalSpriteSheet", strValue))
             {
-                SetNormalSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eNormalSpriteSheetLocation, strValue));
+                SetNormalSpriteSheet(LOAD_RESOURCE(CSpriteSheet, eNormalSpriteSheetLocation, strValue));
             }
             //---Sprite sheet
             Core::StorageLocation eHighlightSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("HighlightSpriteSheetLocation", strValue))
             {
-                eHighlightSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eHighlightSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("HighlightSpriteSheet", strValue))
             {
-                SetHighlightSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eHighlightSpriteSheetLocation, strValue));
+                SetHighlightSpriteSheet(LOAD_RESOURCE(CSpriteSheet, eHighlightSpriteSheetLocation, strValue));
             }
 			//---Default index ID
 			if(insParams.TryGetValue("BaseNormalSpriteSheetIndexID", strValue))
@@ -102,11 +102,11 @@ namespace moFlo
             Core::StorageLocation eDeselectAudioLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SelectAudioEffectLocation", strValue))
             {
-                eSelectAudioLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSelectAudioLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("DeselectAudioEffectLocation", strValue))
             {
-                eDeselectAudioLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eDeselectAudioLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("SelectAudioEffect", strValue))
             {
@@ -210,7 +210,7 @@ namespace moFlo
         //-----------------------------------------------------------
         /// Set Normal Sprite Sheet
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::SetNormalSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void CStretchableHighlightButton::SetNormalSpriteSheet(const SpriteSheetPtr& inpSpriteSheet)
         {
             NormalSpriteSheet = inpSpriteSheet;
             mCurrentSpriteSheet = NormalSpriteSheet;
@@ -223,7 +223,7 @@ namespace moFlo
         //-----------------------------------------------------------
         /// Set Highlight Sprite Sheet
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::SetHighlightSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void CStretchableHighlightButton::SetHighlightSpriteSheet(const SpriteSheetPtr& inpSpriteSheet)
         {
             HighlightSpriteSheet = inpSpriteSheet;
             
@@ -235,14 +235,14 @@ namespace moFlo
         //-----------------------------------------------------------
         /// Get Normal Sprite Sheet
         //-----------------------------------------------------------
-        const Rendering::SpriteSheetPtr& CStretchableHighlightButton::GetNormalSpriteSheet() const
+        const SpriteSheetPtr& CStretchableHighlightButton::GetNormalSpriteSheet() const
         {
             return NormalSpriteSheet; 
         }
         //-----------------------------------------------------------
         /// Get Highlight Sprite Sheet
         //-----------------------------------------------------------
-        const Rendering::SpriteSheetPtr& CStretchableHighlightButton::GetHighlightSpriteSheet() const
+        const SpriteSheetPtr& CStretchableHighlightButton::GetHighlightSpriteSheet() const
         {
             return HighlightSpriteSheet; 
         }
@@ -379,7 +379,7 @@ namespace moFlo
         //-----------------------------------------------------------
         /// Draw
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void CStretchableHighlightButton::Draw(CCanvasRenderer* inpCanvas)
         {
             //Check if this is on screen
 			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);

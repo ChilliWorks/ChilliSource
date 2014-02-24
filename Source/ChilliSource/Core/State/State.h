@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{
@@ -114,7 +114,7 @@ namespace moFlo
             ///
             /// @param Notification
             //---------------------------------------------------------------------
-            virtual bool OnReceiveNotification(moFlo::Notification* inpsNotification){return true;}
+            virtual bool OnReceiveNotification(Notification* inpsNotification){return true;}
             
             //---------------------------------------------------------------------
             /// Get Name

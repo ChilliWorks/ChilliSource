@@ -9,9 +9,9 @@
 #ifndef _MOFLO_GUI_FORWARDDECLARATIONS_H_
 #define _MOFLO_GUI_FORWARDDECLARATIONS_H_
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
         //---Container views
         class CWindow;

@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

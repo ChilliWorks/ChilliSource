@@ -13,7 +13,7 @@
 
 #include <limits.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -31,7 +31,7 @@ namespace moFlo
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CPointLightComponent::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+		bool CPointLightComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == ILightComponent::InterfaceID || inInterfaceID == CPointLightComponent::InterfaceID;
 		}

@@ -12,127 +12,130 @@
 
 #ifdef DEBUG_STATS
 
-namespace moFlo
+namespace ChilliSource
 {
-    CDebugStats::MapStringToString CDebugStats::mmapEvents;
-    bool CDebugStats::mbEnabled = true;
-    
-    //----------------------------------------------------------------------------------
-    /// Get Value For Event
-    ///
-    /// Get the current value for the given event type
-    ///
-    /// @param Type ID
-    /// @return Value as string
-    //----------------------------------------------------------------------------------
-    const std::string& CDebugStats::GetValueForEvent(const std::string& instrType)
+    namespace Debugging
     {
-        return mmapEvents[instrType];
-    }
-    //----------------------------------------------------------------------------------
-    /// Add To Event
-    ///
-    /// Add the given value to the value already stored for the given event
-    ///
-    /// @param Type ID
-    /// @param Value to add
-    //----------------------------------------------------------------------------------
-    void CDebugStats::AddToEvent(const std::string& instrType, u32 inudwValue)
-    {
-        if(!mbEnabled) return;
+        CDebugStats::MapStringToString CDebugStats::mmapEvents;
+        bool CDebugStats::mbEnabled = true;
         
-        MapStringToString::iterator it = mmapEvents.find(instrType);
-        
-        u32 udwNewValue = inudwValue;
-        
-        if(it != mmapEvents.end())
+        //----------------------------------------------------------------------------------
+        /// Get Value For Event
+        ///
+        /// Get the current value for the given event type
+        ///
+        /// @param Type ID
+        /// @return Value as string
+        //----------------------------------------------------------------------------------
+        const std::string& CDebugStats::GetValueForEvent(const std::string& instrType)
         {
-            udwNewValue = Core::CStringConverter::ParseUnsignedInt(mmapEvents[instrType]) + inudwValue;
-            it->second = STRING_CAST(udwNewValue);
+            return mmapEvents[instrType];
         }
-        else
+        //----------------------------------------------------------------------------------
+        /// Add To Event
+        ///
+        /// Add the given value to the value already stored for the given event
+        ///
+        /// @param Type ID
+        /// @param Value to add
+        //----------------------------------------------------------------------------------
+        void CDebugStats::AddToEvent(const std::string& instrType, u32 inudwValue)
         {
-            mmapEvents[instrType] = STRING_CAST(udwNewValue);
+            if(!mbEnabled) return;
+            
+            MapStringToString::iterator it = mmapEvents.find(instrType);
+            
+            u32 udwNewValue = inudwValue;
+            
+            if(it != mmapEvents.end())
+            {
+                udwNewValue = Core::CStringConverter::ParseUnsignedInt(mmapEvents[instrType]) + inudwValue;
+                it->second = STRING_CAST(udwNewValue);
+            }
+            else
+            {
+                mmapEvents[instrType] = STRING_CAST(udwNewValue);
+            }
         }
-    }
-    //----------------------------------------------------------------------------------
-    /// Add To Event
-    ///
-    /// Add the given value to the value already stored for the given event
-    ///
-    /// @param Type ID
-    /// @param Value to add
-    //----------------------------------------------------------------------------------
-    void CDebugStats::AddToEvent(const std::string& instrType, s32 indwValue)
-    {
-        if(!mbEnabled) return;
-        
-        MapStringToString::iterator it = mmapEvents.find(instrType);
-        
-        s32 dwNewValue = indwValue;
-        
-        if(it != mmapEvents.end())
+        //----------------------------------------------------------------------------------
+        /// Add To Event
+        ///
+        /// Add the given value to the value already stored for the given event
+        ///
+        /// @param Type ID
+        /// @param Value to add
+        //----------------------------------------------------------------------------------
+        void CDebugStats::AddToEvent(const std::string& instrType, s32 indwValue)
         {
-            dwNewValue = Core::CStringConverter::ParseInt(mmapEvents[instrType]) + indwValue;
-            it->second = STRING_CAST(dwNewValue);
+            if(!mbEnabled) return;
+            
+            MapStringToString::iterator it = mmapEvents.find(instrType);
+            
+            s32 dwNewValue = indwValue;
+            
+            if(it != mmapEvents.end())
+            {
+                dwNewValue = Core::CStringConverter::ParseInt(mmapEvents[instrType]) + indwValue;
+                it->second = STRING_CAST(dwNewValue);
+            }
+            else
+            {
+                mmapEvents[instrType] = STRING_CAST(dwNewValue);
+            }
         }
-        else
+        //----------------------------------------------------------------------------------
+        /// Add To Event
+        ///
+        /// Add the given value to the value already stored for the given event
+        ///
+        /// @param Type ID
+        /// @param Value to add
+        //----------------------------------------------------------------------------------
+        void CDebugStats::AddToEvent(const std::string& instrType, f32 infValue)
         {
-            mmapEvents[instrType] = STRING_CAST(dwNewValue);
+            if(!mbEnabled) return;
+            
+            MapStringToString::iterator it = mmapEvents.find(instrType);
+            
+            f32 fNewValue = infValue;
+            
+            if(it != mmapEvents.end())
+            {
+                fNewValue = Core::CStringConverter::ParseFloat(mmapEvents[instrType]) + infValue;
+                it->second = STRING_CAST(fNewValue);
+            }
+            else
+            {
+                mmapEvents[instrType] = STRING_CAST(fNewValue);
+            }
         }
-    }
-    //----------------------------------------------------------------------------------
-    /// Add To Event
-    ///
-    /// Add the given value to the value already stored for the given event
-    ///
-    /// @param Type ID
-    /// @param Value to add
-    //----------------------------------------------------------------------------------
-    void CDebugStats::AddToEvent(const std::string& instrType, f32 infValue)
-    {
-        if(!mbEnabled) return;
-        
-        MapStringToString::iterator it = mmapEvents.find(instrType);
-        
-        f32 fNewValue = infValue;
-        
-        if(it != mmapEvents.end())
+        //----------------------------------------------------------------------------------
+        /// Set Enabled
+        ///
+        /// @param Whether tracking is enabled
+        //----------------------------------------------------------------------------------
+        void CDebugStats::SetEnabled(bool inbEnabled)
         {
-            fNewValue = Core::CStringConverter::ParseFloat(mmapEvents[instrType]) + infValue;
-            it->second = STRING_CAST(fNewValue);
+            mbEnabled = inbEnabled;
         }
-        else
+        //----------------------------------------------------------------------------------
+        /// Is Enabled
+        ///
+        /// @return Whether tracking is enabled
+        //----------------------------------------------------------------------------------
+        bool CDebugStats::IsEnabled()
         {
-            mmapEvents[instrType] = STRING_CAST(fNewValue);
+            return mbEnabled;
         }
-    }
-    //----------------------------------------------------------------------------------
-    /// Set Enabled
-    ///
-    /// @param Whether tracking is enabled
-    //----------------------------------------------------------------------------------
-    void CDebugStats::SetEnabled(bool inbEnabled)
-    {
-        mbEnabled = inbEnabled;
-    }
-    //----------------------------------------------------------------------------------
-    /// Is Enabled
-    ///
-    /// @return Whether tracking is enabled
-    //----------------------------------------------------------------------------------
-    bool CDebugStats::IsEnabled()
-    {
-        return mbEnabled;
-    }
-    //----------------------------------------------------------------------------------
-    /// Clear
-    ///
-    /// Clear all the previously recorded stats
-    //----------------------------------------------------------------------------------
-    void CDebugStats::Clear()
-    {
-        mmapEvents.clear();
+        //----------------------------------------------------------------------------------
+        /// Clear
+        ///
+        /// Clear all the previously recorded stats
+        //----------------------------------------------------------------------------------
+        void CDebugStats::Clear()
+        {
+            mmapEvents.clear();
+        }
     }
 }
 

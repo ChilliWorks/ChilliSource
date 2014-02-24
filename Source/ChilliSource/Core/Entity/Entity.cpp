@@ -13,7 +13,7 @@
 
 #include <algorithm>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

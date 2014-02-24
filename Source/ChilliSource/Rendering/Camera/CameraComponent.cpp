@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -38,7 +38,7 @@ namespace moFlo
 		/// @param Comparison Type
 		/// @return Whether the class matches the comparison type
 		//----------------------------------------------------------
-		bool CCameraComponent::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+		bool CCameraComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return (inInterfaceID == CCameraComponent::InterfaceID);
 		}

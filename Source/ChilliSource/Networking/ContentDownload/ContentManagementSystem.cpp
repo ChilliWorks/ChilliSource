@@ -18,7 +18,7 @@
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/Minizip/unzip.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Networking
     {
@@ -80,7 +80,7 @@ namespace moFlo
 		std::string CContentManagementSystem::CalculateChecksum(Core::StorageLocation ineLocation, const std::string& instrFilePath)
 		{
             std::string strMD5Checksum = Core::CApplication::GetFileSystemPtr()->GetFileMD5Checksum(ineLocation, instrFilePath);
-			std::string strBase64Encoded = CBaseEncoding::Base64Encode(strMD5Checksum);
+			std::string strBase64Encoded = Core::CBaseEncoding::Base64Encode(strMD5Checksum);
 			Core::CStringUtils::ChopTrailingChars(strBase64Encoded, '=');
 			return strBase64Encoded;
 		}
@@ -206,9 +206,9 @@ namespace moFlo
 				if(!mPackageDetails.empty())
 				{
 					//Unzip all the files and overwrite the old manifest
-					CWaitCondition WaitCondition(mPackageDetails.size()); 
+					Core::CWaitCondition WaitCondition(mPackageDetails.size());
 					
-					CTaskScheduler::ForEach(mPackageDetails.begin(), mPackageDetails.end(), this, &CContentManagementSystem::ExtractFilesFromPackage, &WaitCondition);
+					Core::CTaskScheduler::ForEach(mPackageDetails.begin(), mPackageDetails.end(), this, &CContentManagementSystem::ExtractFilesFromPackage, &WaitCondition);
 					
 					//Wait on all the packages being unzipped
 					WaitCondition.Wait();
@@ -222,9 +222,9 @@ namespace moFlo
 				if(!mRemovePackageIDs.empty())
 				{
 					//Remove any unused files from the documents
-					CWaitCondition WaitCondition(mRemovePackageIDs.size()); 
+					Core::CWaitCondition WaitCondition(mRemovePackageIDs.size());
 					
-					CTaskScheduler::ForEach(mRemovePackageIDs.begin(), mRemovePackageIDs.end(), this, &CContentManagementSystem::DeleteDirectory, &WaitCondition);
+					Core::CTaskScheduler::ForEach(mRemovePackageIDs.begin(), mRemovePackageIDs.end(), this, &CContentManagementSystem::DeleteDirectory, &WaitCondition);
 					
 					//Wait on all the packages being removed
 					WaitCondition.Wait();
@@ -777,7 +777,7 @@ namespace moFlo
         //-----------------------------------------------------------
         void CContentManagementSystem::DeleteDirectory(const std::string& instrDirectory) const
         {
-            moFlo::Core::CApplication::GetFileSystemPtr()->DeleteDirectory(Core::StorageLocation::k_DLC, instrDirectory);
+            ChilliSource::Core::CApplication::GetFileSystemPtr()->DeleteDirectory(Core::StorageLocation::k_DLC, instrDirectory);
         }
     }
 }

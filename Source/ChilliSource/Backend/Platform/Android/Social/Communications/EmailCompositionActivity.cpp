@@ -13,9 +13,9 @@
 #include <ChilliSource/Core/Main/Application.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		const std::string kstrTempAttachmentDirectory = "_AttachmentTemp/";
 		//-------------------------------------------------------

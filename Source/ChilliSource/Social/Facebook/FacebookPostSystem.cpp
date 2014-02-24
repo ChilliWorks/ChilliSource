@@ -22,18 +22,18 @@
  */
 #define FACEBOOK_API_NOW_ACTUALLY_DOES_WHAT_IT_SAYS_WITH_ACTIONLINKS 0
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Social
 	{
 		DEFINE_NAMED_INTERFACE(IFacebookPostSystem);
         
-        IFacebookPostSystem* IFacebookPostSystem::CreatePostSystem(moFlo::Social::IFacebookAuthenticationSystem* inpAuthSystem)
+        IFacebookPostSystem* IFacebookPostSystem::CreatePostSystem(ChilliSource::Social::IFacebookAuthenticationSystem* inpAuthSystem)
         {
 #ifdef TARGET_OS_IPHONE
-            return new moFlo::iOSPlatform::CFacebookPostSystem(inpAuthSystem);
+            return new ChilliSource::iOS::CFacebookPostSystem(inpAuthSystem);
 #elif TARGET_ANDROID
-            return new moFlo::AndroidPlatform::CFacebookPostSystem(inpAuthSystem);
+            return new ChilliSource::Android::CFacebookPostSystem(inpAuthSystem);
 #endif
 			return NULL;
         }

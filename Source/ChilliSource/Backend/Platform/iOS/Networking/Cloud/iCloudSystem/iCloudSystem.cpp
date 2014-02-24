@@ -19,15 +19,15 @@ NSString *reqSysVer = @"5.0";
 
 std::string EMPTY_STD_STRING = "Empty";
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
     {
         DEFINE_NAMED_INTERFACE(CiCloudSystem);
         
-        using namespace moFlo::Core;
+        using namespace ChilliSource::Core;
         
-        CiCloudSystem::CiCloudSystem(moFlo::Networking::IHttpConnectionSystem* inpcHttpConnectionSystem)
+        CiCloudSystem::CiCloudSystem(ChilliSource::Networking::IHttpConnectionSystem* inpcHttpConnectionSystem)
         {
             //You should be checking if IsSupported before creating the system as it is only compatible with >= iOS 5.0 OS's
             if(!IsSupported())
@@ -139,7 +139,7 @@ namespace moFlo
                 NSURL *storageURL = [[NSFileManager defaultManager] 
                                         URLForUbiquityContainerIdentifier:nil];
                 
-                return moFlo::Core::CStringUtils::NSStringToString([storageURL absoluteString]);
+                return ChilliSource::Core::CStringUtils::NSStringToString([storageURL absoluteString]);
             }
             else 
             {
@@ -186,7 +186,7 @@ namespace moFlo
         void CiCloudSystem::CreateFile(CloudStorageArea ineStorageArea, const std::string& instrFileName, const std::string& instrData)
         {
             NSMutableData *data = [[NSMutableData alloc] initWithBytes:instrData.data() length:instrData.length()];
-            [[CiCloudSystemController sharedInstance] writeDocumentWithAbsolutePath:moFlo::Core::CStringUtils::StringToNSString(GetAppendedFilePathToStorageArea(ineStorageArea, instrFileName))
+            [[CiCloudSystemController sharedInstance] writeDocumentWithAbsolutePath:ChilliSource::Core::CStringUtils::StringToNSString(GetAppendedFilePathToStorageArea(ineStorageArea, instrFileName))
                                                                                   :data
                                                                                   :NULL];
             return;
@@ -205,7 +205,7 @@ namespace moFlo
         
 #pragma mark File/Folder Queries
         
-        bool CiCloudSystem::SyncFileToCloud(moFlo::Core::StorageLocation ineStorageLocation, const std::string& instrFilePath, ICloudStorageSystem::OnSyncFileCompletedDelegate inSyncCompleteDelegate, ICloudStorageSystem::OnSyncConflictDelegate inSyncConflictDelegate)
+        bool CiCloudSystem::SyncFileToCloud(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string& instrFilePath, ICloudStorageSystem::OnSyncFileCompletedDelegate inSyncCompleteDelegate, ICloudStorageSystem::OnSyncConflictDelegate inSyncConflictDelegate)
         {
             if(!IsCloudStorageEnabled())
                 return false;
@@ -224,7 +224,7 @@ namespace moFlo
             }
             
             //First we need to check if this file exists locally
-            bool bExists = moFlo::Core::CApplication::GetFileSystemPtr()->DoesFileExist(ineStorageLocation, instrFilePath);
+            bool bExists = ChilliSource::Core::CApplication::GetFileSystemPtr()->DoesFileExist(ineStorageLocation, instrFilePath);
 
             int dwFilePathOffset = instrFilePath.find_last_of("/");
             
@@ -280,7 +280,7 @@ namespace moFlo
             
             
             //We want to copy our local copies contents straight to the server
-            FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath, moFlo::Core::FileMode::k_read);
+            FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath, ChilliSource::Core::FileMode::k_read);
             
             std::string strLocalContents = "";
             
@@ -289,13 +289,13 @@ namespace moFlo
             
             std::string strCloudContents = [incOpenedDoc contentsAsSTDString];
             
-            bool bExists = moFlo::Core::CApplication::GetFileSystemPtr()->DoesFileExist(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath);
+            bool bExists = ChilliSource::Core::CApplication::GetFileSystemPtr()->DoesFileExist(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath);
             
             //If no local file we still want to sync if cloud file exists
             if(!bExists)
             {
                 //Cloud version exists, local version does not - create local from cloud
-                FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath, moFlo::Core::FileMode::k_write);
+                FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath, ChilliSource::Core::FileMode::k_write);
                 pFileStream->Write(strCloudContents);
                 pFileStream->Close();
                 
@@ -373,7 +373,7 @@ namespace moFlo
                 {
                     if(psRequest.mpcSyncConflictDelegate)
                     {
-                        FileSyncConflict* pConflict = new moFlo::ICloudStorageSystem::FileSyncConflict(psRequest.meLocalStorageLocation,
+                        FileSyncConflict* pConflict = new Networking::ICloudStorageSystem::FileSyncConflict(psRequest.meLocalStorageLocation,
                                                                     psRequest.mstrLocalFilePath,
                                                                     GetCloudStorageAreaForStorageArea(psRequest.meLocalStorageLocation),
                                                                     CStringUtils::NSStringToString([[incOpenedDoc fileURL] absoluteString]),
@@ -382,7 +382,7 @@ namespace moFlo
                         
                         mvsCachedConflicts.push_back(pConflict);
                         //Call the delegate
-                        psRequest.mpcSyncConflictDelegate(moFlo::ICloudStorageSystem::OnConflictResolvedDelegate(this, &CiCloudSystem::OnConflictResolved), pConflict);
+                        psRequest.mpcSyncConflictDelegate(Networking::ICloudStorageSystem::OnConflictResolvedDelegate(this, &CiCloudSystem::OnConflictResolved), pConflict);
                     }
                     else
                     {
@@ -392,13 +392,13 @@ namespace moFlo
             }
         }
         
-        void CiCloudSystem::OnConflictResolved(moFlo::ICloudStorageSystem::FileConflictChoice ineChoice, moFlo::ICloudStorageSystem::FileSyncConflict* insFileSyncConflict, moFlo::ICloudStorageSystem::OnSyncFileCompletedDelegate inpSyncCompleteDelegate)
+        void CiCloudSystem::OnConflictResolved(Networking::ICloudStorageSystem::FileConflictChoice ineChoice, Networking::ICloudStorageSystem::FileSyncConflict* insFileSyncConflict, Networking::ICloudStorageSystem::OnSyncFileCompletedDelegate inpSyncCompleteDelegate)
         {
             switch (ineChoice)
             {
                 case ICloudStorageSystem::FileConflictChoice::k_copyCloudToLocal:
                 {
-                    FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, moFlo::Core::FileMode::k_write);
+                    FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, ChilliSource::Core::FileMode::k_write);
                     
                     if(pFileStream)
                     {
@@ -430,7 +430,7 @@ namespace moFlo
                 case ICloudStorageSystem::FileConflictChoice::k_copyLocalToCloud:
                 {
                     //We want to copy our local copies contents straight to the server
-                    FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, moFlo::Core::FileMode::k_read);
+                    FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, ChilliSource::Core::FileMode::k_read);
                     
                     if(pFileStream)
                     {
@@ -469,11 +469,11 @@ namespace moFlo
         void CiCloudSystem::QueryForAllCloudFiles()
         {
             if(IsCloudStorageEnabled())
-                [[CiCloudSystemController sharedInstance] queryContentsOfICloudDirectory:(moFlo::ICloudStorageSystem::OnQueryFilesCompletedDelegate(this, &CiCloudSystem::QueryDidFinishGathering))];
+                [[CiCloudSystemController sharedInstance] queryContentsOfICloudDirectory:(Networking::ICloudStorageSystem::OnQueryFilesCompletedDelegate(this, &CiCloudSystem::QueryDidFinishGathering))];
         }
         
         //Callback from any query made to retrieve files from cloud
-        void CiCloudSystem::QueryDidFinishGathering(moFlo::ICloudStorageSystem::ICloudFileList invFileList)
+        void CiCloudSystem::QueryDidFinishGathering(Networking::ICloudStorageSystem::ICloudFileList invFileList)
         {
             mvCachedCloudFiles = invFileList;
             

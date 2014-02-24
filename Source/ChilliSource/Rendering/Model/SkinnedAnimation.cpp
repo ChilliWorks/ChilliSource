@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

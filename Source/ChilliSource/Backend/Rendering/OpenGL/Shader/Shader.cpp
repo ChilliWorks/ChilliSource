@@ -16,7 +16,7 @@
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{
@@ -59,7 +59,7 @@ namespace moFlo
         GLint CShader::GetAttributeLocation(const char * instrAttributeName)
         {
         	// Hash the name string
-            LocationLookup sItem( moFlo::CHashCRC32::GenerateHashCode(instrAttributeName), 0);
+            LocationLookup sItem( Core::CHashCRC32::GenerateHashCode(instrAttributeName), 0);
             
             // Binary search through a sorted array of items
             DYNAMIC_ARRAY<LocationLookup>::iterator it;
@@ -85,7 +85,7 @@ namespace moFlo
         GLint CShader::GetUniformLocation(const char * instrUniformName)
         {
         	// Hash the name string
-            LocationLookup sItem( moFlo::CHashCRC32::GenerateHashCode(instrUniformName), 0);
+            LocationLookup sItem( Core::CHashCRC32::GenerateHashCode(instrUniformName), 0);
             
             // Binary search through a sorted array of items
             DYNAMIC_ARRAY<LocationLookup>::iterator it;
@@ -113,7 +113,7 @@ namespace moFlo
 		bool CShader::ReadShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, std::stringstream& outstrContents)
 		{
 			//Open the shader file for reading only
-			moFlo::Core::FileStreamPtr shaderStream = moFlo::Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilePath, moFlo::Core::FileMode::k_read);
+			ChilliSource::Core::FileStreamPtr shaderStream = ChilliSource::Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilePath, ChilliSource::Core::FileMode::k_read);
             
             if (shaderStream == NULL || shaderStream->IsBad() == true)
 			{

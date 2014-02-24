@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{
@@ -575,7 +575,7 @@ namespace moFlo
         ///
         /// @param Notification
         //-------------------------------------------------------------------------
-        bool CStateManager::OnNotificationReceived(moFlo::Notification* inpsNotification)
+        bool CStateManager::OnNotificationReceived(Core::Notification* inpsNotification)
         {
             if(mStateHierarchy.back()->ShouldReceiveNotifications())
             {

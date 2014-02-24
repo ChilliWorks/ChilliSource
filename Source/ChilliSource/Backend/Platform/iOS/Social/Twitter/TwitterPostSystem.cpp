@@ -19,15 +19,15 @@
     #include <Twitter/Twitter.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
 		//------------------------------------------------------------------------
 		/// Constructor
 		//------------------------------------------------------------------------
-		CTwitterPostSystem::CTwitterPostSystem(iOSPlatform::CHttpConnectionSystem* inpHttpConnectionSystem,
-											   Networking::COAuthSystem* inpOAuthSystem) : Social::ITwitterPostSystem(inpHttpConnectionSystem, inpOAuthSystem)
+		CTwitterPostSystem::CTwitterPostSystem(iOS::CHttpConnectionSystem* inpHttpConnectionSystem,
+											   Core::COAuthSystem* inpOAuthSystem) : Social::ITwitterPostSystem(inpHttpConnectionSystem, inpOAuthSystem)
 		{
 			
 		}
@@ -66,11 +66,11 @@ namespace moFlo
 				if(RequestOAuthToken(strAuthoiseURL))
 				{
 					// Show authentication view
-					if(Core::CApplication::GetPlatformSystemPtr()->CanCreateActivityWithInterface<moFlo::Social::ITwitterAuthenticationActivity>())
+					if(Core::CApplication::GetPlatformSystemPtr()->CanCreateActivityWithInterface<ChilliSource::Social::ITwitterAuthenticationActivity>())
 					{
-						mpAuthenticationView = Core::CApplication::GetPlatformSystemPtr()->CreateActivityWithInterface<moFlo::Social::ITwitterAuthenticationActivity>();
-						mpAuthenticationView->SetAuthenticationPINResultDelegate(moFlo::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate(this, &ITwitterPostSystem::OnPINComplete));
-						mpAuthenticationView->GetDismissedEvent() += moFlo::ActivityDismissedEvent(this, &ITwitterPostSystem::OnAuthorisationDismissed);
+						mpAuthenticationView = Core::CApplication::GetPlatformSystemPtr()->CreateActivityWithInterface<ChilliSource::Social::ITwitterAuthenticationActivity>();
+						mpAuthenticationView->SetAuthenticationPINResultDelegate(ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate(this, &ITwitterPostSystem::OnPINComplete));
+						mpAuthenticationView->GetDismissedEvent() += Core::ActivityDismissedEvent(this, &ITwitterPostSystem::OnAuthorisationDismissed);
 						mpAuthenticationView->Present();
 					}
 				}
@@ -147,7 +147,7 @@ namespace moFlo
                 {
                     std::string strPath = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(insDesc.eLocalImageStorageLocation) + insDesc.strLocalImagePath;
                     
-                    NSString* pImagePath = moCore::CStringUtils::StringToNSString(strPath);
+                    NSString* pImagePath = Core::CStringUtils::StringToNSString(strPath);
                     UIImage* pImage = [UIImage imageWithContentsOfFile:pImagePath];
                     
                     if(pImage != nil)
@@ -239,7 +239,7 @@ namespace moFlo
 		///
 		/// @param PIN entered by user
 		//------------------------------------------------------------------------
-		void CTwitterPostSystem::OnPINComplete(const moFlo::Social::ITwitterAuthenticationActivity::AuthenticationPINResult &insResult)
+		void CTwitterPostSystem::OnPINComplete(const ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResult &insResult)
 		{
 			if(Social::TwitterPIN::kudwTwitterPINLength == insResult.strPIN.size())
 			{
@@ -250,12 +250,12 @@ namespace moFlo
 		//------------------------------------------------------------------------
 		/// Delegate called with the authorisation view is dismissed.
 		//------------------------------------------------------------------------
-		void CTwitterPostSystem::OnAuthorisationDismissed(moFlo::IActivity* inpActivity)
+		void CTwitterPostSystem::OnAuthorisationDismissed(Core::IActivity* inpActivity)
 		{
 			// User has cancelled
 			if(mpAuthenticationView)
 			{
-				mpAuthenticationView->GetDismissedEvent() -= moFlo::ActivityDismissedEvent(this, &CTwitterPostSystem::OnAuthorisationDismissed);
+				mpAuthenticationView->GetDismissedEvent() -= Core::ActivityDismissedEvent(this, &CTwitterPostSystem::OnAuthorisationDismissed);
 				SAFE_DELETE(mpAuthenticationView);
 			}
 		}

@@ -10,9 +10,9 @@
 #ifndef _MO_FLO_PLATFORM_ANDROID_UDID_MANAGER_H_
 #define _MO_FLO_PLATFORM_ANDROID_UDID_MANAGER_H_
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//==================================================
 		/// UDID Manager

@@ -7,9 +7,9 @@
 
 #include <ChilliSource/Core/Main/Screen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		CMouse* gpMouseInstance = NULL;
 		//----------------------------------------------------
@@ -52,13 +52,13 @@ namespace moFlo
 		/// 
 		/// @return Position of cursor on screen
 		//------------------------------------------------------
-		moFlo::Core::CVector2 CMouse::GetPosition() const
+		ChilliSource::Core::CVector2 CMouse::GetPosition() const
 		{
 			s32 dwX, dwY = 0;
 			glfwGetMousePos(&dwX, &dwY);
 
 			dwY = Core::CScreen::GetOrientedHeight() - dwY; 
-			return moFlo::Core::CVector2((f32)dwX, (f32)dwY);
+			return ChilliSource::Core::CVector2((f32)dwX, (f32)dwY);
 		}
 		//---GLFW Mouse Delegates
 		//----------------------------------------------

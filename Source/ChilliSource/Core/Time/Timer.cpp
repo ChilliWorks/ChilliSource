@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Core/Time/Timer.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core 
 	{

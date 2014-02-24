@@ -11,13 +11,13 @@
 
 #include <ChilliSource/Core/System/System.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
     {
         typedef fastdelegate::FastDelegate1<const std::string&> RemoteTokenReceivedDelegate;
 		
-        class IRemoteNotificationSystem : public moFlo::Core::ISystem
+        class IRemoteNotificationSystem : public ChilliSource::Core::ISystem
         {
         public:
             DECLARE_NAMED_INTERFACE(IRemoteNotificationSystem);

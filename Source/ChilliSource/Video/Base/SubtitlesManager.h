@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Resource/ResourceManager.h>
 
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Video
 	{

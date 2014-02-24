@@ -15,18 +15,18 @@
 #include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Social
 	{
 		DEFINE_NAMED_INTERFACE(ITwitterAuthenticationActivity);
         
-        IActivity* ITwitterAuthenticationActivity::CreateTwitterAuthenticationActivity()
+        Core::IActivity* ITwitterAuthenticationActivity::CreateTwitterAuthenticationActivity()
         {
 #ifdef TARGET_OS_IPHONE
-            return new moFlo::iOSPlatform::CTwitterAuthenticationActivity();
+            return new ChilliSource::iOS::CTwitterAuthenticationActivity();
 #elif TARGET_ANDROID
-            return new moFlo::AndroidPlatform::CTwitterAuthenticationActivity();
+            return new ChilliSource::Android::CTwitterAuthenticationActivity();
 #endif
 			return NULL;
         }
@@ -47,14 +47,14 @@ namespace moFlo
 		/// @return Event triggered when activity is
 		/// dismissed
 		//-----------------------------------------------
-		IEvent<ActivityDismissedEvent>& ITwitterAuthenticationActivity::GetDismissedEvent()
+		Core::IEvent<Core::ActivityDismissedEvent>& ITwitterAuthenticationActivity::GetDismissedEvent()
 		{
 			return mOnDismissedEvent;
 		}
 		//-----------------------------------------------
 		/// Set Authentication PIN Result Delegate
 		//-----------------------------------------------
-		void ITwitterAuthenticationActivity::SetAuthenticationPINResultDelegate(const moFlo::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate inCallback)
+		void ITwitterAuthenticationActivity::SetAuthenticationPINResultDelegate(const ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate inCallback)
 		{
 			mOnPINResultDelegate = inCallback;
 		}

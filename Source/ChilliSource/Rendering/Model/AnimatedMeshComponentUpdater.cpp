@@ -9,7 +9,7 @@
 #include <ChilliSource/Rendering/Model/AnimatedMeshComponentUpdater.h>
 #include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {
@@ -25,7 +25,7 @@ namespace moFlo
         //------------------------------------------------
         bool CAnimatedMeshComponentUpdater::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-            return (CAnimatedMeshComponentUpdater::InterfaceID == inInterfaceID || moCore::IUpdateable::InterfaceID == inInterfaceID);
+            return (CAnimatedMeshComponentUpdater::InterfaceID == inInterfaceID || Core::IUpdateable::InterfaceID == inInterfaceID);
         }
         //------------------------------------------------
         /// Add Component

@@ -10,9 +10,9 @@
 
 #import <UIKit/UIKit.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
         //------------------------------------------------------------------------------
         /// Schedule Notification 
@@ -22,7 +22,7 @@ namespace moFlo
         ///
         /// @param Notification 
         //------------------------------------------------------------------------------
-        void CLocalNotificationScheduler::ScheduleNotification(const Notification& insNotification)
+        void CLocalNotificationScheduler::ScheduleNotification(const Core::Notification& insNotification)
         {
             NSDate* pDate = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)insNotification.TriggerTime];
             
@@ -71,11 +71,11 @@ namespace moFlo
         ///
         /// @param ID type
         //-------------------------------------------------------------------------
-        void CLocalNotificationScheduler::CancelByID(NotificationID inID)
+        void CLocalNotificationScheduler::CancelByID(Core::NotificationID inID)
         {
 			for(UILocalNotification* pNotification in [[UIApplication sharedApplication] scheduledLocalNotifications]) 
 			{
-				NotificationID ID = [[pNotification.userInfo objectForKey:@"ID"] unsignedIntValue];
+				Core::NotificationID ID = [[pNotification.userInfo objectForKey:@"ID"] unsignedIntValue];
 				
 				if(ID == inID) 
 				{
@@ -94,7 +94,7 @@ namespace moFlo
         /// @param Out: Notifications that meet criteria
         /// @return Whether any notifications exist within that time period
         //-------------------------------------------------------------------------
-        bool CLocalNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, DYNAMIC_ARRAY<Notification>& outaNotifications)
+        bool CLocalNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, DYNAMIC_ARRAY<Core::Notification>& outaNotifications)
         {
             outaNotifications.clear();
             
@@ -105,7 +105,7 @@ namespace moFlo
                 
 				if(std::abs(dwDeltaSecs) <= inPeriod) 
 				{
-                    Notification sNotification;
+                    Core::Notification sNotification;
                     ConvertUILocalNotificationToNotification(pNotification, sNotification);
 					outaNotifications.push_back(sNotification);
 				}
@@ -140,9 +140,9 @@ namespace moFlo
             UILocalNotification* pLocalNotification = [inpOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
             if(pLocalNotification) 
             {
-                Notification sNotification;
+                Core::Notification sNotification;
                 ConvertUILocalNotificationToNotification(pLocalNotification, sNotification);
-                CNotificationScheduler::OnNotificationReceived(sNotification);
+                Core::CNotificationScheduler::OnNotificationReceived(sNotification);
                 return true;
             }
             
@@ -173,9 +173,9 @@ namespace moFlo
             //Reset the badge number
             inpApplication.applicationIconBadgeNumber = (inpApplication.applicationIconBadgeNumber - 1);
             
-            Notification sNotification;
+            Core::Notification sNotification;
             ConvertUILocalNotificationToNotification(inpNotification, sNotification);
-            CNotificationScheduler::OnNotificationReceived(sNotification);
+            Core::CNotificationScheduler::OnNotificationReceived(sNotification);
         }
         //-------------------------------------------------------------------------
         /// Convert UILocalNotification to Notification
@@ -183,14 +183,14 @@ namespace moFlo
         /// @param Apple UILocalNotification
         /// @param Out: moFlow notification
         //-------------------------------------------------------------------------
-        void CLocalNotificationScheduler::ConvertUILocalNotificationToNotification(UILocalNotification* inpUILocal, Notification& outsNotification)
+        void CLocalNotificationScheduler::ConvertUILocalNotificationToNotification(UILocalNotification* inpUILocal, Core::Notification& outsNotification)
         {
             outsNotification.bDismissed = false;
-            outsNotification.eType = NotificationType::k_system;
+            outsNotification.eType = Core::NotificationType::k_system;
             outsNotification.TriggerTime = (TimeIntervalSecs)[inpUILocal.fireDate timeIntervalSince1970];
             
-            outsNotification.ID = (NotificationID)[[inpUILocal.userInfo objectForKey:@"ID"] unsignedIntValue];
-            outsNotification.ePriority = (NotificationPriority)[[inpUILocal.userInfo objectForKey:@"Priority"] unsignedIntValue];
+            outsNotification.ID = (Core::NotificationID)[[inpUILocal.userInfo objectForKey:@"ID"] unsignedIntValue];
+            outsNotification.ePriority = (Core::NotificationPriority)[[inpUILocal.userInfo objectForKey:@"Priority"] unsignedIntValue];
             
             NSDictionary* pParams = (NSDictionary*)[inpUILocal.userInfo objectForKey:@"Params"];
             

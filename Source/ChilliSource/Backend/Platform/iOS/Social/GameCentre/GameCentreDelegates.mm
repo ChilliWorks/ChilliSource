@@ -66,17 +66,17 @@ BOOL kbUseAnimationForDismiss = YES;
                                   matchData:match.matchData completionHandler:nil];    
 }
 
-- (moFlo::IEvent<GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent>&) GetWasCancelledEvent
+- (ChilliSource::Core::IEvent<GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent>&) GetWasCancelledEvent
 {
     return mWasCancelledEvent;
 }
 
-- (moFlo::IEvent<GameCentreTurnBasedMatchmakerViewControllerDidFailEvent>&) GetDidFailEvent
+- (ChilliSource::Core::IEvent<GameCentreTurnBasedMatchmakerViewControllerDidFailEvent>&) GetDidFailEvent
 {
     return mDidFailEvent;
 }
 
-- (moFlo::IEvent<GameCentreTurnBasedMatchmakerViewControllerDidFindMatchEvent>&) GetDidFindMatchEvent
+- (ChilliSource::Core::IEvent<GameCentreTurnBasedMatchmakerViewControllerDidFindMatchEvent>&) GetDidFindMatchEvent
 {
     return mDidFindMatchEvent;
 }
@@ -94,17 +94,17 @@ BOOL kbUseAnimationForDismiss = YES;
 	return gameCentreTurnBasedEventHandlerInstance;
 }
 
-- (moFlo::IEvent<HandleInviteFromGameCenterEventDelegate>&) GetHandleInviteFromGameCenterEvent
+- (ChilliSource::Core::IEvent<HandleInviteFromGameCenterEventDelegate>&) GetHandleInviteFromGameCenterEvent
 {
     return mHandleInviteFromGameCenterEvent;
 }
 
-- (moFlo::IEvent<HandleTurnEventForMatchEventDelegate>&) GetHandleTurnEventForMatchEvent
+- (ChilliSource::Core::IEvent<HandleTurnEventForMatchEventDelegate>&) GetHandleTurnEventForMatchEvent
 {
     return mHandleTurnEventForMatchEvent;
 }
 
-- (moFlo::IEvent<HandleMatchEndedEventDelegate>&) GetHandleMatchEndedEvent
+- (ChilliSource::Core::IEvent<HandleMatchEndedEventDelegate>&) GetHandleMatchEndedEvent
 {
     return mHandleMatchEndedEvent;
 }
@@ -211,7 +211,7 @@ BOOL kbUseAnimationForDismiss = YES;
 //-----------------------------------------------
 - (void) BeginListeningForGKLocalAuthenticationChanged
 {
-    if(moFlo::iOSPlatform::CGameCentreSystem::IsSupported())
+    if(ChilliSource::iOS::CGameCentreSystem::IsSupported())
     {
         //Register for notifications
         [[NSNotificationCenter defaultCenter] addObserver:self 
@@ -225,7 +225,7 @@ BOOL kbUseAnimationForDismiss = YES;
 //-----------------------------------------------
 - (void) StopListeningForGKLocalAuthenticationChanged
 {
-    if(moFlo::iOSPlatform::CGameCentreSystem::IsSupported())
+    if(ChilliSource::iOS::CGameCentreSystem::IsSupported())
     {
         [[NSNotificationCenter defaultCenter] removeObserver:self 
                                                         name:GKPlayerAuthenticationDidChangeNotificationName 
@@ -237,7 +237,7 @@ BOOL kbUseAnimationForDismiss = YES;
 ///
 /// @return Event Object
 //-----------------------------------------------
-- (moFlo::IEvent<GKNotificationEventDelegate>&) GetGKLocalAuthenticationChangedEvent
+- (ChilliSource::Core::IEvent<GKNotificationEventDelegate>&) GetGKLocalAuthenticationChangedEvent
 {
 	return mGKPlayerAuthenticationChangeEvent;
 }

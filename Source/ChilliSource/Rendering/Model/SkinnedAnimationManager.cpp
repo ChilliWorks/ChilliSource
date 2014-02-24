@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -51,7 +51,7 @@ namespace moFlo
 		//----------------------------------------------------------------
 		Core::InterfaceIDType CSkinnedAnimationManager::GetProviderType() const
 		{
-			return Rendering::CSkinnedAnimation::InterfaceID;
+			return CSkinnedAnimation::InterfaceID;
 		}
 		//-----------------------------------------------------------------
 		/// Get Resource From File

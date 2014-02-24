@@ -20,11 +20,11 @@
 
 #pragma comment(lib, "winhttp")
 
-namespace moFlo
+namespace ChilliSource
 {
 	using namespace Networking;
 
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		const u32 kudwBufferSize = 1024 * 50;
 		const u32 kudwKeepAliveTimeInSeconds = 120;

@@ -16,9 +16,9 @@
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/XML/rapidxml_forward.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         //--------------------------------------------------------
         /// Create GUI

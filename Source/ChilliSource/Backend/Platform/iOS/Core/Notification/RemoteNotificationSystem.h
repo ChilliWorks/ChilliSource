@@ -13,9 +13,9 @@
 
 #include <UIKit/UIKit.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
         class CRemoteNotificationSystem : public Core::IRemoteNotificationSystem
         {

@@ -16,7 +16,7 @@
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -25,7 +25,7 @@ namespace moFlo
 		///
 		/// Any object that can be rendered
 		//====================================================
-		class IRenderComponent : public IVolumeComponent
+		class IRenderComponent : public Core::IVolumeComponent
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(IRenderComponent);

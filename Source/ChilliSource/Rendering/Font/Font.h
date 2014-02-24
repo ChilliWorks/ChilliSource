@@ -17,7 +17,7 @@
 
 #include <ChilliSource/Core/String/UTF8String.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -25,12 +25,12 @@ namespace moFlo
 		typedef u32 FontAlignment;
 		typedef f32 FontSpacing;
 		
-		typedef UTF8String CharacterSet;
+		typedef Core::UTF8String CharacterSet;
 		
-		const UTF8String::Char kSimilarSpaceCharacter = '-';
-		const UTF8String::Char kReturnCharacter = '\n';
-		const UTF8String::Char kTabCharacter = '\t';
-        const UTF8String::Char kSpaceCharacter = ' ';
+		const Core::UTF8String::Char kSimilarSpaceCharacter = '-';
+		const Core::UTF8String::Char kReturnCharacter = '\n';
+		const Core::UTF8String::Char kTabCharacter = '\t';
+        const Core::UTF8String::Char kSpaceCharacter = ' ';
         
         const u32 kudwSpacesPerTab = 5;
 		
@@ -134,13 +134,13 @@ namespace moFlo
             ///
             /// @param Texture containing the font
             //-------------------------------------------
-            void SetTexture(const Rendering::TexturePtr& inpTex);
+            void SetTexture(const TexturePtr& inpTex);
 			//-------------------------------------------
 			/// Get Texture
 			///
 			/// @return Font texture 
 			//-------------------------------------------
-			const Rendering::TexturePtr& GetTexture() const;
+			const TexturePtr& GetTexture() const;
 			//-------------------------------------------
 			/// Set Character Data
 			///
@@ -149,7 +149,7 @@ namespace moFlo
 			///
 			/// @param Sprite data containing UV's etc
 			//-------------------------------------------
-			void SetSpriteSheet(const Rendering::SpriteSheetPtr& inpData);
+			void SetSpriteSheet(const SpriteSheetPtr& inpData);
 			//-------------------------------------------
 			/// Get Mode Character Height
 			///
@@ -170,7 +170,7 @@ namespace moFlo
 			/// @param info struct to be filled with data for the character
 			/// @return Success or invisible chars
 			//-------------------------------------------
-			CharacterResult GetInfoForCharacter(UTF8String::Char inChar, CharacterInfo& outInfo) const;
+			CharacterResult GetInfoForCharacter(Core::UTF8String::Char inChar, CharacterInfo& outInfo) const;
 			//-------------------------------------------
 			/// Get Attributes
 			///
@@ -197,7 +197,7 @@ namespace moFlo
             /// @param Second character to test
             /// @return Spacing between characters
             //-------------------------------------------
-            f32 GetKerningBetweenCharacters(UTF8String::Char inChar1, UTF8String::Char inChar2) const;
+            f32 GetKerningBetweenCharacters(Core::UTF8String::Char inChar1, Core::UTF8String::Char inChar2) const;
             //-------------------------------------------
             /// Set Global Kerning Offset
             ///
@@ -227,7 +227,7 @@ namespace moFlo
             //-------------------------------------------
             void SetKerningInfo(const DYNAMIC_ARRAY<CKernLookup>& inaFirstReg, const DYNAMIC_ARRAY<CKernPair>& inaPairs);
             
-			typedef HASH_MAP<UTF8String::Char, CharacterInfo> CharToCharInfoMap;
+			typedef HASH_MAP<Core::UTF8String::Char, CharacterInfo> CharToCharInfoMap;
 			
 			CharToCharInfoMap mMapCharToCharInfo;
 			
@@ -244,10 +244,10 @@ namespace moFlo
             DYNAMIC_ARRAY<CKernPair> maPairs;
                     
 			//The font bitmap
-			Rendering::TexturePtr mpTexture;
+			TexturePtr mpTexture;
 			
 			//The location and width etc of each character on the tpage
-			Rendering::SpriteSheetPtr mpCharacterData;
+			SpriteSheetPtr mpCharacterData;
             
             f32 mfLineHeight;
             

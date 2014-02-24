@@ -9,11 +9,11 @@
 #include <ChilliSource/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
 #include <ChilliSource/Platform/Android/Social/Facebook/FacebookPostSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	using namespace moFlo::Social;
+	using namespace ChilliSource::Social;
 
-	namespace AndroidPlatform
+	namespace Android
 	{
 		CFacebookPostSystem::CFacebookPostSystem(Social::IFacebookAuthenticationSystem* inpAuthSystem) : mpAuthSystem(inpAuthSystem)
 		{

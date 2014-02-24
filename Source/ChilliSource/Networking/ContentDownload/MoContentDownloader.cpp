@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/Base/Device.h>
 #include <ChilliSource/Core/JSON/json.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Networking
     {
@@ -189,7 +189,7 @@ namespace moFlo
                                 HttpRequestDetails RequestDetails = inpRequest->GetDetails();
                                 RequestDetails.strURL = RequestDetails.strRedirectionURL;
                                 RequestDetails.strRedirectionURL = "";
-                                RequestDetails.eType = moFlo::Networking::HttpRequestDetails::Type::k_get;
+                                RequestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_get;
                                 mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(RequestDetails, IHttpRequest::CompletionDelegate(this, &CMoContentDownloader::OnContentDownloadComplete));
                                 break;
                             }

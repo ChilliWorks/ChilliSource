@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/ShaderManager.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{
@@ -25,9 +25,9 @@ namespace moFlo
 		/// @return Concrete shader resource object based on the render
 		/// system
 		//----------------------------------------------------------------
-		moFlo::Rendering::ShaderPtr CShaderManager::CreateShaderResource() const
+		ChilliSource::Rendering::ShaderPtr CShaderManager::CreateShaderResource() const
 		{
-			return moFlo::Rendering::ShaderPtr(new CShader());
+			return ChilliSource::Rendering::ShaderPtr(new CShader());
 		}
 		//----------------------------------------------------------------
 		/// Manages Resource With Extension
@@ -50,7 +50,7 @@ namespace moFlo
 		/// @param Out: Shader resource
 		/// @return Success
 		//---------------------------------------------------------
-		bool CShaderManager::CreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, moFlo::Rendering::ShaderPtr& outpShader)
+		bool CShaderManager::CreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ChilliSource::Rendering::ShaderPtr& outpShader)
 		{
 			SHARED_PTR<CShader> pGLShader = SHARED_PTR_CAST<CShader>(outpShader);
 			
@@ -61,7 +61,7 @@ namespace moFlo
 			if(pShaderResource != mMapFilenameToResource.end())
 			{
 				//It's already linked baby!
-				outpShader = SHARED_PTR_CAST<moFlo::Rendering::IShader>(pShaderResource->second);
+				outpShader = SHARED_PTR_CAST<ChilliSource::Rendering::IShader>(pShaderResource->second);
 				return true;
 			} 
 			
@@ -98,7 +98,7 @@ namespace moFlo
 		/// @param Out: Shader resource
 		/// @return Success
 		//---------------------------------------------------------
-		bool CShaderManager::AsyncCreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, moFlo::Rendering::ShaderPtr& outpShader)
+		bool CShaderManager::AsyncCreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ChilliSource::Rendering::ShaderPtr& outpShader)
 		{
 			SHARED_PTR<CShader> pGLShader = SHARED_PTR_CAST<CShader>(outpShader);
 			
@@ -118,7 +118,7 @@ namespace moFlo
 			mMapFilenameToResource.insert(std::make_pair(instrFilePath, outpShader));
 			
 			//create a task for loading the shader in the background
-			CTaskScheduler::ScheduleTask(Task4<Core::StorageLocation, const std::string&, const std::string&, moFlo::Rendering::ShaderPtr&>(this, &CShaderManager::LoadShaderTask, ineStorageLocation, instrFilePath + "." + kstrGLVertexShaderExtension, instrFilePath + "." + kstrGLFragmentShaderExtension, outpShader));
+            Core::CTaskScheduler::ScheduleTask(Core::Task4<Core::StorageLocation, const std::string&, const std::string&, ChilliSource::Rendering::ShaderPtr&>(this, &CShaderManager::LoadShaderTask, ineStorageLocation, instrFilePath + "." + kstrGLVertexShaderExtension, instrFilePath + "." + kstrGLFragmentShaderExtension, outpShader));
 			
 			return true;
 		}
@@ -130,7 +130,7 @@ namespace moFlo
 		/// @param Pixel shader file path
 		/// @param Out: Shader resource
 		//---------------------------------------------------------
-		void CShaderManager::LoadShaderTask(Core::StorageLocation ineStorageLocation, const std::string &instrVSFilePath, const std::string &instrPSFilePath, moFlo::Rendering::ShaderPtr& outpShader)
+		void CShaderManager::LoadShaderTask(Core::StorageLocation ineStorageLocation, const std::string &instrVSFilePath, const std::string &instrPSFilePath, ChilliSource::Rendering::ShaderPtr& outpShader)
 		{
 			SHARED_PTR<CShader> pGLShader = SHARED_PTR_CAST<CShader>(outpShader);
 			
@@ -161,14 +161,14 @@ namespace moFlo
 			}
 			
 			//schedule a task for the main thread to compile the shader
-			CTaskScheduler::ScheduleMainThreadTask(Task3<const std::string&, const std::string&, moFlo::Rendering::ShaderPtr&>(this, &CShaderManager::CompileShaderTask, sstrVS.str(), sstrPS.str(), outpShader));
+			Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task3<const std::string&, const std::string&, ChilliSource::Rendering::ShaderPtr&>(this, &CShaderManager::CompileShaderTask, sstrVS.str(), sstrPS.str(), outpShader));
 		}
 		//---------------------------------------------------------
 		/// Compile Shader Task
 		///
 		/// @param Out: Shader resource
 		//---------------------------------------------------------
-		void CShaderManager::CompileShaderTask(const std::string& instrVS,const std::string& instrPS, moFlo::Rendering::ShaderPtr& outpShader)
+		void CShaderManager::CompileShaderTask(const std::string& instrVS,const std::string& instrPS, ChilliSource::Rendering::ShaderPtr& outpShader)
 		{
 			SHARED_PTR<CShader> pGLShader = SHARED_PTR_CAST<CShader>(outpShader);
 			

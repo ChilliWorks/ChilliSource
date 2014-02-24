@@ -16,7 +16,7 @@
 
 #include <stdexcept>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -49,7 +49,7 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		bool CMoAnimLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == Rendering::CSkinnedAnimation::InterfaceID);
+			return (inInterfaceID == CSkinnedAnimation::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource From File With Extension
@@ -75,8 +75,8 @@ namespace moFlo
 			SkinnedAnimationPtr pAnim = SHARED_PTR_CAST<CSkinnedAnimation>(outpResource);
 			
 			//Load model as task
-			Task3<Core::StorageLocation, const std::string&, const SkinnedAnimationPtr&> AnimTask(this, &CMoAnimLoader::ReadAnimationTask,ineStorageLocation, inFilePath, pAnim);
-			CTaskScheduler::ScheduleTask(AnimTask);
+			Core::Task3<Core::StorageLocation, const std::string&, const SkinnedAnimationPtr&> AnimTask(this, &CMoAnimLoader::ReadAnimationTask,ineStorageLocation, inFilePath, pAnim);
+			Core::CTaskScheduler::ScheduleTask(AnimTask);
 			
 			return true;
 		}
@@ -113,7 +113,7 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// Read Header
 		//----------------------------------------------------------------------------
-		bool CMoAnimLoader::ReadHeader(const moFlo::Core::FileStreamPtr& inpStream, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource, u32& outudwNumFrames, s32& outdwNumSkeletonNodes)
+		bool CMoAnimLoader::ReadHeader(const ChilliSource::Core::FileStreamPtr& inpStream, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource, u32& outudwNumFrames, s32& outdwNumSkeletonNodes)
 		{
 			//Check file for corruption
 			if(inpStream == NULL || inpStream->IsBad() == true)
@@ -162,7 +162,7 @@ namespace moFlo
 		//----------------------------------------------------------------------------
 		/// Read Animation Data
 		//----------------------------------------------------------------------------
-		bool CMoAnimLoader::ReadAnimationData(const moFlo::Core::FileStreamPtr& inpStream, u32 inudwNumFrames, s32 indwNumSkeletonNodes, const SkinnedAnimationPtr& outpResource)
+		bool CMoAnimLoader::ReadAnimationData(const ChilliSource::Core::FileStreamPtr& inpStream, u32 inudwNumFrames, s32 indwNumSkeletonNodes, const SkinnedAnimationPtr& outpResource)
 		{
 			for (u32 i = 0; i < inudwNumFrames; i++)
 			{

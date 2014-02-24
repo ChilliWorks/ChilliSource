@@ -4,7 +4,7 @@
 #include <cfloat>
 #include <ChilliSource/Core/String/StringConverter.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

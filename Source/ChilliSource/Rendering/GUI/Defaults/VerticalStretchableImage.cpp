@@ -15,9 +15,9 @@
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
 		DEFINE_META_CLASS(CVerticalStretchableImage)
 
@@ -52,11 +52,11 @@ namespace moFlo
             Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SpriteSheetLocation", strValue))
             {
-                eSpriteSheetLocation = moFlo::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("SpriteSheet", strValue))
             {
-				SetSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eSpriteSheetLocation, strValue));
+				SetSpriteSheet(LOAD_RESOURCE(CSpriteSheet, eSpriteSheetLocation, strValue));
 			}
 
 			//---Sprite sheet base name
@@ -106,7 +106,7 @@ namespace moFlo
         ///
         /// @param Sprite sheet containing the nine patches
         //---------------------------------------------------------
-        void CVerticalStretchableImage::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void CVerticalStretchableImage::SetSpriteSheet(const SpriteSheetPtr& inpSpriteSheet)
         {
             SpriteSheet = inpSpriteSheet;
         }
@@ -115,7 +115,7 @@ namespace moFlo
 		///
 		/// @return Sprite sheet containing the nine patches
 		//---------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CVerticalStretchableImage::GetSpriteSheet() const
+		const SpriteSheetPtr& CVerticalStretchableImage::GetSpriteSheet() const
 		{
 			return SpriteSheet;
 		}
@@ -218,7 +218,7 @@ namespace moFlo
         ///
         /// @param Canvas renderer pointer
         //---------------------------------------------------------
-        void CVerticalStretchableImage::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void CVerticalStretchableImage::Draw(CCanvasRenderer* inpCanvas)
         {
 			//Check if this is on screen
 			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);

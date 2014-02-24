@@ -16,7 +16,7 @@
 
 #include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Social
 	{
@@ -35,7 +35,7 @@ namespace moFlo
 			void ToJSON(Json::Value& outsRoot) const;
 		};
 		
-		class IFacebookPostSystem : public moFlo::Core::ISystem
+		class IFacebookPostSystem : public ChilliSource::Core::ISystem
 		{
 		public:
 			
@@ -50,7 +50,7 @@ namespace moFlo
 			
 			typedef fastdelegate::FastDelegate1<const PostResult&> PostResultDelegate;
             
-            static IFacebookPostSystem* CreatePostSystem(moFlo::Social::IFacebookAuthenticationSystem* inpAuthSystem);
+            static IFacebookPostSystem* CreatePostSystem(ChilliSource::Social::IFacebookAuthenticationSystem* inpAuthSystem);
             
 			virtual void TryPost(const FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback) = 0;
             

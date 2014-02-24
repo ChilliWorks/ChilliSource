@@ -13,7 +13,7 @@
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 #include <ChilliSource/Rendering/Model/Skeleton.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {
@@ -183,13 +183,13 @@ namespace moFlo
         //----------------------------------------------------------
         /// Get Matrix At Index
         //----------------------------------------------------------
-        const moCore::CMatrix4x4& CSkinnedAnimationGroup::GetMatrixAtIndex(s32 indwIndex) const
+        const Core::CMatrix4x4& CSkinnedAnimationGroup::GetMatrixAtIndex(s32 indwIndex) const
         {
             if (indwIndex < mCurrentAnimationMatrices.size())
             {
                 return mCurrentAnimationMatrices[indwIndex];
             }
-            return moCore::CMatrix4x4::IDENTITY;
+            return Core::CMatrix4x4::IDENTITY;
         }
         //----------------------------------------------------------
         /// Apply Inverse Bind Pose

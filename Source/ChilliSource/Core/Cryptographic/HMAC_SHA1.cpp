@@ -15,7 +15,7 @@
 #include <iostream>
 #include <memory>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

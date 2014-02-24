@@ -23,7 +23,7 @@
 
 #define MAX_KERN_RATIO 0.25
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -48,12 +48,12 @@ namespace moFlo
 		///
 		/// Draw the UI
 		//----------------------------------------------------------
-		void CCanvasRenderer::Render(ISurface* inpRootSurface, f32 infNearClipDistance)
+		void CCanvasRenderer::Render(CGUIView* inpView, f32 infNearClipDistance)
 		{
             //We use this to ensure our UI is never clipped
             mfNearClippingDistance = infNearClipDistance + 1.0f;
             
-            inpRootSurface->Draw(this);
+            inpView->Draw(this);
 			
 			mOverlayBatcher.ForceRender(mpRenderSystem);
             
@@ -172,9 +172,9 @@ namespace moFlo
         //-----------------------------------------------------------
         /// Draw String
         //-----------------------------------------------------------
-		void CCanvasRenderer::DrawString(const UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
+		void CCanvasRenderer::DrawString(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                          const Core::CColour & insColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
-										 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped, bool *outpInvalidCharacterFound)
+										 TextJustification ineHorizontalJustification, TextJustification ineVerticalJustification, bool inbFlipVertical, TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped, bool *outpInvalidCharacterFound)
 		{
             //Flush buffer
             if(msCachedSprite.pMaterial != mpDefaultMaterial)
@@ -222,9 +222,9 @@ namespace moFlo
         //-----------------------------------------------------------
         /// Draw Distance Outlined String
         //-----------------------------------------------------------
-        void CCanvasRenderer::DrawDistanceOutlinedString(const UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
+        void CCanvasRenderer::DrawDistanceOutlinedString(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                                  const Core::CColour & insColour, const Core::CColour& insOutlineColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
-                                                 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
+                                                 TextJustification ineHorizontalJustification, TextJustification ineVerticalJustification, bool inbFlipVertical, TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
 		{
             //Flush buffer
             if(msCachedSprite.pMaterial != mpDistanceFontOutlined)
@@ -243,9 +243,9 @@ namespace moFlo
         //-----------------------------------------------------------
         /// Draw Distance String
         //-----------------------------------------------------------
-        void CCanvasRenderer::DrawDistanceString(const UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
+        void CCanvasRenderer::DrawDistanceString(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                          const Core::CColour & insColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
-										 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
+										 TextJustification ineHorizontalJustification, TextJustification ineVerticalJustification, bool inbFlipVertical, TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
 		{
             //Flush buffer
             if(msCachedSprite.pMaterial != mpDistanceFont)
@@ -264,9 +264,9 @@ namespace moFlo
         //-----------------------------------------------------------
         /// Draw Distance String Internal
         //-----------------------------------------------------------
-        void CCanvasRenderer::DrawDistanceStringInternal(const UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
+        void CCanvasRenderer::DrawDistanceStringInternal(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                                  const Core::CColour & insColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
-                                                 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
+                                                 TextJustification ineHorizontalJustification, TextJustification ineVerticalJustification, bool inbFlipVertical, TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
         {
             //Get the data about how to draw each character
             //This will be in text space and will be in a single line
@@ -309,7 +309,7 @@ namespace moFlo
         /// Calculate the length of a string based on the font
         /// and attributes
         //------------------------------------------------------------
-        f32 CCanvasRenderer::CalculateStringWidth(const UTF8String& insString, const Rendering::FontPtr& inpFont, f32 infSize, f32 infCharSpacing)
+        f32 CCanvasRenderer::CalculateStringWidth(const Core::UTF8String& insString, const FontPtr& inpFont, f32 infSize, f32 infCharSpacing)
         {
             Core::CVector2 vSize;
             
@@ -324,18 +324,18 @@ namespace moFlo
             CharacterList CurrentLine;
             
             //Loop round each character and get it's size
-            UTF8String::iterator it = (UTF8String::iterator)insString.begin();
+            Core::UTF8String::iterator it = (Core::UTF8String::iterator)insString.begin();
 			while(insString.end() != it)
 			{
                 //Get character for iterator codepoint and bump the iterator to the beginning of 
                 //the next character
-                UTF8String::Char Char = insString.next(it);
+                Core::UTF8String::Char Char = insString.next(it);
                 
                 // If kerning is supported, then we need the next character
-                UTF8String::Char NextChar = Char;
+                Core::UTF8String::Char NextChar = Char;
                 if(inpFont->SupportsKerning() && insString.end() != it)
                 {
-                    UTF8String::iterator it2 = it;
+                    Core::UTF8String::iterator it2 = it;
                     NextChar = insString.next(it2);
                 }
                 
@@ -353,7 +353,7 @@ namespace moFlo
         /// Calculate the height of a string based on the font, width
         /// and attributes
         //------------------------------------------------------------
-        f32 CCanvasRenderer::CalculateStringHeight(const UTF8String& insString, const FontPtr& inpFont, f32 infWidth, f32 infSize, f32 infCharSpacing, f32 infLineSpacing, u32 inudwNumLines)
+        f32 CCanvasRenderer::CalculateStringHeight(const Core::UTF8String& insString, const FontPtr& inpFont, f32 infWidth, f32 infSize, f32 infCharSpacing, f32 infLineSpacing, u32 inudwNumLines)
         {
             Core::CVector2 vCursorPos;
             
@@ -371,29 +371,29 @@ namespace moFlo
             u32 udwCurrentNumLines = 1;
 
             //Loop round each character and get it's size
-            UTF8String::iterator it = (UTF8String::iterator)insString.begin();
+            Core::UTF8String::iterator it = (Core::UTF8String::iterator)insString.begin();
 			while(it != insString.end())
 			{
                 //Get character for iterator codepoint and bump the iterator to the beginning of 
                 //the next character
-                UTF8String::Char Char = insString.next(it);
+                Core::UTF8String::Char Char = insString.next(it);
                 
                 //Decide whether to wrap or clip. If max num lines is zero this means wrap text infinetly
                 if(inudwNumLines == 0 || udwCurrentNumLines <= inudwNumLines)
                 {
                     // If kerning is supported, then we need the next character
-                    UTF8String::Char NextChar = Char;
+                    Core::UTF8String::Char NextChar = Char;
                     if(inpFont->SupportsKerning() && insString.end() != it)
                     {
-                        UTF8String::iterator it2 = it;
+                        Core::UTF8String::iterator it2 = it;
                         NextChar = insString.next(it2);
                     }
                     
                     //Construct the characters position and size from the font sheet to get the width
-                    BuildCharacter(inpFont, Char, NextChar, moCore::CVector2::ZERO, infSize, infCharSpacing, fLastCharacterWidth, CurrentLine);
+                    BuildCharacter(inpFont, Char, NextChar, Core::CVector2::ZERO, infSize, infCharSpacing, fLastCharacterWidth, CurrentLine);
                     vCursorPos.x += fLastCharacterWidth;
 
-                    UTF8String sTemp;
+                    Core::UTF8String sTemp;
                     sTemp.appendChar(Char);
                     
                     //Added by Joe 9/1/14
@@ -432,8 +432,8 @@ namespace moFlo
                         //Find the length to the next space/tab from the cursor pos
                         //and if it exceed the bounds then wrap
                         f32 fLengthToNextSpace = vCursorPos.x;
-                        UTF8String::iterator jt = it;
-                        UTF8String::Char NextChar = 0;
+                        Core::UTF8String::iterator jt = it;
+                        Core::UTF8String::Char NextChar = 0;
                         
                         while(jt != insString.end() && NextChar != kSpaceCharacter && NextChar != kTabCharacter && NextChar != kReturnCharacter)
                         {
@@ -465,9 +465,9 @@ namespace moFlo
 		/// Construct a list of character sprites
 		/// from the given string
         //-------------------------------------------
-		void CCanvasRenderer::BuildString(const FontPtr& inpFont, const UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
-										  const Core::CVector2& invBounds, u32 inudwNumLines, GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification,
-                                          bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, bool * outpClipped, bool * outpInvalidCharacterFound)
+		void CCanvasRenderer::BuildString(const FontPtr& inpFont, const Core::UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
+										  const Core::CVector2& invBounds, u32 inudwNumLines, TextJustification ineHorizontalJustification, TextJustification ineVerticalJustification,
+                                          bool inbFlipVertical, TextOverflowBehaviour ineBehaviour, bool * outpClipped, bool * outpInvalidCharacterFound)
 		{
             bool bClipped=false;
             
@@ -489,18 +489,18 @@ namespace moFlo
             
             bool bNoMoreLines = false;
 			
-            UTF8String::iterator it = (UTF8String::iterator)inText.begin();
+            Core::UTF8String::iterator it = (Core::UTF8String::iterator)inText.begin();
             while(inText.end() != it)
 			{
                 //Get character for iterator codepoint and bump the iterator to the beginning of
                 //the next character
-                UTF8String::Char Char = inText.next(it);
+                Core::UTF8String::Char Char = inText.next(it);
                 
                 // If kerning is supported, then we need the next character
-                UTF8String::Char NextChar = Char;
+                Core::UTF8String::Char NextChar = Char;
                 if(inpFont->SupportsKerning() && inText.end() != it)
                 {
-                    UTF8String::iterator it2 = it;
+                    Core::UTF8String::iterator it2 = it;
                     NextChar = inText.next(it2);
                 }
                 
@@ -552,9 +552,9 @@ namespace moFlo
                         //Find the length to the next space/tab from the cursor pos
                         //and if it exceed the bounds then wrap
                         f32 fLengthToNextSpace = vCursorPos.x;
-                        UTF8String::iterator jt = it;
-                        UTF8String::Char LookAheadChar;
-                        UTF8String::Char LookAheadNextChar;
+                        Core::UTF8String::iterator jt = it;
+                        Core::UTF8String::Char LookAheadChar;
+                        Core::UTF8String::Char LookAheadNextChar;
                         CharacterList CurrentLineTemp;
                         
                         //This while loop exits through break statements only.
@@ -567,12 +567,12 @@ namespace moFlo
                                 break;
                             
                             LookAheadNextChar = LookAheadChar;
-                            UTF8String::iterator jt2 = jt;
+                            Core::UTF8String::iterator jt2 = jt;
                             if(jt!=inText.end())
                                 LookAheadNextChar=inText.next(jt2);
                             
                             //Construct the characters position and size from the font sheet to get the width
-                            BuildCharacter(inpFont, LookAheadChar, LookAheadNextChar, moCore::CVector2::ZERO, infTextSize, infCharacterSpacing, fLastCharacterWidth, CurrentLineTemp, outpInvalidCharacterFound);
+                            BuildCharacter(inpFont, LookAheadChar, LookAheadNextChar, Core::CVector2::ZERO, infTextSize, infCharacterSpacing, fLastCharacterWidth, CurrentLineTemp, outpInvalidCharacterFound);
                             fLengthToNextSpace += fLastCharacterWidth;
                             
                             if(fLengthToNextSpace > invBounds.x)
@@ -601,15 +601,15 @@ namespace moFlo
                     //We are out of room so we can either over-run the label or clip the text
                     switch(ineBehaviour)
                     {
-                        case GUI::TextOverflowBehaviour::k_none:
-                        case GUI::TextOverflowBehaviour::k_clip:
+                        case TextOverflowBehaviour::k_none:
+                        case TextOverflowBehaviour::k_clip:
                             //Don't process any further characters
-                            it = (UTF8String::iterator)inText.end();
+                            it = (Core::UTF8String::iterator)inText.end();
                             bClipped=true;
                             break;
-                        case GUI::TextOverflowBehaviour::k_follow:
+                        case TextOverflowBehaviour::k_follow:
                             //Shunt the text backwards so it appears to scroll
-                            ineHorizontalJustification = GUI::TextJustification::k_right;
+                            ineHorizontalJustification = TextJustification::k_right;
                             break;
                     }
                 }
@@ -635,14 +635,14 @@ namespace moFlo
             
             switch(ineVerticalJustification)
             {
-                case GUI::TextJustification::k_top:
+                case TextJustification::k_top:
                 default:
                     fOffsetY = (invBounds.y * 0.5f);
                     break;
-                case GUI::TextJustification::k_centre:
+                case TextJustification::k_centre:
                     fOffsetY = (fHeight * 0.5f);
                     break;
-                case GUI::TextJustification::k_bottom:
+                case TextJustification::k_bottom:
                     fOffsetY = -((invBounds.y * 0.5f) - fHeight);
                     break;
             };
@@ -658,7 +658,7 @@ namespace moFlo
 		//----------------------------------------------------
 		/// Build Character
 		//----------------------------------------------------
-		CharacterResult CCanvasRenderer::BuildCharacter(const FontPtr& inpFont, UTF8String::Char inCharacter, UTF8String::Char inNextCharacter,
+		CharacterResult CCanvasRenderer::BuildCharacter(const FontPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
                                                          const Core::CVector2& invCursor, f32 infTextScale, f32 infCharSpacing,
                                                          f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound)
 		{
@@ -686,9 +686,7 @@ namespace moFlo
                         
                         if(fKernAmount > (fCharWidth * MAX_KERN_RATIO))
                         {
-                            //DEBUG_LOG("discarded excessive kerning on "+STRING_CAST(inCharacter)+" and "+STRING_CAST(inNextCharacter)+" ("+STRING_CAST(fKernAmount)+"/"+STRING_CAST(fCharWidth)+")");
                             fKernAmount = fCharWidth * MAX_KERN_RATIO;
-                            //DEBUG_LOG("reduced kerning to "+STRING_CAST(fKernAmount));
                         }
                         
                         fCharWidth -= fKernAmount;
@@ -731,7 +729,7 @@ namespace moFlo
         //----------------------------------------------------
         /// Wrap
         //----------------------------------------------------
-        void CCanvasRenderer::Wrap(GUI::TextJustification ineHorizontalJustification, f32 infLineSpacing, const Core::CVector2& invBounds, 
+        void CCanvasRenderer::Wrap(TextJustification ineHorizontalJustification, f32 infLineSpacing, const Core::CVector2& invBounds, 
 								   CharacterList &inCurrentLine, Core::CVector2& outvCursor, CharacterList &outCharacters)
         {
             if(!inCurrentLine.empty())
@@ -742,14 +740,14 @@ namespace moFlo
                 
                 switch(ineHorizontalJustification)
                 {
-                    case GUI::TextJustification::k_left:
+                    case TextJustification::k_left:
                     default:
                         fOffsetX = -(invBounds.x * 0.5f);
                         break;
-                    case GUI::TextJustification::k_centre:
+                    case TextJustification::k_centre:
                         fOffsetX = -(outvCursor.x * 0.5f);
                         break;
-                    case GUI::TextJustification::k_right:
+                    case TextJustification::k_right:
                         fOffsetX = (invBounds.x * 0.5f) - outvCursor.x;
                         break;
                 };

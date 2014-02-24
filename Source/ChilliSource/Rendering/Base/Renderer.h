@@ -16,7 +16,7 @@
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -131,7 +131,7 @@ namespace moFlo
             ///
             /// @param Root window
 			//----------------------------------------------------------
-			void RenderUI(GUI::CWindow* inpWindow);
+			void RenderUI(CWindow* inpWindow);
             //----------------------------------------------------------
             /// Render Scene To Target
             ///
@@ -205,7 +205,7 @@ namespace moFlo
             /// rendering
             /// @return Projection matrix for overlay rendering
             //----------------------------------------------------------
-            Core::CMatrix4x4 CreateOverlayProjection(moGUI::CWindow* inpWindow) const;
+            Core::CMatrix4x4 CreateOverlayProjection(CWindow* inpWindow) const;
             //----------------------------------------------------------
             /// Sort Opaque
             ///

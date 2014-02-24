@@ -18,7 +18,7 @@
 #include <ChilliSource/Rendering/Particles/Effectors/ParticleEffectorFactory.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

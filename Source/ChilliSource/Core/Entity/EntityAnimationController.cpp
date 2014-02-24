@@ -14,7 +14,7 @@
 using namespace std;
 
 // CLASSES
-namespace moFlo 
+namespace ChilliSource 
 {
 	namespace Core 
 	{

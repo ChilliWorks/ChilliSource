@@ -10,9 +10,9 @@
 
 #include <ChilliSource/Core/String/StringUtils.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
 		DEFINE_META_CLASS(CFormattedLabel)
 
@@ -50,7 +50,7 @@ namespace moFlo
         ///
         /// @param Text string
         //-------------------------------------------------------
-        void CFormattedLabel::SetText(const UTF8String& instrText, const Core::ParamDictionary& insParams,bool inbOverwriteText)
+        void CFormattedLabel::SetText(const Core::UTF8String& instrText, const Core::ParamDictionary& insParams,bool inbOverwriteText)
         {
 			mCachedChars.clear();
 			

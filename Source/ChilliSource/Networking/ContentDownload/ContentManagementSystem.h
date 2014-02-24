@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Networking
     {

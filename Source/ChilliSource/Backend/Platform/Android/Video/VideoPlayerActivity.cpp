@@ -21,9 +21,9 @@
 #include <ChilliSource/Video/Main/SubtitlesManager.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace AndroidPlatform
+    namespace Android
     {
         //--------------------------------------------------------------
         /// Constructor
@@ -49,7 +49,7 @@ namespace moFlo
         //--------------------------------------------------------------
         /// Present
         //--------------------------------------------------------------
-        void CVideoPlayerActivity::Present(Core::STORAGE_LOCATION ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour)
+        void CVideoPlayerActivity::Present(Core::STORAGE_LOCATION ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour)
         {
         	//calculate the storage location and full filename.
         	bool bIsPackage;
@@ -88,9 +88,9 @@ namespace moFlo
 		//--------------------------------------------------------------
 		void CVideoPlayerActivity::PresentWithSubtitles(Core::STORAGE_LOCATION ineVideoLocation, const std::string& instrVideoFilename,
 														Core::STORAGE_LOCATION ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
-														bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour)
+														bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour)
 		{
-			mpSubtitles = LOAD_RESOURCE(moFlo::Video::CSubtitles, ineSubtitlesLocation, instrSubtitlesFilename);
+			mpSubtitles = LOAD_RESOURCE(ChilliSource::Video::CSubtitles, ineSubtitlesLocation, instrSubtitlesFilename);
 			mpVideoPlayerJavaInterface->SetUpdateSubtitlesDelegate(OnUpdateSubtitlesDelegate(this, &CVideoPlayerActivity::OnUpdateSubtitles));
 			Present(ineVideoLocation, instrVideoFilename, inbCanDismissWithTap, inBackgroundColour);
 		}
@@ -180,32 +180,32 @@ namespace moFlo
 				mCurrentSubtitleTimeMS = currentTimeMS;
 
 				//get the current subtitles
-				DYNAMIC_ARRAY<moFlo::Video::CSubtitles::SubtitlePtr> pSubtitleArray = mpSubtitles->GetSubtitlesAtTime(mCurrentSubtitleTimeMS);
+				DYNAMIC_ARRAY<ChilliSource::Video::CSubtitles::SubtitlePtr> pSubtitleArray = mpSubtitles->GetSubtitlesAtTime(mCurrentSubtitleTimeMS);
 
 				//add any new subtitles
-				for (DYNAMIC_ARRAY<moFlo::Video::CSubtitles::SubtitlePtr>::iterator it = pSubtitleArray.begin(); it != pSubtitleArray.end(); ++it)
+				for (DYNAMIC_ARRAY<ChilliSource::Video::CSubtitles::SubtitlePtr>::iterator it = pSubtitleArray.begin(); it != pSubtitleArray.end(); ++it)
 				{
-					HASH_MAP<moFlo::Video::CSubtitles::SubtitlePtr, s64>::iterator mapEntry = maSubtitleMap.find(*it);
+					HASH_MAP<ChilliSource::Video::CSubtitles::SubtitlePtr, s64>::iterator mapEntry = maSubtitleMap.find(*it);
 					if (mapEntry == maSubtitleMap.end())
 					{
-						moFlo::UTF8String strText = moFlo::Core::CLocalisedText::GetText((*it)->strTextID);
-						moFlo::Video::CSubtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName((*it)->strStyleName);
+						ChilliSource::UTF8String strText = ChilliSource::Core::CLocalisedText::GetText((*it)->strTextID);
+						ChilliSource::Video::CSubtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName((*it)->strStyleName);
 						s64 lwSubtitleID = mpVideoPlayerJavaInterface->CreateSubtitle(strText, pStyle->strFontName,pStyle->udwFontSize, Core::StringFromAlignmentAnchor(pStyle->eAlignment), pStyle->Bounds.vOrigin.x, pStyle->Bounds.vOrigin.y, pStyle->Bounds.vSize.x, pStyle->Bounds.vSize.y);
 						mpVideoPlayerJavaInterface->SetSubtitleColour(lwSubtitleID, 0.0f, 0.0f, 0.0f, 0.0f);
-						maSubtitleMap.insert(std::pair<moFlo::Video::CSubtitles::SubtitlePtr, s64>(*it, lwSubtitleID));
+						maSubtitleMap.insert(std::pair<ChilliSource::Video::CSubtitles::SubtitlePtr, s64>(*it, lwSubtitleID));
 					}
 				}
 
 				//update the current text views
-				for (HASH_MAP<moFlo::Video::CSubtitles::SubtitlePtr, s64>::iterator it = maSubtitleMap.begin(); it != maSubtitleMap.end(); ++it)
+				for (HASH_MAP<ChilliSource::Video::CSubtitles::SubtitlePtr, s64>::iterator it = maSubtitleMap.begin(); it != maSubtitleMap.end(); ++it)
 				{
 					UpdateSubtitle(it->first, it->second, mCurrentSubtitleTimeMS);
 				}
 
 				//removes any text views that are no longer needed.
-				for (DYNAMIC_ARRAY<moFlo::Video::CSubtitles::SubtitlePtr>::iterator it = maSubtitlesToRemove.begin(); it != maSubtitlesToRemove.end(); ++it)
+				for (DYNAMIC_ARRAY<ChilliSource::Video::CSubtitles::SubtitlePtr>::iterator it = maSubtitlesToRemove.begin(); it != maSubtitlesToRemove.end(); ++it)
 				{
-					HASH_MAP<moFlo::Video::CSubtitles::SubtitlePtr, s64>::iterator mapEntry = maSubtitleMap.find(*it);
+					HASH_MAP<ChilliSource::Video::CSubtitles::SubtitlePtr, s64>::iterator mapEntry = maSubtitleMap.find(*it);
 					if (mapEntry != maSubtitleMap.end())
 					{
 						mpVideoPlayerJavaInterface->RemoveSubtitle(mapEntry->second);
@@ -218,9 +218,9 @@ namespace moFlo
 		//---------------------------------------------------------------
 		/// Update Subtitle
 		//---------------------------------------------------------------
-		void CVideoPlayerActivity::UpdateSubtitle(const moFlo::Video::CSubtitles::SubtitlePtr& inpSubtitle, s64 inlwSubtitleID, TimeIntervalMs inTimeMS)
+		void CVideoPlayerActivity::UpdateSubtitle(const ChilliSource::Video::CSubtitles::SubtitlePtr& inpSubtitle, s64 inlwSubtitleID, TimeIntervalMs inTimeMS)
 		{
-			moFlo::Video::CSubtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->strStyleName);
+			ChilliSource::Video::CSubtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->strStyleName);
 
 			f32 fFade = 0.0f;
 			s64 lwRelativeTime = ((s64)inTimeMS) - ((s64)inpSubtitle->StartTimeMS);

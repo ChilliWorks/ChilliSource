@@ -12,7 +12,7 @@
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Core/System/System.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {

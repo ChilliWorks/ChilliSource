@@ -10,9 +10,9 @@
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioManager.h>
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioResource.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		//-----------------------------------------------------------------
 		/// Create Audio Resource

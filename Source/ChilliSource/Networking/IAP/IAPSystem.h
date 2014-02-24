@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Networking
     {
@@ -62,7 +62,7 @@ namespace moFlo
         typedef fastdelegate::FastDelegate2<const std::string&, const std::string&> IAPTransactionCloseDelegate;
         
         
-		class IIAPSystem : public moFlo::Core::ISystem
+		class IIAPSystem : public ChilliSource::Core::ISystem
         {
         public:
             DECLARE_NAMED_INTERFACE(IIAPSystem);

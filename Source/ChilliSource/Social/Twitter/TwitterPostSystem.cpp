@@ -17,18 +17,18 @@
 #include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterPostSystem.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Social
 	{
 		DEFINE_NAMED_INTERFACE(ITwitterPostSystem);
 
-        ITwitterPostSystem* ITwitterPostSystem::CreateSystem(Networking::IHttpConnectionSystem* inpHttpConnectionSystem, Networking::COAuthSystem* inpOAuthSystem)
+        ITwitterPostSystem* ITwitterPostSystem::CreateSystem(Networking::IHttpConnectionSystem* inpHttpConnectionSystem, Core::COAuthSystem* inpOAuthSystem)
         {
 #ifdef TARGET_OS_IPHONE
-            return new moFlo::iOSPlatform::CTwitterPostSystem(static_cast<iOSPlatform::CHttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
+            return new ChilliSource::iOS::CTwitterPostSystem(static_cast<iOS::CHttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
 #elif TARGET_ANDROID
-            return new moFlo::AndroidPlatform::CTwitterPostSystem(static_cast<AndroidPlatform::CHttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
+            return new ChilliSource::Android::CTwitterPostSystem(static_cast<Android::CHttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
 #endif
 			return NULL;
         }
@@ -37,7 +37,7 @@ namespace moFlo
 		/// Constructor
 		//------------------------------------------------------------------------
 		ITwitterPostSystem::ITwitterPostSystem(Networking::IHttpConnectionSystem* inpHttpConnectionSystem,
-											   Networking::COAuthSystem* inpOAuthSystem) : mstrCustomerKey(""),
+											   Core::COAuthSystem* inpOAuthSystem) : mstrCustomerKey(""),
 																						   mstrCustomerSecret(""),
 																						   mpAuthenticationView(NULL)
 		{
@@ -109,11 +109,11 @@ namespace moFlo
 			if(mpHttpConnectionSystem->CheckReachability())
 			{
 				// Construct our Tweet request URL
-				std::string strStatus = Social::TwitterDefault::TWITTER_STATUS_STRING + CBaseEncoding::URLEncode(insDesc.strText.ToASCII());
+				std::string strStatus = Social::TwitterDefault::TWITTER_STATUS_STRING + Core::CBaseEncoding::URLEncode(insDesc.strText.ToASCII());
 				std::string strStatusURL = Social::TwitterURL::TWITTER_STATUS_UPDATE_URL;
 				std::string strOAuthHeader;
 
-				if(mpOAuthSystem->GetOAuthHeader(Networking::COAuthSystem::OAuthHttpRequestType::k_httpPost,
+				if(mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpPost,
 												 strStatusURL,
 												 strStatus, strOAuthHeader))
 				{
@@ -136,35 +136,35 @@ namespace moFlo
 		//------------------------------------------------------------------------
 		void ITwitterPostSystem::OnStatusUpdateComplete(Networking::HttpRequestPtr inpRequest, Networking::IHttpRequest::CompletionResult ineResult)
 		{
-			if(ineResult == moFlo::Networking::IHttpRequest::CompletionResult::k_completed)
+			if(ineResult == ChilliSource::Networking::IHttpRequest::CompletionResult::k_completed)
 			{
 				if(mCompletionDelegate)
 				{
 					mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_success);
 				}
 			}
-			else if(ineResult == moFlo::Networking::IHttpRequest::CompletionResult::k_failed)
+			else if(ineResult == ChilliSource::Networking::IHttpRequest::CompletionResult::k_failed)
 			{
 				if(mCompletionDelegate)
 				{
 					mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_failed);
 				}
 			}
-			else if(ineResult == moFlo::Networking::IHttpRequest::CompletionResult::k_cancelled)
+			else if(ineResult == ChilliSource::Networking::IHttpRequest::CompletionResult::k_cancelled)
 			{
 				if(mCompletionDelegate)
 				{
 					mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_cancelled);
 				}
 			}
-			else if(ineResult == moFlo::Networking::IHttpRequest::CompletionResult::k_timeout)
+			else if(ineResult == ChilliSource::Networking::IHttpRequest::CompletionResult::k_timeout)
 			{
 				if(mCompletionDelegate)
 				{
 					mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_failed);
 				}
 			}
-			else if(ineResult == moFlo::Networking::IHttpRequest::CompletionResult::k_flushed)
+			else if(ineResult == ChilliSource::Networking::IHttpRequest::CompletionResult::k_flushed)
 			{
 				if(mCompletionDelegate)
 				{
@@ -193,10 +193,10 @@ namespace moFlo
 			{
 				// Construct our OAuth request URL - 'oob' means out-of-band and tells Twitter we
 				// are on a mobile device.
-				std::string strURL = Social::TwitterOAuthAPIURLs::TWITTER_OAUTH_REQUEST_TOKEN_URL + Social::TwitterDefault::TWITTER_URL_SEP_QUESTION_MARK + Networking::OAUTHLIB_CALLBACK_KEY + "=oob";
+				std::string strURL = Social::TwitterOAuthAPIURLs::TWITTER_OAUTH_REQUEST_TOKEN_URL + Social::TwitterDefault::TWITTER_URL_SEP_QUESTION_MARK + Core::OAUTHLIB_CALLBACK_KEY + "=oob";
 				std::string strOAuthHeader;
 
-				if(mpOAuthSystem->GetOAuthHeader(Networking::COAuthSystem::OAuthHttpRequestType::k_httpGet,
+				if(mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpGet,
 												 strURL,
 												 std::string(""), strOAuthHeader))
 				{
@@ -216,9 +216,9 @@ namespace moFlo
 		//------------------------------------------------------------------------
 		/// Delegate called with RequestOAuthToken() completes.
 		//------------------------------------------------------------------------
-		void ITwitterPostSystem::OnRequestOAuthTokenComplete(moFlo::Networking::HttpRequestPtr inpRequest, moFlo::Networking::IHttpRequest::CompletionResult ineResult)
+		void ITwitterPostSystem::OnRequestOAuthTokenComplete(ChilliSource::Networking::HttpRequestPtr inpRequest, ChilliSource::Networking::IHttpRequest::CompletionResult ineResult)
 		{
-			if(ineResult == moFlo::Networking::IHttpRequest::CompletionResult::k_completed)
+			if(ineResult == ChilliSource::Networking::IHttpRequest::CompletionResult::k_completed)
 			{
 				// Tell OAuth system to save access token and secret from web response
 				mpOAuthSystem->ExtractOAuthTokenKeySecret(inpRequest->GetResponseString());
@@ -249,7 +249,7 @@ namespace moFlo
 			{
 				std::string strOAuthHeader;
 
-				if(mpOAuthSystem->GetOAuthHeader(Networking::COAuthSystem::OAuthHttpRequestType::k_httpGet,
+				if(mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpGet,
 												 Social::TwitterOAuthAPIURLs::TWITTER_OAUTH_ACCESS_TOKEN_URL,
 												 std::string(""), strOAuthHeader, true))
 				{
@@ -269,9 +269,9 @@ namespace moFlo
 		//------------------------------------------------------------------------
 		/// Delegate called with RequestOAuthToken() completes.
 		//------------------------------------------------------------------------
-		void ITwitterPostSystem::OnRequestOAuthAccessTokenComplete(moFlo::Networking::HttpRequestPtr inpRequest, moFlo::Networking::IHttpRequest::CompletionResult ineResult)
+		void ITwitterPostSystem::OnRequestOAuthAccessTokenComplete(ChilliSource::Networking::HttpRequestPtr inpRequest, ChilliSource::Networking::IHttpRequest::CompletionResult ineResult)
 		{
-			if(ineResult == moFlo::Networking::IHttpRequest::CompletionResult::k_completed)
+			if(ineResult == ChilliSource::Networking::IHttpRequest::CompletionResult::k_completed)
 			{
 				DEBUG_LOG("CTwitterPostSystem::OnRequestOAuthAccessTokenComplete() - Got response:\n"+inpRequest->GetResponseString());
 				// Tell OAuth system to save access token and secret from web response
@@ -289,7 +289,7 @@ namespace moFlo
 			std::string strTokenKey;
 			std::string strSecretKey;
 
-			moFlo::Core::CLocalDataStore& pLocalData = moFlo::Core::CLocalDataStore::GetSingleton();
+			ChilliSource::Core::CLocalDataStore& pLocalData = ChilliSource::Core::CLocalDataStore::GetSingleton();
 
 			if(pLocalData.TryGetValue(Social::TwitterDataStore::kstrDataStoreKey[(u32)Social::TwitterDataStore::DataStoreKey::k_OAuthToken], strTokenKey))
 			{
@@ -321,7 +321,7 @@ namespace moFlo
 		//------------------------------------------------------------------------
 		void ITwitterPostSystem::SaveOAuthTokenKeyAndSecretKey()
 		{
-			moFlo::Core::CLocalDataStore& pLocalData = moFlo::Core::CLocalDataStore::GetSingleton();
+			ChilliSource::Core::CLocalDataStore& pLocalData = ChilliSource::Core::CLocalDataStore::GetSingleton();
 
 			// Save our OAuth Token and Secret
 			mpOAuthSystem->GetOAuthTokenKey(mstrSavedOAuthTokenKey);

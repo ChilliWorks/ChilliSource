@@ -21,7 +21,7 @@
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Audio
 	{
@@ -151,7 +151,7 @@ namespace moFlo
 			/// listen for this event
 			/// @return Audio event
 			//-------------------------------------------------------
-			IEvent<AudioVolumeEventDelegate>& GetMasterEffectVolumeChangedEvent();
+			Core::IEvent<AudioVolumeEventDelegate>& GetMasterEffectVolumeChangedEvent();
 			//-------------------------------------------------------
 			/// Get Master Stream Volume Changed Event
 			///
@@ -159,7 +159,7 @@ namespace moFlo
 			/// listen for this event
 			/// @return Audio event
 			//-------------------------------------------------------
-			IEvent<AudioVolumeEventDelegate>& GetMasterStreamVolumeChangedEvent();
+			Core::IEvent<AudioVolumeEventDelegate>& GetMasterStreamVolumeChangedEvent();
 			//----------------------------------------------------
 			/// Get Number Of Component Factories
 			///
@@ -181,8 +181,8 @@ namespace moFlo
 			
 		protected:
 			
-			CEvent0<AudioVolumeEventDelegate> mOnMasterEffectVolumeChangedEvent;
-			CEvent0<AudioVolumeEventDelegate> mOnMasterStreamVolumeChangedEvent;
+			Core::CEvent0<AudioVolumeEventDelegate> mOnMasterEffectVolumeChangedEvent;
+			Core::CEvent0<AudioVolumeEventDelegate> mOnMasterStreamVolumeChangedEvent;
 			
 			IAudioManager* mpAudioManager;
 			IAudioComponentFactory* mpAudioComponentFactory;

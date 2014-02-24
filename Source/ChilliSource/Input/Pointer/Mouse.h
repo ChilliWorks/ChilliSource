@@ -7,7 +7,7 @@
 
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Input
 	{
@@ -42,31 +42,31 @@ namespace moFlo
 			/// 
 			/// @return Position of cursor on screen
 			//------------------------------------------------------
-			virtual moFlo::Core::CVector2 GetPosition() const = 0;
+			virtual ChilliSource::Core::CVector2 GetPosition() const = 0;
 			//------------------------------------------------------
 			/// Get Mouse Pressed Event
 			///
 			/// @return Event triggered on mouse button down
 			//------------------------------------------------------
-			IEvent<MouseEventDelegate> & GetMousePressedEvent();
+			Core::IEvent<MouseEventDelegate> & GetMousePressedEvent();
 			//------------------------------------------------------
 			/// Get Mouse Moved Event
 			///
 			/// @return Event triggered on mouse moved
 			//------------------------------------------------------
-			IEvent<MouseEventDelegate> & GetMouseMovedEvent();
+			Core::IEvent<MouseEventDelegate> & GetMouseMovedEvent();
 			//------------------------------------------------------
 			/// Get Mouse Released Event
 			///
 			/// @return Event triggered on mouse button up
 			//------------------------------------------------------
-			IEvent<MouseEventDelegate> & GetMouseReleasedEvent();
+			Core::IEvent<MouseEventDelegate> & GetMouseReleasedEvent();
 
 		protected:
 
-			CEvent1<MouseEventDelegate> mOnMouseMovedEvent;
-			CEvent1<MouseEventDelegate> mOnMousePressedEvent;
-			CEvent1<MouseEventDelegate> mOnMouseReleasedEvent;
+			Core::CEvent1<MouseEventDelegate> mOnMouseMovedEvent;
+			Core::CEvent1<MouseEventDelegate> mOnMousePressedEvent;
+			Core::CEvent1<MouseEventDelegate> mOnMouseReleasedEvent;
 
 			//Tracks the state of the mouse buttons
 			bool mbaButtonsDown[(u32)MouseInputType::k_total];

@@ -10,9 +10,9 @@
 
 #include <ChilliSource/Backend/Audio/FMOD/3D/FMODAudioComponent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
         //----------------------------------------------------
 		/// FMOD - On Channel Audio Complete Callback
@@ -31,7 +31,7 @@ namespace moFlo
 					FMOD::Channel* pChannel = (FMOD::Channel*)inpChannel;
 					
 					//Grab the instance pointer so we can notify the correct resource 
-					moFlo::iOSPlatform::CFMODAudioComponent* pAudioResource = NULL;
+					ChilliSource::iOS::CFMODAudioComponent* pAudioResource = NULL;
 					pChannel->getUserData((void**)&pAudioResource);
 					
 					//Now trigger the real callback

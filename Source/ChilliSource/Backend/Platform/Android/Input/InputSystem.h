@@ -1,7 +1,7 @@
 /** 
  * File: InputSystem.h
  * Date: 5 Oct 2010
- * Description: Concrete iOS3_x implementation of moflo::Input::IInputSystem;
+ * Description: Concrete iOS3_x implementation of ChilliSource::Input::IInputSystem;
  */
 
 /** 
@@ -20,9 +20,9 @@
 #include <ChilliSource/Platform/Android/Input/Accelerometer.h>
 #include <ChilliSource/Platform/Android/Input/VirtualKeyboard.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class CInputSystem : public Input::IInputSystem
 		{

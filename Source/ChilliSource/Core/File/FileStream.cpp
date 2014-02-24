@@ -10,7 +10,7 @@
 #include <ChilliSource/Core/Cryptographic/SHA1.h>
 #include <ChilliSource/Core/File/FileStream.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {

@@ -15,8 +15,8 @@
 
 @class SMSDelegate;
 
-namespace moFlo{
-	namespace iOSPlatform {
+namespace ChilliSource{
+	namespace iOS {
 		
 		class CSMSCompositionActivity : public Social::ISMSCompositionActivity 
 		{
@@ -28,7 +28,7 @@ namespace moFlo{
 			CSMSCompositionActivity();
 			~CSMSCompositionActivity();
 			
-			virtual void Present(const DYNAMIC_ARRAY<CUTF8String> & inastrRecipientNumbers, const CUTF8String & instrContents, const ISMSCompositionActivity::SendResultDelegate & inCallback);
+			virtual void Present(const DYNAMIC_ARRAY<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const ISMSCompositionActivity::SendResultDelegate & inCallback);
 
 			virtual void Dismiss();
 		private:
@@ -42,9 +42,9 @@ namespace moFlo{
 
 @interface  SMSDelegate : NSObject<MFMessageComposeViewControllerDelegate>
 {
-	moFlo::Social::ISMSCompositionActivity::SendResultDelegate mCallback;
+	ChilliSource::Social::ISMSCompositionActivity::SendResultDelegate mCallback;
 }
--(SMSDelegate*) initWithCallback:(moFlo::Social::ISMSCompositionActivity::SendResultDelegate)callback;
+-(SMSDelegate*) initWithCallback:(ChilliSource::Social::ISMSCompositionActivity::SendResultDelegate)callback;
 
 	
 @end

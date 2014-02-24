@@ -12,7 +12,7 @@
 #ifndef MOFLOW_RENDERING_SKINNEDANIMATIONGROUP_H_
 #define MOFLOW_RENDERING_SKINNEDANIMATIONGROUP_H_
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {
@@ -97,7 +97,7 @@ namespace moFlo
             /// @param the index of the required matrix.
             /// @return the matrix.
 			//----------------------------------------------------------
-            const moCore::CMatrix4x4& GetMatrixAtIndex(s32 indwIndex) const;
+            const Core::CMatrix4x4& GetMatrixAtIndex(s32 indwIndex) const;
             //----------------------------------------------------------
 			/// Apply Inverse Bind Pose
             ///

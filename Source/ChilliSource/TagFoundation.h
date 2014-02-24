@@ -70,27 +70,29 @@ typedef u64                 TimeIntervalSecs;
 typedef u64                 TimeIntervalMs;
 typedef	const s8*			cString;
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace Core{}
-    namespace Rendering{}
-    namespace Networking{}
-    namespace GUI{}
     namespace Audio{}
+    namespace Core{}
+    namespace Debugging{}
     namespace Input{}
-    namespace Physics2D{}
-    namespace Physics3D{}
+    namespace Networking{}
+    namespace Rendering{}
+    namespace Social{}
+    namespace Video{}
+    namespace Web{}
 }
 
-namespace moCore = moFlo::Core;
-namespace moRendering = moFlo::Rendering;
-namespace moNetworking = moFlo::Networking;
-namespace moGUI = moFlo::GUI;
-namespace moAudio = moFlo::Audio;
-namespace moPhysics2D = moFlo::Physics2D;
-namespace moPhysics3D= moFlo::Physics3D;
-namespace moInput = moFlo::Input;
 
+namespace CSAudio = ChilliSource::Audio;
+namespace CSCore = ChilliSource::Core;
+namespace CSDebugging = ChilliSource::Debugging;
+namespace CSInput = ChilliSource::Input;
+namespace CSNetworking = ChilliSource::Networking;
+namespace CSRendering = ChilliSource::Rendering;
+namespace CSSocial = ChilliSource::Social;
+namespace CSVideo = ChilliSource::Video;
+namespace CSWeb = ChilliSource::Web;
 
 //Static Assertions
 template <bool> struct CompileTimeChecker
@@ -104,30 +106,30 @@ template <> struct CompileTimeChecker<false>{};
 #define SAFE_DELETE(x)						{if(x) delete(x); x = NULL;}
 #define SAFE_DELETE_ARRAY(x)				{if(x) delete[] (x); x = NULL;}
 
-#define STRING_CAST(x)						(moFlo::Core::CStringConverter::ToString(x))
+#define STRING_CAST(x)						(ChilliSource::Core::CStringConverter::ToString(x))
 
-#define PARSE_FLOAT(x)                      (moCore::CStringConverter::ParseFloat(x))
-#define PARSE_INT(x)                        (moCore::CStringConverter::ParseInt(x))
-#define PARSE_UINT(x)                       (moCore::CStringConverter::ParseUnsignedInt(x))
-#define PARSE_BOOL(x)                       (moCore::CStringConverter::ParseBool(x))
-#define PARSE_VECTOR2(x)                    (moCore::CStringConverter::ParseVector2(x))
-#define PARSE_VECTOR3(x)                    (moCore::CStringConverter::ParseVector3(x))
-#define PARSE_VECTOR4(x)                    (moCore::CStringConverter::ParseVector4(x))
-#define PARSE_MATRIX4X4(x)                  (moCore::CStringConverter::ParseMatrix4(x))
-#define PARSE_QUATERNION(x)                 (moCore::CStringConverter::ParseQuaternion(x))
-#define PARSE_COLOUR(x)                     (moCore::CStringConverter::ParseColourValue(x))
+#define PARSE_FLOAT(x)                      (Core::CStringConverter::ParseFloat(x))
+#define PARSE_INT(x)                        (Core::CStringConverter::ParseInt(x))
+#define PARSE_UINT(x)                       (Core::CStringConverter::ParseUnsignedInt(x))
+#define PARSE_BOOL(x)                       (Core::CStringConverter::ParseBool(x))
+#define PARSE_VECTOR2(x)                    (Core::CStringConverter::ParseVector2(x))
+#define PARSE_VECTOR3(x)                    (Core::CStringConverter::ParseVector3(x))
+#define PARSE_VECTOR4(x)                    (Core::CStringConverter::ParseVector4(x))
+#define PARSE_MATRIX4X4(x)                  (Core::CStringConverter::ParseMatrix4(x))
+#define PARSE_QUATERNION(x)                 (Core::CStringConverter::ParseQuaternion(x))
+#define PARSE_COLOUR(x)                     (Core::CStringConverter::ParseColourValue(x))
 
-#define STRING_HASH(x)						moFlo::CHashCRC32::GenerateHashCode(x)
-#define GET_LOCALISED_TEXT(x)               moFlo::Core::CLocalisedText::GetText(x)
+#define STRING_HASH(x)						ChilliSource::Core::CHashCRC32::GenerateHashCode(x)
+#define GET_LOCALISED_TEXT(x)               ChilliSource::Core::CLocalisedText::GetText(x)
 
-#define DEBUG_LOG(x)						(moFlo::CLogging::LogVerbose(x))
-#define WARNING_LOG(x)						(moFlo::CLogging::LogWarning(x))
-#define ERROR_LOG(x)						(moFlo::CLogging::LogError(x))
-#define FATAL_LOG(x)						(moFlo::CLogging::LogFatal(x))
+#define DEBUG_LOG(x)						(ChilliSource::Core::CLogging::LogVerbose(x))
+#define WARNING_LOG(x)						(ChilliSource::Core::CLogging::LogWarning(x))
+#define ERROR_LOG(x)						(ChilliSource::Core::CLogging::LogError(x))
+#define FATAL_LOG(x)						(ChilliSource::Core::CLogging::LogFatal(x))
 
 
 #ifdef DEBUG
-    #define MOFLOW_ASSERT(x, msg) if((x) == 0){moFlo::CLogging::LogFatal(msg);}
+    #define MOFLOW_ASSERT(x, msg) if((x) == 0){ChilliSource::Core::CLogging::LogFatal(msg);}
 #else
     #define MOFLOW_ASSERT(x, msg)
 #endif

@@ -17,7 +17,7 @@
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

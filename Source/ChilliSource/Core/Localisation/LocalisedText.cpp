@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{	

@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -29,8 +29,8 @@ namespace moFlo
 		{
 			mudwNumVertices = 0;
 			mudwNumIndices = 0;
-			mvMinBounds = moFlo::Core::CVector3(0.0f, 0.0f, 0.0f);
-			mvMaxBounds = moFlo::Core::CVector3(0.0f, 0.0f, 0.0f);
+			mvMinBounds = ChilliSource::Core::CVector3(0.0f, 0.0f, 0.0f);
+			mvMaxBounds = ChilliSource::Core::CVector3(0.0f, 0.0f, 0.0f);
 			mpVertexData = NULL;
 			mpIndexData = NULL;
             ePrimitiveType = PrimitiveType::k_tri;
@@ -42,8 +42,8 @@ namespace moFlo
 		MeshDescriptor::MeshDescriptor()
 		{
 			mudwIndexSize = 0;
-			mvMinBounds = moFlo::Core::CVector3(0.0f, 0.0f, 0.0f);
-			mvMaxBounds = moFlo::Core::CVector3(0.0f, 0.0f, 0.0f);
+			mvMinBounds = ChilliSource::Core::CVector3(0.0f, 0.0f, 0.0f);
+			mvMaxBounds = ChilliSource::Core::CVector3(0.0f, 0.0f, 0.0f);
 		}
 	}
 }

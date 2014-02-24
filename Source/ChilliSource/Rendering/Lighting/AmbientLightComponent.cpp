@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -18,7 +18,7 @@ namespace moFlo
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CAmbientLightComponent::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+		bool CAmbientLightComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == ILightComponent::InterfaceID || inInterfaceID == CAmbientLightComponent::InterfaceID;
 		}

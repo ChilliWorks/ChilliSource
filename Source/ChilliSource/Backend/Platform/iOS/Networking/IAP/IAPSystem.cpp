@@ -11,9 +11,9 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
         CIAPSystem::CIAPSystem()
         {
@@ -100,7 +100,7 @@ namespace moFlo
                 
                 if(bHasReceipt)
                 {
-                    pTransaction->strReceipt = moFlo::CBaseEncoding::Base64Encode((s8*)[inpTransaction.transactionReceipt bytes], [inpTransaction.transactionReceipt length]);
+                    pTransaction->strReceipt = Core::CBaseEncoding::Base64Encode((s8*)[inpTransaction.transactionReceipt bytes], [inpTransaction.transactionReceipt length]);
                 }
             }
             

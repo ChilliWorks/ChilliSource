@@ -16,7 +16,7 @@
 #include <ChilliSource/Rendering/Font/FontLoader.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -106,7 +106,7 @@ namespace moFlo
             std::string strFileName, strExtension;
 			Core::CStringUtils::SplitBaseFilename(inFilePath, strFileName, strExtension);
             const std::string stdKerningFilePath(strFileName+"."+kstrKerningExtension);
-			moFlo::Core::FileStreamPtr pKerningStream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, stdKerningFilePath, Core::FileMode::k_read);
+			ChilliSource::Core::FileStreamPtr pKerningStream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, stdKerningFilePath, Core::FileMode::k_read);
             
             return (pKerningStream && !pKerningStream->IsBad());
         }

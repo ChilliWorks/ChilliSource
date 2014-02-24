@@ -20,11 +20,11 @@
     #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookUtils.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
 	using namespace Social;
 	
-	namespace iOSPlatform
+	namespace iOS
 	{
 		CFacebookPostSystem::CFacebookPostSystem(Social::IFacebookAuthenticationSystem* inpAuthSystem)
         : mpAuthSystem(inpAuthSystem)

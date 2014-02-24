@@ -14,11 +14,11 @@
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
-		class CWebViewActivity: public moFlo::IWebViewActivity
+		class CWebViewActivity: public ChilliSource::IWebViewActivity
 		{
 		public:
 			CWebViewActivity();
@@ -62,7 +62,7 @@ namespace moFlo
 			///
 			/// @param Unified Vector of size
 			//-----------------------------------------------
-			void SetSize(const moFlo::UnifiedVector2 & invSize);
+			void SetSize(const ChilliSource::UnifiedVector2 & invSize);
 			//-----------------------------------------------
 			/// Get Size
 			///
@@ -70,7 +70,7 @@ namespace moFlo
 			///
 			/// return Unified Vector of size
 			//-----------------------------------------------
-			moFlo::UnifiedVector2 GetSize() const;
+			ChilliSource::UnifiedVector2 GetSize() const;
 			//-----------------------------------------------
 			/// On WebView Dismissed
 			///
@@ -90,8 +90,8 @@ namespace moFlo
 			void AddDismissButton(f32 infSize);
 
 		private:
-			moFlo::UnifiedVector2 mvUnifiedSize;
-			moFlo::Core::CVector2 mvAbsoluteSize;
+			ChilliSource::UnifiedVector2 mvUnifiedSize;
+			ChilliSource::Core::CVector2 mvAbsoluteSize;
 			static u32 msudwCurrentIndex;
 			u32 mudwIndex;
 

@@ -20,18 +20,18 @@ NSArray* CreateNSArrayFromStringArray(const DYNAMIC_ARRAY<std::string> & inaStri
     
     for (u32 i = 0; i < inaStrings.size(); ++i)
     {
-        [pResult addObject: moFlo::Core::CStringUtils::StringToNSString(inaStrings[i])];
+        [pResult addObject: ChilliSource::Core::CStringUtils::StringToNSString(inaStrings[i])];
     }
     
     return pResult;
 }
 
-namespace moFlo
+namespace ChilliSource
 {
 	using namespace Social;
 	using namespace Core;
     
-	namespace iOSPlatform
+	namespace iOS
 	{
 		DEFINE_NAMED_INTERFACE(CFacebookAuthenticationSystem);
 		
@@ -112,7 +112,7 @@ namespace moFlo
                 {
                     if(mAuthenticateDelegate)
                     {
-                        sResponse.strToken = moCore::CStringUtils::NSStringToString([[inpSession accessTokenData] accessToken]);
+                        sResponse.strToken = Core::CStringUtils::NSStringToString([[inpSession accessTokenData] accessToken]);
                         sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_success;
                         mAuthenticateDelegate(sResponse);
                     }
@@ -143,7 +143,7 @@ namespace moFlo
 		
         std::string CFacebookAuthenticationSystem::GetActiveToken() const
 		{
-			return moCore::CStringUtils::NSStringToString(FBSession.activeSession.accessTokenData.accessToken);
+			return Core::CStringUtils::NSStringToString(FBSession.activeSession.accessTokenData.accessToken);
 		}
         
         void CFacebookAuthenticationSystem::AuthoriseReadPermissions(const DYNAMIC_ARRAY<std::string> & inaReadPerms, const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)

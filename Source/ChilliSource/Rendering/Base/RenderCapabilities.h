@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_RENDERING_RENDERCAPABILITIES_H_
 #define _MOFLOW_RENDERING_RENDERCAPABILITIES_H_
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {
@@ -22,7 +22,7 @@ namespace moFlo
         /// texture size. This should not be used prior to the render
         /// system being initialised.
         //===============================================================
-        class IRenderCapabilities : public moFlo::Core::ISystem
+        class IRenderCapabilities : public ChilliSource::Core::ISystem
         {
         public:
             DECLARE_NAMED_INTERFACE(IRenderCapabilities);

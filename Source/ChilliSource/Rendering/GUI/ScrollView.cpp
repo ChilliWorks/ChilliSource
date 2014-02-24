@@ -17,9 +17,9 @@
     #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #endif
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
 		DEFINE_META_CLASS(CScrollView)
 
@@ -226,7 +226,7 @@ namespace moFlo
         void CScrollView::Reset()
         {
             mvVelocity = Core::CVector2::ZERO;
-            mpContainerView->SetOffsetFromParentAlignment(UnifiedVector2(Core::CVector2::ZERO, Core::CVector2::ZERO));
+            mpContainerView->SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::CVector2::ZERO, Core::CVector2::ZERO));
         }
         //-----------------------------------------------------
         /// Jump To
@@ -235,7 +235,7 @@ namespace moFlo
         ///
         /// @param The new position
         //-----------------------------------------------------
-        void CScrollView::JumpTo(const UnifiedVector2& inuvPosition)
+        void CScrollView::JumpTo(const Core::UnifiedVector2& inuvPosition)
         {
             Reset();
             Core::CVector2 vAbsPos = inuvPosition.GetAbsolute() + (inuvPosition.GetRelative()*mpContainerView->GetAbsoluteSize());
@@ -255,10 +255,10 @@ namespace moFlo
         ///
         /// @return Content size
         //-----------------------------------------------------
-        moCore::CVector2 CScrollView::GetAbsoluteContentSize() const
+        Core::CVector2 CScrollView::GetAbsoluteContentSize() const
         {
             if(!mpContainerView)
-                return moCore::CVector2::ZERO;
+                return Core::CVector2::ZERO;
             return mpContainerView->GetAbsoluteSize();
         }
         //-----------------------------------------------------------
@@ -267,10 +267,10 @@ namespace moFlo
         /// @return The current absolute position of the content
         /// from the top left corner of the scroll view
         //-----------------------------------------------------------
-        moCore::CVector2 CScrollView::GetAbsoluteContentPosition() const
+        Core::CVector2 CScrollView::GetAbsoluteContentPosition() const
         {
             if(!mpContainerView)
-                return moCore::CVector2::ZERO;
+                return Core::CVector2::ZERO;
             return mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topLeft) - GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topLeft);
         }
         //-----------------------------------------------------
@@ -363,12 +363,12 @@ namespace moFlo
         ///
         /// @param Canvas renderer pointer
         //-------------------------------------------------------
-        void CScrollView::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void CScrollView::Draw(CCanvasRenderer* inpCanvas)
         {
 #if DEBUG_DRAWING
             if(mbDrawDebug)
             {
-                Rendering::ITextureManager* pMgr = (Rendering::ITextureManager*)(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Rendering::ITexture::InterfaceID));
+                ITextureManager* pMgr = (ITextureManager*)(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(ITexture::InterfaceID));
                 inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), pMgr->GetDefaultTexture(), Core::Rectangle(Core::CVector2::ZERO, Core::CVector2::ZERO), Core::CColour(1.0f,0.0f,0.0f,0.5f));
             }
 #endif

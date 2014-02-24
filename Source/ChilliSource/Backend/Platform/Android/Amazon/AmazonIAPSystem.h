@@ -12,9 +12,9 @@
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 #include <ChilliSource/Backend/Platform/Android/Amazon/AmazonIAPJavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//========================================================================
 		/// Amazon IAP System

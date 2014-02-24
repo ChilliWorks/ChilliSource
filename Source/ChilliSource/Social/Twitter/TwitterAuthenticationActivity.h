@@ -13,11 +13,11 @@
 #include <ChilliSource/Core/Base/Activity.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Social
 	{
-		class ITwitterAuthenticationActivity : public IActivity
+		class ITwitterAuthenticationActivity : public Core::IActivity
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(ITwitterAuthenticationActivity);
@@ -74,18 +74,18 @@ namespace moFlo
 			/// @return Event triggered when activity is
 			/// dismissed
 			//-----------------------------------------------
-			IEvent<ActivityDismissedEvent>& GetDismissedEvent();
+			Core::IEvent<Core::ActivityDismissedEvent>& GetDismissedEvent();
 			//-----------------------------------------------
 			/// Set Authentication PIN Result Delegate
 			///
 			/// Sets the delegate to trigger when the user
 			/// confirms PIN entry
 			//-----------------------------------------------
-			void SetAuthenticationPINResultDelegate(const moFlo::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate inCallback);
+			void SetAuthenticationPINResultDelegate(const ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate inCallback);
 		
 		protected:
-			CEvent1<ActivityDismissedEvent>													mOnDismissedEvent;
-			moFlo::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate	mOnPINResultDelegate;
+			Core::CEvent1<Core::ActivityDismissedEvent>                                             mOnDismissedEvent;
+			ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate	mOnPINResultDelegate;
 			std::string																		mstrURL;
 			std::string																		mstrPIN;
 		};

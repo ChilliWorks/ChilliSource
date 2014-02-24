@@ -17,7 +17,7 @@
 #include <ChilliSource/Core/String/StringConverter.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Rendering
     {
@@ -142,7 +142,7 @@ namespace moFlo
                     bParticlesActive = true;
                     
                     f32 fLerpFactor = fEmissionStep/kfTimeSinceLastEmission;
-                    Core::CVector3 vPosition = moCore::CMathUtils::Lerp(fLerpFactor, mvLastEmissionPos, vCurrentPos) - vCurrentPos;
+                    Core::CVector3 vPosition = Core::CMathUtils::Lerp(fLerpFactor, mvLastEmissionPos, vCurrentPos) - vCurrentPos;
                     fEmissionStep += mfEmissionFreq;
                     
                     Core::CQuaternion qOrientation;

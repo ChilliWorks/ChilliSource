@@ -14,9 +14,9 @@
 #include <ChilliSource/Networking/HTTP/HttpConnectionSystem.h>
 #include <vector>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{	
 		class CHttpConnectionSystem : public Networking::IHttpConnectionSystem, public Core::IUpdateable
 		{

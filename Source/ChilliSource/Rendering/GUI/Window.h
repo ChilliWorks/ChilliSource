@@ -24,13 +24,12 @@
 #include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         class CWindow : public CGUIView
         {
-        	DECLARE_CREATABLE(ISurface, CWindow);
         public:
             CWindow();
             virtual ~CWindow();
@@ -41,6 +40,12 @@ namespace moFlo
     		/// @param pointer to the input system
     		//-----------------------------------------------------
     		void SetInputSystem(Input::IInputSystem* inpInputSystem);
+            //-----------------------------------------------------
+            /// Get Input System
+            ///
+            /// @return pointer to the input system
+            //-----------------------------------------------------
+            Input::IInputSystem* GetInputSystem();
             void ListenForTouches();
             void UnlistenFromTouches();
             //-----------------------------------------------------------
@@ -116,13 +121,16 @@ namespace moFlo
 			///
 			/// @param Canvas renderer
 			//-----------------------------------------------------
-            void Draw(Rendering::CCanvasRenderer * inpCanvas);
+            void Draw(CCanvasRenderer * inpCanvas);
 #endif
 			
             bool mbListeningForTouches;
             
 			// Granting friendly access for the Scene
-			friend void moCore::CScene::BecomeInactive();
+			friend void Core::CScene::BecomeInactive();
+            
+        private:
+            Input::IInputSystem* mpInputSystem;
         };
     }
 }

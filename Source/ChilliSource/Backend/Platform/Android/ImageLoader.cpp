@@ -18,9 +18,9 @@
 
 #include <ChilliSource/Platform/Android/ImageLoading/PngImage.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		const std::string PNGExtension("png");
 		const std::string JPGExtension("jpg");
@@ -95,7 +95,7 @@ namespace moFlo
 		void ImageLoader::CreatePNGImageFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::CImage* outpImage)
 		{
 			//load the png image
-			moFlo::AndroidPlatform::CPngImage image;
+			ChilliSource::Android::CPngImage image;
 			image.Load(ineStorageLocation, inFilePath);
 
 			//check the image has loaded

@@ -11,12 +11,12 @@
 
 #include <ChilliSource/Social/Communications/SMSCompositionActivity.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 
-		class CSMSCompositionActivity: public moFlo::Social::ISMSCompositionActivity
+		class CSMSCompositionActivity: public ChilliSource::Social::ISMSCompositionActivity
 		{
 		public:
 			virtual bool IsA(Core::InterfaceIDType inID) const;

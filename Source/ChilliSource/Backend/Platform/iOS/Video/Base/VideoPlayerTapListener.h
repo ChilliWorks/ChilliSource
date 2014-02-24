@@ -17,9 +17,9 @@
 @class UITapGestureRecognizer;
 @class CADisplayLink;
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
         //========================================================
         /// Delegates
@@ -38,7 +38,7 @@ namespace moFlo
     UITapGestureRecognizer* mpRecogniser;
     CADisplayLink* mpDisplayLink;
     bool mbReceivedTap;
-    moFlo::iOSPlatform::VideoPlayerTappedDelegate mTappedDelegate;
+    ChilliSource::iOS::VideoPlayerTappedDelegate mTappedDelegate;
     UIView* mpView;
 }
 //--------------------------------------------------------
@@ -56,7 +56,7 @@ namespace moFlo
 /// @param the view.
 /// @param the tapped delegate.
 //--------------------------------------------------------
--(void) SetupWithView:(UIView*)inpView AndDelegate:(moFlo::iOSPlatform::VideoPlayerTappedDelegate)inTappedDelegate;
+-(void) SetupWithView:(UIView*)inpView AndDelegate:(ChilliSource::iOS::VideoPlayerTappedDelegate)inTappedDelegate;
 //--------------------------------------------------------
 /// On Tap
 ///

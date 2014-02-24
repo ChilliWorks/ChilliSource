@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Core/Entity/Transform.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {

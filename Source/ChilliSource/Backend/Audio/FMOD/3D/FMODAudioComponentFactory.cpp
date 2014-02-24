@@ -15,9 +15,9 @@
 
 #include <ChilliSource/Audio/Base/AudioManager.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
         DEFINE_NAMED_INTERFACE(CFMODAudioComponentFactory);
 

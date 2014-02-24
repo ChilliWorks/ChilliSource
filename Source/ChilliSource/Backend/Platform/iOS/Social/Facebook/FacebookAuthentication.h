@@ -14,9 +14,9 @@
 
 #include <FacebookSDK/FacebookSDK.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		class CFacebookAuthenticationSystem : public Social::IFacebookAuthenticationSystem
 		{

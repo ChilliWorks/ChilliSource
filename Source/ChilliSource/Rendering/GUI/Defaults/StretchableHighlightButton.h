@@ -13,9 +13,9 @@
 #include <ChilliSource/Rendering/GUI/Button.h>
 #include <ChilliSource/Audio/ForwardDeclarations.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         //===========================================================
         /// Stretchable Highlight Button
@@ -65,25 +65,25 @@ namespace moFlo
             ///
             /// @param Sprite sheet with with normal image
             //-----------------------------------------------------------
-            void SetNormalSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+            void SetNormalSpriteSheet(const SpriteSheetPtr& inpSpriteSheet);
 			//-----------------------------------------------------------
 			/// Set Highlight Sprite Sheet
 			///
 			/// @param Sprite sheet with with highlight image
 			//-----------------------------------------------------------
-			void SetHighlightSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetHighlightSpriteSheet(const SpriteSheetPtr& inpSpriteSheet);
             //-----------------------------------------------------------
             /// Get Normal Sprite Sheet
             ///
             /// @return Sprite sheet with default image
             //-----------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetNormalSpriteSheet() const;
+			const SpriteSheetPtr& GetNormalSpriteSheet() const;
 			//-----------------------------------------------------------
 			/// Get Highlight Sprite Sheet
 			///
 			/// @return Sprite sheet with highlight image
 			//-----------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetHighlightSpriteSheet() const;
+			const SpriteSheetPtr& GetHighlightSpriteSheet() const;
 			//-----------------------------------------------------------
 			/// Set Base Normal Sprite Sheet Index ID
 			///
@@ -185,7 +185,7 @@ namespace moFlo
 			///
 			/// @param Canvas renderer
 			//-----------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			void Draw(CCanvasRenderer* inpCanvas);
             //--------------------------------------------------------
             /// Set Width Maintaining Aspect
             ///
@@ -280,7 +280,7 @@ namespace moFlo
             void OnButtonDeselectThreshold(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo);
             
         private:
-            Rendering::SpriteSheetPtr mCurrentSpriteSheet;
+            SpriteSheetPtr mCurrentSpriteSheet;
             SpriteSheetIndex msCurrentIndices;
             SpriteSheetIndex msNormalIndices;
             SpriteSheetIndex msHighlightIndices;
@@ -290,8 +290,8 @@ namespace moFlo
 			bool mbSelected;
             
             //---Properties
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, NormalSpriteSheet, SetNormalSpriteSheet, GetNormalSpriteSheet);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, HighlightSpriteSheet, SetHighlightSpriteSheet, GetHighlightSpriteSheet);
+			DECLARE_PROPERTY_A(SpriteSheetPtr, NormalSpriteSheet, SetNormalSpriteSheet, GetNormalSpriteSheet);
+			DECLARE_PROPERTY_A(SpriteSheetPtr, HighlightSpriteSheet, SetHighlightSpriteSheet, GetHighlightSpriteSheet);
 			DECLARE_PROPERTY_A(std::string, BaseNormalSpriteSheetIndexID, SetBaseNormalSpriteSheetIndexID, GetBaseNormalSpriteSheetIndexID);
 			DECLARE_PROPERTY_A(std::string, BaseHighlightSpriteSheetIndexID, SetBaseHighlightSpriteSheetIndexID, GetBaseHighlightSpriteSheetIndexID);
 			DECLARE_PROPERTY_A(Core::CColour, HighlightColour, SetHighlightColour, GetHighlightColour);

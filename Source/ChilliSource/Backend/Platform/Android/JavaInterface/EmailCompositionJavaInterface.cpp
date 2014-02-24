@@ -29,16 +29,16 @@ extern "C"
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CEmailCompositionNativeInterface_OnEmailClosed(JNIEnv* inpEnv, jobject inpThis, s32 indwResultCode)
 {
-	moFlo::AndroidPlatform::EmailCompositionJavaInterfacePtr pJavaInterface = moFlo::AndroidPlatform::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<moFlo::AndroidPlatform::CEmailCompositionJavaInterface>();
+	ChilliSource::Android::EmailCompositionJavaInterfacePtr pJavaInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CEmailCompositionJavaInterface>();
 	if (pJavaInterface != NULL)
 	{
 		pJavaInterface->OnEmailClosed(indwResultCode);
 	}
 }
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 
 		DEFINE_NAMED_INTERFACE(CEmailCompositionJavaInterface);

@@ -13,7 +13,7 @@
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/Threading/Tasks.hpp>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Core
     {
@@ -29,7 +29,7 @@ namespace moFlo
         
         bool CSceneProvider::CanCreateResourceOfKind(InterfaceIDType  inInterfaceID) const
         {
-            return inInterfaceID == moFlo::Core::CSceneDesc::InterfaceID;
+            return inInterfaceID == ChilliSource::Core::CSceneDesc::InterfaceID;
         }
         
         bool CSceneProvider::CanCreateResourceFromFileWithExtension(const std::string &inExtension) const

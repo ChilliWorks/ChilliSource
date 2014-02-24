@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_CORE_COLOUR_H_
 #define _MO_FLO_CORE_COLOUR_H_
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{

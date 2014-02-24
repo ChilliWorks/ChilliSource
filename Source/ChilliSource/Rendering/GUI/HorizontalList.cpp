@@ -10,9 +10,9 @@
 
 #include <ChilliSource/Core/Base/Screen.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         DEFINE_META_CLASS(CHorizontalList);
         DEFINE_PROPERTY(AbsoluteSpacing);
@@ -223,7 +223,7 @@ namespace moFlo
         ///
         /// @param Canvas renderer pointer
         //-------------------------------------------------------
-        void CHorizontalList::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void CHorizontalList::Draw(CCanvasRenderer* inpCanvas)
         {
             //This is a container view and has no renderables
             //We will need to render our subviews though

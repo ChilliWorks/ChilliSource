@@ -15,7 +15,7 @@
 
 #include <ChilliSource/Core/Entity/Entity.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Audio
 	{
@@ -37,7 +37,7 @@ namespace moFlo
 		/// @param Comparison Type
 		/// @return Whether the class matches the comparison type
 		//----------------------------------------------------------
-		bool CAudioComponent::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+		bool CAudioComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return (inInterfaceID == CAudioComponent::InterfaceID);
 		}
@@ -96,7 +96,7 @@ namespace moFlo
         /// complete notifications
         /// @return Audio event 
         //---------------------------------------------------------------------
-        IEvent<AudioEventDelegate>& CAudioComponent::GetAudioFinishedEvent()
+        Core::IEvent<AudioEventDelegate>& CAudioComponent::GetAudioFinishedEvent()
         {
             return mOnPlaybackCompleteEvent;
         }

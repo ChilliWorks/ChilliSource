@@ -13,9 +13,9 @@
 #include <jni.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		namespace JavaInterfaceUtils
 		{

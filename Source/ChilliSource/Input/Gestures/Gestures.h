@@ -17,12 +17,11 @@
 #include <ChilliSource/Core/Time/Timer.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
-#include <ChilliSource/Core/Base/Surface.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
-
 #include <ChilliSource/Input/ForwardDeclarations.h>
+#include <ChilliSource/Rendering/GUI/GUIView.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Input
 	{
@@ -36,7 +35,7 @@ namespace moFlo
 		public:
 			typedef fastdelegate::FastDelegate1<const CGesture&> GestureEventDelegate;
 			
-            CGesture(ISurface* inpSurface);
+            CGesture(Rendering::CGUIView* inpView);
             CGesture(ITouchScreen* inpTouchDevice);
 			virtual ~CGesture();
 			
@@ -92,7 +91,7 @@ namespace moFlo
 			u16 mNumContactPointsRequired;	
 			bool mbIsGestureInvalid;
 			Core::CTimer mTimer;
-			ISurface* mpSurface;
+            Rendering::CGUIView* mpView;
             ITouchScreen* mpTouchDevice;
             
         private:
@@ -109,7 +108,7 @@ namespace moFlo
 		class CSwipeGesture : public CGesture
 		{
 		public:
-            CSwipeGesture(ISurface* inpSurface);
+            CSwipeGesture(Rendering::CGUIView* inpSurface);
             CSwipeGesture(ITouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
@@ -141,14 +140,14 @@ namespace moFlo
 			///
 			/// Return start swipe position
 			//----------------------------------------------------
-            moFlo::Core::CVector2 GetStartPosition() const { return mvStartPos; }
+            ChilliSource::Core::CVector2 GetStartPosition() const { return mvStartPos; }
             
             //----------------------------------------------------
 			/// Get Swipe end position
 			///
 			/// Return end swipe position
 			//----------------------------------------------------
-            moFlo::Core::CVector2 GetEndPosition() const { return mvEndPos; }
+            ChilliSource::Core::CVector2 GetEndPosition() const { return mvEndPos; }
             
 		private:
 			
@@ -188,7 +187,7 @@ namespace moFlo
 		class CPinchGesture : public CGesture
 		{
 		public:
-            CPinchGesture(ISurface* inpSurface);
+            CPinchGesture(Rendering::CGUIView* inpSurface);
             CPinchGesture(ITouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
@@ -236,11 +235,11 @@ namespace moFlo
             //----------------------------------------------------
 			/// Populate Start Positions For First Touch
 			//----------------------------------------------------
-			void PopulateStartPositions(moFlo::Core::CVector2& outvFirstPosition, moFlo::Core::CVector2& outvSecondPosition) const;
+			void PopulateStartPositions(ChilliSource::Core::CVector2& outvFirstPosition, ChilliSource::Core::CVector2& outvSecondPosition) const;
             //----------------------------------------------------
 			/// Get Current Position
 			//----------------------------------------------------
-			void PopulateCurrentPositions(moFlo::Core::CVector2& outvFirstPosition, moFlo::Core::CVector2& outvSecondPosition) const;
+			void PopulateCurrentPositions(ChilliSource::Core::CVector2& outvFirstPosition, ChilliSource::Core::CVector2& outvSecondPosition) const;
             
 			
 		private:
@@ -292,7 +291,7 @@ namespace moFlo
 		class CTapGesture : public CGesture
 		{
 		public:
-            CTapGesture(ISurface* inpSurface);
+            CTapGesture(Rendering::CGUIView* inpSurface);
             CTapGesture(ITouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
@@ -370,7 +369,7 @@ namespace moFlo
 		class CDragGesture : public CGesture
 		{
 		public:
-			CDragGesture(ISurface* inpSurface);
+			CDragGesture(Rendering::CGUIView* inpSurface);
             CDragGesture(ITouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
@@ -408,7 +407,7 @@ namespace moFlo
 			///
 			/// Return start swipe position
 			//----------------------------------------------------
-            moFlo::Core::CVector2 GetStartPosition() const { return mvStartPos; }
+            ChilliSource::Core::CVector2 GetStartPosition() const { return mvStartPos; }
             //----------------------------------------------------
 			/// Get Touch ID
 			///
@@ -461,7 +460,7 @@ namespace moFlo
 		class CHoldGesture : public CGesture
 		{
 		public:
-			CHoldGesture(ISurface* inpSurface);
+			CHoldGesture(Rendering::CGUIView* inpSurface);
             CHoldGesture(ITouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------

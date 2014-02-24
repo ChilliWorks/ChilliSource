@@ -24,9 +24,9 @@
 #include <list>
 #include <map>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace Networking
+	namespace Core
 	{
 		const u32 OAUTHLIB_BUFFSIZE										= 1024;
 		const u32 OAUTHLIB_BUFFSIZE_LARGE 								= 1024;

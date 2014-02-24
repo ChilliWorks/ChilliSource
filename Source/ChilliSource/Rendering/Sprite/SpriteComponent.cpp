@@ -16,7 +16,7 @@
 
 #include <ChilliSource/Core/Entity/Entity.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -35,7 +35,7 @@ namespace moFlo
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CSpriteComponent::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+		bool CSpriteComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return  (inInterfaceID == CSpriteComponent::InterfaceID) || 
                     (inInterfaceID == IRenderComponent::InterfaceID) ||
@@ -326,7 +326,7 @@ namespace moFlo
         //-----------------------------------------------------------
         /// Get Upper Left Corner Position
         //-----------------------------------------------------------
-		const moFlo::Core::CVector4 & CSpriteComponent::GetUpperLeftCornerPos()
+		const ChilliSource::Core::CVector4 & CSpriteComponent::GetUpperLeftCornerPos()
         {
 			if (!mbCornerPosCacheValid)
             {
@@ -338,7 +338,7 @@ namespace moFlo
         //-----------------------------------------------------------
         /// Get Lower Left Corner Position
         //-----------------------------------------------------------
-		const moFlo::Core::CVector4 & CSpriteComponent::GetLowerLeftCornerPos()
+		const ChilliSource::Core::CVector4 & CSpriteComponent::GetLowerLeftCornerPos()
         {
 			if (!mbCornerPosCacheValid) 
             {
@@ -350,7 +350,7 @@ namespace moFlo
         //-----------------------------------------------------------
         /// Get Upper Right Corner Position
         //-----------------------------------------------------------
-		const moFlo::Core::CVector4 & CSpriteComponent::GetUpperRightCornerPos()
+		const ChilliSource::Core::CVector4 & CSpriteComponent::GetUpperRightCornerPos()
         {
 			if (!mbCornerPosCacheValid) 
             {
@@ -362,7 +362,7 @@ namespace moFlo
         //-----------------------------------------------------------
         /// Get Lower Right Corner Position
         //-----------------------------------------------------------
-		const moFlo::Core::CVector4 & CSpriteComponent::GetLowerRightCornerPos()
+		const ChilliSource::Core::CVector4 & CSpriteComponent::GetLowerRightCornerPos()
         {
 			if (!mbCornerPosCacheValid) 
             {

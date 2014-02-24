@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/System/System.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Networking
     {
@@ -102,7 +102,7 @@ namespace moFlo
 		};
 		
 		
-		class IHttpConnectionSystem : public moFlo::Core::ISystem
+		class IHttpConnectionSystem : public ChilliSource::Core::ISystem
         {
 		public:
 			DECLARE_NAMED_INTERFACE(IHttpConnectionSystem);

@@ -14,9 +14,9 @@
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		//===========================================================
 		/// Http Request Error Code

@@ -12,9 +12,9 @@
 
 #include <ChilliSource/Rendering/GUI/SliderBar.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace GUI
+    namespace Rendering
     {
         class CVerticalSliderBar : public CSliderBar
         {
@@ -33,31 +33,31 @@ namespace moFlo
             ///
             /// @param Canvas renderer pointer
             //------------------------------------------------------
-            void Draw(Rendering::CCanvasRenderer* inpCanvas);
+            void Draw(CCanvasRenderer* inpCanvas);
             //--------------------------------------------------------
             /// Set Bar Sprite Sheet
             ///
             /// @param Sprite sheet for the bar
             //--------------------------------------------------------
-            void SetBarSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+            void SetBarSpriteSheet(const SpriteSheetPtr& inpSpriteSheet);
 			//--------------------------------------------------------
 			/// Get Bar Sprite Sheet
 			///
 			/// @return Sprite sheet for the bar
 			//--------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetBarSpriteSheet() const;
+			const SpriteSheetPtr& GetBarSpriteSheet() const;
 			//--------------------------------------------------------
 			/// Set Slider Sprite Sheet
 			///
 			/// @param Sprite sheet for the slider
 			//--------------------------------------------------------
-			void SetSliderSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetSliderSpriteSheet(const SpriteSheetPtr& inpSpriteSheet);
 			//--------------------------------------------------------
 			/// Get Slider Sprite Sheet
 			///
 			/// @return Sprite sheet for the slider
 			//--------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetSliderSpriteSheet() const;
+			const SpriteSheetPtr& GetSliderSpriteSheet() const;
             //--------------------------------------------------------
             /// Set Bar Sprite Sheet Index
             ///
@@ -111,13 +111,13 @@ namespace moFlo
             ///
             /// @param The unified size of the slider
             //--------------------------------------------------------
-            void SetSliderSize(const UnifiedVector2& invUnifiedSize);
+            void SetSliderSize(const Core::UnifiedVector2& invUnifiedSize);
 			//--------------------------------------------------------
 			/// Get Slider Size
 			///
 			/// @return The unified size of the slider
 			//--------------------------------------------------------
-			const UnifiedVector2& GetSliderSize() const;
+			const Core::UnifiedVector2& GetSliderSize() const;
             
             //---Touch Delegates
             //-----------------------------------------------------------
@@ -140,10 +140,10 @@ namespace moFlo
             ImageViewPtr mpBackgroundImage;
             ImageViewPtr mpSliderImage;
 
-			DECLARE_PROPERTY_A(UnifiedVector2, UnifiedSliderSize, SetSliderSize, GetSliderSize);
+			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedSliderSize, SetSliderSize, GetSliderSize);
 
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, BarSpriteSheet, SetBarSpriteSheet, GetBarSpriteSheet);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, SliderSpriteSheet, SetSliderSpriteSheet, GetSliderSpriteSheet);
+			DECLARE_PROPERTY_A(SpriteSheetPtr, BarSpriteSheet, SetBarSpriteSheet, GetBarSpriteSheet);
+			DECLARE_PROPERTY_A(SpriteSheetPtr, SliderSpriteSheet, SetSliderSpriteSheet, GetSliderSpriteSheet);
 
 			DECLARE_PROPERTY_A(u32, BarSpriteSheetIndex, SetBarSpriteSheetIndex, GetBarSpriteSheetIndex);
 			DECLARE_PROPERTY_A(u32, SliderSpriteSheetIndex, SetSliderSpriteSheetIndex, GetSliderSpriteSheetIndex);

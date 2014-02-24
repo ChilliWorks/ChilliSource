@@ -1,7 +1,7 @@
 /** 
 * File: InputSystem.h
 * Date: 5 Oct 2010
-* Description: Concrete iOS3_x implementation of moflo::Input::IInputSystem;
+* Description: Concrete iOS3_x implementation of ChilliSource::Input::IInputSystem;
 */
 
 /** 
@@ -19,9 +19,9 @@
 #include <ChilliSource/Backend/Platform/Windows/Input/MouseWindows.h>
 #include <ChilliSource/Backend/Platform/Windows/Input/TouchscreenWindows.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		class CInputSystem : public Input::IInputSystem
 		{

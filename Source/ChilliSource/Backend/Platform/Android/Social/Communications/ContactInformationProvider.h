@@ -14,11 +14,11 @@
 #include <ChilliSource/Social/Communications/ContactInformationProvider.h>
 #include <vector>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
-		class CContactInformationProvider: public moFlo::Social::IContactInformationProvider
+		class CContactInformationProvider: public ChilliSource::Social::IContactInformationProvider
 		{
 		public:
 			virtual bool IsA(Core::InterfaceIDType inID) const;

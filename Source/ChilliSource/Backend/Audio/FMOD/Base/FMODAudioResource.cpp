@@ -13,9 +13,9 @@
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioResource.h>
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		//-------------------------------------------------
 		/// Constructor
@@ -27,7 +27,7 @@ namespace moFlo
         //-------------------------------------------------
         /// Is A
         //-------------------------------------------------
-        bool CFMODAudioResource::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+        bool CFMODAudioResource::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
         {
             return (inInterfaceID == Audio::IAudioResource::InterfaceID);
         }

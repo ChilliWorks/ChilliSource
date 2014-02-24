@@ -33,16 +33,22 @@
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
 
 #include <ChilliSource/Audio/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
+#include <ChilliSource/Rendering/Base/Renderer.h>
+#include <ChilliSource/Rendering/Base/RenderSystem.h>
+#include <ChilliSource/Rendering/Camera/CameraComponent.h>
+
+#include <ChilliSource/Input/Base/InputSystem.h>
 
 #include <ctime>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Core
 	{
@@ -77,11 +83,14 @@ namespace moFlo
         ScreenOrientation CApplication::meDefaultOrientation = ScreenOrientation::k_landscapeRight;
         
         CResourceManagerDispenser* CApplication::mpResourceManagerDispenser = NULL;
-		
-        moFlo::IApplicationDelegates* CApplication::mpApplicationDelegates = NULL;
 
         SystemConfirmDialog::Delegate CApplication::mActiveSysConfirmDelegate;
 
+        f32 CApplication::s_updateIntervalRemainder = 0.0f;
+        bool CApplication::s_shouldInvokeResumeEvent = false;
+        bool CApplication::s_isFirstFrame = true;
+        bool CApplication::s_isSuspending = false;
+        
 		//--------------------------------------------------------------------------------------------------
 		/// Constructor
 		///
@@ -99,7 +108,6 @@ namespace moFlo
 #endif
             
 			pPlatformSystem = IPlatformSystem::Create();
-			mpApplicationDelegates = moFlo::IApplicationDelegates::Create();
 		}
         //--------------------------------------------------------------------------------------------------
         /// Resolution Sort Predicate
@@ -628,7 +636,56 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------------------
 		void CApplication::OnFrameBegin(f32 infDt, TimeIntervalSecs inuddwTimestamp)
 		{
-			mpApplicationDelegates->OnFrameBegin(infDt, inuddwTimestamp);
+            if(s_shouldInvokeResumeEvent == true)
+			{
+				s_shouldInvokeResumeEvent = false;
+				OnApplicationResumed();
+			}
+            
+            if(s_isSuspending)
+            {
+                // Updating after told to suspend so early out
+                return;
+            }
+            
+#ifdef DEBUG_STATS
+            Debugging::CDebugStats::RecordEvent("FrameTime", infDt);
+			Debugging::CDebugStats::RecordEvent("FPS", 1.0f/infDt);
+#endif
+            
+			//Update the app time since start
+			SetAppElapsedTime(inuddwTimestamp);
+            
+			CTaskScheduler::ExecuteMainThreadTasks();
+            
+            //We do not need to render as often as we update so this callback will be triggered
+            //less freqenctly than the update frequency suggests. We must work out how many times to update based on the time since last frame
+            //and our actual update frequency. We carry the remainder to the next frame until we have a full update cycle
+            s_updateIntervalRemainder = CMathUtils::Min(s_updateIntervalRemainder + infDt, GetUpdateIntervalMax());
+            
+			//Force the input system to distribute any buffered input
+			if(mpInputSystem != NULL)
+			{
+				mpInputSystem->FlushBufferedInput();
+			}
+            
+            while((s_updateIntervalRemainder >= CApplication::GetUpdateInterval()) || s_isFirstFrame)
+            {
+                s_updateIntervalRemainder -=  CApplication::GetUpdateInterval();
+                mStateMgr.FixedUpdate(CApplication::GetUpdateInterval());
+                
+                s_isFirstFrame = false;
+            }
+            
+            //Tell the state manager to update the active state
+            Update(infDt);
+            
+            //Render the scene
+            mpRenderer->RenderToScreen(Core::CApplication::GetStateManagerPtr()->GetActiveScenePtr());
+            
+#ifdef DEBUG_STATS
+			CDebugStats::Clear();
+#endif
 		}
         //--------------------------------------------------------------------------------------------------
         /// Update
@@ -666,7 +723,9 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------------------
 		void CApplication::OnApplicationMemoryWarning()
 		{
-			mpApplicationDelegates->OnApplicationMemoryWarning();
+			DEBUG_LOG("Memory Warning. Clearing resource cache...");
+			CResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
+			CApplicationEvents::GetLowMemoryEvent().Invoke();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// On Go Back
@@ -675,7 +734,9 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------------------
 		void CApplication::OnGoBack()
 		{
-			mpApplicationDelegates->OnGoBack();
+			DEBUG_LOG("Go back event.");
+			mStateMgr.GetActiveState()->OnGoBack();
+			CApplicationEvents::GetGoBackEvent().Invoke();
 		}
 		//----------------------------------------------------------------------
 		/// Set Orientation
@@ -686,7 +747,16 @@ namespace moFlo
 		//----------------------------------------------------------------------
 		void CApplication::SetOrientation(ScreenOrientation inOrientation)
 		{
-			mpApplicationDelegates->OnSetOrientation(inOrientation);
+			if(mpRenderer->GetActiveCameraPtr())
+			{
+				mpRenderer->GetActiveCameraPtr()->SetViewportOrientation(inOrientation);
+			}
+            
+			if(HasTouchInput() == true)
+			{
+				Input::ITouchScreen * pTouchScreen = GetSystemImplementing(Input::IInputSystem::InterfaceID)->GetInterface<Input::IInputSystem>()->GetTouchScreenPtr();
+				pTouchScreen->SetScreenHeight(CScreen::GetOrientedHeight());
+			}
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Enable System Updating
@@ -707,7 +777,26 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------------------
 		void CApplication::Suspend()
 		{
-            mpApplicationDelegates->OnApplicationSuspended();
+            DEBUG_LOG("App Suspending...");
+    
+			s_isSuspending = true;
+            
+			//Tell the active state to save it's data etc
+			mStateMgr.Pause();
+            
+			//We must invalidate the application timer. This will stop sub-system updates
+			pPlatformSystem->SetUpdaterActive(false);
+            
+			//We need to rebind or rebuild the context if it was stolen
+			if(mpRenderSystem)
+			{
+				mpRenderSystem->Suspend();
+			}
+            
+			CApplicationEvents::GetSuspendEvent().Invoke();
+			CApplicationEvents::GetLateSuspendEvent().Invoke();
+			
+			DEBUG_LOG("App Finished Suspending...");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Resume
@@ -716,10 +805,30 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------------------
 		void CApplication::Resume()
 		{
-            mpApplicationDelegates->SetInvokeResumeEvent(true);
+            s_shouldInvokeResumeEvent = true;
 
 			//We must restart the application timer. This will automatically restart system updates
 			pPlatformSystem->SetUpdaterActive(true);
+		}
+        //----------------------------------------------
+		/// On Application Resumed
+		//----------------------------------------------
+		void CApplication::OnApplicationResumed()
+		{
+			DEBUG_LOG("App Resuming...");
+            
+			if(mpRenderSystem != NULL)
+			{
+				mpRenderSystem->Resume();
+			}
+            
+			s_isSuspending = false;
+			CApplicationEvents::GetResumeEvent().Invoke();
+            
+			//Tell the active state to continue
+			mStateMgr.Resume();
+			
+			DEBUG_LOG("App Finished Resuming...");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// On Screen Resized
@@ -728,7 +837,22 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------------------
 		void CApplication::OnScreenResized(u32 inudwWidth, u32 inudwHeight) 
 		{	
-			mpApplicationDelegates->OnScreenResized(inudwWidth, inudwHeight);
+			CScreen::SetRawDimensions(Core::CVector2((f32)inudwWidth, (f32)inudwHeight));
+            
+			if(mpRenderSystem)
+			{
+				mpRenderSystem->OnScreenOrientationChanged(inudwWidth, inudwHeight);
+			}
+            
+			if(HasTouchInput() == true)
+			{
+				Input::ITouchScreen * pTouchScreen = GetSystemImplementing(Input::IInputSystem::InterfaceID)->GetInterface<Input::IInputSystem>()->GetTouchScreenPtr();
+				pTouchScreen->SetScreenHeight(CScreen::GetOrientedHeight());
+			}
+            
+			CApplicationEvents::GetScreenResizedEvent().Invoke(inudwWidth, inudwHeight);
+            
+			DEBUG_LOG("Screen resized Notification");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// On Screen Changed Orientation
@@ -738,7 +862,19 @@ namespace moFlo
 		//--------------------------------------------------------------------------------------------------
 		void CApplication::OnScreenChangedOrientation(ScreenOrientation ineOrientation) 
 		{		
-			mpApplicationDelegates->OnScreenChangedOrientation(ineOrientation);
+			CScreen::SetOrientation(ineOrientation);
+            
+			if(mpRenderSystem)
+			{
+				mpRenderSystem->OnScreenOrientationChanged(Core::CScreen::GetOrientedWidth(), Core::CScreen::GetOrientedHeight());
+			}
+            
+			//Flip the screen
+			SetOrientation(ineOrientation);
+			CApplicationEvents::GetScreenOrientationChangedEvent().Invoke(ineOrientation);
+            
+			DEBUG_LOG("Screen Oriented Notification");
+
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Destructor

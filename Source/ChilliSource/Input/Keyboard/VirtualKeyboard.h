@@ -13,12 +13,12 @@
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Input
 	{
 		typedef fastdelegate::FastDelegate0<> KeyboardEventDelegate;
-		typedef fastdelegate::FastDelegate2<const UTF8String&, bool*> TextInputEventDelegate;
+		typedef fastdelegate::FastDelegate2<const Core::UTF8String&, bool*> TextInputEventDelegate;
         
         enum class KeyboardType
 		{
@@ -56,26 +56,26 @@ namespace moFlo
 			virtual void Show() = 0;
 			virtual void Hide() = 0;
 			
-			const UTF8String& GetKeyboardText() const{return mstrText;}
+			const Core::UTF8String& GetKeyboardText() const{return mstrText;}
             
-            virtual void SetText(const UTF8String& instrText) = 0;
+            virtual void SetText(const Core::UTF8String& instrText) = 0;
             
             virtual void SetKeyboardType(KeyboardType ineKeyboardType) = 0;
             virtual void SetCapitalisationMethod(KeyboardCapitalisation ineKeyboardCapitalisation) = 0;
 			
-			IEvent<KeyboardEventDelegate>& GetKeyboardShowEvent() {return mOnKeyboardShowEvent;}
-			IEvent<KeyboardEventDelegate>& GetKeyboardHideEvent() {return mOnKeyboardHideEvent;}
-			IEvent<TextInputEventDelegate>& GetKeyboardTextChangeEvent() {return mOnKeyboardTextChangeEvent;}
+			Core::IEvent<KeyboardEventDelegate>& GetKeyboardShowEvent() {return mOnKeyboardShowEvent;}
+			Core::IEvent<KeyboardEventDelegate>& GetKeyboardHideEvent() {return mOnKeyboardHideEvent;}
+			Core::IEvent<TextInputEventDelegate>& GetKeyboardTextChangeEvent() {return mOnKeyboardTextChangeEvent;}
 			
 			bool IsActive() {return mbIsActive;}
 			
 		protected:
 			
-			CEvent0<KeyboardEventDelegate> mOnKeyboardShowEvent;
-			CEvent0<KeyboardEventDelegate> mOnKeyboardHideEvent;
-			CEvent2<TextInputEventDelegate> mOnKeyboardTextChangeEvent;
+			Core::CEvent0<KeyboardEventDelegate> mOnKeyboardShowEvent;
+			Core::CEvent0<KeyboardEventDelegate> mOnKeyboardHideEvent;
+			Core::CEvent2<TextInputEventDelegate> mOnKeyboardTextChangeEvent;
 			
-			UTF8String mstrText;
+			Core::UTF8String mstrText;
 			
 			bool mbIsActive;
 		};

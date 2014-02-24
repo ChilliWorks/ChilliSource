@@ -15,9 +15,9 @@
 
 #include <ChilliSource/Input/Keyboard/VirtualKeyboard.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace GUI
+	namespace Rendering
 	{
 		class CEditableLabel : public CLabel
 		{
@@ -41,7 +41,7 @@ namespace moFlo
 			///
 			/// @param Keyboard Event Delegate
 			//-------------------------------------------------
-			IEvent<Input::KeyboardEventDelegate>& GetKeyboardShowEvent();
+			Core::IEvent<Input::KeyboardEventDelegate>& GetKeyboardShowEvent();
 			//-------------------------------------------------
 			/// Get Keyboard Hide Event
 			///
@@ -50,7 +50,7 @@ namespace moFlo
 			///
 			/// @param Keyboard Event Delegate
 			//-------------------------------------------------
-			IEvent<Input::KeyboardEventDelegate>& GetKeyboardHideEvent();
+			Core::IEvent<Input::KeyboardEventDelegate>& GetKeyboardHideEvent();
 			//-------------------------------------------------
 			/// Get Text Change Event
 			///
@@ -59,7 +59,7 @@ namespace moFlo
 			///
 			/// @param Text Change Event Delegate
 			//-------------------------------------------------
-			IEvent<TextChangeEventDelegate>& GetTextChangeEvent();
+			Core::IEvent<TextChangeEventDelegate>& GetTextChangeEvent();
 			//-------------------------------------------------
 			/// Set Keyboard
 			///
@@ -152,14 +152,14 @@ namespace moFlo
             ///
             /// @param Capitalisation Type
             //------------------------
-            void SetKeyboardCapitalisationMethod(moInput::KeyboardCapitalisation ineCapitalisationType);
+            void SetKeyboardCapitalisationMethod(Input::KeyboardCapitalisation ineCapitalisationType);
             //-------------------------------------------------------
 			/// SetTextSeparator
 			///
 			/// Sets the separator for text display
 			/// @param The string to use as a separator
 			//-------------------------------------------------------
-            void SetTextSeparator(const UTF8String& inutf8strSeparator);
+            void SetTextSeparator(const Core::UTF8String& inutf8strSeparator);
             //-------------------------------------------------------
 			/// SetTextSeparatorSpacing
 			///
@@ -173,7 +173,7 @@ namespace moFlo
 			/// Overridden set text method, updates cached separator string
             /// @param instrText text to set as entry
 			//-------------------------------------------------------
-            void SetText(const UTF8String& instrText);
+            void SetText(const Core::UTF8String& instrText);
 		protected:
 
 			//-------------------------------------------------
@@ -190,7 +190,7 @@ namespace moFlo
 			/// @param Contents of the keyboard
 			/// @param Whether to accept the input
 			//----------------------------------------------------
-			void OnKeyboardTextChanged(const UTF8String& instrText, bool* inbRejectInput);
+			void OnKeyboardTextChanged(const Core::UTF8String& instrText, bool* inbRejectInput);
 			//-------------------------------------------------
 			/// On Keyboard Hidden
 			///
@@ -222,7 +222,7 @@ namespace moFlo
 			///
 			/// @param Canvas renderer
 			//-------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			void Draw(CCanvasRenderer* inpCanvas);
 			//-------------------------------------------------------
 			/// Update
 			///
@@ -236,15 +236,15 @@ namespace moFlo
 			///
 			/// Returns the stored text separated by set separators
 			//-------------------------------------------------------
-            UTF8String GetTextWithSeparators() const;
+            Core::UTF8String GetTextWithSeparators() const;
 
 		private:
 
 			Input::IVirtualKeyboard* mpKeyboard;
 
-			CEvent0<Input::KeyboardEventDelegate> mOnKeyboardShowEvent;
-			CEvent0<Input::KeyboardEventDelegate> mOnKeyboardHideEvent;
-			CEvent1<TextChangeEventDelegate> mOnTextChangeEvent;
+			Core::CEvent0<Input::KeyboardEventDelegate> mOnKeyboardShowEvent;
+			Core::CEvent0<Input::KeyboardEventDelegate> mOnKeyboardHideEvent;
+			Core::CEvent1<TextChangeEventDelegate> mOnTextChangeEvent;
 
 			f32 mfTimeToShow;
 			bool mbShowKeyboard;
@@ -254,8 +254,8 @@ namespace moFlo
 
 			static CEditableLabel* pKeyboardListener;
             
-            UTF8String mutf8strTextWithSeparators;
-            UTF8String mutf8strSeparator;
+            Core::UTF8String mutf8strTextWithSeparators;
+            Core::UTF8String mutf8strSeparator;
             u32 mu32SeparatorSpacing;
             bool mbSelected;
 		};

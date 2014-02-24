@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -112,7 +112,7 @@ namespace moFlo
 				
 				for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
-					if(static_cast<IImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(ineStorageLocation, inFilePath, ineFormat, pSourceImage))
+					if(static_cast<Core::IImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(ineStorageLocation, inFilePath, ineFormat, pSourceImage))
 					{
 						Core::CImage* pImage = (Core::CImage*)(pSourceImage.get());
 						pImage->SetName(inFilePath);
@@ -174,8 +174,8 @@ namespace moFlo
 				Desc.pTextureResource->SetStorageLocation(ineStorageLocation);
 
 				//Load image as a task. Once it completed we can load the texture as it should be done on the main thread
-				Task1<ImageDesc&> ImageLoadTask(this, &ITextureManager::ImageLoadTask, Desc);
-				CTaskScheduler::ScheduleTask(ImageLoadTask);
+				Core::Task1<ImageDesc&> ImageLoadTask(this, &ITextureManager::ImageLoadTask, Desc);
+				Core::CTaskScheduler::ScheduleTask(ImageLoadTask);
 				
 				//add resource to the resource map
 				mMapFilenameToResource.insert(std::make_pair(inFilePath, SHARED_PTR_CAST<Core::IResource>(Desc.pTextureResource)));
@@ -198,7 +198,7 @@ namespace moFlo
 		{
 			for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 			{
-				if(static_cast<IImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(inDesc.eStorageLocation, inDesc.strFilename, inDesc.eImageFormat, inDesc.pImageResource))
+				if(static_cast<Core::IImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(inDesc.eStorageLocation, inDesc.strFilename, inDesc.eImageFormat, inDesc.pImageResource))
 				{
 					DEBUG_LOG("Loading image " + inDesc.strFilename);
 					
@@ -207,7 +207,7 @@ namespace moFlo
 					pImage->SetLoaded(true);
 					
 					//Load the texture from this image
-					CTaskScheduler::ScheduleMainThreadTask(Task3<const Core::ResourcePtr&, bool, TexturePtr&>(this, &ITextureManager::TextureLoadTask, inDesc.pImageResource, inDesc.bUseMipmaps, inDesc.pTextureResource));
+					Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task3<const Core::ResourcePtr&, bool, TexturePtr&>(this, &ITextureManager::TextureLoadTask, inDesc.pImageResource, inDesc.bUseMipmaps, inDesc.pTextureResource));
 					return;
 				}
 			}

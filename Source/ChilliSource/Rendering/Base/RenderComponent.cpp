@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{

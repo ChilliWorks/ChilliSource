@@ -15,12 +15,12 @@
 #include <vector>
 #include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 
-		class SCContactInformationProviderJavaInterface : public moFlo::AndroidPlatform::_IJavaInterface
+		class SCContactInformationProviderJavaInterface : public ChilliSource::Android::_IJavaInterface
 		{
 		public:
 			//--------------------------------------------------------------------------------------

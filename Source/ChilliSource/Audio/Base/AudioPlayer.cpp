@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Audio
     {
@@ -104,7 +104,7 @@ namespace moFlo
         /// Play Effect
         //------------------------------------------------
         u32 CAudioPlayer::PlayEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffectFile,
-                                     bool inbLooping, moAudio::AudioEventDelegate inAudioFinishedEvent)
+                                     bool inbLooping, AudioEventDelegate inAudioFinishedEvent)
         {
             MapNameToResource::iterator pIt = mmapNamesToResources.find(instrEffectFile);
             u32 udwIndex = 0;
@@ -308,14 +308,14 @@ namespace moFlo
         //------------------------------------------------
         /// Get Audio Component At Index
         //------------------------------------------------
-        moAudio::AudioComponentPtr CAudioPlayer::GetAudioComponentAtIndex(const u32 inudwIndex)
+        AudioComponentPtr CAudioPlayer::GetAudioComponentAtIndex(const u32 inudwIndex)
         {
             if(inudwIndex < mAudioComponentCache.size())
             {
                 return mAudioComponentCache[inudwIndex];
             }
             
-            return moAudio::AudioComponentPtr();
+            return AudioComponentPtr();
         }
         //------------------------------------------------
         /// Find Free Component Index

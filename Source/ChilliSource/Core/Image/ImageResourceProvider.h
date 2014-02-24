@@ -13,32 +13,35 @@
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Core/Image/Image.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	class IImageResourceProvider : public Core::IResourceProvider
-	{
-	public:
+    namespace Core
+    {
+        class IImageResourceProvider : public Core::IResourceProvider
+        {
+        public:
 
-		//----------------------------------------------------------------
-		/// Create Image From File
-		///
-        /// @param The storage location to load from
-		/// @param File path to resource
-		/// @return Instantiated resource
-		//----------------------------------------------------------------
-		virtual bool CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource) = 0;
-		//--------------------------------------------------
-		/// Set Default Format
-		///
-		/// @param Image format that will be used in lieu
-		/// of specific
-		//--------------------------------------------------
-		static void SetDefaultFormat(Core::CImage::Format ineFormat);
-		
-	protected:
-		
-		static Core::CImage::Format meDefaultFormat;
-	};
+            //----------------------------------------------------------------
+            /// Create Image From File
+            ///
+            /// @param The storage location to load from
+            /// @param File path to resource
+            /// @return Instantiated resource
+            //----------------------------------------------------------------
+            virtual bool CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource) = 0;
+            //--------------------------------------------------
+            /// Set Default Format
+            ///
+            /// @param Image format that will be used in lieu
+            /// of specific
+            //--------------------------------------------------
+            static void SetDefaultFormat(Core::CImage::Format ineFormat);
+            
+        protected:
+            
+            static Core::CImage::Format meDefaultFormat;
+        };
+    }
 }
 
 #endif

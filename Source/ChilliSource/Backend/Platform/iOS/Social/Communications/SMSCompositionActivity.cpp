@@ -11,8 +11,8 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 
-namespace moFlo{
-	namespace iOSPlatform {
+namespace ChilliSource{
+	namespace iOS {
 		bool CSMSCompositionActivity::IsA(Core::InterfaceIDType inID) const{
 			return inID == CSMSCompositionActivity::InterfaceID;
 		}
@@ -39,7 +39,7 @@ namespace moFlo{
 			[mpDelegate release];
 			mpDelegate = nil;
 		}
-		void CSMSCompositionActivity::Present(const DYNAMIC_ARRAY<CUTF8String> & inastrRecipientNumbers, const CUTF8String & instrContents, const ISMSCompositionActivity::SendResultDelegate & inCallback){
+		void CSMSCompositionActivity::Present(const DYNAMIC_ARRAY<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const ISMSCompositionActivity::SendResultDelegate & inCallback){
 			
 			mpDelegate = [[SMSDelegate alloc] initWithCallback:inCallback];
 						
@@ -82,7 +82,7 @@ namespace moFlo{
 
 @implementation SMSDelegate
 
--(SMSDelegate*) initWithCallback:(moFlo::Social::ISMSCompositionActivity::SendResultDelegate)callback{
+-(SMSDelegate*) initWithCallback:(ChilliSource::Social::ISMSCompositionActivity::SendResultDelegate)callback{
 	
 	if ((self = [super init])){
 	
@@ -95,7 +95,7 @@ namespace moFlo{
 
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result 
 {
-	using namespace moFlo::Social;
+	using namespace ChilliSource::Social;
     
     if(controller.parentViewController)
     {

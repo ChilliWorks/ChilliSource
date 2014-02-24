@@ -16,9 +16,9 @@
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Image/Image.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace WindowsPlatform
+	namespace Windows
 	{
 		const std::string PNGExtension("png");
 
@@ -112,7 +112,7 @@ namespace moFlo
 		//----------------------------------------------------------------
 		bool ImageLoader::CreatePNGImageFromFile(Core::STORAGE_LOCATION ineLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::CImage* outpImage)
 		{
-			moFlo::WindowsPlatform::CPngImage image;
+			ChilliSource::Windows::CPngImage image;
 			image.Load(ineLocation, inFilePath);
 
 			if(image.IsLoaded())

@@ -25,9 +25,9 @@
 
 #include <AudioToolbox/AudioSession.h>
 
-namespace moFlo
+namespace ChilliSource
 {
-    namespace iOSPlatform
+    namespace iOS
     {
         namespace
         {
@@ -78,7 +78,7 @@ namespace moFlo
         meSubtitlesLocation(Core::StorageLocation::k_none)
         
         {
-            moFlo::Core::CApplicationEvents::GetResumeEvent() += moFlo::Core::ApplicationSystemDelegate(this, &CVideoPlayerActivity::OnResume);
+            ChilliSource::Core::CApplicationEvents::GetResumeEvent() += ChilliSource::Core::ApplicationSystemDelegate(this, &CVideoPlayerActivity::OnResume);
             mpTapListener = [[CVideoPlayerTapListener alloc] init];
         }
 		//--------------------------------------------------------------
@@ -101,7 +101,7 @@ namespace moFlo
         /// @param Whether to allow dismissing of the video
         /// @param Background colour
         //--------------------------------------------------------------
-        void CVideoPlayerActivity::Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour)
+        void CVideoPlayerActivity::Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour)
         {
             mBackgroundColour = inBackgroundColour;
             
@@ -133,7 +133,7 @@ namespace moFlo
         //--------------------------------------------------------------
         void CVideoPlayerActivity::PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
                                                         Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
-                                                        bool inbCanDismissWithTap, const moCore::CColour& inBackgroundColour)
+                                                        bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour)
         {
             //setup the subtitles
             meSubtitlesLocation = ineSubtitlesLocation;
@@ -385,7 +385,7 @@ namespace moFlo
                 //setup the tap gesture if we can dismiss with tap
                 if (mbCanDismissWithTap && mpTapListener != nil)
                 {
-                    [mpTapListener SetupWithView: mpVideoOverlayView AndDelegate:moFlo::iOSPlatform::VideoPlayerTappedDelegate(this, &CVideoPlayerActivity::OnTapped)];
+                    [mpTapListener SetupWithView: mpVideoOverlayView AndDelegate:ChilliSource::iOS::VideoPlayerTappedDelegate(this, &CVideoPlayerActivity::OnTapped)];
                 }
                 
                 //create the subtitles renderer
@@ -449,7 +449,7 @@ namespace moFlo
         CVideoPlayerActivity::~CVideoPlayerActivity()
         {
             [mpTapListener release];
-            moFlo::Core::CApplicationEvents::GetResumeEvent() -= moFlo::Core::ApplicationSystemDelegate(this, &CVideoPlayerActivity::OnResume);
+            ChilliSource::Core::CApplicationEvents::GetResumeEvent() -= ChilliSource::Core::ApplicationSystemDelegate(this, &CVideoPlayerActivity::OnResume);
             
             StopListeningForMoviePlayerNotifications();
         }

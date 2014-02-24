@@ -13,7 +13,7 @@
 #include <ChilliSource/Networking/ContentDownload/ContentDownloader.h>
 #include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
 
-namespace moFlo
+namespace ChilliSource
 {
     namespace Networking
     {

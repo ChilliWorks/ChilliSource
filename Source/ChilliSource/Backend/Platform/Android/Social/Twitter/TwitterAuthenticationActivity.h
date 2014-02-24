@@ -24,9 +24,9 @@
 //@protocol UITextFieldDelegate;
 //@protocol UIAlertViewDelegate;
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace AndroidPlatform
+	namespace Android
 	{
 		class CTwitterAuthenticationActivity : public Social::ITwitterAuthenticationActivity
 		{
@@ -69,10 +69,10 @@ namespace moFlo
 			//-----------------------------------------------
 			void OnPINComplete();
 			
-			moFlo::UnifiedVector2					mvUnifiedSize;
-			moFlo::Core::CVector2					mvAbsoluteSize;
-			moFlo::Core::CVector2					mvAbsolutePositionTopLeft;
-			moFlo::Core::CVector2					mvAbsolutePositionCentre;
+			ChilliSource::UnifiedVector2					mvUnifiedSize;
+			ChilliSource::Core::CVector2					mvAbsoluteSize;
+			ChilliSource::Core::CVector2					mvAbsolutePositionTopLeft;
+			ChilliSource::Core::CVector2					mvAbsolutePositionCentre;
 		};
 	}
 }

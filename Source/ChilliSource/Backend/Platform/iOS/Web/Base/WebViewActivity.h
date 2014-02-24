@@ -23,11 +23,11 @@
 @class UIActivityIndicatorView;
 @protocol UIWebViewDelegate;
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
-		class CWebViewActivity : public IWebViewActivity
+		class CWebViewActivity : public Web::IWebViewActivity
 		{
 		public:
 			CWebViewActivity();
@@ -71,7 +71,7 @@ namespace moFlo
 			///
 			/// @param Unified Vector of size
 			//-----------------------------------------------
-			void SetSize(const moFlo::UnifiedVector2 & invSize);
+			void SetSize(const Core::UnifiedVector2 & invSize);
 			//-----------------------------------------------
 			/// Get Size
 			///
@@ -79,7 +79,7 @@ namespace moFlo
 			///
 			/// return Unified Vector of size
 			//-----------------------------------------------
-			moFlo::UnifiedVector2 GetSize() const;
+			Core::UnifiedVector2 GetSize() const;
             //-----------------------------------------------
             /// Display
             ///
@@ -135,9 +135,9 @@ namespace moFlo
             UIActivityIndicatorView* mpActivityIndicator;
 			UIWebDelegate* mpWebDelegate;
 			
-			moFlo::UnifiedVector2 mvUnifiedSize;
-			moFlo::Core::CVector2 mvAbsoluteSize;
-			moFlo::Core::CVector2 mvAbsolutePosition;
+			Core::UnifiedVector2 mvUnifiedSize;
+			Core::CVector2 mvAbsoluteSize;
+			Core::CVector2 mvAbsolutePosition;
             f32 mfDismissButtonScale;
 			
             std::string mstrAnchor;
@@ -147,9 +147,9 @@ namespace moFlo
 
 @interface UIWebDelegate : NSObject<UIWebViewDelegate>
 {
-	moFlo::iOSPlatform::CWebViewActivity* mpDelegate;
+	ChilliSource::iOS::CWebViewActivity* mpDelegate;
 }
--(void) SetCPPDelegate:(moFlo::iOSPlatform::CWebViewActivity*) inpDelegate;
+-(void) SetCPPDelegate:(ChilliSource::iOS::CWebViewActivity*) inpDelegate;
 -(void) OnDismissButtonPressed:(id)inpObject;
 
 @end

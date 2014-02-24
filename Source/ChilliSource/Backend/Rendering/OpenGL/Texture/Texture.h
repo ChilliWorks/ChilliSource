@@ -16,11 +16,11 @@
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CTexture : public moFlo::Rendering::ITexture
+		class CTexture : public ChilliSource::Rendering::ITexture
 		{
 		public:
 

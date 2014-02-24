@@ -11,7 +11,7 @@
 #include <ChilliSource/Rendering/Particles/ParticleSystem.h>
 #include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
 
-namespace moFlo
+namespace ChilliSource
 {
 	namespace Rendering
 	{
@@ -31,7 +31,7 @@ namespace moFlo
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CParticleComponent::IsA(moFlo::Core::InterfaceIDType inInterfaceID) const
+		bool CParticleComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return (inInterfaceID == CParticleComponent::InterfaceID) || 
             (inInterfaceID == IRenderComponent::InterfaceID);

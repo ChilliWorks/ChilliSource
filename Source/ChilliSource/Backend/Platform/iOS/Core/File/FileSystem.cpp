@@ -19,9 +19,9 @@
 
 #include <iostream>
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform 
+	namespace iOS 
 	{
         //constants
         const std::string kstrSaveDataPath  = "SaveData/";
@@ -118,7 +118,7 @@ namespace moFlo
             for(NSString* file in Contents)
             {
                 std::string strFile([file UTF8String]);
-                mHashedPackageFileNames.push_back(CHashCRC32::GenerateHashCode(strFile));
+                mHashedPackageFileNames.push_back(Core::CHashCRC32::GenerateHashCode(strFile));
             }
             
             std::sort(mHashedPackageFileNames.begin(), mHashedPackageFileNames.end());
@@ -412,7 +412,7 @@ namespace moFlo
         {
             for(DYNAMIC_ARRAY<std::string>::const_iterator it = inastrDirs.begin(); it != inastrDirs.end(); ++it)
             {
-                std::string path = moFlo::Core::CStringUtils::StandardisePath(*it);
+                std::string path = ChilliSource::Core::CStringUtils::StandardisePath(*it);
                 NSString* Dir = [NSString stringWithCString:path.c_str() encoding:NSASCIIStringEncoding];
                 
                 if (inbRecursive == true)
@@ -480,12 +480,12 @@ namespace moFlo
             std::string strDir;
             if(instrDirectory.empty() == false)
             {
-                strDir = moFlo::Core::CStringUtils::StandardisePath(instrDirectory);
+                strDir = ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory);
             }
             
             for(NSString* FileNames in inpFilenames)
             {
-                outstrFileNames.push_back(strDir + moFlo::Core::CStringUtils::NSStringToString(FileNames));
+                outstrFileNames.push_back(strDir + ChilliSource::Core::CStringUtils::NSStringToString(FileNames));
             }
         }
         //--------------------------------------------------------------
@@ -735,7 +735,7 @@ namespace moFlo
             }
             
             //return whether or not the file exists
-			return DoesFileExist(moFlo::Core::CStringUtils::StandardisePath(path));
+			return DoesFileExist(ChilliSource::Core::CStringUtils::StandardisePath(path));
         }
         //--------------------------------------------------------------
         /// Does File Exist In Cached DLC
@@ -755,7 +755,7 @@ namespace moFlo
         //--------------------------------------------------------------
         bool CFileSystem::DoesFileExistInPackageDLC(const std::string& instrFilepath) const
         {
-            return DoesFileExist(moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mstrPackageDLCPath + instrFilepath));
+            return DoesFileExist(ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mstrPackageDLCPath + instrFilepath));
         }
         //--------------------------------------------------------------
         /// Does Directory Exist
@@ -797,7 +797,7 @@ namespace moFlo
             }
             
             //return whether or not the dir exists
-			return DoesFolderExist(moFlo::Core::CStringUtils::StandardisePath(path));
+			return DoesFolderExist(ChilliSource::Core::CStringUtils::StandardisePath(path));
         }
         //--------------------------------------------------------------
         /// Is Storage Location Available
@@ -858,11 +858,11 @@ namespace moFlo
             //return whether or not the file exists
             if(inbFolder)
             {
-                return DoesFolderExist(moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath));
+                return DoesFolderExist(ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath));
             }
             else
             {
-                return DoesFileExist(moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath));
+                return DoesFileExist(ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath));
             }
         }
         //--------------------------------------------------------------
@@ -874,7 +874,7 @@ namespace moFlo
         std::string CFileSystem::GetDirectoryForDLCFile(const std::string& instrFilePath) const
         {
             std::string strResult;
-            std::string strPath = moFlo::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrFilePath);
+            std::string strPath = ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrFilePath);
             
             if(DoesFileExist(strPath))
             {
@@ -899,7 +899,7 @@ namespace moFlo
             
             for(u32 i=0; i<3; ++i)
             {
-                std::string strPath = moFlo::Core::CStringUtils::StandardisePath(mastrResourceDirectory[i] + instrFilePath);
+                std::string strPath = ChilliSource::Core::CStringUtils::StandardisePath(mastrResourceDirectory[i] + instrFilePath);
                 if(DoesFileExistInHashedStore(strPath))
                 {
                     strResult = GetStorageLocationDirectory(Core::StorageLocation::k_package) + strPath;
@@ -919,7 +919,7 @@ namespace moFlo
         //--------------------------------------------------------------
         bool CFileSystem::DoesFileExistInHashedStore(const std::string& instrPath) const
         {
-            u32 udwHashedFile = CHashCRC32::GenerateHashCode(instrPath);
+            u32 udwHashedFile = Core::CHashCRC32::GenerateHashCode(instrPath);
             
             DYNAMIC_ARRAY<u32>::const_iterator it = std::lower_bound(mHashedPackageFileNames.begin(), mHashedPackageFileNames.end(), udwHashedFile);
             

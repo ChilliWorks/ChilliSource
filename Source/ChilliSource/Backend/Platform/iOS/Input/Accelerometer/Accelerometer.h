@@ -19,9 +19,9 @@
 
 @class CMMotionManager;
 
-namespace moFlo
+namespace ChilliSource
 {
-	namespace iOSPlatform
+	namespace iOS
 	{
 		class CAccelerometer : public Input::IAccelerometer, public Core::IUpdateable
 		{

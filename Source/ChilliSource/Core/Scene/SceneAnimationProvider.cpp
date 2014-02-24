@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/Scene/SceneAnimation.h>
 #include <ChilliSource/Core/Base/Application.h>
 
-namespace moFlo{
+namespace ChilliSource{
     namespace Core
     {
         DEFINE_NAMED_INTERFACE(CSceneAnimationProvider);
@@ -27,7 +27,7 @@ namespace moFlo{
         
         bool CSceneAnimationProvider::CanCreateResourceOfKind(InterfaceIDType  inInterfaceID) const
         {
-            return inInterfaceID == moFlo::Core::CSceneAnimation::InterfaceID;
+            return inInterfaceID == ChilliSource::Core::CSceneAnimation::InterfaceID;
         }
         
         bool CSceneAnimationProvider::CanCreateResourceFromFileWithExtension(const std::string &inExtension) const
