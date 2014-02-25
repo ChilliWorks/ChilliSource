@@ -9,6 +9,7 @@
 #ifndef _MOFLOW_CORE_NOTIFICATIONS_REMOTENOTIFICATIONSYSTEM_H_
 #define _MOFLOW_CORE_NOTIFICATIONS_REMOTENOTIFICATIONSYSTEM_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/System.h>
 
 namespace ChilliSource

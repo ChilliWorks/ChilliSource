@@ -131,7 +131,7 @@ namespace ChilliSource
             //We use the scheme, host and port to identify connections by generating a hash that uniquely identifes
             //a connection. Then because CFNumber does not allow unsigned ints we must create an incremental counter
             //to act as a UDID!
-            ConnectionID PropID = Core::CHashCRC32::GenerateHashCode(strScheme + strHostName + STRING_CAST(dwPortNum));
+            ConnectionID PropID = Core::CHashCRC32::GenerateHashCode(strScheme + strHostName + ToString(dwPortNum));
             ConnectionID StreamID = 0;
             bool bConnectionAlreadyExists = false;
             

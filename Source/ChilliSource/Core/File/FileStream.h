@@ -10,11 +10,12 @@
 #ifndef _MOFLO_CORE_FILEIO_FILE_STREAM_
 #define _MOFLO_CORE_FILEIO_FILE_STREAM_
 
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Cryptographic/SHA1.h>
+
 #include <string>
 #include <cstdio>
 #include <fstream>
-
-#include <ChilliSource/Core/Cryptographic/SHA1.h>
 
 namespace ChilliSource
 {

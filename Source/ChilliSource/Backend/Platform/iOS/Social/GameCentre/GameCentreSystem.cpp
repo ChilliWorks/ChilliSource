@@ -744,7 +744,7 @@ namespace ChilliSource
 			 else
 			 {
 			 //Great Success
-			 DEBUG_LOG("Game Center - Score of " + STRING_CAST(pRequest->muddwScore) + " posted successfully");
+			 DEBUG_LOG("Game Center - Score of " + ToString(pRequest->muddwScore) + " posted successfully");
 			 mudwNumOpenRequests--;
 			 //Delete the request
 			 delete pRequest;
@@ -809,7 +809,7 @@ namespace ChilliSource
 			 else if(pScores)
 			 {
 			 //Great Success
-			 DEBUG_LOG("Game Center - Scores request successful. Num scores returned: " + STRING_CAST([pScores count]));
+			 DEBUG_LOG("Game Center - Scores request successful. Num scores returned: " + ToString([pScores count]));
 			 mudwNumOpenRequests--;
 			 //Now we need to store the scores and request the names before we return the data to the application
 			 OnScoreRangeRequestComplete(pScores, pRequest->mstrLeaderboardCategoryID);
@@ -841,7 +841,7 @@ namespace ChilliSource
 			 else if(pPlayers)
 			 {
 			 //Great Success
-			 DEBUG_LOG("Game Center - Names request successful. Num names returned: " + STRING_CAST([pPlayers count]));
+			 DEBUG_LOG("Game Center - Names request successful. Num names returned: " + ToString([pPlayers count]));
 			 mudwNumOpenRequests--;
 			 //Now we need to combine the names with the previously requested scores and return them to the app
 			 OnNameRequestComplete(pPlayers, pRequest->mstrKey);
@@ -869,7 +869,7 @@ namespace ChilliSource
 			 
 			 } else {
 			 //Great Success
-			 DEBUG_LOG("Game Center - Achievement:" + pRequest->mstrAchievementID + " Updated to progress:" + STRING_CAST((f32)pRequest->mffProgression));
+			 DEBUG_LOG("Game Center - Achievement:" + pRequest->mstrAchievementID + " Updated to progress:" + ToString((f32)pRequest->mffProgression));
 			 mudwNumOpenRequests--;
 			 //Delete the request
 			 delete pRequest;
@@ -904,7 +904,7 @@ namespace ChilliSource
 				}
 			}
 			
-			DEBUG_LOG("GameCentre:ProcessAchievementsStatusRequest - User has " + STRING_CAST((u32)mastrCompletedAchievements.size()) +" achievements");
+			DEBUG_LOG("GameCentre:ProcessAchievementsStatusRequest - User has " + ToString((u32)mastrCompletedAchievements.size()) +" achievements");
 
 		}
 		void CGameCentreSystem::ProcessAchievementDescriptionsRequest(CGameCentreAchievementDescriptionsRequest * pRequest){
@@ -918,7 +918,7 @@ namespace ChilliSource
 			 } else {
 			 mpAchievementDescriptions = descriptions;
 			 [mpAchievementDescriptions retain];
-			 DEBUG_LOG("GameCentre:ProcessAchievementDescriptionsRequest - Received " + STRING_CAST([descriptions count]) + " descriptions");
+			 DEBUG_LOG("GameCentre:ProcessAchievementDescriptionsRequest - Received " + ToString([descriptions count]) + " descriptions");
 					   }
 			 }
 			];
@@ -962,7 +962,7 @@ namespace ChilliSource
 				  }
 				  else if(pPlayers)
 				  {
-				  DEBUG_LOG("Game Center - Friend Info request successful. Num friends returned: " + STRING_CAST([pPlayers count]));
+				  DEBUG_LOG("Game Center - Friend Info request successful. Num friends returned: " + ToString([pPlayers count]));
 				  }
 				  else
 				  {

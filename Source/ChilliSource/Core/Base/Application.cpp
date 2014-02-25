@@ -20,7 +20,6 @@
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/Resource/ResourceGroupManager.h>
-#include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Base/Logging.h>
 #include <ChilliSource/Core/Base/Device.h>
@@ -34,8 +33,6 @@
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
-#include <ChilliSource/Audio/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>

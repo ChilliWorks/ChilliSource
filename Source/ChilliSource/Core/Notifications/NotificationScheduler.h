@@ -9,10 +9,12 @@
 #ifndef _MO_FLO_CORE_NOTIFICATION_SCHEDULER_H_
 #define _MO_FLO_CORE_NOTIFICATION_SCHEDULER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
+
 #include <queue>
 
 namespace ChilliSource

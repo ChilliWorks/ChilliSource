@@ -10,9 +10,8 @@
 #ifndef _MOFLO_NETWORKING_MOMETRICSSYSTEM_H_
 #define _MOFLO_NETWORKING_MOMETRICSSYSTEM_H_
 
-#include <ChilliSource/Networking/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/System.h>
-
 #include <ChilliSource/Networking/Metrics/MoMetricsSession.h>
 
 #define RECORD_METRICS_EVENT(type, params, summarise)\

@@ -13,9 +13,9 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_SYSTEM_H_
 #define _MO_FLO_AUDIO_AUDIO_SYSTEM_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/Base/AudioManager.h>
 #include <ChilliSource/Audio/3D/AudioComponentFactory.h>
-
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Core/Math/MathUtils.h>

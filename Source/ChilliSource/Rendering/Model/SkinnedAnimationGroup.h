@@ -6,11 +6,11 @@
 //  Copyright (c) 2012 Tag Games Ltd. All rights reserved.
 //
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Core/File/FileSystem.h>
-
 #ifndef MOFLOW_RENDERING_SKINNEDANIMATIONGROUP_H_
 #define MOFLOW_RENDERING_SKINNEDANIMATIONGROUP_H_
+
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource
 {

@@ -10,8 +10,9 @@
 #ifndef _MO_FLO_CORE_TIMER_H_
 #define _MO_FLO_CORE_TIMER_H_
 
-#include <vector>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Time/CoreTimer.h>
+#include <vector>
 
 namespace ChilliSource
 {

@@ -12,7 +12,7 @@
 #ifndef MoshiMonsters_SceneAnimation_h
 #define MoshiMonsters_SceneAnimation_h
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/Scene/ForwardDeclarations.h>
 #include <ChilliSource/Core/Entity/EntityAnimation.h>

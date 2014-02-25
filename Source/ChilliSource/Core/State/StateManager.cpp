@@ -583,30 +583,30 @@ namespace ChilliSource
             }
             else
             {
-                 //   DEBUG_LOG("StateManager state not accepting notifications. for notification "+STRING_CAST(inpsNotification->ID)+" priority "+STRING_CAST(inpsNotification->ePriority)+" type "+STRING_CAST(inpsNotification->eType));
+                 //   DEBUG_LOG("StateManager state not accepting notifications. for notification "+ToString(inpsNotification->ID)+" priority "+ToString(inpsNotification->ePriority)+" type "+ToString(inpsNotification->eType));
             }
 			return false;
         }
         
         void CStateManager::DebugPrint(std::string instrMessage){
-            DEBUG_LOG("CStateManager "+CStringConverter::ToString((u32)this)+" - "+instrMessage);
-            DEBUG_LOG("mpApp = "+CStringConverter::ToString((u32)mpApp));
-            DEBUG_LOG("mStateOperationQueue size:"+CStringConverter::ToString(mStateOperationQueue.size()));
+            DEBUG_LOG("CStateManager "+ToString((u32)this)+" - "+instrMessage);
+            DEBUG_LOG("mpApp = "+ToString((u32)mpApp));
+            DEBUG_LOG("mStateOperationQueue size:"+ToString(mStateOperationQueue.size()));
     
             
-            DEBUG_LOG("mStateHierarchy size:"+CStringConverter::ToString(mStateHierarchy.size()));
+            DEBUG_LOG("mStateHierarchy size:"+ToString(mStateHierarchy.size()));
 
             
             for(s32 i=0;i<mStateHierarchy.size();i++){
-                DEBUG_LOG("("+CStringConverter::ToString(i)+") "+CStringConverter::ToString((u32)mStateHierarchy[i].get())+" name:"+mStateHierarchy[i]->GetName());
+                DEBUG_LOG("("+ToString(i)+") "+ToString((u32)mStateHierarchy[i].get())+" name:"+mStateHierarchy[i]->GetName());
             }
             
-            DEBUG_LOG("mStateOperationQueue size:"+CStringConverter::ToString(mStateOperationQueue.size()));
+            DEBUG_LOG("mStateOperationQueue size:"+ToString(mStateOperationQueue.size()));
 
             s32 udwCount=0;
             std::list<StateOperation>::iterator it=mStateOperationQueue.begin();
             while(it!=mStateOperationQueue.end()){
-                DEBUG_LOG("("+CStringConverter::ToString(udwCount)+") eAction:"+CStringConverter::ToString((u32)(*it).eAction)+" pState:"+CStringConverter::ToString((u32)(*it).pState.get())+" pRawState:"+CStringConverter::ToString((u32)(*it).pRawState));
+                DEBUG_LOG("("+ToString(udwCount)+") eAction:"+ToString((u32)(*it).eAction)+" pState:"+ToString((u32)(*it).pState.get())+" pRawState:"+ToString((u32)(*it).pRawState));
                 udwCount++;
                 it++;
             }

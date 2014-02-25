@@ -69,7 +69,7 @@ namespace ChilliSource
             Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SpriteSheetLocation", strValue))
             {
-                eSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("SpriteSheet", strValue))
 			{
@@ -87,22 +87,22 @@ namespace ChilliSource
             
             if( insParams.TryGetValue("BaseBackgroundVisible", strValue) )
             {
-                mpBGImage->SetVisible( Core::CStringConverter::ParseBool(strValue)  );
+                mpBGImage->SetVisible( Core::ParseBool(strValue)  );
             }
             //---Width from image
             if(insParams.TryGetValue("WidthFromImage", strValue))
             {
-                WidthFromImage = Core::CStringConverter::ParseBool(strValue);
+                WidthFromImage = Core::ParseBool(strValue);
             }
             
 			//---Colours
 			if(insParams.TryGetValue("FillColour", strValue))
 			{
-				SetFillColour(Core::CStringConverter::ParseColourValue(strValue));
+				SetFillColour(Core::ParseColour(strValue));
 			}
 			if(insParams.TryGetValue("BackgroundColour", strValue))
 			{
-				SetBackgroundColour(Core::CStringConverter::ParseColourValue(strValue));
+				SetBackgroundColour(Core::ParseColour(strValue));
 			}
             
 		}

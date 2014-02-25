@@ -9,6 +9,7 @@
 #ifndef _MOFLOW_PLATFORM_IOS_REMOTENOTIFICATIONSYSTEM_H_
 #define _MOFLOW_PLATFORM_IOS_REMOTENOTIFICATIONSYSTEM_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
 
 #include <UIKit/UIKit.h>

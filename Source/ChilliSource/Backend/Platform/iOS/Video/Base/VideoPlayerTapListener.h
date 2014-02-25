@@ -9,9 +9,11 @@
 #ifndef _MOFLOW_PLATFORM_IOS_VIDEO_VIDEOPLAYERTAPLISTENER_H_
 #define _MOFLOW_PLATFORM_IOS_VIDEO_VIDEOPLAYERTAPLISTENER_H_
 
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
+
 #import <Foundation/Foundation.h>
 #include <MediaPlayer/MediaPlayer.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 
 @class UIView;
 @class UITapGestureRecognizer;

@@ -9,6 +9,7 @@
 #ifndef _MOFLOW_NETWORKING_IAPSYSTEM_H_
 #define _MOFLOW_NETWORKING_IAPSYSTEM_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 

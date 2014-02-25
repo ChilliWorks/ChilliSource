@@ -65,12 +65,12 @@ namespace ChilliSource
             //---Enable Horizontal scrolling
             if(insParams.TryGetValue("ScrollHorizontally", strValue))
             {
-                ScrollHorizontally = Core::CStringConverter::ParseBool(strValue);
+                ScrollHorizontally = Core::ParseBool(strValue);
             }
             //---Enable Vertical scrolling
             if(insParams.TryGetValue("ScrollVertically", strValue))
             {
-                ScrollVertically = Core::CStringConverter::ParseBool(strValue);
+                ScrollVertically = Core::ParseBool(strValue);
             }
             
             //Lets give the scroll view an empty container that we can check bounds against

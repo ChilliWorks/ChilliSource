@@ -464,7 +464,7 @@ namespace ChilliSource
                                     u32 udwPackageSize = Core::XMLUtils::GetAttributeValueOrDefault<u32>(pServerPackageEl, "Size", 0);
                                     muRunningToDownloadTotal += udwPackageSize;
                                     
-                                    DEBUG_LOG("CMS: " + strServerPackageID + " package requires updating of size : " + STRING_CAST(udwPackageSize));
+                                    DEBUG_LOG("CMS: " + strServerPackageID + " package requires updating of size : " + ToString(udwPackageSize));
                                     
                                     PackageDetails sPackageDetails;
                                     sPackageDetails.strID = strServerPackageID;
@@ -545,7 +545,7 @@ namespace ChilliSource
 					muRunningToDownloadTotal += udwPackageSize;
                     
 					DEBUG_LOG("CMS: " + strPackageID + " package content is different on server than on device");
-                    DEBUG_LOG("CMS: " + strPackageID + " package requires updating of size : " + STRING_CAST(udwPackageSize));
+                    DEBUG_LOG("CMS: " + strPackageID + " package requires updating of size : " + ToString(udwPackageSize));
                     
                     PackageDetails sPackageDetails;
                     sPackageDetails.strID = strPackageID;

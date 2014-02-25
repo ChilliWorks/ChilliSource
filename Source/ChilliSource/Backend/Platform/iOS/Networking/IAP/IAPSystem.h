@@ -9,8 +9,8 @@
 #ifndef _MOFLOW_PLATFORM_IOS_IAPSYSTEM_
 #define _MOFLOW_PLATFORM_IOS_IAPSYSTEM_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
-
 #include <ChilliSource/Backend/Platform/iOS/Networking/IAP/StoreKitIAPSystem.h>
 
 namespace ChilliSource

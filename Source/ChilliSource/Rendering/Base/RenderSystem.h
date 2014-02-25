@@ -11,11 +11,10 @@
 #ifndef _MOFLO_RENDERING_IRENDERSYSTEM_H
 #define _MOFLO_RENDERING_IRENDERSYSTEM_H
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Core/Base/Colour.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
 #include <ChilliSource/Rendering/Base/RenderTarget.h>
 #include <ChilliSource/Rendering/Material/Material.h>

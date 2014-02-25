@@ -92,7 +92,7 @@ namespace ChilliSource
                 }
 			}
 			
-			WARNING_LOG("Application cannot find factory for interface ID: " + STRING_CAST(inInterfaceID));
+			WARNING_LOG("Application cannot find factory for interface ID: " + ToString(inInterfaceID));
 			return NULL;
         }
         //--------------------------------------------------------------------------------------------------
@@ -112,7 +112,7 @@ namespace ChilliSource
                 }
 			}
             
-            WARNING_LOG("Cannot find component producer for interface ID: " + STRING_CAST(inInterfaceID));
+            WARNING_LOG("Cannot find component producer for interface ID: " + ToString(inInterfaceID));
             return NULL;
         }
         //--------------------------------------------------------------------

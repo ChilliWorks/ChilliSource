@@ -10,6 +10,7 @@
 #ifndef _MO_FLO_CORE_TASKS_H_
 #define _MO_FLO_CORE_TASKS_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 
 #include <thread>

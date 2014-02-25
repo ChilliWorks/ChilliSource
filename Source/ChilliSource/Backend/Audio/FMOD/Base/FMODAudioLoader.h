@@ -14,6 +14,7 @@
 #ifndef _MO_FLO_AUDIO_FMOD_FMOD_AUDIO_LOADER_H_
 #define _MO_FLO_AUDIO_FMOD_FMOD_AUDIO_LOADER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/Base/AudioLoader.h>
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
 

@@ -13,9 +13,8 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_MANAGER_H_
 #define _MO_FLO_AUDIO_AUDIO_MANAGER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceManager.h>
-
-#include <ChilliSource/Audio/ForwardDeclarations.h>
 #include <ChilliSource/Audio/Base/AudioResource.h>
 #include <ChilliSource/Audio/3D/AudioListener.h>
 

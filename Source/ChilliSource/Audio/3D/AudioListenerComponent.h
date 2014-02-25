@@ -13,6 +13,8 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_LISTENER_COMPONENT_H_
 #define _MO_FLO_AUDIO_AUDIO_LISTENER_COMPONENT_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 #include <ChilliSource/Core/Entity/Component.h>
 
 #include <ChilliSource/Audio/3D/AudioListener.h>

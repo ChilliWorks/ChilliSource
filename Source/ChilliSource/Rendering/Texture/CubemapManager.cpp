@@ -125,7 +125,7 @@ namespace ChilliSource
                         for(u32 i=0; i<6; ++i)
                         {
                             Core::ResourcePtr pSourceImage(new Core::CImage());
-                            std::string strFileName = strPath + STRING_CAST(i+1) + strExt;
+                            std::string strFileName = strPath + ToString(i+1) + strExt;
                             if(static_cast<Core::IImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(ineStorageLocation, strFileName, ineFormat, pSourceImage))
                             {
                                 Core::CImage* pImage = (Core::CImage*)(pSourceImage.get());
@@ -192,7 +192,7 @@ namespace ChilliSource
 				ImageDesc Desc;
                 for(u32 i=0; i<6; ++i)
                 {
-                    Desc.strFilenames[i] = strPath + STRING_CAST(i+1) + strExt;
+                    Desc.strFilenames[i] = strPath + ToString(i+1) + strExt;
                     Desc.pImageResources.push_back(Core::ResourcePtr(new Core::CImage()));
                 }
 	

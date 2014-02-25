@@ -7,6 +7,7 @@
  *
  */
 
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #include <ChilliSource/GUI/Debug/DebugStatsView.h>
 
@@ -49,12 +50,12 @@ namespace ChilliSource
             
             if(it != mmapEvents.end())
             {
-                udwNewValue = Core::CStringConverter::ParseUnsignedInt(mmapEvents[instrType]) + inudwValue;
-                it->second = STRING_CAST(udwNewValue);
+                udwNewValue = Core::ParseU32(mmapEvents[instrType]) + inudwValue;
+                it->second = ToString(udwNewValue);
             }
             else
             {
-                mmapEvents[instrType] = STRING_CAST(udwNewValue);
+                mmapEvents[instrType] = ToString(udwNewValue);
             }
         }
         //----------------------------------------------------------------------------------
@@ -75,12 +76,12 @@ namespace ChilliSource
             
             if(it != mmapEvents.end())
             {
-                dwNewValue = Core::CStringConverter::ParseInt(mmapEvents[instrType]) + indwValue;
-                it->second = STRING_CAST(dwNewValue);
+                dwNewValue = Core::ParseS32(mmapEvents[instrType]) + indwValue;
+                it->second = ToString(dwNewValue);
             }
             else
             {
-                mmapEvents[instrType] = STRING_CAST(dwNewValue);
+                mmapEvents[instrType] = ToString(dwNewValue);
             }
         }
         //----------------------------------------------------------------------------------
@@ -101,12 +102,12 @@ namespace ChilliSource
             
             if(it != mmapEvents.end())
             {
-                fNewValue = Core::CStringConverter::ParseFloat(mmapEvents[instrType]) + infValue;
-                it->second = STRING_CAST(fNewValue);
+                fNewValue = Core::ParseF32(mmapEvents[instrType]) + infValue;
+                it->second = ToString(fNewValue);
             }
             else
             {
-                mmapEvents[instrType] = STRING_CAST(fNewValue);
+                mmapEvents[instrType] = ToString(fNewValue);
             }
         }
         //----------------------------------------------------------------------------------

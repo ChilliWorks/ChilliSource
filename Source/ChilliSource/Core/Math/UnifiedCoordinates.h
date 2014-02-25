@@ -9,6 +9,7 @@
 #ifndef _MOFLO_GUI_UNIFIED_COORDINATES_H_
 #define _MOFLO_GUI_UNIFIED_COORDINATES_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 
 //---------------------------------------------------------------

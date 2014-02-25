@@ -2,9 +2,8 @@
 #ifndef _MO_FLO_INPUT_MOUSE_H_
 #define _MO_FLO_INPUT_MOUSE_H_
 
-#include <ChilliSource/Input/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Input/Base/InputDevice.h>
-
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
 namespace ChilliSource

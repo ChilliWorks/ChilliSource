@@ -9,9 +9,8 @@
 #ifndef _MOFLO_GUI_DEFAULTS_STRETCHABLEHIGHLIGHTBUTTON_H_
 #define _MOFLO_GUI_DEFAULTS_STRETCHABLEHIGHLIGHTBUTTON_H_
 
-#include <ChilliSource/GUI/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Button/Button.h>
-#include <ChilliSource/Audio/ForwardDeclarations.h>
 
 namespace ChilliSource
 {

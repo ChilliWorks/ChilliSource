@@ -6,11 +6,13 @@
 //  Copyright (c) 2012 Tag Games Ltd. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+#include <ChilliSource/ChilliSource.h>
 #import <ChilliSource/Backend/Platform/iOS/Networking/Cloud/iCloudSystem/ICloudSystem.h>
 #import <ChilliSource/Core/Base/FastDelegate.h>
 #import <ChilliSource/Networking/Cloud/CloudStorageSystem.h>
+
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface CiCloudSystemController : NSObject
 {

@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_RENDERING_SPRITE_BATCH_H_
 #define _MO_FLO_RENDERING_SPRITE_BATCH_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>

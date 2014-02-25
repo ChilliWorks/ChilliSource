@@ -8,6 +8,7 @@
 
 #include <ChilliSource/Rendering/Particles/Effectors/LinearForceParticleEffector.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 namespace ChilliSource
 {
@@ -27,12 +28,12 @@ namespace ChilliSource
             //Linear force
             if(insParams.TryGetValue("Force", strTemp))
             {
-                mvForce = Core::CStringConverter::ParseVector3(strTemp);
+                mvForce = Core::ParseVector3(strTemp);
             }
             //Energy level
             if(insParams.TryGetValue("AtEnergyLevel", strTemp))
             {
-                mfActiveEnergyLevel = Core::CStringConverter::ParseFloat(strTemp);
+                mfActiveEnergyLevel = Core::ParseF32(strTemp);
             }
         }
         //-----------------------------------------------------

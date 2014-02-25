@@ -10,6 +10,8 @@
 #ifndef _MOFLO_CORE_GENERICEVENTIMPL_H_
 #define _MOFLO_CORE_GENERICEVENTIMPL_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 #include <thread>
 
 namespace ChilliSource

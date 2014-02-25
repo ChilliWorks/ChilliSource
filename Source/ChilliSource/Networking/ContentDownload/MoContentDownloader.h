@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_NETWORKING_MO_CONTENT_DOWNLOADER_H_
 #define _MOFLOW_NETWORKING_MO_CONTENT_DOWNLOADER_H_
 
-#include <ChilliSource/Networking/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Networking/ContentDownload/ContentDownloader.h>
 #include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
 

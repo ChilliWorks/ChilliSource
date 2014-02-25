@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_CORE_LOCALISED_TEXT_H_
 #define _MO_FLO_CORE_LOCALISED_TEXT_H_
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Container/HashedArray.h>
 #include <ChilliSource/Core/String/UTF8String.h>

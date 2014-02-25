@@ -10,6 +10,7 @@
 #ifndef _MO_FLO_IOS_PLATFORM_GAME_CENTRE_H_
 #define _MO_FLO_IOS_PLATFORM_GAME_CENTRE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/Container/WorkerQueue.h>

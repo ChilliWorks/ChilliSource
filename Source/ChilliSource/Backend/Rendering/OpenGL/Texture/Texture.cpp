@@ -339,7 +339,7 @@ namespace ChilliSource
 		{
 			if(inSlot > mpRenderCapabilities->GetNumTextureUnits())
 			{
-				FATAL_LOG("Attempting to bind to texture unit not supported on this device: " + STRING_CAST(inSlot));
+				FATAL_LOG("Attempting to bind to texture unit not supported on this device: " + ToString(inSlot));
 			}
 			
             SetActiveTextureSlot(inSlot);

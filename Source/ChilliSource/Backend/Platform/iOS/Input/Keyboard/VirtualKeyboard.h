@@ -9,13 +9,13 @@
 #ifndef _MO_FLO_PLATFORM_IOS_VIRTUAL_KEYBOARD_H_
 #define _MO_FLO_PLATFORM_IOS_VIRTUAL_KEYBOARD_H_
 
-#include <UIKit/UIKit.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
-
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
-
 #include <ChilliSource/Input/Keyboard/VirtualKeyboard.h>
+
+#include <UIKit/UIKit.h>
 
 namespace ChilliSource
 {

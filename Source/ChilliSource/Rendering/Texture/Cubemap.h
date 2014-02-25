@@ -10,6 +10,7 @@
 #ifndef _MOFLO_RENDERING_CUBEMAP_H_
 #define _MOFLO_RENDERING_CUBEMAP_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 

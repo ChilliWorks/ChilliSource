@@ -14,7 +14,7 @@
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 
 #include <ChilliSource/Core/Entity/Entity.h>
-#include <ChilliSource/Core/String/StringConverter.h>
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
 namespace ChilliSource
@@ -37,50 +37,50 @@ namespace ChilliSource
             //Frequency
             if(inParams.TryGetValue("Frequency", strTemp))
             {
-                mfEmissionFreq = Core::CStringConverter::ParseFloat(strTemp);
+                mfEmissionFreq = Core::ParseF32(strTemp);
                 mfCurrentTime = mfEmissionFreq;
             }
             //Looping
             if(inParams.TryGetValue("IsLooping", strTemp))
             {
-                mbShouldLoop = Core::CStringConverter::ParseBool(strTemp);
+                mbShouldLoop = Core::ParseBool(strTemp);
             }
             //Lifetime in seconds
             if(inParams.TryGetValue("Lifetime", strTemp))
             {
-                f32 fTimeToLive = Core::CStringConverter::ParseFloat(strTemp);
+                f32 fTimeToLive = Core::ParseF32(strTemp);
                 SetLifetime(fTimeToLive);
             }
             //Colour
             if(inParams.TryGetValue("InitColour", strTemp))
             {
-                mInitialColour = Core::CStringConverter::ParseColourValue(strTemp);
+                mInitialColour = Core::ParseColour(strTemp);
             }
             //Velocity
             if(inParams.TryGetValue("InitVelocity", strTemp))
             {
-                mfInitialVelocity = Core::CStringConverter::ParseFloat(strTemp);
+                mfInitialVelocity = Core::ParseF32(strTemp);
                 mfMinInitialVelocity = mfInitialVelocity;
             }
             //Min Init Velocity
             if(inParams.TryGetValue("MinInitVelocity", strTemp))
             {
-                mfMinInitialVelocity = Core::CStringConverter::ParseFloat(strTemp);
+                mfMinInitialVelocity = Core::ParseF32(strTemp);
             }
             //Scale
             if(inParams.TryGetValue("InitScale", strTemp))
             {
-                mvInitialScale = Core::CStringConverter::ParseVector2(strTemp);
+                mvInitialScale = Core::ParseVector2(strTemp);
             }
             //Num per emission
             if(inParams.TryGetValue("ParticlesPerEmit", strTemp))
             {
-                mudwMaxNumParticlesPerEmission = Core::CStringConverter::ParseUnsignedInt(strTemp);
+                mudwMaxNumParticlesPerEmission = Core::ParseU32(strTemp);
             }
             // Global space
             if(inParams.TryGetValue("GlobalSpace", strTemp))
             {
-                mbIsGlobalSpace = Core::CStringConverter::ParseBool(strTemp);
+                mbIsGlobalSpace = Core::ParseBool(strTemp);
             }
             
             mudwMaxNumParticles = (std::ceil(mfTimeToLive/mfEmissionFreq) * mudwMaxNumParticlesPerEmission);

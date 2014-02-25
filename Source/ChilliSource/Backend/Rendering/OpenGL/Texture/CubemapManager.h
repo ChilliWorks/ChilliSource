@@ -10,8 +10,8 @@
 #ifndef _MOFLOW_OPENGL_CUBEMAPMANAGER_H_
 #define _MOFLOW_OPENGL_CUBEMAPMANAGER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Texture/CubemapManager.h>
 
 namespace ChilliSource

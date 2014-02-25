@@ -9,6 +9,7 @@
 #ifndef _MOFLOW_CORE_ETC1IMAGEPROVIDER_H_
 #define _MOFLOW_CORE_ETC1IMAGEPROVIDER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Image/ImageResourceProvider.h>
 
 namespace ChilliSource

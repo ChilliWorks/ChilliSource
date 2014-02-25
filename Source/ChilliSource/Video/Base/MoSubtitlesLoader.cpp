@@ -125,7 +125,7 @@ namespace ChilliSource
             u32 udwVersionNumber = root.get(kstrTagVersionNumber, 0).asUInt();
             if (udwVersionNumber != 1)
             {
-                ERROR_LOG("MoSubtitles file '" + inFilePath + "' has version number '" + STRING_CAST(udwVersionNumber) + "'. Only version 1 is supported.");
+                ERROR_LOG("MoSubtitles file '" + inFilePath + "' has version number '" + ToString(udwVersionNumber) + "'. Only version 1 is supported.");
                 return false;
             }
             

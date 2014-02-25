@@ -10,8 +10,8 @@
 #ifndef _MOFLOW_OPENGL_RENDERTARGET_H_
 #define _MOFLOW_OPENGL_RENDERTARGET_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/RenderTarget.h>
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
 
 #ifdef TARGET_OS_IPHONE

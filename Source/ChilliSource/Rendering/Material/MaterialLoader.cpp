@@ -318,7 +318,7 @@ namespace ChilliSource
                             {
                                 if(outaShaderFiles[udwShaderFilesIndex].first == kaShaderNodes[i].second)
                                 {
-                                    outaShaderFiles[udwShaderFilesIndex].second.first = ChilliSource::Core::CStringConverter::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pShaderEl, "location", "Package"));
+                                    outaShaderFiles[udwShaderFilesIndex].second.first = ChilliSource::Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pShaderEl, "location", "Package"));
                                     outaShaderFiles[udwShaderFilesIndex].second.second = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pShaderEl, "file-name", "");
                                     break;
                                 }
@@ -376,7 +376,7 @@ namespace ChilliSource
 					while(pTexEl)
 					{
                         TextureDesc desc;
-                        desc.meLocation = Core::CStringConverter::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pTexEl, "location", "Package"));
+                        desc.meLocation = Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pTexEl, "location", "Package"));
                         desc.mstrFile = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pTexEl, "image-name", "");
                         desc.mbMipMapped = Core::XMLUtils::GetAttributeValueOrDefault<bool>(pTexEl, "mipmapped", false);
                         outaTextureFiles.push_back(desc);
@@ -389,7 +389,7 @@ namespace ChilliSource
 				if(pCubemapEl)
 				{
                     TextureDesc desc;
-                    desc.meLocation = Core::CStringConverter::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pCubemapEl, "location", "Package"));
+                    desc.meLocation = Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pCubemapEl, "location", "Package"));
                     desc.mstrFile = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pCubemapEl, "base-name", "");
                     desc.mbMipMapped = Core::XMLUtils::GetAttributeValueOrDefault<bool>(pCubemapEl, "mipmapped", false);
                     outaCubemapFiles.push_back(desc);

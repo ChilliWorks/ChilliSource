@@ -13,6 +13,7 @@
 #ifndef _MO_FLO_CORE_UTILS_H_
 #define _MO_FLO_CORE_UTILS_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/JSON/forwards.h>
 

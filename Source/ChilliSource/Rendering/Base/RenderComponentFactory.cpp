@@ -27,6 +27,7 @@
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 namespace ChilliSource
 {
@@ -150,26 +151,26 @@ namespace ChilliSource
 				f32 fHorFOV = 45.0f;
 				if (insParamDictionary.HasValue("FOV")) 
                 {
-					fHorFOV = Core::CStringConverter::ParseFloat(insParamDictionary.ValueForKey("FOV"));
+					fHorFOV = Core::ParseF32(insParamDictionary.ValueForKey("FOV"));
 				}
 				
 				f32 fNearClipZ = 0.1f;
 				if (insParamDictionary.HasValue("NearClippingZ")) 
                 {
-					fNearClipZ = Core::CStringConverter::ParseFloat(insParamDictionary.ValueForKey("NearClippingZ"));
+					fNearClipZ = Core::ParseF32(insParamDictionary.ValueForKey("NearClippingZ"));
 				}
 				
 				f32 fFarClipZ = 1000.0f;
 				if (insParamDictionary.HasValue("FarClippingZ")) 
                 {
-					fFarClipZ = Core::CStringConverter::ParseFloat(insParamDictionary.ValueForKey("FarClippingZ"));
+					fFarClipZ = Core::ParseF32(insParamDictionary.ValueForKey("FarClippingZ"));
 				}
 				
 				CameraComponentPtr pResult = CreateCameraComponent(fHorFOV, fNearClipZ, fFarClipZ);
 				
 				if (insParamDictionary.HasValue("ClearColour")) 
                 {
-					Core::CColour cClearCol = Core::CStringConverter::ParseColourValue(insParamDictionary.ValueForKey("ClearColour"));
+					Core::CColour cClearCol = Core::ParseColour(insParamDictionary.ValueForKey("ClearColour"));
 					pResult->SetClearColour(cClearCol);
 				}
 				
@@ -196,7 +197,7 @@ namespace ChilliSource
 						std::string strTargetDensity;
 						if(insParamDictionary.TryGetValue("TargetDensity", strTargetDensity))
 						{
-							udwTargetDensity = Core::CStringConverter::ParseInt(strTargetDensity);
+							udwTargetDensity = Core::ParseS32(strTargetDensity);
 						}
 						f32 fScale = udwTargetDensity / Core::IFileSystem::GetDeviceResourcesDensity();
 						
@@ -218,13 +219,13 @@ namespace ChilliSource
 				std::string strSize;
 				if (insParamDictionary.TryGetValue("Size", strSize))
 				{
-					pSprite->SetDimensions(Core::CStringConverter::ParseVector2(strSize));					
+					pSprite->SetDimensions(Core::ParseVector2(strSize));					
 				}
 				
 				std::string strColour;
 				if (insParamDictionary.TryGetValue("Colour", strColour))
 				{
-					pSprite->SetColour(Core::CStringConverter::ParseColourValue(strColour));
+					pSprite->SetColour(Core::ParseColour(strColour));
 				}		
 				
 				std::string strOriginAlignment;

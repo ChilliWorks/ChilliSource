@@ -10,6 +10,7 @@
 
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 namespace ChilliSource
 {
@@ -41,7 +42,7 @@ namespace ChilliSource
             //---Animation
             if(insParams.TryGetValue("AnimationTime", strValue))
             {
-                SetAnimatedTimeInSeconds(Core::CStringConverter::ParseFloat(strValue));
+                SetAnimatedTimeInSeconds(Core::ParseF32(strValue));
                 SetProgress(mfProgress);
             }
         }

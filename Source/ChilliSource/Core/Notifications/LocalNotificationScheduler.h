@@ -9,6 +9,7 @@
 #ifndef _MOFLOW_CORE_LOCALNOTIFICATIONSCHEDULER_H_
 #define _MOFLOW_CORE_LOCALNOTIFICATIONSCHEDULER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
 namespace ChilliSource

@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_RENDERING_CULLING_PREDICATES_H_
 #define _MOFLOW_RENDERING_CULLING_PREDICATES_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {

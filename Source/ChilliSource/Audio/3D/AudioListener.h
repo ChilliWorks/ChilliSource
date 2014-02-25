@@ -13,6 +13,8 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_LISTENER_H_
 #define _MO_FLO_AUDIO_AUDIO_LISTENER_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource
 {
 	namespace Audio

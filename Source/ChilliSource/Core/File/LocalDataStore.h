@@ -15,6 +15,7 @@
 #ifndef _MOFLO_CORE_LOCALDATASTORE_H_
 #define _MOFLO_CORE_LOCALDATASTORE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
 namespace ChilliSource

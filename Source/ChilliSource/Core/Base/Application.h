@@ -10,15 +10,11 @@
 #ifndef _MOFLO_APPLICATION_H_
 #define _MOFLO_APPLICATION_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/State/StateManager.h>
-#include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Audio/ForwardDeclarations.h>
-#include <ChilliSource/GUI/ForwardDeclarations.h>
 
 #include <limits>
 

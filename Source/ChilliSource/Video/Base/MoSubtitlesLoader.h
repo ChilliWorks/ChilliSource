@@ -10,7 +10,7 @@
 #ifndef _MOFLOW_VIDEO_MOSUBTITLESLOADER_H_
 #define _MOFLOW_VIDEO_MOSUBTITLESLOADER_H_
 
-#include <ChilliSource/Video/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Video/Base/Subtitles.h>

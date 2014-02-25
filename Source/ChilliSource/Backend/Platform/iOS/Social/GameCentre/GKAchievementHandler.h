@@ -6,6 +6,8 @@
 //  $Id$
 //
 
+#include <ChilliSource/ChilliSource.h>
+
 #import <Foundation/Foundation.h>
 #import "GKAchievementNotification.h"
 

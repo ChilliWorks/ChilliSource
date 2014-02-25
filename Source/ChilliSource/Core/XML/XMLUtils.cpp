@@ -12,6 +12,7 @@
  */
 
 #include <ChilliSource/Core/XML/XMLUtils.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 namespace ChilliSource
 {
@@ -75,7 +76,7 @@ namespace ChilliSource
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return CStringConverter::ParseFloat(Result);
+				return ParseF32(Result);
 			} else {
 				return inDefault;
 			}
@@ -85,7 +86,7 @@ namespace ChilliSource
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return CStringConverter::ParseInt(Result);
+				return ParseS32(Result);
 			} else {
 				return inDefault;
 			}
@@ -96,7 +97,7 @@ namespace ChilliSource
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return CStringConverter::ParseUnsignedInt(Result);
+				return ParseU32(Result);
 			} else {
 				return inDefault;
 			}
@@ -107,7 +108,7 @@ namespace ChilliSource
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return CStringConverter::ParseLong(Result);
+				return ParseS64(Result);
 			} else {
 				return inDefault;
 			}
@@ -118,7 +119,7 @@ namespace ChilliSource
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return CStringConverter::ParseUnsignedLong(Result);
+				return ParseU64(Result);
 			} else {
 				return inDefault;
 			}
@@ -129,7 +130,7 @@ namespace ChilliSource
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return CStringConverter::ParseBool(Result);
+				return ParseBool(Result);
 			} else {
 				return inDefault;
 			}
@@ -140,7 +141,7 @@ namespace ChilliSource
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return CStringConverter::ParseVector2(Result);
+				return ParseVector2(Result);
 			} else {
 				return inDefault;
 			}
@@ -151,7 +152,7 @@ namespace ChilliSource
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return CStringConverter::ParseVector3(Result);
+				return ParseVector3(Result);
 			} else {
 				return inDefault;
 			}
@@ -161,7 +162,7 @@ namespace ChilliSource
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return CStringConverter::ParseVector4(Result);
+				return ParseVector4(Result);
 			} else {
 				return inDefault;
 			}
@@ -171,7 +172,7 @@ namespace ChilliSource
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return CStringConverter::ParseMatrix4(Result);
+				return ParseMatrix4(Result);
 			} else {
 				return inDefault;
 			}
@@ -181,7 +182,7 @@ namespace ChilliSource
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return CStringConverter::ParseQuaternion(Result);
+				return ParseQuaternion(Result);
 			} else {
 				return inDefault;
 			}
@@ -191,7 +192,7 @@ namespace ChilliSource
 			std::string Result;
 			
 			if (GetAttributeValue(inpElement, inAttributeName, Result)) {
-				return CStringConverter::ParseColourValue(Result);
+				return ParseColour(Result);
 			} else {
 				return inDefault;
 			}

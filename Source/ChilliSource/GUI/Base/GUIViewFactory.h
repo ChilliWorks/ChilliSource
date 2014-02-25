@@ -9,10 +9,9 @@
 #ifndef _MOFLO_GUI_GUIVIEWFACTORY_H_
 #define _MOFLO_GUI_GUIVIEWFACTORY_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
-
-#include <ChilliSource/GUI/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/XML/rapidxml_forward.h>
 

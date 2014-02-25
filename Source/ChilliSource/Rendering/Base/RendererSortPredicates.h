@@ -10,7 +10,7 @@
 #ifndef _MOFLO_RENDERING_RENDERERSORTPREDICATES_H_
 #define _MOFLO_RENDERING_RENDERERSORTPREDICATES_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {

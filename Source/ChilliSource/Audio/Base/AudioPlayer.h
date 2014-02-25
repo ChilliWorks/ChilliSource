@@ -10,9 +10,8 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_PLAYER_H_
 #define _MO_FLO_AUDIO_AUDIO_PLAYER_H_
 
-#include <ChilliSource/Audio/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/3D/AudioComponent.h>
-
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource

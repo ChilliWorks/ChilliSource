@@ -13,9 +13,9 @@
 #ifndef _MO_FLO_RENDERING_SPRITE_LOADER_H_
 #define _MO_FLO_RENDERING_SPRITE_LOADER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
-
 
 namespace ChilliSource
 {

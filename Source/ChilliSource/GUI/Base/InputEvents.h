@@ -9,10 +9,8 @@
 #ifndef _MO_FLO_GUI_INPUT_EVENTS_H_
 #define _MO_FLO_GUI_INPUT_EVENTS_H_
 
-#include <ChilliSource/GUI/ForwardDeclarations.h>
-
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
-
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
 namespace ChilliSource

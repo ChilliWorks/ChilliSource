@@ -13,6 +13,7 @@
 #ifndef _MO_FLO_AUDIO_RESOURCE_H_
 #define _MO_FLO_AUDIO_RESOURCE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 
 namespace ChilliSource 

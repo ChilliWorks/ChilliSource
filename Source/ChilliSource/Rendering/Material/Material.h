@@ -10,12 +10,10 @@
 #ifndef _MO_FLO_RENDERING_MATERIAL_H_
 #define _MO_FLO_RENDERING_MATERIAL_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
-
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/String/StringUtils.h>
-
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource

@@ -9,6 +9,7 @@
 #ifndef _MOFLO_CLOUDSTORAGESYSTEM_H
 #define _MOFLO_CLOUDSTORAGESYSTEM_H
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>

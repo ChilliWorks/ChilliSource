@@ -113,7 +113,7 @@ namespace ChilliSource
                 return mStringIDLookups[inudwFrameIndex];
             }
             
-            WARNING_LOG("Sprite not found for Frame Index: " + STRING_CAST(inudwFrameIndex));
+            WARNING_LOG("Sprite not found for Frame Index: " + ToString(inudwFrameIndex));
             return Core::CStringUtils::BLANK;
         }		
 		//---------------------------------------------------------------------

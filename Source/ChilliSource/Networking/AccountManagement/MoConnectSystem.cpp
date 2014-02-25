@@ -1182,12 +1182,12 @@ namespace ChilliSource
                 }
                 else
                 {
-                    ERROR_LOG("Unable to validate IAP receipt.\nGot response code \""+STRING_CAST(inpRequest->GetResponseCode())+"\"");
+                    ERROR_LOG("Unable to validate IAP receipt.\nGot response code \""+ToString(inpRequest->GetResponseCode())+"\"");
                 }
             }
             else
             {
-                ERROR_LOG("Unable to validate IAP receipt as HTTP request did not complete. Instead we got result: "+STRING_CAST((u32)ineResult));
+                ERROR_LOG("Unable to validate IAP receipt as HTTP request did not complete. Instead we got result: "+ToString((u32)ineResult));
             }
             
             mValidateReceiptDelegate(bIsValid, ineResult, sIAP);

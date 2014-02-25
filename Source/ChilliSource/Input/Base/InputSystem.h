@@ -14,7 +14,7 @@
 #ifndef _MOFLO_INPUT_INPUTSYSTEM_H_
 #define _MOFLO_INPUT_INPUTSYSTEM_H_
 
-#include <ChilliSource/Input/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 

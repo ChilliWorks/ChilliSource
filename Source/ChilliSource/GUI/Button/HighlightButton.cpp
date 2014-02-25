@@ -88,7 +88,7 @@ namespace ChilliSource
             Core::StorageLocation eNormalTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("NormalTextureLocation", strValue))
             {
-                eNormalTextureLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eNormalTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("NormalTexture", strValue))
             {
@@ -98,7 +98,7 @@ namespace ChilliSource
             Core::StorageLocation eHighlightTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("HighlightTextureLocation", strValue))
             {
-                eHighlightTextureLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eHighlightTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("HighlightTexture", strValue))
             {
@@ -108,7 +108,7 @@ namespace ChilliSource
             Core::StorageLocation eNormalSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("NormalSpriteSheetLocation", strValue))
             {
-                eNormalSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eNormalSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("NormalSpriteSheet", strValue))
             {
@@ -118,7 +118,7 @@ namespace ChilliSource
             Core::StorageLocation eHighlightSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("HighlightSpriteSheetLocation", strValue))
             {
-                eHighlightSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eHighlightSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("HighlightSpriteSheet", strValue))
             {
@@ -128,13 +128,13 @@ namespace ChilliSource
             if(insParams.TryGetValue("NormalSpriteSheetIndex", strValue))
             {
                 MOFLOW_ASSERT(NormalSpriteSheet, "Sprite sheet index cannot be set without sprite sheet");
-                SetNormalSpriteSheetIndex(Core::CStringConverter::ParseUnsignedInt(strValue));
+                SetNormalSpriteSheetIndex(Core::ParseU32(strValue));
             }
             //---Highlight index
             if(insParams.TryGetValue("HighlightSpriteSheetIndex", strValue))
             {
 				MOFLOW_ASSERT(HighlightSpriteSheet, "Sprite sheet index cannot be set without sprite sheet");
-				SetHighlightSpriteSheetIndex(Core::CStringConverter::ParseUnsignedInt(strValue));
+				SetHighlightSpriteSheetIndex(Core::ParseU32(strValue));
             }
 			//---Default index ID
 			if(insParams.TryGetValue("NormalSpriteSheetIndexID", strValue))
@@ -149,57 +149,57 @@ namespace ChilliSource
             //---Highlight Colour
             if(insParams.TryGetValue("HighlightColour", strValue))
             {
-                SetHighlightColour(Core::CStringConverter::ParseColourValue(strValue));
+                SetHighlightColour(Core::ParseColour(strValue));
             }
 			//---Size from image
             if(insParams.TryGetValue("SizeFromImage", strValue))
             {
-                SizeFromImage = Core::CStringConverter::ParseBool(strValue);
+                SizeFromImage = Core::ParseBool(strValue);
             }
             //---Width from image
             if(insParams.TryGetValue("WidthFromImage", strValue))
             {
-                EnableWidthFromImage(Core::CStringConverter::ParseBool(strValue));
+                EnableWidthFromImage(Core::ParseBool(strValue));
             }
             //---Height from image
             if(insParams.TryGetValue("HeightFromImage", strValue))
             {
-                EnableHeightFromImage(Core::CStringConverter::ParseBool(strValue));
+                EnableHeightFromImage(Core::ParseBool(strValue));
             }
 			//---Maintain Width
 			if(insParams.TryGetValue("HeightMaintain", strValue))
 			{
-				HeightMaintain = Core::CStringConverter::ParseBool(strValue);
+				HeightMaintain = Core::ParseBool(strValue);
 			}
 			//---Maintain Height
 			if(insParams.TryGetValue("WidthMaintain", strValue))
 			{
-				WidthMaintain = Core::CStringConverter::ParseBool(strValue);
+				WidthMaintain = Core::ParseBool(strValue);
 			}
 			//---Set Maintain Height
 			if(insParams.TryGetValue("SetHeightMaintain", strValue))
 			{
-				Core::CVector2 vSize = Core::CStringConverter::ParseVector2(strValue);
+				Core::CVector2 vSize = Core::ParseVector2(strValue);
 				HeightMaintain = true;
 				SetHeightMaintainingAspect(vSize.x, vSize.y);
 			}
 			//---Set Maintain Width
 			if(insParams.TryGetValue("SetWidthMaintain", strValue))
 			{
-				Core::CVector2 vSize = Core::CStringConverter::ParseVector2(strValue);
+				Core::CVector2 vSize = Core::ParseVector2(strValue);
 				WidthMaintain = true;
 				SetWidthMaintainingAspect(vSize.x, vSize.y);
 			}
             //---Set Fill Maintain
             if(insParams.TryGetValue("SetFillMaintain", strValue))
             {
-                Core::CVector4 vSize = Core::CStringConverter::ParseVector4(strValue);
+                Core::CVector4 vSize = Core::ParseVector4(strValue);
                 SetFillMaintainingAspect(vSize.x, vSize.y, vSize.z, vSize.w);
             }
             //---Set Fit Maintain
             if(insParams.TryGetValue("SetFitMaintain", strValue))
             {
-                Core::CVector4 vSize = Core::CStringConverter::ParseVector4(strValue);
+                Core::CVector4 vSize = Core::ParseVector4(strValue);
                 SetFitMaintainingAspect(vSize.x, vSize.y, vSize.z, vSize.w);
             }
             //---Audio effect
@@ -207,11 +207,11 @@ namespace ChilliSource
             Core::StorageLocation eDeselectAudioLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SelectAudioEffectLocation", strValue))
             {
-                eSelectAudioLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSelectAudioLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("DeselectAudioEffectLocation", strValue))
             {
-                eDeselectAudioLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eDeselectAudioLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("SelectAudioEffect", strValue))
             {

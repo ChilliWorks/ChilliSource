@@ -7,7 +7,7 @@
 //
 
 #include <ChilliSource/Rendering/Particles/Emitters/ConeParticleEmitter.h>
-
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
 namespace ChilliSource
@@ -28,7 +28,7 @@ namespace ChilliSource
             //Radius
             if(inParams.TryGetValue("Radius", strTemp))
             {
-                fRadius =Core::CMathUtils::Clamp( Core::CStringConverter::ParseFloat(strTemp), 1.0f, 89.0f);
+                fRadius =Core::CMathUtils::Clamp( Core::ParseF32(strTemp), 1.0f, 89.0f);
             }
             
             mfBoxArea = sinf(Core::CMathUtils::DegToRad(fRadius));

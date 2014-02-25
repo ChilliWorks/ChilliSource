@@ -9,9 +9,11 @@
 #ifndef _MOFLO_CORE_STRINGUTILITIES_H_
 #define _MOFLO_CORE_STRINGUTILITIES_H_
 
-#include <sstream>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
+
+#include <sstream>
 #include <string>
 
 #if (TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE) && __OBJC__
@@ -270,6 +272,9 @@ namespace ChilliSource
 													   const std::string& instrHours,
 													   const std::string& instrMins,
 													   const std::string& instrSecs);
+            
+            /** Checks the std::string is a inValid number inValue. */
+			static bool isNumber(const std::string& inVal);
 		};
 	}
 }

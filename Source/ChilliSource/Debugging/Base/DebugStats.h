@@ -12,6 +12,8 @@
 
 #ifdef DEBUG_STATS
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource
 {
     namespace Debugging
@@ -33,7 +35,7 @@ namespace ChilliSource
             {
                 if(!mbEnabled) return;
                 
-                mmapEvents[instrType] = STRING_CAST(inValue);
+                mmapEvents[instrType] = ToString(inValue);
             }
             //----------------------------------------------------------------------------------
             /// Record Event (String Value)

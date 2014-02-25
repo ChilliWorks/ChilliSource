@@ -7,9 +7,8 @@
 //
 
 #include <ChilliSource/GUI/Label/EditableLabel.h>
-
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Base/Screen.h>
-
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
 namespace ChilliSource
@@ -48,12 +47,12 @@ namespace ChilliSource
 			//---Texture
 			if(insParams.TryGetValue("SecureEntry", strValue))
 			{
-				EnableSecureEntry(Core::CStringConverter::ParseBool(strValue));
+				EnableSecureEntry(Core::ParseBool(strValue));
 			}
 			//---Sprite sheet
 			if(insParams.TryGetValue("CharacterLimit", strValue))
 			{
-				SetCharacterLimit(Core::CStringConverter::ParseUnsignedInt(strValue));
+				SetCharacterLimit(Core::ParseU32(strValue));
 			}
         }
         //-------------------------------------------------

@@ -10,8 +10,7 @@
 #ifndef _MO_FLO_RENDERING_PARTICLES_EFFECTORS_PARTICLE_EFFECTOR_FACTORY_H_
 #define _MO_FLO_RENDERING_PARTICLES_EFFECTORS_PARTICLE_EFFECTOR_FACTORY_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
-
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 

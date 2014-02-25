@@ -109,6 +109,8 @@ namespace ChilliSource
         typedef SHARED_PTR<IVolumeComponent> VolumeComponentPtr;
         typedef WEAK_PTR<IVolumeComponent> VolumeComponentWeakPtr;
         
+        enum class StorageLocation;
+        
         enum class InterpolationType
         {
             k_step,

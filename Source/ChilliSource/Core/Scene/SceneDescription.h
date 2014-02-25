@@ -10,6 +10,7 @@
 #ifndef _MOFLO_CORE_SCENEDESCRIPTION_H_
 #define _MOFLO_CORE_SCENEDESCRIPTION_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/XML/rapidxml_utils.hpp>
 #include <ChilliSource/Core/Container/ParamDictionary.h>

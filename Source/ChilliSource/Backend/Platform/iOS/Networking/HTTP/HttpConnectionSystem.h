@@ -10,10 +10,13 @@
 #ifndef _MOFLO_PLATFORM_IOS_HTTPCONNECTIONSYSTEM_H_
 #define _MOFLO_PLATFORM_IOS_HTTPCONNECTIONSYSTEM_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
-#include <vector>
+
 #import <Foundation/Foundation.h>
+
+#include <vector>
 
 namespace ChilliSource
 {

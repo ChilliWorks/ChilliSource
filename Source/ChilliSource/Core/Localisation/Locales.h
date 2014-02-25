@@ -10,6 +10,7 @@
 #ifndef _MO_FLO_CORE_LOCALES_H_
 #define _MO_FLO_CORE_LOCALES_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Localisation/MoFloLocale.h>
 
 namespace ChilliSource

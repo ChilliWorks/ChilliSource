@@ -6,8 +6,7 @@
 //  Copyright (c) 2013 Tag Games Ltd. All rights reserved.
 //
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 

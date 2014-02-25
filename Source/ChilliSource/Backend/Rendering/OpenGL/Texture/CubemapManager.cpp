@@ -75,7 +75,7 @@ namespace ChilliSource
                                     {
                                         Core::ResourcePtr pSourceImage(new Core::CImage());
                                         Core::CImage* pImage = (Core::CImage*)(pSourceImage.get());
-                                        std::string strFileName = strPath + STRING_CAST(i+1) + strExt;
+                                        std::string strFileName = strPath + ToString(i+1) + strExt;
                                         if(static_cast<IImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(pOpenGLCubemap->GetStorageLocation(), strFileName, pOpenGLCubemap->GetImageFormat(), pSourceImage))
                                         {
                                             pImage->SetName(strFileName);

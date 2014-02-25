@@ -11,6 +11,7 @@
 #ifndef _MOFLO_CORE_RESOURCE_H_
 #define _MOFLO_CORE_RESOURCE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/File/FileSystem.h>

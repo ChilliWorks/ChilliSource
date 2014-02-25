@@ -13,7 +13,7 @@
 #ifndef _MO_FLO_CORE_RESOURCE_GROUP_MANAGER_H_
 #define _MO_FLO_CORE_RESOURCE_GROUP_MANAGER_H_
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {

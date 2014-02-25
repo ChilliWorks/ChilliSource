@@ -10,9 +10,8 @@
 #ifndef _MOFLO_GUI_DEFAULTS_HORIZONTALSTRETCHABLEIMAGE_H_
 #define _MOFLO_GUI_DEFAULTS_HORIZONTALSTRETCHABLEIMAGE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace ChilliSource
 {

@@ -9,10 +9,8 @@
 #ifndef _MO_FLO_RENDERING_MATERIAL_LOADER_H_
 #define _MO_FLO_RENDERING_MATERIAL_LOADER_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Material/Material.h>
-
-#include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
 namespace ChilliSource

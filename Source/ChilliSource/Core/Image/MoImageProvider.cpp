@@ -164,7 +164,7 @@ namespace ChilliSource
                 u32 udwInflatedChecksum = CHashCRC32::GenerateHashCode((const s8*)pubyBitmapData, sHeader.udwOriginalDataSize);
                 if(sHeader.uddwChecksum != (u64)udwInflatedChecksum)
                 {
-                    ERROR_LOG("MoImage checksum of "+STRING_CAST(udwInflatedChecksum)+" does not match expected checksum "+STRING_CAST(sHeader.uddwChecksum));
+                    ERROR_LOG("MoImage checksum of "+ToString(udwInflatedChecksum)+" does not match expected checksum "+ToString(sHeader.uddwChecksum));
                 }
                 
                 free(pubyCompressedData);

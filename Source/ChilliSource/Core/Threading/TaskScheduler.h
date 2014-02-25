@@ -10,6 +10,7 @@
 #ifndef _MO_FLO_CORE_TASK_SCHEDULER_H_
 #define _MO_FLO_CORE_TASK_SCHEDULER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Threading/ThreadPool.h>
 #include <ChilliSource/Core/Threading/Tasks.hpp>
 

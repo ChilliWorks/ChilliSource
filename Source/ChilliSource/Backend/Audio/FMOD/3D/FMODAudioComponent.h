@@ -10,6 +10,7 @@
 #ifndef _MO_FLO_PLATFORM_FMOD_FMOD_AUDIO_COMPONENT_H_
 #define _MO_FLO_PLATFORM_FMOD_FMOD_AUDIO_COMPONENT_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/3D/AudioComponent.h>
 
 #include <fmod.hpp>

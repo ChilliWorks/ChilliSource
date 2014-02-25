@@ -9,6 +9,7 @@
 #ifndef _MOFLOW_CORE_OBJECT_POOL_H
 #define _MOFLOW_CORE_OBJECT_POOL_H
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 
 #include <new>
@@ -55,7 +56,7 @@ namespace ChilliSource
                 if(maReleasePool.empty())
                 {
                     maReleasePool.push_back(new T());
-                    WARNING_LOG("Object Pool - Exceeding initial capacity (" + STRING_CAST((u32)maReleasePool.size() + (u32)maActivePool.size()) + ")");
+                    WARNING_LOG("Object Pool - Exceeding initial capacity (" + ToString((u32)maReleasePool.size() + (u32)maActivePool.size()) + ")");
                 }
 
                 T* pObj = maReleasePool.back();

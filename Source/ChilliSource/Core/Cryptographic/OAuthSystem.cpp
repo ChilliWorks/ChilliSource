@@ -262,8 +262,8 @@ namespace ChilliSource
          *--*/
         std::string COAuthSystem::GenerateNonceTimeStamp(TimeIntervalSecs TimeStamp)
 		{
-            std::string strTime = Core::CStringConverter::ToString(TimeStamp);
-            std::string strCounter = Core::CStringConverter::ToString(udwNonceCounter);
+            std::string strTime = Core::ToString(TimeStamp);
+            std::string strCounter = Core::ToString(udwNonceCounter);
             
             udwNonceCounter++;
             return strTime + strCounter;
@@ -298,7 +298,7 @@ namespace ChilliSource
 		    {
                 TimeIntervalSecs Timestamp = (TimeIntervalSecs)time(NULL);
                 mstrNOnce = GenerateNonceTimeStamp(Timestamp);
-		        mstrTimeStamp = Core::CStringConverter::ToString(Timestamp);
+		        mstrTimeStamp = Core::ToString(Timestamp);
 		    }
 
 		    /* Consumer key and its value */

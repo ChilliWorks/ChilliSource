@@ -13,6 +13,7 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_LOADER_H_
 #define _MO_FLO_AUDIO_AUDIO_LOADER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Audio/Base/AudioManager.h>
 #include <ChilliSource/Audio/Base/AudioSystem.h>

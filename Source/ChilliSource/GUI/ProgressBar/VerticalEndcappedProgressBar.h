@@ -9,10 +9,9 @@
 #ifndef _MOFLOW_GUI_DEFAULTS_VERTICALENDCAPPEDPROGRESSBAR_H_
 #define _MOFLOW_GUI_DEFAULTS_VERTICALENDCAPPEDPROGRESSBAR_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/ProgressBar/ProgressBar.h>
 #include <ChilliSource/GUI/Image/VerticalStretchableImage.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace ChilliSource
 {

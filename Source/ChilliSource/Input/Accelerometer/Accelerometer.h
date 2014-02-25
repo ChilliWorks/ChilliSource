@@ -9,6 +9,7 @@
 #ifndef MOFLOW_INPUT_ACCELEROMETER_H
 #define MOFLOW_INPUT_ACCELEROMETER_H
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Input/Base/InputDevice.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>

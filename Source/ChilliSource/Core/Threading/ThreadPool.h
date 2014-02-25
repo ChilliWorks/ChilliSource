@@ -7,6 +7,7 @@
 #ifndef _CHILLISOURCE_CORE_THREADING_THREADPOOL_H_
 #define _CHILLISOURCE_CORE_THREADING_THREADPOOL_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/WorkerQueue.h>
 
 #include <queue>

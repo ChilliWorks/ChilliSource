@@ -10,7 +10,7 @@
 #ifndef _MOFLOW_RENDERING_MESHDESCRIPTOR_H_
 #define _MOFLOW_RENDERING_MESHDESCRIPTOR_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Base/VertexDeclaration.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>

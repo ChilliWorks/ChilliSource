@@ -6,9 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Networking/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Networking/ContentDownload/ContentDownloader.h>
-
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>

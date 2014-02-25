@@ -9,6 +9,7 @@
 #ifndef _MOFLO_GUI_VerticalStretchableImageVIEW_H_
 #define _MOFLO_GUI_VerticalStretchableImageVIEW_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
 
 //=============================================================

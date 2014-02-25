@@ -9,10 +9,13 @@
 #ifndef _MOFLO_PLATFORM_IOS_GAMECENTREDELEGATES_H_
 #define _MOFLO_PLATFORM_IOS_GAMECENTREDELEGATES_H_
 
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
+
 #import <Foundation/Foundation.h>
 #import <GameKit/GameKit.h>
 #import <GameKit/GKTurnBasedMatch.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
+
 
 typedef fastdelegate::FastDelegate0<> GKNotificationEventDelegate;
 typedef fastdelegate::FastDelegate0<> GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent;

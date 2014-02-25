@@ -10,6 +10,7 @@
 #ifndef _MOFLO_SOCIAL_FACEBOOK_FACEBOOKAUTHENTICATION_H_
 #define _MOFLO_SOCIAL_FACEBOOK_FACEBOOKAUTHENTICATION_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/System.h>
 
 namespace ChilliSource

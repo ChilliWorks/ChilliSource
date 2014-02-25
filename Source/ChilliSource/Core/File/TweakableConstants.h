@@ -1,8 +1,10 @@
 #ifndef _MOFLO_CORE_TWEAKABLECONSTANTS_H
 #define _MOFLO_CORE_TWEAKABLECONSTANTS_H
 
-#include <string>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/XML/tinyxml.h>
+
+#include <string>
 
 #define USETWEAKABLECONSTANTS
 

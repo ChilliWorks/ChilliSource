@@ -226,7 +226,7 @@ namespace ChilliSource
 				return mMaterials[indwSubMeshIndex];
 			}
 			
-            ERROR_LOG("Failed to get material from sub mesh " + STRING_CAST(indwSubMeshIndex));
+            ERROR_LOG("Failed to get material from sub mesh " + ToString(indwSubMeshIndex));
 			return MaterialPtr();
 		}
         //-----------------------------------------------------------

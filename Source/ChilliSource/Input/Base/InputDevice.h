@@ -14,6 +14,7 @@
 #ifndef _MOFLO_INPUT_INPUTDEVICE_H_
 #define _MOFLO_INPUT_INPUTDEVICE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
 namespace ChilliSource

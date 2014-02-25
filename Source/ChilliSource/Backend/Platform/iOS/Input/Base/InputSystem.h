@@ -14,13 +14,13 @@
 #ifndef _MOFLO_PLATFORM_IOS3X_INPUTSYSTEM_H_
 #define _MOFLO_PLATFORM_IOS3X_INPUTSYSTEM_H_
 
-#include <UIKit/UIKit.h>
-
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Input/Base/InputSystem.h>
-
 #include <ChilliSource/Backend/Platform/iOS/Input/Pointer/TouchScreen.h>
 #include <ChilliSource/Backend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
 #include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/VirtualKeyboard.h>
+
+#include <UIKit/UIKit.h>
 
 namespace ChilliSource
 {

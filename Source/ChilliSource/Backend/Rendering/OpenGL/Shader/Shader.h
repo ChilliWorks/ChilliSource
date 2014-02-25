@@ -13,9 +13,9 @@
 #ifndef _MOFLOW_OPENGL_SHADER_H_
 #define _MOFLOW_OPENGL_SHADER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
-#include <ChilliSource/Core/ForwardDeclarations.h>
 
 namespace ChilliSource
 {

@@ -109,11 +109,11 @@ namespace ChilliSource
         
         void IState::DebugPrint(std::string instrMessage)
         {
-            DEBUG_LOG("IState "+CStringConverter::ToString((u32)this)+" - "+instrMessage);
+            DEBUG_LOG("IState "+ToString((u32)this)+" - "+instrMessage);
             DEBUG_LOG("name = "+GetName());
-            DEBUG_LOG("mpScene = "+CStringConverter::ToString((u32)mpScene));
-            DEBUG_LOG("mbOwnsScene = "+CStringConverter::ToString(mbOwnsScene));
-            DEBUG_LOG("mpStateMgr = "+CStringConverter::ToString((u32)mpStateMgr));
+            DEBUG_LOG("mpScene = "+ToString((u32)mpScene));
+            DEBUG_LOG("mbOwnsScene = "+ToString(mbOwnsScene));
+            DEBUG_LOG("mpStateMgr = "+ToString((u32)mpStateMgr));
         }
         
 	}

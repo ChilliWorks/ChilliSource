@@ -10,6 +10,8 @@
 #ifndef _MOFLOW_NETWORKING_STANDARDMETRICSEVENTS_H_
 #define _MOFLOW_NETWORKING_STANDARDMETRICSEVENTS_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 //using preprocessor to decide whether to declare event string or define it.
 #ifdef DEFINE_EVENTS
 #define METRICS_EVENT(x) const std::string k##x = "fudge";

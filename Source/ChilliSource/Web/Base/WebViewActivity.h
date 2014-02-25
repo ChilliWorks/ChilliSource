@@ -10,6 +10,7 @@
 #ifndef _MO_FLO_CORE_WEB_VIEW_ACTIVITY_H_
 #define _MO_FLO_CORE_WEB_VIEW_ACTIVITY_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Activity.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/File/FileSystem.h>

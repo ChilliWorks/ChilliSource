@@ -10,6 +10,7 @@
 #ifndef _MO_FLO_STATE_MANAGER_H_
 #define _MO_FLO_STATE_MANAGER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/State/State.h>
 #include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>

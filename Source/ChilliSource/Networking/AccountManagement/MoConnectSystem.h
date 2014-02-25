@@ -10,15 +10,15 @@
 #ifndef _MOFLOW_NETWORKING_MOCONNECTSYSTEM_H_
 #define _MOFLOW_NETWORKING_MOCONNECTSYSTEM_H_
 
-#include <vector>
-
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/System/System.h>
-#include <ChilliSource/Networking/ForwardDeclarations.h>
 #include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 #include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
+
+#include <vector>
 
 namespace ChilliSource
 {

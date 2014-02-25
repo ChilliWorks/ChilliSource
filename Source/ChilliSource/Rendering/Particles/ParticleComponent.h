@@ -10,9 +10,8 @@
 #ifndef _MO_FLO_RENDERING_PARTICLE_COMPONENT_H_
 #define _MO_FLO_RENDERING_PARTICLE_COMPONENT_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/RenderComponent.h>
-
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 
 namespace ChilliSource

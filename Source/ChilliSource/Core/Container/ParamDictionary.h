@@ -12,6 +12,7 @@
 
 class TiXmlElement;
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/XML/rapidxml_forward.h>
 
 namespace ChilliSource

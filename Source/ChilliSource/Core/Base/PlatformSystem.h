@@ -10,14 +10,9 @@
 #ifndef _MOFLOW_CORE_PLATFORMSYSTEM_H_
 #define _MOFLOW_CORE_PLATFORMSYSTEM_H_
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Localisation/Locales.h>
 #include <ChilliSource/Core/Base/Application.h>
-
-#include <ChilliSource/Input/ForwardDeclarations.h>
-#include <ChilliSource/Audio/ForwardDeclarations.h>
-#include <ChilliSource/Networking/ForwardDeclarations.h>
-#include <ChilliSource/Video/ForwardDeclarations.h>
 
 namespace ChilliSource
 {

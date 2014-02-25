@@ -13,6 +13,7 @@
 #ifndef _MOFLOW_OPENGL_SHADERMANAGER_H_
 #define _MOFLOW_OPENGL_SHADERMANAGER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Shader/ShaderManager.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
 

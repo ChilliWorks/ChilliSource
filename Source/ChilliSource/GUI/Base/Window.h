@@ -16,11 +16,8 @@
 #ifndef _MOFLO_GUIWINDOW_H_
 #define _MOFLO_GUIWINDOW_H_
 
-#include <ChilliSource/GUI/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
-
-#include <ChilliSource/Input/ForwardDeclarations.h>
-
 #include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Core/Base/Screen.h>
 

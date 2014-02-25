@@ -265,7 +265,7 @@ namespace ChilliSource
 			std::string strHashableDirectoryContents;
 			for (DYNAMIC_ARRAY<u32>::iterator it = audwHashes.begin(); it != audwHashes.end(); ++it)
 			{
-				strHashableDirectoryContents += STRING_CAST(*it);
+				strHashableDirectoryContents += ToString(*it);
 			}
 
 			//return the hash of this as the output
@@ -313,7 +313,7 @@ namespace ChilliSource
 
 
 			u32 udwTotalFiles = astrFilenames.size();
-			DEBUG_LOG("Total Files = " + STRING_CAST(udwTotalFiles) + ", Total Size = " + STRING_CAST(udwTotalSize));
+			DEBUG_LOG("Total Files = " + ToString(udwTotalFiles) + ", Total Size = " + ToString(udwTotalSize));
 			return udwTotalSize;
 		}
         

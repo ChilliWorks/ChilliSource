@@ -13,12 +13,11 @@
 #ifndef _MO_FLO_INPUT_GESTURES_H_
 #define _MO_FLO_INPUT_GESTURES_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Time/Timer.h>
-#include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
-#include <ChilliSource/Input/ForwardDeclarations.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
 
 namespace ChilliSource

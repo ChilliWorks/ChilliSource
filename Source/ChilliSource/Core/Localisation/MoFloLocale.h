@@ -10,6 +10,7 @@
 #ifndef _MO_FLO_CORE_LOCALE_H_
 #define _MO_FLO_CORE_LOCALE_H_
 
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {

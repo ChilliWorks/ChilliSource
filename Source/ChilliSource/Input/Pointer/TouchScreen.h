@@ -14,6 +14,7 @@
 #ifndef _MOFLO_INPUT_TOUCHSCREEN_H_
 #define _MOFLO_INPUT_TOUCHSCREEN_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Input/Base/InputDevice.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Math/Vector2.h>

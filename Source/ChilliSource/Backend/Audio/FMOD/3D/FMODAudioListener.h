@@ -13,7 +13,9 @@
 #ifndef _MO_FLO_AUDIO_FMOD_FMOD_AUDIO_LISTENER_H_
 #define _MO_FLO_AUDIO_FMOD_FMOD_AUDIO_LISTENER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/3D/AudioListener.h>
+
 #include <fmod.hpp>
 #include <fmod_errors.h>
 

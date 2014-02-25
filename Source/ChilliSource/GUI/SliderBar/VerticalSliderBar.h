@@ -10,6 +10,7 @@
 #ifndef _MO_FLO_GUI_DEFAULTS_VERTICAL_SLIDER_BAR_H_
 #define _MO_FLO_GUI_DEFAULTS_VERTICAL_SLIDER_BAR_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/SliderBar/SliderBar.h>
 
 namespace ChilliSource

@@ -10,6 +10,7 @@
 #ifndef _MOFLO_CORE_IMAGE_H_
 #define _MOFLO_CORE_IMAGE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 
 namespace ChilliSource

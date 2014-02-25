@@ -9,6 +9,8 @@
 #ifndef _MOFLOW_CORE_AESENCRYPT_H_
 #define _MOFLOW_CORE_AESENCRYPT_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource
 {
     namespace Core

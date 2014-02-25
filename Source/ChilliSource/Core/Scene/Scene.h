@@ -10,14 +10,11 @@
 #ifndef _MO_FLO_CORE_SCENE_H_
 #define _MO_FLO_CORE_SCENE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/Container/Octree.h>
 #include <ChilliSource/Core/Volume/VolumeComponent.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Input/ForwardDeclarations.h>
-#include <ChilliSource/GUI/ForwardDeclarations.h>
 
 namespace ChilliSource
 {

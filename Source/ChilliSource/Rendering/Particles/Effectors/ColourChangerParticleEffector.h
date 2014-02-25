@@ -10,8 +10,8 @@
 #ifndef _MO_FLO_RENDERING_PARTICLES_EFFECTORS_COLOUR_CHANGER_PARTICLE_EFFECTOR_H_
 #define _MO_FLO_RENDERING_PARTICLES_EFFECTORS_COLOUR_CHANGER_PARTICLE_EFFECTOR_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
-
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
 namespace ChilliSource

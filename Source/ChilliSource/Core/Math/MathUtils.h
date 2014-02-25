@@ -10,6 +10,8 @@
 #ifndef _MO_FLO_CORE_MATH_MATH_HELPER_H_
 #define _MO_FLO_CORE_MATH_MATH_HELPER_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource
 {
 	namespace Core 

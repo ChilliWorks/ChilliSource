@@ -9,6 +9,8 @@
 #ifndef _MO_FLO_CORE_CONTAINERS_UTF8_STRING_H_
 #define _MO_FLO_CORE_CONTAINERS_UTF8_STRING_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource
 {
     namespace Core

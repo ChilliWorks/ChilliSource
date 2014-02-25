@@ -10,8 +10,7 @@
 #ifndef _MO_FLO_RENDERING_SKELETALANIMATION_H_
 #define _MO_FLO_RENDERING_SKELETALANIMATION_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
-
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 

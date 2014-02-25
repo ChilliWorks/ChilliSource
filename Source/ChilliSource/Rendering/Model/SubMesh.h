@@ -10,9 +10,9 @@
 #ifndef _MO_FLO_RENDERING_SUB_MESH_H_
 #define _MO_FLO_RENDERING_SUB_MESH_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
-
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector4.h>

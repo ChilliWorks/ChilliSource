@@ -14,6 +14,7 @@
 #ifndef _MOFLO_CORE_XML_XMLUTILS_H_
 #define _MOFLO_CORE_XML_XMLUTILS_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/XML/tinyxml.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/String/StringConverter.h>

@@ -9,6 +9,8 @@
 #ifndef _MOFLOW_RENDERING_RENDERCAPABILITIES_H_
 #define _MOFLOW_RENDERING_RENDERCAPABILITIES_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource
 {
     namespace Rendering

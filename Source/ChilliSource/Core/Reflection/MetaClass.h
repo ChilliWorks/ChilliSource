@@ -9,10 +9,10 @@
 #ifndef MO_FLOW_CORE_REFLECTION_META_CLASS_HPP_
 #define MO_FLOW_CORE_REFLECTION_META_CLASS_HPP_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Reflection/ForwardDeclarations.h>
 #include <ChilliSource/Core/Reflection/Instance.h>
 #include <ChilliSource/Core/Reflection/Registry.h>
-
 #include <ChilliSource/Core/Base/FastDelegate.h>
 
 namespace ChilliSource

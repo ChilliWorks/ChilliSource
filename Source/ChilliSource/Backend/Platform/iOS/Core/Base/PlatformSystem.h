@@ -13,6 +13,8 @@
 #ifndef _MO_FLO_PLATFORM_IOS_PLATFORM_SYSTEM_H_
 #define _MO_FLO_PLATFORM_IOS_PLATFORM_SYSTEM_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 

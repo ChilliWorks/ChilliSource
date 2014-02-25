@@ -10,9 +10,8 @@
 #ifndef _MO_FLO_CORE_ENTITY_H_
 #define _MO_FLO_CORE_ENTITY_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/BuildProperties.h>
-
-#include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Entity/Transform.h>
 #include <ChilliSource/Core/JSON/json.h>

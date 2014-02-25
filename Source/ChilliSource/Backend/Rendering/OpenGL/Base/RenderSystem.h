@@ -10,17 +10,14 @@
 #ifndef _MOFLOW_OPENGL_ES2_RENDER_SYSTEM_H_
 #define _MOFLOW_OPENGL_ES2_RENDER_SYSTEM_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Base/Colour.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
-
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureManager.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/CubemapManager.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/ShaderManager.h>
-
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
 
 namespace ChilliSource

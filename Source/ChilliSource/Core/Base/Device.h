@@ -10,8 +10,8 @@
 #ifndef _MO_FLO_CORE_DEVICE_H_
 #define _MO_FLO_CORE_DEVICE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Localisation/Locales.h>
-
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
 namespace ChilliSource

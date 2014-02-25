@@ -13,7 +13,6 @@
 #ifndef _MO_FLO_GUI_FONT_MANAGER_H_
 #define _MO_FLO_GUI_FONT_MANAGER_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 
 #include <ChilliSource/Core/Resource/ResourceManager.h>

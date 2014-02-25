@@ -14,7 +14,7 @@
 #ifndef _MOFLO_CORE_COMPONENT_H
 #define _MOFLO_CORE_COMPONENT_H
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
 namespace ChilliSource

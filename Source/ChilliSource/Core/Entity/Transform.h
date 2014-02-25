@@ -9,6 +9,7 @@
 #ifndef _MO_FLO_CORE_TRANSFORM_H_
 #define _MO_FLO_CORE_TRANSFORM_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Quaternion.h>

@@ -12,6 +12,7 @@
 
 #ifdef DEBUG_STATS
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Image/ImageView.h>
 #include <ChilliSource/GUI/Label/Label.h>
 

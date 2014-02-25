@@ -14,9 +14,8 @@
 #ifndef _MOFLO_CORE_COMPONENTFACTORY_H
 #define _MOFLO_CORE_COMPONENTFACTORY_H
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Entity/Component.h>
-
 
 namespace ChilliSource
 {

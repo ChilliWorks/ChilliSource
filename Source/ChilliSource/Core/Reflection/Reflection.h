@@ -9,6 +9,7 @@
 #ifndef MO_FLOW_CORE_REFLECTION_REFLECTION_H_
 #define MO_FLOW_CORE_REFLECTION_REFLECTION_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Reflection/Property.h>
 #include <ChilliSource/Core/Reflection/Instance.h>
 #include <ChilliSource/Core/Reflection/MetaClass.h>

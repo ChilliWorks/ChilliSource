@@ -1,8 +1,10 @@
 #include <ChilliSource/Core/File/TweakableConstants.h>
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/XML/tinyxml.h>
+
 #include <climits>
 #include <cfloat>
-#include <ChilliSource/Core/String/StringConverter.h>
+
 
 namespace ChilliSource
 {
@@ -231,13 +233,13 @@ namespace ChilliSource
 			if (pValue != NULL){
 				
 				if (inpElement->ValueStr() == "Float"){  
-					mNamespaces[inCurrentNamespace].Floats[pName] =  CStringConverter::ParseFloat(std::string(pValue));
+					mNamespaces[inCurrentNamespace].Floats[pName] =  ParseF32(std::string(pValue));
 				} else if (inpElement->ValueStr() == "Int"){
-					mNamespaces[inCurrentNamespace].Ints[pName] =  CStringConverter::ParseInt(std::string(pValue));
+					mNamespaces[inCurrentNamespace].Ints[pName] =  ParseS32(std::string(pValue));
 				} else if (inpElement->ValueStr() == "String"){
 					mNamespaces[inCurrentNamespace].Strings[pName] = std::string(pValue);
 				} else if (inpElement->ValueStr() == "Bool"){
-					mNamespaces[inCurrentNamespace].Bools[pName] = CStringConverter::ParseBool(std::string(pValue));
+					mNamespaces[inCurrentNamespace].Bools[pName] = ParseBool(std::string(pValue));
 				} 
 					
 

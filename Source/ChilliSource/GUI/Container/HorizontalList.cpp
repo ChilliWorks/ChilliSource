@@ -9,6 +9,7 @@
 #include <ChilliSource/GUI/Container/HorizontalList.h>
 
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 namespace ChilliSource
 {
@@ -75,12 +76,12 @@ namespace ChilliSource
             //---Set Spacing
             if(insParams.TryGetValue("AbsoluteSpacing", strValue))
             {
-                AbsoluteSpacing = Core::CStringConverter::ParseFloat(strValue);
+                AbsoluteSpacing = Core::ParseF32(strValue);
             }
             
             if(insParams.TryGetValue("RelativeSpacing", strValue))
             {
-                RelativeSpacing = Core::CStringConverter::ParseFloat(strValue);
+                RelativeSpacing = Core::ParseF32(strValue);
             }
         }
         //---------------------------------------------------------

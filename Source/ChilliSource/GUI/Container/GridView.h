@@ -9,6 +9,7 @@
 #ifndef _MOFLO_GUI_GRIDVIEW_H_
 #define _MOFLO_GUI_GRIDVIEW_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
 
 namespace ChilliSource

@@ -8,8 +8,8 @@
 
 #include <ChilliSource/Rendering/Particles/Effectors/SpinnerParticleEffector.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
-
 #include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 namespace ChilliSource
 {
@@ -31,12 +31,12 @@ namespace ChilliSource
             //Linear force
             if(insParams.TryGetValue("AngVelocity", strTemp))
             {
-                mfAngVelocity = Core::CMathUtils::DegToRad( Core::CStringConverter::ParseFloat(strTemp) );
+                mfAngVelocity = Core::CMathUtils::DegToRad( Core::ParseF32(strTemp) );
             }
             //Energy level
             if(insParams.TryGetValue("AtEnergyLevel", strTemp))
             {
-                mfActiveEnergyLevel = Core::CStringConverter::ParseFloat(strTemp);
+                mfActiveEnergyLevel = Core::ParseF32(strTemp);
             }
         }
         //-----------------------------------------------------

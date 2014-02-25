@@ -10,7 +10,7 @@
 #ifndef _MOFLO_CORE_ENTITYANIMATIONCONTROLLER_H_
 #define _MOFLO_CORE_ENTITYANIMATIONCONTROLLER_H_
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Entity/EntityAnimation.h>
 
