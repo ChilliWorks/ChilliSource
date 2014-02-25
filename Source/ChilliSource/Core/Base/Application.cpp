@@ -11,7 +11,6 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
-#include <ChilliSource/Core/Base/ApplicationDelegates.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Core/Entity/ComponentFactory.h>

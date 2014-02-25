@@ -8,7 +8,7 @@
  */
 
 #include <ChilliSource/Debugging/Base/DebugStats.h>
-#include <ChilliSource/Rendering/GUI/Defaults/DebugStatsView.h>
+#include <ChilliSource/GUI/Debug/DebugStatsView.h>
 
 #ifdef DEBUG_STATS
 

@@ -18,7 +18,7 @@
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Audio/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/GUI/ForwardDeclarations.h>
+#include <ChilliSource/GUI/ForwardDeclarations.h>
 
 #include <limits>
 

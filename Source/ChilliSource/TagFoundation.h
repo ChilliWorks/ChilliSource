@@ -76,6 +76,7 @@ namespace ChilliSource
     namespace Core{}
     namespace Debugging{}
     namespace Input{}
+    namespace GUI{}
     namespace Networking{}
     namespace Rendering{}
     namespace Social{}
@@ -88,6 +89,7 @@ namespace CSAudio = ChilliSource::Audio;
 namespace CSCore = ChilliSource::Core;
 namespace CSDebugging = ChilliSource::Debugging;
 namespace CSInput = ChilliSource::Input;
+namespace CSGUI = ChilliSource::GUI;
 namespace CSNetworking = ChilliSource::Networking;
 namespace CSRendering = ChilliSource::Rendering;
 namespace CSSocial = ChilliSource::Social;

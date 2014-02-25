@@ -16,7 +16,7 @@
 
 #include <ChilliSource/Audio/ForwardDeclarations.h>
 
-#include <ChilliSource/Rendering/GUI/ForwardDeclarations.h>
+#include <ChilliSource/GUI/ForwardDeclarations.h>
 
 #define GET_COMPONENT_FACTORY(FACTORY_TYPE) ChilliSource::Core::CComponentFactoryDispenser::GetSingletonPtr()->GetFactoryWithInterface<FACTORY_TYPE>() 
 

@@ -44,7 +44,7 @@
 #include <ChilliSource/Audio/Base/AudioPlayer.h>
 #include <ChilliSource/Audio/Base/AudioLoader.h>
 
-#include <ChilliSource/Rendering/GUI/GUIViewFactory.h>
+#include <ChilliSource/GUI/Base/GUIViewFactory.h>
 
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Image/MoImageProvider.h>
@@ -159,7 +159,7 @@ namespace ChilliSource
 		void CPlatformSystem::Init()
 		{
             //Initialise GUI factory
-            Rendering::CGUIViewFactory::RegisterDefaults();
+            GUI::CGUIViewFactory::RegisterDefaults();
 		}
 		//-------------------------------------------------
 		/// Create Default Systems

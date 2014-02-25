@@ -17,7 +17,7 @@
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Input/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/GUI/ForwardDeclarations.h>
+#include <ChilliSource/GUI/ForwardDeclarations.h>
 
 namespace ChilliSource
 {
@@ -186,7 +186,7 @@ namespace ChilliSource
 			///
 			/// @return The main window that all the scene's UI is attached to.
 			//--------------------------------------------------------------------------------------------------
-			Rendering::CWindow* GetWindowPtr();
+			GUI::CWindow* GetWindowPtr();
 
 			//--------------------------------------------------------------------------------------------------
 			/// Update
@@ -217,7 +217,7 @@ namespace ChilliSource
 			
 			//COctree mSpatialGraph;				//Scene culling tree
 			
-			Rendering::CWindow* mpRootWindow;        //Main window for attaching UI components
+			GUI::CWindow* mpRootWindow;        //Main window for attaching UI components
 			
 			SharedEntityList mEntities;
             

@@ -23,7 +23,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
-#include <ChilliSource/Rendering/GUI/Window.h>
+#include <ChilliSource/GUI/Base/Window.h>
 
 namespace ChilliSource
 {
@@ -355,7 +355,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render UI
         //----------------------------------------------------------
-        void CRenderer::RenderUI(CWindow* inpWindow)
+        void CRenderer::RenderUI(GUI::CWindow* inpWindow)
         {
             mpRenderSystem->ApplyCamera(Core::CVector3::ZERO, Core::CMatrix4x4::IDENTITY, CreateOverlayProjection(inpWindow), ChilliSource::Core::CColour::CORNFLOWER_BLUE);
 			mCanvas.Render(inpWindow, 1.0f);
@@ -448,7 +448,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Create Overlay Projection
         //----------------------------------------------------------
-        Core::CMatrix4x4 CRenderer::CreateOverlayProjection(CWindow* inpWindow) const
+        Core::CMatrix4x4 CRenderer::CreateOverlayProjection(GUI::CWindow* inpWindow) const
         {
             const Core::CVector2 kvOverlayDimensions(inpWindow->GetAbsoluteSize());
             const f32 kfOverlayNear = 1.0f;

@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Core/Scene/Scene.h>
 
-#include <ChilliSource/Rendering/GUI/Window.h>
+#include <ChilliSource/GUI/Base/Window.h>
 
 namespace ChilliSource
 {
@@ -37,7 +37,7 @@ namespace ChilliSource
 		CScene::CScene(Input::IInputSystem* inpInputSystem, f32 infWorldHalfSize) 
         : mpRootWindow(nullptr)
 		{
-			mpRootWindow = new Rendering::CWindow();
+			mpRootWindow = new GUI::CWindow();
 			mpRootWindow->SetInputSystem(inpInputSystem);
 		}
 		//-------------------------------------------------------
@@ -174,7 +174,7 @@ namespace ChilliSource
         ///
         /// @return The main window that all the scene's UI is attached to.
         //--------------------------------------------------------------------------------------------------
-        Rendering::CWindow* CScene::GetWindowPtr()
+        GUI::CWindow* CScene::GetWindowPtr()
         {
             return mpRootWindow;
         }

@@ -14,7 +14,7 @@
 
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 
-#include <ChilliSource/Rendering/GUI/ForwardDeclarations.h>
+#include <ChilliSource/GUI/ForwardDeclarations.h>
 
 #define GET_RESOURCE_MANAGER(TYPE) ChilliSource::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<TYPE>() 
 #define LOAD_RESOURCE(TYPE, LOCATION, FILENAME) SHARED_PTR_CAST<TYPE>(ChilliSource::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(TYPE::InterfaceID)->GetResourceFromFile(LOCATION, FILENAME))

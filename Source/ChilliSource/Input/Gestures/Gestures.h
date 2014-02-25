@@ -19,7 +19,7 @@
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Input/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/GUI/GUIView.h>
+#include <ChilliSource/GUI/Base/GUIView.h>
 
 namespace ChilliSource
 {
@@ -35,7 +35,7 @@ namespace ChilliSource
 		public:
 			typedef fastdelegate::FastDelegate1<const CGesture&> GestureEventDelegate;
 			
-            CGesture(Rendering::CGUIView* inpView);
+            CGesture(GUI::CGUIView* inpView);
             CGesture(ITouchScreen* inpTouchDevice);
 			virtual ~CGesture();
 			
@@ -91,7 +91,7 @@ namespace ChilliSource
 			u16 mNumContactPointsRequired;	
 			bool mbIsGestureInvalid;
 			Core::CTimer mTimer;
-            Rendering::CGUIView* mpView;
+            GUI::CGUIView* mpView;
             ITouchScreen* mpTouchDevice;
             
         private:
@@ -108,7 +108,7 @@ namespace ChilliSource
 		class CSwipeGesture : public CGesture
 		{
 		public:
-            CSwipeGesture(Rendering::CGUIView* inpSurface);
+            CSwipeGesture(GUI::CGUIView* inpSurface);
             CSwipeGesture(ITouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
@@ -187,7 +187,7 @@ namespace ChilliSource
 		class CPinchGesture : public CGesture
 		{
 		public:
-            CPinchGesture(Rendering::CGUIView* inpSurface);
+            CPinchGesture(GUI::CGUIView* inpSurface);
             CPinchGesture(ITouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
@@ -291,7 +291,7 @@ namespace ChilliSource
 		class CTapGesture : public CGesture
 		{
 		public:
-            CTapGesture(Rendering::CGUIView* inpSurface);
+            CTapGesture(GUI::CGUIView* inpSurface);
             CTapGesture(ITouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
@@ -369,7 +369,7 @@ namespace ChilliSource
 		class CDragGesture : public CGesture
 		{
 		public:
-			CDragGesture(Rendering::CGUIView* inpSurface);
+			CDragGesture(GUI::CGUIView* inpSurface);
             CDragGesture(ITouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
@@ -460,7 +460,7 @@ namespace ChilliSource
 		class CHoldGesture : public CGesture
 		{
 		public:
-			CHoldGesture(Rendering::CGUIView* inpSurface);
+			CHoldGesture(GUI::CGUIView* inpSurface);
             CHoldGesture(ITouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
