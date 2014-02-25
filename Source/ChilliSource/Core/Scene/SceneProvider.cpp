@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/Scene/SceneProvider.h>
 #include <ChilliSource/Core/Scene/SceneDescription.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Core/Threading/Tasks.hpp>
+#include <ChilliSource/Core/Threading/Task.h>
 
 namespace ChilliSource
 {

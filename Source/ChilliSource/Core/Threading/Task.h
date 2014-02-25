@@ -1,14 +1,14 @@
 /*
- *  Tasks.hpp
- *  iOSTemplate
+ *  Task.h
+ *  Chilli Source
  *
  *  Created by Scott Downie on 15/08/2011.
  *  Copyright 2011 Tag Games. All rights reserved.
  *
  */
 
-#ifndef _MO_FLO_CORE_TASKS_H_
-#define _MO_FLO_CORE_TASKS_H_
+#ifndef _CHILLISOURCE_CORE_THREADING_TASK_H_
+#define _CHILLISOURCE_CORE_THREADING_TASK_H_
 
 #include <ChilliSource/Core/Base/FastDelegate.h>
 

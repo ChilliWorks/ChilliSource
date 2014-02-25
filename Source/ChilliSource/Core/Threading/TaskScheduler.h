@@ -11,7 +11,7 @@
 #define _MO_FLO_CORE_TASK_SCHEDULER_H_
 
 #include <ChilliSource/Core/Threading/ThreadPool.h>
-#include <ChilliSource/Core/Threading/Tasks.hpp>
+#include <ChilliSource/Core/Threading/Task.h>
 
 namespace ChilliSource
 {
