@@ -174,7 +174,7 @@ namespace ChilliSource
 				Desc.pTextureResource->SetStorageLocation(ineStorageLocation);
 
 				//Load image as a task. Once it completed we can load the texture as it should be done on the main thread
-				Core::Task1<ImageDesc&> ImageLoadTask(this, &ITextureManager::ImageLoadTask, Desc);
+				Core::Task<ImageDesc&> ImageLoadTask(this, &ITextureManager::ImageLoadTask, Desc);
 				Core::CTaskScheduler::ScheduleTask(ImageLoadTask);
 				
 				//add resource to the resource map
@@ -207,7 +207,7 @@ namespace ChilliSource
 					pImage->SetLoaded(true);
 					
 					//Load the texture from this image
-					Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task3<const Core::ResourcePtr&, bool, TexturePtr&>(this, &ITextureManager::TextureLoadTask, inDesc.pImageResource, inDesc.bUseMipmaps, inDesc.pTextureResource));
+					Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourcePtr&, bool, TexturePtr&>(this, &ITextureManager::TextureLoadTask, inDesc.pImageResource, inDesc.bUseMipmaps, inDesc.pTextureResource));
 					return;
 				}
 			}

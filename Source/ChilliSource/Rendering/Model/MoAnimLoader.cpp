@@ -75,7 +75,7 @@ namespace ChilliSource
 			SkinnedAnimationPtr pAnim = SHARED_PTR_CAST<CSkinnedAnimation>(outpResource);
 			
 			//Load model as task
-			Core::Task3<Core::StorageLocation, const std::string&, const SkinnedAnimationPtr&> AnimTask(this, &CMoAnimLoader::ReadAnimationTask,ineStorageLocation, inFilePath, pAnim);
+			Core::Task<Core::StorageLocation, const std::string&, const SkinnedAnimationPtr&> AnimTask(this, &CMoAnimLoader::ReadAnimationTask,ineStorageLocation, inFilePath, pAnim);
 			Core::CTaskScheduler::ScheduleTask(AnimTask);
 			
 			return true;

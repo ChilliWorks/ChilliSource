@@ -44,7 +44,7 @@ namespace ChilliSource
         
         bool CSceneProvider::AsyncCreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
         {
-            Task3<StorageLocation, const std::string&, ResourcePtr&> ReadFileTask(this, &CSceneProvider::LoadAsyncMoScene, ineStorageLocation, inFilePath, outpResource);
+            Task<StorageLocation, const std::string&, ResourcePtr&> ReadFileTask(this, &CSceneProvider::LoadAsyncMoScene, ineStorageLocation, inFilePath, outpResource);
             CTaskScheduler::ScheduleTask(ReadFileTask);
             return true;
         }

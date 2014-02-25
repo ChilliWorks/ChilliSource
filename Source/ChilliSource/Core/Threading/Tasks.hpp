@@ -19,308 +19,201 @@ namespace ChilliSource
 {
     namespace Core
     {
-        //==========================================================
-        /// Wait Condition
-        ///
-        /// Holds a mutex and a condition which a can be used to
-        /// wait on the execution of a task
-        //==========================================================
-        class CWaitCondition
+        namespace ExpansionHelpers
+        {
+            //------------------------------------------------------------------
+            // Expand tuples into individual arguments
+            // http://stackoverflow.com/a/16868151/658622
+            //------------------------------------------------------------------
+            template <s32... TIdxs> struct Index {};
+            template <s32 TNum, s32... TIdxs> struct GenSeq : GenSeq<TNum - 1, TNum - 1, TIdxs...> {};
+            template <s32... TIdxs> struct GenSeq<0, TIdxs...> : Index<TIdxs...> {};
+        }
+        
+        class WaitCondition
         {
         public:
             
-            //------------------------------------
+            //------------------------------------------------
             /// Constructor 
             ///
-            /// Default - Waiting on one task
-            //------------------------------------
-            CWaitCondition(u32 inudwNumTasks = 1) : mudwCounter(inudwNumTasks)
+            /// @author S Downie
+            ///
+            /// @param [Optional] Num times before notify
+            //------------------------------------------------
+            WaitCondition(u32 in_numTilNotify = 1)
+            : m_notfiedCounter(in_numTilNotify)
             {
             }
-            //------------------------------------
-            /// Wait 
+            //------------------------------------------------
+            /// Block the calling thread until the condition
+            /// has been met
             ///
-            /// Block the calling thread until
-            /// the condition has been met
-            //------------------------------------
+            /// @author S Downie
+            //------------------------------------------------
             void Wait()
             {
                 //The task thread should have locked the mutex by this point
                 //and the thread that scheduled the task should be the
                 //once calling this method
-                std::unique_lock<std::mutex> Lock(mMutex);
+                std::unique_lock<std::mutex> Lock(m_mutex);
                 
-                while(mudwCounter)
+                while(m_notfiedCounter)
                 {
                     //Wait on the scheduler mutex to become available
-                    mCondition.wait(Lock);
+                    m_condition.wait(Lock);
                 }
             }
-            //------------------------------------
-            /// Update Condition 
-            ///
-            /// Called by the thread executing
-            /// the task when the task is complete
-            /// Once all the dependent tasks are 
-            /// complete then the any waiters
+            //------------------------------------------------
+            /// Called by the thread executing the task when
+            /// the task is complete. Once all the dependent
+            /// tasks are complete then the any waiters
             /// are notified
-            //------------------------------------
-            void UpdateCondition()
+            ///
+            /// @author S Downie
+            //------------------------------------------------
+            void NotifyCondition()
             {
                 //The thread updating the counter needs
                 //exculsive access. If we have dependent tasks
                 //then multiple threads may need to access this
-                std::unique_lock<std::mutex> Lock(mMutex);
+                std::unique_lock<std::mutex> Lock(m_mutex);
                 
-                if((--mudwCounter) == 0)
+                if((--m_notfiedCounter) == 0)
                 {
-                    mCondition.notify_all();
+                    m_condition.notify_all();
                 }
             }
             
         private:
             
-            std::condition_variable mCondition;
-            std::mutex mMutex;
+            std::condition_variable m_condition;
+            std::mutex m_mutex;
             
-            u32 mudwCounter;
+            u32 m_notfiedCounter;
         };
-        //==========================================================
-        /// Tasks
-        ///
-        /// Holds a delegate and parameters on which execution
-        /// can be deferred
-        //==========================================================
-        //---Task 0
-        struct Task0
+
+        template <typename... TArgTypes> class Task
         {
-            fastdelegate::FastDelegate0<> TaskDelegate;
-            CWaitCondition* pWaitCondition;
+            typedef std::function<void(TArgTypes...)> TaskDelegate;
             
-            Task0(const fastdelegate::FastDelegate0<>& inTaskDelegate, CWaitCondition* inpWaitCondition = NULL) 
-            : TaskDelegate(inTaskDelegate), pWaitCondition(inpWaitCondition)
+        public:
+            
+            //------------------------------------------------------------------
+            /// Constructor (Delegate object)
+            ///
+            /// @author S Downie
+            ///
+            /// @param Delegate function that is called when the task is executed
+            /// @param [Variadic] Arguments to pass to the task on execution
+            /// @param [Optional] Wait condition that task will notify when it
+            /// completes. This can be used to block on the task.
+            //------------------------------------------------------------------
+            Task(const TaskDelegate& in_taskDelegate, TArgTypes... in_args, WaitCondition* in_waitCondition = nullptr)
+            : m_delegate(in_taskDelegate)
+            , m_args(in_args...)
+            , m_waitCondition(in_waitCondition)
             {
             }
-            
-            template <typename TDelegate, typename TSender> Task0(TSender* inpSender, void (TDelegate::*func)(), CWaitCondition* inpWaitCondition = NULL) 
-            : TaskDelegate(inpSender, func), pWaitCondition(inpWaitCondition)
+            //------------------------------------------------------------------
+            /// Constructor (Free delegate)
+            ///
+            /// @author S Downie
+            ///
+            /// @param Function that's called on execution
+            /// @param [Variadic] Arguments to pass to the task on execution
+            /// @param [Optional] Wait condition that task will notify when it
+            /// completes. This can be used to block on the task.
+            //------------------------------------------------------------------
+            template <typename TDelegate, typename TSender> Task(void (TDelegate::*in_func)(TArgTypes...), TArgTypes... in_args, WaitCondition* in_waitCondition = nullptr)
+            : m_delegate(std::bind(in_func))
+            , m_args(in_args...)
+            , m_waitCondition(in_waitCondition)
             {
             }
-            
-            template <typename TDelegate, typename TSender> Task0(TSender* inpSender, void (TDelegate::*func)() const, CWaitCondition* inpWaitCondition = NULL) 
-            : TaskDelegate(inpSender, func), pWaitCondition(inpWaitCondition)
+            //------------------------------------------------------------------
+            /// Constructor (Non-const delegate)
+            ///
+            /// @author S Downie
+            ///
+            /// @param Instance that's delegate function is called on execution
+            /// @param Function that's called on execution
+            /// @param [Variadic] Arguments to pass to the task on execution
+            /// @param [Optional] Wait condition that task will notify when it
+            /// completes. This can be used to block on the task.
+            //------------------------------------------------------------------
+            template <typename TDelegate, typename TSender> Task(TSender* in_sender, void (TDelegate::*in_func)(TArgTypes...), TArgTypes... in_args, WaitCondition* in_waitCondition = nullptr)
+            : m_delegate(std::bind(in_func, in_sender, in_args...))
+            , m_args(in_args...)
+            , m_waitCondition(in_waitCondition)
             {
             }
-            
+            //------------------------------------------------------------------
+            /// Constructor (Const delegate)
+            ///
+            /// @author S Downie
+            ///
+            /// @param Instance that's delegate function is called on execution
+            /// @param Function that's called on execution
+            /// @param [Variadic] Arguments to pass to the task on execution
+            /// @param [Optional] Wait condition that task will notify when it
+            /// completes. This can be used to block on the task.
+            //------------------------------------------------------------------
+            template <typename TDelegate, typename TSender> Task(TSender* in_sender, void (TDelegate::*in_func)(TArgTypes...) const, TArgTypes... in_args, WaitCondition* in_waitCondition = nullptr)
+            : m_delegate(std::bind(in_func, in_sender, in_args...))
+            , m_args(in_args...)
+            , m_waitCondition(in_waitCondition)
+            {
+            }
+            //------------------------------------------------------------------
+            /// Executes the task function with the stored arguments and
+            /// notifies the wait condition on completion
+            ///
+            /// @author S Downie
+            //------------------------------------------------------------------
             void operator()()
             {
-                TaskDelegate();
+                Expand(m_args);
                 
-                if(pWaitCondition)
+                if(m_waitCondition != nullptr)
                 {
-                    pWaitCondition->UpdateCondition();
+                    m_waitCondition->NotifyCondition();
                 }
             }
-        };
-        //---Task 1
-        template <typename T> struct Task1
-        {
-            fastdelegate::FastDelegate1<T> TaskDelegate;
-            typename std::remove_reference<T>::type Arg1;
-            CWaitCondition* pWaitCondition;
             
-            Task1(const fastdelegate::FastDelegate1<T>& inTaskDelegate, 
-                  T inArg1, 
-                  CWaitCondition* inpWaitCondition = NULL)
-            : TaskDelegate(inTaskDelegate), Arg1(inArg1), pWaitCondition(inpWaitCondition)
+        private:
+            
+            //------------------------------------------------------------------
+            /// Expand the given tuple into individual arguments.
+            /// http://stackoverflow.com/a/16868151/658622
+            ///
+            /// @author S Downie
+            ///
+            /// @param Tuple
+            /// @param Indices
+            //------------------------------------------------------------------
+            template <typename... TArgs, int... TIdxs> void Expand(std::tuple<TArgs...>& in_args, ExpansionHelpers::Index<TIdxs...>)
             {
+                m_delegate(std::get<TIdxs>(in_args)...);
+            }
+            //------------------------------------------------------------------
+            /// Expand the given tuple into individual arguments.
+            /// http://stackoverflow.com/a/16868151/658622
+            ///
+            /// @author S Downie
+            ///
+            /// @param Tuple
+            //------------------------------------------------------------------
+            template <typename... Args> void Expand(std::tuple<Args...>& in_args)
+            {
+                Expand(in_args, ExpansionHelpers::GenSeq<sizeof...(Args)>{});
             }
             
-            template <typename TDelegate, typename TSender> Task1(TSender* inpSender, void (TDelegate::*func)(T inArg1), 
-                                                                  T inArg1, 
-                                                                  CWaitCondition* inpWaitCondition = NULL) 
-            : TaskDelegate(inpSender, func), Arg1(inArg1), pWaitCondition(inpWaitCondition)
-            {
-            }
+        private:
             
-            template <typename TDelegate, typename TSender> Task1(TSender* inpSender, void (TDelegate::*func)(T inArg1) const, 
-                                                                  T inArg1, 
-                                                                  CWaitCondition* inpWaitCondition = NULL) 
-            : TaskDelegate(inpSender, func), Arg1(inArg1), pWaitCondition(inpWaitCondition)
-            {
-            }
-            
-            void operator()()
-            {
-                TaskDelegate(Arg1);
-                
-                if(pWaitCondition)
-                {
-                    pWaitCondition->UpdateCondition();
-                }
-            }
-        };
-        //---Task 2
-        template <typename T1, typename T2> struct Task2
-        {
-            fastdelegate::FastDelegate2<T1, T2> TaskDelegate;
-            typename std::remove_reference<T1>::type Arg1;
-            typename std::remove_reference<T2>::type Arg2;
-            CWaitCondition* pWaitCondition;
-            
-            Task2(const fastdelegate::FastDelegate2<T1, T2>& inTaskDelegate, 
-                  T1 inArg1, T2 inArg2, 
-                  CWaitCondition* inpWaitCondition = NULL)
-            : TaskDelegate(inTaskDelegate), Arg1(inArg1), Arg2(inArg2), pWaitCondition(inpWaitCondition)
-            {
-            }
-            
-            template <typename TDelegate, typename TSender> Task2(TSender* inpSender, void (TDelegate::*func)(T1 inArg1, T2 inArg2), 
-                                                                  T1 inArg1, T2 inArg2, 
-                                                                  CWaitCondition* inpWaitCondition = NULL) 
-            : TaskDelegate(inpSender, func), Arg1(inArg1), Arg2(inArg2), pWaitCondition(inpWaitCondition)
-            {
-            }
-            
-            template <typename TDelegate, typename TSender> Task2(TSender* inpSender, void (TDelegate::*func)(T1 inArg1, T2 inArg2) const, 
-                                                                  T1 inArg1, T2 inArg2, 
-                                                                  CWaitCondition* inpWaitCondition = NULL) 
-            : TaskDelegate(inpSender, func), Arg1(inArg1), Arg2(inArg2), pWaitCondition(inpWaitCondition)
-            {
-            }
-            
-            void operator()()
-            {
-                TaskDelegate(Arg1, Arg2);
-                
-                if(pWaitCondition)
-                {
-                    pWaitCondition->UpdateCondition();
-                }
-            }
-        };
-        //---Task 3
-        template <typename T1, typename T2, typename T3> struct Task3
-        {
-            fastdelegate::FastDelegate3<T1, T2, T3> TaskDelegate;
-            typename std::remove_reference<T1>::type Arg1;
-            typename std::remove_reference<T2>::type Arg2;
-            typename std::remove_reference<T3>::type Arg3;
-            CWaitCondition* pWaitCondition;
-            
-            Task3(const fastdelegate::FastDelegate3<T1, T2, T3>& inTaskDelegate, 
-                  T1 inArg1, T2 inArg2, T3 inArg3, 
-                  CWaitCondition* inpWaitCondition = NULL)
-            : TaskDelegate(inTaskDelegate), Arg1(inArg1), Arg2(inArg2), Arg3(inArg3), pWaitCondition(inpWaitCondition)
-            {
-            }
-            
-            template <typename TDelegate, typename TSender> Task3(TSender* inpSender, void (TDelegate::*func)(T1 inArg1, T2 inArg2, T3 inArg3), 
-                                                                  T1 inArg1, T2 inArg2, T3 inArg3, 
-                                                                  CWaitCondition* inpWaitCondition = NULL) 
-            : TaskDelegate(inpSender, func), Arg1(inArg1), Arg2(inArg2), Arg3(inArg3), pWaitCondition(inpWaitCondition)
-            {
-            }
-            
-            template <typename TDelegate, typename TSender> Task3(TSender* inpSender, void (TDelegate::*func)(T1 inArg1, T2 inArg2, T3 inArg3) const, 
-                                                                  T1 inArg1, T2 inArg2, T3 inArg3, 
-                                                                  CWaitCondition* inpWaitCondition = NULL) 
-            : TaskDelegate(inpSender, func), Arg1(inArg1), Arg2(inArg2), Arg3(inArg3), pWaitCondition(inpWaitCondition)
-            {
-            }
-            
-            void operator()()
-            {
-                TaskDelegate(Arg1, Arg2, Arg3);
-                
-                if(pWaitCondition)
-                {
-                    pWaitCondition->UpdateCondition();
-                }
-            }
-        };
-        //---Task 4
-        template <typename T1, typename T2, typename T3, typename T4> struct Task4
-        {
-            fastdelegate::FastDelegate4<T1, T2, T3, T4> TaskDelegate;
-            typename std::remove_reference<T1>::type Arg1;
-            typename std::remove_reference<T2>::type Arg2;
-            typename std::remove_reference<T3>::type Arg3;
-            typename std::remove_reference<T4>::type Arg4;
-            CWaitCondition* pWaitCondition;
-            
-            Task4(const fastdelegate::FastDelegate4<T1, T2, T3, T4>& inTaskDelegate,
-                  T1 inArg1, T2 inArg2, T3 inArg3, T4 inArg4,
-                  CWaitCondition* inpWaitCondition = NULL)
-            : TaskDelegate(inTaskDelegate), Arg1(inArg1), Arg2(inArg2), Arg3(inArg3), Arg4(inArg4), pWaitCondition(inpWaitCondition)
-            {
-            }
-            
-            template <typename TDelegate, typename TSender> Task4(TSender* inpSender, void (TDelegate::*func)(T1 inArg1, T2 inArg2, T3 inArg3, T4 inArg4),
-                                                                  T1 inArg1, T2 inArg2, T3 inArg3, T4 inArg4,
-                                                                  CWaitCondition* inpWaitCondition = NULL)
-            : TaskDelegate(inpSender, func), Arg1(inArg1), Arg2(inArg2), Arg3(inArg3), Arg4(inArg4), pWaitCondition(inpWaitCondition)
-            {
-            }
-            
-            template <typename TDelegate, typename TSender> Task4(TSender* inpSender, void (TDelegate::*func)(T1 inArg1, T2 inArg2, T3 inArg3, T4 inArg4) const,
-                                                                  T1 inArg1, T2 inArg2, T3 inArg3, T4 inArg4,
-                                                                  CWaitCondition* inpWaitCondition = NULL)
-            : TaskDelegate(inpSender, func), Arg1(inArg1), Arg2(inArg2), Arg3(inArg3), Arg4(inArg4), pWaitCondition(inpWaitCondition)
-            {
-            }
-            
-            void operator()()
-            {
-                TaskDelegate(Arg1, Arg2, Arg3, Arg4);
-                
-                if(pWaitCondition)
-                {
-                    pWaitCondition->UpdateCondition();
-                }
-            }
-        };
-        //---Task5
-        template <typename T1, typename T2, typename T3, typename T4, typename T5> struct Task5
-        {
-            fastdelegate::FastDelegate5<T1, T2, T3, T4, T5> TaskDelegate;
-            typename std::remove_reference<T1>::type Arg1;
-            typename std::remove_reference<T2>::type Arg2;
-            typename std::remove_reference<T3>::type Arg3;
-            typename std::remove_reference<T4>::type Arg4;
-            typename std::remove_reference<T5>::type Arg5;
-            CWaitCondition* pWaitCondition;
-            
-            Task5(const fastdelegate::FastDelegate4<T1, T2, T3, T4, T5>& inTaskDelegate,
-                  T1 inArg1, T2 inArg2, T3 inArg3, T4 inArg4, T5 inArg5,
-                  CWaitCondition* inpWaitCondition = NULL)
-            : TaskDelegate(inTaskDelegate), Arg1(inArg1), Arg2(inArg2), Arg3(inArg3), Arg4(inArg4), Arg5(inArg5), pWaitCondition(inpWaitCondition)
-            {
-            }
-            
-            template <typename TDelegate, typename TSender> Task5(TSender* inpSender, void (TDelegate::*func)(T1 inArg1, T2 inArg2, T3 inArg3, T4 inArg4, T5 inArg5),
-                                                                  T1 inArg1, T2 inArg2, T3 inArg3, T4 inArg4, T5 inArg5,
-                                                                  CWaitCondition* inpWaitCondition = NULL)
-            : TaskDelegate(inpSender, func), Arg1(inArg1), Arg2(inArg2), Arg3(inArg3), Arg4(inArg4), Arg5(inArg5), pWaitCondition(inpWaitCondition)
-            {
-            }
-            
-            template <typename TDelegate, typename TSender> Task5(TSender* inpSender, void (TDelegate::*func)(T1 inArg1, T2 inArg2, T3 inArg3, T4 inArg4, T5 inArg5) const,
-                                                                  T1 inArg1, T2 inArg2, T3 inArg3, T4 inArg4, T5 inArg5,
-                                                                  CWaitCondition* inpWaitCondition = NULL)
-            : TaskDelegate(inpSender, func), Arg1(inArg1), Arg2(inArg2), Arg3(inArg3), Arg4(inArg4), Arg5(inArg5), pWaitCondition(inpWaitCondition)
-            {
-            }
-            
-            void operator()()
-            {
-                TaskDelegate(Arg1, Arg2, Arg3, Arg4, Arg5);
-                
-                if(pWaitCondition)
-                {
-                    pWaitCondition->UpdateCondition();
-                }
-            }
+            TaskDelegate m_delegate;
+            std::tuple<typename std::remove_reference<TArgTypes>::type...> m_args;
+            WaitCondition* m_waitCondition;
         };
     }
 }
