@@ -120,13 +120,29 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Function that's called on execution
+            /// @param Free function that's called on execution
             /// @param [Variadic] Arguments to pass to the task on execution
             /// @param [Optional] Wait condition that task will notify when it
             /// completes. This can be used to block on the task.
             //------------------------------------------------------------------
-            template <typename TDelegate, typename TSender> Task(void (TDelegate::*in_func)(TArgTypes...), TArgTypes... in_args, WaitCondition* in_waitCondition = nullptr)
-            : m_delegate(std::bind(in_func))
+            Task(void (*in_func)(TArgTypes...), TArgTypes... in_args, WaitCondition* in_waitCondition = nullptr)
+            : m_delegate(in_func)
+            , m_args(in_args...)
+            , m_waitCondition(in_waitCondition)
+            {
+            }
+            //------------------------------------------------------------------
+            /// Constructor (Static delegate)
+            ///
+            /// @author S Downie
+            ///
+            /// @param Static function that's called on execution
+            /// @param [Variadic] Arguments to pass to the task on execution
+            /// @param [Optional] Wait condition that task will notify when it
+            /// completes. This can be used to block on the task.
+            //------------------------------------------------------------------
+            template <typename TDelegate> Task(void (TDelegate::*in_func)(TArgTypes...), TArgTypes... in_args, WaitCondition* in_waitCondition = nullptr)
+            : m_delegate(in_func)
             , m_args(in_args...)
             , m_waitCondition(in_waitCondition)
             {
