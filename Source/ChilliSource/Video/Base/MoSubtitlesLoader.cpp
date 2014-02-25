@@ -100,7 +100,7 @@ namespace ChilliSource
 			SubtitlesPtr pSubtitles = SHARED_PTR_CAST<CSubtitles>(outpResource);
 			
 			//Load model as task
-            Core::Task3<Core::StorageLocation, const std::string&, SubtitlesPtr&> task(this, &CMoSubtitlesLoader::LoadMoSubtitlesTask,ineStorageLocation, inFilePath, pSubtitles);
+            Core::Task<Core::StorageLocation, const std::string&, SubtitlesPtr&> task(this, &CMoSubtitlesLoader::LoadMoSubtitlesTask,ineStorageLocation, inFilePath, pSubtitles);
 			Core::CTaskScheduler::ScheduleTask(task);
 			
 			return true;

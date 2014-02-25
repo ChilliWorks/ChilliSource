@@ -12,7 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Threading/ThreadPool.h>
-#include <ChilliSource/Core/Threading/Tasks.hpp>
+#include <ChilliSource/Core/Threading/Task.h>
 
 namespace ChilliSource
 {
@@ -60,14 +60,14 @@ namespace ChilliSource
             /// @param Optional wait condition
             //------------------------------------------------
             template <typename TSender, typename TDelegate, typename TIterator, typename TArg>
-            static void ForEach(TIterator inIt, TIterator inItEnd, TSender* inpSender, void (TDelegate::*func)(TArg inArg1), CWaitCondition* inpWaitCondition = NULL)
+            static void ForEach(TIterator inIt, TIterator inItEnd, TSender* inpSender, void (TDelegate::*func)(TArg inArg1), WaitCondition* inpWaitCondition = NULL)
             {
                 //Unlike usual tasks the wait condition is shared between each scheduled task
                 //and threfore the condition isn't one but the number of iterations
                 for(; inIt != inItEnd; ++inIt)
                 {
                     TArg Value = (*inIt);
-                    pThreadPool->Schedule(Task1<TArg>(inpSender, func, Value, inpWaitCondition));
+                    pThreadPool->Schedule(Task<TArg>(inpSender, func, Value, inpWaitCondition));
                 }
             }
             //------------------------------------------------
@@ -83,14 +83,14 @@ namespace ChilliSource
             /// @param Optional wait condition
             //------------------------------------------------
             template <typename TSender, typename TDelegate, typename TIterator, typename TArg>
-            static void ForEach(TIterator inIt, TIterator inItEnd, TSender* inpSender, void (TDelegate::*func)(TArg inArg1) const, CWaitCondition* inpWaitCondition = NULL)
+            static void ForEach(TIterator inIt, TIterator inItEnd, TSender* inpSender, void (TDelegate::*func)(TArg inArg1) const, WaitCondition* inpWaitCondition = NULL)
             {
                 //Unlike usual tasks the wait condition is shared between each scheduled task
                 //and threfore the condition isn't one but the number of iterations
                 for(; inIt != inItEnd; ++inIt)
                 {
                     TArg Value = (*inIt);
-                    pThreadPool->Schedule(Task1<TArg>(inpSender, func, Value, inpWaitCondition));
+                    pThreadPool->Schedule(Task<TArg>(inpSender, func, Value, inpWaitCondition));
                 }
             }
             //----------------------------------------------------

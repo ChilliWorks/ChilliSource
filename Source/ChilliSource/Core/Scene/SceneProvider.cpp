@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/Scene/SceneProvider.h>
 #include <ChilliSource/Core/Scene/SceneDescription.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Core/Threading/Tasks.hpp>
+#include <ChilliSource/Core/Threading/Task.h>
 
 namespace ChilliSource
 {
@@ -44,7 +44,7 @@ namespace ChilliSource
         
         bool CSceneProvider::AsyncCreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
         {
-            Task3<StorageLocation, const std::string&, ResourcePtr&> ReadFileTask(this, &CSceneProvider::LoadAsyncMoScene, ineStorageLocation, inFilePath, outpResource);
+            Task<StorageLocation, const std::string&, ResourcePtr&> ReadFileTask(this, &CSceneProvider::LoadAsyncMoScene, ineStorageLocation, inFilePath, outpResource);
             CTaskScheduler::ScheduleTask(ReadFileTask);
             return true;
         }
