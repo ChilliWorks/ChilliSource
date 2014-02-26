@@ -43,12 +43,12 @@ namespace ChilliSource
 		/// of aggregated components. These components could be
 		/// materials or physics etc.
 		//--------------------------------------------------------------------------------------------------
-		class CEntity : public ENABLE_SHARED_FROM_THIS<CEntity>
+		class CEntity final : public ENABLE_SHARED_FROM_THIS<CEntity>
 		{	
 		public:
 			CEntity();
-			virtual ~CEntity();
-            
+            ~CEntity();
+        
             //----------------------------------------------------------------
             /// Transform
             ///
@@ -773,11 +773,6 @@ namespace ChilliSource
 		/// @return Entity
 		//------------------------------------------------------------------
 		EntityPtr CreateEntity(const ComponentPtr & inpComponent);
-		
-		void operator +=(const EntityPtr& pEnt, const ComponentPtr& pComp);
-		void operator -=(const EntityPtr& pEnt, const ComponentPtr& pComp);
-		void operator +=(const EntityPtr& pEnt, const EntityPtr& pChild);
-		void operator -=(const EntityPtr& pEnt, const EntityPtr& pChild);
 	}
 }
 

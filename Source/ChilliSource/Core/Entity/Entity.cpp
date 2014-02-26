@@ -654,42 +654,6 @@ namespace ChilliSource
 			return pEntity;
 		}
 		//-------------------------------------------------------------
-		/// Attach
-		///
-		/// @param Component to attach to the entity
-		//-------------------------------------------------------------
-		void operator +=(const EntityPtr& pEnt, const ComponentPtr& pComp)
-		{
-			pEnt->Attach(pComp);
-		}
-		//-------------------------------------------------------------
-		/// Detach
-		///
-		/// @param Component to remove from the entity
-		//-------------------------------------------------------------
-		void operator -=(const EntityPtr& pEnt, const ComponentPtr& pComp)
-		{
-			pEnt->Detach(pComp);
-		}
-		//-------------------------------------------------------------
-		/// Add Child
-		///
-		/// @param Entity to derive transform from
-		//-------------------------------------------------------------
-		void operator +=(const EntityPtr& pEnt, const EntityPtr& pChild)
-		{
-			pEnt->AddChild(pChild);
-		}
-		//-------------------------------------------------------------
-		/// Remove Child
-		///
-		/// @param Entity to remove
-		//-------------------------------------------------------------
-		void operator -=(const EntityPtr& pEnt, const EntityPtr& pChild)
-		{
-			pEnt->RemoveChild(pChild);
-		}
-		//-------------------------------------------------------------
 		/// Has Name
 		///
 		/// @return Whether this entity is named
