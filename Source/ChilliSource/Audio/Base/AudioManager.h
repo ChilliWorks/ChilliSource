@@ -22,13 +22,13 @@ namespace ChilliSource
 {
 	namespace Audio 
 	{
-		class IAudioManager : public Core::IResourceManager
+		class AudioManager : public Core::IResourceManager
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(IAudioManager);
+			DECLARE_NAMED_INTERFACE(AudioManager);
 			
-			IAudioManager(){}
-			virtual ~IAudioManager(){}
+			AudioManager(){}
+			virtual ~AudioManager(){}
 			//----------------------------------------------------------------
 			/// Is A
 			///
@@ -81,7 +81,7 @@ namespace ChilliSource
             /// @param the file path
             /// @return the audio resource pointer
 			//----------------------------------------------------------------
-			AudioResourcePtr GetSoundFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath);
+			AudioResourceSPtr GetSoundFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath);
 			//----------------------------------------------------------------
 			/// Stream Sound From File
 			///
@@ -91,13 +91,13 @@ namespace ChilliSource
             /// @param the file path
             /// @return the audio resource pointer
 			//----------------------------------------------------------------
-			AudioResourcePtr StreamSoundFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath);
+			AudioResourceSPtr StreamSoundFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath);
 			//----------------------------------------------------------------
 			/// Create Listener
 			///
 			/// @return Concrete audio listener
 			//----------------------------------------------------------------
-			AudioListenerPtr CreateListener();
+			AudioListenerSPtr CreateListener();
 			//-----------------------------------------------------------------
 			/// Destroy
 			///
@@ -117,11 +117,11 @@ namespace ChilliSource
 			///
 			/// @return Concrete audio resource based on the audio system
 			//-----------------------------------------------------------------
-			virtual AudioResourcePtr CreateAudioResource() const = 0;
+			virtual AudioResourceSPtr CreateAudioResource() const = 0;
 			
 		private:
 
-			typedef std::unordered_map<std::string, AudioResourcePtr> MapStringToSoundEffectPtr;
+			typedef std::unordered_map<std::string, AudioResourceSPtr> MapStringToSoundEffectPtr;
 			typedef MapStringToSoundEffectPtr::iterator MapStringToSoundEffectPtrItr;
 			MapStringToSoundEffectPtr mMapFileNamesToSoundEffect;
 		};

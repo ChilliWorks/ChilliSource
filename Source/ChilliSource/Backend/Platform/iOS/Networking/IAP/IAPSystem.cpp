@@ -220,7 +220,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void CIAPSystem::RequestProductPurchase(const std::string& instrProductID)
         {
-            MOFLOW_ASSERT(IsProductIDRegistered(mProductRegInfos, instrProductID), "Products must be registered with the IAP system before purchasing");
+            CS_ASSERT(IsProductIDRegistered(mProductRegInfos, instrProductID), "Products must be registered with the IAP system before purchasing");
             NSString* productID = Core::CStringUtils::StringToNSString(instrProductID);
             [mpStoreKitSystem requestPurchaseWithProductID:productID andQuantity:1];
         }

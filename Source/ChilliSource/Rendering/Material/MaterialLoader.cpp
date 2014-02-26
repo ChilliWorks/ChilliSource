@@ -39,7 +39,7 @@ namespace ChilliSource
 		CMaterialLoader::CMaterialLoader(IRenderCapabilities* inpRenderCapabilities)
 			: mpRenderCapabilities(inpRenderCapabilities)
 		{
-			MOFLOW_ASSERT(mpRenderCapabilities, "Material loader is missing required system: Render Capabilities.");
+			CS_ASSERT(mpRenderCapabilities, "Material loader is missing required system: Render Capabilities.");
 		}
 		//-------------------------------------------------------------------------
 		/// Is A
@@ -257,7 +257,7 @@ namespace ChilliSource
 					}
 					else
 					{
-						ERROR_LOG("Material: No blend function exists for the following " + strSrcFunc + ", " + strDstFunc);
+						CS_ERROR_LOG("Material: No blend function exists for the following " + strSrcFunc + ", " + strDstFunc);
 					}
 				}
                 //Get the cull face

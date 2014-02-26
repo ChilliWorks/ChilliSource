@@ -95,7 +95,7 @@
     ChilliSource::Video::CSubtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->strStyleName);
     if (pStyle == nullptr)
     {
-        ERROR_LOG("Cannot find style '" + inpSubtitle->strStyleName + "' in subtitles.");
+        CS_ERROR_LOG("Cannot find style '" + inpSubtitle->strStyleName + "' in subtitles.");
         return;
     }
     
@@ -211,7 +211,7 @@
             break;
         }
         default:
-             WARNING_LOG("Could not set vertical alignment.");
+             CS_WARNING_LOG("Could not set vertical alignment.");
             break;
     }
 }
@@ -235,7 +235,7 @@
         case ChilliSource::Core::AlignmentAnchor::k_bottomRight:
             return NSTextAlignmentRight;
         default:
-            WARNING_LOG("Could not convert alignment anchor to NSTextAlignment.");
+            CS_WARNING_LOG("Could not convert alignment anchor to NSTextAlignment.");
             return NSTextAlignmentLeft;
     }
 }

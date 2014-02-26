@@ -70,7 +70,7 @@ namespace ChilliSource
         bool CiCloudSystem::IsSupported()
         {
 #if TARGET_IPHONE_SIMULATOR
-            ERROR_LOG("CiCloudSystem::IsSupported - System not supported on simulator");
+            CS_ERROR_LOG("CiCloudSystem::IsSupported - System not supported on simulator");
             return false;
 #endif
             
@@ -83,12 +83,12 @@ namespace ChilliSource
 			// at least iOS 5.0, then we are good to go.
             if((pClass != nil) && osVersionSupported)
             {
-                DEBUG_LOG("ICloudSupported");
+                CS_DEBUG_LOG("ICloudSupported");
                 return true;
             }
             else
             {
-                ERROR_LOG("CiCloudSystem::IsSupported - System not supported on current device, needs to be iOS 5.0 at least");
+                CS_ERROR_LOG("CiCloudSystem::IsSupported - System not supported on current device, needs to be iOS 5.0 at least");
                 return false;
             }
         }
@@ -100,7 +100,7 @@ namespace ChilliSource
             
             if(!strURLAsString || [strURLAsString length] == 0)
             {
-                ERROR_LOG("iCloud not enabled on device");
+                CS_ERROR_LOG("iCloud not enabled on device");
                 return false;
             }
             
@@ -113,7 +113,7 @@ namespace ChilliSource
             else 
             {
                 [ubiq release];
-                ERROR_LOG("CiCloudSystem::IsCloudStorageEnabled() - ICloud Not Enabled On Device!");
+                CS_ERROR_LOG("CiCloudSystem::IsCloudStorageEnabled() - ICloud Not Enabled On Device!");
                 return false;
             }
             
@@ -165,12 +165,12 @@ namespace ChilliSource
                 {
                     if(![mpcFileManager createDirectoryAtURL:ubiquitousPackage withIntermediateDirectories:YES attributes:nil error:nil])
                     {
-                        ERROR_LOG("CiCloudSystem::CreateDirectoryURL - Failed to create Directory - " + strConstructedPath);
+                        CS_ERROR_LOG("CiCloudSystem::CreateDirectoryURL - Failed to create Directory - " + strConstructedPath);
                     }
                 }
                 else 
                 {
-                    DEBUG_LOG("Directory already exists");
+                    CS_DEBUG_LOG("Directory already exists");
                 }
                 
                 [ubiq release];
@@ -178,7 +178,7 @@ namespace ChilliSource
             }
             else 
             {
-                ERROR_LOG("CiCloudSystem::CreateDirectory - Failed to create Directory - ICloud Not Enabled!");
+                CS_ERROR_LOG("CiCloudSystem::CreateDirectory - Failed to create Directory - ICloud Not Enabled!");
             }
         }
 
@@ -195,7 +195,7 @@ namespace ChilliSource
         void CiCloudSystem::DeleteFile(CloudStorageArea ineStorageArea, const std::string& instrFileName)
         {
             //TODO:: Implement
-            ERROR_LOG("CiCloudSystem::DeleteFile:: Not Implemented");
+            CS_ERROR_LOG("CiCloudSystem::DeleteFile:: Not Implemented");
         }
         
         const std::string CiCloudSystem::GetAppendedFilePathToStorageArea(CloudStorageArea ineArea, const std::string& instrRelativeFilePath) const
@@ -212,15 +212,15 @@ namespace ChilliSource
             
             if(mpcHttpConnectionSystem && !mpcHttpConnectionSystem->CheckReachability())
             {
-                ERROR_LOG("Cannot sync file to cloud, network unreachable");
+                CS_ERROR_LOG("Cannot sync file to cloud, network unreachable");
                 return false;
             }
             
             //Show up a warning message if called from a thread other than main
             if(![NSThread isMainThread])
             {
-                WARNING_LOG("CiCloudSystem::SyncFileToCloud -> You are calling this function from inside a thread, objects that rely on autoreleasing in this system will be leaked!");
-                WARNING_LOG("You should create an NSAutoReleasePool at the beginning of your thread and call release when its finished (Ingnore this warning if already implemented)");
+                CS_WARNING_LOG("CiCloudSystem::SyncFileToCloud -> You are calling this function from inside a thread, objects that rely on autoreleasing in this system will be leaked!");
+                CS_WARNING_LOG("You should create an NSAutoReleasePool at the beginning of your thread and call release when its finished (Ingnore this warning if already implemented)");
             }
             
             //First we need to check if this file exists locally
@@ -233,7 +233,7 @@ namespace ChilliSource
             
             std::string strConstructedPath = GetAppendedFilePathToStorageArea(GetCloudStorageAreaForStorageArea(ineStorageLocation), instrFilePath);
             
-            DEBUG_LOG(GetCloudStoragePath() + strConstructedPath);
+            CS_DEBUG_LOG(GetCloudStoragePath() + strConstructedPath);
             
             //We store the query delegates along with the file name
             mmFileToSyncDelegateMap.insert(std::make_pair(GetCloudStoragePath() + strConstructedPath, CloudFileSyncRequest(ineStorageLocation, instrFilePath, inSyncConflictDelegate, inSyncCompleteDelegate)));
@@ -247,7 +247,7 @@ namespace ChilliSource
         void CiCloudSystem::OnCloudFileOpened(MoFlowUIDocument* incOpenedDoc, BOOL inbJustCreated)
         {
             std::string strFileState = CStringUtils::NSStringToString([CiCloudSystemController stringForState:[incOpenedDoc documentState]]);
-            DEBUG_LOG("CiCloudSystem::OnCloudFileOpened with state " + strFileState);
+            CS_DEBUG_LOG("CiCloudSystem::OnCloudFileOpened with state " + strFileState);
             
             //Should always callback with a MoFloUIDocument - whether valid or not
             if(!incOpenedDoc)
@@ -257,7 +257,7 @@ namespace ChilliSource
 
             //Get the file url string
             std::string mstrFileName = CStringUtils::NSStringToString([[incOpenedDoc fileURL] absoluteString]);
-            DEBUG_LOG(mstrFileName);
+            CS_DEBUG_LOG(mstrFileName);
             
             //Find the delegates this url refares to
             FileToSyncDelegateMap::iterator it;
@@ -308,7 +308,7 @@ namespace ChilliSource
             
             if(strLocalContents.compare(strCloudContents) == 0)
             {
-                DEBUG_LOG("CiCloudSystem::OnCloudFileOpened - File Contents are Equal no Changes needed");
+                CS_DEBUG_LOG("CiCloudSystem::OnCloudFileOpened - File Contents are Equal no Changes needed");
                 
                 //Call the onSync Completed delegate, if any
                 if(psRequest.mpcSyncCompletedDelegate)
@@ -345,13 +345,13 @@ namespace ChilliSource
                 //The locally stored version is the latest version
                 if([pLocalModifiedTime compare:pCloudLastEdited] == NSOrderedDescending)
                 {
-                    DEBUG_LOG("CiCloudSystem::OnCloudFileOpened - Local version is the later version, commiting to iCloud!");
+                    CS_DEBUG_LOG("CiCloudSystem::OnCloudFileOpened - Local version is the later version, commiting to iCloud!");
                     
                     //Set the file contents to that of our local file
                     NSMutableData *data = [[NSMutableData alloc] initWithBytes:strLocalContents.data() length:strLocalContents.length()];
                     s8* pData = (s8*)[data mutableBytes];
                     std::string strData = std::string(pData, [data length]);
-                    DEBUG_LOG(strData);
+                    CS_DEBUG_LOG(strData);
                     
                     if([data length] > 0)
                     {
@@ -361,7 +361,7 @@ namespace ChilliSource
                     }
                     else
                     {
-                        ERROR_LOG("CiCloudSystem::OnCloudFileOpened - Local file is latest version, but has NULL contents, doing nothing ... ");
+                        CS_ERROR_LOG("CiCloudSystem::OnCloudFileOpened - Local file is latest version, but has NULL contents, doing nothing ... ");
                         if (psRequest.mpcSyncCompletedDelegate)
                         {
                             psRequest.mpcSyncCompletedDelegate();
@@ -386,7 +386,7 @@ namespace ChilliSource
                     }
                     else
                     {
-                        ERROR_LOG("CiCloudSystem::OnCloudFileOpened - A later version of the file exists on server and no conflict delegate has been provided - doing nothing!");
+                        CS_ERROR_LOG("CiCloudSystem::OnCloudFileOpened - A later version of the file exists on server and no conflict delegate has been provided - doing nothing!");
                     }
                 }
             }

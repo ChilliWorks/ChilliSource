@@ -118,21 +118,21 @@ namespace ChilliSource
 			//Check file for corruption
 			if(inpStream == nullptr || inpStream->IsBad() == true)
 			{
-				ERROR_LOG("Cannot open MoAnim file: " + inFilePath);
+				CS_ERROR_LOG("Cannot open MoAnim file: " + inFilePath);
 				return false;
 			}
 			
 			u32 udwFileCheckValue = ReadValue<u32>(inpStream);
 			if(udwFileCheckValue != kgMoAnimFileCheckValue)
 			{
-				ERROR_LOG("MoAnim file has corruption(incorrect File Check Value): " + inFilePath);
+				CS_ERROR_LOG("MoAnim file has corruption(incorrect File Check Value): " + inFilePath);
 				return false;
 			}
 			
 			u32 udwVersionNum = ReadValue<u32>(inpStream);
 			if (udwVersionNum < kgMoAnimMinVersion || udwVersionNum > kgMoAnimMaxVersion)
 			{
-				ERROR_LOG("Unsupported MoAnim version: " + inFilePath);
+				CS_ERROR_LOG("Unsupported MoAnim version: " + inFilePath);
 				return false;
 			}
 			
@@ -145,7 +145,7 @@ namespace ChilliSource
 				switch (dwFeatureType)
 				{
 					default:
-						ERROR_LOG("Unknown feature type in MoAnim(" + inFilePath + ")feature declaration!");
+						CS_ERROR_LOG("Unknown feature type in MoAnim(" + inFilePath + ")feature declaration!");
 						break;
 				}
 			}

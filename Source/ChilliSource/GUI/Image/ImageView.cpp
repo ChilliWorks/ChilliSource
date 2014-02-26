@@ -85,7 +85,7 @@ namespace ChilliSource
             //---Sprite sheet index
             if(insParams.TryGetValue("SpriteSheetIndex", strValue))
             {
-                MOFLOW_ASSERT(SpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+                CS_ASSERT(SpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
                 SpriteSheetIndex = Core::ParseU32(strValue);
             }
             //---Sprite Sheet Index ID
@@ -298,7 +298,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         void CImageView::SetSpriteSheetIndexID(const std::string& instrID)
         {
-            MOFLOW_ASSERT(SpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+            CS_ASSERT(SpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
             SpriteSheetIndexID = instrID;
             SetSpriteSheetIndex(SpriteSheet->GetFrameIndexByID(instrID));
             
@@ -428,7 +428,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         Core::CVector2 CImageView::GetSizeFromImage() const
         {
-            MOFLOW_ASSERT((Texture || SpriteSheet), "Must have a sprite sheet or texture");
+            CS_ASSERT((Texture || SpriteSheet), "Must have a sprite sheet or texture");
             
             if(Texture)
             {

@@ -180,7 +180,7 @@ namespace ChilliSource
             inaSystems.push_back(Core::SystemPtr(pInputSystem));
             Core::CApplication::SetInputSystem(pInputSystem);
             
-            Audio::IAudioSystem * pAudioSystem = new iOS::CFMODSystem();
+            Audio::AudioSystem * pAudioSystem = new iOS::CFMODSystem();
 			inaSystems.push_back(Core::SystemPtr(pAudioSystem));
 			inaSystems.push_back(Core::SystemPtr(new iOS::CFMODAudioLoader(pAudioSystem)));
 			Core::CApplication::SetAudioSystem(pAudioSystem);
@@ -221,7 +221,7 @@ namespace ChilliSource
 		{
             if(Core::CApplication::GetAudioSystemPtr() != nullptr)
 			{
-				Audio::CAudioPlayer::Init();
+				Audio::AudioPlayer::Init();
 			}
 		}
         //-----------------------------------------

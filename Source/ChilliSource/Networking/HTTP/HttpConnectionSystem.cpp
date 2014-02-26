@@ -29,10 +29,10 @@ namespace ChilliSource
         
         HttpRequestPtr IHttpConnectionSystem::HandleRedirection(const IHttpRequest* inpRequest)
         {
-            MOFLOW_ASSERT(inpRequest, "inpRequest cannot be null!");
+            CS_ASSERT(inpRequest, "inpRequest cannot be null!");
             if(inpRequest->GetResponseCode() != kHTTPMovedTemporarily)
             {
-                ERROR_LOG("Trying to redirect on a non-redirected request");
+                CS_ERROR_LOG("Trying to redirect on a non-redirected request");
             }
             else
             {

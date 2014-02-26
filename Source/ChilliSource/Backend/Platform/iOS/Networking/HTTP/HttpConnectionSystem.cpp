@@ -348,7 +348,7 @@ namespace ChilliSource
                     }
                     
                     //...and remove the completed request
-                    SAFE_DELETE(*it);
+                    CS_SAFE_DELETE(*it);
                     it = mapRequests.erase(it);
                 }
                 else
@@ -420,7 +420,7 @@ namespace ChilliSource
             //Track the time the request has been active so we can manually timeout
             else if(!mbCompleted && !mbReceivedResponse && ((mfActiveTime += (Core::CMathUtils::Min(infDT, 0.5f))) > kfDefaultHTTPTimeout))
             {
-                DEBUG_LOG("HTTP Connection timed out on request: " + msDetails.strURL);
+                CS_DEBUG_LOG("HTTP Connection timed out on request: " + msDetails.strURL);
 				//Flag to stop the polling thread which should
 				//exit gracefully
 				mfActiveTime = 0.0f;

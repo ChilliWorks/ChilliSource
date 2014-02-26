@@ -61,7 +61,7 @@ namespace ChilliSource
             if (!mpRenderCapabilities)
             {
             	mpRenderCapabilities = Core::CApplication::GetSystemImplementing<IRenderCapabilities>();
-            	MOFLOW_ASSERT(mpRenderCapabilities, "Render Component Factory is missing required system: Render Capabilities.");
+            	CS_ASSERT(mpRenderCapabilities, "Render Component Factory is missing required system: Render Capabilities.");
             }
         }
         //--------------------------------------------------------
@@ -143,7 +143,7 @@ namespace ChilliSource
 				} 
                 else 
                 {
-					WARNING_LOG("Insufficient parameters to create a StaticMeshComponent");
+					CS_WARNING_LOG("Insufficient parameters to create a StaticMeshComponent");
 				}
 			} 
             else if (insTypeName == CCameraComponent::TypeName) 

@@ -61,7 +61,7 @@ namespace ChilliSource
 			//Set the current context
             if(!mContext || ![EAGLContext setCurrentContext: mContext])
             {
-                FATAL_LOG("Cannot Create OpenGL ES 2.0 Context");
+                CS_FATAL_LOG("Cannot Create OpenGL ES 2.0 Context");
             }
 #endif
 		}
@@ -77,13 +77,13 @@ namespace ChilliSource
         //----------------------------------------------------------
         bool CRenderSystem::Init(u32 inudwWidth, u32 inudwHeight)
 		{
-            MOFLOW_ASSERT((inudwWidth > 0 && inudwHeight > 0), "Cannot create and OpenGL ES view with size ZERO");
+            CS_ASSERT((inudwWidth > 0 && inudwHeight > 0), "Cannot create and OpenGL ES view with size ZERO");
 #ifdef TARGET_WINDOWS
 			GLenum GlewError = glewInit();
 			if(GLEW_OK != GlewError)
 			{
 				//Problem: glewInit failed, something is seriously wrong.
-				FATAL_LOG("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
+				CS_FATAL_LOG("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
 			}
 #endif
 #ifdef TARGET_ANDROID
@@ -92,7 +92,7 @@ namespace ChilliSource
 #endif
             
             mpRenderCapabilities = Core::CApplication::GetSystemImplementing<CRenderCapabilities>();
-            MOFLOW_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
+            CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
             mpRenderCapabilities->CalculateCapabilities();
             
             ForceRefreshRenderStates();
@@ -337,7 +337,7 @@ namespace ChilliSource
             
             if(inMaterial.GetTextures().empty() == false)
             {
-                MOFLOW_ASSERT(inMaterial.GetTextures().size() <= mpRenderCapabilities->GetNumTextureUnits(), "RenderSystem::ApplyMaterial -> Trying to bind more textures than there area texture units");
+                CS_ASSERT(inMaterial.GetTextures().size() <= mpRenderCapabilities->GetNumTextureUnits(), "RenderSystem::ApplyMaterial -> Trying to bind more textures than there area texture units");
                 
                 for(u32 i=0; i<inMaterial.GetTextures().size(); ++i)
                 {
@@ -473,7 +473,7 @@ namespace ChilliSource
                     
                     if(mShadowMapTexHandle >= 0)
                     {
-                        MOFLOW_ASSERT(mudwNumBoundTextures <= mpRenderCapabilities->GetNumTextureUnits(), "RenderSystem::ApplyMaterial -> Trying to bind more textures than there area texture units");
+                        CS_ASSERT(mudwNumBoundTextures <= mpRenderCapabilities->GetNumTextureUnits(), "RenderSystem::ApplyMaterial -> Trying to bind more textures than there area texture units");
                         pLightComponent->GetShadowMapPtr()->Bind(mudwNumBoundTextures);
                         glUniform1i(mShadowMapTexHandle, mudwNumBoundTextures);
                         ++mudwNumBoundTextures;
@@ -963,7 +963,7 @@ namespace ChilliSource
 						break;
 					case Rendering::AlphaBlend::k_unknown:
 					default:
-						ERROR_LOG("Open GL ES Unknown blend function");
+						CS_ERROR_LOG("Open GL ES Unknown blend function");
 						break;
 				};
                 
@@ -996,7 +996,7 @@ namespace ChilliSource
 						break;
 					case Rendering::AlphaBlend::k_unknown:
 					default:
-						ERROR_LOG("Open GL ES Unknown blend function");
+						CS_ERROR_LOG("Open GL ES Unknown blend function");
 						break;
 				};
 				
@@ -1109,7 +1109,7 @@ namespace ChilliSource
 			//Check we don't exceed the GL limits of this device
 			if(udwAttributeCount > (u32)mdwMaxVertAttribs)
 			{
-				FATAL_LOG("OpenGL ES 2.0: Shader exceeds maximum vertex attributes " + Core::ToString(mdwMaxVertAttribs));
+				CS_FATAL_LOG("OpenGL ES 2.0: Shader exceeds maximum vertex attributes " + Core::ToString(mdwMaxVertAttribs));
 			}
 			
             // Enable and disable the vertex attribs that have changed
@@ -1170,7 +1170,7 @@ namespace ChilliSource
 				case Rendering::PrimitiveType::k_line:
 					return GL_LINES;
 				default:
-					ERROR_LOG("Invalid primitive type OpenGLES");
+					CS_ERROR_LOG("Invalid primitive type OpenGLES");
 					return -1;
 			}
 		}
@@ -1268,25 +1268,25 @@ namespace ChilliSource
 				switch (*it)
 				{
                     case GL_NO_ERROR:
-                        ERROR_LOG("GL_NO_ERROR -> Somethings gone wrong, this should not be getting reported as an error.");
+                        CS_ERROR_LOG("GL_NO_ERROR -> Somethings gone wrong, this should not be getting reported as an error.");
                         break;
                     case GL_INVALID_ENUM:
-                        ERROR_LOG("GL_INVALID_ENUM -> An unacceptable value is specified for an enumerated argument. The offending command is ignored and has no other side effect than to set the error flag.");
+                        CS_ERROR_LOG("GL_INVALID_ENUM -> An unacceptable value is specified for an enumerated argument. The offending command is ignored and has no other side effect than to set the error flag.");
                         break;
                     case GL_INVALID_VALUE:
-                        ERROR_LOG("GL_INVALID_VALUE -> A numeric argument is out of range. The offending command is ignored and has no other side effect than to set the error flag.");
+                        CS_ERROR_LOG("GL_INVALID_VALUE -> A numeric argument is out of range. The offending command is ignored and has no other side effect than to set the error flag.");
                         break;
                     case GL_INVALID_OPERATION:
-                        ERROR_LOG("GL_INVALID_OPERATION -> The specified operation is not allowed in the current state. The offending command is ignored and has no other side effect than to set the error flag.");
+                        CS_ERROR_LOG("GL_INVALID_OPERATION -> The specified operation is not allowed in the current state. The offending command is ignored and has no other side effect than to set the error flag.");
                         break;
                     case GL_INVALID_FRAMEBUFFER_OPERATION:
-                        ERROR_LOG("GL_INVALID_FRAMEBUFFER_OPERATION -> The command is trying to render to or read from the framebuffer while the currently bound framebuffer is not framebuffer complete (i.e. the return value from glCheckFramebufferStatus is not GL_FRAMEBUFFER_COMPLETE). The offending command is ignored and has no other side effect than to set the error flag.");
+                        CS_ERROR_LOG("GL_INVALID_FRAMEBUFFER_OPERATION -> The command is trying to render to or read from the framebuffer while the currently bound framebuffer is not framebuffer complete (i.e. the return value from glCheckFramebufferStatus is not GL_FRAMEBUFFER_COMPLETE). The offending command is ignored and has no other side effect than to set the error flag.");
                         break;
                     case GL_OUT_OF_MEMORY:
-                        ERROR_LOG("GL_OUT_OF_MEMORY -> There is not enough memory left to execute the command. The state of the GL is undefined, except for the state of the error flags, after this error is recorded.");
+                        CS_ERROR_LOG("GL_OUT_OF_MEMORY -> There is not enough memory left to execute the command. The state of the GL is undefined, except for the state of the error flags, after this error is recorded.");
                         break;
                     default:
-                        ERROR_LOG("Something's gone wrong, unknown GL error code.");
+                        CS_ERROR_LOG("Something's gone wrong, unknown GL error code.");
                         break;
 				}
 			}

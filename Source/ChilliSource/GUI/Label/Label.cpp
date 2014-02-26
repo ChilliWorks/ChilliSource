@@ -583,7 +583,7 @@ namespace ChilliSource
                 return TextJustification::k_bottom;
             }
             
-            FATAL_LOG("No justification matches type");
+            CS_FATAL_LOG("No justification matches type");
             
             return TextJustification::k_left;
         }

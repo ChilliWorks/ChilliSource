@@ -17,7 +17,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CFMODAudioManager : public Audio::IAudioManager
+		class CFMODAudioManager : public Audio::AudioManager
 		{
 		public:
 			
@@ -26,7 +26,7 @@ namespace ChilliSource
 			///
 			/// @return Concrete audio resource based on the audio system
 			//-----------------------------------------------------------------
-			Audio::AudioResourcePtr CreateAudioResource() const;
+			Audio::AudioResourceSPtr CreateAudioResource() const;
 		};
 	}
 }

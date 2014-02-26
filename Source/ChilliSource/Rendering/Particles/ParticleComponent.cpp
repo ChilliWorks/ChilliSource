@@ -175,12 +175,12 @@ namespace ChilliSource
 		{
             for(std::vector<CParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
 			{
-				SAFE_DELETE(*it);
+				CS_SAFE_DELETE(*it);
 			}
 			
 			for(std::vector<IParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
             {
-                SAFE_DELETE(*itEffector);
+                CS_SAFE_DELETE(*itEffector);
             }
 			
             RemoveFromWorldSystem();

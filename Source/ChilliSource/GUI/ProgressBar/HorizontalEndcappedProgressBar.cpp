@@ -96,33 +96,33 @@ namespace ChilliSource
 			//---Background indices
 			if(insParams.TryGetValue("BackgroundLeftIndex", strValue))
 			{
-				MOFLOW_ASSERT(SpriteSheet, "Sprite sheet must be set first");
+				CS_ASSERT(SpriteSheet, "Sprite sheet must be set first");
 				mpBGImage->SetSpriteSheetLeftIndex(mpBGImage->GetSpriteSheet()->GetFrameIndexByID(strValue));
 			}
 			if(insParams.TryGetValue("BackgroundCentreIndex", strValue))
 			{
-				MOFLOW_ASSERT(SpriteSheet, "Sprite sheet must be set first");
+				CS_ASSERT(SpriteSheet, "Sprite sheet must be set first");
 				mpBGImage->SetSpriteSheetCentreIndex(mpBGImage->GetSpriteSheet()->GetFrameIndexByID(strValue));
 			}	
 			if(insParams.TryGetValue("BackgroundRightIndex", strValue))
 			{
-				MOFLOW_ASSERT(SpriteSheet, "Sprite sheet must be set first");
+				CS_ASSERT(SpriteSheet, "Sprite sheet must be set first");
 				mpBGImage->SetSpriteSheetRightIndex(mpBGImage->GetSpriteSheet()->GetFrameIndexByID(strValue));
 			}	
 			//---Progress indices
 			if(insParams.TryGetValue("ProgressLeftIndex", strValue))
 			{
-				MOFLOW_ASSERT(SpriteSheet, "Sprite sheet must be set first");
+				CS_ASSERT(SpriteSheet, "Sprite sheet must be set first");
 				mpFillImage->SetSpriteSheetLeftIndex(mpFillImage->GetSpriteSheet()->GetFrameIndexByID(strValue));
 			}
 			if(insParams.TryGetValue("ProgressCentreIndex", strValue))
 			{
-				MOFLOW_ASSERT(SpriteSheet, "Sprite sheet must be set first");
+				CS_ASSERT(SpriteSheet, "Sprite sheet must be set first");
 				mpFillImage->SetSpriteSheetCentreIndex(mpFillImage->GetSpriteSheet()->GetFrameIndexByID(strValue));
 			}	
 			if(insParams.TryGetValue("ProgressRightIndex", strValue))
 			{
-				MOFLOW_ASSERT(SpriteSheet, "Sprite sheet must be set first");
+				CS_ASSERT(SpriteSheet, "Sprite sheet must be set first");
 				mpFillImage->SetSpriteSheetRightIndex(mpFillImage->GetSpriteSheet()->GetFrameIndexByID(strValue));
 			}
             //---Height from image

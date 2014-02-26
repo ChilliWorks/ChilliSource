@@ -234,7 +234,7 @@ namespace ChilliSource
 		{
 			for(u32 i=0; i<kudwTotalNumNodes; ++i)
             {
-                SAFE_DELETE(mTree[i]);
+                CS_SAFE_DELETE(mTree[i]);
             }
 		}
 		//----------------------------------------------------------------

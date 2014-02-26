@@ -19,7 +19,7 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		DEFINE_NAMED_INTERFACE(IAudioManager);
+		DEFINE_NAMED_INTERFACE(AudioManager);
 		//----------------------------------------------------------------
 		/// Is A
 		///
@@ -27,27 +27,27 @@ namespace ChilliSource
 		/// @param The interface to compare
 		/// @return Whether the object implements that interface
 		//----------------------------------------------------------------
-		bool IAudioManager::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool AudioManager::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IAudioManager::InterfaceID;
+			return inInterfaceID == AudioManager::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Get Resource Type
 		///
 		/// @return The type of resource this manager handles
 		//----------------------------------------------------------------
-		Core::InterfaceIDType IAudioManager::GetResourceType() const
+		Core::InterfaceIDType AudioManager::GetResourceType() const
 		{
-			return IAudioResource::InterfaceID;
+			return AudioResource::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Manages Resource Of Type
 		///
 		/// @return Whether this object manages the object of type
 		//----------------------------------------------------------------
-		bool IAudioManager::ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const
+		bool AudioManager::ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IAudioResource::InterfaceID;
+			return inInterfaceID == AudioResource::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Manages Resource With Extension
@@ -55,7 +55,7 @@ namespace ChilliSource
 		/// @param Extension
 		/// @return Whether this object manages object with extension
 		//----------------------------------------------------------------
-		bool IAudioManager::ManagesResourceWithExtension(const std::string &instrExtension) const
+		bool AudioManager::ManagesResourceWithExtension(const std::string &instrExtension) const
 		{
 			for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 			{
@@ -72,9 +72,9 @@ namespace ChilliSource
 		///
 		/// @return The type of resource it consumes from resource provider
 		//----------------------------------------------------------------
-		Core::InterfaceIDType IAudioManager::GetProviderType() const
+		Core::InterfaceIDType AudioManager::GetProviderType() const
 		{
-			return Audio::IAudioResource::InterfaceID;
+			return Audio::AudioResource::InterfaceID;
 		}
 		//-----------------------------------------------------------------
 		/// Get Resource From File
@@ -84,7 +84,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr IAudioManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr AudioManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetSoundFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -97,7 +97,7 @@ namespace ChilliSource
         /// @param the file path
         /// @return The audio resource pointer
 		//----------------------------------------------------------------
-		AudioResourcePtr IAudioManager::StreamSoundFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
+		AudioResourceSPtr AudioManager::StreamSoundFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
 		{
 			Core::ResourcePtr pResource = CreateAudioResource();
 			
@@ -106,8 +106,8 @@ namespace ChilliSource
 				if(mResourceProviders[nProvider]->StreamResourceFromFile(ineStorageLocation, inFilePath, pResource)) 
 				{
 					//Add it to the cache
-					DEBUG_LOG("Streaming sound " + inFilePath);
-					AudioResourcePtr pAudio = std::static_pointer_cast<IAudioResource>(pResource);
+					CS_DEBUG_LOG("Streaming sound " + inFilePath);
+					AudioResourceSPtr pAudio = std::static_pointer_cast<AudioResource>(pResource);
 					pAudio->SetName(inFilePath);
 					pAudio->SetOwningResourceManager(this);
 					pAudio->SetLoaded(true);
@@ -116,8 +116,8 @@ namespace ChilliSource
 			}
 		
 			//Resource not found
-			ERROR_LOG("Cannot find resource for sound with path " + inFilePath);
-			return AudioResourcePtr();
+			CS_ERROR_LOG("Cannot find resource for sound with path " + inFilePath);
+			return AudioResourceSPtr();
 		}
 		//----------------------------------------------------------------
 		/// Get Sound From File
@@ -129,7 +129,7 @@ namespace ChilliSource
         /// @param the file path
         /// @return the audio resource pointer
 		//----------------------------------------------------------------
-		AudioResourcePtr IAudioManager::GetSoundFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
+		AudioResourceSPtr AudioManager::GetSoundFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
 		{
 			MapStringToSoundEffectPtrItr pExistingResource = mMapFileNamesToSoundEffect.find(inFilePath);
 			
@@ -142,9 +142,9 @@ namespace ChilliSource
 					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, inFilePath, pResource)) 
 					{
 						//Add it to the cache
-						DEBUG_LOG("Loading sound " + inFilePath);
+						CS_DEBUG_LOG("Loading sound " + inFilePath);
 						
-						AudioResourcePtr pAudio = std::static_pointer_cast<IAudioResource>(pResource);
+						AudioResourceSPtr pAudio = std::static_pointer_cast<AudioResource>(pResource);
 						mMapFileNamesToSoundEffect.insert(std::make_pair(inFilePath, pAudio));
 						pAudio->SetName(inFilePath);
 						pAudio->SetOwningResourceManager(this);
@@ -159,54 +159,54 @@ namespace ChilliSource
 			}
 			
 			//Resource not found
-			ERROR_LOG("Cannot find resource for sound with path " + inFilePath);
-			return AudioResourcePtr();
+			CS_ERROR_LOG("Cannot find resource for sound with path " + inFilePath);
+			return AudioResourceSPtr();
 		}
 		//----------------------------------------------------------------
 		/// Create Listener
 		///
 		/// @return Concrete audio listener
 		//----------------------------------------------------------------
-		AudioListenerPtr IAudioManager::CreateListener()
+		AudioListenerSPtr AudioManager::CreateListener()
 		{
 			for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 			{
-				AudioListenerPtr pListener = static_cast<CAudioLoader*>(mResourceProviders[nProvider])->CreateAudioListener();
+				AudioListenerSPtr pListener = static_cast<AudioLoader*>(mResourceProviders[nProvider])->CreateAudioListener();
 				if(pListener) 
 				{
 					return pListener;
 				}
 			}
 			
-			return AudioListenerPtr();
+			return AudioListenerSPtr();
 		}
 		//-----------------------------------------------------------------
 		/// Destroy Sound Effect
 		///
 		/// @param Handle to the sound you want to destroy
 		//-----------------------------------------------------------------
-		void IAudioManager::Destroy(const Core::ResourcePtr& inpSoundEffect)
+		void AudioManager::Destroy(const Core::ResourcePtr& inpSoundEffect)
 		{
-			AudioResourcePtr pSound = std::static_pointer_cast<IAudioResource>(inpSoundEffect);
+			AudioResourceSPtr pSound = std::static_pointer_cast<AudioResource>(inpSoundEffect);
 			for(MapStringToSoundEffectPtrItr it = mMapFileNamesToSoundEffect.begin(); it != mMapFileNamesToSoundEffect.end(); ++it)
 			{
 				if(it->second == pSound)
 				{
-					DEBUG_LOG("Destroying sound effect " + pSound->GetName());
+					CS_DEBUG_LOG("Destroying sound effect " + pSound->GetName());
 					mMapFileNamesToSoundEffect.erase(it);
 					return;
 				}
 			}
 			
-			ERROR_LOG("Destroying sound effect " + pSound->GetName());
+			CS_ERROR_LOG("Destroying sound effect " + pSound->GetName());
 		}
 		//-----------------------------------------------------------------
 		/// Destroy All Sound Effects
 		///
 		//-----------------------------------------------------------------
-		void IAudioManager::DestroyAll()
+		void AudioManager::DestroyAll()
 		{
-			DEBUG_LOG("Clearing sound effect cache");
+			CS_DEBUG_LOG("Clearing sound effect cache");
 			for(MapStringToSoundEffectPtrItr it = mMapFileNamesToSoundEffect.begin(); it != mMapFileNamesToSoundEffect.end(); ++it)
 			{
 				//If we are the only person using this then kill it dead

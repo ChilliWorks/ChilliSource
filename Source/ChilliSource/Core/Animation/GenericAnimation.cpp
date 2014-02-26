@@ -96,7 +96,7 @@ namespace ChilliSource
                     break;
 
                 default :
-                    FATAL_LOG("Cannot play animation with given mode");
+                    CS_FATAL_LOG("Cannot play animation with given mode");
                     break;
             }
 

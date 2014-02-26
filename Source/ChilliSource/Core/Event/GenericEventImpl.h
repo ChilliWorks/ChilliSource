@@ -244,7 +244,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                    WARNING_LOG("GenericEvent - Adding a duplicate Listener");
+                    CS_WARNING_LOG("GenericEvent - Adding a duplicate Listener");
                 }
                 return;
             }
@@ -380,7 +380,7 @@ namespace ChilliSource
             
             if(this->mbIsInvoking)
             {
-                WARNING_LOG("GenericEvent - Nested Invoke code detected");
+                CS_WARNING_LOG("GenericEvent - Nested Invoke code detected");
                 return;
             }
             
@@ -419,7 +419,7 @@ namespace ChilliSource
             
             if(this->mbIsInvoking)
             {
-                WARNING_LOG("GenericEvent - Nested Invoke code detected");
+                CS_WARNING_LOG("GenericEvent - Nested Invoke code detected");
                 return;
             }
             
@@ -458,7 +458,7 @@ namespace ChilliSource
             
             if(this->mbIsInvoking)
             {
-                WARNING_LOG("GenericEvent - Nested Invoke code detected");
+                CS_WARNING_LOG("GenericEvent - Nested Invoke code detected");
                 return;
             }
             
@@ -497,7 +497,7 @@ namespace ChilliSource
             
             if(this->mbIsInvoking)
             {
-                WARNING_LOG("GenericEvent - Nested Invoke code detected");
+                CS_WARNING_LOG("GenericEvent - Nested Invoke code detected");
                 return;
             }
             
@@ -536,7 +536,7 @@ namespace ChilliSource
             
             if(this->mbIsInvoking)
             {
-                WARNING_LOG("GenericEvent - Nested Invoke code detected");
+                CS_WARNING_LOG("GenericEvent - Nested Invoke code detected");
                 return;
             }
             

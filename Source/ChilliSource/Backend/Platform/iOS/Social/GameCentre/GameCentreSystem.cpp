@@ -285,7 +285,7 @@ namespace ChilliSource
             {
                 if (pcError)
                 {
-                    ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pcError localizedDescription]));
+                    CS_ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pcError localizedDescription]));
                     
                     //Handle error by disabling game centre
                     mbIsGameCentreSupported = false;
@@ -698,7 +698,7 @@ namespace ChilliSource
 			 if(pError)
 			 {
 			 //Request failed. Let's try again later. It's already been popped from the queue
-			 ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
+			 CS_ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
 			 mudwNumOpenRequests--;
 			 //let's add it back on
 			 AddRequestToQueue(pRequest);
@@ -706,7 +706,7 @@ namespace ChilliSource
 			 else if(pCategories && pTitles)
 			 {
 			 //Great Success
-			 DEBUG_LOG("Game Center - Leaderboard info downloaded successfully");
+			 CS_DEBUG_LOG("Game Center - Leaderboard info downloaded successfully");
 			 mudwNumOpenRequests--;
 			 //Build a packet for the listener and invoke their callback
 			 OnLeaderboardsInfoRequestComplete(pCategories, pTitles);
@@ -736,7 +736,7 @@ namespace ChilliSource
 			 if(pError)
 			 {
 			 //Request failed. Let's try again later. It's already been popped from the queue
-			 ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
+			 CS_ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
 			 mudwNumOpenRequests--;
 			 //let's add it back on
 			 AddRequestToQueue(pRequest);
@@ -744,7 +744,7 @@ namespace ChilliSource
 			 else
 			 {
 			 //Great Success
-			 DEBUG_LOG("Game Center - Score of " + Core::ToString(pRequest->muddwScore) + " posted successfully");
+			 CS_DEBUG_LOG("Game Center - Score of " + Core::ToString(pRequest->muddwScore) + " posted successfully");
 			 mudwNumOpenRequests--;
 			 //Delete the request
 			 delete pRequest;
@@ -801,7 +801,7 @@ namespace ChilliSource
 			 if(pError)
 			 {
 			 //Request failed. Let's try again later. It's already been popped from the queue
-			 ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
+			 CS_ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
 			 mudwNumOpenRequests--;
 			 //let's add it back on
 			 AddRequestToQueue(pRequest);
@@ -809,7 +809,7 @@ namespace ChilliSource
 			 else if(pScores)
 			 {
 			 //Great Success
-			 DEBUG_LOG("Game Center - Scores request successful. Num scores returned: " + Core::ToString([pScores count]));
+			 CS_DEBUG_LOG("Game Center - Scores request successful. Num scores returned: " + Core::ToString([pScores count]));
 			 mudwNumOpenRequests--;
 			 //Now we need to store the scores and request the names before we return the data to the application
 			 OnScoreRangeRequestComplete(pScores, pRequest->mstrLeaderboardCategoryID);
@@ -833,7 +833,7 @@ namespace ChilliSource
 			 if(pError)
 			 {
 			 //Request failed. Let's try again later. It's already been popped from the queue
-			 ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
+			 CS_ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
 			 mudwNumOpenRequests--;
 			 //let's add it back on
 			 AddRequestToQueue(pRequest);
@@ -841,7 +841,7 @@ namespace ChilliSource
 			 else if(pPlayers)
 			 {
 			 //Great Success
-			 DEBUG_LOG("Game Center - Names request successful. Num names returned: " + Core::ToString([pPlayers count]));
+			 CS_DEBUG_LOG("Game Center - Names request successful. Num names returned: " + Core::ToString([pPlayers count]));
 			 mudwNumOpenRequests--;
 			 //Now we need to combine the names with the previously requested scores and return them to the app
 			 OnNameRequestComplete(pPlayers, pRequest->mstrKey);
@@ -863,13 +863,13 @@ namespace ChilliSource
 			[pAchievement reportAchievementWithCompletionHandler:^(NSError* pError)
 			 {
 			 if (pError){
-			 ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
+			 CS_ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
 			 mudwNumOpenRequests--;
 			 AddRequestToQueue(pRequest);
 			 
 			 } else {
 			 //Great Success
-			 DEBUG_LOG("Game Center - Achievement:" + pRequest->mstrAchievementID + " Updated to progress:" + Core::ToString((f32)pRequest->mffProgression));
+			 CS_DEBUG_LOG("Game Center - Achievement:" + pRequest->mstrAchievementID + " Updated to progress:" + Core::ToString((f32)pRequest->mffProgression));
 			 mudwNumOpenRequests--;
 			 //Delete the request
 			 delete pRequest;
@@ -887,7 +887,7 @@ namespace ChilliSource
 					HandleAchievementStatusArray(achievements);	
 
 				 } else {
-					 ERROR_LOG("Game Center:ProcessAchievementsStatusRequest- " + ChilliSource::Core::CStringUtils::NSStringToString([error localizedDescription]));
+					 CS_ERROR_LOG("Game Center:ProcessAchievementsStatusRequest- " + ChilliSource::Core::CStringUtils::NSStringToString([error localizedDescription]));
 					 mudwNumOpenRequests--;
 					 AddRequestToQueue(pRequest);
 				 }
@@ -904,21 +904,21 @@ namespace ChilliSource
 				}
 			}
 			
-			DEBUG_LOG("GameCentre:ProcessAchievementsStatusRequest - User has " + Core::ToString((u32)mastrCompletedAchievements.size()) +" achievements");
+			CS_DEBUG_LOG("GameCentre:ProcessAchievementsStatusRequest - User has " + Core::ToString((u32)mastrCompletedAchievements.size()) +" achievements");
 
 		}
 		void CGameCentreSystem::ProcessAchievementDescriptionsRequest(CGameCentreAchievementDescriptionsRequest * pRequest){
 			[GKAchievementDescription loadAchievementDescriptionsWithCompletionHandler:^(NSArray *descriptions, NSError *error)
 			 {
 			 if (error){
-			 ERROR_LOG("GameCentre:ProcessAchievementDescriptionsRequest - " + ChilliSource::Core::CStringUtils::NSStringToString([error localizedDescription]));
+			 CS_ERROR_LOG("GameCentre:ProcessAchievementDescriptionsRequest - " + ChilliSource::Core::CStringUtils::NSStringToString([error localizedDescription]));
 			 mudwNumOpenRequests--;
 			 AddRequestToQueue(pRequest);
 			 
 			 } else {
 			 mpAchievementDescriptions = descriptions;
 			 [mpAchievementDescriptions retain];
-			 DEBUG_LOG("GameCentre:ProcessAchievementDescriptionsRequest - Received " + Core::ToString([descriptions count]) + " descriptions");
+			 CS_DEBUG_LOG("GameCentre:ProcessAchievementDescriptionsRequest - Received " + Core::ToString([descriptions count]) + " descriptions");
 					   }
 			 }
 			];
@@ -943,7 +943,7 @@ namespace ChilliSource
 				 if(pError)
 				 {
 				 //Request failed. Let's try again later. It's already been popped from the queue
-				 ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
+				 CS_ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
 				 mudwNumOpenRequests--;
 				 //let's add it back on
 				 AddRequestToQueue(pRequest);
@@ -951,22 +951,22 @@ namespace ChilliSource
 				 else
 				 {
 				 //Great Success
-				 DEBUG_LOG("Game Center - Friend IDs request successful");
+				 CS_DEBUG_LOG("Game Center - Friend IDs request successful");
 				 mudwNumOpenRequests--;
 				 //Fire off a request for the actual friend data now
 				 [GKPlayer loadPlayersForIdentifiers:pFriends withCompletionHandler:^(NSArray* pPlayers, NSError* pError) 
 				  {
 				  if(pError)
 				  {
-				  ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
+				  CS_ERROR_LOG("Game Center - " + ChilliSource::Core::CStringUtils::NSStringToString([pError localizedDescription]));
 				  }
 				  else if(pPlayers)
 				  {
-				  DEBUG_LOG("Game Center - Friend Info request successful. Num friends returned: " + Core::ToString([pPlayers count]));
+				  CS_DEBUG_LOG("Game Center - Friend Info request successful. Num friends returned: " + Core::ToString([pPlayers count]));
 				  }
 				  else
 				  {
-				  DEBUG_LOG("Game Center - Nae mates");
+				  CS_DEBUG_LOG("Game Center - Nae mates");
 				  }
 				  
 				  }];
@@ -1011,7 +1011,7 @@ namespace ChilliSource
                     mstrPlayerID = ChilliSource::Core::CStringUtils::NSStringToUTF8String([GKLocalPlayer localPlayer].playerID);
                     mstrPlayerName = ChilliSource::Core::CStringUtils::NSStringToUTF8String([GKLocalPlayer localPlayer].alias);
                     
-                    DEBUG_LOG("Game Center - Local Player signs in");
+                    CS_DEBUG_LOG("Game Center - Local Player signs in");
     
                     mAuthenticationChangedEvent.Invoke(true);
                     
@@ -1027,7 +1027,7 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				DEBUG_LOG("Game Center - Local Player signs out");
+				CS_DEBUG_LOG("Game Center - Local Player signs out");
 				mAuthenticationChangedEvent.Invoke(false);
 			}
 			

@@ -25,8 +25,8 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        Audio::AudioComponentPtr CHighlightButton::mspDefaultSelectSound;
-        Audio::AudioComponentPtr CHighlightButton::mspDefaultDeSelectSound;
+        Audio::AudioComponentSPtr CHighlightButton::mspDefaultSelectSound;
+        Audio::AudioComponentSPtr CHighlightButton::mspDefaultDeSelectSound;
         
 		DEFINE_META_CLASS(CHighlightButton)
 
@@ -128,13 +128,13 @@ namespace ChilliSource
             //---Default index
             if(insParams.TryGetValue("NormalSpriteSheetIndex", strValue))
             {
-                MOFLOW_ASSERT(NormalSpriteSheet, "Sprite sheet index cannot be set without sprite sheet");
+                CS_ASSERT(NormalSpriteSheet, "Sprite sheet index cannot be set without sprite sheet");
                 SetNormalSpriteSheetIndex(Core::ParseU32(strValue));
             }
             //---Highlight index
             if(insParams.TryGetValue("HighlightSpriteSheetIndex", strValue))
             {
-				MOFLOW_ASSERT(HighlightSpriteSheet, "Sprite sheet index cannot be set without sprite sheet");
+				CS_ASSERT(HighlightSpriteSheet, "Sprite sheet index cannot be set without sprite sheet");
 				SetHighlightSpriteSheetIndex(Core::ParseU32(strValue));
             }
 			//---Default index ID
@@ -216,12 +216,12 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("SelectAudioEffect", strValue))
             {
-                Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
+                Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
                 SetSelectAudioEffect(pAudioFactory->CreateAudioComponent(eSelectAudioLocation, strValue, false, false));
             }
 			if(insParams.TryGetValue("DeselectAudioEffect", strValue))
             {
-                Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
+                Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
                 SetDeselectAudioEffect(pAudioFactory->CreateAudioComponent(eDeselectAudioLocation, strValue, false, false));
             }
             
@@ -417,7 +417,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void CHighlightButton::SetNormalSpriteSheetIndexID(const std::string& instrID)
 		{
-			MOFLOW_ASSERT(NormalSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+			CS_ASSERT(NormalSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			NormalSpriteSheetIndexID = instrID;
 			SetNormalSpriteSheetIndex(NormalSpriteSheet->GetFrameIndexByID(instrID));
 		}
@@ -428,7 +428,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void CHighlightButton::SetHighlightSpriteSheetIndexID(const std::string& instrID)
 		{
-			MOFLOW_ASSERT(HighlightSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+			CS_ASSERT(HighlightSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			HighlightSpriteSheetIndexID = instrID;
 			SetHighlightSpriteSheetIndex(HighlightSpriteSheet->GetFrameIndexByID(instrID));
 		}
@@ -500,7 +500,7 @@ namespace ChilliSource
         ///
         /// @param Audio effect played when the button is selected
         //-----------------------------------------------------------
-        void CHighlightButton::SetSelectAudioEffect(const Audio::AudioComponentPtr& inpEffect)
+        void CHighlightButton::SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
         {
             mpSelectAudioEffect = inpEffect;
         }
@@ -509,19 +509,19 @@ namespace ChilliSource
 		///
 		/// @param Audio effect played when the button is selected
 		//-----------------------------------------------------------
-		void CHighlightButton::SetDeselectAudioEffect(const Audio::AudioComponentPtr& inpEffect)
+		void CHighlightButton::SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
 		{
 			mpDeselectAudioEffect = inpEffect;
 		}
         void CHighlightButton::SetDefaultSelectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
         {
-            Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
+            Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
             mspDefaultSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
         }
         
         void CHighlightButton::SetDefaultDeselectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
         {
-            Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
+            Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
             mspDefaultDeSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
         }
         //-----------------------------------------------------------

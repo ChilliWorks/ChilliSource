@@ -130,13 +130,13 @@ namespace ChilliSource
                 pResult = pCompFac->CreateComponent(insComponentDesc.strType, insComponentDesc.sParams);
                 if(!pResult)
                 {
-                    WARNING_LOG("SceneLoader: Factory failed to produce component of type: " + insComponentDesc.strType);
+                    CS_WARNING_LOG("SceneLoader: Factory failed to produce component of type: " + insComponentDesc.strType);
 
                 }
             }
             else
             {
-				WARNING_LOG("SceneLoader: No registered factory can produce type: " + insComponentDesc.strType);
+				CS_WARNING_LOG("SceneLoader: No registered factory can produce type: " + insComponentDesc.strType);
             }
             
             
@@ -164,7 +164,7 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				ERROR_LOG("SceneDescription could not load the file:" + incName);
+				CS_ERROR_LOG("SceneDescription could not load the file:" + incName);
                 return false;
 			}
             

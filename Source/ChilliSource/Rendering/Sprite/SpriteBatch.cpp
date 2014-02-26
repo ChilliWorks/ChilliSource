@@ -153,7 +153,7 @@ namespace ChilliSource
 		{
             if(inudwStride > 0)
             {
-                MOFLOW_ASSERT(inMaterial.GetActiveShaderProgram(), "Cannot render a sprite batch with no active shader.");
+                CS_ASSERT(inMaterial.GetActiveShaderProgram(), "Cannot render a sprite batch with no active shader.");
                 
                 mpSpriteBuffer->Bind();
 			
@@ -176,7 +176,7 @@ namespace ChilliSource
 		{
             if(mpSpriteBuffer->GetIndexCount() > 0)
             {
-                MOFLOW_ASSERT(inMaterial.GetActiveShaderProgram(), "Cannot render a sprite batch with no active shader.");
+                CS_ASSERT(inMaterial.GetActiveShaderProgram(), "Cannot render a sprite batch with no active shader.");
                 
                 mpSpriteBuffer->Bind();
                 
@@ -212,7 +212,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		CSpriteBatch::~CSpriteBatch() 
 		{
-			SAFE_DELETE(mpSpriteBuffer);
+			CS_SAFE_DELETE(mpSpriteBuffer);
 		}
 	}
 }

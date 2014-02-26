@@ -348,7 +348,7 @@ namespace ChilliSource
             {
                 if(*itEffector == inpEffector)
                 {
-                    SAFE_DELETE(*itEffector);
+                    CS_SAFE_DELETE(*itEffector);
                     mEffectors.erase(itEffector);
                     return;
                 }

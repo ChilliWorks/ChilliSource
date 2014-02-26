@@ -26,7 +26,7 @@ CInputSystem::CInputSystem()
 
 CInputSystem::~CInputSystem()
 {
-	SAFE_DELETE(mpAccelerometer);
+	CS_SAFE_DELETE(mpAccelerometer);
 }
 
 bool CInputSystem::IsA(Core::InterfaceIDType inInterfaceID) const

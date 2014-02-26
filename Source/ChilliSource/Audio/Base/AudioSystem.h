@@ -32,13 +32,13 @@ namespace ChilliSource
 		
         typedef fastdelegate::FastDelegate0<> AudioVolumeEventDelegate;
 		
-		class IAudioSystem : public Core::ISystem, public Core::IUpdateable, public Core::IComponentProducer
+		class AudioSystem : public Core::ISystem, public Core::IUpdateable, public Core::IComponentProducer
 		{
 		public:
-			IAudioSystem();
-			virtual ~IAudioSystem();
+			AudioSystem();
+			virtual ~AudioSystem();
 			
-			DECLARE_NAMED_INTERFACE(IAudioSystem);
+			DECLARE_NAMED_INTERFACE(AudioSystem);
 
 			//-------------------------------------------------------
 			/// Is A
@@ -55,7 +55,7 @@ namespace ChilliSource
 			/// @param File path
 			/// @param Sound handle to be initialised with sound
 			//-------------------------------------------------------
-			virtual void CreateSound(const std::string& instrFilePath, IAudioResource* inpAudio) = 0;
+			virtual void CreateSound(const std::string& instrFilePath, AudioResource* inpAudio) = 0;
 			//-------------------------------------------------------
 			/// Create 3D Sound
 			///
@@ -65,7 +65,7 @@ namespace ChilliSource
 			/// @param File path
 			/// @param Sound handle to be initialised with sound
 			//-------------------------------------------------------
-			virtual void Create3DSound(const std::string& instrFilePath, IAudioResource* inpAudio) = 0;
+			virtual void Create3DSound(const std::string& instrFilePath, AudioResource* inpAudio) = 0;
 			//-------------------------------------------------------
 			/// Create Stream
 			///
@@ -75,7 +75,7 @@ namespace ChilliSource
 			/// @param File path
 			/// @param Sound handle to be initialised with stream
 			//-------------------------------------------------------
-			virtual void CreateStream(const std::string& instrFilePath, IAudioResource* inpAudio) = 0;
+			virtual void CreateStream(const std::string& instrFilePath, AudioResource* inpAudio) = 0;
 			//-------------------------------------------------------
 			/// Create 3D Stream
 			///
@@ -85,13 +85,13 @@ namespace ChilliSource
 			/// @param File path
 			/// @param Sound handle to be initialised with stream
 			//-------------------------------------------------------
-			virtual void Create3DStream(const std::string& instrFilePath, IAudioResource* inpAudio) = 0;
+			virtual void Create3DStream(const std::string& instrFilePath, AudioResource* inpAudio) = 0;
 			//-------------------------------------------------------
 			/// Play Sound
 			///
 			/// @param Sound handle
 			//-------------------------------------------------------
-			virtual void PlaySound(CAudioComponent* inpAudioComponent) = 0;
+			virtual void PlaySound(AudioComponent* inpAudioComponent) = 0;
 			//-------------------------------------------------------
 			/// Destroy 
 			///
@@ -103,7 +103,7 @@ namespace ChilliSource
 			///
 			/// @return Audio listener
 			//-------------------------------------------------------
-			virtual AudioListenerPtr CreateAudioListener() = 0;
+			virtual AudioListenerSPtr CreateAudioListener() = 0;
 			//-------------------------------------------------------
 			/// Set Master Effect Volume
 			///
@@ -137,13 +137,13 @@ namespace ChilliSource
 			///
 			/// @param Audio manager
 			//-------------------------------------------------------
-			const IAudioManager& GetAudioManager() const;
+			const AudioManager& GetAudioManager() const;
 			//-------------------------------------------------------
 			/// Get Audio Manager Pointer
 			///
 			/// @param Pointer to audio manager
 			//-------------------------------------------------------
-			const IAudioManager* GetAudioManagerPtr() const;
+			const AudioManager* GetAudioManagerPtr() const;
 			//-------------------------------------------------------
 			/// Get Master Effect Volume Changed Event
 			///
@@ -184,8 +184,8 @@ namespace ChilliSource
 			Core::CEvent0<AudioVolumeEventDelegate> mOnMasterEffectVolumeChangedEvent;
 			Core::CEvent0<AudioVolumeEventDelegate> mOnMasterStreamVolumeChangedEvent;
 			
-			IAudioManager* mpAudioManager;
-			IAudioComponentFactory* mpAudioComponentFactory;
+			AudioManager* mpAudioManager;
+			AudioComponentFactory* mpAudioComponentFactory;
 			
 			f32 mfMasterEffectVolume;
 			f32 mfMasterStreamVolume;

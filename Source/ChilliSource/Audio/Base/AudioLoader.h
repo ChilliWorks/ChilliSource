@@ -22,12 +22,12 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		class CAudioLoader : public Core::IResourceProvider
+		class AudioLoader : public Core::IResourceProvider
 		{
 		public:
 			
-			CAudioLoader(IAudioSystem* inpAudioSystem);
-			virtual ~CAudioLoader();
+			AudioLoader(AudioSystem* inpAudioSystem);
+			virtual ~AudioLoader();
 			
 			//-------------------------------------------------------------------------
 			/// Is A
@@ -48,10 +48,10 @@ namespace ChilliSource
 			///
 			/// @return Audio listener
 			//----------------------------------------------------------------------------
-			virtual AudioListenerPtr CreateAudioListener() = 0;
+			virtual AudioListenerSPtr CreateAudioListener() = 0;
 		protected:
 			
-			const IAudioManager& mAudioManager;
+			const AudioManager& mAudioManager;
 		};
 	}
 }

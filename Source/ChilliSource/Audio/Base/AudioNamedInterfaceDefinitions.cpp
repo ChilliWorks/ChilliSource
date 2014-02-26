@@ -16,6 +16,6 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		DEFINE_NAMED_INTERFACE(IAudioResource);
+		DEFINE_NAMED_INTERFACE(AudioResource);
 	}
 }

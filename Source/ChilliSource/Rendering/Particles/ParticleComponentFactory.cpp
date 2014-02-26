@@ -142,12 +142,12 @@ namespace ChilliSource
                     }
                     else
                     {
-                        ERROR_LOG("Particle file: " + instrScriptFile + " no material found for file");
+                        CS_ERROR_LOG("Particle file: " + instrScriptFile + " no material found for file");
                     }
                 }
                 else
                 {
-                    ERROR_LOG("Particle file: " + instrScriptFile + " no material found"); 
+                    CS_ERROR_LOG("Particle file: " + instrScriptFile + " no material found"); 
                 }
                 
                 //---Emitters
@@ -168,7 +168,7 @@ namespace ChilliSource
                         }
                         else
                         {
-                            ERROR_LOG("Particle file: " + instrScriptFile + " no emitters shape found");
+                            CS_ERROR_LOG("Particle file: " + instrScriptFile + " no emitters shape found");
                         }
                         
                         //Jump to the next emitter
@@ -177,7 +177,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                    ERROR_LOG("Particle file: " + instrScriptFile + " no emitters found");
+                    CS_ERROR_LOG("Particle file: " + instrScriptFile + " no emitters found");
                 }
                 
                 //---Effectors
@@ -205,7 +205,7 @@ namespace ChilliSource
 			} 
             else 
             {
-				ERROR_LOG("Particle component factory could not load file: " + instrScriptFile);
+				CS_ERROR_LOG("Particle component factory could not load file: " + instrScriptFile);
 			}
             
 			mpParticleSystem->AddParticleComponent(pParticleComp.get());			

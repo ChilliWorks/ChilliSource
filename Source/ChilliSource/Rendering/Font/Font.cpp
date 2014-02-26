@@ -145,7 +145,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				ERROR_LOG("Invalid space character chosen in font please include a '-' in the font");
+				CS_ERROR_LOG("Invalid space character chosen in font please include a '-' in the font");
 			}
             
         }

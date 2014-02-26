@@ -19,13 +19,13 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-        DEFINE_NAMED_INTERFACE(CAudioComponent);
+        DEFINE_NAMED_INTERFACE(AudioComponent);
         //---------------------------------------------------------------------
 		/// Constructor
 		///
 		/// Default
 		//---------------------------------------------------------------------
-		CAudioComponent::CAudioComponent(IAudioSystem* inpOwningSystem) 
+		AudioComponent::AudioComponent(AudioSystem* inpOwningSystem) 
         : mfCurrentVolume(0.0f), mpOwningSystem(inpOwningSystem), mfCurrentFrequency(1.0f)
 		{
 
@@ -37,9 +37,9 @@ namespace ChilliSource
 		/// @param Comparison Type
 		/// @return Whether the class matches the comparison type
 		//----------------------------------------------------------
-		bool CAudioComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool AudioComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == CAudioComponent::InterfaceID);
+			return (inInterfaceID == AudioComponent::InterfaceID);
 		}
 		//------------------------------------------------------
 		/// Set Audio Source
@@ -47,27 +47,27 @@ namespace ChilliSource
 		/// Set the audio source for this component
 		/// @param Audio resource pointer
 		//------------------------------------------------------
-		void CAudioComponent::SetAudioSource(const AudioResourcePtr& inpAudioSource)
+		void AudioComponent::SetAudioSource(const AudioResourceSPtr& inpAudioSource)
 		{
 			//Register for master volume changed event
 			if(mpAudioSource && mpAudioSource->IsStreamed())
 			{
-				mpOwningSystem->GetMasterStreamVolumeChangedEvent() -= AudioVolumeEventDelegate(this, &CAudioComponent::OnMasterVolumeChanged);
+				mpOwningSystem->GetMasterStreamVolumeChangedEvent() -= AudioVolumeEventDelegate(this, &AudioComponent::OnMasterVolumeChanged);
 			}
 			else if(mpAudioSource)
 			{
-				mpOwningSystem->GetMasterEffectVolumeChangedEvent() -= AudioVolumeEventDelegate(this, &CAudioComponent::OnMasterVolumeChanged);
+				mpOwningSystem->GetMasterEffectVolumeChangedEvent() -= AudioVolumeEventDelegate(this, &AudioComponent::OnMasterVolumeChanged);
 			}
 			
 			mpAudioSource = inpAudioSource;
 			
 			if(mpAudioSource && mpAudioSource->IsStreamed())
 			{
-				mpOwningSystem->GetMasterStreamVolumeChangedEvent() += AudioVolumeEventDelegate(this, &CAudioComponent::OnMasterVolumeChanged);
+				mpOwningSystem->GetMasterStreamVolumeChangedEvent() += AudioVolumeEventDelegate(this, &AudioComponent::OnMasterVolumeChanged);
 			}
 			else if(mpAudioSource)
 			{
-				mpOwningSystem->GetMasterEffectVolumeChangedEvent() += AudioVolumeEventDelegate(this, &CAudioComponent::OnMasterVolumeChanged);
+				mpOwningSystem->GetMasterEffectVolumeChangedEvent() += AudioVolumeEventDelegate(this, &AudioComponent::OnMasterVolumeChanged);
 			}
 		}
 		//------------------------------------------------------
@@ -76,7 +76,7 @@ namespace ChilliSource
 		/// Get the audio source for this component
 		/// @return Audio resource pointer
 		//------------------------------------------------------
-		AudioResourcePtr& CAudioComponent::GetAudioSource() 
+		AudioResourceSPtr& AudioComponent::GetAudioSource() 
 		{
 			return mpAudioSource;
 		}
@@ -85,7 +85,7 @@ namespace ChilliSource
         ///
         /// @return Sound length in seconds
         //---------------------------------------------------------------------
-        f32 CAudioComponent::GetLength() const
+        f32 AudioComponent::GetLength() const
         {
             return mpAudioSource->GetLength();
         }
@@ -96,7 +96,7 @@ namespace ChilliSource
         /// complete notifications
         /// @return Audio event 
         //---------------------------------------------------------------------
-        Core::IEvent<AudioEventDelegate>& CAudioComponent::GetAudioFinishedEvent()
+        Core::IEvent<AudioEventDelegate>& AudioComponent::GetAudioFinishedEvent()
         {
             return mOnPlaybackCompleteEvent;
         }
@@ -105,7 +105,7 @@ namespace ChilliSource
         ///
         /// Triggered when the audio systems master volume is changed
         //---------------------------------------------------------------------
-        void CAudioComponent::OnMasterVolumeChanged()
+        void AudioComponent::OnMasterVolumeChanged()
         {
             SetVolume(mfCurrentVolume);
         }
@@ -114,7 +114,7 @@ namespace ChilliSource
 		///
 		/// @param Time between frames in seconds
 		//------------------------------------------------------
-		void CAudioComponent::Update(f32 dt)
+		void AudioComponent::Update(f32 dt)
 		{
 			if(mpEntityOwner)
 			{
@@ -126,16 +126,16 @@ namespace ChilliSource
         //---------------------------------------------------------------------
 		/// Destructor
 		//---------------------------------------------------------------------
-		CAudioComponent::~CAudioComponent() 
+		AudioComponent::~AudioComponent() 
 		{
             //Register for master volume changed event
 			if(mpAudioSource && mpAudioSource->IsStreamed())
 			{
-				mpOwningSystem->GetMasterStreamVolumeChangedEvent() -= AudioVolumeEventDelegate(this, &CAudioComponent::OnMasterVolumeChanged);
+				mpOwningSystem->GetMasterStreamVolumeChangedEvent() -= AudioVolumeEventDelegate(this, &AudioComponent::OnMasterVolumeChanged);
 			}
 			else if(mpAudioSource)
 			{
-				mpOwningSystem->GetMasterEffectVolumeChangedEvent() -= AudioVolumeEventDelegate(this, &CAudioComponent::OnMasterVolumeChanged);
+				mpOwningSystem->GetMasterEffectVolumeChangedEvent() -= AudioVolumeEventDelegate(this, &AudioComponent::OnMasterVolumeChanged);
 			}
 		} 
 	}

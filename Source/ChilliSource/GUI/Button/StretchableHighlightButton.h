@@ -156,13 +156,13 @@ namespace ChilliSource
             ///
             /// @param Audio effect played when the button is selected
             //-----------------------------------------------------------
-            void SetSelectAudioEffect(const Audio::AudioComponentPtr& inpEffect);
+            void SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect);
 			//-----------------------------------------------------------
             /// Set De-Select Audio Effect
             ///
             /// @param Audio effect played when the button is selected
             //-----------------------------------------------------------
-            void SetDeselectAudioEffect(const Audio::AudioComponentPtr& inpEffect);
+            void SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect);
             //--------------------------------------------------------
 			/// Set Highlight Colour
 			///
@@ -283,8 +283,8 @@ namespace ChilliSource
             SpriteSheetIndex msCurrentIndices;
             SpriteSheetIndex msNormalIndices;
             SpriteSheetIndex msHighlightIndices;
-            Audio::AudioComponentPtr mpSelectAudioEffect;
-			Audio::AudioComponentPtr mpDeselectAudioEffect;
+            Audio::AudioComponentSPtr mpSelectAudioEffect;
+			Audio::AudioComponentSPtr mpDeselectAudioEffect;
             Core::CColour mCurrentColour;
 			bool mbSelected;
             

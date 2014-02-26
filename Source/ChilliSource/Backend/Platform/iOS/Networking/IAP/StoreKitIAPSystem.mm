@@ -136,7 +136,7 @@
 //-------------------------------------------------------
 -(void) requestPurchaseWithProductID:(NSString*)inProductID andQuantity:(u32)inQuantity
 {
-    MOFLOW_ASSERT([mOpenTransactions count] == 0 && [mUserPurchasedProductIDs count] == 0, "IAPSystem: Cannot make multiple purchases at same time");
+    CS_ASSERT([mOpenTransactions count] == 0 && [mUserPurchasedProductIDs count] == 0, "IAPSystem: Cannot make multiple purchases at same time");
     
     for(SKProduct* pProduct in mProducts)
     {

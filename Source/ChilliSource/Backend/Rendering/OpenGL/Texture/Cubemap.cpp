@@ -131,7 +131,7 @@ namespace ChilliSource
 		//--------------------------------------------------
 		void CCubemap::Init(const std::vector<Core::ResourcePtr>& inapSourceImages, bool inbWithMipsMaps)
 		{
-            MOFLOW_ASSERT(inapSourceImages.size() == 6, "Cubemaps must have 6 face textures");
+            CS_ASSERT(inapSourceImages.size() == 6, "Cubemaps must have 6 face textures");
             
 			glGenTextures(1, &mGLTextureID);
 			Bind();
@@ -157,7 +157,7 @@ namespace ChilliSource
                     break;
                 case Core::ImageCompression::k_PVR2Bpp:
 #ifndef TARGET_OS_IPHONE
-                    FATAL_LOG("PVR compressed textures are only supported on iOS.");
+                    CS_FATAL_LOG("PVR compressed textures are only supported on iOS.");
 #else
                     switch(pSourceImage->GetFormat())
                     {
@@ -173,7 +173,7 @@ namespace ChilliSource
                     break;
                 case Core::ImageCompression::k_PVR4Bpp:
 #ifndef TARGET_OS_IPHONE
-                    FATAL_LOG("PVR compressed textures are only supported on iOS.");
+                    CS_FATAL_LOG("PVR compressed textures are only supported on iOS.");
 #else
                     switch(pSourceImage->GetFormat())
                     {
@@ -208,7 +208,7 @@ namespace ChilliSource
 		{
 			if(inSlot > mpRenderCapabilities->GetNumTextureUnits())
 			{
-				FATAL_LOG("Attempting to bind to texture unit not supported on this device: " + Core::ToString(inSlot));
+				CS_FATAL_LOG("Attempting to bind to texture unit not supported on this device: " + Core::ToString(inSlot));
 			}
 			
             CTexture::SetActiveTextureSlot(inSlot);

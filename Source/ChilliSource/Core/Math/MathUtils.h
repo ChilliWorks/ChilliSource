@@ -80,7 +80,7 @@ namespace ChilliSource
             //---------------------------------------------------------
             template <typename T> inline static T CentralLimit(T inMin, T inMax, u32 inudwPasses = 20)
             {
-				MOFLOW_ASSERT(inudwPasses != 0, "Must have at least one pass");
+				CS_ASSERT(inudwPasses != 0, "Must have at least one pass");
 				
 				T TotalValue = 0;
 				for(u32 i = 0; i < inudwPasses; ++i)

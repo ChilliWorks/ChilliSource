@@ -718,7 +718,7 @@ namespace ChilliSource
 					outfCharacterWidth = 0.0f;
                     if(outpInvalidCharacterFound)
                         (*outpInvalidCharacterFound)=true;
-					ERROR_LOG("Invalid character in text component");
+					CS_ERROR_LOG("Invalid character in text component");
 					break;
 				}
 			}

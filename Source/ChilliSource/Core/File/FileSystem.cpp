@@ -236,7 +236,7 @@ namespace ChilliSource
 
 				//get the hash
 				udwOutput = CHashCRC32::GenerateHashCode(abyContents, dwLength);
-				SAFE_DELETE_ARRAY(abyContents);
+				CS_SAFE_DELETE_ARRAY(abyContents);
 			}
 			return udwOutput;
 		}
@@ -313,7 +313,7 @@ namespace ChilliSource
 
 
 			u32 udwTotalFiles = astrFilenames.size();
-			DEBUG_LOG("Total Files = " + ToString(udwTotalFiles) + ", Total Size = " + ToString(udwTotalSize));
+			CS_DEBUG_LOG("Total Files = " + ToString(udwTotalFiles) + ", Total Size = " + ToString(udwTotalSize));
 			return udwTotalSize;
 		}
         

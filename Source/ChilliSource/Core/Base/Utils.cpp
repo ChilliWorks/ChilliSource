@@ -17,7 +17,7 @@ bool CUtils::ReadJson(ChilliSource::Core::StorageLocation ineStorageLocation, co
 {
     if(!outpJson)
     {
-    	WARNING_LOG("CUtils::ReadJson| Output is NULL");
+    	CS_WARNING_LOG("CUtils::ReadJson| Output is NULL");
         return false;
     }
     
@@ -31,7 +31,7 @@ bool CUtils::ReadJson(ChilliSource::Core::StorageLocation ineStorageLocation, co
     
     if(!jReader.parse(strJsonString, *outpJson))
     {
-        WARNING_LOG("CUtils::ReadJson| Json could not be parsed:" + jReader.getFormatedErrorMessages());
+        CS_WARNING_LOG("CUtils::ReadJson| Json could not be parsed:" + jReader.getFormatedErrorMessages());
         return false;
     }
     
@@ -44,7 +44,7 @@ bool CUtils::FileToString(StorageLocation ineStorageLocation, const std::string 
     
     if(!pFile || pFile->IsOpen() == false)
     {
-        WARNING_LOG("CUtils::FileToString| Could not open file" + instrPath);
+        CS_WARNING_LOG("CUtils::FileToString| Could not open file" + instrPath);
         return false;
     }
 
@@ -59,7 +59,7 @@ FileStreamPtr CUtils::StringToFile(StorageLocation ineStorageLocation, const std
     
     if(!pFile || pFile->IsOpen() == false)
     {
-        WARNING_LOG("CUtils::StringToFile| Could not open file" + instrPath);
+        CS_WARNING_LOG("CUtils::StringToFile| Could not open file" + instrPath);
         return FileStreamPtr();
     }
     

@@ -99,13 +99,13 @@ namespace ChilliSource
 			//---Background index
 			if(insParams.TryGetValue("BarSpriteSheetIndex", strValue))
 			{
-				MOFLOW_ASSERT(BarSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+				CS_ASSERT(BarSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 				SetBarSpriteSheetIndex(Core::ParseU32(strValue));
 			}
 			//---Slider index
 			if(insParams.TryGetValue("SliderSpriteSheetIndex", strValue))
 			{
-				MOFLOW_ASSERT(SliderSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+				CS_ASSERT(SliderSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 				SetSliderSpriteSheetIndex(Core::ParseU32(strValue));
 			}
 			//---Background ID
@@ -220,7 +220,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		void CHorizontalSliderBar::SetBarSpriteSheetIndexID(const std::string& instrID)
 		{
-			MOFLOW_ASSERT(BarSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+			CS_ASSERT(BarSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			BarSpriteSheetIndexID = instrID;
 			SetBarSpriteSheetIndex(BarSpriteSheet->GetFrameIndexByID(instrID));
 		}
@@ -231,7 +231,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		void CHorizontalSliderBar::SetSliderSpriteSheetIndexID(const std::string& instrID)
 		{
-			MOFLOW_ASSERT(SliderSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+			CS_ASSERT(SliderSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			SliderSpriteSheetIndexID = instrID;
 			SetSliderSpriteSheetIndex(SliderSpriteSheet->GetFrameIndexByID(instrID));
 		}

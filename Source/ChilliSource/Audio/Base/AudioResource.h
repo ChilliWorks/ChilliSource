@@ -20,11 +20,11 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		class IAudioResource : public Core::IResource
+		class AudioResource : public Core::IResource
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(IAudioResource);
-			virtual ~IAudioResource(){}
+			DECLARE_NAMED_INTERFACE(AudioResource);
+			virtual ~AudioResource(){}
         
 			//---------------------------------------------------------------------
 			/// Get Length

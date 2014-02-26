@@ -23,7 +23,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CFMODAudioListener : public Audio::IAudioListener
+		class CFMODAudioListener : public Audio::AudioListener
 		{
 		public:
 			CFMODAudioListener(FMOD::System* inpFMODSystem);

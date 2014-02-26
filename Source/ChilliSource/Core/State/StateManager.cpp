@@ -101,7 +101,7 @@ namespace ChilliSource
                         if(!mStateHierarchy.empty())
                         {
                             pTop = mStateHierarchy.back();
-                            MOFLOW_ASSERT(pTop != pPushed, "You cannot push a copy of a state onto itself");
+                            CS_ASSERT(pTop != pPushed, "You cannot push a copy of a state onto itself");
                         }
                         
                         //Only the top state will have been started so this
@@ -583,30 +583,30 @@ namespace ChilliSource
             }
             else
             {
-                 //   DEBUG_LOG("StateManager state not accepting notifications. for notification "+ToString(inpsNotification->ID)+" priority "+ToString(inpsNotification->ePriority)+" type "+ToString(inpsNotification->eType));
+                 //   CS_DEBUG_LOG("StateManager state not accepting notifications. for notification "+ToString(inpsNotification->ID)+" priority "+ToString(inpsNotification->ePriority)+" type "+ToString(inpsNotification->eType));
             }
 			return false;
         }
         
         void CStateManager::DebugPrint(std::string instrMessage){
-            DEBUG_LOG("CStateManager "+ToString((u32)this)+" - "+instrMessage);
-            DEBUG_LOG("mpApp = "+ToString((u32)mpApp));
-            DEBUG_LOG("mStateOperationQueue size:"+ToString(mStateOperationQueue.size()));
+            CS_DEBUG_LOG("CStateManager "+ToString((u32)this)+" - "+instrMessage);
+            CS_DEBUG_LOG("mpApp = "+ToString((u32)mpApp));
+            CS_DEBUG_LOG("mStateOperationQueue size:"+ToString(mStateOperationQueue.size()));
     
             
-            DEBUG_LOG("mStateHierarchy size:"+ToString(mStateHierarchy.size()));
+            CS_DEBUG_LOG("mStateHierarchy size:"+ToString(mStateHierarchy.size()));
 
             
             for(s32 i=0;i<mStateHierarchy.size();i++){
-                DEBUG_LOG("("+ToString(i)+") "+ToString((u32)mStateHierarchy[i].get())+" name:"+mStateHierarchy[i]->GetName());
+                CS_DEBUG_LOG("("+ToString(i)+") "+ToString((u32)mStateHierarchy[i].get())+" name:"+mStateHierarchy[i]->GetName());
             }
             
-            DEBUG_LOG("mStateOperationQueue size:"+ToString(mStateOperationQueue.size()));
+            CS_DEBUG_LOG("mStateOperationQueue size:"+ToString(mStateOperationQueue.size()));
 
             s32 udwCount=0;
             std::list<StateOperation>::iterator it=mStateOperationQueue.begin();
             while(it!=mStateOperationQueue.end()){
-                DEBUG_LOG("("+ToString(udwCount)+") eAction:"+ToString((u32)(*it).eAction)+" pState:"+ToString((u32)(*it).pState.get())+" pRawState:"+ToString((u32)(*it).pRawState));
+                CS_DEBUG_LOG("("+ToString(udwCount)+") eAction:"+ToString((u32)(*it).eAction)+" pState:"+ToString((u32)(*it).pState.get())+" pRawState:"+ToString((u32)(*it).pRawState));
                 udwCount++;
                 it++;
             }

@@ -25,7 +25,7 @@ namespace ChilliSource
 	{
 		const u32 kudwMaxFMODChannels = 32;
 		
-		class CFMODSystem : public Audio::IAudioSystem
+		class CFMODSystem : public Audio::AudioSystem
 		{
 		public:
 			CFMODSystem();
@@ -74,7 +74,7 @@ namespace ChilliSource
 			/// @param File path
 			/// @param Sound handle to be initialised with sound
 			//-------------------------------------------------------
-			void CreateSound(const std::string& instrFilePath, Audio::IAudioResource* inpAudio);
+			void CreateSound(const std::string& instrFilePath, Audio::AudioResource* inpAudio);
 			//-------------------------------------------------------
 			/// Create 3D Sound
 			///
@@ -84,7 +84,7 @@ namespace ChilliSource
 			/// @param File path
 			/// @param Sound handle to be initialised with sound
 			//-------------------------------------------------------
-			void Create3DSound(const std::string& instrFilePath, Audio::IAudioResource* inpAudio);
+			void Create3DSound(const std::string& instrFilePath, Audio::AudioResource* inpAudio);
 			//-------------------------------------------------------
 			/// Create Stream
 			///
@@ -93,7 +93,7 @@ namespace ChilliSource
 			/// @param File path
 			/// @param Stream handle
 			//-------------------------------------------------------
-			void CreateStream(const std::string& instrFilePath, Audio::IAudioResource* inpAudio);
+			void CreateStream(const std::string& instrFilePath, Audio::AudioResource* inpAudio);
 			//-------------------------------------------------------
 			/// Create 3D Stream
 			///
@@ -102,7 +102,7 @@ namespace ChilliSource
 			/// @param File path
 			/// @param Stream handle
 			//-------------------------------------------------------
-			void Create3DStream(const std::string& instrFilePath, Audio::IAudioResource* inpAudio);
+			void Create3DStream(const std::string& instrFilePath, Audio::AudioResource* inpAudio);
 			//-------------------------------------------------------
 			/// Play Sound
 			///
@@ -111,7 +111,7 @@ namespace ChilliSource
 			///
 			/// @param FMOD sound handle
 			//-------------------------------------------------------
-			void PlaySound(Audio::CAudioComponent* inpAudioComponent);
+			void PlaySound(Audio::AudioComponent* inpAudioComponent);
 			//-------------------------------------------------------
 			/// Play Event
 			///
@@ -132,7 +132,7 @@ namespace ChilliSource
 			///
 			/// @return Audio listener
 			//-------------------------------------------------------
-			Audio::AudioListenerPtr CreateAudioListener();
+			Audio::AudioListenerSPtr CreateAudioListener();
 			//-------------------------------------------------------
 			/// Destroy 
 			///

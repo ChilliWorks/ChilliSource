@@ -75,8 +75,8 @@ namespace ChilliSource
 				if(it->second.get() == inpResource)
 				{
 					ResourcePtr pResource = it->second;
-					MOFLOW_ASSERT((pResource.use_count() <= 2), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + pResource->GetName() + ")");
-					DEBUG_LOG("Releasing resource from cache " + inpResource->GetName());
+					CS_ASSERT((pResource.use_count() <= 2), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + pResource->GetName() + ")");
+					CS_DEBUG_LOG("Releasing resource from cache " + inpResource->GetName());
 					mMapFilenameToResource.erase(it);
 					return;
 				}
@@ -95,8 +95,8 @@ namespace ChilliSource
 			for(MapStringToResourcePtr::iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it)
 			{
 				ResourcePtr pResource = it->second;
-				MOFLOW_ASSERT((pResource.use_count() <= 2), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + pResource->GetName() + ")");
-				DEBUG_LOG("Releasing resource from cache " + pResource->GetName());
+				CS_ASSERT((pResource.use_count() <= 2), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + pResource->GetName() + ")");
+				CS_DEBUG_LOG("Releasing resource from cache " + pResource->GetName());
 			}
 
 			mMapFilenameToResource.clear();
@@ -114,7 +114,7 @@ namespace ChilliSource
 			{
 				if(it->second.use_count() == 1)
 				{
-					DEBUG_LOG("Releasing resource from cache " + it->second->GetName());
+					CS_DEBUG_LOG("Releasing resource from cache " + it->second->GetName());
 					it = mMapFilenameToResource.erase(it);
                     ++udwNumReleased;
 				}

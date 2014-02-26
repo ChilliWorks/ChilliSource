@@ -16,13 +16,13 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-        DEFINE_NAMED_INTERFACE(IAudioSystem);
+        DEFINE_NAMED_INTERFACE(AudioSystem);
 		//-------------------------------------------------------
 		/// Constructor
 		///
 		/// Default
 		//-------------------------------------------------------
-		IAudioSystem::IAudioSystem() : mfMasterEffectVolume(kfDefaultAudioVolume), mfMasterStreamVolume(kfDefaultAudioVolume),
+		AudioSystem::AudioSystem() : mfMasterEffectVolume(kfDefaultAudioVolume), mfMasterStreamVolume(kfDefaultAudioVolume),
 		mfDopplerFactor(kfDefaultDoppler), mfRolloffFactor(kfDefaultRolloff), mfDistanceFactor(kfDefaultDistance), mpAudioComponentFactory(nullptr), mpAudioManager(nullptr)
 		{
 			//Set the overall system volume
@@ -34,9 +34,9 @@ namespace ChilliSource
 		///
 		/// @return Whether this object is of given type
 		//-------------------------------------------------------
-		bool IAudioSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool AudioSystem::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == Core::IUpdateable::InterfaceID || inInterfaceID == Core::IComponentProducer::InterfaceID || inInterfaceID == IAudioSystem::InterfaceID;
+			return inInterfaceID == Core::IUpdateable::InterfaceID || inInterfaceID == Core::IComponentProducer::InterfaceID || inInterfaceID == AudioSystem::InterfaceID;
 		}
 		//-------------------------------------------------------
 		/// Set Master Effect Volume
@@ -44,7 +44,7 @@ namespace ChilliSource
 		/// Set the volume for the entire audio effect system
 		/// @param Normalised volume level [0, 1]
 		//-------------------------------------------------------
-		void IAudioSystem::SetMasterEffectVolume(f32 infVolume)
+		void AudioSystem::SetMasterEffectVolume(f32 infVolume)
 		{
 			mfMasterEffectVolume = Core::CMathUtils::Clamp(infVolume, 0.0f, 1.0f);
 			
@@ -57,7 +57,7 @@ namespace ChilliSource
 		/// Set the volume for the entire audio stream system
 		/// @param Normalised volume level [0, 1]
 		//-------------------------------------------------------
-		void IAudioSystem::SetMasterStreamVolume(f32 infVolume)
+		void AudioSystem::SetMasterStreamVolume(f32 infVolume)
 		{
 			mfMasterStreamVolume = Core::CMathUtils::Clamp(infVolume, 0.0f, 1.0f);
 			
@@ -70,7 +70,7 @@ namespace ChilliSource
 		/// Get the volume for the entire audio effect system
 		/// @return Normalised volume level [0, 1]
 		//-------------------------------------------------------
-		f32 IAudioSystem::GetMasterEffectVolume() const
+		f32 AudioSystem::GetMasterEffectVolume() const
 		{
 			return mfMasterEffectVolume;
 		}
@@ -80,7 +80,7 @@ namespace ChilliSource
 		/// Get the volume for the entire audio stream system
 		/// @return Normalised volume level [0, 1]
 		//-------------------------------------------------------
-		f32 IAudioSystem::GetMasterStreamVolume() const
+		f32 AudioSystem::GetMasterStreamVolume() const
 		{
 			return mfMasterStreamVolume;
 		}
@@ -89,7 +89,7 @@ namespace ChilliSource
 		///
 		/// @param Audio manager
 		//-------------------------------------------------------
-		const IAudioManager& IAudioSystem::GetAudioManager() const
+		const AudioManager& AudioSystem::GetAudioManager() const
 		{
 			return *mpAudioManager;
 		}
@@ -98,7 +98,7 @@ namespace ChilliSource
 		///
 		/// @param Pointer to audio manager
 		//-------------------------------------------------------
-		const IAudioManager* IAudioSystem::GetAudioManagerPtr() const
+		const AudioManager* AudioSystem::GetAudioManagerPtr() const
 		{
 			return mpAudioManager;
 		}
@@ -107,7 +107,7 @@ namespace ChilliSource
 		///
 		/// @return Number of factories in this system
 		//----------------------------------------------------
-		u32  IAudioSystem::GetNumComponentFactories() const
+		u32  AudioSystem::GetNumComponentFactories() const
 		{
 			return 1;
 		}
@@ -116,7 +116,7 @@ namespace ChilliSource
 		///
 		/// @return Audio component factory pointer
 		//-------------------------------------------------------
-		Core::IComponentFactory* IAudioSystem::GetComponentFactoryPtr(u32 inudwIndex)
+		Core::IComponentFactory* AudioSystem::GetComponentFactoryPtr(u32 inudwIndex)
 		{
 			return mpAudioComponentFactory;
 		}
@@ -125,7 +125,7 @@ namespace ChilliSource
 		///
 		/// @return Audio component factory
 		//-------------------------------------------------------
-		Core::IComponentFactory& IAudioSystem::GetComponentFactory(u32 inudwIndex)
+		Core::IComponentFactory& AudioSystem::GetComponentFactory(u32 inudwIndex)
 		{
 			return *mpAudioComponentFactory;
 		}
@@ -136,7 +136,7 @@ namespace ChilliSource
 		/// listen for this event
 		/// @return Audio event
 		//-------------------------------------------------------
-		Core::IEvent<AudioVolumeEventDelegate>& IAudioSystem::GetMasterEffectVolumeChangedEvent()
+		Core::IEvent<AudioVolumeEventDelegate>& AudioSystem::GetMasterEffectVolumeChangedEvent()
 		{
 			return mOnMasterEffectVolumeChangedEvent;
 		}
@@ -147,7 +147,7 @@ namespace ChilliSource
 		/// listen for this event
 		/// @return Audio event
 		//-------------------------------------------------------
-		Core::IEvent<AudioVolumeEventDelegate>& IAudioSystem::GetMasterStreamVolumeChangedEvent()
+		Core::IEvent<AudioVolumeEventDelegate>& AudioSystem::GetMasterStreamVolumeChangedEvent()
 		{
 			return mOnMasterStreamVolumeChangedEvent;
 		}
@@ -155,7 +155,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//-------------------------------------------------------
-		IAudioSystem::~IAudioSystem()
+		AudioSystem::~AudioSystem()
 		{
 		}
 	}

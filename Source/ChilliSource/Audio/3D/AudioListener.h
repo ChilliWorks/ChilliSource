@@ -19,10 +19,10 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		class IAudioListener
+		class AudioListener
 		{
 		public:
-			virtual ~IAudioListener(){}
+			virtual ~AudioListener(){}
 			//------------------------------------------------------------
 			/// Set 3D Location
 			///
@@ -36,9 +36,6 @@ namespace ChilliSource
 			//-------------------------------------------------------------
 			virtual void Set3DLocation(Core::CVector3& invPos, Core::CVector3& invVel, Core::CVector3& invForward, Core::CVector3& invUp) = 0;
 		};
-		
-		typedef std::shared_ptr<IAudioListener> AudioListenerPtr;
-		typedef std::weak_ptr<IAudioListener> AudioListenerWeakPtr;
 	}
 }
 

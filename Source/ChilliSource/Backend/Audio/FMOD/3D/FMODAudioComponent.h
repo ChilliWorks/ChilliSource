@@ -19,10 +19,10 @@ namespace ChilliSource
 {
     namespace iOS
     {
-        class CFMODAudioComponent : public Audio::CAudioComponent
+        class CFMODAudioComponent : public Audio::AudioComponent
         {
         public:
-            CFMODAudioComponent(Audio::IAudioSystem* inpOwningSystem);
+            CFMODAudioComponent(Audio::AudioSystem* inpOwningSystem);
 			~CFMODAudioComponent();
             //---------------------------------------------------------------------
 			/// Play

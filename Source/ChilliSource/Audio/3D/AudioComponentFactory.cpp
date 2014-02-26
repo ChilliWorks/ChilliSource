@@ -16,13 +16,13 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-        DEFINE_NAMED_INTERFACE(IAudioComponentFactory);
+        DEFINE_NAMED_INTERFACE(AudioComponentFactory);
 		//--------------------------------------------------------
 		/// Constructor
 		///
 		/// @param Audio manager instance so we can create audio
 		//--------------------------------------------------------
-		IAudioComponentFactory::IAudioComponentFactory(IAudioSystem* inpAudioSystem, IAudioManager* inpAudioMgr) : mpAudioManager(inpAudioMgr), mpAudioSystem(inpAudioSystem)
+		AudioComponentFactory::AudioComponentFactory(AudioSystem* inpAudioSystem, AudioManager* inpAudioMgr) : mpAudioManager(inpAudioMgr), mpAudioSystem(inpAudioSystem)
 		{
 			
 		}

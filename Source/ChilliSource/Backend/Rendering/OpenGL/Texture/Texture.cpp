@@ -36,7 +36,7 @@ namespace ChilliSource
         mpRenderCapabilities(nullptr)
 		{
             mpRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
-            MOFLOW_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
+            CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
 		}
 		//--------------------------------------------------
 		/// Init
@@ -147,7 +147,7 @@ namespace ChilliSource
 					break;
 				case Core::ImageCompression::k_PVR2Bpp:
 #ifndef TARGET_OS_IPHONE
-                    FATAL_LOG("PVR compressed textures are only supported on iOS.");
+                    CS_FATAL_LOG("PVR compressed textures are only supported on iOS.");
 #else
 					switch(pSourceImage->GetFormat())
                     {
@@ -163,7 +163,7 @@ namespace ChilliSource
 					break;
 				case Core::ImageCompression::k_PVR4Bpp:
 #ifndef TARGET_OS_IPHONE
-                    FATAL_LOG("PVR compressed textures are only supported on iOS.");
+                    CS_FATAL_LOG("PVR compressed textures are only supported on iOS.");
 #else
 					switch(pSourceImage->GetFormat())
                     {
@@ -219,7 +219,7 @@ namespace ChilliSource
             GLuint udwCheck = glCheckFramebufferStatus(GL_FRAMEBUFFER);
             if(udwCheck != GL_FRAMEBUFFER_COMPLETE)
             {
-                ERROR_LOG("Framebuffer Not Complete!");
+                CS_ERROR_LOG("Framebuffer Not Complete!");
                 return false;
             }
             
@@ -285,7 +285,7 @@ namespace ChilliSource
             if (paTextureUnits != nullptr)
             {
                 Rendering::IRenderCapabilities* pRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
-                MOFLOW_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
+                CS_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
                 
                 for(u32 i = 0; i < pRenderCapabilities->GetNumTextureUnits(); ++i)
                 {
@@ -313,11 +313,11 @@ namespace ChilliSource
         void CTexture::ErrorCheck(u32 inudwWidth, u32 inudwHeight)
         {
             Rendering::IRenderCapabilities* pRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
-            MOFLOW_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
+            CS_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
             
 			if(inudwWidth > pRenderCapabilities->GetMaxTextureSize() || inudwHeight > pRenderCapabilities->GetMaxTextureSize())
 			{
-				ERROR_LOG("OpenGL ES does not support textures of this size on this hardware - Empty texture");
+				CS_ERROR_LOG("OpenGL ES does not support textures of this size on this hardware - Empty texture");
 			}
         }
 		//--------------------------------------------------
@@ -339,7 +339,7 @@ namespace ChilliSource
 		{
 			if(inSlot > mpRenderCapabilities->GetNumTextureUnits())
 			{
-				FATAL_LOG("Attempting to bind to texture unit not supported on this device: " + Core::ToString(inSlot));
+				CS_FATAL_LOG("Attempting to bind to texture unit not supported on this device: " + Core::ToString(inSlot));
 			}
 			
             SetActiveTextureSlot(inSlot);
@@ -359,7 +359,7 @@ namespace ChilliSource
             if(!paTextureUnits)
 			{
                 Rendering::IRenderCapabilities* pRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
-                MOFLOW_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
+                CS_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
                 
                 //Create the available texture unit slots
                 paTextureUnits = new TextureUnit[pRenderCapabilities->GetNumTextureUnits()];
@@ -486,7 +486,7 @@ namespace ChilliSource
 		void CTexture::Unbind(u8* inpObjectID)
 		{
             Rendering::IRenderCapabilities* pRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
-            MOFLOW_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
+            CS_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
             
             for (u32 i = 0; i < pRenderCapabilities->GetNumTextureUnits(); ++i)
             {

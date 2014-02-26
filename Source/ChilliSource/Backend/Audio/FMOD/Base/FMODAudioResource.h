@@ -23,7 +23,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CFMODAudioResource : public Audio::IAudioResource 
+		class CFMODAudioResource : public Audio::AudioResource 
 		{
 		public:
             CFMODAudioResource();

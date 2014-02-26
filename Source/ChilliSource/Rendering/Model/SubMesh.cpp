@@ -194,8 +194,8 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		void CSubMesh::Render(IRenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const MaterialPtr& inpMaterial, const SkinnedAnimationGroupPtr& inpAnimationGroup) const
 		{
-            MOFLOW_ASSERT(mpMeshBuffer->GetVertexCount() > 0, "Cannot render Sub Mesh without vertices");
-            MOFLOW_ASSERT(inpMaterial.get() && inpMaterial->GetActiveShaderProgram(), "Cannot render Sub Mesh without a material or active shader.");
+            CS_ASSERT(mpMeshBuffer->GetVertexCount() > 0, "Cannot render Sub Mesh without vertices");
+            CS_ASSERT(inpMaterial.get() && inpMaterial->GetActiveShaderProgram(), "Cannot render Sub Mesh without a material or active shader.");
             
             inpRenderSystem->ApplyMaterial(*inpMaterial.get());
             
@@ -225,7 +225,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		CSubMesh::~CSubMesh()
 		{
-			SAFE_DELETE(mpMeshBuffer);
+			CS_SAFE_DELETE(mpMeshBuffer);
 		}
 	}
 }

@@ -100,7 +100,7 @@ namespace ChilliSource
         {
             if(!inpRootNode)
             {
-                WARNING_LOG("CSceneAnimation:Tried to apply animation to nullptr Entity.");
+                CS_WARNING_LOG("CSceneAnimation:Tried to apply animation to nullptr Entity.");
                 return false;
             }
             

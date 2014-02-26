@@ -20,7 +20,7 @@ namespace ChilliSource
     {
         const u32 kudwNumConcurrentSoundEffects = 10;
         
-        class CAudioPlayer
+        class AudioPlayer
         {
         public:
             
@@ -167,7 +167,7 @@ namespace ChilliSource
             /// @param Index of audio component to return
             /// @param Audio component or empty pointer of not found
             //------------------------------------------------
-            static AudioComponentPtr GetAudioComponentAtIndex(const u32 inudwIndex);
+            static AudioComponentSPtr GetAudioComponentAtIndex(const u32 inudwIndex);
             //------------------------------------------------
             /// Set Volume
             ///
@@ -192,17 +192,17 @@ namespace ChilliSource
             
         private:
             
-            static std::vector<AudioComponentPtr> mAudioComponentCache;
+            static std::vector<AudioComponentSPtr> mAudioComponentCache;
             static std::vector<u32> maudwComponentPauseCount;
             static std::vector<bool> mabComponentLooping;
             
-            typedef std::unordered_map<std::string, AudioResourcePtr> MapNameToResource;
+            typedef std::unordered_map<std::string, AudioResourceSPtr> MapNameToResource;
             static MapNameToResource mmapNamesToResources;
             
-            static IAudioManager* mpAudioManager;
-            static IAudioComponentFactory* mpAudioComponentFactory;
+            static AudioManager* mpAudioManager;
+            static AudioComponentFactory* mpAudioComponentFactory;
             
-            static AudioComponentPtr mpMusicComponent;
+            static AudioComponentSPtr mpMusicComponent;
             
             static f32 mfEffectVolume;
             

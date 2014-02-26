@@ -24,11 +24,11 @@ namespace ChilliSource
 	{
         class CFMODSystem;
         
-		class CFMODAudioLoader : public Audio::CAudioLoader
+		class CFMODAudioLoader : public Audio::AudioLoader
 		{
 		public:
 			
-			CFMODAudioLoader(Audio::IAudioSystem* inpFMODSystem);
+			CFMODAudioLoader(Audio::AudioSystem* inpFMODSystem);
 	
 			//----------------------------------------------------------------------------
 			/// Can Create Resource From File With Extension
@@ -64,7 +64,7 @@ namespace ChilliSource
 			///
 			/// @return Audio listener
 			//----------------------------------------------------------------------------
-			Audio::AudioListenerPtr CreateAudioListener();
+			Audio::AudioListenerSPtr CreateAudioListener();
 			
 		private:
 			

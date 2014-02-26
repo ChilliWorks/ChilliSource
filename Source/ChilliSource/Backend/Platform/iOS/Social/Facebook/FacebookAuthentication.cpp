@@ -178,7 +178,7 @@ namespace ChilliSource
         {
             mAuthoriseWriteDelegate = inDelegate;
             
-            MOFLOW_ASSERT(maRequestedWritePermissions.empty(), "Previous authorise hasn't been completed yet!");
+            CS_ASSERT(maRequestedWritePermissions.empty(), "Previous authorise hasn't been completed yet!");
             maRequestedWritePermissions = inaWritePerms;
             
             NSArray * pPermissionsArray = CreateNSArrayFromStringArray(inaWritePerms);
@@ -259,7 +259,7 @@ namespace ChilliSource
             }
             else
             {
-                ERROR_LOG("No app ID specified in plist (FacebookAppID)");
+                CS_ERROR_LOG("No app ID specified in plist (FacebookAppID)");
             }
         }
         

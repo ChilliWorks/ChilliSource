@@ -89,7 +89,7 @@ namespace ChilliSource
 						if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource)) 
 						{
 							//Add it to the cache
-							DEBUG_LOG("Loading skinned animation " + instrFilePath);
+							CS_DEBUG_LOG("Loading skinned animation " + instrFilePath);
 							mMapFilenameToResource.insert(std::make_pair(instrFilePath , pResource));
 							pResource->SetName(instrFilePath);
 							pResource->SetFilename(instrFilePath);
@@ -108,7 +108,7 @@ namespace ChilliSource
 			}
 			
 			//Resource not found
-			ERROR_LOG("Cannot find resource for skinned animation with path " + instrFilePath);
+			CS_ERROR_LOG("Cannot find resource for skinned animation with path " + instrFilePath);
 			return SkinnedAnimationPtr();
 		}
 		//-----------------------------------------------------------------
@@ -131,7 +131,7 @@ namespace ChilliSource
 					if(mResourceProviders[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
 					{
 						
-						DEBUG_LOG("Loading skinned animation " + instrFilePath);
+						CS_DEBUG_LOG("Loading skinned animation " + instrFilePath);
 						
 						pResource->SetName(instrFilePath);
 						pResource->SetFilename(instrFilePath);
@@ -154,7 +154,7 @@ namespace ChilliSource
 			}
 			
 			//Resource not found
-			ERROR_LOG("Cannot find resource for skinned animation with path " + instrFilePath);
+			CS_ERROR_LOG("Cannot find resource for skinned animation with path " + instrFilePath);
 			return SkinnedAnimationPtr();
 		}
 		//-----------------------------------------------------------------

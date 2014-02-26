@@ -63,12 +63,12 @@ namespace ChilliSource
                 //Read the byte order mark and ensure it is 123456
                 u32 udwByteOrder = 0;
                 pImageFile->Read((s8*)&udwByteOrder, sizeof(u32));
-                MOFLOW_ASSERT(udwByteOrder == 123456, "Endianess not supported");
+                CS_ASSERT(udwByteOrder == 123456, "Endianess not supported");
                 
                 //Read the version
                 u32 udwVersion = 0;
                 pImageFile->Read((s8*)&udwVersion, sizeof(u32));
-                MOFLOW_ASSERT(udwVersion >= 2 && udwVersion <= 3, "Only versions 2 and 3 supported");
+                CS_ASSERT(udwVersion >= 2 && udwVersion <= 3, "Only versions 2 and 3 supported");
                 
                 if(3 == udwVersion)
                 {
@@ -77,7 +77,7 @@ namespace ChilliSource
                 else
                 if(2 == udwVersion)
                 {
-                    WARNING_LOG("File \""+inFilePath+"\" moimage version 2 is deprecated. Please use version 3 which is supported from revision 86 in the tool repository.");
+                    CS_WARNING_LOG("File \""+inFilePath+"\" moimage version 2 is deprecated. Please use version 3 which is supported from revision 86 in the tool repository.");
                     ReadFileVersion2(pImageFile, outpResource);
                 }
                 
@@ -102,7 +102,7 @@ namespace ChilliSource
             u32 udwSize = 0;
             Core::CImage::Format eFormat;
             bool bFoundFormat = GetFormatInfo(sHeader.udwImageFormat, sHeader.udwWidth, sHeader.udwHeight, eFormat, udwSize);
-            MOFLOW_ASSERT(bFoundFormat, "Invalid MoImage Format.");
+            CS_ASSERT(bFoundFormat, "Invalid MoImage Format.");
             
             // Allocated memory needed for the bitmap context
             u8* pubyBitmapData = (u8*) malloc(udwSize);
@@ -133,7 +133,7 @@ namespace ChilliSource
             u32 udwSize = 0;
             Core::CImage::Format eFormat;
             bool bFoundFormat = GetFormatInfo(sHeader.udwImageFormat, sHeader.udwWidth, sHeader.udwHeight, eFormat, udwSize);
-            MOFLOW_ASSERT(bFoundFormat, "Invalid MoImage Format.");
+            CS_ASSERT(bFoundFormat, "Invalid MoImage Format.");
             
             u8* pubyBitmapData = nullptr;
             if(sHeader.udwCompression != 0)
@@ -164,7 +164,7 @@ namespace ChilliSource
                 u32 udwInflatedChecksum = CHashCRC32::GenerateHashCode((const s8*)pubyBitmapData, sHeader.udwOriginalDataSize);
                 if(sHeader.uddwChecksum != (u64)udwInflatedChecksum)
                 {
-                    ERROR_LOG("MoImage checksum of "+ToString(udwInflatedChecksum)+" does not match expected checksum "+ToString(sHeader.uddwChecksum));
+                    CS_ERROR_LOG("MoImage checksum of "+ToString(udwInflatedChecksum)+" does not match expected checksum "+ToString(sHeader.uddwChecksum));
                 }
                 
                 free(pubyCompressedData);

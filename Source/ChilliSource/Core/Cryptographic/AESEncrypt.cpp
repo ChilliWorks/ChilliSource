@@ -31,12 +31,12 @@ namespace ChilliSource
 
         void CAESEncrypt::Encrypt(const u8* inpData, u32 inudwDataLength, const std::string& instrPrivateKey, u8* outpData)
         {
-            MOFLOW_ASSERT(instrPrivateKey.size() == 16, "AES Encryption keys must be 16 bytes");
+            CS_ASSERT(instrPrivateKey.size() == 16, "AES Encryption keys must be 16 bytes");
             
             AES_KEY sKey;
             if(!AES_set_encrypt_key((const u8*)instrPrivateKey.data(), 128, &sKey) == 0)
             {
-                FATAL_LOG("AES: Cannot set decryption key");
+                CS_FATAL_LOG("AES: Cannot set decryption key");
             }
             
             s32 dwBytesRemaining = (s32)inudwDataLength;
@@ -56,12 +56,12 @@ namespace ChilliSource
         
         void CAESEncrypt::Decrypt(const u8* inpData, u32 inudwDataLength, const std::string& instrPrivateKey, u8* outpData)
         {
-            MOFLOW_ASSERT(instrPrivateKey.size() == 16, "AES Encryption keys must be 16 bytes");
+            CS_ASSERT(instrPrivateKey.size() == 16, "AES Encryption keys must be 16 bytes");
             
             AES_KEY sKey;
             if(!AES_set_decrypt_key((const u8*)instrPrivateKey.data(), 128, &sKey) == 0)
             {
-                FATAL_LOG("AES: Cannot set decryption key");
+                CS_FATAL_LOG("AES: Cannot set decryption key");
             }
 
             s32 dwBytesRemaining = (s32)inudwDataLength;

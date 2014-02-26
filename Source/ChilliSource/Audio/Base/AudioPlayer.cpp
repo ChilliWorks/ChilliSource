@@ -18,28 +18,28 @@ namespace ChilliSource
 {
     namespace Audio
     {
-        u32  CAudioPlayer::mudwCapacity = kudwNumConcurrentSoundEffects;
-        f32 CAudioPlayer::mfEffectVolume = 1.0f;
+        u32  AudioPlayer::mudwCapacity = kudwNumConcurrentSoundEffects;
+        f32 AudioPlayer::mfEffectVolume = 1.0f;
         
-        IAudioManager* CAudioPlayer::mpAudioManager = nullptr; 
-        IAudioComponentFactory* CAudioPlayer::mpAudioComponentFactory = nullptr;
+        AudioManager* AudioPlayer::mpAudioManager = nullptr; 
+        AudioComponentFactory* AudioPlayer::mpAudioComponentFactory = nullptr;
         
-        std::vector<AudioComponentPtr> CAudioPlayer::mAudioComponentCache;
-        std::vector<u32> CAudioPlayer::maudwComponentPauseCount;
-        std::vector<bool> CAudioPlayer::mabComponentLooping;
+        std::vector<AudioComponentSPtr> AudioPlayer::mAudioComponentCache;
+        std::vector<u32> AudioPlayer::maudwComponentPauseCount;
+        std::vector<bool> AudioPlayer::mabComponentLooping;
         
-        AudioComponentPtr CAudioPlayer::mpMusicComponent;
+        AudioComponentSPtr AudioPlayer::mpMusicComponent;
         
-        CAudioPlayer::MapNameToResource CAudioPlayer::mmapNamesToResources;
+        AudioPlayer::MapNameToResource AudioPlayer::mmapNamesToResources;
         
         //------------------------------------------------
         /// Init
         //------------------------------------------------
-        void CAudioPlayer::Init()
+        void AudioPlayer::Init()
         {
             mAudioComponentCache.reserve(mudwCapacity);
             
-            mpAudioComponentFactory = (IAudioComponentFactory*)Core::CComponentFactoryDispenser::GetSingletonPtr()->GetFactoryProducing(CAudioComponent::InterfaceID);
+            mpAudioComponentFactory = (AudioComponentFactory*)Core::CComponentFactoryDispenser::GetSingletonPtr()->GetFactoryProducing(AudioComponent::InterfaceID);
             
             for(u32 udwComp = 0; udwComp < mudwCapacity; ++udwComp)
             {
@@ -51,7 +51,7 @@ namespace ChilliSource
         //------------------------------------------------
         /// Add Effect
         //------------------------------------------------
-        void CAudioPlayer::AddEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffect)
+        void AudioPlayer::AddEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffect)
         {
             MapNameToResource::iterator pIt = mmapNamesToResources.find(instrEffect);
             
@@ -59,10 +59,10 @@ namespace ChilliSource
             {
                 if(!mpAudioManager)
                 {
-                    mpAudioManager = (IAudioManager*)Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(IAudioResource::InterfaceID);
+                    mpAudioManager = (AudioManager*)Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(AudioResource::InterfaceID);
                 }
                 
-                AudioResourcePtr pResource = mpAudioManager->GetSoundFromFile(ineStorageLocation, instrEffect);
+                AudioResourceSPtr pResource = mpAudioManager->GetSoundFromFile(ineStorageLocation, instrEffect);
                 if(pResource)
                 {
                     pResource->SetStreamed(false);
@@ -73,7 +73,7 @@ namespace ChilliSource
         //------------------------------------------------
         /// Remove Effect
         //------------------------------------------------
-        void CAudioPlayer::RemoveEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffect)
+        void AudioPlayer::RemoveEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffect)
         {
             MapNameToResource::iterator pIt = mmapNamesToResources.find(instrEffect);
             
@@ -81,13 +81,13 @@ namespace ChilliSource
             {
                 if(!mpAudioManager)
                 {
-                    mpAudioManager = (IAudioManager*)Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(IAudioResource::InterfaceID);
+                    mpAudioManager = (AudioManager*)Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(AudioResource::InterfaceID);
                 }
                 
                 // Make sure our effect is stopped
                 for(u32 i = 0; i < mAudioComponentCache.size(); i++)
                 {
-                    AudioComponentPtr pComp = mAudioComponentCache[i];
+                    AudioComponentSPtr pComp = mAudioComponentCache[i];
                     if(pComp->GetAudioSource() == pIt->second)
                     {
                         StopEffect(i);
@@ -103,7 +103,7 @@ namespace ChilliSource
         //------------------------------------------------
         /// Play Effect
         //------------------------------------------------
-        u32 CAudioPlayer::PlayEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffectFile,
+        u32 AudioPlayer::PlayEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffectFile,
                                      bool inbLooping, AudioEventDelegate inAudioFinishedEvent)
         {
             MapNameToResource::iterator pIt = mmapNamesToResources.find(instrEffectFile);
@@ -111,9 +111,9 @@ namespace ChilliSource
             
             if(pIt != mmapNamesToResources.end())
             {
-                AudioResourcePtr pResource = pIt->second;
+                AudioResourceSPtr pResource = pIt->second;
                 udwIndex = FindFreeComponentIndex();
-                AudioComponentPtr pComp = mAudioComponentCache[udwIndex];
+                AudioComponentSPtr pComp = mAudioComponentCache[udwIndex];
                 pComp->SetAudioSource(pResource);
                 pComp->SetLooping(inbLooping);
                 pComp->Play();
@@ -127,7 +127,7 @@ namespace ChilliSource
             }
             else
             {
-                ERROR_LOG("Sound effect: " + instrEffectFile + " not found in cache");
+                CS_ERROR_LOG("Sound effect: " + instrEffectFile + " not found in cache");
             }
             
             return udwIndex;
@@ -135,7 +135,7 @@ namespace ChilliSource
         //------------------------------------------------
         /// Play Music
         //------------------------------------------------
-        void CAudioPlayer::PlayMusic(Core::StorageLocation ineStorageLocation, const std::string& instrEffectFile, bool inbLooping)
+        void AudioPlayer::PlayMusic(Core::StorageLocation ineStorageLocation, const std::string& instrEffectFile, bool inbLooping)
         {
             mpMusicComponent = mpAudioComponentFactory->CreateAudioComponent(ineStorageLocation, instrEffectFile, true, inbLooping);
             mpMusicComponent->Play();
@@ -143,7 +143,7 @@ namespace ChilliSource
         //------------------------------------------------
         /// Resume Effect
         //------------------------------------------------
-        void CAudioPlayer::ResumeEffect(u32 inudwEffectID)
+        void AudioPlayer::ResumeEffect(u32 inudwEffectID)
         {
             if(inudwEffectID < mudwCapacity)
             {
@@ -158,7 +158,7 @@ namespace ChilliSource
         //------------------------------------------------
         /// Resume Music
         //------------------------------------------------
-        void CAudioPlayer::ResumeMusic()
+        void AudioPlayer::ResumeMusic()
         {
             if(mpMusicComponent)
             {
@@ -168,7 +168,7 @@ namespace ChilliSource
         //------------------------------------------------
         /// Resume All Effects
         //------------------------------------------------
-        void CAudioPlayer::ResumeAllEffects()
+        void AudioPlayer::ResumeAllEffects()
         {
             for(u32 udwComp = 0; udwComp < mAudioComponentCache.size(); udwComp++)
             {
@@ -178,7 +178,7 @@ namespace ChilliSource
         //------------------------------------------------
         /// Pause Music
         //------------------------------------------------
-        void CAudioPlayer::PauseMusic()
+        void AudioPlayer::PauseMusic()
         {
             if(mpMusicComponent)
             {
@@ -188,7 +188,7 @@ namespace ChilliSource
         //------------------------------------------------
         /// Pause Effect
         //------------------------------------------------
-        void CAudioPlayer::PauseEffect(u32 inudwEffectID)
+        void AudioPlayer::PauseEffect(u32 inudwEffectID)
         {
             if(inudwEffectID < mudwCapacity)
             {
@@ -199,7 +199,7 @@ namespace ChilliSource
         //------------------------------------------------
         /// Pause All Effects
         //------------------------------------------------
-        void CAudioPlayer::PauseAllEffects()
+        void AudioPlayer::PauseAllEffects()
         {
             for(u32 udwComp = 0; udwComp < mAudioComponentCache.size(); udwComp++)
             {
@@ -209,12 +209,12 @@ namespace ChilliSource
         //------------------------------------------------
         /// Stop Effect
         //------------------------------------------------
-        void CAudioPlayer::StopEffect(u32 inudwEffectID)
+        void AudioPlayer::StopEffect(u32 inudwEffectID)
         {
             if(inudwEffectID < mudwCapacity)
             {
                 mAudioComponentCache[inudwEffectID]->Stop();
-                mAudioComponentCache[inudwEffectID]->SetAudioSource(AudioResourcePtr());
+                mAudioComponentCache[inudwEffectID]->SetAudioSource(AudioResourceSPtr());
                 mAudioComponentCache[inudwEffectID]->GetAudioFinishedEvent().RemoveAllListeners();
                 maudwComponentPauseCount[inudwEffectID] = 0;
                 mabComponentLooping[inudwEffectID] = false;
@@ -223,22 +223,22 @@ namespace ChilliSource
         //------------------------------------------------
         /// Stop Music
         //------------------------------------------------
-        void CAudioPlayer::StopMusic()
+        void AudioPlayer::StopMusic()
         {
             if(nullptr != mpMusicComponent)
             {
                 mpMusicComponent->Stop();
-                DEBUG_LOG("Music stopped");
+                CS_DEBUG_LOG("Music stopped");
             }
             else
             {
-            	ERROR_LOG("Music component is nullptr");
+            	CS_ERROR_LOG("Music component is nullptr");
             }
         }
         //------------------------------------------------
         /// Stop All Effects
         //------------------------------------------------
-        void CAudioPlayer::StopAllEffects()
+        void AudioPlayer::StopAllEffects()
         {
             for(u32 udwComp = 0; udwComp < mAudioComponentCache.size(); udwComp++)
             {
@@ -248,7 +248,7 @@ namespace ChilliSource
         //------------------------------------------------
         /// Is Effect Playing
         //------------------------------------------------
-        bool CAudioPlayer::IsEffectPlaying(u32 inudwEffectID)
+        bool AudioPlayer::IsEffectPlaying(u32 inudwEffectID)
         {
             if(inudwEffectID < mudwCapacity)
             {
@@ -260,7 +260,7 @@ namespace ChilliSource
         //------------------------------------------------
         /// Is Music Playing
         //------------------------------------------------
-        bool CAudioPlayer::IsMusicPlaying()
+        bool AudioPlayer::IsMusicPlaying()
         {
             if(nullptr != mpMusicComponent)
             {
@@ -272,21 +272,21 @@ namespace ChilliSource
         //------------------------------------------------
         /// Get Cache Size
         //------------------------------------------------
-        u32 CAudioPlayer::GetCacheSize()
+        u32 AudioPlayer::GetCacheSize()
         {
             return mAudioComponentCache.size();
         }
         //------------------------------------------------
         /// Set Effect Volume
         //------------------------------------------------
-        void CAudioPlayer::SetEffectVolume(f32 infVolume)
+        void AudioPlayer::SetEffectVolume(f32 infVolume)
         {
             mfEffectVolume = infVolume;
         }
         //------------------------------------------------
         /// Set Music Volume
         //------------------------------------------------
-        void CAudioPlayer::SetMusicVolume(f32 infVolume)
+        void AudioPlayer::SetMusicVolume(f32 infVolume)
         {
             if(mpMusicComponent)
             {
@@ -296,7 +296,7 @@ namespace ChilliSource
         //------------------------------------------------
         /// Clear Cache
         //------------------------------------------------
-        void CAudioPlayer::ClearCache()
+        void AudioPlayer::ClearCache()
         {
             mmapNamesToResources.clear();
             
@@ -308,19 +308,19 @@ namespace ChilliSource
         //------------------------------------------------
         /// Get Audio Component At Index
         //------------------------------------------------
-        AudioComponentPtr CAudioPlayer::GetAudioComponentAtIndex(const u32 inudwIndex)
+        AudioComponentSPtr AudioPlayer::GetAudioComponentAtIndex(const u32 inudwIndex)
         {
             if(inudwIndex < mAudioComponentCache.size())
             {
                 return mAudioComponentCache[inudwIndex];
             }
             
-            return AudioComponentPtr();
+            return AudioComponentSPtr();
         }
         //------------------------------------------------
         /// Find Free Component Index
         //------------------------------------------------
-        u32 CAudioPlayer::FindFreeComponentIndex() 
+        u32 AudioPlayer::FindFreeComponentIndex() 
         {
             //If there is no free audio components then it will
             //override the last audio component in the list

@@ -69,7 +69,7 @@ namespace ChilliSource
                 return found->second;
             }
             
-            WARNING_LOG("Could not find style '" + instrName + "' in Subtitles '" + GetName() + "'");
+            CS_WARNING_LOG("Could not find style '" + instrName + "' in Subtitles '" + GetName() + "'");
             return StylePtr();
         }
 	}

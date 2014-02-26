@@ -20,10 +20,10 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		class CSoundEvent
+		class SoundEvent
 		{
 		public:
-			CSoundEvent();
+			SoundEvent();
 			
 			//-------------------------------------------------------------
 			/// Add Sound
@@ -34,7 +34,7 @@ namespace ChilliSource
 			/// @param Sound sample
 			/// @param Delay (seconds)
 			//-------------------------------------------------------------
-			void AddSound(const AudioComponentPtr &inSound, f32 infDelayInSecs);
+			void AddSound(const AudioComponentSPtr &inSound, f32 infDelayInSecs);
 			//-------------------------------------------------------------
 			/// Play
 			///
@@ -55,7 +55,7 @@ namespace ChilliSource
 			void Update(f32 dt);
 		private:
 			
-			std::vector< std::pair<AudioComponentPtr, f32> > mSoundAndDelay;
+			std::vector< std::pair<AudioComponentSPtr, f32> > mSoundAndDelay;
 			std::vector<f32> mPlayedIndices;
 			
 			f32 mfTimeSincePlay;

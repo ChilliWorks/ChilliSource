@@ -112,7 +112,7 @@ namespace ChilliSource
 		inline void CMatrix4x4::Multiply(const CMatrix4x4* inp1, const CMatrix4x4* inp2, CMatrix4x4* outp3)
         {
 #if defined TARGET_OS_IPHONE && defined ENABLE_QUICK_MATH
-            MOFLOW_ASSERT(inp1 != outp3 && inp2 != outp3, "The input matrices must differ from the output Matrix (see vDSP_mmul difference between iOS6 and iOS7)");
+            CS_ASSERT(inp1 != outp3 && inp2 != outp3, "The input matrices must differ from the output Matrix (see vDSP_mmul difference between iOS6 and iOS7)");
             vDSP_mmul(const_cast<f32*>(inp1->m), 1, const_cast<f32*>(inp2->m), 1, outp3->m, 1, 4, 4, 4);
 #else
 			const f32* p1 = inp1->m;

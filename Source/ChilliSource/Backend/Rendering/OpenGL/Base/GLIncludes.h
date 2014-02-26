@@ -20,4 +20,10 @@
 #define MOFLOW_OPENGL
 #endif
 
+//---Missing OpenGL definitions
+#define GL_GLEXT_PROTOTYPES
+#ifdef TARGET_ANDROID
+typedef char GLchar;
+#endif
+
 #endif

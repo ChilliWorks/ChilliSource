@@ -25,8 +25,8 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        Audio::AudioComponentPtr CToggleButton::mspDefaultSelectSound;
-        Audio::AudioComponentPtr CToggleButton::mspDefaultDeSelectSound;
+        Audio::AudioComponentSPtr CToggleButton::mspDefaultSelectSound;
+        Audio::AudioComponentSPtr CToggleButton::mspDefaultDeSelectSound;
         
 		DEFINE_META_CLASS(CToggleButton)
 
@@ -124,13 +124,13 @@ namespace ChilliSource
             //---Default index
             if(insParams.TryGetValue("OnSpriteSheetIndex", strValue))
             {
-                MOFLOW_ASSERT(OnSpriteSheet, "Sprite sheet index cannot be set without sprite sheet");
+                CS_ASSERT(OnSpriteSheet, "Sprite sheet index cannot be set without sprite sheet");
                 SetOnSpriteSheetIndex(Core::ParseU32(strValue));
             }
             //---Off index
             if(insParams.TryGetValue("OffSpriteSheetIndex", strValue))
             {
-				MOFLOW_ASSERT(OffSpriteSheet, "Sprite sheet index cannot be set without sprite sheet");
+				CS_ASSERT(OffSpriteSheet, "Sprite sheet index cannot be set without sprite sheet");
 				SetOffSpriteSheetIndex(Core::ParseU32(strValue));
             }
 			//---Default index ID
@@ -186,12 +186,12 @@ namespace ChilliSource
             //---Audio effect
             if(insParams.TryGetValue("SelectAudioEffect", strValue))
             {
-                Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
+                Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
                 SetSelectAudioEffect(pAudioFactory->CreateAudioComponent(eSelectAudioLocation, strValue, false, false));
             }
 			if(insParams.TryGetValue("DeselectAudioEffect", strValue))
             {
-                Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
+                Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
                 SetDeselectAudioEffect(pAudioFactory->CreateAudioComponent(eSelectAudioLocation, strValue, false, false));
             }
             
@@ -387,7 +387,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void CToggleButton::SetOnSpriteSheetIndexID(const std::string& instrID)
 		{
-			MOFLOW_ASSERT(OnSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+			CS_ASSERT(OnSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			OnSpriteSheetIndexID = instrID;
 			SetOnSpriteSheetIndex(OnSpriteSheet->GetFrameIndexByID(instrID));
 		}
@@ -398,7 +398,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void CToggleButton::SetOffSpriteSheetIndexID(const std::string& instrID)
 		{
-			MOFLOW_ASSERT(OffSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+			CS_ASSERT(OffSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			OffSpriteSheetIndexID = instrID;
 			SetOffSpriteSheetIndex(OffSpriteSheet->GetFrameIndexByID(instrID));
 		}
@@ -450,7 +450,7 @@ namespace ChilliSource
         ///
         /// @param Audio effect played when the button is selected
         //-----------------------------------------------------------
-        void CToggleButton::SetSelectAudioEffect(const Audio::AudioComponentPtr& inpEffect)
+        void CToggleButton::SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
         {
             mpSelectAudioEffect = inpEffect;
         }
@@ -459,19 +459,19 @@ namespace ChilliSource
 		///
 		/// @param Audio effect played when the button is selected
 		//-----------------------------------------------------------
-		void CToggleButton::SetDeselectAudioEffect(const Audio::AudioComponentPtr& inpEffect)
+		void CToggleButton::SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
 		{
 			mpDeselectAudioEffect = inpEffect;
 		}
         void CToggleButton::SetDefaultSelectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
         {
-            Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
+            Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
             mspDefaultSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
         }
         
         void CToggleButton::SetDefaultDeselectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
         {
-            Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
+            Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
             mspDefaultDeSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
         }
         //-----------------------------------------------------------

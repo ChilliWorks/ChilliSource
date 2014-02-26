@@ -43,7 +43,7 @@ namespace ChilliSource
 		{
 				mpHttpConnectionSystem = inpHttpConnectionSystem;
 				mpOAuthSystem = inpOAuthSystem;
-				MOFLOW_ASSERT(mpHttpConnectionSystem != nullptr && mpOAuthSystem != nullptr, "Twitter post system requires the http request system and oauth system.");
+				CS_ASSERT(mpHttpConnectionSystem != nullptr && mpOAuthSystem != nullptr, "Twitter post system requires the http request system and oauth system.");
 		}
 		//------------------------------------------------------------------------
 		/// Destructor
@@ -72,10 +72,10 @@ namespace ChilliSource
         			bResult = true;
         		}
 				else
-					ERROR_LOG("CTwitterPostSystem::Init() - ERROR: Twitter does not have an OAuth system!");
+					CS_ERROR_LOG("CTwitterPostSystem::Init() - ERROR: Twitter does not have an OAuth system!");
         	}
         	else
-        		ERROR_LOG("CTwitterPostSystem::Init() - ERROR: Twitter customer key and/or customer secret string(s) empty!");
+        		CS_ERROR_LOG("CTwitterPostSystem::Init() - ERROR: Twitter customer key and/or customer secret string(s) empty!");
 			
         	return bResult;
         }
@@ -85,7 +85,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------
         bool ITwitterPostSystem::Authenticate()
         {
-        	WARNING_LOG("ITwitterPostSystem::Authenticate() - This platform does not have an Authenticate() method\n\tTwitter may not function correctly or at all!");
+        	CS_WARNING_LOG("ITwitterPostSystem::Authenticate() - This platform does not have an Authenticate() method\n\tTwitter may not function correctly or at all!");
 
         	return true;
         }
@@ -273,7 +273,7 @@ namespace ChilliSource
 		{
 			if(ineResult == ChilliSource::Networking::IHttpRequest::CompletionResult::k_completed)
 			{
-				DEBUG_LOG("CTwitterPostSystem::OnRequestOAuthAccessTokenComplete() - Got response:\n"+inpRequest->GetResponseString());
+				CS_DEBUG_LOG("CTwitterPostSystem::OnRequestOAuthAccessTokenComplete() - Got response:\n"+inpRequest->GetResponseString());
 				// Tell OAuth system to save access token and secret from web response
 				mpOAuthSystem->ExtractOAuthTokenKeySecret(inpRequest->GetResponseString());
 				SaveOAuthTokenKeyAndSecretKey();

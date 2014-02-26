@@ -84,13 +84,13 @@ static id _instance;
                  }
                  else
                  {
-                     ERROR_LOG("ICloudSystemController::openDocument:: Document could not be saved!");
+                     CS_ERROR_LOG("ICloudSystemController::openDocument:: Document could not be saved!");
                      incOpenFileCompleteDelegate(newDoc, NO);
                  }
              }];
          }
          else {
-             ERROR_LOG("ICloudSystemController::openDocument - File not found, not creating cloud file");
+             CS_ERROR_LOG("ICloudSystemController::openDocument - File not found, not creating cloud file");
              incOpenFileCompleteDelegate(doc, NO);
          }
          
@@ -124,7 +124,7 @@ static id _instance;
                  }
                  else
                  {
-                     ERROR_LOG("ICloudSystemController::writeDocumentWithRelativePath - Document Failed to close succesfully");
+                     CS_ERROR_LOG("ICloudSystemController::writeDocumentWithRelativePath - Document Failed to close succesfully");
                  }
              }];                
         }
@@ -150,13 +150,13 @@ static id _instance;
                 }
                 else
                 {
-                    ERROR_LOG("ICloudSystemController::writeDocumentWithAbsolutePath - Document Failed to close succesfully");
+                    CS_ERROR_LOG("ICloudSystemController::writeDocumentWithAbsolutePath - Document Failed to close succesfully");
                 }
             }];                
         }
         else 
         {
-            ERROR_LOG("ICloudSystemController::writeDocumentWithAbsolutePath - Document could not be saved succesfully");
+            CS_ERROR_LOG("ICloudSystemController::writeDocumentWithAbsolutePath - Document could not be saved succesfully");
         }
     }];
 }

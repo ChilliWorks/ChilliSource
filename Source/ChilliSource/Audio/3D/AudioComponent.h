@@ -22,15 +22,15 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-        typedef fastdelegate::FastDelegate1<CAudioComponent*> AudioEventDelegate;
+        typedef fastdelegate::FastDelegate1<AudioComponent*> AudioEventDelegate;
         
-		class CAudioComponent : public Core::IComponent
+		class AudioComponent : public Core::IComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CAudioComponent);
+			DECLARE_NAMED_INTERFACE(AudioComponent);
 			
-			CAudioComponent(IAudioSystem* inpOwningSystem);
-			virtual ~CAudioComponent();
+			AudioComponent(AudioSystem* inpOwningSystem);
+			virtual ~AudioComponent();
             
             //----------------------------------------------------------
 			/// Is A
@@ -122,14 +122,14 @@ namespace ChilliSource
 			/// Set the audio source for this component
 			/// @param Audio resource pointer
 			//------------------------------------------------------
-			void SetAudioSource(const AudioResourcePtr& inpAudioSource);
+			void SetAudioSource(const AudioResourceSPtr& inpAudioSource);
 			//------------------------------------------------------
 			/// Get Audio Source
 			///
 			/// Get the audio source for this component
 			/// @return Audio resource pointer
 			//------------------------------------------------------
-			AudioResourcePtr& GetAudioSource();
+			AudioResourceSPtr& GetAudioSource();
             //------------------------------------------------------
 			/// Update
 			///
@@ -139,9 +139,9 @@ namespace ChilliSource
 			
 		protected:
 			
-            IAudioSystem* mpOwningSystem;
+            AudioSystem* mpOwningSystem;
             
-			AudioResourcePtr mpAudioSource;
+			AudioResourceSPtr mpAudioSource;
             
 			f32 mfCurrentVolume;
             f32 mfCurrentFrequency;

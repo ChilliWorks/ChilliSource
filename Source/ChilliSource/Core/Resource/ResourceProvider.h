@@ -33,12 +33,12 @@ namespace ChilliSource
 			virtual bool CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource) = 0;
 			virtual bool AsyncCreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
             {
-                WARNING_LOG("No implementation for AsyncCreateResourceFromFile"); 
+                CS_WARNING_LOG("No implementation for AsyncCreateResourceFromFile"); 
                 return false;
             };
 			virtual bool StreamResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
             {
-                WARNING_LOG("No implementation for StreamResourceFromFile"); 
+                CS_WARNING_LOG("No implementation for StreamResourceFromFile"); 
                 return false;
             }
 			

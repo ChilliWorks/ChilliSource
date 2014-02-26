@@ -140,7 +140,7 @@ namespace ChilliSource
 		/// @param File path
 		/// @param Sound handle to be initialised with sound
 		//-------------------------------------------------------
-		void CFMODSystem::CreateSound(const std::string& instrFilePath, Audio::IAudioResource* inpAudio)
+		void CFMODSystem::CreateSound(const std::string& instrFilePath, Audio::AudioResource* inpAudio)
 		{
 			ErrorCheck(mpFMODSystem->createSound(instrFilePath.c_str(), FMOD_SOFTWARE, nullptr, &static_cast<CFMODAudioResource*>(inpAudio)->mpFMODSound));
 		}
@@ -153,7 +153,7 @@ namespace ChilliSource
 		/// @param File path
 		/// @param Sound handle to be initialised with sound
 		//-------------------------------------------------------
-		void CFMODSystem::Create3DSound(const std::string& instrFilePath, Audio::IAudioResource* inpAudio)
+		void CFMODSystem::Create3DSound(const std::string& instrFilePath, Audio::AudioResource* inpAudio)
 		{
 			ErrorCheck(mpFMODSystem->createSound(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_3D, nullptr, &static_cast<CFMODAudioResource*>(inpAudio)->mpFMODSound));
 		}
@@ -165,7 +165,7 @@ namespace ChilliSource
 		/// @param File path
 		/// @param Stream handle
 		//-------------------------------------------------------
-		void CFMODSystem::CreateStream(const std::string& instrFilePath, Audio::IAudioResource* inpAudio)
+		void CFMODSystem::CreateStream(const std::string& instrFilePath, Audio::AudioResource* inpAudio)
 		{
 			ErrorCheck(mpFMODSystem->createStream(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_LOOP_NORMAL, nullptr, &static_cast<CFMODAudioResource*>(inpAudio)->mpFMODSound));
 		}
@@ -177,7 +177,7 @@ namespace ChilliSource
 		/// @param File path
 		/// @param Stream handle
 		//-------------------------------------------------------
-		void CFMODSystem::Create3DStream(const std::string& instrFilePath, Audio::IAudioResource* inpAudio)
+		void CFMODSystem::Create3DStream(const std::string& instrFilePath, Audio::AudioResource* inpAudio)
 		{
 			ErrorCheck(mpFMODSystem->createStream(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_LOOP_NORMAL|FMOD_3D, nullptr, &static_cast<CFMODAudioResource*>(inpAudio)->mpFMODSound));
 		}
@@ -189,7 +189,7 @@ namespace ChilliSource
 		///
 		/// @param FMOD sound handle
 		//-------------------------------------------------------
-		void CFMODSystem::PlaySound(Audio::CAudioComponent* inpAudioComponent)
+		void CFMODSystem::PlaySound(Audio::AudioComponent* inpAudioComponent)
 		{
 			//We let FMOD manages the channels 
 			FMOD::Channel* pActiveChannel = nullptr;
@@ -236,7 +236,7 @@ namespace ChilliSource
 		///
 		/// @return Audio listener
 		//----------------------------------------------------------------------------
-		Audio::AudioListenerPtr CFMODSystem::CreateAudioListener()
+		Audio::AudioListenerSPtr CFMODSystem::CreateAudioListener()
 		{
 			return FMODAudioListenerPtr(new CFMODAudioListener(mpFMODSystem));
 		}
@@ -250,7 +250,7 @@ namespace ChilliSource
 		{
 			if(ineResult != FMOD_OK)
 			{
-				FATAL_LOG("FMOD error: " + std::string(FMOD_ErrorString(ineResult)));
+				CS_FATAL_LOG("FMOD error: " + std::string(FMOD_ErrorString(ineResult)));
 			}
 		}
 		//-------------------------------------------------------
@@ -284,8 +284,8 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		CFMODSystem::~CFMODSystem()
 		{
-            SAFE_DELETE(mpAudioComponentFactory);
-			SAFE_DELETE(mpAudioManager);
+            CS_SAFE_DELETE(mpAudioComponentFactory);
+			CS_SAFE_DELETE(mpAudioManager);
 			Destroy();
 		}
 	}

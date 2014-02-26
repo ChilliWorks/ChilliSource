@@ -48,7 +48,7 @@ namespace ChilliSource
         
         void CMoMetricsSystem::SetConstant(const std::string& instrKey, const std::string& instrValue)
         {
-            MOFLOW_ASSERT(mpCurrentSession, "Cannot set constant without first starting a session");
+            CS_ASSERT(mpCurrentSession, "Cannot set constant without first starting a session");
             if(mpCurrentSession)
             {
                 mpCurrentSession->SetConstant(instrKey, instrValue);
@@ -57,7 +57,7 @@ namespace ChilliSource
         
         void CMoMetricsSystem::SetLocation(const MetricsLocation& insLocation)
         {
-            MOFLOW_ASSERT(mpCurrentSession, "Cannot set location without first starting a session");
+            CS_ASSERT(mpCurrentSession, "Cannot set location without first starting a session");
             if(mpCurrentSession)
             {
                 mpCurrentSession->RequestLocationUpdate(insLocation);
@@ -66,7 +66,7 @@ namespace ChilliSource
         
         void CMoMetricsSystem::SetServerTimeDelta(s32 indwServerDelta)
 		{
-            MOFLOW_ASSERT(mpCurrentSession, "Cannot set server time delta without first starting a session");
+            CS_ASSERT(mpCurrentSession, "Cannot set server time delta without first starting a session");
             if(mpCurrentSession)
             {
                 mpCurrentSession->SetServerTimeDelta(indwServerDelta);
@@ -154,7 +154,7 @@ namespace ChilliSource
         
         void CMoMetricsSystem::RecordEvent(const std::string & instrType, const std::vector<std::string>& inastrParams, bool inbSummarise)
         {
-            MOFLOW_ASSERT(mpCurrentSession, "Cannot record event without first starting a session");
+            CS_ASSERT(mpCurrentSession, "Cannot record event without first starting a session");
             if(mpCurrentSession)
             {
                 mpCurrentSession->RecordEvent(instrType, inastrParams, inbSummarise);
@@ -200,7 +200,7 @@ namespace ChilliSource
         
         void CMoMetricsSystem::Destroy()
         {
-            SAFE_DELETE(mpCurrentSession);
+            CS_SAFE_DELETE(mpCurrentSession);
             
             for(std::vector<CMoMetricsSession*>::iterator it = maPendingClosedSessions.begin(); it != maPendingClosedSessions.end(); ++it)
             {

@@ -84,7 +84,7 @@ namespace ChilliSource
             //-----------------------------------------------------------
             virtual ~IEvent()
             {
-                SAFE_DELETE(mpImpl);
+                CS_SAFE_DELETE(mpImpl);
             }
             
         protected:

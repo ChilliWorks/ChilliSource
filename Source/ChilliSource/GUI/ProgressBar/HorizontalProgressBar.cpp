@@ -120,13 +120,13 @@ namespace ChilliSource
             //---Background index
             if(insParams.TryGetValue("BackgroundSpriteSheetIndex", strValue))
             {
-				MOFLOW_ASSERT(BackgroundSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+				CS_ASSERT(BackgroundSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 				SetBackgroundSpriteSheetIndex(Core::ParseU32(strValue));
             }
 			//---Progress index
 			if(insParams.TryGetValue("ProgressSpriteSheetIndex", strValue))
 			{
-				MOFLOW_ASSERT(ProgressSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+				CS_ASSERT(ProgressSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 				SetProgressSpriteSheetIndex(Core::ParseU32(strValue));
 			}
 			//---Background index ID
@@ -137,7 +137,7 @@ namespace ChilliSource
 			//---Progress index ID
 			if(insParams.TryGetValue("ProgressSpriteSheetIndexID", strValue))
 			{
-				MOFLOW_ASSERT(ProgressSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+				CS_ASSERT(ProgressSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 				SetProgressSpriteSheetIndexID(strValue);
 			}
 		}
@@ -234,7 +234,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		void CHorizontalProgressBar::SetBackgroundSpriteSheetIndexID(const std::string& instrID)
 		{
-			MOFLOW_ASSERT(BackgroundSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+			CS_ASSERT(BackgroundSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			BackgroundSpriteSheetIndexID = instrID;
 			SetBackgroundSpriteSheetIndex(BackgroundSpriteSheet->GetFrameIndexByID(instrID));
 		}
@@ -245,7 +245,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		void CHorizontalProgressBar::SetProgressSpriteSheetIndexID(const std::string& instrID)
 		{
-			MOFLOW_ASSERT(ProgressSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+			CS_ASSERT(ProgressSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			ProgressSpriteSheetIndexID = instrID;
 			SetProgressSpriteSheetIndex(ProgressSpriteSheet->GetFrameIndexByID(instrID));
 		}

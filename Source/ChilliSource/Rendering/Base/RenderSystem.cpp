@@ -91,8 +91,8 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		IRenderSystem::~IRenderSystem()
 		{
-			SAFE_DELETE(mpRenderFactory);
-            SAFE_DELETE(mpSpriteBatcher);
+			CS_SAFE_DELETE(mpRenderFactory);
+            CS_SAFE_DELETE(mpSpriteBatcher);
 		}
 	}
 }

@@ -121,7 +121,7 @@ namespace ChilliSource
 						TexturePtr pTexture = CreateTextureResource();
 						if(CreateTextureFromImage(pImage, inbWithMipsMaps, pTexture))
 						{
-							DEBUG_LOG("Loading texture " + inFilePath);
+							CS_DEBUG_LOG("Loading texture " + inFilePath);
 							
 							mMapFilenameToResource.insert(std::make_pair(inFilePath, std::static_pointer_cast<Core::IResource>(pTexture)));
 							pTexture->SetName(inFilePath);
@@ -139,7 +139,7 @@ namespace ChilliSource
 				return std::static_pointer_cast<ITexture>(pExistingResource->second);
 			}
 			
-			ERROR_LOG("Cannot find resource for texture with path " + inFilePath);
+			CS_ERROR_LOG("Cannot find resource for texture with path " + inFilePath);
 			return GetDefaultTexture();
 		}
 		//-----------------------------------------------------------------
@@ -200,7 +200,7 @@ namespace ChilliSource
 			{
 				if(static_cast<Core::IImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(inDesc.eStorageLocation, inDesc.strFilename, inDesc.eImageFormat, inDesc.pImageResource))
 				{
-					DEBUG_LOG("Loading image " + inDesc.strFilename);
+					CS_DEBUG_LOG("Loading image " + inDesc.strFilename);
 					
 					Core::CImage* pImage = (Core::CImage*)(inDesc.pImageResource.get());
 					pImage->SetName(inDesc.strFilename);
@@ -212,7 +212,7 @@ namespace ChilliSource
 				}
 			}
 			
-			ERROR_LOG("Cannot find resource for image with name " + inDesc.strFilename);
+			CS_ERROR_LOG("Cannot find resource for image with name " + inDesc.strFilename);
 		}
 		//-----------------------------------------------------------------------------------
 		/// Texture Load Task
@@ -233,7 +233,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				ERROR_LOG("Cannot create texture from image " + pImage->GetName());
+				CS_ERROR_LOG("Cannot create texture from image " + pImage->GetName());
 				outpTexture = GetDefaultTexture();
 			}
 
@@ -282,7 +282,7 @@ namespace ChilliSource
 
 			CreateTextureFromImage(pImage, false, mpDefaultTexture);
 
-			SAFE_DELETE(pImage);
+			CS_SAFE_DELETE(pImage);
 		}
 	}
 }

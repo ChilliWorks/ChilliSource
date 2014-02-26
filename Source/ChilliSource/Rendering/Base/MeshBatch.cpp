@@ -57,7 +57,7 @@ namespace ChilliSource
 					//insure this is using the correct vertex declaration.
 					CVertexDeclaration declaration = pSubMesh->GetInternalMeshBuffer()->GetVertexDeclaration();
 					if (!(declaration == VertexLayout::kMesh))
-						ERROR_LOG("Mesh in mesh batch is not using the correct vertex layout!");
+						CS_ERROR_LOG("Mesh in mesh batch is not using the correct vertex layout!");
 				}
                 
                 mudwVertexCount += pMesh->GetNumVerts();
@@ -222,7 +222,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CMeshBatch::Render(IRenderSystem* inpRenderSystem) const
 		{
-            MOFLOW_ASSERT(mpMaterial && mpMaterial->GetActiveShaderProgram(), "Cannot render a mesh batch without a material or active shader.");
+            CS_ASSERT(mpMaterial && mpMaterial->GetActiveShaderProgram(), "Cannot render a mesh batch without a material or active shader.");
             
 			//If we own the mesh buffer then the batcher won't be calling bind for us.
 			mpMeshBuffer->Bind();
@@ -276,7 +276,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		CMeshBatch::~CMeshBatch() 
 		{
-			SAFE_DELETE(mpMeshBuffer)
+			CS_SAFE_DELETE(mpMeshBuffer)
 		}
 	}
 }

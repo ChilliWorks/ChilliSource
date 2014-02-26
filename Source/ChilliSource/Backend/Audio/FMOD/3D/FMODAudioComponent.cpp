@@ -52,7 +52,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//---------------------------------------------------------------------
-		CFMODAudioComponent::CFMODAudioComponent(Audio::IAudioSystem* inpOwningSystem) : CAudioComponent(inpOwningSystem), mpFMODChannel(nullptr)
+		CFMODAudioComponent::CFMODAudioComponent(Audio::AudioSystem* inpOwningSystem) : AudioComponent(inpOwningSystem), mpFMODChannel(nullptr)
         {
         }
         //---------------------------------------------------------------------

@@ -79,7 +79,7 @@ namespace ChilliSource
             }
             else
             {
-                ERROR_LOG("Facebook Post: User must be authenticated");
+                CS_ERROR_LOG("Facebook Post: User must be authenticated");
             }
         }
         

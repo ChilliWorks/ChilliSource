@@ -107,7 +107,7 @@ namespace ChilliSource
 				{
 					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, inFilePath, pResource))
 					{
-						DEBUG_LOG("Loading Material " + inFilePath);
+						CS_DEBUG_LOG("Loading Material " + inFilePath);
 						mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
 						
 						MaterialPtr pMaterial = std::static_pointer_cast<CMaterial>(pResource);
@@ -126,7 +126,7 @@ namespace ChilliSource
 				return std::static_pointer_cast<CMaterial>(pExistingResource->second);
 			}
 			
-			ERROR_LOG("Cannot find resource for Material with path " + inFilePath);
+			CS_ERROR_LOG("Cannot find resource for Material with path " + inFilePath);
 			return Core::CApplication::GetDefaultMaterial();
 		}
 		//----------------------------------------------------------------
@@ -159,7 +159,7 @@ namespace ChilliSource
 					
 					if(mResourceProviders[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, inFilePath, pResource))
 					{
-						DEBUG_LOG("Loading Material " + inFilePath);
+						CS_DEBUG_LOG("Loading Material " + inFilePath);
 						mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
 
 						return pMaterial;
@@ -171,7 +171,7 @@ namespace ChilliSource
 				return std::static_pointer_cast<CMaterial>(pExistingResource->second);
 			}
 			
-			ERROR_LOG("Cannot find resource for Material with path " + inFilePath);
+			CS_ERROR_LOG("Cannot find resource for Material with path " + inFilePath);
 			return MaterialPtr();
 		}
 	}

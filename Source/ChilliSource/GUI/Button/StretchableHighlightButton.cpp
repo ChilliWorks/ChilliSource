@@ -111,12 +111,12 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("SelectAudioEffect", strValue))
             {
-                Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
+                Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
                 SetSelectAudioEffect(pAudioFactory->CreateAudioComponent(eSelectAudioLocation, strValue, false, false));
             }
 			if(insParams.TryGetValue("DeselectAudioEffect", strValue))
             {
-                Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
+                Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
                 SetDeselectAudioEffect(pAudioFactory->CreateAudioComponent(eDeselectAudioLocation, strValue, false, false));
             }
             //---Normal Sprite sheet indices
@@ -352,14 +352,14 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Set Select Audio Effect
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::SetSelectAudioEffect(const Audio::AudioComponentPtr& inpEffect)
+        void CStretchableHighlightButton::SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
         {
             mpSelectAudioEffect = inpEffect;
         }
         //-----------------------------------------------------------
         /// Set De-Select Audio Effect
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::SetDeselectAudioEffect(const Audio::AudioComponentPtr& inpEffect)
+        void CStretchableHighlightButton::SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
         {
             mpDeselectAudioEffect = inpEffect;
         }

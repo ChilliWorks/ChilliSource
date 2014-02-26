@@ -194,7 +194,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				ERROR_LOG("Cannot create GUI view of type: " + strType);
+				CS_ERROR_LOG("Cannot create GUI view of type: " + strType);
 				return pView;
 			}
 		}

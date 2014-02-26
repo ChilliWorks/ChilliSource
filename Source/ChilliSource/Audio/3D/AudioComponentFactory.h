@@ -25,19 +25,19 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		class IAudioComponentFactory : public Core::IComponentFactory
+		class AudioComponentFactory : public Core::IComponentFactory
 		{
 		public:
-			IAudioComponentFactory(IAudioSystem* inpAudioSystem, IAudioManager* inpAudioMgr);
-            virtual ~IAudioComponentFactory(){}
+			AudioComponentFactory(AudioSystem* inpAudioSystem, AudioManager* inpAudioMgr);
+            virtual ~AudioComponentFactory(){}
             
-			DECLARE_NAMED_INTERFACE(IAudioComponentFactory);
+			DECLARE_NAMED_INTERFACE(AudioComponentFactory);
             //--------------------------------------------------------
 			/// Create Audio Component
 			///
 			/// Instantiates a 2D audio component
 			//--------------------------------------------------------
-			virtual AudioComponentPtr CreateAudioComponent() = 0;
+			virtual AudioComponentSPtr CreateAudioComponent() = 0;
 			//--------------------------------------------------------
 			/// Create Audio Component
 			///
@@ -46,7 +46,7 @@ namespace ChilliSource
 			/// @param Whether the sample loops or not
 			/// @return Audio Component
 			//--------------------------------------------------------
-			virtual AudioComponentPtr CreateAudioComponent(const AudioResourcePtr& inpAudio, bool inbShouldLoop = false) = 0;
+			virtual AudioComponentSPtr CreateAudioComponent(const AudioResourceSPtr& inpAudio, bool inbShouldLoop = false) = 0;
 			//--------------------------------------------------------
 			/// Create Audio Component
 			///
@@ -56,7 +56,7 @@ namespace ChilliSource
 			/// @param Whether the sample loops or not
 			/// @return Audio Component
 			//--------------------------------------------------------
-			virtual AudioComponentPtr CreateAudioComponent(Core::StorageLocation ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop = false) = 0;
+			virtual AudioComponentSPtr CreateAudioComponent(Core::StorageLocation ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop = false) = 0;
 			//--------------------------------------------------------
 			/// Create 3D Audio Component
 			///
@@ -65,7 +65,7 @@ namespace ChilliSource
 			/// @param Whether the sample loops or not
 			/// @return Audio Component
 			//--------------------------------------------------------
-			virtual AudioComponentPtr Create3DAudioComponent(const AudioResourcePtr& inpAudio, bool inbShouldLoop = false) = 0;
+			virtual AudioComponentSPtr Create3DAudioComponent(const AudioResourceSPtr& inpAudio, bool inbShouldLoop = false) = 0;
 			//--------------------------------------------------------
 			/// Create 3D Audio Component
 			///
@@ -75,7 +75,7 @@ namespace ChilliSource
 			/// @param Whether the sample loops or not
 			/// @return Audio Component
 			//--------------------------------------------------------
-			virtual AudioComponentPtr Create3DAudioComponent(Core::StorageLocation ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop = false) = 0;
+			virtual AudioComponentSPtr Create3DAudioComponent(Core::StorageLocation ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop = false) = 0;
 			//--------------------------------------------------------
 			/// Create Listener Component
 			///
@@ -83,12 +83,12 @@ namespace ChilliSource
 			/// to the camera
 			/// @return Listener component
 			//--------------------------------------------------------
-			virtual AudioListenerComponentPtr CreateListenerComponent() = 0;
+			virtual AudioListenerComponentSPtr CreateListenerComponent() = 0;
 			
 		protected:
 			
-			IAudioManager* mpAudioManager;
-            IAudioSystem* mpAudioSystem;
+			AudioManager* mpAudioManager;
+            AudioSystem* mpAudioSystem;
 		};
 	}
 }

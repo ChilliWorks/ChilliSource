@@ -165,13 +165,13 @@ namespace ChilliSource
             ///
             /// @param Audio effect played when the button is selected
             //-----------------------------------------------------------
-            void SetSelectAudioEffect(const Audio::AudioComponentPtr& inpEffect);
+            void SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect);
 			//-----------------------------------------------------------
             /// Set De-Select Audio Effect
             ///
             /// @param Audio effect played when the button is selected
             //-----------------------------------------------------------
-            void SetDeselectAudioEffect(const Audio::AudioComponentPtr& inpEffect);
+            void SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect);
 			//--------------------------------------------------------
 			/// Enable Size From Image
 			///
@@ -354,8 +354,8 @@ namespace ChilliSource
 
             ImageViewPtr mpBackgroundImage;
  
-            Audio::AudioComponentPtr mpSelectAudioEffect;
-			Audio::AudioComponentPtr mpDeselectAudioEffect;
+            Audio::AudioComponentSPtr mpSelectAudioEffect;
+			Audio::AudioComponentSPtr mpDeselectAudioEffect;
 			
             Core::Rectangle msOnUVs;
             Core::Rectangle msOffUVs;
@@ -363,8 +363,8 @@ namespace ChilliSource
 			bool mbSelected;
             bool mbToggledOn;
             
-            static Audio::AudioComponentPtr mspDefaultSelectSound;
-            static Audio::AudioComponentPtr mspDefaultDeSelectSound;
+            static Audio::AudioComponentSPtr mspDefaultSelectSound;
+            static Audio::AudioComponentSPtr mspDefaultDeSelectSound;
 		};
         
         typedef std::shared_ptr<CToggleButton> ToggleButtonPtr;

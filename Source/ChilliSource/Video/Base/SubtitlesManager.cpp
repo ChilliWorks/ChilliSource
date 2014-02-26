@@ -73,7 +73,7 @@ namespace ChilliSource
 				{
 					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, inFilePath, pResource))
 					{
-						DEBUG_LOG("Loading Subtitles " + inFilePath);
+						CS_DEBUG_LOG("Loading Subtitles " + inFilePath);
 						mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
 						
 						SubtitlesPtr pSubtitles = std::static_pointer_cast<CSubtitles>(pResource);
@@ -91,7 +91,7 @@ namespace ChilliSource
 				return std::static_pointer_cast<CSubtitles>(pExistingResource->second);
 			}
 			
-			ERROR_LOG("Cannot find resource for Subtitles with path " + inFilePath);
+			CS_ERROR_LOG("Cannot find resource for Subtitles with path " + inFilePath);
 			return SubtitlesPtr();
 		}
 		//----------------------------------------------------------------
@@ -115,7 +115,7 @@ namespace ChilliSource
 					
 					if(mResourceProviders[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, inFilePath, pResource))
 					{
-						DEBUG_LOG("Loading Subtitles " + inFilePath);
+						CS_DEBUG_LOG("Loading Subtitles " + inFilePath);
 						mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
 						return pSubtitles;
 					}
@@ -126,7 +126,7 @@ namespace ChilliSource
 				return std::static_pointer_cast<CSubtitles>(pExistingResource->second);
 			}
 			
-			ERROR_LOG("Cannot find resource for Subtitles with path " + inFilePath);
+			CS_ERROR_LOG("Cannot find resource for Subtitles with path " + inFilePath);
 			return SubtitlesPtr();
 		}
 	}

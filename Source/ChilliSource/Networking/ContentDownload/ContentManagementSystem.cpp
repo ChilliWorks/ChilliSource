@@ -104,7 +104,7 @@ namespace ChilliSource
         void CContentManagementSystem::ClearDownloadData()
         {
         	//Clear the old crap
-            SAFE_DELETE(mpServerManifest);
+            CS_SAFE_DELETE(mpServerManifest);
             mRemovePackageIDs.clear();
             mPackageDetails.clear();
         }
@@ -124,7 +124,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void CContentManagementSystem::CheckForUpdates(const CContentManagementSystem::CheckForUpdateDelegate& inDelegate)
         {
-            DEBUG_LOG("CMS: Checking for content updates...");
+            CS_DEBUG_LOG("CMS: Checking for content updates...");
             
             //Clear any stale data from last update check
             ClearDownloadData();
@@ -138,7 +138,7 @@ namespace ChilliSource
             else
             {
                 //The request has failed to start most likely due to internet connection
-                ERROR_LOG("CMS: Internet not reachable");
+                CS_ERROR_LOG("CMS: Internet not reachable");
                 if(mbDLCCachePurged)
                 {
                     inDelegate(UpdateResult::k_updateCheckFailedBlocking);
@@ -175,7 +175,7 @@ namespace ChilliSource
             }
             else
             {
-            	DEBUG_LOG("CMS: Content update finished");
+            	CS_DEBUG_LOG("CMS: Content update finished");
                 mOnDownloadCompleteDelegate(Result::k_contentSucceeded);
             }
         }
@@ -201,7 +201,7 @@ namespace ChilliSource
         {
             if(!mPackageDetails.empty() || !mRemovePackageIDs.empty())
             {
-                DEBUG_LOG("CMS: Installing content updates...");
+                CS_DEBUG_LOG("CMS: Installing content updates...");
 				
 				if(!mPackageDetails.empty())
 				{
@@ -233,7 +233,7 @@ namespace ChilliSource
                 //Save the new content manifest
                 mpServerManifest->SaveFile(Core::StorageLocation::k_DLC, "ContentManifest.moman");
                 
-                DEBUG_LOG("CMS: Installing content updates complete");
+                CS_DEBUG_LOG("CMS: Installing content updates complete");
                 
                 mbDLCCachePurged = false;
                 
@@ -266,18 +266,18 @@ namespace ChilliSource
             switch(ineResult)
             {
                 case ContentDownloader::Result::k_succeeded:
-                    DEBUG_LOG("CMS: Content manifest download complete");
+                    CS_DEBUG_LOG("CMS: Content manifest download complete");
                     mstrServerManifestData += instrManifest;
                     BuildDownloadList(mstrServerManifestData); 
                     mstrServerManifestData.clear();
                     break;
                 case ContentDownloader::Result::k_failed:
-                    DEBUG_LOG("CMS: Content manifest download failed: " + instrManifest);
+                    CS_DEBUG_LOG("CMS: Content manifest download failed: " + instrManifest);
                     mstrServerManifestData.clear();
                     mbDLCCachePurged ? mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateCheckFailedBlocking) : mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateCheckFailed);
                     break;
                 case ContentDownloader::Result::k_flushed:
-                    DEBUG_LOG("CMS: Content manifest download flushed");
+                    CS_DEBUG_LOG("CMS: Content manifest download flushed");
                     mstrServerManifestData += instrManifest;
                     break;
             };
@@ -300,7 +300,7 @@ namespace ChilliSource
             {
                 case ContentDownloader::Result::k_succeeded:
                 {
-                    DEBUG_LOG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package download complete");
+                    CS_DEBUG_LOG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package download complete");
                     if(SavePackageToFile(mPackageDetails[mudwCurrentPackageDownload], instrData, true))
                     {
                         muRunningDownloadedTotal += mPackageDetails[mudwCurrentPackageDownload].udwSize;
@@ -308,7 +308,7 @@ namespace ChilliSource
                         //Don't overwrite the old manifest until all the content has been downloaded 
                         if(mudwCurrentPackageDownload >= (mPackageDetails.size() - 1))
                         {
-                            DEBUG_LOG("CMS: Content update finished");
+                            CS_DEBUG_LOG("CMS: Content update finished");
                             mOnDownloadCompleteDelegate(Result::k_contentSucceeded);
                         }
                         else
@@ -321,7 +321,7 @@ namespace ChilliSource
                 }
                 case ContentDownloader::Result::k_failed:
                 {
-                	DEBUG_LOG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package download failed");
+                	CS_DEBUG_LOG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package download failed");
                     
                     //Delete all temp zip files and cancel the outstanding requests
                     DeleteDirectory("Temp");
@@ -334,7 +334,7 @@ namespace ChilliSource
                 }
                 case ContentDownloader::Result::k_flushed:
                 {
-                	DEBUG_LOG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package exceeds buffer size and is being flushed");
+                	CS_DEBUG_LOG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package exceeds buffer size and is being flushed");
                     SavePackageToFile(mPackageDetails[mudwCurrentPackageDownload], instrData, false);
                     break;
                 }
@@ -357,7 +357,7 @@ namespace ChilliSource
             
             if(!mpServerManifest->RootElement())
             {
-                ERROR_LOG("CMS: Server content manifest is invalid");
+                CS_ERROR_LOG("CMS: Server content manifest is invalid");
                 if(mbDLCCachePurged)
                 {
                     mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateCheckFailedBlocking);
@@ -373,7 +373,7 @@ namespace ChilliSource
             //Check if DLC is enabled
             if(!Core::XMLUtils::GetAttributeValueOrDefault<bool>(mpServerManifest->RootElement(), "DLCEnabled", false))
             {
-                DEBUG_LOG("CMS: DLC disabled by server");
+                CS_DEBUG_LOG("CMS: DLC disabled by server");
 				mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateNotAvailable);
                 return;
             }
@@ -464,7 +464,7 @@ namespace ChilliSource
                                     u32 udwPackageSize = Core::XMLUtils::GetAttributeValueOrDefault<u32>(pServerPackageEl, "Size", 0);
                                     muRunningToDownloadTotal += udwPackageSize;
                                     
-                                    DEBUG_LOG("CMS: " + strServerPackageID + " package requires updating of size : " + Core::ToString(udwPackageSize));
+                                    CS_DEBUG_LOG("CMS: " + strServerPackageID + " package requires updating of size : " + Core::ToString(udwPackageSize));
                                     
                                     PackageDetails sPackageDetails;
                                     sPackageDetails.strID = strServerPackageID;
@@ -515,7 +515,7 @@ namespace ChilliSource
                 mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateNotAvailable);
             }
             
-            SAFE_DELETE(pCurrentManifest);
+            CS_SAFE_DELETE(pCurrentManifest);
         }
         //-----------------------------------------------------------
         /// Add To Download List if not in Bundle
@@ -544,8 +544,8 @@ namespace ChilliSource
                     u32 udwPackageSize = Core::XMLUtils::GetAttributeValueOrDefault<u32>(pPackageEl, "Size", 0);
 					muRunningToDownloadTotal += udwPackageSize;
                     
-					DEBUG_LOG("CMS: " + strPackageID + " package content is different on server than on device");
-                    DEBUG_LOG("CMS: " + strPackageID + " package requires updating of size : " + Core::ToString(udwPackageSize));
+					CS_DEBUG_LOG("CMS: " + strPackageID + " package content is different on server than on device");
+                    CS_DEBUG_LOG("CMS: " + strPackageID + " package requires updating of size : " + Core::ToString(udwPackageSize));
                     
                     PackageDetails sPackageDetails;
                     sPackageDetails.strID = strPackageID;
@@ -590,10 +590,10 @@ namespace ChilliSource
             if(inbFullyDownloaded)
             {
                 std::string strChecksum = CalculateChecksum(Core::StorageLocation::k_DLC, strFile);
-                DEBUG_LOG("CMS: Package Checksum: " + strChecksum + " Pristine Checksum: " + insPackageDetails.strChecksum);
+                CS_DEBUG_LOG("CMS: Package Checksum: " + strChecksum + " Pristine Checksum: " + insPackageDetails.strChecksum);
                 if(strChecksum != insPackageDetails.strChecksum)
                 {
-                    ERROR_LOG("CMS: " + insPackageDetails.strID + " Package download corrupted");
+                    CS_ERROR_LOG("CMS: " + insPackageDetails.strID + " Package download corrupted");
                     return false;
                 }
             }
@@ -661,7 +661,7 @@ namespace ChilliSource
 			unzFile ZippedFile = unzOpen(strZipFilePath.c_str());
 			if(!ZippedFile)
 			{
-				ERROR_LOG("CMS: Cannot unzip content package: " + insPackageDetails.strID);
+				CS_ERROR_LOG("CMS: Cannot unzip content package: " + insPackageDetails.strID);
 				return;
 			}
 
@@ -703,7 +703,7 @@ namespace ChilliSource
                 }
                 
                 //Close current file and jump to the next
-                SAFE_DELETE_ARRAY(pbyDataBuffer);
+                CS_SAFE_DELETE_ARRAY(pbyDataBuffer);
                 unzCloseCurrentFile(ZippedFile);
                 dwStatus = unzGoToNextFile(ZippedFile);
             }

@@ -156,7 +156,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		void CMesh::Render(IRenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const std::vector<MaterialPtr>& inMaterials, const SkinnedAnimationGroupPtr& inpAnimationGroup) const
 		{
-            MOFLOW_ASSERT(inMaterials.size() > 0, "Must have at least one material to render");
+            CS_ASSERT(inMaterials.size() > 0, "Must have at least one material to render");
 
             std::vector<CSubMesh*> aOpaqueSubMeshes;
             aOpaqueSubMeshes.reserve(mSubMeshes.size());

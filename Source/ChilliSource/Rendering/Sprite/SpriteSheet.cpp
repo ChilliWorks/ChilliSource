@@ -76,7 +76,7 @@ namespace ChilliSource
                 }
             }
             
-//            WARNING_LOG("Sprite not found for ID: " + inID);
+//            CS_WARNING_LOG("Sprite not found for ID: " + inID);
             return 0;
         }
         
@@ -113,7 +113,7 @@ namespace ChilliSource
                 return mStringIDLookups[inudwFrameIndex];
             }
             
-            WARNING_LOG("Sprite not found for Frame Index: " + Core::ToString(inudwFrameIndex));
+            CS_WARNING_LOG("Sprite not found for Frame Index: " + Core::ToString(inudwFrameIndex));
             return Core::CStringUtils::BLANK;
         }		
 		//---------------------------------------------------------------------
