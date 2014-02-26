@@ -21,14 +21,14 @@ namespace ChilliSource
 {
 	namespace Input
 	{
-		class IInputDevice : public Core::IQueryableInterface
+		class InputDevice : public Core::IQueryableInterface
 		{
 		public:
-			IInputDevice(){}
-			virtual ~IInputDevice(){}
+			InputDevice(){}
+			virtual ~InputDevice(){}
 		};
 		
-		typedef std::shared_ptr<IInputDevice> InputDevicePtr;
+		typedef std::shared_ptr<InputDevice> InputDevicePtr;
 	}
 }
 

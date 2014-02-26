@@ -13,6 +13,7 @@ namespace ChilliSource
 {
     namespace Base
     {
+        //base
 #ifdef DEBUG_STATS
         CS_FORWARD_DECLARE_CLASS(DebugStats);
 #endif

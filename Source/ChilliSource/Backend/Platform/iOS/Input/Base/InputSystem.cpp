@@ -31,28 +31,28 @@ CInputSystem::~CInputSystem()
 
 bool CInputSystem::IsA(Core::InterfaceIDType inInterfaceID) const
 {
-	return inInterfaceID == IInputSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
+	return inInterfaceID == InputSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
 }
 
 bool CInputSystem::CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const
 {
-	return inInterfaceID == ITouchScreen::InterfaceID;
+	return inInterfaceID == TouchScreen::InterfaceID;
 }
-IInputDevice * CInputSystem::GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID)
+InputDevice * CInputSystem::GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID)
 {
-	if(inInterfaceID == ITouchScreen::InterfaceID) 
+	if(inInterfaceID == TouchScreen::InterfaceID) 
     {
 		return &mTouchScreen;
 	}
     
 	return nullptr;
 }
-IAccelerometer * CInputSystem::GetAccelerometerPtr()
+Accelerometer * CInputSystem::GetAccelerometerPtr()
 {
 	return mpAccelerometer;
 }
 
-ITouchScreen * CInputSystem::GetTouchScreenPtr()
+TouchScreen * CInputSystem::GetTouchScreenPtr()
 {
 	return &mTouchScreen;
 }
@@ -61,7 +61,7 @@ void CInputSystem::Update(f32 infDT)
     mffTimeStamp += infDT;
 	mTouchScreen.SetCurrentAppTime(mffTimeStamp);
 }
-IVirtualKeyboard* CInputSystem::GetVirtualKeyboardPtr()
+VirtualKeyboard* CInputSystem::GetVirtualKeyboardPtr()
 {
 	return &mVirtualKeyboard;
 }

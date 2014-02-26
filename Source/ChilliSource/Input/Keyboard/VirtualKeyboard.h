@@ -48,11 +48,11 @@ namespace ChilliSource
             k_all
         };
         
-		class IVirtualKeyboard 
+		class VirtualKeyboard 
 		{
 		public:
-			IVirtualKeyboard() : mbIsActive(false){}
-			virtual ~IVirtualKeyboard(){}
+			VirtualKeyboard() : mbIsActive(false){}
+			virtual ~VirtualKeyboard(){}
 			
 			virtual void Show() = 0;
 			virtual void Hide() = 0;

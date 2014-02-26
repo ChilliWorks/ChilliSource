@@ -1,7 +1,7 @@
 /** 
  * File: InputSystem.h
  * Date: 5 Oct 2010
- * Description: Concrete iOS3_x implementation of ChilliSource::Input::IInputSystem;
+ * Description: Concrete iOS3_x implementation of ChilliSource::Input::InputSystem;
  */
 
 /** 
@@ -26,7 +26,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CInputSystem : public Input::IInputSystem
+		class CInputSystem : public Input::InputSystem
 		{
 		public:
             CInputSystem();
@@ -34,14 +34,14 @@ namespace ChilliSource
 			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const;
 			
 			virtual bool CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const;
-			virtual Input::IInputDevice * GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID);
+			virtual Input::InputDevice * GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID);
 			
 			
-			virtual Input::ITouchScreen * GetTouchScreenPtr();
-			virtual Input::IAccelerometer * GetAccelerometerPtr();
+			virtual Input::TouchScreen * GetTouchScreenPtr();
+			virtual Input::Accelerometer * GetAccelerometerPtr();
 			virtual void Update(f32 infDT);
 			
-			virtual Input::IVirtualKeyboard* GetVirtualKeyboardPtr();
+			virtual Input::VirtualKeyboard* GetVirtualKeyboardPtr();
             
             //-----------------------------------------------------------
             /// Flush Buffered Input

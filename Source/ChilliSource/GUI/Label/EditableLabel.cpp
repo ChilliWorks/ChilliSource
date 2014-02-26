@@ -147,7 +147,7 @@ namespace ChilliSource
 		///
 		/// @return Virtual keyboard
 		//-------------------------------------------------
-		Input::IVirtualKeyboard* CEditableLabel::GetKeyboardPtr()
+		Input::VirtualKeyboard* CEditableLabel::GetKeyboardPtr()
 		{
 			return mpKeyboard;
 		}
@@ -156,7 +156,7 @@ namespace ChilliSource
         ///
         /// @param Virtual keyboard
         //-------------------------------------------------
-        void CEditableLabel::SetKeyboard(Input::IVirtualKeyboard* inpKeyboard)
+        void CEditableLabel::SetKeyboard(Input::VirtualKeyboard* inpKeyboard)
         {
             if(mpKeyboard)
             {

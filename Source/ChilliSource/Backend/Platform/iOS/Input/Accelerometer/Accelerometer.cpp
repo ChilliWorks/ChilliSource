@@ -46,7 +46,7 @@ namespace ChilliSource
         //----------------------------------------------------
         bool CAccelerometer::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == IAccelerometer::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
+            return inInterfaceID == Accelerometer::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
         }
         //----------------------------------------------------
         /// Is Updating

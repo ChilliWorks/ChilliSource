@@ -36,13 +36,13 @@ namespace ChilliSource
     		///
     		/// @param pointer to the input system
     		//-----------------------------------------------------
-    		void SetInputSystem(Input::IInputSystem* inpInputSystem);
+    		void SetInputSystem(Input::InputSystem* inpInputSystem);
             //-----------------------------------------------------
             /// Get Input System
             ///
             /// @return pointer to the input system
             //-----------------------------------------------------
-            Input::IInputSystem* GetInputSystem();
+            Input::InputSystem* GetInputSystem();
             void ListenForTouches();
             void UnlistenFromTouches();
             //-----------------------------------------------------------
@@ -127,7 +127,7 @@ namespace ChilliSource
 			friend void Core::CScene::BecomeInactive();
             
         private:
-            Input::IInputSystem* mpInputSystem;
+            Input::InputSystem* mpInputSystem;
         };
     }
 }

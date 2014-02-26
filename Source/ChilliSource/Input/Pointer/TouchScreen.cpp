@@ -23,15 +23,15 @@ namespace ChilliSource
 	namespace Input
 	{
 
-		DEFINE_NAMED_INTERFACE(ITouchScreen);
-		DEFINE_NAMED_INTERFACE(IInputSystem);
+		DEFINE_NAMED_INTERFACE(TouchScreen);
+		DEFINE_NAMED_INTERFACE(InputSystem);
 
-		ITouchScreen::ITouchScreen()
+		TouchScreen::TouchScreen()
 		:mLastTouchIndex(0), mffLastTimeStamp(0.0f), mudwOrientedScreenHeight(0), mbIsEnabled(true)
 		{
 			
 		}
-		ITouchScreen::~ITouchScreen()
+		TouchScreen::~TouchScreen()
 		{
 			
 		}
@@ -40,35 +40,35 @@ namespace ChilliSource
 		{
 			return (this->ID == inOther.ID);
 		}
-		Core::IEvent<TouchEventDelegate> & ITouchScreen::GetTouchBeganEvent()
+		Core::IEvent<TouchEventDelegate> & TouchScreen::GetTouchBeganEvent()
 		{
 			return mTouchBeganEvent;
 		}
-		Core::IEvent<TouchEventDelegate> & ITouchScreen::GetTouchMovedEvent()
+		Core::IEvent<TouchEventDelegate> & TouchScreen::GetTouchMovedEvent()
 		{
 			return mTouchMovedEvent;
 		}
-		Core::IEvent<TouchEventDelegate> & ITouchScreen::GetTouchEndEvent()
+		Core::IEvent<TouchEventDelegate> & TouchScreen::GetTouchEndEvent()
 		{
 			return mTouchEndedEvent;
 		}
-		void ITouchScreen::SetTouchTransformMatrix(const Core::CMatrix4x4 & inTouchTransformMat)
+		void TouchScreen::SetTouchTransformMatrix(const Core::CMatrix4x4 & inTouchTransformMat)
 		{
 			mTouchTransformMatrix = inTouchTransformMat;	
 		}
-		void ITouchScreen::SetCurrentAppTime(f64 inffTimeStamp)
+		void TouchScreen::SetCurrentAppTime(f64 inffTimeStamp)
 		{
 			mffLastTimeStamp = inffTimeStamp;
 		}
-		void ITouchScreen::SetScreenHeight(u32 inudwScreenHeight)
+		void TouchScreen::SetScreenHeight(u32 inudwScreenHeight)
 		{
 			mudwOrientedScreenHeight = inudwScreenHeight;
 		}
-        void ITouchScreen::Enable()
+        void TouchScreen::Enable()
         {
             mbIsEnabled = true;
         }
-        void ITouchScreen::Disable()
+        void TouchScreen::Disable()
         {
             mbIsEnabled = false;
         }
@@ -78,7 +78,7 @@ namespace ChilliSource
         /// Have the input elements notify listeners of each
         /// buffered value then clear the buffered input
         //-----------------------------------------------------------
-        void ITouchScreen::FlushBufferedInput()
+        void TouchScreen::FlushBufferedInput()
         {
         	std::unique_lock<std::mutex> Lock(mMutex);
 
@@ -103,7 +103,7 @@ namespace ChilliSource
             
             mBufferedTouches.clear();
         }
-		u32 ITouchScreen::StartTouch(const Core::CVector2 & invTouchLocation, f64 inTimeStamp)
+		u32 TouchScreen::StartTouch(const Core::CVector2 & invTouchLocation, f64 inTimeStamp)
 		{
             //Give the touch a unique ID
 			u32 TouchID = ++mLastTouchIndex;
@@ -128,7 +128,7 @@ namespace ChilliSource
 
 			return TouchID;
 		}
-		void ITouchScreen::MoveTouch(u32 inID, const Core::CVector2 & invNewTouchLocation, f64 inTimeStamp)
+		void TouchScreen::MoveTouch(u32 inID, const Core::CVector2 & invNewTouchLocation, f64 inTimeStamp)
 		{
             if(!mbIsEnabled)
                 return;
@@ -156,7 +156,7 @@ namespace ChilliSource
 				}
 			}
 		}
-		void ITouchScreen::EndTouch(u32 inID, f64 inTimeStamp)
+		void TouchScreen::EndTouch(u32 inID, f64 inTimeStamp)
 		{
             //Find the most recent instance of this touch and duplicate it making sure to update
             //its current position
@@ -182,14 +182,14 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Add Active Touch
         //-----------------------------------------------------------
-        void ITouchScreen::AddActiveTouch(const TouchInfo& inTouchInfo)
+        void TouchScreen::AddActiveTouch(const TouchInfo& inTouchInfo)
         {
             maActiveTouches.push_back(inTouchInfo);
         }
         //-----------------------------------------------------------
         /// Update Active Touch
         //-----------------------------------------------------------
-        void ITouchScreen::UpdateActiveTouch(const TouchInfo& inTouchInfo)
+        void TouchScreen::UpdateActiveTouch(const TouchInfo& inTouchInfo)
         {
             for (TouchListItr touchIt = maActiveTouches.begin(); touchIt != maActiveTouches.end(); ++touchIt)
 			{
@@ -203,7 +203,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Remove Active Touch
         //-----------------------------------------------------------
-        void ITouchScreen::RemoveActiveTouch(const TouchInfo& inTouchInfo)
+        void TouchScreen::RemoveActiveTouch(const TouchInfo& inTouchInfo)
         {
             for (TouchListItr touchIt = maActiveTouches.begin(); touchIt != maActiveTouches.end(); ++touchIt)
 			{

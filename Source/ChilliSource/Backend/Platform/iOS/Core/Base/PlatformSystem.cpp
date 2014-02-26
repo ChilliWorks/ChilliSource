@@ -176,7 +176,7 @@ namespace ChilliSource
             inaSystems.push_back(Core::SystemPtr(pRenderSystem));
 			Core::CApplication::SetRenderSystem(pRenderSystem);
             
-            Input::IInputSystem* pInputSystem = new iOS::CInputSystem();
+            Input::InputSystem* pInputSystem = new iOS::CInputSystem();
             inaSystems.push_back(Core::SystemPtr(pInputSystem));
             Core::CApplication::SetInputSystem(pInputSystem);
             

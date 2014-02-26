@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CVirtualKeyboard : public Input::IVirtualKeyboard
+		class CVirtualKeyboard : public Input::VirtualKeyboard
 		{
 		public:
 			CVirtualKeyboard();

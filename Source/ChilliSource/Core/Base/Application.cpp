@@ -67,7 +67,7 @@ namespace ChilliSource
         f32 CApplication::mfUpdateSpeed = 1.0f;
         
         Rendering::IRenderSystem* CApplication::mpRenderSystem = nullptr;
-        Input::IInputSystem * CApplication::mpInputSystem = nullptr;
+        Input::InputSystem * CApplication::mpInputSystem = nullptr;
         IPlatformSystem* CApplication::pPlatformSystem = nullptr;
 		Audio::AudioSystem* CApplication::pAudioSystem = nullptr;
 		Rendering::CRenderer* CApplication::mpRenderer = nullptr;
@@ -573,7 +573,7 @@ namespace ChilliSource
 		///
 		/// @param the system pointer.
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::SetInputSystem(Input::IInputSystem* inpSystem)
+		void CApplication::SetInputSystem(Input::InputSystem* inpSystem)
 		{
 			mpInputSystem = inpSystem;
 		}
@@ -750,7 +750,7 @@ namespace ChilliSource
             
 			if(HasTouchInput() == true)
 			{
-				Input::ITouchScreen * pTouchScreen = GetSystemImplementing(Input::IInputSystem::InterfaceID)->GetInterface<Input::IInputSystem>()->GetTouchScreenPtr();
+				Input::TouchScreen * pTouchScreen = GetSystemImplementing(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreenPtr();
 				pTouchScreen->SetScreenHeight(CScreen::GetOrientedHeight());
 			}
 		}
@@ -842,7 +842,7 @@ namespace ChilliSource
             
 			if(HasTouchInput() == true)
 			{
-				Input::ITouchScreen * pTouchScreen = GetSystemImplementing(Input::IInputSystem::InterfaceID)->GetInterface<Input::IInputSystem>()->GetTouchScreenPtr();
+				Input::TouchScreen * pTouchScreen = GetSystemImplementing(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreenPtr();
 				pTouchScreen->SetScreenHeight(CScreen::GetOrientedHeight());
 			}
             

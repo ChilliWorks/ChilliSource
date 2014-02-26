@@ -25,10 +25,10 @@ namespace ChilliSource
 		/// Listens to and stores the acceleration read from the
 		/// hardware accelerometer.
 		//======================================================
-		class IAccelerometer : public IInputDevice
+		class Accelerometer : public InputDevice
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(IAccelerometer);
+			DECLARE_NAMED_INTERFACE(Accelerometer);
 			//----------------------------------------------------
 			/// Delegates
 			//----------------------------------------------------
@@ -36,7 +36,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			/// Constructor
 			//----------------------------------------------------
-			IAccelerometer();
+			Accelerometer();
 			//----------------------------------------------------
 			/// Is Updating
 			///
@@ -74,7 +74,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			/// Destructor
 			//----------------------------------------------------
-			virtual ~IAccelerometer();
+			virtual ~Accelerometer();
 		protected:
 			Core::CEvent1<AccelerationUpdatedDelegate> mAccelerationUpdatedEvent;
 		};

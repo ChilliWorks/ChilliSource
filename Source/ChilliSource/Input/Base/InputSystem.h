@@ -23,19 +23,19 @@ namespace ChilliSource
 
 	namespace Input
 	{
-		class IInputSystem : public Core::ISystem, public Core::IUpdateable
+		class InputSystem : public Core::ISystem, public Core::IUpdateable
 		{
 		public:
-			virtual ~IInputSystem(){};
-			DECLARE_NAMED_INTERFACE(IInputSystem);
+			virtual ~InputSystem(){};
+			DECLARE_NAMED_INTERFACE(InputSystem);
 			
 			virtual bool CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const = 0;
-			virtual IInputDevice * GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID) = 0;
+			virtual InputDevice * GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID) = 0;
 			
-			virtual ITouchScreen * GetTouchScreenPtr(){return nullptr;}
-			virtual IAccelerometer * GetAccelerometerPtr(){return nullptr;}
-			virtual IVirtualKeyboard* GetVirtualKeyboardPtr(){return nullptr;}
-			virtual IMouse* GetMousePtr(){return nullptr;}
+			virtual TouchScreen * GetTouchScreenPtr(){return nullptr;}
+			virtual Accelerometer * GetAccelerometerPtr(){return nullptr;}
+			virtual VirtualKeyboard* GetVirtualKeyboardPtr(){return nullptr;}
+			virtual Mouse* GetMousePtr(){return nullptr;}
             
             virtual void FlushBufferedInput(){};
             

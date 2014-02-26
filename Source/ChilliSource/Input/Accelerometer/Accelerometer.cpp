@@ -14,24 +14,24 @@ namespace ChilliSource
 {
 	namespace Input
 	{
-		DEFINE_NAMED_INTERFACE(IAccelerometer);
+		DEFINE_NAMED_INTERFACE(Accelerometer);
 		//----------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------
-		IAccelerometer::IAccelerometer()
+		Accelerometer::Accelerometer()
 		{
 		}
 		//----------------------------------------------------
 		/// Get Acceleration Updated Event
 		//----------------------------------------------------
-		Core::IEvent<IAccelerometer::AccelerationUpdatedDelegate>& IAccelerometer::GetAccelerationUpdatedEvent()
+		Core::IEvent<Accelerometer::AccelerationUpdatedDelegate>& Accelerometer::GetAccelerationUpdatedEvent()
 		{
 			return mAccelerationUpdatedEvent;
 		}
 		//----------------------------------------------------
 		/// Destructor
 		//----------------------------------------------------
-		IAccelerometer::~IAccelerometer()
+		Accelerometer::~Accelerometer()
 		{
 		}
 	}

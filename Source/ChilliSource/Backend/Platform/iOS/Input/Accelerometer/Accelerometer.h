@@ -24,7 +24,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CAccelerometer : public Input::IAccelerometer, public Core::IUpdateable
+		class CAccelerometer : public Input::Accelerometer, public Core::IUpdateable
 		{
 		public:
 			//----------------------------------------------------

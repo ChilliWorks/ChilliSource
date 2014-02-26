@@ -34,7 +34,7 @@ namespace ChilliSource
 		///
 		/// Create the scene graph object 
 		//--------------------------------------------------------------------------------------------------
-		CScene::CScene(Input::IInputSystem* inpInputSystem, f32 infWorldHalfSize) 
+		CScene::CScene(Input::InputSystem* inpInputSystem, f32 infWorldHalfSize) 
         : mpRootWindow(nullptr)
 		{
 			mpRootWindow = new GUI::CWindow();

@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace Input
 	{
-		class IInputDeviceFactory
+		class InputDeviceFactory
 		{
 		public:
 			virtual bool CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) = 0;

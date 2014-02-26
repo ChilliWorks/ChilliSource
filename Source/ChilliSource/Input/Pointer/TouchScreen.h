@@ -48,16 +48,16 @@ namespace ChilliSource
 		
 		typedef fastdelegate::FastDelegate1<const TouchInfo &> TouchEventDelegate;
 		
-		class ITouchScreen : public IInputDevice
+		class TouchScreen : public InputDevice
 		{
 		public:
-			ITouchScreen();
+			TouchScreen();
 			typedef std::vector<TouchInfo> TouchList;
 			typedef TouchList::iterator TouchListItr;
 
-			virtual ~ITouchScreen();
+			virtual ~TouchScreen();
 			
-			DECLARE_NAMED_INTERFACE(ITouchScreen);
+			DECLARE_NAMED_INTERFACE(TouchScreen);
 			
 			Core::IEvent<TouchEventDelegate> & GetTouchBeganEvent();
 			Core::IEvent<TouchEventDelegate> & GetTouchMovedEvent();

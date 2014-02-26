@@ -295,7 +295,7 @@ namespace ChilliSource
 			///
 			/// @return Pointer to the input system
 			//--------------------------------------------------------------------------------------------------
-			static Input::IInputSystem* GetInputSystemPtr(){return mpInputSystem;}
+			static Input::InputSystem* GetInputSystemPtr(){return mpInputSystem;}
 			//--------------------------------------------------------------------------------------------------
 			/// Get Input System Ptr
 			///
@@ -387,7 +387,7 @@ namespace ChilliSource
 			///
 			/// @param the system pointer.
 			//--------------------------------------------------------------------------------------------------
-			static void SetInputSystem(Input::IInputSystem* inpSystem);
+			static void SetInputSystem(Input::InputSystem* inpSystem);
             //--------------------------------------------------------------------------------------------------
 			/// Set Audio System
 			///
@@ -506,7 +506,7 @@ namespace ChilliSource
 			
             //---Systems
             static Rendering::IRenderSystem* mpRenderSystem;
-			static Input::IInputSystem * mpInputSystem;
+			static Input::InputSystem * mpInputSystem;
             static IPlatformSystem* pPlatformSystem;	//Interface to platform specific API's such as timer etc
             static Audio::AudioSystem* pAudioSystem;
             static IFileSystem* mspFileSystem;

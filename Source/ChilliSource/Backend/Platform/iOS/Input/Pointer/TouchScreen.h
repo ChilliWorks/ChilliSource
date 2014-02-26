@@ -1,7 +1,7 @@
 /** 
  * File: TouchScreen.h
  * Date: 5 Oct 2010
- * Description: Concrete iOS3_x implementation of ChilliSource::Input::ITouchScreen;
+ * Description: Concrete iOS3_x implementation of ChilliSource::Input::TouchScreen;
  */
 
 /** 
@@ -23,7 +23,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CTouchScreen : public Input::ITouchScreen
+		class CTouchScreen : public Input::TouchScreen
 		{
 		public:
 			CTouchScreen();
