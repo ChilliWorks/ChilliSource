@@ -10,6 +10,7 @@
 
 #include <ChilliSource/Core/Scene/SceneAnimation.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/MakeSharedArray.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Entity/EntityAnimationController.h>
 
@@ -21,10 +22,10 @@ namespace ChilliSource
 		{
 			inStream->Read((s8*)&udwKeyframeCount,sizeof(u32));
             
-			afKeyframeTimes = std::shared_ptr<f32>(new f32[udwKeyframeCount], ArrayDeleter<f32>());
+            afKeyframeTimes = MakeSharedArray<f32>(udwKeyframeCount);
 			inStream->Read((s8*)afKeyframeTimes.get(),udwKeyframeCount * sizeof(f32));
             
-            aKeyframeValues = std::shared_ptr<EntityTransform>(new EntityTransform[udwKeyframeCount], ArrayDeleter<EntityTransform>());
+            aKeyframeValues = MakeSharedArray<EntityTransform>(udwKeyframeCount);
 			inStream->Read((s8*)aKeyframeValues.get(),udwKeyframeCount * sizeof(EntityTransform));
             
 			u32 nNameLength;

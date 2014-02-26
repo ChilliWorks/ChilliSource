@@ -49,17 +49,6 @@
     typedef std::shared_ptr<const in_className> in_className##CSPtr;    \
     typedef std::weak_ptr<const in_className> in_className##CWPtr;
 
-
-//TODO: Remove the array deleter and put it in a more sutiable place. This is a functor for deleting shared arrays.
-template <typename T> class ArrayDeleter
-{
-public:
-    void operator () (T* in_arrayObject) const
-    {
-        delete[] in_arrayObject;
-    }
-};
-
 #ifdef __APPLE__
 #include "TargetConditionals.h"
 #endif
