@@ -26,7 +26,7 @@ namespace ChilliSource
 		/// Default
 		//------------------------------------------------------
 		CSpriteBatch::CSpriteBatch(u32 inudwCapacity, IRenderSystem * inpRenderSystem, BufferUsage ineUsage) 
-        : mpSpriteBuffer(NULL), mdwTag(0), mudwNumSpritesBuiltIndicesFor(0)
+        : mpSpriteBuffer(nullptr), mdwTag(0), mudwNumSpritesBuiltIndicesFor(0)
 		{
 			BufferDescription desc;
 			desc.eUsageFlag = ineUsage;
@@ -59,7 +59,7 @@ namespace ChilliSource
 			mpSpriteBuffer->SetIndexCount(udwNumIndices);
 			
 			//Get the buffer locations
-			CSpriteComponent::SpriteVertex* pVBuffer = NULL;
+			CSpriteComponent::SpriteVertex* pVBuffer = nullptr;
 			mpSpriteBuffer->LockVertex((f32**)&pVBuffer, 0, 0);
 
 			u32 VertIdx = 0;
@@ -106,7 +106,7 @@ namespace ChilliSource
 			//No validation, cause it to crash as you want
 			mpSpriteBuffer->Bind();
 			
-            CSpriteComponent::SpriteVertex* pVBuffer = NULL;
+            CSpriteComponent::SpriteVertex* pVBuffer = nullptr;
 			mpSpriteBuffer->LockVertex((f32**)&pVBuffer, 0, 0);
 			
 			pVBuffer += kudwVertsPerSprite * inudwIndex;
@@ -126,7 +126,7 @@ namespace ChilliSource
             {
 				mudwNumSpritesBuiltIndicesFor = inudwNumSprites;
 				
-				u16* pIBuffer = NULL;
+				u16* pIBuffer = nullptr;
 				mpSpriteBuffer->LockIndex(&pIBuffer, 0, 0);
 				
 				for	(u16 nSprite = 0; nSprite < mudwNumSpritesBuiltIndicesFor; nSprite++)

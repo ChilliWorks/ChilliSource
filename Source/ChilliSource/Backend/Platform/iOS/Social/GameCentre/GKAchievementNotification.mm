@@ -191,7 +191,7 @@
 - (void)animateIn
 {
     [self delegateCallback:@selector(willShowAchievementNotification:) withObject:self];
-    [UIView beginAnimations:nil context:NULL];
+    [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:kGKAchievementAnimeTime];
     [UIView setAnimationDelegate:self];
     [UIView setAnimationBeginsFromCurrentState:YES];
@@ -203,7 +203,7 @@
 - (void)animateOut
 {
     [self delegateCallback:@selector(willHideAchievementNotification:) withObject:self];
-    [UIView beginAnimations:nil context:NULL];
+    [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:kGKAchievementAnimeTime];
     [UIView setAnimationDelegate:self];
     [UIView setAnimationBeginsFromCurrentState:YES];

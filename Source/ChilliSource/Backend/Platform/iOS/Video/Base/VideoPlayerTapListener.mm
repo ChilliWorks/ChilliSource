@@ -82,7 +82,7 @@ using namespace ChilliSource::iOS;
 {
     if (mbReceivedTap == true)
     {
-        if (mTappedDelegate != NULL)
+        if (mTappedDelegate != nullptr)
         {
             mTappedDelegate();
         }

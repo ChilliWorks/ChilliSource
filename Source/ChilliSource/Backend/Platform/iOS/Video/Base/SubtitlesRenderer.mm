@@ -93,7 +93,7 @@
 {
     //get the style
     ChilliSource::Video::CSubtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->strStyleName);
-    if (pStyle == NULL)
+    if (pStyle == nullptr)
     {
         ERROR_LOG("Cannot find style '" + inpSubtitle->strStyleName + "' in subtitles.");
         return;

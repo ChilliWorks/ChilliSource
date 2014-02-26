@@ -17,7 +17,7 @@ namespace ChilliSource
         ///
         /// Default
 		//----------------------------------------------------------------
-        CTransform::CTransform() : mbIsTransformCacheValid(false), mbIsParentTransformCacheValid(false), mvScale(1,1,1), mpParentTransform(NULL), mfOpacity(1.0f)
+        CTransform::CTransform() : mbIsTransformCacheValid(false), mbIsParentTransformCacheValid(false), mvScale(1,1,1), mpParentTransform(nullptr), mfOpacity(1.0f)
         {
         
         }
@@ -597,7 +597,7 @@ namespace ChilliSource
 			
 			if(it != mChildTransforms.end())
 			{
-				inpTransform->SetParentTransform(NULL);
+				inpTransform->SetParentTransform(nullptr);
 				mChildTransforms.erase(it);
 				return true;
 			}
@@ -614,7 +614,7 @@ namespace ChilliSource
 		{
 			for(DYNAMIC_ARRAY<CTransform*>::iterator it = mChildTransforms.begin(); it != mChildTransforms.end(); ++it)
 			{
-				(*it)->SetParentTransform(NULL);
+				(*it)->SetParentTransform(nullptr);
 			}
 			
 			mChildTransforms.clear();

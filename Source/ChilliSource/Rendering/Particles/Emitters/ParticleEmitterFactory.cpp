@@ -49,7 +49,7 @@ namespace ChilliSource
             else
             {
                 ERROR_LOG("Cannot create particle emitter of type: " + instrType);
-                return NULL;
+                return nullptr;
             }
         }
     }

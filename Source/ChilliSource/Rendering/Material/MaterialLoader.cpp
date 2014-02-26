@@ -75,7 +75,7 @@ namespace ChilliSource
                 MaterialPtr pMaterial = SHARED_PTR_CAST<CMaterial>(outpResource);
                 
                 IShaderManager* pShaderManager = GET_RESOURCE_MANAGER(IShaderManager);
-                if(pShaderManager != NULL)
+                if(pShaderManager != nullptr)
                 {
                     for(u32 i=0; i<aShaderFiles.size(); ++i)
                     {
@@ -88,7 +88,7 @@ namespace ChilliSource
                 }
                 
                 ITextureManager* pTextureManager = GET_RESOURCE_MANAGER(ITextureManager);
-                if(pTextureManager != NULL)
+                if(pTextureManager != nullptr)
                 {
                     for(u32 i=0; i<aTextureFiles.size(); ++i)
                     {
@@ -97,7 +97,7 @@ namespace ChilliSource
                 }
                 
                 ICubemapManager* pCubemapManager = GET_RESOURCE_MANAGER(ICubemapManager);
-                if(pCubemapManager != NULL)
+                if(pCubemapManager != nullptr)
                 {
                     for(u32 i=0; i<aCubemapFiles.size(); ++i)
                     {
@@ -137,7 +137,7 @@ namespace ChilliSource
                 MaterialPtr pMaterial = SHARED_PTR_CAST<CMaterial>(outpResource);
                 
                 IShaderManager* pShaderManager = GET_RESOURCE_MANAGER(IShaderManager);
-                if(pShaderManager != NULL)
+                if(pShaderManager != nullptr)
                 {
                     for(u32 i=0; i<aShaderFiles.size(); ++i)
                     {
@@ -148,7 +148,7 @@ namespace ChilliSource
                 }
                 
                 ITextureManager* pTextureManager = GET_RESOURCE_MANAGER(ITextureManager);
-                if(pTextureManager != NULL)
+                if(pTextureManager != nullptr)
                 {
                     for(u32 i=0; i<aTextureFiles.size(); ++i)
                     {
@@ -159,7 +159,7 @@ namespace ChilliSource
                 }
                 
                 ICubemapManager* pCubemapManager = GET_RESOURCE_MANAGER(ICubemapManager);
-                if(pCubemapManager != NULL)
+                if(pCubemapManager != nullptr)
                 {
                     for(u32 i=0; i<aCubemapFiles.size(); ++i)
                     {

@@ -59,7 +59,7 @@ namespace ChilliSource
 			u32 GetNumEmitters() const;
 			
 			//---------------------------------------------------
-			/// Returns the emitter at the given index or NULL
+			/// Returns the emitter at the given index or nullptr
 			///
 			/// @param Index
 			//---------------------------------------------------

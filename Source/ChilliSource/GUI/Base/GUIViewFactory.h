@@ -52,7 +52,7 @@ namespace ChilliSource
 			/// @param Optional dynamic array to which views will be pushed
             /// @return GUI View
             //--------------------------------------------------------
-            static GUIViewPtr CreateGUIViewFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile, DYNAMIC_ARRAY<GUIViewPtr>* outpViews = NULL);
+            static GUIViewPtr CreateGUIViewFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile, DYNAMIC_ARRAY<GUIViewPtr>* outpViews = nullptr);
 			//--------------------------------------------------------
             /// Create GUI View 
             ///
@@ -96,7 +96,7 @@ namespace ChilliSource
             /// @param View XML element
             /// @return Created view
             //--------------------------------------------------------
-            static GUIViewPtr CreateView(rapidxml::xml_node<char> * ipViewElement, DYNAMIC_ARRAY<GUIViewPtr>* outpViews = NULL);
+            static GUIViewPtr CreateView(rapidxml::xml_node<char> * ipViewElement, DYNAMIC_ARRAY<GUIViewPtr>* outpViews = nullptr);
             
         private:
             

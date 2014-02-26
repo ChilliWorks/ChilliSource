@@ -163,7 +163,7 @@ namespace ChilliSource
                 BOOL* isDir;
                 if(![mpcFileManager fileExistsAtPath:[ubiquitousPackage absoluteString] isDirectory:isDir])
                 {
-                    if(![mpcFileManager createDirectoryAtURL:ubiquitousPackage withIntermediateDirectories:YES attributes:nil error:NULL])
+                    if(![mpcFileManager createDirectoryAtURL:ubiquitousPackage withIntermediateDirectories:YES attributes:nil error:nil])
                     {
                         ERROR_LOG("CiCloudSystem::CreateDirectoryURL - Failed to create Directory - " + strConstructedPath);
                     }
@@ -188,7 +188,7 @@ namespace ChilliSource
             NSMutableData *data = [[NSMutableData alloc] initWithBytes:instrData.data() length:instrData.length()];
             [[CiCloudSystemController sharedInstance] writeDocumentWithAbsolutePath:ChilliSource::Core::CStringUtils::StringToNSString(GetAppendedFilePathToStorageArea(ineStorageArea, instrFileName))
                                                                                   :data
-                                                                                  :NULL];
+                                                                                  :nil];
             return;
         }
 

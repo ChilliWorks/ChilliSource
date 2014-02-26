@@ -24,7 +24,7 @@ namespace ChilliSource
         {
 		public:
 			virtual ~CRendererSortPredicate(){}
-			virtual void PrepareForSort(DYNAMIC_ARRAY<IRenderComponent*> * inpRenderables = NULL) = 0;
+			virtual void PrepareForSort(DYNAMIC_ARRAY<IRenderComponent*> * inpRenderables = nullptr) = 0;
 			virtual bool SortItem(IRenderComponent* p1, IRenderComponent* p2) = 0;
 			bool operator()(IRenderComponent* p1, IRenderComponent* p2)
             {
@@ -35,10 +35,10 @@ namespace ChilliSource
 		//---------------------------------------------------------
 		/// This class doesn't really sort objects at all
 		//---------------------------------------------------------
-		class CNullSortPredicate : public CRendererSortPredicate
+		class CnullptrSortPredicate : public CRendererSortPredicate
         {
 		public:
-            void PrepareForSort(DYNAMIC_ARRAY<IRenderComponent*> * inpRenderables = NULL){}
+            void PrepareForSort(DYNAMIC_ARRAY<IRenderComponent*> * inpRenderables = nullptr){}
             bool SortItem(IRenderComponent* p1, IRenderComponent* p2){return false;}
 		};
 		
@@ -48,7 +48,7 @@ namespace ChilliSource
 		class CBackToFrontSortPredicate : public CRendererSortPredicate
         {
 		public:
-            void PrepareForSort(DYNAMIC_ARRAY<IRenderComponent*> * inpRenderables = NULL);
+            void PrepareForSort(DYNAMIC_ARRAY<IRenderComponent*> * inpRenderables = nullptr);
             bool SortItem(IRenderComponent* p1, IRenderComponent* p2);
 		private:
 			Core::CMatrix4x4 mCameraViewProj;
@@ -60,7 +60,7 @@ namespace ChilliSource
 		class CMaterialSortPredicate : public CRendererSortPredicate
         {
 		public:
-			virtual void PrepareForSort(DYNAMIC_ARRAY<IRenderComponent*> * inpRenderables = NULL){}
+			virtual void PrepareForSort(DYNAMIC_ARRAY<IRenderComponent*> * inpRenderables = nullptr){}
 			virtual bool SortItem(IRenderComponent* p1, IRenderComponent* p2);
 		};
 	}

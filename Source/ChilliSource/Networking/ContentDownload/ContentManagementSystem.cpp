@@ -32,7 +32,7 @@ namespace ChilliSource
         /// @param Array of tags
         //-----------------------------------------------------------
         CContentManagementSystem::CContentManagementSystem(IContentDownloader* inpContentDownloader) 
-        : mpContentDownloader(inpContentDownloader), mpServerManifest(NULL), 
+        : mpContentDownloader(inpContentDownloader), mpServerManifest(nullptr), 
         muRunningToDownloadTotal(0), muRunningDownloadedTotal(0), mbDLCCachePurged(false)
         {
             mstrContentDirectory = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_DLC);
@@ -283,7 +283,7 @@ namespace ChilliSource
             };
             
             //Reset the listener
-            mOnUpdateCheckCompleteDelegate = NULL;
+            mOnUpdateCheckCompleteDelegate = nullptr;
         }
         //-----------------------------------------------------------
         /// On Content Download Complete
@@ -682,7 +682,7 @@ namespace ChilliSource
                 
                 //Get file information
                 unz_file_info FileInfo;
-                unzGetCurrentFileInfo(ZippedFile, &FileInfo, byaFileName, uddwFilenameLength, NULL, 0, NULL, 0);
+                unzGetCurrentFileInfo(ZippedFile, &FileInfo, byaFileName, uddwFilenameLength, nullptr, 0, nullptr, 0);
                 
                 //Load the file into memory and then save it out to the directory
                 s8* pbyDataBuffer =  new s8[FileInfo.uncompressed_size];

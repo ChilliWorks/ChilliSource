@@ -23,7 +23,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//---------------------------------------------------------
-		CStateManager::CStateManager() : mpApp(NULL), mbStartState(false)
+		CStateManager::CStateManager() : mpApp(nullptr), mbStartState(false)
 		{
 		}
         //---------------------------------------------------------
@@ -494,7 +494,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Get Parent State
         ///
-        /// @return If this state exists within hierarchy then returns parent state, otherwise returns StatePtr() (NULL)
+        /// @return If this state exists within hierarchy then returns parent state, otherwise returns StatePtr() (nullptr)
         //---------------------------------------------------------
         const StatePtr& CStateManager::GetParentState(IState* inpState) const 
         {
@@ -516,7 +516,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Get Child State
         ///
-        /// @return If this state exists within hierarchy then returns child state, otherwise returns StatePtr() (NULL)
+        /// @return If this state exists within hierarchy then returns child state, otherwise returns StatePtr() (nullptr)
         //---------------------------------------------------------
         const StatePtr& CStateManager::GetChildState(IState* inpState) const
         {
@@ -564,7 +564,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				return NULL;
+				return nullptr;
 			}
 		}
         //-------------------------------------------------------------------------

@@ -87,13 +87,13 @@ namespace ChilliSource
 			//---------------------------------------------------------
             /// Get Child State
 			///
-			/// @return If this state exists within hierarchy then returns child state, otherwise returns StatePtr() (NULL)
+			/// @return If this state exists within hierarchy then returns child state, otherwise returns StatePtr() (nullptr)
 			//---------------------------------------------------------
             const StatePtr& GetChildState(IState* inpState) const;
 			//---------------------------------------------------------
             /// Get Parent State
 			///
-			/// @return If this state exists within hierarchy then returns parent state, otherwise returns StatePtr() (NULL)
+			/// @return If this state exists within hierarchy then returns parent state, otherwise returns StatePtr() (nullptr)
 			//---------------------------------------------------------
             const StatePtr& GetParentState(IState* inpState) const;
             //---------------------------------------------------------
@@ -263,8 +263,8 @@ namespace ChilliSource
             
 			struct StateOperation
 			{
-				StateOperation(StateOperationAction ineAction) : eAction(ineAction), pRawState(NULL){}
-				StateOperation(StateOperationAction ineAction, const StatePtr& inpState) : eAction(ineAction), pState(inpState), pRawState(NULL){}
+				StateOperation(StateOperationAction ineAction) : eAction(ineAction), pRawState(nullptr){}
+				StateOperation(StateOperationAction ineAction, const StatePtr& inpState) : eAction(ineAction), pState(inpState), pRawState(nullptr){}
 				StateOperation(StateOperationAction ineAction, IState * inpState) : eAction(ineAction), pRawState(inpState){}
 
 				StateOperationAction eAction;

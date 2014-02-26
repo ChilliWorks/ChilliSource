@@ -115,7 +115,7 @@ namespace ChilliSource
 			//Open the shader file for reading only
 			ChilliSource::Core::FileStreamPtr shaderStream = ChilliSource::Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilePath, ChilliSource::Core::FileMode::k_read);
             
-            if (shaderStream == NULL || shaderStream->IsBad() == true)
+            if (shaderStream == nullptr || shaderStream->IsBad() == true)
 			{
 				ERROR_LOG("Cannot open shader file " + instrFilePath + " for reading");
 				shaderStream->Close();
@@ -184,7 +184,7 @@ namespace ChilliSource
 			DEBUG_LOG("Loading shader " + instrShaderFile);
 			std::string strSource = sstrShaderSource.str();
 			const GLchar* pGLSource = strSource.c_str();
-			glShaderSource(*pGLShader, 1, &pGLSource, NULL);
+			glShaderSource(*pGLShader, 1, &pGLSource, nullptr);
 			
 			//Compile the shader and check for errors
 			DEBUG_LOG("Compiling shader " + instrShaderFile);
@@ -202,7 +202,7 @@ namespace ChilliSource
 				if(InfoLength > 1)
 				{
 					char* ShaderLog = (char*)malloc(sizeof(char) * InfoLength);
-					glGetShaderInfoLog(*pGLShader, InfoLength, NULL, ShaderLog);
+					glGetShaderInfoLog(*pGLShader, InfoLength, nullptr, ShaderLog);
 					ERROR_LOG("Compiling shader " + instrShaderFile + ". " + std::string(ShaderLog));
 					FATAL_LOG("Failed to compile shader");
 					free(ShaderLog);
@@ -257,7 +257,7 @@ namespace ChilliSource
 			//Load the shader source
 			DEBUG_LOG("Loading shader from pre loaded source.");
 			const GLchar* pGLSource = instrShaderSource.c_str();
-			glShaderSource(*pGLShader, 1, &pGLSource, NULL);
+			glShaderSource(*pGLShader, 1, &pGLSource, nullptr);
 			
 			//Compile the shader and check for errors
 			DEBUG_LOG("Compiling shader...");
@@ -275,7 +275,7 @@ namespace ChilliSource
 				if(InfoLength > 1)
 				{
 					char* ShaderLog = (char*)malloc(sizeof(char) * InfoLength);
-					glGetShaderInfoLog(*pGLShader, InfoLength, NULL, ShaderLog);
+					glGetShaderInfoLog(*pGLShader, InfoLength, nullptr, ShaderLog);
 					ERROR_LOG("Compiling shader. " + std::string(ShaderLog));
 					FATAL_LOG(std::string(pGLSource));
 					free(ShaderLog);
@@ -324,7 +324,7 @@ namespace ChilliSource
 				if(InfoLength > 1)
 				{
 					char* ShaderLog = (char*)malloc(sizeof(char) * InfoLength);
-					glGetProgramInfoLog(mGLProgram, InfoLength, NULL, ShaderLog);
+					glGetProgramInfoLog(mGLProgram, InfoLength, nullptr, ShaderLog);
 					ERROR_LOG("Linking shader: " + std::string(ShaderLog));
 					free(ShaderLog);
 					return false;

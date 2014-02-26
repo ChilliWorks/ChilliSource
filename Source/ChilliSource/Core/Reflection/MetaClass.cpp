@@ -26,7 +26,7 @@ namespace ChilliSource
             ///
             /// @param Name
             //--------------------------------------------------------
-            CMetaClass::CMetaClass(const std::string& instrName, u32 inudwSize) : mstrName(instrName), mudwSize(inudwSize), mpBaseClass(NULL)
+            CMetaClass::CMetaClass(const std::string& instrName, u32 inudwSize) : mstrName(instrName), mudwSize(inudwSize), mpBaseClass(nullptr)
             {
                 mudwNameHash = CHashCRC32::GenerateHashCode(instrName);
             }
@@ -63,7 +63,7 @@ namespace ChilliSource
                     return (it->second)(inpInstance);
                 }
                 
-                return NULL;
+                return nullptr;
             }
             //--------------------------------------------------------
             /// Destroy Instance
@@ -142,7 +142,7 @@ namespace ChilliSource
                     }
                 }
 
-                return (mpBaseClass ? mpBaseClass->GetProperty(instrPropName) : NULL);
+                return (mpBaseClass ? mpBaseClass->GetProperty(instrPropName) : nullptr);
             }
             //--------------------------------------------------------
             /// Get Instance
@@ -163,7 +163,7 @@ namespace ChilliSource
                     }
                 }
                 
-                return NULL;
+                return nullptr;
             }
             //--------------------------------------------------------
             /// Get Instance
@@ -182,7 +182,7 @@ namespace ChilliSource
                     }
                 }
 
-                return NULL;
+                return nullptr;
             }
             //--------------------------------------------------------
             /// Get Base Class

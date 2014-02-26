@@ -114,7 +114,7 @@ namespace ChilliSource
 			///
 			/// Looks for a system that implements the given interface (i.e. a 2DRenderSystem etc)
 			/// @param The type ID of the system you wish to implement
-			/// @return System that implements the given interface or NULL if no system
+			/// @return System that implements the given interface or nullptr if no system
 			//--------------------------------------------------------------------------------------------------
 			static SystemPtr GetSystemImplementing(InterfaceIDType inInterfaceID);
 			//--------------------------------------------------------------------------------------------------
@@ -122,38 +122,38 @@ namespace ChilliSource
 			///
 			/// Looks for a system that implements the given interface (i.e. a 2DRenderSystem etc)
 			/// @param The type ID of the system you wish to implement
-			/// @return System that implements the given interface or NULL if no system
+			/// @return System that implements the given interface or nullptr if no system
 			//--------------------------------------------------------------------------------------------------
 			//Templated convenience version of the above saving getting the interface directly
 			template <typename T> static T* GetSystemImplementing()
 			{
 				SystemPtr pSystem = GetSystemImplementing(T::InterfaceID);
 				
-				if (pSystem != NULL) 
+				if (pSystem != nullptr) 
 				{
 					return static_cast<T*>(pSystem.get());
 				}
 				
-				return NULL;
+				return nullptr;
 			}
             //--------------------------------------------------------------------------------------------------
 			/// Get System Implementing
 			///
 			/// Looks for a system that implements the given interface (i.e. a 2DRenderSystem etc)
 			/// @param The type ID of the system you wish to implement
-			/// @return System that implements the given interface or NULL if no system
+			/// @return System that implements the given interface or nullptr if no system
 			//--------------------------------------------------------------------------------------------------
 			//Templated convenience version of the above saving getting the interface directly
 			template <typename T, typename U> static T* GetSystemImplementing()
 			{
 				SystemPtr pSystem = GetSystemImplementing(U::InterfaceID);
 				
-				if (pSystem != NULL) 
+				if (pSystem != nullptr) 
 				{
 					return pSystem->GetInterface<T>();
 				}
 				
-				return NULL;
+				return nullptr;
 			}
 			//--------------------------------------------------------------------------------------------------
 			/// Get Systems Implementing

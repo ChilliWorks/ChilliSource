@@ -52,10 +52,10 @@ namespace ChilliSource
         {
             mstrToken = Core::CBaseEncoding::Base64Encode((const s8*)[inpToken bytes], inpToken.length);
             
-            if(mDelegate != NULL)
+            if(mDelegate != nullptr)
             {
                 mDelegate(mstrToken);
-                mDelegate = NULL;
+                mDelegate = nullptr;
             }
         }
         //-------------------------------------------------------------------------

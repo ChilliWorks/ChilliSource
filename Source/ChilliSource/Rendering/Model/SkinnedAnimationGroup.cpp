@@ -75,11 +75,11 @@ namespace ChilliSource
                 for (DYNAMIC_ARRAY<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
                 {
                     f32 fBlendlinePosition = (*it)->fBlendlinePosition;
-                    if (fBlendlinePosition <= infBlendlinePosition && (pAnimItem1 == NULL || fBlendlinePosition > pAnimItem1->fBlendlinePosition))
+                    if (fBlendlinePosition <= infBlendlinePosition && (pAnimItem1 == nullptr || fBlendlinePosition > pAnimItem1->fBlendlinePosition))
                     {
                         pAnimItem1 = (*it);
                     }
-                    if (fBlendlinePosition >= infBlendlinePosition && (pAnimItem2 == NULL || fBlendlinePosition < pAnimItem2->fBlendlinePosition))
+                    if (fBlendlinePosition >= infBlendlinePosition && (pAnimItem2 == nullptr || fBlendlinePosition < pAnimItem2->fBlendlinePosition))
                     {
                         pAnimItem2 = (*it);
                     }
@@ -87,15 +87,15 @@ namespace ChilliSource
                 
                 //get the animation frames
                 SkinnedAnimationFramePtr pFrame1;
-                if (pAnimItem1 != NULL)
+                if (pAnimItem1 != nullptr)
                     pFrame1 = CalculateAnimationFrame(pAnimItem1->pSkinnedAnimation, infPlaybackPosition);
                 
                 SkinnedAnimationFramePtr pFrame2;
-                if (pAnimItem2 != NULL)
+                if (pAnimItem2 != nullptr)
                     pFrame2 = CalculateAnimationFrame(pAnimItem2->pSkinnedAnimation, infPlaybackPosition);
                 
                 //check that we do indeed have two animations to blend. if not, just return the frame we do have.
-                if (pFrame1 != NULL && pFrame2 != NULL && pAnimItem1.get() != pAnimItem2.get())
+                if (pFrame1 != nullptr && pFrame2 != nullptr && pAnimItem1.get() != pAnimItem2.get())
                 {
                     //get the interpolation factor and then apply the requested blend to the two frames.
                     f32 fFactor = (infBlendlinePosition - pAnimItem1->fBlendlinePosition) / (pAnimItem2->fBlendlinePosition - pAnimItem1->fBlendlinePosition);
@@ -110,11 +110,11 @@ namespace ChilliSource
                             break;
                     }
                 }
-                else if (pFrame1 != NULL)
+                else if (pFrame1 != nullptr)
                 {
                     mCurrentAnimationData = pFrame1;
                 }
-                else if (pFrame2 != NULL)
+                else if (pFrame2 != nullptr)
                 {
                     mCurrentAnimationData = pFrame2;
                 }
@@ -344,7 +344,7 @@ namespace ChilliSource
         {
             SkinnedAnimationFramePtr outFrame(new SkinnedAnimationFrame());
 			
-            if(inFrameA != NULL && inFrameB != NULL)
+            if(inFrameA != nullptr && inFrameB != nullptr)
             {
                 //iterate through each translation
                 outFrame->mNodeTranslations.reserve(inFrameB->mNodeTranslations.size());

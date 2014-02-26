@@ -106,7 +106,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CMaterial::SetTexture(const TexturePtr &inpTexture, u32 inudwIndex)
 		{
-            if(inpTexture == NULL)
+            if(inpTexture == nullptr)
                 return;
             
             if(mTextures.size() > inudwIndex)
@@ -125,7 +125,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CMaterial::AddTexture(const TexturePtr &inpTexture)
 		{
-            if(inpTexture == NULL)
+            if(inpTexture == nullptr)
                 return;
             
 			mTextures.push_back(inpTexture);

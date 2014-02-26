@@ -129,9 +129,9 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void ImageLoader::CreatePNGImageFromFile(const s8* inpbyData, u32 inudwDataSize, Core::CImage::Format ineFormat, Core::CImage* outpImage)
 		{
-            CFDataRef pData = CFDataCreateWithBytesNoCopy(NULL, (u8*)inpbyData, inudwDataSize, kCFAllocatorNull);
+            CFDataRef pData = CFDataCreateWithBytesNoCopy(nullptr, (u8*)inpbyData, inudwDataSize, kCFAllocatorNull);
             CGDataProviderRef imgDataProvider = CGDataProviderCreateWithCFData(pData);
-            CGImageRef cgImage = CGImageCreateWithPNGDataProvider(imgDataProvider, NULL, true, kCGRenderingIntentDefault);
+            CGImageRef cgImage = CGImageCreateWithPNGDataProvider(imgDataProvider, nullptr, true, kCGRenderingIntentDefault);
             
             // Get the width and height of the image
             u32 udwWidth = CGImageGetWidth(cgImage);
@@ -255,9 +255,9 @@ namespace ChilliSource
         //----------------------------------------------------------------
         void ImageLoader::CreateJPGImageFromFile(const s8* inpbyData, u32 inudwDataSize, Core::CImage::Format ineFormat, Core::CImage* outpImage)
         {
-            CFDataRef pData = CFDataCreateWithBytesNoCopy(NULL, (u8*)inpbyData, inudwDataSize, kCFAllocatorNull);
+            CFDataRef pData = CFDataCreateWithBytesNoCopy(nullptr, (u8*)inpbyData, inudwDataSize, kCFAllocatorNull);
             CGDataProviderRef imgDataProvider = CGDataProviderCreateWithCFData(pData);
-            CGImageRef cgImage = CGImageCreateWithJPEGDataProvider(imgDataProvider, NULL, true, kCGRenderingIntentDefault);
+            CGImageRef cgImage = CGImageCreateWithJPEGDataProvider(imgDataProvider, nullptr, true, kCGRenderingIntentDefault);
             
             // Get the width and height of the image
             u32 udwWidth = CGImageGetWidth(cgImage);

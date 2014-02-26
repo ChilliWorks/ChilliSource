@@ -22,7 +22,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//-------------------------------------------------------------
-		CEntity::CEntity() : mbVisible(true), mpParent(NULL), mpOwningScene(NULL), mpEntityAnimationController(EntityAnimationControllerPtr())
+		CEntity::CEntity() : mbVisible(true), mpParent(nullptr), mpOwningScene(nullptr), mpEntityAnimationController(EntityAnimationControllerPtr())
 		{
 		}
 		//-------------------------------------------------------------
@@ -62,7 +62,7 @@ namespace ChilliSource
 			{
 				mLocalTransform.RemoveChildTransform(&inpEntity->Transform());
 				
-				inpEntity->mpParent = NULL;
+				inpEntity->mpParent = nullptr;
 				
 				if(mpOwningScene)
 				{
@@ -83,7 +83,7 @@ namespace ChilliSource
 			
 			for(SharedEntityList::iterator it = mEntities.begin(); it != mEntities.end(); ++it)
 			{
-				(*it)->mpParent = NULL;
+				(*it)->mpParent = nullptr;
 				
 				if(mpOwningScene)
 				{
@@ -164,7 +164,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------
 		/// GetParent
 		/// 
-		/// Return the parent entity of this entity. NULL is returned naturally if
+		/// Return the parent entity of this entity. nullptr is returned naturally if
 		/// there is no parent.
 		///
 		/// @return Pointer to the parent entity of this
@@ -178,7 +178,7 @@ namespace ChilliSource
 		/// 
 		/// Recursively search the entity hierarchy in a depth-first manner
 		/// and return a pointer to the first entity it finds with the name matching
-		/// parameter instrName, or NULL if no match found.
+		/// parameter instrName, or nullptr if no match found.
 		///
 		/// @return A child entity with the specified name
 		//------------------------------------------------------------------
@@ -200,7 +200,7 @@ namespace ChilliSource
 				}
 			}
 			
-			return NULL;
+			return nullptr;
 		}
         //------------------------------------------------------------------
         /// To JSON
@@ -245,7 +245,7 @@ namespace ChilliSource
         /// 
         /// Search only immediate children to an entity and return a pointer
         /// to the first entity it finds with the name matching parameter 
-        /// instrName, or NULL if no match found.
+        /// instrName, or nullptr if no match found.
         ///
         /// @return A child entity with the specified name
         //------------------------------------------------------------------
@@ -420,7 +420,7 @@ namespace ChilliSource
 				}
 			}
 			
-			return NULL;
+			return nullptr;
 		}
 		//-------------------------------------------------------------
 		/// Get Components  (Non managed)
@@ -548,7 +548,7 @@ namespace ChilliSource
                 }
             }
 			
-			return NULL;
+			return nullptr;
 		}
 		//-------------------------------------------------------------
 		/// Get Components  (Non managed Recursive)
@@ -608,7 +608,7 @@ namespace ChilliSource
 				{
 					if(inpComponent.get() == (*it).get())
 					{
-                        inpComponent->SetEntityOwner(NULL);
+                        inpComponent->SetEntityOwner(nullptr);
                         std::swap(mComponents.back(), *it);
                         mComponents.pop_back();
                         
@@ -654,42 +654,6 @@ namespace ChilliSource
 			return pEntity;
 		}
 		//-------------------------------------------------------------
-		/// Attach
-		///
-		/// @param Component to attach to the entity
-		//-------------------------------------------------------------
-		void operator +=(const EntityPtr& pEnt, const ComponentPtr& pComp)
-		{
-			pEnt->Attach(pComp);
-		}
-		//-------------------------------------------------------------
-		/// Detach
-		///
-		/// @param Component to remove from the entity
-		//-------------------------------------------------------------
-		void operator -=(const EntityPtr& pEnt, const ComponentPtr& pComp)
-		{
-			pEnt->Detach(pComp);
-		}
-		//-------------------------------------------------------------
-		/// Add Child
-		///
-		/// @param Entity to derive transform from
-		//-------------------------------------------------------------
-		void operator +=(const EntityPtr& pEnt, const EntityPtr& pChild)
-		{
-			pEnt->AddChild(pChild);
-		}
-		//-------------------------------------------------------------
-		/// Remove Child
-		///
-		/// @param Entity to remove
-		//-------------------------------------------------------------
-		void operator -=(const EntityPtr& pEnt, const EntityPtr& pChild)
-		{
-			pEnt->RemoveChild(pChild);
-		}
-		//-------------------------------------------------------------
 		/// Has Name
 		///
 		/// @return Whether this entity is named
@@ -728,7 +692,7 @@ namespace ChilliSource
             ComponentList ComponentsCopy = mComponents;
             for (ComponentList::const_iterator itr = ComponentsCopy.begin(); itr != ComponentsCopy.end(); ++itr)
 			{
-				(*itr)->SetEntityOwner(NULL);
+				(*itr)->SetEntityOwner(nullptr);
 			}
             mComponents.clear();
             
@@ -760,10 +724,10 @@ namespace ChilliSource
 			ComponentList ComponentsCopy = mComponents;
             for (ComponentList::const_iterator itr = ComponentsCopy.begin(); itr != ComponentsCopy.end(); ++itr) 
 			{
-				(*itr)->SetEntityOwner(NULL);
+				(*itr)->SetEntityOwner(nullptr);
 			}
             
-            mpOwningScene = NULL;
+            mpOwningScene = nullptr;
 			
 			RemoveAllChildren();
 		}

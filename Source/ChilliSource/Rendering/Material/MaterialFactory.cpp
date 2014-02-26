@@ -28,7 +28,7 @@ namespace ChilliSource
         /// Constructor
         //---------------------------------------------------
         CMaterialFactory::CMaterialFactory()
-        : mpTextureManager(NULL), mpShaderManager(NULL), mpCubemapManager(NULL), mpRenderCapabilities(NULL)
+        : mpTextureManager(nullptr), mpShaderManager(nullptr), mpCubemapManager(nullptr), mpRenderCapabilities(nullptr)
         {
             
         }
@@ -352,7 +352,7 @@ namespace ChilliSource
         //---------------------------------------------------
         ITextureManager* CMaterialFactory::GetTextureManager() const
         {
-            if(mpTextureManager == NULL)
+            if(mpTextureManager == nullptr)
             {
                 mpTextureManager = GET_RESOURCE_MANAGER(ITextureManager);
             }
@@ -364,7 +364,7 @@ namespace ChilliSource
         //---------------------------------------------------
         IShaderManager* CMaterialFactory::GetShaderManager() const
         {
-            if(mpShaderManager == NULL)
+            if(mpShaderManager == nullptr)
             {
                 mpShaderManager = GET_RESOURCE_MANAGER(IShaderManager);
             }
@@ -376,7 +376,7 @@ namespace ChilliSource
         //---------------------------------------------------
         ICubemapManager* CMaterialFactory::GetCubemapManager() const
         {
-            if(mpCubemapManager == NULL)
+            if(mpCubemapManager == nullptr)
             {
                 mpCubemapManager = GET_RESOURCE_MANAGER(ICubemapManager);
             }
@@ -388,7 +388,7 @@ namespace ChilliSource
         //---------------------------------------------------
         IRenderCapabilities* CMaterialFactory::GetRenderCapabilities() const
         {
-        	if(mpRenderCapabilities == NULL)
+        	if(mpRenderCapabilities == nullptr)
 			{
         		mpRenderCapabilities = Core::CApplication::GetSystemImplementing<IRenderCapabilities>();
         		MOFLOW_ASSERT(mpRenderCapabilities, "Material Factor is missing required system: Render Capabilities.");

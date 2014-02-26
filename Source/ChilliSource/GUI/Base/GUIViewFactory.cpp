@@ -145,7 +145,7 @@ namespace ChilliSource
             bool bExtern = false;
             Core::StorageLocation eStorageLoc;
             
-            for(rapidxml::xml_attribute<> * pAttr = inpViewElement->first_attribute(); pAttr != NULL; pAttr = pAttr->next_attribute())
+            for(rapidxml::xml_attribute<> * pAttr = inpViewElement->first_attribute(); pAttr != nullptr; pAttr = pAttr->next_attribute())
             {
                 if(pAttr->isNamed("Type"))
                 {
@@ -184,7 +184,7 @@ namespace ChilliSource
 				}
                 
 				//Now we need to do some recursion and load any subviews
-                for(rapidxml::xml_node<> * pNode = inpViewElement->first_node(); pNode != NULL; pNode = pNode->next_sibling())
+                for(rapidxml::xml_node<> * pNode = inpViewElement->first_node(); pNode != nullptr; pNode = pNode->next_sibling())
 				{
                     if(pNode->type() == rapidxml::node_element)
                         pView->AddSubview(CreateView(pNode, outpViews));

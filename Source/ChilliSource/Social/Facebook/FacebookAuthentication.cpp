@@ -28,7 +28,7 @@ namespace ChilliSource
 #elif TARGET_ANDROID
             return new ChilliSource::Android::CFacebookAuthenticationSystem();
 #endif
-			return NULL;
+			return nullptr;
         }
     }
 }

@@ -66,19 +66,19 @@ namespace ChilliSource
         f32 CApplication::mfUpdateInterval = kfDefaultUpdateInterval;
         f32 CApplication::mfUpdateSpeed = 1.0f;
         
-        Rendering::IRenderSystem* CApplication::mpRenderSystem = NULL;
-        Input::IInputSystem * CApplication::mpInputSystem = NULL;
-        IPlatformSystem* CApplication::pPlatformSystem = NULL;
-		Audio::IAudioSystem* CApplication::pAudioSystem = NULL;
-		Rendering::CRenderer* CApplication::mpRenderer = NULL;
-		IFileSystem* CApplication::mspFileSystem = NULL;
+        Rendering::IRenderSystem* CApplication::mpRenderSystem = nullptr;
+        Input::IInputSystem * CApplication::mpInputSystem = nullptr;
+        IPlatformSystem* CApplication::pPlatformSystem = nullptr;
+		Audio::IAudioSystem* CApplication::pAudioSystem = nullptr;
+		Rendering::CRenderer* CApplication::mpRenderer = nullptr;
+		IFileSystem* CApplication::mspFileSystem = nullptr;
         
         DYNAMIC_ARRAY<IUpdateable*> CApplication::mUpdateableSystems;
         DYNAMIC_ARRAY<SystemPtr> CApplication::mSystems;
         
         ScreenOrientation CApplication::meDefaultOrientation = ScreenOrientation::k_landscapeRight;
         
-        CResourceManagerDispenser* CApplication::mpResourceManagerDispenser = NULL;
+        CResourceManagerDispenser* CApplication::mpResourceManagerDispenser = nullptr;
 
         SystemConfirmDialog::Delegate CApplication::mActiveSysConfirmDelegate;
 
@@ -149,7 +149,7 @@ namespace ChilliSource
             LoadDefaultResources();
 			OnScreenChangedOrientation(meDefaultOrientation);
 
-			if (mStateMgr.GetActiveScenePtr() == NULL)
+			if (mStateMgr.GetActiveScenePtr() == nullptr)
 				PushInitialState();
 
 			//Register for update events
@@ -201,7 +201,7 @@ namespace ChilliSource
 		///
 		/// Looks for a system that implements the given interface (i.e. a 2DRenderSystem etc)
 		/// @param The type ID of the system you wish to implement
-		/// @return System that implements the given interface or NULL if no system
+		/// @return System that implements the given interface or nullptr if no system
 		//--------------------------------------------------------------------------------------------------
 		SystemPtr CApplication::GetSystemImplementing(InterfaceIDType inInterfaceID)
 		{
@@ -254,7 +254,7 @@ namespace ChilliSource
 			}
 			
 			WARNING_LOG("Application cannot find resource provider");
-			return NULL;
+			return nullptr;
 		}
         //--------------------------------------------------------------------------------------------------
         /// Get State Manager
@@ -556,7 +556,7 @@ namespace ChilliSource
         	if(mActiveSysConfirmDelegate)
         	{
         		mActiveSysConfirmDelegate(inudwID, ineResult);
-        		mActiveSysConfirmDelegate = NULL;
+        		mActiveSysConfirmDelegate = nullptr;
         	}
         }
         //--------------------------------------------------------------------------------------------------
@@ -660,7 +660,7 @@ namespace ChilliSource
             s_updateIntervalRemainder = CMathUtils::Min(s_updateIntervalRemainder + infDt, GetUpdateIntervalMax());
             
 			//Force the input system to distribute any buffered input
-			if(mpInputSystem != NULL)
+			if(mpInputSystem != nullptr)
 			{
 				mpInputSystem->FlushBufferedInput();
 			}
@@ -813,7 +813,7 @@ namespace ChilliSource
 		{
 			DEBUG_LOG("App Resuming...");
             
-			if(mpRenderSystem != NULL)
+			if(mpRenderSystem != nullptr)
 			{
 				mpRenderSystem->Resume();
 			}

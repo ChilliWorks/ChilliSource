@@ -86,7 +86,7 @@ namespace ChilliSource
             //-----------------------------------------------------------
 			void DrawString(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
 							const Core::CColour & insColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
-							GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped = NULL, bool * outpInvalidCharacterFound = NULL);
+							GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped = nullptr, bool * outpInvalidCharacterFound = nullptr);
             
             void DrawDistanceString(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                     const Core::CColour & insColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
@@ -147,7 +147,7 @@ namespace ChilliSource
 			//-------------------------------------------
 			static void BuildString(const FontPtr& inpFont, const Core::UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
 							const Core::CVector2& invBounds, u32 inudwNumLines, GUI::TextJustification ineJustification, GUI::TextJustification ineVerticalJustification,
-							bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour,  bool * outpClipped = NULL, bool * outpInvalidCharacterFound = NULL);
+							bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour,  bool * outpClipped = nullptr, bool * outpInvalidCharacterFound = nullptr);
 			//----------------------------------------------------
 			/// Build Character
 			///
@@ -163,7 +163,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			static CharacterResult BuildCharacter(const FontPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
                                                    const Core::CVector2& invCursor, f32 infTextScale, f32 infCharSpacing,
-                                                   f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound = NULL);
+                                                   f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound = nullptr);
             //----------------------------------------------------
             /// Wrap
             ///

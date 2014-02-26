@@ -78,8 +78,8 @@ namespace ChilliSource
             /// Set Target Textures
             ///
             /// Sets the textures which will be rendered into. If the
-            /// depth texture is NULL a depth buffer will be
-            /// created. If the colour texture is NULL only the
+            /// depth texture is nullptr a depth buffer will be
+            /// created. If the colour texture is nullptr only the
             /// depth texture will be attached.
             ///
             /// @param The colour texture.

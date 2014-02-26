@@ -191,7 +191,7 @@ namespace ChilliSource
             struct TextureUnit
             {
                 TextureUnit()
-                : pObjectID(NULL), dwTextureSlot(-1)
+                : pObjectID(nullptr), dwTextureSlot(-1)
                 {
                     
                 }

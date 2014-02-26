@@ -45,7 +45,7 @@ namespace ChilliSource
                 return MakeRequest(sDetails, inpRequest->GetCompletionDelegate());
             }
             
-            return NULL;
+            return nullptr;
         }
 	}
 }

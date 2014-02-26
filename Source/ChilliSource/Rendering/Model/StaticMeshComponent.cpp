@@ -203,7 +203,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void CStaticMeshComponent::SetMaterialForSubMesh(const MaterialPtr& inpMaterial, const std::string& instrSubMeshName)
         {
-            if (NULL != mpModel)
+            if (nullptr != mpModel)
             {
                 s32 indwIndex = mpModel->GetSubMeshIndexByName(instrSubMeshName);
                 if (indwIndex >= 0 && indwIndex < mMaterials.size())
@@ -235,7 +235,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         MaterialPtr CStaticMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
         {
-            if (NULL != mpModel)
+            if (nullptr != mpModel)
             {
                 s32 indwIndex = mpModel->GetSubMeshIndexByName(instrSubMeshName);
             
@@ -325,7 +325,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CStaticMeshComponent::RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam)
 		{
-            if (mspShadowMapMaterial == NULL)
+            if (mspShadowMapMaterial == nullptr)
             {
                 mspShadowMapMaterial = Core::CApplication::GetSystemImplementing<CMaterialFactory>()->CreateStaticDirectionalShadowMap();
             }
@@ -386,7 +386,7 @@ namespace ChilliSource
                     
 					//if the material load has failed, either fall back on the previous material, or stop getting materials if this is the
 					//first mesh as theres no material to fall back on.
-					if (pMaterial.get() == NULL)
+					if (pMaterial.get() == nullptr)
 					{
 						if (i == 0)
 							break;

@@ -20,7 +20,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        CResourceManagerDispenser* CResourceManagerDispenser::pInstance = NULL;
+        CResourceManagerDispenser* CResourceManagerDispenser::pInstance = nullptr;
         //----------------------------------------------------
         /// Constructor
         ///
@@ -64,7 +64,7 @@ namespace ChilliSource
         ///
         /// Looks for a manager with the given interface
         /// @param The type ID of the manager interface you are seeking
-        /// @return Manager that implements the given interface or NULL if none available
+        /// @return Manager that implements the given interface or nullptr if none available
         //--------------------------------------------------------------------------------------------------
         IResourceManager* CResourceManagerDispenser::GetResourceManagerWithInterface(InterfaceIDType inInterfaceID)
         {
@@ -77,7 +77,7 @@ namespace ChilliSource
 			}
             
             WARNING_LOG("Application cannot find resource manager for type");
-            return NULL;
+            return nullptr;
         }
 		//--------------------------------------------------------------------------------------------------
 		/// Get Resource Manager For Type
@@ -97,7 +97,7 @@ namespace ChilliSource
 			}
 			
 			WARNING_LOG("Application cannot find resource manager for type");
-			return NULL;
+			return nullptr;
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get Resource Manager For Extension
@@ -117,7 +117,7 @@ namespace ChilliSource
 			}
 			
 			WARNING_LOG("Application cannot find resource manager for extension " + instrExtension);
-			return NULL;
+			return nullptr;
 		}
         //----------------------------------------------------------------------
 		/// Free Resource Caches

@@ -32,10 +32,10 @@ namespace ChilliSource
 			virtual bool CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const = 0;
 			virtual IInputDevice * GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID) = 0;
 			
-			virtual ITouchScreen * GetTouchScreenPtr(){return NULL;}
-			virtual IAccelerometer * GetAccelerometerPtr(){return NULL;}
-			virtual IVirtualKeyboard* GetVirtualKeyboardPtr(){return NULL;}
-			virtual IMouse* GetMousePtr(){return NULL;}
+			virtual ITouchScreen * GetTouchScreenPtr(){return nullptr;}
+			virtual IAccelerometer * GetAccelerometerPtr(){return nullptr;}
+			virtual IVirtualKeyboard* GetVirtualKeyboardPtr(){return nullptr;}
+			virtual IMouse* GetMousePtr(){return nullptr;}
             
             virtual void FlushBufferedInput(){};
             

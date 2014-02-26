@@ -73,7 +73,7 @@ namespace ChilliSource
 		public:
 			DECLARE_NAMED_INTERFACE(CMoMetricsSystem);
 			
-			CMoMetricsSystem(IHttpConnectionSystem * inpHttpSystem, const std::string& instrMoMetricsServerURL, const std::string& instrAppID, IExternalMetrics* inpExternalMetrics = NULL);
+			CMoMetricsSystem(IHttpConnectionSystem * inpHttpSystem, const std::string& instrMoMetricsServerURL, const std::string& instrAppID, IExternalMetrics* inpExternalMetrics = nullptr);
             ~CMoMetricsSystem();
 			
             bool IsA(Core::InterfaceIDType inInterfaceID) const;

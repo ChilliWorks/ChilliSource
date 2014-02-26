@@ -100,7 +100,7 @@ namespace ChilliSource
         {
             //The point light matrix is simply a light view matrix
             //as the projection is done in the shader
-            if(mbMatrixCacheValid == false && GetEntityOwner() != NULL)
+            if(mbMatrixCacheValid == false && GetEntityOwner() != nullptr)
             {
                 mmatLight = GetEntityOwner()->Transform().GetWorldTransform().Inverse();
                 mbMatrixCacheValid = true;

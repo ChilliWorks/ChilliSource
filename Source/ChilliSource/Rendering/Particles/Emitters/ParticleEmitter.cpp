@@ -269,7 +269,7 @@ namespace ChilliSource
             Core::CVector3 vUp = matCamWorld.Up();
             Core::CVector3 vForward = matCamWorld.Forward();
             
-            const Core::CMatrix4x4 * pTransform = NULL;
+            const Core::CMatrix4x4 * pTransform = nullptr;
             if(mbIsGlobalSpace == false)
             {
                 pTransform = &matTrans;
@@ -287,7 +287,7 @@ namespace ChilliSource
 
                     UpdateSpriteData(mParticles.vTranslation[i], mParticles.Col[i], sData, qRot * vRight, qRot * vUp, mParticles.vScale[i]);
                     
-                    if (sData.pMaterial->GetActiveShaderProgram() != NULL)
+                    if (sData.pMaterial->GetActiveShaderProgram() != nullptr)
                     {
                         inpRenderSystem->GetDynamicSpriteBatchPtr()->Render(inpRenderSystem, sData, pTransform);
                     }

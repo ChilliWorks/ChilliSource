@@ -10,7 +10,7 @@
 #include <ChilliSource/Backend/Platform/iOS/Input/Pointer/TouchScreen.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-ChilliSource::iOS::CTouchScreen* gpTouchScreenInstance = NULL;
+ChilliSource::iOS::CTouchScreen* gpTouchScreenInstance = nullptr;
 
 namespace ChilliSource
 {
@@ -24,7 +24,7 @@ namespace ChilliSource
 		}
 		CTouchScreen::~CTouchScreen()
 		{
-			gpTouchScreenInstance = NULL;
+			gpTouchScreenInstance = nullptr;
 		}
 		bool CTouchScreen::IsA(Core::InterfaceIDType inInterfaceID) const
 		{

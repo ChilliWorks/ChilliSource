@@ -46,7 +46,7 @@ namespace ChilliSource
                 if(mudwFreeMemory < inudwSize)
                 {
                     ERROR_LOG("Static mem pool out of memory");
-                    return NULL;
+                    return nullptr;
                 }
 
                 //Work out how many chunks are required based on the size requested
@@ -87,7 +87,7 @@ namespace ChilliSource
                     }
                 }
 
-                return NULL;
+                return nullptr;
             }
             //-----------------------------------------------------------------------
             /// Release

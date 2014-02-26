@@ -30,7 +30,7 @@ namespace ChilliSource
 			
             bool IsA(Core::InterfaceIDType inID) const;
 			
-            void Authenticate( const DYNAMIC_ARRAY<std::string>& inastrReadPermissions = DYNAMIC_ARRAY<std::string>(), const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate = NULL);
+            void Authenticate( const DYNAMIC_ARRAY<std::string>& inastrReadPermissions = DYNAMIC_ARRAY<std::string>(), const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate = nullptr);
 			
             bool IsSignedIn() const;
             std::string GetActiveToken() const;

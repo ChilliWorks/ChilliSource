@@ -43,7 +43,7 @@ namespace ChilliSource
 		
 		void EntityTransform::FromXml(rapidxml::xml_node<> * inpEl)
 		{
-            for(rapidxml::xml_attribute<> * pAttr = inpEl->first_attribute(); pAttr != NULL; pAttr = pAttr->next_attribute())
+            for(rapidxml::xml_attribute<> * pAttr = inpEl->first_attribute(); pAttr != nullptr; pAttr = pAttr->next_attribute())
             {
                 if(pAttr->isNamed("translation") )
                 {
@@ -197,7 +197,7 @@ namespace ChilliSource
             if(inpDesc->strName == instrName)
                 return inpDesc;
             
-            CSceneDesc::EntityDesc* pEntityDesc = NULL;
+            CSceneDesc::EntityDesc* pEntityDesc = nullptr;
             
             for(u32 udwChild = 0; udwChild < inpDesc->aChildEntities.size() && !pEntityDesc; ++udwChild)
             {
@@ -249,7 +249,7 @@ namespace ChilliSource
 			bCustomEntityDefinition = !inpEntityEl->isNamed("Entity");
 
 			
-            for(rapidxml::xml_attribute<> * pAttr = inpEntityEl->first_attribute(); pAttr != NULL; pAttr = pAttr->next_attribute())
+            for(rapidxml::xml_attribute<> * pAttr = inpEntityEl->first_attribute(); pAttr != nullptr; pAttr = pAttr->next_attribute())
             {
                 // Read name
                 if(pAttr->isNamed("name"))
@@ -263,7 +263,7 @@ namespace ChilliSource
                 }
 			}
 
-            for(rapidxml::xml_node<> * pNode = inpEntityEl->first_node(); pNode != NULL; pNode = pNode->next_sibling())
+            for(rapidxml::xml_node<> * pNode = inpEntityEl->first_node(); pNode != nullptr; pNode = pNode->next_sibling())
             {
                 // Read transform
                 if(pNode->isNamed("Transform"))
@@ -273,7 +273,7 @@ namespace ChilliSource
                 // Read components
                 else if (pNode->isNamed("Components"))
                 {
-                    for(rapidxml::xml_node<> * pComp = pNode->first_node(); pComp != NULL; pComp = pComp->next_sibling())
+                    for(rapidxml::xml_node<> * pComp = pNode->first_node(); pComp != nullptr; pComp = pComp->next_sibling())
                     {
                         aComponents.push_back(ComponentDesc());
                         aComponents.back().FromXml(pComp);
@@ -282,7 +282,7 @@ namespace ChilliSource
                 // Cycle through child elements processing Entity, CustomEntity and Node
                 else if (pNode->isNamed("Children"))
                 {
-                    for(rapidxml::xml_node<> * pChild = pNode->first_node(); pChild != NULL; pChild = pChild->next_sibling())
+                    for(rapidxml::xml_node<> * pChild = pNode->first_node(); pChild != nullptr; pChild = pChild->next_sibling())
                     {
                         if(pChild->isNamed("Entity") || pChild->isNamed("CustomEntity") )
                         {
@@ -309,7 +309,7 @@ namespace ChilliSource
 		void CSceneDesc::ComponentDesc::FromXml(rapidxml::xml_node<> * inpComponentEl){
             
             strType= inpComponentEl->name();
-            for(rapidxml::xml_attribute<> * pAttr = inpComponentEl->first_attribute(); pAttr != NULL; pAttr = pAttr->next_attribute())
+            for(rapidxml::xml_attribute<> * pAttr = inpComponentEl->first_attribute(); pAttr != nullptr; pAttr = pAttr->next_attribute())
             {
                 if(pAttr->isNamed("name") )
                 {
@@ -321,7 +321,7 @@ namespace ChilliSource
                 }
             }
             
-            for(rapidxml::xml_node<> * pNode = inpComponentEl->first_node(); pNode != NULL; pNode = pNode->next_sibling())
+            for(rapidxml::xml_node<> * pNode = inpComponentEl->first_node(); pNode != nullptr; pNode = pNode->next_sibling())
             {
                 if(pNode->isNamed("Params"))
                 {

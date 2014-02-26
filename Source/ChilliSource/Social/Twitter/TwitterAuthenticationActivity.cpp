@@ -28,7 +28,7 @@ namespace ChilliSource
 #elif TARGET_ANDROID
             return new ChilliSource::Android::CTwitterAuthenticationActivity();
 #endif
-			return NULL;
+			return nullptr;
         }
         
 		//--------------------------------------------------------------

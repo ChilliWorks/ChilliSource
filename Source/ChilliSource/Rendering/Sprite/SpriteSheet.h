@@ -197,7 +197,7 @@ namespace ChilliSource
 			//---------------------------------------------------------------------
 			/// GetFramesForAnimation
 			/// @param Integer index for which animation to return
-			/// @return Pointer to a vector containing the frame indices for the given animation or NULL if inudwAnimIndex is invalid
+			/// @return Pointer to a vector containing the frame indices for the given animation or nullptr if inudwAnimIndex is invalid
 			//---------------------------------------------------------------------
 			const DYNAMIC_ARRAY<u32> * GetFramesForAnimation(u32 inudwAnimIndex) const;
 			//---------------------------------------------------------------------

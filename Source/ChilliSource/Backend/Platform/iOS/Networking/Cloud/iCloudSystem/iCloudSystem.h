@@ -73,7 +73,7 @@ namespace ChilliSource
             /// @param SyncConflictDelegate - Delegate to call when conflict between local and cloud is detected (Note:: if none is provided the sync to cloud will be cancelled automatically)
             /// @return False if iCloud not enabled on system or < iOS 5.0
             //-------------------------------------------------------------
-            bool SyncFileToCloud(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string& instrFilePath, ICloudStorageSystem::OnSyncFileCompletedDelegate ineSyncCompleteDelegate = NULL, ICloudStorageSystem::OnSyncConflictDelegate ineSyncConflictDelegate = NULL);
+            bool SyncFileToCloud(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string& instrFilePath, ICloudStorageSystem::OnSyncFileCompletedDelegate ineSyncCompleteDelegate = nullptr, ICloudStorageSystem::OnSyncConflictDelegate ineSyncConflictDelegate = nullptr);
             
             //////////////////////
             //  File Queries    //
@@ -111,8 +111,8 @@ namespace ChilliSource
                 Networking::ICloudStorageSystem::OnSyncConflictDelegate mpcSyncConflictDelegate;
                 Networking::ICloudStorageSystem::OnSyncFileCompletedDelegate mpcSyncCompletedDelegate;
 
-                CloudFileSyncRequest(Core::StorageLocation ineStorageLocation, const std::string& instrLocalFilePath, Networking::ICloudStorageSystem::OnSyncConflictDelegate incSyncConflictDelegate = NULL,
-                                     Networking::ICloudStorageSystem::OnSyncFileCompletedDelegate incSyncCompletedDelegate = NULL)
+                CloudFileSyncRequest(Core::StorageLocation ineStorageLocation, const std::string& instrLocalFilePath, Networking::ICloudStorageSystem::OnSyncConflictDelegate incSyncConflictDelegate = nullptr,
+                                     Networking::ICloudStorageSystem::OnSyncFileCompletedDelegate incSyncCompletedDelegate = nullptr)
                 {
                     mstrLocalFilePath = instrLocalFilePath;
                     meLocalStorageLocation = ineStorageLocation;

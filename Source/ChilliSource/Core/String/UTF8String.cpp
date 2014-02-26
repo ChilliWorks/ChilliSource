@@ -115,7 +115,7 @@ namespace ChilliSource
                 return &mCodePoints[0];
             }
 
-            return NULL;
+            return nullptr;
         }
         //---------------------------------------------------------
         /// End (Const)
@@ -129,7 +129,7 @@ namespace ChilliSource
                 return &mCodePoints[0] + mCodePoints.size();
             }
 
-            return NULL;
+            return nullptr;
         }
         //---------------------------------------------------------
         /// Begin
@@ -143,7 +143,7 @@ namespace ChilliSource
                 return &mCodePoints[0];
             }
 
-            return NULL;
+            return nullptr;
         }
         //---------------------------------------------------------
         /// End
@@ -157,7 +157,7 @@ namespace ChilliSource
                 return &mCodePoints[0] + mCodePoints.size();
             }
 
-            return NULL;
+            return nullptr;
         }
         //---------------------------------------------------------
         /// Next
@@ -352,7 +352,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         const CUTF8String::CodePoint* CUTF8String::data() const
         {
-            return mCodePoints.empty()? NULL : &mCodePoints[0];
+            return mCodePoints.empty()? nullptr : &mCodePoints[0];
         }
         //---------------------------------------------------------
         /// Data Size

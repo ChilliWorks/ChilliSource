@@ -151,7 +151,7 @@ namespace ChilliSource
 				}
 			}
 			
-			return NULL;
+			return nullptr;
 		}
 		//-----------------------------------------
 		/// Init
@@ -204,9 +204,9 @@ namespace ChilliSource
 			Core::CApplication::SetRenderer(new Rendering::CRenderer(Core::CApplication::GetRenderSystemPtr()));
             
 			//Initialise the input system
-			if(Core::CApplication::GetInputSystemPtr() != NULL)
+			if(Core::CApplication::GetInputSystemPtr() != nullptr)
 			{
-				Core::CApplication::SetHasTouchInput((Core::CApplication::GetInputSystemPtr()->GetTouchScreenPtr() != NULL));
+				Core::CApplication::SetHasTouchInput((Core::CApplication::GetInputSystemPtr()->GetTouchScreenPtr() != nullptr));
 			}
 		}
 		//-------------------------------------------------
@@ -219,7 +219,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void CPlatformSystem::PostCreateSystems()
 		{
-            if(Core::CApplication::GetAudioSystemPtr() != NULL)
+            if(Core::CApplication::GetAudioSystemPtr() != nullptr)
 			{
 				Audio::CAudioPlayer::Init();
 			}
@@ -285,11 +285,11 @@ namespace ChilliSource
         ///
         /// @param InterfaceID to generate
         /// @param Vector of existing systems
-        /// @return A handle to the given system or NULL if the platform cannot support it
+        /// @return A handle to the given system or nullptr if the platform cannot support it
         //-----------------------------------------
 		Core::ISystem* CPlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<Core::SystemPtr> & inaExistingSystems) const
         {
-			Core::ISystem * pResult = NULL;
+			Core::ISystem * pResult = nullptr;
 			
 			MapInterfaceIDToSystemFunc::const_iterator pFunc(mmapInterfaceIDToSystemFunc.find(inInterfaceID));
 			
@@ -323,7 +323,7 @@ namespace ChilliSource
 		/// Tries to create a platform specific implementation with the given interface
 		///
 		/// @param InterfaceID to generate
-		/// @return A handle to the given activity or NULL if the platform cannot support it
+		/// @return A handle to the given activity or nullptr if the platform cannot support it
 		//-----------------------------------------
 		Core::IActivity* CPlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
         {
@@ -334,7 +334,7 @@ namespace ChilliSource
 				return pFunc->second();
 			}
 			
-			return NULL;
+			return nullptr;
 		}
 		//-----------------------------------------
         /// Can Create Information Provider With Interface
@@ -354,7 +354,7 @@ namespace ChilliSource
 		/// Tries to create a platform specific implementation with the given interface
 		///
 		/// @param InterfaceID to generate
-		/// @return A handle to the given system or NULL if the platform cannot support it
+		/// @return A handle to the given system or nullptr if the platform cannot support it
 		//-----------------------------------------
 		Core::IInformationProvider* CPlatformSystem::CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
         {
@@ -363,7 +363,7 @@ namespace ChilliSource
             {
 				return pFunc->second();
 			}
-			return NULL;
+			return nullptr;
 		}
 		//--------------------------------------------
 		/// Create Systems
@@ -459,9 +459,9 @@ namespace ChilliSource
 		std::string CPlatformSystem::GetDeviceModelTypeName() const
 		{
 			size_t size = 0;
-			sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+			sysctlbyname("hw.machine", nullptr, &size, nullptr, 0);
 			char* machine = (char*)malloc(size);
-			sysctlbyname("hw.machine", machine, &size, NULL, 0);
+			sysctlbyname("hw.machine", machine, &size, nullptr, 0);
 			NSString *platform = [NSString stringWithCString:machine encoding:NSASCIIStringEncoding];
 			free(machine);
 
@@ -610,7 +610,7 @@ namespace ChilliSource
 			u32 udwNumCores = 1;
 			size_t udwSize = sizeof(udwNumCores);
 			
-			if(sysctlbyname("hw.ncpu", &udwNumCores, &udwSize, NULL, 0)) 
+			if(sysctlbyname("hw.ncpu", &udwNumCores, &udwSize, nullptr, 0)) 
 			{
 				return 1;
 			}
@@ -685,9 +685,9 @@ namespace ChilliSource
             if (mfPhysicalScreenSize < 0.0f)
             {
                 size_t size = 0;
-                sysctlbyname("hw.machine", NULL, &size, NULL, 0);
+                sysctlbyname("hw.machine", nullptr, &size, nullptr, 0);
                 char* machine = (char*)malloc(size);
-                sysctlbyname("hw.machine", machine, &size, NULL, 0);
+                sysctlbyname("hw.machine", machine, &size, nullptr, 0);
                 NSString *platform = [NSString stringWithCString:machine encoding:NSASCIIStringEncoding];
                 free(machine);
                 

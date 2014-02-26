@@ -44,7 +44,7 @@ namespace ChilliSource
             /// @param Render system
             /// @param Sprite data to batch
 			//-------------------------------------------------------
-			void Render(IRenderSystem* inpRenderSystem, const CSpriteComponent::SpriteData& inpSprite, const Core::CMatrix4x4 * inpTransform = NULL);
+			void Render(IRenderSystem* inpRenderSystem, const CSpriteComponent::SpriteData& inpSprite, const Core::CMatrix4x4 * inpTransform = nullptr);
             //-------------------------------------------------------
             /// Force Command Change
             ///

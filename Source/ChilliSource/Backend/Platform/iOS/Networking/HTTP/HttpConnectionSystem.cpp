@@ -53,7 +53,7 @@ namespace ChilliSource
 		/// Causes the system to issue a request with the given details.
 		/// @param A HttpRequestDetails struct with valid params per the documentation of HttpRequestDetails
 		/// @param (Optional) A function to call when the request is completed. Note that the request can be completed by failure/cancellation as well as success.
-		/// @return A pointer to the request. The system owns this pointer. Returns NULL if the request cannot be created.
+		/// @return A pointer to the request. The system owns this pointer. Returns nullptr if the request cannot be created.
 		//--------------------------------------------------------------------------------------------------
 		HttpRequestPtr CHttpConnectionSystem::MakeRequest(const HttpRequestDetails & insRequestDetails, IHttpRequest::CompletionDelegate inOnComplete)
         {
@@ -64,11 +64,11 @@ namespace ChilliSource
             
             //Create the URL object
             CFStringRef pstrURL = CFStringCreateWithCString(kCFAllocatorDefault, insRequestDetails.strURL.c_str(), kCFStringEncodingASCII);
-			CFURLRef pURL = CFURLCreateWithString(kCFAllocatorDefault, pstrURL, NULL);
+			CFURLRef pURL = CFURLCreateWithString(kCFAllocatorDefault, pstrURL, nullptr);
             CFRelease(pstrURL);
             
             //Create the request
-            CFHTTPMessageRef pRequest = NULL;
+            CFHTTPMessageRef pRequest = nullptr;
             
 			switch(insRequestDetails.eType)
 			{
@@ -96,8 +96,8 @@ namespace ChilliSource
 				{
 					std::string strKey = it->first;
 					std::string strValue = it->second;
-					CFStringRef cfsKey = CFStringCreateWithCString(NULL, strKey.c_str(), kCFStringEncodingASCII);
-					CFStringRef cfsValue = CFStringCreateWithCString(NULL, strValue.c_str(), kCFStringEncodingASCII);
+					CFStringRef cfsKey = CFStringCreateWithCString(nullptr, strKey.c_str(), kCFStringEncodingASCII);
+					CFStringRef cfsValue = CFStringCreateWithCString(nullptr, strValue.c_str(), kCFStringEncodingASCII);
 					CFHTTPMessageSetHeaderFieldValue(pRequest, cfsKey, cfsValue);
 					CFRelease(cfsKey);
 					CFRelease(cfsValue);
@@ -190,7 +190,7 @@ namespace ChilliSource
             {
                 //The stream could not be opened
                 CFRelease(ReadStream);
-                return NULL;
+                return nullptr;
             }
 		}
         //--------------------------------------------------------------------------------------------------
@@ -216,7 +216,7 @@ namespace ChilliSource
             s8            remotePortStr[NI_MAXSERV];
             
             sockObj = (CFDataRef) CFReadStreamCopyProperty(inReadStreamRef, kCFStreamPropertySocketNativeHandle);
-            if (sockObj != NULL)
+            if (sockObj != nullptr)
             {
                 assert(CFGetTypeID(sockObj) == CFDataGetTypeID());
                 assert(CFDataGetLength(sockObj) == sizeof(s32));
@@ -414,7 +414,7 @@ namespace ChilliSource
                         mCompletionDelegate(this, meRequestResult);
                     }
                     
-                    mCompletionDelegate = NULL;
+                    mCompletionDelegate = nullptr;
                 }
 			}
             //Track the time the request has been active so we can manually timeout
@@ -431,7 +431,7 @@ namespace ChilliSource
                 if(mCompletionDelegate)
                 {
                     mCompletionDelegate(this, IHttpRequest::CompletionResult::k_timeout);
-                    mCompletionDelegate = NULL;
+                    mCompletionDelegate = nullptr;
                 }
             }
 		}

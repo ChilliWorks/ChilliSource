@@ -19,7 +19,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//-----------------------------------------------------------------
-		IResourceManager::IResourceManager() : mpApplicationOwner(NULL)
+		IResourceManager::IResourceManager() : mpApplicationOwner(nullptr)
 		{
 		}
 		//-----------------------------------------------------------------
@@ -144,7 +144,7 @@ namespace ChilliSource
 					return (*it);
 				}
 			}
-			return NULL;
+			return nullptr;
 		}
         
         //-----------------------------------------------------------------

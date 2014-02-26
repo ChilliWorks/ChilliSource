@@ -60,7 +60,7 @@ namespace ChilliSource
                     }
                 }
 
-                return NULL;
+                return nullptr;
             }
             //------------------------------------------------------------
             /// Get Classes

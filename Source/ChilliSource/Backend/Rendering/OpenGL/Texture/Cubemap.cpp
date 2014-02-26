@@ -122,7 +122,7 @@ namespace ChilliSource
         meSFilter(Rendering::ITexture::Filter::k_linear), meTFilter(Rendering::ITexture::Filter::k_linear),
         meSWrapMode(Rendering::ITexture::WrapMode::k_clamp), meTWrapMode(Rendering::ITexture::WrapMode::k_clamp),
         mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), meImageFormat(Core::CImage::Format::k_RGBA8888),
-        mpRenderCapabilities(NULL)
+        mpRenderCapabilities(nullptr)
         {
             mpRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
         }

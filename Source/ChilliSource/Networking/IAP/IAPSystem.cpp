@@ -37,7 +37,7 @@ namespace ChilliSource
         	return new Android::CAmazonIAPSystem(inParams);
 #	endif
 #endif
-        	return NULL;
+        	return nullptr;
         }
         //---------------------------------------------------------------
         /// Is A

@@ -161,7 +161,7 @@ namespace ChilliSource
             
             DYNAMIC_ARRAY<u32> IDLookup;
             DYNAMIC_ARRAY<std::string> IDStringLookup;
-			if(idFile == NULL || idFile->IsBad())
+			if(idFile == nullptr || idFile->IsBad())
 			{
 				WARNING_LOG("Sprite loader ID lookups unavailable: .mospriteid missing");
 				

@@ -136,7 +136,7 @@ namespace ChilliSource
 						{
 							//if the image used for this texture was cached, then recreate from it
 							HASH_MAP<CTexture*, Core::ImagePtr>::iterator it = mapBackedUpImages.find(pOpenGLTexture.get());
-							if (it != mapBackedUpImages.end() && it->second != NULL)
+							if (it != mapBackedUpImages.end() && it->second != nullptr)
 							{
 								CreateTextureFromImage(it->second.get(), pOpenGLTexture->HasMipMaps(), pTexture);
 							}

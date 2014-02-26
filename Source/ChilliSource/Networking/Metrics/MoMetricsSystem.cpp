@@ -23,10 +23,10 @@ namespace ChilliSource
     {
 		DEFINE_NAMED_INTERFACE(CMoMetricsSystem);
 		
-		CMoMetricsSystem * CMoMetricsSystem::mpSingletonInstance = NULL;
+		CMoMetricsSystem * CMoMetricsSystem::mpSingletonInstance = nullptr;
 		
 		CMoMetricsSystem::CMoMetricsSystem(IHttpConnectionSystem * inpHttpSystem, const std::string& instrMoMetricsServerURL, const std::string& instrAppID, IExternalMetrics* inpExternalMetrics)
-		: mpHttpSystem(inpHttpSystem), mstrMoMetricsURL(instrMoMetricsServerURL), mstrAppID(instrAppID), mpCurrentSession(NULL), mbSessionsStarted(false), mpExternalMetrics(inpExternalMetrics)
+		: mpHttpSystem(inpHttpSystem), mstrMoMetricsURL(instrMoMetricsServerURL), mstrAppID(instrAppID), mpCurrentSession(nullptr), mbSessionsStarted(false), mpExternalMetrics(inpExternalMetrics)
 		{		
 			mpSingletonInstance = this;
 		}
@@ -96,7 +96,7 @@ namespace ChilliSource
                     mpCurrentSession->RequestClose();
                     
                     maPendingClosedSessions.push_back(mpCurrentSession);
-                    mpCurrentSession = NULL;
+                    mpCurrentSession = nullptr;
                 }
             }
             

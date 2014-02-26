@@ -44,7 +44,7 @@ namespace ChilliSource
 			
             virtual ~IFacebookAuthenticationSystem(){}
 			
-			virtual void Authenticate(const DYNAMIC_ARRAY<std::string>& inastrReadPermissions = DYNAMIC_ARRAY<std::string>(), const AuthenticationCompleteDelegate& inDelegate = NULL) = 0;
+			virtual void Authenticate(const DYNAMIC_ARRAY<std::string>& inastrReadPermissions = DYNAMIC_ARRAY<std::string>(), const AuthenticationCompleteDelegate& inDelegate = nullptr) = 0;
 			
 			virtual bool IsSignedIn() const = 0;
 			virtual std::string GetActiveToken() const = 0;

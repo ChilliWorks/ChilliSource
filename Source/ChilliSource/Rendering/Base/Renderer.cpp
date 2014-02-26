@@ -38,7 +38,7 @@ namespace ChilliSource
 		/// Constructor
 		//----------------------------------------------------------
 		CRenderer::CRenderer(IRenderSystem * inpRenderSystem) 
-        : mpRenderSystem(inpRenderSystem), mCanvas(inpRenderSystem), mpActiveCamera(NULL)
+        : mpRenderSystem(inpRenderSystem), mCanvas(inpRenderSystem), mpActiveCamera(nullptr)
 		{
 			mpTransparentSortPredicate = RendererSortPredicatePtr(new CBackToFrontSortPredicate());
             mpOpaqueSortPredicate = RendererSortPredicatePtr(new CMaterialSortPredicate());
@@ -96,12 +96,12 @@ namespace ChilliSource
             //get the width and height
             u32 udwWidth = 1;
             u32 udwHeight = 1;
-            if (inpColourTarget != NULL)
+            if (inpColourTarget != nullptr)
             {
                 udwWidth = inpColourTarget->GetWidth();
                 udwHeight = inpColourTarget->GetHeight();
             }
-            else if (inpDepthTarget != NULL)
+            else if (inpDepthTarget != nullptr)
             {
                 udwWidth = inpDepthTarget->GetWidth();
                 udwHeight = inpDepthTarget->GetHeight();
@@ -122,10 +122,10 @@ namespace ChilliSource
             DYNAMIC_ARRAY<CCameraComponent*> aCameraCache;
             DYNAMIC_ARRAY<CDirectionalLightComponent*> aDirLightCache;
             DYNAMIC_ARRAY<CPointLightComponent*> aPointLightCache;
-            CAmbientLightComponent* pAmbientLight = NULL;
+            CAmbientLightComponent* pAmbientLight = nullptr;
             
 			FindRenderableObjectsInScene(inpScene, aPreFilteredRenderCache, aCameraCache, aDirLightCache, aPointLightCache, pAmbientLight);
-            mpActiveCamera = (aCameraCache.empty() ? NULL : aCameraCache.back());
+            mpActiveCamera = (aCameraCache.empty() ? nullptr : aCameraCache.back());
             
             if(mpActiveCamera)
             {
@@ -186,11 +186,11 @@ namespace ChilliSource
                 SortTransparent(mpActiveCamera, aCameraTransparentCache);
                 Render(mpActiveCamera, ShaderPass::k_ambient, aCameraTransparentCache);
                 
-                mpRenderSystem->SetLight(NULL);
+                mpRenderSystem->SetLight(nullptr);
                 RenderUI(inpScene->GetWindowPtr());
                 
                 //Present contents of buffer to screen
-                if (inpRenderTarget != NULL)
+                if (inpRenderTarget != nullptr)
                 {
                 	inpRenderTarget->Discard();
                 }
@@ -202,11 +202,11 @@ namespace ChilliSource
                 //Clear the frame buffer ready for rendering
                 mpRenderSystem->BeginFrame(inpRenderTarget);
                 
-                mpRenderSystem->SetLight(NULL);
+                mpRenderSystem->SetLight(nullptr);
                 RenderUI(inpScene->GetWindowPtr());
                 
                 //Present contents of buffer to screen
-                if (inpRenderTarget != NULL)
+                if (inpRenderTarget != nullptr)
                 {
                 	inpRenderTarget->Discard();
                 }
@@ -311,7 +311,7 @@ namespace ChilliSource
             
             for(u32 i=0; i<inaLightComponents.size(); ++i)
             {
-                if(inaLightComponents[i]->GetShadowMapPtr() != NULL)
+                if(inaLightComponents[i]->GetShadowMapPtr() != nullptr)
                 {
                     mpRenderSystem->SetLight(inaLightComponents[i]);
                     RenderShadowMap(mpActiveCamera, inaLightComponents[i], aFilteredShadowMapRenderCache);
@@ -367,7 +367,7 @@ namespace ChilliSource
 		{
             ICullingPredicate * pCullingPredicate = GetCullPredicate(inpCamera).get();
             
-            if(pCullingPredicate == NULL)
+            if(pCullingPredicate == nullptr)
             {
                 outaRenderCache = inaRenderCache;
                 return;

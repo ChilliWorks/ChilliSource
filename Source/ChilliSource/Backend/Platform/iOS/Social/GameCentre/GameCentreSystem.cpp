@@ -1016,7 +1016,7 @@ namespace ChilliSource
                     mAuthenticationChangedEvent.Invoke(true);
                     
                     //Load friends
-                    RequestFriendsInformation("FriendInfo", NULL);
+                    RequestFriendsInformation("FriendInfo", nullptr);
                     
                     mastrCompletedAchievements.clear();
                     [mpAchievementDescriptions release];
@@ -1072,7 +1072,7 @@ namespace ChilliSource
 			if (sResultData.aScores.size() > 0)
             {
 				//Ping request to game centre for games
-				RequestNamesForIDs(paIdentifier, instrKey, "NameRequest", NULL);
+				RequestNamesForIDs(paIdentifier, instrKey, "NameRequest", nullptr);
 			} 
 			else 
 			{

@@ -180,7 +180,7 @@ namespace ChilliSource
 			if(szFileName == NULL) return false;
 
 			fIn = fopen(szFileName, "rb");
-			if(fIn == NULL) return false;
+			if(fIn == nullptr) return false;
 
 			fseek(fIn, 0, SEEK_END);
 			ulFileSize = (unsigned long)ftell(fIn);
@@ -209,7 +209,7 @@ namespace ChilliSource
 				Update((u8 *)uData, ulRest);
 			}
 
-			fclose(fIn); fIn = NULL;
+			fclose(fIn); fIn = nullptr;
 			return true;
 		}
 #endif
@@ -253,7 +253,7 @@ namespace ChilliSource
 			unsigned char i;
 			char szTemp[16];
 
-			if(szReport == NULL) return;
+			if(szReport == nullptr) return;
 
 			if((REPORT_HEX == eReportType) || (REPORT_HEX_SHORT == eReportType))
 			{

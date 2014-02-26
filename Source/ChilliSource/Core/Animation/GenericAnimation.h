@@ -272,8 +272,8 @@ namespace ChilliSource
             KeyframeAnimation()
             :ValueAnimation<T>(0.0f)
             {
-                mpaKeyValues = NULL;
-                mpafKeyframeTimes = NULL;
+                mpaKeyValues = nullptr;
+                mpafKeyframeTimes = nullptr;
             }
             
             /////////////////////////////////////////////////////////////////////////////////

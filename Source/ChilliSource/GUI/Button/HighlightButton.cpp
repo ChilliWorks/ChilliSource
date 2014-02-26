@@ -878,7 +878,7 @@ namespace ChilliSource
             mvFillMaintainTarget.vAbsolute.x = infAbsWidth;
             mvFillMaintainTarget.vAbsolute.y = infAbsHeight;
             
-            if(GetParentViewPtr() == NULL)
+            if(GetParentViewPtr() == nullptr)
                 return;
             
             Core::CVector2 vParentSize(GetParentViewPtr()->GetAbsoluteSize());
@@ -913,7 +913,7 @@ namespace ChilliSource
             mvFitMaintainTarget.vAbsolute.x = infAbsWidth;
             mvFitMaintainTarget.vAbsolute.y = infAbsHeight;
             
-            if(GetParentViewPtr() == NULL)
+            if(GetParentViewPtr() == nullptr)
                 return;
             
             Core::CVector2 vParentSize(GetParentViewPtr()->GetAbsoluteSize());

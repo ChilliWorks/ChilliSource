@@ -21,7 +21,7 @@ namespace ChilliSource
         std::deque<Notification> CNotificationScheduler::NotificationQueue;
         DYNAMIC_ARRAY<Notification> CNotificationScheduler::TimedAppNotifications;
         
-        ILocalNotificationScheduler* CNotificationScheduler::mspLocalNotificationScheduler = NULL;
+        ILocalNotificationScheduler* CNotificationScheduler::mspLocalNotificationScheduler = nullptr;
 
         const f32 kfMinTimeBetweenNotifications = 2.0f;
         f32 gfTimeBetweenNotifications = 0.0f;

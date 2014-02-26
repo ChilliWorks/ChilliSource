@@ -193,11 +193,11 @@ namespace ChilliSource
 			
 			TiXmlElement * pRoot = Document.RootElement();
 			
-			if (pRoot != NULL && pRoot->ValueStr() == "TweakableConstants"){
+			if (pRoot != nullptr && pRoot->ValueStr() == "TweakableConstants"){
 				
 				TiXmlElement * pElement = pRoot->FirstChildElement();
 				
-				while (pElement != NULL){
+				while (pElement != nullptr){
 					
 					ParseFileElement(pElement, mBlank);
 					pElement = pElement->NextSiblingElement();
@@ -209,7 +209,7 @@ namespace ChilliSource
 			const char * pName = inpElement->Attribute("name");
 			const char * pValue = inpElement->Attribute("value");
 			
-			if (pName == NULL)
+			if (pName == nullptr)
 				return;
 			
 			if (inCurrentNamespace == mBlank){
@@ -223,14 +223,14 @@ namespace ChilliSource
 					
 					TiXmlElement * pSubElement = inpElement->FirstChildElement();
 					
-					while (pSubElement != NULL){
+					while (pSubElement != nullptr){
 						ParseFileElement(pSubElement, NamespaceName);
 						pSubElement = pSubElement->NextSiblingElement();
 					}
 					return;
 				}
 			}
-			if (pValue != NULL){
+			if (pValue != nullptr){
 				
 				if (inpElement->ValueStr() == "Float"){  
 					mNamespaces[inCurrentNamespace].Floats[pName] =  ParseF32(std::string(pValue));
@@ -249,7 +249,7 @@ namespace ChilliSource
 				
 				TiXmlElement * pPointDef = inpElement->FirstChildElement();
 				
-				while (pPointDef != NULL) {
+				while (pPointDef != nullptr) {
 					
 					f64 X;
 					f64 Y;

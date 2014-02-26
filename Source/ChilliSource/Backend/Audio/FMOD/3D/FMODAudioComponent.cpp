@@ -31,7 +31,7 @@ namespace ChilliSource
 					FMOD::Channel* pChannel = (FMOD::Channel*)inpChannel;
 					
 					//Grab the instance pointer so we can notify the correct resource 
-					ChilliSource::iOS::CFMODAudioComponent* pAudioResource = NULL;
+					ChilliSource::iOS::CFMODAudioComponent* pAudioResource = nullptr;
 					pChannel->getUserData((void**)&pAudioResource);
 					
 					//Now trigger the real callback
@@ -52,7 +52,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//---------------------------------------------------------------------
-		CFMODAudioComponent::CFMODAudioComponent(Audio::IAudioSystem* inpOwningSystem) : CAudioComponent(inpOwningSystem), mpFMODChannel(NULL)
+		CFMODAudioComponent::CFMODAudioComponent(Audio::IAudioSystem* inpOwningSystem) : CAudioComponent(inpOwningSystem), mpFMODChannel(nullptr)
         {
         }
         //---------------------------------------------------------------------
@@ -118,15 +118,15 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		void CFMODAudioComponent::SetChannel(FMOD::Channel* inpChannel)
 		{
-            if (mpFMODChannel != NULL)
+            if (mpFMODChannel != nullptr)
             {
-                mpFMODChannel->setUserData(NULL);
-                mpFMODChannel->setCallback(NULL);
+                mpFMODChannel->setUserData(nullptr);
+                mpFMODChannel->setCallback(nullptr);
             }
             
 			mpFMODChannel = inpChannel;
 			
-            if (mpFMODChannel != NULL)
+            if (mpFMODChannel != nullptr)
             {
                 //Set the initial volume
                 SetVolume(Audio::kfDefaultAudioVolume);
@@ -145,7 +145,7 @@ namespace ChilliSource
 		void CFMODAudioComponent::OnPlaybackComplete()
 		{
             mOnPlaybackCompleteEvent.Invoke(this);
-			SetChannel(NULL);
+			SetChannel(nullptr);
 		}
 		//---------------------------------------------------------------------
 		/// Set Volume
@@ -233,7 +233,7 @@ namespace ChilliSource
 		}
 		CFMODAudioComponent::~CFMODAudioComponent()
 		{
-            SetChannel(NULL);
+            SetChannel(nullptr);
         }
     }
 }

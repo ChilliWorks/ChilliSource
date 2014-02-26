@@ -87,7 +87,7 @@ namespace ChilliSource
             /// @param Priority (High priority will leap-frog lower priority in the queue
             /// @param Delegate An optional callback delegate to allow application to track notifications
             //------------------------------------------------------------------------------
-            static void ScheduleNotification(NotificationType ineType, const Notification& insNotification, NotificationPriority inePriority = NotificationPriority::k_standard, Notification::NotificationPresentedDelegate inpDelegate = NULL);
+            static void ScheduleNotification(NotificationType ineType, const Notification& insNotification, NotificationPriority inePriority = NotificationPriority::k_standard, Notification::NotificationPresentedDelegate inpDelegate = nullptr);
             //------------------------------------------------------------------------------
             /// Schedule Notification For Time
             ///
