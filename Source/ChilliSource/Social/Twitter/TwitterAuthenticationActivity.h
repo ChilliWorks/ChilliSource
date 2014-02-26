@@ -19,10 +19,10 @@ namespace ChilliSource
 {
 	namespace Social
 	{
-		class ITwitterAuthenticationActivity : public Core::IActivity
+		class TwitterAuthenticationActivity : public Core::IActivity
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(ITwitterAuthenticationActivity);
+			DECLARE_NAMED_INTERFACE(TwitterAuthenticationActivity);
 			
             static IActivity* CreateTwitterAuthenticationActivity();
             
@@ -83,11 +83,11 @@ namespace ChilliSource
 			/// Sets the delegate to trigger when the user
 			/// confirms PIN entry
 			//-----------------------------------------------
-			void SetAuthenticationPINResultDelegate(const ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate inCallback);
+			void SetAuthenticationPINResultDelegate(const ChilliSource::Social::TwitterAuthenticationActivity::AuthenticationPINResultDelegate inCallback);
 		
 		protected:
 			Core::CEvent1<Core::ActivityDismissedEvent>                                             mOnDismissedEvent;
-			ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate	mOnPINResultDelegate;
+			ChilliSource::Social::TwitterAuthenticationActivity::AuthenticationPINResultDelegate	mOnPINResultDelegate;
 			std::string																		mstrURL;
 			std::string																		mstrPIN;
 		};

@@ -19,7 +19,7 @@ namespace ChilliSource{
 
 	namespace iOS {
 		
-		class CContactInformationProvider : public Social::IContactInformationProvider
+		class CContactInformationProvider : public Social::ContactInformationProvider
 		{
 		public:
 			virtual bool IsA(Core::InterfaceIDType inID) const;

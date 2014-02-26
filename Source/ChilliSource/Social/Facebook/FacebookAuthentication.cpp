@@ -21,9 +21,9 @@ namespace ChilliSource
 {
     namespace Social
     {
-        DEFINE_NAMED_INTERFACE(IFacebookAuthenticationSystem);
+        DEFINE_NAMED_INTERFACE(FacebookAuthenticationSystem);
         
-        IFacebookAuthenticationSystem* IFacebookAuthenticationSystem::CreateSystem()
+        FacebookAuthenticationSystem* FacebookAuthenticationSystem::CreateSystem()
         {
 #ifdef TARGET_OS_IPHONE
             return new ChilliSource::iOS::CFacebookAuthenticationSystem();

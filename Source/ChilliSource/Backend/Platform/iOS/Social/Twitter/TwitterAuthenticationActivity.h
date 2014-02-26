@@ -32,7 +32,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CTwitterAuthenticationActivity : public Social::ITwitterAuthenticationActivity
+		class CTwitterAuthenticationActivity : public Social::TwitterAuthenticationActivity
 		{
 		public:
 			CTwitterAuthenticationActivity();

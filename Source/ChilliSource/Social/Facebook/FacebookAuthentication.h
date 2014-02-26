@@ -22,7 +22,7 @@ namespace ChilliSource
 		 * See http://developers.facebook.com/docs/authentication/permissions/ for definitions of what these provide
          **/
 		
-		class IFacebookAuthenticationSystem : public Core::ISystem
+		class FacebookAuthenticationSystem : public Core::ISystem
 		{
 		public:
             
@@ -41,9 +41,9 @@ namespace ChilliSource
             
             typedef fastdelegate::FastDelegate1<const AuthenticateResponse&> AuthenticationCompleteDelegate;
             
-			DECLARE_NAMED_INTERFACE(IFacebookAuthenticationSystem);
+			DECLARE_NAMED_INTERFACE(FacebookAuthenticationSystem);
 			
-            virtual ~IFacebookAuthenticationSystem(){}
+            virtual ~FacebookAuthenticationSystem(){}
 			
 			virtual void Authenticate(const std::vector<std::string>& inastrReadPermissions = std::vector<std::string>(), const AuthenticationCompleteDelegate& inDelegate = nullptr) = 0;
 			
@@ -59,7 +59,7 @@ namespace ChilliSource
             
             virtual void PublishInstall() = 0;
             
-            static IFacebookAuthenticationSystem* CreateSystem();
+            static FacebookAuthenticationSystem* CreateSystem();
 		};
 	}
 }

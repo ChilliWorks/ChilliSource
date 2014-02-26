@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace iOS
     {
-        class CEmailCompositionActivity : public Social::IEmailCompositionActivity
+        class CEmailCompositionActivity : public Social::EmailCompositionActivity
 		{
 		public:
             //-------------------------------------------------------
@@ -100,14 +100,14 @@ namespace ChilliSource
 
 @interface EmailDelegate : NSObject<MFMailComposeViewControllerDelegate>
 {
-	ChilliSource::Social::IEmailCompositionActivity::SendResultDelegate mCallback;
+	ChilliSource::Social::EmailCompositionActivity::SendResultDelegate mCallback;
 }
 //-------------------------------------------------------
 /// Init With Callback
 ///
 /// @param The send result callback.
 //-------------------------------------------------------
--(EmailDelegate*) initWithCallback:(ChilliSource::Social::IEmailCompositionActivity::SendResultDelegate)callback;
+-(EmailDelegate*) initWithCallback:(ChilliSource::Social::EmailCompositionActivity::SendResultDelegate)callback;
 
 @end
 

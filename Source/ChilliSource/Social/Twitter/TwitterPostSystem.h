@@ -88,11 +88,11 @@ namespace ChilliSource
             std::string strLocalImagePath;
 		};
 		
-		class ITwitterPostSystem: public ChilliSource::Core::ISystem
+		class TwitterPostSystem: public ChilliSource::Core::ISystem
 		{
 		public:
 			
-			DECLARE_NAMED_INTERFACE(ITwitterPostSystem);
+			DECLARE_NAMED_INTERFACE(TwitterPostSystem);
 			
 			enum class PostResult
 			{
@@ -105,14 +105,14 @@ namespace ChilliSource
 			typedef fastdelegate::FastDelegate1<const PostResult&> PostResultDelegate;
 			
             //Create platform specific system
-            static ITwitterPostSystem* CreateSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::COAuthSystem* inpOAuthSystem);
+            static TwitterPostSystem* CreateSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::COAuthSystem* inpOAuthSystem);
             
-			ITwitterPostSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem,
+			TwitterPostSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem,
 							   Core::COAuthSystem* inpOAuthSystem);
 			//------------------------------------------------------------------------
 			/// Destructor
 			//------------------------------------------------------------------------
-			~ITwitterPostSystem();
+			~TwitterPostSystem();
 			//------------------------------------------------------------------------
             /// Init
             ///
@@ -151,7 +151,7 @@ namespace ChilliSource
 			///
 			/// @param PIN entered by user
 			//------------------------------------------------------------------------
-			virtual void OnPINComplete(const ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResult &inResult) = 0;
+			virtual void OnPINComplete(const ChilliSource::Social::TwitterAuthenticationActivity::AuthenticationPINResult &inResult) = 0;
 			//------------------------------------------------------------------------
 			/// Delegate called with the authorisation view is dismissed.
 			///
@@ -242,7 +242,7 @@ namespace ChilliSource
 			std::string											mstrSavedOAuthTokenSecret;
 
 			// View used during initial authorisation phase
-			ChilliSource::Social::ITwitterAuthenticationActivity*		mpAuthenticationView;
+			ChilliSource::Social::TwitterAuthenticationActivity*		mpAuthenticationView;
 
 			// Post description
 			// This is used to store the Tweet to send if the

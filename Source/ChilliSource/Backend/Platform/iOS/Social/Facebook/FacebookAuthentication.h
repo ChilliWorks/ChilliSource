@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CFacebookAuthenticationSystem : public Social::IFacebookAuthenticationSystem
+		class CFacebookAuthenticationSystem : public Social::FacebookAuthenticationSystem
 		{
 		public:
 			//Define an interface for this platform specific version as the
@@ -31,13 +31,13 @@ namespace ChilliSource
 			
             bool IsA(Core::InterfaceIDType inID) const;
 			
-            void Authenticate( const std::vector<std::string>& inastrReadPermissions = std::vector<std::string>(), const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate = nullptr);
+            void Authenticate( const std::vector<std::string>& inastrReadPermissions = std::vector<std::string>(), const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate = nullptr);
 			
             bool IsSignedIn() const;
             std::string GetActiveToken() const;
             
-            void AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate);
-            void AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate);
+            void AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate);
+            void AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate);
             
             bool HasPermission(const std::string& instrPermission) const;
 			
@@ -54,9 +54,9 @@ namespace ChilliSource
             
             std::vector<std::string> mastrPermissions;
             
-            IFacebookAuthenticationSystem::AuthenticationCompleteDelegate mAuthenticateDelegate;
-            IFacebookAuthenticationSystem::AuthenticationCompleteDelegate mAuthoriseReadDelegate;
-            IFacebookAuthenticationSystem::AuthenticationCompleteDelegate mAuthoriseWriteDelegate;
+            FacebookAuthenticationSystem::AuthenticationCompleteDelegate mAuthenticateDelegate;
+            FacebookAuthenticationSystem::AuthenticationCompleteDelegate mAuthoriseReadDelegate;
+            FacebookAuthenticationSystem::AuthenticationCompleteDelegate mAuthoriseWriteDelegate;
             
             std::vector<std::string> maRequestedWritePermissions;
 		};

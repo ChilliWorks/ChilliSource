@@ -20,7 +20,7 @@
 namespace ChilliSource{
 	namespace iOS {
 		
-		class CSMSCompositionActivity : public Social::ISMSCompositionActivity 
+		class CSMSCompositionActivity : public Social::SMSCompositionActivity 
 		{
 		public:
 			virtual bool IsA(Core::InterfaceIDType inID) const;
@@ -30,7 +30,7 @@ namespace ChilliSource{
 			CSMSCompositionActivity();
 			~CSMSCompositionActivity();
 			
-			virtual void Present(const std::vector<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const ISMSCompositionActivity::SendResultDelegate & inCallback);
+			virtual void Present(const std::vector<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const SMSCompositionActivity::SendResultDelegate & inCallback);
 
 			virtual void Dismiss();
 		private:
@@ -44,9 +44,9 @@ namespace ChilliSource{
 
 @interface  SMSDelegate : NSObject<MFMessageComposeViewControllerDelegate>
 {
-	ChilliSource::Social::ISMSCompositionActivity::SendResultDelegate mCallback;
+	ChilliSource::Social::SMSCompositionActivity::SendResultDelegate mCallback;
 }
--(SMSDelegate*) initWithCallback:(ChilliSource::Social::ISMSCompositionActivity::SendResultDelegate)callback;
+-(SMSDelegate*) initWithCallback:(ChilliSource::Social::SMSCompositionActivity::SendResultDelegate)callback;
 
 	
 @end
