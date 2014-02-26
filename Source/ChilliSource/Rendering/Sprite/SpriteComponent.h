@@ -71,7 +71,7 @@ namespace ChilliSource
 			/// @param Comparison Type
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//----------------------------------------------------
 			/// Get Axis Aligned Bounding Box
 			///
@@ -80,7 +80,7 @@ namespace ChilliSource
 			/// recomputed when required.
 			/// @return Axis aligned bounding box
 			//----------------------------------------------------
-			virtual const Core::AABB& GetAABB();
+			virtual const Core::AABB& GetAABB() override;
 			//----------------------------------------------------
 			/// Get Object Oriented Bounding Box
 			///
@@ -89,7 +89,7 @@ namespace ChilliSource
 			/// recomputed when required.
 			/// @return OOBB
 			//----------------------------------------------------
-			const Core::OOBB& GetOOBB();
+			const Core::OOBB& GetOOBB() override;
 			//----------------------------------------------------
 			/// Get Bounding Sphere
 			///
@@ -98,7 +98,7 @@ namespace ChilliSource
 			/// recomputed when required.
 			/// @return bounding sphere
 			//----------------------------------------------------
-			const Core::Sphere& GetBoundingSphere();
+			const Core::Sphere& GetBoundingSphere() override;
 			//-----------------------------------------------------------
 			/// Set Dimensions
 			///
@@ -287,7 +287,7 @@ namespace ChilliSource
             /// @param Active camera component
             /// @param The current shader pass.
             //-----------------------------------------------------------
-            void Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass);
+            void Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass) override;
             //-----------------------------------------------------
             /// Render Shadow Map
             ///
@@ -296,21 +296,21 @@ namespace ChilliSource
             /// @param Render system
             /// @param Active camera component
             //-----------------------------------------------------
-            void RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam){};
+            void RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam) override{};
 			//----------------------------------------------------
 			/// On Attached To Entity
 			///
 			/// Triggered when the component is attached to
 			/// an entity
 			//----------------------------------------------------
-			void OnAttachedToEntity();
+			void OnAttachedToEntity() override;
 			//----------------------------------------------------
 			/// On Detached From Entity
 			///
 			/// Triggered when the component is removed from
 			/// an entity
 			//----------------------------------------------------
-			void OnDetachedFromEntity();
+			void OnDetachedFromEntity() override;
             
 		protected:	
             //------------------------------------------------------------

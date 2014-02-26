@@ -23,16 +23,16 @@ namespace ChilliSource{
 		class CSMSCompositionActivity : public Social::SMSCompositionActivity 
 		{
 		public:
-			virtual bool IsA(Core::InterfaceIDType inID) const;
+			virtual bool IsA(Core::InterfaceIDType inID) const override;
 			
 			static bool SupportedByDevice(); //You must always check this method before constructing an instance of the class or doom will ensue.
 			
 			CSMSCompositionActivity();
 			~CSMSCompositionActivity();
 			
-			virtual void Present(const std::vector<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const SMSCompositionActivity::SendResultDelegate & inCallback);
+			virtual void Present(const std::vector<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const SMSCompositionActivity::SendResultDelegate & inCallback) override;
 
-			virtual void Dismiss();
+			virtual void Dismiss() override;
 		private:
 			
 			SMSDelegate * mpDelegate;

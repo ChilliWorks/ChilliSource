@@ -29,7 +29,7 @@ namespace ChilliSource
 			CTouchScreen();
 			~CTouchScreen();
 			
-			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			
 			void OnTouchBegan(UITouch* inpNativeTouch);
 			void OnTouchMoved(UITouch* inpNativeTouch);

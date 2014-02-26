@@ -38,7 +38,7 @@ namespace ChilliSource
 			/// @param Comparison Type
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//----------------------------------------------------
 			/// Get Axis Aligned Bounding Box
 			///
@@ -47,7 +47,7 @@ namespace ChilliSource
 			/// recomputed when required.
 			/// @return Axis aligned bounding box
 			//----------------------------------------------------
-			const Core::AABB& GetAABB();
+			const Core::AABB& GetAABB() override;
 			//----------------------------------------------------
 			/// Get Object Oriented Bounding Box
 			///
@@ -56,7 +56,7 @@ namespace ChilliSource
 			/// recomputed when required.
 			/// @return OOBB
 			//----------------------------------------------------
-			const Core::OOBB& GetOOBB();
+			const Core::OOBB& GetOOBB() override;
 			//----------------------------------------------------
 			/// Get Bounding Sphere
 			///
@@ -65,7 +65,7 @@ namespace ChilliSource
 			/// recomputed when required.
 			/// @return bounding sphere
 			//----------------------------------------------------
-			const Core::Sphere& GetBoundingSphere();
+			const Core::Sphere& GetBoundingSphere() override;
 			//-----------------------------------------------------------
 			/// Is Transparent
 			///
@@ -73,7 +73,7 @@ namespace ChilliSource
 			///
 			/// @return whether or not this has transparency
 			//-----------------------------------------------------------
-			bool IsTransparent();
+			bool IsTransparent() override;
 			//-----------------------------------------------------------
 			/// Set Material
 			///
@@ -82,7 +82,7 @@ namespace ChilliSource
 			///
 			/// @param Handle to material
 			//-----------------------------------------------------------
-			void SetMaterial(const MaterialPtr& inpMaterial);
+			void SetMaterial(const MaterialPtr& inpMaterial) override;
 			//-----------------------------------------------------------
 			/// Set Material For Sub Mesh
 			///
@@ -151,7 +151,7 @@ namespace ChilliSource
             /// @param Active camera component
             /// @param The current shader pass.
 			//----------------------------------------------------------
-			void Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass);
+			void Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass) override;
             //-----------------------------------------------------
             /// Render Shadow Map
             ///
@@ -160,14 +160,14 @@ namespace ChilliSource
             /// @param Render system
             /// @param Active camera component
             //-----------------------------------------------------
-            void RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam);
+            void RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam) override;
             //----------------------------------------------------
             /// On Attached To Entity
             ///
             /// Triggered when the component is attached to
             /// an entity
             //----------------------------------------------------
-            void OnAttachedToEntity();
+            void OnAttachedToEntity() override;
             //----------------------------------------------------
             /// On Entity Transform Changed
             ///
@@ -181,7 +181,7 @@ namespace ChilliSource
             /// Triggered when the component is removed from
             /// an entity
             //----------------------------------------------------
-            void OnDetachedFromEntity();
+            void OnDetachedFromEntity() override;
             //----------------------------------------------------
             /// Apply Default Materials
             ///

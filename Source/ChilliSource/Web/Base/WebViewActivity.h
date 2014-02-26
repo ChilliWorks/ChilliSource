@@ -31,7 +31,7 @@ namespace ChilliSource
             /// @param Interface ID
             /// @param Whether activity is of given type
             //--------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType inID) const;
+            bool IsA(Core::InterfaceIDType inID) const override;
             //-----------------------------------------------
             /// Present
             /// 

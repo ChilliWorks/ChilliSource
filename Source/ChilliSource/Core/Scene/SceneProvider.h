@@ -21,14 +21,14 @@ namespace ChilliSource
         public:
             DECLARE_NAMED_INTERFACE(CSceneProvider);
             
-            bool IsA(InterfaceIDType inInterface) const;
+            bool IsA(InterfaceIDType inInterface) const override;
             
-            bool CanCreateResourceOfKind(InterfaceIDType inInterfaceID) const;
-            bool CanCreateResourceFromFileWithExtension(const std::string & inExtension) const;
+            bool CanCreateResourceOfKind(InterfaceIDType inInterfaceID) const override;
+            bool CanCreateResourceFromFileWithExtension(const std::string & inExtension) const override;
             
             //---Filepath is relative to the resources directory - either the documents or the package
-            bool CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource);
-            bool AsyncCreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource);
+            bool CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource) override;
+            bool AsyncCreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource) override;
             
         private:
             bool LoadMoScene(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource);
