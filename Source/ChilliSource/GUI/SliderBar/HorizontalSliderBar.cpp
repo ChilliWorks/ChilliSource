@@ -21,7 +21,7 @@ namespace ChilliSource
 {
     namespace GUI
     {
-		DEFINE_META_CLASS(CHorizontalSliderBar)
+		DEFINE_META_CLASS(HorizontalSliderBar)
         
 		DEFINE_PROPERTY(BarSpriteSheet);
 		DEFINE_PROPERTY(SliderSpriteSheet);
@@ -36,7 +36,7 @@ namespace ChilliSource
         ///
         /// Create the subviews that make up the container
         //------------------------------------------------------
-        CHorizontalSliderBar::CHorizontalSliderBar() : mpBackgroundImage(new CImageView()), mpSliderImage(new CImageView()),
+        HorizontalSliderBar::HorizontalSliderBar() : mpBackgroundImage(new ImageView()), mpSliderImage(new ImageView()),
         BarSpriteSheetIndex(0), SliderSpriteSheetIndex(0), UnifiedSliderSize(0.15f, 1.5f, 0.0f, 0.0f)
         {
 			SetSize(0.8f, 0.1f, 0.0f, 0.0f);
@@ -51,15 +51,15 @@ namespace ChilliSource
             mpSliderImage->EnableUserInteraction(false);
             mpBackgroundImage->AddSubview(mpSliderImage);
             
-            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &CHorizontalSliderBar::OnSliderMoved);
+            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &HorizontalSliderBar::OnSliderMoved);
         }
 		//------------------------------------------------------
 		/// Constructor
 		///
 		/// From param dictionary
 		//------------------------------------------------------
-		CHorizontalSliderBar::CHorizontalSliderBar(const Core::ParamDictionary& insParams)
-        : CSliderBar(insParams), mpBackgroundImage(new CImageView()), mpSliderImage(new CImageView()),
+		HorizontalSliderBar::HorizontalSliderBar(const Core::ParamDictionary& insParams)
+        : SliderBar(insParams), mpBackgroundImage(new ImageView()), mpSliderImage(new ImageView()),
         BarSpriteSheetIndex(0), SliderSpriteSheetIndex(0), UnifiedSliderSize(0.15f, 1.5f, 0.0f, 0.0f)
 		{
 			SetSize(0.8f, 0.1f, 0.0f, 0.0f);
@@ -125,14 +125,14 @@ namespace ChilliSource
 				SetSliderSize(Core::UnifiedVector2(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w));
 			}
             
-			mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &CHorizontalSliderBar::OnSliderMoved);
+			mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &HorizontalSliderBar::OnSliderMoved);
 		}
 		//--------------------------------------------------------
 		/// Set Bar Sprite Sheet
 		///
 		/// @param Sprite sheet for the bar
 		//--------------------------------------------------------
-		void CHorizontalSliderBar::SetBarSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void HorizontalSliderBar::SetBarSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
 		{
 			BarSpriteSheet = inpSpriteSheet;
 			mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -147,7 +147,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet for the bar
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CHorizontalSliderBar::GetBarSpriteSheet() const
+		const Rendering::SpriteSheetPtr& HorizontalSliderBar::GetBarSpriteSheet() const
 		{
 			return BarSpriteSheet;
 		}
@@ -156,7 +156,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet for the slider
 		//--------------------------------------------------------
-		void CHorizontalSliderBar::SetSliderSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void HorizontalSliderBar::SetSliderSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
 		{
 			SliderSpriteSheet = inpSpriteSheet;
 			mpSliderImage->SetSpriteSheet(inpSpriteSheet);
@@ -171,7 +171,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet for the slider
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CHorizontalSliderBar::GetSliderSpriteSheet() const
+		const Rendering::SpriteSheetPtr& HorizontalSliderBar::GetSliderSpriteSheet() const
 		{
 			return SliderSpriteSheet;
 		}
@@ -180,7 +180,7 @@ namespace ChilliSource
 		///
 		/// @param The index of the image within the sprite sheet
 		//--------------------------------------------------------
-		void CHorizontalSliderBar::SetBarSpriteSheetIndex(u32 inudwIndex)
+		void HorizontalSliderBar::SetBarSpriteSheetIndex(u32 inudwIndex)
 		{
 			BarSpriteSheetIndex = inudwIndex;
 			mpBackgroundImage->SetSpriteSheetIndex(inudwIndex);
@@ -190,7 +190,7 @@ namespace ChilliSource
 		///
 		/// @param The index of the image within the sprite sheet
 		//--------------------------------------------------------
-		void CHorizontalSliderBar::SetSliderSpriteSheetIndex(u32 inudwIndex)
+		void HorizontalSliderBar::SetSliderSpriteSheetIndex(u32 inudwIndex)
 		{
 			SliderSpriteSheetIndex = inudwIndex;
 			mpSliderImage->SetSpriteSheetIndex(inudwIndex);
@@ -200,7 +200,7 @@ namespace ChilliSource
 		///
 		/// @return The index of the image within the sprite sheet
 		//--------------------------------------------------------
-		u32 CHorizontalSliderBar::GetBarSpriteSheetIndex() const
+		u32 HorizontalSliderBar::GetBarSpriteSheetIndex() const
 		{
 			return BarSpriteSheetIndex;
 		}
@@ -209,7 +209,7 @@ namespace ChilliSource
 		///
 		/// @return The index of the image within the sprite sheet
 		//--------------------------------------------------------
-		u32 CHorizontalSliderBar::GetSliderSpriteSheetIndex() const
+		u32 HorizontalSliderBar::GetSliderSpriteSheetIndex() const
 		{
 			return SliderSpriteSheetIndex;
 		}
@@ -218,7 +218,7 @@ namespace ChilliSource
 		///
 		/// @param The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		void CHorizontalSliderBar::SetBarSpriteSheetIndexID(const std::string& instrID)
+		void HorizontalSliderBar::SetBarSpriteSheetIndexID(const std::string& instrID)
 		{
 			CS_ASSERT(BarSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			BarSpriteSheetIndexID = instrID;
@@ -229,7 +229,7 @@ namespace ChilliSource
 		///
 		/// @param The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		void CHorizontalSliderBar::SetSliderSpriteSheetIndexID(const std::string& instrID)
+		void HorizontalSliderBar::SetSliderSpriteSheetIndexID(const std::string& instrID)
 		{
 			CS_ASSERT(SliderSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			SliderSpriteSheetIndexID = instrID;
@@ -240,7 +240,7 @@ namespace ChilliSource
 		///
 		/// @return The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		const std::string& CHorizontalSliderBar::GetBarSpriteSheetIndexID() const
+		const std::string& HorizontalSliderBar::GetBarSpriteSheetIndexID() const
 		{
 			return BarSpriteSheetIndexID;
 		}
@@ -249,7 +249,7 @@ namespace ChilliSource
 		///
 		/// @return The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		const std::string& CHorizontalSliderBar::GetSliderSpriteSheetIndexID() const
+		const std::string& HorizontalSliderBar::GetSliderSpriteSheetIndexID() const
 		{
 			return SliderSpriteSheetIndexID;
 		}
@@ -258,7 +258,7 @@ namespace ChilliSource
 		///
 		/// @param The unified size of the slider
 		//--------------------------------------------------------
-		void CHorizontalSliderBar::SetSliderSize(const Core::UnifiedVector2& invUnifiedSize)
+		void HorizontalSliderBar::SetSliderSize(const Core::UnifiedVector2& invUnifiedSize)
 		{
 			UnifiedSliderSize = invUnifiedSize;
 			mpSliderImage->SetSize(invUnifiedSize);
@@ -268,7 +268,7 @@ namespace ChilliSource
 		///
 		/// @return The unified size of the slider
 		//--------------------------------------------------------
-		const Core::UnifiedVector2& CHorizontalSliderBar::GetSliderSize() const
+		const Core::UnifiedVector2& HorizontalSliderBar::GetSliderSize() const
 		{
 			return UnifiedSliderSize;
 		}
@@ -280,7 +280,7 @@ namespace ChilliSource
         ///
         /// @param Touch data
         //-----------------------------------------------------------
-        void CHorizontalSliderBar::OnSliderMoved(CGUIView* inpView, const Input::TouchInfo & insTouchInfo)
+        void HorizontalSliderBar::OnSliderMoved(GUIView* inpView, const Input::TouchInfo & insTouchInfo)
         {
             mfSliderValue = ((insTouchInfo.vLocation.x - GetAbsoluteScreenSpacePosition().x)/GetAbsoluteSize().x) + 0.5f;
             mpSliderImage->SetPosition(mfSliderValue, 0.5f, 0.0f, 0.0f);
@@ -293,19 +293,19 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //------------------------------------------------------
-        void CHorizontalSliderBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void HorizontalSliderBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
             if(Visible)
             {
-                CGUIView::Draw(inpCanvas);
+                GUIView::Draw(inpCanvas);
             }
         }
 		//------------------------------------------------------
 		/// Destructor
 		//------------------------------------------------------
-		CHorizontalSliderBar::~CHorizontalSliderBar()
+		HorizontalSliderBar::~HorizontalSliderBar()
 		{
-			mInputEvents.GetMovedWithinEvent() -= GUIEventDelegate(this, &CHorizontalSliderBar::OnSliderMoved);
+			mInputEvents.GetMovedWithinEvent() -= GUIEventDelegate(this, &HorizontalSliderBar::OnSliderMoved);
 		}
     }
 }

@@ -16,10 +16,10 @@ namespace ChilliSource
 {
     namespace GUI
     {
-		DEFINE_META_CLASS(CProgressBar)
+		DEFINE_META_CLASS(ProgressBar)
         
         
-        CProgressBar::CProgressBar()
+        ProgressBar::ProgressBar()
 		:mfProgress(0.0f)
 		,mfAnimationTime(0.0f)
 		,mfPreviousValue(0)
@@ -29,8 +29,8 @@ namespace ChilliSource
             
         }
         
-        CProgressBar::CProgressBar(const Core::ParamDictionary& insParams)
-		:CGUIView(insParams)
+        ProgressBar::ProgressBar(const Core::ParamDictionary& insParams)
+		:GUIView(insParams)
 		,mfProgress(0.0f)
 		,mfAnimationTime(0.0f)
 		,mfPreviousValue(0)
@@ -54,7 +54,7 @@ namespace ChilliSource
         ///
         /// @param Value between 0 and 1
         //------------------------------------------------
-        void CProgressBar::SetProgress(f32 infProgress)
+        void ProgressBar::SetProgress(f32 infProgress)
         {            
             mfPreviousValue = GetProgress();
             mfProgress = Core::CMathUtils::Clamp(infProgress, 0.0f, 1.0f);
@@ -79,7 +79,7 @@ namespace ChilliSource
         ///
         /// @return Value between 0 and 1
         //------------------------------------------------
-        f32 CProgressBar::GetProgress() const
+        f32 ProgressBar::GetProgress() const
         {
             if(mfAnimationTime != 0)
             {
@@ -96,7 +96,7 @@ namespace ChilliSource
         ///
         /// @param Number of seconds the animation will run for
         //------------------------------------------------------------------------
-        void CProgressBar::SetAnimatedTimeInSeconds(f32 infAnimationTime)
+        void ProgressBar::SetAnimatedTimeInSeconds(f32 infAnimationTime)
         {
             mfAnimationTime = infAnimationTime * 1000;
         }
@@ -105,14 +105,14 @@ namespace ChilliSource
         ///
         /// @param Number of seconds the animation will run for
         //------------------------------------------------------------------------
-        f32 CProgressBar::GetAnimationTime() 
+        f32 ProgressBar::GetAnimationTime() 
         { 
             return mfAnimationTime;
         }
         
-        void CProgressBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void ProgressBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
-            CGUIView::Draw(inpCanvas);
+            GUIView::Draw(inpCanvas);
         }
     }
 }

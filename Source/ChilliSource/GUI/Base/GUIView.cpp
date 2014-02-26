@@ -22,9 +22,9 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        static GUIViewPtr pGUINull;
+        static GUIViewSPtr pGUINull;
 
-		DEFINE_META_CLASS(CGUIView)
+		DEFINE_META_CLASS(GUIView)
 
 		//---Properties
 		DEFINE_PROPERTY(Name);
@@ -55,7 +55,7 @@ namespace ChilliSource
         ///
         /// Default
         //-----------------------------------------------------
-        CGUIView::CGUIView() : mpParentView(nullptr), mpRootWindow(nullptr), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
+        GUIView::GUIView() : mpParentView(nullptr), mpRootWindow(nullptr), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
         Rotation(0.0f), Opacity(1.0f), LocalAlignment(Core::AlignmentAnchor::k_middleCentre), ParentalAlignment(Core::AlignmentAnchor::k_bottomLeft), AlignedWithParent(false),
         Scale(Core::CVector2::ONE), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
         AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
@@ -69,7 +69,7 @@ namespace ChilliSource
         ///
         /// @param Param dictionary
         //------------------------------------------------------
-        CGUIView::CGUIView(const Core::ParamDictionary& insParams) 
+        GUIView::GUIView(const Core::ParamDictionary& insParams) 
 		: mpParentView(nullptr), mpRootWindow(nullptr), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
         Rotation(0.0f), Opacity(1.0f), LocalAlignment(Core::AlignmentAnchor::k_middleCentre), ParentalAlignment(Core::AlignmentAnchor::k_bottomLeft), AlignedWithParent(false),
         Scale(Core::CVector2::ONE), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
@@ -218,11 +218,11 @@ namespace ChilliSource
 		///
 		/// Dirty the transform and force it to be recalculated
 		//-----------------------------------------------------
-		void CGUIView::OnTransformChanged(u32 inudwInvalidFlags)
+		void GUIView::OnTransformChanged(u32 inudwInvalidFlags)
 		{
 			BITMASK_CLEAR(mudwCacheValidaters, inudwInvalidFlags);
 			
-			for(CGUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
+			for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
 			{
 				(*it)->OnTransformChanged(inudwInvalidFlags);
 			}
@@ -235,7 +235,7 @@ namespace ChilliSource
         ///
         /// @param GUIView shared pointer
         //-----------------------------------------------------
-        void CGUIView::AddSubview(const GUIViewPtr& inpSubview)
+        void GUIView::AddSubview(const GUIViewSPtr& inpSubview)
         {
 			if(inpSubview->GetParentViewPtr() == this)
 				return;
@@ -265,9 +265,9 @@ namespace ChilliSource
         ///
         /// @param GUIView pointer
         //-----------------------------------------------------
-        void CGUIView::RemoveSubview(CGUIView* inpSubview)
+        void GUIView::RemoveSubview(GUIView* inpSubview)
         {
-            for(CGUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
+            for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
             {
                 if((*it).get() == inpSubview)
                 {
@@ -285,9 +285,9 @@ namespace ChilliSource
 		///
 		/// @param GUIView pointer
 		//-----------------------------------------------------			
-		void CGUIView::RemoveAllSubviews()
+		void GUIView::RemoveAllSubviews()
 		{
-			for(CGUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
+			for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
             {
 				(*it)->SetParentView(nullptr);
 				(*it)->SetRootWindow(nullptr);
@@ -305,7 +305,7 @@ namespace ChilliSource
         /// be destroyed (i.e. Don't use this function to
         /// remove yourself within an event)
         //-----------------------------------------------------
-        void CGUIView::RemoveFromParentView()
+        void GUIView::RemoveFromParentView()
         {
             if(mpParentView)
             {
@@ -319,7 +319,7 @@ namespace ChilliSource
         /// Function used to layout GUI content when absolute
         /// sizes are needed. Must be attached to root window.
         //-----------------------------------------------------
-        void CGUIView::LayoutContent()
+        void GUIView::LayoutContent()
         {
             
         }
@@ -329,7 +329,7 @@ namespace ChilliSource
         ///
         /// Move this view a single layer towards the screen
         //-----------------------------------------------------
-        void CGUIView::BringForward()
+        void GUIView::BringForward()
         {
             if(mpParentView)
             {
@@ -341,7 +341,7 @@ namespace ChilliSource
         ///
         /// Move this view a layer away from the screen
         //-----------------------------------------------------
-        void CGUIView::SendBackward()
+        void GUIView::SendBackward()
         {
             if(mpParentView)
             {
@@ -353,7 +353,7 @@ namespace ChilliSource
         ///
         /// Move this view to the top of the view hierarchy
         //-----------------------------------------------------
-        void CGUIView::BringToFront()
+        void GUIView::BringToFront()
         {
             if(mpParentView)
             {
@@ -365,7 +365,7 @@ namespace ChilliSource
         ///
         /// Move this view to the end of the view hierarchy
         //-----------------------------------------------------
-        void CGUIView::SendToBack()
+        void GUIView::SendToBack()
         {
             if(mpParentView)
             {
@@ -377,7 +377,7 @@ namespace ChilliSource
         ///
         /// Move this view a single layer towards the screen
         //-----------------------------------------------------
-        void CGUIView::BringSubviewForward(CGUIView* inpView)
+        void GUIView::BringSubviewForward(GUIView* inpView)
         {
             u32 udwNumSubviews = mSubviews.size();
             for(u32 i=0; i<udwNumSubviews; ++i)
@@ -394,7 +394,7 @@ namespace ChilliSource
         ///
         /// Move this view a layer away from the screen
         //-----------------------------------------------------
-        void CGUIView::SendSubviewBackward(CGUIView* inpView)
+        void GUIView::SendSubviewBackward(GUIView* inpView)
         {
             u32 udwNumSubviews = mSubviews.size();
             for(u32 i=0; i<udwNumSubviews; ++i)
@@ -411,7 +411,7 @@ namespace ChilliSource
         ///
         /// Move this view to the top of the view hierarchy
         //-----------------------------------------------------
-        void CGUIView::BringSubviewToFront(CGUIView* inpView)
+        void GUIView::BringSubviewToFront(GUIView* inpView)
         {
             u32 udwNumSubviews = mSubviews.size();
             for(u32 i = 1; i < udwNumSubviews; ++i)
@@ -427,7 +427,7 @@ namespace ChilliSource
         ///
         /// Move this view to the end of the view hierarchy
         //-----------------------------------------------------
-        void CGUIView::SendSubviewToBack(CGUIView* inpView)
+        void GUIView::SendSubviewToBack(GUIView* inpView)
         {
             u32 udwNumSubviews = mSubviews.size();
             for(u32 i = udwNumSubviews - 1; i > 0; --i)
@@ -443,7 +443,7 @@ namespace ChilliSource
         ///
         /// @return Raw GUI view pointer
         //-----------------------------------------------------
-        CGUIView* CGUIView::GetParentViewPtr() const
+        GUIView* GUIView::GetParentViewPtr() const
         {
             return mpParentView;
         }
@@ -453,7 +453,7 @@ namespace ChilliSource
 		/// @param Name
 		/// @return Parent in hierarchy with given name
 		//-----------------------------------------------------
-		CGUIView* CGUIView::GetParentWithName(const std::string& instrName) const
+		GUIView* GUIView::GetParentWithName(const std::string& instrName) const
 		{
 			if(mpParentView)
 			{
@@ -471,7 +471,7 @@ namespace ChilliSource
         ///
         /// @param The parent the view is attached to
         //-----------------------------------------------------
-        void CGUIView::SetParentView(CGUIView* inpParentView)
+        void GUIView::SetParentView(GUIView* inpParentView)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize|(u32)TransformCache::k_absPos);
             mpParentView = inpParentView;
@@ -481,7 +481,7 @@ namespace ChilliSource
 		///
 		/// @return The input events of the view
 		//-----------------------------------------------------
-		CInputEvents* CGUIView::GetInputEvents()
+		InputEvents* GUIView::GetInputEvents()
 		{
 			return &mInputEvents;
 		}
@@ -490,7 +490,7 @@ namespace ChilliSource
         ///
         /// @return Window that the view is attached to
         //-----------------------------------------------------
-        CWindow* CGUIView::GetRootWindowPtr() const
+        Window* GUIView::GetRootWindowPtr() const
         {
             return mpRootWindow;
         }
@@ -499,11 +499,11 @@ namespace ChilliSource
         ///
         /// @param The window the view is attached to
         //-----------------------------------------------------
-        void CGUIView::SetRootWindow(CWindow* inpWindow)
+        void GUIView::SetRootWindow(Window* inpWindow)
         {
             mpRootWindow = inpWindow;
 			
-			for(CGUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
+			for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
             {
 				(*it)->SetRootWindow(inpWindow);
 			}
@@ -516,7 +516,7 @@ namespace ChilliSource
         ///
         /// @return Touch began event
         //-----------------------------------------------------------
-        Core::IEvent<Input::TouchEventDelegate> & CGUIView::GetTouchBeganEvent()
+        Core::IEvent<Input::TouchEventDelegate> & GUIView::GetTouchBeganEvent()
         {
             return mTouchBeganEvent;
         }
@@ -528,7 +528,7 @@ namespace ChilliSource
         ///
         /// @return Touch moved event
         //-----------------------------------------------------------
-        Core::IEvent<Input::TouchEventDelegate> & CGUIView::GetTouchMovedEvent()
+        Core::IEvent<Input::TouchEventDelegate> & GUIView::GetTouchMovedEvent()
         {
             return mTouchMovedEvent;
         }
@@ -540,7 +540,7 @@ namespace ChilliSource
         ///
         /// @return Touch end event
         //-----------------------------------------------------------
-        Core::IEvent<Input::TouchEventDelegate> & CGUIView::GetTouchEndEvent()
+        Core::IEvent<Input::TouchEventDelegate> & GUIView::GetTouchEndEvent()
         {
             return mTouchEndedEvent;
         }
@@ -549,7 +549,7 @@ namespace ChilliSource
         ///
         /// @return Vector of shared GUI view pointers
         //-----------------------------------------------------
-        const CGUIView::Subviews& CGUIView::GetSubviews() const
+        const GUIView::Subviews& GUIView::GetSubviews() const
         {
             return mSubviews;
         }
@@ -558,7 +558,7 @@ namespace ChilliSource
 		///
 		/// @return Vector of shared GUI view pointers
 		//-----------------------------------------------------
-		CGUIView::Subviews& CGUIView::GetSubviews()
+		GUIView::Subviews& GUIView::GetSubviews()
 		{
 			return mSubviews;
 		}
@@ -567,7 +567,7 @@ namespace ChilliSource
         ///
         /// @return Subview at the given index in the hierarchy
         //-----------------------------------------------------
-        const GUIViewPtr& CGUIView::GetSubviewAtIndex(u32 inudwIndex) const
+        const GUIViewSPtr& GUIView::GetSubviewAtIndex(u32 inudwIndex) const
         {
             return mSubviews[inudwIndex];
         }
@@ -577,9 +577,9 @@ namespace ChilliSource
         /// @param Name
         /// @return Subview in hierarchy with given name
         //-----------------------------------------------------
-        const GUIViewPtr& CGUIView::GetSubviewWithName(const std::string& instrName) const
+        const GUIViewSPtr& GUIView::GetSubviewWithName(const std::string& instrName) const
         {
-            for(CGUIView::Subviews::const_iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
+            for(GUIView::Subviews::const_iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
             {
                 //If the subview has the name then return it
                 if((*it)->GetName() == instrName)
@@ -589,7 +589,7 @@ namespace ChilliSource
                 else
                 {
                     //Check if it lives inside the subviews subview
-                    const GUIViewPtr& pView = (*it)->GetSubviewWithName(instrName);
+                    const GUIViewSPtr& pView = (*it)->GetSubviewWithName(instrName);
 					if(pView)
 					{
 						return pView;
@@ -605,9 +605,9 @@ namespace ChilliSource
 		/// @param Name
 		/// @param out List of subviews in hierarchy with given name
 		//-----------------------------------------------------
-		void CGUIView::GetSubviewsWithName(const std::string& instrName, std::vector<GUIViewPtr>& outSubviews) const
+		void GUIView::GetSubviewsWithName(const std::string& instrName, std::vector<GUIViewSPtr>& outSubviews) const
         {
-            for(CGUIView::Subviews::const_iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
+            for(GUIView::Subviews::const_iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
             {
                 // If the subview has the name then add it
                 if((*it)->GetName() == instrName)
@@ -632,7 +632,7 @@ namespace ChilliSource
         ///
         /// @param Alignment type
         //-----------------------------------------------------
-        void CGUIView::SetLocalAlignment(Core::AlignmentAnchor ineAlignment)
+        void GUIView::SetLocalAlignment(Core::AlignmentAnchor ineAlignment)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             LocalAlignment = ineAlignment;
@@ -646,7 +646,7 @@ namespace ChilliSource
         ///
         /// @return Alignment type
         //-----------------------------------------------------
-        Core::AlignmentAnchor CGUIView::GetLocalAlignment() const
+        Core::AlignmentAnchor GUIView::GetLocalAlignment() const
         {
             return LocalAlignment;
         }
@@ -658,7 +658,7 @@ namespace ChilliSource
         ///
         /// @param Enable/disable
         //-----------------------------------------------------
-        void CGUIView::EnableRotationWithParent(bool inbEnable)
+        void GUIView::EnableRotationWithParent(bool inbEnable)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             RotatedWithParent = inbEnable;
@@ -668,7 +668,7 @@ namespace ChilliSource
 		///
 		/// @param Whether the view rotates with it's parent
 		//-----------------------------------------------------
-		bool CGUIView::IsRotatedWithParent() const
+		bool GUIView::IsRotatedWithParent() const
 		{
 			return RotatedWithParent;
 		}
@@ -680,7 +680,7 @@ namespace ChilliSource
         ///
         /// @param Enable/disable
         //-----------------------------------------------------
-        void CGUIView::EnableAlignmentToParent(bool inbEnable)
+        void GUIView::EnableAlignmentToParent(bool inbEnable)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             AlignedWithParent = inbEnable;
@@ -690,7 +690,7 @@ namespace ChilliSource
         ///
         /// @param Whether the view is aligned with it's
         //-----------------------------------------------------
-        bool CGUIView::IsAlignedToParent() const
+        bool GUIView::IsAlignedToParent() const
         {
             return AlignedWithParent;
         }
@@ -704,7 +704,7 @@ namespace ChilliSource
         ///
         /// @param Alignment type
         //-----------------------------------------------------
-        void CGUIView::SetAlignmentToParent(Core::AlignmentAnchor ineAlignment)
+        void GUIView::SetAlignmentToParent(Core::AlignmentAnchor ineAlignment)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             ParentalAlignment = ineAlignment;
@@ -717,7 +717,7 @@ namespace ChilliSource
         ///
         /// @return Alignment type
         //-----------------------------------------------------
-        Core::AlignmentAnchor CGUIView::GetAlignmentWithParent() const
+        Core::AlignmentAnchor GUIView::GetAlignmentWithParent() const
         {
             return ParentalAlignment;
         }
@@ -731,7 +731,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates
         //-----------------------------------------------------
-        void CGUIView::SetOffsetFromParentAlignment(const Core::UnifiedVector2& invOffset)
+        void GUIView::SetOffsetFromParentAlignment(const Core::UnifiedVector2& invOffset)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedParentalOffset = invOffset;
@@ -746,7 +746,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates
         //-----------------------------------------------------
-        void CGUIView::SetOffsetFromParentAlignment(f32 infRx, f32 infRy, f32 infAx, f32 infAy)
+        void GUIView::SetOffsetFromParentAlignment(f32 infRx, f32 infRy, f32 infAx, f32 infAy)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedParentalOffset.vRelative.x = infRx;
@@ -764,7 +764,7 @@ namespace ChilliSource
         ///
         /// @return Unified co-ordinates
         //-----------------------------------------------------
-        const Core::UnifiedVector2& CGUIView::GetOffsetFromParentAlignment() const
+        const Core::UnifiedVector2& GUIView::GetOffsetFromParentAlignment() const
         {
             return UnifiedParentalOffset;
         }
@@ -779,7 +779,7 @@ namespace ChilliSource
         /// @return Unified co-ordinates converted to real
         /// co-ordinates
         //-----------------------------------------------------
-        const Core::CVector2& CGUIView::GetAbsoluteOffsetFromParentAlignment() const
+        const Core::CVector2& GUIView::GetAbsoluteOffsetFromParentAlignment() const
         {
             mvAbsoluteParentalOffset = (mpParentView->GetAbsoluteSize() * GetOffsetFromParentAlignment().GetRelative()) + GetOffsetFromParentAlignment().GetAbsolute();
             return mvAbsoluteParentalOffset;
@@ -792,7 +792,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates
         //-----------------------------------------------------
-        void CGUIView::SetOffsetFromPosition(const Core::UnifiedVector2& invOffset)
+        void GUIView::SetOffsetFromPosition(const Core::UnifiedVector2& invOffset)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedPositionOffset = invOffset;
@@ -805,7 +805,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates
         //-----------------------------------------------------
-        void CGUIView::SetOffsetFromPosition(f32 infRx, f32 infRy, f32 infAx, f32 infAy)
+        void GUIView::SetOffsetFromPosition(f32 infRx, f32 infRy, f32 infAx, f32 infAy)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedPositionOffset.vRelative.x = infRx;
@@ -821,7 +821,7 @@ namespace ChilliSource
         ///
         /// @return Unified co-ordinates
         //-----------------------------------------------------
-        const Core::UnifiedVector2& CGUIView::GetOffsetFromPosition() const
+        const Core::UnifiedVector2& GUIView::GetOffsetFromPosition() const
         {
             return UnifiedPositionOffset;
         }
@@ -834,7 +834,7 @@ namespace ChilliSource
         /// @return Unified co-ordinates converted to real
         /// co-ordinates
         //-----------------------------------------------------
-        const Core::CVector2& CGUIView::GetAbsoluteOffsetFromPosition() const
+        const Core::CVector2& GUIView::GetAbsoluteOffsetFromPosition() const
         {
             mvAbsolutePositionOffset = GetOffsetFromPosition().GetAbsolute();
 			
@@ -855,7 +855,7 @@ namespace ChilliSource
 		///
 		/// @param Enable/disable
 		//-----------------------------------------------------
-		void CGUIView::EnableClipOffScreen(bool inbEnable)
+		void GUIView::EnableClipOffScreen(bool inbEnable)
         {
             ClipOffScreen = inbEnable;
         }
@@ -867,7 +867,7 @@ namespace ChilliSource
 		///
 		/// @return Enable/disable
 		//-----------------------------------------------------
-		bool CGUIView::IsClippedOffScreenEnabled() const
+		bool GUIView::IsClippedOffScreenEnabled() const
 		{
 			return ClipOffScreen;
 		}
@@ -879,7 +879,7 @@ namespace ChilliSource
         ///
         /// @param Enable/disable
         //-----------------------------------------------------
-        void CGUIView::EnableSubviewClipping(bool inbEnable)
+        void GUIView::EnableSubviewClipping(bool inbEnable)
         {
             ClipSubviews = inbEnable;
         }
@@ -891,7 +891,7 @@ namespace ChilliSource
         ///
         /// @return Enable/disable
         //-----------------------------------------------------
-        bool CGUIView::IsSubviewClippingEnabled() const
+        bool GUIView::IsSubviewClippingEnabled() const
         {
             return ClipSubviews;
         }
@@ -900,7 +900,7 @@ namespace ChilliSource
         ///
         /// @param Name of view instance
         //-----------------------------------------------------
-        void CGUIView::SetName(const std::string& instrName)
+        void GUIView::SetName(const std::string& instrName)
         {
             Name = instrName;
         }
@@ -909,7 +909,7 @@ namespace ChilliSource
         ///
         /// @return Name of view instance
         //-----------------------------------------------------
-        const std::string& CGUIView::GetName() const
+        const std::string& GUIView::GetName() const
         {
             return Name;
         }
@@ -919,7 +919,7 @@ namespace ChilliSource
         /// @param Toggle whether the view and subviews are
         /// visible or not
         //-----------------------------------------------------
-        void CGUIView::SetVisible(bool inbVisible)
+        void GUIView::SetVisible(bool inbVisible)
         {
             Visible = inbVisible;
         }
@@ -928,7 +928,7 @@ namespace ChilliSource
 		///
 		/// @return
 		//-----------------------------------------------------
-		bool CGUIView::IsVisible() const
+		bool GUIView::IsVisible() const
 		{
 			return Visible;
 		}
@@ -937,7 +937,7 @@ namespace ChilliSource
 		///
 		/// @return If the entity is visible, checking the ancestors
 		//-----------------------------------------------------
-		bool CGUIView::IsVisibleInHierarchy() const
+		bool GUIView::IsVisibleInHierarchy() const
 		{
 			if (Visible && GetParentViewPtr())
 			{
@@ -954,13 +954,13 @@ namespace ChilliSource
         ///
         /// @returns If being drawn
         //-----------------------------------------------------
-        bool CGUIView::IsRendered() const
+        bool GUIView::IsRendered() const
         {
             bool bIsDrawn = IsVisible();
             if(!bIsDrawn)
                 return false;
             
-            CGUIView * pParentView = GetParentViewPtr();
+            GUIView * pParentView = GetParentViewPtr();
             while(pParentView)
             {
                 if(!pParentView->IsVisible())
@@ -977,7 +977,7 @@ namespace ChilliSource
         ///
         /// @param Enable/disable
         //-----------------------------------------------------
-        void CGUIView::EnableUserInteraction(bool inbEnabled)
+        void GUIView::EnableUserInteraction(bool inbEnabled)
         {
 			UserInteraction = inbEnabled;
 		}
@@ -986,7 +986,7 @@ namespace ChilliSource
 		///
 		/// @return whether the view receives user input
 		//-----------------------------------------------------
-		bool CGUIView::IsUserInteractionEnabled() const
+		bool GUIView::IsUserInteractionEnabled() const
 		{
 			return UserInteraction;
 		}
@@ -997,7 +997,7 @@ namespace ChilliSource
         ///
 		/// @param Enable/disable
 		//-----------------------------------------------------
-		void CGUIView::SetMovable(bool inbMovable)
+		void GUIView::SetMovable(bool inbMovable)
 		{
 			Movable = inbMovable;
 		}
@@ -1006,7 +1006,7 @@ namespace ChilliSource
 		///
 		/// @return Whether view is draggable
 		//-----------------------------------------------------
-		bool CGUIView::IsMovable() const
+		bool GUIView::IsMovable() const
 		{
 			return Movable;
 		}
@@ -1016,7 +1016,7 @@ namespace ChilliSource
 		/// @param Override to force a view to consome or route touches
 		/// @param The type of touch concerned (BEGAN, MOVED or ALL)
         //-----------------------------------------------------
-        void CGUIView::EnableTouchConsumption(bool inbEnabled, TouchType ineType)
+        void GUIView::EnableTouchConsumption(bool inbEnabled, TouchType ineType)
         {
 			if(inbEnabled)
 			{
@@ -1036,7 +1036,7 @@ namespace ChilliSource
 		/// @return Override to force a view to consome or route
 		/// touches
 		//-----------------------------------------------------
-		bool CGUIView::IsTouchConsumptionEnabled(TouchType ineType) const
+		bool GUIView::IsTouchConsumptionEnabled(TouchType ineType) const
 		{
 			return (u32)ineType & ConsumesTouches;
 		}
@@ -1046,7 +1046,7 @@ namespace ChilliSource
         /// @param Whether the parents scale affects the
         /// child
         //-----------------------------------------------------
-        void CGUIView::EnableInheritedScale(bool inbEnabled)
+        void GUIView::EnableInheritedScale(bool inbEnabled)
 		{
 			InheritScale = inbEnabled;
 		}
@@ -1055,7 +1055,7 @@ namespace ChilliSource
 		///
 		/// @return Whether this view inherits scale from its parent
 		//-----------------------------------------------------
-		bool CGUIView::IsInheritedScaleEnabled() const
+		bool GUIView::IsInheritedScaleEnabled() const
 		{
 			return InheritScale;
 		}
@@ -1065,7 +1065,7 @@ namespace ChilliSource
         /// @param Whether the parents colour affects the
         /// child
         //-----------------------------------------------------
-        void CGUIView::EnableInheritedColour(bool inbEnabled)
+        void GUIView::EnableInheritedColour(bool inbEnabled)
 		{
 			InheritColour = inbEnabled;
 		}
@@ -1074,7 +1074,7 @@ namespace ChilliSource
 		///
 		/// @return Whether this view inherits colour from its parent
 		//-----------------------------------------------------
-		bool CGUIView::IsInheritedColourEnabled() const
+		bool GUIView::IsInheritedColourEnabled() const
 		{
 			return InheritColour;
 		}
@@ -1083,7 +1083,7 @@ namespace ChilliSource
 		///
 		/// @param Whether this view inherits opacity from its parent
 		//-----------------------------------------------------
-		void CGUIView::EnableInheritedOpacity(bool inbEnabled)
+		void GUIView::EnableInheritedOpacity(bool inbEnabled)
 		{
 			InheritOpacity = inbEnabled;
 		}
@@ -1092,7 +1092,7 @@ namespace ChilliSource
 		///
 		/// @return Whether this view inherits opacity from its parent
 		//-----------------------------------------------------
-		bool CGUIView::IsInheritedOpacityEnabled() const
+		bool GUIView::IsInheritedOpacityEnabled() const
 		{
 			return InheritOpacity;
 		}
@@ -1101,7 +1101,7 @@ namespace ChilliSource
         ///
         /// @param The colour applied to the view when drawn
         //-----------------------------------------------------
-        void CGUIView::SetColour(const Core::CColour& inColour)
+        void GUIView::SetColour(const Core::CColour& inColour)
         {
             Colour = inColour;
         }
@@ -1110,7 +1110,7 @@ namespace ChilliSource
 		///
 		/// @return The colour applied to the view when drawn
 		//-----------------------------------------------------
-		const Core::CColour& CGUIView::GetColour() const
+		const Core::CColour& GUIView::GetColour() const
 		{
 			return Colour;
 		}
@@ -1119,7 +1119,7 @@ namespace ChilliSource
         ///
         /// @param The inherited colour of the view
         //-----------------------------------------------------
-        const Core::CColour& CGUIView::GetAbsoluteColour()
+        const Core::CColour& GUIView::GetAbsoluteColour()
         {
             mAbsoluteColour = Colour;
             
@@ -1137,7 +1137,7 @@ namespace ChilliSource
 		///
 		/// @param Fractional opacity to set for this view (0 - 1)
 		//-----------------------------------------------------
-		void CGUIView::SetOpacity(f32 infValue)
+		void GUIView::SetOpacity(f32 infValue)
 		{
 			Opacity = infValue;
 		}
@@ -1146,7 +1146,7 @@ namespace ChilliSource
 		///
 		/// @param Returns the opacity of this view.
 		//-----------------------------------------------------
-		f32 CGUIView::GetOpacity() const
+		f32 GUIView::GetOpacity() const
 		{
 			return Opacity;
 		}
@@ -1155,7 +1155,7 @@ namespace ChilliSource
 		///
 		/// @return Returns this view's opacity multiplied by the inherited opacity of any parent it may have
 		//-----------------------------------------------------
-		f32 CGUIView::GetInheritedOpacity() const
+		f32 GUIView::GetInheritedOpacity() const
 		{
 			if (mpParentView && InheritOpacity)
 				return Opacity * mpParentView->GetInheritedOpacity();
@@ -1174,7 +1174,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates
         //------------------------------------------------------
-        void CGUIView::SetPosition(const Core::UnifiedVector2& invPosition)
+        void GUIView::SetPosition(const Core::UnifiedVector2& invPosition)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedPosition = invPosition;
@@ -1189,7 +1189,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates Rx, Ry, Ax, Ay
         //------------------------------------------------------
-        void CGUIView::SetPosition(f32 fRx, f32 fRy, f32 fAx, f32 fAy)
+        void GUIView::SetPosition(f32 fRx, f32 fRy, f32 fAx, f32 fAy)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             UnifiedPosition.vRelative.x = fRx;
@@ -1205,7 +1205,7 @@ namespace ChilliSource
         ///
         /// @param co-ordinates
         //------------------------------------------------------
-        void CGUIView::MoveBy(const Core::UnifiedVector2& invPosition)
+        void GUIView::MoveBy(const Core::UnifiedVector2& invPosition)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             if(!AlignedWithParent)
@@ -1225,7 +1225,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates Rx, Ry, Ax, Ay 
         //------------------------------------------------------
-        void CGUIView::MoveBy(f32 fRx, f32 fRy, f32 fAx, f32 fAy)
+        void GUIView::MoveBy(f32 fRx, f32 fRy, f32 fAx, f32 fAy)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absPos);
             if(!AlignedWithParent)
@@ -1251,7 +1251,7 @@ namespace ChilliSource
         ///
         /// @param Angle in radians
         //------------------------------------------------------
-        void CGUIView::RotateTo(f32 infAngleInRadians)
+        void GUIView::RotateTo(f32 infAngleInRadians)
         {
 			OnTransformChanged((u32)TransformCache::k_transform);
             Rotation = infAngleInRadians;
@@ -1263,7 +1263,7 @@ namespace ChilliSource
         ///
         /// @param Angle in radians
         //------------------------------------------------------
-        void CGUIView::RotateBy(f32 infAngleInRadians)
+        void GUIView::RotateBy(f32 infAngleInRadians)
         {
 			OnTransformChanged((u32)TransformCache::k_transform);
             Rotation += infAngleInRadians;
@@ -1275,7 +1275,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates for scale factor
         //------------------------------------------------------
-        void CGUIView::SetSize(const Core::UnifiedVector2& invSize)
+        void GUIView::SetSize(const Core::UnifiedVector2& invSize)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize);
             UnifiedSize = invSize;
@@ -1287,7 +1287,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates Rx, Ry, Ax, Ay 
         //------------------------------------------------------
-        void CGUIView::SetSize(f32 fRx, f32 fRy, f32 fAx, f32 fAy)
+        void GUIView::SetSize(f32 fRx, f32 fRy, f32 fAx, f32 fAy)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize);
             UnifiedSize.vRelative.x = fRx;
@@ -1302,7 +1302,7 @@ namespace ChilliSource
         ///
         /// @param Scale co-ordinates for scale factor
         //------------------------------------------------------
-        void CGUIView::ScaleTo(const Core::CVector2& invScale)
+        void GUIView::ScaleTo(const Core::CVector2& invScale)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize);
             Scale = invScale;
@@ -1314,7 +1314,7 @@ namespace ChilliSource
         ///
         /// @param Unified co-ordinates fScaleX, fScaleY
         //------------------------------------------------------
-        void CGUIView::ScaleTo(f32 fScaleX, f32 fScaleY)
+        void GUIView::ScaleTo(f32 fScaleX, f32 fScaleY)
         {
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize);
             Scale.x = fScaleX;
@@ -1327,7 +1327,7 @@ namespace ChilliSource
 		///
 		/// @param Scale uniform co-ordinate fScale
 		//------------------------------------------------------
-        void CGUIView::ScaleTo(f32 fScale)
+        void GUIView::ScaleTo(f32 fScale)
         {
             ScaleTo(fScale, fScale);
         }
@@ -1341,7 +1341,7 @@ namespace ChilliSource
         ///
         /// @return Unified co-ordinates
         //------------------------------------------------------
-        const Core::UnifiedVector2& CGUIView::GetPosition() const
+        const Core::UnifiedVector2& GUIView::GetPosition() const
         {
             return UnifiedPosition;
         }
@@ -1352,7 +1352,7 @@ namespace ChilliSource
         ///
         /// @return Angle in radians
         //------------------------------------------------------
-        f32 CGUIView::GetRotation() const
+        f32 GUIView::GetRotation() const
         {
             return Rotation;
         }
@@ -1363,7 +1363,7 @@ namespace ChilliSource
         ///
         /// @return Unified co-ordinates for dimensions
         //------------------------------------------------------
-        const Core::UnifiedVector2& CGUIView::GetSize() const
+        const Core::UnifiedVector2& GUIView::GetSize() const
         {
             return UnifiedSize;
         }
@@ -1374,7 +1374,7 @@ namespace ChilliSource
         ///
         /// @return Unified co-ordinates for dimensions
         //------------------------------------------------------
-        const Core::CVector2& CGUIView::GetScale() const
+        const Core::CVector2& GUIView::GetScale() const
         {
             return Scale;
         }
@@ -1383,7 +1383,7 @@ namespace ChilliSource
         ///
         /// @param The inherited scale of the view
         //-----------------------------------------------------
-        const Core::CVector2& CGUIView::GetAbsoluteScale() const
+        const Core::CVector2& GUIView::GetAbsoluteScale() const
         {
             mvAbsoluteScale = Scale;
             
@@ -1402,7 +1402,7 @@ namespace ChilliSource
 		///
 		/// @return Cumulated rotation of the parent hierarchy
 		//------------------------------------------------------
-		const f32 CGUIView::GetAbsoluteRotation() const
+		const f32 GUIView::GetAbsoluteRotation() const
 		{
 			if (mpParentView && !RotatedWithParent)
 			{
@@ -1419,7 +1419,7 @@ namespace ChilliSource
         ///
         /// @return Position combined absolute and relative
         //------------------------------------------------------
-        const Core::CVector2& CGUIView::GetAbsolutePosition() const
+        const Core::CVector2& GUIView::GetAbsolutePosition() const
         {
 			if(!BITMASK_CHECK(mudwCacheValidaters, (u32)TransformCache::k_absPos))
 			{
@@ -1470,7 +1470,7 @@ namespace ChilliSource
         ///
         /// @return Position combined absolute and relative
         //------------------------------------------------------
-        const Core::CVector2& CGUIView::GetAbsoluteScreenSpacePosition() const
+        const Core::CVector2& GUIView::GetAbsoluteScreenSpacePosition() const
         {
             //Return the translation component of our transform
 			GetTransform();
@@ -1487,7 +1487,7 @@ namespace ChilliSource
         ///
         /// @return Size combined absolute and relative
         //------------------------------------------------------
-        const Core::CVector2& CGUIView::GetAbsoluteSize() const
+        const Core::CVector2& GUIView::GetAbsoluteSize() const
         {
             //The absolute size is based on the absolute size of our parent 
             //and the relative size of us
@@ -1513,7 +1513,7 @@ namespace ChilliSource
         /// @param Anchor point type
         /// @return Anchor point value as absolute
         //-----------------------------------------------------
-        Core::CVector2 CGUIView::GetAbsoluteAnchorPoint(Core::AlignmentAnchor ineAlignment) const
+        Core::CVector2 GUIView::GetAbsoluteAnchorPoint(Core::AlignmentAnchor ineAlignment) const
         {
 			Core::CVector2 vSize = GetAbsoluteSize();
 			Core::CVector2 vHalfSize(vSize.x * 0.5f, vSize.y * 0.5f);
@@ -1528,7 +1528,7 @@ namespace ChilliSource
         /// @param Anchor point type
         /// @return Anchor point value as absolute
         //-----------------------------------------------------
-        Core::CVector2 CGUIView::GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor ineAlignment) const
+        Core::CVector2 GUIView::GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor ineAlignment) const
         {
 			Core::CVector2 vSize = GetAbsoluteSize();
 			Core::CVector2 vHalfSize(vSize.x * 0.5f, vSize.y * 0.5f);
@@ -1543,7 +1543,7 @@ namespace ChilliSource
         ///
         /// @return Transformation matrix
         //-----------------------------------------------------
-        const Core::CMatrix3x3& CGUIView::GetTransform() const
+        const Core::CMatrix3x3& GUIView::GetTransform() const
         {
 			if(!BITMASK_CHECK(mudwCacheValidaters, (u32)TransformCache::k_transform))
 			{
@@ -1572,7 +1572,7 @@ namespace ChilliSource
         /// @return Whether any part of the view is within
         /// the bounds of the screen
         //-----------------------------------------------------
-        bool CGUIView::IsOnscreen() const
+        bool GUIView::IsOnscreen() const
         {
             //Check if this is on screen
             Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
@@ -1587,12 +1587,12 @@ namespace ChilliSource
         ///
         /// @param Time between frames
         //-----------------------------------------------------
-        void CGUIView::Update(f32 infDt)
+        void GUIView::Update(f32 infDt)
         {
             if(Visible)
             {
 				mSubviewsCopy = mSubviews;
-                for(CGUIView::Subviews::iterator it = mSubviewsCopy.begin(); it != mSubviewsCopy.end(); ++it)
+                for(GUIView::Subviews::iterator it = mSubviewsCopy.begin(); it != mSubviewsCopy.end(); ++it)
                 {
                     (*it)->Update(infDt);
                 }
@@ -1609,7 +1609,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer
         //----------------------------------------------------
-        void CGUIView::Draw(Rendering::CCanvasRenderer * inpCanvas)
+        void GUIView::Draw(Rendering::CCanvasRenderer * inpCanvas)
         {
 			if(Visible && (!ClipOffScreen || IsOnscreen()))
 			{
@@ -1623,7 +1623,7 @@ namespace ChilliSource
 					inpCanvas->EnableClippingToBounds(vBottomLeft, GetAbsoluteSize());
 				}
 				
-				for(CGUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
+				for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
 				{
 					if ((*it)->IsVisible())
 					{
@@ -1648,7 +1648,7 @@ namespace ChilliSource
         /// @param Point vector
         /// @return Whether it lies within the view
         //----------------------------------------------------
-        bool CGUIView::Contains(const Core::CVector2& invPoint) const
+        bool GUIView::Contains(const Core::CVector2& invPoint) const
         {
             Core::Rectangle sAbsoluteAABB(GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft), GetAbsoluteSize());
             return sAbsoluteAABB.Contains(invPoint);
@@ -1659,7 +1659,7 @@ namespace ChilliSource
 		/// @param Whether view will listen for touches outwith
 		/// it's bounds
         //-----------------------------------------------------------		
-		void CGUIView::EnableAcceptTouchesOutsideOfBounds(bool inbEnable)
+		void GUIView::EnableAcceptTouchesOutsideOfBounds(bool inbEnable)
 		{
 			AcceptTouchesOutsideOfBounds = inbEnable;
 		}
@@ -1669,7 +1669,7 @@ namespace ChilliSource
 		/// @return Whether view will listen for touches outwith
 		/// it's bounds
         //-----------------------------------------------------------
-		bool CGUIView::IsAcceptTouchesOutsideOfBoundsEnabled() const
+		bool GUIView::IsAcceptTouchesOutsideOfBoundsEnabled() const
 		{
 			return AcceptTouchesOutsideOfBounds;
 		}
@@ -1679,11 +1679,11 @@ namespace ChilliSource
 		/// Triggered if the screen orientation changes so we can
 		/// resize ourself
 		//-----------------------------------------------------------
-		void CGUIView::OnScreenOrientationChanged()
+		void GUIView::OnScreenOrientationChanged()
 		{
 			OnTransformChanged((u32)TransformCache::k_transform|(u32)TransformCache::k_absSize|(u32)TransformCache::k_absPos);
 
-			for(CGUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
+			for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
 			{
 				(*it)->OnScreenOrientationChanged();
 			}
@@ -1697,7 +1697,7 @@ namespace ChilliSource
         /// @param Touch data
         /// @return Whether touch has been consumed
         //-----------------------------------------------------------
-        bool CGUIView::OnTouchBegan(const Input::TouchInfo & insTouchInfo)
+        bool GUIView::OnTouchBegan(const Input::TouchInfo & insTouchInfo)
         {
             if(UserInteraction)
             {
@@ -1709,7 +1709,7 @@ namespace ChilliSource
 				mSubviewsCopy = mSubviews;
 
                 //Loop through all our children
-                for(CGUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
+                for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
                 {
 					if((*it)->UserInteraction)
 					{
@@ -1752,7 +1752,7 @@ namespace ChilliSource
         /// @param Touch data
         /// @return Whether touch has been consumed
         //-----------------------------------------------------------
-        bool CGUIView::OnTouchMoved(const Input::TouchInfo & insTouchInfo)
+        bool GUIView::OnTouchMoved(const Input::TouchInfo & insTouchInfo)
         {
             if(UserInteraction)
             {
@@ -1770,7 +1770,7 @@ namespace ChilliSource
 
 				mSubviewsCopy = mSubviews;
 
-                for(CGUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
+                for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
                 {
                     if((*it)->OnTouchMoved(insTouchInfo))
                     {
@@ -1804,7 +1804,7 @@ namespace ChilliSource
         /// @param Touch data
         /// @return Whether touch has been consumed
         //-----------------------------------------------------------
-        void CGUIView::OnTouchEnded(const Input::TouchInfo & insTouchInfo)
+        void GUIView::OnTouchEnded(const Input::TouchInfo & insTouchInfo)
         {
 			mbIsBeingDragged = false;
 
@@ -1812,7 +1812,7 @@ namespace ChilliSource
             {
 				mSubviewsCopy = mSubviews;
 				
-                for(CGUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
+                for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
                 {
                     (*it)->OnTouchEnded(insTouchInfo);
                 }
@@ -1829,10 +1829,10 @@ namespace ChilliSource
         /// Calls LayoutContent on its subviews. Must be
         /// attached to root window.
         //-----------------------------------------------------
-        void CGUIView::LayoutChildrensContent()
+        void GUIView::LayoutChildrensContent()
         {
             Subviews aSubviewsCopy = mSubviews;
-            for(CGUIView::Subviews::iterator it = aSubviewsCopy.begin(); it != aSubviewsCopy.end(); ++it)
+            for(GUIView::Subviews::iterator it = aSubviewsCopy.begin(); it != aSubviewsCopy.end(); ++it)
             {
                 (*it)->LayoutContent();
                 (*it)->LayoutChildrensContent();
@@ -1841,7 +1841,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		/// Destructor
 		//-----------------------------------------------------
-		CGUIView::~CGUIView()
+		GUIView::~GUIView()
 		{
 			RemoveAllSubviews();
 		}

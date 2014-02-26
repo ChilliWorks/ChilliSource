@@ -23,16 +23,16 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        typedef fastdelegate::FastDelegate1<IButton*> ButtonEventDelegate;
+        typedef fastdelegate::FastDelegate1<Button*> ButtonEventDelegate;
         
-        class IButton : public CGUIView
+        class Button : public GUIView
         {
         public:
 
-			DECLARE_META_CLASS(IButton)
+			DECLARE_META_CLASS(Button)
 
-            IButton(){}
-            IButton(const Core::ParamDictionary& insParams) : CGUIView(insParams){}
+            Button(){}
+            Button(const Core::ParamDictionary& insParams) : GUIView(insParams){}
             
             //--------------------------------------------------
             /// Get Activated Event

@@ -22,7 +22,7 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        DEFINE_META_CLASS(CImageView)
+        DEFINE_META_CLASS(ImageView)
 		
         //---Properties
         DEFINE_PROPERTY(Texture);
@@ -44,7 +44,7 @@ namespace ChilliSource
         ///
         /// Default
         //--------------------------------------------------------
-        CImageView::CImageView() : UVs(Core::CVector2(0, 0), Core::CVector2(1, 1)), UVOffsets(Core::CVector2(0, 0), Core::CVector2(1, 1)), SpriteSheetIndex(0), SizeFromImage(false),
+        ImageView::ImageView() : UVs(Core::CVector2(0, 0), Core::CVector2(1, 1)), UVOffsets(Core::CVector2(0, 0), Core::CVector2(1, 1)), SpriteSheetIndex(0), SizeFromImage(false),
         HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), ActAsSpacer(false), FlipHorizontal(false), FlipVertical(false), mbFillMaintain(false), mbFitMaintain(false)
         {
             
@@ -56,8 +56,8 @@ namespace ChilliSource
         ///
         /// @param Param dictionary
         //------------------------------------------------------
-        CImageView::CImageView(const Core::ParamDictionary& insParams)
-        : CGUIView(insParams), UVs(Core::CVector2(0, 0), Core::CVector2(1, 1)), UVOffsets(Core::CVector2(0, 0), Core::CVector2(1, 1)), SpriteSheetIndex(0),
+        ImageView::ImageView(const Core::ParamDictionary& insParams)
+        : GUIView(insParams), UVs(Core::CVector2(0, 0), Core::CVector2(1, 1)), UVOffsets(Core::CVector2(0, 0), Core::CVector2(1, 1)), SpriteSheetIndex(0),
         SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), ActAsSpacer(false), FlipHorizontal(false), FlipVertical(false), mbFillMaintain(false), mbFitMaintain(false)
         {
             std::string strValue;
@@ -200,7 +200,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //--------------------------------------------------------
-        void CImageView::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void ImageView::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
             if(!IsOnscreen() || !Visible)
             {
@@ -244,14 +244,14 @@ namespace ChilliSource
                 inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), pTexture, sNewUVs, GetAbsoluteColour());
             }
             
-            CGUIView::Draw(inpCanvas);
+            GUIView::Draw(inpCanvas);
         }
         //--------------------------------------------------------
         /// Set Sprite Sheet
         ///
         /// @param Sprite sheet name
         //--------------------------------------------------------
-        void CImageView::SetSpriteSheet(const std::string& instrSpriteSheet, Core::StorageLocation ineLocation)
+        void ImageView::SetSpriteSheet(const std::string& instrSpriteSheet, Core::StorageLocation ineLocation)
         {
             SpriteSheet = LOAD_RESOURCE(Rendering::CSpriteSheet, ineLocation, instrSpriteSheet);
         }
@@ -260,7 +260,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet
         //--------------------------------------------------------
-        void CImageView::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void ImageView::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
         {
             SpriteSheet = inpSpriteSheet;
         }
@@ -269,7 +269,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet
         //--------------------------------------------------------
-        const Rendering::SpriteSheetPtr& CImageView::GetSpriteSheet() const
+        const Rendering::SpriteSheetPtr& ImageView::GetSpriteSheet() const
         {
             return SpriteSheet;
         }
@@ -278,7 +278,7 @@ namespace ChilliSource
         ///
         /// @param The index of the image within the sprite sheet
         //--------------------------------------------------------
-        void CImageView::SetSpriteSheetIndex(u32 inudwIndex)
+        void ImageView::SetSpriteSheetIndex(u32 inudwIndex)
         {
             SpriteSheetIndex = inudwIndex;
         }
@@ -287,7 +287,7 @@ namespace ChilliSource
         ///
         /// @return The index of the image within the sprite sheet
         //--------------------------------------------------------
-        u32 CImageView::GetSpriteSheetIndex() const
+        u32 ImageView::GetSpriteSheetIndex() const
         {
             return SpriteSheetIndex;
         }
@@ -296,7 +296,7 @@ namespace ChilliSource
         ///
         /// @param The ID of the index of the image within the sprite sheet
         //--------------------------------------------------------
-        void CImageView::SetSpriteSheetIndexID(const std::string& instrID)
+        void ImageView::SetSpriteSheetIndexID(const std::string& instrID)
         {
             CS_ASSERT(SpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
             SpriteSheetIndexID = instrID;
@@ -310,7 +310,7 @@ namespace ChilliSource
         ///
         /// @return The ID of the index of the image within the sprite sheet
         //--------------------------------------------------------
-        const std::string& CImageView::GetSpriteSheetIndexID() const
+        const std::string& ImageView::GetSpriteSheetIndexID() const
         {
             return SpriteSheetIndexID;
         }
@@ -321,7 +321,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //--------------------------------------------------------
-        void CImageView::SetTexture(const Rendering::TexturePtr& inpTexture)
+        void ImageView::SetTexture(const Rendering::TexturePtr& inpTexture)
         {
             Texture = inpTexture;
             
@@ -335,7 +335,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //--------------------------------------------------------
-        const Rendering::TexturePtr& CImageView::GetTexture() const
+        const Rendering::TexturePtr& ImageView::GetTexture() const
         {
             return Texture;
         }
@@ -347,7 +347,7 @@ namespace ChilliSource
         ///
         /// @param Rect containing u, v, s, & t
         //--------------------------------------------------------
-        void CImageView::SetUVs(const Core::Rectangle& insUVs)
+        void ImageView::SetUVs(const Core::Rectangle& insUVs)
         {
             UVs = insUVs;
         }
@@ -356,7 +356,7 @@ namespace ChilliSource
         ///
         /// @return Rect containing u, v, s, & t
         //--------------------------------------------------------
-        const Core::Rectangle& CImageView::GetUVs() const
+        const Core::Rectangle& ImageView::GetUVs() const
         {
             return UVs;
         }
@@ -368,7 +368,7 @@ namespace ChilliSource
         ///
         /// @param Rect containing u, v, s, & t
         //--------------------------------------------------------
-        void CImageView::SetUVOffsets(const Core::Rectangle& insUVOffsets)
+        void ImageView::SetUVOffsets(const Core::Rectangle& insUVOffsets)
         {
             UVOffsets = insUVOffsets;
         }
@@ -377,7 +377,7 @@ namespace ChilliSource
         ///
         /// @return Rect containing u, v, s, & t offsets
         //--------------------------------------------------------
-        const Core::Rectangle& CImageView::GetUVOffsets() const
+        const Core::Rectangle& ImageView::GetUVOffsets() const
         {
             return UVOffsets;
 		}
@@ -389,7 +389,7 @@ namespace ChilliSource
         ///
         /// @param Enable/disable
         //--------------------------------------------------------
-        void CImageView::EnableSizeFromImage(bool inbEnable)
+        void ImageView::EnableSizeFromImage(bool inbEnable)
         {
             SizeFromImage = inbEnable;
             
@@ -405,7 +405,7 @@ namespace ChilliSource
         /// @return Whether the image view's size will be
         /// based on the size of the image
         //--------------------------------------------------------
-        bool CImageView::IsSizeFromImageEnabled() const
+        bool ImageView::IsSizeFromImageEnabled() const
         {
             return SizeFromImage;
         }
@@ -416,7 +416,7 @@ namespace ChilliSource
         /// without requiring a draw to call. Useful for working
         /// with relative sizes and aspect ratios.
         //--------------------------------------------------------
-        void CImageView::SetSizeFromImage()
+        void ImageView::SetSizeFromImage()
         {
             SetSize(Core::UnifiedVector2(Core::CVector2::ZERO, GetSizeFromImage()));
         }
@@ -426,7 +426,7 @@ namespace ChilliSource
         ///
         /// @return Absolute size of the image
         //--------------------------------------------------------
-        Core::CVector2 CImageView::GetSizeFromImage() const
+        Core::CVector2 ImageView::GetSizeFromImage() const
         {
             CS_ASSERT((Texture || SpriteSheet), "Must have a sprite sheet or texture");
             
@@ -449,7 +449,7 @@ namespace ChilliSource
         ///
         /// @param Enable/disable
         //--------------------------------------------------------
-        void CImageView::EnableWidthFromImage(bool inbEnable)
+        void ImageView::EnableWidthFromImage(bool inbEnable)
         {
             WidthFromImage = inbEnable;
             
@@ -465,7 +465,7 @@ namespace ChilliSource
         /// @return Whether the image view's width will be
         /// based on the width of the image
         //--------------------------------------------------------
-        bool CImageView::IsWidthFromImageEnabled() const
+        bool ImageView::IsWidthFromImageEnabled() const
         {
             return WidthFromImage;
         }
@@ -476,7 +476,7 @@ namespace ChilliSource
         /// without requiring a draw to call. Useful for working
         /// with relative sizes and aspect ratios.
         //--------------------------------------------------------
-        void CImageView::SetWidthFromImage()
+        void ImageView::SetWidthFromImage()
         {
             SetSize(0.0f, GetSize().GetRelative().y, GetSizeFromImage().x, GetSize().GetAbsolute().y);
         }
@@ -488,7 +488,7 @@ namespace ChilliSource
         ///
         /// @param Enable/disable
         //--------------------------------------------------------
-        void CImageView::EnableHeightFromImage(bool inbEnable)
+        void ImageView::EnableHeightFromImage(bool inbEnable)
         {
             HeightFromImage = inbEnable;
             
@@ -504,7 +504,7 @@ namespace ChilliSource
         /// @return Whether the image view's height will be
         /// based on the height of the image
         //--------------------------------------------------------
-        bool CImageView::IsHeightFromImageEnabled() const
+        bool ImageView::IsHeightFromImageEnabled() const
         {
             return HeightFromImage;
         }
@@ -515,7 +515,7 @@ namespace ChilliSource
         /// without requiring a draw to call. Useful for working
         /// with relative sizes and aspect ratios.
         //--------------------------------------------------------
-        void CImageView::SetHeightFromImage()
+        void ImageView::SetHeightFromImage()
         {
             SetSize(GetSize().GetRelative().x, 0.0f, GetSize().GetAbsolute().x, GetSizeFromImage().y);
         }
@@ -527,7 +527,7 @@ namespace ChilliSource
         ///
         /// @param Unified width
         //--------------------------------------------------------
-        void CImageView::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
+        void ImageView::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
         {
             WidthMaintain = true;
             
@@ -552,7 +552,7 @@ namespace ChilliSource
         ///
         /// @param Unified height
         //--------------------------------------------------------
-        void CImageView::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
+        void ImageView::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
         {
             HeightMaintain = true;
             
@@ -578,7 +578,7 @@ namespace ChilliSource
         ///
         /// @param Unified size
         //--------------------------------------------------------
-        void CImageView::SetFillMaintainingAspect(f32 infRelWidth, f32 infRelHeight, f32 infAbsWidth, f32 infAbsHeight)
+        void ImageView::SetFillMaintainingAspect(f32 infRelWidth, f32 infRelHeight, f32 infAbsWidth, f32 infAbsHeight)
         {
             mbFillMaintain = true;
             mvFillMaintainTarget.vRelative.x = infRelWidth;
@@ -613,7 +613,7 @@ namespace ChilliSource
         ///
         /// @param Unified size
         //--------------------------------------------------------
-        void CImageView::SetFitMaintainingAspect(f32 infRelWidth, f32 infRelHeight, f32 infAbsWidth, f32 infAbsHeight)
+        void ImageView::SetFitMaintainingAspect(f32 infRelWidth, f32 infRelHeight, f32 infAbsWidth, f32 infAbsHeight)
         {
             mbFitMaintain = true;
             mvFitMaintainTarget.vRelative.x = infRelWidth;
@@ -644,7 +644,7 @@ namespace ChilliSource
         ///
         /// @return Whether auto scaling of the height to maintain the aspect ratio
         //--------------------------------------------------------
-        bool CImageView::IsHeightMaintainingAspectEnabled() const
+        bool ImageView::IsHeightMaintainingAspectEnabled() const
         {
             return HeightMaintain;
         }
@@ -655,7 +655,7 @@ namespace ChilliSource
         ///
         /// @param boolean to disable or enable
         //--------------------------------------------------------
-        void CImageView::EnableHeightMaintainingAspect(bool inbEnabled)
+        void ImageView::EnableHeightMaintainingAspect(bool inbEnabled)
         {
             HeightMaintain = inbEnabled;
         }
@@ -664,7 +664,7 @@ namespace ChilliSource
         ///
         /// @return Whether auto scaling of the height to maintain the aspect ratio
         //--------------------------------------------------------
-        bool CImageView::IsWidthMaintainingAspectEnabled() const
+        bool ImageView::IsWidthMaintainingAspectEnabled() const
         {
             return WidthMaintain;
         }
@@ -675,7 +675,7 @@ namespace ChilliSource
         ///
         /// @param boolean to disable or enable
         //--------------------------------------------------------
-        void CImageView::EnableWidthMaintainingAspect(bool inbEnabled)
+        void ImageView::EnableWidthMaintainingAspect(bool inbEnabled)
         {
             WidthMaintain = inbEnabled;	
         }
@@ -685,7 +685,7 @@ namespace ChilliSource
         /// Image view can be sized from assets etc. This function
         /// calculates the size based on these factors
         //--------------------------------------------------------
-        void CImageView::UpdateSizeFromImage()
+        void ImageView::UpdateSizeFromImage()
         {
             if(SizeFromImage)
             {
@@ -710,7 +710,7 @@ namespace ChilliSource
         /// Image view can be sized from assets etc. This function
         /// calculates the size based on these factors
         //--------------------------------------------------------
-        void CImageView::UpdateSizeMaintainingAspect()
+        void ImageView::UpdateSizeMaintainingAspect()
         {
             if(mbFillMaintain)
             {
@@ -737,10 +737,10 @@ namespace ChilliSource
         /// Called when the view is able to retrieve an absolute
         /// value.
         //--------------------------------------------------------
-        void CImageView::LayoutContent()
+        void ImageView::LayoutContent()
         {
             UpdateSizeFromImage();
-            CGUIView::LayoutContent();
+            GUIView::LayoutContent();
         }
         //-----------------------------------------------------------
 		/// Set Flipped Horizontal
@@ -749,7 +749,7 @@ namespace ChilliSource
 		///
 		/// @param Whether to flip or not
 		//-----------------------------------------------------------
-		void CImageView::EnableHorizontalFlip(bool inbValue)
+		void ImageView::EnableHorizontalFlip(bool inbValue)
 		{
 			FlipHorizontal = inbValue;
 		}
@@ -758,7 +758,7 @@ namespace ChilliSource
 		///
 		/// @param Whether sprite is flipped about it's local x-axis
 		//-----------------------------------------------------------
-		bool CImageView::IsHorizontalFlipEnabled() const
+		bool ImageView::IsHorizontalFlipEnabled() const
 		{
 			return FlipHorizontal;
 		}
@@ -769,7 +769,7 @@ namespace ChilliSource
 		///
 		/// @param Whether to flip or not
 		//-----------------------------------------------------------
-		void CImageView::EnableVerticalFlip(bool inbValue)
+		void ImageView::EnableVerticalFlip(bool inbValue)
 		{
 			FlipVertical = inbValue;
 		}
@@ -778,7 +778,7 @@ namespace ChilliSource
 		///
 		/// @param Whether sprite is flipped about it's local y-axis
 		//-----------------------------------------------------------
-		bool CImageView::IsVerticalFlipEnabled() const
+		bool ImageView::IsVerticalFlipEnabled() const
 		{
 			return FlipVertical;
 		}
@@ -789,7 +789,7 @@ namespace ChilliSource
         ///
         /// @param Enable/disable
         //-----------------------------------------------------------
-        void CImageView::EnableActAsSpacer(bool inbValue)
+        void ImageView::EnableActAsSpacer(bool inbValue)
         {
             ActAsSpacer = inbValue;
         }
@@ -798,7 +798,7 @@ namespace ChilliSource
         ///
         /// @param Whether the image view is acting as a container
         //-----------------------------------------------------------
-        bool CImageView::IsActAsSpacerEnabled() const
+        bool ImageView::IsActAsSpacerEnabled() const
         {
             return ActAsSpacer;
         }

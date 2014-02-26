@@ -18,57 +18,57 @@ namespace ChilliSource
         //--------------------------------------------------------
         /// Base
         //--------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CGUIView);
-        CS_FORWARD_DECLARE_CLASS(CGUIViewFactory);
-        CS_FORWARD_DECLARE_CLASS(CInputEvents);
-        CS_FORWARD_DECLARE_CLASS(CWindow);
+        CS_FORWARD_DECLARE_CLASS(GUIView);
+        CS_FORWARD_DECLARE_CLASS(GUIViewFactory);
+        CS_FORWARD_DECLARE_CLASS(InputEvents);
+        CS_FORWARD_DECLARE_CLASS(Window);
         //--------------------------------------------------------
         /// Button
         //--------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(IButton);
-        CS_FORWARD_DECLARE_CLASS(CHighlightButton);
-        CS_FORWARD_DECLARE_CLASS(CStretchableHighlightButton);
-        CS_FORWARD_DECLARE_CLASS(CToggleButton);
+        CS_FORWARD_DECLARE_CLASS(Button);
+        CS_FORWARD_DECLARE_CLASS(HighlightButton);
+        CS_FORWARD_DECLARE_CLASS(StretchableHighlightButton);
+        CS_FORWARD_DECLARE_CLASS(ToggleButton);
         //--------------------------------------------------------
         /// Container
         //--------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CGridView);
-        CS_FORWARD_DECLARE_CLASS(CHorizontalList);
-        CS_FORWARD_DECLARE_CLASS(CScrollView);
-        CS_FORWARD_DECLARE_CLASS(CVerticalList);
+        CS_FORWARD_DECLARE_CLASS(GridView);
+        CS_FORWARD_DECLARE_CLASS(HorizontalList);
+        CS_FORWARD_DECLARE_CLASS(ScrollView);
+        CS_FORWARD_DECLARE_CLASS(VerticalList);
         //--------------------------------------------------------
         /// Debug
         //--------------------------------------------------------
 #ifdef DEBUG_STATS
-        CS_FORWARD_DECLARE_CLASS(CDebugStatsView);
+        CS_FORWARD_DECLARE_CLASS(DebugStatsView);
 #endif
         //--------------------------------------------------------
         /// Image
         //--------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CHorizontalStretchableImage);
-        CS_FORWARD_DECLARE_CLASS(CImageView);
-        CS_FORWARD_DECLARE_CLASS(CStretchableImage);
-        CS_FORWARD_DECLARE_CLASS(CVerticalStretchableImage);
+        CS_FORWARD_DECLARE_CLASS(HorizontalStretchableImage);
+        CS_FORWARD_DECLARE_CLASS(ImageView);
+        CS_FORWARD_DECLARE_CLASS(StretchableImage);
+        CS_FORWARD_DECLARE_CLASS(VerticalStretchableImage);
         //--------------------------------------------------------
         /// Label
         //--------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CEditableLabel);
-        CS_FORWARD_DECLARE_CLASS(CFormattedLabel);
-        CS_FORWARD_DECLARE_CLASS(CLabel);
+        CS_FORWARD_DECLARE_CLASS(EditableLabel);
+        CS_FORWARD_DECLARE_CLASS(FormattedLabel);
+        CS_FORWARD_DECLARE_CLASS(Label);
         //--------------------------------------------------------
         /// Progress Bar
         //--------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CHorizontalClippingProgressBar);
-        CS_FORWARD_DECLARE_CLASS(CHorizontalEndcappedProgressBar);
-        CS_FORWARD_DECLARE_CLASS(CHorizontalProgressBar);
-        CS_FORWARD_DECLARE_CLASS(CProgressBar);
-        CS_FORWARD_DECLARE_CLASS(CVerticalEndcappedProgressBar);
+        CS_FORWARD_DECLARE_CLASS(HorizontalClippingProgressBar);
+        CS_FORWARD_DECLARE_CLASS(HorizontalEndcappedProgressBar);
+        CS_FORWARD_DECLARE_CLASS(HorizontalProgressBar);
+        CS_FORWARD_DECLARE_CLASS(ProgressBar);
+        CS_FORWARD_DECLARE_CLASS(VerticalEndcappedProgressBar);
         //--------------------------------------------------------
         /// Slider Bar
         //--------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CHorizontalSliderBar);
-        CS_FORWARD_DECLARE_CLASS(CSliderBar);
-        CS_FORWARD_DECLARE_CLASS(CVerticalSliderBar);
+        CS_FORWARD_DECLARE_CLASS(HorizontalSliderBar);
+        CS_FORWARD_DECLARE_CLASS(SliderBar);
+        CS_FORWARD_DECLARE_CLASS(VerticalSliderBar);
     }
 }
 

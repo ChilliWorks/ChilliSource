@@ -30,7 +30,7 @@ namespace ChilliSource
 {
 	namespace GUI
 	{
-		class CGUIView
+		class GUIView
 		{
 		protected:
             
@@ -54,13 +54,13 @@ namespace ChilliSource
 
 		public:
 
-			DECLARE_META_CLASS(CGUIView)
+			DECLARE_META_CLASS(GUIView)
 
-			typedef std::vector<GUIViewPtr> Subviews;
+			typedef std::vector<GUIViewSPtr> Subviews;
 
-			CGUIView();
-			CGUIView(const Core::ParamDictionary& insParams);
-			virtual ~CGUIView();
+			GUIView();
+			GUIView(const Core::ParamDictionary& insParams);
+			virtual ~GUIView();
 
 			//---Hierarchy Manipulation
 			//-----------------------------------------------------
@@ -70,7 +70,7 @@ namespace ChilliSource
 			///
 			/// @param GUIView shared pointer
 			//-----------------------------------------------------
-			virtual void AddSubview(const GUIViewPtr& inpSubview);
+			virtual void AddSubview(const GUIViewSPtr& inpSubview);
 			//-----------------------------------------------------
 			/// Remove Subview (Internal)
 			///
@@ -78,7 +78,7 @@ namespace ChilliSource
 			///
 			/// @param GUIView pointer
 			//-----------------------------------------------------
-			virtual void RemoveSubview(CGUIView* inpSubview);
+			virtual void RemoveSubview(GUIView* inpSubview);
 
 			//-----------------------------------------------------
 			/// Remove Subview (Internal)
@@ -113,20 +113,20 @@ namespace ChilliSource
 			///
 			/// @return Raw GUI view pointer
 			//-----------------------------------------------------
-			CGUIView* GetParentViewPtr() const;
+			GUIView* GetParentViewPtr() const;
 			//-----------------------------------------------------
 			/// Get Parent With Name
 			///
 			/// @param Name
 			/// @return Parent in hierarchy with given name
 			//-----------------------------------------------------
-			CGUIView* GetParentWithName(const std::string& instrName) const;
+			GUIView* GetParentWithName(const std::string& instrName) const;
 			//-----------------------------------------------------
 			/// Get Root Window Pointer
 			///
 			/// @return Window that the view is attached to
 			//-----------------------------------------------------
-			CWindow* GetRootWindowPtr() const;
+			Window* GetRootWindowPtr() const;
 			//-----------------------------------------------------
 			/// Get Subviews
 			///
@@ -145,21 +145,21 @@ namespace ChilliSource
 			/// @param Index
 			/// @return Subview at the given index in the hierarchy
 			//-----------------------------------------------------
-			const GUIViewPtr& GetSubviewAtIndex(u32 inudwIndex) const;
+			const GUIViewSPtr& GetSubviewAtIndex(u32 inudwIndex) const;
 			//-----------------------------------------------------
 			/// Get Subview With Name
 			///
 			/// @param Name
 			/// @return Subview in hierarchy with given name
 			//-----------------------------------------------------
-			const GUIViewPtr& GetSubviewWithName(const std::string& instrName) const;
+			const GUIViewSPtr& GetSubviewWithName(const std::string& instrName) const;
 			//-----------------------------------------------------
 			/// Get Subviews With Name
 			///
 			/// @param Name
 			/// @param out List of subviews in hierarchy with given name
 			//-----------------------------------------------------
-			void GetSubviewsWithName(const std::string& instrName, std::vector<GUIViewPtr>& outSubviews) const;
+			void GetSubviewsWithName(const std::string& instrName, std::vector<GUIViewSPtr>& outSubviews) const;
 			//-----------------------------------------------------
 			/// Bring Forward
 			///
@@ -189,25 +189,25 @@ namespace ChilliSource
 			///
 			/// Move this view a single layer towards the screen
 			//-----------------------------------------------------
-			void BringSubviewForward(CGUIView* inpView);
+			void BringSubviewForward(GUIView* inpView);
 			//-----------------------------------------------------
 			/// Send Subview Backward
 			///
 			/// Move this view a layer away from the screen
 			//-----------------------------------------------------
-			void SendSubviewBackward(CGUIView* inpView);
+			void SendSubviewBackward(GUIView* inpView);
 			//-----------------------------------------------------
 			/// Bring Subview To Front
 			///
 			/// Move this view to the top of the view hierarchy
 			//-----------------------------------------------------
-			void BringSubviewToFront(CGUIView* inpView);
+			void BringSubviewToFront(GUIView* inpView);
 			//-----------------------------------------------------
 			/// Send Subview To Back
 			///
 			/// Move this view to the end of the view hierarchy
 			//-----------------------------------------------------
-			void SendSubviewToBack(CGUIView* inpView);
+			void SendSubviewToBack(GUIView* inpView);
 
 			//---View properties
 			//-----------------------------------------------------
@@ -843,19 +843,19 @@ namespace ChilliSource
 			///
 			/// @param The parent the view is attached to
 			//-----------------------------------------------------
-			void SetParentView(CGUIView* inpParentView);
+			void SetParentView(GUIView* inpParentView);
 			//-----------------------------------------------------
 			/// Get Input Events
 			///
 			/// @return The input events of the view
 			//-----------------------------------------------------
-			CInputEvents* GetInputEvents();
+			InputEvents* GetInputEvents();
 			//-----------------------------------------------------
 			/// Set Root Window 
 			///
 			/// @param The window the view is attached to
 			//-----------------------------------------------------
-			void SetRootWindow(CWindow* inpWindow);
+			void SetRootWindow(Window* inpWindow);
             //-----------------------------------------------------------
             /// Get Touch Began Event
             ///
@@ -906,7 +906,7 @@ namespace ChilliSource
 			///
 			/// @param GUIView shared pointer
 			//-----------------------------------------------------
-			virtual void OnSubviewAdded(const GUIViewPtr& inpSubview) { }
+			virtual void OnSubviewAdded(const GUIViewSPtr& inpSubview) { }
 			//-----------------------------------------------------
 			/// Layout Children's Content
 			///
@@ -936,10 +936,10 @@ namespace ChilliSource
 			Subviews mSubviews;
 			Subviews mSubviewsCopy;
 
-			CInputEvents mInputEvents;
+			InputEvents mInputEvents;
 
-			CGUIView* mpParentView;
-			CWindow* mpRootWindow;
+			GUIView* mpParentView;
+			Window* mpRootWindow;
 
 			bool mbIsBeingDragged;
 			

@@ -21,7 +21,7 @@ namespace ChilliSource
 {
     namespace GUI
     {
-		DEFINE_META_CLASS(CHorizontalProgressBar)
+		DEFINE_META_CLASS(HorizontalProgressBar)
 
 		DEFINE_PROPERTY(BackgroundTexture);
 		DEFINE_PROPERTY(ProgressTexture);
@@ -37,7 +37,7 @@ namespace ChilliSource
         ///
         /// Create the subviews that make up the container
         //------------------------------------------------------
-        CHorizontalProgressBar::CHorizontalProgressBar() : mpBackgroundImage(new CImageView()), mpProgressImage(new CImageView()),
+        HorizontalProgressBar::HorizontalProgressBar() : mpBackgroundImage(new ImageView()), mpProgressImage(new ImageView()),
 			BackgroundSpriteSheetIndex(0), ProgressSpriteSheetIndex(0)
         {
 			SetSize(0.8f, 0.1f, 0.0f, 0.0f);
@@ -59,8 +59,8 @@ namespace ChilliSource
         ///
         /// From param dictionary
         //------------------------------------------------------
-        CHorizontalProgressBar::CHorizontalProgressBar(const Core::ParamDictionary& insParams) 
-		: CProgressBar(insParams), mpBackgroundImage(new CImageView()), mpProgressImage(new CImageView()), BackgroundSpriteSheetIndex(0), ProgressSpriteSheetIndex(0) 
+        HorizontalProgressBar::HorizontalProgressBar(const Core::ParamDictionary& insParams) 
+		: ProgressBar(insParams), mpBackgroundImage(new ImageView()), mpProgressImage(new ImageView()), BackgroundSpriteSheetIndex(0), ProgressSpriteSheetIndex(0) 
         {
             mfProgressAbsHeight = 0.0f;
             mfProgressRelHeight = 1.0f;
@@ -146,7 +146,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet
 		//--------------------------------------------------------
-		void CHorizontalProgressBar::SetBackgroundSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void HorizontalProgressBar::SetBackgroundSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
 		{
 			BackgroundSpriteSheet = inpSpriteSheet;
 			mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -161,7 +161,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet
 		//--------------------------------------------------------
-		void CHorizontalProgressBar::SetProgressSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void HorizontalProgressBar::SetProgressSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
 		{
 			ProgressSpriteSheet = inpSpriteSheet;
 			mpProgressImage->SetSpriteSheet(inpSpriteSheet);
@@ -176,7 +176,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CHorizontalProgressBar::GetBackgroundSpriteSheet() const
+		const Rendering::SpriteSheetPtr& HorizontalProgressBar::GetBackgroundSpriteSheet() const
 		{
 			return BackgroundSpriteSheet;
 		}
@@ -185,7 +185,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CHorizontalProgressBar::GetProgressSpriteSheet() const
+		const Rendering::SpriteSheetPtr& HorizontalProgressBar::GetProgressSpriteSheet() const
 		{
 			return ProgressSpriteSheet;
 		}
@@ -194,7 +194,7 @@ namespace ChilliSource
         ///
         /// @param The index of the image within the sprite sheet
         //--------------------------------------------------------
-        void CHorizontalProgressBar::SetBackgroundSpriteSheetIndex(u32 inudwIndex)
+        void HorizontalProgressBar::SetBackgroundSpriteSheetIndex(u32 inudwIndex)
         {
 			BackgroundSpriteSheetIndex = inudwIndex;
             mpBackgroundImage->SetSpriteSheetIndex(inudwIndex);
@@ -204,7 +204,7 @@ namespace ChilliSource
         ///
         /// @param The index of the image within the sprite sheet
         //--------------------------------------------------------
-        void CHorizontalProgressBar::SetProgressSpriteSheetIndex(u32 inudwIndex)
+        void HorizontalProgressBar::SetProgressSpriteSheetIndex(u32 inudwIndex)
         {
 			ProgressSpriteSheetIndex = inudwIndex;
             mpProgressImage->SetSpriteSheetIndex(inudwIndex);
@@ -214,7 +214,7 @@ namespace ChilliSource
 		///
 		/// @return The index of the image within the sprite sheet
 		//--------------------------------------------------------
-		u32 CHorizontalProgressBar::GetBackgroundSpriteSheetIndex() const
+		u32 HorizontalProgressBar::GetBackgroundSpriteSheetIndex() const
 		{
 			return BackgroundSpriteSheetIndex;
 		}
@@ -223,7 +223,7 @@ namespace ChilliSource
 		///
 		/// @return The index of the image within the sprite sheet
 		//--------------------------------------------------------
-		u32 CHorizontalProgressBar::GetProgressSpriteSheetIndex() const
+		u32 HorizontalProgressBar::GetProgressSpriteSheetIndex() const
 		{
 			return ProgressSpriteSheetIndex;
 		}
@@ -232,7 +232,7 @@ namespace ChilliSource
 		///
 		/// @param The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		void CHorizontalProgressBar::SetBackgroundSpriteSheetIndexID(const std::string& instrID)
+		void HorizontalProgressBar::SetBackgroundSpriteSheetIndexID(const std::string& instrID)
 		{
 			CS_ASSERT(BackgroundSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			BackgroundSpriteSheetIndexID = instrID;
@@ -243,7 +243,7 @@ namespace ChilliSource
 		///
 		/// @param The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		void CHorizontalProgressBar::SetProgressSpriteSheetIndexID(const std::string& instrID)
+		void HorizontalProgressBar::SetProgressSpriteSheetIndexID(const std::string& instrID)
 		{
 			CS_ASSERT(ProgressSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			ProgressSpriteSheetIndexID = instrID;
@@ -254,7 +254,7 @@ namespace ChilliSource
 		///
 		/// @return The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		const std::string& CHorizontalProgressBar::GetBackgroundSpriteSheetIndexID() const
+		const std::string& HorizontalProgressBar::GetBackgroundSpriteSheetIndexID() const
 		{
 			return BackgroundSpriteSheetIndexID;
 		}
@@ -263,7 +263,7 @@ namespace ChilliSource
 		///
 		/// @return The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		const std::string& CHorizontalProgressBar::GetProgressSpriteSheetIndexID() const
+		const std::string& HorizontalProgressBar::GetProgressSpriteSheetIndexID() const
 		{
 			return ProgressSpriteSheetIndexID;
 		}
@@ -272,7 +272,7 @@ namespace ChilliSource
         ///
         /// @param Texture representing the background
         //------------------------------------------------------
-        void CHorizontalProgressBar::SetBackgroundImage(const Rendering::TexturePtr& inpTexture)
+        void HorizontalProgressBar::SetBackgroundImage(const Rendering::TexturePtr& inpTexture)
         {
 			BackgroundTexture = inpTexture;
             mpBackgroundImage->SetTexture(inpTexture);
@@ -287,7 +287,7 @@ namespace ChilliSource
 		///
 		/// @param Texture representing the bar
 		//------------------------------------------------------
-		void CHorizontalProgressBar::SetProgressImage(const Rendering::TexturePtr& inpTexture)
+		void HorizontalProgressBar::SetProgressImage(const Rendering::TexturePtr& inpTexture)
 		{
 			ProgressTexture = inpTexture;
 			mpProgressImage->SetTexture(inpTexture);
@@ -302,7 +302,7 @@ namespace ChilliSource
 		///
 		/// @return Texture representing the background
 		//------------------------------------------------------
-		const Rendering::TexturePtr& CHorizontalProgressBar::GetBackgroundImage() const
+		const Rendering::TexturePtr& HorizontalProgressBar::GetBackgroundImage() const
 		{
 			return BackgroundTexture;
 		}
@@ -311,7 +311,7 @@ namespace ChilliSource
 		///
 		/// @return Texture representing the bar
 		//------------------------------------------------------
-		const Rendering::TexturePtr& CHorizontalProgressBar::GetProgressImage() const
+		const Rendering::TexturePtr& HorizontalProgressBar::GetProgressImage() const
 		{
 			return ProgressTexture;
 		}
@@ -323,14 +323,14 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //------------------------------------------------------
-        void CHorizontalProgressBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void HorizontalProgressBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
             //Update the progress bar
             mpProgressImage->SetSize(GetProgress(), mfProgressRelHeight, 0, mfProgressAbsHeight);
             
             if(Visible)
             {
-                CGUIView::Draw(inpCanvas);
+                GUIView::Draw(inpCanvas);
             }
         }
         //--------------------------------------------------------
@@ -338,7 +338,7 @@ namespace ChilliSource
         ///
         /// @param Rel, Abs
         //--------------------------------------------------------
-        void CHorizontalProgressBar::SetProgressImageHeight(f32 infRel, f32 infAbs)
+        void HorizontalProgressBar::SetProgressImageHeight(f32 infRel, f32 infAbs)
         {
             mfProgressAbsHeight = infAbs;
             mfProgressRelHeight = infRel;

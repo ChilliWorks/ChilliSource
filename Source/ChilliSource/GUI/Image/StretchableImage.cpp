@@ -19,7 +19,7 @@ namespace ChilliSource
 {
     namespace GUI
     {
-		DEFINE_META_CLASS(CStretchableImage)
+		DEFINE_META_CLASS(StretchableImage)
 		
 		DEFINE_PROPERTY(SpriteSheet);
 		DEFINE_PROPERTY(HeightMaintain);
@@ -32,7 +32,7 @@ namespace ChilliSource
         /// 
         /// Empty
         //---------------------------------------------------------
-        CStretchableImage::CStretchableImage()
+        StretchableImage::StretchableImage()
 		: HeightMaintain(false), WidthMaintain(false), CentreTouchConsumption(false)
         {
 			memset(&msIndices, 0, sizeof(u32) * 9);
@@ -42,8 +42,8 @@ namespace ChilliSource
         ///
         /// From param dictionary
         //---------------------------------------------------------
-        CStretchableImage::CStretchableImage(const Core::ParamDictionary& insParams) 
-		: CGUIView(insParams), HeightMaintain(false), WidthMaintain(false), CentreTouchConsumption(false)
+        StretchableImage::StretchableImage(const Core::ParamDictionary& insParams) 
+		: GUIView(insParams), HeightMaintain(false), WidthMaintain(false), CentreTouchConsumption(false)
         {
 			CentreTouchConsumption = IsTouchConsumptionEnabled();
 			
@@ -175,7 +175,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet containing the nine patches
         //---------------------------------------------------------
-        void CStretchableImage::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void StretchableImage::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
         {
             SpriteSheet = inpSpriteSheet;
         }
@@ -184,7 +184,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet containing the nine patches
 		//---------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CStretchableImage::GetSpriteSheet() const
+		const Rendering::SpriteSheetPtr& StretchableImage::GetSpriteSheet() const
 		{
 			return SpriteSheet;
 		}
@@ -205,7 +205,7 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		void CStretchableImage::SetBaseSpriteSheetIndexID(const std::string& instrID)
+		void StretchableImage::SetBaseSpriteSheetIndexID(const std::string& instrID)
 		{
 			if(SpriteSheet)
 			{
@@ -239,7 +239,7 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		const std::string& CStretchableImage::GetBaseSpriteSheetIndexID() const
+		const std::string& StretchableImage::GetBaseSpriteSheetIndexID() const
 		{
 			return BaseSpriteSheetIndexID;
 		}
@@ -248,7 +248,7 @@ namespace ChilliSource
         ///
         /// @param Struct containing the tpage index of each patch
         //---------------------------------------------------------
-        void CStretchableImage::SetSpriteSheetIndices(const CStretchableImage::SpriteSheetIndex& insIndices)
+        void StretchableImage::SetSpriteSheetIndices(const StretchableImage::SpriteSheetIndex& insIndices)
         {
             msIndices = insIndices;
         }
@@ -267,7 +267,7 @@ namespace ChilliSource
         ///
         /// @param Array containing the tpage index of each patch
         //---------------------------------------------------------
-        void CStretchableImage::SetSpriteSheetIndices(const u32* inpIndices)
+        void StretchableImage::SetSpriteSheetIndices(const u32* inpIndices)
         {
             msIndices.udwTopLeft = inpIndices[0];
             msIndices.udwTopRight = inpIndices[1];
@@ -286,7 +286,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //---------------------------------------------------------
-        void CStretchableImage::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void StretchableImage::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
 			//Check if this is on screen
 			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
@@ -421,7 +421,7 @@ namespace ChilliSource
                                    Core::AlignmentAnchor::k_topLeft);
                 
                 // Render subviews
-                CGUIView::Draw(inpCanvas);
+                GUIView::Draw(inpCanvas);
             }
 		}
 		//--------------------------------------------------------
@@ -432,7 +432,7 @@ namespace ChilliSource
 		///
 		/// @param Unified width
 		//--------------------------------------------------------
-		void CStretchableImage::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
+		void StretchableImage::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
 		{
             Core::CVector2 vCurrentSize = GetAbsoluteSize();
 			f32 fAspectRatio = vCurrentSize.y / vCurrentSize.x;
@@ -454,7 +454,7 @@ namespace ChilliSource
 		///
 		/// @param Unified height
 		//--------------------------------------------------------
-		void CStretchableImage::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
+		void StretchableImage::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
 		{
             Core::CVector2 vCurrentSize = GetAbsoluteSize();
 			f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
@@ -475,7 +475,7 @@ namespace ChilliSource
 		///
 		/// @param boolean to disable or enable
 		//--------------------------------------------------------
-		void CStretchableImage::EnableHeightMaintainingAspect(bool inbEnabled)
+		void StretchableImage::EnableHeightMaintainingAspect(bool inbEnabled)
 		{
 			HeightMaintain = inbEnabled;
 		}
@@ -486,7 +486,7 @@ namespace ChilliSource
 		///
 		/// @param boolean to disable or enable
 		//--------------------------------------------------------
-		void CStretchableImage::EnableWidthMaintainingAspect(bool inbEnabled)
+		void StretchableImage::EnableWidthMaintainingAspect(bool inbEnabled)
 		{
 			WidthMaintain = inbEnabled;            
 		}
@@ -495,7 +495,7 @@ namespace ChilliSource
 		///
 		/// @return auto scaling of the Width to maintain the aspect ratio
 		//--------------------------------------------------------
-		bool CStretchableImage::IsWidthMaintainingAspectEnabled() const
+		bool StretchableImage::IsWidthMaintainingAspectEnabled() const
 		{
 			return WidthMaintain;
 		}
@@ -504,12 +504,12 @@ namespace ChilliSource
 		///
 		/// @return auto scaling of the height to maintain the aspect ratio
 		//--------------------------------------------------------
-		bool CStretchableImage::IsHeightMaintainingAspectEnabled() const
+		bool StretchableImage::IsHeightMaintainingAspectEnabled() const
 		{
 			return HeightMaintain;
 		}
 		
-		void CStretchableImage::CalculatePatchSize(PatchSize& outPatchSize)
+		void StretchableImage::CalculatePatchSize(PatchSize& outPatchSize)
 		{
 			Core::CVector2 vPanelSize = GetAbsoluteSize();
 			Core::CVector2 vPanelPos = GetAbsoluteScreenSpacePosition();
@@ -586,7 +586,7 @@ namespace ChilliSource
 		///
 		/// @param boolean to disable or enable
 		//--------------------------------------------------------
-		void CStretchableImage::EnableCentreTouchConsumption(bool inbEnabled)
+		void StretchableImage::EnableCentreTouchConsumption(bool inbEnabled)
 		{
 			CentreTouchConsumption = inbEnabled;
 		}
@@ -596,14 +596,14 @@ namespace ChilliSource
 		///
 		/// @return whether the touch though the middle is enabled or not
 		//--------------------------------------------------------
-		bool CStretchableImage::IsCentreTouchConsumptionEnabled() const
+		bool StretchableImage::IsCentreTouchConsumptionEnabled() const
 		{
 			return CentreTouchConsumption;
 		}
 		
-		bool CStretchableImage::OnTouchBegan(const Input::TouchInfo &insTouchInfo)
+		bool StretchableImage::OnTouchBegan(const Input::TouchInfo &insTouchInfo)
 		{
-			bool bConsumed = CGUIView::OnTouchBegan(insTouchInfo);
+			bool bConsumed = GUIView::OnTouchBegan(insTouchInfo);
 			
 			if (!CentreTouchConsumption && bConsumed && IsTouchConsumptionEnabled(TouchType::k_began))
 			{
@@ -627,7 +627,7 @@ namespace ChilliSource
 			return bConsumed;
 		}
 		
-		bool CStretchableImage::OnTouchMoved(const Input::TouchInfo & insTouchInfo)
+		bool StretchableImage::OnTouchMoved(const Input::TouchInfo & insTouchInfo)
 		{
 			// Special treatment if the middle image has to let the touch through
 			if (!CentreTouchConsumption && IsTouchConsumptionEnabled(TouchType::k_moved))
@@ -648,7 +648,7 @@ namespace ChilliSource
 					
 					mSubviewsCopy = mSubviews;
 					
-					for(CGUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
+					for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
 					{
 						if((*it)->OnTouchMoved(insTouchInfo))
 						{
@@ -685,7 +685,7 @@ namespace ChilliSource
 				return false;
 			}
 			
-			return CGUIView::OnTouchMoved(insTouchInfo);
+			return GUIView::OnTouchMoved(insTouchInfo);
 		}
     }
 }

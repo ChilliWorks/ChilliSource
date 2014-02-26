@@ -16,14 +16,14 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        class CScrollView : public CGUIView
+        class ScrollView : public GUIView
         {
         public:
 
-			DECLARE_META_CLASS(CScrollView)
+			DECLARE_META_CLASS(ScrollView)
 
-            CScrollView();
-            CScrollView(const Core::ParamDictionary& insParams);
+            ScrollView();
+            ScrollView(const Core::ParamDictionary& insParams);
             //-----------------------------------------------------
             /// Add Subview
             ///
@@ -31,7 +31,7 @@ namespace ChilliSource
             ///
             /// @param GUIView shared pointer
             //-----------------------------------------------------
-            void AddSubview(const GUIViewPtr& inpSubview);
+            void AddSubview(const GUIViewSPtr& inpSubview);
             //-----------------------------------------------------
             /// Remove Subview (Internal)
             ///
@@ -39,7 +39,7 @@ namespace ChilliSource
             ///
             /// @param GUIView pointer
             //-----------------------------------------------------
-            void RemoveSubview(CGUIView* inpSubview);
+            void RemoveSubview(GUIView* inpSubview);
             //-----------------------------------------------------------
             /// On Touch Began
             ///
@@ -158,13 +158,13 @@ namespace ChilliSource
 			/// @return The GUIView that contains all scrollable subviews
 			/// within the scroll view.
 			//-----------------------------------------------------------
-            const GUIViewPtr& GetContainerView() const;
+            const GUIViewSPtr& GetContainerView() const;
             
         private:
             
             Core::CVector2 mvVelocity;
             
-            GUIViewPtr mpContainerView;
+            GUIViewSPtr mpContainerView;
             
 			Core::CVector2 mvRealPreviousTouchPosition;
 			Core::CVector2 mvNextRealPreviousTouchPosition;

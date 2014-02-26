@@ -34,7 +34,7 @@ namespace ChilliSource
 		public:
 			typedef fastdelegate::FastDelegate1<const Gesture&> GestureEventDelegate;
 			
-            Gesture(GUI::CGUIView* inpView);
+            Gesture(GUI::GUIView* inpView);
             Gesture(TouchScreen* inpTouchDevice);
 			virtual ~Gesture();
 			
@@ -90,7 +90,7 @@ namespace ChilliSource
 			u16 mNumContactPointsRequired;	
 			bool mbIsGestureInvalid;
 			Core::CTimer mTimer;
-            GUI::CGUIView* mpView;
+            GUI::GUIView* mpView;
             TouchScreen* mpTouchDevice;
             
         private:
@@ -107,7 +107,7 @@ namespace ChilliSource
 		class SwipeGesture : public Gesture
 		{
 		public:
-            SwipeGesture(GUI::CGUIView* inpSurface);
+            SwipeGesture(GUI::GUIView* inpSurface);
             SwipeGesture(TouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
@@ -186,7 +186,7 @@ namespace ChilliSource
 		class PinchGesture : public Gesture
 		{
 		public:
-            PinchGesture(GUI::CGUIView* inpSurface);
+            PinchGesture(GUI::GUIView* inpSurface);
             PinchGesture(TouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
@@ -290,7 +290,7 @@ namespace ChilliSource
 		class TapCSwipeGestureGesture : public Gesture
 		{
 		public:
-            TapCSwipeGestureGesture(GUI::CGUIView* inpSurface);
+            TapCSwipeGestureGesture(GUI::GUIView* inpSurface);
             TapCSwipeGestureGesture(TouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
@@ -368,7 +368,7 @@ namespace ChilliSource
 		class DragGesture : public Gesture
 		{
 		public:
-			DragGesture(GUI::CGUIView* inpSurface);
+			DragGesture(GUI::GUIView* inpSurface);
             DragGesture(TouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
@@ -459,7 +459,7 @@ namespace ChilliSource
 		class CHoldGesture : public Gesture
 		{
 		public:
-			CHoldGesture(GUI::CGUIView* inpSurface);
+			CHoldGesture(GUI::GUIView* inpSurface);
             CHoldGesture(TouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------

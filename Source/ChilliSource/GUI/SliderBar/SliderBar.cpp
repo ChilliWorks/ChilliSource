@@ -14,14 +14,14 @@ namespace ChilliSource
 {
     namespace GUI
     {
-		DEFINE_META_CLASS(CSliderBar)
+		DEFINE_META_CLASS(SliderBar)
 
         //----------------------------------------------
         /// Constructor
         ///
         /// Default
         //----------------------------------------------
-        CSliderBar::CSliderBar() : mfSliderValue(0.0f)
+        SliderBar::SliderBar() : mfSliderValue(0.0f)
         {
             
         }
@@ -30,7 +30,7 @@ namespace ChilliSource
         ///
         /// From Params
         //----------------------------------------------
-        CSliderBar::CSliderBar(const Core::ParamDictionary& insParams) : CGUIView(insParams), mfSliderValue(0.0f)
+        SliderBar::SliderBar(const Core::ParamDictionary& insParams) : GUIView(insParams), mfSliderValue(0.0f)
         {
             
         }
@@ -39,7 +39,7 @@ namespace ChilliSource
         ///
         /// @return Normalised value of the slider pos
         //----------------------------------------------
-        f32 CSliderBar::GetValue() const
+        f32 SliderBar::GetValue() const
         {
             return Core::CMathUtils::Clamp(mfSliderValue, 0.0f, 1.0f);
         }
@@ -48,7 +48,7 @@ namespace ChilliSource
         ///
         /// @param Normalised value of the slider pos
         //----------------------------------------------
-        void CSliderBar::SetValue(f32 infValue)
+        void SliderBar::SetValue(f32 infValue)
         {
             mfSliderValue=Core::CMathUtils::Clamp(infValue, 0.0f, 1.0f);
         }		

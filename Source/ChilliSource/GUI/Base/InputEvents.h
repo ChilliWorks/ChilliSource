@@ -17,9 +17,9 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        typedef fastdelegate::FastDelegate2<CGUIView*, const Input::TouchInfo&> GUIEventDelegate;
+        typedef fastdelegate::FastDelegate2<GUIView*, const Input::TouchInfo&> GUIEventDelegate;
         
-        class CInputEvents
+        class InputEvents
         {
         public:
             //---User action delegates
@@ -87,7 +87,7 @@ namespace ChilliSource
             /// @param Touch data
             /// @return Whether the view contains the touch
             //-----------------------------------------------------------
-            bool OnTouchBegan(CGUIView* inpView, const Input::TouchInfo & insTouchInfo);
+            bool OnTouchBegan(GUIView* inpView, const Input::TouchInfo & insTouchInfo);
             //-----------------------------------------------------------
             /// On Touch Moved
             ///
@@ -96,7 +96,7 @@ namespace ChilliSource
             /// @param Touch data
             /// @return Whether the view contains the touch
             //-----------------------------------------------------------
-            bool OnTouchMoved(CGUIView* inpView, const Input::TouchInfo & insTouchInfo);
+            bool OnTouchMoved(GUIView* inpView, const Input::TouchInfo & insTouchInfo);
             //-----------------------------------------------------------
             /// On Touch Ended
             ///
@@ -104,7 +104,7 @@ namespace ChilliSource
             ///
             /// @param Touch data
             //-----------------------------------------------------------
-            void OnTouchEnded(CGUIView* inpView, const Input::TouchInfo & insTouchInfo);
+            void OnTouchEnded(GUIView* inpView, const Input::TouchInfo & insTouchInfo);
             
         protected:
             

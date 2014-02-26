@@ -22,7 +22,7 @@ namespace ChilliSource
 {
     namespace GUI
     {
-		DEFINE_META_CLASS(CScrollView)
+		DEFINE_META_CLASS(ScrollView)
 
 		DEFINE_PROPERTY(ScrollHorizontally);
 		DEFINE_PROPERTY(ScrollVertically);
@@ -35,8 +35,8 @@ namespace ChilliSource
         ///
         /// Default
         //--------------------------------------------
-        CScrollView::CScrollView() 
-		: ScrollHorizontally(true), ScrollVertically(true), mpContainerView(new CGUIView), mbTouchMoved(false), mbTouchActive(false), mfTouchTravel(0.0f),mbDrawDebug(false)
+        ScrollView::ScrollView() 
+		: ScrollHorizontally(true), ScrollVertically(true), mpContainerView(new GUIView), mbTouchMoved(false), mbTouchActive(false), mfTouchTravel(0.0f),mbDrawDebug(false)
         {
             //A scroll view that doesn't clip is useless
             EnableSubviewClipping(true);
@@ -48,15 +48,15 @@ namespace ChilliSource
             mpContainerView->EnableAlignmentToParent(true);
             mpContainerView->SetAlignmentToParent(Core::AlignmentAnchor::k_topLeft);
             mpContainerView->EnableTouchConsumption(false);
-            CGUIView::AddSubview(mpContainerView);
+            GUIView::AddSubview(mpContainerView);
         }
         //--------------------------------------------
         /// Constructor
         ///
         /// From param dictionary
         //--------------------------------------------
-        CScrollView::CScrollView(const Core::ParamDictionary& insParams) 
-		: CGUIView(insParams), ScrollHorizontally(true), ScrollVertically(true), mpContainerView(new CGUIView), mbTouchMoved(false), mbTouchActive(false), mfTouchTravel(0.0f),mbDrawDebug(false)
+        ScrollView::ScrollView(const Core::ParamDictionary& insParams) 
+		: GUIView(insParams), ScrollHorizontally(true), ScrollVertically(true), mpContainerView(new GUIView), mbTouchMoved(false), mbTouchActive(false), mfTouchTravel(0.0f),mbDrawDebug(false)
         {
             //A scroll view that doesn't clip is useless
             EnableSubviewClipping(true);
@@ -81,7 +81,7 @@ namespace ChilliSource
             mpContainerView->EnableAlignmentToParent(true);
             mpContainerView->SetAlignmentToParent(Core::AlignmentAnchor::k_topLeft);
             mpContainerView->EnableTouchConsumption(false);
-            CGUIView::AddSubview(mpContainerView);
+            GUIView::AddSubview(mpContainerView);
         }
         //-----------------------------------------------------
         /// Add Subview
@@ -90,7 +90,7 @@ namespace ChilliSource
         ///
         /// @param GUIView shared pointer
         //-----------------------------------------------------
-        void CScrollView::AddSubview(const GUIViewPtr& inpSubview)
+        void ScrollView::AddSubview(const GUIViewSPtr& inpSubview)
         {
             mpContainerView->AddSubview(inpSubview);
         }
@@ -101,7 +101,7 @@ namespace ChilliSource
         ///
         /// @param GUIView pointer
         //-----------------------------------------------------
-        void CScrollView::RemoveSubview(CGUIView* inpSubview)
+        void ScrollView::RemoveSubview(GUIView* inpSubview)
         {
             mpContainerView->RemoveSubview(inpSubview);
         }
@@ -110,7 +110,7 @@ namespace ChilliSource
         ///
         /// @param Whether the scroll view allows sideways scrolling
         //-----------------------------------------------------------
-        void CScrollView::EnableHorizontalScrolling(bool inbEnabled)
+        void ScrollView::EnableHorizontalScrolling(bool inbEnabled)
         {
             ScrollHorizontally = inbEnabled;
         }
@@ -119,7 +119,7 @@ namespace ChilliSource
         ///
         /// @param Whether the scroll view allows vertical scrolling
         //-----------------------------------------------------------
-        void CScrollView::EnableVerticalScrolling(bool inbEnabled)
+        void ScrollView::EnableVerticalScrolling(bool inbEnabled)
         {
             ScrollVertically = inbEnabled;
         }
@@ -128,7 +128,7 @@ namespace ChilliSource
 		///
 		/// @return Whether the scroll view allows sideways scrolling
 		//-----------------------------------------------------------
-		bool CScrollView::IsHorizontalScrollingEnabled() const
+		bool ScrollView::IsHorizontalScrollingEnabled() const
 		{
 			return ScrollHorizontally;
 		}
@@ -137,7 +137,7 @@ namespace ChilliSource
 		///
 		/// @return Whether the scroll view allows vertical scrolling
 		//-----------------------------------------------------------
-		bool CScrollView::IsVerticalScrollingEnabled() const
+		bool ScrollView::IsVerticalScrollingEnabled() const
 		{
 			return ScrollVertically;
 		}
@@ -146,7 +146,7 @@ namespace ChilliSource
         ///
         /// @param Time between frames
         //-----------------------------------------------------
-        void CScrollView::Update(f32 infDt)
+        void ScrollView::Update(f32 infDt)
         {
             if(Visible)
             {
@@ -216,7 +216,7 @@ namespace ChilliSource
 					mbTouchMoved = false;
 				}
 				
-                CGUIView::Update(infDt);
+                GUIView::Update(infDt);
 			}
         }
         //-----------------------------------------------------
@@ -224,7 +224,7 @@ namespace ChilliSource
         ///
         /// Resets the scroller back to the default
         //-----------------------------------------------------
-        void CScrollView::Reset()
+        void ScrollView::Reset()
         {
             mvVelocity = Core::CVector2::ZERO;
             mpContainerView->SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::CVector2::ZERO, Core::CVector2::ZERO));
@@ -236,7 +236,7 @@ namespace ChilliSource
         ///
         /// @param The new position
         //-----------------------------------------------------
-        void CScrollView::JumpTo(const Core::UnifiedVector2& inuvPosition)
+        void ScrollView::JumpTo(const Core::UnifiedVector2& inuvPosition)
         {
             Reset();
             Core::CVector2 vAbsPos = inuvPosition.GetAbsolute() + (inuvPosition.GetRelative()*mpContainerView->GetAbsoluteSize());
@@ -247,7 +247,7 @@ namespace ChilliSource
         ///
         /// @param Content size
         //-----------------------------------------------------
-        void CScrollView::SetAbsoluteContentSize(const Core::CVector2& invSize)
+        void ScrollView::SetAbsoluteContentSize(const Core::CVector2& invSize)
         {
             mpContainerView->SetSize(0.0f, 0.0f, invSize.x, invSize.y);
         }
@@ -256,7 +256,7 @@ namespace ChilliSource
         ///
         /// @return Content size
         //-----------------------------------------------------
-        Core::CVector2 CScrollView::GetAbsoluteContentSize() const
+        Core::CVector2 ScrollView::GetAbsoluteContentSize() const
         {
             if(!mpContainerView)
                 return Core::CVector2::ZERO;
@@ -268,7 +268,7 @@ namespace ChilliSource
         /// @return The current absolute position of the content
         /// from the top left corner of the scroll view
         //-----------------------------------------------------------
-        Core::CVector2 CScrollView::GetAbsoluteContentPosition() const
+        Core::CVector2 ScrollView::GetAbsoluteContentPosition() const
         {
             if(!mpContainerView)
                 return Core::CVector2::ZERO;
@@ -279,7 +279,7 @@ namespace ChilliSource
         ///
         /// @param Velocity
         //-----------------------------------------------------
-        void CScrollView::SetVelocity(const Core::CVector2& invVelocity)
+        void ScrollView::SetVelocity(const Core::CVector2& invVelocity)
         {
             mvVelocity = invVelocity;
         }
@@ -291,7 +291,7 @@ namespace ChilliSource
         /// @param Touch data
         /// @return Whether touch has been consumed
         //-----------------------------------------------------------
-        bool CScrollView::OnTouchBegan(const Input::TouchInfo& insTouchInfo)
+        bool ScrollView::OnTouchBegan(const Input::TouchInfo& insTouchInfo)
         {
             if(UserInteraction && Visible)
             {
@@ -303,7 +303,7 @@ namespace ChilliSource
 				mfTouchTravel = 0.0f;
             }
             
-            return CGUIView::OnTouchBegan(insTouchInfo);
+            return GUIView::OnTouchBegan(insTouchInfo);
         }
         //-----------------------------------------------------------
         /// On Touch Moved
@@ -313,7 +313,7 @@ namespace ChilliSource
         /// @param Touch data
         /// @return Whether touch has been consumed
         //-----------------------------------------------------------
-        bool CScrollView::OnTouchMoved(const Input::TouchInfo& insTouchInfo)
+        bool ScrollView::OnTouchMoved(const Input::TouchInfo& insTouchInfo)
         {
             if(UserInteraction && Visible && mbTouchActive && Contains(insTouchInfo.vLocation))
             {
@@ -333,7 +333,7 @@ namespace ChilliSource
 				mvNextRealPreviousTouchPosition = insTouchInfo.vLocation;
 				mbTouchMoved = true;
 				
-				CGUIView::OnTouchMoved(insTouchInfo);
+				GUIView::OnTouchMoved(insTouchInfo);
             }
             
             return false;
@@ -345,14 +345,14 @@ namespace ChilliSource
         ///
         /// @param Touch data
         //-----------------------------------------------------------
-        void CScrollView::OnTouchEnded(const Input::TouchInfo& insTouchInfo)
+        void ScrollView::OnTouchEnded(const Input::TouchInfo& insTouchInfo)
         {
 			if(UserInteraction && Visible)
 			{
 				mbTouchActive = false;
 			}
 
-            CGUIView::OnTouchEnded(insTouchInfo);
+            GUIView::OnTouchEnded(insTouchInfo);
 
         }
         
@@ -364,7 +364,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //-------------------------------------------------------
-        void CScrollView::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void ScrollView::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
 #if DEBUG_DRAWING
             if(mbDrawDebug)
@@ -374,7 +374,7 @@ namespace ChilliSource
             }
 #endif
         
-            CGUIView::Draw(inpCanvas);
+            GUIView::Draw(inpCanvas);
         }
 		//-------------------------------------------------------
 		/// Sets Debug Drawing
@@ -384,7 +384,7 @@ namespace ChilliSource
 		/// @param New value for this flag. DEBUG_DRAWING must be
 		/// set to TRUE
 		//-------------------------------------------------------
-		void CScrollView::EnableDebugDrawing(bool inbValue)
+		void ScrollView::EnableDebugDrawing(bool inbValue)
 		{
 #if DEBUG_DRAWING
 			mbDrawDebug = inbValue;
@@ -398,7 +398,7 @@ namespace ChilliSource
         /// @return The GUIView that contains all scrollable subviews
         /// within the scroll view.
         //-----------------------------------------------------------
-        const GUIViewPtr& CScrollView::GetContainerView() const
+        const GUIViewSPtr& ScrollView::GetContainerView() const
         {
             return mpContainerView;
         }

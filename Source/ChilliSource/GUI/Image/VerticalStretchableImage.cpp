@@ -19,7 +19,7 @@ namespace ChilliSource
 {
     namespace GUI
     {
-		DEFINE_META_CLASS(CVerticalStretchableImage)
+		DEFINE_META_CLASS(VerticalStretchableImage)
 
 		DEFINE_PROPERTY(SpriteSheet);
 		DEFINE_PROPERTY(HeightMaintain);
@@ -31,7 +31,7 @@ namespace ChilliSource
         /// 
         /// Empty
         //---------------------------------------------------------
-        CVerticalStretchableImage::CVerticalStretchableImage()
+        VerticalStretchableImage::VerticalStretchableImage()
 			: HeightMaintain(false), WidthMaintain(false)
         {
 			memset(&msIndices, 0, sizeof(u32) * 3);
@@ -41,8 +41,8 @@ namespace ChilliSource
         ///
         /// From param dictionary
         //---------------------------------------------------------
-        CVerticalStretchableImage::CVerticalStretchableImage(const Core::ParamDictionary& insParams) 
-			: CGUIView(insParams), HeightMaintain(false), WidthMaintain(false)
+        VerticalStretchableImage::VerticalStretchableImage(const Core::ParamDictionary& insParams) 
+			: GUIView(insParams), HeightMaintain(false), WidthMaintain(false)
         {
             std::string strValue;
 
@@ -106,7 +106,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet containing the nine patches
         //---------------------------------------------------------
-        void CVerticalStretchableImage::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void VerticalStretchableImage::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
         {
             SpriteSheet = inpSpriteSheet;
         }
@@ -115,7 +115,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet containing the nine patches
 		//---------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CVerticalStretchableImage::GetSpriteSheet() const
+		const Rendering::SpriteSheetPtr& VerticalStretchableImage::GetSpriteSheet() const
 		{
 			return SpriteSheet;
 		}
@@ -136,7 +136,7 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		void CVerticalStretchableImage::SetBaseSpriteSheetIndexID(const std::string& instrID)
+		void VerticalStretchableImage::SetBaseSpriteSheetIndexID(const std::string& instrID)
 		{
 			if(SpriteSheet)
 			{
@@ -164,7 +164,7 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		const std::string& CVerticalStretchableImage::GetBaseSpriteSheetIndexID() const
+		const std::string& VerticalStretchableImage::GetBaseSpriteSheetIndexID() const
 		{
 			return BaseSpriteSheetIndexID;
 		}
@@ -173,7 +173,7 @@ namespace ChilliSource
         ///
         /// @param Struct containing the tpage index of each patch
         //---------------------------------------------------------
-        void CVerticalStretchableImage::SetSpriteSheetIndices(const CVerticalStretchableImage::SpriteSheetIndex& insIndices)
+        void VerticalStretchableImage::SetSpriteSheetIndices(const VerticalStretchableImage::SpriteSheetIndex& insIndices)
         {
             msIndices = insIndices;
         }
@@ -192,7 +192,7 @@ namespace ChilliSource
         ///
         /// @param Array containing the tpage index of each patch
         //---------------------------------------------------------
-        void CVerticalStretchableImage::SetSpriteSheetIndices(const u32* inpIndices)
+        void VerticalStretchableImage::SetSpriteSheetIndices(const u32* inpIndices)
         {
             msIndices.udwTop = inpIndices[0];
             msIndices.udwBottom = inpIndices[1];
@@ -205,7 +205,7 @@ namespace ChilliSource
 		/// @param Sprite sheet index of middle patch
 		/// @param Sprite sheet index of bottom patch
 		//---------------------------------------------------------
-		void CVerticalStretchableImage::SetSpriteSheetIndices(u32 inudwTop, u32 inudwMid, u32 inudwBottom)
+		void VerticalStretchableImage::SetSpriteSheetIndices(u32 inudwTop, u32 inudwMid, u32 inudwBottom)
 		{
 			msIndices.udwTop = inudwTop;
 			msIndices.udwMiddle = inudwMid;
@@ -218,7 +218,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //---------------------------------------------------------
-        void CVerticalStretchableImage::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void VerticalStretchableImage::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
 			//Check if this is on screen
 			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
@@ -325,7 +325,7 @@ namespace ChilliSource
                                    Core::AlignmentAnchor::k_topLeft);
                 
                 //Render subviews
-                CGUIView::Draw(inpCanvas);
+                GUIView::Draw(inpCanvas);
             }
 		}
 		//--------------------------------------------------------
@@ -336,7 +336,7 @@ namespace ChilliSource
 		///
 		/// @param Unified width
 		//--------------------------------------------------------
-		void CVerticalStretchableImage::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
+		void VerticalStretchableImage::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
 		{
             Core::CVector2 vCurrentSize = GetAbsoluteSize();
 			f32 fAspectRatio = vCurrentSize.y / vCurrentSize.x;
@@ -358,7 +358,7 @@ namespace ChilliSource
 		///
 		/// @param Unified height
 		//--------------------------------------------------------
-		void CVerticalStretchableImage::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
+		void VerticalStretchableImage::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
 		{
             Core::CVector2 vCurrentSize = GetAbsoluteSize();
 			f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
@@ -379,7 +379,7 @@ namespace ChilliSource
 		///
 		/// @param boolean to disable or enable
 		//--------------------------------------------------------
-		void CVerticalStretchableImage::EnableHeightMaintainingAspect(bool inbEnabled)
+		void VerticalStretchableImage::EnableHeightMaintainingAspect(bool inbEnabled)
 		{
 			HeightMaintain = inbEnabled;
 		}
@@ -390,7 +390,7 @@ namespace ChilliSource
 		///
 		/// @param boolean to disable or enable
 		//--------------------------------------------------------
-		void CVerticalStretchableImage::EnableWidthMaintainingAspect(bool inbEnabled)
+		void VerticalStretchableImage::EnableWidthMaintainingAspect(bool inbEnabled)
 		{
 			WidthMaintain = inbEnabled;            
 		}
@@ -399,7 +399,7 @@ namespace ChilliSource
 		///
 		/// @return auto scaling of the Width to maintain the aspect ratio
 		//--------------------------------------------------------
-		bool CVerticalStretchableImage::IsWidthMaintainingAspectEnabled() const
+		bool VerticalStretchableImage::IsWidthMaintainingAspectEnabled() const
 		{
 			return WidthMaintain;
 		}
@@ -408,7 +408,7 @@ namespace ChilliSource
 		///
 		/// @return auto scaling of the height to maintain the aspect ratio
 		//--------------------------------------------------------
-		bool CVerticalStretchableImage::IsHeightMaintainingAspectEnabled() const
+		bool VerticalStretchableImage::IsHeightMaintainingAspectEnabled() const
 		{
 			return HeightMaintain;
 		}
@@ -417,7 +417,7 @@ namespace ChilliSource
 		///
 		/// @param Sum of the widths of both end caps
 		//--------------------------------------------------------
-		f32 CVerticalStretchableImage::GetCombinedCapHeight() const
+		f32 VerticalStretchableImage::GetCombinedCapHeight() const
 		{
 			return SpriteSheet->GetSizeForFrame(msIndices.udwTop).y + SpriteSheet->GetSizeForFrame(msIndices.udwBottom).y;
 		}
@@ -426,7 +426,7 @@ namespace ChilliSource
 		///
 		/// @param Sum of the heights of both end caps
 		//--------------------------------------------------------
-		f32 CVerticalStretchableImage::GetCapWidth() const
+		f32 VerticalStretchableImage::GetCapWidth() const
 		{
 			return SpriteSheet->GetSizeForFrame(msIndices.udwTop).x;
 		}

@@ -22,9 +22,9 @@ namespace ChilliSource
 {
 	namespace GUI
 	{
-		DebugStatsViewPtr CDebugStatsView::pInstance;
+		DebugStatsViewPtr DebugStatsView::pInstance;
 		
-		CDebugStatsView::CDebugStatsView() : mfTextScale(1.0f)
+		DebugStatsView::DebugStatsView() : mfTextScale(1.0f)
 		{
             const f32 kfBestFitTextSize = 10.0f;
             
@@ -61,7 +61,7 @@ namespace ChilliSource
 			}
 		}
         
-        void CDebugStatsView::RefreshStats()
+        void DebugStatsView::RefreshStats()
         {
             SET_DEBUG_STAT(FPS);
             SET_DEBUG_STAT(FrameTime);
@@ -74,11 +74,11 @@ namespace ChilliSource
             SET_DEBUG_STAT(GUI);
         }
 		
-		const DebugStatsViewPtr& CDebugStatsView::GetSingletonPtr()
+		const DebugStatsViewPtr& DebugStatsView::GetSingletonPtr()
 		{
             if(!pInstance)
             {
-                pInstance = DebugStatsViewPtr(new CDebugStatsView());
+                pInstance = DebugStatsViewPtr(new DebugStatsView());
             }
             
 			return pInstance;

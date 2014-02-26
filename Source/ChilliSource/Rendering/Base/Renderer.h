@@ -129,7 +129,7 @@ namespace ChilliSource
             ///
             /// @param Root window
 			//----------------------------------------------------------
-			void RenderUI(GUI::CWindow* inpWindow);
+			void RenderUI(GUI::Window* inpWindow);
             //----------------------------------------------------------
             /// Render Scene To Target
             ///
@@ -203,7 +203,7 @@ namespace ChilliSource
             /// rendering
             /// @return Projection matrix for overlay rendering
             //----------------------------------------------------------
-            Core::CMatrix4x4 CreateOverlayProjection(GUI::CWindow* inpWindow) const;
+            Core::CMatrix4x4 CreateOverlayProjection(GUI::Window* inpWindow) const;
             //----------------------------------------------------------
             /// Sort Opaque
             ///

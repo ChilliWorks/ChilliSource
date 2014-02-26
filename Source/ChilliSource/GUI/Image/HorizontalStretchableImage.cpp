@@ -19,7 +19,7 @@ namespace ChilliSource
 {
 	namespace GUI
 	{
-		DEFINE_META_CLASS(CHorizontalStretchableImage)
+		DEFINE_META_CLASS(HorizontalStretchableImage)
 
 		DEFINE_PROPERTY(SpriteSheet);
 		DEFINE_PROPERTY(BaseSpriteSheetIndexID);
@@ -31,7 +31,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//---------------------------------------------------------
-		CHorizontalStretchableImage::CHorizontalStretchableImage()
+		HorizontalStretchableImage::HorizontalStretchableImage()
 			: mudwLeftCapIndex(0), mudwCentreIndex(0), mudwRightCapIndex(0), HeightFromImage(false), ActAsSpacer(false)
 		{
 		}
@@ -40,8 +40,8 @@ namespace ChilliSource
 		///
 		/// @param Dictonary of values
 		//---------------------------------------------------------
-		CHorizontalStretchableImage::CHorizontalStretchableImage(const Core::ParamDictionary& insParams)
-			: CGUIView(insParams), mudwLeftCapIndex(0), mudwCentreIndex(0), mudwRightCapIndex(0), HeightFromImage(false), ActAsSpacer(false)
+		HorizontalStretchableImage::HorizontalStretchableImage(const Core::ParamDictionary& insParams)
+			: GUIView(insParams), mudwLeftCapIndex(0), mudwCentreIndex(0), mudwRightCapIndex(0), HeightFromImage(false), ActAsSpacer(false)
 		{
 			std::string strValue;
 
@@ -77,7 +77,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet containing the patches
 		//---------------------------------------------------------
-		void CHorizontalStretchableImage::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void HorizontalStretchableImage::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
 		{
 			SpriteSheet = inpSpriteSheet;
 		}
@@ -86,7 +86,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet containing the patches
 		//---------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CHorizontalStretchableImage::GetSpriteSheet() const
+		const Rendering::SpriteSheetPtr& HorizontalStretchableImage::GetSpriteSheet() const
 		{
 			return SpriteSheet;
 		}
@@ -101,7 +101,7 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		void CHorizontalStretchableImage::SetBaseSpriteSheetIndexID(const std::string& instrID)
+		void HorizontalStretchableImage::SetBaseSpriteSheetIndexID(const std::string& instrID)
 		{
 			if(SpriteSheet)
 			{
@@ -123,7 +123,7 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		const std::string& CHorizontalStretchableImage::GetBaseSpriteSheetIndexID() const
+		const std::string& HorizontalStretchableImage::GetBaseSpriteSheetIndexID() const
 		{
 			return BaseSpriteSheetIndexID;
 		}
@@ -136,7 +136,7 @@ namespace ChilliSource
 		///
 		/// @param Array containing the tpage index of each patch
 		//---------------------------------------------------------
-		void CHorizontalStretchableImage::SetSpriteSheetIndices(const u32* inpIndices)
+		void HorizontalStretchableImage::SetSpriteSheetIndices(const u32* inpIndices)
 		{
 			mudwLeftCapIndex = inpIndices[0];
 			mudwCentreIndex = inpIndices[1];
@@ -149,7 +149,7 @@ namespace ChilliSource
 		/// @param Sprite sheet index of centre patch
 		/// @param Sprite sheet index of right patch
 		//---------------------------------------------------------
-		void CHorizontalStretchableImage::SetSpriteSheetIndices(u32 inudwLeft, u32 inudwMid, u32 inudwRight)
+		void HorizontalStretchableImage::SetSpriteSheetIndices(u32 inudwLeft, u32 inudwMid, u32 inudwRight)
 		{
 			mudwLeftCapIndex = inudwLeft;
 			mudwCentreIndex = inudwMid;
@@ -160,7 +160,7 @@ namespace ChilliSource
 		///
 		/// @param tpage index of left patch
 		//---------------------------------------------------------
-		void CHorizontalStretchableImage::SetSpriteSheetLeftIndex(u32 inudwIndex)
+		void HorizontalStretchableImage::SetSpriteSheetLeftIndex(u32 inudwIndex)
 		{
 			mudwLeftCapIndex = inudwIndex;
 		}
@@ -169,7 +169,7 @@ namespace ChilliSource
 		///
 		/// @param tpage index of centre patch
 		//---------------------------------------------------------
-		void CHorizontalStretchableImage::SetSpriteSheetCentreIndex(u32 inudwIndex)
+		void HorizontalStretchableImage::SetSpriteSheetCentreIndex(u32 inudwIndex)
 		{
 			mudwCentreIndex = inudwIndex;
 		}
@@ -178,7 +178,7 @@ namespace ChilliSource
 		///
 		/// @param tpage index of right patch
 		//---------------------------------------------------------
-		void CHorizontalStretchableImage::SetSpriteSheetRightIndex(u32 inudwIndex)
+		void HorizontalStretchableImage::SetSpriteSheetRightIndex(u32 inudwIndex)
 		{
 			mudwRightCapIndex = inudwIndex;
 		}
@@ -190,7 +190,7 @@ namespace ChilliSource
         ///
         /// @param Enable/disable
         //--------------------------------------------------------
-        void CHorizontalStretchableImage::EnableHeightFromImage(bool inbEnable)
+        void HorizontalStretchableImage::EnableHeightFromImage(bool inbEnable)
         {
             HeightFromImage = inbEnable;
         }
@@ -203,7 +203,7 @@ namespace ChilliSource
 		/// @return Whether the image view's height will be 
 		/// based on the size of the image
 		//--------------------------------------------------------
-		bool CHorizontalStretchableImage::IsHeightFromImageEnabled() const
+		bool HorizontalStretchableImage::IsHeightFromImageEnabled() const
 		{
 			return HeightFromImage;
 		}
@@ -212,7 +212,7 @@ namespace ChilliSource
 		///
 		/// @param Sum of the widths of both end caps
 		//--------------------------------------------------------
-		f32 CHorizontalStretchableImage::GetCombinedCapWidth() const
+		f32 HorizontalStretchableImage::GetCombinedCapWidth() const
 		{
 			return SpriteSheet->GetSizeForFrame(mudwLeftCapIndex).x + SpriteSheet->GetSizeForFrame(mudwRightCapIndex).x;
 		}
@@ -221,7 +221,7 @@ namespace ChilliSource
 		///
 		/// @param Sum of the heights of both end caps
 		//--------------------------------------------------------
-		f32 CHorizontalStretchableImage::GetCapHeight() const
+		f32 HorizontalStretchableImage::GetCapHeight() const
 		{
 			return SpriteSheet->GetSizeForFrame(mudwLeftCapIndex).y;
 		}
@@ -231,13 +231,13 @@ namespace ChilliSource
         /// Called when the view is able to retrieve an absolute
         /// value.
         //--------------------------------------------------------
-		void CHorizontalStretchableImage::LayoutContent()
+		void HorizontalStretchableImage::LayoutContent()
 		{
             SetSizeFromImage();
-            CGUIView::LayoutContent();
+            GUIView::LayoutContent();
 		}
 		
-		void CHorizontalStretchableImage::SetSizeFromImage()
+		void HorizontalStretchableImage::SetSizeFromImage()
 		{
 			if(HeightFromImage)
             {
@@ -253,7 +253,7 @@ namespace ChilliSource
 		///
 		/// @param Canvas renderer pointer
 		//---------------------------------------------------------
-		void CHorizontalStretchableImage::Draw(Rendering::CCanvasRenderer* inpCanvas)
+		void HorizontalStretchableImage::Draw(Rendering::CCanvasRenderer* inpCanvas)
 		{
 			if(Visible && SpriteSheet)
 			{
@@ -326,7 +326,7 @@ namespace ChilliSource
 				}
                 
 				//Render subviews
-				CGUIView::Draw(inpCanvas);
+				GUIView::Draw(inpCanvas);
 			}
 		}
 	}

@@ -183,7 +183,7 @@ namespace ChilliSource
 			///
 			/// @return The main window that all the scene's UI is attached to.
 			//--------------------------------------------------------------------------------------------------
-			GUI::CWindow* GetWindowPtr();
+			GUI::Window* GetWindowPtr();
 
 			//--------------------------------------------------------------------------------------------------
 			/// Update
@@ -214,7 +214,7 @@ namespace ChilliSource
 			
 			//COctree mSpatialGraph;				//Scene culling tree
 			
-			GUI::CWindow* mpRootWindow;        //Main window for attaching UI components
+			GUI::Window* mpRootWindow;        //Main window for attaching UI components
 			
 			SharedEntityList mEntities;
             

@@ -35,41 +35,41 @@ namespace ChilliSource
 {
 	namespace GUI
 	{
-		CGUIViewFactory::MapDelegateToString CGUIViewFactory::mmapDelegateToType;
+		GUIViewFactory::MapDelegateToString GUIViewFactory::mmapDelegateToType;
 
 		//--------------------------------------------------------
 		/// Register Defaults
 		///
 		/// Register default views with the factory
 		//--------------------------------------------------------
-		void CGUIViewFactory::RegisterDefaults()
+		void GUIViewFactory::RegisterDefaults()
 		{
-			Register<CGUIView>("GUIView");
-			Register<CScrollView, CGUIView>("ScrollView");
-			Register<CImageView, CGUIView>("ImageView");
-			Register<CLabel, CGUIView>("Label");
-			Register<CStretchableImage, CGUIView>("StretchableImage");
-            Register<CVerticalStretchableImage, CGUIView>("VerticalStretchableImage");
-			Register<CHorizontalStretchableImage, CGUIView>("HorizontalStretchableImage");
-			Register<CGridView, CGUIView>("GridView");
-			Register<CEditableLabel, CLabel>("EditableLabel");
-            Register<CFormattedLabel, CLabel>("FormattedLabel");
-			Register<CSliderBar, CGUIView>("SliderBar");
-			Register<CProgressBar, CGUIView>("ProgressBar");
-			Register<IButton, CGUIView>("Button");
-            Register<CHorizontalList, CGUIView>("HorizontalList");
-            Register<CVerticalList, CGUIView>("VerticalList");
+			Register<GUIView>("GUIView");
+			Register<ScrollView, GUIView>("ScrollView");
+			Register<ImageView, GUIView>("ImageView");
+			Register<Label, GUIView>("Label");
+			Register<StretchableImage, GUIView>("StretchableImage");
+            Register<VerticalStretchableImage, GUIView>("VerticalStretchableImage");
+			Register<HorizontalStretchableImage, GUIView>("HorizontalStretchableImage");
+			Register<GridView, GUIView>("GridView");
+			Register<EditableLabel, Label>("EditableLabel");
+            Register<FormattedLabel, Label>("FormattedLabel");
+			Register<SliderBar, GUIView>("SliderBar");
+			Register<ProgressBar, GUIView>("ProgressBar");
+			Register<Button, GUIView>("Button");
+            Register<HorizontalList, GUIView>("HorizontalList");
+            Register<VerticalList, GUIView>("VerticalList");
             
 			//Defaults
-			Register<CHighlightButton, IButton>("HighlightButton");
-            Register<CToggleButton, IButton>("ToggleButton");
-			Register<CHorizontalProgressBar, CProgressBar>("HorizontalProgressBar");
-            Register<CHorizontalSliderBar, CSliderBar>("HorizontalSliderBar");
-			Register<CVerticalSliderBar, CSliderBar>("VerticalSliderBar");
-			Register<CHorizontalEndcappedProgressBar, CProgressBar>("HorizontalEndcappedProgressBar");
-            Register<CVerticalEndcappedProgressBar, CProgressBar>("VerticalEndcappedProgressBar");
-			Register<CHorizontalClippingProgressBar, CProgressBar>("HorizontalClippingProgressBar");
-            Register<CStretchableHighlightButton, IButton>("StretchableHighlightButton");
+			Register<HighlightButton, Button>("HighlightButton");
+            Register<ToggleButton, Button>("ToggleButton");
+			Register<HorizontalProgressBar, ProgressBar>("HorizontalProgressBar");
+            Register<HorizontalSliderBar, SliderBar>("HorizontalSliderBar");
+			Register<VerticalSliderBar, SliderBar>("VerticalSliderBar");
+			Register<HorizontalEndcappedProgressBar, ProgressBar>("HorizontalEndcappedProgressBar");
+            Register<VerticalEndcappedProgressBar, ProgressBar>("VerticalEndcappedProgressBar");
+			Register<HorizontalClippingProgressBar, ProgressBar>("HorizontalClippingProgressBar");
+            Register<StretchableHighlightButton, Button>("StretchableHighlightButton");
 		}
 		//--------------------------------------------------------
 		/// Create GUI View 
@@ -78,7 +78,7 @@ namespace ChilliSource
 		///
 		/// @return GUI View
 		//--------------------------------------------------------
-		GUIViewPtr CGUIViewFactory::CreateGUIView(const std::string& instrTypeName, const Core::ParamDictionary& insParams)
+		GUIViewSPtr GUIViewFactory::CreateGUIView(const std::string& instrTypeName, const Core::ParamDictionary& insParams)
 		{
 			//Create the UI of the given type
 			MapDelegateToString::iterator it = mmapDelegateToType.find(instrTypeName);
@@ -87,7 +87,7 @@ namespace ChilliSource
 				return (it->second)(insParams);
 			}
 
-			return GUIViewPtr();
+			return GUIViewSPtr();
 		}
 		//--------------------------------------------------------
 		/// Create GUI View From Script
@@ -99,9 +99,9 @@ namespace ChilliSource
 		/// @param Optional dynamic array to which views will be pushed
 		/// @return GUI View
 		//--------------------------------------------------------
-		GUIViewPtr CGUIViewFactory::CreateGUIViewFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile, std::vector<GUIViewPtr>* outpViews)
+		GUIViewSPtr GUIViewFactory::CreateGUIViewFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile, std::vector<GUIViewSPtr>* outpViews)
 		{
-			GUIViewPtr pRootView;
+			GUIViewSPtr pRootView;
 
             Core::FileStreamPtr pFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrScriptFile, Core::FileMode::k_read);
             assert(pFile);
@@ -135,11 +135,11 @@ namespace ChilliSource
 		/// @param View XML element
 		/// @return Created view
 		//--------------------------------------------------------
-		GUIViewPtr CGUIViewFactory::CreateView(rapidxml::xml_node<>* inpViewElement, std::vector<GUIViewPtr>* outpViews)
+		GUIViewSPtr GUIViewFactory::CreateView(rapidxml::xml_node<>* inpViewElement, std::vector<GUIViewSPtr>* outpViews)
 		{
 			//Get the view type
 			//Get the param dictionary config values
-			GUIViewPtr pView;
+			GUIViewSPtr pView;
             std::string strType;
             std::string strSource;
             bool bExtern = false;

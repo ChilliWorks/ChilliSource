@@ -16,15 +16,15 @@ namespace ChilliSource
 {
 	namespace GUI
 	{
-		class CHorizontalSliderBar : public CSliderBar
+		class HorizontalSliderBar : public SliderBar
 		{
 		public:
             
-			DECLARE_META_CLASS(CHorizontalSliderBar)
+			DECLARE_META_CLASS(HorizontalSliderBar)
             
-			CHorizontalSliderBar();
-			CHorizontalSliderBar(const Core::ParamDictionary& insParams);
-			~CHorizontalSliderBar();
+			HorizontalSliderBar();
+			HorizontalSliderBar(const Core::ParamDictionary& insParams);
+			~HorizontalSliderBar();
 			//------------------------------------------------------
 			/// Draw
 			///
@@ -127,7 +127,7 @@ namespace ChilliSource
 			///
 			/// @param Touch data
 			//-----------------------------------------------------------
-			void OnSliderMoved(CGUIView* inpView, const Input::TouchInfo & insTouchInfo);
+			void OnSliderMoved(GUIView* inpView, const Input::TouchInfo & insTouchInfo);
 			//-----------------------------------------------------------
 			/// Get Slider Value
 			///
@@ -139,8 +139,8 @@ namespace ChilliSource
             
 		private:
             
-			ImageViewPtr mpBackgroundImage;
-			ImageViewPtr mpSliderImage;
+			ImageViewSPtr mpBackgroundImage;
+			ImageViewSPtr mpSliderImage;
             
 			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedSliderSize, SetSliderSize, GetSliderSize);
             
@@ -153,9 +153,6 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(std::string, BarSpriteSheetIndexID, SetBarSpriteSheetIndexID, GetBarSpriteSheetIndexID);
 			DECLARE_PROPERTY_A(std::string, SliderSpriteSheetIndexID, SetSliderSpriteSheetIndexID, GetSliderSpriteSheetIndexID);
 		};
-        
-		typedef std::shared_ptr<CHorizontalSliderBar> HorizontalSliderBarPtr;
-		typedef std::weak_ptr<CHorizontalSliderBar> HorizontalSliderBarWeakPtr;
 	}
 }
 

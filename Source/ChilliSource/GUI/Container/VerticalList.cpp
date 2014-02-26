@@ -15,7 +15,7 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        DEFINE_META_CLASS(CVerticalList);
+        DEFINE_META_CLASS(VerticalList);
         
         DEFINE_PROPERTY(AbsoluteSpacing);
         DEFINE_PROPERTY(RelativeSpacing);
@@ -27,7 +27,7 @@ namespace ChilliSource
         ///
         /// Default
         //---------------------------------------------------------
-        CVerticalList::CVerticalList()
+        VerticalList::VerticalList()
         : VerticalJustifiction(ItemVerticalJustification::k_top), AbsoluteSpacing(0.0f), RelativeSpacing(0.0f), meHorizontalAlignmentAnchor(Core::AlignmentAnchor::k_topCentre)
         {
             
@@ -37,8 +37,8 @@ namespace ChilliSource
         ///
         /// @param Dictionary of params
         //---------------------------------------------------------
-        CVerticalList::CVerticalList(const Core::ParamDictionary& insParams)
-        : CGUIView(insParams), VerticalJustifiction(ItemVerticalJustification::k_top), AbsoluteSpacing(0.0f), meHorizontalAlignmentAnchor(Core::AlignmentAnchor::k_topCentre), RelativeSpacing(0.0f)
+        VerticalList::VerticalList(const Core::ParamDictionary& insParams)
+        : GUIView(insParams), VerticalJustifiction(ItemVerticalJustification::k_top), AbsoluteSpacing(0.0f), meHorizontalAlignmentAnchor(Core::AlignmentAnchor::k_topCentre), RelativeSpacing(0.0f)
         {
             std::string strValue;
             
@@ -93,7 +93,7 @@ namespace ChilliSource
         /// @param Space between items in the list relative to
         /// the size of the container
         //---------------------------------------------------------
-        void CVerticalList::SetRelativeSpacing(f32 infSpacing)
+        void VerticalList::SetRelativeSpacing(f32 infSpacing)
         {
             RelativeSpacing = infSpacing;
         }
@@ -102,7 +102,7 @@ namespace ChilliSource
         ///
         /// @param Space between items in the list
         //---------------------------------------------------------
-        void CVerticalList::SetAbsoluteSpacing(f32 infSpacing)
+        void VerticalList::SetAbsoluteSpacing(f32 infSpacing)
         {
             AbsoluteSpacing = infSpacing;
         }
@@ -111,7 +111,7 @@ namespace ChilliSource
         ///
         /// @return Space between items in the list
         //---------------------------------------------------------
-        f32 CVerticalList::GetAbsoluteSpacing() const
+        f32 VerticalList::GetAbsoluteSpacing() const
         {
             return AbsoluteSpacing;
         }
@@ -121,7 +121,7 @@ namespace ChilliSource
         /// @return Space between items in the list relative to the
         /// size of the container
         //---------------------------------------------------------
-        f32 CVerticalList::GetRelativeSpacing() const
+        f32 VerticalList::GetRelativeSpacing() const
         {
             return RelativeSpacing;
         }
@@ -130,7 +130,7 @@ namespace ChilliSource
         ///
         /// @param Justification which will align the items within the list
         //---------------------------------------------------------
-        void CVerticalList::SetVerticalJustification(ItemVerticalJustification ineJustification)
+        void VerticalList::SetVerticalJustification(ItemVerticalJustification ineJustification)
         {
             VerticalJustifiction = ineJustification;
         }
@@ -139,7 +139,7 @@ namespace ChilliSource
         ///
         /// @return Justification which will align the items within the list
         //---------------------------------------------------------
-        CVerticalList::ItemVerticalJustification CVerticalList::GetVerticalJustification() const
+        VerticalList::ItemVerticalJustification VerticalList::GetVerticalJustification() const
         {
             return VerticalJustifiction;
         }
@@ -148,7 +148,7 @@ namespace ChilliSource
         ///
         /// @param Justification which will align the items within the list
         //---------------------------------------------------------
-        void CVerticalList::SetHorizontalJustification(ItemHorizontalJustification ineJustification)
+        void VerticalList::SetHorizontalJustification(ItemHorizontalJustification ineJustification)
         {
             HorizontalJustifiction = ineJustification;
             
@@ -171,7 +171,7 @@ namespace ChilliSource
         ///
         /// @return Horizontal Justification which will align the items within the list
         //---------------------------------------------------------
-        CVerticalList::ItemHorizontalJustification CVerticalList::GetHorizontalJustification() const
+        VerticalList::ItemHorizontalJustification VerticalList::GetHorizontalJustification() const
         {
             return HorizontalJustifiction;
         }
@@ -182,9 +182,9 @@ namespace ChilliSource
         ///
         /// @param GUIView shared pointer
         //-----------------------------------------------------
-        void CVerticalList::AddSubview(const GUIViewPtr& inpSubview)
+        void VerticalList::AddSubview(const GUIViewSPtr& inpSubview)
         {
-            CGUIView::AddSubview(inpSubview);
+            GUIView::AddSubview(inpSubview);
             maListSubviews.push_back(inpSubview);
         }
         //-----------------------------------------------------
@@ -194,10 +194,10 @@ namespace ChilliSource
         ///
         /// @param GUIView pointer
         //-----------------------------------------------------
-        void CVerticalList::RemoveSubview(CGUIView* inpSubview)
+        void VerticalList::RemoveSubview(GUIView* inpSubview)
         {
-            CGUIView::RemoveSubview(inpSubview);
-            for(CGUIView::Subviews::iterator it = maListSubviews.begin(); it != maListSubviews.end(); ++it)
+            GUIView::RemoveSubview(inpSubview);
+            for(GUIView::Subviews::iterator it = maListSubviews.begin(); it != maListSubviews.end(); ++it)
             {
                 if((*it).get() == inpSubview)
                 {
@@ -214,9 +214,9 @@ namespace ChilliSource
 		///
 		/// @param GUIView pointer
 		//-----------------------------------------------------			
-		void CVerticalList::RemoveAllSubviews()
+		void VerticalList::RemoveAllSubviews()
 		{
-			CGUIView::RemoveAllSubviews();
+			GUIView::RemoveAllSubviews();
             maListSubviews.clear();
 		}
         //-------------------------------------------------------
@@ -227,7 +227,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //-------------------------------------------------------
-        void CVerticalList::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void VerticalList::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
             //This is a container view and has no renderables
             //We will need to render our subviews though
@@ -246,7 +246,7 @@ namespace ChilliSource
                 //Arrange everything!
                 LayoutContent();
 				
-                CGUIView::Draw(inpCanvas);
+                GUIView::Draw(inpCanvas);
             }
         }
         //-------------------------------------------------------
@@ -255,7 +255,7 @@ namespace ChilliSource
         /// Loop through the subviews and position them correctly
         /// in the list 
         //-------------------------------------------------------
-        void CVerticalList::LayoutContent()
+        void VerticalList::LayoutContent()
         {
             f32 fContainerHeight = GetAbsoluteSize().y;
             f32 fSpacing = (fContainerHeight * RelativeSpacing) + AbsoluteSpacing;

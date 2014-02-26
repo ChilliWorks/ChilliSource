@@ -25,10 +25,10 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        Audio::AudioComponentSPtr CToggleButton::mspDefaultSelectSound;
-        Audio::AudioComponentSPtr CToggleButton::mspDefaultDeSelectSound;
+        Audio::AudioComponentSPtr ToggleButton::mspDefaultSelectSound;
+        Audio::AudioComponentSPtr ToggleButton::mspDefaultDeSelectSound;
         
-		DEFINE_META_CLASS(CToggleButton)
+		DEFINE_META_CLASS(ToggleButton)
 
 		DEFINE_PROPERTY(OnTexture);
 		DEFINE_PROPERTY(OffTexture);
@@ -48,8 +48,8 @@ namespace ChilliSource
         ///
         /// Create the widget by adding the background image
         //-----------------------------------------------------------
-        CToggleButton::CToggleButton() 
-        : mpBackgroundImage(new CImageView()), OnSpriteSheetIndex(0), OffSpriteSheetIndex(0),
+        ToggleButton::ToggleButton() 
+        : mpBackgroundImage(new ImageView()), OnSpriteSheetIndex(0), OffSpriteSheetIndex(0),
         msOnUVs(Core::CVector2::ZERO, Core::CVector2::ONE),
         msOffUVs(Core::CVector2::ZERO, Core::CVector2::ONE),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), mbToggledOn(false)
@@ -59,17 +59,17 @@ namespace ChilliSource
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
 			
-            mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &CToggleButton::OnButtonSelect);
-            mInputEvents.GetReleasedInsideEvent() += GUIEventDelegate(this, &CToggleButton::OnButtonActivated);
-            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &CToggleButton::OnButtonDeselectThreshold);
+            mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &ToggleButton::OnButtonSelect);
+            mInputEvents.GetReleasedInsideEvent() += GUIEventDelegate(this, &ToggleButton::OnButtonActivated);
+            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &ToggleButton::OnButtonDeselectThreshold);
         }
         //------------------------------------------------------------
         /// Constructor
         ///
         /// From param dictionary
         //------------------------------------------------------------
-        CToggleButton::CToggleButton(const Core::ParamDictionary& insParams) 
-        : IButton(insParams), mpBackgroundImage(new CImageView()), OnSpriteSheetIndex(0), OffSpriteSheetIndex(0),
+        ToggleButton::ToggleButton(const Core::ParamDictionary& insParams) 
+        : Button(insParams), mpBackgroundImage(new ImageView()), OnSpriteSheetIndex(0), OffSpriteSheetIndex(0),
         msOnUVs(Core::CVector2::ZERO, Core::CVector2::ONE), msOffUVs(Core::CVector2::ZERO, Core::CVector2::ONE),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), mbToggledOn(false)
         {
@@ -200,16 +200,16 @@ namespace ChilliSource
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
 			
-            mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &CToggleButton::OnButtonSelect);
-            mInputEvents.GetReleasedInsideEvent() += GUIEventDelegate(this, &CToggleButton::OnButtonActivated);
-            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &CToggleButton::OnButtonDeselectThreshold);
+            mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &ToggleButton::OnButtonSelect);
+            mInputEvents.GetReleasedInsideEvent() += GUIEventDelegate(this, &ToggleButton::OnButtonActivated);
+            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &ToggleButton::OnButtonDeselectThreshold);
         }
         //-----------------------------------------------------------
         /// Get Background Image View
         ///
         /// @return Image view
         //-----------------------------------------------------------
-        const ImageViewPtr& CToggleButton::GetBackgroundImageView() const
+        const ImageViewSPtr& ToggleButton::GetBackgroundImageView() const
         {
             return mpBackgroundImage;
         }
@@ -220,7 +220,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //-----------------------------------------------------------
-        void CToggleButton::SetOnImage(const Rendering::TexturePtr& inpTexture)
+        void ToggleButton::SetOnImage(const Rendering::TexturePtr& inpTexture)
         {
             OnTexture = inpTexture;
             
@@ -234,7 +234,7 @@ namespace ChilliSource
 		///
 		/// @return Texture for non-selected button
 		//-----------------------------------------------------------
-		const Rendering::TexturePtr& CToggleButton::GetOnImage() const
+		const Rendering::TexturePtr& ToggleButton::GetOnImage() const
 		{
 			return OnTexture;
 		}
@@ -245,7 +245,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //-----------------------------------------------------------
-        void CToggleButton::SetOffImage(const Rendering::TexturePtr& inpTexture)
+        void ToggleButton::SetOffImage(const Rendering::TexturePtr& inpTexture)
         {
             OffTexture = inpTexture;
             mpBackgroundImage->SetTexture(inpTexture);
@@ -261,7 +261,7 @@ namespace ChilliSource
 		///
 		/// @return Texture for selected button
 		//-----------------------------------------------------------
-		const Rendering::TexturePtr& CToggleButton::GetOffImage() const
+		const Rendering::TexturePtr& ToggleButton::GetOffImage() const
 		{
 			return OffTexture;
 		}
@@ -273,7 +273,7 @@ namespace ChilliSource
         ///
         /// @param Rectangle for the UVs
         //-----------------------------------------------------------
-        void CToggleButton::SetOnUVs(Core::Rectangle insUVs)
+        void ToggleButton::SetOnUVs(Core::Rectangle insUVs)
         {
             msOnUVs = insUVs;
             
@@ -287,7 +287,7 @@ namespace ChilliSource
         ///
         /// @param Rectangle for the UVs
         //-----------------------------------------------------------
-        void CToggleButton::SetOffUVs(Core::Rectangle insUVs)
+        void ToggleButton::SetOffUVs(Core::Rectangle insUVs)
         {
             msOffUVs = insUVs;
             
@@ -300,7 +300,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet with default image
         //-----------------------------------------------------------
-        void CToggleButton::SetOnSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void ToggleButton::SetOnSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
         {
             OnSpriteSheet = inpSpriteSheet;
             mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -315,7 +315,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet with default image
 		//-----------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CToggleButton::GetOnSpriteSheet() const
+		const Rendering::SpriteSheetPtr& ToggleButton::GetOnSpriteSheet() const
 		{ 
 			return OnSpriteSheet; 
 		}
@@ -324,7 +324,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet with Off image
 		//-----------------------------------------------------------
-		void CToggleButton::SetOffSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void ToggleButton::SetOffSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
 		{
 			OffSpriteSheet = inpSpriteSheet;
 			mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -339,7 +339,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet with Off image
 		//-----------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CToggleButton::GetOffSpriteSheet() const
+		const Rendering::SpriteSheetPtr& ToggleButton::GetOffSpriteSheet() const
 		{ 
 			return OffSpriteSheet; 
 		}
@@ -348,7 +348,7 @@ namespace ChilliSource
         ///
         /// @param Index of default state on sprite sheet
         //-----------------------------------------------------------
-        void CToggleButton::SetOnSpriteSheetIndex(u32 inudwIndex)
+        void ToggleButton::SetOnSpriteSheetIndex(u32 inudwIndex)
         {
             OnSpriteSheetIndex = inudwIndex;
         }
@@ -357,7 +357,7 @@ namespace ChilliSource
         ///
         /// @param Index of Off state on sprite sheet
         //-----------------------------------------------------------
-        void CToggleButton::SetOffSpriteSheetIndex(u32 inudwIndex)
+        void ToggleButton::SetOffSpriteSheetIndex(u32 inudwIndex)
         {
             OffSpriteSheetIndex = inudwIndex;
             mpBackgroundImage->SetSpriteSheetIndex(inudwIndex);
@@ -367,7 +367,7 @@ namespace ChilliSource
 		///
 		/// @return Index of default state on sprite sheet
 		//-----------------------------------------------------------
-		u32 CToggleButton::GetOnSpriteSheetIndex() const
+		u32 ToggleButton::GetOnSpriteSheetIndex() const
 		{
 			return OnSpriteSheetIndex;
 		}
@@ -376,7 +376,7 @@ namespace ChilliSource
 		///
 		/// @return Index of Off state on sprite sheet
 		//-----------------------------------------------------------
-		u32 CToggleButton::GetOffSpriteSheetIndex() const
+		u32 ToggleButton::GetOffSpriteSheetIndex() const
 		{
 			return OffSpriteSheetIndex;
 		}
@@ -385,7 +385,7 @@ namespace ChilliSource
 		///
 		/// @param Index of default state on sprite sheet
 		//-----------------------------------------------------------
-		void CToggleButton::SetOnSpriteSheetIndexID(const std::string& instrID)
+		void ToggleButton::SetOnSpriteSheetIndexID(const std::string& instrID)
 		{
 			CS_ASSERT(OnSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			OnSpriteSheetIndexID = instrID;
@@ -396,7 +396,7 @@ namespace ChilliSource
 		///
 		/// @param Index ID of Off state on sprite sheet
 		//-----------------------------------------------------------
-		void CToggleButton::SetOffSpriteSheetIndexID(const std::string& instrID)
+		void ToggleButton::SetOffSpriteSheetIndexID(const std::string& instrID)
 		{
 			CS_ASSERT(OffSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			OffSpriteSheetIndexID = instrID;
@@ -407,7 +407,7 @@ namespace ChilliSource
 		///
 		/// @return Index ID of default state on sprite sheet
 		//-----------------------------------------------------------
-		const std::string& CToggleButton::GetOnSpriteSheetIndexID() const
+		const std::string& ToggleButton::GetOnSpriteSheetIndexID() const
 		{
 			return OnSpriteSheetIndexID;
 		}
@@ -416,7 +416,7 @@ namespace ChilliSource
 		///
 		/// @return Index ID of Off state on sprite sheet
 		//-----------------------------------------------------------
-		const std::string& CToggleButton::GetOffSpriteSheetIndexID() const
+		const std::string& ToggleButton::GetOffSpriteSheetIndexID() const
 		{
 			return OffSpriteSheetIndexID;
 		}
@@ -428,7 +428,7 @@ namespace ChilliSource
         ///
         /// @param Enable/disable
         //--------------------------------------------------------
-        void CToggleButton::EnableSizeFromImage(bool inbEnable)
+        void ToggleButton::EnableSizeFromImage(bool inbEnable)
         {
             SizeFromImage = inbEnable;
         }
@@ -441,7 +441,7 @@ namespace ChilliSource
 		/// @return Whether the image view's size will be 
 		/// based on the size of the image
 		//--------------------------------------------------------
-		bool CToggleButton::IsSizeFromImageEnabled() const
+		bool ToggleButton::IsSizeFromImageEnabled() const
 		{
 			return SizeFromImage;
 		}
@@ -450,7 +450,7 @@ namespace ChilliSource
         ///
         /// @param Audio effect played when the button is selected
         //-----------------------------------------------------------
-        void CToggleButton::SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
+        void ToggleButton::SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
         {
             mpSelectAudioEffect = inpEffect;
         }
@@ -459,17 +459,17 @@ namespace ChilliSource
 		///
 		/// @param Audio effect played when the button is selected
 		//-----------------------------------------------------------
-		void CToggleButton::SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
+		void ToggleButton::SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
 		{
 			mpDeselectAudioEffect = inpEffect;
 		}
-        void CToggleButton::SetDefaultSelectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
+        void ToggleButton::SetDefaultSelectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
         {
             Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
             mspDefaultSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
         }
         
-        void CToggleButton::SetDefaultDeselectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
+        void ToggleButton::SetDefaultDeselectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
         {
             Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
             mspDefaultDeSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
@@ -477,7 +477,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// On Button Select
         //-----------------------------------------------------------
-        void CToggleButton::OnButtonSelect(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void ToggleButton::OnButtonSelect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
         {
 			if(!mbSelected)
 			{
@@ -492,7 +492,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// On Button De-select
         //-----------------------------------------------------------
-        void CToggleButton::OnButtonDeselect(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void ToggleButton::OnButtonDeselect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
         {
 			if(mbSelected)
 			{
@@ -507,7 +507,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// On Button De-select Threshold
         //-----------------------------------------------------------
-        void CToggleButton::OnButtonDeselectThreshold(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void ToggleButton::OnButtonDeselectThreshold(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
         {
             const f32 kfThreshold = 5.0f;
 			if(mbSelected && (std::abs(insTouchInfo.vLocation.x - insTouchInfo.vPreviousLocation.x) > kfThreshold || std::abs(insTouchInfo.vLocation.y - insTouchInfo.vPreviousLocation.y) > kfThreshold))
@@ -523,7 +523,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// On Button Activated
         //-----------------------------------------------------------
-        void CToggleButton::OnButtonActivated(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void ToggleButton::OnButtonActivated(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
         {
 			if(mbSelected)
 			{
@@ -549,7 +549,7 @@ namespace ChilliSource
         /// Force the look of the button to be toggled on
         /// this will not generate a button activated event
         ///-------------------------------------------------------
-        void CToggleButton::ToggleOn()
+        void ToggleButton::ToggleOn()
         {
             mbToggledOn = true;
             
@@ -573,7 +573,7 @@ namespace ChilliSource
         /// Force the look of the button to be toggled on
         /// this will not generate a button activated event
         ///-------------------------------------------------------
-        void CToggleButton::ToggleOff()
+        void ToggleButton::ToggleOff()
         {
             mbToggledOn = false;
             
@@ -594,14 +594,14 @@ namespace ChilliSource
         //--------------------------------------------------------
         /// Set Toggle
         ///-------------------------------------------------------
-        void CToggleButton::SetToggle(bool inbToggle)
+        void ToggleButton::SetToggle(bool inbToggle)
         {
             inbToggle ? ToggleOn() : ToggleOff();
         }
         //--------------------------------------------------------
         /// Is Toggled
         ///-------------------------------------------------------
-        bool CToggleButton::IsToggled() const
+        bool ToggleButton::IsToggled() const
         {
             return mbToggledOn;
         }
@@ -612,13 +612,13 @@ namespace ChilliSource
 		///
 		/// @param Canvas renderer
 		//-----------------------------------------------------------
-		void CToggleButton::Draw(Rendering::CCanvasRenderer* inpCanvasRenderer)
+		void ToggleButton::Draw(Rendering::CCanvasRenderer* inpCanvasRenderer)
 		{
 			SetSizeFromImage();
-			CGUIView::Draw(inpCanvasRenderer);
+			GUIView::Draw(inpCanvasRenderer);
 		}
 		
-		void CToggleButton::SetSizeFromImage()
+		void ToggleButton::SetSizeFromImage()
 		{
 			if(SizeFromImage)
 			{
@@ -643,10 +643,10 @@ namespace ChilliSource
         /// Called when the view is able to retrieve an absolute
         /// value.
         //--------------------------------------------------------
-		void CToggleButton::LayoutContent()
+		void ToggleButton::LayoutContent()
 		{
             SetSizeFromImage();
-            CGUIView::LayoutContent();
+            GUIView::LayoutContent();
 		}
         
 		//--------------------------------------------------------
@@ -654,7 +654,7 @@ namespace ChilliSource
 		///
 		/// @return Absolute size of the image
 		//--------------------------------------------------------
-		Core::CVector2 CToggleButton::GetSizeFromImage() const
+		Core::CVector2 ToggleButton::GetSizeFromImage() const
 		{
 			Core::CVector2 vAbsSize;
             if(GetBackgroundImageView()->GetTexture())
@@ -676,7 +676,7 @@ namespace ChilliSource
         ///
         /// @param Unified width
         //--------------------------------------------------------
-        void CToggleButton::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
+        void ToggleButton::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
         {
             WidthMaintain = true;
             
@@ -701,7 +701,7 @@ namespace ChilliSource
         ///
         /// @param Unified height
         //--------------------------------------------------------
-        void CToggleButton::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
+        void ToggleButton::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
         {
             HeightMaintain = true;
             
@@ -725,7 +725,7 @@ namespace ChilliSource
         ///
         /// @param boolean to disable or enable
         //--------------------------------------------------------
-        void CToggleButton::EnableHeightMaintainingAspect(bool inbEnabled)
+        void ToggleButton::EnableHeightMaintainingAspect(bool inbEnabled)
         {
 			HeightMaintain = inbEnabled;
         }
@@ -736,7 +736,7 @@ namespace ChilliSource
         ///
         /// @param boolean to disable or enable
         //--------------------------------------------------------
-        void CToggleButton::EnableWidthMaintainingAspect(bool inbEnabled)
+        void ToggleButton::EnableWidthMaintainingAspect(bool inbEnabled)
         {
 			WidthMaintain = inbEnabled;
         }
@@ -745,7 +745,7 @@ namespace ChilliSource
 		///
 		/// @return Whether auto scaling of the width to maintain the aspect ratio
 		//--------------------------------------------------------
-		bool CToggleButton::IsWidthMaintainingAspectEnabled() const
+		bool ToggleButton::IsWidthMaintainingAspectEnabled() const
 		{
 			return WidthMaintain;
 		}
@@ -754,14 +754,14 @@ namespace ChilliSource
 		///
 		/// @return Whether auto scaling of the height to maintain the aspect ratio
 		//--------------------------------------------------------
-		bool CToggleButton::IsHeightMaintainingAspectEnabled() const
+		bool ToggleButton::IsHeightMaintainingAspectEnabled() const
 		{
 			return HeightMaintain;
 		}
         //----------------------------------------------------------
         /// Destructor
         //----------------------------------------------------------
-        CToggleButton::~CToggleButton()
+        ToggleButton::~ToggleButton()
         {
             if(mpSelectAudioEffect)
             {

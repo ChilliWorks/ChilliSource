@@ -159,7 +159,7 @@ namespace ChilliSource
 		void CPlatformSystem::Init()
 		{
             //Initialise GUI factory
-            GUI::CGUIViewFactory::RegisterDefaults();
+            GUI::GUIViewFactory::RegisterDefaults();
 		}
 		//-------------------------------------------------
 		/// Create Default Systems

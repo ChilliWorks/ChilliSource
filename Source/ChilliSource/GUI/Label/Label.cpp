@@ -23,7 +23,7 @@ namespace ChilliSource
 {
     namespace GUI
     {
-		DEFINE_META_CLASS(CLabel)
+		DEFINE_META_CLASS(Label)
 
 		//---Properties
 		DEFINE_PROPERTY(Text);
@@ -44,7 +44,7 @@ namespace ChilliSource
         DEFINE_PROPERTY(TextOutlineColour);
         DEFINE_PROPERTY(FlipVertical);
         
-        f32 CLabel::mfGlobalTextScale = 1.0f;
+        f32 Label::mfGlobalTextScale = 1.0f;
 
         //Res density of iPhone 4, used to normalise text spacing
         const f32 kfScalableFontResDensity = 2.0f;
@@ -54,7 +54,7 @@ namespace ChilliSource
         ///
         /// Default
         //-------------------------------------------------------
-        CLabel::CLabel() : MaxNumLines(0), TextScale(1.0f), CharacterSpacing(0.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
+        Label::Label() : MaxNumLines(0), TextScale(1.0f), CharacterSpacing(0.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
 		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), ScalableFont(false), ScalableHeight(0), TextOutlined(false), FlipVertical(false), mbLastDrawWasClipped(false), mbLastDrawHadInvalidCharacter(false)
         {
             SetColour(Core::CColour(0.18f, 0.3f, 0.4f, 0.6f));
@@ -75,8 +75,8 @@ namespace ChilliSource
         ///
         /// From param dictionary
         //-------------------------------------------------------
-        CLabel::CLabel(const Core::ParamDictionary& insParams) 
-        : CGUIView(insParams), MaxNumLines(0), TextScale(1.0f), CharacterSpacing(0.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
+        Label::Label(const Core::ParamDictionary& insParams) 
+        : GUIView(insParams), MaxNumLines(0), TextScale(1.0f), CharacterSpacing(0.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
 		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), ScalableFont(false), ScalableHeight(0), TextOutlined(false), FlipVertical(false)
         {
             std::string strValue;
@@ -201,7 +201,7 @@ namespace ChilliSource
         ///
         /// @param Text string
         //-------------------------------------------------------
-        void CLabel::SetText(const Core::UTF8String& instrText)
+        void Label::SetText(const Core::UTF8String& instrText)
         {
             Text = instrText;
             
@@ -212,7 +212,7 @@ namespace ChilliSource
         ///
         /// @returnText string
         //-------------------------------------------------------
-        const Core::UTF8String& CLabel::GetText() const
+        const Core::UTF8String& Label::GetText() const
         {
             return Text;
         }
@@ -221,7 +221,7 @@ namespace ChilliSource
 		///
 		/// @param Text string representing lookup ID
 		//-------------------------------------------------------
-		void CLabel::SetTextID(const std::string& instrText)
+		void Label::SetTextID(const std::string& instrText)
 		{
 			TextID = instrText;
 
@@ -239,7 +239,7 @@ namespace ChilliSource
 		///
 		/// @return Text string representing lookup ID
 		//-------------------------------------------------------
-		const std::string& CLabel::GetTextID() const
+		const std::string& Label::GetTextID() const
 		{
 			return TextID;
 		}
@@ -248,7 +248,7 @@ namespace ChilliSource
         ///
         /// @param Font used to display text
         //-------------------------------------------------------
-        void CLabel::SetFont(const Rendering::FontPtr& inpFont)
+        void Label::SetFont(const Rendering::FontPtr& inpFont)
         {
             Font = inpFont;
             
@@ -259,7 +259,7 @@ namespace ChilliSource
         ///
         /// @return Font used to display text
         //-------------------------------------------------------
-        const Rendering::FontPtr& CLabel::GetFont() const
+        const Rendering::FontPtr& Label::GetFont() const
         {
             return Font;
         }
@@ -271,7 +271,7 @@ namespace ChilliSource
         ///
         /// @param Unified vector
         //-------------------------------------------------------
-        void CLabel::SetMaximumSize(const Core::UnifiedVector2& invSize)
+        void Label::SetMaximumSize(const Core::UnifiedVector2& invSize)
         {
             UnifiedMaxSize = invSize;
 
@@ -284,7 +284,7 @@ namespace ChilliSource
         ///
         /// @param Unified vector
         //-------------------------------------------------------
-        void CLabel::SetMinimumSize(const Core::UnifiedVector2& invSize)
+        void Label::SetMinimumSize(const Core::UnifiedVector2& invSize)
         {
             UnifiedMinSize = invSize;
 
@@ -298,7 +298,7 @@ namespace ChilliSource
         ///
         /// @param Unified vector RX, RY, AX & AY
         //-------------------------------------------------------
-        void CLabel::SetMaximumSize(f32 infRx, f32 infRy, f32 infAx, f32 infAy)
+        void Label::SetMaximumSize(f32 infRx, f32 infRy, f32 infAx, f32 infAy)
         {
             UnifiedMaxSize.vRelative.x = infRx;
             UnifiedMaxSize.vRelative.y = infRy;
@@ -314,7 +314,7 @@ namespace ChilliSource
         ///
         /// @param Unified vector RX, RY, AX & AY
         //-------------------------------------------------------
-        void CLabel::SetMinimumSize(f32 infRx, f32 infRy, f32 infAx, f32 infAy)
+        void Label::SetMinimumSize(f32 infRx, f32 infRy, f32 infAx, f32 infAy)
         {
             UnifiedMinSize.vRelative.x = infRx;
             UnifiedMinSize.vRelative.y = infRy;
@@ -330,7 +330,7 @@ namespace ChilliSource
 		///
 		/// @return Unified vector
 		//-------------------------------------------------------
-		const Core::UnifiedVector2& CLabel::GetMinimumSize() const
+		const Core::UnifiedVector2& Label::GetMinimumSize() const
 		{
 			return UnifiedMinSize;
 		}
@@ -341,7 +341,7 @@ namespace ChilliSource
 		///
 		/// @return Unified vector
 		//-------------------------------------------------------
-		const Core::UnifiedVector2& CLabel::GetMaximumSize() const
+		const Core::UnifiedVector2& Label::GetMaximumSize() const
 		{
 			return UnifiedMaxSize;
 		}
@@ -351,7 +351,7 @@ namespace ChilliSource
         /// @param Whether the label should grow and shrink
         /// based on the text contents
         //-------------------------------------------------------
-        void CLabel::EnableAutosizing(bool inbEnabled)
+        void Label::EnableAutosizing(bool inbEnabled)
         {
             Autosizing = inbEnabled;
 
@@ -363,7 +363,7 @@ namespace ChilliSource
 		/// @return Whether the label should grow and shrink
 		/// based on the text contents
 		//-------------------------------------------------------
-		bool CLabel::IsAutosizingEnabled() const
+		bool Label::IsAutosizingEnabled() const
 		{
 			return Autosizing;
 		}
@@ -373,11 +373,11 @@ namespace ChilliSource
 		/// Triggered if the screen orientation changes so we can
 		/// resize ourself
 		//-----------------------------------------------------------
-		void CLabel::OnScreenOrientationChanged()
+		void Label::OnScreenOrientationChanged()
 		{
 			mCachedChars.clear();
 
-			CGUIView::OnScreenOrientationChanged();
+			GUIView::OnScreenOrientationChanged();
 		}
         //-------------------------------------------------------
         /// Set Number of Lines
@@ -390,7 +390,7 @@ namespace ChilliSource
         ///
         /// @param Num lines
         //-------------------------------------------------------
-        void CLabel::SetNumberOfLines(u32 inudwNumLines)
+        void Label::SetNumberOfLines(u32 inudwNumLines)
         {
             MaxNumLines = inudwNumLines;
             
@@ -407,7 +407,7 @@ namespace ChilliSource
         ///
         /// @return Num lines
         //-------------------------------------------------------
-        u32 CLabel::GetNumberOfLines() const
+        u32 Label::GetNumberOfLines() const
         {
             return MaxNumLines;
         }
@@ -418,7 +418,7 @@ namespace ChilliSource
         ///
         /// @param Absolute Scalar
         //-------------------------------------------------------
-        void CLabel::SetLineSpacing(f32 infSpacing)
+        void Label::SetLineSpacing(f32 infSpacing)
         {
             LineSpacing = infSpacing;
             
@@ -429,7 +429,7 @@ namespace ChilliSource
 		///
 		/// @return The space left vertically between lines 
 		//-------------------------------------------------------
-		f32 CLabel::GetLineSpacing() const
+		f32 Label::GetLineSpacing() const
 		{
 			return LineSpacing;
 		}
@@ -440,7 +440,7 @@ namespace ChilliSource
         ///
         /// @param Absolute Scalar
         //-------------------------------------------------------
-        void CLabel::SetCharacterSpacing(f32 infSpacing)
+        void Label::SetCharacterSpacing(f32 infSpacing)
         {
             CharacterSpacing = infSpacing;
             
@@ -451,7 +451,7 @@ namespace ChilliSource
 		///
 		/// @return The space left horizontally between letters 
 		//-------------------------------------------------------
-		f32 CLabel::GetCharacterSpacing() const
+		f32 Label::GetCharacterSpacing() const
 		{
 			return CharacterSpacing;
 		}
@@ -460,7 +460,7 @@ namespace ChilliSource
         ///
         /// @param Absolute value by which the text is scaled
         //-------------------------------------------------------
-        void CLabel::SetTextScale(f32 infScale)
+        void Label::SetTextScale(f32 infScale)
         {
             TextScale = infScale;
             
@@ -471,7 +471,7 @@ namespace ChilliSource
 		///
 		/// @return Absolute Scalar
 		//-------------------------------------------------------
-		f32 CLabel::GetTextScale() const
+		f32 Label::GetTextScale() const
 		{
 			return TextScale;
 		}
@@ -480,7 +480,7 @@ namespace ChilliSource
         ///
         /// @param Colour
         //-------------------------------------------------------
-        void CLabel::SetTextColour(const Core::CColour& inColour)
+        void Label::SetTextColour(const Core::CColour& inColour)
         {
             TextColour = inColour;
         }
@@ -489,7 +489,7 @@ namespace ChilliSource
 		///
 		/// @return Colour
 		//-------------------------------------------------------
-		const Core::CColour& CLabel::GetTextColour() const
+		const Core::CColour& Label::GetTextColour() const
 		{
 			return TextColour;
 		}
@@ -498,7 +498,7 @@ namespace ChilliSource
 		///
 		/// @param Horizontal justification
 		//-------------------------------------------------------
-		void CLabel::SetHorizontalJustification(TextJustification ineHorizontalJustification)
+		void Label::SetHorizontalJustification(TextJustification ineHorizontalJustification)
 		{
 			HorizontalJustification = ineHorizontalJustification;
 
@@ -509,7 +509,7 @@ namespace ChilliSource
         ///
         /// @param Vertical justification
         //-------------------------------------------------------
-        void CLabel::SetVerticalJustification(TextJustification ineVerticalJustification)
+        void Label::SetVerticalJustification(TextJustification ineVerticalJustification)
         {
 			VerticalJustification = ineVerticalJustification;
             
@@ -520,7 +520,7 @@ namespace ChilliSource
         ///
         /// @return Horizontal justification
         //-------------------------------------------------------
-        TextJustification CLabel::GetHorizontalJustification() const
+        TextJustification Label::GetHorizontalJustification() const
         {
             return HorizontalJustification;
         }
@@ -529,7 +529,7 @@ namespace ChilliSource
         ///
         /// @return Vertical justification
         //-------------------------------------------------------
-        TextJustification CLabel::GetVerticalJustification() const
+        TextJustification Label::GetVerticalJustification() const
         {
             return VerticalJustification;
         }
@@ -538,7 +538,7 @@ namespace ChilliSource
         ///
         /// @param Whether the label has a coloured background
         //-------------------------------------------------------
-        void CLabel::EnableBackground(bool inbEnabled)
+        void Label::EnableBackground(bool inbEnabled)
         {
             Background = inbEnabled;
         }
@@ -547,7 +547,7 @@ namespace ChilliSource
 		///
 		/// @return Whether the label has a coloured background
 		//-------------------------------------------------------
-		bool CLabel::IsBackgroundEnabled() const
+		bool Label::IsBackgroundEnabled() const
 		{
 			return Background;
 		}
@@ -560,7 +560,7 @@ namespace ChilliSource
         /// @param Text representation of justification
         /// @return Justification enum
         //-------------------------------------------------------
-        TextJustification CLabel::JustificationFromString(const std::string& instrJustification)
+        TextJustification Label::JustificationFromString(const std::string& instrJustification)
         {
             if(instrJustification == "Left")
             {
@@ -595,7 +595,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer
         //-------------------------------------------------------
-        void CLabel::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void Label::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
             if(Visible)
             {
@@ -676,7 +676,7 @@ namespace ChilliSource
                 }
             
                 //Draw the kids
-                for(CGUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
+                for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
                 {
                     (*it)->Draw(inpCanvas);
                 }
@@ -693,7 +693,7 @@ namespace ChilliSource
         ///
         /// based on the text contents
         //-------------------------------------------------------
-        void CLabel::DoAutosizing(Rendering::CCanvasRenderer* inpCanvas)
+        void Label::DoAutosizing(Rendering::CCanvasRenderer* inpCanvas)
         {
             if(Autosizing && mCachedChars.empty())
             {
@@ -766,7 +766,7 @@ namespace ChilliSource
 		/// @param Whether the label should use a scalable font
 		/// or not
 		//-------------------------------------------------------
-		void CLabel::EnableScalableFont(bool inbEnabled)
+		void Label::EnableScalableFont(bool inbEnabled)
 		{
 			ScalableFont = inbEnabled;
 		}
@@ -776,7 +776,7 @@ namespace ChilliSource
 		/// @return Whether the label should use a scalable font
 		/// or not
 		//-------------------------------------------------------
-		bool CLabel::IsScalableFontEnabled() const
+		bool Label::IsScalableFontEnabled() const
 		{
 			return ScalableFont;
 		}
@@ -785,7 +785,7 @@ namespace ChilliSource
 		///
 		/// @param Sets the height of the scalable font
 		//-------------------------------------------------------
-		void CLabel::SetScalableFontHeight(f32 infHeight)
+		void Label::SetScalableFontHeight(f32 infHeight)
 		{
 			ScalableHeight = infHeight;
 		}
@@ -794,7 +794,7 @@ namespace ChilliSource
 		///
 		/// @return Height of scalable font
 		//-------------------------------------------------------
-		f32 CLabel::GetScalableFontHeight() const
+		f32 Label::GetScalableFontHeight() const
 		{
 			return ScalableHeight;
 		}
@@ -805,7 +805,7 @@ namespace ChilliSource
 		///
 		/// @param Whether to flip or not
 		//-----------------------------------------------------------
-		void CLabel::EnableVerticalFlip(bool inbValue)
+		void Label::EnableVerticalFlip(bool inbValue)
 		{
 			FlipVertical = inbValue;
 		}
@@ -814,7 +814,7 @@ namespace ChilliSource
 		///
 		/// @param Whether label is flipped about it's local y-axis
 		//-----------------------------------------------------------
-		bool CLabel::IsVerticalFlipEnabled() const
+		bool Label::IsVerticalFlipEnabled() const
 		{
 			return FlipVertical;
 		}
@@ -827,14 +827,14 @@ namespace ChilliSource
         ///
         /// @param scale
         //-------------------------------------------------------
-        void CLabel::SetGlobalTextScale(f32 infScale)
+        void Label::SetGlobalTextScale(f32 infScale)
         {
             mfGlobalTextScale = infScale;
         }
         //-------------------------------------------------------
         /// Get Global Text Scale
         //-------------------------------------------------------
-        f32 CLabel::GetGlobalTextScale()
+        f32 Label::GetGlobalTextScale()
         {
             if(ScalableFont)
             {
@@ -848,7 +848,7 @@ namespace ChilliSource
         ///
         /// @param Whether the scaleable text has an outline
         //-------------------------------------------------------
-        void CLabel::EnableTextOutline(bool inbEnabled)
+        void Label::EnableTextOutline(bool inbEnabled)
         {
             TextOutlined = inbEnabled;
         }
@@ -857,7 +857,7 @@ namespace ChilliSource
         ///
         /// @return Whether the scaleable text has an outline
         //-------------------------------------------------------
-        bool CLabel::IsTextOutlineEnabled() const
+        bool Label::IsTextOutlineEnabled() const
         {
             return TextOutlined;
         }
@@ -866,7 +866,7 @@ namespace ChilliSource
         ///
         /// @param Text outline colour for scaleable fonts
         //-------------------------------------------------------
-        void CLabel::SetTextOutlineColour(const Core::CColour& inColour)
+        void Label::SetTextOutlineColour(const Core::CColour& inColour)
         {
             TextOutlineColour = inColour;
         }
@@ -875,7 +875,7 @@ namespace ChilliSource
         ///
         /// @return Colour for outline of scaleable fonts
         //-------------------------------------------------------
-        const Core::CColour& CLabel::GetTextOutlineColour() const
+        const Core::CColour& Label::GetTextOutlineColour() const
         {
             return TextOutlineColour;
         }
@@ -884,9 +884,9 @@ namespace ChilliSource
         ///
         /// Dirty the transform and force it to be recalculated
         //-----------------------------------------------------
-        void CLabel::OnTransformChanged(u32 inudwInvalidFlags)
+        void Label::OnTransformChanged(u32 inudwInvalidFlags)
         {
-            CGUIView::OnTransformChanged(inudwInvalidFlags);
+            GUIView::OnTransformChanged(inudwInvalidFlags);
             if ((inudwInvalidFlags & (u32)TransformCache::k_absSize) == (u32)TransformCache::k_absSize)
             {
                 mCachedChars.clear();

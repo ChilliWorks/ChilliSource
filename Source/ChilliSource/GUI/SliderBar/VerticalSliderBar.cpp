@@ -21,7 +21,7 @@ namespace ChilliSource
 {
     namespace GUI
     {
-		DEFINE_META_CLASS(CVerticalSliderBar)
+		DEFINE_META_CLASS(VerticalSliderBar)
 
 		DEFINE_PROPERTY(BarSpriteSheet);
 		DEFINE_PROPERTY(SliderSpriteSheet);
@@ -36,8 +36,8 @@ namespace ChilliSource
         ///
         /// Create the subviews that make up the container
         //------------------------------------------------------
-        CVerticalSliderBar::CVerticalSliderBar() 
-		: mpBackgroundImage(new CImageView()), mpSliderImage(new CImageView()), BarSpriteSheetIndex(0), SliderSpriteSheetIndex(0), UnifiedSliderSize(1.5f, 0.15f, 0.0f, 0.0f)
+        VerticalSliderBar::VerticalSliderBar() 
+		: mpBackgroundImage(new ImageView()), mpSliderImage(new ImageView()), BarSpriteSheetIndex(0), SliderSpriteSheetIndex(0), UnifiedSliderSize(1.5f, 0.15f, 0.0f, 0.0f)
         {
 			SetSize(0.1f, 0.8f, 0.0f, 0.0f);
             mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::CVector2(1.0f, 1.0f), Core::CVector2(0, 0)));
@@ -50,15 +50,15 @@ namespace ChilliSource
             mpSliderImage->EnableUserInteraction(false);
             mpBackgroundImage->AddSubview(mpSliderImage);
             
-            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &CVerticalSliderBar::OnSliderMoved);
+            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &VerticalSliderBar::OnSliderMoved);
         }
         //------------------------------------------------------
         /// Constructor
         ///
         /// From param dictionary
         //------------------------------------------------------
-        CVerticalSliderBar::CVerticalSliderBar(const Core::ParamDictionary& insParams) 
-		: CSliderBar(insParams), mpBackgroundImage(new CImageView()), mpSliderImage(new CImageView()),
+        VerticalSliderBar::VerticalSliderBar(const Core::ParamDictionary& insParams) 
+		: SliderBar(insParams), mpBackgroundImage(new ImageView()), mpSliderImage(new ImageView()),
 			BarSpriteSheetIndex(0), SliderSpriteSheetIndex(0), UnifiedSliderSize(1.5f, 0.15f, 0.0f, 0.0f)
         {
 			SetSize(0.1f, 0.8f, 0.0f, 0.0f);
@@ -124,14 +124,14 @@ namespace ChilliSource
                 SetSliderSize(Core::UnifiedVector2(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w));
             }
             
-            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &CVerticalSliderBar::OnSliderMoved);
+            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &VerticalSliderBar::OnSliderMoved);
         }
         //--------------------------------------------------------
         /// Set Bar Sprite Sheet
         ///
         /// @param Sprite sheet for the bar
         //--------------------------------------------------------
-        void CVerticalSliderBar::SetBarSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void VerticalSliderBar::SetBarSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
         {
 			BarSpriteSheet = inpSpriteSheet;
             mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -146,7 +146,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet for the bar
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CVerticalSliderBar::GetBarSpriteSheet() const
+		const Rendering::SpriteSheetPtr& VerticalSliderBar::GetBarSpriteSheet() const
 		{
 			return BarSpriteSheet;
 		}
@@ -155,7 +155,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet for the slider
 		//--------------------------------------------------------
-		void CVerticalSliderBar::SetSliderSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void VerticalSliderBar::SetSliderSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
 		{
 			SliderSpriteSheet = inpSpriteSheet;
 			mpSliderImage->SetSpriteSheet(inpSpriteSheet);
@@ -170,7 +170,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet for the slider
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CVerticalSliderBar::GetSliderSpriteSheet() const
+		const Rendering::SpriteSheetPtr& VerticalSliderBar::GetSliderSpriteSheet() const
 		{
 			return SliderSpriteSheet;
 		}
@@ -179,7 +179,7 @@ namespace ChilliSource
         ///
         /// @param The index of the image within the sprite sheet
         //--------------------------------------------------------
-        void CVerticalSliderBar::SetBarSpriteSheetIndex(u32 inudwIndex)
+        void VerticalSliderBar::SetBarSpriteSheetIndex(u32 inudwIndex)
         {
 			BarSpriteSheetIndex = inudwIndex;
             mpBackgroundImage->SetSpriteSheetIndex(inudwIndex);
@@ -189,7 +189,7 @@ namespace ChilliSource
         ///
         /// @param The index of the image within the sprite sheet
         //--------------------------------------------------------
-        void CVerticalSliderBar::SetSliderSpriteSheetIndex(u32 inudwIndex)
+        void VerticalSliderBar::SetSliderSpriteSheetIndex(u32 inudwIndex)
         {
 			SliderSpriteSheetIndex = inudwIndex;
             mpSliderImage->SetSpriteSheetIndex(inudwIndex);
@@ -199,7 +199,7 @@ namespace ChilliSource
 		///
 		/// @return The index of the image within the sprite sheet
 		//--------------------------------------------------------
-		u32 CVerticalSliderBar::GetBarSpriteSheetIndex() const
+		u32 VerticalSliderBar::GetBarSpriteSheetIndex() const
 		{
 			return BarSpriteSheetIndex;
 		}
@@ -208,7 +208,7 @@ namespace ChilliSource
 		///
 		/// @return The index of the image within the sprite sheet
 		//--------------------------------------------------------
-		u32 CVerticalSliderBar::GetSliderSpriteSheetIndex() const
+		u32 VerticalSliderBar::GetSliderSpriteSheetIndex() const
 		{
 			return SliderSpriteSheetIndex;
 		}
@@ -217,7 +217,7 @@ namespace ChilliSource
 		///
 		/// @param The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		void CVerticalSliderBar::SetBarSpriteSheetIndexID(const std::string& instrID)
+		void VerticalSliderBar::SetBarSpriteSheetIndexID(const std::string& instrID)
 		{
 			CS_ASSERT(BarSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			BarSpriteSheetIndexID = instrID;
@@ -228,7 +228,7 @@ namespace ChilliSource
 		///
 		/// @param The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		void CVerticalSliderBar::SetSliderSpriteSheetIndexID(const std::string& instrID)
+		void VerticalSliderBar::SetSliderSpriteSheetIndexID(const std::string& instrID)
 		{
 			CS_ASSERT(SliderSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			SliderSpriteSheetIndexID = instrID;
@@ -239,7 +239,7 @@ namespace ChilliSource
 		///
 		/// @return The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		const std::string& CVerticalSliderBar::GetBarSpriteSheetIndexID() const
+		const std::string& VerticalSliderBar::GetBarSpriteSheetIndexID() const
 		{
 			return BarSpriteSheetIndexID;
 		}
@@ -248,7 +248,7 @@ namespace ChilliSource
 		///
 		/// @return The index ID of the image within the sprite sheet
 		//--------------------------------------------------------
-		const std::string& CVerticalSliderBar::GetSliderSpriteSheetIndexID() const
+		const std::string& VerticalSliderBar::GetSliderSpriteSheetIndexID() const
 		{
 			return SliderSpriteSheetIndexID;
 		}
@@ -257,7 +257,7 @@ namespace ChilliSource
         ///
         /// @param The unified size of the slider
         //--------------------------------------------------------
-        void CVerticalSliderBar::SetSliderSize(const Core::UnifiedVector2& invUnifiedSize)
+        void VerticalSliderBar::SetSliderSize(const Core::UnifiedVector2& invUnifiedSize)
         {
 			UnifiedSliderSize = invUnifiedSize;
             mpSliderImage->SetSize(invUnifiedSize);
@@ -267,7 +267,7 @@ namespace ChilliSource
 		///
 		/// @return The unified size of the slider
 		//--------------------------------------------------------
-		const Core::UnifiedVector2& CVerticalSliderBar::GetSliderSize() const
+		const Core::UnifiedVector2& VerticalSliderBar::GetSliderSize() const
 		{
 			return UnifiedSliderSize;
 		}
@@ -279,7 +279,7 @@ namespace ChilliSource
         ///
         /// @param Touch data
         //-----------------------------------------------------------
-        void CVerticalSliderBar::OnSliderMoved(CGUIView* inpView, const Input::TouchInfo & insTouchInfo)
+        void VerticalSliderBar::OnSliderMoved(GUIView* inpView, const Input::TouchInfo & insTouchInfo)
         {
             mfSliderValue = ((insTouchInfo.vLocation.y - GetAbsoluteScreenSpacePosition().y)/GetAbsoluteSize().y) + 0.5f;
             mpSliderImage->SetPosition(0.5f, mfSliderValue, 0.0f, 0.0f);
@@ -289,7 +289,7 @@ namespace ChilliSource
 		/// 
 		/// Reposition the slider image
 		//-----------------------------------------------------------
-		void CVerticalSliderBar::UpdateSliderPosition()
+		void VerticalSliderBar::UpdateSliderPosition()
 		{
 			mpSliderImage->SetPosition(0.5f, mfSliderValue, 0.0f, 0.0f);
 		}
@@ -301,19 +301,19 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //------------------------------------------------------
-        void CVerticalSliderBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void VerticalSliderBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
             if(Visible)
             {
-                CGUIView::Draw(inpCanvas);
+                GUIView::Draw(inpCanvas);
             }
         }
 		//------------------------------------------------------
 		/// Destructor
 		//------------------------------------------------------
-		CVerticalSliderBar::~CVerticalSliderBar()
+		VerticalSliderBar::~VerticalSliderBar()
 		{
-			mInputEvents.GetMovedWithinEvent() -= GUIEventDelegate(this, &CVerticalSliderBar::OnSliderMoved);
+			mInputEvents.GetMovedWithinEvent() -= GUIEventDelegate(this, &VerticalSliderBar::OnSliderMoved);
 		}
     }
 }

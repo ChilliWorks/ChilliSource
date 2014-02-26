@@ -35,14 +35,14 @@ namespace ChilliSource
             k_follow
 		};
 		
-        class CLabel : public CGUIView
+        class Label : public GUIView
         {
         public:
             
-			DECLARE_META_CLASS(CLabel)
+			DECLARE_META_CLASS(Label)
 
-            CLabel();
-            CLabel(const Core::ParamDictionary& insParams);
+            Label();
+            Label(const Core::ParamDictionary& insParams);
             //-------------------------------------------------------
             /// Set Text
             ///

@@ -15,7 +15,7 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        DEFINE_META_CLASS(CHorizontalList);
+        DEFINE_META_CLASS(HorizontalList);
         DEFINE_PROPERTY(AbsoluteSpacing);
         DEFINE_PROPERTY(RelativeSpacing);
         DEFINE_PROPERTY(Justifiction);
@@ -26,7 +26,7 @@ namespace ChilliSource
         ///
         /// Default
         //---------------------------------------------------------
-        CHorizontalList::CHorizontalList()
+        HorizontalList::HorizontalList()
         : HorizontalJustifiction(ItemHorizontalJustification::k_left), AbsoluteSpacing(0.0f), RelativeSpacing(0.0f), meVerticalAlignmentAnchor(Core::AlignmentAnchor::k_middleLeft)
         {
             
@@ -36,8 +36,8 @@ namespace ChilliSource
         ///
         /// @param Dictionary of params
         //---------------------------------------------------------
-        CHorizontalList::CHorizontalList(const Core::ParamDictionary& insParams)
-        : CGUIView(insParams), HorizontalJustifiction(ItemHorizontalJustification::k_left), AbsoluteSpacing(0.0f), meVerticalAlignmentAnchor(Core::AlignmentAnchor::k_middleLeft), RelativeSpacing(0.0f)
+        HorizontalList::HorizontalList(const Core::ParamDictionary& insParams)
+        : GUIView(insParams), HorizontalJustifiction(ItemHorizontalJustification::k_left), AbsoluteSpacing(0.0f), meVerticalAlignmentAnchor(Core::AlignmentAnchor::k_middleLeft), RelativeSpacing(0.0f)
         {
             std::string strValue;
             
@@ -90,7 +90,7 @@ namespace ChilliSource
         /// @param Space between items in the list relative to
         /// the size of the container
         //---------------------------------------------------------
-        void CHorizontalList::SetRelativeSpacing(f32 infSpacing)
+        void HorizontalList::SetRelativeSpacing(f32 infSpacing)
         {
             RelativeSpacing = infSpacing;
         }
@@ -99,7 +99,7 @@ namespace ChilliSource
         ///
         /// @param Space between items in the list
         //---------------------------------------------------------
-        void CHorizontalList::SetAbsoluteSpacing(f32 infSpacing)
+        void HorizontalList::SetAbsoluteSpacing(f32 infSpacing)
         {
             AbsoluteSpacing = infSpacing;
         }
@@ -108,7 +108,7 @@ namespace ChilliSource
         ///
         /// @return Space between items in the list
         //---------------------------------------------------------
-        f32 CHorizontalList::GetAbsoluteSpacing() const
+        f32 HorizontalList::GetAbsoluteSpacing() const
         {
             return AbsoluteSpacing;
         }
@@ -118,7 +118,7 @@ namespace ChilliSource
         /// @return Space between items in the list relative to the
         /// size of the container
         //---------------------------------------------------------
-        f32 CHorizontalList::GetRelativeSpacing() const
+        f32 HorizontalList::GetRelativeSpacing() const
         {
             return RelativeSpacing;
         }
@@ -127,7 +127,7 @@ namespace ChilliSource
         ///
         /// @param Justification which will align the items within the list
         //---------------------------------------------------------
-        void CHorizontalList::SetHorizontalJustification(ItemHorizontalJustification ineJustification)
+        void HorizontalList::SetHorizontalJustification(ItemHorizontalJustification ineJustification)
         {
             HorizontalJustifiction = ineJustification;
         }
@@ -136,7 +136,7 @@ namespace ChilliSource
         ///
         /// @return Justification which will align the items within the list
         //---------------------------------------------------------
-        CHorizontalList::ItemHorizontalJustification CHorizontalList::GetHorizontalJustification() const
+        HorizontalList::ItemHorizontalJustification HorizontalList::GetHorizontalJustification() const
         {
             return HorizontalJustifiction;
         }
@@ -145,7 +145,7 @@ namespace ChilliSource
         ///
         /// @param Justification which will align the items within the list
         //---------------------------------------------------------
-        void CHorizontalList::SetVerticalJustification(ItemVerticalJustification ineJustification)
+        void HorizontalList::SetVerticalJustification(ItemVerticalJustification ineJustification)
         {
             VerticalJustifiction = ineJustification;
             
@@ -168,7 +168,7 @@ namespace ChilliSource
         ///
         /// @return Vertical Justification which will align the items within the list
         //---------------------------------------------------------
-        CHorizontalList::ItemVerticalJustification CHorizontalList::GetVerticalJustification() const
+        HorizontalList::ItemVerticalJustification HorizontalList::GetVerticalJustification() const
         {
             return VerticalJustifiction;
         }
@@ -179,9 +179,9 @@ namespace ChilliSource
         ///
         /// @param GUIView shared pointer
         //-----------------------------------------------------
-        void CHorizontalList::AddSubview(const GUIViewPtr& inpSubview)
+        void HorizontalList::AddSubview(const GUIViewSPtr& inpSubview)
         {
-            CGUIView::AddSubview(inpSubview);
+            GUIView::AddSubview(inpSubview);
             maListSubviews.push_back(inpSubview);
         }
         //-----------------------------------------------------
@@ -191,10 +191,10 @@ namespace ChilliSource
         ///
         /// @param GUIView pointer
         //-----------------------------------------------------
-        void CHorizontalList::RemoveSubview(CGUIView* inpSubview)
+        void HorizontalList::RemoveSubview(GUIView* inpSubview)
         {
-            CGUIView::RemoveSubview(inpSubview);
-            for(CGUIView::Subviews::iterator it = maListSubviews.begin(); it != maListSubviews.end(); ++it)
+            GUIView::RemoveSubview(inpSubview);
+            for(GUIView::Subviews::iterator it = maListSubviews.begin(); it != maListSubviews.end(); ++it)
             {
                 if((*it).get() == inpSubview)
                 {
@@ -211,9 +211,9 @@ namespace ChilliSource
 		///
 		/// @param GUIView pointer
 		//-----------------------------------------------------			
-		void CHorizontalList::RemoveAllSubviews()
+		void HorizontalList::RemoveAllSubviews()
 		{
-			CGUIView::RemoveAllSubviews();
+			GUIView::RemoveAllSubviews();
             maListSubviews.clear();
 		}
         //-------------------------------------------------------
@@ -224,7 +224,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //-------------------------------------------------------
-        void CHorizontalList::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void HorizontalList::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
             //This is a container view and has no renderables
             //We will need to render our subviews though
@@ -243,7 +243,7 @@ namespace ChilliSource
                 //Arrange everything!
                 LayoutContent();
 				
-                CGUIView::Draw(inpCanvas);
+                GUIView::Draw(inpCanvas);
             }
         }
         //-------------------------------------------------------
@@ -252,7 +252,7 @@ namespace ChilliSource
         /// Loop through the subviews and position them correctly
         /// in the list 
         //-------------------------------------------------------
-        void CHorizontalList::LayoutContent()
+        void HorizontalList::LayoutContent()
         {
             f32 fContainerWidth = GetAbsoluteSize().x;
             f32 fSpacing = (fContainerWidth * RelativeSpacing) + AbsoluteSpacing;

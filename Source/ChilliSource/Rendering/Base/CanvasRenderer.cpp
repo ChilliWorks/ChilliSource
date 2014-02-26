@@ -48,7 +48,7 @@ namespace ChilliSource
 		///
 		/// Draw the UI
 		//----------------------------------------------------------
-		void CCanvasRenderer::Render(GUI::CGUIView* inpView, f32 infNearClipDistance)
+		void CCanvasRenderer::Render(GUI::GUIView* inpView, f32 infNearClipDistance)
 		{
             //We use this to ensure our UI is never clipped
             mfNearClippingDistance = infNearClipDistance + 1.0f;

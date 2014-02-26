@@ -16,14 +16,14 @@ namespace ChilliSource
 {
 	namespace GUI
 	{
-		class CGridView : public CGUIView
+		class GridView : public GUIView
 		{
 		public:
 
-			DECLARE_META_CLASS(CGridView)
+			DECLARE_META_CLASS(GridView)
 
-			CGridView();
-			CGridView(const Core::ParamDictionary& insParams);
+			GridView();
+			GridView(const Core::ParamDictionary& insParams);
 			//-------------------------------------------------------
 			/// Set Number of Rows
 			///
@@ -179,7 +179,7 @@ namespace ChilliSource
             ///
             /// @param GUIView shared pointer
             //-----------------------------------------------------
-            void AddSubview(const GUIViewPtr& inpSubview);
+            void AddSubview(const GUIViewSPtr& inpSubview);
             //-----------------------------------------------------
             /// Remove Subview (Internal)
             ///
@@ -187,7 +187,7 @@ namespace ChilliSource
             ///
             /// @param GUIView pointer
             //-----------------------------------------------------
-            void RemoveSubview(CGUIView* inpSubview);
+            void RemoveSubview(GUIView* inpSubview);
             //-----------------------------------------------------
             /// Remove Subview (Internal)
             ///
@@ -222,7 +222,7 @@ namespace ChilliSource
 			void LayoutContentRowMajor(const Core::CVector2& invCellSize, u32 udwNumCols, u32 udwNumRows);
 
 		protected:
-            CGUIView::Subviews mapGridSubviews;
+            GUIView::Subviews mapGridSubviews;
 
 			DECLARE_PROPERTY_A(f32, AbsoluteRowSpacing, SetAbsoluteRowSpacing, GetAbsoluteRowSpacing);
 			DECLARE_PROPERTY_A(f32, AbsoluteColumnSpacing, SetAbsoluteColumnSpacing, GetAbsoluteColumnSpacing);

@@ -14,7 +14,7 @@ namespace ChilliSource
 {
     namespace GUI
     {
-		DEFINE_META_CLASS(IButton)
+		DEFINE_META_CLASS(Button)
 
         //--------------------------------------------------
         /// Get Activated Event
@@ -22,7 +22,7 @@ namespace ChilliSource
         /// @return Event triggered when the button is 
         /// activated
         //--------------------------------------------------
-        Core::IEvent<ButtonEventDelegate>& IButton::GetActivatedEvent()
+        Core::IEvent<ButtonEventDelegate>& Button::GetActivatedEvent()
         {
             return mOnButtonActivatedEvent;
         }

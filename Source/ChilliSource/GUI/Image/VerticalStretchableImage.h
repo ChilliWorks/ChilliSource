@@ -22,11 +22,11 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        class CVerticalStretchableImage : public CGUIView
+        class VerticalStretchableImage : public GUIView
         {
         public:
 
-			DECLARE_META_CLASS(CVerticalStretchableImage)
+			DECLARE_META_CLASS(VerticalStretchableImage)
 
             struct SpriteSheetIndex
             {
@@ -34,8 +34,8 @@ namespace ChilliSource
                 u32 udwBottom;
                 u32 udwMiddle;
             };
-            CVerticalStretchableImage();
-            CVerticalStretchableImage(const Core::ParamDictionary& insParams);
+            VerticalStretchableImage();
+            VerticalStretchableImage(const Core::ParamDictionary& insParams);
             //---------------------------------------------------------
             /// Set Sprite Sheet
             ///
@@ -173,12 +173,7 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
 			
             SpriteSheetIndex msIndices;
-            
-           
-
         };
-        
-        typedef std::shared_ptr<CVerticalStretchableImage> VerticalStretchableImagePtr;
     }
 }
 

@@ -16,14 +16,14 @@ namespace ChilliSource
 {
 	namespace GUI
 	{
-		class CHorizontalProgressBar : public CProgressBar
+		class HorizontalProgressBar : public ProgressBar
 		{
 		public:
 
-			DECLARE_META_CLASS(CHorizontalProgressBar)
+			DECLARE_META_CLASS(HorizontalProgressBar)
 
-			CHorizontalProgressBar();
-			CHorizontalProgressBar(const Core::ParamDictionary& insParams);
+			HorizontalProgressBar();
+			HorizontalProgressBar(const Core::ParamDictionary& insParams);
 			//------------------------------------------------------
 			/// Draw
 			///
@@ -138,8 +138,8 @@ namespace ChilliSource
 
 		private:
 
-			ImageViewPtr mpBackgroundImage;
-			ImageViewPtr mpProgressImage;
+			ImageViewSPtr mpBackgroundImage;
+			ImageViewSPtr mpProgressImage;
 
 			DECLARE_PROPERTY_A(Rendering::TexturePtr, BackgroundTexture, SetBackgroundImage, GetBackgroundImage);
 			DECLARE_PROPERTY_A(Rendering::TexturePtr, ProgressTexture, SetProgressImage, GetProgressImage);
@@ -155,9 +155,6 @@ namespace ChilliSource
             
             f32 mfProgressAbsHeight, mfProgressRelHeight;
 		};
-
-		typedef std::shared_ptr<CHorizontalProgressBar> HorizontalProgressBarPtr;
-		typedef std::weak_ptr<CHorizontalProgressBar> HorizontalProgressBarWeakPtr;
 	}
 }
 

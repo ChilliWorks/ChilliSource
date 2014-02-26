@@ -25,11 +25,11 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        class CWindow : public CGUIView
+        class Window : public GUIView
         {
         public:
-            CWindow();
-            virtual ~CWindow();
+            Window();
+            virtual ~Window();
             
     		//-----------------------------------------------------
     		/// Set Input System

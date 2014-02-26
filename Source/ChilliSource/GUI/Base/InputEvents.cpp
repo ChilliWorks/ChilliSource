@@ -23,7 +23,7 @@ namespace ChilliSource
         ///
         /// @return Event
         //-----------------------------------------------------------
-        Core::IEvent<GUIEventDelegate>& CInputEvents::GetPressedInsideEvent()
+        Core::IEvent<GUIEventDelegate>& InputEvents::GetPressedInsideEvent()
         {
             return mTouchPressedInside;
         }
@@ -35,7 +35,7 @@ namespace ChilliSource
         ///
         /// @return Event
         //-----------------------------------------------------------
-        Core::IEvent<GUIEventDelegate>& CInputEvents::GetReleasedInsideEvent()
+        Core::IEvent<GUIEventDelegate>& InputEvents::GetReleasedInsideEvent()
         {
             return mTouchReleasedInside;
         }
@@ -47,7 +47,7 @@ namespace ChilliSource
         ///
         /// @return Event
         //-----------------------------------------------------------
-        Core::IEvent<GUIEventDelegate>& CInputEvents::GetReleasedOutsideEvent()
+        Core::IEvent<GUIEventDelegate>& InputEvents::GetReleasedOutsideEvent()
         {
             return mTouchReleasedOutside;
         }
@@ -59,7 +59,7 @@ namespace ChilliSource
         ///
         /// @return Event
         //-----------------------------------------------------------
-        Core::IEvent<GUIEventDelegate>& CInputEvents::GetMovedOutsideEvent()
+        Core::IEvent<GUIEventDelegate>& InputEvents::GetMovedOutsideEvent()
         {   
             return mTouchMoveExit;    
         }
@@ -71,7 +71,7 @@ namespace ChilliSource
         ///
         /// @return Event
         //-----------------------------------------------------------
-        Core::IEvent<GUIEventDelegate>& CInputEvents::GetMovedInsideEvent()
+        Core::IEvent<GUIEventDelegate>& InputEvents::GetMovedInsideEvent()
         {
             return mTouchMoveEnter;
         }
@@ -83,7 +83,7 @@ namespace ChilliSource
         ///
         /// @return Event
         //-----------------------------------------------------------
-        Core::IEvent<GUIEventDelegate>& CInputEvents::GetMovedWithinEvent()
+        Core::IEvent<GUIEventDelegate>& InputEvents::GetMovedWithinEvent()
         {
             return mTouchMovedWithin;
         }
@@ -96,7 +96,7 @@ namespace ChilliSource
         /// @param Touch data
         /// @return Whether the view contains the touch
         //-----------------------------------------------------------
-        bool CInputEvents::OnTouchBegan(CGUIView* inpView, const Input::TouchInfo & insTouchInfo)
+        bool InputEvents::OnTouchBegan(GUIView* inpView, const Input::TouchInfo & insTouchInfo)
         {
             //We must contain this point to be notified so we can trigger an event
             //Events: PressedInside
@@ -114,7 +114,7 @@ namespace ChilliSource
         /// @param Touch data
         /// @return Whether the view contains the touch
         //-----------------------------------------------------------
-        bool CInputEvents::OnTouchMoved(CGUIView* inpView, const Input::TouchInfo & insTouchInfo)
+        bool InputEvents::OnTouchMoved(GUIView* inpView, const Input::TouchInfo & insTouchInfo)
         {
             std::vector<u32>::iterator it = std::find(mOpenTouches.begin(), mOpenTouches.end(), insTouchInfo.ID);
             
@@ -147,7 +147,7 @@ namespace ChilliSource
         ///
         /// @param Touch data
         //-----------------------------------------------------------
-        void CInputEvents::OnTouchEnded(CGUIView* inpView, const Input::TouchInfo & insTouchInfo)
+        void InputEvents::OnTouchEnded(GUIView* inpView, const Input::TouchInfo & insTouchInfo)
         {
             std::vector<u32>::iterator it = std::find(mOpenTouches.begin(), mOpenTouches.end(), insTouchInfo.ID);
             

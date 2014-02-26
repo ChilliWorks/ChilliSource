@@ -17,14 +17,14 @@ namespace ChilliSource
 {
 	namespace GUI
 	{
-		class CVerticalEndcappedProgressBar : public CProgressBar
+		class VerticalEndcappedProgressBar : public ProgressBar
 		{
 		public:
             
-			DECLARE_META_CLASS(CVerticalEndcappedProgressBar)
+			DECLARE_META_CLASS(VerticalEndcappedProgressBar)
             
-			CVerticalEndcappedProgressBar();
-			CVerticalEndcappedProgressBar(const Core::ParamDictionary& insParams);
+			VerticalEndcappedProgressBar();
+			VerticalEndcappedProgressBar(const Core::ParamDictionary& insParams);
             
 			//------------------------------------------------------------------------
 			/// Set Sprite Sheet
@@ -167,13 +167,10 @@ namespace ChilliSource
             
             DECLARE_PROPERTY_A(bool, WidthFromImage, EnableWidthFromImage, IsWidthFromImageEnabled);
 			
-			VerticalStretchableImagePtr mpFillImage;
-			VerticalStretchableImagePtr mpBGImage;
+			VerticalStretchableImageSPtr mpFillImage;
+			VerticalStretchableImageSPtr mpBGImage;
             
 		};
-        
-		typedef std::shared_ptr<CVerticalEndcappedProgressBar> VerticalEndcappedProgressBarPtr;
-		typedef std::weak_ptr<CVerticalEndcappedProgressBar> VerticalEndcappedProgressBarWeakPtr;
 	}
 }
 

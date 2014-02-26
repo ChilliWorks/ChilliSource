@@ -18,19 +18,19 @@ namespace ChilliSource
 {
 	namespace GUI
 	{
-		class CEditableLabel : public CLabel
+		class EditableLabel : public Label
 		{
 		public:
 
-			DECLARE_META_CLASS(CEditableLabel)
+			DECLARE_META_CLASS(EditableLabel)
 
-			typedef fastdelegate::FastDelegate1<CEditableLabel*> TextChangeEventDelegate;
+			typedef fastdelegate::FastDelegate1<EditableLabel*> TextChangeEventDelegate;
 
 			static const s8 kbySecureEntryCharacter = '*';
 
-			CEditableLabel();
-			CEditableLabel(const Core::ParamDictionary& insParams);
-			virtual ~CEditableLabel();
+			EditableLabel();
+			EditableLabel(const Core::ParamDictionary& insParams);
+			virtual ~EditableLabel();
 
 			//-------------------------------------------------
 			/// Get Keyboard Show Event
@@ -251,7 +251,7 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(bool, SecureEntry, EnableSecureEntry, IsSecureEntryEnabled);
 			DECLARE_PROPERTY_A(u32, CharacterLimit, SetCharacterLimit, GetCharacterLimit);
 
-			static CEditableLabel* pKeyboardListener;
+			static EditableLabel* pKeyboardListener;
             
             Core::UTF8String mutf8strTextWithSeparators;
             Core::UTF8String mutf8strSeparator;

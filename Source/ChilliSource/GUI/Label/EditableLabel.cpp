@@ -15,12 +15,12 @@ namespace ChilliSource
 {
     namespace GUI
     {
-		DEFINE_META_CLASS(CEditableLabel)
+		DEFINE_META_CLASS(EditableLabel)
 
 		DEFINE_PROPERTY(SecureEntry);
 		DEFINE_PROPERTY(CharacterLimit);
 
-        CEditableLabel* CEditableLabel::pKeyboardListener = nullptr;
+        EditableLabel* EditableLabel::pKeyboardListener = nullptr;
         
         //Res density of iPhone 4, used to normalise text spacing
         const f32 kfScalableFontResDensity = 2.0f;
@@ -30,7 +30,7 @@ namespace ChilliSource
         ///
         /// Default
         //-------------------------------------------------
-        CEditableLabel::CEditableLabel() : mpKeyboard(nullptr), SecureEntry(false), CharacterLimit(0), mbShowKeyboard(false), mfTimeToShow(0.0f), mu32SeparatorSpacing(0), mutf8strSeparator(""), mutf8strTextWithSeparators(""), mbSelected(false)
+        EditableLabel::EditableLabel() : mpKeyboard(nullptr), SecureEntry(false), CharacterLimit(0), mbShowKeyboard(false), mfTimeToShow(0.0f), mu32SeparatorSpacing(0), mutf8strSeparator(""), mutf8strTextWithSeparators(""), mbSelected(false)
         {
             
         }
@@ -39,8 +39,8 @@ namespace ChilliSource
         ///
         /// From param dictionary
         //-------------------------------------------------
-        CEditableLabel::CEditableLabel(const Core::ParamDictionary& insParams) 
-        : CLabel(insParams), mpKeyboard(nullptr), CharacterLimit(0), SecureEntry(false), mbShowKeyboard(false), mfTimeToShow(0.0f), mu32SeparatorSpacing(0), mutf8strSeparator(""), mutf8strTextWithSeparators("")
+        EditableLabel::EditableLabel(const Core::ParamDictionary& insParams) 
+        : Label(insParams), mpKeyboard(nullptr), CharacterLimit(0), SecureEntry(false), mbShowKeyboard(false), mfTimeToShow(0.0f), mu32SeparatorSpacing(0), mutf8strSeparator(""), mutf8strTextWithSeparators("")
         {
 			std::string strValue;
 
@@ -63,7 +63,7 @@ namespace ChilliSource
         ///
         /// @param Keyboard Event Delegate
         //-------------------------------------------------
-        Core::IEvent<Input::KeyboardEventDelegate>& CEditableLabel::GetKeyboardShowEvent()
+        Core::IEvent<Input::KeyboardEventDelegate>& EditableLabel::GetKeyboardShowEvent()
         {
             return mOnKeyboardShowEvent;
         }
@@ -75,7 +75,7 @@ namespace ChilliSource
         ///
         /// @param Keyboard Event Delegate
         //-------------------------------------------------
-        Core::IEvent<Input::KeyboardEventDelegate>& CEditableLabel::GetKeyboardHideEvent()
+        Core::IEvent<Input::KeyboardEventDelegate>& EditableLabel::GetKeyboardHideEvent()
         {
             return mOnKeyboardHideEvent;
         }
@@ -87,7 +87,7 @@ namespace ChilliSource
         ///
         /// @param Text Change Event Delegate
         //-------------------------------------------------
-        Core::IEvent<CEditableLabel::TextChangeEventDelegate>& CEditableLabel::GetTextChangeEvent()
+        Core::IEvent<EditableLabel::TextChangeEventDelegate>& EditableLabel::GetTextChangeEvent()
         {
             return mOnTextChangeEvent;
         }
@@ -100,7 +100,7 @@ namespace ChilliSource
         ///
         /// @param Enable/disable
         //--------------------------------------------------
-        void CEditableLabel::EnableSecureEntry(bool inbEnabled)
+        void EditableLabel::EnableSecureEntry(bool inbEnabled)
         {
             SecureEntry = inbEnabled;
 			mCachedChars.clear();
@@ -114,7 +114,7 @@ namespace ChilliSource
 		///
 		/// @param Enable/disable
 		//--------------------------------------------------
-		bool CEditableLabel::IsSecureEntryEnabled() const
+		bool EditableLabel::IsSecureEntryEnabled() const
 		{
 			return SecureEntry;
 		}
@@ -126,7 +126,7 @@ namespace ChilliSource
         ///
         /// @param Limit
         //--------------------------------------------------
-        void CEditableLabel::SetCharacterLimit(u32 inudwLimit)
+        void EditableLabel::SetCharacterLimit(u32 inudwLimit)
         {
             CharacterLimit = inudwLimit;
         }
@@ -138,7 +138,7 @@ namespace ChilliSource
 		///
 		/// @return Limit
 		//--------------------------------------------------
-		u32 CEditableLabel::GetCharacterLimit() const
+		u32 EditableLabel::GetCharacterLimit() const
 		{
 			return CharacterLimit;
 		}
@@ -147,7 +147,7 @@ namespace ChilliSource
 		///
 		/// @return Virtual keyboard
 		//-------------------------------------------------
-		Input::VirtualKeyboard* CEditableLabel::GetKeyboardPtr()
+		Input::VirtualKeyboard* EditableLabel::GetKeyboardPtr()
 		{
 			return mpKeyboard;
 		}
@@ -156,13 +156,13 @@ namespace ChilliSource
         ///
         /// @param Virtual keyboard
         //-------------------------------------------------
-        void CEditableLabel::SetKeyboard(Input::VirtualKeyboard* inpKeyboard)
+        void EditableLabel::SetKeyboard(Input::VirtualKeyboard* inpKeyboard)
         {
             if(mpKeyboard)
             {
                 //Stop listening to old keyboard
-                mpKeyboard->GetKeyboardShowEvent() -= Input::KeyboardEventDelegate(this, &CEditableLabel::OnKeyboardShown);
-                mpKeyboard->GetKeyboardHideEvent() -= Input::KeyboardEventDelegate(this, &CEditableLabel::OnKeyboardHidden);
+                mpKeyboard->GetKeyboardShowEvent() -= Input::KeyboardEventDelegate(this, &EditableLabel::OnKeyboardShown);
+                mpKeyboard->GetKeyboardHideEvent() -= Input::KeyboardEventDelegate(this, &EditableLabel::OnKeyboardHidden);
             }
             
             if(inpKeyboard)
@@ -170,8 +170,8 @@ namespace ChilliSource
                 mpKeyboard = inpKeyboard;
                 
                 //Stop listening to old keyboard
-                mpKeyboard->GetKeyboardShowEvent() += Input::KeyboardEventDelegate(this, &CEditableLabel::OnKeyboardShown);
-                mpKeyboard->GetKeyboardHideEvent() += Input::KeyboardEventDelegate(this, &CEditableLabel::OnKeyboardHidden);
+                mpKeyboard->GetKeyboardShowEvent() += Input::KeyboardEventDelegate(this, &EditableLabel::OnKeyboardShown);
+                mpKeyboard->GetKeyboardHideEvent() += Input::KeyboardEventDelegate(this, &EditableLabel::OnKeyboardHidden);
             }
             else
             {
@@ -181,7 +181,7 @@ namespace ChilliSource
         //-------------------------------------------------
         /// Show Keyboard
         //-------------------------------------------------
-        void CEditableLabel::ShowKeyboard()
+        void EditableLabel::ShowKeyboard()
         {
             if(mpKeyboard)
             {
@@ -192,7 +192,7 @@ namespace ChilliSource
         //-------------------------------------------------
         /// Hide Keyboard
         //-------------------------------------------------
-        void CEditableLabel::HideKeyboard()
+        void EditableLabel::HideKeyboard()
         {
             if(mpKeyboard)
             {
@@ -206,20 +206,20 @@ namespace ChilliSource
         ///
         /// Triggered when the keyboard displays
         //-------------------------------------------------
-        void CEditableLabel::OnKeyboardShown()
+        void EditableLabel::OnKeyboardShown()
         {
             if(pKeyboardListener == this)
             {
                 mpKeyboard->SetText(Text);
-                mpKeyboard->GetKeyboardTextChangeEvent() += Input::TextInputEventDelegate(this, &CEditableLabel::OnKeyboardTextChanged);
+                mpKeyboard->GetKeyboardTextChangeEvent() += Input::TextInputEventDelegate(this, &EditableLabel::OnKeyboardTextChanged);
                 mOnKeyboardShowEvent.Invoke();
             }
         }
         
-        void CEditableLabel::ClearText()
+        void EditableLabel::ClearText()
         {
             mpKeyboard->SetText("");
-            CLabel::SetText("");
+            Label::SetText("");
         }
         //----------------------------------------------------
 		/// On Keyboard Text Changed
@@ -229,7 +229,7 @@ namespace ChilliSource
         /// @param Contents of the keyboard
         /// @param Whether to accept the input
 		//----------------------------------------------------
-		void CEditableLabel::OnKeyboardTextChanged(const Core::UTF8String& instrText, bool* inbRejectInput)
+		void EditableLabel::OnKeyboardTextChanged(const Core::UTF8String& instrText, bool* inbRejectInput)
 		{
             //We can reject the text if it exceeds our input limit
             if(CharacterLimit > 0 && instrText.length() > CharacterLimit)
@@ -238,7 +238,7 @@ namespace ChilliSource
             }
             else
             {
-                CLabel::SetText(instrText);
+                Label::SetText(instrText);
                 *inbRejectInput = false;
                 
                 // if we're using separators, calculate the separated string now
@@ -253,11 +253,11 @@ namespace ChilliSource
         ///
         /// Triggered when the keyboard disappears
         //-------------------------------------------------
-        void CEditableLabel::OnKeyboardHidden()
+        void EditableLabel::OnKeyboardHidden()
         {
             if(pKeyboardListener == this)
             {
-                mpKeyboard->GetKeyboardTextChangeEvent() -= Input::TextInputEventDelegate(this, &CEditableLabel::OnKeyboardTextChanged);
+                mpKeyboard->GetKeyboardTextChangeEvent() -= Input::TextInputEventDelegate(this, &EditableLabel::OnKeyboardTextChanged);
                 pKeyboardListener = nullptr;
                 mOnKeyboardHideEvent.Invoke();
                
@@ -271,14 +271,14 @@ namespace ChilliSource
         /// @param Touch data
         /// @return Whether touch has been consumed
         //-----------------------------------------------------------
-        bool CEditableLabel::OnTouchBegan(const Input::TouchInfo & insTouchInfo)
+        bool EditableLabel::OnTouchBegan(const Input::TouchInfo & insTouchInfo)
         {
             if(UserInteraction)
             {
                 mbSelected = true;
             }
             
-            return CGUIView::OnTouchBegan(insTouchInfo);
+            return GUIView::OnTouchBegan(insTouchInfo);
         }
         //-----------------------------------------------------------
         /// On Touch Ended
@@ -287,7 +287,7 @@ namespace ChilliSource
         ///
         /// @param Touch data
         //-----------------------------------------------------------
-        void CEditableLabel::OnTouchEnded(const Input::TouchInfo & insTouchInfo)
+        void EditableLabel::OnTouchEnded(const Input::TouchInfo & insTouchInfo)
         {
             if(UserInteraction && Visible && mpKeyboard && mbSelected)
             {
@@ -307,7 +307,7 @@ namespace ChilliSource
             
             mbSelected = false;
             
-            CGUIView::OnTouchEnded(insTouchInfo);
+            GUIView::OnTouchEnded(insTouchInfo);
         }
         //-------------------------------------------------------
         /// Update
@@ -316,7 +316,7 @@ namespace ChilliSource
         ///
         /// @param Time between frames
         //-------------------------------------------------------
-        void CEditableLabel::Update(f32 infDt)
+        void EditableLabel::Update(f32 infDt)
         {
             if(mbShowKeyboard && (mfTimeToShow += infDt) > 1.0f)
             {
@@ -333,7 +333,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer
         //-------------------------------------------------------
-        void CEditableLabel::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void EditableLabel::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
 			//Check if this is on screen
 			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
@@ -410,7 +410,7 @@ namespace ChilliSource
                 }
             }
             //Draw the kids
-            for(CGUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
+            for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
             {
                 (*it)->Draw(inpCanvas);
             }
@@ -426,9 +426,9 @@ namespace ChilliSource
         /// Overridden set text method, updates cached separator string
         /// @param instrText text to set as entry
         //-------------------------------------------------------
-        void CEditableLabel::SetText(const Core::UTF8String& instrText)
+        void EditableLabel::SetText(const Core::UTF8String& instrText)
         {
-            CLabel::SetText(instrText);
+            Label::SetText(instrText);
             
             // handle cached separator string
             if(mutf8strSeparator.size() > 0)
@@ -441,7 +441,7 @@ namespace ChilliSource
         ///
         /// Changes the displayed keys to numberpad
         //-------------------------------------------------
-        void CEditableLabel::SetKeyboardInputTypeNumeric()
+        void EditableLabel::SetKeyboardInputTypeNumeric()
         {
             if(mpKeyboard)
                 mpKeyboard->SetKeyboardType(ChilliSource::Input::KeyboardType::k_numeric);
@@ -451,7 +451,7 @@ namespace ChilliSource
         ///
         /// Changes the displayed keys to Text entry
         //-------------------------------------------------
-        void CEditableLabel::SetKeyboardInputTypeText()
+        void EditableLabel::SetKeyboardInputTypeText()
         {
             if(mpKeyboard)
                 mpKeyboard->SetKeyboardType(ChilliSource::Input::KeyboardType::k_text);
@@ -461,7 +461,7 @@ namespace ChilliSource
         ///
         /// @param Capitalisation Type
         //------------------------
-        void CEditableLabel::SetKeyboardCapitalisationMethod(Input::KeyboardCapitalisation ineCapitalisationType)
+        void EditableLabel::SetKeyboardCapitalisationMethod(Input::KeyboardCapitalisation ineCapitalisationType)
         {
             if(mpKeyboard)
                 mpKeyboard->SetCapitalisationMethod(ineCapitalisationType);
@@ -471,7 +471,7 @@ namespace ChilliSource
         ///
         /// override to permit last text length tracking
         //-------------------------------------------------
-        Core::UTF8String CEditableLabel::GetTextWithSeparators() const
+        Core::UTF8String EditableLabel::GetTextWithSeparators() const
         {
             Core::UTF8String strutf8Out("");
             
@@ -502,7 +502,7 @@ namespace ChilliSource
         ///
         /// Sets the separator that will be used in GetTextWithSeparators
         //-------------------------------------------------
-        void CEditableLabel::SetTextSeparator(const Core::UTF8String& inutf8strSeparator)
+        void EditableLabel::SetTextSeparator(const Core::UTF8String& inutf8strSeparator)
         {
             mutf8strSeparator = inutf8strSeparator;
         }
@@ -511,7 +511,7 @@ namespace ChilliSource
         ///
         /// Sets the chars between separators, 0 for no separators
         //-------------------------------------------------
-        void CEditableLabel::SetTextSeparatorSpacing(u32 inu32Spacing)
+        void EditableLabel::SetTextSeparatorSpacing(u32 inu32Spacing)
         {
             mu32SeparatorSpacing = inu32Spacing;
         }
@@ -519,7 +519,7 @@ namespace ChilliSource
         /// Destructor
         ///
         //-------------------------------------------------
-        CEditableLabel::~CEditableLabel() 
+        EditableLabel::~EditableLabel() 
         {
             if(pKeyboardListener == this)
             {
@@ -534,9 +534,9 @@ namespace ChilliSource
             if(mpKeyboard)
             {
                 //Stop listening to old keyboard
-                mpKeyboard->GetKeyboardShowEvent() -= Input::KeyboardEventDelegate(this, &CEditableLabel::OnKeyboardShown);
-                mpKeyboard->GetKeyboardTextChangeEvent() -= Input::TextInputEventDelegate(this, &CEditableLabel::OnKeyboardTextChanged);
-                mpKeyboard->GetKeyboardHideEvent() -= Input::KeyboardEventDelegate(this, &CEditableLabel::OnKeyboardHidden);
+                mpKeyboard->GetKeyboardShowEvent() -= Input::KeyboardEventDelegate(this, &EditableLabel::OnKeyboardShown);
+                mpKeyboard->GetKeyboardTextChangeEvent() -= Input::TextInputEventDelegate(this, &EditableLabel::OnKeyboardTextChanged);
+                mpKeyboard->GetKeyboardHideEvent() -= Input::KeyboardEventDelegate(this, &EditableLabel::OnKeyboardHidden);
             }
         }
     }

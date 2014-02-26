@@ -27,7 +27,7 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        DEFINE_META_CLASS(CStretchableHighlightButton);
+        DEFINE_META_CLASS(StretchableHighlightButton);
         
         DEFINE_PROPERTY(NormalSpriteSheet);
         DEFINE_PROPERTY(HighlightSpriteSheet);
@@ -40,22 +40,22 @@ namespace ChilliSource
 		//-----------------------------------------------------------
         /// Constructor
         //-----------------------------------------------------------
-        CStretchableHighlightButton::CStretchableHighlightButton()
+        StretchableHighlightButton::StretchableHighlightButton()
         :   HighlightColour(0.7f, 0.7f, 0.7f, 1.0f), mbSelected(false), HeightMaintain(false), WidthMaintain(false), mCurrentColour(Core::CColour::WHITE)
         {
             memset(&msNormalIndices, 0, sizeof(u32) * 9);
             memset(&msHighlightIndices, 0, sizeof(u32) * 9);
             memset(&msCurrentIndices, 0, sizeof(u32) * 9);
             
-            mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &CStretchableHighlightButton::OnButtonSelect);
-            mInputEvents.GetReleasedInsideEvent() += GUIEventDelegate(this, &CStretchableHighlightButton::OnButtonActivated);
-            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &CStretchableHighlightButton::OnButtonDeselectThreshold);
+            mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &StretchableHighlightButton::OnButtonSelect);
+            mInputEvents.GetReleasedInsideEvent() += GUIEventDelegate(this, &StretchableHighlightButton::OnButtonActivated);
+            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &StretchableHighlightButton::OnButtonDeselectThreshold);
         }
         //-----------------------------------------------------------
         /// Constructor
         //-----------------------------------------------------------
-        CStretchableHighlightButton::CStretchableHighlightButton(const Core::ParamDictionary& insParams)
-        : IButton(insParams), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f), mbSelected(false), HeightMaintain(false), WidthMaintain(false)
+        StretchableHighlightButton::StretchableHighlightButton(const Core::ParamDictionary& insParams)
+        : Button(insParams), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f), mbSelected(false), HeightMaintain(false), WidthMaintain(false)
         {
             std::string strValue;
             
@@ -204,14 +204,14 @@ namespace ChilliSource
 				EnableHeightMaintainingAspect(Core::ParseBool(strValue));
 			}
             
-            mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &CStretchableHighlightButton::OnButtonSelect);
-            mInputEvents.GetReleasedInsideEvent() += GUIEventDelegate(this, &CStretchableHighlightButton::OnButtonActivated);
-            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &CStretchableHighlightButton::OnButtonDeselectThreshold);
+            mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &StretchableHighlightButton::OnButtonSelect);
+            mInputEvents.GetReleasedInsideEvent() += GUIEventDelegate(this, &StretchableHighlightButton::OnButtonActivated);
+            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &StretchableHighlightButton::OnButtonDeselectThreshold);
         }
         //-----------------------------------------------------------
         /// Set Normal Sprite Sheet
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::SetNormalSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void StretchableHighlightButton::SetNormalSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
         {
             NormalSpriteSheet = inpSpriteSheet;
             mCurrentSpriteSheet = NormalSpriteSheet;
@@ -224,7 +224,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Set Highlight Sprite Sheet
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::SetHighlightSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void StretchableHighlightButton::SetHighlightSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
         {
             HighlightSpriteSheet = inpSpriteSheet;
             
@@ -236,21 +236,21 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Normal Sprite Sheet
         //-----------------------------------------------------------
-        const Rendering::SpriteSheetPtr& CStretchableHighlightButton::GetNormalSpriteSheet() const
+        const Rendering::SpriteSheetPtr& StretchableHighlightButton::GetNormalSpriteSheet() const
         {
             return NormalSpriteSheet; 
         }
         //-----------------------------------------------------------
         /// Get Highlight Sprite Sheet
         //-----------------------------------------------------------
-        const Rendering::SpriteSheetPtr& CStretchableHighlightButton::GetHighlightSpriteSheet() const
+        const Rendering::SpriteSheetPtr& StretchableHighlightButton::GetHighlightSpriteSheet() const
         {
             return HighlightSpriteSheet; 
         }
         //-----------------------------------------------------------
         /// Set Base Normal Sprite Sheet Index ID
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::SetBaseNormalSpriteSheetIndexID(const std::string& instrID)
+        void StretchableHighlightButton::SetBaseNormalSpriteSheetIndexID(const std::string& instrID)
         {
             if(NormalSpriteSheet)
 			{
@@ -272,7 +272,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Set Base Highlight Sprite Sheet Index ID
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::SetBaseHighlightSpriteSheetIndexID(const std::string& instrID)
+        void StretchableHighlightButton::SetBaseHighlightSpriteSheetIndexID(const std::string& instrID)
         {
             if(HighlightSpriteSheet)
 			{
@@ -292,21 +292,21 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Base Normal Sprite Sheet Index ID
         //-----------------------------------------------------------
-        const std::string& CStretchableHighlightButton::GetBaseNormalSpriteSheetIndexID() const
+        const std::string& StretchableHighlightButton::GetBaseNormalSpriteSheetIndexID() const
         {
             return BaseNormalSpriteSheetIndexID;
         }
         //-----------------------------------------------------------
         /// Get Base Highlight Sprite Sheet Index ID
         //-----------------------------------------------------------
-        const std::string& CStretchableHighlightButton::GetBaseHighlightSpriteSheetIndexID() const
+        const std::string& StretchableHighlightButton::GetBaseHighlightSpriteSheetIndexID() const
         {
             return BaseHighlightSpriteSheetIndexID;
         }
         //---------------------------------------------------------
         /// Set Normal Sprite Sheet Indices
         //---------------------------------------------------------
-        void CStretchableHighlightButton::SetNormalSpriteSheetIndices(const SpriteSheetIndex& insIndices)
+        void StretchableHighlightButton::SetNormalSpriteSheetIndices(const SpriteSheetIndex& insIndices)
         {
             msNormalIndices = insIndices;
             msCurrentIndices = msNormalIndices;
@@ -314,7 +314,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Set Normal Sprite Sheet Indices
         //---------------------------------------------------------
-        void CStretchableHighlightButton::SetNormalSpriteSheetIndices(const u32* inpIndices)
+        void StretchableHighlightButton::SetNormalSpriteSheetIndices(const u32* inpIndices)
         {
             msNormalIndices.udwTopLeft = inpIndices[0];
             msNormalIndices.udwTopRight = inpIndices[1];
@@ -330,14 +330,14 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Set Highlight Sprite Sheet Indices
         //---------------------------------------------------------
-        void CStretchableHighlightButton::SetHighlightSpriteSheetIndices(const SpriteSheetIndex& insIndices)
+        void StretchableHighlightButton::SetHighlightSpriteSheetIndices(const SpriteSheetIndex& insIndices)
         {
             msHighlightIndices = insIndices;
         }
         //---------------------------------------------------------
         /// Set Highlight Sprite Sheet Indices
         //---------------------------------------------------------
-        void CStretchableHighlightButton::SetHighlightSpriteSheetIndices(const u32* inpIndices)
+        void StretchableHighlightButton::SetHighlightSpriteSheetIndices(const u32* inpIndices)
         {
             msHighlightIndices.udwTopLeft = inpIndices[0];
             msHighlightIndices.udwTopRight = inpIndices[1];
@@ -352,35 +352,35 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Set Select Audio Effect
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
+        void StretchableHighlightButton::SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
         {
             mpSelectAudioEffect = inpEffect;
         }
         //-----------------------------------------------------------
         /// Set De-Select Audio Effect
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
+        void StretchableHighlightButton::SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
         {
             mpDeselectAudioEffect = inpEffect;
         }
         //--------------------------------------------------------
         /// Set Highlight Colour
         //--------------------------------------------------------
-        void CStretchableHighlightButton::SetHighlightColour(const Core::CColour & inValue)
+        void StretchableHighlightButton::SetHighlightColour(const Core::CColour & inValue)
         {
             HighlightColour = inValue;
         }
         //--------------------------------------------------------
         /// Get Highlight Colour
         //--------------------------------------------------------
-        const Core::CColour & CStretchableHighlightButton::GetHighlightColour() const
+        const Core::CColour & StretchableHighlightButton::GetHighlightColour() const
         {
             return HighlightColour;
         }
         //-----------------------------------------------------------
         /// Draw
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void StretchableHighlightButton::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
             //Check if this is on screen
 			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
@@ -571,13 +571,13 @@ namespace ChilliSource
                                    Core::AlignmentAnchor::k_topLeft);
                 
                 //Render subviews
-                CGUIView::Draw(inpCanvas);
+                GUIView::Draw(inpCanvas);
             }
         }
         //--------------------------------------------------------
         /// Set Width Maintaining Aspect
         //--------------------------------------------------------
-        void CStretchableHighlightButton::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
+        void StretchableHighlightButton::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
         {
             Core::CVector2 vCurrentSize = GetAbsoluteSize();
 			f32 fAspectRatio = vCurrentSize.y / vCurrentSize.x;
@@ -594,7 +594,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         /// Set Height Maintaining Aspect
         //--------------------------------------------------------
-        void CStretchableHighlightButton::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
+        void StretchableHighlightButton::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
         {
             Core::CVector2 vCurrentSize = GetAbsoluteSize();
 			f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
@@ -611,14 +611,14 @@ namespace ChilliSource
         //--------------------------------------------------------
         /// Enable Width Maintaining Aspect
         //--------------------------------------------------------
-        void CStretchableHighlightButton::EnableWidthMaintainingAspect(bool inbEnabled)
+        void StretchableHighlightButton::EnableWidthMaintainingAspect(bool inbEnabled)
         {
             WidthMaintain = inbEnabled;  
         }
         //--------------------------------------------------------
         /// Is Width Maintaining Aspect Enabled
         //--------------------------------------------------------
-        bool CStretchableHighlightButton::IsWidthMaintainingAspectEnabled() const
+        bool StretchableHighlightButton::IsWidthMaintainingAspectEnabled() const
         {
             return WidthMaintain;
              
@@ -626,21 +626,21 @@ namespace ChilliSource
         //--------------------------------------------------------
         /// Enable Height Maintaining Aspect
         //--------------------------------------------------------
-        void CStretchableHighlightButton::EnableHeightMaintainingAspect(bool inbEnabled)
+        void StretchableHighlightButton::EnableHeightMaintainingAspect(bool inbEnabled)
         {
             HeightMaintain = inbEnabled;
         }
         //--------------------------------------------------------
         /// Is Height Maintaining Aspect Enabled
         //--------------------------------------------------------
-        bool CStretchableHighlightButton::IsHeightMaintainingAspectEnabled() const
+        bool StretchableHighlightButton::IsHeightMaintainingAspectEnabled() const
         {
             return HeightMaintain;
         }
         //-----------------------------------------------------------
         /// On Button Select
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::OnButtonSelect(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void StretchableHighlightButton::OnButtonSelect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
         {
             if(!mbSelected)
 			{
@@ -668,7 +668,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// On Button Activated
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::OnButtonActivated(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void StretchableHighlightButton::OnButtonActivated(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
         {
             if(mbSelected)
 			{
@@ -679,7 +679,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// On Button De-select
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::OnButtonDeselect(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void StretchableHighlightButton::OnButtonDeselect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
         {
             if(mbSelected)
 			{
@@ -701,7 +701,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// On Button De-select Threshold
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::OnButtonDeselectThreshold(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void StretchableHighlightButton::OnButtonDeselectThreshold(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
         {
             const f32 kfThreshold = 5.0f;
 			if(std::abs(insTouchInfo.vLocation.x - insTouchInfo.vPreviousLocation.x) > kfThreshold || std::abs(insTouchInfo.vLocation.y - insTouchInfo.vPreviousLocation.y) > kfThreshold)
@@ -712,7 +712,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Destructor
         //-----------------------------------------------------------
-        CStretchableHighlightButton::~CStretchableHighlightButton()
+        StretchableHighlightButton::~StretchableHighlightButton()
         {
             if(mpSelectAudioEffect)
             {

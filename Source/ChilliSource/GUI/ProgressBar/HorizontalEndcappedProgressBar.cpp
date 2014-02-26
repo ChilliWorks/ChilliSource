@@ -18,7 +18,7 @@ namespace ChilliSource
 {
 	namespace GUI
 	{
-		DEFINE_META_CLASS(CHorizontalEndcappedProgressBar)
+		DEFINE_META_CLASS(HorizontalEndcappedProgressBar)
 		
 		DEFINE_PROPERTY(SpriteSheet);
 		DEFINE_PROPERTY(BaseFillSpriteSheetIndexID);
@@ -28,17 +28,17 @@ namespace ChilliSource
 		DEFINE_PROPERTY(BackgroundColour);
 		DEFINE_PROPERTY(HeightFromImage);
 
-		CHorizontalEndcappedProgressBar::CHorizontalEndcappedProgressBar() : HeightFromImage(false)
+		HorizontalEndcappedProgressBar::HorizontalEndcappedProgressBar() : HeightFromImage(false)
 		{
 
-			mpBGImage = HorizontalStretchableImagePtr(new CHorizontalStretchableImage());
+			mpBGImage = HorizontalStretchableImagePtr(new HorizontalStretchableImage());
 			mpBGImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
 			mpBGImage->EnableAlignmentToParent(true);
 			mpBGImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
             mpBGImage->EnableTouchConsumption(false);
 			AddSubview(mpBGImage);
 			
-			mpFillImage = HorizontalStretchableImagePtr(new CHorizontalStretchableImage());
+			mpFillImage = HorizontalStretchableImagePtr(new HorizontalStretchableImage());
 			mpFillImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
 			mpFillImage->EnableAlignmentToParent(true);
 			mpFillImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
@@ -50,17 +50,17 @@ namespace ChilliSource
 		///
 		/// From param dictionary
 		//------------------------------------------------------
-		CHorizontalEndcappedProgressBar::CHorizontalEndcappedProgressBar(const Core::ParamDictionary& insParams) 
-		: CProgressBar(insParams), HeightFromImage(false)
+		HorizontalEndcappedProgressBar::HorizontalEndcappedProgressBar(const Core::ParamDictionary& insParams) 
+		: ProgressBar(insParams), HeightFromImage(false)
 		{
-			mpBGImage = HorizontalStretchableImagePtr(new CHorizontalStretchableImage());
+			mpBGImage = HorizontalStretchableImagePtr(new HorizontalStretchableImage());
 			mpBGImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
 			mpBGImage->EnableAlignmentToParent(true);
 			mpBGImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
             mpBGImage->EnableTouchConsumption(false);
 			AddSubview(mpBGImage);
 			
-			mpFillImage = HorizontalStretchableImagePtr(new CHorizontalStretchableImage());
+			mpFillImage = HorizontalStretchableImagePtr(new HorizontalStretchableImage());
 			mpFillImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
 			mpFillImage->EnableAlignmentToParent(true);
 			mpFillImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
@@ -147,7 +147,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite Sheet
 		//------------------------------------------------------------------------
-		void CHorizontalEndcappedProgressBar::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void HorizontalEndcappedProgressBar::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
 		{
 			SpriteSheet = inpSpriteSheet;
 			mpBGImage->SetSpriteSheet(inpSpriteSheet);
@@ -158,7 +158,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite Sheet
 		//------------------------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CHorizontalEndcappedProgressBar::GetSpriteSheet() const
+		const Rendering::SpriteSheetPtr& HorizontalEndcappedProgressBar::GetSpriteSheet() const
 		{
 			return SpriteSheet;
 		}
@@ -173,7 +173,7 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		void CHorizontalEndcappedProgressBar::SetBaseFillSpriteSheetIndexID(const std::string& instrID)
+		void HorizontalEndcappedProgressBar::SetBaseFillSpriteSheetIndexID(const std::string& instrID)
 		{
 			BaseFillSpriteSheetIndexID = instrID;
 			mpFillImage->SetBaseSpriteSheetIndexID(instrID);
@@ -189,7 +189,7 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		const std::string& CHorizontalEndcappedProgressBar::GetBaseFillSpriteSheetIndexID() const
+		const std::string& HorizontalEndcappedProgressBar::GetBaseFillSpriteSheetIndexID() const
 		{
 			return BaseFillSpriteSheetIndexID;
 		}
@@ -204,7 +204,7 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		void CHorizontalEndcappedProgressBar::SetBaseBackgroundSpriteSheetIndexID(const std::string& instrID)
+		void HorizontalEndcappedProgressBar::SetBaseBackgroundSpriteSheetIndexID(const std::string& instrID)
 		{
 			BaseBackgroundSpriteSheetIndexID = instrID;
 			mpBGImage->SetBaseSpriteSheetIndexID(instrID);
@@ -220,7 +220,7 @@ namespace ChilliSource
 		///
 		/// the base ID would be "BLUE_PANEL_"
 		//---------------------------------------------------------
-		const std::string& CHorizontalEndcappedProgressBar::GetBaseBackgroundSpriteSheetIndexID() const
+		const std::string& HorizontalEndcappedProgressBar::GetBaseBackgroundSpriteSheetIndexID() const
 		{
 			return BaseBackgroundSpriteSheetIndexID;
 		}
@@ -231,7 +231,7 @@ namespace ChilliSource
 		/// @param Sprite sheet index of centre patch
 		/// @param Sprite sheet index of right patch
 		//------------------------------------------------------------------------
-		void CHorizontalEndcappedProgressBar::SetFillIndices(u32 inudwLeft, u32 inudwMid, u32 inudwRight)
+		void HorizontalEndcappedProgressBar::SetFillIndices(u32 inudwLeft, u32 inudwMid, u32 inudwRight)
 		{
 			mpFillImage->SetSpriteSheetIndices(inudwLeft, inudwMid, inudwRight);	
 		}
@@ -242,7 +242,7 @@ namespace ChilliSource
 		/// @param Sprite sheet index of centre patch
 		/// @param Sprite sheet index of right patch
 		//------------------------------------------------------------------------
-		void CHorizontalEndcappedProgressBar::SetBackgroundIndices(u32 inudwLeft, u32 inudwMid, u32 inudwRight)
+		void HorizontalEndcappedProgressBar::SetBackgroundIndices(u32 inudwLeft, u32 inudwMid, u32 inudwRight)
 		{
 			mpBGImage->SetSpriteSheetIndices(inudwLeft, inudwMid, inudwRight);
 		}
@@ -251,7 +251,7 @@ namespace ChilliSource
 		///
 		/// @param Colour of progress bar
 		//------------------------------------------------------------------------
-		void CHorizontalEndcappedProgressBar::SetFillColour(const Core::CColour& inColour)
+		void HorizontalEndcappedProgressBar::SetFillColour(const Core::CColour& inColour)
 		{
 			FillColour = inColour;
 			mpFillImage->SetColour(inColour);
@@ -261,7 +261,7 @@ namespace ChilliSource
 		///
 		/// @return Colour of progress bar
 		//------------------------------------------------------------------------
-		const Core::CColour& CHorizontalEndcappedProgressBar::GetFillColour() const
+		const Core::CColour& HorizontalEndcappedProgressBar::GetFillColour() const
 		{
 			return FillColour;
 		}
@@ -270,7 +270,7 @@ namespace ChilliSource
 		///
 		/// @param Colour of background
 		//------------------------------------------------------------------------
-		void CHorizontalEndcappedProgressBar::SetBackgroundColour(const Core::CColour& inColour)
+		void HorizontalEndcappedProgressBar::SetBackgroundColour(const Core::CColour& inColour)
 		{
 			BackgroundColour = inColour;
 			mpBGImage->SetColour(inColour);
@@ -280,7 +280,7 @@ namespace ChilliSource
 		///
 		/// @return Colour of background
 		//------------------------------------------------------------------------
-		const Core::CColour& CHorizontalEndcappedProgressBar::GetBackgroundColour() const
+		const Core::CColour& HorizontalEndcappedProgressBar::GetBackgroundColour() const
 		{
 			return BackgroundColour;
 		}
@@ -292,7 +292,7 @@ namespace ChilliSource
 		///
 		/// @param Enable/disable
 		//--------------------------------------------------------
-		void CHorizontalEndcappedProgressBar::EnableHeightFromImage(bool inbEnable)
+		void HorizontalEndcappedProgressBar::EnableHeightFromImage(bool inbEnable)
 		{
 			
 		}
@@ -305,7 +305,7 @@ namespace ChilliSource
 		/// @return Whether the image view's size will be 
 		/// based on the size of the image
 		//--------------------------------------------------------
-		bool CHorizontalEndcappedProgressBar::IsHeightFromImageEnabled() const
+		bool HorizontalEndcappedProgressBar::IsHeightFromImageEnabled() const
 		{
 			return HeightFromImage;
 		}
@@ -316,7 +316,7 @@ namespace ChilliSource
 		///
 		/// @param Renderer
 		//------------------------------------------------------------------------
-		void CHorizontalEndcappedProgressBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
+		void HorizontalEndcappedProgressBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
 		{
 			if(Visible && SpriteSheet)
 			{
@@ -349,7 +349,7 @@ namespace ChilliSource
 				mpFillImage->Draw(inpCanvas);
 			}
             
-            CProgressBar::Draw(inpCanvas);
+            ProgressBar::Draw(inpCanvas);
 		}
 	}
 }

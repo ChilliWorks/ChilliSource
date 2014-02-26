@@ -22,11 +22,11 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        class CStretchableImage : public CGUIView
+        class StretchableImage : public GUIView
         {
         public:
 
-			DECLARE_META_CLASS(CStretchableImage)
+			DECLARE_META_CLASS(StretchableImage)
 
             struct SpriteSheetIndex
             {
@@ -40,8 +40,8 @@ namespace ChilliSource
                 u32 udwRightCentre;
                 u32 udwMiddleCentre;
             };
-            CStretchableImage();
-            CStretchableImage(const Core::ParamDictionary& insParams);
+            StretchableImage();
+            StretchableImage(const Core::ParamDictionary& insParams);
             //---------------------------------------------------------
             /// Set Sprite Sheet
             ///

@@ -22,14 +22,14 @@ namespace ChilliSource
 		/// Uses a mark-up language to format the string via embedded
 		/// images, hyperlinks etc
 		//============================================================
-		class CFormattedLabel : public CLabel
+		class FormattedLabel : public Label
 		{
 		public:
 
-			DECLARE_META_CLASS(CFormattedLabel)
+			DECLARE_META_CLASS(FormattedLabel)
 
-			CFormattedLabel();
-			CFormattedLabel(const Core::ParamDictionary& insParams);
+			FormattedLabel();
+			FormattedLabel(const Core::ParamDictionary& insParams);
 
             //-------------------------------------------------------
 			/// Set Text

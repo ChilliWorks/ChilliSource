@@ -23,10 +23,10 @@ namespace ChilliSource
         /// but built out of 9 patches. This means it can scale in
         /// in the same was as a stretchable image.
         //===========================================================
-        class CStretchableHighlightButton : public IButton
+        class StretchableHighlightButton : public Button
         {
         public:
-			DECLARE_META_CLASS(CStretchableHighlightButton)
+			DECLARE_META_CLASS(StretchableHighlightButton)
             
             //-----------------------------------------------------------
             /// Sprite Sheet Index
@@ -48,7 +48,7 @@ namespace ChilliSource
             //-----------------------------------------------------------
             /// Constructor
             //-----------------------------------------------------------
-            CStretchableHighlightButton();
+            StretchableHighlightButton();
             //-----------------------------------------------------------
             /// Constructor
             ///
@@ -58,7 +58,7 @@ namespace ChilliSource
             ///
             /// @param The param dictionary.
             //-----------------------------------------------------------
-            CStretchableHighlightButton(const Core::ParamDictionary& insParams);
+            StretchableHighlightButton(const Core::ParamDictionary& insParams);
             //-----------------------------------------------------------
             /// Set Normal Sprite Sheet
             ///
@@ -234,7 +234,7 @@ namespace ChilliSource
             //-----------------------------------------------------------
             /// Destructor
             //-----------------------------------------------------------
-            virtual ~CStretchableHighlightButton();
+            virtual ~StretchableHighlightButton();
             
         private:
             //-----------------------------------------------------------
@@ -246,7 +246,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param Touch info
             //-----------------------------------------------------------
-            void OnButtonSelect(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo);
+            void OnButtonSelect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
             //-----------------------------------------------------------
             /// On Button Activated
             ///
@@ -256,7 +256,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param Touch info
             //-----------------------------------------------------------
-            void OnButtonActivated(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo);
+            void OnButtonActivated(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
             //-----------------------------------------------------------
             /// On Button De-select
             ///
@@ -266,7 +266,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param Touch info
             //-----------------------------------------------------------
-            void OnButtonDeselect(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo);
+            void OnButtonDeselect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
             //-----------------------------------------------------------
             /// On Button De-select Threshold
             ///
@@ -276,7 +276,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param Touch info
             //-----------------------------------------------------------
-            void OnButtonDeselectThreshold(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo);
+            void OnButtonDeselectThreshold(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
             
         private:
             Rendering::SpriteSheetPtr mCurrentSpriteSheet;
@@ -297,9 +297,6 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(bool, HeightMaintain, EnableHeightMaintainingAspect, IsHeightMaintainingAspectEnabled);
 			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
 		};
-        
-        typedef std::shared_ptr<CStretchableHighlightButton> StretchableHighlightButtonPtr;
-		typedef std::weak_ptr<CStretchableHighlightButton> StretchableHighlightButtonWeakPtr;
     }
 }
 

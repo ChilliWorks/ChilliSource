@@ -17,16 +17,16 @@ namespace ChilliSource
 {
 	namespace GUI
 	{
-		class CSliderBar : public CGUIView
+		class SliderBar : public GUIView
 		{
 		public:
 
-			DECLARE_META_CLASS(CSliderBar)
+			DECLARE_META_CLASS(SliderBar)
 
-			CSliderBar();
-			CSliderBar(const Core::ParamDictionary& insParams);
+			SliderBar();
+			SliderBar(const Core::ParamDictionary& insParams);
 
-			virtual ~CSliderBar(){}
+			virtual ~SliderBar(){}
 
 			//----------------------------------------------
 			/// Get Value

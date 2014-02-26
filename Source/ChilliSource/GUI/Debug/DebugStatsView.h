@@ -17,11 +17,11 @@
 #include <ChilliSource/GUI/Label/Label.h>
 
 #define DECLARE_DEBUG_STAT(NAME) \
-LabelPtr mpLabel##NAME; \
-LabelPtr mpValue##NAME 
+LabelSPtr mpLabel##NAME; \
+LabelSPtr mpValue##NAME 
 
 #define DEFINE_DEBUG_STAT(NAME) \
-mpLabel##NAME = LabelPtr(new CLabel()); \
+mpLabel##NAME = LabelSPtr(new Label()); \
 mpLabel##NAME->SetText(#NAME); \
 mpLabel##NAME->SetTextScale(mfTextScale); \
 mpLabel##NAME->SetAlignmentToParent(Core::AlignmentAnchor::k_topLeft); \
@@ -34,7 +34,7 @@ mpLabel##NAME->EnableUserInteraction(false); \
 mpLabel##NAME->EnableTouchConsumption(false); \
 mpLabel##NAME->EnableBackground(false); \
 AddSubview(mpLabel##NAME); \
-mpValue##NAME = LabelPtr(new CLabel()); \
+mpValue##NAME = LabelSPtr(new Label()); \
 mpValue##NAME->SetTextScale(mfTextScale); \
 mpValue##NAME->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft); \
 mpValue##NAME->SetAlignmentToParent(Core::AlignmentAnchor::k_middleRight); \
@@ -61,7 +61,7 @@ namespace ChilliSource
     
 	namespace GUI
 	{
-		class CDebugStatsView : public CImageView
+		class DebugStatsView : public ImageView
 		{
 		public:
 			
@@ -83,7 +83,7 @@ namespace ChilliSource
 			
 		private:
 			
-            CDebugStatsView();
+            DebugStatsView();
             
 			static DebugStatsViewPtr pInstance;
             

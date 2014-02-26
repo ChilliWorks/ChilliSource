@@ -25,7 +25,7 @@ namespace ChilliSource
 {
     namespace GUI
     {
-		DEFINE_META_CLASS(CGridView)
+		DEFINE_META_CLASS(GridView)
 
 		DEFINE_PROPERTY(AbsoluteRowSpacing);
 		DEFINE_PROPERTY(AbsoluteColumnSpacing);
@@ -35,14 +35,14 @@ namespace ChilliSource
 		DEFINE_PROPERTY(MaxNumRows);
 		DEFINE_PROPERTY(RowFill);
 
-        bool CGridView::mbDrawDebug = false;
+        bool GridView::mbDrawDebug = false;
         
         //------------------------------------------------------
         /// Constructor
         ///
         /// Default
         //------------------------------------------------------
-        CGridView::CGridView()
+        GridView::GridView()
             : AbsoluteRowSpacing(0.0f), AbsoluteColumnSpacing(0.0f), RelativeRowSpacing(0.0f), RelativeColumnSpacing(0.0f), RowFill(false),
             MaxNumColumns(0), MaxNumRows(0)
         {
@@ -52,8 +52,8 @@ namespace ChilliSource
         ///
         /// From param dictionary
         //------------------------------------------------------
-        CGridView::CGridView(const Core::ParamDictionary& insParams)
-            : CGUIView(insParams), AbsoluteRowSpacing(0.0f), AbsoluteColumnSpacing(0.0f), RelativeRowSpacing(0.0f), RelativeColumnSpacing(0.0f),
+        GridView::GridView(const Core::ParamDictionary& insParams)
+            : GUIView(insParams), AbsoluteRowSpacing(0.0f), AbsoluteColumnSpacing(0.0f), RelativeRowSpacing(0.0f), RelativeColumnSpacing(0.0f),
             RowFill(false), MaxNumColumns(0), MaxNumRows(0)
         {
             std::string strValue;
@@ -106,7 +106,7 @@ namespace ChilliSource
         ///
         /// @param Num rows
         //-------------------------------------------------------
-        void CGridView::SetNumberOfRows(u32 inudwNumRows)
+        void GridView::SetNumberOfRows(u32 inudwNumRows)
         {
             MaxNumRows = inudwNumRows; 
         }
@@ -122,7 +122,7 @@ namespace ChilliSource
         ///
         /// @param Num columns
         //-------------------------------------------------------
-        void CGridView::SetNumberOfColumns(u32 inudwNumColumns)
+        void GridView::SetNumberOfColumns(u32 inudwNumColumns)
         {
             MaxNumColumns = inudwNumColumns;
         }
@@ -135,7 +135,7 @@ namespace ChilliSource
 		///
 		/// @return Num rows
 		//-------------------------------------------------------
-		u32 CGridView::GetNumberOfRows() const
+		u32 GridView::GetNumberOfRows() const
 		{
 			return MaxNumRows;
 		}
@@ -148,7 +148,7 @@ namespace ChilliSource
 		///
 		/// @return Num columns
 		//-------------------------------------------------------
-		u32 CGridView::GetNumberOfColumns() const
+		u32 GridView::GetNumberOfColumns() const
 		{
 			return MaxNumColumns;
 		}
@@ -159,7 +159,7 @@ namespace ChilliSource
         ///
         /// @param Absolute scalar
         //-------------------------------------------------------
-        void CGridView::SetAbsoluteColumnSpacing(f32 infSpacing)
+        void GridView::SetAbsoluteColumnSpacing(f32 infSpacing)
         {
             AbsoluteColumnSpacing = infSpacing;
         }
@@ -170,7 +170,7 @@ namespace ChilliSource
         ///
         /// @param Absolute scalar
         //-------------------------------------------------------
-        void CGridView::SetAbsoluteRowSpacing(f32 infSpacing)
+        void GridView::SetAbsoluteRowSpacing(f32 infSpacing)
         {
             AbsoluteRowSpacing = infSpacing;
         }
@@ -181,7 +181,7 @@ namespace ChilliSource
 		///
 		/// @return Dips scalar
 		//-------------------------------------------------------
-		f32 CGridView::GetAbsoluteColumnSpacing() const
+		f32 GridView::GetAbsoluteColumnSpacing() const
 		{
 			return AbsoluteColumnSpacing;
 		}
@@ -192,7 +192,7 @@ namespace ChilliSource
 		///
 		/// @return Dips scalar
 		//-------------------------------------------------------
-		f32 CGridView::GetAbsoluteRowSpacing() const
+		f32 GridView::GetAbsoluteRowSpacing() const
 		{
 			return AbsoluteRowSpacing;
 		}
@@ -203,7 +203,7 @@ namespace ChilliSource
         ///
         /// @param Dips scalar
         //-------------------------------------------------------
-        void CGridView::SetRelativeColumnSpacing(f32 infSpacing)
+        void GridView::SetRelativeColumnSpacing(f32 infSpacing)
         {
             RelativeColumnSpacing = infSpacing;
         }
@@ -214,7 +214,7 @@ namespace ChilliSource
         ///
         /// @param Dips scalar
         //-------------------------------------------------------
-        void CGridView::SetRelativeRowSpacing(f32 infSpacing)
+        void GridView::SetRelativeRowSpacing(f32 infSpacing)
         {
             RelativeRowSpacing = infSpacing;
         }
@@ -225,7 +225,7 @@ namespace ChilliSource
         ///
         /// @return Dips scalar
         //-------------------------------------------------------
-        f32 CGridView::GetRelativeColumnSpacing() const
+        f32 GridView::GetRelativeColumnSpacing() const
         {
             return RelativeColumnSpacing;
         }
@@ -236,7 +236,7 @@ namespace ChilliSource
         ///
         /// @return Dips scalar
         //-------------------------------------------------------
-        f32 CGridView::GetRelativeRowSpacing() const
+        f32 GridView::GetRelativeRowSpacing() const
         {
             return RelativeRowSpacing;
         }
@@ -248,7 +248,7 @@ namespace ChilliSource
 		/// 
 		/// @param Boolean
 		//-------------------------------------------------------
-		void CGridView::EnableRowFill(bool inbEnable)
+		void GridView::EnableRowFill(bool inbEnable)
 		{
 			RowFill = inbEnable;
 		}
@@ -260,7 +260,7 @@ namespace ChilliSource
 		/// 
 		/// @return Boolean
 		//-------------------------------------------------------
-		bool CGridView::IsRowFillEnabled() const
+		bool GridView::IsRowFillEnabled() const
 		{
 			return RowFill;
 		}
@@ -273,7 +273,7 @@ namespace ChilliSource
         ///
         /// @param Cell size
         //-------------------------------------------------------
-        void CGridView::LayoutContentColumnMajor(const Core::CVector2& invCellSize, u32 udwNumCols, u32 udwNumRows)
+        void GridView::LayoutContentColumnMajor(const Core::CVector2& invCellSize, u32 udwNumCols, u32 udwNumRows)
         {
             const f32 fColumnSpacing = (GetAbsoluteSize().x * RelativeColumnSpacing) + AbsoluteColumnSpacing;
             const f32 fRowSpacing = (GetAbsoluteSize().y * RelativeRowSpacing) + AbsoluteRowSpacing;
@@ -317,7 +317,7 @@ namespace ChilliSource
         ///
         /// @param Cell size
         //-------------------------------------------------------
-        void CGridView::LayoutContentRowMajor(const Core::CVector2& invCellSize, u32 udwNumCols, u32 udwNumRows)
+        void GridView::LayoutContentRowMajor(const Core::CVector2& invCellSize, u32 udwNumCols, u32 udwNumRows)
         {
             const f32 fColumnSpacing = (GetAbsoluteSize().x * RelativeColumnSpacing) + AbsoluteColumnSpacing;
             const f32 fRowSpacing = (GetAbsoluteSize().y * RelativeRowSpacing) + AbsoluteRowSpacing;
@@ -358,7 +358,7 @@ namespace ChilliSource
         /// Loop through the subviews and position them correctly
         /// in the grid based on the rows and columns
         //-------------------------------------------------------
-        void CGridView::LayoutContent()
+        void GridView::LayoutContent()
         {
             //All the subviews within this grid view will helpfully
             //be re-arranged to fit the grid
@@ -417,9 +417,9 @@ namespace ChilliSource
         ///
         /// @param GUIView shared pointer
         //-----------------------------------------------------
-        void CGridView::AddSubview(const GUIViewPtr& inpSubview)
+        void GridView::AddSubview(const GUIViewSPtr& inpSubview)
         {
-            CGUIView::AddSubview(inpSubview);
+            GUIView::AddSubview(inpSubview);
             mapGridSubviews.push_back(inpSubview);
         }
         //-----------------------------------------------------
@@ -429,10 +429,10 @@ namespace ChilliSource
         ///
         /// @param GUIView pointer
         //-----------------------------------------------------
-        void CGridView::RemoveSubview(CGUIView* inpSubview)
+        void GridView::RemoveSubview(GUIView* inpSubview)
         {
-            CGUIView::RemoveSubview(inpSubview);
-            for(CGUIView::Subviews::iterator it = mapGridSubviews.begin(); it != mapGridSubviews.end(); ++it)
+            GUIView::RemoveSubview(inpSubview);
+            for(GUIView::Subviews::iterator it = mapGridSubviews.begin(); it != mapGridSubviews.end(); ++it)
             {
                 if((*it).get() == inpSubview)
                 {
@@ -449,9 +449,9 @@ namespace ChilliSource
 		///
 		/// @param GUIView pointer
 		//-----------------------------------------------------			
-		void CGridView::RemoveAllSubviews()
+		void GridView::RemoveAllSubviews()
 		{
-			CGUIView::RemoveAllSubviews();
+			GUIView::RemoveAllSubviews();
             mapGridSubviews.clear();
 		}
         
@@ -463,7 +463,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //-------------------------------------------------------
-        void CGridView::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void GridView::Draw(Rendering::CCanvasRenderer* inpCanvas)
         {
             //This is a container view and has no renderables
             //We will need to render our subviews though
@@ -483,14 +483,14 @@ namespace ChilliSource
                 LayoutContent();
 				
 #if DEBUG_DRAWING
-				if(CGridView::mbDrawDebug)
+				if(GridView::mbDrawDebug)
 				{
 					Rendering::ITextureManager* pMgr = (Rendering::ITextureManager*)(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Rendering::ITexture::InterfaceID));
 					inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), pMgr->GetDefaultTexture(), Core::Rectangle(Core::CVector2::ZERO, Core::CVector2::ZERO), Core::CColour(1.0f,0.0f,0.0f,0.5f));
 				}
 #endif
 				
-                CGUIView::Draw(inpCanvas);
+                GUIView::Draw(inpCanvas);
             }
         }
 		//-------------------------------------------------------
@@ -501,12 +501,12 @@ namespace ChilliSource
 		/// @param New value for this flag. DEBUG_DRAWING must be
 		/// set to TRUE
 		//-------------------------------------------------------
-		void CGridView::EnableDebugDrawing(bool inbValue)
+		void GridView::EnableDebugDrawing(bool inbValue)
 		{
 #if DEBUG_DRAWING
-			CGridView::mbDrawDebug = inbValue;
+			GridView::mbDrawDebug = inbValue;
 #else
-			CGridView::mbDrawDebug = false;
+			GridView::mbDrawDebug = false;
 #endif
 		}
     }

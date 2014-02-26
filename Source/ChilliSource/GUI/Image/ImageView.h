@@ -18,15 +18,15 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        class CImageView : public CGUIView
+        class ImageView : public GUIView
         {
         public:
 
-			DECLARE_META_CLASS(CImageView)
+			DECLARE_META_CLASS(ImageView)
 
-            CImageView();
-            CImageView(const Core::ParamDictionary& insParams);
-            virtual ~CImageView(){}
+            ImageView();
+            ImageView(const Core::ParamDictionary& insParams);
+            virtual ~ImageView(){}
             //--------------------------------------------------------
             /// Draw
             ///

@@ -17,21 +17,21 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        class CHighlightButton : public IButton
+        class HighlightButton : public Button
         {
         public:
 
-			DECLARE_META_CLASS(CHighlightButton)
+			DECLARE_META_CLASS(HighlightButton)
 
-            CHighlightButton();
-            CHighlightButton(const Core::ParamDictionary& insParams);
-            virtual ~CHighlightButton();
+            HighlightButton();
+            HighlightButton(const Core::ParamDictionary& insParams);
+            virtual ~HighlightButton();
             //-----------------------------------------------------------
             /// Get Background Image View
             ///
             /// @return Image view
             //-----------------------------------------------------------
-            const ImageViewPtr& GetBackgroundImageView() const;
+            const ImageViewSPtr& GetBackgroundImageView() const;
             //-----------------------------------------------------------
             /// Set Normal Image
             ///
@@ -364,7 +364,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param Touch info
             //-----------------------------------------------------------
-            void OnButtonSelect(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo);
+            void OnButtonSelect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
             //-----------------------------------------------------------
             /// On Button Activated
             ///
@@ -374,7 +374,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param Touch info
             //-----------------------------------------------------------
-            void OnButtonActivated(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo);
+            void OnButtonActivated(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
             //-----------------------------------------------------------
             /// On Button De-select
             ///
@@ -384,7 +384,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param Touch info
             //-----------------------------------------------------------
-            void OnButtonDeselect(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo);
+            void OnButtonDeselect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
             //-----------------------------------------------------------
             /// On Button De-select Threshold
             ///
@@ -394,7 +394,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param Touch info
             //-----------------------------------------------------------
-            void OnButtonDeselectThreshold(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo);
+            void OnButtonDeselectThreshold(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
 			//-----------------------------------------------------------
 			/// Draw
 			///
@@ -432,7 +432,7 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(bool, HeightMaintain, EnableHeightMaintainingAspect, IsHeightMaintainingAspectEnabled);
 			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
 
-            ImageViewPtr mpBackgroundImage;
+            ImageViewSPtr mpBackgroundImage;
  
             Audio::AudioComponentSPtr mpSelectAudioEffect;
 			Audio::AudioComponentSPtr mpDeselectAudioEffect;
@@ -445,9 +445,6 @@ namespace ChilliSource
             static Audio::AudioComponentSPtr mspDefaultSelectSound;
             static Audio::AudioComponentSPtr mspDefaultDeSelectSound;
 		};
-        
-        typedef std::shared_ptr<CHighlightButton> HighlightButtonPtr;
-		typedef std::weak_ptr<CHighlightButton> HighlightButtonWeakPtr;
     }
 }
 

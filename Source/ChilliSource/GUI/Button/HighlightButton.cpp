@@ -25,10 +25,10 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        Audio::AudioComponentSPtr CHighlightButton::mspDefaultSelectSound;
-        Audio::AudioComponentSPtr CHighlightButton::mspDefaultDeSelectSound;
+        Audio::AudioComponentSPtr HighlightButton::mspDefaultSelectSound;
+        Audio::AudioComponentSPtr HighlightButton::mspDefaultDeSelectSound;
         
-		DEFINE_META_CLASS(CHighlightButton)
+		DEFINE_META_CLASS(HighlightButton)
 
 		DEFINE_PROPERTY(NormalTexture);
 		DEFINE_PROPERTY(HighlightTexture);
@@ -50,8 +50,8 @@ namespace ChilliSource
         ///
         /// Create the widget by adding the background image
         //-----------------------------------------------------------
-        CHighlightButton::CHighlightButton() 
-        : mpBackgroundImage(new CImageView()), NormalSpriteSheetIndex(0), HighlightSpriteSheetIndex(0), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
+        HighlightButton::HighlightButton() 
+        : mpBackgroundImage(new ImageView()), NormalSpriteSheetIndex(0), HighlightSpriteSheetIndex(0), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
         msDefaultUVs(Core::CVector2::ZERO, Core::CVector2::ONE),
         msHighlightUVs(Core::CVector2::ZERO, Core::CVector2::ONE),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), mbFillMaintain(false), mbFitMaintain(false)
@@ -61,17 +61,17 @@ namespace ChilliSource
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
 			
-            mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &CHighlightButton::OnButtonSelect);
-            mInputEvents.GetReleasedInsideEvent() += GUIEventDelegate(this, &CHighlightButton::OnButtonActivated);
-            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &CHighlightButton::OnButtonDeselectThreshold);
+            mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &HighlightButton::OnButtonSelect);
+            mInputEvents.GetReleasedInsideEvent() += GUIEventDelegate(this, &HighlightButton::OnButtonActivated);
+            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &HighlightButton::OnButtonDeselectThreshold);
         }
         //------------------------------------------------------------
         /// Constructor
         ///
         /// From param dictionary
         //------------------------------------------------------------
-        CHighlightButton::CHighlightButton(const Core::ParamDictionary& insParams) 
-        : IButton(insParams), mpBackgroundImage(new CImageView()), NormalSpriteSheetIndex(0), HighlightSpriteSheetIndex(0),
+        HighlightButton::HighlightButton(const Core::ParamDictionary& insParams) 
+        : Button(insParams), mpBackgroundImage(new ImageView()), NormalSpriteSheetIndex(0), HighlightSpriteSheetIndex(0),
         msDefaultUVs(Core::CVector2::ZERO, Core::CVector2::ONE),
         msHighlightUVs(Core::CVector2::ZERO, Core::CVector2::ONE),
         mbSelected(false), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
@@ -230,16 +230,16 @@ namespace ChilliSource
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
 			
-            mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &CHighlightButton::OnButtonSelect);
-            mInputEvents.GetReleasedInsideEvent() += GUIEventDelegate(this, &CHighlightButton::OnButtonActivated);
-            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &CHighlightButton::OnButtonDeselectThreshold);
+            mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &HighlightButton::OnButtonSelect);
+            mInputEvents.GetReleasedInsideEvent() += GUIEventDelegate(this, &HighlightButton::OnButtonActivated);
+            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &HighlightButton::OnButtonDeselectThreshold);
         }
         //-----------------------------------------------------------
         /// Get Background Image View
         ///
         /// @return Image view
         //-----------------------------------------------------------
-        const ImageViewPtr& CHighlightButton::GetBackgroundImageView() const
+        const ImageViewSPtr& HighlightButton::GetBackgroundImageView() const
         {
             return mpBackgroundImage;
         }
@@ -250,7 +250,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //-----------------------------------------------------------
-        void CHighlightButton::SetNormalImage(const Rendering::TexturePtr& inpTexture)
+        void HighlightButton::SetNormalImage(const Rendering::TexturePtr& inpTexture)
         {
             NormalTexture = inpTexture;
 			mpBackgroundImage->SetTexture(inpTexture);
@@ -266,7 +266,7 @@ namespace ChilliSource
 		///
 		/// @return Texture for non-selected button
 		//-----------------------------------------------------------
-		const Rendering::TexturePtr& CHighlightButton::GetNormalImage() const
+		const Rendering::TexturePtr& HighlightButton::GetNormalImage() const
 		{
 			return NormalTexture;
 		}
@@ -277,7 +277,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //-----------------------------------------------------------
-        void CHighlightButton::SetHighlightImage(const Rendering::TexturePtr& inpTexture)
+        void HighlightButton::SetHighlightImage(const Rendering::TexturePtr& inpTexture)
         {
             HighlightTexture = inpTexture;
             
@@ -291,7 +291,7 @@ namespace ChilliSource
 		///
 		/// @return Texture for selected button
 		//-----------------------------------------------------------
-		const Rendering::TexturePtr& CHighlightButton::GetHighlightImage() const
+		const Rendering::TexturePtr& HighlightButton::GetHighlightImage() const
 		{
 			return HighlightTexture;
 		}
@@ -303,7 +303,7 @@ namespace ChilliSource
         ///
         /// @param Rectangle for the UVs
         //-----------------------------------------------------------
-        void CHighlightButton::SetDefaultUVs(Core::Rectangle insUVs)
+        void HighlightButton::SetDefaultUVs(Core::Rectangle insUVs)
         {
             msDefaultUVs = insUVs;
             
@@ -317,7 +317,7 @@ namespace ChilliSource
         ///
         /// @param Rectangle for the UVs
         //-----------------------------------------------------------
-        void CHighlightButton::SetHighlightUVs(Core::Rectangle insUVs)
+        void HighlightButton::SetHighlightUVs(Core::Rectangle insUVs)
         {
             msHighlightUVs = insUVs;
             
@@ -330,7 +330,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet with default image
         //-----------------------------------------------------------
-        void CHighlightButton::SetNormalSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void HighlightButton::SetNormalSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
         {
             NormalSpriteSheet = inpSpriteSheet;
             mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -345,7 +345,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet with default image
 		//-----------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CHighlightButton::GetNormalSpriteSheet() const
+		const Rendering::SpriteSheetPtr& HighlightButton::GetNormalSpriteSheet() const
 		{ 
 			return NormalSpriteSheet; 
 		}
@@ -354,7 +354,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet with highlight image
 		//-----------------------------------------------------------
-		void CHighlightButton::SetHighlightSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void HighlightButton::SetHighlightSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
 		{
 			HighlightSpriteSheet = inpSpriteSheet;
 			mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -369,7 +369,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet with highlight image
 		//-----------------------------------------------------------
-		const Rendering::SpriteSheetPtr& CHighlightButton::GetHighlightSpriteSheet() const 
+		const Rendering::SpriteSheetPtr& HighlightButton::GetHighlightSpriteSheet() const 
 		{ 
 			return HighlightSpriteSheet; 
 		}
@@ -378,7 +378,7 @@ namespace ChilliSource
         ///
         /// @param Index of default state on sprite sheet
         //-----------------------------------------------------------
-        void CHighlightButton::SetNormalSpriteSheetIndex(u32 inudwIndex)
+        void HighlightButton::SetNormalSpriteSheetIndex(u32 inudwIndex)
         {
             NormalSpriteSheetIndex = inudwIndex;
             mpBackgroundImage->SetSpriteSheetIndex(inudwIndex);
@@ -388,7 +388,7 @@ namespace ChilliSource
         ///
         /// @param Index of highlight state on sprite sheet
         //-----------------------------------------------------------
-        void CHighlightButton::SetHighlightSpriteSheetIndex(u32 inudwIndex)
+        void HighlightButton::SetHighlightSpriteSheetIndex(u32 inudwIndex)
         {
             HighlightSpriteSheetIndex = inudwIndex;
         }
@@ -397,7 +397,7 @@ namespace ChilliSource
 		///
 		/// @return Index of default state on sprite sheet
 		//-----------------------------------------------------------
-		u32 CHighlightButton::GetNormalSpriteSheetIndex() const
+		u32 HighlightButton::GetNormalSpriteSheetIndex() const
 		{
 			return NormalSpriteSheetIndex;
 		}
@@ -406,7 +406,7 @@ namespace ChilliSource
 		///
 		/// @return Index of highlight state on sprite sheet
 		//-----------------------------------------------------------
-		u32 CHighlightButton::GetHighlightSpriteSheetIndex() const
+		u32 HighlightButton::GetHighlightSpriteSheetIndex() const
 		{
 			return HighlightSpriteSheetIndex;
 		}
@@ -415,7 +415,7 @@ namespace ChilliSource
 		///
 		/// @param Index of default state on sprite sheet
 		//-----------------------------------------------------------
-		void CHighlightButton::SetNormalSpriteSheetIndexID(const std::string& instrID)
+		void HighlightButton::SetNormalSpriteSheetIndexID(const std::string& instrID)
 		{
 			CS_ASSERT(NormalSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			NormalSpriteSheetIndexID = instrID;
@@ -426,7 +426,7 @@ namespace ChilliSource
 		///
 		/// @param Index ID of highlight state on sprite sheet
 		//-----------------------------------------------------------
-		void CHighlightButton::SetHighlightSpriteSheetIndexID(const std::string& instrID)
+		void HighlightButton::SetHighlightSpriteSheetIndexID(const std::string& instrID)
 		{
 			CS_ASSERT(HighlightSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			HighlightSpriteSheetIndexID = instrID;
@@ -437,7 +437,7 @@ namespace ChilliSource
 		///
 		/// @return Index ID of default state on sprite sheet
 		//-----------------------------------------------------------
-		const std::string& CHighlightButton::GetNormalSpriteSheetIndexID() const
+		const std::string& HighlightButton::GetNormalSpriteSheetIndexID() const
 		{
 			return NormalSpriteSheetIndexID;
 		}
@@ -446,7 +446,7 @@ namespace ChilliSource
 		///
 		/// @return Index ID of highlight state on sprite sheet
 		//-----------------------------------------------------------
-		const std::string& CHighlightButton::GetHighlightSpriteSheetIndexID() const
+		const std::string& HighlightButton::GetHighlightSpriteSheetIndexID() const
 		{
 			return HighlightSpriteSheetIndexID;
 		}
@@ -458,7 +458,7 @@ namespace ChilliSource
         ///
         /// @param Enable/disable
         //--------------------------------------------------------
-        void CHighlightButton::EnableSizeFromImage(bool inbEnable)
+        void HighlightButton::EnableSizeFromImage(bool inbEnable)
         {
             SizeFromImage = inbEnable;
         }
@@ -471,7 +471,7 @@ namespace ChilliSource
 		/// @return Whether the image view's size will be 
 		/// based on the size of the image
 		//--------------------------------------------------------
-		bool CHighlightButton::IsSizeFromImageEnabled() const
+		bool HighlightButton::IsSizeFromImageEnabled() const
 		{
 			return SizeFromImage;
 		}
@@ -481,7 +481,7 @@ namespace ChilliSource
 		/// @param Tint colour to apply when the button is
 		/// selected
 		//--------------------------------------------------------
-		void CHighlightButton::SetHighlightColour(const Core::CColour & inValue)
+		void HighlightButton::SetHighlightColour(const Core::CColour & inValue)
 		{
 			HighlightColour = inValue;
 		}
@@ -491,7 +491,7 @@ namespace ChilliSource
 		/// @return Tint colour to apply when the button is
 		/// selected
 		//--------------------------------------------------------
-		const Core::CColour & CHighlightButton::GetHighlightColour() const
+		const Core::CColour & HighlightButton::GetHighlightColour() const
 		{
 			return HighlightColour;
 		}
@@ -500,7 +500,7 @@ namespace ChilliSource
         ///
         /// @param Audio effect played when the button is selected
         //-----------------------------------------------------------
-        void CHighlightButton::SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
+        void HighlightButton::SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
         {
             mpSelectAudioEffect = inpEffect;
         }
@@ -509,17 +509,17 @@ namespace ChilliSource
 		///
 		/// @param Audio effect played when the button is selected
 		//-----------------------------------------------------------
-		void CHighlightButton::SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
+		void HighlightButton::SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
 		{
 			mpDeselectAudioEffect = inpEffect;
 		}
-        void CHighlightButton::SetDefaultSelectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
+        void HighlightButton::SetDefaultSelectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
         {
             Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
             mspDefaultSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
         }
         
-        void CHighlightButton::SetDefaultDeselectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
+        void HighlightButton::SetDefaultDeselectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
         {
             Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
             mspDefaultDeSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
@@ -527,7 +527,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// On Button Select
         //-----------------------------------------------------------
-        void CHighlightButton::OnButtonSelect(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void HighlightButton::OnButtonSelect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
         {
 			if(!mbSelected)
 			{
@@ -564,7 +564,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// On Button De-select
         //-----------------------------------------------------------
-        void CHighlightButton::OnButtonDeselect(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void HighlightButton::OnButtonDeselect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
         {
 			if(mbSelected)
 			{
@@ -592,7 +592,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// On Button De-select Threshold
         //-----------------------------------------------------------
-        void CHighlightButton::OnButtonDeselectThreshold(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void HighlightButton::OnButtonDeselectThreshold(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
         {
             const f32 kfThreshold = 5.0f;
 			if(std::abs(insTouchInfo.vLocation.x - insTouchInfo.vPreviousLocation.x) > kfThreshold || std::abs(insTouchInfo.vLocation.y - insTouchInfo.vPreviousLocation.y) > kfThreshold)
@@ -603,7 +603,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// On Button Activated
         //-----------------------------------------------------------
-        void CHighlightButton::OnButtonActivated(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo)
+        void HighlightButton::OnButtonActivated(GUIView* inpButton, const Input::TouchInfo & insTouchInfo)
         {
 			if(mbSelected)
 			{
@@ -618,13 +618,13 @@ namespace ChilliSource
 		///
 		/// @param Canvas renderer
 		//-----------------------------------------------------------
-		void CHighlightButton::Draw(Rendering::CCanvasRenderer* inpCanvasRenderer)
+		void HighlightButton::Draw(Rendering::CCanvasRenderer* inpCanvasRenderer)
 		{
 			SetSizeFromImage();
-			CGUIView::Draw(inpCanvasRenderer);
+			GUIView::Draw(inpCanvasRenderer);
 		}
 		
-		void CHighlightButton::SetSizeFromImage()
+		void HighlightButton::SetSizeFromImage()
 		{
 			if(SizeFromImage)
 			{
@@ -650,7 +650,7 @@ namespace ChilliSource
         /// Image view can be sized from assets etc. This function
         /// calculates the size based on these factors
         //--------------------------------------------------------
-        void CHighlightButton::UpdateSizeMaintainingAspect()
+        void HighlightButton::UpdateSizeMaintainingAspect()
         {
             if(mbFillMaintain)
             {
@@ -680,7 +680,7 @@ namespace ChilliSource
         ///
         /// @param Enable/disable
         //--------------------------------------------------------
-        void CHighlightButton::EnableWidthFromImage(bool inbEnable)
+        void HighlightButton::EnableWidthFromImage(bool inbEnable)
         {
             WidthFromImage = inbEnable;
             
@@ -696,7 +696,7 @@ namespace ChilliSource
         /// @return Whether the image view's width will be
         /// based on the width of the image
         //--------------------------------------------------------
-        bool CHighlightButton::IsWidthFromImageEnabled() const
+        bool HighlightButton::IsWidthFromImageEnabled() const
         {
             return WidthFromImage;
         }
@@ -707,7 +707,7 @@ namespace ChilliSource
         /// without requiring a draw to call. Useful for working
         /// with relative sizes and aspect ratios.
         //--------------------------------------------------------
-        void CHighlightButton::SetWidthFromImage()
+        void HighlightButton::SetWidthFromImage()
         {
             SetSize(0.0f, GetSize().GetRelative().y, mpBackgroundImage->GetSizeFromImage().x, GetSize().GetAbsolute().y);
         }
@@ -719,7 +719,7 @@ namespace ChilliSource
         ///
         /// @param Enable/disable
         //--------------------------------------------------------
-        void CHighlightButton::EnableHeightFromImage(bool inbEnable)
+        void HighlightButton::EnableHeightFromImage(bool inbEnable)
         {
             HeightFromImage = inbEnable;
             
@@ -735,7 +735,7 @@ namespace ChilliSource
         /// @return Whether the image view's height will be
         /// based on the height of the image
         //--------------------------------------------------------
-        bool CHighlightButton::IsHeightFromImageEnabled() const
+        bool HighlightButton::IsHeightFromImageEnabled() const
         {
             return HeightFromImage;
         }
@@ -746,7 +746,7 @@ namespace ChilliSource
         /// without requiring a draw to call. Useful for working
         /// with relative sizes and aspect ratios.
         //--------------------------------------------------------
-        void CHighlightButton::SetHeightFromImage()
+        void HighlightButton::SetHeightFromImage()
         {
             SetSize(GetSize().GetRelative().x, 0.0f, GetSize().GetAbsolute().x, mpBackgroundImage->GetSizeFromImage().y);
         }
@@ -756,10 +756,10 @@ namespace ChilliSource
         /// Called when the view is able to retrieve an absolute
         /// value.
         //--------------------------------------------------------
-		void CHighlightButton::LayoutContent()
+		void HighlightButton::LayoutContent()
 		{
             SetSizeFromImage();
-            CGUIView::LayoutContent();
+            GUIView::LayoutContent();
 		}
         
 		//--------------------------------------------------------
@@ -767,7 +767,7 @@ namespace ChilliSource
 		///
 		/// @return Absolute size of the image
 		//--------------------------------------------------------
-		Core::CVector2 CHighlightButton::GetSizeFromImage() const
+		Core::CVector2 HighlightButton::GetSizeFromImage() const
 		{
 			return GetBackgroundImageView()->GetSizeFromImage();
 		}
@@ -779,7 +779,7 @@ namespace ChilliSource
         ///
         /// @param Unified width
         //--------------------------------------------------------
-        void CHighlightButton::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
+        void HighlightButton::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
         {
             WidthMaintain = true;
             
@@ -804,7 +804,7 @@ namespace ChilliSource
         ///
         /// @param Unified height
         //--------------------------------------------------------
-        void CHighlightButton::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
+        void HighlightButton::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
         {
             HeightMaintain = true;
             
@@ -828,7 +828,7 @@ namespace ChilliSource
         ///
         /// @param boolean to disable or enable
         //--------------------------------------------------------
-        void CHighlightButton::EnableHeightMaintainingAspect(bool inbEnabled)
+        void HighlightButton::EnableHeightMaintainingAspect(bool inbEnabled)
         {
 			HeightMaintain = inbEnabled;
         }
@@ -839,7 +839,7 @@ namespace ChilliSource
         ///
         /// @param boolean to disable or enable
         //--------------------------------------------------------
-        void CHighlightButton::EnableWidthMaintainingAspect(bool inbEnabled)
+        void HighlightButton::EnableWidthMaintainingAspect(bool inbEnabled)
         {
 			WidthMaintain = inbEnabled;
         }
@@ -848,7 +848,7 @@ namespace ChilliSource
 		///
 		/// @return Whether auto scaling of the width to maintain the aspect ratio
 		//--------------------------------------------------------
-		bool CHighlightButton::IsWidthMaintainingAspectEnabled() const
+		bool HighlightButton::IsWidthMaintainingAspectEnabled() const
 		{
 			return WidthMaintain;
 		}
@@ -857,7 +857,7 @@ namespace ChilliSource
 		///
 		/// @return Whether auto scaling of the height to maintain the aspect ratio
 		//--------------------------------------------------------
-		bool CHighlightButton::IsHeightMaintainingAspectEnabled() const
+		bool HighlightButton::IsHeightMaintainingAspectEnabled() const
 		{
 			return HeightMaintain;
 		}
@@ -870,7 +870,7 @@ namespace ChilliSource
         ///
         /// @param Unified size
         //--------------------------------------------------------
-        void CHighlightButton::SetFillMaintainingAspect(f32 infRelWidth, f32 infRelHeight, f32 infAbsWidth, f32 infAbsHeight)
+        void HighlightButton::SetFillMaintainingAspect(f32 infRelWidth, f32 infRelHeight, f32 infAbsWidth, f32 infAbsHeight)
         {
             mbFillMaintain = true;
             mvFillMaintainTarget.vRelative.x = infRelWidth;
@@ -905,7 +905,7 @@ namespace ChilliSource
         ///
         /// @param Unified size
         //--------------------------------------------------------
-        void CHighlightButton::SetFitMaintainingAspect(f32 infRelWidth, f32 infRelHeight, f32 infAbsWidth, f32 infAbsHeight)
+        void HighlightButton::SetFitMaintainingAspect(f32 infRelWidth, f32 infRelHeight, f32 infAbsWidth, f32 infAbsHeight)
         {
             mbFitMaintain = true;
             mvFitMaintainTarget.vRelative.x = infRelWidth;
@@ -934,7 +934,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Destructor
         //----------------------------------------------------------
-        CHighlightButton::~CHighlightButton()
+        HighlightButton::~HighlightButton()
         {
             if(mpSelectAudioEffect)
             {

@@ -26,7 +26,7 @@ namespace ChilliSource
 		///
 		/// Creates the window with an absolute size
 		//-----------------------------------------------
-		CWindow::CWindow():mbListeningForTouches(false)
+		Window::Window():mbListeningForTouches(false)
 		{
 			//We are the root window of the view hierarchy
 			//Each hierarchy can only have on window
@@ -40,15 +40,15 @@ namespace ChilliSource
 			SetName("RootWindow");
             
 			//Register for screen rotation events
-			Core::CApplicationEvents::GetScreenOrientationChangedEvent() += Core::ApplicationScreenOrientationDelegate(this, &CWindow::OnScreenOrientationChanged);
-			Core::CApplicationEvents::GetScreenResizedEvent() += Core::ApplicationScreenResizeDelegate(this, &CWindow::OnScreenResized);
+			Core::CApplicationEvents::GetScreenOrientationChangedEvent() += Core::ApplicationScreenOrientationDelegate(this, &Window::OnScreenOrientationChanged);
+			Core::CApplicationEvents::GetScreenResizedEvent() += Core::ApplicationScreenResizeDelegate(this, &Window::OnScreenResized);
 		}
 		//-----------------------------------------------------
 		/// Set Input System
 		///
 		/// @param pointer to the input system
 		//-----------------------------------------------------
-		void CWindow::SetInputSystem(Input::InputSystem* inpInputSystem)
+		void Window::SetInputSystem(Input::InputSystem* inpInputSystem)
 		{
 			mpInputSystem = inpInputSystem;
             
@@ -60,28 +60,28 @@ namespace ChilliSource
         ///
         /// @return pointer to the input system
         //-----------------------------------------------------
-        Input::InputSystem* CWindow::GetInputSystem()
+        Input::InputSystem* Window::GetInputSystem()
         {
             return mpInputSystem;
         }
-        void CWindow::ListenForTouches()
+        void Window::ListenForTouches()
         {
             if(mpInputSystem && mpInputSystem->GetTouchScreenPtr() && !mbListeningForTouches)
 			{
-				mpInputSystem->GetTouchScreenPtr()->GetTouchBeganEvent() += Input::TouchEventDelegate(this, &CWindow::_OnTouchBegan);
-				mpInputSystem->GetTouchScreenPtr()->GetTouchMovedEvent() += Input::TouchEventDelegate(this, &CWindow::_OnTouchMoved);
-				mpInputSystem->GetTouchScreenPtr()->GetTouchEndEvent() += Input::TouchEventDelegate(this, &CWindow::_OnTouchEnded);
+				mpInputSystem->GetTouchScreenPtr()->GetTouchBeganEvent() += Input::TouchEventDelegate(this, &Window::_OnTouchBegan);
+				mpInputSystem->GetTouchScreenPtr()->GetTouchMovedEvent() += Input::TouchEventDelegate(this, &Window::_OnTouchMoved);
+				mpInputSystem->GetTouchScreenPtr()->GetTouchEndEvent() += Input::TouchEventDelegate(this, &Window::_OnTouchEnded);
                 mbListeningForTouches=true;
 			}
         }
         
-        void CWindow::UnlistenFromTouches()
+        void Window::UnlistenFromTouches()
         {
             if(mpInputSystem && mpInputSystem->GetTouchScreenPtr() && mbListeningForTouches)
 			{
-				mpInputSystem->GetTouchScreenPtr()->GetTouchBeganEvent() -= Input::TouchEventDelegate(this, &CWindow::_OnTouchBegan);
-				mpInputSystem->GetTouchScreenPtr()->GetTouchMovedEvent() -= Input::TouchEventDelegate(this, &CWindow::_OnTouchMoved);
-				mpInputSystem->GetTouchScreenPtr()->GetTouchEndEvent() -= Input::TouchEventDelegate(this, &CWindow::_OnTouchEnded);
+				mpInputSystem->GetTouchScreenPtr()->GetTouchBeganEvent() -= Input::TouchEventDelegate(this, &Window::_OnTouchBegan);
+				mpInputSystem->GetTouchScreenPtr()->GetTouchMovedEvent() -= Input::TouchEventDelegate(this, &Window::_OnTouchMoved);
+				mpInputSystem->GetTouchScreenPtr()->GetTouchEndEvent() -= Input::TouchEventDelegate(this, &Window::_OnTouchEnded);
                 mbListeningForTouches=false;
 			}
         }
@@ -91,7 +91,7 @@ namespace ChilliSource
 		/// Triggered if the screen orientation changes so we can
 		/// resize ourself
 		//-----------------------------------------------------------
-		void CWindow::OnScreenOrientationChanged(Core::ScreenOrientation ineOrientation)
+		void Window::OnScreenOrientationChanged(Core::ScreenOrientation ineOrientation)
 		{
 			Core::CVector2 vAbsSize = Core::CScreen::GetOrientedDimensions();
             
@@ -100,14 +100,14 @@ namespace ChilliSource
 			SetPosition(Core::UnifiedVector2(Core::CVector2(0.0f, 0.0f), vAbsSize * 0.5f));
             
 			//Notify all subviews and they can decide what to do
-			CGUIView::OnScreenOrientationChanged();
+			GUIView::OnScreenOrientationChanged();
 		}
 		//-----------------------------------------------------------
 		/// On Screen Resized
 		///
 		/// Triggered if the screen resizes
 		//-----------------------------------------------------------
-		void CWindow::OnScreenResized(u32 inudwWidth, u32 inudwHeight)
+		void Window::OnScreenResized(u32 inudwWidth, u32 inudwHeight)
 		{
 			Core::CVector2 vAbsSize((f32)inudwWidth, (f32)inudwHeight);
             
@@ -116,7 +116,7 @@ namespace ChilliSource
 			SetPosition(Core::UnifiedVector2(Core::CVector2(0.0f, 0.0f), vAbsSize * 0.5f));
             
 			//Notify all subviews and they can decide what to do
-			CGUIView::OnScreenOrientationChanged();
+			GUIView::OnScreenOrientationChanged();
 		}
 		//-----------------------------------------------------------
 		/// On Touch Began
@@ -125,7 +125,7 @@ namespace ChilliSource
 		///
 		/// @param Touch data
 		//-----------------------------------------------------------
-		void CWindow::_OnTouchBegan(const Input::TouchInfo & insTouchInfo)
+		void Window::_OnTouchBegan(const Input::TouchInfo & insTouchInfo)
 		{
 			if (!UserInteraction)
 				return;
@@ -135,7 +135,7 @@ namespace ChilliSource
 			mInputEvents.OnTouchBegan(this, insTouchInfo);
 			
 			//We need to notify any subviews they get first dibs
-			for(CGUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
+			for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
 			{
 				if(((*it)->IsAcceptTouchesOutsideOfBoundsEnabled() || (*it)->Contains(insTouchInfo.vLocation)))
 				{
@@ -161,7 +161,7 @@ namespace ChilliSource
 		///
 		/// @param Touch data
 		//-----------------------------------------------------------
-		void CWindow::_OnTouchMoved(const Input::TouchInfo & insTouchInfo)
+		void Window::_OnTouchMoved(const Input::TouchInfo & insTouchInfo)
 		{
 			if (!UserInteraction)
 				return;
@@ -171,7 +171,7 @@ namespace ChilliSource
 			mInputEvents.OnTouchMoved(this, insTouchInfo);
 			
 			//We need to notify any subviews they get first dibs
-			for(CGUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
+			for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
 			{
 				if((*it)->OnTouchMoved(insTouchInfo))
 				{
@@ -194,7 +194,7 @@ namespace ChilliSource
 		///
 		/// @param Touch data
 		//-----------------------------------------------------------
-		void CWindow::_OnTouchEnded(const Input::TouchInfo & insTouchInfo)
+		void Window::_OnTouchEnded(const Input::TouchInfo & insTouchInfo)
 		{
 			if (!UserInteraction)
 				return;
@@ -204,7 +204,7 @@ namespace ChilliSource
 			mInputEvents.OnTouchEnded(this, insTouchInfo);
 			
 			//We need to notify any subviews they get first dibs
-			for(CGUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
+			for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
 			{
 				(*it)->OnTouchEnded(insTouchInfo);
 			}
@@ -221,7 +221,7 @@ namespace ChilliSource
         ///
         /// @param Touch data
         //-----------------------------------------------------------
-        bool CWindow::OnTouchBegan(const Input::TouchInfo & insTouchInfo)
+        bool Window::OnTouchBegan(const Input::TouchInfo & insTouchInfo)
         {
             return false;
         }
@@ -232,7 +232,7 @@ namespace ChilliSource
         ///
         /// @param Touch data
         //-----------------------------------------------------------
-        bool CWindow::OnTouchMoved(const Input::TouchInfo & insTouchInfo)
+        bool Window::OnTouchMoved(const Input::TouchInfo & insTouchInfo)
         {
             return false;
         }
@@ -243,7 +243,7 @@ namespace ChilliSource
         ///
         /// @param Touch data
         //-----------------------------------------------------------
-        void CWindow::OnTouchEnded(const Input::TouchInfo & insTouchInfo)
+        void Window::OnTouchEnded(const Input::TouchInfo & insTouchInfo)
         {
             
         }
@@ -257,16 +257,16 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer
         //-----------------------------------------------------
-        void CWindow::Draw(CCanvasRenderer * inpCanvas)
+        void Window::Draw(CCanvasRenderer * inpCanvas)
         {
-            CGUIView::Draw(inpCanvas);
+            GUIView::Draw(inpCanvas);
             
             if(DebugStats::IsEnabled())
             {
-                CDebugStatsView::GetSingletonPtr()->SetParentView(this);
-                CDebugStatsView::GetSingletonPtr()->SetRootWindow(this);
-                CDebugStatsView::GetSingletonPtr()->RefreshStats();
-                CDebugStatsView::GetSingletonPtr()->Draw(inpCanvas);
+                DebugStatsView::GetSingletonPtr()->SetParentView(this);
+                DebugStatsView::GetSingletonPtr()->SetRootWindow(this);
+                DebugStatsView::GetSingletonPtr()->RefreshStats();
+                DebugStatsView::GetSingletonPtr()->Draw(inpCanvas);
             }
         }
 #endif
@@ -274,14 +274,14 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//-----------------------------------------------
-		CWindow::~CWindow()
+		Window::~Window()
 		{
 			//Deregister for touch delegates
 			//The window is responsible for receiving input for this scene
 			UnlistenFromTouches();
             
-			Core::CApplicationEvents::GetScreenOrientationChangedEvent() -= Core::ApplicationScreenOrientationDelegate(this, &CWindow::OnScreenOrientationChanged);
-			Core::CApplicationEvents::GetScreenResizedEvent() -= Core::ApplicationScreenResizeDelegate(this, &CWindow::OnScreenResized);
+			Core::CApplicationEvents::GetScreenOrientationChangedEvent() -= Core::ApplicationScreenOrientationDelegate(this, &Window::OnScreenOrientationChanged);
+			Core::CApplicationEvents::GetScreenResizedEvent() -= Core::ApplicationScreenResizeDelegate(this, &Window::OnScreenResized);
 		}
 	}
 }

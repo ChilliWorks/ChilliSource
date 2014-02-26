@@ -27,15 +27,15 @@ namespace ChilliSource
         ///
         /// @param Param dictionary
         //--------------------------------------------------------
-        template<typename T> GUIViewPtr CreateGUI(const Core::ParamDictionary & insParams)
+        template<typename T> GUIViewSPtr CreateGUI(const Core::ParamDictionary & insParams)
         {
-            return GUIViewPtr(new T(insParams));   
+            return GUIViewSPtr(new T(insParams));   
         }
         
-        class CGUIViewFactory
+        class GUIViewFactory
         {
         public:  
-            typedef fastdelegate::FastDelegate1<const Core::ParamDictionary&, GUIViewPtr> GUIViewCreateDelegate; 
+            typedef fastdelegate::FastDelegate1<const Core::ParamDictionary&, GUIViewSPtr> GUIViewCreateDelegate; 
             //--------------------------------------------------------
             /// Register Defaults
             ///
@@ -52,7 +52,7 @@ namespace ChilliSource
 			/// @param Optional dynamic array to which views will be pushed
             /// @return GUI View
             //--------------------------------------------------------
-            static GUIViewPtr CreateGUIViewFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile, std::vector<GUIViewPtr>* outpViews = nullptr);
+            static GUIViewSPtr CreateGUIViewFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile, std::vector<GUIViewSPtr>* outpViews = nullptr);
 			//--------------------------------------------------------
             /// Create GUI View 
             ///
@@ -60,7 +60,7 @@ namespace ChilliSource
             ///
             /// @return GUI View
             //--------------------------------------------------------
-            static GUIViewPtr CreateGUIView(const std::string& instrTypeName, const Core::ParamDictionary& insParams);
+            static GUIViewSPtr CreateGUIView(const std::string& instrTypeName, const Core::ParamDictionary& insParams);
 			//--------------------------------------------------------
 			/// Register 
 			///
@@ -96,7 +96,7 @@ namespace ChilliSource
             /// @param View XML element
             /// @return Created view
             //--------------------------------------------------------
-            static GUIViewPtr CreateView(rapidxml::xml_node<char> * ipViewElement, std::vector<GUIViewPtr>* outpViews = nullptr);
+            static GUIViewSPtr CreateView(rapidxml::xml_node<char> * ipViewElement, std::vector<GUIViewSPtr>* outpViews = nullptr);
             
         private:
             

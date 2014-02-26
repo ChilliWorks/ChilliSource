@@ -16,14 +16,14 @@ namespace ChilliSource
 {
 	namespace GUI
 	{
-		class CProgressBar : public CGUIView
+		class ProgressBar : public GUIView
 		{
 		public:
 
-			DECLARE_META_CLASS(CProgressBar)
+			DECLARE_META_CLASS(ProgressBar)
 
-			CProgressBar();
-			CProgressBar(const Core::ParamDictionary& insParams);
+			ProgressBar();
+			ProgressBar(const Core::ParamDictionary& insParams);
 			//------------------------------------------------
 			/// Set Progress
 			///

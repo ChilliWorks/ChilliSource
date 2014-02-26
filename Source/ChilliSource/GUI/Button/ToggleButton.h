@@ -17,21 +17,21 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        class CToggleButton : public IButton
+        class ToggleButton : public Button
         {
         public:
 
-			DECLARE_META_CLASS(CToggleButton)
+			DECLARE_META_CLASS(ToggleButton)
 
-            CToggleButton();
-            CToggleButton(const Core::ParamDictionary& insParams);
-            virtual ~CToggleButton();
+            ToggleButton();
+            ToggleButton(const Core::ParamDictionary& insParams);
+            virtual ~ToggleButton();
             //-----------------------------------------------------------
             /// Get Background Image View
             ///
             /// @return Image view
             //-----------------------------------------------------------
-            const ImageViewPtr& GetBackgroundImageView() const;
+            const ImageViewSPtr& GetBackgroundImageView() const;
             //-----------------------------------------------------------
             /// Set On Image
             ///
@@ -295,7 +295,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param Touch info
             //-----------------------------------------------------------
-            virtual void OnButtonSelect(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo);
+            virtual void OnButtonSelect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
             //-----------------------------------------------------------
             /// On Button Activated
             ///
@@ -305,7 +305,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param Touch info
             //-----------------------------------------------------------
-            virtual void OnButtonActivated(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo);
+            virtual void OnButtonActivated(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
             //-----------------------------------------------------------
             /// On Button De-select
             ///
@@ -315,7 +315,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param Touch info
             //-----------------------------------------------------------
-            virtual void OnButtonDeselect(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo);
+            virtual void OnButtonDeselect(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
             //-----------------------------------------------------------
             /// On Button De-select Threshold
             ///
@@ -325,7 +325,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param Touch info
             //-----------------------------------------------------------
-            virtual void OnButtonDeselectThreshold(CGUIView* inpButton, const Input::TouchInfo & insTouchInfo);
+            virtual void OnButtonDeselectThreshold(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
 			//-----------------------------------------------------------
 			/// Draw
 			///
@@ -352,7 +352,7 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(bool, HeightMaintain, EnableHeightMaintainingAspect, IsHeightMaintainingAspectEnabled);
 			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
 
-            ImageViewPtr mpBackgroundImage;
+            ImageViewSPtr mpBackgroundImage;
  
             Audio::AudioComponentSPtr mpSelectAudioEffect;
 			Audio::AudioComponentSPtr mpDeselectAudioEffect;
@@ -366,9 +366,6 @@ namespace ChilliSource
             static Audio::AudioComponentSPtr mspDefaultSelectSound;
             static Audio::AudioComponentSPtr mspDefaultDeSelectSound;
 		};
-        
-        typedef std::shared_ptr<CToggleButton> ToggleButtonPtr;
-		typedef std::weak_ptr<CToggleButton>ToggleButtonWeakPtr;
     }
 }
 

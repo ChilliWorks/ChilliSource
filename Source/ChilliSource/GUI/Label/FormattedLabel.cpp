@@ -14,7 +14,7 @@ namespace ChilliSource
 {
     namespace GUI
     {
-		DEFINE_META_CLASS(CFormattedLabel)
+		DEFINE_META_CLASS(FormattedLabel)
 
         //---Mark-up samples
         // [img= image.png/spritesheetkey x=200 y=200]
@@ -25,7 +25,7 @@ namespace ChilliSource
         ///
         /// Default
         //--------------------------------------------------
-        CFormattedLabel::CFormattedLabel()
+        FormattedLabel::FormattedLabel()
         {
             
         }
@@ -34,7 +34,7 @@ namespace ChilliSource
         ///
         /// @param Param dictionary
         //--------------------------------------------------
-        CFormattedLabel::CFormattedLabel(const Core::ParamDictionary& insParam) : CLabel(insParam)
+        FormattedLabel::FormattedLabel(const Core::ParamDictionary& insParam) : Label(insParam)
         {
             
         }
@@ -50,13 +50,13 @@ namespace ChilliSource
         ///
         /// @param Text string
         //-------------------------------------------------------
-        void CFormattedLabel::SetText(const Core::UTF8String& instrText, const Core::ParamDictionary& insParams,bool inbOverwriteText)
+        void FormattedLabel::SetText(const Core::UTF8String& instrText, const Core::ParamDictionary& insParams,bool inbOverwriteText)
         {
 			mCachedChars.clear();
 			
             //Let us find the variable names in the string
             if(inbOverwriteText)
-                CLabel::SetText("");
+                Label::SetText("");
             
             Core::CStringUtils::InsertVariables(instrText, insParams, Text);
         }

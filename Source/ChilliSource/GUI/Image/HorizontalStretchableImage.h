@@ -17,14 +17,14 @@ namespace ChilliSource
 {
 	namespace GUI
 	{
-		class CHorizontalStretchableImage : public CGUIView
+		class HorizontalStretchableImage : public GUIView
 		{	
 		public:
 
-			DECLARE_META_CLASS(CHorizontalStretchableImage)
+			DECLARE_META_CLASS(HorizontalStretchableImage)
 
-			CHorizontalStretchableImage();
-			CHorizontalStretchableImage(const Core::ParamDictionary& insParams);
+			HorizontalStretchableImage();
+			HorizontalStretchableImage(const Core::ParamDictionary& insParams);
 
 			//---------------------------------------------------------
 			/// Set Sprite Sheet
@@ -181,7 +181,7 @@ namespace ChilliSource
 			u32 mudwRightCapIndex;
 		};
 
-		typedef std::shared_ptr<CHorizontalStretchableImage> HorizontalStretchableImagePtr;
+		typedef std::shared_ptr<HorizontalStretchableImage> HorizontalStretchableImagePtr;
 	}
 }
 

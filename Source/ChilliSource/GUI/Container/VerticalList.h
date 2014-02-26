@@ -16,14 +16,14 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        class CVerticalList : public CGUIView
+        class VerticalList : public GUIView
         {
         public:
             
-            DECLARE_META_CLASS(CVerticalList)
+            DECLARE_META_CLASS(VerticalList)
             
-            CVerticalList();
-            CVerticalList(const Core::ParamDictionary& insParams);
+            VerticalList();
+            VerticalList(const Core::ParamDictionary& insParams);
             
             enum class ItemHorizontalJustification
             {
@@ -96,7 +96,7 @@ namespace ChilliSource
             ///
             /// @param GUIView shared pointer
             //-----------------------------------------------------
-            void AddSubview(const GUIViewPtr& inpSubview);
+            void AddSubview(const GUIViewSPtr& inpSubview);
             //-----------------------------------------------------
             /// Remove Subview (Internal)
             ///
@@ -104,7 +104,7 @@ namespace ChilliSource
             ///
             /// @param GUIView pointer
             //-----------------------------------------------------
-            void RemoveSubview(CGUIView* inpSubview);
+            void RemoveSubview(GUIView* inpSubview);
             //-----------------------------------------------------
             /// Remove Subview (Internal)
             ///
@@ -132,7 +132,7 @@ namespace ChilliSource
             
         private:
             
-            CGUIView::Subviews maListSubviews;
+            GUIView::Subviews maListSubviews;
             
             Core::AlignmentAnchor meHorizontalAlignmentAnchor;
         

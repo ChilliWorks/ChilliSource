@@ -37,7 +37,7 @@ namespace ChilliSource
 		CScene::CScene(Input::InputSystem* inpInputSystem, f32 infWorldHalfSize) 
         : mpRootWindow(nullptr)
 		{
-			mpRootWindow = new GUI::CWindow();
+			mpRootWindow = new GUI::Window();
 			mpRootWindow->SetInputSystem(inpInputSystem);
 		}
 		//-------------------------------------------------------
@@ -174,7 +174,7 @@ namespace ChilliSource
         ///
         /// @return The main window that all the scene's UI is attached to.
         //--------------------------------------------------------------------------------------------------
-        GUI::CWindow* CScene::GetWindowPtr()
+        GUI::Window* CScene::GetWindowPtr()
         {
             return mpRootWindow;
         }
