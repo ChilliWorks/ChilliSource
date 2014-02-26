@@ -64,10 +64,10 @@ namespace ChilliSource
         typedef fastdelegate::FastDelegate2<const std::string&, const std::string&> IAPTransactionCloseDelegate;
         
         
-		class IIAPSystem : public ChilliSource::Core::ISystem
+		class IAPSystem : public ChilliSource::Core::ISystem
         {
         public:
-            DECLARE_NAMED_INTERFACE(IIAPSystem);
+            DECLARE_NAMED_INTERFACE(IAPSystem);
             
             //---------------------------------------------------------------
             /// Create
@@ -81,7 +81,7 @@ namespace ChilliSource
             ///		AmazonPrivateKey		The private key used to encrypt
             ///								the on disk Amazon IAP cache.
             //---------------------------------------------------------------
-            static IIAPSystem* Create(const Core::ParamDictionary& inParams);
+            static IAPSystem* Create(const Core::ParamDictionary& inParams);
 
             //---------------------------------------------------------------
             /// Is A

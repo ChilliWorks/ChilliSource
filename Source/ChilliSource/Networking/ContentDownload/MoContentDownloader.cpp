@@ -22,7 +22,7 @@ namespace ChilliSource
         /// @param Asset server URL
         /// @param Dynamic array of tags that determine content
         //----------------------------------------------------------------
-        CMoContentDownloader::CMoContentDownloader(IHttpConnectionSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags)
+        MoContentDownloader::MoContentDownloader(HttpConnectionSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags)
         : mpHttpConnectionSystem(inpRequestSystem), mstrAssetServerURL(instrAssetServerURL), mastrTags(inastrTags)
         {
             
@@ -36,7 +36,7 @@ namespace ChilliSource
         /// @param Delegate
         /// @return Whether the manifest download has begun
         //----------------------------------------------------------------
-        bool CMoContentDownloader::DownloadContentManifest(const ContentDownloader::Delegate& inDelegate)
+        bool MoContentDownloader::DownloadContentManifest(const ContentDownloader::Delegate& inDelegate)
         {
             mOnContentManifestDownloadCompleteDelegate = inDelegate;
             
@@ -66,7 +66,7 @@ namespace ChilliSource
 				RequestDetails.eType = HttpRequestDetails::Type::k_post;
                 RequestDetails.strBody = JWriter.write(JDeviceData);
                 
-                mpHttpConnectionSystem->MakeRequest(RequestDetails, IHttpRequest::CompletionDelegate(this, &CMoContentDownloader::OnContentManifestDownloadComplete));
+                mpHttpConnectionSystem->MakeRequest(RequestDetails, HttpRequest::CompletionDelegate(this, &MoContentDownloader::OnContentManifestDownloadComplete));
                 return true;
             }
             else
@@ -82,14 +82,14 @@ namespace ChilliSource
         /// @param URL string
         /// @param Delegate
         //----------------------------------------------------------------
-        void CMoContentDownloader::DownloadPackage(const std::string& instrURL, const ContentDownloader::Delegate& inDelegate)
+        void MoContentDownloader::DownloadPackage(const std::string& instrURL, const ContentDownloader::Delegate& inDelegate)
         {
             mOnContentDownloadCompleteDelegate = inDelegate;
             
             HttpRequestDetails RequestDetails;
             RequestDetails.strURL = instrURL;
             RequestDetails.eType = HttpRequestDetails::Type::k_get;
-            mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(RequestDetails, IHttpRequest::CompletionDelegate(this, &CMoContentDownloader::OnContentDownloadComplete));
+            mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(RequestDetails, HttpRequest::CompletionDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
         }
         //----------------------------------------------------------------
         /// On Content Manifest Download Complete
@@ -99,11 +99,11 @@ namespace ChilliSource
         /// @param Request response
         /// @param Request result
         //----------------------------------------------------------------
-        void CMoContentDownloader::OnContentManifestDownloadComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+        void MoContentDownloader::OnContentManifestDownloadComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
         {
             switch(ineResult)
             {
-                case IHttpRequest::CompletionResult::k_completed:
+                case HttpRequest::CompletionResult::k_completed:
                 {
                     //Check the response code for errors
                     switch(inpRequest->GetResponseCode())
@@ -124,14 +124,14 @@ namespace ChilliSource
                     }
                     break;
                 }
-                case IHttpRequest::CompletionResult::k_timeout:
-                case IHttpRequest::CompletionResult::k_failed:
-                case IHttpRequest::CompletionResult::k_cancelled:
+                case HttpRequest::CompletionResult::k_timeout:
+                case HttpRequest::CompletionResult::k_failed:
+                case HttpRequest::CompletionResult::k_cancelled:
                 {
                     mOnContentManifestDownloadCompleteDelegate(ContentDownloader::Result::k_failed, inpRequest->GetResponseString());
                     break;
                 }
-                case IHttpRequest::CompletionResult::k_flushed:
+                case HttpRequest::CompletionResult::k_flushed:
                 {
                     //Check the response code for errors
                     switch(inpRequest->GetResponseCode())
@@ -162,14 +162,14 @@ namespace ChilliSource
         /// @param Request response
         /// @param Request result
         //----------------------------------------------------------------
-        void CMoContentDownloader::OnContentDownloadComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+        void MoContentDownloader::OnContentDownloadComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
         {
             if(mpCurrentRequest == inpRequest)
                 mpCurrentRequest = HttpRequestPtr();
             
             switch(ineResult)
             {
-                case IHttpRequest::CompletionResult::k_completed:
+                case HttpRequest::CompletionResult::k_completed:
                 {
                     // Check the response code for errors
                     switch(inpRequest->GetResponseCode())
@@ -190,21 +190,21 @@ namespace ChilliSource
                                 RequestDetails.strURL = RequestDetails.strRedirectionURL;
                                 RequestDetails.strRedirectionURL = "";
                                 RequestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_get;
-                                mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(RequestDetails, IHttpRequest::CompletionDelegate(this, &CMoContentDownloader::OnContentDownloadComplete));
+                                mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(RequestDetails, HttpRequest::CompletionDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
                                 break;
                             }
                         }
                     }
                     break;
                 }
-                case IHttpRequest::CompletionResult::k_timeout:
-                case IHttpRequest::CompletionResult::k_failed:
-                case IHttpRequest::CompletionResult::k_cancelled:
+                case HttpRequest::CompletionResult::k_timeout:
+                case HttpRequest::CompletionResult::k_failed:
+                case HttpRequest::CompletionResult::k_cancelled:
                 {
                     mOnContentDownloadCompleteDelegate(ContentDownloader::Result::k_failed, inpRequest->GetResponseString());
                     break;
                 }
-                case IHttpRequest::CompletionResult::k_flushed:
+                case HttpRequest::CompletionResult::k_flushed:
                 {
                     mOnContentDownloadCompleteDelegate(ContentDownloader::Result::k_flushed, inpRequest->GetResponseString());
                     break;
@@ -217,7 +217,7 @@ namespace ChilliSource
         ///
         /// @return The amount of bytes read by the current request, if any
         //----------------------------------------------------------------
-        u32 CMoContentDownloader::GetCurrentDownloadedBytes() const
+        u32 MoContentDownloader::GetCurrentDownloadedBytes() const
         {
             if(mpCurrentRequest)
             {

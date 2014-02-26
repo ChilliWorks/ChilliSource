@@ -18,7 +18,7 @@ namespace ChilliSource
 {
     namespace iOS
     {
-        class CIAPSystem : public Networking::IIAPSystem
+        class CIAPSystem : public Networking::IAPSystem
         {
         public:
             CIAPSystem();

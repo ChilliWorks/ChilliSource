@@ -16,10 +16,10 @@ namespace ChilliSource
 {
     namespace Networking
     {
-        class CContentManagementSystem : public Core::ISystem
+        class ContentManagementSystem : public Core::ISystem
         {
         public:
-            DECLARE_NAMED_INTERFACE(CContentManagementSystem);
+            DECLARE_NAMED_INTERFACE(ContentManagementSystem);
             
             enum class UpdateResult
             {
@@ -44,7 +44,7 @@ namespace ChilliSource
             ///
             /// @param Content downloader
             //-----------------------------------------------------------
-            CContentManagementSystem(IContentDownloader* inpContentDownloader);
+            ContentManagementSystem(IContentDownloader* inpContentDownloader);
             //-----------------------------------------------------------
             /// Is A
             ///

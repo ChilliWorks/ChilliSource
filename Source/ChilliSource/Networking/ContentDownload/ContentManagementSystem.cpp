@@ -22,7 +22,7 @@ namespace ChilliSource
 {
     namespace Networking
     {
-        DEFINE_NAMED_INTERFACE(CContentManagementSystem);
+        DEFINE_NAMED_INTERFACE(ContentManagementSystem);
         
         //-----------------------------------------------------------
         /// Constructor
@@ -31,7 +31,7 @@ namespace ChilliSource
 		/// @param Current application version 
         /// @param Array of tags
         //-----------------------------------------------------------
-        CContentManagementSystem::CContentManagementSystem(IContentDownloader* inpContentDownloader) 
+        ContentManagementSystem::ContentManagementSystem(IContentDownloader* inpContentDownloader) 
         : mpContentDownloader(inpContentDownloader), mpServerManifest(nullptr), 
         muRunningToDownloadTotal(0), muRunningDownloadedTotal(0), mbDLCCachePurged(false)
         {
@@ -45,7 +45,7 @@ namespace ChilliSource
         ///
         /// @param TiXmlDocument
         //-----------------------------------------------------------
-        void CContentManagementSystem::LoadLocalManifest(TiXmlDocument* inpCurrentManifest)
+        void ContentManagementSystem::LoadLocalManifest(TiXmlDocument* inpCurrentManifest)
         {
             //The manifest lives in the documents directory
             inpCurrentManifest->LoadFile(Core::StorageLocation::k_DLC, "ContentManifest.moman");
@@ -62,7 +62,7 @@ namespace ChilliSource
         /// @param File name
         /// @return Checksum of file as found in the current manifest
         //-----------------------------------------------------------
-        std::string CContentManagementSystem::GetManifestChecksumForFile(const std::string& instrFilename)
+        std::string ContentManagementSystem::GetManifestChecksumForFile(const std::string& instrFilename)
         {
             return CalculateChecksum(Core::StorageLocation::k_DLC, instrFilename);
         }
@@ -77,7 +77,7 @@ namespace ChilliSource
 		/// @param File path
 		/// @return Checksum string
 		//-----------------------------------------------------------
-		std::string CContentManagementSystem::CalculateChecksum(Core::StorageLocation ineLocation, const std::string& instrFilePath)
+		std::string ContentManagementSystem::CalculateChecksum(Core::StorageLocation ineLocation, const std::string& instrFilePath)
 		{
             std::string strMD5Checksum = Core::CApplication::GetFileSystemPtr()->GetFileMD5Checksum(ineLocation, instrFilePath);
 			std::string strBase64Encoded = Core::CBaseEncoding::Base64Encode(strMD5Checksum);
@@ -90,9 +90,9 @@ namespace ChilliSource
         /// @param Interface ID to compare
         /// @return Whether system is of that type
         //-----------------------------------------------------------
-        bool CContentManagementSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+        bool ContentManagementSystem::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == CContentManagementSystem::InterfaceID;
+            return inInterfaceID == ContentManagementSystem::InterfaceID;
         }
         //-----------------------------------------------------------
         /// Clear Download Data
@@ -101,7 +101,7 @@ namespace ChilliSource
         /// when the download is successful; at which point
         /// we can clear the data and remove any temp files
         //-----------------------------------------------------------
-        void CContentManagementSystem::ClearDownloadData()
+        void ContentManagementSystem::ClearDownloadData()
         {
         	//Clear the old crap
             CS_SAFE_DELETE(mpServerManifest);
@@ -122,7 +122,7 @@ namespace ChilliSource
         /// @param Delegate to callback notifying whether an update
         /// is required
         //-----------------------------------------------------------
-        void CContentManagementSystem::CheckForUpdates(const CContentManagementSystem::CheckForUpdateDelegate& inDelegate)
+        void ContentManagementSystem::CheckForUpdates(const ContentManagementSystem::CheckForUpdateDelegate& inDelegate)
         {
             CS_DEBUG_LOG("CMS: Checking for content updates...");
             
@@ -130,7 +130,7 @@ namespace ChilliSource
             ClearDownloadData();
             
             //Have the downloader request the manifest in it's own way
-            if(mpContentDownloader->DownloadContentManifest(ContentDownloader::Delegate(this, &CContentManagementSystem::OnContentManifestDownloadComplete)))
+            if(mpContentDownloader->DownloadContentManifest(ContentDownloader::Delegate(this, &ContentManagementSystem::OnContentManifestDownloadComplete)))
             {
                 //The request has started successfully
                 mOnUpdateCheckCompleteDelegate = inDelegate;
@@ -161,7 +161,7 @@ namespace ChilliSource
         ///
         /// @param Delegate to call when download is complete
         //-----------------------------------------------------------
-        void CContentManagementSystem::DownloadUpdates(const CContentManagementSystem::CompleteDelegate& inDelegate)
+        void ContentManagementSystem::DownloadUpdates(const ContentManagementSystem::CompleteDelegate& inDelegate)
         {
         	mOnDownloadCompleteDelegate = inDelegate;
             mudwCurrentPackageDownload = 0;
@@ -171,7 +171,7 @@ namespace ChilliSource
             	//Add a temp directory so that the packages are stored atomically and only overwrite
                 //the originals on full success
                 Core::CApplication::GetFileSystemPtr()->CreateDirectory(Core::StorageLocation::k_DLC, "Temp");
-                mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, ContentDownloader::Delegate(this, &CContentManagementSystem::OnContentDownloadComplete));
+                mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, ContentDownloader::Delegate(this, &ContentManagementSystem::OnContentDownloadComplete));
             }
             else
             {
@@ -184,10 +184,10 @@ namespace ChilliSource
         ///
         /// Perform the HTTP request for the next DLC package
         //-----------------------------------------------------------
-        void CContentManagementSystem::DownloadNextPackage()
+        void ContentManagementSystem::DownloadNextPackage()
         {
             mudwCurrentPackageDownload++;
-            mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, ContentDownloader::Delegate(this, &CContentManagementSystem::OnContentDownloadComplete));
+            mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, ContentDownloader::Delegate(this, &ContentManagementSystem::OnContentDownloadComplete));
         }
         //-----------------------------------------------------------
         /// Install Updates
@@ -197,7 +197,7 @@ namespace ChilliSource
         ///
         /// @param Delegate to call when Install is complete
         //-----------------------------------------------------------
-        void CContentManagementSystem::InstallUpdates(const CompleteDelegate& inDelegate)
+        void ContentManagementSystem::InstallUpdates(const CompleteDelegate& inDelegate)
         {
             if(!mPackageDetails.empty() || !mRemovePackageIDs.empty())
             {
@@ -208,7 +208,7 @@ namespace ChilliSource
 					//Unzip all the files and overwrite the old manifest
 					Core::WaitCondition waitCondition(mPackageDetails.size());
 					
-					Core::CTaskScheduler::ForEach(mPackageDetails.begin(), mPackageDetails.end(), this, &CContentManagementSystem::ExtractFilesFromPackage, &waitCondition);
+					Core::CTaskScheduler::ForEach(mPackageDetails.begin(), mPackageDetails.end(), this, &ContentManagementSystem::ExtractFilesFromPackage, &waitCondition);
 					
 					//Wait on all the packages being unzipped
 					waitCondition.Wait();
@@ -224,7 +224,7 @@ namespace ChilliSource
 					//Remove any unused files from the documents
 					Core::WaitCondition waitCondition(mRemovePackageIDs.size());
 					
-					Core::CTaskScheduler::ForEach(mRemovePackageIDs.begin(), mRemovePackageIDs.end(), this, &CContentManagementSystem::DeleteDirectory, &waitCondition);
+					Core::CTaskScheduler::ForEach(mRemovePackageIDs.begin(), mRemovePackageIDs.end(), this, &ContentManagementSystem::DeleteDirectory, &waitCondition);
 					
 					//Wait on all the packages being removed
 					waitCondition.Wait();
@@ -261,7 +261,7 @@ namespace ChilliSource
         /// @param Request result
         /// @param Request response
         //-----------------------------------------------------------
-        void CContentManagementSystem::OnContentManifestDownloadComplete(ContentDownloader::Result ineResult, const std::string& instrManifest)
+        void ContentManagementSystem::OnContentManifestDownloadComplete(ContentDownloader::Result ineResult, const std::string& instrManifest)
         {
             switch(ineResult)
             {
@@ -294,7 +294,7 @@ namespace ChilliSource
         /// @param Request result
         /// @param Request response
         //-----------------------------------------------------------
-        void CContentManagementSystem::OnContentDownloadComplete(ContentDownloader::Result ineResult, const std::string& instrData)
+        void ContentManagementSystem::OnContentDownloadComplete(ContentDownloader::Result ineResult, const std::string& instrData)
         {
         	switch(ineResult)
             {
@@ -349,7 +349,7 @@ namespace ChilliSource
         ///
         /// @param String containing the server manifest
         //-----------------------------------------------------------
-        void CContentManagementSystem::BuildDownloadList(const std::string& instrServerManifest)
+        void ContentManagementSystem::BuildDownloadList(const std::string& instrServerManifest)
         {
 			//Validate the server manifest
             mpServerManifest = new TiXmlDocument();
@@ -525,7 +525,7 @@ namespace ChilliSource
         ///
         /// @param Package element
         //-----------------------------------------------------------
-        void CContentManagementSystem::AddToDownloadListIfNotInBundle(TiXmlElement* pPackageEl) 
+        void ContentManagementSystem::AddToDownloadListIfNotInBundle(TiXmlElement* pPackageEl) 
         {
             //Check all the file names
             TiXmlElement* pFileEl = Core::XMLUtils::FirstChildElementWithName(pPackageEl, "File");
@@ -577,7 +577,7 @@ namespace ChilliSource
         /// @param Whether the file has finished downloading
 		/// @return Success
         //-----------------------------------------------------------
-        bool CContentManagementSystem::SavePackageToFile(const PackageDetails& insPackageDetails, const std::string& instrZippedPackage, bool inbFullyDownloaded)
+        bool ContentManagementSystem::SavePackageToFile(const PackageDetails& insPackageDetails, const std::string& instrZippedPackage, bool inbFullyDownloaded)
         {
             std::string strFile = "Temp/" + insPackageDetails.strID + ".packzip";
 
@@ -653,7 +653,7 @@ namespace ChilliSource
         ///
         /// @param Zipped package
         //-----------------------------------------------------------
-        void CContentManagementSystem::ExtractFilesFromPackage(const CContentManagementSystem::PackageDetails& insPackageDetails) const
+        void ContentManagementSystem::ExtractFilesFromPackage(const ContentManagementSystem::PackageDetails& insPackageDetails) const
         {
 			//Open zip
 			std::string strZipFilePath(mstrContentDirectory + "/Temp/" + insPackageDetails.strID + ".packzip");
@@ -718,7 +718,7 @@ namespace ChilliSource
 		///
 		/// @return The size of the data needing to be downloaded
 		//-----------------------------------------------------------
-		u32 CContentManagementSystem::GetRunningTotalToDownload()
+		u32 ContentManagementSystem::GetRunningTotalToDownload()
 		{
 			return muRunningToDownloadTotal;
 		}
@@ -729,7 +729,7 @@ namespace ChilliSource
 		///
 		/// @return The current running total of the size of data downloaded
 		//-----------------------------------------------------------
-		u32 CContentManagementSystem::GetRunningTotalDownloaded()
+		u32 ContentManagementSystem::GetRunningTotalDownloaded()
 		{
 			return muRunningDownloadedTotal + mpContentDownloader->GetCurrentDownloadedBytes();
 		}
@@ -745,7 +745,7 @@ namespace ChilliSource
         ///
         /// @return Whether the file exists
         //-----------------------------------------------------------
-        bool CContentManagementSystem::DoesFileExist(const std::string& instrFilename, const std::string instrChecksum, bool inbCheckOnlyBundle) 
+        bool ContentManagementSystem::DoesFileExist(const std::string& instrFilename, const std::string instrChecksum, bool inbCheckOnlyBundle) 
         {
             if(inbCheckOnlyBundle)
             {
@@ -775,7 +775,7 @@ namespace ChilliSource
         ///
         /// @return The directory
         //-----------------------------------------------------------
-        void CContentManagementSystem::DeleteDirectory(const std::string& instrDirectory) const
+        void ContentManagementSystem::DeleteDirectory(const std::string& instrDirectory) const
         {
             ChilliSource::Core::CApplication::GetFileSystemPtr()->DeleteDirectory(Core::StorageLocation::k_DLC, instrDirectory);
         }

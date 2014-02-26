@@ -27,7 +27,7 @@ namespace ChilliSource
         
         using namespace ChilliSource::Core;
         
-        CiCloudSystem::CiCloudSystem(ChilliSource::Networking::IHttpConnectionSystem* inpcHttpConnectionSystem)
+        CiCloudSystem::CiCloudSystem(ChilliSource::Networking::HttpConnectionSystem* inpcHttpConnectionSystem)
         {
             //You should be checking if IsSupported before creating the system as it is only compatible with >= iOS 5.0 OS's
             if(!IsSupported())
@@ -205,7 +205,7 @@ namespace ChilliSource
         
 #pragma mark File/Folder Queries
         
-        bool CiCloudSystem::SyncFileToCloud(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string& instrFilePath, ICloudStorageSystem::OnSyncFileCompletedDelegate inSyncCompleteDelegate, ICloudStorageSystem::OnSyncConflictDelegate inSyncConflictDelegate)
+        bool CiCloudSystem::SyncFileToCloud(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string& instrFilePath, CloudStorageSystem::OnSyncFileCompletedDelegate inSyncCompleteDelegate, CloudStorageSystem::OnSyncConflictDelegate inSyncConflictDelegate)
         {
             if(!IsCloudStorageEnabled())
                 return false;
@@ -373,7 +373,7 @@ namespace ChilliSource
                 {
                     if(psRequest.mpcSyncConflictDelegate)
                     {
-                        FileSyncConflict* pConflict = new Networking::ICloudStorageSystem::FileSyncConflict(psRequest.meLocalStorageLocation,
+                        FileSyncConflict* pConflict = new Networking::CloudStorageSystem::FileSyncConflict(psRequest.meLocalStorageLocation,
                                                                     psRequest.mstrLocalFilePath,
                                                                     GetCloudStorageAreaForStorageArea(psRequest.meLocalStorageLocation),
                                                                     CStringUtils::NSStringToString([[incOpenedDoc fileURL] absoluteString]),
@@ -382,7 +382,7 @@ namespace ChilliSource
                         
                         mvsCachedConflicts.push_back(pConflict);
                         //Call the delegate
-                        psRequest.mpcSyncConflictDelegate(Networking::ICloudStorageSystem::OnConflictResolvedDelegate(this, &CiCloudSystem::OnConflictResolved), pConflict);
+                        psRequest.mpcSyncConflictDelegate(Networking::CloudStorageSystem::OnConflictResolvedDelegate(this, &CiCloudSystem::OnConflictResolved), pConflict);
                     }
                     else
                     {
@@ -392,11 +392,11 @@ namespace ChilliSource
             }
         }
         
-        void CiCloudSystem::OnConflictResolved(Networking::ICloudStorageSystem::FileConflictChoice ineChoice, Networking::ICloudStorageSystem::FileSyncConflict* insFileSyncConflict, Networking::ICloudStorageSystem::OnSyncFileCompletedDelegate inpSyncCompleteDelegate)
+        void CiCloudSystem::OnConflictResolved(Networking::CloudStorageSystem::FileConflictChoice ineChoice, Networking::CloudStorageSystem::FileSyncConflict* insFileSyncConflict, Networking::CloudStorageSystem::OnSyncFileCompletedDelegate inpSyncCompleteDelegate)
         {
             switch (ineChoice)
             {
-                case ICloudStorageSystem::FileConflictChoice::k_copyCloudToLocal:
+                case CloudStorageSystem::FileConflictChoice::k_copyCloudToLocal:
                 {
                     FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, ChilliSource::Core::FileMode::k_write);
                     
@@ -427,7 +427,7 @@ namespace ChilliSource
                     
                     break;
                 }
-                case ICloudStorageSystem::FileConflictChoice::k_copyLocalToCloud:
+                case CloudStorageSystem::FileConflictChoice::k_copyLocalToCloud:
                 {
                     //We want to copy our local copies contents straight to the server
                     FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, ChilliSource::Core::FileMode::k_read);
@@ -469,11 +469,11 @@ namespace ChilliSource
         void CiCloudSystem::QueryForAllCloudFiles()
         {
             if(IsCloudStorageEnabled())
-                [[CiCloudSystemController sharedInstance] queryContentsOfICloudDirectory:(Networking::ICloudStorageSystem::OnQueryFilesCompletedDelegate(this, &CiCloudSystem::QueryDidFinishGathering))];
+                [[CiCloudSystemController sharedInstance] queryContentsOfICloudDirectory:(Networking::CloudStorageSystem::OnQueryFilesCompletedDelegate(this, &CiCloudSystem::QueryDidFinishGathering))];
         }
         
         //Callback from any query made to retrieve files from cloud
-        void CiCloudSystem::QueryDidFinishGathering(Networking::ICloudStorageSystem::ICloudFileList invFileList)
+        void CiCloudSystem::QueryDidFinishGathering(Networking::CloudStorageSystem::ICloudFileList invFileList)
         {
             mvCachedCloudFiles = invFileList;
             

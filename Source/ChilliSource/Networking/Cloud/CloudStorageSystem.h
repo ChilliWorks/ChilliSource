@@ -19,7 +19,7 @@ namespace ChilliSource
 {
     namespace Networking
     {
-        class ICloudStorageSystem : public ChilliSource::Core::ISystem
+        class CloudStorageSystem : public ChilliSource::Core::ISystem
         {
         public:
             
@@ -112,9 +112,9 @@ namespace ChilliSource
             
             //--------------------------------------------------------------------------------------------------------//
             
-            DECLARE_NAMED_INTERFACE(ICloudStorageSystem);
+            DECLARE_NAMED_INTERFACE(CloudStorageSystem);
             
-            virtual ~ICloudStorageSystem(){}
+            virtual ~CloudStorageSystem(){}
             
             //Returns if the client meets the minimum OS version to use this feature
             static bool IsSupported() { return false; }

@@ -70,7 +70,7 @@ namespace ChilliSource
             : mfPhysicalScreenSize(-1.0f)
 		{
             //---Systems
-			AddSystemFunc(Networking::IHttpConnectionSystem::InterfaceID,SystemCreationFunction(this, &CPlatformSystem::CreateHttpConnectionSystem));
+			AddSystemFunc(Networking::HttpConnectionSystem::InterfaceID,SystemCreationFunction(this, &CPlatformSystem::CreateHttpConnectionSystem));
 
             AddActivityFunc(Social::IEmailCompositionActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateEmailCompositionActivity));
  

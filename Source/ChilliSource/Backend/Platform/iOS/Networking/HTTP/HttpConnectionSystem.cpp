@@ -45,7 +45,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		bool CHttpConnectionSystem::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IHttpConnectionSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
+			return inInterfaceID == HttpConnectionSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Make Request
@@ -55,7 +55,7 @@ namespace ChilliSource
 		/// @param (Optional) A function to call when the request is completed. Note that the request can be completed by failure/cancellation as well as success.
 		/// @return A pointer to the request. The system owns this pointer. Returns nullptr if the request cannot be created.
 		//--------------------------------------------------------------------------------------------------
-		HttpRequestPtr CHttpConnectionSystem::MakeRequest(const HttpRequestDetails & insRequestDetails, IHttpRequest::CompletionDelegate inOnComplete)
+		HttpRequestPtr CHttpConnectionSystem::MakeRequest(const HttpRequestDetails & insRequestDetails, HttpRequest::CompletionDelegate inOnComplete)
         {
             //NOTE: The CFNetwork framework handles persistent connections under the hood but it must be
             //coaxed into multiple persistent connections across domains. CFNetwork will reuse connections to the same domain
@@ -382,7 +382,7 @@ namespace ChilliSource
 		/// @param Request details
 		/// @param Completion delegate
 		//=====================================================================================================
-		CHttpConnectionSystem::CHttpRequest::CHttpRequest(const Networking::HttpRequestDetails & insDetails, const CHttpConnectionSystem::ConnectionInfo& insConnectionInfo, const Networking::IHttpRequest::CompletionDelegate & inCompletionDelegate)
+		CHttpConnectionSystem::CHttpRequest::CHttpRequest(const Networking::HttpRequestDetails & insDetails, const CHttpConnectionSystem::ConnectionInfo& insConnectionInfo, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate)
 		: msDetails(insDetails), mbCompleted(false), mCompletionDelegate(inCompletionDelegate), mfActiveTime(0.0f), mbReceivedResponse(false), mbThreadCompleted(false),
         mudwResponseCode(0), mudwBytesRead(0), mbRequestCompleted(false), mConnectionInfo(insConnectionInfo), mudwBytesReadThisBlock(0)
 		{
@@ -409,7 +409,7 @@ namespace ChilliSource
                 
                 if(mCompletionDelegate)
                 {
-                    if(meRequestResult != IHttpRequest::CompletionResult::k_cancelled)
+                    if(meRequestResult != HttpRequest::CompletionResult::k_cancelled)
                     {
                         mCompletionDelegate(this, meRequestResult);
                     }
@@ -430,7 +430,7 @@ namespace ChilliSource
                 
                 if(mCompletionDelegate)
                 {
-                    mCompletionDelegate(this, IHttpRequest::CompletionResult::k_timeout);
+                    mCompletionDelegate(this, HttpRequest::CompletionResult::k_timeout);
                     mCompletionDelegate = nullptr;
                 }
             }
@@ -498,13 +498,13 @@ namespace ChilliSource
                                             strBuffer.clear();
                                             strBuffer.str("");
                                             mudwBytesReadThisBlock = 0;
-                                            mCompletionDelegate(this, IHttpRequest::CompletionResult::k_flushed);
+                                            mCompletionDelegate(this, HttpRequest::CompletionResult::k_flushed);
                                         }
 									}
 									else if(dwBytesRead < 0)
 									{
 										//error condition, log and diagnose
-                                        meRequestResult = IHttpRequest::CompletionResult::k_failed;
+                                        meRequestResult = HttpRequest::CompletionResult::k_failed;
 										mbCompleted = true;
 									}
 									else if(dwBytesRead == 0)
@@ -514,7 +514,7 @@ namespace ChilliSource
 										//Copy the buffer into the response
 										mResponseData = strBuffer.str();
 										mudwResponseCode = udwResponseCode;
-                                        meRequestResult = IHttpRequest::CompletionResult::k_completed;
+                                        meRequestResult = HttpRequest::CompletionResult::k_completed;
 										mbCompleted = true;
 									}
 								}
@@ -535,7 +535,7 @@ namespace ChilliSource
 				case kCFStreamStatusNotOpen:
                 default:
                 {
-                    meRequestResult = IHttpRequest::CompletionResult::k_failed;
+                    meRequestResult = HttpRequest::CompletionResult::k_failed;
                     mbCompleted = true;
 					break;
                 }
@@ -552,7 +552,7 @@ namespace ChilliSource
 		{
             mbCompleted = true;
             mbReceivedResponse = true;
-            meRequestResult = IHttpRequest::CompletionResult::k_cancelled;
+            meRequestResult = HttpRequest::CompletionResult::k_cancelled;
 		}
 		//----------------------------------------------------------------------------------------
 		/// Has Completed
@@ -577,7 +577,7 @@ namespace ChilliSource
 		///
 		/// @return The delegate that will be invoked on request complete
 		//----------------------------------------------------------------------------------------
-		const Networking::IHttpRequest::CompletionDelegate & CHttpConnectionSystem::CHttpRequest::GetCompletionDelegate() const
+		const Networking::HttpRequest::CompletionDelegate & CHttpConnectionSystem::CHttpRequest::GetCompletionDelegate() const
 		{
 			return mCompletionDelegate;
 		}

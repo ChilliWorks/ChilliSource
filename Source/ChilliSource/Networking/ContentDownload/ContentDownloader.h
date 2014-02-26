@@ -1,5 +1,5 @@
 //
-//  ContentDownloader.h
+//  IContentDownloader.h
 //  MoFlow
 //
 //  Created by Scott Downie on 23/01/2012.

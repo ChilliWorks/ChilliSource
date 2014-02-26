@@ -22,11 +22,11 @@ namespace ChilliSource
 {
 	namespace Networking
     {
-        DEFINE_NAMED_INTERFACE(IIAPSystem);
+        DEFINE_NAMED_INTERFACE(IAPSystem);
         //---------------------------------------------------------------
         /// Create
         //---------------------------------------------------------------
-        IIAPSystem* IIAPSystem::Create(const Core::ParamDictionary& inParams)
+        IAPSystem* IAPSystem::Create(const Core::ParamDictionary& inParams)
         {
 #ifdef TARGET_OS_IPHONE
         	return new iOS::CIAPSystem();
@@ -42,9 +42,9 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// Is A
         //---------------------------------------------------------------
-        bool IIAPSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+        bool IAPSystem::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == IIAPSystem::InterfaceID;
+            return inInterfaceID == IAPSystem::InterfaceID;
         }
     }
 }

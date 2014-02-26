@@ -17,7 +17,7 @@ namespace ChilliSource
 {
     namespace Networking
     {
-        class CMoContentDownloader : public IContentDownloader
+        class MoContentDownloader : public IContentDownloader
         {
         public:
             //----------------------------------------------------------------
@@ -27,7 +27,7 @@ namespace ChilliSource
             /// @param Asset server URL
             /// @param Dynamic array of tags that determine content
             //----------------------------------------------------------------
-            CMoContentDownloader(IHttpConnectionSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags);
+            MoContentDownloader(HttpConnectionSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags);
             //----------------------------------------------------------------
             /// Download Content Manifest
             ///
@@ -75,7 +75,7 @@ namespace ChilliSource
             /// @param Request response
             /// @param Request result
             //----------------------------------------------------------------
-            void OnContentManifestDownloadComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+            void OnContentManifestDownloadComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
             //----------------------------------------------------------------
             /// On Content Download Complete
             ///
@@ -84,7 +84,7 @@ namespace ChilliSource
             /// @param Request response
             /// @param Request result
             //----------------------------------------------------------------
-            void OnContentDownloadComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+            void OnContentDownloadComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
             
         private:
             
@@ -94,7 +94,7 @@ namespace ChilliSource
             ContentDownloader::Delegate mOnContentManifestDownloadCompleteDelegate;
             ContentDownloader::Delegate mOnContentDownloadCompleteDelegate;
             
-            IHttpConnectionSystem* mpHttpConnectionSystem;
+            HttpConnectionSystem* mpHttpConnectionSystem;
             
             HttpRequestPtr mpCurrentRequest;
         };

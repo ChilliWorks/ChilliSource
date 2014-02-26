@@ -16,7 +16,7 @@
 
 @interface CiCloudSystemController : NSObject
 {
-    ChilliSource::Networking::ICloudStorageSystem::OnQueryFilesCompletedDelegate mpcQueryFilesCompleteDelegate;
+    ChilliSource::Networking::CloudStorageSystem::OnQueryFilesCompletedDelegate mpcQueryFilesCompleteDelegate;
     
     std::vector<NSURL*> mpcCachedResults;
     NSMutableArray *maOpenedFiles;
@@ -43,7 +43,7 @@
 /// @param InstrContents - Contents to write
 /// @param InpCompleteDelegate - Delegate to call when completed
 //-------------------------------------------------------------
-- (void)writeDocumentWithRelativePath:(NSString*)InstrFileName :(NSMutableData*)InstrContents :(ChilliSource::Networking::ICloudStorageSystem::OnSyncFileCompletedDelegate)InpCompleteDelegate;
+- (void)writeDocumentWithRelativePath:(NSString*)InstrFileName :(NSMutableData*)InstrContents :(ChilliSource::Networking::CloudStorageSystem::OnSyncFileCompletedDelegate)InpCompleteDelegate;
 
 //-------------------------------------------------------------
 /// writeDocumentWithAbsolutePath
@@ -52,10 +52,10 @@
 /// @param InstrContents - Contents to write
 /// @param InpCompleteDelegate - Delegate to call when completed
 //-------------------------------------------------------------
-- (void)writeDocumentWithAbsolutePath:(NSString*)InstrFileName :(NSMutableData*)InstrContents :(ChilliSource::Networking::ICloudStorageSystem::OnSyncFileCompletedDelegate)InpCompleteDelegate;
+- (void)writeDocumentWithAbsolutePath:(NSString*)InstrFileName :(NSMutableData*)InstrContents :(ChilliSource::Networking::CloudStorageSystem::OnSyncFileCompletedDelegate)InpCompleteDelegate;
 
 //Querys iCloud for a list of files in cloud directory
-- (void)queryContentsOfICloudDirectory:(ChilliSource::Networking::ICloudStorageSystem::OnQueryFilesCompletedDelegate)incQueryFilesDelegate;
+- (void)queryContentsOfICloudDirectory:(ChilliSource::Networking::CloudStorageSystem::OnQueryFilesCompletedDelegate)incQueryFilesDelegate;
 
 //-------------------------------------------------------------
 /// stringForState

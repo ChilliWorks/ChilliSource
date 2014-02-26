@@ -38,7 +38,7 @@ namespace ChilliSource
         {
             Json::Value jBody;
             std::string strEndpoint;
-            IHttpRequest::CompletionDelegate Delegate;
+            HttpRequest::CompletionDelegate Delegate;
             bool bRequiresAuth;
         };
         
@@ -57,12 +57,12 @@ namespace ChilliSource
         typedef std::shared_ptr<IExternalMetrics> ExternalMetricsPtr;
         
         
-        class CMoMetricsSession
+        class MoMetricsSession
         {
         public:
             
-            CMoMetricsSession(IHttpConnectionSystem * inpHttpSystem, const std::string& instrMetricsUrl, const std::string& instrAppID, IExternalMetrics* inpExternalMetrics = nullptr);
-            ~CMoMetricsSession();
+            MoMetricsSession(HttpConnectionSystem * inpHttpSystem, const std::string& instrMetricsUrl, const std::string& instrAppID, IExternalMetrics* inpExternalMetrics = nullptr);
+            ~MoMetricsSession();
             
             void SetConstant(const std::string& instrKey, const std::string& instrValue);
             bool ContainsConstant(const std::string& instrKey) const;
@@ -100,13 +100,13 @@ namespace ChilliSource
             void OnActionRetry();
             
             void MakeSessionRequest();
-            void OnAuthTokensRequestComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+            void OnAuthTokensRequestComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
             
             void MakeLocationUpdateRequest(const MetricsLocation& insLocation);
-            void OnLocationUpdateRequestComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+            void OnLocationUpdateRequestComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
             
             void MakeCloseRequest();
-            void OnCloseRequestComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+            void OnCloseRequestComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
             
             void UpdateLastActivityTime();
             TimeIntervalSecs GetLastActivityTime() const;
@@ -117,14 +117,14 @@ namespace ChilliSource
             
             void QueueRequest(const MetricsRequest& insRequest);
             void MakeNextRequest();
-            void OnQueuedRequestComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+            void OnQueuedRequestComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
             
             void CompressEventBatch();
             void RequestFlushBatchEvents();
             
             void AppendAuthDetails(MetricsRequest& insRequest) const;
 			void MakeFlushRequest(u32 inudwNumEventsToFlush);
-			void FlushEventsRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+			void FlushEventsRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
             
             void Destroy();
 
@@ -134,7 +134,7 @@ namespace ChilliSource
             std::deque<MetricsRequest> mQueuedRequests;
             std::deque<Action> mQueuedActions;
             
-            std::unordered_map<HttpRequestPtr, IHttpRequest::CompletionDelegate> mmapRequestToDelegate;
+            std::unordered_map<HttpRequestPtr, HttpRequest::CompletionDelegate> mmapRequestToDelegate;
             
             std::unordered_map<std::string, std::string> mmapConstants;
             
@@ -159,7 +159,7 @@ namespace ChilliSource
             
             bool mbRequestInProgress;
             bool mbActionInProgress;
-            IHttpConnectionSystem * mpHttpSystem;
+            HttpConnectionSystem * mpHttpSystem;
             
             IExternalMetrics* mpExternalMetrics;
         };
