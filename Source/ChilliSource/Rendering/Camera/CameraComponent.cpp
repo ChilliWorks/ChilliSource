@@ -54,7 +54,7 @@ namespace ChilliSource
 		{
             Core::CEntity * pParent(GetEntityOwner());
 
-            MOFLOW_ASSERT((pParent!=NULL), "CameraComponent has no parent entity");
+            MOFLOW_ASSERT((pParent!=nullptr), "CameraComponent has no parent entity");
             
             pParent->Transform().SetLookAt(invPos, invTarget, invUp);
 		}

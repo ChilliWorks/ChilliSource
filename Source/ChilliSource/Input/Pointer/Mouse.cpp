@@ -12,7 +12,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//------------------------------------------------------
-		IMouse::IMouse() : mpTouchProxy(NULL)
+		IMouse::IMouse() : mpTouchProxy(nullptr)
 		{
 			memset(mbaButtonsDown, false, sizeof(bool) * (u32)MouseInputType::k_total);
 		}

@@ -41,7 +41,7 @@ namespace ChilliSource
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CGesture::CGesture(GUI::CGUIView* inpView) : mbIsGestureInvalid(false), mpView(inpView), mpTouchDevice(NULL)
+		CGesture::CGesture(GUI::CGUIView* inpView) : mbIsGestureInvalid(false), mpView(inpView), mpTouchDevice(nullptr)
 		{
 			//Register for touch notifications
 			mpView->GetTouchBeganEvent() += TouchEventDelegate(this, &CGesture::OnTouchBegan);
@@ -83,8 +83,8 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void CGesture::SurfaceDestroyed()
         {
-            mpView = NULL;
-            mpTouchDevice = NULL;
+            mpView = nullptr;
+            mpTouchDevice = nullptr;
         }
         //----------------------------------------------------
 		/// Notify Gesture Triggered
@@ -110,14 +110,14 @@ namespace ChilliSource
                 mpView->GetTouchBeganEvent() -= TouchEventDelegate(this, &CGesture::OnTouchBegan);
                 mpView->GetTouchMovedEvent() -= TouchEventDelegate(this, &CGesture::OnTouchMoved);
                 mpView->GetTouchEndEvent() -= TouchEventDelegate(this, &CGesture::OnTouchEnded);
-                mpView = NULL;
+                mpView = nullptr;
             }
             else if(mpTouchDevice)
             {
                 mpTouchDevice->GetTouchBeganEvent() -= TouchEventDelegate(this, &CGesture::OnTouchBegan);
                 mpTouchDevice->GetTouchMovedEvent() -= TouchEventDelegate(this, &CGesture::OnTouchMoved);
                 mpTouchDevice->GetTouchEndEvent() -= TouchEventDelegate(this, &CGesture::OnTouchEnded);
-                mpTouchDevice = NULL;
+                mpTouchDevice = nullptr;
             }
 		}
 		//================================================

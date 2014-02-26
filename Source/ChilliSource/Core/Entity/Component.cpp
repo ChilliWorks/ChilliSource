@@ -15,7 +15,7 @@ namespace ChilliSource
 	namespace Core
 	{
 		IComponent::IComponent()
-		:mpEntityOwner(NULL), mudwQueryMask(0)
+		:mpEntityOwner(nullptr), mudwQueryMask(0)
 		{
 			
 		}
@@ -48,14 +48,14 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void IComponent::SetEntityOwner(CEntity* inpOwner)
 		{
-			if(mpEntityOwner != NULL)
+			if(mpEntityOwner != nullptr)
 			{
 				OnDetachedFromEntity();
 			}
 			
 			mpEntityOwner = inpOwner;
 			
-			if (inpOwner != NULL) 
+			if (inpOwner != nullptr) 
 			{
 				OnAttachedToEntity();
 			}

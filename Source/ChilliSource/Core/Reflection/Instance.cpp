@@ -24,7 +24,7 @@ namespace ChilliSource
             /// @param Meta-class of which this is an instance
             //--------------------------------------------------------
             CInstance::CInstance(const std::string& instrName, CMetaClass* inpClass)
-            :mstrName(instrName), mpClass(inpClass), mpInstance(NULL)
+            :mstrName(instrName), mpClass(inpClass), mpInstance(nullptr)
             {
                 mudwNameHash = CHashCRC32::GenerateHashCode(instrName);
             }

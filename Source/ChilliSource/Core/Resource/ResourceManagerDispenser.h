@@ -52,14 +52,14 @@ namespace ChilliSource
             ///
             /// Looks for a manager with the given interface
             /// @param The type ID of the manager interface you are seeking
-            /// @return Manager that implements the given interface or NULL if none available
+            /// @return Manager that implements the given interface or nullptr if none available
             //--------------------------------------------------------------------------------------------------
             IResourceManager* GetResourceManagerWithInterface(InterfaceIDType inInterfaceID);
             //--------------------------------------------------------------------------------------------------
 			/// Get Resource Manager With Interface
 			///
 			/// Convenience template function for the above
-			/// @return Manager that implements the templated interface or NULL if none available
+			/// @return Manager that implements the templated interface or nullptr if none available
 			//--------------------------------------------------------------------------------------------------
 			template <typename T> T* GetResourceManagerWithInterface()
             {

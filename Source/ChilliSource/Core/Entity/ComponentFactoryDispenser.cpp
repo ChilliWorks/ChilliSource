@@ -19,7 +19,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        CComponentFactoryDispenser* CComponentFactoryDispenser::pInstance = NULL;
+        CComponentFactoryDispenser* CComponentFactoryDispenser::pInstance = nullptr;
         //----------------------------------------------------
         /// Constructor
         ///
@@ -60,7 +60,7 @@ namespace ChilliSource
         ///
         /// Looks for a factory that can create the given type
         /// @param The type ID of the object you wish to create (i.e. CMesh, ITexture)
-        /// @return Factory that can produce the given interface or NULL if none available
+        /// @return Factory that can produce the given interface or nullptr if none available
         //--------------------------------------------------------------------------------------------------
         IComponentFactory* CComponentFactoryDispenser::GetFactoryProducing(const std::string & insName)
         {
@@ -73,7 +73,7 @@ namespace ChilliSource
 			}
 			
 			WARNING_LOG("Application cannot find factory producing: " + insName);
-			return NULL;
+			return nullptr;
         }
         //--------------------------------------------------------------------------------------------------
         /// Get Factory Producing
@@ -93,14 +93,14 @@ namespace ChilliSource
 			}
 			
 			WARNING_LOG("Application cannot find factory for interface ID: " + STRING_CAST(inInterfaceID));
-			return NULL;
+			return nullptr;
         }
         //--------------------------------------------------------------------------------------------------
         /// Get Factory With Interface
         ///
         /// Looks for a factory with the given interface
         /// @param The type ID of the factory interface you are seeking
-        /// @return Factory that implements the given interface or NULL if none available
+        /// @return Factory that implements the given interface or nullptr if none available
         //--------------------------------------------------------------------------------------------------
         IComponentFactory* CComponentFactoryDispenser::GetFactoryWithInterface(InterfaceIDType inInterfaceID)
         {
@@ -113,7 +113,7 @@ namespace ChilliSource
 			}
             
             WARNING_LOG("Cannot find component producer for interface ID: " + STRING_CAST(inInterfaceID));
-            return NULL;
+            return nullptr;
         }
         //--------------------------------------------------------------------
         /// Destructor

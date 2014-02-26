@@ -92,7 +92,7 @@ namespace ChilliSource
             //-------------------------------------------------------------
             template <typename T> bool HasA() const
             {
-                return GetComponent(T::InterfaceID) != NULL;
+                return GetComponent(T::InterfaceID) != nullptr;
             }
 			//-------------------------------------------------------------
 			/// Get Component  (Managed)
@@ -641,7 +641,7 @@ namespace ChilliSource
 			//------------------------------------------------------------------
 			/// GetParent
 			/// 
-			/// Return the parent entity of this entity. NULL is returned naturally if
+			/// Return the parent entity of this entity. nullptr is returned naturally if
 			/// there is no parent.
 			///
 			/// @return Pointer to the parent entity of this
@@ -653,7 +653,7 @@ namespace ChilliSource
 			/// 
 			/// Recursively search the entity hierarchy in a depth-first manner
 			/// and return a pointer to the first entity it finds with the name matching
-			/// parameter instrName, or NULL if no match found.
+			/// parameter instrName, or nullptr if no match found.
 			///
 			/// @return A child entity with the specified name
 			//------------------------------------------------------------------
@@ -672,7 +672,7 @@ namespace ChilliSource
 			/// 
 			/// Search only immediate children to an entity and return a pointer
 			/// to the first entity it finds with the name matching parameter 
-			/// instrName, or NULL if no match found.
+			/// instrName, or nullptr if no match found.
 			///
 			/// @return A child entity with the specified name
 			//------------------------------------------------------------------

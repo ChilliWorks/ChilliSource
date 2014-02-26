@@ -18,7 +18,7 @@ namespace ChilliSource
             QueryPerformanceFrequency(&mFrequency);
             QueryPerformanceCounter(&mStartTime);
 #else
-            gettimeofday(&mStartTime, NULL);
+            gettimeofday(&mStartTime, 0);
 #endif
         }
         
@@ -28,7 +28,7 @@ namespace ChilliSource
 #ifdef TARGET_WINDOWS
             QueryPerformanceCounter(&StopTime);
 #else
-            gettimeofday(&StopTime, NULL);
+            gettimeofday(&StopTime, 0);
 #endif
             mffLastDurationMicroS = GetTimeDurationMicroS(mStartTime, StopTime);
         }

@@ -26,7 +26,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//----------------------------------------------------------------
-		IShaderManager::IShaderManager() : mpRenderSystem(NULL)
+		IShaderManager::IShaderManager() : mpRenderSystem(nullptr)
 		{
 			
 		}

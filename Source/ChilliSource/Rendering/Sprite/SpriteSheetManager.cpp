@@ -28,7 +28,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//-----------------------------------------------------------------
-		ISpriteSheetManager::ISpriteSheetManager() : mpTextureManager(NULL)
+		ISpriteSheetManager::ISpriteSheetManager() : mpTextureManager(nullptr)
 		{
 		}
 		//----------------------------------------------------------------

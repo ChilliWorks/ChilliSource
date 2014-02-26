@@ -244,17 +244,17 @@ namespace ChilliSource
 		//-----------------------------------------------------------------------
 		f32  CStringConverter:: ParseFloat(const std::string & val)
 		{
-            return strtod(val.c_str(), NULL);
+            return strtod(val.c_str(), nullptr);
 		}
 		//-----------------------------------------------------------------------
 		int  CStringConverter:: ParseInt(const std::string & val)
 		{
-	        return strtol(val.c_str(), NULL, 10);
+	        return strtol(val.c_str(), nullptr, 10);
     	}
 		//-----------------------------------------------------------------------
 		unsigned int  CStringConverter:: ParseUnsignedInt(const std::string & val)
 		{
-			return strtoul(val.c_str(), NULL, 10);
+			return strtoul(val.c_str(), nullptr, 10);
 		}
 		//-----------------------------------------------------------------------
         // DEPRECATED 

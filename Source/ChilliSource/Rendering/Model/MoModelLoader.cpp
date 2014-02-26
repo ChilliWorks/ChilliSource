@@ -272,7 +272,7 @@ namespace ChilliSource
 		bool CMoModelLoader::ReadGlobalHeader(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, const std::string &inFilePath, MeshDataQuantities& outMeshDataQuantities)
 		{
 			//Check file for corruption
-			if(NULL == inpStream || true == inpStream->IsBad())
+			if(nullptr == inpStream || true == inpStream->IsBad())
 			{
 				ERROR_LOG("Cannot open MoModel file: " + inFilePath);
 				return false;

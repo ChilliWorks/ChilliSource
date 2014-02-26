@@ -96,11 +96,11 @@ namespace ChilliSource{
         {
             clear();
             
-            for(rapidxml::xml_node<> * pParam = inpEl->first_node(); pParam != NULL; pParam =pParam->next_sibling())
+            for(rapidxml::xml_node<> * pParam = inpEl->first_node(); pParam != nullptr; pParam =pParam->next_sibling())
             {
-                const char * pKey = NULL;
-                const char * pValue = NULL;
-                for(rapidxml::xml_attribute<> * pAttr = pParam->first_attribute(); pAttr != NULL; pAttr =pAttr->next_attribute())
+                const char * pKey = nullptr;
+                const char * pValue = nullptr;
+                for(rapidxml::xml_attribute<> * pAttr = pParam->first_attribute(); pAttr != nullptr; pAttr =pAttr->next_attribute())
                 {
 
                     if ( pAttr->isNamed("key") )

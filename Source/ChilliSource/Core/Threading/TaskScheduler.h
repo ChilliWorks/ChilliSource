@@ -59,7 +59,7 @@ namespace ChilliSource
             /// @param Optional wait condition
             //------------------------------------------------
             template <typename TSender, typename TDelegate, typename TIterator, typename TArg>
-            static void ForEach(TIterator inIt, TIterator inItEnd, TSender* inpSender, void (TDelegate::*func)(TArg inArg1), WaitCondition* inpWaitCondition = NULL)
+            static void ForEach(TIterator inIt, TIterator inItEnd, TSender* inpSender, void (TDelegate::*func)(TArg inArg1), WaitCondition* inpWaitCondition = nullptr)
             {
                 //Unlike usual tasks the wait condition is shared between each scheduled task
                 //and threfore the condition isn't one but the number of iterations
@@ -82,7 +82,7 @@ namespace ChilliSource
             /// @param Optional wait condition
             //------------------------------------------------
             template <typename TSender, typename TDelegate, typename TIterator, typename TArg>
-            static void ForEach(TIterator inIt, TIterator inItEnd, TSender* inpSender, void (TDelegate::*func)(TArg inArg1) const, WaitCondition* inpWaitCondition = NULL)
+            static void ForEach(TIterator inIt, TIterator inItEnd, TSender* inpSender, void (TDelegate::*func)(TArg inArg1) const, WaitCondition* inpWaitCondition = nullptr)
             {
                 //Unlike usual tasks the wait condition is shared between each scheduled task
                 //and threfore the condition isn't one but the number of iterations

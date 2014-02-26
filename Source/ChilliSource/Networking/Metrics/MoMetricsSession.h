@@ -62,7 +62,7 @@ namespace ChilliSource
         {
         public:
             
-            CMoMetricsSession(IHttpConnectionSystem * inpHttpSystem, const std::string& instrMetricsUrl, const std::string& instrAppID, IExternalMetrics* inpExternalMetrics = NULL);
+            CMoMetricsSession(IHttpConnectionSystem * inpHttpSystem, const std::string& instrMetricsUrl, const std::string& instrAppID, IExternalMetrics* inpExternalMetrics = nullptr);
             ~CMoMetricsSession();
             
             void SetConstant(const std::string& instrKey, const std::string& instrValue);

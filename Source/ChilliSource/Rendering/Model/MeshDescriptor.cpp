@@ -31,8 +31,8 @@ namespace ChilliSource
 			mudwNumIndices = 0;
 			mvMinBounds = ChilliSource::Core::CVector3(0.0f, 0.0f, 0.0f);
 			mvMaxBounds = ChilliSource::Core::CVector3(0.0f, 0.0f, 0.0f);
-			mpVertexData = NULL;
-			mpIndexData = NULL;
+			mpVertexData = nullptr;
+			mpIndexData = nullptr;
             ePrimitiveType = PrimitiveType::k_tri;
 			meMaterialStorageLocation = Core::StorageLocation::k_none;
 		}

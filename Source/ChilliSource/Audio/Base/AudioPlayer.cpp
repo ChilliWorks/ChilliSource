@@ -21,8 +21,8 @@ namespace ChilliSource
         u32  CAudioPlayer::mudwCapacity = kudwNumConcurrentSoundEffects;
         f32 CAudioPlayer::mfEffectVolume = 1.0f;
         
-        IAudioManager* CAudioPlayer::mpAudioManager = NULL; 
-        IAudioComponentFactory* CAudioPlayer::mpAudioComponentFactory = NULL;
+        IAudioManager* CAudioPlayer::mpAudioManager = nullptr; 
+        IAudioComponentFactory* CAudioPlayer::mpAudioComponentFactory = nullptr;
         
         DYNAMIC_ARRAY<AudioComponentPtr> CAudioPlayer::mAudioComponentCache;
         DYNAMIC_ARRAY<u32> CAudioPlayer::maudwComponentPauseCount;
@@ -118,7 +118,7 @@ namespace ChilliSource
                 pComp->SetLooping(inbLooping);
                 pComp->Play();
                 pComp->SetVolume(mfEffectVolume);
-                if(NULL != inAudioFinishedEvent)
+                if(nullptr != inAudioFinishedEvent)
                 {
                     pComp->GetAudioFinishedEvent() += inAudioFinishedEvent;
                 }
@@ -225,14 +225,14 @@ namespace ChilliSource
         //------------------------------------------------
         void CAudioPlayer::StopMusic()
         {
-            if(NULL != mpMusicComponent)
+            if(nullptr != mpMusicComponent)
             {
                 mpMusicComponent->Stop();
                 DEBUG_LOG("Music stopped");
             }
             else
             {
-            	ERROR_LOG("Music component is NULL");
+            	ERROR_LOG("Music component is nullptr");
             }
         }
         //------------------------------------------------
@@ -262,7 +262,7 @@ namespace ChilliSource
         //------------------------------------------------
         bool CAudioPlayer::IsMusicPlaying()
         {
-            if(NULL != mpMusicComponent)
+            if(nullptr != mpMusicComponent)
             {
                 return mpMusicComponent->IsPlaying();
             }
@@ -326,7 +326,7 @@ namespace ChilliSource
             //override the last audio component in the list
             for(u32 udwComp = 0; udwComp < mAudioComponentCache.size(); ++udwComp)
             {
-                if((mAudioComponentCache[udwComp]->GetAudioSource() == NULL) || (!mAudioComponentCache[udwComp]->IsPlaying() && !mabComponentLooping[udwComp]))
+                if((mAudioComponentCache[udwComp]->GetAudioSource() == nullptr) || (!mAudioComponentCache[udwComp]->IsPlaying() && !mabComponentLooping[udwComp]))
                 {
                     return udwComp;
                 }

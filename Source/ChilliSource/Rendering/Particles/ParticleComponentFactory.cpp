@@ -30,7 +30,7 @@ namespace ChilliSource
 		/// Default
 		//--------------------------------------------------------
 		CParticleComponentFactory::CParticleComponentFactory(CParticleSystem* inpParticleSystem, CParticleEmitterFactory* inpEmitterFactory, CParticleEffectorFactory* inpEffectorFactory) :
-        mpParticleSystem(inpParticleSystem), mpMaterialMgr(NULL), mpEmitterFactory(inpEmitterFactory), mpEffectorFactory(inpEffectorFactory)
+        mpParticleSystem(inpParticleSystem), mpMaterialMgr(nullptr), mpEmitterFactory(inpEmitterFactory), mpEffectorFactory(inpEffectorFactory)
 		{
 
 		}

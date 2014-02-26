@@ -13,7 +13,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        Core::ThreadPool* CTaskScheduler::pThreadPool = NULL;
+        Core::ThreadPool* CTaskScheduler::pThreadPool = nullptr;
         
         std::recursive_mutex CTaskScheduler::MainThreadTaskMutex;
         DYNAMIC_ARRAY<CTaskScheduler::GenericTaskType> CTaskScheduler::MainThreadTasks;

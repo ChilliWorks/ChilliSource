@@ -306,7 +306,7 @@ namespace ChilliSource
 			if (inudwAnimIndex < mAnimationFrames.size())
 				return &mAnimationFrames[inudwAnimIndex];
 			
-			return NULL;
+			return nullptr;
 		}
 		
 		bool CSpriteSheet::AddAnimation(std::string & instrName, const DYNAMIC_ARRAY<u32> & instrFrames)

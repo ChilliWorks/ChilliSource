@@ -16,8 +16,8 @@ namespace ChilliSource
 	namespace Core
 	{	
         u32 CLocalisedText::mudwLineCount = 0;
-        UTF8String* CLocalisedText::mpText = NULL;
-        CLocalisedText::IDToLookupIndex* CLocalisedText::mpTextLookup = NULL;
+        UTF8String* CLocalisedText::mpText = nullptr;
+        CLocalisedText::IDToLookupIndex* CLocalisedText::mpTextLookup = nullptr;
         
 		//---------------------------------------------------------------------
 		/// Get Text
@@ -97,7 +97,7 @@ namespace ChilliSource
         bool CLocalisedText::LoadLocalisedText(FileStreamPtr& incLocaleFile)
         {
             //if bad, then bail!
-			if (incLocaleFile == NULL || incLocaleFile->IsBad() == true)
+			if (incLocaleFile == nullptr || incLocaleFile->IsBad() == true)
 			{
 				if(incLocaleFile->IsOpen())
                 {
@@ -244,7 +244,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         bool CLocalisedText::LoadTextID(FileStreamPtr& incIDFile)
         {
-			if(incIDFile == NULL || incIDFile->IsBad())
+			if(incIDFile == nullptr || incIDFile->IsBad())
 			{
 				WARNING_LOG("LocalisedTextLoader ID lookups unavailable: TagText.id missing");
 				

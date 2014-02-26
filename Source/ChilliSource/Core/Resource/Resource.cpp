@@ -22,7 +22,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//-------------------------------------------------------
-		IResource::IResource(): mpOwningResMgr(NULL), mbIsHighRes(false), mbIsLoaded(false), mpMutex(new std::mutex()),
+		IResource::IResource(): mpOwningResMgr(nullptr), mbIsHighRes(false), mbIsLoaded(false), mpMutex(new std::mutex()),
         mpCondition(new std::condition_variable()), meStorageLocation(StorageLocation::k_none), mstrFilename("")
 		{
 		}

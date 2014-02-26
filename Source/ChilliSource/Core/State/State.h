@@ -28,7 +28,7 @@ namespace ChilliSource
 		class IState
 		{
 		public:
-			IState(CScene* inpScene = NULL);
+			IState(CScene* inpScene = nullptr);
 			virtual ~IState();
 			
 			//-----------------------------------------

@@ -24,7 +24,7 @@ namespace ChilliSource
         const std::string kstrLocalDataStoreEncryptedFilename   = "App.elds";
         const std::string kstrLocalDataStoreEncryptionKey       = "aV0r71^jX01}pXMk";
         
-        CLocalDataStore* CLocalDataStore::mpSingletonInstance = NULL;
+        CLocalDataStore* CLocalDataStore::mpSingletonInstance = nullptr;
 		
 		//----------------------------------------------------------------
         /// Get Singleton
@@ -313,7 +313,7 @@ namespace ChilliSource
                     TiXmlDocument xmlDoc;
                     xmlDoc.Parse(pbyData, 0, TIXML_DEFAULT_ENCODING);
                     TiXmlElement* pRoot = xmlDoc.RootElement();
-                    if(NULL != pRoot)
+                    if(nullptr != pRoot)
                     {
                         mBackingDictionary.FromXml(pRoot);
                     }
@@ -327,7 +327,7 @@ namespace ChilliSource
                 TiXmlDocument xmlDoc;
                 xmlDoc.LoadFile(StorageLocation::k_saveData, kstrLocalDataStoreDeprecatedFilename);
                 TiXmlElement* pRoot = xmlDoc.RootElement();
-                if(NULL != pRoot)
+                if(nullptr != pRoot)
                 {
                     mBackingDictionary.FromXml(pRoot);
                     pFileSystem->DeleteFile(StorageLocation::k_saveData, kstrLocalDataStoreDeprecatedFilename);

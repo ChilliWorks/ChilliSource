@@ -54,7 +54,7 @@ namespace ChilliSource
         {
             mTransactionDelegate = inRequestDelegate;
             
-            if(mTransactionDelegate == NULL)
+            if(mTransactionDelegate == nullptr)
                 return;
             
             [mpStoreKitSystem startListeningForTransactions:fastdelegate::MakeDelegate(this, &CIAPSystem::OnTransactionUpdate)];
@@ -64,7 +64,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void CIAPSystem::OnTransactionUpdate(NSString* inProductID, StoreKitIAP::TransactionResult ineResult, SKPaymentTransaction* inpTransaction)
         {
-            if(mTransactionDelegate == NULL)
+            if(mTransactionDelegate == nullptr)
                 return;
             
             Networking::IAPTransactionPtr pTransaction(new Networking::IAPTransaction());
@@ -120,7 +120,7 @@ namespace ChilliSource
         {
             mProductDescDelegate = inRequestDelegate;
             
-            if(mProductDescDelegate == NULL)
+            if(mProductDescDelegate == nullptr)
                 return;
             
             if(inaProductIDs.empty())
@@ -160,7 +160,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void CIAPSystem::OnProductDescriptionRequestComplete(NSArray* inProducts)
         {
-            if(mProductDescDelegate == NULL)
+            if(mProductDescDelegate == nullptr)
                 return;
  
             DYNAMIC_ARRAY<Networking::IAPProductDesc> aResults;

@@ -34,7 +34,7 @@ namespace ChilliSource
 		class CScene
 		{
 		public:
-			CScene(Input::IInputSystem* inpInputSystem = NULL, f32 infWorldHalfSize = 100);
+			CScene(Input::IInputSystem* inpInputSystem = nullptr, f32 infWorldHalfSize = 100);
 			~CScene();
 
 			//-------------------------------------------------------

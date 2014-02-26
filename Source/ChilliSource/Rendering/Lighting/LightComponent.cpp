@@ -50,7 +50,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         const Core::CVector3& ILightComponent::GetWorldPosition() const
         {
-            if(GetEntityOwner() != NULL)
+            if(GetEntityOwner() != nullptr)
             {
                 return GetEntityOwner()->Transform().GetWorldPosition();
             }

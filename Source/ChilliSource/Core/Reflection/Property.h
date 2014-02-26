@@ -46,7 +46,7 @@ namespace ChilliSource
                     pProp->mudwSize = sizeof(PropType);
                     pProp->mudwOffset = CPropertyConcrete<PropType, ClassType>::GetOffset(inpValue);
                     pProp->mpClass = inpMetaClass;
-                    pProp->mpStaticValue = NULL;
+                    pProp->mpStaticValue = nullptr;
                     pProp->mudwNameHash = CHashCRC32::GenerateHashCode(instrName);  
                     pProp->mstrType = instrType;
                     pProp->mudwTypeHash = CHashCRC32::GenerateHashCode(instrType);
@@ -328,7 +328,7 @@ namespace ChilliSource
                 //--------------------------------------------------------
                 bool IsStatic() const
                 {
-                    return (mpStaticValue != NULL);
+                    return (mpStaticValue != nullptr);
                 }
 
             protected:
@@ -367,7 +367,7 @@ namespace ChilliSource
                 inline static u32 GetOffset(Type Class::* inpProperty)
                 {
                     //Dirty boy!
-                    return ((u32)&(((Class*)NULL)->*inpProperty));
+                    return ((u32)&(((Class*)nullptr)->*inpProperty));
                 }
                 //--------------------------------------------------------
                 /// Call Setter Value
@@ -501,8 +501,8 @@ namespace ChilliSource
                 /// Constructor
                 //--------------------------------------------------------
                 CPropertyConcrete() 
-                    : mpSetterMethodValue(NULL), mpSetterMethodConstRef(NULL), mpGetterMethodValueConst(NULL), 
-                    mpGetterMethodConstRefConst(NULL), mpGetterMethodValue(NULL), mpGetterMethodConstRef(NULL)
+                    : mpSetterMethodValue(nullptr), mpSetterMethodConstRef(nullptr), mpGetterMethodValueConst(nullptr), 
+                    mpGetterMethodConstRefConst(nullptr), mpGetterMethodValue(nullptr), mpGetterMethodConstRef(nullptr)
                 {}
 
             private:

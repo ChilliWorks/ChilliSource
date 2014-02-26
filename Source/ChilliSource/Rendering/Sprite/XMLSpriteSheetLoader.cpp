@@ -83,9 +83,9 @@ namespace ChilliSource
 			
 			TiXmlElement * pFramesEl = Core::XMLUtils::FirstChildElementWithName(Document.RootElement(), "Frames");
 			
-			if (pFramesEl != NULL)
+			if (pFramesEl != nullptr)
             {
-				for (TiXmlElement * pFrameEl = Core::XMLUtils::FirstChildElementWithName(pFramesEl, "Frame"); pFrameEl != NULL; pFrameEl = XMLUtils::NextSiblingElementWithName(pFrameEl)){
+				for (TiXmlElement * pFrameEl = Core::XMLUtils::FirstChildElementWithName(pFramesEl, "Frame"); pFrameEl != nullptr; pFrameEl = XMLUtils::NextSiblingElementWithName(pFrameEl)){
 					CSpriteSheet::Frame sNewFrame;	
 					sNewFrame.U = XMLUtils::GetAttributeValueOrDefault<s32>(pFrameEl, "x", 0);
 					sNewFrame.V = XMLUtils::GetAttributeValueOrDefault<s32>(pFrameEl, "y", 0);
@@ -102,7 +102,7 @@ namespace ChilliSource
 			
 			if (pAnimsEl)
 			{
-				for (TiXmlElement * pAnimEl = Core::XMLUtils::FirstChildElementWithName(pAnimsEl, "Animation"); pAnimEl != NULL; pAnimEl = XMLUtils::NextSiblingElementWithName(pAnimEl))
+				for (TiXmlElement * pAnimEl = Core::XMLUtils::FirstChildElementWithName(pAnimsEl, "Animation"); pAnimEl != nullptr; pAnimEl = XMLUtils::NextSiblingElementWithName(pAnimEl))
 				{
 					
 					std::string strName = XMLUtils::GetAttributeValueOrDefault<std::string>(pAnimEl,"name",CStringUtils::BLANK);

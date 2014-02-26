@@ -21,7 +21,7 @@ namespace ChilliSource
 		{
 			const char * pAttribVal = inpElement->Attribute(inAttributeName.c_str());
 			
-			if (pAttribVal != NULL) {
+			if (pAttribVal != nullptr) {
 				inAttributeValue = std::string(pAttribVal);
 				return true;
 			}
@@ -32,7 +32,7 @@ namespace ChilliSource
 			
 			TiXmlElement * pChild = inpParentElement->FirstChildElement();
 			
-			while (pChild != NULL) {
+			while (pChild != nullptr) {
 				
 				if (pChild->ValueStr() == inName) {
 					return pChild;
@@ -41,13 +41,13 @@ namespace ChilliSource
 				pChild = pChild->NextSiblingElement();
 			}
 			
-			return NULL;
+			return nullptr;
 		}
 		
 		TiXmlElement* XMLUtils::NextSiblingElementWithName(TiXmlElement* inpPreviousElement){
 			TiXmlElement * pSibling = inpPreviousElement->NextSiblingElement();
 			
-			while (pSibling != NULL) {
+			while (pSibling != nullptr) {
 				
 				if (pSibling->ValueStr() == inpPreviousElement->ValueStr()) {
 					return pSibling;
@@ -56,7 +56,7 @@ namespace ChilliSource
 				pSibling = pSibling->NextSiblingElement();
 			}
 			
-			return NULL;	
+			return nullptr;	
 		}
 		
 		///Template specialisations

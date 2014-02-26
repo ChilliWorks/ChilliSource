@@ -18,8 +18,8 @@
 {
     if ((self = [super init]))
     {
-        mProductsDelegate = NULL;
-        mTransactionUpdateDelegate = NULL;
+        mProductsDelegate = nullptr;
+        mTransactionUpdateDelegate = nullptr;
         mProducts = nil;
         
         mOpenTransactions = [[NSMutableArray alloc] init];
@@ -68,7 +68,7 @@
         if(cachedProducts.count == inProductIDs.count)
         {
             mProductsDelegate(cachedProducts);
-            mProductsDelegate = NULL;
+            mProductsDelegate = nullptr;
             return;
         }
     }
@@ -88,7 +88,7 @@
         [mProductsRequest release];
     }
     mProductsRequest = nil;
-	mProductsDelegate = NULL;
+	mProductsDelegate = nullptr;
 }
 //-------------------------------------------------------
 /// Products Request Did Receive Response
@@ -104,14 +104,14 @@
         NSLog(@"Invalid Product IDs: %@", inResponse.invalidProductIdentifiers);
     }
     
-    if(mProductsDelegate == NULL)
+    if(mProductsDelegate == nullptr)
         return;
     
     //Store the products as we will need the objects to perform the purchases
     mProducts = [inResponse.products retain];
 	
     mProductsDelegate(mProducts);
-    mProductsDelegate = NULL;
+    mProductsDelegate = nullptr;
 }
 //-------------------------------------------------------
 /// Start Listening For Transactions
@@ -128,7 +128,7 @@
 //-------------------------------------------------------
 -(void) stopListeningForTransactions
 {
-    mTransactionUpdateDelegate = NULL;
+    mTransactionUpdateDelegate = nullptr;
     [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
 }
 //-------------------------------------------------------
@@ -164,7 +164,7 @@
 //-------------------------------------------------------
 - (void)paymentQueue:(SKPaymentQueue *)inQueue updatedTransactions:(NSArray*)inTransactions
 {
-    if(mTransactionUpdateDelegate == NULL)
+    if(mTransactionUpdateDelegate == nullptr)
         return;
     
 	for(SKPaymentTransaction * pTransaction in inTransactions)

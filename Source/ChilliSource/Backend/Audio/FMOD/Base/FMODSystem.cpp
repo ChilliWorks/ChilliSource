@@ -32,7 +32,7 @@ namespace ChilliSource
 		///
 		/// Initialise FMOD
 		//-------------------------------------------------------
-		CFMODSystem::CFMODSystem() : mpFMODSystem(NULL), mpFMODEventSystem(NULL), mpFMODEventProject(NULL)
+		CFMODSystem::CFMODSystem() : mpFMODSystem(nullptr), mpFMODEventSystem(nullptr), mpFMODEventProject(nullptr)
 		{
 			mpAudioManager = new CFMODAudioManager();
             mpAudioComponentFactory = new CFMODAudioComponentFactory(this, mpAudioManager);
@@ -54,7 +54,7 @@ namespace ChilliSource
             driverData.sessionCategory = FMOD_IPHONE_SESSIONCATEGORY_PLAYANDRECORD;
 			ErrorCheck(mpFMODEventSystem->init(kudwMaxFMODChannels, FMOD_INIT_NORMAL, &driverData));
 #else
-            ErrorCheck(mpFMODEventSystem->init(kudwMaxFMODChannels, FMOD_INIT_NORMAL, NULL));
+            ErrorCheck(mpFMODEventSystem->init(kudwMaxFMODChannels, FMOD_INIT_NORMAL, nullptr));
 #endif
 			
 			//Set defaults
@@ -73,7 +73,7 @@ namespace ChilliSource
 		{
             std::string strFilePath;
             Core::CApplication::GetFileSystemPtr()->GetBestPathToFile(ineLocation, instrFilePath, strFilePath);
-            ErrorCheck(mpFMODEventSystem->load(strFilePath.c_str(), NULL, &mpFMODEventProject));
+            ErrorCheck(mpFMODEventSystem->load(strFilePath.c_str(), nullptr, &mpFMODEventProject));
 		}
 		//-------------------------------------------------------
 		/// Unload Event Data
@@ -86,13 +86,13 @@ namespace ChilliSource
 		{
             if(mpFMODEventProject)
             {
-                FMOD::EventGroup * pcEventRelease = NULL;
+                FMOD::EventGroup * pcEventRelease = nullptr;
                 u32 udwGroupID = 0;
                 
                 // get all groups and free them
                 while(mpFMODEventProject->getGroupByIndex(udwGroupID++, false, &pcEventRelease) == FMOD_OK)
                 {
-                    ErrorCheck(pcEventRelease->freeEventData(NULL, true));
+                    ErrorCheck(pcEventRelease->freeEventData(nullptr, true));
                 }
             }
 		}
@@ -107,12 +107,12 @@ namespace ChilliSource
 		{
             if(mpFMODEventProject)
             {
-                FMOD::EventGroup * pcEventRelease = NULL;
+                FMOD::EventGroup * pcEventRelease = nullptr;
                 
                 // get groups and free it
                 if(mpFMODEventProject->getGroup(instrEventGroup.c_str(), false, &pcEventRelease) == FMOD_OK)
                 {
-                    ErrorCheck(pcEventRelease->freeEventData(NULL, true));
+                    ErrorCheck(pcEventRelease->freeEventData(nullptr, true));
                 }
             }
 		}
@@ -125,9 +125,9 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void CFMODSystem::PreloadEventGroup(const std::string& instrGroupName)
 		{
-			if(mpFMODEventProject != NULL)
+			if(mpFMODEventProject != nullptr)
 			{	
-				FMOD::EventGroup * pPreloadGroup = NULL;
+				FMOD::EventGroup * pPreloadGroup = nullptr;
 				mpFMODEventProject->getGroup(instrGroupName.c_str(), true, &pPreloadGroup);
 			}
 		}
@@ -142,7 +142,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void CFMODSystem::CreateSound(const std::string& instrFilePath, Audio::IAudioResource* inpAudio)
 		{
-			ErrorCheck(mpFMODSystem->createSound(instrFilePath.c_str(), FMOD_SOFTWARE, NULL, &static_cast<CFMODAudioResource*>(inpAudio)->mpFMODSound));
+			ErrorCheck(mpFMODSystem->createSound(instrFilePath.c_str(), FMOD_SOFTWARE, nullptr, &static_cast<CFMODAudioResource*>(inpAudio)->mpFMODSound));
 		}
 		//-------------------------------------------------------
 		/// Create 3D Sound
@@ -155,7 +155,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void CFMODSystem::Create3DSound(const std::string& instrFilePath, Audio::IAudioResource* inpAudio)
 		{
-			ErrorCheck(mpFMODSystem->createSound(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_3D, NULL, &static_cast<CFMODAudioResource*>(inpAudio)->mpFMODSound));
+			ErrorCheck(mpFMODSystem->createSound(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_3D, nullptr, &static_cast<CFMODAudioResource*>(inpAudio)->mpFMODSound));
 		}
 		//-------------------------------------------------------
 		/// Create Stream
@@ -167,7 +167,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void CFMODSystem::CreateStream(const std::string& instrFilePath, Audio::IAudioResource* inpAudio)
 		{
-			ErrorCheck(mpFMODSystem->createStream(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_LOOP_NORMAL, NULL, &static_cast<CFMODAudioResource*>(inpAudio)->mpFMODSound));
+			ErrorCheck(mpFMODSystem->createStream(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_LOOP_NORMAL, nullptr, &static_cast<CFMODAudioResource*>(inpAudio)->mpFMODSound));
 		}
 		//-------------------------------------------------------
 		/// Create 3d Stream
@@ -179,7 +179,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void CFMODSystem::Create3DStream(const std::string& instrFilePath, Audio::IAudioResource* inpAudio)
 		{
-			ErrorCheck(mpFMODSystem->createStream(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_LOOP_NORMAL|FMOD_3D, NULL, &static_cast<CFMODAudioResource*>(inpAudio)->mpFMODSound));
+			ErrorCheck(mpFMODSystem->createStream(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_LOOP_NORMAL|FMOD_3D, nullptr, &static_cast<CFMODAudioResource*>(inpAudio)->mpFMODSound));
 		}
 		//-------------------------------------------------------
 		/// Play Sound
@@ -192,7 +192,7 @@ namespace ChilliSource
 		void CFMODSystem::PlaySound(Audio::CAudioComponent* inpAudioComponent)
 		{
 			//We let FMOD manages the channels 
-			FMOD::Channel* pActiveChannel = NULL;
+			FMOD::Channel* pActiveChannel = nullptr;
 			ErrorCheck(mpFMODSystem->playSound(FMOD_CHANNEL_FREE, SHARED_PTR_CAST<CFMODAudioResource>(inpAudioComponent->GetAudioSource())->mpFMODSound, false, &pActiveChannel));
 			
 			//Give the sound it's channel so we can query the state
@@ -207,9 +207,9 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		FMOD::Event* CFMODSystem::PlayEvent(const std::string& instrEventName)
 		{
-			if(mpFMODEventProject != NULL)
+			if(mpFMODEventProject != nullptr)
 			{
-				FMOD::Event * pEvent = NULL;
+				FMOD::Event * pEvent = nullptr;
 				ErrorCheck(mpFMODEventProject->getEvent(instrEventName.c_str(), FMOD_EVENT_DEFAULT, &pEvent));
                 
                 if(pEvent)
@@ -219,7 +219,7 @@ namespace ChilliSource
                 
 				return pEvent; 
 			}
-			return NULL;
+			return nullptr;
 		}
 		//-------------------------------------------------------
 		/// Update
@@ -262,7 +262,7 @@ namespace ChilliSource
         //-------------------------------------------------------
 		void CFMODSystem::OnApplicationMemoryWarning()
 		{
-			if(mpFMODEventProject!= NULL)
+			if(mpFMODEventProject!= nullptr)
 			{
 				mpFMODEventProject->stopAllEvents();
 				UnloadEventData();
@@ -276,7 +276,7 @@ namespace ChilliSource
 		void CFMODSystem::Destroy()
 		{
             ErrorCheck(mpFMODEventSystem->release());
-			mpFMODEventSystem = NULL;
+			mpFMODEventSystem = nullptr;
 		}
 		//-------------------------------------------------------
 		/// Destructor

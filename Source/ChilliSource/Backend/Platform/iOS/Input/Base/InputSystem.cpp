@@ -45,7 +45,7 @@ IInputDevice * CInputSystem::GetDeviceWithInterface(Core::InterfaceIDType inInte
 		return &mTouchScreen;
 	}
     
-	return NULL;
+	return nullptr;
 }
 IAccelerometer * CInputSystem::GetAccelerometerPtr()
 {

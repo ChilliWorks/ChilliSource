@@ -48,7 +48,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         const Core::CVector3& CDirectionalLightComponent::GetDirection() const
         {
-            if(GetEntityOwner() != NULL)
+            if(GetEntityOwner() != nullptr)
             {
                 mvDirection = GetEntityOwner()->Transform().GetWorldOrientation() * Core::CVector3::Z_UNIT_NEGATIVE;
             }
@@ -65,7 +65,7 @@ namespace ChilliSource
         const Core::CMatrix4x4& CDirectionalLightComponent::GetLightMatrix() const
         {
             //The matrix is a view projection
-            if(mbMatrixCacheValid == false && GetEntityOwner() != NULL)
+            if(mbMatrixCacheValid == false && GetEntityOwner() != nullptr)
             {
                 Core::CMatrix4x4 matView = GetEntityOwner()->Transform().GetWorldTransform().Inverse();
                 Core::CMatrix4x4::Multiply(&matView, &mmatProj, &mmatLight);

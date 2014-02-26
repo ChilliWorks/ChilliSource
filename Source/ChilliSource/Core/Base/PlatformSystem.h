@@ -125,8 +125,8 @@ namespace ChilliSource
             /// Tries to create a platform specific implementation with the given interface
             ///
             /// @param InterfaceID to generate
-            /// @param Vector of existing systems. The return value is added to this vector if not NULL.
-            /// @return A handle to the given system or NULL if the platform cannot support it
+            /// @param Vector of existing systems. The return value is added to this vector if not nullptr.
+            /// @return A handle to the given system or nullptr if the platform cannot support it
             //-----------------------------------------
             virtual Core::ISystem* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<Core::SystemPtr> & inaExistingSystems) const = 0;
             //-----------------------------------------
@@ -136,7 +136,7 @@ namespace ChilliSource
             ///
             /// @param InterfaceID to generate
             /// @param Vector of existing systems
-            /// @return A handle to the given system or NULL if the platform cannot support it
+            /// @return A handle to the given system or nullptr if the platform cannot support it
             //-----------------------------------------
             template <typename T> T* CreateAndAddSystemWithInterface(DYNAMIC_ARRAY<Core::SystemPtr> & inaExistingSystems) const
             {
@@ -166,7 +166,7 @@ namespace ChilliSource
             /// Tries to create a platform specific implementation with the given interface
             ///
             /// @param InterfaceID to generate
-            /// @return A handle to the given activity or NULL if the platform cannot support it
+            /// @return A handle to the given activity or nullptr if the platform cannot support it
             //-----------------------------------------
             virtual IActivity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const = 0;
             //-----------------------------------------
@@ -175,7 +175,7 @@ namespace ChilliSource
             /// Convenience template method of the above returning the needed interface type.
             ///
             /// @param InterfaceID to generate
-            /// @return A handle to the given activity or NULL if the platform cannot support it
+            /// @return A handle to the given activity or nullptr if the platform cannot support it
             //-----------------------------------------
             template <typename T> T* CreateActivityWithInterface() const
             {
@@ -209,7 +209,7 @@ namespace ChilliSource
             /// Tries to create a platform specific implementation with the given interface
             ///
             /// @param InterfaceID to generate
-            /// @return A handle to the given system or NULL if the platform cannot support it
+            /// @return A handle to the given system or nullptr if the platform cannot support it
             //-----------------------------------------
             virtual IInformationProvider* CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const = 0;
             //-----------------------------------------
@@ -219,7 +219,7 @@ namespace ChilliSource
             ///
             /// @param InterfaceID to generate
             /// @param Vector of existing systems
-            /// @return A handle to the given system or NULL if the platform cannot support it
+            /// @return A handle to the given system or nullptr if the platform cannot support it
             //-----------------------------------------
             template <typename T> T* CreateInformationProviderWithInterface() const
             {

@@ -305,7 +305,7 @@ namespace ChilliSource
             CalculateSpriteData();
             
             mSpriteData.pMaterial->SetActiveShaderProgram(ineShaderPass);
-            if (mSpriteData.pMaterial->GetActiveShaderProgram() != NULL)
+            if (mSpriteData.pMaterial->GetActiveShaderProgram() != nullptr)
             {
                 //Add us to the render systems dynamic batch
                 //If we force a batch flush here then the previous sprites

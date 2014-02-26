@@ -27,7 +27,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------------
-		CSubMesh::CSubMesh(std::string instrName) : mstrName(instrName), mpMeshBuffer(NULL), mpRenderSystem(NULL)
+		CSubMesh::CSubMesh(std::string instrName) : mstrName(instrName), mpMeshBuffer(nullptr), mpRenderSystem(nullptr)
 		{
 			
 		}
@@ -71,7 +71,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		u32 CSubMesh::GetNumVerts()
 		{
-			if (mpMeshBuffer != NULL)
+			if (mpMeshBuffer != nullptr)
 				return mpMeshBuffer->GetVertexCount();
 			else
 				return 0;
@@ -81,7 +81,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		u32 CSubMesh::GetNumIndices()
 		{
-			if (mpMeshBuffer != NULL)
+			if (mpMeshBuffer != nullptr)
 				return mpMeshBuffer->GetIndexCount();
 			else
 				return 0;
@@ -141,7 +141,7 @@ namespace ChilliSource
 			mpMeshBuffer->Bind();
 			
 			//---Vertex Mapping
-			u8* pVBuffer = NULL;
+			u8* pVBuffer = nullptr;
 			mpMeshBuffer->LockVertex((f32**)&pVBuffer, 0, 0);
 			
 			//Map the data from the cache into the buffer
@@ -153,7 +153,7 @@ namespace ChilliSource
 			//---Index Mapping
             if(udwIndexDataCapacity != 0)
             {
-                u16* pIBuffer = NULL;
+                u16* pIBuffer = nullptr;
                 mpMeshBuffer->LockIndex(&pIBuffer, 0, 0);
                 
                 memcpy(pIBuffer, inpIndexData, udwIndexDataCapacity);
@@ -199,7 +199,7 @@ namespace ChilliSource
             
             inpRenderSystem->ApplyMaterial(*inpMaterial.get());
             
-            if (inpAnimationGroup != NULL)
+            if (inpAnimationGroup != nullptr)
             {
                 //Apply inverse bind pose matrix.
                 DYNAMIC_ARRAY<Core::CMatrix4x4> combinedMatrices;

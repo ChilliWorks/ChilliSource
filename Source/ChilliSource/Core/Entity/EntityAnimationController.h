@@ -50,7 +50,7 @@ namespace ChilliSource
 			/// CreateAnimation
 			///
 			/// Creates and retains an EntityAnimation object with animdata with the given name and target entity.
-			/// Will return an empty pointer if it cannot find animdata with the given name or the target entity is NULL.
+			/// Will return an empty pointer if it cannot find animdata with the given name or the target entity is nullptr.
 			//----------------------------------------------
 			EntityAnimationPtr CreateAnimation(const std::string & instrAnimName, ChilliSource::Core::CEntity* inpAnimTarget, u32 inudwQueryFlags = 0);
 			
@@ -58,7 +58,7 @@ namespace ChilliSource
 			/// CreateAnimation
 			///
 			/// Creates and retains an EntityAnimation object with animdata with the given name and target entity.
-			/// Will return an empty pointer if it cannot find animdata with the given name or the target entity is NULL.
+			/// Will return an empty pointer if it cannot find animdata with the given name or the target entity is nullptr.
 			//----------------------------------------------
 			EntityAnimationPtr CreateAndPlayAnimation(const std::string & instrAnimName, ChilliSource::Core::CEntity* inpAnimTarget, AnimationPlayMode inePlayMode);
             

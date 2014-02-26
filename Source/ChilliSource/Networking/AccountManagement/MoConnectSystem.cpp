@@ -55,7 +55,7 @@ namespace ChilliSource
 		:mpHttpConnectionSystem(inpHttpSystem)
         ,mbHasSignedInUser(false)
         ,mstrMoConnectURL(instrMoConnectServerURL)
-        ,mpPendingLoginsRequest(NULL)
+        ,mpPendingLoginsRequest(nullptr)
         ,mudwRequestIDSeed(0)
         ,mbNoRemoveFulfilledRequests(false)
         ,mstrRealm(instrMoConnectServerURL)
@@ -163,7 +163,7 @@ namespace ChilliSource
 				mTimeRequestCallback(0);
 			}
 			
-			mTimeRequestCallback = NULL;
+			mTimeRequestCallback = nullptr;
 		}
         //------------------------
         /// Generate Authentication Header
@@ -542,7 +542,7 @@ namespace ChilliSource
         //------------------------
 		void CMoConnectSystem::LoginsRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
         {
-			mpPendingLoginsRequest = NULL;
+			mpPendingLoginsRequest = nullptr;
 			
 			if(inpRequest->GetResponseCode() == kHTTPRedirect)
             {
@@ -659,7 +659,7 @@ namespace ChilliSource
                 eResult = PushNotificationResult::k_failed;
             }
             
-            if(NULL != mPushNotificationCallback)
+            if(nullptr != mPushNotificationCallback)
             {
                 mPushNotificationCallback(eResult);
             }
@@ -729,7 +729,7 @@ namespace ChilliSource
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");
 			
-			mpHttpConnectionSystem->MakeRequest(requestDetails, NULL);
+			mpHttpConnectionSystem->MakeRequest(requestDetails, nullptr);
         }
         //------------------------
         /// Handle Redirection
@@ -754,7 +754,7 @@ namespace ChilliSource
 			if (mpPendingLoginsRequest)
             {
 				mpPendingLoginsRequest->Cancel();
-				mpPendingLoginsRequest = NULL;
+				mpPendingLoginsRequest = nullptr;
 			}
             
 			mSignedInUserChangesEvent.Invoke(this);
@@ -937,7 +937,7 @@ namespace ChilliSource
         {
 			for (u32 nRequest = 0; nRequest < masOpenRequests.size(); nRequest++)
             {
-				if ( (masOpenRequests[nRequest].udwID == inudwID) && (masOpenRequests[nRequest].pHttpRequest != NULL))
+				if ( (masOpenRequests[nRequest].udwID == inudwID) && (masOpenRequests[nRequest].pHttpRequest != nullptr))
                 {
 					masOpenRequests[nRequest].pHttpRequest->Cancel();
 					break;
@@ -967,7 +967,7 @@ namespace ChilliSource
 			RequestInfo* pRequest = FindRequestWithHttpRequest(inpRequest);
 			
 			// This shouldn't ever happen but if it does let's sidestep over the issue.
-			if(NULL == pRequest)
+			if(nullptr == pRequest)
             {
 				return;
 			}
@@ -1016,7 +1016,7 @@ namespace ChilliSource
 				}
 			}
 			
-			pRequest->pHttpRequest = NULL;
+			pRequest->pHttpRequest = nullptr;
 			RequestResultDelegate reqCallback = pRequest->Callback;
 			if(reqCallback)
             {
@@ -1046,7 +1046,7 @@ namespace ChilliSource
 				}
 			}
 			
-			return NULL;
+			return nullptr;
 		}
         //------------------------
         /// Find Request With Http Request
@@ -1061,7 +1061,7 @@ namespace ChilliSource
 				}
 			}
 			
-			return NULL;
+			return nullptr;
 		}
         //------------------------
         /// Validate IAP Receipt

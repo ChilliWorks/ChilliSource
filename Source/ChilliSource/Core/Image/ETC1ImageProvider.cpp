@@ -55,7 +55,7 @@ namespace ChilliSource
 
             Core::FileStreamPtr pImageFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
 
-            if (pImageFile != NULL && pImageFile->IsOpen() == true && pImageFile->IsBad() == false)
+            if (pImageFile != nullptr && pImageFile->IsOpen() == true && pImageFile->IsBad() == false)
             {
                 //ETC1 Format is in big endian format. As all the platforms we support are little endian we will have to convert the data to little endian.
                 //read the header.

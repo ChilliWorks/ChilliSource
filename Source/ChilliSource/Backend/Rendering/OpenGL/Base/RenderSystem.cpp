@@ -44,10 +44,10 @@ namespace ChilliSource
 		/// Constructor
 		//----------------------------------------------------------
 		CRenderSystem::CRenderSystem()
-		: mpDefaultRenderTarget(NULL), mpCurrentMaterial(NULL), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0), mpVertexAttribs(NULL),
+		: mpDefaultRenderTarget(nullptr), mpCurrentMaterial(nullptr), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0), mpVertexAttribs(nullptr),
         mbEmissiveSet(false), mbAmbientSet(false), mbDiffuseSet(false), mbSpecularSet(false), mudwNumBoundTextures(0), mSrcBlendFunc(Rendering::AlphaBlend::k_unknown), mDstBlendFunc(Rendering::AlphaBlend::k_unknown),
-        meCurrentCullFace(Rendering::CullFace::k_front), meDepthFunc(Rendering::DepthFunction::k_less), mpLightComponent(NULL), mbBlendFunctionLocked(false), mpaTextureHandles(NULL), mbInvalidateLigthingCache(true),
-        mpRenderCapabilities(NULL)
+        meCurrentCullFace(Rendering::CullFace::k_front), meDepthFunc(Rendering::DepthFunction::k_less), mpLightComponent(nullptr), mbBlendFunctionLocked(false), mpaTextureHandles(nullptr), mbInvalidateLigthingCache(true),
+        mpRenderCapabilities(nullptr)
 		{
 			//Register the GL texture and shader managers
             Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mTexManager);
@@ -159,7 +159,7 @@ namespace ChilliSource
         {
             if(inpLightComponent == mpLightComponent && mbInvalidateAllCaches == false)
             {
-                if(mpLightComponent != NULL)
+                if(mpLightComponent != nullptr)
                 {
                     mbInvalidateLigthingCache = mpLightComponent->IsCacheValid() == false;
                 }
@@ -182,7 +182,7 @@ namespace ChilliSource
                 mpCurrentMaterial = &inMaterial;
                 
                 //Bind this materials shader
-                if(inMaterial.GetActiveShaderProgram() != NULL)
+                if(inMaterial.GetActiveShaderProgram() != nullptr)
                 {
                     ApplyRenderStates(inMaterial);
                     
@@ -330,7 +330,7 @@ namespace ChilliSource
             
             mCubemapHandle = pShader->GetUniformLocation("uCubemap");
             
-            if(mpaTextureHandles == NULL)
+            if(mpaTextureHandles == nullptr)
             {
                 mpaTextureHandles = (std::pair<GLint, u32>*)calloc(mpRenderCapabilities->GetNumTextureUnits(), sizeof(std::pair<GLint, u32>));
             }
@@ -407,7 +407,7 @@ namespace ChilliSource
                 }
             }
             
-            if(mCubemapHandle >= 0 && inMaterial.GetCubemap() != NULL)
+            if(mCubemapHandle >= 0 && inMaterial.GetCubemap() != nullptr)
             {
                 inMaterial.GetCubemap()->Bind(mudwNumBoundTextures);
                 glUniform1i(mCubemapHandle, mudwNumBoundTextures);
@@ -449,7 +449,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CRenderSystem::ApplyLighting(const Rendering::CMaterial &inMaterial, Rendering::ILightComponent* inpLightComponent)
         {
-            if(mbInvalidateLigthingCache == false || inpLightComponent == NULL)
+            if(mbInvalidateLigthingCache == false || inpLightComponent == nullptr)
                 return;
             
             mbInvalidateLigthingCache = false;
@@ -464,7 +464,7 @@ namespace ChilliSource
                 {
                     glUniform3fv(mLightDirHandle, 1, (const GLfloat*)&pLightComponent->GetDirection());
                 }
-                if(pLightComponent->GetShadowMapPtr() != NULL)
+                if(pLightComponent->GetShadowMapPtr() != nullptr)
                 {
                     if(mShadowToleranceHandle >= 0)
                     {
@@ -541,7 +541,7 @@ namespace ChilliSource
 #ifdef DEBUG
 			CheckForGLErrors();
 #endif
-			if (inpActiveRenderTarget != NULL)
+			if (inpActiveRenderTarget != nullptr)
 			{
 				inpActiveRenderTarget->Bind();
 			}
@@ -659,7 +659,7 @@ namespace ChilliSource
 		void CRenderSystem::EndFrame(Rendering::IRenderTarget* inpActiveRenderTarget)
 		{
 #ifdef TARGET_OS_IPHONE
-            if (mpDefaultRenderTarget != NULL && mpDefaultRenderTarget == inpActiveRenderTarget)
+            if (mpDefaultRenderTarget != nullptr && mpDefaultRenderTarget == inpActiveRenderTarget)
             {
                 CRenderTarget::PresentDefaultRenderTarget(mContext, mpDefaultRenderTarget);
             }
@@ -1077,7 +1077,7 @@ namespace ChilliSource
                 for(u32 i =0; i < mdwMaxVertAttribs; i++)
                 {
                     if(mpVertexAttribs[i].pBuffer == inpBuffer)
-                        mpVertexAttribs[i].pBuffer = NULL;
+                        mpVertexAttribs[i].pBuffer = nullptr;
                 }
                 ((ChilliSource::OpenGL::CMeshBuffer*)inpBuffer)->SetCacheValid();
             }
@@ -1307,11 +1307,11 @@ namespace ChilliSource
 			{
 				if([EAGLContext currentContext] == mContext)
 				{
-					[EAGLContext setCurrentContext:NULL];
+					[EAGLContext setCurrentContext:nil];
 				}
 				
 				[mContext release];
-				mContext = NULL;
+				mContext = nullptr;
 			}
 #endif
 		}

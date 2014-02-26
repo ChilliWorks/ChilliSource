@@ -34,14 +34,14 @@ namespace ChilliSource
 			/// Set Transparent Sort Predicate
 			///
 			/// Sets the sort predicate to use for sorting transparent objects
-			/// @param Our CRendererSortPredicate functor. If this is null the renderer will not sort transparent objects
+			/// @param Our CRendererSortPredicate functor. If this is nullptr the renderer will not sort transparent objects
 			//----------------------------------------------------------
 			void SetTransparentSortPredicate(const RendererSortPredicatePtr & inpFunctor);
             //----------------------------------------------------------
 			/// Set Opaque Sort Predicate
 			///
 			/// Sets the sort predicate to use for sorting opaque objects
-			/// @param Our CRendererSortPredicate functor. If this is null the renderer will not sort opaque objects
+			/// @param Our CRendererSortPredicate functor. If this is nullptr the renderer will not sort opaque objects
 			//----------------------------------------------------------
 			void SetOpaqueSortPredicate(const RendererSortPredicatePtr & inpFunctor);
             
@@ -195,7 +195,7 @@ namespace ChilliSource
             /// Get Cull Predicate
             ///
             /// @param Camera
-            /// @return Camera cull predicate or NULL
+            /// @return Camera cull predicate or nullptr
             //----------------------------------------------------------
             CullingPredicatePtr GetCullPredicate(CCameraComponent* inpActiveCamera) const;
             //----------------------------------------------------------

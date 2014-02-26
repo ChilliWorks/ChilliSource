@@ -30,7 +30,7 @@ namespace ChilliSource
 #elif TARGET_ANDROID
             return new ChilliSource::Android::CTwitterPostSystem(static_cast<Android::CHttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
 #endif
-			return NULL;
+			return nullptr;
         }
         
 		//------------------------------------------------------------------------
@@ -39,11 +39,11 @@ namespace ChilliSource
 		ITwitterPostSystem::ITwitterPostSystem(Networking::IHttpConnectionSystem* inpHttpConnectionSystem,
 											   Core::COAuthSystem* inpOAuthSystem) : mstrCustomerKey(""),
 																						   mstrCustomerSecret(""),
-																						   mpAuthenticationView(NULL)
+																						   mpAuthenticationView(nullptr)
 		{
 				mpHttpConnectionSystem = inpHttpConnectionSystem;
 				mpOAuthSystem = inpOAuthSystem;
-				MOFLOW_ASSERT(mpHttpConnectionSystem != NULL && mpOAuthSystem != NULL, "Twitter post system requires the http request system and oauth system.");
+				MOFLOW_ASSERT(mpHttpConnectionSystem != nullptr && mpOAuthSystem != nullptr, "Twitter post system requires the http request system and oauth system.");
 		}
 		//------------------------------------------------------------------------
 		/// Destructor

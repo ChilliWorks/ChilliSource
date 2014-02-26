@@ -113,7 +113,7 @@ namespace ChilliSource
             NSMutableArray* Contents = [[NSMutableArray alloc] init];
             NSString* Dir = [NSString stringWithCString:mstrBundlePath.c_str() encoding:NSASCIIStringEncoding];
             
-            [Contents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:Dir error:NULL]];
+            [Contents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:Dir error:nil]];
             
             for(NSString* file in Contents)
             {
@@ -170,7 +170,7 @@ namespace ChilliSource
         {
             Core::FileStreamPtr pFileStream = CreateFileStream(ineStorageLocation, instrDirectory, Core::FileMode::k_writeBinary);
 			
-            if (pFileStream.get() == NULL || pFileStream->IsOpen() == false || pFileStream->IsBad() == true)
+            if (pFileStream.get() == nullptr || pFileStream->IsOpen() == false || pFileStream->IsBad() == true)
             {
                 ERROR_LOG("Failed to create file: " + instrDirectory);
                 return false;
@@ -362,7 +362,7 @@ namespace ChilliSource
             //remove the file
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
 			CFStringRef cfStringRef = CFStringCreateWithCString(kCFAllocatorDefault, strPath.c_str(), kCFStringEncodingMacRoman);
-            [[NSFileManager defaultManager] removeItemAtPath:(NSString*)cfStringRef error:NULL];
+            [[NSFileManager defaultManager] removeItemAtPath:(NSString*)cfStringRef error:nil];
 			CFRelease(cfStringRef); 
 			[pPool release];
             
@@ -394,7 +394,7 @@ namespace ChilliSource
             //remove the directory
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
 			CFStringRef cfStringRef = CFStringCreateWithCString(kCFAllocatorDefault, strDirectory.c_str(), kCFStringEncodingMacRoman);
-            [[NSFileManager defaultManager] removeItemAtPath:(NSString*)cfStringRef error:NULL];
+            [[NSFileManager defaultManager] removeItemAtPath:(NSString*)cfStringRef error:nil];
 			CFRelease(cfStringRef); 
 			[pPool release];
             
@@ -417,11 +417,11 @@ namespace ChilliSource
                 
                 if (inbRecursive == true)
                 {
-                    [outpContents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:Dir error:NULL]];
+                    [outpContents addObjectsFromArray:[[NSFileManager defaultManager] subpathsOfDirectoryAtPath:Dir error:nil]];
                 }
                 else
                 {
-                    [outpContents addObjectsFromArray:[[NSFileManager defaultManager] contentsOfDirectoryAtPath:Dir error:NULL]];
+                    [outpContents addObjectsFromArray:[[NSFileManager defaultManager] contentsOfDirectoryAtPath:Dir error:nil]];
                 }
             }
         }

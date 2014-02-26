@@ -55,7 +55,7 @@ namespace ChilliSource
         ///
         /// Default
         //-----------------------------------------------------
-        CGUIView::CGUIView() : mpParentView(NULL), mpRootWindow(NULL), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
+        CGUIView::CGUIView() : mpParentView(nullptr), mpRootWindow(nullptr), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
         Rotation(0.0f), Opacity(1.0f), LocalAlignment(Core::AlignmentAnchor::k_middleCentre), ParentalAlignment(Core::AlignmentAnchor::k_bottomLeft), AlignedWithParent(false),
         Scale(Core::CVector2::ONE), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
         AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
@@ -70,7 +70,7 @@ namespace ChilliSource
         /// @param Param dictionary
         //------------------------------------------------------
         CGUIView::CGUIView(const Core::ParamDictionary& insParams) 
-		: mpParentView(NULL), mpRootWindow(NULL), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
+		: mpParentView(nullptr), mpRootWindow(nullptr), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
         Rotation(0.0f), Opacity(1.0f), LocalAlignment(Core::AlignmentAnchor::k_middleCentre), ParentalAlignment(Core::AlignmentAnchor::k_bottomLeft), AlignedWithParent(false),
         Scale(Core::CVector2::ONE), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
         AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
@@ -271,8 +271,8 @@ namespace ChilliSource
             {
                 if((*it).get() == inpSubview)
                 {
-                    inpSubview->SetParentView(NULL);
-                    inpSubview->SetRootWindow(NULL);
+                    inpSubview->SetParentView(nullptr);
+                    inpSubview->SetRootWindow(nullptr);
                     mSubviews.erase(it);
                     return;
                 }
@@ -289,8 +289,8 @@ namespace ChilliSource
 		{
 			for(CGUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
             {
-				(*it)->SetParentView(NULL);
-				(*it)->SetRootWindow(NULL);
+				(*it)->SetParentView(nullptr);
+				(*it)->SetRootWindow(nullptr);
             }
 			
 			mSubviews.clear();
@@ -464,7 +464,7 @@ namespace ChilliSource
 				return mpParentView->GetParentWithName(instrName);
 			}
 			
-			return NULL;
+			return nullptr;
 		}
         //-----------------------------------------------------
         /// Set Parent View 

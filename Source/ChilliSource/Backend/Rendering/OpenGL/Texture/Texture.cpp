@@ -22,7 +22,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-        CTexture::TextureUnit* CTexture::paTextureUnits = NULL;
+        CTexture::TextureUnit* CTexture::paTextureUnits = nullptr;
         u32 CTexture::udwCurrentActiveSlot = 0;
 		
 		//---------------------------------------------------------------
@@ -33,7 +33,7 @@ namespace ChilliSource
 		CTexture::CTexture(CTextureManager* inpTextureManager)
         : meSFilter(Filter::k_linear), meTFilter(Filter::k_linear), meSWrapMode(WrapMode::k_clamp), meTWrapMode(WrapMode::k_clamp), mGLTexID(0),
         mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), mdwTextureSlot(0), meImageFormat(Core::CImage::Format::k_RGBA8888), mpTextureManager(inpTextureManager),
-        mpRenderCapabilities(NULL)
+        mpRenderCapabilities(nullptr)
 		{
             mpRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
             MOFLOW_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
@@ -64,28 +64,28 @@ namespace ChilliSource
             {
                 default:
                 case Core::CImage::Format::k_RGBA8888:
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, inudwWidth, inudwHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, inudwWidth, inudwHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
                     break;
                 case Core::CImage::Format::k_RGB888:
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, inudwWidth, inudwHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, inudwWidth, inudwHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
                     break;
                 case Core::CImage::Format::k_RGBA4444:
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, inudwWidth, inudwHeight, 0, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, NULL);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, inudwWidth, inudwHeight, 0, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, nullptr);
                     break;
                 case Core::CImage::Format::k_RGB565:
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, inudwWidth, inudwHeight, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, NULL);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, inudwWidth, inudwHeight, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, nullptr);
                     break;
                 case Core::CImage::Format::k_LumA88:
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE_ALPHA, inudwWidth, inudwHeight, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, NULL);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE_ALPHA, inudwWidth, inudwHeight, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, nullptr);
                     break;
                 case Core::CImage::Format::k_Lum8:
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, inudwWidth, inudwHeight, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, NULL);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, inudwWidth, inudwHeight, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, nullptr);
                     break;
                 case Core::CImage::Format::k_Depth16:
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, inudwWidth, inudwHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, NULL);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, inudwWidth, inudwHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, nullptr);
                     break;
                 case Core::CImage::Format::k_Depth32:
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, inudwWidth, inudwHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, NULL);
+                    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, inudwWidth, inudwHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, nullptr);
                     break;
             };
 		}
@@ -200,13 +200,13 @@ namespace ChilliSource
             //Unbinding all texture units since cache can have been trashed in previous call
             for(u32 i = 0; i < mpRenderCapabilities->GetNumTextureUnits(); ++i)
             {
-                if(paTextureUnits[i].pObjectID != NULL)
+                if(paTextureUnits[i].pObjectID != nullptr)
                 {
                     glActiveTexture(GL_TEXTURE0 + i);
                     udwCurrentActiveSlot = paTextureUnits[i].dwTextureSlot;
                     glBindTexture(GL_TEXTURE_2D, 0);
                     paTextureUnits[i].dwTextureSlot = -1;
-                    paTextureUnits[i].pObjectID = NULL;
+                    paTextureUnits[i].pObjectID = nullptr;
                 }
             }
             
@@ -282,7 +282,7 @@ namespace ChilliSource
 		//--------------------------------------------------
 		void CTexture::ClearCache()
 		{
-            if (paTextureUnits != NULL)
+            if (paTextureUnits != nullptr)
             {
                 Rendering::IRenderCapabilities* pRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
                 MOFLOW_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
@@ -293,7 +293,7 @@ namespace ChilliSource
                     if(paTextureUnits[i].pObjectID)
                     {
                         paTextureUnits[i].dwTextureSlot = -1;
-                        paTextureUnits[i].pObjectID = NULL;
+                        paTextureUnits[i].pObjectID = nullptr;
                     }
                 }
             }
@@ -497,7 +497,7 @@ namespace ChilliSource
                     udwCurrentActiveSlot = paTextureUnits[i].dwTextureSlot;
                     glBindTexture(GL_TEXTURE_2D, 0);
                     paTextureUnits[i].dwTextureSlot = -1;
-                    paTextureUnits[i].pObjectID = NULL;
+                    paTextureUnits[i].pObjectID = nullptr;
                     break;
                 }
             }
@@ -573,7 +573,7 @@ namespace ChilliSource
             if(inTextureID > 0)
             {
                 Rendering::IRenderCapabilities* pRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
-				if(pRenderCapabilities == NULL)
+				if(pRenderCapabilities == nullptr)
 					return;
 
                 for(u32 i = 0; i < pRenderCapabilities->GetNumTextureUnits(); ++i)
@@ -582,7 +582,7 @@ namespace ChilliSource
                     if(paTextureUnits[i].pObjectID == inpObjectID)
                     {
                         paTextureUnits[i].dwTextureSlot = -1;
-                        paTextureUnits[i].pObjectID = NULL;
+                        paTextureUnits[i].pObjectID = nullptr;
                         break;
                     }
                     

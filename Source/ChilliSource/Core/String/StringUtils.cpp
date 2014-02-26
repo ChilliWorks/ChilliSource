@@ -637,7 +637,7 @@ namespace ChilliSource
             s8* pData = (s8*)instrString.data();
             size_t Length = instrString.data_size();
             
-            if(pData == NULL || Length == 0)
+            if(pData == nullptr || Length == 0)
                 return [[[NSString alloc] init] autorelease];
             
             NSStringEncoding pEncode = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingUTF8);  

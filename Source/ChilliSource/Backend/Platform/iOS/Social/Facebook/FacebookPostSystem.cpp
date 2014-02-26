@@ -29,7 +29,7 @@ namespace ChilliSource
 		CFacebookPostSystem::CFacebookPostSystem(Social::IFacebookAuthenticationSystem* inpAuthSystem)
         : mpAuthSystem(inpAuthSystem)
 		{
-			mCompletionDelegate = NULL;
+			mCompletionDelegate = nullptr;
 #if DEBUG
             [FBSettings enableBetaFeature:FBBetaFeaturesShareDialog];
 #endif

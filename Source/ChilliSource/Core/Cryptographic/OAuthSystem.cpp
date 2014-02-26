@@ -246,7 +246,7 @@ namespace ChilliSource
 		*--*/
         std::string COAuthSystem::GenerateNonceTimeStamp()
 		{
-            return GenerateNonceTimeStamp((TimeIntervalSecs)time(NULL));
+            return GenerateNonceTimeStamp((TimeIntervalSecs)time(0));
 		}
 		/*++
          * @method: COAuthSystem::GenerateNonceTimeStamp
@@ -296,7 +296,7 @@ namespace ChilliSource
 		    /* Generate nonce and timestamp if required */
 		    if(inbGenerateTimestamp)
 		    {
-                TimeIntervalSecs Timestamp = (TimeIntervalSecs)time(NULL);
+                TimeIntervalSecs Timestamp = (TimeIntervalSecs)time(0);
                 mstrNOnce = GenerateNonceTimeStamp(Timestamp);
 		        mstrTimeStamp = Core::CStringConverter::ToString(Timestamp);
 		    }

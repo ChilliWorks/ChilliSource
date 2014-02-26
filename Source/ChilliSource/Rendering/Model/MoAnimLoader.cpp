@@ -116,7 +116,7 @@ namespace ChilliSource
 		bool CMoAnimLoader::ReadHeader(const ChilliSource::Core::FileStreamPtr& inpStream, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource, u32& outudwNumFrames, s32& outdwNumSkeletonNodes)
 		{
 			//Check file for corruption
-			if(inpStream == NULL || inpStream->IsBad() == true)
+			if(inpStream == nullptr || inpStream->IsBad() == true)
 			{
 				ERROR_LOG("Cannot open MoAnim file: " + inFilePath);
 				return false;

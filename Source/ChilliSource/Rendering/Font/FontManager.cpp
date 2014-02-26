@@ -30,7 +30,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//-----------------------------------------------------------------
-		IFontManager::IFontManager() : mpSpriteSheetManager(NULL)
+		IFontManager::IFontManager() : mpSpriteSheetManager(nullptr)
 		{
 		}
 		//----------------------------------------------------------------

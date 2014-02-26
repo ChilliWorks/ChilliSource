@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-        CRenderTarget* CRenderTarget::pCurrentlyBoundTarget = NULL;
+        CRenderTarget* CRenderTarget::pCurrentlyBoundTarget = nullptr;
         
         GLint gCurrentlyBoundFrameBuffer = -1;
         GLint gCurrentlyBoundRenderBuffer = -1;
@@ -154,7 +154,7 @@ namespace ChilliSource
             [inpContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:nil];
             
             if(CRenderTarget::pCurrentlyBoundTarget == inpRenderTarget)
-                CRenderTarget::pCurrentlyBoundTarget = NULL;
+                CRenderTarget::pCurrentlyBoundTarget = nullptr;
             
             if(gCurrentlyBoundFrameBuffer == inpRenderTarget->mFrameBuffer)
                 gCurrentlyBoundFrameBuffer = -1;
@@ -172,7 +172,7 @@ namespace ChilliSource
         //--------------------------------------------------
         void CRenderTarget::ClearCache()
         {
-            CRenderTarget::pCurrentlyBoundTarget = NULL;
+            CRenderTarget::pCurrentlyBoundTarget = nullptr;
             gCurrentlyBoundFrameBuffer = -1;
             gCurrentlyBoundRenderBuffer = -1;
         }
@@ -207,12 +207,12 @@ namespace ChilliSource
             DeleteRenderBuffer(&mDepthBuffer);
             BindFrameBuffer(mFrameBuffer);
 			
-            if (inpColourTexture != NULL)
+            if (inpColourTexture != nullptr)
             {
                 glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, SHARED_PTR_CAST<CTexture>(inpColourTexture)->GetTextureID(), 0);
             }
             
-            if (inpDepthTexture != NULL)
+            if (inpDepthTexture != nullptr)
             {
                 glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, SHARED_PTR_CAST<CTexture>(inpDepthTexture)->GetTextureID(), 0);
             }
@@ -303,7 +303,7 @@ namespace ChilliSource
             if(CRenderTarget::pCurrentlyBoundTarget == this)
             {
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
-                CRenderTarget::pCurrentlyBoundTarget = NULL;
+                CRenderTarget::pCurrentlyBoundTarget = nullptr;
             }
             
             DeleteRenderBuffer(&mRenderBuffer);

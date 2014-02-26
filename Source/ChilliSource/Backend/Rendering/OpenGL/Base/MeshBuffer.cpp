@@ -14,7 +14,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-        CMeshBuffer* CMeshBuffer::pCurrentlyBoundBuffer = NULL;
+        CMeshBuffer* CMeshBuffer::pCurrentlyBoundBuffer = nullptr;
         
 		//-----------------------------------------------------
 		/// Constructor
@@ -25,7 +25,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		CMeshBuffer::CMeshBuffer(ChilliSource::Rendering::BufferDescription &inBuffDesc) 
         : ChilliSource::Rendering::IMeshBuffer(inBuffDesc), mVertexBuffer(0), mIndexBuffer(0), mBufferUsage(0), mBufferAccess(0),
-          mpVertexData(NULL), mpIndexData(NULL), mpVertexDataBackup(NULL), mpIndexDataBackup(NULL), mbMapBufferAvailable(false), mbCacheValid(false)
+          mpVertexData(nullptr), mpIndexData(nullptr), mpVertexDataBackup(nullptr), mpIndexDataBackup(nullptr), mbMapBufferAvailable(false), mbCacheValid(false)
 		{
 			glGenBuffers(1, &mVertexBuffer);
             
@@ -68,12 +68,12 @@ namespace ChilliSource
 			};
 			
 			glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
-			glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, NULL, mBufferUsage);
+			glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, nullptr, mBufferUsage);
             
             if(mIndexBuffer != 0)
             {
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
-                glBufferData(GL_ELEMENT_ARRAY_BUFFER, mBufferDesc.IndexDataCapacity, NULL, mBufferUsage);
+                glBufferData(GL_ELEMENT_ARRAY_BUFFER, mBufferDesc.IndexDataCapacity, nullptr, mBufferUsage);
             }
             
             CMeshBuffer::pCurrentlyBoundBuffer = this;
@@ -109,7 +109,7 @@ namespace ChilliSource
 			{
 				if (mBufferDesc.eUsageFlag == Rendering::BufferUsage::k_dynamic)
 				{
-					glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, NULL, mBufferUsage);
+					glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, nullptr, mBufferUsage);
 				}
 
 #ifdef MOFLOW_OPENGL
@@ -145,7 +145,7 @@ namespace ChilliSource
 		{
             if(!mIndexBuffer)
             {
-                (*outppBuffer) = NULL;
+                (*outppBuffer) = nullptr;
                 return false;
             }
             
@@ -180,7 +180,7 @@ namespace ChilliSource
 		{
 			if(mbMapBufferAvailable)
 			{
-				mpVertexData = NULL;
+				mpVertexData = nullptr;
 #ifdef MOFLOW_OPENGL
 				return glUnmapBuffer(GL_ARRAY_BUFFER);
 #elif defined MOFLOW_OPENGLES2
@@ -206,7 +206,7 @@ namespace ChilliSource
             
 			if(mbMapBufferAvailable)
 			{
-				mpIndexData = NULL;
+				mpIndexData = nullptr;
 #ifdef MOFLOW_OPENGL
 				return glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
 #elif defined MOFLOW_OPENGLES2
@@ -251,7 +251,7 @@ namespace ChilliSource
 			{
 				mpVertexDataBackup = (f32*)new u8[mBufferDesc.VertexDataCapacity];
 			}
-			f32* pVBuffer = NULL;
+			f32* pVBuffer = nullptr;
 			LockVertex(&pVBuffer, 0, 0);
 			memcpy(mpVertexDataBackup, pVBuffer, GetVertexCapacity());
 			UnlockVertex();
@@ -262,7 +262,7 @@ namespace ChilliSource
                 {
                     mpIndexDataBackup = (u16*)new u8[mBufferDesc.IndexDataCapacity];
                 }
-                u16* pIBuffer = NULL;
+                u16* pIBuffer = nullptr;
                 LockIndex(&pIBuffer, 0, 0);
                 memcpy(mpIndexDataBackup, pIBuffer, GetIndexCapacity());
                 UnlockIndex();
@@ -280,9 +280,9 @@ namespace ChilliSource
 		void CMeshBuffer::Restore()
 		{
             //Force bind as we may have been bound from before context destruction
-            CMeshBuffer::pCurrentlyBoundBuffer = NULL;
+            CMeshBuffer::pCurrentlyBoundBuffer = nullptr;
             
-            if(mpVertexDataBackup == NULL)
+            if(mpVertexDataBackup == nullptr)
             {
                 return;
             }
@@ -299,14 +299,14 @@ namespace ChilliSource
 
             Bind();
             
-			f32* pVBuffer = NULL;
+			f32* pVBuffer = nullptr;
 			LockVertex(&pVBuffer, 0, 0);
 			memcpy(pVBuffer, mpVertexDataBackup, GetVertexCapacity());
 			UnlockVertex();
 
             if(mIndexBuffer != 0)
             {
-                u16* pIBuffer = NULL;
+                u16* pIBuffer = nullptr;
                 LockIndex(&pIBuffer, 0, 0);
                 memcpy(pIBuffer, mpIndexDataBackup, GetIndexCapacity());
                 UnlockIndex();
@@ -363,7 +363,7 @@ namespace ChilliSource
 
             if(CMeshBuffer::pCurrentlyBoundBuffer == this)
             {
-                CMeshBuffer::pCurrentlyBoundBuffer = NULL;
+                CMeshBuffer::pCurrentlyBoundBuffer = nullptr;
             }
             
 			glDeleteBuffers(1, &mVertexBuffer);

@@ -37,7 +37,7 @@ namespace ChilliSource
         	return new Android::CAmazonRemoteNotificationSystem();
 #	endif
 #endif
-        	return NULL;
+        	return nullptr;
         }
         //---------------------------------------------------------------
         /// Is A

@@ -27,7 +27,7 @@ namespace ChilliSource
 		/// Constructor
 		//--------------------------------------------------------------------
 		CMesh::CMesh() 
-		: mpRenderSystem(NULL), mudwTotalVerts(0), mudwTotalIndices(0), mpSkeleton(new CSkeleton())
+		: mpRenderSystem(nullptr), mudwTotalVerts(0), mudwTotalIndices(0), mpSkeleton(new CSkeleton())
 		{
 		}
 		//---------------------------------------------------------------------
@@ -171,7 +171,7 @@ namespace ChilliSource
                 const MaterialPtr& pMaterial = inMaterials[udwCurrMaterial];
                 udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
                 
-				if (pMaterial->GetActiveShaderProgram() != NULL)
+				if (pMaterial->GetActiveShaderProgram() != nullptr)
                 {
                     if(pMaterial->IsTransparent() == false)
                     {

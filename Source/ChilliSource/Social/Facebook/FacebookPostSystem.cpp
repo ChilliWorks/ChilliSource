@@ -35,7 +35,7 @@ namespace ChilliSource
 #elif TARGET_ANDROID
             return new ChilliSource::Android::CFacebookPostSystem(inpAuthSystem);
 #endif
-			return NULL;
+			return nullptr;
         }
         
 		void FacebookPostDesc::ToJSON(Json::Value & outsRoot) const

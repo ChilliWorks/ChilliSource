@@ -46,7 +46,7 @@ namespace ChilliSource
 			//Once we have reached a certain tree depth then the octants have all be created
 			if(inuwDepth >= (s32)kudwMaximumTreeDepth)
 			{
-				return NULL;
+				return nullptr;
 			}
 			
 			//Create the new child node

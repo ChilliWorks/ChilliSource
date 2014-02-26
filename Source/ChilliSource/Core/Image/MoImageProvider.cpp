@@ -135,7 +135,7 @@ namespace ChilliSource
             bool bFoundFormat = GetFormatInfo(sHeader.udwImageFormat, sHeader.udwWidth, sHeader.udwHeight, eFormat, udwSize);
             MOFLOW_ASSERT(bFoundFormat, "Invalid MoImage Format.");
             
-            u8* pubyBitmapData = NULL;
+            u8* pubyBitmapData = nullptr;
             if(sHeader.udwCompression != 0)
             {
                 // Allocated memory needed for the compressed image data

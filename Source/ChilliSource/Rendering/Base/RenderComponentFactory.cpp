@@ -39,7 +39,7 @@ namespace ChilliSource
         /// Managers that are required
 		//--------------------------------------------------------
         CRenderComponentFactory::CRenderComponentFactory(IRenderSystem* inpRenderSystem) 
-        : mpRenderSystem(inpRenderSystem), mpMeshManager(NULL), mpMaterialManager(NULL), mpSpriteSheetManager(NULL), mpTextureManager(NULL), mpRenderCapabilities(NULL)
+        : mpRenderSystem(inpRenderSystem), mpMeshManager(nullptr), mpMaterialManager(nullptr), mpSpriteSheetManager(nullptr), mpTextureManager(nullptr), mpRenderCapabilities(nullptr)
         {
 			if(!mpSpriteSheetManager)
             {

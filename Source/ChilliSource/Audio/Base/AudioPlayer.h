@@ -57,7 +57,7 @@ namespace ChilliSource
             /// @return ID of file provide access
             //------------------------------------------------
             static u32 PlayEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffectFile,
-                                  bool inbLooping, AudioEventDelegate inAudioFinishedEvent = NULL);
+                                  bool inbLooping, AudioEventDelegate inAudioFinishedEvent = nullptr);
             //------------------------------------------------
             /// Play 
             ///
@@ -163,7 +163,7 @@ namespace ChilliSource
             /// Get Audio Component At Index
             ///
             /// Returns the current audio component in the cache that matches
-            /// the given index or NULL if index is invalid
+            /// the given index or nullptr if index is invalid
             ///
             /// @param Index of audio component to return
             /// @param Audio component or empty pointer of not found

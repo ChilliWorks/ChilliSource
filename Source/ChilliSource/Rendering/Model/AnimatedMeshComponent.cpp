@@ -202,7 +202,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void CAnimatedMeshComponent::SetMaterialForSubMesh(const MaterialPtr& inpMaterial, const std::string& instrSubMeshName)
         {
-            if (NULL != mpModel)
+            if (nullptr != mpModel)
             {
                 s32 indwIndex = mpModel->GetSubMeshIndexByName(instrSubMeshName);
                 if (indwIndex >= 0 && indwIndex < mMaterials.size())
@@ -234,7 +234,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         MaterialPtr CAnimatedMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
         {
-            if (NULL != mpModel)
+            if (nullptr != mpModel)
             {
                 s32 indwIndex = mpModel->GetSubMeshIndexByName(instrSubMeshName);
                 
@@ -319,7 +319,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CAnimatedMeshComponent::AttachAnimation(const SkinnedAnimationPtr& inpAnimation, f32 infBlendlinePosition)
         {
-            if (NULL != mActiveAnimationGroup)
+            if (nullptr != mActiveAnimationGroup)
             {
                 mActiveAnimationGroup->AttachAnimation(inpAnimation, infBlendlinePosition);
                 mbAnimationDataDirty = true;
@@ -330,7 +330,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CAnimatedMeshComponent::GetAnimations(DYNAMIC_ARRAY<SkinnedAnimationPtr>& outapSkinnedAnimationList)
         {
-            if (NULL != mActiveAnimationGroup)
+            if (nullptr != mActiveAnimationGroup)
             {
                 mActiveAnimationGroup->GetAnimations(outapSkinnedAnimationList);
             }
@@ -340,7 +340,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CAnimatedMeshComponent::DetatchAnimation(const SkinnedAnimationPtr& inpAnimation)
         {
-            if (NULL != mActiveAnimationGroup)
+            if (nullptr != mActiveAnimationGroup)
             {
                 mActiveAnimationGroup->DetatchAnimation(inpAnimation);
             }
@@ -350,7 +350,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CAnimatedMeshComponent::FadeOut(AnimationBlendType ineFadeType, f32 infFadeOutTime)
         {
-            if (NULL != mActiveAnimationGroup && true == mActiveAnimationGroup->IsPrepared())
+            if (nullptr != mActiveAnimationGroup && true == mActiveAnimationGroup->IsPrepared())
             {
                 mFadingAnimationGroup = mActiveAnimationGroup;
                 mActiveAnimationGroup = SkinnedAnimationGroupPtr(new CSkinnedAnimationGroup(mpModel->GetSkeletonPtr()));
@@ -361,7 +361,7 @@ namespace ChilliSource
                 SetPlaybackPosition(0.0f);
                 mAnimationChangedEvent.Invoke(this);
             }
-            else if (NULL != mActiveAnimationGroup)
+            else if (nullptr != mActiveAnimationGroup)
             {
                 mActiveAnimationGroup->ClearAnimations();
             }
@@ -372,7 +372,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CAnimatedMeshComponent::ClearAnimations()
         {
-            if (mActiveAnimationGroup != NULL)
+            if (mActiveAnimationGroup != nullptr)
             {
                 mActiveAnimationGroup->ClearAnimations();
                 mFadingAnimationGroup.reset();
@@ -387,13 +387,13 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CAnimatedMeshComponent::AttachEntity(const Core::EntityPtr& inpEntity, const std::string& instrNodeName)
         {
-            if (NULL == mpEntityOwner)
+            if (nullptr == mpEntityOwner)
             {
                 ERROR_LOG("Could not attach entity to animated mesh becuase the mesh is not yet attached to an entity.");
                 return;
             }
             
-            if (NULL != inpEntity->GetParent() || NULL != inpEntity->GetOwningScene())
+            if (nullptr != inpEntity->GetParent() || nullptr != inpEntity->GetOwningScene())
             {
                 ERROR_LOG("Could not attach entity to animated mesh becuase the entity already has a parent.");
                 return;
@@ -545,7 +545,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         f32 CAnimatedMeshComponent::GetAnimationLength()
         {
-            if (mActiveAnimationGroup != NULL)
+            if (mActiveAnimationGroup != nullptr)
             {
                 return mActiveAnimationGroup->GetAnimationLength();
             }
@@ -591,7 +591,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CAnimatedMeshComponent::Update(f32 infDeltaTime)
         {
-            if (NULL != mpEntityOwner && NULL != mpEntityOwner->GetOwningScene())
+            if (nullptr != mpEntityOwner && nullptr != mpEntityOwner->GetOwningScene())
             {
                 UpdateAnimation(infDeltaTime);
             }
@@ -623,7 +623,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CAnimatedMeshComponent::Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass)
 		{
-            if (NULL != mActiveAnimationGroup)
+            if (nullptr != mActiveAnimationGroup)
             {
                 if (mbAnimationDataDirty == true)
                 {
@@ -647,7 +647,7 @@ namespace ChilliSource
                 {
                     mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), mMaterials, mActiveAnimationGroup);
                 }
-                else if (mFadingAnimationGroup != NULL && mFadingAnimationGroup->IsPrepared() == true)
+                else if (mFadingAnimationGroup != nullptr && mFadingAnimationGroup->IsPrepared() == true)
                 {
                     mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), mMaterials, mFadingAnimationGroup);
                 }
@@ -658,9 +658,9 @@ namespace ChilliSource
         //-----------------------------------------------------
         void CAnimatedMeshComponent::RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam)
         {
-            if (NULL != mActiveAnimationGroup)
+            if (nullptr != mActiveAnimationGroup)
             {
-                if (mspShadowMapMaterial == NULL)
+                if (mspShadowMapMaterial == nullptr)
                 {
                     mspShadowMapMaterial = Core::CApplication::GetSystemImplementing<CMaterialFactory>()->CreateAnimatedDirectionalShadowMap();
                 }
@@ -679,7 +679,7 @@ namespace ChilliSource
                 {
                     mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), aMaterials, mActiveAnimationGroup);
                 }
-                else if (mFadingAnimationGroup != NULL && mFadingAnimationGroup->IsPrepared() == true)
+                else if (mFadingAnimationGroup != nullptr && mFadingAnimationGroup->IsPrepared() == true)
                 {
                     mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), aMaterials, mFadingAnimationGroup);
                 }
@@ -690,7 +690,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CAnimatedMeshComponent::UpdateAnimation(f32 infDeltaTime)
         {
-            if (NULL != mpEntityOwner && NULL != mpEntityOwner->GetOwningScene() && NULL != mActiveAnimationGroup && mActiveAnimationGroup->GetAnimationCount() != 0)
+            if (nullptr != mpEntityOwner && nullptr != mpEntityOwner->GetOwningScene() && nullptr != mActiveAnimationGroup && mActiveAnimationGroup->GetAnimationCount() != 0)
             {
                 //update the animation timer.
                 UpdateAnimationTimer(infDeltaTime);
@@ -699,7 +699,7 @@ namespace ChilliSource
                 mActiveAnimationGroup->BuildAnimationData(meBlendType, mfPlaybackPosition, mfBlendlinePosition);
                 
                 //if there is a group fading out, then apply this to the active data.
-                if (NULL != mFadingAnimationGroup)
+                if (nullptr != mFadingAnimationGroup)
                 {
                     if (mfFadeMaxTime > 0.0f && mfFadeTimer < mfFadeMaxTime)
                     {
@@ -723,7 +723,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CAnimatedMeshComponent::UpdateAnimationTimer(f32 infDeltaTime)
 		{
-            if (NULL != mActiveAnimationGroup)
+            if (nullptr != mActiveAnimationGroup)
             {
                 //Update the playback position
                 mfPlaybackPosition += infDeltaTime * mfPlaybackSpeedMultiplier;
@@ -752,7 +752,7 @@ namespace ChilliSource
                 }
                 
                 //update the fade timer
-                if (NULL != mFadingAnimationGroup)
+                if (nullptr != mFadingAnimationGroup)
                 {
                     mfFadeTimer += infDeltaTime;
                 }
@@ -763,7 +763,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CAnimatedMeshComponent::UpdateAttachedEntities()
         {
-            if (NULL != mActiveAnimationGroup)
+            if (nullptr != mActiveAnimationGroup)
             {
                 for (AttachedEntityList::iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end();)
                 {
@@ -817,7 +817,7 @@ namespace ChilliSource
                     
 					//if the material load has failed, either fall back on the previous material, or stop getting materials if this is the
 					//first mesh as theres no material to fall back on.
-					if (pMaterial.get() == NULL)
+					if (pMaterial.get() == nullptr)
 					{
 						if (i == 0)
 							break;

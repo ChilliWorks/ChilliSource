@@ -26,7 +26,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//------------------------------------------------------
-		CMeshBatch::CMeshBatch() : mpMeshBuffer(NULL), mudwVertexCount(0), mudwIndexCount(0), mdwTag(0)
+		CMeshBatch::CMeshBatch() : mpMeshBuffer(nullptr), mudwVertexCount(0), mudwIndexCount(0), mdwTag(0)
 		{
 
 		}
@@ -107,9 +107,9 @@ namespace ChilliSource
 			mpMeshBuffer->SetIndexCount(mudwIndexCount);
 			
 			//Get the buffer locations
-			MeshBatchVertex* pVBatchBuffer = NULL;
+			MeshBatchVertex* pVBatchBuffer = nullptr;
 			mpMeshBuffer->LockVertex((f32**)&pVBatchBuffer, 0, 0);
-			u16* pIBatchBuffer = NULL;
+			u16* pIBatchBuffer = nullptr;
 			mpMeshBuffer->LockIndex(&pIBatchBuffer, 0, 0);
             
             MeshBatchVertex sTempVert;
@@ -146,7 +146,7 @@ namespace ChilliSource
                     u32 NumVerts = pSubBuffer->GetVertexCount();
                     
 					//Copy the vertex data into the buffer
-					MeshBatchVertex* _pVSubBuffer = NULL;
+					MeshBatchVertex* _pVSubBuffer = nullptr;
 					pSubBuffer->LockVertex((f32**)&_pVSubBuffer, 0, 0);
                     
                     //Get the vertex data and transform it before we load it into the batch buffer
@@ -175,7 +175,7 @@ namespace ChilliSource
                     u32 NumIndices = pSubBuffer->GetIndexCount();
                     
                     //Lock the data we need to copy
-                    u16* _pISubBuffer = NULL;
+                    u16* _pISubBuffer = nullptr;
                     pSubBuffer->LockIndex(&_pISubBuffer, 0, 0);
                     
                     //Get the index data and offset it before we load it into the batch buffer

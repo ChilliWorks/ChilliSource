@@ -23,7 +23,7 @@ namespace ChilliSource
 		/// Default
 		//-------------------------------------------------------
 		IAudioSystem::IAudioSystem() : mfMasterEffectVolume(kfDefaultAudioVolume), mfMasterStreamVolume(kfDefaultAudioVolume),
-		mfDopplerFactor(kfDefaultDoppler), mfRolloffFactor(kfDefaultRolloff), mfDistanceFactor(kfDefaultDistance), mpAudioComponentFactory(NULL), mpAudioManager(NULL)
+		mfDopplerFactor(kfDefaultDoppler), mfRolloffFactor(kfDefaultRolloff), mfDistanceFactor(kfDefaultDistance), mpAudioComponentFactory(nullptr), mpAudioManager(nullptr)
 		{
 			//Set the overall system volume
 			SetMasterEffectVolume(kfDefaultAudioVolume);

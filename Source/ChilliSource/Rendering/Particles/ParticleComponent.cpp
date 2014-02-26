@@ -24,7 +24,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		/// Constructor 
 		//-----------------------------------------------------
-		CParticleComponent::CParticleComponent(): mpOwningSystem(NULL), mfUpdateScaleFactor(1.0f), mbEmittersFinished(false)
+		CParticleComponent::CParticleComponent(): mpOwningSystem(nullptr), mfUpdateScaleFactor(1.0f), mbEmittersFinished(false)
 		{
             SetCullingEnabled(false);
 		}
@@ -68,14 +68,14 @@ namespace ChilliSource
 			return mEmitters.size();
 		}
 		//---------------------------------------------------
-		/// Returns the emitter at the given index or NULL
+		/// Returns the emitter at the given index or nullptr
 		//---------------------------------------------------
 		CParticleEmitter* CParticleComponent::GetEmitter(u32 inudwIndex){
 			
 			if (inudwIndex < mEmitters.size())
 				return mEmitters[inudwIndex];
 				
-			return NULL;
+			return nullptr;
 		}
         //---------------------------------------------------
 		/// Add Effector

@@ -20,7 +20,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		/// Constructor
 		//-------------------------------------------------
-		CFMODAudioResource::CFMODAudioResource() : mpFMODSound(NULL)
+		CFMODAudioResource::CFMODAudioResource() : mpFMODSound(nullptr)
 		{
             Audio::IAudioResource::SetStreamed(false);
 		}
@@ -38,7 +38,7 @@ namespace ChilliSource
 		{
             u32 udwLengthInMs = 0;
             
-            if (mpFMODSound != NULL)
+            if (mpFMODSound != nullptr)
             {
                 mpFMODSound->getLength(&udwLengthInMs, FMOD_TIMEUNIT_MS);
             }
@@ -51,7 +51,7 @@ namespace ChilliSource
         //--------------------------------------------------
         void CFMODAudioResource::SetLooping(bool inbShouldLoop)
         {
-            if (mpFMODSound != NULL)
+            if (mpFMODSound != nullptr)
             {
                 inbShouldLoop ? mpFMODSound->setMode(FMOD_LOOP_NORMAL) : mpFMODSound->setMode(FMOD_LOOP_OFF);
             }
@@ -61,7 +61,7 @@ namespace ChilliSource
 		//--------------------------------------------------
 		CFMODAudioResource::~CFMODAudioResource()
 		{
-            if (mpFMODSound != NULL)
+            if (mpFMODSound != nullptr)
             {
                 mpFMODSound->release();
             }

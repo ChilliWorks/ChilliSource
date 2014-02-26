@@ -21,7 +21,7 @@ namespace ChilliSource
 		DEFINE_PROPERTY(SecureEntry);
 		DEFINE_PROPERTY(CharacterLimit);
 
-        CEditableLabel* CEditableLabel::pKeyboardListener = NULL;
+        CEditableLabel* CEditableLabel::pKeyboardListener = nullptr;
         
         //Res density of iPhone 4, used to normalise text spacing
         const f32 kfScalableFontResDensity = 2.0f;
@@ -31,7 +31,7 @@ namespace ChilliSource
         ///
         /// Default
         //-------------------------------------------------
-        CEditableLabel::CEditableLabel() : mpKeyboard(NULL), SecureEntry(false), CharacterLimit(0), mbShowKeyboard(false), mfTimeToShow(0.0f), mu32SeparatorSpacing(0), mutf8strSeparator(""), mutf8strTextWithSeparators(""), mbSelected(false)
+        CEditableLabel::CEditableLabel() : mpKeyboard(nullptr), SecureEntry(false), CharacterLimit(0), mbShowKeyboard(false), mfTimeToShow(0.0f), mu32SeparatorSpacing(0), mutf8strSeparator(""), mutf8strTextWithSeparators(""), mbSelected(false)
         {
             
         }
@@ -41,7 +41,7 @@ namespace ChilliSource
         /// From param dictionary
         //-------------------------------------------------
         CEditableLabel::CEditableLabel(const Core::ParamDictionary& insParams) 
-        : CLabel(insParams), mpKeyboard(NULL), CharacterLimit(0), SecureEntry(false), mbShowKeyboard(false), mfTimeToShow(0.0f), mu32SeparatorSpacing(0), mutf8strSeparator(""), mutf8strTextWithSeparators("")
+        : CLabel(insParams), mpKeyboard(nullptr), CharacterLimit(0), SecureEntry(false), mbShowKeyboard(false), mfTimeToShow(0.0f), mu32SeparatorSpacing(0), mutf8strSeparator(""), mutf8strTextWithSeparators("")
         {
 			std::string strValue;
 
@@ -259,7 +259,7 @@ namespace ChilliSource
             if(pKeyboardListener == this)
             {
                 mpKeyboard->GetKeyboardTextChangeEvent() -= Input::TextInputEventDelegate(this, &CEditableLabel::OnKeyboardTextChanged);
-                pKeyboardListener = NULL;
+                pKeyboardListener = nullptr;
                 mOnKeyboardHideEvent.Invoke();
                
             }
@@ -524,7 +524,7 @@ namespace ChilliSource
         {
             if(pKeyboardListener == this)
             {
-                pKeyboardListener = NULL;
+                pKeyboardListener = nullptr;
 				
 				if(mpKeyboard)
 				{

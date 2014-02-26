@@ -27,7 +27,7 @@ namespace ChilliSource
 		/// Default
 		//-------------------------------------------------------
 		IRenderSystem::IRenderSystem()
-        : mpRenderFactory(NULL), mpSpriteBatcher(NULL)
+        : mpRenderFactory(nullptr), mpSpriteBatcher(nullptr)
 		{
             Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mMeshManager);
 			Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mSkinnedAnimationManager);
@@ -42,7 +42,7 @@ namespace ChilliSource
         //----------------------------------------------------
         CDynamicSpriteBatch* IRenderSystem::GetDynamicSpriteBatchPtr()
         {
-            if(mpSpriteBatcher == NULL)
+            if(mpSpriteBatcher == nullptr)
             {
                 mpSpriteBatcher = new CDynamicSpriteBatch(this);
             }
@@ -65,7 +65,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		Core::IComponentFactory* IRenderSystem::GetComponentFactoryPtr(u32 inudwIndex)
 		{
-            if(mpRenderFactory == NULL)
+            if(mpRenderFactory == nullptr)
             {
                 mpRenderFactory = new CRenderComponentFactory(this);
             }
@@ -79,7 +79,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		Core::IComponentFactory& IRenderSystem::GetComponentFactory(u32 inudwIndex)
 		{
-            if(mpRenderFactory == NULL)
+            if(mpRenderFactory == nullptr)
             {
                 mpRenderFactory = new CRenderComponentFactory(this);
             }

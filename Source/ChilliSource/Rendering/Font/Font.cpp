@@ -190,7 +190,7 @@ namespace ChilliSource
         f32 CFont::GetKerningBetweenCharacters(Core::UTF8String::Char inChar1, Core::UTF8String::Char inChar2) const
         {
             const CKernLookup* pLookup = &(*std::lower_bound(maFirstLookup.begin(), maFirstLookup.end(), CKernLookup(inChar1, 0, 0)));
-			if(NULL == pLookup || pLookup->wCharacter != inChar1)
+			if(nullptr == pLookup || pLookup->wCharacter != inChar1)
             {
 				return mfGlobalKerningOffset;
             }
@@ -198,7 +198,7 @@ namespace ChilliSource
             u32 udwStart = pLookup->uwStart;
 			u32 udwEnd = udwStart + pLookup->uwLength;
 			const CKernPair* pPair = &(*std::lower_bound(maPairs.begin() + udwStart, maPairs.begin() + udwEnd, CKernPair(inChar2, 0.0f)));
-			if(NULL == pPair || pPair->wCharacter != inChar2)
+			if(nullptr == pPair || pPair->wCharacter != inChar2)
             {
 				return mfGlobalKerningOffset;
 			}

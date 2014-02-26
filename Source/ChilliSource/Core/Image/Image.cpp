@@ -125,7 +125,7 @@ namespace ChilliSource
 		/// Default
 		//----------------------------------------------------------------
 		CImage::CImage()
-		:meFormat(CImage::Format::k_RGBA8888), mudwWidth(0), mudwHeight(0), mpRawData(NULL), meCompression(ImageCompression::k_none), mbHasAlpha(false), mudwDataLength(0), mpImageData(NULL)
+		:meFormat(CImage::Format::k_RGBA8888), mudwWidth(0), mudwHeight(0), mpRawData(nullptr), meCompression(ImageCompression::k_none), mbHasAlpha(false), mudwDataLength(0), mpImageData(nullptr)
 		{
 			
 		}

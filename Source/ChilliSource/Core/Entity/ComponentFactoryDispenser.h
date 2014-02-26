@@ -52,7 +52,7 @@ namespace ChilliSource
             ///
             /// Looks for a factory that can create the given type
             /// @param The type ID of the object you wish to create (i.e. CMesh, ITexture)
-            /// @return Factory that can produce the given interface or NULL if none available
+            /// @return Factory that can produce the given interface or nullptr if none available
             //--------------------------------------------------------------------------------------------------
             IComponentFactory* GetFactoryProducing(const std::string & insName);
             //--------------------------------------------------------------------------------------------------
@@ -68,14 +68,14 @@ namespace ChilliSource
             ///
             /// Looks for a factory with the given interface
             /// @param The type ID of the factory interface you are seeking
-            /// @return Factory that implements the given interface or NULL if none available
+            /// @return Factory that implements the given interface or nullptr if none available
             //--------------------------------------------------------------------------------------------------
             IComponentFactory* GetFactoryWithInterface(InterfaceIDType inInterfaceID);
             //--------------------------------------------------------------------------------------------------
 			/// Get Factory With Interface
 			///
 			/// Convenience template function for the above
-			/// @return Factory that implements the templated interface or NULL if none available
+			/// @return Factory that implements the templated interface or nullptr if none available
 			//--------------------------------------------------------------------------------------------------
 			template <typename T> T* GetFactoryWithInterface()
             {

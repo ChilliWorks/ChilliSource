@@ -93,7 +93,7 @@ namespace ChilliSource
 			SharedEntityList::iterator it = std::find(mEntities.begin(), mEntities.end(), inpEntity);
 			if(it != mEntities.end())
 			{
-				(*it)->SetOwningScene(NULL);
+				(*it)->SetOwningScene(nullptr);
                 it->swap(mEntities.back());
                 mEntities.pop_back();
 			}

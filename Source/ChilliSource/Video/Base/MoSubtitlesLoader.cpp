@@ -135,7 +135,7 @@ namespace ChilliSource
                 for (Json::ValueIterator it = root[kstrTagStyles].begin(); it != root[kstrTagStyles].end(); ++it)
                 {
                     CSubtitles::StylePtr pStyle = LoadStyle((*it));
-                    if (pStyle != NULL)
+                    if (pStyle != nullptr)
                     {
                         outpResource->AddStyle(pStyle);
                     }
@@ -158,7 +158,7 @@ namespace ChilliSource
                 for (Json::ValueIterator it = root[kstrTagSubtitles].begin(); it != root[kstrTagSubtitles].end(); ++it)
                 {
                     CSubtitles::SubtitlePtr pSubtitle = LoadSubtitle((*it));
-                    if (pSubtitle != NULL)
+                    if (pSubtitle != nullptr)
                     {
                         outpResource->AddSubtitle(pSubtitle);
                     }
