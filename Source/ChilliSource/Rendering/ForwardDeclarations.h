@@ -1,14 +1,14 @@
-/*
- *  ForwardDeclarations.h
- *  moFlo
- *
- *  Created by Stuart McGaw on 23/09/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  ForwardDeclarations.h
+//  Chilli Source
+//
+//  Created by Ian Copland on 26/02/2014.
+//  Copyright 2014 Tag Games. All rights reserved.
+//
 
-#ifndef _MOFLO_RENDERING_FORWARDDECLARATIONS_H_
-#define _MOFLO_RENDERING_FORWARDDECLARATIONS_H_
+
+#ifndef _CHILLISOURCE_RENDERING_FORWARDDECLARATIONS_H_
+#define _CHILLISOURCE_RENDERING_FORWARDDECLARATIONS_H_
 
 #include <ChilliSource/ChilliSource.h>
 
@@ -16,159 +16,110 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CVertexDeclaration;					//Defines the layout and components for a vertex
-		
-		class CMesh;							//A container for vertex data and indexes describing geometry
-		class CSubMesh;
-		class IMeshBuffer;				//A rendersystem specific hardware accelerated buffer containing vertex data
-		class CMeshManager;
-		
-		class CSkinnedAnimation;			//a single skeletal animation for use with a CMesh.
-		class CSkinnedAnimationManager;
-        class CSkinnedAnimationGroup;
-		class CSkeleton;
-		struct SkinnedAnimationFrame;
-        struct SkeletonNode;
-		
-        class CFont;
-		class CFontLoader;
-		class IFontManager;
-		
-		class ITexture;					//Texture that can be bound, have filters applied to it (implemented by a subclass per IRenderSystem)
-		class ITextureManager;
-        
-        class ICubemap;
-        class ICubemapManager;
-		
-		class CSpriteSheet;
-		class CSpriteSheetLoader;
-		class ISpriteSheetManager;
-		
-		class IShader; 
-		class IShaderManager;
-		
-		class CMaterial;				//Describes how a surface should be drawn using lighting, textures and shaders
-		class IMaterialManager;
-        class CMaterialFactory;
-		
-		class IRenderTarget;
-		
-		class CRenderer;				//Class responsible for drawing the contents of a scene graph to screen
-        class CCanvasRenderer;
-		class CRendererSortPredicate;
-		typedef std::shared_ptr<CRendererSortPredicate> RendererSortPredicatePtr;
-        class ICullingPredicate;
-        typedef std::shared_ptr<ICullingPredicate> CullingPredicatePtr;
-
-		class CSpriteBatch;
-		class CDynamicSpriteBatch;
-		class CMeshBatch;
-		
-		class IRenderSystem;			//A specialisation of ISystem which provides facilities for rendering Scenes to screen
-        class IRenderable;
-		
-		class CRenderComponentFactory;	
-		
-		class IRenderComponent;				//Base class for anything that can be drawn by an IRenderSystem.
-		class CStaticMeshComponent;			//A 3D mesh which cannot be animated (though it can be moved)
-		class CAnimatedMeshComponent;
-		class CStaticMeshBatchComponent;
-		class CParticleSystemComponent;		//A particle system
-		class CSpriteComponent;				//A quad placed in world space
-		class CStaticSpriteBatchComponent;	
-		
-		//Other Rendering subclasses of IComponent
-		class CCameraComponent;
-		class ILightComponent;
-        class CAmbientLightComponent;
-		class CDirectionalLightComponent;
-        class CPointLightComponent;
-        
-        class CAnimatedMeshComponentUpdater;
-		
-		class CParticleSystem;
-		class CParticleComponent;
-		class CParticleEmitter;
-		struct Particle;
-		class CParticleComponentFactory;
-        class CParticleEffectorFactory;
-        class CParticleEmitterFactory;
-		class IParticleEffector;
-		
-        class IRenderCapabilities;
-        
-		//---Light components
-		typedef std::shared_ptr<ILightComponent> LightComponentPtr;
-		typedef std::weak_ptr<ILightComponent> LightComponentWeakPtr;
-        
-        typedef std::shared_ptr<CAmbientLightComponent> AmbientLightComponentPtr;
-		typedef std::weak_ptr<CAmbientLightComponent> AmbientLightComponentWeakPtr;
-		
-		typedef std::shared_ptr<CDirectionalLightComponent> DirectionalLightComponentPtr;
-		typedef std::weak_ptr<CDirectionalLightComponent> DirectionalLightComponentWeakPtr;
-        
-        typedef std::shared_ptr<CPointLightComponent> PointLightComponentPtr;
-		typedef std::weak_ptr<CPointLightComponent> PointLightComponentWeakPtr;
-		
-		//---Render components
-		typedef std::shared_ptr<IRenderComponent> RenderComponentPtr;
-		typedef std::weak_ptr<IRenderComponent> RenderComponentWeakPtr;
-		
-		typedef std::shared_ptr<CSpriteComponent> SpriteComponentPtr;
-		typedef std::weak_ptr<CSpriteComponent> SpriteComponentWeakPtr;
-		
-		typedef std::shared_ptr<CStaticMeshComponent> StaticMeshComponentPtr;
-		typedef std::weak_ptr<CStaticMeshComponent> StaticMeshComponentWeakPtr;
-		
-		typedef std::shared_ptr<CAnimatedMeshComponent> AnimatedMeshComponentPtr;
-		typedef std::weak_ptr<CAnimatedMeshComponent> AnimatedMeshComponentWeakPtr;
-		
-		typedef std::shared_ptr<CParticleComponent> ParticleComponentPtr;
-		typedef std::weak_ptr<CParticleComponent> ParticleComponentWeakPtr;
-		
-		typedef std::shared_ptr<CCameraComponent> CameraComponentPtr;
-		typedef std::weak_ptr<CCameraComponent> CameraComponentWeakPtr;
-
-		//---Resources
-        typedef std::shared_ptr<CFont> FontPtr;
-		typedef std::weak_ptr<CFont> FontWeakPtr;
-
-		typedef std::shared_ptr<CMaterial> MaterialPtr;
-		typedef std::weak_ptr<CMaterial> MaterialWeakPtr;
-		
-		typedef std::shared_ptr<CMesh> MeshPtr;
-		typedef std::weak_ptr<CMesh> MeshWeakPtr;
-		
-		typedef std::shared_ptr<CSkinnedAnimation> SkinnedAnimationPtr;
-		typedef std::weak_ptr<CSkinnedAnimation> SkinnedAnimationWeakPtr;
-		
-		typedef std::shared_ptr<CSubMesh> SubMeshPtr;
-		typedef std::weak_ptr<CSubMesh> SubMeshWeakPtr;
-		
-		typedef std::shared_ptr<IShader> ShaderPtr;
-		typedef std::weak_ptr<IShader> ShaderWeakPtr;
-		
-		typedef std::shared_ptr<CSpriteSheet> SpriteSheetPtr;
-		typedef std::weak_ptr<CSpriteSheet> SpriteSheetWeakPtr;
-		
-		typedef std::shared_ptr<ITexture> TexturePtr;
-		typedef std::weak_ptr<ITexture> TextureWeakPtr;
-        
-        typedef std::shared_ptr<ICubemap> CubemapPtr;
-		typedef std::weak_ptr<ICubemap> CubemapWeakPtr;
-		
-		//----Other
-		typedef std::shared_ptr<SkinnedAnimationFrame> SkinnedAnimationFramePtr;
-		typedef std::weak_ptr<SkinnedAnimationFrame> SkinnedAnimationFrameWeakPtr;
-        
-        typedef std::shared_ptr<SkeletonNode> SkeletonNodePtr;
-		typedef std::weak_ptr<SkeletonNode> SkeletonNodeWeakPtr;
-		
-        typedef std::shared_ptr<CSkinnedAnimationGroup> SkinnedAnimationGroupPtr;
-		typedef std::weak_ptr<CSkinnedAnimationGroup> SkinnedAnimationWeakGroupPtr;
-        
-		typedef std::shared_ptr<CSkeleton> SkeletonPtr;
-		typedef std::weak_ptr<CSkeleton> SkeletonWeakPtr;
+        //------------------------------------------------------------
+        /// Base
+        //------------------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(CAlignmentAnchors);
+        CS_FORWARD_DECLARE_CLASS(CCanvasRenderer);
+        CS_FORWARD_DECLARE_CLASS(ICullingPredicate);
+        CS_FORWARD_DECLARE_CLASS(CViewportCullPredicate);
+        CS_FORWARD_DECLARE_CLASS(CFrustumCullPredicate);
+        CS_FORWARD_DECLARE_CLASS(CMeshBatch);
+        CS_FORWARD_DECLARE_CLASS(IMeshBuffer);
+        CS_FORWARD_DECLARE_CLASS(IRenderCapabilities);
+        CS_FORWARD_DECLARE_CLASS(IRenderComponent);
+        CS_FORWARD_DECLARE_CLASS(CRenderComponentFactory);
+        CS_FORWARD_DECLARE_CLASS(CRenderer);
+        CS_FORWARD_DECLARE_CLASS(CRendererSortPredicate);
+        CS_FORWARD_DECLARE_CLASS(CnullptrSortPredicate);
+        CS_FORWARD_DECLARE_CLASS(CBackToFrontSortPredicate);
+        CS_FORWARD_DECLARE_CLASS(CMaterialSortPredicate);
+        CS_FORWARD_DECLARE_CLASS(IRenderSystem);
+        CS_FORWARD_DECLARE_CLASS(IRenderTarget);
+        CS_FORWARD_DECLARE_CLASS(CVertexDeclaration);
+        //------------------------------------------------------------
+        /// Camera
+        //------------------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(CCameraComponent);
+        //------------------------------------------------------------
+        /// Font
+        //------------------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(CFont);
+        CS_FORWARD_DECLARE_CLASS(CFontLoader);
+        CS_FORWARD_DECLARE_CLASS(IFontManager);
+        //------------------------------------------------------------
+        /// Lighting
+        //------------------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(CAmbientLightComponent);
+        CS_FORWARD_DECLARE_CLASS(CDirectionalLightComponent);
+        CS_FORWARD_DECLARE_CLASS(ILightComponent);
+        CS_FORWARD_DECLARE_CLASS(CPointLightComponent);
+        //------------------------------------------------------------
+        /// Material
+        //------------------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(CMaterial);
+        CS_FORWARD_DECLARE_CLASS(CMaterialFactory);
+        CS_FORWARD_DECLARE_CLASS(CMaterialLoader);
+        CS_FORWARD_DECLARE_CLASS(IMaterialManager);
+        //------------------------------------------------------------
+        /// Model
+        //------------------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(CAnimatedMeshComponent);
+        CS_FORWARD_DECLARE_CLASS(CAnimatedMeshComponentUpdater);
+        CS_FORWARD_DECLARE_CLASS(CMesh);
+        CS_FORWARD_DECLARE_CLASS(MeshFeatureDescriptor);
+        CS_FORWARD_DECLARE_CLASS(SubMeshDescriptor);
+        CS_FORWARD_DECLARE_CLASS(MeshDescriptor);
+        CS_FORWARD_DECLARE_CLASS(CMeshManager);
+        CS_FORWARD_DECLARE_CLASS(CMoAnimLoader);
+        CS_FORWARD_DECLARE_CLASS(CMoModelLoader);
+        CS_FORWARD_DECLARE_CLASS(CSkeleton);
+        CS_FORWARD_DECLARE_CLASS(CSkinnedAnimation);
+        CS_FORWARD_DECLARE_CLASS(SkinnedAnimationFrame);
+        CS_FORWARD_DECLARE_CLASS(SkeletonNode);
+        CS_FORWARD_DECLARE_CLASS(CSkinnedAnimationGroup);
+        CS_FORWARD_DECLARE_CLASS(CSkinnedAnimationManager);
+        CS_FORWARD_DECLARE_CLASS(CStaticMeshComponent);
+        CS_FORWARD_DECLARE_CLASS(CSubMesh);
+        //------------------------------------------------------------
+        /// Particles
+        //------------------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(CParticleComponent);
+        CS_FORWARD_DECLARE_CLASS(CParticleComponentFactory);
+        CS_FORWARD_DECLARE_CLASS(CParticleSystem);
+        CS_FORWARD_DECLARE_CLASS(CColourChangerParticleEffector);
+        CS_FORWARD_DECLARE_CLASS(CLinearForceParticleEffector);
+        CS_FORWARD_DECLARE_CLASS(IParticleEffector);
+        CS_FORWARD_DECLARE_CLASS(CParticleEffectorFactory);
+        CS_FORWARD_DECLARE_CLASS(CScalerParticleEffector);
+        CS_FORWARD_DECLARE_CLASS(CSpinnerParticleEffector);
+        CS_FORWARD_DECLARE_CLASS(CConeParticleEmitter);
+        CS_FORWARD_DECLARE_CLASS(CParticleEmitter);
+        CS_FORWARD_DECLARE_CLASS(CParticleEmitterFactory);
+        CS_FORWARD_DECLARE_CLASS(CPointParticleEmitter);
+        CS_FORWARD_DECLARE_CLASS(CRingParticleEmitter);
+        //------------------------------------------------------------
+        /// Shader
+        //------------------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(IShader);
+        CS_FORWARD_DECLARE_CLASS(IShaderManager);
+        //------------------------------------------------------------
+        /// Sprite
+        //------------------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(CDynamicSpriteBatch);
+        CS_FORWARD_DECLARE_CLASS(CSpriteBatch);
+        CS_FORWARD_DECLARE_CLASS(CSpriteComponent);
+        CS_FORWARD_DECLARE_CLASS(CSpriteSheet);
+        CS_FORWARD_DECLARE_CLASS(CSpriteSheetLoader);
+        CS_FORWARD_DECLARE_CLASS(ISpriteSheetManager);
+        CS_FORWARD_DECLARE_CLASS(CXMLSpriteSheetLoader);
+        //------------------------------------------------------------
+        /// Texture
+        //------------------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(ICubemap);
+        CS_FORWARD_DECLARE_CLASS(ICubemapManager);
+        CS_FORWARD_DECLARE_CLASS(ITexture);
+        CS_FORWARD_DECLARE_CLASS(ITextureManager);
 	}
 }
 
