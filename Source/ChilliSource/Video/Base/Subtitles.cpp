@@ -13,38 +13,38 @@ namespace ChilliSource
 {
 	namespace Video
 	{
-		DEFINE_NAMED_INTERFACE(CSubtitles);
+		DEFINE_NAMED_INTERFACE(Subtitles);
 		//------------------------------------------------
 		/// Constructor
 		//------------------------------------------------
-		CSubtitles::CSubtitles()
+		Subtitles::Subtitles()
 		{
 		}
         //----------------------------------------------------------
         /// Is A
         //----------------------------------------------------------
-        bool CSubtitles::IsA(Core::InterfaceIDType inInterfaceID) const
+        bool Subtitles::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-            return (inInterfaceID == CSubtitles::InterfaceID);
+            return (inInterfaceID == Subtitles::InterfaceID);
         }
         //----------------------------------------------------------
         /// Add Style
         //----------------------------------------------------------
-        void CSubtitles::AddStyle(const StylePtr& inpStyle)
+        void Subtitles::AddStyle(const StylePtr& inpStyle)
         {
             mStyleMap.insert(std::pair<std::string, StylePtr>(inpStyle->strName, inpStyle));
         }
         //----------------------------------------------------------
         /// Add Subtitle
         //----------------------------------------------------------
-        void CSubtitles::AddSubtitle(const SubtitlePtr& inpSubtitle)
+        void Subtitles::AddSubtitle(const SubtitlePtr& inpSubtitle)
         {
             mSubtitles.push_back(inpSubtitle);
         }
         //----------------------------------------------------------
         /// Get Subtitles At Time
         //----------------------------------------------------------
-        std::vector<CSubtitles::SubtitlePtr> CSubtitles::GetSubtitlesAtTime(TimeIntervalMs inTimeMS) const
+        std::vector<Subtitles::SubtitlePtr> Subtitles::GetSubtitlesAtTime(TimeIntervalMs inTimeMS) const
         {
             std::vector<SubtitlePtr> subtitles;
             
@@ -61,7 +61,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Style With Name
         //----------------------------------------------------------
-        CSubtitles::StylePtr CSubtitles::GetStyleWithName(const std::string& instrName) const
+        Subtitles::StylePtr Subtitles::GetStyleWithName(const std::string& instrName) const
         {
             std::unordered_map<std::string, StylePtr>::const_iterator found = mStyleMap.find(instrName);
             if (found != mStyleMap.end())

@@ -89,7 +89,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		bool CVideoPlayerActivity::IsA(Core::InterfaceIDType inID) const
 		{
-			return inID == Video::IVideoPlayerActivity::InterfaceID;
+			return inID == Video::VideoPlayerActivity::InterfaceID;
 		}
         //--------------------------------------------------------------
         /// Present

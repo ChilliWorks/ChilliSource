@@ -22,13 +22,13 @@ namespace ChilliSource
 		typedef fastdelegate::FastDelegate0<> VideoDismissedEventDelegate;
 		typedef fastdelegate::FastDelegate0<> VideoPlaybackEventDelegate;
         
-        class IVideoPlayerActivity : public Core::IActivity
+        class VideoPlayerActivity : public Core::IActivity
         {
         public:
-            DECLARE_NAMED_INTERFACE(IVideoPlayerActivity);
+            DECLARE_NAMED_INTERFACE(VideoPlayerActivity);
 			
-            IVideoPlayerActivity(){}
-            virtual ~IVideoPlayerActivity(){}
+            VideoPlayerActivity(){}
+            virtual ~VideoPlayerActivity(){}
             //--------------------------------------------------------------
             /// Present
             ///

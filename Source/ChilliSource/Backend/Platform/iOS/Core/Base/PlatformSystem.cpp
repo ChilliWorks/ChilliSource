@@ -75,7 +75,7 @@ namespace ChilliSource
             AddActivityFunc(Social::IEmailCompositionActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateEmailCompositionActivity));
  
             //---Activities
-            AddActivityFunc(Video::IVideoPlayerActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateDefaultVideoPlayerActivity));
+            AddActivityFunc(Video::VideoPlayerActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateDefaultVideoPlayerActivity));
 			AddActivityFunc(Web::WebViewActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateWebViewActivity));
 			
 			if(CSMSCompositionActivity::SupportedByDevice())

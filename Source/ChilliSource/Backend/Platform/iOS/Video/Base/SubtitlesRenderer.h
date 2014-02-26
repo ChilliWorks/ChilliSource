@@ -26,10 +26,10 @@
 {
     UIView* mpBaseView;
     CADisplayLink* mpDisplayLink;
-    ChilliSource::Video::SubtitlesPtr mpSubtitles;
+    ChilliSource::Video::SubtitlesSPtr mpSubtitles;
     ChilliSource::iOS::CVideoPlayerActivity* mpVideoPlayer;
-    std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*> maTextViewMap;
-    std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr> maSubtitlesToRemove;
+    std::unordered_map<ChilliSource::Video::Subtitles::SubtitlePtr, UITextView*> maTextViewMap;
+    std::vector<ChilliSource::Video::Subtitles::SubtitlePtr> maSubtitlesToRemove;
     TimeIntervalMs mCurrentTimeMS;
 }
 //--------------------------------------------------------
@@ -55,7 +55,7 @@
 ///
 /// @param the subtitle.
 //--------------------------------------------------------
--(void) AddTextView:(const ChilliSource::Video::CSubtitles::SubtitlePtr&)inpSubtitle;
+-(void) AddTextView:(const ChilliSource::Video::Subtitles::SubtitlePtr&)inpSubtitle;
 //--------------------------------------------------------
 /// Update Text View
 ///
@@ -64,7 +64,7 @@
 /// @param The text view.
 /// @param the subtitle.
 //--------------------------------------------------------
--(void) UpdateTextView:(UITextView*)inpTextView Subtitle:(const ChilliSource::Video::CSubtitles::SubtitlePtr&)inpSubtitle Time:(TimeIntervalMs)inTimeMS;
+-(void) UpdateTextView:(UITextView*)inpTextView Subtitle:(const ChilliSource::Video::Subtitles::SubtitlePtr&)inpSubtitle Time:(TimeIntervalMs)inTimeMS;
 //--------------------------------------------------------
 /// Remove Text View
 ///
@@ -73,7 +73,7 @@
 ///
 /// @param The subtitle.
 //--------------------------------------------------------
--(void) RemoveTextView:(const ChilliSource::Video::CSubtitles::SubtitlePtr&)inpSubtitle;
+-(void) RemoveTextView:(const ChilliSource::Video::Subtitles::SubtitlePtr&)inpSubtitle;
 //--------------------------------------------------------
 /// Set Alignment
 ///
