@@ -17,8 +17,8 @@ namespace ChilliSource
 {
     namespace Debugging
     {
-        CDebugStats::MapStringToString CDebugStats::mmapEvents;
-        bool CDebugStats::mbEnabled = true;
+        DebugStats::MapStringToString DebugStats::mmapEvents;
+        bool DebugStats::mbEnabled = true;
         
         //----------------------------------------------------------------------------------
         /// Get Value For Event
@@ -28,7 +28,7 @@ namespace ChilliSource
         /// @param Type ID
         /// @return Value as string
         //----------------------------------------------------------------------------------
-        const std::string& CDebugStats::GetValueForEvent(const std::string& instrType)
+        const std::string& DebugStats::GetValueForEvent(const std::string& instrType)
         {
             return mmapEvents[instrType];
         }
@@ -40,7 +40,7 @@ namespace ChilliSource
         /// @param Type ID
         /// @param Value to add
         //----------------------------------------------------------------------------------
-        void CDebugStats::AddToEvent(const std::string& instrType, u32 inudwValue)
+        void DebugStats::AddToEvent(const std::string& instrType, u32 inudwValue)
         {
             if(!mbEnabled) return;
             
@@ -66,7 +66,7 @@ namespace ChilliSource
         /// @param Type ID
         /// @param Value to add
         //----------------------------------------------------------------------------------
-        void CDebugStats::AddToEvent(const std::string& instrType, s32 indwValue)
+        void DebugStats::AddToEvent(const std::string& instrType, s32 indwValue)
         {
             if(!mbEnabled) return;
             
@@ -92,7 +92,7 @@ namespace ChilliSource
         /// @param Type ID
         /// @param Value to add
         //----------------------------------------------------------------------------------
-        void CDebugStats::AddToEvent(const std::string& instrType, f32 infValue)
+        void DebugStats::AddToEvent(const std::string& instrType, f32 infValue)
         {
             if(!mbEnabled) return;
             
@@ -115,7 +115,7 @@ namespace ChilliSource
         ///
         /// @param Whether tracking is enabled
         //----------------------------------------------------------------------------------
-        void CDebugStats::SetEnabled(bool inbEnabled)
+        void DebugStats::SetEnabled(bool inbEnabled)
         {
             mbEnabled = inbEnabled;
         }
@@ -124,7 +124,7 @@ namespace ChilliSource
         ///
         /// @return Whether tracking is enabled
         //----------------------------------------------------------------------------------
-        bool CDebugStats::IsEnabled()
+        bool DebugStats::IsEnabled()
         {
             return mbEnabled;
         }
@@ -133,7 +133,7 @@ namespace ChilliSource
         ///
         /// Clear all the previously recorded stats
         //----------------------------------------------------------------------------------
-        void CDebugStats::Clear()
+        void DebugStats::Clear()
         {
             mmapEvents.clear();
         }

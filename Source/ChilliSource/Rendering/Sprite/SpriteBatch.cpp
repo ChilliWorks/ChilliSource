@@ -160,7 +160,7 @@ namespace ChilliSource
                 //Tell the render system to draw the contents of the buffer
                 inpRenderSystem->ApplyMaterial(inMaterial);
 #ifdef DEBUG_STATS
-                CDebugStats::AddToEvent("Verts", (inudwStride*2)/3);
+                DebugStats::AddToEvent("Verts", (inudwStride*2)/3);
 #endif
                 inpRenderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Core::CMatrix4x4::IDENTITY);
             }
@@ -183,7 +183,7 @@ namespace ChilliSource
                 //Tell the render system to draw the contents of the buffer
                 inpRenderSystem->ApplyMaterial(inMaterial);
 #ifdef DEBUG_STATS
-                CDebugStats::AddToEvent("Verts", (mpSpriteBuffer->GetIndexCount()*2)/3);
+                DebugStats::AddToEvent("Verts", (mpSpriteBuffer->GetIndexCount()*2)/3);
 #endif
                 inpRenderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Core::CMatrix4x4::IDENTITY);
             }

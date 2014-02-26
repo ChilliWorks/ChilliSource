@@ -261,7 +261,7 @@ namespace ChilliSource
         {
             CGUIView::Draw(inpCanvas);
             
-            if(CDebugStats::IsEnabled())
+            if(DebugStats::IsEnabled())
             {
                 CDebugStatsView::GetSingletonPtr()->SetParentView(this);
                 CDebugStatsView::GetSingletonPtr()->SetRootWindow(this);

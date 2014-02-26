@@ -192,7 +192,7 @@ namespace ChilliSource
                 udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
 					
 #ifdef DEBUG_STATS
-                CDebugStats::AddToEvent("Meshes", 1);
+                DebugStats::AddToEvent("Meshes", 1);
 #endif
                 (*it)->Render(inpRenderSystem, inmatWorld, pMaterial, inpAnimationGroup);
 			}
@@ -205,7 +205,7 @@ namespace ChilliSource
                 udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
 				
 #ifdef DEBUG_STATS
-                CDebugStats::AddToEvent("Meshes_Trans", 1);
+                DebugStats::AddToEvent("Meshes_Trans", 1);
 #endif
                 (*it)->Render(inpRenderSystem, inmatWorld, pMaterial, inpAnimationGroup);
 			}

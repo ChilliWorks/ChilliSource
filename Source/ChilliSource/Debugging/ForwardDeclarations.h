@@ -9,6 +9,13 @@
 #ifndef _CHILLISOURCE_DEBUGGING_FORWARDDECLARATIONS_H_
 #define _CHILLISOURCE_DEBUGGING_FORWARDDECLARATIONS_H_
 
-
-
+namespace ChilliSource
+{
+    namespace Base
+    {
+#ifdef DEBUG_STATS
+        CS_FORWARD_DECLARE_CLASS(DebugStats);
+#endif
+    }
+}
 #endif

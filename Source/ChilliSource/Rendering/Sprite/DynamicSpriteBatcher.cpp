@@ -114,11 +114,11 @@ namespace ChilliSource
                     RenderCommand &sLastCommand = maRenderCommands.back();
                     if(sLastCommand.Material.IsTransparent())
                     {
-                        CDebugStats::AddToEvent("Sprites_Trans", (u32)maSpriteCache.size());
+                        DebugStats::AddToEvent("Sprites_Trans", (u32)maSpriteCache.size());
                     }
                     else
                     {
-                        CDebugStats::AddToEvent("Sprites", (u32)maSpriteCache.size());
+                        DebugStats::AddToEvent("Sprites", (u32)maSpriteCache.size());
                     }
                 }
 #endif

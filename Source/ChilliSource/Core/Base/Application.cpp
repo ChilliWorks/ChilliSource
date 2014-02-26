@@ -645,8 +645,8 @@ namespace ChilliSource
             }
             
 #ifdef DEBUG_STATS
-            Debugging::CDebugStats::RecordEvent("FrameTime", infDt);
-			Debugging::CDebugStats::RecordEvent("FPS", 1.0f/infDt);
+            Debugging::DebugStats::RecordEvent("FrameTime", infDt);
+			Debugging::DebugStats::RecordEvent("FPS", 1.0f/infDt);
 #endif
             
 			//Update the app time since start
@@ -680,7 +680,7 @@ namespace ChilliSource
             mpRenderer->RenderToScreen(Core::CApplication::GetStateManagerPtr()->GetActiveScenePtr());
             
 #ifdef DEBUG_STATS
-			CDebugStats::Clear();
+			DebugStats::Clear();
 #endif
 		}
         //--------------------------------------------------------------------------------------------------

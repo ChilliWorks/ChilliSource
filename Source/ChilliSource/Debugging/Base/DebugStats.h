@@ -18,7 +18,7 @@ namespace ChilliSource
 {
     namespace Debugging
     {
-        class CDebugStats
+        class DebugStats
         {
         public:
             

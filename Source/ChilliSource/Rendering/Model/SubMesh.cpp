@@ -209,7 +209,7 @@ namespace ChilliSource
 			
 			mpMeshBuffer->Bind();
 #ifdef DEBUG_STATS
-            CDebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
+            DebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
 #endif
             if(mpMeshBuffer->GetIndexCount() > 0)
             {
