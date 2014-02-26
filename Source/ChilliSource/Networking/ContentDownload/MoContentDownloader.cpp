@@ -99,7 +99,7 @@ namespace ChilliSource
         /// @param Request response
         /// @param Request result
         //----------------------------------------------------------------
-        void MoContentDownloader::OnContentManifestDownloadComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+        void MoContentDownloader::OnContentManifestDownloadComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
         {
             switch(ineResult)
             {
@@ -162,10 +162,10 @@ namespace ChilliSource
         /// @param Request response
         /// @param Request result
         //----------------------------------------------------------------
-        void MoContentDownloader::OnContentDownloadComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+        void MoContentDownloader::OnContentDownloadComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
         {
             if(mpCurrentRequest == inpRequest)
-                mpCurrentRequest = HttpRequestPtr();
+                mpCurrentRequest = nullptr;
             
             switch(ineResult)
             {

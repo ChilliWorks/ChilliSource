@@ -62,7 +62,7 @@ namespace ChilliSource
         {
         public:
             DECLARE_NAMED_INTERFACE(CSceneAnimation);
-            bool IsA(InterfaceIDType inInterface) const;
+            bool IsA(InterfaceIDType inInterface) const override;
             
             //--------------------------------------------------------------
             /// ApplyAnimationToScene

@@ -76,7 +76,7 @@ namespace ChilliSource
 			MoMetricsSystem(HttpConnectionSystem * inpHttpSystem, const std::string& instrMoMetricsServerURL, const std::string& instrAppID, IExternalMetrics* inpExternalMetrics = nullptr);
             ~MoMetricsSystem();
 			
-            bool IsA(Core::InterfaceIDType inInterfaceID) const;
+            bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			
 			static MoMetricsSystem & GetSingleton();
 			static MoMetricsSystem * GetSingletonPtr();

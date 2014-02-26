@@ -296,7 +296,7 @@ namespace ChilliSource
             MakeNextRequest();
         }
         
-        void MoMetricsSession::OnAuthTokensRequestComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+        void MoMetricsSession::OnAuthTokensRequestComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
 		{
 			if (ineResult == HttpRequest::CompletionResult::k_timeout || inpRequest->GetResponseCode() == kHTTPBusy)
             {
@@ -348,7 +348,7 @@ namespace ChilliSource
             MakeNextRequest();
         }
         
-        void MoMetricsSession::OnLocationUpdateRequestComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+        void MoMetricsSession::OnLocationUpdateRequestComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
         {
             if (ineResult == HttpRequest::CompletionResult::k_completed)
             {
@@ -424,18 +424,18 @@ namespace ChilliSource
             Json::FastWriter jWriter;
 			sRequestDetails.strBody = jWriter.write(sRequest.jBody);
             
-            HttpRequestPtr pRequest = mpHttpSystem->MakeRequest(sRequestDetails, HttpRequest::CompletionDelegate(this, &MoMetricsSession::OnQueuedRequestComplete));
+            HttpRequest* pRequest = mpHttpSystem->MakeRequest(sRequestDetails, HttpRequest::CompletionDelegate(this, &MoMetricsSession::OnQueuedRequestComplete));
             
             mmapRequestToDelegate.insert(std::make_pair(pRequest, sRequest.Delegate));
         }
         
-        void MoMetricsSession::OnQueuedRequestComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+        void MoMetricsSession::OnQueuedRequestComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
         {
             mQueuedRequests.pop_front();
             
             mbRequestInProgress = false;
             
-            std::unordered_map<HttpRequestPtr, HttpRequest::CompletionDelegate>::iterator it = mmapRequestToDelegate.find(inpRequest);
+            std::unordered_map<HttpRequest*, HttpRequest::CompletionDelegate>::iterator it = mmapRequestToDelegate.find(inpRequest);
             
             if(it != mmapRequestToDelegate.end())
             {
@@ -562,7 +562,7 @@ namespace ChilliSource
             MakeNextRequest();
 		}
 		
-		void MoMetricsSession::FlushEventsRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+		void MoMetricsSession::FlushEventsRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
         {
 			if (ineResult == HttpRequest::CompletionResult::k_completed)
             {
@@ -603,7 +603,7 @@ namespace ChilliSource
 			mstrToken.clear();
         }
         
-        void MoMetricsSession::OnCloseRequestComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+        void MoMetricsSession::OnCloseRequestComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
         {
             if (ineResult == HttpRequest::CompletionResult::k_completed)
             {
@@ -619,9 +619,9 @@ namespace ChilliSource
         
         void MoMetricsSession::Destroy()
         {
-            for(std::unordered_map<HttpRequestPtr, HttpRequest::CompletionDelegate>::iterator it = mmapRequestToDelegate.begin(); it != mmapRequestToDelegate.end(); ++it)
+            for(std::unordered_map<HttpRequest*, HttpRequest::CompletionDelegate>::iterator it = mmapRequestToDelegate.begin(); it != mmapRequestToDelegate.end(); ++it)
             {
-                HttpRequestPtr pRequest = it->first;
+                HttpRequest* pRequest = it->first;
                 if(pRequest)
                 {
                     pRequest->Cancel();

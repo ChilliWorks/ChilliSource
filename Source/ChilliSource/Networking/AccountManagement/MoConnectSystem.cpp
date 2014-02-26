@@ -136,7 +136,7 @@ namespace ChilliSource
         //------------------------
         /// Time Request Completes
         //------------------------
-		void MoConnectSystem::TimeRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+		void MoConnectSystem::TimeRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
 		{
 			if(!mTimeRequestCallback)
 				return;
@@ -212,7 +212,7 @@ namespace ChilliSource
 		//------------------------
         /// Account Create Request Completes
         //------------------------
-		void MoConnectSystem::AccountCreateRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+		void MoConnectSystem::AccountCreateRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
         {
 			AccountCreateResult eResult = AccountCreateResult::k_noServerResponse;
 			
@@ -318,7 +318,7 @@ namespace ChilliSource
         //------------------------
         /// Register Login Request Completes
         //------------------------
-		void MoConnectSystem::RegisterLoginRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+		void MoConnectSystem::RegisterLoginRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
         {
 			RegisterLoginResult eResult = RegisterLoginResult::k_noServerResponse;
 			
@@ -447,7 +447,7 @@ namespace ChilliSource
         //------------------------
         /// Sign In Request Completes
         //------------------------
-		void MoConnectSystem::SignInRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+		void MoConnectSystem::SignInRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
         {
 			SignInResult eResult = SignInResult::k_noServerResponse;
             std::vector<SignedInUser> asUsers;
@@ -501,7 +501,7 @@ namespace ChilliSource
         //------------------------
         /// Try Sign In Request Completes
         //------------------------
-		void MoConnectSystem::RetrieveAccountsRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+		void MoConnectSystem::RetrieveAccountsRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
         {
 			SignInResult eResult = SignInResult::k_noServerResponse;
             std::vector<SignedInUser> asUsers;
@@ -540,7 +540,7 @@ namespace ChilliSource
 		//------------------------
         /// Logins Request Completes
         //------------------------
-		void MoConnectSystem::LoginsRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+		void MoConnectSystem::LoginsRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
         {
 			mpPendingLoginsRequest = nullptr;
 			
@@ -633,7 +633,7 @@ namespace ChilliSource
         //------------------------
         /// Push Notification Request Completes
         //------------------------
-        void MoConnectSystem::PushNotificationRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+        void MoConnectSystem::PushNotificationRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
         {
             PushNotificationResult eResult = PushNotificationResult::k_success;
             
@@ -686,7 +686,7 @@ namespace ChilliSource
 		//------------------------
         /// On Me Received
         //------------------------
-        void MoConnectSystem::OnLocalUserProfileReceived(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+        void MoConnectSystem::OnLocalUserProfileReceived(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
         {
             Json::Value jResponse;
             switch (ineResult)
@@ -734,7 +734,7 @@ namespace ChilliSource
         //------------------------
         /// Handle Redirection
         //------------------------
-		void MoConnectSystem::HandleRedirection(HttpRequestPtr inpRequest)
+		void MoConnectSystem::HandleRedirection(HttpRequest* inpRequest)
         {
 			Json::Reader cReader;
 			Json::Value cResponse;
@@ -960,7 +960,7 @@ namespace ChilliSource
         //------------------------
         /// General Request Completes
         //------------------------
-		void MoConnectSystem::GeneralRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+		void MoConnectSystem::GeneralRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
         {
 			RequestResult eRequestResult = RequestResult::k_success;
 			Json::Value cJResponse;
@@ -1051,7 +1051,7 @@ namespace ChilliSource
         //------------------------
         /// Find Request With Http Request
         //------------------------
-		MoConnectSystem::RequestInfo* MoConnectSystem::FindRequestWithHttpRequest(HttpRequestPtr inpHttp)
+		MoConnectSystem::RequestInfo* MoConnectSystem::FindRequestWithHttpRequest(HttpRequest* inpHttp)
         {
 			for(u32 udwReq = 0; udwReq < masOpenRequests.size(); udwReq++)
             {
@@ -1120,7 +1120,7 @@ namespace ChilliSource
         //------------------------
         /// On IAP Reciept Validation Response
         //------------------------
-        void MoConnectSystem::OnIAPRecieptValidationResponse(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+        void MoConnectSystem::OnIAPRecieptValidationResponse(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
         {
             bool bIsValid = false;
             IAPReceipt sIAP;
@@ -1222,7 +1222,7 @@ namespace ChilliSource
         //------------------------
         /// On IAP Redeemed Response
         //------------------------
-        void MoConnectSystem::OnIAPRedeemedResponse(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
+        void MoConnectSystem::OnIAPRedeemedResponse(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult)
         {
             if(HttpRequest::CompletionResult::k_completed == ineResult)
             {

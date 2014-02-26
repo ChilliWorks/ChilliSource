@@ -32,7 +32,7 @@ namespace ChilliSource
 			/// @param Interace ID
 			/// @return Whether object if of argument type
 			//--------------------------------------------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType inInterfaceID) const;
+            bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//--------------------------------------------------------------------------------------------------
 			/// Make Request
 			///
@@ -41,13 +41,13 @@ namespace ChilliSource
 			/// @param (Optional) A function to call when the request is completed. Note that the request can be completed by failure/cancellation as well as success.
 			/// @return A pointer to the request. The system owns this pointer. Returns NULL if the request cannot be created.
 			//--------------------------------------------------------------------------------------------------
-            Networking::HttpRequestPtr MakeRequest(const Networking::HttpRequestDetails & insRequestDetails, Networking::HttpRequest::CompletionDelegate inOnComplete = Networking::HttpRequest::CompletionDelegate());
+            Networking::HttpRequest* MakeRequest(const Networking::HttpRequestDetails & insRequestDetails, Networking::HttpRequest::CompletionDelegate inOnComplete = Networking::HttpRequest::CompletionDelegate()) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Cancel All Requests
 			///
             /// Equivalent to calling the above on every incomplete request in progress.
             //--------------------------------------------------------------------------------------------------
-            void CancelAllRequests();
+            void CancelAllRequests() override;
             //--------------------------------------------------------------------------------------------------
             /// Check Reachability
             ///
@@ -55,7 +55,7 @@ namespace ChilliSource
             ///
             /// @return Success if URL is reachable
             //--------------------------------------------------------------------------------------------------
-            bool CheckReachability() const;
+            bool CheckReachability() const override;
 			//--------------------------------------------------------------------------------------------------
 			/// Update
 			///
@@ -64,7 +64,7 @@ namespace ChilliSource
 			///
 			/// @param Time between frames
 			//--------------------------------------------------------------------------------------------------
-            void Update(f32 infDT);
+            void Update(f32 infDT) override;
             
         private:
             
@@ -127,7 +127,7 @@ namespace ChilliSource
 				///
 				/// Close the request and invoke the completion delegate with the cancel response
 				//----------------------------------------------------------------------------------------
-				void Cancel();
+				void Cancel() override;
 				//----------------------------------------------------------------------------------------
 				/// Has Completed
 				///
@@ -139,31 +139,31 @@ namespace ChilliSource
 				///
 				/// @return The original request details (i.e. whether it is post/get the body and header)
 				//----------------------------------------------------------------------------------------
-                const Networking::HttpRequestDetails & GetDetails() const;
+                const Networking::HttpRequestDetails & GetDetails() const override;
 				//----------------------------------------------------------------------------------------
 				/// Get Completion Delegate
 				///
 				/// @return The delegate that will be invoked on request complete
 				//----------------------------------------------------------------------------------------
-                const Networking::HttpRequest::CompletionDelegate & GetCompletionDelegate() const;
+                const Networking::HttpRequest::CompletionDelegate & GetCompletionDelegate() const override;
 				//----------------------------------------------------------------------------------------
 				/// Get Response String
 				///
 				/// @return The contents of the response as a string. This could be binary data
 				//----------------------------------------------------------------------------------------
-                const std::string & GetResponseString() const;
+                const std::string & GetResponseString() const override;
 				//----------------------------------------------------------------------------------------
 				/// Get Response Code
 				///
 				/// @return HTTP response code (i.e. 200 = OK, 400 = Error)
 				//----------------------------------------------------------------------------------------
-                u32 GetResponseCode() const;
+                u32 GetResponseCode() const override;
                 //----------------------------------------------------------------------------------------
                 /// Get Bytes Read
                 ///
                 /// @return Number of bytes read til now
                 //----------------------------------------------------------------------------------------
-                u32 GetBytesRead() const;
+                u32 GetBytesRead() const override;
                 //----------------------------------------------------------------------------------------
                 /// Get Connection Info
                 ///

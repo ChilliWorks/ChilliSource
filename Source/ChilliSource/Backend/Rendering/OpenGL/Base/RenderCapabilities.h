@@ -41,7 +41,7 @@ namespace ChilliSource
 			/// @return Whether the object implements that
             /// interface
 			//-------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
             //-------------------------------------------------
 			/// Calculate Capabilities
             ///

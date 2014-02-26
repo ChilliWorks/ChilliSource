@@ -27,7 +27,7 @@ namespace ChilliSource
             mudwMaxBufferSize = inudwSize;
         }
         
-        HttpRequestPtr HttpConnectionSystem::HandleRedirection(const HttpRequest* inpRequest)
+        HttpRequest* HttpConnectionSystem::HandleRedirection(const HttpRequest* inpRequest)
         {
             CS_ASSERT(inpRequest, "inpRequest cannot be null!");
             if(inpRequest->GetResponseCode() != kHTTPMovedTemporarily)

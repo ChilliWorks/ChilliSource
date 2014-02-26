@@ -22,20 +22,20 @@ namespace ChilliSource
         public:
             DECLARE_NAMED_INTERFACE(CSceneAnimDescManager);
             
-            bool IsA(InterfaceIDType inInterfaceID) const;
+            bool IsA(InterfaceIDType inInterfaceID) const override;
             
-            InterfaceIDType GetResourceType() const;
-            InterfaceIDType GetProviderType() const;
+            InterfaceIDType GetResourceType() const override;
+            InterfaceIDType GetProviderType() const override;
             
-            bool ManagesResourceOfType(InterfaceIDType inInterfaceID) const;
+            bool ManagesResourceOfType(InterfaceIDType inInterfaceID) const override;
             
             SceneAnimationPtr GetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath);
             
             SceneAnimationPtr AsyncGetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath);
             
-            ResourcePtr GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath);
+            ResourcePtr GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
             
-            ResourcePtr AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath);
+            ResourcePtr AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
             
         };
     }

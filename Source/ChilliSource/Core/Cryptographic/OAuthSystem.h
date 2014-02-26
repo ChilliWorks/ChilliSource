@@ -56,7 +56,7 @@ namespace ChilliSource
 
 			DECLARE_NAMED_INTERFACE(COAuthSystem);
 
-			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 
             enum class OAuthHttpRequestType
 			{

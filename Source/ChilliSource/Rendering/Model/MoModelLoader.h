@@ -39,21 +39,21 @@ namespace ChilliSource
 			/// @param Interface to compare
 			/// @return Whether the object implements the given interface
 			//-------------------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//----------------------------------------------------------------------------
 			/// Can Create Resource of Kind
 			///
 			/// @param Type to compare
 			/// @return Whether the object can create a resource of given type
 			//----------------------------------------------------------------------------
-			bool CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const;
+			bool CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const override;
 			//----------------------------------------------------------------------------
 			/// Can Create Resource From File With Extension
 			///
 			/// @param Extension to compare
 			/// @return Whether the object can create a resource with the given extension
 			//----------------------------------------------------------------------------
-			bool CanCreateResourceFromFileWithExtension(const std::string & inExtension) const;
+			bool CanCreateResourceFromFileWithExtension(const std::string & inExtension) const override;
 			//----------------------------------------------------------------------------
 			/// Populate Existing Mesh From File
 			///
@@ -103,7 +103,7 @@ namespace ChilliSource
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource) override;
 			//----------------------------------------------------------------------------
 			/// Async Create Resource From File
 			///
@@ -112,7 +112,7 @@ namespace ChilliSource
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			bool AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource) override;
 			//----------------------------------------------------------------------------
 			/// Create Mesh From File
 			///

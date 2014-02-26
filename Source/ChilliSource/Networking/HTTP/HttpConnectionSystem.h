@@ -48,7 +48,6 @@ namespace ChilliSource
 		};
 		
 		class HttpRequest;
-		typedef HttpRequest* HttpRequestPtr;
         
 		class HttpRequest
         {
@@ -63,7 +62,7 @@ namespace ChilliSource
                 k_flushed       //The request buffer is full and the buffer needs to be flushed
 			};
             
-			typedef fastdelegate::FastDelegate2<HttpRequestPtr,CompletionResult> CompletionDelegate;
+			typedef fastdelegate::FastDelegate2<HttpRequest*, CompletionResult> CompletionDelegate;
 			//----------------------------------------------------------------------------------------
 			/// Get Details
 			///
@@ -116,7 +115,7 @@ namespace ChilliSource
 			/// @param (Optional) A function to call when the request is completed. Note that the request can be completed by failure/cancellation as well as success.
             /// @return A pointer to the request. The system owns this pointer. Returns NULL if the request cannot be created.
             //--------------------------------------------------------------------------------------------------
-			virtual HttpRequestPtr MakeRequest(const HttpRequestDetails & insRequestDetails, HttpRequest::CompletionDelegate inOnComplete = HttpRequest::CompletionDelegate()) = 0;
+			virtual HttpRequest* MakeRequest(const HttpRequestDetails & insRequestDetails, HttpRequest::CompletionDelegate inOnComplete = HttpRequest::CompletionDelegate()) = 0;
 			//--------------------------------------------------------------------------------------------------
 			/// Cancel All Requests
 			///
@@ -136,7 +135,7 @@ namespace ChilliSource
             ///
             /// Handles redirecting to the given url on receiving a 302
             //----------------------------------------------------------------------------------------
-            HttpRequestPtr HandleRedirection(const HttpRequest* inpRequest);
+            HttpRequest* HandleRedirection(const HttpRequest* inpRequest);
             //--------------------------------------------------------------------------------------------------
             /// Set Max Buffer Size
             ///

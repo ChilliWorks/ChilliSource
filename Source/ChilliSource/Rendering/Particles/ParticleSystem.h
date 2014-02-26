@@ -35,7 +35,7 @@ namespace ChilliSource
 			/// @param Comparison Type
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//-------------------------------------------
 			/// Add Particle Component
 			///
@@ -55,7 +55,7 @@ namespace ChilliSource
 			///
 			/// @param Time between frames
 			//-------------------------------------------
-			void Update(f32 infDT);
+			void Update(f32 infDT) override;
 			//-------------------------------------------
 			/// Sets a factor to scale update delta time by. Useful for pausing all effects when paused etc.
 			//-------------------------------------------
@@ -65,19 +65,19 @@ namespace ChilliSource
 			///
 			/// @return Number of factories in this system
 			//----------------------------------------------------
-			u32 GetNumComponentFactories() const;
+			u32 GetNumComponentFactories() const override;
 			//-------------------------------------------
 			/// Get Component Factory Pointer 
 			///
 			/// @return Particle component factory
 			//-------------------------------------------
-			Core::IComponentFactory* GetComponentFactoryPtr(u32 inudwIndex);
+			Core::IComponentFactory* GetComponentFactoryPtr(u32 inudwIndex) override;
 			//-------------------------------------------
 			/// Get Component Factory  
 			///
 			/// @return Particle component factory
 			//-------------------------------------------
-			Core::IComponentFactory& GetComponentFactory(u32 inudwIndex);
+			Core::IComponentFactory& GetComponentFactory(u32 inudwIndex) override;
             //-------------------------------------------
 			/// Get Emitter Factory
 			///

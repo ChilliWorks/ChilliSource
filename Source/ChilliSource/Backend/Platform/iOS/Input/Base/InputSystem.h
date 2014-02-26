@@ -31,17 +31,17 @@ namespace ChilliSource
 		public:
             CInputSystem();
 			virtual ~CInputSystem();
-			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			
-			virtual bool CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const;
-			virtual Input::InputDevice * GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID);
+			virtual bool CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const override;
+			virtual Input::InputDevice * GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID) override;
 			
 			
-			virtual Input::TouchScreen * GetTouchScreenPtr();
-			virtual Input::Accelerometer * GetAccelerometerPtr();
-			virtual void Update(f32 infDT);
+			virtual Input::TouchScreen * GetTouchScreenPtr() override;
+			virtual Input::Accelerometer * GetAccelerometerPtr() override;
+			virtual void Update(f32 infDT) override;
 			
-			virtual Input::VirtualKeyboard* GetVirtualKeyboardPtr();
+			virtual Input::VirtualKeyboard* GetVirtualKeyboardPtr() override;
             
             //-----------------------------------------------------------
             /// Flush Buffered Input
@@ -49,7 +49,7 @@ namespace ChilliSource
             /// Have the input elements notify listeners of each
             /// buffered value then clear the buffered input
             //-----------------------------------------------------------
-            void FlushBufferedInput();
+            void FlushBufferedInput() override;
 			
 		protected:
 			CTouchScreen mTouchScreen;

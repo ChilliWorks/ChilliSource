@@ -60,7 +60,7 @@ namespace ChilliSource
 			/// @param Interface type to query
 			/// @return Whether the object is of given type
 			//----------------------------------------------------------------
-			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//----------------------------------------------------------------
 			/// Get Format
 			///
