@@ -11,6 +11,7 @@
 #define _MOFLOW_VIDEO_SUBTITLES_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>

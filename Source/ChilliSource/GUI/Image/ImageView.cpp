@@ -16,6 +16,7 @@
 
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 namespace ChilliSource
 {

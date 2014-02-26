@@ -8,12 +8,14 @@
  */
 
 #include <ChilliSource/Video/Base/MoSubtitlesLoader.h>
-#include <ChilliSource/Video/Base/Subtitles.h>
-#include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Core/JSON/json.h>
-#include <ChilliSource/Core/File/FileStream.h>
+
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/File/FileStream.h>
+#include <ChilliSource/Core/JSON/json.h>
+#include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Video/Base/Subtitles.h>
 
 namespace ChilliSource
 {
@@ -125,7 +127,7 @@ namespace ChilliSource
             u32 udwVersionNumber = root.get(kstrTagVersionNumber, 0).asUInt();
             if (udwVersionNumber != 1)
             {
-                ERROR_LOG("MoSubtitles file '" + inFilePath + "' has version number '" + ToString(udwVersionNumber) + "'. Only version 1 is supported.");
+                ERROR_LOG("MoSubtitles file '" + inFilePath + "' has version number '" + Core::ToString(udwVersionNumber) + "'. Only version 1 is supported.");
                 return false;
             }
             
@@ -194,7 +196,7 @@ namespace ChilliSource
             
             pStyle->strFontName = inStyleJson.get(kstrTagStyleFont, kstrDefaultFont).asString();
             pStyle->udwFontSize = inStyleJson.get(kstrTagStyleFontSize, kstrDefaultFontSize).asUInt();
-            pStyle->Colour = PARSE_COLOUR(inStyleJson.get(kstrTagStyleFontColour, kstrDefaultColour).asString());
+            pStyle->Colour = Core::ParseColour(inStyleJson.get(kstrTagStyleFontColour, kstrDefaultColour).asString());
             pStyle->FadeTimeMS = ParseTime(inStyleJson.get(kstrTagStyleFadeTime, (s32)kDefaultFadeTimeMS).asString());
             pStyle->eAlignment = Core::AlignmentAnchorFromString(inStyleJson.get(kstrTagStyleAlignment, kstrDefaultAlignment).asString());
             pStyle->Bounds = LoadBounds(inStyleJson.get(kstrTagStyleBounds, ""));

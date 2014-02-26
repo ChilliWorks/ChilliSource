@@ -220,7 +220,7 @@ namespace ChilliSource
 			
 			for (int i = 0; i < indwNumSubMeshes; i++)
 			{
-				SubMeshPtr newMesh = pMesh->CreateSubMesh("mesh" + ToString(i));
+				SubMeshPtr newMesh = pMesh->CreateSubMesh("mesh" + Core::ToString(i));
 				newMesh->Prepare(mpApplicationOwner->GetRenderSystemPtr(), vertDeclaration, 2, inudwVertexDataSize, indwIndexDataSize);
 			}
 			

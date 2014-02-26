@@ -8,6 +8,14 @@
 
 #include <ChilliSource/Core/String/ToString.h>
 
+#include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Vector4.h>
+
 #include <sstream>
 
 namespace ChilliSource
@@ -160,7 +168,7 @@ namespace ChilliSource
         std::string ToString(const CMatrix4x4& in_value)
         {
             std::stringstream stream;
-			stream << val.m[0] << " "
+			stream << in_value.m[0] << " "
 			<< in_value.m[1] << " "
 			<< in_value.m[2] << " "
 			<< in_value.m[3] << " "
@@ -218,7 +226,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         std::string ToString(size_t in_value)
         {
-            return ToString(reinterpret_cast<u32>(in_value));
+            return ToString(static_cast<u32>(in_value));
         }
 #endif
     }

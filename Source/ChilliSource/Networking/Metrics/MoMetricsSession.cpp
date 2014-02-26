@@ -42,7 +42,7 @@ namespace ChilliSource
             Json::Value jParamArray(Json::arrayValue);
             for (u32 i = 0; i < astrParams.size(); ++i)
             {
-                incValue["Param" + ToString(i+1)] = astrParams[i];
+                incValue["Param" + Core::ToString(i+1)] = astrParams[i];
             }
 		}
         
@@ -57,7 +57,7 @@ namespace ChilliSource
             Json::Value jParamArray(Json::arrayValue);
             for (u32 i = 0; i < astrParams.size(); ++i)
             {
-                incValue["Param" + ToString(i+1)] = astrParams[i];
+                incValue["Param" + Core::ToString(i+1)] = astrParams[i];
             }
         }
         
@@ -73,7 +73,7 @@ namespace ChilliSource
             astrParams.reserve(udwNumParams);
             for (u32 i = 0; i < udwNumParams; ++i)
             {
-                astrParams.push_back(incValue["Param" + ToString(i+1)].asString());
+                astrParams.push_back(incValue["Param" + Core::ToString(i+1)].asString());
             }
 		}
         
@@ -81,7 +81,7 @@ namespace ChilliSource
         : mpHttpSystem(inpHttpSystem), mstrRealmUrl(instrMetricsUrl), mstrAppID(instrAppID), mpExternalMetrics(inpExternalMetrics), mbIsClosed(false), mdwServerTimeDelta(0), mbActionInProgress(false), mbRequestInProgress(false),
         mudwCurrentDelayIndex(0), mLastActionTime(0)
         {
-            mstrID = ToString(Core::CApplication::GetSystemTime());
+            mstrID = Core::ToString(Core::CApplication::GetSystemTime());
         }
         
         void CMoMetricsSession::SetConstant(const std::string& instrKey, const std::string& instrValue)

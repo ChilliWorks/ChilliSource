@@ -50,6 +50,28 @@ template <bool> struct CompileTimeChecker
 template <> struct CompileTimeChecker<false>{};
 
 
+#ifdef __APPLE__
+#include "TargetConditionals.h"
+#endif
+
+//---Logging Levels
+#define LOG_VERBOSE		(0)
+#define LOG_WARNING		(1)
+#define LOG_ERROR		(2)
+
+#ifdef DEBUG
+//---Active Log Level
+#define LOG_LEVEL		(LOG_VERBOSE)
+//---Debug Flags
+#define DEBUG_DRAWING	(1)
+#else
+//---Active Log Level
+#define LOG_LEVEL		(LOG_ERROR)
+//---Debug Flags
+#define DEBUG_DRAWING	(0)
+#endif
+
+
 //---Macros
 #define SAFE_DELETE(x)						{if(x) delete(x); x = NULL;}
 #define SAFE_DELETE_ARRAY(x)				{if(x) delete[] (x); x = NULL;}

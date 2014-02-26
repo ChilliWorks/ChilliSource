@@ -10,6 +10,8 @@
 #include <ChilliSource/Core/Cryptographic/SHA1.h>
 #include <ChilliSource/Core/File/FileStream.h>
 
+#include <sstream>
+
 namespace ChilliSource
 {
     namespace Core

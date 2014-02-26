@@ -10,7 +10,7 @@
 #include <ChilliSource/GUI/Image/HorizontalStretchableImage.h>
 
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
-
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>

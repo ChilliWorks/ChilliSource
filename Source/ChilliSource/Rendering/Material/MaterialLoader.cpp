@@ -7,8 +7,12 @@
 //
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
+#include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/XML/XMLUtils.h>
 #include <ChilliSource/Rendering/Shader/ShaderManager.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
@@ -19,9 +23,6 @@
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 
-#include <ChilliSource/Core/XML/XMLUtils.h>
-#include <ChilliSource/Core/Base/Colour.h>
-#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace ChilliSource
 {

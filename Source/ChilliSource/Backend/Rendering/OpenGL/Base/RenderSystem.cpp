@@ -341,7 +341,7 @@ namespace ChilliSource
                 
                 for(u32 i=0; i<inMaterial.GetTextures().size(); ++i)
                 {
-                    mpaTextureHandles[i].first = pShader->GetUniformLocation(std::string("uTexture"+ToString(i)).c_str());
+                    mpaTextureHandles[i].first = pShader->GetUniformLocation(std::string("uTexture"+Core::ToString(i)).c_str());
                 }
             }
         }
@@ -1109,7 +1109,7 @@ namespace ChilliSource
 			//Check we don't exceed the GL limits of this device
 			if(udwAttributeCount > (u32)mdwMaxVertAttribs)
 			{
-				FATAL_LOG("OpenGL ES 2.0: Shader exceeds maximum vertex attributes " + ToString(mdwMaxVertAttribs));
+				FATAL_LOG("OpenGL ES 2.0: Shader exceeds maximum vertex attributes " + Core::ToString(mdwMaxVertAttribs));
 			}
 			
             // Enable and disable the vertex attribs that have changed

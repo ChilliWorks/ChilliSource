@@ -16,6 +16,7 @@
 
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 #include <ChilliSource/Audio/3D/AudioComponent.h>
 #include <ChilliSource/Audio/3D/AudioComponentFactory.h>

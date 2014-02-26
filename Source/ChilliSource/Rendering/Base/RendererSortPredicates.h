@@ -11,6 +11,7 @@
 #define _MOFLO_RENDERING_RENDERERSORTPREDICATES_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Math/Matrix4x4.h>
 
 namespace ChilliSource
 {

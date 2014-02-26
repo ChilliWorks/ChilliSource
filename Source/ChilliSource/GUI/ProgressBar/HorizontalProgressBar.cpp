@@ -14,6 +14,7 @@
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 namespace ChilliSource

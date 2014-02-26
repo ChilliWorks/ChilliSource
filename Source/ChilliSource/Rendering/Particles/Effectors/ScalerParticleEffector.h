@@ -13,6 +13,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
+#include <ChilliSource/Core/Math/Vector3.h>
 
 namespace ChilliSource
 {

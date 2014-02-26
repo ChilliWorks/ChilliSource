@@ -11,9 +11,9 @@
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
-
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 namespace ChilliSource
 {

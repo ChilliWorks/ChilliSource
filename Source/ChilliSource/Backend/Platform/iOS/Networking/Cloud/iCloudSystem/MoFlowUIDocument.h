@@ -8,9 +8,10 @@
 //  Copyright (c) 2012 Tag Games Ltd. All rights reserved.
 //
 
+#include <ChilliSource/ChilliSource.h>
+
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-
 
 @interface MoFlowUIDocument : UIDocument
 

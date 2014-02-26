@@ -11,11 +11,13 @@
 #define _MOFLO_CORE_SCENEDESCRIPTION_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
+#include <ChilliSource/Core/Container/ParamDictionary.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/Scene/ForwardDeclarations.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/XML/rapidxml_utils.hpp>
-#include <ChilliSource/Core/Container/ParamDictionary.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
-#include <ChilliSource/Core/Scene/ForwardDeclarations.h>
 
 namespace ChilliSource
 {

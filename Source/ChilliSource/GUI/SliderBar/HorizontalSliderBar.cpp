@@ -10,6 +10,7 @@
 #include <ChilliSource/GUI/Image/ImageView.h>
 
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>

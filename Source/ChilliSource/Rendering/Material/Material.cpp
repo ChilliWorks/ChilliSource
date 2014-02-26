@@ -8,10 +8,12 @@
  */
 
 #include <ChilliSource/Rendering/Material/Material.h>
+
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Shader/ShaderManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-
+#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 namespace ChilliSource

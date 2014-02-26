@@ -9,6 +9,7 @@
 #include <ChilliSource/GUI/Container/ScrollView.h>
 
 #include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 #if DEBUG_DRAWING
     #include <ChilliSource/Rendering/Base/CanvasRenderer.h>

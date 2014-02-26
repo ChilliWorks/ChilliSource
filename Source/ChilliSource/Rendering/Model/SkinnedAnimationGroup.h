@@ -11,6 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/Math/Matrix4x4.h>
 
 namespace ChilliSource
 {

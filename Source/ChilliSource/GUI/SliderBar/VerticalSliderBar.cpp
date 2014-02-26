@@ -7,9 +7,11 @@
 //
 
 #include <ChilliSource/GUI/SliderBar/VerticalSliderBar.h>
+
 #include <ChilliSource/GUI/Image/ImageView.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
@@ -77,7 +79,7 @@ namespace ChilliSource
             Core::StorageLocation eBarSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("BarSpriteSheetLocation", strValue))
             {
-                eBarSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eBarSpriteSheetLocation = Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("BarSpriteSheet", strValue))
             {
@@ -87,7 +89,7 @@ namespace ChilliSource
             Core::StorageLocation eSliderSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SliderSpriteSheetLocation", strValue))
             {
-                eSliderSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eSliderSpriteSheetLocation = Core::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("SliderSpriteSheet", strValue))
 			{

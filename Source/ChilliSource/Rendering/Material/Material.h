@@ -15,6 +15,7 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 
 namespace ChilliSource
 {

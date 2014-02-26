@@ -11,6 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Activity.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 

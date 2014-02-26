@@ -8,8 +8,8 @@
 
 #include <ChilliSource/GUI/ProgressBar/VerticalEndcappedProgressBar.h>
 
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
-
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 

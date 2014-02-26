@@ -10,6 +10,7 @@
 #define _MOFLOW_RENDERING_RENDERCAPABILITIES_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/System/System.h>
 
 namespace ChilliSource
 {
@@ -24,7 +25,7 @@ namespace ChilliSource
         /// texture size. This should not be used prior to the render
         /// system being initialised.
         //===============================================================
-        class IRenderCapabilities : public ChilliSource::Core::ISystem
+        class IRenderCapabilities : public Core::ISystem
         {
         public:
             DECLARE_NAMED_INTERFACE(IRenderCapabilities);
