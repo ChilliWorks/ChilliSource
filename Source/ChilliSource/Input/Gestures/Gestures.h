@@ -84,7 +84,7 @@ namespace ChilliSource
 			
 		protected:
 			
-			typedef DYNAMIC_ARRAY<GestureEventDelegate> GestureDelegatesList;
+			typedef std::vector<GestureEventDelegate> GestureDelegatesList;
 			typedef GestureDelegatesList::iterator GestureDelegatesListItr;
 			
 			u16 mNumContactPointsRequired;	
@@ -565,12 +565,12 @@ namespace ChilliSource
             GestureDelegatesList mGestureCancelledDelegates;
 		};
 		
-		typedef SHARED_PTR<CPinchGesture> PinchGesturePtr;
-		typedef SHARED_PTR<CSwipeGesture> SwipeGesturePtr;
-		typedef SHARED_PTR<CTapGesture> TapGesturePtr;
-		typedef SHARED_PTR<CDragGesture> DragGesturePtr;
-		typedef SHARED_PTR<CHoldGesture> HoldGesturePtr;
-		typedef SHARED_PTR<CGesture> GesturePtr;
+		typedef std::shared_ptr<CPinchGesture> PinchGesturePtr;
+		typedef std::shared_ptr<CSwipeGesture> SwipeGesturePtr;
+		typedef std::shared_ptr<CTapGesture> TapGesturePtr;
+		typedef std::shared_ptr<CDragGesture> DragGesturePtr;
+		typedef std::shared_ptr<CHoldGesture> HoldGesturePtr;
+		typedef std::shared_ptr<CGesture> GesturePtr;
 
 	}
 }

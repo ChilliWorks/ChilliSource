@@ -37,8 +37,8 @@ namespace ChilliSource
 			virtual void Set3DLocation(Core::CVector3& invPos, Core::CVector3& invVel, Core::CVector3& invForward, Core::CVector3& invUp) = 0;
 		};
 		
-		typedef SHARED_PTR<IAudioListener> AudioListenerPtr;
-		typedef WEAK_PTR<IAudioListener> AudioListenerWeakPtr;
+		typedef std::shared_ptr<IAudioListener> AudioListenerPtr;
+		typedef std::weak_ptr<IAudioListener> AudioListenerWeakPtr;
 	}
 }
 

@@ -97,14 +97,14 @@ namespace ChilliSource
 							pResource->SetOwningResourceManager(static_cast<Core::IResourceManager*>(this));
 							pResource->SetLoaded(true);
 							
-							return SHARED_PTR_CAST<CSkinnedAnimation>(pResource);
+							return std::static_pointer_cast<CSkinnedAnimation>(pResource);
 						}
 					}
 				}
 			} 
 			else 
 			{
-				return SHARED_PTR_CAST<CSkinnedAnimation>(pExistingResource->second);
+				return std::static_pointer_cast<CSkinnedAnimation>(pExistingResource->second);
 			}
 			
 			//Resource not found
@@ -143,14 +143,14 @@ namespace ChilliSource
 						{
 							//Add it to the cache
 							mMapFilenameToResource.insert(std::make_pair(instrFilePath, pResource));
-							return SHARED_PTR_CAST<CSkinnedAnimation>(pResource);
+							return std::static_pointer_cast<CSkinnedAnimation>(pResource);
 						}
 					}
 				}
 			} 
 			else 
 			{
-				return SHARED_PTR_CAST<CSkinnedAnimation>(pExistingResource->second);
+				return std::static_pointer_cast<CSkinnedAnimation>(pExistingResource->second);
 			}
 			
 			//Resource not found

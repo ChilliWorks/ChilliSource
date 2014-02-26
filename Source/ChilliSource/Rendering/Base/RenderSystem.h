@@ -48,7 +48,7 @@ namespace ChilliSource
 			virtual void EndFrame(IRenderTarget* inpActiveRenderTarget) = 0;
 
 			virtual void ApplyMaterial(const CMaterial& inMaterial) = 0;
-            virtual void ApplyJoints(const DYNAMIC_ARRAY<Core::CMatrix4x4>& inaJoints) = 0;
+            virtual void ApplyJoints(const std::vector<Core::CMatrix4x4>& inaJoints) = 0;
 			virtual void ApplyCamera(const Core::CVector3& invPosition, const Core::CMatrix4x4& inmatInvView, const Core::CMatrix4x4& inmatProj, const Core::CColour& inClearCol) = 0;
             virtual void SetLight(ILightComponent* inpLightComponent) = 0;
 			

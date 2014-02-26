@@ -64,7 +64,7 @@ namespace ChilliSource
         //--------------------------------------------------------------------------------------------------
         IComponentFactory* CComponentFactoryDispenser::GetFactoryProducing(const std::string & insName)
         {
-            for (DYNAMIC_ARRAY<IComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
+            for (std::vector<IComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
 			{
                 if((*it)->CanProduceComponentWithTypeName(insName)) 
                 {
@@ -84,7 +84,7 @@ namespace ChilliSource
         //--------------------------------------------------------------------------------------------------
         IComponentFactory* CComponentFactoryDispenser::GetFactoryProducing(InterfaceIDType inInterfaceID)
         {
-            for (DYNAMIC_ARRAY<IComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
+            for (std::vector<IComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
 			{
                 if((*it)->CanProduceComponentWithInterface(inInterfaceID)) 
                 {
@@ -104,7 +104,7 @@ namespace ChilliSource
         //--------------------------------------------------------------------------------------------------
         IComponentFactory* CComponentFactoryDispenser::GetFactoryWithInterface(InterfaceIDType inInterfaceID)
         {
-            for(DYNAMIC_ARRAY<IComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
+            for(std::vector<IComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
 			{
                 if((*it)->IsA(inInterfaceID)) 
                 {

@@ -22,7 +22,7 @@ namespace ChilliSource
         /// @param Asset server URL
         /// @param Dynamic array of tags that determine content
         //----------------------------------------------------------------
-        CMoContentDownloader::CMoContentDownloader(IHttpConnectionSystem* inpRequestSystem, const std::string& instrAssetServerURL, const DYNAMIC_ARRAY<std::string>& inastrTags)
+        CMoContentDownloader::CMoContentDownloader(IHttpConnectionSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags)
         : mpHttpConnectionSystem(inpRequestSystem), mstrAssetServerURL(instrAssetServerURL), mastrTags(inastrTags)
         {
             
@@ -53,7 +53,7 @@ namespace ChilliSource
                 
                 //The server uses the tags to determine which content to serve
                 Json::Value JTags(Json::arrayValue);
-                for(DYNAMIC_ARRAY<std::string>::const_iterator it = mastrTags.begin(); it != mastrTags.end(); ++it)
+                for(std::vector<std::string>::const_iterator it = mastrTags.begin(); it != mastrTags.end(); ++it)
                 {
                     JTags.append(*it);
                 }

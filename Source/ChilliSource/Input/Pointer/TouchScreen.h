@@ -52,7 +52,7 @@ namespace ChilliSource
 		{
 		public:
 			ITouchScreen();
-			typedef DYNAMIC_ARRAY<TouchInfo> TouchList;
+			typedef std::vector<TouchInfo> TouchList;
 			typedef TouchList::iterator TouchListItr;
 
 			virtual ~ITouchScreen();

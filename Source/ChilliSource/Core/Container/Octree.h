@@ -53,7 +53,7 @@ namespace ChilliSource
 	{
 		class COctree
 		{
-            typedef DYNAMIC_ARRAY<VolumeComponentPtr> ObjectList;
+            typedef std::vector<VolumeComponentPtr> ObjectList;
             
             struct Node
 			{
@@ -78,7 +78,7 @@ namespace ChilliSource
             /// @param Empty container to be filled
             /// @param Query mask
             //--------------------------------------------------------------------------------------------------
-            void QuerySceneForVisibleComponents(const Core::CFrustum* inpFrustum, DYNAMIC_ARRAY<ComponentPtr> &outComponents, u32 inudwQueryMask);
+            void QuerySceneForVisibleComponents(const Core::CFrustum* inpFrustum, std::vector<ComponentPtr> &outComponents, u32 inudwQueryMask);
 			//---------------------------------------------------------------
 			/// Add 
 			///
@@ -120,14 +120,14 @@ namespace ChilliSource
 			/// Recurse through all the child nodes and get the 
 			/// entities from them
 			//----------------------------------------------------------
-			void GetChildNodeAttachedToNode(COctree::Node* pNode, const Core::CFrustum* inpFrustum, DYNAMIC_ARRAY<ComponentPtr> &outComponents, u32 inudwQueryMask);
+			void GetChildNodeAttachedToNode(COctree::Node* pNode, const Core::CFrustum* inpFrustum, std::vector<ComponentPtr> &outComponents, u32 inudwQueryMask);
 			//----------------------------------------------------------
 			/// Get Components Attached To Node
 			///
 			/// Recurse through all the components and do the cull
             /// test
 			//----------------------------------------------------------
-			void GetComponentsAttachedToNode(COctree::Node* pNode, DYNAMIC_ARRAY<ComponentPtr> &outComponents, u32 inudwQueryMask);
+			void GetComponentsAttachedToNode(COctree::Node* pNode, std::vector<ComponentPtr> &outComponents, u32 inudwQueryMask);
 			
 		private:
 		

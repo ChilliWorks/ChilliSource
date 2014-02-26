@@ -173,8 +173,8 @@ namespace ChilliSource
             
 		};
 
-		typedef SHARED_PTR<CHorizontalEndcappedProgressBar> HorizontalEndcappedProgressBarPtr;
-		typedef WEAK_PTR<CHorizontalEndcappedProgressBar> HorizontalEndcappedProgressBarWeakPtr;
+		typedef std::shared_ptr<CHorizontalEndcappedProgressBar> HorizontalEndcappedProgressBarPtr;
+		typedef std::weak_ptr<CHorizontalEndcappedProgressBar> HorizontalEndcappedProgressBarWeakPtr;
 	}
 }
 

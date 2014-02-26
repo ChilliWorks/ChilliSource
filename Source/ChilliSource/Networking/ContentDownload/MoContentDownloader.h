@@ -27,7 +27,7 @@ namespace ChilliSource
             /// @param Asset server URL
             /// @param Dynamic array of tags that determine content
             //----------------------------------------------------------------
-            CMoContentDownloader(IHttpConnectionSystem* inpRequestSystem, const std::string& instrAssetServerURL, const DYNAMIC_ARRAY<std::string>& inastrTags);
+            CMoContentDownloader(IHttpConnectionSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags);
             //----------------------------------------------------------------
             /// Download Content Manifest
             ///
@@ -58,13 +58,13 @@ namespace ChilliSource
             ///
             /// @return The current tags of this downloader
             //----------------------------------------------------------------
-            inline const DYNAMIC_ARRAY<std::string>& GetTags() const { return mastrTags; }
+            inline const std::vector<std::string>& GetTags() const { return mastrTags; }
             //----------------------------------------------------------------
             /// Set Tags
             ///
             /// Set the tags for this downloader
             //----------------------------------------------------------------
-            inline void SetTags(const DYNAMIC_ARRAY<std::string>& inastrTags) { mastrTags = inastrTags; }
+            inline void SetTags(const std::vector<std::string>& inastrTags) { mastrTags = inastrTags; }
             
         private:
             //----------------------------------------------------------------
@@ -88,7 +88,7 @@ namespace ChilliSource
             
         private:
             
-            DYNAMIC_ARRAY<std::string> mastrTags;
+            std::vector<std::string> mastrTags;
             
             std::string mstrAssetServerURL;
             ContentDownloader::Delegate mOnContentManifestDownloadCompleteDelegate;

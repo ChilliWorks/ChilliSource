@@ -59,7 +59,7 @@ namespace ChilliSource
 			///
 			/// @return all States
 			//---------------------------------------------------------
-            const DYNAMIC_ARRAY<StatePtr>& GetStates() const;
+            const std::vector<StatePtr>& GetStates() const;
 			//---------------------------------------------------------
 			/// Get Active State
 			///
@@ -276,7 +276,7 @@ namespace ChilliSource
 		
 			CApplication* mpApp;
 			
-			DYNAMIC_ARRAY<StatePtr> mStateHierarchy;              //The alive states. A state can be pushed onto the stack to become the active state. Yet the other states will not be destroyed. Hierarchy is now a vector, so that states within can be inspected, since std::stack is a little opaque
+			std::vector<StatePtr> mStateHierarchy;              //The alive states. A state can be pushed onto the stack to become the active state. Yet the other states will not be destroyed. Hierarchy is now a vector, so that states within can be inspected, since std::stack is a little opaque
 			std::list<StateOperation> mStateOperationQueue;
             
             bool mbStartState;

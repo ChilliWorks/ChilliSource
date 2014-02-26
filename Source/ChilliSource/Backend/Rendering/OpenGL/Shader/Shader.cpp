@@ -62,7 +62,7 @@ namespace ChilliSource
             LocationLookup sItem( Core::CHashCRC32::GenerateHashCode(instrAttributeName), 0);
             
             // Binary search through a sorted array of items
-            DYNAMIC_ARRAY<LocationLookup>::iterator it;
+            std::vector<LocationLookup>::iterator it;
             it = std::lower_bound(maAttributes.begin(), maAttributes.end(), sItem, SortCachedLocations);
             
             if(it!=maAttributes.end()  && it->first == sItem.first)
@@ -88,7 +88,7 @@ namespace ChilliSource
             LocationLookup sItem( Core::CHashCRC32::GenerateHashCode(instrUniformName), 0);
             
             // Binary search through a sorted array of items
-            DYNAMIC_ARRAY<LocationLookup>::iterator it;
+            std::vector<LocationLookup>::iterator it;
             it =std::lower_bound(maUniforms.begin(), maUniforms.end(), sItem, SortCachedLocations);
             
             if(it!=maUniforms.end()  && it->first == sItem.first)

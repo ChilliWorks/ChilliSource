@@ -208,7 +208,7 @@ namespace ChilliSource
         //-------------------------------------------
         /// Set Kerning Info
         //-------------------------------------------
-        void CFont::SetKerningInfo(const DYNAMIC_ARRAY<CKernLookup>& inaFirstReg, const DYNAMIC_ARRAY<CKernPair>& inaPairs)
+        void CFont::SetKerningInfo(const std::vector<CKernLookup>& inaFirstReg, const std::vector<CKernPair>& inaPairs)
         {
             maFirstLookup = inaFirstReg;
             maPairs = inaPairs;

@@ -67,12 +67,12 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool CMaterialLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
-            DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > > aShaderFiles;
-            DYNAMIC_ARRAY<TextureDesc> aTextureFiles;
-            DYNAMIC_ARRAY<TextureDesc> aCubemapFiles;
+            std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > > aShaderFiles;
+            std::vector<TextureDesc> aTextureFiles;
+            std::vector<TextureDesc> aCubemapFiles;
             if(BuildMaterialFromFile(ineStorageLocation, inFilePath, aShaderFiles, aTextureFiles, aCubemapFiles, outpResource) == true)
 			{
-                MaterialPtr pMaterial = SHARED_PTR_CAST<CMaterial>(outpResource);
+                MaterialPtr pMaterial = std::static_pointer_cast<CMaterial>(outpResource);
                 
                 IShaderManager* pShaderManager = GET_RESOURCE_MANAGER(IShaderManager);
                 if(pShaderManager != nullptr)
@@ -129,12 +129,12 @@ namespace ChilliSource
 		void CMaterialLoader::BuildMaterialTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
 			//build the material
-            DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > > aShaderFiles;
-            DYNAMIC_ARRAY<TextureDesc> aTextureFiles;
-            DYNAMIC_ARRAY<TextureDesc> aCubemapFiles;
+            std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > > aShaderFiles;
+            std::vector<TextureDesc> aTextureFiles;
+            std::vector<TextureDesc> aCubemapFiles;
 			if(BuildMaterialFromFile(ineStorageLocation, inFilePath, aShaderFiles, aTextureFiles, aCubemapFiles, outpResource) == true)
 			{
-                MaterialPtr pMaterial = SHARED_PTR_CAST<CMaterial>(outpResource);
+                MaterialPtr pMaterial = std::static_pointer_cast<CMaterial>(outpResource);
                 
                 IShaderManager* pShaderManager = GET_RESOURCE_MANAGER(IShaderManager);
                 if(pShaderManager != nullptr)
@@ -185,9 +185,9 @@ namespace ChilliSource
 		/// Build Material From File
 		//----------------------------------------------------------------------------
 		bool CMaterialLoader::BuildMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath,
-                                                    DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles,
-                                                    DYNAMIC_ARRAY<TextureDesc>& outaTextureFiles,
-                                                    DYNAMIC_ARRAY<TextureDesc>& outaCubemapFiles,
+                                                    std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles,
+                                                    std::vector<TextureDesc>& outaTextureFiles,
+                                                    std::vector<TextureDesc>& outaCubemapFiles,
                                                     Core::ResourcePtr& outpResource)
 		{
             const u32 kudwNumShaderNodes = 3;
@@ -362,7 +362,7 @@ namespace ChilliSource
 						}
 						else if(strType == "MatrixArray")
 						{
-							pMaterial->mMapMat4ArrayShaderVars.insert(std::make_pair(strName, DYNAMIC_ARRAY<Core::CMatrix4x4>()));
+							pMaterial->mMapMat4ArrayShaderVars.insert(std::make_pair(strName, std::vector<Core::CMatrix4x4>()));
 						}
 						//Move on to the next variable
 						pShaderVarEl =  Core::XMLUtils::NextSiblingElementWithName(pShaderVarEl);
@@ -406,7 +406,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
 		/// Get Shader Files For Material Type
 		//----------------------------------------------------------------------------
-        void CMaterialLoader::GetShaderFilesForMaterialType(const std::string& instrType, DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles) const
+        void CMaterialLoader::GetShaderFilesForMaterialType(const std::string& instrType, std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles) const
         {
             if(instrType == "Sprite")
             {

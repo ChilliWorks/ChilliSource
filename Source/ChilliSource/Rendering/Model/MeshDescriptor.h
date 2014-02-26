@@ -49,7 +49,7 @@ namespace ChilliSource
             Core::StorageLocation meMaterialStorageLocation;
 			u8* mpVertexData;
 			u8* mpIndexData;
-			DYNAMIC_ARRAY<ChilliSource::Core::CMatrix4x4> mInverseBindPoseMatrices;
+			std::vector<ChilliSource::Core::CMatrix4x4> mInverseBindPoseMatrices;
 			PrimitiveType ePrimitiveType;            
 		};
 		//-------------------------------------------------------------------------
@@ -65,7 +65,7 @@ namespace ChilliSource
 			ChilliSource::Core::CVector3 mvMinBounds;
 			ChilliSource::Core::CVector3 mvMaxBounds;
 			SkeletonPtr mpSkeleton;
-			DYNAMIC_ARRAY<SubMeshDescriptor> mMeshes;
+			std::vector<SubMeshDescriptor> mMeshes;
 		};
 	}
 }

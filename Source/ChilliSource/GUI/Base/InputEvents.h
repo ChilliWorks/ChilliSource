@@ -118,7 +118,7 @@ namespace ChilliSource
             
         private: 
             
-            DYNAMIC_ARRAY<u32> mOpenTouches;  
+            std::vector<u32> mOpenTouches;  
         };
     }
 }

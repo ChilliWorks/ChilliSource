@@ -184,7 +184,7 @@ namespace ChilliSource
             }
             
             
-            DYNAMIC_ARRAY<FileSyncConflict*> mvsCachedConflicts;
+            std::vector<FileSyncConflict*> mvsCachedConflicts;
             
             OnQueryFilesCompletedDelegate mOnQueryFilesCompletedDelegate;
         };

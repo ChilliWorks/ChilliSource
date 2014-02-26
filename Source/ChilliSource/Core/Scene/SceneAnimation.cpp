@@ -21,10 +21,10 @@ namespace ChilliSource
 		{
 			inStream->Read((s8*)&udwKeyframeCount,sizeof(u32));
             
-			afKeyframeTimes = SHARED_PTR<f32>(new f32[udwKeyframeCount], ArrayDeleter<f32>());
+			afKeyframeTimes = std::shared_ptr<f32>(new f32[udwKeyframeCount], ArrayDeleter<f32>());
 			inStream->Read((s8*)afKeyframeTimes.get(),udwKeyframeCount * sizeof(f32));
             
-            aKeyframeValues = SHARED_PTR<EntityTransform>(new EntityTransform[udwKeyframeCount], ArrayDeleter<EntityTransform>());
+            aKeyframeValues = std::shared_ptr<EntityTransform>(new EntityTransform[udwKeyframeCount], ArrayDeleter<EntityTransform>());
 			inStream->Read((s8*)aKeyframeValues.get(),udwKeyframeCount * sizeof(EntityTransform));
             
 			u32 nNameLength;
@@ -91,12 +91,12 @@ namespace ChilliSource
             return  inInterface == CSceneAnimation::InterfaceID;
         }
         
-        bool CSceneAnimation::ApplyAnimationToScene(const EntityPtr &inpRootNode, DYNAMIC_ARRAY<EntityAnimationPtr> &outEntityAnimList) const
+        bool CSceneAnimation::ApplyAnimationToScene(const EntityPtr &inpRootNode, std::vector<EntityAnimationPtr> &outEntityAnimList) const
         {
             return ApplyAnimationToScene(inpRootNode.get(), outEntityAnimList);
         }
         
-        bool CSceneAnimation::ApplyAnimationToScene(CEntity* inpRootNode, DYNAMIC_ARRAY<EntityAnimationPtr> &outEntityAnimList) const
+        bool CSceneAnimation::ApplyAnimationToScene(CEntity* inpRootNode, std::vector<EntityAnimationPtr> &outEntityAnimList) const
         {
             if(!inpRootNode)
             {
@@ -129,12 +129,12 @@ namespace ChilliSource
             return true;
         }
         
-        bool CSceneAnimation::PlayAnimation(const EntityPtr& inpRootNode, DYNAMIC_ARRAY<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode, InterpolationType ineInterpType) const
+        bool CSceneAnimation::PlayAnimation(const EntityPtr& inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode, InterpolationType ineInterpType) const
         {
             return PlayAnimation(inpRootNode.get(), outEntityAnimList, inePlayMode, ineInterpType);
         }
         
-        bool CSceneAnimation::PlayAnimation(CEntity* inpRootNode, DYNAMIC_ARRAY<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode, InterpolationType ineInterpType) const
+        bool CSceneAnimation::PlayAnimation(CEntity* inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode, InterpolationType ineInterpType) const
         {
             u32 udwCurrentAnims = outEntityAnimList.size();
             if(!ApplyAnimationToScene(inpRootNode, outEntityAnimList))

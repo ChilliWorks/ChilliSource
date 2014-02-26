@@ -13,8 +13,8 @@
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
 #define GET_RESOURCE_MANAGER(TYPE) ChilliSource::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<TYPE>() 
-#define LOAD_RESOURCE(TYPE, LOCATION, FILENAME) SHARED_PTR_CAST<TYPE>(ChilliSource::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(TYPE::InterfaceID)->GetResourceFromFile(LOCATION, FILENAME))
-#define ASYNC_LOAD_RESOURCE(TYPE, LOCATION, FILENAME) SHARED_PTR_CAST<TYPE>(ChilliSource::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(TYPE::InterfaceID)->AsyncGetResourceFromFile(LOCATION, FILENAME))
+#define LOAD_RESOURCE(TYPE, LOCATION, FILENAME) std::static_pointer_cast<TYPE>(ChilliSource::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(TYPE::InterfaceID)->GetResourceFromFile(LOCATION, FILENAME))
+#define ASYNC_LOAD_RESOURCE(TYPE, LOCATION, FILENAME) std::static_pointer_cast<TYPE>(ChilliSource::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(TYPE::InterfaceID)->AsyncGetResourceFromFile(LOCATION, FILENAME))
 
 namespace ChilliSource
 {
@@ -104,10 +104,10 @@ namespace ChilliSource
             ///
             /// @param Vector of resource provider pointers
             //----------------------------------------------------------------------
-            void SetResourceProviders(const DYNAMIC_ARRAY<IResourceProvider*> inProviders);
+            void SetResourceProviders(const std::vector<IResourceProvider*> inProviders);
             
         private:
-            DYNAMIC_ARRAY<IResourceManager*> mResourceManagers;
+            std::vector<IResourceManager*> mResourceManagers;
             CApplication* mpApp;
             IResourceGroupManager* mpResourceGroupMgr;
             

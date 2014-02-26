@@ -39,7 +39,7 @@ namespace ChilliSource
         //------------------------------------------------
         void CAnimatedMeshComponentUpdater::Update(f32 infDeltaTime)
         {
-            for (DYNAMIC_ARRAY<CAnimatedMeshComponent*>::const_iterator it = mapComponentsToUpdate.begin(); it != mapComponentsToUpdate.end(); ++it)
+            for (std::vector<CAnimatedMeshComponent*>::const_iterator it = mapComponentsToUpdate.begin(); it != mapComponentsToUpdate.end(); ++it)
             {
                 (*it)->Update(infDeltaTime);
             }
@@ -49,7 +49,7 @@ namespace ChilliSource
         //------------------------------------------------
         void CAnimatedMeshComponentUpdater::RemoveComponent(CAnimatedMeshComponent* inpAnimatedMesh)
         {
-            DYNAMIC_ARRAY<CAnimatedMeshComponent*>::iterator it;
+            std::vector<CAnimatedMeshComponent*>::iterator it;
             for (it = mapComponentsToUpdate.begin(); it != mapComponentsToUpdate.end(); ++it)
             {
                 if ((*it) == inpAnimatedMesh)

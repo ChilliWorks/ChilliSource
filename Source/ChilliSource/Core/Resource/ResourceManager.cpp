@@ -36,7 +36,7 @@ namespace ChilliSource
 		///
 		/// @param Vector of the resource loaders that this manager will use
 		//-----------------------------------------------------------------
-		void IResourceManager::SetResourceProviders(const DYNAMIC_ARRAY<IResourceProvider*> & inVecResourceProviders)
+		void IResourceManager::SetResourceProviders(const std::vector<IResourceProvider*> & inVecResourceProviders)
 		{
 			mResourceProviders = inVecResourceProviders;
 		}
@@ -137,7 +137,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		IResourceProvider* IResourceManager::GetResourceProviderByExtension(const std::string &instrExtension)
 		{
-			for (DYNAMIC_ARRAY<IResourceProvider*>::iterator it = mResourceProviders.begin(); it != mResourceProviders.end(); it++)
+			for (std::vector<IResourceProvider*>::iterator it = mResourceProviders.begin(); it != mResourceProviders.end(); it++)
 			{
 				if ((*it)->CanCreateResourceFromFileWithExtension(instrExtension) == true)
 				{
@@ -154,9 +154,9 @@ namespace ChilliSource
         ///
         /// @return List of current loaded resources
         //-----------------------------------------------------------------
-        DYNAMIC_ARRAY<ResourceDesc> IResourceManager::GetAllLoadedResources() const
+        std::vector<ResourceDesc> IResourceManager::GetAllLoadedResources() const
         {
-            DYNAMIC_ARRAY<ResourceDesc> asUsedResources;
+            std::vector<ResourceDesc> asUsedResources;
             for(MapStringToResourcePtr::const_iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it )
 			{
                 ResourceDesc sResource;

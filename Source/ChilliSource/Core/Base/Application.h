@@ -162,7 +162,7 @@ namespace ChilliSource
 			/// and fills an array with them.
 			/// @param The type ID of the system you wish to implement
 			//--------------------------------------------------------------------------------------------------
-			static void GetSystemsImplementing(InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<SystemPtr> & outSystems);
+			static void GetSystemsImplementing(InterfaceIDType inInterfaceID, std::vector<SystemPtr> & outSystems);
 			//--------------------------------------------------------------------------------------------------
 			/// Get Systems Implementing
 			///
@@ -171,7 +171,7 @@ namespace ChilliSource
 			/// @param The type ID of the system you wish to implement
 			//--------------------------------------------------------------------------------------------------
 			//Templated convenience version of the above saving getting the interface directly
-            template <typename T> static void GetSystemsImplementing(DYNAMIC_ARRAY<T*> & outSystems)
+            template <typename T> static void GetSystemsImplementing(std::vector<T*> & outSystems)
 			{
 				for (size_t nSystem = 0; nSystem < mSystems.size(); nSystem++) 
 				{
@@ -462,7 +462,7 @@ namespace ChilliSource
             /// @param Out: The name of the directory to fall back on for resolution dependant assets
             /// @param Out: The name of the directory to use as the default (i.e. for shared assets)
             //--------------------------------------------------------------------------------------------------
-            virtual void SetResourceDirectories(DYNAMIC_ARRAY<ResourceDirectoryInfo>& outaResDependantDirectoryInfos, std::string& outstrResDefaultDirectory, std::string& outstrDefaultDirectory) = 0;
+            virtual void SetResourceDirectories(std::vector<ResourceDirectoryInfo>& outaResDependantDirectoryInfos, std::string& outstrResDefaultDirectory, std::string& outstrDefaultDirectory) = 0;
 			//--------------------------------------------------------------------------------------------------
 			/// Create Systems
 			///
@@ -513,8 +513,8 @@ namespace ChilliSource
 
 			static ScreenOrientation meDefaultOrientation;
 			
-			static DYNAMIC_ARRAY<SystemPtr> mSystems; //All systems in use by the application
-            static DYNAMIC_ARRAY<IUpdateable*> mUpdateableSystems; //All updateable systems in use by the application
+			static std::vector<SystemPtr> mSystems; //All systems in use by the application
+            static std::vector<IUpdateable*> mUpdateableSystems; //All updateable systems in use by the application
             
             static CResourceManagerDispenser* mpResourceManagerDispenser;
             CComponentFactoryDispenser* mpComponentFactoryDispenser;
@@ -523,7 +523,7 @@ namespace ChilliSource
             static bool mbUpdateSystems;
 		private:
 			
-			DYNAMIC_ARRAY<IResourceProvider*> mResourceProviders; //All resource provider systems available
+			std::vector<IResourceProvider*> mResourceProviders; //All resource provider systems available
 
 			static SystemConfirmDialog::Delegate mActiveSysConfirmDelegate;
         

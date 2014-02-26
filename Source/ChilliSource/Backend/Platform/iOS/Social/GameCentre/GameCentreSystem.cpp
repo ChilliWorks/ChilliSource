@@ -461,7 +461,7 @@ namespace ChilliSource
 		void CGameCentreSystem::SetAchievementProgression(const std::string & instrID, double inffProgression, bool inbShowToast, const std::string& instrTag, RequestErrorDelegate inpErrorDelegate){
 			
 			//Check we don't have this achievement
-			DYNAMIC_ARRAY<std::string>::iterator pAchievementID = std::find(mastrCompletedAchievements.begin(),mastrCompletedAchievements.end(),instrID);
+			std::vector<std::string>::iterator pAchievementID = std::find(mastrCompletedAchievements.begin(),mastrCompletedAchievements.end(),instrID);
 			
 			if (mbIsGameCentreSupported && pAchievementID == mastrCompletedAchievements.end()){
 				
@@ -512,7 +512,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------
         bool CGameCentreSystem::IsAchievementUnlocked(const std::string & instrID)
         {
-            DYNAMIC_ARRAY<std::string>::iterator it = std::find(mastrCompletedAchievements.begin(), mastrCompletedAchievements.end(), instrID);
+            std::vector<std::string>::iterator it = std::find(mastrCompletedAchievements.begin(), mastrCompletedAchievements.end(), instrID);
             if(it == mastrCompletedAchievements.end())
                 return false;
             else
@@ -1093,7 +1093,7 @@ namespace ChilliSource
 		void CGameCentreSystem::OnNameRequestComplete(NSArray* inpPlayers, const std::string& instrKey)
 		{
 			//We need to find the data we downloaded earlier with the scores
-			HASH_MAP<std::string, LeaderboardScoreResults>::iterator pLeaderboardScoreResult = mMapNameRequestToLeaderboardScoreResults.find(instrKey);
+			std::unordered_map<std::string, LeaderboardScoreResults>::iterator pLeaderboardScoreResult = mMapNameRequestToLeaderboardScoreResults.find(instrKey);
 			
 			if(pLeaderboardScoreResult != mMapNameRequestToLeaderboardScoreResults.end())
 			{
@@ -1106,7 +1106,7 @@ namespace ChilliSource
 					pScore->bIsFriend = pPlayer.isFriend;
 				}
 				
-				HASH_MAP<std::string, LeaderboardScoreRequestDelegate>::iterator pDelegate = mMapRequestNameToRequestDelegate.find(instrKey);
+				std::unordered_map<std::string, LeaderboardScoreRequestDelegate>::iterator pDelegate = mMapRequestNameToRequestDelegate.find(instrKey);
 				
 				if (pDelegate != mMapRequestNameToRequestDelegate.end()){
 					pDelegate->second(pLeaderboardScoreResult->second);	

@@ -12,6 +12,8 @@
 
 #include <ChilliSource/Core/Time/CoreTimer.h>
 
+#include <ChilliSource/Core/Base/FastDelegate.h>
+
 namespace ChilliSource
 {
 	namespace Core

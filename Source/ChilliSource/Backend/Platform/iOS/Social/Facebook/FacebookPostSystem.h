@@ -27,7 +27,7 @@ namespace ChilliSource
 			
             void TryPost(const Social::FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback);
             
-            void TrySendRequest(const Social::FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback, DYNAMIC_ARRAY<std::string>& inastrRecommendedFriends);
+            void TrySendRequest(const Social::FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends);
 			
 		private:
             void Post(const Social::FacebookPostDesc& insDesc);

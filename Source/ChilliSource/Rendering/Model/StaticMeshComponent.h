@@ -193,7 +193,7 @@ namespace ChilliSource
 		private:
 			
 			MeshPtr mpModel;
-			DYNAMIC_ARRAY<MaterialPtr> mMaterials;
+			std::vector<MaterialPtr> mMaterials;
             
             bool mbBoundingSphereValid;
             bool mbAABBValid;

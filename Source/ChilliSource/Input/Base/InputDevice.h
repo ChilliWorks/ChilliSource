@@ -28,7 +28,7 @@ namespace ChilliSource
 			virtual ~IInputDevice(){}
 		};
 		
-		typedef SHARED_PTR<IInputDevice> InputDevicePtr;
+		typedef std::shared_ptr<IInputDevice> InputDevicePtr;
 	}
 }
 

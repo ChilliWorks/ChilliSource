@@ -17,6 +17,8 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
+#include <vector>
+
 namespace ChilliSource
 {
 	namespace Core
@@ -28,7 +30,7 @@ namespace ChilliSource
 				mbLengthCacheValid = false;
 				mfDeltaT = 0;
 			}
-			CCatmullRomSpline(const DYNAMIC_ARRAY<T> & inPoints)
+			CCatmullRomSpline(const std::vector<T> & inPoints)
 			: mPoints(inPoints)
 			{
 				mbLengthCacheValid = false;
@@ -176,11 +178,11 @@ namespace ChilliSource
 			
 			mutable bool mbLengthCacheValid;
 			mutable f32 mfCachedLength;
-			mutable DYNAMIC_ARRAY<f32> mfCachedParamDists; //Cached values 
-			mutable DYNAMIC_ARRAY<f32> mfCachedDists; //
+			mutable std::vector<f32> mfCachedParamDists; //Cached values 
+			mutable std::vector<f32> mfCachedDists; //
 			
 			f32 mfDeltaT;
-			DYNAMIC_ARRAY<T> mPoints;
+			std::vector<T> mPoints;
 		};
 		
 		template <typename T> class CMultiLineSegment {
@@ -189,7 +191,7 @@ namespace ChilliSource
 			{
 				mbLengthCacheValid = false;
 			}
-			CMultiLineSegment(const DYNAMIC_ARRAY<T> & inPoints)
+			CMultiLineSegment(const std::vector<T> & inPoints)
 			: mPoints(inPoints)
 			{
 				mbLengthCacheValid = false;
@@ -262,10 +264,10 @@ namespace ChilliSource
 			
 			mutable bool mbLengthCacheValid;
 			mutable f32 mfCachedLength;
-			mutable DYNAMIC_ARRAY<f32> mfCachedParamDists; //Cached values 
-			mutable DYNAMIC_ARRAY<f32> mfCachedDists; //
+			mutable std::vector<f32> mfCachedParamDists; //Cached values 
+			mutable std::vector<f32> mfCachedDists; //
 			
-			DYNAMIC_ARRAY<T> mPoints;
+			std::vector<T> mPoints;
 		};
 		
 	}

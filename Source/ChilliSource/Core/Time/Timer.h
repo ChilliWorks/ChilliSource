@@ -124,13 +124,13 @@ namespace ChilliSource
 			
 			bool mbIsTimerActive;
 			
-			typedef DYNAMIC_ARRAY<TimeEventDelegate> TimeDelegatesList;
+			typedef std::vector<TimeEventDelegate> TimeDelegatesList;
 			typedef TimeDelegatesList::iterator TimeDelegatesListItr;
 			TimeDelegatesList maTimerBeganDelegates;
 			
-			DYNAMIC_ARRAY< std::pair<TimeEventDelegate, f32> > maTimeElapsedDelegates;
-			DYNAMIC_ARRAY<PeriodicUpdateData> maPeriodicUpdateDelegates;
-			DYNAMIC_ARRAY<TimeEventDelegate> maPeriodicUpdateDelegatesDelayedRemove;
+			std::vector< std::pair<TimeEventDelegate, f32> > maTimeElapsedDelegates;
+			std::vector<PeriodicUpdateData> maPeriodicUpdateDelegates;
+			std::vector<TimeEventDelegate> maPeriodicUpdateDelegatesDelayedRemove;
 		};
 	}
 }

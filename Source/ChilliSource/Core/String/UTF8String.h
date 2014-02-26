@@ -11,6 +11,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 
+#include <vector>
+
 namespace ChilliSource
 {
     namespace Core
@@ -235,7 +237,7 @@ namespace ChilliSource
 
         private:
             
-            DYNAMIC_ARRAY<CodePoint> mCodePoints;
+            std::vector<CodePoint> mCodePoints;
             
             mutable u32 mudwLength;
             

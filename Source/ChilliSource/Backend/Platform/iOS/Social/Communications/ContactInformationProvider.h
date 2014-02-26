@@ -29,7 +29,7 @@ namespace ChilliSource{
 			virtual u32 GetNumberContacts();
 			virtual const Social::ContactRecord & GetContactAtIndex(u32 inudwIndex);
 		private:
-			DYNAMIC_ARRAY<Social::ContactRecord> masContacts;
+			std::vector<Social::ContactRecord> masContacts;
 		};
 		
 	}

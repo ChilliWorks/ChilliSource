@@ -35,7 +35,7 @@ namespace ChilliSource
 			/// @param Out: Cubemap resource
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateCubemapFromImages(const DYNAMIC_ARRAY<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapPtr& outpCubemap);
+			bool CreateCubemapFromImages(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapPtr& outpCubemap);
 			//----------------------------------------------------------------
 			/// Restore
 			///
@@ -62,8 +62,8 @@ namespace ChilliSource
 			void RemoveRestorableCubemap(CCubemap* inpCubemap);
 		private:
 #ifdef TARGET_ANDROID
-			DYNAMIC_ARRAY<Rendering::CubemapWeakPtr> mapCubemapCache;
-			HASH_MAP<CCubemap*, Core::ImagePtr> mapBackedUpImages;
+			std::vector<Rendering::CubemapWeakPtr> mapCubemapCache;
+			std::unordered_map<CCubemap*, Core::ImagePtr> mapBackedUpImages;
 #endif
 		};
 	}

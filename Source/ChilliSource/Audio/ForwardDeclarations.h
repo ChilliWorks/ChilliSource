@@ -31,14 +31,14 @@ namespace ChilliSource
 		
 		class IAudioComponentFactory;
 		
-		typedef SHARED_PTR<CAudioComponent> AudioComponentPtr;
-		typedef WEAK_PTR<CAudioComponent> AudioComponentWeakPtr;
+		typedef std::shared_ptr<CAudioComponent> AudioComponentPtr;
+		typedef std::weak_ptr<CAudioComponent> AudioComponentWeakPtr;
 
-		typedef SHARED_PTR<CAudioListenerComponent> AudioListenerComponentPtr;
-		typedef WEAK_PTR<CAudioListenerComponent> AudioListenerComponentWeakPtr;
+		typedef std::shared_ptr<CAudioListenerComponent> AudioListenerComponentPtr;
+		typedef std::weak_ptr<CAudioListenerComponent> AudioListenerComponentWeakPtr;
         
-        typedef SHARED_PTR<IAudioResource> AudioResourcePtr;
-		typedef WEAK_PTR<IAudioResource> AudioResourceWeakPtr;
+        typedef std::shared_ptr<IAudioResource> AudioResourcePtr;
+		typedef std::weak_ptr<IAudioResource> AudioResourceWeakPtr;
 	}
 }
 

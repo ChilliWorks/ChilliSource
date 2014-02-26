@@ -68,7 +68,7 @@ namespace ChilliSource
         //--------------------------------------------------------------------------------------------------
         IResourceManager* CResourceManagerDispenser::GetResourceManagerWithInterface(InterfaceIDType inInterfaceID)
         {
-            for (DYNAMIC_ARRAY<IResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr) 
+            for (std::vector<IResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr) 
 			{
 				if ((*pMgr)->IsA(inInterfaceID)) 
 				{
@@ -88,7 +88,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		IResourceManager* CResourceManagerDispenser::GetResourceManagerForType(InterfaceIDType inResourceInterfaceID)
 		{
-			for (DYNAMIC_ARRAY<IResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr) 
+			for (std::vector<IResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr) 
 			{
 				if ((*pMgr)->ManagesResourceOfType(inResourceInterfaceID)) 
 				{
@@ -108,7 +108,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		IResourceManager* CResourceManagerDispenser::GetResourceManagerForExtension(const std::string &instrExtension)
 		{
-			for (DYNAMIC_ARRAY<IResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr) 
+			for (std::vector<IResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr) 
 			{
 				if((*pMgr)->ManagesResourceWithExtension(instrExtension)) 
 				{
@@ -131,7 +131,7 @@ namespace ChilliSource
 			do
 			{
                 udwReleasedCount = 0;
-                for (DYNAMIC_ARRAY<IResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr)
+                for (std::vector<IResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr)
                 {
                     udwReleasedCount += (*pMgr)->ReleaseAllUnused();
                 }
@@ -168,15 +168,15 @@ namespace ChilliSource
         ///
         /// @param Vector of resource provider pointers
         //----------------------------------------------------------------------
-        void CResourceManagerDispenser::SetResourceProviders(const DYNAMIC_ARRAY<IResourceProvider*> inProviders)
+        void CResourceManagerDispenser::SetResourceProviders(const std::vector<IResourceProvider*> inProviders)
         {
             //For each resource manager, give it resource providers of the same resource type
-			for (DYNAMIC_ARRAY<IResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr) 
+			for (std::vector<IResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr) 
 			{
 				InterfaceIDType ResourceType = (*pMgr)->GetProviderType();
-				DYNAMIC_ARRAY<IResourceProvider*> UsefulResourceProviders;
+				std::vector<IResourceProvider*> UsefulResourceProviders;
 				
-				for (DYNAMIC_ARRAY<IResourceProvider*>::const_iterator pProv = inProviders.begin(); pProv != inProviders.end(); ++pProv) 
+				for (std::vector<IResourceProvider*>::const_iterator pProv = inProviders.begin(); pProv != inProviders.end(); ++pProv) 
 				{
 					if ((*pProv)->CanCreateResourceOfKind(ResourceType)) 
 					{

@@ -73,8 +73,8 @@ namespace ChilliSource
 		Rendering::CRenderer* CApplication::mpRenderer = nullptr;
 		IFileSystem* CApplication::mspFileSystem = nullptr;
         
-        DYNAMIC_ARRAY<IUpdateable*> CApplication::mUpdateableSystems;
-        DYNAMIC_ARRAY<SystemPtr> CApplication::mSystems;
+        std::vector<IUpdateable*> CApplication::mUpdateableSystems;
+        std::vector<SystemPtr> CApplication::mSystems;
         
         ScreenOrientation CApplication::meDefaultOrientation = ScreenOrientation::k_landscapeRight;
         
@@ -167,7 +167,7 @@ namespace ChilliSource
         {
             //Get a list of the resource directories and determine which one this device should be
             //loading from based on it's screen
-            DYNAMIC_ARRAY<ResourceDirectoryInfo> aDirectoryInfos;
+            std::vector<ResourceDirectoryInfo> aDirectoryInfos;
             std::string strDefaultDir, strDeviceDir, strDefaultDeviceDir;
             SetResourceDirectories(aDirectoryInfos, strDefaultDeviceDir, strDefaultDir);
             
@@ -177,7 +177,7 @@ namespace ChilliSource
             u32 udwCurrentRes = CScreen::GetOrientedWidth() * CScreen::GetOrientedHeight();
             f32 fCurrenctDensity = CScreen::GetDensity();
             f32 fAssetDensity = 1.0f;
-            for(DYNAMIC_ARRAY<ResourceDirectoryInfo>::const_iterator it = aDirectoryInfos.begin(); it != aDirectoryInfos.end(); ++it)
+            for(std::vector<ResourceDirectoryInfo>::const_iterator it = aDirectoryInfos.begin(); it != aDirectoryInfos.end(); ++it)
             {
                 //The density and the resolution must both be under the maximum for the directory to be selected.
                 if(udwCurrentRes <= it->udwMaxRes && fCurrenctDensity <= it->fMaxDensity)
@@ -205,7 +205,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		SystemPtr CApplication::GetSystemImplementing(InterfaceIDType inInterfaceID)
 		{
-			for (DYNAMIC_ARRAY<SystemPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
+			for (std::vector<SystemPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
 			{
 				if ((*it)->IsA(inInterfaceID)) 
 				{
@@ -223,10 +223,10 @@ namespace ChilliSource
 		/// and fills an array with them.
 		/// @param The type ID of the system you wish to implement
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::GetSystemsImplementing(InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<SystemPtr> & outSystems)
+		void CApplication::GetSystemsImplementing(InterfaceIDType inInterfaceID, std::vector<SystemPtr> & outSystems)
 		{
 			outSystems.clear();
-			for (DYNAMIC_ARRAY<SystemPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
+			for (std::vector<SystemPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
 			{
 				if ((*it)->IsA(inInterfaceID)) 
 				{
@@ -245,7 +245,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		IResourceProvider* CApplication::GetResourceProviderProducing(InterfaceIDType inInterfaceID, const std::string & inExtension)
 		{
-			for (DYNAMIC_ARRAY<IResourceProvider*>::iterator pProv = mResourceProviders.begin(); pProv != mResourceProviders.end(); ++pProv) 
+			for (std::vector<IResourceProvider*>::iterator pProv = mResourceProviders.begin(); pProv != mResourceProviders.end(); ++pProv) 
 			{
 				if ((*pProv)->CanCreateResourceFromFileWithExtension(inExtension)) 
 				{
@@ -336,7 +336,7 @@ namespace ChilliSource
 		void CApplication::PostCreateSystems()
 		{
             //Loop round all the created systems and categorise them
-			for(DYNAMIC_ARRAY<SystemPtr>::iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
+			for(std::vector<SystemPtr>::iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
 			{
 				if ((*it)->IsA(IUpdateable::InterfaceID))
 				{
@@ -702,7 +702,7 @@ namespace ChilliSource
 			//Update sub systems
             if (mbUpdateSystems == true)
             {
-				for(DYNAMIC_ARRAY<IUpdateable*>::iterator it = mUpdateableSystems.begin(); it != mUpdateableSystems.end(); ++it)
+				for(std::vector<IUpdateable*>::iterator it = mUpdateableSystems.begin(); it != mUpdateableSystems.end(); ++it)
 				{
 					(*it)->Update(infDT);
 				}

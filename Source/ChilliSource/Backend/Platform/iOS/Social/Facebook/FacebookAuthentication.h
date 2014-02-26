@@ -11,6 +11,7 @@
 #define _MOFLO_PLATFORM_IOS_SOCIAL_FACEBOOKAUTHENTICATION_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
 
 #include <FacebookSDK/FacebookSDK.h>
@@ -30,13 +31,13 @@ namespace ChilliSource
 			
             bool IsA(Core::InterfaceIDType inID) const;
 			
-            void Authenticate( const DYNAMIC_ARRAY<std::string>& inastrReadPermissions = DYNAMIC_ARRAY<std::string>(), const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate = nullptr);
+            void Authenticate( const std::vector<std::string>& inastrReadPermissions = std::vector<std::string>(), const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate = nullptr);
 			
             bool IsSignedIn() const;
             std::string GetActiveToken() const;
             
-            void AuthoriseReadPermissions(const DYNAMIC_ARRAY<std::string> & inaReadPerms, const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate);
-            void AuthoriseWritePermissions(const DYNAMIC_ARRAY<std::string> & inaWritePerms, const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate);
+            void AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate);
+            void AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate);
             
             bool HasPermission(const std::string& instrPermission) const;
 			
@@ -51,13 +52,13 @@ namespace ChilliSource
             
             void OnSessionStateChanged(FBSession* inpSession, FBSessionState ineState);
             
-            DYNAMIC_ARRAY<std::string> mastrPermissions;
+            std::vector<std::string> mastrPermissions;
             
             IFacebookAuthenticationSystem::AuthenticationCompleteDelegate mAuthenticateDelegate;
             IFacebookAuthenticationSystem::AuthenticationCompleteDelegate mAuthoriseReadDelegate;
             IFacebookAuthenticationSystem::AuthenticationCompleteDelegate mAuthoriseWriteDelegate;
             
-            DYNAMIC_ARRAY<std::string> maRequestedWritePermissions;
+            std::vector<std::string> maRequestedWritePermissions;
 		};
 	}
 }

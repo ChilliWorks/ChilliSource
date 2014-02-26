@@ -192,11 +192,11 @@ namespace ChilliSource
             
         private:
             
-            static DYNAMIC_ARRAY<AudioComponentPtr> mAudioComponentCache;
-            static DYNAMIC_ARRAY<u32> maudwComponentPauseCount;
-            static DYNAMIC_ARRAY<bool> mabComponentLooping;
+            static std::vector<AudioComponentPtr> mAudioComponentCache;
+            static std::vector<u32> maudwComponentPauseCount;
+            static std::vector<bool> mabComponentLooping;
             
-            typedef HASH_MAP<std::string, AudioResourcePtr> MapNameToResource;
+            typedef std::unordered_map<std::string, AudioResourcePtr> MapNameToResource;
             static MapNameToResource mmapNamesToResources;
             
             static IAudioManager* mpAudioManager;

@@ -39,7 +39,7 @@ namespace ChilliSource{
 			[mpDelegate release];
 			mpDelegate = nil;
 		}
-		void CSMSCompositionActivity::Present(const DYNAMIC_ARRAY<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const ISMSCompositionActivity::SendResultDelegate & inCallback){
+		void CSMSCompositionActivity::Present(const std::vector<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const ISMSCompositionActivity::SendResultDelegate & inCallback){
 			
 			mpDelegate = [[SMSDelegate alloc] initWithCallback:inCallback];
 						

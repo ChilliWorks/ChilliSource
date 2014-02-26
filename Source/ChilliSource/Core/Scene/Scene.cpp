@@ -136,15 +136,15 @@ namespace ChilliSource
 		/// @param Ray to check intersection
 		/// @param A handle to a container to fill with intersecting components (Render components)
 		//--------------------------------------------------------------------------------------------------
-		void CScene::QuerySceneForIntersection(const Core::Ray &inRay, DYNAMIC_ARRAY<IVolumeComponent*> &outIntersectComponents, bool inbIsDepthSorted, u32 inudwQueryMask)
+		void CScene::QuerySceneForIntersection(const Core::Ray &inRay, std::vector<IVolumeComponent*> &outIntersectComponents, bool inbIsDepthSorted, u32 inudwQueryMask)
 		{
 			//Only render components can be checked for ray intersection as they have AABB's
-			DYNAMIC_ARRAY<IVolumeComponent*> IntersectableComponents;
+			std::vector<IVolumeComponent*> IntersectableComponents;
 			QuerySceneForComponents<IVolumeComponent>(IntersectableComponents, inudwQueryMask);
 			
 			//Loop through the render components and check for intersection
 			//If any intersect then add them to the intersect list
-			for(DYNAMIC_ARRAY<IVolumeComponent*>::iterator it = IntersectableComponents.begin(); it != IntersectableComponents.end(); ++it)
+			for(std::vector<IVolumeComponent*>::iterator it = IntersectableComponents.begin(); it != IntersectableComponents.end(); ++it)
 			{
 				IVolumeComponent* pComponent = (IVolumeComponent*)(*it);
 				

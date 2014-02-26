@@ -17,6 +17,9 @@
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Base/Application.h>
 
+#include <unordered_map>
+#include <vector>
+
 namespace ChilliSource
 {
 	namespace Core
@@ -79,11 +82,11 @@ namespace ChilliSource
 			{
 				DEBUG_LOG("Loading resource group " + instrGroupName + "...");
 				//Get the file names within that directory
-				DYNAMIC_ARRAY<std::string> FileNames;
+				std::vector<std::string> FileNames;
 				CApplication::GetFileSystemPtr()->GetFileNamesInDirectory(StorageLocation::k_package, pExistingResource->second->mstrDirectory, true, FileNames);
 				
 				//Load this bad boy. 
-				for(DYNAMIC_ARRAY<std::string>::const_iterator it = FileNames.begin(); it != FileNames.end(); ++it)
+				for(std::vector<std::string>::const_iterator it = FileNames.begin(); it != FileNames.end(); ++it)
 				{
 					std::string strName;
 					std::string strExtension;
@@ -128,7 +131,7 @@ namespace ChilliSource
 				pExistingResource->second->meCurrentStatus = CResourceGroup::Status::k_notLoaded;
 				
 				//Tell the resource manager to unload the object from it's cache
-				for(DYNAMIC_ARRAY<ResourcePtr>::iterator it = pExistingResource->second->mResources.begin(); it != pExistingResource->second->mResources.end(); ++it)
+				for(std::vector<ResourcePtr>::iterator it = pExistingResource->second->mResources.begin(); it != pExistingResource->second->mResources.end(); ++it)
 				{
 					(*it)->Release();
 				}
@@ -186,7 +189,7 @@ namespace ChilliSource
 			{
 				it->second->meCurrentStatus = CResourceGroup::Status::k_notLoaded;
 				//Tell the resource manager to let it go!
-				for(DYNAMIC_ARRAY<ResourcePtr>::iterator jt = it->second->mResources.begin(); jt != it->second->mResources.end(); ++jt)
+				for(std::vector<ResourcePtr>::iterator jt = it->second->mResources.begin(); jt != it->second->mResources.end(); ++jt)
 				{
 					(*jt)->Release();
 				}

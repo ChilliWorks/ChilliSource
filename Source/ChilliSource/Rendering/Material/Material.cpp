@@ -147,7 +147,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Textures
 		//----------------------------------------------------------
-		const DYNAMIC_ARRAY<TexturePtr>& CMaterial::GetTextures() const
+		const std::vector<TexturePtr>& CMaterial::GetTextures() const
 		{
 			return mTextures;
 		}
@@ -443,7 +443,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Shader Matrix Array Value
 		//-----------------------------------------------------------
-		void CMaterial::SetShaderMatrixArrayValue(const std::string& instrVarName, const DYNAMIC_ARRAY<Core::CMatrix4x4>& inmatValue)
+		void CMaterial::SetShaderMatrixArrayValue(const std::string& instrVarName, const std::vector<Core::CMatrix4x4>& inmatValue)
 		{
 			mMapMat4ArrayShaderVars[instrVarName] = inmatValue;
             

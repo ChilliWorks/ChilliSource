@@ -85,7 +85,7 @@ namespace ChilliSource
         /// @param Empty container to be filled
         /// @param Query mask
         //--------------------------------------------------------------------------------------------------
-        void COctree::QuerySceneForVisibleComponents(const Core::CFrustum* inpFrustum, DYNAMIC_ARRAY<ComponentPtr> &outComponents, u32 inudwQueryMask)
+        void COctree::QuerySceneForVisibleComponents(const Core::CFrustum* inpFrustum, std::vector<ComponentPtr> &outComponents, u32 inudwQueryMask)
         {
             //Check if the node is inside the frustum
             if(inpFrustum->SphereCullTest(mpRoot->BoundingSphere))
@@ -185,7 +185,7 @@ namespace ChilliSource
         /// Recurse through all the child nodes and get the 
         /// entities from them
         //----------------------------------------------------------
-        void COctree::GetChildNodeAttachedToNode(COctree::Node* pNode, const CFrustum* inpFrustum, DYNAMIC_ARRAY<ComponentPtr> &outComponents, u32 inudwQueryMask)
+        void COctree::GetChildNodeAttachedToNode(COctree::Node* pNode, const CFrustum* inpFrustum, std::vector<ComponentPtr> &outComponents, u32 inudwQueryMask)
         {
             if(pNode)
             {
@@ -208,7 +208,7 @@ namespace ChilliSource
         /// Recurse through all the components and do the cull
         /// test
         //----------------------------------------------------------
-        void COctree::GetComponentsAttachedToNode(COctree::Node* pNode, DYNAMIC_ARRAY<ComponentPtr> &outComponents, u32 inudwQueryMask)
+        void COctree::GetComponentsAttachedToNode(COctree::Node* pNode, std::vector<ComponentPtr> &outComponents, u32 inudwQueryMask)
         {
             if(pNode)
             {

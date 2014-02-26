@@ -53,7 +53,7 @@ namespace ChilliSource
             std::string mstrFilename;
             StorageLocation meStorageLocation;
         };
-        typedef SHARED_PTR<StorageLocationAndFilename> StorageLocationAndFilenamePtr;
+        typedef std::shared_ptr<StorageLocationAndFilename> StorageLocationAndFilenamePtr;
 		//=========================================================================================
 		/// IFileSystem
         ///
@@ -205,7 +205,7 @@ namespace ChilliSource
             /// @param Output dynamic array containing the filenames.
             //--------------------------------------------------------------
             virtual void GetFileNamesWithExtensionInDirectory(StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                              const std::string& instrExtension, DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath = false) const = 0;
+                                                              const std::string& instrExtension, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath = false) const = 0;
             //--------------------------------------------------------------
             /// Get Path For Files With Name In Directory
             ///
@@ -220,7 +220,7 @@ namespace ChilliSource
             /// @param Output dynamic array containing the filenames.
             //--------------------------------------------------------------
             virtual void GetPathForFilesWithNameInDirectory(StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                              const std::string& instrName, DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath = false) const = 0;
+                                                              const std::string& instrName, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath = false) const = 0;
             //--------------------------------------------------------------
             /// Get File Names In Directory
             ///
@@ -233,7 +233,7 @@ namespace ChilliSource
             /// @param Output dynamic array containing the filenames.
             //--------------------------------------------------------------
             virtual void GetFileNamesInDirectory(StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                 DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath = false) const = 0;
+                                                 std::vector<std::string> &outstrFileNames, bool inbAppendFullPath = false) const = 0;
             //--------------------------------------------------------------
             /// Get Directories In Directory
             ///
@@ -246,7 +246,7 @@ namespace ChilliSource
             /// @param Output dynamic array containing the dir names.
             //--------------------------------------------------------------
             virtual void GetDirectoriesInDirectory(StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                   DYNAMIC_ARRAY<std::string> &outstrDirectories, bool inbAppendFullPath = false) const = 0;
+                                                   std::vector<std::string> &outstrDirectories, bool inbAppendFullPath = false) const = 0;
             //--------------------------------------------------------------
             /// Does File Exist
             ///

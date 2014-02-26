@@ -178,7 +178,7 @@ namespace ChilliSource
 
         };
         
-        typedef SHARED_PTR<CVerticalStretchableImage> VerticalStretchableImagePtr;
+        typedef std::shared_ptr<CVerticalStretchableImage> VerticalStretchableImagePtr;
     }
 }
 

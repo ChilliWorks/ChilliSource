@@ -446,8 +446,8 @@ namespace ChilliSource
             static Audio::AudioComponentPtr mspDefaultDeSelectSound;
 		};
         
-        typedef SHARED_PTR<CHighlightButton> HighlightButtonPtr;
-		typedef WEAK_PTR<CHighlightButton> HighlightButtonWeakPtr;
+        typedef std::shared_ptr<CHighlightButton> HighlightButtonPtr;
+		typedef std::weak_ptr<CHighlightButton> HighlightButtonWeakPtr;
     }
 }
 

@@ -15,6 +15,9 @@
 #include <ChilliSource/Core/Reflection/Registry.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 
+#include <unordered_map>
+#include <vector>
+
 namespace ChilliSource
 {
     namespace Core
@@ -91,7 +94,7 @@ namespace ChilliSource
                 ///
                 /// @param Vector of properties for this meta-class
                 //--------------------------------------------------------
-                const DYNAMIC_ARRAY<CProperty*>& GetProperties() const;
+                const std::vector<CProperty*>& GetProperties() const;
                 //--------------------------------------------------------
                 /// Get Property
                 ///
@@ -172,8 +175,8 @@ namespace ChilliSource
                    
             private:
                 
-                DYNAMIC_ARRAY<CProperty*> mProperties;
-                DYNAMIC_ARRAY<CInstance*> mInstances;
+                std::vector<CProperty*> mProperties;
+                std::vector<CInstance*> mInstances;
 
                 CMetaClass* mpBaseClass;
                 
@@ -182,10 +185,10 @@ namespace ChilliSource
                 u32 mudwSize;
                 u32 mudwNameHash;
                 
-                typedef HASH_MAP<u32, InstanceCreateDelegate> MapMetaClassToInstanceCreateDelegate;
+                typedef std::unordered_map<u32, InstanceCreateDelegate> MapMetaClassToInstanceCreateDelegate;
                 static MapMetaClassToInstanceCreateDelegate mapClassToInstanceCreate;
                 
-                typedef HASH_MAP<u32, InstanceDestroyDelegate> MapMetaClassToInstanceDestroyDelegate;
+                typedef std::unordered_map<u32, InstanceDestroyDelegate> MapMetaClassToInstanceDestroyDelegate;
                 static MapMetaClassToInstanceDestroyDelegate mapClassToInstanceDestroy;
             };
         }

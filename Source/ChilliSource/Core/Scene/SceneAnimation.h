@@ -48,14 +48,14 @@ namespace ChilliSource
 				std::string strTargetPath;
 				std::string strName;
                 u32 udwKeyframeCount;
-				SHARED_PTR<f32> afKeyframeTimes;
-				SHARED_PTR<EntityTransform>	aKeyframeValues;
+				std::shared_ptr<f32> afKeyframeTimes;
+				std::shared_ptr<EntityTransform>	aKeyframeValues;
                 
 				void FromBinaryStream(const Core::FileStreamPtr & inStream);
 				void ToBinaryStream(const Core::FileStreamPtr & inStream);
 			};
             
-            DYNAMIC_ARRAY<EntityAnimationDesc>	asEntityAnimations;
+            std::vector<EntityAnimationDesc>	asEntityAnimations;
         };
         
         class CSceneAnimation : public ChilliSource::Core::IResource
@@ -74,8 +74,8 @@ namespace ChilliSource
             /// @param Output, instances animations in this scene animation
             /// @return Success
             //---------------------------------------------------------------
-            bool ApplyAnimationToScene(const EntityPtr& inpRootNode, DYNAMIC_ARRAY<EntityAnimationPtr>& outEntityAnimList) const;
-            bool ApplyAnimationToScene(CEntity* inpRootNode, DYNAMIC_ARRAY<EntityAnimationPtr> &outEntityAnimList) const;
+            bool ApplyAnimationToScene(const EntityPtr& inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList) const;
+            bool ApplyAnimationToScene(CEntity* inpRootNode, std::vector<EntityAnimationPtr> &outEntityAnimList) const;
             
             //--------------------------------------------------------------
             /// PlayAnimation
@@ -88,8 +88,8 @@ namespace ChilliSource
             /// @param Playback mode
             /// @return Success
             //---------------------------------------------------------------
-            bool PlayAnimation(const EntityPtr& inpRootNode, DYNAMIC_ARRAY<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode = AnimationPlayMode::k_once, InterpolationType ineInterType = InterpolationType::k_linear) const;
-            bool PlayAnimation(CEntity* inpRootNode, DYNAMIC_ARRAY<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode = AnimationPlayMode::k_once, InterpolationType ineInterType = InterpolationType::k_linear) const;
+            bool PlayAnimation(const EntityPtr& inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode = AnimationPlayMode::k_once, InterpolationType ineInterType = InterpolationType::k_linear) const;
+            bool PlayAnimation(CEntity* inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode = AnimationPlayMode::k_once, InterpolationType ineInterType = InterpolationType::k_linear) const;
             
             //--------------------------------------------------------------
             /// SetSceneAnimDesc

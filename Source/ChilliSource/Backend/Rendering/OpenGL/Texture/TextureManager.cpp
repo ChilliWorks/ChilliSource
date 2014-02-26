@@ -48,7 +48,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool CTextureManager::CreateTextureFromImage(Core::CImage * inpImage, bool inbWithMipsMaps, ChilliSource::Rendering::TexturePtr& outpTexture)
 		{
-			SHARED_PTR_CAST<CTexture>(outpTexture)->Init(inpImage, inbWithMipsMaps);
+			std::static_pointer_cast<CTexture>(outpTexture)->Init(inpImage, inbWithMipsMaps);
 			return true;
 		}
 		//----------------------------------------------------------------
@@ -60,7 +60,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool CTextureManager::CreateEmptyTexture(u32 inudwWidth, u32 inudwHeight, Core::CImage::Format ineFormat, ChilliSource::Rendering::TexturePtr& outpTexture)
 		{
-			SHARED_PTR_CAST<CTexture>(outpTexture)->Init(inudwWidth, inudwHeight, ineFormat);
+			std::static_pointer_cast<CTexture>(outpTexture)->Init(inudwWidth, inudwHeight, ineFormat);
 			outpTexture->SetLoaded(true);
 			return true;
 		}
@@ -73,7 +73,7 @@ namespace ChilliSource
 		void CTextureManager::Backup()
 		{
 #ifdef TARGET_ANDROID
-			for(DYNAMIC_ARRAY<Rendering::TextureWeakPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
+			for(std::vector<Rendering::TextureWeakPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
 			{
 				if (Rendering::TexturePtr pTexture = (*it).lock())
 				{
@@ -84,11 +84,11 @@ namespace ChilliSource
 						{
 //							Core::ImagePtr pImage;
 //							CreateImageFromTexture(pTexture.get(), pImage);
-//							SHARED_PTR<CTexture> pOpenGLTexture = SHARED_PTR_CAST<CTexture>(pTexture);
+//							std::shared_ptr<CTexture> pOpenGLTexture = std::static_pointer_cast<CTexture>(pTexture);
 //							pOpenGLTexture->Reset();
 //							mapBackedUpImages.insert(std::pair<CTexture*, Core::ImagePtr>(pOpenGLTexture.get(), pImage));
 
-							SHARED_PTR<CTexture> pOpenGLTexture = SHARED_PTR_CAST<CTexture>(pTexture);
+							std::shared_ptr<CTexture> pOpenGLTexture = std::static_pointer_cast<CTexture>(pTexture);
 							pOpenGLTexture->Reset();
 							mapBackedUpImages.insert(std::pair<CTexture*, Core::ImagePtr>(pOpenGLTexture.get(), Core::ImagePtr()));
 						}
@@ -109,15 +109,15 @@ namespace ChilliSource
 			//rebuild the default texture
 			CreateDefaultTexture();
 
-			for(DYNAMIC_ARRAY<Rendering::TextureWeakPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
+			for(std::vector<Rendering::TextureWeakPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
 			{
 				if (Rendering::TexturePtr pTexture = (*it).lock())
 				{
 					if(pTexture->IsLoaded())
 					{
-						SHARED_PTR<CTexture> pOpenGLTexture = SHARED_PTR_CAST<CTexture>(pTexture);
+						std::shared_ptr<CTexture> pOpenGLTexture = std::static_pointer_cast<CTexture>(pTexture);
 						Core::ImagePtr pImage = Core::ImagePtr(new Core::CImage());
-						Core::ResourcePtr pImageResource = SHARED_PTR_CAST<Core::IResource>(pImage);
+						Core::ResourcePtr pImageResource = std::static_pointer_cast<Core::IResource>(pImage);
 
 						//If the texture was loaded from file then reload it.
 						if(pOpenGLTexture->GetFilename() != "" && pOpenGLTexture->GetStorageLocation() != Core::SL_NONE)
@@ -135,7 +135,7 @@ namespace ChilliSource
 						else
 						{
 							//if the image used for this texture was cached, then recreate from it
-							HASH_MAP<CTexture*, Core::ImagePtr>::iterator it = mapBackedUpImages.find(pOpenGLTexture.get());
+							std::unordered_map<CTexture*, Core::ImagePtr>::iterator it = mapBackedUpImages.find(pOpenGLTexture.get());
 							if (it != mapBackedUpImages.end() && it->second != nullptr)
 							{
 								CreateTextureFromImage(it->second.get(), pOpenGLTexture->HasMipMaps(), pTexture);
@@ -177,7 +177,7 @@ namespace ChilliSource
 		void CTextureManager::RemoveRestorableTexture(CTexture* inpTexture)
 		{
 #ifdef TARGET_ANDROID
-			for(DYNAMIC_ARRAY<Rendering::TextureWeakPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
+			for(std::vector<Rendering::TextureWeakPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
 			{
 				if (Rendering::TexturePtr pTexture = (*it).lock())
 				{

@@ -94,7 +94,7 @@ namespace ChilliSource
         /// @param Out: Notifications that meet criteria
         /// @return Whether any notifications exist within that time period
         //-------------------------------------------------------------------------
-        bool CLocalNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, DYNAMIC_ARRAY<Core::Notification>& outaNotifications)
+        bool CLocalNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Core::Notification>& outaNotifications)
         {
             outaNotifications.clear();
             

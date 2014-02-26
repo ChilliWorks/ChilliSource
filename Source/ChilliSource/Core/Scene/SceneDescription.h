@@ -58,8 +58,8 @@ namespace ChilliSource
 			{
 				std::string     strName;
                 EntityTransform sTransform;
-				DYNAMIC_ARRAY<EntityDesc> aChildEntities;
-				DYNAMIC_ARRAY<ComponentDesc> aComponents;		
+				std::vector<EntityDesc> aChildEntities;
+				std::vector<ComponentDesc> aComponents;		
                 ParamDictionary sParams;
                 bool            bVisible;
 				bool            bCustomEntityDefinition;

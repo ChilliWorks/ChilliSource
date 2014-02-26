@@ -26,8 +26,8 @@ namespace ChilliSource
 		struct EntityAnimationData
 		{
             u32 udwKeyframeCount;
-			SHARED_PTR<f32> afKeyframeTimes;
-			SHARED_PTR<EntityTransform>	aKeyframeValues;
+			std::shared_ptr<f32> afKeyframeTimes;
+			std::shared_ptr<EntityTransform>	aKeyframeValues;
 		};
 		
 		/*
@@ -61,15 +61,15 @@ namespace ChilliSource
             typedef fastdelegate::FastDelegate3<u32, u32, f32> InterpolateDelegate;
             
             u32 mudwFrameCount;
-            const SHARED_PTR<f32> mpafFrameTimes; // Array of pointers to frame times
-			const SHARED_PTR<EntityTransform> mpasFrameValues; // Corresponding array of pointers to keyframes
+            const std::shared_ptr<f32> mpafFrameTimes; // Array of pointers to frame times
+			const std::shared_ptr<EntityTransform> mpasFrameValues; // Corresponding array of pointers to keyframes
             f32 mfInTime; // Float for the start of the animation
             f32 mfOutTime; // Float for the end of the animation
             InterpolateDelegate mInterpolateDelegate;
 		};
 		
-		typedef SHARED_PTR<CEntityAnimation> EntityAnimationPtr;
-        typedef WEAK_PTR<CEntityAnimation> EntityAnimationWPtr;
+		typedef std::shared_ptr<CEntityAnimation> EntityAnimationPtr;
+        typedef std::weak_ptr<CEntityAnimation> EntityAnimationWPtr;
 	}
 }
 

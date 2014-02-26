@@ -32,7 +32,7 @@ namespace ChilliSource
             ///
             /// @param Sprite array
 			//------------------------------------------------------
-			void Build(DYNAMIC_ARRAY<CSpriteComponent::SpriteData>* inpSprites);
+			void Build(std::vector<CSpriteComponent::SpriteData>* inpSprites);
 			//------------------------------------------------------
 			/// Render
 			///

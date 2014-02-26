@@ -12,6 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Activity.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
 namespace ChilliSource

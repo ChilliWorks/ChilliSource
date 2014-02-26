@@ -114,8 +114,8 @@ namespace ChilliSource
 			
 			IResourceManager* mpOwningResMgr;
 
-			SHARED_PTR<std::condition_variable> mpCondition;
-			SHARED_PTR<std::mutex> mpMutex;
+			std::shared_ptr<std::condition_variable> mpCondition;
+			std::shared_ptr<std::mutex> mpMutex;
 		};
 	}
 }

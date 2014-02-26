@@ -605,7 +605,7 @@ namespace ChilliSource
 		/// @param Name
 		/// @param out List of subviews in hierarchy with given name
 		//-----------------------------------------------------
-		void CGUIView::GetSubviewsWithName(const std::string& instrName, DYNAMIC_ARRAY<GUIViewPtr>& outSubviews) const
+		void CGUIView::GetSubviewsWithName(const std::string& instrName, std::vector<GUIViewPtr>& outSubviews) const
         {
             for(CGUIView::Subviews::const_iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
             {

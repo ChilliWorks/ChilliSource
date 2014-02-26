@@ -11,6 +11,7 @@
 #define _MOFLO_CORE_ACTIVITY_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
 namespace ChilliSource

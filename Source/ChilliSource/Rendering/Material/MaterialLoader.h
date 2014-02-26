@@ -102,9 +102,9 @@ namespace ChilliSource
 			/// @return Whether the resource was loaded 
 			//----------------------------------------------------------------------------
             bool BuildMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath,
-                                       DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles,
-                                       DYNAMIC_ARRAY<TextureDesc>& outaTextureFiles,
-                                       DYNAMIC_ARRAY<TextureDesc>& outaCubemapFiles,
+                                       std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles,
+                                       std::vector<TextureDesc>& outaTextureFiles,
+                                       std::vector<TextureDesc>& outaCubemapFiles,
                                        Core::ResourcePtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Convert String To Blend Function
@@ -132,7 +132,7 @@ namespace ChilliSource
             /// @param Material type
             /// @param Out: Shader files
             //----------------------------------------------------------------------------
-            void GetShaderFilesForMaterialType(const std::string& instrType, DYNAMIC_ARRAY<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles) const;
+            void GetShaderFilesForMaterialType(const std::string& instrType, std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles) const;
 
             IRenderCapabilities* mpRenderCapabilities;
 		};

@@ -45,7 +45,7 @@ namespace ChilliSource
             
         private:
             
-            typedef HASH_MAP<std::string, EffectorCreateDelegate> MapDelegateToString;
+            typedef std::unordered_map<std::string, EffectorCreateDelegate> MapDelegateToString;
             MapDelegateToString mmapDelegateToType;
         };
     }

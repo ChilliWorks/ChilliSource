@@ -154,8 +154,8 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(std::string, SliderSpriteSheetIndexID, SetSliderSpriteSheetIndexID, GetSliderSpriteSheetIndexID);
 		};
         
-		typedef SHARED_PTR<CHorizontalSliderBar> HorizontalSliderBarPtr;
-		typedef WEAK_PTR<CHorizontalSliderBar> HorizontalSliderBarWeakPtr;
+		typedef std::shared_ptr<CHorizontalSliderBar> HorizontalSliderBarPtr;
+		typedef std::weak_ptr<CHorizontalSliderBar> HorizontalSliderBarWeakPtr;
 	}
 }
 

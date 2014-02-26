@@ -298,8 +298,8 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
 		};
         
-        typedef SHARED_PTR<CStretchableHighlightButton> StretchableHighlightButtonPtr;
-		typedef WEAK_PTR<CStretchableHighlightButton> StretchableHighlightButtonWeakPtr;
+        typedef std::shared_ptr<CStretchableHighlightButton> StretchableHighlightButtonPtr;
+		typedef std::weak_ptr<CStretchableHighlightButton> StretchableHighlightButtonWeakPtr;
     }
 }
 

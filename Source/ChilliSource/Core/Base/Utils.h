@@ -17,6 +17,8 @@
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/JSON/forwards.h>
 
+#include <vector>
+
 #define BYTE_SWAP_2(src) ChilliSource::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(src))
 #define BYTE_SWAP_4(src) ChilliSource::Core::CUtils::Endian4ByteSwap(reinterpret_cast<u32*>(src))
 
@@ -84,7 +86,7 @@ namespace ChilliSource
             
             // Optimised removal of many elements from a vector while preserving the order of the vector
             template<typename ELEMENT>
-            static u32 VectorRemoveMany(DYNAMIC_ARRAY<ELEMENT> & inaElements, DYNAMIC_ARRAY<ELEMENT>& inaRemovables)
+            static u32 VectorRemoveMany(std::vector<ELEMENT> & inaElements, std::vector<ELEMENT>& inaRemovables)
             {
                 if(inaRemovables.empty())
                     return 0;

@@ -124,7 +124,7 @@ namespace ChilliSource
             /// @param Out: Notifications that meet criteria
             /// @return Whether any notifications exist within that time period
             //-------------------------------------------------------------------------
-            static bool TryGetNotificationsScheduledWithinTimePeriod(NotificationType ineType, TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, DYNAMIC_ARRAY<Notification>& outaNotifications);
+            static bool TryGetNotificationsScheduledWithinTimePeriod(NotificationType ineType, TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Notification>& outaNotifications);
             //-------------------------------------------------------------------------
             /// Enable Notifications
             ///
@@ -185,7 +185,7 @@ namespace ChilliSource
             static bool bPushNotificationsEnabled;
             
             static std::deque<Notification> NotificationQueue;
-            static DYNAMIC_ARRAY<Notification> TimedAppNotifications;
+            static std::vector<Notification> TimedAppNotifications;
 
             static ILocalNotificationScheduler* mspLocalNotificationScheduler;
         };

@@ -450,7 +450,7 @@ namespace ChilliSource
 		void CMoConnectSystem::SignInRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
         {
 			SignInResult eResult = SignInResult::k_noServerResponse;
-            DYNAMIC_ARRAY<SignedInUser> asUsers;
+            std::vector<SignedInUser> asUsers;
             
 			if(ineResult == IHttpRequest::CompletionResult::k_completed)
             {
@@ -504,7 +504,7 @@ namespace ChilliSource
 		void CMoConnectSystem::RetrieveAccountsRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
         {
 			SignInResult eResult = SignInResult::k_noServerResponse;
-            DYNAMIC_ARRAY<SignedInUser> asUsers;
+            std::vector<SignedInUser> asUsers;
 			
 			if(ineResult == IHttpRequest::CompletionResult::k_completed)
             {

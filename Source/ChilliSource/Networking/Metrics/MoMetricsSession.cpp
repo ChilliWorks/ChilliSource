@@ -174,7 +174,7 @@ namespace ChilliSource
             {
                 Json::Value jConstants(Json::objectValue);
                 
-                for(HASH_MAP<std::string, std::string>::const_iterator it = mmapConstants.begin(); it != mmapConstants.end(); ++it)
+                for(std::unordered_map<std::string, std::string>::const_iterator it = mmapConstants.begin(); it != mmapConstants.end(); ++it)
                 {
                     jConstants[it->first] = it->second;
                 }
@@ -374,7 +374,7 @@ namespace ChilliSource
             return mLastActivityTime;
         }
         
-        void CMoMetricsSession::RecordEvent(const std::string & instrType, const DYNAMIC_ARRAY<std::string>& inastrParams, bool inbSummarise)
+        void CMoMetricsSession::RecordEvent(const std::string & instrType, const std::vector<std::string>& inastrParams, bool inbSummarise)
         {
             UpdateLastActivityTime();
             
@@ -435,7 +435,7 @@ namespace ChilliSource
             
             mbRequestInProgress = false;
             
-            HASH_MAP<HttpRequestPtr, IHttpRequest::CompletionDelegate>::iterator it = mmapRequestToDelegate.find(inpRequest);
+            std::unordered_map<HttpRequestPtr, IHttpRequest::CompletionDelegate>::iterator it = mmapRequestToDelegate.find(inpRequest);
             
             if(it != mmapRequestToDelegate.end())
             {
@@ -546,7 +546,7 @@ namespace ChilliSource
                     it->ToJsonForServer(jEvent);
                     
                     //Add the constants
-                    for(HASH_MAP<std::string, std::string>::const_iterator it = mmapConstants.begin(); it != mmapConstants.end(); ++it)
+                    for(std::unordered_map<std::string, std::string>::const_iterator it = mmapConstants.begin(); it != mmapConstants.end(); ++it)
                     {
                         jEvent[it->first] = it->second;
                     }
@@ -619,7 +619,7 @@ namespace ChilliSource
         
         void CMoMetricsSession::Destroy()
         {
-            for(HASH_MAP<HttpRequestPtr, IHttpRequest::CompletionDelegate>::iterator it = mmapRequestToDelegate.begin(); it != mmapRequestToDelegate.end(); ++it)
+            for(std::unordered_map<HttpRequestPtr, IHttpRequest::CompletionDelegate>::iterator it = mmapRequestToDelegate.begin(); it != mmapRequestToDelegate.end(); ++it)
             {
                 HttpRequestPtr pRequest = it->first;
                 if(pRequest)

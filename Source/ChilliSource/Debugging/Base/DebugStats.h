@@ -109,7 +109,7 @@ namespace ChilliSource
             
         private:
             
-            typedef HASH_MAP<std::string, std::string> MapStringToString;
+            typedef std::unordered_map<std::string, std::string> MapStringToString;
             static MapStringToString mmapEvents;
             
             static bool mbEnabled;

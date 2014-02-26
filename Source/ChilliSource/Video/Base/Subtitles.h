@@ -44,7 +44,7 @@ namespace ChilliSource
                 Core::AlignmentAnchor eAlignment;
                 TimeIntervalMs FadeTimeMS;
             };
-            typedef SHARED_PTR<Style> StylePtr;
+            typedef std::shared_ptr<Style> StylePtr;
             //----------------------------------------------------------
 			/// Subtitle
 			//----------------------------------------------------------
@@ -55,7 +55,7 @@ namespace ChilliSource
                 TimeIntervalMs EndTimeMS;
                 std::string strTextID;
             };
-            typedef SHARED_PTR<Subtitle> SubtitlePtr;
+            typedef std::shared_ptr<Subtitle> SubtitlePtr;
             //----------------------------------------------------------
 			/// Constructor
 			//----------------------------------------------------------
@@ -88,7 +88,7 @@ namespace ChilliSource
 			/// @param the time.
 			/// @return a vector of subtitles.
 			//----------------------------------------------------------
-            DYNAMIC_ARRAY<SubtitlePtr> GetSubtitlesAtTime(TimeIntervalMs inTimeMS) const;
+            std::vector<SubtitlePtr> GetSubtitlesAtTime(TimeIntervalMs inTimeMS) const;
             //----------------------------------------------------------
 			/// Get Style With Name
 			///
@@ -97,8 +97,8 @@ namespace ChilliSource
 			//----------------------------------------------------------
             StylePtr GetStyleWithName(const std::string& instrName) const;
         private:
-            HASH_MAP<std::string, StylePtr> mStyleMap;
-            DYNAMIC_ARRAY<SubtitlePtr> mSubtitles;
+            std::unordered_map<std::string, StylePtr> mStyleMap;
+            std::vector<SubtitlePtr> mSubtitles;
 		};
 	}
 }

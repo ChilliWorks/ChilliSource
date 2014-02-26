@@ -3,6 +3,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 
+#include <vector>
+
 namespace ChilliSource
 {
     namespace Core
@@ -53,7 +55,7 @@ namespace ChilliSource
                 u32 udwNumChunks = (inudwSize/mudwAlignmentSize + 1);
 
                 //Find a free chunk
-                for(DYNAMIC_ARRAY<MemChunk>::iterator it = mChunks.begin(); it != mChunks.end(); ++it)
+                for(std::vector<MemChunk>::iterator it = mChunks.begin(); it != mChunks.end(); ++it)
                 {
                     if(!it->bIsAllocated)
                     {
@@ -115,7 +117,7 @@ namespace ChilliSource
 
             s8* mpMemPool;
 
-            DYNAMIC_ARRAY<MemChunk> mChunks;
+            std::vector<MemChunk> mChunks;
         };
     }
 }

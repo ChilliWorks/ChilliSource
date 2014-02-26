@@ -199,21 +199,21 @@ namespace ChilliSource
 			/// @param Integer index for which animation to return
 			/// @return Pointer to a vector containing the frame indices for the given animation or nullptr if inudwAnimIndex is invalid
 			//---------------------------------------------------------------------
-			const DYNAMIC_ARRAY<u32> * GetFramesForAnimation(u32 inudwAnimIndex) const;
+			const std::vector<u32> * GetFramesForAnimation(u32 inudwAnimIndex) const;
 			//---------------------------------------------------------------------
 			/// AddAnimation
 			/// @param Name for this animation, must be unique
 			/// @param Array of frame indices describing this animation
 			/// @return true if successful or false if the parameter constraints above are not respected
 			//---------------------------------------------------------------------			
-			bool AddAnimation(std::string & instrName, const DYNAMIC_ARRAY<u32> & instrFrames);
+			bool AddAnimation(std::string & instrName, const std::vector<u32> & instrFrames);
             //---------------------------------------------------------------------
             /// Set ID Lookups
             ///
             /// @param The hashed string lookups into the sprite array
             /// @param The raw string lookups
             //---------------------------------------------------------------------
-            void SetIDLookups(const DYNAMIC_ARRAY<u32>& inSpriteHashedIDLookups, const DYNAMIC_ARRAY<std::string>& inSpriteStringIDLookups);
+            void SetIDLookups(const std::vector<u32>& inSpriteHashedIDLookups, const std::vector<std::string>& inSpriteStringIDLookups);
             //---------------------------------------------------------------------
             /// Set SpriteSheet Size
             ///
@@ -242,11 +242,11 @@ namespace ChilliSource
             s16        mwSpriteSheetWidth;
             s16        mwSpriteSheetHeight;
             
-			DYNAMIC_ARRAY<Frame> mFrames;
-			DYNAMIC_ARRAY<std::string> mAnimationNames;
-			DYNAMIC_ARRAY<DYNAMIC_ARRAY<u32> > mAnimationFrames;
-            DYNAMIC_ARRAY<u32> mIDLookups;
-            DYNAMIC_ARRAY<std::string> mStringIDLookups;
+			std::vector<Frame> mFrames;
+			std::vector<std::string> mAnimationNames;
+			std::vector<std::vector<u32> > mAnimationFrames;
+            std::vector<u32> mIDLookups;
+            std::vector<std::string> mStringIDLookups;
 			
 			friend class ISpriteSheetManager;
 		};

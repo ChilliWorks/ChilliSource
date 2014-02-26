@@ -13,6 +13,7 @@
 #include <ChilliSource/ChilliSource.h>
 
 #include <thread>
+#include <vector>
 
 namespace ChilliSource
 {
@@ -41,8 +42,8 @@ namespace ChilliSource
             //-----------------------------------------------------------
             /// Typedefs
             //-----------------------------------------------------------
-            typedef typename DYNAMIC_ARRAY<DelegateObject> DelegateList;
-            typedef typename DYNAMIC_ARRAY<DelegateObject>::iterator DelegateListItr;
+            typedef typename std::vector<DelegateObject> DelegateList;
+            typedef typename std::vector<DelegateObject>::iterator DelegateListItr;
             
             //-----------------------------------------------------------
             /// Constructor

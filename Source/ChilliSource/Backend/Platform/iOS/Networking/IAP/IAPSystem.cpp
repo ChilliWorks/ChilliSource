@@ -22,7 +22,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// Register Products
         //---------------------------------------------------------------
-        void CIAPSystem::RegisterProducts(const DYNAMIC_ARRAY<Networking::IAPProductRegInfo>& inaProducts)
+        void CIAPSystem::RegisterProducts(const std::vector<Networking::IAPProductRegInfo>& inaProducts)
         {
             mProductRegInfos = inaProducts;
         }
@@ -116,7 +116,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// Request Product Descriptions
         //---------------------------------------------------------------
-        void CIAPSystem::RequestProductDescriptions(const DYNAMIC_ARRAY<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void CIAPSystem::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
             mProductDescDelegate = inRequestDelegate;
             
@@ -125,7 +125,7 @@ namespace ChilliSource
             
             if(inaProductIDs.empty())
             {
-                mProductDescDelegate(DYNAMIC_ARRAY<Networking::IAPProductDesc>());
+                mProductDescDelegate(std::vector<Networking::IAPProductDesc>());
                 return;
             }
             
@@ -145,7 +145,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void CIAPSystem::RequestAllProductDescriptions(const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
-            DYNAMIC_ARRAY<std::string> aIDs;
+            std::vector<std::string> aIDs;
             aIDs.reserve(mProductRegInfos.size());
             
             for(u32 i=0; i<mProductRegInfos.size(); ++i)
@@ -163,7 +163,7 @@ namespace ChilliSource
             if(mProductDescDelegate == nullptr)
                 return;
  
-            DYNAMIC_ARRAY<Networking::IAPProductDesc> aResults;
+            std::vector<Networking::IAPProductDesc> aResults;
             
             if(inProducts != nil)
             {
@@ -203,7 +203,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// Is Product ID Registered
         //---------------------------------------------------------------
-        bool IsProductIDRegistered(const DYNAMIC_ARRAY<Networking::IAPProductRegInfo>& inProductRegInfos, const std::string& instrProductID)
+        bool IsProductIDRegistered(const std::vector<Networking::IAPProductRegInfo>& inProductRegInfos, const std::string& instrProductID)
         {
             for(u32 i=0; i<inProductRegInfos.size(); ++i)
             {

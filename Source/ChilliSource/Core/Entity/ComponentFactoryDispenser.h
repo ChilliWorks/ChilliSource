@@ -78,7 +78,7 @@ namespace ChilliSource
             
         private:
             
-            DYNAMIC_ARRAY<IComponentFactory*> mComponentFactories;
+            std::vector<IComponentFactory*> mComponentFactories;
             
             
             static CComponentFactoryDispenser* pInstance;

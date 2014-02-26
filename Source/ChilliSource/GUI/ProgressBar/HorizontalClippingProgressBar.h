@@ -179,8 +179,8 @@ namespace ChilliSource
 			f32 mfSegmentSize;
 		};
 
-		typedef SHARED_PTR<CHorizontalClippingProgressBar> HorizontalClippingProgressBarPtr;
-		typedef WEAK_PTR<CHorizontalClippingProgressBar> HorizontalClippingProgressBarWeakPtr;
+		typedef std::shared_ptr<CHorizontalClippingProgressBar> HorizontalClippingProgressBarPtr;
+		typedef std::weak_ptr<CHorizontalClippingProgressBar> HorizontalClippingProgressBarWeakPtr;
 	}
 }
 

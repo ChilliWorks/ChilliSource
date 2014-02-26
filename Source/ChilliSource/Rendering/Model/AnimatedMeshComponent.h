@@ -200,7 +200,7 @@ namespace ChilliSource
             ///
             /// @param OUT: A list of all attached animations.
 			//----------------------------------------------------------
-            void GetAnimations(DYNAMIC_ARRAY<SkinnedAnimationPtr>& outapSkinnedAnimationList);
+            void GetAnimations(std::vector<SkinnedAnimationPtr>& outapSkinnedAnimationList);
             //----------------------------------------------------------
 			/// Fade Out
 			///
@@ -452,10 +452,10 @@ namespace ChilliSource
             void ApplyDefaultMaterials();
             
 		private:
-            typedef DYNAMIC_ARRAY<std::pair<Core::EntityWeakPtr, s32> > AttachedEntityList;
+            typedef std::vector<std::pair<Core::EntityWeakPtr, s32> > AttachedEntityList;
             AttachedEntityList maAttachedEntities;
 			MeshPtr mpModel;
-			DYNAMIC_ARRAY<MaterialPtr> mMaterials;
+			std::vector<MaterialPtr> mMaterials;
 			SkinnedAnimationGroupPtr mActiveAnimationGroup;
             SkinnedAnimationGroupPtr mFadingAnimationGroup;
 			f32 mfPlaybackPosition;

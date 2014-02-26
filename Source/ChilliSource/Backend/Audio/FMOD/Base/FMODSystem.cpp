@@ -193,7 +193,7 @@ namespace ChilliSource
 		{
 			//We let FMOD manages the channels 
 			FMOD::Channel* pActiveChannel = nullptr;
-			ErrorCheck(mpFMODSystem->playSound(FMOD_CHANNEL_FREE, SHARED_PTR_CAST<CFMODAudioResource>(inpAudioComponent->GetAudioSource())->mpFMODSound, false, &pActiveChannel));
+			ErrorCheck(mpFMODSystem->playSound(FMOD_CHANNEL_FREE, std::static_pointer_cast<CFMODAudioResource>(inpAudioComponent->GetAudioSource())->mpFMODSound, false, &pActiveChannel));
 			
 			//Give the sound it's channel so we can query the state
 			static_cast<CFMODAudioComponent*>(inpAudioComponent)->SetChannel(pActiveChannel);

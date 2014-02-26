@@ -24,9 +24,9 @@ namespace ChilliSource
         IAudioManager* CAudioPlayer::mpAudioManager = nullptr; 
         IAudioComponentFactory* CAudioPlayer::mpAudioComponentFactory = nullptr;
         
-        DYNAMIC_ARRAY<AudioComponentPtr> CAudioPlayer::mAudioComponentCache;
-        DYNAMIC_ARRAY<u32> CAudioPlayer::maudwComponentPauseCount;
-        DYNAMIC_ARRAY<bool> CAudioPlayer::mabComponentLooping;
+        std::vector<AudioComponentPtr> CAudioPlayer::mAudioComponentCache;
+        std::vector<u32> CAudioPlayer::maudwComponentPauseCount;
+        std::vector<bool> CAudioPlayer::mabComponentLooping;
         
         AudioComponentPtr CAudioPlayer::mpMusicComponent;
         

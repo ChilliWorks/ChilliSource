@@ -140,7 +140,7 @@ namespace ChilliSource
         
         void CMoMetricsSystem::FlushPendingClosedSessions()
         {
-            for(DYNAMIC_ARRAY<CMoMetricsSession*>::iterator it = maPendingClosedSessions.begin(); it != maPendingClosedSessions.end(); ++it)
+            for(std::vector<CMoMetricsSession*>::iterator it = maPendingClosedSessions.begin(); it != maPendingClosedSessions.end(); ++it)
             {
                 if(!(*it)->IsOpen())
                 {
@@ -152,7 +152,7 @@ namespace ChilliSource
             }
         }
         
-        void CMoMetricsSystem::RecordEvent(const std::string & instrType, const DYNAMIC_ARRAY<std::string>& inastrParams, bool inbSummarise)
+        void CMoMetricsSystem::RecordEvent(const std::string & instrType, const std::vector<std::string>& inastrParams, bool inbSummarise)
         {
             MOFLOW_ASSERT(mpCurrentSession, "Cannot record event without first starting a session");
             if(mpCurrentSession)
@@ -173,7 +173,7 @@ namespace ChilliSource
         {
             //Save the cached metrics
             Json::Value jClosed;
-            for(DYNAMIC_ARRAY<CMoMetricsSession*>::iterator it = maPendingClosedSessions.begin(); it != maPendingClosedSessions.end(); ++it)
+            for(std::vector<CMoMetricsSession*>::iterator it = maPendingClosedSessions.begin(); it != maPendingClosedSessions.end(); ++it)
             {
                 if(!(*it)->IsClosed())
                 {
@@ -202,7 +202,7 @@ namespace ChilliSource
         {
             SAFE_DELETE(mpCurrentSession);
             
-            for(DYNAMIC_ARRAY<CMoMetricsSession*>::iterator it = maPendingClosedSessions.begin(); it != maPendingClosedSessions.end(); ++it)
+            for(std::vector<CMoMetricsSession*>::iterator it = maPendingClosedSessions.begin(); it != maPendingClosedSessions.end(); ++it)
             {
                 CMoMetricsSession* pSession = (*it);
                 delete pSession;

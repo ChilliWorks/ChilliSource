@@ -69,18 +69,18 @@ namespace ChilliSource
 			
 
 			
-			typedef DYNAMIC_ARRAY<CurvePoint> CurvePointVector;
+			typedef std::vector<CurvePoint> CurvePointVector;
 			
-			typedef HASH_MAP<std::string,float> MapNameToFloat;
+			typedef std::unordered_map<std::string,float> MapNameToFloat;
 			typedef MapNameToFloat::const_iterator MapNameToFloatItr;
-			typedef HASH_MAP<std::string,int> MapNameToInt;
+			typedef std::unordered_map<std::string,int> MapNameToInt;
 			typedef MapNameToInt::const_iterator MapNameToIntItr;
-			typedef HASH_MAP<std::string,std::string> MapNameToString;
+			typedef std::unordered_map<std::string,std::string> MapNameToString;
 			typedef MapNameToString::const_iterator MapNameToStringItr;
-			typedef HASH_MAP<std::string,bool> MapNameToBool;
+			typedef std::unordered_map<std::string,bool> MapNameToBool;
 			typedef MapNameToBool::const_iterator MapNameToBoolItr;
 			
-			typedef HASH_MAP<std::string,CurvePointVector> MapNameToCurvePoints;
+			typedef std::unordered_map<std::string,CurvePointVector> MapNameToCurvePoints;
 			typedef MapNameToCurvePoints::const_iterator MapNameToCurvePointsItr;
 
 			struct ConstantsGroup{
@@ -91,13 +91,13 @@ namespace ChilliSource
 				MapNameToCurvePoints Curves;
 			};
 			
-			typedef HASH_MAP<std::string,ConstantsGroup> MapNamespaceToConstantsGroup;
+			typedef std::unordered_map<std::string,ConstantsGroup> MapNamespaceToConstantsGroup;
 			typedef MapNamespaceToConstantsGroup::iterator MapNamespaceToConstantsGroupItr;
 			typedef MapNamespaceToConstantsGroup::const_iterator MapNamespaceToConstantsGroupCItr;
 
 			MapNamespaceToConstantsGroup mNamespaces;
 			
-			DYNAMIC_ARRAY<Core::StorageLocationAndFilenamePtr> mFileNames;
+			std::vector<Core::StorageLocationAndFilenamePtr> mFileNames;
 			std::string mBlank;//blank string to return for failed string constant lookups
 		};
 		

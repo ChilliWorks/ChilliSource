@@ -204,10 +204,10 @@ namespace ChilliSource
                 bool mbRequestCompleted;
 			};
 			
-            typedef DYNAMIC_ARRAY<ConnectionInfo> ConnectionPool;
+            typedef std::vector<ConnectionInfo> ConnectionPool;
             ConnectionPool mPersistentConnectionPool;
             
-			typedef DYNAMIC_ARRAY<CHttpRequest*> RequestVector;
+			typedef std::vector<CHttpRequest*> RequestVector;
 			RequestVector mapRequests;
             
             static u32 udwStaticNumConnectionsEstablished;

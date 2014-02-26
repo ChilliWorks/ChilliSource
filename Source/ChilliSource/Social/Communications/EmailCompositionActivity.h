@@ -61,7 +61,7 @@ namespace ChilliSource
             /// @param The callback describing the result of the email.
             /// @param Whether or not to format as HTML.
             //-------------------------------------------------------
-			virtual void Present(const DYNAMIC_ARRAY<Core::CUTF8String> & inastrRecipientAddresses, const Core::CUTF8String & instrSubject, const Core::CUTF8String & instrContents, const SendResultDelegate & inCallback, bool inbFormatAsHtml) = 0;
+			virtual void Present(const std::vector<Core::CUTF8String> & inastrRecipientAddresses, const Core::CUTF8String & instrSubject, const Core::CUTF8String & instrContents, const SendResultDelegate & inCallback, bool inbFormatAsHtml) = 0;
             //-------------------------------------------------------
             /// Present With Attachment
             ///
@@ -76,7 +76,7 @@ namespace ChilliSource
             /// @param The callback describing the result of the email.
             /// @param Whether or not to format as HTML.
             //-------------------------------------------------------
-            virtual void PresentWithAttachment(const DYNAMIC_ARRAY<Core::CUTF8String> & inastrRecipientAddresses, const Core::CUTF8String & instrSubject, const Core::CUTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml) = 0;
+            virtual void PresentWithAttachment(const std::vector<Core::CUTF8String> & inastrRecipientAddresses, const Core::CUTF8String & instrSubject, const Core::CUTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml) = 0;
             //-------------------------------------------------------
 			/// Dismiss
 			///

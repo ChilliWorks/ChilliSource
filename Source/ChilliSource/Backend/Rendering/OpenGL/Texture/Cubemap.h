@@ -31,7 +31,7 @@ namespace ChilliSource
 			/// @param Source images (Must be 6)
 			/// @param Whether to create mip maps
 			//--------------------------------------------------
-			void Init(const DYNAMIC_ARRAY<Core::ResourcePtr>& inapSourceImages, bool inbWithMipsMaps);
+			void Init(const std::vector<Core::ResourcePtr>& inapSourceImages, bool inbWithMipsMaps);
 			//--------------------------------------------------
 			/// Is A
 			///

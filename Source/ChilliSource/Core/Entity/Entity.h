@@ -22,16 +22,16 @@ namespace ChilliSource
 	namespace Core 
 	{
 		class CEntity;
-		typedef SHARED_PTR<CEntity> EntityPtr;
-        typedef WEAK_PTR<CEntity> EntityWeakPtr;
-		typedef DYNAMIC_ARRAY<ComponentPtr> ComponentList;
+		typedef std::shared_ptr<CEntity> EntityPtr;
+        typedef std::weak_ptr<CEntity> EntityWeakPtr;
+		typedef std::vector<ComponentPtr> ComponentList;
 		
 #ifdef ENTITY_LINKED_LIST
 		typedef std::list<EntityPtr> SharedEntityList;
 		typedef std::list<CEntity*> EntityList;
 #else		
-		typedef DYNAMIC_ARRAY<EntityPtr> SharedEntityList;
-		typedef DYNAMIC_ARRAY<CEntity*> EntityList;
+		typedef std::vector<EntityPtr> SharedEntityList;
+		typedef std::vector<CEntity*> EntityList;
 #endif
 		
 		//--------------------------------------------------------------------------------------------------
@@ -41,7 +41,7 @@ namespace ChilliSource
 		/// of aggregated components. These components could be
 		/// materials or physics etc.
 		//--------------------------------------------------------------------------------------------------
-		class CEntity final : public ENABLE_SHARED_FROM_THIS<CEntity>
+		class CEntity final : public std::enable_shared_from_this<CEntity>
 		{	
 		public:
 			CEntity();
@@ -106,9 +106,9 @@ namespace ChilliSource
             /// @param Query mask used to filter the results
 			/// @return the first component of the given type
 			//-------------------------------------------------------------
-			template <typename T> SHARED_PTR<T> GetManagedComponent(u32 inudwQueryMask = 0)
+			template <typename T> std::shared_ptr<T> GetManagedComponent(u32 inudwQueryMask = 0)
 			{
-				return SHARED_PTR_CAST<T>(GetManagedComponent(T::InterfaceID, inudwQueryMask));
+				return std::static_pointer_cast<T>(GetManagedComponent(T::InterfaceID, inudwQueryMask));
 			}
             //-------------------------------------------------------------
 			/// Get Component  (Managed)
@@ -116,9 +116,9 @@ namespace ChilliSource
             /// @param Query mask used to filter the results
 			/// @return the first component of the given type
 			//-------------------------------------------------------------
-			template <typename T> SHARED_PTR<const T> GetManagedComponent(u32 inudwQueryMask = 0) const
+			template <typename T> std::shared_ptr<const T> GetManagedComponent(u32 inudwQueryMask = 0) const
 			{
-				return SHARED_PTR_CAST<T>(GetManagedComponent(T::InterfaceID, inudwQueryMask));
+				return std::static_pointer_cast<T>(GetManagedComponent(T::InterfaceID, inudwQueryMask));
 			}
 			//-------------------------------------------------------------
 			/// Get Components  (Managed)
@@ -131,7 +131,7 @@ namespace ChilliSource
             /// @param Query mask used to filter the results
 			/// @param Whether to clear the vector before populating
 			//-------------------------------------------------------------
-			void GetManagedComponents(InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<ComponentPtr> & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true) const;
+			void GetManagedComponents(InterfaceIDType inInterfaceID, std::vector<ComponentPtr> & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true) const;
 			//-------------------------------------------------------------
 			/// Get Components  (Managed)
 			///
@@ -142,7 +142,7 @@ namespace ChilliSource
             /// @param Query mask used to filter the results
 			/// @param Whether to clear the vector before populating
 			//-------------------------------------------------------------
-			template <typename T> void GetManagedComponents(DYNAMIC_ARRAY<SHARED_PTR<T> > & outComponents, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
+			template <typename T> void GetManagedComponents(std::vector<std::shared_ptr<T> > & outComponents, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
 			{
 				if(inbClearVectorBeforeUsing) 
 				{
@@ -163,7 +163,7 @@ namespace ChilliSource
                     
                     if( (*pItr)->IsA(T::InterfaceID))
                     {
-                        outComponents.push_back(SHARED_PTR_CAST<T>(*pItr));
+                        outComponents.push_back(std::static_pointer_cast<T>(*pItr));
                     }
                 }
 			}
@@ -178,7 +178,7 @@ namespace ChilliSource
             /// @param Query mask used to filter the results
 			/// @param Whether to clear the vector before populating
 			//-------------------------------------------------------------
-			template <typename T1, typename T2> void GetManagedComponents(DYNAMIC_ARRAY<SHARED_PTR<T1> > & outComponents1, DYNAMIC_ARRAY<SHARED_PTR<T2> > & outComponents2,
+			template <typename T1, typename T2> void GetManagedComponents(std::vector<std::shared_ptr<T1> > & outComponents1, std::vector<std::shared_ptr<T2> > & outComponents2,
                                                                           u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
 			{
 				if(inbClearVectorBeforeUsing)
@@ -201,11 +201,11 @@ namespace ChilliSource
                     
                     if((*pItr)->IsA(T1::InterfaceID))
                     {
-                        outComponents1.push_back(SHARED_PTR_CAST<T1>(*pItr));
+                        outComponents1.push_back(std::static_pointer_cast<T1>(*pItr));
                     }
                     if((*pItr)->IsA(T2::InterfaceID))
                     {
-                        outComponents2.push_back(SHARED_PTR_CAST<T2>(*pItr));
+                        outComponents2.push_back(std::static_pointer_cast<T2>(*pItr));
                     }
                 }
 			}
@@ -221,7 +221,7 @@ namespace ChilliSource
             /// @param Query mask used to filter the results
 			/// @param Whether to clear the vector before populating
 			//-------------------------------------------------------------
-			template <typename T1, typename T2, typename T3> void GetManagedComponents(DYNAMIC_ARRAY<SHARED_PTR<T1> > & outComponents1, DYNAMIC_ARRAY<SHARED_PTR<T2> > & outComponents2, DYNAMIC_ARRAY<SHARED_PTR<T3> > & outComponents3,
+			template <typename T1, typename T2, typename T3> void GetManagedComponents(std::vector<std::shared_ptr<T1> > & outComponents1, std::vector<std::shared_ptr<T2> > & outComponents2, std::vector<std::shared_ptr<T3> > & outComponents3,
                                                                                        u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
 			{
 				if(inbClearVectorBeforeUsing)
@@ -245,15 +245,15 @@ namespace ChilliSource
                     
                     if((*pItr)->IsA(T1::InterfaceID))
                     {
-                        outComponents1.push_back(SHARED_PTR_CAST<T1>(*pItr));
+                        outComponents1.push_back(std::static_pointer_cast<T1>(*pItr));
                     }
                     if((*pItr)->IsA(T2::InterfaceID))
                     {
-                        outComponents2.push_back(SHARED_PTR_CAST<T2>(*pItr));
+                        outComponents2.push_back(std::static_pointer_cast<T2>(*pItr));
                     }
                     if((*pItr)->IsA(T3::InterfaceID))
                     {
-                        outComponents3.push_back(SHARED_PTR_CAST<T3>(*pItr));
+                        outComponents3.push_back(std::static_pointer_cast<T3>(*pItr));
                     }
                 }
 			}
@@ -296,7 +296,7 @@ namespace ChilliSource
             /// @param Query mask used to filter the results
 			/// @param Whether to clear the vector before populating
 			//-------------------------------------------------------------
-			void GetComponents(InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<IComponent*> & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true) const;
+			void GetComponents(InterfaceIDType inInterfaceID, std::vector<IComponent*> & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true) const;
 			//-------------------------------------------------------------
 			/// Get Components  (Non managed)
 			///
@@ -307,7 +307,7 @@ namespace ChilliSource
             /// @param Query mask used to filter the results
 			/// @param Whether to clear the vector before populating
 			//-------------------------------------------------------------
-			template <typename T> void GetComponents(DYNAMIC_ARRAY<T*> & outComponents, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
+			template <typename T> void GetComponents(std::vector<T*> & outComponents, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
 			{
 				if(inbClearVectorBeforeUsing) 
 				{
@@ -343,7 +343,7 @@ namespace ChilliSource
             /// @param Query mask used to filter the results
 			/// @param Whether to clear the vector before populating
 			//-------------------------------------------------------------
-			template <typename T1, typename T2> void GetComponents(DYNAMIC_ARRAY<T1*> & outComponents1, DYNAMIC_ARRAY<T2*> & outComponents2,
+			template <typename T1, typename T2> void GetComponents(std::vector<T1*> & outComponents1, std::vector<T2*> & outComponents2,
                                                                    u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
 			{
 				if(inbClearVectorBeforeUsing)
@@ -386,7 +386,7 @@ namespace ChilliSource
             /// @param Query mask used to filter the results
 			/// @param Whether to clear the vector before populating
 			//-------------------------------------------------------------
-			template <typename T1, typename T2, typename T3> void GetComponents(DYNAMIC_ARRAY<T1*> & outComponents1, DYNAMIC_ARRAY<T2*> & outComponents2, DYNAMIC_ARRAY<T3*> & outComponents3,
+			template <typename T1, typename T2, typename T3> void GetComponents(std::vector<T1*> & outComponents1, std::vector<T2*> & outComponents2, std::vector<T3*> & outComponents3,
                                                                                 u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
 			{
 				if(inbClearVectorBeforeUsing)
@@ -435,9 +435,9 @@ namespace ChilliSource
 			/// @return the first component of the given type within
             /// entity or children
 			//-------------------------------------------------------------
-			template <typename T> SHARED_PTR<T> GetManagedComponentRecursive(u32 inudwQueryMask = 0)
+			template <typename T> std::shared_ptr<T> GetManagedComponentRecursive(u32 inudwQueryMask = 0)
 			{
-				return SHARED_PTR_CAST<T>(GetManagedComponentRecursive(T::InterfaceID, inudwQueryMask));
+				return std::static_pointer_cast<T>(GetManagedComponentRecursive(T::InterfaceID, inudwQueryMask));
 			}
             //-------------------------------------------------------------
 			/// Get Component  (Managed Recursive)
@@ -445,9 +445,9 @@ namespace ChilliSource
 			/// @return the first component of the given type within
             /// entity or children
 			//-------------------------------------------------------------
-			template <typename T> SHARED_PTR<const T> GetManagedComponentRecursive(u32 inudwQueryMask = 0) const
+			template <typename T> std::shared_ptr<const T> GetManagedComponentRecursive(u32 inudwQueryMask = 0) const
 			{
-				return SHARED_PTR_CAST<T>(GetManagedComponentRecursive(T::InterfaceID, inudwQueryMask));
+				return std::static_pointer_cast<T>(GetManagedComponentRecursive(T::InterfaceID, inudwQueryMask));
 			}
 			//-------------------------------------------------------------
 			/// Get Components  (Managed Recursive)
@@ -460,7 +460,7 @@ namespace ChilliSource
 			/// @param Out - Vector to populate with components
 			/// @param Whether to clear the vector before populating
 			//-------------------------------------------------------------
-			void GetManagedComponentsRecursive(InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<ComponentPtr> & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true) const;
+			void GetManagedComponentsRecursive(InterfaceIDType inInterfaceID, std::vector<ComponentPtr> & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true) const;
 			//-------------------------------------------------------------
 			/// Get Components  (Managed Recursive)
 			///
@@ -472,7 +472,7 @@ namespace ChilliSource
 			/// @param Out - Vector to populate with components
 			/// @param Whether to clear the vector before populating
 			//-------------------------------------------------------------
-			template <typename T> void GetManagedComponentsRecursive(DYNAMIC_ARRAY<SHARED_PTR<T> > & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
+			template <typename T> void GetManagedComponentsRecursive(std::vector<std::shared_ptr<T> > & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
 			{
 				if(inbClearVectorBeforeUsing) 
 				{
@@ -485,7 +485,7 @@ namespace ChilliSource
 					{
 						if((*pItr)->IsA(T::InterfaceID)) 
 						{
-							outComponentsWithInterface.push_back(SHARED_PTR_CAST<T>(*pItr));
+							outComponentsWithInterface.push_back(std::static_pointer_cast<T>(*pItr));
 						}
 					}
 				}
@@ -533,7 +533,7 @@ namespace ChilliSource
 			/// @param Out - Vector to populate with components
 			/// @param Whether to clear the vector before populating
 			//-------------------------------------------------------------
-			void GetComponentsRecursive(InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<IComponent*> & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true) const;
+			void GetComponentsRecursive(InterfaceIDType inInterfaceID, std::vector<IComponent*> & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true) const;
 			//-------------------------------------------------------------
 			/// Get Components  (Non managed Recursive)
 			///
@@ -545,7 +545,7 @@ namespace ChilliSource
 			/// @param Out - Vector to populate with components
 			/// @param Whether to clear the vector before populating
 			//-------------------------------------------------------------
-			template <typename T> void GetComponentsRecursive(DYNAMIC_ARRAY<T*> & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
+			template <typename T> void GetComponentsRecursive(std::vector<T*> & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
 			{
 				if(inbClearVectorBeforeUsing) 
 				{

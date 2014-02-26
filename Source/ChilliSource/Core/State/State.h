@@ -177,7 +177,7 @@ namespace ChilliSource
 			friend class CStateManager;
 		};
 		
-		typedef SHARED_PTR<IState> StatePtr;
+		typedef std::shared_ptr<IState> StatePtr;
 	}
 }
 

@@ -1,5 +1,7 @@
 #include <ChilliSource/Core/Container/StaticMemPool.h>
 
+#include <vector>
+
 namespace ChilliSource
 {
     namespace Core
@@ -52,7 +54,7 @@ namespace ChilliSource
         //-----------------------------------------------------------------------
         void CStaticMemPool::Release(void* inpData)
         {
-            for(DYNAMIC_ARRAY<MemChunk>::iterator it = mChunks.begin(); it != mChunks.end(); ++it)
+            for(std::vector<MemChunk>::iterator it = mChunks.begin(); it != mChunks.end(); ++it)
             {
                 if(it->pbyData == inpData)
                 {

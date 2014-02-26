@@ -59,7 +59,7 @@ namespace ChilliSource
 			Core::CVector2 vPosition;
 		};
 		
-		typedef DYNAMIC_ARRAY<PlacedCharacter> CharacterList;
+		typedef std::vector<PlacedCharacter> CharacterList;
         
 		class CFont : public Core::IResource
 		{
@@ -223,9 +223,9 @@ namespace ChilliSource
             /// @param Kerning lookup array
             /// @param Kerning pair array
             //-------------------------------------------
-            void SetKerningInfo(const DYNAMIC_ARRAY<CKernLookup>& inaFirstReg, const DYNAMIC_ARRAY<CKernPair>& inaPairs);
+            void SetKerningInfo(const std::vector<CKernLookup>& inaFirstReg, const std::vector<CKernPair>& inaPairs);
             
-			typedef HASH_MAP<Core::UTF8String::Char, CharacterInfo> CharToCharInfoMap;
+			typedef std::unordered_map<Core::UTF8String::Char, CharacterInfo> CharToCharInfoMap;
 			
 			CharToCharInfoMap mMapCharToCharInfo;
 			
@@ -236,10 +236,10 @@ namespace ChilliSource
 			CharacterSet mCharacterSet;
 			
             // Kerning lookup
-            DYNAMIC_ARRAY<CKernLookup> maFirstLookup;
+            std::vector<CKernLookup> maFirstLookup;
                     
             // Kerning pairs
-            DYNAMIC_ARRAY<CKernPair> maPairs;
+            std::vector<CKernPair> maPairs;
                     
 			//The font bitmap
 			TexturePtr mpTexture;

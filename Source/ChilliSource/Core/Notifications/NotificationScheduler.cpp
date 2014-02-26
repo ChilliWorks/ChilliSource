@@ -19,7 +19,7 @@ namespace ChilliSource
         bool CNotificationScheduler::bPushNotificationsEnabled = true;
         
         std::deque<Notification> CNotificationScheduler::NotificationQueue;
-        DYNAMIC_ARRAY<Notification> CNotificationScheduler::TimedAppNotifications;
+        std::vector<Notification> CNotificationScheduler::TimedAppNotifications;
         
         ILocalNotificationScheduler* CNotificationScheduler::mspLocalNotificationScheduler = nullptr;
 
@@ -199,7 +199,7 @@ namespace ChilliSource
         /// @param Out: Notifications that meet criteria
         /// @return Whether any notifications exist within that time period
         //-------------------------------------------------------------------------
-        bool CNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(NotificationType ineType, TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, DYNAMIC_ARRAY<Notification>& outaNotifications)
+        bool CNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(NotificationType ineType, TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Notification>& outaNotifications)
         {
             switch(ineType)
             {
@@ -257,7 +257,7 @@ namespace ChilliSource
             switch(ineType)
             {
                 case NotificationType::k_app:
-                    for(DYNAMIC_ARRAY<Notification>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end(); /*No Increment*/)
+                    for(std::vector<Notification>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end(); /*No Increment*/)
                     {  
                         if(inID == it->ID)
                         {
@@ -313,7 +313,7 @@ namespace ChilliSource
             //Update the app notifications
             TimeIntervalSecs CurrentTime = Core::CApplication::GetSystemTime();
             
-            for(DYNAMIC_ARRAY<Notification>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end(); /*No Increment*/)
+            for(std::vector<Notification>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end(); /*No Increment*/)
             {  
                 if(CurrentTime >= it->TriggerTime)
                 {

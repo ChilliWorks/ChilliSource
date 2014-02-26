@@ -123,7 +123,7 @@ namespace ChilliSource
 						{
 							DEBUG_LOG("Loading texture " + inFilePath);
 							
-							mMapFilenameToResource.insert(std::make_pair(inFilePath, SHARED_PTR_CAST<Core::IResource>(pTexture)));
+							mMapFilenameToResource.insert(std::make_pair(inFilePath, std::static_pointer_cast<Core::IResource>(pTexture)));
 							pTexture->SetName(inFilePath);
 							pTexture->SetOwningResourceManager(this);
 							pTexture->SetLoaded(true);
@@ -136,7 +136,7 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				return SHARED_PTR_CAST<ITexture>(pExistingResource->second);
+				return std::static_pointer_cast<ITexture>(pExistingResource->second);
 			}
 			
 			ERROR_LOG("Cannot find resource for texture with path " + inFilePath);
@@ -178,13 +178,13 @@ namespace ChilliSource
 				Core::CTaskScheduler::ScheduleTask(ImageLoadTask);
 				
 				//add resource to the resource map
-				mMapFilenameToResource.insert(std::make_pair(inFilePath, SHARED_PTR_CAST<Core::IResource>(Desc.pTextureResource)));
+				mMapFilenameToResource.insert(std::make_pair(inFilePath, std::static_pointer_cast<Core::IResource>(Desc.pTextureResource)));
 				
 				return Desc.pTextureResource;
 			} 
 			else 
 			{
-				return SHARED_PTR_CAST<ITexture>(pExistingResource->second);
+				return std::static_pointer_cast<ITexture>(pExistingResource->second);
 			}
 		}
 		//-----------------------------------------------------------------------------------

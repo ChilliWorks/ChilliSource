@@ -53,13 +53,13 @@
     if (mCurrentTimeMS != currentTimeMS)
     {
         mCurrentTimeMS = currentTimeMS;
-        DYNAMIC_ARRAY<ChilliSource::Video::CSubtitles::SubtitlePtr> pSubtitleArray = mpSubtitles->GetSubtitlesAtTime(mCurrentTimeMS);
+        std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr> pSubtitleArray = mpSubtitles->GetSubtitlesAtTime(mCurrentTimeMS);
 
         //add any new subtitles
-        for (DYNAMIC_ARRAY<ChilliSource::Video::CSubtitles::SubtitlePtr>::iterator it = pSubtitleArray.begin(); it != pSubtitleArray.end(); ++it)
+        for (std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr>::iterator it = pSubtitleArray.begin(); it != pSubtitleArray.end(); ++it)
         {
             
-            HASH_MAP<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*>::iterator mapEntry = maTextViewMap.find(*it);
+            std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*>::iterator mapEntry = maTextViewMap.find(*it);
             if (mapEntry == maTextViewMap.end())
             {
                 [self AddTextView:*it];
@@ -67,15 +67,15 @@
         }
 
         //update the current text views
-        for (HASH_MAP<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*>::iterator it = maTextViewMap.begin(); it != maTextViewMap.end(); ++it)
+        for (std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*>::iterator it = maTextViewMap.begin(); it != maTextViewMap.end(); ++it)
         {
             [self UpdateTextView:it->second Subtitle:it->first Time:mCurrentTimeMS];
         }
 
         //removes any text views that are no longer needed.
-        for (DYNAMIC_ARRAY<ChilliSource::Video::CSubtitles::SubtitlePtr>::iterator it = maSubtitlesToRemove.begin(); it != maSubtitlesToRemove.end(); ++it)
+        for (std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr>::iterator it = maSubtitlesToRemove.begin(); it != maSubtitlesToRemove.end(); ++it)
         {
-            HASH_MAP<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*>::iterator mapEntry = maTextViewMap.find(*it);
+            std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*>::iterator mapEntry = maTextViewMap.find(*it);
             if (mapEntry != maTextViewMap.end())
             {
                 [mapEntry->second removeFromSuperview];

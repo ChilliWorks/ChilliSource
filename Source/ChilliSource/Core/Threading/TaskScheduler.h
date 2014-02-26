@@ -129,7 +129,7 @@ namespace ChilliSource
             static Core::ThreadPool* pThreadPool;
             
             static std::recursive_mutex MainThreadTaskMutex;
-            static DYNAMIC_ARRAY<GenericTaskType> MainThreadTasks;
+            static std::vector<GenericTaskType> MainThreadTasks;
         };
     }
 }

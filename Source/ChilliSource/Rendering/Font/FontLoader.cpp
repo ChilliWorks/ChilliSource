@@ -128,8 +128,8 @@ namespace ChilliSource
 				dwKerningPairs = Core::CUtils::Endian4ByteSwap(&dwKerningPairs);
 				
 				// Kerning stored in a first character look up register
-				DYNAMIC_ARRAY<CFont::CKernLookup> aKernLookup;
-				DYNAMIC_ARRAY<CFont::CKernPair> aKernPairs;
+				std::vector<CFont::CKernLookup> aKernLookup;
+				std::vector<CFont::CKernPair> aKernPairs;
 				aKernPairs.reserve(dwKerningPairs);
                 
 				for(s32 dwPair = 0; dwPair < dwKerningPairs; dwPair++)

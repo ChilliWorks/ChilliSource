@@ -186,7 +186,7 @@ namespace ChilliSource
                 {
                     ApplyRenderStates(inMaterial);
                     
-                    ShaderPtr pShader = SHARED_PTR_CAST<CShader>(inMaterial.GetActiveShaderProgram());
+                    ShaderPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
                     GLuint GLShaderProgram = pShader->GetProgramID();
                     
                     if(GLShaderProgram != 0)
@@ -226,13 +226,13 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Joints
         //----------------------------------------------------------
-        void CRenderSystem::ApplyJoints(const DYNAMIC_ARRAY<Core::CMatrix4x4>& inaJoints)
+        void CRenderSystem::ApplyJoints(const std::vector<Core::CMatrix4x4>& inaJoints)
         {
             if(mJointsHandle != -1)
             {
                 //remove the final column from the joint matrix data as it is always going to be [0 0 0 1].
-                DYNAMIC_ARRAY<Core::CVector4> aJointVectors;
-                for (DYNAMIC_ARRAY<Core::CMatrix4x4>::const_iterator it = inaJoints.begin(); it != inaJoints.end(); ++it)
+                std::vector<Core::CVector4> aJointVectors;
+                for (std::vector<Core::CMatrix4x4>::const_iterator it = inaJoints.begin(); it != inaJoints.end(); ++it)
                 {
                     aJointVectors.push_back(Core::CVector4(it->m[0], it->m[4], it->m[8], it->m[12]));
                     aJointVectors.push_back(Core::CVector4(it->m[1], it->m[5], it->m[9], it->m[13]));
@@ -302,7 +302,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CRenderSystem::GetUniformLocations(const Rendering::CMaterial &inMaterial)
         {
-            ShaderPtr pShader = SHARED_PTR_CAST<CShader>(inMaterial.GetActiveShaderProgram());
+            ShaderPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
             
             //Get the required handles to the shader variables (Uniform)
             mmatWVPHandle = pShader->GetUniformLocation("umatWorldViewProj");
@@ -350,7 +350,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CRenderSystem::ApplyShaderVariables(const Rendering::CMaterial &inMaterial, GLuint inShaderProg)
 		{
-            ShaderPtr pShader = SHARED_PTR_CAST<CShader>(inMaterial.GetActiveShaderProgram());
+            ShaderPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
 			//Get and set all the custom shader variables
 			for(Rendering::MapStringToFloat::const_iterator it = inMaterial.mMapFloatShaderVars.begin(); it!= inMaterial.mMapFloatShaderVars.end(); ++it)
 			{
@@ -1214,7 +1214,7 @@ namespace ChilliSource
 		void CRenderSystem::BackupMeshBuffers()
 		{
 #ifdef TARGET_ANDROID
-			for(DYNAMIC_ARRAY<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
+			for(std::vector<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
 			{
 				(*it)->Backup();
 			}
@@ -1226,7 +1226,7 @@ namespace ChilliSource
 		void CRenderSystem::RestoreMeshBuffers()
 		{
 #ifdef TARGET_ANDROID
-			for(DYNAMIC_ARRAY<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
+			for(std::vector<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
 			{
 				(*it)->Restore();
 			}
@@ -1238,7 +1238,7 @@ namespace ChilliSource
 		void CRenderSystem::RemoveBuffer(Rendering::IMeshBuffer* inpBuffer)
 		{
 #ifdef TARGET_ANDROID
-			for(DYNAMIC_ARRAY<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
+			for(std::vector<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
 			{
 				if ((*it) == inpBuffer)
 				{
@@ -1254,7 +1254,7 @@ namespace ChilliSource
 		void CRenderSystem::CheckForGLErrors()
 		{
 			//get an array of all the errors that have occurred
-			DYNAMIC_ARRAY<GLenum> errorArray;
+			std::vector<GLenum> errorArray;
 			GLenum currentError = glGetError();
 			while (currentError != GL_NO_ERROR)
 			{
@@ -1263,7 +1263,7 @@ namespace ChilliSource
 			}
             
 			//print out the meaning of each error found
-			for (DYNAMIC_ARRAY<GLenum>::iterator it = errorArray.begin(); it != errorArray.end(); ++it)
+			for (std::vector<GLenum>::iterator it = errorArray.begin(); it != errorArray.end(); ++it)
 			{
 				switch (*it)
 				{

@@ -40,7 +40,7 @@ namespace ChilliSource
             virtual const std::string& GetInterfaceTypeName() const = 0;
 		};
 		
-		typedef SHARED_PTR<ISystem> SystemPtr;
+		typedef std::shared_ptr<ISystem> SystemPtr;
 	}
 }
 

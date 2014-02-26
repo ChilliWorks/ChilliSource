@@ -382,7 +382,7 @@ namespace ChilliSource
 		/// @param Out - Vector to populate with components
 		/// @param Whether to clear the vector before populating
 		//-------------------------------------------------------------
-		void CEntity::GetManagedComponents(InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<ComponentPtr> & outComponentsWithInterface, u32 inudwQueryMask, bool inbClearVectorBeforeUsing) const
+		void CEntity::GetManagedComponents(InterfaceIDType inInterfaceID, std::vector<ComponentPtr> & outComponentsWithInterface, u32 inudwQueryMask, bool inbClearVectorBeforeUsing) const
 		{
 			if (inbClearVectorBeforeUsing) 
 			{
@@ -432,7 +432,7 @@ namespace ChilliSource
 		/// @param Out - Vector to populate with components
 		/// @param Whether to clear the vector before populating
 		//-------------------------------------------------------------
-		void CEntity::GetComponents(InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<IComponent*> & outComponentsWithInterface, u32 inudwQueryMask, bool inbClearVectorBeforeUsing) const
+		void CEntity::GetComponents(InterfaceIDType inInterfaceID, std::vector<IComponent*> & outComponentsWithInterface, u32 inudwQueryMask, bool inbClearVectorBeforeUsing) const
 		{
 			if (inbClearVectorBeforeUsing) 
 			{
@@ -494,7 +494,7 @@ namespace ChilliSource
 		/// @param Out - Vector to populate with components
 		/// @param Whether to clear the vector before populating
 		//-------------------------------------------------------------
-		void CEntity::GetManagedComponentsRecursive(InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<ComponentPtr> & outComponentsWithInterface, u32 inudwQueryMask, bool inbClearVectorBeforeUsing) const
+		void CEntity::GetManagedComponentsRecursive(InterfaceIDType inInterfaceID, std::vector<ComponentPtr> & outComponentsWithInterface, u32 inudwQueryMask, bool inbClearVectorBeforeUsing) const
 		{
 			if (inbClearVectorBeforeUsing) 
 			{
@@ -561,7 +561,7 @@ namespace ChilliSource
 		/// @param Out - Vector to populate with components
 		/// @param Whether to clear the vector before populating
 		//-------------------------------------------------------------
-		void CEntity::GetComponentsRecursive(InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<IComponent*> & outComponentsWithInterface, u32 inudwQueryMask, bool inbClearVectorBeforeUsing) const
+		void CEntity::GetComponentsRecursive(InterfaceIDType inInterfaceID, std::vector<IComponent*> & outComponentsWithInterface, u32 inudwQueryMask, bool inbClearVectorBeforeUsing) const
 		{
 			if (inbClearVectorBeforeUsing) 
 			{

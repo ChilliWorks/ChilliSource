@@ -65,7 +65,7 @@ namespace ChilliSource
 		///
 		/// @return Element array 
 		//-------------------------------------------------------
-        const DYNAMIC_ARRAY<VertexElement>& CVertexDeclaration::GetElements() const
+        const std::vector<VertexElement>& CVertexDeclaration::GetElements() const
         {
             return mElements;
         }
@@ -96,7 +96,7 @@ namespace ChilliSource
 		{
 			u16 Offset = 0;
 
-			for(DYNAMIC_ARRAY<VertexElement>::iterator it = mElements.begin(); it != mElements.end(); ++it)
+			for(std::vector<VertexElement>::iterator it = mElements.begin(); it != mElements.end(); ++it)
 			{
 				if((*it).eSemantic == inElement.eSemantic)
 				{

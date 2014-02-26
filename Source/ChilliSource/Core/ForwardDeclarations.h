@@ -32,11 +32,11 @@ namespace ChilliSource
 		
 		//ComponentSystem
 		class CEntity;
-        typedef SHARED_PTR<CEntity> EntityPtr;
-        typedef WEAK_PTR<CEntity> EntityWeakPtr;
+        typedef std::shared_ptr<CEntity> EntityPtr;
+        typedef std::weak_ptr<CEntity> EntityWeakPtr;
         
 		class IComponent;
-        typedef SHARED_PTR<IComponent> ComponentPtr;
+        typedef std::shared_ptr<IComponent> ComponentPtr;
 		class IComponentFactory;
 		
 		//Scene
@@ -46,8 +46,8 @@ namespace ChilliSource
 		
 		class CEntityAnimationController;
 		class CEntityAnimation;
-		typedef SHARED_PTR<CEntityAnimation> EntityAnimationPtr;
-		typedef SHARED_PTR<CEntityAnimationController> EntityAnimationControllerPtr;
+		typedef std::shared_ptr<CEntityAnimation> EntityAnimationPtr;
+		typedef std::shared_ptr<CEntityAnimationController> EntityAnimationControllerPtr;
 		struct EntityAnimationData;
 		
 		//Resources
@@ -91,13 +91,13 @@ namespace ChilliSource
 		class IWFileStream;
 		class CFileSystemFactory;
         
-        typedef SHARED_PTR<IFileStream> FileStreamPtr;
+        typedef std::shared_ptr<IFileStream> FileStreamPtr;
         
-		typedef SHARED_PTR<IResource> ResourcePtr;
-		typedef WEAK_PTR<IResource> ResourceWeakPtr;
+		typedef std::shared_ptr<IResource> ResourcePtr;
+		typedef std::weak_ptr<IResource> ResourceWeakPtr;
 
-        typedef SHARED_PTR<CImage> ImagePtr;
-		typedef WEAK_PTR<CImage> ImageWeakPtr;
+        typedef std::shared_ptr<CImage> ImagePtr;
+		typedef std::weak_ptr<CImage> ImageWeakPtr;
 
         class IActivity;
         class IInformationProvider;
@@ -106,8 +106,8 @@ namespace ChilliSource
         class IPlatformSystem;
         class IWebViewActivity;
         
-        typedef SHARED_PTR<IVolumeComponent> VolumeComponentPtr;
-        typedef WEAK_PTR<IVolumeComponent> VolumeComponentWeakPtr;
+        typedef std::shared_ptr<IVolumeComponent> VolumeComponentPtr;
+        typedef std::weak_ptr<IVolumeComponent> VolumeComponentWeakPtr;
         
         enum class StorageLocation;
         

@@ -200,8 +200,8 @@ namespace ChilliSource
             
             CDynamicSpriteBatch mOverlayBatcher;
             
-			DYNAMIC_ARRAY<Core::CVector2> mScissorPos;
-            DYNAMIC_ARRAY<Core::CVector2> mScissorSize;
+			std::vector<Core::CVector2> mScissorPos;
+            std::vector<Core::CVector2> mScissorSize;
                         
 			IRenderSystem* mpRenderSystem;
             

@@ -12,6 +12,9 @@
 
 #include <ChilliSource/ChilliSource.h>
 
+#include <cmath>
+#include <vector>
+
 namespace ChilliSource
 {
 	namespace Core 
@@ -215,7 +218,7 @@ namespace ChilliSource
             /// @param Data set of type T
             /// @return Most common value of type T
             //----------------------------------------------------
-            template <typename T> static T Mode(DYNAMIC_ARRAY<T>& inDataSet)
+            template <typename T> static T Mode(std::vector<T>& inDataSet)
             {
                 //Sort smallest to largest
                 std::sort(inDataSet.begin(), inDataSet.end());
@@ -257,7 +260,7 @@ namespace ChilliSource
             /// @param Data set of type T
             /// @return Average value of type T
             //----------------------------------------------------
-            template <typename T> static T Mean(DYNAMIC_ARRAY<T>& inDataSet)
+            template <typename T> static T Mean(std::vector<T>& inDataSet)
             {
                 if(inDataSet.empty())
                     return 0;
@@ -280,7 +283,7 @@ namespace ChilliSource
             /// @param Data set of type T
             /// @return Average value of type T
             //----------------------------------------------------
-            template <typename T> static T Median(DYNAMIC_ARRAY<T>& inDataSet)
+            template <typename T> static T Median(std::vector<T>& inDataSet)
             {
                 if(inDataSet.empty())
                     return 0;

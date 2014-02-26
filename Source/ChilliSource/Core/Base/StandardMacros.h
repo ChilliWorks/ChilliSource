@@ -9,8 +9,6 @@
 #ifndef _CHILLISOURCE_CORE_BASE_STANDARDMACROS_H_
 #define _CHILLISOURCE_CORE_BASE_STANDARDMACROS_H_
 
-//TODO: Better way to not include the headers from here but still be able to swap libs easily
-#include <memory>
 
 //TODO: Remove the array deleter and put it in a more sutiable place. This is a functor for deleting shared arrays.
 template <typename T> class ArrayDeleter
@@ -21,34 +19,6 @@ public:
         delete[] in_arrayObject;
     }
 };
-
-#define SHARED_PTR std::shared_ptr
-#define WEAK_PTR std::weak_ptr
-#define WEAK_ARRAY_PTR std::weak_array
-#define UNIQUE_PTR std::unique_ptr
-#define UNIQUE_ARRAY_PTR std::unique_array
-#define SHARED_PTR_CAST std::static_pointer_cast
-#define ENABLE_SHARED_FROM_THIS std::enable_shared_from_this
-#define SHARED_FUTURE std::shared_future
-#define MAKE_SHARED_PTR std::make_shared
-
-#include <ChilliSource/Core/Base/FastDelegate.h>
-
-//TODO: Better way to not include the headers from here but still be able to swap libs easily i.e. if we want to use a different STL implementation
-#include <unordered_map>
-#define HASH_MAP std::unordered_map
-
-//TODO: Better way to not include the headers from here but still be able to swap libs easily
-#include <vector>
-#define DYNAMIC_ARRAY std::vector
-
-//Static Assertions
-template <bool> struct CompileTimeChecker
-{
-    CompileTimeChecker(...);
-};
-template <> struct CompileTimeChecker<false>{};
-
 
 #ifdef __APPLE__
 #include "TargetConditionals.h"

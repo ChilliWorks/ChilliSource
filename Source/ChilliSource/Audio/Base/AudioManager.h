@@ -121,7 +121,7 @@ namespace ChilliSource
 			
 		private:
 
-			typedef HASH_MAP<std::string, AudioResourcePtr> MapStringToSoundEffectPtr;
+			typedef std::unordered_map<std::string, AudioResourcePtr> MapStringToSoundEffectPtr;
 			typedef MapStringToSoundEffectPtr::iterator MapStringToSoundEffectPtrItr;
 			MapStringToSoundEffectPtr mMapFileNamesToSoundEffect;
 		};

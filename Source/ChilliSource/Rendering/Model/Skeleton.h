@@ -12,6 +12,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 
+#include <vector>
+
 namespace ChilliSource
 {
 	namespace Rendering
@@ -87,13 +89,13 @@ namespace ChilliSource
 			///
 			/// @return the dynamic array of nodes
 			//-------------------------------------------------------------------------
-			const DYNAMIC_ARRAY<SkeletonNodePtr>& GetNodes() const;
+			const std::vector<SkeletonNodePtr>& GetNodes() const;
             //-------------------------------------------------------------------------
 			/// Get Joint Indices
 			///
 			/// @return the array of joint indices
 			//-------------------------------------------------------------------------
-			const DYNAMIC_ARRAY<s32>& GetJointIndices() const;
+			const std::vector<s32>& GetJointIndices() const;
 			//-------------------------------------------------------------------------
 			/// Add Node
 			///
@@ -112,8 +114,8 @@ namespace ChilliSource
 			
 		private:
 			
-			DYNAMIC_ARRAY<SkeletonNodePtr> mapNodes;
-            DYNAMIC_ARRAY<s32> madwJoints;
+			std::vector<SkeletonNodePtr> mapNodes;
+            std::vector<s32> madwJoints;
 		};
 	}
 }

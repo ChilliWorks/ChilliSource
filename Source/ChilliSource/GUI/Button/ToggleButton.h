@@ -367,8 +367,8 @@ namespace ChilliSource
             static Audio::AudioComponentPtr mspDefaultDeSelectSound;
 		};
         
-        typedef SHARED_PTR<CToggleButton> ToggleButtonPtr;
-		typedef WEAK_PTR<CToggleButton>ToggleButtonWeakPtr;
+        typedef std::shared_ptr<CToggleButton> ToggleButtonPtr;
+		typedef std::weak_ptr<CToggleButton>ToggleButtonWeakPtr;
     }
 }
 

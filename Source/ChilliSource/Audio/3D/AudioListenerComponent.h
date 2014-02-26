@@ -65,8 +65,8 @@ namespace ChilliSource
 			AudioListenerPtr mpAudioListener;
 		};
 		
-		typedef SHARED_PTR<CAudioListenerComponent> AudioListenerComponentPtr;
-		typedef WEAK_PTR<CAudioListenerComponent> AudioListenerComponentWeakPtr;
+		typedef std::shared_ptr<CAudioListenerComponent> AudioListenerComponentPtr;
+		typedef std::weak_ptr<CAudioListenerComponent> AudioListenerComponentWeakPtr;
 	}
 }
 

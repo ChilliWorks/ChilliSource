@@ -7,6 +7,8 @@
 //
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
+
 #import <StoreKit/StoreKit.h>
 
 namespace StoreKitIAP

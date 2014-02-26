@@ -10,6 +10,7 @@
 #define _MOFLOW_NETWORKING_IAPSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
@@ -38,7 +39,7 @@ namespace ChilliSource
             Type eType;
         };
         
-        typedef fastdelegate::FastDelegate1<const DYNAMIC_ARRAY<IAPProductDesc>&> IAPProductDescDelegate;
+        typedef fastdelegate::FastDelegate1<const std::vector<IAPProductDesc>&> IAPProductDescDelegate;
         
 
         struct IAPTransaction
@@ -58,7 +59,7 @@ namespace ChilliSource
             };
         };
         
-        typedef SHARED_PTR<IAPTransaction> IAPTransactionPtr;
+        typedef std::shared_ptr<IAPTransaction> IAPTransactionPtr;
         typedef fastdelegate::FastDelegate2<IAPTransaction::Status, const IAPTransactionPtr&> IAPTransactionDelegate;
         typedef fastdelegate::FastDelegate2<const std::string&, const std::string&> IAPTransactionCloseDelegate;
         
@@ -97,7 +98,7 @@ namespace ChilliSource
             ///
             /// @param List of products
             //---------------------------------------------------------------
-            virtual void RegisterProducts(const DYNAMIC_ARRAY<IAPProductRegInfo>& inaProducts) = 0;
+            virtual void RegisterProducts(const std::vector<IAPProductRegInfo>& inaProducts) = 0;
             //---------------------------------------------------------------
 			/// Get Provider ID
 			///
@@ -153,7 +154,7 @@ namespace ChilliSource
 			/// @param List of product IDs to request descriptions for
             /// @param Delegate to invoke when the request completes
             //---------------------------------------------------------------
-            virtual void RequestProductDescriptions(const DYNAMIC_ARRAY<std::string>& inaProductIDs, const IAPProductDescDelegate& inRequestDelegate) = 0;
+            virtual void RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const IAPProductDescDelegate& inRequestDelegate) = 0;
             //---------------------------------------------------------------
 			/// Cancel Product Descriptions Request
 			///

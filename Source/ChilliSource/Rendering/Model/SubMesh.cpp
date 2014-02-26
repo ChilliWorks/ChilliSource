@@ -202,7 +202,7 @@ namespace ChilliSource
             if (inpAnimationGroup != nullptr)
             {
                 //Apply inverse bind pose matrix.
-                DYNAMIC_ARRAY<Core::CMatrix4x4> combinedMatrices;
+                std::vector<Core::CMatrix4x4> combinedMatrices;
                 inpAnimationGroup->ApplyInverseBindPose(mpInverseBindPose->mInverseBindPoseMatrices, combinedMatrices);
                 inpRenderSystem->ApplyJoints(combinedMatrices);
             }

@@ -181,7 +181,7 @@ namespace ChilliSource
 			u32 mudwRightCapIndex;
 		};
 
-		typedef SHARED_PTR<CHorizontalStretchableImage> HorizontalStretchableImagePtr;
+		typedef std::shared_ptr<CHorizontalStretchableImage> HorizontalStretchableImagePtr;
 	}
 }
 

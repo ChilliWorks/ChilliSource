@@ -44,11 +44,11 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Subtitles At Time
         //----------------------------------------------------------
-        DYNAMIC_ARRAY<CSubtitles::SubtitlePtr> CSubtitles::GetSubtitlesAtTime(TimeIntervalMs inTimeMS) const
+        std::vector<CSubtitles::SubtitlePtr> CSubtitles::GetSubtitlesAtTime(TimeIntervalMs inTimeMS) const
         {
-            DYNAMIC_ARRAY<SubtitlePtr> subtitles;
+            std::vector<SubtitlePtr> subtitles;
             
-            for (DYNAMIC_ARRAY<SubtitlePtr>::const_iterator it = mSubtitles.begin(); it != mSubtitles.end(); ++it)
+            for (std::vector<SubtitlePtr>::const_iterator it = mSubtitles.begin(); it != mSubtitles.end(); ++it)
             {
                 if (inTimeMS >= (*it)->StartTimeMS && inTimeMS <= (*it)->EndTimeMS)
                 {
@@ -63,7 +63,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         CSubtitles::StylePtr CSubtitles::GetStyleWithName(const std::string& instrName) const
         {
-            HASH_MAP<std::string, StylePtr>::const_iterator found = mStyleMap.find(instrName);
+            std::unordered_map<std::string, StylePtr>::const_iterator found = mStyleMap.find(instrName);
             if (found != mStyleMap.end())
             {
                 return found->second;

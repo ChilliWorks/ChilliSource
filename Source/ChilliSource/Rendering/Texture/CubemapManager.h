@@ -113,7 +113,7 @@ namespace ChilliSource
 			///
 			/// @param Image to create moFlo Cubemap from
 			//----------------------------------------------------------------
-			virtual bool CreateCubemapFromImages(const DYNAMIC_ARRAY<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, CubemapPtr& outpCubemap) = 0;
+			virtual bool CreateCubemapFromImages(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, CubemapPtr& outpCubemap) = 0;
 		protected:
 			
 			struct ImageDesc
@@ -122,7 +122,7 @@ namespace ChilliSource
 				Core::CImage::Format eImageFormat;
 				bool bUseMipmaps;
                 Core::StorageLocation eStorageLocation;
-				DYNAMIC_ARRAY<Core::ResourcePtr> pImageResources;
+				std::vector<Core::ResourcePtr> pImageResources;
 				CubemapPtr pCubemapResource;
 			};
 			
@@ -143,7 +143,7 @@ namespace ChilliSource
 			/// @param With mipmapping
 			/// @param Cubemap to create
 			//-----------------------------------------------------------------------------------
-			void CubemapLoadTask(const DYNAMIC_ARRAY<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, CubemapPtr& outpCubemap);
+			void CubemapLoadTask(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, CubemapPtr& outpCubemap);
 		};
 	}
 	

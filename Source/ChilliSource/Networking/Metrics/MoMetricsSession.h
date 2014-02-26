@@ -22,7 +22,7 @@ namespace ChilliSource
         struct MetricsEvent
         {
 			std::string strType;
-            DYNAMIC_ARRAY<std::string> astrParams;
+            std::vector<std::string> astrParams;
             u32 udwCount;
 			u32 udwTimeStamp;
             bool bSummarisable;
@@ -54,7 +54,7 @@ namespace ChilliSource
 
         };
         
-        typedef SHARED_PTR<IExternalMetrics> ExternalMetricsPtr;
+        typedef std::shared_ptr<IExternalMetrics> ExternalMetricsPtr;
         
         
         class CMoMetricsSession
@@ -71,7 +71,7 @@ namespace ChilliSource
             
             void RequestAuthTokens();
             void RequestLocationUpdate(const MetricsLocation& insLocation);
-            void RecordEvent(const std::string & instrType, const DYNAMIC_ARRAY<std::string>& inastrParams, bool inbSummarise);
+            void RecordEvent(const std::string & instrType, const std::vector<std::string>& inastrParams, bool inbSummarise);
             void RequestFlushEvents();
             void RequestClose();
             
@@ -134,9 +134,9 @@ namespace ChilliSource
             std::deque<MetricsRequest> mQueuedRequests;
             std::deque<Action> mQueuedActions;
             
-            HASH_MAP<HttpRequestPtr, IHttpRequest::CompletionDelegate> mmapRequestToDelegate;
+            std::unordered_map<HttpRequestPtr, IHttpRequest::CompletionDelegate> mmapRequestToDelegate;
             
-            HASH_MAP<std::string, std::string> mmapConstants;
+            std::unordered_map<std::string, std::string> mmapConstants;
             
             MetricsLocation msLocation;
             

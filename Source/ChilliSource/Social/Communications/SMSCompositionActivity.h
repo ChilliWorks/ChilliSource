@@ -36,7 +36,7 @@ namespace ChilliSource {
 			
 			typedef fastdelegate::FastDelegate1<SendResult> SendResultDelegate;
 			
-			virtual void Present(const DYNAMIC_ARRAY<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const SendResultDelegate & inCallback) = 0;
+			virtual void Present(const std::vector<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const SendResultDelegate & inCallback) = 0;
 			virtual void Dismiss() = 0;
 		};
 		

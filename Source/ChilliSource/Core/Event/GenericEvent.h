@@ -11,6 +11,7 @@
 #define _MOFLO_CORE_GENERICEVENT_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEventImpl.h>
 
 namespace ChilliSource

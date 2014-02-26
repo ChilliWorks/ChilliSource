@@ -313,7 +313,7 @@ namespace ChilliSource
             }
             
             //get all the files in the directory
-            DYNAMIC_ARRAY<std::string> astrFilenames;
+            std::vector<std::string> astrFilenames;
             GetFileNamesInDirectory(ineSourceStorageLocation, instrSourceDirectory, true, astrFilenames);
             
             //error if there are no files
@@ -326,7 +326,7 @@ namespace ChilliSource
             //copy each of these files individually
             std::string strSourceProperPath = Core::CStringUtils::StandardisePath(instrSourceDirectory);
             std::string strDestProperPath = Core::CStringUtils::StandardisePath(instrDestinationDirectory);
-            for (DYNAMIC_ARRAY<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
+            for (std::vector<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
             {
                 if (CopyFile(ineSourceStorageLocation, strSourceProperPath + *it, 
                          ineDestinationStorageLocation, strDestProperPath + *it) == false)
@@ -408,9 +408,9 @@ namespace ChilliSource
         /// @param Recurse into sub directories
         /// @param Out: Content file names
         //------------------------------------------------------------
-        void GetDirectoryContents(const DYNAMIC_ARRAY<std::string>& inastrDirs, bool inbRecursive, NSMutableArray* outpContents)
+        void GetDirectoryContents(const std::vector<std::string>& inastrDirs, bool inbRecursive, NSMutableArray* outpContents)
         {
-            for(DYNAMIC_ARRAY<std::string>::const_iterator it = inastrDirs.begin(); it != inastrDirs.end(); ++it)
+            for(std::vector<std::string>::const_iterator it = inastrDirs.begin(); it != inastrDirs.end(); ++it)
             {
                 std::string path = ChilliSource::Core::CStringUtils::StandardisePath(*it);
                 NSString* Dir = [NSString stringWithCString:path.c_str() encoding:NSASCIIStringEncoding];
@@ -475,7 +475,7 @@ namespace ChilliSource
         /// @param Directory to append
         /// @param Out: Filenames
         //--------------------------------------------------------------
-        void ConvertObjCToPath(NSArray* inpFilenames, const std::string& instrDirectory, DYNAMIC_ARRAY<std::string> &outstrFileNames)
+        void ConvertObjCToPath(NSArray* inpFilenames, const std::string& instrDirectory, std::vector<std::string> &outstrFileNames)
         {
             std::string strDir;
             if(instrDirectory.empty() == false)
@@ -492,7 +492,7 @@ namespace ChilliSource
         /// Get File Names With Extension In Directory
         //--------------------------------------------------------------
         void CFileSystem::GetFileNamesWithExtensionInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
-                                                  const std::string& instrExtension, DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath) const
+                                                  const std::string& instrExtension, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
         {
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -501,7 +501,7 @@ namespace ChilliSource
                 return;
             }
             
-            DYNAMIC_ARRAY<std::string> astrDirectoriesToCheck;
+            std::vector<std::string> astrDirectoriesToCheck;
             GetPathsForStorageLocation(ineStorageLocation, instrDirectory, astrDirectoriesToCheck);
             
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
@@ -527,7 +527,7 @@ namespace ChilliSource
             [pPool release];
             
             std::sort(outstrFileNames.begin(), outstrFileNames.end());
-            DYNAMIC_ARRAY<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
+            std::vector<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
             outstrFileNames.resize(it - outstrFileNames.begin()); 
         }
         //--------------------------------------------------------------
@@ -544,7 +544,7 @@ namespace ChilliSource
         /// @param Output dynamic array containing the filenames.
         //--------------------------------------------------------------
         void CFileSystem::GetPathForFilesWithNameInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                        const std::string& instrName, DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath) const
+                                                        const std::string& instrName, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
         {
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -553,7 +553,7 @@ namespace ChilliSource
                 return;
             }
             
-            DYNAMIC_ARRAY<std::string> astrDirectoriesToCheck;
+            std::vector<std::string> astrDirectoriesToCheck;
             GetPathsForStorageLocation(ineStorageLocation, instrDirectory, astrDirectoriesToCheck);
             
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
@@ -579,14 +579,14 @@ namespace ChilliSource
             [pPool release];
             
             std::sort(outstrFileNames.begin(), outstrFileNames.end());
-            DYNAMIC_ARRAY<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
+            std::vector<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
             outstrFileNames.resize(it - outstrFileNames.begin()); 
         }
         //--------------------------------------------------------------
         /// Get File Names In Directory
         //--------------------------------------------------------------
         void CFileSystem::GetFileNamesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories, 
-                                     DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath) const
+                                     std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
         {
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -595,7 +595,7 @@ namespace ChilliSource
                 return;
             }
             
-            DYNAMIC_ARRAY<std::string> astrDirectoriesToCheck;
+            std::vector<std::string> astrDirectoriesToCheck;
             GetPathsForStorageLocation(ineStorageLocation, instrDirectory, astrDirectoriesToCheck);
             
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
@@ -621,14 +621,14 @@ namespace ChilliSource
             [pPool release];
             
             std::sort(outstrFileNames.begin(), outstrFileNames.end());
-            DYNAMIC_ARRAY<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
+            std::vector<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
             outstrFileNames.resize(it - outstrFileNames.begin()); 
         }
         //--------------------------------------------------------------
         /// Get Directories In Directory
         //--------------------------------------------------------------
         void CFileSystem::GetDirectoriesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
-                                                    DYNAMIC_ARRAY<std::string> &outstrDirectories, bool inbAppendFullPath) const
+                                                    std::vector<std::string> &outstrDirectories, bool inbAppendFullPath) const
         {
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -637,7 +637,7 @@ namespace ChilliSource
                 return;
             }
             
-            DYNAMIC_ARRAY<std::string> astrDirectoriesToCheck;
+            std::vector<std::string> astrDirectoriesToCheck;
             GetPathsForStorageLocation(ineStorageLocation, instrDirectory, astrDirectoriesToCheck);
             
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
@@ -663,7 +663,7 @@ namespace ChilliSource
             [pPool release];
             
             std::sort(outstrDirectories.begin(), outstrDirectories.end());
-            DYNAMIC_ARRAY<std::string>::iterator it = std::unique(outstrDirectories.begin(), outstrDirectories.end());
+            std::vector<std::string>::iterator it = std::unique(outstrDirectories.begin(), outstrDirectories.end());
             outstrDirectories.resize(it - outstrDirectories.begin()); 
         }
         //------------------------------------------------------------
@@ -673,7 +673,7 @@ namespace ChilliSource
         /// @param File name to append
         /// @param Out: All the paths for the given location
         //------------------------------------------------------------
-        void CFileSystem::GetPathsForStorageLocation(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, DYNAMIC_ARRAY<std::string>& outaPaths) const
+        void CFileSystem::GetPathsForStorageLocation(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, std::vector<std::string>& outaPaths) const
         {
             switch(ineStorageLocation)
             {
@@ -921,7 +921,7 @@ namespace ChilliSource
         {
             u32 udwHashedFile = Core::CHashCRC32::GenerateHashCode(instrPath);
             
-            DYNAMIC_ARRAY<u32>::const_iterator it = std::lower_bound(mHashedPackageFileNames.begin(), mHashedPackageFileNames.end(), udwHashedFile);
+            std::vector<u32>::const_iterator it = std::lower_bound(mHashedPackageFileNames.begin(), mHashedPackageFileNames.end(), udwHashedFile);
             
             if(it!= mHashedPackageFileNames.end() && *it == udwHashedFile)
                 return true;

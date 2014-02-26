@@ -78,9 +78,9 @@ namespace ChilliSource
         }
         
 		//-----------------------------------------------------------------------
-		DYNAMIC_ARRAY<std::string> CStringUtils::Split( const std::string& str, const std::string& delims, unsigned int maxSplits)
+		std::vector<std::string> CStringUtils::Split( const std::string& str, const std::string& delims, unsigned int maxSplits)
 		{
-			DYNAMIC_ARRAY<std::string> ret;
+			std::vector<std::string> ret;
 			// Pre-allocate some space for performance
 			ret.reserve(maxSplits ? maxSplits+1 : 10);    // 10 is guessed capacity for most case
 			
@@ -122,9 +122,9 @@ namespace ChilliSource
 
 
 		//-----------------------------------------------------------------------
-		DYNAMIC_ARRAY< std::string > CStringUtils::Tokenise( const std::string& str, const std::string& singleDelims, const std::string& doubleDelims, unsigned int maxSplits)
+		std::vector< std::string > CStringUtils::Tokenise( const std::string& str, const std::string& singleDelims, const std::string& doubleDelims, unsigned int maxSplits)
 		{
-			DYNAMIC_ARRAY<std::string> ret;
+			std::vector<std::string> ret;
 			// Pre-allocate some space for performance
 			ret.reserve(maxSplits ? maxSplits+1 : 10);    // 10 is guessed capacity for most case
 			

@@ -6,6 +6,8 @@
 
 #include <ChilliSource/Core/Threading/ThreadPool.h>
 
+#include <ChilliSource/Core/Base/FastDelegate.h>
+
 namespace ChilliSource
 {
     namespace Core

@@ -192,7 +192,7 @@ namespace ChilliSource
         protected:
             
             Particle mParticles;
-            DYNAMIC_ARRAY<IParticleEffector*> mEffectors;
+            std::vector<IParticleEffector*> mEffectors;
             
             f32 mfInitialVelocity;
             f32 mfMinInitialVelocity;

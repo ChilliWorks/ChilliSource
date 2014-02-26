@@ -170,7 +170,7 @@ namespace ChilliSource
                         mParticles.vVelocity[i] = qOrientation * mParticles.vVelocity[i];
                     }
                     
-                    for(DYNAMIC_ARRAY<IParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
+                    for(std::vector<IParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
                     {
                         (*itEffector)->Init(&mParticles, i);
                     }
@@ -234,7 +234,7 @@ namespace ChilliSource
         void CParticleEmitter::UpdateParticle(u32 inudwParticleIndex, f32 infDT)
         {
             //Apply the effector to each particle
-            for(DYNAMIC_ARRAY<IParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
+            for(std::vector<IParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
             {
                 if(mParticles.fEnergy[inudwParticleIndex] <= (*itEffector)->GetActiveEnergyLevel())
                 {
@@ -344,7 +344,7 @@ namespace ChilliSource
         //-----------------------------------------------------
         void CParticleEmitter::RemoveEffector(IParticleEffector* inpEffector)
         {
-            for(DYNAMIC_ARRAY<IParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
+            for(std::vector<IParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
             {
                 if(*itEffector == inpEffector)
                 {

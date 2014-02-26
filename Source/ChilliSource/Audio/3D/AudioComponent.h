@@ -13,9 +13,9 @@
 #define _MO_FLO_AUDIO_AUDIO_COMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
-
 #include <ChilliSource/Audio/Base/AudioResource.h>
 
 namespace ChilliSource

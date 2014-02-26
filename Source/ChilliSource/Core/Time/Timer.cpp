@@ -88,8 +88,8 @@ namespace ChilliSource
                 
                 if(!maTimeElapsedDelegates.empty())
                 {
-                    DYNAMIC_ARRAY< std::pair<TimeEventDelegate, f32> > aTimeElapsedDelegatesCopy = maTimeElapsedDelegates;
-                    for(DYNAMIC_ARRAY< std::pair<TimeEventDelegate, f32> >::iterator it = aTimeElapsedDelegatesCopy.begin(); it != aTimeElapsedDelegatesCopy.end(); ++it)
+                    std::vector< std::pair<TimeEventDelegate, f32> > aTimeElapsedDelegatesCopy = maTimeElapsedDelegates;
+                    for(std::vector< std::pair<TimeEventDelegate, f32> >::iterator it = aTimeElapsedDelegatesCopy.begin(); it != aTimeElapsedDelegatesCopy.end(); ++it)
                     {
                         if(mfCurrentTime >= it->second)
                         {
@@ -99,9 +99,9 @@ namespace ChilliSource
                 }
                 
 				//Periodic delegates
-				for(DYNAMIC_ARRAY<TimeEventDelegate>::iterator itOut = maPeriodicUpdateDelegatesDelayedRemove.begin(); itOut != maPeriodicUpdateDelegatesDelayedRemove.end(); ++itOut)
+				for(std::vector<TimeEventDelegate>::iterator itOut = maPeriodicUpdateDelegatesDelayedRemove.begin(); itOut != maPeriodicUpdateDelegatesDelayedRemove.end(); ++itOut)
 				{
-					for(DYNAMIC_ARRAY<PeriodicUpdateData>::iterator itIn = maPeriodicUpdateDelegates.begin(); itIn != maPeriodicUpdateDelegates.end(); ++itIn)
+					for(std::vector<PeriodicUpdateData>::iterator itIn = maPeriodicUpdateDelegates.begin(); itIn != maPeriodicUpdateDelegates.end(); ++itIn)
 					{
 						if(*itOut == itIn->Delegate)
 						{
@@ -111,7 +111,7 @@ namespace ChilliSource
 					}
 				}
 				maPeriodicUpdateDelegatesDelayedRemove.clear();
-				for(DYNAMIC_ARRAY<PeriodicUpdateData>::iterator it = maPeriodicUpdateDelegates.begin(); it != maPeriodicUpdateDelegates.end(); ++it)
+				for(std::vector<PeriodicUpdateData>::iterator it = maPeriodicUpdateDelegates.begin(); it != maPeriodicUpdateDelegates.end(); ++it)
 				{
 					if((it->fTimeSinceLastUpdate += dt) >= it->fTimeBetweenUpdates)
 					{
@@ -142,7 +142,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void CTimer::DeregisterTimeElapsedDelegate(TimeEventDelegate inDelegate)
 		{
-			for(DYNAMIC_ARRAY< std::pair<TimeEventDelegate, f32> >::iterator it = maTimeElapsedDelegates.begin(); it != maTimeElapsedDelegates.end(); ++it)
+			for(std::vector< std::pair<TimeEventDelegate, f32> >::iterator it = maTimeElapsedDelegates.begin(); it != maTimeElapsedDelegates.end(); ++it)
 			{
 				if(inDelegate == it->first)
 				{
@@ -176,7 +176,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void CTimer::DeregisterPeriodicUpdateDelegate(TimeEventDelegate inDelegate)
 		{
-			for(DYNAMIC_ARRAY<PeriodicUpdateData>::iterator it = maPeriodicUpdateDelegates.begin(); it != maPeriodicUpdateDelegates.end(); ++it)
+			for(std::vector<PeriodicUpdateData>::iterator it = maPeriodicUpdateDelegates.begin(); it != maPeriodicUpdateDelegates.end(); ++it)
 			{
 				if(inDelegate == it->Delegate)
 				{

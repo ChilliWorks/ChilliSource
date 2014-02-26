@@ -73,7 +73,7 @@ namespace ChilliSource
             {
                 //Lets cache the result and only compute again if required (i.e. on append or erase)
                 mudwLength = 0;
-                for(DYNAMIC_ARRAY<CodePoint>::const_iterator it = mCodePoints.begin(); it != mCodePoints.end(); ++it)
+                for(std::vector<CodePoint>::const_iterator it = mCodePoints.begin(); it != mCodePoints.end(); ++it)
                 {
                     mudwLength += (*it & 0xc0) != 0x80;
 
@@ -329,7 +329,7 @@ namespace ChilliSource
             u32 udwPosition = 0;
 
             //iterate over the code points of this string, copying the section we are interested in.
-            for(DYNAMIC_ARRAY<CodePoint>::const_iterator it = mCodePoints.begin(); it != mCodePoints.end(); ++it)
+            for(std::vector<CodePoint>::const_iterator it = mCodePoints.begin(); it != mCodePoints.end(); ++it)
             {
                 if (udwPosition >= inudwStartPosition + inudwLength)
                 {
@@ -423,7 +423,7 @@ namespace ChilliSource
             u32 udwOffset = 0;
             GetCharacter(inpIt, udwOffset);
 
-            for(DYNAMIC_ARRAY<CodePoint>::iterator it = mCodePoints.begin(); it != mCodePoints.end(); ++it)
+            for(std::vector<CodePoint>::iterator it = mCodePoints.begin(); it != mCodePoints.end(); ++it)
             {
                 if(&(*it) == inpIt)
                 {

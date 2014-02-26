@@ -399,7 +399,7 @@ namespace ChilliSource
             //Lets find out what we need already have in the manifest
 			else
             {
-                HASH_MAP<std::string, std::string> mapPackageIDToChecksum;
+                std::unordered_map<std::string, std::string> mapPackageIDToChecksum;
                 
                 //Store the data from the local manifest to make a comparison with the server manifest
                 if(pCurrentManifest->RootElement())
@@ -428,7 +428,7 @@ namespace ChilliSource
                     std::string strServerPackageChecksum = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pServerPackageEl, "Checksum", "");
 					std::string strMinVersionForPackage = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pServerPackageEl, "MinVersion", "");
                     
-                    HASH_MAP<std::string, std::string>::iterator it = mapPackageIDToChecksum.find(strServerPackageID);
+                    std::unordered_map<std::string, std::string>::iterator it = mapPackageIDToChecksum.find(strServerPackageID);
 				
                     //Based on the state of the file decide whether it needs updating
                     if(it != mapPackageIDToChecksum.end())
@@ -493,7 +493,7 @@ namespace ChilliSource
                 }
                
                 //Any packages left in the local manifest need to be removed
-                for(HASH_MAP<std::string, std::string>::iterator it = mapPackageIDToChecksum.begin(); it != mapPackageIDToChecksum.end(); ++it)
+                for(std::unordered_map<std::string, std::string>::iterator it = mapPackageIDToChecksum.begin(); it != mapPackageIDToChecksum.end(); ++it)
                 {
                     mRemovePackageIDs.push_back(it->first);
                 }

@@ -328,7 +328,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Animations
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::GetAnimations(DYNAMIC_ARRAY<SkinnedAnimationPtr>& outapSkinnedAnimationList)
+        void CAnimatedMeshComponent::GetAnimations(std::vector<SkinnedAnimationPtr>& outapSkinnedAnimationList)
         {
             if (nullptr != mActiveAnimationGroup)
             {
@@ -665,7 +665,7 @@ namespace ChilliSource
                     mspShadowMapMaterial = Core::CApplication::GetSystemImplementing<CMaterialFactory>()->CreateAnimatedDirectionalShadowMap();
                 }
                 
-                DYNAMIC_ARRAY<MaterialPtr> aMaterials;
+                std::vector<MaterialPtr> aMaterials;
                 mspShadowMapMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
                 aMaterials.push_back(mspShadowMapMaterial);
                 

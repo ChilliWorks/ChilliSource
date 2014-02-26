@@ -250,8 +250,8 @@ namespace ChilliSource
 
         private:
             
-            DYNAMIC_ARRAY<std::string> mRemovePackageIDs; 
-            DYNAMIC_ARRAY<PackageDetails> mPackageDetails;
+            std::vector<std::string> mRemovePackageIDs; 
+            std::vector<PackageDetails> mPackageDetails;
 			
 			u32	muRunningToDownloadTotal;
 			u32 muRunningDownloadedTotal;

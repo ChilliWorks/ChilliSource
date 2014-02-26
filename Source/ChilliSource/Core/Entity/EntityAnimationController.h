@@ -41,7 +41,7 @@ namespace ChilliSource
 			//----------------------------------------------
 			/// ReleaseAnimations
 			///
-			/// The controller will release all its shared_ptrs to EntityAnimations it created. Although EntityAnimations which
+			/// The controller will release all its std::shared_ptrs to EntityAnimations it created. Although EntityAnimations which
 			/// have been held elsewhere will still be valid they will no longer be updated automatically.
 			//----------------------------------------------
 			void ReleaseAnimations();
@@ -145,15 +145,15 @@ namespace ChilliSource
 			const EntityAnimationData* GetEntityAnimationDataWithName(const std::string & instrName) const;
 
 
-			HASH_MAP<std::string, EntityAnimationData>	mmapAnimDataToEntityName;
-			DYNAMIC_ARRAY<EntityAnimContext>			masPlayingAnimations;
+			std::unordered_map<std::string, EntityAnimationData>	mmapAnimDataToEntityName;
+			std::vector<EntityAnimContext>			masPlayingAnimations;
             CEvent1<EventAnimationCompletion>           mAnimationCompletionEvent;
             CEvent1<EventAnimationCompletion>           mAnimationLoopedEvent;
             
             bool mbPaused;
 		};
 		
-		typedef SHARED_PTR<CEntityAnimationController> EntityAnimationControllerPtr;
+		typedef std::shared_ptr<CEntityAnimationController> EntityAnimationControllerPtr;
 	}
 }
 

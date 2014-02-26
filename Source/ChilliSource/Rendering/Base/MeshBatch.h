@@ -112,7 +112,7 @@ namespace ChilliSource
 			IMeshBuffer* mpMeshBuffer;
 			
 			//List of sprites in the batch
-			typedef HASH_MAP<StaticMeshComponentPtr, Core::CMatrix4x4> MapMeshToTransform;
+			typedef std::unordered_map<StaticMeshComponentPtr, Core::CMatrix4x4> MapMeshToTransform;
 			MapMeshToTransform mmapMeshCache;
 		};
 	}

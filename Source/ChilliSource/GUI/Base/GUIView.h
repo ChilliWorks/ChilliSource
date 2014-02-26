@@ -56,7 +56,7 @@ namespace ChilliSource
 
 			DECLARE_META_CLASS(CGUIView)
 
-			typedef DYNAMIC_ARRAY<GUIViewPtr> Subviews;
+			typedef std::vector<GUIViewPtr> Subviews;
 
 			CGUIView();
 			CGUIView(const Core::ParamDictionary& insParams);
@@ -159,7 +159,7 @@ namespace ChilliSource
 			/// @param Name
 			/// @param out List of subviews in hierarchy with given name
 			//-----------------------------------------------------
-			void GetSubviewsWithName(const std::string& instrName, DYNAMIC_ARRAY<GUIViewPtr>& outSubviews) const;
+			void GetSubviewsWithName(const std::string& instrName, std::vector<GUIViewPtr>& outSubviews) const;
 			//-----------------------------------------------------
 			/// Bring Forward
 			///

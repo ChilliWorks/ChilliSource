@@ -97,7 +97,7 @@ namespace ChilliSource
             CParticleEmitterFactory mEmitterFactory;
             CParticleEffectorFactory mEffectorFactory;
 			f32 mfTimeScaleFactor;
-			DYNAMIC_ARRAY<CParticleComponent*> mParticleComponents;
+			std::vector<CParticleComponent*> mParticleComponents;
 		};
 	}
 }

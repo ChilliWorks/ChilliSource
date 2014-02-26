@@ -40,7 +40,7 @@ namespace ChilliSource
             /// @param Out: Notifications that meet criteria
             /// @return Whether any notifications exist within that time period
             //-------------------------------------------------------------------------
-            virtual bool TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, DYNAMIC_ARRAY<Notification>& outaNotifications) = 0;
+            virtual bool TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Notification>& outaNotifications) = 0;
             //-------------------------------------------------------------------------
             /// Cancel By ID
             ///

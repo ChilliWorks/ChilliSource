@@ -77,7 +77,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool CMoModelLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
-			MeshPtr pMesh = SHARED_PTR_CAST<CMesh>(outpResource);
+			MeshPtr pMesh = std::static_pointer_cast<CMesh>(outpResource);
 			
 			//get the path to the curent file
 			std::string filename, filepath;
@@ -105,7 +105,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool CMoModelLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
-			MeshPtr pMesh = SHARED_PTR_CAST<CMesh>(outpResource);
+			MeshPtr pMesh = std::static_pointer_cast<CMesh>(outpResource);
 			
 			//get the path to the curent file
 			std::string filename, filepath;
@@ -215,7 +215,7 @@ namespace ChilliSource
 			bool bSuccess = CMeshManager::BuildMesh(mpApp->GetRenderSystemPtr(), inMeshDescriptor, outpResource, inbNeedsPrepared);
 			
 			//cleanup
-			for (DYNAMIC_ARRAY<SubMeshDescriptor>::const_iterator it = inMeshDescriptor.mMeshes.begin(); it != inMeshDescriptor.mMeshes.end(); ++it)
+			for (std::vector<SubMeshDescriptor>::const_iterator it = inMeshDescriptor.mMeshes.begin(); it != inMeshDescriptor.mMeshes.end(); ++it)
 			{
 				delete[] it->mpVertexData;
 				delete[] it->mpIndexData;
@@ -365,7 +365,7 @@ namespace ChilliSource
                 inMeshDescriptor.mpSkeleton = SkeletonPtr(new CSkeleton());
                 
 				//read the skeleton nodes
-                HASH_MAP<u32, s32> jointToNodeMap;
+                std::unordered_map<u32, s32> jointToNodeMap;
 				for (u32 i = 0; i < inQuantities.mdwNumSkeletonNodes; i++)
 				{
                     //get the skeleton node name name

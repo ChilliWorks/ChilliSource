@@ -65,7 +65,7 @@ namespace ChilliSource
             //----------------------------------------------
             void DoTaskOrWait();
 
-            typedef DYNAMIC_ARRAY<std::thread> ThreadGroup;
+            typedef std::vector<std::thread> ThreadGroup;
             typedef WorkerQueue<GenericTaskType> TaskQueue;
 
             ThreadGroup m_threadGroup;

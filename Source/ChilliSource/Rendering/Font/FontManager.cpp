@@ -117,7 +117,7 @@ namespace ChilliSource
                         
 						mMapFilenameToResource.insert(std::make_pair(strFontFile, pResource));
 						
-						FontPtr pFont = SHARED_PTR_CAST<CFont>(pResource);
+						FontPtr pFont = std::static_pointer_cast<CFont>(pResource);
 						pFont->SetName(strFontFile);
 						pFont->SetOwningResourceManager(this);
 						pFont->SetLoaded(true);
@@ -135,7 +135,7 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				return SHARED_PTR_CAST<CFont>(pExistingResource->second);
+				return std::static_pointer_cast<CFont>(pExistingResource->second);
 			}
 			
 			//Resource not found

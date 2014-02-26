@@ -412,7 +412,7 @@ namespace ChilliSource
         ///
         /// @return all States
         //---------------------------------------------------------
-        const DYNAMIC_ARRAY<StatePtr>& CStateManager::GetStates() const
+        const std::vector<StatePtr>& CStateManager::GetStates() const
         {
             return mStateHierarchy;
         }
@@ -441,7 +441,7 @@ namespace ChilliSource
         {
             u32 udwCount = 0;
             
-            for (DYNAMIC_ARRAY<StatePtr>::const_iterator it = mStateHierarchy.begin(); it != mStateHierarchy.end(); ++it)
+            for (std::vector<StatePtr>::const_iterator it = mStateHierarchy.begin(); it != mStateHierarchy.end(); ++it)
             {
                 if ((*it).get() == inpState)
                 {
@@ -460,7 +460,7 @@ namespace ChilliSource
         {
             bool bIsActive = false;
             
-            for (DYNAMIC_ARRAY<StatePtr>::const_iterator it = mStateHierarchy.begin(); it != mStateHierarchy.end(); ++it)
+            for (std::vector<StatePtr>::const_iterator it = mStateHierarchy.begin(); it != mStateHierarchy.end(); ++it)
             {
                 if ((*it).get() == inpState)
                 {

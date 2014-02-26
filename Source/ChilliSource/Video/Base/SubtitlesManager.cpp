@@ -76,7 +76,7 @@ namespace ChilliSource
 						DEBUG_LOG("Loading Subtitles " + inFilePath);
 						mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
 						
-						SubtitlesPtr pSubtitles = SHARED_PTR_CAST<CSubtitles>(pResource);
+						SubtitlesPtr pSubtitles = std::static_pointer_cast<CSubtitles>(pResource);
 						pSubtitles->SetName(inFilePath);
 						pSubtitles->SetOwningResourceManager(this);
 						pSubtitles->SetFilename(inFilePath);
@@ -88,7 +88,7 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				return SHARED_PTR_CAST<CSubtitles>(pExistingResource->second);
+				return std::static_pointer_cast<CSubtitles>(pExistingResource->second);
 			}
 			
 			ERROR_LOG("Cannot find resource for Subtitles with path " + inFilePath);
@@ -106,7 +106,7 @@ namespace ChilliSource
 				Core::ResourcePtr pResource(new CSubtitles());
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
-					SubtitlesPtr pSubtitles = SHARED_PTR_CAST<CSubtitles>(pResource);
+					SubtitlesPtr pSubtitles = std::static_pointer_cast<CSubtitles>(pResource);
 					pSubtitles->SetName(inFilePath);
 					pSubtitles->SetFilename(inFilePath);
 					pSubtitles->SetStorageLocation(ineStorageLocation);
@@ -123,7 +123,7 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				return SHARED_PTR_CAST<CSubtitles>(pExistingResource->second);
+				return std::static_pointer_cast<CSubtitles>(pExistingResource->second);
 			}
 			
 			ERROR_LOG("Cannot find resource for Subtitles with path " + inFilePath);

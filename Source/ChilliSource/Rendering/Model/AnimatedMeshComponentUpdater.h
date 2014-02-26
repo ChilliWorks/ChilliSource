@@ -61,7 +61,7 @@ namespace ChilliSource
 			//------------------------------------------------
 			void RemoveComponent(CAnimatedMeshComponent* inpAnimatedMesh);
         private:
-            DYNAMIC_ARRAY<CAnimatedMeshComponent*> mapComponentsToUpdate;
+            std::vector<CAnimatedMeshComponent*> mapComponentsToUpdate;
         };
     }
 }

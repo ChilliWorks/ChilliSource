@@ -63,7 +63,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool CMoAnimLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
-			SkinnedAnimationPtr pAnim = SHARED_PTR_CAST<CSkinnedAnimation>(outpResource);
+			SkinnedAnimationPtr pAnim = std::static_pointer_cast<CSkinnedAnimation>(outpResource);
 			
 			return CreateSkinnedAnimationFromFile(ineStorageLocation, inFilePath, pAnim);
 		}
@@ -72,7 +72,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool CMoAnimLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
-			SkinnedAnimationPtr pAnim = SHARED_PTR_CAST<CSkinnedAnimation>(outpResource);
+			SkinnedAnimationPtr pAnim = std::static_pointer_cast<CSkinnedAnimation>(outpResource);
 			
 			//Load model as task
 			Core::Task<Core::StorageLocation, const std::string&, const SkinnedAnimationPtr&> AnimTask(this, &CMoAnimLoader::ReadAnimationTask,ineStorageLocation, inFilePath, pAnim);

@@ -10,6 +10,7 @@
 #define _MOFLO_PLATFORM_IOS_GAMECENTREDELEGATES_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
 #import <Foundation/Foundation.h>

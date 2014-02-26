@@ -12,6 +12,8 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Reflection/ForwardDeclarations.h>
 
+#include <vector>
+
 namespace ChilliSource
 {
     namespace Core
@@ -50,11 +52,11 @@ namespace ChilliSource
                 ///
                 /// @return Array of meta classes
                 //------------------------------------------------------------
-                static const DYNAMIC_ARRAY<CMetaClass*>& GetClasses();
+                static const std::vector<CMetaClass*>& GetClasses();
                 
             private:
                 
-                static DYNAMIC_ARRAY<CMetaClass*> MetaClasses;
+                static std::vector<CMetaClass*> MetaClasses;
             };
         }
     }

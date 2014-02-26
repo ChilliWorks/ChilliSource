@@ -10,9 +10,10 @@
 #define MOFLOW_INPUT_ACCELEROMETER_H
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Input/Base/InputDevice.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
+#include <ChilliSource/Input/Base/InputDevice.h>
 
 namespace ChilliSource
 {

@@ -25,9 +25,9 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		struct SkinnedAnimationFrame
 		{
-			DYNAMIC_ARRAY<Core::CVector3> mNodeTranslations;
-			DYNAMIC_ARRAY<Core::CQuaternion> mNodeOrientations;
-            DYNAMIC_ARRAY<Core::CVector3> mNodeScalings;
+			std::vector<Core::CVector3> mNodeTranslations;
+			std::vector<Core::CQuaternion> mNodeOrientations;
+            std::vector<Core::CVector3> mNodeScalings;
 		};
 		//---------------------------------------------------------------------
 		/// Skeletal Animation Resource.
@@ -95,7 +95,7 @@ namespace ChilliSource
 		private:
 			
 			f32 mfFrameTime;
-			DYNAMIC_ARRAY<SkinnedAnimationFramePtr> mFrames;
+			std::vector<SkinnedAnimationFramePtr> mFrames;
 		};
 	}
 }

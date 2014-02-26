@@ -16,8 +16,8 @@ namespace ChilliSource
         class CSubtitlesManager;
         class CMoSubtitlesLoader;
         
-        typedef SHARED_PTR<CSubtitles> SubtitlesPtr;
-        typedef SHARED_PTR<CSubtitlesManager> SubtitlesManagerPtr;
-        typedef SHARED_PTR<CMoSubtitlesLoader> MoSubtitlesLoaderPtr;
+        typedef std::shared_ptr<CSubtitles> SubtitlesPtr;
+        typedef std::shared_ptr<CSubtitlesManager> SubtitlesManagerPtr;
+        typedef std::shared_ptr<CMoSubtitlesLoader> MoSubtitlesLoaderPtr;
     }
 }

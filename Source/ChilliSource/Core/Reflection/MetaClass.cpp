@@ -105,7 +105,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             void CMetaClass::RemoveInstance(CInstance* inpInstance)
             {
-                for(DYNAMIC_ARRAY<CInstance*>::iterator it = mInstances.begin(); it != mInstances.end(); ++it)
+                for(std::vector<CInstance*>::iterator it = mInstances.begin(); it != mInstances.end(); ++it)
                 {
                     if(inpInstance == (*it))
                     {
@@ -119,7 +119,7 @@ namespace ChilliSource
             ///
             /// @param Vector of properties for this meta-class
             //--------------------------------------------------------
-            const DYNAMIC_ARRAY<CProperty*>& CMetaClass::GetProperties() const
+            const std::vector<CProperty*>& CMetaClass::GetProperties() const
             {
                 return mProperties;
             }
@@ -134,7 +134,7 @@ namespace ChilliSource
             {
                 u32 udwNameHash = CHashCRC32::GenerateHashCode(instrPropName);
                 
-                for(DYNAMIC_ARRAY<CProperty*>::const_iterator it = mProperties.begin(); it != mProperties.end(); ++it)
+                for(std::vector<CProperty*>::const_iterator it = mProperties.begin(); it != mProperties.end(); ++it)
                 {
                     if(udwNameHash == (*it)->GetNameHash())
                     {
@@ -155,7 +155,7 @@ namespace ChilliSource
             {
                 u32 udwNameHash = CHashCRC32::GenerateHashCode(instrName);
                 
-                for(DYNAMIC_ARRAY<CInstance*>::const_iterator it = mInstances.begin(); it != mInstances.end(); ++it)
+                for(std::vector<CInstance*>::const_iterator it = mInstances.begin(); it != mInstances.end(); ++it)
                 {
                     if(udwNameHash == (*it)->GetNameHash())
                     {
@@ -174,7 +174,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             CInstance* CMetaClass::GetInstance(void* inpInstance) const
             {
-                for(DYNAMIC_ARRAY<CInstance*>::const_iterator it = mInstances.begin(); it != mInstances.end(); ++it)
+                for(std::vector<CInstance*>::const_iterator it = mInstances.begin(); it != mInstances.end(); ++it)
                 {
                     if(inpInstance == (*it)->GetInstance())
                     {
@@ -236,11 +236,11 @@ namespace ChilliSource
             //--------------------------------------------------------
             CMetaClass::~CMetaClass()
             {
-                for(DYNAMIC_ARRAY<CProperty*>::iterator it = mProperties.begin(); it != mProperties.end(); ++it)
+                for(std::vector<CProperty*>::iterator it = mProperties.begin(); it != mProperties.end(); ++it)
                 {
                     delete (*it);
                 }
-                for(DYNAMIC_ARRAY<CInstance*>::iterator it = mInstances.begin(); it != mInstances.end(); ++it)
+                for(std::vector<CInstance*>::iterator it = mInstances.begin(); it != mInstances.end(); ++it)
                 {
                     delete (*it);
                 }

@@ -151,7 +151,7 @@ namespace ChilliSource
 			///
 			/// @param Dynamic array of joint matrices.
 			//----------------------------------------------------------
-            void ApplyJoints(const DYNAMIC_ARRAY<Core::CMatrix4x4>& inaJoints);
+            void ApplyJoints(const std::vector<Core::CMatrix4x4>& inaJoints);
 			//----------------------------------------------------------
 			/// Create Render Target
 			///
@@ -569,7 +569,7 @@ namespace ChilliSource
 #ifdef TARGET_OS_IPHONE
             EAGLContext* mContext;
 #elif defined TARGET_ANDROID
-            DYNAMIC_ARRAY<CMeshBuffer*> mMeshBuffers;
+            std::vector<CMeshBuffer*> mMeshBuffers;
 #endif
 		};
 	}

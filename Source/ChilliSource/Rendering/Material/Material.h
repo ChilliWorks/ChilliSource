@@ -17,17 +17,19 @@
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 
+#include <unordered_map>
+
 namespace ChilliSource
 {
 	namespace Rendering
 	{
-		typedef HASH_MAP<std::string, f32> MapStringToFloat;
-		typedef HASH_MAP<std::string, Core::CVector2> MapStringToVec2;
-		typedef HASH_MAP<std::string, Core::CVector3> MapStringToVec3;
-		typedef HASH_MAP<std::string, Core::CVector4> MapStringToVec4;
-		typedef HASH_MAP<std::string, Core::CMatrix4x4> MapStringToMat4;
-		typedef HASH_MAP<std::string, DYNAMIC_ARRAY<Core::CMatrix4x4> > MapStringToMat4Array;
-		typedef HASH_MAP<std::string, Core::CColour> MapStringToCol;
+		typedef std::unordered_map<std::string, f32> MapStringToFloat;
+		typedef std::unordered_map<std::string, Core::CVector2> MapStringToVec2;
+		typedef std::unordered_map<std::string, Core::CVector3> MapStringToVec3;
+		typedef std::unordered_map<std::string, Core::CVector4> MapStringToVec4;
+		typedef std::unordered_map<std::string, Core::CMatrix4x4> MapStringToMat4;
+		typedef std::unordered_map<std::string, std::vector<Core::CMatrix4x4> > MapStringToMat4Array;
+		typedef std::unordered_map<std::string, Core::CColour> MapStringToCol;
         
         //============================================
 		/// Alpha Blend
@@ -146,7 +148,7 @@ namespace ChilliSource
 			///
 			/// @return Texture array
 			//----------------------------------------------------------
-			const DYNAMIC_ARRAY<TexturePtr>& GetTextures() const;
+			const std::vector<TexturePtr>& GetTextures() const;
             //----------------------------------------------------------
 			/// Set Cubemap
 			///
@@ -393,7 +395,7 @@ namespace ChilliSource
 			/// @param Variable name
 			/// @param Matrix data
 			//-----------------------------------------------------------
-			void SetShaderMatrixArrayValue(const std::string& instrVarName, const DYNAMIC_ARRAY<Core::CMatrix4x4>& inmatValue);
+			void SetShaderMatrixArrayValue(const std::string& instrVarName, const std::vector<Core::CMatrix4x4>& inmatValue);
 			//-----------------------------------------------------------
 			/// Set Shader Colour Value
 			///
@@ -433,7 +435,7 @@ namespace ChilliSource
 
 		private:
             
-            DYNAMIC_ARRAY<TexturePtr> mTextures;
+            std::vector<TexturePtr> mTextures;
             
             CubemapPtr mpCubemap;
             

@@ -115,7 +115,7 @@ namespace ChilliSource
                 std::string strToken;
                 std::string strTokenSecret;
             };
-			typedef fastdelegate::FastDelegate3<CMoConnectSystem*, SignInResult, const DYNAMIC_ARRAY<SignedInUser>& > SignInDelegate;
+			typedef fastdelegate::FastDelegate3<CMoConnectSystem*, SignInResult, const std::vector<SignedInUser>& > SignInDelegate;
 			//-----------------------------------------------------------
 			/// Sign In Via Email
 			///
@@ -277,7 +277,7 @@ namespace ChilliSource
             std::string mstrOAuthTokenSecret;
 			
 			bool mbHasLoadedLoginTypes;
-			DYNAMIC_ARRAY<std::string> mastrCurrentAccountLogins;
+			std::vector<std::string> mastrCurrentAccountLogins;
 			HttpRequestPtr mpPendingLoginsRequest;
             
 			Core::CEvent1<EventDelegate> mSignedInUserChangesEvent;
@@ -302,7 +302,7 @@ namespace ChilliSource
             RequestInfo* FindRequestWithHttpRequest(HttpRequestPtr inpHttp);
                 
             bool mbNoRemoveFulfilledRequests;
-            DYNAMIC_ARRAY<RequestInfo> masOpenRequests;
+            std::vector<RequestInfo> masOpenRequests;
             u32 mudwRequestIDSeed;
             
         };

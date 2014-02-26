@@ -37,7 +37,7 @@ namespace ChilliSource
             
 		protected:
 			
-			typedef HASH_MAP<UITouch*, size_t> MapNativeTouchToID;
+			typedef std::unordered_map<UITouch*, size_t> MapNativeTouchToID;
 			MapNativeTouchToID mMapNativeTouchesToID;
             
             f32 mfScale;

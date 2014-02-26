@@ -28,8 +28,8 @@
     CADisplayLink* mpDisplayLink;
     ChilliSource::Video::SubtitlesPtr mpSubtitles;
     ChilliSource::iOS::CVideoPlayerActivity* mpVideoPlayer;
-    HASH_MAP<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*> maTextViewMap;
-    DYNAMIC_ARRAY<ChilliSource::Video::CSubtitles::SubtitlePtr> maSubtitlesToRemove;
+    std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*> maTextViewMap;
+    std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr> maSubtitlesToRemove;
     TimeIntervalMs mCurrentTimeMS;
 }
 //--------------------------------------------------------

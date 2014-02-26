@@ -107,7 +107,7 @@ namespace ChilliSource
 				{
 					//Add it to the cache
 					DEBUG_LOG("Streaming sound " + inFilePath);
-					AudioResourcePtr pAudio = SHARED_PTR_CAST<IAudioResource>(pResource);
+					AudioResourcePtr pAudio = std::static_pointer_cast<IAudioResource>(pResource);
 					pAudio->SetName(inFilePath);
 					pAudio->SetOwningResourceManager(this);
 					pAudio->SetLoaded(true);
@@ -144,7 +144,7 @@ namespace ChilliSource
 						//Add it to the cache
 						DEBUG_LOG("Loading sound " + inFilePath);
 						
-						AudioResourcePtr pAudio = SHARED_PTR_CAST<IAudioResource>(pResource);
+						AudioResourcePtr pAudio = std::static_pointer_cast<IAudioResource>(pResource);
 						mMapFileNamesToSoundEffect.insert(std::make_pair(inFilePath, pAudio));
 						pAudio->SetName(inFilePath);
 						pAudio->SetOwningResourceManager(this);
@@ -187,7 +187,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		void IAudioManager::Destroy(const Core::ResourcePtr& inpSoundEffect)
 		{
-			AudioResourcePtr pSound = SHARED_PTR_CAST<IAudioResource>(inpSoundEffect);
+			AudioResourcePtr pSound = std::static_pointer_cast<IAudioResource>(inpSoundEffect);
 			for(MapStringToSoundEffectPtrItr it = mMapFileNamesToSoundEffect.begin(); it != mMapFileNamesToSoundEffect.end(); ++it)
 			{
 				if(it->second == pSound)

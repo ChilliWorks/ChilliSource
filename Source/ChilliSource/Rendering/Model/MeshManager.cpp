@@ -126,14 +126,14 @@ namespace ChilliSource
 							pResource->SetOwningResourceManager(static_cast<Core::IResourceManager*>(this));
 							pResource->SetLoaded(true);
 							
-							return SHARED_PTR_CAST<CMesh>(pResource);
+							return std::static_pointer_cast<CMesh>(pResource);
 						}
 					}
 				}
 			} 
 			else 
 			{
-				return SHARED_PTR_CAST<CMesh>(pExistingResource->second);
+				return std::static_pointer_cast<CMesh>(pExistingResource->second);
 			}
 			
 			//Resource not found
@@ -179,14 +179,14 @@ namespace ChilliSource
 						{
 							//Add it to the cache
 							mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
-							return SHARED_PTR_CAST<CMesh>(pResource);
+							return std::static_pointer_cast<CMesh>(pResource);
 						}
 					}
 				}
 			} 
 			else 
 			{
-				return SHARED_PTR_CAST<CMesh>(pExistingResource->second);
+				return std::static_pointer_cast<CMesh>(pExistingResource->second);
 			}
 			
 			//Resource not found
@@ -247,7 +247,7 @@ namespace ChilliSource
 			
 			//iterate through each mesh
 			int count = 0;
-			for (DYNAMIC_ARRAY<SubMeshDescriptor>::const_iterator it = inMeshDescriptor.mMeshes.begin(); it != inMeshDescriptor.mMeshes.end(); ++it)
+			for (std::vector<SubMeshDescriptor>::const_iterator it = inMeshDescriptor.mMeshes.begin(); it != inMeshDescriptor.mMeshes.end(); ++it)
 			{
 				//caclulate the mesh capacities
 				u32 udwVertexDataCapacity = it->mudwNumVertices * inMeshDescriptor.mVertexDeclaration.GetTotalSize(); 

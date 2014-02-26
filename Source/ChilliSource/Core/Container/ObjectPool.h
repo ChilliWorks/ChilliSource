@@ -20,8 +20,8 @@ namespace ChilliSource
     {
         template <typename T> class CObjectPool
         {
-            typedef DYNAMIC_ARRAY<T*> Pool;
-            typedef SHARED_PTR<T> ObjectSharedPtr;
+            typedef std::vector<T*> Pool;
+            typedef std::shared_ptr<T> ObjectSharedPtr;
             typedef T* ObjectPtr;
             
         public:

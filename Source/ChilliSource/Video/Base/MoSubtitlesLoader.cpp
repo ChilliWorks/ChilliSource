@@ -90,7 +90,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		bool CMoSubtitlesLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
-            SubtitlesPtr pSubtitles = SHARED_PTR_CAST<CSubtitles>(outpResource);
+            SubtitlesPtr pSubtitles = std::static_pointer_cast<CSubtitles>(outpResource);
             
             return LoadMoSubtitles(ineStorageLocation, inFilePath, pSubtitles);
 		}
@@ -99,7 +99,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		bool CMoSubtitlesLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
-			SubtitlesPtr pSubtitles = SHARED_PTR_CAST<CSubtitles>(outpResource);
+			SubtitlesPtr pSubtitles = std::static_pointer_cast<CSubtitles>(outpResource);
 			
 			//Load model as task
             Core::Task<Core::StorageLocation, const std::string&, SubtitlesPtr&> task(this, &CMoSubtitlesLoader::LoadMoSubtitlesTask,ineStorageLocation, inFilePath, pSubtitles);

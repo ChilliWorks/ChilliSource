@@ -46,7 +46,7 @@ namespace ChilliSource
         ///
         /// @param Sprite array
 		//------------------------------------------------------
-		void CSpriteBatch::Build(DYNAMIC_ARRAY<CSpriteComponent::SpriteData>* inpSprites)
+		void CSpriteBatch::Build(std::vector<CSpriteComponent::SpriteData>* inpSprites)
 		{
 			//Sanity check
 			if(!mpSpriteBuffer) return;
@@ -65,7 +65,7 @@ namespace ChilliSource
 			u32 VertIdx = 0;
 									
 			//The vertex data depends on the sprite vertex layout.
-			for(DYNAMIC_ARRAY<CSpriteComponent::SpriteData>::iterator pSpriteItr = inpSprites->begin(); pSpriteItr != inpSprites->end(); ++pSpriteItr)
+			for(std::vector<CSpriteComponent::SpriteData>::iterator pSpriteItr = inpSprites->begin(); pSpriteItr != inpSprites->end(); ++pSpriteItr)
 			{
 				MapSpriteIntoBuffer(&pVBuffer[VertIdx], (*pSpriteItr));
 				VertIdx+=4;

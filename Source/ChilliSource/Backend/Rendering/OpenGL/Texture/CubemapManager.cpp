@@ -34,9 +34,9 @@ namespace ChilliSource
 		/// @param Out: Cubemap resource
 		/// @return Success
 		//----------------------------------------------------------------
-		bool CCubemapManager::CreateCubemapFromImages(const DYNAMIC_ARRAY<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapPtr& outpCubemap)
+		bool CCubemapManager::CreateCubemapFromImages(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapPtr& outpCubemap)
 		{
-			SHARED_PTR_CAST<CCubemap>(outpCubemap)->Init(inaImages, inbWithMipsMaps);
+			std::static_pointer_cast<CCubemap>(outpCubemap)->Init(inaImages, inbWithMipsMaps);
 			return true;
 		}
 		//----------------------------------------------------------------
@@ -47,18 +47,18 @@ namespace ChilliSource
 		void CCubemapManager::Restore()
 		{
 #ifdef TARGET_ANDROID
-			for(DYNAMIC_ARRAY<Rendering::CubemapWeakPtr>::iterator it = mapCubemapCache.begin(); it != mapCubemapCache.end(); ++it)
+			for(std::vector<Rendering::CubemapWeakPtr>::iterator it = mapCubemapCache.begin(); it != mapCubemapCache.end(); ++it)
 			{
 				if (Rendering::CubemapPtr pCubemap = (*it).lock())
 				{
 					if(pCubemap->IsLoaded())
 					{
-						SHARED_PTR<CCubemap> pOpenGLCubemap = SHARED_PTR_CAST<CCubemap>(pCubemap);
+						std::shared_ptr<CCubemap> pOpenGLCubemap = std::static_pointer_cast<CCubemap>(pCubemap);
                         
                         //If the Cubemap was loaded from file then reload it.
                         if(pOpenGLCubemap->GetFilename() != "" && pOpenGLCubemap->GetStorageLocation() != Core::SL_NONE)
                         {
-                            DYNAMIC_ARRAY<Core::ResourcePtr> aImages;
+                            std::vector<Core::ResourcePtr> aImages;
                             aImages.reserve(6);
                             
                             std::string strPath;
@@ -129,7 +129,7 @@ namespace ChilliSource
 		void CCubemapManager::RemoveRestorableCubemap(CCubemap* inpCubemap)
 		{
 #ifdef TARGET_ANDROID
-			for(DYNAMIC_ARRAY<Rendering::CubemapWeakPtr>::iterator it = mapCubemapCache.begin(); it != mapCubemapCache.end(); ++it)
+			for(std::vector<Rendering::CubemapWeakPtr>::iterator it = mapCubemapCache.begin(); it != mapCubemapCache.end(); ++it)
 			{
 				if (Rendering::CubemapPtr pCubemap = (*it).lock())
 				{

@@ -13,6 +13,8 @@
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
+#include <unordered_map>
+
 namespace ChilliSource
 {
     namespace Rendering
@@ -47,7 +49,7 @@ namespace ChilliSource
             
         private:
             
-            typedef HASH_MAP<std::string, EmitterCreateDelegate> MapDelegateToString;
+            typedef std::unordered_map<std::string, EmitterCreateDelegate> MapDelegateToString;
             MapDelegateToString mmapDelegateToType;
         };
     }

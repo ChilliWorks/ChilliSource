@@ -156,8 +156,8 @@ namespace ChilliSource
             f32 mfProgressAbsHeight, mfProgressRelHeight;
 		};
 
-		typedef SHARED_PTR<CHorizontalProgressBar> HorizontalProgressBarPtr;
-		typedef WEAK_PTR<CHorizontalProgressBar> HorizontalProgressBarWeakPtr;
+		typedef std::shared_ptr<CHorizontalProgressBar> HorizontalProgressBarPtr;
+		typedef std::weak_ptr<CHorizontalProgressBar> HorizontalProgressBarWeakPtr;
 	}
 }
 

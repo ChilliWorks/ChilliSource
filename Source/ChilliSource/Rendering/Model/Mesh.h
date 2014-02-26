@@ -100,7 +100,7 @@ namespace ChilliSource
 			/// @param World transform matrix
 			/// @param The array of materials.
 			//-----------------------------------------------------------------
-			void Render(IRenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const DYNAMIC_ARRAY<MaterialPtr>& inMaterials, 
+			void Render(IRenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const std::vector<MaterialPtr>& inMaterials, 
                         const SkinnedAnimationGroupPtr& inpAnimationGroup = SkinnedAnimationGroupPtr()) const;
 		private:
 			//Only the mesh loader can create this
@@ -147,7 +147,7 @@ namespace ChilliSource
 			friend class CMeshBatch;
 		private:
 			
-			DYNAMIC_ARRAY<SubMeshPtr> mSubMeshes;
+			std::vector<SubMeshPtr> mSubMeshes;
 			SkeletonPtr mpSkeleton;
 			
 			Core::AABB mBoundingBox;

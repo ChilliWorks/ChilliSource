@@ -330,7 +330,7 @@ namespace ChilliSource
                 mspShadowMapMaterial = Core::CApplication::GetSystemImplementing<CMaterialFactory>()->CreateStaticDirectionalShadowMap();
             }
             
-            DYNAMIC_ARRAY<MaterialPtr> aMaterials;
+            std::vector<MaterialPtr> aMaterials;
             mspShadowMapMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             aMaterials.push_back(mspShadowMapMaterial);
             

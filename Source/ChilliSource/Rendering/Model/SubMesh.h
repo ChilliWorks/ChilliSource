@@ -29,9 +29,9 @@ namespace ChilliSource
 		//===============================================
 		struct InverseBindPose
 		{
-			DYNAMIC_ARRAY<ChilliSource::Core::CMatrix4x4> mInverseBindPoseMatrices;
+			std::vector<ChilliSource::Core::CMatrix4x4> mInverseBindPoseMatrices;
 		};
-		typedef SHARED_PTR<InverseBindPose> InverseBindPosePtr;
+		typedef std::shared_ptr<InverseBindPose> InverseBindPosePtr;
 		
 		class CSubMesh
 		{
