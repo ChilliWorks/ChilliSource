@@ -38,6 +38,7 @@ namespace ChilliSource
             if(inParams.TryGetValue("Frequency", strTemp))
             {
                 mfEmissionFreq = Core::CStringConverter::ParseFloat(strTemp);
+                MOFLOW_ASSERT(mfEmissionFreq > 0.0f, "Frequency cannot be zero or less");
                 mfCurrentTime = mfEmissionFreq;
             }
             //Looping
