@@ -36,25 +36,25 @@ namespace ChilliSource
 			/// @param The interface to compare
 			/// @return Whether the object implements that interface
 			//----------------------------------------------------------------
-			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//----------------------------------------------------------------
 			/// Get Resource Type
 			///
 			/// @return The type of resource this manager handles
 			//----------------------------------------------------------------
-			virtual Core::InterfaceIDType GetResourceType() const;
+			virtual Core::InterfaceIDType GetResourceType() const override;
 			//----------------------------------------------------------------
 			/// Get Provider Type
 			///
 			/// @return The type of resource it consumes from resource provider
 			//----------------------------------------------------------------
-			virtual Core::InterfaceIDType GetProviderType() const; 
+			virtual Core::InterfaceIDType GetProviderType() const override;
 		    //----------------------------------------------------------------
 		    /// Manages Resource Of Type
 		    ///
 		    /// @return Whether this object manages the object of type
 		    //----------------------------------------------------------------
-			virtual bool ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const;
+			virtual bool ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const override;
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///
@@ -63,7 +63,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//----------------------------------------------------------------
 			/// Get Sound From File
 			///

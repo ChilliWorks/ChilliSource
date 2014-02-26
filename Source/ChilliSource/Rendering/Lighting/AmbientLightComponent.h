@@ -29,13 +29,13 @@ namespace ChilliSource
 			/// @param Comparison Type
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
             //----------------------------------------------------------
             /// Get Light Matrix
             ///
             /// @return Light transform
             //----------------------------------------------------------
-            const Core::CMatrix4x4& GetLightMatrix() const;
+            const Core::CMatrix4x4& GetLightMatrix() const override;
 		};
     }
 }

@@ -51,7 +51,7 @@ namespace ChilliSource
             /// @param Interface ID to compare
             /// @return Whether system is of that type
             //-----------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
             //-----------------------------------------------------------
             /// Check For Updates
             ///

@@ -36,7 +36,7 @@ namespace ChilliSource
 			/// @param Comparison Type
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
             //----------------------------------------------------------
 			/// Set Shadow Volume
 			///
@@ -70,21 +70,21 @@ namespace ChilliSource
             ///
             /// @return Matrix to transform into light space
             //----------------------------------------------------------
-            const Core::CMatrix4x4& GetLightMatrix() const;
+            const Core::CMatrix4x4& GetLightMatrix() const override;
             //----------------------------------------------------
 			/// On Attached To Entity
 			///
 			/// Triggered when the component is attached to
 			/// an entity
 			//----------------------------------------------------
-            void OnAttachedToEntity();
+            void OnAttachedToEntity() override;
 			//----------------------------------------------------
 			/// On Detached From Entity
 			///
 			/// Triggered when the component is removed from
 			/// an entity
 			//----------------------------------------------------
-            void OnDetachedFromEntity();
+            void OnDetachedFromEntity() override;
             //----------------------------------------------------
             /// On Entity Transform Changed
             ///

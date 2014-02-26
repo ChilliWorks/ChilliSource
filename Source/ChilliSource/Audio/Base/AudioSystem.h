@@ -45,7 +45,7 @@ namespace ChilliSource
 			///
 			/// @return Whether this object is of given type
 			//-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//-------------------------------------------------------
 			/// Create Sound
 			///
@@ -165,19 +165,19 @@ namespace ChilliSource
 			///
 			/// @return Number of factories in this system
 			//----------------------------------------------------
-			u32 GetNumComponentFactories() const;
+			u32 GetNumComponentFactories() const override;
 			//-------------------------------------------------------
 			/// Get Component Factory Pointer
 			///
 			/// @return Audio component factory pointer
 			//-------------------------------------------------------
-			Core::IComponentFactory* GetComponentFactoryPtr(u32 inudwIndex);
+			Core::IComponentFactory* GetComponentFactoryPtr(u32 inudwIndex) override;
 			//-------------------------------------------------------
 			/// Get Component Factory
 			///
 			/// @return Audio component factory
 			//-------------------------------------------------------
-			Core::IComponentFactory& GetComponentFactory(u32 inudwIndex);
+			Core::IComponentFactory& GetComponentFactory(u32 inudwIndex) override;
 			
 		protected:
 			

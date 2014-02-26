@@ -36,7 +36,7 @@ namespace ChilliSource
 			///
 			/// @return Whether this object is of given type
 			//----------------------------------------------------
-            bool IsA(Core::InterfaceIDType inInterfaceID) const;
+            bool IsA(Core::InterfaceIDType inInterfaceID) const override;
             //-------------------------------------------------------
             /// Supported By Device
             ///
@@ -51,31 +51,31 @@ namespace ChilliSource
 			/// @return whether or not the accelerometer is
             /// currently updating.
 			//----------------------------------------------------
-			bool IsUpdating() const;
+			bool IsUpdating() const override;;
 			//----------------------------------------------------
 			/// Start Updating
 			///
 			/// Start listening for accelerometer changes.
 			//----------------------------------------------------
-			void StartUpdating();
+			void StartUpdating() override;;
             //----------------------------------------------------
             /// Update
             ///
             /// @param Time since last update
             //----------------------------------------------------
-            void Update(f32 infDT);
+            void Update(f32 infDT) override;;
 			//----------------------------------------------------
 			/// Get Acceleration
 			///
 			/// @return The acceleration in Gs.
 			//----------------------------------------------------
-			const Core::CVector3& GetAcceleration() const;
+			const Core::CVector3& GetAcceleration() const override;;
 			//----------------------------------------------------
 			/// Stop Updating
 			///
 			/// Stop listening for accelerometer changes.
 			//----------------------------------------------------
-			void StopUpdating();
+			void StopUpdating() override;;
 			//----------------------------------------------------
 			/// Destructor
 			//----------------------------------------------------

@@ -35,25 +35,25 @@ namespace ChilliSource
 			/// @param The interface to compare
 			/// @return Whether the object implements that interface
 			//----------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//----------------------------------------------------------------
 			/// Get Resource Type
 			///
 			/// @return The type of resource this manager handles
 			//----------------------------------------------------------------
-			Core::InterfaceIDType GetResourceType() const;
+			Core::InterfaceIDType GetResourceType() const override;
 			//----------------------------------------------------------------
 			/// Get Provider Type
 			///
 			/// @return The type of resource it consumes from resource provider
 			//----------------------------------------------------------------
-			Core::InterfaceIDType GetProviderType() const; 
+			Core::InterfaceIDType GetProviderType() const override;
 			//----------------------------------------------------------------
 			/// Manages Resource Of Type
 			///
 			/// @return Whether this object manages the object of type
 			//----------------------------------------------------------------
-			bool ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const;
+			bool ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const override;
 			//----------------------------------------------------------------
 			/// Get Font From File
 			///
@@ -75,7 +75,7 @@ namespace ChilliSource
             /// @param The storage location to load from
 			/// @param File name
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			
 		private:
 			
