@@ -126,7 +126,7 @@ namespace ChilliSource
 			///
 			/// @return Whether this object is of given type
 			//---------------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
             //-------------------------------------------
             /// Set Texture
             ///

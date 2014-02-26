@@ -47,7 +47,7 @@ namespace ChilliSource
 			/// @param Comparison Type
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			bool IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const override;
 			//----------------------------------------------------------
 			/// Init
 			///
@@ -57,7 +57,7 @@ namespace ChilliSource
             /// @param Height
             /// @return Success
 			//----------------------------------------------------------
-			bool Init(u32 inudwWidth, u32 inudwHeight);
+			bool Init(u32 inudwWidth, u32 inudwHeight) override;
             //----------------------------------------------------------
             /// Resume
             ///
@@ -65,14 +65,14 @@ namespace ChilliSource
             /// Something may have stole our context so we need to
             /// check and bind it
             //----------------------------------------------------------
-            void Resume();
+            void Resume() override;
             //----------------------------------------------------------
 			/// Suspend
 			///
 			/// Called when the app suspends. This can be used to prepare
 			/// For re-setting up the context in resume.
 			//----------------------------------------------------------
-			void Suspend();
+			void Suspend() override;
             //----------------------------------------------------------
             /// Backup Context
             ///
@@ -93,7 +93,7 @@ namespace ChilliSource
 			/// Create a hardware accelerated VBO
 			/// @return An instantiated buffer
 			//----------------------------------------------------------
-			Rendering::MeshBuffer* CreateBuffer(Rendering::BufferDescription &inDesc);
+			Rendering::MeshBuffer* CreateBuffer(Rendering::BufferDescription &inDesc) override;
 			//----------------------------------------------------------
 			/// Render Vertex Buffer
 			///
@@ -104,7 +104,7 @@ namespace ChilliSource
             /// @param Number of vertices to render
 			/// @param The world matrix to apply transformations
 			//----------------------------------------------------------
-			void RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::CMatrix4x4& inmatWorld);
+			void RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::CMatrix4x4& inmatWorld) override;
 			//----------------------------------------------------------
 			/// Render Buffer
 			///
@@ -116,7 +116,7 @@ namespace ChilliSource
             /// @param Number of indices to render
 			/// @param The world matrix to apply transformations
 			//----------------------------------------------------------
-			void RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::CMatrix4x4& inmatWorld);
+			void RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::CMatrix4x4& inmatWorld) override;
             //----------------------------------------------------------
 			/// Apply Camera
 			///
@@ -127,7 +127,7 @@ namespace ChilliSource
 			/// @param Camera view matrix
 			/// @param Frame buffer clear colour
 			//----------------------------------------------------------
-			void ApplyCamera(const Core::CVector3& invPos, const Core::CMatrix4x4& inmatView, const Core::CMatrix4x4& inmatProj, const Core::CColour& inClearCol);
+			void ApplyCamera(const Core::CVector3& invPos, const Core::CMatrix4x4& inmatView, const Core::CMatrix4x4& inmatProj, const Core::CColour& inClearCol) override;
             //----------------------------------------------------------
             /// Set Light
             ///
@@ -135,7 +135,7 @@ namespace ChilliSource
             ///
             /// @param lighting components
             //----------------------------------------------------------
-            void SetLight(Rendering::LightComponent* inpLightComponent);
+            void SetLight(Rendering::LightComponent* inpLightComponent) override;
 			//----------------------------------------------------------
 			/// Apply Material
 			///
@@ -143,7 +143,7 @@ namespace ChilliSource
 			///
 			/// @param Material
 			//----------------------------------------------------------
-			void ApplyMaterial(const Rendering::Material& inMaterial);
+			void ApplyMaterial(const Rendering::Material& inMaterial) override;
             //----------------------------------------------------------
 			/// Apply Joints
 			///
@@ -151,7 +151,7 @@ namespace ChilliSource
 			///
 			/// @param Dynamic array of joint matrices.
 			//----------------------------------------------------------
-            void ApplyJoints(const std::vector<Core::CMatrix4x4>& inaJoints);
+            void ApplyJoints(const std::vector<Core::CMatrix4x4>& inaJoints) override;
 			//----------------------------------------------------------
 			/// Create Render Target
 			///
@@ -161,13 +161,13 @@ namespace ChilliSource
             /// @param Height
 			/// @return An instantiated target
 			//----------------------------------------------------------
-			Rendering::RenderTarget* CreateRenderTarget(u32 inudwWidth, u32 inudwHeight);
+			Rendering::RenderTarget* CreateRenderTarget(u32 inudwWidth, u32 inudwHeight) override;
 			//----------------------------------------------------------
 			/// Get Default Render Target
 			///
 			/// @return Onscreen render target
 			//----------------------------------------------------------
-			Rendering::RenderTarget* GetDefaultRenderTarget();
+			Rendering::RenderTarget* GetDefaultRenderTarget() override;
 			//----------------------------------------------------------
 			/// Resize Frame Buffer
 			///
@@ -183,7 +183,7 @@ namespace ChilliSource
             ///
             /// @return Where the shaders live in the bundle
             //----------------------------------------------------------
-            std::string GetPathToShaders() const;
+            std::string GetPathToShaders() const override;
 			//----------------------------------------------------------
 			/// On Screen Orientation Changed
 			///
@@ -191,13 +191,13 @@ namespace ChilliSource
 			/// @param Width
 			/// @param Height
 			//----------------------------------------------------------
-			void OnScreenOrientationChanged(u32 inudwWidth, u32 inudwHeight);
+			void OnScreenOrientationChanged(u32 inudwWidth, u32 inudwHeight) override;
             //----------------------------------------------------------
 			/// Destroy
 			///
 			/// Release the OpenGL ES context and any assets
 			//----------------------------------------------------------
-            void Destroy();
+            void Destroy() override;
             
             //---Render states
             //----------------------------------------------------------
@@ -205,53 +205,53 @@ namespace ChilliSource
             ///
             /// Prevent alpha blending being altered
             //----------------------------------------------------------
-            void LockAlphaBlending();
+            void LockAlphaBlending() override;
             //----------------------------------------------------------
             /// Unlock Alpha Blending
             ///
             /// Allow alpha blending to be altered
             //----------------------------------------------------------
-            void UnlockAlphaBlending();
+            void UnlockAlphaBlending() override;
             //----------------------------------------------------------
 			/// Enable Alpha Blending
 			///
 			/// Turns alpha blending on or off
 			/// @param Boolean to toggle enable/disable
 			//----------------------------------------------------------
-			void EnableAlphaBlending(bool inbIsEnabled);
+			void EnableAlphaBlending(bool inbIsEnabled) override;
 			//----------------------------------------------------------
 			/// Enable Depth Testing
 			///
 			/// Turns depth testing on or off
 			/// @param Boolean to toggle enable/disable
 			//----------------------------------------------------------
-			void EnableDepthTesting(bool inbIsEnabled);
+			void EnableDepthTesting(bool inbIsEnabled) override;
 			//----------------------------------------------------------
 			/// Enable Face Culling
 			///
 			/// Turns culling on or off
 			/// @param Boolean to toggle enable/disable
 			//----------------------------------------------------------
-			void EnableFaceCulling(bool inbIsEnabled);
+			void EnableFaceCulling(bool inbIsEnabled) override;
 			//----------------------------------------------------------
 			/// Enable Colour Writing
 			///
 			/// Turns colour writing on or off.
 			/// @param Boolean to toggle enable/disable
 			//----------------------------------------------------------
-			void EnableColourWriting(bool inbIsEnabled);
+			void EnableColourWriting(bool inbIsEnabled) override;
             //----------------------------------------------------------
             /// Lock Depth Writing
             ///
             /// Prevent depth writing from being altered
             //----------------------------------------------------------
-            void LockDepthWriting();
+            void LockDepthWriting() override;
             //----------------------------------------------------------
             /// Unlock Depth Writing
             ///
             /// Allow depth write to be altered
             //----------------------------------------------------------
-            void UnlockDepthWriting();
+            void UnlockDepthWriting() override;
             //----------------------------------------------------------
 			/// Enable Depth Writing
 			///
@@ -259,7 +259,7 @@ namespace ChilliSource
 			/// @param Boolean to toggle enable/disable
             /// @param Whether to lock to prevent this being changed
 			//----------------------------------------------------------
-			void EnableDepthWriting(bool inbIsEnabled);
+			void EnableDepthWriting(bool inbIsEnabled) override;
             //----------------------------------------------------------
             /// Enable Scissor Testing
             ///
@@ -267,7 +267,7 @@ namespace ChilliSource
             /// of the screen
             /// @param Enable/disable
             //----------------------------------------------------------
-            void EnableScissorTesting(bool inbIsEnabled);
+            void EnableScissorTesting(bool inbIsEnabled) override;
             //----------------------------------------------------------
             /// Set Scissor Region
             ///
@@ -277,39 +277,39 @@ namespace ChilliSource
             /// @param Position of the bottom left corner of the rect
             /// @param Size of the scissor region
             //---------------------------------------------------------
-            void SetScissorRegion(const Core::CVector2& invPosition, const Core::CVector2& invSize);
+            void SetScissorRegion(const Core::CVector2& invPosition, const Core::CVector2& invSize) override;
             //----------------------------------------------------------
 			/// Set Cull Face
 			///
 			/// Sets the cull face
 			/// @param Cull face
 			//----------------------------------------------------------
-			void SetCullFace(Rendering::CullFace ineCullface);
+			void SetCullFace(Rendering::CullFace ineCullface) override;
             //----------------------------------------------------------
             /// Lock Blend Function
             ///
             /// Prevent the blend function being altered
             //----------------------------------------------------------
-            void LockBlendFunction();
+            void LockBlendFunction() override;
             //----------------------------------------------------------
             /// Unlock Blend Function
             ///
             /// Allow the blend function to be altered
             //----------------------------------------------------------
-            void UnlockBlendFunction();
+            void UnlockBlendFunction() override;
 			//----------------------------------------------------------
 			/// Set Blend Function
 			///
 			/// @param Source function
 			/// @param Destination function
 			//----------------------------------------------------------
-			void SetBlendFunction(Rendering::AlphaBlend ineSrcFunc, Rendering::AlphaBlend ineDstFunc);
+			void SetBlendFunction(Rendering::AlphaBlend ineSrcFunc, Rendering::AlphaBlend ineDstFunc) override;
             //----------------------------------------------------------
 			/// Set Depth Function
 			///
             /// @param Function to be used for depth testing
 			//----------------------------------------------------------
-            void SetDepthFunction(Rendering::DepthFunction ineFunc);
+            void SetDepthFunction(Rendering::DepthFunction ineFunc) override;
             //----------------------------------------------------------
             /// Remove Buffer
             ///
@@ -384,13 +384,13 @@ namespace ChilliSource
 			///
 			/// Clear the back buffer to the clear colour
 			//----------------------------------------------------------
-			void BeginFrame(Rendering::RenderTarget* inpActiveRenderTarget);
+			void BeginFrame(Rendering::RenderTarget* inpActiveRenderTarget) override;
 			//----------------------------------------------------------
 			/// End Frame
 			///
 			/// Present the buffer to the screen
 			//----------------------------------------------------------
-			void EndFrame(Rendering::RenderTarget* inpActiveRenderTarget);
+			void EndFrame(Rendering::RenderTarget* inpActiveRenderTarget) override;
 			//----------------------------------------------------------
 			/// Apply Shader Variables
 			///

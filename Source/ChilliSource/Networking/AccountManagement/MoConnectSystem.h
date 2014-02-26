@@ -34,7 +34,7 @@ namespace ChilliSource
 			MoConnectSystem(HttpConnectionSystem * inpHttpSystem, const std::string& instrMoConnectServerURL, Core::COAuthSystem * inpOAuthSystem);
 			
 			DECLARE_NAMED_INTERFACE(MoConnectSystem);
-			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			
             Core::COAuthSystem* GetOAuthSystem();
             
@@ -230,40 +230,40 @@ namespace ChilliSource
             
             void GenerateAuthenticationHeader(const std::string& instrURL, Core::ParamDictionary& outsHeader) const;
             
-			void AccountCreateRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+			void AccountCreateRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
 			AccountCreateDelegate mAccountCreateCallback;
             
-			void RegisterLoginRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+			void RegisterLoginRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
 			RegisterLoginDelegate mRegisterLoginCallback;
             
-			void SignInRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+			void SignInRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
 			SignInDelegate mSignInCallback;
             
-			void RetrieveAccountsRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+			void RetrieveAccountsRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
             SignInDelegate mRetrieveAccountsCallback;
             
             const std::string& GetPushNotificationTypeAsString(const PushNotificationType ineType);
-            void PushNotificationRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+            void PushNotificationRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
 			PushNotificationResultDelegate mPushNotificationCallback;
 			
-			void TimeRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+			void TimeRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
 			ServerTimeDelegate mTimeRequestCallback;
             
-			void LoginsRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+			void LoginsRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
 			
-			void GeneralRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+			void GeneralRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
 			
-			void HandleRedirection(HttpRequestPtr inpRequest);
+			void HandleRedirection(HttpRequest* inpRequest);
 			
 			void HandleSetNameResponse(const Json::Value& incValue);
 			
 			void OnUserChanged();
             
-            void OnLocalUserProfileReceived(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+            void OnLocalUserProfileReceived(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
 			
             const std::string& GetIAPTypeAsString(const IAPType ineType);
-            void OnIAPRecieptValidationResponse(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
-            void OnIAPRedeemedResponse(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+            void OnIAPRecieptValidationResponse(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
+            void OnIAPRedeemedResponse(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
             ValidateReceiptDelegate mValidateReceiptDelegate;
             
 			std::string mstrMoConnectURL;
@@ -278,7 +278,7 @@ namespace ChilliSource
 			
 			bool mbHasLoadedLoginTypes;
 			std::vector<std::string> mastrCurrentAccountLogins;
-			HttpRequestPtr mpPendingLoginsRequest;
+			HttpRequest* mpPendingLoginsRequest;
             
 			Core::CEvent1<EventDelegate> mSignedInUserChangesEvent;
 			HttpConnectionSystem* mpHttpConnectionSystem;
@@ -290,7 +290,7 @@ namespace ChilliSource
 				u32 udwID;
 				std::string strMethod;
 				Json::Value cPayload;
-				HttpRequestPtr pHttpRequest;
+				HttpRequest* pHttpRequest;
 				RequestResultDelegate Callback;
 				bool operator == (const RequestInfo& other)
                 {
@@ -299,7 +299,7 @@ namespace ChilliSource
             };
                 
             RequestInfo* FindRequestWithID(u32 inudwID);
-            RequestInfo* FindRequestWithHttpRequest(HttpRequestPtr inpHttp);
+            RequestInfo* FindRequestWithHttpRequest(HttpRequest* inpHttp);
                 
             bool mbNoRemoveFulfilledRequests;
             std::vector<RequestInfo> masOpenRequests;

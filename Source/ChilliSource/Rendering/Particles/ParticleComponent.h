@@ -41,7 +41,7 @@ namespace ChilliSource
 			/// @param Comparison Type
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			bool IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const override;
 			
 			
 			//---------------------------------------------------
@@ -119,7 +119,7 @@ namespace ChilliSource
             /// @param Active camera component
             /// @param The current shader pass.
             //-------------------------------------------------
-            void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass);
+            void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass) override;
             //-----------------------------------------------------
             /// Render Shadow Map
             ///
@@ -128,7 +128,7 @@ namespace ChilliSource
             /// @param Render system
             /// @param Active camera component
             //-----------------------------------------------------
-            void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam){};
+            void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam) override {};
 			//-------------------------------------------------
 			/// Set Owning System
 			///

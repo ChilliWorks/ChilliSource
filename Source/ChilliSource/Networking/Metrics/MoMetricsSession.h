@@ -100,13 +100,13 @@ namespace ChilliSource
             void OnActionRetry();
             
             void MakeSessionRequest();
-            void OnAuthTokensRequestComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+            void OnAuthTokensRequestComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
             
             void MakeLocationUpdateRequest(const MetricsLocation& insLocation);
-            void OnLocationUpdateRequestComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+            void OnLocationUpdateRequestComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
             
             void MakeCloseRequest();
-            void OnCloseRequestComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+            void OnCloseRequestComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
             
             void UpdateLastActivityTime();
             TimeIntervalSecs GetLastActivityTime() const;
@@ -117,14 +117,14 @@ namespace ChilliSource
             
             void QueueRequest(const MetricsRequest& insRequest);
             void MakeNextRequest();
-            void OnQueuedRequestComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+            void OnQueuedRequestComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
             
             void CompressEventBatch();
             void RequestFlushBatchEvents();
             
             void AppendAuthDetails(MetricsRequest& insRequest) const;
 			void MakeFlushRequest(u32 inudwNumEventsToFlush);
-			void FlushEventsRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+			void FlushEventsRequestCompletes(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
             
             void Destroy();
 
@@ -134,7 +134,7 @@ namespace ChilliSource
             std::deque<MetricsRequest> mQueuedRequests;
             std::deque<Action> mQueuedActions;
             
-            std::unordered_map<HttpRequestPtr, HttpRequest::CompletionDelegate> mmapRequestToDelegate;
+            std::unordered_map<HttpRequest*, HttpRequest::CompletionDelegate> mmapRequestToDelegate;
             
             std::unordered_map<std::string, std::string> mmapConstants;
             

@@ -75,7 +75,7 @@ namespace ChilliSource
             /// @param Request response
             /// @param Request result
             //----------------------------------------------------------------
-            void OnContentManifestDownloadComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+            void OnContentManifestDownloadComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
             //----------------------------------------------------------------
             /// On Content Download Complete
             ///
@@ -84,7 +84,7 @@ namespace ChilliSource
             /// @param Request response
             /// @param Request result
             //----------------------------------------------------------------
-            void OnContentDownloadComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+            void OnContentDownloadComplete(HttpRequest* inpRequest, HttpRequest::CompletionResult ineResult);
             
         private:
             
@@ -96,7 +96,7 @@ namespace ChilliSource
             
             HttpConnectionSystem* mpHttpConnectionSystem;
             
-            HttpRequestPtr mpCurrentRequest;
+            HttpRequest* mpCurrentRequest;
         };
     }
 }

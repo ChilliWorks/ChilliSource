@@ -51,19 +51,19 @@ namespace ChilliSource
 			/// @param Interface ID type
 			/// @return Whether the object is of this type
 			//--------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//--------------------------------------------------
 			/// Bind
 			///
 			/// @param Texture unit to bind texture to (default 0)
 			//--------------------------------------------------
-			void Bind(u32 inSlot = 0);
+			void Bind(u32 inSlot = 0) override;
 			//--------------------------------------------------
 			/// Unbind
 			///
 			/// Unbind this texture from a slot if it is bound
 			//--------------------------------------------------
-			void Unbind();
+			void Unbind() override;
 			//--------------------------------------------------
 			/// Set Filter
 			///
@@ -71,7 +71,7 @@ namespace ChilliSource
 			/// @param S filter mode
 			/// @param T filter mode
 			//--------------------------------------------------
-			void SetFilter(Filter ineSFilter, Filter ineTFilter);
+			void SetFilter(Filter ineSFilter, Filter ineTFilter) override;
 			//--------------------------------------------------
 			/// Set Wrap Mode
 			///
@@ -79,7 +79,7 @@ namespace ChilliSource
 			/// @param S wrap mode
 			/// @param T wrap mode
 			//--------------------------------------------------
-			void SetWrapMode(WrapMode inSWrapMode, WrapMode inTWrapMode);
+			void SetWrapMode(WrapMode inSWrapMode, WrapMode inTWrapMode) override;
 			//--------------------------------------------------
 			/// Get Texture ID
 			///

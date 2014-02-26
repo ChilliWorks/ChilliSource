@@ -42,7 +42,7 @@ namespace ChilliSource
             /// @return whether email is supported on the current
             /// device
             //-------------------------------------------------------
-            bool IsSupportedByDevice() const;
+            bool IsSupportedByDevice() const override;
             //-------------------------------------------------------
 			/// Is A
 			///
@@ -51,7 +51,7 @@ namespace ChilliSource
 			/// @param Interface type to query
 			/// @return Whether the object is of given type
 			//-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inID) const;
+			bool IsA(Core::InterfaceIDType inID) const override;
             //-------------------------------------------------------
             /// Present
             ///
@@ -64,7 +64,7 @@ namespace ChilliSource
             /// @param The callback describing the result of the email.
             /// @param Whether or not to format as HTML.
             //-------------------------------------------------------
-			void Present(const std::vector<Core::CUTF8String>& inastrRecipientAddresses, const Core::CUTF8String& instrSubject, const Core::CUTF8String& instrContents, const SendResultDelegate& inCallback, bool inbFormatAsHtml);
+			void Present(const std::vector<Core::CUTF8String>& inastrRecipientAddresses, const Core::CUTF8String& instrSubject, const Core::CUTF8String& instrContents, const SendResultDelegate& inCallback, bool inbFormatAsHtml) override;
             //-------------------------------------------------------
             /// Present With Attachment
             ///
@@ -79,13 +79,13 @@ namespace ChilliSource
             /// @param The callback describing the result of the email.
             /// @param Whether or not to format as HTML.
             //-------------------------------------------------------
-            void PresentWithAttachment(const std::vector<Core::CUTF8String> & inastrRecipientAddresses, const Core::CUTF8String & instrSubject, const Core::CUTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml);
+            void PresentWithAttachment(const std::vector<Core::CUTF8String> & inastrRecipientAddresses, const Core::CUTF8String & instrSubject, const Core::CUTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml) override;
             //-------------------------------------------------------
             /// Dismiss
             ///
             /// Dismisses the activity if it is currently displayed.
             //-------------------------------------------------------
-			void Dismiss();
+			void Dismiss() override;
             //-------------------------------------------------------
             /// Destructor
             //-------------------------------------------------------

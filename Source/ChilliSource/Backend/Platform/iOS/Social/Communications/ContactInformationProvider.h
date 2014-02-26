@@ -15,19 +15,19 @@
 
 #include <vector>
 
-namespace ChilliSource{
-
-	namespace iOS {
-		
+namespace ChilliSource
+{
+	namespace iOS
+    {
 		class CContactInformationProvider : public Social::ContactInformationProvider
 		{
 		public:
-			virtual bool IsA(Core::InterfaceIDType inID) const;
+			virtual bool IsA(Core::InterfaceIDType inID) const override;;
 			
-			virtual void LoadInformation();
+			virtual void LoadInformation() override;
 			
-			virtual u32 GetNumberContacts();
-			virtual const Social::ContactRecord & GetContactAtIndex(u32 inudwIndex);
+			virtual u32 GetNumberContacts() override;
+			virtual const Social::ContactRecord & GetContactAtIndex(u32 inudwIndex) override;
 		private:
 			std::vector<Social::ContactRecord> masContacts;
 		};

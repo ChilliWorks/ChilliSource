@@ -50,24 +50,6 @@ namespace ChilliSource
 			return inInterfaceID == AudioResource::InterfaceID;
 		}
 		//----------------------------------------------------------------
-		/// Manages Resource With Extension
-		///
-		/// @param Extension
-		/// @return Whether this object manages object with extension
-		//----------------------------------------------------------------
-		bool AudioManager::ManagesResourceWithExtension(const std::string &instrExtension) const
-		{
-			for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
-			{
-				if(mResourceProviders[nProvider]->CanCreateResourceFromFileWithExtension(instrExtension))
-				{
-					return true;
-				}
-			}
-			
-			return false;
-		}
-		//----------------------------------------------------------------
 		/// Get Provider Type
 		///
 		/// @return The type of resource it consumes from resource provider

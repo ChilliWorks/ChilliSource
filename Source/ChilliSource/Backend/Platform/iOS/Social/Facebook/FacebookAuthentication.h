@@ -29,21 +29,21 @@ namespace ChilliSource
             
             ~CFacebookAuthenticationSystem();
 			
-            bool IsA(Core::InterfaceIDType inID) const;
+            bool IsA(Core::InterfaceIDType inID) const override;
 			
-            void Authenticate( const std::vector<std::string>& inastrReadPermissions = std::vector<std::string>(), const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate = nullptr);
+            void Authenticate( const std::vector<std::string>& inastrReadPermissions = std::vector<std::string>(), const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate = nullptr) override;
 			
-            bool IsSignedIn() const;
-            std::string GetActiveToken() const;
+            bool IsSignedIn() const override;
+            std::string GetActiveToken() const override;
             
-            void AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate);
-            void AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate);
+            void AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate) override;
+            void AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate) override;
             
-            bool HasPermission(const std::string& instrPermission) const;
+            bool HasPermission(const std::string& instrPermission) const override;
 			
-            void SignOut();
+            void SignOut() override;
             
-            void PublishInstall();
+            void PublishInstall() override;
 			
 		private:
             void CreateNewSession();

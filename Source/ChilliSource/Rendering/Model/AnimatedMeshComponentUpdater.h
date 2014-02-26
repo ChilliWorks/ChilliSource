@@ -33,7 +33,7 @@ namespace ChilliSource
 			/// @param Interface to compare
 			/// @return Whether the object implements the given interface
 			//------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
             //------------------------------------------------
 			/// Add Component
 			///
@@ -51,7 +51,7 @@ namespace ChilliSource
             ///
             /// @param The delta time.
 			//------------------------------------------------
-			void Update(f32 infDeltaTime);
+			void Update(f32 infDeltaTime) override;
             //------------------------------------------------
 			/// Remove Component
 			///

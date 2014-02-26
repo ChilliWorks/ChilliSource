@@ -71,7 +71,8 @@ namespace ChilliSource
 			/// @param Type ID
 			/// @return Whether the request is of given type
 			//-----------------------------------------------
-			bool IsA(GameCentreRequestID inTypeID){
+			bool IsA(GameCentreRequestID inTypeID) override
+            {
 				return inTypeID == kudwGameCentrePostScoreRequestID;
 			}
 			
@@ -92,7 +93,8 @@ namespace ChilliSource
 			/// @param Type ID
 			/// @return Whether the request is of given type
 			//-----------------------------------------------
-			bool IsA(GameCentreRequestID inTypeID){
+			bool IsA(GameCentreRequestID inTypeID) override
+            {
 				return inTypeID == kudwGameCentreUpdateAchievementRequestID;
 			}
 			
@@ -115,7 +117,8 @@ namespace ChilliSource
 			/// @param Type ID
 			/// @return Whether the request is of given type
 			//-----------------------------------------------
-			bool IsA(GameCentreRequestID inTypeID){
+			bool IsA(GameCentreRequestID inTypeID) override
+            {
 				return inTypeID == kudwGameCentreAchievementDescriptionsRequestID;
 			}
 			
@@ -134,7 +137,7 @@ namespace ChilliSource
 			/// @param Type ID
 			/// @return Whether the request is of given type
 			//-----------------------------------------------
-			bool IsA(GameCentreRequestID inTypeID)
+			bool IsA(GameCentreRequestID inTypeID) override
 			{
 				return inTypeID == kudwGameCentreAchievementsStatusRequestID;
 			}
@@ -154,7 +157,8 @@ namespace ChilliSource
 			/// @param Type ID
 			/// @return Whether the request is of given type
 			//-----------------------------------------------
-			bool IsA(GameCentreRequestID inTypeID){
+			bool IsA(GameCentreRequestID inTypeID) override
+            {
 				return inTypeID == kudwGameCentreGetScoresRequestID;
 			}
 			
@@ -178,7 +182,7 @@ namespace ChilliSource
 			/// @param Type ID
 			/// @return Whether the request is of given type
 			//-----------------------------------------------
-			bool IsA(GameCentreRequestID inTypeID)
+			bool IsA(GameCentreRequestID inTypeID) override
 			{
 				return inTypeID == kudwGameCentreGetNamesRequestID;
 			}
@@ -207,7 +211,8 @@ namespace ChilliSource
 			/// @param Type ID
 			/// @return Whether the request is of given type
 			//-----------------------------------------------
-			bool IsA(GameCentreRequestID inTypeID){
+			bool IsA(GameCentreRequestID inTypeID) override
+            {
 				return inTypeID == kudwGameCentreGetFriendIdentifiersRequestID;
 			}
 			
@@ -225,9 +230,9 @@ namespace ChilliSource
 			/// @param Type ID
 			/// @return Whether the request is of given type
 			//-----------------------------------------------
-			bool IsA(GameCentreRequestID inTypeID){
+			bool IsA(GameCentreRequestID inTypeID) override
+            {
 				return inTypeID == kudwGameCentreGetLeaderboardsInfoRequestID;
-				
 			}
 		};
 		

@@ -35,19 +35,19 @@ namespace ChilliSource
             /// @param Comparison Type
             /// @return Whether the class matches the comparison type
             //----------------------------------------------------------
-            bool IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const;
+            bool IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const override;
 			//----------------------------------------------------------
 			/// Get Length
 			///
 			/// @return Sound length in seconds
 			//----------------------------------------------------------
-			f32 GetLength();
+			f32 GetLength() override;
             //----------------------------------------------------------
             /// Set Looping
             ///
             /// @param Whether to loop the sound or not
             //----------------------------------------------------------
-            void SetLooping(bool inbShouldLoop);
+            void SetLooping(bool inbShouldLoop) override;
             
 			FMOD::Sound* mpFMODSound;
 		};

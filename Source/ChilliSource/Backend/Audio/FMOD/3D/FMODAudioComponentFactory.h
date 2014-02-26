@@ -33,7 +33,7 @@ namespace ChilliSource
 			///
 			/// @return Whether this object is of given type
 			//-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//--------------------------------------------------------
 			/// Can Produce Component With Interface
 			///
@@ -43,7 +43,7 @@ namespace ChilliSource
 			/// @param The ID of the component to create
 			/// @return Whether the object can create component of ID
 			//--------------------------------------------------------
-			bool CanProduceComponentWithInterface(Core::InterfaceIDType inTypeID) const;
+			bool CanProduceComponentWithInterface(Core::InterfaceIDType inTypeID) const override;
 			//--------------------------------------------------------
 			/// Can Produce Component With Type Name
 			///
@@ -53,7 +53,7 @@ namespace ChilliSource
 			/// @param The name of the component to create
 			/// @return Whether the object can create component 
 			//--------------------------------------------------------
-			bool CanProduceComponentWithTypeName(const std::string & incName) const;
+			bool CanProduceComponentWithTypeName(const std::string & incName) const override;
 
             //--------------------------------------------------------
 			/// Create Audio Component

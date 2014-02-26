@@ -36,7 +36,7 @@ namespace ChilliSource
 			/// @param Interface ID
 			/// @param Whether activity is of given type
 			//--------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inID) const;
+			bool IsA(Core::InterfaceIDType inID) const override;
             //--------------------------------------------------------------
             /// Present
             ///
@@ -47,7 +47,7 @@ namespace ChilliSource
             /// @param Whether or not the video can be dismissed by tapping.
             /// @param Background colour
             //--------------------------------------------------------------
-            void Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour);
+            void Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour) override;
             //--------------------------------------------------------------
             /// Present With Subtitles
             ///
@@ -62,31 +62,31 @@ namespace ChilliSource
             //--------------------------------------------------------------
             void PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
                                       Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
-                                      bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour);
+                                      bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour) override;
             //--------------------------------------------------------------
             /// Is Playing
             ///
             /// @return Whether a video is currently playing
             //--------------------------------------------------------------
-            bool IsPlaying() const;
+            bool IsPlaying() const override;
             //--------------------------------------------------------------
             /// Dismiss
             ///
             /// End playback of the currently playing video
             //--------------------------------------------------------------
-            void Dismiss();
+            void Dismiss() override;
             //--------------------------------------------------------------
             /// Get Duration
             ///
             /// @return The length of the video in seconds
             //--------------------------------------------------------------
-            f32 GetDuration() const;
+            f32 GetDuration() const override;
             //--------------------------------------------------------------
             /// Get Time
             ///
             /// @return The position of the video in seconds
             //--------------------------------------------------------------
-            f32 GetTime() const;
+            f32 GetTime() const override;
             //--------------------------------------------------------------
             /// Keep App Running (iOS Specific)
             ///

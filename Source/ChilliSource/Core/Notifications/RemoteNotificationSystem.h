@@ -35,7 +35,7 @@ namespace ChilliSource
             ///
             /// @return Whether this implements the passed in interface id.
             //---------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType inInterfaceID) const;
+            bool IsA(Core::InterfaceIDType inInterfaceID) const override;
             //-------------------------------------------------------------------------
             /// Request Remote Token
             ///

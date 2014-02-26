@@ -134,7 +134,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Delegate method called when a status update has completed
 		//------------------------------------------------------------------------
-		void TwitterPostSystem::OnStatusUpdateComplete(Networking::HttpRequestPtr inpRequest, Networking::HttpRequest::CompletionResult ineResult)
+		void TwitterPostSystem::OnStatusUpdateComplete(Networking::HttpRequest* inpRequest, Networking::HttpRequest::CompletionResult ineResult)
 		{
 			if(ineResult == ChilliSource::Networking::HttpRequest::CompletionResult::k_completed)
 			{
@@ -216,7 +216,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Delegate called with RequestOAuthToken() completes.
 		//------------------------------------------------------------------------
-		void TwitterPostSystem::OnRequestOAuthTokenComplete(ChilliSource::Networking::HttpRequestPtr inpRequest, ChilliSource::Networking::HttpRequest::CompletionResult ineResult)
+		void TwitterPostSystem::OnRequestOAuthTokenComplete(ChilliSource::Networking::HttpRequest* inpRequest, ChilliSource::Networking::HttpRequest::CompletionResult ineResult)
 		{
 			if(ineResult == ChilliSource::Networking::HttpRequest::CompletionResult::k_completed)
 			{
@@ -269,7 +269,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Delegate called with RequestOAuthToken() completes.
 		//------------------------------------------------------------------------
-		void TwitterPostSystem::OnRequestOAuthAccessTokenComplete(ChilliSource::Networking::HttpRequestPtr inpRequest, ChilliSource::Networking::HttpRequest::CompletionResult ineResult)
+		void TwitterPostSystem::OnRequestOAuthAccessTokenComplete(Networking::HttpRequest* inpRequest, Networking::HttpRequest::CompletionResult ineResult)
 		{
 			if(ineResult == ChilliSource::Networking::HttpRequest::CompletionResult::k_completed)
 			{

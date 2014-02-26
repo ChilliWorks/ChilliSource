@@ -176,7 +176,7 @@ namespace ChilliSource
 			/// @param HTTP request
 			/// @param The result from the request
 			//------------------------------------------------------------------------
-			virtual void OnStatusUpdateComplete(Networking::HttpRequestPtr inpRequest, Networking::HttpRequest::CompletionResult ineResult);
+			virtual void OnStatusUpdateComplete(Networking::HttpRequest* inpRequest, Networking::HttpRequest::CompletionResult ineResult);
 			//------------------------------------------------------------------------
 			/// Gets a request token and secret. This is used to authorise the user
 			/// and get a PIN from Twitter
@@ -196,7 +196,7 @@ namespace ChilliSource
 			/// @param HTTP request
 			/// @param The result from the request
 			//------------------------------------------------------------------------
-			virtual void OnRequestOAuthTokenComplete(Networking::HttpRequestPtr inpRequest, Networking::HttpRequest::CompletionResult ineResult);
+			virtual void OnRequestOAuthTokenComplete(Networking::HttpRequest* inpRequest, Networking::HttpRequest::CompletionResult ineResult);
 			//------------------------------------------------------------------------
 			/// Exchange our request token with an access token
 			/// This step is called after the user has entered the PIN displayed
@@ -217,7 +217,7 @@ namespace ChilliSource
 			/// @param HTTP request
 			/// @param The result from the request
 			//------------------------------------------------------------------------
-			virtual void OnRequestOAuthAccessTokenComplete(ChilliSource::Networking::HttpRequestPtr inpRequest, ChilliSource::Networking::HttpRequest::CompletionResult ineResult);
+			virtual void OnRequestOAuthAccessTokenComplete(Networking::HttpRequest* inpRequest, Networking::HttpRequest::CompletionResult ineResult);
 			//------------------------------------------------------------------------
 			/// Trys to load save token and secret keys
 			//------------------------------------------------------------------------

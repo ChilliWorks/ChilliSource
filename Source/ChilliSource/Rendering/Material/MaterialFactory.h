@@ -32,7 +32,7 @@ namespace ChilliSource
             /// @param Interface ID
             /// @return Whether the object is of the same interface
             //---------------------------------------------------
-            bool IsA(Core::InterfaceIDType inInterfaceID) const;
+            bool IsA(Core::InterfaceIDType inInterfaceID) const override;
             //---------------------------------------------------
             /// Create Custom
             ///

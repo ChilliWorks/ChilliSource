@@ -38,19 +38,19 @@ namespace ChilliSource
             /// @param Comparison Type
             /// @return Whether the class matches the comparison type
             //----------------------------------------------------------
-            bool IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const;
+            bool IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const override;
             
             //Returns if the client meets the minimum OS version to use this feature
             static bool IsSupported();
             
             //Returns if iCloud has been enabled on the client device
-            bool IsCloudStorageEnabled() const;
+            bool IsCloudStorageEnabled() const override;
             
             //Performs any initialisation required
-            void Initialise();
+            void Initialise() override;
 
             //If cloud service is enabled returns the path to the storage on device
-            std::string GetCloudStoragePath() const;
+            std::string GetCloudStoragePath() const override;
             
             //Manually Refresh the cache of files stored in the cloud
             void RefreshCloudContent();
@@ -80,18 +80,18 @@ namespace ChilliSource
             //////////////////////
             
             //Querys for files in a Storage area in the cloud, will invoke OnQueryFilesCompletedEvent when results are retrieved
-            void QueryForAllCloudFiles();
+            void QueryForAllCloudFiles() override;
 
         private:
             
             //Create Directory in Cloud
-            void CreateDirectory(CloudStorageArea ineStorageArea, const std::string& instrDir);
+            void CreateDirectory(CloudStorageArea ineStorageArea, const std::string& instrDir) override;
             
             //Create file in cloud only, use SyncFileToCloud to maintain both locations
-            void CreateFile(CloudStorageArea ineStorageArea, const std::string& instrFileName, const std::string& instrData);
+            void CreateFile(CloudStorageArea ineStorageArea, const std::string& instrFileName, const std::string& instrData) override;
             
             //Delete File from cloud only
-            void DeleteFile(CloudStorageArea ineStorageArea, const std::string& instrFileName);
+            void DeleteFile(CloudStorageArea ineStorageArea, const std::string& instrFileName) override;
             
         private:
             

@@ -33,26 +33,26 @@ namespace ChilliSource
 			/// @param The interface to compare
 			/// @return Whether the object implements that interface
 			//----------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//----------------------------------------------------------------
 			/// Get Resource Type
 			///
 			/// @return The type of resource this manager handles
 			//----------------------------------------------------------------
-			Core::InterfaceIDType GetResourceType() const;
+			Core::InterfaceIDType GetResourceType() const override;
 			//----------------------------------------------------------------
 			/// Get Provider Type
 			///
 			/// @return The type of resource it consumes from resource provider
 			//----------------------------------------------------------------
-			Core::InterfaceIDType GetProviderType() const; 
+			Core::InterfaceIDType GetProviderType() const override;
 			//----------------------------------------------------------------
 			/// Manages Resource Of Type
 			///
 			/// @param Type
 			/// @return Whether this object manages the object of type
 			//----------------------------------------------------------------
-			bool ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const;
+			bool ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const override;
 			//----------------------------------------------------------------
 			/// Get Cubemap From File
 			///
@@ -89,7 +89,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -98,7 +98,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
+			Core::ResourcePtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//----------------------------------------------------------------
 			/// Create Cubemap Resource
 			///

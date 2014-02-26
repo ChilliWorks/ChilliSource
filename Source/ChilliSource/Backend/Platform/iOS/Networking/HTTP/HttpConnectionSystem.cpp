@@ -55,7 +55,7 @@ namespace ChilliSource
 		/// @param (Optional) A function to call when the request is completed. Note that the request can be completed by failure/cancellation as well as success.
 		/// @return A pointer to the request. The system owns this pointer. Returns nullptr if the request cannot be created.
 		//--------------------------------------------------------------------------------------------------
-		HttpRequestPtr CHttpConnectionSystem::MakeRequest(const HttpRequestDetails & insRequestDetails, HttpRequest::CompletionDelegate inOnComplete)
+		HttpRequest* CHttpConnectionSystem::MakeRequest(const HttpRequestDetails & insRequestDetails, HttpRequest::CompletionDelegate inOnComplete)
         {
             //NOTE: The CFNetwork framework handles persistent connections under the hood but it must be
             //coaxed into multiple persistent connections across domains. CFNetwork will reuse connections to the same domain

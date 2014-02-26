@@ -76,7 +76,7 @@ namespace ChilliSource
             
             DECLARE_NAMED_INTERFACE(CSceneDesc);
             
-            bool IsA(InterfaceIDType inInterfaceID) const;
+            bool IsA(InterfaceIDType inInterfaceID) const override;
             
             typedef fastdelegate::FastDelegate1<const EntityDesc&, EntityPtr> CustomEntityDelegate;
             EntityPtr BuildScene(CustomEntityDelegate inCustomEntityDelegate = CustomEntityDelegate());

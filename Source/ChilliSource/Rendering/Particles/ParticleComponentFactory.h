@@ -33,7 +33,7 @@ namespace ChilliSource
             /// @param Interface ID
             /// @return Whether the object is of given type
             //-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//--------------------------------------------------------
 			/// Can Produce Component With Interface
 			///
@@ -43,14 +43,14 @@ namespace ChilliSource
 			/// @param The ID of the component to create
 			/// @return Whether the object can create component of ID
 			//--------------------------------------------------------
-			bool CanProduceComponentWithInterface(Core::InterfaceIDType inTypeID) const;
+			bool CanProduceComponentWithInterface(Core::InterfaceIDType inTypeID) const override;
             //----------------------------------------------------------------------------
             /// Can Produce Component With Type Name
             ///
             /// @param Type name
             /// @return Whether the factory can produce components with the given name
             //----------------------------------------------------------------------------
-			bool CanProduceComponentWithTypeName(const std::string & incName) const;
+			bool CanProduceComponentWithTypeName(const std::string & incName) const override;
 			//--------------------------------------------------------
 			/// Create Particle Component
 			///
