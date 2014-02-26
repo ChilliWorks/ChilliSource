@@ -8,11 +8,13 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Core/Notification/RemoteNotificationSystem.h>
 
-#include <UIKit/UIKit.h>
-
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
+
+#include <UIKit/UIKit.h>
+
 
 namespace ChilliSource
 {

@@ -130,11 +130,11 @@ namespace ChilliSource
             
             //check everything is okay
             bool bResult = (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE && pDefaultRenderTarget->mudwWidth != 0 && pDefaultRenderTarget->mudwHeight != 0);
-            MOFLOW_ASSERT(bResult, "Cannot Create OpenGL ES 2.0 default render buffer");
+            CS_ASSERT(bResult, "Cannot Create OpenGL ES 2.0 default render buffer");
             
             //attach depth buffer
             bResult = pDefaultRenderTarget->CreateAndAttachDepthBuffer();
-            MOFLOW_ASSERT(bResult, "Cannot Create OpenGL ES 2.0 default depth buffer");
+            CS_ASSERT(bResult, "Cannot Create OpenGL ES 2.0 default depth buffer");
             
             return pDefaultRenderTarget;
         }
@@ -162,7 +162,7 @@ namespace ChilliSource
             if(gCurrentlyBoundRenderBuffer == inpRenderTarget->mRenderBuffer || gCurrentlyBoundRenderBuffer == inpRenderTarget->mDepthBuffer)
                 gCurrentlyBoundRenderBuffer = -1;
             
-            SAFE_DELETE(inpRenderTarget);
+            CS_SAFE_DELETE(inpRenderTarget);
         }
 #endif
         //--------------------------------------------------
@@ -209,18 +209,18 @@ namespace ChilliSource
 			
             if (inpColourTexture != nullptr)
             {
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, SHARED_PTR_CAST<CTexture>(inpColourTexture)->GetTextureID(), 0);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, std::static_pointer_cast<CTexture>(inpColourTexture)->GetTextureID(), 0);
             }
             
             if (inpDepthTexture != nullptr)
             {
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, SHARED_PTR_CAST<CTexture>(inpDepthTexture)->GetTextureID(), 0);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, std::static_pointer_cast<CTexture>(inpDepthTexture)->GetTextureID(), 0);
             }
             else
             {
                 if (CreateAndAttachDepthBuffer() == false)
                 {
-                    ERROR_LOG("Failed to attach Depth Buffer to render target.");
+                    CS_ERROR_LOG("Failed to attach Depth Buffer to render target.");
                 }
             }
             
@@ -231,18 +231,18 @@ namespace ChilliSource
                 case GL_FRAMEBUFFER_COMPLETE:
                     break;
                 case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-                    ERROR_LOG("Render Target's frame buffer has incomplete attachment!");
+                    CS_ERROR_LOG("Render Target's frame buffer has incomplete attachment!");
                     break;
 #ifdef MOFLOW_OPENGLES2
                 case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS:
-                    ERROR_LOG("Render Target's frame buffer has incomplete dimensions!");
+                    CS_ERROR_LOG("Render Target's frame buffer has incomplete dimensions!");
                     break;
 #endif
                 case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-                    ERROR_LOG("Render Target's frame buffer has missing attachment!");
+                    CS_ERROR_LOG("Render Target's frame buffer has missing attachment!");
                     break;
                 case GL_FRAMEBUFFER_UNSUPPORTED:
-                    ERROR_LOG("Render Target's frame buffer is unsupported!");
+                    CS_ERROR_LOG("Render Target's frame buffer is unsupported!");
                     break;
             }
 #endif

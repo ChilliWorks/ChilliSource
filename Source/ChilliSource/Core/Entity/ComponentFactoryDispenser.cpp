@@ -60,11 +60,11 @@ namespace ChilliSource
         ///
         /// Looks for a factory that can create the given type
         /// @param The type ID of the object you wish to create (i.e. CMesh, ITexture)
-        /// @return Factory that can produce the given interface or nullptr if none available
+        /// @return Factory that can produce the given interface or NULL if none available
         //--------------------------------------------------------------------------------------------------
         IComponentFactory* CComponentFactoryDispenser::GetFactoryProducing(const std::string & insName)
         {
-            for (DYNAMIC_ARRAY<IComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
+            for (std::vector<IComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
 			{
                 if((*it)->CanProduceComponentWithTypeName(insName)) 
                 {
@@ -72,7 +72,7 @@ namespace ChilliSource
                 }
 			}
 			
-			WARNING_LOG("Application cannot find factory producing: " + insName);
+			CS_WARNING_LOG("Application cannot find factory producing: " + insName);
 			return nullptr;
         }
         //--------------------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ namespace ChilliSource
         //--------------------------------------------------------------------------------------------------
         IComponentFactory* CComponentFactoryDispenser::GetFactoryProducing(InterfaceIDType inInterfaceID)
         {
-            for (DYNAMIC_ARRAY<IComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
+            for (std::vector<IComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
 			{
                 if((*it)->CanProduceComponentWithInterface(inInterfaceID)) 
                 {
@@ -92,7 +92,7 @@ namespace ChilliSource
                 }
 			}
 			
-			WARNING_LOG("Application cannot find factory for interface ID: " + STRING_CAST(inInterfaceID));
+			CS_WARNING_LOG("Application cannot find factory for interface ID: " + ToString(inInterfaceID));
 			return nullptr;
         }
         //--------------------------------------------------------------------------------------------------
@@ -100,11 +100,11 @@ namespace ChilliSource
         ///
         /// Looks for a factory with the given interface
         /// @param The type ID of the factory interface you are seeking
-        /// @return Factory that implements the given interface or nullptr if none available
+        /// @return Factory that implements the given interface or NULL if none available
         //--------------------------------------------------------------------------------------------------
         IComponentFactory* CComponentFactoryDispenser::GetFactoryWithInterface(InterfaceIDType inInterfaceID)
         {
-            for(DYNAMIC_ARRAY<IComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
+            for(std::vector<IComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
 			{
                 if((*it)->IsA(inInterfaceID)) 
                 {
@@ -112,7 +112,7 @@ namespace ChilliSource
                 }
 			}
             
-            WARNING_LOG("Cannot find component producer for interface ID: " + STRING_CAST(inInterfaceID));
+            CS_WARNING_LOG("Cannot find component producer for interface ID: " + ToString(inInterfaceID));
             return nullptr;
         }
         //--------------------------------------------------------------------

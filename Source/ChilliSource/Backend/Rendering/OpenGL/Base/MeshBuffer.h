@@ -10,6 +10,7 @@
 #ifndef _MOFLOW_OPENGL_MESHBUFFER_H_
 #define _MOFLOW_OPENGL_MESHBUFFER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>

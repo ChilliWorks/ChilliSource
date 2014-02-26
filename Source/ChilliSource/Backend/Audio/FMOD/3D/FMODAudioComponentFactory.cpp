@@ -26,8 +26,8 @@ namespace ChilliSource
 		///
 		/// @param Audio manager instance so we can create audio
 		//--------------------------------------------------------
-		CFMODAudioComponentFactory::CFMODAudioComponentFactory(Audio::IAudioSystem* inpAudioSystem, Audio::IAudioManager* inpAudioMgr) 
-        : Audio::IAudioComponentFactory(inpAudioSystem, inpAudioMgr)
+		CFMODAudioComponentFactory::CFMODAudioComponentFactory(Audio::AudioSystem* inpAudioSystem, Audio::AudioManager* inpAudioMgr) 
+        : Audio::AudioComponentFactory(inpAudioSystem, inpAudioMgr)
 		{
 			
 		}
@@ -39,7 +39,7 @@ namespace ChilliSource
         //---------------------------------------------------------
 		bool CFMODAudioComponentFactory::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-			return inInterfaceID == IAudioComponentFactory::InterfaceID;
+			return inInterfaceID == AudioComponentFactory::InterfaceID;
 		}
 		//--------------------------------------------------------
 		/// Can Produce Component With Interface
@@ -52,7 +52,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		bool CFMODAudioComponentFactory::CanProduceComponentWithInterface(Core::InterfaceIDType inTypeID) const
 		{
-			return (Audio::CAudioComponent::InterfaceID == inTypeID) || (Audio::CAudioListenerComponent::InterfaceID == inTypeID);
+			return (Audio::AudioComponent::InterfaceID == inTypeID) || (Audio::AudioListenerComponent::InterfaceID == inTypeID);
 		}
 		//--------------------------------------------------------
 		/// Can Produce Component With Type Name
@@ -65,16 +65,16 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		bool CFMODAudioComponentFactory::CanProduceComponentWithTypeName(const std::string & incName) const
 		{
-			return (Audio::CAudioComponent::TypeName == incName) || (Audio::CAudioListenerComponent::TypeName == incName);
+			return (Audio::AudioComponent::TypeName == incName) || (Audio::AudioListenerComponent::TypeName == incName);
 		}
         //--------------------------------------------------------
         /// Create Audio Component
         ///
         /// Instantiates a 2D audio component
         //--------------------------------------------------------
-        Audio::AudioComponentPtr CFMODAudioComponentFactory::CreateAudioComponent()
+        Audio::AudioComponentSPtr CFMODAudioComponentFactory::CreateAudioComponent()
         {
-            return Audio::AudioComponentPtr(new CFMODAudioComponent(mpAudioSystem));
+            return Audio::AudioComponentSPtr(new CFMODAudioComponent(mpAudioSystem));
         }
 		//--------------------------------------------------------
 		/// Create Audio Component
@@ -84,9 +84,9 @@ namespace ChilliSource
 		/// @param Whether the sample loops or not
 		/// @return Audio Component
 		//--------------------------------------------------------
-		Audio::AudioComponentPtr CFMODAudioComponentFactory::CreateAudioComponent(const Audio::AudioResourcePtr& inpAudio, bool inbShouldLoop)
+		Audio::AudioComponentSPtr CFMODAudioComponentFactory::CreateAudioComponent(const Audio::AudioResourceSPtr& inpAudio, bool inbShouldLoop)
 		{
-			Audio::AudioComponentPtr pAudioSample(new CFMODAudioComponent(mpAudioSystem));
+			Audio::AudioComponentSPtr pAudioSample(new CFMODAudioComponent(mpAudioSystem));
 			pAudioSample->SetAudioSource(inpAudio);
 			pAudioSample->SetLooping(inbShouldLoop);
 			return pAudioSample;
@@ -100,10 +100,10 @@ namespace ChilliSource
 		/// @param Whether the sample loops or not
 		/// @return Audio Component
 		//--------------------------------------------------------
-		Audio::AudioComponentPtr CFMODAudioComponentFactory::CreateAudioComponent(Core::StorageLocation ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop)
+		Audio::AudioComponentSPtr CFMODAudioComponentFactory::CreateAudioComponent(Core::StorageLocation ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop)
 		{
 			//Load the audio with our audio manager
-			Audio::AudioResourcePtr pAudioSample;
+			Audio::AudioResourceSPtr pAudioSample;
 			
 			if(!inbShouldStream)
 			{
@@ -116,7 +116,7 @@ namespace ChilliSource
 			
 			pAudioSample->SetStreamed(inbShouldStream);
 			
-			Audio::AudioComponentPtr pAudioComponent(new CFMODAudioComponent(mpAudioSystem));
+			Audio::AudioComponentSPtr pAudioComponent(new CFMODAudioComponent(mpAudioSystem));
 			pAudioComponent->SetAudioSource(pAudioSample);
 			pAudioComponent->SetLooping(inbShouldLoop);
 			return pAudioComponent;
@@ -129,9 +129,9 @@ namespace ChilliSource
 		/// @param Whether the sample loops or not
 		/// @return Audio Component
 		//--------------------------------------------------------
-		Audio::AudioComponentPtr CFMODAudioComponentFactory::Create3DAudioComponent(const Audio::AudioResourcePtr& inpAudio, bool inbShouldLoop)
+		Audio::AudioComponentSPtr CFMODAudioComponentFactory::Create3DAudioComponent(const Audio::AudioResourceSPtr& inpAudio, bool inbShouldLoop)
 		{
-			Audio::AudioComponentPtr pAudioSample(new CFMODAudioComponent(mpAudioSystem));
+			Audio::AudioComponentSPtr pAudioSample(new CFMODAudioComponent(mpAudioSystem));
 			pAudioSample->SetAudioSource(inpAudio);
 			pAudioSample->SetLooping(inbShouldLoop);
 			return pAudioSample;
@@ -145,10 +145,10 @@ namespace ChilliSource
 		/// @param Whether the sample loops or not
 		/// @return Audio Component
 		//--------------------------------------------------------
-		Audio::AudioComponentPtr CFMODAudioComponentFactory::Create3DAudioComponent(Core::StorageLocation ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop)
+		Audio::AudioComponentSPtr CFMODAudioComponentFactory::Create3DAudioComponent(Core::StorageLocation ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop)
 		{
 			//Load the audio with our audio manager
-			Audio::AudioResourcePtr pAudioSample;
+			Audio::AudioResourceSPtr pAudioSample;
 			
 			if(!inbShouldStream)
 			{
@@ -161,7 +161,7 @@ namespace ChilliSource
 			
 			pAudioSample->SetStreamed(inbShouldStream);
 			
-			Audio::AudioComponentPtr pAudioComponent(new CFMODAudioComponent(mpAudioSystem));
+			Audio::AudioComponentSPtr pAudioComponent(new CFMODAudioComponent(mpAudioSystem));
 			pAudioComponent->SetAudioSource(pAudioSample);
 			pAudioComponent->SetLooping(inbShouldLoop);
 			return pAudioComponent;
@@ -173,10 +173,10 @@ namespace ChilliSource
 		/// to the camera
 		/// @return Listener component
 		//--------------------------------------------------------
-		Audio::AudioListenerComponentPtr CFMODAudioComponentFactory::CreateListenerComponent()
+		Audio::AudioListenerComponentSPtr CFMODAudioComponentFactory::CreateListenerComponent()
 		{
-			Audio::AudioListenerPtr pListener = mpAudioManager->CreateListener();
-			Audio::AudioListenerComponentPtr pListenerComponent(new Audio::CAudioListenerComponent());
+			Audio::AudioListenerSPtr pListener = mpAudioManager->CreateListener();
+			Audio::AudioListenerComponentSPtr pListenerComponent(new Audio::AudioListenerComponent());
 			pListenerComponent->SetAudioListener(pListener);
 			return pListenerComponent;
 		}

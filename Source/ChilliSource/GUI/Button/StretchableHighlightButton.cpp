@@ -18,6 +18,7 @@
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 #include <ChilliSource/Audio/3D/AudioComponent.h>
 #include <ChilliSource/Audio/3D/AudioComponentFactory.h>
@@ -66,7 +67,7 @@ namespace ChilliSource
             Core::StorageLocation eNormalSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("NormalSpriteSheetLocation", strValue))
             {
-                eNormalSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eNormalSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("NormalSpriteSheet", strValue))
             {
@@ -76,7 +77,7 @@ namespace ChilliSource
             Core::StorageLocation eHighlightSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("HighlightSpriteSheetLocation", strValue))
             {
-                eHighlightSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eHighlightSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("HighlightSpriteSheet", strValue))
             {
@@ -95,112 +96,112 @@ namespace ChilliSource
             //---Highlight Colour
             if(insParams.TryGetValue("HighlightColour", strValue))
             {
-                SetHighlightColour(Core::CStringConverter::ParseColourValue(strValue));
+                SetHighlightColour(Core::ParseColour(strValue));
             }
             //---Audio effect
             Core::StorageLocation eSelectAudioLocation = Core::StorageLocation::k_package;
             Core::StorageLocation eDeselectAudioLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SelectAudioEffectLocation", strValue))
             {
-                eSelectAudioLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSelectAudioLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("DeselectAudioEffectLocation", strValue))
             {
-                eDeselectAudioLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eDeselectAudioLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("SelectAudioEffect", strValue))
             {
-                Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
+                Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
                 SetSelectAudioEffect(pAudioFactory->CreateAudioComponent(eSelectAudioLocation, strValue, false, false));
             }
 			if(insParams.TryGetValue("DeselectAudioEffect", strValue))
             {
-                Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
+                Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
                 SetDeselectAudioEffect(pAudioFactory->CreateAudioComponent(eDeselectAudioLocation, strValue, false, false));
             }
             //---Normal Sprite sheet indices
             if(insParams.TryGetValue("NormalTopLeftIndex", strValue))
             {
-                msNormalIndices.udwTopLeft = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msNormalIndices.udwTopLeft = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("NormalTopRightIndex", strValue))
             {
-                msNormalIndices.udwTopRight = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msNormalIndices.udwTopRight = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("NormalBottomLeftIndex", strValue))
             {
-                msNormalIndices.udwBottomLeft = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msNormalIndices.udwBottomLeft = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("NormalBottomRightIndex", strValue))
             {
-                msNormalIndices.udwBottomRight = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msNormalIndices.udwBottomRight = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("NormalTopIndex", strValue))
             {
-                msNormalIndices.udwTopCentre = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msNormalIndices.udwTopCentre = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("NormalBottomIndex", strValue))
             {
-                msNormalIndices.udwBottomCentre = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msNormalIndices.udwBottomCentre = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("NormalLeftIndex", strValue))
             {
-                msNormalIndices.udwLeftCentre = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msNormalIndices.udwLeftCentre = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("NormalRightIndex", strValue))
             {
-                msNormalIndices.udwRightCentre = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msNormalIndices.udwRightCentre = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("NormalCentreIndex", strValue))
             {
-                msNormalIndices.udwMiddleCentre = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msNormalIndices.udwMiddleCentre = Core::ParseU32(strValue);
             }
             //---Highlight Sprite sheet indices
             if(insParams.TryGetValue("HighlightTopLeftIndex", strValue))
             {
-                msHighlightIndices.udwTopLeft = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msHighlightIndices.udwTopLeft = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("HighlightTopRightIndex", strValue))
             {
-                msHighlightIndices.udwTopRight = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msHighlightIndices.udwTopRight = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("HighlightBottomLeftIndex", strValue))
             {
-                msHighlightIndices.udwBottomLeft = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msHighlightIndices.udwBottomLeft = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("HighlightBottomRightIndex", strValue))
             {
-                msHighlightIndices.udwBottomRight = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msHighlightIndices.udwBottomRight = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("HighlightTopIndex", strValue))
             {
-                msHighlightIndices.udwTopCentre = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msHighlightIndices.udwTopCentre = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("HighlightBottomIndex", strValue))
             {
-                msHighlightIndices.udwBottomCentre = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msHighlightIndices.udwBottomCentre = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("HighlightLeftIndex", strValue))
             {
-                msHighlightIndices.udwLeftCentre = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msHighlightIndices.udwLeftCentre = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("HighlightRightIndex", strValue))
             {
-                msHighlightIndices.udwRightCentre = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msHighlightIndices.udwRightCentre = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("HighlightCentreIndex", strValue))
             {
-                msHighlightIndices.udwMiddleCentre = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msHighlightIndices.udwMiddleCentre = Core::ParseU32(strValue);
             }
 			//---Width maintain
 			if(insParams.TryGetValue("WidthMaintain", strValue))
             {
-				EnableWidthMaintainingAspect(Core::CStringConverter::ParseBool(strValue));
+				EnableWidthMaintainingAspect(Core::ParseBool(strValue));
 			}
 			//---Height maintain
 			if(insParams.TryGetValue("HeightMaintain", strValue))
             {
-				EnableHeightMaintainingAspect(Core::CStringConverter::ParseBool(strValue));
+				EnableHeightMaintainingAspect(Core::ParseBool(strValue));
 			}
             
             mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &CStretchableHighlightButton::OnButtonSelect);
@@ -351,14 +352,14 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Set Select Audio Effect
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::SetSelectAudioEffect(const Audio::AudioComponentPtr& inpEffect)
+        void CStretchableHighlightButton::SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
         {
             mpSelectAudioEffect = inpEffect;
         }
         //-----------------------------------------------------------
         /// Set De-Select Audio Effect
         //-----------------------------------------------------------
-        void CStretchableHighlightButton::SetDeselectAudioEffect(const Audio::AudioComponentPtr& inpEffect)
+        void CStretchableHighlightButton::SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
         {
             mpDeselectAudioEffect = inpEffect;
         }

@@ -23,7 +23,7 @@ namespace ChilliSource
 	{
 		DEFINE_NAMED_INTERFACE(ITwitterPostSystem);
 
-        ITwitterPostSystem* ITwitterPostSystem::CreateSystem(Networking::IHttpConnectionSystem* inpHttpConnectionSystem, Core::COAuthSystem* inpOAuthSystem)
+        ITwitterPostSystem* ITwitterPostSystem::CreateSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::COAuthSystem* inpOAuthSystem)
         {
 #ifdef TARGET_OS_IPHONE
             return new ChilliSource::iOS::CTwitterPostSystem(static_cast<iOS::CHttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
@@ -36,14 +36,14 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Constructor
 		//------------------------------------------------------------------------
-		ITwitterPostSystem::ITwitterPostSystem(Networking::IHttpConnectionSystem* inpHttpConnectionSystem,
+		ITwitterPostSystem::ITwitterPostSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem,
 											   Core::COAuthSystem* inpOAuthSystem) : mstrCustomerKey(""),
 																						   mstrCustomerSecret(""),
 																						   mpAuthenticationView(nullptr)
 		{
 				mpHttpConnectionSystem = inpHttpConnectionSystem;
 				mpOAuthSystem = inpOAuthSystem;
-				MOFLOW_ASSERT(mpHttpConnectionSystem != nullptr && mpOAuthSystem != nullptr, "Twitter post system requires the http request system and oauth system.");
+				CS_ASSERT(mpHttpConnectionSystem != nullptr && mpOAuthSystem != nullptr, "Twitter post system requires the http request system and oauth system.");
 		}
 		//------------------------------------------------------------------------
 		/// Destructor
@@ -72,10 +72,10 @@ namespace ChilliSource
         			bResult = true;
         		}
 				else
-					ERROR_LOG("CTwitterPostSystem::Init() - ERROR: Twitter does not have an OAuth system!");
+					CS_ERROR_LOG("CTwitterPostSystem::Init() - ERROR: Twitter does not have an OAuth system!");
         	}
         	else
-        		ERROR_LOG("CTwitterPostSystem::Init() - ERROR: Twitter customer key and/or customer secret string(s) empty!");
+        		CS_ERROR_LOG("CTwitterPostSystem::Init() - ERROR: Twitter customer key and/or customer secret string(s) empty!");
 			
         	return bResult;
         }
@@ -85,7 +85,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------
         bool ITwitterPostSystem::Authenticate()
         {
-        	WARNING_LOG("ITwitterPostSystem::Authenticate() - This platform does not have an Authenticate() method\n\tTwitter may not function correctly or at all!");
+        	CS_WARNING_LOG("ITwitterPostSystem::Authenticate() - This platform does not have an Authenticate() method\n\tTwitter may not function correctly or at all!");
 
         	return true;
         }
@@ -124,7 +124,7 @@ namespace ChilliSource
 					sHttpRequest.sHeaders.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
 					sHttpRequest.sHeaders.SetValueForKey(Social::TwitterOAuthAPIHeaders::TWITTER_OAUTH_REQUEST_HEADER_AUTHORIZATION, strOAuthHeader);
 
-					mpHttpConnectionSystem->MakeRequest(sHttpRequest, Networking::IHttpRequest::CompletionDelegate(this, &ITwitterPostSystem::OnStatusUpdateComplete));
+					mpHttpConnectionSystem->MakeRequest(sHttpRequest, Networking::HttpRequest::CompletionDelegate(this, &ITwitterPostSystem::OnStatusUpdateComplete));
 					bResult = true;
 				}
 			}
@@ -134,37 +134,37 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Delegate method called when a status update has completed
 		//------------------------------------------------------------------------
-		void ITwitterPostSystem::OnStatusUpdateComplete(Networking::HttpRequestPtr inpRequest, Networking::IHttpRequest::CompletionResult ineResult)
+		void ITwitterPostSystem::OnStatusUpdateComplete(Networking::HttpRequestPtr inpRequest, Networking::HttpRequest::CompletionResult ineResult)
 		{
-			if(ineResult == ChilliSource::Networking::IHttpRequest::CompletionResult::k_completed)
+			if(ineResult == ChilliSource::Networking::HttpRequest::CompletionResult::k_completed)
 			{
 				if(mCompletionDelegate)
 				{
 					mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_success);
 				}
 			}
-			else if(ineResult == ChilliSource::Networking::IHttpRequest::CompletionResult::k_failed)
+			else if(ineResult == ChilliSource::Networking::HttpRequest::CompletionResult::k_failed)
 			{
 				if(mCompletionDelegate)
 				{
 					mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_failed);
 				}
 			}
-			else if(ineResult == ChilliSource::Networking::IHttpRequest::CompletionResult::k_cancelled)
+			else if(ineResult == ChilliSource::Networking::HttpRequest::CompletionResult::k_cancelled)
 			{
 				if(mCompletionDelegate)
 				{
 					mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_cancelled);
 				}
 			}
-			else if(ineResult == ChilliSource::Networking::IHttpRequest::CompletionResult::k_timeout)
+			else if(ineResult == ChilliSource::Networking::HttpRequest::CompletionResult::k_timeout)
 			{
 				if(mCompletionDelegate)
 				{
 					mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_failed);
 				}
 			}
-			else if(ineResult == ChilliSource::Networking::IHttpRequest::CompletionResult::k_flushed)
+			else if(ineResult == ChilliSource::Networking::HttpRequest::CompletionResult::k_flushed)
 			{
 				if(mCompletionDelegate)
 				{
@@ -206,7 +206,7 @@ namespace ChilliSource
 					sHttpRequest.sHeaders.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
 					sHttpRequest.sHeaders.SetValueForKey(Social::TwitterOAuthAPIHeaders::TWITTER_OAUTH_REQUEST_HEADER_AUTHORIZATION, strOAuthHeader);
 
-					mpHttpConnectionSystem->MakeRequest(sHttpRequest, Networking::IHttpRequest::CompletionDelegate(this, &ITwitterPostSystem::OnRequestOAuthTokenComplete));
+					mpHttpConnectionSystem->MakeRequest(sHttpRequest, Networking::HttpRequest::CompletionDelegate(this, &ITwitterPostSystem::OnRequestOAuthTokenComplete));
 					bResult = true;
 				}
 			}
@@ -216,9 +216,9 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Delegate called with RequestOAuthToken() completes.
 		//------------------------------------------------------------------------
-		void ITwitterPostSystem::OnRequestOAuthTokenComplete(ChilliSource::Networking::HttpRequestPtr inpRequest, ChilliSource::Networking::IHttpRequest::CompletionResult ineResult)
+		void ITwitterPostSystem::OnRequestOAuthTokenComplete(ChilliSource::Networking::HttpRequestPtr inpRequest, ChilliSource::Networking::HttpRequest::CompletionResult ineResult)
 		{
-			if(ineResult == ChilliSource::Networking::IHttpRequest::CompletionResult::k_completed)
+			if(ineResult == ChilliSource::Networking::HttpRequest::CompletionResult::k_completed)
 			{
 				// Tell OAuth system to save access token and secret from web response
 				mpOAuthSystem->ExtractOAuthTokenKeySecret(inpRequest->GetResponseString());
@@ -259,7 +259,7 @@ namespace ChilliSource
 					sHttpRequest.sHeaders.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
 					sHttpRequest.sHeaders.SetValueForKey(Social::TwitterOAuthAPIHeaders::TWITTER_OAUTH_REQUEST_HEADER_AUTHORIZATION, strOAuthHeader);
 
-					mpHttpConnectionSystem->MakeRequest(sHttpRequest, Networking::IHttpRequest::CompletionDelegate(this, &ITwitterPostSystem::OnRequestOAuthAccessTokenComplete));
+					mpHttpConnectionSystem->MakeRequest(sHttpRequest, Networking::HttpRequest::CompletionDelegate(this, &ITwitterPostSystem::OnRequestOAuthAccessTokenComplete));
 					bResult = true;
 				}
 			}
@@ -269,11 +269,11 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Delegate called with RequestOAuthToken() completes.
 		//------------------------------------------------------------------------
-		void ITwitterPostSystem::OnRequestOAuthAccessTokenComplete(ChilliSource::Networking::HttpRequestPtr inpRequest, ChilliSource::Networking::IHttpRequest::CompletionResult ineResult)
+		void ITwitterPostSystem::OnRequestOAuthAccessTokenComplete(ChilliSource::Networking::HttpRequestPtr inpRequest, ChilliSource::Networking::HttpRequest::CompletionResult ineResult)
 		{
-			if(ineResult == ChilliSource::Networking::IHttpRequest::CompletionResult::k_completed)
+			if(ineResult == ChilliSource::Networking::HttpRequest::CompletionResult::k_completed)
 			{
-				DEBUG_LOG("CTwitterPostSystem::OnRequestOAuthAccessTokenComplete() - Got response:\n"+inpRequest->GetResponseString());
+				CS_DEBUG_LOG("CTwitterPostSystem::OnRequestOAuthAccessTokenComplete() - Got response:\n"+inpRequest->GetResponseString());
 				// Tell OAuth system to save access token and secret from web response
 				mpOAuthSystem->ExtractOAuthTokenKeySecret(inpRequest->GetResponseString());
 				SaveOAuthTokenKeyAndSecretKey();

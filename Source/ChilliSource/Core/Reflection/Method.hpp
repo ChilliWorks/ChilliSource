@@ -9,8 +9,8 @@
 #ifndef MO_FLOW_CORE_REFLECTION_METHOD_HPP_
 #define MO_FLOW_CORE_REFLECTION_METHOD_HPP_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Reflection/ForwardDeclarations.h>
-
 
 namespace ChilliSource
 {

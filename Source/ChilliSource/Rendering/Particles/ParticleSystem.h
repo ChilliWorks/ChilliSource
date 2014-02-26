@@ -10,12 +10,10 @@
 #ifndef _MO_FLO_RENDERING_PARTICLE_SYSTEM_H_
 #define _MO_FLO_RENDERING_PARTICLE_SYSTEM_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
-
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particles/ParticleComponentFactory.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
 #include <ChilliSource/Rendering/Particles/Effectors/ParticleEffectorFactory.h>
-
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 
@@ -99,7 +97,7 @@ namespace ChilliSource
             CParticleEmitterFactory mEmitterFactory;
             CParticleEffectorFactory mEffectorFactory;
 			f32 mfTimeScaleFactor;
-			DYNAMIC_ARRAY<CParticleComponent*> mParticleComponents;
+			std::vector<CParticleComponent*> mParticleComponents;
 		};
 	}
 }

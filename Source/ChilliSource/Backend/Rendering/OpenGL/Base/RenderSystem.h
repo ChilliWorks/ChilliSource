@@ -10,17 +10,14 @@
 #ifndef _MOFLOW_OPENGL_ES2_RENDER_SYSTEM_H_
 #define _MOFLOW_OPENGL_ES2_RENDER_SYSTEM_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Base/Colour.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
-
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureManager.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/CubemapManager.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/ShaderManager.h>
-
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
 
 namespace ChilliSource
@@ -154,7 +151,7 @@ namespace ChilliSource
 			///
 			/// @param Dynamic array of joint matrices.
 			//----------------------------------------------------------
-            void ApplyJoints(const DYNAMIC_ARRAY<Core::CMatrix4x4>& inaJoints);
+            void ApplyJoints(const std::vector<Core::CMatrix4x4>& inaJoints);
 			//----------------------------------------------------------
 			/// Create Render Target
 			///
@@ -572,7 +569,7 @@ namespace ChilliSource
 #ifdef TARGET_OS_IPHONE
             EAGLContext* mContext;
 #elif defined TARGET_ANDROID
-            DYNAMIC_ARRAY<CMeshBuffer*> mMeshBuffers;
+            std::vector<CMeshBuffer*> mMeshBuffers;
 #endif
 		};
 	}

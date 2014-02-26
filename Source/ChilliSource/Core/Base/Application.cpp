@@ -20,7 +20,6 @@
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/Resource/ResourceGroupManager.h>
-#include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Base/Logging.h>
 #include <ChilliSource/Core/Base/Device.h>
@@ -34,8 +33,6 @@
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
-#include <ChilliSource/Audio/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
@@ -70,14 +67,14 @@ namespace ChilliSource
         f32 CApplication::mfUpdateSpeed = 1.0f;
         
         Rendering::IRenderSystem* CApplication::mpRenderSystem = nullptr;
-        Input::IInputSystem * CApplication::mpInputSystem = nullptr;
+        Input::InputSystem * CApplication::mpInputSystem = nullptr;
         IPlatformSystem* CApplication::pPlatformSystem = nullptr;
-		Audio::IAudioSystem* CApplication::pAudioSystem = nullptr;
+		Audio::AudioSystem* CApplication::pAudioSystem = nullptr;
 		Rendering::CRenderer* CApplication::mpRenderer = nullptr;
 		IFileSystem* CApplication::mspFileSystem = nullptr;
         
-        DYNAMIC_ARRAY<IUpdateable*> CApplication::mUpdateableSystems;
-        DYNAMIC_ARRAY<SystemPtr> CApplication::mSystems;
+        std::vector<IUpdateable*> CApplication::mUpdateableSystems;
+        std::vector<SystemPtr> CApplication::mSystems;
         
         ScreenOrientation CApplication::meDefaultOrientation = ScreenOrientation::k_landscapeRight;
         
@@ -170,7 +167,7 @@ namespace ChilliSource
         {
             //Get a list of the resource directories and determine which one this device should be
             //loading from based on it's screen
-            DYNAMIC_ARRAY<ResourceDirectoryInfo> aDirectoryInfos;
+            std::vector<ResourceDirectoryInfo> aDirectoryInfos;
             std::string strDefaultDir, strDeviceDir, strDefaultDeviceDir;
             SetResourceDirectories(aDirectoryInfos, strDefaultDeviceDir, strDefaultDir);
             
@@ -180,7 +177,7 @@ namespace ChilliSource
             u32 udwCurrentRes = CScreen::GetOrientedWidth() * CScreen::GetOrientedHeight();
             f32 fCurrenctDensity = CScreen::GetDensity();
             f32 fAssetDensity = 1.0f;
-            for(DYNAMIC_ARRAY<ResourceDirectoryInfo>::const_iterator it = aDirectoryInfos.begin(); it != aDirectoryInfos.end(); ++it)
+            for(std::vector<ResourceDirectoryInfo>::const_iterator it = aDirectoryInfos.begin(); it != aDirectoryInfos.end(); ++it)
             {
                 //The density and the resolution must both be under the maximum for the directory to be selected.
                 if(udwCurrentRes <= it->udwMaxRes && fCurrenctDensity <= it->fMaxDensity)
@@ -193,7 +190,7 @@ namespace ChilliSource
             
             if(strDeviceDir.empty())
             {
-                WARNING_LOG("No resource folder can be found for this device switching to default directory");
+                CS_WARNING_LOG("No resource folder can be found for this device switching to default directory");
                 strDeviceDir = strDefaultDeviceDir;
             }
             
@@ -208,7 +205,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		SystemPtr CApplication::GetSystemImplementing(InterfaceIDType inInterfaceID)
 		{
-			for (DYNAMIC_ARRAY<SystemPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
+			for (std::vector<SystemPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
 			{
 				if ((*it)->IsA(inInterfaceID)) 
 				{
@@ -216,7 +213,7 @@ namespace ChilliSource
 				}
 			}
 			
-			WARNING_LOG("Application cannot find implementing systems");
+			CS_WARNING_LOG("Application cannot find implementing systems");
 			return SystemPtr();
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -226,10 +223,10 @@ namespace ChilliSource
 		/// and fills an array with them.
 		/// @param The type ID of the system you wish to implement
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::GetSystemsImplementing(InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<SystemPtr> & outSystems)
+		void CApplication::GetSystemsImplementing(InterfaceIDType inInterfaceID, std::vector<SystemPtr> & outSystems)
 		{
 			outSystems.clear();
-			for (DYNAMIC_ARRAY<SystemPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
+			for (std::vector<SystemPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
 			{
 				if ((*it)->IsA(inInterfaceID)) 
 				{
@@ -237,7 +234,7 @@ namespace ChilliSource
 				}
 			}
 			
-			WARNING_LOG("Application cannot find implementing systems");
+			CS_WARNING_LOG("Application cannot find implementing systems");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get Resource Provider Producing
@@ -248,7 +245,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		IResourceProvider* CApplication::GetResourceProviderProducing(InterfaceIDType inInterfaceID, const std::string & inExtension)
 		{
-			for (DYNAMIC_ARRAY<IResourceProvider*>::iterator pProv = mResourceProviders.begin(); pProv != mResourceProviders.end(); ++pProv) 
+			for (std::vector<IResourceProvider*>::iterator pProv = mResourceProviders.begin(); pProv != mResourceProviders.end(); ++pProv) 
 			{
 				if ((*pProv)->CanCreateResourceFromFileWithExtension(inExtension)) 
 				{
@@ -256,7 +253,7 @@ namespace ChilliSource
 				}
 			}
 			
-			WARNING_LOG("Application cannot find resource provider");
+			CS_WARNING_LOG("Application cannot find resource provider");
 			return nullptr;
 		}
         //--------------------------------------------------------------------------------------------------
@@ -339,7 +336,7 @@ namespace ChilliSource
 		void CApplication::PostCreateSystems()
 		{
             //Loop round all the created systems and categorise them
-			for(DYNAMIC_ARRAY<SystemPtr>::iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
+			for(std::vector<SystemPtr>::iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
 			{
 				if ((*it)->IsA(IUpdateable::InterfaceID))
 				{
@@ -576,7 +573,7 @@ namespace ChilliSource
 		///
 		/// @param the system pointer.
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::SetInputSystem(Input::IInputSystem* inpSystem)
+		void CApplication::SetInputSystem(Input::InputSystem* inpSystem)
 		{
 			mpInputSystem = inpSystem;
 		}
@@ -585,7 +582,7 @@ namespace ChilliSource
 		///
 		/// @param the system pointer.
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::SetAudioSystem(Audio::IAudioSystem* inpSystem)
+		void CApplication::SetAudioSystem(Audio::AudioSystem* inpSystem)
 		{
 			pAudioSystem = inpSystem;
 		}
@@ -648,8 +645,8 @@ namespace ChilliSource
             }
             
 #ifdef DEBUG_STATS
-            Debugging::CDebugStats::RecordEvent("FrameTime", infDt);
-			Debugging::CDebugStats::RecordEvent("FPS", 1.0f/infDt);
+            Debugging::DebugStats::RecordEvent("FrameTime", infDt);
+			Debugging::DebugStats::RecordEvent("FPS", 1.0f/infDt);
 #endif
             
 			//Update the app time since start
@@ -683,7 +680,7 @@ namespace ChilliSource
             mpRenderer->RenderToScreen(Core::CApplication::GetStateManagerPtr()->GetActiveScenePtr());
             
 #ifdef DEBUG_STATS
-			CDebugStats::Clear();
+			DebugStats::Clear();
 #endif
 		}
         //--------------------------------------------------------------------------------------------------
@@ -705,7 +702,7 @@ namespace ChilliSource
 			//Update sub systems
             if (mbUpdateSystems == true)
             {
-				for(DYNAMIC_ARRAY<IUpdateable*>::iterator it = mUpdateableSystems.begin(); it != mUpdateableSystems.end(); ++it)
+				for(std::vector<IUpdateable*>::iterator it = mUpdateableSystems.begin(); it != mUpdateableSystems.end(); ++it)
 				{
 					(*it)->Update(infDT);
 				}
@@ -722,7 +719,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void CApplication::OnApplicationMemoryWarning()
 		{
-			DEBUG_LOG("Memory Warning. Clearing resource cache...");
+			CS_DEBUG_LOG("Memory Warning. Clearing resource cache...");
 			CResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
 			CApplicationEvents::GetLowMemoryEvent().Invoke();
 		}
@@ -733,7 +730,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void CApplication::OnGoBack()
 		{
-			DEBUG_LOG("Go back event.");
+			CS_DEBUG_LOG("Go back event.");
 			mStateMgr.GetActiveState()->OnGoBack();
 			CApplicationEvents::GetGoBackEvent().Invoke();
 		}
@@ -753,7 +750,7 @@ namespace ChilliSource
             
 			if(HasTouchInput() == true)
 			{
-				Input::ITouchScreen * pTouchScreen = GetSystemImplementing(Input::IInputSystem::InterfaceID)->GetInterface<Input::IInputSystem>()->GetTouchScreenPtr();
+				Input::TouchScreen * pTouchScreen = GetSystemImplementing(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreenPtr();
 				pTouchScreen->SetScreenHeight(CScreen::GetOrientedHeight());
 			}
 		}
@@ -776,7 +773,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void CApplication::Suspend()
 		{
-            DEBUG_LOG("App Suspending...");
+            CS_DEBUG_LOG("App Suspending...");
     
 			s_isSuspending = true;
             
@@ -795,7 +792,7 @@ namespace ChilliSource
 			CApplicationEvents::GetSuspendEvent().Invoke();
 			CApplicationEvents::GetLateSuspendEvent().Invoke();
 			
-			DEBUG_LOG("App Finished Suspending...");
+			CS_DEBUG_LOG("App Finished Suspending...");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Resume
@@ -814,7 +811,7 @@ namespace ChilliSource
 		//----------------------------------------------
 		void CApplication::OnApplicationResumed()
 		{
-			DEBUG_LOG("App Resuming...");
+			CS_DEBUG_LOG("App Resuming...");
             
 			if(mpRenderSystem != nullptr)
 			{
@@ -827,7 +824,7 @@ namespace ChilliSource
 			//Tell the active state to continue
 			mStateMgr.Resume();
 			
-			DEBUG_LOG("App Finished Resuming...");
+			CS_DEBUG_LOG("App Finished Resuming...");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// On Screen Resized
@@ -845,13 +842,13 @@ namespace ChilliSource
             
 			if(HasTouchInput() == true)
 			{
-				Input::ITouchScreen * pTouchScreen = GetSystemImplementing(Input::IInputSystem::InterfaceID)->GetInterface<Input::IInputSystem>()->GetTouchScreenPtr();
+				Input::TouchScreen * pTouchScreen = GetSystemImplementing(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreenPtr();
 				pTouchScreen->SetScreenHeight(CScreen::GetOrientedHeight());
 			}
             
 			CApplicationEvents::GetScreenResizedEvent().Invoke(inudwWidth, inudwHeight);
             
-			DEBUG_LOG("Screen resized Notification");
+			CS_DEBUG_LOG("Screen resized Notification");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// On Screen Changed Orientation
@@ -872,7 +869,7 @@ namespace ChilliSource
 			SetOrientation(ineOrientation);
 			CApplicationEvents::GetScreenOrientationChangedEvent().Invoke(ineOrientation);
             
-			DEBUG_LOG("Screen Oriented Notification");
+			CS_DEBUG_LOG("Screen Oriented Notification");
 
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -887,9 +884,9 @@ namespace ChilliSource
 			pDefaultMesh.reset();
 			pDefaultMaterial.reset();
 
-			SAFE_DELETE(pPlatformSystem);
-            SAFE_DELETE(mpResourceManagerDispenser);
-            SAFE_DELETE(mpComponentFactoryDispenser);
+			CS_SAFE_DELETE(pPlatformSystem);
+            CS_SAFE_DELETE(mpResourceManagerDispenser);
+            CS_SAFE_DELETE(mpComponentFactoryDispenser);
 
 			//We have an issue with the order of destruction of systems.
 			while(mSystems.empty() == false)

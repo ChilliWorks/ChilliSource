@@ -18,13 +18,13 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-        DEFINE_NAMED_INTERFACE(CAudioListenerComponent);
+        DEFINE_NAMED_INTERFACE(AudioListenerComponent);
 		//-------------------------------------------------------
 		/// Constructor
 		///
 		/// Default
 		//-------------------------------------------------------
-		CAudioListenerComponent::CAudioListenerComponent()
+		AudioListenerComponent::AudioListenerComponent()
 		{
 		}
 		//----------------------------------------------------------
@@ -34,9 +34,9 @@ namespace ChilliSource
 		/// @param Comparison Type
 		/// @return Whether the class matches the comparison type
 		//----------------------------------------------------------
-		bool CAudioListenerComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool AudioListenerComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == CAudioListenerComponent::InterfaceID);
+			return (inInterfaceID == AudioListenerComponent::InterfaceID);
 		}
 		//------------------------------------------------------
 		/// Set Audio Listener
@@ -44,7 +44,7 @@ namespace ChilliSource
 		/// Set the audio listener for this component
 		/// @param Audio resource pointer
 		//------------------------------------------------------
-		void CAudioListenerComponent::SetAudioListener(const AudioListenerPtr& inpAudioListener)
+		void AudioListenerComponent::SetAudioListener(const AudioListenerSPtr& inpAudioListener)
 		{
 			mpAudioListener = inpAudioListener;
 		}
@@ -54,7 +54,7 @@ namespace ChilliSource
 		/// Get the audio listener for this component
 		/// @return Audio resource pointer
 		//------------------------------------------------------
-		AudioListenerPtr& CAudioListenerComponent::GetAudioListener()
+		AudioListenerSPtr& AudioListenerComponent::GetAudioListener()
 		{
 			return mpAudioListener;
 		}
@@ -63,7 +63,7 @@ namespace ChilliSource
 		///
 		/// @param Time between frames in seconds
 		//------------------------------------------------------
-		void CAudioListenerComponent::Update(f32 dt)
+		void AudioListenerComponent::Update(f32 dt)
 		{
 			if(mpEntityOwner)
 			{
@@ -84,7 +84,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//-------------------------------------------------------
-		CAudioListenerComponent::~CAudioListenerComponent()
+		AudioListenerComponent::~AudioListenerComponent()
 		{
 		}
 	}

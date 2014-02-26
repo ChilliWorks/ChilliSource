@@ -262,8 +262,8 @@ namespace ChilliSource
          *--*/
         std::string COAuthSystem::GenerateNonceTimeStamp(TimeIntervalSecs TimeStamp)
 		{
-            std::string strTime = Core::CStringConverter::ToString(TimeStamp);
-            std::string strCounter = Core::CStringConverter::ToString(udwNonceCounter);
+            std::string strTime = Core::ToString(TimeStamp);
+            std::string strCounter = Core::ToString(udwNonceCounter);
             
             udwNonceCounter++;
             return strTime + strCounter;
@@ -298,7 +298,7 @@ namespace ChilliSource
 		    {
                 TimeIntervalSecs Timestamp = (TimeIntervalSecs)time(0);
                 mstrNOnce = GenerateNonceTimeStamp(Timestamp);
-		        mstrTimeStamp = Core::CStringConverter::ToString(Timestamp);
+		        mstrTimeStamp = Core::ToString(Timestamp);
 		    }
 
 		    /* Consumer key and its value */
@@ -409,15 +409,15 @@ namespace ChilliSource
 		        }
 		        break;
 		    }
-		    //DEBUG_LOG("\nCOAuthSystem::GetSignature() - URLEncoding URL...");
+		    //CS_DEBUG_LOG("\nCOAuthSystem::GetSignature() - URLEncoding URL...");
 		    strSigBase.append(CBaseEncoding::URLEncode(instrRawUrl));
 		    strSigBase.append("&");
-		    //DEBUG_LOG("\nCOAuthSystem::GetSignature() - URLEncoding params...");
+		    //CS_DEBUG_LOG("\nCOAuthSystem::GetSignature() - URLEncoding params...");
 		    strSigBase.append(CBaseEncoding::URLEncode(strRawParams));
 
-		    //DEBUG_LOG("\nCOAuthSystem::GetSignature() - Signature Raw URL is: \""+instrRawUrl+"\"");
-		    //DEBUG_LOG("COAuthSystem::GetSignature() - Signature Raw Params is: \""+strRawParams+"\"");
-		    //DEBUG_LOG("COAuthSystem::GetSignature() - Signature string is: \""+strSigBase+"\"");
+		    //CS_DEBUG_LOG("\nCOAuthSystem::GetSignature() - Signature Raw URL is: \""+instrRawUrl+"\"");
+		    //CS_DEBUG_LOG("COAuthSystem::GetSignature() - Signature Raw Params is: \""+strRawParams+"\"");
+		    //CS_DEBUG_LOG("COAuthSystem::GetSignature() - Signature string is: \""+strSigBase+"\"");
 
 		    /* Now, hash the signature base string using HMAC_SHA1 class */
 		    ChilliSource::Core::CHMAC_SHA1 objHMACSHA1;
@@ -427,7 +427,7 @@ namespace ChilliSource
 		    memset(bypDigest, 0, OAUTHLIB_BUFFSIZE_LARGE);
 
 		    /* Signing key is composed of consumer_secret&token_secret */
-		    //DEBUG_LOG("COAuthSystem::GetSignature() - Signing with customer secret:\""+mstrConsumerSecret+"\"");
+		    //CS_DEBUG_LOG("COAuthSystem::GetSignature() - Signing with customer secret:\""+mstrConsumerSecret+"\"");
 		    strSecretSigningKey.assign(mstrConsumerSecret);
 		    strSecretSigningKey.append("&");
 		    if(mstrOAuthTokenSecret.length())
@@ -443,13 +443,13 @@ namespace ChilliSource
 
 		    /* Do a base64 encode of signature - SHA 1 digest is 160 bits*/
 		    std::string strBase64String = CBaseEncoding::Base64Encode((s8*)bypDigest, 20);
-		    //DEBUG_LOG("COAuthSystem::GetSignature() - Base64 of signature SHA1:\""+strBase64String+"\"");
+		    //CS_DEBUG_LOG("COAuthSystem::GetSignature() - Base64 of signature SHA1:\""+strBase64String+"\"");
 
 
-		    //DEBUG_LOG("COAuthSystem::GetSignature() - Encoding Base64 signature...");
+		    //CS_DEBUG_LOG("COAuthSystem::GetSignature() - Encoding Base64 signature...");
 		    /* Do an url encode */
 		    outstrOAuthSignature = CBaseEncoding::URLEncode(strBase64String);
-		    //DEBUG_LOG("COAuthSystem::GetSignature() - Encoding result:\""+outstrOAuthSignature+"\"");
+		    //CS_DEBUG_LOG("COAuthSystem::GetSignature() - Encoding result:\""+outstrOAuthSignature+"\"");
 
 		    return (outstrOAuthSignature.length()) ? true : false;
 		}
@@ -667,7 +667,7 @@ namespace ChilliSource
 		            mstrOAuthScreenName = strDummy;
 		        }
 				
-				//DEBUG_LOG("COAuthSystem::ExtractOAuthTokenKeySecret() - Key:\""+mstrOAuthTokenKey+"\", Secret:\""+mstrOAuthTokenSecret+"\", Name:\""+mstrOAuthScreenName+"\"");
+				//CS_DEBUG_LOG("COAuthSystem::ExtractOAuthTokenKeySecret() - Key:\""+mstrOAuthTokenKey+"\", Secret:\""+mstrOAuthTokenSecret+"\", Name:\""+mstrOAuthScreenName+"\"");
 		    }
 		    return true;
 		}

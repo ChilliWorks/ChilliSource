@@ -9,6 +9,8 @@
 
 #include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
 
+#include <ChilliSource/Core/Base/FastDelegate.h>
+
 #ifdef TARGET_OS_IPHONE
 #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookAuthentication.h>
 #elif TARGET_ANDROID

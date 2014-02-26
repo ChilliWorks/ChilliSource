@@ -12,6 +12,7 @@
 
 #ifdef DEBUG_STATS
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Image/ImageView.h>
 #include <ChilliSource/GUI/Label/Label.h>
 
@@ -48,7 +49,7 @@ mpLabel##NAME->AddSubview(mpValue##NAME)
 
 #define SET_DEBUG_STAT(NAME) \
 {\
-    std::string strValue = CDebugStats::GetValueForEvent(#NAME);\
+    std::string strValue = DebugStats::GetValueForEvent(#NAME);\
     if(strValue.empty())\
         strValue = "0";\
     mpValue##NAME->SetText(strValue);\

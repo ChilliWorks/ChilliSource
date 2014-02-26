@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/File/LocalDataStore.h>
-#include <ChilliSource/Core/String/StringConverter.h>
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Cryptographic/aes.h>
 #include <ChilliSource/Core/Cryptographic/AESEncrypt.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
@@ -63,7 +63,7 @@ namespace ChilliSource
 			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
 			if(bSuccess)
             {
-				outbValue = CStringConverter::ParseBool(strTempValue);
+				outbValue = ParseBool(strTempValue);
             }
 			return bSuccess;
 		}
@@ -76,7 +76,7 @@ namespace ChilliSource
 			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
 			if(bSuccess)
             {
-				outuwValue = static_cast<u16>(CStringConverter::ParseUnsignedInt(strTempValue));
+				outuwValue = static_cast<u16>(ParseU32(strTempValue));
             }
 			return bSuccess;			
 		}
@@ -89,7 +89,7 @@ namespace ChilliSource
 			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
 			if(bSuccess)
             {
-				outwValue = static_cast<s16>(CStringConverter::ParseInt(strTempValue));
+				outwValue = static_cast<s16>(ParseS32(strTempValue));
 			}
 			return bSuccess;
 		}
@@ -102,7 +102,7 @@ namespace ChilliSource
 			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
 			if(bSuccess)
             {
-				outudwValue = static_cast<u32>(CStringConverter::ParseUnsignedInt(strTempValue));
+				outudwValue = static_cast<u32>(ParseU32(strTempValue));
 			}
 			return bSuccess;			
 		}
@@ -115,7 +115,7 @@ namespace ChilliSource
 			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
 			if(bSuccess)
             {
-				outdwValue = static_cast<s32>(CStringConverter::ParseInt(strTempValue));
+				outdwValue = static_cast<s32>(ParseS32(strTempValue));
 			}
 			return bSuccess;			
 		}
@@ -128,7 +128,7 @@ namespace ChilliSource
 			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
 			if(bSuccess)
             {
-				outuddwValue = static_cast<u64>(CStringConverter::ParseUnsignedLong(strTempValue));
+				outuddwValue = static_cast<u64>(ParseU64(strTempValue));
 			}
 			return bSuccess;			
 		}
@@ -141,7 +141,7 @@ namespace ChilliSource
 			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
 			if(bSuccess)
             {
-				outddwValue = static_cast<s64>(CStringConverter::ParseLong(strTempValue));
+				outddwValue = static_cast<s64>(ParseS64(strTempValue));
 			}
 			return bSuccess;			
 		}
@@ -154,7 +154,7 @@ namespace ChilliSource
 			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
 			if(bSuccess)
             {
-				outfValue = CStringConverter::ParseFloat(strTempValue);
+				outfValue = ParseF32(strTempValue);
 			}
 			return bSuccess;		
 		}		
@@ -171,56 +171,56 @@ namespace ChilliSource
         //----------------------------------------------------------------
 		void CLocalDataStore::SetValueForKey(const std::string& instrKey, bool inbValue)
         {
-			SetValueForKey(instrKey, CStringConverter::ToString(inbValue));
+			SetValueForKey(instrKey, ToString(inbValue));
 		}
         //----------------------------------------------------------------
         /// Set Value For Key
         //----------------------------------------------------------------
 		void CLocalDataStore::SetValueForKey(const std::string& instrKey, u16 inuwValue)
         {
-			SetValueForKey(instrKey, CStringConverter::ToString(inuwValue));			
+			SetValueForKey(instrKey, ToString(inuwValue));			
 		}
         //----------------------------------------------------------------
         /// Set Value For Key
         //----------------------------------------------------------------
 		void CLocalDataStore::SetValueForKey(const std::string& instrKey, s16 inwValue)
         {
-			SetValueForKey(instrKey, CStringConverter::ToString(inwValue));
+			SetValueForKey(instrKey, ToString(inwValue));
 		}
         //----------------------------------------------------------------
         /// Set Value For Key
         //----------------------------------------------------------------
 		void CLocalDataStore::SetValueForKey(const std::string& instrKey, u32 inudwValue)
         {
-			SetValueForKey(instrKey, CStringConverter::ToString(inudwValue));
+			SetValueForKey(instrKey, ToString(inudwValue));
 		}
         //----------------------------------------------------------------
         /// Set Value For Key
         //----------------------------------------------------------------
 		void CLocalDataStore::SetValueForKey(const std::string& instrKey, s32 indwValue)
         {
-			SetValueForKey(instrKey, CStringConverter::ToString(indwValue));
+			SetValueForKey(instrKey, ToString(indwValue));
 		}
         //----------------------------------------------------------------
         /// Set Value For Key
         //----------------------------------------------------------------
 		void CLocalDataStore::SetValueForKey(const std::string& instrKey, u64 inuddwValue)
         {
-			SetValueForKey(instrKey, CStringConverter::ToString(inuddwValue));
+			SetValueForKey(instrKey, ToString(inuddwValue));
 		}
         //----------------------------------------------------------------
         /// Set Value For Key
         //----------------------------------------------------------------
 		void CLocalDataStore::SetValueForKey(const std::string& instrKey, s64 inddwValue)
         {
-			SetValueForKey(instrKey, CStringConverter::ToString(inddwValue));
+			SetValueForKey(instrKey, ToString(inddwValue));
 		}
         //----------------------------------------------------------------
         /// Set Value For Key
         //----------------------------------------------------------------
 		void CLocalDataStore::SetValueForKey(const std::string& instrKey, f32 infValue)
         {
-			SetValueForKey(instrKey, CStringConverter::ToString(infValue));
+			SetValueForKey(instrKey, ToString(infValue));
 		}
         //----------------------------------------------------------------
         /// Try Erase Key
@@ -279,7 +279,7 @@ namespace ChilliSource
                 pFileStream->Close();
             }
             
-            SAFE_DELETE_ARRAY(pdwDocEncrypted)
+            CS_SAFE_DELETE_ARRAY(pdwDocEncrypted)
             mbBackingValid = true;
 		}
         //----------------------------------------------------------------
@@ -318,7 +318,7 @@ namespace ChilliSource
                         mBackingDictionary.FromXml(pRoot);
                     }
                     
-                    SAFE_DELETE_ARRAY(pbyData);
+                    CS_SAFE_DELETE_ARRAY(pbyData);
                 }
             }
             else

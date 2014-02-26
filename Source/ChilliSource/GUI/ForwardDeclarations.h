@@ -33,89 +33,89 @@ namespace ChilliSource
         //---Resources
 		class CDebugStatsView;
         
-        typedef SHARED_PTR<CGUIView> GUIViewPtr;
-		typedef WEAK_PTR<CGUIView> GUIViewWeakPtr;
+        typedef std::shared_ptr<CGUIView> GUIViewPtr;
+		typedef std::weak_ptr<CGUIView> GUIViewWeakPtr;
         
-        typedef SHARED_PTR<CGridView> GridViewPtr;
-		typedef WEAK_PTR<CGridView> GridViewWeakPtr;
+        typedef std::shared_ptr<CGridView> GridViewPtr;
+		typedef std::weak_ptr<CGridView> GridViewWeakPtr;
         
-        typedef SHARED_PTR<CHorizontalList> HorizontalListPtr;
-		typedef WEAK_PTR<CHorizontalList> HorizontalListWeakPtr;
+        typedef std::shared_ptr<CHorizontalList> HorizontalListPtr;
+		typedef std::weak_ptr<CHorizontalList> HorizontalListWeakPtr;
         
-        typedef SHARED_PTR<CVerticalList> VerticalListPtr;
-		typedef WEAK_PTR<CVerticalList> VerticalListWeakPtr;
+        typedef std::shared_ptr<CVerticalList> VerticalListPtr;
+		typedef std::weak_ptr<CVerticalList> VerticalListWeakPtr;
         
-        typedef SHARED_PTR<CScrollView> ScrollViewPtr;
-		typedef WEAK_PTR<CScrollView> ScrollViewWeakPtr;
+        typedef std::shared_ptr<CScrollView> ScrollViewPtr;
+		typedef std::weak_ptr<CScrollView> ScrollViewWeakPtr;
         
-        typedef SHARED_PTR<CImageView> ImageViewPtr;
-		typedef WEAK_PTR<CImageView> ImageViewWeakPtr;
+        typedef std::shared_ptr<CImageView> ImageViewPtr;
+		typedef std::weak_ptr<CImageView> ImageViewWeakPtr;
 
-		typedef SHARED_PTR<CEditableLabel> EditableLabelPtr;
-		typedef WEAK_PTR<CEditableLabel> EditableLabelWeakPtr;
+		typedef std::shared_ptr<CEditableLabel> EditableLabelPtr;
+		typedef std::weak_ptr<CEditableLabel> EditableLabelWeakPtr;
 		
-		typedef SHARED_PTR<IButton> ButtonPtr;
-		typedef WEAK_PTR<IButton> ButtonWeakPtr;
+		typedef std::shared_ptr<IButton> ButtonPtr;
+		typedef std::weak_ptr<IButton> ButtonWeakPtr;
 		
-        typedef SHARED_PTR<CStretchableImage> StretchableImagePtr;
-		typedef WEAK_PTR<CStretchableImage> StretchableImageWeakPtr;
+        typedef std::shared_ptr<CStretchableImage> StretchableImagePtr;
+		typedef std::weak_ptr<CStretchableImage> StretchableImageWeakPtr;
         
-        typedef SHARED_PTR<CLabel> LabelPtr;
-		typedef WEAK_PTR<CLabel> LabelWeakPtr;
+        typedef std::shared_ptr<CLabel> LabelPtr;
+		typedef std::weak_ptr<CLabel> LabelWeakPtr;
         
-        typedef SHARED_PTR<CFormattedLabel> FormattedLabelPtr;
-		typedef WEAK_PTR<CFormattedLabel> FormattedLabelWeakPtr;
+        typedef std::shared_ptr<CFormattedLabel> FormattedLabelPtr;
+		typedef std::weak_ptr<CFormattedLabel> FormattedLabelWeakPtr;
         
-        typedef SHARED_PTR<CProgressBar> ProgressBarPtr;
-        typedef WEAK_PTR<CProgressBar> ProgressBarWeakPtr;
+        typedef std::shared_ptr<CProgressBar> ProgressBarPtr;
+        typedef std::weak_ptr<CProgressBar> ProgressBarWeakPtr;
 		
-		typedef SHARED_PTR<CDebugStatsView> DebugStatsViewPtr;
-		typedef WEAK_PTR<CDebugStatsView> DebugStatsViewWeakPtr;
+		typedef std::shared_ptr<CDebugStatsView> DebugStatsViewPtr;
+		typedef std::weak_ptr<CDebugStatsView> DebugStatsViewWeakPtr;
         
         //---Default widgets
         class CHighlightButton;
-        typedef SHARED_PTR<CHighlightButton> HighlightButtonPtr;
-        typedef WEAK_PTR<CHighlightButton> HighlightButtonWeakPtr;
+        typedef std::shared_ptr<CHighlightButton> HighlightButtonPtr;
+        typedef std::weak_ptr<CHighlightButton> HighlightButtonWeakPtr;
         
         class CHorizontalClippingProgressBar;
-        typedef SHARED_PTR<CHorizontalClippingProgressBar> HorizontalClippingProgressBarPtr;
-		typedef WEAK_PTR<CHorizontalClippingProgressBar> HorizontalClippingProgressBarWeakPtr;
+        typedef std::shared_ptr<CHorizontalClippingProgressBar> HorizontalClippingProgressBarPtr;
+		typedef std::weak_ptr<CHorizontalClippingProgressBar> HorizontalClippingProgressBarWeakPtr;
         
         class CHorizontalEndcappedProgressBar;
-        typedef SHARED_PTR<CHorizontalEndcappedProgressBar> HorizontalEndcappedProgressBarPtr;
-		typedef WEAK_PTR<CHorizontalEndcappedProgressBar> HorizontalEndcappedProgressBarWeakPtr;
+        typedef std::shared_ptr<CHorizontalEndcappedProgressBar> HorizontalEndcappedProgressBarPtr;
+		typedef std::weak_ptr<CHorizontalEndcappedProgressBar> HorizontalEndcappedProgressBarWeakPtr;
 
         class CVerticalEndcappedProgressBar;
-        typedef SHARED_PTR<CVerticalEndcappedProgressBar> VerticalEndcappedProgressBarPtr;
-		typedef WEAK_PTR<CVerticalEndcappedProgressBar> VerticalEndcappedProgressBarWeakPtr;
+        typedef std::shared_ptr<CVerticalEndcappedProgressBar> VerticalEndcappedProgressBarPtr;
+		typedef std::weak_ptr<CVerticalEndcappedProgressBar> VerticalEndcappedProgressBarWeakPtr;
         
         class CHorizontalProgressBar;
-        typedef SHARED_PTR<CHorizontalProgressBar> HorizontalProgressBarPtr;
-		typedef WEAK_PTR<CHorizontalProgressBar> HorizontalProgressBarWeakPtr;
+        typedef std::shared_ptr<CHorizontalProgressBar> HorizontalProgressBarPtr;
+		typedef std::weak_ptr<CHorizontalProgressBar> HorizontalProgressBarWeakPtr;
         
         class CHorizontalSliderBar;
-        typedef SHARED_PTR<CHorizontalSliderBar> HorizontalSliderBarPtr;
-		typedef WEAK_PTR<CHorizontalSliderBar> HorizontalSliderBarWeakPtr;
+        typedef std::shared_ptr<CHorizontalSliderBar> HorizontalSliderBarPtr;
+		typedef std::weak_ptr<CHorizontalSliderBar> HorizontalSliderBarWeakPtr;
         
         class CHorizontalStretchableImage;
-        typedef SHARED_PTR<CHorizontalStretchableImage> HorizontalStretchableImagePtr;
-        typedef WEAK_PTR<CHorizontalStretchableImage> HorizontalStretchableImageWeakPtr;
+        typedef std::shared_ptr<CHorizontalStretchableImage> HorizontalStretchableImagePtr;
+        typedef std::weak_ptr<CHorizontalStretchableImage> HorizontalStretchableImageWeakPtr;
         
         class CStretchableHighlightButton;
-        typedef SHARED_PTR<CStretchableHighlightButton> StretchableHighlightButtonPtr;
-		typedef WEAK_PTR<CStretchableHighlightButton> StretchableHighlightButtonWeakPtr;
+        typedef std::shared_ptr<CStretchableHighlightButton> StretchableHighlightButtonPtr;
+		typedef std::weak_ptr<CStretchableHighlightButton> StretchableHighlightButtonWeakPtr;
         
         class CToggleButton;
-        typedef SHARED_PTR<CToggleButton> ToggleButtonPtr;
-        typedef WEAK_PTR<CToggleButton> ToggleButtonWeakPtr;
+        typedef std::shared_ptr<CToggleButton> ToggleButtonPtr;
+        typedef std::weak_ptr<CToggleButton> ToggleButtonWeakPtr;
         
         class CVerticalSliderBar;
-        typedef SHARED_PTR<CVerticalSliderBar> VerticalSliderBarPtr;
-        typedef WEAK_PTR<CVerticalSliderBar> VerticalSliderBarWeakPtr;
+        typedef std::shared_ptr<CVerticalSliderBar> VerticalSliderBarPtr;
+        typedef std::weak_ptr<CVerticalSliderBar> VerticalSliderBarWeakPtr;
         
         class CVerticalStretchableImage;
-        typedef SHARED_PTR<CVerticalStretchableImage> VerticalStretchableImagePtr;
-        typedef WEAK_PTR<CVerticalStretchableImage> VerticalStretchableImageWeakPtr;
+        typedef std::shared_ptr<CVerticalStretchableImage> VerticalStretchableImagePtr;
+        typedef std::weak_ptr<CVerticalStretchableImage> VerticalStretchableImageWeakPtr;
     }
 }
 

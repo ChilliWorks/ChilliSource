@@ -16,20 +16,15 @@
 #ifndef _MO_FLO_GUI_GUI_VIEW_H_
 #define _MO_FLO_GUI_GUI_VIEW_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/GUI/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Base/InputEvents.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
-
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Math/Matrix3x3.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
-
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
-
 #include <ChilliSource/Core/Reflection/Reflection.h>
+#include <ChilliSource/Core/Base/Colour.h>
 
 namespace ChilliSource
 {
@@ -61,7 +56,7 @@ namespace ChilliSource
 
 			DECLARE_META_CLASS(CGUIView)
 
-			typedef DYNAMIC_ARRAY<GUIViewPtr> Subviews;
+			typedef std::vector<GUIViewPtr> Subviews;
 
 			CGUIView();
 			CGUIView(const Core::ParamDictionary& insParams);
@@ -164,7 +159,7 @@ namespace ChilliSource
 			/// @param Name
 			/// @param out List of subviews in hierarchy with given name
 			//-----------------------------------------------------
-			void GetSubviewsWithName(const std::string& instrName, DYNAMIC_ARRAY<GUIViewPtr>& outSubviews) const;
+			void GetSubviewsWithName(const std::string& instrName, std::vector<GUIViewPtr>& outSubviews) const;
 			//-----------------------------------------------------
 			/// Bring Forward
 			///

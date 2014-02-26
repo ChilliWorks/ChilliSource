@@ -89,7 +89,7 @@ namespace ChilliSource
             ///
             /// @param Array of 6 images
             //--------------------------------------------------
-            void CubemapImage2D(const DYNAMIC_ARRAY<Core::ResourcePtr>& inapSourceImages)
+            void CubemapImage2D(const std::vector<Core::ResourcePtr>& inapSourceImages)
             {
                 for(u32 i=0; i<6; ++i)
                 {
@@ -104,7 +104,7 @@ namespace ChilliSource
             /// @param Format
             /// @param Array of 6 images
             //--------------------------------------------------
-            void CubemapCompressedImage2D(GLenum inFormat, const DYNAMIC_ARRAY<Core::ResourcePtr>& inapSourceImages)
+            void CubemapCompressedImage2D(GLenum inFormat, const std::vector<Core::ResourcePtr>& inapSourceImages)
             {
                 for(u32 i=0; i<6; ++i)
                 {
@@ -129,9 +129,9 @@ namespace ChilliSource
 		//--------------------------------------------------
 		/// Init
 		//--------------------------------------------------
-		void CCubemap::Init(const DYNAMIC_ARRAY<Core::ResourcePtr>& inapSourceImages, bool inbWithMipsMaps)
+		void CCubemap::Init(const std::vector<Core::ResourcePtr>& inapSourceImages, bool inbWithMipsMaps)
 		{
-            MOFLOW_ASSERT(inapSourceImages.size() == 6, "Cubemaps must have 6 face textures");
+            CS_ASSERT(inapSourceImages.size() == 6, "Cubemaps must have 6 face textures");
             
 			glGenTextures(1, &mGLTextureID);
 			Bind();
@@ -157,7 +157,7 @@ namespace ChilliSource
                     break;
                 case Core::ImageCompression::k_PVR2Bpp:
 #ifndef TARGET_OS_IPHONE
-                    FATAL_LOG("PVR compressed textures are only supported on iOS.");
+                    CS_FATAL_LOG("PVR compressed textures are only supported on iOS.");
 #else
                     switch(pSourceImage->GetFormat())
                     {
@@ -173,7 +173,7 @@ namespace ChilliSource
                     break;
                 case Core::ImageCompression::k_PVR4Bpp:
 #ifndef TARGET_OS_IPHONE
-                    FATAL_LOG("PVR compressed textures are only supported on iOS.");
+                    CS_FATAL_LOG("PVR compressed textures are only supported on iOS.");
 #else
                     switch(pSourceImage->GetFormat())
                     {
@@ -208,7 +208,7 @@ namespace ChilliSource
 		{
 			if(inSlot > mpRenderCapabilities->GetNumTextureUnits())
 			{
-				FATAL_LOG("Attempting to bind to texture unit not supported on this device: " + STRING_CAST(inSlot));
+				CS_FATAL_LOG("Attempting to bind to texture unit not supported on this device: " + Core::ToString(inSlot));
 			}
 			
             CTexture::SetActiveTextureSlot(inSlot);

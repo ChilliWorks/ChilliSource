@@ -14,11 +14,13 @@
 #ifndef _MOFLO_INPUT_INPUTDEVICEFACTORY_H_
 #define _MOFLO_INPUT_INPUTDEVICEFACTORY_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource
 {
 	namespace Input
 	{
-		class IInputDeviceFactory
+		class InputDeviceFactory
 		{
 		public:
 			virtual bool CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) = 0;

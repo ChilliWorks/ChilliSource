@@ -70,7 +70,7 @@ namespace ChilliSource
                 else
                 {
                     msPostDesc = insDesc;
-                    DYNAMIC_ARRAY<std::string> aWritePerms;
+                    std::vector<std::string> aWritePerms;
                     aWritePerms.push_back("publish_actions");
                     if(insDesc.strTo != "")
                         aWritePerms.push_back("publish_stream");
@@ -79,11 +79,11 @@ namespace ChilliSource
             }
             else
             {
-                ERROR_LOG("Facebook Post: User must be authenticated");
+                CS_ERROR_LOG("Facebook Post: User must be authenticated");
             }
         }
         
-        void CFacebookPostSystem::TrySendRequest(const Social::FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback, DYNAMIC_ARRAY<std::string>& inastrRecommendedFriends)
+        void CFacebookPostSystem::TrySendRequest(const Social::FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends)
         {
             std::string strFriends;
             

@@ -2,9 +2,8 @@
 #ifndef _MO_FLO_INPUT_MOUSE_H_
 #define _MO_FLO_INPUT_MOUSE_H_
 
-#include <ChilliSource/Input/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Input/Base/InputDevice.h>
-
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
 namespace ChilliSource
@@ -19,16 +18,16 @@ namespace ChilliSource
             k_total
 		};
 
-		typedef fastdelegate::FastDelegate1<const IMouse*> MouseEventDelegate;
+		typedef fastdelegate::FastDelegate1<const Mouse*> MouseEventDelegate;
 
-		class IMouse : public IInputDevice
+		class Mouse : public InputDevice
 		{
 		public:
 
-			DECLARE_NAMED_INTERFACE(IMouse);
-			IMouse();
-			IMouse(ITouchScreen* inpTouchProxy);
-			virtual ~IMouse(){}
+			DECLARE_NAMED_INTERFACE(Mouse);
+			Mouse();
+			Mouse(TouchScreen* inpTouchProxy);
+			virtual ~Mouse(){}
 
 			//------------------------------------------------------
 			/// Is Button Down
@@ -71,7 +70,7 @@ namespace ChilliSource
 			//Tracks the state of the mouse buttons
 			bool mbaButtonsDown[(u32)MouseInputType::k_total];
 
-			ITouchScreen* mpTouchProxy;
+			TouchScreen* mpTouchProxy;
 		};
 	}
 }

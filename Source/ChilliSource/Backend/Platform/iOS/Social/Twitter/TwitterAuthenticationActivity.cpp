@@ -195,7 +195,7 @@ namespace ChilliSource
 			if(Social::TwitterPIN::kudwTwitterPINLength != instrPIN.size())
 			{
 				// Handle error here
-				ERROR_LOG("Invalid PIN length!");
+				CS_ERROR_LOG("Invalid PIN length!");
 				strPIN.clear();
 			}
 			else

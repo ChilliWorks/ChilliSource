@@ -176,12 +176,12 @@ namespace ChilliSource
         //--------------------------------------------------------------
         std::string IFileSystem::GetDirectoryMD5Checksum(StorageLocation ineStorageLocation, const std::string& instrDirectory) const
 		{
-        	DYNAMIC_ARRAY<std::string> astrHashes;
-			DYNAMIC_ARRAY<std::string> astrFilenames;
+        	std::vector<std::string> astrHashes;
+			std::vector<std::string> astrFilenames;
 			GetFileNamesInDirectory(ineStorageLocation, instrDirectory, true, astrFilenames);
             
 			//get a hash for each of the files.
-			for (DYNAMIC_ARRAY<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
+			for (std::vector<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
 			{
                 std::string strFileHash = GetFileMD5Checksum(ineStorageLocation, instrDirectory + *it);
                 std::string strPathHash = CHashMD5::GenerateBinaryHashCode(it->c_str(), it->length());
@@ -194,7 +194,7 @@ namespace ChilliSource
             
 			//build this into a hashable string
 			std::string strHashableDirectoryContents;
-			for (DYNAMIC_ARRAY<std::string>::iterator it = astrHashes.begin(); it != astrHashes.end(); ++it)
+			for (std::vector<std::string>::iterator it = astrHashes.begin(); it != astrHashes.end(); ++it)
 			{
 				strHashableDirectoryContents += (*it);
 			}
@@ -236,7 +236,7 @@ namespace ChilliSource
 
 				//get the hash
 				udwOutput = CHashCRC32::GenerateHashCode(abyContents, dwLength);
-				SAFE_DELETE_ARRAY(abyContents);
+				CS_SAFE_DELETE_ARRAY(abyContents);
 			}
 			return udwOutput;
 		}
@@ -245,12 +245,12 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		u32 IFileSystem::GetDirectoryCRC32Checksum(StorageLocation ineStorageLocation, const std::string&  instrDirectory) const
 		{
-			DYNAMIC_ARRAY<u32> audwHashes;
-			DYNAMIC_ARRAY<std::string> astrFilenames;
+			std::vector<u32> audwHashes;
+			std::vector<std::string> astrFilenames;
 			GetFileNamesInDirectory(ineStorageLocation, instrDirectory, true, astrFilenames);
 
 			//get a hash for each of the files.
-			for (DYNAMIC_ARRAY<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
+			for (std::vector<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
 			{
 				u32 udwFileHash = GetFileCRC32Checksum(ineStorageLocation, instrDirectory + *it);
 				u32 udwPathHash = CHashCRC32::GenerateHashCode(it->c_str(), it->length());
@@ -263,9 +263,9 @@ namespace ChilliSource
 
 			//build this into a hashable string
 			std::string strHashableDirectoryContents;
-			for (DYNAMIC_ARRAY<u32>::iterator it = audwHashes.begin(); it != audwHashes.end(); ++it)
+			for (std::vector<u32>::iterator it = audwHashes.begin(); it != audwHashes.end(); ++it)
 			{
-				strHashableDirectoryContents += STRING_CAST(*it);
+				strHashableDirectoryContents += ToString(*it);
 			}
 
 			//return the hash of this as the output
@@ -299,13 +299,13 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		u32 IFileSystem::GetDirectorySize(StorageLocation ineStorageLocation, const std::string&  instrDirectory) const
 		{
-			DYNAMIC_ARRAY<std::string> astrFilenames;
+			std::vector<std::string> astrFilenames;
 			GetFileNamesInDirectory(ineStorageLocation, instrDirectory, true, astrFilenames);
 
 			u32 udwTotalSize = 0;
 
 			//get a hash for each of the files.
-			for (DYNAMIC_ARRAY<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
+			for (std::vector<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
 			{
 				u32 udwFileSize = GetFileSize(ineStorageLocation, instrDirectory +"/"+ *it);
 				udwTotalSize += udwFileSize;
@@ -313,7 +313,7 @@ namespace ChilliSource
 
 
 			u32 udwTotalFiles = astrFilenames.size();
-			DEBUG_LOG("Total Files = " + STRING_CAST(udwTotalFiles) + ", Total Size = " + STRING_CAST(udwTotalSize));
+			CS_DEBUG_LOG("Total Files = " + ToString(udwTotalFiles) + ", Total Size = " + ToString(udwTotalSize));
 			return udwTotalSize;
 		}
         

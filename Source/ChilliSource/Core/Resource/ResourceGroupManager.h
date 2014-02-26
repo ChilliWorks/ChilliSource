@@ -13,7 +13,10 @@
 #ifndef _MO_FLO_CORE_RESOURCE_GROUP_MANAGER_H_
 #define _MO_FLO_CORE_RESOURCE_GROUP_MANAGER_H_
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
+
+#include <unordered_map>
+#include <vector>
 
 namespace ChilliSource
 {
@@ -87,15 +90,15 @@ namespace ChilliSource
 				
 				std::string mstrDirectory;
 				
-				DYNAMIC_ARRAY<ResourcePtr> mResources;
+				std::vector<ResourcePtr> mResources;
 				
 				enum class Status{k_loaded, k_notLoaded};
 				Status meCurrentStatus;
 			};
 			
-			typedef SHARED_PTR<CResourceGroup> ResourceGroupPtr;
+			typedef std::shared_ptr<CResourceGroup> ResourceGroupPtr;
 			
-			typedef HASH_MAP<std::string, ResourceGroupPtr> MapStringToResourceGroup;
+			typedef std::unordered_map<std::string, ResourceGroupPtr> MapStringToResourceGroup;
 			typedef MapStringToResourceGroup::iterator MapStringToResourceGroupItr;
 			MapStringToResourceGroup mMapNameToResourceGroup;
 			

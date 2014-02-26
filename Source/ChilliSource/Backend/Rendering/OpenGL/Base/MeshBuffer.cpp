@@ -312,8 +312,8 @@ namespace ChilliSource
                 UnlockIndex();
             }
 
-			SAFE_DELETE_ARRAY(mpVertexDataBackup);
-			SAFE_DELETE_ARRAY(mpIndexDataBackup);
+			CS_SAFE_DELETE_ARRAY(mpVertexDataBackup);
+			CS_SAFE_DELETE_ARRAY(mpIndexDataBackup);
 		}
 		//-----------------------------------------------------
 		/// Set Owning Render System
@@ -375,10 +375,10 @@ namespace ChilliSource
 			mVertexBuffer = 0;
 			mIndexBuffer  = 0;
 
-			SAFE_DELETE_ARRAY(mpVertexData);
-			SAFE_DELETE_ARRAY(mpIndexData);
-			SAFE_DELETE_ARRAY(mpVertexDataBackup);
-			SAFE_DELETE_ARRAY(mpIndexDataBackup);
+			CS_SAFE_DELETE_ARRAY(mpVertexData);
+			CS_SAFE_DELETE_ARRAY(mpIndexData);
+			CS_SAFE_DELETE_ARRAY(mpVertexDataBackup);
+			CS_SAFE_DELETE_ARRAY(mpIndexDataBackup);
 		}
 	}
 }

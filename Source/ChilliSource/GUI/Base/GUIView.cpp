@@ -8,7 +8,7 @@
 
 #include <ChilliSource/GUI/Base/GUIView.h>
 
-#include <ChilliSource/Core/String/StringConverter.h>
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Base/BitOps.h>
@@ -86,52 +86,52 @@ namespace ChilliSource
             if(insParams.TryGetValue("UnifiedPosition", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::CVector4 vRawPosition = Core::CStringConverter::ParseVector4(strValue);
+                Core::CVector4 vRawPosition = Core::ParseVector4(strValue);
                 SetPosition(Core::UnifiedVector2(vRawPosition.x, vRawPosition.y, vRawPosition.z, vRawPosition.w));
             }
             //---Unified size
             if(insParams.TryGetValue("UnifiedSize", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::CVector4 vRawSize = Core::CStringConverter::ParseVector4(strValue);
+                Core::CVector4 vRawSize = Core::ParseVector4(strValue);
                 SetSize(Core::UnifiedVector2(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w));
             }
             //---Unified scale
             if(insParams.TryGetValue("Scale", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::CVector2 vScale = Core::CStringConverter::ParseVector2(strValue);
+                Core::CVector2 vScale = Core::ParseVector2(strValue);
                 ScaleTo(vScale);
             }
             //---Scale Inheritance
 			if (insParams.TryGetValue("InheritScale", strValue))
 			{
-				InheritScale = Core::CStringConverter::ParseBool(strValue);
+				InheritScale = Core::ParseBool(strValue);
 			}
             //---Rotation
             if(insParams.TryGetValue("Rotation", strValue))
             {
-                RotateTo(Core::CStringConverter::ParseFloat(strValue));
+                RotateTo(Core::ParseF32(strValue));
             }
             //---Is rotated with parent
             if(insParams.TryGetValue("RotatedWithParent", strValue))
             {
-                RotatedWithParent = Core::CStringConverter::ParseBool(strValue);
+                RotatedWithParent = Core::ParseBool(strValue);
             }
             //---Is aligned with parent
             if(insParams.TryGetValue("AlignedWithParent", strValue))
             {
-                AlignedWithParent = Core::CStringConverter::ParseBool(strValue);
+                AlignedWithParent = Core::ParseBool(strValue);
             }
 			//---Enable Clipping Off Screen
 			if(insParams.TryGetValue("ClipOffScreen", strValue))
 			{
-				ClipOffScreen = Core::CStringConverter::ParseBool(strValue);
+				ClipOffScreen = Core::ParseBool(strValue);
 			}
             //---Enable clipping
             if(insParams.TryGetValue("ClipSubviews", strValue))
             {
-                ClipSubviews = Core::CStringConverter::ParseBool(strValue);
+                ClipSubviews = Core::ParseBool(strValue);
             }
             //---Local alignment
             if(insParams.TryGetValue("LocalAlignment", strValue))
@@ -147,70 +147,70 @@ namespace ChilliSource
             if(insParams.TryGetValue("UnifiedParentalOffset", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::CVector4 vRawOffset = Core::CStringConverter::ParseVector4(strValue);
+                Core::CVector4 vRawOffset = Core::ParseVector4(strValue);
                 SetOffsetFromParentAlignment(Core::UnifiedVector2(vRawOffset.x, vRawOffset.y, vRawOffset.z, vRawOffset.w));
             }
             //---Unified alignment offset
             if(insParams.TryGetValue("UnifiedPositionOffset", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::CVector4 vRawOffset = Core::CStringConverter::ParseVector4(strValue);
+                Core::CVector4 vRawOffset = Core::ParseVector4(strValue);
                 SetOffsetFromPosition(Core::UnifiedVector2(vRawOffset.x, vRawOffset.y, vRawOffset.z, vRawOffset.w));
             }
             //---Enable user interaction
             if(insParams.TryGetValue("UserInteraction", strValue))
             {
-                UserInteraction = Core::CStringConverter::ParseBool(strValue);
+                UserInteraction = Core::ParseBool(strValue);
             }
             //---Enable touch consumption
             if(insParams.TryGetValue("ConsumesTouches", strValue))
             {
-				EnableTouchConsumption(Core::CStringConverter::ParseBool(strValue));
+				EnableTouchConsumption(Core::ParseBool(strValue));
             }
             //---Enable touch consumption
             if(insParams.TryGetValue("ConsumesTouchesBegan", strValue))
             {
-				EnableTouchConsumption(Core::CStringConverter::ParseBool(strValue), TouchType::k_began);
+				EnableTouchConsumption(Core::ParseBool(strValue), TouchType::k_began);
             }
             //---Enable touch consumption
             if(insParams.TryGetValue("ConsumesTouchesMoved", strValue))
             {
-				EnableTouchConsumption(Core::CStringConverter::ParseBool(strValue), TouchType::k_moved);
+				EnableTouchConsumption(Core::ParseBool(strValue), TouchType::k_moved);
             }
             //---Accept Touches Outside of Bounds
             if(insParams.TryGetValue("AcceptTouchesOutsideOfBounds", strValue))
             {
-                EnableAcceptTouchesOutsideOfBounds(Core::CStringConverter::ParseBool(strValue));
+                EnableAcceptTouchesOutsideOfBounds(Core::ParseBool(strValue));
             }
             //---Colour
             if(insParams.TryGetValue("Colour", strValue))
             {
-                SetColour(Core::CStringConverter::ParseColourValue(strValue));
+                SetColour(Core::ParseColour(strValue));
             }
             //---Colour Inheritance
 			if (insParams.TryGetValue("InheritColour", strValue))
 			{
-				InheritColour = Core::CStringConverter::ParseBool(strValue);
+				InheritColour = Core::ParseBool(strValue);
 			}
             //---Movable
             if(insParams.TryGetValue("Movable", strValue))
             {
-                SetMovable(Core::CStringConverter::ParseBool(strValue));
+                SetMovable(Core::ParseBool(strValue));
             }
 			//---Visible
             if(insParams.TryGetValue("Visible", strValue))
 			{
-				Visible = Core::CStringConverter::ParseBool(strValue);
+				Visible = Core::ParseBool(strValue);
 			}
 			//---Inherit Opacity
 			if (insParams.TryGetValue("InheritOpacity", strValue))
 			{
-				InheritOpacity = Core::CStringConverter::ParseBool(strValue);
+				InheritOpacity = Core::ParseBool(strValue);
 			}
 			//---Opacity
 			if (insParams.TryGetValue("Opacity", strValue))
 			{
-				Opacity = Core::CStringConverter::ParseFloat(strValue);
+				Opacity = Core::ParseF32(strValue);
 			}
         }
 		//-----------------------------------------------------
@@ -605,7 +605,7 @@ namespace ChilliSource
 		/// @param Name
 		/// @param out List of subviews in hierarchy with given name
 		//-----------------------------------------------------
-		void CGUIView::GetSubviewsWithName(const std::string& instrName, DYNAMIC_ARRAY<GUIViewPtr>& outSubviews) const
+		void CGUIView::GetSubviewsWithName(const std::string& instrName, std::vector<GUIViewPtr>& outSubviews) const
         {
             for(CGUIView::Subviews::const_iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
             {

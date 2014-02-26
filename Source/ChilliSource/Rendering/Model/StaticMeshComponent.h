@@ -10,6 +10,7 @@
 #ifndef _MO_FLO_RENDERING_STATIC_MESH_COMPONENT_H_
 #define _MO_FLO_RENDERING_STATIC_MESH_COMPONENT_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/RenderComponent.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
 
@@ -192,7 +193,7 @@ namespace ChilliSource
 		private:
 			
 			MeshPtr mpModel;
-			DYNAMIC_ARRAY<MaterialPtr> mMaterials;
+			std::vector<MaterialPtr> mMaterials;
             
             bool mbBoundingSphereValid;
             bool mbAABBValid;

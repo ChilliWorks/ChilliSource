@@ -28,12 +28,12 @@ namespace ChilliSource
 		/// @param Touch screen device
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CGesture::CGesture(ITouchScreen* inpTouchDevice) : mbIsGestureInvalid(false), mpView(nullptr), mpTouchDevice(inpTouchDevice)
+		Gesture::Gesture(TouchScreen* inpTouchDevice) : mbIsGestureInvalid(false), mpView(nullptr), mpTouchDevice(inpTouchDevice)
 		{
 			//Register for touch notifications
-			inpTouchDevice->GetTouchBeganEvent() += TouchEventDelegate(this, &CGesture::OnTouchBegan);
-			inpTouchDevice->GetTouchMovedEvent() += TouchEventDelegate(this, &CGesture::OnTouchMoved);
-			inpTouchDevice->GetTouchEndEvent() += TouchEventDelegate(this, &CGesture::OnTouchEnded);
+			inpTouchDevice->GetTouchBeganEvent() += TouchEventDelegate(this, &Gesture::OnTouchBegan);
+			inpTouchDevice->GetTouchMovedEvent() += TouchEventDelegate(this, &Gesture::OnTouchMoved);
+			inpTouchDevice->GetTouchEndEvent() += TouchEventDelegate(this, &Gesture::OnTouchEnded);
 		}
         //----------------------------------------------------
 		/// Constructor
@@ -41,12 +41,12 @@ namespace ChilliSource
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CGesture::CGesture(GUI::CGUIView* inpView) : mbIsGestureInvalid(false), mpView(inpView), mpTouchDevice(nullptr)
+		Gesture::Gesture(GUI::CGUIView* inpView) : mbIsGestureInvalid(false), mpView(inpView), mpTouchDevice(nullptr)
 		{
 			//Register for touch notifications
-			mpView->GetTouchBeganEvent() += TouchEventDelegate(this, &CGesture::OnTouchBegan);
-			mpView->GetTouchMovedEvent() += TouchEventDelegate(this, &CGesture::OnTouchMoved);
-			mpView->GetTouchEndEvent() += TouchEventDelegate(this, &CGesture::OnTouchEnded);
+			mpView->GetTouchBeganEvent() += TouchEventDelegate(this, &Gesture::OnTouchBegan);
+			mpView->GetTouchMovedEvent() += TouchEventDelegate(this, &Gesture::OnTouchMoved);
+			mpView->GetTouchEndEvent() += TouchEventDelegate(this, &Gesture::OnTouchEnded);
 		}
 		//----------------------------------------------------
 		/// Register Gesture Delegate
@@ -55,7 +55,7 @@ namespace ChilliSource
 		/// recognized.
 		/// @param Event listener
 		//----------------------------------------------------
-		void CGesture::RegisterGestureDelegate(GestureEventDelegate inEventDelegate)
+		void Gesture::RegisterGestureDelegate(GestureEventDelegate inEventDelegate)
 		{
 			mGestureDelegates.push_back(inEventDelegate);
 		}
@@ -65,7 +65,7 @@ namespace ChilliSource
 		/// Usubscribe the listener for event notifications
 		/// @param Event listener
 		//----------------------------------------------------
-		void CGesture::DeregisterGestureDelegate(GestureEventDelegate inEventDelegate)
+		void Gesture::DeregisterGestureDelegate(GestureEventDelegate inEventDelegate)
 		{
 			for(GestureDelegatesList::iterator it = mGestureDelegates.begin(); it != mGestureDelegates.end(); ++it)
             {
@@ -81,7 +81,7 @@ namespace ChilliSource
 		///
         /// The surface we are listenting too is now gone
 		//----------------------------------------------------
-		void CGesture::SurfaceDestroyed()
+		void Gesture::SurfaceDestroyed()
         {
             mpView = nullptr;
             mpTouchDevice = nullptr;
@@ -92,7 +92,7 @@ namespace ChilliSource
         /// Notify listeners that a gesture action has
         /// occurred
 		//----------------------------------------------------
-        void CGesture::NotifyGestureTriggered()
+        void Gesture::NotifyGestureTriggered()
         {
             for(GestureDelegatesListItr it = mGestureDelegates.begin(); it != mGestureDelegates.end(); ++it)
             {
@@ -103,20 +103,20 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//----------------------------------------------------
-		CGesture::~CGesture()
+		Gesture::~Gesture()
 		{
             if(mpView)
             {
-                mpView->GetTouchBeganEvent() -= TouchEventDelegate(this, &CGesture::OnTouchBegan);
-                mpView->GetTouchMovedEvent() -= TouchEventDelegate(this, &CGesture::OnTouchMoved);
-                mpView->GetTouchEndEvent() -= TouchEventDelegate(this, &CGesture::OnTouchEnded);
+                mpView->GetTouchBeganEvent() -= TouchEventDelegate(this, &Gesture::OnTouchBegan);
+                mpView->GetTouchMovedEvent() -= TouchEventDelegate(this, &Gesture::OnTouchMoved);
+                mpView->GetTouchEndEvent() -= TouchEventDelegate(this, &Gesture::OnTouchEnded);
                 mpView = nullptr;
             }
             else if(mpTouchDevice)
             {
-                mpTouchDevice->GetTouchBeganEvent() -= TouchEventDelegate(this, &CGesture::OnTouchBegan);
-                mpTouchDevice->GetTouchMovedEvent() -= TouchEventDelegate(this, &CGesture::OnTouchMoved);
-                mpTouchDevice->GetTouchEndEvent() -= TouchEventDelegate(this, &CGesture::OnTouchEnded);
+                mpTouchDevice->GetTouchBeganEvent() -= TouchEventDelegate(this, &Gesture::OnTouchBegan);
+                mpTouchDevice->GetTouchMovedEvent() -= TouchEventDelegate(this, &Gesture::OnTouchMoved);
+                mpTouchDevice->GetTouchEndEvent() -= TouchEventDelegate(this, &Gesture::OnTouchEnded);
                 mpTouchDevice = nullptr;
             }
 		}
@@ -132,8 +132,8 @@ namespace ChilliSource
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CSwipeGesture::CSwipeGesture(GUI::CGUIView* inpView)
-		: CGesture(inpView), mMinDistanceRequiredSqrd(4000), mNumContactPointsRequired(1), mCurrentNumContactPoints(0), mMaxNumContactPoints(0), mfMaximumSwipeDuration(0.5f)
+		SwipeGesture::SwipeGesture(GUI::CGUIView* inpView)
+		: Gesture(inpView), mMinDistanceRequiredSqrd(4000), mNumContactPointsRequired(1), mCurrentNumContactPoints(0), mMaxNumContactPoints(0), mfMaximumSwipeDuration(0.5f)
 		{
 		}
         //----------------------------------------------------
@@ -142,8 +142,8 @@ namespace ChilliSource
 		/// @param Touch screen device
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CSwipeGesture::CSwipeGesture(ITouchScreen* inpTouchDevice)
-		: CGesture(inpTouchDevice), mMinDistanceRequiredSqrd(4000), mNumContactPointsRequired(1), mCurrentNumContactPoints(0), mMaxNumContactPoints(0), mfMaximumSwipeDuration(0.5f)
+		SwipeGesture::SwipeGesture(TouchScreen* inpTouchDevice)
+		: Gesture(inpTouchDevice), mMinDistanceRequiredSqrd(4000), mNumContactPointsRequired(1), mCurrentNumContactPoints(0), mMaxNumContactPoints(0), mfMaximumSwipeDuration(0.5f)
 		{
 		}
 		//----------------------------------------------------
@@ -152,7 +152,7 @@ namespace ChilliSource
 		/// The number of contacts before the gesture is recognized.
 		/// @param Number of points required
 		//----------------------------------------------------
-		void CSwipeGesture::SetNumContactPointsRequired(const u32 inNumContacts)
+		void SwipeGesture::SetNumContactPointsRequired(const u32 inNumContacts)
 		{
 			mNumContactPointsRequired = inNumContacts;
 		}
@@ -162,7 +162,7 @@ namespace ChilliSource
 		/// The maximum duration during which the swipe will be recognised.
 		/// @param Max duration of the swipe gesture
 		//----------------------------------------------------
-		void CSwipeGesture::SetMaximumSwipeDuration(const f32 infMaximumSwipeDuration)
+		void SwipeGesture::SetMaximumSwipeDuration(const f32 infMaximumSwipeDuration)
 		{
 			mfMaximumSwipeDuration = infMaximumSwipeDuration;
 		}
@@ -172,7 +172,7 @@ namespace ChilliSource
 		/// Set the minimum distance touches must move to trigger the gesture
 		/// @param Minimum Distance
 		//----------------------------------------------------
-		void CSwipeGesture::SetMinimumDistance(u32 inudwMinDistance)
+		void SwipeGesture::SetMinimumDistance(u32 inudwMinDistance)
 		{
 			mMinDistanceRequiredSqrd = inudwMinDistance * inudwMinDistance;
 		}
@@ -183,7 +183,7 @@ namespace ChilliSource
 		/// Triggered by the input manager when the device
 		/// receives touch notifications
 		//----------------------------------------------------
-		void CSwipeGesture::OnTouchBegan(const TouchInfo &Info)
+		void SwipeGesture::OnTouchBegan(const TouchInfo &Info)
 		{
 			if(++mCurrentNumContactPoints == 1)
 			{
@@ -201,7 +201,7 @@ namespace ChilliSource
 			//Get it's initial position so we can work out it's velocity later
 			mvStartPos = Info.vLocation;
 		}
-		void CSwipeGesture::OnTouchEnded(const TouchInfo &Info)
+		void SwipeGesture::OnTouchEnded(const TouchInfo &Info)
 		{
 			if (mCurrentNumContactPoints > 0)
 				mCurrentNumContactPoints--;
@@ -248,8 +248,8 @@ namespace ChilliSource
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CPinchGesture::CPinchGesture(GUI::CGUIView* inpView)
-		: CGesture(inpView), mMinDistanceRequiredSqrd(6000), mfStartDisplacement(0.0f), mfCurrentDisplacement(0.0f), mbFirstTouchBegan(false), mbSecondTouchBegan(false), mCurrentTouches(0), mTouchID1(0), mfRatio(0.0f),
+		PinchGesture::PinchGesture(GUI::CGUIView* inpView)
+		: Gesture(inpView), mMinDistanceRequiredSqrd(6000), mfStartDisplacement(0.0f), mfCurrentDisplacement(0.0f), mbFirstTouchBegan(false), mbSecondTouchBegan(false), mCurrentTouches(0), mTouchID1(0), mfRatio(0.0f),
 		mTouchID2(0)
 		{
 		}
@@ -259,8 +259,8 @@ namespace ChilliSource
 		/// @param Touch screen device
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CPinchGesture::CPinchGesture(ITouchScreen* inpTouchDevice) 
-		: CGesture(inpTouchDevice), mMinDistanceRequiredSqrd(6000), mfStartDisplacement(0.0f), mfCurrentDisplacement(0.0f), mbFirstTouchBegan(false), mbSecondTouchBegan(false), mCurrentTouches(0), mTouchID1(0), mfRatio(0.0f),
+		PinchGesture::PinchGesture(TouchScreen* inpTouchDevice) 
+		: Gesture(inpTouchDevice), mMinDistanceRequiredSqrd(6000), mfStartDisplacement(0.0f), mfCurrentDisplacement(0.0f), mbFirstTouchBegan(false), mbSecondTouchBegan(false), mCurrentTouches(0), mTouchID1(0), mfRatio(0.0f),
 		mTouchID2(0)
 		{
 		}
@@ -271,7 +271,7 @@ namespace ChilliSource
 		/// recognized.
 		/// @param Event listener
 		//----------------------------------------------------
-		void CPinchGesture::RegisterGestureBeganDelegate(GestureEventDelegate inEventDelegate)
+		void PinchGesture::RegisterGestureBeganDelegate(GestureEventDelegate inEventDelegate)
 		{
 			mGestureBeganDelegates.push_back(inEventDelegate);
 		}
@@ -281,7 +281,7 @@ namespace ChilliSource
 		/// Usubscribe the listener for event notifications
 		/// @param Event listener
 		//----------------------------------------------------
-		void CPinchGesture::DeregisterGestureBeganDelegate(GestureEventDelegate inEventDelegate)
+		void PinchGesture::DeregisterGestureBeganDelegate(GestureEventDelegate inEventDelegate)
 		{
             for(GestureDelegatesList::iterator it = mGestureBeganDelegates.begin(); it != mGestureBeganDelegates.end(); ++it)
             {
@@ -299,7 +299,7 @@ namespace ChilliSource
 		/// recognized.
 		/// @param Event listener
 		//----------------------------------------------------
-		void CPinchGesture::RegisterGestureEndedDelegate(GestureEventDelegate inEventDelegate)
+		void PinchGesture::RegisterGestureEndedDelegate(GestureEventDelegate inEventDelegate)
 		{
 			mGestureEndedDelegates.push_back(inEventDelegate);
 		}
@@ -309,7 +309,7 @@ namespace ChilliSource
 		/// Usubscribe the listener for event notifications
 		/// @param Event listener
 		//----------------------------------------------------
-		void CPinchGesture::DeregisterGestureEndedDelegate(GestureEventDelegate inEventDelegate)
+		void PinchGesture::DeregisterGestureEndedDelegate(GestureEventDelegate inEventDelegate)
 		{
             for(GestureDelegatesList::iterator it = mGestureEndedDelegates.begin(); it != mGestureEndedDelegates.end(); ++it)
             {
@@ -325,7 +325,7 @@ namespace ChilliSource
 		///
 		/// @return Start Displacement
 		//----------------------------------------------------
-		const f32 CPinchGesture::GetStartDisplacement() const
+		const f32 PinchGesture::GetStartDisplacement() const
 		{
 			return mfStartDisplacement;
 		}
@@ -334,7 +334,7 @@ namespace ChilliSource
 		///
 		/// @return Current Displacement
 		//----------------------------------------------------
-		const f32 CPinchGesture::GetCurrentDisplacement() const
+		const f32 PinchGesture::GetCurrentDisplacement() const
 		{
 			return mfCurrentDisplacement;
 		}
@@ -345,7 +345,7 @@ namespace ChilliSource
 		/// Triggered by the input manager when the device
 		/// receives touch notifications
 		//----------------------------------------------------
-		void CPinchGesture::OnTouchBegan(const TouchInfo &Info)
+		void PinchGesture::OnTouchBegan(const TouchInfo &Info)
 		{
 			mCurrentTouches++;
 			
@@ -359,14 +359,14 @@ namespace ChilliSource
 			else if(!mbSecondTouchBegan)
 			{
 				// Need to set the first touch to the current first touch position
-                ITouchScreen* pTouchScreen = mpTouchDevice;
+                TouchScreen* pTouchScreen = mpTouchDevice;
                 
                 if(mpView)
                 {
                     pTouchScreen = Core::CApplication::GetInputSystemPtr()->GetTouchScreenPtr();
                 }
                 
-				ITouchScreen::TouchList& cTouchList = pTouchScreen->GetTouchList();
+				TouchScreen::TouchList& cTouchList = pTouchScreen->GetTouchList();
 				for (u32 i = 0; i < cTouchList.size(); ++i)
 				{
 					if (cTouchList[i].ID == mTouchID1)
@@ -394,7 +394,7 @@ namespace ChilliSource
 					(*it)(*this);
 			}
 		}
-		void CPinchGesture::OnTouchMoved(const TouchInfo &Info)
+		void PinchGesture::OnTouchMoved(const TouchInfo &Info)
 		{
 			//Get the initial distance between the touches
 			//Once that distance has changed sufficiently then we better recognize!
@@ -425,7 +425,7 @@ namespace ChilliSource
 				}
 			}
 		}
-		void CPinchGesture::OnTouchEnded(const TouchInfo &Info)
+		void PinchGesture::OnTouchEnded(const TouchInfo &Info)
 		{
             if(mCurrentTouches > 0)
             {
@@ -455,13 +455,13 @@ namespace ChilliSource
             }
 		}
         
-        void CPinchGesture::PopulateStartPositions(ChilliSource::Core::CVector2& outvFirstPosition, ChilliSource::Core::CVector2& outvSecondPosition) const
+        void PinchGesture::PopulateStartPositions(ChilliSource::Core::CVector2& outvFirstPosition, ChilliSource::Core::CVector2& outvSecondPosition) const
         {
             outvFirstPosition = mvStartPos1;
             outvSecondPosition = mvStartPos2;
         }
         
-        void CPinchGesture::PopulateCurrentPositions(ChilliSource::Core::CVector2& outvFirstPosition, ChilliSource::Core::CVector2& outvSecondPosition) const
+        void PinchGesture::PopulateCurrentPositions(ChilliSource::Core::CVector2& outvFirstPosition, ChilliSource::Core::CVector2& outvSecondPosition) const
         {
             outvFirstPosition = mvCurrentPos1;
             outvSecondPosition = mvCurrentPos2;
@@ -479,8 +479,8 @@ namespace ChilliSource
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CTapGesture::CTapGesture(GUI::CGUIView* inpView)
-		: CGesture(inpView), mNumTapsRequired(1), mfMaximumTapDuration(0.15f), mfMaxTimeBetweenTaps(0.25f), mCurrentNumTaps(0), mfLastTapTime(0.0f), mfLastBeganTime(0.0f), mudwMaxDistAllowedSqrd(1000)
+		TapCSwipeGestureGesture::TapCSwipeGestureGesture(GUI::CGUIView* inpView)
+		: Gesture(inpView), mNumTapsRequired(1), mfMaximumTapDuration(0.15f), mfMaxTimeBetweenTaps(0.25f), mCurrentNumTaps(0), mfLastTapTime(0.0f), mfLastBeganTime(0.0f), mudwMaxDistAllowedSqrd(1000)
 		{
 		}
         //----------------------------------------------------
@@ -489,8 +489,8 @@ namespace ChilliSource
 		/// @param Touch screen device
 		/// @param Active gesture bounds in screen space
 		//----------------------------------------------------
-		CTapGesture::CTapGesture(ITouchScreen* inpTouchDevice) 
-		: CGesture(inpTouchDevice), mNumTapsRequired(1), mfMaximumTapDuration(0.15f), mfMaxTimeBetweenTaps(0.25f), mCurrentNumTaps(0), mfLastTapTime(0.0f), mfLastBeganTime(0.0f), mudwMaxDistAllowedSqrd(1000)
+		TapCSwipeGestureGesture::TapCSwipeGestureGesture(TouchScreen* inpTouchDevice) 
+		: Gesture(inpTouchDevice), mNumTapsRequired(1), mfMaximumTapDuration(0.15f), mfMaxTimeBetweenTaps(0.25f), mCurrentNumTaps(0), mfLastTapTime(0.0f), mfLastBeganTime(0.0f), mudwMaxDistAllowedSqrd(1000)
 		{
 		}
 		//----------------------------------------------------
@@ -500,7 +500,7 @@ namespace ChilliSource
 		/// Use this for double tapping etc
 		/// @param Number of taps required
 		//----------------------------------------------------
-		void CTapGesture::SetNumTapsRequired(const u32 inNumTaps)
+		void TapCSwipeGestureGesture::SetNumTapsRequired(const u32 inNumTaps)
 		{
 			mNumTapsRequired = inNumTaps;
 		}
@@ -511,7 +511,7 @@ namespace ChilliSource
         /// classes as a tap anymore
         /// @param Duration
         //----------------------------------------------------
-        void CTapGesture::SetMaximumTapDuration(const f32 infMaximumTapDuration)
+        void TapCSwipeGestureGesture::SetMaximumTapDuration(const f32 infMaximumTapDuration)
         {
             mfMaximumTapDuration = infMaximumTapDuration;
         }
@@ -522,7 +522,7 @@ namespace ChilliSource
         /// touch that will be accepted as a tap
         /// @param Duration
         //----------------------------------------------------
-        void CTapGesture::SetMaxDistanceAllowedSqrd(const u32 inudwMaxDistanceAllowedSqrd)
+        void TapCSwipeGestureGesture::SetMaxDistanceAllowedSqrd(const u32 inudwMaxDistanceAllowedSqrd)
         {
             mudwMaxDistAllowedSqrd = inudwMaxDistanceAllowedSqrd;
         }
@@ -533,7 +533,7 @@ namespace ChilliSource
 		/// Triggered by the input manager when the device
 		/// receives touch notifications
 		//----------------------------------------------------
-		void CTapGesture::OnTouchBegan(const TouchInfo &Info)
+		void TapCSwipeGestureGesture::OnTouchBegan(const TouchInfo &Info)
 		{
 			if(mCurrentNumTaps == 0)
 			{
@@ -546,7 +546,7 @@ namespace ChilliSource
 			
 			mfLastBeganTime = mTimer.GetTimeElapsed();
 		}
-		void CTapGesture::OnTouchEnded(const TouchInfo &Info)
+		void TapCSwipeGestureGesture::OnTouchEnded(const TouchInfo &Info)
 		{
 			//Ok we know by now whether we had a single tap (gesture will be valid)! Let's check if we have met the multi tap criteria
 			//That is that the taps happen within the given time
@@ -581,7 +581,7 @@ namespace ChilliSource
 		/// Check For Tap
 		/// @return Whether a single tap has been recognized
 		//----------------------------------------------------
-		bool CTapGesture::CheckForTap()
+		bool TapCSwipeGestureGesture::CheckForTap()
 		{
 			f32 fCurrentTapTime = mTimer.GetTimeElapsed();
 			
@@ -598,7 +598,7 @@ namespace ChilliSource
 		/// Check For Multi-Tap
 		/// @return Whether a the most recent tap was part of the last sequence
 		//----------------------------------------------------------------------
-		bool CTapGesture::CheckForMultiTap()
+		bool TapCSwipeGestureGesture::CheckForMultiTap()
 		{
 			f32 fCurrentTapTime = mTimer.GetTimeElapsed();
 			
@@ -631,8 +631,8 @@ namespace ChilliSource
 		/// @param Surface
 		/// @param Active gesture bounds in screen space
 		//-----------------------------------------------------
-		CDragGesture::CDragGesture(GUI::CGUIView* inpView)
-		: CGesture(inpView), mMinDistanceRequiredSqrd(2000), mfInitialHoldDuration(0.8f), mbFirstRun(true), mCurrentTouches(0), mbIsGestureActive(false), mCurrentID(0)
+		DragGesture::DragGesture(GUI::CGUIView* inpView)
+		: Gesture(inpView), mMinDistanceRequiredSqrd(2000), mfInitialHoldDuration(0.8f), mbFirstRun(true), mCurrentTouches(0), mbIsGestureActive(false), mCurrentID(0)
 		{
 		}
         //----------------------------------------------------
@@ -641,8 +641,8 @@ namespace ChilliSource
 		/// @param Touch screen device
 		/// @param Active gesture bounds in screen space
 		//-----------------------------------------------------
-		CDragGesture::CDragGesture(ITouchScreen* inpTouchDevice) 
-		: CGesture(inpTouchDevice), mMinDistanceRequiredSqrd(2000), mfInitialHoldDuration(0.8f), mbFirstRun(true), mCurrentTouches(0), mbIsGestureActive(false), mCurrentID(0)
+		DragGesture::DragGesture(TouchScreen* inpTouchDevice) 
+		: Gesture(inpTouchDevice), mMinDistanceRequiredSqrd(2000), mfInitialHoldDuration(0.8f), mbFirstRun(true), mCurrentTouches(0), mbIsGestureActive(false), mCurrentID(0)
 		{
 		}
 		//----------------------------------------------------
@@ -652,7 +652,7 @@ namespace ChilliSource
 		/// recognized.
 		/// @param Event listener
 		//----------------------------------------------------
-		void CDragGesture::RegisterGestureBeganDelegate(GestureEventDelegate inEventDelegate)
+		void DragGesture::RegisterGestureBeganDelegate(GestureEventDelegate inEventDelegate)
 		{
 			mGestureBeganDelegates.push_back(inEventDelegate);
 		}
@@ -662,7 +662,7 @@ namespace ChilliSource
 		/// Usubscribe the listener for event notifications
 		/// @param Event listener
 		//----------------------------------------------------
-		void CDragGesture::DeregisterGestureBeganDelegate(GestureEventDelegate inEventDelegate)
+		void DragGesture::DeregisterGestureBeganDelegate(GestureEventDelegate inEventDelegate)
 		{
             for(GestureDelegatesList::iterator it = mGestureBeganDelegates.begin(); it != mGestureBeganDelegates.end(); ++it)
             {
@@ -680,7 +680,7 @@ namespace ChilliSource
 		/// recognized.
 		/// @param Event listener
 		//----------------------------------------------------
-		void CDragGesture::RegisterGestureEndedDelegate(GestureEventDelegate inEventDelegate)
+		void DragGesture::RegisterGestureEndedDelegate(GestureEventDelegate inEventDelegate)
 		{
 			mGestureEndedDelegates.push_back(inEventDelegate);
 		}
@@ -690,7 +690,7 @@ namespace ChilliSource
 		/// Usubscribe the listener for event notifications
 		/// @param Event listener
 		//----------------------------------------------------
-		void CDragGesture::DeregisterGestureEndedDelegate(GestureEventDelegate inEventDelegate)
+		void DragGesture::DeregisterGestureEndedDelegate(GestureEventDelegate inEventDelegate)
 		{
             for(GestureDelegatesList::iterator it = mGestureEndedDelegates.begin(); it != mGestureEndedDelegates.end(); ++it)
             {
@@ -708,7 +708,7 @@ namespace ChilliSource
 		/// Triggered by the input manager when the device
 		/// receives touch notifications
 		//----------------------------------------------------
-		void CDragGesture::OnTouchBegan(const TouchInfo &Info)
+		void DragGesture::OnTouchBegan(const TouchInfo &Info)
 		{
 			mbIsGestureInvalid = true;
 			mCurrentTouches++;
@@ -723,7 +723,7 @@ namespace ChilliSource
             }
 		}
 		
-		void CDragGesture::OnTouchMoved(const TouchInfo &Info)
+		void DragGesture::OnTouchMoved(const TouchInfo &Info)
 		{
 			// Only recognise the touch that started the gesture
 			if (mbIsGestureActive && mCurrentID == Info.ID)
@@ -779,7 +779,7 @@ namespace ChilliSource
 			}
 		}
 		
-		void CDragGesture::OnTouchEnded(const TouchInfo &Info)
+		void DragGesture::OnTouchEnded(const TouchInfo &Info)
 		{
             if(mCurrentTouches > 0)//if(mbIsGestureActive && mCurrentTouches > 0)
             {
@@ -820,7 +820,7 @@ namespace ChilliSource
 		/// @param Active gesture bounds in screen space
 		//-----------------------------------------------------
 		CHoldGesture::CHoldGesture(GUI::CGUIView* inpView)
-		: CGesture(inpView), mfMaxDistanceAllowedSqrd(100), mfHoldDuration(0.8f), mbIsGestureActive(false), mudwNumberOfTouch(0), mfInitialHoldTime(0.2f), mbIsGestureStarted(false)
+		: Gesture(inpView), mfMaxDistanceAllowedSqrd(100), mfHoldDuration(0.8f), mbIsGestureActive(false), mudwNumberOfTouch(0), mfInitialHoldTime(0.2f), mbIsGestureStarted(false)
 		{
 		}
         //----------------------------------------------------
@@ -829,8 +829,8 @@ namespace ChilliSource
 		/// @param Touch screen device
 		/// @param Active gesture bounds in screen space
 		//-----------------------------------------------------
-		CHoldGesture::CHoldGesture(ITouchScreen* inpTouchDevice) 
-		: CGesture(inpTouchDevice), mfMaxDistanceAllowedSqrd(100), mfHoldDuration(0.8f), mbIsGestureActive(false), mudwNumberOfTouch(0), mfInitialHoldTime(0.2f), mbIsGestureStarted(false)
+		CHoldGesture::CHoldGesture(TouchScreen* inpTouchDevice) 
+		: Gesture(inpTouchDevice), mfMaxDistanceAllowedSqrd(100), mfHoldDuration(0.8f), mbIsGestureActive(false), mudwNumberOfTouch(0), mfInitialHoldTime(0.2f), mbIsGestureStarted(false)
 		{
 		}
 		//----------------------------------------------------

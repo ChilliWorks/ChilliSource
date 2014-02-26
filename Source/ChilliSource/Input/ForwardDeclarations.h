@@ -1,45 +1,46 @@
-/** 
- * File: ForwardDeclarations.h
- * Date: 5 Oct 2010
- * Description: Forward declarations for classes in the ChilliSource::Input namespace;
- */
+//
+//  ForwardDeclarations.h
+//  Chilli Source
+//
+//  Created by Ian Copland on 26/02/2014.
+//  Copyright 2014 Tag Games. All rights reserved.
+//
 
-/** 
- *
- * Author Stuart 
- * Version 1.0 - moFlo
- * Copyright ©2010 Tag Games Limited - All rights reserved 
- */
-
-#ifndef _MOFLO_INPUT_FORWARDDECLARATIONS_H_
-#define _MOFLO_INPUT_FORWARDDECLARATIONS_H_
+#ifndef _CHILLISOURCE_INPUT_FORWARDDECLARATIONS_H_
+#define _CHILLISOURCE_INPUT_FORWARDDECLARATIONS_H_
 
 namespace ChilliSource 
 {
 	namespace Input 
 	{
-		class IInputSystem;
-		
-		class IInputDeviceFactory;
-		class IInputDevice;
-		
-		class ITouchScreen;
-		class CGesture;
-		class CTapGesture;
-		class CSwipeGesture;
-		class CPinchGesture;
-		class CDragGesture;
-		class CRotationGesture;
-		
-		struct TouchInfo;
-		
-		class IAccelerometer;
-		class IMouse;
-		class IKeyboard;
-		
-		//Virtual input devices
-		class CVirtualAnalogStick;
-		class IVirtualKeyboard;
+        //--------------------------------------------------
+        /// Accelerometer
+        //--------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(Accelerometer);
+        //--------------------------------------------------
+        /// Base
+        //--------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(InputDevice);
+        CS_FORWARD_DECLARE_CLASS(InputDeviceFactory);
+        CS_FORWARD_DECLARE_CLASS(InputSystem);
+        //--------------------------------------------------
+        /// Gestures
+        //--------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(Gesture);
+        CS_FORWARD_DECLARE_CLASS(TapCSwipeGestureGesture);
+        CS_FORWARD_DECLARE_CLASS(SwipeGesture);
+        CS_FORWARD_DECLARE_CLASS(PinchGesture);
+        CS_FORWARD_DECLARE_CLASS(DragGesture);
+        CS_FORWARD_DECLARE_CLASS(RotationGesture);
+        //--------------------------------------------------
+        /// Keyboard
+        //--------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(VirtualKeyboard);
+        //--------------------------------------------------
+        /// Pointer
+        //--------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(Mouse);
+        CS_FORWARD_DECLARE_CLASS(TouchScreen);
 	}
 }
 

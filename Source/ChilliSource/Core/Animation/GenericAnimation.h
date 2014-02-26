@@ -14,6 +14,7 @@
 #ifndef _MOFLO_CORE_GENERICANIMATION_H_
 #define _MOFLO_CORE_GENERICANIMATION_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
@@ -99,7 +100,7 @@ namespace ChilliSource
             u32 mudwFlags;
         };
         
-        typedef SHARED_PTR<IAnimation> AnimationPtr;
+        typedef std::shared_ptr<IAnimation> AnimationPtr;
         
         //<ValueAnimation is a template class which represents the animation of a specific value
         template <typename T> class ValueAnimation : public IAnimation
@@ -278,7 +279,7 @@ namespace ChilliSource
             /////////////////////////////////////////////////////////////////////////////////
             // Version using unique keyframe data
             /////////////////////////////////////////////////////////////////////////////////
-            KeyframeAnimation(const DYNAMIC_ARRAY<f32>* inpafKeyframeTimes, const DYNAMIC_ARRAY<T>* inpaKeyValues)
+            KeyframeAnimation(const std::vector<f32>* inpafKeyframeTimes, const std::vector<T>* inpaKeyValues)
             :ValueAnimation<T>(inpafKeyframeTimes->back()), mpafKeyframeTimes(inpafKeyframeTimes), mpaKeyValues(inpaKeyValues), mbOwnsData(false)
             {
                 ParameteriseKeyframeTimes();			
@@ -286,23 +287,23 @@ namespace ChilliSource
             /////////////////////////////////////////////////////////////////////////////////
             // Version copying keyframe data
             /////////////////////////////////////////////////////////////////////////////////
-            KeyframeAnimation(const DYNAMIC_ARRAY<f32> & inafKeyframeTimes, const DYNAMIC_ARRAY<T> & inaKeyValues)
+            KeyframeAnimation(const std::vector<f32> & inafKeyframeTimes, const std::vector<T> & inaKeyValues)
             :ValueAnimation<T>(inafKeyframeTimes.back()), mbOwnsData(true)
             {
                 SetData(inafKeyframeTimes,inaKeyValues);	
             }
             
-            void SetData(const DYNAMIC_ARRAY<f32>  & inafKeyframeTimes, const DYNAMIC_ARRAY<T> & inaKeyValues)
+            void SetData(const std::vector<f32>  & inafKeyframeTimes, const std::vector<T> & inaKeyValues)
             {
                 {
-                    DYNAMIC_ARRAY<f32> * pLocalKeyFrameTimes = new DYNAMIC_ARRAY<f32>();
+                    std::vector<f32> * pLocalKeyFrameTimes = new std::vector<f32>();
                     pLocalKeyFrameTimes->resize(inafKeyframeTimes.size());
                     std::copy(inafKeyframeTimes.begin(), inafKeyframeTimes.end(),pLocalKeyFrameTimes->begin());
                     
                     mpafKeyframeTimes = pLocalKeyFrameTimes;
                 }
                 {
-                    DYNAMIC_ARRAY<T> * pLocalKeyFrameValues  = new DYNAMIC_ARRAY<T>();
+                    std::vector<T> * pLocalKeyFrameValues  = new std::vector<T>();
                     pLocalKeyFrameValues->resize(inaKeyValues.size());
                     std::copy(inaKeyValues.begin(), inaKeyValues.end(),pLocalKeyFrameValues->begin());
                     
@@ -319,8 +320,8 @@ namespace ChilliSource
             {
                 if (mbOwnsData)
                 {
-                    SAFE_DELETE(mpafKeyframeTimes);
-                    SAFE_DELETE(mpaKeyValues);
+                    CS_SAFE_DELETE(mpafKeyframeTimes);
+                    CS_SAFE_DELETE(mpaKeyValues);
                 }
             }
             
@@ -328,7 +329,7 @@ namespace ChilliSource
             {
                 f32 fProg = this->GetProgression();
                 
-                DYNAMIC_ARRAY<f32>::const_iterator pV = std::lower_bound(mpafKeyframeTimes->begin(), mpafKeyframeTimes->end(), fProg);
+                std::vector<f32>::const_iterator pV = std::lower_bound(mpafKeyframeTimes->begin(), mpafKeyframeTimes->end(), fProg);
                 
                 u32 lowIndex = (&(*pV) - &((*mpafKeyframeTimes)[0]));
                 if (lowIndex > 0)
@@ -353,7 +354,7 @@ namespace ChilliSource
             u32 GetCurrentLowerFrameIndex(){
                 f32 fProg = this->GetProgression();
                 
-                DYNAMIC_ARRAY<f32>::const_iterator pV = std::lower_bound(mpafKeyframeTimes->begin(),mpafKeyframeTimes->end(), fProg);
+                std::vector<f32>::const_iterator pV = std::lower_bound(mpafKeyframeTimes->begin(),mpafKeyframeTimes->end(), fProg);
                 
                 u32 udwLowIndex = (&(*pV) - &((*mpafKeyframeTimes)[0]));
                 if (udwLowIndex > 0)
@@ -369,7 +370,7 @@ namespace ChilliSource
                 {
                     f32 fScaleFactor = mpafKeyframeTimes->back();
                     
-                    DYNAMIC_ARRAY<f32>* pNonConstTimes = const_cast<DYNAMIC_ARRAY<f32>*>(mpafKeyframeTimes);
+                    std::vector<f32>* pNonConstTimes = const_cast<std::vector<f32>*>(mpafKeyframeTimes);
                     
                     for (u32 nKeyframeTime = 0; nKeyframeTime < pNonConstTimes->size(); nKeyframeTime++)
                     {
@@ -379,8 +380,8 @@ namespace ChilliSource
             }
             
             bool mbOwnsData;
-            const DYNAMIC_ARRAY<f32> * mpafKeyframeTimes;
-            const DYNAMIC_ARRAY<T> * mpaKeyValues;
+            const std::vector<f32> * mpafKeyframeTimes;
+            const std::vector<T> * mpaKeyValues;
         };
     }
 }

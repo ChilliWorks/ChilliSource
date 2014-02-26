@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_NETWORKING_MO_CONTENT_DOWNLOADER_H_
 #define _MOFLOW_NETWORKING_MO_CONTENT_DOWNLOADER_H_
 
-#include <ChilliSource/Networking/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Networking/ContentDownload/ContentDownloader.h>
 #include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
 
@@ -17,7 +17,7 @@ namespace ChilliSource
 {
     namespace Networking
     {
-        class CMoContentDownloader : public IContentDownloader
+        class MoContentDownloader : public IContentDownloader
         {
         public:
             //----------------------------------------------------------------
@@ -27,7 +27,7 @@ namespace ChilliSource
             /// @param Asset server URL
             /// @param Dynamic array of tags that determine content
             //----------------------------------------------------------------
-            CMoContentDownloader(IHttpConnectionSystem* inpRequestSystem, const std::string& instrAssetServerURL, const DYNAMIC_ARRAY<std::string>& inastrTags);
+            MoContentDownloader(HttpConnectionSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags);
             //----------------------------------------------------------------
             /// Download Content Manifest
             ///
@@ -58,13 +58,13 @@ namespace ChilliSource
             ///
             /// @return The current tags of this downloader
             //----------------------------------------------------------------
-            inline const DYNAMIC_ARRAY<std::string>& GetTags() const { return mastrTags; }
+            inline const std::vector<std::string>& GetTags() const { return mastrTags; }
             //----------------------------------------------------------------
             /// Set Tags
             ///
             /// Set the tags for this downloader
             //----------------------------------------------------------------
-            inline void SetTags(const DYNAMIC_ARRAY<std::string>& inastrTags) { mastrTags = inastrTags; }
+            inline void SetTags(const std::vector<std::string>& inastrTags) { mastrTags = inastrTags; }
             
         private:
             //----------------------------------------------------------------
@@ -75,7 +75,7 @@ namespace ChilliSource
             /// @param Request response
             /// @param Request result
             //----------------------------------------------------------------
-            void OnContentManifestDownloadComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+            void OnContentManifestDownloadComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
             //----------------------------------------------------------------
             /// On Content Download Complete
             ///
@@ -84,17 +84,17 @@ namespace ChilliSource
             /// @param Request response
             /// @param Request result
             //----------------------------------------------------------------
-            void OnContentDownloadComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+            void OnContentDownloadComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
             
         private:
             
-            DYNAMIC_ARRAY<std::string> mastrTags;
+            std::vector<std::string> mastrTags;
             
             std::string mstrAssetServerURL;
             ContentDownloader::Delegate mOnContentManifestDownloadCompleteDelegate;
             ContentDownloader::Delegate mOnContentDownloadCompleteDelegate;
             
-            IHttpConnectionSystem* mpHttpConnectionSystem;
+            HttpConnectionSystem* mpHttpConnectionSystem;
             
             HttpRequestPtr mpCurrentRequest;
         };

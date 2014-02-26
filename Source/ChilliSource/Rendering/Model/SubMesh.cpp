@@ -194,22 +194,22 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		void CSubMesh::Render(IRenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const MaterialPtr& inpMaterial, const SkinnedAnimationGroupPtr& inpAnimationGroup) const
 		{
-            MOFLOW_ASSERT(mpMeshBuffer->GetVertexCount() > 0, "Cannot render Sub Mesh without vertices");
-            MOFLOW_ASSERT(inpMaterial.get() && inpMaterial->GetActiveShaderProgram(), "Cannot render Sub Mesh without a material or active shader.");
+            CS_ASSERT(mpMeshBuffer->GetVertexCount() > 0, "Cannot render Sub Mesh without vertices");
+            CS_ASSERT(inpMaterial.get() && inpMaterial->GetActiveShaderProgram(), "Cannot render Sub Mesh without a material or active shader.");
             
             inpRenderSystem->ApplyMaterial(*inpMaterial.get());
             
             if (inpAnimationGroup != nullptr)
             {
                 //Apply inverse bind pose matrix.
-                DYNAMIC_ARRAY<Core::CMatrix4x4> combinedMatrices;
+                std::vector<Core::CMatrix4x4> combinedMatrices;
                 inpAnimationGroup->ApplyInverseBindPose(mpInverseBindPose->mInverseBindPoseMatrices, combinedMatrices);
                 inpRenderSystem->ApplyJoints(combinedMatrices);
             }
 			
 			mpMeshBuffer->Bind();
 #ifdef DEBUG_STATS
-            CDebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
+            DebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
 #endif
             if(mpMeshBuffer->GetIndexCount() > 0)
             {
@@ -225,7 +225,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		CSubMesh::~CSubMesh()
 		{
-			SAFE_DELETE(mpMeshBuffer);
+			CS_SAFE_DELETE(mpMeshBuffer);
 		}
 	}
 }

@@ -11,6 +11,7 @@
 #ifndef _MO_FLO_PLATFORM_IOS_WEB_VIEW_ACTIVITY_H_
 #define _MO_FLO_PLATFORM_IOS_WEB_VIEW_ACTIVITY_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Web/Base/WebViewActivity.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #include <ChilliSource/Core/File/FileSystem.h>

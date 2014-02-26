@@ -19,9 +19,9 @@ namespace ChilliSource
 		///
 		/// @return Concrete audio resource based on the audio system
 		//-----------------------------------------------------------------
-		Audio::AudioResourcePtr CFMODAudioManager::CreateAudioResource() const
+		Audio::AudioResourceSPtr CFMODAudioManager::CreateAudioResource() const
 		{
-			return Audio::AudioResourcePtr(new CFMODAudioResource());
+			return Audio::AudioResourceSPtr(new CFMODAudioResource());
 		}
 	}
 }

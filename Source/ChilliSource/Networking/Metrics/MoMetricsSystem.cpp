@@ -21,59 +21,59 @@ namespace ChilliSource
 	
 	namespace Networking
     {
-		DEFINE_NAMED_INTERFACE(CMoMetricsSystem);
+		DEFINE_NAMED_INTERFACE(MoMetricsSystem);
 		
-		CMoMetricsSystem * CMoMetricsSystem::mpSingletonInstance = nullptr;
+		MoMetricsSystem * MoMetricsSystem::mpSingletonInstance = nullptr;
 		
-		CMoMetricsSystem::CMoMetricsSystem(IHttpConnectionSystem * inpHttpSystem, const std::string& instrMoMetricsServerURL, const std::string& instrAppID, IExternalMetrics* inpExternalMetrics)
+		MoMetricsSystem::MoMetricsSystem(HttpConnectionSystem * inpHttpSystem, const std::string& instrMoMetricsServerURL, const std::string& instrAppID, IExternalMetrics* inpExternalMetrics)
 		: mpHttpSystem(inpHttpSystem), mstrMoMetricsURL(instrMoMetricsServerURL), mstrAppID(instrAppID), mpCurrentSession(nullptr), mbSessionsStarted(false), mpExternalMetrics(inpExternalMetrics)
 		{		
 			mpSingletonInstance = this;
 		}
 		
-		bool CMoMetricsSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool MoMetricsSystem::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-			return inInterfaceID == CMoMetricsSystem::InterfaceID;
+			return inInterfaceID == MoMetricsSystem::InterfaceID;
 		}
         
-		CMoMetricsSystem & CMoMetricsSystem::GetSingleton()
+		MoMetricsSystem & MoMetricsSystem::GetSingleton()
         {
 			return *mpSingletonInstance;
 		}
         
-		CMoMetricsSystem * CMoMetricsSystem::GetSingletonPtr()
+		MoMetricsSystem * MoMetricsSystem::GetSingletonPtr()
         {
 			return mpSingletonInstance;
 		}
         
-        void CMoMetricsSystem::SetConstant(const std::string& instrKey, const std::string& instrValue)
+        void MoMetricsSystem::SetConstant(const std::string& instrKey, const std::string& instrValue)
         {
-            MOFLOW_ASSERT(mpCurrentSession, "Cannot set constant without first starting a session");
+            CS_ASSERT(mpCurrentSession, "Cannot set constant without first starting a session");
             if(mpCurrentSession)
             {
                 mpCurrentSession->SetConstant(instrKey, instrValue);
             }
         }
         
-        void CMoMetricsSystem::SetLocation(const MetricsLocation& insLocation)
+        void MoMetricsSystem::SetLocation(const MetricsLocation& insLocation)
         {
-            MOFLOW_ASSERT(mpCurrentSession, "Cannot set location without first starting a session");
+            CS_ASSERT(mpCurrentSession, "Cannot set location without first starting a session");
             if(mpCurrentSession)
             {
                 mpCurrentSession->RequestLocationUpdate(insLocation);
             }
         }
         
-        void CMoMetricsSystem::SetServerTimeDelta(s32 indwServerDelta)
+        void MoMetricsSystem::SetServerTimeDelta(s32 indwServerDelta)
 		{
-            MOFLOW_ASSERT(mpCurrentSession, "Cannot set server time delta without first starting a session");
+            CS_ASSERT(mpCurrentSession, "Cannot set server time delta without first starting a session");
             if(mpCurrentSession)
             {
                 mpCurrentSession->SetServerTimeDelta(indwServerDelta);
             }
 		}
 		
-		void CMoMetricsSystem::StartSessions()
+		void MoMetricsSystem::StartSessions()
         {
             if(mbSessionsStarted)
                 return;
@@ -102,12 +102,12 @@ namespace ChilliSource
             
             if(!mpCurrentSession)
             {
-                mpCurrentSession = new CMoMetricsSession(mpHttpSystem, mstrMoMetricsURL, mstrAppID, mpExternalMetrics);
+                mpCurrentSession = new MoMetricsSession(mpHttpSystem, mstrMoMetricsURL, mstrAppID, mpExternalMetrics);
                 mpCurrentSession->RequestAuthTokens();
             }
 		}
         
-        void CMoMetricsSystem::LoadPendingSessions()
+        void MoMetricsSystem::LoadPendingSessions()
         {
             Json::Value jSessions;
             if(Core::CUtils::ReadJson(Core::StorageLocation::k_cache, "PendingSessions.mometrics", &jSessions))
@@ -119,7 +119,7 @@ namespace ChilliSource
                     
                     for(u32 i=0; i<jClosedSessions.size(); ++i)
                     {
-                        CMoMetricsSession* pSession = new CMoMetricsSession(mpHttpSystem, mstrMoMetricsURL, mstrAppID);
+                        MoMetricsSession* pSession = new MoMetricsSession(mpHttpSystem, mstrMoMetricsURL, mstrAppID);
                         pSession->LoadFromCache(jClosedSessions[i].asString());
                         maPendingClosedSessions.push_back(pSession);
                     }
@@ -129,7 +129,7 @@ namespace ChilliSource
                 {
                     if(!jSessions["Current"].isNull())
                     {
-                        mpCurrentSession = new CMoMetricsSession(mpHttpSystem, mstrMoMetricsURL, mstrAppID);
+                        mpCurrentSession = new MoMetricsSession(mpHttpSystem, mstrMoMetricsURL, mstrAppID);
                         mpCurrentSession->LoadFromCache(jSessions["Current"].asString());
                     }
                 }
@@ -138,9 +138,9 @@ namespace ChilliSource
             }
         }
         
-        void CMoMetricsSystem::FlushPendingClosedSessions()
+        void MoMetricsSystem::FlushPendingClosedSessions()
         {
-            for(DYNAMIC_ARRAY<CMoMetricsSession*>::iterator it = maPendingClosedSessions.begin(); it != maPendingClosedSessions.end(); ++it)
+            for(std::vector<MoMetricsSession*>::iterator it = maPendingClosedSessions.begin(); it != maPendingClosedSessions.end(); ++it)
             {
                 if(!(*it)->IsOpen())
                 {
@@ -152,16 +152,16 @@ namespace ChilliSource
             }
         }
         
-        void CMoMetricsSystem::RecordEvent(const std::string & instrType, const DYNAMIC_ARRAY<std::string>& inastrParams, bool inbSummarise)
+        void MoMetricsSystem::RecordEvent(const std::string & instrType, const std::vector<std::string>& inastrParams, bool inbSummarise)
         {
-            MOFLOW_ASSERT(mpCurrentSession, "Cannot record event without first starting a session");
+            CS_ASSERT(mpCurrentSession, "Cannot record event without first starting a session");
             if(mpCurrentSession)
             {
                 mpCurrentSession->RecordEvent(instrType, inastrParams, inbSummarise);
             }
 		}
     
-        void CMoMetricsSystem::ForceFlushCache()
+        void MoMetricsSystem::ForceFlushCache()
         {
             if(mpCurrentSession && mpCurrentSession->IsOpen())
             {
@@ -169,11 +169,11 @@ namespace ChilliSource
             }
         }
         
-        void CMoMetricsSystem::StopSessions()
+        void MoMetricsSystem::StopSessions()
         {
             //Save the cached metrics
             Json::Value jClosed;
-            for(DYNAMIC_ARRAY<CMoMetricsSession*>::iterator it = maPendingClosedSessions.begin(); it != maPendingClosedSessions.end(); ++it)
+            for(std::vector<MoMetricsSession*>::iterator it = maPendingClosedSessions.begin(); it != maPendingClosedSessions.end(); ++it)
             {
                 if(!(*it)->IsClosed())
                 {
@@ -198,19 +198,19 @@ namespace ChilliSource
             mbSessionsStarted = false;
 		}
         
-        void CMoMetricsSystem::Destroy()
+        void MoMetricsSystem::Destroy()
         {
-            SAFE_DELETE(mpCurrentSession);
+            CS_SAFE_DELETE(mpCurrentSession);
             
-            for(DYNAMIC_ARRAY<CMoMetricsSession*>::iterator it = maPendingClosedSessions.begin(); it != maPendingClosedSessions.end(); ++it)
+            for(std::vector<MoMetricsSession*>::iterator it = maPendingClosedSessions.begin(); it != maPendingClosedSessions.end(); ++it)
             {
-                CMoMetricsSession* pSession = (*it);
+                MoMetricsSession* pSession = (*it);
                 delete pSession;
             }
             maPendingClosedSessions.clear();
         }
         
-        CMoMetricsSystem::~CMoMetricsSystem()
+        MoMetricsSystem::~MoMetricsSystem()
         {
             Destroy();
         }

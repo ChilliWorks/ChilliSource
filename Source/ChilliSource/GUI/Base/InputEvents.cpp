@@ -116,7 +116,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         bool CInputEvents::OnTouchMoved(CGUIView* inpView, const Input::TouchInfo & insTouchInfo)
         {
-            DYNAMIC_ARRAY<u32>::iterator it = std::find(mOpenTouches.begin(), mOpenTouches.end(), insTouchInfo.ID);
+            std::vector<u32>::iterator it = std::find(mOpenTouches.begin(), mOpenTouches.end(), insTouchInfo.ID);
             
             bool bContains = inpView->Contains(insTouchInfo.vLocation);
             
@@ -149,7 +149,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void CInputEvents::OnTouchEnded(CGUIView* inpView, const Input::TouchInfo & insTouchInfo)
         {
-            DYNAMIC_ARRAY<u32>::iterator it = std::find(mOpenTouches.begin(), mOpenTouches.end(), insTouchInfo.ID);
+            std::vector<u32>::iterator it = std::find(mOpenTouches.begin(), mOpenTouches.end(), insTouchInfo.ID);
             
             if(inpView->Contains(insTouchInfo.vLocation))
             {

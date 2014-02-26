@@ -9,6 +9,7 @@
 #ifndef _MO_FLO_CORE_APPLICATION_EVENTS_H_
 #define _MO_FLO_CORE_APPLICATION_EVENTS_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/Base/Screen.h>
 

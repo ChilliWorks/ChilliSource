@@ -8,10 +8,12 @@
  */
 
 #include <ChilliSource/Rendering/Material/Material.h>
+
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Shader/ShaderManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-
+#include <ChilliSource/Core/Math/Matrix4x4.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 namespace ChilliSource
@@ -145,7 +147,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Textures
 		//----------------------------------------------------------
-		const DYNAMIC_ARRAY<TexturePtr>& CMaterial::GetTextures() const
+		const std::vector<TexturePtr>& CMaterial::GetTextures() const
 		{
 			return mTextures;
 		}
@@ -441,7 +443,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Shader Matrix Array Value
 		//-----------------------------------------------------------
-		void CMaterial::SetShaderMatrixArrayValue(const std::string& instrVarName, const DYNAMIC_ARRAY<Core::CMatrix4x4>& inmatValue)
+		void CMaterial::SetShaderMatrixArrayValue(const std::string& instrVarName, const std::vector<Core::CMatrix4x4>& inmatValue)
 		{
 			mMapMat4ArrayShaderVars[instrVarName] = inmatValue;
             

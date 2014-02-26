@@ -57,7 +57,7 @@ namespace ChilliSource
 					//insure this is using the correct vertex declaration.
 					CVertexDeclaration declaration = pSubMesh->GetInternalMeshBuffer()->GetVertexDeclaration();
 					if (!(declaration == VertexLayout::kMesh))
-						ERROR_LOG("Mesh in mesh batch is not using the correct vertex layout!");
+						CS_ERROR_LOG("Mesh in mesh batch is not using the correct vertex layout!");
 				}
                 
                 mudwVertexCount += pMesh->GetNumVerts();
@@ -134,7 +134,7 @@ namespace ChilliSource
 				//---------------------------------------------------
                 // Sub-Meshes
                 //---------------------------------------------------
-				for(DYNAMIC_ARRAY<SubMeshPtr>::const_iterator jt = it->first->GetMesh()->mSubMeshes.begin(); jt != it->first->GetMesh()->mSubMeshes.end(); ++jt)
+				for(std::vector<SubMeshPtr>::const_iterator jt = it->first->GetMesh()->mSubMeshes.begin(); jt != it->first->GetMesh()->mSubMeshes.end(); ++jt)
 				{
 					IMeshBuffer* pSubBuffer = (*jt)->GetInternalMeshBuffer();
 					pSubBuffer->Bind();
@@ -222,7 +222,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CMeshBatch::Render(IRenderSystem* inpRenderSystem) const
 		{
-            MOFLOW_ASSERT(mpMaterial && mpMaterial->GetActiveShaderProgram(), "Cannot render a mesh batch without a material or active shader.");
+            CS_ASSERT(mpMaterial && mpMaterial->GetActiveShaderProgram(), "Cannot render a mesh batch without a material or active shader.");
             
 			//If we own the mesh buffer then the batcher won't be calling bind for us.
 			mpMeshBuffer->Bind();
@@ -230,7 +230,7 @@ namespace ChilliSource
 			//Tell the render system to draw the contents of the buffer
 			inpRenderSystem->ApplyMaterial(*mpMaterial.get());
 #ifdef DEBUG_STATS
-            CDebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
+            DebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
 #endif
 			inpRenderSystem->RenderBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetIndexCount(), Core::CMatrix4x4::IDENTITY);
 		}
@@ -276,7 +276,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		CMeshBatch::~CMeshBatch() 
 		{
-			SAFE_DELETE(mpMeshBuffer)
+			CS_SAFE_DELETE(mpMeshBuffer)
 		}
 	}
 }

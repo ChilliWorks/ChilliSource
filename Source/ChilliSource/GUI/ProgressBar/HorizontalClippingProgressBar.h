@@ -9,6 +9,7 @@
 #ifndef _MOFLO_GUI_DEFAULTS_HORIZONTAL_CLIPPING_PROGRESS_BAR_H_
 #define _MOFLO_GUI_DEFAULTS_HORIZONTAL_CLIPPING_PROGRESS_BAR_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/GUI/ProgressBar/ProgressBar.h>
 
@@ -178,8 +179,8 @@ namespace ChilliSource
 			f32 mfSegmentSize;
 		};
 
-		typedef SHARED_PTR<CHorizontalClippingProgressBar> HorizontalClippingProgressBarPtr;
-		typedef WEAK_PTR<CHorizontalClippingProgressBar> HorizontalClippingProgressBarWeakPtr;
+		typedef std::shared_ptr<CHorizontalClippingProgressBar> HorizontalClippingProgressBarPtr;
+		typedef std::weak_ptr<CHorizontalClippingProgressBar> HorizontalClippingProgressBarWeakPtr;
 	}
 }
 

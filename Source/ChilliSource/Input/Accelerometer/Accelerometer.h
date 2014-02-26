@@ -9,9 +9,11 @@
 #ifndef MOFLOW_INPUT_ACCELEROMETER_H
 #define MOFLOW_INPUT_ACCELEROMETER_H
 
-#include <ChilliSource/Input/Base/InputDevice.h>
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
+#include <ChilliSource/Input/Base/InputDevice.h>
 
 namespace ChilliSource
 {
@@ -23,10 +25,10 @@ namespace ChilliSource
 		/// Listens to and stores the acceleration read from the
 		/// hardware accelerometer.
 		//======================================================
-		class IAccelerometer : public IInputDevice
+		class Accelerometer : public InputDevice
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(IAccelerometer);
+			DECLARE_NAMED_INTERFACE(Accelerometer);
 			//----------------------------------------------------
 			/// Delegates
 			//----------------------------------------------------
@@ -34,7 +36,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			/// Constructor
 			//----------------------------------------------------
-			IAccelerometer();
+			Accelerometer();
 			//----------------------------------------------------
 			/// Is Updating
 			///
@@ -72,7 +74,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			/// Destructor
 			//----------------------------------------------------
-			virtual ~IAccelerometer();
+			virtual ~Accelerometer();
 		protected:
 			Core::CEvent1<AccelerationUpdatedDelegate> mAccelerationUpdatedEvent;
 		};

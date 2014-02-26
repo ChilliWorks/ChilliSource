@@ -226,7 +226,7 @@ namespace ChilliSource
 				return mMaterials[indwSubMeshIndex];
 			}
 			
-            ERROR_LOG("Failed to get material from sub mesh " + STRING_CAST(indwSubMeshIndex));
+            CS_ERROR_LOG("Failed to get material from sub mesh " + Core::ToString(indwSubMeshIndex));
 			return MaterialPtr();
 		}
         //-----------------------------------------------------------
@@ -244,7 +244,7 @@ namespace ChilliSource
                 }
             }
 			
-            ERROR_LOG("Failed to get material from sub mesh " + instrSubMeshName);
+            CS_ERROR_LOG("Failed to get material from sub mesh " + instrSubMeshName);
 			return MaterialPtr();
         }
 		//----------------------------------------------------------
@@ -328,7 +328,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Animations
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::GetAnimations(DYNAMIC_ARRAY<SkinnedAnimationPtr>& outapSkinnedAnimationList)
+        void CAnimatedMeshComponent::GetAnimations(std::vector<SkinnedAnimationPtr>& outapSkinnedAnimationList)
         {
             if (nullptr != mActiveAnimationGroup)
             {
@@ -389,13 +389,13 @@ namespace ChilliSource
         {
             if (nullptr == mpEntityOwner)
             {
-                ERROR_LOG("Could not attach entity to animated mesh becuase the mesh is not yet attached to an entity.");
+                CS_ERROR_LOG("Could not attach entity to animated mesh becuase the mesh is not yet attached to an entity.");
                 return;
             }
             
             if (nullptr != inpEntity->GetParent() || nullptr != inpEntity->GetOwningScene())
             {
-                ERROR_LOG("Could not attach entity to animated mesh becuase the entity already has a parent.");
+                CS_ERROR_LOG("Could not attach entity to animated mesh becuase the entity already has a parent.");
                 return;
             }
             
@@ -414,7 +414,7 @@ namespace ChilliSource
             s32 dwNodeIndex = mpModel->GetSkeletonPtr()->GetNodeIndexByName(instrNodeName);
             if (dwNodeIndex == -1)
             {
-                ERROR_LOG("Could not attach entity to the animated mesh becuase the skeleton node name could not be found.");
+                CS_ERROR_LOG("Could not attach entity to the animated mesh becuase the skeleton node name could not be found.");
                 return;
             }
             
@@ -665,7 +665,7 @@ namespace ChilliSource
                     mspShadowMapMaterial = Core::CApplication::GetSystemImplementing<CMaterialFactory>()->CreateAnimatedDirectionalShadowMap();
                 }
                 
-                DYNAMIC_ARRAY<MaterialPtr> aMaterials;
+                std::vector<MaterialPtr> aMaterials;
                 mspShadowMapMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
                 aMaterials.push_back(mspShadowMapMaterial);
                 

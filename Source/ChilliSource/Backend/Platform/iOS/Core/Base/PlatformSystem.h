@@ -13,6 +13,8 @@
 #ifndef _MO_FLO_PLATFORM_IOS_PLATFORM_SYSTEM_H_
 #define _MO_FLO_PLATFORM_IOS_PLATFORM_SYSTEM_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 
@@ -44,7 +46,7 @@ namespace ChilliSource
 			///
 			/// @param the system list
 			//-------------------------------------------------
-			void CreateDefaultSystems(DYNAMIC_ARRAY<Core::SystemPtr> & inaSystems);
+			void CreateDefaultSystems(std::vector<Core::SystemPtr> & inaSystems);
 			//-------------------------------------------------
 			/// Post Create Systems
 			///
@@ -101,7 +103,7 @@ namespace ChilliSource
 			/// @param Vector of existing systems. The return value is added to this vector if not nullptr.
 			/// @return A handle to the given system or nullptr if the platform cannot support it
 			//-----------------------------------------
-			Core::ISystem* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<Core::SystemPtr> & inaExistingSystems) const;
+			Core::ISystem* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemPtr> & inaExistingSystems) const;
 			
 			//==========================================
 			//--- Activity Creation
@@ -261,7 +263,7 @@ namespace ChilliSource
             /// @param System list
             /// @return A pointer to the system
             //--------------------------------------------
-			Core::ISystem * CreateHttpConnectionSystem(DYNAMIC_ARRAY<Core::SystemPtr>& inSystems) const;
+			Core::ISystem * CreateHttpConnectionSystem(std::vector<Core::SystemPtr>& inSystems) const;
  
             //--------------------------------------------
 			/// Create Activities
@@ -284,7 +286,7 @@ namespace ChilliSource
             //--------------------------------------------
 			Core::IInformationProvider* CreateContactInformationProvider() const;
 			
-            typedef fastdelegate::FastDelegate1<DYNAMIC_ARRAY<Core::SystemPtr> &, Core::ISystem*> SystemCreationFunction;
+            typedef fastdelegate::FastDelegate1<std::vector<Core::SystemPtr> &, Core::ISystem*> SystemCreationFunction;
             
             //--------------------------------------------
             /// Add System Function
@@ -307,7 +309,7 @@ namespace ChilliSource
             /// @param Exisiting systems
             /// @return Pointer to system
             //-------------------------------------------
-			Core::ISystem* FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const DYNAMIC_ARRAY<Core::SystemPtr>& inSystems) const;
+			Core::ISystem* FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemPtr>& inSystems) const;
 			
 			typedef fastdelegate::FastDelegate0<Core::IActivity*> ActivityCreationFunction;
 			
@@ -344,13 +346,13 @@ namespace ChilliSource
 			
 		private:
 			
-			typedef HASH_MAP<Core::InterfaceIDType, SystemCreationFunction> MapInterfaceIDToSystemFunc;
+			typedef std::unordered_map<Core::InterfaceIDType, SystemCreationFunction> MapInterfaceIDToSystemFunc;
 			MapInterfaceIDToSystemFunc mmapInterfaceIDToSystemFunc;
         
-			typedef HASH_MAP<Core::InterfaceIDType, ActivityCreationFunction> MapInterfaceIDToActivityFunc;
+			typedef std::unordered_map<Core::InterfaceIDType, ActivityCreationFunction> MapInterfaceIDToActivityFunc;
 			MapInterfaceIDToActivityFunc mmapInterfaceIDToActivityFunc;
 			
-			typedef HASH_MAP<Core::InterfaceIDType, InfoProviderCreationFunction> MapInterfaceIDToInfoProviderFunc;
+			typedef std::unordered_map<Core::InterfaceIDType, InfoProviderCreationFunction> MapInterfaceIDToInfoProviderFunc;
 			MapInterfaceIDToInfoProviderFunc mmapInterfaceIDToInfoProviderFunc;
             
             f32 mfPhysicalScreenSize;

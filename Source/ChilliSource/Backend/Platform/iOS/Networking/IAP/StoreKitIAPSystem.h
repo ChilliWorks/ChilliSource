@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Tag Games Ltd. All rights reserved.
 //
 
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 
 #import <StoreKit/StoreKit.h>
 

@@ -593,7 +593,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool CTransform::RemoveChildTransform(CTransform* inpTransform)
 		{
-			DYNAMIC_ARRAY<CTransform*>::iterator it = std::find(mChildTransforms.begin(), mChildTransforms.end(), inpTransform);
+			std::vector<CTransform*>::iterator it = std::find(mChildTransforms.begin(), mChildTransforms.end(), inpTransform);
 			
 			if(it != mChildTransforms.end())
 			{
@@ -612,7 +612,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void CTransform::RemoveAllChildTransforms()
 		{
-			for(DYNAMIC_ARRAY<CTransform*>::iterator it = mChildTransforms.begin(); it != mChildTransforms.end(); ++it)
+			for(std::vector<CTransform*>::iterator it = mChildTransforms.begin(); it != mChildTransforms.end(); ++it)
 			{
 				(*it)->SetParentTransform(nullptr);
 			}
@@ -641,7 +641,7 @@ namespace ChilliSource
         {
             mbIsTransformCacheValid = false;
             
-            for(DYNAMIC_ARRAY<CTransform*>::iterator it = mChildTransforms.begin(); it != mChildTransforms.end(); ++it)
+            for(std::vector<CTransform*>::iterator it = mChildTransforms.begin(); it != mChildTransforms.end(); ++it)
             {
                 (*it)->OnParentTransformChanged();
             }

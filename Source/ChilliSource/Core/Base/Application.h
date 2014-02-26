@@ -10,15 +10,11 @@
 #ifndef _MOFLO_APPLICATION_H_
 #define _MOFLO_APPLICATION_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/State/StateManager.h>
-#include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Audio/ForwardDeclarations.h>
-#include <ChilliSource/GUI/ForwardDeclarations.h>
 
 #include <limits>
 
@@ -166,7 +162,7 @@ namespace ChilliSource
 			/// and fills an array with them.
 			/// @param The type ID of the system you wish to implement
 			//--------------------------------------------------------------------------------------------------
-			static void GetSystemsImplementing(InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<SystemPtr> & outSystems);
+			static void GetSystemsImplementing(InterfaceIDType inInterfaceID, std::vector<SystemPtr> & outSystems);
 			//--------------------------------------------------------------------------------------------------
 			/// Get Systems Implementing
 			///
@@ -175,7 +171,7 @@ namespace ChilliSource
 			/// @param The type ID of the system you wish to implement
 			//--------------------------------------------------------------------------------------------------
 			//Templated convenience version of the above saving getting the interface directly
-            template <typename T> static void GetSystemsImplementing(DYNAMIC_ARRAY<T*> & outSystems)
+            template <typename T> static void GetSystemsImplementing(std::vector<T*> & outSystems)
 			{
 				for (size_t nSystem = 0; nSystem < mSystems.size(); nSystem++) 
 				{
@@ -299,13 +295,13 @@ namespace ChilliSource
 			///
 			/// @return Pointer to the input system
 			//--------------------------------------------------------------------------------------------------
-			static Input::IInputSystem* GetInputSystemPtr(){return mpInputSystem;}
+			static Input::InputSystem* GetInputSystemPtr(){return mpInputSystem;}
 			//--------------------------------------------------------------------------------------------------
 			/// Get Input System Ptr
 			///
 			/// @return Pointer to the input system
 			//--------------------------------------------------------------------------------------------------
-			static Audio::IAudioSystem* GetAudioSystemPtr(){return pAudioSystem;}
+			static Audio::AudioSystem* GetAudioSystemPtr(){return pAudioSystem;}
 			//--------------------------------------------------------------------------------------------------
 			/// Get File System Ptr
 			///
@@ -391,13 +387,13 @@ namespace ChilliSource
 			///
 			/// @param the system pointer.
 			//--------------------------------------------------------------------------------------------------
-			static void SetInputSystem(Input::IInputSystem* inpSystem);
+			static void SetInputSystem(Input::InputSystem* inpSystem);
             //--------------------------------------------------------------------------------------------------
 			/// Set Audio System
 			///
 			/// @param the system pointer.
 			//--------------------------------------------------------------------------------------------------
-			static void SetAudioSystem(Audio::IAudioSystem* inpSystem);
+			static void SetAudioSystem(Audio::AudioSystem* inpSystem);
             //--------------------------------------------------------------------------------------------------
 			/// Set Renderer
 			///
@@ -466,7 +462,7 @@ namespace ChilliSource
             /// @param Out: The name of the directory to fall back on for resolution dependant assets
             /// @param Out: The name of the directory to use as the default (i.e. for shared assets)
             //--------------------------------------------------------------------------------------------------
-            virtual void SetResourceDirectories(DYNAMIC_ARRAY<ResourceDirectoryInfo>& outaResDependantDirectoryInfos, std::string& outstrResDefaultDirectory, std::string& outstrDefaultDirectory) = 0;
+            virtual void SetResourceDirectories(std::vector<ResourceDirectoryInfo>& outaResDependantDirectoryInfos, std::string& outstrResDefaultDirectory, std::string& outstrDefaultDirectory) = 0;
 			//--------------------------------------------------------------------------------------------------
 			/// Create Systems
 			///
@@ -510,15 +506,15 @@ namespace ChilliSource
 			
             //---Systems
             static Rendering::IRenderSystem* mpRenderSystem;
-			static Input::IInputSystem * mpInputSystem;
+			static Input::InputSystem * mpInputSystem;
             static IPlatformSystem* pPlatformSystem;	//Interface to platform specific API's such as timer etc
-            static Audio::IAudioSystem* pAudioSystem;
+            static Audio::AudioSystem* pAudioSystem;
             static IFileSystem* mspFileSystem;
 
 			static ScreenOrientation meDefaultOrientation;
 			
-			static DYNAMIC_ARRAY<SystemPtr> mSystems; //All systems in use by the application
-            static DYNAMIC_ARRAY<IUpdateable*> mUpdateableSystems; //All updateable systems in use by the application
+			static std::vector<SystemPtr> mSystems; //All systems in use by the application
+            static std::vector<IUpdateable*> mUpdateableSystems; //All updateable systems in use by the application
             
             static CResourceManagerDispenser* mpResourceManagerDispenser;
             CComponentFactoryDispenser* mpComponentFactoryDispenser;
@@ -527,7 +523,7 @@ namespace ChilliSource
             static bool mbUpdateSystems;
 		private:
 			
-			DYNAMIC_ARRAY<IResourceProvider*> mResourceProviders; //All resource provider systems available
+			std::vector<IResourceProvider*> mResourceProviders; //All resource provider systems available
 
 			static SystemConfirmDialog::Delegate mActiveSysConfirmDelegate;
         

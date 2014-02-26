@@ -14,7 +14,7 @@
 #	include <Accounts/Accounts.h>
 #endif
 
-NSArray* CreateNSArrayFromStringArray(const DYNAMIC_ARRAY<std::string> & inaStrings)
+NSArray* CreateNSArrayFromStringArray(const std::vector<std::string> & inaStrings)
 {
     NSMutableArray * pResult = [[NSMutableArray alloc] initWithCapacity:inaStrings.size()];
     
@@ -40,7 +40,7 @@ namespace ChilliSource
 			return (inID == CFacebookAuthenticationSystem::InterfaceID) || (inID == IFacebookAuthenticationSystem::InterfaceID);
 		}
 		
-		void CFacebookAuthenticationSystem::Authenticate(const DYNAMIC_ARRAY<std::string>& inastrReadPermissions, const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
+		void CFacebookAuthenticationSystem::Authenticate(const std::vector<std::string>& inastrReadPermissions, const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
 		{
             mAuthenticateDelegate = inDelegate;
             mastrPermissions = inastrReadPermissions;
@@ -146,7 +146,7 @@ namespace ChilliSource
 			return Core::CStringUtils::NSStringToString(FBSession.activeSession.accessTokenData.accessToken);
 		}
         
-        void CFacebookAuthenticationSystem::AuthoriseReadPermissions(const DYNAMIC_ARRAY<std::string> & inaReadPerms, const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
+        void CFacebookAuthenticationSystem::AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
         {
             mAuthoriseReadDelegate = inDelegate;
             
@@ -174,11 +174,11 @@ namespace ChilliSource
             [pPermissionsArray release];
         }
         
-        void CFacebookAuthenticationSystem::AuthoriseWritePermissions(const DYNAMIC_ARRAY<std::string> & inaWritePerms, const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
+        void CFacebookAuthenticationSystem::AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
         {
             mAuthoriseWriteDelegate = inDelegate;
             
-            MOFLOW_ASSERT(maRequestedWritePermissions.empty(), "Previous authorise hasn't been completed yet!");
+            CS_ASSERT(maRequestedWritePermissions.empty(), "Previous authorise hasn't been completed yet!");
             maRequestedWritePermissions = inaWritePerms;
             
             NSArray * pPermissionsArray = CreateNSArrayFromStringArray(inaWritePerms);
@@ -217,7 +217,7 @@ namespace ChilliSource
                         
                         // Free unused memory.
                         maRequestedWritePermissions.clear();
-                        DYNAMIC_ARRAY<std::string>(maRequestedWritePermissions).swap(maRequestedWritePermissions);
+                        std::vector<std::string>(maRequestedWritePermissions).swap(maRequestedWritePermissions);
                         
                         if(bPermissionMismatch == NO)
                         {
@@ -259,7 +259,7 @@ namespace ChilliSource
             }
             else
             {
-                ERROR_LOG("No app ID specified in plist (FacebookAppID)");
+                CS_ERROR_LOG("No app ID specified in plist (FacebookAppID)");
             }
         }
         

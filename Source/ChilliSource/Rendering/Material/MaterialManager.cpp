@@ -107,10 +107,10 @@ namespace ChilliSource
 				{
 					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, inFilePath, pResource))
 					{
-						DEBUG_LOG("Loading Material " + inFilePath);
+						CS_DEBUG_LOG("Loading Material " + inFilePath);
 						mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
 						
-						MaterialPtr pMaterial = SHARED_PTR_CAST<CMaterial>(pResource);
+						MaterialPtr pMaterial = std::static_pointer_cast<CMaterial>(pResource);
 						pMaterial->SetName(inFilePath);
 						pMaterial->SetOwningResourceManager(this);
 						pMaterial->SetFilename(inFilePath);
@@ -123,10 +123,10 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				return SHARED_PTR_CAST<CMaterial>(pExistingResource->second);
+				return std::static_pointer_cast<CMaterial>(pExistingResource->second);
 			}
 			
-			ERROR_LOG("Cannot find resource for Material with path " + inFilePath);
+			CS_ERROR_LOG("Cannot find resource for Material with path " + inFilePath);
 			return Core::CApplication::GetDefaultMaterial();
 		}
 		//----------------------------------------------------------------
@@ -150,7 +150,7 @@ namespace ChilliSource
 				Core::ResourcePtr pResource(new CMaterial());
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
-					MaterialPtr pMaterial = SHARED_PTR_CAST<CMaterial>(pResource);
+					MaterialPtr pMaterial = std::static_pointer_cast<CMaterial>(pResource);
 					pMaterial->SetName(inFilePath);
 					pMaterial->SetFilename(inFilePath);
 					pMaterial->SetStorageLocation(ineStorageLocation);
@@ -159,7 +159,7 @@ namespace ChilliSource
 					
 					if(mResourceProviders[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, inFilePath, pResource))
 					{
-						DEBUG_LOG("Loading Material " + inFilePath);
+						CS_DEBUG_LOG("Loading Material " + inFilePath);
 						mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
 
 						return pMaterial;
@@ -168,10 +168,10 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				return SHARED_PTR_CAST<CMaterial>(pExistingResource->second);
+				return std::static_pointer_cast<CMaterial>(pExistingResource->second);
 			}
 			
-			ERROR_LOG("Cannot find resource for Material with path " + inFilePath);
+			CS_ERROR_LOG("Cannot find resource for Material with path " + inFilePath);
 			return MaterialPtr();
 		}
 	}

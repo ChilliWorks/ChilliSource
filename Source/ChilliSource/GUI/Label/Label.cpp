@@ -12,6 +12,7 @@
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
@@ -96,36 +97,36 @@ namespace ChilliSource
             //---Number of lines
             if(insParams.TryGetValue("NumLines", strValue))
             {
-                MaxNumLines = Core::CStringConverter::ParseUnsignedInt(strValue);
+                MaxNumLines = Core::ParseU32(strValue);
             }
             //---Text Scale
             if(insParams.TryGetValue("TextScale", strValue))
             {
-                TextScale = Core::CStringConverter::ParseFloat(strValue);
+                TextScale = Core::ParseF32(strValue);
             }
             //---Character spacing
             if(insParams.TryGetValue("CharacterSpacing", strValue))
             {
-                CharacterSpacing = Core::CStringConverter::ParseFloat(strValue);
+                CharacterSpacing = Core::ParseF32(strValue);
             }
             //---Unified maximum size
             if(insParams.TryGetValue("UnifiedMaxSize", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::CVector4 vRawSize = Core::CStringConverter::ParseVector4(strValue);
+                Core::CVector4 vRawSize = Core::ParseVector4(strValue);
                 SetMaximumSize(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w);
             }
             //---Unified maximum size
             if(insParams.TryGetValue("UnifiedMinSize", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::CVector4 vRawSize = Core::CStringConverter::ParseVector4(strValue);
+                Core::CVector4 vRawSize = Core::ParseVector4(strValue);
                 SetMinimumSize(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w);
             }
             //---Line spacing
             if(insParams.TryGetValue("LineSpacing", strValue))
             {
-                LineSpacing = Core::CStringConverter::ParseFloat(strValue);
+                LineSpacing = Core::ParseF32(strValue);
             }
             //---Text justification
             if(insParams.TryGetValue("HorizontalJustification", strValue))
@@ -140,7 +141,7 @@ namespace ChilliSource
             Core::StorageLocation eFontLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("FontLocation", strValue))
             {
-                eFontLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eFontLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("Font", strValue))
             {
@@ -149,36 +150,36 @@ namespace ChilliSource
             //---Text Colour
             if(insParams.TryGetValue("TextColour", strValue))
             {
-                TextColour = Core::CStringConverter::ParseColourValue(strValue);
+                TextColour = Core::ParseColour(strValue);
             }
             //---Text Outline
             if(insParams.TryGetValue("EnableTextOutline", strValue))
             {
-                TextOutlined = Core::CStringConverter::ParseBool(strValue);
+                TextOutlined = Core::ParseBool(strValue);
             }
             //---Text Outline Colour
             if(insParams.TryGetValue("TextOutlineColour", strValue))
             {
                 TextOutlined = true;
-                TextOutlineColour = Core::CStringConverter::ParseColourValue(strValue);
+                TextOutlineColour = Core::ParseColour(strValue);
             }
             //---Enable Background Colour
             if(insParams.TryGetValue("EnableBackground", strValue))
             {
-                Background = Core::CStringConverter::ParseBool(strValue);
+                Background = Core::ParseBool(strValue);
             }
             //---Enable Autosizing
             if(insParams.TryGetValue("EnableAutosizing", strValue))
             {
-                Autosizing = Core::CStringConverter::ParseBool(strValue);
+                Autosizing = Core::ParseBool(strValue);
             }
             if(insParams.TryGetValue("ScalableFont", strValue))
             {
-                ScalableFont = Core::CStringConverter::ParseBool(strValue);
+                ScalableFont = Core::ParseBool(strValue);
             }
             if(insParams.TryGetValue("ScalableHeight", strValue))
             {
-                ScalableHeight = Core::CStringConverter::ParseFloat(strValue);
+                ScalableHeight = Core::ParseF32(strValue);
             }
             //---UV Flipped Y
             if(insParams.TryGetValue("FlipVertical", strValue))
@@ -582,7 +583,7 @@ namespace ChilliSource
                 return TextJustification::k_bottom;
             }
             
-            FATAL_LOG("No justification matches type");
+            CS_FATAL_LOG("No justification matches type");
             
             return TextJustification::k_left;
         }

@@ -13,6 +13,7 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_LOADER_H_
 #define _MO_FLO_AUDIO_AUDIO_LOADER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Audio/Base/AudioManager.h>
 #include <ChilliSource/Audio/Base/AudioSystem.h>
@@ -21,12 +22,12 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		class CAudioLoader : public Core::IResourceProvider
+		class AudioLoader : public Core::IResourceProvider
 		{
 		public:
 			
-			CAudioLoader(IAudioSystem* inpAudioSystem);
-			virtual ~CAudioLoader();
+			AudioLoader(AudioSystem* inpAudioSystem);
+			virtual ~AudioLoader();
 			
 			//-------------------------------------------------------------------------
 			/// Is A
@@ -47,10 +48,10 @@ namespace ChilliSource
 			///
 			/// @return Audio listener
 			//----------------------------------------------------------------------------
-			virtual AudioListenerPtr CreateAudioListener() = 0;
+			virtual AudioListenerSPtr CreateAudioListener() = 0;
 		protected:
 			
-			const IAudioManager& mAudioManager;
+			const AudioManager& mAudioManager;
 		};
 	}
 }

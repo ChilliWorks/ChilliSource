@@ -9,6 +9,8 @@
 #ifndef _MOFLOW_CORE_PERFORMANCE_TIMER_H_
 #define _MOFLOW_CORE_PERFORMANCE_TIMER_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 #ifdef TARGET_WINDOWS   
     #include <windows.h>
 #else          

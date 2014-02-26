@@ -9,6 +9,8 @@
 #ifndef _MOFLO_PLATFORM_IOS_NATIVE_SYSTEM_H_
 #define _MOFLO_PLATFORM_IOS_NATIVE_SYSTEM_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 

@@ -7,9 +7,8 @@
 //
 
 #include <ChilliSource/GUI/Label/EditableLabel.h>
-
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Base/Screen.h>
-
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
 namespace ChilliSource
@@ -48,12 +47,12 @@ namespace ChilliSource
 			//---Texture
 			if(insParams.TryGetValue("SecureEntry", strValue))
 			{
-				EnableSecureEntry(Core::CStringConverter::ParseBool(strValue));
+				EnableSecureEntry(Core::ParseBool(strValue));
 			}
 			//---Sprite sheet
 			if(insParams.TryGetValue("CharacterLimit", strValue))
 			{
-				SetCharacterLimit(Core::CStringConverter::ParseUnsignedInt(strValue));
+				SetCharacterLimit(Core::ParseU32(strValue));
 			}
         }
         //-------------------------------------------------
@@ -148,7 +147,7 @@ namespace ChilliSource
 		///
 		/// @return Virtual keyboard
 		//-------------------------------------------------
-		Input::IVirtualKeyboard* CEditableLabel::GetKeyboardPtr()
+		Input::VirtualKeyboard* CEditableLabel::GetKeyboardPtr()
 		{
 			return mpKeyboard;
 		}
@@ -157,7 +156,7 @@ namespace ChilliSource
         ///
         /// @param Virtual keyboard
         //-------------------------------------------------
-        void CEditableLabel::SetKeyboard(Input::IVirtualKeyboard* inpKeyboard)
+        void CEditableLabel::SetKeyboard(Input::VirtualKeyboard* inpKeyboard)
         {
             if(mpKeyboard)
             {

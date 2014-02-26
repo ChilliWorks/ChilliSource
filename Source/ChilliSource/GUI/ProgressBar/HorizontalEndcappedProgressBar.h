@@ -10,10 +10,9 @@
 #ifndef _MOFLOW_GUI_DEFAULTS_HORIZONTALENDCAPPEDPROGRESSBAR_H_
 #define _MOFLOW_GUI_DEFAULTS_HORIZONTALENDCAPPEDPROGRESSBAR_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/ProgressBar/ProgressBar.h>
 #include <ChilliSource/GUI/Image/HorizontalStretchableImage.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace ChilliSource
 {
@@ -174,8 +173,8 @@ namespace ChilliSource
             
 		};
 
-		typedef SHARED_PTR<CHorizontalEndcappedProgressBar> HorizontalEndcappedProgressBarPtr;
-		typedef WEAK_PTR<CHorizontalEndcappedProgressBar> HorizontalEndcappedProgressBarWeakPtr;
+		typedef std::shared_ptr<CHorizontalEndcappedProgressBar> HorizontalEndcappedProgressBarPtr;
+		typedef std::weak_ptr<CHorizontalEndcappedProgressBar> HorizontalEndcappedProgressBarWeakPtr;
 	}
 }
 

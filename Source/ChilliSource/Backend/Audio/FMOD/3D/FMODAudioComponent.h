@@ -10,6 +10,7 @@
 #ifndef _MO_FLO_PLATFORM_FMOD_FMOD_AUDIO_COMPONENT_H_
 #define _MO_FLO_PLATFORM_FMOD_FMOD_AUDIO_COMPONENT_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/3D/AudioComponent.h>
 
 #include <fmod.hpp>
@@ -18,10 +19,10 @@ namespace ChilliSource
 {
     namespace iOS
     {
-        class CFMODAudioComponent : public Audio::CAudioComponent
+        class CFMODAudioComponent : public Audio::AudioComponent
         {
         public:
-            CFMODAudioComponent(Audio::IAudioSystem* inpOwningSystem);
+            CFMODAudioComponent(Audio::AudioSystem* inpOwningSystem);
 			~CFMODAudioComponent();
             //---------------------------------------------------------------------
 			/// Play

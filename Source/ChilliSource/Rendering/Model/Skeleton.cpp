@@ -9,6 +9,8 @@
 
 #include <ChilliSource/Rendering/Model/Skeleton.h>
 
+#include <vector>
+
 namespace ChilliSource
 {
 	namespace Rendering
@@ -27,7 +29,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		SkeletonNodePtr CSkeleton::GetNodeByName(const std::string& instrName) const
 		{
-			for (DYNAMIC_ARRAY<SkeletonNodePtr>::const_iterator it = mapNodes.begin(); it != mapNodes.end(); ++it)
+			for (std::vector<SkeletonNodePtr>::const_iterator it = mapNodes.begin(); it != mapNodes.end(); ++it)
 			{
 				if (instrName == (*it)->mstrName)
 					return *it;
@@ -41,7 +43,7 @@ namespace ChilliSource
         s32 CSkeleton::GetNodeIndexByName(const std::string& instrName) const
         {
             s32 dwIndex = 0;
-            for (DYNAMIC_ARRAY<SkeletonNodePtr>::const_iterator it = mapNodes.begin(); it != mapNodes.end(); ++it)
+            for (std::vector<SkeletonNodePtr>::const_iterator it = mapNodes.begin(); it != mapNodes.end(); ++it)
 			{
 				if (instrName == (*it)->mstrName)
 					return dwIndex;
@@ -82,14 +84,14 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Get Nodes
 		//-------------------------------------------------------------------------
-		const DYNAMIC_ARRAY<SkeletonNodePtr>& CSkeleton::GetNodes() const
+		const std::vector<SkeletonNodePtr>& CSkeleton::GetNodes() const
 		{
 			return mapNodes;
 		}
         //-------------------------------------------------------------------------
         /// Get Joint Indices
         //-------------------------------------------------------------------------
-        const DYNAMIC_ARRAY<s32>& CSkeleton::GetJointIndices() const
+        const std::vector<s32>& CSkeleton::GetJointIndices() const
         {
             return madwJoints;
         }

@@ -10,6 +10,8 @@
 #ifndef _MOFLO_CORE_GENERICEVENT_H_
 #define _MOFLO_CORE_GENERICEVENT_H_
 
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEventImpl.h>
 
 namespace ChilliSource
@@ -82,7 +84,7 @@ namespace ChilliSource
             //-----------------------------------------------------------
             virtual ~IEvent()
             {
-                SAFE_DELETE(mpImpl);
+                CS_SAFE_DELETE(mpImpl);
             }
             
         protected:

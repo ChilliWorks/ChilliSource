@@ -13,12 +13,11 @@
 #ifndef _MO_FLO_INPUT_GESTURES_H_
 #define _MO_FLO_INPUT_GESTURES_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Time/Timer.h>
-#include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
-#include <ChilliSource/Input/ForwardDeclarations.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
 
 namespace ChilliSource
@@ -30,14 +29,14 @@ namespace ChilliSource
 		///
 		/// Base gesture class.
 		//================================================
-		class CGesture
+		class Gesture
 		{
 		public:
-			typedef fastdelegate::FastDelegate1<const CGesture&> GestureEventDelegate;
+			typedef fastdelegate::FastDelegate1<const Gesture&> GestureEventDelegate;
 			
-            CGesture(GUI::CGUIView* inpView);
-            CGesture(ITouchScreen* inpTouchDevice);
-			virtual ~CGesture();
+            Gesture(GUI::CGUIView* inpView);
+            Gesture(TouchScreen* inpTouchDevice);
+			virtual ~Gesture();
 			
 			//----------------------------------------------------
 			/// Register Gesture Delegate
@@ -85,14 +84,14 @@ namespace ChilliSource
 			
 		protected:
 			
-			typedef DYNAMIC_ARRAY<GestureEventDelegate> GestureDelegatesList;
+			typedef std::vector<GestureEventDelegate> GestureDelegatesList;
 			typedef GestureDelegatesList::iterator GestureDelegatesListItr;
 			
 			u16 mNumContactPointsRequired;	
 			bool mbIsGestureInvalid;
 			Core::CTimer mTimer;
             GUI::CGUIView* mpView;
-            ITouchScreen* mpTouchDevice;
+            TouchScreen* mpTouchDevice;
             
         private:
             
@@ -105,11 +104,11 @@ namespace ChilliSource
 		/// A swift movement with one or more contact
 		/// points over a large range within a short time
 		//================================================
-		class CSwipeGesture : public CGesture
+		class SwipeGesture : public Gesture
 		{
 		public:
-            CSwipeGesture(GUI::CGUIView* inpSurface);
-            CSwipeGesture(ITouchScreen* inpTouchDevice);
+            SwipeGesture(GUI::CGUIView* inpSurface);
+            SwipeGesture(TouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
 			/// Set Number of Contact Points Required
@@ -184,11 +183,11 @@ namespace ChilliSource
 		/// A movement in which the distance between
 		/// two contact points decreases
 		//================================================
-		class CPinchGesture : public CGesture
+		class PinchGesture : public Gesture
 		{
 		public:
-            CPinchGesture(GUI::CGUIView* inpSurface);
-            CPinchGesture(ITouchScreen* inpTouchDevice);
+            PinchGesture(GUI::CGUIView* inpSurface);
+            PinchGesture(TouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
 			/// Register Gesture Delegate
@@ -288,11 +287,11 @@ namespace ChilliSource
 		/// One or more contact points registered for
 		/// a short period of time. Handles multiple taps
 		//================================================
-		class CTapGesture : public CGesture
+		class TapCSwipeGestureGesture : public Gesture
 		{
 		public:
-            CTapGesture(GUI::CGUIView* inpSurface);
-            CTapGesture(ITouchScreen* inpTouchDevice);
+            TapCSwipeGestureGesture(GUI::CGUIView* inpSurface);
+            TapCSwipeGestureGesture(TouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
 			/// Set Number of Taps Required
@@ -366,11 +365,11 @@ namespace ChilliSource
 		/// One or more contact points moving perceptibly
 		/// over any range
 		//================================================
-		class CDragGesture : public CGesture
+		class DragGesture : public Gesture
 		{
 		public:
-			CDragGesture(GUI::CGUIView* inpSurface);
-            CDragGesture(ITouchScreen* inpTouchDevice);
+			DragGesture(GUI::CGUIView* inpSurface);
+            DragGesture(TouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
 			/// RegisterGestureBeganDelegate
@@ -457,11 +456,11 @@ namespace ChilliSource
 		/// One contact point registered for a short 
 		/// period of time.
 		//================================================
-		class CHoldGesture : public CGesture
+		class CHoldGesture : public Gesture
 		{
 		public:
 			CHoldGesture(GUI::CGUIView* inpSurface);
-            CHoldGesture(ITouchScreen* inpTouchDevice);
+            CHoldGesture(TouchScreen* inpTouchDevice);
 			
 			//----------------------------------------------------
 			/// Register Gesture Delegate
@@ -566,12 +565,12 @@ namespace ChilliSource
             GestureDelegatesList mGestureCancelledDelegates;
 		};
 		
-		typedef SHARED_PTR<CPinchGesture> PinchGesturePtr;
-		typedef SHARED_PTR<CSwipeGesture> SwipeGesturePtr;
-		typedef SHARED_PTR<CTapGesture> TapGesturePtr;
-		typedef SHARED_PTR<CDragGesture> DragGesturePtr;
-		typedef SHARED_PTR<CHoldGesture> HoldGesturePtr;
-		typedef SHARED_PTR<CGesture> GesturePtr;
+		typedef std::shared_ptr<PinchGesture> PinchGesturePtr;
+		typedef std::shared_ptr<PinchGesture> SwipeGesturePtr;
+		typedef std::shared_ptr<TapCSwipeGestureGesture> TapGesturePtr;
+		typedef std::shared_ptr<DragGesture> DragGesturePtr;
+		typedef std::shared_ptr<CHoldGesture> HoldGesturePtr;
+		typedef std::shared_ptr<Gesture> GesturePtr;
 
 	}
 }

@@ -30,7 +30,7 @@ static id _instance;
     return self;
 }
 
-- (void)queryContentsOfICloudDirectory:(ChilliSource::Networking::ICloudStorageSystem::OnQueryFilesCompletedDelegate)incQueryFilesDelegate;
+- (void)queryContentsOfICloudDirectory:(ChilliSource::Networking::CloudStorageSystem::OnQueryFilesCompletedDelegate)incQueryFilesDelegate;
 {
 	if(NSClassFromString(@"NSMetadataQuery") != nil)
 	{
@@ -84,13 +84,13 @@ static id _instance;
                  }
                  else
                  {
-                     ERROR_LOG("ICloudSystemController::openDocument:: Document could not be saved!");
+                     CS_ERROR_LOG("ICloudSystemController::openDocument:: Document could not be saved!");
                      incOpenFileCompleteDelegate(newDoc, NO);
                  }
              }];
          }
          else {
-             ERROR_LOG("ICloudSystemController::openDocument - File not found, not creating cloud file");
+             CS_ERROR_LOG("ICloudSystemController::openDocument - File not found, not creating cloud file");
              incOpenFileCompleteDelegate(doc, NO);
          }
          
@@ -99,7 +99,7 @@ static id _instance;
     [doc release];
 }
 
-- (void)writeDocumentWithRelativePath:(NSString*)InstrFileName :(NSMutableData*)InstrContents :(ChilliSource::Networking::ICloudStorageSystem::OnSyncFileCompletedDelegate)InpCompleteDelegate
+- (void)writeDocumentWithRelativePath:(NSString*)InstrFileName :(NSMutableData*)InstrContents :(ChilliSource::Networking::CloudStorageSystem::OnSyncFileCompletedDelegate)InpCompleteDelegate
 {
     NSURL *ubiq = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
     NSURL *ubiquitousPackage = [ubiq URLByAppendingPathComponent:InstrFileName];
@@ -124,14 +124,14 @@ static id _instance;
                  }
                  else
                  {
-                     ERROR_LOG("ICloudSystemController::writeDocumentWithRelativePath - Document Failed to close succesfully");
+                     CS_ERROR_LOG("ICloudSystemController::writeDocumentWithRelativePath - Document Failed to close succesfully");
                  }
              }];                
         }
     }];
 }
 
-- (void)writeDocumentWithAbsolutePath:(NSString*)InstrFileName :(NSMutableData*)InstrContents :(ChilliSource::Networking::ICloudStorageSystem::OnSyncFileCompletedDelegate)InpCompleteDelegate
+- (void)writeDocumentWithAbsolutePath:(NSString*)InstrFileName :(NSMutableData*)InstrContents :(ChilliSource::Networking::CloudStorageSystem::OnSyncFileCompletedDelegate)InpCompleteDelegate
 {
     NSLog(@"ICloudSystemController::writeDocument - Writing Document - %@ ", InstrFileName);
     MoFlowUIDocument *doc = [[MoFlowUIDocument alloc] initWithFileURL:([NSURL URLWithString:InstrFileName])];
@@ -150,13 +150,13 @@ static id _instance;
                 }
                 else
                 {
-                    ERROR_LOG("ICloudSystemController::writeDocumentWithAbsolutePath - Document Failed to close succesfully");
+                    CS_ERROR_LOG("ICloudSystemController::writeDocumentWithAbsolutePath - Document Failed to close succesfully");
                 }
             }];                
         }
         else 
         {
-            ERROR_LOG("ICloudSystemController::writeDocumentWithAbsolutePath - Document could not be saved succesfully");
+            CS_ERROR_LOG("ICloudSystemController::writeDocumentWithAbsolutePath - Document could not be saved succesfully");
         }
     }];
 }
@@ -170,7 +170,7 @@ static id _instance;
         //Clear out the cached contents
         mpcCachedResults.clear();
         
-        ChilliSource::Networking::ICloudStorageSystem::ICloudFileList mvFileList;
+        ChilliSource::Networking::CloudStorageSystem::ICloudFileList mvFileList;
         
         NSEnumerator *e = [[[incNotification object] results] objectEnumerator];
         NSMetadataItem *result;

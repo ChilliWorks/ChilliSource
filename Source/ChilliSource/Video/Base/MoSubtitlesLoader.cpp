@@ -8,12 +8,14 @@
  */
 
 #include <ChilliSource/Video/Base/MoSubtitlesLoader.h>
-#include <ChilliSource/Video/Base/Subtitles.h>
-#include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Core/JSON/json.h>
-#include <ChilliSource/Core/File/FileStream.h>
+
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/File/FileStream.h>
+#include <ChilliSource/Core/JSON/json.h>
+#include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Video/Base/Subtitles.h>
 
 namespace ChilliSource
 {
@@ -88,7 +90,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		bool CMoSubtitlesLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
-            SubtitlesPtr pSubtitles = SHARED_PTR_CAST<CSubtitles>(outpResource);
+            SubtitlesPtr pSubtitles = std::static_pointer_cast<CSubtitles>(outpResource);
             
             return LoadMoSubtitles(ineStorageLocation, inFilePath, pSubtitles);
 		}
@@ -97,7 +99,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		bool CMoSubtitlesLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
-			SubtitlesPtr pSubtitles = SHARED_PTR_CAST<CSubtitles>(outpResource);
+			SubtitlesPtr pSubtitles = std::static_pointer_cast<CSubtitles>(outpResource);
 			
 			//Load model as task
             Core::Task<Core::StorageLocation, const std::string&, SubtitlesPtr&> task(this, &CMoSubtitlesLoader::LoadMoSubtitlesTask,ineStorageLocation, inFilePath, pSubtitles);
@@ -125,7 +127,7 @@ namespace ChilliSource
             u32 udwVersionNumber = root.get(kstrTagVersionNumber, 0).asUInt();
             if (udwVersionNumber != 1)
             {
-                ERROR_LOG("MoSubtitles file '" + inFilePath + "' has version number '" + STRING_CAST(udwVersionNumber) + "'. Only version 1 is supported.");
+                CS_ERROR_LOG("MoSubtitles file '" + inFilePath + "' has version number '" + Core::ToString(udwVersionNumber) + "'. Only version 1 is supported.");
                 return false;
             }
             
@@ -141,14 +143,14 @@ namespace ChilliSource
                     }
                     else
                     {
-                        ERROR_LOG("MoSubtitles file '" + inFilePath + "' failed to load.");
+                        CS_ERROR_LOG("MoSubtitles file '" + inFilePath + "' failed to load.");
                         return false;
                     }
                 }
             }
             else
             {
-                ERROR_LOG("MoSubtitles file '" + inFilePath + "' does not have styles.");
+                CS_ERROR_LOG("MoSubtitles file '" + inFilePath + "' does not have styles.");
                 return false;
             }
             
@@ -164,14 +166,14 @@ namespace ChilliSource
                     }
                     else
                     {
-                        ERROR_LOG("MoSubtitles file '" + inFilePath + "' failed to load.");
+                        CS_ERROR_LOG("MoSubtitles file '" + inFilePath + "' failed to load.");
                         return false;
                     }
                 }
             }
             else
             {
-                ERROR_LOG("MoSubtitles file '" + inFilePath + "' does not have subtitles.");
+                CS_ERROR_LOG("MoSubtitles file '" + inFilePath + "' does not have subtitles.");
                 return false;
             }
             
@@ -188,13 +190,13 @@ namespace ChilliSource
             pStyle->strName = inStyleJson.get(kstrTagStyleName,"").asString();
             if(pStyle->strName == "")
             {
-                ERROR_LOG("Subtitle style must have a name.");
+                CS_ERROR_LOG("Subtitle style must have a name.");
                 return CSubtitles::StylePtr();
             }
             
             pStyle->strFontName = inStyleJson.get(kstrTagStyleFont, kstrDefaultFont).asString();
             pStyle->udwFontSize = inStyleJson.get(kstrTagStyleFontSize, kstrDefaultFontSize).asUInt();
-            pStyle->Colour = PARSE_COLOUR(inStyleJson.get(kstrTagStyleFontColour, kstrDefaultColour).asString());
+            pStyle->Colour = Core::ParseColour(inStyleJson.get(kstrTagStyleFontColour, kstrDefaultColour).asString());
             pStyle->FadeTimeMS = ParseTime(inStyleJson.get(kstrTagStyleFadeTime, (s32)kDefaultFadeTimeMS).asString());
             pStyle->eAlignment = Core::AlignmentAnchorFromString(inStyleJson.get(kstrTagStyleAlignment, kstrDefaultAlignment).asString());
             pStyle->Bounds = LoadBounds(inStyleJson.get(kstrTagStyleBounds, ""));
@@ -212,7 +214,7 @@ namespace ChilliSource
             pSubtitle->strStyleName = inSubtitleJson.get(kstrTagSubtitleStyle, "").asString();
             if (pSubtitle->strStyleName == "")
             {
-            	ERROR_LOG("Subtitle must have a style.");
+            	CS_ERROR_LOG("Subtitle must have a style.");
             	return CSubtitles::SubtitlePtr();
             }
             
@@ -220,7 +222,7 @@ namespace ChilliSource
             pSubtitle->strTextID = inSubtitleJson.get(kstrTagSubtitleTextID, "").asString();
             if (pSubtitle->strTextID == "")
             {
-                ERROR_LOG("Subtitle must have a text ID.");
+                CS_ERROR_LOG("Subtitle must have a text ID.");
                 return CSubtitles::SubtitlePtr();
             }
             

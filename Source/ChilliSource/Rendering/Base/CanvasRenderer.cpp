@@ -166,7 +166,7 @@ namespace ChilliSource
 			mOverlayBatcher.Render(mpRenderSystem, msCachedSprite);
             
 #ifdef DEBUG_STATS
-            CDebugStats::AddToEvent("GUI", 1);
+            DebugStats::AddToEvent("GUI", 1);
 #endif
         }
         //-----------------------------------------------------------
@@ -216,7 +216,7 @@ namespace ChilliSource
 			}
             
 #ifdef DEBUG_STATS
-            CDebugStats::AddToEvent("GUI", 1);
+            DebugStats::AddToEvent("GUI", 1);
 #endif
 		}
         //-----------------------------------------------------------
@@ -300,7 +300,7 @@ namespace ChilliSource
             }
             
 #ifdef DEBUG_STATS
-            CDebugStats::AddToEvent("GUI", 1);
+            DebugStats::AddToEvent("GUI", 1);
 #endif
         }
         //-----------------------------------------------------------
@@ -718,7 +718,7 @@ namespace ChilliSource
 					outfCharacterWidth = 0.0f;
                     if(outpInvalidCharacterFound)
                         (*outpInvalidCharacterFound)=true;
-					ERROR_LOG("Invalid character in text component");
+					CS_ERROR_LOG("Invalid character in text component");
 					break;
 				}
 			}

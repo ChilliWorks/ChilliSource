@@ -10,11 +10,13 @@
 #ifndef _MOFLO_CORE_RESOURCEMANAGER_H_
 #define _MOFLO_CORE_RESOURCEMANAGER_H_
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+
+#include <unordered_map>
 
 namespace ChilliSource
 {
@@ -76,7 +78,7 @@ namespace ChilliSource
 			///
 			/// @param Vector of the resource loaders that this manager will use
 			//-----------------------------------------------------------------
-			void SetResourceProviders(const DYNAMIC_ARRAY<IResourceProvider*> & inVecResourceProviders);
+			void SetResourceProviders(const std::vector<IResourceProvider*> & inVecResourceProviders);
 			//-----------------------------------------------------------------
 			/// Release
 			///
@@ -144,13 +146,13 @@ namespace ChilliSource
             ///
             /// @return List of current loaded resources
 			//-----------------------------------------------------------------
-			virtual DYNAMIC_ARRAY<ResourceDesc> GetAllLoadedResources() const;
+			virtual std::vector<ResourceDesc> GetAllLoadedResources() const;
 		protected:
 			
-			DYNAMIC_ARRAY<IResourceProvider*> mResourceProviders;
+			std::vector<IResourceProvider*> mResourceProviders;
 			CApplication* mpApplicationOwner;
 			
-			typedef HASH_MAP<std::string, ResourcePtr> MapStringToResourcePtr;
+			typedef std::unordered_map<std::string, ResourcePtr> MapStringToResourcePtr;
 			MapStringToResourcePtr mMapFilenameToResource;
 		};
 	}

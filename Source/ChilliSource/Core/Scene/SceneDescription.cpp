@@ -8,12 +8,12 @@
  */
 
 #include <ChilliSource/Core/Scene/SceneDescription.h>
-
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/Entity/ComponentFactory.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 namespace ChilliSource
 {
@@ -32,13 +32,13 @@ namespace ChilliSource
             inpEl->name("Transform");
             			
 			if (vTranslation != CVector3::ZERO)
-                rapidxml::add_new_attribute(inpEl, "translation", STRING_CAST(vTranslation).c_str());
+                rapidxml::add_new_attribute(inpEl, "translation", ToString(vTranslation).c_str());
 			if (qOrientation != CQuaternion::IDENTITY)
-				rapidxml::add_new_attribute(inpEl, "orientation", STRING_CAST(qOrientation).c_str());
+				rapidxml::add_new_attribute(inpEl, "orientation", ToString(qOrientation).c_str());
 			if (vScale != CVector3(1,1,1))
-				rapidxml::add_new_attribute(inpEl, "scale", STRING_CAST(vScale).c_str());
+				rapidxml::add_new_attribute(inpEl, "scale", ToString(vScale).c_str());
             if(fOpacity != 1.0f)
-                rapidxml::add_new_attribute(inpEl, "opacity", STRING_CAST(fOpacity).c_str());
+                rapidxml::add_new_attribute(inpEl, "opacity", ToString(fOpacity).c_str());
 		}
 		
 		void EntityTransform::FromXml(rapidxml::xml_node<> * inpEl)
@@ -47,19 +47,19 @@ namespace ChilliSource
             {
                 if(pAttr->isNamed("translation") )
                 {
-                    vTranslation = CStringConverter::ParseVector3(pAttr->value());
+                    vTranslation = ParseVector3(pAttr->value());
                 }
                 else if(pAttr->isNamed("orientation") )
                 {
-                    qOrientation = CStringConverter::ParseQuaternion(pAttr->value());
+                    qOrientation = ParseQuaternion(pAttr->value());
                 }
                 else if(pAttr->isNamed("scale") )
                 {
-                    vScale = CStringConverter::ParseVector3(pAttr->value());
+                    vScale = ParseVector3(pAttr->value());
                 }
                 else if(pAttr->isNamed("opacity") )
                 {
-                    fOpacity = CStringConverter::ParseFloat(pAttr->value());
+                    fOpacity = ParseF32(pAttr->value());
                 }
             }
         }
@@ -130,13 +130,13 @@ namespace ChilliSource
                 pResult = pCompFac->CreateComponent(insComponentDesc.strType, insComponentDesc.sParams);
                 if(!pResult)
                 {
-                    WARNING_LOG("SceneLoader: Factory failed to produce component of type: " + insComponentDesc.strType);
+                    CS_WARNING_LOG("SceneLoader: Factory failed to produce component of type: " + insComponentDesc.strType);
 
                 }
             }
             else
             {
-				WARNING_LOG("SceneLoader: No registered factory can produce type: " + insComponentDesc.strType);
+				CS_WARNING_LOG("SceneLoader: No registered factory can produce type: " + insComponentDesc.strType);
             }
             
             
@@ -164,7 +164,7 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				ERROR_LOG("SceneDescription could not load the file:" + incName);
+				CS_ERROR_LOG("SceneDescription could not load the file:" + incName);
                 return false;
 			}
             
@@ -213,7 +213,7 @@ namespace ChilliSource
             rapidxml::xml_node<> * pEntityEl = rapidxml::add_new_child(inpParentEl, bCustomEntityDefinition ? "CustomEntity" : "Entity");
             
             rapidxml::add_new_attribute(pEntityEl, "name", strName.c_str());
-			rapidxml::add_new_attribute(pEntityEl,"visible", STRING_CAST(bVisible).c_str());
+			rapidxml::add_new_attribute(pEntityEl,"visible", ToString(bVisible).c_str());
 
 			// Write out Transform
             rapidxml::xml_node<> * pTransform = rapidxml::add_new_child(pEntityEl, "Transform");
@@ -259,7 +259,7 @@ namespace ChilliSource
                 // Read visibility
                 else if(pAttr->isNamed("visible"))
                 {
-                    bVisible = CStringConverter::ParseBool(pAttr->value());
+                    bVisible = ParseBool(pAttr->value());
                 }
 			}
 
@@ -317,7 +317,7 @@ namespace ChilliSource
                 }
                 if(pAttr->isNamed("visible") )
                 {
-                    bVisible = CStringConverter::ParseBool(pAttr->value());
+                    bVisible = ParseBool(pAttr->value());
                 }
             }
             

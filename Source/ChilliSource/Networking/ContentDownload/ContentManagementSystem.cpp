@@ -22,7 +22,7 @@ namespace ChilliSource
 {
     namespace Networking
     {
-        DEFINE_NAMED_INTERFACE(CContentManagementSystem);
+        DEFINE_NAMED_INTERFACE(ContentManagementSystem);
         
         //-----------------------------------------------------------
         /// Constructor
@@ -31,7 +31,7 @@ namespace ChilliSource
 		/// @param Current application version 
         /// @param Array of tags
         //-----------------------------------------------------------
-        CContentManagementSystem::CContentManagementSystem(IContentDownloader* inpContentDownloader) 
+        ContentManagementSystem::ContentManagementSystem(IContentDownloader* inpContentDownloader) 
         : mpContentDownloader(inpContentDownloader), mpServerManifest(nullptr), 
         muRunningToDownloadTotal(0), muRunningDownloadedTotal(0), mbDLCCachePurged(false)
         {
@@ -45,7 +45,7 @@ namespace ChilliSource
         ///
         /// @param TiXmlDocument
         //-----------------------------------------------------------
-        void CContentManagementSystem::LoadLocalManifest(TiXmlDocument* inpCurrentManifest)
+        void ContentManagementSystem::LoadLocalManifest(TiXmlDocument* inpCurrentManifest)
         {
             //The manifest lives in the documents directory
             inpCurrentManifest->LoadFile(Core::StorageLocation::k_DLC, "ContentManifest.moman");
@@ -62,7 +62,7 @@ namespace ChilliSource
         /// @param File name
         /// @return Checksum of file as found in the current manifest
         //-----------------------------------------------------------
-        std::string CContentManagementSystem::GetManifestChecksumForFile(const std::string& instrFilename)
+        std::string ContentManagementSystem::GetManifestChecksumForFile(const std::string& instrFilename)
         {
             return CalculateChecksum(Core::StorageLocation::k_DLC, instrFilename);
         }
@@ -77,7 +77,7 @@ namespace ChilliSource
 		/// @param File path
 		/// @return Checksum string
 		//-----------------------------------------------------------
-		std::string CContentManagementSystem::CalculateChecksum(Core::StorageLocation ineLocation, const std::string& instrFilePath)
+		std::string ContentManagementSystem::CalculateChecksum(Core::StorageLocation ineLocation, const std::string& instrFilePath)
 		{
             std::string strMD5Checksum = Core::CApplication::GetFileSystemPtr()->GetFileMD5Checksum(ineLocation, instrFilePath);
 			std::string strBase64Encoded = Core::CBaseEncoding::Base64Encode(strMD5Checksum);
@@ -90,9 +90,9 @@ namespace ChilliSource
         /// @param Interface ID to compare
         /// @return Whether system is of that type
         //-----------------------------------------------------------
-        bool CContentManagementSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+        bool ContentManagementSystem::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == CContentManagementSystem::InterfaceID;
+            return inInterfaceID == ContentManagementSystem::InterfaceID;
         }
         //-----------------------------------------------------------
         /// Clear Download Data
@@ -101,10 +101,10 @@ namespace ChilliSource
         /// when the download is successful; at which point
         /// we can clear the data and remove any temp files
         //-----------------------------------------------------------
-        void CContentManagementSystem::ClearDownloadData()
+        void ContentManagementSystem::ClearDownloadData()
         {
         	//Clear the old crap
-            SAFE_DELETE(mpServerManifest);
+            CS_SAFE_DELETE(mpServerManifest);
             mRemovePackageIDs.clear();
             mPackageDetails.clear();
         }
@@ -122,15 +122,15 @@ namespace ChilliSource
         /// @param Delegate to callback notifying whether an update
         /// is required
         //-----------------------------------------------------------
-        void CContentManagementSystem::CheckForUpdates(const CContentManagementSystem::CheckForUpdateDelegate& inDelegate)
+        void ContentManagementSystem::CheckForUpdates(const ContentManagementSystem::CheckForUpdateDelegate& inDelegate)
         {
-            DEBUG_LOG("CMS: Checking for content updates...");
+            CS_DEBUG_LOG("CMS: Checking for content updates...");
             
             //Clear any stale data from last update check
             ClearDownloadData();
             
             //Have the downloader request the manifest in it's own way
-            if(mpContentDownloader->DownloadContentManifest(ContentDownloader::Delegate(this, &CContentManagementSystem::OnContentManifestDownloadComplete)))
+            if(mpContentDownloader->DownloadContentManifest(ContentDownloader::Delegate(this, &ContentManagementSystem::OnContentManifestDownloadComplete)))
             {
                 //The request has started successfully
                 mOnUpdateCheckCompleteDelegate = inDelegate;
@@ -138,7 +138,7 @@ namespace ChilliSource
             else
             {
                 //The request has failed to start most likely due to internet connection
-                ERROR_LOG("CMS: Internet not reachable");
+                CS_ERROR_LOG("CMS: Internet not reachable");
                 if(mbDLCCachePurged)
                 {
                     inDelegate(UpdateResult::k_updateCheckFailedBlocking);
@@ -161,7 +161,7 @@ namespace ChilliSource
         ///
         /// @param Delegate to call when download is complete
         //-----------------------------------------------------------
-        void CContentManagementSystem::DownloadUpdates(const CContentManagementSystem::CompleteDelegate& inDelegate)
+        void ContentManagementSystem::DownloadUpdates(const ContentManagementSystem::CompleteDelegate& inDelegate)
         {
         	mOnDownloadCompleteDelegate = inDelegate;
             mudwCurrentPackageDownload = 0;
@@ -171,11 +171,11 @@ namespace ChilliSource
             	//Add a temp directory so that the packages are stored atomically and only overwrite
                 //the originals on full success
                 Core::CApplication::GetFileSystemPtr()->CreateDirectory(Core::StorageLocation::k_DLC, "Temp");
-                mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, ContentDownloader::Delegate(this, &CContentManagementSystem::OnContentDownloadComplete));
+                mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, ContentDownloader::Delegate(this, &ContentManagementSystem::OnContentDownloadComplete));
             }
             else
             {
-            	DEBUG_LOG("CMS: Content update finished");
+            	CS_DEBUG_LOG("CMS: Content update finished");
                 mOnDownloadCompleteDelegate(Result::k_contentSucceeded);
             }
         }
@@ -184,10 +184,10 @@ namespace ChilliSource
         ///
         /// Perform the HTTP request for the next DLC package
         //-----------------------------------------------------------
-        void CContentManagementSystem::DownloadNextPackage()
+        void ContentManagementSystem::DownloadNextPackage()
         {
             mudwCurrentPackageDownload++;
-            mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, ContentDownloader::Delegate(this, &CContentManagementSystem::OnContentDownloadComplete));
+            mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, ContentDownloader::Delegate(this, &ContentManagementSystem::OnContentDownloadComplete));
         }
         //-----------------------------------------------------------
         /// Install Updates
@@ -197,18 +197,18 @@ namespace ChilliSource
         ///
         /// @param Delegate to call when Install is complete
         //-----------------------------------------------------------
-        void CContentManagementSystem::InstallUpdates(const CompleteDelegate& inDelegate)
+        void ContentManagementSystem::InstallUpdates(const CompleteDelegate& inDelegate)
         {
             if(!mPackageDetails.empty() || !mRemovePackageIDs.empty())
             {
-                DEBUG_LOG("CMS: Installing content updates...");
+                CS_DEBUG_LOG("CMS: Installing content updates...");
 				
 				if(!mPackageDetails.empty())
 				{
 					//Unzip all the files and overwrite the old manifest
 					Core::WaitCondition waitCondition(mPackageDetails.size());
 					
-					Core::CTaskScheduler::ForEach(mPackageDetails.begin(), mPackageDetails.end(), this, &CContentManagementSystem::ExtractFilesFromPackage, &waitCondition);
+					Core::CTaskScheduler::ForEach(mPackageDetails.begin(), mPackageDetails.end(), this, &ContentManagementSystem::ExtractFilesFromPackage, &waitCondition);
 					
 					//Wait on all the packages being unzipped
 					waitCondition.Wait();
@@ -224,7 +224,7 @@ namespace ChilliSource
 					//Remove any unused files from the documents
 					Core::WaitCondition waitCondition(mRemovePackageIDs.size());
 					
-					Core::CTaskScheduler::ForEach(mRemovePackageIDs.begin(), mRemovePackageIDs.end(), this, &CContentManagementSystem::DeleteDirectory, &waitCondition);
+					Core::CTaskScheduler::ForEach(mRemovePackageIDs.begin(), mRemovePackageIDs.end(), this, &ContentManagementSystem::DeleteDirectory, &waitCondition);
 					
 					//Wait on all the packages being removed
 					waitCondition.Wait();
@@ -233,7 +233,7 @@ namespace ChilliSource
                 //Save the new content manifest
                 mpServerManifest->SaveFile(Core::StorageLocation::k_DLC, "ContentManifest.moman");
                 
-                DEBUG_LOG("CMS: Installing content updates complete");
+                CS_DEBUG_LOG("CMS: Installing content updates complete");
                 
                 mbDLCCachePurged = false;
                 
@@ -261,23 +261,23 @@ namespace ChilliSource
         /// @param Request result
         /// @param Request response
         //-----------------------------------------------------------
-        void CContentManagementSystem::OnContentManifestDownloadComplete(ContentDownloader::Result ineResult, const std::string& instrManifest)
+        void ContentManagementSystem::OnContentManifestDownloadComplete(ContentDownloader::Result ineResult, const std::string& instrManifest)
         {
             switch(ineResult)
             {
                 case ContentDownloader::Result::k_succeeded:
-                    DEBUG_LOG("CMS: Content manifest download complete");
+                    CS_DEBUG_LOG("CMS: Content manifest download complete");
                     mstrServerManifestData += instrManifest;
                     BuildDownloadList(mstrServerManifestData); 
                     mstrServerManifestData.clear();
                     break;
                 case ContentDownloader::Result::k_failed:
-                    DEBUG_LOG("CMS: Content manifest download failed: " + instrManifest);
+                    CS_DEBUG_LOG("CMS: Content manifest download failed: " + instrManifest);
                     mstrServerManifestData.clear();
                     mbDLCCachePurged ? mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateCheckFailedBlocking) : mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateCheckFailed);
                     break;
                 case ContentDownloader::Result::k_flushed:
-                    DEBUG_LOG("CMS: Content manifest download flushed");
+                    CS_DEBUG_LOG("CMS: Content manifest download flushed");
                     mstrServerManifestData += instrManifest;
                     break;
             };
@@ -294,13 +294,13 @@ namespace ChilliSource
         /// @param Request result
         /// @param Request response
         //-----------------------------------------------------------
-        void CContentManagementSystem::OnContentDownloadComplete(ContentDownloader::Result ineResult, const std::string& instrData)
+        void ContentManagementSystem::OnContentDownloadComplete(ContentDownloader::Result ineResult, const std::string& instrData)
         {
         	switch(ineResult)
             {
                 case ContentDownloader::Result::k_succeeded:
                 {
-                    DEBUG_LOG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package download complete");
+                    CS_DEBUG_LOG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package download complete");
                     if(SavePackageToFile(mPackageDetails[mudwCurrentPackageDownload], instrData, true))
                     {
                         muRunningDownloadedTotal += mPackageDetails[mudwCurrentPackageDownload].udwSize;
@@ -308,7 +308,7 @@ namespace ChilliSource
                         //Don't overwrite the old manifest until all the content has been downloaded 
                         if(mudwCurrentPackageDownload >= (mPackageDetails.size() - 1))
                         {
-                            DEBUG_LOG("CMS: Content update finished");
+                            CS_DEBUG_LOG("CMS: Content update finished");
                             mOnDownloadCompleteDelegate(Result::k_contentSucceeded);
                         }
                         else
@@ -321,7 +321,7 @@ namespace ChilliSource
                 }
                 case ContentDownloader::Result::k_failed:
                 {
-                	DEBUG_LOG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package download failed");
+                	CS_DEBUG_LOG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package download failed");
                     
                     //Delete all temp zip files and cancel the outstanding requests
                     DeleteDirectory("Temp");
@@ -334,7 +334,7 @@ namespace ChilliSource
                 }
                 case ContentDownloader::Result::k_flushed:
                 {
-                	DEBUG_LOG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package exceeds buffer size and is being flushed");
+                	CS_DEBUG_LOG("CMS: " + mPackageDetails[mudwCurrentPackageDownload].strID + " Package exceeds buffer size and is being flushed");
                     SavePackageToFile(mPackageDetails[mudwCurrentPackageDownload], instrData, false);
                     break;
                 }
@@ -349,7 +349,7 @@ namespace ChilliSource
         ///
         /// @param String containing the server manifest
         //-----------------------------------------------------------
-        void CContentManagementSystem::BuildDownloadList(const std::string& instrServerManifest)
+        void ContentManagementSystem::BuildDownloadList(const std::string& instrServerManifest)
         {
 			//Validate the server manifest
             mpServerManifest = new TiXmlDocument();
@@ -357,7 +357,7 @@ namespace ChilliSource
             
             if(!mpServerManifest->RootElement())
             {
-                ERROR_LOG("CMS: Server content manifest is invalid");
+                CS_ERROR_LOG("CMS: Server content manifest is invalid");
                 if(mbDLCCachePurged)
                 {
                     mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateCheckFailedBlocking);
@@ -373,7 +373,7 @@ namespace ChilliSource
             //Check if DLC is enabled
             if(!Core::XMLUtils::GetAttributeValueOrDefault<bool>(mpServerManifest->RootElement(), "DLCEnabled", false))
             {
-                DEBUG_LOG("CMS: DLC disabled by server");
+                CS_DEBUG_LOG("CMS: DLC disabled by server");
 				mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateNotAvailable);
                 return;
             }
@@ -399,7 +399,7 @@ namespace ChilliSource
             //Lets find out what we need already have in the manifest
 			else
             {
-                HASH_MAP<std::string, std::string> mapPackageIDToChecksum;
+                std::unordered_map<std::string, std::string> mapPackageIDToChecksum;
                 
                 //Store the data from the local manifest to make a comparison with the server manifest
                 if(pCurrentManifest->RootElement())
@@ -428,7 +428,7 @@ namespace ChilliSource
                     std::string strServerPackageChecksum = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pServerPackageEl, "Checksum", "");
 					std::string strMinVersionForPackage = Core::XMLUtils::GetAttributeValueOrDefault<std::string>(pServerPackageEl, "MinVersion", "");
                     
-                    HASH_MAP<std::string, std::string>::iterator it = mapPackageIDToChecksum.find(strServerPackageID);
+                    std::unordered_map<std::string, std::string>::iterator it = mapPackageIDToChecksum.find(strServerPackageID);
 				
                     //Based on the state of the file decide whether it needs updating
                     if(it != mapPackageIDToChecksum.end())
@@ -464,7 +464,7 @@ namespace ChilliSource
                                     u32 udwPackageSize = Core::XMLUtils::GetAttributeValueOrDefault<u32>(pServerPackageEl, "Size", 0);
                                     muRunningToDownloadTotal += udwPackageSize;
                                     
-                                    DEBUG_LOG("CMS: " + strServerPackageID + " package requires updating of size : " + STRING_CAST(udwPackageSize));
+                                    CS_DEBUG_LOG("CMS: " + strServerPackageID + " package requires updating of size : " + Core::ToString(udwPackageSize));
                                     
                                     PackageDetails sPackageDetails;
                                     sPackageDetails.strID = strServerPackageID;
@@ -493,7 +493,7 @@ namespace ChilliSource
                 }
                
                 //Any packages left in the local manifest need to be removed
-                for(HASH_MAP<std::string, std::string>::iterator it = mapPackageIDToChecksum.begin(); it != mapPackageIDToChecksum.end(); ++it)
+                for(std::unordered_map<std::string, std::string>::iterator it = mapPackageIDToChecksum.begin(); it != mapPackageIDToChecksum.end(); ++it)
                 {
                     mRemovePackageIDs.push_back(it->first);
                 }
@@ -515,7 +515,7 @@ namespace ChilliSource
                 mOnUpdateCheckCompleteDelegate(UpdateResult::k_updateNotAvailable);
             }
             
-            SAFE_DELETE(pCurrentManifest);
+            CS_SAFE_DELETE(pCurrentManifest);
         }
         //-----------------------------------------------------------
         /// Add To Download List if not in Bundle
@@ -525,7 +525,7 @@ namespace ChilliSource
         ///
         /// @param Package element
         //-----------------------------------------------------------
-        void CContentManagementSystem::AddToDownloadListIfNotInBundle(TiXmlElement* pPackageEl) 
+        void ContentManagementSystem::AddToDownloadListIfNotInBundle(TiXmlElement* pPackageEl) 
         {
             //Check all the file names
             TiXmlElement* pFileEl = Core::XMLUtils::FirstChildElementWithName(pPackageEl, "File");
@@ -544,8 +544,8 @@ namespace ChilliSource
                     u32 udwPackageSize = Core::XMLUtils::GetAttributeValueOrDefault<u32>(pPackageEl, "Size", 0);
 					muRunningToDownloadTotal += udwPackageSize;
                     
-					DEBUG_LOG("CMS: " + strPackageID + " package content is different on server than on device");
-                    DEBUG_LOG("CMS: " + strPackageID + " package requires updating of size : " + STRING_CAST(udwPackageSize));
+					CS_DEBUG_LOG("CMS: " + strPackageID + " package content is different on server than on device");
+                    CS_DEBUG_LOG("CMS: " + strPackageID + " package requires updating of size : " + Core::ToString(udwPackageSize));
                     
                     PackageDetails sPackageDetails;
                     sPackageDetails.strID = strPackageID;
@@ -577,7 +577,7 @@ namespace ChilliSource
         /// @param Whether the file has finished downloading
 		/// @return Success
         //-----------------------------------------------------------
-        bool CContentManagementSystem::SavePackageToFile(const PackageDetails& insPackageDetails, const std::string& instrZippedPackage, bool inbFullyDownloaded)
+        bool ContentManagementSystem::SavePackageToFile(const PackageDetails& insPackageDetails, const std::string& instrZippedPackage, bool inbFullyDownloaded)
         {
             std::string strFile = "Temp/" + insPackageDetails.strID + ".packzip";
 
@@ -590,10 +590,10 @@ namespace ChilliSource
             if(inbFullyDownloaded)
             {
                 std::string strChecksum = CalculateChecksum(Core::StorageLocation::k_DLC, strFile);
-                DEBUG_LOG("CMS: Package Checksum: " + strChecksum + " Pristine Checksum: " + insPackageDetails.strChecksum);
+                CS_DEBUG_LOG("CMS: Package Checksum: " + strChecksum + " Pristine Checksum: " + insPackageDetails.strChecksum);
                 if(strChecksum != insPackageDetails.strChecksum)
                 {
-                    ERROR_LOG("CMS: " + insPackageDetails.strID + " Package download corrupted");
+                    CS_ERROR_LOG("CMS: " + insPackageDetails.strID + " Package download corrupted");
                     return false;
                 }
             }
@@ -653,7 +653,7 @@ namespace ChilliSource
         ///
         /// @param Zipped package
         //-----------------------------------------------------------
-        void CContentManagementSystem::ExtractFilesFromPackage(const CContentManagementSystem::PackageDetails& insPackageDetails) const
+        void ContentManagementSystem::ExtractFilesFromPackage(const ContentManagementSystem::PackageDetails& insPackageDetails) const
         {
 			//Open zip
 			std::string strZipFilePath(mstrContentDirectory + "/Temp/" + insPackageDetails.strID + ".packzip");
@@ -661,7 +661,7 @@ namespace ChilliSource
 			unzFile ZippedFile = unzOpen(strZipFilePath.c_str());
 			if(!ZippedFile)
 			{
-				ERROR_LOG("CMS: Cannot unzip content package: " + insPackageDetails.strID);
+				CS_ERROR_LOG("CMS: Cannot unzip content package: " + insPackageDetails.strID);
 				return;
 			}
 
@@ -703,7 +703,7 @@ namespace ChilliSource
                 }
                 
                 //Close current file and jump to the next
-                SAFE_DELETE_ARRAY(pbyDataBuffer);
+                CS_SAFE_DELETE_ARRAY(pbyDataBuffer);
                 unzCloseCurrentFile(ZippedFile);
                 dwStatus = unzGoToNextFile(ZippedFile);
             }
@@ -718,7 +718,7 @@ namespace ChilliSource
 		///
 		/// @return The size of the data needing to be downloaded
 		//-----------------------------------------------------------
-		u32 CContentManagementSystem::GetRunningTotalToDownload()
+		u32 ContentManagementSystem::GetRunningTotalToDownload()
 		{
 			return muRunningToDownloadTotal;
 		}
@@ -729,7 +729,7 @@ namespace ChilliSource
 		///
 		/// @return The current running total of the size of data downloaded
 		//-----------------------------------------------------------
-		u32 CContentManagementSystem::GetRunningTotalDownloaded()
+		u32 ContentManagementSystem::GetRunningTotalDownloaded()
 		{
 			return muRunningDownloadedTotal + mpContentDownloader->GetCurrentDownloadedBytes();
 		}
@@ -745,7 +745,7 @@ namespace ChilliSource
         ///
         /// @return Whether the file exists
         //-----------------------------------------------------------
-        bool CContentManagementSystem::DoesFileExist(const std::string& instrFilename, const std::string instrChecksum, bool inbCheckOnlyBundle) 
+        bool ContentManagementSystem::DoesFileExist(const std::string& instrFilename, const std::string instrChecksum, bool inbCheckOnlyBundle) 
         {
             if(inbCheckOnlyBundle)
             {
@@ -775,7 +775,7 @@ namespace ChilliSource
         ///
         /// @return The directory
         //-----------------------------------------------------------
-        void CContentManagementSystem::DeleteDirectory(const std::string& instrDirectory) const
+        void ContentManagementSystem::DeleteDirectory(const std::string& instrDirectory) const
         {
             ChilliSource::Core::CApplication::GetFileSystemPtr()->DeleteDirectory(Core::StorageLocation::k_DLC, instrDirectory);
         }

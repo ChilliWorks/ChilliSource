@@ -14,9 +14,9 @@
 #ifndef _MOFLO_CORE_XML_XMLUTILS_H_
 #define _MOFLO_CORE_XML_XMLUTILS_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/XML/tinyxml.h>
 #include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Core/String/StringConverter.h>
 
 namespace ChilliSource
 {
@@ -30,7 +30,7 @@ namespace ChilliSource
 			//Default template is unspported
 			template <typename T> static const T GetAttributeValueOrDefault(TiXmlElement* inpElement, const std::string & inAttributeName, const T & inDefault)
 			{
-				WARNING_LOG("Called GetAttributeValueOrDefault on an unsupported type");
+				CS_WARNING_LOG("Called GetAttributeValueOrDefault on an unsupported type");
 			}
 			
 			static TiXmlElement* FirstChildElementWithName(TiXmlElement* inpParentElement, const std::string & inName);

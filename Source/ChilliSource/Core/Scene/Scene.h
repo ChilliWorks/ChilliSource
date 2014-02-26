@@ -10,14 +10,11 @@
 #ifndef _MO_FLO_CORE_SCENE_H_
 #define _MO_FLO_CORE_SCENE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/Container/Octree.h>
 #include <ChilliSource/Core/Volume/VolumeComponent.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Input/ForwardDeclarations.h>
-#include <ChilliSource/GUI/ForwardDeclarations.h>
 
 namespace ChilliSource
 {
@@ -34,7 +31,7 @@ namespace ChilliSource
 		class CScene
 		{
 		public:
-			CScene(Input::IInputSystem* inpInputSystem = nullptr, f32 infWorldHalfSize = 100);
+			CScene(Input::InputSystem* inpInputSystem = nullptr, f32 infWorldHalfSize = 100);
 			~CScene();
 
 			//-------------------------------------------------------
@@ -84,14 +81,14 @@ namespace ChilliSource
 			/// @param Ray to check intersection
 			/// @param A handle to a container to fill with intersecting components
 			//--------------------------------------------------------------------------------------------------
-			void QuerySceneForIntersection(const Core::Ray &inRay, DYNAMIC_ARRAY<IVolumeComponent*> &outIntersectComponents, bool mbIsDepthSorted = false, u32 inudwQueryMask = 0);
+			void QuerySceneForIntersection(const Core::Ray &inRay, std::vector<IVolumeComponent*> &outIntersectComponents, bool mbIsDepthSorted = false, u32 inudwQueryMask = 0);
 			//--------------------------------------------------------------------------------------------------
 			/// Query Scene For Components
 			///
 			/// Traverse the scene for the given component type and fill the list with those components
 			/// @param Empty container to be filled
 			//--------------------------------------------------------------------------------------------------
-			template <typename T> void QuerySceneForComponents(DYNAMIC_ARRAY<T*> &outComponents, u32 inudwQueryMask = 0)
+			template <typename T> void QuerySceneForComponents(std::vector<T*> &outComponents, u32 inudwQueryMask = 0)
 			{
 				for(SharedEntityList::const_iterator it = mEntities.begin(); it != mEntities.end(); ++it)
 				{
@@ -104,7 +101,7 @@ namespace ChilliSource
 			/// Traverse the scene for the given component type and fill the list with those components
 			/// @param Empty container to be filled
 			//--------------------------------------------------------------------------------------------------
-			template <typename T> void QuerySceneForManagedComponents(DYNAMIC_ARRAY<SHARED_PTR<T> > &outComponents, u32 inudwQueryMask = 0)
+			template <typename T> void QuerySceneForManagedComponents(std::vector<std::shared_ptr<T> > &outComponents, u32 inudwQueryMask = 0)
 			{
 				for(SharedEntityList::const_iterator it = mEntities.begin(); it != mEntities.end(); ++it)
 				{
@@ -119,7 +116,7 @@ namespace ChilliSource
 			/// @param Empty container to be filled with T1
             /// @param Empty container to be filled with T2
 			//--------------------------------------------------------------------------------------------------
-			template <typename T1, typename T2> void QuerySceneForComponents(DYNAMIC_ARRAY<T1*> &outComponents1, DYNAMIC_ARRAY<T2*> &outComponents2,
+			template <typename T1, typename T2> void QuerySceneForComponents(std::vector<T1*> &outComponents1, std::vector<T2*> &outComponents2,
                                                                              u32 inudwQueryMask = 0)
 			{
 				for(SharedEntityList::const_iterator it = mEntities.begin(); it != mEntities.end(); ++it)
@@ -135,7 +132,7 @@ namespace ChilliSource
             /// @param Empty container to be filled with T1
             /// @param Empty container to be filled with T2
 			//--------------------------------------------------------------------------------------------------
-			template <typename T1, typename T2> void QuerySceneForManagedComponents(DYNAMIC_ARRAY<SHARED_PTR<T1> > &outComponents1, DYNAMIC_ARRAY<SHARED_PTR<T2> > &outComponents2,
+			template <typename T1, typename T2> void QuerySceneForManagedComponents(std::vector<std::shared_ptr<T1> > &outComponents1, std::vector<std::shared_ptr<T2> > &outComponents2,
                                                                                     u32 inudwQueryMask = 0)
 			{
 				for(SharedEntityList::const_iterator it = mEntities.begin(); it != mEntities.end(); ++it)
@@ -152,7 +149,7 @@ namespace ChilliSource
             /// @param Empty container to be filled with T2
             /// @param Empty container to be filled with T3
 			//--------------------------------------------------------------------------------------------------
-			template <typename T1, typename T2, typename T3> void QuerySceneForComponents(DYNAMIC_ARRAY<T1*> &outComponents1, DYNAMIC_ARRAY<T2*> &outComponents2, DYNAMIC_ARRAY<T3*> &outComponents3,
+			template <typename T1, typename T2, typename T3> void QuerySceneForComponents(std::vector<T1*> &outComponents1, std::vector<T2*> &outComponents2, std::vector<T3*> &outComponents3,
                                                                                           u32 inudwQueryMask = 0)
 			{
 				for(SharedEntityList::const_iterator it = mEntities.begin(); it != mEntities.end(); ++it)
@@ -169,7 +166,7 @@ namespace ChilliSource
             /// @param Empty container to be filled with T2
             /// @param Empty container to be filled with T3
 			//--------------------------------------------------------------------------------------------------
-			template <typename T1, typename T2, typename T3> void QuerySceneForManagedComponents(DYNAMIC_ARRAY<SHARED_PTR<T1> > &outComponents1, DYNAMIC_ARRAY<SHARED_PTR<T1> > &outComponents2, DYNAMIC_ARRAY<SHARED_PTR<T1> > &outComponents3,
+			template <typename T1, typename T2, typename T3> void QuerySceneForManagedComponents(std::vector<std::shared_ptr<T1> > &outComponents1, std::vector<std::shared_ptr<T1> > &outComponents2, std::vector<std::shared_ptr<T1> > &outComponents3,
                                                                                                  u32 inudwQueryMask = 0)
 			{
 				for(SharedEntityList::const_iterator it = mEntities.begin(); it != mEntities.end(); ++it)

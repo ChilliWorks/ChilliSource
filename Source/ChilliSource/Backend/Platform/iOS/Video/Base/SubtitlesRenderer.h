@@ -9,9 +9,10 @@
 #ifndef _MOFLOW_PLATFORM_IOS_VIDEO_SUBTITLESRENDERER_H_
 #define _MOFLOW_PLATFORM_IOS_VIDEO_SUBTITLESRENDERER_H_
 
-#include <ChilliSource/Video/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Video/Base/Subtitles.h>
 #include <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerActivity.h>
+
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
@@ -27,8 +28,8 @@
     CADisplayLink* mpDisplayLink;
     ChilliSource::Video::SubtitlesPtr mpSubtitles;
     ChilliSource::iOS::CVideoPlayerActivity* mpVideoPlayer;
-    HASH_MAP<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*> maTextViewMap;
-    DYNAMIC_ARRAY<ChilliSource::Video::CSubtitles::SubtitlePtr> maSubtitlesToRemove;
+    std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*> maTextViewMap;
+    std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr> maSubtitlesToRemove;
     TimeIntervalMs mCurrentTimeMS;
 }
 //--------------------------------------------------------

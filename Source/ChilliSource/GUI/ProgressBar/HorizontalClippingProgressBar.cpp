@@ -7,13 +7,13 @@
 //
 
 #include <ChilliSource/GUI/ProgressBar/HorizontalClippingProgressBar.h>
-#include <ChilliSource/GUI/Image/ImageView.h>
 
+#include <ChilliSource/GUI/Image/ImageView.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 namespace ChilliSource
@@ -76,7 +76,7 @@ namespace ChilliSource
             Core::StorageLocation eBackgroundTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("BackgroundTextureLocation", strValue))
             {
-                eBackgroundTextureLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eBackgroundTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("BackgroundTexture", strValue))
             {
@@ -86,7 +86,7 @@ namespace ChilliSource
             Core::StorageLocation eProgressTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("ProgressTextureLocation", strValue))
             {
-                eProgressTextureLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eProgressTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("ProgressTexture", strValue))
             {
@@ -96,7 +96,7 @@ namespace ChilliSource
             Core::StorageLocation eBackgroundSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("BackgroundSpriteSheetLocation", strValue))
             {
-                eBackgroundSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eBackgroundSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("BackgroundSpriteSheet", strValue))
             {
@@ -106,7 +106,7 @@ namespace ChilliSource
             Core::StorageLocation eProgressSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("ProgressSpriteSheetLocation", strValue))
             {
-                eProgressSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eProgressSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("ProgressSpriteSheet", strValue))
 			{
@@ -115,14 +115,14 @@ namespace ChilliSource
             //---Background index
             if(insParams.TryGetValue("BackgroundSpriteSheetIndex", strValue))
             {
-				MOFLOW_ASSERT(BackgroundSpriteSheet, "Cannot set sprite sheet index without sprite sheet");
-				SetBackgroundSpriteSheetIndex(Core::CStringConverter::ParseUnsignedInt(strValue));
+				CS_ASSERT(BackgroundSpriteSheet, "Cannot set sprite sheet index without sprite sheet");
+				SetBackgroundSpriteSheetIndex(Core::ParseU32(strValue));
             }
             //---Progress index
             if(insParams.TryGetValue("ProgressSpriteSheetIndex", strValue))
             {
-				MOFLOW_ASSERT(ProgressSpriteSheet, "Cannot set sprite sheet index without sprite sheet");
-				SetProgressSpriteSheetIndex(Core::CStringConverter::ParseUnsignedInt(strValue));
+				CS_ASSERT(ProgressSpriteSheet, "Cannot set sprite sheet index without sprite sheet");
+				SetProgressSpriteSheetIndex(Core::ParseU32(strValue));
             }
 			//---Background index ID
 			if(insParams.TryGetValue("BackgroundSpriteSheetIndexID", strValue))
@@ -136,12 +136,12 @@ namespace ChilliSource
 			}
 			if(insParams.TryGetValue("Segments", strValue))
 			{
-				mdwSegments=Core::CStringConverter::ParseInt(strValue);
+				mdwSegments=Core::ParseS32(strValue);
 			}
 			//---Height From Image
 			if(insParams.TryGetValue("HeightFromImage", strValue))
 			{
-				HeightFromImage = Core::CStringConverter::ParseBool(strValue);
+				HeightFromImage = Core::ParseBool(strValue);
 			}
 
 			if(mdwSegments != 0)
@@ -224,7 +224,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		void CHorizontalClippingProgressBar::SetBackgroundSpriteSheetIndexID(const std::string& instrID)
 		{
-			MOFLOW_ASSERT(BackgroundSpriteSheet, "Cannot set sprite sheet index without sprite sheet");
+			CS_ASSERT(BackgroundSpriteSheet, "Cannot set sprite sheet index without sprite sheet");
 			BackgroundSpriteSheetIndexID = instrID;
 			SetBackgroundSpriteSheetIndex(BackgroundSpriteSheet->GetFrameIndexByID(instrID));
 		}
@@ -235,7 +235,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		void CHorizontalClippingProgressBar::SetProgressSpriteSheetIndexID(const std::string& instrID)
 		{
-			MOFLOW_ASSERT(ProgressSpriteSheet, "Cannot set sprite sheet index without sprite sheet");
+			CS_ASSERT(ProgressSpriteSheet, "Cannot set sprite sheet index without sprite sheet");
 			ProgressSpriteSheetIndexID = instrID;
 			SetProgressSpriteSheetIndex(ProgressSpriteSheet->GetFrameIndexByID(instrID));
 		}

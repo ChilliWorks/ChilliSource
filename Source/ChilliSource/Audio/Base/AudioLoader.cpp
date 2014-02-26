@@ -25,9 +25,9 @@ namespace ChilliSource
 		///
 		/// Register this object as a model provider
 		//-------------------------------------------------------------------------
-		CAudioLoader::CAudioLoader(IAudioSystem* inpAudioSystem) : mAudioManager(inpAudioSystem->GetAudioManager())
+		AudioLoader::AudioLoader(AudioSystem* inpAudioSystem) : mAudioManager(inpAudioSystem->GetAudioManager())
 		{
-            Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(const_cast<IAudioManager*>(&mAudioManager));
+            Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(const_cast<AudioManager*>(&mAudioManager));
 		}
 		//-------------------------------------------------------------------------
 		/// Is A
@@ -35,7 +35,7 @@ namespace ChilliSource
 		/// @param Interface to compare
 		/// @return Whether the object implements the given interface
 		//-------------------------------------------------------------------------
-		bool CAudioLoader::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool AudioLoader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == IResourceProvider::InterfaceID;
 		}
@@ -45,15 +45,15 @@ namespace ChilliSource
 		/// @param Type to compare
 		/// @return Whether the object can create a resource of given type
 		//----------------------------------------------------------------------------
-		bool CAudioLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
+		bool AudioLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == Audio::IAudioResource::InterfaceID);
+			return (inInterfaceID == Audio::AudioResource::InterfaceID);
 		}
 		//-------------------------------------------------------------------------
 		/// Destructor
 		///
 		//-------------------------------------------------------------------------
-		CAudioLoader::~CAudioLoader() 
+		AudioLoader::~AudioLoader() 
 		{
 
 		}

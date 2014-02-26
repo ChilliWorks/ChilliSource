@@ -9,9 +9,8 @@
 #ifndef _MOFLO_GUI_DEFAULTS_STRETCHABLEHIGHLIGHTBUTTON_H_
 #define _MOFLO_GUI_DEFAULTS_STRETCHABLEHIGHLIGHTBUTTON_H_
 
-#include <ChilliSource/GUI/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Button/Button.h>
-#include <ChilliSource/Audio/ForwardDeclarations.h>
 
 namespace ChilliSource
 {
@@ -157,13 +156,13 @@ namespace ChilliSource
             ///
             /// @param Audio effect played when the button is selected
             //-----------------------------------------------------------
-            void SetSelectAudioEffect(const Audio::AudioComponentPtr& inpEffect);
+            void SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect);
 			//-----------------------------------------------------------
             /// Set De-Select Audio Effect
             ///
             /// @param Audio effect played when the button is selected
             //-----------------------------------------------------------
-            void SetDeselectAudioEffect(const Audio::AudioComponentPtr& inpEffect);
+            void SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect);
             //--------------------------------------------------------
 			/// Set Highlight Colour
 			///
@@ -284,8 +283,8 @@ namespace ChilliSource
             SpriteSheetIndex msCurrentIndices;
             SpriteSheetIndex msNormalIndices;
             SpriteSheetIndex msHighlightIndices;
-            Audio::AudioComponentPtr mpSelectAudioEffect;
-			Audio::AudioComponentPtr mpDeselectAudioEffect;
+            Audio::AudioComponentSPtr mpSelectAudioEffect;
+			Audio::AudioComponentSPtr mpDeselectAudioEffect;
             Core::CColour mCurrentColour;
 			bool mbSelected;
             
@@ -299,8 +298,8 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
 		};
         
-        typedef SHARED_PTR<CStretchableHighlightButton> StretchableHighlightButtonPtr;
-		typedef WEAK_PTR<CStretchableHighlightButton> StretchableHighlightButtonWeakPtr;
+        typedef std::shared_ptr<CStretchableHighlightButton> StretchableHighlightButtonPtr;
+		typedef std::weak_ptr<CStretchableHighlightButton> StretchableHighlightButtonWeakPtr;
     }
 }
 

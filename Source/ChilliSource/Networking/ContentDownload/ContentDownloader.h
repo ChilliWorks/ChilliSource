@@ -1,5 +1,5 @@
 //
-//  ContentDownloader.h
+//  IContentDownloader.h
 //  MoFlow
 //
 //  Created by Scott Downie on 23/01/2012.
@@ -9,6 +9,7 @@
 #ifndef _MOFLOW_NETWORKING_CONTENT_DOWNLOADER_H_
 #define _MOFLOW_NETWORKING_CONTENT_DOWNLOADER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 
 namespace ChilliSource

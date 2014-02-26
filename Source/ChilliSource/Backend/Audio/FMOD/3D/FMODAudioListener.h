@@ -13,7 +13,9 @@
 #ifndef _MO_FLO_AUDIO_FMOD_FMOD_AUDIO_LISTENER_H_
 #define _MO_FLO_AUDIO_FMOD_FMOD_AUDIO_LISTENER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/3D/AudioListener.h>
+
 #include <fmod.hpp>
 #include <fmod_errors.h>
 
@@ -21,7 +23,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CFMODAudioListener : public Audio::IAudioListener
+		class CFMODAudioListener : public Audio::AudioListener
 		{
 		public:
 			CFMODAudioListener(FMOD::System* inpFMODSystem);
@@ -45,8 +47,8 @@ namespace ChilliSource
 			FMOD::System* mpFMODSystem;
 		};
 		
-		typedef SHARED_PTR<CFMODAudioListener> FMODAudioListenerPtr;
-		typedef WEAK_PTR<CFMODAudioListener> FMODAudioListenerWeakPtr;
+		typedef std::shared_ptr<CFMODAudioListener> FMODAudioListenerPtr;
+		typedef std::weak_ptr<CFMODAudioListener> FMODAudioListenerWeakPtr;
 	}
 }
 

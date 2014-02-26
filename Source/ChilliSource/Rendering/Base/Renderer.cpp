@@ -110,7 +110,7 @@ namespace ChilliSource
             IRenderTarget* pOffscreenTarget = mpRenderSystem->CreateRenderTarget(udwWidth, udwHeight);
             pOffscreenTarget->SetTargetTextures(inpColourTarget, inpDepthTarget);
             RenderSceneToTarget(inpScene, pOffscreenTarget);
-            SAFE_DELETE(pOffscreenTarget);
+            CS_SAFE_DELETE(pOffscreenTarget);
 		}
         //----------------------------------------------------------
 		/// Render Scene To Target
@@ -118,10 +118,10 @@ namespace ChilliSource
 		void CRenderer::RenderSceneToTarget(Core::CScene* inpScene, IRenderTarget* inpRenderTarget)
         {
 			//Traverse the scene graph and get all renderable objects
-            DYNAMIC_ARRAY<IRenderComponent*> aPreFilteredRenderCache;
-            DYNAMIC_ARRAY<CCameraComponent*> aCameraCache;
-            DYNAMIC_ARRAY<CDirectionalLightComponent*> aDirLightCache;
-            DYNAMIC_ARRAY<CPointLightComponent*> aPointLightCache;
+            std::vector<IRenderComponent*> aPreFilteredRenderCache;
+            std::vector<CCameraComponent*> aCameraCache;
+            std::vector<CDirectionalLightComponent*> aDirLightCache;
+            std::vector<CPointLightComponent*> aPointLightCache;
             CAmbientLightComponent* pAmbientLight = nullptr;
             
 			FindRenderableObjectsInScene(inpScene, aPreFilteredRenderCache, aCameraCache, aDirLightCache, aPointLightCache, pAmbientLight);
@@ -138,9 +138,9 @@ namespace ChilliSource
                 RenderShadowMap(mpActiveCamera, aDirLightCache, aPreFilteredRenderCache);
                 
                 //Cull items based on camera
-                DYNAMIC_ARRAY<IRenderComponent*> aCameraRenderCache;
-                DYNAMIC_ARRAY<IRenderComponent*> aCameraOpaqueCache;
-                DYNAMIC_ARRAY<IRenderComponent*> aCameraTransparentCache;
+                std::vector<IRenderComponent*> aCameraRenderCache;
+                std::vector<IRenderComponent*> aCameraOpaqueCache;
+                std::vector<IRenderComponent*> aCameraTransparentCache;
                 CullRenderables(mpActiveCamera, aPreFilteredRenderCache, aCameraRenderCache);
                 FilterSceneRenderables(aCameraRenderCache, aCameraOpaqueCache, aCameraTransparentCache);
                 
@@ -173,7 +173,7 @@ namespace ChilliSource
                     for(u32 i=0; i<aPointLightCache.size(); ++i)
                     {
                         mpRenderSystem->SetLight(aPointLightCache[i]);
-                        DYNAMIC_ARRAY<IRenderComponent*> aPointLightOpaqueCache;
+                        std::vector<IRenderComponent*> aPointLightOpaqueCache;
                         CullRenderables(aPointLightCache[i], aCameraOpaqueCache, aPointLightOpaqueCache);
                         Render(mpActiveCamera, ShaderPass::k_point, aPointLightOpaqueCache);
                     }
@@ -216,10 +216,10 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Find Renderable Objects In Scene
 		//----------------------------------------------------------
-        void CRenderer::FindRenderableObjectsInScene(Core::CScene* pScene, DYNAMIC_ARRAY<IRenderComponent*>& outaRenderCache, DYNAMIC_ARRAY<CCameraComponent*>& outaCameraCache,
-                                          DYNAMIC_ARRAY<CDirectionalLightComponent*>& outaDirectionalLightComponentCache, DYNAMIC_ARRAY<CPointLightComponent*>& outaPointLightComponentCache, CAmbientLightComponent*& outpAmbientLight) const
+        void CRenderer::FindRenderableObjectsInScene(Core::CScene* pScene, std::vector<IRenderComponent*>& outaRenderCache, std::vector<CCameraComponent*>& outaCameraCache,
+                                          std::vector<CDirectionalLightComponent*>& outaDirectionalLightComponentCache, std::vector<CPointLightComponent*>& outaPointLightComponentCache, CAmbientLightComponent*& outpAmbientLight) const
 		{
-            static DYNAMIC_ARRAY<ILightComponent*> aLightComponentCache;
+            static std::vector<ILightComponent*> aLightComponentCache;
             aLightComponentCache.clear();
             
             pScene->QuerySceneForComponents<IRenderComponent, CCameraComponent, ILightComponent>(outaRenderCache, outaCameraCache, aLightComponentCache);
@@ -265,7 +265,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Sort Opaque
         //----------------------------------------------------------
-        void CRenderer::SortOpaque(CCameraComponent* inpCameraComponent, DYNAMIC_ARRAY<IRenderComponent*>& inaRenderables) const
+        void CRenderer::SortOpaque(CCameraComponent* inpCameraComponent, std::vector<IRenderComponent*>& inaRenderables) const
         {
             RendererSortPredicatePtr pOpaqueSort = inpCameraComponent->GetOpaqueSortPredicate();
             if(!pOpaqueSort)
@@ -282,7 +282,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Sort Transparent
         //----------------------------------------------------------
-        void CRenderer::SortTransparent(CCameraComponent* inpCameraComponent, DYNAMIC_ARRAY<IRenderComponent*>& inaRenderables) const
+        void CRenderer::SortTransparent(CCameraComponent* inpCameraComponent, std::vector<IRenderComponent*>& inaRenderables) const
         {
             RendererSortPredicatePtr pTransparentSort = inpCameraComponent->GetTransparentSortPredicate();
             if(!pTransparentSort)
@@ -299,9 +299,9 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Shadow Map
         //----------------------------------------------------------
-        void CRenderer::RenderShadowMap(CCameraComponent* inpCameraComponent, DYNAMIC_ARRAY<CDirectionalLightComponent*>& inaLightComponents, DYNAMIC_ARRAY<IRenderComponent*>& inaRenderables)
+        void CRenderer::RenderShadowMap(CCameraComponent* inpCameraComponent, std::vector<CDirectionalLightComponent*>& inaLightComponents, std::vector<IRenderComponent*>& inaRenderables)
         {
-            DYNAMIC_ARRAY<IRenderComponent*> aFilteredShadowMapRenderCache;
+            std::vector<IRenderComponent*> aFilteredShadowMapRenderCache;
             
             if(inaLightComponents.size() > 0)
             {
@@ -321,7 +321,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Render Shadow Map
 		//----------------------------------------------------------
-		void CRenderer::RenderShadowMap(CCameraComponent* inpCameraComponent, CDirectionalLightComponent* inpLightComponent, DYNAMIC_ARRAY<IRenderComponent*>& inaRenderables)
+		void CRenderer::RenderShadowMap(CCameraComponent* inpCameraComponent, CDirectionalLightComponent* inpLightComponent, std::vector<IRenderComponent*>& inaRenderables)
 		{
 			//Create a new offscreen render target using the given texture
 			IRenderTarget* pRenderTarget = mpRenderSystem->CreateRenderTarget(inpLightComponent->GetShadowMapPtr()->GetWidth(), inpLightComponent->GetShadowMapPtr()->GetHeight());
@@ -330,21 +330,21 @@ namespace ChilliSource
             mpRenderSystem->BeginFrame(pRenderTarget);
             
             //Only opaque objects cast and receive shadows
-            for(DYNAMIC_ARRAY<IRenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
+            for(std::vector<IRenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
             {
                 (*it)->RenderShadowMap(mpRenderSystem, inpCameraComponent);
             }
             
             mpRenderSystem->EndFrame(pRenderTarget);
             
-            SAFE_DELETE(pRenderTarget);
+            CS_SAFE_DELETE(pRenderTarget);
 		}
         //----------------------------------------------------------
 		/// Render
 		//----------------------------------------------------------
-		void CRenderer::Render(CCameraComponent* inpCameraComponent, ShaderPass ineShaderPass, DYNAMIC_ARRAY<IRenderComponent*>& inaRenderables)
+		void CRenderer::Render(CCameraComponent* inpCameraComponent, ShaderPass ineShaderPass, std::vector<IRenderComponent*>& inaRenderables)
 		{
-            for(DYNAMIC_ARRAY<IRenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
+            for(std::vector<IRenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
             {
                 (*it)->Render(mpRenderSystem, inpCameraComponent, ineShaderPass);
             }
@@ -363,7 +363,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Cull Renderables
         //----------------------------------------------------------
-		void CRenderer::CullRenderables(CCameraComponent* inpCamera, const DYNAMIC_ARRAY<IRenderComponent*>& inaRenderCache, DYNAMIC_ARRAY<IRenderComponent*>& outaRenderCache) const
+		void CRenderer::CullRenderables(CCameraComponent* inpCamera, const std::vector<IRenderComponent*>& inaRenderCache, std::vector<IRenderComponent*>& outaRenderCache) const
 		{
             ICullingPredicate * pCullingPredicate = GetCullPredicate(inpCamera).get();
             
@@ -377,7 +377,7 @@ namespace ChilliSource
             
             inpCamera->UpdateFrustum();
             
-			for(DYNAMIC_ARRAY<IRenderComponent*>::const_iterator it = inaRenderCache.begin(); it != inaRenderCache.end(); ++it)
+			for(std::vector<IRenderComponent*>::const_iterator it = inaRenderCache.begin(); it != inaRenderCache.end(); ++it)
 			{
 				IRenderComponent* pRenderable = (*it);
 				
@@ -396,7 +396,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Cull Renderables
         //----------------------------------------------------------
-		void CRenderer::CullRenderables(CPointLightComponent* inpLightComponent, const DYNAMIC_ARRAY<IRenderComponent*>& inaRenderCache, DYNAMIC_ARRAY<IRenderComponent*>& outaRenderCache) const
+		void CRenderer::CullRenderables(CPointLightComponent* inpLightComponent, const std::vector<IRenderComponent*>& inaRenderCache, std::vector<IRenderComponent*>& outaRenderCache) const
         {
             //Reserve estimated space
             outaRenderCache.reserve(inaRenderCache.size());
@@ -405,7 +405,7 @@ namespace ChilliSource
             aLightSphere.vOrigin = inpLightComponent->GetWorldPosition();
             aLightSphere.fRadius = inpLightComponent->GetRangeOfInfluence();
             
-            for(DYNAMIC_ARRAY<IRenderComponent*>::const_iterator it = inaRenderCache.begin(); it != inaRenderCache.end(); ++it)
+            for(std::vector<IRenderComponent*>::const_iterator it = inaRenderCache.begin(); it != inaRenderCache.end(); ++it)
             {
                 if(Core::CIntersection::Intersects(aLightSphere, (*it)->GetBoundingSphere()) == true)
                 {
@@ -416,13 +416,13 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Filter Scene Renderables
         //----------------------------------------------------------
-		void CRenderer::FilterSceneRenderables(const DYNAMIC_ARRAY<IRenderComponent*>& inaRenderables, DYNAMIC_ARRAY<IRenderComponent*>& outaOpaque, DYNAMIC_ARRAY<IRenderComponent*>& outaTransparent) const
+		void CRenderer::FilterSceneRenderables(const std::vector<IRenderComponent*>& inaRenderables, std::vector<IRenderComponent*>& outaOpaque, std::vector<IRenderComponent*>& outaTransparent) const
 		{
             //Reserve estimated space
             outaOpaque.reserve(inaRenderables.size());
             outaTransparent.reserve(inaRenderables.size());
             
-			for(DYNAMIC_ARRAY<IRenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
+			for(std::vector<IRenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
 			{
 				IRenderComponent* pRenderable = (*it);
                 pRenderable->IsTransparent() ? outaTransparent.push_back(pRenderable) : outaOpaque.push_back(pRenderable);
@@ -431,12 +431,12 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Filter Shadow Map Renderables
         //----------------------------------------------------------
-        void CRenderer::FilterShadowMapRenderables(const DYNAMIC_ARRAY<IRenderComponent*>& inaRenderables, DYNAMIC_ARRAY<IRenderComponent*>& outaRenderables) const
+        void CRenderer::FilterShadowMapRenderables(const std::vector<IRenderComponent*>& inaRenderables, std::vector<IRenderComponent*>& outaRenderables) const
         {
             //Reserve estimated space
             outaRenderables.reserve(inaRenderables.size());
             
-            for(DYNAMIC_ARRAY<IRenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
+            for(std::vector<IRenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
 			{
 				IRenderComponent* pRenderable = (*it);
                 if(pRenderable->IsShadowCastingEnabled() == true && pRenderable->IsTransparent() == false)

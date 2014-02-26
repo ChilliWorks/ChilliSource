@@ -14,6 +14,7 @@
 #ifndef _MOFLO_INPUT_TOUCHSCREEN_H_
 #define _MOFLO_INPUT_TOUCHSCREEN_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Input/Base/InputDevice.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Math/Vector2.h>
@@ -47,16 +48,16 @@ namespace ChilliSource
 		
 		typedef fastdelegate::FastDelegate1<const TouchInfo &> TouchEventDelegate;
 		
-		class ITouchScreen : public IInputDevice
+		class TouchScreen : public InputDevice
 		{
 		public:
-			ITouchScreen();
-			typedef DYNAMIC_ARRAY<TouchInfo> TouchList;
+			TouchScreen();
+			typedef std::vector<TouchInfo> TouchList;
 			typedef TouchList::iterator TouchListItr;
 
-			virtual ~ITouchScreen();
+			virtual ~TouchScreen();
 			
-			DECLARE_NAMED_INTERFACE(ITouchScreen);
+			DECLARE_NAMED_INTERFACE(TouchScreen);
 			
 			Core::IEvent<TouchEventDelegate> & GetTouchBeganEvent();
 			Core::IEvent<TouchEventDelegate> & GetTouchMovedEvent();

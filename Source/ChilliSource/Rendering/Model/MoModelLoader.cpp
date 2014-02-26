@@ -77,7 +77,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool CMoModelLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
-			MeshPtr pMesh = SHARED_PTR_CAST<CMesh>(outpResource);
+			MeshPtr pMesh = std::static_pointer_cast<CMesh>(outpResource);
 			
 			//get the path to the curent file
 			std::string filename, filepath;
@@ -105,7 +105,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool CMoModelLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
-			MeshPtr pMesh = SHARED_PTR_CAST<CMesh>(outpResource);
+			MeshPtr pMesh = std::static_pointer_cast<CMesh>(outpResource);
 			
 			//get the path to the curent file
 			std::string filename, filepath;
@@ -215,7 +215,7 @@ namespace ChilliSource
 			bool bSuccess = CMeshManager::BuildMesh(mpApp->GetRenderSystemPtr(), inMeshDescriptor, outpResource, inbNeedsPrepared);
 			
 			//cleanup
-			for (DYNAMIC_ARRAY<SubMeshDescriptor>::const_iterator it = inMeshDescriptor.mMeshes.begin(); it != inMeshDescriptor.mMeshes.end(); ++it)
+			for (std::vector<SubMeshDescriptor>::const_iterator it = inMeshDescriptor.mMeshes.begin(); it != inMeshDescriptor.mMeshes.end(); ++it)
 			{
 				delete[] it->mpVertexData;
 				delete[] it->mpIndexData;
@@ -274,21 +274,21 @@ namespace ChilliSource
 			//Check file for corruption
 			if(nullptr == inpStream || true == inpStream->IsBad())
 			{
-				ERROR_LOG("Cannot open MoModel file: " + inFilePath);
+				CS_ERROR_LOG("Cannot open MoModel file: " + inFilePath);
 				return false;
 			}
 			
 			u32 udwFileCheckValue = ReadValue<u32>(inpStream);
 			if(udwFileCheckValue != kgMoModelFileCheckValue)
 			{
-				ERROR_LOG("MoModel file has corruption(incorrect File Check Value): " + inFilePath);
+				CS_ERROR_LOG("MoModel file has corruption(incorrect File Check Value): " + inFilePath);
 				return false;
 			}
 			
 			u32 udwVersionNum = ReadValue<u32>(inpStream);
 			if (udwVersionNum < kgMoModelMinVersion || udwVersionNum > kgMoModelMaxVersion)
 			{
-				ERROR_LOG("Unsupported MoModel version: " + inFilePath);
+				CS_ERROR_LOG("Unsupported MoModel version: " + inFilePath);
 				return false;
 			}
 			
@@ -317,12 +317,12 @@ namespace ChilliSource
                         //A breaking change was made to animated models in version 11.
                         if (udwVersionNum < 11)
                         {
-                            ERROR_LOG("Model contains old format animation data, please update to momodel version 11: " + inFilePath);
+                            CS_ERROR_LOG("Model contains old format animation data, please update to momodel version 11: " + inFilePath);
                             return false;
                         }
 						break;
 					default:
-						ERROR_LOG("Unknown feature type in MoModel(" + inFilePath + ")feature declaration!");
+						CS_ERROR_LOG("Unknown feature type in MoModel(" + inFilePath + ")feature declaration!");
 						break;
 				}
 			}
@@ -365,7 +365,7 @@ namespace ChilliSource
                 inMeshDescriptor.mpSkeleton = SkeletonPtr(new CSkeleton());
                 
 				//read the skeleton nodes
-                HASH_MAP<u32, s32> jointToNodeMap;
+                std::unordered_map<u32, s32> jointToNodeMap;
 				for (u32 i = 0; i < inQuantities.mdwNumSkeletonNodes; i++)
 				{
                     //get the skeleton node name name
@@ -521,7 +521,7 @@ namespace ChilliSource
 				switch (MoModelVertexElement(dwVertexElement))
 				{
 					case MoModelVertexElement::k_none:
-						ERROR_LOG("Unknown vertex type in vertex declaration!");
+						CS_ERROR_LOG("Unknown vertex type in vertex declaration!");
 						break;
 					case MoModelVertexElement::k_position:
 						apVertElements[i].eType = VertexDataType::k_float4;

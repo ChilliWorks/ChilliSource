@@ -44,7 +44,7 @@ namespace ChilliSource
             }
             else
             {
-                ERROR_LOG("Cannot create particle effector of type: " + instrType);
+                CS_ERROR_LOG("Cannot create particle effector of type: " + instrType);
                 return nullptr;
             }
         }

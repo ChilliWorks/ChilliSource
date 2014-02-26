@@ -10,7 +10,7 @@
 #ifndef _MOFLOW_RENDERING_MESHDESCRIPTOR_H_
 #define _MOFLOW_RENDERING_MESHDESCRIPTOR_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Base/VertexDeclaration.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
@@ -49,7 +49,7 @@ namespace ChilliSource
             Core::StorageLocation meMaterialStorageLocation;
 			u8* mpVertexData;
 			u8* mpIndexData;
-			DYNAMIC_ARRAY<ChilliSource::Core::CMatrix4x4> mInverseBindPoseMatrices;
+			std::vector<ChilliSource::Core::CMatrix4x4> mInverseBindPoseMatrices;
 			PrimitiveType ePrimitiveType;            
 		};
 		//-------------------------------------------------------------------------
@@ -65,7 +65,7 @@ namespace ChilliSource
 			ChilliSource::Core::CVector3 mvMinBounds;
 			ChilliSource::Core::CVector3 mvMaxBounds;
 			SkeletonPtr mpSkeleton;
-			DYNAMIC_ARRAY<SubMeshDescriptor> mMeshes;
+			std::vector<SubMeshDescriptor> mMeshes;
 		};
 	}
 }

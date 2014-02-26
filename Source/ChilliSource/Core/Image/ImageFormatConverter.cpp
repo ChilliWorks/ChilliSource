@@ -43,7 +43,7 @@ namespace ChilliSource
             //---------------------------------------------------
             void RGBA8888ToRGB888(Core::CImage* inpImage)
             {
-                MOFLOW_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
+                CS_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
                 
                 u8* pOriginalImageData = (u8*)inpImage->GetData();
                 u32 udwBytesPerPixel = 3;
@@ -68,7 +68,7 @@ namespace ChilliSource
             //---------------------------------------------------
             void RGBA8888ToRGBA4444(Core::CImage* inpImage)
             {
-                MOFLOW_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
+                CS_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
                 
                 u8* pOriginalImageData = (u8*)inpImage->GetData();
                 u32 udwBytesPerPixel = 2;
@@ -95,7 +95,7 @@ namespace ChilliSource
             //---------------------------------------------------
             void RGBA8888ToRGB565(Core::CImage* inpImage)
             {
-                MOFLOW_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
+                CS_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
                 
                 u8* pOriginalImageData = (u8*)inpImage->GetData();
                 u32 udwBytesPerPixel = 2;
@@ -120,7 +120,7 @@ namespace ChilliSource
             //---------------------------------------------------
             void RGBA8888ToLUMA88(Core::CImage* inpImage)
             {
-                MOFLOW_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
+                CS_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
                 
                 u8* pOriginalImageData = (u8*)inpImage->GetData();
                 u32 udwArea = inpImage->GetWidth() * inpImage->GetHeight();
@@ -145,7 +145,7 @@ namespace ChilliSource
             //---------------------------------------------------
             void RGBA8888ToLUM8(Core::CImage* inpImage)
             {
-                MOFLOW_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
+                CS_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
                 
                 u8* pOriginalImageData = (u8*)inpImage->GetData();
                 u32 udwArea = inpImage->GetWidth() * inpImage->GetHeight();
@@ -170,7 +170,7 @@ namespace ChilliSource
             //---------------------------------------------------
             void RGBA8888ToDepth32(Core::CImage* inpImage)
             {
-                MOFLOW_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
+                CS_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
                 
                 inpImage->SetFormat(Core::CImage::Format::k_Depth32);
             }
@@ -179,7 +179,7 @@ namespace ChilliSource
             //---------------------------------------------------
             void RGBA8888ToDepth16(Core::CImage* inpImage)
             {
-                MOFLOW_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
+                CS_ASSERT(inpImage->GetFormat() == Core::CImage::Format::k_RGBA8888, "Cannot convert an image that is not in RGBA8888 format.");
                 
                 u8* pOriginalImageData = (u8*)inpImage->GetData();
                 u32 udwBytesPerPixel = 2;

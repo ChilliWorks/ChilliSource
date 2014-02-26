@@ -9,6 +9,8 @@
 #ifndef _EAGL_VIEW_H_
 #define _EAGL_VIEW_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <OpenGLES/EAGL.h>

@@ -13,16 +13,17 @@
 #ifndef _MO_FLO_AUDIO_SOUND_EVENT_H_
 #define _MO_FLO_AUDIO_SOUND_EVENT_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/3D/AudioComponent.h>
 
 namespace ChilliSource
 {
 	namespace Audio
 	{
-		class CSoundEvent
+		class SoundEvent
 		{
 		public:
-			CSoundEvent();
+			SoundEvent();
 			
 			//-------------------------------------------------------------
 			/// Add Sound
@@ -33,7 +34,7 @@ namespace ChilliSource
 			/// @param Sound sample
 			/// @param Delay (seconds)
 			//-------------------------------------------------------------
-			void AddSound(const AudioComponentPtr &inSound, f32 infDelayInSecs);
+			void AddSound(const AudioComponentSPtr &inSound, f32 infDelayInSecs);
 			//-------------------------------------------------------------
 			/// Play
 			///
@@ -54,8 +55,8 @@ namespace ChilliSource
 			void Update(f32 dt);
 		private:
 			
-			DYNAMIC_ARRAY< std::pair<AudioComponentPtr, f32> > mSoundAndDelay;
-			DYNAMIC_ARRAY<f32> mPlayedIndices;
+			std::vector< std::pair<AudioComponentSPtr, f32> > mSoundAndDelay;
+			std::vector<f32> mPlayedIndices;
 			
 			f32 mfTimeSincePlay;
 			bool mbIsPlaying;

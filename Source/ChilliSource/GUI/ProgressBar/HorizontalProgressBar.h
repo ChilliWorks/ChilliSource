@@ -9,6 +9,7 @@
 #ifndef _MOFLO_GUI_DEFAULTS_HORIZONTALPROGRESSBAR_H_
 #define _MOFLO_GUI_DEFAULTS_HORIZONTALPROGRESSBAR_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/ProgressBar/ProgressBar.h>
 
 namespace ChilliSource
@@ -155,8 +156,8 @@ namespace ChilliSource
             f32 mfProgressAbsHeight, mfProgressRelHeight;
 		};
 
-		typedef SHARED_PTR<CHorizontalProgressBar> HorizontalProgressBarPtr;
-		typedef WEAK_PTR<CHorizontalProgressBar> HorizontalProgressBarWeakPtr;
+		typedef std::shared_ptr<CHorizontalProgressBar> HorizontalProgressBarPtr;
+		typedef std::weak_ptr<CHorizontalProgressBar> HorizontalProgressBarWeakPtr;
 	}
 }
 

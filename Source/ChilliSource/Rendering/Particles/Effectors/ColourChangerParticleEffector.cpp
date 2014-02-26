@@ -6,6 +6,7 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Particles/Effectors/ColourChangerParticleEffector.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 
@@ -28,12 +29,12 @@ namespace ChilliSource
             //Colour change
             if(insParams.TryGetValue("TargetColour", strTemp))
             {
-                mTargetColour = Core::CStringConverter::ParseColourValue(strTemp);
+                mTargetColour = Core::ParseColour(strTemp);
             }
             //Energy level
             if(insParams.TryGetValue("AtEnergyLevel", strTemp))
             {
-                mfActiveEnergyLevel = Core::CStringConverter::ParseFloat(strTemp);
+                mfActiveEnergyLevel = Core::ParseF32(strTemp);
             }
         }
         //-----------------------------------------------------

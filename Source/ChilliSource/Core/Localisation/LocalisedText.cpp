@@ -43,7 +43,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------
         const UTF8String& CLocalisedText::GetText(const std::string &instrID) 
         {
-			MOFLOW_ASSERT(mpTextLookup, "Text Lookup IDs are missing");
+			CS_ASSERT(mpTextLookup, "Text Lookup IDs are missing");
 
             IDToLookupIndex::iterator it = mpTextLookup->Find(instrID);
             
@@ -52,7 +52,7 @@ namespace ChilliSource
                 return GetText(it->second);
             }
             
-            ERROR_LOG("Missing localised text with ID:" + instrID);
+            CS_ERROR_LOG("Missing localised text with ID:" + instrID);
             return GetText(-1);
         }
 		//----------------------------------------------------------------------------
@@ -66,8 +66,8 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
         bool CLocalisedText::LoadTextFromFile(StorageLocation ineLocation, const std::string & inFilePath, const std::string & inFileName)
 		{
-            SAFE_DELETE_ARRAY(mpText);
-            SAFE_DELETE(mpTextLookup);
+            CS_SAFE_DELETE_ARRAY(mpText);
+            CS_SAFE_DELETE(mpTextLookup);
             mudwLineCount = 0;
             
 			FileStreamPtr localFile = CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath + inFileName, FileMode::k_read);
@@ -246,7 +246,7 @@ namespace ChilliSource
         {
 			if(incIDFile == nullptr || incIDFile->IsBad())
 			{
-				WARNING_LOG("LocalisedTextLoader ID lookups unavailable: TagText.id missing");
+				CS_WARNING_LOG("LocalisedTextLoader ID lookups unavailable: TagText.id missing");
 				
 				if(incIDFile->IsOpen())
                 {

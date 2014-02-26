@@ -10,30 +10,30 @@
 #ifndef _MOFLOW_NETWORKING_MOCONNECTSYSTEM_H_
 #define _MOFLOW_NETWORKING_MOCONNECTSYSTEM_H_
 
-#include <vector>
-
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/System/System.h>
-#include <ChilliSource/Networking/ForwardDeclarations.h>
 #include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 #include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
+
+#include <vector>
 
 namespace ChilliSource
 {
 	namespace Networking
     {
-		class CMoConnectSystem : public Core::ISystem
+		class MoConnectSystem : public Core::ISystem
         {
 		public:
             //Credentials
 			static const std::string kstrFacebookLoginType;
 			static const std::string kstrEmailLoginType;
             
-			CMoConnectSystem(IHttpConnectionSystem * inpHttpSystem, const std::string& instrMoConnectServerURL, Core::COAuthSystem * inpOAuthSystem);
+			MoConnectSystem(HttpConnectionSystem * inpHttpSystem, const std::string& instrMoConnectServerURL, Core::COAuthSystem * inpOAuthSystem);
 			
-			DECLARE_NAMED_INTERFACE(CMoConnectSystem);
+			DECLARE_NAMED_INTERFACE(MoConnectSystem);
 			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const;
 			
             Core::COAuthSystem* GetOAuthSystem();
@@ -62,7 +62,7 @@ namespace ChilliSource
                 k_noServerResponse,
                 k_serverRefuses
 			};
-			typedef fastdelegate::FastDelegate2<CMoConnectSystem*,AccountCreateResult> AccountCreateDelegate;
+			typedef fastdelegate::FastDelegate2<MoConnectSystem*,AccountCreateResult> AccountCreateDelegate;
 			void CreateNewAccount(AccountCreateDelegate inDel);
 			
 			enum class RegisterLoginResult
@@ -76,7 +76,7 @@ namespace ChilliSource
 				k_invalidForm = 2000,            // The form is improperly formatted
 				k_invalidType = 2001,            // A param in the form is invalidly formatted
 			};
-			typedef fastdelegate::FastDelegate2<CMoConnectSystem*,RegisterLoginResult> RegisterLoginDelegate;
+			typedef fastdelegate::FastDelegate2<MoConnectSystem*,RegisterLoginResult> RegisterLoginDelegate;
 			//-----------------------------------------------------------
 			/// Register Login Email
 			///
@@ -115,7 +115,7 @@ namespace ChilliSource
                 std::string strToken;
                 std::string strTokenSecret;
             };
-			typedef fastdelegate::FastDelegate3<CMoConnectSystem*, SignInResult, const DYNAMIC_ARRAY<SignedInUser>& > SignInDelegate;
+			typedef fastdelegate::FastDelegate3<MoConnectSystem*, SignInResult, const std::vector<SignedInUser>& > SignInDelegate;
 			//-----------------------------------------------------------
 			/// Sign In Via Email
 			///
@@ -172,7 +172,7 @@ namespace ChilliSource
             void RegisterForPushNotifications(const PushNotificationType ineType, const std::string& instrToken,
                                               const std::string& instrLanguage, const std::string& instrCountryCode, const PushNotificationResultDelegate& inDelegate);
 			
-			typedef fastdelegate::FastDelegate1<CMoConnectSystem*> EventDelegate;
+			typedef fastdelegate::FastDelegate1<MoConnectSystem*> EventDelegate;
 			Core::IEvent<EventDelegate>& SignedInUserChangesEvent();
 			
             bool HasLoadedLoginTypes();
@@ -196,13 +196,13 @@ namespace ChilliSource
                 k_undefined
             };
             
-            typedef fastdelegate::FastDelegate3<const bool, const IHttpRequest::CompletionResult, const IAPReceipt> ValidateReceiptDelegate;
+            typedef fastdelegate::FastDelegate3<const bool, const HttpRequest::CompletionResult, const IAPReceipt> ValidateReceiptDelegate;
             void ValidateIAPReceipt(const IAPType ineType,
                                     const ChilliSource::Networking::IAPTransactionPtr& inpTransInfo,
                                     ValidateReceiptDelegate inDelegate);
             void RedeemIAP(const std::string& instrReceiptId);
             
-			typedef fastdelegate::FastDelegate2<CMoConnectSystem*, const Json::Value&> LocalUserProfileDelegate;
+			typedef fastdelegate::FastDelegate2<MoConnectSystem*, const Json::Value&> LocalUserProfileDelegate;
             
 			//-----------------------------------------------------------
 			/// Request Local User Profile
@@ -230,28 +230,28 @@ namespace ChilliSource
             
             void GenerateAuthenticationHeader(const std::string& instrURL, Core::ParamDictionary& outsHeader) const;
             
-			void AccountCreateRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+			void AccountCreateRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
 			AccountCreateDelegate mAccountCreateCallback;
             
-			void RegisterLoginRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+			void RegisterLoginRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
 			RegisterLoginDelegate mRegisterLoginCallback;
             
-			void SignInRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+			void SignInRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
 			SignInDelegate mSignInCallback;
             
-			void RetrieveAccountsRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+			void RetrieveAccountsRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
             SignInDelegate mRetrieveAccountsCallback;
             
             const std::string& GetPushNotificationTypeAsString(const PushNotificationType ineType);
-            void PushNotificationRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+            void PushNotificationRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
 			PushNotificationResultDelegate mPushNotificationCallback;
 			
-			void TimeRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+			void TimeRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
 			ServerTimeDelegate mTimeRequestCallback;
             
-			void LoginsRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+			void LoginsRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
 			
-			void GeneralRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+			void GeneralRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
 			
 			void HandleRedirection(HttpRequestPtr inpRequest);
 			
@@ -259,11 +259,11 @@ namespace ChilliSource
 			
 			void OnUserChanged();
             
-            void OnLocalUserProfileReceived(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+            void OnLocalUserProfileReceived(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
 			
             const std::string& GetIAPTypeAsString(const IAPType ineType);
-            void OnIAPRecieptValidationResponse(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
-            void OnIAPRedeemedResponse(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult);
+            void OnIAPRecieptValidationResponse(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
+            void OnIAPRedeemedResponse(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult);
             ValidateReceiptDelegate mValidateReceiptDelegate;
             
 			std::string mstrMoConnectURL;
@@ -277,11 +277,11 @@ namespace ChilliSource
             std::string mstrOAuthTokenSecret;
 			
 			bool mbHasLoadedLoginTypes;
-			DYNAMIC_ARRAY<std::string> mastrCurrentAccountLogins;
+			std::vector<std::string> mastrCurrentAccountLogins;
 			HttpRequestPtr mpPendingLoginsRequest;
             
 			Core::CEvent1<EventDelegate> mSignedInUserChangesEvent;
-			IHttpConnectionSystem* mpHttpConnectionSystem;
+			HttpConnectionSystem* mpHttpConnectionSystem;
             Core::COAuthSystem*  mpOAuthSystem;
             LocalUserProfileDelegate mLocalUserProfileDelegate;
 			
@@ -302,7 +302,7 @@ namespace ChilliSource
             RequestInfo* FindRequestWithHttpRequest(HttpRequestPtr inpHttp);
                 
             bool mbNoRemoveFulfilledRequests;
-            DYNAMIC_ARRAY<RequestInfo> masOpenRequests;
+            std::vector<RequestInfo> masOpenRequests;
             u32 mudwRequestIDSeed;
             
         };

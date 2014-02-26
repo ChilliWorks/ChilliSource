@@ -98,6 +98,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Declare SHA1 workspace
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource
 {
 	namespace Core

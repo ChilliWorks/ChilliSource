@@ -10,9 +10,9 @@
 #ifndef _MO_FLO_RENDERING_PARTICLE_COMPONENT_H_
 #define _MO_FLO_RENDERING_PARTICLE_COMPONENT_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Rendering/Base/RenderComponent.h>
-
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 
 namespace ChilliSource
@@ -154,8 +154,8 @@ namespace ChilliSource
 			
 		private:
 			
-			DYNAMIC_ARRAY<CParticleEmitter*> mEmitters;
-			DYNAMIC_ARRAY<IParticleEffector*> mEffectors;
+			std::vector<CParticleEmitter*> mEmitters;
+			std::vector<IParticleEffector*> mEffectors;
 			
 			CParticleSystem* mpOwningSystem;
             

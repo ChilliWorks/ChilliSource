@@ -10,7 +10,7 @@
 #include <ChilliSource/GUI/Image/HorizontalStretchableImage.h>
 
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
-
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
@@ -48,7 +48,7 @@ namespace ChilliSource
             Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SpriteSheetLocation", strValue))
             {
-                eSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             
 			if(insParams.TryGetValue("SpriteSheet", strValue))
@@ -64,7 +64,7 @@ namespace ChilliSource
             //---Height from image
             if(insParams.TryGetValue("HeightFromImage", strValue))
             {
-                HeightFromImage = Core::CStringConverter::ParseBool(strValue);
+                HeightFromImage = Core::ParseBool(strValue);
             }
             
             if(insParams.TryGetValue("ActAsSpacer", strValue))

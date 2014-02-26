@@ -54,9 +54,9 @@ namespace ChilliSource
 		class CRenderer;				//Class responsible for drawing the contents of a scene graph to screen
         class CCanvasRenderer;
 		class CRendererSortPredicate;
-		typedef SHARED_PTR<CRendererSortPredicate> RendererSortPredicatePtr;
+		typedef std::shared_ptr<CRendererSortPredicate> RendererSortPredicatePtr;
         class ICullingPredicate;
-        typedef SHARED_PTR<ICullingPredicate> CullingPredicatePtr;
+        typedef std::shared_ptr<ICullingPredicate> CullingPredicatePtr;
 
 		class CSpriteBatch;
 		class CDynamicSpriteBatch;
@@ -96,77 +96,77 @@ namespace ChilliSource
         class IRenderCapabilities;
         
 		//---Light components
-		typedef SHARED_PTR<ILightComponent> LightComponentPtr;
-		typedef WEAK_PTR<ILightComponent> LightComponentWeakPtr;
+		typedef std::shared_ptr<ILightComponent> LightComponentPtr;
+		typedef std::weak_ptr<ILightComponent> LightComponentWeakPtr;
         
-        typedef SHARED_PTR<CAmbientLightComponent> AmbientLightComponentPtr;
-		typedef WEAK_PTR<CAmbientLightComponent> AmbientLightComponentWeakPtr;
+        typedef std::shared_ptr<CAmbientLightComponent> AmbientLightComponentPtr;
+		typedef std::weak_ptr<CAmbientLightComponent> AmbientLightComponentWeakPtr;
 		
-		typedef SHARED_PTR<CDirectionalLightComponent> DirectionalLightComponentPtr;
-		typedef WEAK_PTR<CDirectionalLightComponent> DirectionalLightComponentWeakPtr;
+		typedef std::shared_ptr<CDirectionalLightComponent> DirectionalLightComponentPtr;
+		typedef std::weak_ptr<CDirectionalLightComponent> DirectionalLightComponentWeakPtr;
         
-        typedef SHARED_PTR<CPointLightComponent> PointLightComponentPtr;
-		typedef WEAK_PTR<CPointLightComponent> PointLightComponentWeakPtr;
+        typedef std::shared_ptr<CPointLightComponent> PointLightComponentPtr;
+		typedef std::weak_ptr<CPointLightComponent> PointLightComponentWeakPtr;
 		
 		//---Render components
-		typedef SHARED_PTR<IRenderComponent> RenderComponentPtr;
-		typedef WEAK_PTR<IRenderComponent> RenderComponentWeakPtr;
+		typedef std::shared_ptr<IRenderComponent> RenderComponentPtr;
+		typedef std::weak_ptr<IRenderComponent> RenderComponentWeakPtr;
 		
-		typedef SHARED_PTR<CSpriteComponent> SpriteComponentPtr;
-		typedef WEAK_PTR<CSpriteComponent> SpriteComponentWeakPtr;
+		typedef std::shared_ptr<CSpriteComponent> SpriteComponentPtr;
+		typedef std::weak_ptr<CSpriteComponent> SpriteComponentWeakPtr;
 		
-		typedef SHARED_PTR<CStaticMeshComponent> StaticMeshComponentPtr;
-		typedef WEAK_PTR<CStaticMeshComponent> StaticMeshComponentWeakPtr;
+		typedef std::shared_ptr<CStaticMeshComponent> StaticMeshComponentPtr;
+		typedef std::weak_ptr<CStaticMeshComponent> StaticMeshComponentWeakPtr;
 		
-		typedef SHARED_PTR<CAnimatedMeshComponent> AnimatedMeshComponentPtr;
-		typedef WEAK_PTR<CAnimatedMeshComponent> AnimatedMeshComponentWeakPtr;
+		typedef std::shared_ptr<CAnimatedMeshComponent> AnimatedMeshComponentPtr;
+		typedef std::weak_ptr<CAnimatedMeshComponent> AnimatedMeshComponentWeakPtr;
 		
-		typedef SHARED_PTR<CParticleComponent> ParticleComponentPtr;
-		typedef WEAK_PTR<CParticleComponent> ParticleComponentWeakPtr;
+		typedef std::shared_ptr<CParticleComponent> ParticleComponentPtr;
+		typedef std::weak_ptr<CParticleComponent> ParticleComponentWeakPtr;
 		
-		typedef SHARED_PTR<CCameraComponent> CameraComponentPtr;
-		typedef WEAK_PTR<CCameraComponent> CameraComponentWeakPtr;
+		typedef std::shared_ptr<CCameraComponent> CameraComponentPtr;
+		typedef std::weak_ptr<CCameraComponent> CameraComponentWeakPtr;
 
 		//---Resources
-        typedef SHARED_PTR<CFont> FontPtr;
-		typedef WEAK_PTR<CFont> FontWeakPtr;
+        typedef std::shared_ptr<CFont> FontPtr;
+		typedef std::weak_ptr<CFont> FontWeakPtr;
 
-		typedef SHARED_PTR<CMaterial> MaterialPtr;
-		typedef WEAK_PTR<CMaterial> MaterialWeakPtr;
+		typedef std::shared_ptr<CMaterial> MaterialPtr;
+		typedef std::weak_ptr<CMaterial> MaterialWeakPtr;
 		
-		typedef SHARED_PTR<CMesh> MeshPtr;
-		typedef WEAK_PTR<CMesh> MeshWeakPtr;
+		typedef std::shared_ptr<CMesh> MeshPtr;
+		typedef std::weak_ptr<CMesh> MeshWeakPtr;
 		
-		typedef SHARED_PTR<CSkinnedAnimation> SkinnedAnimationPtr;
-		typedef WEAK_PTR<CSkinnedAnimation> SkinnedAnimationWeakPtr;
+		typedef std::shared_ptr<CSkinnedAnimation> SkinnedAnimationPtr;
+		typedef std::weak_ptr<CSkinnedAnimation> SkinnedAnimationWeakPtr;
 		
-		typedef SHARED_PTR<CSubMesh> SubMeshPtr;
-		typedef WEAK_PTR<CSubMesh> SubMeshWeakPtr;
+		typedef std::shared_ptr<CSubMesh> SubMeshPtr;
+		typedef std::weak_ptr<CSubMesh> SubMeshWeakPtr;
 		
-		typedef SHARED_PTR<IShader> ShaderPtr;
-		typedef WEAK_PTR<IShader> ShaderWeakPtr;
+		typedef std::shared_ptr<IShader> ShaderPtr;
+		typedef std::weak_ptr<IShader> ShaderWeakPtr;
 		
-		typedef SHARED_PTR<CSpriteSheet> SpriteSheetPtr;
-		typedef WEAK_PTR<CSpriteSheet> SpriteSheetWeakPtr;
+		typedef std::shared_ptr<CSpriteSheet> SpriteSheetPtr;
+		typedef std::weak_ptr<CSpriteSheet> SpriteSheetWeakPtr;
 		
-		typedef SHARED_PTR<ITexture> TexturePtr;
-		typedef WEAK_PTR<ITexture> TextureWeakPtr;
+		typedef std::shared_ptr<ITexture> TexturePtr;
+		typedef std::weak_ptr<ITexture> TextureWeakPtr;
         
-        typedef SHARED_PTR<ICubemap> CubemapPtr;
-		typedef WEAK_PTR<ICubemap> CubemapWeakPtr;
+        typedef std::shared_ptr<ICubemap> CubemapPtr;
+		typedef std::weak_ptr<ICubemap> CubemapWeakPtr;
 		
 		//----Other
-		typedef SHARED_PTR<SkinnedAnimationFrame> SkinnedAnimationFramePtr;
-		typedef WEAK_PTR<SkinnedAnimationFrame> SkinnedAnimationFrameWeakPtr;
+		typedef std::shared_ptr<SkinnedAnimationFrame> SkinnedAnimationFramePtr;
+		typedef std::weak_ptr<SkinnedAnimationFrame> SkinnedAnimationFrameWeakPtr;
         
-        typedef SHARED_PTR<SkeletonNode> SkeletonNodePtr;
-		typedef WEAK_PTR<SkeletonNode> SkeletonNodeWeakPtr;
+        typedef std::shared_ptr<SkeletonNode> SkeletonNodePtr;
+		typedef std::weak_ptr<SkeletonNode> SkeletonNodeWeakPtr;
 		
-        typedef SHARED_PTR<CSkinnedAnimationGroup> SkinnedAnimationGroupPtr;
-		typedef WEAK_PTR<CSkinnedAnimationGroup> SkinnedAnimationWeakGroupPtr;
+        typedef std::shared_ptr<CSkinnedAnimationGroup> SkinnedAnimationGroupPtr;
+		typedef std::weak_ptr<CSkinnedAnimationGroup> SkinnedAnimationWeakGroupPtr;
         
-		typedef SHARED_PTR<CSkeleton> SkeletonPtr;
-		typedef WEAK_PTR<CSkeleton> SkeletonWeakPtr;
+		typedef std::shared_ptr<CSkeleton> SkeletonPtr;
+		typedef std::weak_ptr<CSkeleton> SkeletonWeakPtr;
 	}
 }
 

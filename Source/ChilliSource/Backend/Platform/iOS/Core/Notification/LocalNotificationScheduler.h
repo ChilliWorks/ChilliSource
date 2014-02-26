@@ -9,6 +9,7 @@
 #ifndef _MO_FLO_PLATFORM_IOS_LOCAL_NOTIFICATION_SCHEDULER_H_
 #define _MO_FLO_PLATFORM_IOS_LOCAL_NOTIFICATION_SCHEDULER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 #include <ChilliSource/Core/Notifications/LocalNotificationScheduler.h>
 
@@ -59,7 +60,7 @@ namespace ChilliSource
             /// @param Out: Notifications that meet criteria
             /// @return Whether any notifications exist within that time period
             //-------------------------------------------------------------------------
-            bool TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, DYNAMIC_ARRAY<Core::Notification>& outaNotifications);
+            bool TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Core::Notification>& outaNotifications);
             //-------------------------------------------------------------------------
             /// Application Did Finish Launching With Options
             ///

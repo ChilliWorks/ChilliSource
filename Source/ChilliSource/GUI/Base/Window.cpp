@@ -48,7 +48,7 @@ namespace ChilliSource
 		///
 		/// @param pointer to the input system
 		//-----------------------------------------------------
-		void CWindow::SetInputSystem(Input::IInputSystem* inpInputSystem)
+		void CWindow::SetInputSystem(Input::InputSystem* inpInputSystem)
 		{
 			mpInputSystem = inpInputSystem;
             
@@ -60,7 +60,7 @@ namespace ChilliSource
         ///
         /// @return pointer to the input system
         //-----------------------------------------------------
-        Input::IInputSystem* CWindow::GetInputSystem()
+        Input::InputSystem* CWindow::GetInputSystem()
         {
             return mpInputSystem;
         }
@@ -261,7 +261,7 @@ namespace ChilliSource
         {
             CGUIView::Draw(inpCanvas);
             
-            if(CDebugStats::IsEnabled())
+            if(DebugStats::IsEnabled())
             {
                 CDebugStatsView::GetSingletonPtr()->SetParentView(this);
                 CDebugStatsView::GetSingletonPtr()->SetRootWindow(this);

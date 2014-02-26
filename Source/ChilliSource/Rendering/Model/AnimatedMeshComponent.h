@@ -10,10 +10,10 @@
 #ifndef _MO_FLO_RENDERING_ANIMATED_MESH_COMPONENT_H_
 #define _MO_FLO_RENDERING_ANIMATED_MESH_COMPONENT_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/RenderComponent.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
-#include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
@@ -200,7 +200,7 @@ namespace ChilliSource
             ///
             /// @param OUT: A list of all attached animations.
 			//----------------------------------------------------------
-            void GetAnimations(DYNAMIC_ARRAY<SkinnedAnimationPtr>& outapSkinnedAnimationList);
+            void GetAnimations(std::vector<SkinnedAnimationPtr>& outapSkinnedAnimationList);
             //----------------------------------------------------------
 			/// Fade Out
 			///
@@ -452,10 +452,10 @@ namespace ChilliSource
             void ApplyDefaultMaterials();
             
 		private:
-            typedef DYNAMIC_ARRAY<std::pair<Core::EntityWeakPtr, s32> > AttachedEntityList;
+            typedef std::vector<std::pair<Core::EntityWeakPtr, s32> > AttachedEntityList;
             AttachedEntityList maAttachedEntities;
 			MeshPtr mpModel;
-			DYNAMIC_ARRAY<MaterialPtr> mMaterials;
+			std::vector<MaterialPtr> mMaterials;
 			SkinnedAnimationGroupPtr mActiveAnimationGroup;
             SkinnedAnimationGroupPtr mFadingAnimationGroup;
 			f32 mfPlaybackPosition;

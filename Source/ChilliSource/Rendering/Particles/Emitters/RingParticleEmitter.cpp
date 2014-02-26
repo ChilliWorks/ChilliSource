@@ -12,6 +12,7 @@
 
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Entity/Entity.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 namespace ChilliSource
 {
@@ -30,7 +31,7 @@ namespace ChilliSource
             //Frequency
             if(inParams.TryGetValue("Radius", strTemp))
             {
-                mfRadius = Core::CStringConverter::ParseFloat(strTemp);
+                mfRadius = Core::ParseF32(strTemp);
             }
         }
         //-----------------------------------------------------

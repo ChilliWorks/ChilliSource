@@ -17,7 +17,7 @@ namespace ChilliSource
     {
         namespace Reflect
         {
-            DYNAMIC_ARRAY<CMetaClass*> CRegistry::MetaClasses;
+            std::vector<CMetaClass*> CRegistry::MetaClasses;
 
             //------------------------------------------------------------
             /// Add Class
@@ -35,7 +35,7 @@ namespace ChilliSource
             //------------------------------------------------------------
             void CRegistry::RemoveClass(CMetaClass* inpClass)
             {
-                DYNAMIC_ARRAY<CMetaClass*>::iterator it = std::find(MetaClasses.begin(), MetaClasses.end(), inpClass);
+                std::vector<CMetaClass*>::iterator it = std::find(MetaClasses.begin(), MetaClasses.end(), inpClass);
                 if(it != MetaClasses.end())
                 {
                     MetaClasses.erase(it);
@@ -52,7 +52,7 @@ namespace ChilliSource
             CMetaClass* CRegistry::GetClass(const std::string& instrName)
             {
                 u32 udwNameHash = CHashCRC32::GenerateHashCode(instrName);
-                for(DYNAMIC_ARRAY<CMetaClass*>::iterator it = MetaClasses.begin(); it != MetaClasses.end(); ++it)
+                for(std::vector<CMetaClass*>::iterator it = MetaClasses.begin(); it != MetaClasses.end(); ++it)
                 {
                     if((*it)->GetNameHash() == udwNameHash)
                     {
@@ -69,7 +69,7 @@ namespace ChilliSource
             ///
             /// @return Array of meta classes
             //------------------------------------------------------------
-            const DYNAMIC_ARRAY<CMetaClass*>& CRegistry::GetClasses()
+            const std::vector<CMetaClass*>& CRegistry::GetClasses()
             {
                 return MetaClasses;
             }
@@ -78,7 +78,7 @@ namespace ChilliSource
             //-------------------------------------------------------------
             CRegistry::~CRegistry()
             {
-                for(DYNAMIC_ARRAY<CMetaClass*>::iterator it = MetaClasses.begin(); it != MetaClasses.end(); ++it)
+                for(std::vector<CMetaClass*>::iterator it = MetaClasses.begin(); it != MetaClasses.end(); ++it)
                 {
                     delete (*it);
                 }

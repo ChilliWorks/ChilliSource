@@ -9,15 +9,16 @@
 #ifndef _MOFLOW_PLATFORM_IOS_IAPSYSTEM_
 #define _MOFLOW_PLATFORM_IOS_IAPSYSTEM_
 
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
-
 #include <ChilliSource/Backend/Platform/iOS/Networking/IAP/StoreKitIAPSystem.h>
 
 namespace ChilliSource
 {
     namespace iOS
     {
-        class CIAPSystem : public Networking::IIAPSystem
+        class CIAPSystem : public Networking::IAPSystem
         {
         public:
             CIAPSystem();
@@ -31,7 +32,7 @@ namespace ChilliSource
             ///
             /// @param List of products
             //---------------------------------------------------------------
-            void RegisterProducts(const DYNAMIC_ARRAY<Networking::IAPProductRegInfo>& inaProducts);
+            void RegisterProducts(const std::vector<Networking::IAPProductRegInfo>& inaProducts);
             
             //---------------------------------------------------------------
 			/// Get Provider ID
@@ -79,7 +80,7 @@ namespace ChilliSource
 			/// @param List of product IDs to request descriptions for
             /// @param Delegate to invoke when the request completes
             //---------------------------------------------------------------
-            void RequestProductDescriptions(const DYNAMIC_ARRAY<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate);
+            void RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate);
             //---------------------------------------------------------------
 			/// Request All Product Descriptions
 			///
@@ -149,7 +150,7 @@ namespace ChilliSource
             
         private:
             
-            DYNAMIC_ARRAY<Networking::IAPProductRegInfo> mProductRegInfos;
+            std::vector<Networking::IAPProductRegInfo> mProductRegInfos;
             
             StoreKitIAPSystem* mpStoreKitSystem;
             

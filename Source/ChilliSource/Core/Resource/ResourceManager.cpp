@@ -36,7 +36,7 @@ namespace ChilliSource
 		///
 		/// @param Vector of the resource loaders that this manager will use
 		//-----------------------------------------------------------------
-		void IResourceManager::SetResourceProviders(const DYNAMIC_ARRAY<IResourceProvider*> & inVecResourceProviders)
+		void IResourceManager::SetResourceProviders(const std::vector<IResourceProvider*> & inVecResourceProviders)
 		{
 			mResourceProviders = inVecResourceProviders;
 		}
@@ -75,8 +75,8 @@ namespace ChilliSource
 				if(it->second.get() == inpResource)
 				{
 					ResourcePtr pResource = it->second;
-					MOFLOW_ASSERT((pResource.use_count() <= 2), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + pResource->GetName() + ")");
-					DEBUG_LOG("Releasing resource from cache " + inpResource->GetName());
+					CS_ASSERT((pResource.use_count() <= 2), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + pResource->GetName() + ")");
+					CS_DEBUG_LOG("Releasing resource from cache " + inpResource->GetName());
 					mMapFilenameToResource.erase(it);
 					return;
 				}
@@ -95,8 +95,8 @@ namespace ChilliSource
 			for(MapStringToResourcePtr::iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it)
 			{
 				ResourcePtr pResource = it->second;
-				MOFLOW_ASSERT((pResource.use_count() <= 2), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + pResource->GetName() + ")");
-				DEBUG_LOG("Releasing resource from cache " + pResource->GetName());
+				CS_ASSERT((pResource.use_count() <= 2), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + pResource->GetName() + ")");
+				CS_DEBUG_LOG("Releasing resource from cache " + pResource->GetName());
 			}
 
 			mMapFilenameToResource.clear();
@@ -114,7 +114,7 @@ namespace ChilliSource
 			{
 				if(it->second.use_count() == 1)
 				{
-					DEBUG_LOG("Releasing resource from cache " + it->second->GetName());
+					CS_DEBUG_LOG("Releasing resource from cache " + it->second->GetName());
 					it = mMapFilenameToResource.erase(it);
                     ++udwNumReleased;
 				}
@@ -137,7 +137,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		IResourceProvider* IResourceManager::GetResourceProviderByExtension(const std::string &instrExtension)
 		{
-			for (DYNAMIC_ARRAY<IResourceProvider*>::iterator it = mResourceProviders.begin(); it != mResourceProviders.end(); it++)
+			for (std::vector<IResourceProvider*>::iterator it = mResourceProviders.begin(); it != mResourceProviders.end(); it++)
 			{
 				if ((*it)->CanCreateResourceFromFileWithExtension(instrExtension) == true)
 				{
@@ -154,9 +154,9 @@ namespace ChilliSource
         ///
         /// @return List of current loaded resources
         //-----------------------------------------------------------------
-        DYNAMIC_ARRAY<ResourceDesc> IResourceManager::GetAllLoadedResources() const
+        std::vector<ResourceDesc> IResourceManager::GetAllLoadedResources() const
         {
-            DYNAMIC_ARRAY<ResourceDesc> asUsedResources;
+            std::vector<ResourceDesc> asUsedResources;
             for(MapStringToResourcePtr::const_iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it )
 			{
                 ResourceDesc sResource;

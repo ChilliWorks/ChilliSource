@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_RENDERING_MESH_BATCH_H_
 #define _MO_FLO_RENDERING_MESH_BATCH_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/VertexLayouts.h>
 
 namespace ChilliSource
@@ -112,7 +112,7 @@ namespace ChilliSource
 			IMeshBuffer* mpMeshBuffer;
 			
 			//List of sprites in the batch
-			typedef HASH_MAP<StaticMeshComponentPtr, Core::CMatrix4x4> MapMeshToTransform;
+			typedef std::unordered_map<StaticMeshComponentPtr, Core::CMatrix4x4> MapMeshToTransform;
 			MapMeshToTransform mmapMeshCache;
 		};
 	}

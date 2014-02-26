@@ -9,9 +9,8 @@
 #ifndef _MO_FLO_RENDERING_PARTICLES_PARTICLE_EMITTER_H_
 #define _MO_FLO_RENDERING_PARTICLES_PARTICLE_EMITTER_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
-
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
 namespace ChilliSource
@@ -193,7 +192,7 @@ namespace ChilliSource
         protected:
             
             Particle mParticles;
-            DYNAMIC_ARRAY<IParticleEffector*> mEffectors;
+            std::vector<IParticleEffector*> mEffectors;
             
             f32 mfInitialVelocity;
             f32 mfMinInitialVelocity;

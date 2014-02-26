@@ -1,8 +1,11 @@
 #ifndef _MO_FLO_CORE_VECTOR_4_H_
 #define _MO_FLO_CORE_VECTOR_4_H_
 
-#include <math.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector3.h>
+
+#include <math.h>
+
 //=================================================
 // Tag - Vector 4
 //

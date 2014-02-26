@@ -10,13 +10,11 @@
 #ifndef _MO_FLO_RENDERING_CANVAS_H_
 #define _MO_FLO_RENDERING_CANVAS_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
-
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/GUI/Label/Label.h>
-
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Core/Math/Matrix3x3.h>
@@ -202,8 +200,8 @@ namespace ChilliSource
             
             CDynamicSpriteBatch mOverlayBatcher;
             
-			DYNAMIC_ARRAY<Core::CVector2> mScissorPos;
-            DYNAMIC_ARRAY<Core::CVector2> mScissorSize;
+			std::vector<Core::CVector2> mScissorPos;
+            std::vector<Core::CVector2> mScissorSize;
                         
 			IRenderSystem* mpRenderSystem;
             

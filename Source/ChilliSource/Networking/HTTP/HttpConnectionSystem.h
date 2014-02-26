@@ -10,6 +10,7 @@
 #ifndef _MOFLOW_NETWORKING_HTTPCONNECTIONSYSTEM_H_
 #define _MOFLOW_NETWORKING_HTTPCONNECTIONSYSTEM_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/System/System.h>
@@ -46,13 +47,13 @@ namespace ChilliSource
 			std::string strRedirectionURL;
 		};
 		
-		class IHttpRequest;
-		typedef IHttpRequest* HttpRequestPtr;
+		class HttpRequest;
+		typedef HttpRequest* HttpRequestPtr;
         
-		class IHttpRequest
+		class HttpRequest
         {
 		public:
-            virtual ~IHttpRequest(){}
+            virtual ~HttpRequest(){}
 			enum class CompletionResult
 			{
                 k_completed,    //The request completed and returned a result
@@ -102,10 +103,10 @@ namespace ChilliSource
 		};
 		
 		
-		class IHttpConnectionSystem : public ChilliSource::Core::ISystem
+		class HttpConnectionSystem : public ChilliSource::Core::ISystem
         {
 		public:
-			DECLARE_NAMED_INTERFACE(IHttpConnectionSystem);
+			DECLARE_NAMED_INTERFACE(HttpConnectionSystem);
             
             //--------------------------------------------------------------------------------------------------
 			/// Make Request
@@ -115,7 +116,7 @@ namespace ChilliSource
 			/// @param (Optional) A function to call when the request is completed. Note that the request can be completed by failure/cancellation as well as success.
             /// @return A pointer to the request. The system owns this pointer. Returns NULL if the request cannot be created.
             //--------------------------------------------------------------------------------------------------
-			virtual HttpRequestPtr MakeRequest(const HttpRequestDetails & insRequestDetails, IHttpRequest::CompletionDelegate inOnComplete = IHttpRequest::CompletionDelegate()) = 0;
+			virtual HttpRequestPtr MakeRequest(const HttpRequestDetails & insRequestDetails, HttpRequest::CompletionDelegate inOnComplete = HttpRequest::CompletionDelegate()) = 0;
 			//--------------------------------------------------------------------------------------------------
 			/// Cancel All Requests
 			///
@@ -135,7 +136,7 @@ namespace ChilliSource
             ///
             /// Handles redirecting to the given url on receiving a 302
             //----------------------------------------------------------------------------------------
-            HttpRequestPtr HandleRedirection(const IHttpRequest* inpRequest);
+            HttpRequestPtr HandleRedirection(const HttpRequest* inpRequest);
             //--------------------------------------------------------------------------------------------------
             /// Set Max Buffer Size
             ///

@@ -6,9 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Networking/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Networking/ContentDownload/ContentDownloader.h>
-
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
@@ -17,10 +16,10 @@ namespace ChilliSource
 {
     namespace Networking
     {
-        class CContentManagementSystem : public Core::ISystem
+        class ContentManagementSystem : public Core::ISystem
         {
         public:
-            DECLARE_NAMED_INTERFACE(CContentManagementSystem);
+            DECLARE_NAMED_INTERFACE(ContentManagementSystem);
             
             enum class UpdateResult
             {
@@ -45,7 +44,7 @@ namespace ChilliSource
             ///
             /// @param Content downloader
             //-----------------------------------------------------------
-            CContentManagementSystem(IContentDownloader* inpContentDownloader);
+            ContentManagementSystem(IContentDownloader* inpContentDownloader);
             //-----------------------------------------------------------
             /// Is A
             ///
@@ -251,8 +250,8 @@ namespace ChilliSource
 
         private:
             
-            DYNAMIC_ARRAY<std::string> mRemovePackageIDs; 
-            DYNAMIC_ARRAY<PackageDetails> mPackageDetails;
+            std::vector<std::string> mRemovePackageIDs; 
+            std::vector<PackageDetails> mPackageDetails;
 			
 			u32	muRunningToDownloadTotal;
 			u32 muRunningDownloadedTotal;

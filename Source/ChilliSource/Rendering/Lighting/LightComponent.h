@@ -10,9 +10,10 @@
 #ifndef _MOFLOW_RENDERING_COMPONENTS_LIGHTCOMPONENT_H_
 #define _MOFLOW_RENDERING_COMPONENTS_LIGHTCOMPONENT_H_
 
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Entity/Component.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/Core/Math/Matrix4x4.h>
 
 namespace ChilliSource
 {

@@ -149,7 +149,7 @@ namespace ChilliSource
                 pFrame += udwNumElementsPerSprite;
 			}
 			
-			SAFE_DELETE_ARRAY(SBuffer);
+			CS_SAFE_DELETE_ARRAY(SBuffer);
             
             // Load in string IDs
             std::string strName;
@@ -159,11 +159,11 @@ namespace ChilliSource
             Core::CStringUtils::SplitBaseFilename(inFilePath, strName, strExtension);
             Core::FileStreamPtr idFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, strName + ".mospriteid", Core::FileMode::k_read);
             
-            DYNAMIC_ARRAY<u32> IDLookup;
-            DYNAMIC_ARRAY<std::string> IDStringLookup;
+            std::vector<u32> IDLookup;
+            std::vector<std::string> IDStringLookup;
 			if(idFile == nullptr || idFile->IsBad())
 			{
-				WARNING_LOG("Sprite loader ID lookups unavailable: .mospriteid missing");
+				CS_WARNING_LOG("Sprite loader ID lookups unavailable: .mospriteid missing");
 				
 				if(idFile->IsOpen())
 					idFile->Close();

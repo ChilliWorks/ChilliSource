@@ -10,6 +10,10 @@
 #ifndef _MO_FLO_RENDERING_VERTEX_DECLARATION_H_
 #define _MO_FLO_RENDERING_VERTEX_DECLARATION_H_
 
+#include <ChilliSource/ChilliSource.h>
+
+#include <vector>
+
 namespace ChilliSource
 {
 	namespace Rendering
@@ -80,13 +84,13 @@ namespace ChilliSource
 			const u16 GetElementOffset(const VertexElement &inElement);
 			const u16 GetTotalSize();
 			const u32 GetTotalNumValues();
-            const DYNAMIC_ARRAY<VertexElement>& GetElements() const;
+            const std::vector<VertexElement>& GetElements() const;
 			
 			bool operator== (const CVertexDeclaration& inOther);
 			
 		private:
 			
-			DYNAMIC_ARRAY<VertexElement> mElements;
+			std::vector<VertexElement> mElements;
 			
 			u16 mTotalSize;
 			u32 mTotalNumValues;

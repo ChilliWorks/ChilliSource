@@ -13,26 +13,26 @@ namespace ChilliSource
 {
 	namespace Networking
     {
-		DEFINE_NAMED_INTERFACE(IHttpConnectionSystem);
+		DEFINE_NAMED_INTERFACE(HttpConnectionSystem);
         
-        u32 IHttpConnectionSystem::mudwMaxBufferSize = 0;
+        u32 HttpConnectionSystem::mudwMaxBufferSize = 0;
         
         //--------------------------------------------------------------------------------------------------
         /// Set Max Buffer Size
         ///
         /// @param The number of bytes read before the buffer is flushed
         //--------------------------------------------------------------------------------------------------
-        void IHttpConnectionSystem::SetMaxBufferSize(u32 inudwSize)
+        void HttpConnectionSystem::SetMaxBufferSize(u32 inudwSize)
         {
             mudwMaxBufferSize = inudwSize;
         }
         
-        HttpRequestPtr IHttpConnectionSystem::HandleRedirection(const IHttpRequest* inpRequest)
+        HttpRequestPtr HttpConnectionSystem::HandleRedirection(const HttpRequest* inpRequest)
         {
-            MOFLOW_ASSERT(inpRequest, "inpRequest cannot be null!");
+            CS_ASSERT(inpRequest, "inpRequest cannot be null!");
             if(inpRequest->GetResponseCode() != kHTTPMovedTemporarily)
             {
-                ERROR_LOG("Trying to redirect on a non-redirected request");
+                CS_ERROR_LOG("Trying to redirect on a non-redirected request");
             }
             else
             {

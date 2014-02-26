@@ -6,11 +6,12 @@
 //  Copyright (c) 2012 Tag Games Ltd. All rights reserved.
 //
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
-#include <ChilliSource/Core/File/FileSystem.h>
-
 #ifndef MOFLOW_RENDERING_SKINNEDANIMATIONGROUP_H_
 #define MOFLOW_RENDERING_SKINNEDANIMATIONGROUP_H_
+
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/Math/Matrix4x4.h>
 
 namespace ChilliSource
 {
@@ -107,7 +108,7 @@ namespace ChilliSource
             /// @param the inverse bind pose matrices.
             /// @param OUT: The combined matrices.
 			//----------------------------------------------------------
-			void ApplyInverseBindPose(const DYNAMIC_ARRAY<Core::CMatrix4x4>& inInverseBindPoseMatrices, DYNAMIC_ARRAY<Core::CMatrix4x4>& outCombinedMatrices);
+			void ApplyInverseBindPose(const std::vector<Core::CMatrix4x4>& inInverseBindPoseMatrices, std::vector<Core::CMatrix4x4>& outCombinedMatrices);
             //----------------------------------------------------------
 			/// Get Animation Length
             ///
@@ -132,7 +133,7 @@ namespace ChilliSource
             ///
             /// @param OUT: The list of animations.
 			//----------------------------------------------------------
-			void GetAnimations(DYNAMIC_ARRAY<SkinnedAnimationPtr>& outapSkinnedAnimationList);
+			void GetAnimations(std::vector<SkinnedAnimationPtr>& outapSkinnedAnimationList);
             //-----------------------------------------------------------
             /// Destructor
             //-----------------------------------------------------------
@@ -148,7 +149,7 @@ namespace ChilliSource
                 SkinnedAnimationPtr pSkinnedAnimation;
                 f32 fBlendlinePosition;
             };
-            typedef SHARED_PTR<AnimationItem> AnimationItemPtr;
+            typedef std::shared_ptr<AnimationItem> AnimationItemPtr;
             //----------------------------------------------------------
 			/// Calculate Animation Length
             ///
@@ -179,9 +180,9 @@ namespace ChilliSource
 			SkinnedAnimationFramePtr LerpBetweenFrames(const SkinnedAnimationFramePtr& inFrameA, const SkinnedAnimationFramePtr& inFrameB, f32 infInterpFactor);
             
             SkeletonPtr mpSkeleton;
-            DYNAMIC_ARRAY<AnimationItemPtr> mAnimations;
+            std::vector<AnimationItemPtr> mAnimations;
             SkinnedAnimationFramePtr mCurrentAnimationData;
-            DYNAMIC_ARRAY<Core::CMatrix4x4> mCurrentAnimationMatrices;
+            std::vector<Core::CMatrix4x4> mCurrentAnimationMatrices;
             bool mbAnimationLengthDirty;
             f32 mfAnimationLength;
             bool mbPrepared;

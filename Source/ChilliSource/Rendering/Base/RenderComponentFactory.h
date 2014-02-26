@@ -10,10 +10,8 @@
 #ifndef _MO_FLO_RENDERING_RENDER_COMPONENT_FACTORY_H_
 #define _MO_FLO_RENDERING_RENDER_COMPONENT_FACTORY_H_
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Entity/ComponentFactory.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource

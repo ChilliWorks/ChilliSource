@@ -9,11 +9,10 @@
 #ifndef _MOFLO_GUI_IMAGEVIEW_H_
 #define _MOFLO_GUI_IMAGEVIEW_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
-
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource
 {

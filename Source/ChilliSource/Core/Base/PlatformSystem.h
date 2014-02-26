@@ -10,14 +10,9 @@
 #ifndef _MOFLOW_CORE_PLATFORMSYSTEM_H_
 #define _MOFLOW_CORE_PLATFORMSYSTEM_H_
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Localisation/Locales.h>
 #include <ChilliSource/Core/Base/Application.h>
-
-#include <ChilliSource/Input/ForwardDeclarations.h>
-#include <ChilliSource/Audio/ForwardDeclarations.h>
-#include <ChilliSource/Networking/ForwardDeclarations.h>
-#include <ChilliSource/Video/ForwardDeclarations.h>
 
 namespace ChilliSource
 {
@@ -92,7 +87,7 @@ namespace ChilliSource
             ///
             /// @param the system list
             //-------------------------------------------------
-            virtual void CreateDefaultSystems(DYNAMIC_ARRAY<Core::SystemPtr> & inaSystems) = 0;
+            virtual void CreateDefaultSystems(std::vector<Core::SystemPtr> & inaSystems) = 0;
             //-------------------------------------------------
             /// Post Create Systems
             ///
@@ -128,7 +123,7 @@ namespace ChilliSource
             /// @param Vector of existing systems. The return value is added to this vector if not nullptr.
             /// @return A handle to the given system or nullptr if the platform cannot support it
             //-----------------------------------------
-            virtual Core::ISystem* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<Core::SystemPtr> & inaExistingSystems) const = 0;
+            virtual Core::ISystem* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemPtr> & inaExistingSystems) const = 0;
             //-----------------------------------------
             /// Create and Add System With Interface
             ///
@@ -138,7 +133,7 @@ namespace ChilliSource
             /// @param Vector of existing systems
             /// @return A handle to the given system or nullptr if the platform cannot support it
             //-----------------------------------------
-            template <typename T> T* CreateAndAddSystemWithInterface(DYNAMIC_ARRAY<Core::SystemPtr> & inaExistingSystems) const
+            template <typename T> T* CreateAndAddSystemWithInterface(std::vector<Core::SystemPtr> & inaExistingSystems) const
             {
                 return static_cast<T*> (CreateAndAddSystemWithInterface(T::InterfaceID, inaExistingSystems));
             }

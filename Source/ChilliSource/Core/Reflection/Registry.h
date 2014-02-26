@@ -9,7 +9,10 @@
 #ifndef MO_FLOW_CORE_REFLECTION_REGISTRY_HPP_
 #define MO_FLOW_CORE_REFLECTION_REGISTRY_HPP_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Reflection/ForwardDeclarations.h>
+
+#include <vector>
 
 namespace ChilliSource
 {
@@ -49,11 +52,11 @@ namespace ChilliSource
                 ///
                 /// @return Array of meta classes
                 //------------------------------------------------------------
-                static const DYNAMIC_ARRAY<CMetaClass*>& GetClasses();
+                static const std::vector<CMetaClass*>& GetClasses();
                 
             private:
                 
-                static DYNAMIC_ARRAY<CMetaClass*> MetaClasses;
+                static std::vector<CMetaClass*> MetaClasses;
             };
         }
     }

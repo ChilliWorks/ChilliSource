@@ -114,11 +114,11 @@ namespace ChilliSource
                     RenderCommand &sLastCommand = maRenderCommands.back();
                     if(sLastCommand.Material.IsTransparent())
                     {
-                        CDebugStats::AddToEvent("Sprites_Trans", (u32)maSpriteCache.size());
+                        DebugStats::AddToEvent("Sprites_Trans", (u32)maSpriteCache.size());
                     }
                     else
                     {
-                        CDebugStats::AddToEvent("Sprites", (u32)maSpriteCache.size());
+                        DebugStats::AddToEvent("Sprites", (u32)maSpriteCache.size());
                     }
                 }
 #endif
@@ -148,7 +148,7 @@ namespace ChilliSource
             }   
             
             //Loop round all the render commands and draw the sections of the buffer with the correct material
-            for(DYNAMIC_ARRAY<RenderCommand>::iterator it = maRenderCommands.begin(); it != maRenderCommands.end(); ++it)
+            for(std::vector<RenderCommand>::iterator it = maRenderCommands.begin(); it != maRenderCommands.end(); ++it)
             {
                 //Render the last filled buffer
                 mpBatch[mudwCurrentRenderSpriteBatch]->Render(inpRenderSystem, it->Material, it->udwOffset, it->udwStride);

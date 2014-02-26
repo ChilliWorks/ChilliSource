@@ -9,6 +9,7 @@
 #ifndef _MO_FLO_GUI_FORMATTED_LABEL_H_
 #define _MO_FLO_GUI_FORMATTED_LABEL_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Label/Label.h>
 
 namespace ChilliSource

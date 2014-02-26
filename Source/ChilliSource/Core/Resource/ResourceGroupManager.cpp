@@ -17,6 +17,9 @@
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Core/Base/Application.h>
 
+#include <unordered_map>
+#include <vector>
+
 namespace ChilliSource
 {
 	namespace Core
@@ -45,7 +48,7 @@ namespace ChilliSource
 			//Check the pool to see if this resource group already exists
 			if(pExistingResource == mMapNameToResourceGroup.end()) 
 			{
-				DEBUG_LOG("Creating resource group " + instrGroupName + " for directory " + instrDirectory);
+				CS_DEBUG_LOG("Creating resource group " + instrGroupName + " for directory " + instrDirectory);
 				ResourceGroupPtr pGroup(new CResourceGroup());
 				pGroup->mstrDirectory = instrDirectory;
 				
@@ -54,7 +57,7 @@ namespace ChilliSource
 			} 
 			
 			//Duplicate resource group
-			ERROR_LOG("Resource group " + instrGroupName + " with directory " + instrDirectory + " cannot be created as it already exists");
+			CS_ERROR_LOG("Resource group " + instrGroupName + " with directory " + instrDirectory + " cannot be created as it already exists");
 		}
 		//-----------------------------------------------------
 		/// Load Group
@@ -70,20 +73,20 @@ namespace ChilliSource
 			//Check the pool to see if this resource group already exists
 			if(pExistingResource == mMapNameToResourceGroup.end()) 
 			{
-				ERROR_LOG("Loading resource group " + instrGroupName + " cannot be found");
+				CS_ERROR_LOG("Loading resource group " + instrGroupName + " cannot be found");
 				return;
 			} 
 			
 			//Check we don't load twice!
 			if(pExistingResource->second->meCurrentStatus == CResourceGroup::Status::k_notLoaded)
 			{
-				DEBUG_LOG("Loading resource group " + instrGroupName + "...");
+				CS_DEBUG_LOG("Loading resource group " + instrGroupName + "...");
 				//Get the file names within that directory
-				DYNAMIC_ARRAY<std::string> FileNames;
+				std::vector<std::string> FileNames;
 				CApplication::GetFileSystemPtr()->GetFileNamesInDirectory(StorageLocation::k_package, pExistingResource->second->mstrDirectory, true, FileNames);
 				
 				//Load this bad boy. 
-				for(DYNAMIC_ARRAY<std::string>::const_iterator it = FileNames.begin(); it != FileNames.end(); ++it)
+				for(std::vector<std::string>::const_iterator it = FileNames.begin(); it != FileNames.end(); ++it)
 				{
 					std::string strName;
 					std::string strExtension;
@@ -96,7 +99,7 @@ namespace ChilliSource
 					
 					if(!pResMgr)
 					{
-						ERROR_LOG("Cannot load file  " + (*it) + " in resource group " + instrGroupName);
+						CS_ERROR_LOG("Cannot load file  " + (*it) + " in resource group " + instrGroupName);
 						continue;
 					}
 					
@@ -108,7 +111,7 @@ namespace ChilliSource
 				
 				//Flag this loaded
 				pExistingResource->second->meCurrentStatus = CResourceGroup::Status::k_loaded;
-				DEBUG_LOG("Loading resource group " + instrGroupName + " complete\n");
+				CS_DEBUG_LOG("Loading resource group " + instrGroupName + " complete\n");
 			}
 		}
 		//-----------------------------------------------------
@@ -124,11 +127,11 @@ namespace ChilliSource
 			//Check the pool to see if this resource group already exists
 			if(pExistingResource != mMapNameToResourceGroup.end()) 
 			{
-				DEBUG_LOG("Unloading resource group " + instrGroupName);
+				CS_DEBUG_LOG("Unloading resource group " + instrGroupName);
 				pExistingResource->second->meCurrentStatus = CResourceGroup::Status::k_notLoaded;
 				
 				//Tell the resource manager to unload the object from it's cache
-				for(DYNAMIC_ARRAY<ResourcePtr>::iterator it = pExistingResource->second->mResources.begin(); it != pExistingResource->second->mResources.end(); ++it)
+				for(std::vector<ResourcePtr>::iterator it = pExistingResource->second->mResources.begin(); it != pExistingResource->second->mResources.end(); ++it)
 				{
 					(*it)->Release();
 				}
@@ -137,7 +140,7 @@ namespace ChilliSource
 				return;
 			} 
 			
-			ERROR_LOG("Unloading resource group " + instrGroupName + " cannot be found");			
+			CS_ERROR_LOG("Unloading resource group " + instrGroupName + " cannot be found");			
 		}
 		//-----------------------------------------------------
 		/// Destroy Group
@@ -153,12 +156,12 @@ namespace ChilliSource
 			if(pExistingResource != mMapNameToResourceGroup.end()) 
 			{
 				UnloadGroup(instrGroupName);
-				DEBUG_LOG("Destroying resource group " + instrGroupName);
+				CS_DEBUG_LOG("Destroying resource group " + instrGroupName);
 				mMapNameToResourceGroup.erase(pExistingResource);
 				return;
 			} 
 			
-			ERROR_LOG("Destroying resource group " + instrGroupName + " cannot be found");
+			CS_ERROR_LOG("Destroying resource group " + instrGroupName + " cannot be found");
 		}
 		//-----------------------------------------------------
 		/// Invalidate Cache
@@ -186,7 +189,7 @@ namespace ChilliSource
 			{
 				it->second->meCurrentStatus = CResourceGroup::Status::k_notLoaded;
 				//Tell the resource manager to let it go!
-				for(DYNAMIC_ARRAY<ResourcePtr>::iterator jt = it->second->mResources.begin(); jt != it->second->mResources.end(); ++jt)
+				for(std::vector<ResourcePtr>::iterator jt = it->second->mResources.begin(); jt != it->second->mResources.end(); ++jt)
 				{
 					(*jt)->Release();
 				}

@@ -9,6 +9,10 @@
 #ifndef _MO_FLO_CORE_CONTAINERS_UTF8_STRING_H_
 #define _MO_FLO_CORE_CONTAINERS_UTF8_STRING_H_
 
+#include <ChilliSource/ChilliSource.h>
+
+#include <vector>
+
 namespace ChilliSource
 {
     namespace Core
@@ -233,7 +237,7 @@ namespace ChilliSource
 
         private:
             
-            DYNAMIC_ARRAY<CodePoint> mCodePoints;
+            std::vector<CodePoint> mCodePoints;
             
             mutable u32 mudwLength;
             

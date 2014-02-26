@@ -10,7 +10,10 @@
 #ifndef _MOFLO_CORE_GENERICEVENTIMPL_H_
 #define _MOFLO_CORE_GENERICEVENTIMPL_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 #include <thread>
+#include <vector>
 
 namespace ChilliSource
 {
@@ -39,8 +42,8 @@ namespace ChilliSource
             //-----------------------------------------------------------
             /// Typedefs
             //-----------------------------------------------------------
-            typedef typename DYNAMIC_ARRAY<DelegateObject> DelegateList;
-            typedef typename DYNAMIC_ARRAY<DelegateObject>::iterator DelegateListItr;
+            typedef typename std::vector<DelegateObject> DelegateList;
+            typedef typename std::vector<DelegateObject>::iterator DelegateListItr;
             
             //-----------------------------------------------------------
             /// Constructor
@@ -241,7 +244,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                    WARNING_LOG("GenericEvent - Adding a duplicate Listener");
+                    CS_WARNING_LOG("GenericEvent - Adding a duplicate Listener");
                 }
                 return;
             }
@@ -377,7 +380,7 @@ namespace ChilliSource
             
             if(this->mbIsInvoking)
             {
-                WARNING_LOG("GenericEvent - Nested Invoke code detected");
+                CS_WARNING_LOG("GenericEvent - Nested Invoke code detected");
                 return;
             }
             
@@ -416,7 +419,7 @@ namespace ChilliSource
             
             if(this->mbIsInvoking)
             {
-                WARNING_LOG("GenericEvent - Nested Invoke code detected");
+                CS_WARNING_LOG("GenericEvent - Nested Invoke code detected");
                 return;
             }
             
@@ -455,7 +458,7 @@ namespace ChilliSource
             
             if(this->mbIsInvoking)
             {
-                WARNING_LOG("GenericEvent - Nested Invoke code detected");
+                CS_WARNING_LOG("GenericEvent - Nested Invoke code detected");
                 return;
             }
             
@@ -494,7 +497,7 @@ namespace ChilliSource
             
             if(this->mbIsInvoking)
             {
-                WARNING_LOG("GenericEvent - Nested Invoke code detected");
+                CS_WARNING_LOG("GenericEvent - Nested Invoke code detected");
                 return;
             }
             
@@ -533,7 +536,7 @@ namespace ChilliSource
             
             if(this->mbIsInvoking)
             {
-                WARNING_LOG("GenericEvent - Nested Invoke code detected");
+                CS_WARNING_LOG("GenericEvent - Nested Invoke code detected");
                 return;
             }
             

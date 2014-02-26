@@ -9,6 +9,8 @@
 #ifndef _MO_FLO_HASH_CRC_32_H_
 #define _MO_FLO_HASH_CRC_32_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource
 {
     namespace Core

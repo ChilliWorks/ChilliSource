@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_RENDERING_DYNAMICSPRITEBATCH_H_
 #define _MO_FLO_RENDERING_DYNAMICSPRITEBATCH_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Sprite/SpriteBatch.h>
 
 namespace ChilliSource
@@ -79,8 +79,8 @@ namespace ChilliSource
 		private:
         
 			CSpriteBatch* mpBatch[kudwNumBuffers];
-			DYNAMIC_ARRAY<CSpriteComponent::SpriteData> maSpriteCache;
-            DYNAMIC_ARRAY<RenderCommand> maRenderCommands;
+			std::vector<CSpriteComponent::SpriteData> maSpriteCache;
+            std::vector<RenderCommand> maRenderCommands;
             
             MaterialPtr mpLastMaterial;
             

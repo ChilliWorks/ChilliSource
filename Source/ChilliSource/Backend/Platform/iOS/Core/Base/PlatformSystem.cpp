@@ -70,7 +70,7 @@ namespace ChilliSource
             : mfPhysicalScreenSize(-1.0f)
 		{
             //---Systems
-			AddSystemFunc(Networking::IHttpConnectionSystem::InterfaceID,SystemCreationFunction(this, &CPlatformSystem::CreateHttpConnectionSystem));
+			AddSystemFunc(Networking::HttpConnectionSystem::InterfaceID,SystemCreationFunction(this, &CPlatformSystem::CreateHttpConnectionSystem));
 
             AddActivityFunc(Social::IEmailCompositionActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateEmailCompositionActivity));
  
@@ -141,7 +141,7 @@ namespace ChilliSource
         /// @param Exisiting systems
         /// @return Pointer to system
         //-------------------------------------------
-		Core::ISystem* CPlatformSystem::FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const DYNAMIC_ARRAY<Core::SystemPtr>& inSystems) const
+		Core::ISystem* CPlatformSystem::FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemPtr>& inSystems) const
         {
 			for(u32 nSystem = 0; nSystem < inSystems.size(); nSystem++)
             {
@@ -169,18 +169,18 @@ namespace ChilliSource
 		///
 		/// @param the system list
 		//-------------------------------------------------
-		void CPlatformSystem::CreateDefaultSystems(DYNAMIC_ARRAY<Core::SystemPtr> & inaSystems)
+		void CPlatformSystem::CreateDefaultSystems(std::vector<Core::SystemPtr> & inaSystems)
 		{
 			//create the main systems
             Rendering::IRenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
             inaSystems.push_back(Core::SystemPtr(pRenderSystem));
 			Core::CApplication::SetRenderSystem(pRenderSystem);
             
-            Input::IInputSystem* pInputSystem = new iOS::CInputSystem();
+            Input::InputSystem* pInputSystem = new iOS::CInputSystem();
             inaSystems.push_back(Core::SystemPtr(pInputSystem));
             Core::CApplication::SetInputSystem(pInputSystem);
             
-            Audio::IAudioSystem * pAudioSystem = new iOS::CFMODSystem();
+            Audio::AudioSystem * pAudioSystem = new iOS::CFMODSystem();
 			inaSystems.push_back(Core::SystemPtr(pAudioSystem));
 			inaSystems.push_back(Core::SystemPtr(new iOS::CFMODAudioLoader(pAudioSystem)));
 			Core::CApplication::SetAudioSystem(pAudioSystem);
@@ -221,7 +221,7 @@ namespace ChilliSource
 		{
             if(Core::CApplication::GetAudioSystemPtr() != nullptr)
 			{
-				Audio::CAudioPlayer::Init();
+				Audio::AudioPlayer::Init();
 			}
 		}
         //-----------------------------------------
@@ -287,7 +287,7 @@ namespace ChilliSource
         /// @param Vector of existing systems
         /// @return A handle to the given system or nullptr if the platform cannot support it
         //-----------------------------------------
-		Core::ISystem* CPlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<Core::SystemPtr> & inaExistingSystems) const
+		Core::ISystem* CPlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemPtr> & inaExistingSystems) const
         {
 			Core::ISystem * pResult = nullptr;
 			
@@ -374,7 +374,7 @@ namespace ChilliSource
         /// @param System list
 		/// @return A pointer to the system
 		//--------------------------------------------
-		Core::ISystem * CPlatformSystem::CreateHttpConnectionSystem(DYNAMIC_ARRAY<Core::SystemPtr>& inSystems) const
+		Core::ISystem * CPlatformSystem::CreateHttpConnectionSystem(std::vector<Core::SystemPtr>& inSystems) const
         {
 			return new CHttpConnectionSystem();
 		}
@@ -532,7 +532,7 @@ namespace ChilliSource
 			std::string strLocaleCode = [NSUserLocale UTF8String];
 
 			//break this locale into parts(language/country code/extra)
-			DYNAMIC_ARRAY<std::string> strLocaleBrokenUp = ChilliSource::Core::CStringUtils::Split(strLocaleCode, "-", 0);
+			std::vector<std::string> strLocaleBrokenUp = ChilliSource::Core::CStringUtils::Split(strLocaleCode, "-", 0);
 
 			if (strLocaleBrokenUp.size() > 1)
 			{

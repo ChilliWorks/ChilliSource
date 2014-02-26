@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace Rendering
     {
-		void CBackToFrontSortPredicate::PrepareForSort(DYNAMIC_ARRAY<IRenderComponent*> * inpRenderable)
+		void CBackToFrontSortPredicate::PrepareForSort(std::vector<IRenderComponent*> * inpRenderable)
         {
 			mCameraViewProj = CRenderer::matViewProjCache;
             

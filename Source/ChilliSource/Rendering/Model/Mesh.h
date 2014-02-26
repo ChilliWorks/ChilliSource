@@ -10,9 +10,8 @@
 #ifndef _MO_FLO_RENDERING_MESH_H_
 #define _MO_FLO_RENDERING_MESH_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
-
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
@@ -101,7 +100,7 @@ namespace ChilliSource
 			/// @param World transform matrix
 			/// @param The array of materials.
 			//-----------------------------------------------------------------
-			void Render(IRenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const DYNAMIC_ARRAY<MaterialPtr>& inMaterials, 
+			void Render(IRenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const std::vector<MaterialPtr>& inMaterials, 
                         const SkinnedAnimationGroupPtr& inpAnimationGroup = SkinnedAnimationGroupPtr()) const;
 		private:
 			//Only the mesh loader can create this
@@ -148,7 +147,7 @@ namespace ChilliSource
 			friend class CMeshBatch;
 		private:
 			
-			DYNAMIC_ARRAY<SubMeshPtr> mSubMeshes;
+			std::vector<SubMeshPtr> mSubMeshes;
 			SkeletonPtr mpSkeleton;
 			
 			Core::AABB mBoundingBox;

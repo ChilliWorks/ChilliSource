@@ -10,7 +10,7 @@
 
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Base/Screen.h>
-
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Base/Screen.h>
@@ -61,37 +61,37 @@ namespace ChilliSource
             //---Num columns
             if(insParams.TryGetValue("MaxNumColumns", strValue))
             {
-                MaxNumColumns = Core::CStringConverter::ParseUnsignedInt(strValue);
+                MaxNumColumns = Core::ParseU32(strValue);
             }
             //---Num rows
             if(insParams.TryGetValue("MaxNumRows", strValue))
             {
-                MaxNumRows = Core::CStringConverter::ParseUnsignedInt(strValue);
+                MaxNumRows = Core::ParseU32(strValue);
             }
             //---Fill direction
             if(insParams.TryGetValue("RowFill", strValue))
             {
-                RowFill = Core::CStringConverter::ParseBool(strValue);
+                RowFill = Core::ParseBool(strValue);
             }
             //---Row spacing
             if(insParams.TryGetValue("AbsoluteRowSpacing", strValue))
             {
-                SetAbsoluteRowSpacing(Core::CStringConverter::ParseFloat(strValue));
+                SetAbsoluteRowSpacing(Core::ParseF32(strValue));
             }
             //---Column spacing
             if(insParams.TryGetValue("AbsoluteColumnSpacing", strValue))
             {
-                SetAbsoluteColumnSpacing(Core::CStringConverter::ParseFloat(strValue));
+                SetAbsoluteColumnSpacing(Core::ParseF32(strValue));
             }
             //---Row spacing
             if(insParams.TryGetValue("RelativeRowSpacing", strValue))
             {
-                SetRelativeRowSpacing(Core::CStringConverter::ParseFloat(strValue));
+                SetRelativeRowSpacing(Core::ParseF32(strValue));
             }
             //---Column spacing
             if(insParams.TryGetValue("RelativeColumnSpacing", strValue))
             {
-                SetRelativeColumnSpacing(Core::CStringConverter::ParseFloat(strValue));
+                SetRelativeColumnSpacing(Core::ParseF32(strValue));
             }
         }
         //-------------------------------------------------------

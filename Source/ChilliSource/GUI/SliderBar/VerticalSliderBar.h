@@ -10,6 +10,7 @@
 #ifndef _MO_FLO_GUI_DEFAULTS_VERTICAL_SLIDER_BAR_H_
 #define _MO_FLO_GUI_DEFAULTS_VERTICAL_SLIDER_BAR_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/SliderBar/SliderBar.h>
 
 namespace ChilliSource
@@ -152,8 +153,8 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(std::string, SliderSpriteSheetIndexID, SetSliderSpriteSheetIndexID, GetSliderSpriteSheetIndexID);
         };
         
-        typedef SHARED_PTR<CVerticalSliderBar> VerticalSliderBarPtr;
-        typedef WEAK_PTR<CVerticalSliderBar> VerticalSliderBarWeakPtr;
+        typedef std::shared_ptr<CVerticalSliderBar> VerticalSliderBarPtr;
+        typedef std::weak_ptr<CVerticalSliderBar> VerticalSliderBarWeakPtr;
     }
 }
 

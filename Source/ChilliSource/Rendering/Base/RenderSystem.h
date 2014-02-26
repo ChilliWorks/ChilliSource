@@ -11,11 +11,10 @@
 #ifndef _MOFLO_RENDERING_IRENDERSYSTEM_H
 #define _MOFLO_RENDERING_IRENDERSYSTEM_H
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Core/Base/Colour.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
 #include <ChilliSource/Rendering/Base/RenderTarget.h>
 #include <ChilliSource/Rendering/Material/Material.h>
@@ -49,7 +48,7 @@ namespace ChilliSource
 			virtual void EndFrame(IRenderTarget* inpActiveRenderTarget) = 0;
 
 			virtual void ApplyMaterial(const CMaterial& inMaterial) = 0;
-            virtual void ApplyJoints(const DYNAMIC_ARRAY<Core::CMatrix4x4>& inaJoints) = 0;
+            virtual void ApplyJoints(const std::vector<Core::CMatrix4x4>& inaJoints) = 0;
 			virtual void ApplyCamera(const Core::CVector3& invPosition, const Core::CMatrix4x4& inmatInvView, const Core::CMatrix4x4& inmatProj, const Core::CColour& inClearCol) = 0;
             virtual void SetLight(ILightComponent* inpLightComponent) = 0;
 			

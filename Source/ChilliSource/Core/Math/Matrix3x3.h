@@ -10,6 +10,7 @@
 #ifndef _MO_FLO_CORE_MATH_MATRIX_3X3_H_
 #define _MO_FLO_CORE_MATH_MATRIX_3X3_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 

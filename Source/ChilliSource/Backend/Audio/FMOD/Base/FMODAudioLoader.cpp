@@ -30,8 +30,8 @@ namespace ChilliSource
 		///
 		/// Register this object as a model provider
 		//-------------------------------------------------------------------------
-		CFMODAudioLoader::CFMODAudioLoader(Audio::IAudioSystem* inpFMODSystem) 
-		: CAudioLoader(inpFMODSystem), mpFMODSystem(static_cast<CFMODSystem*>(inpFMODSystem))
+		CFMODAudioLoader::CFMODAudioLoader(Audio::AudioSystem* inpFMODSystem) 
+		: AudioLoader(inpFMODSystem), mpFMODSystem(static_cast<CFMODSystem*>(inpFMODSystem))
 		{
 			mstrBundlePath = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_package) + "/";
 			mstrDocumentsPath = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_cache) + "/";
@@ -64,11 +64,11 @@ namespace ChilliSource
             
             if(strFilePath.empty())
             {
-                ERROR_LOG("Cannot load audio from the given Storage Location.");
+                CS_ERROR_LOG("Cannot load audio from the given Storage Location.");
                 return false;
             }
 			
-            mpFMODSystem->Create3DSound(strFilePath, (Audio::IAudioResource*)outpResource.get());
+            mpFMODSystem->Create3DSound(strFilePath, (Audio::AudioResource*)outpResource.get());
 			return true;
 		}
 		//----------------------------------------------------------------------------
@@ -86,12 +86,12 @@ namespace ChilliSource
             
             if(strFilePath.empty())
             {
-                ERROR_LOG("Cannot load audio from the given Storage Location.");
+                CS_ERROR_LOG("Cannot load audio from the given Storage Location.");
                 return false;
             }
 			
 			
-            mpFMODSystem->CreateStream(strFilePath, (Audio::IAudioResource*)outpResource.get());
+            mpFMODSystem->CreateStream(strFilePath, (Audio::AudioResource*)outpResource.get());
 			return true;
 		}
 		//----------------------------------------------------------------------------
@@ -99,7 +99,7 @@ namespace ChilliSource
 		///
 		/// @return Audio listener
 		//----------------------------------------------------------------------------
-		Audio::AudioListenerPtr CFMODAudioLoader::CreateAudioListener()
+		Audio::AudioListenerSPtr CFMODAudioLoader::CreateAudioListener()
 		{
 			return mpFMODSystem->CreateAudioListener();
 		}

@@ -9,6 +9,7 @@
 #ifndef MoshiMonsters_SceneAnimationProvider_h
 #define MoshiMonsters_SceneAnimationProvider_h
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
 namespace ChilliSource {

@@ -9,7 +9,7 @@
 #ifndef MOFLOW_RENDERING_MATERIALFACTORY_H
 #define MOFLOW_RENDERING_MATERIALFACTORY_H
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/System.h>
 
 namespace ChilliSource

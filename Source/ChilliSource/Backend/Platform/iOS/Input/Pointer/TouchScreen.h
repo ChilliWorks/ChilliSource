@@ -1,7 +1,7 @@
 /** 
  * File: TouchScreen.h
  * Date: 5 Oct 2010
- * Description: Concrete iOS3_x implementation of ChilliSource::Input::ITouchScreen;
+ * Description: Concrete iOS3_x implementation of ChilliSource::Input::TouchScreen;
  */
 
 /** 
@@ -14,14 +14,16 @@
 #ifndef _MOFLO_PLATFORM_IOS_TOUCHSCREEN_H_
 #define _MOFLO_PLATFORM_IOS_TOUCHSCREEN_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
+
 #include <UIKit/UIKit.h>
 
 namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CTouchScreen : public Input::ITouchScreen
+		class CTouchScreen : public Input::TouchScreen
 		{
 		public:
 			CTouchScreen();
@@ -35,7 +37,7 @@ namespace ChilliSource
             
 		protected:
 			
-			typedef HASH_MAP<UITouch*, size_t> MapNativeTouchToID;
+			typedef std::unordered_map<UITouch*, size_t> MapNativeTouchToID;
 			MapNativeTouchToID mMapNativeTouchesToID;
             
             f32 mfScale;

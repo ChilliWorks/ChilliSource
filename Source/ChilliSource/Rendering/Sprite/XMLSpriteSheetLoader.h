@@ -10,9 +10,9 @@
 #ifndef _MOFLO_RENDERING_SPRITE_LOADER_H_
 #define _MOFLO_RENDERING_SPRITE_LOADER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
-
 
 namespace ChilliSource
 {

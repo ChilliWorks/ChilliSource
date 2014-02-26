@@ -58,7 +58,7 @@ typedef int_least16_t		s16;
 typedef int_least32_t		s32;
 typedef int_least64_t		s64;
 
-typedef uint_least8_t		u8;
+typedef unsigned char		u8;
 typedef uint_least16_t		u16;
 typedef uint_least32_t		u32;
 typedef uint_least64_t		u64;
@@ -76,7 +76,6 @@ namespace ChilliSource
     namespace Core{}
     namespace Debugging{}
     namespace Input{}
-    namespace GUI{}
     namespace Networking{}
     namespace Rendering{}
     namespace Social{}
@@ -89,7 +88,6 @@ namespace CSAudio = ChilliSource::Audio;
 namespace CSCore = ChilliSource::Core;
 namespace CSDebugging = ChilliSource::Debugging;
 namespace CSInput = ChilliSource::Input;
-namespace CSGUI = ChilliSource::GUI;
 namespace CSNetworking = ChilliSource::Networking;
 namespace CSRendering = ChilliSource::Rendering;
 namespace CSSocial = ChilliSource::Social;
@@ -105,8 +103,8 @@ template <> struct CompileTimeChecker<false>{};
 
 
 //---Macros
-#define SAFE_DELETE(x)						{if(x) delete(x); x = nullptr;}
-#define SAFE_DELETE_ARRAY(x)				{if(x) delete[] (x); x = nullptr;}
+#define SAFE_DELETE(x)						{if(x) delete(x); x = NULL;}
+#define SAFE_DELETE_ARRAY(x)				{if(x) delete[] (x); x = NULL;}
 
 #define STRING_CAST(x)						(ChilliSource::Core::CStringConverter::ToString(x))
 
@@ -137,7 +135,7 @@ template <> struct CompileTimeChecker<false>{};
 #endif
 
 #ifdef DEBUG
-    #define SMART_CAST(to, from) dynamic_cast<to >(from); assert(dynamic_cast<to >(from) != nullptr);  
+    #define SMART_CAST(to, from) dynamic_cast<to >(from); assert(dynamic_cast<to >(from) != NULL);  
 #else
     #define SMART_CAST(to, from) static_cast<to >(from);
 #endif

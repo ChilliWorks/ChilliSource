@@ -16,11 +16,8 @@
 #ifndef _MOFLO_GUIWINDOW_H_
 #define _MOFLO_GUIWINDOW_H_
 
-#include <ChilliSource/GUI/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
-
-#include <ChilliSource/Input/ForwardDeclarations.h>
-
 #include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
@@ -39,13 +36,13 @@ namespace ChilliSource
     		///
     		/// @param pointer to the input system
     		//-----------------------------------------------------
-    		void SetInputSystem(Input::IInputSystem* inpInputSystem);
+    		void SetInputSystem(Input::InputSystem* inpInputSystem);
             //-----------------------------------------------------
             /// Get Input System
             ///
             /// @return pointer to the input system
             //-----------------------------------------------------
-            Input::IInputSystem* GetInputSystem();
+            Input::InputSystem* GetInputSystem();
             void ListenForTouches();
             void UnlistenFromTouches();
             //-----------------------------------------------------------
@@ -130,7 +127,7 @@ namespace ChilliSource
 			friend void Core::CScene::BecomeInactive();
             
         private:
-            Input::IInputSystem* mpInputSystem;
+            Input::InputSystem* mpInputSystem;
         };
     }
 }

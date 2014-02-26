@@ -9,9 +9,11 @@
 #ifndef _MOFLO_CORE_STRINGUTILITIES_H_
 #define _MOFLO_CORE_STRINGUTILITIES_H_
 
-#include <sstream>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
+
+#include <sstream>
 #include <string>
 
 #if (TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE) && __OBJC__
@@ -68,7 +70,7 @@ namespace ChilliSource
 			 maxSplits The maximum number of splits to perform (0 for unlimited splits). If this
 			 parameters is > 0, the splitting process will stop after this many splits, left to right.
 			 */
-			static DYNAMIC_ARRAY< std::string > Split( const std::string& str, const std::string& delims = "\t\n ", unsigned int maxSplits = 0);
+			static std::vector< std::string > Split( const std::string& str, const std::string& delims = "\t\n ", unsigned int maxSplits = 0);
 
 			/** Returns a StringVector that contains all the substrings delimited
 			 by the characters in the passed <code>delims</code> argument, 
@@ -82,7 +84,7 @@ namespace ChilliSource
 			 maxSplits The maximum number of splits to perform (0 for unlimited splits). If this
 			 parameters is > 0, the splitting process will stop after this many splits, left to right.
 			 */
-			static DYNAMIC_ARRAY< std::string > Tokenise( const std::string& str, const std::string& delims = "\t\n ", const std::string& doubleDelims = "\"", unsigned int maxSplits = 0);
+			static std::vector< std::string > Tokenise( const std::string& str, const std::string& delims = "\t\n ", const std::string& doubleDelims = "\"", unsigned int maxSplits = 0);
 
 			/** Lower-cases all the characters in the string.
 			 */
@@ -270,6 +272,9 @@ namespace ChilliSource
 													   const std::string& instrHours,
 													   const std::string& instrMins,
 													   const std::string& instrSecs);
+            
+            /** Checks the std::string is a inValid number inValue. */
+			static bool isNumber(const std::string& inVal);
 		};
 	}
 }

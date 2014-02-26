@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_STATE_
 #define _MO_FLO_STATE_
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
 namespace ChilliSource
@@ -177,7 +177,7 @@ namespace ChilliSource
 			friend class CStateManager;
 		};
 		
-		typedef SHARED_PTR<IState> StatePtr;
+		typedef std::shared_ptr<IState> StatePtr;
 	}
 }
 

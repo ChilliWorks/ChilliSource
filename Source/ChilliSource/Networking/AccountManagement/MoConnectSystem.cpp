@@ -19,10 +19,10 @@ namespace ChilliSource
 	
 	namespace Networking
     {
-		DEFINE_NAMED_INTERFACE(CMoConnectSystem);
+		DEFINE_NAMED_INTERFACE(MoConnectSystem);
 		
-		const std::string CMoConnectSystem::kstrFacebookLoginType = "facebook";
-		const std::string CMoConnectSystem::kstrEmailLoginType = "email";
+		const std::string MoConnectSystem::kstrFacebookLoginType = "facebook";
+		const std::string MoConnectSystem::kstrEmailLoginType = "email";
         
         const std::string kstrPushNotificationAppleAPNS = "apns";
         const std::string kstrPushNotificationGoogleGCM = "gcm";
@@ -51,7 +51,7 @@ namespace ChilliSource
         //------------------------
         /// Constructor
         //------------------------
-		CMoConnectSystem::CMoConnectSystem(IHttpConnectionSystem* inpHttpSystem, const std::string& instrMoConnectServerURL, Core::COAuthSystem* inpOAuthSystem)
+		MoConnectSystem::MoConnectSystem(HttpConnectionSystem* inpHttpSystem, const std::string& instrMoConnectServerURL, Core::COAuthSystem* inpOAuthSystem)
 		:mpHttpConnectionSystem(inpHttpSystem)
         ,mbHasSignedInUser(false)
         ,mstrMoConnectURL(instrMoConnectServerURL)
@@ -66,28 +66,28 @@ namespace ChilliSource
         //------------------------
         /// Is A
         //------------------------
-		bool CMoConnectSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool MoConnectSystem::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-			return inInterfaceID == CMoConnectSystem::InterfaceID;
+			return inInterfaceID == MoConnectSystem::InterfaceID;
 		}
         //------------------------
         /// Get OAuth System
         //------------------------
-        Core::COAuthSystem* CMoConnectSystem::GetOAuthSystem()
+        Core::COAuthSystem* MoConnectSystem::GetOAuthSystem()
         {
             return mpOAuthSystem;
         }
 		//------------------------
         /// Has Signed In User
         //------------------------
-		bool CMoConnectSystem::HasSignedInUser() const
+		bool MoConnectSystem::HasSignedInUser() const
         {
 			return mbHasSignedInUser;
 		}
 		//------------------------
         /// Get Current User ID
         //------------------------
-		const std::string& CMoConnectSystem::GetCurrentUserID() const
+		const std::string& MoConnectSystem::GetCurrentUserID() const
         {
 			if(HasSignedInUser())
             {
@@ -101,7 +101,7 @@ namespace ChilliSource
         //------------------------
         /// Get Current User Name
         //------------------------
-		const std::string& CMoConnectSystem::GetCurrentUserName() const
+		const std::string& MoConnectSystem::GetCurrentUserName() const
         {
 			if(HasSignedInUser())
             {
@@ -115,7 +115,7 @@ namespace ChilliSource
 		//------------------------
         /// Set Current User Name
         //------------------------
-		void CMoConnectSystem::SetCurrentUserName(const std::string& instrName)
+		void MoConnectSystem::SetCurrentUserName(const std::string& instrName)
         {
 			mstrUserName = instrName;
 			CLocalDataStore* pLDS = CLocalDataStore::GetSingletonPtr();
@@ -125,25 +125,25 @@ namespace ChilliSource
         //------------------------
         /// Get Server Time
         //------------------------
-		void CMoConnectSystem::GetServerTime(const CMoConnectSystem::ServerTimeDelegate& inDelegate)
+		void MoConnectSystem::GetServerTime(const MoConnectSystem::ServerTimeDelegate& inDelegate)
 		{
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrMoConnectURL + "/ping";
 			requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
-			mpHttpConnectionSystem->MakeRequest(requestDetails, IHttpRequest::CompletionDelegate(this, &CMoConnectSystem::TimeRequestCompletes));
+			mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::TimeRequestCompletes));
 			mTimeRequestCallback = inDelegate;
 		}
         //------------------------
         /// Time Request Completes
         //------------------------
-		void CMoConnectSystem::TimeRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+		void MoConnectSystem::TimeRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
 		{
 			if(!mTimeRequestCallback)
 				return;
 			
 			Json::Reader cReader;
 			Json::Value cJResponse;
-			if(ineResult == IHttpRequest::CompletionResult::k_completed && inpRequest->GetResponseCode() == kHTTPResponseOK)
+			if(ineResult == HttpRequest::CompletionResult::k_completed && inpRequest->GetResponseCode() == kHTTPResponseOK)
 			{
 				if(cReader.parse(inpRequest->GetResponseString(), cJResponse))
 				{
@@ -168,7 +168,7 @@ namespace ChilliSource
         //------------------------
         /// Generate Authentication Header
         //------------------------
-		void CMoConnectSystem::GenerateAuthenticationHeader(const std::string& instrURL, Core::ParamDictionary& outsHeader) const
+		void MoConnectSystem::GenerateAuthenticationHeader(const std::string& instrURL, Core::ParamDictionary& outsHeader) const
         {
             std::string strOAuthHeader;
             mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpPost, instrURL, "", strOAuthHeader);
@@ -178,14 +178,14 @@ namespace ChilliSource
 		//------------------------
         /// Signed In User ChangesEvent
         //------------------------
-		IEvent<CMoConnectSystem::EventDelegate>& CMoConnectSystem::SignedInUserChangesEvent()
+		IEvent<MoConnectSystem::EventDelegate>& MoConnectSystem::SignedInUserChangesEvent()
         {
 			return mSignedInUserChangesEvent;
 		}
 		//------------------------
         /// Create New Account
         //------------------------
-		void CMoConnectSystem::CreateNewAccount(AccountCreateDelegate inDel)
+		void MoConnectSystem::CreateNewAccount(AccountCreateDelegate inDel)
         {
 			SignOutCurrentUser();
 			
@@ -198,25 +198,25 @@ namespace ChilliSource
             
             std::string strOAuthHeader;
             mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
-            DEBUG_LOG(strOAuthHeader);
+            CS_DEBUG_LOG(strOAuthHeader);
             
             mpOAuthSystem->SetOAuthTokenKey(mstrOAuthToken);
             mpOAuthSystem->SetOAuthTokenSecret(mstrOAuthTokenSecret);
             
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");
-			mpHttpConnectionSystem->MakeRequest(requestDetails, IHttpRequest::CompletionDelegate(this, &CMoConnectSystem::AccountCreateRequestCompletes));
+			mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::AccountCreateRequestCompletes));
 			
 			mAccountCreateCallback = inDel;
 		}
 		//------------------------
         /// Account Create Request Completes
         //------------------------
-		void CMoConnectSystem::AccountCreateRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+		void MoConnectSystem::AccountCreateRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
         {
 			AccountCreateResult eResult = AccountCreateResult::k_noServerResponse;
 			
-			if(IHttpRequest::CompletionResult::k_completed == ineResult && inpRequest->GetResponseCode() == kHTTPResponseOK)
+			if(HttpRequest::CompletionResult::k_completed == ineResult && inpRequest->GetResponseCode() == kHTTPResponseOK)
             {
 				Json::Reader cReader;
 				Json::Value cJResponse;
@@ -259,7 +259,7 @@ namespace ChilliSource
         //------------------------
         /// Register Login Email
         //------------------------
-        void CMoConnectSystem::RegisterLoginEmail(const std::string& instrID, const std::string& instrPassword, const RegisterLoginDelegate& inDel)
+        void MoConnectSystem::RegisterLoginEmail(const std::string& instrID, const std::string& instrPassword, const RegisterLoginDelegate& inDel)
         {
             // Create Data
 			Json::Value cCredentialsMsg(Json::objectValue);
@@ -275,7 +275,7 @@ namespace ChilliSource
         //------------------------
         /// Register Login Facebook
         //------------------------
-        void CMoConnectSystem::RegisterLoginFacebook(const std::string& instrAccessToken, const RegisterLoginDelegate& inDel)
+        void MoConnectSystem::RegisterLoginFacebook(const std::string& instrAccessToken, const RegisterLoginDelegate& inDel)
         {
             // Create Data
 			Json::Value cCredentialsMsg(Json::objectValue);
@@ -291,7 +291,7 @@ namespace ChilliSource
         //------------------------
         /// Register Login
         //------------------------
-		void CMoConnectSystem::RegisterLogin(const Json::Value& injData, RegisterLoginDelegate inDel)
+		void MoConnectSystem::RegisterLogin(const Json::Value& injData, RegisterLoginDelegate inDel)
         {
 			if(HasSignedInUser())
             {
@@ -304,7 +304,7 @@ namespace ChilliSource
                 
                 GenerateAuthenticationHeader(requestDetails.strURL, requestDetails.sHeaders);
 				
-				mpHttpConnectionSystem->MakeRequest(requestDetails, IHttpRequest::CompletionDelegate(this, &CMoConnectSystem::RegisterLoginRequestCompletes));
+				mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::RegisterLoginRequestCompletes));
                 
                 // Assume we're going to succeed, then undo it if we don't
 				mastrCurrentAccountLogins.push_back(injData["Type"].asString());
@@ -318,7 +318,7 @@ namespace ChilliSource
         //------------------------
         /// Register Login Request Completes
         //------------------------
-		void CMoConnectSystem::RegisterLoginRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+		void MoConnectSystem::RegisterLoginRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
         {
 			RegisterLoginResult eResult = RegisterLoginResult::k_noServerResponse;
 			
@@ -331,9 +331,9 @@ namespace ChilliSource
 				return;
 			}
 			
-			if(ineResult == IHttpRequest::CompletionResult::k_completed)
+			if(ineResult == HttpRequest::CompletionResult::k_completed)
             {
-				DEBUG_LOG("RegisterLoginResponse:" + inpRequest->GetResponseString());
+				CS_DEBUG_LOG("RegisterLoginResponse:" + inpRequest->GetResponseString());
 				Json::Reader cReader;
 				Json::Value cJResponse;
                 
@@ -370,7 +370,7 @@ namespace ChilliSource
         //------------------------
         /// Sign In Via Email
         //------------------------
-        void CMoConnectSystem::SignInViaEmail(const std::string& instrID, const std::string& instrPassword, const SignInDelegate& inDel, bool inbGetAccountsOnly)
+        void MoConnectSystem::SignInViaEmail(const std::string& instrID, const std::string& instrPassword, const SignInDelegate& inDel, bool inbGetAccountsOnly)
         {
             // Create Data
 			Json::Value cCredentialsMsg(Json::objectValue);
@@ -386,7 +386,7 @@ namespace ChilliSource
         //------------------------
         /// Sign In Via Facebook
         //------------------------
-        void CMoConnectSystem::SignInViaFacebook(const std::string& instrAccessToken, const SignInDelegate& inDel, bool inbGetAccountsOnly)
+        void MoConnectSystem::SignInViaFacebook(const std::string& instrAccessToken, const SignInDelegate& inDel, bool inbGetAccountsOnly)
         {
             // Create Data
 			Json::Value cCredentialsMsg(Json::objectValue);
@@ -410,7 +410,7 @@ namespace ChilliSource
         //------------------------
         /// Sign In
         //------------------------
-        void CMoConnectSystem::SignIn(const Json::Value& injData, const SignInDelegate& inDel, bool inbRetrieveAccountsOnly)
+        void MoConnectSystem::SignIn(const Json::Value& injData, const SignInDelegate& inDel, bool inbRetrieveAccountsOnly)
         {
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrMoConnectURL + "/user/login";
@@ -434,25 +434,25 @@ namespace ChilliSource
             // Retrieve accounts only
             if(inbRetrieveAccountsOnly)
             {
-                mpHttpConnectionSystem->MakeRequest(requestDetails, IHttpRequest::CompletionDelegate(this, &CMoConnectSystem::RetrieveAccountsRequestCompletes));
+                mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::RetrieveAccountsRequestCompletes));
                 mRetrieveAccountsCallback = inDel;
             }
             // Actual sign in request
             else
             {
-                mpHttpConnectionSystem->MakeRequest(requestDetails, IHttpRequest::CompletionDelegate(this, &CMoConnectSystem::SignInRequestCompletes));
+                mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::SignInRequestCompletes));
                 mSignInCallback = inDel;
             }
 		}
         //------------------------
         /// Sign In Request Completes
         //------------------------
-		void CMoConnectSystem::SignInRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+		void MoConnectSystem::SignInRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
         {
 			SignInResult eResult = SignInResult::k_noServerResponse;
-            DYNAMIC_ARRAY<SignedInUser> asUsers;
+            std::vector<SignedInUser> asUsers;
             
-			if(ineResult == IHttpRequest::CompletionResult::k_completed)
+			if(ineResult == HttpRequest::CompletionResult::k_completed)
             {
 				Json::Reader cReader;
 				Json::Value cJResponse;
@@ -501,12 +501,12 @@ namespace ChilliSource
         //------------------------
         /// Try Sign In Request Completes
         //------------------------
-		void CMoConnectSystem::RetrieveAccountsRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+		void MoConnectSystem::RetrieveAccountsRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
         {
 			SignInResult eResult = SignInResult::k_noServerResponse;
-            DYNAMIC_ARRAY<SignedInUser> asUsers;
+            std::vector<SignedInUser> asUsers;
 			
-			if(ineResult == IHttpRequest::CompletionResult::k_completed)
+			if(ineResult == HttpRequest::CompletionResult::k_completed)
             {
 				Json::Reader cReader;
 				Json::Value cJResponse;
@@ -540,7 +540,7 @@ namespace ChilliSource
 		//------------------------
         /// Logins Request Completes
         //------------------------
-		void CMoConnectSystem::LoginsRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+		void MoConnectSystem::LoginsRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
         {
 			mpPendingLoginsRequest = nullptr;
 			
@@ -553,7 +553,7 @@ namespace ChilliSource
 				return;
 			}
 			
-			if(ineResult == IHttpRequest::CompletionResult::k_completed)
+			if(ineResult == HttpRequest::CompletionResult::k_completed)
             {
 				Json::Reader cReader;
 				Json::Value cJResponse;
@@ -581,7 +581,7 @@ namespace ChilliSource
         //------------------------
         /// Register For Push Notifications
         //------------------------
-        void CMoConnectSystem::RegisterForPushNotifications(const PushNotificationType ineType, const std::string& instrToken,
+        void MoConnectSystem::RegisterForPushNotifications(const PushNotificationType ineType, const std::string& instrToken,
                                                             const std::string& instrLanguage, const std::string& instrCountryCode,
                                                             const PushNotificationResultDelegate& inDelegate)
         {
@@ -600,22 +600,22 @@ namespace ChilliSource
             
             std::string strOAuthHeader;
             mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
-            DEBUG_LOG(strOAuthHeader);
+            CS_DEBUG_LOG(strOAuthHeader);
             
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");
 			
 			Json::FastWriter cWriter;
 			requestDetails.strBody = cWriter.write(cRegistrationMsg);
-			DEBUG_LOG("RegisterForPushNotifications:"+requestDetails.strBody);
-			mpHttpConnectionSystem->MakeRequest(requestDetails, IHttpRequest::CompletionDelegate(this, &CMoConnectSystem::PushNotificationRequestCompletes));
+			CS_DEBUG_LOG("RegisterForPushNotifications:"+requestDetails.strBody);
+			mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::PushNotificationRequestCompletes));
             
             mPushNotificationCallback = inDelegate;
         }
         //------------------------
         /// Get Push Notification Type As String
         //------------------------
-        const std::string& CMoConnectSystem::GetPushNotificationTypeAsString(const PushNotificationType ineType)
+        const std::string& MoConnectSystem::GetPushNotificationTypeAsString(const PushNotificationType ineType)
         {
             switch(ineType)
             {
@@ -624,7 +624,7 @@ namespace ChilliSource
                 case PushNotificationType::k_googleGCM:
                     return kstrPushNotificationGoogleGCM;
                     default:
-                    ERROR_LOG("Unsupported push notification type!");
+                    CS_ERROR_LOG("Unsupported push notification type!");
                     break;
             }
             
@@ -633,27 +633,27 @@ namespace ChilliSource
         //------------------------
         /// Push Notification Request Completes
         //------------------------
-        void CMoConnectSystem::PushNotificationRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+        void MoConnectSystem::PushNotificationRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
         {
             PushNotificationResult eResult = PushNotificationResult::k_success;
             
-            if(ineResult != IHttpRequest::CompletionResult::k_completed)
+            if(ineResult != HttpRequest::CompletionResult::k_completed)
             {
-                if(ineResult == IHttpRequest::CompletionResult::k_failed)
+                if(ineResult == HttpRequest::CompletionResult::k_failed)
                 {
-                    ERROR_LOG("Push notification registration failed!");
+                    CS_ERROR_LOG("Push notification registration failed!");
                 }
-                else if(ineResult == IHttpRequest::CompletionResult::k_cancelled)
+                else if(ineResult == HttpRequest::CompletionResult::k_cancelled)
                 {
-                    ERROR_LOG("Push notification registration was cancelled.");
+                    CS_ERROR_LOG("Push notification registration was cancelled.");
                 }
-                else if(ineResult == IHttpRequest::CompletionResult::k_timeout)
+                else if(ineResult == HttpRequest::CompletionResult::k_timeout)
                 {
-                    ERROR_LOG("Push notification registration timed out.");
+                    CS_ERROR_LOG("Push notification registration timed out.");
                 }
-                else if(ineResult == IHttpRequest::CompletionResult::k_flushed)
+                else if(ineResult == HttpRequest::CompletionResult::k_flushed)
                 {
-                    ERROR_LOG("Push notification registration buffer need to be flushed.");
+                    CS_ERROR_LOG("Push notification registration buffer need to be flushed.");
                 }
                 
                 eResult = PushNotificationResult::k_failed;
@@ -667,7 +667,7 @@ namespace ChilliSource
 		//------------------------
         /// Request Local User Profile
         //------------------------
-        void CMoConnectSystem::RequestLocalUserProfile(const LocalUserProfileDelegate& ineDelegate)
+        void MoConnectSystem::RequestLocalUserProfile(const LocalUserProfileDelegate& ineDelegate)
         {
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrRealm + "/me";
@@ -679,19 +679,19 @@ namespace ChilliSource
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");
 			
-			mpHttpConnectionSystem->MakeRequest(requestDetails, IHttpRequest::CompletionDelegate(this, &CMoConnectSystem::OnLocalUserProfileReceived));
+			mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::OnLocalUserProfileReceived));
 			
 			mLocalUserProfileDelegate = ineDelegate;
         }
 		//------------------------
         /// On Me Received
         //------------------------
-        void CMoConnectSystem::OnLocalUserProfileReceived(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+        void MoConnectSystem::OnLocalUserProfileReceived(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
         {
             Json::Value jResponse;
             switch (ineResult)
             {
-                case IHttpRequest::CompletionResult::k_completed:
+                case HttpRequest::CompletionResult::k_completed:
                 {
                     Json::Reader cReader;
                     cReader.parse(inpRequest->GetResponseString(), jResponse);
@@ -705,7 +705,7 @@ namespace ChilliSource
 		//------------------------
         /// Call Abandon
         //------------------------
-        void CMoConnectSystem::RequestAccountAbandonment(const SignedInUser& insSignedUser)
+        void MoConnectSystem::RequestAccountAbandonment(const SignedInUser& insSignedUser)
         {
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrRealm + "/me/abandon";
@@ -734,7 +734,7 @@ namespace ChilliSource
         //------------------------
         /// Handle Redirection
         //------------------------
-		void CMoConnectSystem::HandleRedirection(HttpRequestPtr inpRequest)
+		void MoConnectSystem::HandleRedirection(HttpRequestPtr inpRequest)
         {
 			Json::Reader cReader;
 			Json::Value cResponse;
@@ -746,7 +746,7 @@ namespace ChilliSource
         //------------------------
         /// On User Changed
         //------------------------
-		void CMoConnectSystem::OnUserChanged()
+		void MoConnectSystem::OnUserChanged()
         {
 			mbHasLoadedLoginTypes = false;
 			mastrCurrentAccountLogins.clear();
@@ -762,21 +762,21 @@ namespace ChilliSource
 		//------------------------
         /// Has Loaded LoginT ypes
         //------------------------
-		bool CMoConnectSystem::HasLoadedLoginTypes()
+		bool MoConnectSystem::HasLoadedLoginTypes()
         {
 			return mbHasLoadedLoginTypes;
 		}
         //------------------------
         /// Current Account Has Login
         //------------------------
-		bool CMoConnectSystem::CurrentAccountHasLogin(const std::string& instrType)
+		bool MoConnectSystem::CurrentAccountHasLogin(const std::string& instrType)
         {
 			return std::find(mastrCurrentAccountLogins.begin(), mastrCurrentAccountLogins.end(), instrType) != mastrCurrentAccountLogins.end();
 		}
 		//------------------------
         /// Try Restore User Details
         //------------------------
-		bool CMoConnectSystem::TryRestoreUserDetails()
+		bool MoConnectSystem::TryRestoreUserDetails()
         {
 			CLocalDataStore* pLDS = CLocalDataStore::GetSingletonPtr();
 			pLDS->TryGetValue(kstrMoConnectUserKey, mstrUserName); //(not having a name is not at all blocking)
@@ -813,7 +813,7 @@ namespace ChilliSource
         //------------------------
         /// Save User Details
         //------------------------
-		void CMoConnectSystem::SaveUserDetails(bool inbAnonymous)
+		void MoConnectSystem::SaveUserDetails(bool inbAnonymous)
 		{
             std::string strMoConnectIdKey = "";
             std::string strMoConnectRealmKey = "";
@@ -861,7 +861,7 @@ namespace ChilliSource
         //------------------------
         /// Forget Saved User Details
         //------------------------
-		void CMoConnectSystem::ForgetSavedUserDetails(bool inbAnonymous)
+		void MoConnectSystem::ForgetSavedUserDetails(bool inbAnonymous)
 		{
 			CLocalDataStore* pLDS = CLocalDataStore::GetSingletonPtr();
 			
@@ -886,7 +886,7 @@ namespace ChilliSource
         //------------------------
         /// Sign Out Current User
         //------------------------
-		void CMoConnectSystem::SignOutCurrentUser()
+		void MoConnectSystem::SignOutCurrentUser()
         {
 			mbHasSignedInUser = false;
 			mstrRealm = mstrMoConnectURL;
@@ -904,7 +904,7 @@ namespace ChilliSource
         //------------------------
         /// Make Request
         //------------------------
-		u32 CMoConnectSystem::MakeRequest(const std::string& instrMethod, const RequestResultDelegate& inDelegate)
+		u32 MoConnectSystem::MakeRequest(const std::string& instrMethod, const RequestResultDelegate& inDelegate)
         {
 			Json::Value cEmptyPayload(Json::objectValue);
 			return MakeRequest(instrMethod,cEmptyPayload,inDelegate);
@@ -912,7 +912,7 @@ namespace ChilliSource
         //------------------------
         /// Make Request
         //------------------------
-		u32 CMoConnectSystem::MakeRequest(const std::string& instrMethod, Json::Value& incPayload, const RequestResultDelegate& inDelegate)
+		u32 MoConnectSystem::MakeRequest(const std::string& instrMethod, Json::Value& incPayload, const RequestResultDelegate& inDelegate)
         {
 			RequestInfo sNewRequest;
 			sNewRequest.udwID = mudwRequestIDSeed++;
@@ -925,7 +925,7 @@ namespace ChilliSource
 			requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
 			requestDetails.strBody = sNewRequest.cPayload.toUnformattedString();
             GenerateAuthenticationHeader(requestDetails.strURL, requestDetails.sHeaders);
-            sNewRequest.pHttpRequest = mpHttpConnectionSystem->MakeRequest(requestDetails, IHttpRequest::CompletionDelegate(this,&CMoConnectSystem::GeneralRequestCompletes));
+            sNewRequest.pHttpRequest = mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this,&MoConnectSystem::GeneralRequestCompletes));
 			masOpenRequests.push_back(sNewRequest);
 			
 			return sNewRequest.udwID;
@@ -933,7 +933,7 @@ namespace ChilliSource
         //------------------------
         /// Cancel Request
         //------------------------
-		void CMoConnectSystem::CancelRequest(u32 inudwID)
+		void MoConnectSystem::CancelRequest(u32 inudwID)
         {
 			for (u32 nRequest = 0; nRequest < masOpenRequests.size(); nRequest++)
             {
@@ -947,7 +947,7 @@ namespace ChilliSource
         //------------------------
         /// Cancel All Requests
         //------------------------
-		void CMoConnectSystem::CancelAllRequests()
+		void MoConnectSystem::CancelAllRequests()
         {
 			mbNoRemoveFulfilledRequests = true;
 			for (u32 nRequest = 0; nRequest < masOpenRequests.size(); nRequest++)
@@ -960,7 +960,7 @@ namespace ChilliSource
         //------------------------
         /// General Request Completes
         //------------------------
-		void CMoConnectSystem::GeneralRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+		void MoConnectSystem::GeneralRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
         {
 			RequestResult eRequestResult = RequestResult::k_success;
 			Json::Value cJResponse;
@@ -976,13 +976,13 @@ namespace ChilliSource
 			
 			switch(ineResult)
             {
-				case IHttpRequest::CompletionResult::k_cancelled:
+				case HttpRequest::CompletionResult::k_cancelled:
 					eRequestResult = RequestResult::k_cancelled;
 					break;
-				case IHttpRequest::CompletionResult::k_timeout:
+				case HttpRequest::CompletionResult::k_timeout:
 					eRequestResult = RequestResult::k_failedNoResponse;
 					break;
-				case IHttpRequest::CompletionResult::k_failed:
+				case HttpRequest::CompletionResult::k_failed:
 					eRequestResult = RequestResult::k_failedNoResponse;
 					break;
                 default:
@@ -1036,7 +1036,7 @@ namespace ChilliSource
 		//------------------------
         /// Find Request With ID
         //------------------------
-		CMoConnectSystem::RequestInfo* CMoConnectSystem::FindRequestWithID(u32 inudwID)
+		MoConnectSystem::RequestInfo* MoConnectSystem::FindRequestWithID(u32 inudwID)
         {
 			for(u32 udwReq = 0; udwReq < masOpenRequests.size(); udwReq++)
             {
@@ -1051,7 +1051,7 @@ namespace ChilliSource
         //------------------------
         /// Find Request With Http Request
         //------------------------
-		CMoConnectSystem::RequestInfo* CMoConnectSystem::FindRequestWithHttpRequest(HttpRequestPtr inpHttp)
+		MoConnectSystem::RequestInfo* MoConnectSystem::FindRequestWithHttpRequest(HttpRequestPtr inpHttp)
         {
 			for(u32 udwReq = 0; udwReq < masOpenRequests.size(); udwReq++)
             {
@@ -1066,11 +1066,11 @@ namespace ChilliSource
         //------------------------
         /// Validate IAP Receipt
         //------------------------
-        void CMoConnectSystem::ValidateIAPReceipt(const IAPType ineType,
+        void MoConnectSystem::ValidateIAPReceipt(const IAPType ineType,
                                                   const IAPTransactionPtr& inpTransInfo,
                                                   ValidateReceiptDelegate inDelegate)
         {
-            DEBUG_LOG("CMoConnectSystem::ValidateIAPReceipt");
+            CS_DEBUG_LOG("MoConnectSystem::ValidateIAPReceipt");
             HttpRequestDetails requestDetails;
 
             requestDetails.strURL = mstrRealm + "/iap/production";
@@ -1087,22 +1087,22 @@ namespace ChilliSource
       
             std::string strOAuthHeader;
             mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
-            DEBUG_LOG(strOAuthHeader);
+            CS_DEBUG_LOG(strOAuthHeader);
             
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");
 			
 			Json::FastWriter cWriter;
 			requestDetails.strBody = cWriter.write(cIAPMsg);
-			DEBUG_LOG("ValidateIAPReceipt:"+requestDetails.strBody);
-			mpHttpConnectionSystem->MakeRequest(requestDetails, IHttpRequest::CompletionDelegate(this, &CMoConnectSystem::OnIAPRecieptValidationResponse));
+			CS_DEBUG_LOG("ValidateIAPReceipt:"+requestDetails.strBody);
+			mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::OnIAPRecieptValidationResponse));
             
             mValidateReceiptDelegate = inDelegate;
         }
         //------------------------
         /// Get IAP Type As String
         //------------------------
-        const std::string& CMoConnectSystem::GetIAPTypeAsString(const IAPType ineType)
+        const std::string& MoConnectSystem::GetIAPTypeAsString(const IAPType ineType)
         {
             switch(ineType)
             {
@@ -1111,7 +1111,7 @@ namespace ChilliSource
                 case IAPType::k_google:
                     return kstrIAPnGoogle;
                 default:
-                    ERROR_LOG("Unsupported push notification type!");
+                    CS_ERROR_LOG("Unsupported push notification type!");
                     break;
             }
             
@@ -1120,16 +1120,16 @@ namespace ChilliSource
         //------------------------
         /// On IAP Reciept Validation Response
         //------------------------
-        void CMoConnectSystem::OnIAPRecieptValidationResponse(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+        void MoConnectSystem::OnIAPRecieptValidationResponse(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
         {
             bool bIsValid = false;
             IAPReceipt sIAP;
             sIAP.ddwTimeCreated = 0;
             sIAP.bRedeemed = false;
             
-            if(IHttpRequest::CompletionResult::k_completed == ineResult)
+            if(HttpRequest::CompletionResult::k_completed == ineResult)
             {
-                DEBUG_LOG("CMoConnectSystem::OnRecieptValidationResponse");
+                CS_DEBUG_LOG("MoConnectSystem::OnRecieptValidationResponse");
                 if(kHTTPResponseOK == inpRequest->GetResponseCode())
                 {
                     Json::Reader cReader;
@@ -1139,7 +1139,7 @@ namespace ChilliSource
                         if(cJResponse.isObject() && cJResponse.isMember("Error"))
                         {
                             // Error
-                            DEBUG_LOG("CMoConnectSystem::OnRecieptValidationResponse() - This ain't right!");
+                            CS_DEBUG_LOG("MoConnectSystem::OnRecieptValidationResponse() - This ain't right!");
                         }
                         else
                         {
@@ -1182,12 +1182,12 @@ namespace ChilliSource
                 }
                 else
                 {
-                    ERROR_LOG("Unable to validate IAP receipt.\nGot response code \""+STRING_CAST(inpRequest->GetResponseCode())+"\"");
+                    CS_ERROR_LOG("Unable to validate IAP receipt.\nGot response code \""+ToString(inpRequest->GetResponseCode())+"\"");
                 }
             }
             else
             {
-                ERROR_LOG("Unable to validate IAP receipt as HTTP request did not complete. Instead we got result: "+STRING_CAST((u32)ineResult));
+                CS_ERROR_LOG("Unable to validate IAP receipt as HTTP request did not complete. Instead we got result: "+ToString((u32)ineResult));
             }
             
             mValidateReceiptDelegate(bIsValid, ineResult, sIAP);
@@ -1195,9 +1195,9 @@ namespace ChilliSource
         //------------------------
         /// Redeem IAP
         //------------------------
-        void CMoConnectSystem::RedeemIAP(const std::string& instrReceiptId)
+        void MoConnectSystem::RedeemIAP(const std::string& instrReceiptId)
         {
-            DEBUG_LOG("CMoConnectSystem::RedeemIAP");
+            CS_DEBUG_LOG("MoConnectSystem::RedeemIAP");
             HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrRealm + "/iap/redeem";
 			requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
@@ -1210,21 +1210,21 @@ namespace ChilliSource
             
             std::string strOAuthHeader;
             mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
-            DEBUG_LOG(strOAuthHeader);
+            CS_DEBUG_LOG(strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");
 			
 			Json::FastWriter cWriter;
 			requestDetails.strBody = cWriter.write(cIAPMsg);
-			DEBUG_LOG("RedeemIAP:"+requestDetails.strBody);
-			mpHttpConnectionSystem->MakeRequest(requestDetails, IHttpRequest::CompletionDelegate(this, &CMoConnectSystem::OnIAPRedeemedResponse));
+			CS_DEBUG_LOG("RedeemIAP:"+requestDetails.strBody);
+			mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::OnIAPRedeemedResponse));
         }
         //------------------------
         /// On IAP Redeemed Response
         //------------------------
-        void CMoConnectSystem::OnIAPRedeemedResponse(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+        void MoConnectSystem::OnIAPRedeemedResponse(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
         {
-            if(IHttpRequest::CompletionResult::k_completed == ineResult)
+            if(HttpRequest::CompletionResult::k_completed == ineResult)
             {
                 Json::Reader cReader;
                 Json::Value cJResponse;
@@ -1232,7 +1232,7 @@ namespace ChilliSource
                 {
                     if(!cJResponse.isNull())
                     {
-                        ERROR_LOG("Unable to redeem iap.");
+                        CS_ERROR_LOG("Unable to redeem iap.");
                     }
                 }
             }

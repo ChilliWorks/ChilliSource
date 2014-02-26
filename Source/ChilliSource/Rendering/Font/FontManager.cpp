@@ -113,11 +113,11 @@ namespace ChilliSource
 				{
 					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, strFontFile, pResource)) 
 					{
-						DEBUG_LOG("Loading font " + strFontFile);
+						CS_DEBUG_LOG("Loading font " + strFontFile);
                         
 						mMapFilenameToResource.insert(std::make_pair(strFontFile, pResource));
 						
-						FontPtr pFont = SHARED_PTR_CAST<CFont>(pResource);
+						FontPtr pFont = std::static_pointer_cast<CFont>(pResource);
 						pFont->SetName(strFontFile);
 						pFont->SetOwningResourceManager(this);
 						pFont->SetLoaded(true);
@@ -135,11 +135,11 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				return SHARED_PTR_CAST<CFont>(pExistingResource->second);
+				return std::static_pointer_cast<CFont>(pExistingResource->second);
 			}
 			
 			//Resource not found
-			ERROR_LOG("Cannot find resource for font with path " + inFilePath);
+			CS_ERROR_LOG("Cannot find resource for font with path " + inFilePath);
 			return FontPtr();
 		}
 	}

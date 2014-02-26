@@ -10,8 +10,8 @@
 #ifndef _MOFLOW_OPENGL_TEXTUREMANAGER_H_
 #define _MOFLOW_OPENGL_TEXTUREMANAGER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 
 namespace ChilliSource
@@ -87,8 +87,8 @@ namespace ChilliSource
 			void RemoveRestorableTexture(CTexture* inpTexture);
 		private:
 #ifdef TARGET_ANDROID
-			DYNAMIC_ARRAY<Rendering::TextureWeakPtr> mapTextureCache;
-			HASH_MAP<CTexture*, Core::ImagePtr> mapBackedUpImages;
+			std::vector<Rendering::TextureWeakPtr> mapTextureCache;
+			std::unordered_map<CTexture*, Core::ImagePtr> mapBackedUpImages;
 #endif
 		};
 	}

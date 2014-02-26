@@ -13,14 +13,16 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_LISTENER_H_
 #define _MO_FLO_AUDIO_AUDIO_LISTENER_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource
 {
 	namespace Audio
 	{
-		class IAudioListener
+		class AudioListener
 		{
 		public:
-			virtual ~IAudioListener(){}
+			virtual ~AudioListener(){}
 			//------------------------------------------------------------
 			/// Set 3D Location
 			///
@@ -34,9 +36,6 @@ namespace ChilliSource
 			//-------------------------------------------------------------
 			virtual void Set3DLocation(Core::CVector3& invPos, Core::CVector3& invVel, Core::CVector3& invForward, Core::CVector3& invUp) = 0;
 		};
-		
-		typedef SHARED_PTR<IAudioListener> AudioListenerPtr;
-		typedef WEAK_PTR<IAudioListener> AudioListenerWeakPtr;
 	}
 }
 

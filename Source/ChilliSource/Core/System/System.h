@@ -14,7 +14,7 @@
 #ifndef _MOFLO_CORE_SYSTEM_H
 #define _MOFLO_CORE_SYSTEM_H
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
 namespace ChilliSource
@@ -40,7 +40,7 @@ namespace ChilliSource
             virtual const std::string& GetInterfaceTypeName() const = 0;
 		};
 		
-		typedef SHARED_PTR<ISystem> SystemPtr;
+		typedef std::shared_ptr<ISystem> SystemPtr;
 	}
 }
 

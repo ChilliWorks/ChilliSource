@@ -10,11 +10,11 @@
 #ifndef _MOFLOW_OPENGL_CUBEMAP_H_
 #define _MOFLOW_OPENGL_CUBEMAP_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace ChilliSource
 {
@@ -31,7 +31,7 @@ namespace ChilliSource
 			/// @param Source images (Must be 6)
 			/// @param Whether to create mip maps
 			//--------------------------------------------------
-			void Init(const DYNAMIC_ARRAY<Core::ResourcePtr>& inapSourceImages, bool inbWithMipsMaps);
+			void Init(const std::vector<Core::ResourcePtr>& inapSourceImages, bool inbWithMipsMaps);
 			//--------------------------------------------------
 			/// Is A
 			///

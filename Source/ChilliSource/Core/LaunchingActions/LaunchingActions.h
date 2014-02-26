@@ -9,6 +9,9 @@
 #ifndef _MOFLO_CORE_LAUNCHING_ACTIONS_H_
 #define _MOFLO_CORE_LAUNCHING_ACTIONS_H_
 
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
+
 namespace ChilliSource
 {
     namespace Core

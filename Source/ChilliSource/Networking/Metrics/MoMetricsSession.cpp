@@ -26,8 +26,8 @@ namespace ChilliSource
         
         void GenerateRequestID(std::string& outstrID)
         {
-            std::string strTime = Core::CStringConverter::ToString(Core::CApplication::GetSystemTime());
-            std::string strCounter = Core::CStringConverter::ToString(udwNonceCounter);
+            std::string strTime = Core::ToString(Core::CApplication::GetSystemTime());
+            std::string strCounter = Core::ToString(udwNonceCounter);
             
             udwNonceCounter++;
             outstrID = strTime + strCounter;
@@ -42,7 +42,7 @@ namespace ChilliSource
             Json::Value jParamArray(Json::arrayValue);
             for (u32 i = 0; i < astrParams.size(); ++i)
             {
-                incValue["Param" + STRING_CAST(i+1)] = astrParams[i];
+                incValue["Param" + Core::ToString(i+1)] = astrParams[i];
             }
 		}
         
@@ -57,7 +57,7 @@ namespace ChilliSource
             Json::Value jParamArray(Json::arrayValue);
             for (u32 i = 0; i < astrParams.size(); ++i)
             {
-                incValue["Param" + STRING_CAST(i+1)] = astrParams[i];
+                incValue["Param" + Core::ToString(i+1)] = astrParams[i];
             }
         }
         
@@ -73,38 +73,38 @@ namespace ChilliSource
             astrParams.reserve(udwNumParams);
             for (u32 i = 0; i < udwNumParams; ++i)
             {
-                astrParams.push_back(incValue["Param" + STRING_CAST(i+1)].asString());
+                astrParams.push_back(incValue["Param" + Core::ToString(i+1)].asString());
             }
 		}
         
-        CMoMetricsSession::CMoMetricsSession(IHttpConnectionSystem * inpHttpSystem, const std::string& instrMetricsUrl, const std::string& instrAppID, IExternalMetrics* inpExternalMetrics)
+        MoMetricsSession::MoMetricsSession(HttpConnectionSystem * inpHttpSystem, const std::string& instrMetricsUrl, const std::string& instrAppID, IExternalMetrics* inpExternalMetrics)
         : mpHttpSystem(inpHttpSystem), mstrRealmUrl(instrMetricsUrl), mstrAppID(instrAppID), mpExternalMetrics(inpExternalMetrics), mbIsClosed(false), mdwServerTimeDelta(0), mbActionInProgress(false), mbRequestInProgress(false),
         mudwCurrentDelayIndex(0), mLastActionTime(0)
         {
-            mstrID = STRING_CAST(Core::CApplication::GetSystemTime());
+            mstrID = Core::ToString(Core::CApplication::GetSystemTime());
         }
         
-        void CMoMetricsSession::SetConstant(const std::string& instrKey, const std::string& instrValue)
+        void MoMetricsSession::SetConstant(const std::string& instrKey, const std::string& instrValue)
         {
             mmapConstants[instrKey] = instrValue;
         }
 
-        bool CMoMetricsSession::ContainsConstant(const std::string& instrKey) const
+        bool MoMetricsSession::ContainsConstant(const std::string& instrKey) const
         {
             return mmapConstants.find(instrKey) != mmapConstants.end();
         }
         
-        void CMoMetricsSession::SetServerTimeDelta(s32 indwServerDelta)
+        void MoMetricsSession::SetServerTimeDelta(s32 indwServerDelta)
 		{
             mdwServerTimeDelta = indwServerDelta;
 		}
         
-        const std::string& CMoMetricsSession::GetID() const
+        const std::string& MoMetricsSession::GetID() const
         {
             return mstrID;
         }
         
-        void CMoMetricsSession::LoadFromCache(const std::string& instrID)
+        void MoMetricsSession::LoadFromCache(const std::string& instrID)
         {
             mQueuedEvents.clear();
             
@@ -147,7 +147,7 @@ namespace ChilliSource
             Core::CApplication::GetFileSystemPtr()->DeleteFile(Core::StorageLocation::k_cache,  instrID + ".mosession");
         }
         
-        void CMoMetricsSession::SaveToCache()
+        void MoMetricsSession::SaveToCache()
         {
             Json::Value jSession;
             
@@ -174,7 +174,7 @@ namespace ChilliSource
             {
                 Json::Value jConstants(Json::objectValue);
                 
-                for(HASH_MAP<std::string, std::string>::const_iterator it = mmapConstants.begin(); it != mmapConstants.end(); ++it)
+                for(std::unordered_map<std::string, std::string>::const_iterator it = mmapConstants.begin(); it != mmapConstants.end(); ++it)
                 {
                     jConstants[it->first] = it->second;
                 }
@@ -192,34 +192,34 @@ namespace ChilliSource
 			mQueuedEvents.clear();
         }
         
-        bool CMoMetricsSession::IsExpired() const
+        bool MoMetricsSession::IsExpired() const
         {
             s32 dwTimeSinceLastActivity = (s32)(Core::CApplication::GetSystemTime() - GetLastActivityTime());
             return (dwTimeSinceLastActivity > kSessionGraceTimeSecs);
         }
         
-        bool CMoMetricsSession::IsOpen() const
+        bool MoMetricsSession::IsOpen() const
         {
             return !mstrToken.empty();
         }
         
-        bool CMoMetricsSession::IsClosed() const
+        bool MoMetricsSession::IsClosed() const
         {
             return mbIsClosed;
         }
         
-        void CMoMetricsSession::QueueAction(Action ineAction)
+        void MoMetricsSession::QueueAction(Action ineAction)
         {
             mQueuedActions.push_back(ineAction);
             PerformNextAction();
         }
         
-        bool CMoMetricsSession::CanPerformNextAction() const
+        bool MoMetricsSession::CanPerformNextAction() const
         {
             return !mQueuedActions.empty() && !mbActionInProgress && ((Core::CApplication::GetSystemTime() - mLastActionTime) >= kaRetryDelaysSecs[mudwCurrentDelayIndex]);
         }
         
-        void CMoMetricsSession::PerformNextAction()
+        void MoMetricsSession::PerformNextAction()
         {
             if(!CanPerformNextAction())
                 return;
@@ -244,7 +244,7 @@ namespace ChilliSource
             }
         }
         
-        void CMoMetricsSession::OnActionComplete()
+        void MoMetricsSession::OnActionComplete()
         {
             mbActionInProgress = false;
             if(!mQueuedActions.empty())
@@ -252,7 +252,7 @@ namespace ChilliSource
             PerformNextAction();
         }
         
-        void CMoMetricsSession::OnActionRetry()
+        void MoMetricsSession::OnActionRetry()
         {
             if(mudwCurrentDelayIndex < (kudwNumRetrys-1))
             {
@@ -263,12 +263,12 @@ namespace ChilliSource
             PerformNextAction();
         }
         
-        void CMoMetricsSession::RequestAuthTokens()
+        void MoMetricsSession::RequestAuthTokens()
         {
             QueueAction(Action::k_createSession);
         }
         
-        void CMoMetricsSession::MakeSessionRequest()
+        void MoMetricsSession::MakeSessionRequest()
         {
             UpdateLastActivityTime();
 			
@@ -291,14 +291,14 @@ namespace ChilliSource
 			cJSession["Data"] = cJData;
             cJSession["Timestamp"] = (u32)Core::CApplication::GetSystemTime();
 			
-            MetricsRequest sRequest = {cJSession, "/session/create", IHttpRequest::CompletionDelegate(this, &CMoMetricsSession::OnAuthTokensRequestComplete), false};
+            MetricsRequest sRequest = {cJSession, "/session/create", HttpRequest::CompletionDelegate(this, &MoMetricsSession::OnAuthTokensRequestComplete), false};
             QueueRequest(sRequest);
             MakeNextRequest();
         }
         
-        void CMoMetricsSession::OnAuthTokensRequestComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+        void MoMetricsSession::OnAuthTokensRequestComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
 		{
-			if (ineResult == IHttpRequest::CompletionResult::k_timeout || inpRequest->GetResponseCode() == kHTTPBusy)
+			if (ineResult == HttpRequest::CompletionResult::k_timeout || inpRequest->GetResponseCode() == kHTTPBusy)
             {
                 OnActionRetry();
                 return;
@@ -322,14 +322,14 @@ namespace ChilliSource
             OnActionComplete();
 		}
         
-        void CMoMetricsSession::RequestLocationUpdate(const MetricsLocation& insLocation)
+        void MoMetricsSession::RequestLocationUpdate(const MetricsLocation& insLocation)
         {
             msLocation = insLocation;
             
             QueueAction(Action::k_updateLocation);
         }
         
-        void CMoMetricsSession::MakeLocationUpdateRequest(const MetricsLocation& insLocation)
+        void MoMetricsSession::MakeLocationUpdateRequest(const MetricsLocation& insLocation)
         {
             UpdateLastActivityTime();
 			
@@ -343,14 +343,14 @@ namespace ChilliSource
 			cJSession["Data"] = cJData;
             cJSession["Timestamp"] = (u32)Core::CApplication::GetSystemTime();
 			
-            MetricsRequest sRequest = {cJSession, "/session/update", IHttpRequest::CompletionDelegate(this, &CMoMetricsSession::OnLocationUpdateRequestComplete), true};
+            MetricsRequest sRequest = {cJSession, "/session/update", HttpRequest::CompletionDelegate(this, &MoMetricsSession::OnLocationUpdateRequestComplete), true};
             QueueRequest(sRequest);
             MakeNextRequest();
         }
         
-        void CMoMetricsSession::OnLocationUpdateRequestComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+        void MoMetricsSession::OnLocationUpdateRequestComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
         {
-            if (ineResult == IHttpRequest::CompletionResult::k_completed)
+            if (ineResult == HttpRequest::CompletionResult::k_completed)
             {
                 if(inpRequest->GetResponseCode() == kHTTPBusy)
                 {
@@ -364,17 +364,17 @@ namespace ChilliSource
             OnActionComplete();
         }
         
-        void CMoMetricsSession::UpdateLastActivityTime()
+        void MoMetricsSession::UpdateLastActivityTime()
         {
             mLastActivityTime = Core::CApplication::GetSystemTime();
         }
         
-        TimeIntervalSecs CMoMetricsSession::GetLastActivityTime() const
+        TimeIntervalSecs MoMetricsSession::GetLastActivityTime() const
         {
             return mLastActivityTime;
         }
         
-        void CMoMetricsSession::RecordEvent(const std::string & instrType, const DYNAMIC_ARRAY<std::string>& inastrParams, bool inbSummarise)
+        void MoMetricsSession::RecordEvent(const std::string & instrType, const std::vector<std::string>& inastrParams, bool inbSummarise)
         {
             UpdateLastActivityTime();
             
@@ -390,12 +390,12 @@ namespace ChilliSource
 			QueueEvent(sEvent);
         }
         
-        void CMoMetricsSession::QueueRequest(const MetricsRequest& insRequest)
+        void MoMetricsSession::QueueRequest(const MetricsRequest& insRequest)
         {
             mQueuedRequests.push_back(insRequest);
         }
         
-        void CMoMetricsSession::MakeNextRequest()
+        void MoMetricsSession::MakeNextRequest()
         {
             if(mQueuedRequests.empty() || mbRequestInProgress)
                 return;
@@ -424,22 +424,22 @@ namespace ChilliSource
             Json::FastWriter jWriter;
 			sRequestDetails.strBody = jWriter.write(sRequest.jBody);
             
-            HttpRequestPtr pRequest = mpHttpSystem->MakeRequest(sRequestDetails, IHttpRequest::CompletionDelegate(this, &CMoMetricsSession::OnQueuedRequestComplete));
+            HttpRequestPtr pRequest = mpHttpSystem->MakeRequest(sRequestDetails, HttpRequest::CompletionDelegate(this, &MoMetricsSession::OnQueuedRequestComplete));
             
             mmapRequestToDelegate.insert(std::make_pair(pRequest, sRequest.Delegate));
         }
         
-        void CMoMetricsSession::OnQueuedRequestComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+        void MoMetricsSession::OnQueuedRequestComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
         {
             mQueuedRequests.pop_front();
             
             mbRequestInProgress = false;
             
-            HASH_MAP<HttpRequestPtr, IHttpRequest::CompletionDelegate>::iterator it = mmapRequestToDelegate.find(inpRequest);
+            std::unordered_map<HttpRequestPtr, HttpRequest::CompletionDelegate>::iterator it = mmapRequestToDelegate.find(inpRequest);
             
             if(it != mmapRequestToDelegate.end())
             {
-                IHttpRequest::CompletionDelegate Delegate = it->second;
+                HttpRequest::CompletionDelegate Delegate = it->second;
                 mmapRequestToDelegate.erase(it);
                 Delegate(inpRequest, ineResult);
             }
@@ -447,14 +447,14 @@ namespace ChilliSource
             MakeNextRequest();
         }
         
-		void CMoMetricsSession::QueueEvent(const MetricsEvent & insEvent)
+		void MoMetricsSession::QueueEvent(const MetricsEvent & insEvent)
         {
 			mQueuedEvents.push_back(insEvent);
             
 			RequestFlushBatchEvents();
 		}
         
-        void CMoMetricsSession::AppendAuthDetails(MetricsRequest& insRequest) const
+        void MoMetricsSession::AppendAuthDetails(MetricsRequest& insRequest) const
         {
 			Json::Value jAuth;
 			
@@ -464,7 +464,7 @@ namespace ChilliSource
 			insRequest.jBody["Auth"] = jAuth;
 		}
         
-        void CMoMetricsSession::RequestFlushBatchEvents()
+        void MoMetricsSession::RequestFlushBatchEvents()
         {
 			bool bMeetsBatchRequirement = (mQueuedEvents.size() >= kudwMaxEventsPerBatch);
             
@@ -474,7 +474,7 @@ namespace ChilliSource
 			}
 		}
         
-        void CMoMetricsSession::RequestFlushEvents()
+        void MoMetricsSession::RequestFlushEvents()
         {
             u32 udwNumFullBatched = mQueuedEvents.size()/kudwMaxEventsPerBatch;
             u32 udwNumRemaining = mQueuedEvents.size()%kudwMaxEventsPerBatch;
@@ -489,7 +489,7 @@ namespace ChilliSource
             }
         }
         
-        void CMoMetricsSession::CompressEventBatch()
+        void MoMetricsSession::CompressEventBatch()
         {
             for(std::deque<MetricsEvent>::iterator iterOuter = mQueuedEvents.begin(); iterOuter < mQueuedEvents.end(); ++iterOuter)
             {
@@ -524,7 +524,7 @@ namespace ChilliSource
             }
         }
         
-		void CMoMetricsSession::MakeFlushRequest(u32 inudwNumEventsToFlush)
+		void MoMetricsSession::MakeFlushRequest(u32 inudwNumEventsToFlush)
         {
             CompressEventBatch();
             
@@ -546,7 +546,7 @@ namespace ChilliSource
                     it->ToJsonForServer(jEvent);
                     
                     //Add the constants
-                    for(HASH_MAP<std::string, std::string>::const_iterator it = mmapConstants.begin(); it != mmapConstants.end(); ++it)
+                    for(std::unordered_map<std::string, std::string>::const_iterator it = mmapConstants.begin(); it != mmapConstants.end(); ++it)
                     {
                         jEvent[it->first] = it->second;
                     }
@@ -557,14 +557,14 @@ namespace ChilliSource
 			
 			jMessage["Data"] = jEvents;
             
-            MetricsRequest sRequest = {jMessage, "/events/add", IHttpRequest::CompletionDelegate(this, &CMoMetricsSession::FlushEventsRequestCompletes), true};
+            MetricsRequest sRequest = {jMessage, "/events/add", HttpRequest::CompletionDelegate(this, &MoMetricsSession::FlushEventsRequestCompletes), true};
             QueueRequest(sRequest);
             MakeNextRequest();
 		}
 		
-		void CMoMetricsSession::FlushEventsRequestCompletes(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+		void MoMetricsSession::FlushEventsRequestCompletes(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
         {
-			if (ineResult == IHttpRequest::CompletionResult::k_completed)
+			if (ineResult == HttpRequest::CompletionResult::k_completed)
             {
                 if(inpRequest->GetResponseCode() == kHTTPBusy)
                 {
@@ -585,17 +585,17 @@ namespace ChilliSource
             OnActionComplete();
 		}
         
-        void CMoMetricsSession::RequestClose()
+        void MoMetricsSession::RequestClose()
         {
             QueueAction(Action::k_closeSession);
         }
         
-        void CMoMetricsSession::MakeCloseRequest()
+        void MoMetricsSession::MakeCloseRequest()
         {
             Json::Value jPostBody(Json::objectValue);
 			jPostBody["Timestamp"] = (u32)GetLastActivityTime();
             
-            MetricsRequest sRequest = {jPostBody, "/session/close", IHttpRequest::CompletionDelegate(this, &CMoMetricsSession::OnCloseRequestComplete), true};
+            MetricsRequest sRequest = {jPostBody, "/session/close", HttpRequest::CompletionDelegate(this, &MoMetricsSession::OnCloseRequestComplete), true};
             QueueRequest(sRequest);
             MakeNextRequest();
 			
@@ -603,9 +603,9 @@ namespace ChilliSource
 			mstrToken.clear();
         }
         
-        void CMoMetricsSession::OnCloseRequestComplete(HttpRequestPtr inpRequest, IHttpRequest::CompletionResult ineResult)
+        void MoMetricsSession::OnCloseRequestComplete(HttpRequestPtr inpRequest, HttpRequest::CompletionResult ineResult)
         {
-            if (ineResult == IHttpRequest::CompletionResult::k_completed)
+            if (ineResult == HttpRequest::CompletionResult::k_completed)
             {
                 if(inpRequest->GetResponseCode() == kHTTPBusy)
                 {
@@ -617,9 +617,9 @@ namespace ChilliSource
             OnActionComplete();
         }
         
-        void CMoMetricsSession::Destroy()
+        void MoMetricsSession::Destroy()
         {
-            for(HASH_MAP<HttpRequestPtr, IHttpRequest::CompletionDelegate>::iterator it = mmapRequestToDelegate.begin(); it != mmapRequestToDelegate.end(); ++it)
+            for(std::unordered_map<HttpRequestPtr, HttpRequest::CompletionDelegate>::iterator it = mmapRequestToDelegate.begin(); it != mmapRequestToDelegate.end(); ++it)
             {
                 HttpRequestPtr pRequest = it->first;
                 if(pRequest)
@@ -631,7 +631,7 @@ namespace ChilliSource
             mmapRequestToDelegate.clear();
         }
         
-        CMoMetricsSession::~CMoMetricsSession()
+        MoMetricsSession::~MoMetricsSession()
         {
             Destroy();
         }

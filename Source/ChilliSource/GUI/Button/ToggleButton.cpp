@@ -16,6 +16,7 @@
 
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 #include <ChilliSource/Audio/3D/AudioComponent.h>
 #include <ChilliSource/Audio/3D/AudioComponentFactory.h>
@@ -24,8 +25,8 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        Audio::AudioComponentPtr CToggleButton::mspDefaultSelectSound;
-        Audio::AudioComponentPtr CToggleButton::mspDefaultDeSelectSound;
+        Audio::AudioComponentSPtr CToggleButton::mspDefaultSelectSound;
+        Audio::AudioComponentSPtr CToggleButton::mspDefaultDeSelectSound;
         
 		DEFINE_META_CLASS(CToggleButton)
 
@@ -84,7 +85,7 @@ namespace ChilliSource
             Core::StorageLocation eOnTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("OnTextureLocation", strValue))
             {
-                eOnTextureLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eOnTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("OnTexture", strValue))
             {
@@ -94,7 +95,7 @@ namespace ChilliSource
             Core::StorageLocation eOffTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("OffTextureLocation", strValue))
             {
-                eOffTextureLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eOffTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("OffTexture", strValue))
             {
@@ -104,7 +105,7 @@ namespace ChilliSource
             Core::StorageLocation eOnSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("OnSpriteSheetLocation", strValue))
             {
-                eOnSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eOnSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("OnSpriteSheet", strValue))
             {
@@ -114,7 +115,7 @@ namespace ChilliSource
             Core::StorageLocation eOffSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("OffSpriteSheetLocation", strValue))
             {
-                eOffSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eOffSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("OffSpriteSheet", strValue))
             {
@@ -123,14 +124,14 @@ namespace ChilliSource
             //---Default index
             if(insParams.TryGetValue("OnSpriteSheetIndex", strValue))
             {
-                MOFLOW_ASSERT(OnSpriteSheet, "Sprite sheet index cannot be set without sprite sheet");
-                SetOnSpriteSheetIndex(Core::CStringConverter::ParseUnsignedInt(strValue));
+                CS_ASSERT(OnSpriteSheet, "Sprite sheet index cannot be set without sprite sheet");
+                SetOnSpriteSheetIndex(Core::ParseU32(strValue));
             }
             //---Off index
             if(insParams.TryGetValue("OffSpriteSheetIndex", strValue))
             {
-				MOFLOW_ASSERT(OffSpriteSheet, "Sprite sheet index cannot be set without sprite sheet");
-				SetOffSpriteSheetIndex(Core::CStringConverter::ParseUnsignedInt(strValue));
+				CS_ASSERT(OffSpriteSheet, "Sprite sheet index cannot be set without sprite sheet");
+				SetOffSpriteSheetIndex(Core::ParseU32(strValue));
             }
 			//---Default index ID
 			if(insParams.TryGetValue("OnSpriteSheetIndexID", strValue))
@@ -145,29 +146,29 @@ namespace ChilliSource
 			//---Size from image
             if(insParams.TryGetValue("SizeFromImage", strValue))
             {
-                SizeFromImage = Core::CStringConverter::ParseBool(strValue);
+                SizeFromImage = Core::ParseBool(strValue);
             }
 			//---Maintain Width
 			if(insParams.TryGetValue("HeightMaintain", strValue))
 			{
-				HeightMaintain = Core::CStringConverter::ParseBool(strValue);
+				HeightMaintain = Core::ParseBool(strValue);
 			}
 			//---Maintain Height
 			if(insParams.TryGetValue("WidthMaintain", strValue))
 			{
-				WidthMaintain = Core::CStringConverter::ParseBool(strValue);
+				WidthMaintain = Core::ParseBool(strValue);
 			}
 			//---Set Maintain Height
 			if(insParams.TryGetValue("SetHeightMaintain", strValue))
 			{
-				Core::CVector2 vSize = Core::CStringConverter::ParseVector2(strValue);
+				Core::CVector2 vSize = Core::ParseVector2(strValue);
 				HeightMaintain = true;
 				SetHeightMaintainingAspect(vSize.x, vSize.y);
 			}
 			//---Set Maintain Width
 			if(insParams.TryGetValue("SetWidthMaintain", strValue))
 			{
-				Core::CVector2 vSize = Core::CStringConverter::ParseVector2(strValue);
+				Core::CVector2 vSize = Core::ParseVector2(strValue);
 				WidthMaintain = true;
 				SetWidthMaintainingAspect(vSize.x, vSize.y);
 			}
@@ -176,21 +177,21 @@ namespace ChilliSource
             Core::StorageLocation eDeselectAudioLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SelectAudioEffectLocation", strValue))
             {
-                eSelectAudioLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSelectAudioLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("DeselectAudioEffectLocation", strValue))
             {
-                eDeselectAudioLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eDeselectAudioLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             //---Audio effect
             if(insParams.TryGetValue("SelectAudioEffect", strValue))
             {
-                Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
+                Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
                 SetSelectAudioEffect(pAudioFactory->CreateAudioComponent(eSelectAudioLocation, strValue, false, false));
             }
 			if(insParams.TryGetValue("DeselectAudioEffect", strValue))
             {
-                Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
+                Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
                 SetDeselectAudioEffect(pAudioFactory->CreateAudioComponent(eSelectAudioLocation, strValue, false, false));
             }
             
@@ -386,7 +387,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void CToggleButton::SetOnSpriteSheetIndexID(const std::string& instrID)
 		{
-			MOFLOW_ASSERT(OnSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+			CS_ASSERT(OnSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			OnSpriteSheetIndexID = instrID;
 			SetOnSpriteSheetIndex(OnSpriteSheet->GetFrameIndexByID(instrID));
 		}
@@ -397,7 +398,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void CToggleButton::SetOffSpriteSheetIndexID(const std::string& instrID)
 		{
-			MOFLOW_ASSERT(OffSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+			CS_ASSERT(OffSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			OffSpriteSheetIndexID = instrID;
 			SetOffSpriteSheetIndex(OffSpriteSheet->GetFrameIndexByID(instrID));
 		}
@@ -449,7 +450,7 @@ namespace ChilliSource
         ///
         /// @param Audio effect played when the button is selected
         //-----------------------------------------------------------
-        void CToggleButton::SetSelectAudioEffect(const Audio::AudioComponentPtr& inpEffect)
+        void CToggleButton::SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
         {
             mpSelectAudioEffect = inpEffect;
         }
@@ -458,19 +459,19 @@ namespace ChilliSource
 		///
 		/// @param Audio effect played when the button is selected
 		//-----------------------------------------------------------
-		void CToggleButton::SetDeselectAudioEffect(const Audio::AudioComponentPtr& inpEffect)
+		void CToggleButton::SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect)
 		{
 			mpDeselectAudioEffect = inpEffect;
 		}
         void CToggleButton::SetDefaultSelectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
         {
-            Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
+            Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
             mspDefaultSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
         }
         
         void CToggleButton::SetDefaultDeselectAudioEffect(Core::StorageLocation ineLocation, const std::string instrAudioEffect)
         {
-            Audio::IAudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::IAudioComponentFactory);
+            Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
             mspDefaultDeSelectSound = pAudioFactory->CreateAudioComponent(ineLocation, instrAudioEffect, false, false);
         }
         //-----------------------------------------------------------

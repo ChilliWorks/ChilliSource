@@ -7,8 +7,11 @@
 //
 
 #include <ChilliSource/Core/LaunchingActions/LaunchingActions.h>
+
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/JSON/json.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
 namespace ChilliSource
 {
@@ -20,14 +23,14 @@ namespace ChilliSource
             std::string strData;
         };
         
-        DYNAMIC_ARRAY<LaunchAction> gaLaunchActionCache;
+        std::vector<LaunchAction> gaLaunchActionCache;
         
-        typedef HASH_MAP<std::string, CLaunchingActions::ActionDelegate> MapActionToDelegate;
+        typedef std::unordered_map<std::string, CLaunchingActions::ActionDelegate> MapActionToDelegate;
         MapActionToDelegate gmapActionToDelegate;
         
         std::string ConvertURLToLaunchAction(const std::string& instrURL)
         {
-            DYNAMIC_ARRAY<std::string> aSplits = Core::CStringUtils::Split(instrURL, "//");
+            std::vector<std::string> aSplits = Core::CStringUtils::Split(instrURL, "//");
             if(aSplits.size() == 2) //The URL must have a scheme and a data blob;
             {
                 const std::string& strEncoded =  aSplits[1];
@@ -67,7 +70,7 @@ namespace ChilliSource
             
             gmapActionToDelegate[instrActionType] = inDelegate;
             
-            for(DYNAMIC_ARRAY<LaunchAction>::iterator it = gaLaunchActionCache.begin(); it != gaLaunchActionCache.end(); )
+            for(std::vector<LaunchAction>::iterator it = gaLaunchActionCache.begin(); it != gaLaunchActionCache.end(); )
             {
                 if(it->strAction == instrActionType)
                 {

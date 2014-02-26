@@ -1,6 +1,8 @@
 #ifndef _MO_FLO_CORE_VECTOR_3_H_
 #define _MO_FLO_CORE_VECTOR_3_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 #include <math.h>
 
 //=================================================

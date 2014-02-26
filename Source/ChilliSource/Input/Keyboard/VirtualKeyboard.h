@@ -9,6 +9,7 @@
 #ifndef _MO_FLO_INPUT_VIRTUAL_KEYBOARD_H_
 #define _MO_FLO_INPUT_VIRTUAL_KEYBOARD_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/String/UTF8String.h>
@@ -47,11 +48,11 @@ namespace ChilliSource
             k_all
         };
         
-		class IVirtualKeyboard 
+		class VirtualKeyboard 
 		{
 		public:
-			IVirtualKeyboard() : mbIsActive(false){}
-			virtual ~IVirtualKeyboard(){}
+			VirtualKeyboard() : mbIsActive(false){}
+			virtual ~VirtualKeyboard(){}
 			
 			virtual void Show() = 0;
 			virtual void Hide() = 0;

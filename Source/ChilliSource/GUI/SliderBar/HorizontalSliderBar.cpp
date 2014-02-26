@@ -10,6 +10,7 @@
 #include <ChilliSource/GUI/Image/ImageView.h>
 
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
@@ -79,7 +80,7 @@ namespace ChilliSource
             Core::StorageLocation eBarSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("BarSpriteSheetLocation", strValue))
             {
-                eBarSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eBarSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("BarSpriteSheet", strValue))
 			{
@@ -89,7 +90,7 @@ namespace ChilliSource
             Core::StorageLocation eSliderSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SliderSpriteSheetLocation", strValue))
             {
-                eSliderSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSliderSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("SliderSpriteSheet", strValue))
 			{
@@ -98,14 +99,14 @@ namespace ChilliSource
 			//---Background index
 			if(insParams.TryGetValue("BarSpriteSheetIndex", strValue))
 			{
-				MOFLOW_ASSERT(BarSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
-				SetBarSpriteSheetIndex(Core::CStringConverter::ParseUnsignedInt(strValue));
+				CS_ASSERT(BarSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+				SetBarSpriteSheetIndex(Core::ParseU32(strValue));
 			}
 			//---Slider index
 			if(insParams.TryGetValue("SliderSpriteSheetIndex", strValue))
 			{
-				MOFLOW_ASSERT(SliderSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
-				SetSliderSpriteSheetIndex(Core::CStringConverter::ParseUnsignedInt(strValue));
+				CS_ASSERT(SliderSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+				SetSliderSpriteSheetIndex(Core::ParseU32(strValue));
 			}
 			//---Background ID
 			if(insParams.TryGetValue("BarSpriteSheetIndexID", strValue))
@@ -120,7 +121,7 @@ namespace ChilliSource
 			//---Slider size
 			if(insParams.TryGetValue("UnifiedSliderSize", strValue))
 			{
-				Core::CVector4 vRawSize = Core::CStringConverter::ParseVector4(strValue);
+				Core::CVector4 vRawSize = Core::ParseVector4(strValue);
 				SetSliderSize(Core::UnifiedVector2(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w));
 			}
             
@@ -219,7 +220,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		void CHorizontalSliderBar::SetBarSpriteSheetIndexID(const std::string& instrID)
 		{
-			MOFLOW_ASSERT(BarSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+			CS_ASSERT(BarSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			BarSpriteSheetIndexID = instrID;
 			SetBarSpriteSheetIndex(BarSpriteSheet->GetFrameIndexByID(instrID));
 		}
@@ -230,7 +231,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		void CHorizontalSliderBar::SetSliderSpriteSheetIndexID(const std::string& instrID)
 		{
-			MOFLOW_ASSERT(SliderSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+			CS_ASSERT(SliderSpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
 			SliderSpriteSheetIndexID = instrID;
 			SetSliderSpriteSheetIndex(SliderSpriteSheet->GetFrameIndexByID(instrID));
 		}

@@ -12,11 +12,13 @@
 
 #ifdef DEBUG_STATS
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource
 {
     namespace Debugging
     {
-        class CDebugStats
+        class DebugStats
         {
         public:
             
@@ -33,7 +35,7 @@ namespace ChilliSource
             {
                 if(!mbEnabled) return;
                 
-                mmapEvents[instrType] = STRING_CAST(inValue);
+                mmapEvents[instrType] = ToString(inValue);
             }
             //----------------------------------------------------------------------------------
             /// Record Event (String Value)
@@ -107,7 +109,7 @@ namespace ChilliSource
             
         private:
             
-            typedef HASH_MAP<std::string, std::string> MapStringToString;
+            typedef std::unordered_map<std::string, std::string> MapStringToString;
             static MapStringToString mmapEvents;
             
             static bool mbEnabled;

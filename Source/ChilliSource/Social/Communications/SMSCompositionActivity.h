@@ -10,9 +10,11 @@
 #ifndef _MOFLO_SOCIAL_COMMUNICATIONS_SMSCOMPOSITIONSCREEN_H_
 #define _MOFLO_SOCIAL_COMMUNICATIONS_SMSCOMPOSITIONSCREEN_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Activity.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
+
 #include <vector>
 
 namespace ChilliSource {
@@ -34,7 +36,7 @@ namespace ChilliSource {
 			
 			typedef fastdelegate::FastDelegate1<SendResult> SendResultDelegate;
 			
-			virtual void Present(const DYNAMIC_ARRAY<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const SendResultDelegate & inCallback) = 0;
+			virtual void Present(const std::vector<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const SendResultDelegate & inCallback) = 0;
 			virtual void Dismiss() = 0;
 		};
 		

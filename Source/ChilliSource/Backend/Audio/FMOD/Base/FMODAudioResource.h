@@ -13,8 +13,8 @@
 #ifndef _MO_FLO_AUDIO_FMOD_FMOD_AUDIO_RESOURCE_H_
 #define _MO_FLO_AUDIO_FMOD_FMOD_AUDIO_RESOURCE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/Base/AudioResource.h>
-#include <ChilliSource/Audio/ForwardDeclarations.h>
 
 #include <fmod.hpp>
 #include <fmod_errors.h>
@@ -23,7 +23,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CFMODAudioResource : public Audio::IAudioResource 
+		class CFMODAudioResource : public Audio::AudioResource 
 		{
 		public:
             CFMODAudioResource();

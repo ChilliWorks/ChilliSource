@@ -62,7 +62,7 @@ namespace ChilliSource
             LocationLookup sItem( Core::CHashCRC32::GenerateHashCode(instrAttributeName), 0);
             
             // Binary search through a sorted array of items
-            DYNAMIC_ARRAY<LocationLookup>::iterator it;
+            std::vector<LocationLookup>::iterator it;
             it = std::lower_bound(maAttributes.begin(), maAttributes.end(), sItem, SortCachedLocations);
             
             if(it!=maAttributes.end()  && it->first == sItem.first)
@@ -88,7 +88,7 @@ namespace ChilliSource
             LocationLookup sItem( Core::CHashCRC32::GenerateHashCode(instrUniformName), 0);
             
             // Binary search through a sorted array of items
-            DYNAMIC_ARRAY<LocationLookup>::iterator it;
+            std::vector<LocationLookup>::iterator it;
             it =std::lower_bound(maUniforms.begin(), maUniforms.end(), sItem, SortCachedLocations);
             
             if(it!=maUniforms.end()  && it->first == sItem.first)
@@ -117,7 +117,7 @@ namespace ChilliSource
             
             if (shaderStream == nullptr || shaderStream->IsBad() == true)
 			{
-				ERROR_LOG("Cannot open shader file " + instrFilePath + " for reading");
+				CS_ERROR_LOG("Cannot open shader file " + instrFilePath + " for reading");
 				shaderStream->Close();
 				return false;
 			}
@@ -159,7 +159,7 @@ namespace ChilliSource
 			switch(ineShaderType)
 			{
 				case Rendering::ShaderType::k_combined:
-					ERROR_LOG("OpenGL ES 2.0 does not support combined vertex and pixel shaders");
+					CS_ERROR_LOG("OpenGL ES 2.0 does not support combined vertex and pixel shaders");
 					return false;
 				case Rendering::ShaderType::k_vertex:
 					GLShaderType = GL_VERTEX_SHADER;
@@ -176,18 +176,18 @@ namespace ChilliSource
 			
 			if(*pGLShader == 0)
 			{
-				FATAL_LOG("OpenGL ES 2.0 does not support shader type for " + instrShaderFile);
+				CS_FATAL_LOG("OpenGL ES 2.0 does not support shader type for " + instrShaderFile);
 				return false;
 			}
 			
 			//Load the shader source 
-			DEBUG_LOG("Loading shader " + instrShaderFile);
+			CS_DEBUG_LOG("Loading shader " + instrShaderFile);
 			std::string strSource = sstrShaderSource.str();
 			const GLchar* pGLSource = strSource.c_str();
 			glShaderSource(*pGLShader, 1, &pGLSource, nullptr);
 			
 			//Compile the shader and check for errors
-			DEBUG_LOG("Compiling shader " + instrShaderFile);
+			CS_DEBUG_LOG("Compiling shader " + instrShaderFile);
 			glCompileShader(*pGLShader);
 			
 			GLint Compiled;
@@ -203,17 +203,17 @@ namespace ChilliSource
 				{
 					char* ShaderLog = (char*)malloc(sizeof(char) * InfoLength);
 					glGetShaderInfoLog(*pGLShader, InfoLength, nullptr, ShaderLog);
-					ERROR_LOG("Compiling shader " + instrShaderFile + ". " + std::string(ShaderLog));
-					FATAL_LOG("Failed to compile shader");
+					CS_ERROR_LOG("Compiling shader " + instrShaderFile + ". " + std::string(ShaderLog));
+					CS_FATAL_LOG("Failed to compile shader");
 					free(ShaderLog);
 					return false;
 				}
 				
-				FATAL_LOG("Compiling shader " + instrShaderFile);
+				CS_FATAL_LOG("Compiling shader " + instrShaderFile);
 				return false;
 			}
 			
-			DEBUG_LOG("Shader compiled successfully\n");
+			CS_DEBUG_LOG("Shader compiled successfully\n");
 			return true;
 		}
 		//----------------------------------------------------------
@@ -233,7 +233,7 @@ namespace ChilliSource
 			switch(ineShaderType)
 			{
 				case Rendering::ShaderType::k_combined:
-					ERROR_LOG("OpenGL ES 2.0 does not support combined vertex and pixel shaders");
+					CS_ERROR_LOG("OpenGL ES 2.0 does not support combined vertex and pixel shaders");
 					return false;
 				case Rendering::ShaderType::k_vertex:
 					GLShaderType = GL_VERTEX_SHADER;
@@ -250,17 +250,17 @@ namespace ChilliSource
 			
 			if(*pGLShader == 0)
 			{
-				FATAL_LOG("OpenGL ES 2.0 does not support shader type");
+				CS_FATAL_LOG("OpenGL ES 2.0 does not support shader type");
 				return false;
 			}
 			
 			//Load the shader source
-			DEBUG_LOG("Loading shader from pre loaded source.");
+			CS_DEBUG_LOG("Loading shader from pre loaded source.");
 			const GLchar* pGLSource = instrShaderSource.c_str();
 			glShaderSource(*pGLShader, 1, &pGLSource, nullptr);
 			
 			//Compile the shader and check for errors
-			DEBUG_LOG("Compiling shader...");
+			CS_DEBUG_LOG("Compiling shader...");
 			glCompileShader(*pGLShader);
 			
 			GLint Compiled;
@@ -276,17 +276,17 @@ namespace ChilliSource
 				{
 					char* ShaderLog = (char*)malloc(sizeof(char) * InfoLength);
 					glGetShaderInfoLog(*pGLShader, InfoLength, nullptr, ShaderLog);
-					ERROR_LOG("Compiling shader. " + std::string(ShaderLog));
-					FATAL_LOG(std::string(pGLSource));
+					CS_ERROR_LOG("Compiling shader. " + std::string(ShaderLog));
+					CS_FATAL_LOG(std::string(pGLSource));
 					free(ShaderLog);
 					return false;
 				}
 				
-				FATAL_LOG("Compiling shader.");
+				CS_FATAL_LOG("Compiling shader.");
 				return false;
 			}
 			
-			DEBUG_LOG("Shader compiled successfully\n");
+			CS_DEBUG_LOG("Shader compiled successfully\n");
 			return true;
 		}
 		//----------------------------------------------------------
@@ -301,7 +301,7 @@ namespace ChilliSource
 			
 			if(mGLProgram == 0)
 			{
-				FATAL_LOG("Creating OpenGL ES shader program");
+				CS_FATAL_LOG("Creating OpenGL ES shader program");
 			}
 			
 			//Now attach our two shaders
@@ -325,13 +325,13 @@ namespace ChilliSource
 				{
 					char* ShaderLog = (char*)malloc(sizeof(char) * InfoLength);
 					glGetProgramInfoLog(mGLProgram, InfoLength, nullptr, ShaderLog);
-					ERROR_LOG("Linking shader: " + std::string(ShaderLog));
+					CS_ERROR_LOG("Linking shader: " + std::string(ShaderLog));
 					free(ShaderLog);
 					return false;
 				}
 			}
 			
-			DEBUG_LOG("Linking shader complete\n");
+			CS_DEBUG_LOG("Linking shader complete\n");
 			return true;
 		}
 		//----------------------------------------------------------

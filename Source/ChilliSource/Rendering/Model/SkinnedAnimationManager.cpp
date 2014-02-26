@@ -89,7 +89,7 @@ namespace ChilliSource
 						if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource)) 
 						{
 							//Add it to the cache
-							DEBUG_LOG("Loading skinned animation " + instrFilePath);
+							CS_DEBUG_LOG("Loading skinned animation " + instrFilePath);
 							mMapFilenameToResource.insert(std::make_pair(instrFilePath , pResource));
 							pResource->SetName(instrFilePath);
 							pResource->SetFilename(instrFilePath);
@@ -97,18 +97,18 @@ namespace ChilliSource
 							pResource->SetOwningResourceManager(static_cast<Core::IResourceManager*>(this));
 							pResource->SetLoaded(true);
 							
-							return SHARED_PTR_CAST<CSkinnedAnimation>(pResource);
+							return std::static_pointer_cast<CSkinnedAnimation>(pResource);
 						}
 					}
 				}
 			} 
 			else 
 			{
-				return SHARED_PTR_CAST<CSkinnedAnimation>(pExistingResource->second);
+				return std::static_pointer_cast<CSkinnedAnimation>(pExistingResource->second);
 			}
 			
 			//Resource not found
-			ERROR_LOG("Cannot find resource for skinned animation with path " + instrFilePath);
+			CS_ERROR_LOG("Cannot find resource for skinned animation with path " + instrFilePath);
 			return SkinnedAnimationPtr();
 		}
 		//-----------------------------------------------------------------
@@ -131,7 +131,7 @@ namespace ChilliSource
 					if(mResourceProviders[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
 					{
 						
-						DEBUG_LOG("Loading skinned animation " + instrFilePath);
+						CS_DEBUG_LOG("Loading skinned animation " + instrFilePath);
 						
 						pResource->SetName(instrFilePath);
 						pResource->SetFilename(instrFilePath);
@@ -143,18 +143,18 @@ namespace ChilliSource
 						{
 							//Add it to the cache
 							mMapFilenameToResource.insert(std::make_pair(instrFilePath, pResource));
-							return SHARED_PTR_CAST<CSkinnedAnimation>(pResource);
+							return std::static_pointer_cast<CSkinnedAnimation>(pResource);
 						}
 					}
 				}
 			} 
 			else 
 			{
-				return SHARED_PTR_CAST<CSkinnedAnimation>(pExistingResource->second);
+				return std::static_pointer_cast<CSkinnedAnimation>(pExistingResource->second);
 			}
 			
 			//Resource not found
-			ERROR_LOG("Cannot find resource for skinned animation with path " + instrFilePath);
+			CS_ERROR_LOG("Cannot find resource for skinned animation with path " + instrFilePath);
 			return SkinnedAnimationPtr();
 		}
 		//-----------------------------------------------------------------

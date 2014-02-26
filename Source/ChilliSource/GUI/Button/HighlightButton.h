@@ -9,11 +9,9 @@
 #ifndef _MOFLO_GUI_DEFAULTS_HIGHLIGHTBUTTON_H_
 #define _MOFLO_GUI_DEFAULTS_HIGHLIGHTBUTTON_H_
 
-#include <ChilliSource/GUI/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Button/Button.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
-
-#include <ChilliSource/Audio/ForwardDeclarations.h>
 
 namespace ChilliSource
 {
@@ -167,13 +165,13 @@ namespace ChilliSource
             ///
             /// @param Audio effect played when the button is selected
             //-----------------------------------------------------------
-            void SetSelectAudioEffect(const Audio::AudioComponentPtr& inpEffect);
+            void SetSelectAudioEffect(const Audio::AudioComponentSPtr& inpEffect);
 			//-----------------------------------------------------------
             /// Set De-Select Audio Effect
             ///
             /// @param Audio effect played when the button is selected
             //-----------------------------------------------------------
-            void SetDeselectAudioEffect(const Audio::AudioComponentPtr& inpEffect);
+            void SetDeselectAudioEffect(const Audio::AudioComponentSPtr& inpEffect);
 			//--------------------------------------------------------
 			/// Enable Size From Image
 			///
@@ -436,20 +434,20 @@ namespace ChilliSource
 
             ImageViewPtr mpBackgroundImage;
  
-            Audio::AudioComponentPtr mpSelectAudioEffect;
-			Audio::AudioComponentPtr mpDeselectAudioEffect;
+            Audio::AudioComponentSPtr mpSelectAudioEffect;
+			Audio::AudioComponentSPtr mpDeselectAudioEffect;
 			
             Core::Rectangle msDefaultUVs;
             Core::Rectangle msHighlightUVs;
             
 			bool mbSelected;
             
-            static Audio::AudioComponentPtr mspDefaultSelectSound;
-            static Audio::AudioComponentPtr mspDefaultDeSelectSound;
+            static Audio::AudioComponentSPtr mspDefaultSelectSound;
+            static Audio::AudioComponentSPtr mspDefaultDeSelectSound;
 		};
         
-        typedef SHARED_PTR<CHighlightButton> HighlightButtonPtr;
-		typedef WEAK_PTR<CHighlightButton> HighlightButtonWeakPtr;
+        typedef std::shared_ptr<CHighlightButton> HighlightButtonPtr;
+		typedef std::weak_ptr<CHighlightButton> HighlightButtonWeakPtr;
     }
 }
 

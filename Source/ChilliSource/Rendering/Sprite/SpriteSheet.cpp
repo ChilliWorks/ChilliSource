@@ -76,7 +76,7 @@ namespace ChilliSource
                 }
             }
             
-//            WARNING_LOG("Sprite not found for ID: " + inID);
+//            CS_WARNING_LOG("Sprite not found for ID: " + inID);
             return 0;
         }
         
@@ -113,7 +113,7 @@ namespace ChilliSource
                 return mStringIDLookups[inudwFrameIndex];
             }
             
-            WARNING_LOG("Sprite not found for Frame Index: " + STRING_CAST(inudwFrameIndex));
+            CS_WARNING_LOG("Sprite not found for Frame Index: " + Core::ToString(inudwFrameIndex));
             return Core::CStringUtils::BLANK;
         }		
 		//---------------------------------------------------------------------
@@ -300,7 +300,7 @@ namespace ChilliSource
 			
 			return Core::CStringUtils::BLANK;
 		}
-		const DYNAMIC_ARRAY<u32> * CSpriteSheet::GetFramesForAnimation(u32 inudwAnimIndex) const
+		const std::vector<u32> * CSpriteSheet::GetFramesForAnimation(u32 inudwAnimIndex) const
 		{
 			
 			if (inudwAnimIndex < mAnimationFrames.size())
@@ -309,7 +309,7 @@ namespace ChilliSource
 			return nullptr;
 		}
 		
-		bool CSpriteSheet::AddAnimation(std::string & instrName, const DYNAMIC_ARRAY<u32> & instrFrames)
+		bool CSpriteSheet::AddAnimation(std::string & instrName, const std::vector<u32> & instrFrames)
 		{
 			if (GetAnimationIndexByName(instrName) != UINT_MAX)
 			{
@@ -327,7 +327,7 @@ namespace ChilliSource
         /// @param The hashed string lookups into the sprite array
         /// @param The raw string lookups
         //---------------------------------------------------------------------
-        void CSpriteSheet::SetIDLookups(const DYNAMIC_ARRAY<u32>& inSpriteHashedIDLookups, const DYNAMIC_ARRAY<std::string>& inSpriteStringIDLookups)
+        void CSpriteSheet::SetIDLookups(const std::vector<u32>& inSpriteHashedIDLookups, const std::vector<std::string>& inSpriteStringIDLookups)
         {
             mIDLookups = inSpriteHashedIDLookups;
             mStringIDLookups = inSpriteStringIDLookups;

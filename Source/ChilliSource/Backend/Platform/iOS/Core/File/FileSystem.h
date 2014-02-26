@@ -10,8 +10,10 @@
 #ifndef _MOFLO_PLATFORM_IOS_FILEIO_FILESYSTEM_
 #define _MOFLO_PLATFORM_IOS_FILEIO_FILESYSTEM_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/File/FileStream.h>
+
 #include <string>
 
 
@@ -126,7 +128,7 @@ namespace ChilliSource
             /// @param Output dynamic array containing the filenames.
             //--------------------------------------------------------------
             void GetFileNamesWithExtensionInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
-                                                      const std::string& instrExtension, DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath = false) const;
+                                                      const std::string& instrExtension, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath = false) const;
             //--------------------------------------------------------------
             /// Get Path For Files With Name In Directory
             ///
@@ -141,7 +143,7 @@ namespace ChilliSource
             /// @param Output dynamic array containing the filenames.
             //--------------------------------------------------------------
             void GetPathForFilesWithNameInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                                 const std::string& instrName, DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath = false) const;
+                                                                 const std::string& instrName, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath = false) const;
             //--------------------------------------------------------------
             /// Get File Names In Directory
             ///
@@ -154,7 +156,7 @@ namespace ChilliSource
             /// @param Output dynamic array containing the filenames.
             //--------------------------------------------------------------
             void GetFileNamesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
-                                         DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath = false) const;
+                                         std::vector<std::string> &outstrFileNames, bool inbAppendFullPath = false) const;
             //--------------------------------------------------------------
             /// Get Directories In Directory
             ///
@@ -167,7 +169,7 @@ namespace ChilliSource
             /// @param Output dynamic array containing the dir names.
             //--------------------------------------------------------------
             void GetDirectoriesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
-                                           DYNAMIC_ARRAY<std::string> &outstrDirectories, bool inbAppendFullPath = false) const;
+                                           std::vector<std::string> &outstrDirectories, bool inbAppendFullPath = false) const;
             //--------------------------------------------------------------
             /// Does File Exist
             ///
@@ -278,7 +280,7 @@ namespace ChilliSource
             /// @param File name to append
             /// @param Out: All the paths for the given location
             //------------------------------------------------------------
-            void GetPathsForStorageLocation(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, DYNAMIC_ARRAY<std::string>& outaPaths) const;
+            void GetPathsForStorageLocation(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, std::vector<std::string>& outaPaths) const;
             //--------------------------------------------------------------
             /// Create Hashed Bundle File List
             ///
@@ -290,7 +292,7 @@ namespace ChilliSource
 			std::string mstrDocumentsPath;
             std::string mstrLibraryPath;
             
-            DYNAMIC_ARRAY<u32> mHashedPackageFileNames;
+            std::vector<u32> mHashedPackageFileNames;
 		};
 	}
 }

@@ -10,8 +10,7 @@
 #ifndef _MO_FLO_RENDERING_SKELETALANIMATION_H_
 #define _MO_FLO_RENDERING_SKELETALANIMATION_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
-
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 
@@ -26,9 +25,9 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		struct SkinnedAnimationFrame
 		{
-			DYNAMIC_ARRAY<Core::CVector3> mNodeTranslations;
-			DYNAMIC_ARRAY<Core::CQuaternion> mNodeOrientations;
-            DYNAMIC_ARRAY<Core::CVector3> mNodeScalings;
+			std::vector<Core::CVector3> mNodeTranslations;
+			std::vector<Core::CQuaternion> mNodeOrientations;
+            std::vector<Core::CVector3> mNodeScalings;
 		};
 		//---------------------------------------------------------------------
 		/// Skeletal Animation Resource.
@@ -96,7 +95,7 @@ namespace ChilliSource
 		private:
 			
 			f32 mfFrameTime;
-			DYNAMIC_ARRAY<SkinnedAnimationFramePtr> mFrames;
+			std::vector<SkinnedAnimationFramePtr> mFrames;
 		};
 	}
 }

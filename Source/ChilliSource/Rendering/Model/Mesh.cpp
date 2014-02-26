@@ -89,7 +89,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		SubMeshPtr CMesh::GetSubMeshByName(const std::string& instrName) const
 		{
-			for (DYNAMIC_ARRAY<SubMeshPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for (std::vector<SubMeshPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
 				if ((*it)->GetName() == instrName)
 					return (*it);
@@ -103,7 +103,7 @@ namespace ChilliSource
 		s32 CMesh::GetSubMeshIndexByName(const std::string& instrName) const
 		{
             u32 dwCount = 0;
-			for (DYNAMIC_ARRAY<SubMeshPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for (std::vector<SubMeshPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
 				if ((*it)->GetName() == instrName)
 					return dwCount;
@@ -128,7 +128,7 @@ namespace ChilliSource
 		{
 			int index = -1;
 			int currentIndex = 0;
-			for (DYNAMIC_ARRAY<SubMeshPtr>::iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for (std::vector<SubMeshPtr>::iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
 				if ((*it)->GetName() == instrName)
 					index = currentIndex;
@@ -154,19 +154,19 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Render
 		//-----------------------------------------------------------------
-		void CMesh::Render(IRenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const DYNAMIC_ARRAY<MaterialPtr>& inMaterials, const SkinnedAnimationGroupPtr& inpAnimationGroup) const
+		void CMesh::Render(IRenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const std::vector<MaterialPtr>& inMaterials, const SkinnedAnimationGroupPtr& inpAnimationGroup) const
 		{
-            MOFLOW_ASSERT(inMaterials.size() > 0, "Must have at least one material to render");
+            CS_ASSERT(inMaterials.size() > 0, "Must have at least one material to render");
 
-            DYNAMIC_ARRAY<CSubMesh*> aOpaqueSubMeshes;
+            std::vector<CSubMesh*> aOpaqueSubMeshes;
             aOpaqueSubMeshes.reserve(mSubMeshes.size());
             
-            DYNAMIC_ARRAY<CSubMesh*> aTransparentSubMeshes;
+            std::vector<CSubMesh*> aTransparentSubMeshes;
             aTransparentSubMeshes.reserve(mSubMeshes.size());
             
             //render all opaque stuff first
 			u32 udwCurrMaterial = 0;
-			for(DYNAMIC_ARRAY<SubMeshPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for(std::vector<SubMeshPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
                 const MaterialPtr& pMaterial = inMaterials[udwCurrMaterial];
                 udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
@@ -186,26 +186,26 @@ namespace ChilliSource
             
 			//render all opaque stuff first
             udwCurrMaterial = 0;
-			for(DYNAMIC_ARRAY<CSubMesh*>::const_iterator it = aOpaqueSubMeshes.begin(); it != aOpaqueSubMeshes.end(); ++it)
+			for(std::vector<CSubMesh*>::const_iterator it = aOpaqueSubMeshes.begin(); it != aOpaqueSubMeshes.end(); ++it)
 			{
                 const MaterialPtr& pMaterial = inMaterials[udwCurrMaterial];
                 udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
 					
 #ifdef DEBUG_STATS
-                CDebugStats::AddToEvent("Meshes", 1);
+                DebugStats::AddToEvent("Meshes", 1);
 #endif
                 (*it)->Render(inpRenderSystem, inmatWorld, pMaterial, inpAnimationGroup);
 			}
 			
 			//then transparent stuff
 			udwCurrMaterial = 0;
-			for(DYNAMIC_ARRAY<CSubMesh*>::const_iterator it = aTransparentSubMeshes.begin(); it != aTransparentSubMeshes.end(); ++it)
+			for(std::vector<CSubMesh*>::const_iterator it = aTransparentSubMeshes.begin(); it != aTransparentSubMeshes.end(); ++it)
 			{
                 const MaterialPtr& pMaterial = inMaterials[udwCurrMaterial];
                 udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
 				
 #ifdef DEBUG_STATS
-                CDebugStats::AddToEvent("Meshes_Trans", 1);
+                DebugStats::AddToEvent("Meshes_Trans", 1);
 #endif
                 (*it)->Render(inpRenderSystem, inmatWorld, pMaterial, inpAnimationGroup);
 			}
@@ -218,7 +218,7 @@ namespace ChilliSource
 			mudwTotalVerts = 0;
 			mudwTotalIndices = 0;
 			
-			for(DYNAMIC_ARRAY<SubMeshPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for(std::vector<SubMeshPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
 				mudwTotalVerts += (*it)->GetNumVerts();
 				mudwTotalIndices += (*it)->GetNumIndices();

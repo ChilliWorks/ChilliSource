@@ -10,13 +10,11 @@
 #ifndef _MO_FLO_RENDERING_CAMERA_COMPONENT_H_
 #define _MO_FLO_RENDERING_CAMERA_COMPONENT_H_
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 
 namespace ChilliSource
 {

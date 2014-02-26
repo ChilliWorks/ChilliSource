@@ -73,7 +73,7 @@ namespace ChilliSource
             {
                 //Lets cache the result and only compute again if required (i.e. on append or erase)
                 mudwLength = 0;
-                for(DYNAMIC_ARRAY<CodePoint>::const_iterator it = mCodePoints.begin(); it != mCodePoints.end(); ++it)
+                for(std::vector<CodePoint>::const_iterator it = mCodePoints.begin(); it != mCodePoints.end(); ++it)
                 {
                     mudwLength += (*it & 0xc0) != 0x80;
 
@@ -259,7 +259,7 @@ namespace ChilliSource
             else
             {
                 udwNumCodePoints = 0;
-                DEBUG_LOG("Invalid UT8 format");
+                CS_DEBUG_LOG("Invalid UT8 format");
             }
             
             for(u32 i=0; i<udwNumCodePoints; ++i)
@@ -305,7 +305,7 @@ namespace ChilliSource
             else if((*pLeadCodePoint) < 0xC0)
             {
                 udwNumCodePoints = 0;
-                DEBUG_LOG("Invalid UT8 format");
+                CS_DEBUG_LOG("Invalid UT8 format");
             }
             
             for(u32 i=0; i<udwNumCodePoints; ++i)
@@ -329,7 +329,7 @@ namespace ChilliSource
             u32 udwPosition = 0;
 
             //iterate over the code points of this string, copying the section we are interested in.
-            for(DYNAMIC_ARRAY<CodePoint>::const_iterator it = mCodePoints.begin(); it != mCodePoints.end(); ++it)
+            for(std::vector<CodePoint>::const_iterator it = mCodePoints.begin(); it != mCodePoints.end(); ++it)
             {
                 if (udwPosition >= inudwStartPosition + inudwLength)
                 {
@@ -423,7 +423,7 @@ namespace ChilliSource
             u32 udwOffset = 0;
             GetCharacter(inpIt, udwOffset);
 
-            for(DYNAMIC_ARRAY<CodePoint>::iterator it = mCodePoints.begin(); it != mCodePoints.end(); ++it)
+            for(std::vector<CodePoint>::iterator it = mCodePoints.begin(); it != mCodePoints.end(); ++it)
             {
                 if(&(*it) == inpIt)
                 {

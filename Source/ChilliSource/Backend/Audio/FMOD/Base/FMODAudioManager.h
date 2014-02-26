@@ -10,13 +10,14 @@
 #ifndef _MO_FLO_PLATFORM_IOS_FMOD_FMOD_AUDIO_MANAGER_H_
 #define _MO_FLO_PLATFORM_IOS_FMOD_FMOD_AUDIO_MANAGER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/Base/AudioManager.h>
 
 namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CFMODAudioManager : public Audio::IAudioManager
+		class CFMODAudioManager : public Audio::AudioManager
 		{
 		public:
 			
@@ -25,7 +26,7 @@ namespace ChilliSource
 			///
 			/// @return Concrete audio resource based on the audio system
 			//-----------------------------------------------------------------
-			Audio::AudioResourcePtr CreateAudioResource() const;
+			Audio::AudioResourceSPtr CreateAudioResource() const;
 		};
 	}
 }

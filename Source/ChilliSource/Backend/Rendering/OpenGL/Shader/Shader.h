@@ -13,9 +13,9 @@
 #ifndef _MOFLOW_OPENGL_SHADER_H_
 #define _MOFLOW_OPENGL_SHADER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
-#include <ChilliSource/Core/ForwardDeclarations.h>
 
 namespace ChilliSource
 {
@@ -105,12 +105,12 @@ namespace ChilliSource
             
             // Cached attribute and uniform locations
             typedef std::pair<u32, GLint> LocationLookup;
-            DYNAMIC_ARRAY<LocationLookup> maAttributes;
-            DYNAMIC_ARRAY<LocationLookup> maUniforms;
+            std::vector<LocationLookup> maAttributes;
+            std::vector<LocationLookup> maUniforms;
 		};
 		
-		typedef SHARED_PTR<CShader> ShaderPtr;
-		typedef WEAK_PTR<CShader> ShaderWeakPtr;
+		typedef std::shared_ptr<CShader> ShaderPtr;
+		typedef std::weak_ptr<CShader> ShaderWeakPtr;
 	}
 }
 

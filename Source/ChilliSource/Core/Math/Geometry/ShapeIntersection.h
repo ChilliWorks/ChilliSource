@@ -13,6 +13,7 @@
 #ifndef _MO_FLO_CORE_MATH_SHAPE_INTERSECTION_H_
 #define _MO_FLO_CORE_MATH_SHAPE_INTERSECTION_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 
 namespace ChilliSource

@@ -9,10 +9,9 @@
 #ifndef _MOFLO_GUI_GUIVIEWFACTORY_H_
 #define _MOFLO_GUI_GUIVIEWFACTORY_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
-
-#include <ChilliSource/GUI/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/XML/rapidxml_forward.h>
 
@@ -53,7 +52,7 @@ namespace ChilliSource
 			/// @param Optional dynamic array to which views will be pushed
             /// @return GUI View
             //--------------------------------------------------------
-            static GUIViewPtr CreateGUIViewFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile, DYNAMIC_ARRAY<GUIViewPtr>* outpViews = nullptr);
+            static GUIViewPtr CreateGUIViewFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile, std::vector<GUIViewPtr>* outpViews = nullptr);
 			//--------------------------------------------------------
             /// Create GUI View 
             ///
@@ -97,11 +96,11 @@ namespace ChilliSource
             /// @param View XML element
             /// @return Created view
             //--------------------------------------------------------
-            static GUIViewPtr CreateView(rapidxml::xml_node<char> * ipViewElement, DYNAMIC_ARRAY<GUIViewPtr>* outpViews = nullptr);
+            static GUIViewPtr CreateView(rapidxml::xml_node<char> * ipViewElement, std::vector<GUIViewPtr>* outpViews = nullptr);
             
         private:
             
-            typedef HASH_MAP<std::string, GUIViewCreateDelegate> MapDelegateToString;
+            typedef std::unordered_map<std::string, GUIViewCreateDelegate> MapDelegateToString;
             static MapDelegateToString mmapDelegateToType;
         };
     }

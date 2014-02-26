@@ -10,6 +10,7 @@
 #ifndef _MO_FLO_CORE_SCREEN_H_
 #define _MO_FLO_CORE_SCREEN_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 
 namespace ChilliSource

@@ -10,7 +10,7 @@
 #ifndef _MOFLO_CORE_MATHS_SHAPES_H_
 #define _MOFLO_CORE_MATHS_SHAPES_H_
 
-
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Quaternion.h>

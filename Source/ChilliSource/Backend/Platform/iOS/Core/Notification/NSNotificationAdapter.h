@@ -9,9 +9,12 @@
 #ifndef _NS_NOTIFICATION_ADAPTER_H_
 #define _NS_NOTIFICATION_ADAPTER_H_
 
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
+#include <ChilliSource/Core/Event/GenericEvent.h>
+
 #import <Foundation/Foundation.h>
 
-#include <ChilliSource/Core/Event/GenericEvent.h>
 
 typedef fastdelegate::FastDelegate0<> NotificationEventDelegate;
 

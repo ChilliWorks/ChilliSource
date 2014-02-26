@@ -59,10 +59,10 @@ namespace ChilliSource
                 {
                     if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
                     {
-                        DEBUG_LOG("Loading Scene Description " + instrFilePath);
+                        CS_DEBUG_LOG("Loading Scene Description " + instrFilePath);
                         mMapFilenameToResource.emplace(instrFilePath, pResource);
                         
-                        SceneDescPtr pSceneDesc = SHARED_PTR_CAST<CSceneDesc>(pResource);
+                        SceneDescPtr pSceneDesc = std::static_pointer_cast<CSceneDesc>(pResource);
                         pSceneDesc->SetName(instrFilePath);
                         pSceneDesc->SetOwningResourceManager(this);
                         pSceneDesc->SetFilename(instrFilePath);
@@ -74,9 +74,9 @@ namespace ChilliSource
                 }
             }
             else
-                return SHARED_PTR_CAST<CSceneDesc>(pExistingResource->second);
+                return std::static_pointer_cast<CSceneDesc>(pExistingResource->second);
             
-            ERROR_LOG("Cannot find resource for Scene Description with path " + instrFilePath);
+            CS_ERROR_LOG("Cannot find resource for Scene Description with path " + instrFilePath);
             return SceneDescPtr();
         }
         
@@ -89,7 +89,7 @@ namespace ChilliSource
                 ResourcePtr pResource(new CSceneDesc());
                 for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
                 {
-                    SceneDescPtr pSceneDesc = SHARED_PTR_CAST<CSceneDesc>(pResource);
+                    SceneDescPtr pSceneDesc = std::static_pointer_cast<CSceneDesc>(pResource);
                     pSceneDesc->SetName(instrFilePath);
                     pSceneDesc->SetOwningResourceManager(this);
                     pSceneDesc->SetFilename(instrFilePath);
@@ -98,7 +98,7 @@ namespace ChilliSource
 
                     if(mResourceProviders[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
                     {
-                        DEBUG_LOG("Loading Scene Description " + instrFilePath);
+                        CS_DEBUG_LOG("Loading Scene Description " + instrFilePath);
                         mMapFilenameToResource.emplace(instrFilePath, pResource);
                                                 
                         return pSceneDesc;
@@ -106,9 +106,9 @@ namespace ChilliSource
                 }
             }
             else
-                return SHARED_PTR_CAST<CSceneDesc>(pExistingResource->second);
+                return std::static_pointer_cast<CSceneDesc>(pExistingResource->second);
             
-            ERROR_LOG("Cannot find resource for Scene Description with path " + instrFilePath);
+            CS_ERROR_LOG("Cannot find resource for Scene Description with path " + instrFilePath);
             return SceneDescPtr();
         }
         

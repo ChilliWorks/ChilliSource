@@ -10,6 +10,7 @@
 #ifndef _MO_FLO_IOS_PLATFORM_GAME_CENTRE_H_
 #define _MO_FLO_IOS_PLATFORM_GAME_CENTRE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/Container/WorkerQueue.h>
@@ -41,8 +42,8 @@ namespace ChilliSource
         //---Containers
 		struct LeaderboardsInfo
 		{
-			DYNAMIC_ARRAY<Core::UTF8String> mNames;
-			DYNAMIC_ARRAY<std::string> mCategoryIDs;
+			std::vector<Core::UTF8String> mNames;
+			std::vector<std::string> mCategoryIDs;
 		};
         struct ScoreInfo
         {
@@ -51,7 +52,7 @@ namespace ChilliSource
             u64 uddwScore;                          //The raw score value
             bool bIsFriend;                         //Whether the player is a friend of the local player
         };
-        typedef DYNAMIC_ARRAY<ScoreInfo> ScoreContainer;
+        typedef std::vector<ScoreInfo> ScoreContainer;
         
 		struct LeaderboardScoreResults
 		{
@@ -336,8 +337,8 @@ namespace ChilliSource
 			
 			LeaderboardsInfo mLeaderboardsInfo;
             
-            HASH_MAP<std::string, LeaderboardScoreResults> mMapNameRequestToLeaderboardScoreResults;
-			HASH_MAP<std::string, LeaderboardScoreRequestDelegate> mMapRequestNameToRequestDelegate;
+            std::unordered_map<std::string, LeaderboardScoreResults> mMapNameRequestToLeaderboardScoreResults;
+			std::unordered_map<std::string, LeaderboardScoreRequestDelegate> mMapRequestNameToRequestDelegate;
 			Core::CEvent1<AuthenticationChangedDelegate> mAuthenticationChangedEvent;
 			Core::CEvent1<LeaderboardsInfoRequestEventDelegate> mLeaderboardsInfoRequestEvent;
 			Core::CEvent1<AchievementsResetDelegate> mAchievementsResetEvent;
@@ -348,14 +349,14 @@ namespace ChilliSource
 			Core::UTF8String mstrPlayerID;
 			Core::UTF8String mstrPlayerName;
             
-			DYNAMIC_ARRAY<std::string> mastrCompletedAchievements;
+			std::vector<std::string> mastrCompletedAchievements;
 			NSArray * mpAchievementDescriptions;//<Cheeky little NSArray of GKAchivementDescription objects
 			
             bool mbUseTurnBasedMultiplayer;     // true if we want to use turn-based multiplayer, otherwise false.
             u32 mudwNumOpenRequests;
 		};
 		
-        typedef SHARED_PTR<CGameCentreSystem> GameCentreSystemPtr;
+        typedef std::shared_ptr<CGameCentreSystem> GameCentreSystemPtr;
 	}
 }
 #endif

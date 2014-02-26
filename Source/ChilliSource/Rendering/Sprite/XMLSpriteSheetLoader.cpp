@@ -108,9 +108,9 @@ namespace ChilliSource
 					std::string strName = XMLUtils::GetAttributeValueOrDefault<std::string>(pAnimEl,"name",CStringUtils::BLANK);
 					std::string strFrames = XMLUtils::GetAttributeValueOrDefault<std::string>(pAnimEl,"frames",CStringUtils::BLANK);
 					
-                    DYNAMIC_ARRAY<std::string> astrFrames = CStringUtils::Split(strFrames," ");
+                    std::vector<std::string> astrFrames = CStringUtils::Split(strFrames," ");
 					//TODO: WTF?
-					DYNAMIC_ARRAY<u32> aIndices;
+					std::vector<u32> aIndices;
 				}
 			}
 

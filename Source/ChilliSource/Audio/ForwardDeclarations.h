@@ -1,44 +1,34 @@
-/*
- * File: ForwardDeclarations.h
- * Date: 16/11/2010 2010 
- * Description: 
- */
+//
+//  ForwardDeclarations.h
+//  Chilli Source
+//
+//  Created by Scott Downie on 21/04/2011.
+//  Copyright 2011 Tag Games. All rights reserved.
+//
 
-/*
- * Author: Scott Downie
- * Version: v 1.0
- * Copyright ©2010 Tag Games Limited - All rights reserved 
- */
-
-#ifndef _MOFLO_AUDIO_FORWARDDECLARATIONS_H_
-#define _MOFLO_AUDIO_FORWARDDECLARATIONS_H_
+#ifndef _CHILLISOURCE_AUDIO_FORWARDDECLARATIONS_H_
+#define _CHILLISOURCE_AUDIO_FORWARDDECLARATIONS_H_
 
 namespace ChilliSource
 {
 	namespace Audio
 	{
-		class IAudioSystem;
-		class IAudioManager;
-		
-		class CAudioComponent;
-        class CAudioListenerComponent;
-        
-        class IAudioResource;
-		class IAudioListener;
-		
-		class CSoundEffect;
-		class CAudioLoader;
-		
-		class IAudioComponentFactory;
-		
-		typedef SHARED_PTR<CAudioComponent> AudioComponentPtr;
-		typedef WEAK_PTR<CAudioComponent> AudioComponentWeakPtr;
-
-		typedef SHARED_PTR<CAudioListenerComponent> AudioListenerComponentPtr;
-		typedef WEAK_PTR<CAudioListenerComponent> AudioListenerComponentWeakPtr;
-        
-        typedef SHARED_PTR<IAudioResource> AudioResourcePtr;
-		typedef WEAK_PTR<IAudioResource> AudioResourceWeakPtr;
+        //--------------------------------------------------
+        /// 3D
+        //--------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(AudioComponent);
+        CS_FORWARD_DECLARE_CLASS(AudioComponentFactory);
+        CS_FORWARD_DECLARE_CLASS(AudioListener);
+        CS_FORWARD_DECLARE_CLASS(AudioListenerComponent);
+        //--------------------------------------------------
+        /// Base
+        //--------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(AudioLoader);
+        CS_FORWARD_DECLARE_CLASS(AudioManager);
+        CS_FORWARD_DECLARE_CLASS(AudioPlayer);
+        CS_FORWARD_DECLARE_CLASS(AudioResource);
+        CS_FORWARD_DECLARE_CLASS(AudioSystem);
+        CS_FORWARD_DECLARE_CLASS(SoundEvent);
 	}
 }
 

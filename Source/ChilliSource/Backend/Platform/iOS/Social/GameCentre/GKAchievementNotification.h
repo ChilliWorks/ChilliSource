@@ -6,6 +6,8 @@
 //  $Id$
 //
 
+#include <ChilliSource/ChilliSource.h>
+
 #import <UIKit/UIKit.h>
 
 @class GKAchievementNotification;

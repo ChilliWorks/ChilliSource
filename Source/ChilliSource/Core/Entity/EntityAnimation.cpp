@@ -101,7 +101,7 @@ namespace ChilliSource
             }
             
 			u32 highIndex = lowIndex + 1;
-            std::min(highIndex, mudwFrameCount-1);
+            highIndex = std::min(highIndex, mudwFrameCount-1);
             
             f32 fMin = mpafFrameTimes.get()[lowIndex];
             f32 fMax = mpafFrameTimes.get()[highIndex];

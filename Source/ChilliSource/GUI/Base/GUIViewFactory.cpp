@@ -99,7 +99,7 @@ namespace ChilliSource
 		/// @param Optional dynamic array to which views will be pushed
 		/// @return GUI View
 		//--------------------------------------------------------
-		GUIViewPtr CGUIViewFactory::CreateGUIViewFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile, DYNAMIC_ARRAY<GUIViewPtr>* outpViews)
+		GUIViewPtr CGUIViewFactory::CreateGUIViewFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile, std::vector<GUIViewPtr>* outpViews)
 		{
 			GUIViewPtr pRootView;
 
@@ -135,7 +135,7 @@ namespace ChilliSource
 		/// @param View XML element
 		/// @return Created view
 		//--------------------------------------------------------
-		GUIViewPtr CGUIViewFactory::CreateView(rapidxml::xml_node<>* inpViewElement, DYNAMIC_ARRAY<GUIViewPtr>* outpViews)
+		GUIViewPtr CGUIViewFactory::CreateView(rapidxml::xml_node<>* inpViewElement, std::vector<GUIViewPtr>* outpViews)
 		{
 			//Get the view type
 			//Get the param dictionary config values
@@ -194,7 +194,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				ERROR_LOG("Cannot create GUI view of type: " + strType);
+				CS_ERROR_LOG("Cannot create GUI view of type: " + strType);
 				return pView;
 			}
 		}

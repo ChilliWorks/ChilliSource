@@ -5,14 +5,14 @@ namespace ChilliSource
 {
 	namespace Input
 	{
-		DEFINE_NAMED_INTERFACE(IMouse);
+		DEFINE_NAMED_INTERFACE(Mouse);
 
 		//------------------------------------------------------
 		/// Constructor
 		///
 		/// Default
 		//------------------------------------------------------
-		IMouse::IMouse() : mpTouchProxy(nullptr)
+		Mouse::Mouse() : mpTouchProxy(nullptr)
 		{
 			memset(mbaButtonsDown, false, sizeof(bool) * (u32)MouseInputType::k_total);
 		}
@@ -23,7 +23,7 @@ namespace ChilliSource
 		///
 		/// @param Touch screen proxy
 		//------------------------------------------------------
-		IMouse::IMouse(ITouchScreen* inpTouchProxy) : mpTouchProxy(inpTouchProxy)
+		Mouse::Mouse(TouchScreen* inpTouchProxy) : mpTouchProxy(inpTouchProxy)
 		{
 			memset(mbaButtonsDown, false, sizeof(bool) * (u32)MouseInputType::k_total);
 		}
@@ -33,7 +33,7 @@ namespace ChilliSource
 		/// @param Mouse button type
 		/// @return Whether the mouse button is down
 		//------------------------------------------------------
-		bool IMouse::IsButtonDown(MouseInputType ineButton) const
+		bool Mouse::IsButtonDown(MouseInputType ineButton) const
 		{
 			return mbaButtonsDown[(u32)ineButton];
 		}
@@ -42,7 +42,7 @@ namespace ChilliSource
 		///
 		/// @return Event triggered on mouse button down
 		//------------------------------------------------------
-		Core::IEvent<MouseEventDelegate> & IMouse::GetMousePressedEvent()
+		Core::IEvent<MouseEventDelegate> & Mouse::GetMousePressedEvent()
 		{
 			return mOnMousePressedEvent;
 		}
@@ -51,7 +51,7 @@ namespace ChilliSource
 		///
 		/// @return Event triggered on mouse moved
 		//------------------------------------------------------
-		Core::IEvent<MouseEventDelegate> & IMouse::GetMouseMovedEvent()
+		Core::IEvent<MouseEventDelegate> & Mouse::GetMouseMovedEvent()
 		{
 			return mOnMouseMovedEvent;
 		}
@@ -60,7 +60,7 @@ namespace ChilliSource
 		///
 		/// @return Event triggered on mouse button up
 		//------------------------------------------------------
-		Core::IEvent<MouseEventDelegate> & IMouse::GetMouseReleasedEvent()
+		Core::IEvent<MouseEventDelegate> & Mouse::GetMouseReleasedEvent()
 		{
 			return mOnMouseReleasedEvent;
 		}

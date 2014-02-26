@@ -9,6 +9,7 @@
 #ifndef _MO_FLO_RENDERING_PARTICLES_EMITTERS_CONE_PARTICLE_EMITTER_H_
 #define _MO_FLO_RENDERING_PARTICLES_EMITTERS_CONE_PARTICLE_EMITTER_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
 
 namespace ChilliSource

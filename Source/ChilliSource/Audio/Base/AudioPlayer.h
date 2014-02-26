@@ -10,9 +10,8 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_PLAYER_H_
 #define _MO_FLO_AUDIO_AUDIO_PLAYER_H_
 
-#include <ChilliSource/Audio/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/3D/AudioComponent.h>
-
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource
@@ -21,7 +20,7 @@ namespace ChilliSource
     {
         const u32 kudwNumConcurrentSoundEffects = 10;
         
-        class CAudioPlayer
+        class AudioPlayer
         {
         public:
             
@@ -168,7 +167,7 @@ namespace ChilliSource
             /// @param Index of audio component to return
             /// @param Audio component or empty pointer of not found
             //------------------------------------------------
-            static AudioComponentPtr GetAudioComponentAtIndex(const u32 inudwIndex);
+            static AudioComponentSPtr GetAudioComponentAtIndex(const u32 inudwIndex);
             //------------------------------------------------
             /// Set Volume
             ///
@@ -193,17 +192,17 @@ namespace ChilliSource
             
         private:
             
-            static DYNAMIC_ARRAY<AudioComponentPtr> mAudioComponentCache;
-            static DYNAMIC_ARRAY<u32> maudwComponentPauseCount;
-            static DYNAMIC_ARRAY<bool> mabComponentLooping;
+            static std::vector<AudioComponentSPtr> mAudioComponentCache;
+            static std::vector<u32> maudwComponentPauseCount;
+            static std::vector<bool> mabComponentLooping;
             
-            typedef HASH_MAP<std::string, AudioResourcePtr> MapNameToResource;
+            typedef std::unordered_map<std::string, AudioResourceSPtr> MapNameToResource;
             static MapNameToResource mmapNamesToResources;
             
-            static IAudioManager* mpAudioManager;
-            static IAudioComponentFactory* mpAudioComponentFactory;
+            static AudioManager* mpAudioManager;
+            static AudioComponentFactory* mpAudioComponentFactory;
             
-            static AudioComponentPtr mpMusicComponent;
+            static AudioComponentSPtr mpMusicComponent;
             
             static f32 mfEffectVolume;
             

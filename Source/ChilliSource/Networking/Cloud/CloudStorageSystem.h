@@ -9,6 +9,7 @@
 #ifndef _MOFLO_CLOUDSTORAGESYSTEM_H
 #define _MOFLO_CLOUDSTORAGESYSTEM_H
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
@@ -18,7 +19,7 @@ namespace ChilliSource
 {
     namespace Networking
     {
-        class ICloudStorageSystem : public ChilliSource::Core::ISystem
+        class CloudStorageSystem : public ChilliSource::Core::ISystem
         {
         public:
             
@@ -111,9 +112,9 @@ namespace ChilliSource
             
             //--------------------------------------------------------------------------------------------------------//
             
-            DECLARE_NAMED_INTERFACE(ICloudStorageSystem);
+            DECLARE_NAMED_INTERFACE(CloudStorageSystem);
             
-            virtual ~ICloudStorageSystem(){}
+            virtual ~CloudStorageSystem(){}
             
             //Returns if the client meets the minimum OS version to use this feature
             static bool IsSupported() { return false; }
@@ -183,7 +184,7 @@ namespace ChilliSource
             }
             
             
-            DYNAMIC_ARRAY<FileSyncConflict*> mvsCachedConflicts;
+            std::vector<FileSyncConflict*> mvsCachedConflicts;
             
             OnQueryFilesCompletedDelegate mOnQueryFilesCompletedDelegate;
         };

@@ -12,13 +12,16 @@
 
 class TiXmlElement;
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/XML/rapidxml_forward.h>
+
+#include <unordered_map>
 
 namespace ChilliSource
 {
 	namespace Core 
     {
-		typedef HASH_MAP<std::string,std::string> StringToStringMap;
+		typedef std::unordered_map<std::string,std::string> StringToStringMap;
 		
 		struct ParamDictionary : public StringToStringMap
         {

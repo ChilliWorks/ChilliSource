@@ -8,6 +8,8 @@
  */
 
 #include <ChilliSource/Rendering/Particles/ParticleComponent.h>
+
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Rendering/Particles/ParticleSystem.h>
 #include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
 
@@ -89,7 +91,7 @@ namespace ChilliSource
             
 			mEffectors.push_back(inpEffector);
 			
-            for(DYNAMIC_ARRAY<CParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
+            for(std::vector<CParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
 			{
 				(*it)->AddEffector(inpEffector);
 			}
@@ -101,7 +103,7 @@ namespace ChilliSource
 		{
             bool bEmittingFinished = true;
             
-			for(DYNAMIC_ARRAY<CParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
+			for(std::vector<CParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
 			{
 				(*it)->Update(infDt * mfUpdateScaleFactor);
                 
@@ -123,7 +125,7 @@ namespace ChilliSource
         {
             if (ineShaderPass == ShaderPass::k_ambient)
             {
-                for(DYNAMIC_ARRAY<CParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
+                for(std::vector<CParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
                 {
                     (*it)->Render(inpRenderSystem, inpCam);
                 }
@@ -134,7 +136,7 @@ namespace ChilliSource
         //---------------------------------------------------
         void CParticleComponent::StartEmitting()
         {
-            for(DYNAMIC_ARRAY<CParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
+            for(std::vector<CParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
 			{
 				(*it)->StartEmitting();
 			}
@@ -144,7 +146,7 @@ namespace ChilliSource
 		//---------------------------------------------------
         void CParticleComponent::EmitBurst()
         {
-            for(DYNAMIC_ARRAY<CParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
+            for(std::vector<CParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
 			{
 				(*it)->EmitBurst();
 			}
@@ -154,7 +156,7 @@ namespace ChilliSource
         //---------------------------------------------------
         void CParticleComponent::StopEmitting()
         {
-            for(DYNAMIC_ARRAY<CParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
+            for(std::vector<CParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
 			{
 				(*it)->StopEmitting();
 			}
@@ -171,14 +173,14 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		CParticleComponent::~CParticleComponent()
 		{
-            for(DYNAMIC_ARRAY<CParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
+            for(std::vector<CParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
 			{
-				SAFE_DELETE(*it);
+				CS_SAFE_DELETE(*it);
 			}
 			
-			for(DYNAMIC_ARRAY<IParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
+			for(std::vector<IParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
             {
-                SAFE_DELETE(*itEffector);
+                CS_SAFE_DELETE(*itEffector);
             }
 			
             RemoveFromWorldSystem();

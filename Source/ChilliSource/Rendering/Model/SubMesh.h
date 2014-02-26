@@ -10,9 +10,9 @@
 #ifndef _MO_FLO_RENDERING_SUB_MESH_H_
 #define _MO_FLO_RENDERING_SUB_MESH_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
-
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector4.h>
@@ -29,9 +29,9 @@ namespace ChilliSource
 		//===============================================
 		struct InverseBindPose
 		{
-			DYNAMIC_ARRAY<ChilliSource::Core::CMatrix4x4> mInverseBindPoseMatrices;
+			std::vector<ChilliSource::Core::CMatrix4x4> mInverseBindPoseMatrices;
 		};
-		typedef SHARED_PTR<InverseBindPose> InverseBindPosePtr;
+		typedef std::shared_ptr<InverseBindPose> InverseBindPosePtr;
 		
 		class CSubMesh
 		{

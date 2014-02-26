@@ -73,7 +73,7 @@ namespace ChilliSource
 		//-------------------------------------------
 		void CParticleSystem::RemoveParticleComponent(CParticleComponent* inpParticle)
 		{
-            for(DYNAMIC_ARRAY<CParticleComponent*>::iterator it = mParticleComponents.begin(); it != mParticleComponents.end(); ++it)
+            for(std::vector<CParticleComponent*>::iterator it = mParticleComponents.begin(); it != mParticleComponents.end(); ++it)
             {
                 if((*it) == inpParticle)
                 {
@@ -93,14 +93,14 @@ namespace ChilliSource
 		{
             infDT *= mfTimeScaleFactor;
             
-			for(DYNAMIC_ARRAY<CParticleComponent*>::iterator it = mParticleComponents.begin(); it != mParticleComponents.end(); ++it)
+			for(std::vector<CParticleComponent*>::iterator it = mParticleComponents.begin(); it != mParticleComponents.end(); ++it)
 			{
                 if((*it)->GetEntityOwner())
                     (*it)->Update(infDT);
 			}
             
             // safe execution of emitter finished delegate
-			for(DYNAMIC_ARRAY<CParticleComponent*>::iterator it = mParticleComponents.begin(); it != mParticleComponents.end(); ++it)
+			for(std::vector<CParticleComponent*>::iterator it = mParticleComponents.begin(); it != mParticleComponents.end(); ++it)
 			{
                 if((*it)->GetEmittersFinished())
                 {

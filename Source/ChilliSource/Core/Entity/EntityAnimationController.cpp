@@ -53,7 +53,7 @@ namespace ChilliSource
 		
 		const EntityAnimationData* CEntityAnimationController::GetEntityAnimationDataWithName(const std::string & instrName) const 
 		{
-			HASH_MAP<std::string, EntityAnimationData>::const_iterator pEntry = mmapAnimDataToEntityName.find(instrName);
+			std::unordered_map<std::string, EntityAnimationData>::const_iterator pEntry = mmapAnimDataToEntityName.find(instrName);
 			if (pEntry == mmapAnimDataToEntityName.end())
 				return NULL;
 			else 

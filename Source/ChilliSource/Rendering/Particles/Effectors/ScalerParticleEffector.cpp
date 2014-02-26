@@ -8,6 +8,7 @@
 
 #include <ChilliSource/Rendering/Particles/Effectors/ScalerParticleEffector.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 namespace ChilliSource
 {
@@ -28,7 +29,7 @@ namespace ChilliSource
             //Colour change
             if(insParams.TryGetValue("TargetScale", strTemp))
             {
-                float fScale = Core::CStringConverter::ParseFloat(strTemp);
+                float fScale = Core::ParseF32(strTemp);
                 mvTargetScale.x = fScale;
                 mvTargetScale.y = fScale;
                 mvTargetScale.z = fScale;
@@ -36,7 +37,7 @@ namespace ChilliSource
             //Energy level
             if(insParams.TryGetValue("AtEnergyLevel", strTemp))
             {
-                mfActiveEnergyLevel = Core::CStringConverter::ParseFloat(strTemp);
+                mfActiveEnergyLevel = Core::ParseF32(strTemp);
             }
         }
         //-----------------------------------------------------

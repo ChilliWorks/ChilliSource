@@ -46,7 +46,7 @@ namespace ChilliSource
         ///
         /// @param Sprite array
 		//------------------------------------------------------
-		void CSpriteBatch::Build(DYNAMIC_ARRAY<CSpriteComponent::SpriteData>* inpSprites)
+		void CSpriteBatch::Build(std::vector<CSpriteComponent::SpriteData>* inpSprites)
 		{
 			//Sanity check
 			if(!mpSpriteBuffer) return;
@@ -65,7 +65,7 @@ namespace ChilliSource
 			u32 VertIdx = 0;
 									
 			//The vertex data depends on the sprite vertex layout.
-			for(DYNAMIC_ARRAY<CSpriteComponent::SpriteData>::iterator pSpriteItr = inpSprites->begin(); pSpriteItr != inpSprites->end(); ++pSpriteItr)
+			for(std::vector<CSpriteComponent::SpriteData>::iterator pSpriteItr = inpSprites->begin(); pSpriteItr != inpSprites->end(); ++pSpriteItr)
 			{
 				MapSpriteIntoBuffer(&pVBuffer[VertIdx], (*pSpriteItr));
 				VertIdx+=4;
@@ -153,14 +153,14 @@ namespace ChilliSource
 		{
             if(inudwStride > 0)
             {
-                MOFLOW_ASSERT(inMaterial.GetActiveShaderProgram(), "Cannot render a sprite batch with no active shader.");
+                CS_ASSERT(inMaterial.GetActiveShaderProgram(), "Cannot render a sprite batch with no active shader.");
                 
                 mpSpriteBuffer->Bind();
 			
                 //Tell the render system to draw the contents of the buffer
                 inpRenderSystem->ApplyMaterial(inMaterial);
 #ifdef DEBUG_STATS
-                CDebugStats::AddToEvent("Verts", (inudwStride*2)/3);
+                DebugStats::AddToEvent("Verts", (inudwStride*2)/3);
 #endif
                 inpRenderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Core::CMatrix4x4::IDENTITY);
             }
@@ -176,14 +176,14 @@ namespace ChilliSource
 		{
             if(mpSpriteBuffer->GetIndexCount() > 0)
             {
-                MOFLOW_ASSERT(inMaterial.GetActiveShaderProgram(), "Cannot render a sprite batch with no active shader.");
+                CS_ASSERT(inMaterial.GetActiveShaderProgram(), "Cannot render a sprite batch with no active shader.");
                 
                 mpSpriteBuffer->Bind();
                 
                 //Tell the render system to draw the contents of the buffer
                 inpRenderSystem->ApplyMaterial(inMaterial);
 #ifdef DEBUG_STATS
-                CDebugStats::AddToEvent("Verts", (mpSpriteBuffer->GetIndexCount()*2)/3);
+                DebugStats::AddToEvent("Verts", (mpSpriteBuffer->GetIndexCount()*2)/3);
 #endif
                 inpRenderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Core::CMatrix4x4::IDENTITY);
             }
@@ -212,7 +212,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		CSpriteBatch::~CSpriteBatch() 
 		{
-			SAFE_DELETE(mpSpriteBuffer);
+			CS_SAFE_DELETE(mpSpriteBuffer);
 		}
 	}
 }

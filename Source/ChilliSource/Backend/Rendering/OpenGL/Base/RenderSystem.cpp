@@ -61,7 +61,7 @@ namespace ChilliSource
 			//Set the current context
             if(!mContext || ![EAGLContext setCurrentContext: mContext])
             {
-                FATAL_LOG("Cannot Create OpenGL ES 2.0 Context");
+                CS_FATAL_LOG("Cannot Create OpenGL ES 2.0 Context");
             }
 #endif
 		}
@@ -77,13 +77,13 @@ namespace ChilliSource
         //----------------------------------------------------------
         bool CRenderSystem::Init(u32 inudwWidth, u32 inudwHeight)
 		{
-            MOFLOW_ASSERT((inudwWidth > 0 && inudwHeight > 0), "Cannot create and OpenGL ES view with size ZERO");
+            CS_ASSERT((inudwWidth > 0 && inudwHeight > 0), "Cannot create and OpenGL ES view with size ZERO");
 #ifdef TARGET_WINDOWS
 			GLenum GlewError = glewInit();
 			if(GLEW_OK != GlewError)
 			{
 				//Problem: glewInit failed, something is seriously wrong.
-				FATAL_LOG("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
+				CS_FATAL_LOG("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
 			}
 #endif
 #ifdef TARGET_ANDROID
@@ -92,7 +92,7 @@ namespace ChilliSource
 #endif
             
             mpRenderCapabilities = Core::CApplication::GetSystemImplementing<CRenderCapabilities>();
-            MOFLOW_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
+            CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
             mpRenderCapabilities->CalculateCapabilities();
             
             ForceRefreshRenderStates();
@@ -186,7 +186,7 @@ namespace ChilliSource
                 {
                     ApplyRenderStates(inMaterial);
                     
-                    ShaderPtr pShader = SHARED_PTR_CAST<CShader>(inMaterial.GetActiveShaderProgram());
+                    ShaderPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
                     GLuint GLShaderProgram = pShader->GetProgramID();
                     
                     if(GLShaderProgram != 0)
@@ -226,13 +226,13 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Joints
         //----------------------------------------------------------
-        void CRenderSystem::ApplyJoints(const DYNAMIC_ARRAY<Core::CMatrix4x4>& inaJoints)
+        void CRenderSystem::ApplyJoints(const std::vector<Core::CMatrix4x4>& inaJoints)
         {
             if(mJointsHandle != -1)
             {
                 //remove the final column from the joint matrix data as it is always going to be [0 0 0 1].
-                DYNAMIC_ARRAY<Core::CVector4> aJointVectors;
-                for (DYNAMIC_ARRAY<Core::CMatrix4x4>::const_iterator it = inaJoints.begin(); it != inaJoints.end(); ++it)
+                std::vector<Core::CVector4> aJointVectors;
+                for (std::vector<Core::CMatrix4x4>::const_iterator it = inaJoints.begin(); it != inaJoints.end(); ++it)
                 {
                     aJointVectors.push_back(Core::CVector4(it->m[0], it->m[4], it->m[8], it->m[12]));
                     aJointVectors.push_back(Core::CVector4(it->m[1], it->m[5], it->m[9], it->m[13]));
@@ -302,7 +302,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CRenderSystem::GetUniformLocations(const Rendering::CMaterial &inMaterial)
         {
-            ShaderPtr pShader = SHARED_PTR_CAST<CShader>(inMaterial.GetActiveShaderProgram());
+            ShaderPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
             
             //Get the required handles to the shader variables (Uniform)
             mmatWVPHandle = pShader->GetUniformLocation("umatWorldViewProj");
@@ -337,11 +337,11 @@ namespace ChilliSource
             
             if(inMaterial.GetTextures().empty() == false)
             {
-                MOFLOW_ASSERT(inMaterial.GetTextures().size() <= mpRenderCapabilities->GetNumTextureUnits(), "RenderSystem::ApplyMaterial -> Trying to bind more textures than there area texture units");
+                CS_ASSERT(inMaterial.GetTextures().size() <= mpRenderCapabilities->GetNumTextureUnits(), "RenderSystem::ApplyMaterial -> Trying to bind more textures than there area texture units");
                 
                 for(u32 i=0; i<inMaterial.GetTextures().size(); ++i)
                 {
-                    mpaTextureHandles[i].first = pShader->GetUniformLocation(std::string("uTexture"+STRING_CAST(i)).c_str());
+                    mpaTextureHandles[i].first = pShader->GetUniformLocation(std::string("uTexture"+Core::ToString(i)).c_str());
                 }
             }
         }
@@ -350,7 +350,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CRenderSystem::ApplyShaderVariables(const Rendering::CMaterial &inMaterial, GLuint inShaderProg)
 		{
-            ShaderPtr pShader = SHARED_PTR_CAST<CShader>(inMaterial.GetActiveShaderProgram());
+            ShaderPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
 			//Get and set all the custom shader variables
 			for(Rendering::MapStringToFloat::const_iterator it = inMaterial.mMapFloatShaderVars.begin(); it!= inMaterial.mMapFloatShaderVars.end(); ++it)
 			{
@@ -473,7 +473,7 @@ namespace ChilliSource
                     
                     if(mShadowMapTexHandle >= 0)
                     {
-                        MOFLOW_ASSERT(mudwNumBoundTextures <= mpRenderCapabilities->GetNumTextureUnits(), "RenderSystem::ApplyMaterial -> Trying to bind more textures than there area texture units");
+                        CS_ASSERT(mudwNumBoundTextures <= mpRenderCapabilities->GetNumTextureUnits(), "RenderSystem::ApplyMaterial -> Trying to bind more textures than there area texture units");
                         pLightComponent->GetShadowMapPtr()->Bind(mudwNumBoundTextures);
                         glUniform1i(mShadowMapTexHandle, mudwNumBoundTextures);
                         ++mudwNumBoundTextures;
@@ -589,8 +589,8 @@ namespace ChilliSource
         void CRenderSystem::RenderVertexBuffer(Rendering::IMeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::CMatrix4x4& inmatWorld)
 		{
 #ifdef DEBUG_STATS
-            CDebugStats::AddToEvent("DrawCalls", 1u);
-			CDebugStats::AddToEvent("Verts", inudwNumVerts);
+            DebugStats::AddToEvent("DrawCalls", 1u);
+			DebugStats::AddToEvent("Verts", inudwNumVerts);
 #endif
             
 			//Set the new model view matrix based on the camera view matrix and the object matrix
@@ -624,7 +624,7 @@ namespace ChilliSource
         void CRenderSystem::RenderBuffer(Rendering::IMeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::CMatrix4x4& inmatWorld)
 		{
 #ifdef DEBUG_STATS
-            CDebugStats::AddToEvent("DrawCalls", 1u);
+            DebugStats::AddToEvent("DrawCalls", 1u);
 #endif
 
 			//Set the new model view matrix based on the camera view matrix and the object matrix
@@ -963,7 +963,7 @@ namespace ChilliSource
 						break;
 					case Rendering::AlphaBlend::k_unknown:
 					default:
-						ERROR_LOG("Open GL ES Unknown blend function");
+						CS_ERROR_LOG("Open GL ES Unknown blend function");
 						break;
 				};
                 
@@ -996,7 +996,7 @@ namespace ChilliSource
 						break;
 					case Rendering::AlphaBlend::k_unknown:
 					default:
-						ERROR_LOG("Open GL ES Unknown blend function");
+						CS_ERROR_LOG("Open GL ES Unknown blend function");
 						break;
 				};
 				
@@ -1109,7 +1109,7 @@ namespace ChilliSource
 			//Check we don't exceed the GL limits of this device
 			if(udwAttributeCount > (u32)mdwMaxVertAttribs)
 			{
-				FATAL_LOG("OpenGL ES 2.0: Shader exceeds maximum vertex attributes " + STRING_CAST(mdwMaxVertAttribs));
+				CS_FATAL_LOG("OpenGL ES 2.0: Shader exceeds maximum vertex attributes " + Core::ToString(mdwMaxVertAttribs));
 			}
 			
             // Enable and disable the vertex attribs that have changed
@@ -1170,7 +1170,7 @@ namespace ChilliSource
 				case Rendering::PrimitiveType::k_line:
 					return GL_LINES;
 				default:
-					ERROR_LOG("Invalid primitive type OpenGLES");
+					CS_ERROR_LOG("Invalid primitive type OpenGLES");
 					return -1;
 			}
 		}
@@ -1214,7 +1214,7 @@ namespace ChilliSource
 		void CRenderSystem::BackupMeshBuffers()
 		{
 #ifdef TARGET_ANDROID
-			for(DYNAMIC_ARRAY<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
+			for(std::vector<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
 			{
 				(*it)->Backup();
 			}
@@ -1226,7 +1226,7 @@ namespace ChilliSource
 		void CRenderSystem::RestoreMeshBuffers()
 		{
 #ifdef TARGET_ANDROID
-			for(DYNAMIC_ARRAY<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
+			for(std::vector<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
 			{
 				(*it)->Restore();
 			}
@@ -1238,7 +1238,7 @@ namespace ChilliSource
 		void CRenderSystem::RemoveBuffer(Rendering::IMeshBuffer* inpBuffer)
 		{
 #ifdef TARGET_ANDROID
-			for(DYNAMIC_ARRAY<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
+			for(std::vector<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
 			{
 				if ((*it) == inpBuffer)
 				{
@@ -1254,7 +1254,7 @@ namespace ChilliSource
 		void CRenderSystem::CheckForGLErrors()
 		{
 			//get an array of all the errors that have occurred
-			DYNAMIC_ARRAY<GLenum> errorArray;
+			std::vector<GLenum> errorArray;
 			GLenum currentError = glGetError();
 			while (currentError != GL_NO_ERROR)
 			{
@@ -1263,30 +1263,30 @@ namespace ChilliSource
 			}
             
 			//print out the meaning of each error found
-			for (DYNAMIC_ARRAY<GLenum>::iterator it = errorArray.begin(); it != errorArray.end(); ++it)
+			for (std::vector<GLenum>::iterator it = errorArray.begin(); it != errorArray.end(); ++it)
 			{
 				switch (*it)
 				{
                     case GL_NO_ERROR:
-                        ERROR_LOG("GL_NO_ERROR -> Somethings gone wrong, this should not be getting reported as an error.");
+                        CS_ERROR_LOG("GL_NO_ERROR -> Somethings gone wrong, this should not be getting reported as an error.");
                         break;
                     case GL_INVALID_ENUM:
-                        ERROR_LOG("GL_INVALID_ENUM -> An unacceptable value is specified for an enumerated argument. The offending command is ignored and has no other side effect than to set the error flag.");
+                        CS_ERROR_LOG("GL_INVALID_ENUM -> An unacceptable value is specified for an enumerated argument. The offending command is ignored and has no other side effect than to set the error flag.");
                         break;
                     case GL_INVALID_VALUE:
-                        ERROR_LOG("GL_INVALID_VALUE -> A numeric argument is out of range. The offending command is ignored and has no other side effect than to set the error flag.");
+                        CS_ERROR_LOG("GL_INVALID_VALUE -> A numeric argument is out of range. The offending command is ignored and has no other side effect than to set the error flag.");
                         break;
                     case GL_INVALID_OPERATION:
-                        ERROR_LOG("GL_INVALID_OPERATION -> The specified operation is not allowed in the current state. The offending command is ignored and has no other side effect than to set the error flag.");
+                        CS_ERROR_LOG("GL_INVALID_OPERATION -> The specified operation is not allowed in the current state. The offending command is ignored and has no other side effect than to set the error flag.");
                         break;
                     case GL_INVALID_FRAMEBUFFER_OPERATION:
-                        ERROR_LOG("GL_INVALID_FRAMEBUFFER_OPERATION -> The command is trying to render to or read from the framebuffer while the currently bound framebuffer is not framebuffer complete (i.e. the return value from glCheckFramebufferStatus is not GL_FRAMEBUFFER_COMPLETE). The offending command is ignored and has no other side effect than to set the error flag.");
+                        CS_ERROR_LOG("GL_INVALID_FRAMEBUFFER_OPERATION -> The command is trying to render to or read from the framebuffer while the currently bound framebuffer is not framebuffer complete (i.e. the return value from glCheckFramebufferStatus is not GL_FRAMEBUFFER_COMPLETE). The offending command is ignored and has no other side effect than to set the error flag.");
                         break;
                     case GL_OUT_OF_MEMORY:
-                        ERROR_LOG("GL_OUT_OF_MEMORY -> There is not enough memory left to execute the command. The state of the GL is undefined, except for the state of the error flags, after this error is recorded.");
+                        CS_ERROR_LOG("GL_OUT_OF_MEMORY -> There is not enough memory left to execute the command. The state of the GL is undefined, except for the state of the error flags, after this error is recorded.");
                         break;
                     default:
-                        ERROR_LOG("Something's gone wrong, unknown GL error code.");
+                        CS_ERROR_LOG("Something's gone wrong, unknown GL error code.");
                         break;
 				}
 			}

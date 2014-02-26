@@ -14,6 +14,7 @@
 #ifndef __MO_FLO_CORE_CRYPTOGRAPHIC_HMAC_SHA1_H__
 #define __MO_FLO_CORE_CRYPTOGRAPHIC_HMAC_SHA1_H__
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Cryptographic/SHA1.h>
 
 //typedef unsigned char BYTE ;

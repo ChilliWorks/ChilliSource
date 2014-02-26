@@ -9,9 +9,9 @@
 #ifndef _MOFLOW_RENDERINGPLATFORM_OPENGL_RENDERCAPABILITIES_H_
 #define _MOFLOW_RENDERINGPLATFORM_OPENGL_RENDERCAPABILITIES_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
-
 
 namespace ChilliSource
 {

@@ -7,6 +7,7 @@
  *
  */
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/VertexDeclaration.h>
 
 namespace ChilliSource

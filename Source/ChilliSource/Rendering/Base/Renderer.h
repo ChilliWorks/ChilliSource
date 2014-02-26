@@ -10,10 +10,8 @@
 #ifndef _MO_FLO_RENDERING_RENDERER_H_
 #define _MO_FLO_RENDERING_RENDERER_H_
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Entity/Component.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
 namespace ChilliSource
@@ -101,7 +99,7 @@ namespace ChilliSource
             /// @param Light components
             /// @param Render components
             //----------------------------------------------------------
-            void RenderShadowMap(CCameraComponent* inpCameraComponent, DYNAMIC_ARRAY<CDirectionalLightComponent*>& inaLightComponents, DYNAMIC_ARRAY<IRenderComponent*>& inaRenderables);
+            void RenderShadowMap(CCameraComponent* inpCameraComponent, std::vector<CDirectionalLightComponent*>& inaLightComponents, std::vector<IRenderComponent*>& inaRenderables);
             //----------------------------------------------------------
             /// Render Shadow Map
             ///
@@ -111,7 +109,7 @@ namespace ChilliSource
             /// @param Light component
             /// @param Render components
             //----------------------------------------------------------
-            void RenderShadowMap(CCameraComponent* inpCameraComponent, CDirectionalLightComponent* inpLightComponent, DYNAMIC_ARRAY<IRenderComponent*>& inaRenderables);
+            void RenderShadowMap(CCameraComponent* inpCameraComponent, CDirectionalLightComponent* inpLightComponent, std::vector<IRenderComponent*>& inaRenderables);
 			//----------------------------------------------------------
 			/// Render
 			///
@@ -123,7 +121,7 @@ namespace ChilliSource
             /// @param The shader pass.
             /// @param Renderables
 			//----------------------------------------------------------
-			void Render(CCameraComponent* inpCameraComponent, ShaderPass ineShaderPass, DYNAMIC_ARRAY<IRenderComponent*>& inaRenderables);
+			void Render(CCameraComponent* inpCameraComponent, ShaderPass ineShaderPass, std::vector<IRenderComponent*>& inaRenderables);
             //----------------------------------------------------------
 			/// Render UI
             ///
@@ -153,8 +151,8 @@ namespace ChilliSource
             /// @param Out: Dir lights
             /// @param Out: Point lights
 			//----------------------------------------------------------
-			void FindRenderableObjectsInScene(Core::CScene* pScene, DYNAMIC_ARRAY<IRenderComponent*>& outaRenderCache, DYNAMIC_ARRAY<CCameraComponent*>& outaCameraCache,
-                                              DYNAMIC_ARRAY<CDirectionalLightComponent*>& outaDirectionalLightComponentCache, DYNAMIC_ARRAY<CPointLightComponent*>& outaPointLightComponentCache, CAmbientLightComponent*& outpAmbientLight) const;
+			void FindRenderableObjectsInScene(Core::CScene* pScene, std::vector<IRenderComponent*>& outaRenderCache, std::vector<CCameraComponent*>& outaCameraCache,
+                                              std::vector<CDirectionalLightComponent*>& outaDirectionalLightComponentCache, std::vector<CPointLightComponent*>& outaPointLightComponentCache, CAmbientLightComponent*& outpAmbientLight) const;
             //----------------------------------------------------------
             /// Cull Renderables
             ///
@@ -162,7 +160,7 @@ namespace ChilliSource
             /// @param Renderables to cull
             /// @param [Out]: Visible renderables
             //----------------------------------------------------------
-            void CullRenderables(CCameraComponent* inpCamera, const DYNAMIC_ARRAY<IRenderComponent*>& inaRenderCache, DYNAMIC_ARRAY<IRenderComponent*>& outaRenderCache) const;
+            void CullRenderables(CCameraComponent* inpCamera, const std::vector<IRenderComponent*>& inaRenderCache, std::vector<IRenderComponent*>& outaRenderCache) const;
             //----------------------------------------------------------
             /// Cull Renderables
             ///
@@ -170,7 +168,7 @@ namespace ChilliSource
             /// @param Renderables to cull
             /// @param [Out]: Visible renderables
             //----------------------------------------------------------
-            void CullRenderables(CPointLightComponent* inpLightComponent, const DYNAMIC_ARRAY<IRenderComponent*>& inaRenderCache, DYNAMIC_ARRAY<IRenderComponent*>& outaRenderCache) const;
+            void CullRenderables(CPointLightComponent* inpLightComponent, const std::vector<IRenderComponent*>& inaRenderCache, std::vector<IRenderComponent*>& outaRenderCache) const;
 			//----------------------------------------------------------
 			/// Filter Scene Renderables
 			///
@@ -180,7 +178,7 @@ namespace ChilliSource
             /// @param Out: Opaque renderables
             /// @param Out: Transparent renderables
 			//----------------------------------------------------------
-			void FilterSceneRenderables(const DYNAMIC_ARRAY<IRenderComponent*>& inaRenderables, DYNAMIC_ARRAY<IRenderComponent*>& outaOpaque, DYNAMIC_ARRAY<IRenderComponent*>& outaTransparent) const;
+			void FilterSceneRenderables(const std::vector<IRenderComponent*>& inaRenderables, std::vector<IRenderComponent*>& outaOpaque, std::vector<IRenderComponent*>& outaTransparent) const;
             //----------------------------------------------------------
 			/// Filter Shadow Map Renderables
 			///
@@ -190,7 +188,7 @@ namespace ChilliSource
             /// @param List of renderable objects
             /// @param Out: renderables
 			//----------------------------------------------------------
-			void FilterShadowMapRenderables(const DYNAMIC_ARRAY<IRenderComponent*>& inaRenderables, DYNAMIC_ARRAY<IRenderComponent*>& outaRenderables) const;
+			void FilterShadowMapRenderables(const std::vector<IRenderComponent*>& inaRenderables, std::vector<IRenderComponent*>& outaRenderables) const;
             //----------------------------------------------------------
             /// Get Cull Predicate
             ///
@@ -215,7 +213,7 @@ namespace ChilliSource
             /// @param Camera component
             /// @param Renderables
             //----------------------------------------------------------
-            void SortOpaque(CCameraComponent* inpCameraComponent, DYNAMIC_ARRAY<IRenderComponent*>& inaRenderables) const;
+            void SortOpaque(CCameraComponent* inpCameraComponent, std::vector<IRenderComponent*>& inaRenderables) const;
             //----------------------------------------------------------
             /// Sort Transparent
             ///
@@ -225,7 +223,7 @@ namespace ChilliSource
             /// @param Camera component
             /// @param Renderables
             //----------------------------------------------------------
-            void SortTransparent(CCameraComponent* inpCameraComponent, DYNAMIC_ARRAY<IRenderComponent*>& inaRenderables) const;
+            void SortTransparent(CCameraComponent* inpCameraComponent, std::vector<IRenderComponent*>& inaRenderables) const;
             
         private:
             

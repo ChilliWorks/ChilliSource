@@ -22,14 +22,14 @@ namespace ChilliSource
 		//-------------------------------------------------
 		CFMODAudioResource::CFMODAudioResource() : mpFMODSound(nullptr)
 		{
-            Audio::IAudioResource::SetStreamed(false);
+            Audio::AudioResource::SetStreamed(false);
 		}
         //-------------------------------------------------
         /// Is A
         //-------------------------------------------------
         bool CFMODAudioResource::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
         {
-            return (inInterfaceID == Audio::IAudioResource::InterfaceID);
+            return (inInterfaceID == Audio::AudioResource::InterfaceID);
         }
 		//--------------------------------------------------
 		/// Get Length

@@ -10,6 +10,7 @@
 #ifndef _MOFLO_RENDERING_ITEXTURE_H_
 #define _MOFLO_RENDERING_ITEXTURE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 
 namespace ChilliSource

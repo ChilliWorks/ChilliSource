@@ -11,9 +11,9 @@
 #include <ChilliSource/Rendering/Sprite/SpriteSheet.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetManager.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
-
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 namespace ChilliSource
 {
@@ -55,7 +55,7 @@ namespace ChilliSource
             Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SpriteSheetLocation", strValue))
             {
-                eSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("SpriteSheet", strValue))
             {
@@ -71,39 +71,39 @@ namespace ChilliSource
             //---Sprite sheet indices
             if(insParams.TryGetValue("TopLeftIndex", strValue))
             {
-                msIndices.udwTopLeft = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msIndices.udwTopLeft = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("TopRightIndex", strValue))
             {
-                msIndices.udwTopRight = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msIndices.udwTopRight = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("BottomLeftIndex", strValue))
             {
-                msIndices.udwBottomLeft = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msIndices.udwBottomLeft = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("BottomRightIndex", strValue))
             {
-                msIndices.udwBottomRight = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msIndices.udwBottomRight = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("TopIndex", strValue))
             {
-                msIndices.udwTopCentre = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msIndices.udwTopCentre = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("BottomIndex", strValue))
             {
-                msIndices.udwBottomCentre = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msIndices.udwBottomCentre = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("LeftIndex", strValue))
             {
-                msIndices.udwLeftCentre = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msIndices.udwLeftCentre = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("RightIndex", strValue))
             {
-                msIndices.udwRightCentre = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msIndices.udwRightCentre = Core::ParseU32(strValue);
             }
             if(insParams.TryGetValue("CentreIndex", strValue))
             {
-                msIndices.udwMiddleCentre = Core::CStringConverter::ParseUnsignedInt(strValue);
+                msIndices.udwMiddleCentre = Core::ParseU32(strValue);
             }
             //---Index IDs
             if(insParams.TryGetValue("TopLeftIndexID", strValue))
@@ -145,29 +145,29 @@ namespace ChilliSource
 			//---Maintain Width
 			if(insParams.TryGetValue("HeightMaintain", strValue))
 			{
-				HeightMaintain = Core::CStringConverter::ParseBool(strValue);
+				HeightMaintain = Core::ParseBool(strValue);
 			}
 			//---Maintain Height
 			if(insParams.TryGetValue("WidthMaintain", strValue))
 			{
-				WidthMaintain = Core::CStringConverter::ParseBool(strValue);
+				WidthMaintain = Core::ParseBool(strValue);
 			}
 			//---Set Maintain Width
 			if(insParams.TryGetValue("SetHeightMaintain", strValue))
 			{
-				Core::CVector2 vSize = Core::CStringConverter::ParseVector2(strValue);
+				Core::CVector2 vSize = Core::ParseVector2(strValue);
 				SetHeightMaintainingAspect(vSize.x, vSize.y);
 			}
 			//---Set Maintain Height
 			if(insParams.TryGetValue("SetWidthMaintain", strValue))
 			{
-				Core::CVector2 vSize = Core::CStringConverter::ParseVector2(strValue);
+				Core::CVector2 vSize = Core::ParseVector2(strValue);
 				SetWidthMaintainingAspect(vSize.x, vSize.y);
 			}
 			//---Centre Touch Consumption
 			if(insParams.TryGetValue("CentreTouchConsumption", strValue))
 			{
-				CentreTouchConsumption = Core::CStringConverter::ParseBool(strValue);
+				CentreTouchConsumption = Core::ParseBool(strValue);
 			}
         }
         //---------------------------------------------------------

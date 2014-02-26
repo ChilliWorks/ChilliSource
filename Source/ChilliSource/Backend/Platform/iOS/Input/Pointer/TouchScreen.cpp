@@ -28,7 +28,7 @@ namespace ChilliSource
 		}
 		bool CTouchScreen::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == Input::ITouchScreen::InterfaceID;
+			return inInterfaceID == Input::TouchScreen::InterfaceID;
 		}
 		void CTouchScreen::OnTouchBegan(UITouch* inpNativeTouch)
 		{

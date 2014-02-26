@@ -9,6 +9,7 @@
 #ifndef _MOFLOW_CORE_CONTAINERS_HASHED_ARRAY_H_
 #define _MOFLOW_CORE_CONTAINERS_HASHED_ARRAY_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
@@ -40,7 +41,7 @@ namespace ChilliSource
             CHashedArray(u32 inudwCapacity, const HashDelegate& inDelegate) 
             : mudwCapacity(inudwCapacity), mudwSize(0), mHashDelegate(inDelegate), mbSortCacheValid(true)
             {
-                MOFLOW_ASSERT(inudwCapacity > 0, "Cannot create an array with capacity zero");
+                CS_ASSERT(inudwCapacity > 0, "Cannot create an array with capacity zero");
                 mpaStorage = new KeyValue[inudwCapacity];
             }
             //-------------------------------------------
@@ -84,7 +85,7 @@ namespace ChilliSource
                     return false;
                 }
                 
-                MOFLOW_ASSERT(mHashDelegate, "Key type cannot be hashed without providing a custom hash method");
+                CS_ASSERT(mHashDelegate, "Key type cannot be hashed without providing a custom hash method");
                 u32 udwHash = mHashDelegate(inKey);
                 mpaStorage[mudwSize].first = udwHash;
                 mpaStorage[mudwSize].second = inValue;
@@ -108,7 +109,7 @@ namespace ChilliSource
                     mbSortCacheValid = true;
                 }
                 
-                MOFLOW_ASSERT(mHashDelegate, "Key type cannot be hashed without providing a custom hash method");
+                CS_ASSERT(mHashDelegate, "Key type cannot be hashed without providing a custom hash method");
                 
                 u32 udwHash = mHashDelegate(inKey);
                 s32 dwIndex = FindIndex(udwHash);
@@ -153,7 +154,7 @@ namespace ChilliSource
                     mbSortCacheValid = true;
                 }
                 
-                MOFLOW_ASSERT(mHashDelegate, "Key type cannot be hashed without providing a custom hash method");
+                CS_ASSERT(mHashDelegate, "Key type cannot be hashed without providing a custom hash method");
                 
                 u32 udwHash = mHashDelegate(inKey);
                 s32 dwIndex = FindIndex(udwHash);
@@ -179,7 +180,7 @@ namespace ChilliSource
                     mbSortCacheValid = true;
                 }
                 
-                MOFLOW_ASSERT(mHashDelegate, "Key type cannot be hashed without providing a custom hash method");
+                CS_ASSERT(mHashDelegate, "Key type cannot be hashed without providing a custom hash method");
                 
                 u32 udwHash = mHashDelegate(inKey);
                 s32 dwIndex = FindIndex(udwHash);
@@ -344,7 +345,7 @@ namespace ChilliSource
             CHashedArray(u32 inudwCapacity) 
             : mudwCapacity(inudwCapacity), mudwSize(0), mbSortCacheValid(true)
             {
-                MOFLOW_ASSERT(inudwCapacity > 0, "Cannot create an array with capacity zero");
+                CS_ASSERT(inudwCapacity > 0, "Cannot create an array with capacity zero");
                 mpaStorage = new KeyValue[inudwCapacity];
             }
             //-------------------------------------------
@@ -636,7 +637,7 @@ namespace ChilliSource
             CHashedArray(u32 inudwCapacity) 
             : mudwCapacity(inudwCapacity), mudwSize(0), mbSortCacheValid(true)
             {
-                MOFLOW_ASSERT(inudwCapacity > 0, "Cannot create an array with capacity zero");
+                CS_ASSERT(inudwCapacity > 0, "Cannot create an array with capacity zero");
                 mpaStorage = new KeyValue[inudwCapacity];
             }
             //-------------------------------------------

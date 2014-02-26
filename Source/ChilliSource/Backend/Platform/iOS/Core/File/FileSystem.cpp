@@ -56,7 +56,7 @@ namespace ChilliSource
 			char path[PATH_MAX];
 			if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)path, PATH_MAX))
 			{
-				ERROR_LOG("Changing working directory to resource folder");
+				CS_ERROR_LOG("Changing working directory to resource folder");
 			}
 			CFRelease(resourcesURL);
 			return std::string(path)  + "/";
@@ -137,7 +137,7 @@ namespace ChilliSource
             //check the requested storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available on this platform!");
+                CS_ERROR_LOG("Requested Storage Location is not available on this platform!");
                 return newFilestream;
             }
             
@@ -151,7 +151,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                    ERROR_LOG("Cannot write to the requested Storage Location!");
+                    CS_ERROR_LOG("Cannot write to the requested Storage Location!");
                 }
             }
             else
@@ -172,7 +172,7 @@ namespace ChilliSource
 			
             if (pFileStream.get() == nullptr || pFileStream->IsOpen() == false || pFileStream->IsBad() == true)
             {
-                ERROR_LOG("Failed to create file: " + instrDirectory);
+                CS_ERROR_LOG("Failed to create file: " + instrDirectory);
                 return false;
             }
             
@@ -188,14 +188,14 @@ namespace ChilliSource
             //check the requested storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available on this platform!");
+                CS_ERROR_LOG("Requested Storage Location is not available on this platform!");
                 return false;
             }
             
             //insure that the storage location is writable.
             if (IsStorageLocationWritable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Cannot write to the requested Storage Location!");
+                CS_ERROR_LOG("Cannot write to the requested Storage Location!");
                 return false;
             }
             
@@ -207,7 +207,7 @@ namespace ChilliSource
             {
                 if (![fileManager createDirectoryAtPath:[NSString stringWithUTF8String:path.c_str()] withIntermediateDirectories:YES attributes:nil error:nil])
                 {
-                    ERROR_LOG("Error creating directory.");
+                    CS_ERROR_LOG("Error creating directory.");
                     [pPool release];
                     return false;
                 }
@@ -226,27 +226,27 @@ namespace ChilliSource
             //check the requested source storage location is available
             if (IsStorageLocationAvailable(ineSourceStorageLocation) == false)
             {
-                ERROR_LOG("Requested source Storage Location is not available on this platform!");
+                CS_ERROR_LOG("Requested source Storage Location is not available on this platform!");
                 return false;
             }
             
             //check the requested destination storage location is available
             if (IsStorageLocationAvailable(ineDestinationStorageLocation) == false)
             {
-                ERROR_LOG("Requested destination Storage Location is not available on this platform!");
+                CS_ERROR_LOG("Requested destination Storage Location is not available on this platform!");
                 return false;
             }
             
             //insure that the destination location is writable.
             if (IsStorageLocationWritable(ineDestinationStorageLocation) == false)
             {
-                ERROR_LOG("Cannot write to the destination Storage Location!");
+                CS_ERROR_LOG("Cannot write to the destination Storage Location!");
                 return false;
             }
             
             if(!DoesFileExist(ineSourceStorageLocation, instrSourceFilepath))
             {
-                ERROR_LOG("Source file does not exist -  " + instrSourceFilepath);
+                CS_ERROR_LOG("Source file does not exist -  " + instrSourceFilepath);
                 return false;
             }
             
@@ -294,39 +294,39 @@ namespace ChilliSource
             //check the requested source storage location is available
             if (IsStorageLocationAvailable(ineSourceStorageLocation) == false)
             {
-                ERROR_LOG("Requested source Storage Location is not available on this platform!");
+                CS_ERROR_LOG("Requested source Storage Location is not available on this platform!");
                 return false;
             }
             
             //check the requested destination storage location is available
             if (IsStorageLocationAvailable(ineDestinationStorageLocation) == false)
             {
-                ERROR_LOG("Requested destination Storage Location is not available on this platform!");
+                CS_ERROR_LOG("Requested destination Storage Location is not available on this platform!");
                 return false;
             }
             
             //insure that the destination location is writable.
             if (IsStorageLocationWritable(ineDestinationStorageLocation) == false)
             {
-                ERROR_LOG("Cannot write to the destination Storage Location!");
+                CS_ERROR_LOG("Cannot write to the destination Storage Location!");
                 return false;
             }
             
             //get all the files in the directory
-            DYNAMIC_ARRAY<std::string> astrFilenames;
+            std::vector<std::string> astrFilenames;
             GetFileNamesInDirectory(ineSourceStorageLocation, instrSourceDirectory, true, astrFilenames);
             
             //error if there are no files
             if (astrFilenames.size() == 0)
             {
-                ERROR_LOG("Cannot copy contents of directory as there are no files: " + instrSourceDirectory);
+                CS_ERROR_LOG("Cannot copy contents of directory as there are no files: " + instrSourceDirectory);
                 return false;
             }
             
             //copy each of these files individually
             std::string strSourceProperPath = Core::CStringUtils::StandardisePath(instrSourceDirectory);
             std::string strDestProperPath = Core::CStringUtils::StandardisePath(instrDestinationDirectory);
-            for (DYNAMIC_ARRAY<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
+            for (std::vector<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
             {
                 if (CopyFile(ineSourceStorageLocation, strSourceProperPath + *it, 
                          ineDestinationStorageLocation, strDestProperPath + *it) == false)
@@ -345,14 +345,14 @@ namespace ChilliSource
             //check the requested storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available on this platform!");
+                CS_ERROR_LOG("Requested Storage Location is not available on this platform!");
                 return false;
             }
             
             //insure that the storage location is writable.
             if (IsStorageLocationWritable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Cannot write to the requested Storage Location!");
+                CS_ERROR_LOG("Cannot write to the requested Storage Location!");
                 return false;
             }
             
@@ -377,14 +377,14 @@ namespace ChilliSource
             //check the requested storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available on this platform!");
+                CS_ERROR_LOG("Requested Storage Location is not available on this platform!");
                 return false;
             }
             
             //insure that the storage location is writable.
             if (IsStorageLocationWritable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Cannot write to the requested Storage Location!");
+                CS_ERROR_LOG("Cannot write to the requested Storage Location!");
                 return false;
             }
             
@@ -408,9 +408,9 @@ namespace ChilliSource
         /// @param Recurse into sub directories
         /// @param Out: Content file names
         //------------------------------------------------------------
-        void GetDirectoryContents(const DYNAMIC_ARRAY<std::string>& inastrDirs, bool inbRecursive, NSMutableArray* outpContents)
+        void GetDirectoryContents(const std::vector<std::string>& inastrDirs, bool inbRecursive, NSMutableArray* outpContents)
         {
-            for(DYNAMIC_ARRAY<std::string>::const_iterator it = inastrDirs.begin(); it != inastrDirs.end(); ++it)
+            for(std::vector<std::string>::const_iterator it = inastrDirs.begin(); it != inastrDirs.end(); ++it)
             {
                 std::string path = ChilliSource::Core::CStringUtils::StandardisePath(*it);
                 NSString* Dir = [NSString stringWithCString:path.c_str() encoding:NSASCIIStringEncoding];
@@ -475,7 +475,7 @@ namespace ChilliSource
         /// @param Directory to append
         /// @param Out: Filenames
         //--------------------------------------------------------------
-        void ConvertObjCToPath(NSArray* inpFilenames, const std::string& instrDirectory, DYNAMIC_ARRAY<std::string> &outstrFileNames)
+        void ConvertObjCToPath(NSArray* inpFilenames, const std::string& instrDirectory, std::vector<std::string> &outstrFileNames)
         {
             std::string strDir;
             if(instrDirectory.empty() == false)
@@ -492,16 +492,16 @@ namespace ChilliSource
         /// Get File Names With Extension In Directory
         //--------------------------------------------------------------
         void CFileSystem::GetFileNamesWithExtensionInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
-                                                  const std::string& instrExtension, DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath) const
+                                                  const std::string& instrExtension, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
         {
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available!");
+                CS_ERROR_LOG("Requested Storage Location is not available!");
                 return;
             }
             
-            DYNAMIC_ARRAY<std::string> astrDirectoriesToCheck;
+            std::vector<std::string> astrDirectoriesToCheck;
             GetPathsForStorageLocation(ineStorageLocation, instrDirectory, astrDirectoriesToCheck);
             
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
@@ -527,7 +527,7 @@ namespace ChilliSource
             [pPool release];
             
             std::sort(outstrFileNames.begin(), outstrFileNames.end());
-            DYNAMIC_ARRAY<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
+            std::vector<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
             outstrFileNames.resize(it - outstrFileNames.begin()); 
         }
         //--------------------------------------------------------------
@@ -544,16 +544,16 @@ namespace ChilliSource
         /// @param Output dynamic array containing the filenames.
         //--------------------------------------------------------------
         void CFileSystem::GetPathForFilesWithNameInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
-                                                        const std::string& instrName, DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath) const
+                                                        const std::string& instrName, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
         {
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available!");
+                CS_ERROR_LOG("Requested Storage Location is not available!");
                 return;
             }
             
-            DYNAMIC_ARRAY<std::string> astrDirectoriesToCheck;
+            std::vector<std::string> astrDirectoriesToCheck;
             GetPathsForStorageLocation(ineStorageLocation, instrDirectory, astrDirectoriesToCheck);
             
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
@@ -579,23 +579,23 @@ namespace ChilliSource
             [pPool release];
             
             std::sort(outstrFileNames.begin(), outstrFileNames.end());
-            DYNAMIC_ARRAY<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
+            std::vector<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
             outstrFileNames.resize(it - outstrFileNames.begin()); 
         }
         //--------------------------------------------------------------
         /// Get File Names In Directory
         //--------------------------------------------------------------
         void CFileSystem::GetFileNamesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories, 
-                                     DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath) const
+                                     std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
         {
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available!");
+                CS_ERROR_LOG("Requested Storage Location is not available!");
                 return;
             }
             
-            DYNAMIC_ARRAY<std::string> astrDirectoriesToCheck;
+            std::vector<std::string> astrDirectoriesToCheck;
             GetPathsForStorageLocation(ineStorageLocation, instrDirectory, astrDirectoriesToCheck);
             
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
@@ -621,23 +621,23 @@ namespace ChilliSource
             [pPool release];
             
             std::sort(outstrFileNames.begin(), outstrFileNames.end());
-            DYNAMIC_ARRAY<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
+            std::vector<std::string>::iterator it = std::unique(outstrFileNames.begin(), outstrFileNames.end());
             outstrFileNames.resize(it - outstrFileNames.begin()); 
         }
         //--------------------------------------------------------------
         /// Get Directories In Directory
         //--------------------------------------------------------------
         void CFileSystem::GetDirectoriesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
-                                                    DYNAMIC_ARRAY<std::string> &outstrDirectories, bool inbAppendFullPath) const
+                                                    std::vector<std::string> &outstrDirectories, bool inbAppendFullPath) const
         {
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available!");
+                CS_ERROR_LOG("Requested Storage Location is not available!");
                 return;
             }
             
-            DYNAMIC_ARRAY<std::string> astrDirectoriesToCheck;
+            std::vector<std::string> astrDirectoriesToCheck;
             GetPathsForStorageLocation(ineStorageLocation, instrDirectory, astrDirectoriesToCheck);
             
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
@@ -663,7 +663,7 @@ namespace ChilliSource
             [pPool release];
             
             std::sort(outstrDirectories.begin(), outstrDirectories.end());
-            DYNAMIC_ARRAY<std::string>::iterator it = std::unique(outstrDirectories.begin(), outstrDirectories.end());
+            std::vector<std::string>::iterator it = std::unique(outstrDirectories.begin(), outstrDirectories.end());
             outstrDirectories.resize(it - outstrDirectories.begin()); 
         }
         //------------------------------------------------------------
@@ -673,7 +673,7 @@ namespace ChilliSource
         /// @param File name to append
         /// @param Out: All the paths for the given location
         //------------------------------------------------------------
-        void CFileSystem::GetPathsForStorageLocation(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, DYNAMIC_ARRAY<std::string>& outaPaths) const
+        void CFileSystem::GetPathsForStorageLocation(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, std::vector<std::string>& outaPaths) const
         {
             switch(ineStorageLocation)
             {
@@ -703,7 +703,7 @@ namespace ChilliSource
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available!");
+                CS_ERROR_LOG("Requested Storage Location is not available!");
                 return false;
             }
             
@@ -765,7 +765,7 @@ namespace ChilliSource
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available!");
+                CS_ERROR_LOG("Requested Storage Location is not available!");
                 return false;
             }
             
@@ -837,7 +837,7 @@ namespace ChilliSource
                     strStorageLocationPath = mstrLibraryPath + kstrDLCPath;
                     break;
                 default:
-                    ERROR_LOG("Storage Location not available on this platform!");
+                    CS_ERROR_LOG("Storage Location not available on this platform!");
                     break;
             }
             
@@ -851,7 +851,7 @@ namespace ChilliSource
             //Check that this storage location is available
             if (IsStorageLocationAvailable(Core::StorageLocation::k_DLC) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available!");
+                CS_ERROR_LOG("Requested Storage Location is not available!");
                 return false;
             }
             
@@ -921,7 +921,7 @@ namespace ChilliSource
         {
             u32 udwHashedFile = Core::CHashCRC32::GenerateHashCode(instrPath);
             
-            DYNAMIC_ARRAY<u32>::const_iterator it = std::lower_bound(mHashedPackageFileNames.begin(), mHashedPackageFileNames.end(), udwHashedFile);
+            std::vector<u32>::const_iterator it = std::lower_bound(mHashedPackageFileNames.begin(), mHashedPackageFileNames.end(), udwHashedFile);
             
             if(it!= mHashedPackageFileNames.end() && *it == udwHashedFile)
                 return true;

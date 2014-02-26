@@ -7,6 +7,8 @@
 //
 
 #include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/String/StringParser.h>
+
 #include <algorithm>
 #include <cctype>
 
@@ -76,9 +78,9 @@ namespace ChilliSource
         }
         
 		//-----------------------------------------------------------------------
-		DYNAMIC_ARRAY<std::string> CStringUtils::Split( const std::string& str, const std::string& delims, unsigned int maxSplits)
+		std::vector<std::string> CStringUtils::Split( const std::string& str, const std::string& delims, unsigned int maxSplits)
 		{
-			DYNAMIC_ARRAY<std::string> ret;
+			std::vector<std::string> ret;
 			// Pre-allocate some space for performance
 			ret.reserve(maxSplits ? maxSplits+1 : 10);    // 10 is guessed capacity for most case
 			
@@ -120,9 +122,9 @@ namespace ChilliSource
 
 
 		//-----------------------------------------------------------------------
-		DYNAMIC_ARRAY< std::string > CStringUtils::Tokenise( const std::string& str, const std::string& singleDelims, const std::string& doubleDelims, unsigned int maxSplits)
+		std::vector< std::string > CStringUtils::Tokenise( const std::string& str, const std::string& singleDelims, const std::string& doubleDelims, unsigned int maxSplits)
 		{
-			DYNAMIC_ARRAY<std::string> ret;
+			std::vector<std::string> ret;
 			// Pre-allocate some space for performance
 			ret.reserve(maxSplits ? maxSplits+1 : 10);    // 10 is guessed capacity for most case
 			
@@ -668,18 +670,18 @@ namespace ChilliSource
 														  const std::string& instrMins,
 														  const std::string& instrSecs)
 		{
-			u32 udwYears = CStringConverter::ParseInt(instrYear);
-			u32 udwMonths = CStringConverter::ParseInt(instrMonth);
+			u32 udwYears = ParseS32(instrYear);
+			u32 udwMonths = ParseS32(instrMonth);
 			if(udwMonths > 0)
 				udwMonths--;// Don't cound full month for current month
-			u32 udwDays = CStringConverter::ParseInt(instrDays);
+			u32 udwDays = ParseS32(instrDays);
 			if(udwDays > 0)
 				udwDays--;// Don't count full day as starts on 1st of month
-			u32 udwHours = CStringConverter::ParseInt(instrHours);
+			u32 udwHours = ParseS32(instrHours);
 			if(udwHours > 0)
 				udwHours--;// Don't count 1 hour of days
-			u32 udwMins = CStringConverter::ParseInt(instrMins);
-			u32 udwSecs = CStringConverter::ParseInt(instrSecs);
+			u32 udwMins = ParseS32(instrMins);
+			u32 udwSecs = ParseS32(instrSecs);
 			
 			u32 udwTotalDays = 0;
 			for(u32 i = 1970; i < udwYears; i++)
@@ -713,6 +715,14 @@ namespace ChilliSource
 			u32 udwTotalSecs = (udwTotalMins * 60) + udwSecs;
 			
 			return udwTotalSecs;
+		}
+        //-----------------------------------------------------------------------
+		bool  CStringUtils::isNumber(const std::string& val)
+		{
+			std::istringstream str(val);
+			float tst;
+			str >> tst;
+			return !str.fail() && str.eof();
 		}
 	}
 }

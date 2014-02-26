@@ -9,6 +9,7 @@
 #ifndef MoshiMonsters_SceneAnimDescManager_h
 #define MoshiMonsters_SceneAnimDescManager_h
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceManager.h>
 #include <ChilliSource/Core/Scene/SceneAnimation.h>
 

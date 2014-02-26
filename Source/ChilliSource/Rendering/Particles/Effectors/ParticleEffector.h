@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_RENDERING__PARTICLES_PARTICLE_EFFECTOR_H_
 #define _MO_FLO_RENDERING__PARTICLES_PARTICLE_EFFECTOR_H_
 
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {

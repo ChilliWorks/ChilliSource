@@ -52,7 +52,7 @@ namespace ChilliSource
 		//---------------------------------------------------------
 		bool CShaderManager::CreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ChilliSource::Rendering::ShaderPtr& outpShader)
 		{
-			SHARED_PTR<CShader> pGLShader = SHARED_PTR_CAST<CShader>(outpShader);
+			std::shared_ptr<CShader> pGLShader = std::static_pointer_cast<CShader>(outpShader);
 			
 			//Check if this program already exists
 			MapStringToResourcePtr::iterator pShaderResource = mMapFilenameToResource.find(instrFilePath);
@@ -61,7 +61,7 @@ namespace ChilliSource
 			if(pShaderResource != mMapFilenameToResource.end())
 			{
 				//It's already linked baby!
-				outpShader = SHARED_PTR_CAST<ChilliSource::Rendering::IShader>(pShaderResource->second);
+				outpShader = std::static_pointer_cast<ChilliSource::Rendering::IShader>(pShaderResource->second);
 				return true;
 			} 
 			
@@ -100,7 +100,7 @@ namespace ChilliSource
 		//---------------------------------------------------------
 		bool CShaderManager::AsyncCreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ChilliSource::Rendering::ShaderPtr& outpShader)
 		{
-			SHARED_PTR<CShader> pGLShader = SHARED_PTR_CAST<CShader>(outpShader);
+			std::shared_ptr<CShader> pGLShader = std::static_pointer_cast<CShader>(outpShader);
 			
 			//Check if this program already exists
 			MapStringToResourcePtr::iterator pShaderResource = mMapFilenameToResource.find(instrFilePath);
@@ -110,7 +110,7 @@ namespace ChilliSource
 			if(pShaderResource != mMapFilenameToResource.end())
 			{
 				//It's already linked baby!
-				outpShader = SHARED_PTR_CAST<Rendering::IShader>(pShaderResource->second);
+				outpShader = std::static_pointer_cast<Rendering::IShader>(pShaderResource->second);
 				return true;
 			}
 			
@@ -132,7 +132,7 @@ namespace ChilliSource
 		//---------------------------------------------------------
 		void CShaderManager::LoadShaderTask(Core::StorageLocation ineStorageLocation, const std::string &instrVSFilePath, const std::string &instrPSFilePath, ChilliSource::Rendering::ShaderPtr& outpShader)
 		{
-			SHARED_PTR<CShader> pGLShader = SHARED_PTR_CAST<CShader>(outpShader);
+			std::shared_ptr<CShader> pGLShader = std::static_pointer_cast<CShader>(outpShader);
 			
 			//load the VS
 			std::stringstream sstrVS;
@@ -170,7 +170,7 @@ namespace ChilliSource
 		//---------------------------------------------------------
 		void CShaderManager::CompileShaderTask(const std::string& instrVS,const std::string& instrPS, ChilliSource::Rendering::ShaderPtr& outpShader)
 		{
-			SHARED_PTR<CShader> pGLShader = SHARED_PTR_CAST<CShader>(outpShader);
+			std::shared_ptr<CShader> pGLShader = std::static_pointer_cast<CShader>(outpShader);
 			
 			//compile the VS
 			if (instrVS != "")
@@ -208,7 +208,7 @@ namespace ChilliSource
 				{
 					if(it->second->IsLoaded())
 					{
-						SHARED_PTR<CShader> pShader = SHARED_PTR_CAST<CShader>(it->second);
+						std::shared_ptr<CShader> pShader = std::static_pointer_cast<CShader>(it->second);
 
 						if(pShader->LoadAndCompileShader(pShader->GetStorageLocation(), pShader->GetFilename() + "." + kstrGLVertexShaderExtension, Rendering::SHADER_TYPE_VERTEX))
 						{
@@ -220,17 +220,17 @@ namespace ChilliSource
 								}
 								else
 								{
-									FATAL_LOG("Failed to create shader: " + pShader->GetFilename());
+									CS_FATAL_LOG("Failed to create shader: " + pShader->GetFilename());
 								}
 							}
 							else
 							{
-								FATAL_LOG("Failed to reload shader: " + pShader->GetFilename());
+								CS_FATAL_LOG("Failed to reload shader: " + pShader->GetFilename());
 							}
 						}
 						else
 						{
-							FATAL_LOG("Failed to reload shader: " + pShader->GetFilename());
+							CS_FATAL_LOG("Failed to reload shader: " + pShader->GetFilename());
 						}
 					}
 				}

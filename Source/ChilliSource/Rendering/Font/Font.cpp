@@ -145,7 +145,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				ERROR_LOG("Invalid space character chosen in font please include a '-' in the font");
+				CS_ERROR_LOG("Invalid space character chosen in font please include a '-' in the font");
 			}
             
         }
@@ -208,7 +208,7 @@ namespace ChilliSource
         //-------------------------------------------
         /// Set Kerning Info
         //-------------------------------------------
-        void CFont::SetKerningInfo(const DYNAMIC_ARRAY<CKernLookup>& inaFirstReg, const DYNAMIC_ARRAY<CKernPair>& inaPairs)
+        void CFont::SetKerningInfo(const std::vector<CKernLookup>& inaFirstReg, const std::vector<CKernPair>& inaPairs)
         {
             maFirstLookup = inaFirstReg;
             maPairs = inaPairs;

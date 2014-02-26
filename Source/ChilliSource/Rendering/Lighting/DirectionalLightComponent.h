@@ -10,6 +10,7 @@
 #ifndef _MOFLOW_RENDERING_COMPONENTS_DIRECTIONALLIGHTCOMPONENT_H_
 #define _MOFLOW_RENDERING_COMPONENTS_DIRECTIONALLIGHTCOMPONENT_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
 
 namespace ChilliSource

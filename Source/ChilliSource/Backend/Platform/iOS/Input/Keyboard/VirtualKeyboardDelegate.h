@@ -9,8 +9,10 @@
 #ifndef _MO_FLO_PLATFORM_IOS_INPUT_VIRTUAL_KEYBOARD_DELEGATE_H_
 #define _MO_FLO_PLATFORM_IOS_INPUT_VIRTUAL_KEYBOARD_DELEGATE_H_
 
-#include <UIKit/UIKit.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/VirtualKeyboard.h>
+
+#include <UIKit/UIKit.h>
 
 using namespace ChilliSource::iOS;
 

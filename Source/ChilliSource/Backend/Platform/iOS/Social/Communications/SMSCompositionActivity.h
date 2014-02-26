@@ -10,7 +10,9 @@
 #ifndef _MOFLO_PLATFORM_IOS_SOCIAL_COMMUNICATIONS_SMSCOMPOSITIONSCREEN_H_
 #define _MOFLO_PLATFORM_IOS_SOCIAL_COMMUNICATIONS_SMSCOMPOSITIONSCREEN_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Social/Communications/SMSCompositionActivity.h>
+
 #include <MessageUI/MessageUI.h>
 
 @class SMSDelegate;
@@ -28,7 +30,7 @@ namespace ChilliSource{
 			CSMSCompositionActivity();
 			~CSMSCompositionActivity();
 			
-			virtual void Present(const DYNAMIC_ARRAY<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const ISMSCompositionActivity::SendResultDelegate & inCallback);
+			virtual void Present(const std::vector<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const ISMSCompositionActivity::SendResultDelegate & inCallback);
 
 			virtual void Dismiss();
 		private:

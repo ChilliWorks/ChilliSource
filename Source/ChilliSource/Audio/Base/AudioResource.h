@@ -13,17 +13,18 @@
 #ifndef _MO_FLO_AUDIO_RESOURCE_H_
 #define _MO_FLO_AUDIO_RESOURCE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 
 namespace ChilliSource 
 {
 	namespace Audio
 	{
-		class IAudioResource : public Core::IResource
+		class AudioResource : public Core::IResource
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(IAudioResource);
-			virtual ~IAudioResource(){}
+			DECLARE_NAMED_INTERFACE(AudioResource);
+			virtual ~AudioResource(){}
         
 			//---------------------------------------------------------------------
 			/// Get Length

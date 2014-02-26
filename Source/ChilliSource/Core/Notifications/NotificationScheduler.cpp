@@ -19,7 +19,7 @@ namespace ChilliSource
         bool CNotificationScheduler::bPushNotificationsEnabled = true;
         
         std::deque<Notification> CNotificationScheduler::NotificationQueue;
-        DYNAMIC_ARRAY<Notification> CNotificationScheduler::TimedAppNotifications;
+        std::vector<Notification> CNotificationScheduler::TimedAppNotifications;
         
         ILocalNotificationScheduler* CNotificationScheduler::mspLocalNotificationScheduler = nullptr;
 
@@ -90,10 +90,10 @@ namespace ChilliSource
                     }
                     break;
                 case NotificationType::k_push:
-                    ERROR_LOG("Push notifications can not be scheduled within the app");
+                    CS_ERROR_LOG("Push notifications can not be scheduled within the app");
                     break;
                 case NotificationType::k_system:
-                    ERROR_LOG("System notifications must be scheduled with a time");
+                    CS_ERROR_LOG("System notifications must be scheduled with a time");
                     break;
             }
         
@@ -126,7 +126,7 @@ namespace ChilliSource
                     }
                     break;
                 case NotificationType::k_push:
-                    ERROR_LOG("Push notifications can not be scheduled within the app");
+                    CS_ERROR_LOG("Push notifications can not be scheduled within the app");
                     break;
                 case NotificationType::k_system:
                     if(bSystemNotificationsEnabled)
@@ -171,7 +171,7 @@ namespace ChilliSource
                     }
                     break;
                 case NotificationType::k_push:
-                    ERROR_LOG("Push notifications can not be scheduled within the app");
+                    CS_ERROR_LOG("Push notifications can not be scheduled within the app");
                     break;
                 case NotificationType::k_system:
                     if(bSystemNotificationsEnabled)
@@ -199,15 +199,15 @@ namespace ChilliSource
         /// @param Out: Notifications that meet criteria
         /// @return Whether any notifications exist within that time period
         //-------------------------------------------------------------------------
-        bool CNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(NotificationType ineType, TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, DYNAMIC_ARRAY<Notification>& outaNotifications)
+        bool CNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(NotificationType ineType, TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Notification>& outaNotifications)
         {
             switch(ineType)
             {
                 case NotificationType::k_app:
-                    WARNING_LOG("CNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod is not implemented for type NOTICE_APP");
+                    CS_WARNING_LOG("CNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod is not implemented for type NOTICE_APP");
                     break;
                 case NotificationType::k_push:
-                    FATAL_LOG("Push notifications can not be checked within the app");
+                    CS_FATAL_LOG("Push notifications can not be checked within the app");
                     break;
                 case NotificationType::k_system:
                     return mspLocalNotificationScheduler->TryGetNotificationsScheduledWithinTimePeriod(inTime, inPeriod, outaNotifications);
@@ -257,7 +257,7 @@ namespace ChilliSource
             switch(ineType)
             {
                 case NotificationType::k_app:
-                    for(DYNAMIC_ARRAY<Notification>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end(); /*No Increment*/)
+                    for(std::vector<Notification>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end(); /*No Increment*/)
                     {  
                         if(inID == it->ID)
                         {
@@ -270,7 +270,7 @@ namespace ChilliSource
                     }
                     break;
                 case NotificationType::k_push:
-                    FATAL_LOG("Push notifications can not be cancelled within the app");
+                    CS_FATAL_LOG("Push notifications can not be cancelled within the app");
                     break;
                 case NotificationType::k_system:
                     mspLocalNotificationScheduler->CancelByID(inID);
@@ -292,7 +292,7 @@ namespace ChilliSource
                     TimedAppNotifications.clear();
                     break;
                 case NotificationType::k_push:
-                    FATAL_LOG("Push notifications can not be cancelled within the app");
+                    CS_FATAL_LOG("Push notifications can not be cancelled within the app");
                     break;
                 case NotificationType::k_system:
                     mspLocalNotificationScheduler->CancelAll();
@@ -313,7 +313,7 @@ namespace ChilliSource
             //Update the app notifications
             TimeIntervalSecs CurrentTime = Core::CApplication::GetSystemTime();
             
-            for(DYNAMIC_ARRAY<Notification>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end(); /*No Increment*/)
+            for(std::vector<Notification>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end(); /*No Increment*/)
             {  
                 if(CurrentTime >= it->TriggerTime)
                 {

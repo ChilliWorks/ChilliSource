@@ -13,6 +13,8 @@
 #ifndef _MO_FLO_AUDIO_AUDIO_LISTENER_COMPONENT_H_
 #define _MO_FLO_AUDIO_AUDIO_LISTENER_COMPONENT_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 #include <ChilliSource/Core/Entity/Component.h>
 
 #include <ChilliSource/Audio/3D/AudioListener.h>
@@ -21,13 +23,13 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		class CAudioListenerComponent : public Core::IComponent
+		class AudioListenerComponent : public Core::IComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CAudioListenerComponent);
+			DECLARE_NAMED_INTERFACE(AudioListenerComponent);
 			
-			CAudioListenerComponent();
-			virtual ~CAudioListenerComponent();
+			AudioListenerComponent();
+			virtual ~AudioListenerComponent();
 			
 			//----------------------------------------------------------
 			/// Is A
@@ -49,22 +51,19 @@ namespace ChilliSource
 			/// Set the audio listener for this component
 			/// @param Audio resource pointer
 			//------------------------------------------------------
-			void SetAudioListener(const AudioListenerPtr& inpAudioListener);
+			void SetAudioListener(const AudioListenerSPtr& inpAudioListener);
 			//------------------------------------------------------
 			/// Get Audio Listener
 			///
 			/// Get the audio listener for this component
 			/// @return Audio resource pointer
 			//------------------------------------------------------
-			AudioListenerPtr& GetAudioListener();
+			AudioListenerSPtr& GetAudioListener();
 			
 		private:
 			
-			AudioListenerPtr mpAudioListener;
+			AudioListenerSPtr mpAudioListener;
 		};
-		
-		typedef SHARED_PTR<CAudioListenerComponent> AudioListenerComponentPtr;
-		typedef WEAK_PTR<CAudioListenerComponent> AudioListenerComponentWeakPtr;
 	}
 }
 

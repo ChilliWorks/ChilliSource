@@ -21,7 +21,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//-------------------------------------------------------------
-		CSoundEvent::CSoundEvent() : mbIsPlaying(false), mfTimeSincePlay(0.0f)
+		SoundEvent::SoundEvent() : mbIsPlaying(false), mfTimeSincePlay(0.0f)
 		{
 		}
 		//-------------------------------------------------------------
@@ -33,7 +33,7 @@ namespace ChilliSource
 		/// @param Sound sample
 		/// @param Delay (seconds)
 		//-------------------------------------------------------------
-		void CSoundEvent::AddSound(const AudioComponentPtr &inSound, f32 infDelayInSecs)
+		void SoundEvent::AddSound(const AudioComponentSPtr &inSound, f32 infDelayInSecs)
 		{
 			mSoundAndDelay.push_back(std::make_pair(inSound, infDelayInSecs));
 		}
@@ -42,7 +42,7 @@ namespace ChilliSource
 		///
 		/// Play all sounds in the batch
 		//-------------------------------------------------------------
-		void CSoundEvent::Play()
+		void SoundEvent::Play()
 		{
 			//Begin timing for offsets
 			mfTimeSincePlay = 0.0f;
@@ -54,9 +54,9 @@ namespace ChilliSource
 		///
 		/// Pause all sounds in the batch
 		//-------------------------------------------------------------
-		void CSoundEvent::Pause()
+		void SoundEvent::Pause()
 		{
-			for(DYNAMIC_ARRAY< std::pair<AudioComponentPtr, f32> >::iterator it = mSoundAndDelay.begin(); it != mSoundAndDelay.end(); ++it)
+			for(std::vector< std::pair<AudioComponentSPtr, f32> >::iterator it = mSoundAndDelay.begin(); it != mSoundAndDelay.end(); ++it)
 			{
 				it->first->Pause();
 			}
@@ -68,14 +68,14 @@ namespace ChilliSource
 		///
 		/// @param Time between frames
 		//-------------------------------------------------------------
-		void CSoundEvent::Update(f32 dt)
+		void SoundEvent::Update(f32 dt)
 		{
 			if(mbIsPlaying)
 			{
 				mfTimeSincePlay += dt;
 				
 				//Check all the sounds and see if we should play them
-				for(DYNAMIC_ARRAY< std::pair<AudioComponentPtr, f32> >::iterator it = mSoundAndDelay.begin(); it != mSoundAndDelay.end(); ++it)
+				for(std::vector< std::pair<AudioComponentSPtr, f32> >::iterator it = mSoundAndDelay.begin(); it != mSoundAndDelay.end(); ++it)
 				{
 					if(it->second >= 0.0f && mfTimeSincePlay >= it->second)
 					{
@@ -90,7 +90,7 @@ namespace ChilliSource
 							//All the sounds have played from this batch. We are done
 							mbIsPlaying = false;
 							u32 i = 0;
-							for(DYNAMIC_ARRAY< std::pair<AudioComponentPtr, f32> >::iterator it = mSoundAndDelay.begin(); it != mSoundAndDelay.end(); ++it)
+							for(std::vector< std::pair<AudioComponentSPtr, f32> >::iterator it = mSoundAndDelay.begin(); it != mSoundAndDelay.end(); ++it)
 							{
 								it->second = mPlayedIndices[i];
 								i++;

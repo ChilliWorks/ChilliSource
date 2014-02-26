@@ -16,6 +16,7 @@
 
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/String/StringParser.h>
 
 namespace ChilliSource
 {
@@ -65,7 +66,7 @@ namespace ChilliSource
             Core::StorageLocation eTextureLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("TextureLocation", strValue))
             {
-                eTextureLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eTextureLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("Texture", strValue))
             {
@@ -75,7 +76,7 @@ namespace ChilliSource
             Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SpriteSheetLocation", strValue))
             {
-                eSpriteSheetLocation = ChilliSource::Core::CStringConverter::ParseStorageLocation(strValue);
+                eSpriteSheetLocation = ChilliSource::Core::ParseStorageLocation(strValue);
             }
             if(insParams.TryGetValue("SpriteSheet", strValue))
             {
@@ -84,8 +85,8 @@ namespace ChilliSource
             //---Sprite sheet index
             if(insParams.TryGetValue("SpriteSheetIndex", strValue))
             {
-                MOFLOW_ASSERT(SpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
-                SpriteSheetIndex = Core::CStringConverter::ParseUnsignedInt(strValue);
+                CS_ASSERT(SpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+                SpriteSheetIndex = Core::ParseU32(strValue);
             }
             //---Sprite Sheet Index ID
             if(insParams.TryGetValue("SpriteSheetIndexID", strValue))
@@ -95,56 +96,56 @@ namespace ChilliSource
             //---Size from image
             if(insParams.TryGetValue("SizeFromImage", strValue))
             {
-                EnableSizeFromImage(Core::CStringConverter::ParseBool(strValue));
+                EnableSizeFromImage(Core::ParseBool(strValue));
             }
             //---Width from image
             if(insParams.TryGetValue("WidthFromImage", strValue))
             {
-                EnableWidthFromImage(Core::CStringConverter::ParseBool(strValue));
+                EnableWidthFromImage(Core::ParseBool(strValue));
             }
             //---Height from image
             if(insParams.TryGetValue("HeightFromImage", strValue))
             {
-                EnableHeightFromImage(Core::CStringConverter::ParseBool(strValue));
+                EnableHeightFromImage(Core::ParseBool(strValue));
             }
             //---Maintain Width
             if(insParams.TryGetValue("HeightMaintain", strValue))
             {
-                HeightMaintain = Core::CStringConverter::ParseBool(strValue);
+                HeightMaintain = Core::ParseBool(strValue);
             }
             //---Maintain Height
             if(insParams.TryGetValue("WidthMaintain", strValue))
             {
-                WidthMaintain = Core::CStringConverter::ParseBool(strValue);
+                WidthMaintain = Core::ParseBool(strValue);
             }
             //---Set Maintain Width
             if(insParams.TryGetValue("SetHeightMaintain", strValue))
             {
-                Core::CVector2 vSize = Core::CStringConverter::ParseVector2(strValue);
+                Core::CVector2 vSize = Core::ParseVector2(strValue);
                 SetHeightMaintainingAspect(vSize.x, vSize.y);
             }
             //---Set Maintain Height
             if(insParams.TryGetValue("SetWidthMaintain", strValue))
             {
-                Core::CVector2 vSize = Core::CStringConverter::ParseVector2(strValue);
+                Core::CVector2 vSize = Core::ParseVector2(strValue);
                 SetWidthMaintainingAspect(vSize.x, vSize.y);
             }
             //---Set Fill Maintain
             if(insParams.TryGetValue("SetFillMaintain", strValue))
             {
-                Core::CVector4 vSize = Core::CStringConverter::ParseVector4(strValue);
+                Core::CVector4 vSize = Core::ParseVector4(strValue);
                 SetFillMaintainingAspect(vSize.x, vSize.y, vSize.z, vSize.w);
             }
             //---Set Fit Maintain
             if(insParams.TryGetValue("SetFitMaintain", strValue))
             {
-                Core::CVector4 vSize = Core::CStringConverter::ParseVector4(strValue);
+                Core::CVector4 vSize = Core::ParseVector4(strValue);
                 SetFitMaintainingAspect(vSize.x, vSize.y, vSize.z, vSize.w);
             }
             //---UV
             if(insParams.TryGetValue("UVs", strValue))
             {
-                Core::CVector4 vRaw = Core::CStringConverter::ParseVector4(strValue);
+                Core::CVector4 vRaw = Core::ParseVector4(strValue);
                 UVs.vOrigin.x = vRaw.x;
                 UVs.vOrigin.y = vRaw.y;
                 UVs.vSize.x = vRaw.z;
@@ -153,7 +154,7 @@ namespace ChilliSource
             //---UV Offsets
             if(insParams.TryGetValue("UVOffsets", strValue))
             {
-                Core::CVector4 vRaw = Core::CStringConverter::ParseVector4(strValue);
+                Core::CVector4 vRaw = Core::ParseVector4(strValue);
                 UVOffsets.vOrigin.x = vRaw.x;
                 UVOffsets.vOrigin.y = vRaw.y;
                 UVOffsets.vSize.x = vRaw.z;
@@ -297,7 +298,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         void CImageView::SetSpriteSheetIndexID(const std::string& instrID)
         {
-            MOFLOW_ASSERT(SpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
+            CS_ASSERT(SpriteSheet, "Cannot set sprite sheet index without setting sprite sheet");
             SpriteSheetIndexID = instrID;
             SetSpriteSheetIndex(SpriteSheet->GetFrameIndexByID(instrID));
             
@@ -427,7 +428,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         Core::CVector2 CImageView::GetSizeFromImage() const
         {
-            MOFLOW_ASSERT((Texture || SpriteSheet), "Must have a sprite sheet or texture");
+            CS_ASSERT((Texture || SpriteSheet), "Must have a sprite sheet or texture");
             
             if(Texture)
             {

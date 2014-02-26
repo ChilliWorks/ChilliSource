@@ -9,6 +9,8 @@
 #ifndef _CHILLISOURCE_CORE_CONTAINER_WORKERQUEUE_H_
 #define _CHILLISOURCE_CORE_CONTAINER_WORKERQUEUE_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 #include <queue>
 #include <thread>
 

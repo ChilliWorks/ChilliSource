@@ -45,7 +45,7 @@ namespace ChilliSource
         void CSkinnedAnimationGroup::DetatchAnimation(const SkinnedAnimationPtr& inpAnimation)
         {
             mbAnimationLengthDirty = true;
-            for (DYNAMIC_ARRAY<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
+            for (std::vector<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
             {
                 if ((*it)->pSkinnedAnimation.get() == inpAnimation.get())
                 {
@@ -72,7 +72,7 @@ namespace ChilliSource
                 //find which two animations should be blended together
                 AnimationItemPtr pAnimItem1;
                 AnimationItemPtr pAnimItem2;
-                for (DYNAMIC_ARRAY<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
+                for (std::vector<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
                 {
                     f32 fBlendlinePosition = (*it)->fBlendlinePosition;
                     if (fBlendlinePosition <= infBlendlinePosition && (pAnimItem1 == nullptr || fBlendlinePosition > pAnimItem1->fBlendlinePosition))
@@ -105,7 +105,7 @@ namespace ChilliSource
                             mCurrentAnimationData = LerpBetweenFrames(pFrame1, pFrame2, fFactor);
                             break;
                         default:
-                            ERROR_LOG("Invalid animation blend type given.");
+                            CS_ERROR_LOG("Invalid animation blend type given.");
                             mCurrentAnimationData = pFrame1;
                             break;
                     }
@@ -120,7 +120,7 @@ namespace ChilliSource
                 }
                 else 
                 {
-                    ERROR_LOG("Something has gone wrong when blending animations.");
+                    CS_ERROR_LOG("Something has gone wrong when blending animations.");
                     return;
                 }
                 mbPrepared = true;
@@ -133,7 +133,7 @@ namespace ChilliSource
             }
             else
             {
-                ERROR_LOG("No animations attached to the animation group!");
+                CS_ERROR_LOG("No animations attached to the animation group!");
 				return;
             }
         }
@@ -148,7 +148,7 @@ namespace ChilliSource
                     mCurrentAnimationData = LerpBetweenFrames(mCurrentAnimationData, inpAnimationGroup->mCurrentAnimationData, infBlendFactor);
                     break;
                 default:
-                    ERROR_LOG("Invalid animation blend type given.");
+                    CS_ERROR_LOG("Invalid animation blend type given.");
                     break;
             }
         }
@@ -157,9 +157,9 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CSkinnedAnimationGroup::BuildMatrices(s32 indwCurrentParent, const Core::CMatrix4x4& inParentMatrix)
         {
-            const DYNAMIC_ARRAY<SkeletonNodePtr>& nodes = mpSkeleton->GetNodes();
+            const std::vector<SkeletonNodePtr>& nodes = mpSkeleton->GetNodes();
 			u32 currIndex = 0;
-			for (DYNAMIC_ARRAY<SkeletonNodePtr>::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+			for (std::vector<SkeletonNodePtr>::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
 			{
 				if ((*it)->mdwParentIndex == indwCurrentParent)
 				{
@@ -194,9 +194,9 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Inverse Bind Pose
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::ApplyInverseBindPose(const DYNAMIC_ARRAY<Core::CMatrix4x4>& inInverseBindPoseMatrices, DYNAMIC_ARRAY<Core::CMatrix4x4>& outCombinedMatrices)
+        void CSkinnedAnimationGroup::ApplyInverseBindPose(const std::vector<Core::CMatrix4x4>& inInverseBindPoseMatrices, std::vector<Core::CMatrix4x4>& outCombinedMatrices)
         {
-            const DYNAMIC_ARRAY<s32>& kadwJoints = mpSkeleton->GetJointIndices();
+            const std::vector<s32>& kadwJoints = mpSkeleton->GetJointIndices();
             
             outCombinedMatrices.clear();
             for (u32 i = 0; i < kadwJoints.size(); ++i)
@@ -207,13 +207,13 @@ namespace ChilliSource
             //check that they have the same number of joints
 			if (kadwJoints.size() != inInverseBindPoseMatrices.size())
 			{
-				ERROR_LOG("Cannot apply bind pose matrices to joint matrices, becuase they are not from the same skeleton.");
+				CS_ERROR_LOG("Cannot apply bind pose matrices to joint matrices, becuase they are not from the same skeleton.");
 			}
 			
 			//iterate through and multiply together to get the new array
 			s32 count = 0;
-			DYNAMIC_ARRAY<s32>::const_iterator joint = kadwJoints.begin();
-			for (DYNAMIC_ARRAY<Core::CMatrix4x4>::const_iterator ibp = inInverseBindPoseMatrices.begin(); 
+			std::vector<s32>::const_iterator joint = kadwJoints.begin();
+			for (std::vector<Core::CMatrix4x4>::const_iterator ibp = inInverseBindPoseMatrices.begin(); 
 				 joint != kadwJoints.end() && ibp != inInverseBindPoseMatrices.end();)
 			{
 				//multiply together
@@ -250,9 +250,9 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Animation
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::GetAnimations(DYNAMIC_ARRAY<SkinnedAnimationPtr>& outapSkinnedAnimationList)
+        void CSkinnedAnimationGroup::GetAnimations(std::vector<SkinnedAnimationPtr>& outapSkinnedAnimationList)
         {
-            for (DYNAMIC_ARRAY<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
+            for (std::vector<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
             {
                 outapSkinnedAnimationList.push_back((*it)->pSkinnedAnimation);
             }
@@ -266,14 +266,14 @@ namespace ChilliSource
             {
                 mfAnimationLength = 0.0f;
                 
-                for (DYNAMIC_ARRAY<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
+                for (std::vector<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
                 {
                     SkinnedAnimationPtr pAnim = (*it)->pSkinnedAnimation;
                     f32 fAnimationLength = pAnim->GetFrameTime() * ((f32)(pAnim->GetNumFrames() - 1));
                     
                     if (mfAnimationLength != 0.0f && mfAnimationLength != fAnimationLength)
                     {
-                        ERROR_LOG("All grouped animations must have the same length!");
+                        CS_ERROR_LOG("All grouped animations must have the same length!");
                         mfAnimationLength = 0.0f;
                         return;
                     }
@@ -298,7 +298,7 @@ namespace ChilliSource
             //report errors if the playback position provided does not make sense
             if (infPlaybackPosition < 0.0f)
             {
-                ERROR_LOG("A playback position below 0 does not make sense.");
+                CS_ERROR_LOG("A playback position below 0 does not make sense.");
             }
             
             //calculate the two frame indices this is between
@@ -348,8 +348,8 @@ namespace ChilliSource
             {
                 //iterate through each translation
                 outFrame->mNodeTranslations.reserve(inFrameB->mNodeTranslations.size());
-                DYNAMIC_ARRAY<Core::CVector3>::const_iterator transAIt = inFrameA->mNodeTranslations.begin();
-                for (DYNAMIC_ARRAY<Core::CVector3>::const_iterator transBIt = inFrameB->mNodeTranslations.begin(); 
+                std::vector<Core::CVector3>::const_iterator transAIt = inFrameA->mNodeTranslations.begin();
+                for (std::vector<Core::CVector3>::const_iterator transBIt = inFrameB->mNodeTranslations.begin(); 
                      transAIt != inFrameA->mNodeTranslations.end() && transBIt != inFrameB->mNodeTranslations.end();)
                 {
                     //lerp
@@ -365,8 +365,8 @@ namespace ChilliSource
                 
                 //iterate through each orientation
                 outFrame->mNodeOrientations.reserve(inFrameB->mNodeOrientations.size());
-                DYNAMIC_ARRAY<Core::CQuaternion>::const_iterator orientAIt = inFrameA->mNodeOrientations.begin();
-                for (DYNAMIC_ARRAY<Core::CQuaternion>::const_iterator orientBIt = inFrameB->mNodeOrientations.begin();
+                std::vector<Core::CQuaternion>::const_iterator orientAIt = inFrameA->mNodeOrientations.begin();
+                for (std::vector<Core::CQuaternion>::const_iterator orientBIt = inFrameB->mNodeOrientations.begin();
                      orientAIt != inFrameA->mNodeOrientations.end() && orientBIt != inFrameB->mNodeOrientations.end();)
                 {
                     //lerp
@@ -382,8 +382,8 @@ namespace ChilliSource
                 
                 //iterate through each scale
                 outFrame->mNodeScalings.reserve(inFrameB->mNodeScalings.size());
-                DYNAMIC_ARRAY<Core::CVector3>::const_iterator scaleAIt = inFrameA->mNodeScalings.begin();
-                for (DYNAMIC_ARRAY<Core::CVector3>::const_iterator scaleBIt = inFrameB->mNodeScalings.begin();
+                std::vector<Core::CVector3>::const_iterator scaleAIt = inFrameA->mNodeScalings.begin();
+                for (std::vector<Core::CVector3>::const_iterator scaleBIt = inFrameB->mNodeScalings.begin();
                      scaleAIt != inFrameA->mNodeScalings.end() && scaleBIt != inFrameB->mNodeScalings.end();)
                 {
                     //lerp

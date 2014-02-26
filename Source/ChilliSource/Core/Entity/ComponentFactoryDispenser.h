@@ -9,14 +9,8 @@
 #ifndef _MO_FLO_CORE_FACTORY_DISPENSER_H_
 #define _MO_FLO_CORE_FACTORY_DISPENSER_H_
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
-
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
-
-#include <ChilliSource/Audio/ForwardDeclarations.h>
-
-#include <ChilliSource/GUI/ForwardDeclarations.h>
 
 #define GET_COMPONENT_FACTORY(FACTORY_TYPE) ChilliSource::Core::CComponentFactoryDispenser::GetSingletonPtr()->GetFactoryWithInterface<FACTORY_TYPE>() 
 
@@ -84,7 +78,7 @@ namespace ChilliSource
             
         private:
             
-            DYNAMIC_ARRAY<IComponentFactory*> mComponentFactories;
+            std::vector<IComponentFactory*> mComponentFactories;
             
             
             static CComponentFactoryDispenser* pInstance;

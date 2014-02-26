@@ -1,6 +1,10 @@
 #ifndef _MO_FLO_CORE_STATIC_MEM_POOL_H_
 #define _MO_FLO_CORE_STATIC_MEM_POOL_H_
 
+#include <ChilliSource/ChilliSource.h>
+
+#include <vector>
+
 namespace ChilliSource
 {
     namespace Core
@@ -43,7 +47,7 @@ namespace ChilliSource
             {
                 if(mudwFreeMemory < inudwSize)
                 {
-                    ERROR_LOG("Static mem pool out of memory");
+                    CS_ERROR_LOG("Static mem pool out of memory");
                     return nullptr;
                 }
 
@@ -51,7 +55,7 @@ namespace ChilliSource
                 u32 udwNumChunks = (inudwSize/mudwAlignmentSize + 1);
 
                 //Find a free chunk
-                for(DYNAMIC_ARRAY<MemChunk>::iterator it = mChunks.begin(); it != mChunks.end(); ++it)
+                for(std::vector<MemChunk>::iterator it = mChunks.begin(); it != mChunks.end(); ++it)
                 {
                     if(!it->bIsAllocated)
                     {
@@ -113,7 +117,7 @@ namespace ChilliSource
 
             s8* mpMemPool;
 
-            DYNAMIC_ARRAY<MemChunk> mChunks;
+            std::vector<MemChunk> mChunks;
         };
     }
 }

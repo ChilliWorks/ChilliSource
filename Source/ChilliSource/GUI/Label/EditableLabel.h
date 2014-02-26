@@ -9,10 +9,9 @@
 #ifndef _MO_FLO_GUI_GUI_EDITABLE_LABEL
 #define _MO_FLO_GUI_GUI_EDITABLE_LABEL
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Label/Label.h>
-
 #include <ChilliSource/Core/Event/GenericEvent.h>
-
 #include <ChilliSource/Input/Keyboard/VirtualKeyboard.h>
 
 namespace ChilliSource
@@ -65,13 +64,13 @@ namespace ChilliSource
 			///
 			/// @param Virtual keyboard
 			//-------------------------------------------------
-			void SetKeyboard(Input::IVirtualKeyboard* inpKeyboard);
+			void SetKeyboard(Input::VirtualKeyboard* inpKeyboard);
 			//-------------------------------------------------
 			/// Get Keyboard Ptr
 			///
 			/// @return Virtual keyboard
 			//-------------------------------------------------
-			Input::IVirtualKeyboard* GetKeyboardPtr();
+			Input::VirtualKeyboard* GetKeyboardPtr();
             //-------------------------------------------------
 			/// Show Keyboard
 			//-------------------------------------------------
@@ -240,7 +239,7 @@ namespace ChilliSource
 
 		private:
 
-			Input::IVirtualKeyboard* mpKeyboard;
+			Input::VirtualKeyboard* mpKeyboard;
 
 			Core::CEvent0<Input::KeyboardEventDelegate> mOnKeyboardShowEvent;
 			Core::CEvent0<Input::KeyboardEventDelegate> mOnKeyboardHideEvent;

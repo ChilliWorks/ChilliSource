@@ -14,20 +14,21 @@
 #ifndef _MOFLO_INPUT_INPUTDEVICE_H_
 #define _MOFLO_INPUT_INPUTDEVICE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
 namespace ChilliSource
 {
 	namespace Input
 	{
-		class IInputDevice : public Core::IQueryableInterface
+		class InputDevice : public Core::IQueryableInterface
 		{
 		public:
-			IInputDevice(){}
-			virtual ~IInputDevice(){}
+			InputDevice(){}
+			virtual ~InputDevice(){}
 		};
 		
-		typedef SHARED_PTR<IInputDevice> InputDevicePtr;
+		typedef std::shared_ptr<InputDevice> InputDevicePtr;
 	}
 }
 

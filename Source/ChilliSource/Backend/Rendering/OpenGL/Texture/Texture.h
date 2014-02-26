@@ -10,10 +10,10 @@
 #ifndef _MOFLOW_OPENGL_TEXTURE_H_
 #define _MOFLOW_OPENGL_TEXTURE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
-#include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace ChilliSource
