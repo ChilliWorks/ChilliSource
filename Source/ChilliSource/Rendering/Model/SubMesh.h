@@ -155,7 +155,7 @@ namespace ChilliSource
 			/// @param the render system.
 			/// @param World transform matrix
 			//-----------------------------------------------------------------
-			void Render(RenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const MaterialPtr& inpMaterial, const SkinnedAnimationGroupPtr& inpAnimationGroup) const;
+			void Render(RenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const MaterialSPtr& inpMaterial, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const;
 			
 			//Only model loaders can alter the mesh construct
 			friend class MeshManager;

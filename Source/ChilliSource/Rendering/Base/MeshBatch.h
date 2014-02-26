@@ -48,19 +48,19 @@ namespace ChilliSource
 			/// @param Static mesh component
 			/// @param Transform
 			//------------------------------------------------------
-			void AddMesh(const StaticMeshComponentPtr &inpSprite, const Core::CMatrix4x4& inmatTransform);
+			void AddMesh(const StaticMeshComponentSPtr &inpSprite, const Core::CMatrix4x4& inmatTransform);
 			//------------------------------------------------------
 			/// Set Material
 			///
 			/// @param Material
 			//------------------------------------------------------
-			void SetMaterial(MaterialPtr inpMaterial);
+			void SetMaterial(MaterialSPtr inpMaterial);
 			//------------------------------------------------------
 			/// Get Material
 			///
 			/// @return Material
 			//------------------------------------------------------
-			const MaterialPtr& GetMaterial() const;
+			const MaterialSPtr& GetMaterial() const;
 			//------------------------------------------------------
 			/// Render
 			///
@@ -106,13 +106,13 @@ namespace ChilliSource
 			u32 mudwIndexCount;
 			
 			//The shared material
-			MaterialPtr mpMaterial;
+			MaterialSPtr mpMaterial;
 			
 			//---Render Buffer
 			MeshBuffer* mpMeshBuffer;
 			
 			//List of sprites in the batch
-			typedef std::unordered_map<StaticMeshComponentPtr, Core::CMatrix4x4> MapMeshToTransform;
+			typedef std::unordered_map<StaticMeshComponentSPtr, Core::CMatrix4x4> MapMeshToTransform;
 			MapMeshToTransform mmapMeshCache;
 		};
 	}

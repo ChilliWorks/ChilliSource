@@ -79,7 +79,7 @@ namespace ChilliSource
 			/// @param Filename
 			/// @param the output resource pointer
 			//----------------------------------------------------------------------------
-			void ReadAnimationTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource);
+			void ReadAnimationTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Create Skinned Animation From File
 			///
@@ -90,7 +90,7 @@ namespace ChilliSource
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool CreateSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource);
+			bool CreateSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Read Header
 			///
@@ -100,7 +100,7 @@ namespace ChilliSource
 			/// @param the Skeletal Animation that this data is being loaded into.
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool ReadHeader(const ChilliSource::Core::FileStreamPtr& inpStream, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource, u32& outudwNumFrames, s32& outdwNumSkeletonNodes);
+			bool ReadHeader(const ChilliSource::Core::FileStreamPtr& inpStream, const std::string & inFilePath, const SkinnedAnimationSPtr& outpResource, u32& outudwNumFrames, s32& outdwNumSkeletonNodes);
 			//----------------------------------------------------------------------------
 			/// Read Animation Data
 			///
@@ -112,7 +112,7 @@ namespace ChilliSource
             /// @param The number of skeleton nodes.
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool ReadAnimationData(const ChilliSource::Core::FileStreamPtr& inpStream, u32 inudwNumFrames, s32 indwNumSkeletonNodes, const SkinnedAnimationPtr& outpResource);
+			bool ReadAnimationData(const ChilliSource::Core::FileStreamPtr& inpStream, u32 inudwNumFrames, s32 indwNumSkeletonNodes, const SkinnedAnimationSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Read Value (Templated)
 			///

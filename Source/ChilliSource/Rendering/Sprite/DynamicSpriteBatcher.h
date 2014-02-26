@@ -82,7 +82,7 @@ namespace ChilliSource
 			std::vector<SpriteComponent::SpriteData> maSpriteCache;
             std::vector<RenderCommand> maRenderCommands;
             
-            MaterialPtr mpLastMaterial;
+            MaterialSPtr mpLastMaterial;
             
             u32 mudwCurrentRenderSpriteBatch;
             u32 mudwSpriteCommandCounter;

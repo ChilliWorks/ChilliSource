@@ -412,7 +412,7 @@ namespace ChilliSource
         ///
         /// @return Gets the currently set opaque sort predicate for this scene
         //--------------------------------------------------------------------------------------------------
-        RendererSortPredicatePtr CameraComponent::GetOpaqueSortPredicate() const
+        RendererSortPredicateSPtr CameraComponent::GetOpaqueSortPredicate() const
         {
             return mpOpaqueSortPredicate;
         }
@@ -421,7 +421,7 @@ namespace ChilliSource
         ///
         /// @return Gets the currently set opaque sort predicate for this scene
         //--------------------------------------------------------------------------------------------------
-        RendererSortPredicatePtr CameraComponent::GetTransparentSortPredicate() const
+        RendererSortPredicateSPtr CameraComponent::GetTransparentSortPredicate() const
         {
             return mpTransparentSortPredicate;
         }
@@ -430,7 +430,7 @@ namespace ChilliSource
         ///
         /// @return Opaque sort predicate to use for this scene
         //--------------------------------------------------------------------------------------------------
-        void CameraComponent::SetOpaqueSortPredicate(const RendererSortPredicatePtr & inpPredicate)
+        void CameraComponent::SetOpaqueSortPredicate(const RendererSortPredicateSPtr & inpPredicate)
         {
             mpOpaqueSortPredicate = inpPredicate;
         }
@@ -439,7 +439,7 @@ namespace ChilliSource
         ///
         /// @param Transparent sort predicate to use for this scene
         //--------------------------------------------------------------------------------------------------
-        void CameraComponent::SetTransparentSortPredicate(const RendererSortPredicatePtr & inpPredicate)
+        void CameraComponent::SetTransparentSortPredicate(const RendererSortPredicateSPtr & inpPredicate)
         {
             mpTransparentSortPredicate = inpPredicate;
         }
@@ -448,7 +448,7 @@ namespace ChilliSource
         ///
         /// @param Culling predicate to use for this camera
         //--------------------------------------------------------------------------------------------------
-        CullingPredicatePtr CameraComponent::GetCullingPredicate() const
+        ICullingPredicateSPtr CameraComponent::GetCullingPredicate() const
         {
             return IsOrthographicView() ? mpOrthographicCulling : mpPerspectiveCulling;
         }
@@ -457,7 +457,7 @@ namespace ChilliSource
         ///
         /// @param Culling predicate to use for this camera in perpective mode
         //--------------------------------------------------------------------------------------------------
-        void CameraComponent::SetPerspectiveCullingPredicate(const CullingPredicatePtr & inpPredicate)
+        void CameraComponent::SetPerspectiveCullingPredicate(const ICullingPredicateSPtr & inpPredicate)
         {
             mpPerspectiveCulling = inpPredicate;
         }
@@ -466,7 +466,7 @@ namespace ChilliSource
         ///
         /// @param Culling predicate to use for this camera in orthographic mode
         //--------------------------------------------------------------------------------------------------
-        void CameraComponent::SetOrthographicCullingPredicate(const CullingPredicatePtr & inpPredicate)
+        void CameraComponent::SetOrthographicCullingPredicate(const ICullingPredicateSPtr & inpPredicate)
         {
             mpOrthographicCulling = inpPredicate;
         }        

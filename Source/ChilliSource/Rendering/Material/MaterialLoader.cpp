@@ -72,7 +72,7 @@ namespace ChilliSource
             std::vector<TextureDesc> aCubemapFiles;
             if(BuildMaterialFromFile(ineStorageLocation, inFilePath, aShaderFiles, aTextureFiles, aCubemapFiles, outpResource) == true)
 			{
-                MaterialPtr pMaterial = std::static_pointer_cast<Material>(outpResource);
+                MaterialSPtr pMaterial = std::static_pointer_cast<Material>(outpResource);
                 
                 ShaderManager* pShaderManager = GET_RESOURCE_MANAGER(ShaderManager);
                 if(pShaderManager != nullptr)
@@ -134,7 +134,7 @@ namespace ChilliSource
             std::vector<TextureDesc> aCubemapFiles;
 			if(BuildMaterialFromFile(ineStorageLocation, inFilePath, aShaderFiles, aTextureFiles, aCubemapFiles, outpResource) == true)
 			{
-                MaterialPtr pMaterial = std::static_pointer_cast<Material>(outpResource);
+                MaterialSPtr pMaterial = std::static_pointer_cast<Material>(outpResource);
                 
                 ShaderManager* pShaderManager = GET_RESOURCE_MANAGER(ShaderManager);
                 if(pShaderManager != nullptr)
@@ -163,7 +163,7 @@ namespace ChilliSource
                 {
                     for(u32 i=0; i<aCubemapFiles.size(); ++i)
                     {
-                        CubemapPtr pCubemap = pCubemapManager->AsyncGetCubemapFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile, Core::CImage::Format::k_default, aCubemapFiles[i].mbMipMapped);
+                        CubemapSPtr pCubemap = pCubemapManager->AsyncGetCubemapFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile, Core::CImage::Format::k_default, aCubemapFiles[i].mbMipMapped);
                         pMaterial->SetCubemap(pCubemap);
                         pCubemap->WaitTilLoaded();
                     }

@@ -92,7 +92,7 @@ namespace ChilliSource
         /// @param whether or not to use mipmaps
         /// @return The sprites sheet resource pointer
 		//----------------------------------------------------------------
-		SpriteSheetPtr SpriteSheetManager::GetSpriteSheetFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
+		SpriteSheetSPtr SpriteSheetManager::GetSpriteSheetFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
 		{
             //It's the texture that is passed in so we need to load the binary file
             std::string strSpriteSheetFile;
@@ -114,7 +114,7 @@ namespace ChilliSource
 						CS_DEBUG_LOG("Loading sprite data " + strSpriteSheetFile);
 						mMapFilenameToResource.insert(std::make_pair(strSpriteSheetFile, pResource));
 						
-						SpriteSheetPtr pSpriteSheet = std::static_pointer_cast<SpriteSheet>(pResource);
+						SpriteSheetSPtr pSpriteSheet = std::static_pointer_cast<SpriteSheet>(pResource);
 						pSpriteSheet->SetName(strSpriteSheetFile);
 						pSpriteSheet->SetFilename(inFilePath);
 						pSpriteSheet->SetStorageLocation(ineStorageLocation);
@@ -141,7 +141,7 @@ namespace ChilliSource
 			
 			//Resource not found
 			CS_ERROR_LOG("Cannot find resource for sprite data with path " + inFilePath);
-			return SpriteSheetPtr();
+			return SpriteSheetSPtr();
 		}
 	}
 }

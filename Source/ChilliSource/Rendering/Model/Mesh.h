@@ -62,7 +62,7 @@ namespace ChilliSource
 			///
 			/// @return The skeleton
 			//-----------------------------------------------------------------
-			const SkeletonPtr& GetSkeletonPtr() const;
+			const SkeletonSPtr& GetSkeletonPtr() const;
 			//-----------------------------------------------------------------
             /// Get Number of Sub Meshes
             ///
@@ -75,14 +75,14 @@ namespace ChilliSource
 			/// @param Index
 			/// @return Handle to submesh
 			//-----------------------------------------------------------------
-			SubMeshPtr GetSubMeshAtIndex(u32 inIndex) const;
+			SubMeshSPtr GetSubMeshAtIndex(u32 inIndex) const;
 			//-----------------------------------------------------------------
 			/// Get Sub-mesh by Name
 			///
 			/// @param Index
 			/// @return Handle to submesh
 			//-----------------------------------------------------------------
-			SubMeshPtr GetSubMeshByName(const std::string& instrName) const;
+			SubMeshSPtr GetSubMeshByName(const std::string& instrName) const;
             //-----------------------------------------------------------------
 			/// Get Submesh Index by Name
 			///
@@ -100,8 +100,8 @@ namespace ChilliSource
 			/// @param World transform matrix
 			/// @param The array of materials.
 			//-----------------------------------------------------------------
-			void Render(RenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const std::vector<MaterialPtr>& inMaterials, 
-                        const SkinnedAnimationGroupPtr& inpAnimationGroup = SkinnedAnimationGroupPtr()) const;
+			void Render(RenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const std::vector<MaterialSPtr>& inMaterials, 
+                        const SkinnedAnimationGroupSPtr& inpAnimationGroup = SkinnedAnimationGroupSPtr()) const;
 		private:
 			//Only the mesh loader can create this
 			Mesh();
@@ -114,7 +114,7 @@ namespace ChilliSource
 			/// @param the name of the mesh.
 			/// @return The newly created sub-mesh.
 			//-----------------------------------------------------------------
-			SubMeshPtr CreateSubMesh(const std::string& instrName);
+			SubMeshSPtr CreateSubMesh(const std::string& instrName);
 			//-----------------------------------------------------------------
 			/// Remove Sub Mesh By Name
 			///
@@ -147,8 +147,8 @@ namespace ChilliSource
 			friend class MeshBatch;
 		private:
 			
-			std::vector<SubMeshPtr> mSubMeshes;
-			SkeletonPtr mpSkeleton;
+			std::vector<SubMeshSPtr> mSubMeshes;
+			SkeletonSPtr mpSkeleton;
 			
 			Core::AABB mBoundingBox;
 			u32 mudwTotalVerts;

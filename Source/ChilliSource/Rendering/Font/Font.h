@@ -147,7 +147,7 @@ namespace ChilliSource
 			///
 			/// @param Sprite data containing UV's etc
 			//-------------------------------------------
-			void SetSpriteSheet(const SpriteSheetPtr& inpData);
+			void SetSpriteSheet(const SpriteSheetSPtr& inpData);
 			//-------------------------------------------
 			/// Get Mode Character Height
 			///
@@ -245,7 +245,7 @@ namespace ChilliSource
 			TextureSPtr mpTexture;
 			
 			//The location and width etc of each character on the tpage
-			SpriteSheetPtr mpCharacterData;
+			SpriteSheetSPtr mpCharacterData;
             
             f32 mfLineHeight;
             

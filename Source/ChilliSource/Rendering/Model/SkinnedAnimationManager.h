@@ -81,7 +81,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return a pointer to the skeletal animation.
 			//-----------------------------------------------------------------
-			SkinnedAnimationPtr GetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
+			SkinnedAnimationSPtr GetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
 			//-----------------------------------------------------------------
 			/// Async Get Skinned Animation From File
 			///
@@ -92,7 +92,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return a pointer to the skeletal animation.
 			//-----------------------------------------------------------------
-			SkinnedAnimationPtr AsyncGetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
+			SkinnedAnimationSPtr AsyncGetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath);
 		private:
 			
 		};

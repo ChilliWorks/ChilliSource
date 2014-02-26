@@ -44,9 +44,9 @@ namespace ChilliSource
             //Lets give the scroll view an empty container that we can check bounds against
             //this container will expand to hold all it's children
             mpContainerView->SetSize(1.0f, 1.0f, 0.0f, 0.0f);
-            mpContainerView->SetLocalAlignment(Core::AlignmentAnchor::k_topLeft);
+            mpContainerView->SetLocalAlignment(Rendering::AlignmentAnchor::k_topLeft);
             mpContainerView->EnableAlignmentToParent(true);
-            mpContainerView->SetAlignmentToParent(Core::AlignmentAnchor::k_topLeft);
+            mpContainerView->SetAlignmentToParent(Rendering::AlignmentAnchor::k_topLeft);
             mpContainerView->EnableTouchConsumption(false);
             GUIView::AddSubview(mpContainerView);
         }
@@ -77,9 +77,9 @@ namespace ChilliSource
             //Lets give the scroll view an empty container that we can check bounds against
             //this container will expand to hold all it's children
             mpContainerView->SetSize(1.0f, 1.0f, 0.0f, 0.0f);
-            mpContainerView->SetLocalAlignment(Core::AlignmentAnchor::k_topLeft);
+            mpContainerView->SetLocalAlignment(Rendering::AlignmentAnchor::k_topLeft);
             mpContainerView->EnableAlignmentToParent(true);
-            mpContainerView->SetAlignmentToParent(Core::AlignmentAnchor::k_topLeft);
+            mpContainerView->SetAlignmentToParent(Rendering::AlignmentAnchor::k_topLeft);
             mpContainerView->EnableTouchConsumption(false);
             GUIView::AddSubview(mpContainerView);
         }
@@ -152,29 +152,29 @@ namespace ChilliSource
             {
                 //Check if the container exceeds the bounds of the scroll view
 				//Get edge positions
-				Core::CVector2 vTopLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topLeft);
-				Core::CVector2 vBottomRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomRight);
+				Core::CVector2 vTopLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
+				Core::CVector2 vBottomRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomRight);
 				
 				//We don't want the scrollable items to fly into oblivion we must cap them.
 				//The objects can only move in a direction until the furthest object in that direction is within the scroll view
 				//at this point we "bounce" the objects.
 				
-				Core::CVector2 vNewLeftPosition = mvVelocity + mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topLeft);
-				Core::CVector2 vNewRightPosition = mvVelocity + mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomRight);
+				Core::CVector2 vNewLeftPosition = mvVelocity + mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
+				Core::CVector2 vNewRightPosition = mvVelocity + mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomRight);
 				
-				Core::CVector2 vSizeOfContainer = mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight) - mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft);
+				Core::CVector2 vSizeOfContainer = mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight) - mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
 				
 				if(vSizeOfContainer.x > vBottomRight.x - vTopLeft.x)
 				{
 					// AM: Make sure we're not going to fly past the left edge
 					if(vNewLeftPosition.x >= vTopLeft.x)
 					{
-						mvVelocity.x = vTopLeft.x - mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topLeft).x;
+						mvVelocity.x = vTopLeft.x - mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topLeft).x;
 					}
                     // AM: Make sure we're not going to fly past the right edge
 					else if(vNewRightPosition.x <= vBottomRight.x)
                     {
-                        mvVelocity.x = vBottomRight.x - mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomRight).x;
+                        mvVelocity.x = vBottomRight.x - mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomRight).x;
                     } 
 				}
 				else
@@ -187,12 +187,12 @@ namespace ChilliSource
 					// AM: Make sure we're not going to fly past the top edge
 					if(vNewLeftPosition.y <= vTopLeft.y)
 					{
-						mvVelocity.y = vTopLeft.y - mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topLeft).y;
+						mvVelocity.y = vTopLeft.y - mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topLeft).y;
 					}
                     // AM: Make sure we're not going to fly past the bottom edge
 					else if(vNewRightPosition.y >= vBottomRight.y)
                     {
-                        mvVelocity.y = vBottomRight.y - mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomRight).y;
+                        mvVelocity.y = vBottomRight.y - mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomRight).y;
                     }
 				}
 				else
@@ -272,7 +272,7 @@ namespace ChilliSource
         {
             if(!mpContainerView)
                 return Core::CVector2::ZERO;
-            return mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topLeft) - GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topLeft);
+            return mpContainerView->GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topLeft) - GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
         }
         //-----------------------------------------------------
         /// Set Velocity

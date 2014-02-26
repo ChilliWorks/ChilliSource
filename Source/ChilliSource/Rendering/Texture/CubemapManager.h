@@ -65,7 +65,7 @@ namespace ChilliSource
 			/// @param Generate mip-maps. Default = false
 			/// @return A handle to the Cubemap
 			//----------------------------------------------------------------
-			CubemapPtr GetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default, bool inbWithMipsMaps = false);
+			CubemapSPtr GetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default, bool inbWithMipsMaps = false);
 			//-----------------------------------------------------------------
 			/// Async Get Cubemap From File
 			///
@@ -80,7 +80,7 @@ namespace ChilliSource
 			/// @param Enable mip-mapping
 			/// @return Generic pointer to resource type
 			//-----------------------------------------------------------------
-			CubemapPtr AsyncGetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default, bool inbWithMipsMaps = false);
+			CubemapSPtr AsyncGetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default, bool inbWithMipsMaps = false);
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///
@@ -104,7 +104,7 @@ namespace ChilliSource
 			///
 			/// @return Concrete Cubemap resource based on the render system
 			//----------------------------------------------------------------
-			virtual CubemapPtr CreateCubemapResource() = 0;
+			virtual CubemapSPtr CreateCubemapResource() = 0;
             //----------------------------------------------------------------
 			/// Create Cubemap From Image
 			///
@@ -113,7 +113,7 @@ namespace ChilliSource
 			///
 			/// @param Image to create moFlo Cubemap from
 			//----------------------------------------------------------------
-			virtual bool CreateCubemapFromImages(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, CubemapPtr& outpCubemap) = 0;
+			virtual bool CreateCubemapFromImages(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, CubemapSPtr& outpCubemap) = 0;
 		protected:
 			
 			struct ImageDesc
@@ -123,7 +123,7 @@ namespace ChilliSource
 				bool bUseMipmaps;
                 Core::StorageLocation eStorageLocation;
 				std::vector<Core::ResourcePtr> pImageResources;
-				CubemapPtr pCubemapResource;
+				CubemapSPtr pCubemapResource;
 			};
 			
 			//-----------------------------------------------------------------------------------
@@ -143,7 +143,7 @@ namespace ChilliSource
 			/// @param With mipmapping
 			/// @param Cubemap to create
 			//-----------------------------------------------------------------------------------
-			void CubemapLoadTask(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, CubemapPtr& outpCubemap);
+			void CubemapLoadTask(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, CubemapSPtr& outpCubemap);
 		};
 	}
 	

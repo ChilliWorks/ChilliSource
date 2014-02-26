@@ -31,15 +31,15 @@ namespace ChilliSource
 		{
             
 			mpBGImage = VerticalStretchableImageSPtr(new VerticalStretchableImage());
-			mpBGImage->SetLocalAlignment(Core::AlignmentAnchor::k_bottomCentre);
+			mpBGImage->SetLocalAlignment(Rendering::AlignmentAnchor::k_bottomCentre);
 			mpBGImage->EnableAlignmentToParent(true);
-			mpBGImage->SetAlignmentToParent(Core::AlignmentAnchor::k_bottomCentre);
+			mpBGImage->SetAlignmentToParent(Rendering::AlignmentAnchor::k_bottomCentre);
 			AddSubview(mpBGImage);
 			
 			mpFillImage = VerticalStretchableImageSPtr(new VerticalStretchableImage());
-			mpFillImage->SetLocalAlignment(Core::AlignmentAnchor::k_bottomCentre);
+			mpFillImage->SetLocalAlignment(Rendering::AlignmentAnchor::k_bottomCentre);
 			mpFillImage->EnableAlignmentToParent(true);
-			mpFillImage->SetAlignmentToParent(Core::AlignmentAnchor::k_bottomCentre);
+			mpFillImage->SetAlignmentToParent(Rendering::AlignmentAnchor::k_bottomCentre);
 			AddSubview(mpFillImage);
 		}
 		//------------------------------------------------------
@@ -52,15 +52,15 @@ namespace ChilliSource
 		{
             
 			mpBGImage = VerticalStretchableImageSPtr(new VerticalStretchableImage());
-			mpBGImage->SetLocalAlignment(Core::AlignmentAnchor::k_bottomCentre);
+			mpBGImage->SetLocalAlignment(Rendering::AlignmentAnchor::k_bottomCentre);
 			mpBGImage->EnableAlignmentToParent(true);
-			mpBGImage->SetAlignmentToParent(Core::AlignmentAnchor::k_bottomCentre);
+			mpBGImage->SetAlignmentToParent(Rendering::AlignmentAnchor::k_bottomCentre);
 			AddSubview(mpBGImage);
 			
 			mpFillImage = VerticalStretchableImageSPtr(new VerticalStretchableImage());
-			mpFillImage->SetLocalAlignment(Core::AlignmentAnchor::k_bottomCentre);
+			mpFillImage->SetLocalAlignment(Rendering::AlignmentAnchor::k_bottomCentre);
 			mpFillImage->EnableAlignmentToParent(true);
-			mpFillImage->SetAlignmentToParent(Core::AlignmentAnchor::k_bottomCentre);
+			mpFillImage->SetAlignmentToParent(Rendering::AlignmentAnchor::k_bottomCentre);
 			AddSubview(mpFillImage);
 			
 			std::string strValue;
@@ -111,7 +111,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite Sheet
 		//------------------------------------------------------------------------
-		void VerticalEndcappedProgressBar::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void VerticalEndcappedProgressBar::SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
 		{
 			SpriteSheet = inpSpriteSheet;
 			mpBGImage->SetSpriteSheet(inpSpriteSheet);
@@ -122,7 +122,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite Sheet
 		//------------------------------------------------------------------------
-		const Rendering::SpriteSheetPtr& VerticalEndcappedProgressBar::GetSpriteSheet() const
+		const Rendering::SpriteSheetSPtr& VerticalEndcappedProgressBar::GetSpriteSheet() const
 		{
 			return SpriteSheet;
 		}

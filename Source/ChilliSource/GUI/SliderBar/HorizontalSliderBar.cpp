@@ -132,7 +132,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet for the bar
 		//--------------------------------------------------------
-		void HorizontalSliderBar::SetBarSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void HorizontalSliderBar::SetBarSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
 		{
 			BarSpriteSheet = inpSpriteSheet;
 			mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -147,7 +147,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet for the bar
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetPtr& HorizontalSliderBar::GetBarSpriteSheet() const
+		const Rendering::SpriteSheetSPtr& HorizontalSliderBar::GetBarSpriteSheet() const
 		{
 			return BarSpriteSheet;
 		}
@@ -156,7 +156,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet for the slider
 		//--------------------------------------------------------
-		void HorizontalSliderBar::SetSliderSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void HorizontalSliderBar::SetSliderSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
 		{
 			SliderSpriteSheet = inpSpriteSheet;
 			mpSliderImage->SetSpriteSheet(inpSpriteSheet);
@@ -171,7 +171,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet for the slider
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetPtr& HorizontalSliderBar::GetSliderSpriteSheet() const
+		const Rendering::SpriteSheetSPtr& HorizontalSliderBar::GetSliderSpriteSheet() const
 		{
 			return SliderSpriteSheet;
 		}

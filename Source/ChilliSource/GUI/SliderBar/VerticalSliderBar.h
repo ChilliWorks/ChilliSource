@@ -40,25 +40,25 @@ namespace ChilliSource
             ///
             /// @param Sprite sheet for the bar
             //--------------------------------------------------------
-            void SetBarSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+            void SetBarSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
 			//--------------------------------------------------------
 			/// Get Bar Sprite Sheet
 			///
 			/// @return Sprite sheet for the bar
 			//--------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetBarSpriteSheet() const;
+			const Rendering::SpriteSheetSPtr& GetBarSpriteSheet() const;
 			//--------------------------------------------------------
 			/// Set Slider Sprite Sheet
 			///
 			/// @param Sprite sheet for the slider
 			//--------------------------------------------------------
-			void SetSliderSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetSliderSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
 			//--------------------------------------------------------
 			/// Get Slider Sprite Sheet
 			///
 			/// @return Sprite sheet for the slider
 			//--------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetSliderSpriteSheet() const;
+			const Rendering::SpriteSheetSPtr& GetSliderSpriteSheet() const;
             //--------------------------------------------------------
             /// Set Bar Sprite Sheet Index
             ///
@@ -143,8 +143,8 @@ namespace ChilliSource
 
 			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedSliderSize, SetSliderSize, GetSliderSize);
 
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, BarSpriteSheet, SetBarSpriteSheet, GetBarSpriteSheet);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, SliderSpriteSheet, SetSliderSpriteSheet, GetSliderSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, BarSpriteSheet, SetBarSpriteSheet, GetBarSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, SliderSpriteSheet, SetSliderSpriteSheet, GetSliderSpriteSheet);
 
 			DECLARE_PROPERTY_A(u32, BarSpriteSheetIndex, SetBarSpriteSheetIndex, GetBarSpriteSheetIndex);
 			DECLARE_PROPERTY_A(u32, SliderSpriteSheetIndex, SetSliderSpriteSheetIndex, GetSliderSpriteSheetIndex);

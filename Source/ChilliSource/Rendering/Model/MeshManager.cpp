@@ -16,7 +16,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		MeshPtr MeshManager::mpDefaultMesh;
+		MeshSPtr MeshManager::mpDefaultMesh;
         
 		DEFINE_NAMED_INTERFACE(MeshManager);
 		
@@ -99,7 +99,7 @@ namespace ChilliSource
         /// @param the filepath
         /// @return the resource pointer to the mesh
 		//----------------------------------------------------------------
-		MeshPtr MeshManager::GetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
+		MeshSPtr MeshManager::GetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -150,7 +150,7 @@ namespace ChilliSource
         /// @param the filepath
         /// @return the resource pointer to the mesh
 		//----------------------------------------------------------------
-		MeshPtr MeshManager::AsyncGetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
+		MeshSPtr MeshManager::AsyncGetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -196,9 +196,9 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		/// Create Manual Mesh
 		//----------------------------------------------------------------
-		MeshPtr MeshManager::CreateManualMesh(MeshDescriptor & inMeshDescriptor)
+		MeshSPtr MeshManager::CreateManualMesh(MeshDescriptor & inMeshDescriptor)
 		{
-			MeshPtr pMesh(new Mesh());
+			MeshSPtr pMesh(new Mesh());
 			
 			BuildMesh(mpApplicationOwner->GetRenderSystemPtr(), inMeshDescriptor, pMesh);
 			
@@ -207,7 +207,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		/// Create Empty Model
 		//----------------------------------------------------------------
-		MeshPtr MeshManager::CreateEmptyMesh(u32 indwNumSubMeshes, u32 inudwVertexDataSize, u32 indwIndexDataSize)
+		MeshSPtr MeshManager::CreateEmptyMesh(u32 indwNumSubMeshes, u32 inudwVertexDataSize, u32 indwIndexDataSize)
 		{
 			Mesh* pMesh = new Mesh();
 			
@@ -220,7 +220,7 @@ namespace ChilliSource
 			
 			for (int i = 0; i < indwNumSubMeshes; i++)
 			{
-				SubMeshPtr newMesh = pMesh->CreateSubMesh("mesh" + Core::ToString(i));
+				SubMeshSPtr newMesh = pMesh->CreateSubMesh("mesh" + Core::ToString(i));
 				newMesh->Prepare(mpApplicationOwner->GetRenderSystemPtr(), vertDeclaration, 2, inudwVertexDataSize, indwIndexDataSize);
 			}
 			
@@ -228,12 +228,12 @@ namespace ChilliSource
 			delete[] apVertElements;
 			
 			//return the model pointer
-			return MeshPtr(pMesh);
+			return MeshSPtr(pMesh);
 		}
 		//----------------------------------------------------------------------------
 		/// BuildMesh
 		//----------------------------------------------------------------------------
-		bool MeshManager::BuildMesh(RenderSystem* inpRenderSystem, MeshDescriptor& inMeshDescriptor, const MeshPtr& outpResource, bool inbNeedsPrepared)
+		bool MeshManager::BuildMesh(RenderSystem* inpRenderSystem, MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource, bool inbNeedsPrepared)
 		{
 			bool bSuccess = true;
 			
@@ -254,7 +254,7 @@ namespace ChilliSource
 				u32 udwIndexDataCapacity  = it->mudwNumIndices * inMeshDescriptor.mudwIndexSize;
 				
 				//prepare the mesh if it needs it, otherwise just update the vertex and index declarations.
-				SubMeshPtr newSubMesh;
+				SubMeshSPtr newSubMesh;
 				if (inbNeedsPrepared == true)
 				{
 					newSubMesh = outpResource->CreateSubMesh(it->mstrName);
@@ -310,7 +310,7 @@ namespace ChilliSource
         ///
         /// @return A default cube mesh. This will be returned if no mesh can be found
         //----------------------------------------------------------------------------
-        MeshPtr MeshManager::GetDefaultMesh()
+        MeshSPtr MeshManager::GetDefaultMesh()
         {
             return Core::CApplication::GetDefaultMesh();
         }

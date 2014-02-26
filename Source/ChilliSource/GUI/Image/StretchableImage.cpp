@@ -175,7 +175,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet containing the nine patches
         //---------------------------------------------------------
-        void StretchableImage::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void StretchableImage::SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
         {
             SpriteSheet = inpSpriteSheet;
         }
@@ -184,7 +184,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet containing the nine patches
 		//---------------------------------------------------------
-		const Rendering::SpriteSheetPtr& StretchableImage::GetSpriteSheet() const
+		const Rendering::SpriteSheetSPtr& StretchableImage::GetSpriteSheet() const
 		{
 			return SpriteSheet;
 		}
@@ -289,8 +289,8 @@ namespace ChilliSource
         void StretchableImage::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
 			//Check if this is on screen
-			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
-			Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft);
+			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
+			Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
 			
 			if(vTopRight.y < 0 || vBottomLeft.y > Core::CScreen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::CScreen::GetOrientedWidth())
 			{
@@ -301,7 +301,7 @@ namespace ChilliSource
             if(Visible && SpriteSheet)
             {
                 Core::CVector2 vPanelPos = GetAbsoluteScreenSpacePosition();
-                Core::CVector2 vTopLeft = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topLeft);
+                Core::CVector2 vTopLeft = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
                 Core::CVector2 vPatchPos;
                 
                 Core::CColour AbsColour = GetAbsoluteColour();
@@ -328,41 +328,41 @@ namespace ChilliSource
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwTopLeft), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_topLeft);
+                                   Rendering::AlignmentAnchor::k_topLeft);
                 
                 // Draw the top right corner
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topRight));
+                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topRight));
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeTopRight,  
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwTopRight), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_topRight);
+                                   Rendering::AlignmentAnchor::k_topRight);
                 
                 // Draw the bottom left corner
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_bottomLeft));
+                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft));
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeBottomLeft, 
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwBottomLeft), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_bottomLeft);
+                                   Rendering::AlignmentAnchor::k_bottomLeft);
                 
                 // Draw the bottom right corner
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_bottomRight));
+                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomRight));
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    sPatchSize.vSizeBottomRight,  
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwBottomRight), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_bottomRight);
+                                   Rendering::AlignmentAnchor::k_bottomRight);
                 
                 // Draw the top
 				vPatchPos.x = vTopLeft.x + sPatchSize.vSizeTopLeft.x;
-				vPatchPos.y = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topCentre).y;
+				vPatchPos.y = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topCentre).y;
                 matPatchTransform.Translate(vPatchPos);
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
@@ -370,11 +370,11 @@ namespace ChilliSource
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwTopCentre), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_topLeft);
+                                   Rendering::AlignmentAnchor::k_topLeft);
 				
                 // Draw the bottom
 				vPatchPos.x = vTopLeft.x + sPatchSize.vSizeBottomLeft.x;
-				vPatchPos.y = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_bottomCentre).y;
+				vPatchPos.y = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomCentre).y;
                 matPatchTransform.Translate(vPatchPos);
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
@@ -382,10 +382,10 @@ namespace ChilliSource
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwBottomCentre), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_bottomLeft);
+                                   Rendering::AlignmentAnchor::k_bottomLeft);
                 
                 // Draw the left
-				vPatchPos.x = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_middleLeft).x;
+				vPatchPos.x = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_middleLeft).x;
 				vPatchPos.y = vTopLeft.y - sPatchSize.vSizeTopLeft.y;
                 matPatchTransform.Translate(vPatchPos);
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
@@ -394,10 +394,10 @@ namespace ChilliSource
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwLeftCentre), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_topLeft);
+                                   Rendering::AlignmentAnchor::k_topLeft);
                 
                 // Draw the right
-				vPatchPos.x = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_middleRight).x;
+				vPatchPos.x = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_middleRight).x;
 				vPatchPos.y = vTopLeft.y - sPatchSize.vSizeTopRight.y;
                 matPatchTransform.Translate(vPatchPos);
                 Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
@@ -406,7 +406,7 @@ namespace ChilliSource
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwRightCentre), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_topRight);
+                                   Rendering::AlignmentAnchor::k_topRight);
                 
                 // Draw the centre
 				vPatchPos.x = vTopLeft.x + sPatchSize.vSizeTopLeft.x;
@@ -418,7 +418,7 @@ namespace ChilliSource
 								   SpriteSheet->GetTexture(),
                                    SpriteSheet->GetUVsForFrame(msIndices.udwMiddleCentre), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_topLeft);
+                                   Rendering::AlignmentAnchor::k_topLeft);
                 
                 // Render subviews
                 GUIView::Draw(inpCanvas);
@@ -615,7 +615,7 @@ namespace ChilliSource
 					CalculatePatchSize(sPatchSize);
 					
 					// Get the AABB of the centre
-					Core::Rectangle sMiddleAABB(GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft) + sPatchSize.vSizeBottomLeft, sPatchSize.vSizeMiddleCentre);
+					Core::Rectangle sMiddleAABB(GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft) + sPatchSize.vSizeBottomLeft, sPatchSize.vSizeMiddleCentre);
 					
 					// If the touch is not located in the centre, we consume it
 					bool bContainsMiddle = sMiddleAABB.Contains(insTouchInfo.vLocation);
@@ -666,7 +666,7 @@ namespace ChilliSource
 						CalculatePatchSize(sPatchSize);
 						
 						// Get the AABB of the centre
-						Core::Rectangle sMiddleAABB(GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft) + sPatchSize.vSizeBottomLeft, sPatchSize.vSizeMiddleCentre);
+						Core::Rectangle sMiddleAABB(GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft) + sPatchSize.vSizeBottomLeft, sPatchSize.vSizeMiddleCentre);
 						
 						// If the touch is not located in the centre, we consume it
 						bool bContainsMiddle = sMiddleAABB.Contains(insTouchInfo.vLocation);

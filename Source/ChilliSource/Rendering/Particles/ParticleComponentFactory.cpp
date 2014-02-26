@@ -98,9 +98,9 @@ namespace ChilliSource
         ///
         /// @return Particle Component
         //--------------------------------------------------------
-        ParticleComponentPtr ParticleComponentFactory::CreateParticleComponent()
+        ParticleComponentSPtr ParticleComponentFactory::CreateParticleComponent()
 		{
-			ParticleComponentPtr pParticleComp(new ParticleComponent());
+			ParticleComponentSPtr pParticleComp(new ParticleComponent());
 			mpParticleSystem->AddParticleComponent(pParticleComp.get());			
 			return pParticleComp;
 		}
@@ -113,9 +113,9 @@ namespace ChilliSource
         /// @param The filepath
         /// @return Particle Component
         //--------------------------------------------------------
-        ParticleComponentPtr ParticleComponentFactory::CreateParticleComponentFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile)
+        ParticleComponentSPtr ParticleComponentFactory::CreateParticleComponentFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile)
 		{
-			ParticleComponentPtr pParticleComp(new ParticleComponent());
+			ParticleComponentSPtr pParticleComp(new ParticleComponent());
             
             //Load script
             TiXmlDocument Doc(instrScriptFile);
@@ -131,7 +131,7 @@ namespace ChilliSource
                     mpMaterialMgr = static_cast<MaterialManager*>(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Material::InterfaceID));
                 }
                 
-                MaterialPtr pMaterial;
+                MaterialSPtr pMaterial;
                 TiXmlElement* pMaterialEl = Core::XMLUtils::FirstChildElementWithName(pDocRoot, "material");
                 if(pMaterialEl)
                 {

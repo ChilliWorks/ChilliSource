@@ -38,7 +38,7 @@ namespace ChilliSource
         /// @return Ownership of particle emitter of that type
         //-------------------------------------------------------------------
         ParticleEmitter* ParticleEmitterFactory::CreateParticleEmitter(const std::string& instrType, const Core::ParamDictionary& insParams, 
-                                                                         const MaterialPtr& inpMaterial, ParticleComponent* inpOwner)
+                                                                         const MaterialSPtr& inpMaterial, ParticleComponent* inpOwner)
         {
             MapDelegateToString::iterator it = mmapDelegateToType.find(instrType);
             

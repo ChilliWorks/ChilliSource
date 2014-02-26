@@ -58,7 +58,7 @@ namespace ChilliSource
             {
                 SpriteVertex sVerts[kudwVertsPerSprite];
                 
-                MaterialPtr pMaterial;
+                MaterialSPtr pMaterial;
             };
 			
 			DECLARE_NAMED_INTERFACE(SpriteComponent);
@@ -232,13 +232,13 @@ namespace ChilliSource
 			///
 			/// @param Alignment to set origin to be (AlignmentAnchor::k_middleCentre) by default
 			//-----------------------------------------------------------
-			void SetOriginAlignment(Core::AlignmentAnchor ineAlignment);
+			void SetOriginAlignment(AlignmentAnchor ineAlignment);
 			//-----------------------------------------------------------
             /// Get Origin Alignment 
             ///
 			/// @return Returns alignment of this sprite's origin
 			//-----------------------------------------------------------
-			Core::AlignmentAnchor  GetOriginAlignment() const;
+			AlignmentAnchor  GetOriginAlignment() const;
             //-----------------------------------------------------------
             /// Get Upper Left Corner Position
             ///
@@ -371,7 +371,7 @@ namespace ChilliSource
             Core::CColour mColourWithOpacity;
             Core::CColour::ByteColour mByteColourWithOpacity;
 			
-            Core::AlignmentAnchor     meAlignment;
+            AlignmentAnchor     meAlignment;
             
 			bool mbFlippedHorizontal;
 			bool mbFlippedVertical;

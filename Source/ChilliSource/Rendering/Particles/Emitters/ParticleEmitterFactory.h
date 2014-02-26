@@ -22,7 +22,7 @@ namespace ChilliSource
         class ParticleEmitterFactory
         {
         public:
-            typedef fastdelegate::FastDelegate3<const Core::ParamDictionary&, const MaterialPtr&, ParticleComponent*, ParticleEmitter*> EmitterCreateDelegate; 
+            typedef fastdelegate::FastDelegate3<const Core::ParamDictionary&, const MaterialSPtr&, ParticleComponent*, ParticleEmitter*> EmitterCreateDelegate; 
 
             //------------------------------------------------------------------
             /// Register 
@@ -45,7 +45,7 @@ namespace ChilliSource
             /// @return Ownership of particle emitter of that type
             //-------------------------------------------------------------------
             ParticleEmitter* CreateParticleEmitter(const std::string& instrType, const Core::ParamDictionary& insParams, 
-                                                    const MaterialPtr& inpMaterial, ParticleComponent* inpOwner);
+                                                    const MaterialSPtr& inpMaterial, ParticleComponent* inpOwner);
             
         private:
             

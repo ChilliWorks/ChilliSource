@@ -25,7 +25,7 @@ namespace ChilliSource
 		/// Constructor
 		//----------------------------------------------------------
 		SpriteComponent::SpriteComponent() : mUVs(Core::CVector2(0, 0), Core::CVector2(1, 1)), mbFlippedVertical(false), mbFlippedHorizontal(false), 
-        mbCornerPosCacheValid(false), meAlignment(Core::AlignmentAnchor::k_middleCentre), mbUVCacheValid(false), mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
+        mbCornerPosCacheValid(false), meAlignment(AlignmentAnchor::k_middleCentre), mbUVCacheValid(false), mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
 		{
             mByteColourWithOpacity.r = 255;
             mByteColourWithOpacity.g = 255;
@@ -238,7 +238,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Origin Alignment
 		//-----------------------------------------------------------
-		void SpriteComponent::SetOriginAlignment(Core::AlignmentAnchor ineAlignment)
+		void SpriteComponent::SetOriginAlignment(AlignmentAnchor ineAlignment)
         {
 			meAlignment = ineAlignment;
 			mbCornerPosCacheValid = false;
@@ -246,7 +246,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get Origin Alignment
 		//-----------------------------------------------------------
-		Core::AlignmentAnchor SpriteComponent::GetOriginAlignment() const
+		AlignmentAnchor SpriteComponent::GetOriginAlignment() const
         {
 			return meAlignment;
 		}
@@ -396,7 +396,7 @@ namespace ChilliSource
             
 			Core::CVector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
 			Core::CVector2 vAlignedPos;
-            Core::Align(meAlignment, vHalfSize, vAlignedPos);
+            Align(meAlignment, vHalfSize, vAlignedPos);
             
             Core::CVector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
             Core::CVector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);

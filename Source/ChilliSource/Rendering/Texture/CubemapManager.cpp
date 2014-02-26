@@ -102,7 +102,7 @@ namespace ChilliSource
 		/// @param Generate mip-maps. Default = false
 		/// @return A handle to the Cubemap
 		//----------------------------------------------------------------
-		CubemapPtr CubemapManager::GetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
+		CubemapSPtr CubemapManager::GetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -116,7 +116,7 @@ namespace ChilliSource
 				{
                     if(mResourceProviders[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
                     {
-                        CubemapPtr pCubemap = CreateCubemapResource();
+                        CubemapSPtr pCubemap = CreateCubemapResource();
                         std::vector<Core::ResourcePtr> aImages;
                         aImages.reserve(6);
                         
@@ -138,7 +138,7 @@ namespace ChilliSource
                         if(aImages.size() != 6)
                         {
                             CS_ERROR_LOG("Cannot find all resources for Cubemap with base path " + inFilePath);
-                            return CubemapPtr();
+                            return CubemapSPtr();
                         }
                         
                         if(CreateCubemapFromImages(aImages, inbWithMipsMaps, pCubemap))
@@ -162,7 +162,7 @@ namespace ChilliSource
 			}
 			
 			CS_ERROR_LOG("Cannot find resource for Cubemap with base path " + inFilePath);
-			return CubemapPtr();
+			return CubemapSPtr();
 		}
 		//-----------------------------------------------------------------
 		/// Async Get Cubemap From File
@@ -178,7 +178,7 @@ namespace ChilliSource
 		/// @param Enable mip-mapping
 		/// @return Generic pointer to resource type
 		//-----------------------------------------------------------------
-		CubemapPtr CubemapManager::AsyncGetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
+		CubemapSPtr CubemapManager::AsyncGetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -247,7 +247,7 @@ namespace ChilliSource
                     }
                     
                     //Load the Cubemap from this image
-                    Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<const std::vector<Core::ResourcePtr>&, bool, CubemapPtr&>(this, &CubemapManager::CubemapLoadTask, inDesc.pImageResources, inDesc.bUseMipmaps, inDesc.pCubemapResource));
+                    Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<const std::vector<Core::ResourcePtr>&, bool, CubemapSPtr&>(this, &CubemapManager::CubemapLoadTask, inDesc.pImageResources, inDesc.bUseMipmaps, inDesc.pCubemapResource));
                     return;
                 }
 			}
@@ -263,7 +263,7 @@ namespace ChilliSource
 		/// @param With mipmapping
 		/// @param Cubemap to create
 		//-----------------------------------------------------------------------------------
-		void CubemapManager::CubemapLoadTask(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, CubemapPtr& outpCubemap)
+		void CubemapManager::CubemapLoadTask(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, CubemapSPtr& outpCubemap)
 		{
             if(CreateCubemapFromImages(inaImages, inbWithMipsMaps, outpCubemap))
             {
@@ -273,7 +273,7 @@ namespace ChilliSource
             else
             {
                 CS_ERROR_LOG("Cannot create Cubemap from image " + inaImages[0]->GetName());
-                outpCubemap = CubemapPtr();
+                outpCubemap = CubemapSPtr();
                 return;
             }
 

@@ -46,11 +46,11 @@ namespace ChilliSource
 			
 			for(MapMeshToTransform::const_iterator it = mmapMeshCache.begin(); it != mmapMeshCache.end(); ++it)
 			{
-				MeshPtr pMesh = it->first->GetMesh();
+				MeshSPtr pMesh = it->first->GetMesh();
 				
 				for (u32 i = 0; i < pMesh->GetNumSubMeshes(); i++)
 				{
-					SubMeshPtr pSubMesh = pMesh->GetSubMeshAtIndex(i);
+					SubMeshSPtr pSubMesh = pMesh->GetSubMeshAtIndex(i);
 					VBufferSize += pSubMesh->GetInternalMeshBuffer()->GetVertexCapacity();
 					IBufferSize += pSubMesh->GetInternalMeshBuffer()->GetIndexCapacity();
 					
@@ -86,7 +86,7 @@ namespace ChilliSource
 		/// @param Static mesh component
 		/// @param Transform
 		//------------------------------------------------------
-		void MeshBatch::AddMesh(const StaticMeshComponentPtr &inpMesh, const Core::CMatrix4x4& inmatTransform)
+		void MeshBatch::AddMesh(const StaticMeshComponentSPtr &inpMesh, const Core::CMatrix4x4& inmatTransform)
 		{
 			mmapMeshCache.insert(std::make_pair(inpMesh, inmatTransform));
 		}
@@ -134,7 +134,7 @@ namespace ChilliSource
 				//---------------------------------------------------
                 // Sub-Meshes
                 //---------------------------------------------------
-				for(std::vector<SubMeshPtr>::const_iterator jt = it->first->GetMesh()->mSubMeshes.begin(); jt != it->first->GetMesh()->mSubMeshes.end(); ++jt)
+				for(std::vector<SubMeshSPtr>::const_iterator jt = it->first->GetMesh()->mSubMeshes.begin(); jt != it->first->GetMesh()->mSubMeshes.end(); ++jt)
 				{
 					MeshBuffer* pSubBuffer = (*jt)->GetInternalMeshBuffer();
 					pSubBuffer->Bind();
@@ -239,7 +239,7 @@ namespace ChilliSource
 		///
 		/// @return Material
 		//------------------------------------------------------
-		const MaterialPtr& MeshBatch::GetMaterial() const
+		const MaterialSPtr& MeshBatch::GetMaterial() const
 		{
 			return mpMaterial;
 		}
@@ -248,7 +248,7 @@ namespace ChilliSource
 		///
 		/// @param Material
 		//------------------------------------------------------
-		void MeshBatch::SetMaterial(MaterialPtr inpMaterial)
+		void MeshBatch::SetMaterial(MaterialSPtr inpMaterial)
 		{
 			mpMaterial = inpMaterial;
 		}

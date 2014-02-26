@@ -40,37 +40,37 @@ namespace ChilliSource
 		Renderer::Renderer(RenderSystem * inpRenderSystem) 
         : mpRenderSystem(inpRenderSystem), mCanvas(inpRenderSystem), mpActiveCamera(nullptr)
 		{
-			mpTransparentSortPredicate = RendererSortPredicatePtr(new BackToFrontSortPredicate());
-            mpOpaqueSortPredicate = RendererSortPredicatePtr(new MaterialSortPredicate());
+			mpTransparentSortPredicate = RendererSortPredicateSPtr(new BackToFrontSortPredicate());
+            mpOpaqueSortPredicate = RendererSortPredicateSPtr(new MaterialSortPredicate());
             
-            mpPerspectiveCullPredicate = CullingPredicatePtr(new FrustumCullPredicate());
-            mpOrthoCullPredicate = CullingPredicatePtr(new ViewportCullPredicate());
+            mpPerspectiveCullPredicate = ICullingPredicateSPtr(new FrustumCullPredicate());
+            mpOrthoCullPredicate = ICullingPredicateSPtr(new ViewportCullPredicate());
 		}
 		//----------------------------------------------------------
 		/// Set Transparent Sort Predicate
 		//----------------------------------------------------------
-		void Renderer::SetTransparentSortPredicate(const RendererSortPredicatePtr & inpFunctor)
+		void Renderer::SetTransparentSortPredicate(const RendererSortPredicateSPtr & inpFunctor)
         {
 			mpTransparentSortPredicate = inpFunctor;
 		}
         //----------------------------------------------------------
         /// Set Opaque Sort Predicate
         //----------------------------------------------------------
-        void Renderer::SetOpaqueSortPredicate(const RendererSortPredicatePtr & inpFunctor)
+        void Renderer::SetOpaqueSortPredicate(const RendererSortPredicateSPtr & inpFunctor)
         {
             mpOpaqueSortPredicate = inpFunctor;
         }
         //----------------------------------------------------------
         /// Set Perspective Cull Predicate
         //----------------------------------------------------------
-        void Renderer::SetPerspectiveCullPredicate(const CullingPredicatePtr & inpFunctor)
+        void Renderer::SetPerspectiveCullPredicate(const ICullingPredicateSPtr & inpFunctor)
         {
             mpPerspectiveCullPredicate = inpFunctor;
         }
         //----------------------------------------------------------
         /// Set Ortho Cull Predicate
         //----------------------------------------------------------
-        void Renderer::SetOrthoCullPredicate(const CullingPredicatePtr & inpFunctor)
+        void Renderer::SetOrthoCullPredicate(const ICullingPredicateSPtr & inpFunctor)
         {
             mpOrthoCullPredicate = inpFunctor;
         }
@@ -247,9 +247,9 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Cull Predicate
         //----------------------------------------------------------
-        CullingPredicatePtr Renderer::GetCullPredicate(CameraComponent* inpActiveCamera) const
+        ICullingPredicateSPtr Renderer::GetCullPredicate(CameraComponent* inpActiveCamera) const
         {
-            CullingPredicatePtr pCullPredicate = inpActiveCamera->GetCullingPredicate();
+            ICullingPredicateSPtr pCullPredicate = inpActiveCamera->GetCullingPredicate();
             
             if(pCullPredicate)
             {
@@ -267,7 +267,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void Renderer::SortOpaque(CameraComponent* inpCameraComponent, std::vector<RenderComponent*>& inaRenderables) const
         {
-            RendererSortPredicatePtr pOpaqueSort = inpCameraComponent->GetOpaqueSortPredicate();
+            RendererSortPredicateSPtr pOpaqueSort = inpCameraComponent->GetOpaqueSortPredicate();
             if(!pOpaqueSort)
             {
                 pOpaqueSort = mpOpaqueSortPredicate;
@@ -284,7 +284,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void Renderer::SortTransparent(CameraComponent* inpCameraComponent, std::vector<RenderComponent*>& inaRenderables) const
         {
-            RendererSortPredicatePtr pTransparentSort = inpCameraComponent->GetTransparentSortPredicate();
+            RendererSortPredicateSPtr pTransparentSort = inpCameraComponent->GetTransparentSortPredicate();
             if(!pTransparentSort)
             {
                 pTransparentSort = mpTransparentSortPredicate;

@@ -31,13 +31,13 @@ namespace ChilliSource
 			///
 			/// @param Sprite Sheet
 			//------------------------------------------------------------------------
-			void SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
 			//------------------------------------------------------------------------
 			/// Get Sprite Sheet
 			///
 			/// @return Sprite Sheet
 			//------------------------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetSpriteSheet() const;
+			const Rendering::SpriteSheetSPtr& GetSpriteSheet() const;
 			//---------------------------------------------------------
 			/// Set Base Fill Sprite Sheet Index ID
 			///
@@ -156,7 +156,7 @@ namespace ChilliSource
             
 		private:
             
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
             
 			DECLARE_PROPERTY_A(std::string, BaseFillSpriteSheetIndexID, SetBaseFillSpriteSheetIndexID, GetBaseFillSpriteSheetIndexID);
 			DECLARE_PROPERTY_A(std::string, BaseBackgroundSpriteSheetIndexID, SetBaseBackgroundSpriteSheetIndexID, GetBaseBackgroundSpriteSheetIndexID);

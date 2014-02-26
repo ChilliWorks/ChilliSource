@@ -95,7 +95,7 @@ namespace ChilliSource
 		/// @param File name
 		/// @param Image format
 		//----------------------------------------------------------------
-		FontPtr FontManager::GetFontFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat)
+		FontSPtr FontManager::GetFontFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat)
 		{
             //It's the texture that is passed in so we need to load the alphabet file
             std::string strFontFile;
@@ -117,7 +117,7 @@ namespace ChilliSource
                         
 						mMapFilenameToResource.insert(std::make_pair(strFontFile, pResource));
 						
-						FontPtr pFont = std::static_pointer_cast<Font>(pResource);
+						FontSPtr pFont = std::static_pointer_cast<Font>(pResource);
 						pFont->SetName(strFontFile);
 						pFont->SetOwningResourceManager(this);
 						pFont->SetLoaded(true);
@@ -127,7 +127,7 @@ namespace ChilliSource
                             mpSpriteSheetManager = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<SpriteSheetManager>();
                         }
                         
-                        SpriteSheetPtr pFontData = mpSpriteSheetManager->GetSpriteSheetFromFile(ineStorageLocation, inFilePath, ineFormat, false);
+                        SpriteSheetSPtr pFontData = mpSpriteSheetManager->GetSpriteSheetFromFile(ineStorageLocation, inFilePath, ineFormat, false);
                         pFont->SetSpriteSheet(pFontData);
 						return pFont;
 					}
@@ -140,7 +140,7 @@ namespace ChilliSource
 			
 			//Resource not found
 			CS_ERROR_LOG("Cannot find resource for font with path " + inFilePath);
-			return FontPtr();
+			return FontSPtr();
 		}
 	}
 }

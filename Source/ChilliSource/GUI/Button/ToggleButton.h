@@ -81,25 +81,25 @@ namespace ChilliSource
             ///
             /// @param Sprite sheet with with On image
             //-----------------------------------------------------------
-            void SetOnSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+            void SetOnSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
 			//-----------------------------------------------------------
 			/// Set Off Sprite Sheet
 			///
 			/// @param Sprite sheet with with Off image
 			//-----------------------------------------------------------
-			void SetOffSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetOffSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
             //-----------------------------------------------------------
             /// Get On Sprite Sheet
             ///
             /// @return Sprite sheet with default image
             //-----------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetOnSpriteSheet() const;
+			const Rendering::SpriteSheetSPtr& GetOnSpriteSheet() const;
 			//-----------------------------------------------------------
 			/// Get Off Sprite Sheet
 			///
 			/// @return Sprite sheet with Off image
 			//-----------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetOffSpriteSheet() const;
+			const Rendering::SpriteSheetSPtr& GetOffSpriteSheet() const;
             //-----------------------------------------------------------
             /// Set On Sprite Sheet Index
             ///
@@ -339,8 +339,8 @@ namespace ChilliSource
 			//---Properties
 			DECLARE_PROPERTY_A(Rendering::TextureSPtr, OnTexture, SetOnImage, GetOnImage);
 			DECLARE_PROPERTY_A(Rendering::TextureSPtr, OffTexture, SetOffImage, GetOffImage);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, OnSpriteSheet, SetOnSpriteSheet, GetOnSpriteSheet);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, OffSpriteSheet, SetOffSpriteSheet, GetOffSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, OnSpriteSheet, SetOnSpriteSheet, GetOnSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, OffSpriteSheet, SetOffSpriteSheet, GetOffSpriteSheet);
 
 			DECLARE_PROPERTY_A(u32,OnSpriteSheetIndex, SetOnSpriteSheetIndex, GetOnSpriteSheetIndex);
 			DECLARE_PROPERTY_A(u32, OffSpriteSheetIndex, SetOffSpriteSheetIndex, GetOffSpriteSheetIndex);

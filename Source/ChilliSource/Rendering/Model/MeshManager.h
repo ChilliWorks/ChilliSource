@@ -83,7 +83,7 @@ namespace ChilliSource
             /// @param the filepath
             /// @return the resource pointer to the mesh
 			//----------------------------------------------------------------
-			MeshPtr GetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath);
+			MeshSPtr GetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath);
 			//----------------------------------------------------------------
 			/// Async Get Model From File
 			///
@@ -94,21 +94,21 @@ namespace ChilliSource
             /// @param the filepath
             /// @return the resource pointer to the mesh
 			//----------------------------------------------------------------
-			MeshPtr AsyncGetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath);
+			MeshSPtr AsyncGetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath);
 			//----------------------------------------------------------------
 			/// Create Empty Model
 			///
 			/// Creates a new empty model which can be later populated with
 			/// data using PopulateModelFromFile
 			//----------------------------------------------------------------
-			MeshPtr CreateEmptyMesh(u32 indwNumSubMeshes, u32 inudwVertexDataSize, u32 indwIndexDataSize);
+			MeshSPtr CreateEmptyMesh(u32 indwNumSubMeshes, u32 inudwVertexDataSize, u32 indwIndexDataSize);
             //----------------------------------------------------------------
             /// Create Manual Mesh
             ///
             /// @param Mesh descriptor containing the vertex data etx
             /// @return Mesh resource
             //----------------------------------------------------------------
-			MeshPtr CreateManualMesh(MeshDescriptor& insMeshDescriptor);
+			MeshSPtr CreateManualMesh(MeshDescriptor& insMeshDescriptor);
 			//----------------------------------------------------------------------------
 			/// BuildMesh
 			///
@@ -120,17 +120,17 @@ namespace ChilliSource
 			/// @param whether or not the mesh needs prepared. Defaults to true.
 			/// @return success or failure.
 			//----------------------------------------------------------------------------
-			static bool BuildMesh(RenderSystem* inpRenderSystem, MeshDescriptor& inMeshDescriptor, const MeshPtr& outpResource, bool inbNeedsPrepared = true);
+			static bool BuildMesh(RenderSystem* inpRenderSystem, MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource, bool inbNeedsPrepared = true);
             //----------------------------------------------------------------------------
             /// Get Default Mesh
             ///
             /// @return A default cube mesh. This will be returned if no mesh can be found
             //----------------------------------------------------------------------------
-            MeshPtr GetDefaultMesh();
+            MeshSPtr GetDefaultMesh();
             
         private:
             
-            static MeshPtr mpDefaultMesh;
+            static MeshSPtr mpDefaultMesh;
 		};
 	}
 }

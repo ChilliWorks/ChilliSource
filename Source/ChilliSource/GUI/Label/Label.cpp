@@ -248,7 +248,7 @@ namespace ChilliSource
         ///
         /// @param Font used to display text
         //-------------------------------------------------------
-        void Label::SetFont(const Rendering::FontPtr& inpFont)
+        void Label::SetFont(const Rendering::FontSPtr& inpFont)
         {
             Font = inpFont;
             
@@ -259,7 +259,7 @@ namespace ChilliSource
         ///
         /// @return Font used to display text
         //-------------------------------------------------------
-        const Rendering::FontPtr& Label::GetFont() const
+        const Rendering::FontSPtr& Label::GetFont() const
         {
             return Font;
         }
@@ -600,8 +600,8 @@ namespace ChilliSource
             if(Visible)
             {
                 //Check if this is on screen
-                Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
-                Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft);
+                Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
+                Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
                 
                 if(vTopRight.y < 0 || vBottomLeft.y > Core::CScreen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::CScreen::GetOrientedWidth())
                 {

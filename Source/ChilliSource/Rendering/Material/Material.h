@@ -92,7 +92,7 @@ namespace ChilliSource
 			///
 			/// @return Cloned instance
 			//----------------------------------------------------------
-			MaterialPtr Clone() const;
+			MaterialSPtr Clone() const;
 			//----------------------------------------------------------
 			/// Is A
 			///
@@ -154,13 +154,13 @@ namespace ChilliSource
 			///
 			/// @param Cubemap
 			//----------------------------------------------------------
-			void SetCubemap(const CubemapPtr &inpCubemap);
+			void SetCubemap(const CubemapSPtr &inpCubemap);
 			//----------------------------------------------------------
 			/// Get Cubemap
 			///
 			/// @return Cubemap
 			//----------------------------------------------------------
-			const CubemapPtr& GetCubemap() const;
+			const CubemapSPtr& GetCubemap() const;
 			//----------------------------------------------------------
 			/// Is Transparent
 			///
@@ -437,7 +437,7 @@ namespace ChilliSource
             
             std::vector<TextureSPtr> mTextures;
             
-            CubemapPtr mpCubemap;
+            CubemapSPtr mpCubemap;
             
             ShaderSPtr maShaderPrograms[(u32)ShaderPass::k_total];
             ShaderSPtr mpActiveShaderProgram;

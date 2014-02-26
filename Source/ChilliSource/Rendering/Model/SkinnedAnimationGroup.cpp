@@ -20,7 +20,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Constructor
         //-----------------------------------------------------------
-        SkinnedAnimationGroup::SkinnedAnimationGroup(const SkeletonPtr& inpSkeleton)
+        SkinnedAnimationGroup::SkinnedAnimationGroup(const SkeletonSPtr& inpSkeleton)
         : mpSkeleton(inpSkeleton), mbAnimationLengthDirty(true), mfAnimationLength(0.0f), mbPrepared(false)
         {
             for (u32 i = 0; i < mpSkeleton->GetNumNodes(); ++i)
@@ -31,7 +31,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Attach Animation
         //----------------------------------------------------------
-        void SkinnedAnimationGroup::AttachAnimation(const SkinnedAnimationPtr& inpAnimation, f32 infBlendlinePosition)
+        void SkinnedAnimationGroup::AttachAnimation(const SkinnedAnimationSPtr& inpAnimation, f32 infBlendlinePosition)
         {
             mbAnimationLengthDirty = true;
             AnimationItemPtr pItem(new AnimationItem());
@@ -42,7 +42,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Detatch Animation
         //----------------------------------------------------------
-        void SkinnedAnimationGroup::DetatchAnimation(const SkinnedAnimationPtr& inpAnimation)
+        void SkinnedAnimationGroup::DetatchAnimation(const SkinnedAnimationSPtr& inpAnimation)
         {
             mbAnimationLengthDirty = true;
             for (std::vector<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
@@ -86,11 +86,11 @@ namespace ChilliSource
                 }
                 
                 //get the animation frames
-                SkinnedAnimationFramePtr pFrame1;
+                SkinnedAnimationFrameSPtr pFrame1;
                 if (pAnimItem1 != nullptr)
                     pFrame1 = CalculateAnimationFrame(pAnimItem1->pSkinnedAnimation, infPlaybackPosition);
                 
-                SkinnedAnimationFramePtr pFrame2;
+                SkinnedAnimationFrameSPtr pFrame2;
                 if (pAnimItem2 != nullptr)
                     pFrame2 = CalculateAnimationFrame(pAnimItem2->pSkinnedAnimation, infPlaybackPosition);
                 
@@ -127,7 +127,7 @@ namespace ChilliSource
             }
             else if (mAnimations.size() > 0) 
             {
-                SkinnedAnimationPtr pAnim = mAnimations[0]->pSkinnedAnimation;
+                SkinnedAnimationSPtr pAnim = mAnimations[0]->pSkinnedAnimation;
                 mCurrentAnimationData = CalculateAnimationFrame(pAnim, infPlaybackPosition);
                 mbPrepared = true;
             }
@@ -140,7 +140,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Blend Group
         //----------------------------------------------------------
-        void SkinnedAnimationGroup::BlendGroup(AnimationBlendType ineBlendType, const SkinnedAnimationGroupPtr& inpAnimationGroup, f32 infBlendFactor)
+        void SkinnedAnimationGroup::BlendGroup(AnimationBlendType ineBlendType, const SkinnedAnimationGroupSPtr& inpAnimationGroup, f32 infBlendFactor)
         {
             switch (ineBlendType)
             {
@@ -157,9 +157,9 @@ namespace ChilliSource
         //----------------------------------------------------------
         void SkinnedAnimationGroup::BuildMatrices(s32 indwCurrentParent, const Core::CMatrix4x4& inParentMatrix)
         {
-            const std::vector<SkeletonNodePtr>& nodes = mpSkeleton->GetNodes();
+            const std::vector<SkeletonNodeSPtr>& nodes = mpSkeleton->GetNodes();
 			u32 currIndex = 0;
-			for (std::vector<SkeletonNodePtr>::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+			for (std::vector<SkeletonNodeSPtr>::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
 			{
 				if ((*it)->mdwParentIndex == indwCurrentParent)
 				{
@@ -250,7 +250,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Animation
         //----------------------------------------------------------
-        void SkinnedAnimationGroup::GetAnimations(std::vector<SkinnedAnimationPtr>& outapSkinnedAnimationList)
+        void SkinnedAnimationGroup::GetAnimations(std::vector<SkinnedAnimationSPtr>& outapSkinnedAnimationList)
         {
             for (std::vector<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
             {
@@ -268,7 +268,7 @@ namespace ChilliSource
                 
                 for (std::vector<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
                 {
-                    SkinnedAnimationPtr pAnim = (*it)->pSkinnedAnimation;
+                    SkinnedAnimationSPtr pAnim = (*it)->pSkinnedAnimation;
                     f32 fAnimationLength = pAnim->GetFrameTime() * ((f32)(pAnim->GetNumFrames() - 1));
                     
                     if (mfAnimationLength != 0.0f && mfAnimationLength != fAnimationLength)
@@ -293,7 +293,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Calculate Animation Frame
         //----------------------------------------------------------
-        SkinnedAnimationFramePtr SkinnedAnimationGroup::CalculateAnimationFrame(const SkinnedAnimationPtr& inpAnimation, f32 infPlaybackPosition)
+        SkinnedAnimationFrameSPtr SkinnedAnimationGroup::CalculateAnimationFrame(const SkinnedAnimationSPtr& inpAnimation, f32 infPlaybackPosition)
         {
             //report errors if the playback position provided does not make sense
             if (infPlaybackPosition < 0.0f)
@@ -328,8 +328,8 @@ namespace ChilliSource
             }
             
 			//get the frames
-			SkinnedAnimationFramePtr frameA = inpAnimation->GetFrameAtIndex(dwFrameAIndex);
-			SkinnedAnimationFramePtr frameB = inpAnimation->GetFrameAtIndex(dwFrameBIndex);
+			SkinnedAnimationFrameSPtr frameA = inpAnimation->GetFrameAtIndex(dwFrameAIndex);
+			SkinnedAnimationFrameSPtr frameB = inpAnimation->GetFrameAtIndex(dwFrameBIndex);
 			
 			//get the ratio of one frame to the next
 			f32 interpFactor = (infPlaybackPosition - (dwFrameAIndex * inpAnimation->GetFrameTime())) / inpAnimation->GetFrameTime();
@@ -340,9 +340,9 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Lerp Between Frames
         //--------------------------------------------------------------
-        SkinnedAnimationFramePtr SkinnedAnimationGroup::LerpBetweenFrames(const SkinnedAnimationFramePtr& inFrameA, const SkinnedAnimationFramePtr& inFrameB, f32 infInterpFactor)
+        SkinnedAnimationFrameSPtr SkinnedAnimationGroup::LerpBetweenFrames(const SkinnedAnimationFrameSPtr& inFrameA, const SkinnedAnimationFrameSPtr& inFrameB, f32 infInterpFactor)
         {
-            SkinnedAnimationFramePtr outFrame(new SkinnedAnimationFrame());
+            SkinnedAnimationFrameSPtr outFrame(new SkinnedAnimationFrame());
 			
             if(inFrameA != nullptr && inFrameB != nullptr)
             {

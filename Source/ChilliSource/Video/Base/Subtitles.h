@@ -41,7 +41,7 @@ namespace ChilliSource
                 u32 udwFontSize;
                 Core::CColour Colour;
                 Core::Rectangle Bounds;
-                Core::AlignmentAnchor eAlignment;
+                Rendering::AlignmentAnchor eAlignment;
                 TimeIntervalMs FadeTimeMS;
             };
             typedef std::shared_ptr<Style> StylePtr;

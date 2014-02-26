@@ -63,7 +63,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool MoAnimLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
-			SkinnedAnimationPtr pAnim = std::static_pointer_cast<SkinnedAnimation>(outpResource);
+			SkinnedAnimationSPtr pAnim = std::static_pointer_cast<SkinnedAnimation>(outpResource);
 			
 			return CreateSkinnedAnimationFromFile(ineStorageLocation, inFilePath, pAnim);
 		}
@@ -72,10 +72,10 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool MoAnimLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
-			SkinnedAnimationPtr pAnim = std::static_pointer_cast<SkinnedAnimation>(outpResource);
+			SkinnedAnimationSPtr pAnim = std::static_pointer_cast<SkinnedAnimation>(outpResource);
 			
 			//Load model as task
-			Core::Task<Core::StorageLocation, const std::string&, const SkinnedAnimationPtr&> AnimTask(this, &MoAnimLoader::ReadAnimationTask,ineStorageLocation, inFilePath, pAnim);
+			Core::Task<Core::StorageLocation, const std::string&, const SkinnedAnimationSPtr&> AnimTask(this, &MoAnimLoader::ReadAnimationTask,ineStorageLocation, inFilePath, pAnim);
 			Core::CTaskScheduler::ScheduleTask(AnimTask);
 			
 			return true;
@@ -83,14 +83,14 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// ReadAnimationTask
 		//----------------------------------------------------------------------------
-		void MoAnimLoader::ReadAnimationTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource)
+		void MoAnimLoader::ReadAnimationTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationSPtr& outpResource)
 		{
 			CreateSkinnedAnimationFromFile(ineStorageLocation, inFilePath, outpResource);
 		}
 		//----------------------------------------------------------------------------
 		/// Create Skinned Animation From File
 		//----------------------------------------------------------------------------
-		bool MoAnimLoader::CreateSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource)  
+		bool MoAnimLoader::CreateSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationSPtr& outpResource)  
 		{
             bool mbSuccess = true;
 			
@@ -113,7 +113,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Read Header
 		//----------------------------------------------------------------------------
-		bool MoAnimLoader::ReadHeader(const ChilliSource::Core::FileStreamPtr& inpStream, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource, u32& outudwNumFrames, s32& outdwNumSkeletonNodes)
+		bool MoAnimLoader::ReadHeader(const ChilliSource::Core::FileStreamPtr& inpStream, const std::string & inFilePath, const SkinnedAnimationSPtr& outpResource, u32& outudwNumFrames, s32& outdwNumSkeletonNodes)
 		{
 			//Check file for corruption
 			if(inpStream == nullptr || inpStream->IsBad() == true)
@@ -162,12 +162,12 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Read Animation Data
 		//----------------------------------------------------------------------------
-		bool MoAnimLoader::ReadAnimationData(const ChilliSource::Core::FileStreamPtr& inpStream, u32 inudwNumFrames, s32 indwNumSkeletonNodes, const SkinnedAnimationPtr& outpResource)
+		bool MoAnimLoader::ReadAnimationData(const ChilliSource::Core::FileStreamPtr& inpStream, u32 inudwNumFrames, s32 indwNumSkeletonNodes, const SkinnedAnimationSPtr& outpResource)
 		{
 			for (u32 i = 0; i < inudwNumFrames; i++)
 			{
 				//create new frame
-				SkinnedAnimationFramePtr frame(new SkinnedAnimationFrame());
+				SkinnedAnimationFrameSPtr frame(new SkinnedAnimationFrame());
 				
 				//add all skeleton nodes matrices
 				for (s32 j = 0; j < indwNumSkeletonNodes; j++)

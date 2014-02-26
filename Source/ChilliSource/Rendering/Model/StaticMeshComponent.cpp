@@ -29,7 +29,7 @@ namespace ChilliSource
 	{
         DEFINE_NAMED_INTERFACE(StaticMeshComponent);
     
-        MaterialPtr StaticMeshComponent::mspShadowMapMaterial;
+        MaterialSPtr StaticMeshComponent::mspShadowMapMaterial;
         
         StaticMeshComponent::StaticMeshComponent()
         : mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
@@ -173,7 +173,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Material
 		//-----------------------------------------------------------
-		void StaticMeshComponent::SetMaterial(const MaterialPtr& inpMaterial)
+		void StaticMeshComponent::SetMaterial(const MaterialSPtr& inpMaterial)
 		{
 			mpMaterial = inpMaterial;
 			
@@ -186,7 +186,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Material For Sub Mesh
 		//-----------------------------------------------------------
-		void StaticMeshComponent::SetMaterialForSubMesh(const MaterialPtr& inpMaterial, u32 indwSubMeshIndex)
+		void StaticMeshComponent::SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, u32 indwSubMeshIndex)
 		{
 			if (indwSubMeshIndex < mMaterials.size())
 			{
@@ -201,7 +201,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Set Material For Sub Mesh
         //-----------------------------------------------------------
-        void StaticMeshComponent::SetMaterialForSubMesh(const MaterialPtr& inpMaterial, const std::string& instrSubMeshName)
+        void StaticMeshComponent::SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, const std::string& instrSubMeshName)
         {
             if (nullptr != mpModel)
             {
@@ -220,7 +220,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get Material Of Sub Mesh
 		//-----------------------------------------------------------
-		MaterialPtr StaticMeshComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
+		MaterialSPtr StaticMeshComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
 		{
 			if (indwSubMeshIndex < mMaterials.size())
 			{
@@ -228,12 +228,12 @@ namespace ChilliSource
 			}
 			
             CS_ERROR_LOG("Failed to get material from sub mesh " + Core::ToString(indwSubMeshIndex));
-			return MaterialPtr();
+			return MaterialSPtr();
 		}
         //-----------------------------------------------------------
         /// Get Material Of Sub Mesh
         //-----------------------------------------------------------
-        MaterialPtr StaticMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
+        MaterialSPtr StaticMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
         {
             if (nullptr != mpModel)
             {
@@ -246,12 +246,12 @@ namespace ChilliSource
             }
 			
             CS_ERROR_LOG("Failed to get material from sub mesh " + instrSubMeshName);
-			return MaterialPtr();
+			return MaterialSPtr();
         }
 		//----------------------------------------------------------
 		/// Attach Mesh
 		//----------------------------------------------------------
-		void StaticMeshComponent::AttachMesh(const MeshPtr& inpModel)
+		void StaticMeshComponent::AttachMesh(const MeshSPtr& inpModel)
 		{
 			mpModel = inpModel;
             
@@ -266,7 +266,7 @@ namespace ChilliSource
             }
             while (mMaterials.size() < inpModel->GetNumSubMeshes())
             {
-                mMaterials.push_back(MaterialPtr());
+                mMaterials.push_back(MaterialSPtr());
             }
 			
 			ApplyDefaultMaterials();
@@ -274,7 +274,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Attach Mesh
         //----------------------------------------------------------
-        void StaticMeshComponent::AttachMesh(const MeshPtr& inpModel, const MaterialPtr& inpMaterial)
+        void StaticMeshComponent::AttachMesh(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial)
         {
             mpModel = inpModel;
 			mpMaterial = inpMaterial;
@@ -290,7 +290,7 @@ namespace ChilliSource
             }
             while (mMaterials.size() < inpModel->GetNumSubMeshes())
             {
-                mMaterials.push_back(MaterialPtr());
+                mMaterials.push_back(MaterialSPtr());
             }
             
             SetMaterial(inpMaterial);
@@ -298,7 +298,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Mesh
         //----------------------------------------------------------
-        const MeshPtr& StaticMeshComponent::GetMesh() const
+        const MeshSPtr& StaticMeshComponent::GetMesh() const
         {
             return mpModel;
         }
@@ -330,7 +330,7 @@ namespace ChilliSource
                 mspShadowMapMaterial = Core::CApplication::GetSystemImplementing<MaterialFactory>()->CreateStaticDirectionalShadowMap();
             }
             
-            std::vector<MaterialPtr> aMaterials;
+            std::vector<MaterialSPtr> aMaterials;
             mspShadowMapMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             aMaterials.push_back(mspShadowMapMaterial);
             
@@ -373,12 +373,12 @@ namespace ChilliSource
 				for (u32 i = 0; i < mpModel->GetNumSubMeshes(); i++)
 				{
 					//get the material name
-					SubMeshPtr subMesh = mpModel->GetSubMeshAtIndex(i);
+					SubMeshSPtr subMesh = mpModel->GetSubMeshAtIndex(i);
 					std::string matName = subMesh->GetDefaultMaterialName();
                     Core::StorageLocation eStorageLocation = subMesh->GetDefaultMaterialStorageLocation();
                     
 					//try and load the material
-					MaterialPtr pMaterial;
+					MaterialSPtr pMaterial;
 					if (matName != "")
                     {
 						pMaterial = LOAD_RESOURCE(Material, eStorageLocation, matName);

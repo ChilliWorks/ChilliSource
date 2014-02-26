@@ -27,15 +27,15 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Get Node By Name
 		//-------------------------------------------------------------------------
-		SkeletonNodePtr Skeleton::GetNodeByName(const std::string& instrName) const
+		SkeletonNodeSPtr Skeleton::GetNodeByName(const std::string& instrName) const
 		{
-			for (std::vector<SkeletonNodePtr>::const_iterator it = mapNodes.begin(); it != mapNodes.end(); ++it)
+			for (std::vector<SkeletonNodeSPtr>::const_iterator it = mapNodes.begin(); it != mapNodes.end(); ++it)
 			{
 				if (instrName == (*it)->mstrName)
 					return *it;
 			}
 			
-			return SkeletonNodePtr();
+			return SkeletonNodeSPtr();
 		}
         //-------------------------------------------------------------------------
         /// Get Node Index By Name
@@ -43,7 +43,7 @@ namespace ChilliSource
         s32 Skeleton::GetNodeIndexByName(const std::string& instrName) const
         {
             s32 dwIndex = 0;
-            for (std::vector<SkeletonNodePtr>::const_iterator it = mapNodes.begin(); it != mapNodes.end(); ++it)
+            for (std::vector<SkeletonNodeSPtr>::const_iterator it = mapNodes.begin(); it != mapNodes.end(); ++it)
 			{
 				if (instrName == (*it)->mstrName)
 					return dwIndex;
@@ -54,14 +54,14 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Get Node By Index
 		//-------------------------------------------------------------------------
-		SkeletonNodePtr Skeleton::GetNodeByIndex(u32 indwIndex) const
+		SkeletonNodeSPtr Skeleton::GetNodeByIndex(u32 indwIndex) const
 		{
 			if (indwIndex < mapNodes.size())
 			{
 				return mapNodes[indwIndex];
 			}
 			
-			return SkeletonNodePtr();
+			return SkeletonNodeSPtr();
 		}
 		//-------------------------------------------------------------------------
 		/// Get Num Nodes
@@ -84,7 +84,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Get Nodes
 		//-------------------------------------------------------------------------
-		const std::vector<SkeletonNodePtr>& Skeleton::GetNodes() const
+		const std::vector<SkeletonNodeSPtr>& Skeleton::GetNodes() const
 		{
 			return mapNodes;
 		}
@@ -100,7 +100,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		void Skeleton::AddNode(const std::string& instrName, s32 indwParentIndex)
 		{
-			SkeletonNodePtr newNode(new SkeletonNode());
+			SkeletonNodeSPtr newNode(new SkeletonNode());
 			newNode->mstrName = instrName;
 			newNode->mdwParentIndex = indwParentIndex;
 			mapNodes.push_back(newNode);

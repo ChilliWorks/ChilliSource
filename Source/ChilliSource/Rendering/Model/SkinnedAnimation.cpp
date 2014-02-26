@@ -30,13 +30,13 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		/// Get Frame At Index
 		//---------------------------------------------------------------------
-		SkinnedAnimationFramePtr SkinnedAnimation::GetFrameAtIndex(u32 indwFrameIndex) const
+		SkinnedAnimationFrameSPtr SkinnedAnimation::GetFrameAtIndex(u32 indwFrameIndex) const
 		{
 			if (indwFrameIndex < mFrames.size())
 			{
 				return mFrames[indwFrameIndex];
 			}
-			return SkinnedAnimationFramePtr();
+			return SkinnedAnimationFrameSPtr();
 		}
 		//---------------------------------------------------------------------
 		/// Get Frame Time
@@ -55,7 +55,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		/// Add Frame
 		//---------------------------------------------------------------------
-		void SkinnedAnimation::AddFrame(const SkinnedAnimationFramePtr& inpAnimationFrame)
+		void SkinnedAnimation::AddFrame(const SkinnedAnimationFrameSPtr& inpAnimationFrame)
 		{
 			mFrames.push_back(inpAnimationFrame);
 		}

@@ -300,7 +300,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet with default image
         //-----------------------------------------------------------
-        void ToggleButton::SetOnSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void ToggleButton::SetOnSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
         {
             OnSpriteSheet = inpSpriteSheet;
             mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -315,7 +315,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet with default image
 		//-----------------------------------------------------------
-		const Rendering::SpriteSheetPtr& ToggleButton::GetOnSpriteSheet() const
+		const Rendering::SpriteSheetSPtr& ToggleButton::GetOnSpriteSheet() const
 		{ 
 			return OnSpriteSheet; 
 		}
@@ -324,7 +324,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet with Off image
 		//-----------------------------------------------------------
-		void ToggleButton::SetOffSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void ToggleButton::SetOffSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
 		{
 			OffSpriteSheet = inpSpriteSheet;
 			mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -339,7 +339,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet with Off image
 		//-----------------------------------------------------------
-		const Rendering::SpriteSheetPtr& ToggleButton::GetOffSpriteSheet() const
+		const Rendering::SpriteSheetSPtr& ToggleButton::GetOffSpriteSheet() const
 		{ 
 			return OffSpriteSheet; 
 		}

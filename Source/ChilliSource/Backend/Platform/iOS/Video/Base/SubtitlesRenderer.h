@@ -82,7 +82,7 @@
 /// @param the UITextView.
 /// @param The alignment achor.
 //--------------------------------------------------------
--(void) SetAlignment:(UITextView*)inpView WithAnchor:(ChilliSource::Core::AlignmentAnchor)ineAnchor;
+-(void) SetAlignment:(UITextView*)inpView WithAnchor:(ChilliSource::Rendering::AlignmentAnchor)ineAnchor;
 //--------------------------------------------------------
 /// Text Alignment From Anchor
 ///
@@ -92,7 +92,7 @@
 /// @param The alignment achor.
 /// @return the NSTextAlignment.
 //--------------------------------------------------------
--(NSTextAlignment) TextAlignmentFromAnchor:(ChilliSource::Core::AlignmentAnchor)ineAnchor;
+-(NSTextAlignment) TextAlignmentFromAnchor:(ChilliSource::Rendering::AlignmentAnchor)ineAnchor;
 //--------------------------------------------------------
 /// Calculate Text Box Rect
 ///

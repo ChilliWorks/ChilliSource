@@ -26,7 +26,7 @@ namespace ChilliSource
 			///
 			/// @return Concrete Cubemap resource based on the render system
 			//----------------------------------------------------------------
-			ChilliSource::Rendering::CubemapPtr CreateCubemapResource();
+			ChilliSource::Rendering::CubemapSPtr CreateCubemapResource();
 			//----------------------------------------------------------------
 			/// Create Cubemap From Image
 			///
@@ -35,7 +35,7 @@ namespace ChilliSource
 			/// @param Out: Cubemap resource
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateCubemapFromImages(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapPtr& outpCubemap);
+			bool CreateCubemapFromImages(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapSPtr& outpCubemap);
 			//----------------------------------------------------------------
 			/// Restore
 			///
@@ -50,7 +50,7 @@ namespace ChilliSource
 			///
 			/// @param The Cubemap pointer.
 			//----------------------------------------------------------------
-			void AddRestorableCubemap(const Rendering::CubemapPtr& inpCubemap);
+			void AddRestorableCubemap(const Rendering::CubemapSPtr& inpCubemap);
 			//----------------------------------------------------------------
 			/// Remove Restorable Cubemap
 			///

@@ -58,7 +58,7 @@ namespace ChilliSource
 			///
 			/// @return Particle Component
 			//--------------------------------------------------------
-			ParticleComponentPtr CreateParticleComponent();
+			ParticleComponentSPtr CreateParticleComponent();
             //--------------------------------------------------------
             /// Create Particle Component From Script
             ///
@@ -68,7 +68,7 @@ namespace ChilliSource
             /// @param The filepath
             /// @return Particle Component
             //--------------------------------------------------------
-            ParticleComponentPtr CreateParticleComponentFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile);
+            ParticleComponentSPtr CreateParticleComponentFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile);
             //--------------------------------------------------------
             /// Register Emitter Type
             ///

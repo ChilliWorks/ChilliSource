@@ -46,7 +46,7 @@ namespace ChilliSource
 			/// @param the nodes name
 			/// @return a smart pointer to the node
 			//-------------------------------------------------------------------------
-			SkeletonNodePtr GetNodeByName(const std::string& instrName) const;
+			SkeletonNodeSPtr GetNodeByName(const std::string& instrName) const;
             //-------------------------------------------------------------------------
 			/// Get Node Index By Name
 			///
@@ -65,7 +65,7 @@ namespace ChilliSource
 			/// @param the index.
 			/// @param a smart pointer to the node.
 			//-------------------------------------------------------------------------
-			SkeletonNodePtr GetNodeByIndex(u32 indwIndex) const;
+			SkeletonNodeSPtr GetNodeByIndex(u32 indwIndex) const;
 			//-------------------------------------------------------------------------
 			/// Get Num Nodes
 			///
@@ -89,7 +89,7 @@ namespace ChilliSource
 			///
 			/// @return the dynamic array of nodes
 			//-------------------------------------------------------------------------
-			const std::vector<SkeletonNodePtr>& GetNodes() const;
+			const std::vector<SkeletonNodeSPtr>& GetNodes() const;
             //-------------------------------------------------------------------------
 			/// Get Joint Indices
 			///
@@ -114,7 +114,7 @@ namespace ChilliSource
 			
 		private:
 			
-			std::vector<SkeletonNodePtr> mapNodes;
+			std::vector<SkeletonNodeSPtr> mapNodes;
             std::vector<s32> madwJoints;
 		};
 	}

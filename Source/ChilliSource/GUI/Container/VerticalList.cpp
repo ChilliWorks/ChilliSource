@@ -28,7 +28,7 @@ namespace ChilliSource
         /// Default
         //---------------------------------------------------------
         VerticalList::VerticalList()
-        : VerticalJustifiction(ItemVerticalJustification::k_top), AbsoluteSpacing(0.0f), RelativeSpacing(0.0f), meHorizontalAlignmentAnchor(Core::AlignmentAnchor::k_topCentre)
+        : VerticalJustifiction(ItemVerticalJustification::k_top), AbsoluteSpacing(0.0f), RelativeSpacing(0.0f), meHorizontalAlignmentAnchor(Rendering::AlignmentAnchor::k_topCentre)
         {
             
         }
@@ -38,7 +38,7 @@ namespace ChilliSource
         /// @param Dictionary of params
         //---------------------------------------------------------
         VerticalList::VerticalList(const Core::ParamDictionary& insParams)
-        : GUIView(insParams), VerticalJustifiction(ItemVerticalJustification::k_top), AbsoluteSpacing(0.0f), meHorizontalAlignmentAnchor(Core::AlignmentAnchor::k_topCentre), RelativeSpacing(0.0f)
+        : GUIView(insParams), VerticalJustifiction(ItemVerticalJustification::k_top), AbsoluteSpacing(0.0f), meHorizontalAlignmentAnchor(Rendering::AlignmentAnchor::k_topCentre), RelativeSpacing(0.0f)
         {
             std::string strValue;
             
@@ -155,13 +155,13 @@ namespace ChilliSource
             switch(HorizontalJustifiction)
             {
                 case ItemHorizontalJustification::k_left:
-                    meHorizontalAlignmentAnchor = Core::AlignmentAnchor::k_topLeft;
+                    meHorizontalAlignmentAnchor = Rendering::AlignmentAnchor::k_topLeft;
                     break;
                 case ItemHorizontalJustification::k_centre:
-                    meHorizontalAlignmentAnchor = Core::AlignmentAnchor::k_topCentre;
+                    meHorizontalAlignmentAnchor = Rendering::AlignmentAnchor::k_topCentre;
                     break;
                 case ItemHorizontalJustification::k_right:
-                    meHorizontalAlignmentAnchor = Core::AlignmentAnchor::k_topRight;
+                    meHorizontalAlignmentAnchor = Rendering::AlignmentAnchor::k_topRight;
                     break;
             }
             
@@ -234,8 +234,8 @@ namespace ChilliSource
             if(Visible)
             {
 				//Check if this is on screen
-				Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
-				Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft);
+				Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
+				Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
 				
 				if(vTopRight.y < 0 || vBottomLeft.y > Core::CScreen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::CScreen::GetOrientedWidth())
 				{

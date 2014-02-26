@@ -47,9 +47,9 @@ namespace ChilliSource
             AddSubview(mpBackgroundImage);
             
             mpProgressImage->SetSize(Core::UnifiedVector2(Core::CVector2(0.0f, 1.0f), Core::CVector2(0, 0)));
-            mpProgressImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
+            mpProgressImage->SetLocalAlignment(Rendering::AlignmentAnchor::k_middleLeft);
             mpProgressImage->EnableAlignmentToParent(true);
-            mpProgressImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
+            mpProgressImage->SetAlignmentToParent(Rendering::AlignmentAnchor::k_middleLeft);
             mpBackgroundImage->AddSubview(mpProgressImage);
         }
         //------------------------------------------------------
@@ -65,9 +65,9 @@ namespace ChilliSource
             AddSubview(mpBackgroundImage);
  
             mpProgressImage->SetSize(Core::UnifiedVector2(Core::CVector2(0.0f, 1.0f), Core::CVector2(0, 0)));
-            mpProgressImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
+            mpProgressImage->SetLocalAlignment(Rendering::AlignmentAnchor::k_middleLeft);
             mpProgressImage->EnableAlignmentToParent(true);
-            mpProgressImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
+            mpProgressImage->SetAlignmentToParent(Rendering::AlignmentAnchor::k_middleLeft);
             mpBackgroundImage->AddSubview(mpProgressImage);
             
             std::string strValue;
@@ -154,7 +154,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet
 		//--------------------------------------------------------
-		void HorizontalClippingProgressBar::SetBackgroundSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void HorizontalClippingProgressBar::SetBackgroundSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
 		{
 			BackgroundSpriteSheet = inpSpriteSheet;
 			mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -169,7 +169,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet
 		//--------------------------------------------------------
-		void HorizontalClippingProgressBar::SetProgressSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void HorizontalClippingProgressBar::SetProgressSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
 		{
 			ProgressSpriteSheet = inpSpriteSheet;
 			mpProgressImage->SetSpriteSheet(inpSpriteSheet);
@@ -184,7 +184,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetPtr& HorizontalClippingProgressBar::GetBackgroundSpriteSheet() const
+		const Rendering::SpriteSheetSPtr& HorizontalClippingProgressBar::GetBackgroundSpriteSheet() const
 		{
 			return BackgroundSpriteSheet;
 		}
@@ -193,7 +193,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet
 		//--------------------------------------------------------
-		const Rendering::SpriteSheetPtr& HorizontalClippingProgressBar::GetProgressSpriteSheet() const
+		const Rendering::SpriteSheetSPtr& HorizontalClippingProgressBar::GetProgressSpriteSheet() const
 		{
 			return ProgressSpriteSheet;
 		}

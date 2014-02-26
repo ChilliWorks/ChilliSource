@@ -134,7 +134,7 @@ namespace ChilliSource
             
             GUIView::Subviews maListSubviews;
             
-            Core::AlignmentAnchor meHorizontalAlignmentAnchor;
+            Rendering::AlignmentAnchor meHorizontalAlignmentAnchor;
         
             DECLARE_PROPERTY_A(f32, AbsoluteSpacing, SetAbsoluteSpacing, GetAbsoluteSpacing);
             DECLARE_PROPERTY_A(f32, RelativeSpacing, SetRelativeSpacing, GetRelativeSpacing);

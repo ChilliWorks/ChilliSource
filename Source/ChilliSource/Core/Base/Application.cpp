@@ -57,9 +57,9 @@ namespace ChilliSource
         TimeIntervalSecs CApplication::uddwCurrentAppTime = 0;
 		
         CStateManager CApplication::mStateMgr;
-        Rendering::FontPtr CApplication::pDefaultFont;
-        Rendering::MeshPtr CApplication::pDefaultMesh;
-        Rendering::MaterialPtr CApplication::pDefaultMaterial;
+        Rendering::FontSPtr CApplication::pDefaultFont;
+        Rendering::MeshSPtr CApplication::pDefaultMesh;
+        Rendering::MaterialSPtr CApplication::pDefaultMaterial;
 
         bool CApplication::mbHasTouchInput = false;
         bool CApplication::mbUpdateSystems = true;
@@ -478,7 +478,7 @@ namespace ChilliSource
         ///
         /// @return Default font given to the system by the application delegate
         //--------------------------------------------------------------------------------------------------
-        const Rendering::FontPtr& CApplication::GetDefaultFont()
+        const Rendering::FontSPtr& CApplication::GetDefaultFont()
         {
             return pDefaultFont;
         }
@@ -487,7 +487,7 @@ namespace ChilliSource
         ///
         /// @return Default mesh given to the system by the application delegate
         //--------------------------------------------------------------------------------------------------
-        const Rendering::MeshPtr& CApplication::GetDefaultMesh()
+        const Rendering::MeshSPtr& CApplication::GetDefaultMesh()
         {
             return pDefaultMesh;
         }
@@ -496,7 +496,7 @@ namespace ChilliSource
         ///
         /// @return Default material given to the system by the application delegate
         //--------------------------------------------------------------------------------------------------
-        const Rendering::MaterialPtr& CApplication::GetDefaultMaterial()
+        const Rendering::MaterialSPtr& CApplication::GetDefaultMaterial()
         {
             return pDefaultMaterial;
         }

@@ -98,7 +98,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite data containing UV's etc
 		//-------------------------------------------
-		void Font::SetSpriteSheet(const SpriteSheetPtr& inpData)
+		void Font::SetSpriteSheet(const SpriteSheetSPtr& inpData)
 		{
 			mpCharacterData = inpData;
 			mpTexture = inpData->GetTexture();

@@ -26,7 +26,7 @@ namespace ChilliSource
         ///
         /// @param Param Dictionary
         //-------------------------------------------------------------
-        ParticleEmitter::ParticleEmitter(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, ParticleComponent* inpComponent)
+        ParticleEmitter::ParticleEmitter(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent)
         : mudwMaxNumParticles(100), mudwMaxNumParticlesPerEmission(1), mfEmissionFreq(0.5f), mfCurrentTime(0.0f), mfLastEmissionTime(0.0f), mfTimeToLive(1.0f), mvInitialScale(1.0f, 1.0f), mbShouldLoop(true)
         ,mfEnergyLoss(1.0f/mfTimeToLive), mpOwningComponent(inpComponent), mbIsEmitting(true), mudwNumUsed(0), mpMaterial(inpMaterial),msParticleUVs(Core::CVector2::ZERO, Core::CVector2(1.0f,1.0f))
 		,mudwBurstCounter(0), mbIsEmittingFinished(false)
@@ -38,7 +38,7 @@ namespace ChilliSource
             if(inParams.TryGetValue("Frequency", strTemp))
             {
                 mfEmissionFreq = Core::ParseF32(strTemp);
-                MOFLOW_ASSERT(mfEmissionFreq > 0.0f, "Frequency cannot be zero or less");
+                CS_ASSERT(mfEmissionFreq > 0.0f, "Frequency cannot be zero or less");
                 
                 mfCurrentTime = mfEmissionFreq;
             }
@@ -399,7 +399,7 @@ namespace ChilliSource
         ///
         /// @param Material ptr
         //-----------------------------------------------------
-        void ParticleEmitter::SetMaterial(const MaterialPtr& inpMaterial)
+        void ParticleEmitter::SetMaterial(const MaterialSPtr& inpMaterial)
         {
             mpMaterial = inpMaterial;
         }

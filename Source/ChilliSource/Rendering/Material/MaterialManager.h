@@ -64,7 +64,7 @@ namespace ChilliSource
 			/// @param File name
 			/// @return A handle to the Material
 			//----------------------------------------------------------------
-			MaterialPtr GetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePathMaterial);
+			MaterialSPtr GetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePathMaterial);
 			//----------------------------------------------------------------
 			/// Async Get Material From File
 			///
@@ -76,7 +76,7 @@ namespace ChilliSource
 			/// @param File name
 			/// @return A handle to the Material
 			//----------------------------------------------------------------
-			MaterialPtr AsyncGetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePathMaterial);
+			MaterialSPtr AsyncGetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePathMaterial);
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///

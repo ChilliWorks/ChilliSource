@@ -63,21 +63,21 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Material
 		//-----------------------------------------------------------
-		void RenderComponent::SetMaterial(const MaterialPtr &inpMaterial)
+		void RenderComponent::SetMaterial(const MaterialSPtr &inpMaterial)
 		{
 			mpMaterial = inpMaterial;
 		}
 		//-----------------------------------------------------------
 		/// Get Material
 		//-----------------------------------------------------------
-		const MaterialPtr& RenderComponent::GetMaterial() const
+		const MaterialSPtr& RenderComponent::GetMaterial() const
 		{
 			return mpMaterial;
 		}
 		//-----------------------------------------------------------
 		/// Get Material
 		//-----------------------------------------------------------
-		MaterialPtr& RenderComponent::GetMaterial()
+		MaterialSPtr& RenderComponent::GetMaterial()
 		{
 			return mpMaterial;
 		}

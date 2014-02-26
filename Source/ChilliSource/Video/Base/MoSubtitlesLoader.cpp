@@ -198,7 +198,7 @@ namespace ChilliSource
             pStyle->udwFontSize = inStyleJson.get(kstrTagStyleFontSize, kstrDefaultFontSize).asUInt();
             pStyle->Colour = Core::ParseColour(inStyleJson.get(kstrTagStyleFontColour, kstrDefaultColour).asString());
             pStyle->FadeTimeMS = ParseTime(inStyleJson.get(kstrTagStyleFadeTime, (s32)kDefaultFadeTimeMS).asString());
-            pStyle->eAlignment = Core::AlignmentAnchorFromString(inStyleJson.get(kstrTagStyleAlignment, kstrDefaultAlignment).asString());
+            pStyle->eAlignment = Rendering::AlignmentAnchorFromString(inStyleJson.get(kstrTagStyleAlignment, kstrDefaultAlignment).asString());
             pStyle->Bounds = LoadBounds(inStyleJson.get(kstrTagStyleBounds, ""));
             
             return pStyle;

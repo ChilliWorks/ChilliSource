@@ -19,7 +19,7 @@ namespace ChilliSource
         class RingParticleEmitter : public ParticleEmitter
         {
         public:
-            RingParticleEmitter(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, ParticleComponent* inpComponent);
+            RingParticleEmitter(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent);
             
             //-----------------------------------------------------
             /// Create
@@ -31,7 +31,7 @@ namespace ChilliSource
             /// @param Owning system
             /// @return Ownership of point emitter
             //-----------------------------------------------------
-            static ParticleEmitter* Create(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, ParticleComponent* inpComponent);
+            static ParticleEmitter* Create(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent);
             
         private:
 			//-----------------------------------------------------

@@ -64,7 +64,7 @@ namespace ChilliSource
 			u32 mudwIndexSize;
 			ChilliSource::Core::CVector3 mvMinBounds;
 			ChilliSource::Core::CVector3 mvMaxBounds;
-			SkeletonPtr mpSkeleton;
+			SkeletonSPtr mpSkeleton;
 			std::vector<SubMeshDescriptor> mMeshes;
 		};
 	}

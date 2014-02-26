@@ -59,9 +59,9 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Clone
 		//----------------------------------------------------------
-		MaterialPtr Material::Clone() const
+		MaterialSPtr Material::Clone() const
 		{
-			return MaterialPtr(new Material(*this));
+			return MaterialSPtr(new Material(*this));
 		}
 		//----------------------------------------------------------
 		/// Is A
@@ -154,7 +154,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Cubemap
         //----------------------------------------------------------
-        void Material::SetCubemap(const CubemapPtr &inpCubemap)
+        void Material::SetCubemap(const CubemapSPtr &inpCubemap)
         {
             mpCubemap = inpCubemap;
             
@@ -163,7 +163,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Cubemap
         //----------------------------------------------------------
-        const CubemapPtr& Material::GetCubemap() const
+        const CubemapSPtr& Material::GetCubemap() const
         {
             return mpCubemap;
         }

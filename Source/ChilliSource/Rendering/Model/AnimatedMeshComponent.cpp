@@ -29,7 +29,7 @@ namespace ChilliSource
 	{
 		DEFINE_NAMED_INTERFACE(AnimatedMeshComponent);
         
-        MaterialPtr AnimatedMeshComponent::mspShadowMapMaterial;
+        MaterialSPtr AnimatedMeshComponent::mspShadowMapMaterial;
         
 		//----------------------------------------------------------
 		/// Constructor
@@ -172,7 +172,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Material
 		//-----------------------------------------------------------
-		void AnimatedMeshComponent::SetMaterial(const MaterialPtr& inpMaterial)
+		void AnimatedMeshComponent::SetMaterial(const MaterialSPtr& inpMaterial)
 		{
 			mpMaterial = inpMaterial;
 			
@@ -185,7 +185,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Material For Sub Mesh
 		//-----------------------------------------------------------
-		void AnimatedMeshComponent::SetMaterialForSubMesh(const MaterialPtr& inpMaterial, u32 indwSubMeshIndex)
+		void AnimatedMeshComponent::SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, u32 indwSubMeshIndex)
 		{
 			if (indwSubMeshIndex < mMaterials.size())
 			{
@@ -200,7 +200,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Set Material For Sub Mesh
         //-----------------------------------------------------------
-        void AnimatedMeshComponent::SetMaterialForSubMesh(const MaterialPtr& inpMaterial, const std::string& instrSubMeshName)
+        void AnimatedMeshComponent::SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, const std::string& instrSubMeshName)
         {
             if (nullptr != mpModel)
             {
@@ -219,7 +219,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get Material Of Sub Mesh
 		//-----------------------------------------------------------
-		const MaterialPtr AnimatedMeshComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
+		const MaterialSPtr AnimatedMeshComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
 		{
 			if (indwSubMeshIndex < mMaterials.size())
 			{
@@ -227,12 +227,12 @@ namespace ChilliSource
 			}
 			
             CS_ERROR_LOG("Failed to get material from sub mesh " + Core::ToString(indwSubMeshIndex));
-			return MaterialPtr();
+			return MaterialSPtr();
 		}
         //-----------------------------------------------------------
         /// Get Material Of Sub Mesh
         //-----------------------------------------------------------
-        MaterialPtr AnimatedMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
+        MaterialSPtr AnimatedMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
         {
             if (nullptr != mpModel)
             {
@@ -245,12 +245,12 @@ namespace ChilliSource
             }
 			
             CS_ERROR_LOG("Failed to get material from sub mesh " + instrSubMeshName);
-			return MaterialPtr();
+			return MaterialSPtr();
         }
 		//----------------------------------------------------------
 		/// Attach Mesh
 		//----------------------------------------------------------
-		void AnimatedMeshComponent::AttachMesh(const MeshPtr& inpModel)
+		void AnimatedMeshComponent::AttachMesh(const MeshSPtr& inpModel)
 		{
 			mpModel = inpModel;
             // Update OOBB
@@ -266,7 +266,7 @@ namespace ChilliSource
             }
             while (mMaterials.size() < inpModel->GetNumSubMeshes())
             {
-                mMaterials.push_back(MaterialPtr());
+                mMaterials.push_back(MaterialSPtr());
             }
 			
 			ApplyDefaultMaterials();
@@ -278,7 +278,7 @@ namespace ChilliSource
         /// material
         /// @param Mesh object
         //----------------------------------------------------------
-        void AnimatedMeshComponent::AttachMesh(const MeshPtr& inpModel, const MaterialPtr& inpMaterial)
+        void AnimatedMeshComponent::AttachMesh(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial)
         {
             mpModel = inpModel;
 			mpMaterial = inpMaterial;
@@ -295,7 +295,7 @@ namespace ChilliSource
             }
             while (mMaterials.size() < inpModel->GetNumSubMeshes())
             {
-                mMaterials.push_back(MaterialPtr());
+                mMaterials.push_back(MaterialSPtr());
             }
             
             SetMaterial(inpMaterial);
@@ -303,7 +303,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Mesh
         //----------------------------------------------------------
-        const MeshPtr& AnimatedMeshComponent::GetMesh() const
+        const MeshSPtr& AnimatedMeshComponent::GetMesh() const
         {
             return mpModel;
         }
@@ -317,7 +317,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Attach Animation
         //----------------------------------------------------------
-        void AnimatedMeshComponent::AttachAnimation(const SkinnedAnimationPtr& inpAnimation, f32 infBlendlinePosition)
+        void AnimatedMeshComponent::AttachAnimation(const SkinnedAnimationSPtr& inpAnimation, f32 infBlendlinePosition)
         {
             if (nullptr != mActiveAnimationGroup)
             {
@@ -328,7 +328,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Animations
         //----------------------------------------------------------
-        void AnimatedMeshComponent::GetAnimations(std::vector<SkinnedAnimationPtr>& outapSkinnedAnimationList)
+        void AnimatedMeshComponent::GetAnimations(std::vector<SkinnedAnimationSPtr>& outapSkinnedAnimationList)
         {
             if (nullptr != mActiveAnimationGroup)
             {
@@ -338,7 +338,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Detatch Animation
         //----------------------------------------------------------
-        void AnimatedMeshComponent::DetatchAnimation(const SkinnedAnimationPtr& inpAnimation)
+        void AnimatedMeshComponent::DetatchAnimation(const SkinnedAnimationSPtr& inpAnimation)
         {
             if (nullptr != mActiveAnimationGroup)
             {
@@ -353,7 +353,7 @@ namespace ChilliSource
             if (nullptr != mActiveAnimationGroup && true == mActiveAnimationGroup->IsPrepared())
             {
                 mFadingAnimationGroup = mActiveAnimationGroup;
-                mActiveAnimationGroup = SkinnedAnimationGroupPtr(new SkinnedAnimationGroup(mpModel->GetSkeletonPtr()));
+                mActiveAnimationGroup = SkinnedAnimationGroupSPtr(new SkinnedAnimationGroup(mpModel->GetSkeletonPtr()));
                 mfFadePlaybackPosition = mfPlaybackPosition;
                 mfFadeBlendlinePosition = mfBlendlinePosition;
                 mfFadeMaxTime = infFadeOutTime;
@@ -665,7 +665,7 @@ namespace ChilliSource
                     mspShadowMapMaterial = Core::CApplication::GetSystemImplementing<MaterialFactory>()->CreateAnimatedDirectionalShadowMap();
                 }
                 
-                std::vector<MaterialPtr> aMaterials;
+                std::vector<MaterialSPtr> aMaterials;
                 mspShadowMapMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
                 aMaterials.push_back(mspShadowMapMaterial);
                 
@@ -709,7 +709,7 @@ namespace ChilliSource
                     }
                     else
                     {
-                        mFadingAnimationGroup = SkinnedAnimationGroupPtr();
+                        mFadingAnimationGroup = SkinnedAnimationGroupSPtr();
                     }
                 }
                 mActiveAnimationGroup->BuildMatrices();
@@ -788,7 +788,7 @@ namespace ChilliSource
         void AnimatedMeshComponent::Reset()
         {
             DetatchAllEntities();
-			mActiveAnimationGroup = SkinnedAnimationGroupPtr(new SkinnedAnimationGroup(mpModel->GetSkeletonPtr()));
+			mActiveAnimationGroup = SkinnedAnimationGroupSPtr(new SkinnedAnimationGroup(mpModel->GetSkeletonPtr()));
             mFadingAnimationGroup.reset();
             mfBlendlinePosition = 0.0f;
             mfFadeTimer = 0.0f;
@@ -806,12 +806,12 @@ namespace ChilliSource
 				for (u32 i = 0; i < mpModel->GetNumSubMeshes(); i++)
 				{
 					//get the material name
-					SubMeshPtr subMesh = mpModel->GetSubMeshAtIndex(i);
+					SubMeshSPtr subMesh = mpModel->GetSubMeshAtIndex(i);
 					std::string matName = subMesh->GetDefaultMaterialName();
                     Core::StorageLocation eStorageLocation = subMesh->GetDefaultMaterialStorageLocation();
                     
 					//try and load the material
-					MaterialPtr pMaterial;
+					MaterialSPtr pMaterial;
 					if (matName != "")
 						pMaterial = LOAD_RESOURCE(Material, eStorageLocation, matName);
                     

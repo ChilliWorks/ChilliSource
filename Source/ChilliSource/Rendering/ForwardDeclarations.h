@@ -83,6 +83,7 @@ namespace ChilliSource
         //------------------------------------------------------------
         /// Particles
         //------------------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(Particle);
         CS_FORWARD_DECLARE_CLASS(ParticleComponent);
         CS_FORWARD_DECLARE_CLASS(ParticleComponentFactory);
         CS_FORWARD_DECLARE_CLASS(ParticleSystem);

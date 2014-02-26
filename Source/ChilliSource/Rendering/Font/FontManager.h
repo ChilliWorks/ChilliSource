@@ -64,7 +64,7 @@ namespace ChilliSource
 			/// @param File name
 			/// @param Image format
 			//----------------------------------------------------------------
-			FontPtr GetFontFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default);
+			FontSPtr GetFontFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default);
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///

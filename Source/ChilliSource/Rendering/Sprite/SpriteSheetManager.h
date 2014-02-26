@@ -66,7 +66,7 @@ namespace ChilliSource
             /// @param Whether or not mip maps should be used
             /// @return the spritesheet resource pointer
 			//----------------------------------------------------------------
-			SpriteSheetPtr GetSpriteSheetFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default, bool inbWithMipsMaps = false);
+			SpriteSheetSPtr GetSpriteSheetFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default, bool inbWithMipsMaps = false);
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///

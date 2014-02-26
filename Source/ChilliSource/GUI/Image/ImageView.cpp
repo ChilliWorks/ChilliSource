@@ -260,7 +260,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet
         //--------------------------------------------------------
-        void ImageView::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void ImageView::SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
         {
             SpriteSheet = inpSpriteSheet;
         }
@@ -269,7 +269,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet
         //--------------------------------------------------------
-        const Rendering::SpriteSheetPtr& ImageView::GetSpriteSheet() const
+        const Rendering::SpriteSheetSPtr& ImageView::GetSpriteSheet() const
         {
             return SpriteSheet;
         }

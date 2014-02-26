@@ -50,7 +50,7 @@ namespace ChilliSource
 			/// @param the index to the frame
 			/// @return the AnimationFramePtr at the given index
 			//---------------------------------------------------------------------
-			SkinnedAnimationFramePtr GetFrameAtIndex(u32 indwFrameIndex) const;
+			SkinnedAnimationFrameSPtr GetFrameAtIndex(u32 indwFrameIndex) const;
 			//---------------------------------------------------------------------
 			/// Get Frame Time
 			///
@@ -78,7 +78,7 @@ namespace ChilliSource
 			///
 			/// @param The new frame.
 			//---------------------------------------------------------------------
-			void AddFrame(const SkinnedAnimationFramePtr& inpAnimationFrame);
+			void AddFrame(const SkinnedAnimationFrameSPtr& inpAnimationFrame);
 			//---------------------------------------------------------------------
 			/// Set Frame Rate
 			///
@@ -95,7 +95,7 @@ namespace ChilliSource
 		private:
 			
 			f32 mfFrameTime;
-			std::vector<SkinnedAnimationFramePtr> mFrames;
+			std::vector<SkinnedAnimationFrameSPtr> mFrames;
 		};
 	}
 }

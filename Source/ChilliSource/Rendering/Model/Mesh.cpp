@@ -61,7 +61,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Get Skeleton
 		//-----------------------------------------------------------------
-		const SkeletonPtr& Mesh::GetSkeletonPtr() const
+		const SkeletonSPtr& Mesh::GetSkeletonPtr() const
 		{
 			return mpSkeleton;
 		}
@@ -75,11 +75,11 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Get Sub-mesh at Index
 		//-----------------------------------------------------------------
-		SubMeshPtr Mesh::GetSubMeshAtIndex(u32 inIndex) const
+		SubMeshSPtr Mesh::GetSubMeshAtIndex(u32 inIndex) const
 		{
 			if(inIndex > mSubMeshes.size())
 			{
-				return SubMeshPtr();
+				return SubMeshSPtr();
 			}
 			
 			return mSubMeshes[inIndex];
@@ -87,15 +87,15 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Get Sub-mesh by Name
 		//-----------------------------------------------------------------
-		SubMeshPtr Mesh::GetSubMeshByName(const std::string& instrName) const
+		SubMeshSPtr Mesh::GetSubMeshByName(const std::string& instrName) const
 		{
-			for (std::vector<SubMeshPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for (std::vector<SubMeshSPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
 				if ((*it)->GetName() == instrName)
 					return (*it);
 			}
 			
-			return SubMeshPtr();
+			return SubMeshSPtr();
 		}
         //-----------------------------------------------------------------
 		/// Get Sub-mesh Index by Name
@@ -103,7 +103,7 @@ namespace ChilliSource
 		s32 Mesh::GetSubMeshIndexByName(const std::string& instrName) const
 		{
             u32 dwCount = 0;
-			for (std::vector<SubMeshPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for (std::vector<SubMeshSPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
 				if ((*it)->GetName() == instrName)
 					return dwCount;
@@ -115,9 +115,9 @@ namespace ChilliSource
         //-----------------------------------------------------------------
 		/// Create Sub Mesh
 		//-----------------------------------------------------------------
-		SubMeshPtr Mesh::CreateSubMesh(const std::string& instrName)
+		SubMeshSPtr Mesh::CreateSubMesh(const std::string& instrName)
 		{
-			SubMeshPtr newMesh(new SubMesh(instrName));
+			SubMeshSPtr newMesh(new SubMesh(instrName));
 			mSubMeshes.push_back(newMesh);
 			return newMesh;
 		}
@@ -128,7 +128,7 @@ namespace ChilliSource
 		{
 			int index = -1;
 			int currentIndex = 0;
-			for (std::vector<SubMeshPtr>::iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for (std::vector<SubMeshSPtr>::iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
 				if ((*it)->GetName() == instrName)
 					index = currentIndex;
@@ -154,7 +154,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Render
 		//-----------------------------------------------------------------
-		void Mesh::Render(RenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const std::vector<MaterialPtr>& inMaterials, const SkinnedAnimationGroupPtr& inpAnimationGroup) const
+		void Mesh::Render(RenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const std::vector<MaterialSPtr>& inMaterials, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const
 		{
             CS_ASSERT(inMaterials.size() > 0, "Must have at least one material to render");
 
@@ -166,9 +166,9 @@ namespace ChilliSource
             
             //render all opaque stuff first
 			u32 udwCurrMaterial = 0;
-			for(std::vector<SubMeshPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for(std::vector<SubMeshSPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
-                const MaterialPtr& pMaterial = inMaterials[udwCurrMaterial];
+                const MaterialSPtr& pMaterial = inMaterials[udwCurrMaterial];
                 udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
                 
 				if (pMaterial->GetActiveShaderProgram() != nullptr)
@@ -188,7 +188,7 @@ namespace ChilliSource
             udwCurrMaterial = 0;
 			for(std::vector<SubMesh*>::const_iterator it = aOpaqueSubMeshes.begin(); it != aOpaqueSubMeshes.end(); ++it)
 			{
-                const MaterialPtr& pMaterial = inMaterials[udwCurrMaterial];
+                const MaterialSPtr& pMaterial = inMaterials[udwCurrMaterial];
                 udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
 					
 #ifdef DEBUG_STATS
@@ -201,7 +201,7 @@ namespace ChilliSource
 			udwCurrMaterial = 0;
 			for(std::vector<SubMesh*>::const_iterator it = aTransparentSubMeshes.begin(); it != aTransparentSubMeshes.end(); ++it)
 			{
-                const MaterialPtr& pMaterial = inMaterials[udwCurrMaterial];
+                const MaterialSPtr& pMaterial = inMaterials[udwCurrMaterial];
                 udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
 				
 #ifdef DEBUG_STATS
@@ -218,7 +218,7 @@ namespace ChilliSource
 			mudwTotalVerts = 0;
 			mudwTotalIndices = 0;
 			
-			for(std::vector<SubMeshPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for(std::vector<SubMeshSPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
 				mudwTotalVerts += (*it)->GetNumVerts();
 				mudwTotalIndices += (*it)->GetNumIndices();

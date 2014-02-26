@@ -81,25 +81,25 @@ namespace ChilliSource
             ///
             /// @param Sprite sheet with with normal image
             //-----------------------------------------------------------
-            void SetNormalSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+            void SetNormalSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
 			//-----------------------------------------------------------
 			/// Set Highlight Sprite Sheet
 			///
 			/// @param Sprite sheet with with highlight image
 			//-----------------------------------------------------------
-			void SetHighlightSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetHighlightSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
             //-----------------------------------------------------------
             /// Get Normal Sprite Sheet
             ///
             /// @return Sprite sheet with default image
             //-----------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetNormalSpriteSheet() const;
+			const Rendering::SpriteSheetSPtr& GetNormalSpriteSheet() const;
 			//-----------------------------------------------------------
 			/// Get Highlight Sprite Sheet
 			///
 			/// @return Sprite sheet with highlight image
 			//-----------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetHighlightSpriteSheet() const;
+			const Rendering::SpriteSheetSPtr& GetHighlightSpriteSheet() const;
             //-----------------------------------------------------------
             /// Set Normal Sprite Sheet Index
             ///
@@ -415,8 +415,8 @@ namespace ChilliSource
 			//---Properties
 			DECLARE_PROPERTY_A(Rendering::TextureSPtr, NormalTexture, SetNormalImage, GetNormalImage);
 			DECLARE_PROPERTY_A(Rendering::TextureSPtr, HighlightTexture, SetHighlightImage, GetHighlightImage);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, NormalSpriteSheet, SetNormalSpriteSheet, GetNormalSpriteSheet);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, HighlightSpriteSheet, SetHighlightSpriteSheet, GetHighlightSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, NormalSpriteSheet, SetNormalSpriteSheet, GetNormalSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, HighlightSpriteSheet, SetHighlightSpriteSheet, GetHighlightSpriteSheet);
 
 			DECLARE_PROPERTY_A(Core::CColour, HighlightColour, SetHighlightColour, GetHighlightColour);
 

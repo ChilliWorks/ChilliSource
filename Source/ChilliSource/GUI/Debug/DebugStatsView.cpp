@@ -47,9 +47,9 @@ namespace ChilliSource
 			EnableAlignmentToParent(true);
 			
 			SetSize(0.0f, 0.0f, 200.0f, mSubviews.size() * 22.0f);
-			SetAlignmentToParent(Core::AlignmentAnchor::k_topLeft);
+			SetAlignmentToParent(Rendering::AlignmentAnchor::k_topLeft);
 			SetOffsetFromParentAlignment(0.0f, 0.0f, 10.0f, -10.0f);
-			SetLocalAlignment(Core::AlignmentAnchor::k_topLeft);
+			SetLocalAlignment(Rendering::AlignmentAnchor::k_topLeft);
 			
 			SetTexture(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::TextureManager>()->GetDefaultTexture());
 			SetColour(Core::CColour(0.41f, 0.41f, 0.41f, 0.8f));

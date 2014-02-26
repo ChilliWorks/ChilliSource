@@ -330,7 +330,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet with default image
         //-----------------------------------------------------------
-        void HighlightButton::SetNormalSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void HighlightButton::SetNormalSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
         {
             NormalSpriteSheet = inpSpriteSheet;
             mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -345,7 +345,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet with default image
 		//-----------------------------------------------------------
-		const Rendering::SpriteSheetPtr& HighlightButton::GetNormalSpriteSheet() const
+		const Rendering::SpriteSheetSPtr& HighlightButton::GetNormalSpriteSheet() const
 		{ 
 			return NormalSpriteSheet; 
 		}
@@ -354,7 +354,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet with highlight image
 		//-----------------------------------------------------------
-		void HighlightButton::SetHighlightSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void HighlightButton::SetHighlightSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
 		{
 			HighlightSpriteSheet = inpSpriteSheet;
 			mpBackgroundImage->SetSpriteSheet(inpSpriteSheet);
@@ -369,7 +369,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet with highlight image
 		//-----------------------------------------------------------
-		const Rendering::SpriteSheetPtr& HighlightButton::GetHighlightSpriteSheet() const 
+		const Rendering::SpriteSheetSPtr& HighlightButton::GetHighlightSpriteSheet() const 
 		{ 
 			return HighlightSpriteSheet; 
 		}

@@ -235,44 +235,44 @@ namespace ChilliSource
             ///
             /// @return Gets the currently set opaque sort predicate for this camera
             //--------------------------------------------------------------------------------------------------
-            RendererSortPredicatePtr GetOpaqueSortPredicate() const;
+            RendererSortPredicateSPtr GetOpaqueSortPredicate() const;
             //--------------------------------------------------------------------------------------------------
             /// Get Transparent Sort Predicate
             ///
             /// @return Gets the currently set opaque sort predicate for this camera
             //--------------------------------------------------------------------------------------------------
-            RendererSortPredicatePtr GetTransparentSortPredicate() const;
+            RendererSortPredicateSPtr GetTransparentSortPredicate() const;
             //--------------------------------------------------------------------------------------------------
             /// Set Opaque Sort Predicate
             ///
             /// @return Opaque sort predicate to use for this camera
             //--------------------------------------------------------------------------------------------------
-            void SetOpaqueSortPredicate(const RendererSortPredicatePtr & inpPredicate);
+            void SetOpaqueSortPredicate(const RendererSortPredicateSPtr & inpPredicate);
             //--------------------------------------------------------------------------------------------------
             /// Set Transparent Sort Predicate
             ///
             /// @param Transparent sort predicate to use for this camera
             //--------------------------------------------------------------------------------------------------
-            void SetTransparentSortPredicate(const RendererSortPredicatePtr & inpPredicate);
+            void SetTransparentSortPredicate(const RendererSortPredicateSPtr & inpPredicate);
 			         
             //--------------------------------------------------------------------------------------------------
             /// Get Culling Predicate
             ///
             /// @param Culling predicate to use for this camera
             //--------------------------------------------------------------------------------------------------
-            CullingPredicatePtr GetCullingPredicate() const;
+            ICullingPredicateSPtr GetCullingPredicate() const;
             //--------------------------------------------------------------------------------------------------
             /// Get Perspective Culling Predicate
             ///
             /// @param Culling predicate to use for this camera in perpective mode
             //--------------------------------------------------------------------------------------------------
-            void SetPerspectiveCullingPredicate(const CullingPredicatePtr & inpPredicate);
+            void SetPerspectiveCullingPredicate(const ICullingPredicateSPtr & inpPredicate);
             //--------------------------------------------------------------------------------------------------
             /// Get orthographic Culling Predicate
             ///
             /// @param Culling predicate to use for this camera in orthographic mode
             //--------------------------------------------------------------------------------------------------
-            void SetOrthographicCullingPredicate(const CullingPredicatePtr & inpPredicate);
+            void SetOrthographicCullingPredicate(const ICullingPredicateSPtr & inpPredicate);
             
 		private:
 			//------------------------------------------------------
@@ -302,11 +302,11 @@ namespace ChilliSource
 			Core::CMatrix4x4 mmatView;		//View matrix
 			Core::CMatrix4x4 mmatViewProj;	//View projection;
             
-            RendererSortPredicatePtr mpOpaqueSortPredicate;
-            RendererSortPredicatePtr mpTransparentSortPredicate;
+            RendererSortPredicateSPtr mpOpaqueSortPredicate;
+            RendererSortPredicateSPtr mpTransparentSortPredicate;
             
-            CullingPredicatePtr      mpOrthographicCulling;
-            CullingPredicatePtr      mpPerspectiveCulling;
+            ICullingPredicateSPtr      mpOrthographicCulling;
+            ICullingPredicateSPtr      mpPerspectiveCulling;
 		};
 	}
 }

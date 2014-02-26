@@ -20,9 +20,9 @@ namespace ChilliSource
 		///
 		/// @return Concrete Cubemap resource based on the render system
 		//----------------------------------------------------------------
-		ChilliSource::Rendering::CubemapPtr CCubemapManager::CreateCubemapResource()
+		ChilliSource::Rendering::CubemapSPtr CCubemapManager::CreateCubemapResource()
 		{
-			Rendering::CubemapPtr pCubemap(new CCubemap(this));
+			Rendering::CubemapSPtr pCubemap(new CCubemap(this));
 			AddRestorableCubemap(pCubemap);
 			return pCubemap;
 		}
@@ -34,7 +34,7 @@ namespace ChilliSource
 		/// @param Out: Cubemap resource
 		/// @return Success
 		//----------------------------------------------------------------
-		bool CCubemapManager::CreateCubemapFromImages(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapPtr& outpCubemap)
+		bool CCubemapManager::CreateCubemapFromImages(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapSPtr& outpCubemap)
 		{
 			std::static_pointer_cast<CCubemap>(outpCubemap)->Init(inaImages, inbWithMipsMaps);
 			return true;
@@ -49,7 +49,7 @@ namespace ChilliSource
 #ifdef TARGET_ANDROID
 			for(std::vector<Rendering::CubemapWeakPtr>::iterator it = mapCubemapCache.begin(); it != mapCubemapCache.end(); ++it)
 			{
-				if (Rendering::CubemapPtr pCubemap = (*it).lock())
+				if (Rendering::CubemapSPtr pCubemap = (*it).lock())
 				{
 					if(pCubemap->IsLoaded())
 					{
@@ -112,7 +112,7 @@ namespace ChilliSource
 		///
 		/// @param The Cubemap pointer.
 		//----------------------------------------------------------------
-		void CCubemapManager::AddRestorableCubemap(const Rendering::CubemapPtr& inpCubemap)
+		void CCubemapManager::AddRestorableCubemap(const Rendering::CubemapSPtr& inpCubemap)
 		{
 #ifdef TARGET_ANDROID
 			mapCubemapCache.push_back(Rendering::CubemapWeakPtr(inpCubemap));
@@ -131,7 +131,7 @@ namespace ChilliSource
 #ifdef TARGET_ANDROID
 			for(std::vector<Rendering::CubemapWeakPtr>::iterator it = mapCubemapCache.begin(); it != mapCubemapCache.end(); ++it)
 			{
-				if (Rendering::CubemapPtr pCubemap = (*it).lock())
+				if (Rendering::CubemapSPtr pCubemap = (*it).lock())
 				{
 					if (pCubemap.get() == inpCubemap)
 					{

@@ -70,7 +70,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Get Skinned Animation From File
 		//-----------------------------------------------------------------
-		SkinnedAnimationPtr SkinnedAnimationManager::GetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		SkinnedAnimationSPtr SkinnedAnimationManager::GetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
 			
@@ -109,12 +109,12 @@ namespace ChilliSource
 			
 			//Resource not found
 			CS_ERROR_LOG("Cannot find resource for skinned animation with path " + instrFilePath);
-			return SkinnedAnimationPtr();
+			return SkinnedAnimationSPtr();
 		}
 		//-----------------------------------------------------------------
 		/// Async Get Skinned Animation From File
 		//-----------------------------------------------------------------
-		SkinnedAnimationPtr SkinnedAnimationManager::AsyncGetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		SkinnedAnimationSPtr SkinnedAnimationManager::AsyncGetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
 			
@@ -155,7 +155,7 @@ namespace ChilliSource
 			
 			//Resource not found
 			CS_ERROR_LOG("Cannot find resource for skinned animation with path " + instrFilePath);
-			return SkinnedAnimationPtr();
+			return SkinnedAnimationSPtr();
 		}
 		//-----------------------------------------------------------------
 		/// Destructor

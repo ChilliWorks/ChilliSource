@@ -34,14 +34,14 @@ namespace ChilliSource
 			/// Sets the sort predicate to use for sorting transparent objects
 			/// @param Our RendererSortPredicate functor. If this is nullptr the renderer will not sort transparent objects
 			//----------------------------------------------------------
-			void SetTransparentSortPredicate(const RendererSortPredicatePtr & inpFunctor);
+			void SetTransparentSortPredicate(const RendererSortPredicateSPtr & inpFunctor);
             //----------------------------------------------------------
 			/// Set Opaque Sort Predicate
 			///
 			/// Sets the sort predicate to use for sorting opaque objects
 			/// @param Our RendererSortPredicate functor. If this is nullptr the renderer will not sort opaque objects
 			//----------------------------------------------------------
-			void SetOpaqueSortPredicate(const RendererSortPredicatePtr & inpFunctor);
+			void SetOpaqueSortPredicate(const RendererSortPredicateSPtr & inpFunctor);
             
             //----------------------------------------------------------
 			/// Set Perspective Cull Predicate
@@ -49,14 +49,14 @@ namespace ChilliSource
             /// @param Predicate that is called to determine whether
             /// an object should be culled with an perspective camera
 			//----------------------------------------------------------
-			void SetPerspectiveCullPredicate(const CullingPredicatePtr & inpFunctor);
+			void SetPerspectiveCullPredicate(const ICullingPredicateSPtr & inpFunctor);
             //----------------------------------------------------------
 			/// Set Ortho Cull Predicate
 			///
             /// @param Predicate that is called to determine whether
             /// an object should be culled with an orthographic camera
 			//----------------------------------------------------------
-			void SetOrthoCullPredicate(const CullingPredicatePtr & inpFunctor);
+			void SetOrthoCullPredicate(const ICullingPredicateSPtr & inpFunctor);
             //----------------------------------------------------------
 			/// Render To Screen
 			///
@@ -195,7 +195,7 @@ namespace ChilliSource
             /// @param Camera
             /// @return Camera cull predicate or nullptr
             //----------------------------------------------------------
-            CullingPredicatePtr GetCullPredicate(CameraComponent* inpActiveCamera) const;
+            ICullingPredicateSPtr GetCullPredicate(CameraComponent* inpActiveCamera) const;
             //----------------------------------------------------------
 			/// Create Overlay Projection
             ///
@@ -232,11 +232,11 @@ namespace ChilliSource
 			RenderSystem* mpRenderSystem;
 			CameraComponent* mpActiveCamera;
             
-			RendererSortPredicatePtr mpTransparentSortPredicate;
-            RendererSortPredicatePtr mpOpaqueSortPredicate;
+			RendererSortPredicateSPtr mpTransparentSortPredicate;
+            RendererSortPredicateSPtr mpOpaqueSortPredicate;
             
-            CullingPredicatePtr mpPerspectiveCullPredicate;
-            CullingPredicatePtr mpOrthoCullPredicate;
+            ICullingPredicateSPtr mpPerspectiveCullPredicate;
+            ICullingPredicateSPtr mpOrthoCullPredicate;
 		};
 	}
 }

@@ -32,16 +32,16 @@ namespace ChilliSource
 		{
 
 			mpBGImage = HorizontalStretchableImagePtr(new HorizontalStretchableImage());
-			mpBGImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
+			mpBGImage->SetLocalAlignment(Rendering::AlignmentAnchor::k_middleLeft);
 			mpBGImage->EnableAlignmentToParent(true);
-			mpBGImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
+			mpBGImage->SetAlignmentToParent(Rendering::AlignmentAnchor::k_middleLeft);
             mpBGImage->EnableTouchConsumption(false);
 			AddSubview(mpBGImage);
 			
 			mpFillImage = HorizontalStretchableImagePtr(new HorizontalStretchableImage());
-			mpFillImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
+			mpFillImage->SetLocalAlignment(Rendering::AlignmentAnchor::k_middleLeft);
 			mpFillImage->EnableAlignmentToParent(true);
-			mpFillImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
+			mpFillImage->SetAlignmentToParent(Rendering::AlignmentAnchor::k_middleLeft);
             mpFillImage->EnableTouchConsumption(false);
 			AddSubview(mpFillImage);
 		}
@@ -54,16 +54,16 @@ namespace ChilliSource
 		: ProgressBar(insParams), HeightFromImage(false)
 		{
 			mpBGImage = HorizontalStretchableImagePtr(new HorizontalStretchableImage());
-			mpBGImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
+			mpBGImage->SetLocalAlignment(Rendering::AlignmentAnchor::k_middleLeft);
 			mpBGImage->EnableAlignmentToParent(true);
-			mpBGImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
+			mpBGImage->SetAlignmentToParent(Rendering::AlignmentAnchor::k_middleLeft);
             mpBGImage->EnableTouchConsumption(false);
 			AddSubview(mpBGImage);
 			
 			mpFillImage = HorizontalStretchableImagePtr(new HorizontalStretchableImage());
-			mpFillImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
+			mpFillImage->SetLocalAlignment(Rendering::AlignmentAnchor::k_middleLeft);
 			mpFillImage->EnableAlignmentToParent(true);
-			mpFillImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
+			mpFillImage->SetAlignmentToParent(Rendering::AlignmentAnchor::k_middleLeft);
             mpFillImage->EnableTouchConsumption(false);
 			AddSubview(mpFillImage);
 			
@@ -147,7 +147,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite Sheet
 		//------------------------------------------------------------------------
-		void HorizontalEndcappedProgressBar::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void HorizontalEndcappedProgressBar::SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
 		{
 			SpriteSheet = inpSpriteSheet;
 			mpBGImage->SetSpriteSheet(inpSpriteSheet);
@@ -158,7 +158,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite Sheet
 		//------------------------------------------------------------------------
-		const Rendering::SpriteSheetPtr& HorizontalEndcappedProgressBar::GetSpriteSheet() const
+		const Rendering::SpriteSheetSPtr& HorizontalEndcappedProgressBar::GetSpriteSheet() const
 		{
 			return SpriteSheet;
 		}

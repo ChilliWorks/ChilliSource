@@ -62,13 +62,13 @@ namespace ChilliSource
             ///
             /// @param Sprite sheet
             //--------------------------------------------------------
-            void SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+            void SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
             //--------------------------------------------------------
             /// Get Sprite Sheet
             ///
             /// @param Sprite sheet
             //--------------------------------------------------------
-            const Rendering::SpriteSheetPtr& GetSpriteSheet() const;
+            const Rendering::SpriteSheetSPtr& GetSpriteSheet() const;
             //--------------------------------------------------------
             /// Set Sprite Sheet Index
             ///
@@ -352,7 +352,7 @@ namespace ChilliSource
             
 			//---Properties
             DECLARE_PROPERTY_A(Rendering::TextureSPtr, Texture, SetTexture, GetTexture);
-            DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
+            DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
 
             DECLARE_PROPERTY_A(Core::Rectangle, UVs, SetUVs, GetUVs);
 			DECLARE_PROPERTY_A(Core::Rectangle, UVOffsets, SetUVOffsets, GetUVOffsets);

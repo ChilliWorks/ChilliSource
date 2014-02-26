@@ -77,7 +77,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet containing the patches
 		//---------------------------------------------------------
-		void HorizontalStretchableImage::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void HorizontalStretchableImage::SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
 		{
 			SpriteSheet = inpSpriteSheet;
 		}
@@ -86,7 +86,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet containing the patches
 		//---------------------------------------------------------
-		const Rendering::SpriteSheetPtr& HorizontalStretchableImage::GetSpriteSheet() const
+		const Rendering::SpriteSheetSPtr& HorizontalStretchableImage::GetSpriteSheet() const
 		{
 			return SpriteSheet;
 		}
@@ -268,7 +268,7 @@ namespace ChilliSource
                 if (ActAsSpacer == false)
                 {
                     Core::CVector2 vPanelPos = GetAbsoluteScreenSpacePosition();
-                    Core::CVector2 vTopLeft = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topLeft);
+                    Core::CVector2 vTopLeft = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
                     Core::CVector2 vPatchPos;
                     
                     Core::CColour AbsColour = GetAbsoluteColour();
@@ -288,7 +288,7 @@ namespace ChilliSource
                     // Record size the caps need to shrink
                     f32 fShrinkX = (vPatchSize.x < 0 ? vPatchSize.x : 0) * 0.5f;
                     vPatchPos.x = vTopLeft.x + SpriteSheet->GetSizeForFrame(mudwLeftCapIndex).x + fShrinkX;
-                    vPatchPos.y = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topCentre).y;
+                    vPatchPos.y = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topCentre).y;
                     // Clamp the size of the middle
                     vPatchSize.x = (vPatchSize.x < 0 ? 0 : vPatchSize.x);
                     
@@ -302,17 +302,17 @@ namespace ChilliSource
                                        SpriteSheet->GetTexture(), 
                                        SpriteSheet->GetUVsForFrame(mudwLeftCapIndex), 
                                        AbsColour, 
-                                       Core::AlignmentAnchor::k_topLeft);
+                                       Rendering::AlignmentAnchor::k_topLeft);
                     
                     //Draw the right cap
-                    matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topRight));
+                    matPatchTransform.Translate(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topRight));
                     Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                     inpCanvas->DrawBox(matTransform, 
                                        Core::CVector2(SpriteSheet->GetSizeForFrame(mudwRightCapIndex).x + fShrinkX,vPanelSize.y),
                                        SpriteSheet->GetTexture(), 
                                        SpriteSheet->GetUVsForFrame(mudwRightCapIndex), 
                                        AbsColour, 
-                                       Core::AlignmentAnchor::k_topRight);
+                                       Rendering::AlignmentAnchor::k_topRight);
                     
                     // Draw the centre going from left to right cap
                     matPatchTransform.Translate(vPatchPos);
@@ -322,7 +322,7 @@ namespace ChilliSource
                                        SpriteSheet->GetTexture(),
                                        SpriteSheet->GetUVsForFrame(mudwCentreIndex),
                                        AbsColour,
-                                       Core::AlignmentAnchor::k_topLeft);
+                                       Rendering::AlignmentAnchor::k_topLeft);
 				}
                 
 				//Render subviews

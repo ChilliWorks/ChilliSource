@@ -287,8 +287,8 @@ namespace ChilliSource
             for(Subviews::iterator pView = mapGridSubviews.begin(); pView != mapGridSubviews.end(); ++pView)
             {
                 (*pView)->EnableAlignmentToParent(true);
-                (*pView)->SetAlignmentToParent(Core::AlignmentAnchor::k_topLeft);
-                (*pView)->SetLocalAlignment(Core::AlignmentAnchor::k_topLeft);
+                (*pView)->SetAlignmentToParent(Rendering::AlignmentAnchor::k_topLeft);
+                (*pView)->SetLocalAlignment(Rendering::AlignmentAnchor::k_topLeft);
                 (*pView)->SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::CVector2(0.0f, 0.0f), vCellPosition));
                 vCellPosition.x += (invCellSize.x + fColumnSpacing);
                 
@@ -331,8 +331,8 @@ namespace ChilliSource
             for(Subviews::iterator pView = mapGridSubviews.begin(); pView != mapGridSubviews.end(); ++pView)
             {
                 (*pView)->EnableAlignmentToParent(true);
-                (*pView)->SetAlignmentToParent(Core::AlignmentAnchor::k_topLeft);
-				(*pView)->SetLocalAlignment(Core::AlignmentAnchor::k_topLeft);
+                (*pView)->SetAlignmentToParent(Rendering::AlignmentAnchor::k_topLeft);
+				(*pView)->SetLocalAlignment(Rendering::AlignmentAnchor::k_topLeft);
                 (*pView)->SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::CVector2(0.0f, 0.0f), vCellPosition));
                 vCellPosition.y -= (invCellSize.y + fRowSpacing);
                 
@@ -470,8 +470,8 @@ namespace ChilliSource
             if(Visible)
             {
 				//Check if this is on screen
-				Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
-				Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft);
+				Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
+				Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
 				
 				if(vTopRight.y < 0 || vBottomLeft.y > Core::CScreen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::CScreen::GetOrientedWidth())
 				{

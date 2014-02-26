@@ -322,19 +322,19 @@ namespace ChilliSource
 			///
             /// @return Default font given to the system by the application delegate
             //--------------------------------------------------------------------------------------------------
-            static const Rendering::FontPtr& GetDefaultFont();
+            static const Rendering::FontSPtr& GetDefaultFont();
             //--------------------------------------------------------------------------------------------------
 			/// Get Default Mesh
 			///
             /// @return Default mesh given to the system by the application delegate
             //--------------------------------------------------------------------------------------------------
-            static const Rendering::MeshPtr& GetDefaultMesh();
+            static const Rendering::MeshSPtr& GetDefaultMesh();
             //--------------------------------------------------------------------------------------------------
 			/// Get Default Material
 			///
             /// @return Default material given to the system by the application delegate
             //--------------------------------------------------------------------------------------------------
-            static const Rendering::MaterialPtr& GetDefaultMaterial();
+            static const Rendering::MaterialSPtr& GetDefaultMaterial();
             //--------------------------------------------------------------------------------------------------
             /// Quit
             ///
@@ -528,9 +528,9 @@ namespace ChilliSource
 			static SystemConfirmDialog::Delegate mActiveSysConfirmDelegate;
         
 			static TimeIntervalSecs uddwCurrentAppTime;
-            static Rendering::FontPtr pDefaultFont;
-            static Rendering::MeshPtr pDefaultMesh;
-            static Rendering::MaterialPtr pDefaultMaterial;
+            static Rendering::FontSPtr pDefaultFont;
+            static Rendering::MeshSPtr pDefaultMesh;
+            static Rendering::MaterialSPtr pDefaultMaterial;
 			static f32 mfUpdateInterval;
             static f32 mfUpdateSpeed;
             

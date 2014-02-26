@@ -72,13 +72,13 @@ namespace ChilliSource
             ///
             /// @param Font used to display text
             //-------------------------------------------------------
-            void SetFont(const Rendering::FontPtr& inpFont);
+            void SetFont(const Rendering::FontSPtr& inpFont);
             //-------------------------------------------------------
             /// Get Font
             ///
             /// @return Font used to display text
             //-------------------------------------------------------
-            const Rendering::FontPtr& GetFont() const;
+            const Rendering::FontSPtr& GetFont() const;
             //-------------------------------------------------------
             /// Set Number of Lines
             ///
@@ -397,7 +397,7 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(f32, LineSpacing, SetLineSpacing, GetLineSpacing);
 			DECLARE_PROPERTY_A(TextJustification, HorizontalJustification, SetHorizontalJustification, GetHorizontalJustification);
 			DECLARE_PROPERTY_A(TextJustification, VerticalJustification, SetVerticalJustification, GetVerticalJustification);
-			DECLARE_PROPERTY_A(Rendering::FontPtr, Font, SetFont, GetFont);
+			DECLARE_PROPERTY_A(Rendering::FontSPtr, Font, SetFont, GetFont);
             DECLARE_PROPERTY_A(bool, ScalableFont, SetScalableFont, GetScalableFont)
             DECLARE_PROPERTY_A(f32, ScalableHeight, SetScalableHeight, GetScalableHeight);
 			DECLARE_PROPERTY_A(Core::CColour, TextColour, SetTextColour, GetTextColour);

@@ -96,7 +96,7 @@ namespace ChilliSource
 		/// @param Material type
 		/// @return A handle to the Material
 		//----------------------------------------------------------------
-		MaterialPtr MaterialManager::GetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
+		MaterialSPtr MaterialManager::GetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -110,7 +110,7 @@ namespace ChilliSource
 						CS_DEBUG_LOG("Loading Material " + inFilePath);
 						mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
 						
-						MaterialPtr pMaterial = std::static_pointer_cast<Material>(pResource);
+						MaterialSPtr pMaterial = std::static_pointer_cast<Material>(pResource);
 						pMaterial->SetName(inFilePath);
 						pMaterial->SetOwningResourceManager(this);
 						pMaterial->SetFilename(inFilePath);
@@ -141,7 +141,7 @@ namespace ChilliSource
 		/// @param Material type
 		/// @return A handle to the Material
 		//----------------------------------------------------------------
-		MaterialPtr MaterialManager::AsyncGetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
+		MaterialSPtr MaterialManager::AsyncGetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -150,7 +150,7 @@ namespace ChilliSource
 				Core::ResourcePtr pResource(new Material());
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
-					MaterialPtr pMaterial = std::static_pointer_cast<Material>(pResource);
+					MaterialSPtr pMaterial = std::static_pointer_cast<Material>(pResource);
 					pMaterial->SetName(inFilePath);
 					pMaterial->SetFilename(inFilePath);
 					pMaterial->SetStorageLocation(ineStorageLocation);
@@ -172,7 +172,7 @@ namespace ChilliSource
 			}
 			
 			CS_ERROR_LOG("Cannot find resource for Material with path " + inFilePath);
-			return MaterialPtr();
+			return MaterialSPtr();
 		}
 	}
 }

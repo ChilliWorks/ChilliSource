@@ -417,7 +417,7 @@ namespace ChilliSource
 			///
 			/// @param Alignment type
 			//-----------------------------------------------------
-			void SetLocalAlignment(Core::AlignmentAnchor ineAlignment);
+			void SetLocalAlignment(Rendering::AlignmentAnchor ineAlignment);
 			//-----------------------------------------------------
 			/// Get Local Alignment
 			///
@@ -427,7 +427,7 @@ namespace ChilliSource
 			///
 			/// @return Alignment type
 			//-----------------------------------------------------
-			Core::AlignmentAnchor GetLocalAlignment() const;
+			Rendering::AlignmentAnchor GetLocalAlignment() const;
 			//-----------------------------------------------------
 			/// Enable Rotation With Parent
 			///
@@ -468,7 +468,7 @@ namespace ChilliSource
 			///
 			/// @param Alignment type
 			//-----------------------------------------------------
-			void SetAlignmentToParent(Core::AlignmentAnchor ineAlignment);
+			void SetAlignmentToParent(Rendering::AlignmentAnchor ineAlignment);
 			//-----------------------------------------------------
 			/// Get Alignment with Parent
 			///
@@ -477,7 +477,7 @@ namespace ChilliSource
 			///
 			/// @return Alignment type
 			//-----------------------------------------------------
-			Core::AlignmentAnchor GetAlignmentWithParent() const;
+			Rendering::AlignmentAnchor GetAlignmentWithParent() const;
 			//-----------------------------------------------------
 			/// Set Offset From Parent Alignment
 			///
@@ -566,14 +566,14 @@ namespace ChilliSource
 			/// @param Anchor point type
 			/// @return Anchor point value as absolute
 			//-----------------------------------------------------
-			Core::CVector2 GetAbsoluteAnchorPoint(Core::AlignmentAnchor ineAlignment) const;
+			Core::CVector2 GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor ineAlignment) const;
 			//-----------------------------------------------------
 			/// Get Absolute Screen Space Anchor Point
 			///
 			/// @param Anchor point type
 			/// @return Anchor point value as absolute
 			//-----------------------------------------------------
-			Core::CVector2 GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor ineAlignment) const;
+			Core::CVector2 GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor ineAlignment) const;
             //-----------------------------------------------------
             /// Is Onscreen
             ///
@@ -954,8 +954,8 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(Core::CVector2, Scale, ScaleTo, GetScale);
 			DECLARE_PROPERTY_A(f32, Rotation, RotateTo, GetRotation);
 			DECLARE_PROPERTY_A(f32, Opacity, SetOpacity, GetOpacity);
-			DECLARE_PROPERTY_A(Core::AlignmentAnchor, LocalAlignment, SetLocalAlignment, GetLocalAlignment);
-			DECLARE_PROPERTY_A(Core::AlignmentAnchor, ParentalAlignment, SetAlignmentToParent, GetAlignmentWithParent);
+			DECLARE_PROPERTY_A(Rendering::AlignmentAnchor, LocalAlignment, SetLocalAlignment, GetLocalAlignment);
+			DECLARE_PROPERTY_A(Rendering::AlignmentAnchor, ParentalAlignment, SetAlignmentToParent, GetAlignmentWithParent);
 			DECLARE_PROPERTY_A(bool, AlignedWithParent, EnableAlignmentToParent, IsAlignedToParent);
 			DECLARE_PROPERTY_A(bool, RotatedWithParent, EnableRotationWithParent, IsRotatedWithParent);
 			DECLARE_PROPERTY_A(bool, ClipOffScreen, EnableClipOffScreen, IsClippedOffScreenEnabled);

@@ -77,7 +77,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool MoModelLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
-			MeshPtr pMesh = std::static_pointer_cast<Mesh>(outpResource);
+			MeshSPtr pMesh = std::static_pointer_cast<Mesh>(outpResource);
 			
 			//get the path to the curent file
 			std::string filename, filepath;
@@ -88,7 +88,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Create Mesh From File
 		//----------------------------------------------------------------------------
-		bool MoModelLoader::CreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource)  
+		bool MoModelLoader::CreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const std::string& instrMaterialPath, const MeshSPtr& outpResource)  
 		{
             MeshDescriptor descriptor;
 			
@@ -105,7 +105,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool MoModelLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
-			MeshPtr pMesh = std::static_pointer_cast<Mesh>(outpResource);
+			MeshSPtr pMesh = std::static_pointer_cast<Mesh>(outpResource);
 			
 			//get the path to the curent file
 			std::string filename, filepath;
@@ -116,10 +116,10 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Async Create Mesh From File
 		//----------------------------------------------------------------------------
-		bool MoModelLoader::AsyncCreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource)
+		bool MoModelLoader::AsyncCreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshSPtr& outpResource)
 		{
 			//Load model as task
-			Core::Task<Core::StorageLocation, const std::string&, const std::string&, const MeshPtr&> MeshTask(this, &MoModelLoader::LoadMeshDataTask, ineStorageLocation, inFilePath, instrMaterialPath, outpResource);
+			Core::Task<Core::StorageLocation, const std::string&, const std::string&, const MeshSPtr&> MeshTask(this, &MoModelLoader::LoadMeshDataTask, ineStorageLocation, inFilePath, instrMaterialPath, outpResource);
 			Core::CTaskScheduler::ScheduleTask(MeshTask);
 			
 			return true;
@@ -127,7 +127,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// LoadMeshDataTask
 		//----------------------------------------------------------------------------
-		void MoModelLoader::LoadMeshDataTask(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string &instrMaterialPath, const MeshPtr& outpResource)
+		void MoModelLoader::LoadMeshDataTask(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string &instrMaterialPath, const MeshSPtr& outpResource)
 		{
 			//read the mesh data into a MoStaticDeclaration
 			MeshDescriptor descriptor;
@@ -137,19 +137,19 @@ namespace ChilliSource
 			}
 			
 			//start a main thread task for loading the data into a mesh
-			Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<MeshDescriptor&,const MeshPtr&>(this, &MoModelLoader::BuildMeshTask, descriptor, outpResource));
+			Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<MeshDescriptor&,const MeshSPtr&>(this, &MoModelLoader::BuildMeshTask, descriptor, outpResource));
 		}
 		//----------------------------------------------------------------------------
 		/// Build Mesh Task
 		//----------------------------------------------------------------------------
-		void MoModelLoader::BuildMeshTask(MeshDescriptor& inMeshDescriptor, const MeshPtr& outpResource)
+		void MoModelLoader::BuildMeshTask(MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource)
 		{
 			BuildMesh(inMeshDescriptor, outpResource);				   
 		}
 		//----------------------------------------------------------------------------
 		/// Populate Existing Mesh From File
 		//----------------------------------------------------------------------------
-		void MoModelLoader::PopulateExistingMeshFromFile(const MeshPtr& inpMesh, Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath)
+		void MoModelLoader::PopulateExistingMeshFromFile(const MeshSPtr& inpMesh, Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath)
 		{
 			MeshDescriptor descriptor;
 			
@@ -170,7 +170,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Async Populate Existing Mesh From File
 		//----------------------------------------------------------------------------
-		void MoModelLoader::AsyncPopulateExistingMeshFromFile(const MeshPtr& inpMesh, Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath)
+		void MoModelLoader::AsyncPopulateExistingMeshFromFile(const MeshSPtr& inpMesh, Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath)
 		{
 			inpMesh->SetLoaded(false);
 			
@@ -182,13 +182,13 @@ namespace ChilliSource
 			}
 			
 			//Load image as a task. Once it completed we can load the texture as it should be done on the main thread
-			Core::Task<Core::StorageLocation, const std::string&, const std::string&, const MeshPtr&> MeshTask(this, &MoModelLoader::LoadDataForExistingMeshTask, ineStorageLocation, inFilePath, strMatPath, inpMesh);
+			Core::Task<Core::StorageLocation, const std::string&, const std::string&, const MeshSPtr&> MeshTask(this, &MoModelLoader::LoadDataForExistingMeshTask, ineStorageLocation, inFilePath, strMatPath, inpMesh);
 			Core::CTaskScheduler::ScheduleTask(MeshTask);
 		}
 		//----------------------------------------------------------------------------
 		/// LoadDataForExistingMeshTask
 		//----------------------------------------------------------------------------
-		void MoModelLoader::LoadDataForExistingMeshTask(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath, const MeshPtr& outpResource)
+		void MoModelLoader::LoadDataForExistingMeshTask(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath, const MeshSPtr& outpResource)
 		{
 			//read the mesh data into a MoStaticDeclaration
 			MeshDescriptor descriptor;
@@ -198,19 +198,19 @@ namespace ChilliSource
 			}
 			
 			//start a main thread task for loading the data into a mesh
-			Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<MeshDescriptor&, const MeshPtr&>(this, &MoModelLoader::BuildExistingMeshTask, descriptor, outpResource));
+			Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<MeshDescriptor&, const MeshSPtr&>(this, &MoModelLoader::BuildExistingMeshTask, descriptor, outpResource));
 		}
 		//----------------------------------------------------------------------------
 		/// Build Existing Mesh Task
 		//----------------------------------------------------------------------------
-		void MoModelLoader::BuildExistingMeshTask(MeshDescriptor& inMeshDescriptor, const MeshPtr& outpResource)
+		void MoModelLoader::BuildExistingMeshTask(MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource)
 		{			
 			BuildMesh(inMeshDescriptor, outpResource, false);
 		}
 		//----------------------------------------------------------------------------
 		/// BuildMesh
 		//----------------------------------------------------------------------------
-		bool MoModelLoader::BuildMesh(MeshDescriptor& inMeshDescriptor, const MeshPtr& outpResource, bool inbNeedsPrepared)
+		bool MoModelLoader::BuildMesh(MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource, bool inbNeedsPrepared)
 		{
 			bool bSuccess = MeshManager::BuildMesh(mpApp->GetRenderSystemPtr(), inMeshDescriptor, outpResource, inbNeedsPrepared);
 			
@@ -362,7 +362,7 @@ namespace ChilliSource
 		{
 			if (true == inMeshDescriptor.mFeatures.mbHasAnimationData)
 			{
-                inMeshDescriptor.mpSkeleton = SkeletonPtr(new Skeleton());
+                inMeshDescriptor.mpSkeleton = SkeletonSPtr(new Skeleton());
                 
 				//read the skeleton nodes
                 std::unordered_map<u32, s32> jointToNodeMap;

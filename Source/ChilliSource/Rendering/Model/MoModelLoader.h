@@ -67,7 +67,7 @@ namespace ChilliSource
 			/// @param Filename
 			/// @param The path to this files materials. Assumed to be the same directory as the file if left blank.
 			//----------------------------------------------------------------------------
-			void PopulateExistingMeshFromFile(const MeshPtr& inpMesh, Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath = "");
+			void PopulateExistingMeshFromFile(const MeshSPtr& inpMesh, Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath = "");
 			//----------------------------------------------------------------------------
 			/// Async Populate Existing Mesh From File
 			///
@@ -82,7 +82,7 @@ namespace ChilliSource
 			/// @param Filename
 			/// @param The path to this files materials. Assumed to be the same directory as the file if left blank.
 			//----------------------------------------------------------------------------
-			void AsyncPopulateExistingMeshFromFile(const MeshPtr& inpMesh, Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath = "");
+			void AsyncPopulateExistingMeshFromFile(const MeshSPtr& inpMesh, Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath = "");
 		private:
             //----------------------------------------------------------------------------
             /// Mesh Data Quantities
@@ -122,7 +122,7 @@ namespace ChilliSource
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool CreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource);
+			bool CreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Async Create Mesh From File
 			///
@@ -132,7 +132,7 @@ namespace ChilliSource
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool AsyncCreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource);
+			bool AsyncCreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// LoadMeshDataTask
 			///
@@ -141,14 +141,14 @@ namespace ChilliSource
 			/// @param The path to this files materials. Assumed to be the same directory as the file if left blank.
 			/// @param the output resource pointer
 			//----------------------------------------------------------------------------
-			void LoadMeshDataTask(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource);
+			void LoadMeshDataTask(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Build Mesh Task
 			///
 			/// @param the mesh declaration
 			/// @param the output resource pointer
 			//----------------------------------------------------------------------------
-			void BuildMeshTask(MeshDescriptor& inMeshDescriptor, const MeshPtr& outpResource);
+			void BuildMeshTask(MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// LoadDataForExistingMeshTask
 			///
@@ -157,14 +157,14 @@ namespace ChilliSource
 			/// @param The path to this files materials. Assumed to be the same directory as the file if left blank.
 			/// @param the output resource pointer
 			//----------------------------------------------------------------------------
-			void LoadDataForExistingMeshTask(Core::StorageLocation ineStorageLocation, const std::string &inFilePath,  const std::string& instrMaterialPath, const MeshPtr& outpResource);
+			void LoadDataForExistingMeshTask(Core::StorageLocation ineStorageLocation, const std::string &inFilePath,  const std::string& instrMaterialPath, const MeshSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Build Existing Mesh Task
 			///
 			/// @param the mesh declaration
 			/// @param the output resource pointer
 			//----------------------------------------------------------------------------
-			void BuildExistingMeshTask(MeshDescriptor& inMeshDescriptor, const MeshPtr& outpResource);
+			void BuildExistingMeshTask(MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// BuildMesh
 			///
@@ -175,7 +175,7 @@ namespace ChilliSource
 			/// @param whether or not the mesh needs prepared. Defaults to true.
 			/// @return success or failure.
 			//----------------------------------------------------------------------------
-			bool BuildMesh(MeshDescriptor& inMeshDescriptor, const MeshPtr& outpResource, bool inbNeedsPrepared = true);
+			bool BuildMesh(MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource, bool inbNeedsPrepared = true);
 			//----------------------------------------------------------------------------
 			/// Read File
 			///
