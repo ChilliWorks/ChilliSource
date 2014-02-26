@@ -73,8 +73,8 @@ template <> struct CompileTimeChecker<false>{};
 
 
 //---Macros
-#define SAFE_DELETE(x)						{if(x) delete(x); x = NULL;}
-#define SAFE_DELETE_ARRAY(x)				{if(x) delete[] (x); x = NULL;}
+#define SAFE_DELETE(x)						{if(x) delete(x); x = nullptr;}
+#define SAFE_DELETE_ARRAY(x)				{if(x) delete[] (x); x = nullptr;}
 
 #define PARSE_FLOAT(x)                      (Core::ParseF32(x))
 #define PARSE_INT(x)                        (Core::ParseS32(x))
@@ -102,7 +102,7 @@ template <> struct CompileTimeChecker<false>{};
 #endif
 
 #ifdef DEBUG
-#define SMART_CAST(to, from) dynamic_cast<to >(from); assert(dynamic_cast<to >(from) != NULL);
+#define SMART_CAST(to, from) dynamic_cast<to >(from); assert(dynamic_cast<to >(from) != nullptr);
 #else
 #define SMART_CAST(to, from) static_cast<to >(from);
 #endif

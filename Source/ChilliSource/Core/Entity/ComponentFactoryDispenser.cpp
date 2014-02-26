@@ -19,7 +19,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        CComponentFactoryDispenser* CComponentFactoryDispenser::pInstance = NULL;
+        CComponentFactoryDispenser* CComponentFactoryDispenser::pInstance = nullptr;
         //----------------------------------------------------
         /// Constructor
         ///
@@ -73,7 +73,7 @@ namespace ChilliSource
 			}
 			
 			WARNING_LOG("Application cannot find factory producing: " + insName);
-			return NULL;
+			return nullptr;
         }
         //--------------------------------------------------------------------------------------------------
         /// Get Factory Producing
@@ -93,7 +93,7 @@ namespace ChilliSource
 			}
 			
 			WARNING_LOG("Application cannot find factory for interface ID: " + ToString(inInterfaceID));
-			return NULL;
+			return nullptr;
         }
         //--------------------------------------------------------------------------------------------------
         /// Get Factory With Interface
@@ -113,7 +113,7 @@ namespace ChilliSource
 			}
             
             WARNING_LOG("Cannot find component producer for interface ID: " + ToString(inInterfaceID));
-            return NULL;
+            return nullptr;
         }
         //--------------------------------------------------------------------
         /// Destructor
