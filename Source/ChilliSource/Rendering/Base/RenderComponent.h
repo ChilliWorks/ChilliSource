@@ -24,12 +24,12 @@ namespace ChilliSource
 		///
 		/// Any object that can be rendered
 		//====================================================
-		class IRenderComponent : public Core::IVolumeComponent
+		class RenderComponent : public Core::IVolumeComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(IRenderComponent);
-			IRenderComponent();
-			virtual ~IRenderComponent(){}
+			DECLARE_NAMED_INTERFACE(RenderComponent);
+			RenderComponent();
+			virtual ~RenderComponent(){}
 			
 			//----------------------------------------------------
 			/// Get Axis Aligned Bounding Box
@@ -110,7 +110,7 @@ namespace ChilliSource
             /// @param Active camera component
             /// @param The current shader pass.
             //-----------------------------------------------------
-            virtual void Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass inePass) = 0;
+            virtual void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass inePass) = 0;
             //-----------------------------------------------------
             /// Render Shadow Map
             ///
@@ -119,7 +119,7 @@ namespace ChilliSource
             /// @param Render system
             /// @param Active camera component
             //-----------------------------------------------------
-            virtual void RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam) = 0;
+            virtual void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam) = 0;
             //-----------------------------------------------------------
 			/// Set Material
 			///

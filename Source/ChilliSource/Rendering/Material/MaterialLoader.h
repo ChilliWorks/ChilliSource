@@ -25,7 +25,7 @@ namespace ChilliSource
 			///
 			/// @param The render capabilities.
 			//-------------------------------------------------------------------------
-			CMaterialLoader(IRenderCapabilities* inpRenderCapabilities);
+			CMaterialLoader(RenderCapabilities* inpRenderCapabilities);
 			//-------------------------------------------------------------------------
 			/// Is A
 			///
@@ -134,7 +134,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
             void GetShaderFilesForMaterialType(const std::string& instrType, std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles) const;
 
-            IRenderCapabilities* mpRenderCapabilities;
+            RenderCapabilities* mpRenderCapabilities;
 		};
 	}
 }

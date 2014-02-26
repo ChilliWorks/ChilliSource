@@ -25,10 +25,10 @@ namespace ChilliSource
         /// texture size. This should not be used prior to the render
         /// system being initialised.
         //===============================================================
-        class IRenderCapabilities : public Core::ISystem
+        class RenderCapabilities : public Core::ISystem
         {
         public:
-            DECLARE_NAMED_INTERFACE(IRenderCapabilities);
+            DECLARE_NAMED_INTERFACE(RenderCapabilities);
             //-------------------------------------------------------
             /// Is Shadow Mapping Supported
             ///
@@ -58,7 +58,7 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// Destructor
             //-------------------------------------------------------
-            virtual ~IRenderCapabilities(){};
+            virtual ~RenderCapabilities(){};
         };
     }
 }

@@ -22,11 +22,11 @@ namespace ChilliSource
 		/// Abstract render target. Contains data about a 
 		/// render target.
 		//=====================================================
-		class IRenderTarget
+		class RenderTarget
 		{
 		public:
-			IRenderTarget(){}
-			virtual ~IRenderTarget(){}
+			RenderTarget(){}
+			virtual ~RenderTarget(){}
 			
             //------------------------------------------------------
             /// Set Target Textures

@@ -216,7 +216,7 @@ namespace ChilliSource
 			VertexElement* apVertElements = new VertexElement[dwNumVertexElements];
 			apVertElements[0].eType = VertexDataType::k_float3;
 			apVertElements[0].eSemantic = VertexDataSemantic::k_position;
-			CVertexDeclaration vertDeclaration(dwNumVertexElements, apVertElements);
+			VertexDeclaration vertDeclaration(dwNumVertexElements, apVertElements);
 			
 			for (int i = 0; i < indwNumSubMeshes; i++)
 			{
@@ -233,7 +233,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// BuildMesh
 		//----------------------------------------------------------------------------
-		bool CMeshManager::BuildMesh(IRenderSystem* inpRenderSystem, MeshDescriptor& inMeshDescriptor, const MeshPtr& outpResource, bool inbNeedsPrepared)
+		bool CMeshManager::BuildMesh(RenderSystem* inpRenderSystem, MeshDescriptor& inMeshDescriptor, const MeshPtr& outpResource, bool inbNeedsPrepared)
 		{
 			bool bSuccess = true;
 			

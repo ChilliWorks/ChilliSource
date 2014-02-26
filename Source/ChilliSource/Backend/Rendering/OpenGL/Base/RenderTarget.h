@@ -22,7 +22,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CRenderTarget : public ChilliSource::Rendering::IRenderTarget
+		class CRenderTarget : public ChilliSource::Rendering::RenderTarget
 		{
 		public:
 #ifdef TARGET_OS_IPHONE

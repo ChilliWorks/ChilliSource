@@ -35,7 +35,7 @@ namespace ChilliSource
 		/// A sprite component. This defines a 2D object that can
 		/// be manipulated, textured and animated.
 		//===============================================================
-		class CSpriteComponent : public IRenderComponent
+		class CSpriteComponent : public RenderComponent
 		{
 		public: 
 			
@@ -287,7 +287,7 @@ namespace ChilliSource
             /// @param Active camera component
             /// @param The current shader pass.
             //-----------------------------------------------------------
-            void Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass);
+            void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass);
             //-----------------------------------------------------
             /// Render Shadow Map
             ///
@@ -296,7 +296,7 @@ namespace ChilliSource
             /// @param Render system
             /// @param Active camera component
             //-----------------------------------------------------
-            void RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam){};
+            void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam){};
 			//----------------------------------------------------
 			/// On Attached To Entity
 			///

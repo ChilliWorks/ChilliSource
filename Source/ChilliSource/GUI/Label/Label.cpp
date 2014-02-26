@@ -145,7 +145,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("Font", strValue))
             {
-                Font = LOAD_RESOURCE(Rendering::CFont, eFontLocation, strValue);
+                Font = LOAD_RESOURCE(Rendering::Font, eFontLocation, strValue);
             }
             //---Text Colour
             if(insParams.TryGetValue("TextColour", strValue))
@@ -595,7 +595,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer
         //-------------------------------------------------------
-        void Label::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void Label::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
             if(Visible)
             {
@@ -693,7 +693,7 @@ namespace ChilliSource
         ///
         /// based on the text contents
         //-------------------------------------------------------
-        void Label::DoAutosizing(Rendering::CCanvasRenderer* inpCanvas)
+        void Label::DoAutosizing(Rendering::CanvasRenderer* inpCanvas)
         {
             if(Autosizing && mCachedChars.empty())
             {

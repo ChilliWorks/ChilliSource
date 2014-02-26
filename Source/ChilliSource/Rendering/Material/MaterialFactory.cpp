@@ -386,11 +386,11 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Get Render Capabilities
         //---------------------------------------------------
-        IRenderCapabilities* CMaterialFactory::GetRenderCapabilities() const
+        RenderCapabilities* CMaterialFactory::GetRenderCapabilities() const
         {
         	if(mpRenderCapabilities == nullptr)
 			{
-        		mpRenderCapabilities = Core::CApplication::GetSystemImplementing<IRenderCapabilities>();
+        		mpRenderCapabilities = Core::CApplication::GetSystemImplementing<RenderCapabilities>();
         		CS_ASSERT(mpRenderCapabilities, "Material Factor is missing required system: Render Capabilities.");
 			}
 

@@ -549,7 +549,7 @@ namespace ChilliSource
 						break;
 				}
 			}
-			inMeshDescriptor.mVertexDeclaration = CVertexDeclaration(dwNumVertexElements, apVertElements);
+			inMeshDescriptor.mVertexDeclaration = VertexDeclaration(dwNumVertexElements, apVertElements);
 			delete[] apVertElements;
 		}
 		//---------------------------------------------------

@@ -20,9 +20,9 @@ namespace ChilliSource
 {
 	namespace Rendering
     {
-		void CBackToFrontSortPredicate::PrepareForSort(std::vector<IRenderComponent*> * inpRenderable)
+		void BackToFrontSortPredicate::PrepareForSort(std::vector<RenderComponent*> * inpRenderable)
         {
-			mCameraViewProj = CRenderer::matViewProjCache;
+			mCameraViewProj = Renderer::matViewProjCache;
             
             CMatrix4x4 matViewTrans;
             CMatrix4x4 matWorld;
@@ -39,12 +39,12 @@ namespace ChilliSource
             }
 		}
         
-		bool CBackToFrontSortPredicate::SortItem(IRenderComponent* p1, IRenderComponent* p2)
+		bool BackToFrontSortPredicate::SortItem(RenderComponent* p1, RenderComponent* p2)
         {
 			return p1->GetSortValue() > p2->GetSortValue();
 		}
         
-        bool CMaterialSortPredicate::SortItem(IRenderComponent* p1, IRenderComponent* p2)
+        bool MaterialSortPredicate::SortItem(RenderComponent* p1, RenderComponent* p2)
         {
             CMaterial * pM1= p1->GetMaterial().get();
             CMaterial * pM2= p2->GetMaterial().get();

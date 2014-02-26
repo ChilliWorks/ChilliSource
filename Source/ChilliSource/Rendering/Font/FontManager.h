@@ -22,11 +22,11 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class IFontManager : public Core::IResourceManager
+		class FontManager : public Core::IResourceManager
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(IFontManager);
-			IFontManager();
+			DECLARE_NAMED_INTERFACE(FontManager);
+			FontManager();
 			
 			//----------------------------------------------------------------
 			/// Is A

@@ -218,7 +218,7 @@ namespace ChilliSource
             ///
             /// @param Canvas renderer
             //-------------------------------------------------------
-            virtual void Draw(Rendering::CCanvasRenderer* inpCanvas);
+            virtual void Draw(Rendering::CanvasRenderer* inpCanvas);
             //-------------------------------------------------------
             /// Set Maximum Size
             ///
@@ -300,7 +300,7 @@ namespace ChilliSource
 			///
 			/// based on the text contents
 			//-------------------------------------------------------
-			void DoAutosizing(Rendering::CCanvasRenderer* inpCanvas);
+			void DoAutosizing(Rendering::CanvasRenderer* inpCanvas);
             //-------------------------------------------------------
             /// Enable Scalable Font
             ///

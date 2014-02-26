@@ -35,11 +35,11 @@ namespace ChilliSource
 		};
 		
 		
-		class CMeshBatch
+		class MeshBatch
 		{
 		public:
-			CMeshBatch();
-			~CMeshBatch();
+			MeshBatch();
+			~MeshBatch();
 			//------------------------------------------------------
 			/// Add Mesh
 			///
@@ -68,7 +68,7 @@ namespace ChilliSource
 			///
 			/// @param Active render system
 			//------------------------------------------------------
-			void Render(IRenderSystem* inpRenderSystem) const;
+			void Render(RenderSystem* inpRenderSystem) const;
 			//------------------------------------------------------
 			/// Get Tag
 			///
@@ -89,7 +89,7 @@ namespace ChilliSource
 			///
 			/// @param Render system
 			//------------------------------------------------------
-			void CreateStaticBuffer(IRenderSystem* inpRenderSystem);
+			void CreateStaticBuffer(RenderSystem* inpRenderSystem);
 			//------------------------------------------------------
 			/// Build
 			///
@@ -109,7 +109,7 @@ namespace ChilliSource
 			MaterialPtr mpMaterial;
 			
 			//---Render Buffer
-			IMeshBuffer* mpMeshBuffer;
+			MeshBuffer* mpMeshBuffer;
 			
 			//List of sprites in the batch
 			typedef std::unordered_map<StaticMeshComponentPtr, Core::CMatrix4x4> MapMeshToTransform;

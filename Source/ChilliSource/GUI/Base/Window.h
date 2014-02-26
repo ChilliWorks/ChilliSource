@@ -118,7 +118,7 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer
 			//-----------------------------------------------------
-            void Draw(CCanvasRenderer * inpCanvas);
+            void Draw(CanvasRenderer * inpCanvas);
 #endif
 			
             bool mbListeningForTouches;

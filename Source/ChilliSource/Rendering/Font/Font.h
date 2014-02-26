@@ -61,7 +61,7 @@ namespace ChilliSource
 		
 		typedef std::vector<PlacedCharacter> CharacterList;
         
-		class CFont : public Core::IResource
+		class Font : public Core::IResource
 		{
 		public:
 
@@ -119,8 +119,8 @@ namespace ChilliSource
                 s16 wCharacter;				
             };
 			
-			virtual ~CFont(){}
-			DECLARE_NAMED_INTERFACE(CFont);
+			virtual ~Font(){}
+			DECLARE_NAMED_INTERFACE(Font);
 			//---------------------------------------------------------------------
 			/// Is A
 			///
@@ -206,11 +206,11 @@ namespace ChilliSource
             static void SetGlobalKerningOffset(f32 infOffset);
 		
         private:
-            friend class IFontManager;
-            friend class CFontLoader;
+            friend class FontManager;
+            friend class FontLoader;
                     
 			//Only the font manager can create this
-            CFont() : mfLineHeight(0.0f)
+            Font() : mfLineHeight(0.0f)
             {
                 maFirstLookup.clear();
                 maPairs.clear();

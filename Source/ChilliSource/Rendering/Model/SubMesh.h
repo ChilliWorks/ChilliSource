@@ -56,7 +56,7 @@ namespace ChilliSource
 			///
 			/// @return Mesh buffer containing the vertex data
 			//-----------------------------------------------------------------
-			IMeshBuffer* GetInternalMeshBuffer() const;
+			MeshBuffer* GetInternalMeshBuffer() const;
 			//-----------------------------------------------------------------
 			/// Get AABB
 			///
@@ -100,7 +100,7 @@ namespace ChilliSource
 			/// @param the buffer access flag. defaults to "READ".			
             /// @param the primitive type. defaults to "TRIS".
 			//-----------------------------------------------------------------
-			void Prepare(IRenderSystem* inpRenderSystem, CVertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes,
+			void Prepare(RenderSystem* inpRenderSystem, VertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes,
 						 u32 inudwVertexCapacityInBytes, u32 inudwIndexCapacityInBytes, BufferAccess inAccessFlag = BufferAccess::k_read,
 						 PrimitiveType inPrimativeType = PrimitiveType::k_tri);
 			//-----------------------------------------------------------------
@@ -113,7 +113,7 @@ namespace ChilliSource
 			/// @param the new vertex declaration.
 			/// @param the new size of indices.
 			//-----------------------------------------------------------------
-			void AlterBufferDeclaration(CVertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes);
+			void AlterBufferDeclaration(VertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes);
 			//-----------------------------------------------------------------
 			/// Build
 			///
@@ -155,7 +155,7 @@ namespace ChilliSource
 			/// @param the render system.
 			/// @param World transform matrix
 			//-----------------------------------------------------------------
-			void Render(IRenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const MaterialPtr& inpMaterial, const SkinnedAnimationGroupPtr& inpAnimationGroup) const;
+			void Render(RenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const MaterialPtr& inpMaterial, const SkinnedAnimationGroupPtr& inpAnimationGroup) const;
 			
 			//Only model loaders can alter the mesh construct
 			friend class CMeshManager;
@@ -169,10 +169,10 @@ namespace ChilliSource
 			Core::AABB mBoundingBox;
 			
 			//Used to create hardware buffers and render
-			IRenderSystem* mpRenderSystem;
+			RenderSystem* mpRenderSystem;
 			
 			//We own this!!!
-			IMeshBuffer* mpMeshBuffer;
+			MeshBuffer* mpMeshBuffer;
 			
 			InverseBindPosePtr mpInverseBindPose;
 		};

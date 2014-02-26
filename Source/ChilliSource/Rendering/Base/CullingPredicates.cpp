@@ -14,12 +14,12 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        bool CViewportCullPredicate::CullItem(CCameraComponent* inpCamera, IRenderComponent* inpItem) const
+        bool ViewportCullPredicate::CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const
         {
             return false;
         }
         
-        bool CFrustumCullPredicate::CullItem(CCameraComponent* inpCamera, IRenderComponent* inpItem) const
+        bool FrustumCullPredicate::CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const
         {
             return !inpCamera->GetFrustumPtr()->SphereCullTest(inpItem->GetBoundingSphere());
         }

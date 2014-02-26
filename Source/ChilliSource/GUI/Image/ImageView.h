@@ -34,7 +34,7 @@ namespace ChilliSource
             ///
             /// @param Canvas renderer pointer
             //--------------------------------------------------------
-            virtual void Draw(Rendering::CCanvasRenderer* inpCanvas);
+            virtual void Draw(Rendering::CanvasRenderer* inpCanvas);
             //--------------------------------------------------------
             /// Set Texture
             ///

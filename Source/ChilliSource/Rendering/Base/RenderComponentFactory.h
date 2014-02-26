@@ -23,12 +23,12 @@ namespace ChilliSource
 		///
 		/// Allows objects to instantiate renderable components
 		//======================================================
-		class CRenderComponentFactory : public Core::IComponentFactory
+		class RenderComponentFactory : public Core::IComponentFactory
 		{
 		public: 
-			DECLARE_NAMED_INTERFACE(CRenderComponentFactory);
-			CRenderComponentFactory(IRenderSystem* inpRenderSystem);
-			virtual ~CRenderComponentFactory(){}
+			DECLARE_NAMED_INTERFACE(RenderComponentFactory);
+			RenderComponentFactory(RenderSystem* inpRenderSystem);
+			virtual ~RenderComponentFactory(){}
             //--------------------------------------------------------
             /// Is A
             ///
@@ -70,7 +70,7 @@ namespace ChilliSource
 			///
 			/// @return The render system which created us
 			//--------------------------------------------------------
-			IRenderSystem* GetOwningRenderSystemPtr();
+			RenderSystem* GetOwningRenderSystemPtr();
 			
             //---------------------------------------------------------------------------
 			/// Create Static Sprite Component
@@ -125,13 +125,13 @@ namespace ChilliSource
 
 		protected:
 			
-			IRenderSystem* mpRenderSystem;
+			RenderSystem* mpRenderSystem;
             
             CMeshManager* mpMeshManager;
 			IMaterialManager* mpMaterialManager;
 			ITextureManager* mpTextureManager;
 			ISpriteSheetManager* mpSpriteSheetManager;
-			IRenderCapabilities* mpRenderCapabilities;
+			RenderCapabilities* mpRenderCapabilities;
 		};
 	}
 }

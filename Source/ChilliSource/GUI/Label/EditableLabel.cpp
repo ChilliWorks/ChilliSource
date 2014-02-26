@@ -333,7 +333,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer
         //-------------------------------------------------------
-        void EditableLabel::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void EditableLabel::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
 			//Check if this is on screen
 			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);

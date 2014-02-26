@@ -31,7 +31,7 @@ namespace ChilliSource
 		/// Constructor
 		///
 		//----------------------------------------------------------
-		CCanvasRenderer::CCanvasRenderer(IRenderSystem* inpRenderSystem) : mOverlayBatcher(inpRenderSystem), mpRenderSystem(inpRenderSystem), mfNearClippingDistance(0.0f)
+		CanvasRenderer::CanvasRenderer(RenderSystem* inpRenderSystem) : mOverlayBatcher(inpRenderSystem), mpRenderSystem(inpRenderSystem), mfNearClippingDistance(0.0f)
 		{
             CMaterialFactory* pMaterialFactory = Core::CApplication::GetSystemImplementing<CMaterialFactory>();
             if(pMaterialFactory != nullptr)
@@ -48,7 +48,7 @@ namespace ChilliSource
 		///
 		/// Draw the UI
 		//----------------------------------------------------------
-		void CCanvasRenderer::Render(GUI::GUIView* inpView, f32 infNearClipDistance)
+		void CanvasRenderer::Render(GUI::GUIView* inpView, f32 infNearClipDistance)
 		{
             //We use this to ensure our UI is never clipped
             mfNearClippingDistance = infNearClipDistance + 1.0f;
@@ -75,7 +75,7 @@ namespace ChilliSource
         /// Pushes to a stack which tracks when to enable and
         /// disable scissoring
         //---------------------------------------------------------
-        void CCanvasRenderer::EnableClippingToBounds(const Core::CVector2& invPosition, const Core::CVector2& invSize)
+        void CanvasRenderer::EnableClippingToBounds(const Core::CVector2& invPosition, const Core::CVector2& invSize)
         {
             mOverlayBatcher.ForceCommandChange();
             
@@ -116,7 +116,7 @@ namespace ChilliSource
         ///
         /// Pop the scissor tracking stack
         //----------------------------------------------------------                            
-        void CCanvasRenderer::DisableClippingToBounds()
+        void CanvasRenderer::DisableClippingToBounds()
         {
             if(!mScissorPos.empty())
             {
@@ -145,7 +145,7 @@ namespace ChilliSource
         ///
         /// Build a sprite box and batch it ready for rendering
         //-----------------------------------------------------------
-        void CCanvasRenderer::DrawBox(const Core::CMatrix3x3& inmatTransform, const Core::CVector2 & invSize, const TexturePtr & inpTexture, 
+        void CanvasRenderer::DrawBox(const Core::CMatrix3x3& inmatTransform, const Core::CVector2 & invSize, const TexturePtr & inpTexture, 
                                       const Core::CRect& inUVs, const Core::CColour & insTintColour, Core::AlignmentAnchor ineAlignment)
         {
             //Flush buffer
@@ -172,7 +172,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Draw String
         //-----------------------------------------------------------
-		void CCanvasRenderer::DrawString(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
+		void CanvasRenderer::DrawString(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                          const Core::CColour & insColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing, 
 										 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines, bool * outpClipped, bool *outpInvalidCharacterFound)
 		{
@@ -222,7 +222,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Draw Distance Outlined String
         //-----------------------------------------------------------
-        void CCanvasRenderer::DrawDistanceOutlinedString(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
+        void CanvasRenderer::DrawDistanceOutlinedString(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                                  const Core::CColour & insColour, const Core::CColour& insOutlineColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
                                                  GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
 		{
@@ -243,7 +243,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Draw Distance String
         //-----------------------------------------------------------
-        void CCanvasRenderer::DrawDistanceString(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
+        void CanvasRenderer::DrawDistanceString(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                          const Core::CColour & insColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
 										 GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
 		{
@@ -264,7 +264,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Draw Distance String Internal
         //-----------------------------------------------------------
-        void CCanvasRenderer::DrawDistanceStringInternal(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
+        void CanvasRenderer::DrawDistanceStringInternal(const Core::UTF8String & insString, const Core::CMatrix3x3& inmatTransform, f32 infSize, const FontPtr& inpFont, CharacterList& outCharCache,
                                                  const Core::CColour & insColour, const Core::CVector2 & invBounds, f32 infCharacterSpacing, f32 infLineSpacing,
                                                  GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification, bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, u32 inudwNumLines)
         {
@@ -309,7 +309,7 @@ namespace ChilliSource
         /// Calculate the length of a string based on the font
         /// and attributes
         //------------------------------------------------------------
-        f32 CCanvasRenderer::CalculateStringWidth(const Core::UTF8String& insString, const FontPtr& inpFont, f32 infSize, f32 infCharSpacing)
+        f32 CanvasRenderer::CalculateStringWidth(const Core::UTF8String& insString, const FontPtr& inpFont, f32 infSize, f32 infCharSpacing)
         {
             Core::CVector2 vSize;
             
@@ -353,7 +353,7 @@ namespace ChilliSource
         /// Calculate the height of a string based on the font, width
         /// and attributes
         //------------------------------------------------------------
-        f32 CCanvasRenderer::CalculateStringHeight(const Core::UTF8String& insString, const FontPtr& inpFont, f32 infWidth, f32 infSize, f32 infCharSpacing, f32 infLineSpacing, u32 inudwNumLines)
+        f32 CanvasRenderer::CalculateStringHeight(const Core::UTF8String& insString, const FontPtr& inpFont, f32 infWidth, f32 infSize, f32 infCharSpacing, f32 infLineSpacing, u32 inudwNumLines)
         {
             Core::CVector2 vCursorPos;
             
@@ -440,7 +440,7 @@ namespace ChilliSource
                             NextChar = insString.next(jt);
                             
                             //Add it to the length
-                            CFont::CharacterInfo sInfo;
+                            Font::CharacterInfo sInfo;
                             inpFont->GetInfoForCharacter(NextChar, sInfo);
                             fLengthToNextSpace += (sInfo.vSize.x * infSize) + infCharSpacing;
                             
@@ -465,7 +465,7 @@ namespace ChilliSource
 		/// Construct a list of character sprites
 		/// from the given string
         //-------------------------------------------
-		void CCanvasRenderer::BuildString(const FontPtr& inpFont, const Core::UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
+		void CanvasRenderer::BuildString(const FontPtr& inpFont, const Core::UTF8String &inText, CharacterList &outCharacters, f32 infTextSize, f32 infCharacterSpacing, f32 infLineSpacing,
 										  const Core::CVector2& invBounds, u32 inudwNumLines, GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification,
                                           bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, bool * outpClipped, bool * outpInvalidCharacterFound)
 		{
@@ -658,11 +658,11 @@ namespace ChilliSource
 		//----------------------------------------------------
 		/// Build Character
 		//----------------------------------------------------
-		CharacterResult CCanvasRenderer::BuildCharacter(const FontPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
+		CharacterResult CanvasRenderer::BuildCharacter(const FontPtr& inpFont, Core::UTF8String::Char inCharacter, Core::UTF8String::Char inNextCharacter,
                                                          const Core::CVector2& invCursor, f32 infTextScale, f32 infCharSpacing,
                                                          f32 &outfCharacterWidth, CharacterList &outCharacters, bool * outpInvalidCharacterFound)
 		{
-			CFont::CharacterInfo sInfo;
+			Font::CharacterInfo sInfo;
 			CharacterResult Result = inpFont->GetInfoForCharacter(inCharacter, sInfo);
             
             sInfo.vSize *= infTextScale;
@@ -729,7 +729,7 @@ namespace ChilliSource
         //----------------------------------------------------
         /// Wrap
         //----------------------------------------------------
-        void CCanvasRenderer::Wrap(GUI::TextJustification ineHorizontalJustification, f32 infLineSpacing, const Core::CVector2& invBounds,
+        void CanvasRenderer::Wrap(GUI::TextJustification ineHorizontalJustification, f32 infLineSpacing, const Core::CVector2& invBounds,
 								   CharacterList &inCurrentLine, Core::CVector2& outvCursor, CharacterList &outCharacters)
         {
             if(!inCurrentLine.empty())
@@ -769,7 +769,7 @@ namespace ChilliSource
 		///
 		/// Rebuild the sprite data
 		//-----------------------------------------------------
-		void CCanvasRenderer::UpdateSpriteData(const Core::CMatrix4x4 & inTransform, const Core::CVector2 & invSize, const Core::Rectangle& inUVs, const Core::CColour & insTintColour, Core::AlignmentAnchor ineAlignment)
+		void CanvasRenderer::UpdateSpriteData(const Core::CMatrix4x4 & inTransform, const Core::CVector2 & invSize, const Core::Rectangle& inUVs, const Core::CColour & insTintColour, Core::AlignmentAnchor ineAlignment)
 		{
 			Core::CColour::ByteColour Col = Core::CColour::ColourToByteColour(insTintColour);
 			

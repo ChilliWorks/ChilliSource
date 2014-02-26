@@ -23,11 +23,11 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CCanvasRenderer
+		class CanvasRenderer
 		{
 		public:
 
-			CCanvasRenderer(IRenderSystem* inpRenderSystem);
+			CanvasRenderer(RenderSystem* inpRenderSystem);
 			//----------------------------------------------------------
 			/// Render
 			///
@@ -203,7 +203,7 @@ namespace ChilliSource
 			std::vector<Core::CVector2> mScissorPos;
             std::vector<Core::CVector2> mScissorSize;
                         
-			IRenderSystem* mpRenderSystem;
+			RenderSystem* mpRenderSystem;
             
             f32 mfNearClippingDistance;
 		};

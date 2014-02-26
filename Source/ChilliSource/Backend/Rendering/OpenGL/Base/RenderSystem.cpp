@@ -70,7 +70,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		bool CRenderSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return	(inInterfaceID == IRenderSystem::InterfaceID) || (inInterfaceID == Core::IComponentProducer::InterfaceID);
+			return	(inInterfaceID == RenderSystem::InterfaceID) || (inInterfaceID == Core::IComponentProducer::InterfaceID);
 		}
         //----------------------------------------------------------
         /// Init
@@ -529,14 +529,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Default Render Target
 		//----------------------------------------------------------
-		Rendering::IRenderTarget* CRenderSystem::GetDefaultRenderTarget()
+		Rendering::RenderTarget* CRenderSystem::GetDefaultRenderTarget()
 		{
 			return mpDefaultRenderTarget;
 		}
 		//----------------------------------------------------------
 		/// Begin Frame
 		//----------------------------------------------------------
-		void CRenderSystem::BeginFrame(Rendering::IRenderTarget* inpActiveRenderTarget)
+		void CRenderSystem::BeginFrame(Rendering::RenderTarget* inpActiveRenderTarget)
 		{
 #ifdef DEBUG
 			CheckForGLErrors();
@@ -562,7 +562,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Create Render Target
 		//----------------------------------------------------------
-		Rendering::IRenderTarget* CRenderSystem::CreateRenderTarget(u32 inudwWidth, u32 inudwHeight)
+		Rendering::RenderTarget* CRenderSystem::CreateRenderTarget(u32 inudwWidth, u32 inudwHeight)
 		{
 			CRenderTarget* pDefaultRenderTarget = new CRenderTarget();
 			pDefaultRenderTarget->Init(inudwWidth, inudwHeight);
@@ -572,7 +572,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Create Buffer
 		//----------------------------------------------------------
-		Rendering::IMeshBuffer* CRenderSystem::CreateBuffer(Rendering::BufferDescription &inDesc)
+		Rendering::MeshBuffer* CRenderSystem::CreateBuffer(Rendering::BufferDescription &inDesc)
 		{
 			CMeshBuffer* pBuffer = new CMeshBuffer(inDesc);
 			pBuffer->SetMapBufferAvailable(gbIsMapBufferAvailable);
@@ -586,7 +586,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Vertex Buffer
         //----------------------------------------------------------
-        void CRenderSystem::RenderVertexBuffer(Rendering::IMeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::CMatrix4x4& inmatWorld)
+        void CRenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::CMatrix4x4& inmatWorld)
 		{
 #ifdef DEBUG_STATS
             DebugStats::AddToEvent("DrawCalls", 1u);
@@ -621,7 +621,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Buffer
         //----------------------------------------------------------
-        void CRenderSystem::RenderBuffer(Rendering::IMeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::CMatrix4x4& inmatWorld)
+        void CRenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::CMatrix4x4& inmatWorld)
 		{
 #ifdef DEBUG_STATS
             DebugStats::AddToEvent("DrawCalls", 1u);
@@ -656,7 +656,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// End Frame
 		//----------------------------------------------------------
-		void CRenderSystem::EndFrame(Rendering::IRenderTarget* inpActiveRenderTarget)
+		void CRenderSystem::EndFrame(Rendering::RenderTarget* inpActiveRenderTarget)
 		{
 #ifdef TARGET_OS_IPHONE
             if (mpDefaultRenderTarget != nullptr && mpDefaultRenderTarget == inpActiveRenderTarget)
@@ -1038,7 +1038,7 @@ namespace ChilliSource
                     return -1;
             }
         }
-        bool CRenderSystem::ApplyVertexAttributePointr(Rendering::IMeshBuffer* inpBuffer,
+        bool CRenderSystem::ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
                                                        GLuint inudwLocation, GLint indwSize, GLenum ineType, GLboolean inbNormalized,
                                                        GLsizei indwStride, const GLvoid* inpOffset)
         {
@@ -1063,7 +1063,7 @@ namespace ChilliSource
 		//------------------------------------------------------------
 		/// Enable Vertex Attribute For Semantic
 		//------------------------------------------------------------
-		void CRenderSystem::EnableVertexAttributeForSemantic(Rendering::IMeshBuffer* inpBuffer)
+		void CRenderSystem::EnableVertexAttributeForSemantic(Rendering::MeshBuffer* inpBuffer)
 		{
             if(mbInvalidateAllCaches || mdwMaxVertAttribs == 0)
             {
@@ -1235,7 +1235,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Remove Buffer
 		//----------------------------------------------------------
-		void CRenderSystem::RemoveBuffer(Rendering::IMeshBuffer* inpBuffer)
+		void CRenderSystem::RemoveBuffer(Rendering::MeshBuffer* inpBuffer)
 		{
 #ifdef TARGET_ANDROID
 			for(std::vector<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)

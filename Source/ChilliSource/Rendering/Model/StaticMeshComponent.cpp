@@ -42,7 +42,7 @@ namespace ChilliSource
 		bool CStaticMeshComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return  (inInterfaceID == CStaticMeshComponent::InterfaceID) || 
-                    (inInterfaceID == IRenderComponent::InterfaceID) ||
+                    (inInterfaceID == RenderComponent::InterfaceID) ||
                     (inInterfaceID == IVolumeComponent::InterfaceID);
 		}
 		//----------------------------------------------------
@@ -305,7 +305,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render
         //----------------------------------------------------------
-        void CStaticMeshComponent::Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass)
+        void CStaticMeshComponent::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass)
 		{
             if(IsTransparent())
             {
@@ -323,7 +323,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Shadow Map
         //----------------------------------------------------------
-        void CStaticMeshComponent::RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam)
+        void CStaticMeshComponent::RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam)
 		{
             if (mspShadowMapMaterial == nullptr)
             {

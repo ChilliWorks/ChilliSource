@@ -612,7 +612,7 @@ namespace ChilliSource
 		///
 		/// @param Canvas renderer
 		//-----------------------------------------------------------
-		void ToggleButton::Draw(Rendering::CCanvasRenderer* inpCanvasRenderer)
+		void ToggleButton::Draw(Rendering::CanvasRenderer* inpCanvasRenderer)
 		{
 			SetSizeFromImage();
 			GUIView::Draw(inpCanvasRenderer);

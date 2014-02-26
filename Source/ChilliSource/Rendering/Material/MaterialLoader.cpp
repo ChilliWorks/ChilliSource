@@ -36,7 +36,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Constructor
 		//-------------------------------------------------------------------------
-		CMaterialLoader::CMaterialLoader(IRenderCapabilities* inpRenderCapabilities)
+		CMaterialLoader::CMaterialLoader(RenderCapabilities* inpRenderCapabilities)
 			: mpRenderCapabilities(inpRenderCapabilities)
 		{
 			CS_ASSERT(mpRenderCapabilities, "Material loader is missing required system: Render Capabilities.");

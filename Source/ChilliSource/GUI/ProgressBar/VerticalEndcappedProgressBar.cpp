@@ -280,7 +280,7 @@ namespace ChilliSource
 		///
 		/// @param Renderer
 		//------------------------------------------------------------------------
-		void VerticalEndcappedProgressBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
+		void VerticalEndcappedProgressBar::Draw(Rendering::CanvasRenderer* inpCanvas)
 		{
 			if(Visible && SpriteSheet)
 			{

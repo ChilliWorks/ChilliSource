@@ -19,34 +19,33 @@ namespace ChilliSource
         //------------------------------------------------------------
         /// Base
         //------------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CAlignmentAnchors);
-        CS_FORWARD_DECLARE_CLASS(CCanvasRenderer);
+        CS_FORWARD_DECLARE_CLASS(CanvasRenderer);
         CS_FORWARD_DECLARE_CLASS(ICullingPredicate);
-        CS_FORWARD_DECLARE_CLASS(CViewportCullPredicate);
-        CS_FORWARD_DECLARE_CLASS(CFrustumCullPredicate);
-        CS_FORWARD_DECLARE_CLASS(CMeshBatch);
-        CS_FORWARD_DECLARE_CLASS(IMeshBuffer);
-        CS_FORWARD_DECLARE_CLASS(IRenderCapabilities);
-        CS_FORWARD_DECLARE_CLASS(IRenderComponent);
-        CS_FORWARD_DECLARE_CLASS(CRenderComponentFactory);
-        CS_FORWARD_DECLARE_CLASS(CRenderer);
-        CS_FORWARD_DECLARE_CLASS(CRendererSortPredicate);
-        CS_FORWARD_DECLARE_CLASS(CnullptrSortPredicate);
-        CS_FORWARD_DECLARE_CLASS(CBackToFrontSortPredicate);
-        CS_FORWARD_DECLARE_CLASS(CMaterialSortPredicate);
-        CS_FORWARD_DECLARE_CLASS(IRenderSystem);
-        CS_FORWARD_DECLARE_CLASS(IRenderTarget);
-        CS_FORWARD_DECLARE_CLASS(CVertexDeclaration);
+        CS_FORWARD_DECLARE_CLASS(ViewportCullPredicate);
+        CS_FORWARD_DECLARE_CLASS(FrustumCullPredicate);
+        CS_FORWARD_DECLARE_CLASS(MeshBatch);
+        CS_FORWARD_DECLARE_CLASS(MeshBuffer);
+        CS_FORWARD_DECLARE_CLASS(RenderCapabilities);
+        CS_FORWARD_DECLARE_CLASS(RenderComponent);
+        CS_FORWARD_DECLARE_CLASS(RenderComponentFactory);
+        CS_FORWARD_DECLARE_CLASS(Renderer);
+        CS_FORWARD_DECLARE_CLASS(RendererSortPredicate);
+        CS_FORWARD_DECLARE_CLASS(NullSortPredicate);
+        CS_FORWARD_DECLARE_CLASS(BackToFrontSortPredicate);
+        CS_FORWARD_DECLARE_CLASS(MaterialSortPredicate);
+        CS_FORWARD_DECLARE_CLASS(RenderSystem);
+        CS_FORWARD_DECLARE_CLASS(RenderTarget);
+        CS_FORWARD_DECLARE_CLASS(VertexDeclaration);
         //------------------------------------------------------------
         /// Camera
         //------------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CCameraComponent);
+        CS_FORWARD_DECLARE_CLASS(CameraComponent);
         //------------------------------------------------------------
         /// Font
         //------------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CFont);
-        CS_FORWARD_DECLARE_CLASS(CFontLoader);
-        CS_FORWARD_DECLARE_CLASS(IFontManager);
+        CS_FORWARD_DECLARE_CLASS(Font);
+        CS_FORWARD_DECLARE_CLASS(FontLoader);
+        CS_FORWARD_DECLARE_CLASS(FontManager);
         //------------------------------------------------------------
         /// Lighting
         //------------------------------------------------------------

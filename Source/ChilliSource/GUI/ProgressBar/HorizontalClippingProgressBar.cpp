@@ -346,7 +346,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //------------------------------------------------------
-        void HorizontalClippingProgressBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void HorizontalClippingProgressBar::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
             if(Visible)
             {

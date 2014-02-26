@@ -184,7 +184,7 @@ namespace ChilliSource
             s32 mdwTextureSlot;
 
             CTextureManager* mpTextureManager;
-            Rendering::IRenderCapabilities* mpRenderCapabilities;
+            Rendering::RenderCapabilities* mpRenderCapabilities;
             
             static u32 udwCurrentActiveSlot;
             

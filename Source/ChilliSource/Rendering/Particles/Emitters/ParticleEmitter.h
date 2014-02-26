@@ -50,7 +50,7 @@ namespace ChilliSource
             ///
             /// @param Render system
             //-----------------------------------------------------
-            void Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam);
+            void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam);
             //---------------------------------------------------
             /// Start Emitting
             ///

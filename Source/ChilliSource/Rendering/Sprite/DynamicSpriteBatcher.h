@@ -30,7 +30,7 @@ namespace ChilliSource
 		class CDynamicSpriteBatch
 		{
 		public:
-			CDynamicSpriteBatch(IRenderSystem* inpRenderSystem);
+			CDynamicSpriteBatch(RenderSystem* inpRenderSystem);
             ~CDynamicSpriteBatch();
             
 			//-------------------------------------------------------
@@ -44,7 +44,7 @@ namespace ChilliSource
             /// @param Render system
             /// @param Sprite data to batch
 			//-------------------------------------------------------
-			void Render(IRenderSystem* inpRenderSystem, const CSpriteComponent::SpriteData& inpSprite, const Core::CMatrix4x4 * inpTransform = nullptr);
+			void Render(RenderSystem* inpRenderSystem, const CSpriteComponent::SpriteData& inpSprite, const Core::CMatrix4x4 * inpTransform = nullptr);
             //-------------------------------------------------------
             /// Force Command Change
             ///
@@ -60,7 +60,7 @@ namespace ChilliSource
             ///
             /// @param Render system
 			//-------------------------------------------------------
-			void ForceRender(IRenderSystem* inpRenderSystem);
+			void ForceRender(RenderSystem* inpRenderSystem);
 			
 		private:
             
@@ -74,7 +74,7 @@ namespace ChilliSource
             /// 
             /// @param Render system
             //----------------------------------------------------------
-            void BuildAndFlushBatch(IRenderSystem* inpRenderSystem);
+            void BuildAndFlushBatch(RenderSystem* inpRenderSystem);
 			
 		private:
         

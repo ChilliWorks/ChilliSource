@@ -33,13 +33,13 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(CRenderComponentFactory);
+		DEFINE_NAMED_INTERFACE(RenderComponentFactory);
         //--------------------------------------------------------
         /// Constructor
         ///
         /// Managers that are required
 		//--------------------------------------------------------
-        CRenderComponentFactory::CRenderComponentFactory(IRenderSystem* inpRenderSystem) 
+        RenderComponentFactory::RenderComponentFactory(RenderSystem* inpRenderSystem) 
         : mpRenderSystem(inpRenderSystem), mpMeshManager(nullptr), mpMaterialManager(nullptr), mpSpriteSheetManager(nullptr), mpTextureManager(nullptr), mpRenderCapabilities(nullptr)
         {
 			if(!mpSpriteSheetManager)
@@ -60,7 +60,7 @@ namespace ChilliSource
             }
             if (!mpRenderCapabilities)
             {
-            	mpRenderCapabilities = Core::CApplication::GetSystemImplementing<IRenderCapabilities>();
+            	mpRenderCapabilities = Core::CApplication::GetSystemImplementing<RenderCapabilities>();
             	CS_ASSERT(mpRenderCapabilities, "Render Component Factory is missing required system: Render Capabilities.");
             }
         }
@@ -69,9 +69,9 @@ namespace ChilliSource
         ///
         /// @return If the object is of the given interface type
         //--------------------------------------------------------
-		bool CRenderComponentFactory::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool RenderComponentFactory::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-			return (inInterfaceID == CRenderComponentFactory::InterfaceID);
+			return (inInterfaceID == RenderComponentFactory::InterfaceID);
 		}
         //--------------------------------------------------------
 		/// Can Produce Component With Interface
@@ -82,11 +82,11 @@ namespace ChilliSource
 		/// @param The ID of the component to create
 		/// @return Whether the object can create component of ID
 		//--------------------------------------------------------
-		bool CRenderComponentFactory::CanProduceComponentWithInterface(Core::InterfaceIDType inTypeID) const
+		bool RenderComponentFactory::CanProduceComponentWithInterface(Core::InterfaceIDType inTypeID) const
 		{
 			return
             (CSpriteComponent::InterfaceID == inTypeID)	||
-			(CCameraComponent::InterfaceID == inTypeID)	|| 
+			(CameraComponent::InterfaceID == inTypeID)	|| 
 			(CStaticMeshComponent::InterfaceID == inTypeID) || 
 			(ILightComponent::InterfaceID == inTypeID) ||
 			(CDirectionalLightComponent::InterfaceID == inTypeID);
@@ -100,11 +100,11 @@ namespace ChilliSource
 		/// @param The name of the component to create
 		/// @return Whether the object can create component
 		//--------------------------------------------------------
-		bool CRenderComponentFactory::CanProduceComponentWithTypeName(const std::string & incName) const
+		bool RenderComponentFactory::CanProduceComponentWithTypeName(const std::string & incName) const
         {			
 			return
             (CSpriteComponent::TypeName == incName)	||
-            (CCameraComponent::TypeName == incName)	|| 
+            (CameraComponent::TypeName == incName)	|| 
             (CStaticMeshComponent::TypeName == incName) || 
             (ILightComponent::TypeName == incName) ||
             (CDirectionalLightComponent::TypeName == incName);
@@ -118,7 +118,7 @@ namespace ChilliSource
         /// @param Type Name
         /// @param Param Dictionary
         //--------------------------------------------------------
-        Core::ComponentPtr CRenderComponentFactory::CreateComponent(const std::string & insTypeName, const Core::ParamDictionary & insParamDictionary)
+        Core::ComponentPtr RenderComponentFactory::CreateComponent(const std::string & insTypeName, const Core::ParamDictionary & insParamDictionary)
         {
             if (insTypeName == CStaticMeshComponent::TypeName) 
             {
@@ -146,7 +146,7 @@ namespace ChilliSource
 					CS_WARNING_LOG("Insufficient parameters to create a StaticMeshComponent");
 				}
 			} 
-            else if (insTypeName == CCameraComponent::TypeName) 
+            else if (insTypeName == CameraComponent::TypeName) 
             {
 				f32 fHorFOV = 45.0f;
 				if (insParamDictionary.HasValue("FOV")) 
@@ -244,7 +244,7 @@ namespace ChilliSource
 		///
 		/// @return The render system which created us
 		//--------------------------------------------------------
-		IRenderSystem* CRenderComponentFactory::GetOwningRenderSystemPtr()
+		RenderSystem* RenderComponentFactory::GetOwningRenderSystemPtr()
 		{
 			return mpRenderSystem;
 		}
@@ -256,7 +256,7 @@ namespace ChilliSource
         /// @param Material file
         /// @return an instantiated sprite object
         //---------------------------------------------------------------------------
-        SpriteComponentPtr CRenderComponentFactory::CreateSpriteComponent(const Core::CVector2 &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath)
+        SpriteComponentPtr RenderComponentFactory::CreateSpriteComponent(const Core::CVector2 &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath)
         {
             SpriteComponentPtr pSprite(new CSpriteComponent());
             pSprite->SetMaterial(mpMaterialManager->GetMaterialFromFile(ineStorageLocation, instrMaterialFilePath));
@@ -270,7 +270,7 @@ namespace ChilliSource
         /// @param Material
         /// @return an instantiated sprite object
         //---------------------------------------------------------------------------
-        SpriteComponentPtr CRenderComponentFactory::CreateSpriteComponent(const Core::CVector2 &invDims, const MaterialPtr& inpMaterial)
+        SpriteComponentPtr RenderComponentFactory::CreateSpriteComponent(const Core::CVector2 &invDims, const MaterialPtr& inpMaterial)
         {
             SpriteComponentPtr pSprite(new CSpriteComponent());
             pSprite->SetDimensions(invDims);
@@ -285,7 +285,7 @@ namespace ChilliSource
         /// @param Material
         /// @return an instantiated sprite object
         //---------------------------------------------------------------------------
-        SpriteComponentPtr CRenderComponentFactory::CreateSpriteComponent(const SpriteSheetPtr& pSpriteSheet, u32 inTpageIndex, const MaterialPtr& inpMaterial)
+        SpriteComponentPtr RenderComponentFactory::CreateSpriteComponent(const SpriteSheetPtr& pSpriteSheet, u32 inTpageIndex, const MaterialPtr& inpMaterial)
         {
             SpriteComponentPtr pSprite(new CSpriteComponent());
             pSprite->SetMaterial(inpMaterial);
@@ -303,7 +303,7 @@ namespace ChilliSource
         /// @param Material
         /// @return an instantiated sprite object
         //---------------------------------------------------------------------------
-        SpriteComponentPtr CRenderComponentFactory::CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheetTexture, u32 inTpageIndex, const MaterialPtr& inpMaterial)
+        SpriteComponentPtr RenderComponentFactory::CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheetTexture, u32 inTpageIndex, const MaterialPtr& inpMaterial)
         {
             SpriteComponentPtr pSprite(new CSpriteComponent());
             pSprite->SetMaterial(inpMaterial);
@@ -321,7 +321,7 @@ namespace ChilliSource
         /// @param Material
         /// @return an instantiated sprite object
         //---------------------------------------------------------------------------
-        SpriteComponentPtr CRenderComponentFactory::CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheetTexture, const std::string& instrTpageID, const MaterialPtr& inpMaterial)
+        SpriteComponentPtr RenderComponentFactory::CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheetTexture, const std::string& instrTpageID, const MaterialPtr& inpMaterial)
         {
             SpriteComponentPtr pSprite(new CSpriteComponent());
             pSprite->SetMaterial(inpMaterial);
@@ -340,7 +340,7 @@ namespace ChilliSource
 		/// @param Mesh 
         /// @return Static mesh component
         //---------------------------------------------------------------------------
-		StaticMeshComponentPtr CRenderComponentFactory::CreateStaticMeshComponent(const MeshPtr& inpModel)
+		StaticMeshComponentPtr RenderComponentFactory::CreateStaticMeshComponent(const MeshPtr& inpModel)
 		{
 			StaticMeshComponentPtr pResult(new CStaticMeshComponent());
 			pResult->AttachMesh(inpModel);
@@ -353,7 +353,7 @@ namespace ChilliSource
         /// @param Material 
         /// @return Static mesh component
         //---------------------------------------------------------------------------
-		StaticMeshComponentPtr CRenderComponentFactory::CreateStaticMeshComponent(const MeshPtr& inpModel, const MaterialPtr& inpMaterial)
+		StaticMeshComponentPtr RenderComponentFactory::CreateStaticMeshComponent(const MeshPtr& inpModel, const MaterialPtr& inpMaterial)
 		{
 			StaticMeshComponentPtr pResult(new CStaticMeshComponent());
 			pResult->AttachMesh(inpModel, inpMaterial);
@@ -367,7 +367,7 @@ namespace ChilliSource
         /// @param Material file
         /// @return Static mesh component
         //---------------------------------------------------------------------------
-		StaticMeshComponentPtr CRenderComponentFactory::CreateStaticMeshComponent(const MeshPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName)
+		StaticMeshComponentPtr RenderComponentFactory::CreateStaticMeshComponent(const MeshPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName)
 		{
 			MaterialPtr pMaterial = mpMaterialManager->GetMaterialFromFile(ineStorageLocation, insMaterialName);
 			return CreateStaticMeshComponent(inpModel, pMaterial);
@@ -381,7 +381,7 @@ namespace ChilliSource
         /// @param Mesh file
         /// @return Static mesh component
         //---------------------------------------------------------------------------
-		StaticMeshComponentPtr CRenderComponentFactory::CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFilePath)
+		StaticMeshComponentPtr RenderComponentFactory::CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFilePath)
 		{
             MeshPtr pModel = mpMeshManager->GetModelFromFile(ineStorageLocation, instrModelFilePath);
             StaticMeshComponentPtr pResult(new CStaticMeshComponent());
@@ -396,7 +396,7 @@ namespace ChilliSource
         /// @param Material
         /// @return Static mesh component
         //---------------------------------------------------------------------------
-		StaticMeshComponentPtr CRenderComponentFactory::CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName, const MaterialPtr& inpMaterial)
+		StaticMeshComponentPtr RenderComponentFactory::CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName, const MaterialPtr& inpMaterial)
         {
 			MeshPtr pModel = mpMeshManager->GetModelFromFile(ineStorageLocation, instrModelFileName);
 			return CreateStaticMeshComponent(pModel, inpMaterial);
@@ -410,7 +410,7 @@ namespace ChilliSource
         /// @param Material file
         /// @return Static mesh component
         //---------------------------------------------------------------------------
-		StaticMeshComponentPtr CRenderComponentFactory::CreateStaticMeshComponent(Core::StorageLocation ineModelStorageLocation, const std::string& instrModelFilePath, Core::StorageLocation ineMaterialStorageLocation, const std::string& instrMaterialFilePath)
+		StaticMeshComponentPtr RenderComponentFactory::CreateStaticMeshComponent(Core::StorageLocation ineModelStorageLocation, const std::string& instrModelFilePath, Core::StorageLocation ineMaterialStorageLocation, const std::string& instrMaterialFilePath)
 		{
 			MeshPtr pModel = mpMeshManager->GetModelFromFile(ineModelStorageLocation, instrModelFilePath);
 			MaterialPtr pMaterial = mpMaterialManager->GetMaterialFromFile(ineMaterialStorageLocation, instrMaterialFilePath);
@@ -432,7 +432,7 @@ namespace ChilliSource
 		/// @param Mesh 
         /// @return Animated mesh component
         //---------------------------------------------------------------------------
-		AnimatedMeshComponentPtr CRenderComponentFactory::CreateAnimatedMeshComponent(const MeshPtr& inpModel)
+		AnimatedMeshComponentPtr RenderComponentFactory::CreateAnimatedMeshComponent(const MeshPtr& inpModel)
 		{
 			AnimatedMeshComponentPtr pResult(new CAnimatedMeshComponent());
 			pResult->AttachMesh(inpModel);
@@ -445,7 +445,7 @@ namespace ChilliSource
         /// @param Material 
         /// @return Animated mesh component
         //---------------------------------------------------------------------------
-		AnimatedMeshComponentPtr CRenderComponentFactory::CreateAnimatedMeshComponent(const MeshPtr& inpModel, const MaterialPtr& inpMaterial)
+		AnimatedMeshComponentPtr RenderComponentFactory::CreateAnimatedMeshComponent(const MeshPtr& inpModel, const MaterialPtr& inpMaterial)
 		{
 			AnimatedMeshComponentPtr pResult(new CAnimatedMeshComponent());
 			pResult->AttachMesh(inpModel, inpMaterial);
@@ -459,7 +459,7 @@ namespace ChilliSource
         /// @param Material file
         /// @return Animated mesh component
         //---------------------------------------------------------------------------
-		AnimatedMeshComponentPtr CRenderComponentFactory::CreateAnimatedMeshComponent(const MeshPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName)
+		AnimatedMeshComponentPtr RenderComponentFactory::CreateAnimatedMeshComponent(const MeshPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName)
 		{
 			MaterialPtr pMaterial = mpMaterialManager->GetMaterialFromFile(ineStorageLocation, insMaterialName);
 			return CreateAnimatedMeshComponent(inpModel, pMaterial);
@@ -473,7 +473,7 @@ namespace ChilliSource
         /// @param Mesh file
         /// @return Animated mesh component
         //---------------------------------------------------------------------------
-		AnimatedMeshComponentPtr CRenderComponentFactory::CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFilePath)
+		AnimatedMeshComponentPtr RenderComponentFactory::CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFilePath)
 		{
             MeshPtr pModel = mpMeshManager->GetModelFromFile(ineStorageLocation, instrModelFilePath);
             AnimatedMeshComponentPtr pResult(new CAnimatedMeshComponent());
@@ -488,7 +488,7 @@ namespace ChilliSource
         /// @param Material
         /// @return Animated mesh component
         //---------------------------------------------------------------------------
-		AnimatedMeshComponentPtr CRenderComponentFactory::CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName, const MaterialPtr& inpMaterial)
+		AnimatedMeshComponentPtr RenderComponentFactory::CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName, const MaterialPtr& inpMaterial)
         {
 			MeshPtr pModel = mpMeshManager->GetModelFromFile(ineStorageLocation, instrModelFileName);
 			return CreateAnimatedMeshComponent(pModel, inpMaterial);
@@ -502,7 +502,7 @@ namespace ChilliSource
         /// @param Material file
         /// @return Animated mesh component
         //---------------------------------------------------------------------------
-		AnimatedMeshComponentPtr CRenderComponentFactory::CreateAnimatedMeshComponent(Core::StorageLocation ineModelStorageLocation, const std::string& instrModelFilePath, Core::StorageLocation ineMaterialStorageLocation, const std::string& instrMaterialFilePath)
+		AnimatedMeshComponentPtr RenderComponentFactory::CreateAnimatedMeshComponent(Core::StorageLocation ineModelStorageLocation, const std::string& instrModelFilePath, Core::StorageLocation ineMaterialStorageLocation, const std::string& instrMaterialFilePath)
 		{
 			MeshPtr pModel = mpMeshManager->GetModelFromFile(ineModelStorageLocation, instrModelFilePath);
 			MaterialPtr pMaterial = mpMaterialManager->GetMaterialFromFile(ineMaterialStorageLocation, instrMaterialFilePath);
@@ -524,7 +524,7 @@ namespace ChilliSource
 		/// @param Far clipping plane
 		/// @return an instantiated camera object
 		//---------------------------------------------------------------------------
-		CameraComponentPtr CRenderComponentFactory::CreateCameraComponent(const f32 infFOV, const f32 infNear, const f32 infFar, bool inbIsOrthographic)
+		CameraComponentPtr RenderComponentFactory::CreateCameraComponent(const f32 infFOV, const f32 infNear, const f32 infFar, bool inbIsOrthographic)
 		{
 			CameraDescription desc;
 			desc.vViewSize = Core::CScreen::GetOrientedDimensions();
@@ -537,7 +537,7 @@ namespace ChilliSource
 			desc.bShouldResizeToScreen = true;
 			desc.bShouldRotateToScreen = true;
 			
-			CameraComponentPtr pCamera(new CCameraComponent(desc));
+			CameraComponentPtr pCamera(new CameraComponent(desc));
 			pCamera->SetViewportOrientation(Core::CScreen::GetOrientation());
 			return pCamera;
 		}
@@ -546,7 +546,7 @@ namespace ChilliSource
         ///
         /// @return Light component
 		//---------------------------------------------------------------------------
-        AmbientLightComponentPtr CRenderComponentFactory::CreateAmbientLightComponent() const
+        AmbientLightComponentPtr RenderComponentFactory::CreateAmbientLightComponent() const
         {
             AmbientLightComponentPtr pLight(new CAmbientLightComponent());
             return pLight;
@@ -557,7 +557,7 @@ namespace ChilliSource
         /// @param Shadow map resolution (Zero for no shadows)
         /// @return Light component
 		//---------------------------------------------------------------------------
-		DirectionalLightComponentPtr CRenderComponentFactory::CreateDirectionalLightComponent(u32 inudwShadowMapRes) const
+		DirectionalLightComponentPtr RenderComponentFactory::CreateDirectionalLightComponent(u32 inudwShadowMapRes) const
 		{
             TexturePtr pShadowMap;
             TexturePtr pShadowMapDebug;
@@ -581,7 +581,7 @@ namespace ChilliSource
         ///
         /// @return Light component
 		//---------------------------------------------------------------------------
-        PointLightComponentPtr CRenderComponentFactory::CreatePointLightComponent() const
+        PointLightComponentPtr RenderComponentFactory::CreatePointLightComponent() const
         {
             PointLightComponentPtr pLight(new CPointLightComponent());
             return pLight;

@@ -48,7 +48,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Get Internal Mesh Buffer
 		//-----------------------------------------------------------------
-		IMeshBuffer* CSubMesh::GetInternalMeshBuffer() const
+		MeshBuffer* CSubMesh::GetInternalMeshBuffer() const
 		{
 			return mpMeshBuffer;
 		}
@@ -89,7 +89,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Prepare
 		//-----------------------------------------------------------------
-		void CSubMesh::Prepare(IRenderSystem* inpRenderSystem, CVertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes,
+		void CSubMesh::Prepare(RenderSystem* inpRenderSystem, VertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes,
 							   u32 inudwVertexCapacityInBytes, u32 inudwIndexCapacityInBytes, BufferAccess inAccessFlag, PrimitiveType inPrimativeType)
 		{
 			mpRenderSystem = inpRenderSystem;
@@ -110,7 +110,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Alter Buffer Declaration
 		//-----------------------------------------------------------------
-		void CSubMesh::AlterBufferDeclaration(CVertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes)
+		void CSubMesh::AlterBufferDeclaration(VertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes)
 		{
 			BufferDescription desc;
 			desc.eUsageFlag = BufferUsage::k_static;
@@ -192,7 +192,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Render
 		//-----------------------------------------------------------------
-		void CSubMesh::Render(IRenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const MaterialPtr& inpMaterial, const SkinnedAnimationGroupPtr& inpAnimationGroup) const
+		void CSubMesh::Render(RenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const MaterialPtr& inpMaterial, const SkinnedAnimationGroupPtr& inpAnimationGroup) const
 		{
             CS_ASSERT(mpMeshBuffer->GetVertexCount() > 0, "Cannot render Sub Mesh without vertices");
             CS_ASSERT(inpMaterial.get() && inpMaterial->GetActiveShaderProgram(), "Cannot render Sub Mesh without a material or active shader.");

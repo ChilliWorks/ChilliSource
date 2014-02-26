@@ -184,7 +184,7 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer
 			//-----------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			void Draw(Rendering::CanvasRenderer* inpCanvas);
             //--------------------------------------------------------
             /// Set Width Maintaining Aspect
             ///

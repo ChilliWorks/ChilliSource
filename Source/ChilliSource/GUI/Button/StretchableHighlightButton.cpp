@@ -380,7 +380,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Draw
         //-----------------------------------------------------------
-        void StretchableHighlightButton::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void StretchableHighlightButton::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
             //Check if this is on screen
 			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);

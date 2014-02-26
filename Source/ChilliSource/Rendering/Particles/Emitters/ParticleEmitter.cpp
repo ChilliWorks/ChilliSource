@@ -255,7 +255,7 @@ namespace ChilliSource
         ///
         /// @param Render system
         //-----------------------------------------------------
-        void CParticleEmitter::Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam)
+        void CParticleEmitter::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam)
         {
             CSpriteComponent::SpriteData sData;
             // Get world matrix

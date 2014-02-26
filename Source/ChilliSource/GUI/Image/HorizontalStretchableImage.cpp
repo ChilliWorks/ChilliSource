@@ -253,7 +253,7 @@ namespace ChilliSource
 		///
 		/// @param Canvas renderer pointer
 		//---------------------------------------------------------
-		void HorizontalStretchableImage::Draw(Rendering::CCanvasRenderer* inpCanvas)
+		void HorizontalStretchableImage::Draw(Rendering::CanvasRenderer* inpCanvas)
 		{
 			if(Visible && SpriteSheet)
 			{

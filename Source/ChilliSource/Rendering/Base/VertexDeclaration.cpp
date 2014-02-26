@@ -14,7 +14,7 @@ namespace ChilliSource
 	namespace Rendering
 	{
 		
-		CVertexDeclaration::CVertexDeclaration()
+		VertexDeclaration::VertexDeclaration()
 		{
 			mTotalSize = 0;
 			mTotalNumValues = 0;
@@ -30,7 +30,7 @@ namespace ChilliSource
 		/// @param Array of semantic names
 		//-------------------------------------------
 	
-		CVertexDeclaration::CVertexDeclaration(u16 nElements, const VertexElement* inpElements)
+		VertexDeclaration::VertexDeclaration(u16 nElements, const VertexElement* inpElements)
 		{
 			mTotalSize = 0;
 			mTotalNumValues = 0;
@@ -47,7 +47,7 @@ namespace ChilliSource
 		///
 		/// @return the number of elemets in the vertex layout
 		//-------------------------------------------------------
-		const u16 CVertexDeclaration::GetNumElements()
+		const u16 VertexDeclaration::GetNumElements()
 		{
 			return mElements.size();
 		}
@@ -56,7 +56,7 @@ namespace ChilliSource
 		///
 		/// @return the element 
 		//-------------------------------------------------------
-		const VertexElement& CVertexDeclaration::GetElementAtIndex(const u16 inIndex)
+		const VertexElement& VertexDeclaration::GetElementAtIndex(const u16 inIndex)
 		{
 			return mElements[inIndex];
 		}
@@ -65,7 +65,7 @@ namespace ChilliSource
 		///
 		/// @return Element array 
 		//-------------------------------------------------------
-        const std::vector<VertexElement>& CVertexDeclaration::GetElements() const
+        const std::vector<VertexElement>& VertexDeclaration::GetElements() const
         {
             return mElements;
         }
@@ -74,7 +74,7 @@ namespace ChilliSource
 		///
 		/// @return the size of the vertex layout
 		//-------------------------------------------------------
-		const u16 CVertexDeclaration::GetTotalSize()
+		const u16 VertexDeclaration::GetTotalSize()
 		{
 			return mTotalSize;
 		}
@@ -83,7 +83,7 @@ namespace ChilliSource
 		///
 		/// @return the number of individual values in the layout
 		//-------------------------------------------------------
-		const u32 CVertexDeclaration::GetTotalNumValues()
+		const u32 VertexDeclaration::GetTotalNumValues()
 		{
 			return mTotalNumValues;
 		}
@@ -92,7 +92,7 @@ namespace ChilliSource
 		///
 		/// @return The offset of the element in the layout
 		//-------------------------------------------------------
-		const u16 CVertexDeclaration::GetElementOffset(const VertexElement &inElement)
+		const u16 VertexDeclaration::GetElementOffset(const VertexElement &inElement)
 		{
 			u16 Offset = 0;
 
@@ -112,14 +112,14 @@ namespace ChilliSource
 		///
 		/// @return the size of the element type 
 		//-------------------------------------------------------
-		const u16 CVertexDeclaration::GetSizeOfElement(VertexElement &inElement)
+		const u16 VertexDeclaration::GetSizeOfElement(VertexElement &inElement)
 		{
 			return inElement.Size();
 		}
 		//-------------------------------------------------------
 		/// Is Equals operator
 		//-------------------------------------------------------
-		bool CVertexDeclaration::operator== (const CVertexDeclaration& inOther)
+		bool VertexDeclaration::operator== (const VertexDeclaration& inOther)
 		{
 			if (mTotalSize != inOther.mTotalSize)
 				return false;

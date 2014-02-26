@@ -200,7 +200,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //--------------------------------------------------------
-        void ImageView::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void ImageView::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
             if(!IsOnscreen() || !Visible)
             {

@@ -110,7 +110,7 @@ namespace ChilliSource
             return mfAnimationTime;
         }
         
-        void ProgressBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void ProgressBar::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
             GUIView::Draw(inpCanvas);
         }

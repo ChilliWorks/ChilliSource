@@ -26,7 +26,7 @@ namespace ChilliSource
 		/// Concrete implementation of a vertex buffer object 
 		/// for OpenGL ES
 		//==========================================================
-		class CMeshBuffer : public ChilliSource::Rendering::IMeshBuffer
+		class CMeshBuffer : public ChilliSource::Rendering::MeshBuffer
 		{
 		public:
 			CMeshBuffer(ChilliSource::Rendering::BufferDescription &inBuffDesc);

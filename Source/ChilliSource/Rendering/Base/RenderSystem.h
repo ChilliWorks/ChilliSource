@@ -1,5 +1,5 @@
 /*
- *  IRenderSystem.h
+ *  RenderSystem.h
  *  MoFlow
  *
  *  Created by Tag Games on 28/09/2010.
@@ -31,12 +31,12 @@ namespace ChilliSource
 	{
         class CDynamicSpriteBatch;
         
-		class IRenderSystem : public Core::ISystem, public Core::IComponentProducer
+		class RenderSystem : public Core::ISystem, public Core::IComponentProducer
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(IRenderSystem);
-			IRenderSystem();
-			virtual ~IRenderSystem();
+			DECLARE_NAMED_INTERFACE(RenderSystem);
+			RenderSystem();
+			virtual ~RenderSystem();
 			
 			virtual bool Init(u32 inudwWidth, u32 inudwHeight) = 0;
 			virtual void Resume() = 0;
@@ -44,8 +44,8 @@ namespace ChilliSource
 			virtual void Destroy() = 0;
 			virtual void OnScreenOrientationChanged(u32 inudwWidth, u32 inudwHeight) = 0;
 
-			virtual void BeginFrame(IRenderTarget* inpActiveRenderTarget) = 0;
-			virtual void EndFrame(IRenderTarget* inpActiveRenderTarget) = 0;
+			virtual void BeginFrame(RenderTarget* inpActiveRenderTarget) = 0;
+			virtual void EndFrame(RenderTarget* inpActiveRenderTarget) = 0;
 
 			virtual void ApplyMaterial(const CMaterial& inMaterial) = 0;
             virtual void ApplyJoints(const std::vector<Core::CMatrix4x4>& inaJoints) = 0;
@@ -72,12 +72,12 @@ namespace ChilliSource
             virtual void SetCullFace(CullFace ineCullFace) = 0;
             virtual void SetScissorRegion(const Core::CVector2& invPosition, const Core::CVector2& invSize) = 0;
 			
-			virtual IMeshBuffer* CreateBuffer(BufferDescription&) = 0;
-			virtual void RenderVertexBuffer(IMeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::CMatrix4x4&) = 0;
-			virtual void RenderBuffer(IMeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::CMatrix4x4&) = 0;
+			virtual MeshBuffer* CreateBuffer(BufferDescription&) = 0;
+			virtual void RenderVertexBuffer(MeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::CMatrix4x4&) = 0;
+			virtual void RenderBuffer(MeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::CMatrix4x4&) = 0;
 			
-			virtual IRenderTarget* CreateRenderTarget(u32 inWidth, u32 inHeight) = 0;
-			virtual IRenderTarget* GetDefaultRenderTarget() = 0;
+			virtual RenderTarget* CreateRenderTarget(u32 inWidth, u32 inHeight) = 0;
+			virtual RenderTarget* GetDefaultRenderTarget() = 0;
 			
 			Core::IComponentFactory* GetComponentFactoryPtr(u32 inudwIndex);
 			Core::IComponentFactory& GetComponentFactory(u32 inudwIndex);
@@ -99,12 +99,12 @@ namespace ChilliSource
 		protected:
 			
 			//---Render Factories
-			CRenderComponentFactory* mpRenderFactory;
+			RenderComponentFactory* mpRenderFactory;
 			
 			//---Render resource managers
 			CMeshManager mMeshManager;
 			CSkinnedAnimationManager mSkinnedAnimationManager;
-            IFontManager mFontManager;
+            FontManager mFontManager;
 			IMaterialManager mMaterialManager;
 			ISpriteSheetManager mSpriteManager;
             

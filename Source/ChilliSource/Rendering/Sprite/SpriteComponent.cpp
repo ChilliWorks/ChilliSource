@@ -38,7 +38,7 @@ namespace ChilliSource
 		bool CSpriteComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return  (inInterfaceID == CSpriteComponent::InterfaceID) || 
-                    (inInterfaceID == IRenderComponent::InterfaceID) ||
+                    (inInterfaceID == RenderComponent::InterfaceID) ||
                     (inInterfaceID == IVolumeComponent::InterfaceID);
 		}
 		//----------------------------------------------------
@@ -300,7 +300,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Render
         //-----------------------------------------------------------
-        void CSpriteComponent::Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass)
+        void CSpriteComponent::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass)
         {
             CalculateSpriteData();
             

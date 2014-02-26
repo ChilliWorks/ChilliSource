@@ -34,7 +34,7 @@ namespace ChilliSource
             ///
             /// @param Canvas renderer pointer
             //------------------------------------------------------
-            void Draw(Rendering::CCanvasRenderer* inpCanvas);
+            void Draw(Rendering::CanvasRenderer* inpCanvas);
             //--------------------------------------------------------
             /// Set Bar Sprite Sheet
             ///

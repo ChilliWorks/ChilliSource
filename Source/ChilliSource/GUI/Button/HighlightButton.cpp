@@ -618,7 +618,7 @@ namespace ChilliSource
 		///
 		/// @param Canvas renderer
 		//-----------------------------------------------------------
-		void HighlightButton::Draw(Rendering::CCanvasRenderer* inpCanvasRenderer)
+		void HighlightButton::Draw(Rendering::CanvasRenderer* inpCanvasRenderer)
 		{
 			SetSizeFromImage();
 			GUIView::Draw(inpCanvasRenderer);

@@ -364,7 +364,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //-------------------------------------------------------
-        void ScrollView::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void ScrollView::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
 #if DEBUG_DRAWING
             if(mbDrawDebug)

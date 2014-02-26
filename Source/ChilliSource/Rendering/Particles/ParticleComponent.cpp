@@ -36,7 +36,7 @@ namespace ChilliSource
 		bool CParticleComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return (inInterfaceID == CParticleComponent::InterfaceID) || 
-            (inInterfaceID == IRenderComponent::InterfaceID);
+            (inInterfaceID == RenderComponent::InterfaceID);
 		}
 		//-------------------------------------------------
 		/// Set Owning System
@@ -121,7 +121,7 @@ namespace ChilliSource
         //-------------------------------------------------
         /// Render
         //-------------------------------------------------
-        void CParticleComponent::Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass)
+        void CParticleComponent::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass)
         {
             if (ineShaderPass == ShaderPass::k_ambient)
             {

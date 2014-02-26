@@ -22,7 +22,7 @@ namespace ChilliSource
 		class CSpriteBatch
 		{
 		public:
-			CSpriteBatch(u32 inudwCapacity, IRenderSystem * inpRenderSystem, BufferUsage ineUsage);
+			CSpriteBatch(u32 inudwCapacity, RenderSystem * inpRenderSystem, BufferUsage ineUsage);
 			~CSpriteBatch();
 			//------------------------------------------------------
 			/// Build
@@ -42,7 +42,7 @@ namespace ChilliSource
             /// @param Offset into mesh buffer
             /// @param Stride within mesh buffer
 			//------------------------------------------------------
-			void Render(IRenderSystem* inpRenderSystem, const CMaterial& inMaterial, u32 inudwOffset, u32 inudwStride) const;
+			void Render(RenderSystem* inpRenderSystem, const CMaterial& inMaterial, u32 inudwOffset, u32 inudwStride) const;
             //------------------------------------------------------
             /// Render
             ///
@@ -50,7 +50,7 @@ namespace ChilliSource
             ///
             /// @param Active render system
             //------------------------------------------------------
-            void Render(IRenderSystem* inpRenderSystem, const CMaterial& inMaterial) const;
+            void Render(RenderSystem* inpRenderSystem, const CMaterial& inMaterial) const;
 			//------------------------------------------------------
 			/// Get Tag
 			///
@@ -99,7 +99,7 @@ namespace ChilliSource
 			s32 mdwTag;
 			
 			//---Render Buffer
-			IMeshBuffer* mpSpriteBuffer;
+			MeshBuffer* mpSpriteBuffer;
 		};
 	}
 }

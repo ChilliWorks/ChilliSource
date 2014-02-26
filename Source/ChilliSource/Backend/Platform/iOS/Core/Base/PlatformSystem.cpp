@@ -172,7 +172,7 @@ namespace ChilliSource
 		void CPlatformSystem::CreateDefaultSystems(std::vector<Core::SystemPtr> & inaSystems)
 		{
 			//create the main systems
-            Rendering::IRenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
+            Rendering::RenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
             inaSystems.push_back(Core::SystemPtr(pRenderSystem));
 			Core::CApplication::SetRenderSystem(pRenderSystem);
             
@@ -193,7 +193,7 @@ namespace ChilliSource
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CSpriteSheetLoader()));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CXMLSpriteSheetLoader()));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CMaterialLoader(pRenderCapabilities)));
-			inaSystems.push_back(Core::SystemPtr(new Rendering::CFontLoader()));
+			inaSystems.push_back(Core::SystemPtr(new Rendering::FontLoader()));
             inaSystems.push_back(Core::SystemPtr(new Rendering::CAnimatedMeshComponentUpdater()));
             inaSystems.push_back(Core::SystemPtr(new Rendering::CMaterialFactory()));
             
@@ -201,7 +201,7 @@ namespace ChilliSource
 			Core::CApplication::GetRenderSystemPtr()->Init((u32)Core::CScreen::GetRawDimensions().x, (u32)Core::CScreen::GetRawDimensions().y);
             
 			//Create the renderer
-			Core::CApplication::SetRenderer(new Rendering::CRenderer(Core::CApplication::GetRenderSystemPtr()));
+			Core::CApplication::SetRenderer(new Rendering::Renderer(Core::CApplication::GetRenderSystemPtr()));
             
 			//Initialise the input system
 			if(Core::CApplication::GetInputSystemPtr() != nullptr)

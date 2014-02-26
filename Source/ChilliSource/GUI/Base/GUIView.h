@@ -775,7 +775,7 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer
 			//-----------------------------------------------------
-			virtual void Draw(Rendering::CCanvasRenderer * inpCanvas);
+			virtual void Draw(Rendering::CanvasRenderer * inpCanvas);
 			//----------------------------------------------------
 			/// Contains
 			///

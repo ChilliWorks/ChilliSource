@@ -119,7 +119,7 @@ namespace ChilliSource
             bool mbHasMipMaps;
             
             CCubemapManager* mpCubemapManager;
-            Rendering::IRenderCapabilities* mpRenderCapabilities;
+            Rendering::RenderCapabilities* mpRenderCapabilities;
 		};
 	}
 }

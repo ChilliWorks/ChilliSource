@@ -102,7 +102,7 @@ namespace ChilliSource
             ///
             /// @param Render system 
             //-----------------------------------------------------------------
-            void SetRenderSystem(IRenderSystem* inpRenderSystem);
+            void SetRenderSystem(RenderSystem* inpRenderSystem);
 			
 		protected:
 			
@@ -140,7 +140,7 @@ namespace ChilliSource
             
         protected:
             
-            IRenderSystem* mpRenderSystem;
+            RenderSystem* mpRenderSystem;
 		};
 	}
 }

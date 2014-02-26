@@ -18,13 +18,13 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(CCameraComponent);
+		DEFINE_NAMED_INTERFACE(CameraComponent);
 		//------------------------------------------------------
 		/// Constructor
 		///
 		/// @param Camera description setting the FOV etc
 		//------------------------------------------------------
-		CCameraComponent::CCameraComponent(const CameraDescription &inCamDesc) 
+		CameraComponent::CameraComponent(const CameraDescription &inCamDesc) 
 			: mDesc(inCamDesc), mbProjectionCacheValid(false)
 		{
 			EnableViewportRotationWithScreen(mDesc.bShouldRotateToScreen);
@@ -38,9 +38,9 @@ namespace ChilliSource
 		/// @param Comparison Type
 		/// @return Whether the class matches the comparison type
 		//----------------------------------------------------------
-		bool CCameraComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool CameraComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == CCameraComponent::InterfaceID);
+			return (inInterfaceID == CameraComponent::InterfaceID);
 		}
 		//----------------------------------------------------------
 		/// Set Look At
@@ -50,7 +50,7 @@ namespace ChilliSource
 		/// @param Look target
 		/// @param Up direction
 		//----------------------------------------------------------
-		void CCameraComponent::SetLookAt(const Core::CVector3& invPos, const Core::CVector3& invTarget, const Core::CVector3& invUp)
+		void CameraComponent::SetLookAt(const Core::CVector3& invPos, const Core::CVector3& invTarget, const Core::CVector3& invUp)
 		{
             Core::CEntity * pParent(GetEntityOwner());
 
@@ -66,7 +66,7 @@ namespace ChilliSource
 		/// @param Point in screen space with orientation
 		/// @return Ray in world space with camera view direction
 		//------------------------------------------------------
-		Core::Ray CCameraComponent::Unproject(const Core::CVector2 &invScreenPos)
+		Core::Ray CameraComponent::Unproject(const Core::CVector2 &invScreenPos)
 		{
             Core::CMatrix4x4 matProj = (GetView() * GetProjection()).Inverse();
             
@@ -96,7 +96,7 @@ namespace ChilliSource
 		/// Convert from a point in world space to a point in
 		/// screen space
 		//------------------------------------------------------
-		Core::CVector2 CCameraComponent::Project(const Core::CVector3 &invWorldPos)
+		Core::CVector2 CameraComponent::Project(const Core::CVector3 &invWorldPos)
 		{
 			//Convert the world space position to clip space
 			Core::CMatrix4x4 matToClip = (GetView() * GetProjection());
@@ -121,7 +121,7 @@ namespace ChilliSource
 		/// Switch between ortho and perspective
 		/// @param On or off
 		//----------------------------------------------------------
-		void CCameraComponent::UseOrthographicView(bool inbOrthoEnabled)
+		void CameraComponent::UseOrthographicView(bool inbOrthoEnabled)
 		{
 			mDesc.IsOrthographic = inbOrthoEnabled;
 
@@ -132,7 +132,7 @@ namespace ChilliSource
         ///
         /// @return On or off
         //----------------------------------------------------------
-        bool CCameraComponent::IsOrthographicView() const
+        bool CameraComponent::IsOrthographicView() const
         {
             return mDesc.IsOrthographic;
         }
@@ -141,7 +141,7 @@ namespace ChilliSource
 		///
 		/// @param Vector containing width and height
 		//----------------------------------------------------------
-		void CCameraComponent::SetViewportSize(const Core::CVector2 &invSize)
+		void CameraComponent::SetViewportSize(const Core::CVector2 &invSize)
 		{
 			mDesc.vViewSize = invSize;
 			mbProjectionCacheValid = false;
@@ -152,7 +152,7 @@ namespace ChilliSource
 		/// @param Width 
 		/// @param Height
 		//----------------------------------------------------------
-		void CCameraComponent::SetViewportSize(u32 inudwWidth, u32 inudwHeight)
+		void CameraComponent::SetViewportSize(u32 inudwWidth, u32 inudwHeight)
 		{
 			mDesc.vViewSize.x = (f32)inudwWidth;
 			mDesc.vViewSize.y = (f32)inudwHeight;
@@ -163,7 +163,7 @@ namespace ChilliSource
 		///
 		/// @param Vector containing width and height
 		//----------------------------------------------------------
-		const Core::CVector2& CCameraComponent::GetViewportSize()
+		const Core::CVector2& CameraComponent::GetViewportSize()
 		{ 
 			return mDesc.vViewSize; 
 		}	
@@ -172,7 +172,7 @@ namespace ChilliSource
 		///
 		/// 
 		//------------------------------------------------------
-		void CCameraComponent::CalculatePerspectiveMatrix()
+		void CameraComponent::CalculatePerspectiveMatrix()
 		{
 			f32 Top = mDesc.fNearClipping * (f32)tanf(mDesc.fFOV * Core::kPI / 360.0f);
 			f32 Bottom = -Top;
@@ -202,7 +202,7 @@ namespace ChilliSource
 		///
 		/// 
 		//------------------------------------------------------
-		void CCameraComponent::CalculateOrthographicMatrix()
+		void CameraComponent::CalculateOrthographicMatrix()
 		{
 			mmatOrthoProj = Core::CMatrix4x4::CreateOrthoMatrix(mDesc.vViewSize.x, mDesc.vViewSize.y, mDesc.fNearClipping, mDesc.fFarClipping);
 			mbProjectionCacheValid = true;
@@ -214,7 +214,7 @@ namespace ChilliSource
 		/// screen orientation
 		/// @param Screen orientation flag
 		//------------------------------------------------------
-		void CCameraComponent::SetViewportOrientation(Core::ScreenOrientation ineOrientation)
+		void CameraComponent::SetViewportOrientation(Core::ScreenOrientation ineOrientation)
 		{
 			//Save the camera's new orientation
 			mViewOrientation = ineOrientation;
@@ -227,7 +227,7 @@ namespace ChilliSource
 		///
 		/// @return Orthographic projection matrix
 		//------------------------------------------------------
-		const Core::CMatrix4x4& CCameraComponent::GetOrthoProjection() const
+		const Core::CMatrix4x4& CameraComponent::GetOrthoProjection() const
 		{
 			return mmatOrthoProj;
 		}
@@ -239,7 +239,7 @@ namespace ChilliSource
 		/// 
 		/// @return Projection matrix
 		//------------------------------------------------------
-		const Core::CMatrix4x4& CCameraComponent::GetProjection() 
+		const Core::CMatrix4x4& CameraComponent::GetProjection() 
 		{
 			if(!mbProjectionCacheValid)
 			{
@@ -264,7 +264,7 @@ namespace ChilliSource
 		///
 		/// @return View matrix
 		//------------------------------------------------------
-		const Core::CMatrix4x4& CCameraComponent::GetView()
+		const Core::CMatrix4x4& CameraComponent::GetView()
 		{
 			if(mpEntityOwner)
 			{
@@ -278,7 +278,7 @@ namespace ChilliSource
 		///
 		/// @return Pointer to camera frustum
 		//------------------------------------------------------
-		const Core::CFrustum* CCameraComponent::GetFrustumPtr() const
+		const Core::CFrustum* CameraComponent::GetFrustumPtr() const
 		{
 			return &mFrustum;
 		}
@@ -287,7 +287,7 @@ namespace ChilliSource
 		///
 		/// Recalculate frustum planes
 		//------------------------------------------------------
-		void CCameraComponent::UpdateFrustum()
+		void CameraComponent::UpdateFrustum()
 		{
 			Core::CMatrix4x4::Multiply(&GetView(), &GetProjection(), &mmatViewProj);
 
@@ -300,7 +300,7 @@ namespace ChilliSource
 		/// Orientate the given matrix to face the cameras
 		/// view vector
 		//------------------------------------------------------
-		void CCameraComponent::Billboard(const Core::CMatrix4x4& inmatBillboarded, Core::CMatrix4x4& outmatBillboarded)
+		void CameraComponent::Billboard(const Core::CMatrix4x4& inmatBillboarded, Core::CMatrix4x4& outmatBillboarded)
 		{
             const Core::CMatrix4x4 matView = GetView();
             Core::CMatrix4x4::Multiply(&inmatBillboarded, &matView, &outmatBillboarded);
@@ -314,7 +314,7 @@ namespace ChilliSource
 		///
 		/// @param Viewing angle in degrees
 		//------------------------------------------------------
-		void CCameraComponent::SetFieldOfView(const f32 infFOVDegress)
+		void CameraComponent::SetFieldOfView(const f32 infFOVDegress)
 		{
 			mDesc.fFOV = infFOVDegress;
 
@@ -325,7 +325,7 @@ namespace ChilliSource
 		///
 		/// @param Aspect Ratio (Viewport width/viewport height)
 		//------------------------------------------------------
-		void CCameraComponent::SetAspectRatio(const f32 infAspectRatio)
+		void CameraComponent::SetAspectRatio(const f32 infAspectRatio)
 		{
 			mDesc.fAspect = infAspectRatio;
 
@@ -336,7 +336,7 @@ namespace ChilliSource
 		///
 		/// @param Near Z clipping distance in view space
 		//------------------------------------------------------
-		void CCameraComponent::SetNearClipping(const f32 infNear)
+		void CameraComponent::SetNearClipping(const f32 infNear)
 		{
 			mDesc.fNearClipping = infNear;
 
@@ -347,7 +347,7 @@ namespace ChilliSource
 		///
 		/// @param Far Z clipping distance in view space
 		//------------------------------------------------------
-		void CCameraComponent::SetFarClipping(const f32 infFar)
+		void CameraComponent::SetFarClipping(const f32 infFar)
 		{
 			mDesc.fFarClipping = infFar;
 
@@ -358,7 +358,7 @@ namespace ChilliSource
 		///
 		/// @return Viewing angle in degrees
 		//------------------------------------------------------
-		const f32 CCameraComponent::GetFieldOfView() const
+		const f32 CameraComponent::GetFieldOfView() const
 		{
 			return mDesc.fFOV;
 		}
@@ -367,7 +367,7 @@ namespace ChilliSource
 		///
 		/// @return Aspect Ratio (Viewport width/viewport height)
 		//------------------------------------------------------
-		const f32 CCameraComponent::GetAspectRatio() const
+		const f32 CameraComponent::GetAspectRatio() const
 		{
 			return mDesc.fAspect;
 		}
@@ -376,7 +376,7 @@ namespace ChilliSource
 		///
 		/// @return Near Z clipping distance in view space
 		//------------------------------------------------------
-		const f32 CCameraComponent::GetNearClipping() const
+		const f32 CameraComponent::GetNearClipping() const
 		{
 			return mDesc.fNearClipping;
 		}
@@ -385,7 +385,7 @@ namespace ChilliSource
 		///
 		/// @return Far Z clipping distance in view space
 		//------------------------------------------------------
-		const f32 CCameraComponent::GetFarClipping() const
+		const f32 CameraComponent::GetFarClipping() const
 		{
 			return mDesc.fFarClipping;
 		}
@@ -394,7 +394,7 @@ namespace ChilliSource
 		///
 		/// @param Render buffer clear colour
 		//------------------------------------------------------
-		void CCameraComponent::SetClearColour(const Core::CColour &inCol)
+		void CameraComponent::SetClearColour(const Core::CColour &inCol)
 		{
 			mDesc.ClearCol = inCol;
 		}
@@ -403,7 +403,7 @@ namespace ChilliSource
 		///
 		/// @return Render buffer clear colour
 		//------------------------------------------------------
-		const Core::CColour& CCameraComponent::GetClearColour() const
+		const Core::CColour& CameraComponent::GetClearColour() const
 		{
 			return mDesc.ClearCol;
 		}
@@ -412,7 +412,7 @@ namespace ChilliSource
         ///
         /// @return Gets the currently set opaque sort predicate for this scene
         //--------------------------------------------------------------------------------------------------
-        RendererSortPredicatePtr CCameraComponent::GetOpaqueSortPredicate() const
+        RendererSortPredicatePtr CameraComponent::GetOpaqueSortPredicate() const
         {
             return mpOpaqueSortPredicate;
         }
@@ -421,7 +421,7 @@ namespace ChilliSource
         ///
         /// @return Gets the currently set opaque sort predicate for this scene
         //--------------------------------------------------------------------------------------------------
-        RendererSortPredicatePtr CCameraComponent::GetTransparentSortPredicate() const
+        RendererSortPredicatePtr CameraComponent::GetTransparentSortPredicate() const
         {
             return mpTransparentSortPredicate;
         }
@@ -430,7 +430,7 @@ namespace ChilliSource
         ///
         /// @return Opaque sort predicate to use for this scene
         //--------------------------------------------------------------------------------------------------
-        void CCameraComponent::SetOpaqueSortPredicate(const RendererSortPredicatePtr & inpPredicate)
+        void CameraComponent::SetOpaqueSortPredicate(const RendererSortPredicatePtr & inpPredicate)
         {
             mpOpaqueSortPredicate = inpPredicate;
         }
@@ -439,7 +439,7 @@ namespace ChilliSource
         ///
         /// @param Transparent sort predicate to use for this scene
         //--------------------------------------------------------------------------------------------------
-        void CCameraComponent::SetTransparentSortPredicate(const RendererSortPredicatePtr & inpPredicate)
+        void CameraComponent::SetTransparentSortPredicate(const RendererSortPredicatePtr & inpPredicate)
         {
             mpTransparentSortPredicate = inpPredicate;
         }
@@ -448,7 +448,7 @@ namespace ChilliSource
         ///
         /// @param Culling predicate to use for this camera
         //--------------------------------------------------------------------------------------------------
-        CullingPredicatePtr CCameraComponent::GetCullingPredicate() const
+        CullingPredicatePtr CameraComponent::GetCullingPredicate() const
         {
             return IsOrthographicView() ? mpOrthographicCulling : mpPerspectiveCulling;
         }
@@ -457,7 +457,7 @@ namespace ChilliSource
         ///
         /// @param Culling predicate to use for this camera in perpective mode
         //--------------------------------------------------------------------------------------------------
-        void CCameraComponent::SetPerspectiveCullingPredicate(const CullingPredicatePtr & inpPredicate)
+        void CameraComponent::SetPerspectiveCullingPredicate(const CullingPredicatePtr & inpPredicate)
         {
             mpPerspectiveCulling = inpPredicate;
         }
@@ -466,7 +466,7 @@ namespace ChilliSource
         ///
         /// @param Culling predicate to use for this camera in orthographic mode
         //--------------------------------------------------------------------------------------------------
-        void CCameraComponent::SetOrthographicCullingPredicate(const CullingPredicatePtr & inpPredicate)
+        void CameraComponent::SetOrthographicCullingPredicate(const CullingPredicatePtr & inpPredicate)
         {
             mpOrthographicCulling = inpPredicate;
         }        
@@ -476,10 +476,10 @@ namespace ChilliSource
 		/// @param Whether the viewport should rotate when
 		/// the screen rotates
 		//-----------------------------------------------------
-		void CCameraComponent::EnableViewportRotationWithScreen(bool inbEnable)
+		void CameraComponent::EnableViewportRotationWithScreen(bool inbEnable)
 		{
-			inbEnable ? Core::CApplicationEvents::GetScreenOrientationChangedEvent() += Core::ApplicationScreenOrientationDelegate(this, &CCameraComponent::SetViewportOrientation) :
-						Core::CApplicationEvents::GetScreenOrientationChangedEvent() -= Core::ApplicationScreenOrientationDelegate(this, &CCameraComponent::SetViewportOrientation);
+			inbEnable ? Core::CApplicationEvents::GetScreenOrientationChangedEvent() += Core::ApplicationScreenOrientationDelegate(this, &CameraComponent::SetViewportOrientation) :
+						Core::CApplicationEvents::GetScreenOrientationChangedEvent() -= Core::ApplicationScreenOrientationDelegate(this, &CameraComponent::SetViewportOrientation);
 		}
 		//------------------------------------------------------
 		/// Enable Viewport Resize with Screen
@@ -487,16 +487,16 @@ namespace ChilliSource
 		/// @param Whether the viewport should resize when
 		/// the screen resizes
 		//-----------------------------------------------------
-		void CCameraComponent::EnableViewportResizeWithScreen(bool inbEnable)
+		void CameraComponent::EnableViewportResizeWithScreen(bool inbEnable)
 		{
-			inbEnable ? Core::CApplicationEvents::GetScreenResizedEvent() += Core::ApplicationScreenResizeDelegate(this, &CCameraComponent::SetViewportSize) :
-						Core::CApplicationEvents::GetScreenResizedEvent() -= Core::ApplicationScreenResizeDelegate(this, &CCameraComponent::SetViewportSize);
+			inbEnable ? Core::CApplicationEvents::GetScreenResizedEvent() += Core::ApplicationScreenResizeDelegate(this, &CameraComponent::SetViewportSize) :
+						Core::CApplicationEvents::GetScreenResizedEvent() -= Core::ApplicationScreenResizeDelegate(this, &CameraComponent::SetViewportSize);
 		}
 		//-----------------------------------------------------
 		/// Destructor
 		///
 		//-----------------------------------------------------
-		CCameraComponent::~CCameraComponent()
+		CameraComponent::~CameraComponent()
 		{
 			if(mDesc.bShouldResizeToScreen)
 			{

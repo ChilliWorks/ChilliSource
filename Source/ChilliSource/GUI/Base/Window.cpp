@@ -257,7 +257,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer
         //-----------------------------------------------------
-        void Window::Draw(CCanvasRenderer * inpCanvas)
+        void Window::Draw(CanvasRenderer * inpCanvas)
         {
             GUIView::Draw(inpCanvas);
             

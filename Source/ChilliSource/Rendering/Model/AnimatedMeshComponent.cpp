@@ -47,7 +47,7 @@ namespace ChilliSource
 		bool CAnimatedMeshComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return  (inInterfaceID == CAnimatedMeshComponent::InterfaceID) ||
-                    (inInterfaceID == IRenderComponent::InterfaceID) ||
+                    (inInterfaceID == RenderComponent::InterfaceID) ||
                     (inInterfaceID == IVolumeComponent::InterfaceID);
 		}
 		//----------------------------------------------------
@@ -621,7 +621,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
         /// Render
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass)
+        void CAnimatedMeshComponent::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass)
 		{
             if (nullptr != mActiveAnimationGroup)
             {
@@ -656,7 +656,7 @@ namespace ChilliSource
         //-----------------------------------------------------
         /// Render Shadow Map
         //-----------------------------------------------------
-        void CAnimatedMeshComponent::RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam)
+        void CAnimatedMeshComponent::RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam)
         {
             if (nullptr != mActiveAnimationGroup)
             {

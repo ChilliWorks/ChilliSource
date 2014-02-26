@@ -301,7 +301,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //------------------------------------------------------
-        void VerticalSliderBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void VerticalSliderBar::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
             if(Visible)
             {

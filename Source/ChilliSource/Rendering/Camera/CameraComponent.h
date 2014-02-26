@@ -35,12 +35,12 @@ namespace ChilliSource
 			Core::CVector2 vViewSize;
 		};
 		
-		class CCameraComponent : public Core::IComponent
+		class CameraComponent : public Core::IComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CCameraComponent);
-			CCameraComponent(const CameraDescription &inCamDesc);
-			~CCameraComponent();
+			DECLARE_NAMED_INTERFACE(CameraComponent);
+			CameraComponent(const CameraDescription &inCamDesc);
+			~CameraComponent();
 			//----------------------------------------------------------
 			/// Is A
 			///

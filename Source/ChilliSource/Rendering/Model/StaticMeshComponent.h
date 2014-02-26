@@ -24,7 +24,7 @@ namespace ChilliSource
 		/// A static mesh component. This defines a 3D mesh that can
 		/// be manipulated, textured but not animated.
 		//===============================================================
-		class CStaticMeshComponent : public IRenderComponent
+		class CStaticMeshComponent : public RenderComponent
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(CStaticMeshComponent);
@@ -151,7 +151,7 @@ namespace ChilliSource
             /// @param Active camera component
             /// @param The current shader pass.
 			//----------------------------------------------------------
-			void Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass);
+			void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass);
             //-----------------------------------------------------
             /// Render Shadow Map
             ///
@@ -160,7 +160,7 @@ namespace ChilliSource
             /// @param Render system
             /// @param Active camera component
             //-----------------------------------------------------
-            void RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam);
+            void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam);
             //----------------------------------------------------
             /// On Attached To Entity
             ///

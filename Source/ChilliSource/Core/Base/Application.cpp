@@ -66,11 +66,11 @@ namespace ChilliSource
         f32 CApplication::mfUpdateInterval = kfDefaultUpdateInterval;
         f32 CApplication::mfUpdateSpeed = 1.0f;
         
-        Rendering::IRenderSystem* CApplication::mpRenderSystem = nullptr;
+        Rendering::RenderSystem* CApplication::mpRenderSystem = nullptr;
         Input::InputSystem * CApplication::mpInputSystem = nullptr;
         IPlatformSystem* CApplication::pPlatformSystem = nullptr;
 		Audio::AudioSystem* CApplication::pAudioSystem = nullptr;
-		Rendering::CRenderer* CApplication::mpRenderer = nullptr;
+		Rendering::Renderer* CApplication::mpRenderer = nullptr;
 		IFileSystem* CApplication::mspFileSystem = nullptr;
         
         std::vector<IUpdateable*> CApplication::mUpdateableSystems;
@@ -395,7 +395,7 @@ namespace ChilliSource
                 {
                     StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultFont"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultFont"].get("Path", "").asString();
-                    pDefaultFont = LOAD_RESOURCE(Rendering::CFont, eStorageLocation, strPath);
+                    pDefaultFont = LOAD_RESOURCE(Rendering::Font, eStorageLocation, strPath);
                 }
                 
                 if(jRoot.isMember("DefaultMaterial"))
@@ -564,7 +564,7 @@ namespace ChilliSource
 		///
 		/// @param the system pointer.
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::SetRenderSystem(Rendering::IRenderSystem* inpSystem)
+		void CApplication::SetRenderSystem(Rendering::RenderSystem* inpSystem)
 		{
 			mpRenderSystem = inpSystem;
 		}
@@ -591,7 +591,7 @@ namespace ChilliSource
 		///
 		/// @param the renderer
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::SetRenderer(Rendering::CRenderer* inpSystem)
+		void CApplication::SetRenderer(Rendering::Renderer* inpSystem)
 		{
 			mpRenderer = inpSystem;
 		}

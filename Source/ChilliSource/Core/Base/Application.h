@@ -277,13 +277,13 @@ namespace ChilliSource
 			///
 			/// @return Handle application renderer
 			//--------------------------------------------------------------------------------------------------
-			static Rendering::CRenderer* GetRendererPtr() {return mpRenderer;}
+			static Rendering::Renderer* GetRendererPtr() {return mpRenderer;}
 			//--------------------------------------------------------------------------------------------------
 			/// Get Render System Pointer
 			///
 			/// @return Handle to platfrom specific render system
 			//--------------------------------------------------------------------------------------------------
-			static Rendering::IRenderSystem* GetRenderSystemPtr() {return mpRenderSystem;}
+			static Rendering::RenderSystem* GetRenderSystemPtr() {return mpRenderSystem;}
             //--------------------------------------------------------------------------------------------------
 			/// Get Platform System Ptr
 			///
@@ -381,7 +381,7 @@ namespace ChilliSource
 			///
 			/// @param the system pointer.
 			//--------------------------------------------------------------------------------------------------
-			static void SetRenderSystem(Rendering::IRenderSystem* inpSystem);
+			static void SetRenderSystem(Rendering::RenderSystem* inpSystem);
             //--------------------------------------------------------------------------------------------------
 			/// Set Input System
 			///
@@ -399,7 +399,7 @@ namespace ChilliSource
 			///
 			/// @param the renderer
 			//--------------------------------------------------------------------------------------------------
-			static void SetRenderer(Rendering::CRenderer* inpSystem);
+			static void SetRenderer(Rendering::Renderer* inpSystem);
 			//--------------------------------------------------------------------------------------------------
 			/// Set File System
 			///
@@ -502,10 +502,10 @@ namespace ChilliSource
 			
 			static CStateManager mStateMgr;		//Handles the state updating and transitioning
             
-			static Rendering::CRenderer* mpRenderer;
+			static Rendering::Renderer* mpRenderer;
 			
             //---Systems
-            static Rendering::IRenderSystem* mpRenderSystem;
+            static Rendering::RenderSystem* mpRenderSystem;
 			static Input::InputSystem * mpInputSystem;
             static IPlatformSystem* pPlatformSystem;	//Interface to platform specific API's such as timer etc
             static Audio::AudioSystem* pAudioSystem;

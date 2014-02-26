@@ -60,7 +60,7 @@ namespace ChilliSource
 			MeshDescriptor();
 			
 			MeshFeatureDescriptor mFeatures;
-			CVertexDeclaration mVertexDeclaration;
+			VertexDeclaration mVertexDeclaration;
 			u32 mudwIndexSize;
 			ChilliSource::Core::CVector3 mvMinBounds;
 			ChilliSource::Core::CVector3 mvMaxBounds;

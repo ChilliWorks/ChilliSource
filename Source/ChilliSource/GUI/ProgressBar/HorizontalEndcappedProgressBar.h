@@ -153,7 +153,7 @@ namespace ChilliSource
 			///
 			/// @param Renderer
 			//------------------------------------------------------------------------
-			virtual void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			virtual void Draw(Rendering::CanvasRenderer* inpCanvas);
 
 		private:
 

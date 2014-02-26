@@ -402,7 +402,7 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer
 			//-----------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvasRenderer);
+			void Draw(Rendering::CanvasRenderer* inpCanvasRenderer);
             
         private:
             

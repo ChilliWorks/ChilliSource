@@ -162,7 +162,7 @@ namespace ChilliSource
         ///
         /// @param Render system 
         //-----------------------------------------------------------------
-        void IShaderManager::SetRenderSystem(IRenderSystem* inpRenderSystem)
+        void IShaderManager::SetRenderSystem(RenderSystem* inpRenderSystem)
         {
             mpRenderSystem = inpRenderSystem;
         }

@@ -47,7 +47,7 @@ namespace ChilliSource
 		/// An animated mesh component. This defines a 3D mesh that can
 		/// be manipulated, textured and animated.
 		//===============================================================
-		class CAnimatedMeshComponent : public IRenderComponent
+		class CAnimatedMeshComponent : public RenderComponent
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(CAnimatedMeshComponent);
@@ -403,7 +403,7 @@ namespace ChilliSource
             /// @param Active camera component
             /// @param The current shader pass.
 			//----------------------------------------------------------
-			void Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass);
+			void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass);
             //-----------------------------------------------------
             /// Render Shadow Map
             ///
@@ -412,7 +412,7 @@ namespace ChilliSource
             /// @param Render system
             /// @param Active camera component
             //-----------------------------------------------------
-            void RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam);
+            void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam);
             //----------------------------------------------------------
 			/// Update Animation
 			///

@@ -21,23 +21,23 @@ namespace ChilliSource
             
             virtual ~ICullingPredicate(){}
             
-            virtual bool CullItem(CCameraComponent* inpCamera, IRenderComponent* inpItem) const = 0;
+            virtual bool CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const = 0;
 
         private:
         };
         
-        class CViewportCullPredicate : public ICullingPredicate
+        class ViewportCullPredicate : public ICullingPredicate
         {
         public:
             
-            bool CullItem(CCameraComponent* inpCamera, IRenderComponent* inpItem) const;
+            bool CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const;
         };
         
-        class CFrustumCullPredicate : public ICullingPredicate
+        class FrustumCullPredicate : public ICullingPredicate
         {
         public:
             
-            bool CullItem(CCameraComponent* inpCamera, IRenderComponent* inpItem) const;
+            bool CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const;
         };
     }
 }

@@ -29,7 +29,7 @@ namespace ChilliSource
 		/// @param Interface to compare
 		/// @return Whether the object implements the given interface
 		//-------------------------------------------------------------------------
-		bool CFontLoader::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool FontLoader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == IResourceProvider::InterfaceID;
 		}
@@ -39,9 +39,9 @@ namespace ChilliSource
 		/// @param Type to compare
 		/// @return Whether the object can create a resource of given type
 		//----------------------------------------------------------------------------
-		bool CFontLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
+		bool FontLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == CFont::InterfaceID);
+			return (inInterfaceID == Font::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource From File With Extension
@@ -50,7 +50,7 @@ namespace ChilliSource
 		/// @param Extension to compare
 		/// @return Whether the object can create a resource with the given extension
 		//----------------------------------------------------------------------------
-		bool CFontLoader::CanCreateResourceFromFileWithExtension(const std::string& inExtension) const
+		bool FontLoader::CanCreateResourceFromFileWithExtension(const std::string& inExtension) const
 		{
 			return (inExtension == kstrGlyphExtension);
 		}
@@ -64,11 +64,11 @@ namespace ChilliSource
 		/// @param Out: Resource object
 		/// @return Whether the resource was created successfully
 		//----------------------------------------------------------------------------
-		bool CFontLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string& inFilePath, Core::ResourcePtr& outpResource)
+		bool FontLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string& inFilePath, Core::ResourcePtr& outpResource)
 		{
             bool bResult = false;
             
-			CFont* pFont = (CFont*)(outpResource.get());
+			Font* pFont = (Font*)(outpResource.get());
 			
 			//Buffer for the character set
             std::string strGlyphs;
@@ -100,7 +100,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         /// Has Kerning Info
         //----------------------------------------------------------------------------
-        const bool CFontLoader::HasKerningInfo(const Core::StorageLocation ineStorageLocation, const std::string& inFilePath) const
+        const bool FontLoader::HasKerningInfo(const Core::StorageLocation ineStorageLocation, const std::string& inFilePath) const
         {
             // Get the kerning file
             std::string strFileName, strExtension;
@@ -113,7 +113,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         /// Load Kerning Info
         //----------------------------------------------------------------------------
-        bool CFontLoader::LoadKerningInfo(Core::StorageLocation ineStorageLocation, const std::string& inFilePath, CFont* inpFont)
+        bool FontLoader::LoadKerningInfo(Core::StorageLocation ineStorageLocation, const std::string& inFilePath, Font* inpFont)
         {
             // Get the kerning file
             std::string strFileName, strExtension;
@@ -128,8 +128,8 @@ namespace ChilliSource
 				dwKerningPairs = Core::CUtils::Endian4ByteSwap(&dwKerningPairs);
 				
 				// Kerning stored in a first character look up register
-				std::vector<CFont::CKernLookup> aKernLookup;
-				std::vector<CFont::CKernPair> aKernPairs;
+				std::vector<Font::CKernLookup> aKernLookup;
+				std::vector<Font::CKernPair> aKernPairs;
 				aKernPairs.reserve(dwKerningPairs);
                 
 				for(s32 dwPair = 0; dwPair < dwKerningPairs; dwPair++)
@@ -150,14 +150,14 @@ namespace ChilliSource
 					// Check if we are on a new c1
 					if(aKernLookup.empty())
 					{
-						aKernLookup.push_back(CFont::CKernLookup(dwChar1, aKernPairs.size(), 0));
+						aKernLookup.push_back(Font::CKernLookup(dwChar1, aKernPairs.size(), 0));
 					}
 					else if(aKernLookup.back().wCharacter != dwChar1)
 					{
 						aKernLookup.back().uwLength = aKernPairs.size() - aKernLookup.back().uwStart;
-						aKernLookup.push_back(CFont::CKernLookup(dwChar1, aKernPairs.size(), 0));
+						aKernLookup.push_back(Font::CKernLookup(dwChar1, aKernPairs.size(), 0));
 					}
-					aKernPairs.push_back(CFont::CKernPair(dwChar2, static_cast<f32>(dwSpacing)));
+					aKernPairs.push_back(Font::CKernPair(dwChar2, static_cast<f32>(dwSpacing)));
 				}
 				inpFont->SetKerningInfo(aKernLookup, aKernPairs);
                 
@@ -171,7 +171,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//-------------------------------------------------------------------------
-		CFontLoader::~CFontLoader()
+		FontLoader::~FontLoader()
 		{
 		}
 	}

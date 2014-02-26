@@ -323,7 +323,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //------------------------------------------------------
-        void HorizontalProgressBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void HorizontalProgressBar::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
             //Update the progress bar
             mpProgressImage->SetSize(GetProgress(), mfProgressRelHeight, 0, mfProgressAbsHeight);

@@ -247,14 +247,14 @@ namespace ChilliSource
             ///
             /// @return The render capabilities.
             //---------------------------------------------------
-            IRenderCapabilities* GetRenderCapabilities() const;
+            RenderCapabilities* GetRenderCapabilities() const;
             
         private:
             
             mutable ITextureManager* mpTextureManager;
             mutable IShaderManager* mpShaderManager;
             mutable ICubemapManager* mpCubemapManager;
-            mutable IRenderCapabilities* mpRenderCapabilities;
+            mutable RenderCapabilities* mpRenderCapabilities;
         };
     }
 }

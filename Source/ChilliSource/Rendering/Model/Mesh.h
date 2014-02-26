@@ -100,7 +100,7 @@ namespace ChilliSource
 			/// @param World transform matrix
 			/// @param The array of materials.
 			//-----------------------------------------------------------------
-			void Render(IRenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const std::vector<MaterialPtr>& inMaterials, 
+			void Render(RenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const std::vector<MaterialPtr>& inMaterials, 
                         const SkinnedAnimationGroupPtr& inpAnimationGroup = SkinnedAnimationGroupPtr()) const;
 		private:
 			//Only the mesh loader can create this
@@ -144,7 +144,7 @@ namespace ChilliSource
 			//Only model loaders can alter the mesh construct
 			friend class CMoModelLoader;
 			friend class CMeshManager;
-			friend class CMeshBatch;
+			friend class MeshBatch;
 		private:
 			
 			std::vector<SubMeshPtr> mSubMeshes;
@@ -153,7 +153,7 @@ namespace ChilliSource
 			Core::AABB mBoundingBox;
 			u32 mudwTotalVerts;
 			u32 mudwTotalIndices;
-			IRenderSystem* mpRenderSystem;
+			RenderSystem* mpRenderSystem;
 		};
 	}
 }

@@ -20,13 +20,13 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(IRenderSystem);
+        DEFINE_NAMED_INTERFACE(RenderSystem);
 		//-------------------------------------------------------
 		/// Constructor
 		///
 		/// Default
 		//-------------------------------------------------------
-		IRenderSystem::IRenderSystem()
+		RenderSystem::RenderSystem()
         : mpRenderFactory(nullptr), mpSpriteBatcher(nullptr)
 		{
             Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mMeshManager);
@@ -40,7 +40,7 @@ namespace ChilliSource
         ///
         /// @return Pointer to dynamic sprite batcher
         //----------------------------------------------------
-        CDynamicSpriteBatch* IRenderSystem::GetDynamicSpriteBatchPtr()
+        CDynamicSpriteBatch* RenderSystem::GetDynamicSpriteBatchPtr()
         {
             if(mpSpriteBatcher == nullptr)
             {
@@ -54,7 +54,7 @@ namespace ChilliSource
 		///
 		/// @return Number of factories in this system
 		//----------------------------------------------------
-		u32 IRenderSystem::GetNumComponentFactories() const
+		u32 RenderSystem::GetNumComponentFactories() const
 		{
 			return 1;
 		}
@@ -63,11 +63,11 @@ namespace ChilliSource
 		///
 		/// 
 		//-------------------------------------------------------
-		Core::IComponentFactory* IRenderSystem::GetComponentFactoryPtr(u32 inudwIndex)
+		Core::IComponentFactory* RenderSystem::GetComponentFactoryPtr(u32 inudwIndex)
 		{
             if(mpRenderFactory == nullptr)
             {
-                mpRenderFactory = new CRenderComponentFactory(this);
+                mpRenderFactory = new RenderComponentFactory(this);
             }
             
             return mpRenderFactory;
@@ -77,11 +77,11 @@ namespace ChilliSource
 		///
 		/// 
 		//-------------------------------------------------------
-		Core::IComponentFactory& IRenderSystem::GetComponentFactory(u32 inudwIndex)
+		Core::IComponentFactory& RenderSystem::GetComponentFactory(u32 inudwIndex)
 		{
             if(mpRenderFactory == nullptr)
             {
-                mpRenderFactory = new CRenderComponentFactory(this);
+                mpRenderFactory = new RenderComponentFactory(this);
             }
             
             return *mpRenderFactory;
@@ -89,7 +89,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		/// Destructor
 		//-------------------------------------------------------
-		IRenderSystem::~IRenderSystem()
+		RenderSystem::~RenderSystem()
 		{
 			CS_SAFE_DELETE(mpRenderFactory);
             CS_SAFE_DELETE(mpSpriteBatcher);

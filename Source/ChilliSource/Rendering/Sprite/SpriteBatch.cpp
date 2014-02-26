@@ -25,7 +25,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//------------------------------------------------------
-		CSpriteBatch::CSpriteBatch(u32 inudwCapacity, IRenderSystem * inpRenderSystem, BufferUsage ineUsage) 
+		CSpriteBatch::CSpriteBatch(u32 inudwCapacity, RenderSystem * inpRenderSystem, BufferUsage ineUsage) 
         : mpSpriteBuffer(nullptr), mdwTag(0), mudwNumSpritesBuiltIndicesFor(0)
 		{
 			BufferDescription desc;
@@ -149,7 +149,7 @@ namespace ChilliSource
         /// @param Offset into mesh buffer
         /// @param Stride within mesh buffer
 		//------------------------------------------------------
-		void CSpriteBatch::Render(IRenderSystem* inpRenderSystem, const CMaterial& inMaterial, u32 inudwOffset, u32 inudwStride) const
+		void CSpriteBatch::Render(RenderSystem* inpRenderSystem, const CMaterial& inMaterial, u32 inudwOffset, u32 inudwStride) const
 		{
             if(inudwStride > 0)
             {
@@ -172,7 +172,7 @@ namespace ChilliSource
 		///
 		/// @param Active render system
 		//------------------------------------------------------
-		void CSpriteBatch::Render(IRenderSystem* inpRenderSystem, const CMaterial& inMaterial) const
+		void CSpriteBatch::Render(RenderSystem* inpRenderSystem, const CMaterial& inMaterial) const
 		{
             if(mpSpriteBuffer->GetIndexCount() > 0)
             {

@@ -18,87 +18,87 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(IRenderComponent);
+        DEFINE_NAMED_INTERFACE(RenderComponent);
 		//----------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------
-		IRenderComponent::IRenderComponent() : mfSortValue(0), mbVisible(true), mbShouldCull(true), mbCastsShadows(false)
+		RenderComponent::RenderComponent() : mfSortValue(0), mbVisible(true), mbShouldCull(true), mbCastsShadows(false)
 		{
 		}
 		//----------------------------------------------------
 		/// Is Visible
 		//----------------------------------------------------
-		bool IRenderComponent::IsVisible() const
+		bool RenderComponent::IsVisible() const
 		{
             return mpEntityOwner ? mbVisible && (mpEntityOwner->IsVisible() && mpEntityOwner->Transform().GetWorldOpacity() != 0) : mbVisible;
 		}
         //----------------------------------------------------
         /// Should Cull
         //----------------------------------------------------
-        bool IRenderComponent::IsCullingEnabled() const
+        bool RenderComponent::IsCullingEnabled() const
         {
             return mbShouldCull;
         }
         //----------------------------------------------------
         /// Set Cull Enabled
         //----------------------------------------------------
-        void IRenderComponent::SetCullingEnabled(bool inbCull)
+        void RenderComponent::SetCullingEnabled(bool inbCull)
         {
             mbShouldCull = inbCull;
         }
 		//----------------------------------------------------
 		/// Set Visible
 		//----------------------------------------------------
-		void IRenderComponent::SetVisible(bool inbVisible)
+		void RenderComponent::SetVisible(bool inbVisible)
 		{
 			mbVisible = inbVisible;
 		}
 		//-----------------------------------------------------
 		/// Get Transformation Matrix
 		//-----------------------------------------------------
-		const Core::CMatrix4x4& IRenderComponent::GetTransformationMatrix()
+		const Core::CMatrix4x4& RenderComponent::GetTransformationMatrix()
 		{
 			return mpEntityOwner->Transform().GetWorldTransform();
 		}
 		//-----------------------------------------------------------
 		/// Set Material
 		//-----------------------------------------------------------
-		void IRenderComponent::SetMaterial(const MaterialPtr &inpMaterial)
+		void RenderComponent::SetMaterial(const MaterialPtr &inpMaterial)
 		{
 			mpMaterial = inpMaterial;
 		}
 		//-----------------------------------------------------------
 		/// Get Material
 		//-----------------------------------------------------------
-		const MaterialPtr& IRenderComponent::GetMaterial() const
+		const MaterialPtr& RenderComponent::GetMaterial() const
 		{
 			return mpMaterial;
 		}
 		//-----------------------------------------------------------
 		/// Get Material
 		//-----------------------------------------------------------
-		MaterialPtr& IRenderComponent::GetMaterial()
+		MaterialPtr& RenderComponent::GetMaterial()
 		{
 			return mpMaterial;
 		}
 		//-----------------------------------------------------------
 		/// Is Transparent
 		//-----------------------------------------------------------
-		bool IRenderComponent::IsTransparent()
+		bool RenderComponent::IsTransparent()
 		{
 			return mpMaterial->IsTransparent();
 		}
         //-----------------------------------------------------
         /// Set Shadow Casting Enabled
         //-----------------------------------------------------
-        void IRenderComponent::SetShadowCastingEnabled(bool inbEnabled)
+        void RenderComponent::SetShadowCastingEnabled(bool inbEnabled)
         {
             mbCastsShadows = inbEnabled;
         }
         //-----------------------------------------------------
         /// Is Shadow Casting Enabled
         //-----------------------------------------------------
-        bool IRenderComponent::IsShadowCastingEnabled() const
+        bool RenderComponent::IsShadowCastingEnabled() const
         {
             return mbCastsShadows;
         }

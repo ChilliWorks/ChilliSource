@@ -463,7 +463,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //-------------------------------------------------------
-        void GridView::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void GridView::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
             //This is a container view and has no renderables
             //We will need to render our subviews though

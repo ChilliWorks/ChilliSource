@@ -12,6 +12,6 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        DEFINE_NAMED_INTERFACE(IRenderCapabilities);
+        DEFINE_NAMED_INTERFACE(RenderCapabilities);
     }
 }
