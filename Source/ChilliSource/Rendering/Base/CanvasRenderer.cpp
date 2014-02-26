@@ -60,13 +60,13 @@ namespace ChilliSource
             if(msCachedSprite.pMaterial)
             {
                 msCachedSprite.pMaterial->SetScissoringEnabled(false);
-                msCachedSprite.pMaterial->SetTexture(TexturePtr());
+                msCachedSprite.pMaterial->SetTexture(TextureSPtr());
             }
             
             mpRenderSystem->EnableScissorTesting(false);
             
-            mpDefaultMaterial->SetTexture(TexturePtr());
-            mpDistanceFont->SetTexture(TexturePtr());
+            mpDefaultMaterial->SetTexture(TextureSPtr());
+            mpDistanceFont->SetTexture(TextureSPtr());
 		}
         //----------------------------------------------------------
         /// Enable Clipping To Bounds
@@ -145,7 +145,7 @@ namespace ChilliSource
         ///
         /// Build a sprite box and batch it ready for rendering
         //-----------------------------------------------------------
-        void CanvasRenderer::DrawBox(const Core::CMatrix3x3& inmatTransform, const Core::CVector2 & invSize, const TexturePtr & inpTexture, 
+        void CanvasRenderer::DrawBox(const Core::CMatrix3x3& inmatTransform, const Core::CVector2 & invSize, const TextureSPtr & inpTexture, 
                                       const Core::CRect& inUVs, const Core::CColour & insTintColour, Core::AlignmentAnchor ineAlignment)
         {
             //Flush buffer
@@ -773,15 +773,15 @@ namespace ChilliSource
 		{
 			Core::CColour::ByteColour Col = Core::CColour::ColourToByteColour(insTintColour);
 			
-			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topLeft].Col = Col;
-            msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft].Col = Col;
-            msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topRight].Col = Col;
-            msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight].Col = Col;
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].Col = Col;
+            msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].Col = Col;
+            msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].Col = Col;
+            msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].Col = Col;
 			
-			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topLeft].vTex = inUVs.TopLeft();
-			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft].vTex = inUVs.BottomLeft();
-			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topRight].vTex = inUVs.TopRight();
-			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight].vTex = inUVs.BottomRight();
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vTex = inUVs.TopLeft();
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vTex = inUVs.BottomLeft();
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex = inUVs.TopRight();
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex = inUVs.BottomRight();
 			
 			Core::CVector2 vHalfSize(invSize.x * 0.5f, invSize.y * 0.5f);
 			Core::CVector2 vAlignedPos;
@@ -792,37 +792,37 @@ namespace ChilliSource
 			
             const Core::CMatrix4x4 &matTransform(inTransform);
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topLeft].vPos);
+            Core::CMatrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos);
             
             vTemp.x = vHalfSize.x;
             vTemp.y = vHalfSize.y;
 			
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topRight].vPos);
+            Core::CMatrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos);
             
             vTemp.x = -vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 			
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft].vPos);
+            Core::CMatrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos);
             
             vTemp.x = vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 			
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight].vPos);
+            Core::CMatrix4x4::Multiply(&vTemp, &matTransform, &msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos);
 
-			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topLeft].vPos.z = -mfNearClippingDistance;
-			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topLeft].vPos.w = 1.0f;
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.z = -mfNearClippingDistance;
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos.w = 1.0f;
 			
-			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft].vPos.z = -mfNearClippingDistance;
-			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft].vPos.w = 1.0f;
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos.z = -mfNearClippingDistance;
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos.w = 1.0f;
 			
-			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topRight].vPos.z = -mfNearClippingDistance;
-			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_topRight].vPos.w = 1.0f;
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos.z = -mfNearClippingDistance;
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos.w = 1.0f;
 			
-			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight].vPos.z = -mfNearClippingDistance;
-			msCachedSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight].vPos.w = 1.0f;
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos.z = -mfNearClippingDistance;
+			msCachedSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos.w = 1.0f;
 		}
 	}
 }

@@ -22,11 +22,11 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class ISpriteSheetManager : public Core::IResourceManager
+		class SpriteSheetManager : public Core::IResourceManager
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(ISpriteSheetManager);
-			ISpriteSheetManager();
+			DECLARE_NAMED_INTERFACE(SpriteSheetManager);
+			SpriteSheetManager();
 
 			//----------------------------------------------------------------
 			/// Is A
@@ -79,7 +79,7 @@ namespace ChilliSource
 			
 		private:
             
-            ITextureManager* mpTextureManager;
+            TextureManager* mpTextureManager;
 		};
 	}
 }

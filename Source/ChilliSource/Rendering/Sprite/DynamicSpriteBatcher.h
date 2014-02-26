@@ -27,11 +27,11 @@ namespace ChilliSource
             u32 udwStride;
         };
         
-		class CDynamicSpriteBatch
+		class DynamicSpriteBatch
 		{
 		public:
-			CDynamicSpriteBatch(RenderSystem* inpRenderSystem);
-            ~CDynamicSpriteBatch();
+			DynamicSpriteBatch(RenderSystem* inpRenderSystem);
+            ~DynamicSpriteBatch();
             
 			//-------------------------------------------------------
 			/// Render
@@ -44,7 +44,7 @@ namespace ChilliSource
             /// @param Render system
             /// @param Sprite data to batch
 			//-------------------------------------------------------
-			void Render(RenderSystem* inpRenderSystem, const CSpriteComponent::SpriteData& inpSprite, const Core::CMatrix4x4 * inpTransform = nullptr);
+			void Render(RenderSystem* inpRenderSystem, const SpriteComponent::SpriteData& inpSprite, const Core::CMatrix4x4 * inpTransform = nullptr);
             //-------------------------------------------------------
             /// Force Command Change
             ///
@@ -78,8 +78,8 @@ namespace ChilliSource
 			
 		private:
         
-			CSpriteBatch* mpBatch[kudwNumBuffers];
-			std::vector<CSpriteComponent::SpriteData> maSpriteCache;
+			SpriteBatch* mpBatch[kudwNumBuffers];
+			std::vector<SpriteComponent::SpriteData> maSpriteCache;
             std::vector<RenderCommand> maRenderCommands;
             
             MaterialPtr mpLastMaterial;

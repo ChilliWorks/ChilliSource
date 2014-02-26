@@ -74,7 +74,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialPtr CreateSprite(const TexturePtr& inpTex) const;
+            MaterialPtr CreateSprite(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Static
             ///
@@ -84,7 +84,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialPtr CreateStatic(const TexturePtr& inpTex) const;
+            MaterialPtr CreateStatic(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Static
             ///
@@ -94,7 +94,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialPtr CreateStaticAmbient(const TexturePtr& inpTex) const;
+            MaterialPtr CreateStaticAmbient(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Static Blinn
             ///
@@ -105,7 +105,7 @@ namespace ChilliSource
             /// @param Texture file path
             /// @return New material
             //---------------------------------------------------
-            MaterialPtr CreateStaticBlinn(const TexturePtr& inpTex) const;
+            MaterialPtr CreateStaticBlinn(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Static Blinn Shadowed
             ///
@@ -117,7 +117,7 @@ namespace ChilliSource
             /// @param Texture file path
             /// @return New material
             //---------------------------------------------------
-            MaterialPtr CreateStaticBlinnShadowed(const TexturePtr& inpTex) const;
+            MaterialPtr CreateStaticBlinnShadowed(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Static Blinn Per Vertex
             ///
@@ -127,7 +127,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialPtr CreateStaticBlinnPerVertex(const TexturePtr& inpTex) const;
+            MaterialPtr CreateStaticBlinnPerVertex(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Static Blinn Per Vertex Shadowed
             ///
@@ -138,7 +138,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialPtr CreateStaticBlinnPerVertexShadowed(const TexturePtr& inpTex) const;
+            MaterialPtr CreateStaticBlinnPerVertexShadowed(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Static Directional Shadow Map
             ///
@@ -157,7 +157,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialPtr CreateAnimated(const TexturePtr& inpTex) const;
+            MaterialPtr CreateAnimated(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Animated Ambient
             ///
@@ -167,7 +167,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialPtr CreateAnimatedAmbient(const TexturePtr& inpTex) const;
+            MaterialPtr CreateAnimatedAmbient(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Animated Blinn
             ///
@@ -178,7 +178,7 @@ namespace ChilliSource
             /// @param Texture file path
             /// @return New material
             //---------------------------------------------------
-            MaterialPtr CreateAnimatedBlinn(const TexturePtr& inpTex) const;
+            MaterialPtr CreateAnimatedBlinn(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Animated Blinn Shadowed
             ///
@@ -190,7 +190,7 @@ namespace ChilliSource
             /// @param Texture file path
             /// @return New material
             //---------------------------------------------------
-            MaterialPtr CreateAnimatedBlinnShadowed(const TexturePtr& inpTex) const;
+            MaterialPtr CreateAnimatedBlinnShadowed(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Animated Blinn Per Vertex
             ///
@@ -200,7 +200,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialPtr CreateAnimatedBlinnPerVertex(const TexturePtr& inpTex) const;
+            MaterialPtr CreateAnimatedBlinnPerVertex(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Animated Blinn Per Vertex Shadowed
             ///
@@ -211,7 +211,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialPtr CreateAnimatedBlinnPerVertexShadowed(const TexturePtr& inpTex) const;
+            MaterialPtr CreateAnimatedBlinnPerVertexShadowed(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Animated Directional Shadow Map
             ///
@@ -229,19 +229,19 @@ namespace ChilliSource
             ///
             /// @return Texture manager
             //---------------------------------------------------
-            ITextureManager* GetTextureManager() const;
+            TextureManager* GetTextureManager() const;
             //---------------------------------------------------
             /// Get Shader Manager
             ///
             /// @return Shader manager
             //---------------------------------------------------
-            IShaderManager* GetShaderManager() const;
+            ShaderManager* GetShaderManager() const;
             //---------------------------------------------------
             /// Get Cubemap Manager
             ///
             /// @return Cubemap manager
             //---------------------------------------------------
-            ICubemapManager* GetCubemapManager() const;
+            CubemapManager* GetCubemapManager() const;
             //---------------------------------------------------
             /// Get Render Capabilities
             ///
@@ -251,9 +251,9 @@ namespace ChilliSource
             
         private:
             
-            mutable ITextureManager* mpTextureManager;
-            mutable IShaderManager* mpShaderManager;
-            mutable ICubemapManager* mpCubemapManager;
+            mutable TextureManager* mpTextureManager;
+            mutable ShaderManager* mpShaderManager;
+            mutable CubemapManager* mpCubemapManager;
             mutable RenderCapabilities* mpRenderCapabilities;
         };
     }

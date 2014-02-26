@@ -77,7 +77,7 @@ namespace ChilliSource
             }
 			if(insParams.TryGetValue("SpriteSheet", strValue))
 			{
-				SetSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eSpriteSheetLocation, strValue));
+				SetSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eSpriteSheetLocation, strValue));
 			}
 			//---Sprite sheet ID
 			if(insParams.TryGetValue("BaseFillSpriteSheetIndexID", strValue))

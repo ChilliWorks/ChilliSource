@@ -28,7 +28,7 @@ namespace ChilliSource
             /// @param Shadow map target texture
             /// @param Shadow map debug target texture
             //----------------------------------------------------------
-			DirectionalLightComponent(const TexturePtr& inpShadowMapTarget, const TexturePtr& inpShadowMapDebugTarget = TexturePtr());
+			DirectionalLightComponent(const TextureSPtr& inpShadowMapTarget, const TextureSPtr& inpShadowMapDebugTarget = TextureSPtr());
 			//----------------------------------------------------------
 			/// Is A
 			///
@@ -97,20 +97,20 @@ namespace ChilliSource
 			///
 			/// @return Shadow map texture
 			//----------------------------------------------------------
-			const TexturePtr& GetShadowMapPtr() const;
+			const TextureSPtr& GetShadowMapPtr() const;
             //----------------------------------------------------------
 			/// Get Shadow Map Debug Ptr
 			///
 			/// @return Shadow map debug colour texture
 			//----------------------------------------------------------
-			const TexturePtr& GetShadowMapDebugPtr() const;
+			const TextureSPtr& GetShadowMapDebugPtr() const;
             
         private:
             
             Core::CMatrix4x4 mmatProj;
             
-            TexturePtr mpShadowMap;
-            TexturePtr mpShadowMapDebug;
+            TextureSPtr mpShadowMap;
+            TextureSPtr mpShadowMapDebug;
             
             mutable Core::CVector3 mvDirection;
             

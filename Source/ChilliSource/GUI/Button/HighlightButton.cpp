@@ -93,7 +93,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("NormalTexture", strValue))
             {
-                SetNormalImage(LOAD_RESOURCE(Rendering::ITexture, eNormalTextureLocation, strValue));
+                SetNormalImage(LOAD_RESOURCE(Rendering::Texture, eNormalTextureLocation, strValue));
             }
             //---Highlight
             Core::StorageLocation eHighlightTextureLocation = Core::StorageLocation::k_package;
@@ -103,7 +103,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("HighlightTexture", strValue))
             {
-                SetHighlightImage(LOAD_RESOURCE(Rendering::ITexture, eHighlightTextureLocation, strValue));
+                SetHighlightImage(LOAD_RESOURCE(Rendering::Texture, eHighlightTextureLocation, strValue));
             }
             //---Sprite sheet
             Core::StorageLocation eNormalSpriteSheetLocation = Core::StorageLocation::k_package;
@@ -113,7 +113,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("NormalSpriteSheet", strValue))
             {
-                SetNormalSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eNormalSpriteSheetLocation, strValue));
+                SetNormalSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eNormalSpriteSheetLocation, strValue));
             }
             //---Sprite sheet
             Core::StorageLocation eHighlightSpriteSheetLocation = Core::StorageLocation::k_package;
@@ -123,7 +123,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("HighlightSpriteSheet", strValue))
             {
-                SetHighlightSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eHighlightSpriteSheetLocation, strValue));
+                SetHighlightSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eHighlightSpriteSheetLocation, strValue));
             }
             //---Default index
             if(insParams.TryGetValue("NormalSpriteSheetIndex", strValue))
@@ -250,7 +250,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //-----------------------------------------------------------
-        void HighlightButton::SetNormalImage(const Rendering::TexturePtr& inpTexture)
+        void HighlightButton::SetNormalImage(const Rendering::TextureSPtr& inpTexture)
         {
             NormalTexture = inpTexture;
 			mpBackgroundImage->SetTexture(inpTexture);
@@ -266,7 +266,7 @@ namespace ChilliSource
 		///
 		/// @return Texture for non-selected button
 		//-----------------------------------------------------------
-		const Rendering::TexturePtr& HighlightButton::GetNormalImage() const
+		const Rendering::TextureSPtr& HighlightButton::GetNormalImage() const
 		{
 			return NormalTexture;
 		}
@@ -277,7 +277,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //-----------------------------------------------------------
-        void HighlightButton::SetHighlightImage(const Rendering::TexturePtr& inpTexture)
+        void HighlightButton::SetHighlightImage(const Rendering::TextureSPtr& inpTexture)
         {
             HighlightTexture = inpTexture;
             
@@ -291,7 +291,7 @@ namespace ChilliSource
 		///
 		/// @return Texture for selected button
 		//-----------------------------------------------------------
-		const Rendering::TexturePtr& HighlightButton::GetHighlightImage() const
+		const Rendering::TextureSPtr& HighlightButton::GetHighlightImage() const
 		{
 			return HighlightTexture;
 		}

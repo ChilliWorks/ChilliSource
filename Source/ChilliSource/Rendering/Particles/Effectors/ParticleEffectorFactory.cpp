@@ -21,7 +21,7 @@ namespace ChilliSource
         /// @param Effector static create delegate
         /// @param Key string
         //------------------------------------------------------------------
-        void CParticleEffectorFactory::Register(const EffectorCreateDelegate& inDelegate, const std::string& instrKey)
+        void ParticleEffectorFactory::Register(const EffectorCreateDelegate& inDelegate, const std::string& instrKey)
         {
             mmapDelegateToType.insert(std::make_pair(instrKey, inDelegate));
         }
@@ -34,7 +34,7 @@ namespace ChilliSource
         /// @param Param dictionary
         /// @return Ownership of particle effector of that type
         //-------------------------------------------------------------------
-        IParticleEffector* CParticleEffectorFactory::CreateParticleEffector(const std::string& instrType, const Core::ParamDictionary& insParams)
+        ParticleEffector* ParticleEffectorFactory::CreateParticleEffector(const std::string& instrType, const Core::ParamDictionary& insParams)
         {
             MapDelegateToString::iterator it = mmapDelegateToType.find(instrType);
             

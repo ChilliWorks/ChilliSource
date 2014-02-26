@@ -20,7 +20,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Constructor
         //----------------------------------------------------------
-        DirectionalLightComponent::DirectionalLightComponent(const TexturePtr& inpShadowMapTarget, const TexturePtr& inpShadowMapDebugTarget)
+        DirectionalLightComponent::DirectionalLightComponent(const TextureSPtr& inpShadowMapTarget, const TextureSPtr& inpShadowMapDebugTarget)
         : mpShadowMap(inpShadowMapTarget)
         , mpShadowMapDebug(inpShadowMapDebugTarget)
         , mfShadowTolerance(0.0f)
@@ -93,14 +93,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Shadow Map Ptr
         //----------------------------------------------------------
-        const TexturePtr& DirectionalLightComponent::GetShadowMapPtr() const
+        const TextureSPtr& DirectionalLightComponent::GetShadowMapPtr() const
         {
             return mpShadowMap;
         }
         //----------------------------------------------------------
         /// Get Shadow Map Debug Ptr
         //----------------------------------------------------------
-        const TexturePtr& DirectionalLightComponent::GetShadowMapDebugPtr() const
+        const TextureSPtr& DirectionalLightComponent::GetShadowMapDebugPtr() const
         {
             return mpShadowMapDebug;
         }

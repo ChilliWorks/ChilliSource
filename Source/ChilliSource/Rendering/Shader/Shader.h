@@ -27,17 +27,17 @@ namespace ChilliSource
             k_fragment
 		};
 		
-		class IShader : public Core::IResource
+		class Shader : public Core::IResource
 		{
 		public:
 			
-			virtual ~IShader(){}
-			DECLARE_NAMED_INTERFACE(IShader);
+			virtual ~Shader(){}
+			DECLARE_NAMED_INTERFACE(Shader);
 			
 		protected:
 			
 			//Can only be created via the resource manager
-			IShader(){}
+			Shader(){}
 		};
 	}
 }

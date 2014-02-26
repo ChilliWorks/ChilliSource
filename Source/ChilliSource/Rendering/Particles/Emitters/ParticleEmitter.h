@@ -27,12 +27,12 @@ namespace ChilliSource
             f32* fAngularRotation;
         };
         
-        class CParticleEmitter
+        class ParticleEmitter
         {
         public:
             
-            CParticleEmitter(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, CParticleComponent* inpComponent);
-            virtual~CParticleEmitter();
+            ParticleEmitter(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, ParticleComponent* inpComponent);
+            virtual~ParticleEmitter();
             //-----------------------------------------------------
             /// Update
             ///
@@ -77,7 +77,7 @@ namespace ChilliSource
             ///
             /// @param Particle effector
             //-----------------------------------------------------
-            void AddEffector(IParticleEffector* inpEffector);
+            void AddEffector(ParticleEffector* inpEffector);
             //-----------------------------------------------------
             /// Remove Effector
             ///
@@ -86,7 +86,7 @@ namespace ChilliSource
             ///
             /// @param Particle effector
             //-----------------------------------------------------
-            void RemoveEffector(IParticleEffector* inpEffector);
+            void RemoveEffector(ParticleEffector* inpEffector);
             //-----------------------------------------------------
             /// Set Velocity
             ///
@@ -186,13 +186,13 @@ namespace ChilliSource
 			///
 			/// Rebuild the sprite data
 			//-----------------------------------------------------
-			void UpdateSpriteData(const Core::CVector3& invPos, const Core::CColour & insTintColour, CSpriteComponent::SpriteData& outsData,
+			void UpdateSpriteData(const Core::CVector3& invPos, const Core::CColour & insTintColour, SpriteComponent::SpriteData& outsData,
                                   const Core::CVector3& invRight, const Core::CVector3& invUp, const Core::CVector3& invScale);
             
         protected:
             
             Particle mParticles;
-            std::vector<IParticleEffector*> mEffectors;
+            std::vector<ParticleEffector*> mEffectors;
             
             f32 mfInitialVelocity;
             f32 mfMinInitialVelocity;
@@ -221,7 +221,7 @@ namespace ChilliSource
             bool mbIsEmittingFinished;
             bool mbIsGlobalSpace;
             
-            CParticleComponent* mpOwningComponent;
+            ParticleComponent* mpOwningComponent;
         };
     }
 }

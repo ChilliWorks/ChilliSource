@@ -21,12 +21,12 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CParticleSystem : public Core::ISystem, public Core::IUpdateable, public Core::IComponentProducer
+		class ParticleSystem : public Core::ISystem, public Core::IUpdateable, public Core::IComponentProducer
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CParticleSystem);
+			DECLARE_NAMED_INTERFACE(ParticleSystem);
 			
-			CParticleSystem();
+			ParticleSystem();
 			
 			//----------------------------------------------------------
 			/// Is A
@@ -41,13 +41,13 @@ namespace ChilliSource
 			///
 			/// @param Particle Component
 			//-------------------------------------------
-			void AddParticleComponent(CParticleComponent* inpParticle);
+			void AddParticleComponent(ParticleComponent* inpParticle);
 			//-------------------------------------------
 			/// Remove Particle Component
 			///
 			/// @param Particle Component
 			//-------------------------------------------
-			void RemoveParticleComponent(CParticleComponent* inpParticle);
+			void RemoveParticleComponent(ParticleComponent* inpParticle);
 			//-------------------------------------------
 			/// Update 
 			///
@@ -83,21 +83,21 @@ namespace ChilliSource
 			///
 			/// @return Particle Emitter factory
 			//-------------------------------------------
-            CParticleEmitterFactory& GetEmitterFactory();
+            ParticleEmitterFactory& GetEmitterFactory();
             //-------------------------------------------
 			/// Get Effector Factory  
 			///
 			/// @return Particle Effector factory
 			//-------------------------------------------
-            CParticleEffectorFactory& GetEffectorFactory();
+            ParticleEffectorFactory& GetEffectorFactory();
 			
 		private:
 			
-			CParticleComponentFactory* mpParticleFactory;
-            CParticleEmitterFactory mEmitterFactory;
-            CParticleEffectorFactory mEffectorFactory;
+			ParticleComponentFactory* mpParticleFactory;
+            ParticleEmitterFactory mEmitterFactory;
+            ParticleEffectorFactory mEffectorFactory;
 			f32 mfTimeScaleFactor;
-			std::vector<CParticleComponent*> mParticleComponents;
+			std::vector<ParticleComponent*> mParticleComponents;
 		};
 	}
 }

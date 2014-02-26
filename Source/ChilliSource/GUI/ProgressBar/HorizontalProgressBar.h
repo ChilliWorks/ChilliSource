@@ -38,25 +38,25 @@ namespace ChilliSource
 			///
 			/// @param Texture representing the background
 			//------------------------------------------------------
-			void SetBackgroundImage(const Rendering::TexturePtr& inpTexture);
+			void SetBackgroundImage(const Rendering::TextureSPtr& inpTexture);
 			//------------------------------------------------------
 			/// Set Progress Image
 			///
 			/// @param Texture representing the bar
 			//------------------------------------------------------
-			void SetProgressImage(const Rendering::TexturePtr& inpTexture);
+			void SetProgressImage(const Rendering::TextureSPtr& inpTexture);
 			//------------------------------------------------------
 			/// Get Background Image
 			///
 			/// @return Texture representing the background
 			//------------------------------------------------------
-			const Rendering::TexturePtr& GetBackgroundImage() const;
+			const Rendering::TextureSPtr& GetBackgroundImage() const;
 			//------------------------------------------------------
 			/// Get Progress Image
 			///
 			/// @return Texture representing the bar
 			//------------------------------------------------------
-			const Rendering::TexturePtr& GetProgressImage() const;
+			const Rendering::TextureSPtr& GetProgressImage() const;
 			//--------------------------------------------------------
 			/// Set Background Sprite Sheet
 			///
@@ -141,8 +141,8 @@ namespace ChilliSource
 			ImageViewSPtr mpBackgroundImage;
 			ImageViewSPtr mpProgressImage;
 
-			DECLARE_PROPERTY_A(Rendering::TexturePtr, BackgroundTexture, SetBackgroundImage, GetBackgroundImage);
-			DECLARE_PROPERTY_A(Rendering::TexturePtr, ProgressTexture, SetProgressImage, GetProgressImage);
+			DECLARE_PROPERTY_A(Rendering::TextureSPtr, BackgroundTexture, SetBackgroundImage, GetBackgroundImage);
+			DECLARE_PROPERTY_A(Rendering::TextureSPtr, ProgressTexture, SetProgressImage, GetProgressImage);
 
 			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, BackgroundSpriteSheet, SetBackgroundSpriteSheet, GetBackgroundSpriteSheet);
 			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, ProgressSpriteSheet, SetProgressSpriteSheet, GetProgressSpriteSheet);

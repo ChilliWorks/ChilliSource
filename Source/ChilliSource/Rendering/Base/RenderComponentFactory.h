@@ -129,8 +129,8 @@ namespace ChilliSource
             
             MeshManager* mpMeshManager;
 			MaterialManager* mpMaterialManager;
-			ITextureManager* mpTextureManager;
-			ISpriteSheetManager* mpSpriteSheetManager;
+			TextureManager* mpTextureManager;
+			SpriteSheetManager* mpSpriteSheetManager;
 			RenderCapabilities* mpRenderCapabilities;
 		};
 	}

@@ -201,7 +201,7 @@ namespace ChilliSource
         //------------------------------------------------------
         /// Set Target Textures
         //------------------------------------------------------
-        void CRenderTarget::SetTargetTextures(const Rendering::TexturePtr& inpColourTexture, const Rendering::TexturePtr& inpDepthTexture)
+        void CRenderTarget::SetTargetTextures(const Rendering::TextureSPtr& inpColourTexture, const Rendering::TextureSPtr& inpDepthTexture)
         {
             DeleteRenderBuffer(&mRenderBuffer);
             DeleteRenderBuffer(&mDepthBuffer);

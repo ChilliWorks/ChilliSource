@@ -124,7 +124,7 @@ namespace ChilliSource
                         
                         if(!mpSpriteSheetManager)
                         {
-                            mpSpriteSheetManager = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<ISpriteSheetManager>();
+                            mpSpriteSheetManager = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<SpriteSheetManager>();
                         }
                         
                         SpriteSheetPtr pFontData = mpSpriteSheetManager->GetSpriteSheetFromFile(ineStorageLocation, inFilePath, ineFormat, false);

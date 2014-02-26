@@ -1,5 +1,5 @@
 /*
- *  ITextureManager.h
+ *  TextureManager.h
  *  moFlo
  *
  *  Created by Tag Games on 01/10/2010.
@@ -18,14 +18,14 @@ namespace ChilliSource
 {	
 	namespace Rendering
 	{
-		class ITextureManager : public Core::IResourceManager
+		class TextureManager : public Core::IResourceManager
 		{
 		public:
 			
-			DECLARE_NAMED_INTERFACE(ITextureManager);
+			DECLARE_NAMED_INTERFACE(TextureManager);
 			
-			ITextureManager();
-			virtual ~ITextureManager(){}
+			TextureManager();
+			virtual ~TextureManager(){}
 			//----------------------------------------------------------------
 			/// Is A
 			///
@@ -65,7 +65,7 @@ namespace ChilliSource
 			/// @param Generate mip-maps. Default = false
 			/// @return A handle to the texture
 			//----------------------------------------------------------------
-			TexturePtr GetTextureFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default, bool inbWithMipsMaps = false);
+			TextureSPtr GetTextureFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default, bool inbWithMipsMaps = false);
 			//-----------------------------------------------------------------
 			/// Async Get Texture From File
 			///
@@ -80,7 +80,7 @@ namespace ChilliSource
 			/// @param Enable mip-mapping
 			/// @return Generic pointer to resource type
 			//-----------------------------------------------------------------
-			TexturePtr AsyncGetTextureFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default, bool inbWithMipsMaps = false);
+			TextureSPtr AsyncGetTextureFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default, bool inbWithMipsMaps = false);
 			//----------------------------------------------------------------
 			/// Create Empty Texture
 			///
@@ -89,7 +89,7 @@ namespace ChilliSource
 			/// @param Out: Texture resource 
 			/// @return Success
 			//----------------------------------------------------------------
-			virtual bool CreateEmptyTexture(u32 inWidth, u32 inHeight, Core::CImage::Format ineFormat, TexturePtr& outpTexture) = 0;
+			virtual bool CreateEmptyTexture(u32 inWidth, u32 inHeight, Core::CImage::Format ineFormat, TextureSPtr& outpTexture) = 0;
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///
@@ -114,13 +114,13 @@ namespace ChilliSource
 			/// Returns a 2x2 white texture
 			/// @return Pointer to default texture
 			//-----------------------------------------------------------------
-			const TexturePtr & GetDefaultTexture();	
+			const TextureSPtr & GetDefaultTexture();	
 			//----------------------------------------------------------------
 			/// Create Texture Resource
 			///
 			/// @return Concrete texture resource based on the render system
 			//----------------------------------------------------------------
-			virtual TexturePtr CreateTextureResource() = 0;
+			virtual TextureSPtr CreateTextureResource() = 0;
             //----------------------------------------------------------------
 			/// Create Image From Texture
 			///
@@ -129,16 +129,16 @@ namespace ChilliSource
 			///
 			/// @param mopFlow Texture to create Image from
 			//----------------------------------------------------------------
-			virtual bool CreateImageFromTexture(ITexture* pTexture, Core::ImagePtr& outpImage) = 0;
+			virtual bool CreateImageFromTexture(Texture* pTexture, Core::ImagePtr& outpImage) = 0;
             //----------------------------------------------------------------
 			/// Create Texture From Image
 			///
 			/// Rendersystem specific implementations should override this
-			/// to return a shared pointer to their ITexture object
+			/// to return a shared pointer to their Texture object
 			///
 			/// @param Image to create moFlo texture from
 			//----------------------------------------------------------------
-			virtual bool CreateTextureFromImage(Core::CImage * pImage, bool inbWithMipsMaps, TexturePtr& outpTexture) = 0;
+			virtual bool CreateTextureFromImage(Core::CImage * pImage, bool inbWithMipsMaps, TextureSPtr& outpTexture) = 0;
 		protected:
 			
 			struct ImageDesc
@@ -148,7 +148,7 @@ namespace ChilliSource
 				bool bUseMipmaps;
                 Core::StorageLocation eStorageLocation;
 				Core::ResourcePtr pImageResource;
-				TexturePtr pTextureResource;
+				TextureSPtr pTextureResource;
 			};
 			
 			//-----------------------------------------------------------------------------------
@@ -168,7 +168,7 @@ namespace ChilliSource
 			/// @param With mipmapping
 			/// @param Texture to create
 			//-----------------------------------------------------------------------------------
-			void TextureLoadTask(const Core::ResourcePtr& inpImage, bool inbWithMipsMaps, TexturePtr& outpTexture);
+			void TextureLoadTask(const Core::ResourcePtr& inpImage, bool inbWithMipsMaps, TextureSPtr& outpTexture);
 			//-----------------------------------------------------------------
 			/// CreateDefaultTexture
 			///
@@ -177,7 +177,7 @@ namespace ChilliSource
 			//-----------------------------------------------------------------
 			void CreateDefaultTexture();
 			
-			TexturePtr mpDefaultTexture;
+			TextureSPtr mpDefaultTexture;
 		};
 	}
 	

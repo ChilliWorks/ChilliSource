@@ -59,7 +59,7 @@ namespace ChilliSource
         /// Get Factory Producing
         ///
         /// Looks for a factory that can create the given type
-        /// @param The type ID of the object you wish to create (i.e. Mesh, ITexture)
+        /// @param The type ID of the object you wish to create (i.e. Mesh, Texture)
         /// @return Factory that can produce the given interface or NULL if none available
         //--------------------------------------------------------------------------------------------------
         IComponentFactory* CComponentFactoryDispenser::GetFactoryProducing(const std::string & insName)

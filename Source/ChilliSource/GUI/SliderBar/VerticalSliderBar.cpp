@@ -83,7 +83,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("BarSpriteSheet", strValue))
             {
-                SetBarSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eBarSpriteSheetLocation, strValue));
+                SetBarSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eBarSpriteSheetLocation, strValue));
             }
 			//---Slider Sprite sheet
             Core::StorageLocation eSliderSpriteSheetLocation = Core::StorageLocation::k_package;
@@ -93,7 +93,7 @@ namespace ChilliSource
             }
 			if(insParams.TryGetValue("SliderSpriteSheet", strValue))
 			{
-				SetSliderSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eSliderSpriteSheetLocation, strValue));
+				SetSliderSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eSliderSpriteSheetLocation, strValue));
 			}
             //---Background index
             if(insParams.TryGetValue("BarSpriteSheetIndex", strValue))

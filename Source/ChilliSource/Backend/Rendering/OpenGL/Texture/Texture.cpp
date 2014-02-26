@@ -328,7 +328,7 @@ namespace ChilliSource
 		//--------------------------------------------------
 		bool CTexture::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == ITexture::InterfaceID;
+			return inInterfaceID == Texture::InterfaceID;
 		}
 		//--------------------------------------------------
 		/// Bind

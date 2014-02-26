@@ -23,8 +23,8 @@ namespace ChilliSource
         ///
         /// @param Param Dictionary
         //-------------------------------------------------------------
-        CRingParticleEmitter::CRingParticleEmitter(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, CParticleComponent* inpComponent) 
-        :CParticleEmitter(inParams, inpMaterial, inpComponent), mfRadius(1.0f)
+        RingParticleEmitter::RingParticleEmitter(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, ParticleComponent* inpComponent) 
+        :ParticleEmitter(inParams, inpMaterial, inpComponent), mfRadius(1.0f)
         {
             std::string strTemp;
             
@@ -44,9 +44,9 @@ namespace ChilliSource
         /// @param Owning system
         /// @return Ownership of point emitter
         //-----------------------------------------------------
-        CParticleEmitter* CRingParticleEmitter::Create(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, CParticleComponent* inpComponent)
+        ParticleEmitter* RingParticleEmitter::Create(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, ParticleComponent* inpComponent)
         {
-            return new CRingParticleEmitter(inParams, inpMaterial, inpComponent);
+            return new RingParticleEmitter(inParams, inpMaterial, inpComponent);
         }
 		//-----------------------------------------------------
 		/// Emit
@@ -58,7 +58,7 @@ namespace ChilliSource
 		/// @param Particles
 		/// @param Index of current particle
 		//-----------------------------------------------------
-		void CRingParticleEmitter::Emit(Particle* inpParticles, u32 udwParticleIndex)
+		void RingParticleEmitter::Emit(Particle* inpParticles, u32 udwParticleIndex)
         {
             
     

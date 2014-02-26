@@ -27,12 +27,12 @@ namespace ChilliSource
 		///
 		/// Default
 		//-------------------------------------------------------
-		CDynamicSpriteBatch::CDynamicSpriteBatch(RenderSystem* inpRenderSystem) 
+		DynamicSpriteBatch::DynamicSpriteBatch(RenderSystem* inpRenderSystem) 
         : mudwCurrentRenderSpriteBatch(0), mudwSpriteCommandCounter(0)
 		{
             for(u32 i=0; i<kudwNumBuffers; ++i)
             {
-                mpBatch[i] = new CSpriteBatch(kudwMaxSpritesInDynamicBatch, inpRenderSystem, BufferUsage::k_dynamic);
+                mpBatch[i] = new SpriteBatch(kudwMaxSpritesInDynamicBatch, inpRenderSystem, BufferUsage::k_dynamic);
             }
             
             maRenderCommands.reserve(50);
@@ -48,7 +48,7 @@ namespace ChilliSource
         /// @param Render system
         /// @param Sprite data to batch
         //-------------------------------------------------------
-		void CDynamicSpriteBatch::Render(RenderSystem* inpRenderSystem, const CSpriteComponent::SpriteData& inpSprite, const Core::CMatrix4x4 * inpTransform)
+		void DynamicSpriteBatch::Render(RenderSystem* inpRenderSystem, const SpriteComponent::SpriteData& inpSprite, const Core::CMatrix4x4 * inpTransform)
 		{
             //If we exceed the capacity of the buffer then we will be forced to flush it
             if(maSpriteCache.size() >= kudwMaxSpritesInDynamicBatch)
@@ -79,7 +79,7 @@ namespace ChilliSource
         /// Force a render command change so that subsequent
         /// additons to the buffer will not be drawn in this call
         //-------------------------------------------------------
-		void CDynamicSpriteBatch::ForceCommandChange()
+		void DynamicSpriteBatch::ForceCommandChange()
 		{
             if(!maSpriteCache.empty())
             {
@@ -104,7 +104,7 @@ namespace ChilliSource
         ///
         /// @param Render system
         //-------------------------------------------------------
-        void CDynamicSpriteBatch::ForceRender(RenderSystem* inpRenderSystem)
+        void DynamicSpriteBatch::ForceRender(RenderSystem* inpRenderSystem)
         {
             if(!maSpriteCache.empty())
             {
@@ -138,7 +138,7 @@ namespace ChilliSource
         /// 
         /// @param Render system
         //----------------------------------------------------------
-		void CDynamicSpriteBatch::BuildAndFlushBatch(RenderSystem* inpRenderSystem)
+		void DynamicSpriteBatch::BuildAndFlushBatch(RenderSystem* inpRenderSystem)
         {
             if(!maSpriteCache.empty())
             {
@@ -162,7 +162,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Destructor
         //----------------------------------------------------------
-        CDynamicSpriteBatch::~CDynamicSpriteBatch()
+        DynamicSpriteBatch::~DynamicSpriteBatch()
         {
             for(u32 i=0; i<kudwNumBuffers; ++i)
             {

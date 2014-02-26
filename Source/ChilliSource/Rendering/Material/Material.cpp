@@ -81,14 +81,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Active Shader Program
         //----------------------------------------------------------
-        const ShaderPtr& Material::GetActiveShaderProgram() const
+        const ShaderSPtr& Material::GetActiveShaderProgram() const
         {
             return mpActiveShaderProgram;
         }
         //----------------------------------------------------------
         /// Set Shader Program
         //----------------------------------------------------------
-        void Material::SetShaderProgram(ShaderPass inePass, const ShaderPtr &inpShaderProgram)
+        void Material::SetShaderProgram(ShaderPass inePass, const ShaderSPtr &inpShaderProgram)
         {
             mbIsCacheValid = false;
             maShaderPrograms[(u32)inePass] = inpShaderProgram;
@@ -104,7 +104,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Set Texture
 		//----------------------------------------------------------
-		void Material::SetTexture(const TexturePtr &inpTexture, u32 inudwIndex)
+		void Material::SetTexture(const TextureSPtr &inpTexture, u32 inudwIndex)
 		{
             if(inpTexture == nullptr)
                 return;
@@ -123,7 +123,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Add Texture
 		//----------------------------------------------------------
-		void Material::AddTexture(const TexturePtr &inpTexture)
+		void Material::AddTexture(const TextureSPtr &inpTexture)
 		{
             if(inpTexture == nullptr)
                 return;
@@ -135,11 +135,11 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Texture
 		//----------------------------------------------------------
-		const TexturePtr& Material::GetTexture(u32 inudwIndex) const
+		const TextureSPtr& Material::GetTexture(u32 inudwIndex) const
 		{
 			if(mTextures.size() <= inudwIndex)
 			{
-                ITextureManager* pTextureManager = GET_RESOURCE_MANAGER(ITextureManager);
+                TextureManager* pTextureManager = GET_RESOURCE_MANAGER(TextureManager);
 				return pTextureManager->GetDefaultTexture();
 			}
 			return mTextures[inudwIndex];
@@ -147,7 +147,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Textures
 		//----------------------------------------------------------
-		const std::vector<TexturePtr>& Material::GetTextures() const
+		const std::vector<TextureSPtr>& Material::GetTextures() const
 		{
 			return mTextures;
 		}

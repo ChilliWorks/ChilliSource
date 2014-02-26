@@ -70,7 +70,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("Texture", strValue))
             {
-                Texture = LOAD_RESOURCE(Rendering::ITexture, eTextureLocation, strValue);
+                Texture = LOAD_RESOURCE(Rendering::Texture, eTextureLocation, strValue);
             }
             //---Sprite sheet
             Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
@@ -211,7 +211,7 @@ namespace ChilliSource
             
             if(ActAsSpacer == false)
             {
-                Rendering::TexturePtr pTexture;
+                Rendering::TextureSPtr pTexture;
                 Core::Rectangle sNewUVs;
                 
                 if(Texture)
@@ -253,7 +253,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         void ImageView::SetSpriteSheet(const std::string& instrSpriteSheet, Core::StorageLocation ineLocation)
         {
-            SpriteSheet = LOAD_RESOURCE(Rendering::CSpriteSheet, ineLocation, instrSpriteSheet);
+            SpriteSheet = LOAD_RESOURCE(Rendering::SpriteSheet, ineLocation, instrSpriteSheet);
         }
         //--------------------------------------------------------
         /// Set Sprite Sheet
@@ -321,7 +321,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //--------------------------------------------------------
-        void ImageView::SetTexture(const Rendering::TexturePtr& inpTexture)
+        void ImageView::SetTexture(const Rendering::TextureSPtr& inpTexture)
         {
             Texture = inpTexture;
             
@@ -335,7 +335,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //--------------------------------------------------------
-        const Rendering::TexturePtr& ImageView::GetTexture() const
+        const Rendering::TextureSPtr& ImageView::GetTexture() const
         {
             return Texture;
         }

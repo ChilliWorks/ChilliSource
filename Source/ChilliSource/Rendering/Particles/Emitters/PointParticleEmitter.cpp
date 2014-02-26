@@ -22,8 +22,8 @@ namespace ChilliSource
         ///
         /// @param Param Dictionary
         //-------------------------------------------------------------
-        CPointParticleEmitter::CPointParticleEmitter(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, CParticleComponent* inpComponent) 
-        :CParticleEmitter(inParams, inpMaterial, inpComponent)
+        PointParticleEmitter::PointParticleEmitter(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, ParticleComponent* inpComponent) 
+        :ParticleEmitter(inParams, inpMaterial, inpComponent)
         {
             
         }
@@ -37,9 +37,9 @@ namespace ChilliSource
         /// @param Owning system
         /// @return Ownership of point emitter
         //-----------------------------------------------------
-        CParticleEmitter* CPointParticleEmitter::Create(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, CParticleComponent* inpComponent)
+        ParticleEmitter* PointParticleEmitter::Create(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, ParticleComponent* inpComponent)
         {
-            return new CPointParticleEmitter(inParams, inpMaterial, inpComponent);
+            return new PointParticleEmitter(inParams, inpMaterial, inpComponent);
         }
 		//-----------------------------------------------------
 		/// Emit
@@ -51,7 +51,7 @@ namespace ChilliSource
 		/// @param Particles
 		/// @param Index of current particle
 		//-----------------------------------------------------
-		void CPointParticleEmitter::Emit(Particle* inpParticles, u32 udwParticleIndex)
+		void PointParticleEmitter::Emit(Particle* inpParticles, u32 udwParticleIndex)
         {
 			Core::CVector3 vDirection(Core::CMathUtils::RandomInRange(-1.0f, 1.0f),
 									  Core::CMathUtils::RandomInRange(-1.0f, 1.0f),

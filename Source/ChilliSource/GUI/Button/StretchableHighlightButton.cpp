@@ -71,7 +71,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("NormalSpriteSheet", strValue))
             {
-                SetNormalSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eNormalSpriteSheetLocation, strValue));
+                SetNormalSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eNormalSpriteSheetLocation, strValue));
             }
             //---Sprite sheet
             Core::StorageLocation eHighlightSpriteSheetLocation = Core::StorageLocation::k_package;
@@ -81,7 +81,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("HighlightSpriteSheet", strValue))
             {
-                SetHighlightSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eHighlightSpriteSheetLocation, strValue));
+                SetHighlightSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eHighlightSpriteSheetLocation, strValue));
             }
 			//---Default index ID
 			if(insParams.TryGetValue("BaseNormalSpriteSheetIndexID", strValue))

@@ -78,7 +78,7 @@ namespace ChilliSource
 			/// @param Texture to render colour to.
             /// @param Texture to render depth to.
 			//----------------------------------------------------------
-			void RenderToTexture(Core::CScene* inpScene, const TexturePtr &inpColourTarget, const TexturePtr& inpDepthTarget = TexturePtr());
+			void RenderToTexture(Core::CScene* inpScene, const TextureSPtr &inpColourTarget, const TextureSPtr& inpDepthTarget = TextureSPtr());
 			//----------------------------------------------------------
 			/// Get Active Camera Pointer
 			///

@@ -18,7 +18,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CCubemapManager : public ChilliSource::Rendering::ICubemapManager
+		class CCubemapManager : public ChilliSource::Rendering::CubemapManager
 		{
 		public:
 			//----------------------------------------------------------------

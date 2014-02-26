@@ -91,7 +91,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render To Texture
         //----------------------------------------------------------
-        void Renderer::RenderToTexture(Core::CScene* inpScene, const TexturePtr& inpColourTarget, const TexturePtr& inpDepthTarget)
+        void Renderer::RenderToTexture(Core::CScene* inpScene, const TextureSPtr& inpColourTarget, const TextureSPtr& inpDepthTarget)
 		{
             //get the width and height
             u32 udwWidth = 1;

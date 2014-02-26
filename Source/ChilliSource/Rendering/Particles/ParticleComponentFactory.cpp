@@ -22,14 +22,14 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(CParticleComponentFactory);
+		DEFINE_NAMED_INTERFACE(ParticleComponentFactory);
 		
 		//--------------------------------------------------------
 		/// Constructor
 		///
 		/// Default
 		//--------------------------------------------------------
-		CParticleComponentFactory::CParticleComponentFactory(CParticleSystem* inpParticleSystem, CParticleEmitterFactory* inpEmitterFactory, CParticleEffectorFactory* inpEffectorFactory) :
+		ParticleComponentFactory::ParticleComponentFactory(ParticleSystem* inpParticleSystem, ParticleEmitterFactory* inpEmitterFactory, ParticleEffectorFactory* inpEffectorFactory) :
         mpParticleSystem(inpParticleSystem), mpMaterialMgr(nullptr), mpEmitterFactory(inpEmitterFactory), mpEffectorFactory(inpEffectorFactory)
 		{
 
@@ -40,9 +40,9 @@ namespace ChilliSource
         /// @param Interface ID
         /// @return Whether the object is of given type
         //-------------------------------------------------------
-		bool CParticleComponentFactory::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool ParticleComponentFactory::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == CParticleComponentFactory::InterfaceID;
+			return inInterfaceID == ParticleComponentFactory::InterfaceID;
 		}
 		//--------------------------------------------------------
 		/// Can Produce Component With Interface
@@ -53,9 +53,9 @@ namespace ChilliSource
 		/// @param The ID of the component to create
 		/// @return Whether the object can create component of ID
 		//--------------------------------------------------------
-		bool CParticleComponentFactory::CanProduceComponentWithInterface(Core::InterfaceIDType inTypeID) const
+		bool ParticleComponentFactory::CanProduceComponentWithInterface(Core::InterfaceIDType inTypeID) const
 		{
-			return (CParticleComponent::InterfaceID == inTypeID);
+			return (ParticleComponent::InterfaceID == inTypeID);
 		}
         //----------------------------------------------------------------------------
         /// Can Produce Component With Type Name
@@ -63,9 +63,9 @@ namespace ChilliSource
         /// @param Type name
         /// @return Whether the factory can produce components with the given name
         //----------------------------------------------------------------------------
-		bool CParticleComponentFactory::CanProduceComponentWithTypeName(const std::string & incName) const
+		bool ParticleComponentFactory::CanProduceComponentWithTypeName(const std::string & incName) const
 		{
-			return (CParticleComponent::TypeName == incName);
+			return (ParticleComponent::TypeName == incName);
 		}
         //--------------------------------------------------------
         /// Register Emitter Type
@@ -75,7 +75,7 @@ namespace ChilliSource
         /// @param Delegate
         /// @param Emitter type name
         //--------------------------------------------------------
-        void CParticleComponentFactory::RegisterEmitterType(const CParticleEmitterFactory::EmitterCreateDelegate& inDelegate, const std::string& instrName)
+        void ParticleComponentFactory::RegisterEmitterType(const ParticleEmitterFactory::EmitterCreateDelegate& inDelegate, const std::string& instrName)
         {
             mpEmitterFactory->Register(inDelegate, instrName);
         }
@@ -87,7 +87,7 @@ namespace ChilliSource
         /// @param Delegate
         /// @param Effector type name
         //--------------------------------------------------------
-        void CParticleComponentFactory::RegisterEffectorType(const CParticleEffectorFactory::EffectorCreateDelegate& inDelegate, const std::string& instrName)
+        void ParticleComponentFactory::RegisterEffectorType(const ParticleEffectorFactory::EffectorCreateDelegate& inDelegate, const std::string& instrName)
         {
             mpEffectorFactory->Register(inDelegate, instrName);
         }
@@ -98,9 +98,9 @@ namespace ChilliSource
         ///
         /// @return Particle Component
         //--------------------------------------------------------
-        ParticleComponentPtr CParticleComponentFactory::CreateParticleComponent()
+        ParticleComponentPtr ParticleComponentFactory::CreateParticleComponent()
 		{
-			ParticleComponentPtr pParticleComp(new CParticleComponent());
+			ParticleComponentPtr pParticleComp(new ParticleComponent());
 			mpParticleSystem->AddParticleComponent(pParticleComp.get());			
 			return pParticleComp;
 		}
@@ -113,9 +113,9 @@ namespace ChilliSource
         /// @param The filepath
         /// @return Particle Component
         //--------------------------------------------------------
-        ParticleComponentPtr CParticleComponentFactory::CreateParticleComponentFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile)
+        ParticleComponentPtr ParticleComponentFactory::CreateParticleComponentFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile)
 		{
-			ParticleComponentPtr pParticleComp(new CParticleComponent());
+			ParticleComponentPtr pParticleComp(new ParticleComponent());
             
             //Load script
             TiXmlDocument Doc(instrScriptFile);

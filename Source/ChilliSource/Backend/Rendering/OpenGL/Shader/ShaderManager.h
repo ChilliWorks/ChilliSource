@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CShaderManager : public ChilliSource::Rendering::IShaderManager
+		class CShaderManager : public ChilliSource::Rendering::ShaderManager
 		{
 		public:
 			//----------------------------------------------------------------
@@ -30,7 +30,7 @@ namespace ChilliSource
 			/// @return Concrete shader resource object based on the render
 			/// system
 			//----------------------------------------------------------------
-			ChilliSource::Rendering::ShaderPtr CreateShaderResource() const;
+			ChilliSource::Rendering::ShaderSPtr CreateShaderResource() const;
 			//----------------------------------------------------------------
 			/// Manages Resource With Extension
 			///
@@ -49,7 +49,7 @@ namespace ChilliSource
 			/// @param Out: Shader resource
 			/// @return Success
 			//---------------------------------------------------------
-			bool CreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ChilliSource::Rendering::ShaderPtr& outpShader);
+			bool CreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ChilliSource::Rendering::ShaderSPtr& outpShader);
 			//---------------------------------------------------------
 			/// Async Create Shader Program From File
 			///
@@ -61,7 +61,7 @@ namespace ChilliSource
 			/// @param Out: Shader resource
 			/// @return Success
 			//---------------------------------------------------------
-			bool AsyncCreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ChilliSource::Rendering::ShaderPtr& outpShader);
+			bool AsyncCreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ChilliSource::Rendering::ShaderSPtr& outpShader);
 			//---------------------------------------------------------
 			/// Load Shader Task
 			///
@@ -70,7 +70,7 @@ namespace ChilliSource
             /// @param Pixel shader file path
 			/// @param Out: Shader resource
 			//---------------------------------------------------------
-			void LoadShaderTask(Core::StorageLocation ineStorageLocation, const std::string &instrVSFilePath, const std::string &instrPSFilePath, ChilliSource::Rendering::ShaderPtr& outpShader);
+			void LoadShaderTask(Core::StorageLocation ineStorageLocation, const std::string &instrVSFilePath, const std::string &instrPSFilePath, ChilliSource::Rendering::ShaderSPtr& outpShader);
 			//---------------------------------------------------------
 			/// Compile Shader Task
 			///
@@ -78,7 +78,7 @@ namespace ChilliSource
 			/// @param Pixel shader
 			/// @param Out: Shader resource
 			//---------------------------------------------------------
-			void CompileShaderTask(const std::string& insstrVS, const std::string& insstrPS, ChilliSource::Rendering::ShaderPtr& outpShader);
+			void CompileShaderTask(const std::string& insstrVS, const std::string& insstrPS, ChilliSource::Rendering::ShaderSPtr& outpShader);
 			//-----------------------------------------------------------------
 			/// Restore
 			///

@@ -1,5 +1,5 @@
 /*
- *  ICubemapManager.cpp
+ *  CubemapManager.cpp
  *  moFlow
  *
  *  Created by Tag Games on 01/10/2010.
@@ -19,12 +19,12 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(ICubemapManager);
+		DEFINE_NAMED_INTERFACE(CubemapManager);
 		
 		//----------------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------------
-		ICubemapManager::ICubemapManager()
+		CubemapManager::CubemapManager()
 		{
 			
 		}
@@ -35,34 +35,34 @@ namespace ChilliSource
 		/// @param The interface to compare
 		/// @return Whether the object implements that interface
 		//----------------------------------------------------------------
-		bool ICubemapManager::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool CubemapManager::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == ICubemapManager::InterfaceID;
+			return inInterfaceID == CubemapManager::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Get Resource Type
 		///
 		/// @return The type of resource this manager handles
 		//----------------------------------------------------------------
-		Core::InterfaceIDType ICubemapManager::GetResourceType() const
+		Core::InterfaceIDType CubemapManager::GetResourceType() const
 		{
-			return ICubemap::InterfaceID;
+			return Cubemap::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Manages Resource Of Type
 		///
 		/// @return Whether this object manages the object of type
 		//----------------------------------------------------------------
-		bool ICubemapManager::ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const
+		bool CubemapManager::ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == ICubemap::InterfaceID;
+			return inInterfaceID == Cubemap::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Get Provider Type
 		///
 		/// @return The type of resource it consumes from resource provider
 		//----------------------------------------------------------------
-		Core::InterfaceIDType ICubemapManager::GetProviderType() const
+		Core::InterfaceIDType CubemapManager::GetProviderType() const
 		{
 			return Core::CImage::InterfaceID;
 		}
@@ -74,7 +74,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr ICubemapManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr CubemapManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetCubemapFromFile(ineStorageLocation, instrFilePath, Core::CImage::Format::k_default, false);
 		}
@@ -86,7 +86,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr ICubemapManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr CubemapManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetCubemapFromFile(ineStorageLocation, instrFilePath, Core::CImage::Format::k_default, false);
 		}
@@ -102,7 +102,7 @@ namespace ChilliSource
 		/// @param Generate mip-maps. Default = false
 		/// @return A handle to the Cubemap
 		//----------------------------------------------------------------
-		CubemapPtr ICubemapManager::GetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
+		CubemapPtr CubemapManager::GetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -158,7 +158,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				return std::static_pointer_cast<ICubemap>(pExistingResource->second);
+				return std::static_pointer_cast<Cubemap>(pExistingResource->second);
 			}
 			
 			CS_ERROR_LOG("Cannot find resource for Cubemap with base path " + inFilePath);
@@ -178,7 +178,7 @@ namespace ChilliSource
 		/// @param Enable mip-mapping
 		/// @return Generic pointer to resource type
 		//-----------------------------------------------------------------
-		CubemapPtr ICubemapManager::AsyncGetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
+		CubemapPtr CubemapManager::AsyncGetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -204,7 +204,7 @@ namespace ChilliSource
 				Desc.pCubemapResource->SetStorageLocation(ineStorageLocation);
 
 				//Load image as a task. Once it completed we can load the Cubemap as it should be done on the main thread
-				Core::Task<ImageDesc&> ImageLoadTask(this, &ICubemapManager::ImageLoadTask, Desc);
+				Core::Task<ImageDesc&> ImageLoadTask(this, &CubemapManager::ImageLoadTask, Desc);
 				Core::CTaskScheduler::ScheduleTask(ImageLoadTask);
 				
 				//add resource to the resource map
@@ -214,7 +214,7 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				return std::static_pointer_cast<ICubemap>(pExistingResource->second);
+				return std::static_pointer_cast<Cubemap>(pExistingResource->second);
 			}
 		}
 		//-----------------------------------------------------------------------------------
@@ -224,7 +224,7 @@ namespace ChilliSource
 		///
 		/// @param Image descriptor
 		//-----------------------------------------------------------------------------------
-		void ICubemapManager::ImageLoadTask(ImageDesc& inDesc)
+		void CubemapManager::ImageLoadTask(ImageDesc& inDesc)
 		{
             std::string strPath;
             std::string strExt;
@@ -247,7 +247,7 @@ namespace ChilliSource
                     }
                     
                     //Load the Cubemap from this image
-                    Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<const std::vector<Core::ResourcePtr>&, bool, CubemapPtr&>(this, &ICubemapManager::CubemapLoadTask, inDesc.pImageResources, inDesc.bUseMipmaps, inDesc.pCubemapResource));
+                    Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<const std::vector<Core::ResourcePtr>&, bool, CubemapPtr&>(this, &CubemapManager::CubemapLoadTask, inDesc.pImageResources, inDesc.bUseMipmaps, inDesc.pCubemapResource));
                     return;
                 }
 			}
@@ -263,7 +263,7 @@ namespace ChilliSource
 		/// @param With mipmapping
 		/// @param Cubemap to create
 		//-----------------------------------------------------------------------------------
-		void ICubemapManager::CubemapLoadTask(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, CubemapPtr& outpCubemap)
+		void CubemapManager::CubemapLoadTask(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, CubemapPtr& outpCubemap)
 		{
             if(CreateCubemapFromImages(inaImages, inbWithMipsMaps, outpCubemap))
             {

@@ -34,7 +34,7 @@ namespace ChilliSource
 		/// @param Interface to compare
 		/// @return Whether the object implements the given interface
 		//-------------------------------------------------------------------------
-		bool CSpriteSheetLoader::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool SpriteSheetLoader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == IResourceProvider::InterfaceID;
 		}
@@ -44,9 +44,9 @@ namespace ChilliSource
 		/// @param Type to compare
 		/// @return Whether the object can create a resource of given type
 		//----------------------------------------------------------------------------
-		bool CSpriteSheetLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
+		bool SpriteSheetLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == CSpriteSheet::InterfaceID);
+			return (inInterfaceID == SpriteSheet::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource From File With Extension
@@ -55,7 +55,7 @@ namespace ChilliSource
 		/// @param Extension to compare
 		/// @return Whether the object can create a resource with the given extension
 		//----------------------------------------------------------------------------
-		bool CSpriteSheetLoader::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
+		bool SpriteSheetLoader::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
 		{
 			return (inExtension == kstrTagSpriteExtension);
 		}
@@ -67,7 +67,7 @@ namespace ChilliSource
 		/// @param Out: Resource object
 		/// @return Whether the resource loaded
 		//----------------------------------------------------------------------------
-		bool CSpriteSheetLoader::CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool SpriteSheetLoader::CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
 			ChilliSource::Core::FileStreamPtr binary_file = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath, ChilliSource::Core::FileMode::k_readBinary);
 			
@@ -121,14 +121,14 @@ namespace ChilliSource
 			}
 			
 			//Now copy the data into our sprite data buffer as it is now in the correct format
-			CSpriteSheet* pSpriteSheet = (CSpriteSheet*)(outpResource.get());
+			SpriteSheet* pSpriteSheet = (SpriteSheet*)(outpResource.get());
             pSpriteSheet->SetSpriteSheetSize(wSpriteSheetWidth, wSpriteSheetHeight);
 			pSpriteSheet->SetNumSpriteFrames(NumSprites);
 			
             s16 *pFrame = SBuffer;
 			for(s32 i = 0; i < NumSprites; ++i)
 			{
-				CSpriteSheet::SpriteFrame Frame;
+				SpriteSheet::SpriteFrame Frame;
 				
 				Frame.U			= pFrame[0];
 				Frame.V			= pFrame[1];

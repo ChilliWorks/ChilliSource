@@ -25,9 +25,9 @@ namespace ChilliSource
 		/// @return Concrete shader resource object based on the render
 		/// system
 		//----------------------------------------------------------------
-		ChilliSource::Rendering::ShaderPtr CShaderManager::CreateShaderResource() const
+		ChilliSource::Rendering::ShaderSPtr CShaderManager::CreateShaderResource() const
 		{
-			return ChilliSource::Rendering::ShaderPtr(new CShader());
+			return ChilliSource::Rendering::ShaderSPtr(new CShader());
 		}
 		//----------------------------------------------------------------
 		/// Manages Resource With Extension
@@ -50,7 +50,7 @@ namespace ChilliSource
 		/// @param Out: Shader resource
 		/// @return Success
 		//---------------------------------------------------------
-		bool CShaderManager::CreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ChilliSource::Rendering::ShaderPtr& outpShader)
+		bool CShaderManager::CreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ChilliSource::Rendering::ShaderSPtr& outpShader)
 		{
 			std::shared_ptr<CShader> pGLShader = std::static_pointer_cast<CShader>(outpShader);
 			
@@ -61,7 +61,7 @@ namespace ChilliSource
 			if(pShaderResource != mMapFilenameToResource.end())
 			{
 				//It's already linked baby!
-				outpShader = std::static_pointer_cast<ChilliSource::Rendering::IShader>(pShaderResource->second);
+				outpShader = std::static_pointer_cast<ChilliSource::Rendering::Shader>(pShaderResource->second);
 				return true;
 			} 
 			
@@ -98,7 +98,7 @@ namespace ChilliSource
 		/// @param Out: Shader resource
 		/// @return Success
 		//---------------------------------------------------------
-		bool CShaderManager::AsyncCreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ChilliSource::Rendering::ShaderPtr& outpShader)
+		bool CShaderManager::AsyncCreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ChilliSource::Rendering::ShaderSPtr& outpShader)
 		{
 			std::shared_ptr<CShader> pGLShader = std::static_pointer_cast<CShader>(outpShader);
 			
@@ -110,7 +110,7 @@ namespace ChilliSource
 			if(pShaderResource != mMapFilenameToResource.end())
 			{
 				//It's already linked baby!
-				outpShader = std::static_pointer_cast<Rendering::IShader>(pShaderResource->second);
+				outpShader = std::static_pointer_cast<Rendering::Shader>(pShaderResource->second);
 				return true;
 			}
 			
@@ -118,7 +118,7 @@ namespace ChilliSource
 			mMapFilenameToResource.insert(std::make_pair(instrFilePath, outpShader));
 			
 			//create a task for loading the shader in the background
-            Core::CTaskScheduler::ScheduleTask(Core::Task<Core::StorageLocation, const std::string&, const std::string&, ChilliSource::Rendering::ShaderPtr&>(this, &CShaderManager::LoadShaderTask, ineStorageLocation, instrFilePath + "." + kstrGLVertexShaderExtension, instrFilePath + "." + kstrGLFragmentShaderExtension, outpShader));
+            Core::CTaskScheduler::ScheduleTask(Core::Task<Core::StorageLocation, const std::string&, const std::string&, ChilliSource::Rendering::ShaderSPtr&>(this, &CShaderManager::LoadShaderTask, ineStorageLocation, instrFilePath + "." + kstrGLVertexShaderExtension, instrFilePath + "." + kstrGLFragmentShaderExtension, outpShader));
 			
 			return true;
 		}
@@ -130,7 +130,7 @@ namespace ChilliSource
 		/// @param Pixel shader file path
 		/// @param Out: Shader resource
 		//---------------------------------------------------------
-		void CShaderManager::LoadShaderTask(Core::StorageLocation ineStorageLocation, const std::string &instrVSFilePath, const std::string &instrPSFilePath, ChilliSource::Rendering::ShaderPtr& outpShader)
+		void CShaderManager::LoadShaderTask(Core::StorageLocation ineStorageLocation, const std::string &instrVSFilePath, const std::string &instrPSFilePath, ChilliSource::Rendering::ShaderSPtr& outpShader)
 		{
 			std::shared_ptr<CShader> pGLShader = std::static_pointer_cast<CShader>(outpShader);
 			
@@ -161,14 +161,14 @@ namespace ChilliSource
 			}
 			
 			//schedule a task for the main thread to compile the shader
-			Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<const std::string&, const std::string&, ChilliSource::Rendering::ShaderPtr&>(this, &CShaderManager::CompileShaderTask, sstrVS.str(), sstrPS.str(), outpShader));
+			Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<const std::string&, const std::string&, ChilliSource::Rendering::ShaderSPtr&>(this, &CShaderManager::CompileShaderTask, sstrVS.str(), sstrPS.str(), outpShader));
 		}
 		//---------------------------------------------------------
 		/// Compile Shader Task
 		///
 		/// @param Out: Shader resource
 		//---------------------------------------------------------
-		void CShaderManager::CompileShaderTask(const std::string& instrVS,const std::string& instrPS, ChilliSource::Rendering::ShaderPtr& outpShader)
+		void CShaderManager::CompileShaderTask(const std::string& instrVS,const std::string& instrPS, ChilliSource::Rendering::ShaderSPtr& outpShader)
 		{
 			std::shared_ptr<CShader> pGLShader = std::static_pointer_cast<CShader>(outpShader);
 			

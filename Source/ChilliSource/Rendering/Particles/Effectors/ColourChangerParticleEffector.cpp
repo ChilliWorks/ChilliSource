@@ -19,7 +19,7 @@ namespace ChilliSource
         ///
         /// @param Param dictionary
         //----------------------------------------------------
-        CColourChangerParticleEffector::CColourChangerParticleEffector(const Core::ParamDictionary& insParams)
+        ColourChangerParticleEffector::ColourChangerParticleEffector(const Core::ParamDictionary& insParams)
         :mbInitialColourSet(false)
         {
             mfActiveEnergyLevel = 0.0f;
@@ -45,9 +45,9 @@ namespace ChilliSource
         /// @param Param dictionary
         /// @return Ownership of effector
         //-----------------------------------------------------
-        IParticleEffector* CColourChangerParticleEffector::Create(const Core::ParamDictionary& inParams)
+        ParticleEffector* ColourChangerParticleEffector::Create(const Core::ParamDictionary& inParams)
         {
-            return new CColourChangerParticleEffector(inParams);
+            return new ColourChangerParticleEffector(inParams);
         }
         //-----------------------------------------------------
         /// Init
@@ -57,7 +57,7 @@ namespace ChilliSource
         ///
         /// @param Particle to intialise
         //-----------------------------------------------------
-        void CColourChangerParticleEffector::Init(Particle* inpParticle, u32 inudwIndex)
+        void ColourChangerParticleEffector::Init(Particle* inpParticle, u32 inudwIndex)
         {
             //Doesn't require initing
         }
@@ -70,7 +70,7 @@ namespace ChilliSource
         /// @param Particle to effect
         /// @param Time between frames
         //-----------------------------------------------------
-        void CColourChangerParticleEffector::Apply(Particle* inpParticle, u32 inudwIndex, f32 infDt)
+        void ColourChangerParticleEffector::Apply(Particle* inpParticle, u32 inudwIndex, f32 infDt)
         {
             f32 fEnergy = inpParticle->fEnergy[inudwIndex];
             

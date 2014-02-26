@@ -20,9 +20,9 @@ namespace ChilliSource
 		///
 		/// @return Concrete texture resource based on the render system
 		//----------------------------------------------------------------
-		ChilliSource::Rendering::TexturePtr CTextureManager::CreateTextureResource()
+		ChilliSource::Rendering::TextureSPtr CTextureManager::CreateTextureResource()
 		{
-			Rendering::TexturePtr pTexture(new CTexture(this));
+			Rendering::TextureSPtr pTexture(new CTexture(this));
 			AddRestorableTexture(pTexture);
 			return pTexture;
 		}
@@ -34,7 +34,7 @@ namespace ChilliSource
         ///
         /// @param mopFlow Texture to create Image from
         //----------------------------------------------------------------
-        bool CTextureManager::CreateImageFromTexture(Rendering::ITexture* inpTexture, Core::ImagePtr& outpImage)
+        bool CTextureManager::CreateImageFromTexture(Rendering::Texture* inpTexture, Core::ImagePtr& outpImage)
         {
             return ((CTexture*)inpTexture)->CreateImage(outpImage);
         }
@@ -46,7 +46,7 @@ namespace ChilliSource
 		/// @param Out: Texture resource
 		/// @return Success
 		//----------------------------------------------------------------
-		bool CTextureManager::CreateTextureFromImage(Core::CImage * inpImage, bool inbWithMipsMaps, ChilliSource::Rendering::TexturePtr& outpTexture)
+		bool CTextureManager::CreateTextureFromImage(Core::CImage * inpImage, bool inbWithMipsMaps, ChilliSource::Rendering::TextureSPtr& outpTexture)
 		{
 			std::static_pointer_cast<CTexture>(outpTexture)->Init(inpImage, inbWithMipsMaps);
 			return true;
@@ -58,7 +58,7 @@ namespace ChilliSource
 		/// @param Texture height
 		/// @return Texture resource
 		//----------------------------------------------------------------
-		bool CTextureManager::CreateEmptyTexture(u32 inudwWidth, u32 inudwHeight, Core::CImage::Format ineFormat, ChilliSource::Rendering::TexturePtr& outpTexture)
+		bool CTextureManager::CreateEmptyTexture(u32 inudwWidth, u32 inudwHeight, Core::CImage::Format ineFormat, ChilliSource::Rendering::TextureSPtr& outpTexture)
 		{
 			std::static_pointer_cast<CTexture>(outpTexture)->Init(inudwWidth, inudwHeight, ineFormat);
 			outpTexture->SetLoaded(true);
@@ -75,7 +75,7 @@ namespace ChilliSource
 #ifdef TARGET_ANDROID
 			for(std::vector<Rendering::TextureWeakPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
 			{
-				if (Rendering::TexturePtr pTexture = (*it).lock())
+				if (Rendering::TextureSPtr pTexture = (*it).lock())
 				{
 					if(pTexture->IsLoaded())
 					{
@@ -111,7 +111,7 @@ namespace ChilliSource
 
 			for(std::vector<Rendering::TextureWeakPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
 			{
-				if (Rendering::TexturePtr pTexture = (*it).lock())
+				if (Rendering::TextureSPtr pTexture = (*it).lock())
 				{
 					if(pTexture->IsLoaded())
 					{
@@ -160,7 +160,7 @@ namespace ChilliSource
 		///
 		/// @param The texture pointer.
 		//----------------------------------------------------------------
-		void CTextureManager::AddRestorableTexture(const Rendering::TexturePtr& inpTexture)
+		void CTextureManager::AddRestorableTexture(const Rendering::TextureSPtr& inpTexture)
 		{
 #ifdef TARGET_ANDROID
 			mapTextureCache.push_back(Rendering::TextureWeakPtr(inpTexture));
@@ -179,7 +179,7 @@ namespace ChilliSource
 #ifdef TARGET_ANDROID
 			for(std::vector<Rendering::TextureWeakPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
 			{
-				if (Rendering::TexturePtr pTexture = (*it).lock())
+				if (Rendering::TextureSPtr pTexture = (*it).lock())
 				{
 					if (pTexture.get() == inpTexture)
 					{

@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CSpriteSheet : public Core::IResource
+		class SpriteSheet : public Core::IResource
 		{
 		public:
 			
@@ -39,10 +39,10 @@ namespace ChilliSource
 			
 			typedef Frame SpriteFrame;
 			
-			DECLARE_NAMED_INTERFACE(CSpriteSheet);
+			DECLARE_NAMED_INTERFACE(SpriteSheet);
 			
-			CSpriteSheet();
-			virtual ~CSpriteSheet(){}
+			SpriteSheet();
+			virtual ~SpriteSheet(){}
 			
 			//---------------------------------------------------------------------
 			/// Is A
@@ -171,13 +171,13 @@ namespace ChilliSource
 			///
 			/// @param Texture
 			//---------------------------------------------------------------------
-			void SetTexture(const TexturePtr& inpTex);
+			void SetTexture(const TextureSPtr& inpTex);
 			//---------------------------------------------------------------------
 			/// Get Texture
 			///
 			/// return Texture
 			//---------------------------------------------------------------------
-			const TexturePtr& GetTexture() const;			
+			const TextureSPtr& GetTexture() const;			
 			//---------------------------------------------------------------------
 			/// Animations
 			//---------------------------------------------------------------------		
@@ -237,7 +237,7 @@ namespace ChilliSource
             //---------------------------------------------------------------------
             s16 GetSpriteSheetHeight() { return mwSpriteSheetHeight; }
 		private:
-			TexturePtr mpTexture;
+			TextureSPtr mpTexture;
 			
             s16        mwSpriteSheetWidth;
             s16        mwSpriteSheetHeight;
@@ -248,7 +248,7 @@ namespace ChilliSource
             std::vector<u32> mIDLookups;
             std::vector<std::string> mStringIDLookups;
 			
-			friend class ISpriteSheetManager;
+			friend class SpriteSheetManager;
 		};
 	}
 }

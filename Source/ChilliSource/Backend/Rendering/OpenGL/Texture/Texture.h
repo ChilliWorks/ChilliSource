@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CTexture : public ChilliSource::Rendering::ITexture
+		class CTexture : public ChilliSource::Rendering::Texture
 		{
 		public:
 

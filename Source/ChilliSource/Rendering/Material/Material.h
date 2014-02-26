@@ -112,13 +112,13 @@ namespace ChilliSource
 			///
 			/// @return Shader resource for rendering with 
 			//----------------------------------------------------------
-			const ShaderPtr& GetActiveShaderProgram() const;
+			const ShaderSPtr& GetActiveShaderProgram() const;
             //----------------------------------------------------------
 			/// Set Shader Program
 			///
 			/// @param Shader resource
 			//----------------------------------------------------------
-			void SetShaderProgram(ShaderPass inePass, const ShaderPtr &inpShaderProgram);
+			void SetShaderProgram(ShaderPass inePass, const ShaderSPtr &inpShaderProgram);
             //----------------------------------------------------------
 			/// Clear Textures
 			//----------------------------------------------------------
@@ -129,26 +129,26 @@ namespace ChilliSource
 			/// @param Texture 
 			/// @param At index
 			//----------------------------------------------------------
-			void SetTexture(const TexturePtr &inpTexture, u32 inudwIndex = 0);
+			void SetTexture(const TextureSPtr &inpTexture, u32 inudwIndex = 0);
 			//----------------------------------------------------------
 			/// Add Texture
 			///
 			/// @param Texture 
 			//----------------------------------------------------------
-			void AddTexture(const TexturePtr &inpTexture);
+			void AddTexture(const TextureSPtr &inpTexture);
 			//----------------------------------------------------------
 			/// Get Texture
 			///
 			/// @param Index to check
 			/// @return Texture 
 			//----------------------------------------------------------
-			const TexturePtr& GetTexture(u32 inudwIndex = 0) const;
+			const TextureSPtr& GetTexture(u32 inudwIndex = 0) const;
 			//----------------------------------------------------------
 			/// Get Textures
 			///
 			/// @return Texture array
 			//----------------------------------------------------------
-			const std::vector<TexturePtr>& GetTextures() const;
+			const std::vector<TextureSPtr>& GetTextures() const;
             //----------------------------------------------------------
 			/// Set Cubemap
 			///
@@ -435,12 +435,12 @@ namespace ChilliSource
 
 		private:
             
-            std::vector<TexturePtr> mTextures;
+            std::vector<TextureSPtr> mTextures;
             
             CubemapPtr mpCubemap;
             
-            ShaderPtr maShaderPrograms[(u32)ShaderPass::k_total];
-            ShaderPtr mpActiveShaderProgram;
+            ShaderSPtr maShaderPrograms[(u32)ShaderPass::k_total];
+            ShaderSPtr mpActiveShaderProgram;
 			
 			Core::CColour mEmissive;
             Core::CColour mAmbient;

@@ -39,7 +39,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		bool CShader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IShader::InterfaceID;
+			return inInterfaceID == Shader::InterfaceID;
 		}
 		//----------------------------------------------------------
 		/// Get Program ID

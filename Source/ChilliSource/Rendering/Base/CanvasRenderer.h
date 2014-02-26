@@ -62,7 +62,7 @@ namespace ChilliSource
             /// @param Colour
             /// @param Box origin alignment
             //-----------------------------------------------------------
-			void DrawBox(const Core::CMatrix3x3& inmatTransform, const Core::CVector2 & invSize, const TexturePtr & inpTexture, const Core::Rectangle& inUVs, 
+			void DrawBox(const Core::CMatrix3x3& inmatTransform, const Core::CVector2 & invSize, const TextureSPtr & inpTexture, const Core::Rectangle& inUVs, 
                          const Core::CColour & insTintColour, Core::AlignmentAnchor ineAlignment = Core::AlignmentAnchor::k_middleCentre);
             //-----------------------------------------------------------
             /// Draw String
@@ -192,13 +192,13 @@ namespace ChilliSource
 			
 		private:
 			
-			CSpriteComponent::SpriteData   msCachedSprite;
+			SpriteComponent::SpriteData   msCachedSprite;
             MaterialPtr                    mpDefaultMaterial;
             MaterialPtr                    mpDistanceFont;
             MaterialPtr                    mpDistanceFontOutlined;
             
             
-            CDynamicSpriteBatch mOverlayBatcher;
+            DynamicSpriteBatch mOverlayBatcher;
             
 			std::vector<Core::CVector2> mScissorPos;
             std::vector<Core::CVector2> mScissorSize;

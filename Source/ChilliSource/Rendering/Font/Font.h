@@ -132,13 +132,13 @@ namespace ChilliSource
             ///
             /// @param Texture containing the font
             //-------------------------------------------
-            void SetTexture(const TexturePtr& inpTex);
+            void SetTexture(const TextureSPtr& inpTex);
 			//-------------------------------------------
 			/// Get Texture
 			///
 			/// @return Font texture 
 			//-------------------------------------------
-			const TexturePtr& GetTexture() const;
+			const TextureSPtr& GetTexture() const;
 			//-------------------------------------------
 			/// Set Character Data
 			///
@@ -242,7 +242,7 @@ namespace ChilliSource
             std::vector<CKernPair> maPairs;
                     
 			//The font bitmap
-			TexturePtr mpTexture;
+			TextureSPtr mpTexture;
 			
 			//The location and width etc of each character on the tpage
 			SpriteSheetPtr mpCharacterData;

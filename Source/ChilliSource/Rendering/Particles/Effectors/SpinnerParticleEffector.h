@@ -18,10 +18,10 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        class CSpinnerParticleEffector : public IParticleEffector
+        class SpinnerParticleEffector : public ParticleEffector
         {
         public:
-            CSpinnerParticleEffector(const Core::ParamDictionary& insParams);
+            SpinnerParticleEffector(const Core::ParamDictionary& insParams);
             //-----------------------------------------------------
             /// Create
             ///
@@ -30,7 +30,7 @@ namespace ChilliSource
             /// @param Param dictionary
             /// @return Ownership of effector
             //-----------------------------------------------------
-            static IParticleEffector* Create(const Core::ParamDictionary& inParams);
+            static ParticleEffector* Create(const Core::ParamDictionary& inParams);
             //-----------------------------------------------------
             /// Init
             ///

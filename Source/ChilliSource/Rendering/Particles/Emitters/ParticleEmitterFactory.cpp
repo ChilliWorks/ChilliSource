@@ -22,7 +22,7 @@ namespace ChilliSource
         /// @param Emitter instance static create delegate
         /// @param Key string
         //------------------------------------------------------------------
-        void CParticleEmitterFactory::Register(const EmitterCreateDelegate& inDelegate, const std::string& instrKey)
+        void ParticleEmitterFactory::Register(const EmitterCreateDelegate& inDelegate, const std::string& instrKey)
         {
             mmapDelegateToType.insert(std::make_pair(instrKey, inDelegate));
         }
@@ -37,8 +37,8 @@ namespace ChilliSource
         /// @param Owning particle system
         /// @return Ownership of particle emitter of that type
         //-------------------------------------------------------------------
-        CParticleEmitter* CParticleEmitterFactory::CreateParticleEmitter(const std::string& instrType, const Core::ParamDictionary& insParams, 
-                                                                         const MaterialPtr& inpMaterial, CParticleComponent* inpOwner)
+        ParticleEmitter* ParticleEmitterFactory::CreateParticleEmitter(const std::string& instrType, const Core::ParamDictionary& insParams, 
+                                                                         const MaterialPtr& inpMaterial, ParticleComponent* inpOwner)
         {
             MapDelegateToString::iterator it = mmapDelegateToType.find(instrType);
             

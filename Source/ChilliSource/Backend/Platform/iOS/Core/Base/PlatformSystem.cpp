@@ -190,8 +190,8 @@ namespace ChilliSource
             inaSystems.push_back(Core::SystemPtr(pRenderCapabilities));
             inaSystems.push_back(Core::SystemPtr(new iOS::ImageLoader()));
             inaSystems.push_back(Core::SystemPtr(new Core::CMoImageProvider()));
-			inaSystems.push_back(Core::SystemPtr(new Rendering::CSpriteSheetLoader()));
-			inaSystems.push_back(Core::SystemPtr(new Rendering::CXMLSpriteSheetLoader()));
+			inaSystems.push_back(Core::SystemPtr(new Rendering::SpriteSheetLoader()));
+			inaSystems.push_back(Core::SystemPtr(new Rendering::XMLSpriteSheetLoader()));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::MaterialLoader(pRenderCapabilities)));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::FontLoader()));
             inaSystems.push_back(Core::SystemPtr(new Rendering::AnimatedMeshComponentUpdater()));

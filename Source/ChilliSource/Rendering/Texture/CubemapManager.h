@@ -18,14 +18,14 @@ namespace ChilliSource
 {	
 	namespace Rendering
 	{
-		class ICubemapManager: public Core::IResourceManager
+		class CubemapManager: public Core::IResourceManager
 		{
 		public:
 			
-			DECLARE_NAMED_INTERFACE(ICubemapManager);
+			DECLARE_NAMED_INTERFACE(CubemapManager);
 			
-			ICubemapManager();
-			virtual ~ICubemapManager(){}
+			CubemapManager();
+			virtual ~CubemapManager(){}
 			//----------------------------------------------------------------
 			/// Is A
 			///
@@ -109,7 +109,7 @@ namespace ChilliSource
 			/// Create Cubemap From Image
 			///
 			/// Rendersystem specific implementations should override this
-			/// to return a shared pointer to their ICubemap object
+			/// to return a shared pointer to their Cubemap object
 			///
 			/// @param Image to create moFlo Cubemap from
 			//----------------------------------------------------------------

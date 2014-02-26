@@ -44,11 +44,11 @@ namespace ChilliSource
         {
 			if(!mpSpriteSheetManager)
             {
-                mpSpriteSheetManager = static_cast<ISpriteSheetManager*>(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(CSpriteSheet::InterfaceID));
+                mpSpriteSheetManager = static_cast<SpriteSheetManager*>(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(SpriteSheet::InterfaceID));
             }
             if(!mpTextureManager)
             {
-                mpTextureManager = static_cast<ITextureManager*>(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(ITexture::InterfaceID));
+                mpTextureManager = static_cast<TextureManager*>(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Texture::InterfaceID));
             }
             if(!mpMaterialManager)
             {
@@ -85,7 +85,7 @@ namespace ChilliSource
 		bool RenderComponentFactory::CanProduceComponentWithInterface(Core::InterfaceIDType inTypeID) const
 		{
 			return
-            (CSpriteComponent::InterfaceID == inTypeID)	||
+            (SpriteComponent::InterfaceID == inTypeID)	||
 			(CameraComponent::InterfaceID == inTypeID)	|| 
 			(StaticMeshComponent::InterfaceID == inTypeID) || 
 			(LightComponent::InterfaceID == inTypeID) ||
@@ -103,7 +103,7 @@ namespace ChilliSource
 		bool RenderComponentFactory::CanProduceComponentWithTypeName(const std::string & incName) const
         {			
 			return
-            (CSpriteComponent::TypeName == incName)	||
+            (SpriteComponent::TypeName == incName)	||
             (CameraComponent::TypeName == incName)	|| 
             (StaticMeshComponent::TypeName == incName) || 
             (LightComponent::TypeName == incName) ||
@@ -176,9 +176,9 @@ namespace ChilliSource
 				
 				return pResult;
             }
-            else if (insTypeName == CSpriteComponent::TypeName)
+            else if (insTypeName == SpriteComponent::TypeName)
             {
-				SpriteComponentPtr pSprite(new CSpriteComponent());
+				SpriteComponentPtr pSprite(new SpriteComponent());
 				
 				std::string strMaterialName;
 				if (insParamDictionary.TryGetValue("MaterialName", strMaterialName))
@@ -258,7 +258,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         SpriteComponentPtr RenderComponentFactory::CreateSpriteComponent(const Core::CVector2 &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath)
         {
-            SpriteComponentPtr pSprite(new CSpriteComponent());
+            SpriteComponentPtr pSprite(new SpriteComponent());
             pSprite->SetMaterial(mpMaterialManager->GetMaterialFromFile(ineStorageLocation, instrMaterialFilePath));
             pSprite->SetDimensions(invDims);
             return pSprite;
@@ -272,7 +272,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         SpriteComponentPtr RenderComponentFactory::CreateSpriteComponent(const Core::CVector2 &invDims, const MaterialPtr& inpMaterial)
         {
-            SpriteComponentPtr pSprite(new CSpriteComponent());
+            SpriteComponentPtr pSprite(new SpriteComponent());
             pSprite->SetDimensions(invDims);
             pSprite->SetMaterial(inpMaterial);
             return pSprite;
@@ -287,7 +287,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         SpriteComponentPtr RenderComponentFactory::CreateSpriteComponent(const SpriteSheetPtr& pSpriteSheet, u32 inTpageIndex, const MaterialPtr& inpMaterial)
         {
-            SpriteComponentPtr pSprite(new CSpriteComponent());
+            SpriteComponentPtr pSprite(new SpriteComponent());
             pSprite->SetMaterial(inpMaterial);
             pSprite->SetDimensions(pSpriteSheet->GetSizeForFrame(inTpageIndex));
             pSprite->SetUVs(pSpriteSheet->GetUVsForFrame(inTpageIndex));
@@ -305,7 +305,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         SpriteComponentPtr RenderComponentFactory::CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheetTexture, u32 inTpageIndex, const MaterialPtr& inpMaterial)
         {
-            SpriteComponentPtr pSprite(new CSpriteComponent());
+            SpriteComponentPtr pSprite(new SpriteComponent());
             pSprite->SetMaterial(inpMaterial);
             SpriteSheetPtr pSpriteSheet = mpSpriteSheetManager->GetSpriteSheetFromFile(ineStorageLocation, instrSpriteSheetTexture);
             pSprite->SetDimensions(pSpriteSheet->GetSizeForFrame(inTpageIndex));
@@ -323,7 +323,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         SpriteComponentPtr RenderComponentFactory::CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheetTexture, const std::string& instrTpageID, const MaterialPtr& inpMaterial)
         {
-            SpriteComponentPtr pSprite(new CSpriteComponent());
+            SpriteComponentPtr pSprite(new SpriteComponent());
             pSprite->SetMaterial(inpMaterial);
             SpriteSheetPtr pSpriteSheet = mpSpriteSheetManager->GetSpriteSheetFromFile(ineStorageLocation, instrSpriteSheetTexture);
             u32 udwTpageID = pSpriteSheet->GetFrameIndexByID(instrTpageID);
@@ -559,8 +559,8 @@ namespace ChilliSource
 		//---------------------------------------------------------------------------
 		DirectionalLightComponentPtr RenderComponentFactory::CreateDirectionalLightComponent(u32 inudwShadowMapRes) const
 		{
-            TexturePtr pShadowMap;
-            TexturePtr pShadowMapDebug;
+            TextureSPtr pShadowMap;
+            TextureSPtr pShadowMapDebug;
             
             if(mpRenderCapabilities->IsShadowMappingSupported() == true && inudwShadowMapRes > 0)
             {

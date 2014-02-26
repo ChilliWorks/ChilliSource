@@ -74,20 +74,20 @@ namespace ChilliSource
 			{
                 MaterialPtr pMaterial = std::static_pointer_cast<Material>(outpResource);
                 
-                IShaderManager* pShaderManager = GET_RESOURCE_MANAGER(IShaderManager);
+                ShaderManager* pShaderManager = GET_RESOURCE_MANAGER(ShaderManager);
                 if(pShaderManager != nullptr)
                 {
                     for(u32 i=0; i<aShaderFiles.size(); ++i)
                     {
                         if(aShaderFiles[i].second.second.empty() == false)
                         {
-                            ShaderPtr pShader = pShaderManager->GetShaderFromFile(aShaderFiles[i].second.first, aShaderFiles[i].second.second);
+                            ShaderSPtr pShader = pShaderManager->GetShaderFromFile(aShaderFiles[i].second.first, aShaderFiles[i].second.second);
                             pMaterial->SetShaderProgram(aShaderFiles[i].first, pShader);
                         }
                     }
                 }
                 
-                ITextureManager* pTextureManager = GET_RESOURCE_MANAGER(ITextureManager);
+                TextureManager* pTextureManager = GET_RESOURCE_MANAGER(TextureManager);
                 if(pTextureManager != nullptr)
                 {
                     for(u32 i=0; i<aTextureFiles.size(); ++i)
@@ -96,7 +96,7 @@ namespace ChilliSource
                     }
                 }
                 
-                ICubemapManager* pCubemapManager = GET_RESOURCE_MANAGER(ICubemapManager);
+                CubemapManager* pCubemapManager = GET_RESOURCE_MANAGER(CubemapManager);
                 if(pCubemapManager != nullptr)
                 {
                     for(u32 i=0; i<aCubemapFiles.size(); ++i)
@@ -136,29 +136,29 @@ namespace ChilliSource
 			{
                 MaterialPtr pMaterial = std::static_pointer_cast<Material>(outpResource);
                 
-                IShaderManager* pShaderManager = GET_RESOURCE_MANAGER(IShaderManager);
+                ShaderManager* pShaderManager = GET_RESOURCE_MANAGER(ShaderManager);
                 if(pShaderManager != nullptr)
                 {
                     for(u32 i=0; i<aShaderFiles.size(); ++i)
                     {
-                        ShaderPtr pShader = pShaderManager->AsyncGetShaderFromFile(aShaderFiles[i].second.first, aShaderFiles[i].second.second);
+                        ShaderSPtr pShader = pShaderManager->AsyncGetShaderFromFile(aShaderFiles[i].second.first, aShaderFiles[i].second.second);
                         pMaterial->SetShaderProgram(aShaderFiles[i].first, pShader);
                         pShader->WaitTilLoaded();
                     }
                 }
                 
-                ITextureManager* pTextureManager = GET_RESOURCE_MANAGER(ITextureManager);
+                TextureManager* pTextureManager = GET_RESOURCE_MANAGER(TextureManager);
                 if(pTextureManager != nullptr)
                 {
                     for(u32 i=0; i<aTextureFiles.size(); ++i)
                     {
-                        TexturePtr pTexture = pTextureManager->AsyncGetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::CImage::Format::k_default, aTextureFiles[i].mbMipMapped);
+                        TextureSPtr pTexture = pTextureManager->AsyncGetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::CImage::Format::k_default, aTextureFiles[i].mbMipMapped);
                         pMaterial->AddTexture(pTexture);
                         pTexture->WaitTilLoaded();
                     }
                 }
                 
-                ICubemapManager* pCubemapManager = GET_RESOURCE_MANAGER(ICubemapManager);
+                CubemapManager* pCubemapManager = GET_RESOURCE_MANAGER(CubemapManager);
                 if(pCubemapManager != nullptr)
                 {
                     for(u32 i=0; i<aCubemapFiles.size(); ++i)

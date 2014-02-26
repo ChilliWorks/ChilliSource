@@ -186,7 +186,7 @@ namespace ChilliSource
                 {
                     ApplyRenderStates(inMaterial);
                     
-                    ShaderPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
+                    ShaderSPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
                     GLuint GLShaderProgram = pShader->GetProgramID();
                     
                     if(GLShaderProgram != 0)
@@ -262,7 +262,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Get Attribute Locations
 		//----------------------------------------------------------
-		void CRenderSystem::GetAttributeLocations(const ShaderPtr& inpShader)
+		void CRenderSystem::GetAttributeLocations(const ShaderSPtr& inpShader)
         {
             //Get the handles to the shader attributes
             
@@ -302,7 +302,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CRenderSystem::GetUniformLocations(const Rendering::Material &inMaterial)
         {
-            ShaderPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
+            ShaderSPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
             
             //Get the required handles to the shader variables (Uniform)
             mmatWVPHandle = pShader->GetUniformLocation("umatWorldViewProj");
@@ -350,7 +350,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CRenderSystem::ApplyShaderVariables(const Rendering::Material &inMaterial, GLuint inShaderProg)
 		{
-            ShaderPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
+            ShaderSPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
 			//Get and set all the custom shader variables
 			for(Rendering::MapStringToFloat::const_iterator it = inMaterial.mMapFloatShaderVars.begin(); it!= inMaterial.mMapFloatShaderVars.end(); ++it)
 			{

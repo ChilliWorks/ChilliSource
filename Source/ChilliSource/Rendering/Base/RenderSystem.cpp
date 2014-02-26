@@ -40,11 +40,11 @@ namespace ChilliSource
         ///
         /// @return Pointer to dynamic sprite batcher
         //----------------------------------------------------
-        CDynamicSpriteBatch* RenderSystem::GetDynamicSpriteBatchPtr()
+        DynamicSpriteBatch* RenderSystem::GetDynamicSpriteBatchPtr()
         {
             if(mpSpriteBatcher == nullptr)
             {
-                mpSpriteBatcher = new CDynamicSpriteBatch(this);
+                mpSpriteBatcher = new DynamicSpriteBatch(this);
             }
             
             return mpSpriteBatcher;

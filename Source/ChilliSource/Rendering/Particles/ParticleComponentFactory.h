@@ -20,12 +20,12 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CParticleComponentFactory : public Core::IComponentFactory
+		class ParticleComponentFactory : public Core::IComponentFactory
 		{
 		public: 
-			CParticleComponentFactory(CParticleSystem* inpParticleSystem, CParticleEmitterFactory* inpEmitterFactory, CParticleEffectorFactory* inpEffectorFactory);
+			ParticleComponentFactory(ParticleSystem* inpParticleSystem, ParticleEmitterFactory* inpEmitterFactory, ParticleEffectorFactory* inpEffectorFactory);
             
-			DECLARE_NAMED_INTERFACE(CParticleComponentFactory);
+			DECLARE_NAMED_INTERFACE(ParticleComponentFactory);
             
             //-------------------------------------------------------
             /// Is A
@@ -77,7 +77,7 @@ namespace ChilliSource
             /// @param Delegate
             /// @param Emitter type name
             //--------------------------------------------------------
-            void RegisterEmitterType(const CParticleEmitterFactory::EmitterCreateDelegate& inDelegate, const std::string& instrName);
+            void RegisterEmitterType(const ParticleEmitterFactory::EmitterCreateDelegate& inDelegate, const std::string& instrName);
             //--------------------------------------------------------
             /// Register Effector Type
             ///
@@ -86,15 +86,15 @@ namespace ChilliSource
             /// @param Delegate
             /// @param Effector type name
             //--------------------------------------------------------
-            void RegisterEffectorType(const CParticleEffectorFactory::EffectorCreateDelegate& inDelegate, const std::string& instrName);
+            void RegisterEffectorType(const ParticleEffectorFactory::EffectorCreateDelegate& inDelegate, const std::string& instrName);
 			
 		private:
 			
-			CParticleSystem* mpParticleSystem;
+			ParticleSystem* mpParticleSystem;
             MaterialManager* mpMaterialMgr;
             
-            CParticleEffectorFactory* mpEffectorFactory;
-            CParticleEmitterFactory* mpEmitterFactory;
+            ParticleEffectorFactory* mpEffectorFactory;
+            ParticleEmitterFactory* mpEmitterFactory;
 		};
 	}
 }

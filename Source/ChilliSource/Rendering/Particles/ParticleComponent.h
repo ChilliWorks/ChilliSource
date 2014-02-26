@@ -24,16 +24,16 @@ namespace ChilliSource
 		///
 		/// Multiple emitters that create the system
 		//====================================================
-		class CParticleComponent : public RenderComponent
+		class ParticleComponent : public RenderComponent
 		{
 		public:
             
-            typedef fastdelegate::FastDelegate1<CParticleComponent*> EmittersFinishedDelegate;
+            typedef fastdelegate::FastDelegate1<ParticleComponent*> EmittersFinishedDelegate;
 			
-			DECLARE_NAMED_INTERFACE(CParticleComponent);
+			DECLARE_NAMED_INTERFACE(ParticleComponent);
 			
-			CParticleComponent();
-            ~CParticleComponent();
+			ParticleComponent();
+            ~ParticleComponent();
 			//----------------------------------------------------------
 			/// Is A
 			///
@@ -51,7 +51,7 @@ namespace ChilliSource
 			///
 			/// @param Emitter
 			//---------------------------------------------------
-			void AddEmitter(CParticleEmitter* inpEmitter);
+			void AddEmitter(ParticleEmitter* inpEmitter);
 		
 
 			//---------------------------------------------------
@@ -64,7 +64,7 @@ namespace ChilliSource
 			///
 			/// @param Index
 			//---------------------------------------------------
-			CParticleEmitter* GetEmitter(u32 inudwIndex);
+			ParticleEmitter* GetEmitter(u32 inudwIndex);
 			
             //---------------------------------------------------
             /// Add Effector
@@ -73,7 +73,7 @@ namespace ChilliSource
             ///
             /// @param Effector
             //---------------------------------------------------
-            void AddEffector(IParticleEffector* inpEffector);
+            void AddEffector(ParticleEffector* inpEffector);
             //---------------------------------------------------
             /// Start Emitting
             ///
@@ -134,7 +134,7 @@ namespace ChilliSource
 			///
 			/// @param Particle system
 			//-------------------------------------------------
-			void SetOwningSystem(CParticleSystem* inpSystem);
+			void SetOwningSystem(ParticleSystem* inpSystem);
 			//-------------------------------------------------
 			/// Remove From World System
 			//-------------------------------------------------
@@ -154,10 +154,10 @@ namespace ChilliSource
 			
 		private:
 			
-			std::vector<CParticleEmitter*> mEmitters;
-			std::vector<IParticleEffector*> mEffectors;
+			std::vector<ParticleEmitter*> mEmitters;
+			std::vector<ParticleEffector*> mEffectors;
 			
-			CParticleSystem* mpOwningSystem;
+			ParticleSystem* mpOwningSystem;
             
             f32 mfUpdateScaleFactor;
             

@@ -51,7 +51,7 @@ namespace ChilliSource
 			SetOffsetFromParentAlignment(0.0f, 0.0f, 10.0f, -10.0f);
 			SetLocalAlignment(Core::AlignmentAnchor::k_topLeft);
 			
-			SetTexture(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::ITextureManager>()->GetDefaultTexture());
+			SetTexture(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::TextureManager>()->GetDefaultTexture());
 			SetColour(Core::CColour(0.41f, 0.41f, 0.41f, 0.8f));
 			
 			u32 i = 0;

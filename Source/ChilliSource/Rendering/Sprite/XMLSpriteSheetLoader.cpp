@@ -24,7 +24,7 @@ namespace ChilliSource
 		///
 		/// @param Handle to moFlo App
 		//-------------------------------------------------------------------------
-		CXMLSpriteSheetLoader::CXMLSpriteSheetLoader() 
+		XMLSpriteSheetLoader::XMLSpriteSheetLoader() 
 		{
 			
 		}
@@ -34,7 +34,7 @@ namespace ChilliSource
 		/// @param Interface to compare
 		/// @return Whether the object implements the given interface
 		//-------------------------------------------------------------------------
-		bool CXMLSpriteSheetLoader::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool XMLSpriteSheetLoader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == IResourceProvider::InterfaceID;
 		}
@@ -44,9 +44,9 @@ namespace ChilliSource
 		/// @param Type to compare
 		/// @return Whether the object can create a resource of given type
 		//----------------------------------------------------------------------------
-		bool CXMLSpriteSheetLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
+		bool XMLSpriteSheetLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == CSpriteSheet::InterfaceID);
+			return (inInterfaceID == SpriteSheet::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource From File With Extension
@@ -55,7 +55,7 @@ namespace ChilliSource
 		/// @param Extension to compare
 		/// @return Whether the object can create a resource with the given extension
 		//----------------------------------------------------------------------------
-		bool CXMLSpriteSheetLoader::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
+		bool XMLSpriteSheetLoader::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
 		{
 			return (inExtension == kstrTagXmlSpriteExtension);
 		}
@@ -67,11 +67,11 @@ namespace ChilliSource
 		/// @param Out: Resource object
 		/// @return Whether the resource loaded
 		//----------------------------------------------------------------------------
-		bool CXMLSpriteSheetLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool XMLSpriteSheetLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
 			using namespace Core;
             
-			CSpriteSheet* pData = (CSpriteSheet*)(outpResource.get());
+			SpriteSheet* pData = (SpriteSheet*)(outpResource.get());
             
 			TiXmlDocument Document;
             Document.LoadFile(ineStorageLocation, inFilePath);
@@ -86,7 +86,7 @@ namespace ChilliSource
 			if (pFramesEl != nullptr)
             {
 				for (TiXmlElement * pFrameEl = Core::XMLUtils::FirstChildElementWithName(pFramesEl, "Frame"); pFrameEl != nullptr; pFrameEl = XMLUtils::NextSiblingElementWithName(pFrameEl)){
-					CSpriteSheet::Frame sNewFrame;	
+					SpriteSheet::Frame sNewFrame;	
 					sNewFrame.U = XMLUtils::GetAttributeValueOrDefault<s32>(pFrameEl, "x", 0);
 					sNewFrame.V = XMLUtils::GetAttributeValueOrDefault<s32>(pFrameEl, "y", 0);
 					sNewFrame.OffsetX = XMLUtils::GetAttributeValueOrDefault<s32>(pFrameEl, "ox", 0);
@@ -120,7 +120,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//-------------------------------------------------------------------------
-		CXMLSpriteSheetLoader::~CXMLSpriteSheetLoader()
+		XMLSpriteSheetLoader::~XMLSpriteSheetLoader()
 		{
 		}
 	}

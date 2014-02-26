@@ -94,7 +94,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Create Sprite
         //---------------------------------------------------
-        MaterialPtr MaterialFactory::CreateSprite(const TexturePtr& inpTex) const
+        MaterialPtr MaterialFactory::CreateSprite(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/Sprite"));
@@ -108,7 +108,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Create Static
         //---------------------------------------------------
-        MaterialPtr MaterialFactory::CreateStatic(const TexturePtr& inpTex) const
+        MaterialPtr MaterialFactory::CreateStatic(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/Static"));
@@ -122,7 +122,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Create Static
         //---------------------------------------------------
-        MaterialPtr MaterialFactory::CreateStaticAmbient(const TexturePtr& inpTex) const
+        MaterialPtr MaterialFactory::CreateStaticAmbient(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
@@ -136,7 +136,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Create Static Blinn
         //---------------------------------------------------
-        MaterialPtr MaterialFactory::CreateStaticBlinn(const TexturePtr& inpTex) const
+        MaterialPtr MaterialFactory::CreateStaticBlinn(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
@@ -152,7 +152,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Create Static Blinn Shadowed
         //---------------------------------------------------
-        MaterialPtr MaterialFactory::CreateStaticBlinnShadowed(const TexturePtr& inpTex) const
+        MaterialPtr MaterialFactory::CreateStaticBlinnShadowed(const TextureSPtr& inpTex) const
         {
         	if (GetRenderCapabilities()->IsShadowMappingSupported() == false)
 			{
@@ -173,7 +173,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Create Static Blinn Per Vertex
         //---------------------------------------------------
-        MaterialPtr MaterialFactory::CreateStaticBlinnPerVertex(const TexturePtr& inpTex) const
+        MaterialPtr MaterialFactory::CreateStaticBlinnPerVertex(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
@@ -189,7 +189,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Create Static Blinn Per Vertex
         //---------------------------------------------------
-        MaterialPtr MaterialFactory::CreateStaticBlinnPerVertexShadowed(const TexturePtr& inpTex) const
+        MaterialPtr MaterialFactory::CreateStaticBlinnPerVertexShadowed(const TextureSPtr& inpTex) const
         {
         	if (GetRenderCapabilities()->IsShadowMappingSupported() == false)
 			{
@@ -229,7 +229,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Create Animated
         //---------------------------------------------------
-        MaterialPtr MaterialFactory::CreateAnimated(const TexturePtr& inpTex) const
+        MaterialPtr MaterialFactory::CreateAnimated(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/Animated"));
@@ -243,7 +243,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Create Animated Ambient
         //---------------------------------------------------
-        MaterialPtr MaterialFactory::CreateAnimatedAmbient(const TexturePtr& inpTex) const
+        MaterialPtr MaterialFactory::CreateAnimatedAmbient(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
@@ -257,7 +257,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Create Animated Blinn
         //---------------------------------------------------
-        MaterialPtr MaterialFactory::CreateAnimatedBlinn(const TexturePtr& inpTex) const
+        MaterialPtr MaterialFactory::CreateAnimatedBlinn(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
@@ -273,7 +273,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Create Animated Blinn Shadowed
         //---------------------------------------------------
-        MaterialPtr MaterialFactory::CreateAnimatedBlinnShadowed(const TexturePtr& inpTex) const
+        MaterialPtr MaterialFactory::CreateAnimatedBlinnShadowed(const TextureSPtr& inpTex) const
         {
         	if (GetRenderCapabilities()->IsShadowMappingSupported() == false)
 			{
@@ -294,7 +294,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Create Animated Blinn Per Vertex
         //---------------------------------------------------
-        MaterialPtr MaterialFactory::CreateAnimatedBlinnPerVertex(const TexturePtr& inpTex) const
+        MaterialPtr MaterialFactory::CreateAnimatedBlinnPerVertex(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
@@ -310,7 +310,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Create Animated Blinn Per Vertex
         //---------------------------------------------------
-        MaterialPtr MaterialFactory::CreateAnimatedBlinnPerVertexShadowed(const TexturePtr& inpTex) const
+        MaterialPtr MaterialFactory::CreateAnimatedBlinnPerVertexShadowed(const TextureSPtr& inpTex) const
         {
         	if (GetRenderCapabilities()->IsShadowMappingSupported() == false)
         	{
@@ -350,11 +350,11 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Get Texture Manager
         //---------------------------------------------------
-        ITextureManager* MaterialFactory::GetTextureManager() const
+        TextureManager* MaterialFactory::GetTextureManager() const
         {
             if(mpTextureManager == nullptr)
             {
-                mpTextureManager = GET_RESOURCE_MANAGER(ITextureManager);
+                mpTextureManager = GET_RESOURCE_MANAGER(TextureManager);
             }
             
             return mpTextureManager;
@@ -362,11 +362,11 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Get Shader Manager
         //---------------------------------------------------
-        IShaderManager* MaterialFactory::GetShaderManager() const
+        ShaderManager* MaterialFactory::GetShaderManager() const
         {
             if(mpShaderManager == nullptr)
             {
-                mpShaderManager = GET_RESOURCE_MANAGER(IShaderManager);
+                mpShaderManager = GET_RESOURCE_MANAGER(ShaderManager);
             }
             
             return mpShaderManager;
@@ -374,11 +374,11 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Get Cubemap Manager
         //---------------------------------------------------
-        ICubemapManager* MaterialFactory::GetCubemapManager() const
+        CubemapManager* MaterialFactory::GetCubemapManager() const
         {
             if(mpCubemapManager == nullptr)
             {
-                mpCubemapManager = GET_RESOURCE_MANAGER(ICubemapManager);
+                mpCubemapManager = GET_RESOURCE_MANAGER(CubemapManager);
             }
             
             return mpCubemapManager;

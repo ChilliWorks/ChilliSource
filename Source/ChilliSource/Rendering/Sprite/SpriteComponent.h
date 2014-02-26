@@ -35,7 +35,7 @@ namespace ChilliSource
 		/// A sprite component. This defines a 2D object that can
 		/// be manipulated, textured and animated.
 		//===============================================================
-		class CSpriteComponent : public RenderComponent
+		class SpriteComponent : public RenderComponent
 		{
 		public: 
 			
@@ -61,9 +61,9 @@ namespace ChilliSource
                 MaterialPtr pMaterial;
             };
 			
-			DECLARE_NAMED_INTERFACE(CSpriteComponent);
-			CSpriteComponent();
-            virtual ~CSpriteComponent();
+			DECLARE_NAMED_INTERFACE(SpriteComponent);
+			SpriteComponent();
+            virtual ~SpriteComponent();
 			//----------------------------------------------------------
 			/// Is A
 			///

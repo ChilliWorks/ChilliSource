@@ -85,7 +85,7 @@ namespace ChilliSource
             /// @param The colour texture.
             /// @param The depth texture.
             //------------------------------------------------------
-			void SetTargetTextures(const Rendering::TexturePtr& inpColourTexture, const Rendering::TexturePtr& inpDepthTexture);
+			void SetTargetTextures(const Rendering::TextureSPtr& inpColourTexture, const Rendering::TextureSPtr& inpDepthTexture);
             //------------------------------------------------------
             /// Bind
             ///

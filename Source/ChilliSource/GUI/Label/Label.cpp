@@ -58,7 +58,7 @@ namespace ChilliSource
 		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), ScalableFont(false), ScalableHeight(0), TextOutlined(false), FlipVertical(false), mbLastDrawWasClipped(false), mbLastDrawHadInvalidCharacter(false)
         {
             SetColour(Core::CColour(0.18f, 0.3f, 0.4f, 0.6f));
-            Rendering::ITextureManager* pMgr = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::ITextureManager>();
+            Rendering::TextureManager* pMgr = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::TextureManager>();
             mpWhiteTex = pMgr->GetDefaultTexture();
             
             //Grab the default font
@@ -187,7 +187,7 @@ namespace ChilliSource
                 FlipVertical = true;
             }
             
-            Rendering::ITextureManager* pMgr = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::ITextureManager>();
+            Rendering::TextureManager* pMgr = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::TextureManager>();
             mpWhiteTex = pMgr->GetDefaultTexture();
             
             if(!Font)

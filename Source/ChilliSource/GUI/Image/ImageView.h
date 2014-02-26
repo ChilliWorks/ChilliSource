@@ -42,7 +42,7 @@ namespace ChilliSource
             ///
             /// @param Texture shared pointer
             //--------------------------------------------------------
-            void SetTexture(const Rendering::TexturePtr& inpTexture);
+            void SetTexture(const Rendering::TextureSPtr& inpTexture);
             //--------------------------------------------------------
             /// Get Texture
             ///
@@ -50,7 +50,7 @@ namespace ChilliSource
             ///
             /// @param Texture shared pointer
             //--------------------------------------------------------
-            const Rendering::TexturePtr& GetTexture() const;
+            const Rendering::TextureSPtr& GetTexture() const;
             //--------------------------------------------------------
             /// Set Sprite Sheet
             ///
@@ -351,7 +351,7 @@ namespace ChilliSource
             bool mbFitMaintain;
             
 			//---Properties
-            DECLARE_PROPERTY_A(Rendering::TexturePtr, Texture, SetTexture, GetTexture);
+            DECLARE_PROPERTY_A(Rendering::TextureSPtr, Texture, SetTexture, GetTexture);
             DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
 
             DECLARE_PROPERTY_A(Core::Rectangle, UVs, SetUVs, GetUVs);

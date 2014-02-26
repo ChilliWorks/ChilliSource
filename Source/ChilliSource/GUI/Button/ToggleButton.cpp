@@ -89,7 +89,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("OnTexture", strValue))
             {
-                SetOnImage(LOAD_RESOURCE(Rendering::ITexture, eOnTextureLocation, strValue));
+                SetOnImage(LOAD_RESOURCE(Rendering::Texture, eOnTextureLocation, strValue));
             }
             //---Off
             Core::StorageLocation eOffTextureLocation = Core::StorageLocation::k_package;
@@ -99,7 +99,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("OffTexture", strValue))
             {
-                SetOffImage(LOAD_RESOURCE(Rendering::ITexture, eOffTextureLocation, strValue));
+                SetOffImage(LOAD_RESOURCE(Rendering::Texture, eOffTextureLocation, strValue));
             }
             //---Sprite sheet
             Core::StorageLocation eOnSpriteSheetLocation = Core::StorageLocation::k_package;
@@ -109,7 +109,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("OnSpriteSheet", strValue))
             {
-                SetOnSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eOnSpriteSheetLocation, strValue));
+                SetOnSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eOnSpriteSheetLocation, strValue));
             }
             //---Sprite sheet
             Core::StorageLocation eOffSpriteSheetLocation = Core::StorageLocation::k_package;
@@ -119,7 +119,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("OffSpriteSheet", strValue))
             {
-                SetOffSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eOffSpriteSheetLocation, strValue));
+                SetOffSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eOffSpriteSheetLocation, strValue));
             }
             //---Default index
             if(insParams.TryGetValue("OnSpriteSheetIndex", strValue))
@@ -220,7 +220,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //-----------------------------------------------------------
-        void ToggleButton::SetOnImage(const Rendering::TexturePtr& inpTexture)
+        void ToggleButton::SetOnImage(const Rendering::TextureSPtr& inpTexture)
         {
             OnTexture = inpTexture;
             
@@ -234,7 +234,7 @@ namespace ChilliSource
 		///
 		/// @return Texture for non-selected button
 		//-----------------------------------------------------------
-		const Rendering::TexturePtr& ToggleButton::GetOnImage() const
+		const Rendering::TextureSPtr& ToggleButton::GetOnImage() const
 		{
 			return OnTexture;
 		}
@@ -245,7 +245,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //-----------------------------------------------------------
-        void ToggleButton::SetOffImage(const Rendering::TexturePtr& inpTexture)
+        void ToggleButton::SetOffImage(const Rendering::TextureSPtr& inpTexture)
         {
             OffTexture = inpTexture;
             mpBackgroundImage->SetTexture(inpTexture);
@@ -261,7 +261,7 @@ namespace ChilliSource
 		///
 		/// @return Texture for selected button
 		//-----------------------------------------------------------
-		const Rendering::TexturePtr& ToggleButton::GetOffImage() const
+		const Rendering::TextureSPtr& ToggleButton::GetOffImage() const
 		{
 			return OffTexture;
 		}

@@ -1,5 +1,5 @@
 /*
- *  ITexture.h
+ *  Texture.h
  *  MoFlow
  *
  *  Created by Tag Games on 01/10/2010.
@@ -20,12 +20,12 @@ namespace ChilliSource
 		const f32 kTexelOffset		= 1.0f;
 		const f32 kHalfTexelOffset	= kTexelOffset * 0.5f;
 		
-		class ITexture : public Core::IResource
+		class Texture : public Core::IResource
 		{
 		public:
 			
-			virtual ~ITexture(){}
-			DECLARE_NAMED_INTERFACE(ITexture);
+			virtual ~Texture(){}
+			DECLARE_NAMED_INTERFACE(Texture);
 			
 			enum class Filter
 			{
@@ -53,7 +53,7 @@ namespace ChilliSource
 			
 		protected:
 			//Only texture loader can create this
-			ITexture():mudwWidth(0), mudwHeight(0){};
+			Texture():mudwWidth(0), mudwHeight(0){};
 			
 		protected:
 			u32 mudwWidth;

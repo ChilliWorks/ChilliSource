@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CCubemap : public ChilliSource::Rendering::ICubemap
+		class CCubemap : public ChilliSource::Rendering::Cubemap
 		{
 		public:
 
@@ -78,7 +78,7 @@ namespace ChilliSource
 			/// @param S filter mode
 			/// @param T filter mode
 			//--------------------------------------------------
-			void SetFilter(Rendering::ITexture::Filter ineSFilter, Rendering::ITexture::Filter ineTFilter);
+			void SetFilter(Rendering::Texture::Filter ineSFilter, Rendering::Texture::Filter ineTFilter);
 			//--------------------------------------------------
 			/// Set Wrap Mode
 			///
@@ -86,7 +86,7 @@ namespace ChilliSource
 			/// @param S wrap mode
 			/// @param T wrap mode
 			//--------------------------------------------------
-			void SetWrapMode(Rendering::ITexture::WrapMode inSWrapMode, Rendering::ITexture::WrapMode inTWrapMode);
+			void SetWrapMode(Rendering::Texture::WrapMode inSWrapMode, Rendering::Texture::WrapMode inTWrapMode);
             
         private:
             //--------------------------------------------------
@@ -108,10 +108,10 @@ namespace ChilliSource
             
             GLuint mGLTextureID;
             
-            Rendering::ITexture::Filter meSFilter;
-			Rendering::ITexture::Filter meTFilter;
-			Rendering::ITexture::WrapMode meSWrapMode;
-			Rendering::ITexture::WrapMode meTWrapMode;
+            Rendering::Texture::Filter meSFilter;
+			Rendering::Texture::Filter meTFilter;
+			Rendering::Texture::WrapMode meSWrapMode;
+			Rendering::Texture::WrapMode meTWrapMode;
             
             Core::CImage::Format meImageFormat;
             

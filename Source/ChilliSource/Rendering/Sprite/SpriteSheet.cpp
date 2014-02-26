@@ -20,13 +20,13 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(CSpriteSheet);
+        DEFINE_NAMED_INTERFACE(SpriteSheet);
 		//-------------------------------------------------------------------------
 		/// Constructor
 		///
 		/// Default
 		//-------------------------------------------------------------------------
-		CSpriteSheet::CSpriteSheet()
+		SpriteSheet::SpriteSheet()
         :mwSpriteSheetWidth(0)
         ,mwSpriteSheetHeight(0)
 		{
@@ -36,16 +36,16 @@ namespace ChilliSource
 		///
 		/// @return Whether this object is of given type
 		//---------------------------------------------------------------------
-		bool CSpriteSheet::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool SpriteSheet::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == CSpriteSheet::InterfaceID;
+			return inInterfaceID == SpriteSheet::InterfaceID;
 		}
 		//---------------------------------------------------------------------
 		/// Add Sprite Frame
 		///
 		/// @param Sprite frame containing width, height, UV's and offsets
 		//---------------------------------------------------------------------
-		void CSpriteSheet::AddSpriteFrame(const CSpriteSheet::Frame& inFrame)
+		void SpriteSheet::AddSpriteFrame(const SpriteSheet::Frame& inFrame)
 		{
 			mFrames.push_back(inFrame);
 		}
@@ -55,7 +55,7 @@ namespace ChilliSource
 		/// @param Index from pre-generated header
 		/// @return Sprite frame data
 		//---------------------------------------------------------------------
-		const CSpriteSheet::Frame& CSpriteSheet::GetSpriteFrameByID(u32 inID) const
+		const SpriteSheet::Frame& SpriteSheet::GetSpriteFrameByID(u32 inID) const
 		{
 			return mFrames[inID];
 		}
@@ -65,7 +65,7 @@ namespace ChilliSource
         /// @param ID from generated string list
         /// @return Sprite index ID
         //---------------------------------------------------------------------
-        u32 CSpriteSheet::GetFrameIndexByID(const std::string& inID) const
+        u32 SpriteSheet::GetFrameIndexByID(const std::string& inID) const
         {
             u32 udwHashedString = Core::CHashCRC32::GenerateHashCode(inID);
             for(u32 i=0; i<mIDLookups.size(); ++i)
@@ -86,7 +86,7 @@ namespace ChilliSource
         /// @param ID from generated string list
         /// @return true if sprite exists
         //---------------------------------------------------------------------
-        bool CSpriteSheet::HasFrameWithID(const std::string& inID) const
+        bool SpriteSheet::HasFrameWithID(const std::string& inID) const
         {
             u32 udwHashedString = Core::CHashCRC32::GenerateHashCode(inID);
             for(u32 i=0; i<mIDLookups.size(); ++i)
@@ -106,7 +106,7 @@ namespace ChilliSource
         /// @param Sprite index ID
         /// @return ID from generated string list
         //---------------------------------------------------------------------
-        const std::string& CSpriteSheet::GetIDFromFrameIndex(u32 inudwFrameIndex) const
+        const std::string& SpriteSheet::GetIDFromFrameIndex(u32 inudwFrameIndex) const
         {
             if(inudwFrameIndex < mStringIDLookups.size())
             {
@@ -121,7 +121,7 @@ namespace ChilliSource
 		///
 		/// @return Number of sprite frames loaded
 		//---------------------------------------------------------------------
-		u32 CSpriteSheet::GetNumSpriteFrames() const
+		u32 SpriteSheet::GetNumSpriteFrames() const
         {
 			return mFrames.size();
 		}
@@ -130,7 +130,7 @@ namespace ChilliSource
 		///
 		/// @param Number of sprite frames loaded
 		//---------------------------------------------------------------------
-		void CSpriteSheet::SetNumSpriteFrames(u32 inudwNumFrame)
+		void SpriteSheet::SetNumSpriteFrames(u32 inudwNumFrame)
 		{
 			mFrames.reserve(inudwNumFrame);
 		}
@@ -140,7 +140,7 @@ namespace ChilliSource
 		/// @param ID for frame 
 		/// @return Rect containing UV coords for the given frame
 		//---------------------------------------------------------------------
-		Core::CRect CSpriteSheet::GetUVsForFrame(u32 inudwFrameID) const
+		Core::CRect SpriteSheet::GetUVsForFrame(u32 inudwFrameID) const
         {
 			Core::CRect sResult;
 			GetUVsForFrame(inudwFrameID, sResult);
@@ -152,7 +152,7 @@ namespace ChilliSource
 		/// @param ID for frame 
 		/// @param Rect set to UV coords for the given frame
 		//---------------------------------------------------------------------
-		void CSpriteSheet::GetUVsForFrame(u32 inudwFrameID, Core::CRect & outsUVRect) const
+		void SpriteSheet::GetUVsForFrame(u32 inudwFrameID, Core::CRect & outsUVRect) const
         {
 			const Frame & sFrame = mFrames[inudwFrameID];
 			
@@ -170,7 +170,7 @@ namespace ChilliSource
 		/// @param ID for frame 
 		/// param Vec2 containing size for the frame
 		//---------------------------------------------------------------------
-		Core::CVector2 CSpriteSheet::GetSizeForFrame(u32 inudwFrameID) const
+		Core::CVector2 SpriteSheet::GetSizeForFrame(u32 inudwFrameID) const
         {
 			Core::CVector2 sResult;
 			GetSizeForFrame(inudwFrameID, sResult);
@@ -182,7 +182,7 @@ namespace ChilliSource
 		/// @param ID for frame 
 		/// @param Vec2 set to size for the frame
 		//---------------------------------------------------------------------
-		void CSpriteSheet::GetSizeForFrame(u32 inudwFrameID, Core::CVector2 & outvSize) const
+		void SpriteSheet::GetSizeForFrame(u32 inudwFrameID, Core::CVector2 & outvSize) const
         {
 			outvSize.x = mFrames[inudwFrameID].Width;
 			outvSize.y = mFrames[inudwFrameID].Height;
@@ -193,7 +193,7 @@ namespace ChilliSource
 		/// @param ID for frame 
 		/// return Vec2 containing offset for the frame
 		//---------------------------------------------------------------------
-		Core::CVector2 CSpriteSheet::GetOffsetForFrame(u32 inudwFrameID) const
+		Core::CVector2 SpriteSheet::GetOffsetForFrame(u32 inudwFrameID) const
         {
 			Core::CVector2 vResult;
 			GetOffsetForFrame(inudwFrameID,vResult);
@@ -205,7 +205,7 @@ namespace ChilliSource
 		/// @param ID for frame 
 		/// @param Vec2 set to offset for the frame
 		//---------------------------------------------------------------------
-		void CSpriteSheet::GetOffsetForFrame(u32 inudwFrameID, Core::CVector2 & outvOffset) const
+		void SpriteSheet::GetOffsetForFrame(u32 inudwFrameID, Core::CVector2 & outvOffset) const
         {
 			outvOffset.x = mFrames[inudwFrameID].OffsetX;
 			outvOffset.y = mFrames[inudwFrameID].OffsetY;
@@ -216,7 +216,7 @@ namespace ChilliSource
         /// @param ID for frame 
         /// param Vec2 containing density independent size for the frame
         //---------------------------------------------------------------------
-        Core::CVector2 CSpriteSheet::GetDPISizeForFrame(u32 inudwFrameID) const
+        Core::CVector2 SpriteSheet::GetDPISizeForFrame(u32 inudwFrameID) const
         {
             Core::CVector2 sResult;
 			GetDPISizeForFrame(inudwFrameID, sResult);
@@ -228,7 +228,7 @@ namespace ChilliSource
         /// @param ID for frame 
         /// param Vec2 containing density independent size for the frame
         //---------------------------------------------------------------------
-        void CSpriteSheet::GetDPISizeForFrame(u32 inudwFrameID, Core::CVector2 & outvSize) const
+        void SpriteSheet::GetDPISizeForFrame(u32 inudwFrameID, Core::CVector2 & outvSize) const
         {
             outvSize.x = mFrames[inudwFrameID].Width * (1.0f/Core::CScreen::GetDensity());
 			outvSize.y = mFrames[inudwFrameID].Height * (1.0f/Core::CScreen::GetDensity());
@@ -239,7 +239,7 @@ namespace ChilliSource
         /// @param ID for frame 
         /// @param Vec2 set to teh density independent offset for the frame
         //---------------------------------------------------------------------
-        Core::CVector2 CSpriteSheet::GetDPIOffsetForFrame(u32 inudwFrameID) const
+        Core::CVector2 SpriteSheet::GetDPIOffsetForFrame(u32 inudwFrameID) const
         {
             Core::CVector2 vResult;
 			GetDPIOffsetForFrame(inudwFrameID,vResult);
@@ -251,7 +251,7 @@ namespace ChilliSource
         /// @param ID for frame 
         /// @param Vec2 set to teh density independent offset for the frame
         //---------------------------------------------------------------------
-        void CSpriteSheet::GetDPIOffsetForFrame(u32 inudwFrameID, Core::CVector2 & outvOffset) const
+        void SpriteSheet::GetDPIOffsetForFrame(u32 inudwFrameID, Core::CVector2 & outvOffset) const
         {
             outvOffset.x = mFrames[inudwFrameID].OffsetX * (1.0f/Core::CScreen::GetDensity());
 			outvOffset.y = mFrames[inudwFrameID].OffsetY * (1.0f/Core::CScreen::GetDensity());
@@ -261,7 +261,7 @@ namespace ChilliSource
 		///
 		/// @param Texture
 		//---------------------------------------------------------------------
-		void CSpriteSheet::SetTexture(const TexturePtr& inpTex)
+		void SpriteSheet::SetTexture(const TextureSPtr& inpTex)
 		{
 			mpTexture = inpTex;
 		}
@@ -270,16 +270,16 @@ namespace ChilliSource
 		///
 		/// return Texture
 		//---------------------------------------------------------------------
-		const TexturePtr& CSpriteSheet::GetTexture() const
+		const TextureSPtr& SpriteSheet::GetTexture() const
 		{
 			return mpTexture;
 		}
 		
-		u32 CSpriteSheet::GetNumAnimations() const
+		u32 SpriteSheet::GetNumAnimations() const
 		{
 			return mAnimationNames.size();
 		}
-		u32 CSpriteSheet::GetAnimationIndexByName(const std::string & instrName) const
+		u32 SpriteSheet::GetAnimationIndexByName(const std::string & instrName) const
 		{
 			
 			for (u32 nAnim = 0; nAnim < mAnimationNames.size(); nAnim++){
@@ -292,7 +292,7 @@ namespace ChilliSource
 			
 			return UINT_MAX;
 		}
-		const std::string & CSpriteSheet::GetNameForAnimation(u32 inudwIndex) const
+		const std::string & SpriteSheet::GetNameForAnimation(u32 inudwIndex) const
 		{
 			
 			if (inudwIndex < mAnimationNames.size())
@@ -300,7 +300,7 @@ namespace ChilliSource
 			
 			return Core::CStringUtils::BLANK;
 		}
-		const std::vector<u32> * CSpriteSheet::GetFramesForAnimation(u32 inudwAnimIndex) const
+		const std::vector<u32> * SpriteSheet::GetFramesForAnimation(u32 inudwAnimIndex) const
 		{
 			
 			if (inudwAnimIndex < mAnimationFrames.size())
@@ -309,7 +309,7 @@ namespace ChilliSource
 			return nullptr;
 		}
 		
-		bool CSpriteSheet::AddAnimation(std::string & instrName, const std::vector<u32> & instrFrames)
+		bool SpriteSheet::AddAnimation(std::string & instrName, const std::vector<u32> & instrFrames)
 		{
 			if (GetAnimationIndexByName(instrName) != UINT_MAX)
 			{
@@ -327,7 +327,7 @@ namespace ChilliSource
         /// @param The hashed string lookups into the sprite array
         /// @param The raw string lookups
         //---------------------------------------------------------------------
-        void CSpriteSheet::SetIDLookups(const std::vector<u32>& inSpriteHashedIDLookups, const std::vector<std::string>& inSpriteStringIDLookups)
+        void SpriteSheet::SetIDLookups(const std::vector<u32>& inSpriteHashedIDLookups, const std::vector<std::string>& inSpriteStringIDLookups)
         {
             mIDLookups = inSpriteHashedIDLookups;
             mStringIDLookups = inSpriteStringIDLookups;
@@ -341,7 +341,7 @@ namespace ChilliSource
         /// @param Width
         /// @param Height
         //---------------------------------------------------------------------
-        void CSpriteSheet::SetSpriteSheetSize(s16 inwSpriteSheetWidth, s16 inwSpriteSheetHeight)
+        void SpriteSheet::SetSpriteSheetSize(s16 inwSpriteSheetWidth, s16 inwSpriteSheetHeight)
         {
             mwSpriteSheetWidth = inwSpriteSheetWidth;
             mwSpriteSheetHeight = inwSpriteSheetHeight;

@@ -24,26 +24,26 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(CParticleSystem);
+		DEFINE_NAMED_INTERFACE(ParticleSystem);
 		//------------------------------------------------
 		/// Constructor
 		///
 		/// Default
 		//------------------------------------------------
-		CParticleSystem::CParticleSystem() : mfTimeScaleFactor(1.0f)
+		ParticleSystem::ParticleSystem() : mfTimeScaleFactor(1.0f)
 		{
-			mpParticleFactory = new CParticleComponentFactory(this, &mEmitterFactory, &mEffectorFactory);
+			mpParticleFactory = new ParticleComponentFactory(this, &mEmitterFactory, &mEffectorFactory);
 
             //Register the default emitters and effectors
             //with the factories
-            mEmitterFactory.Register(CParticleEmitterFactory::EmitterCreateDelegate(&CPointParticleEmitter::Create), "Point");
-            mEmitterFactory.Register(CParticleEmitterFactory::EmitterCreateDelegate(&CRingParticleEmitter::Create), "Ring");
-            mEmitterFactory.Register(CParticleEmitterFactory::EmitterCreateDelegate(&CConeParticleEmitter::Create), "Cone");
+            mEmitterFactory.Register(ParticleEmitterFactory::EmitterCreateDelegate(&PointParticleEmitter::Create), "Point");
+            mEmitterFactory.Register(ParticleEmitterFactory::EmitterCreateDelegate(&RingParticleEmitter::Create), "Ring");
+            mEmitterFactory.Register(ParticleEmitterFactory::EmitterCreateDelegate(&ConeParticleEmitter::Create), "Cone");
             
-            mEffectorFactory.Register(CParticleEffectorFactory::EffectorCreateDelegate(&CColourChangerParticleEffector::Create), "ColourChanger");
-            mEffectorFactory.Register(CParticleEffectorFactory::EffectorCreateDelegate(&CLinearForceParticleEffector::Create), "LinearForce");
-            mEffectorFactory.Register(CParticleEffectorFactory::EffectorCreateDelegate(&CSpinnerParticleEffector::Create), "Spinner");
-            mEffectorFactory.Register(CParticleEffectorFactory::EffectorCreateDelegate(&CScalerParticleEffector::Create), "Scaler");
+            mEffectorFactory.Register(ParticleEffectorFactory::EffectorCreateDelegate(&ColourChangerParticleEffector::Create), "ColourChanger");
+            mEffectorFactory.Register(ParticleEffectorFactory::EffectorCreateDelegate(&LinearForceParticleEffector::Create), "LinearForce");
+            mEffectorFactory.Register(ParticleEffectorFactory::EffectorCreateDelegate(&SpinnerParticleEffector::Create), "Spinner");
+            mEffectorFactory.Register(ParticleEffectorFactory::EffectorCreateDelegate(&ScalerParticleEffector::Create), "Scaler");
 		}
 		//----------------------------------------------------------
 		/// Is A
@@ -52,16 +52,16 @@ namespace ChilliSource
 		/// @param Comparison Type
 		/// @return Whether the class matches the comparison type
 		//----------------------------------------------------------
-		bool CParticleSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool ParticleSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == CParticleSystem::InterfaceID) || (inInterfaceID == Core::IUpdateable::InterfaceID) || (inInterfaceID == Core::IComponentProducer::InterfaceID);
+			return (inInterfaceID == ParticleSystem::InterfaceID) || (inInterfaceID == Core::IUpdateable::InterfaceID) || (inInterfaceID == Core::IComponentProducer::InterfaceID);
 		}
 		//-------------------------------------------
 		/// Add Particle Component
 		///
 		/// @param Particle Component
 		//-------------------------------------------
-		void CParticleSystem::AddParticleComponent(CParticleComponent* inpParticle)
+		void ParticleSystem::AddParticleComponent(ParticleComponent* inpParticle)
 		{
 			inpParticle->SetOwningSystem(this);
 			mParticleComponents.push_back(inpParticle);
@@ -71,9 +71,9 @@ namespace ChilliSource
 		///
 		/// @param Particle Component
 		//-------------------------------------------
-		void CParticleSystem::RemoveParticleComponent(CParticleComponent* inpParticle)
+		void ParticleSystem::RemoveParticleComponent(ParticleComponent* inpParticle)
 		{
-            for(std::vector<CParticleComponent*>::iterator it = mParticleComponents.begin(); it != mParticleComponents.end(); ++it)
+            for(std::vector<ParticleComponent*>::iterator it = mParticleComponents.begin(); it != mParticleComponents.end(); ++it)
             {
                 if((*it) == inpParticle)
                 {
@@ -89,18 +89,18 @@ namespace ChilliSource
 		///
 		/// @param Time between frames
 		//-------------------------------------------
-		void CParticleSystem::Update(f32 infDT)
+		void ParticleSystem::Update(f32 infDT)
 		{
             infDT *= mfTimeScaleFactor;
             
-			for(std::vector<CParticleComponent*>::iterator it = mParticleComponents.begin(); it != mParticleComponents.end(); ++it)
+			for(std::vector<ParticleComponent*>::iterator it = mParticleComponents.begin(); it != mParticleComponents.end(); ++it)
 			{
                 if((*it)->GetEntityOwner())
                     (*it)->Update(infDT);
 			}
             
             // safe execution of emitter finished delegate
-			for(std::vector<CParticleComponent*>::iterator it = mParticleComponents.begin(); it != mParticleComponents.end(); ++it)
+			for(std::vector<ParticleComponent*>::iterator it = mParticleComponents.begin(); it != mParticleComponents.end(); ++it)
 			{
                 if((*it)->GetEmittersFinished())
                 {
@@ -112,7 +112,7 @@ namespace ChilliSource
 		//-------------------------------------------
 		/// Sets a factor to scale update delta time by. Useful for pausing all effects when paused etc.
 		//-------------------------------------------
-		void CParticleSystem::SetTimeScaleFactor(f32 infValue)
+		void ParticleSystem::SetTimeScaleFactor(f32 infValue)
 		{
 			mfTimeScaleFactor = infValue;
 		}
@@ -121,7 +121,7 @@ namespace ChilliSource
 		///
 		/// @return Number of factories in this system
 		//----------------------------------------------------
-		u32 CParticleSystem::GetNumComponentFactories() const
+		u32 ParticleSystem::GetNumComponentFactories() const
 		{
 			return 1;
 		}
@@ -130,7 +130,7 @@ namespace ChilliSource
 		///
 		/// @return Particle component factory
 		//-------------------------------------------
-		Core::IComponentFactory* CParticleSystem::GetComponentFactoryPtr(u32 inudwIndex)
+		Core::IComponentFactory* ParticleSystem::GetComponentFactoryPtr(u32 inudwIndex)
 		{
 			return mpParticleFactory;
 		}
@@ -139,7 +139,7 @@ namespace ChilliSource
 		///
 		/// @return Particle component factory
 		//-------------------------------------------
-		Core::IComponentFactory& CParticleSystem::GetComponentFactory(u32 inudwIndex)
+		Core::IComponentFactory& ParticleSystem::GetComponentFactory(u32 inudwIndex)
 		{
 			return *mpParticleFactory;
 		}
@@ -148,7 +148,7 @@ namespace ChilliSource
         ///
         /// @return Particle Emitter factory
         //-------------------------------------------
-        CParticleEmitterFactory& CParticleSystem::GetEmitterFactory()
+        ParticleEmitterFactory& ParticleSystem::GetEmitterFactory()
         {
             return mEmitterFactory;
         }
@@ -157,7 +157,7 @@ namespace ChilliSource
         ///
         /// @return Particle Effector factory
         //-------------------------------------------
-        CParticleEffectorFactory& CParticleSystem::GetEffectorFactory()
+        ParticleEffectorFactory& ParticleSystem::GetEffectorFactory()
         {
             return mEffectorFactory;
         }

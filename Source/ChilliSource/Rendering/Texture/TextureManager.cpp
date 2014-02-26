@@ -1,5 +1,5 @@
 /*
- *  ITextureManager.cpp
+ *  TextureManager.cpp
  *  MoFlow
  *
  *  Created by Tag Games on 01/10/2010.
@@ -19,12 +19,12 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(ITextureManager);
+		DEFINE_NAMED_INTERFACE(TextureManager);
 		
 		//----------------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------------
-		ITextureManager::ITextureManager()
+		TextureManager::TextureManager()
 		{
 			
 		}
@@ -35,34 +35,34 @@ namespace ChilliSource
 		/// @param The interface to compare
 		/// @return Whether the object implements that interface
 		//----------------------------------------------------------------
-		bool ITextureManager::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool TextureManager::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == ITextureManager::InterfaceID;
+			return inInterfaceID == TextureManager::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Get Resource Type
 		///
 		/// @return The type of resource this manager handles
 		//----------------------------------------------------------------
-		Core::InterfaceIDType ITextureManager::GetResourceType() const
+		Core::InterfaceIDType TextureManager::GetResourceType() const
 		{
-			return ITexture::InterfaceID;
+			return Texture::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Manages Resource Of Type
 		///
 		/// @return Whether this object manages the object of type
 		//----------------------------------------------------------------
-		bool ITextureManager::ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const
+		bool TextureManager::ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == ITexture::InterfaceID;
+			return inInterfaceID == Texture::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Get Provider Type
 		///
 		/// @return The type of resource it consumes from resource provider
 		//----------------------------------------------------------------
-		Core::InterfaceIDType ITextureManager::GetProviderType() const
+		Core::InterfaceIDType TextureManager::GetProviderType() const
 		{
 			return Core::CImage::InterfaceID;
 		}
@@ -74,7 +74,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr ITextureManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr TextureManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetTextureFromFile(ineStorageLocation, instrFilePath, Core::CImage::Format::k_default, false);
 		}
@@ -86,7 +86,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr ITextureManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr TextureManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetTextureFromFile(ineStorageLocation, instrFilePath, Core::CImage::Format::k_default, false);
 		}
@@ -102,7 +102,7 @@ namespace ChilliSource
 		/// @param Generate mip-maps. Default = false
 		/// @return A handle to the texture
 		//----------------------------------------------------------------
-		TexturePtr ITextureManager::GetTextureFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
+		TextureSPtr TextureManager::GetTextureFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -118,7 +118,7 @@ namespace ChilliSource
 						pImage->SetName(inFilePath);
 						pImage->SetLoaded(true);
 						
-						TexturePtr pTexture = CreateTextureResource();
+						TextureSPtr pTexture = CreateTextureResource();
 						if(CreateTextureFromImage(pImage, inbWithMipsMaps, pTexture))
 						{
 							CS_DEBUG_LOG("Loading texture " + inFilePath);
@@ -136,7 +136,7 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				return std::static_pointer_cast<ITexture>(pExistingResource->second);
+				return std::static_pointer_cast<Texture>(pExistingResource->second);
 			}
 			
 			CS_ERROR_LOG("Cannot find resource for texture with path " + inFilePath);
@@ -156,7 +156,7 @@ namespace ChilliSource
 		/// @param Enable mip-mapping
 		/// @return Generic pointer to resource type
 		//-----------------------------------------------------------------
-		TexturePtr ITextureManager::AsyncGetTextureFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
+		TextureSPtr TextureManager::AsyncGetTextureFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
@@ -174,7 +174,7 @@ namespace ChilliSource
 				Desc.pTextureResource->SetStorageLocation(ineStorageLocation);
 
 				//Load image as a task. Once it completed we can load the texture as it should be done on the main thread
-				Core::Task<ImageDesc&> ImageLoadTask(this, &ITextureManager::ImageLoadTask, Desc);
+				Core::Task<ImageDesc&> ImageLoadTask(this, &TextureManager::ImageLoadTask, Desc);
 				Core::CTaskScheduler::ScheduleTask(ImageLoadTask);
 				
 				//add resource to the resource map
@@ -184,7 +184,7 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				return std::static_pointer_cast<ITexture>(pExistingResource->second);
+				return std::static_pointer_cast<Texture>(pExistingResource->second);
 			}
 		}
 		//-----------------------------------------------------------------------------------
@@ -194,7 +194,7 @@ namespace ChilliSource
 		///
 		/// @param Image descriptor
 		//-----------------------------------------------------------------------------------
-		void ITextureManager::ImageLoadTask(ImageDesc& inDesc)
+		void TextureManager::ImageLoadTask(ImageDesc& inDesc)
 		{
 			for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 			{
@@ -207,7 +207,7 @@ namespace ChilliSource
 					pImage->SetLoaded(true);
 					
 					//Load the texture from this image
-					Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourcePtr&, bool, TexturePtr&>(this, &ITextureManager::TextureLoadTask, inDesc.pImageResource, inDesc.bUseMipmaps, inDesc.pTextureResource));
+					Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<const Core::ResourcePtr&, bool, TextureSPtr&>(this, &TextureManager::TextureLoadTask, inDesc.pImageResource, inDesc.bUseMipmaps, inDesc.pTextureResource));
 					return;
 				}
 			}
@@ -223,7 +223,7 @@ namespace ChilliSource
 		/// @param With mipmapping
 		/// @param Texture to create
 		//-----------------------------------------------------------------------------------
-		void ITextureManager::TextureLoadTask(const Core::ResourcePtr& inpImage, bool inbWithMipsMaps, TexturePtr& outpTexture)
+		void TextureManager::TextureLoadTask(const Core::ResourcePtr& inpImage, bool inbWithMipsMaps, TextureSPtr& outpTexture)
 		{
 			Core::CImage* pImage = (Core::CImage*)(inpImage.get());
 			if(CreateTextureFromImage(pImage, inbWithMipsMaps, outpTexture))
@@ -245,7 +245,7 @@ namespace ChilliSource
 		/// Returns a 2x2 white texture
 		/// @return Pointer to default texture
 		//-----------------------------------------------------------------
-		const TexturePtr & ITextureManager::GetDefaultTexture()
+		const TextureSPtr & TextureManager::GetDefaultTexture()
         {
 			if(!mpDefaultTexture)
             {
@@ -265,7 +265,7 @@ namespace ChilliSource
 		/// Creates a 2x2 white texture
 		/// @return Pointer to default texture
 		//-----------------------------------------------------------------
-		void ITextureManager::CreateDefaultTexture()
+		void TextureManager::CreateDefaultTexture()
 		{
 			u32 numPixels = 4;
 			u32 numBytesPerPixel = 4;

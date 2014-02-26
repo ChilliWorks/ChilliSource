@@ -18,11 +18,11 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CXMLSpriteSheetLoader : public Core::IResourceProvider
+		class XMLSpriteSheetLoader : public Core::IResourceProvider
 		{
 		public:
-			CXMLSpriteSheetLoader();
-			virtual ~CXMLSpriteSheetLoader();
+			XMLSpriteSheetLoader();
+			virtual ~XMLSpriteSheetLoader();
 			
 			//-------------------------------------------------------------------------
 			/// Is A

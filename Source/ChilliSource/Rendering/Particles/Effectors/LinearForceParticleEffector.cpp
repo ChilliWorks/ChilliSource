@@ -19,7 +19,7 @@ namespace ChilliSource
         ///
         /// @param Param dictionary
         //----------------------------------------------------
-        CLinearForceParticleEffector::CLinearForceParticleEffector(const Core::ParamDictionary& insParams)
+        LinearForceParticleEffector::LinearForceParticleEffector(const Core::ParamDictionary& insParams)
         {
             mfActiveEnergyLevel = 0.0f;
             
@@ -44,9 +44,9 @@ namespace ChilliSource
         /// @param Param dictionary
         /// @return Ownership of effector
         //-----------------------------------------------------
-        IParticleEffector* CLinearForceParticleEffector::Create(const Core::ParamDictionary& inParams)
+        ParticleEffector* LinearForceParticleEffector::Create(const Core::ParamDictionary& inParams)
         {
-            return new CLinearForceParticleEffector(inParams);
+            return new LinearForceParticleEffector(inParams);
         }
         //-----------------------------------------------------
         /// Init
@@ -56,7 +56,7 @@ namespace ChilliSource
         ///
         /// @param Particle to intialise
         //-----------------------------------------------------
-        void CLinearForceParticleEffector::Init(Particle* inpParticle, u32 inudwIndex)
+        void LinearForceParticleEffector::Init(Particle* inpParticle, u32 inudwIndex)
         {
             
         }
@@ -69,7 +69,7 @@ namespace ChilliSource
         /// @param Particle to effect
         /// @param Time between frames
         //-----------------------------------------------------
-        void CLinearForceParticleEffector::Apply(Particle* inpParticle, u32 inudwIndex, f32 infDt)
+        void LinearForceParticleEffector::Apply(Particle* inpParticle, u32 inudwIndex, f32 infDt)
         {
 			inpParticle->vVelocity[inudwIndex] += (mvForce * infDt);
         }

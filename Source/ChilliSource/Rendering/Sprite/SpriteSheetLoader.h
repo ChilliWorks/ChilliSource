@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CSpriteSheetLoader : public Core::IResourceProvider
+		class SpriteSheetLoader : public Core::IResourceProvider
 		{
 		public:
 	

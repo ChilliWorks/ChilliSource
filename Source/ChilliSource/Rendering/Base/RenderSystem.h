@@ -29,7 +29,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        class CDynamicSpriteBatch;
+        class DynamicSpriteBatch;
         
 		class RenderSystem : public Core::ISystem, public Core::IComponentProducer
 		{
@@ -95,7 +95,7 @@ namespace ChilliSource
             ///
             /// @return Pointer to dynamic sprite batcher
             //----------------------------------------------------
-            CDynamicSpriteBatch* GetDynamicSpriteBatchPtr();
+            DynamicSpriteBatch* GetDynamicSpriteBatchPtr();
 		protected:
 			
 			//---Render Factories
@@ -106,9 +106,9 @@ namespace ChilliSource
 			SkinnedAnimationManager mSkinnedAnimationManager;
             FontManager mFontManager;
 			MaterialManager mMaterialManager;
-			ISpriteSheetManager mSpriteManager;
+			SpriteSheetManager mSpriteManager;
             
-            CDynamicSpriteBatch* mpSpriteBatcher;
+            DynamicSpriteBatch* mpSpriteBatcher;
 		};
 	}
 }

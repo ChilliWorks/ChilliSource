@@ -339,7 +339,7 @@ namespace ChilliSource
             ///
             /// @param Shader
             //----------------------------------------------------------
-            void GetAttributeLocations(const ShaderPtr& inpShader);
+            void GetAttributeLocations(const ShaderSPtr& inpShader);
             //----------------------------------------------------------
             /// Get Uniform Locations
             ///

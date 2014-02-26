@@ -85,7 +85,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("BackgroundTexture", strValue))
             {
-                mpBackgroundImage->SetTexture(LOAD_RESOURCE(Rendering::ITexture, eBackgroundTextureLocation, strValue));
+                mpBackgroundImage->SetTexture(LOAD_RESOURCE(Rendering::Texture, eBackgroundTextureLocation, strValue));
             }
             //---Progress Texture
             Core::StorageLocation eProgressTextureLocation = Core::StorageLocation::k_package;
@@ -95,7 +95,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("ProgressTexture", strValue))
             {
-                mpProgressImage->SetTexture(LOAD_RESOURCE(Rendering::ITexture, eProgressTextureLocation, strValue));
+                mpProgressImage->SetTexture(LOAD_RESOURCE(Rendering::Texture, eProgressTextureLocation, strValue));
             }
             //---Background sprite sheet
             Core::StorageLocation eBackgroundSpriteSheetLocation = Core::StorageLocation::k_package;
@@ -105,7 +105,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("BackgroundSpriteSheet", strValue))
             {
-                SetBackgroundSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eBackgroundSpriteSheetLocation, strValue));
+                SetBackgroundSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eBackgroundSpriteSheetLocation, strValue));
             }
 			//---Progress sprite sheet
             Core::StorageLocation eProgressSpriteSheetLocation = Core::StorageLocation::k_package;
@@ -115,7 +115,7 @@ namespace ChilliSource
             }
 			if(insParams.TryGetValue("ProgressSpriteSheet", strValue))
 			{
-				SetProgressSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eProgressSpriteSheetLocation, strValue));
+				SetProgressSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eProgressSpriteSheetLocation, strValue));
 			}
             //---Background index
             if(insParams.TryGetValue("BackgroundSpriteSheetIndex", strValue))
@@ -272,7 +272,7 @@ namespace ChilliSource
         ///
         /// @param Texture representing the background
         //------------------------------------------------------
-        void HorizontalProgressBar::SetBackgroundImage(const Rendering::TexturePtr& inpTexture)
+        void HorizontalProgressBar::SetBackgroundImage(const Rendering::TextureSPtr& inpTexture)
         {
 			BackgroundTexture = inpTexture;
             mpBackgroundImage->SetTexture(inpTexture);
@@ -287,7 +287,7 @@ namespace ChilliSource
 		///
 		/// @param Texture representing the bar
 		//------------------------------------------------------
-		void HorizontalProgressBar::SetProgressImage(const Rendering::TexturePtr& inpTexture)
+		void HorizontalProgressBar::SetProgressImage(const Rendering::TextureSPtr& inpTexture)
 		{
 			ProgressTexture = inpTexture;
 			mpProgressImage->SetTexture(inpTexture);
@@ -302,7 +302,7 @@ namespace ChilliSource
 		///
 		/// @return Texture representing the background
 		//------------------------------------------------------
-		const Rendering::TexturePtr& HorizontalProgressBar::GetBackgroundImage() const
+		const Rendering::TextureSPtr& HorizontalProgressBar::GetBackgroundImage() const
 		{
 			return BackgroundTexture;
 		}
@@ -311,7 +311,7 @@ namespace ChilliSource
 		///
 		/// @return Texture representing the bar
 		//------------------------------------------------------
-		const Rendering::TexturePtr& HorizontalProgressBar::GetProgressImage() const
+		const Rendering::TextureSPtr& HorizontalProgressBar::GetProgressImage() const
 		{
 			return ProgressTexture;
 		}

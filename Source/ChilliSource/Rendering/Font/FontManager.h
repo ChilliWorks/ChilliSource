@@ -79,7 +79,7 @@ namespace ChilliSource
 			
 		private:
 			
-            ISpriteSheetManager* mpSpriteSheetManager;
+            SpriteSheetManager* mpSpriteSheetManager;
 		};
 	}
 }

@@ -119,8 +119,8 @@ namespace ChilliSource
 		//--------------------------------------------------
         CCubemap::CCubemap(CCubemapManager* inpManager)
         :mpCubemapManager(inpManager),
-        meSFilter(Rendering::ITexture::Filter::k_linear), meTFilter(Rendering::ITexture::Filter::k_linear),
-        meSWrapMode(Rendering::ITexture::WrapMode::k_clamp), meTWrapMode(Rendering::ITexture::WrapMode::k_clamp),
+        meSFilter(Rendering::Texture::Filter::k_linear), meTFilter(Rendering::Texture::Filter::k_linear),
+        meSWrapMode(Rendering::Texture::WrapMode::k_clamp), meTWrapMode(Rendering::Texture::WrapMode::k_clamp),
         mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), meImageFormat(Core::CImage::Format::k_RGBA8888),
         mpRenderCapabilities(nullptr)
         {
@@ -199,7 +199,7 @@ namespace ChilliSource
 		//--------------------------------------------------
 		bool CCubemap::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == ICubemap::InterfaceID;
+			return inInterfaceID == Cubemap::InterfaceID;
 		}
 		//--------------------------------------------------
 		/// Bind
@@ -227,7 +227,7 @@ namespace ChilliSource
 		/// @param S filter mode
 		/// @param T filter mode
 		//--------------------------------------------------
-		void CCubemap::SetFilter(Rendering::ITexture::Filter ineSFilter, Rendering::ITexture::Filter ineTFilter)
+		void CCubemap::SetFilter(Rendering::Texture::Filter ineSFilter, Rendering::Texture::Filter ineTFilter)
 		{
 			meSFilter = ineSFilter;
 			meTFilter = ineTFilter;
@@ -241,7 +241,7 @@ namespace ChilliSource
 		/// @param S wrap mode
 		/// @param T wrap mode
 		//--------------------------------------------------
-		void CCubemap::SetWrapMode(Rendering::ITexture::WrapMode inSWrapMode, Rendering::ITexture::WrapMode inTWrapMode)
+		void CCubemap::SetWrapMode(Rendering::Texture::WrapMode inSWrapMode, Rendering::Texture::WrapMode inTWrapMode)
 		{
 			meSWrapMode = inSWrapMode;
 			meTWrapMode = inTWrapMode;
@@ -258,20 +258,20 @@ namespace ChilliSource
             switch(meSWrapMode)
             {
                 default:
-                case Rendering::ITexture::WrapMode::k_clamp:
+                case Rendering::Texture::WrapMode::k_clamp:
                     glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
                     break;
-                case Rendering::ITexture::WrapMode::k_repeat:
+                case Rendering::Texture::WrapMode::k_repeat:
                     glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_S,GL_REPEAT);
                     break;
             };
             switch(meTWrapMode)
             {
                 default:
-                case Rendering::ITexture::WrapMode::k_clamp:
+                case Rendering::Texture::WrapMode::k_clamp:
                     glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
                     break;
-                case Rendering::ITexture::WrapMode::k_repeat:
+                case Rendering::Texture::WrapMode::k_repeat:
                     glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_T,GL_REPEAT);
                     break;
             };
@@ -281,20 +281,20 @@ namespace ChilliSource
                 switch (meSFilter)
                 {
                     default:
-                    case Rendering::ITexture::Filter::k_point:
+                    case Rendering::Texture::Filter::k_point:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER,  GL_NEAREST);
                         break;
-                    case Rendering::ITexture::Filter::k_linear:
+                    case Rendering::Texture::Filter::k_linear:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER,  GL_LINEAR);
                         break;
                 }
                 switch (meTFilter)
                 {
                     default:
-                    case Rendering::ITexture::Filter::k_point:
+                    case Rendering::Texture::Filter::k_point:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                         break;
-                    case Rendering::ITexture::Filter::k_linear:
+                    case Rendering::Texture::Filter::k_linear:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                         break;
                 }
@@ -304,20 +304,20 @@ namespace ChilliSource
                 switch (meSFilter)
                 {
                     default:
-                    case Rendering::ITexture::Filter::k_point:
+                    case Rendering::Texture::Filter::k_point:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER,  GL_NEAREST_MIPMAP_NEAREST);
                         break;
-                    case Rendering::ITexture::Filter::k_linear:
+                    case Rendering::Texture::Filter::k_linear:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER,  GL_LINEAR_MIPMAP_NEAREST);
                         break;
                 }
                 switch (meTFilter)
                 {
                     default:
-                    case Rendering::ITexture::Filter::k_point:
+                    case Rendering::Texture::Filter::k_point:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                         break;
-                    case Rendering::ITexture::Filter::k_linear:
+                    case Rendering::Texture::Filter::k_linear:
                         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                         break;
                 }

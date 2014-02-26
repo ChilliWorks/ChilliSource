@@ -83,42 +83,42 @@ namespace ChilliSource
         //------------------------------------------------------------
         /// Particles
         //------------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CParticleComponent);
-        CS_FORWARD_DECLARE_CLASS(CParticleComponentFactory);
-        CS_FORWARD_DECLARE_CLASS(CParticleSystem);
-        CS_FORWARD_DECLARE_CLASS(CColourChangerParticleEffector);
-        CS_FORWARD_DECLARE_CLASS(CLinearForceParticleEffector);
-        CS_FORWARD_DECLARE_CLASS(IParticleEffector);
-        CS_FORWARD_DECLARE_CLASS(CParticleEffectorFactory);
-        CS_FORWARD_DECLARE_CLASS(CScalerParticleEffector);
-        CS_FORWARD_DECLARE_CLASS(CSpinnerParticleEffector);
-        CS_FORWARD_DECLARE_CLASS(CConeParticleEmitter);
-        CS_FORWARD_DECLARE_CLASS(CParticleEmitter);
-        CS_FORWARD_DECLARE_CLASS(CParticleEmitterFactory);
-        CS_FORWARD_DECLARE_CLASS(CPointParticleEmitter);
-        CS_FORWARD_DECLARE_CLASS(CRingParticleEmitter);
+        CS_FORWARD_DECLARE_CLASS(ParticleComponent);
+        CS_FORWARD_DECLARE_CLASS(ParticleComponentFactory);
+        CS_FORWARD_DECLARE_CLASS(ParticleSystem);
+        CS_FORWARD_DECLARE_CLASS(ColourChangerParticleEffector);
+        CS_FORWARD_DECLARE_CLASS(LinearForceParticleEffector);
+        CS_FORWARD_DECLARE_CLASS(ParticleEffector);
+        CS_FORWARD_DECLARE_CLASS(ParticleEffectorFactory);
+        CS_FORWARD_DECLARE_CLASS(ScalerParticleEffector);
+        CS_FORWARD_DECLARE_CLASS(SpinnerParticleEffector);
+        CS_FORWARD_DECLARE_CLASS(ConeParticleEmitter);
+        CS_FORWARD_DECLARE_CLASS(ParticleEmitter);
+        CS_FORWARD_DECLARE_CLASS(ParticleEmitterFactory);
+        CS_FORWARD_DECLARE_CLASS(PointParticleEmitter);
+        CS_FORWARD_DECLARE_CLASS(RingParticleEmitter);
         //------------------------------------------------------------
         /// Shader
         //------------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(IShader);
-        CS_FORWARD_DECLARE_CLASS(IShaderManager);
+        CS_FORWARD_DECLARE_CLASS(Shader);
+        CS_FORWARD_DECLARE_CLASS(ShaderManager);
         //------------------------------------------------------------
         /// Sprite
         //------------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CDynamicSpriteBatch);
-        CS_FORWARD_DECLARE_CLASS(CSpriteBatch);
-        CS_FORWARD_DECLARE_CLASS(CSpriteComponent);
-        CS_FORWARD_DECLARE_CLASS(CSpriteSheet);
-        CS_FORWARD_DECLARE_CLASS(CSpriteSheetLoader);
-        CS_FORWARD_DECLARE_CLASS(ISpriteSheetManager);
-        CS_FORWARD_DECLARE_CLASS(CXMLSpriteSheetLoader);
+        CS_FORWARD_DECLARE_CLASS(DynamicSpriteBatch);
+        CS_FORWARD_DECLARE_CLASS(SpriteBatch);
+        CS_FORWARD_DECLARE_CLASS(SpriteComponent);
+        CS_FORWARD_DECLARE_CLASS(SpriteSheet);
+        CS_FORWARD_DECLARE_CLASS(SpriteSheetLoader);
+        CS_FORWARD_DECLARE_CLASS(SpriteSheetManager);
+        CS_FORWARD_DECLARE_CLASS(XMLSpriteSheetLoader);
         //------------------------------------------------------------
         /// Texture
         //------------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(ICubemap);
-        CS_FORWARD_DECLARE_CLASS(ICubemapManager);
-        CS_FORWARD_DECLARE_CLASS(ITexture);
-        CS_FORWARD_DECLARE_CLASS(ITextureManager);
+        CS_FORWARD_DECLARE_CLASS(Cubemap);
+        CS_FORWARD_DECLARE_CLASS(CubemapManager);
+        CS_FORWARD_DECLARE_CLASS(Texture);
+        CS_FORWARD_DECLARE_CLASS(TextureManager);
 	}
 }
 

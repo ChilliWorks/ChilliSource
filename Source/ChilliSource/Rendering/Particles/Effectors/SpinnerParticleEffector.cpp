@@ -20,7 +20,7 @@ namespace ChilliSource
         ///
         /// @param Param dictionary
         //----------------------------------------------------
-        CSpinnerParticleEffector::CSpinnerParticleEffector(const Core::ParamDictionary& insParams)
+        SpinnerParticleEffector::SpinnerParticleEffector(const Core::ParamDictionary& insParams)
         {
             mfActiveEnergyLevel = 0.0f;
             
@@ -47,9 +47,9 @@ namespace ChilliSource
         /// @param Param dictionary
         /// @return Ownership of effector
         //-----------------------------------------------------
-        IParticleEffector* CSpinnerParticleEffector::Create(const Core::ParamDictionary& inParams)
+        ParticleEffector* SpinnerParticleEffector::Create(const Core::ParamDictionary& inParams)
         {
-            return new CSpinnerParticleEffector(inParams);
+            return new SpinnerParticleEffector(inParams);
         }
         //-----------------------------------------------------
         /// Init
@@ -59,7 +59,7 @@ namespace ChilliSource
         ///
         /// @param Particle to intialise
         //-----------------------------------------------------
-        void CSpinnerParticleEffector::Init(Particle* inpParticle, u32 inudwIndex)
+        void SpinnerParticleEffector::Init(Particle* inpParticle, u32 inudwIndex)
         {
             
         }
@@ -72,7 +72,7 @@ namespace ChilliSource
         /// @param Particle to effect
         /// @param Time between frames
         //-----------------------------------------------------
-        void CSpinnerParticleEffector::Apply(Particle* inpParticle, u32 inudwIndex, f32 infDt)
+        void SpinnerParticleEffector::Apply(Particle* inpParticle, u32 inudwIndex, f32 infDt)
         {
             f32 fRand = Core::CMathUtils::GetPseudoRandom(inudwIndex + 1) + mfRandomOffset - 1.0f;
             f32 fAngVelocity = mfAngVelocity * fRand;

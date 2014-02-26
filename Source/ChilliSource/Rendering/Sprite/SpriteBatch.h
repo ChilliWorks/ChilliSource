@@ -19,11 +19,11 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CSpriteBatch
+		class SpriteBatch
 		{
 		public:
-			CSpriteBatch(u32 inudwCapacity, RenderSystem * inpRenderSystem, BufferUsage ineUsage);
-			~CSpriteBatch();
+			SpriteBatch(u32 inudwCapacity, RenderSystem * inpRenderSystem, BufferUsage ineUsage);
+			~SpriteBatch();
 			//------------------------------------------------------
 			/// Build
 			///
@@ -32,7 +32,7 @@ namespace ChilliSource
             ///
             /// @param Sprite array
 			//------------------------------------------------------
-			void Build(std::vector<CSpriteComponent::SpriteData>* inpSprites);
+			void Build(std::vector<SpriteComponent::SpriteData>* inpSprites);
 			//------------------------------------------------------
 			/// Render
 			///
@@ -71,7 +71,7 @@ namespace ChilliSource
 			/// @param Index of which sprite to replace
 			/// @param New sprite to map over the contents
 			//------------------------------------------------------
-			void RemapSprite(u32 inudwIndex, const CSpriteComponent::SpriteData &inpSprite);
+			void RemapSprite(u32 inudwIndex, const SpriteComponent::SpriteData &inpSprite);
 			
 		private:
             //-------------------------------------------------------
@@ -83,7 +83,7 @@ namespace ChilliSource
             /// @param Pointer to sprite offset in buffer
             /// @param Sprite to map
             //-------------------------------------------------------
-			void MapSpriteIntoBuffer(CSpriteComponent::SpriteVertex* inpBuffer, const CSpriteComponent::SpriteData& inpSprite);
+			void MapSpriteIntoBuffer(SpriteComponent::SpriteVertex* inpBuffer, const SpriteComponent::SpriteData& inpSprite);
 			//-------------------------------------------------------
 			/// Build Indices For Number Sprites
 			///
