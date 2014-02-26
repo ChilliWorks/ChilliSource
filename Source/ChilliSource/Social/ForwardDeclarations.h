@@ -12,6 +12,8 @@
 #ifndef _MOFLO_SOCIAL_FORWARDDECLARATIONS_H_
 #define _MOFLO_SOCIAL_FORWARDDECLARATIONS_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource{
 	namespace Social{
 	

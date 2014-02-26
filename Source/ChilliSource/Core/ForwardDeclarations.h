@@ -10,6 +10,8 @@
 #ifndef _MOFLO_CORE_FORWARDDECLARATIONS_H_
 #define _MOFLO_CORE_FORWARDDECLARATIONS_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource 
 {
 	namespace Core
@@ -104,7 +106,7 @@ namespace ChilliSource
         struct UnifiedVector2;
         class IVolumeComponent;
         class IPlatformSystem;
-        class IWebViewActivity;
+        class WebViewActivity;
         
         typedef std::shared_ptr<IVolumeComponent> VolumeComponentPtr;
         typedef std::weak_ptr<IVolumeComponent> VolumeComponentWeakPtr;

@@ -6,6 +6,7 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {

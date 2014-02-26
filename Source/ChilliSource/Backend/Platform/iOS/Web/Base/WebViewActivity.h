@@ -28,7 +28,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CWebViewActivity : public Web::IWebViewActivity
+		class CWebViewActivity : public Web::WebViewActivity
 		{
 		public:
 			CWebViewActivity();

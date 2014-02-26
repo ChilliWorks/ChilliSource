@@ -9,6 +9,8 @@
 #ifndef _MOFLO_GUI_FORWARDDECLARATIONS_H_
 #define _MOFLO_GUI_FORWARDDECLARATIONS_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource
 {
 	namespace GUI

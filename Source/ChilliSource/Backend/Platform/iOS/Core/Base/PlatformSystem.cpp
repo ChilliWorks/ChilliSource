@@ -76,7 +76,7 @@ namespace ChilliSource
  
             //---Activities
             AddActivityFunc(Video::IVideoPlayerActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateDefaultVideoPlayerActivity));
-			AddActivityFunc(Web::IWebViewActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateWebViewActivity));
+			AddActivityFunc(Web::WebViewActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateWebViewActivity));
 			
 			if(CSMSCompositionActivity::SupportedByDevice())
             {

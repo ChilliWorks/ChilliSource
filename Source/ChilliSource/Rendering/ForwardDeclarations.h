@@ -10,6 +10,8 @@
 #ifndef _MOFLO_RENDERING_FORWARDDECLARATIONS_H_
 #define _MOFLO_RENDERING_FORWARDDECLARATIONS_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource
 {
 	namespace Rendering

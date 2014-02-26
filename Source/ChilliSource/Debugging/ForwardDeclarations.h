@@ -9,6 +9,8 @@
 #ifndef _CHILLISOURCE_DEBUGGING_FORWARDDECLARATIONS_H_
 #define _CHILLISOURCE_DEBUGGING_FORWARDDECLARATIONS_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource
 {
     namespace Base

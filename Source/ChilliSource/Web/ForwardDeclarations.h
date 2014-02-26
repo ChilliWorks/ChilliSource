@@ -9,6 +9,17 @@
 #ifndef _CHILLISOURCE_WEB_FORWARDDECLARATIONS_H_
 #define _CHILLISOURCE_WEB_FORWARDDECLARATIONS_H_
 
+#include <ChilliSource/ChilliSource.h>
 
+namespace ChilliSource
+{
+    namespace Web
+    {
+        //---------------------------------------------------
+        /// Base
+        //---------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(WebViewActivity);
+    }
+}
 
 #endif
