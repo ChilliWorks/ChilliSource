@@ -192,10 +192,10 @@ namespace ChilliSource
             inaSystems.push_back(Core::SystemPtr(new Core::CMoImageProvider()));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CSpriteSheetLoader()));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CXMLSpriteSheetLoader()));
-			inaSystems.push_back(Core::SystemPtr(new Rendering::CMaterialLoader(pRenderCapabilities)));
+			inaSystems.push_back(Core::SystemPtr(new Rendering::MaterialLoader(pRenderCapabilities)));
 			inaSystems.push_back(Core::SystemPtr(new Rendering::FontLoader()));
-            inaSystems.push_back(Core::SystemPtr(new Rendering::CAnimatedMeshComponentUpdater()));
-            inaSystems.push_back(Core::SystemPtr(new Rendering::CMaterialFactory()));
+            inaSystems.push_back(Core::SystemPtr(new Rendering::AnimatedMeshComponentUpdater()));
+            inaSystems.push_back(Core::SystemPtr(new Rendering::MaterialFactory()));
             
 			//Initialise the render system
 			Core::CApplication::GetRenderSystemPtr()->Init((u32)Core::CScreen::GetRawDimensions().x, (u32)Core::CScreen::GetRawDimensions().y);

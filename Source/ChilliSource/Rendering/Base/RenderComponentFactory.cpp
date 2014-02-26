@@ -52,11 +52,11 @@ namespace ChilliSource
             }
             if(!mpMaterialManager)
             {
-                mpMaterialManager = static_cast<IMaterialManager*>(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(CMaterial::InterfaceID));
+                mpMaterialManager = static_cast<MaterialManager*>(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Material::InterfaceID));
             }
             if(!mpMeshManager)
             {
-                mpMeshManager = static_cast<CMeshManager*>(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(CMesh::InterfaceID));
+                mpMeshManager = static_cast<MeshManager*>(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Mesh::InterfaceID));
             }
             if (!mpRenderCapabilities)
             {
@@ -87,9 +87,9 @@ namespace ChilliSource
 			return
             (CSpriteComponent::InterfaceID == inTypeID)	||
 			(CameraComponent::InterfaceID == inTypeID)	|| 
-			(CStaticMeshComponent::InterfaceID == inTypeID) || 
-			(ILightComponent::InterfaceID == inTypeID) ||
-			(CDirectionalLightComponent::InterfaceID == inTypeID);
+			(StaticMeshComponent::InterfaceID == inTypeID) || 
+			(LightComponent::InterfaceID == inTypeID) ||
+			(DirectionalLightComponent::InterfaceID == inTypeID);
 		}
         //--------------------------------------------------------
 		/// Can Produce Component With Type Name
@@ -105,9 +105,9 @@ namespace ChilliSource
 			return
             (CSpriteComponent::TypeName == incName)	||
             (CameraComponent::TypeName == incName)	|| 
-            (CStaticMeshComponent::TypeName == incName) || 
-            (ILightComponent::TypeName == incName) ||
-            (CDirectionalLightComponent::TypeName == incName);
+            (StaticMeshComponent::TypeName == incName) || 
+            (LightComponent::TypeName == incName) ||
+            (DirectionalLightComponent::TypeName == incName);
 		}
         //--------------------------------------------------------
         /// Create Component
@@ -120,7 +120,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         Core::ComponentPtr RenderComponentFactory::CreateComponent(const std::string & insTypeName, const Core::ParamDictionary & insParamDictionary)
         {
-            if (insTypeName == CStaticMeshComponent::TypeName) 
+            if (insTypeName == StaticMeshComponent::TypeName) 
             {
 				std::string sMeshName;
 				if (insParamDictionary.TryGetValue("MeshName", sMeshName))
@@ -342,7 +342,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
 		StaticMeshComponentPtr RenderComponentFactory::CreateStaticMeshComponent(const MeshPtr& inpModel)
 		{
-			StaticMeshComponentPtr pResult(new CStaticMeshComponent());
+			StaticMeshComponentPtr pResult(new StaticMeshComponent());
 			pResult->AttachMesh(inpModel);
 			return pResult;
 		}
@@ -355,7 +355,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
 		StaticMeshComponentPtr RenderComponentFactory::CreateStaticMeshComponent(const MeshPtr& inpModel, const MaterialPtr& inpMaterial)
 		{
-			StaticMeshComponentPtr pResult(new CStaticMeshComponent());
+			StaticMeshComponentPtr pResult(new StaticMeshComponent());
 			pResult->AttachMesh(inpModel, inpMaterial);
 			return pResult;
 		}
@@ -384,7 +384,7 @@ namespace ChilliSource
 		StaticMeshComponentPtr RenderComponentFactory::CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFilePath)
 		{
             MeshPtr pModel = mpMeshManager->GetModelFromFile(ineStorageLocation, instrModelFilePath);
-            StaticMeshComponentPtr pResult(new CStaticMeshComponent());
+            StaticMeshComponentPtr pResult(new StaticMeshComponent());
 			pResult->AttachMesh(pModel);
 			return pResult;
 		}
@@ -434,7 +434,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
 		AnimatedMeshComponentPtr RenderComponentFactory::CreateAnimatedMeshComponent(const MeshPtr& inpModel)
 		{
-			AnimatedMeshComponentPtr pResult(new CAnimatedMeshComponent());
+			AnimatedMeshComponentPtr pResult(new AnimatedMeshComponent());
 			pResult->AttachMesh(inpModel);
 			return pResult;
 		}
@@ -447,7 +447,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
 		AnimatedMeshComponentPtr RenderComponentFactory::CreateAnimatedMeshComponent(const MeshPtr& inpModel, const MaterialPtr& inpMaterial)
 		{
-			AnimatedMeshComponentPtr pResult(new CAnimatedMeshComponent());
+			AnimatedMeshComponentPtr pResult(new AnimatedMeshComponent());
 			pResult->AttachMesh(inpModel, inpMaterial);
 			return pResult;
 		}
@@ -476,7 +476,7 @@ namespace ChilliSource
 		AnimatedMeshComponentPtr RenderComponentFactory::CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFilePath)
 		{
             MeshPtr pModel = mpMeshManager->GetModelFromFile(ineStorageLocation, instrModelFilePath);
-            AnimatedMeshComponentPtr pResult(new CAnimatedMeshComponent());
+            AnimatedMeshComponentPtr pResult(new AnimatedMeshComponent());
 			pResult->AttachMesh(pModel);
 			return pResult;
 		}
@@ -548,7 +548,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------------------
         AmbientLightComponentPtr RenderComponentFactory::CreateAmbientLightComponent() const
         {
-            AmbientLightComponentPtr pLight(new CAmbientLightComponent());
+            AmbientLightComponentPtr pLight(new AmbientLightComponent());
             return pLight;
         }
 		//---------------------------------------------------------------------------
@@ -573,7 +573,7 @@ namespace ChilliSource
 #endif
             }
             
-            DirectionalLightComponentPtr pLight(new CDirectionalLightComponent(pShadowMap, pShadowMapDebug));
+            DirectionalLightComponentPtr pLight(new DirectionalLightComponent(pShadowMap, pShadowMapDebug));
 			return pLight;
 		}
         //---------------------------------------------------------------------------
@@ -583,7 +583,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------------------
         PointLightComponentPtr RenderComponentFactory::CreatePointLightComponent() const
         {
-            PointLightComponentPtr pLight(new CPointLightComponent());
+            PointLightComponentPtr pLight(new PointLightComponent());
             return pLight;
         }
 	}

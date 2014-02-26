@@ -22,13 +22,13 @@ namespace ChilliSource
 		//------------------------------------
 		/// Mesh Manager
 		//------------------------------------
-		class CMeshManager : public Core::IResourceManager
+		class MeshManager : public Core::IResourceManager
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CMeshManager);
+			DECLARE_NAMED_INTERFACE(MeshManager);
 			
-			CMeshManager();
-			virtual ~CMeshManager();
+			MeshManager();
+			virtual ~MeshManager();
 			//----------------------------------------------------------------
 			/// Is A
 			///

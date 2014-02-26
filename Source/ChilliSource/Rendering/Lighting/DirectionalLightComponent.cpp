@@ -15,12 +15,12 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(CDirectionalLightComponent);
+		DEFINE_NAMED_INTERFACE(DirectionalLightComponent);
         
         //----------------------------------------------------------
         /// Constructor
         //----------------------------------------------------------
-        CDirectionalLightComponent::CDirectionalLightComponent(const TexturePtr& inpShadowMapTarget, const TexturePtr& inpShadowMapDebugTarget)
+        DirectionalLightComponent::DirectionalLightComponent(const TexturePtr& inpShadowMapTarget, const TexturePtr& inpShadowMapDebugTarget)
         : mpShadowMap(inpShadowMapTarget)
         , mpShadowMapDebug(inpShadowMapDebugTarget)
         , mfShadowTolerance(0.0f)
@@ -30,14 +30,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CDirectionalLightComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool DirectionalLightComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == ILightComponent::InterfaceID || inInterfaceID == CDirectionalLightComponent::InterfaceID;
+			return inInterfaceID == LightComponent::InterfaceID || inInterfaceID == DirectionalLightComponent::InterfaceID;
 		}
         //----------------------------------------------------------
         /// Set Shadow Volume
         //----------------------------------------------------------
-        void CDirectionalLightComponent::SetShadowVolume(f32 infWidth, f32 infHeight, f32 infNear, f32 infFar)
+        void DirectionalLightComponent::SetShadowVolume(f32 infWidth, f32 infHeight, f32 infNear, f32 infFar)
         {
             mmatProj = Core::CMatrix4x4::CreateOrthoMatrix(infWidth, infHeight, infNear, infFar);
             
@@ -46,7 +46,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Direction
         //----------------------------------------------------------
-        const Core::CVector3& CDirectionalLightComponent::GetDirection() const
+        const Core::CVector3& DirectionalLightComponent::GetDirection() const
         {
             if(GetEntityOwner() != nullptr)
             {
@@ -62,7 +62,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Light Matrix
         //----------------------------------------------------------
-        const Core::CMatrix4x4& CDirectionalLightComponent::GetLightMatrix() const
+        const Core::CMatrix4x4& DirectionalLightComponent::GetLightMatrix() const
         {
             //The matrix is a view projection
             if(mbMatrixCacheValid == false && GetEntityOwner() != nullptr)
@@ -77,14 +77,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Shadow Tolerance
         //----------------------------------------------------------
-        f32 CDirectionalLightComponent::GetShadowTolerance() const
+        f32 DirectionalLightComponent::GetShadowTolerance() const
         {
             return mfShadowTolerance;
         }
         //----------------------------------------------------------
         /// Set Shadow Tolerance
         //----------------------------------------------------------
-        void CDirectionalLightComponent::SetShadowTolerance(f32 infTolerance)
+        void DirectionalLightComponent::SetShadowTolerance(f32 infTolerance)
         {
             mfShadowTolerance = infTolerance;
             
@@ -93,35 +93,35 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Shadow Map Ptr
         //----------------------------------------------------------
-        const TexturePtr& CDirectionalLightComponent::GetShadowMapPtr() const
+        const TexturePtr& DirectionalLightComponent::GetShadowMapPtr() const
         {
             return mpShadowMap;
         }
         //----------------------------------------------------------
         /// Get Shadow Map Debug Ptr
         //----------------------------------------------------------
-        const TexturePtr& CDirectionalLightComponent::GetShadowMapDebugPtr() const
+        const TexturePtr& DirectionalLightComponent::GetShadowMapDebugPtr() const
         {
             return mpShadowMapDebug;
         }
         //----------------------------------------------------
         /// On Attached To Entity
         //----------------------------------------------------
-        void CDirectionalLightComponent::OnAttachedToEntity()
+        void DirectionalLightComponent::OnAttachedToEntity()
         {
-            GetEntityOwner()->Transform().GetTransformChangedEvent() += fastdelegate::MakeDelegate(this, &CDirectionalLightComponent::OnEntityTransformChanged);
+            GetEntityOwner()->Transform().GetTransformChangedEvent() += fastdelegate::MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged);
         }
         //----------------------------------------------------
         /// On Detached From Entity
         //----------------------------------------------------
-        void CDirectionalLightComponent::OnDetachedFromEntity()
+        void DirectionalLightComponent::OnDetachedFromEntity()
         {
-            GetEntityOwner()->Transform().GetTransformChangedEvent() -= fastdelegate::MakeDelegate(this, &CDirectionalLightComponent::OnEntityTransformChanged);
+            GetEntityOwner()->Transform().GetTransformChangedEvent() -= fastdelegate::MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged);
         }
         //----------------------------------------------------
         /// On Entity Transform Changed
         //----------------------------------------------------
-        void CDirectionalLightComponent::OnEntityTransformChanged()
+        void DirectionalLightComponent::OnEntityTransformChanged()
         {
             mbMatrixCacheValid = false;
             mbCacheValid = false;

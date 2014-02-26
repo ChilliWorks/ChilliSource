@@ -120,9 +120,9 @@ namespace ChilliSource
 			//Traverse the scene graph and get all renderable objects
             std::vector<RenderComponent*> aPreFilteredRenderCache;
             std::vector<CameraComponent*> aCameraCache;
-            std::vector<CDirectionalLightComponent*> aDirLightCache;
-            std::vector<CPointLightComponent*> aPointLightCache;
-            CAmbientLightComponent* pAmbientLight = nullptr;
+            std::vector<DirectionalLightComponent*> aDirLightCache;
+            std::vector<PointLightComponent*> aPointLightCache;
+            AmbientLightComponent* pAmbientLight = nullptr;
             
 			FindRenderableObjectsInScene(inpScene, aPreFilteredRenderCache, aCameraCache, aDirLightCache, aPointLightCache, pAmbientLight);
             mpActiveCamera = (aCameraCache.empty() ? nullptr : aCameraCache.back());
@@ -217,12 +217,12 @@ namespace ChilliSource
 		/// Find Renderable Objects In Scene
 		//----------------------------------------------------------
         void Renderer::FindRenderableObjectsInScene(Core::CScene* pScene, std::vector<RenderComponent*>& outaRenderCache, std::vector<CameraComponent*>& outaCameraCache,
-                                          std::vector<CDirectionalLightComponent*>& outaDirectionalLightComponentCache, std::vector<CPointLightComponent*>& outaPointLightComponentCache, CAmbientLightComponent*& outpAmbientLight) const
+                                          std::vector<DirectionalLightComponent*>& outaDirectionalLightComponentCache, std::vector<PointLightComponent*>& outaPointLightComponentCache, AmbientLightComponent*& outpAmbientLight) const
 		{
-            static std::vector<ILightComponent*> aLightComponentCache;
+            static std::vector<LightComponent*> aLightComponentCache;
             aLightComponentCache.clear();
             
-            pScene->QuerySceneForComponents<RenderComponent, CameraComponent, ILightComponent>(outaRenderCache, outaCameraCache, aLightComponentCache);
+            pScene->QuerySceneForComponents<RenderComponent, CameraComponent, LightComponent>(outaRenderCache, outaCameraCache, aLightComponentCache);
             
             //Split the lights
             for(u32 i=0; i<aLightComponentCache.size(); ++i)
@@ -230,17 +230,17 @@ namespace ChilliSource
                 if(aLightComponentCache[i]->GetEntityOwner()->IsVisible() == false)
                     continue;
                 
-                if(aLightComponentCache[i]->IsA(CDirectionalLightComponent::InterfaceID))
+                if(aLightComponentCache[i]->IsA(DirectionalLightComponent::InterfaceID))
                 {
-                    outaDirectionalLightComponentCache.push_back((CDirectionalLightComponent*)aLightComponentCache[i]);
+                    outaDirectionalLightComponentCache.push_back((DirectionalLightComponent*)aLightComponentCache[i]);
                 }
-                else if(aLightComponentCache[i]->IsA(CPointLightComponent::InterfaceID))
+                else if(aLightComponentCache[i]->IsA(PointLightComponent::InterfaceID))
                 {
-                    outaPointLightComponentCache.push_back((CPointLightComponent*)aLightComponentCache[i]);
+                    outaPointLightComponentCache.push_back((PointLightComponent*)aLightComponentCache[i]);
                 }
-                else if(aLightComponentCache[i]->IsA(CAmbientLightComponent::InterfaceID))
+                else if(aLightComponentCache[i]->IsA(AmbientLightComponent::InterfaceID))
                 {
-                    outpAmbientLight = (CAmbientLightComponent*)aLightComponentCache[i];
+                    outpAmbientLight = (AmbientLightComponent*)aLightComponentCache[i];
                 }
             }
 		}
@@ -299,7 +299,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Shadow Map
         //----------------------------------------------------------
-        void Renderer::RenderShadowMap(CameraComponent* inpCameraComponent, std::vector<CDirectionalLightComponent*>& inaLightComponents, std::vector<RenderComponent*>& inaRenderables)
+        void Renderer::RenderShadowMap(CameraComponent* inpCameraComponent, std::vector<DirectionalLightComponent*>& inaLightComponents, std::vector<RenderComponent*>& inaRenderables)
         {
             std::vector<RenderComponent*> aFilteredShadowMapRenderCache;
             
@@ -321,7 +321,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Render Shadow Map
 		//----------------------------------------------------------
-		void Renderer::RenderShadowMap(CameraComponent* inpCameraComponent, CDirectionalLightComponent* inpLightComponent, std::vector<RenderComponent*>& inaRenderables)
+		void Renderer::RenderShadowMap(CameraComponent* inpCameraComponent, DirectionalLightComponent* inpLightComponent, std::vector<RenderComponent*>& inaRenderables)
 		{
 			//Create a new offscreen render target using the given texture
 			RenderTarget* pRenderTarget = mpRenderSystem->CreateRenderTarget(inpLightComponent->GetShadowMapPtr()->GetWidth(), inpLightComponent->GetShadowMapPtr()->GetHeight());
@@ -396,7 +396,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Cull Renderables
         //----------------------------------------------------------
-		void Renderer::CullRenderables(CPointLightComponent* inpLightComponent, const std::vector<RenderComponent*>& inaRenderCache, std::vector<RenderComponent*>& outaRenderCache) const
+		void Renderer::CullRenderables(PointLightComponent* inpLightComponent, const std::vector<RenderComponent*>& inaRenderCache, std::vector<RenderComponent*>& outaRenderCache) const
         {
             //Reserve estimated space
             outaRenderCache.reserve(inaRenderCache.size());

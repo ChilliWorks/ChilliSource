@@ -149,7 +149,7 @@ namespace ChilliSource
         /// @param Offset into mesh buffer
         /// @param Stride within mesh buffer
 		//------------------------------------------------------
-		void CSpriteBatch::Render(RenderSystem* inpRenderSystem, const CMaterial& inMaterial, u32 inudwOffset, u32 inudwStride) const
+		void CSpriteBatch::Render(RenderSystem* inpRenderSystem, const Material& inMaterial, u32 inudwOffset, u32 inudwStride) const
 		{
             if(inudwStride > 0)
             {
@@ -172,7 +172,7 @@ namespace ChilliSource
 		///
 		/// @param Active render system
 		//------------------------------------------------------
-		void CSpriteBatch::Render(RenderSystem* inpRenderSystem, const CMaterial& inMaterial) const
+		void CSpriteBatch::Render(RenderSystem* inpRenderSystem, const Material& inMaterial) const
 		{
             if(mpSpriteBuffer->GetIndexCount() > 0)
             {

@@ -35,11 +35,11 @@ namespace ChilliSource
         //===============================================================
 		/// Events
 		//===============================================================
-        typedef fastdelegate::FastDelegate1<CAnimatedMeshComponent*> AnimationChangedDelegate;
+        typedef fastdelegate::FastDelegate1<AnimatedMeshComponent*> AnimationChangedDelegate;
         typedef Core::CEvent1<AnimationChangedDelegate> AnimationChangedEvent;
-        typedef fastdelegate::FastDelegate1<CAnimatedMeshComponent*> AnimationCompletionDelegate;
+        typedef fastdelegate::FastDelegate1<AnimatedMeshComponent*> AnimationCompletionDelegate;
         typedef Core::CEvent1<AnimationCompletionDelegate> AnimationCompletionEvent;
-        typedef fastdelegate::FastDelegate1<CAnimatedMeshComponent*> AnimationLoopedDelegate;
+        typedef fastdelegate::FastDelegate1<AnimatedMeshComponent*> AnimationLoopedDelegate;
         typedef Core::CEvent1<AnimationLoopedDelegate> AnimationLoopedEvent;
 		//===============================================================
 		/// Animated Mesh component
@@ -47,13 +47,13 @@ namespace ChilliSource
 		/// An animated mesh component. This defines a 3D mesh that can
 		/// be manipulated, textured and animated.
 		//===============================================================
-		class CAnimatedMeshComponent : public RenderComponent
+		class AnimatedMeshComponent : public RenderComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CAnimatedMeshComponent);
+			DECLARE_NAMED_INTERFACE(AnimatedMeshComponent);
 			
-			CAnimatedMeshComponent();
-			~CAnimatedMeshComponent();
+			AnimatedMeshComponent();
+			~AnimatedMeshComponent();
 			//----------------------------------------------------------
 			/// Is A
 			///

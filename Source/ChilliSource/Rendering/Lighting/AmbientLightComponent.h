@@ -17,10 +17,10 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CAmbientLightComponent : public ILightComponent
+		class AmbientLightComponent : public LightComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CAmbientLightComponent);
+			DECLARE_NAMED_INTERFACE(AmbientLightComponent);
 			
 			//----------------------------------------------------------
 			/// Is A

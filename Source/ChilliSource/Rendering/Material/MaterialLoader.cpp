@@ -36,7 +36,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Constructor
 		//-------------------------------------------------------------------------
-		CMaterialLoader::CMaterialLoader(RenderCapabilities* inpRenderCapabilities)
+		MaterialLoader::MaterialLoader(RenderCapabilities* inpRenderCapabilities)
 			: mpRenderCapabilities(inpRenderCapabilities)
 		{
 			CS_ASSERT(mpRenderCapabilities, "Material loader is missing required system: Render Capabilities.");
@@ -44,35 +44,35 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Is A
 		//-------------------------------------------------------------------------
-		bool CMaterialLoader::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool MaterialLoader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == IResourceProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource of Kind
 		//----------------------------------------------------------------------------
-		bool CMaterialLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
+		bool MaterialLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == CMaterial::InterfaceID);
+			return (inInterfaceID == Material::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource From File With Extension
 		//----------------------------------------------------------------------------
-		bool CMaterialLoader::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
+		bool MaterialLoader::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
 		{
 			return (inExtension == kstrMaterialExtension);
 		}
 		//----------------------------------------------------------------------------
 		/// Create Resource From File
 		//----------------------------------------------------------------------------
-		bool CMaterialLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool MaterialLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
             std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > > aShaderFiles;
             std::vector<TextureDesc> aTextureFiles;
             std::vector<TextureDesc> aCubemapFiles;
             if(BuildMaterialFromFile(ineStorageLocation, inFilePath, aShaderFiles, aTextureFiles, aCubemapFiles, outpResource) == true)
 			{
-                MaterialPtr pMaterial = std::static_pointer_cast<CMaterial>(outpResource);
+                MaterialPtr pMaterial = std::static_pointer_cast<Material>(outpResource);
                 
                 IShaderManager* pShaderManager = GET_RESOURCE_MANAGER(IShaderManager);
                 if(pShaderManager != nullptr)
@@ -115,10 +115,10 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Async Create Resource From File
 		//----------------------------------------------------------------------------
-		bool CMaterialLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool MaterialLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
 			//Start the material building task.
-			Core::Task<Core::StorageLocation, const std::string&, Core::ResourcePtr&> BuildMaterialTask(this, &CMaterialLoader::BuildMaterialTask, ineStorageLocation, inFilePath, outpResource);
+			Core::Task<Core::StorageLocation, const std::string&, Core::ResourcePtr&> BuildMaterialTask(this, &MaterialLoader::BuildMaterialTask, ineStorageLocation, inFilePath, outpResource);
 			Core::CTaskScheduler::ScheduleTask(BuildMaterialTask);
 			
 			return true;
@@ -126,7 +126,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Build Material Task
 		//----------------------------------------------------------------------------
-		void CMaterialLoader::BuildMaterialTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		void MaterialLoader::BuildMaterialTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
 			//build the material
             std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > > aShaderFiles;
@@ -134,7 +134,7 @@ namespace ChilliSource
             std::vector<TextureDesc> aCubemapFiles;
 			if(BuildMaterialFromFile(ineStorageLocation, inFilePath, aShaderFiles, aTextureFiles, aCubemapFiles, outpResource) == true)
 			{
-                MaterialPtr pMaterial = std::static_pointer_cast<CMaterial>(outpResource);
+                MaterialPtr pMaterial = std::static_pointer_cast<Material>(outpResource);
                 
                 IShaderManager* pShaderManager = GET_RESOURCE_MANAGER(IShaderManager);
                 if(pShaderManager != nullptr)
@@ -171,20 +171,20 @@ namespace ChilliSource
                 
                 pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
                 
-                Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<Core::ResourcePtr&>(this, &CMaterialLoader::SetLoadedTask, outpResource));
+                Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<Core::ResourcePtr&>(this, &MaterialLoader::SetLoadedTask, outpResource));
 			}
 		}
 		//----------------------------------------------------------------------------
 		/// Set Loaded Task
 		//----------------------------------------------------------------------------
-		void CMaterialLoader::SetLoadedTask(Core::ResourcePtr& outpResource)
+		void MaterialLoader::SetLoadedTask(Core::ResourcePtr& outpResource)
 		{
 			outpResource->SetLoaded(true);
 		}
 		//----------------------------------------------------------------------------
 		/// Build Material From File
 		//----------------------------------------------------------------------------
-		bool CMaterialLoader::BuildMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath,
+		bool MaterialLoader::BuildMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath,
                                                     std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles,
                                                     std::vector<TextureDesc>& outaTextureFiles,
                                                     std::vector<TextureDesc>& outaCubemapFiles,
@@ -198,7 +198,7 @@ namespace ChilliSource
                 std::make_pair("PointLightPass", ShaderPass::k_point)
             };
             
-			CMaterial* pMaterial = (CMaterial*)(outpResource.get());
+			Material* pMaterial = (Material*)(outpResource.get());
 			
 			//Load the XML file
 			TiXmlDocument Document(inFilePath);
@@ -406,7 +406,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
 		/// Get Shader Files For Material Type
 		//----------------------------------------------------------------------------
-        void CMaterialLoader::GetShaderFilesForMaterialType(const std::string& instrType, std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles) const
+        void MaterialLoader::GetShaderFilesForMaterialType(const std::string& instrType, std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles) const
         {
             if(instrType == "Sprite")
             {
@@ -535,7 +535,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Convert String To Blend Function
 		//----------------------------------------------------------------------------
-		AlphaBlend CMaterialLoader::ConvertStringToBlendFunction(const std::string &instrFunc)
+		AlphaBlend MaterialLoader::ConvertStringToBlendFunction(const std::string &instrFunc)
 		{
 			if(instrFunc == "Zero")					return AlphaBlend::k_zero;
 			if(instrFunc == "One")					return AlphaBlend::k_one;
@@ -552,7 +552,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
 		/// Convert String To Cull Face
 		//----------------------------------------------------------------------------
-		CullFace CMaterialLoader::ConvertStringToCullFace(const std::string &instrFace)
+		CullFace MaterialLoader::ConvertStringToCullFace(const std::string &instrFace)
 		{
 			if(instrFace == "Front")    return CullFace::k_front;
 			if(instrFace == "Back")		return CullFace::k_back;

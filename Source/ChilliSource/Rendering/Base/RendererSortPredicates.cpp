@@ -46,15 +46,15 @@ namespace ChilliSource
         
         bool MaterialSortPredicate::SortItem(RenderComponent* p1, RenderComponent* p2)
         {
-            CMaterial * pM1= p1->GetMaterial().get();
-            CMaterial * pM2= p2->GetMaterial().get();
+            Material * pM1= p1->GetMaterial().get();
+            Material * pM2= p2->GetMaterial().get();
             if(pM1 == pM2)
             {
-                bool bp1Mesh = p1->IsA(CStaticMeshComponent::InterfaceID);
-                bool bp2Mesh = p2->IsA(CStaticMeshComponent::InterfaceID);
+                bool bp1Mesh = p1->IsA(StaticMeshComponent::InterfaceID);
+                bool bp2Mesh = p2->IsA(StaticMeshComponent::InterfaceID);
                 if(bp1Mesh && bp2Mesh)
                 {
-                    return ((CStaticMeshComponent*)p1)->GetMesh().get() < ((CStaticMeshComponent*)p2)->GetMesh().get();
+                    return ((StaticMeshComponent*)p1)->GetMesh().get() < ((StaticMeshComponent*)p2)->GetMesh().get();
                 }
                 else
                 {

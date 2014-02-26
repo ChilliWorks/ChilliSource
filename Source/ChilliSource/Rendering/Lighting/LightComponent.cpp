@@ -17,12 +17,12 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(ILightComponent);
+        DEFINE_NAMED_INTERFACE(LightComponent);
 
 		//---------------------------------------------
 		/// Constructor
 		//---------------------------------------------
-		ILightComponent::ILightComponent()
+		LightComponent::LightComponent()
         : mfIntensity(1.0f)
         , mbCacheValid(false)
 		{
@@ -31,7 +31,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Colour
         //----------------------------------------------------------
-        void ILightComponent::SetColour(const Core::CColour &inColour)
+        void LightComponent::SetColour(const Core::CColour &inColour)
         {
             mColour = inColour;
             
@@ -40,7 +40,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Colour
         //----------------------------------------------------------
-        const Core::CColour& ILightComponent::GetColour() const
+        const Core::CColour& LightComponent::GetColour() const
         {
             mIntenseColour = mColour * mfIntensity;
             return mIntenseColour;
@@ -48,7 +48,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get World Position
         //----------------------------------------------------------
-        const Core::CVector3& ILightComponent::GetWorldPosition() const
+        const Core::CVector3& LightComponent::GetWorldPosition() const
         {
             if(GetEntityOwner() != nullptr)
             {
@@ -60,7 +60,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Intensity
         //----------------------------------------------------------
-        void ILightComponent::SetIntensity(f32 infIntensity)
+        void LightComponent::SetIntensity(f32 infIntensity)
         {
             mfIntensity = infIntensity;
             
@@ -69,21 +69,21 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Intensity
         //----------------------------------------------------------
-        f32 ILightComponent::GetIntensity() const
+        f32 LightComponent::GetIntensity() const
         {
             return mfIntensity;
         }
         //----------------------------------------------------------
         /// Is Cache Valid
         //----------------------------------------------------------
-        bool ILightComponent::IsCacheValid() const
+        bool LightComponent::IsCacheValid() const
         {
             return mbCacheValid;
         }
         //----------------------------------------------------------
         /// Set Cache Valid
         //----------------------------------------------------------
-        void ILightComponent::SetCacheValid()
+        void LightComponent::SetCacheValid()
         {
             mbCacheValid = true;
         }

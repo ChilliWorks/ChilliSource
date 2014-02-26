@@ -128,7 +128,7 @@ namespace ChilliSource
                 //---Load the material
                 if(!mpMaterialMgr)
                 {
-                    mpMaterialMgr = static_cast<IMaterialManager*>(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(CMaterial::InterfaceID));
+                    mpMaterialMgr = static_cast<MaterialManager*>(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Material::InterfaceID));
                 }
                 
                 MaterialPtr pMaterial;

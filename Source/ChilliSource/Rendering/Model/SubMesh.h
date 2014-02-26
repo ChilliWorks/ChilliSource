@@ -33,11 +33,11 @@ namespace ChilliSource
 		};
 		typedef std::shared_ptr<InverseBindPose> InverseBindPosePtr;
 		
-		class CSubMesh
+		class SubMesh
 		{
 		public:
 			
-			virtual ~CSubMesh();
+			virtual ~SubMesh();
 			
 			//-----------------------------------------------------------------
 			/// Get Default Material Name
@@ -84,7 +84,7 @@ namespace ChilliSource
 			
 		private:
 			//Only the mesh can create this
-			CSubMesh(std::string instrName);
+			SubMesh(std::string instrName);
 			//-----------------------------------------------------------------
 			/// Prepare
 			///
@@ -158,8 +158,8 @@ namespace ChilliSource
 			void Render(RenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const MaterialPtr& inpMaterial, const SkinnedAnimationGroupPtr& inpAnimationGroup) const;
 			
 			//Only model loaders can alter the mesh construct
-			friend class CMeshManager;
-			friend class CMesh;
+			friend class MeshManager;
+			friend class Mesh;
 			
 		private:
 			

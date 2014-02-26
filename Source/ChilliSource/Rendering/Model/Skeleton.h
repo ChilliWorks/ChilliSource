@@ -29,15 +29,15 @@ namespace ChilliSource
 			s32 mdwParentIndex;
 		};
 		//=========================================================================
-		/// CSkeleton
+		/// Skeleton
 		///
 		/// a simple class that describes a skeleton for skeletal animation.
 		//=========================================================================
-		class CSkeleton
+		class Skeleton
 		{
 		public:
-			CSkeleton();
-			~CSkeleton();
+			Skeleton();
+			~Skeleton();
 			//-------------------------------------------------------------------------
 			/// Get Node By Name
 			///

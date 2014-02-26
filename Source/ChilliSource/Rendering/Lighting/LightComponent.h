@@ -19,15 +19,15 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class ILightComponent : public Core::IComponent
+		class LightComponent : public Core::IComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(ILightComponent);
+			DECLARE_NAMED_INTERFACE(LightComponent);
             
             //----------------------------------------------------------
             /// Constructor
             //----------------------------------------------------------
-			ILightComponent();
+			LightComponent();
             //----------------------------------------------------------
 			/// Set Colour
 			///

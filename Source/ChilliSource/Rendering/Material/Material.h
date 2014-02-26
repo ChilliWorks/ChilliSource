@@ -78,12 +78,12 @@ namespace ChilliSource
             k_total
         };
 		
-		class CMaterial : public Core::IResource
+		class Material : public Core::IResource
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CMaterial);
+			DECLARE_NAMED_INTERFACE(Material);
 		
-            CMaterial();
+            Material();
 			
 			//----------------------------------------------------------
 			/// Clone
@@ -464,8 +464,8 @@ namespace ChilliSource
 			bool mbIsDepthTestEnabled;
             bool mbIsCullingEnabled;
             
-            friend class IMaterialManager;
-			friend class CMaterialLoader;
+            friend class MaterialManager;
+			friend class MaterialLoader;
 		};
 	}
 }

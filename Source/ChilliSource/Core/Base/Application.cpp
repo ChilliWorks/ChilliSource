@@ -388,7 +388,7 @@ namespace ChilliSource
                 {
                     StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultMesh"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultMesh"].get("Path", "").asString();
-                    pDefaultMesh = LOAD_RESOURCE(Rendering::CMesh, eStorageLocation, strPath);
+                    pDefaultMesh = LOAD_RESOURCE(Rendering::Mesh, eStorageLocation, strPath);
                 }
                 
                 if(jRoot.isMember("DefaultFont"))
@@ -402,7 +402,7 @@ namespace ChilliSource
                 {
                     StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultMaterial"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultMaterial"].get("Path", "").asString();
-                    pDefaultMaterial = LOAD_RESOURCE(Rendering::CMaterial, eStorageLocation, strPath);
+                    pDefaultMaterial = LOAD_RESOURCE(Rendering::Material, eStorageLocation, strPath);
                 }
             }
         }

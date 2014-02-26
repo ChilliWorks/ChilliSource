@@ -31,13 +31,13 @@ namespace ChilliSource
 		///
 		/// A group of animations that can be blended.
 		//===============================================================
-        class CSkinnedAnimationGroup
+        class SkinnedAnimationGroup
         {
         public:
             //-----------------------------------------------------------
             /// Constructor
             //-----------------------------------------------------------
-            CSkinnedAnimationGroup(const SkeletonPtr& inpSkeleton);
+            SkinnedAnimationGroup(const SkeletonPtr& inpSkeleton);
             //----------------------------------------------------------
 			/// Attach Animation
 			///
@@ -137,7 +137,7 @@ namespace ChilliSource
             //-----------------------------------------------------------
             /// Destructor
             //-----------------------------------------------------------
-            ~CSkinnedAnimationGroup();
+            ~SkinnedAnimationGroup();
         private:
             //----------------------------------------------------------
             /// Animation Item

@@ -13,33 +13,33 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        DEFINE_NAMED_INTERFACE(CAnimatedMeshComponentUpdater);
+        DEFINE_NAMED_INTERFACE(AnimatedMeshComponentUpdater);
         //------------------------------------------------
         /// Constructor
         //------------------------------------------------
-        CAnimatedMeshComponentUpdater::CAnimatedMeshComponentUpdater()
+        AnimatedMeshComponentUpdater::AnimatedMeshComponentUpdater()
         {
         }
         //------------------------------------------------
         /// Is A
         //------------------------------------------------
-        bool CAnimatedMeshComponentUpdater::IsA(Core::InterfaceIDType inInterfaceID) const
+        bool AnimatedMeshComponentUpdater::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-            return (CAnimatedMeshComponentUpdater::InterfaceID == inInterfaceID || Core::IUpdateable::InterfaceID == inInterfaceID);
+            return (AnimatedMeshComponentUpdater::InterfaceID == inInterfaceID || Core::IUpdateable::InterfaceID == inInterfaceID);
         }
         //------------------------------------------------
         /// Add Component
         //------------------------------------------------
-        void CAnimatedMeshComponentUpdater::AddComponent(CAnimatedMeshComponent* inpAnimatedMesh)
+        void AnimatedMeshComponentUpdater::AddComponent(AnimatedMeshComponent* inpAnimatedMesh)
         {
             mapComponentsToUpdate.push_back(inpAnimatedMesh);
         }
         //------------------------------------------------
         /// Update
         //------------------------------------------------
-        void CAnimatedMeshComponentUpdater::Update(f32 infDeltaTime)
+        void AnimatedMeshComponentUpdater::Update(f32 infDeltaTime)
         {
-            for (std::vector<CAnimatedMeshComponent*>::const_iterator it = mapComponentsToUpdate.begin(); it != mapComponentsToUpdate.end(); ++it)
+            for (std::vector<AnimatedMeshComponent*>::const_iterator it = mapComponentsToUpdate.begin(); it != mapComponentsToUpdate.end(); ++it)
             {
                 (*it)->Update(infDeltaTime);
             }
@@ -47,9 +47,9 @@ namespace ChilliSource
         //------------------------------------------------
         /// Remove Component
         //------------------------------------------------
-        void CAnimatedMeshComponentUpdater::RemoveComponent(CAnimatedMeshComponent* inpAnimatedMesh)
+        void AnimatedMeshComponentUpdater::RemoveComponent(AnimatedMeshComponent* inpAnimatedMesh)
         {
-            std::vector<CAnimatedMeshComponent*>::iterator it;
+            std::vector<AnimatedMeshComponent*>::iterator it;
             for (it = mapComponentsToUpdate.begin(); it != mapComponentsToUpdate.end(); ++it)
             {
                 if ((*it) == inpAnimatedMesh)

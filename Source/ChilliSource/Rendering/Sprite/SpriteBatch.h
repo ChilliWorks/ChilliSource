@@ -42,7 +42,7 @@ namespace ChilliSource
             /// @param Offset into mesh buffer
             /// @param Stride within mesh buffer
 			//------------------------------------------------------
-			void Render(RenderSystem* inpRenderSystem, const CMaterial& inMaterial, u32 inudwOffset, u32 inudwStride) const;
+			void Render(RenderSystem* inpRenderSystem, const Material& inMaterial, u32 inudwOffset, u32 inudwStride) const;
             //------------------------------------------------------
             /// Render
             ///
@@ -50,7 +50,7 @@ namespace ChilliSource
             ///
             /// @param Active render system
             //------------------------------------------------------
-            void Render(RenderSystem* inpRenderSystem, const CMaterial& inMaterial) const;
+            void Render(RenderSystem* inpRenderSystem, const Material& inMaterial) const;
 			//------------------------------------------------------
 			/// Get Tag
 			///

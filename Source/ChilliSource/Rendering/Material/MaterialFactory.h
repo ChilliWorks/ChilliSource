@@ -16,16 +16,16 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        class CMaterialFactory : public Core::ISystem
+        class MaterialFactory : public Core::ISystem
         {
         public:
             
-            DECLARE_NAMED_INTERFACE(CMaterialFactory);
+            DECLARE_NAMED_INTERFACE(MaterialFactory);
             
             //---------------------------------------------------
             /// Constructor
             //---------------------------------------------------
-            CMaterialFactory();
+            MaterialFactory();
             //---------------------------------------------------
             /// Is A
             ///

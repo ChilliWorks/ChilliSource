@@ -135,7 +135,7 @@ namespace ChilliSource
             ///
             /// @param lighting components
             //----------------------------------------------------------
-            void SetLight(Rendering::ILightComponent* inpLightComponent);
+            void SetLight(Rendering::LightComponent* inpLightComponent);
 			//----------------------------------------------------------
 			/// Apply Material
 			///
@@ -143,7 +143,7 @@ namespace ChilliSource
 			///
 			/// @param Material
 			//----------------------------------------------------------
-			void ApplyMaterial(const Rendering::CMaterial& inMaterial);
+			void ApplyMaterial(const Rendering::Material& inMaterial);
             //----------------------------------------------------------
 			/// Apply Joints
 			///
@@ -333,7 +333,7 @@ namespace ChilliSource
             ///
             /// @param Material
             //----------------------------------------------------------
-            void ApplyRenderStates(const Rendering::CMaterial& inMaterial);
+            void ApplyRenderStates(const Rendering::Material& inMaterial);
             //----------------------------------------------------------
             /// Get Attribute Locations
             ///
@@ -345,7 +345,7 @@ namespace ChilliSource
             ///
             /// @param Material
             //----------------------------------------------------------
-            void GetUniformLocations(const Rendering::CMaterial &inMaterial);
+            void GetUniformLocations(const Rendering::Material &inMaterial);
             //----------------------------------------------------------
             /// Apply Textures
             ///
@@ -353,7 +353,7 @@ namespace ChilliSource
             ///
             /// @param Material
             //----------------------------------------------------------
-            void ApplyTextures(const Rendering::CMaterial &inMaterial);
+            void ApplyTextures(const Rendering::Material &inMaterial);
             //----------------------------------------------------------
             /// Apply Lighting Values
             ///
@@ -361,7 +361,7 @@ namespace ChilliSource
             ///
             /// @param Material
             //----------------------------------------------------------
-            void ApplyLightingValues(const Rendering::CMaterial &inMaterial);
+            void ApplyLightingValues(const Rendering::Material &inMaterial);
 			//------------------------------------------------------------
 			/// Enable Vertex Attribute For Semantic (Programmable pipeline)
 			///
@@ -399,7 +399,7 @@ namespace ChilliSource
 			/// @param Material
 			/// @param Shader program
 			//----------------------------------------------------------
-			void ApplyShaderVariables(const Rendering::CMaterial &inMaterial, GLuint inShaderProg);
+			void ApplyShaderVariables(const Rendering::Material &inMaterial, GLuint inShaderProg);
             //----------------------------------------------------------
             /// Apply Lighting
             ///
@@ -408,7 +408,7 @@ namespace ChilliSource
             /// @param Material
             /// @param Lighting component
             //----------------------------------------------------------
-            void ApplyLighting(const Rendering::CMaterial &inMaterial, Rendering::ILightComponent* inpLightComponent);
+            void ApplyLighting(const Rendering::Material &inMaterial, Rendering::LightComponent* inpLightComponent);
 			//----------------------------------------------------------
 			/// Force Refresh Render States
 			///
@@ -453,7 +453,7 @@ namespace ChilliSource
             bool ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
                                             GLuint inudwLocation, GLint indwSize, GLenum ineType, GLboolean inbNormalized, GLsizei indwStride, const GLvoid* inpOffset);
             
-            Rendering::ILightComponent* mpLightComponent;
+            Rendering::LightComponent* mpLightComponent;
             
             Core::CColour mNewClearColour;
 			Core::CColour mClearColour;
@@ -518,7 +518,7 @@ namespace ChilliSource
             Core::CVector2 mvCachedScissorPos;
             Core::CVector2 mvCachedScissorSize;
             
-            const Rendering::CMaterial* mpCurrentMaterial;
+            const Rendering::Material* mpCurrentMaterial;
             
             u32 mudwViewWidth;
             u32 mudwViewHeight;

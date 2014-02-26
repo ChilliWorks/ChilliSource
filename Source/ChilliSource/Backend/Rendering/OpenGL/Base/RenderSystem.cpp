@@ -155,7 +155,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Light
         //----------------------------------------------------------
-        void CRenderSystem::SetLight(Rendering::ILightComponent* inpLightComponent)
+        void CRenderSystem::SetLight(Rendering::LightComponent* inpLightComponent)
         {
             if(inpLightComponent == mpLightComponent && mbInvalidateAllCaches == false)
             {
@@ -173,7 +173,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Apply Material
 		//----------------------------------------------------------
-		void CRenderSystem::ApplyMaterial(const Rendering::CMaterial& inMaterial)
+		void CRenderSystem::ApplyMaterial(const Rendering::Material& inMaterial)
 		{
 			//Enable the hardware states
             if(mbInvalidateAllCaches || !mpCurrentMaterial || mpCurrentMaterial != &inMaterial || !mpCurrentMaterial->IsCacheValid())
@@ -245,7 +245,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Apply Render States
 		//----------------------------------------------------------
-		void CRenderSystem::ApplyRenderStates(const Rendering::CMaterial& inMaterial)
+		void CRenderSystem::ApplyRenderStates(const Rendering::Material& inMaterial)
         {
             EnableAlphaBlending(inMaterial.IsTransparent());
             SetBlendFunction(inMaterial.GetSourceBlendFunction(), inMaterial.GetDestBlendFunction());
@@ -300,7 +300,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Get Uniform Locations
 		//----------------------------------------------------------
-		void CRenderSystem::GetUniformLocations(const Rendering::CMaterial &inMaterial)
+		void CRenderSystem::GetUniformLocations(const Rendering::Material &inMaterial)
         {
             ShaderPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
             
@@ -348,7 +348,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Apply Shader Variables
 		//----------------------------------------------------------
-		void CRenderSystem::ApplyShaderVariables(const Rendering::CMaterial &inMaterial, GLuint inShaderProg)
+		void CRenderSystem::ApplyShaderVariables(const Rendering::Material &inMaterial, GLuint inShaderProg)
 		{
             ShaderPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
 			//Get and set all the custom shader variables
@@ -391,7 +391,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Textures
         //----------------------------------------------------------
-        void CRenderSystem::ApplyTextures(const Rendering::CMaterial &inMaterial)
+        void CRenderSystem::ApplyTextures(const Rendering::Material &inMaterial)
         {
             for(u32 i=0; i<inMaterial.GetTextures().size(); ++i)
             {
@@ -417,7 +417,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Lighting Values
         //----------------------------------------------------------
-        void CRenderSystem::ApplyLightingValues(const Rendering::CMaterial &inMaterial)
+        void CRenderSystem::ApplyLightingValues(const Rendering::Material &inMaterial)
         {
             if(mEmissiveHandle != -1 && (mbInvalidateAllCaches || mbEmissiveSet == false || mCurrentEmissive != inMaterial.GetEmissive()))
             {
@@ -447,7 +447,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Lighting
         //----------------------------------------------------------
-        void CRenderSystem::ApplyLighting(const Rendering::CMaterial &inMaterial, Rendering::ILightComponent* inpLightComponent)
+        void CRenderSystem::ApplyLighting(const Rendering::Material &inMaterial, Rendering::LightComponent* inpLightComponent)
         {
             if(mbInvalidateLigthingCache == false || inpLightComponent == nullptr)
                 return;
@@ -456,9 +456,9 @@ namespace ChilliSource
             inpLightComponent->CalculateLightingValues();
             inpLightComponent->SetCacheValid();
             
-            if(inpLightComponent->IsA(Rendering::CDirectionalLightComponent::InterfaceID))
+            if(inpLightComponent->IsA(Rendering::DirectionalLightComponent::InterfaceID))
             {
-                Rendering::CDirectionalLightComponent* pLightComponent = (Rendering::CDirectionalLightComponent*)inpLightComponent;
+                Rendering::DirectionalLightComponent* pLightComponent = (Rendering::DirectionalLightComponent*)inpLightComponent;
                 
                 if(mLightDirHandle >= 0)
                 {
@@ -480,9 +480,9 @@ namespace ChilliSource
                     }
                 }
             }
-            else if(inpLightComponent->IsA(Rendering::CPointLightComponent::InterfaceID))
+            else if(inpLightComponent->IsA(Rendering::PointLightComponent::InterfaceID))
             {
-                Rendering::CPointLightComponent* pLightComponent = (Rendering::CPointLightComponent*)inpLightComponent;
+                Rendering::PointLightComponent* pLightComponent = (Rendering::PointLightComponent*)inpLightComponent;
                 
                 if(mAttenConHandle >= 0)
                 {

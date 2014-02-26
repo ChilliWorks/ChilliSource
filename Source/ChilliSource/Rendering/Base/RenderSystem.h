@@ -47,10 +47,10 @@ namespace ChilliSource
 			virtual void BeginFrame(RenderTarget* inpActiveRenderTarget) = 0;
 			virtual void EndFrame(RenderTarget* inpActiveRenderTarget) = 0;
 
-			virtual void ApplyMaterial(const CMaterial& inMaterial) = 0;
+			virtual void ApplyMaterial(const Material& inMaterial) = 0;
             virtual void ApplyJoints(const std::vector<Core::CMatrix4x4>& inaJoints) = 0;
 			virtual void ApplyCamera(const Core::CVector3& invPosition, const Core::CMatrix4x4& inmatInvView, const Core::CMatrix4x4& inmatProj, const Core::CColour& inClearCol) = 0;
-            virtual void SetLight(ILightComponent* inpLightComponent) = 0;
+            virtual void SetLight(LightComponent* inpLightComponent) = 0;
 			
 			virtual void EnableAlphaBlending(bool inbIsEnabled) = 0;
 			virtual void EnableDepthTesting(bool inbIsEnabled) = 0;
@@ -102,10 +102,10 @@ namespace ChilliSource
 			RenderComponentFactory* mpRenderFactory;
 			
 			//---Render resource managers
-			CMeshManager mMeshManager;
-			CSkinnedAnimationManager mSkinnedAnimationManager;
+			MeshManager mMeshManager;
+			SkinnedAnimationManager mSkinnedAnimationManager;
             FontManager mFontManager;
-			IMaterialManager mMaterialManager;
+			MaterialManager mMaterialManager;
 			ISpriteSheetManager mSpriteManager;
             
             CDynamicSpriteBatch* mpSpriteBatcher;

@@ -20,11 +20,11 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class IMaterialManager : public Core::IResourceManager
+		class MaterialManager : public Core::IResourceManager
 		{
 		public:
 			
-			DECLARE_NAMED_INTERFACE(IMaterialManager);
+			DECLARE_NAMED_INTERFACE(MaterialManager);
 
 			//----------------------------------------------------------------
 			/// Is A

@@ -32,11 +32,11 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		/// Skeletal Animation Resource.
 		//---------------------------------------------------------------------
-		class CSkinnedAnimation : public Core::IResource
+		class SkinnedAnimation : public Core::IResource
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CSkinnedAnimation);
-			virtual ~CSkinnedAnimation();
+			DECLARE_NAMED_INTERFACE(SkinnedAnimation);
+			virtual ~SkinnedAnimation();
 			
 			//---------------------------------------------------------------------
 			/// Is A
@@ -70,7 +70,7 @@ namespace ChilliSource
 			/// Declared private so that this can only be created by the
 			/// Skeletal Animation Manager.
 			//---------------------------------------------------------------------
-			CSkinnedAnimation();
+			SkinnedAnimation();
 			//---------------------------------------------------------------------
 			/// Add Frame
 			///
@@ -90,8 +90,8 @@ namespace ChilliSource
 			//---------------------------------------------------------------------
 			void SetFrameTime(f32 infFrameTime);
 			
-			friend class CMoAnimLoader;
-			friend class CSkinnedAnimationManager;
+			friend class MoAnimLoader;
+			friend class SkinnedAnimationManager;
 		private:
 			
 			f32 mfFrameTime;

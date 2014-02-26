@@ -20,14 +20,14 @@ namespace ChilliSource
 	namespace Rendering
 	{
 		//-------------------------------------------------------------------------
-		/// CMoAnimLoader class.
-		/// Loads Mo Anim files into a CSkinnedAnimation
+		/// MoAnimLoader class.
+		/// Loads Mo Anim files into a SkinnedAnimation
 		//-------------------------------------------------------------------------
-		class CMoAnimLoader : public Core::IResourceProvider
+		class MoAnimLoader : public Core::IResourceProvider
 		{
 		public:
-			CMoAnimLoader(Core::CApplication* inpApp);
-			~CMoAnimLoader();
+			MoAnimLoader(Core::CApplication* inpApp);
+			~MoAnimLoader();
 			
 			//-------------------------------------------------------------------------
 			/// Is A
@@ -83,7 +83,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------
 			/// Create Skinned Animation From File
 			///
-			/// Loads a MoAnim file into a CSkinnedAnimation.
+			/// Loads a MoAnim file into a SkinnedAnimation.
 			///
             /// @param The storage location to load from
 			/// @param Filename
@@ -104,7 +104,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------
 			/// Read Animation Data
 			///
-			/// Reads all of the data for the animation into the CSkinnedAnimation.
+			/// Reads all of the data for the animation into the SkinnedAnimation.
 			///
 			/// @param The file stream.
 			/// @param the Skeletal Animation that this data is being loaded into.
@@ -127,7 +127,7 @@ namespace ChilliSource
 				return Value;
 			}
 			
-			friend class CSkinnedAnimation;
+			friend class SkinnedAnimation;
 		private:	
 			
 			Core::CApplication* mpApp;

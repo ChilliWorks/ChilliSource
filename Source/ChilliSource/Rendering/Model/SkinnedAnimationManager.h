@@ -21,12 +21,12 @@ namespace ChilliSource
 		//------------------------------------
 		/// SkeletalAnimation manager.
 		//------------------------------------
-		class CSkinnedAnimationManager : public Core::IResourceManager
+		class SkinnedAnimationManager : public Core::IResourceManager
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CSkinnedAnimationManager);
-			CSkinnedAnimationManager();
-			virtual ~CSkinnedAnimationManager();
+			DECLARE_NAMED_INTERFACE(SkinnedAnimationManager);
+			SkinnedAnimationManager();
+			virtual ~SkinnedAnimationManager();
 			
 			//----------------------------------------------------------------
 			/// Is A

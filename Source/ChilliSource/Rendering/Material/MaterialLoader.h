@@ -17,7 +17,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CMaterialLoader : public Core::IResourceProvider
+		class MaterialLoader : public Core::IResourceProvider
 		{
 		public:
 			//-------------------------------------------------------------------------
@@ -25,7 +25,7 @@ namespace ChilliSource
 			///
 			/// @param The render capabilities.
 			//-------------------------------------------------------------------------
-			CMaterialLoader(RenderCapabilities* inpRenderCapabilities);
+			MaterialLoader(RenderCapabilities* inpRenderCapabilities);
 			//-------------------------------------------------------------------------
 			/// Is A
 			///

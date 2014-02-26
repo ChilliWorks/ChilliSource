@@ -17,10 +17,10 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CDirectionalLightComponent : public ILightComponent
+		class DirectionalLightComponent : public LightComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CDirectionalLightComponent);
+			DECLARE_NAMED_INTERFACE(DirectionalLightComponent);
 			
             //----------------------------------------------------------
             /// Constructor
@@ -28,7 +28,7 @@ namespace ChilliSource
             /// @param Shadow map target texture
             /// @param Shadow map debug target texture
             //----------------------------------------------------------
-			CDirectionalLightComponent(const TexturePtr& inpShadowMapTarget, const TexturePtr& inpShadowMapDebugTarget = TexturePtr());
+			DirectionalLightComponent(const TexturePtr& inpShadowMapTarget, const TexturePtr& inpShadowMapDebugTarget = TexturePtr());
 			//----------------------------------------------------------
 			/// Is A
 			///

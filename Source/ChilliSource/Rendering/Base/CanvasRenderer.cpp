@@ -33,7 +33,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		CanvasRenderer::CanvasRenderer(RenderSystem* inpRenderSystem) : mOverlayBatcher(inpRenderSystem), mpRenderSystem(inpRenderSystem), mfNearClippingDistance(0.0f)
 		{
-            CMaterialFactory* pMaterialFactory = Core::CApplication::GetSystemImplementing<CMaterialFactory>();
+            MaterialFactory* pMaterialFactory = Core::CApplication::GetSystemImplementing<MaterialFactory>();
             if(pMaterialFactory != nullptr)
             {
                 mpDistanceFont = pMaterialFactory->CreateGUIDistanceFont();

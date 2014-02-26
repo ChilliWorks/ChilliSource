@@ -25,13 +25,13 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CMesh : public Core::IResource
+		class Mesh : public Core::IResource
 		{
 		public:
 			
-			virtual ~CMesh();
+			virtual ~Mesh();
 			
-			DECLARE_NAMED_INTERFACE(CMesh);
+			DECLARE_NAMED_INTERFACE(Mesh);
 			
 			//---------------------------------------------------------------------
 			/// Is A
@@ -104,7 +104,7 @@ namespace ChilliSource
                         const SkinnedAnimationGroupPtr& inpAnimationGroup = SkinnedAnimationGroupPtr()) const;
 		private:
 			//Only the mesh loader can create this
-			CMesh();
+			Mesh();
 			
 			//-----------------------------------------------------------------
 			/// Create Sub Mesh
@@ -142,8 +142,8 @@ namespace ChilliSource
 			void CalcVertexAndIndexCounts();
 			
 			//Only model loaders can alter the mesh construct
-			friend class CMoModelLoader;
-			friend class CMeshManager;
+			friend class MoModelLoader;
+			friend class MeshManager;
 			friend class MeshBatch;
 		private:
 			

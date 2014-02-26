@@ -17,15 +17,15 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CPointLightComponent : public ILightComponent
+		class PointLightComponent : public LightComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CPointLightComponent);
+			DECLARE_NAMED_INTERFACE(PointLightComponent);
 			
             //----------------------------------------------------------
             /// Constructor
             //----------------------------------------------------------
-			CPointLightComponent();
+			PointLightComponent();
 			//----------------------------------------------------------
 			/// Is A
 			///

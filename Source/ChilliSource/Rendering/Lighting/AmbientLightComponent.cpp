@@ -13,19 +13,19 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(CAmbientLightComponent);
+		DEFINE_NAMED_INTERFACE(AmbientLightComponent);
         
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CAmbientLightComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool AmbientLightComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == ILightComponent::InterfaceID || inInterfaceID == CAmbientLightComponent::InterfaceID;
+			return inInterfaceID == LightComponent::InterfaceID || inInterfaceID == AmbientLightComponent::InterfaceID;
 		}
         //----------------------------------------------------------
         /// Get Light Matrix
         //----------------------------------------------------------
-        const Core::CMatrix4x4& CAmbientLightComponent::GetLightMatrix() const
+        const Core::CMatrix4x4& AmbientLightComponent::GetLightMatrix() const
         {
             return mmatLight;
         }

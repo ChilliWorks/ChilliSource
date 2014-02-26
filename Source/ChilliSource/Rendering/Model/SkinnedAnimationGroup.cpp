@@ -20,7 +20,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Constructor
         //-----------------------------------------------------------
-        CSkinnedAnimationGroup::CSkinnedAnimationGroup(const SkeletonPtr& inpSkeleton)
+        SkinnedAnimationGroup::SkinnedAnimationGroup(const SkeletonPtr& inpSkeleton)
         : mpSkeleton(inpSkeleton), mbAnimationLengthDirty(true), mfAnimationLength(0.0f), mbPrepared(false)
         {
             for (u32 i = 0; i < mpSkeleton->GetNumNodes(); ++i)
@@ -31,7 +31,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Attach Animation
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::AttachAnimation(const SkinnedAnimationPtr& inpAnimation, f32 infBlendlinePosition)
+        void SkinnedAnimationGroup::AttachAnimation(const SkinnedAnimationPtr& inpAnimation, f32 infBlendlinePosition)
         {
             mbAnimationLengthDirty = true;
             AnimationItemPtr pItem(new AnimationItem());
@@ -42,7 +42,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Detatch Animation
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::DetatchAnimation(const SkinnedAnimationPtr& inpAnimation)
+        void SkinnedAnimationGroup::DetatchAnimation(const SkinnedAnimationPtr& inpAnimation)
         {
             mbAnimationLengthDirty = true;
             for (std::vector<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
@@ -57,14 +57,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Clear Animations
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::ClearAnimations()
+        void SkinnedAnimationGroup::ClearAnimations()
         {
             mAnimations.clear();
         }
         //----------------------------------------------------------
         /// Build Animation Data
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::BuildAnimationData(AnimationBlendType ineBlendType, f32 infPlaybackPosition, f32 infBlendlinePosition)
+        void SkinnedAnimationGroup::BuildAnimationData(AnimationBlendType ineBlendType, f32 infPlaybackPosition, f32 infBlendlinePosition)
         {
             //check how many animations we have. if we only have 1 then dont try and blend. If we have none then error.
             if (mAnimations.size() > 1)
@@ -140,7 +140,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Blend Group
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::BlendGroup(AnimationBlendType ineBlendType, const SkinnedAnimationGroupPtr& inpAnimationGroup, f32 infBlendFactor)
+        void SkinnedAnimationGroup::BlendGroup(AnimationBlendType ineBlendType, const SkinnedAnimationGroupPtr& inpAnimationGroup, f32 infBlendFactor)
         {
             switch (ineBlendType)
             {
@@ -155,7 +155,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Build Matrices
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::BuildMatrices(s32 indwCurrentParent, const Core::CMatrix4x4& inParentMatrix)
+        void SkinnedAnimationGroup::BuildMatrices(s32 indwCurrentParent, const Core::CMatrix4x4& inParentMatrix)
         {
             const std::vector<SkeletonNodePtr>& nodes = mpSkeleton->GetNodes();
 			u32 currIndex = 0;
@@ -183,7 +183,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Matrix At Index
         //----------------------------------------------------------
-        const Core::CMatrix4x4& CSkinnedAnimationGroup::GetMatrixAtIndex(s32 indwIndex) const
+        const Core::CMatrix4x4& SkinnedAnimationGroup::GetMatrixAtIndex(s32 indwIndex) const
         {
             if (indwIndex < mCurrentAnimationMatrices.size())
             {
@@ -194,7 +194,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Inverse Bind Pose
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::ApplyInverseBindPose(const std::vector<Core::CMatrix4x4>& inInverseBindPoseMatrices, std::vector<Core::CMatrix4x4>& outCombinedMatrices)
+        void SkinnedAnimationGroup::ApplyInverseBindPose(const std::vector<Core::CMatrix4x4>& inInverseBindPoseMatrices, std::vector<Core::CMatrix4x4>& outCombinedMatrices)
         {
             const std::vector<s32>& kadwJoints = mpSkeleton->GetJointIndices();
             
@@ -228,7 +228,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Animation Length
         //----------------------------------------------------------
-        f32 CSkinnedAnimationGroup::GetAnimationLength()
+        f32 SkinnedAnimationGroup::GetAnimationLength()
         {
             CalculateAnimationLength();
             return mfAnimationLength;
@@ -236,21 +236,21 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Animation Count
         //----------------------------------------------------------
-        u32 CSkinnedAnimationGroup::GetAnimationCount() const
+        u32 SkinnedAnimationGroup::GetAnimationCount() const
         {
             return mAnimations.size();
         }
         //----------------------------------------------------------
         /// Is Prepared
         //----------------------------------------------------------
-        bool CSkinnedAnimationGroup::IsPrepared() const
+        bool SkinnedAnimationGroup::IsPrepared() const
         {
             return mbPrepared;
         }
         //----------------------------------------------------------
         /// Get Animation
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::GetAnimations(std::vector<SkinnedAnimationPtr>& outapSkinnedAnimationList)
+        void SkinnedAnimationGroup::GetAnimations(std::vector<SkinnedAnimationPtr>& outapSkinnedAnimationList)
         {
             for (std::vector<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
             {
@@ -260,7 +260,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Calculate Animation Length
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::CalculateAnimationLength()
+        void SkinnedAnimationGroup::CalculateAnimationLength()
         {
             if (mbAnimationLengthDirty)
             {
@@ -287,13 +287,13 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Destructor
         //-----------------------------------------------------------
-        CSkinnedAnimationGroup::~CSkinnedAnimationGroup()
+        SkinnedAnimationGroup::~SkinnedAnimationGroup()
         {
         }
         //----------------------------------------------------------
         /// Calculate Animation Frame
         //----------------------------------------------------------
-        SkinnedAnimationFramePtr CSkinnedAnimationGroup::CalculateAnimationFrame(const SkinnedAnimationPtr& inpAnimation, f32 infPlaybackPosition)
+        SkinnedAnimationFramePtr SkinnedAnimationGroup::CalculateAnimationFrame(const SkinnedAnimationPtr& inpAnimation, f32 infPlaybackPosition)
         {
             //report errors if the playback position provided does not make sense
             if (infPlaybackPosition < 0.0f)
@@ -340,7 +340,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Lerp Between Frames
         //--------------------------------------------------------------
-        SkinnedAnimationFramePtr CSkinnedAnimationGroup::LerpBetweenFrames(const SkinnedAnimationFramePtr& inFrameA, const SkinnedAnimationFramePtr& inFrameB, f32 infInterpFactor)
+        SkinnedAnimationFramePtr SkinnedAnimationGroup::LerpBetweenFrames(const SkinnedAnimationFramePtr& inFrameA, const SkinnedAnimationFramePtr& inFrameB, f32 infInterpFactor)
         {
             SkinnedAnimationFramePtr outFrame(new SkinnedAnimationFrame());
 			

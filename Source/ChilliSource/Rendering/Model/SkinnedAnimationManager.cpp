@@ -3,7 +3,7 @@
  *  MoFlowSkeleton
  *
  *  Created by Ian Copland on 17/10/2011.
- *  Copyright 2011 Tag Games Ltd. All rights reserved.CSkinnedAnimation
+ *  Copyright 2011 Tag Games Ltd. All rights reserved.SkinnedAnimation
  *
  */
 
@@ -17,66 +17,66 @@ namespace ChilliSource
 	namespace Rendering
 	{
 		
-		DEFINE_NAMED_INTERFACE(CSkinnedAnimationManager);
+		DEFINE_NAMED_INTERFACE(SkinnedAnimationManager);
 		
 		//-----------------------------------------------------------------
 		/// Constructor
 		//-----------------------------------------------------------------
-		CSkinnedAnimationManager::CSkinnedAnimationManager()
+		SkinnedAnimationManager::SkinnedAnimationManager()
 		{
 		}
 		//----------------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------------
-		bool CSkinnedAnimationManager::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool SkinnedAnimationManager::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == CSkinnedAnimationManager::InterfaceID;
+			return inInterfaceID == SkinnedAnimationManager::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Get Resource Type
 		//----------------------------------------------------------------
-		Core::InterfaceIDType CSkinnedAnimationManager::GetResourceType() const
+		Core::InterfaceIDType SkinnedAnimationManager::GetResourceType() const
 		{
-			return CSkinnedAnimation::InterfaceID;
+			return SkinnedAnimation::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Manages Resource Of Type
 		//----------------------------------------------------------------
-		bool CSkinnedAnimationManager::ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const
+		bool SkinnedAnimationManager::ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == CSkinnedAnimation::InterfaceID;
+			return inInterfaceID == SkinnedAnimation::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Get Provider Type
 		//----------------------------------------------------------------
-		Core::InterfaceIDType CSkinnedAnimationManager::GetProviderType() const
+		Core::InterfaceIDType SkinnedAnimationManager::GetProviderType() const
 		{
-			return CSkinnedAnimation::InterfaceID;
+			return SkinnedAnimation::InterfaceID;
 		}
 		//-----------------------------------------------------------------
 		/// Get Resource From File
 		//-----------------------------------------------------------------
-		Core::ResourcePtr CSkinnedAnimationManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr SkinnedAnimationManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetSkinnedAnimationFromFile(ineStorageLocation, instrFilePath);
 		}
 		//-----------------------------------------------------------------
 		/// Async Get Resource From File
 		//-----------------------------------------------------------------
-		Core::ResourcePtr CSkinnedAnimationManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr SkinnedAnimationManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetSkinnedAnimationFromFile(ineStorageLocation, instrFilePath);
 		}
 		//-----------------------------------------------------------------
 		/// Get Skinned Animation From File
 		//-----------------------------------------------------------------
-		SkinnedAnimationPtr CSkinnedAnimationManager::GetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		SkinnedAnimationPtr SkinnedAnimationManager::GetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourcePtr pResource(new CSkinnedAnimation());
+				Core::ResourcePtr pResource(new SkinnedAnimation());
 				
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
@@ -97,14 +97,14 @@ namespace ChilliSource
 							pResource->SetOwningResourceManager(static_cast<Core::IResourceManager*>(this));
 							pResource->SetLoaded(true);
 							
-							return std::static_pointer_cast<CSkinnedAnimation>(pResource);
+							return std::static_pointer_cast<SkinnedAnimation>(pResource);
 						}
 					}
 				}
 			} 
 			else 
 			{
-				return std::static_pointer_cast<CSkinnedAnimation>(pExistingResource->second);
+				return std::static_pointer_cast<SkinnedAnimation>(pExistingResource->second);
 			}
 			
 			//Resource not found
@@ -114,13 +114,13 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Async Get Skinned Animation From File
 		//-----------------------------------------------------------------
-		SkinnedAnimationPtr CSkinnedAnimationManager::AsyncGetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		SkinnedAnimationPtr SkinnedAnimationManager::AsyncGetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourcePtr pResource(new CSkinnedAnimation());
+				Core::ResourcePtr pResource(new SkinnedAnimation());
 				
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
@@ -143,14 +143,14 @@ namespace ChilliSource
 						{
 							//Add it to the cache
 							mMapFilenameToResource.insert(std::make_pair(instrFilePath, pResource));
-							return std::static_pointer_cast<CSkinnedAnimation>(pResource);
+							return std::static_pointer_cast<SkinnedAnimation>(pResource);
 						}
 					}
 				}
 			} 
 			else 
 			{
-				return std::static_pointer_cast<CSkinnedAnimation>(pExistingResource->second);
+				return std::static_pointer_cast<SkinnedAnimation>(pExistingResource->second);
 			}
 			
 			//Resource not found
@@ -161,7 +161,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//-----------------------------------------------------------------
-		CSkinnedAnimationManager::~CSkinnedAnimationManager()
+		SkinnedAnimationManager::~SkinnedAnimationManager()
 		{
 		}
 	}

@@ -91,7 +91,7 @@ namespace ChilliSource
 		private:
 			
 			CParticleSystem* mpParticleSystem;
-            IMaterialManager* mpMaterialMgr;
+            MaterialManager* mpMaterialMgr;
             
             CParticleEffectorFactory* mpEffectorFactory;
             CParticleEmitterFactory* mpEmitterFactory;

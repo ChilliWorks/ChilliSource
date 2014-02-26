@@ -127,8 +127,8 @@ namespace ChilliSource
 			
 			RenderSystem* mpRenderSystem;
             
-            CMeshManager* mpMeshManager;
-			IMaterialManager* mpMaterialManager;
+            MeshManager* mpMeshManager;
+			MaterialManager* mpMaterialManager;
 			ITextureManager* mpTextureManager;
 			ISpriteSheetManager* mpSpriteSheetManager;
 			RenderCapabilities* mpRenderCapabilities;

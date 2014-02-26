@@ -22,7 +22,7 @@ namespace ChilliSource
         
         struct RenderCommand
         {
-            CMaterial Material;
+            Material Material;
             u32 udwOffset;
             u32 udwStride;
         };

@@ -24,13 +24,13 @@ namespace ChilliSource
 		/// A static mesh component. This defines a 3D mesh that can
 		/// be manipulated, textured but not animated.
 		//===============================================================
-		class CStaticMeshComponent : public RenderComponent
+		class StaticMeshComponent : public RenderComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CStaticMeshComponent);
+			DECLARE_NAMED_INTERFACE(StaticMeshComponent);
 			
-            CStaticMeshComponent();
-			~CStaticMeshComponent();
+            StaticMeshComponent();
+			~StaticMeshComponent();
 			//----------------------------------------------------------
 			/// Is A
 			///

@@ -24,14 +24,14 @@ namespace ChilliSource
 	namespace Rendering
 	{
 		//-------------------------------------------------------------------------
-		/// CMoModelLoader class.
-		/// Loads mo model files into a CMesh resource.
+		/// MoModelLoader class.
+		/// Loads mo model files into a Mesh resource.
 		//-------------------------------------------------------------------------
-		class CMoModelLoader : public Core::IResourceProvider
+		class MoModelLoader : public Core::IResourceProvider
 		{
 		public:
-			CMoModelLoader(Core::CApplication* inpApp);
-			virtual ~CMoModelLoader();
+			MoModelLoader(Core::CApplication* inpApp);
+			virtual ~MoModelLoader();
 			
 			//-------------------------------------------------------------------------
 			/// Is A
@@ -57,8 +57,8 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------
 			/// Populate Existing Mesh From File
 			///
-			/// Fills an existing CMesh with data from a file. This will overwrite any
-			/// Previous data in the CMesh. The sub meshes in the mesh must already have been
+			/// Fills an existing Mesh with data from a file. This will overwrite any
+			/// Previous data in the Mesh. The sub meshes in the mesh must already have been
 			/// initialised and must be big enough to fit the new data. If they are too small,
 			/// an error will be thrown and the output mesh will be empty.
 			///
@@ -71,8 +71,8 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------
 			/// Async Populate Existing Mesh From File
 			///
-			/// Fills an existing CMesh with data from a file. This will overwrite any
-			/// Previous data in the CMesh. The sub meshes in the mesh must already have been
+			/// Fills an existing Mesh with data from a file. This will overwrite any
+			/// Previous data in the Mesh. The sub meshes in the mesh must already have been
 			/// initialised and must be big enough to fit the new data. If they are too small,
 			/// an error will be thrown and the output mesh will be empty. This is all handled
 			/// in the background, asynchonously.
@@ -257,7 +257,7 @@ namespace ChilliSource
 		private:	
 			
 			Core::CApplication* mpApp;
-			friend class CMeshManager;
+			friend class MeshManager;
 		};
 	}
 }

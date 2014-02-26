@@ -99,7 +99,7 @@ namespace ChilliSource
             /// @param Light components
             /// @param Render components
             //----------------------------------------------------------
-            void RenderShadowMap(CameraComponent* inpCameraComponent, std::vector<CDirectionalLightComponent*>& inaLightComponents, std::vector<RenderComponent*>& inaRenderables);
+            void RenderShadowMap(CameraComponent* inpCameraComponent, std::vector<DirectionalLightComponent*>& inaLightComponents, std::vector<RenderComponent*>& inaRenderables);
             //----------------------------------------------------------
             /// Render Shadow Map
             ///
@@ -109,7 +109,7 @@ namespace ChilliSource
             /// @param Light component
             /// @param Render components
             //----------------------------------------------------------
-            void RenderShadowMap(CameraComponent* inpCameraComponent, CDirectionalLightComponent* inpLightComponent, std::vector<RenderComponent*>& inaRenderables);
+            void RenderShadowMap(CameraComponent* inpCameraComponent, DirectionalLightComponent* inpLightComponent, std::vector<RenderComponent*>& inaRenderables);
 			//----------------------------------------------------------
 			/// Render
 			///
@@ -152,7 +152,7 @@ namespace ChilliSource
             /// @param Out: Point lights
 			//----------------------------------------------------------
 			void FindRenderableObjectsInScene(Core::CScene* pScene, std::vector<RenderComponent*>& outaRenderCache, std::vector<CameraComponent*>& outaCameraCache,
-                                              std::vector<CDirectionalLightComponent*>& outaDirectionalLightComponentCache, std::vector<CPointLightComponent*>& outaPointLightComponentCache, CAmbientLightComponent*& outpAmbientLight) const;
+                                              std::vector<DirectionalLightComponent*>& outaDirectionalLightComponentCache, std::vector<PointLightComponent*>& outaPointLightComponentCache, AmbientLightComponent*& outpAmbientLight) const;
             //----------------------------------------------------------
             /// Cull Renderables
             ///
@@ -168,7 +168,7 @@ namespace ChilliSource
             /// @param Renderables to cull
             /// @param [Out]: Visible renderables
             //----------------------------------------------------------
-            void CullRenderables(CPointLightComponent* inpLightComponent, const std::vector<RenderComponent*>& inaRenderCache, std::vector<RenderComponent*>& outaRenderCache) const;
+            void CullRenderables(PointLightComponent* inpLightComponent, const std::vector<RenderComponent*>& inaRenderCache, std::vector<RenderComponent*>& outaRenderCache) const;
 			//----------------------------------------------------------
 			/// Filter Scene Renderables
 			///
