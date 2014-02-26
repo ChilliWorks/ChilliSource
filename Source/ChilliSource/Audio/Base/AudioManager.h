@@ -55,13 +55,6 @@ namespace ChilliSource
 		    /// @return Whether this object manages the object of type
 		    //----------------------------------------------------------------
 			virtual bool ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const;
-			//----------------------------------------------------------------
-			/// Manages Resource With Extension
-			///
-			/// @param Extension
-			/// @return Whether this object manages object with extension
-			//----------------------------------------------------------------
-			virtual bool ManagesResourceWithExtension(const std::string &instrExtension) const;
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///
