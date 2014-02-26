@@ -28,10 +28,10 @@ namespace ChilliSource{
 			
 		};
 		
-		class IContactInformationProvider : public Core::IInformationProvider{
+		class ContactInformationProvider : public Core::IInformationProvider{
 		public:
 			
-			DECLARE_NAMED_INTERFACE(IContactInformationProvider);
+			DECLARE_NAMED_INTERFACE(ContactInformationProvider);
 			
 			virtual void LoadInformation() = 0;
 			

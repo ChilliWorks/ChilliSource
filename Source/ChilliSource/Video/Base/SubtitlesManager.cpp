@@ -15,60 +15,60 @@ namespace ChilliSource
 {
 	namespace Video
 	{
-		DEFINE_NAMED_INTERFACE(CSubtitlesManager);
+		DEFINE_NAMED_INTERFACE(SubtitlesManager);
 		
 		//----------------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------------
-		bool CSubtitlesManager::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool SubtitlesManager::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == CSubtitlesManager::InterfaceID;
+			return inInterfaceID == SubtitlesManager::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Get Resource Type
 		//----------------------------------------------------------------
-		Core::InterfaceIDType CSubtitlesManager::GetResourceType() const
+		Core::InterfaceIDType SubtitlesManager::GetResourceType() const
 		{
-			return CSubtitles::InterfaceID;
+			return Subtitles::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Manages Resource Of Type
 		//----------------------------------------------------------------
-		bool CSubtitlesManager::ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const
+		bool SubtitlesManager::ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == CSubtitles::InterfaceID;
+			return inInterfaceID == Subtitles::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Get Provider Type
 		//----------------------------------------------------------------
-		Core::InterfaceIDType CSubtitlesManager::GetProviderType() const
+		Core::InterfaceIDType SubtitlesManager::GetProviderType() const
 		{
-			return CSubtitles::InterfaceID;
+			return Subtitles::InterfaceID;
 		}
 		//-----------------------------------------------------------------
 		/// Get Resource From File
 		//-----------------------------------------------------------------
-		Core::ResourcePtr CSubtitlesManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr SubtitlesManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetSubtitlesFromFile(ineStorageLocation, instrFilePath);
 		}
 		//-----------------------------------------------------------------
 		/// Async Get Resource From File
 		//-----------------------------------------------------------------
-		Core::ResourcePtr CSubtitlesManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourcePtr SubtitlesManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetSubtitlesFromFile(ineStorageLocation, instrFilePath);
 		}
 		//----------------------------------------------------------------
 		/// Get Subtitles From File
 		//----------------------------------------------------------------
-		SubtitlesPtr CSubtitlesManager::GetSubtitlesFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
+		SubtitlesSPtr SubtitlesManager::GetSubtitlesFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourcePtr pResource(new CSubtitles());
+				Core::ResourcePtr pResource(new Subtitles());
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
 					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, inFilePath, pResource))
@@ -76,7 +76,7 @@ namespace ChilliSource
 						CS_DEBUG_LOG("Loading Subtitles " + inFilePath);
 						mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
 						
-						SubtitlesPtr pSubtitles = std::static_pointer_cast<CSubtitles>(pResource);
+						SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(pResource);
 						pSubtitles->SetName(inFilePath);
 						pSubtitles->SetOwningResourceManager(this);
 						pSubtitles->SetFilename(inFilePath);
@@ -88,25 +88,25 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				return std::static_pointer_cast<CSubtitles>(pExistingResource->second);
+				return std::static_pointer_cast<Subtitles>(pExistingResource->second);
 			}
 			
 			CS_ERROR_LOG("Cannot find resource for Subtitles with path " + inFilePath);
-			return SubtitlesPtr();
+			return SubtitlesSPtr();
 		}
 		//----------------------------------------------------------------
 		/// Async Get Subtitles From File
 		//----------------------------------------------------------------
-		SubtitlesPtr CSubtitlesManager::AsyncGetSubtitlesFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
+		SubtitlesSPtr SubtitlesManager::AsyncGetSubtitlesFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourcePtr pResource(new CSubtitles());
+				Core::ResourcePtr pResource(new Subtitles());
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
-					SubtitlesPtr pSubtitles = std::static_pointer_cast<CSubtitles>(pResource);
+					SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(pResource);
 					pSubtitles->SetName(inFilePath);
 					pSubtitles->SetFilename(inFilePath);
 					pSubtitles->SetStorageLocation(ineStorageLocation);
@@ -123,11 +123,11 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				return std::static_pointer_cast<CSubtitles>(pExistingResource->second);
+				return std::static_pointer_cast<Subtitles>(pExistingResource->second);
 			}
 			
 			CS_ERROR_LOG("Cannot find resource for Subtitles with path " + inFilePath);
-			return SubtitlesPtr();
+			return SubtitlesSPtr();
 		}
 	}
 }

@@ -27,10 +27,10 @@ namespace ChilliSource
         /// subtitles over videos played using the video player
         /// activity.
 		//=======================================================
-		class CSubtitles : public Core::IResource
+		class Subtitles : public Core::IResource
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CSubtitles);
+			DECLARE_NAMED_INTERFACE(Subtitles);
             //----------------------------------------------------------
 			/// Style
 			//----------------------------------------------------------
@@ -59,7 +59,7 @@ namespace ChilliSource
             //----------------------------------------------------------
 			/// Constructor
 			//----------------------------------------------------------
-            CSubtitles();
+            Subtitles();
 			//----------------------------------------------------------
 			/// Is A
 			///

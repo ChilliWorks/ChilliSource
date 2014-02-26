@@ -37,7 +37,7 @@
     [mpDisplayLink addToRunLoop: [NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
     
     //load the subtitles
-    mpSubtitles = LOAD_RESOURCE(ChilliSource::Video::CSubtitles, ineStorageLocation, instrFilename);
+    mpSubtitles = LOAD_RESOURCE(ChilliSource::Video::Subtitles, ineStorageLocation, instrFilename);
     
     return self;
 }
@@ -53,13 +53,13 @@
     if (mCurrentTimeMS != currentTimeMS)
     {
         mCurrentTimeMS = currentTimeMS;
-        std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr> pSubtitleArray = mpSubtitles->GetSubtitlesAtTime(mCurrentTimeMS);
+        std::vector<ChilliSource::Video::Subtitles::SubtitlePtr> pSubtitleArray = mpSubtitles->GetSubtitlesAtTime(mCurrentTimeMS);
 
         //add any new subtitles
-        for (std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr>::iterator it = pSubtitleArray.begin(); it != pSubtitleArray.end(); ++it)
+        for (std::vector<ChilliSource::Video::Subtitles::SubtitlePtr>::iterator it = pSubtitleArray.begin(); it != pSubtitleArray.end(); ++it)
         {
             
-            std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*>::iterator mapEntry = maTextViewMap.find(*it);
+            std::unordered_map<ChilliSource::Video::Subtitles::SubtitlePtr, UITextView*>::iterator mapEntry = maTextViewMap.find(*it);
             if (mapEntry == maTextViewMap.end())
             {
                 [self AddTextView:*it];
@@ -67,15 +67,15 @@
         }
 
         //update the current text views
-        for (std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*>::iterator it = maTextViewMap.begin(); it != maTextViewMap.end(); ++it)
+        for (std::unordered_map<ChilliSource::Video::Subtitles::SubtitlePtr, UITextView*>::iterator it = maTextViewMap.begin(); it != maTextViewMap.end(); ++it)
         {
             [self UpdateTextView:it->second Subtitle:it->first Time:mCurrentTimeMS];
         }
 
         //removes any text views that are no longer needed.
-        for (std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr>::iterator it = maSubtitlesToRemove.begin(); it != maSubtitlesToRemove.end(); ++it)
+        for (std::vector<ChilliSource::Video::Subtitles::SubtitlePtr>::iterator it = maSubtitlesToRemove.begin(); it != maSubtitlesToRemove.end(); ++it)
         {
-            std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*>::iterator mapEntry = maTextViewMap.find(*it);
+            std::unordered_map<ChilliSource::Video::Subtitles::SubtitlePtr, UITextView*>::iterator mapEntry = maTextViewMap.find(*it);
             if (mapEntry != maTextViewMap.end())
             {
                 [mapEntry->second removeFromSuperview];
@@ -89,10 +89,10 @@
 //--------------------------------------------------------
 /// Add Text View
 //--------------------------------------------------------
--(void) AddTextView:(const ChilliSource::Video::CSubtitles::SubtitlePtr&)inpSubtitle
+-(void) AddTextView:(const ChilliSource::Video::Subtitles::SubtitlePtr&)inpSubtitle
 {
     //get the style
-    ChilliSource::Video::CSubtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->strStyleName);
+    ChilliSource::Video::Subtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->strStyleName);
     if (pStyle == nullptr)
     {
         CS_ERROR_LOG("Cannot find style '" + inpSubtitle->strStyleName + "' in subtitles.");
@@ -113,14 +113,14 @@
     [pNewTextView setUserInteractionEnabled:NO];
     
     [self SetAlignment: pNewTextView WithAnchor: pStyle->eAlignment];
-    maTextViewMap.insert(std::pair<ChilliSource::Video::CSubtitles::SubtitlePtr, UITextView*>(inpSubtitle, pNewTextView));
+    maTextViewMap.insert(std::pair<ChilliSource::Video::Subtitles::SubtitlePtr, UITextView*>(inpSubtitle, pNewTextView));
 }
 //--------------------------------------------------------
 /// Update Text View
 //--------------------------------------------------------
--(void) UpdateTextView:(UITextView*)inpTextView Subtitle:(const ChilliSource::Video::CSubtitles::SubtitlePtr&)inpSubtitle Time:(TimeIntervalMs)inTimeMS
+-(void) UpdateTextView:(UITextView*)inpTextView Subtitle:(const ChilliSource::Video::Subtitles::SubtitlePtr&)inpSubtitle Time:(TimeIntervalMs)inTimeMS
 {
-    ChilliSource::Video::CSubtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->strStyleName);
+    ChilliSource::Video::Subtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->strStyleName);
     
     f32 fFade = 0.0f;
     s64 lwRelativeTime = ((s64)inTimeMS) - ((s64)inpSubtitle->StartTimeMS);
@@ -161,7 +161,7 @@
 //--------------------------------------------------------
 /// Remove Text View
 //--------------------------------------------------------
--(void) RemoveTextView:(const ChilliSource::Video::CSubtitles::SubtitlePtr&)inpSubtitle
+-(void) RemoveTextView:(const ChilliSource::Video::Subtitles::SubtitlePtr&)inpSubtitle
 {
     maSubtitlesToRemove.push_back(inpSubtitle);
 }

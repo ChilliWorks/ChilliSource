@@ -24,13 +24,13 @@ namespace ChilliSource
         ///
         /// Creates a new Subtitles resource from a MoSubtitles file.
         //=================================================================
-		class CMoSubtitlesLoader : public Core::IResourceProvider
+		class MoSubtitlesLoader : public Core::IResourceProvider
 		{
 		public:
             //-------------------------------------------------------------------------
 			/// Constructor
 			//-------------------------------------------------------------------------
-            CMoSubtitlesLoader();
+            MoSubtitlesLoader();
 			//-------------------------------------------------------------------------
 			/// Is A
 			///
@@ -56,7 +56,7 @@ namespace ChilliSource
             //-------------------------------------------------------------------------
 			/// Destructor
 			//-------------------------------------------------------------------------
-			virtual ~CMoSubtitlesLoader();
+			virtual ~MoSubtitlesLoader();
 		private:
 			//-------------------------------------------------------------------------
 			/// Create Resource From File
@@ -85,7 +85,7 @@ namespace ChilliSource
 			/// @param Filename
 			/// @param Out: Resource object
 			//-------------------------------------------------------------------------
-			void LoadMoSubtitlesTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, SubtitlesPtr& outpResource);
+			void LoadMoSubtitlesTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, SubtitlesSPtr& outpResource);
             //-------------------------------------------------------------------------
 			/// Load MoSubtitles
 			///
@@ -93,21 +93,21 @@ namespace ChilliSource
 			/// @param Filename
 			/// @param Out: Resource object
 			//-------------------------------------------------------------------------
-			bool LoadMoSubtitles(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, SubtitlesPtr& outpResource);
+			bool LoadMoSubtitles(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, SubtitlesSPtr& outpResource);
             //-------------------------------------------------------------------------
 			/// Load Style
 			///
             /// @param The style JSON object.
 			/// @return the style.
 			//-------------------------------------------------------------------------
-			CSubtitles::StylePtr LoadStyle(const Json::Value& inStyleJson);
+			Subtitles::StylePtr LoadStyle(const Json::Value& inStyleJson);
             //-------------------------------------------------------------------------
 			/// Load Subtitle
 			///
             /// @param The subtitle JSON object.
 			/// @return the style.
 			//-------------------------------------------------------------------------
-			CSubtitles::SubtitlePtr LoadSubtitle(const Json::Value& inSubtitleJson);
+			Subtitles::SubtitlePtr LoadSubtitle(const Json::Value& inSubtitleJson);
             //-------------------------------------------------------------------------
 			/// Load Bounds
 			///

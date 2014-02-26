@@ -21,10 +21,10 @@ namespace ChilliSource
 {
 	namespace Social 
 	{
-        class IEmailCompositionActivity : public Core::IActivity
+        class EmailCompositionActivity : public Core::IActivity
         {
 		public:
-			DECLARE_NAMED_INTERFACE(IEmailCompositionActivity);
+			DECLARE_NAMED_INTERFACE(EmailCompositionActivity);
 			//-------------------------------------------------------
             /// Send Result
             ///
@@ -93,7 +93,7 @@ namespace ChilliSource
 			//-------------------------------------------------------
 			/// Destructor
 			//-------------------------------------------------------
-			virtual ~IEmailCompositionActivity(){};
+			virtual ~EmailCompositionActivity(){};
 		};
 		
 	}

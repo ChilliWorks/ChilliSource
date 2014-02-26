@@ -26,7 +26,7 @@ namespace ChilliSource
 	
 	namespace iOS
 	{
-		CFacebookPostSystem::CFacebookPostSystem(Social::IFacebookAuthenticationSystem* inpAuthSystem)
+		CFacebookPostSystem::CFacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem)
         : mpAuthSystem(inpAuthSystem)
 		{
 			mCompletionDelegate = nullptr;
@@ -152,16 +152,16 @@ namespace ChilliSource
              }];
         }
         
-        void CFacebookPostSystem::OnPublishPermissionAuthorised(const IFacebookAuthenticationSystem::AuthenticateResponse& insResponse)
+        void CFacebookPostSystem::OnPublishPermissionAuthorised(const FacebookAuthenticationSystem::AuthenticateResponse& insResponse)
         {
             switch(insResponse.eResult)
             {
-                case IFacebookAuthenticationSystem::AuthenticateResult::k_success:
+                case FacebookAuthenticationSystem::AuthenticateResult::k_success:
                 {
                     Post(msPostDesc);
                     break;
                 }
-                case IFacebookAuthenticationSystem::AuthenticateResult::k_failed:
+                case FacebookAuthenticationSystem::AuthenticateResult::k_failed:
                 {
                     if(mCompletionDelegate)
                     {
@@ -169,7 +169,7 @@ namespace ChilliSource
                     }
                     break;
                 }
-                case IFacebookAuthenticationSystem::AuthenticateResult::k_permissionMismatch:
+                case FacebookAuthenticationSystem::AuthenticateResult::k_permissionMismatch:
                 {
                     if(mCompletionDelegate)
                     {

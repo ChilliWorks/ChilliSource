@@ -19,9 +19,9 @@ namespace ChilliSource
 {
 	namespace Social
 	{
-		DEFINE_NAMED_INTERFACE(ITwitterAuthenticationActivity);
+		DEFINE_NAMED_INTERFACE(TwitterAuthenticationActivity);
         
-        Core::IActivity* ITwitterAuthenticationActivity::CreateTwitterAuthenticationActivity()
+        Core::IActivity* TwitterAuthenticationActivity::CreateTwitterAuthenticationActivity()
         {
 #ifdef TARGET_OS_IPHONE
             return new ChilliSource::iOS::CTwitterAuthenticationActivity();
@@ -37,9 +37,9 @@ namespace ChilliSource
 		/// @param Interface ID
 		/// @param Whether activity is of given type
 		//--------------------------------------------------------------
-		bool ITwitterAuthenticationActivity::IsA(Core::InterfaceIDType inID) const
+		bool TwitterAuthenticationActivity::IsA(Core::InterfaceIDType inID) const
 		{
-			return inID == ITwitterAuthenticationActivity::InterfaceID;
+			return inID == TwitterAuthenticationActivity::InterfaceID;
 		}
 		//-----------------------------------------------
 		/// Get Dismissed Event 
@@ -47,14 +47,14 @@ namespace ChilliSource
 		/// @return Event triggered when activity is
 		/// dismissed
 		//-----------------------------------------------
-		Core::IEvent<Core::ActivityDismissedEvent>& ITwitterAuthenticationActivity::GetDismissedEvent()
+		Core::IEvent<Core::ActivityDismissedEvent>& TwitterAuthenticationActivity::GetDismissedEvent()
 		{
 			return mOnDismissedEvent;
 		}
 		//-----------------------------------------------
 		/// Set Authentication PIN Result Delegate
 		//-----------------------------------------------
-		void ITwitterAuthenticationActivity::SetAuthenticationPINResultDelegate(const ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate inCallback)
+		void TwitterAuthenticationActivity::SetAuthenticationPINResultDelegate(const ChilliSource::Social::TwitterAuthenticationActivity::AuthenticationPINResultDelegate inCallback)
 		{
 			mOnPINResultDelegate = inCallback;
 		}

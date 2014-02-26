@@ -50,7 +50,7 @@ namespace ChilliSource
 			
 			typedef fastdelegate::FastDelegate1<const PostResult&> PostResultDelegate;
             
-            static IFacebookPostSystem* CreatePostSystem(ChilliSource::Social::IFacebookAuthenticationSystem* inpAuthSystem);
+            static IFacebookPostSystem* CreatePostSystem(ChilliSource::Social::FacebookAuthenticationSystem* inpAuthSystem);
             
 			virtual void TryPost(const FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback) = 0;
             

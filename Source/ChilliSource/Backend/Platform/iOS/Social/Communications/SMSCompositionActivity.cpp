@@ -39,7 +39,7 @@ namespace ChilliSource{
 			[mpDelegate release];
 			mpDelegate = nil;
 		}
-		void CSMSCompositionActivity::Present(const std::vector<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const ISMSCompositionActivity::SendResultDelegate & inCallback){
+		void CSMSCompositionActivity::Present(const std::vector<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const SMSCompositionActivity::SendResultDelegate & inCallback){
 			
 			mpDelegate = [[SMSDelegate alloc] initWithCallback:inCallback];
 						
@@ -82,7 +82,7 @@ namespace ChilliSource{
 
 @implementation SMSDelegate
 
--(SMSDelegate*) initWithCallback:(ChilliSource::Social::ISMSCompositionActivity::SendResultDelegate)callback{
+-(SMSDelegate*) initWithCallback:(ChilliSource::Social::SMSCompositionActivity::SendResultDelegate)callback{
 	
 	if ((self = [super init])){
 	
@@ -106,16 +106,16 @@ namespace ChilliSource{
         [[controller presentingViewController] dismissModalViewControllerAnimated:YES];
     }
     
-	ISMSCompositionActivity::SendResult eResult;
+	SMSCompositionActivity::SendResult eResult;
 	switch (result) {
 		case MessageComposeResultSent:
-			eResult = ISMSCompositionActivity::SendResult::k_succeed;
+			eResult = SMSCompositionActivity::SendResult::k_succeed;
 			break;
 		case MessageComposeResultCancelled:
-			eResult = ISMSCompositionActivity::SendResult::k_cancelled;
+			eResult = SMSCompositionActivity::SendResult::k_cancelled;
 			break;
 		case MessageComposeResultFailed:
-			eResult = ISMSCompositionActivity::SendResult::k_failed;
+			eResult = SMSCompositionActivity::SendResult::k_failed;
 	}
 	
 	if (mCallback){

@@ -22,7 +22,7 @@ namespace ChilliSource
 {
     namespace iOS
     {
-        class CVideoPlayerActivity : public Video::IVideoPlayerActivity
+        class CVideoPlayerActivity : public Video::VideoPlayerActivity
         {
         public:
             //--------------------------------------------------------------

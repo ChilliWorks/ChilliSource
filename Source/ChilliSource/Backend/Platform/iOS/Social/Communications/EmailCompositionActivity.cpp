@@ -154,7 +154,7 @@ namespace ChilliSource
 //-------------------------------------------------------
 /// Init With Callback
 //-------------------------------------------------------
--(EmailDelegate*) initWithCallback:(ChilliSource::Social::IEmailCompositionActivity::SendResultDelegate)callback{
+-(EmailDelegate*) initWithCallback:(ChilliSource::Social::EmailCompositionActivity::SendResultDelegate)callback{
 	
 	if ((self = [super init])){
 		
@@ -184,7 +184,7 @@ namespace ChilliSource
         [[controller presentingViewController] dismissModalViewControllerAnimated:YES];
     }
     
-	IEmailCompositionActivity::SendResult eResult;
+	EmailCompositionActivity::SendResult eResult;
 	
     if(error == nil)
     {
@@ -192,13 +192,13 @@ namespace ChilliSource
         {
 			case MFMailComposeResultSaved:
 			case MFMailComposeResultSent:
-				eResult = IEmailCompositionActivity::SendResult::k_succeed;
+				eResult = EmailCompositionActivity::SendResult::k_succeed;
 				break;
 			case MFMailComposeResultCancelled:
-				eResult = IEmailCompositionActivity::SendResult::k_cancelled;
+				eResult = EmailCompositionActivity::SendResult::k_cancelled;
 				break;
 			case MFMailComposeResultFailed:
-				eResult = IEmailCompositionActivity::SendResult::k_failed;
+				eResult = EmailCompositionActivity::SendResult::k_failed;
 				break;
 		}
 	

@@ -55,54 +55,54 @@ namespace ChilliSource
         //----------------------------------------------------------------
         // Constructor
         //----------------------------------------------------------------
-        CMoSubtitlesLoader::CMoSubtitlesLoader()
+        MoSubtitlesLoader::MoSubtitlesLoader()
         {
         }
 		//----------------------------------------------------------------
 		// Is A
 		//----------------------------------------------------------------
-		bool CMoSubtitlesLoader::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool MoSubtitlesLoader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == IResourceProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		// Can Create Resource of Kind
 		//----------------------------------------------------------------
-		bool CMoSubtitlesLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
+		bool MoSubtitlesLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == CSubtitles::InterfaceID);
+			return (inInterfaceID == Subtitles::InterfaceID);
 		}
 		//----------------------------------------------------------------
 		// Can Create Resource From File With Extension
 		//----------------------------------------------------------------
-		bool CMoSubtitlesLoader::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
+		bool MoSubtitlesLoader::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
 		{
 			return (inExtension == kstrMoSubtitlesExtension);
 		}
         //--------------------------------------------------------------
 		// Destructor
 		//--------------------------------------------------------------
-		CMoSubtitlesLoader::~CMoSubtitlesLoader()
+		MoSubtitlesLoader::~MoSubtitlesLoader()
 		{
 		}
 		//--------------------------------------------------------------
 		// Create Resource From File
 		//--------------------------------------------------------------
-		bool CMoSubtitlesLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool MoSubtitlesLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
-            SubtitlesPtr pSubtitles = std::static_pointer_cast<CSubtitles>(outpResource);
+            SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(outpResource);
             
             return LoadMoSubtitles(ineStorageLocation, inFilePath, pSubtitles);
 		}
 		//--------------------------------------------------------------
 		// Async Create Resource From File
 		//--------------------------------------------------------------
-		bool CMoSubtitlesLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool MoSubtitlesLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
 		{
-			SubtitlesPtr pSubtitles = std::static_pointer_cast<CSubtitles>(outpResource);
+			SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(outpResource);
 			
 			//Load model as task
-            Core::Task<Core::StorageLocation, const std::string&, SubtitlesPtr&> task(this, &CMoSubtitlesLoader::LoadMoSubtitlesTask,ineStorageLocation, inFilePath, pSubtitles);
+            Core::Task<Core::StorageLocation, const std::string&, SubtitlesSPtr&> task(this, &MoSubtitlesLoader::LoadMoSubtitlesTask,ineStorageLocation, inFilePath, pSubtitles);
 			Core::CTaskScheduler::ScheduleTask(task);
 			
 			return true;
@@ -110,14 +110,14 @@ namespace ChilliSource
         //--------------------------------------------------------------
         // Load MoSubtitles Task
         //--------------------------------------------------------------
-        void CMoSubtitlesLoader::LoadMoSubtitlesTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, SubtitlesPtr& outpResource)
+        void MoSubtitlesLoader::LoadMoSubtitlesTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, SubtitlesSPtr& outpResource)
         {
             LoadMoSubtitles(ineStorageLocation, inFilePath, outpResource);
         }
         //--------------------------------------------------------------
         // Load MoSubtitles
         //--------------------------------------------------------------
-        bool CMoSubtitlesLoader::LoadMoSubtitles(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, SubtitlesPtr& outpResource)
+        bool MoSubtitlesLoader::LoadMoSubtitles(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, SubtitlesSPtr& outpResource)
         {
             //read the JSON
             Json::Value root;
@@ -136,7 +136,7 @@ namespace ChilliSource
             {
                 for (Json::ValueIterator it = root[kstrTagStyles].begin(); it != root[kstrTagStyles].end(); ++it)
                 {
-                    CSubtitles::StylePtr pStyle = LoadStyle((*it));
+                    Subtitles::StylePtr pStyle = LoadStyle((*it));
                     if (pStyle != nullptr)
                     {
                         outpResource->AddStyle(pStyle);
@@ -159,7 +159,7 @@ namespace ChilliSource
             {
                 for (Json::ValueIterator it = root[kstrTagSubtitles].begin(); it != root[kstrTagSubtitles].end(); ++it)
                 {
-                    CSubtitles::SubtitlePtr pSubtitle = LoadSubtitle((*it));
+                    Subtitles::SubtitlePtr pSubtitle = LoadSubtitle((*it));
                     if (pSubtitle != nullptr)
                     {
                         outpResource->AddSubtitle(pSubtitle);
@@ -182,16 +182,16 @@ namespace ChilliSource
         //-------------------------------------------------------------------------
         // Load Style
         //-------------------------------------------------------------------------
-        CSubtitles::StylePtr CMoSubtitlesLoader::LoadStyle(const Json::Value& inStyleJson)
+        Subtitles::StylePtr MoSubtitlesLoader::LoadStyle(const Json::Value& inStyleJson)
         {
-            CSubtitles::StylePtr pStyle(new CSubtitles::Style());
+            Subtitles::StylePtr pStyle(new Subtitles::Style());
             
             //name
             pStyle->strName = inStyleJson.get(kstrTagStyleName,"").asString();
             if(pStyle->strName == "")
             {
                 CS_ERROR_LOG("Subtitle style must have a name.");
-                return CSubtitles::StylePtr();
+                return Subtitles::StylePtr();
             }
             
             pStyle->strFontName = inStyleJson.get(kstrTagStyleFont, kstrDefaultFont).asString();
@@ -206,16 +206,16 @@ namespace ChilliSource
         //-------------------------------------------------------------------------
         // Load Subtitle
         //-------------------------------------------------------------------------
-        CSubtitles::SubtitlePtr CMoSubtitlesLoader::LoadSubtitle(const Json::Value& inSubtitleJson)
+        Subtitles::SubtitlePtr MoSubtitlesLoader::LoadSubtitle(const Json::Value& inSubtitleJson)
         {
-            CSubtitles::SubtitlePtr pSubtitle(new CSubtitles::Subtitle());
+            Subtitles::SubtitlePtr pSubtitle(new Subtitles::Subtitle());
             
             //style
             pSubtitle->strStyleName = inSubtitleJson.get(kstrTagSubtitleStyle, "").asString();
             if (pSubtitle->strStyleName == "")
             {
             	CS_ERROR_LOG("Subtitle must have a style.");
-            	return CSubtitles::SubtitlePtr();
+            	return Subtitles::SubtitlePtr();
             }
             
             //text id
@@ -223,7 +223,7 @@ namespace ChilliSource
             if (pSubtitle->strTextID == "")
             {
                 CS_ERROR_LOG("Subtitle must have a text ID.");
-                return CSubtitles::SubtitlePtr();
+                return Subtitles::SubtitlePtr();
             }
             
             pSubtitle->StartTimeMS = ParseTime(inSubtitleJson.get(kstrTagSubtitleStartTime, "0").asString());
@@ -234,7 +234,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------------
         // Load Bounds
         //-------------------------------------------------------------------------
-        Core::Rectangle CMoSubtitlesLoader::LoadBounds(const Json::Value& inBoundsJson)
+        Core::Rectangle MoSubtitlesLoader::LoadBounds(const Json::Value& inBoundsJson)
         {
         	f32 fTop = (f32)inBoundsJson.get(kstrTagStyleBoundsTop, kfDefaultTop).asDouble();
         	f32 fBottom = (f32)inBoundsJson.get(kstrTagStyleBoundsBottom, kfDefaultBottom).asDouble();
@@ -246,7 +246,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------------
         // Parse Time
         //-------------------------------------------------------------------------
-        TimeIntervalMs CMoSubtitlesLoader::ParseTime(const std::string& instrTime)
+        TimeIntervalMs MoSubtitlesLoader::ParseTime(const std::string& instrTime)
         {
             u32 udwHours, udwMinutes, udwSeconds, udwMilliseconds;
             std::sscanf(instrTime.c_str(), "%d:%d:%d:%d", &udwHours, &udwMinutes, &udwSeconds, &udwMilliseconds);

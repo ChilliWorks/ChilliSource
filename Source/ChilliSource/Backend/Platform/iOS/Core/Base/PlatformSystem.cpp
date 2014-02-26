@@ -72,19 +72,19 @@ namespace ChilliSource
             //---Systems
 			AddSystemFunc(Networking::HttpConnectionSystem::InterfaceID,SystemCreationFunction(this, &CPlatformSystem::CreateHttpConnectionSystem));
 
-            AddActivityFunc(Social::IEmailCompositionActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateEmailCompositionActivity));
+            AddActivityFunc(Social::EmailCompositionActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateEmailCompositionActivity));
  
             //---Activities
-            AddActivityFunc(Video::IVideoPlayerActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateDefaultVideoPlayerActivity));
-			AddActivityFunc(Web::IWebViewActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateWebViewActivity));
+            AddActivityFunc(Video::VideoPlayerActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateDefaultVideoPlayerActivity));
+			AddActivityFunc(Web::WebViewActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateWebViewActivity));
 			
 			if(CSMSCompositionActivity::SupportedByDevice())
             {
-				AddActivityFunc(Social::ISMSCompositionActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateSMSCompositionActivity));
+				AddActivityFunc(Social::SMSCompositionActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateSMSCompositionActivity));
             }
 			
             //---Info providers
-			AddInfoProviderFunc(Social::IContactInformationProvider::InterfaceID, InfoProviderCreationFunction(this, &CPlatformSystem::CreateContactInformationProvider));
+			AddInfoProviderFunc(Social::ContactInformationProvider::InterfaceID, InfoProviderCreationFunction(this, &CPlatformSystem::CreateContactInformationProvider));
 
 			Core::CNotificationScheduler::Initialise(new CLocalNotificationScheduler());
 			Core::CApplication::SetFileSystem(new iOS::CFileSystem());

@@ -28,7 +28,7 @@ namespace ChilliSource
 	{
 		DEFINE_NAMED_INTERFACE(IFacebookPostSystem);
         
-        IFacebookPostSystem* IFacebookPostSystem::CreatePostSystem(ChilliSource::Social::IFacebookAuthenticationSystem* inpAuthSystem)
+        IFacebookPostSystem* IFacebookPostSystem::CreatePostSystem(ChilliSource::Social::FacebookAuthenticationSystem* inpAuthSystem)
         {
 #ifdef TARGET_OS_IPHONE
             return new ChilliSource::iOS::CFacebookPostSystem(inpAuthSystem);

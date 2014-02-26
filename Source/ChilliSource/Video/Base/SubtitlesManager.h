@@ -17,10 +17,10 @@ namespace ChilliSource
 {
 	namespace Video
 	{
-		class CSubtitlesManager : public Core::IResourceManager
+		class SubtitlesManager : public Core::IResourceManager
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CSubtitlesManager);
+			DECLARE_NAMED_INTERFACE(SubtitlesManager);
 			//----------------------------------------------------------------
 			/// Is A
 			///
@@ -80,7 +80,7 @@ namespace ChilliSource
 			/// @param File name
 			/// @return A handle to the Subtitles
 			//----------------------------------------------------------------
-			SubtitlesPtr GetSubtitlesFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePathMaterial);
+			SubtitlesSPtr GetSubtitlesFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePathMaterial);
 			//----------------------------------------------------------------
 			/// Async Get Subtitles From File
 			///
@@ -92,7 +92,7 @@ namespace ChilliSource
 			/// @param File name
 			/// @return A handle to the Subtitles
 			//----------------------------------------------------------------
-			SubtitlesPtr AsyncGetSubtitlesFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePathMaterial);
+			SubtitlesSPtr AsyncGetSubtitlesFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePathMaterial);
 		};
 	}
 }

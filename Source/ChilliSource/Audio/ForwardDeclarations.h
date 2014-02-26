@@ -9,6 +9,8 @@
 #ifndef _CHILLISOURCE_AUDIO_FORWARDDECLARATIONS_H_
 #define _CHILLISOURCE_AUDIO_FORWARDDECLARATIONS_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource
 {
 	namespace Audio

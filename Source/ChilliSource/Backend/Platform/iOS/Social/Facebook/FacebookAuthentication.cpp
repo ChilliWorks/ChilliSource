@@ -37,10 +37,10 @@ namespace ChilliSource
 		
 		bool CFacebookAuthenticationSystem::IsA(Core::InterfaceIDType inID) const
 		{
-			return (inID == CFacebookAuthenticationSystem::InterfaceID) || (inID == IFacebookAuthenticationSystem::InterfaceID);
+			return (inID == CFacebookAuthenticationSystem::InterfaceID) || (inID == FacebookAuthenticationSystem::InterfaceID);
 		}
 		
-		void CFacebookAuthenticationSystem::Authenticate(const std::vector<std::string>& inastrReadPermissions, const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
+		void CFacebookAuthenticationSystem::Authenticate(const std::vector<std::string>& inastrReadPermissions, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
 		{
             mAuthenticateDelegate = inDelegate;
             mastrPermissions = inastrReadPermissions;
@@ -51,7 +51,7 @@ namespace ChilliSource
                 {
                     AuthenticateResponse sResponse;
                     sResponse.strToken = GetActiveToken();
-                    sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_success;
+                    sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_success;
                     mAuthenticateDelegate(sResponse);
                 }
                 
@@ -93,7 +93,7 @@ namespace ChilliSource
                      if(mAuthenticateDelegate)
                      {
                          AuthenticateResponse sResponse;
-                         sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_failed;
+                         sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_failed;
                          mAuthenticateDelegate(sResponse);
                      }
                  }
@@ -113,7 +113,7 @@ namespace ChilliSource
                     if(mAuthenticateDelegate)
                     {
                         sResponse.strToken = Core::CStringUtils::NSStringToString([[inpSession accessTokenData] accessToken]);
-                        sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_success;
+                        sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_success;
                         mAuthenticateDelegate(sResponse);
                     }
                     break;
@@ -128,7 +128,7 @@ namespace ChilliSource
                 {
                     if(mAuthenticateDelegate)
                     {
-                        sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_failed;
+                        sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_failed;
                         mAuthenticateDelegate(sResponse);
                     }
                     break;
@@ -146,7 +146,7 @@ namespace ChilliSource
 			return Core::CStringUtils::NSStringToString(FBSession.activeSession.accessTokenData.accessToken);
 		}
         
-        void CFacebookAuthenticationSystem::AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
+        void CFacebookAuthenticationSystem::AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
         {
             mAuthoriseReadDelegate = inDelegate;
             
@@ -160,13 +160,13 @@ namespace ChilliSource
                      NSLog(@"%@", error.localizedDescription);
                      if(mAuthoriseReadDelegate)
                      {
-                         sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_failed;
+                         sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_failed;
                          mAuthoriseReadDelegate(sResponse);
                      }
                  }
                  else if(mAuthoriseReadDelegate)
                  {
-                     sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_success;
+                     sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_success;
                      sResponse.strToken = GetActiveToken();
                      mAuthoriseReadDelegate(sResponse);
                  }
@@ -174,7 +174,7 @@ namespace ChilliSource
             [pPermissionsArray release];
         }
         
-        void CFacebookAuthenticationSystem::AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const IFacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
+        void CFacebookAuthenticationSystem::AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
         {
             mAuthoriseWriteDelegate = inDelegate;
             
@@ -192,7 +192,7 @@ namespace ChilliSource
                         NSLog(@"%@", error.localizedDescription);
                         if(mAuthoriseWriteDelegate)
                         {
-                            sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_failed;
+                            sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_failed;
                             mAuthoriseWriteDelegate(sResponse);
                         }
                     }
@@ -221,11 +221,11 @@ namespace ChilliSource
                         
                         if(bPermissionMismatch == NO)
                         {
-                            sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_success;
+                            sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_success;
                         }
                         else
                         {
-                            sResponse.eResult = IFacebookAuthenticationSystem::AuthenticateResult::k_permissionMismatch;
+                            sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_permissionMismatch;
                         }
                         
                         sResponse.strToken = GetActiveToken();

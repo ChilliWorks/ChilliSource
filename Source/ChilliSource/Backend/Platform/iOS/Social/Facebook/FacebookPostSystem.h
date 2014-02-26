@@ -21,7 +21,7 @@ namespace ChilliSource
 		class CFacebookPostSystem : public Social::IFacebookPostSystem
 		{
 		public:
-			CFacebookPostSystem(Social::IFacebookAuthenticationSystem* inpAuthSystem);
+			CFacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem);
 			
             bool IsA(Core::InterfaceIDType inID) const;
 			
@@ -33,9 +33,9 @@ namespace ChilliSource
             void Post(const Social::FacebookPostDesc& insDesc);
             bool TryPostNative(const Social::FacebookPostDesc& insDesc);
             void PostWebBased(const Social::FacebookPostDesc& insDesc);
-            void OnPublishPermissionAuthorised(const Social::IFacebookAuthenticationSystem::AuthenticateResponse& insResponse);
+            void OnPublishPermissionAuthorised(const Social::FacebookAuthenticationSystem::AuthenticateResponse& insResponse);
 			
-            Social::IFacebookAuthenticationSystem* mpAuthSystem;
+            Social::FacebookAuthenticationSystem* mpAuthSystem;
             Social::FacebookPostDesc msPostDesc;
 		};
 	}

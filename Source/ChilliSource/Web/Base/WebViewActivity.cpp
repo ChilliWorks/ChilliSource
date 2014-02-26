@@ -13,16 +13,16 @@ namespace ChilliSource
 {
     namespace Web
     {
-        DEFINE_NAMED_INTERFACE(IWebViewActivity);
+        DEFINE_NAMED_INTERFACE(WebViewActivity);
         //--------------------------------------------------------------
         /// Is A
         ///
         /// @param Interface ID
         /// @param Whether activity is of given type
         //--------------------------------------------------------------
-        bool IWebViewActivity::IsA(Core::InterfaceIDType inID) const
+        bool WebViewActivity::IsA(Core::InterfaceIDType inID) const
         {
-            return inID == IWebViewActivity::InterfaceID;
+            return inID == WebViewActivity::InterfaceID;
         }
         //-----------------------------------------------
         /// Get Dismissed Event 
@@ -30,7 +30,7 @@ namespace ChilliSource
         /// @return Event triggered when activity is
         /// dismissed
         //-----------------------------------------------
-        Core::IEvent<Core::ActivityDismissedEvent>& IWebViewActivity::GetDismissedEvent()
+        Core::IEvent<Core::ActivityDismissedEvent>& WebViewActivity::GetDismissedEvent()
         {
             return mOnDismissedEvent;
         }

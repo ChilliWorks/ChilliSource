@@ -20,11 +20,11 @@ namespace ChilliSource
 {
     namespace Web
     {
-        class IWebViewActivity : public Core::IActivity
+        class WebViewActivity : public Core::IActivity
         {
         public:
             
-            DECLARE_NAMED_INTERFACE(IWebViewActivity);
+            DECLARE_NAMED_INTERFACE(WebViewActivity);
             //--------------------------------------------------------------
             /// Is A
             ///

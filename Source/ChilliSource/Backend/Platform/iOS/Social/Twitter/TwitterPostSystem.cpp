@@ -27,7 +27,7 @@ namespace ChilliSource
 		/// Constructor
 		//------------------------------------------------------------------------
 		CTwitterPostSystem::CTwitterPostSystem(iOS::CHttpConnectionSystem* inpHttpConnectionSystem,
-											   Core::COAuthSystem* inpOAuthSystem) : Social::ITwitterPostSystem(inpHttpConnectionSystem, inpOAuthSystem)
+											   Core::COAuthSystem* inpOAuthSystem) : Social::TwitterPostSystem(inpHttpConnectionSystem, inpOAuthSystem)
 		{
 			
 		}
@@ -46,7 +46,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------
         bool CTwitterPostSystem::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == Social::ITwitterPostSystem::InterfaceID;
+            return inInterfaceID == Social::TwitterPostSystem::InterfaceID;
         }
 		//------------------------------------------------------------------------
 		/// Run the OAuth process and, if successful, leave the system in state
@@ -66,11 +66,11 @@ namespace ChilliSource
 				if(RequestOAuthToken(strAuthoiseURL))
 				{
 					// Show authentication view
-					if(Core::CApplication::GetPlatformSystemPtr()->CanCreateActivityWithInterface<ChilliSource::Social::ITwitterAuthenticationActivity>())
+					if(Core::CApplication::GetPlatformSystemPtr()->CanCreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>())
 					{
-						mpAuthenticationView = Core::CApplication::GetPlatformSystemPtr()->CreateActivityWithInterface<ChilliSource::Social::ITwitterAuthenticationActivity>();
-						mpAuthenticationView->SetAuthenticationPINResultDelegate(ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate(this, &ITwitterPostSystem::OnPINComplete));
-						mpAuthenticationView->GetDismissedEvent() += Core::ActivityDismissedEvent(this, &ITwitterPostSystem::OnAuthorisationDismissed);
+						mpAuthenticationView = Core::CApplication::GetPlatformSystemPtr()->CreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>();
+						mpAuthenticationView->SetAuthenticationPINResultDelegate(ChilliSource::Social::TwitterAuthenticationActivity::AuthenticationPINResultDelegate(this, &TwitterPostSystem::OnPINComplete));
+						mpAuthenticationView->GetDismissedEvent() += Core::ActivityDismissedEvent(this, &TwitterPostSystem::OnAuthorisationDismissed);
 						mpAuthenticationView->Present();
 					}
 				}
@@ -114,7 +114,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------
         /// Try Post
         //------------------------------------------------------------------------
-        bool CTwitterPostSystem::TryPost(const Social::TwitterPostDesc & insDesc, const Social::ITwitterPostSystem::PostResultDelegate & inResultCallback)
+        bool CTwitterPostSystem::TryPost(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback)
         {
 			if(SupportedByDevice())
 				return TryPostUsingiOS(insDesc, inResultCallback);
@@ -127,7 +127,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Try Post Using iOS
 		//------------------------------------------------------------------------
-		bool CTwitterPostSystem::TryPostUsingiOS(const Social::TwitterPostDesc & insDesc, const Social::ITwitterPostSystem::PostResultDelegate & inResultCallback)
+		bool CTwitterPostSystem::TryPostUsingiOS(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback)
 		{
 			if([TWTweetComposeViewController canSendTweet])
             {
@@ -176,13 +176,13 @@ namespace ChilliSource
 						switch(inResult)
 						{
 							case TWTweetComposeViewControllerResultDone:
-								mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_success);
+								mCompletionDelegate(Social::TwitterPostSystem::PostResult::k_success);
 								break;
 							case TWTweetComposeViewControllerResultCancelled:
-								mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_cancelled);
+								mCompletionDelegate(Social::TwitterPostSystem::PostResult::k_cancelled);
 								break;
 							default:
-								mCompletionDelegate(Social::ITwitterPostSystem::PostResult::k_failed);
+								mCompletionDelegate(Social::TwitterPostSystem::PostResult::k_failed);
 								break;
 						};
 					}
@@ -206,7 +206,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Try Post Using moFlow
 		//------------------------------------------------------------------------
-		bool CTwitterPostSystem::TryPostUsingMoFlow(const Social::TwitterPostDesc & insDesc, const Social::ITwitterPostSystem::PostResultDelegate & inResultCallback)
+		bool CTwitterPostSystem::TryPostUsingMoFlow(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback)
 		{
 			bool bResult = false;
 			
@@ -226,7 +226,7 @@ namespace ChilliSource
 				msDesc.strText = insDesc.strText;
 				if(mCompletionDelegate)
 				{
-					inResultCallback(Social::ITwitterPostSystem::PostResult::k_notAuthenticated);
+					inResultCallback(Social::TwitterPostSystem::PostResult::k_notAuthenticated);
 				}
 				bResult = false;
 			}
@@ -239,7 +239,7 @@ namespace ChilliSource
 		///
 		/// @param PIN entered by user
 		//------------------------------------------------------------------------
-		void CTwitterPostSystem::OnPINComplete(const ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResult &insResult)
+		void CTwitterPostSystem::OnPINComplete(const ChilliSource::Social::TwitterAuthenticationActivity::AuthenticationPINResult &insResult)
 		{
 			if(Social::TwitterPIN::kudwTwitterPINLength == insResult.strPIN.size())
 			{

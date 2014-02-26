@@ -21,7 +21,7 @@ namespace ChilliSource
 {
     namespace iOS
     {
-        class CTwitterPostSystem : public ChilliSource::Social::ITwitterPostSystem
+        class CTwitterPostSystem : public ChilliSource::Social::TwitterPostSystem
         {
         public:
 			CTwitterPostSystem(iOS::CHttpConnectionSystem* inpHttpConnectionSystem,
@@ -64,13 +64,13 @@ namespace ChilliSource
             ///
             /// @return If the tweet exceeds the character limit imposed by Twitter
 			//------------------------------------------------------------------------
-			bool TryPost(const Social::TwitterPostDesc & insDesc, const Social::ITwitterPostSystem::PostResultDelegate & inResultCallback);
+			bool TryPost(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback);
 			//------------------------------------------------------------------------
 			/// Delegate called when the user confirms entry of the PIN
 			///
 			/// @param PIN entered by user
 			//------------------------------------------------------------------------
-			void OnPINComplete(const ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResult &inResult);
+			void OnPINComplete(const ChilliSource::Social::TwitterAuthenticationActivity::AuthenticationPINResult &inResult);
 			//------------------------------------------------------------------------
 			/// Delegate called with the authorisation view is dismissed.
 			///
@@ -90,7 +90,7 @@ namespace ChilliSource
             ///
             /// @return If the tweet exceeds the character limit imposed by Twitter
 			//------------------------------------------------------------------------
-			bool TryPostUsingiOS(const Social::TwitterPostDesc & insDesc, const Social::ITwitterPostSystem::PostResultDelegate & inResultCallback);
+			bool TryPostUsingiOS(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback);
 			//------------------------------------------------------------------------
 			/// Try Post Using moFlow
 			///
@@ -102,7 +102,7 @@ namespace ChilliSource
             ///
             /// @return If the tweet exceeds the character limit imposed by Twitter
 			//------------------------------------------------------------------------
-			bool TryPostUsingMoFlow(const Social::TwitterPostDesc & insDesc, const Social::ITwitterPostSystem::PostResultDelegate & inResultCallback);
+			bool TryPostUsingMoFlow(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback);
         };
     }
 }

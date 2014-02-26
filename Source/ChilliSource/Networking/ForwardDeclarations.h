@@ -8,6 +8,8 @@
 #ifndef _CHILLISOURCE_NETWORKING_FORWARDDECLARATIONS_H_
 #define _CHILLISOURCE_NETWORKING_FORWARDDECLARATIONS_H_
 
+#include <ChilliSource/ChilliSource.h>
+
 namespace ChilliSource 
 {
 	namespace Networking 

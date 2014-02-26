@@ -22,10 +22,10 @@ namespace ChilliSource {
 		
 		
 		
-		class ISMSCompositionActivity : public Core::IActivity{
+		class SMSCompositionActivity : public Core::IActivity{
 		public:
 
-			DECLARE_NAMED_INTERFACE(ISMSCompositionActivity);
+			DECLARE_NAMED_INTERFACE(SMSCompositionActivity);
 			
 			enum class SendResult
             {
