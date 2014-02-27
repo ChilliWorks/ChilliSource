@@ -11,6 +11,7 @@
 #define _MO_FLO_CORE_TIMER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Event/IDisconnectableEvent.h>
 #include <ChilliSource/Core/Time/CoreTimer.h>
 
 #include <vector>
@@ -19,121 +20,133 @@ namespace ChilliSource
 {
 	namespace Core 
 	{
-		//============================================
-		/// Description:
-		///
-		/// Used to calculate the time taken between
-		/// beginning and ending the timer.
-		///
-		/// Acts as an interface into the system 
-		/// timer.
-		//============================================
-		
-		class Timer
+		//---------------------------------------------------
+        /// Event style class that objects can connect to
+        /// and be notified periodically or after a set
+        /// period of time
+        ///
+        /// @author S Downie
+        //---------------------------------------------------
+		class Timer final : public IDisconnectableEvent
 		{
 		public:
+            
+            typedef std::function<void()> Delegate;
+            
+            //--------------------------------------------
+            /// Constructor
+            ///
+            /// @author S Downie
+            //--------------------------------------------
 			Timer();
+            //--------------------------------------------
+            /// Destructor
+            ///
+            /// @author S Downie
+            //--------------------------------------------
 			~Timer();
-			
 			//--------------------------------------------
-			/// Start
-			///
-			/// Begin the timer 
+			/// Begin the timer
+            ///
+            /// @author S Downie
 			//--------------------------------------------
 			void Start();
 			//--------------------------------------------
-			/// Reset 
-			///
 			/// Reset the elapsed time
+            ///
+            /// @author S Downie
 			//--------------------------------------------
 			void Reset();
 			//--------------------------------------------
-			/// Stop 
-			///
 			/// Stop the timer
+            ///
+            /// @author S Downie
 			//--------------------------------------------
 			void Stop();
 			//--------------------------------------------
-			/// Check if Timer is active
-			///
-			/// check if timer is active
-			/// @return mbIsTimerActive
+            /// @author S Downie
+            ///
+			/// @return Whether timer is active
 			//--------------------------------------------
-			const bool IsTimerActive() const;
+            inline bool IsTimerActive() const
+            {
+                return m_isActive;
+            }
 			//--------------------------------------------
-			/// Get Time Elapsed
-			///
-			/// Calculate the time elapsed since starting
-			/// @return Delta time
+            /// @author S Downie
+            ///
+			/// @return Time elapsed since first start
+            /// or last reset
 			//--------------------------------------------
-			const f32 GetTimeElapsed() const;
-			
-			//---Callbacks
+            inline f32 GetElapsedTime() const
+            {
+                return m_elapsedTime;
+            }
 			//----------------------------------------------------
-			/// Register Time Elapsed Delegate
-			///
-			/// Register to be triggered when the timer reaches  
-			/// a certain number of seconds
-			/// @param Callback to be triggered
-			/// @param Seconds after which callback is triggerd
+            /// Opens a scoped connection to the timers periodic update
+            /// event. The listener will be notified after every
+            /// period.
+            ///
+            /// @author S Downie
+            ///
+			/// @param Delegate
+			/// @param Seconds after which connection is notified
+            ///
+            /// @return Scoped connection
 			//----------------------------------------------------
-			void RegisterTimeElapsedDelegate(TimeEventDelegate inDelegate, f32 infNumSecondsTilTrigger);
-			//----------------------------------------------------
-			/// Deregister Time Elapsed Delegate
-			///
-			/// Unsubscribe from being triggered after time period
-			/// @param Callback to remove
-			//----------------------------------------------------
-			void DeregisterTimeElapsedDelegate(TimeEventDelegate inDelegate);
-			//----------------------------------------------------
-			/// Register Periodic Update Delegate
-			///
-			/// Register to be triggered every given number of
-			/// seconds
-			/// @param Callback to be triggered
-			/// @param Seconds after which callback is triggerd
-			//----------------------------------------------------
-			void RegisterPeriodicUpdateDelegate(TimeEventDelegate inDelegate, f32 infNumSecondsBetweenTrigger);
-			//----------------------------------------------------
-			/// Deregister Periodic Update Delegate
-			///
-			/// Unsubscribe from being triggered after time period
-			/// @param Callback to remove
-			//----------------------------------------------------
-			void DeregisterPeriodicUpdateDelegate(TimeEventDelegate inDelegate);
+			ConnectionUPtr OpenConnection(Delegate in_delegate, f32 in_periodSecs);
+            //-------------------------------------------------------------
+            /// Close connection to the event. The connection will
+            /// no longer be notified of the event
+            ///
+            /// @author S Downie
+            ///
+            /// @param Connection to close
+            //-------------------------------------------------------------
+            void CloseConnection(Connection* in_connection) override;
 			
 		private:
+            
 			//----------------------------------------------------
-			/// Update
-			///
-			/// Called by the application to update the time 
-			/// elapsed
-			/// @param Time between frames
+            /// Updates the elapsed time
+            ///
+            /// @author S Downie
+            ///
+			/// @param Time since last update
 			//----------------------------------------------------
-			void Update(const f32 dt);
+			void Update(const f32 in_dt);
+            //-------------------------------------------------------------------------
+            /// Remove from the list any connections that have been flagged as closed
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------------------------
+            void RemoveClosedConnections();
+            //-------------------------------------------------------------
+            /// Closes all the currently open connections
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------------
+            void CloseAllConnections();
 			
 		private:
 			
-			struct PeriodicUpdateData
-			{
-				TimeEventDelegate Delegate;
-				f32 fTimeBetweenUpdates;
-				f32 fTimeSinceLastUpdate;
-			};
-			
-			f32 mfCurrentTime;
-			
-			bool mbIsTimerActive;
-			
-			typedef std::vector<TimeEventDelegate> TimeDelegatesList;
-			typedef TimeDelegatesList::iterator TimeDelegatesListItr;
-			TimeDelegatesList maTimerBeganDelegates;
-			
-			std::vector< std::pair<TimeEventDelegate, f32> > maTimeElapsedDelegates;
-			std::vector<PeriodicUpdateData> maPeriodicUpdateDelegates;
-			std::vector<TimeEventDelegate> maPeriodicUpdateDelegatesDelayedRemove;
+            struct ConnectionDesc
+            {
+                Delegate m_delegate;
+                Connection* m_connection = nullptr;
+                f32 m_updatePeriod;
+				f32 m_elapsedSinceLastUpdate = 0.0f;
+            };
+            
+            typedef std::vector<ConnectionDesc> ConnectionList;
+            ConnectionList m_connections;
             
             ConnectionUPtr m_coreTimerUpdateConnection;
+            
+            f32 m_elapsedTime = 0.0f;
+            
+            bool m_isNotifying = false;
+            bool m_isActive = false;;
 		};
 	}
 }

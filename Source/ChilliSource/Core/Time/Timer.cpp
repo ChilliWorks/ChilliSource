@@ -10,17 +10,15 @@
 #include <ChilliSource/Core/Time/Timer.h>
 
 #include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Event/Connection.h>
 
 namespace ChilliSource
 {
 	namespace Core 
 	{
 		//--------------------------------------------
-		/// Constructor 
-		///
-		/// Default
 		//--------------------------------------------
-		Timer::Timer() : mfCurrentTime(0.0f), mbIsTimerActive(false)
+		Timer::Timer()
 		{
             m_coreTimerUpdateConnection = CCoreTimer::GetTimerUpdateEvent().OpenConnection(MakeDelegate(this, &Timer::Update));
 		}
@@ -31,7 +29,7 @@ namespace ChilliSource
 		//--------------------------------------------
 		void Timer::Start()
 		{
-			mbIsTimerActive = true;
+			m_isActive = true;
 		}
 		//--------------------------------------------
 		/// Reset 
@@ -40,7 +38,7 @@ namespace ChilliSource
 		//--------------------------------------------
 		void Timer::Reset()
 		{
-			mfCurrentTime = 0.0f;
+			m_elapsedTime = 0.0f;
 		}
 		//--------------------------------------------
 		/// Stop 
@@ -49,150 +47,106 @@ namespace ChilliSource
 		//--------------------------------------------
 		void Timer::Stop()
 		{
-			mbIsTimerActive = false;
+			m_isActive = false;
 		}
-        //--------------------------------------------
-        /// Check if Timer is active
-        ///
-        /// check if timer is active
-        /// @return mbIsTimerActive
-        //--------------------------------------------
-        const bool Timer::IsTimerActive() const
+        //----------------------------------------------------
+        //----------------------------------------------------
+        ConnectionUPtr Timer::OpenConnection(Delegate in_delegate, f32 in_periodSecs)
         {
-            return mbIsTimerActive;
+            ConnectionUPtr connection(new Connection());
+            connection->SetOwningEvent(this);
+            
+            ConnectionDesc desc;
+            desc.m_delegate = in_delegate;
+            desc.m_connection = connection.get();
+            m_connections.push_back(desc);
+            
+            return connection;
         }
-		//--------------------------------------------
-		/// Get Time Elapsed
-		///
-		/// Calculate the time elapsed since starting
-		/// @return Delta time
-		//--------------------------------------------
-		const f32 Timer::GetTimeElapsed() const
-		{
-			return mfCurrentTime;
-		}
 		//----------------------------------------------------
-		/// Update
-		///
-		/// Called by the application to update the time 
-		/// elapsed
-		/// @param Time between frames
 		//----------------------------------------------------
-		void Timer::Update(const f32 dt)
+		void Timer::Update(const f32 in_dt)
 		{
-			if(mbIsTimerActive)
+			if(m_isActive)
 			{
-				mfCurrentTime += dt;
-				
-				//After time delegates
+				m_elapsedTime += in_dt;
                 
-                if(!maTimeElapsedDelegates.empty())
+                m_isNotifying = true;
+                
+                //Take a snapshot of the number of delegates so any new ones added
+                //during the notify loop aren't notified themseleves.
+                u32 numConnections = m_connections.size();
+                for(u32 i=0; i<numConnections; ++i)
                 {
-                    std::vector< std::pair<TimeEventDelegate, f32> > aTimeElapsedDelegatesCopy = maTimeElapsedDelegates;
-                    for(std::vector< std::pair<TimeEventDelegate, f32> >::iterator it = aTimeElapsedDelegatesCopy.begin(); it != aTimeElapsedDelegatesCopy.end(); ++it)
+                    if(m_connections[i].m_connection != nullptr && (m_connections[i].m_elapsedSinceLastUpdate += in_dt) >= m_connections[i].m_updatePeriod)
                     {
-                        if(mfCurrentTime >= it->second)
-                        {
-                            (it->first)(mfCurrentTime);
-                        }
+                        m_connections[i].m_elapsedSinceLastUpdate = 0.0f;
+                        m_connections[i].m_delegate();
                     }
                 }
                 
-				//Periodic delegates
-				for(std::vector<TimeEventDelegate>::iterator itOut = maPeriodicUpdateDelegatesDelayedRemove.begin(); itOut != maPeriodicUpdateDelegatesDelayedRemove.end(); ++itOut)
-				{
-					for(std::vector<PeriodicUpdateData>::iterator itIn = maPeriodicUpdateDelegates.begin(); itIn != maPeriodicUpdateDelegates.end(); ++itIn)
-					{
-						if(*itOut == itIn->Delegate)
-						{
-							maPeriodicUpdateDelegates.erase(itIn);
-							break;
-						}
-					}
-				}
-				maPeriodicUpdateDelegatesDelayedRemove.clear();
-				for(std::vector<PeriodicUpdateData>::iterator it = maPeriodicUpdateDelegates.begin(); it != maPeriodicUpdateDelegates.end(); ++it)
-				{
-					if((it->fTimeSinceLastUpdate += dt) >= it->fTimeBetweenUpdates)
-					{
-						it->fTimeSinceLastUpdate = 0.0f;
-						(it->Delegate)(mfCurrentTime);
-					}
-				}
+                m_isNotifying = false;
+                
+                RemoveClosedConnections();
 			}
 		}
-		//---Callbacks
-		//----------------------------------------------------
-		/// Register Time Elapsed Delegate
-		///
-		/// Register to be triggered when the timer reaches  
-		/// a certain number of seconds
-		/// @param Callback to be triggered
-		/// @param Seconds after which callback is triggerd
-		//----------------------------------------------------
-		void Timer::RegisterTimeElapsedDelegate(TimeEventDelegate inDelegate, f32 infNumSecondsTilTrigger)
-		{
-			maTimeElapsedDelegates.push_back(std::pair<TimeEventDelegate, f32>(inDelegate, infNumSecondsTilTrigger));
-		}
-		//----------------------------------------------------
-		/// Deregister Time Elapsed Delegate
-		///
-		/// Unsubscribe from being triggered after time period
-		/// @param Callback to remove
-		//----------------------------------------------------
-		void Timer::DeregisterTimeElapsedDelegate(TimeEventDelegate inDelegate)
-		{
-			for(std::vector< std::pair<TimeEventDelegate, f32> >::iterator it = maTimeElapsedDelegates.begin(); it != maTimeElapsedDelegates.end(); ++it)
-			{
-				if(inDelegate == it->first)
-				{
-					maTimeElapsedDelegates.erase(it);
-					break;
-				}
-			}
-		}
-		//----------------------------------------------------
-		/// Register Periodic Update Delegate
-		///
-		/// Register to be triggered every given number of
-		/// seconds
-		/// @param Callback to be triggered
-		/// @param Seconds after which callback is triggerd
-		//----------------------------------------------------
-		void Timer::RegisterPeriodicUpdateDelegate(TimeEventDelegate inDelegate, f32 infNumSecondsBetweenTrigger)
-		{
-			PeriodicUpdateData Data;
-			Data.Delegate = inDelegate;
-			Data.fTimeBetweenUpdates = infNumSecondsBetweenTrigger;
-			Data.fTimeSinceLastUpdate = 0.0f;
-			
-			maPeriodicUpdateDelegates.push_back(Data);
-		}
-		//----------------------------------------------------
-		/// Deregister Periodic Update Delegate
-		///
-		/// Unsubscribe from being triggered after time period
-		/// @param Callback to remove
-		//----------------------------------------------------
-		void Timer::DeregisterPeriodicUpdateDelegate(TimeEventDelegate inDelegate)
-		{
-			for(std::vector<PeriodicUpdateData>::iterator it = maPeriodicUpdateDelegates.begin(); it != maPeriodicUpdateDelegates.end(); ++it)
-			{
-				if(inDelegate == it->Delegate)
-				{
-					maPeriodicUpdateDelegatesDelayedRemove.push_back(it->Delegate);
-					break;
-				}
-			}
-		}
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        void Timer::CloseConnection(Connection* in_connection)
+        {
+            for(u32 i=0; i<m_connections.size(); ++i)
+            {
+                ConnectionDesc& desc = m_connections[i];
+                if(desc.m_connection == in_connection)
+                {
+                    if(m_isNotifying == false)
+                    {
+                        m_connections.erase(m_connections.begin() + i);
+                    }
+                    else
+                    {
+                        desc.m_connection = nullptr;
+                    }
+                    
+                    return;
+                }
+            }
+        }
+        //-------------------------------------------------------------------------
+        //-------------------------------------------------------------------------
+        void Timer::RemoveClosedConnections()
+        {
+            for(typename ConnectionList::iterator it = m_connections.begin(); it != m_connections.end(); )
+            {
+                if(it->m_connection == nullptr)
+                {
+                    it = m_connections.erase(it);
+                }
+                else
+                {
+                    ++it;
+                }
+            }
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        void Timer::CloseAllConnections()
+        {
+            for(u32 i=0; i<m_connections.size(); ++i)
+            {
+                if(m_connections[i].m_connection != nullptr)
+                {
+                    m_connections[i].m_connection->SetOwningEvent(nullptr);
+                }
+            }
+            
+            m_connections.clear();
+        }
 		//--------------------------------------------
-		/// Destructor
-		///
 		//--------------------------------------------
 		Timer::~Timer()
 		{
-			maTimerBeganDelegates.clear();
-			maTimeElapsedDelegates.clear();
+            CloseAllConnections();
 		}
 	}
 }

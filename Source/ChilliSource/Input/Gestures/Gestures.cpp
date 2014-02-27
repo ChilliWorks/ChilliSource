@@ -176,7 +176,7 @@ namespace ChilliSource
 			//Average all the contact point velocities and us that to determine if we have swiped
 			mvVelocity = mvEndPos - mvStartPos;
 			
-			if(mCurrentNumContactPoints == 0 && mTimer.GetTimeElapsed() < mfMaximumSwipeDuration && mvVelocity.LengthSquared() > mMinDistanceRequiredSqrd)
+			if(mCurrentNumContactPoints == 0 && mTimer.GetElapsedTime() < mfMaximumSwipeDuration && mvVelocity.LengthSquared() > mMinDistanceRequiredSqrd)
 			{
 				//Fire off the delegates
                 NotifyGestureTriggered();
@@ -432,7 +432,7 @@ namespace ChilliSource
 				mvStartPos = Info.vLocation;
 			}
 			
-			mfLastBeganTime = mTimer.GetTimeElapsed();
+			mfLastBeganTime = mTimer.GetElapsedTime();
 		}
 		void TapCSwipeGestureGesture::OnTouchEnded(const TouchInfo &Info)
 		{
@@ -471,7 +471,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		bool TapCSwipeGestureGesture::CheckForTap()
 		{
-			f32 fCurrentTapTime = mTimer.GetTimeElapsed();
+			f32 fCurrentTapTime = mTimer.GetElapsedTime();
 			
             // check if the timer has been activated!
 			// It is only a tap if it lasted less time than the max duration allowed and if the correct amount of contact points were applied
@@ -488,7 +488,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------
 		bool TapCSwipeGestureGesture::CheckForMultiTap()
 		{
-			f32 fCurrentTapTime = mTimer.GetTimeElapsed();
+			f32 fCurrentTapTime = mTimer.GetElapsedTime();
 			
 			//The first tap will always be part of the sequence
 			if(mCurrentNumTaps == 0)
@@ -579,7 +579,7 @@ namespace ChilliSource
 				}			
 				
 				//Make sure we are holding down before we declare a drag gesture recognized
-				if (mTimer.GetTimeElapsed() > mfInitialHoldDuration && mCurrentTouches == 1)
+				if (mTimer.GetElapsedTime() > mfInitialHoldDuration && mCurrentTouches == 1)
 				{
 					// Gesture is now valid
 					mbIsGestureInvalid = false;
@@ -676,7 +676,7 @@ namespace ChilliSource
 				mTimer.Reset();
 				mTimer.Start();
 				
-				mTimer.RegisterPeriodicUpdateDelegate(Core::MakeDelegate(this, &CHoldGesture::OnGestureUpdate), 0);
+				m_periodicTimerConnection = mTimer.OpenConnection(Core::MakeDelegate(this, &CHoldGesture::OnGestureUpdate), 0);
 				
 				// Set the starting location
 				mvLocation = Info.vLocation;
@@ -690,12 +690,12 @@ namespace ChilliSource
 			}
 		}
 		
-		void CHoldGesture::OnGestureUpdate(f32 infDT)
+		void CHoldGesture::OnGestureUpdate()
 		{
 			if (mbIsGestureActive)
 			{
 				// The hold timer reached the required time
-				if(mTimer.GetTimeElapsed() > mfHoldDuration)
+				if(mTimer.GetElapsedTime() > mfHoldDuration)
 				{
 					// Trigger the registered delegates
                     NotifyGestureTriggered();
@@ -707,7 +707,7 @@ namespace ChilliSource
             else
             {
                 //We are still waiting to reach the minimum time before triggering
-                if(mTimer.GetTimeElapsed() > mfInitialHoldTime)
+                if(mTimer.GetElapsedTime() > mfInitialHoldTime)
                 {
                     // Trigger the registered delegates
                     m_gestureBeganEvent.NotifyConnections(this);
@@ -762,7 +762,7 @@ namespace ChilliSource
             mbIsGestureActive = false;
 			mbIsGestureStarted = false;
             
-            mTimer.DeregisterPeriodicUpdateDelegate(Core::MakeDelegate(this, &CHoldGesture::OnGestureUpdate));
+            m_periodicTimerConnection = nullptr;
 			mTimer.Reset();
         }
         

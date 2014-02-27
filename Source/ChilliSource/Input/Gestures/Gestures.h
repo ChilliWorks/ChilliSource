@@ -471,7 +471,7 @@ namespace ChilliSource
                 return m_gestureCancelledEvent;
             }
 			
-			void OnGestureUpdate(f32 infDT);
+			void OnGestureUpdate();
 			
 			void SetMaxDistanceAllowedSqrd(f32 fMaxDistanceAllowedSqrd) { mfMaxDistanceAllowedSqrd = fMaxDistanceAllowedSqrd; }
 			void SetHoldDuration(f32 fHoldDuration) { mfHoldDuration = fHoldDuration; }
@@ -525,6 +525,8 @@ namespace ChilliSource
             Core::Event<GestureEventDelegate> m_gestureBeganEvent;
             Core::Event<GestureEventDelegate> m_gestureEndedEvent;
             Core::Event<GestureEventDelegate> m_gestureCancelledEvent;
+            
+            Core::ConnectionUPtr m_periodicTimerConnection;
 		};
 		
 		typedef std::shared_ptr<PinchGesture> PinchGesturePtr;
