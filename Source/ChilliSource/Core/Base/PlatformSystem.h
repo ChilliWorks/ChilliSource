@@ -24,7 +24,7 @@ namespace ChilliSource
         /// Allows generic access to platform
         /// specific code via common function calls
         //---------------------------------------------
-        class IPlatformSystem
+        class PlatformSystem
         {
         public:
             //----------------------------------------- 
@@ -34,11 +34,11 @@ namespace ChilliSource
             /// @author Ian Copland
             /// @return The new instance.
             //-----------------------------------------
-            static IPlatformSystem* Create();
+            static PlatformSystem* Create();
             //-----------------------------------------
             /// Destructor
             //-----------------------------------------
-            virtual ~IPlatformSystem(){}
+            virtual ~PlatformSystem(){}
             //-----------------------------------------
             /// Init
             ///
@@ -87,7 +87,7 @@ namespace ChilliSource
             ///
             /// @param the system list
             //-------------------------------------------------
-            virtual void CreateDefaultSystems(std::vector<Core::SystemPtr> & inaSystems) = 0;
+            virtual void CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems) = 0;
             //-------------------------------------------------
             /// Post Create Systems
             ///
@@ -123,7 +123,7 @@ namespace ChilliSource
             /// @param Vector of existing systems. The return value is added to this vector if not nullptr.
             /// @return A handle to the given system or nullptr if the platform cannot support it
             //-----------------------------------------
-            virtual Core::ISystem* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemPtr> & inaExistingSystems) const = 0;
+            virtual Core::System* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr> & inaExistingSystems) const = 0;
             //-----------------------------------------
             /// Create and Add System With Interface
             ///
@@ -133,7 +133,7 @@ namespace ChilliSource
             /// @param Vector of existing systems
             /// @return A handle to the given system or nullptr if the platform cannot support it
             //-----------------------------------------
-            template <typename T> T* CreateAndAddSystemWithInterface(std::vector<Core::SystemPtr> & inaExistingSystems) const
+            template <typename T> T* CreateAndAddSystemWithInterface(std::vector<Core::SystemSPtr> & inaExistingSystems) const
             {
                 return static_cast<T*> (CreateAndAddSystemWithInterface(T::InterfaceID, inaExistingSystems));
             }
@@ -163,7 +163,7 @@ namespace ChilliSource
             /// @param InterfaceID to generate
             /// @return A handle to the given activity or nullptr if the platform cannot support it
             //-----------------------------------------
-            virtual IActivity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const = 0;
+            virtual Activity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const = 0;
             //-----------------------------------------
             /// Create Activity With Interface
             ///
@@ -225,9 +225,9 @@ namespace ChilliSource
             /// Get Screen Dimensions
             ///
             /// Retrieves the screen dimensions. These dimensions are always in the default orientation for the device.
-            /// @return A CVector2 containing the screen size in its x + y components
+            /// @return A Vector2 containing the screen size in its x + y components
             //-----------------------------------------------------------------------------------------------------------
-            virtual Core::CVector2 GetScreenDimensions() const = 0;
+            virtual Core::Vector2 GetScreenDimensions() const = 0;
             //--------------------------------------------------------------
             /// Get Device Model Name
             ///
@@ -270,14 +270,14 @@ namespace ChilliSource
             /// Get the active language locale of the device
             /// @return Locale ID
             //--------------------------------------------------------------
-            virtual Core::CLocale GetLocale() const = 0;
+            virtual Core::Locale GetLocale() const = 0;
             //--------------------------------------------------------------
             /// Get Language
             ///
             /// Get the active locale of the device in locale format
             /// @return Locale ID
             //--------------------------------------------------------------
-            virtual Core::CLocale GetLanguage() const = 0;
+            virtual Core::Locale GetLanguage() const = 0;
             //-------------------------------------------------
             /// Get Screen Density
             ///

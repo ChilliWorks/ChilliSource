@@ -65,7 +65,7 @@ namespace ChilliSource
         typedef std::function<void(const std::string&, const std::string&)> IAPTransactionCloseDelegate;
         
         
-		class IAPSystem : public ChilliSource::Core::ISystem
+		class IAPSystem : public ChilliSource::Core::System
         {
         public:
             DECLARE_NAMED_INTERFACE(IAPSystem);

@@ -13,7 +13,7 @@
 
 	Version 1.6 - 2005-02-07 (thanks to Howard Kapustein for patches)
 	- You can set the endianness in your files, no need to modify the
-	  header file of the CSHA1 class any more
+	  header file of the SHA1 class any more
 	- Aligned data support
 	- Made support/compilation of the utility functions (ReportHash
 	  and HashFile) optional (useful, if bytes count, for example in
@@ -110,7 +110,7 @@ namespace ChilliSource
 			u32		l[16];
 		} SHA1_WORKSPACE_BLOCK;
 
-		class CSHA1
+		class SHA1
 		{
 		public:
 #ifdef SHA1_UTILITY_FUNCTIONS
@@ -124,8 +124,8 @@ namespace ChilliSource
 #endif
 
 			// Constructor and Destructor
-			CSHA1();
-			~CSHA1();
+			SHA1();
+			~SHA1();
 
 			u32		m_state[5];
 			u32		m_count[2];

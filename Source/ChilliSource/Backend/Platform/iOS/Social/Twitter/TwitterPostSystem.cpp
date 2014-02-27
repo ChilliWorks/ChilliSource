@@ -28,7 +28,7 @@ namespace ChilliSource
 		/// Constructor
 		//------------------------------------------------------------------------
 		CTwitterPostSystem::CTwitterPostSystem(iOS::CHttpConnectionSystem* inpHttpConnectionSystem,
-											   Core::COAuthSystem* inpOAuthSystem) : Social::TwitterPostSystem(inpHttpConnectionSystem, inpOAuthSystem)
+											   Core::OAuthSystem* inpOAuthSystem) : Social::TwitterPostSystem(inpHttpConnectionSystem, inpOAuthSystem)
 		{
 			
 		}
@@ -67,9 +67,9 @@ namespace ChilliSource
 				if(RequestOAuthToken(strAuthoiseURL))
 				{
 					// Show authentication view
-					if(Core::CApplication::GetPlatformSystemPtr()->CanCreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>())
+					if(Core::Application::GetPlatformSystemPtr()->CanCreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>())
 					{
-						mpAuthenticationView = Core::CApplication::GetPlatformSystemPtr()->CreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>();
+						mpAuthenticationView = Core::Application::GetPlatformSystemPtr()->CreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>();
 						mpAuthenticationView->SetAuthenticationPINResultDelegate(Core::MakeDelegate(this, &TwitterPostSystem::OnPINComplete));
 						mpAuthenticationView->GetDismissedEvent() += Core::MakeDelegate(this, &TwitterPostSystem::OnAuthorisationDismissed);
 						mpAuthenticationView->Present();
@@ -146,7 +146,7 @@ namespace ChilliSource
                 bool bImageAttached = true;
                 if(insDesc.strLocalImagePath.length() > 0)
                 {
-                    std::string strPath = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(insDesc.eLocalImageStorageLocation) + insDesc.strLocalImagePath;
+                    std::string strPath = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(insDesc.eLocalImageStorageLocation) + insDesc.strLocalImagePath;
                     
                     NSString* pImagePath = Core::CStringUtils::StringToNSString(strPath);
                     UIImage* pImage = [UIImage imageWithContentsOfFile:pImagePath];
@@ -251,7 +251,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Delegate called with the authorisation view is dismissed.
 		//------------------------------------------------------------------------
-		void CTwitterPostSystem::OnAuthorisationDismissed(Core::IActivity* inpActivity)
+		void CTwitterPostSystem::OnAuthorisationDismissed(Core::Activity* inpActivity)
 		{
 			// User has cancelled
 			if(mpAuthenticationView)

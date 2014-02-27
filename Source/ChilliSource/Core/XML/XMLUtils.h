@@ -46,12 +46,12 @@ namespace ChilliSource
 		template <> const s64 XMLUtils::GetAttributeValueOrDefault<s64>(TiXmlElement* inpElement, const std::string & inAttributeName, const s64 & inDefault);
 		template <> const u64 XMLUtils::GetAttributeValueOrDefault<u64>(TiXmlElement* inpElement, const std::string & inAttributeName, const u64 & inDefault);
 		template <> const bool XMLUtils::GetAttributeValueOrDefault<bool>(TiXmlElement* inpElement, const std::string & inAttributeName, const bool & inDefault);		
-		template <> const CVector2 XMLUtils::GetAttributeValueOrDefault<CVector2>(TiXmlElement* inpElement, const std::string & inAttributeName, const CVector2 & inDefault);
-		template <> const CVector3 XMLUtils::GetAttributeValueOrDefault<CVector3>(TiXmlElement* inpElement, const std::string & inAttributeName, const CVector3 & inDefault);
-		template <> const CVector4 XMLUtils::GetAttributeValueOrDefault<CVector4>(TiXmlElement* inpElement, const std::string & inAttributeName, const CVector4 & inDefault);
-		template <> const CMatrix4x4 XMLUtils::GetAttributeValueOrDefault<CMatrix4x4>(TiXmlElement* inpElement, const std::string & inAttributeName, const CMatrix4x4 & inDefault);
-		template <> const CQuaternion XMLUtils::GetAttributeValueOrDefault<CQuaternion>(TiXmlElement* inpElement, const std::string & inAttributeName, const CQuaternion & inDefault);
-		template <> const CColour XMLUtils::GetAttributeValueOrDefault<CColour>(TiXmlElement* inpElement, const std::string & inAttributeName, const CColour & inDefault);
+		template <> const Vector2 XMLUtils::GetAttributeValueOrDefault<Vector2>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector2 & inDefault);
+		template <> const Vector3 XMLUtils::GetAttributeValueOrDefault<Vector3>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector3 & inDefault);
+		template <> const Vector4 XMLUtils::GetAttributeValueOrDefault<Vector4>(TiXmlElement* inpElement, const std::string & inAttributeName, const Vector4 & inDefault);
+		template <> const Matrix4x4 XMLUtils::GetAttributeValueOrDefault<Matrix4x4>(TiXmlElement* inpElement, const std::string & inAttributeName, const Matrix4x4 & inDefault);
+		template <> const Quaternion XMLUtils::GetAttributeValueOrDefault<Quaternion>(TiXmlElement* inpElement, const std::string & inAttributeName, const Quaternion & inDefault);
+		template <> const Colour XMLUtils::GetAttributeValueOrDefault<Colour>(TiXmlElement* inpElement, const std::string & inAttributeName, const Colour & inDefault);
 	}
 }
 

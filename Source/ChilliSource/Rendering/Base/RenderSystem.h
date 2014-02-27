@@ -1,5 +1,5 @@
 /*
- *  IRenderSystem.h
+ *  RenderSystem.h
  *  MoFlow
  *
  *  Created by Tag Games on 28/09/2010.
@@ -29,14 +29,14 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        class CDynamicSpriteBatch;
+        class DynamicSpriteBatch;
         
-		class IRenderSystem : public Core::ISystem, public Core::IComponentProducer
+		class RenderSystem : public Core::System, public Core::IComponentProducer
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(IRenderSystem);
-			IRenderSystem();
-			virtual ~IRenderSystem();
+			DECLARE_NAMED_INTERFACE(RenderSystem);
+			RenderSystem();
+			virtual ~RenderSystem();
 			
 			virtual bool Init(u32 inudwWidth, u32 inudwHeight) = 0;
 			virtual void Resume() = 0;
@@ -44,13 +44,13 @@ namespace ChilliSource
 			virtual void Destroy() = 0;
 			virtual void OnScreenOrientationChanged(u32 inudwWidth, u32 inudwHeight) = 0;
 
-			virtual void BeginFrame(IRenderTarget* inpActiveRenderTarget) = 0;
-			virtual void EndFrame(IRenderTarget* inpActiveRenderTarget) = 0;
+			virtual void BeginFrame(RenderTarget* inpActiveRenderTarget) = 0;
+			virtual void EndFrame(RenderTarget* inpActiveRenderTarget) = 0;
 
-			virtual void ApplyMaterial(const CMaterial& inMaterial) = 0;
-            virtual void ApplyJoints(const std::vector<Core::CMatrix4x4>& inaJoints) = 0;
-			virtual void ApplyCamera(const Core::CVector3& invPosition, const Core::CMatrix4x4& inmatInvView, const Core::CMatrix4x4& inmatProj, const Core::CColour& inClearCol) = 0;
-            virtual void SetLight(ILightComponent* inpLightComponent) = 0;
+			virtual void ApplyMaterial(const Material& inMaterial) = 0;
+            virtual void ApplyJoints(const std::vector<Core::Matrix4x4>& inaJoints) = 0;
+			virtual void ApplyCamera(const Core::Vector3& invPosition, const Core::Matrix4x4& inmatInvView, const Core::Matrix4x4& inmatProj, const Core::Colour& inClearCol) = 0;
+            virtual void SetLight(LightComponent* inpLightComponent) = 0;
 			
 			virtual void EnableAlphaBlending(bool inbIsEnabled) = 0;
 			virtual void EnableDepthTesting(bool inbIsEnabled) = 0;
@@ -70,17 +70,17 @@ namespace ChilliSource
 			virtual void SetBlendFunction(AlphaBlend ineSrcFunc, AlphaBlend ineDstFunc) = 0;
             virtual void SetDepthFunction(DepthFunction ineFunc) = 0;
             virtual void SetCullFace(CullFace ineCullFace) = 0;
-            virtual void SetScissorRegion(const Core::CVector2& invPosition, const Core::CVector2& invSize) = 0;
+            virtual void SetScissorRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize) = 0;
 			
-			virtual IMeshBuffer* CreateBuffer(BufferDescription&) = 0;
-			virtual void RenderVertexBuffer(IMeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::CMatrix4x4&) = 0;
-			virtual void RenderBuffer(IMeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::CMatrix4x4&) = 0;
+			virtual MeshBuffer* CreateBuffer(BufferDescription&) = 0;
+			virtual void RenderVertexBuffer(MeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::Matrix4x4&) = 0;
+			virtual void RenderBuffer(MeshBuffer*, u32 inudwOffset, u32 inudwStride, const Core::Matrix4x4&) = 0;
 			
-			virtual IRenderTarget* CreateRenderTarget(u32 inWidth, u32 inHeight) = 0;
-			virtual IRenderTarget* GetDefaultRenderTarget() = 0;
+			virtual RenderTarget* CreateRenderTarget(u32 inWidth, u32 inHeight) = 0;
+			virtual RenderTarget* GetDefaultRenderTarget() = 0;
 			
-			Core::IComponentFactory* GetComponentFactoryPtr(u32 inudwIndex);
-			Core::IComponentFactory& GetComponentFactory(u32 inudwIndex);
+			Core::ComponentFactory* GetComponentFactoryPtr(u32 inudwIndex);
+			Core::ComponentFactory& GetComponentFactory(u32 inudwIndex);
             
             virtual std::string GetPathToShaders() const = 0;
 			
@@ -95,20 +95,20 @@ namespace ChilliSource
             ///
             /// @return Pointer to dynamic sprite batcher
             //----------------------------------------------------
-            CDynamicSpriteBatch* GetDynamicSpriteBatchPtr();
+            DynamicSpriteBatch* GetDynamicSpriteBatchPtr();
 		protected:
 			
 			//---Render Factories
-			CRenderComponentFactory* mpRenderFactory;
+			RenderComponentFactory* mpRenderFactory;
 			
 			//---Render resource managers
-			CMeshManager mMeshManager;
-			CSkinnedAnimationManager mSkinnedAnimationManager;
-            IFontManager mFontManager;
-			IMaterialManager mMaterialManager;
-			ISpriteSheetManager mSpriteManager;
+			MeshManager mMeshManager;
+			SkinnedAnimationManager mSkinnedAnimationManager;
+            FontManager mFontManager;
+			MaterialManager mMaterialManager;
+			SpriteSheetManager mSpriteManager;
             
-            CDynamicSpriteBatch* mpSpriteBatcher;
+            DynamicSpriteBatch* mpSpriteBatcher;
 		};
 	}
 }

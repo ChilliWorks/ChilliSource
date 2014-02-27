@@ -15,35 +15,35 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		CSkeleton::CSkeleton()
+		Skeleton::Skeleton()
 		{
 			
 		}
 		
-		CSkeleton::~CSkeleton()
+		Skeleton::~Skeleton()
 		{
 			
 		}
 		//-------------------------------------------------------------------------
 		/// Get Node By Name
 		//-------------------------------------------------------------------------
-		SkeletonNodePtr CSkeleton::GetNodeByName(const std::string& instrName) const
+		SkeletonNodeSPtr Skeleton::GetNodeByName(const std::string& instrName) const
 		{
-			for (std::vector<SkeletonNodePtr>::const_iterator it = mapNodes.begin(); it != mapNodes.end(); ++it)
+			for (std::vector<SkeletonNodeSPtr>::const_iterator it = mapNodes.begin(); it != mapNodes.end(); ++it)
 			{
 				if (instrName == (*it)->mstrName)
 					return *it;
 			}
 			
-			return SkeletonNodePtr();
+			return SkeletonNodeSPtr();
 		}
         //-------------------------------------------------------------------------
         /// Get Node Index By Name
         //-------------------------------------------------------------------------
-        s32 CSkeleton::GetNodeIndexByName(const std::string& instrName) const
+        s32 Skeleton::GetNodeIndexByName(const std::string& instrName) const
         {
             s32 dwIndex = 0;
-            for (std::vector<SkeletonNodePtr>::const_iterator it = mapNodes.begin(); it != mapNodes.end(); ++it)
+            for (std::vector<SkeletonNodeSPtr>::const_iterator it = mapNodes.begin(); it != mapNodes.end(); ++it)
 			{
 				if (instrName == (*it)->mstrName)
 					return dwIndex;
@@ -54,19 +54,19 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Get Node By Index
 		//-------------------------------------------------------------------------
-		SkeletonNodePtr CSkeleton::GetNodeByIndex(u32 indwIndex) const
+		SkeletonNodeSPtr Skeleton::GetNodeByIndex(u32 indwIndex) const
 		{
 			if (indwIndex < mapNodes.size())
 			{
 				return mapNodes[indwIndex];
 			}
 			
-			return SkeletonNodePtr();
+			return SkeletonNodeSPtr();
 		}
 		//-------------------------------------------------------------------------
 		/// Get Num Nodes
 		//-------------------------------------------------------------------------
-		s32 CSkeleton::GetNumNodes() const
+		s32 Skeleton::GetNumNodes() const
 		{
 			return (s32)mapNodes.size();
 		}
@@ -77,30 +77,30 @@ namespace ChilliSource
         ///
         /// @return the number of joints.
         //-------------------------------------------------------------------------
-        u32 CSkeleton::GetNumJoints() const
+        u32 Skeleton::GetNumJoints() const
         {
             return madwJoints.size();
         }
 		//-------------------------------------------------------------------------
 		/// Get Nodes
 		//-------------------------------------------------------------------------
-		const std::vector<SkeletonNodePtr>& CSkeleton::GetNodes() const
+		const std::vector<SkeletonNodeSPtr>& Skeleton::GetNodes() const
 		{
 			return mapNodes;
 		}
         //-------------------------------------------------------------------------
         /// Get Joint Indices
         //-------------------------------------------------------------------------
-        const std::vector<s32>& CSkeleton::GetJointIndices() const
+        const std::vector<s32>& Skeleton::GetJointIndices() const
         {
             return madwJoints;
         }
 		//-------------------------------------------------------------------------
 		/// Add Node
 		//-------------------------------------------------------------------------
-		void CSkeleton::AddNode(const std::string& instrName, s32 indwParentIndex)
+		void Skeleton::AddNode(const std::string& instrName, s32 indwParentIndex)
 		{
-			SkeletonNodePtr newNode(new SkeletonNode());
+			SkeletonNodeSPtr newNode(new SkeletonNode());
 			newNode->mstrName = instrName;
 			newNode->mdwParentIndex = indwParentIndex;
 			mapNodes.push_back(newNode);
@@ -108,7 +108,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------------
         /// Add Joint Index
         //-------------------------------------------------------------------------
-        void CSkeleton::AddJointIndex(s32 indwJointIndex)
+        void Skeleton::AddJointIndex(s32 indwJointIndex)
         {
             madwJoints.push_back(indwJointIndex);
         }

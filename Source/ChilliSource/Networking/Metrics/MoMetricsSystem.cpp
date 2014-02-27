@@ -134,7 +134,7 @@ namespace ChilliSource
                     }
                 }
                 
-                Core::CApplication::GetFileSystemPtr()->DeleteFile(Core::StorageLocation::k_cache, "PendingSessions.mometrics");
+                Core::Application::GetFileSystemPtr()->DeleteFile(Core::StorageLocation::k_cache, "PendingSessions.mometrics");
             }
         }
         

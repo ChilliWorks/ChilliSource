@@ -20,31 +20,31 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(IRenderSystem);
+        DEFINE_NAMED_INTERFACE(RenderSystem);
 		//-------------------------------------------------------
 		/// Constructor
 		///
 		/// Default
 		//-------------------------------------------------------
-		IRenderSystem::IRenderSystem()
+		RenderSystem::RenderSystem()
         : mpRenderFactory(nullptr), mpSpriteBatcher(nullptr)
 		{
-            Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mMeshManager);
-			Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mSkinnedAnimationManager);
-			Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mFontManager);
-			Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mMaterialManager);
-			Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mSpriteManager);
+            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mMeshManager);
+			Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mSkinnedAnimationManager);
+			Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mFontManager);
+			Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mMaterialManager);
+			Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mSpriteManager);
 		}
         //----------------------------------------------------
         /// Get Dynamic Sprite Batch Pointer
         ///
         /// @return Pointer to dynamic sprite batcher
         //----------------------------------------------------
-        CDynamicSpriteBatch* IRenderSystem::GetDynamicSpriteBatchPtr()
+        DynamicSpriteBatch* RenderSystem::GetDynamicSpriteBatchPtr()
         {
             if(mpSpriteBatcher == nullptr)
             {
-                mpSpriteBatcher = new CDynamicSpriteBatch(this);
+                mpSpriteBatcher = new DynamicSpriteBatch(this);
             }
             
             return mpSpriteBatcher;
@@ -54,7 +54,7 @@ namespace ChilliSource
 		///
 		/// @return Number of factories in this system
 		//----------------------------------------------------
-		u32 IRenderSystem::GetNumComponentFactories() const
+		u32 RenderSystem::GetNumComponentFactories() const
 		{
 			return 1;
 		}
@@ -63,11 +63,11 @@ namespace ChilliSource
 		///
 		/// 
 		//-------------------------------------------------------
-		Core::IComponentFactory* IRenderSystem::GetComponentFactoryPtr(u32 inudwIndex)
+		Core::ComponentFactory* RenderSystem::GetComponentFactoryPtr(u32 inudwIndex)
 		{
             if(mpRenderFactory == nullptr)
             {
-                mpRenderFactory = new CRenderComponentFactory(this);
+                mpRenderFactory = new RenderComponentFactory(this);
             }
             
             return mpRenderFactory;
@@ -77,11 +77,11 @@ namespace ChilliSource
 		///
 		/// 
 		//-------------------------------------------------------
-		Core::IComponentFactory& IRenderSystem::GetComponentFactory(u32 inudwIndex)
+		Core::ComponentFactory& RenderSystem::GetComponentFactory(u32 inudwIndex)
 		{
             if(mpRenderFactory == nullptr)
             {
-                mpRenderFactory = new CRenderComponentFactory(this);
+                mpRenderFactory = new RenderComponentFactory(this);
             }
             
             return *mpRenderFactory;
@@ -89,7 +89,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		/// Destructor
 		//-------------------------------------------------------
-		IRenderSystem::~IRenderSystem()
+		RenderSystem::~RenderSystem()
 		{
 			CS_SAFE_DELETE(mpRenderFactory);
             CS_SAFE_DELETE(mpSpriteBatcher);

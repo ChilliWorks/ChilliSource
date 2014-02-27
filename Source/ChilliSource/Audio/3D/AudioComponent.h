@@ -25,7 +25,7 @@ namespace ChilliSource
 	{
         typedef std::function<void(AudioComponent*)> AudioEventDelegate;
         
-		class AudioComponent : public Core::IComponent
+		class AudioComponent : public Core::Component
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(AudioComponent);
@@ -78,7 +78,7 @@ namespace ChilliSource
 			/// @param 3D position vector
 			/// @param 3D velocity vector
 			//---------------------------------------------------------------------
-			virtual void Set3DLocation(Core::CVector3& invPosition, Core::CVector3& invVelocity) = 0;
+			virtual void Set3DLocation(Core::Vector3& invPosition, Core::Vector3& invVelocity) = 0;
             //---------------------------------------------------------------------
 			/// Set Volume
 			///

@@ -5,18 +5,18 @@ namespace ChilliSource
 {
 	namespace Core 
 	{
-		const CVector2 CVector2::ZERO;
-		const CVector2 CVector2::ONE(1.0f,1.0f);
-		const CVector2 CVector2::X_UNIT_POSITIVE(1.0f,0);
-		const CVector2 CVector2::X_UNIT_NEGATIVE(-1.0f,0);
-		const CVector2 CVector2::Y_UNIT_POSITIVE(0,1.0f);
-		const CVector2 CVector2::Y_UNIT_NEGATIVE(0,-1.0f);
+		const Vector2 Vector2::ZERO;
+		const Vector2 Vector2::ONE(1.0f,1.0f);
+		const Vector2 Vector2::X_UNIT_POSITIVE(1.0f,0);
+		const Vector2 Vector2::X_UNIT_NEGATIVE(-1.0f,0);
+		const Vector2 Vector2::Y_UNIT_POSITIVE(0,1.0f);
+		const Vector2 Vector2::Y_UNIT_NEGATIVE(0,-1.0f);
 		//---------------------------------------------------------
 		/// Constructor
 		///
 		/// Default. Initialises to zero
 		//---------------------------------------------------------
-		CVector2::CVector2() : x(0.0f), y(0.0f)
+		Vector2::Vector2() : x(0.0f), y(0.0f)
 		{
 		}
 		//---------------------------------------------------------
@@ -27,7 +27,7 @@ namespace ChilliSource
 		/// @param Y component
 		/// @param Z component
 		//---------------------------------------------------------
-		CVector2::CVector2(const f32 fX, const f32 fY) : x(fX), y(fY)
+		Vector2::Vector2(const f32 fX, const f32 fY) : x(fX), y(fY)
 		{
 		}
 		//---------------------------------------------------------
@@ -36,7 +36,7 @@ namespace ChilliSource
 		/// Initialise with copy
 		/// @param Vector to copy
 		//---------------------------------------------------------
-		CVector2::CVector2(const CVector2 &Vec)
+		Vector2::Vector2(const Vector2 &Vec)
 		{
 			(*this) = Vec;
 		}
@@ -46,7 +46,7 @@ namespace ChilliSource
 		/// Initialise with copy
 		/// @param Vector to copy
 		//---------------------------------------------------------
-		CVector2::CVector2(const CVector3 &Vec) : x(Vec.x), y(Vec.y)
+		Vector2::Vector2(const Vector3 &Vec) : x(Vec.x), y(Vec.y)
 		{
 			
 		}
@@ -56,7 +56,7 @@ namespace ChilliSource
 		/// Initialise with copy
 		/// @param Vector to copy
 		//---------------------------------------------------------
-		CVector2::CVector2(const CVector4 &Vec) : x(Vec.x), y(Vec.y)
+		Vector2::Vector2(const Vector4 &Vec) : x(Vec.x), y(Vec.y)
 		{
 			
 		}
@@ -67,7 +67,7 @@ namespace ChilliSource
 		/// unit length.
 		/// @param A vector object that will be set to the unit 
 		//---------------------------------------------------------
-        CVector2 & CVector2::Normalise()
+        Vector2 & Vector2::Normalise()
 		{
 			//Calculate Magnitude
 			f32 fMag = Length();
@@ -86,9 +86,9 @@ namespace ChilliSource
 		/// unit length.
 		/// @param A vector object that will be set to the unit 
 		//---------------------------------------------------------
-		CVector2 CVector2::NormalisedCopy() const
+		Vector2 Vector2::NormalisedCopy() const
 		{
-			CVector2 Out;
+			Vector2 Out;
 			//Calculate Magnitude
 			f32 fMag = Length();
 			//Prevent division by zero
@@ -106,7 +106,7 @@ namespace ChilliSource
 		/// @param The adjoining vector
 		/// @return The scalar product
 		//---------------------------------------------------------
-		f32 CVector2::DotProduct(const CVector2 &inOtherVec) const
+		f32 Vector2::DotProduct(const Vector2 &inOtherVec) const
 		{
 			return (this->x * inOtherVec.x) + (this->y * inOtherVec.y);
 		}
@@ -117,7 +117,7 @@ namespace ChilliSource
 		/// no costly sqrt function
 		/// @return The magnitude squared
 		//---------------------------------------------------------
-		f32 CVector2::LengthSquared() const
+		f32 Vector2::LengthSquared() const
 		{
 			return (this->x * this->x + this->y * this->y);
 		}
@@ -127,7 +127,7 @@ namespace ChilliSource
 		/// Calculate the magnitude of a vector
 		/// @return The magnitude of the vector
 		//---------------------------------------------------------
-		f32 CVector2::Length() const
+		f32 Vector2::Length() const
 		{
 			//Calculate Magnitude
 			return (f32)sqrt(this->x * this->x + this->y * this->y);
@@ -140,11 +140,11 @@ namespace ChilliSource
 		/// @param The vector to which the angle is defined
 		/// @return The angle in radians
 		//---------------------------------------------------------
-		f32 CVector2::Angle(const CVector2 &inOtherVec) const
+		f32 Vector2::Angle(const Vector2 &inOtherVec) const
 		{			
 			return std::atan2(inOtherVec.y,inOtherVec.x) - std::atan2(y,x);
 		}
-        CVector2 & CVector2::Inverse()
+        Vector2 & Vector2::Inverse()
         {
             if(this->x != 0.0f)
 			{
@@ -157,9 +157,9 @@ namespace ChilliSource
             
             return *this;
         }
-        CVector2 CVector2::InversedCopy() const
+        Vector2 Vector2::InversedCopy() const
         {
-            CVector2 Out;
+            Vector2 Out;
             
             if(this->x != 0.0f)
 			{
@@ -172,7 +172,7 @@ namespace ChilliSource
             
             return Out;
         }
-        void CVector2::Multiply(const CVector2* inpVec, const CVector2* inpVec2, CVector2* outpVec)
+        void Vector2::Multiply(const Vector2* inpVec, const Vector2* inpVec2, Vector2* outpVec)
         {
             outpVec->x = inpVec->x * inpVec2->x; 
             outpVec->y = inpVec->y * inpVec2->y; 

@@ -20,18 +20,18 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Constructor
         //-----------------------------------------------------------
-        CSkinnedAnimationGroup::CSkinnedAnimationGroup(const SkeletonPtr& inpSkeleton)
+        SkinnedAnimationGroup::SkinnedAnimationGroup(const SkeletonSPtr& inpSkeleton)
         : mpSkeleton(inpSkeleton), mbAnimationLengthDirty(true), mfAnimationLength(0.0f), mbPrepared(false)
         {
             for (u32 i = 0; i < mpSkeleton->GetNumNodes(); ++i)
             {
-                mCurrentAnimationMatrices.push_back(Core::CMatrix4x4());
+                mCurrentAnimationMatrices.push_back(Core::Matrix4x4());
             }
         }
         //----------------------------------------------------------
         /// Attach Animation
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::AttachAnimation(const SkinnedAnimationPtr& inpAnimation, f32 infBlendlinePosition)
+        void SkinnedAnimationGroup::AttachAnimation(const SkinnedAnimationSPtr& inpAnimation, f32 infBlendlinePosition)
         {
             mbAnimationLengthDirty = true;
             AnimationItemPtr pItem(new AnimationItem());
@@ -42,7 +42,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Detatch Animation
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::DetatchAnimation(const SkinnedAnimationPtr& inpAnimation)
+        void SkinnedAnimationGroup::DetatchAnimation(const SkinnedAnimationSPtr& inpAnimation)
         {
             mbAnimationLengthDirty = true;
             for (std::vector<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
@@ -57,14 +57,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Clear Animations
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::ClearAnimations()
+        void SkinnedAnimationGroup::ClearAnimations()
         {
             mAnimations.clear();
         }
         //----------------------------------------------------------
         /// Build Animation Data
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::BuildAnimationData(AnimationBlendType ineBlendType, f32 infPlaybackPosition, f32 infBlendlinePosition)
+        void SkinnedAnimationGroup::BuildAnimationData(AnimationBlendType ineBlendType, f32 infPlaybackPosition, f32 infBlendlinePosition)
         {
             //check how many animations we have. if we only have 1 then dont try and blend. If we have none then error.
             if (mAnimations.size() > 1)
@@ -86,11 +86,11 @@ namespace ChilliSource
                 }
                 
                 //get the animation frames
-                SkinnedAnimationFramePtr pFrame1;
+                SkinnedAnimationFrameSPtr pFrame1;
                 if (pAnimItem1 != nullptr)
                     pFrame1 = CalculateAnimationFrame(pAnimItem1->pSkinnedAnimation, infPlaybackPosition);
                 
-                SkinnedAnimationFramePtr pFrame2;
+                SkinnedAnimationFrameSPtr pFrame2;
                 if (pAnimItem2 != nullptr)
                     pFrame2 = CalculateAnimationFrame(pAnimItem2->pSkinnedAnimation, infPlaybackPosition);
                 
@@ -127,7 +127,7 @@ namespace ChilliSource
             }
             else if (mAnimations.size() > 0) 
             {
-                SkinnedAnimationPtr pAnim = mAnimations[0]->pSkinnedAnimation;
+                SkinnedAnimationSPtr pAnim = mAnimations[0]->pSkinnedAnimation;
                 mCurrentAnimationData = CalculateAnimationFrame(pAnim, infPlaybackPosition);
                 mbPrepared = true;
             }
@@ -140,7 +140,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Blend Group
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::BlendGroup(AnimationBlendType ineBlendType, const SkinnedAnimationGroupPtr& inpAnimationGroup, f32 infBlendFactor)
+        void SkinnedAnimationGroup::BlendGroup(AnimationBlendType ineBlendType, const SkinnedAnimationGroupSPtr& inpAnimationGroup, f32 infBlendFactor)
         {
             switch (ineBlendType)
             {
@@ -155,16 +155,16 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Build Matrices
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::BuildMatrices(s32 indwCurrentParent, const Core::CMatrix4x4& inParentMatrix)
+        void SkinnedAnimationGroup::BuildMatrices(s32 indwCurrentParent, const Core::Matrix4x4& inParentMatrix)
         {
-            const std::vector<SkeletonNodePtr>& nodes = mpSkeleton->GetNodes();
+            const std::vector<SkeletonNodeSPtr>& nodes = mpSkeleton->GetNodes();
 			u32 currIndex = 0;
-			for (std::vector<SkeletonNodePtr>::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
+			for (std::vector<SkeletonNodeSPtr>::const_iterator it = nodes.begin(); it != nodes.end(); ++it)
 			{
 				if ((*it)->mdwParentIndex == indwCurrentParent)
 				{
 					//get the world translation and orientation
-					Core::CMatrix4x4 localMat;
+					Core::Matrix4x4 localMat;
                     if(mCurrentAnimationData->mNodeTranslations.empty() == false)
                     {
                         localMat.SetTransform(mCurrentAnimationData->mNodeTranslations[currIndex], mCurrentAnimationData->mNodeScalings[currIndex], mCurrentAnimationData->mNodeOrientations[currIndex]);
@@ -183,25 +183,25 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Matrix At Index
         //----------------------------------------------------------
-        const Core::CMatrix4x4& CSkinnedAnimationGroup::GetMatrixAtIndex(s32 indwIndex) const
+        const Core::Matrix4x4& SkinnedAnimationGroup::GetMatrixAtIndex(s32 indwIndex) const
         {
             if (indwIndex < mCurrentAnimationMatrices.size())
             {
                 return mCurrentAnimationMatrices[indwIndex];
             }
-            return Core::CMatrix4x4::IDENTITY;
+            return Core::Matrix4x4::IDENTITY;
         }
         //----------------------------------------------------------
         /// Apply Inverse Bind Pose
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::ApplyInverseBindPose(const std::vector<Core::CMatrix4x4>& inInverseBindPoseMatrices, std::vector<Core::CMatrix4x4>& outCombinedMatrices)
+        void SkinnedAnimationGroup::ApplyInverseBindPose(const std::vector<Core::Matrix4x4>& inInverseBindPoseMatrices, std::vector<Core::Matrix4x4>& outCombinedMatrices)
         {
             const std::vector<s32>& kadwJoints = mpSkeleton->GetJointIndices();
             
             outCombinedMatrices.clear();
             for (u32 i = 0; i < kadwJoints.size(); ++i)
             {
-                outCombinedMatrices.push_back(Core::CMatrix4x4());
+                outCombinedMatrices.push_back(Core::Matrix4x4());
             }
             
             //check that they have the same number of joints
@@ -213,7 +213,7 @@ namespace ChilliSource
 			//iterate through and multiply together to get the new array
 			s32 count = 0;
 			std::vector<s32>::const_iterator joint = kadwJoints.begin();
-			for (std::vector<Core::CMatrix4x4>::const_iterator ibp = inInverseBindPoseMatrices.begin(); 
+			for (std::vector<Core::Matrix4x4>::const_iterator ibp = inInverseBindPoseMatrices.begin(); 
 				 joint != kadwJoints.end() && ibp != inInverseBindPoseMatrices.end();)
 			{
 				//multiply together
@@ -228,7 +228,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Animation Length
         //----------------------------------------------------------
-        f32 CSkinnedAnimationGroup::GetAnimationLength()
+        f32 SkinnedAnimationGroup::GetAnimationLength()
         {
             CalculateAnimationLength();
             return mfAnimationLength;
@@ -236,21 +236,21 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Animation Count
         //----------------------------------------------------------
-        u32 CSkinnedAnimationGroup::GetAnimationCount() const
+        u32 SkinnedAnimationGroup::GetAnimationCount() const
         {
             return mAnimations.size();
         }
         //----------------------------------------------------------
         /// Is Prepared
         //----------------------------------------------------------
-        bool CSkinnedAnimationGroup::IsPrepared() const
+        bool SkinnedAnimationGroup::IsPrepared() const
         {
             return mbPrepared;
         }
         //----------------------------------------------------------
         /// Get Animation
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::GetAnimations(std::vector<SkinnedAnimationPtr>& outapSkinnedAnimationList)
+        void SkinnedAnimationGroup::GetAnimations(std::vector<SkinnedAnimationSPtr>& outapSkinnedAnimationList)
         {
             for (std::vector<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
             {
@@ -260,7 +260,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Calculate Animation Length
         //----------------------------------------------------------
-        void CSkinnedAnimationGroup::CalculateAnimationLength()
+        void SkinnedAnimationGroup::CalculateAnimationLength()
         {
             if (mbAnimationLengthDirty)
             {
@@ -268,7 +268,7 @@ namespace ChilliSource
                 
                 for (std::vector<AnimationItemPtr>::iterator it = mAnimations.begin(); it != mAnimations.end(); ++it)
                 {
-                    SkinnedAnimationPtr pAnim = (*it)->pSkinnedAnimation;
+                    SkinnedAnimationSPtr pAnim = (*it)->pSkinnedAnimation;
                     f32 fAnimationLength = pAnim->GetFrameTime() * ((f32)(pAnim->GetNumFrames() - 1));
                     
                     if (mfAnimationLength != 0.0f && mfAnimationLength != fAnimationLength)
@@ -287,13 +287,13 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Destructor
         //-----------------------------------------------------------
-        CSkinnedAnimationGroup::~CSkinnedAnimationGroup()
+        SkinnedAnimationGroup::~SkinnedAnimationGroup()
         {
         }
         //----------------------------------------------------------
         /// Calculate Animation Frame
         //----------------------------------------------------------
-        SkinnedAnimationFramePtr CSkinnedAnimationGroup::CalculateAnimationFrame(const SkinnedAnimationPtr& inpAnimation, f32 infPlaybackPosition)
+        SkinnedAnimationFrameSPtr SkinnedAnimationGroup::CalculateAnimationFrame(const SkinnedAnimationSPtr& inpAnimation, f32 infPlaybackPosition)
         {
             //report errors if the playback position provided does not make sense
             if (infPlaybackPosition < 0.0f)
@@ -328,8 +328,8 @@ namespace ChilliSource
             }
             
 			//get the frames
-			SkinnedAnimationFramePtr frameA = inpAnimation->GetFrameAtIndex(dwFrameAIndex);
-			SkinnedAnimationFramePtr frameB = inpAnimation->GetFrameAtIndex(dwFrameBIndex);
+			SkinnedAnimationFrameSPtr frameA = inpAnimation->GetFrameAtIndex(dwFrameAIndex);
+			SkinnedAnimationFrameSPtr frameB = inpAnimation->GetFrameAtIndex(dwFrameBIndex);
 			
 			//get the ratio of one frame to the next
 			f32 interpFactor = (infPlaybackPosition - (dwFrameAIndex * inpAnimation->GetFrameTime())) / inpAnimation->GetFrameTime();
@@ -340,20 +340,20 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Lerp Between Frames
         //--------------------------------------------------------------
-        SkinnedAnimationFramePtr CSkinnedAnimationGroup::LerpBetweenFrames(const SkinnedAnimationFramePtr& inFrameA, const SkinnedAnimationFramePtr& inFrameB, f32 infInterpFactor)
+        SkinnedAnimationFrameSPtr SkinnedAnimationGroup::LerpBetweenFrames(const SkinnedAnimationFrameSPtr& inFrameA, const SkinnedAnimationFrameSPtr& inFrameB, f32 infInterpFactor)
         {
-            SkinnedAnimationFramePtr outFrame(new SkinnedAnimationFrame());
+            SkinnedAnimationFrameSPtr outFrame(new SkinnedAnimationFrame());
 			
             if(inFrameA != nullptr && inFrameB != nullptr)
             {
                 //iterate through each translation
                 outFrame->mNodeTranslations.reserve(inFrameB->mNodeTranslations.size());
-                std::vector<Core::CVector3>::const_iterator transAIt = inFrameA->mNodeTranslations.begin();
-                for (std::vector<Core::CVector3>::const_iterator transBIt = inFrameB->mNodeTranslations.begin(); 
+                std::vector<Core::Vector3>::const_iterator transAIt = inFrameA->mNodeTranslations.begin();
+                for (std::vector<Core::Vector3>::const_iterator transBIt = inFrameB->mNodeTranslations.begin(); 
                      transAIt != inFrameA->mNodeTranslations.end() && transBIt != inFrameB->mNodeTranslations.end();)
                 {
                     //lerp
-                    Core::CVector3 newTrans = Core::CMathUtils::Lerp(infInterpFactor, *transAIt, *transBIt);
+                    Core::Vector3 newTrans = Core::CMathUtils::Lerp(infInterpFactor, *transAIt, *transBIt);
                     
                     //add to frame
                     outFrame->mNodeTranslations.push_back(newTrans);
@@ -365,12 +365,12 @@ namespace ChilliSource
                 
                 //iterate through each orientation
                 outFrame->mNodeOrientations.reserve(inFrameB->mNodeOrientations.size());
-                std::vector<Core::CQuaternion>::const_iterator orientAIt = inFrameA->mNodeOrientations.begin();
-                for (std::vector<Core::CQuaternion>::const_iterator orientBIt = inFrameB->mNodeOrientations.begin();
+                std::vector<Core::Quaternion>::const_iterator orientAIt = inFrameA->mNodeOrientations.begin();
+                for (std::vector<Core::Quaternion>::const_iterator orientBIt = inFrameB->mNodeOrientations.begin();
                      orientAIt != inFrameA->mNodeOrientations.end() && orientBIt != inFrameB->mNodeOrientations.end();)
                 {
                     //lerp
-                    Core::CQuaternion newOrient = Core::CQuaternion::Slerp(*orientAIt, *orientBIt, infInterpFactor);
+                    Core::Quaternion newOrient = Core::Quaternion::Slerp(*orientAIt, *orientBIt, infInterpFactor);
                     
                     //add to frame
                     outFrame->mNodeOrientations.push_back(newOrient);
@@ -382,12 +382,12 @@ namespace ChilliSource
                 
                 //iterate through each scale
                 outFrame->mNodeScalings.reserve(inFrameB->mNodeScalings.size());
-                std::vector<Core::CVector3>::const_iterator scaleAIt = inFrameA->mNodeScalings.begin();
-                for (std::vector<Core::CVector3>::const_iterator scaleBIt = inFrameB->mNodeScalings.begin();
+                std::vector<Core::Vector3>::const_iterator scaleAIt = inFrameA->mNodeScalings.begin();
+                for (std::vector<Core::Vector3>::const_iterator scaleBIt = inFrameB->mNodeScalings.begin();
                      scaleAIt != inFrameA->mNodeScalings.end() && scaleBIt != inFrameB->mNodeScalings.end();)
                 {
                     //lerp
-                    Core::CVector3 newScale = Core::CMathUtils::Lerp(infInterpFactor, *scaleAIt, *scaleBIt);
+                    Core::Vector3 newScale = Core::CMathUtils::Lerp(infInterpFactor, *scaleAIt, *scaleBIt);
                     
                     //add to frame
                     outFrame->mNodeScalings.push_back(newScale);

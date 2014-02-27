@@ -20,10 +20,10 @@ namespace ChilliSource
 			static const VertexElement kSpriteElements[] = {{VertexDataType::k_float4, VertexDataSemantic::k_position}, {VertexDataType::k_float2, VertexDataSemantic::k_uv},     {VertexDataType::k_byte4, VertexDataSemantic::k_colour}};
 			static const VertexElement kPosColElement[]	 = {{VertexDataType::k_float4, VertexDataSemantic::k_position}, {VertexDataType::k_byte4, VertexDataSemantic::k_colour}};
 			
-			//static const CVertexDeclaration kMesh(4,kMeshElements);
-            static const CVertexDeclaration kMesh(3,kMeshElements);
-			static const CVertexDeclaration kSprite(3,kSpriteElements);
-			static const CVertexDeclaration kPosCol(2,kPosColElement);
+			//static const VertexDeclaration kMesh(4,kMeshElements);
+            static const VertexDeclaration kMesh(3,kMeshElements);
+			static const VertexDeclaration kSprite(3,kSpriteElements);
+			static const VertexDeclaration kPosCol(2,kPosColElement);
 		}
 	}
 }

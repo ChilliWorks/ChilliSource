@@ -50,9 +50,9 @@ namespace ChilliSource
         mpRenderCapabilities(nullptr)
 		{
 			//Register the GL texture and shader managers
-            Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mTexManager);
-            Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mCubemapManager);
-            Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mShaderManager);
+            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mTexManager);
+            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mCubemapManager);
+            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mShaderManager);
             
 #ifdef TARGET_OS_IPHONE
             //Create the context with the specified GLES version
@@ -70,7 +70,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		bool CRenderSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return	(inInterfaceID == IRenderSystem::InterfaceID) || (inInterfaceID == Core::IComponentProducer::InterfaceID);
+			return	(inInterfaceID == RenderSystem::InterfaceID) || (inInterfaceID == Core::IComponentProducer::InterfaceID);
 		}
         //----------------------------------------------------------
         /// Init
@@ -91,7 +91,7 @@ namespace ChilliSource
             gbIsMapBufferAvailable = CRenderSystem::CheckForOpenGLExtension("GL_OES_mapbuffer");
 #endif
             
-            mpRenderCapabilities = Core::CApplication::GetSystemImplementing<CRenderCapabilities>();
+            mpRenderCapabilities = Core::Application::GetSystemImplementing<CRenderCapabilities>();
             CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
             mpRenderCapabilities->CalculateCapabilities();
             
@@ -155,7 +155,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Light
         //----------------------------------------------------------
-        void CRenderSystem::SetLight(Rendering::ILightComponent* inpLightComponent)
+        void CRenderSystem::SetLight(Rendering::LightComponent* inpLightComponent)
         {
             if(inpLightComponent == mpLightComponent && mbInvalidateAllCaches == false)
             {
@@ -173,7 +173,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Apply Material
 		//----------------------------------------------------------
-		void CRenderSystem::ApplyMaterial(const Rendering::CMaterial& inMaterial)
+		void CRenderSystem::ApplyMaterial(const Rendering::Material& inMaterial)
 		{
 			//Enable the hardware states
             if(mbInvalidateAllCaches || !mpCurrentMaterial || mpCurrentMaterial != &inMaterial || !mpCurrentMaterial->IsCacheValid())
@@ -186,7 +186,7 @@ namespace ChilliSource
                 {
                     ApplyRenderStates(inMaterial);
                     
-                    ShaderPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
+                    ShaderSPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
                     GLuint GLShaderProgram = pShader->GetProgramID();
                     
                     if(GLShaderProgram != 0)
@@ -226,17 +226,17 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Joints
         //----------------------------------------------------------
-        void CRenderSystem::ApplyJoints(const std::vector<Core::CMatrix4x4>& inaJoints)
+        void CRenderSystem::ApplyJoints(const std::vector<Core::Matrix4x4>& inaJoints)
         {
             if(mJointsHandle != -1)
             {
                 //remove the final column from the joint matrix data as it is always going to be [0 0 0 1].
-                std::vector<Core::CVector4> aJointVectors;
-                for (std::vector<Core::CMatrix4x4>::const_iterator it = inaJoints.begin(); it != inaJoints.end(); ++it)
+                std::vector<Core::Vector4> aJointVectors;
+                for (std::vector<Core::Matrix4x4>::const_iterator it = inaJoints.begin(); it != inaJoints.end(); ++it)
                 {
-                    aJointVectors.push_back(Core::CVector4(it->m[0], it->m[4], it->m[8], it->m[12]));
-                    aJointVectors.push_back(Core::CVector4(it->m[1], it->m[5], it->m[9], it->m[13]));
-                    aJointVectors.push_back(Core::CVector4(it->m[2], it->m[6], it->m[10], it->m[14]));
+                    aJointVectors.push_back(Core::Vector4(it->m[0], it->m[4], it->m[8], it->m[12]));
+                    aJointVectors.push_back(Core::Vector4(it->m[1], it->m[5], it->m[9], it->m[13]));
+                    aJointVectors.push_back(Core::Vector4(it->m[2], it->m[6], it->m[10], it->m[14]));
                 }
                 
                 glUniform4fv(mJointsHandle, aJointVectors.size(), (GLfloat*)&(aJointVectors[0]));
@@ -245,7 +245,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Apply Render States
 		//----------------------------------------------------------
-		void CRenderSystem::ApplyRenderStates(const Rendering::CMaterial& inMaterial)
+		void CRenderSystem::ApplyRenderStates(const Rendering::Material& inMaterial)
         {
             EnableAlphaBlending(inMaterial.IsTransparent());
             SetBlendFunction(inMaterial.GetSourceBlendFunction(), inMaterial.GetDestBlendFunction());
@@ -262,7 +262,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Get Attribute Locations
 		//----------------------------------------------------------
-		void CRenderSystem::GetAttributeLocations(const ShaderPtr& inpShader)
+		void CRenderSystem::GetAttributeLocations(const ShaderSPtr& inpShader)
         {
             //Get the handles to the shader attributes
             
@@ -300,9 +300,9 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Get Uniform Locations
 		//----------------------------------------------------------
-		void CRenderSystem::GetUniformLocations(const Rendering::CMaterial &inMaterial)
+		void CRenderSystem::GetUniformLocations(const Rendering::Material &inMaterial)
         {
-            ShaderPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
+            ShaderSPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
             
             //Get the required handles to the shader variables (Uniform)
             mmatWVPHandle = pShader->GetUniformLocation("umatWorldViewProj");
@@ -348,9 +348,9 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Apply Shader Variables
 		//----------------------------------------------------------
-		void CRenderSystem::ApplyShaderVariables(const Rendering::CMaterial &inMaterial, GLuint inShaderProg)
+		void CRenderSystem::ApplyShaderVariables(const Rendering::Material &inMaterial, GLuint inShaderProg)
 		{
-            ShaderPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
+            ShaderSPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
 			//Get and set all the custom shader variables
 			for(Rendering::MapStringToFloat::const_iterator it = inMaterial.mMapFloatShaderVars.begin(); it!= inMaterial.mMapFloatShaderVars.end(); ++it)
 			{
@@ -391,7 +391,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Textures
         //----------------------------------------------------------
-        void CRenderSystem::ApplyTextures(const Rendering::CMaterial &inMaterial)
+        void CRenderSystem::ApplyTextures(const Rendering::Material &inMaterial)
         {
             for(u32 i=0; i<inMaterial.GetTextures().size(); ++i)
             {
@@ -417,7 +417,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Lighting Values
         //----------------------------------------------------------
-        void CRenderSystem::ApplyLightingValues(const Rendering::CMaterial &inMaterial)
+        void CRenderSystem::ApplyLightingValues(const Rendering::Material &inMaterial)
         {
             if(mEmissiveHandle != -1 && (mbInvalidateAllCaches || mbEmissiveSet == false || mCurrentEmissive != inMaterial.GetEmissive()))
             {
@@ -447,7 +447,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Lighting
         //----------------------------------------------------------
-        void CRenderSystem::ApplyLighting(const Rendering::CMaterial &inMaterial, Rendering::ILightComponent* inpLightComponent)
+        void CRenderSystem::ApplyLighting(const Rendering::Material &inMaterial, Rendering::LightComponent* inpLightComponent)
         {
             if(mbInvalidateLigthingCache == false || inpLightComponent == nullptr)
                 return;
@@ -456,9 +456,9 @@ namespace ChilliSource
             inpLightComponent->CalculateLightingValues();
             inpLightComponent->SetCacheValid();
             
-            if(inpLightComponent->IsA(Rendering::CDirectionalLightComponent::InterfaceID))
+            if(inpLightComponent->IsA(Rendering::DirectionalLightComponent::InterfaceID))
             {
-                Rendering::CDirectionalLightComponent* pLightComponent = (Rendering::CDirectionalLightComponent*)inpLightComponent;
+                Rendering::DirectionalLightComponent* pLightComponent = (Rendering::DirectionalLightComponent*)inpLightComponent;
                 
                 if(mLightDirHandle >= 0)
                 {
@@ -480,9 +480,9 @@ namespace ChilliSource
                     }
                 }
             }
-            else if(inpLightComponent->IsA(Rendering::CPointLightComponent::InterfaceID))
+            else if(inpLightComponent->IsA(Rendering::PointLightComponent::InterfaceID))
             {
-                Rendering::CPointLightComponent* pLightComponent = (Rendering::CPointLightComponent*)inpLightComponent;
+                Rendering::PointLightComponent* pLightComponent = (Rendering::PointLightComponent*)inpLightComponent;
                 
                 if(mAttenConHandle >= 0)
                 {
@@ -515,13 +515,13 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Apply Camera
 		//----------------------------------------------------------
-		void CRenderSystem::ApplyCamera(const Core::CVector3& invPosition, const Core::CMatrix4x4& inmatView, const Core::CMatrix4x4& inmatProj, const Core::CColour& inClearCol)
+		void CRenderSystem::ApplyCamera(const Core::Vector3& invPosition, const Core::Matrix4x4& inmatView, const Core::Matrix4x4& inmatProj, const Core::Colour& inClearCol)
 		{
 			//Set the new view matrix based on the camera position
 			mmatView = inmatView;
 			mmatProj = inmatProj;
             mvCameraPos = invPosition;
-            Core::CMatrix4x4::Multiply(&mmatView, &mmatProj, &mmatViewProj);
+            Core::Matrix4x4::Multiply(&mmatView, &mmatProj, &mmatViewProj);
 			
 			//Set the clear colour
             mNewClearColour = inClearCol;
@@ -529,14 +529,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Default Render Target
 		//----------------------------------------------------------
-		Rendering::IRenderTarget* CRenderSystem::GetDefaultRenderTarget()
+		Rendering::RenderTarget* CRenderSystem::GetDefaultRenderTarget()
 		{
 			return mpDefaultRenderTarget;
 		}
 		//----------------------------------------------------------
 		/// Begin Frame
 		//----------------------------------------------------------
-		void CRenderSystem::BeginFrame(Rendering::IRenderTarget* inpActiveRenderTarget)
+		void CRenderSystem::BeginFrame(Rendering::RenderTarget* inpActiveRenderTarget)
 		{
 #ifdef DEBUG
 			CheckForGLErrors();
@@ -562,7 +562,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Create Render Target
 		//----------------------------------------------------------
-		Rendering::IRenderTarget* CRenderSystem::CreateRenderTarget(u32 inudwWidth, u32 inudwHeight)
+		Rendering::RenderTarget* CRenderSystem::CreateRenderTarget(u32 inudwWidth, u32 inudwHeight)
 		{
 			CRenderTarget* pDefaultRenderTarget = new CRenderTarget();
 			pDefaultRenderTarget->Init(inudwWidth, inudwHeight);
@@ -572,7 +572,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Create Buffer
 		//----------------------------------------------------------
-		Rendering::IMeshBuffer* CRenderSystem::CreateBuffer(Rendering::BufferDescription &inDesc)
+		Rendering::MeshBuffer* CRenderSystem::CreateBuffer(Rendering::BufferDescription &inDesc)
 		{
 			CMeshBuffer* pBuffer = new CMeshBuffer(inDesc);
 			pBuffer->SetMapBufferAvailable(gbIsMapBufferAvailable);
@@ -586,7 +586,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Vertex Buffer
         //----------------------------------------------------------
-        void CRenderSystem::RenderVertexBuffer(Rendering::IMeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::CMatrix4x4& inmatWorld)
+        void CRenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4x4& inmatWorld)
 		{
 #ifdef DEBUG_STATS
             DebugStats::AddToEvent("DrawCalls", 1u);
@@ -594,8 +594,8 @@ namespace ChilliSource
 #endif
             
 			//Set the new model view matrix based on the camera view matrix and the object matrix
-            static Core::CMatrix4x4 matWorldViewProj;
-            Core::CMatrix4x4::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
+            static Core::Matrix4x4 matWorldViewProj;
+            Core::Matrix4x4::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
 			glUniformMatrix4fv(mmatWVPHandle, 1, GL_FALSE, (GLfloat*)matWorldViewProj.m);
 			
             if(mmatWorldHandle != -1)
@@ -621,15 +621,15 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Buffer
         //----------------------------------------------------------
-        void CRenderSystem::RenderBuffer(Rendering::IMeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::CMatrix4x4& inmatWorld)
+        void CRenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4x4& inmatWorld)
 		{
 #ifdef DEBUG_STATS
             DebugStats::AddToEvent("DrawCalls", 1u);
 #endif
 
 			//Set the new model view matrix based on the camera view matrix and the object matrix
-            static Core::CMatrix4x4 matWorldViewProj;
-            Core::CMatrix4x4::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
+            static Core::Matrix4x4 matWorldViewProj;
+            Core::Matrix4x4::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
 			glUniformMatrix4fv(mmatWVPHandle, 1, GL_FALSE, (GLfloat*)matWorldViewProj.m);
             
             if(mmatWorldHandle != -1)
@@ -656,7 +656,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// End Frame
 		//----------------------------------------------------------
-		void CRenderSystem::EndFrame(Rendering::IRenderTarget* inpActiveRenderTarget)
+		void CRenderSystem::EndFrame(Rendering::RenderTarget* inpActiveRenderTarget)
 		{
 #ifdef TARGET_OS_IPHONE
             if (mpDefaultRenderTarget != nullptr && mpDefaultRenderTarget == inpActiveRenderTarget)
@@ -853,7 +853,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Scissor Region
         //---------------------------------------------------------
-        void CRenderSystem::SetScissorRegion(const Core::CVector2& invPosition, const Core::CVector2& invSize)
+        void CRenderSystem::SetScissorRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize)
         {
             if(mbInvalidateAllCaches || mvCachedScissorPos != invPosition || mvCachedScissorSize != invSize)
             {
@@ -1038,7 +1038,7 @@ namespace ChilliSource
                     return -1;
             }
         }
-        bool CRenderSystem::ApplyVertexAttributePointr(Rendering::IMeshBuffer* inpBuffer,
+        bool CRenderSystem::ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
                                                        GLuint inudwLocation, GLint indwSize, GLenum ineType, GLboolean inbNormalized,
                                                        GLsizei indwStride, const GLvoid* inpOffset)
         {
@@ -1063,7 +1063,7 @@ namespace ChilliSource
 		//------------------------------------------------------------
 		/// Enable Vertex Attribute For Semantic
 		//------------------------------------------------------------
-		void CRenderSystem::EnableVertexAttributeForSemantic(Rendering::IMeshBuffer* inpBuffer)
+		void CRenderSystem::EnableVertexAttributeForSemantic(Rendering::MeshBuffer* inpBuffer)
 		{
             if(mbInvalidateAllCaches || mdwMaxVertAttribs == 0)
             {
@@ -1235,7 +1235,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Remove Buffer
 		//----------------------------------------------------------
-		void CRenderSystem::RemoveBuffer(Rendering::IMeshBuffer* inpBuffer)
+		void CRenderSystem::RemoveBuffer(Rendering::MeshBuffer* inpBuffer)
 		{
 #ifdef TARGET_ANDROID
 			for(std::vector<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)

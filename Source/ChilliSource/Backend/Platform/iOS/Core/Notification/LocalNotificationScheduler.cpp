@@ -142,7 +142,7 @@ namespace ChilliSource
             {
                 Core::Notification sNotification;
                 ConvertUILocalNotificationToNotification(pLocalNotification, sNotification);
-                Core::CNotificationScheduler::OnNotificationReceived(sNotification);
+                Core::NotificationScheduler::OnNotificationReceived(sNotification);
                 return true;
             }
             
@@ -175,7 +175,7 @@ namespace ChilliSource
             
             Core::Notification sNotification;
             ConvertUILocalNotificationToNotification(inpNotification, sNotification);
-            Core::CNotificationScheduler::OnNotificationReceived(sNotification);
+            Core::NotificationScheduler::OnNotificationReceived(sNotification);
         }
         //-------------------------------------------------------------------------
         /// Convert UILocalNotification to Notification

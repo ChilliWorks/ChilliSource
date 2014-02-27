@@ -13,7 +13,7 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		const CMatrix3x3 CMatrix3x3::IDENTITY(1,0,0, 
+		const Matrix3x3 Matrix3x3::IDENTITY(1,0,0, 
                                               0,1,0, 
                                               0,0,1);
 		//------------------------------------------------
@@ -21,9 +21,9 @@ namespace ChilliSource
 		///
 		/// Default - Initialises to identity matrix
 		//------------------------------------------------
-		CMatrix3x3::CMatrix3x3()
+		Matrix3x3::Matrix3x3()
 		{
-			(*this) = CMatrix3x3::IDENTITY;
+			(*this) = Matrix3x3::IDENTITY;
 		}
 		//------------------------------------------------
 		/// Constructor
@@ -32,7 +32,7 @@ namespace ChilliSource
 		///
 		/// @param 16 float elements
 		//------------------------------------------------
-		CMatrix3x3::CMatrix3x3(f32 m00, f32 m01, f32 m02,
+		Matrix3x3::Matrix3x3(f32 m00, f32 m01, f32 m02,
 							   f32 m10, f32 m11, f32 m12,
 							   f32 m20, f32 m21, f32 m22)
 		{
@@ -47,7 +47,7 @@ namespace ChilliSource
 		///
 		/// @param Float array containing 16 values
 		//------------------------------------------------
-		CMatrix3x3::CMatrix3x3(const f32* paMatrix)
+		Matrix3x3::Matrix3x3(const f32* paMatrix)
 		{
 			memcpy(&m, paMatrix, sizeof(f32) * kMatrixDims);
 		}
@@ -58,7 +58,7 @@ namespace ChilliSource
 		///
 		/// @param incMatrix4x4 just copy the top-left 3x3 part
 		//------------------------------------------------
-		CMatrix3x3::CMatrix3x3(const CMatrix4x4& incMatrix4x4)
+		Matrix3x3::Matrix3x3(const Matrix4x4& incMatrix4x4)
 		{
 			m[0] = incMatrix4x4.m[0];
 			m[1] = incMatrix4x4.m[1];
@@ -79,9 +79,9 @@ namespace ChilliSource
 		/// @param X component
 		/// @param Y component
 		//------------------------------------------------
-		void CMatrix3x3::Translate(f32 inX, f32 inY)
+		void Matrix3x3::Translate(f32 inX, f32 inY)
 		{
-			Translate(CVector2(inX, inY));
+			Translate(Vector2(inX, inY));
 		}
 		//------------------------------------------------
 		/// Translate
@@ -89,9 +89,9 @@ namespace ChilliSource
 		/// Build a translation matrix
 		/// @param Translation vector
 		//------------------------------------------------
-		void CMatrix3x3::Translate(const CVector2 &inVec)
+		void Matrix3x3::Translate(const Vector2 &inVec)
 		{
-			(*this) = CMatrix3x3::IDENTITY;
+			(*this) = Matrix3x3::IDENTITY;
 			
 			m[6] = inVec.x;
 			m[7] = inVec.y;
@@ -102,9 +102,9 @@ namespace ChilliSource
 		/// Build a transposed matrix
 		/// @param Translation vector
 		//------------------------------------------------
-		CMatrix3x3 CMatrix3x3::GetTranspose() const
+		Matrix3x3 Matrix3x3::GetTranspose() const
 		{
-			CMatrix3x3 cResult;
+			Matrix3x3 cResult;
             
 #if defined TARGET_OS_IPHONE && defined ENABLE_QUICK_MATH
             vDSP_mtrans(const_cast<f32*>(m), 1, cResult.m, 1, 3, 3);
@@ -130,9 +130,9 @@ namespace ChilliSource
 		/// Build a rotation matrix about the z-axis
 		/// @param Angle to rotate in radians
 		//------------------------------------------------
-		void CMatrix3x3::Rotate(f32 infAngleRads)
+		void Matrix3x3::Rotate(f32 infAngleRads)
 		{
-			(*this) = CMatrix3x3::IDENTITY;
+			(*this) = Matrix3x3::IDENTITY;
 			
 			f32 c = cosf(infAngleRads);
 			f32 s = sinf(infAngleRads);
@@ -148,9 +148,9 @@ namespace ChilliSource
 		/// Build a uniform scaling matrix
 		/// @param Scale factor
 		//------------------------------------------------
-		void CMatrix3x3::Scale(f32 inScale)
+		void Matrix3x3::Scale(f32 inScale)
 		{
-			Scale(CVector2(inScale, inScale));
+			Scale(Vector2(inScale, inScale));
 		}
 		//------------------------------------------------
 		/// Scale 
@@ -160,9 +160,9 @@ namespace ChilliSource
 		/// @param Y component
 		/// @param Scale factor
 		//------------------------------------------------
-		void CMatrix3x3::Scale(f32 inX, f32 inY)
+		void Matrix3x3::Scale(f32 inX, f32 inY)
 		{
-			Scale(CVector2(inX, inY));
+			Scale(Vector2(inX, inY));
 		}
 		//------------------------------------------------
 		/// Scale 
@@ -170,14 +170,14 @@ namespace ChilliSource
 		/// Build a scaling matrix 
 		/// @param Scale dimensions vector
 		//------------------------------------------------
-		void CMatrix3x3::Scale(const CVector2 &Vec)
+		void Matrix3x3::Scale(const Vector2 &Vec)
 		{
-			(*this) = CMatrix3x3::IDENTITY;
+			(*this) = Matrix3x3::IDENTITY;
 			
 			m[0] = Vec.x;
 			m[4] = Vec.y;
 		}
-		void CMatrix3x3::SetTransform(const CVector2 & inTranslate, const CVector2 & inScale, f32 infAngleRads)
+		void Matrix3x3::SetTransform(const Vector2 & inTranslate, const Vector2 & inScale, f32 infAngleRads)
 		{
             f32 c = cosf(infAngleRads);
 			f32 s = sinf(infAngleRads);
@@ -196,62 +196,62 @@ namespace ChilliSource
             m[5] = 0.0f;
             m[8] = 1.0f;
 		}
-        void CMatrix3x3::SetTranslation(const CVector2& invTranslation)
+        void Matrix3x3::SetTranslation(const Vector2& invTranslation)
         {
             m[6] = invTranslation.x;
             m[7] = invTranslation.y;
         }
 
-		f32 CMatrix3x3::operator()(u32 inRow, u32 inColumn) const
+		f32 Matrix3x3::operator()(u32 inRow, u32 inColumn) const
 		{
-			return m[inRow * CMatrix3x3::kMatrixWidth + inColumn];
+			return m[inRow * Matrix3x3::kMatrixWidth + inColumn];
 		}
 		
-		CMatrix3x3 CMatrix3x3::operator+(const CMatrix3x3 &rhs) const
+		Matrix3x3 Matrix3x3::operator+(const Matrix3x3 &rhs) const
 		{
-			CMatrix3x3 Result; 
-			for(u32 i=0; i<CMatrix3x3::kMatrixDims; ++i)
+			Matrix3x3 Result; 
+			for(u32 i=0; i<Matrix3x3::kMatrixDims; ++i)
 			{
 				Result.m[i] = this->m[i] + rhs.m[i];
 			} 
 			return Result;
 		}
 		
-		CMatrix3x3 CMatrix3x3::operator-(const CMatrix3x3 &rhs) const
+		Matrix3x3 Matrix3x3::operator-(const Matrix3x3 &rhs) const
 		{
-			CMatrix3x3 Result; 
-			for(u32 i=0; i<CMatrix3x3::kMatrixDims; ++i)
+			Matrix3x3 Result; 
+			for(u32 i=0; i<Matrix3x3::kMatrixDims; ++i)
 			{
 				Result.m[i] = this->m[i] - rhs.m[i];
 			} 
 			return Result;
 		}
 		
-		const CMatrix3x3& CMatrix3x3::operator+=(const CMatrix3x3 &rhs)
+		const Matrix3x3& Matrix3x3::operator+=(const Matrix3x3 &rhs)
 		{
-			for(u32 i=0; i<CMatrix3x3::kMatrixDims; ++i)
+			for(u32 i=0; i<Matrix3x3::kMatrixDims; ++i)
 			{
 				this->m[i] += rhs.m[i];
 			} 
 			return *this;
 		}
 		
-		const CMatrix3x3& CMatrix3x3::operator-=(const CMatrix3x3 &rhs)
+		const Matrix3x3& Matrix3x3::operator-=(const Matrix3x3 &rhs)
 		{
-			for(u32 i=0; i<CMatrix3x3::kMatrixDims; ++i)
+			for(u32 i=0; i<Matrix3x3::kMatrixDims; ++i)
 			{
 				this->m[i] -= rhs.m[i];
 			} 
 			return *this;
 		}
 		
-		const CMatrix3x3& CMatrix3x3::operator*=(const CMatrix3x3 &rhs)
+		const Matrix3x3& Matrix3x3::operator*=(const Matrix3x3 &rhs)
 		{
 			(*this) = (*this) * rhs; 
 			return *this;
 		}
 		
-		const CMatrix3x3& CMatrix3x3::operator*=(f32 Scale)
+		const Matrix3x3& Matrix3x3::operator*=(f32 Scale)
 		{
 			for(u32 i=0; i<kMatrixDims; ++i)
 			{
@@ -260,35 +260,35 @@ namespace ChilliSource
 			return *this;
 		}
 		
-		bool CMatrix3x3::operator==(const CMatrix3x3 &rhs) const
+		bool Matrix3x3::operator==(const Matrix3x3 &rhs) const
 		{
 			return memcmp(&m, &rhs.m, sizeof(f32) * kMatrixDims) == 0;
 		}
 		
-		bool CMatrix3x3::operator!=(const CMatrix3x3 &rhs) const
+		bool Matrix3x3::operator!=(const Matrix3x3 &rhs) const
 		{
 			return memcmp(&m, &rhs.m, sizeof(f32) * kMatrixDims) != 0;
 		}
 	
-		CMatrix3x3 CMatrix3x3::operator*(const CMatrix3x3 &m2) const
+		Matrix3x3 Matrix3x3::operator*(const Matrix3x3 &m2) const
 		{
-			static CMatrix3x3 Result;
+			static Matrix3x3 Result;
 
 			Multiply(this, &m2, &Result);
 			
 			return Result;
 		}
 		
-		CMatrix3x3 operator*(const CMatrix3x3 & inMat, f32 infScale)
+		Matrix3x3 operator*(const Matrix3x3 & inMat, f32 infScale)
         {
-			CMatrix3x3 Result; 
-			for(u32 i=0; i<CMatrix3x3::kMatrixDims; ++i)
+			Matrix3x3 Result; 
+			for(u32 i=0; i<Matrix3x3::kMatrixDims; ++i)
 			{
 				Result.m[i] = inMat.m[i] * infScale;
 			} 
 			return Result;
 		}
-		CMatrix3x3 operator*(f32 infScale, const CMatrix3x3 & inMat)
+		Matrix3x3 operator*(f32 infScale, const Matrix3x3 & inMat)
         {
 			return inMat * infScale;
 		}		

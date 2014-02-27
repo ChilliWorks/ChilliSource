@@ -66,7 +66,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr AudioManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr AudioManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetSoundFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -81,7 +81,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		AudioResourceSPtr AudioManager::StreamSoundFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
 		{
-			Core::ResourcePtr pResource = CreateAudioResource();
+			Core::ResourceSPtr pResource = CreateAudioResource();
 			
 			for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 			{
@@ -117,7 +117,7 @@ namespace ChilliSource
 			
 			if(pExistingResource == mMapFileNamesToSoundEffect.end()) 
 			{
-				Core::ResourcePtr pResource = CreateAudioResource();
+				Core::ResourceSPtr pResource = CreateAudioResource();
 				
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
@@ -167,7 +167,7 @@ namespace ChilliSource
 		///
 		/// @param Handle to the sound you want to destroy
 		//-----------------------------------------------------------------
-		void AudioManager::Destroy(const Core::ResourcePtr& inpSoundEffect)
+		void AudioManager::Destroy(const Core::ResourceSPtr& inpSoundEffect)
 		{
 			AudioResourceSPtr pSound = std::static_pointer_cast<AudioResource>(inpSoundEffect);
 			for(MapStringToSoundEffectPtrItr it = mMapFileNamesToSoundEffect.begin(); it != mMapFileNamesToSoundEffect.end(); ++it)

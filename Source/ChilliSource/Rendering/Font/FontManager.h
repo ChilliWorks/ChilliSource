@@ -22,11 +22,11 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class IFontManager : public Core::IResourceManager
+		class FontManager : public Core::ResourceManager
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(IFontManager);
-			IFontManager();
+			DECLARE_NAMED_INTERFACE(FontManager);
+			FontManager();
 			
 			//----------------------------------------------------------------
 			/// Is A
@@ -64,7 +64,7 @@ namespace ChilliSource
 			/// @param File name
 			/// @param Image format
 			//----------------------------------------------------------------
-			FontPtr GetFontFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default);
+			FontSPtr GetFontFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::Image::Format ineFormat = Core::Image::Format::k_default);
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///
@@ -75,11 +75,11 @@ namespace ChilliSource
             /// @param The storage location to load from
 			/// @param File name
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			
 		private:
 			
-            ISpriteSheetManager* mpSpriteSheetManager;
+            SpriteSheetManager* mpSpriteSheetManager;
 		};
 	}
 }

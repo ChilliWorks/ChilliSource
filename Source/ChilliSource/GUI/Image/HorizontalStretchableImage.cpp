@@ -53,7 +53,7 @@ namespace ChilliSource
             
 			if(insParams.TryGetValue("SpriteSheet", strValue))
 			{
-				SetSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eSpriteSheetLocation, strValue));
+				SetSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eSpriteSheetLocation, strValue));
 			}
 			
 			if(insParams.TryGetValue("BaseSpriteSheetIndexID", strValue))
@@ -77,7 +77,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite sheet containing the patches
 		//---------------------------------------------------------
-		void HorizontalStretchableImage::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void HorizontalStretchableImage::SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
 		{
 			SpriteSheet = inpSpriteSheet;
 		}
@@ -86,7 +86,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite sheet containing the patches
 		//---------------------------------------------------------
-		const Rendering::SpriteSheetPtr& HorizontalStretchableImage::GetSpriteSheet() const
+		const Rendering::SpriteSheetSPtr& HorizontalStretchableImage::GetSpriteSheet() const
 		{
 			return SpriteSheet;
 		}
@@ -241,7 +241,7 @@ namespace ChilliSource
 		{
 			if(HeightFromImage)
             {
-				Core::CVector2 vPanelSize = GetAbsoluteSize();
+				Core::Vector2 vPanelSize = GetAbsoluteSize();
 				vPanelSize.y = GetCapHeight();
 				SetSize(0.0f, 0.0f, vPanelSize.x, vPanelSize.y);
             }
@@ -253,11 +253,11 @@ namespace ChilliSource
 		///
 		/// @param Canvas renderer pointer
 		//---------------------------------------------------------
-		void HorizontalStretchableImage::Draw(Rendering::CCanvasRenderer* inpCanvas)
+		void HorizontalStretchableImage::Draw(Rendering::CanvasRenderer* inpCanvas)
 		{
 			if(Visible && SpriteSheet)
 			{
-				Core::CVector2 vPanelSize = GetAbsoluteSize();
+				Core::Vector2 vPanelSize = GetAbsoluteSize();
 				
 				if(HeightFromImage)
 				{
@@ -267,28 +267,28 @@ namespace ChilliSource
 				
                 if (ActAsSpacer == false)
                 {
-                    Core::CVector2 vPanelPos = GetAbsoluteScreenSpacePosition();
-                    Core::CVector2 vTopLeft = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topLeft);
-                    Core::CVector2 vPatchPos;
+                    Core::Vector2 vPanelPos = GetAbsoluteScreenSpacePosition();
+                    Core::Vector2 vTopLeft = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
+                    Core::Vector2 vPatchPos;
                     
-                    Core::CColour AbsColour = GetAbsoluteColour();
+                    Core::Colour AbsColour = GetAbsoluteColour();
                     
                     //We need to use a matrix so that we can rotate all the patches with respect
                     //to the view
-                    Core::CMatrix3x3 matTransform;
-                    Core::CMatrix3x3 matPatchTransform;
-                    Core::CMatrix3x3 matViewTransform;
+                    Core::Matrix3x3 matTransform;
+                    Core::Matrix3x3 matPatchTransform;
+                    Core::Matrix3x3 matViewTransform;
                     
-                    matViewTransform.SetTransform(vPanelPos, Core::CVector2(1, 1), GetAbsoluteRotation());
+                    matViewTransform.SetTransform(vPanelPos, Core::Vector2(1, 1), GetAbsoluteRotation());
                     
                     // Calculate dimentions and position for middle
-                    Core::CVector2 vPatchSize = SpriteSheet->GetSizeForFrame(mudwCentreIndex);
+                    Core::Vector2 vPatchSize = SpriteSheet->GetSizeForFrame(mudwCentreIndex);
                     vPatchSize.y = vPanelSize.y;
                     vPatchSize.x = vPanelSize.x - (SpriteSheet->GetSizeForFrame(mudwLeftCapIndex).x + SpriteSheet->GetSizeForFrame(mudwRightCapIndex).x);
                     // Record size the caps need to shrink
                     f32 fShrinkX = (vPatchSize.x < 0 ? vPatchSize.x : 0) * 0.5f;
                     vPatchPos.x = vTopLeft.x + SpriteSheet->GetSizeForFrame(mudwLeftCapIndex).x + fShrinkX;
-                    vPatchPos.y = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topCentre).y;
+                    vPatchPos.y = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topCentre).y;
                     // Clamp the size of the middle
                     vPatchSize.x = (vPatchSize.x < 0 ? 0 : vPatchSize.x);
                     
@@ -296,33 +296,33 @@ namespace ChilliSource
                     //Render ourself
                     //Draw the left cap
                     matPatchTransform.Translate(vTopLeft);
-                    Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+                    Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                     inpCanvas->DrawBox(matTransform,
-                                       Core::CVector2(SpriteSheet->GetSizeForFrame(mudwLeftCapIndex).x + fShrinkX,vPanelSize.y),
+                                       Core::Vector2(SpriteSheet->GetSizeForFrame(mudwLeftCapIndex).x + fShrinkX,vPanelSize.y),
                                        SpriteSheet->GetTexture(), 
                                        SpriteSheet->GetUVsForFrame(mudwLeftCapIndex), 
                                        AbsColour, 
-                                       Core::AlignmentAnchor::k_topLeft);
+                                       Rendering::AlignmentAnchor::k_topLeft);
                     
                     //Draw the right cap
-                    matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topRight));
-                    Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+                    matPatchTransform.Translate(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topRight));
+                    Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                     inpCanvas->DrawBox(matTransform, 
-                                       Core::CVector2(SpriteSheet->GetSizeForFrame(mudwRightCapIndex).x + fShrinkX,vPanelSize.y),
+                                       Core::Vector2(SpriteSheet->GetSizeForFrame(mudwRightCapIndex).x + fShrinkX,vPanelSize.y),
                                        SpriteSheet->GetTexture(), 
                                        SpriteSheet->GetUVsForFrame(mudwRightCapIndex), 
                                        AbsColour, 
-                                       Core::AlignmentAnchor::k_topRight);
+                                       Rendering::AlignmentAnchor::k_topRight);
                     
                     // Draw the centre going from left to right cap
                     matPatchTransform.Translate(vPatchPos);
-                    Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+                    Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                     inpCanvas->DrawBox(matTransform,
                                        vPatchSize,
                                        SpriteSheet->GetTexture(),
                                        SpriteSheet->GetUVsForFrame(mudwCentreIndex),
                                        AbsColour,
-                                       Core::AlignmentAnchor::k_topLeft);
+                                       Rendering::AlignmentAnchor::k_topLeft);
 				}
                 
 				//Render subviews

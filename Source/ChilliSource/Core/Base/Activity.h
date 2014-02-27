@@ -20,15 +20,15 @@ namespace ChilliSource
     namespace Core
     {
         /*
-         IActivity represents a class offering UI to perform a specific task
+         Activity represents a class offering UI to perform a specific task
         */
-        class IActivity : public Core::IQueryableInterface
+        class Activity : public Core::QueryableInterface
         {
         public:
-            virtual ~IActivity(){}
+            virtual ~Activity(){}
         };
         
-        typedef std::function<void(IActivity*)> ActivityDismissedEvent;
+        typedef std::function<void(Activity*)> ActivityDismissedEvent;
     }
 }
 

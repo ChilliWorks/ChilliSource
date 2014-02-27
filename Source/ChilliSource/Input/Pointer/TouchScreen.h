@@ -37,8 +37,8 @@ namespace ChilliSource
 		{
 			bool operator ==(const TouchInfo & inOther);
 			
-			Core::CVector2 vLocation; //Where the touch is now in screenspace
-			Core::CVector2 vPreviousLocation; //Where it was last update cycle in screenspace
+			Core::Vector2 vLocation; //Where the touch is now in screenspace
+			Core::Vector2 vPreviousLocation; //Where it was last update cycle in screenspace
 			f64 TimeStamp;
             u32 ID; //Unique identifier for this touch
             TouchInputType eType;
@@ -66,7 +66,7 @@ namespace ChilliSource
             void Enable();
             void Disable();
             
-			void SetTouchTransformMatrix(const Core::CMatrix4x4 & inTouchTransformMat);
+			void SetTouchTransformMatrix(const Core::Matrix4x4 & inTouchTransformMat);
 			void SetCurrentAppTime(f64 inffTimeStamp);
 			void SetScreenHeight(u32 inudwScreenHeight);
             
@@ -78,8 +78,8 @@ namespace ChilliSource
             //-----------------------------------------------------------
             void FlushBufferedInput();
 
-			u32 StartTouch(const Core::CVector2 & invTouchLocation, f64 inTimeStamp);
-			void MoveTouch(u32 inID, const Core::CVector2 & invNewTouchLocation, f64 inTimeStamp);
+			u32 StartTouch(const Core::Vector2 & invTouchLocation, f64 inTimeStamp);
+			void MoveTouch(u32 inID, const Core::Vector2 & invNewTouchLocation, f64 inTimeStamp);
 			void EndTouch(u32 inID, f64 inTimeStamp);
 
 			f64 GetLastTimeStamp() const{return mffLastTimeStamp;}
@@ -123,7 +123,7 @@ namespace ChilliSource
 			u32 mLastTouchIndex;
 			f64 mffLastTimeStamp;
 			
-			Core::CMatrix4x4 mTouchTransformMatrix;
+			Core::Matrix4x4 mTouchTransformMatrix;
 			
 			u32 mudwOrientedScreenHeight;
 			std::mutex mMutex;

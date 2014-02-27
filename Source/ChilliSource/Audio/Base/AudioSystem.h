@@ -32,7 +32,7 @@ namespace ChilliSource
 		
         typedef std::function<void()> AudioVolumeEventDelegate;
 		
-		class AudioSystem : public Core::ISystem, public Core::IUpdateable, public Core::IComponentProducer
+		class AudioSystem : public Core::System, public Core::IUpdateable, public Core::IComponentProducer
 		{
 		public:
 			AudioSystem();
@@ -171,13 +171,13 @@ namespace ChilliSource
 			///
 			/// @return Audio component factory pointer
 			//-------------------------------------------------------
-			Core::IComponentFactory* GetComponentFactoryPtr(u32 inudwIndex) override;
+			Core::ComponentFactory* GetComponentFactoryPtr(u32 inudwIndex) override;
 			//-------------------------------------------------------
 			/// Get Component Factory
 			///
 			/// @return Audio component factory
 			//-------------------------------------------------------
-			Core::IComponentFactory& GetComponentFactory(u32 inudwIndex) override;
+			Core::ComponentFactory& GetComponentFactory(u32 inudwIndex) override;
 			
 		protected:
 			

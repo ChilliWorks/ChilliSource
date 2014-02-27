@@ -16,7 +16,7 @@ namespace ChilliSource
 {
     namespace Networking
     {
-        class ContentManagementSystem : public Core::ISystem
+        class ContentManagementSystem : public Core::System
         {
         public:
             DECLARE_NAMED_INTERFACE(ContentManagementSystem);

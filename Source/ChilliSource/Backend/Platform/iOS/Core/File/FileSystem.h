@@ -26,7 +26,7 @@ namespace ChilliSource
         ///
         /// The iOS Backend for the file system
 		//=========================================================================================
-		class CFileSystem : public Core::IFileSystem
+		class CFileSystem : public Core::FileSystem
 		{
 		public:
 			CFileSystem();
@@ -40,7 +40,7 @@ namespace ChilliSource
             /// @param The filepath.
             /// @param The file mode.
             //--------------------------------------------------------------
-            Core::FileStreamPtr CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const override;
+            Core::FileStreamSPtr CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const override;
             //--------------------------------------------------------------
             /// Create File
             ///

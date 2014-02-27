@@ -72,13 +72,13 @@ namespace ChilliSource
             ///
             /// @param Font used to display text
             //-------------------------------------------------------
-            void SetFont(const Rendering::FontPtr& inpFont);
+            void SetFont(const Rendering::FontSPtr& inpFont);
             //-------------------------------------------------------
             /// Get Font
             ///
             /// @return Font used to display text
             //-------------------------------------------------------
-            const Rendering::FontPtr& GetFont() const;
+            const Rendering::FontSPtr& GetFont() const;
             //-------------------------------------------------------
             /// Set Number of Lines
             ///
@@ -172,25 +172,25 @@ namespace ChilliSource
             ///
             /// @param Colour
             //-------------------------------------------------------
-            virtual void SetTextColour(const Core::CColour& inColour);
+            virtual void SetTextColour(const Core::Colour& inColour);
 			//-------------------------------------------------------
 			/// Get Text Colour
 			///
 			/// @return Colour
 			//-------------------------------------------------------
-			const Core::CColour& GetTextColour() const;
+			const Core::Colour& GetTextColour() const;
             //-------------------------------------------------------
             /// Set Text Outline Colour
             ///
             /// @param Text outline colour for scaleable fonts
             //-------------------------------------------------------
-            void SetTextOutlineColour(const Core::CColour& inColour);
+            void SetTextOutlineColour(const Core::Colour& inColour);
 			//-------------------------------------------------------
 			/// Get Text Outline Colour
 			///
 			/// @return Colour for outline of scaleable fonts
 			//-------------------------------------------------------
-			const Core::CColour& GetTextOutlineColour() const;
+			const Core::Colour& GetTextOutlineColour() const;
             //-------------------------------------------------------
             /// Enable Background
             ///
@@ -218,7 +218,7 @@ namespace ChilliSource
             ///
             /// @param Canvas renderer
             //-------------------------------------------------------
-            virtual void Draw(Rendering::CCanvasRenderer* inpCanvas);
+            virtual void Draw(Rendering::CanvasRenderer* inpCanvas);
             //-------------------------------------------------------
             /// Set Maximum Size
             ///
@@ -300,7 +300,7 @@ namespace ChilliSource
 			///
 			/// based on the text contents
 			//-------------------------------------------------------
-			void DoAutosizing(Rendering::CCanvasRenderer* inpCanvas);
+			void DoAutosizing(Rendering::CanvasRenderer* inpCanvas);
             //-------------------------------------------------------
             /// Enable Scalable Font
             ///
@@ -373,7 +373,7 @@ namespace ChilliSource
             
             Rendering::CharacterList mCachedChars;
             
-            Rendering::TexturePtr mpWhiteTex;
+            Rendering::TextureSPtr mpWhiteTex;
             
             static f32 mfGlobalTextScale;
             
@@ -397,11 +397,11 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(f32, LineSpacing, SetLineSpacing, GetLineSpacing);
 			DECLARE_PROPERTY_A(TextJustification, HorizontalJustification, SetHorizontalJustification, GetHorizontalJustification);
 			DECLARE_PROPERTY_A(TextJustification, VerticalJustification, SetVerticalJustification, GetVerticalJustification);
-			DECLARE_PROPERTY_A(Rendering::FontPtr, Font, SetFont, GetFont);
+			DECLARE_PROPERTY_A(Rendering::FontSPtr, Font, SetFont, GetFont);
             DECLARE_PROPERTY_A(bool, ScalableFont, SetScalableFont, GetScalableFont)
             DECLARE_PROPERTY_A(f32, ScalableHeight, SetScalableHeight, GetScalableHeight);
-			DECLARE_PROPERTY_A(Core::CColour, TextColour, SetTextColour, GetTextColour);
-            DECLARE_PROPERTY_A(Core::CColour, TextOutlineColour, SetTextOutlineColour, GetTextOutlineColour);
+			DECLARE_PROPERTY_A(Core::Colour, TextColour, SetTextColour, GetTextColour);
+            DECLARE_PROPERTY_A(Core::Colour, TextOutlineColour, SetTextOutlineColour, GetTextOutlineColour);
 			DECLARE_PROPERTY_A(bool, Background, EnableBackground, IsBackgroundEnabled);
 			DECLARE_PROPERTY_A(bool, Autosizing, EnableAutosizing, IsAutosizingEnabled);
             DECLARE_PROPERTY_A(bool, TextOutlined, EnableTextOutline, IsTextOutlineEnabled);

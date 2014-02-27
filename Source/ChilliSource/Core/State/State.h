@@ -1,5 +1,5 @@
 /*
- *  IState.h
+ *  State.h
  *  moFlo
  *
  *  Created by Scott Downie on 21/09/2010.
@@ -25,11 +25,11 @@ namespace ChilliSource
 		///
 		/// Holds the states handle to its scene manager
 		//======================================================
-		class IState
+		class State
 		{
 		public:
-			IState(CScene* inpScene = nullptr);
-			virtual ~IState();
+			State(Scene* inpScene = nullptr);
+			virtual ~State();
 			
 			//-----------------------------------------
 			/// On Init
@@ -138,26 +138,26 @@ namespace ChilliSource
 			/// Handy accessors for the main application
 			/// @return Application handle
 			//-----------------------------------------
-			CApplication& GetApplication();
+			Application& GetApplication();
 			//-----------------------------------------
 			/// Get Application
 			///
 			/// Handy accessors for the main application
 			/// @return Application handle
 			//-----------------------------------------
-			CApplication* GetApplicationPtr();
+			Application* GetApplicationPtr();
 			//------------------------------------------
 			/// Get Scene
 			///
 			/// @return Scene to present modally
 			//------------------------------------------
-			CScene* GetScenePtr();
+			Scene* GetScenePtr();
 			//------------------------------------------
 			/// Get State Manager
 			///
 			/// @return Pointer to state manager
 			//------------------------------------------
-			CStateManager* GetStateManagerPtr() const;
+			StateManager* GetStateManagerPtr() const;
             //------------------------------------------
             /// Is Active State
             ///
@@ -169,15 +169,15 @@ namespace ChilliSource
             
 		protected:
 			
-			CStateManager* mpStateMgr;
-			CScene* mpScene;
+			StateManager* mpStateMgr;
+			Scene* mpScene;
 			
 			bool mbOwnsScene;
 			
-			friend class CStateManager;
+			friend class StateManager;
 		};
 		
-		typedef std::shared_ptr<IState> StatePtr;
+		typedef std::shared_ptr<State> StateSPtr;
 	}
 }
 

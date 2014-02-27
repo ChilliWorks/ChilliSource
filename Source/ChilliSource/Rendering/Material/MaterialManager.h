@@ -20,11 +20,11 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class IMaterialManager : public Core::IResourceManager
+		class MaterialManager : public Core::ResourceManager
 		{
 		public:
 			
-			DECLARE_NAMED_INTERFACE(IMaterialManager);
+			DECLARE_NAMED_INTERFACE(MaterialManager);
 
 			//----------------------------------------------------------------
 			/// Is A
@@ -64,7 +64,7 @@ namespace ChilliSource
 			/// @param File name
 			/// @return A handle to the Material
 			//----------------------------------------------------------------
-			MaterialPtr GetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePathMaterial);
+			MaterialSPtr GetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePathMaterial);
 			//----------------------------------------------------------------
 			/// Async Get Material From File
 			///
@@ -76,7 +76,7 @@ namespace ChilliSource
 			/// @param File name
 			/// @return A handle to the Material
 			//----------------------------------------------------------------
-			MaterialPtr AsyncGetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePathMaterial);
+			MaterialSPtr AsyncGetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePathMaterial);
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///
@@ -85,7 +85,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -94,7 +94,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceSPtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 		};
 	}
 }

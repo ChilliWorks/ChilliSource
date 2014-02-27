@@ -24,7 +24,7 @@ namespace ChilliSource
         ///
         /// Creates a new Subtitles resource from a MoSubtitles file.
         //=================================================================
-		class MoSubtitlesLoader : public Core::IResourceProvider
+		class MoSubtitlesLoader : public Core::ResourceProvider
 		{
 		public:
             //-------------------------------------------------------------------------
@@ -66,7 +66,7 @@ namespace ChilliSource
 			/// @param Out: Resource object
 			/// @return Whether the resource was loaded 
 			//-------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource) override;
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource) override;
 			//-------------------------------------------------------------------------
 			/// Async Create Resource From File
 			///
@@ -75,7 +75,7 @@ namespace ChilliSource
 			/// @param Out: Resource object
 			/// @return Whether the resource was loaded
 			//-------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource) override;
+			bool AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource) override;
             //-------------------------------------------------------------------------
 			/// Load MoSubtitles Task
             ///

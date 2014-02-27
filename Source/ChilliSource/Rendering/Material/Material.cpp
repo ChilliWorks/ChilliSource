@@ -20,12 +20,12 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(CMaterial);
+		DEFINE_NAMED_INTERFACE(Material);
 
 		//------------------------------------------------
 		/// Constructor
 		//------------------------------------------------
-		CMaterial::CMaterial() 
+		Material::Material() 
         :
         mSrcBlendFunc(AlphaBlend::k_one), mDstBlendFunc(AlphaBlend::k_oneMinusSourceAlpha), meCullFace(CullFace::k_front),
         mAmbient(0.2f, 0.2f, 0.2f, 1.0f), mEmissive(1.0f, 1.0f, 1.0f, 1.0f), mSpecular(1.0f, 1.0f, 1.0f, 0.05f),
@@ -37,21 +37,21 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Is Cache Valid
         //----------------------------------------------------------
-        bool CMaterial::IsCacheValid() const
+        bool Material::IsCacheValid() const
         {
             return mbIsCacheValid;
         }
         //----------------------------------------------------------
         /// Is Variable Cache Valid
         //----------------------------------------------------------
-        bool CMaterial::IsVariableCacheValid() const
+        bool Material::IsVariableCacheValid() const
         {
             return mbIsVariableCacheValid;
         }
         //----------------------------------------------------------
         /// Set Cache Valid
         //----------------------------------------------------------
-        void CMaterial::SetCacheValid() const
+        void Material::SetCacheValid() const
         {
             mbIsCacheValid = true;
             mbIsVariableCacheValid = true;
@@ -59,21 +59,21 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Clone
 		//----------------------------------------------------------
-		MaterialPtr CMaterial::Clone() const
+		MaterialSPtr Material::Clone() const
 		{
-			return MaterialPtr(new CMaterial(*this));
+			return MaterialSPtr(new Material(*this));
 		}
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CMaterial::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool Material::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == CMaterial::InterfaceID);
+			return (inInterfaceID == Material::InterfaceID);
 		}
         //----------------------------------------------------------
         /// Set Active Shader Program
         //----------------------------------------------------------
-        void CMaterial::SetActiveShaderProgram(ShaderPass inePass)
+        void Material::SetActiveShaderProgram(ShaderPass inePass)
         {
             mbIsCacheValid = false;
             mpActiveShaderProgram = maShaderPrograms[(u32)inePass];
@@ -81,14 +81,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Active Shader Program
         //----------------------------------------------------------
-        const ShaderPtr& CMaterial::GetActiveShaderProgram() const
+        const ShaderSPtr& Material::GetActiveShaderProgram() const
         {
             return mpActiveShaderProgram;
         }
         //----------------------------------------------------------
         /// Set Shader Program
         //----------------------------------------------------------
-        void CMaterial::SetShaderProgram(ShaderPass inePass, const ShaderPtr &inpShaderProgram)
+        void Material::SetShaderProgram(ShaderPass inePass, const ShaderSPtr &inpShaderProgram)
         {
             mbIsCacheValid = false;
             maShaderPrograms[(u32)inePass] = inpShaderProgram;
@@ -96,7 +96,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Clear Textures
         //----------------------------------------------------------
-        void CMaterial::ClearTextures()
+        void Material::ClearTextures()
         {
             mTextures.clear();
             mbIsCacheValid = false;
@@ -104,7 +104,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Set Texture
 		//----------------------------------------------------------
-		void CMaterial::SetTexture(const TexturePtr &inpTexture, u32 inudwIndex)
+		void Material::SetTexture(const TextureSPtr &inpTexture, u32 inudwIndex)
 		{
             if(inpTexture == nullptr)
                 return;
@@ -123,7 +123,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Add Texture
 		//----------------------------------------------------------
-		void CMaterial::AddTexture(const TexturePtr &inpTexture)
+		void Material::AddTexture(const TextureSPtr &inpTexture)
 		{
             if(inpTexture == nullptr)
                 return;
@@ -135,11 +135,11 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Texture
 		//----------------------------------------------------------
-		const TexturePtr& CMaterial::GetTexture(u32 inudwIndex) const
+		const TextureSPtr& Material::GetTexture(u32 inudwIndex) const
 		{
 			if(mTextures.size() <= inudwIndex)
 			{
-                ITextureManager* pTextureManager = GET_RESOURCE_MANAGER(ITextureManager);
+                TextureManager* pTextureManager = GET_RESOURCE_MANAGER(TextureManager);
 				return pTextureManager->GetDefaultTexture();
 			}
 			return mTextures[inudwIndex];
@@ -147,14 +147,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Textures
 		//----------------------------------------------------------
-		const std::vector<TexturePtr>& CMaterial::GetTextures() const
+		const std::vector<TextureSPtr>& Material::GetTextures() const
 		{
 			return mTextures;
 		}
         //----------------------------------------------------------
         /// Set Cubemap
         //----------------------------------------------------------
-        void CMaterial::SetCubemap(const CubemapPtr &inpCubemap)
+        void Material::SetCubemap(const CubemapSPtr &inpCubemap)
         {
             mpCubemap = inpCubemap;
             
@@ -163,21 +163,21 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Cubemap
         //----------------------------------------------------------
-        const CubemapPtr& CMaterial::GetCubemap() const
+        const CubemapSPtr& Material::GetCubemap() const
         {
             return mpCubemap;
         }
 		//----------------------------------------------------------
 		/// Is Transparent
 		//----------------------------------------------------------
-		bool CMaterial::IsTransparent() const
+		bool Material::IsTransparent() const
 		{
 			return mbIsAlphaBlended;
 		}
 		//----------------------------------------------------------
 		/// Set Transparent
 		//----------------------------------------------------------
-		void CMaterial::SetTransparent(bool inbIsTransparent)
+		void Material::SetTransparent(bool inbIsTransparent)
 		{
 			mbIsAlphaBlended = inbIsTransparent;
 			mbIsDepthWriteEnabled = !inbIsTransparent;
@@ -187,14 +187,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is Colour Write Enabled
 		//----------------------------------------------------------
-		bool CMaterial::IsColourWriteEnabled() const
+		bool Material::IsColourWriteEnabled() const
 		{
 			return mbIsColourWriteEnabled;
 		}
 		//----------------------------------------------------------
 		/// Set Colour Write Enabled
 		//----------------------------------------------------------
-		void CMaterial::SetColourWriteEnabled(bool inbIsColourhWrite)
+		void Material::SetColourWriteEnabled(bool inbIsColourhWrite)
 		{
 			mbIsColourWriteEnabled = inbIsColourhWrite;
             
@@ -203,14 +203,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is Depth Write Enabled 
 		//----------------------------------------------------------
-		bool CMaterial::IsDepthWriteEnabled() const
+		bool Material::IsDepthWriteEnabled() const
 		{
 			return mbIsDepthWriteEnabled;
 		}
 		//----------------------------------------------------------
 		/// Set Depth Write Enabled
 		//----------------------------------------------------------
-		void CMaterial::SetDepthWriteEnabled(bool inbIsDepthWrite)
+		void Material::SetDepthWriteEnabled(bool inbIsDepthWrite)
 		{
 			mbIsDepthWriteEnabled = inbIsDepthWrite;
             
@@ -219,14 +219,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is Depth Test Enabled
 		//----------------------------------------------------------
-		bool CMaterial::IsDepthTestEnabled() const
+		bool Material::IsDepthTestEnabled() const
 		{
 			return mbIsDepthTestEnabled;
 		}
 		//----------------------------------------------------------
 		/// Set Depth Test Enabled
 		//----------------------------------------------------------
-		void CMaterial::SetDepthTestEnabled(bool inbIsDepthTest)
+		void Material::SetDepthTestEnabled(bool inbIsDepthTest)
 		{
 			mbIsDepthTestEnabled = inbIsDepthTest;
             
@@ -235,14 +235,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is Culling Enabled
 		//----------------------------------------------------------
-		bool CMaterial::IsCullingEnabled() const
+		bool Material::IsCullingEnabled() const
 		{
 			return mbIsCullingEnabled;
 		}
 		//----------------------------------------------------------
 		/// Set Culling Enabled
 		//----------------------------------------------------------
-		void CMaterial::SetCullingEnabled(bool inbCullingEnabled)
+		void Material::SetCullingEnabled(bool inbCullingEnabled)
 		{
 			mbIsCullingEnabled = inbCullingEnabled;
             
@@ -251,14 +251,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Is Scissoring Enabled
         //----------------------------------------------------------
-        bool CMaterial::IsScissoringEnabled() const
+        bool Material::IsScissoringEnabled() const
         {
             return mbIsScissoringEnabled;
         }
         //----------------------------------------------------------
         /// Set Scissoring Enabled
         //----------------------------------------------------------
-        void CMaterial::SetScissoringEnabled(bool inbEnabled)
+        void Material::SetScissoringEnabled(bool inbEnabled)
         {
             mbIsScissoringEnabled = inbEnabled;
             
@@ -267,7 +267,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Scissoring Region
         //----------------------------------------------------------
-        void CMaterial::SetScissoringRegion(const Core::CVector2& invPosition, const Core::CVector2& invSize)
+        void Material::SetScissoringRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize)
         {
             mvScissorPos = invPosition;
             mvScissorSize = invSize;
@@ -277,21 +277,21 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Scissoring Region Position
         //----------------------------------------------------------
-        const Core::CVector2& CMaterial::GetScissoringRegionPosition() const
+        const Core::Vector2& Material::GetScissoringRegionPosition() const
         {
             return mvScissorPos;
         }
         //----------------------------------------------------------
         /// Get Scissoring Region Size
         //----------------------------------------------------------
-        const Core::CVector2& CMaterial::GetScissoringRegionSize() const
+        const Core::Vector2& Material::GetScissoringRegionSize() const
         {
             return mvScissorSize;
         }
 		//----------------------------------------------------------
 		/// Set Blend Function
 		//----------------------------------------------------------
-		void CMaterial::SetBlendFunction(AlphaBlend ineSource, AlphaBlend ineDest)
+		void Material::SetBlendFunction(AlphaBlend ineSource, AlphaBlend ineDest)
 		{
 			mSrcBlendFunc = ineSource;
 			mDstBlendFunc = ineDest;
@@ -301,35 +301,35 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Source Blend Function
 		//----------------------------------------------------------
-		AlphaBlend CMaterial::GetSourceBlendFunction() const
+		AlphaBlend Material::GetSourceBlendFunction() const
 		{
 			return mSrcBlendFunc;
 		}
 		//----------------------------------------------------------
 		/// Get Destination Blend Function
 		//----------------------------------------------------------
-		AlphaBlend CMaterial::GetDestBlendFunction() const
+		AlphaBlend Material::GetDestBlendFunction() const
 		{
 			return mDstBlendFunc;
 		}
         //----------------------------------------------------------
         /// Set Cull Face
         //----------------------------------------------------------
-        void CMaterial::SetCullFace(CullFace ineCullFace)
+        void Material::SetCullFace(CullFace ineCullFace)
         {
             meCullFace = ineCullFace;
         }
         //----------------------------------------------------------
         /// Get Cull Face
         //----------------------------------------------------------
-        CullFace CMaterial::GetCullFace() const
+        CullFace Material::GetCullFace() const
         {
             return meCullFace;
         }
 		//----------------------------------------------------------
 		/// Set Emissive
 		//----------------------------------------------------------
-		void CMaterial::SetEmissive(const Core::CColour& inEmissive)
+		void Material::SetEmissive(const Core::Colour& inEmissive)
 		{
 			mEmissive = inEmissive;
             
@@ -338,14 +338,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Emissive
 		//----------------------------------------------------------
-		const Core::CColour& CMaterial::GetEmissive() const
+		const Core::Colour& Material::GetEmissive() const
 		{
 			return mEmissive;
 		}
         //----------------------------------------------------------
 		/// Set Ambient
 		//----------------------------------------------------------
-		void CMaterial::SetAmbient(const Core::CColour& inAmbient)
+		void Material::SetAmbient(const Core::Colour& inAmbient)
 		{
 			mAmbient = inAmbient;
             
@@ -354,14 +354,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Ambient
 		//----------------------------------------------------------
-		const Core::CColour& CMaterial::GetAmbient() const
+		const Core::Colour& Material::GetAmbient() const
 		{
 			return mAmbient;
 		}
 		//----------------------------------------------------------
 		/// Set Diffuse
 		//----------------------------------------------------------
-		void CMaterial::SetDiffuse(const Core::CColour& inDiffuse)
+		void Material::SetDiffuse(const Core::Colour& inDiffuse)
 		{
 			mDiffuse = inDiffuse;
             
@@ -370,14 +370,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Diffuse
 		//----------------------------------------------------------
-		const Core::CColour& CMaterial::GetDiffuse() const
+		const Core::Colour& Material::GetDiffuse() const
 		{
 			return mDiffuse;
 		}
 		//----------------------------------------------------------
 		/// Set Specular
 		//----------------------------------------------------------
-		void CMaterial::SetSpecular(const Core::CColour& inSpecular)
+		void Material::SetSpecular(const Core::Colour& inSpecular)
 		{
 			mSpecular = inSpecular;
             
@@ -386,14 +386,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Specular
 		//----------------------------------------------------------
-		const Core::CColour& CMaterial::GetSpecular() const
+		const Core::Colour& Material::GetSpecular() const
 		{
 			return mSpecular;
 		}
 		//-----------------------------------------------------------
 		/// Set Shader Float Value
 		//-----------------------------------------------------------
-		void CMaterial::SetShaderFloatValue(const std::string& instrVarName, f32 infValue)
+		void Material::SetShaderFloatValue(const std::string& instrVarName, f32 infValue)
 		{
             mMapFloatShaderVars[instrVarName] = infValue;
             
@@ -403,7 +403,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Shader Vec2 Value
 		//-----------------------------------------------------------
-		void CMaterial::SetShaderVec2Value(const std::string& instrVarName, const Core::CVector2 &invValue)
+		void Material::SetShaderVec2Value(const std::string& instrVarName, const Core::Vector2 &invValue)
 		{
 			mMapVec2ShaderVars[instrVarName] = invValue;
             
@@ -413,7 +413,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Shader Vec3 Value
 		//-----------------------------------------------------------
-		void CMaterial::SetShaderVec3Value(const std::string& instrVarName, const Core::CVector3 &invValue)
+		void Material::SetShaderVec3Value(const std::string& instrVarName, const Core::Vector3 &invValue)
 		{
 			mMapVec3ShaderVars[instrVarName] = invValue;
             
@@ -423,7 +423,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Shader Vec4 Value
 		//-----------------------------------------------------------
-		void CMaterial::SetShaderVec4Value(const std::string& instrVarName, const Core::CVector4 &invValue)
+		void Material::SetShaderVec4Value(const std::string& instrVarName, const Core::Vector4 &invValue)
 		{
             mMapVec4ShaderVars[instrVarName] = invValue;
             
@@ -433,7 +433,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Shader Matrix Value
 		//-----------------------------------------------------------
-		void CMaterial::SetShaderMatrixValue(const std::string& instrVarName, const Core::CMatrix4x4 &inmatValue)
+		void Material::SetShaderMatrixValue(const std::string& instrVarName, const Core::Matrix4x4 &inmatValue)
 		{
 			mMapMat4ShaderVars[instrVarName] = inmatValue;
             
@@ -443,7 +443,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Shader Matrix Array Value
 		//-----------------------------------------------------------
-		void CMaterial::SetShaderMatrixArrayValue(const std::string& instrVarName, const std::vector<Core::CMatrix4x4>& inmatValue)
+		void Material::SetShaderMatrixArrayValue(const std::string& instrVarName, const std::vector<Core::Matrix4x4>& inmatValue)
 		{
 			mMapMat4ArrayShaderVars[instrVarName] = inmatValue;
             
@@ -453,7 +453,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Shader Colour Value
 		//-----------------------------------------------------------
-		void CMaterial::SetShaderColourValue(const std::string& instrVarName, const Core::CColour &incolValue)
+		void Material::SetShaderColourValue(const std::string& instrVarName, const Core::Colour &incolValue)
 		{
             mMapColShaderVars[instrVarName] = incolValue;
             

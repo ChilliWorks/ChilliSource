@@ -17,7 +17,7 @@ namespace ChilliSource
 {
 	namespace Video
 	{
-		class SubtitlesManager : public Core::IResourceManager
+		class SubtitlesManager : public Core::ResourceManager
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(SubtitlesManager);
@@ -58,7 +58,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -68,7 +68,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceSPtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
             //----------------------------------------------------------------
 			/// Get Subtitles From File
 			///

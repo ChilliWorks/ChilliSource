@@ -24,24 +24,24 @@ namespace ChilliSource
 		/// Does a pre-pass on the scene to convert moFlo
 		/// components to plain data for the render system
 		//==================================================
-		class CRenderer 
+		class Renderer 
 		{
 		public:
-			CRenderer(IRenderSystem * inpRenderSystem);
+			Renderer(RenderSystem * inpRenderSystem);
 			//----------------------------------------------------------
 			/// Set Transparent Sort Predicate
 			///
 			/// Sets the sort predicate to use for sorting transparent objects
-			/// @param Our CRendererSortPredicate functor. If this is nullptr the renderer will not sort transparent objects
+			/// @param Our RendererSortPredicate functor. If this is nullptr the renderer will not sort transparent objects
 			//----------------------------------------------------------
-			void SetTransparentSortPredicate(const RendererSortPredicatePtr & inpFunctor);
+			void SetTransparentSortPredicate(const RendererSortPredicateSPtr & inpFunctor);
             //----------------------------------------------------------
 			/// Set Opaque Sort Predicate
 			///
 			/// Sets the sort predicate to use for sorting opaque objects
-			/// @param Our CRendererSortPredicate functor. If this is nullptr the renderer will not sort opaque objects
+			/// @param Our RendererSortPredicate functor. If this is nullptr the renderer will not sort opaque objects
 			//----------------------------------------------------------
-			void SetOpaqueSortPredicate(const RendererSortPredicatePtr & inpFunctor);
+			void SetOpaqueSortPredicate(const RendererSortPredicateSPtr & inpFunctor);
             
             //----------------------------------------------------------
 			/// Set Perspective Cull Predicate
@@ -49,14 +49,14 @@ namespace ChilliSource
             /// @param Predicate that is called to determine whether
             /// an object should be culled with an perspective camera
 			//----------------------------------------------------------
-			void SetPerspectiveCullPredicate(const CullingPredicatePtr & inpFunctor);
+			void SetPerspectiveCullPredicate(const ICullingPredicateSPtr & inpFunctor);
             //----------------------------------------------------------
 			/// Set Ortho Cull Predicate
 			///
             /// @param Predicate that is called to determine whether
             /// an object should be culled with an orthographic camera
 			//----------------------------------------------------------
-			void SetOrthoCullPredicate(const CullingPredicatePtr & inpFunctor);
+			void SetOrthoCullPredicate(const ICullingPredicateSPtr & inpFunctor);
             //----------------------------------------------------------
 			/// Render To Screen
 			///
@@ -65,7 +65,7 @@ namespace ChilliSource
 			///
 			/// @param Scene to render
 			//----------------------------------------------------------
-			void RenderToScreen(Core::CScene* inpScene);
+			void RenderToScreen(Core::Scene* inpScene);
 			//----------------------------------------------------------
 			/// Render To Texture
 			///
@@ -78,15 +78,15 @@ namespace ChilliSource
 			/// @param Texture to render colour to.
             /// @param Texture to render depth to.
 			//----------------------------------------------------------
-			void RenderToTexture(Core::CScene* inpScene, const TexturePtr &inpColourTarget, const TexturePtr& inpDepthTarget = TexturePtr());
+			void RenderToTexture(Core::Scene* inpScene, const TextureSPtr &inpColourTarget, const TextureSPtr& inpDepthTarget = TextureSPtr());
 			//----------------------------------------------------------
 			/// Get Active Camera Pointer
 			///
 			/// @return A weak pointer to the active scene camera
 			//----------------------------------------------------------
-			CCameraComponent* GetActiveCameraPtr();
+			CameraComponent* GetActiveCameraPtr();
             
-            static Core::CMatrix4x4 matViewProjCache;
+            static Core::Matrix4x4 matViewProjCache;
 			
 		private:
 			
@@ -99,7 +99,7 @@ namespace ChilliSource
             /// @param Light components
             /// @param Render components
             //----------------------------------------------------------
-            void RenderShadowMap(CCameraComponent* inpCameraComponent, std::vector<CDirectionalLightComponent*>& inaLightComponents, std::vector<IRenderComponent*>& inaRenderables);
+            void RenderShadowMap(CameraComponent* inpCameraComponent, std::vector<DirectionalLightComponent*>& inaLightComponents, std::vector<RenderComponent*>& inaRenderables);
             //----------------------------------------------------------
             /// Render Shadow Map
             ///
@@ -109,7 +109,7 @@ namespace ChilliSource
             /// @param Light component
             /// @param Render components
             //----------------------------------------------------------
-            void RenderShadowMap(CCameraComponent* inpCameraComponent, CDirectionalLightComponent* inpLightComponent, std::vector<IRenderComponent*>& inaRenderables);
+            void RenderShadowMap(CameraComponent* inpCameraComponent, DirectionalLightComponent* inpLightComponent, std::vector<RenderComponent*>& inaRenderables);
 			//----------------------------------------------------------
 			/// Render
 			///
@@ -121,7 +121,7 @@ namespace ChilliSource
             /// @param The shader pass.
             /// @param Renderables
 			//----------------------------------------------------------
-			void Render(CCameraComponent* inpCameraComponent, ShaderPass ineShaderPass, std::vector<IRenderComponent*>& inaRenderables);
+			void Render(CameraComponent* inpCameraComponent, ShaderPass ineShaderPass, std::vector<RenderComponent*>& inaRenderables);
             //----------------------------------------------------------
 			/// Render UI
             ///
@@ -138,7 +138,7 @@ namespace ChilliSource
             /// @param Scene
             /// @param Target
             //----------------------------------------------------------
-            void RenderSceneToTarget(Core::CScene* inpScene, IRenderTarget* inpRenderTarget);
+            void RenderSceneToTarget(Core::Scene* inpScene, RenderTarget* inpRenderTarget);
 			//----------------------------------------------------------
 			/// Find Renderable Objects In Scene
 			///
@@ -151,8 +151,8 @@ namespace ChilliSource
             /// @param Out: Dir lights
             /// @param Out: Point lights
 			//----------------------------------------------------------
-			void FindRenderableObjectsInScene(Core::CScene* pScene, std::vector<IRenderComponent*>& outaRenderCache, std::vector<CCameraComponent*>& outaCameraCache,
-                                              std::vector<CDirectionalLightComponent*>& outaDirectionalLightComponentCache, std::vector<CPointLightComponent*>& outaPointLightComponentCache, CAmbientLightComponent*& outpAmbientLight) const;
+			void FindRenderableObjectsInScene(Core::Scene* pScene, std::vector<RenderComponent*>& outaRenderCache, std::vector<CameraComponent*>& outaCameraCache,
+                                              std::vector<DirectionalLightComponent*>& outaDirectionalLightComponentCache, std::vector<PointLightComponent*>& outaPointLightComponentCache, AmbientLightComponent*& outpAmbientLight) const;
             //----------------------------------------------------------
             /// Cull Renderables
             ///
@@ -160,7 +160,7 @@ namespace ChilliSource
             /// @param Renderables to cull
             /// @param [Out]: Visible renderables
             //----------------------------------------------------------
-            void CullRenderables(CCameraComponent* inpCamera, const std::vector<IRenderComponent*>& inaRenderCache, std::vector<IRenderComponent*>& outaRenderCache) const;
+            void CullRenderables(CameraComponent* inpCamera, const std::vector<RenderComponent*>& inaRenderCache, std::vector<RenderComponent*>& outaRenderCache) const;
             //----------------------------------------------------------
             /// Cull Renderables
             ///
@@ -168,7 +168,7 @@ namespace ChilliSource
             /// @param Renderables to cull
             /// @param [Out]: Visible renderables
             //----------------------------------------------------------
-            void CullRenderables(CPointLightComponent* inpLightComponent, const std::vector<IRenderComponent*>& inaRenderCache, std::vector<IRenderComponent*>& outaRenderCache) const;
+            void CullRenderables(PointLightComponent* inpLightComponent, const std::vector<RenderComponent*>& inaRenderCache, std::vector<RenderComponent*>& outaRenderCache) const;
 			//----------------------------------------------------------
 			/// Filter Scene Renderables
 			///
@@ -178,7 +178,7 @@ namespace ChilliSource
             /// @param Out: Opaque renderables
             /// @param Out: Transparent renderables
 			//----------------------------------------------------------
-			void FilterSceneRenderables(const std::vector<IRenderComponent*>& inaRenderables, std::vector<IRenderComponent*>& outaOpaque, std::vector<IRenderComponent*>& outaTransparent) const;
+			void FilterSceneRenderables(const std::vector<RenderComponent*>& inaRenderables, std::vector<RenderComponent*>& outaOpaque, std::vector<RenderComponent*>& outaTransparent) const;
             //----------------------------------------------------------
 			/// Filter Shadow Map Renderables
 			///
@@ -188,14 +188,14 @@ namespace ChilliSource
             /// @param List of renderable objects
             /// @param Out: renderables
 			//----------------------------------------------------------
-			void FilterShadowMapRenderables(const std::vector<IRenderComponent*>& inaRenderables, std::vector<IRenderComponent*>& outaRenderables) const;
+			void FilterShadowMapRenderables(const std::vector<RenderComponent*>& inaRenderables, std::vector<RenderComponent*>& outaRenderables) const;
             //----------------------------------------------------------
             /// Get Cull Predicate
             ///
             /// @param Camera
             /// @return Camera cull predicate or nullptr
             //----------------------------------------------------------
-            CullingPredicatePtr GetCullPredicate(CCameraComponent* inpActiveCamera) const;
+            ICullingPredicateSPtr GetCullPredicate(CameraComponent* inpActiveCamera) const;
             //----------------------------------------------------------
 			/// Create Overlay Projection
             ///
@@ -203,7 +203,7 @@ namespace ChilliSource
             /// rendering
             /// @return Projection matrix for overlay rendering
             //----------------------------------------------------------
-            Core::CMatrix4x4 CreateOverlayProjection(GUI::Window* inpWindow) const;
+            Core::Matrix4x4 CreateOverlayProjection(GUI::Window* inpWindow) const;
             //----------------------------------------------------------
             /// Sort Opaque
             ///
@@ -213,7 +213,7 @@ namespace ChilliSource
             /// @param Camera component
             /// @param Renderables
             //----------------------------------------------------------
-            void SortOpaque(CCameraComponent* inpCameraComponent, std::vector<IRenderComponent*>& inaRenderables) const;
+            void SortOpaque(CameraComponent* inpCameraComponent, std::vector<RenderComponent*>& inaRenderables) const;
             //----------------------------------------------------------
             /// Sort Transparent
             ///
@@ -223,20 +223,20 @@ namespace ChilliSource
             /// @param Camera component
             /// @param Renderables
             //----------------------------------------------------------
-            void SortTransparent(CCameraComponent* inpCameraComponent, std::vector<IRenderComponent*>& inaRenderables) const;
+            void SortTransparent(CameraComponent* inpCameraComponent, std::vector<RenderComponent*>& inaRenderables) const;
             
         private:
             
-            CCanvasRenderer mCanvas;
+            CanvasRenderer mCanvas;
             
-			IRenderSystem* mpRenderSystem;
-			CCameraComponent* mpActiveCamera;
+			RenderSystem* mpRenderSystem;
+			CameraComponent* mpActiveCamera;
             
-			RendererSortPredicatePtr mpTransparentSortPredicate;
-            RendererSortPredicatePtr mpOpaqueSortPredicate;
+			RendererSortPredicateSPtr mpTransparentSortPredicate;
+            RendererSortPredicateSPtr mpOpaqueSortPredicate;
             
-            CullingPredicatePtr mpPerspectiveCullPredicate;
-            CullingPredicatePtr mpOrthoCullPredicate;
+            ICullingPredicateSPtr mpPerspectiveCullPredicate;
+            ICullingPredicateSPtr mpOrthoCullPredicate;
 		};
 	}
 }

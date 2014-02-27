@@ -23,7 +23,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
         struct QuerySortPredicate
         {
-            bool operator()(const IVolumeComponent* lhs, const IVolumeComponent* rhs) const
+            bool operator()(const VolumeComponent* lhs, const VolumeComponent* rhs) const
             {
                 return (lhs->mfQueryIntersectionValue < rhs->mfQueryIntersectionValue);
             }
@@ -34,7 +34,7 @@ namespace ChilliSource
 		///
 		/// Create the scene graph object 
 		//--------------------------------------------------------------------------------------------------
-		CScene::CScene(Input::InputSystem* inpInputSystem, f32 infWorldHalfSize) 
+		Scene::Scene(Input::InputSystem* inpInputSystem, f32 infWorldHalfSize) 
         : mpRootWindow(nullptr)
 		{
 			mpRootWindow = new GUI::Window();
@@ -46,7 +46,7 @@ namespace ChilliSource
 		/// Force the scene to become the active one and to
 		/// receive user interaction
 		//-------------------------------------------------------
-		void CScene::BecomeActive()
+		void Scene::BecomeActive()
 		{
             mpRootWindow->ListenForTouches();
             
@@ -57,7 +57,7 @@ namespace ChilliSource
 		/// Set this scene to be inactive. It will no longer
 		/// be interactable for the user
 		//-------------------------------------------------------
-		void CScene::BecomeInactive()
+		void Scene::BecomeInactive()
 		{
 			Input::TouchInfo sInfo;
 			sInfo.eType = Input::TouchInputType::k_ended;
@@ -72,7 +72,7 @@ namespace ChilliSource
 		///
 		/// @param Entity pointer
 		//-------------------------------------------------------
-		void CScene::AddEntity(const EntityPtr& inpEntity)
+		void Scene::AddEntity(const EntitySPtr& inpEntity)
 		{
 			mEntities.push_back(inpEntity);
 
@@ -88,7 +88,7 @@ namespace ChilliSource
 		///
 		/// @param Entity pointer
 		//-------------------------------------------------------
-		void CScene::RemoveEntity(const EntityPtr& inpEntity)
+		void Scene::RemoveEntity(const EntitySPtr& inpEntity)
 		{
 			SharedEntityList::iterator it = std::find(mEntities.begin(), mEntities.end(), inpEntity);
 			if(it != mEntities.end())
@@ -103,7 +103,7 @@ namespace ChilliSource
 		///
 		/// Remove all the entities from the scene
 		//-------------------------------------------------------
-		void CScene::RemoveAllEntities()
+		void Scene::RemoveAllEntities()
 		{
 			while(!mEntities.empty())
 			{
@@ -115,7 +115,7 @@ namespace ChilliSource
 		///
 		/// @return the list of all the entities in the scene.
 		//-------------------------------------------------------
-		const SharedEntityList& CScene::GetEntityList()
+		const SharedEntityList& Scene::GetEntityList()
 		{
 			return mEntities;
 		}
@@ -124,7 +124,7 @@ namespace ChilliSource
 		///
 		/// @return A reference to the octree that manages the spatial relationship of the scene nodes
 		//--------------------------------------------------------------------------------------------------
-//		const COctree& CScene::GetSpatialGraph() const
+//		const Octree& Scene::GetSpatialGraph() const
 //		{
 //			return mSpatialGraph;
 //		}
@@ -136,17 +136,17 @@ namespace ChilliSource
 		/// @param Ray to check intersection
 		/// @param A handle to a container to fill with intersecting components (Render components)
 		//--------------------------------------------------------------------------------------------------
-		void CScene::QuerySceneForIntersection(const Core::Ray &inRay, std::vector<IVolumeComponent*> &outIntersectComponents, bool inbIsDepthSorted, u32 inudwQueryMask)
+		void Scene::QuerySceneForIntersection(const Core::Ray &inRay, std::vector<VolumeComponent*> &outIntersectComponents, bool inbIsDepthSorted, u32 inudwQueryMask)
 		{
 			//Only render components can be checked for ray intersection as they have AABB's
-			std::vector<IVolumeComponent*> IntersectableComponents;
-			QuerySceneForComponents<IVolumeComponent>(IntersectableComponents, inudwQueryMask);
+			std::vector<VolumeComponent*> IntersectableComponents;
+			QuerySceneForComponents<VolumeComponent>(IntersectableComponents, inudwQueryMask);
 			
 			//Loop through the render components and check for intersection
 			//If any intersect then add them to the intersect list
-			for(std::vector<IVolumeComponent*>::iterator it = IntersectableComponents.begin(); it != IntersectableComponents.end(); ++it)
+			for(std::vector<VolumeComponent*>::iterator it = IntersectableComponents.begin(); it != IntersectableComponents.end(); ++it)
 			{
-				IVolumeComponent* pComponent = (IVolumeComponent*)(*it);
+				VolumeComponent* pComponent = (VolumeComponent*)(*it);
 				
 				f32 fNearIntersection, fFarIntersection = 0.0f;
 				
@@ -174,7 +174,7 @@ namespace ChilliSource
         ///
         /// @return The main window that all the scene's UI is attached to.
         //--------------------------------------------------------------------------------------------------
-        GUI::Window* CScene::GetWindowPtr()
+        GUI::Window* Scene::GetWindowPtr()
         {
             return mpRootWindow;
         }
@@ -185,7 +185,7 @@ namespace ChilliSource
         ///
         /// @param delta time in seconds
         //--------------------------------------------------------------------------------------------------		   
-		void CScene::Update(f32 infDT)
+		void Scene::Update(f32 infDT)
 		{
 			mpRootWindow->Update(infDT);
 		}
@@ -194,7 +194,7 @@ namespace ChilliSource
 		///
 		/// 
 		//--------------------------------------------------------------------------------------------------
-		CScene::~CScene()
+		Scene::~Scene()
 		{
 			RemoveAllEntities();
             delete mpRootWindow;

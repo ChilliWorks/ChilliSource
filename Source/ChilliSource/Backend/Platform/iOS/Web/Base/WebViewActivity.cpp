@@ -92,7 +92,7 @@ namespace ChilliSource
                     strFile = instrFile;
                 }
                 
-				iOS::CFileSystem* pFileSystem = static_cast<iOS::CFileSystem*>(Core::CApplication::GetFileSystemPtr());
+				iOS::CFileSystem* pFileSystem = static_cast<iOS::CFileSystem*>(Core::Application::GetFileSystemPtr());
 
 				std::string strPath;
                 
@@ -102,15 +102,15 @@ namespace ChilliSource
                         strPath = pFileSystem->GetStorageLocationDirectory(ineStorageLocation);
                         break;
                     case Core::StorageLocation::k_package:
-                        strPath = Core::CApplication::GetFileSystemPtr()->GetDirectoryForPackageFile(strFile);
+                        strPath = Core::Application::GetFileSystemPtr()->GetDirectoryForPackageFile(strFile);
                         break;
                     case Core::StorageLocation::k_DLC:
-                        strPath = Core::CApplication::GetFileSystemPtr()->GetDirectoryForDLCFile(strFile);
+                        strPath = Core::Application::GetFileSystemPtr()->GetDirectoryForDLCFile(strFile);
                         break;
                 }
 
                 std::string strHTMLFileContents;
-                Core::FileStreamPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FileMode::k_read);
+                Core::FileStreamSPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FileMode::k_read);
                 pHTMLFile->GetAll(strHTMLFileContents);
                 
                 NSString* pstrHTML = Core::CStringUtils::StringToNSString(strHTMLFileContents);

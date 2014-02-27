@@ -23,6 +23,12 @@ namespace ChilliSource
 {
     namespace Core
     {
+        enum class InterpolationType
+        {
+            k_step,
+            k_linear
+        };
+        
         enum class AnimationPlayMode
         {
             k_once,
@@ -38,17 +44,17 @@ namespace ChilliSource
             k_Total
         };
 
-        ///<IAnimation is the base class for any kind of playable animation
-        class IAnimation
+        ///<Animation is the base class for any kind of playable animation
+        class Animation
         {
         public:
 
-            typedef std::function<void(IAnimation*)> OnCompleteDelegate;
-            typedef std::function<void(IAnimation*)> OnStartDelegate;
+            typedef std::function<void(Animation*)> OnCompleteDelegate;
+            typedef std::function<void(Animation*)> OnStartDelegate;
 
-            IAnimation(f32 infDuration = 0.0f, f32 infStartDelay = 0.0f);
+            Animation(f32 infDuration = 0.0f, f32 infStartDelay = 0.0f);
             
-            virtual ~IAnimation();
+            virtual ~Animation();
             
             void SetOnCompleteDelegate(OnCompleteDelegate inDelegate);
             void SetOnStartDelegate(OnStartDelegate inDelegate);
@@ -101,17 +107,15 @@ namespace ChilliSource
             u32 mudwFlags;
         };
         
-        typedef std::shared_ptr<IAnimation> AnimationPtr;
-        
         //<ValueAnimation is a template class which represents the animation of a specific value
-        template <typename T> class ValueAnimation : public IAnimation
+        template <typename T> class ValueAnimation : public Animation
         {
         public:
             typedef typename std::function<void(const T &)> SetCRValueDelegate;
             typedef typename std::function<void(T)> SetValueDelegate;
             
             ValueAnimation(f32 infDuration)
-            :IAnimation(infDuration)
+            :Animation(infDuration)
             {
                 
             }

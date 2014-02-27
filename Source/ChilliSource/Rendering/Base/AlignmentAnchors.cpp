@@ -10,7 +10,7 @@
 
 namespace ChilliSource
 {
-    namespace Core
+    namespace Rendering
     {
         //--------------------------------------------------------------
         /// Align
@@ -22,24 +22,24 @@ namespace ChilliSource
         /// @param Half size
         /// @param Out anchor point
         //---------------------------------------------------------------
-        void Align(AlignmentAnchor ineAlignment, const CVector2& invHalfSize, CVector2& outvAlignmentPoint)
+        void Align(AlignmentAnchor ineAlignment, const Core::Vector2& invHalfSize, Core::Vector2& outvAlignmentPoint)
         {
             //Vertical alignment
 			switch (ineAlignment) 
             {
-				case Core::AlignmentAnchor::k_topLeft:
-				case Core::AlignmentAnchor::k_topCentre:
-				case Core::AlignmentAnchor::k_topRight:
+				case AlignmentAnchor::k_topLeft:
+				case AlignmentAnchor::k_topCentre:
+				case AlignmentAnchor::k_topRight:
 					outvAlignmentPoint.y = -invHalfSize.y;
 					break;
-				case Core::AlignmentAnchor::k_middleLeft:
-				case Core::AlignmentAnchor::k_middleCentre:
-				case Core::AlignmentAnchor::k_middleRight:
+				case AlignmentAnchor::k_middleLeft:
+				case AlignmentAnchor::k_middleCentre:
+				case AlignmentAnchor::k_middleRight:
 					outvAlignmentPoint.y = 0;
 					break;				
-				case Core::AlignmentAnchor::k_bottomLeft:
-				case Core::AlignmentAnchor::k_bottomCentre:
-				case Core::AlignmentAnchor::k_bottomRight:
+				case AlignmentAnchor::k_bottomLeft:
+				case AlignmentAnchor::k_bottomCentre:
+				case AlignmentAnchor::k_bottomRight:
 					outvAlignmentPoint.y = invHalfSize.y;
 					break;
                     
@@ -50,21 +50,21 @@ namespace ChilliSource
 			//Horizontal alignment
 			switch (ineAlignment) 
             {
-				case Core::AlignmentAnchor::k_topLeft:
-				case Core::AlignmentAnchor::k_middleLeft:
-				case Core::AlignmentAnchor::k_bottomLeft:
+				case AlignmentAnchor::k_topLeft:
+				case AlignmentAnchor::k_middleLeft:
+				case AlignmentAnchor::k_bottomLeft:
 					outvAlignmentPoint.x = invHalfSize.x;
 					break;
 					
-				case Core::AlignmentAnchor::k_topCentre:
-				case Core::AlignmentAnchor::k_middleCentre:
-				case Core::AlignmentAnchor::k_bottomCentre:
+				case AlignmentAnchor::k_topCentre:
+				case AlignmentAnchor::k_middleCentre:
+				case AlignmentAnchor::k_bottomCentre:
 					outvAlignmentPoint.x = 0;
 					break;	
 					
-				case Core::AlignmentAnchor::k_topRight:
-				case Core::AlignmentAnchor::k_middleRight:
-				case Core::AlignmentAnchor::k_bottomRight:
+				case AlignmentAnchor::k_topRight:
+				case AlignmentAnchor::k_middleRight:
+				case AlignmentAnchor::k_bottomRight:
 					outvAlignmentPoint.x = -invHalfSize.x;
 					break;
                     
@@ -82,24 +82,24 @@ namespace ChilliSource
         /// @param Half size
         /// @param Out anchor point
         //---------------------------------------------------------------
-        void GetAnchorPoint(AlignmentAnchor ineAlignment, const CVector2& invHalfSize, CVector2& outvAlignmentPoint)
+        void GetAnchorPoint(AlignmentAnchor ineAlignment, const Core::Vector2& invHalfSize, Core::Vector2& outvAlignmentPoint)
         {
             //Vertical alignment
 			switch (ineAlignment) 
             {
-				case Core::AlignmentAnchor::k_topLeft:
-				case Core::AlignmentAnchor::k_topCentre:
-				case Core::AlignmentAnchor::k_topRight:
+				case AlignmentAnchor::k_topLeft:
+				case AlignmentAnchor::k_topCentre:
+				case AlignmentAnchor::k_topRight:
 					outvAlignmentPoint.y = invHalfSize.y;
 					break;
-				case Core::AlignmentAnchor::k_middleLeft:
-				case Core::AlignmentAnchor::k_middleCentre:
-				case Core::AlignmentAnchor::k_middleRight:
+				case AlignmentAnchor::k_middleLeft:
+				case AlignmentAnchor::k_middleCentre:
+				case AlignmentAnchor::k_middleRight:
 					outvAlignmentPoint.y = 0;
 					break;				
-				case Core::AlignmentAnchor::k_bottomLeft:
-				case Core::AlignmentAnchor::k_bottomCentre:
-				case Core::AlignmentAnchor::k_bottomRight:
+				case AlignmentAnchor::k_bottomLeft:
+				case AlignmentAnchor::k_bottomCentre:
+				case AlignmentAnchor::k_bottomRight:
 					outvAlignmentPoint.y = -invHalfSize.y;
 					break;
                 default:
@@ -109,21 +109,21 @@ namespace ChilliSource
 			//Horizontal alignment
 			switch (ineAlignment) 
             {
-				case Core::AlignmentAnchor::k_topLeft:
-				case Core::AlignmentAnchor::k_middleLeft:
-				case Core::AlignmentAnchor::k_bottomLeft:
+				case AlignmentAnchor::k_topLeft:
+				case AlignmentAnchor::k_middleLeft:
+				case AlignmentAnchor::k_bottomLeft:
 					outvAlignmentPoint.x = -invHalfSize.x;
 					break;
 					
-				case Core::AlignmentAnchor::k_topCentre:
-				case Core::AlignmentAnchor::k_middleCentre:
-				case Core::AlignmentAnchor::k_bottomCentre:
+				case AlignmentAnchor::k_topCentre:
+				case AlignmentAnchor::k_middleCentre:
+				case AlignmentAnchor::k_bottomCentre:
 					outvAlignmentPoint.x = 0;
 					break;	
 					
-				case Core::AlignmentAnchor::k_topRight:
-				case Core::AlignmentAnchor::k_middleRight:
-				case Core::AlignmentAnchor::k_bottomRight:
+				case AlignmentAnchor::k_topRight:
+				case AlignmentAnchor::k_middleRight:
+				case AlignmentAnchor::k_bottomRight:
 					outvAlignmentPoint.x = invHalfSize.x;
 					break;
                 default:

@@ -22,7 +22,7 @@ namespace ChilliSource
     {
         //-----------------------------------------
         //-----------------------------------------
-        IPlatformSystem* IPlatformSystem::Create()
+        PlatformSystem* PlatformSystem::Create()
         {
 #ifdef TARGET_OS_IPHONE
             return new iOS::CPlatformSystem();

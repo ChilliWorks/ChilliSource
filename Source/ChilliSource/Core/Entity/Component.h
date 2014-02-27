@@ -21,29 +21,29 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		class IComponent : public IQueryableInterface
+		class Component : public QueryableInterface
 		{
 		public:
-			IComponent();
-			virtual ~IComponent();
+			Component();
+			virtual ~Component();
 			//----------------------------------------------------
 			/// Get Entity Owner
 			///
 			/// @return Entity to which component is attached
 			//----------------------------------------------------
-			CEntity * GetEntityOwner();
+			Entity * GetEntityOwner();
 			//----------------------------------------------------
 			/// Get Entity Owner (Const)
 			///
 			/// @return Entity to which component is attached
 			//----------------------------------------------------
-			const CEntity * GetEntityOwner() const;
+			const Entity * GetEntityOwner() const;
 			//----------------------------------------------------
 			/// Set Entity Owner (Const)
 			///
 			/// @param Entity to which component is attached
 			//----------------------------------------------------
-			virtual void SetEntityOwner(CEntity* inpOwner);
+			virtual void SetEntityOwner(Entity* inpOwner);
 			//----------------------------------------------------
 			/// Get Query Mask
 			///
@@ -87,12 +87,10 @@ namespace ChilliSource
 			virtual void OnDetachedFromEntity(){}
 
 		protected:
-			CEntity * mpEntityOwner;
+			Entity * mpEntityOwner;
 			
 			u32 mudwQueryMask;
 		};
-		typedef std::shared_ptr<IComponent> ComponentPtr;
-		typedef std::weak_ptr<IComponent> ComponentWeakPtr;
 	}
 }
 

@@ -152,10 +152,10 @@ namespace ChilliSource
 			UITwitterAlertDelegate*					mpAlertDelegate;
 			
 			Core::UnifiedVector2                    mvUnifiedSize;
-			Core::CVector2                          mvPointSize;
-			Core::CVector2                          mvAbsoluteSize;
-			Core::CVector2                          mvAbsolutePositionTopLeft;
-			Core::CVector2                          mvAbsolutePositionCentre;
+			Core::Vector2                          mvPointSize;
+			Core::Vector2                          mvAbsoluteSize;
+			Core::Vector2                          mvAbsolutePositionTopLeft;
+			Core::Vector2                          mvAbsolutePositionCentre;
 		};
 	}
 }

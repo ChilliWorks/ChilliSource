@@ -15,8 +15,8 @@ namespace ChilliSource
 {
     namespace Core
     {
-        std::string IFileSystem::mastrResourceDirectory[3];
-        f32 IFileSystem::mfAssetsDensity = 1.0f;
+        std::string FileSystem::mastrResourceDirectory[3];
+        f32 FileSystem::mfAssetsDensity = 1.0f;
         
         ChilliSource::Core::StorageLocation GetStorageLocationFromString(const std::string & instrStorage)
         {
@@ -34,25 +34,25 @@ namespace ChilliSource
                 return StorageLocation::k_none;
         }
         
-    	DEFINE_NAMED_INTERFACE(IFileSystem);
+    	DEFINE_NAMED_INTERFACE(FileSystem);
 
         const std::string kstrDefaultPackageDLCDirectory = "DLC/";
         
-        IFileSystem::IFileSystem() : mstrPackageDLCPath(kstrDefaultPackageDLCDirectory)
+        FileSystem::FileSystem() : mstrPackageDLCPath(kstrDefaultPackageDLCDirectory)
         {
             
         }
 		//-------------------------------------------------------------------------
 		/// Is A
 		//-------------------------------------------------------------------------
-		bool IFileSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool FileSystem::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IFileSystem::InterfaceID;
+			return inInterfaceID == FileSystem::InterfaceID;
 		}
         //--------------------------------------------------------------
         /// Is Storage Location Writeable
         //--------------------------------------------------------------
-        bool IFileSystem::IsStorageLocationWritable(StorageLocation ineSourceStorageLocation) const
+        bool FileSystem::IsStorageLocationWritable(StorageLocation ineSourceStorageLocation) const
         {
             switch (ineSourceStorageLocation)
             {
@@ -68,7 +68,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Set Package DLC Directory
         //--------------------------------------------------------------
-        void IFileSystem::SetPackageDLCDirectory(const std::string& instrDirectory)
+        void FileSystem::SetPackageDLCDirectory(const std::string& instrDirectory)
         {
             mstrPackageDLCPath = CStringUtils::StandardisePath(instrDirectory);
         }
@@ -77,7 +77,7 @@ namespace ChilliSource
         ///
         /// @return Directory to load device dependent assets from
         //--------------------------------------------
-        const std::string& IFileSystem::GetDeviceResourceDirectory()
+        const std::string& FileSystem::GetDeviceResourceDirectory()
         {
             return mastrResourceDirectory[0];
         }
@@ -86,7 +86,7 @@ namespace ChilliSource
         ///
         /// @return Directory to load device dependent assets from
         //--------------------------------------------
-        const std::string& IFileSystem::GetDefaultDeviceResourceDirectory()
+        const std::string& FileSystem::GetDefaultDeviceResourceDirectory()
         {
             return mastrResourceDirectory[1];
         }
@@ -95,7 +95,7 @@ namespace ChilliSource
         ///
         /// @return Directory to load shared assets from
         //--------------------------------------------
-        const std::string& IFileSystem::GetDefaultResourceDirectory()
+        const std::string& FileSystem::GetDefaultResourceDirectory()
         {
             return mastrResourceDirectory[2];
         }
@@ -107,7 +107,7 @@ namespace ChilliSource
         /// @param Directory to load shared assets from
         /// @param Density of assets in the device dependent folder
         //--------------------------------------------
-        void IFileSystem::SetResourceDirectories(const std::string& instrDeviceDirectory, const std::string& instrDefaultDeviceDirectory, const std::string& instrDefaultDirectory, f32 infAssetsDensity)
+        void FileSystem::SetResourceDirectories(const std::string& instrDeviceDirectory, const std::string& instrDefaultDeviceDirectory, const std::string& instrDefaultDirectory, f32 infAssetsDensity)
         {
             mastrResourceDirectory[0] = instrDeviceDirectory;
             if (!instrDeviceDirectory.empty())
@@ -127,7 +127,7 @@ namespace ChilliSource
         /// @return Density of assets in device
         /// dependent folder
         //--------------------------------------------
-        f32 IFileSystem::GetDeviceResourcesDensity()
+        f32 FileSystem::GetDeviceResourcesDensity()
         {
             return mfAssetsDensity;
         }
@@ -141,7 +141,7 @@ namespace ChilliSource
         /// @param File path
         /// @return MD5 checksum
         //--------------------------------------------------------------
-        std::string IFileSystem::GetFileMD5Checksum(StorageLocation ineLocation, const std::string& instrFilePath) const
+        std::string FileSystem::GetFileMD5Checksum(StorageLocation ineLocation, const std::string& instrFilePath) const
         {
             const u32 kudwChunkSize = 256;
             s8 byData[kudwChunkSize];
@@ -149,7 +149,7 @@ namespace ChilliSource
             CHashMD5::MD5 Hash;
             s32 dwSize = kudwChunkSize;
             
-            FileStreamPtr pFile = CreateFileStream(ineLocation, instrFilePath, FileMode::k_readBinary);
+            FileStreamSPtr pFile = CreateFileStream(ineLocation, instrFilePath, FileMode::k_readBinary);
             
             if(!pFile->IsOpen() || pFile->IsBad())
             {
@@ -174,7 +174,7 @@ namespace ChilliSource
         /// @param File path
         /// @return MD5 checksum
         //--------------------------------------------------------------
-        std::string IFileSystem::GetDirectoryMD5Checksum(StorageLocation ineStorageLocation, const std::string& instrDirectory) const
+        std::string FileSystem::GetDirectoryMD5Checksum(StorageLocation ineStorageLocation, const std::string& instrDirectory) const
 		{
         	std::vector<std::string> astrHashes;
 			std::vector<std::string> astrFilenames;
@@ -210,19 +210,19 @@ namespace ChilliSource
         //--------------------------------------------------------------
 		/// Get Package DLC Directory
 		//--------------------------------------------------------------
-		const std::string& IFileSystem::GetPackageDLCDirectory() const
+		const std::string& FileSystem::GetPackageDLCDirectory() const
 		{
 			return mstrPackageDLCPath;
 		}
         //--------------------------------------------------------------
 		/// Get File CRC32 Checksum
 		//--------------------------------------------------------------
-		u32 IFileSystem::GetFileCRC32Checksum(StorageLocation ineStorageLocation, const std::string&  instrFilepath) const
+		u32 FileSystem::GetFileCRC32Checksum(StorageLocation ineStorageLocation, const std::string&  instrFilepath) const
 		{
 			u32 udwOutput = 0;
 
 			//open the file
-			FileStreamPtr pFile = CreateFileStream(ineStorageLocation, instrFilepath, FileMode::k_readBinary);
+			FileStreamSPtr pFile = CreateFileStream(ineStorageLocation, instrFilepath, FileMode::k_readBinary);
 			if (pFile->IsOpen() == true && pFile->IsBad() == false)
 			{
 				//get the length of the file
@@ -243,7 +243,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
 		/// Get Directory CRC32 Checksum
 		//--------------------------------------------------------------
-		u32 IFileSystem::GetDirectoryCRC32Checksum(StorageLocation ineStorageLocation, const std::string&  instrDirectory) const
+		u32 FileSystem::GetDirectoryCRC32Checksum(StorageLocation ineStorageLocation, const std::string&  instrDirectory) const
 		{
 			std::vector<u32> audwHashes;
 			std::vector<std::string> astrFilenames;
@@ -278,10 +278,10 @@ namespace ChilliSource
         //--------------------------------------------------------------
 		/// Get File length
 		//--------------------------------------------------------------
-		u32 IFileSystem::GetFileSize(StorageLocation ineStorageLocation, const std::string&  instrFilepath) const
+		u32 FileSystem::GetFileSize(StorageLocation ineStorageLocation, const std::string&  instrFilepath) const
 		{
 			//open the file
-			FileStreamPtr pFile = CreateFileStream(ineStorageLocation, instrFilepath, FileMode::k_readBinary);
+			FileStreamSPtr pFile = CreateFileStream(ineStorageLocation, instrFilepath, FileMode::k_readBinary);
 			if (pFile->IsOpen() == true && pFile->IsBad() == false)
 			{
 				//get the length of the file
@@ -297,7 +297,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
 		/// Get Total File size of all Files in Directory
 		//--------------------------------------------------------------
-		u32 IFileSystem::GetDirectorySize(StorageLocation ineStorageLocation, const std::string&  instrDirectory) const
+		u32 FileSystem::GetDirectorySize(StorageLocation ineStorageLocation, const std::string&  instrDirectory) const
 		{
 			std::vector<std::string> astrFilenames;
 			GetFileNamesInDirectory(ineStorageLocation, instrDirectory, true, astrFilenames);
@@ -325,7 +325,7 @@ namespace ChilliSource
         /// @param Out: The path to the most up to date file with the
         /// given name. This argument is unchanged if file is not found
         //--------------------------------------------------------------
-        void IFileSystem::GetBestPathToFile(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, std::string& outFilePath) const
+        void FileSystem::GetBestPathToFile(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, std::string& outFilePath) const
         {
             if(ineStorageLocation == Core::StorageLocation::k_package)
             {

@@ -25,7 +25,7 @@ namespace ChilliSource
         {
         public:
 			CTwitterPostSystem(iOS::CHttpConnectionSystem* inpHttpConnectionSystem,
-							   Core::COAuthSystem* inpOAuthSystem);
+							   Core::OAuthSystem* inpOAuthSystem);
 			~CTwitterPostSystem();
 			//------------------------------------------------------------------------
             /// Is A
@@ -74,9 +74,9 @@ namespace ChilliSource
 			//------------------------------------------------------------------------
 			/// Delegate called with the authorisation view is dismissed.
 			///
-			/// @param Pointer to IActivity that has been dismissed
+			/// @param Pointer to Activity that has been dismissed
 			//------------------------------------------------------------------------
-			void OnAuthorisationDismissed(Core::IActivity* inpActivity) override;
+			void OnAuthorisationDismissed(Core::Activity* inpActivity) override;
 		private:
 			
 			//------------------------------------------------------------------------

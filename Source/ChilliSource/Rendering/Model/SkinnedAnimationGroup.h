@@ -31,13 +31,13 @@ namespace ChilliSource
 		///
 		/// A group of animations that can be blended.
 		//===============================================================
-        class CSkinnedAnimationGroup
+        class SkinnedAnimationGroup
         {
         public:
             //-----------------------------------------------------------
             /// Constructor
             //-----------------------------------------------------------
-            CSkinnedAnimationGroup(const SkeletonPtr& inpSkeleton);
+            SkinnedAnimationGroup(const SkeletonSPtr& inpSkeleton);
             //----------------------------------------------------------
 			/// Attach Animation
 			///
@@ -46,7 +46,7 @@ namespace ChilliSource
             /// @param The animation pointer.
             /// @param the position of the animation on the blendline.
 			//----------------------------------------------------------
-			void AttachAnimation(const SkinnedAnimationPtr& inpAnimation, f32 infBlendlinePosition);
+			void AttachAnimation(const SkinnedAnimationSPtr& inpAnimation, f32 infBlendlinePosition);
             //----------------------------------------------------------
 			/// Detatch Animation
 			///
@@ -54,7 +54,7 @@ namespace ChilliSource
 			///
             /// @param The animation pointer.
 			//----------------------------------------------------------
-			void DetatchAnimation(const SkinnedAnimationPtr& inpAnimation);
+			void DetatchAnimation(const SkinnedAnimationSPtr& inpAnimation);
             //----------------------------------------------------------
 			/// Clear Animations
 			///
@@ -81,7 +81,7 @@ namespace ChilliSource
             /// @param the playback position.
             /// @param the blendline position.
 			//----------------------------------------------------------
-			void BlendGroup(AnimationBlendType ineBlendType, const SkinnedAnimationGroupPtr& inpAnimationGroup, f32 infBlendFactor);
+			void BlendGroup(AnimationBlendType ineBlendType, const SkinnedAnimationGroupSPtr& inpAnimationGroup, f32 infBlendFactor);
             //----------------------------------------------------------
 			/// Build Matrices
             ///
@@ -91,14 +91,14 @@ namespace ChilliSource
             /// @param the current parent.
             /// @param the parent matrix.
 			//----------------------------------------------------------
-			void BuildMatrices(s32 indwCurrentParent = -1, const Core::CMatrix4x4& inParentMatrix = Core::CMatrix4x4());
+			void BuildMatrices(s32 indwCurrentParent = -1, const Core::Matrix4x4& inParentMatrix = Core::Matrix4x4());
             //----------------------------------------------------------
 			/// Get Matrix At Index
             ///
             /// @param the index of the required matrix.
             /// @return the matrix.
 			//----------------------------------------------------------
-            const Core::CMatrix4x4& GetMatrixAtIndex(s32 indwIndex) const;
+            const Core::Matrix4x4& GetMatrixAtIndex(s32 indwIndex) const;
             //----------------------------------------------------------
 			/// Apply Inverse Bind Pose
             ///
@@ -108,7 +108,7 @@ namespace ChilliSource
             /// @param the inverse bind pose matrices.
             /// @param OUT: The combined matrices.
 			//----------------------------------------------------------
-			void ApplyInverseBindPose(const std::vector<Core::CMatrix4x4>& inInverseBindPoseMatrices, std::vector<Core::CMatrix4x4>& outCombinedMatrices);
+			void ApplyInverseBindPose(const std::vector<Core::Matrix4x4>& inInverseBindPoseMatrices, std::vector<Core::Matrix4x4>& outCombinedMatrices);
             //----------------------------------------------------------
 			/// Get Animation Length
             ///
@@ -133,11 +133,11 @@ namespace ChilliSource
             ///
             /// @param OUT: The list of animations.
 			//----------------------------------------------------------
-			void GetAnimations(std::vector<SkinnedAnimationPtr>& outapSkinnedAnimationList);
+			void GetAnimations(std::vector<SkinnedAnimationSPtr>& outapSkinnedAnimationList);
             //-----------------------------------------------------------
             /// Destructor
             //-----------------------------------------------------------
-            ~CSkinnedAnimationGroup();
+            ~SkinnedAnimationGroup();
         private:
             //----------------------------------------------------------
             /// Animation Item
@@ -146,7 +146,7 @@ namespace ChilliSource
             //----------------------------------------------------------
             struct AnimationItem
             {
-                SkinnedAnimationPtr pSkinnedAnimation;
+                SkinnedAnimationSPtr pSkinnedAnimation;
                 f32 fBlendlinePosition;
             };
             typedef std::shared_ptr<AnimationItem> AnimationItemPtr;
@@ -166,7 +166,7 @@ namespace ChilliSource
             /// @param the animation.
             /// @param the playback position.
 			//----------------------------------------------------------
-			SkinnedAnimationFramePtr CalculateAnimationFrame(const SkinnedAnimationPtr& inpAnimation, f32 infPlaybackPosition);
+			SkinnedAnimationFrameSPtr CalculateAnimationFrame(const SkinnedAnimationSPtr& inpAnimation, f32 infPlaybackPosition);
             //--------------------------------------------------------------
 			/// Lerp Between Frames
 			///
@@ -177,12 +177,12 @@ namespace ChilliSource
 			/// @param the interpolation factor
 			/// @return output interpolated frame.
 			//--------------------------------------------------------------
-			SkinnedAnimationFramePtr LerpBetweenFrames(const SkinnedAnimationFramePtr& inFrameA, const SkinnedAnimationFramePtr& inFrameB, f32 infInterpFactor);
+			SkinnedAnimationFrameSPtr LerpBetweenFrames(const SkinnedAnimationFrameSPtr& inFrameA, const SkinnedAnimationFrameSPtr& inFrameB, f32 infInterpFactor);
             
-            SkeletonPtr mpSkeleton;
+            SkeletonSPtr mpSkeleton;
             std::vector<AnimationItemPtr> mAnimations;
-            SkinnedAnimationFramePtr mCurrentAnimationData;
-            std::vector<Core::CMatrix4x4> mCurrentAnimationMatrices;
+            SkinnedAnimationFrameSPtr mCurrentAnimationData;
+            std::vector<Core::Matrix4x4> mCurrentAnimationMatrices;
             bool mbAnimationLengthDirty;
             f32 mfAnimationLength;
             bool mbPrepared;

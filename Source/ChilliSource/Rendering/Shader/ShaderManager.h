@@ -20,14 +20,14 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class IShaderManager : public Core::IResourceManager
+		class ShaderManager : public Core::ResourceManager
 		{
 		public:
 		
-			DECLARE_NAMED_INTERFACE(IShaderManager);
+			DECLARE_NAMED_INTERFACE(ShaderManager);
 			
-			IShaderManager();
-			virtual ~IShaderManager();
+			ShaderManager();
+			virtual ~ShaderManager();
 			//----------------------------------------------------------------
 			/// Is A
 			///
@@ -66,7 +66,7 @@ namespace ChilliSource
 			/// @param File name
 			/// @return A handle to the Shader
 			//----------------------------------------------------------------
-			ShaderPtr GetShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath);
+			ShaderSPtr GetShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath);
 			//----------------------------------------------------------------
 			/// Async Get Shader From File
 			///
@@ -78,7 +78,7 @@ namespace ChilliSource
 			/// @param File name
 			/// @return A handle to the Shader
 			//----------------------------------------------------------------
-			ShaderPtr AsyncGetShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath);
+			ShaderSPtr AsyncGetShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath);
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///
@@ -87,7 +87,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -96,13 +96,13 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceSPtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
             //-----------------------------------------------------------------
             /// Set Render System
             ///
             /// @param Render system 
             //-----------------------------------------------------------------
-            void SetRenderSystem(IRenderSystem* inpRenderSystem);
+            void SetRenderSystem(RenderSystem* inpRenderSystem);
 			
 		protected:
 			
@@ -112,7 +112,7 @@ namespace ChilliSource
 			/// @return Concrete shader resource object based on the render
 			/// system
 			//----------------------------------------------------------------
-			virtual ShaderPtr CreateShaderResource() const = 0;
+			virtual ShaderSPtr CreateShaderResource() const = 0;
 			//---------------------------------------------------------
 			/// Create Shader Program From File
 			///
@@ -124,7 +124,7 @@ namespace ChilliSource
 			/// @param Out: Shader resource
 			/// @return Success
 			//---------------------------------------------------------
-			virtual bool CreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ShaderPtr& outpShader) = 0;
+			virtual bool CreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ShaderSPtr& outpShader) = 0;
 			//---------------------------------------------------------
 			/// Async Create Shader Program From File
 			///
@@ -136,11 +136,11 @@ namespace ChilliSource
 			/// @param Out: Shader resource
 			/// @return Success
 			//---------------------------------------------------------
-			virtual bool AsyncCreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ShaderPtr& outpShader) = 0;
+			virtual bool AsyncCreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ShaderSPtr& outpShader) = 0;
             
         protected:
             
-            IRenderSystem* mpRenderSystem;
+            RenderSystem* mpRenderSystem;
 		};
 	}
 }

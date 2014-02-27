@@ -20,11 +20,11 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CFontLoader : public Core::IResourceProvider
+		class FontLoader : public Core::ResourceProvider
 		{
 		public:
 
-			virtual ~CFontLoader();
+			virtual ~FontLoader();
 			
 			//-------------------------------------------------------------------------
 			/// Is A
@@ -61,7 +61,7 @@ namespace ChilliSource
 			/// @param Out: Resource object
 			/// @return Whether the resource was created successfully
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string& inFilePath, Core::ResourcePtr& outpResource) override;
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string& inFilePath, Core::ResourceSPtr& outpResource) override;
             //----------------------------------------------------------------------------
 			/// Has Kerning Info
 			///
@@ -82,7 +82,7 @@ namespace ChilliSource
 			/// @param Pointer to font resource
 			/// @return Whether the resource was created successfully
 			//----------------------------------------------------------------------------
-            bool LoadKerningInfo(Core::StorageLocation ineStorageLocation, const std::string& inFilePath, CFont* inpFont);
+            bool LoadKerningInfo(Core::StorageLocation ineStorageLocation, const std::string& inFilePath, Font* inpFont);
 		};
 	}
 }

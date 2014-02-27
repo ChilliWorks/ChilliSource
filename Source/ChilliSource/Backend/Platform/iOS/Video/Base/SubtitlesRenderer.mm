@@ -168,22 +168,22 @@
 //--------------------------------------------------------
 /// Set Alignment
 //--------------------------------------------------------
--(void) SetAlignment:(UITextView*)inpView WithAnchor:(ChilliSource::Core::AlignmentAnchor)ineAnchor
+-(void) SetAlignment:(UITextView*)inpView WithAnchor:(ChilliSource::Rendering::AlignmentAnchor)ineAnchor
 {
     inpView.textAlignment = [self TextAlignmentFromAnchor: ineAnchor];
     
     switch (ineAnchor)
     {
-        case ChilliSource::Core::AlignmentAnchor::k_topLeft:
-        case ChilliSource::Core::AlignmentAnchor::k_topCentre:
-        case ChilliSource::Core::AlignmentAnchor::k_topRight:
+        case ChilliSource::Rendering::AlignmentAnchor::k_topLeft:
+        case ChilliSource::Rendering::AlignmentAnchor::k_topCentre:
+        case ChilliSource::Rendering::AlignmentAnchor::k_topRight:
         {
             inpView.contentOffset = (CGPoint){.x = 0.0f, .y = 0.0f};
             break;
         }
-        case ChilliSource::Core::AlignmentAnchor::k_middleLeft:
-        case ChilliSource::Core::AlignmentAnchor::k_middleCentre:
-        case ChilliSource::Core::AlignmentAnchor::k_middleRight:
+        case ChilliSource::Rendering::AlignmentAnchor::k_middleLeft:
+        case ChilliSource::Rendering::AlignmentAnchor::k_middleCentre:
+        case ChilliSource::Rendering::AlignmentAnchor::k_middleRight:
         {
             f32 fBoxSize = [inpView bounds].size.height;
             f32 fContentSize = [inpView contentSize].height;
@@ -196,9 +196,9 @@
             break;
             break;
         }
-        case ChilliSource::Core::AlignmentAnchor::k_bottomLeft:
-        case ChilliSource::Core::AlignmentAnchor::k_bottomCentre:
-        case ChilliSource::Core::AlignmentAnchor::k_bottomRight:
+        case ChilliSource::Rendering::AlignmentAnchor::k_bottomLeft:
+        case ChilliSource::Rendering::AlignmentAnchor::k_bottomCentre:
+        case ChilliSource::Rendering::AlignmentAnchor::k_bottomRight:
         {
             f32 fBoxSize = [inpView bounds].size.height;
             f32 fContentSize = [inpView contentSize].height;
@@ -218,21 +218,21 @@
 //--------------------------------------------------------
 /// Text Alignment From Anchor
 //--------------------------------------------------------
--(NSTextAlignment) TextAlignmentFromAnchor:(ChilliSource::Core::AlignmentAnchor)ineAnchor
+-(NSTextAlignment) TextAlignmentFromAnchor:(ChilliSource::Rendering::AlignmentAnchor)ineAnchor
 {
     switch (ineAnchor)
     {
-        case ChilliSource::Core::AlignmentAnchor::k_topLeft:
-        case ChilliSource::Core::AlignmentAnchor::k_middleLeft:
-        case ChilliSource::Core::AlignmentAnchor::k_bottomLeft:
+        case ChilliSource::Rendering::AlignmentAnchor::k_topLeft:
+        case ChilliSource::Rendering::AlignmentAnchor::k_middleLeft:
+        case ChilliSource::Rendering::AlignmentAnchor::k_bottomLeft:
             return NSTextAlignmentLeft;
-        case ChilliSource::Core::AlignmentAnchor::k_topCentre:
-        case ChilliSource::Core::AlignmentAnchor::k_middleCentre:
-        case ChilliSource::Core::AlignmentAnchor::k_bottomCentre:
+        case ChilliSource::Rendering::AlignmentAnchor::k_topCentre:
+        case ChilliSource::Rendering::AlignmentAnchor::k_middleCentre:
+        case ChilliSource::Rendering::AlignmentAnchor::k_bottomCentre:
             return NSTextAlignmentCenter;
-        case ChilliSource::Core::AlignmentAnchor::k_topRight:
-        case ChilliSource::Core::AlignmentAnchor::k_middleRight:
-        case ChilliSource::Core::AlignmentAnchor::k_bottomRight:
+        case ChilliSource::Rendering::AlignmentAnchor::k_topRight:
+        case ChilliSource::Rendering::AlignmentAnchor::k_middleRight:
+        case ChilliSource::Rendering::AlignmentAnchor::k_bottomRight:
             return NSTextAlignmentRight;
         default:
             CS_WARNING_LOG("Could not convert alignment anchor to NSTextAlignment.");
@@ -247,12 +247,12 @@
 //--------------------------------------------------------
 -(CGRect) CalculateTextBoxRect:(const ChilliSource::Core::Rectangle&)inRelativeBounds
 {
-    ChilliSource::Core::CVector2 vScreenDimensions(ChilliSource::Core::CScreen::GetOrientedWidth() * ChilliSource::Core::CScreen::GetInverseDensity(), ChilliSource::Core::CScreen::GetOrientedHeight() * ChilliSource::Core::CScreen::GetInverseDensity());
-    ChilliSource::Core::CVector2 vVideoDimensions = mpVideoPlayer->GetVideoDimensions();
+    ChilliSource::Core::Vector2 vScreenDimensions(ChilliSource::Core::CScreen::GetOrientedWidth() * ChilliSource::Core::CScreen::GetInverseDensity(), ChilliSource::Core::CScreen::GetOrientedHeight() * ChilliSource::Core::CScreen::GetInverseDensity());
+    ChilliSource::Core::Vector2 vVideoDimensions = mpVideoPlayer->GetVideoDimensions();
     float fScreenAspectRatio = vScreenDimensions.x / vScreenDimensions.y;
     float fVideoAspectRatio = vVideoDimensions.x / vVideoDimensions.y;
     
-    ChilliSource::Core::CVector2 vVideoViewDimensions;
+    ChilliSource::Core::Vector2 vVideoViewDimensions;
     if (fScreenAspectRatio < fVideoAspectRatio)
     {
         vVideoViewDimensions.x = vScreenDimensions.x;
@@ -264,7 +264,7 @@
         vVideoViewDimensions.y = vScreenDimensions.y;
     }
     
-    ChilliSource::Core::CVector2 vVideoViewTopLeft = (vScreenDimensions - vVideoViewDimensions) * 0.5f;
+    ChilliSource::Core::Vector2 vVideoViewTopLeft = (vScreenDimensions - vVideoViewDimensions) * 0.5f;
     return CGRectMake(vVideoViewTopLeft.x + inRelativeBounds.Left() * vVideoViewDimensions.x, vVideoViewTopLeft.y + inRelativeBounds.Top() * vVideoViewDimensions.y, inRelativeBounds.vSize.x * vVideoViewDimensions.x, inRelativeBounds.vSize.y * vVideoViewDimensions.y);
     
 }

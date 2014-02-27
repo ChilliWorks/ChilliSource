@@ -22,11 +22,11 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		class IResourceGroupManager
+		class ResourceGroupManager
 		{
 		public:
-			IResourceGroupManager(CResourceManagerDispenser* inpResMgrDispenser);
-			~IResourceGroupManager();
+			ResourceGroupManager(ResourceManagerDispenser* inpResMgrDispenser);
+			~ResourceGroupManager();
 			
 			//-----------------------------------------------------
 			/// Create Group
@@ -90,7 +90,7 @@ namespace ChilliSource
 				
 				std::string mstrDirectory;
 				
-				std::vector<ResourcePtr> mResources;
+				std::vector<ResourceSPtr> mResources;
 				
 				enum class Status{k_loaded, k_notLoaded};
 				Status meCurrentStatus;
@@ -102,7 +102,7 @@ namespace ChilliSource
 			typedef MapStringToResourceGroup::iterator MapStringToResourceGroupItr;
 			MapStringToResourceGroup mMapNameToResourceGroup;
 			
-			CResourceManagerDispenser* mpResMgrDispenser;
+			ResourceManagerDispenser* mpResMgrDispenser;
 		};
 	}
 }

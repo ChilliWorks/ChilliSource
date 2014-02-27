@@ -64,25 +64,25 @@ namespace ChilliSource
             ///
             /// @param Sprite sheet with with normal image
             //-----------------------------------------------------------
-            void SetNormalSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+            void SetNormalSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
 			//-----------------------------------------------------------
 			/// Set Highlight Sprite Sheet
 			///
 			/// @param Sprite sheet with with highlight image
 			//-----------------------------------------------------------
-			void SetHighlightSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetHighlightSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
             //-----------------------------------------------------------
             /// Get Normal Sprite Sheet
             ///
             /// @return Sprite sheet with default image
             //-----------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetNormalSpriteSheet() const;
+			const Rendering::SpriteSheetSPtr& GetNormalSpriteSheet() const;
 			//-----------------------------------------------------------
 			/// Get Highlight Sprite Sheet
 			///
 			/// @return Sprite sheet with highlight image
 			//-----------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetHighlightSpriteSheet() const;
+			const Rendering::SpriteSheetSPtr& GetHighlightSpriteSheet() const;
 			//-----------------------------------------------------------
 			/// Set Base Normal Sprite Sheet Index ID
 			///
@@ -169,14 +169,14 @@ namespace ChilliSource
 			/// @param Tint colour to apply when the button is
 			/// selected
 			//--------------------------------------------------------
-			void SetHighlightColour(const Core::CColour & inValue);
+			void SetHighlightColour(const Core::Colour & inValue);
 			//--------------------------------------------------------
 			/// Get Highlight Colour
 			///
 			/// @return Tint colour to apply when the button is
 			/// selected
 			//--------------------------------------------------------
-			const Core::CColour & GetHighlightColour() const;
+			const Core::Colour & GetHighlightColour() const;
             //-----------------------------------------------------------
 			/// Draw
 			///
@@ -184,7 +184,7 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer
 			//-----------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			void Draw(Rendering::CanvasRenderer* inpCanvas);
             //--------------------------------------------------------
             /// Set Width Maintaining Aspect
             ///
@@ -279,21 +279,21 @@ namespace ChilliSource
             void OnButtonDeselectThreshold(GUIView* inpButton, const Input::TouchInfo & insTouchInfo);
             
         private:
-            Rendering::SpriteSheetPtr mCurrentSpriteSheet;
+            Rendering::SpriteSheetSPtr mCurrentSpriteSheet;
             SpriteSheetIndex msCurrentIndices;
             SpriteSheetIndex msNormalIndices;
             SpriteSheetIndex msHighlightIndices;
             Audio::AudioComponentSPtr mpSelectAudioEffect;
 			Audio::AudioComponentSPtr mpDeselectAudioEffect;
-            Core::CColour mCurrentColour;
+            Core::Colour mCurrentColour;
 			bool mbSelected;
             
             //---Properties
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, NormalSpriteSheet, SetNormalSpriteSheet, GetNormalSpriteSheet);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, HighlightSpriteSheet, SetHighlightSpriteSheet, GetHighlightSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, NormalSpriteSheet, SetNormalSpriteSheet, GetNormalSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, HighlightSpriteSheet, SetHighlightSpriteSheet, GetHighlightSpriteSheet);
 			DECLARE_PROPERTY_A(std::string, BaseNormalSpriteSheetIndexID, SetBaseNormalSpriteSheetIndexID, GetBaseNormalSpriteSheetIndexID);
 			DECLARE_PROPERTY_A(std::string, BaseHighlightSpriteSheetIndexID, SetBaseHighlightSpriteSheetIndexID, GetBaseHighlightSpriteSheetIndexID);
-			DECLARE_PROPERTY_A(Core::CColour, HighlightColour, SetHighlightColour, GetHighlightColour);
+			DECLARE_PROPERTY_A(Core::Colour, HighlightColour, SetHighlightColour, GetHighlightColour);
 			DECLARE_PROPERTY_A(bool, HeightMaintain, EnableHeightMaintainingAspect, IsHeightMaintainingAspectEnabled);
 			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
 		};

@@ -18,7 +18,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CTextureManager : public ChilliSource::Rendering::ITextureManager
+		class CTextureManager : public ChilliSource::Rendering::TextureManager
 		{
 		public:
 			//----------------------------------------------------------------
@@ -26,7 +26,7 @@ namespace ChilliSource
 			///
 			/// @return Concrete texture resource based on the render system
 			//----------------------------------------------------------------
-			ChilliSource::Rendering::TexturePtr CreateTextureResource();
+			ChilliSource::Rendering::TextureSPtr CreateTextureResource();
 			//----------------------------------------------------------------
 			/// Create Empty Texture
 			///
@@ -35,16 +35,16 @@ namespace ChilliSource
 			/// @param Out: Texture resource
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateEmptyTexture(u32 inudwWidth, u32 inudwHeight, Core::CImage::Format ineFormat, ChilliSource::Rendering::TexturePtr& outpTexture);
+			bool CreateEmptyTexture(u32 inudwWidth, u32 inudwHeight, Core::Image::Format ineFormat, ChilliSource::Rendering::TextureSPtr& outpTexture);
             //----------------------------------------------------------------
 			/// Create Image From Texture
 			///
 			/// Rendersystem specific implementations should override this
-			/// to return a shared pointer to their CImage object
+			/// to return a shared pointer to their Image object
 			///
 			/// @param mopFlow Texture to create Image from
 			//----------------------------------------------------------------
-			bool CreateImageFromTexture(Rendering::ITexture* inpTexture, Core::ImagePtr& outpImage);
+			bool CreateImageFromTexture(Rendering::Texture* inpTexture, Core::ImageSPtr& outpImage);
 			//----------------------------------------------------------------
 			/// Create Texture From Image
 			///
@@ -53,7 +53,7 @@ namespace ChilliSource
 			/// @param Out: Texture resource
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateTextureFromImage(Core::CImage * inpImage, bool inbWithMipsMaps, ChilliSource::Rendering::TexturePtr& outpTexture);
+			bool CreateTextureFromImage(Core::Image * inpImage, bool inbWithMipsMaps, ChilliSource::Rendering::TextureSPtr& outpTexture);
 			//----------------------------------------------------------------
 			/// Backup
 			///
@@ -75,7 +75,7 @@ namespace ChilliSource
 			///
 			/// @param The texture pointer.
 			//----------------------------------------------------------------
-			void AddRestorableTexture(const Rendering::TexturePtr& inpTexture);
+			void AddRestorableTexture(const Rendering::TextureSPtr& inpTexture);
 			//----------------------------------------------------------------
 			/// Remove Restorable Texture
 			///
@@ -88,7 +88,7 @@ namespace ChilliSource
 		private:
 #ifdef TARGET_ANDROID
 			std::vector<Rendering::TextureWeakPtr> mapTextureCache;
-			std::unordered_map<CTexture*, Core::ImagePtr> mapBackedUpImages;
+			std::unordered_map<CTexture*, Core::ImageSPtr> mapBackedUpImages;
 #endif
 		};
 	}

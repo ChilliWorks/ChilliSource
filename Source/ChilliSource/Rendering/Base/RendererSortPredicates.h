@@ -22,13 +22,13 @@ namespace ChilliSource
 		//---------------------------------------------------------
 		/// An abstract base for classes representing different ordering operations
 		//---------------------------------------------------------
-		class CRendererSortPredicate
+		class RendererSortPredicate
         {
 		public:
-			virtual ~CRendererSortPredicate(){}
-			virtual void PrepareForSort(std::vector<IRenderComponent*> * inpRenderables = nullptr) = 0;
-			virtual bool SortItem(IRenderComponent* p1, IRenderComponent* p2) = 0;
-			bool operator()(IRenderComponent* p1, IRenderComponent* p2)
+			virtual ~RendererSortPredicate(){}
+			virtual void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr) = 0;
+			virtual bool SortItem(RenderComponent* p1, RenderComponent* p2) = 0;
+			bool operator()(RenderComponent* p1, RenderComponent* p2)
             {
 				return SortItem(p1, p2);
 			}
@@ -37,33 +37,33 @@ namespace ChilliSource
 		//---------------------------------------------------------
 		/// This class doesn't really sort objects at all
 		//---------------------------------------------------------
-		class CnullptrSortPredicate : public CRendererSortPredicate
+		class NullSortPredicate : public RendererSortPredicate
         {
 		public:
-            void PrepareForSort(std::vector<IRenderComponent*> * inpRenderables = nullptr){}
-            bool SortItem(IRenderComponent* p1, IRenderComponent* p2){return false;}
+            void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr){}
+            bool SortItem(RenderComponent* p1, RenderComponent* p2){return false;}
 		};
 		
 		//---------------------------------------------------------
 		/// This class sorts objects in order of far to near projected screen Z depth
 		//---------------------------------------------------------
-		class CBackToFrontSortPredicate : public CRendererSortPredicate
+		class BackToFrontSortPredicate : public RendererSortPredicate
         {
 		public:
-            void PrepareForSort(std::vector<IRenderComponent*> * inpRenderables = nullptr);
-            bool SortItem(IRenderComponent* p1, IRenderComponent* p2);
+            void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr);
+            bool SortItem(RenderComponent* p1, RenderComponent* p2);
 		private:
-			Core::CMatrix4x4 mCameraViewProj;
+			Core::Matrix4x4 mCameraViewProj;
 		};
         
         //---------------------------------------------------------
 		/// This class sorts objects by material pointer
 		//---------------------------------------------------------
-		class CMaterialSortPredicate : public CRendererSortPredicate
+		class MaterialSortPredicate : public RendererSortPredicate
         {
 		public:
-			virtual void PrepareForSort(std::vector<IRenderComponent*> * inpRenderables = nullptr){}
-			virtual bool SortItem(IRenderComponent* p1, IRenderComponent* p2);
+			virtual void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr){}
+			virtual bool SortItem(RenderComponent* p1, RenderComponent* p2);
 		};
 	}
 }

@@ -21,10 +21,10 @@ namespace ChilliSource
 		///
 		/// Applied to a particle emitter to effect the particle over time
 		//================================================================
-		class IParticleEffector
+		class ParticleEffector
 		{
 		public:
-			virtual ~IParticleEffector(){}
+			virtual ~ParticleEffector(){}
             //-----------------------------------------------------
             /// Init
             ///

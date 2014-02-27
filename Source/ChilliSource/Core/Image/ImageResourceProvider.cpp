@@ -13,14 +13,14 @@ namespace ChilliSource
 {
     namespace Core
     {
-        Core::CImage::Format IImageResourceProvider::meDefaultFormat = Core::CImage::Format::k_RGBA8888;
+        Core::Image::Format ImageResourceProvider::meDefaultFormat = Core::Image::Format::k_RGBA8888;
         //--------------------------------------------------
         /// Set Default Format
         ///
         /// @param Image format that will be used in lieu
         /// of specific
         //--------------------------------------------------
-        void IImageResourceProvider::SetDefaultFormat(Core::CImage::Format ineFormat)
+        void ImageResourceProvider::SetDefaultFormat(Core::Image::Format ineFormat)
         {
             meDefaultFormat = ineFormat;
         }

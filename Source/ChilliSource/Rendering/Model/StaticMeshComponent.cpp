@@ -28,11 +28,11 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(CStaticMeshComponent);
+        DEFINE_NAMED_INTERFACE(StaticMeshComponent);
     
-        MaterialPtr CStaticMeshComponent::mspShadowMapMaterial;
+        MaterialSPtr StaticMeshComponent::mspShadowMapMaterial;
         
-        CStaticMeshComponent::CStaticMeshComponent()
+        StaticMeshComponent::StaticMeshComponent()
         : mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
         {
             mMaterials.push_back(mpMaterial);
@@ -40,16 +40,16 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CStaticMeshComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool StaticMeshComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return  (inInterfaceID == CStaticMeshComponent::InterfaceID) || 
-                    (inInterfaceID == IRenderComponent::InterfaceID) ||
-                    (inInterfaceID == IVolumeComponent::InterfaceID);
+			return  (inInterfaceID == StaticMeshComponent::InterfaceID) || 
+                    (inInterfaceID == RenderComponent::InterfaceID) ||
+                    (inInterfaceID == VolumeComponent::InterfaceID);
 		}
 		//----------------------------------------------------
 		/// Get Axis Aligned Bounding Box
 		//----------------------------------------------------
-		const Core::AABB& CStaticMeshComponent::GetAABB()
+		const Core::AABB& StaticMeshComponent::GetAABB()
 		{
 			if(mpEntityOwner && !mbAABBValid)
 			{
@@ -57,17 +57,17 @@ namespace ChilliSource
                 
 				//Rebuild the box
                 const Core::AABB& cAABB = mpModel->GetAABB();
-                const Core::CMatrix4x4& matWorld = mpEntityOwner->Transform().GetWorldTransform();
-                Core::CVector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
-                Core::CVector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
-                Core::CVector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
-                Core::CVector3 vBackTopRight(cAABB.BackTopRight() * matWorld);
-                Core::CVector3 vFrontBottomLeft(cAABB.FrontBottomLeft() * matWorld);
-                Core::CVector3 vFrontBottomRight(cAABB.FrontBottomRight() * matWorld);
-                Core::CVector3 vFrontTopLeft(cAABB.FrontTopLeft() *matWorld);
-                Core::CVector3 vFrontTopRight(cAABB.FrontTopRight() * matWorld);
+                const Core::Matrix4x4& matWorld = mpEntityOwner->GetTransform().GetWorldTransform();
+                Core::Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
+                Core::Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
+                Core::Vector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
+                Core::Vector3 vBackTopRight(cAABB.BackTopRight() * matWorld);
+                Core::Vector3 vFrontBottomLeft(cAABB.FrontBottomLeft() * matWorld);
+                Core::Vector3 vFrontBottomRight(cAABB.FrontBottomRight() * matWorld);
+                Core::Vector3 vFrontTopLeft(cAABB.FrontTopLeft() *matWorld);
+                Core::Vector3 vFrontTopRight(cAABB.FrontTopRight() * matWorld);
                 
-                Core::CVector3 vMin(std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity());
+                Core::Vector3 vMin(std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity());
                 vMin.x = std::min(vMin.x, vBackBottomLeft.x);
                 vMin.x = std::min(vMin.x, vBackBottomRight.x);
                 vMin.x = std::min(vMin.x, vBackTopLeft.x);
@@ -95,7 +95,7 @@ namespace ChilliSource
                 vMin.z = std::min(vMin.z, vFrontTopLeft.z);
                 vMin.z = std::min(vMin.z, vFrontTopRight.z);
                 
-                Core::CVector3 vMax(-std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity());
+                Core::Vector3 vMax(-std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity());
                 vMax.x = std::max(vMax.x, vBackBottomLeft.x);
                 vMax.x = std::max(vMax.x, vBackBottomRight.x);
                 vMax.x = std::max(vMax.x, vBackTopLeft.x);
@@ -132,13 +132,13 @@ namespace ChilliSource
 		//----------------------------------------------------
 		/// Get Object Oriented Bounding Box
 		//----------------------------------------------------
-		const Core::OOBB& CStaticMeshComponent::GetOOBB()
+		const Core::OOBB& StaticMeshComponent::GetOOBB()
 		{
 			if(mpEntityOwner && !mbOOBBValid)
 			{
                 mbOOBBValid = true;
                 
-				mOBBoundingBox.SetTransform(mpEntityOwner->Transform().GetWorldTransform());
+				mOBBoundingBox.SetTransform(mpEntityOwner->GetTransform().GetWorldTransform());
                 // Origin and Size updated in AttachMesh
 			}
 			return mOBBoundingBox;
@@ -146,14 +146,14 @@ namespace ChilliSource
 		//----------------------------------------------------
 		/// Get Bounding Sphere
 		//----------------------------------------------------
-		const Core::Sphere& CStaticMeshComponent::GetBoundingSphere()
+		const Core::Sphere& StaticMeshComponent::GetBoundingSphere()
 		{
 			if(mpEntityOwner && !mbBoundingSphereValid)
 			{
                 mbBoundingSphereValid = true;
                 
                 const Core::AABB& sAABB = GetAABB();
-                Core::CVector3 vSize = sAABB.GetSize();
+                Core::Vector3 vSize = sAABB.GetSize();
 				mBoundingSphere.vOrigin = sAABB.GetOrigin();
 				mBoundingSphere.fRadius = std::max(vSize.x, vSize.y) * 0.5f;
 			}
@@ -162,7 +162,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Is Transparent
 		//-----------------------------------------------------------
-		bool CStaticMeshComponent::IsTransparent()
+		bool StaticMeshComponent::IsTransparent()
 		{
 			for (u32 i = 0; i < mMaterials.size(); ++i)
 			{
@@ -174,7 +174,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Material
 		//-----------------------------------------------------------
-		void CStaticMeshComponent::SetMaterial(const MaterialPtr& inpMaterial)
+		void StaticMeshComponent::SetMaterial(const MaterialSPtr& inpMaterial)
 		{
 			mpMaterial = inpMaterial;
 			
@@ -187,7 +187,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Material For Sub Mesh
 		//-----------------------------------------------------------
-		void CStaticMeshComponent::SetMaterialForSubMesh(const MaterialPtr& inpMaterial, u32 indwSubMeshIndex)
+		void StaticMeshComponent::SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, u32 indwSubMeshIndex)
 		{
 			if (indwSubMeshIndex < mMaterials.size())
 			{
@@ -202,7 +202,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Set Material For Sub Mesh
         //-----------------------------------------------------------
-        void CStaticMeshComponent::SetMaterialForSubMesh(const MaterialPtr& inpMaterial, const std::string& instrSubMeshName)
+        void StaticMeshComponent::SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, const std::string& instrSubMeshName)
         {
             if (nullptr != mpModel)
             {
@@ -221,7 +221,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get Material Of Sub Mesh
 		//-----------------------------------------------------------
-		MaterialPtr CStaticMeshComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
+		MaterialSPtr StaticMeshComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
 		{
 			if (indwSubMeshIndex < mMaterials.size())
 			{
@@ -229,12 +229,12 @@ namespace ChilliSource
 			}
 			
             CS_ERROR_LOG("Failed to get material from sub mesh " + Core::ToString(indwSubMeshIndex));
-			return MaterialPtr();
+			return MaterialSPtr();
 		}
         //-----------------------------------------------------------
         /// Get Material Of Sub Mesh
         //-----------------------------------------------------------
-        MaterialPtr CStaticMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
+        MaterialSPtr StaticMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
         {
             if (nullptr != mpModel)
             {
@@ -247,12 +247,12 @@ namespace ChilliSource
             }
 			
             CS_ERROR_LOG("Failed to get material from sub mesh " + instrSubMeshName);
-			return MaterialPtr();
+			return MaterialSPtr();
         }
 		//----------------------------------------------------------
 		/// Attach Mesh
 		//----------------------------------------------------------
-		void CStaticMeshComponent::AttachMesh(const MeshPtr& inpModel)
+		void StaticMeshComponent::AttachMesh(const MeshSPtr& inpModel)
 		{
 			mpModel = inpModel;
             
@@ -267,7 +267,7 @@ namespace ChilliSource
             }
             while (mMaterials.size() < inpModel->GetNumSubMeshes())
             {
-                mMaterials.push_back(MaterialPtr());
+                mMaterials.push_back(MaterialSPtr());
             }
 			
 			ApplyDefaultMaterials();
@@ -275,7 +275,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Attach Mesh
         //----------------------------------------------------------
-        void CStaticMeshComponent::AttachMesh(const MeshPtr& inpModel, const MaterialPtr& inpMaterial)
+        void StaticMeshComponent::AttachMesh(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial)
         {
             mpModel = inpModel;
 			mpMaterial = inpMaterial;
@@ -291,7 +291,7 @@ namespace ChilliSource
             }
             while (mMaterials.size() < inpModel->GetNumSubMeshes())
             {
-                mMaterials.push_back(MaterialPtr());
+                mMaterials.push_back(MaterialSPtr());
             }
             
             SetMaterial(inpMaterial);
@@ -299,14 +299,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Mesh
         //----------------------------------------------------------
-        const MeshPtr& CStaticMeshComponent::GetMesh() const
+        const MeshSPtr& StaticMeshComponent::GetMesh() const
         {
             return mpModel;
         }
         //----------------------------------------------------------
         /// Render
         //----------------------------------------------------------
-        void CStaticMeshComponent::Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass)
+        void StaticMeshComponent::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass)
 		{
             if(IsTransparent())
             {
@@ -319,37 +319,37 @@ namespace ChilliSource
                 mMaterials[i]->SetActiveShaderProgram(ineShaderPass);
             }
 
-			mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), mMaterials);
+			mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), mMaterials);
 		}
         //----------------------------------------------------------
         /// Render Shadow Map
         //----------------------------------------------------------
-        void CStaticMeshComponent::RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam)
+        void StaticMeshComponent::RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam)
 		{
             if (mspShadowMapMaterial == nullptr)
             {
-                mspShadowMapMaterial = Core::CApplication::GetSystemImplementing<CMaterialFactory>()->CreateStaticDirectionalShadowMap();
+                mspShadowMapMaterial = Core::Application::GetSystemImplementing<MaterialFactory>()->CreateStaticDirectionalShadowMap();
             }
             
-            std::vector<MaterialPtr> aMaterials;
+            std::vector<MaterialSPtr> aMaterials;
             mspShadowMapMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             aMaterials.push_back(mspShadowMapMaterial);
             
-			mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), aMaterials);
+			mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), aMaterials);
 		}
         //----------------------------------------------------
         /// On Attached To Entity
         //----------------------------------------------------
-        void CStaticMeshComponent::OnAttachedToEntity()
+        void StaticMeshComponent::OnAttachedToEntity()
         {
-            mpEntityOwner->Transform().GetTransformChangedEvent() += Core::MakeDelegate(this, &CStaticMeshComponent::OnEntityTransformChanged);
+            mpEntityOwner->GetTransform().GetTransformChangedEvent() += Core::MakeDelegate(this, &StaticMeshComponent::OnEntityTransformChanged);
             
             OnEntityTransformChanged();
         }
         //----------------------------------------------------
         /// On Entity Transform Changed
         //----------------------------------------------------
-        void CStaticMeshComponent::OnEntityTransformChanged()
+        void StaticMeshComponent::OnEntityTransformChanged()
         {
             mbBoundingSphereValid = false;
             mbAABBValid = false;
@@ -358,14 +358,14 @@ namespace ChilliSource
         //----------------------------------------------------
         /// On Detached From Entity
         //----------------------------------------------------
-        void CStaticMeshComponent::OnDetachedFromEntity()
+        void StaticMeshComponent::OnDetachedFromEntity()
         {
-            mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &CStaticMeshComponent::OnEntityTransformChanged);
+            mpEntityOwner->GetTransform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &StaticMeshComponent::OnEntityTransformChanged);
         }
         //----------------------------------------------------
         /// Apply Default Materials
         //----------------------------------------------------
-        void CStaticMeshComponent::ApplyDefaultMaterials()
+        void StaticMeshComponent::ApplyDefaultMaterials()
         {
             // if the first mesh contains a default material name, then get all the default materials.
 			if (mpModel->GetNumSubMeshes() > 0 && mpModel->GetSubMeshAtIndex(0)->GetDefaultMaterialName() != "")
@@ -374,15 +374,15 @@ namespace ChilliSource
 				for (u32 i = 0; i < mpModel->GetNumSubMeshes(); i++)
 				{
 					//get the material name
-					SubMeshPtr subMesh = mpModel->GetSubMeshAtIndex(i);
+					SubMeshSPtr subMesh = mpModel->GetSubMeshAtIndex(i);
 					std::string matName = subMesh->GetDefaultMaterialName();
                     Core::StorageLocation eStorageLocation = subMesh->GetDefaultMaterialStorageLocation();
                     
 					//try and load the material
-					MaterialPtr pMaterial;
+					MaterialSPtr pMaterial;
 					if (matName != "")
                     {
-						pMaterial = LOAD_RESOURCE(CMaterial, eStorageLocation, matName);
+						pMaterial = LOAD_RESOURCE(Material, eStorageLocation, matName);
                     }
                     
 					//if the material load has failed, either fall back on the previous material, or stop getting materials if this is the
@@ -407,11 +407,11 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Destructor
 		//----------------------------------------------------------
-		CStaticMeshComponent::~CStaticMeshComponent()
+		StaticMeshComponent::~StaticMeshComponent()
 		{
 			if(mpEntityOwner)
             {
-                mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &CStaticMeshComponent::OnEntityTransformChanged);
+                mpEntityOwner->GetTransform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &StaticMeshComponent::OnEntityTransformChanged);
             }
 		}
 	}

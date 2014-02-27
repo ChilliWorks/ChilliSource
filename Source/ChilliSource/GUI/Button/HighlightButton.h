@@ -39,13 +39,13 @@ namespace ChilliSource
             ///
             /// @param Texture shared pointer
             //-----------------------------------------------------------
-            void SetNormalImage(const Rendering::TexturePtr& inpTexture);
+            void SetNormalImage(const Rendering::TextureSPtr& inpTexture);
 			//-----------------------------------------------------------
 			/// Get Normal Image
 			///
 			/// @return Texture for non-selected button
 			//-----------------------------------------------------------
-			const Rendering::TexturePtr& GetNormalImage() const;
+			const Rendering::TextureSPtr& GetNormalImage() const;
             //-----------------------------------------------------------
             /// Set Highlight Image
             ///
@@ -53,13 +53,13 @@ namespace ChilliSource
             ///
             /// @param Texture shared pointer
             //-----------------------------------------------------------
-            void SetHighlightImage(const Rendering::TexturePtr& inpTexture);
+            void SetHighlightImage(const Rendering::TextureSPtr& inpTexture);
 			//-----------------------------------------------------------
 			/// Get Highlight Image
 			///
 			/// @return Texture for selected button
 			//-----------------------------------------------------------
-			const Rendering::TexturePtr& GetHighlightImage() const;
+			const Rendering::TextureSPtr& GetHighlightImage() const;
             //-----------------------------------------------------------
             /// Set Default UVs
             ///
@@ -81,25 +81,25 @@ namespace ChilliSource
             ///
             /// @param Sprite sheet with with normal image
             //-----------------------------------------------------------
-            void SetNormalSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+            void SetNormalSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
 			//-----------------------------------------------------------
 			/// Set Highlight Sprite Sheet
 			///
 			/// @param Sprite sheet with with highlight image
 			//-----------------------------------------------------------
-			void SetHighlightSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetHighlightSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
             //-----------------------------------------------------------
             /// Get Normal Sprite Sheet
             ///
             /// @return Sprite sheet with default image
             //-----------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetNormalSpriteSheet() const;
+			const Rendering::SpriteSheetSPtr& GetNormalSpriteSheet() const;
 			//-----------------------------------------------------------
 			/// Get Highlight Sprite Sheet
 			///
 			/// @return Sprite sheet with highlight image
 			//-----------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetHighlightSpriteSheet() const;
+			const Rendering::SpriteSheetSPtr& GetHighlightSpriteSheet() const;
             //-----------------------------------------------------------
             /// Set Normal Sprite Sheet Index
             ///
@@ -331,21 +331,21 @@ namespace ChilliSource
 			///
 			/// @return Absolute size of the image
 			//--------------------------------------------------------
-			Core::CVector2 GetSizeFromImage() const;
+			Core::Vector2 GetSizeFromImage() const;
             //--------------------------------------------------------
 			/// Set Highlight Colour
 			///
 			/// @param Tint colour to apply when the button is
 			/// selected
 			//--------------------------------------------------------
-			void SetHighlightColour(const Core::CColour & inValue);
+			void SetHighlightColour(const Core::Colour & inValue);
 			//--------------------------------------------------------
 			/// Get Highlight Colour
 			///
 			/// @return Tint colour to apply when the button is
 			/// selected
 			//--------------------------------------------------------
-			const Core::CColour & GetHighlightColour() const;
+			const Core::Colour & GetHighlightColour() const;
 			//--------------------------------------------------------
 			/// Layout Content
 			///
@@ -402,7 +402,7 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer
 			//-----------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvasRenderer);
+			void Draw(Rendering::CanvasRenderer* inpCanvasRenderer);
             
         private:
             
@@ -413,12 +413,12 @@ namespace ChilliSource
             bool mbFitMaintain;
 			
 			//---Properties
-			DECLARE_PROPERTY_A(Rendering::TexturePtr, NormalTexture, SetNormalImage, GetNormalImage);
-			DECLARE_PROPERTY_A(Rendering::TexturePtr, HighlightTexture, SetHighlightImage, GetHighlightImage);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, NormalSpriteSheet, SetNormalSpriteSheet, GetNormalSpriteSheet);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, HighlightSpriteSheet, SetHighlightSpriteSheet, GetHighlightSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::TextureSPtr, NormalTexture, SetNormalImage, GetNormalImage);
+			DECLARE_PROPERTY_A(Rendering::TextureSPtr, HighlightTexture, SetHighlightImage, GetHighlightImage);
+			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, NormalSpriteSheet, SetNormalSpriteSheet, GetNormalSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, HighlightSpriteSheet, SetHighlightSpriteSheet, GetHighlightSpriteSheet);
 
-			DECLARE_PROPERTY_A(Core::CColour, HighlightColour, SetHighlightColour, GetHighlightColour);
+			DECLARE_PROPERTY_A(Core::Colour, HighlightColour, SetHighlightColour, GetHighlightColour);
 
 			DECLARE_PROPERTY_A(u32, NormalSpriteSheetIndex, SetNormalSpriteSheetIndex, GetNormalSpriteSheetIndex);
 			DECLARE_PROPERTY_A(u32, HighlightSpriteSheetIndex, SetHighlightSpriteSheetIndex, GetHighlightSpriteSheetIndex);

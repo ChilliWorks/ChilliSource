@@ -39,7 +39,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		bool CShader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IShader::InterfaceID;
+			return inInterfaceID == Shader::InterfaceID;
 		}
 		//----------------------------------------------------------
 		/// Get Program ID
@@ -113,7 +113,7 @@ namespace ChilliSource
 		bool CShader::ReadShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, std::stringstream& outstrContents)
 		{
 			//Open the shader file for reading only
-			ChilliSource::Core::FileStreamPtr shaderStream = ChilliSource::Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilePath, ChilliSource::Core::FileMode::k_read);
+			ChilliSource::Core::FileStreamSPtr shaderStream = ChilliSource::Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilePath, ChilliSource::Core::FileMode::k_read);
             
             if (shaderStream == nullptr || shaderStream->IsBad() == true)
 			{

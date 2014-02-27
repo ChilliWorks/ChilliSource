@@ -26,7 +26,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//------------------------------------------------------
-		CMeshBatch::CMeshBatch() : mpMeshBuffer(nullptr), mudwVertexCount(0), mudwIndexCount(0), mdwTag(0)
+		MeshBatch::MeshBatch() : mpMeshBuffer(nullptr), mudwVertexCount(0), mudwIndexCount(0), mdwTag(0)
 		{
 
 		}
@@ -38,7 +38,7 @@ namespace ChilliSource
 		///
 		/// @param Render system
 		//------------------------------------------------------
-		void CMeshBatch::CreateStaticBuffer(IRenderSystem* inpRenderSystem)
+		void MeshBatch::CreateStaticBuffer(RenderSystem* inpRenderSystem)
 		{
 			//Sum up the total number of vertices
 			u32 VBufferSize	= 0;
@@ -46,16 +46,16 @@ namespace ChilliSource
 			
 			for(MapMeshToTransform::const_iterator it = mmapMeshCache.begin(); it != mmapMeshCache.end(); ++it)
 			{
-				MeshPtr pMesh = it->first->GetMesh();
+				MeshSPtr pMesh = it->first->GetMesh();
 				
 				for (u32 i = 0; i < pMesh->GetNumSubMeshes(); i++)
 				{
-					SubMeshPtr pSubMesh = pMesh->GetSubMeshAtIndex(i);
+					SubMeshSPtr pSubMesh = pMesh->GetSubMeshAtIndex(i);
 					VBufferSize += pSubMesh->GetInternalMeshBuffer()->GetVertexCapacity();
 					IBufferSize += pSubMesh->GetInternalMeshBuffer()->GetIndexCapacity();
 					
 					//insure this is using the correct vertex declaration.
-					CVertexDeclaration declaration = pSubMesh->GetInternalMeshBuffer()->GetVertexDeclaration();
+					VertexDeclaration declaration = pSubMesh->GetInternalMeshBuffer()->GetVertexDeclaration();
 					if (!(declaration == VertexLayout::kMesh))
 						CS_ERROR_LOG("Mesh in mesh batch is not using the correct vertex layout!");
 				}
@@ -86,7 +86,7 @@ namespace ChilliSource
 		/// @param Static mesh component
 		/// @param Transform
 		//------------------------------------------------------
-		void CMeshBatch::AddMesh(const StaticMeshComponentPtr &inpMesh, const Core::CMatrix4x4& inmatTransform)
+		void MeshBatch::AddMesh(const StaticMeshComponentSPtr &inpMesh, const Core::Matrix4x4& inmatTransform)
 		{
 			mmapMeshCache.insert(std::make_pair(inpMesh, inmatTransform));
 		}
@@ -96,7 +96,7 @@ namespace ChilliSource
 		/// Finalise the batch. Nothing can be changed once
 		/// the batch is built
 		//------------------------------------------------------
-		void CMeshBatch::Build()
+		void MeshBatch::Build()
 		{
 			//Sanity check
 			if(mmapMeshCache.empty() || !mpMeshBuffer) return;
@@ -125,7 +125,7 @@ namespace ChilliSource
 			for(MapMeshToTransform::const_iterator it = mmapMeshCache.begin(); it != mmapMeshCache.end(); ++it)
 			{
 				//build the normal matrix. NOTE: This normal matrix will NOT work if there is a scale component to the transform.
-				Core::CMatrix4x4 NormalMatrix = it->second;
+				Core::Matrix4x4 NormalMatrix = it->second;
 				NormalMatrix.m[12] = 0.0f;
 				NormalMatrix.m[13] = 0.0f;
 				NormalMatrix.m[14] = 0.0f;
@@ -134,9 +134,9 @@ namespace ChilliSource
 				//---------------------------------------------------
                 // Sub-Meshes
                 //---------------------------------------------------
-				for(std::vector<SubMeshPtr>::const_iterator jt = it->first->GetMesh()->mSubMeshes.begin(); jt != it->first->GetMesh()->mSubMeshes.end(); ++jt)
+				for(std::vector<SubMeshSPtr>::const_iterator jt = it->first->GetMesh()->mSubMeshes.begin(); jt != it->first->GetMesh()->mSubMeshes.end(); ++jt)
 				{
-					IMeshBuffer* pSubBuffer = (*jt)->GetInternalMeshBuffer();
+					MeshBuffer* pSubBuffer = (*jt)->GetInternalMeshBuffer();
 					pSubBuffer->Bind();
                     
                     //----------------------------------
@@ -156,8 +156,8 @@ namespace ChilliSource
                         memcpy(&sTempVert, _pVSubBuffer + i, VertexStride);
                         
                         //Transform the vertex
-                        Core::CMatrix4x4::Multiply(&sTempVert.Pos, &it->second, &sTempVert.Pos);
-                        Core::CMatrix4x4::Multiply(&sTempVert.Norm, &NormalMatrix, &sTempVert.Norm);
+                        Core::Matrix4x4::Multiply(&sTempVert.Pos, &it->second, &sTempVert.Pos);
+                        Core::Matrix4x4::Multiply(&sTempVert.Norm, &NormalMatrix, &sTempVert.Norm);
                         
                         //Copy the vertex into our new buffer
                         memcpy(pVBatchBuffer, &sTempVert, VertexStride);
@@ -220,7 +220,7 @@ namespace ChilliSource
 		///
 		/// @param Active render system
 		//------------------------------------------------------
-		void CMeshBatch::Render(IRenderSystem* inpRenderSystem) const
+		void MeshBatch::Render(RenderSystem* inpRenderSystem) const
 		{
             CS_ASSERT(mpMaterial && mpMaterial->GetActiveShaderProgram(), "Cannot render a mesh batch without a material or active shader.");
             
@@ -232,14 +232,14 @@ namespace ChilliSource
 #ifdef DEBUG_STATS
             DebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
 #endif
-			inpRenderSystem->RenderBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetIndexCount(), Core::CMatrix4x4::IDENTITY);
+			inpRenderSystem->RenderBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetIndexCount(), Core::Matrix4x4::IDENTITY);
 		}
 		//------------------------------------------------------
 		/// Get Material
 		///
 		/// @return Material
 		//------------------------------------------------------
-		const MaterialPtr& CMeshBatch::GetMaterial() const
+		const MaterialSPtr& MeshBatch::GetMaterial() const
 		{
 			return mpMaterial;
 		}
@@ -248,7 +248,7 @@ namespace ChilliSource
 		///
 		/// @param Material
 		//------------------------------------------------------
-		void CMeshBatch::SetMaterial(MaterialPtr inpMaterial)
+		void MeshBatch::SetMaterial(MaterialSPtr inpMaterial)
 		{
 			mpMaterial = inpMaterial;
 		}
@@ -257,7 +257,7 @@ namespace ChilliSource
 		///
 		/// Associated data usually used to determine layer
 		//------------------------------------------------------
-		s32 CMeshBatch::GetTag() const
+		s32 MeshBatch::GetTag() const
 		{
 			return mdwTag;
 		}
@@ -266,7 +266,7 @@ namespace ChilliSource
 		///
 		/// Associated data usually used to determine layer
 		//------------------------------------------------------
-		void CMeshBatch::SetTag(s32 indwValue)
+		void MeshBatch::SetTag(s32 indwValue)
 		{
 			mdwTag = indwValue;
 		}
@@ -274,7 +274,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//------------------------------------------------------
-		CMeshBatch::~CMeshBatch() 
+		MeshBatch::~MeshBatch() 
 		{
 			CS_SAFE_DELETE(mpMeshBuffer)
 		}

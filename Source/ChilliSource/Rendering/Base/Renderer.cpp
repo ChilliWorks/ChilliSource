@@ -31,68 +31,68 @@ namespace ChilliSource
 	namespace Rendering
 	{
         //---Matrix caches
-        Core::CMatrix4x4 CRenderer::matViewProjCache;
+        Core::Matrix4x4 Renderer::matViewProjCache;
 		
-		typedef std::function<bool(IRenderComponent*, IRenderComponent*)> RenderSortDelegate;
+		typedef std::function<bool(RenderComponent*, RenderComponent*)> RenderSortDelegate;
 		
 		//----------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------
-		CRenderer::CRenderer(IRenderSystem * inpRenderSystem) 
+		Renderer::Renderer(RenderSystem * inpRenderSystem) 
         : mpRenderSystem(inpRenderSystem), mCanvas(inpRenderSystem), mpActiveCamera(nullptr)
 		{
-			mpTransparentSortPredicate = RendererSortPredicatePtr(new CBackToFrontSortPredicate());
-            mpOpaqueSortPredicate = RendererSortPredicatePtr(new CMaterialSortPredicate());
+			mpTransparentSortPredicate = RendererSortPredicateSPtr(new BackToFrontSortPredicate());
+            mpOpaqueSortPredicate = RendererSortPredicateSPtr(new MaterialSortPredicate());
             
-            mpPerspectiveCullPredicate = CullingPredicatePtr(new CFrustumCullPredicate());
-            mpOrthoCullPredicate = CullingPredicatePtr(new CViewportCullPredicate());
+            mpPerspectiveCullPredicate = ICullingPredicateSPtr(new FrustumCullPredicate());
+            mpOrthoCullPredicate = ICullingPredicateSPtr(new ViewportCullPredicate());
 		}
 		//----------------------------------------------------------
 		/// Set Transparent Sort Predicate
 		//----------------------------------------------------------
-		void CRenderer::SetTransparentSortPredicate(const RendererSortPredicatePtr & inpFunctor)
+		void Renderer::SetTransparentSortPredicate(const RendererSortPredicateSPtr & inpFunctor)
         {
 			mpTransparentSortPredicate = inpFunctor;
 		}
         //----------------------------------------------------------
         /// Set Opaque Sort Predicate
         //----------------------------------------------------------
-        void CRenderer::SetOpaqueSortPredicate(const RendererSortPredicatePtr & inpFunctor)
+        void Renderer::SetOpaqueSortPredicate(const RendererSortPredicateSPtr & inpFunctor)
         {
             mpOpaqueSortPredicate = inpFunctor;
         }
         //----------------------------------------------------------
         /// Set Perspective Cull Predicate
         //----------------------------------------------------------
-        void CRenderer::SetPerspectiveCullPredicate(const CullingPredicatePtr & inpFunctor)
+        void Renderer::SetPerspectiveCullPredicate(const ICullingPredicateSPtr & inpFunctor)
         {
             mpPerspectiveCullPredicate = inpFunctor;
         }
         //----------------------------------------------------------
         /// Set Ortho Cull Predicate
         //----------------------------------------------------------
-        void CRenderer::SetOrthoCullPredicate(const CullingPredicatePtr & inpFunctor)
+        void Renderer::SetOrthoCullPredicate(const ICullingPredicateSPtr & inpFunctor)
         {
             mpOrthoCullPredicate = inpFunctor;
         }
 		//----------------------------------------------------------
 		/// Get Active Camera Pointer
 		//----------------------------------------------------------
-		CCameraComponent* CRenderer::GetActiveCameraPtr()
+		CameraComponent* Renderer::GetActiveCameraPtr()
 		{
 			return mpActiveCamera;
 		}
 		//----------------------------------------------------------
 		/// Render To Screen
 		//----------------------------------------------------------
-		void CRenderer::RenderToScreen(Core::CScene* inpScene)
+		void Renderer::RenderToScreen(Core::Scene* inpScene)
 		{
             RenderSceneToTarget(inpScene, mpRenderSystem->GetDefaultRenderTarget());
 		}
         //----------------------------------------------------------
         /// Render To Texture
         //----------------------------------------------------------
-        void CRenderer::RenderToTexture(Core::CScene* inpScene, const TexturePtr& inpColourTarget, const TexturePtr& inpDepthTarget)
+        void Renderer::RenderToTexture(Core::Scene* inpScene, const TextureSPtr& inpColourTarget, const TextureSPtr& inpDepthTarget)
 		{
             //get the width and height
             u32 udwWidth = 1;
@@ -108,7 +108,7 @@ namespace ChilliSource
                 udwHeight = inpDepthTarget->GetHeight();
             }
             
-            IRenderTarget* pOffscreenTarget = mpRenderSystem->CreateRenderTarget(udwWidth, udwHeight);
+            RenderTarget* pOffscreenTarget = mpRenderSystem->CreateRenderTarget(udwWidth, udwHeight);
             pOffscreenTarget->SetTargetTextures(inpColourTarget, inpDepthTarget);
             RenderSceneToTarget(inpScene, pOffscreenTarget);
             CS_SAFE_DELETE(pOffscreenTarget);
@@ -116,14 +116,14 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Render Scene To Target
 		//----------------------------------------------------------
-		void CRenderer::RenderSceneToTarget(Core::CScene* inpScene, IRenderTarget* inpRenderTarget)
+		void Renderer::RenderSceneToTarget(Core::Scene* inpScene, RenderTarget* inpRenderTarget)
         {
 			//Traverse the scene graph and get all renderable objects
-            std::vector<IRenderComponent*> aPreFilteredRenderCache;
-            std::vector<CCameraComponent*> aCameraCache;
-            std::vector<CDirectionalLightComponent*> aDirLightCache;
-            std::vector<CPointLightComponent*> aPointLightCache;
-            CAmbientLightComponent* pAmbientLight = nullptr;
+            std::vector<RenderComponent*> aPreFilteredRenderCache;
+            std::vector<CameraComponent*> aCameraCache;
+            std::vector<DirectionalLightComponent*> aDirLightCache;
+            std::vector<PointLightComponent*> aPointLightCache;
+            AmbientLightComponent* pAmbientLight = nullptr;
             
 			FindRenderableObjectsInScene(inpScene, aPreFilteredRenderCache, aCameraCache, aDirLightCache, aPointLightCache, pAmbientLight);
             mpActiveCamera = (aCameraCache.empty() ? nullptr : aCameraCache.back());
@@ -131,17 +131,17 @@ namespace ChilliSource
             if(mpActiveCamera)
             {
                 //Apply the world view projection matrix
-                mpRenderSystem->ApplyCamera(mpActiveCamera->GetEntityOwner()->Transform().GetWorldPosition(), mpActiveCamera->GetView(), mpActiveCamera->GetProjection(), mpActiveCamera->GetClearColour());
+                mpRenderSystem->ApplyCamera(mpActiveCamera->GetEntityOwner()->GetTransform().GetWorldPosition(), mpActiveCamera->GetView(), mpActiveCamera->GetProjection(), mpActiveCamera->GetClearColour());
                 //Calculate the view-projection matrix as we will need it for sorting
-                Core::CMatrix4x4::Multiply(&mpActiveCamera->GetView(), &mpActiveCamera->GetProjection(), &matViewProjCache);
+                Core::Matrix4x4::Multiply(&mpActiveCamera->GetView(), &mpActiveCamera->GetProjection(), &matViewProjCache);
                 
                 //Render shadow maps
                 RenderShadowMap(mpActiveCamera, aDirLightCache, aPreFilteredRenderCache);
                 
                 //Cull items based on camera
-                std::vector<IRenderComponent*> aCameraRenderCache;
-                std::vector<IRenderComponent*> aCameraOpaqueCache;
-                std::vector<IRenderComponent*> aCameraTransparentCache;
+                std::vector<RenderComponent*> aCameraRenderCache;
+                std::vector<RenderComponent*> aCameraOpaqueCache;
+                std::vector<RenderComponent*> aCameraTransparentCache;
                 CullRenderables(mpActiveCamera, aPreFilteredRenderCache, aCameraRenderCache);
                 FilterSceneRenderables(aCameraRenderCache, aCameraOpaqueCache, aCameraTransparentCache);
                 
@@ -174,7 +174,7 @@ namespace ChilliSource
                     for(u32 i=0; i<aPointLightCache.size(); ++i)
                     {
                         mpRenderSystem->SetLight(aPointLightCache[i]);
-                        std::vector<IRenderComponent*> aPointLightOpaqueCache;
+                        std::vector<RenderComponent*> aPointLightOpaqueCache;
                         CullRenderables(aPointLightCache[i], aCameraOpaqueCache, aPointLightOpaqueCache);
                         Render(mpActiveCamera, ShaderPass::k_point, aPointLightOpaqueCache);
                     }
@@ -217,13 +217,13 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Find Renderable Objects In Scene
 		//----------------------------------------------------------
-        void CRenderer::FindRenderableObjectsInScene(Core::CScene* pScene, std::vector<IRenderComponent*>& outaRenderCache, std::vector<CCameraComponent*>& outaCameraCache,
-                                          std::vector<CDirectionalLightComponent*>& outaDirectionalLightComponentCache, std::vector<CPointLightComponent*>& outaPointLightComponentCache, CAmbientLightComponent*& outpAmbientLight) const
+        void Renderer::FindRenderableObjectsInScene(Core::Scene* pScene, std::vector<RenderComponent*>& outaRenderCache, std::vector<CameraComponent*>& outaCameraCache,
+                                          std::vector<DirectionalLightComponent*>& outaDirectionalLightComponentCache, std::vector<PointLightComponent*>& outaPointLightComponentCache, AmbientLightComponent*& outpAmbientLight) const
 		{
-            static std::vector<ILightComponent*> aLightComponentCache;
+            static std::vector<LightComponent*> aLightComponentCache;
             aLightComponentCache.clear();
             
-            pScene->QuerySceneForComponents<IRenderComponent, CCameraComponent, ILightComponent>(outaRenderCache, outaCameraCache, aLightComponentCache);
+            pScene->QuerySceneForComponents<RenderComponent, CameraComponent, LightComponent>(outaRenderCache, outaCameraCache, aLightComponentCache);
             
             //Split the lights
             for(u32 i=0; i<aLightComponentCache.size(); ++i)
@@ -231,26 +231,26 @@ namespace ChilliSource
                 if(aLightComponentCache[i]->GetEntityOwner()->IsVisible() == false)
                     continue;
                 
-                if(aLightComponentCache[i]->IsA(CDirectionalLightComponent::InterfaceID))
+                if(aLightComponentCache[i]->IsA(DirectionalLightComponent::InterfaceID))
                 {
-                    outaDirectionalLightComponentCache.push_back((CDirectionalLightComponent*)aLightComponentCache[i]);
+                    outaDirectionalLightComponentCache.push_back((DirectionalLightComponent*)aLightComponentCache[i]);
                 }
-                else if(aLightComponentCache[i]->IsA(CPointLightComponent::InterfaceID))
+                else if(aLightComponentCache[i]->IsA(PointLightComponent::InterfaceID))
                 {
-                    outaPointLightComponentCache.push_back((CPointLightComponent*)aLightComponentCache[i]);
+                    outaPointLightComponentCache.push_back((PointLightComponent*)aLightComponentCache[i]);
                 }
-                else if(aLightComponentCache[i]->IsA(CAmbientLightComponent::InterfaceID))
+                else if(aLightComponentCache[i]->IsA(AmbientLightComponent::InterfaceID))
                 {
-                    outpAmbientLight = (CAmbientLightComponent*)aLightComponentCache[i];
+                    outpAmbientLight = (AmbientLightComponent*)aLightComponentCache[i];
                 }
             }
 		}
         //----------------------------------------------------------
         /// Get Cull Predicate
         //----------------------------------------------------------
-        CullingPredicatePtr CRenderer::GetCullPredicate(CCameraComponent* inpActiveCamera) const
+        ICullingPredicateSPtr Renderer::GetCullPredicate(CameraComponent* inpActiveCamera) const
         {
-            CullingPredicatePtr pCullPredicate = inpActiveCamera->GetCullingPredicate();
+            ICullingPredicateSPtr pCullPredicate = inpActiveCamera->GetCullingPredicate();
             
             if(pCullPredicate)
             {
@@ -266,9 +266,9 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Sort Opaque
         //----------------------------------------------------------
-        void CRenderer::SortOpaque(CCameraComponent* inpCameraComponent, std::vector<IRenderComponent*>& inaRenderables) const
+        void Renderer::SortOpaque(CameraComponent* inpCameraComponent, std::vector<RenderComponent*>& inaRenderables) const
         {
-            RendererSortPredicatePtr pOpaqueSort = inpCameraComponent->GetOpaqueSortPredicate();
+            RendererSortPredicateSPtr pOpaqueSort = inpCameraComponent->GetOpaqueSortPredicate();
             if(!pOpaqueSort)
             {
                 pOpaqueSort = mpOpaqueSortPredicate;
@@ -277,15 +277,15 @@ namespace ChilliSource
             if(pOpaqueSort)
             {
                 pOpaqueSort->PrepareForSort(&inaRenderables);
-				std::sort(inaRenderables.begin(), inaRenderables.end(), Core::MakeDelegate(pOpaqueSort.get(), &CRendererSortPredicate::SortItem));
+				std::sort(inaRenderables.begin(), inaRenderables.end(), Core::MakeDelegate(pOpaqueSort.get(), &RendererSortPredicate::SortItem));
             }
         }
         //----------------------------------------------------------
         /// Sort Transparent
         //----------------------------------------------------------
-        void CRenderer::SortTransparent(CCameraComponent* inpCameraComponent, std::vector<IRenderComponent*>& inaRenderables) const
+        void Renderer::SortTransparent(CameraComponent* inpCameraComponent, std::vector<RenderComponent*>& inaRenderables) const
         {
-            RendererSortPredicatePtr pTransparentSort = inpCameraComponent->GetTransparentSortPredicate();
+            RendererSortPredicateSPtr pTransparentSort = inpCameraComponent->GetTransparentSortPredicate();
             if(!pTransparentSort)
             {
                 pTransparentSort = mpTransparentSortPredicate;
@@ -294,15 +294,15 @@ namespace ChilliSource
 			if(pTransparentSort)
             {
 				pTransparentSort->PrepareForSort(&inaRenderables);
-				std::sort(inaRenderables.begin(), inaRenderables.end(), Core::MakeDelegate(pTransparentSort.get(), &CRendererSortPredicate::SortItem));
+				std::sort(inaRenderables.begin(), inaRenderables.end(), Core::MakeDelegate(pTransparentSort.get(), &RendererSortPredicate::SortItem));
 			}
         }
         //----------------------------------------------------------
         /// Render Shadow Map
         //----------------------------------------------------------
-        void CRenderer::RenderShadowMap(CCameraComponent* inpCameraComponent, std::vector<CDirectionalLightComponent*>& inaLightComponents, std::vector<IRenderComponent*>& inaRenderables)
+        void Renderer::RenderShadowMap(CameraComponent* inpCameraComponent, std::vector<DirectionalLightComponent*>& inaLightComponents, std::vector<RenderComponent*>& inaRenderables)
         {
-            std::vector<IRenderComponent*> aFilteredShadowMapRenderCache;
+            std::vector<RenderComponent*> aFilteredShadowMapRenderCache;
             
             if(inaLightComponents.size() > 0)
             {
@@ -322,16 +322,16 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Render Shadow Map
 		//----------------------------------------------------------
-		void CRenderer::RenderShadowMap(CCameraComponent* inpCameraComponent, CDirectionalLightComponent* inpLightComponent, std::vector<IRenderComponent*>& inaRenderables)
+		void Renderer::RenderShadowMap(CameraComponent* inpCameraComponent, DirectionalLightComponent* inpLightComponent, std::vector<RenderComponent*>& inaRenderables)
 		{
 			//Create a new offscreen render target using the given texture
-			IRenderTarget* pRenderTarget = mpRenderSystem->CreateRenderTarget(inpLightComponent->GetShadowMapPtr()->GetWidth(), inpLightComponent->GetShadowMapPtr()->GetHeight());
+			RenderTarget* pRenderTarget = mpRenderSystem->CreateRenderTarget(inpLightComponent->GetShadowMapPtr()->GetWidth(), inpLightComponent->GetShadowMapPtr()->GetHeight());
 			pRenderTarget->SetTargetTextures(inpLightComponent->GetShadowMapDebugPtr(), inpLightComponent->GetShadowMapPtr());
             
             mpRenderSystem->BeginFrame(pRenderTarget);
             
             //Only opaque objects cast and receive shadows
-            for(std::vector<IRenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
+            for(std::vector<RenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
             {
                 (*it)->RenderShadowMap(mpRenderSystem, inpCameraComponent);
             }
@@ -343,9 +343,9 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Render
 		//----------------------------------------------------------
-		void CRenderer::Render(CCameraComponent* inpCameraComponent, ShaderPass ineShaderPass, std::vector<IRenderComponent*>& inaRenderables)
+		void Renderer::Render(CameraComponent* inpCameraComponent, ShaderPass ineShaderPass, std::vector<RenderComponent*>& inaRenderables)
 		{
-            for(std::vector<IRenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
+            for(std::vector<RenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
             {
                 (*it)->Render(mpRenderSystem, inpCameraComponent, ineShaderPass);
             }
@@ -356,15 +356,15 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render UI
         //----------------------------------------------------------
-        void CRenderer::RenderUI(GUI::Window* inpWindow)
+        void Renderer::RenderUI(GUI::Window* inpWindow)
         {
-            mpRenderSystem->ApplyCamera(Core::CVector3::ZERO, Core::CMatrix4x4::IDENTITY, CreateOverlayProjection(inpWindow), ChilliSource::Core::CColour::CORNFLOWER_BLUE);
+            mpRenderSystem->ApplyCamera(Core::Vector3::ZERO, Core::Matrix4x4::IDENTITY, CreateOverlayProjection(inpWindow), ChilliSource::Core::Colour::CORNFLOWER_BLUE);
 			mCanvas.Render(inpWindow, 1.0f);
         }
         //----------------------------------------------------------
         /// Cull Renderables
         //----------------------------------------------------------
-		void CRenderer::CullRenderables(CCameraComponent* inpCamera, const std::vector<IRenderComponent*>& inaRenderCache, std::vector<IRenderComponent*>& outaRenderCache) const
+		void Renderer::CullRenderables(CameraComponent* inpCamera, const std::vector<RenderComponent*>& inaRenderCache, std::vector<RenderComponent*>& outaRenderCache) const
 		{
             ICullingPredicate * pCullingPredicate = GetCullPredicate(inpCamera).get();
             
@@ -378,9 +378,9 @@ namespace ChilliSource
             
             inpCamera->UpdateFrustum();
             
-			for(std::vector<IRenderComponent*>::const_iterator it = inaRenderCache.begin(); it != inaRenderCache.end(); ++it)
+			for(std::vector<RenderComponent*>::const_iterator it = inaRenderCache.begin(); it != inaRenderCache.end(); ++it)
 			{
-				IRenderComponent* pRenderable = (*it);
+				RenderComponent* pRenderable = (*it);
 				
 				if(pRenderable->IsVisible() == false)
                 {
@@ -397,7 +397,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Cull Renderables
         //----------------------------------------------------------
-		void CRenderer::CullRenderables(CPointLightComponent* inpLightComponent, const std::vector<IRenderComponent*>& inaRenderCache, std::vector<IRenderComponent*>& outaRenderCache) const
+		void Renderer::CullRenderables(PointLightComponent* inpLightComponent, const std::vector<RenderComponent*>& inaRenderCache, std::vector<RenderComponent*>& outaRenderCache) const
         {
             //Reserve estimated space
             outaRenderCache.reserve(inaRenderCache.size());
@@ -406,7 +406,7 @@ namespace ChilliSource
             aLightSphere.vOrigin = inpLightComponent->GetWorldPosition();
             aLightSphere.fRadius = inpLightComponent->GetRangeOfInfluence();
             
-            for(std::vector<IRenderComponent*>::const_iterator it = inaRenderCache.begin(); it != inaRenderCache.end(); ++it)
+            for(std::vector<RenderComponent*>::const_iterator it = inaRenderCache.begin(); it != inaRenderCache.end(); ++it)
             {
                 if(Core::CIntersection::Intersects(aLightSphere, (*it)->GetBoundingSphere()) == true)
                 {
@@ -417,29 +417,29 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Filter Scene Renderables
         //----------------------------------------------------------
-		void CRenderer::FilterSceneRenderables(const std::vector<IRenderComponent*>& inaRenderables, std::vector<IRenderComponent*>& outaOpaque, std::vector<IRenderComponent*>& outaTransparent) const
+		void Renderer::FilterSceneRenderables(const std::vector<RenderComponent*>& inaRenderables, std::vector<RenderComponent*>& outaOpaque, std::vector<RenderComponent*>& outaTransparent) const
 		{
             //Reserve estimated space
             outaOpaque.reserve(inaRenderables.size());
             outaTransparent.reserve(inaRenderables.size());
             
-			for(std::vector<IRenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
+			for(std::vector<RenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
 			{
-				IRenderComponent* pRenderable = (*it);
+				RenderComponent* pRenderable = (*it);
                 pRenderable->IsTransparent() ? outaTransparent.push_back(pRenderable) : outaOpaque.push_back(pRenderable);
 			}
 		}
         //----------------------------------------------------------
         /// Filter Shadow Map Renderables
         //----------------------------------------------------------
-        void CRenderer::FilterShadowMapRenderables(const std::vector<IRenderComponent*>& inaRenderables, std::vector<IRenderComponent*>& outaRenderables) const
+        void Renderer::FilterShadowMapRenderables(const std::vector<RenderComponent*>& inaRenderables, std::vector<RenderComponent*>& outaRenderables) const
         {
             //Reserve estimated space
             outaRenderables.reserve(inaRenderables.size());
             
-            for(std::vector<IRenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
+            for(std::vector<RenderComponent*>::const_iterator it = inaRenderables.begin(); it != inaRenderables.end(); ++it)
 			{
-				IRenderComponent* pRenderable = (*it);
+				RenderComponent* pRenderable = (*it);
                 if(pRenderable->IsShadowCastingEnabled() == true && pRenderable->IsTransparent() == false)
                 {
                     outaRenderables.push_back(pRenderable);
@@ -449,12 +449,12 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Create Overlay Projection
         //----------------------------------------------------------
-        Core::CMatrix4x4 CRenderer::CreateOverlayProjection(GUI::Window* inpWindow) const
+        Core::Matrix4x4 Renderer::CreateOverlayProjection(GUI::Window* inpWindow) const
         {
-            const Core::CVector2 kvOverlayDimensions(inpWindow->GetAbsoluteSize());
+            const Core::Vector2 kvOverlayDimensions(inpWindow->GetAbsoluteSize());
             const f32 kfOverlayNear = 1.0f;
             const f32 kfOverlayFar = 100.0f;
-            return Core::CMatrix4x4::CreateOrthoMatrixOffset(0, kvOverlayDimensions.x, 0, kvOverlayDimensions.y, kfOverlayNear, kfOverlayFar);
+            return Core::Matrix4x4::CreateOrthoMatrixOffset(0, kvOverlayDimensions.x, 0, kvOverlayDimensions.y, kfOverlayNear, kfOverlayFar);
         }
 	}
 }

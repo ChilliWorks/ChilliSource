@@ -20,18 +20,18 @@ namespace ChilliSource
 	namespace Rendering
 	{
         
-        f32 CFont::mfGlobalKerningOffset = 0.0f;
+        f32 Font::mfGlobalKerningOffset = 0.0f;
         
-        DEFINE_NAMED_INTERFACE(CFont);
+        DEFINE_NAMED_INTERFACE(Font);
         
 		//---------------------------------------------------------------------
 		/// Is A
 		///
 		/// @return Whether this object is of given type
 		//---------------------------------------------------------------------
-		bool CFont::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool Font::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == CFont::InterfaceID;
+			return inInterfaceID == Font::InterfaceID;
 		}
 		//-------------------------------------------
 		/// Set Character Set
@@ -40,7 +40,7 @@ namespace ChilliSource
 		/// can display
 		/// @param An array of the characters
 		//-------------------------------------------
-		void CFont::SetCharacterSet(const CharacterSet &inSet)
+		void Font::SetCharacterSet(const CharacterSet &inSet)
 		{
 			mCharacterSet = inSet;
 		}
@@ -49,17 +49,17 @@ namespace ChilliSource
 		///
 		/// @param Texture containing the font 
 		//-------------------------------------------
-		void CFont::SetTexture(const TexturePtr& inpTex)
+		void Font::SetTexture(const TextureSPtr& inpTex)
 		{
 			mpTexture = inpTex;
-			mpTexture->SetFilter(ITexture::Filter::k_linear, ITexture::Filter::k_linear);
+			mpTexture->SetFilter(Texture::Filter::k_linear, Texture::Filter::k_linear);
 		}
 		//-------------------------------------------
 		/// Get Texture
 		///
 		/// @return Font texture 
 		//-------------------------------------------
-		const TexturePtr& CFont::GetTexture() const
+		const TextureSPtr& Font::GetTexture() const
 		{
 			return mpTexture;
 		}
@@ -68,7 +68,7 @@ namespace ChilliSource
 		///
 		/// @return Attributes - Spacing etc
 		//-------------------------------------------
-		const FontAttributes& CFont::GetAttributes() const
+		const FontAttributes& Font::GetAttributes() const
 		{
 			return mAttributes;
 		}
@@ -77,7 +77,7 @@ namespace ChilliSource
 		///
 		/// @return Mode height
 		//-------------------------------------------
-		f32 CFont::GetLineHeight() const
+		f32 Font::GetLineHeight() const
 		{
 			return mfLineHeight;
         }
@@ -86,7 +86,7 @@ namespace ChilliSource
         ///
         /// @return True is kerning supported, false otherwise
         //-------------------------------------------
-        const bool CFont::SupportsKerning() const
+        const bool Font::SupportsKerning() const
         {
             return (!maFirstLookup.empty() && !maPairs.empty());
         }
@@ -98,7 +98,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite data containing UV's etc
 		//-------------------------------------------
-		void CFont::SetSpriteSheet(const SpriteSheetPtr& inpData)
+		void Font::SetSpriteSheet(const SpriteSheetSPtr& inpData)
 		{
 			mpCharacterData = inpData;
 			mpTexture = inpData->GetTexture();
@@ -112,7 +112,7 @@ namespace ChilliSource
             {
 				CharacterInfo sCI;
 				
-				CSpriteSheet::Frame sFrame = mpCharacterData->GetSpriteFrameByID(nChar);
+				SpriteSheet::Frame sFrame = mpCharacterData->GetSpriteFrameByID(nChar);
 				
 				//Get the UV co-ordinates of the character on the font tpage
 				mpCharacterData->GetUVsForFrame(nChar, sCI.sUVs);
@@ -157,7 +157,7 @@ namespace ChilliSource
 		/// @param Frame to be filled with data 
 		/// @return Success or invisible chars
 		//-------------------------------------------
-		CharacterResult CFont::GetInfoForCharacter(Core::UTF8String::Char inChar, CharacterInfo& outInfo) const
+		CharacterResult Font::GetInfoForCharacter(Core::UTF8String::Char inChar, CharacterInfo& outInfo) const
 		{
 			//Check for space character. That won't be in the glyph file or the font bitmap.
 			if(inChar == kSpaceCharacter)
@@ -187,7 +187,7 @@ namespace ChilliSource
         //-------------------------------------------
         /// Get Kerning Between Characters
         //-------------------------------------------
-        f32 CFont::GetKerningBetweenCharacters(Core::UTF8String::Char inChar1, Core::UTF8String::Char inChar2) const
+        f32 Font::GetKerningBetweenCharacters(Core::UTF8String::Char inChar1, Core::UTF8String::Char inChar2) const
         {
             const CKernLookup* pLookup = &(*std::lower_bound(maFirstLookup.begin(), maFirstLookup.end(), CKernLookup(inChar1, 0, 0)));
 			if(nullptr == pLookup || pLookup->wCharacter != inChar1)
@@ -208,7 +208,7 @@ namespace ChilliSource
         //-------------------------------------------
         /// Set Kerning Info
         //-------------------------------------------
-        void CFont::SetKerningInfo(const std::vector<CKernLookup>& inaFirstReg, const std::vector<CKernPair>& inaPairs)
+        void Font::SetKerningInfo(const std::vector<CKernLookup>& inaFirstReg, const std::vector<CKernPair>& inaPairs)
         {
             maFirstLookup = inaFirstReg;
             maPairs = inaPairs;
@@ -216,7 +216,7 @@ namespace ChilliSource
         //-------------------------------------------
         /// Set Global Kerning Offset
         //-------------------------------------------
-        void CFont::SetGlobalKerningOffset(f32 infOffset)
+        void Font::SetGlobalKerningOffset(f32 infOffset)
         {
             mfGlobalKerningOffset = infOffset;
         }

@@ -17,10 +17,10 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CAmbientLightComponent : public ILightComponent
+		class AmbientLightComponent : public LightComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CAmbientLightComponent);
+			DECLARE_NAMED_INTERFACE(AmbientLightComponent);
 			
 			//----------------------------------------------------------
 			/// Is A
@@ -35,7 +35,7 @@ namespace ChilliSource
             ///
             /// @return Light transform
             //----------------------------------------------------------
-            const Core::CMatrix4x4& GetLightMatrix() const override;
+            const Core::Matrix4x4& GetLightMatrix() const override;
 		};
     }
 }

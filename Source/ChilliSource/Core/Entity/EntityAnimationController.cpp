@@ -18,21 +18,21 @@ namespace ChilliSource
 {
 	namespace Core 
 	{
-		CEntityAnimationController::CEntityAnimationController()
+		EntityAnimationController::EntityAnimationController()
         : mbPaused(false)
 		{
 		}
 		
-		CEntityAnimationController::~CEntityAnimationController()
+		EntityAnimationController::~EntityAnimationController()
 		{
 		}
 
-        void CEntityAnimationController::ResetAnimData()
+        void EntityAnimationController::ResetAnimData()
         {
             mmapAnimDataToEntityName.clear();
         }
 		
-		void CEntityAnimationController::LoadDataFromSceneAnimDesc(const CSceneAnimationDesc & insSceneDesc, bool inbClearExistingData)
+		void EntityAnimationController::LoadDataFromSceneAnimDesc(const SceneAnimationDesc & insSceneDesc, bool inbClearExistingData)
         {
 			// Reset the existing animation data
             if (inbClearExistingData)
@@ -40,7 +40,7 @@ namespace ChilliSource
 			
 			for (u32 nAnim = 0; nAnim < insSceneDesc.asEntityAnimations.size(); nAnim++) 
             {
-				const CSceneAnimationDesc::EntityAnimationDesc & sDesc = insSceneDesc.asEntityAnimations[nAnim];
+				const SceneAnimationDesc::EntityAnimationDesc & sDesc = insSceneDesc.asEntityAnimations[nAnim];
 				
 				EntityAnimationData sData;
 				sData.afKeyframeTimes = sDesc.afKeyframeTimes;
@@ -51,7 +51,7 @@ namespace ChilliSource
 			}
 		}
 		
-		const EntityAnimationData* CEntityAnimationController::GetEntityAnimationDataWithName(const std::string & instrName) const 
+		const EntityAnimationData* EntityAnimationController::GetEntityAnimationDataWithName(const std::string & instrName) const 
 		{
 			std::unordered_map<std::string, EntityAnimationData>::const_iterator pEntry = mmapAnimDataToEntityName.find(instrName);
 			if (pEntry == mmapAnimDataToEntityName.end())
@@ -60,29 +60,29 @@ namespace ChilliSource
 				return &(pEntry->second);
 		}
 		
-		void CEntityAnimationController::ReleaseAnimations()
+		void EntityAnimationController::ReleaseAnimations()
 		{
 			masPlayingAnimations.clear();
 		}
 		
-		EntityAnimationPtr CEntityAnimationController::CreateAnimation(const std::string & instrAnimName, CEntity* inpAnimTarget, u32 inudwQueryFlags)
+		EntityAnimationSPtr EntityAnimationController::CreateAnimation(const std::string & instrAnimName, Entity* inpAnimTarget, u32 inudwQueryFlags)
         {
 			const EntityAnimationData* pData = GetEntityAnimationDataWithName(instrAnimName);
 			assert(pData);
 			
-			EntityAnimationPtr pResult = EntityAnimationPtr(new CEntityAnimation(pData, inpAnimTarget, inudwQueryFlags));
+			EntityAnimationSPtr pResult = EntityAnimationSPtr(new EntityAnimation(pData, inpAnimTarget, inudwQueryFlags));
 			assert(pResult);
 			
 			masPlayingAnimations.push_back(EntityAnimContext(pResult, false));
 			return pResult;			
 		}
 		
-		EntityAnimationPtr CEntityAnimationController::CreateAndPlayAnimation(const std::string & instrAnimName, CEntity* inpAnimTarget, AnimationPlayMode inePlayMode)
+		EntityAnimationSPtr EntityAnimationController::CreateAndPlayAnimation(const std::string & instrAnimName, Entity* inpAnimTarget, AnimationPlayMode inePlayMode)
 		{
 			const EntityAnimationData* pData = GetEntityAnimationDataWithName(instrAnimName);
 			assert(pData);
 			
-			EntityAnimationPtr pResult = EntityAnimationPtr(new CEntityAnimation(pData, inpAnimTarget));
+			EntityAnimationSPtr pResult = EntityAnimationSPtr(new EntityAnimation(pData, inpAnimTarget));
 			assert(pResult);
 			
 			masPlayingAnimations.push_back(EntityAnimContext(pResult, false));
@@ -95,7 +95,7 @@ namespace ChilliSource
         ///
         /// Stop the animation timer
         //----------------------------------------------
-        void CEntityAnimationController::Pause()
+        void EntityAnimationController::Pause()
         {
             mbPaused = true;
         }
@@ -104,7 +104,7 @@ namespace ChilliSource
         ///
         /// Stop the animation timer
         //----------------------------------------------
-        void CEntityAnimationController::Resume()
+        void EntityAnimationController::Resume()
         {
             mbPaused = false;
         }
@@ -113,7 +113,7 @@ namespace ChilliSource
         ///
         /// Put all the animations back to the first frame
         //----------------------------------------------
-		void CEntityAnimationController::Restart()
+		void EntityAnimationController::Restart()
 		{
 			for	(u32 nAnim = 0; nAnim < masPlayingAnimations.size(); ++nAnim)
 			{
@@ -121,7 +121,7 @@ namespace ChilliSource
 			}
 		}
 		
-		void CEntityAnimationController::Update(f32 infDT)
+		void EntityAnimationController::Update(f32 infDT)
 		{
             if(!mbPaused)
             {
@@ -140,7 +140,7 @@ namespace ChilliSource
             }
 		}
 		
-		void CEntityAnimationController::ApplyAnimationToEntity(const CSceneAnimationDesc& insSceneAnimDesc, const EntityPtr& inpcEntity, AnimationPlayMode inePlayMode)
+		void EntityAnimationController::ApplyAnimationToEntity(const SceneAnimationDesc& insSceneAnimDesc, const EntitySPtr& inpcEntity, AnimationPlayMode inePlayMode)
 		{
 			// Now setup a temporary animation for this entity
 			LoadDataFromSceneAnimDesc(insSceneAnimDesc, true);
@@ -148,9 +148,9 @@ namespace ChilliSource
 			// Loop through each individual animation and queue its animation
 			for (u32 nAnim = 0; nAnim < insSceneAnimDesc.asEntityAnimations.size(); nAnim++) 
 			{
-                const CSceneAnimationDesc::EntityAnimationDesc & sCurrentAnimation(insSceneAnimDesc.asEntityAnimations[nAnim]);
+                const SceneAnimationDesc::EntityAnimationDesc & sCurrentAnimation(insSceneAnimDesc.asEntityAnimations[nAnim]);
 //				string strName = sCurrentAnimation.strTargetPath;
-				CEntity* pEntity = inpcEntity->FindChildEntityWithName(sCurrentAnimation.strTargetPath);
+				Entity* pEntity = inpcEntity->FindChildEntityWithName(sCurrentAnimation.strTargetPath);
 				if(pEntity)
                 {
 					CreateAndPlayAnimation(sCurrentAnimation.strName, pEntity, inePlayMode);
@@ -158,7 +158,7 @@ namespace ChilliSource
 			}
 		}
 	
-		bool CEntityAnimationController::GetIsFinished() const
+		bool EntityAnimationController::GetIsFinished() const
 		{
 			bool bFinished = true;
 			

@@ -14,14 +14,14 @@ namespace ChilliSource
 {
     namespace Core
     {
-        bool CNotificationScheduler::bSystemNotificationsEnabled = true;
-        bool CNotificationScheduler::bAppNotificationsEnabled = true;
-        bool CNotificationScheduler::bPushNotificationsEnabled = true;
+        bool NotificationScheduler::bSystemNotificationsEnabled = true;
+        bool NotificationScheduler::bAppNotificationsEnabled = true;
+        bool NotificationScheduler::bPushNotificationsEnabled = true;
         
-        std::deque<Notification> CNotificationScheduler::NotificationQueue;
-        std::vector<Notification> CNotificationScheduler::TimedAppNotifications;
+        std::deque<Notification> NotificationScheduler::NotificationQueue;
+        std::vector<Notification> NotificationScheduler::TimedAppNotifications;
         
-        ILocalNotificationScheduler* CNotificationScheduler::mspLocalNotificationScheduler = nullptr;
+        LocalNotificationScheduler* NotificationScheduler::mspLocalNotificationScheduler = nullptr;
 
         const f32 kfMinTimeBetweenNotifications = 2.0f;
         f32 gfTimeBetweenNotifications = 0.0f;
@@ -33,7 +33,7 @@ namespace ChilliSource
         ///
         /// @param local
         //------------------------------------------------------------------------------
-        void CNotificationScheduler::Initialise(ILocalNotificationScheduler* inLocalNS)
+        void NotificationScheduler::Initialise(LocalNotificationScheduler* inLocalNS)
         {
             mspLocalNotificationScheduler = inLocalNS;
         }
@@ -47,7 +47,7 @@ namespace ChilliSource
         /// @param Notification 
         /// @param Priority (High priority will leap-frog lower priority in the queue
         //------------------------------------------------------------------------------
-        void CNotificationScheduler::ScheduleNotification(NotificationType ineType, const Notification& insNotification, NotificationPriority inePriority, const Notification::NotificationPresentedDelegate& inpDelegate)
+        void NotificationScheduler::ScheduleNotification(NotificationType ineType, const Notification& insNotification, NotificationPriority inePriority, const Notification::NotificationPresentedDelegate& inpDelegate)
         {
             switch(ineType)
             {
@@ -109,7 +109,7 @@ namespace ChilliSource
         /// @param Time in seconds at which it should trigger
         /// @param Priority (High priority will leap-frog lower priority in the queue
         //------------------------------------------------------------------------------
-        void CNotificationScheduler::ScheduleNotificationForTime(NotificationType ineType, const Notification& insNotification, TimeIntervalSecs inTime, NotificationPriority inePriority)
+        void NotificationScheduler::ScheduleNotificationForTime(NotificationType ineType, const Notification& insNotification, TimeIntervalSecs inTime, NotificationPriority inePriority)
         {
             switch(ineType)
             {
@@ -153,7 +153,7 @@ namespace ChilliSource
         /// @param Time in seconds at which it should trigger
         /// @param Priority (High priority will leap-frog lower priority in the queue
         //------------------------------------------------------------------------------
-        void CNotificationScheduler::ScheduleNotificationAfterTime(NotificationType ineType, const Notification& insNotification, TimeIntervalSecs inTime, NotificationPriority inePriority)
+        void NotificationScheduler::ScheduleNotificationAfterTime(NotificationType ineType, const Notification& insNotification, TimeIntervalSecs inTime, NotificationPriority inePriority)
         {
             switch(ineType)
             {
@@ -163,7 +163,7 @@ namespace ChilliSource
                         Notification sNotification(insNotification);
                         sNotification.eType = ineType;
                         sNotification.ePriority = inePriority;
-                        sNotification.TriggerTime = Core::CApplication::GetSystemTime() + inTime;
+                        sNotification.TriggerTime = Core::Application::GetSystemTime() + inTime;
                         sNotification.bDismissed = false;
                         sNotification.bTriggered = false;
                         TimedAppNotifications.push_back(sNotification);
@@ -179,7 +179,7 @@ namespace ChilliSource
                         Notification sNotification(insNotification);
                         sNotification.eType = ineType;
                         sNotification.ePriority = inePriority;
-                        sNotification.TriggerTime = Core::CApplication::GetSystemTime() + inTime;
+                        sNotification.TriggerTime = Core::Application::GetSystemTime() + inTime;
                         sNotification.bDismissed = false;
                         sNotification.bTriggered = false;
                         mspLocalNotificationScheduler->ScheduleNotification(sNotification);
@@ -199,12 +199,12 @@ namespace ChilliSource
         /// @param Out: Notifications that meet criteria
         /// @return Whether any notifications exist within that time period
         //-------------------------------------------------------------------------
-        bool CNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(NotificationType ineType, TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Notification>& outaNotifications)
+        bool NotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(NotificationType ineType, TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Notification>& outaNotifications)
         {
             switch(ineType)
             {
                 case NotificationType::k_app:
-                    CS_WARNING_LOG("CNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod is not implemented for type NOTICE_APP");
+                    CS_WARNING_LOG("NotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod is not implemented for type NOTICE_APP");
                     break;
                 case NotificationType::k_push:
                     CS_FATAL_LOG("Push notifications can not be checked within the app");
@@ -223,7 +223,7 @@ namespace ChilliSource
         /// @param Notification Type
         /// @param Enable/disable
         //-------------------------------------------------------------------------
-        void CNotificationScheduler::EnableNotifications(NotificationType ineType, bool inbEnabled)
+        void NotificationScheduler::EnableNotifications(NotificationType ineType, bool inbEnabled)
         {
             switch(ineType)
             {
@@ -252,7 +252,7 @@ namespace ChilliSource
         /// @param Notification Type
         /// @param ID type
         //-------------------------------------------------------------------------
-        void CNotificationScheduler::CancelByID(NotificationType ineType, NotificationID inID)
+        void NotificationScheduler::CancelByID(NotificationType ineType, NotificationID inID)
         {
             switch(ineType)
             {
@@ -284,7 +284,7 @@ namespace ChilliSource
         ///
         /// @param Notification Type
         //-------------------------------------------------------------------------
-        void CNotificationScheduler::CancelAll(NotificationType ineType)
+        void NotificationScheduler::CancelAll(NotificationType ineType)
         {
             switch(ineType)
             {
@@ -306,12 +306,12 @@ namespace ChilliSource
         ///
         /// @param Time between frames
         //-------------------------------------------------------------------------
-        void CNotificationScheduler::Update(f32 infDt)
+        void NotificationScheduler::Update(f32 infDt)
         {
             gfTimeBetweenNotifications += infDt;
             
             //Update the app notifications
-            TimeIntervalSecs CurrentTime = Core::CApplication::GetSystemTime();
+            TimeIntervalSecs CurrentTime = Core::Application::GetSystemTime();
             
             for(std::vector<Notification>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end(); /*No Increment*/)
             {  
@@ -349,7 +349,7 @@ namespace ChilliSource
                 if(!NotificationQueue.empty() && !NotificationQueue.front().bTriggered)
                 {
                     //Trigger the next one
-                    if(Core::CApplication::GetStateManagerPtr()->OnNotificationReceived(&NotificationQueue.front()))
+                    if(Core::Application::GetStateManagerPtr()->OnNotificationReceived(&NotificationQueue.front()))
                     {
                         NotificationQueue.front().bTriggered = true;
                     }
@@ -366,7 +366,7 @@ namespace ChilliSource
         ///
         /// @param Notification
         //-------------------------------------------------------------------------
-        void CNotificationScheduler::OnNotificationReceived(const Notification& insNotification)
+        void NotificationScheduler::OnNotificationReceived(const Notification& insNotification)
         {
             if(IsTypeEnabled(insNotification.eType))
             {
@@ -397,7 +397,7 @@ namespace ChilliSource
         /// @param Notification type
         /// @return Is notification type enabled
         //-------------------------------------------------------------------------
-        bool CNotificationScheduler::IsTypeEnabled(NotificationType ineType)
+        bool NotificationScheduler::IsTypeEnabled(NotificationType ineType)
         {
             switch(ineType)
             {

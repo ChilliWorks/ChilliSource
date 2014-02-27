@@ -19,10 +19,10 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        class CLinearForceParticleEffector : public IParticleEffector
+        class LinearForceParticleEffector : public ParticleEffector
         {
         public:
-            CLinearForceParticleEffector(const Core::ParamDictionary& insParams);
+            LinearForceParticleEffector(const Core::ParamDictionary& insParams);
             //-----------------------------------------------------
             /// Create
             ///
@@ -31,7 +31,7 @@ namespace ChilliSource
             /// @param Param dictionary
             /// @return Ownership of effector
             //-----------------------------------------------------
-            static IParticleEffector* Create(const Core::ParamDictionary& inParams);
+            static ParticleEffector* Create(const Core::ParamDictionary& inParams);
             //-----------------------------------------------------
             /// Init
             ///
@@ -54,7 +54,7 @@ namespace ChilliSource
             
         private:
             
-            Core::CVector3 mvForce;
+            Core::Vector3 mvForce;
         };
     }
 }

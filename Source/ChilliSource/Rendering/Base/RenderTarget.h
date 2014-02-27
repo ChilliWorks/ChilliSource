@@ -22,11 +22,11 @@ namespace ChilliSource
 		/// Abstract render target. Contains data about a 
 		/// render target.
 		//=====================================================
-		class IRenderTarget
+		class RenderTarget
 		{
 		public:
-			IRenderTarget(){}
-			virtual ~IRenderTarget(){}
+			RenderTarget(){}
+			virtual ~RenderTarget(){}
 			
             //------------------------------------------------------
             /// Set Target Textures
@@ -39,7 +39,7 @@ namespace ChilliSource
             /// @param The colour texture.
             /// @param The depth texture.
             //------------------------------------------------------
-			virtual void SetTargetTextures(const TexturePtr& inpColourTexture, const TexturePtr& inpDepthTexture) = 0;
+			virtual void SetTargetTextures(const TextureSPtr& inpColourTexture, const TextureSPtr& inpDepthTexture) = 0;
             //------------------------------------------------------
             /// Bind
             ///

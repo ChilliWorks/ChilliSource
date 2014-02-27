@@ -34,7 +34,7 @@ namespace ChilliSource
             ///
             /// @param Canvas renderer pointer
             //--------------------------------------------------------
-            virtual void Draw(Rendering::CCanvasRenderer* inpCanvas);
+            virtual void Draw(Rendering::CanvasRenderer* inpCanvas);
             //--------------------------------------------------------
             /// Set Texture
             ///
@@ -42,7 +42,7 @@ namespace ChilliSource
             ///
             /// @param Texture shared pointer
             //--------------------------------------------------------
-            void SetTexture(const Rendering::TexturePtr& inpTexture);
+            void SetTexture(const Rendering::TextureSPtr& inpTexture);
             //--------------------------------------------------------
             /// Get Texture
             ///
@@ -50,7 +50,7 @@ namespace ChilliSource
             ///
             /// @param Texture shared pointer
             //--------------------------------------------------------
-            const Rendering::TexturePtr& GetTexture() const;
+            const Rendering::TextureSPtr& GetTexture() const;
             //--------------------------------------------------------
             /// Set Sprite Sheet
             ///
@@ -62,13 +62,13 @@ namespace ChilliSource
             ///
             /// @param Sprite sheet
             //--------------------------------------------------------
-            void SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+            void SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
             //--------------------------------------------------------
             /// Get Sprite Sheet
             ///
             /// @param Sprite sheet
             //--------------------------------------------------------
-            const Rendering::SpriteSheetPtr& GetSpriteSheet() const;
+            const Rendering::SpriteSheetSPtr& GetSpriteSheet() const;
             //--------------------------------------------------------
             /// Set Sprite Sheet Index
             ///
@@ -317,7 +317,7 @@ namespace ChilliSource
 			///
 			/// @return Absolute size of the image
 			//--------------------------------------------------------
-			Core::CVector2 GetSizeFromImage() const;
+			Core::Vector2 GetSizeFromImage() const;
 			//--------------------------------------------------------
 			/// Layout Content
 			///
@@ -351,8 +351,8 @@ namespace ChilliSource
             bool mbFitMaintain;
             
 			//---Properties
-            DECLARE_PROPERTY_A(Rendering::TexturePtr, Texture, SetTexture, GetTexture);
-            DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
+            DECLARE_PROPERTY_A(Rendering::TextureSPtr, Texture, SetTexture, GetTexture);
+            DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
 
             DECLARE_PROPERTY_A(Core::Rectangle, UVs, SetUVs, GetUVs);
 			DECLARE_PROPERTY_A(Core::Rectangle, UVOffsets, SetUVOffsets, GetUVOffsets);

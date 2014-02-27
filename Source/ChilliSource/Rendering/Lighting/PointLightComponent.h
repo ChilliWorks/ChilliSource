@@ -17,15 +17,15 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CPointLightComponent : public ILightComponent
+		class PointLightComponent : public LightComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CPointLightComponent);
+			DECLARE_NAMED_INTERFACE(PointLightComponent);
 			
             //----------------------------------------------------------
             /// Constructor
             //----------------------------------------------------------
-			CPointLightComponent();
+			PointLightComponent();
 			//----------------------------------------------------------
 			/// Is A
 			///
@@ -113,7 +113,7 @@ namespace ChilliSource
             ///
             /// @return Matrix to transform into light space
             //----------------------------------------------------------
-            const Core::CMatrix4x4& GetLightMatrix() const override;
+            const Core::Matrix4x4& GetLightMatrix() const override;
             //----------------------------------------------------
 			/// On Attached To Entity
 			///

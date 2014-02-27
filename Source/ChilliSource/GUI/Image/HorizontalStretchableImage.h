@@ -31,13 +31,13 @@ namespace ChilliSource
 			///
 			/// @param Sprite sheet containing the patches
 			//---------------------------------------------------------
-			void SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
 			//---------------------------------------------------------
 			/// Get Sprite Sheet
 			///
 			/// @return Sprite sheet containing the patches
 			//---------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetSpriteSheet() const;
+			const Rendering::SpriteSheetSPtr& GetSpriteSheet() const;
 			//---------------------------------------------------------
 			/// Set Base Sprite Sheet Index ID
 			///
@@ -165,12 +165,12 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer pointer
 			//---------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			void Draw(Rendering::CanvasRenderer* inpCanvas);
 			
 			
 		private:
 
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
 			
 			DECLARE_PROPERTY_A(std::string, BaseSpriteSheetIndexID, SetBaseSpriteSheetIndexID, GetBaseSpriteSheetIndexID);
             DECLARE_PROPERTY_A(bool, HeightFromImage, EnableHeightFromImage, IsHeightFromImageEnabled);

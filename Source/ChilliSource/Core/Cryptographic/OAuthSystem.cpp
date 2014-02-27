@@ -15,17 +15,17 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		DEFINE_NAMED_INTERFACE(COAuthSystem);
+		DEFINE_NAMED_INTERFACE(OAuthSystem);
         
         static u32 udwNonceCounter = 0;
 
-		bool COAuthSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool OAuthSystem::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == COAuthSystem::InterfaceID;
+			return inInterfaceID == OAuthSystem::InterfaceID;
 		}
 
 		/*++
-		* @method: COAuthSystem::oAuth
+		* @method: OAuthSystem::oAuth
 		*
 		* @description: constructor
 		*
@@ -34,12 +34,12 @@ namespace ChilliSource
 		* @output: none
 		*
 		*--*/
-		COAuthSystem::COAuthSystem()
+		OAuthSystem::OAuthSystem()
 		{
 		}
 
 		/*++
-		* @method: COAuthSystem::~oAuth
+		* @method: OAuthSystem::~oAuth
 		*
 		* @description: destructor
 		*
@@ -48,12 +48,12 @@ namespace ChilliSource
 		* @output: none
 		*
 		*--*/
-		COAuthSystem::~COAuthSystem()
+		OAuthSystem::~OAuthSystem()
 		{
 		}
 
 		/*++
-		* @method: COAuthSystem::GetConsumerKey
+		* @method: OAuthSystem::GetConsumerKey
 		*
 		* @description: this method gives consumer key that is being used currently
 		*
@@ -62,13 +62,13 @@ namespace ChilliSource
 		* @output: consumer key
 		*
 		*--*/
-		void COAuthSystem::GetConsumerKey(std::string& outstrConsumerKey)
+		void OAuthSystem::GetConsumerKey(std::string& outstrConsumerKey)
 		{
 			outstrConsumerKey = mstrConsumerKey;
 		}
 
 		/*++
-		* @method: COAuthSystem::SetConsumerKey
+		* @method: OAuthSystem::SetConsumerKey
 		*
 		* @description: this method saves consumer key that should be used
 		*
@@ -77,13 +77,13 @@ namespace ChilliSource
 		* @output: none
 		*
 		*--*/
-		void COAuthSystem::SetConsumerKey(const std::string& instrConsumerKey)
+		void OAuthSystem::SetConsumerKey(const std::string& instrConsumerKey)
 		{
 		    mstrConsumerKey.assign(CBaseEncoding::URLEncode(instrConsumerKey));
 		}
 
 		/*++
-		* @method: COAuthSystem::GetConsumerSecret
+		* @method: OAuthSystem::GetConsumerSecret
 		*
 		* @description: this method gives consumer secret that is being used currently
 		*
@@ -92,13 +92,13 @@ namespace ChilliSource
 		* @output: consumer secret
 		*
 		*--*/
-		void COAuthSystem::GetConsumerSecret(std::string& outstrConsumerSecret)
+		void OAuthSystem::GetConsumerSecret(std::string& outstrConsumerSecret)
 		{
 			outstrConsumerSecret = mstrConsumerSecret;
 		}
 
 		/*++
-		* @method: COAuthSystem::SetConsumerSecret
+		* @method: OAuthSystem::SetConsumerSecret
 		*
 		* @description: this method saves consumer secret that should be used
 		*
@@ -107,13 +107,13 @@ namespace ChilliSource
 		* @output: none
 		*
 		*--*/
-		void COAuthSystem::SetConsumerSecret(const std::string& instrConsumerSecret)
+		void OAuthSystem::SetConsumerSecret(const std::string& instrConsumerSecret)
 		{
 		    mstrConsumerSecret = CBaseEncoding::URLEncode(instrConsumerSecret);
 		}
 
 		/*++
-		* @method: COAuthSystem::GetOAuthTokenKey
+		* @method: OAuthSystem::GetOAuthTokenKey
 		*
 		* @description: this method gives OAuth token (also called access token) that is being used currently
 		*
@@ -122,13 +122,13 @@ namespace ChilliSource
 		* @output: OAuth token
 		*
 		*--*/
-		void COAuthSystem::GetOAuthTokenKey(std::string& outstrOAuthTokenKey)
+		void OAuthSystem::GetOAuthTokenKey(std::string& outstrOAuthTokenKey)
 		{
 			outstrOAuthTokenKey = mstrOAuthTokenKey;
 		}
 
 		/*++
-		* @method: COAuthSystem::SetOAuthTokenKey
+		* @method: OAuthSystem::SetOAuthTokenKey
 		*
 		* @description: this method saves OAuth token that should be used
 		*
@@ -137,13 +137,13 @@ namespace ChilliSource
 		* @output: none
 		*
 		*--*/
-		void COAuthSystem::SetOAuthTokenKey(const std::string& instrOAuthTokenKey)
+		void OAuthSystem::SetOAuthTokenKey(const std::string& instrOAuthTokenKey)
 		{
 		    mstrOAuthTokenKey = CBaseEncoding::URLEncode(instrOAuthTokenKey);
 		}
 
 		/*++
-		* @method: COAuthSystem::GetOAuthTokenSecret
+		* @method: OAuthSystem::GetOAuthTokenSecret
 		*
 		* @description: this method gives OAuth token secret that is being used currently
 		*
@@ -152,13 +152,13 @@ namespace ChilliSource
 		* @output: OAuth token secret
 		*
 		*--*/
-		void COAuthSystem::GetOAuthTokenSecret(std::string& outstrOAuthTokenSecret)
+		void OAuthSystem::GetOAuthTokenSecret(std::string& outstrOAuthTokenSecret)
 		{
 			outstrOAuthTokenSecret = mstrOAuthTokenSecret;
 		}
 
 		/*++
-		* @method: COAuthSystem::SetOAuthTokenSecret
+		* @method: OAuthSystem::SetOAuthTokenSecret
 		*
 		* @description: this method saves OAuth token that should be used
 		*
@@ -167,13 +167,13 @@ namespace ChilliSource
 		* @output: none
 		*
 		*--*/
-		void COAuthSystem::SetOAuthTokenSecret(const std::string& instrOAuthTokenSecret)
+		void OAuthSystem::SetOAuthTokenSecret(const std::string& instrOAuthTokenSecret)
 		{
 		    mstrOAuthTokenSecret = CBaseEncoding::URLEncode(instrOAuthTokenSecret);
 		}
 
 		/*++
-		* @method: COAuthSystem::GetOAuthScreenName
+		* @method: OAuthSystem::GetOAuthScreenName
 		*
 		* @description: this method gives authorized user's screenname
 		*
@@ -182,13 +182,13 @@ namespace ChilliSource
 		* @output: screen name
 		*
 		*--*/
-		void COAuthSystem::GetOAuthScreenName(std::string& outstrOAuthScreenName)
+		void OAuthSystem::GetOAuthScreenName(std::string& outstrOAuthScreenName)
 		{
 			outstrOAuthScreenName = mstrOAuthScreenName;
 		}
 
 		/*++
-		* @method: COAuthSystem::SetOAuthScreenName
+		* @method: OAuthSystem::SetOAuthScreenName
 		*
 		* @description: this method sets authorized user's screenname
 		*
@@ -197,13 +197,13 @@ namespace ChilliSource
 		* @output: none
 		*
 		*--*/
-		void COAuthSystem::SetOAuthScreenName(const std::string& instrAuthScreenName)
+		void OAuthSystem::SetOAuthScreenName(const std::string& instrAuthScreenName)
 		{
 		    mstrOAuthScreenName = instrAuthScreenName;
 		}
 
 		/*++
-		* @method: COAuthSystem::GetOAuthPin
+		* @method: OAuthSystem::GetOAuthPin
 		*
 		* @description: this method gives OAuth verifier PIN
 		*
@@ -212,13 +212,13 @@ namespace ChilliSource
 		* @output: OAuth verifier PIN
 		*
 		*--*/
-		void COAuthSystem::GetOAuthPin(std::string& outstrOAuthPin)
+		void OAuthSystem::GetOAuthPin(std::string& outstrOAuthPin)
 		{
 			outstrOAuthPin = mstrOAuthPIN;
 		}
 
 		/*++
-		* @method: COAuthSystem::SetOAuthPin
+		* @method: OAuthSystem::SetOAuthPin
 		*
 		* @description: this method sets OAuth verifier PIN
 		*
@@ -227,13 +227,13 @@ namespace ChilliSource
 		* @output: none
 		*
 		*--*/
-		void COAuthSystem::SetOAuthPin(const std::string& instrAuthPin)
+		void OAuthSystem::SetOAuthPin(const std::string& instrAuthPin)
 		{
 		    mstrOAuthPIN = instrAuthPin;
 		}
 
 		/*++
-		* @method: COAuthSystem::GenerateNonceTimeStamp
+		* @method: OAuthSystem::GenerateNonceTimeStamp
 		*
 		* @description: this method generates nonce and timestamp for OAuth header
 		*
@@ -244,12 +244,12 @@ namespace ChilliSource
 		* @remarks: internal method
 		*
 		*--*/
-        std::string COAuthSystem::GenerateNonceTimeStamp()
+        std::string OAuthSystem::GenerateNonceTimeStamp()
 		{
             return GenerateNonceTimeStamp((TimeIntervalSecs)time(0));
 		}
 		/*++
-         * @method: COAuthSystem::GenerateNonceTimeStamp
+         * @method: OAuthSystem::GenerateNonceTimeStamp
          *
          * @description: this method generates nonce and timestamp for OAuth header
          *
@@ -260,7 +260,7 @@ namespace ChilliSource
          * @remarks: internal method
          *
          *--*/
-        std::string COAuthSystem::GenerateNonceTimeStamp(TimeIntervalSecs TimeStamp)
+        std::string OAuthSystem::GenerateNonceTimeStamp(TimeIntervalSecs TimeStamp)
 		{
             std::string strTime = Core::ToString(TimeStamp);
             std::string strCounter = Core::ToString(udwNonceCounter);
@@ -270,7 +270,7 @@ namespace ChilliSource
 		}
         
 		/*++
-		* @method: COAuthSystem::BuildOAuthTokenKeyValuePairs
+		* @method: OAuthSystem::BuildOAuthTokenKeyValuePairs
 		*
 		* @description: this method prepares key-value pairs required for OAuth header
 		*               and signature generation.
@@ -287,7 +287,7 @@ namespace ChilliSource
 		* @remarks: internal method
 		*
 		*--*/
-		bool COAuthSystem::BuildOAuthTokenKeyValuePairs(const bool inbIncludeOAuthVerifierPin,
+		bool OAuthSystem::BuildOAuthTokenKeyValuePairs(const bool inbIncludeOAuthVerifierPin,
 														const std::string& instrRawData,
 														const std::string& instrOAuthSignature,
 														OAuthKeyValuePairsMap& outmapKeyValueMap,
@@ -353,7 +353,7 @@ namespace ChilliSource
 		}
 
 		/*++
-		* @method: COAuthSystem::GetSignature
+		* @method: OAuthSystem::GetSignature
 		*
 		* @description: this method calculates HMAC-SHA1 signature of OAuth header
 		*
@@ -366,7 +366,7 @@ namespace ChilliSource
 		* @remarks: internal method
 		*
 		*--*/
-		bool COAuthSystem::GetSignature(const OAuthHttpRequestType ineType,
+		bool OAuthSystem::GetSignature(const OAuthHttpRequestType ineType,
 										const std::string& instrRawUrl,
 										const OAuthKeyValuePairsMap& inmapRawKeyValuePairs,
 										std::string& outstrOAuthSignature)
@@ -416,18 +416,18 @@ namespace ChilliSource
 		    strSigBase.append(CBaseEncoding::URLEncode(strRawParams));
 
 		    //CS_DEBUG_LOG("\nCOAuthSystem::GetSignature() - Signature Raw URL is: \""+instrRawUrl+"\"");
-		    //CS_DEBUG_LOG("COAuthSystem::GetSignature() - Signature Raw Params is: \""+strRawParams+"\"");
-		    //CS_DEBUG_LOG("COAuthSystem::GetSignature() - Signature string is: \""+strSigBase+"\"");
+		    //CS_DEBUG_LOG("OAuthSystem::GetSignature() - Signature Raw Params is: \""+strRawParams+"\"");
+		    //CS_DEBUG_LOG("OAuthSystem::GetSignature() - Signature string is: \""+strSigBase+"\"");
 
 		    /* Now, hash the signature base string using HMAC_SHA1 class */
-		    ChilliSource::Core::CHMAC_SHA1 objHMACSHA1;
+		    ChilliSource::Core::HMAC_SHA1 objHMACSHA1;
 		    std::string strSecretSigningKey;
 		    u8 bypDigest[OAUTHLIB_BUFFSIZE_LARGE];
 
 		    memset(bypDigest, 0, OAUTHLIB_BUFFSIZE_LARGE);
 
 		    /* Signing key is composed of consumer_secret&token_secret */
-		    //CS_DEBUG_LOG("COAuthSystem::GetSignature() - Signing with customer secret:\""+mstrConsumerSecret+"\"");
+		    //CS_DEBUG_LOG("OAuthSystem::GetSignature() - Signing with customer secret:\""+mstrConsumerSecret+"\"");
 		    strSecretSigningKey.assign(mstrConsumerSecret);
 		    strSecretSigningKey.append("&");
 		    if(mstrOAuthTokenSecret.length())
@@ -435,7 +435,7 @@ namespace ChilliSource
 		    	strSecretSigningKey.append(mstrOAuthTokenSecret);
 		    }
 
-		    objHMACSHA1.HMAC_SHA1((u8*)strSigBase.c_str(),
+		    objHMACSHA1.Generate((u8*)strSigBase.c_str(),
 		    					  strSigBase.length(),
 		                          (u8*)strSecretSigningKey.c_str(),
 		                          strSecretSigningKey.length(),
@@ -443,19 +443,19 @@ namespace ChilliSource
 
 		    /* Do a base64 encode of signature - SHA 1 digest is 160 bits*/
 		    std::string strBase64String = CBaseEncoding::Base64Encode((s8*)bypDigest, 20);
-		    //CS_DEBUG_LOG("COAuthSystem::GetSignature() - Base64 of signature SHA1:\""+strBase64String+"\"");
+		    //CS_DEBUG_LOG("OAuthSystem::GetSignature() - Base64 of signature SHA1:\""+strBase64String+"\"");
 
 
-		    //CS_DEBUG_LOG("COAuthSystem::GetSignature() - Encoding Base64 signature...");
+		    //CS_DEBUG_LOG("OAuthSystem::GetSignature() - Encoding Base64 signature...");
 		    /* Do an url encode */
 		    outstrOAuthSignature = CBaseEncoding::URLEncode(strBase64String);
-		    //CS_DEBUG_LOG("COAuthSystem::GetSignature() - Encoding result:\""+outstrOAuthSignature+"\"");
+		    //CS_DEBUG_LOG("OAuthSystem::GetSignature() - Encoding result:\""+outstrOAuthSignature+"\"");
 
 		    return (outstrOAuthSignature.length()) ? true : false;
 		}
 
 		/*++
-		* @method: COAuthSystem::GetOAuthHeader
+		* @method: OAuthSystem::GetOAuthHeader
 		*
 		* @description: this method builds OAuth header that should be used in HTTP requests to twitter
 		*
@@ -468,7 +468,7 @@ namespace ChilliSource
 		* @output: outstrOAuthHttpHeader - OAuth header
 		*
 		*--*/
-		bool COAuthSystem::GetOAuthHeader(const OAuthHttpRequestType ineType,
+		bool OAuthSystem::GetOAuthHeader(const OAuthHttpRequestType ineType,
 										  const std::string& instrRawUrl,
 										  const std::string& instrRawData,
 										  std::string& outstrOAuthHttpHeader,
@@ -554,7 +554,7 @@ namespace ChilliSource
 		}
 
 		/*++
-		* @method: COAuthSystem::GetStringFromOAuthKeyValuePairs
+		* @method: OAuthSystem::GetStringFromOAuthKeyValuePairs
 		*
 		* @description: this method builds a sorted string from key-value pairs
 		*
@@ -566,7 +566,7 @@ namespace ChilliSource
 		* @remarks: internal method
 		*
 		*--*/
-		bool COAuthSystem::GetStringFromOAuthKeyValuePairs(const OAuthKeyValuePairsMap& inmapRawParamMap,
+		bool OAuthSystem::GetStringFromOAuthKeyValuePairs(const OAuthKeyValuePairsMap& inmapRawParamMap,
 														   std::string& outstrRawParams,
 														   const std::string& instrParamsSeperator)
 		{
@@ -615,7 +615,7 @@ namespace ChilliSource
 		}
 
 		/*++
-		* @method: COAuthSystem::ExtractOAuthTokenKeySecret
+		* @method: OAuthSystem::ExtractOAuthTokenKeySecret
 		*
 		* @description: this method extracts oauth token key and secret from
 		*               twitter's HTTP response
@@ -625,7 +625,7 @@ namespace ChilliSource
 		* @output: none
 		*
 		*--*/
-		bool COAuthSystem::ExtractOAuthTokenKeySecret(const std::string& instrRequestTokenResponse)
+		bool OAuthSystem::ExtractOAuthTokenKeySecret(const std::string& instrRequestTokenResponse)
 		{
 		    if(instrRequestTokenResponse.length())
 		    {
@@ -667,7 +667,7 @@ namespace ChilliSource
 		            mstrOAuthScreenName = strDummy;
 		        }
 				
-				//CS_DEBUG_LOG("COAuthSystem::ExtractOAuthTokenKeySecret() - Key:\""+mstrOAuthTokenKey+"\", Secret:\""+mstrOAuthTokenSecret+"\", Name:\""+mstrOAuthScreenName+"\"");
+				//CS_DEBUG_LOG("OAuthSystem::ExtractOAuthTokenKeySecret() - Key:\""+mstrOAuthTokenKey+"\", Secret:\""+mstrOAuthTokenSecret+"\", Name:\""+mstrOAuthScreenName+"\"");
 		    }
 		    return true;
 		}

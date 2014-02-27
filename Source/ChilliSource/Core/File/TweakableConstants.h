@@ -11,31 +11,31 @@
 #ifdef USETWEAKABLECONSTANTS
 
 //Constants in root namespace
-#define TC_FLOAT(name) ::ChilliSource::Core::CTweakableConstants::GetSingleton().GetFloat(#name)
-#define TC_INT(name) ::ChilliSource::Core::CTweakableConstants::GetSingleton().GetInt(#name)
-#define TC_STR(name) ::ChilliSource::Core::CTweakableConstants::GetSingleton().GetString(#name)
-#define TC_BOOL(name) ::ChilliSource::Core::CTweakableConstants::GetSingleton().GetBool(#name)
-#define TC_SAMPLECURVE(name,value) ::ChilliSource::Core::CTweakableConstants::GetSingleton().SampleCurve(#name,value)
+#define TC_FLOAT(name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetFloat(#name)
+#define TC_INT(name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetInt(#name)
+#define TC_STR(name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetString(#name)
+#define TC_BOOL(name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetBool(#name)
+#define TC_SAMPLECURVE(name,value) ::ChilliSource::Core::TweakableConstants::GetSingleton().SampleCurve(#name,value)
 
 //Constants in namespace
-#define TC_FLOATNS(namespace,name) ::ChilliSource::Core::CTweakableConstants::GetSingleton().GetFloat(#namespace,#name)
-#define TC_INTNS(namespace,name) ::ChilliSource::Core::CTweakableConstants::GetSingleton().GetInt(#namespace,#name)
-#define TC_STRNS(namespace,name) ::ChilliSource::Core::CTweakableConstants::GetSingleton().GetString(#namespace,#name)
-#define TC_BOOLNS(namespace,name) ::ChilliSource::Core::CTweakableConstants::GetSingleton().GetBool(#namespace,#name)
-#define TC_SAMPLECURVENS(namespace,name,value) ::ChilliSource::Core::CTweakableConstants::GetSingleton().SampleCurve(#namespace,#name,value)
+#define TC_FLOATNS(namespace,name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetFloat(#namespace,#name)
+#define TC_INTNS(namespace,name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetInt(#namespace,#name)
+#define TC_STRNS(namespace,name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetString(#namespace,#name)
+#define TC_BOOLNS(namespace,name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetBool(#namespace,#name)
+#define TC_SAMPLECURVENS(namespace,name,value) ::ChilliSource::Core::TweakableConstants::GetSingleton().SampleCurve(#namespace,#name,value)
 
 namespace ChilliSource
 {
 	namespace Core
 	{
 		
-		class CTweakableConstants
+		class TweakableConstants
 		{
 		public: 
-			CTweakableConstants();
-			~CTweakableConstants();
-			static CTweakableConstants & GetSingleton();
-			static CTweakableConstants * GetSingletonPtr();
+			TweakableConstants();
+			~TweakableConstants();
+			static TweakableConstants & GetSingleton();
+			static TweakableConstants * GetSingletonPtr();
 			
 			void AddSourceFile(StorageLocation ineStorageLocation, const std::string & inFileName, bool inbLoadNow = true);
 			
@@ -61,7 +61,7 @@ namespace ChilliSource
 				f32 Y;
 			};
 		protected:
-			static CTweakableConstants * msSingleton;
+			static TweakableConstants * msSingleton;
 			void LoadValues();
 			void LoadFile(StorageLocation ineStorageLocation, const std::string & inFileName);
 			

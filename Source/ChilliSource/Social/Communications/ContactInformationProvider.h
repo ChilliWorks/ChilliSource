@@ -20,11 +20,11 @@ namespace ChilliSource{
 		
 		struct ContactRecord {
 		
-			Core::CUTF8String strName;
+			Core::UTF8String strName;
 			bool bHasEmail;
-			Core::CUTF8String strEmail;
+			Core::UTF8String strEmail;
 			bool bHasMobileNumber;
-			Core::CUTF8String strMobileNumber;
+			Core::UTF8String strMobileNumber;
 			
 		};
 		

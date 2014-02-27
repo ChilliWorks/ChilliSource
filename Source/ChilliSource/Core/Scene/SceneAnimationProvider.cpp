@@ -15,36 +15,36 @@
 namespace ChilliSource{
     namespace Core
     {
-        DEFINE_NAMED_INTERFACE(CSceneAnimationProvider);
+        DEFINE_NAMED_INTERFACE(SceneAnimationProvider);
         
         const std::string kMoSceneAnimExtension("moscene.animations");
         
-        bool CSceneAnimationProvider::IsA(InterfaceIDType inInterfaceID) const
+        bool SceneAnimationProvider::IsA(InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == CSceneAnimationProvider::InterfaceID ||inInterfaceID == IResourceProvider::InterfaceID;
+            return inInterfaceID == SceneAnimationProvider::InterfaceID ||inInterfaceID == ResourceProvider::InterfaceID;
         }
         
         
-        bool CSceneAnimationProvider::CanCreateResourceOfKind(InterfaceIDType  inInterfaceID) const
+        bool SceneAnimationProvider::CanCreateResourceOfKind(InterfaceIDType  inInterfaceID) const
         {
-            return inInterfaceID == ChilliSource::Core::CSceneAnimation::InterfaceID;
+            return inInterfaceID == ChilliSource::Core::SceneAnimation::InterfaceID;
         }
         
-        bool CSceneAnimationProvider::CanCreateResourceFromFileWithExtension(const std::string &inExtension) const
+        bool SceneAnimationProvider::CanCreateResourceFromFileWithExtension(const std::string &inExtension) const
         {
             return inExtension == kMoSceneAnimExtension;
         }
         
-        bool CSceneAnimationProvider::CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
+        bool SceneAnimationProvider::CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource)
         {
             return LoadMoSceneAnim(ineStorageLocation, inFilePath, outpResource);
         }
         
-        bool CSceneAnimationProvider::LoadMoSceneAnim(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
+        bool SceneAnimationProvider::LoadMoSceneAnim(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource)
         {
-            CSceneAnimation * pSceneAnim = reinterpret_cast<CSceneAnimation*>(outpResource.get());
+            SceneAnimation * pSceneAnim = reinterpret_cast<SceneAnimation*>(outpResource.get());
             
-            CSceneAnimationDesc sAnimDesc;
+            SceneAnimationDesc sAnimDesc;
             
             if(!sAnimDesc.LoadFromBinaryFile(ineStorageLocation, inFilePath))
                 return false;

@@ -18,10 +18,10 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        class CColourChangerParticleEffector : public IParticleEffector
+        class ColourChangerParticleEffector : public ParticleEffector
         {
         public:
-            CColourChangerParticleEffector(const Core::ParamDictionary& insParams);
+            ColourChangerParticleEffector(const Core::ParamDictionary& insParams);
             //-----------------------------------------------------
             /// Create
             ///
@@ -30,7 +30,7 @@ namespace ChilliSource
             /// @param Param dictionary
             /// @return Ownership of effector
             //-----------------------------------------------------
-            static IParticleEffector* Create(const Core::ParamDictionary& inParams);
+            static ParticleEffector* Create(const Core::ParamDictionary& inParams);
             //-----------------------------------------------------
             /// Init
             ///
@@ -54,8 +54,8 @@ namespace ChilliSource
         private:
             
             bool mbInitialColourSet;
-            Core::CColour mInitialColour;
-            Core::CColour mTargetColour;
+            Core::Colour mInitialColour;
+            Core::Colour mTargetColour;
         };
     }
 }

@@ -32,13 +32,13 @@ namespace ChilliSource
 			///
 			/// @param Sprite Sheet
 			//------------------------------------------------------------------------
-			void SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
 			//------------------------------------------------------------------------
 			/// Get Sprite Sheet
 			///
 			/// @return Sprite Sheet
 			//------------------------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetSpriteSheet() const;
+			const Rendering::SpriteSheetSPtr& GetSpriteSheet() const;
 			//---------------------------------------------------------
 			/// Set Base Fill Sprite Sheet Index ID
 			///
@@ -127,25 +127,25 @@ namespace ChilliSource
 			///
 			/// @param Colour of progress bar
 			//------------------------------------------------------------------------
-			void SetFillColour(const Core::CColour& inColour);
+			void SetFillColour(const Core::Colour& inColour);
 			//------------------------------------------------------------------------
 			/// Get Fill Colour
 			///
 			/// @return Colour of progress bar
 			//------------------------------------------------------------------------
-			const Core::CColour& GetFillColour() const;
+			const Core::Colour& GetFillColour() const;
 			//------------------------------------------------------------------------
 			/// Set Background Colour
 			///
 			/// @param Colour of background
 			//------------------------------------------------------------------------
-			void SetBackgroundColour(const Core::CColour& inColour);
+			void SetBackgroundColour(const Core::Colour& inColour);
 			//------------------------------------------------------------------------
 			/// Get Background Colour
 			///
 			/// @return Colour of background
 			//------------------------------------------------------------------------
-			const Core::CColour& GetBackgroundColour() const;
+			const Core::Colour& GetBackgroundColour() const;
 			//------------------------------------------------------------------------
 			/// Draw
 			///
@@ -153,17 +153,17 @@ namespace ChilliSource
 			///
 			/// @param Renderer
 			//------------------------------------------------------------------------
-			virtual void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			virtual void Draw(Rendering::CanvasRenderer* inpCanvas);
 
 		private:
 
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
 
 			DECLARE_PROPERTY_A(std::string, BaseFillSpriteSheetIndexID, SetBaseFillSpriteSheetIndexID, GetBaseFillSpriteSheetIndexID);
 			DECLARE_PROPERTY_A(std::string, BaseBackgroundSpriteSheetIndexID, SetBaseBackgroundSpriteSheetIndexID, GetBaseBackgroundSpriteSheetIndexID);
 
-			DECLARE_PROPERTY_A(Core::CColour, FillColour, SetFillColour, GetFillColour);
-			DECLARE_PROPERTY_A(Core::CColour, BackgroundColour, SetBackgroundColour, GetBackgroundColour);
+			DECLARE_PROPERTY_A(Core::Colour, FillColour, SetFillColour, GetFillColour);
+			DECLARE_PROPERTY_A(Core::Colour, BackgroundColour, SetBackgroundColour, GetBackgroundColour);
 			
         
             DECLARE_PROPERTY_A(bool, HeightFromImage, EnableHeightFromImage, IsHeightFromImageEnabled);

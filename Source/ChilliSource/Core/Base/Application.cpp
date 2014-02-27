@@ -54,48 +54,48 @@ namespace ChilliSource
 		const f32 kfUpdateIntervalMax		= kfUpdateClampThreshold;	//We never carry more than this to the next frame
         
         //---Static Definitions
-        TimeIntervalSecs CApplication::uddwCurrentAppTime = 0;
+        TimeIntervalSecs Application::uddwCurrentAppTime = 0;
 		
-        CStateManager CApplication::mStateMgr;
-        Rendering::FontPtr CApplication::pDefaultFont;
-        Rendering::MeshPtr CApplication::pDefaultMesh;
-        Rendering::MaterialPtr CApplication::pDefaultMaterial;
+        StateManager Application::mStateMgr;
+        Rendering::FontSPtr Application::pDefaultFont;
+        Rendering::MeshSPtr Application::pDefaultMesh;
+        Rendering::MaterialSPtr Application::pDefaultMaterial;
 
-        bool CApplication::mbHasTouchInput = false;
-        bool CApplication::mbUpdateSystems = true;
-        f32 CApplication::mfUpdateInterval = kfDefaultUpdateInterval;
-        f32 CApplication::mfUpdateSpeed = 1.0f;
+        bool Application::mbHasTouchInput = false;
+        bool Application::mbUpdateSystems = true;
+        f32 Application::mfUpdateInterval = kfDefaultUpdateInterval;
+        f32 Application::mfUpdateSpeed = 1.0f;
         
-        Rendering::IRenderSystem* CApplication::mpRenderSystem = nullptr;
-        Input::InputSystem * CApplication::mpInputSystem = nullptr;
-        IPlatformSystem* CApplication::pPlatformSystem = nullptr;
-		Audio::AudioSystem* CApplication::pAudioSystem = nullptr;
-		Rendering::CRenderer* CApplication::mpRenderer = nullptr;
-		IFileSystem* CApplication::mspFileSystem = nullptr;
+        Rendering::RenderSystem* Application::mpRenderSystem = nullptr;
+        Input::InputSystem * Application::mpInputSystem = nullptr;
+        PlatformSystem* Application::pPlatformSystem = nullptr;
+		Audio::AudioSystem* Application::pAudioSystem = nullptr;
+		Rendering::Renderer* Application::mpRenderer = nullptr;
+		FileSystem* Application::mspFileSystem = nullptr;
         
-        std::vector<IUpdateable*> CApplication::mUpdateableSystems;
-        std::vector<SystemPtr> CApplication::mSystems;
+        std::vector<IUpdateable*> Application::mUpdateableSystems;
+        std::vector<SystemSPtr> Application::mSystems;
         
-        ScreenOrientation CApplication::meDefaultOrientation = ScreenOrientation::k_landscapeRight;
+        ScreenOrientation Application::meDefaultOrientation = ScreenOrientation::k_landscapeRight;
         
-        CResourceManagerDispenser* CApplication::mpResourceManagerDispenser = nullptr;
+        ResourceManagerDispenser* Application::mpResourceManagerDispenser = nullptr;
 
-        SystemConfirmDialog::Delegate CApplication::mActiveSysConfirmDelegate;
+        SystemConfirmDialog::Delegate Application::mActiveSysConfirmDelegate;
 
-        f32 CApplication::s_updateIntervalRemainder = 0.0f;
-        bool CApplication::s_shouldInvokeResumeEvent = false;
-        bool CApplication::s_isFirstFrame = true;
-        bool CApplication::s_isSuspending = false;
+        f32 Application::s_updateIntervalRemainder = 0.0f;
+        bool Application::s_shouldInvokeResumeEvent = false;
+        bool Application::s_isFirstFrame = true;
+        bool Application::s_isSuspending = false;
         
 		//--------------------------------------------------------------------------------------------------
 		/// Constructor
 		///
 		/// Default
 		//--------------------------------------------------------------------------------------------------
-		CApplication::CApplication()
+		Application::Application()
 		{
-            mpResourceManagerDispenser = new CResourceManagerDispenser(this);
-            mpComponentFactoryDispenser = new CComponentFactoryDispenser(this);
+            mpResourceManagerDispenser = new ResourceManagerDispenser(this);
+            mpComponentFactoryDispenser = new ComponentFactoryDispenser(this);
             mStateMgr.SetOwningApplication(this);
 
 #ifdef TARGET_WINDOWS
@@ -103,7 +103,7 @@ namespace ChilliSource
 			meDefaultOrientation = PORTRAIT_UP;
 #endif
             
-			pPlatformSystem = IPlatformSystem::Create();
+			pPlatformSystem = PlatformSystem::Create();
 		}
         //--------------------------------------------------------------------------------------------------
         /// Resolution Sort Predicate
@@ -119,7 +119,7 @@ namespace ChilliSource
 		///
 		/// Launch the application's setup code and cause it to begin it's update loop
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::Run()
+		void Application::Run()
 		{
 			//Initialise the platform specific API's
 			pPlatformSystem->Init();
@@ -132,7 +132,7 @@ namespace ChilliSource
             DetermineResourceDirectories();
 
             //init tweakable constants and local data store.
-			new CTweakableConstants();
+			new TweakableConstants();
 			new CLocalDataStore();
 
             //Set up the device helper
@@ -163,7 +163,7 @@ namespace ChilliSource
         ///
         /// Depedending on the device decide which folders resources should be loaded from
         //--------------------------------------------------------------------------------------------------
-        void CApplication::DetermineResourceDirectories()
+        void Application::DetermineResourceDirectories()
         {
             //Get a list of the resource directories and determine which one this device should be
             //loading from based on it's screen
@@ -194,7 +194,7 @@ namespace ChilliSource
                 strDeviceDir = strDefaultDeviceDir;
             }
             
-            IFileSystem::SetResourceDirectories(strDeviceDir, strDefaultDeviceDir, strDefaultDir, fAssetDensity);
+            FileSystem::SetResourceDirectories(strDeviceDir, strDefaultDeviceDir, strDefaultDir, fAssetDensity);
         }
 		//--------------------------------------------------------------------------------------------------
 		/// Get System Implementing
@@ -203,9 +203,9 @@ namespace ChilliSource
 		/// @param The type ID of the system you wish to implement
 		/// @return System that implements the given interface or nullptr if no system
 		//--------------------------------------------------------------------------------------------------
-		SystemPtr CApplication::GetSystemImplementing(InterfaceIDType inInterfaceID)
+		SystemSPtr Application::GetSystemImplementing(InterfaceIDType inInterfaceID)
 		{
-			for (std::vector<SystemPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
+			for (std::vector<SystemSPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
 			{
 				if ((*it)->IsA(inInterfaceID)) 
 				{
@@ -214,7 +214,7 @@ namespace ChilliSource
 			}
 			
 			CS_WARNING_LOG("Application cannot find implementing systems");
-			return SystemPtr();
+			return SystemSPtr();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get Systems Implementing
@@ -223,10 +223,10 @@ namespace ChilliSource
 		/// and fills an array with them.
 		/// @param The type ID of the system you wish to implement
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::GetSystemsImplementing(InterfaceIDType inInterfaceID, std::vector<SystemPtr> & outSystems)
+		void Application::GetSystemsImplementing(InterfaceIDType inInterfaceID, std::vector<SystemSPtr> & outSystems)
 		{
 			outSystems.clear();
-			for (std::vector<SystemPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
+			for (std::vector<SystemSPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
 			{
 				if ((*it)->IsA(inInterfaceID)) 
 				{
@@ -243,9 +243,9 @@ namespace ChilliSource
 		/// @param The type ID of the resource you wish to create (i.e. Model, Texture)
 		/// @return Resource provider that loads the resource type
 		//--------------------------------------------------------------------------------------------------
-		IResourceProvider* CApplication::GetResourceProviderProducing(InterfaceIDType inInterfaceID, const std::string & inExtension)
+		ResourceProvider* Application::GetResourceProviderProducing(InterfaceIDType inInterfaceID, const std::string & inExtension)
 		{
-			for (std::vector<IResourceProvider*>::iterator pProv = mResourceProviders.begin(); pProv != mResourceProviders.end(); ++pProv) 
+			for (std::vector<ResourceProvider*>::iterator pProv = mResourceProviders.begin(); pProv != mResourceProviders.end(); ++pProv) 
 			{
 				if ((*pProv)->CanCreateResourceFromFileWithExtension(inExtension)) 
 				{
@@ -261,7 +261,7 @@ namespace ChilliSource
         ///
         /// @return Application state manager
         //--------------------------------------------------------------------------------------------------
-        CStateManager& CApplication::GetStateManager() 
+        StateManager& Application::GetStateManager() 
         {
             return mStateMgr;
         }
@@ -270,7 +270,7 @@ namespace ChilliSource
         ///
         /// @return Handle to application state manager
         //--------------------------------------------------------------------------------------------------
-        CStateManager* CApplication::GetStateManagerPtr() 
+        StateManager* Application::GetStateManagerPtr() 
         {
             return &mStateMgr;
         }
@@ -279,7 +279,7 @@ namespace ChilliSource
 		///
 		/// @return The time elapsed since the application began
 		//--------------------------------------------------------------------------------------------------
-		TimeIntervalSecs CApplication::GetAppElapsedTime() 
+		TimeIntervalSecs Application::GetAppElapsedTime() 
 		{
 			return uddwCurrentAppTime;
 		}
@@ -288,7 +288,7 @@ namespace ChilliSource
 		///
 		/// @param The time elapsed since the application began
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::SetAppElapsedTime(TimeIntervalSecs inElapsedTime)
+		void Application::SetAppElapsedTime(TimeIntervalSecs inElapsedTime)
 		{
 			uddwCurrentAppTime = inElapsedTime;
 		}
@@ -297,7 +297,7 @@ namespace ChilliSource
         ///
         /// @return System clock time in seconds since epoch
         //--------------------------------------------------------------------------------------------------
-        TimeIntervalSecs CApplication::GetSystemTime()
+        TimeIntervalSecs Application::GetSystemTime()
         {
             return time(0);
         }
@@ -306,7 +306,7 @@ namespace ChilliSource
 		///
 		/// @return System clock time in milliseconds since epoch
 		//--------------------------------------------------------------------------------------------------
-		TimeIntervalMs CApplication::GetSystemTimeInMilliseconds()
+		TimeIntervalMs Application::GetSystemTimeInMilliseconds()
 		{
 			return pPlatformSystem->GetSystemTimeMS();
 		}
@@ -315,7 +315,7 @@ namespace ChilliSource
 		///
 		/// @return String containing the engine version number
 		//--------------------------------------------------------------------------------------------------
-		std::string CApplication::GetMoFlowVersion()
+		std::string Application::GetMoFlowVersion()
 		{
 			return MOFLOW_REVISION_NUMBER;
 		}
@@ -324,7 +324,7 @@ namespace ChilliSource
 		///
 		/// @return String containing the application version number
 		//--------------------------------------------------------------------------------------------------
-		std::string CApplication::GetAppVersion()
+		std::string Application::GetAppVersion()
 		{
 			return APP_REVISION_NUMBER;
 		}
@@ -333,10 +333,10 @@ namespace ChilliSource
 		///
 		/// Once the systems have been created they are then added to the pool and initialised
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::PostCreateSystems()
+		void Application::PostCreateSystems()
 		{
             //Loop round all the created systems and categorise them
-			for(std::vector<SystemPtr>::iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
+			for(std::vector<SystemSPtr>::iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
 			{
 				if ((*it)->IsA(IUpdateable::InterfaceID))
 				{
@@ -352,9 +352,9 @@ namespace ChilliSource
                         mpComponentFactoryDispenser->RegisterComponentFactory(pProducer->GetComponentFactoryPtr(i));
                     }
 				}
-				if ((*it)->IsA(IResourceProvider::InterfaceID)) 
+				if ((*it)->IsA(ResourceProvider::InterfaceID)) 
 				{
-					mResourceProviders.push_back((*it)->GetInterface<IResourceProvider>());
+					mResourceProviders.push_back((*it)->GetInterface<ResourceProvider>());
 				}
 			}
 
@@ -366,7 +366,7 @@ namespace ChilliSource
         //-----------------------------------------
 		/// Load Default Resources
 		//-----------------------------------------
-        void CApplication::LoadDefaultResources()
+        void Application::LoadDefaultResources()
         {
             Json::Value jRoot;
             if(CUtils::ReadJson(StorageLocation::k_package, "App.config", &jRoot) == true)
@@ -388,21 +388,21 @@ namespace ChilliSource
                 {
                     StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultMesh"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultMesh"].get("Path", "").asString();
-                    pDefaultMesh = LOAD_RESOURCE(Rendering::CMesh, eStorageLocation, strPath);
+                    pDefaultMesh = LOAD_RESOURCE(Rendering::Mesh, eStorageLocation, strPath);
                 }
                 
                 if(jRoot.isMember("DefaultFont"))
                 {
                     StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultFont"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultFont"].get("Path", "").asString();
-                    pDefaultFont = LOAD_RESOURCE(Rendering::CFont, eStorageLocation, strPath);
+                    pDefaultFont = LOAD_RESOURCE(Rendering::Font, eStorageLocation, strPath);
                 }
                 
                 if(jRoot.isMember("DefaultMaterial"))
                 {
                     StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultMaterial"].get("Location", "Package").asString());
                     std::string strPath = jRoot["DefaultMaterial"].get("Path", "").asString();
-                    pDefaultMaterial = LOAD_RESOURCE(Rendering::CMaterial, eStorageLocation, strPath);
+                    pDefaultMaterial = LOAD_RESOURCE(Rendering::Material, eStorageLocation, strPath);
                 }
             }
         }
@@ -414,7 +414,7 @@ namespace ChilliSource
 		///
 		/// @param Time between update calls
 		//-----------------------------------------
-		void CApplication::SetUpdateInterval(f32 infUpdateInterval)
+		void Application::SetUpdateInterval(f32 infUpdateInterval)
 		{
 			mfUpdateInterval = infUpdateInterval;			
 		}
@@ -423,7 +423,7 @@ namespace ChilliSource
 		///
 		/// @return Time between update calls
 		//--------------------------------------------------------------------------------------------------
-		f32 CApplication::GetUpdateInterval()
+		f32 Application::GetUpdateInterval()
 		{
 			return mfUpdateInterval;
 		}
@@ -432,7 +432,7 @@ namespace ChilliSource
 		///
 		/// @return Max time to be processed in a single frame.
 		//--------------------------------------------------------------------------------------------------
-		f32 CApplication::GetUpdateIntervalMax()
+		f32 Application::GetUpdateIntervalMax()
 		{
 			return kfUpdateIntervalMax;
 		}
@@ -441,7 +441,7 @@ namespace ChilliSource
         ///
         /// @param Scaler to speed up or slow down update time
         //--------------------------------------------------------------------------------------------------
-        void CApplication::SetUpdateSpeed(f32 infSpeed)
+        void Application::SetUpdateSpeed(f32 infSpeed)
         {
             mfUpdateSpeed = infSpeed;
         }
@@ -453,7 +453,7 @@ namespace ChilliSource
         /// @param Storage location
         /// @param File path excluding name (i.e. if root then "")
         //--------------------------------------------------------------------------------------------------
-        void CApplication::RefreshMasterText(StorageLocation ineStorageLocation, const std::string& instrDirectory)
+        void Application::RefreshMasterText(StorageLocation ineStorageLocation, const std::string& instrDirectory)
         {
             //Load any localised text from file 
             if(!Core::CLocalisedText::LoadTextFromFile(ineStorageLocation, instrDirectory, Core::CDevice::GetLanguage().GetLanguageCode() + ".mofloloca"))
@@ -469,7 +469,7 @@ namespace ChilliSource
         ///
         /// @param Text
         //--------------------------------------------------------------------------------------------------
-        void CApplication::MakeToast(const UTF8String& instrText)
+        void Application::MakeToast(const UTF8String& instrText)
         {
             pPlatformSystem->MakeToast(instrText);
         }
@@ -478,7 +478,7 @@ namespace ChilliSource
         ///
         /// @return Default font given to the system by the application delegate
         //--------------------------------------------------------------------------------------------------
-        const Rendering::FontPtr& CApplication::GetDefaultFont()
+        const Rendering::FontSPtr& Application::GetDefaultFont()
         {
             return pDefaultFont;
         }
@@ -487,7 +487,7 @@ namespace ChilliSource
         ///
         /// @return Default mesh given to the system by the application delegate
         //--------------------------------------------------------------------------------------------------
-        const Rendering::MeshPtr& CApplication::GetDefaultMesh()
+        const Rendering::MeshSPtr& Application::GetDefaultMesh()
         {
             return pDefaultMesh;
         }
@@ -496,7 +496,7 @@ namespace ChilliSource
         ///
         /// @return Default material given to the system by the application delegate
         //--------------------------------------------------------------------------------------------------
-        const Rendering::MaterialPtr& CApplication::GetDefaultMaterial()
+        const Rendering::MaterialSPtr& Application::GetDefaultMaterial()
         {
             return pDefaultMaterial;
         }
@@ -506,7 +506,7 @@ namespace ChilliSource
         /// Stop the application and exit 
         /// gracefully
         //-----------------------------------------
-        void CApplication::Quit()
+        void Application::Quit()
         {
             pPlatformSystem->TerminateUpdater();
         }
@@ -522,7 +522,7 @@ namespace ChilliSource
         /// @param Confirm text
         /// @param Cancel text
         //--------------------------------------------------------------------------------------------------
-        void CApplication::ShowSystemConfirmDialog(u32 inudwID, const SystemConfirmDialog::Delegate& inDelegate, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm, const UTF8String& instrCancel)
+        void Application::ShowSystemConfirmDialog(u32 inudwID, const SystemConfirmDialog::Delegate& inDelegate, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm, const UTF8String& instrCancel)
         {
         	 pPlatformSystem->ShowSystemConfirmDialog(inudwID, instrTitle, instrMessage, instrConfirm, instrCancel);
         	 mActiveSysConfirmDelegate = inDelegate;
@@ -538,7 +538,7 @@ namespace ChilliSource
         /// @param Message text
         /// @param Confirm text
         //--------------------------------------------------------------------------------------------------
-        void CApplication::ShowSystemDialog(u32 inudwID, const SystemConfirmDialog::Delegate& inDelegate, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm)
+        void Application::ShowSystemDialog(u32 inudwID, const SystemConfirmDialog::Delegate& inDelegate, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm)
         {
             pPlatformSystem->ShowSystemDialog(inudwID, instrTitle, instrMessage, instrConfirm);
             mActiveSysConfirmDelegate = inDelegate;
@@ -551,7 +551,7 @@ namespace ChilliSource
         /// @param ID
         /// @param Result
         //--------------------------------------------------------------------------------------------------
-        void CApplication::OnSystemConfirmDialogResult(u32 inudwID, SystemConfirmDialog::Result ineResult)
+        void Application::OnSystemConfirmDialogResult(u32 inudwID, SystemConfirmDialog::Result ineResult)
         {
         	if(mActiveSysConfirmDelegate)
         	{
@@ -564,7 +564,7 @@ namespace ChilliSource
 		///
 		/// @param the system pointer.
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::SetRenderSystem(Rendering::IRenderSystem* inpSystem)
+		void Application::SetRenderSystem(Rendering::RenderSystem* inpSystem)
 		{
 			mpRenderSystem = inpSystem;
 		}
@@ -573,7 +573,7 @@ namespace ChilliSource
 		///
 		/// @param the system pointer.
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::SetInputSystem(Input::InputSystem* inpSystem)
+		void Application::SetInputSystem(Input::InputSystem* inpSystem)
 		{
 			mpInputSystem = inpSystem;
 		}
@@ -582,7 +582,7 @@ namespace ChilliSource
 		///
 		/// @param the system pointer.
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::SetAudioSystem(Audio::AudioSystem* inpSystem)
+		void Application::SetAudioSystem(Audio::AudioSystem* inpSystem)
 		{
 			pAudioSystem = inpSystem;
 		}
@@ -591,7 +591,7 @@ namespace ChilliSource
 		///
 		/// @param the renderer
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::SetRenderer(Rendering::CRenderer* inpSystem)
+		void Application::SetRenderer(Rendering::Renderer* inpSystem)
 		{
 			mpRenderer = inpSystem;
 		}
@@ -600,17 +600,17 @@ namespace ChilliSource
 		///
 		/// @param the file system
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::SetFileSystem(IFileSystem* inpSystem)
+		void Application::SetFileSystem(FileSystem* inpSystem)
 		{
 			mspFileSystem = inpSystem;
-			mSystems.push_back(SystemPtr(mspFileSystem));
+			mSystems.push_back(SystemSPtr(mspFileSystem));
 		}
 		 //--------------------------------------------------------------------------------------------------
 		/// Set Has Touch Input
 		///
 		/// @param whether or not touch input is available.
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::SetHasTouchInput(bool inbTouchInput)
+		void Application::SetHasTouchInput(bool inbTouchInput)
 		{
 			mbHasTouchInput = inbTouchInput;
 		}
@@ -619,7 +619,7 @@ namespace ChilliSource
 		///
 		/// @return whether or not touch input is available.
 		//--------------------------------------------------------------------------------------------------
-		bool CApplication::HasTouchInput()
+		bool Application::HasTouchInput()
 		{
 			return mbHasTouchInput;
 		}
@@ -630,7 +630,7 @@ namespace ChilliSource
 		/// and each updatable subsystem with the time since last frame. It will also update any
 		/// game timers.
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::OnFrameBegin(f32 infDt, TimeIntervalSecs inuddwTimestamp)
+		void Application::OnFrameBegin(f32 infDt, TimeIntervalSecs inuddwTimestamp)
 		{
             if(s_shouldInvokeResumeEvent == true)
 			{
@@ -665,10 +665,10 @@ namespace ChilliSource
 				mpInputSystem->FlushBufferedInput();
 			}
             
-            while((s_updateIntervalRemainder >= CApplication::GetUpdateInterval()) || s_isFirstFrame)
+            while((s_updateIntervalRemainder >= Application::GetUpdateInterval()) || s_isFirstFrame)
             {
-                s_updateIntervalRemainder -=  CApplication::GetUpdateInterval();
-                mStateMgr.FixedUpdate(CApplication::GetUpdateInterval());
+                s_updateIntervalRemainder -=  Application::GetUpdateInterval();
+                mStateMgr.FixedUpdate(Application::GetUpdateInterval());
                 
                 s_isFirstFrame = false;
             }
@@ -677,7 +677,7 @@ namespace ChilliSource
             Update(infDt);
             
             //Render the scene
-            mpRenderer->RenderToScreen(Core::CApplication::GetStateManagerPtr()->GetActiveScenePtr());
+            mpRenderer->RenderToScreen(Core::Application::GetStateManagerPtr()->GetActiveScenePtr());
             
 #ifdef DEBUG_STATS
 			DebugStats::Clear();
@@ -691,13 +691,13 @@ namespace ChilliSource
         ///
         /// @param Time between frames
         //--------------------------------------------------------------------------------------------------
-		void CApplication::Update(f32 infDT)
+		void Application::Update(f32 infDT)
 		{
             infDT *= mfUpdateSpeed;
             
 			CCoreTimer::Update(infDT);
             
-            CNotificationScheduler::Update(infDT);
+            NotificationScheduler::Update(infDT);
             
 			//Update sub systems
             if (mbUpdateSystems == true)
@@ -717,10 +717,10 @@ namespace ChilliSource
 		/// Triggered on receiving a "application memory warning" message.
 		/// This will notify active resource managers to purge their caches
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::OnApplicationMemoryWarning()
+		void Application::OnApplicationMemoryWarning()
 		{
 			CS_DEBUG_LOG("Memory Warning. Clearing resource cache...");
-			CResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
+			ResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
 			CApplicationEvents::GetLowMemoryEvent().Invoke();
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -728,7 +728,7 @@ namespace ChilliSource
 		///
 		/// Triggered on receiving a "go back" event. This is usually caused by a back button being pressed
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::OnGoBack()
+		void Application::OnGoBack()
 		{
 			CS_DEBUG_LOG("Go back event.");
 			mStateMgr.GetActiveState()->OnGoBack();
@@ -741,7 +741,7 @@ namespace ChilliSource
 		/// touch input we must rotate the input co-ordinates
 		/// @param Screen orientation flag
 		//----------------------------------------------------------------------
-		void CApplication::SetOrientation(ScreenOrientation inOrientation)
+		void Application::SetOrientation(ScreenOrientation inOrientation)
 		{
 			if(mpRenderer->GetActiveCameraPtr())
 			{
@@ -761,7 +761,7 @@ namespace ChilliSource
 		///
 		/// @param whether or not to update.
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::EnableSystemUpdating(bool inbEnable)
+		void Application::EnableSystemUpdating(bool inbEnable)
 		{
 			mbUpdateSystems = inbEnable;
 		}
@@ -771,7 +771,7 @@ namespace ChilliSource
         /// Triggered on receiving a "application will suspend" message.
 		/// This will notify active states to pause and tell the sub systems to stop
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::Suspend()
+		void Application::Suspend()
 		{
             CS_DEBUG_LOG("App Suspending...");
     
@@ -799,7 +799,7 @@ namespace ChilliSource
 		///
 		/// Resumes application from suspended state
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::Resume()
+		void Application::Resume()
 		{
             s_shouldInvokeResumeEvent = true;
 
@@ -809,7 +809,7 @@ namespace ChilliSource
         //----------------------------------------------
 		/// On Application Resumed
 		//----------------------------------------------
-		void CApplication::OnApplicationResumed()
+		void Application::OnApplicationResumed()
 		{
 			CS_DEBUG_LOG("App Resuming...");
             
@@ -831,9 +831,9 @@ namespace ChilliSource
 		///
 		/// Triggered on receiving a "screen resized" message
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::OnScreenResized(u32 inudwWidth, u32 inudwHeight) 
+		void Application::OnScreenResized(u32 inudwWidth, u32 inudwHeight) 
 		{	
-			CScreen::SetRawDimensions(Core::CVector2((f32)inudwWidth, (f32)inudwHeight));
+			CScreen::SetRawDimensions(Core::Vector2((f32)inudwWidth, (f32)inudwHeight));
             
 			if(mpRenderSystem)
 			{
@@ -856,7 +856,7 @@ namespace ChilliSource
 		/// Triggered on receiving a "orientation changed" message. Used to tell the camera and input
 		/// to rotate
 		//--------------------------------------------------------------------------------------------------
-		void CApplication::OnScreenChangedOrientation(ScreenOrientation ineOrientation) 
+		void Application::OnScreenChangedOrientation(ScreenOrientation ineOrientation) 
 		{		
 			CScreen::SetOrientation(ineOrientation);
             
@@ -876,7 +876,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//--------------------------------------------------------------------------------------------------
-		CApplication::~CApplication()
+		Application::~Application()
 		{
 			mStateMgr.DestroyAll();
 
@@ -891,7 +891,7 @@ namespace ChilliSource
 			//We have an issue with the order of destruction of systems.
 			while(mSystems.empty() == false)
 			{
-				SystemPtr pSystem = mSystems.back();
+				SystemSPtr pSystem = mSystems.back();
 				mSystems.pop_back();
 				pSystem.reset();
 			}

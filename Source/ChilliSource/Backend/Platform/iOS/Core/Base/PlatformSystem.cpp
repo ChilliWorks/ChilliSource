@@ -88,8 +88,8 @@ namespace ChilliSource
             //---Info providers
 			AddInfoProviderFunc(Social::ContactInformationProvider::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateContactInformationProvider));
 
-			Core::CNotificationScheduler::Initialise(new CLocalNotificationScheduler());
-			Core::CApplication::SetFileSystem(new iOS::CFileSystem());
+			Core::NotificationScheduler::Initialise(new CLocalNotificationScheduler());
+			Core::Application::SetFileSystem(new iOS::CFileSystem());
 
 			Core::CLogging::Init();
 		}
@@ -143,7 +143,7 @@ namespace ChilliSource
         /// @param Exisiting systems
         /// @return Pointer to system
         //-------------------------------------------
-		Core::ISystem* CPlatformSystem::FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemPtr>& inSystems) const
+		Core::System* CPlatformSystem::FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemSPtr>& inSystems) const
         {
 			for(u32 nSystem = 0; nSystem < inSystems.size(); nSystem++)
             {
@@ -171,44 +171,44 @@ namespace ChilliSource
 		///
 		/// @param the system list
 		//-------------------------------------------------
-		void CPlatformSystem::CreateDefaultSystems(std::vector<Core::SystemPtr> & inaSystems)
+		void CPlatformSystem::CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems)
 		{
 			//create the main systems
-            Rendering::IRenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
-            inaSystems.push_back(Core::SystemPtr(pRenderSystem));
-			Core::CApplication::SetRenderSystem(pRenderSystem);
+            Rendering::RenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
+            inaSystems.push_back(Core::SystemSPtr(pRenderSystem));
+			Core::Application::SetRenderSystem(pRenderSystem);
             
             Input::InputSystem* pInputSystem = new iOS::CInputSystem();
-            inaSystems.push_back(Core::SystemPtr(pInputSystem));
-            Core::CApplication::SetInputSystem(pInputSystem);
+            inaSystems.push_back(Core::SystemSPtr(pInputSystem));
+            Core::Application::SetInputSystem(pInputSystem);
             
             Audio::AudioSystem * pAudioSystem = new iOS::CFMODSystem();
-			inaSystems.push_back(Core::SystemPtr(pAudioSystem));
-			inaSystems.push_back(Core::SystemPtr(new iOS::CFMODAudioLoader(pAudioSystem)));
-			Core::CApplication::SetAudioSystem(pAudioSystem);
+			inaSystems.push_back(Core::SystemSPtr(pAudioSystem));
+			inaSystems.push_back(Core::SystemSPtr(new iOS::CFMODAudioLoader(pAudioSystem)));
+			Core::Application::SetAudioSystem(pAudioSystem);
             
 			//create other important systems
 			OpenGL::CRenderCapabilities* pRenderCapabilities = new OpenGL::CRenderCapabilities();
-            inaSystems.push_back(Core::SystemPtr(pRenderCapabilities));
-            inaSystems.push_back(Core::SystemPtr(new iOS::ImageLoader()));
-            inaSystems.push_back(Core::SystemPtr(new Core::CMoImageProvider()));
-			inaSystems.push_back(Core::SystemPtr(new Rendering::CSpriteSheetLoader()));
-			inaSystems.push_back(Core::SystemPtr(new Rendering::CXMLSpriteSheetLoader()));
-			inaSystems.push_back(Core::SystemPtr(new Rendering::CMaterialLoader(pRenderCapabilities)));
-			inaSystems.push_back(Core::SystemPtr(new Rendering::CFontLoader()));
-            inaSystems.push_back(Core::SystemPtr(new Rendering::CAnimatedMeshComponentUpdater()));
-            inaSystems.push_back(Core::SystemPtr(new Rendering::CMaterialFactory()));
+            inaSystems.push_back(Core::SystemSPtr(pRenderCapabilities));
+            inaSystems.push_back(Core::SystemSPtr(new iOS::ImageLoader()));
+            inaSystems.push_back(Core::SystemSPtr(new Core::MoImageProvider()));
+			inaSystems.push_back(Core::SystemSPtr(new Rendering::SpriteSheetLoader()));
+			inaSystems.push_back(Core::SystemSPtr(new Rendering::XMLSpriteSheetLoader()));
+			inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialLoader(pRenderCapabilities)));
+			inaSystems.push_back(Core::SystemSPtr(new Rendering::FontLoader()));
+            inaSystems.push_back(Core::SystemSPtr(new Rendering::AnimatedMeshComponentUpdater()));
+            inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialFactory()));
             
 			//Initialise the render system
-			Core::CApplication::GetRenderSystemPtr()->Init((u32)Core::CScreen::GetRawDimensions().x, (u32)Core::CScreen::GetRawDimensions().y);
+			Core::Application::GetRenderSystemPtr()->Init((u32)Core::CScreen::GetRawDimensions().x, (u32)Core::CScreen::GetRawDimensions().y);
             
 			//Create the renderer
-			Core::CApplication::SetRenderer(new Rendering::CRenderer(Core::CApplication::GetRenderSystemPtr()));
+			Core::Application::SetRenderer(new Rendering::Renderer(Core::Application::GetRenderSystemPtr()));
             
 			//Initialise the input system
-			if(Core::CApplication::GetInputSystemPtr() != nullptr)
+			if(Core::Application::GetInputSystemPtr() != nullptr)
 			{
-				Core::CApplication::SetHasTouchInput((Core::CApplication::GetInputSystemPtr()->GetTouchScreenPtr() != nullptr));
+				Core::Application::SetHasTouchInput((Core::Application::GetInputSystemPtr()->GetTouchScreenPtr() != nullptr));
 			}
 		}
 		//-------------------------------------------------
@@ -221,7 +221,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void CPlatformSystem::PostCreateSystems()
 		{
-            if(Core::CApplication::GetAudioSystemPtr() != nullptr)
+            if(Core::Application::GetAudioSystemPtr() != nullptr)
 			{
 				Audio::AudioPlayer::Init();
 			}
@@ -289,9 +289,9 @@ namespace ChilliSource
         /// @param Vector of existing systems
         /// @return A handle to the given system or nullptr if the platform cannot support it
         //-----------------------------------------
-		Core::ISystem* CPlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemPtr> & inaExistingSystems) const
+		Core::System* CPlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr> & inaExistingSystems) const
         {
-			Core::ISystem * pResult = nullptr;
+			Core::System * pResult = nullptr;
 			
 			MapInterfaceIDToSystemFunc::const_iterator pFunc(mmapInterfaceIDToSystemFunc.find(inInterfaceID));
 			
@@ -302,7 +302,7 @@ namespace ChilliSource
 			
 			if (pResult)
             {
-				inaExistingSystems.push_back(Core::SystemPtr(pResult));
+				inaExistingSystems.push_back(Core::SystemSPtr(pResult));
 			}
 			
 			return pResult;
@@ -327,7 +327,7 @@ namespace ChilliSource
 		/// @param InterfaceID to generate
 		/// @return A handle to the given activity or nullptr if the platform cannot support it
 		//-----------------------------------------
-		Core::IActivity* CPlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
+		Core::Activity* CPlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
         {
 			MapInterfaceIDToActivityFunc::const_iterator pFunc(mmapInterfaceIDToActivityFunc.find(inInterfaceID));
 			
@@ -376,7 +376,7 @@ namespace ChilliSource
         /// @param System list
 		/// @return A pointer to the system
 		//--------------------------------------------
-		Core::ISystem * CPlatformSystem::CreateHttpConnectionSystem(std::vector<Core::SystemPtr>& inSystems) const
+		Core::System * CPlatformSystem::CreateHttpConnectionSystem(std::vector<Core::SystemSPtr>& inSystems) const
         {
 			return new CHttpConnectionSystem();
 		}
@@ -387,19 +387,19 @@ namespace ChilliSource
         ///
         /// @return Ownership of the activity
         //--------------------------------------------
-		Core::IActivity* CPlatformSystem::CreateSMSCompositionActivity() const
+		Core::Activity* CPlatformSystem::CreateSMSCompositionActivity() const
         {
 			return new CSMSCompositionActivity();
 		}
-		Core::IActivity* CPlatformSystem::CreateEmailCompositionActivity() const
+		Core::Activity* CPlatformSystem::CreateEmailCompositionActivity() const
         {
 			return new CEmailCompositionActivity();
 		}
-		Core::IActivity * CPlatformSystem::CreateDefaultVideoPlayerActivity() const
+		Core::Activity * CPlatformSystem::CreateDefaultVideoPlayerActivity() const
         {
             return new CVideoPlayerActivity();
         }
-		Core::IActivity * CPlatformSystem::CreateWebViewActivity() const
+		Core::Activity * CPlatformSystem::CreateWebViewActivity() const
         {
             return new CWebViewActivity();
         }
@@ -418,14 +418,14 @@ namespace ChilliSource
 		/// Get Screen Dimensions
 		///
 		/// Retrieves the screen dimensions. These dimensions are always in the default orientation for the device.
-		/// @return A CVector2 containing the screen size in it's x + y components
+		/// @return A Vector2 containing the screen size in it's x + y components
         ///
         /// The dimensions are always for the base screen size and the density scale factor is use to scale the screen
         /// to the correct resolution. i.e. the Retina screen will be 320x480 and a density of 2.0
 		//-----------------------------------------------------------------------------------------------------------
-		Core::CVector2 CPlatformSystem::GetScreenDimensions() const
+		Core::Vector2 CPlatformSystem::GetScreenDimensions() const
 		{
-			Core::CVector2 Result;
+			Core::Vector2 Result;
 			CGSize Size = [[UIScreen mainScreen] bounds].size;
             
             f32 fScale = 1.0f;
@@ -509,7 +509,7 @@ namespace ChilliSource
 		/// Get the active locale of the device
 		/// @return Locale ID
 		//--------------------------------------------------------------
-		Core::CLocale CPlatformSystem::GetLocale() const
+		Core::Locale CPlatformSystem::GetLocale() const
 		{
 			NSLocale *pcLocale = [NSLocale currentLocale];
 			NSString *pcCountryCode = [pcLocale objectForKey:NSLocaleCountryCode];
@@ -518,7 +518,7 @@ namespace ChilliSource
 			std::string strLanguageCode = [pcLanguageCode UTF8String];
 
 			//Just default to english
-			return ChilliSource::Core::CLocale(strLanguageCode, strCountryCode);
+			return ChilliSource::Core::Locale(strLanguageCode, strCountryCode);
 		}
         //--------------------------------------------------------------
 		/// Get Language
@@ -526,7 +526,7 @@ namespace ChilliSource
 		/// Get the active language of the device in locale format
 		/// @return Locale ID
 		//--------------------------------------------------------------
-		Core::CLocale CPlatformSystem::GetLanguage() const
+		Core::Locale CPlatformSystem::GetLanguage() const
 		{
 			NSUserDefaults* UserDefaults = [NSUserDefaults standardUserDefaults];
 			NSArray* SupportedLanguages = [UserDefaults objectForKey:@"AppleLanguages"];
@@ -538,11 +538,11 @@ namespace ChilliSource
 
 			if (strLocaleBrokenUp.size() > 1)
 			{
-				return Core::CLocale(strLocaleBrokenUp[0],strLocaleBrokenUp[1]);
+				return Core::Locale(strLocaleBrokenUp[0],strLocaleBrokenUp[1]);
 			}
 			else if (strLocaleBrokenUp.size() == 1)
 			{
-				return Core::CLocale(strLocaleBrokenUp[0]);
+				return Core::Locale(strLocaleBrokenUp[0]);
 			}
 			else
 				return Core::kUnknownLocale;

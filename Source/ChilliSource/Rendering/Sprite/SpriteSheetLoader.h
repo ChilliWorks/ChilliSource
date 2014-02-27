@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CSpriteSheetLoader : public Core::IResourceProvider
+		class SpriteSheetLoader : public Core::ResourceProvider
 		{
 		public:
 	
@@ -58,7 +58,7 @@ namespace ChilliSource
 			/// @param Out: Resource object
 			/// @return Whether the resource loaded
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource) override;
+			bool CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource) override;
 		};
 	}
 }

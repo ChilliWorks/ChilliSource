@@ -23,7 +23,7 @@ namespace ChilliSource
         ///
         /// @return MD5 checksum
         //--------------------------------------------------------------
-        std::string IFileStream::GetMD5Checksum()
+        std::string FileStream::GetMD5Checksum()
         {
             s32 dwCurrentPos = TellG();
             SeekG(0);
@@ -48,7 +48,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Get SHA1 Checksum
         //--------------------------------------------------------------
-        std::string IFileStream::GetSHA1Checksum(CSHA1::ReportType ineReportType)
+        std::string FileStream::GetSHA1Checksum(SHA1::ReportType ineReportType)
         {
             s32 dwCurrentPos = TellG();
             SeekG(0);
@@ -56,7 +56,7 @@ namespace ChilliSource
             const u32 kudwChunkSize = 256;
             s8 byData[kudwChunkSize];
             
-            CSHA1 Hash;
+            SHA1 Hash;
             Hash.Reset();
             s32 dwSize = kudwChunkSize;
             
@@ -74,7 +74,7 @@ namespace ChilliSource
         //--------------------------------------------------------------------------------------------------
 		/// Open
 		//--------------------------------------------------------------------------------------------------			
-		void IFileStream::Open(const std::string& instrFilename, Core::FileMode ineMode)
+		void FileStream::Open(const std::string& instrFilename, Core::FileMode ineMode)
 		{
 			mstrFilename = instrFilename;
 			meFileMode = ineMode;
@@ -86,70 +86,70 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Is Open
 		//--------------------------------------------------------------------------------------------------
-		bool IFileStream::IsOpen()
+		bool FileStream::IsOpen()
 		{
 			return mFileStream.is_open();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Is Bad
 		//--------------------------------------------------------------------------------------------------
-		bool IFileStream::IsBad()
+		bool FileStream::IsBad()
 		{
 			return (mFileStream.bad() || mFileStream.fail());
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// End Of File
 		//--------------------------------------------------------------------------------------------------
-		bool IFileStream::EndOfFile()
+		bool FileStream::EndOfFile()
 		{
 			return mFileStream.eof();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Close
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::Close()
+		void FileStream::Close()
 		{
 			mFileStream.close();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get
 		//--------------------------------------------------------------------------------------------------
-		s32 IFileStream::Get()
+		s32 FileStream::Get()
 		{
 			return mFileStream.get();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::Get(s8 & outbyChar)
+		void FileStream::Get(s8 & outbyChar)
 		{
 			mFileStream.get(outbyChar);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::Get(s8 * outpbyString, s32 indwStreamSize)
+		void FileStream::Get(s8 * outpbyString, s32 indwStreamSize)
 		{
 			mFileStream.get(outpbyString, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::Get(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim)
+		void FileStream::Get(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim)
 		{
 			mFileStream.get(outpbyString, indwStreamSize, inbyDelim);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get Line
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::GetLine(std::string &outstrString)
+		void FileStream::GetLine(std::string &outstrString)
 		{
 			mFileStream >> outstrString;
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get All
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::GetAll(std::string &outstrString)
+		void FileStream::GetAll(std::string &outstrString)
 		{
 			std::stringstream cStream;
 			cStream << mFileStream.rdbuf();
@@ -159,84 +159,84 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Get
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::Get(std::stringstream &outstrStringStream)
+		void FileStream::Get(std::stringstream &outstrStringStream)
 		{
 			outstrStringStream << mFileStream.rdbuf();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get Line
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::GetLine(s8 * outpbyString, s32 indwStreamSize)
+		void FileStream::GetLine(s8 * outpbyString, s32 indwStreamSize)
 		{
 			mFileStream.getline(outpbyString, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get Line
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::GetLine(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim)
+		void FileStream::GetLine(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim)
 		{
 			mFileStream.getline(outpbyString, indwStreamSize, inbyDelim);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Ignore
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::Ignore(s32 indwStreamSize, s8 inbyDelim)
+		void FileStream::Ignore(s32 indwStreamSize, s8 inbyDelim)
 		{
 			mFileStream.ignore(indwStreamSize, inbyDelim);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Peek
 		//--------------------------------------------------------------------------------------------------
-		s32 IFileStream::Peek()
+		s32 FileStream::Peek()
 		{
 			return mFileStream.peek();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Read
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::Read(s8* inpbyBuffer, s32 indwStreamSize)
+		void FileStream::Read(s8* inpbyBuffer, s32 indwStreamSize)
 		{
 			mFileStream.read(inpbyBuffer, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Read Some
 		//--------------------------------------------------------------------------------------------------
-		s32 IFileStream::ReadSome(s8* inpbyBuffer, s32 indwStreamSize)
+		s32 FileStream::ReadSome(s8* inpbyBuffer, s32 indwStreamSize)
 		{
 			return mFileStream.readsome(inpbyBuffer, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Put Back
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::PutBack(s8 inbyChar)
+		void FileStream::PutBack(s8 inbyChar)
 		{
 			mFileStream.putback(inbyChar);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Unget
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::Unget()
+		void FileStream::Unget()
 		{
 			mFileStream.unget();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// TellG
 		//--------------------------------------------------------------------------------------------------
-		s32 IFileStream::TellG()
+		s32 FileStream::TellG()
 		{
 			return (s32)mFileStream.tellg();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// SeekG
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::SeekG(s32 indwPosition)
+		void FileStream::SeekG(s32 indwPosition)
 		{
 			mFileStream.seekg(indwPosition);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// SeekG
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::SeekG(s32 indwPosition, Core::SeekDir ineDir)
+		void FileStream::SeekG(s32 indwPosition, Core::SeekDir ineDir)
 		{
 			std::ios_base::seekdir dir;
 			switch (ineDir)
@@ -256,49 +256,49 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Sync
 		//--------------------------------------------------------------------------------------------------
-		s32 IFileStream::Sync()
+		s32 FileStream::Sync()
 		{
 			return mFileStream.sync();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Put
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::Put(s8 inbyChar)
+		void FileStream::Put(s8 inbyChar)
 		{
 			mFileStream.put(inbyChar);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Write
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::Write(s8* inpbyChar, s32 indwStreamSize)
+		void FileStream::Write(s8* inpbyChar, s32 indwStreamSize)
 		{
 			mFileStream.write(inpbyChar, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Write
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::Write(const std::string& _instrString)
+		void FileStream::Write(const std::string& _instrString)
 		{
 			mFileStream.write(_instrString.c_str(), _instrString.length());
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// TellP
 		//--------------------------------------------------------------------------------------------------
-		s32 IFileStream::TellP()
+		s32 FileStream::TellP()
 		{
 			return (s32)mFileStream.tellp();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// SeekP
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::SeekP(s32 indwPosition)
+		void FileStream::SeekP(s32 indwPosition)
 		{
 			mFileStream.seekp(indwPosition);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// SeekP
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::SeekP(s32 indwPosition, Core::SeekDir ineDir)
+		void FileStream::SeekP(s32 indwPosition, Core::SeekDir ineDir)
 		{
 			std::ios_base::seekdir dir;
 			switch (ineDir)
@@ -318,14 +318,14 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Flush
 		//--------------------------------------------------------------------------------------------------
-		void IFileStream::Flush()
+		void FileStream::Flush()
 		{
 			mFileStream.flush();
 		}
         //--------------------------------------------------------------------------------------------------
 		/// Get File Mode
 		//--------------------------------------------------------------------------------------------------
-		std::ios_base::openmode IFileStream::GetFileMode() const
+		std::ios_base::openmode FileStream::GetFileMode() const
 		{
 			switch (meFileMode)
 			{

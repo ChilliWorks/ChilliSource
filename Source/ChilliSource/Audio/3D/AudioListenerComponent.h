@@ -23,7 +23,7 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		class AudioListenerComponent : public Core::IComponent
+		class AudioListenerComponent : public Core::Component
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(AudioListenerComponent);

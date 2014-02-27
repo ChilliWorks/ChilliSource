@@ -52,7 +52,7 @@ namespace ChilliSource
 		{
 			return mTouchEndedEvent;
 		}
-		void TouchScreen::SetTouchTransformMatrix(const Core::CMatrix4x4 & inTouchTransformMat)
+		void TouchScreen::SetTouchTransformMatrix(const Core::Matrix4x4 & inTouchTransformMat)
 		{
 			mTouchTransformMatrix = inTouchTransformMat;	
 		}
@@ -103,7 +103,7 @@ namespace ChilliSource
             
             mBufferedTouches.clear();
         }
-		u32 TouchScreen::StartTouch(const Core::CVector2 & invTouchLocation, f64 inTimeStamp)
+		u32 TouchScreen::StartTouch(const Core::Vector2 & invTouchLocation, f64 inTimeStamp)
 		{
             //Give the touch a unique ID
 			u32 TouchID = ++mLastTouchIndex;
@@ -112,7 +112,7 @@ namespace ChilliSource
                 return TouchID;
             
             //Transform the touch from crappy iOS space to our space
-			Core::CVector2 TransformedPosition2(invTouchLocation.x, mudwOrientedScreenHeight - invTouchLocation.y);
+			Core::Vector2 TransformedPosition2(invTouchLocation.x, mudwOrientedScreenHeight - invTouchLocation.y);
 			
             //Create the touch data
 			TouchInfo NewTouch;
@@ -128,7 +128,7 @@ namespace ChilliSource
 
 			return TouchID;
 		}
-		void TouchScreen::MoveTouch(u32 inID, const Core::CVector2 & invNewTouchLocation, f64 inTimeStamp)
+		void TouchScreen::MoveTouch(u32 inID, const Core::Vector2 & invNewTouchLocation, f64 inTimeStamp)
 		{
             if(!mbIsEnabled)
                 return;
@@ -146,7 +146,7 @@ namespace ChilliSource
 				{
                     pTouch->vPreviousLocation = pTouch->vLocation;
                     NewTouch.vPreviousLocation = pTouch->vLocation;
-					Core::CVector2 TransformedPosition2(invNewTouchLocation.x, mudwOrientedScreenHeight - invNewTouchLocation.y);
+					Core::Vector2 TransformedPosition2(invNewTouchLocation.x, mudwOrientedScreenHeight - invNewTouchLocation.y);
 					NewTouch.vLocation = TransformedPosition2;
                     pTouch->vLocation = TransformedPosition2;
 

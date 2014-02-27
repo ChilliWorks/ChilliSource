@@ -27,49 +27,49 @@ namespace ChilliSource
 		//--------------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------------
-		CSubMesh::CSubMesh(std::string instrName) : mstrName(instrName), mpMeshBuffer(nullptr), mpRenderSystem(nullptr)
+		SubMesh::SubMesh(std::string instrName) : mstrName(instrName), mpMeshBuffer(nullptr), mpRenderSystem(nullptr)
 		{
 			
 		}
 		//-----------------------------------------------------------------
 		/// Get Default Material Name
 		//-----------------------------------------------------------------
-		const std::string& CSubMesh::GetDefaultMaterialName()
+		const std::string& SubMesh::GetDefaultMaterialName()
 		{
 			return mstrDefaultMaterialName;
 		}
         //-----------------------------------------------------------------
         /// Get Default Material Storage Location
         //-----------------------------------------------------------------
-        Core::StorageLocation CSubMesh::GetDefaultMaterialStorageLocation()
+        Core::StorageLocation SubMesh::GetDefaultMaterialStorageLocation()
         {
             return meDefaultStorageLocation;
         }
 		//-----------------------------------------------------------------
 		/// Get Internal Mesh Buffer
 		//-----------------------------------------------------------------
-		IMeshBuffer* CSubMesh::GetInternalMeshBuffer() const
+		MeshBuffer* SubMesh::GetInternalMeshBuffer() const
 		{
 			return mpMeshBuffer;
 		}
 		//-----------------------------------------------------------------
 		/// Get AABB
 		//-----------------------------------------------------------------
-		const Core::AABB& CSubMesh::GetAABB()
+		const Core::AABB& SubMesh::GetAABB()
 		{
 			return mBoundingBox;
 		}
 		//-----------------------------------------------------------------
 		/// Get Name
 		//-----------------------------------------------------------------
-		const std::string& CSubMesh::GetName()
+		const std::string& SubMesh::GetName()
 		{
 			return mstrName;
 		}
 		//-----------------------------------------------------------------
 		/// Get Number of Vertices
 		//-----------------------------------------------------------------
-		u32 CSubMesh::GetNumVerts()
+		u32 SubMesh::GetNumVerts()
 		{
 			if (mpMeshBuffer != nullptr)
 				return mpMeshBuffer->GetVertexCount();
@@ -79,7 +79,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Get Number of Indices
 		//-----------------------------------------------------------------
-		u32 CSubMesh::GetNumIndices()
+		u32 SubMesh::GetNumIndices()
 		{
 			if (mpMeshBuffer != nullptr)
 				return mpMeshBuffer->GetIndexCount();
@@ -89,7 +89,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Prepare
 		//-----------------------------------------------------------------
-		void CSubMesh::Prepare(IRenderSystem* inpRenderSystem, CVertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes,
+		void SubMesh::Prepare(RenderSystem* inpRenderSystem, VertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes,
 							   u32 inudwVertexCapacityInBytes, u32 inudwIndexCapacityInBytes, BufferAccess inAccessFlag, PrimitiveType inPrimativeType)
 		{
 			mpRenderSystem = inpRenderSystem;
@@ -110,7 +110,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Alter Buffer Declaration
 		//-----------------------------------------------------------------
-		void CSubMesh::AlterBufferDeclaration(CVertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes)
+		void SubMesh::AlterBufferDeclaration(VertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes)
 		{
 			BufferDescription desc;
 			desc.eUsageFlag = BufferUsage::k_static;
@@ -128,7 +128,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Build
 		//-----------------------------------------------------------------
-		void CSubMesh::Build(void* inpVertexData, void* inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Core::CVector3 invMin, Core::CVector3 invMax)
+		void SubMesh::Build(void* inpVertexData, void* inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Core::Vector3 invMin, Core::Vector3 invMax)
 		{
 			mpMeshBuffer->SetVertexCount(inudwNumVertices);
 			mpMeshBuffer->SetIndexCount(indwNumIndices);
@@ -162,7 +162,7 @@ namespace ChilliSource
                 mpMeshBuffer->UnlockIndex();
 			}
 			//Calculate the size of this meshes bounding box
-			Core::CVector3 vSize = invMax - invMin;
+			Core::Vector3 vSize = invMax - invMin;
 			
 			//Build our bounding box based on the size of all our sub-meshes
 			mBoundingBox = Core::AABB((invMax + invMin) * 0.5f, vSize);
@@ -171,28 +171,28 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Set Default Material Name
 		//-----------------------------------------------------------------
-		void CSubMesh::SetDefaultMaterialName(const std::string& instrMaterialName)
+		void SubMesh::SetDefaultMaterialName(const std::string& instrMaterialName)
 		{
 			mstrDefaultMaterialName = instrMaterialName;
 		}
         //-----------------------------------------------------------------
         /// Set Default Material Storage Location
         //-----------------------------------------------------------------
-        void CSubMesh::SetDefaultMaterialStorageLocation(Core::StorageLocation ineStorageLocation)
+        void SubMesh::SetDefaultMaterialStorageLocation(Core::StorageLocation ineStorageLocation)
         {
             meDefaultStorageLocation = ineStorageLocation;
         }
 		//-----------------------------------------------------------------
 		/// Set Skeleton Controller
 		//-----------------------------------------------------------------
-		void CSubMesh::SetInverseBindPose(const InverseBindPosePtr& inpInverseBindPose)
+		void SubMesh::SetInverseBindPose(const InverseBindPosePtr& inpInverseBindPose)
 		{
 			mpInverseBindPose = inpInverseBindPose;
 		}
 		//-----------------------------------------------------------------
 		/// Render
 		//-----------------------------------------------------------------
-		void CSubMesh::Render(IRenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const MaterialPtr& inpMaterial, const SkinnedAnimationGroupPtr& inpAnimationGroup) const
+		void SubMesh::Render(RenderSystem* inpRenderSystem, const Core::Matrix4x4 &inmatWorld, const MaterialSPtr& inpMaterial, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const
 		{
             CS_ASSERT(mpMeshBuffer->GetVertexCount() > 0, "Cannot render Sub Mesh without vertices");
             CS_ASSERT(inpMaterial.get() && inpMaterial->GetActiveShaderProgram(), "Cannot render Sub Mesh without a material or active shader.");
@@ -202,7 +202,7 @@ namespace ChilliSource
             if (inpAnimationGroup != nullptr)
             {
                 //Apply inverse bind pose matrix.
-                std::vector<Core::CMatrix4x4> combinedMatrices;
+                std::vector<Core::Matrix4x4> combinedMatrices;
                 inpAnimationGroup->ApplyInverseBindPose(mpInverseBindPose->mInverseBindPoseMatrices, combinedMatrices);
                 inpRenderSystem->ApplyJoints(combinedMatrices);
             }
@@ -223,7 +223,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Destructor
 		//-----------------------------------------------------------------
-		CSubMesh::~CSubMesh()
+		SubMesh::~SubMesh()
 		{
 			CS_SAFE_DELETE(mpMeshBuffer);
 		}

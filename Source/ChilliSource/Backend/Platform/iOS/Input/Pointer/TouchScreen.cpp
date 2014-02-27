@@ -34,7 +34,7 @@ namespace ChilliSource
 		{
 			//Grab the touch location from the OS
 			CGPoint TouchLocation = [inpNativeTouch locationInView:inpNativeTouch.view];
-			u32 InternalEventID = StartTouch(Core::CVector2(TouchLocation.x * mfScale, TouchLocation.y * mfScale), mffLastTimeStamp);
+			u32 InternalEventID = StartTouch(Core::Vector2(TouchLocation.x * mfScale, TouchLocation.y * mfScale), mffLastTimeStamp);
 			
 			mMapNativeTouchesToID.insert(std::make_pair(inpNativeTouch,InternalEventID));
 		}
@@ -45,7 +45,7 @@ namespace ChilliSource
 			if (pKey != mMapNativeTouchesToID.end()) 
 			{
 				CGPoint TouchLocation = [inpNativeTouch locationInView:inpNativeTouch.view];			
-				MoveTouch(pKey->second, Core::CVector2(TouchLocation.x * mfScale, TouchLocation.y * mfScale), mffLastTimeStamp);
+				MoveTouch(pKey->second, Core::Vector2(TouchLocation.x * mfScale, TouchLocation.y * mfScale), mffLastTimeStamp);
 			}
 		}
 		void CTouchScreen::OnTouchEnded(UITouch* inpNativeTouch)

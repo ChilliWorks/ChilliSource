@@ -103,7 +103,7 @@ namespace ChilliSource
 		};
 		
 		
-		class HttpConnectionSystem : public ChilliSource::Core::ISystem
+		class HttpConnectionSystem : public ChilliSource::Core::System
         {
 		public:
 			DECLARE_NAMED_INTERFACE(HttpConnectionSystem);

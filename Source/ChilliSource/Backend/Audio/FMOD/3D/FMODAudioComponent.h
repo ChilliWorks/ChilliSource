@@ -79,7 +79,7 @@ namespace ChilliSource
 			/// @param 3D position vector
 			/// @param 3D velocity vector
 			//---------------------------------------------------------------------
-			void Set3DLocation(Core::CVector3& invPosition, Core::CVector3& invVelocity);
+			void Set3DLocation(Core::Vector3& invPosition, Core::Vector3& invVelocity);
             //---------------------------------------------------------------------
 			/// On Playback Complete
 			///

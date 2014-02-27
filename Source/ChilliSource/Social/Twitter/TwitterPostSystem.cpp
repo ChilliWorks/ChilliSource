@@ -24,7 +24,7 @@ namespace ChilliSource
 	{
 		DEFINE_NAMED_INTERFACE(TwitterPostSystem);
 
-        TwitterPostSystem* TwitterPostSystem::CreateSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::COAuthSystem* inpOAuthSystem)
+        TwitterPostSystem* TwitterPostSystem::CreateSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem)
         {
 #ifdef TARGET_OS_IPHONE
             return new ChilliSource::iOS::CTwitterPostSystem(static_cast<iOS::CHttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
@@ -38,7 +38,7 @@ namespace ChilliSource
 		/// Constructor
 		//------------------------------------------------------------------------
 		TwitterPostSystem::TwitterPostSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem,
-											   Core::COAuthSystem* inpOAuthSystem) : mstrCustomerKey(""),
+											   Core::OAuthSystem* inpOAuthSystem) : mstrCustomerKey(""),
 																						   mstrCustomerSecret(""),
 																						   mpAuthenticationView(nullptr)
 		{
@@ -114,7 +114,7 @@ namespace ChilliSource
 				std::string strStatusURL = Social::TwitterURL::TWITTER_STATUS_UPDATE_URL;
 				std::string strOAuthHeader;
 
-				if(mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpPost,
+				if(mpOAuthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpPost,
 												 strStatusURL,
 												 strStatus, strOAuthHeader))
 				{
@@ -197,7 +197,7 @@ namespace ChilliSource
 				std::string strURL = Social::TwitterOAuthAPIURLs::TWITTER_OAUTH_REQUEST_TOKEN_URL + Social::TwitterDefault::TWITTER_URL_SEP_QUESTION_MARK + Core::OAUTHLIB_CALLBACK_KEY + "=oob";
 				std::string strOAuthHeader;
 
-				if(mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpGet,
+				if(mpOAuthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpGet,
 												 strURL,
 												 std::string(""), strOAuthHeader))
 				{
@@ -250,7 +250,7 @@ namespace ChilliSource
 			{
 				std::string strOAuthHeader;
 
-				if(mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpGet,
+				if(mpOAuthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpGet,
 												 Social::TwitterOAuthAPIURLs::TWITTER_OAUTH_ACCESS_TOKEN_URL,
 												 std::string(""), strOAuthHeader, true))
 				{

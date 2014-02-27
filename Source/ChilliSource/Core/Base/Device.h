@@ -26,7 +26,7 @@ namespace ChilliSource
             ///
             /// @param Platform system
             //---------------------------------------------
-            static void Init(IPlatformSystem* inpPlatformSystem);
+            static void Init(PlatformSystem* inpPlatformSystem);
             //---------------------------------------------
             /// Get Model Name
             ///
@@ -50,13 +50,13 @@ namespace ChilliSource
             ///
             /// @return the locale.
             //---------------------------------------------
-            static CLocale& GetLocale();
+            static Locale& GetLocale();
             //---------------------------------------------
             /// Get Langauge
             ///
             /// @return the langauge in locale format
             //---------------------------------------------
-            static CLocale& GetLanguage();
+            static Locale& GetLanguage();
             //---------------------------------------------
             /// Get OS Version
             ///
@@ -89,8 +89,8 @@ namespace ChilliSource
             static std::string mstrDeviceModelType;
             static std::string mstrDeviceManufacturer;
             static std::string mstrDeviceID;
-            static CLocale mLocale;
-            static CLocale mLanguage;
+            static Locale mLocale;
+            static Locale mLanguage;
             static std::string mstrOSVersion;
 			static u32 mudwNumCores;
 			static f32 mfPhysicalScreenSize;

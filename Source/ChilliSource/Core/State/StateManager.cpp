@@ -16,14 +16,14 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-        static StatePtr NullStatePtr;
+        static StateSPtr NullStatePtr;
         
 		//---------------------------------------------------------
 		/// Constructor
 		///
 		/// Default
 		//---------------------------------------------------------
-		CStateManager::CStateManager() : mpApp(nullptr), mbStartState(false)
+		StateManager::StateManager() : mpApp(nullptr), mbStartState(false)
 		{
 		}
         //---------------------------------------------------------
@@ -31,7 +31,7 @@ namespace ChilliSource
 		///
         /// @param Moflow application
 		//---------------------------------------------------------
-        void CStateManager::SetOwningApplication(CApplication* inpApp)
+        void StateManager::SetOwningApplication(Application* inpApp)
         {
             mpApp = inpApp;
         }
@@ -40,7 +40,7 @@ namespace ChilliSource
         ///
         /// @return Moflow application
         //---------------------------------------------------------
-        CApplication& CStateManager::GetApplication()
+        Application& StateManager::GetApplication()
         {
             return *mpApp;
         }
@@ -49,7 +49,7 @@ namespace ChilliSource
         ///
         /// @return Moflow application pointer
         //---------------------------------------------------------
-        CApplication* CStateManager::GetApplicationPtr()
+        Application* StateManager::GetApplicationPtr()
         {
             return mpApp;
         }
@@ -59,7 +59,7 @@ namespace ChilliSource
 		/// Called by the application on receiving a resume
 		/// notification
 		//---------------------------------------------------------
-		void CStateManager::Resume()
+		void StateManager::Resume()
 		{
 			if(!mStateHierarchy.empty()) 
 			{
@@ -72,7 +72,7 @@ namespace ChilliSource
 		/// Called by the application on receiving a suspend
 		/// notification
 		//---------------------------------------------------------
-		void CStateManager::Pause()
+		void StateManager::Pause()
 		{
 			if(!mStateHierarchy.empty()) 
 			{
@@ -87,7 +87,7 @@ namespace ChilliSource
 		///
 		/// @param Time since last update
 		//---------------------------------------------------------
-		void CStateManager::Update(f32 dt)
+		void StateManager::Update(f32 dt)
 		{
 			while(!mStateOperationQueue.empty()) 
 			{
@@ -95,8 +95,8 @@ namespace ChilliSource
 				{
 					case StateOperationAction::k_push:
                     {
-                        StatePtr pPushed = mStateOperationQueue.front().pState;
-                        StatePtr pTop;
+                        StateSPtr pPushed = mStateOperationQueue.front().pState;
+                        StateSPtr pTop;
                         
                         if(!mStateHierarchy.empty())
                         {
@@ -126,11 +126,11 @@ namespace ChilliSource
                     }
 					case StateOperationAction::k_popTo:
                     {
-						IState * pTargetState = mStateOperationQueue.front().pRawState;
+						State * pTargetState = mStateOperationQueue.front().pRawState;
 						bool bTopStateStopped = false;
 						while (!mStateHierarchy.empty() && (mStateHierarchy.back().get() != pTargetState))
                         {
-                            StatePtr pPopped = mStateHierarchy.back();
+                            StateSPtr pPopped = mStateHierarchy.back();
 							
 							// Stop the top state only
 							if(!bTopStateStopped)
@@ -154,7 +154,7 @@ namespace ChilliSource
                     }
 					case StateOperationAction::k_popToUnique:
                     {
-						IState * pTargetState = mStateOperationQueue.front().pRawState;
+						State * pTargetState = mStateOperationQueue.front().pRawState;
 						bool bTopStateStopped = false;
 						while (!mStateHierarchy.empty())
                         {
@@ -162,7 +162,7 @@ namespace ChilliSource
 							if(mStateHierarchy.back().get() == pTargetState && GetNumInstancesOfStateInHierarchy(pTargetState) == 1)
 								break;
 							
-                            StatePtr pPopped = mStateHierarchy.back();
+                            StateSPtr pPopped = mStateHierarchy.back();
 							
 							// Stop the top state only
 							if(!bTopStateStopped)
@@ -187,13 +187,13 @@ namespace ChilliSource
                         
                         if(!mStateHierarchy.empty())
                         {
-                            StatePtr pTop = mStateHierarchy.back();
+                            StateSPtr pTop = mStateHierarchy.back();
                             pTop->OnStop();
                         }
                         
 						while (!mStateHierarchy.empty())
                         {
-                            StatePtr pTop = mStateHierarchy.back();
+                            StateSPtr pTop = mStateHierarchy.back();
                             
                             if(GetNumInstancesOfStateInHierarchy(pTop.get()) == 1)
                             {
@@ -212,7 +212,7 @@ namespace ChilliSource
                         
                         //Only the top state will have been started so this
                         //is the only one we need to stop
-                        StatePtr pPopped = mStateHierarchy.back();
+                        StateSPtr pPopped = mStateHierarchy.back();
                         
 						if(!mbStartState) 
 						{
@@ -254,7 +254,7 @@ namespace ChilliSource
         /// Manages the hierarchy list and the setting of
         /// the state as active or inactive
         //---------------------------------------------------------
-        void CStateManager::PopHierarchy()
+        void StateManager::PopHierarchy()
         {
             bool bOldStateOwnsScene = mStateHierarchy.back()->mbOwnsScene;
             
@@ -277,7 +277,7 @@ namespace ChilliSource
         /// the state as active or inactive
         /// @param State to push
         //---------------------------------------------------------
-        void CStateManager::PushHierarchy(const StatePtr& inpState)
+        void StateManager::PushHierarchy(const StateSPtr& inpState)
         {
             if(!mStateHierarchy.empty() && mStateHierarchy.back()->mpScene && inpState->mbOwnsScene)
                 mStateHierarchy.back()->mpScene->BecomeInactive();
@@ -295,7 +295,7 @@ namespace ChilliSource
         ///
         /// @param Time since last update
         //---------------------------------------------------------
-        void CStateManager::FixedUpdate(f32 dt)
+        void StateManager::FixedUpdate(f32 dt)
         {
             if(!mStateHierarchy.empty()) 
 			{
@@ -307,11 +307,11 @@ namespace ChilliSource
 		///
 		/// Remove all states from the stack and destroy each
 		//---------------------------------------------------------
-		void CStateManager::DestroyAll()
+		void StateManager::DestroyAll()
 		{
 			while(!mStateHierarchy.empty())
 			{
-                StatePtr pState = mStateHierarchy.back();
+                StateSPtr pState = mStateHierarchy.back();
                 mStateHierarchy.pop_back();
                 
                 if(!GetIsStateInHierarchy(pState.get()))
@@ -329,7 +329,7 @@ namespace ChilliSource
 		///
 		/// @param New active state
 		//---------------------------------------------------------
-		void CStateManager::Push(const StatePtr &inpState)
+		void StateManager::Push(const StateSPtr &inpState)
 		{
 			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_push, inpState));
 		}
@@ -340,7 +340,7 @@ namespace ChilliSource
 		/// and resume the state beneath it. This
 		/// state will now be the active state
 		//---------------------------------------------------------
-		void CStateManager::Pop()
+		void StateManager::Pop()
 		{
 			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_pop));
 		}
@@ -352,7 +352,7 @@ namespace ChilliSource
 		/// will become active. If the given state is now on the
 		/// stack the 
 		//---------------------------------------------------------
-		void CStateManager::PopToState(IState * inpTarget)
+		void StateManager::PopToState(State * inpTarget)
         {
 			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_popTo, inpTarget));
 		}
@@ -363,7 +363,7 @@ namespace ChilliSource
 		/// specified state is topmost and is unique in the stack.
 		/// The given state will become active.
 		//---------------------------------------------------------
-		void CStateManager::PopToStateUnique(IState * inpTarget)
+		void StateManager::PopToStateUnique(State * inpTarget)
 		{
 			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_popToUnique, inpTarget));
 		}
@@ -372,7 +372,7 @@ namespace ChilliSource
 		///
 		/// Remove all states from the stack. ALL OF THEM!
 		//---------------------------------------------------------
-		void CStateManager::ClearStack()
+		void StateManager::ClearStack()
 		{
 			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_clear));
 		}
@@ -381,7 +381,7 @@ namespace ChilliSource
 		///
 		/// @return the number of states on the stack.
 		//---------------------------------------------------------
-		u32 CStateManager::GetStackCount()
+		u32 StateManager::GetStackCount()
 		{
 			return mStateHierarchy.size();
 		}
@@ -393,7 +393,7 @@ namespace ChilliSource
 		///
 		/// @param State to become active
 		//---------------------------------------------------------
-		void CStateManager::Change(const StatePtr &inpState)
+		void StateManager::Change(const StateSPtr &inpState)
 		{
 			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_pop));
             mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_push, inpState));
@@ -403,16 +403,16 @@ namespace ChilliSource
 		///
 		/// @return a handle to a factory that can create object of type ID
 		//------------------------------------------------------------------
-		IComponentFactory* CStateManager::GetFactoryProducing(InterfaceIDType inInterfaceID)
+		ComponentFactory* StateManager::GetFactoryProducing(InterfaceIDType inInterfaceID)
 		{
-			return Core::CComponentFactoryDispenser::GetSingletonPtr()->GetFactoryProducing(inInterfaceID);
+			return Core::ComponentFactoryDispenser::GetSingletonPtr()->GetFactoryProducing(inInterfaceID);
 		}
         //---------------------------------------------------------
         /// Get all States
         ///
         /// @return all States
         //---------------------------------------------------------
-        const std::vector<StatePtr>& CStateManager::GetStates() const
+        const std::vector<StateSPtr>& StateManager::GetStates() const
         {
             return mStateHierarchy;
         }
@@ -421,7 +421,7 @@ namespace ChilliSource
 		///
 		/// @return State on top of the hierarchy
 		//---------------------------------------------------------
-		const StatePtr& CStateManager::GetActiveState() const
+		const StateSPtr& StateManager::GetActiveState() const
 		{
 			if(!mStateHierarchy.empty())
 			{
@@ -437,11 +437,11 @@ namespace ChilliSource
         ///
         /// @return The number of times the state appears in the stack
         //---------------------------------------------------------
-        u32 CStateManager::GetNumInstancesOfStateInHierarchy(IState* inpState) const
+        u32 StateManager::GetNumInstancesOfStateInHierarchy(State* inpState) const
         {
             u32 udwCount = 0;
             
-            for (std::vector<StatePtr>::const_iterator it = mStateHierarchy.begin(); it != mStateHierarchy.end(); ++it)
+            for (std::vector<StateSPtr>::const_iterator it = mStateHierarchy.begin(); it != mStateHierarchy.end(); ++it)
             {
                 if ((*it).get() == inpState)
                 {
@@ -456,11 +456,11 @@ namespace ChilliSource
         ///
         /// @return returns true if inpcState is in state stack, otherwise false
         //---------------------------------------------------------
-        bool CStateManager::GetIsStateInHierarchy(IState* inpState) const
+        bool StateManager::GetIsStateInHierarchy(State* inpState) const
         {
             bool bIsActive = false;
             
-            for (std::vector<StatePtr>::const_iterator it = mStateHierarchy.begin(); it != mStateHierarchy.end(); ++it)
+            for (std::vector<StateSPtr>::const_iterator it = mStateHierarchy.begin(); it != mStateHierarchy.end(); ++it)
             {
                 if ((*it).get() == inpState)
                 {
@@ -476,7 +476,7 @@ namespace ChilliSource
         ///
         /// @return returns true if inpcState is in state stack, otherwise false
         //---------------------------------------------------------
-        bool CStateManager::GetIsStatePending(IState* inpState) const
+        bool StateManager::GetIsStatePending(State* inpState) const
         {
             bool bIsPending = false;
             
@@ -494,11 +494,11 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Get Parent State
         ///
-        /// @return If this state exists within hierarchy then returns parent state, otherwise returns StatePtr() (nullptr)
+        /// @return If this state exists within hierarchy then returns parent state, otherwise returns StateSPtr() (nullptr)
         //---------------------------------------------------------
-        const StatePtr& CStateManager::GetParentState(IState* inpState) const 
+        const StateSPtr& StateManager::GetParentState(State* inpState) const 
         {
-            StatePtr pcState = StatePtr();
+            StateSPtr pcState = StateSPtr();
             
             for (s32 i = mStateHierarchy.size() - 1; i >= 0; --i)
             {
@@ -516,9 +516,9 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Get Child State
         ///
-        /// @return If this state exists within hierarchy then returns child state, otherwise returns StatePtr() (nullptr)
+        /// @return If this state exists within hierarchy then returns child state, otherwise returns StateSPtr() (nullptr)
         //---------------------------------------------------------
-        const StatePtr& CStateManager::GetChildState(IState* inpState) const
+        const StateSPtr& StateManager::GetChildState(State* inpState) const
         {
             for (s32 i = mStateHierarchy.size() - 1; i >= 0; --i)
             {
@@ -539,7 +539,7 @@ namespace ChilliSource
         /// @param Raw pointer
         /// @return Equivalent shared pointer if found in hierarchy
         //---------------------------------------------------------
-        const StatePtr& CStateManager::FindStateWithPointer(IState* inpState) const
+        const StateSPtr& StateManager::FindStateWithPointer(State* inpState) const
         {
             for (s32 i = mStateHierarchy.size() - 1; i >= 0; --i)
             {
@@ -556,7 +556,7 @@ namespace ChilliSource
 		///
 		/// @return State on top of the hierarchys scene
 		//---------------------------------------------------------
-		CScene* CStateManager::GetActiveScenePtr()
+		Scene* StateManager::GetActiveScenePtr()
 		{
 			if(!mStateHierarchy.empty())
 			{
@@ -575,7 +575,7 @@ namespace ChilliSource
         ///
         /// @param Notification
         //-------------------------------------------------------------------------
-        bool CStateManager::OnNotificationReceived(Core::Notification* inpsNotification)
+        bool StateManager::OnNotificationReceived(Core::Notification* inpsNotification)
         {
             if(mStateHierarchy.back()->ShouldReceiveNotifications())
             {
@@ -588,8 +588,8 @@ namespace ChilliSource
 			return false;
         }
         
-        void CStateManager::DebugPrint(std::string instrMessage){
-            CS_DEBUG_LOG("CStateManager "+ToString((u32)this)+" - "+instrMessage);
+        void StateManager::DebugPrint(std::string instrMessage){
+            CS_DEBUG_LOG("StateManager "+ToString((u32)this)+" - "+instrMessage);
             CS_DEBUG_LOG("mpApp = "+ToString((u32)mpApp));
             CS_DEBUG_LOG("mStateOperationQueue size:"+ToString(mStateOperationQueue.size()));
     

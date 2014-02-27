@@ -16,16 +16,16 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		MeshPtr CMeshManager::mpDefaultMesh;
+		MeshSPtr MeshManager::mpDefaultMesh;
         
-		DEFINE_NAMED_INTERFACE(CMeshManager);
+		DEFINE_NAMED_INTERFACE(MeshManager);
 		
 		//-----------------------------------------------------------------
 		/// Constructor
 		///
 		/// Default
 		//-----------------------------------------------------------------
-		CMeshManager::CMeshManager()
+		MeshManager::MeshManager()
 		{
 		}
 		//----------------------------------------------------------------
@@ -35,36 +35,36 @@ namespace ChilliSource
 		/// @param The interface to compare
 		/// @return Whether the object implements that interface
 		//----------------------------------------------------------------
-		bool CMeshManager::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool MeshManager::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == CMeshManager::InterfaceID;
+			return inInterfaceID == MeshManager::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Get Resource Type
 		///
 		/// @return The type of resource this manager handles
 		//----------------------------------------------------------------
-		Core::InterfaceIDType CMeshManager::GetResourceType() const
+		Core::InterfaceIDType MeshManager::GetResourceType() const
 		{
-			return CMesh::InterfaceID;
+			return Mesh::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Manages Resource Of Type
 		///
 		/// @return Whether this object manages the object of type
 		//----------------------------------------------------------------
-		bool CMeshManager::ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const
+		bool MeshManager::ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == CMesh::InterfaceID;
+			return inInterfaceID == Mesh::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Get Provider Type
 		///
 		/// @return The type of resource it consumes from resource provider
 		//----------------------------------------------------------------
-		Core::InterfaceIDType CMeshManager::GetProviderType() const
+		Core::InterfaceIDType MeshManager::GetProviderType() const
 		{
-			return CMesh::InterfaceID;
+			return Mesh::InterfaceID;
 		}
 		//-----------------------------------------------------------------
 		/// Get Resource From File
@@ -74,7 +74,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr CMeshManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr MeshManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetModelFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -86,7 +86,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr CMeshManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr MeshManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetModelFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -99,13 +99,13 @@ namespace ChilliSource
         /// @param the filepath
         /// @return the resource pointer to the mesh
 		//----------------------------------------------------------------
-		MeshPtr CMeshManager::GetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
+		MeshSPtr MeshManager::GetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourcePtr pResource(new CMesh());
+				Core::ResourceSPtr pResource(new Mesh());
 				
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
@@ -123,17 +123,17 @@ namespace ChilliSource
 							pResource->SetName(inFilePath);
 							pResource->SetFilename(inFilePath);
 							pResource->SetStorageLocation(ineStorageLocation);
-							pResource->SetOwningResourceManager(static_cast<Core::IResourceManager*>(this));
+							pResource->SetOwningResourceManager(static_cast<Core::ResourceManager*>(this));
 							pResource->SetLoaded(true);
 							
-							return std::static_pointer_cast<CMesh>(pResource);
+							return std::static_pointer_cast<Mesh>(pResource);
 						}
 					}
 				}
 			} 
 			else 
 			{
-				return std::static_pointer_cast<CMesh>(pExistingResource->second);
+				return std::static_pointer_cast<Mesh>(pExistingResource->second);
 			}
 			
 			//Resource not found
@@ -150,13 +150,13 @@ namespace ChilliSource
         /// @param the filepath
         /// @return the resource pointer to the mesh
 		//----------------------------------------------------------------
-		MeshPtr CMeshManager::AsyncGetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
+		MeshSPtr MeshManager::AsyncGetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourcePtr pResource(new CMesh());
+				Core::ResourceSPtr pResource(new Mesh());
 				
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
@@ -179,14 +179,14 @@ namespace ChilliSource
 						{
 							//Add it to the cache
 							mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
-							return std::static_pointer_cast<CMesh>(pResource);
+							return std::static_pointer_cast<Mesh>(pResource);
 						}
 					}
 				}
 			} 
 			else 
 			{
-				return std::static_pointer_cast<CMesh>(pExistingResource->second);
+				return std::static_pointer_cast<Mesh>(pExistingResource->second);
 			}
 			
 			//Resource not found
@@ -196,9 +196,9 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		/// Create Manual Mesh
 		//----------------------------------------------------------------
-		MeshPtr CMeshManager::CreateManualMesh(MeshDescriptor & inMeshDescriptor)
+		MeshSPtr MeshManager::CreateManualMesh(MeshDescriptor & inMeshDescriptor)
 		{
-			MeshPtr pMesh(new CMesh());
+			MeshSPtr pMesh(new Mesh());
 			
 			BuildMesh(mpApplicationOwner->GetRenderSystemPtr(), inMeshDescriptor, pMesh);
 			
@@ -207,20 +207,20 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		/// Create Empty Model
 		//----------------------------------------------------------------
-		MeshPtr CMeshManager::CreateEmptyMesh(u32 indwNumSubMeshes, u32 inudwVertexDataSize, u32 indwIndexDataSize)
+		MeshSPtr MeshManager::CreateEmptyMesh(u32 indwNumSubMeshes, u32 inudwVertexDataSize, u32 indwIndexDataSize)
 		{
-			CMesh* pMesh = new CMesh();
+			Mesh* pMesh = new Mesh();
 			
 			//create vertex declaration
 			s8 dwNumVertexElements = 1;
 			VertexElement* apVertElements = new VertexElement[dwNumVertexElements];
 			apVertElements[0].eType = VertexDataType::k_float3;
 			apVertElements[0].eSemantic = VertexDataSemantic::k_position;
-			CVertexDeclaration vertDeclaration(dwNumVertexElements, apVertElements);
+			VertexDeclaration vertDeclaration(dwNumVertexElements, apVertElements);
 			
 			for (int i = 0; i < indwNumSubMeshes; i++)
 			{
-				SubMeshPtr newMesh = pMesh->CreateSubMesh("mesh" + Core::ToString(i));
+				SubMeshSPtr newMesh = pMesh->CreateSubMesh("mesh" + Core::ToString(i));
 				newMesh->Prepare(mpApplicationOwner->GetRenderSystemPtr(), vertDeclaration, 2, inudwVertexDataSize, indwIndexDataSize);
 			}
 			
@@ -228,12 +228,12 @@ namespace ChilliSource
 			delete[] apVertElements;
 			
 			//return the model pointer
-			return MeshPtr(pMesh);
+			return MeshSPtr(pMesh);
 		}
 		//----------------------------------------------------------------------------
 		/// BuildMesh
 		//----------------------------------------------------------------------------
-		bool CMeshManager::BuildMesh(IRenderSystem* inpRenderSystem, MeshDescriptor& inMeshDescriptor, const MeshPtr& outpResource, bool inbNeedsPrepared)
+		bool MeshManager::BuildMesh(RenderSystem* inpRenderSystem, MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource, bool inbNeedsPrepared)
 		{
 			bool bSuccess = true;
 			
@@ -254,7 +254,7 @@ namespace ChilliSource
 				u32 udwIndexDataCapacity  = it->mudwNumIndices * inMeshDescriptor.mudwIndexSize;
 				
 				//prepare the mesh if it needs it, otherwise just update the vertex and index declarations.
-				SubMeshPtr newSubMesh;
+				SubMeshSPtr newSubMesh;
 				if (inbNeedsPrepared == true)
 				{
 					newSubMesh = outpResource->CreateSubMesh(it->mstrName);
@@ -310,15 +310,15 @@ namespace ChilliSource
         ///
         /// @return A default cube mesh. This will be returned if no mesh can be found
         //----------------------------------------------------------------------------
-        MeshPtr CMeshManager::GetDefaultMesh()
+        MeshSPtr MeshManager::GetDefaultMesh()
         {
-            return Core::CApplication::GetDefaultMesh();
+            return Core::Application::GetDefaultMesh();
         }
 		//-----------------------------------------------------------------
 		/// Destructor
 		///
 		//-----------------------------------------------------------------
-		CMeshManager::~CMeshManager()
+		MeshManager::~MeshManager()
 		{
 		}
 	}

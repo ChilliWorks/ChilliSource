@@ -18,7 +18,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CCubemapManager : public ChilliSource::Rendering::ICubemapManager
+		class CCubemapManager : public ChilliSource::Rendering::CubemapManager
 		{
 		public:
 			//----------------------------------------------------------------
@@ -26,7 +26,7 @@ namespace ChilliSource
 			///
 			/// @return Concrete Cubemap resource based on the render system
 			//----------------------------------------------------------------
-			ChilliSource::Rendering::CubemapPtr CreateCubemapResource();
+			ChilliSource::Rendering::CubemapSPtr CreateCubemapResource();
 			//----------------------------------------------------------------
 			/// Create Cubemap From Image
 			///
@@ -35,7 +35,7 @@ namespace ChilliSource
 			/// @param Out: Cubemap resource
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateCubemapFromImages(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapPtr& outpCubemap);
+			bool CreateCubemapFromImages(const std::vector<Core::ResourceSPtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapSPtr& outpCubemap);
 			//----------------------------------------------------------------
 			/// Restore
 			///
@@ -50,7 +50,7 @@ namespace ChilliSource
 			///
 			/// @param The Cubemap pointer.
 			//----------------------------------------------------------------
-			void AddRestorableCubemap(const Rendering::CubemapPtr& inpCubemap);
+			void AddRestorableCubemap(const Rendering::CubemapSPtr& inpCubemap);
 			//----------------------------------------------------------------
 			/// Remove Restorable Cubemap
 			///
@@ -63,7 +63,7 @@ namespace ChilliSource
 		private:
 #ifdef TARGET_ANDROID
 			std::vector<Rendering::CubemapWeakPtr> mapCubemapCache;
-			std::unordered_map<CCubemap*, Core::ImagePtr> mapBackedUpImages;
+			std::unordered_map<CCubemap*, Core::ImageSPtr> mapBackedUpImages;
 #endif
 		};
 	}

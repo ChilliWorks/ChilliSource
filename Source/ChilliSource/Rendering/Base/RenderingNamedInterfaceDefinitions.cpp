@@ -15,8 +15,8 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(ITexture);
-        DEFINE_NAMED_INTERFACE(ICubemap);
-		DEFINE_NAMED_INTERFACE(IShader);
+		DEFINE_NAMED_INTERFACE(Texture);
+        DEFINE_NAMED_INTERFACE(Cubemap);
+		DEFINE_NAMED_INTERFACE(Shader);
 	}
 }

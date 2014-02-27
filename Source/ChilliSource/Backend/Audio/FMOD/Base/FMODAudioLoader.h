@@ -47,7 +47,7 @@ namespace ChilliSource
 			/// @param Out: Resource object
 			/// @return Success
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource);
 			
 			//----------------------------------------------------------------------------
 			/// Stream Resource From File
@@ -57,7 +57,7 @@ namespace ChilliSource
 			/// @param Out: Resource object
 			/// @return Success
 			//----------------------------------------------------------------------------
-			bool StreamResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			bool StreamResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource);
 			
 			//----------------------------------------------------------------------------
 			/// Create Audio Listener

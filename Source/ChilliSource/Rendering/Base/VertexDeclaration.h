@@ -72,11 +72,11 @@ namespace ChilliSource
 		///
 		/// Holds the vertex layouts to be used by the render buffer
 		//==============================================================
-		class CVertexDeclaration
+		class VertexDeclaration
 		{
 		public:
-			CVertexDeclaration();
-			CVertexDeclaration(u16 nElements, const VertexElement* inpElements);
+			VertexDeclaration();
+			VertexDeclaration(u16 nElements, const VertexElement* inpElements);
 			
 			const u16 GetNumElements();
 			const VertexElement& GetElementAtIndex(const u16 inIndex);
@@ -86,7 +86,7 @@ namespace ChilliSource
 			const u32 GetTotalNumValues();
             const std::vector<VertexElement>& GetElements() const;
 			
-			bool operator== (const CVertexDeclaration& inOther);
+			bool operator== (const VertexDeclaration& inOther);
 			
 		private:
 			

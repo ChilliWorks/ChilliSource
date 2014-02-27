@@ -33,9 +33,9 @@ namespace ChilliSource
 		CFMODAudioLoader::CFMODAudioLoader(Audio::AudioSystem* inpFMODSystem) 
 		: AudioLoader(inpFMODSystem), mpFMODSystem(static_cast<CFMODSystem*>(inpFMODSystem))
 		{
-			mstrBundlePath = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_package) + "/";
-			mstrDocumentsPath = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_cache) + "/";
-            mstrDLCPath = Core::CApplication::GetFileSystemPtr()->GetPackageDLCDirectory() + "/";
+			mstrBundlePath = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_package) + "/";
+			mstrDocumentsPath = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_cache) + "/";
+            mstrDLCPath = Core::Application::GetFileSystemPtr()->GetPackageDLCDirectory() + "/";
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource From File With Extension
@@ -57,10 +57,10 @@ namespace ChilliSource
 		/// @param Out: Resource object
 		/// @return Success
 		//----------------------------------------------------------------------------
-		bool CFMODAudioLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool CFMODAudioLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)  
 		{
             std::string strFilePath;
-            static_cast<iOS::CFileSystem*>(Core::CApplication::GetFileSystemPtr())->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
+            static_cast<iOS::CFileSystem*>(Core::Application::GetFileSystemPtr())->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
             
             if(strFilePath.empty())
             {
@@ -79,10 +79,10 @@ namespace ChilliSource
 		/// @param Out: Resource object
 		/// @return Success
 		//----------------------------------------------------------------------------
-		bool CFMODAudioLoader::StreamResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool CFMODAudioLoader::StreamResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
 		{
             std::string strFilePath;
-            static_cast<iOS::CFileSystem*>(Core::CApplication::GetFileSystemPtr())->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
+            static_cast<iOS::CFileSystem*>(Core::Application::GetFileSystemPtr())->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
             
             if(strFilePath.empty())
             {

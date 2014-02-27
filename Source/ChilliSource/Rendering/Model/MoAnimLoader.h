@@ -20,14 +20,14 @@ namespace ChilliSource
 	namespace Rendering
 	{
 		//-------------------------------------------------------------------------
-		/// CMoAnimLoader class.
-		/// Loads Mo Anim files into a CSkinnedAnimation
+		/// MoAnimLoader class.
+		/// Loads Mo Anim files into a SkinnedAnimation
 		//-------------------------------------------------------------------------
-		class CMoAnimLoader : public Core::IResourceProvider
+		class MoAnimLoader : public Core::ResourceProvider
 		{
 		public:
-			CMoAnimLoader(Core::CApplication* inpApp);
-			~CMoAnimLoader();
+			MoAnimLoader(Core::Application* inpApp);
+			~MoAnimLoader();
 			
 			//-------------------------------------------------------------------------
 			/// Is A
@@ -60,7 +60,7 @@ namespace ChilliSource
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource) override;
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource) override;
 			//----------------------------------------------------------------------------
 			/// Async Create Resource From File
 			///
@@ -69,7 +69,7 @@ namespace ChilliSource
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource) override;
+			bool AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource) override;
 			//----------------------------------------------------------------------------
 			/// ReadAnimationTask
 			///
@@ -79,18 +79,18 @@ namespace ChilliSource
 			/// @param Filename
 			/// @param the output resource pointer
 			//----------------------------------------------------------------------------
-			void ReadAnimationTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource);
+			void ReadAnimationTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Create Skinned Animation From File
 			///
-			/// Loads a MoAnim file into a CSkinnedAnimation.
+			/// Loads a MoAnim file into a SkinnedAnimation.
 			///
             /// @param The storage location to load from
 			/// @param Filename
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool CreateSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource);
+			bool CreateSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, const SkinnedAnimationSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Read Header
 			///
@@ -100,11 +100,11 @@ namespace ChilliSource
 			/// @param the Skeletal Animation that this data is being loaded into.
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool ReadHeader(const ChilliSource::Core::FileStreamPtr& inpStream, const std::string & inFilePath, const SkinnedAnimationPtr& outpResource, u32& outudwNumFrames, s32& outdwNumSkeletonNodes);
+			bool ReadHeader(const ChilliSource::Core::FileStreamSPtr& inpStream, const std::string & inFilePath, const SkinnedAnimationSPtr& outpResource, u32& outudwNumFrames, s32& outdwNumSkeletonNodes);
 			//----------------------------------------------------------------------------
 			/// Read Animation Data
 			///
-			/// Reads all of the data for the animation into the CSkinnedAnimation.
+			/// Reads all of the data for the animation into the SkinnedAnimation.
 			///
 			/// @param The file stream.
 			/// @param the Skeletal Animation that this data is being loaded into.
@@ -112,7 +112,7 @@ namespace ChilliSource
             /// @param The number of skeleton nodes.
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool ReadAnimationData(const ChilliSource::Core::FileStreamPtr& inpStream, u32 inudwNumFrames, s32 indwNumSkeletonNodes, const SkinnedAnimationPtr& outpResource);
+			bool ReadAnimationData(const ChilliSource::Core::FileStreamSPtr& inpStream, u32 inudwNumFrames, s32 indwNumSkeletonNodes, const SkinnedAnimationSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Read Value (Templated)
 			///
@@ -120,17 +120,17 @@ namespace ChilliSource
 			/// @param File stream
 			/// @return Value of type T
 			//----------------------------------------------------------------------------
-			template <typename T> T ReadValue(const ChilliSource::Core::FileStreamPtr& inpFileStream)
+			template <typename T> T ReadValue(const ChilliSource::Core::FileStreamSPtr& inpFileStream)
 			{
 				T Value;
 				inpFileStream->Read(reinterpret_cast<s8*>(&Value), sizeof(T));
 				return Value;
 			}
 			
-			friend class CSkinnedAnimation;
+			friend class SkinnedAnimation;
 		private:	
 			
-			Core::CApplication* mpApp;
+			Core::Application* mpApp;
 		};
 	}
 }

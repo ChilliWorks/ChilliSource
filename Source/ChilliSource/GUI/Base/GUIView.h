@@ -227,19 +227,19 @@ namespace ChilliSource
 			///
 			/// @param The colour applied to the view when drawn
 			//-----------------------------------------------------
-			void SetColour(const Core::CColour& inColour);
+			void SetColour(const Core::Colour& inColour);
 			//-----------------------------------------------------
 			/// Get Colour
 			///
 			/// @return The colour applied to the view when drawn
 			//-----------------------------------------------------
-			const Core::CColour& GetColour() const;
+			const Core::Colour& GetColour() const;
 			//-----------------------------------------------------
 			/// Get Absolute Colour
 			///
 			/// @param The inherited colour of the view
 			//-----------------------------------------------------
-			const Core::CColour& GetAbsoluteColour();
+			const Core::Colour& GetAbsoluteColour();
 			//-----------------------------------------------------
 			/// Set Opacity
 			///
@@ -417,7 +417,7 @@ namespace ChilliSource
 			///
 			/// @param Alignment type
 			//-----------------------------------------------------
-			void SetLocalAlignment(Core::AlignmentAnchor ineAlignment);
+			void SetLocalAlignment(Rendering::AlignmentAnchor ineAlignment);
 			//-----------------------------------------------------
 			/// Get Local Alignment
 			///
@@ -427,7 +427,7 @@ namespace ChilliSource
 			///
 			/// @return Alignment type
 			//-----------------------------------------------------
-			Core::AlignmentAnchor GetLocalAlignment() const;
+			Rendering::AlignmentAnchor GetLocalAlignment() const;
 			//-----------------------------------------------------
 			/// Enable Rotation With Parent
 			///
@@ -468,7 +468,7 @@ namespace ChilliSource
 			///
 			/// @param Alignment type
 			//-----------------------------------------------------
-			void SetAlignmentToParent(Core::AlignmentAnchor ineAlignment);
+			void SetAlignmentToParent(Rendering::AlignmentAnchor ineAlignment);
 			//-----------------------------------------------------
 			/// Get Alignment with Parent
 			///
@@ -477,7 +477,7 @@ namespace ChilliSource
 			///
 			/// @return Alignment type
 			//-----------------------------------------------------
-			Core::AlignmentAnchor GetAlignmentWithParent() const;
+			Rendering::AlignmentAnchor GetAlignmentWithParent() const;
 			//-----------------------------------------------------
 			/// Set Offset From Parent Alignment
 			///
@@ -522,7 +522,7 @@ namespace ChilliSource
 			/// @return Unified co-ordinates converted to real
 			/// co-ordinates
 			//-----------------------------------------------------
-			const Core::CVector2& GetAbsoluteOffsetFromParentAlignment() const;
+			const Core::Vector2& GetAbsoluteOffsetFromParentAlignment() const;
 			//-----------------------------------------------------
 			/// Set Offset From Alignment
 			///
@@ -559,21 +559,21 @@ namespace ChilliSource
 			/// @return Unified co-ordinates converted to real
 			/// co-ordinates
 			//-----------------------------------------------------
-			const Core::CVector2& GetAbsoluteOffsetFromPosition() const;
+			const Core::Vector2& GetAbsoluteOffsetFromPosition() const;
 			//-----------------------------------------------------
 			/// Get Absolute Anchor Point
 			///
 			/// @param Anchor point type
 			/// @return Anchor point value as absolute
 			//-----------------------------------------------------
-			Core::CVector2 GetAbsoluteAnchorPoint(Core::AlignmentAnchor ineAlignment) const;
+			Core::Vector2 GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor ineAlignment) const;
 			//-----------------------------------------------------
 			/// Get Absolute Screen Space Anchor Point
 			///
 			/// @param Anchor point type
 			/// @return Anchor point value as absolute
 			//-----------------------------------------------------
-			Core::CVector2 GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor ineAlignment) const;
+			Core::Vector2 GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor ineAlignment) const;
             //-----------------------------------------------------
             /// Is Onscreen
             ///
@@ -663,7 +663,7 @@ namespace ChilliSource
 			///
 			/// @param Unified co-ordinates 
 			//------------------------------------------------------
-			void ScaleTo(const Core::CVector2& invScale);
+			void ScaleTo(const Core::Vector2& invScale);
 			//------------------------------------------------------
 			/// Scale To
 			///
@@ -714,13 +714,13 @@ namespace ChilliSource
 			///
 			/// @return Unified co-ordinates for scale
 			//------------------------------------------------------
-			const Core::CVector2& GetScale() const;
+			const Core::Vector2& GetScale() const;
 			//-----------------------------------------------------
 			/// Get Absolute Scale
 			///
 			/// @param The inherited scale of the view
 			//-----------------------------------------------------
-			const Core::CVector2& GetAbsoluteScale() const;
+			const Core::Vector2& GetAbsoluteScale() const;
 			//-----------------------------------------------------
 			/// Get Absolute Screen Space Position
 			///
@@ -730,7 +730,7 @@ namespace ChilliSource
 			///
 			/// @return Position combined absolute and relative
 			//------------------------------------------------------
-			const Core::CVector2& GetAbsoluteScreenSpacePosition() const;
+			const Core::Vector2& GetAbsoluteScreenSpacePosition() const;
 			//-----------------------------------------------------
 			/// Get Absolute Rotation
 			///
@@ -748,7 +748,7 @@ namespace ChilliSource
 			///
 			/// @return Position combined absolute and relative
 			//------------------------------------------------------
-			const Core::CVector2& GetAbsolutePosition() const;
+			const Core::Vector2& GetAbsolutePosition() const;
 			//------------------------------------------------------
 			/// Get Absolute Size
 			///
@@ -757,7 +757,7 @@ namespace ChilliSource
 			///
 			/// @return Size combined absolute and relative
 			//------------------------------------------------------
-			const Core::CVector2& GetAbsoluteSize() const;
+			const Core::Vector2& GetAbsoluteSize() const;
 
 			//---Functional overrides
 			//-----------------------------------------------------
@@ -775,7 +775,7 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer
 			//-----------------------------------------------------
-			virtual void Draw(Rendering::CCanvasRenderer * inpCanvas);
+			virtual void Draw(Rendering::CanvasRenderer * inpCanvas);
 			//----------------------------------------------------
 			/// Contains
 			///
@@ -787,7 +787,7 @@ namespace ChilliSource
 			/// @param Point vector
 			/// @return Whether it lies within the view
 			//----------------------------------------------------
-			virtual bool Contains(const Core::CVector2& invPoint) const;
+			virtual bool Contains(const Core::Vector2& invPoint) const;
 			//-----------------------------------------------------------
 			/// Enable Accept Touches Outside of Bounds
 			///
@@ -891,7 +891,7 @@ namespace ChilliSource
 			///
 			/// @return Transformation matrix
 			//-----------------------------------------------------
-			const Core::CMatrix3x3& GetTransform() const;
+			const Core::Matrix3x3& GetTransform() const;
 			//-----------------------------------------------------
 			/// On Transform Changed
 			///
@@ -918,14 +918,14 @@ namespace ChilliSource
 		private:
 
 
-			mutable Core::CMatrix3x3 mmatTransform;
+			mutable Core::Matrix3x3 mmatTransform;
 
-			Core::CColour mAbsoluteColour;
-			mutable Core::CVector2 mvAbsolutePosition;
-			mutable Core::CVector2 mvAbsoluteScale;
-			mutable Core::CVector2 mvAbsoluteSize;
-			mutable Core::CVector2 mvAbsoluteParentalOffset;
-			mutable Core::CVector2 mvAbsolutePositionOffset;
+			Core::Colour mAbsoluteColour;
+			mutable Core::Vector2 mvAbsolutePosition;
+			mutable Core::Vector2 mvAbsoluteScale;
+			mutable Core::Vector2 mvAbsoluteSize;
+			mutable Core::Vector2 mvAbsoluteParentalOffset;
+			mutable Core::Vector2 mvAbsolutePositionOffset;
 
 		protected:
 
@@ -951,11 +951,11 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedSize, SetSize, GetSize);
 			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedParentalOffset, SetOffsetFromParentAlignment, GetOffsetFromParentAlignment);
 			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedPositionOffset, SetOffsetFromPosition, GetOffsetFromPosition);
-			DECLARE_PROPERTY_A(Core::CVector2, Scale, ScaleTo, GetScale);
+			DECLARE_PROPERTY_A(Core::Vector2, Scale, ScaleTo, GetScale);
 			DECLARE_PROPERTY_A(f32, Rotation, RotateTo, GetRotation);
 			DECLARE_PROPERTY_A(f32, Opacity, SetOpacity, GetOpacity);
-			DECLARE_PROPERTY_A(Core::AlignmentAnchor, LocalAlignment, SetLocalAlignment, GetLocalAlignment);
-			DECLARE_PROPERTY_A(Core::AlignmentAnchor, ParentalAlignment, SetAlignmentToParent, GetAlignmentWithParent);
+			DECLARE_PROPERTY_A(Rendering::AlignmentAnchor, LocalAlignment, SetLocalAlignment, GetLocalAlignment);
+			DECLARE_PROPERTY_A(Rendering::AlignmentAnchor, ParentalAlignment, SetAlignmentToParent, GetAlignmentWithParent);
 			DECLARE_PROPERTY_A(bool, AlignedWithParent, EnableAlignmentToParent, IsAlignedToParent);
 			DECLARE_PROPERTY_A(bool, RotatedWithParent, EnableRotationWithParent, IsRotatedWithParent);
 			DECLARE_PROPERTY_A(bool, ClipOffScreen, EnableClipOffScreen, IsClippedOffScreenEnabled);
@@ -967,7 +967,7 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(bool, UserInteraction, EnableUserInteraction, IsUserInteractionEnabled);
 			DECLARE_PROPERTY_A(bool, AcceptTouchesOutsideOfBounds, EnableAcceptTouchesOutsideOfBounds, IsAcceptTouchesOutsideOfBoundsEnabled);
 			DECLARE_PROPERTY_A(bool, InheritOpacity, EnableInheritedOpacity, IsInheritedOpacityEnabled);
-			DECLARE_PROPERTY_A(Core::CColour, Colour, SetColour, GetColour);
+			DECLARE_PROPERTY_A(Core::Colour, Colour, SetColour, GetColour);
 		};
 	}
 }

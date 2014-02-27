@@ -32,10 +32,10 @@ namespace ChilliSource
 		//---------------------------------------------------------------
 		CTexture::CTexture(CTextureManager* inpTextureManager)
         : meSFilter(Filter::k_linear), meTFilter(Filter::k_linear), meSWrapMode(WrapMode::k_clamp), meTWrapMode(WrapMode::k_clamp), mGLTexID(0),
-        mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), mdwTextureSlot(0), meImageFormat(Core::CImage::Format::k_RGBA8888), mpTextureManager(inpTextureManager),
+        mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), mdwTextureSlot(0), meImageFormat(Core::Image::Format::k_RGBA8888), mpTextureManager(inpTextureManager),
         mpRenderCapabilities(nullptr)
 		{
-            mpRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
+            mpRenderCapabilities = Core::Application::GetSystemImplementing<Rendering::RenderCapabilities>();
             CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
 		}
 		//--------------------------------------------------
@@ -44,7 +44,7 @@ namespace ChilliSource
 		/// @param Width
 		/// @param Height
 		//--------------------------------------------------
-		void CTexture::Init(u32 inudwWidth, u32 inudwHeight, Core::CImage::Format ineFormat)
+		void CTexture::Init(u32 inudwWidth, u32 inudwHeight, Core::Image::Format ineFormat)
 		{
             ErrorCheck(inudwWidth, inudwHeight);
 			
@@ -63,28 +63,28 @@ namespace ChilliSource
 			switch (ineFormat)
             {
                 default:
-                case Core::CImage::Format::k_RGBA8888:
+                case Core::Image::Format::k_RGBA8888:
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, inudwWidth, inudwHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
                     break;
-                case Core::CImage::Format::k_RGB888:
+                case Core::Image::Format::k_RGB888:
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, inudwWidth, inudwHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
                     break;
-                case Core::CImage::Format::k_RGBA4444:
+                case Core::Image::Format::k_RGBA4444:
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, inudwWidth, inudwHeight, 0, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, nullptr);
                     break;
-                case Core::CImage::Format::k_RGB565:
+                case Core::Image::Format::k_RGB565:
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, inudwWidth, inudwHeight, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, nullptr);
                     break;
-                case Core::CImage::Format::k_LumA88:
+                case Core::Image::Format::k_LumA88:
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE_ALPHA, inudwWidth, inudwHeight, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, nullptr);
                     break;
-                case Core::CImage::Format::k_Lum8:
+                case Core::Image::Format::k_Lum8:
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, inudwWidth, inudwHeight, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, nullptr);
                     break;
-                case Core::CImage::Format::k_Depth16:
+                case Core::Image::Format::k_Depth16:
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, inudwWidth, inudwHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_SHORT, nullptr);
                     break;
-                case Core::CImage::Format::k_Depth32:
+                case Core::Image::Format::k_Depth32:
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, inudwWidth, inudwHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_INT, nullptr);
                     break;
             };
@@ -95,7 +95,7 @@ namespace ChilliSource
 		/// @param Source image
 		/// @param Whether to create mip maps
 		//--------------------------------------------------
-		void CTexture::Init(Core::CImage * pSourceImage, bool inbWithMipsMaps)
+		void CTexture::Init(Core::Image * pSourceImage, bool inbWithMipsMaps)
 		{
             meImageFormat = pSourceImage->GetFormat();
             
@@ -120,22 +120,22 @@ namespace ChilliSource
 					switch(pSourceImage->GetFormat())
                     {
                         default:
-                        case Core::CImage::Format::k_RGBA8888:
+                        case Core::Image::Format::k_RGBA8888:
                             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, pSourceImage->GetData());
                             break;
-                        case Core::CImage::Format::k_RGB888:
+                        case Core::Image::Format::k_RGB888:
                             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, pSourceImage->GetData());
                             break;
-                        case Core::CImage::Format::k_RGBA4444:
+                        case Core::Image::Format::k_RGBA4444:
                             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_SHORT_4_4_4_4, pSourceImage->GetData());
                             break;
-                        case Core::CImage::Format::k_RGB565:
+                        case Core::Image::Format::k_RGB565:
                             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, pSourceImage->GetData());
                             break;
-                        case Core::CImage::Format::k_LumA88:
+                        case Core::Image::Format::k_LumA88:
                             glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE_ALPHA, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, pSourceImage->GetData());
                             break;
-                        case Core::CImage::Format::k_Lum8:
+                        case Core::Image::Format::k_Lum8:
                             glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, pSourceImage->GetData());
                             break;
                     };
@@ -152,10 +152,10 @@ namespace ChilliSource
 					switch(pSourceImage->GetFormat())
                     {
                         default:
-                        case Core::CImage::Format::k_RGBA8888:
+                        case Core::Image::Format::k_RGBA8888:
                             glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, pSourceImage->GetDataLength(), pSourceImage->GetData());
                             break;
-                        case Core::CImage::Format::k_RGB888:
+                        case Core::Image::Format::k_RGB888:
                             glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, pSourceImage->GetDataLength(), pSourceImage->GetData());
                             break;
                     };
@@ -168,10 +168,10 @@ namespace ChilliSource
 					switch(pSourceImage->GetFormat())
                     {
                         default:
-                        case Core::CImage::Format::k_RGBA8888:
+                        case Core::Image::Format::k_RGBA8888:
                             glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, pSourceImage->GetDataLength(), pSourceImage->GetData());
                             break;
-                        case Core::CImage::Format::k_RGB888:
+                        case Core::Image::Format::k_RGB888:
                             glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, pSourceImage->GetDataLength(), pSourceImage->GetData());
                             break;
                     };
@@ -189,7 +189,7 @@ namespace ChilliSource
         ///
         /// @param Image To Initialize from this Texture
         //----------------------------------------------------------------
-        bool CTexture::CreateImage(Core::ImagePtr& outpImage)
+        bool CTexture::CreateImage(Core::ImageSPtr& outpImage)
         {           
             GLuint udwFrameBufferID;
             
@@ -231,10 +231,10 @@ namespace ChilliSource
             
             glReadPixels(0, 0, GetWidth(), GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, pData);
             
-            outpImage = Core::ImagePtr(new Core::CImage());
+            outpImage = Core::ImageSPtr(new Core::Image());
             outpImage->SetCompression(Core::ImageCompression::k_none);
             outpImage->SetDataLength(udwSize);
-            outpImage->SetFormat(Core::CImage::Format::k_RGBA8888);
+            outpImage->SetFormat(Core::Image::Format::k_RGBA8888);
             outpImage->SetWidth(GetWidth());
             outpImage->SetHeight(GetHeight());
             outpImage->SetData((u8*)pData);
@@ -242,25 +242,25 @@ namespace ChilliSource
             //convert the RGBA8888 data taken from the texture to the intended format.
             switch (meImageFormat)
             {
-                case Core::CImage::Format::k_RGBA8888:
+                case Core::Image::Format::k_RGBA8888:
                     Core::ImageFormatConverter::RGBA8888ToRGB888(outpImage.get());
                     break;
-                case Core::CImage::Format::k_RGBA4444:
+                case Core::Image::Format::k_RGBA4444:
                     Core::ImageFormatConverter::RGBA8888ToRGBA4444(outpImage.get());
                     break;
-                case Core::CImage::Format::k_RGB565:
+                case Core::Image::Format::k_RGB565:
                     Core::ImageFormatConverter::RGBA8888ToRGB565(outpImage.get());
                     break;
-                case Core::CImage::Format::k_LumA88:
+                case Core::Image::Format::k_LumA88:
                     Core::ImageFormatConverter::RGBA8888ToLUMA88(outpImage.get());
                     break;
-                case Core::CImage::Format::k_Lum8:
+                case Core::Image::Format::k_Lum8:
                     Core::ImageFormatConverter::RGBA8888ToLUM8(outpImage.get());
                     break;
-                case Core::CImage::Format::k_Depth32:
+                case Core::Image::Format::k_Depth32:
                     Core::ImageFormatConverter::RGBA8888ToDepth32(outpImage.get());
                     break;
-                case Core::CImage::Format::k_Depth16:
+                case Core::Image::Format::k_Depth16:
                     Core::ImageFormatConverter::RGBA8888ToDepth16(outpImage.get());
                     break;
                 default:
@@ -284,7 +284,7 @@ namespace ChilliSource
 		{
             if (paTextureUnits != nullptr)
             {
-                Rendering::IRenderCapabilities* pRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
+                Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::GetSystemImplementing<Rendering::RenderCapabilities>();
                 CS_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
                 
                 for(u32 i = 0; i < pRenderCapabilities->GetNumTextureUnits(); ++i)
@@ -312,7 +312,7 @@ namespace ChilliSource
         //---------------------------------------------------
         void CTexture::ErrorCheck(u32 inudwWidth, u32 inudwHeight)
         {
-            Rendering::IRenderCapabilities* pRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
+            Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::GetSystemImplementing<Rendering::RenderCapabilities>();
             CS_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
             
 			if(inudwWidth > pRenderCapabilities->GetMaxTextureSize() || inudwHeight > pRenderCapabilities->GetMaxTextureSize())
@@ -328,7 +328,7 @@ namespace ChilliSource
 		//--------------------------------------------------
 		bool CTexture::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == ITexture::InterfaceID;
+			return inInterfaceID == Texture::InterfaceID;
 		}
 		//--------------------------------------------------
 		/// Bind
@@ -358,7 +358,7 @@ namespace ChilliSource
         {
             if(!paTextureUnits)
 			{
-                Rendering::IRenderCapabilities* pRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
+                Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::GetSystemImplementing<Rendering::RenderCapabilities>();
                 CS_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
                 
                 //Create the available texture unit slots
@@ -485,7 +485,7 @@ namespace ChilliSource
 		//--------------------------------------------------
 		void CTexture::Unbind(u8* inpObjectID)
 		{
-            Rendering::IRenderCapabilities* pRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
+            Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::GetSystemImplementing<Rendering::RenderCapabilities>();
             CS_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
             
             for (u32 i = 0; i < pRenderCapabilities->GetNumTextureUnits(); ++i)
@@ -527,7 +527,7 @@ namespace ChilliSource
 		/// @return The format of the image used to create
 		///			the texture.
 		//--------------------------------------------------
-		Core::CImage::Format CTexture::GetImageFormat() const
+		Core::Image::Format CTexture::GetImageFormat() const
 		{
 			return meImageFormat;
 		}
@@ -572,7 +572,7 @@ namespace ChilliSource
         {
             if(inTextureID > 0)
             {
-                Rendering::IRenderCapabilities* pRenderCapabilities = Core::CApplication::GetSystemImplementing<Rendering::IRenderCapabilities>();
+                Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::GetSystemImplementing<Rendering::RenderCapabilities>();
 				if(pRenderCapabilities == nullptr)
 					return;
 

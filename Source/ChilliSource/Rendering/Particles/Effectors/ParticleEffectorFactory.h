@@ -19,10 +19,10 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        class CParticleEffectorFactory
+        class ParticleEffectorFactory
         {
         public:
-            typedef std::function<IParticleEffector*(const Core::ParamDictionary&)> EffectorCreateDelegate;
+            typedef std::function<ParticleEffector*(const Core::ParamDictionary&)> EffectorCreateDelegate;
             
             //------------------------------------------------------------------
             /// Register 
@@ -42,7 +42,7 @@ namespace ChilliSource
             /// @param Param dictionary
             /// @return Ownership of particle effector of that type
             //-------------------------------------------------------------------
-            IParticleEffector* CreateParticleEffector(const std::string& instrType, const Core::ParamDictionary& insParams);
+            ParticleEffector* CreateParticleEffector(const std::string& instrType, const Core::ParamDictionary& insParams);
             
         private:
             

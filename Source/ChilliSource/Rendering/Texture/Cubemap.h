@@ -18,17 +18,17 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class ICubemap : public Core::IResource
+		class Cubemap : public Core::Resource
 		{
 		public:
 			
-			DECLARE_NAMED_INTERFACE(ICubemap);
+			DECLARE_NAMED_INTERFACE(Cubemap);
 			
 			virtual void Bind(u32 inSlot = 0) = 0;
 			virtual void Unbind() = 0;
             
-            virtual void SetFilter(ITexture::Filter ineSFilter, ITexture::Filter ineTFilter) = 0;
-			virtual void SetWrapMode(ITexture::WrapMode inSWrapMode, ITexture::WrapMode inTWrapMode) = 0;
+            virtual void SetFilter(Texture::Filter ineSFilter, Texture::Filter ineTFilter) = 0;
+			virtual void SetWrapMode(Texture::WrapMode inSWrapMode, Texture::WrapMode inTWrapMode) = 0;
 		};
 	}
 }

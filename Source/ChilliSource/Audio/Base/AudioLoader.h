@@ -22,7 +22,7 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		class AudioLoader : public Core::IResourceProvider
+		class AudioLoader : public Core::ResourceProvider
 		{
 		public:
 			

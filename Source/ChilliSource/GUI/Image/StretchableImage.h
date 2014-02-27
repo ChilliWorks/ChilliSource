@@ -47,13 +47,13 @@ namespace ChilliSource
             ///
             /// @param Sprite sheet containing the nine patches
             //---------------------------------------------------------
-            void SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+            void SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
             //---------------------------------------------------------
             /// Get Sprite Sheet
             ///
             /// @return Sprite sheet containing the nine patches
             //---------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetSpriteSheet() const;
+			const Rendering::SpriteSheetSPtr& GetSpriteSheet() const;
 			//---------------------------------------------------------
 			/// Set Base Sprite Sheet Index ID
 			///
@@ -119,7 +119,7 @@ namespace ChilliSource
             ///
             /// @param Canvas renderer pointer
             //---------------------------------------------------------
-            void Draw(Rendering::CCanvasRenderer* inpCanvas);
+            void Draw(Rendering::CanvasRenderer* inpCanvas);
 			//--------------------------------------------------------
             /// Set Width Maintaining Aspect
             ///
@@ -204,22 +204,22 @@ namespace ChilliSource
             
             struct PatchSize
             {
-				ChilliSource::Core::CVector2 vSizeTopLeft;
-				ChilliSource::Core::CVector2 vSizeTopRight;
-				ChilliSource::Core::CVector2 vSizeBottomLeft;
-				ChilliSource::Core::CVector2 vSizeBottomRight;
-				ChilliSource::Core::CVector2 vSizeTopCentre;
-				ChilliSource::Core::CVector2 vSizeBottomCentre;
-				ChilliSource::Core::CVector2 vSizeLeftCentre;
-				ChilliSource::Core::CVector2 vSizeRightCentre;
-				ChilliSource::Core::CVector2 vSizeMiddleCentre;
+				ChilliSource::Core::Vector2 vSizeTopLeft;
+				ChilliSource::Core::Vector2 vSizeTopRight;
+				ChilliSource::Core::Vector2 vSizeBottomLeft;
+				ChilliSource::Core::Vector2 vSizeBottomRight;
+				ChilliSource::Core::Vector2 vSizeTopCentre;
+				ChilliSource::Core::Vector2 vSizeBottomCentre;
+				ChilliSource::Core::Vector2 vSizeLeftCentre;
+				ChilliSource::Core::Vector2 vSizeRightCentre;
+				ChilliSource::Core::Vector2 vSizeMiddleCentre;
             };
 			
 			void CalculatePatchSize(PatchSize& outSizePatch);
 			
 		private:
 
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, SpriteSheet, SetSpriteSheet, GetSpriteSheet);
 
 			DECLARE_PROPERTY_A(std::string, BaseSpriteSheetIndexID, SetBaseSpriteSheetIndexID, GetBaseSpriteSheetIndexID);
 

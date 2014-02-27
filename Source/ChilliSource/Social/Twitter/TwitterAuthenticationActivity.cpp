@@ -21,7 +21,7 @@ namespace ChilliSource
 	{
 		DEFINE_NAMED_INTERFACE(TwitterAuthenticationActivity);
         
-        Core::IActivity* TwitterAuthenticationActivity::CreateTwitterAuthenticationActivity()
+        Core::Activity* TwitterAuthenticationActivity::CreateTwitterAuthenticationActivity()
         {
 #ifdef TARGET_OS_IPHONE
             return new ChilliSource::iOS::CTwitterAuthenticationActivity();

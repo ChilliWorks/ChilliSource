@@ -37,14 +37,14 @@ namespace ChilliSource
 			///
 			/// @return Vector containing the width and height of the screen
 			//----------------------------------------------------------------
-			static const CVector2& GetRawDimensions();
+			static const Vector2& GetRawDimensions();
 			//----------------------------------------------------------------
 			/// Get Oriented Dimensions
 			///
 			/// @return Vector containing the width and height of the screen
 			/// in the current orientation
 			//----------------------------------------------------------------
-			static const CVector2& GetOrientedDimensions();
+			static const Vector2& GetOrientedDimensions();
 			//----------------------------------------------------------------
 			/// Get Oriented Width
 			///
@@ -114,7 +114,7 @@ namespace ChilliSource
 			///
 			/// @param Screen size in default orientation
 			//----------------------------------------------------------------
-			static void SetRawDimensions(const CVector2 & invRawScreenDimensions);
+			static void SetRawDimensions(const Vector2 & invRawScreenDimensions);
 			//----------------------------------------------------------------
 			/// Set Orientation
 			///
@@ -136,12 +136,12 @@ namespace ChilliSource
             //----------------------------------------------------------------
             static void SetDensity(f32 infDensityScalar);
 
-			friend class CApplication;
+			friend class Application;
 			friend class CApplicationDelegates;
 		private:
 
-			static CVector2 mvRawDims;
-			static CVector2 mvOrientedDims;
+			static Vector2 mvRawDims;
+			static Vector2 mvOrientedDims;
 			static ScreenOrientation mOrientation; 
             static bool mbIsHighDefinition;
             static f32 mfDensityScale;

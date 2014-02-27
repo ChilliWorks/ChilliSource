@@ -90,7 +90,7 @@ namespace ChilliSource
 			
 			u16 mNumContactPointsRequired;	
 			bool mbIsGestureInvalid;
-			Core::CTimer mTimer;
+			Core::Timer mTimer;
             GUI::GUIView* mpView;
             TouchScreen* mpTouchDevice;
             
@@ -140,14 +140,14 @@ namespace ChilliSource
 			///
 			/// Return start swipe position
 			//----------------------------------------------------
-            ChilliSource::Core::CVector2 GetStartPosition() const { return mvStartPos; }
+            ChilliSource::Core::Vector2 GetStartPosition() const { return mvStartPos; }
             
             //----------------------------------------------------
 			/// Get Swipe end position
 			///
 			/// Return end swipe position
 			//----------------------------------------------------
-            ChilliSource::Core::CVector2 GetEndPosition() const { return mvEndPos; }
+            ChilliSource::Core::Vector2 GetEndPosition() const { return mvEndPos; }
             
 		private:
 			
@@ -164,7 +164,7 @@ namespace ChilliSource
 			
 		public:
 			
-			Core::CVector2 mvVelocity;
+			Core::Vector2 mvVelocity;
 			
 		private:
 			
@@ -175,8 +175,8 @@ namespace ChilliSource
 			
 			f32 mfMaximumSwipeDuration;
 			
-			Core::CVector2 mvStartPos;
-			Core::CVector2 mvEndPos;
+			Core::Vector2 mvStartPos;
+			Core::Vector2 mvEndPos;
 		};		
 		//================================================
 		/// Pinch Gesture (Continuous)
@@ -235,11 +235,11 @@ namespace ChilliSource
             //----------------------------------------------------
 			/// Populate Start Positions For First Touch
 			//----------------------------------------------------
-			void PopulateStartPositions(ChilliSource::Core::CVector2& outvFirstPosition, ChilliSource::Core::CVector2& outvSecondPosition) const;
+			void PopulateStartPositions(ChilliSource::Core::Vector2& outvFirstPosition, ChilliSource::Core::Vector2& outvSecondPosition) const;
             //----------------------------------------------------
 			/// Get Current Position
 			//----------------------------------------------------
-			void PopulateCurrentPositions(ChilliSource::Core::CVector2& outvFirstPosition, ChilliSource::Core::CVector2& outvSecondPosition) const;
+			void PopulateCurrentPositions(ChilliSource::Core::Vector2& outvFirstPosition, ChilliSource::Core::Vector2& outvSecondPosition) const;
             
 			
 		private:
@@ -270,12 +270,12 @@ namespace ChilliSource
 			
 			bool mbFirstTouchBegan, mbSecondTouchBegan;
 			
-			Core::CVector2	mvStartPos1;			// Touch positions at start of gesture
-			Core::CVector2	mvStartPos2;			
+			Core::Vector2	mvStartPos1;			// Touch positions at start of gesture
+			Core::Vector2	mvStartPos2;			
 			f32				mfStartDisplacement;	// Cached sqrt(|mvStartPos2 - mvStartPos1|)
 			f32				mfStartAngle;
-			Core::CVector2	mvCurrentPos1;			// Touch positions of end of gesture
-			Core::CVector2	mvCurrentPos2;
+			Core::Vector2	mvCurrentPos1;			// Touch positions of end of gesture
+			Core::Vector2	mvCurrentPos2;
 			f32				mfCurrentDisplacement;	// Cached sqrt(|mvCurrentPos2 - mvCurrentPos1|)
 			f32				mfCurrentAngle;
 			
@@ -320,7 +320,7 @@ namespace ChilliSource
             void SetMaxDistanceAllowedSqrd(const u32 inudwMaxDistanceAllowedSqrd);
 		public:
 			
-			Core::CVector2 mvLocation;
+			Core::Vector2 mvLocation;
 			
 		private:
 			
@@ -358,7 +358,7 @@ namespace ChilliSource
 			f32 mfLastTapTime;
 			f32 mfLastBeganTime;
 			
-			Core::CVector2 mvStartPos;
+			Core::Vector2 mvStartPos;
 		};
 		//================================================
 		/// Drag Gesture (Continuous)
@@ -407,7 +407,7 @@ namespace ChilliSource
 			///
 			/// Return start swipe position
 			//----------------------------------------------------
-            ChilliSource::Core::CVector2 GetStartPosition() const { return mvStartPos; }
+            ChilliSource::Core::Vector2 GetStartPosition() const { return mvStartPos; }
             //----------------------------------------------------
 			/// Get Touch ID
 			///
@@ -433,12 +433,12 @@ namespace ChilliSource
 			
 		public:
 			
-			Core::CVector2 mvLocation;
-            Core::CVector2 mvPreviousLocation;
+			Core::Vector2 mvLocation;
+            Core::Vector2 mvPreviousLocation;
 			
 		private:
 			
-			Core::CVector2 mvStartPos;
+			Core::Vector2 mvStartPos;
 			
 			f32 mMinDistanceRequiredSqrd;
             u32 mCurrentID;
@@ -533,7 +533,7 @@ namespace ChilliSource
 			
 		public:
 			
-			Core::CVector2 mvLocation;
+			Core::Vector2 mvLocation;
 			
 		private:
 			
@@ -553,7 +553,7 @@ namespace ChilliSource
             
 		private:
 			
-			//Core::CVector2 mvStartPos;
+			//Core::Vector2 mvStartPos;
 			
 			f32 mfMaxDistanceAllowedSqrd;
 			f32 mfHoldDuration;

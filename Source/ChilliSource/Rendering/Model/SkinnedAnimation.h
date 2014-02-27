@@ -25,18 +25,18 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		struct SkinnedAnimationFrame
 		{
-			std::vector<Core::CVector3> mNodeTranslations;
-			std::vector<Core::CQuaternion> mNodeOrientations;
-            std::vector<Core::CVector3> mNodeScalings;
+			std::vector<Core::Vector3> mNodeTranslations;
+			std::vector<Core::Quaternion> mNodeOrientations;
+            std::vector<Core::Vector3> mNodeScalings;
 		};
 		//---------------------------------------------------------------------
 		/// Skeletal Animation Resource.
 		//---------------------------------------------------------------------
-		class CSkinnedAnimation : public Core::IResource
+		class SkinnedAnimation : public Core::Resource
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CSkinnedAnimation);
-			virtual ~CSkinnedAnimation();
+			DECLARE_NAMED_INTERFACE(SkinnedAnimation);
+			virtual ~SkinnedAnimation();
 			
 			//---------------------------------------------------------------------
 			/// Is A
@@ -50,7 +50,7 @@ namespace ChilliSource
 			/// @param the index to the frame
 			/// @return the AnimationFramePtr at the given index
 			//---------------------------------------------------------------------
-			SkinnedAnimationFramePtr GetFrameAtIndex(u32 indwFrameIndex) const;
+			SkinnedAnimationFrameSPtr GetFrameAtIndex(u32 indwFrameIndex) const;
 			//---------------------------------------------------------------------
 			/// Get Frame Time
 			///
@@ -70,7 +70,7 @@ namespace ChilliSource
 			/// Declared private so that this can only be created by the
 			/// Skeletal Animation Manager.
 			//---------------------------------------------------------------------
-			CSkinnedAnimation();
+			SkinnedAnimation();
 			//---------------------------------------------------------------------
 			/// Add Frame
 			///
@@ -78,7 +78,7 @@ namespace ChilliSource
 			///
 			/// @param The new frame.
 			//---------------------------------------------------------------------
-			void AddFrame(const SkinnedAnimationFramePtr& inpAnimationFrame);
+			void AddFrame(const SkinnedAnimationFrameSPtr& inpAnimationFrame);
 			//---------------------------------------------------------------------
 			/// Set Frame Rate
 			///
@@ -90,12 +90,12 @@ namespace ChilliSource
 			//---------------------------------------------------------------------
 			void SetFrameTime(f32 infFrameTime);
 			
-			friend class CMoAnimLoader;
-			friend class CSkinnedAnimationManager;
+			friend class MoAnimLoader;
+			friend class SkinnedAnimationManager;
 		private:
 			
 			f32 mfFrameTime;
-			std::vector<SkinnedAnimationFramePtr> mFrames;
+			std::vector<SkinnedAnimationFrameSPtr> mFrames;
 		};
 	}
 }

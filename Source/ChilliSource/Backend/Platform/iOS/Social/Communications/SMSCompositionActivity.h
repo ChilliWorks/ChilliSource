@@ -30,7 +30,7 @@ namespace ChilliSource{
 			CSMSCompositionActivity();
 			~CSMSCompositionActivity();
 			
-			virtual void Present(const std::vector<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const SMSCompositionActivity::SendResultDelegate & inCallback) override;
+			virtual void Present(const std::vector<Core::UTF8String> & inastrRecipientNumbers, const Core::UTF8String & instrContents, const SMSCompositionActivity::SendResultDelegate & inCallback) override;
 
 			virtual void Dismiss() override;
 		private:

@@ -51,11 +51,11 @@ namespace ChilliSource
 		/// must override the initialisation methods to create
 		/// the subsystems they require.
 		//--------------------------------------------------------------------------------------------------
-		class CApplication
+		class Application
 		{
 		public:
-			CApplication();
-			virtual ~CApplication();
+			Application();
+			virtual ~Application();
 			
 			//--------------------------------------------------------------------------------------------------
 			/// Run
@@ -116,7 +116,7 @@ namespace ChilliSource
 			/// @param The type ID of the system you wish to implement
 			/// @return System that implements the given interface or nullptr if no system
 			//--------------------------------------------------------------------------------------------------
-			static SystemPtr GetSystemImplementing(InterfaceIDType inInterfaceID);
+			static SystemSPtr GetSystemImplementing(InterfaceIDType inInterfaceID);
 			//--------------------------------------------------------------------------------------------------
 			/// Get System Implementing
 			///
@@ -127,7 +127,7 @@ namespace ChilliSource
 			//Templated convenience version of the above saving getting the interface directly
 			template <typename T> static T* GetSystemImplementing()
 			{
-				SystemPtr pSystem = GetSystemImplementing(T::InterfaceID);
+				SystemSPtr pSystem = GetSystemImplementing(T::InterfaceID);
 				
 				if (pSystem != nullptr) 
 				{
@@ -146,7 +146,7 @@ namespace ChilliSource
 			//Templated convenience version of the above saving getting the interface directly
 			template <typename T, typename U> static T* GetSystemImplementing()
 			{
-				SystemPtr pSystem = GetSystemImplementing(U::InterfaceID);
+				SystemSPtr pSystem = GetSystemImplementing(U::InterfaceID);
 				
 				if (pSystem != nullptr) 
 				{
@@ -162,7 +162,7 @@ namespace ChilliSource
 			/// and fills an array with them.
 			/// @param The type ID of the system you wish to implement
 			//--------------------------------------------------------------------------------------------------
-			static void GetSystemsImplementing(InterfaceIDType inInterfaceID, std::vector<SystemPtr> & outSystems);
+			static void GetSystemsImplementing(InterfaceIDType inInterfaceID, std::vector<SystemSPtr> & outSystems);
 			//--------------------------------------------------------------------------------------------------
 			/// Get Systems Implementing
 			///
@@ -188,7 +188,7 @@ namespace ChilliSource
 			/// @param The type ID of the resource you wish to create (i.e. Model, Texture)
 			/// @return Resource provider that loads the resource type
 			//--------------------------------------------------------------------------------------------------
-			IResourceProvider* GetResourceProviderProducing(InterfaceIDType inInterfaceID, const std::string & inExtension);
+			ResourceProvider* GetResourceProviderProducing(InterfaceIDType inInterfaceID, const std::string & inExtension);
             //--------------------------------------------------------------------------------------------------
             /// Get MoFlow Version
             ///
@@ -265,31 +265,31 @@ namespace ChilliSource
 			///
 			/// @return Application state manager
 			//--------------------------------------------------------------------------------------------------
-			static CStateManager& GetStateManager();
+			static StateManager& GetStateManager();
 			//--------------------------------------------------------------------------------------------------
 			/// Get State Manager Pointer
 			///
 			/// @return Handle to application state manager
 			//--------------------------------------------------------------------------------------------------
-			static CStateManager* GetStateManagerPtr();
+			static StateManager* GetStateManagerPtr();
 			//--------------------------------------------------------------------------------------------------
 			/// Get Renderer Pointer
 			///
 			/// @return Handle application renderer
 			//--------------------------------------------------------------------------------------------------
-			static Rendering::CRenderer* GetRendererPtr() {return mpRenderer;}
+			static Rendering::Renderer* GetRendererPtr() {return mpRenderer;}
 			//--------------------------------------------------------------------------------------------------
 			/// Get Render System Pointer
 			///
 			/// @return Handle to platfrom specific render system
 			//--------------------------------------------------------------------------------------------------
-			static Rendering::IRenderSystem* GetRenderSystemPtr() {return mpRenderSystem;}
+			static Rendering::RenderSystem* GetRenderSystemPtr() {return mpRenderSystem;}
             //--------------------------------------------------------------------------------------------------
 			/// Get Platform System Ptr
 			///
             /// @return Pointer to the platform system
             //--------------------------------------------------------------------------------------------------
-			static IPlatformSystem* GetPlatformSystemPtr(){return pPlatformSystem;}
+			static PlatformSystem* GetPlatformSystemPtr(){return pPlatformSystem;}
 			//--------------------------------------------------------------------------------------------------
 			/// Get Input System Ptr
 			///
@@ -307,7 +307,7 @@ namespace ChilliSource
 			///
 			/// @return Pointer to the file system
 			//--------------------------------------------------------------------------------------------------
-			static IFileSystem* GetFileSystemPtr(){return mspFileSystem;}
+			static FileSystem* GetFileSystemPtr(){return mspFileSystem;}
             //--------------------------------------------------------------------------------------------------
 			/// Refresh Master Text
 			///
@@ -322,19 +322,19 @@ namespace ChilliSource
 			///
             /// @return Default font given to the system by the application delegate
             //--------------------------------------------------------------------------------------------------
-            static const Rendering::FontPtr& GetDefaultFont();
+            static const Rendering::FontSPtr& GetDefaultFont();
             //--------------------------------------------------------------------------------------------------
 			/// Get Default Mesh
 			///
             /// @return Default mesh given to the system by the application delegate
             //--------------------------------------------------------------------------------------------------
-            static const Rendering::MeshPtr& GetDefaultMesh();
+            static const Rendering::MeshSPtr& GetDefaultMesh();
             //--------------------------------------------------------------------------------------------------
 			/// Get Default Material
 			///
             /// @return Default material given to the system by the application delegate
             //--------------------------------------------------------------------------------------------------
-            static const Rendering::MaterialPtr& GetDefaultMaterial();
+            static const Rendering::MaterialSPtr& GetDefaultMaterial();
             //--------------------------------------------------------------------------------------------------
             /// Quit
             ///
@@ -381,7 +381,7 @@ namespace ChilliSource
 			///
 			/// @param the system pointer.
 			//--------------------------------------------------------------------------------------------------
-			static void SetRenderSystem(Rendering::IRenderSystem* inpSystem);
+			static void SetRenderSystem(Rendering::RenderSystem* inpSystem);
             //--------------------------------------------------------------------------------------------------
 			/// Set Input System
 			///
@@ -399,13 +399,13 @@ namespace ChilliSource
 			///
 			/// @param the renderer
 			//--------------------------------------------------------------------------------------------------
-			static void SetRenderer(Rendering::CRenderer* inpSystem);
+			static void SetRenderer(Rendering::Renderer* inpSystem);
 			//--------------------------------------------------------------------------------------------------
 			/// Set File System
 			///
 			/// @param the file system
 			//--------------------------------------------------------------------------------------------------
-			static void SetFileSystem(IFileSystem* inpSystem);
+			static void SetFileSystem(FileSystem* inpSystem);
 			//--------------------------------------------------------------------------------------------------
 			/// Set Has Touch Input
 			///
@@ -500,37 +500,37 @@ namespace ChilliSource
             
 		protected: //---Members
 			
-			static CStateManager mStateMgr;		//Handles the state updating and transitioning
+			static StateManager mStateMgr;		//Handles the state updating and transitioning
             
-			static Rendering::CRenderer* mpRenderer;
+			static Rendering::Renderer* mpRenderer;
 			
             //---Systems
-            static Rendering::IRenderSystem* mpRenderSystem;
+            static Rendering::RenderSystem* mpRenderSystem;
 			static Input::InputSystem * mpInputSystem;
-            static IPlatformSystem* pPlatformSystem;	//Interface to platform specific API's such as timer etc
+            static PlatformSystem* pPlatformSystem;	//Interface to platform specific API's such as timer etc
             static Audio::AudioSystem* pAudioSystem;
-            static IFileSystem* mspFileSystem;
+            static FileSystem* mspFileSystem;
 
 			static ScreenOrientation meDefaultOrientation;
 			
-			static std::vector<SystemPtr> mSystems; //All systems in use by the application
+			static std::vector<SystemSPtr> mSystems; //All systems in use by the application
             static std::vector<IUpdateable*> mUpdateableSystems; //All updateable systems in use by the application
             
-            static CResourceManagerDispenser* mpResourceManagerDispenser;
-            CComponentFactoryDispenser* mpComponentFactoryDispenser;
+            static ResourceManagerDispenser* mpResourceManagerDispenser;
+            ComponentFactoryDispenser* mpComponentFactoryDispenser;
 		
 			static bool mbHasTouchInput;
             static bool mbUpdateSystems;
 		private:
 			
-			std::vector<IResourceProvider*> mResourceProviders; //All resource provider systems available
+			std::vector<ResourceProvider*> mResourceProviders; //All resource provider systems available
 
 			static SystemConfirmDialog::Delegate mActiveSysConfirmDelegate;
         
 			static TimeIntervalSecs uddwCurrentAppTime;
-            static Rendering::FontPtr pDefaultFont;
-            static Rendering::MeshPtr pDefaultMesh;
-            static Rendering::MaterialPtr pDefaultMaterial;
+            static Rendering::FontSPtr pDefaultFont;
+            static Rendering::MeshSPtr pDefaultMesh;
+            static Rendering::MaterialSPtr pDefaultMaterial;
 			static f32 mfUpdateInterval;
             static f32 mfUpdateSpeed;
             

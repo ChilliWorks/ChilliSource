@@ -19,14 +19,14 @@ namespace ChilliSource
 	namespace Rendering
 	{
 		
-		DEFINE_NAMED_INTERFACE(IShaderManager);
+		DEFINE_NAMED_INTERFACE(ShaderManager);
 		
 		//----------------------------------------------------------------
 		/// Constructor
 		///
 		/// Default
 		//----------------------------------------------------------------
-		IShaderManager::IShaderManager() : mpRenderSystem(nullptr)
+		ShaderManager::ShaderManager() : mpRenderSystem(nullptr)
 		{
 			
 		}
@@ -37,36 +37,36 @@ namespace ChilliSource
 		/// @param The interface to compare
 		/// @return Whether the object implements that interface
 		//----------------------------------------------------------------
-		bool IShaderManager::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool ShaderManager::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IShaderManager::InterfaceID;
+			return inInterfaceID == ShaderManager::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Get Resource Type
 		///
 		/// @return The type of resource this manager handles
 		//----------------------------------------------------------------
-		Core::InterfaceIDType IShaderManager::GetResourceType() const
+		Core::InterfaceIDType ShaderManager::GetResourceType() const
 		{
-			return IShader::InterfaceID;
+			return Shader::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Manages Resource Of Type
 		///
 		/// @return Whether this object manages the object of type
 		//----------------------------------------------------------------
-		bool IShaderManager::ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const
+		bool ShaderManager::ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IShader::InterfaceID;
+			return inInterfaceID == Shader::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Get Provider Type
 		///
 		/// @return The type of resource it consumes from resource provider
 		//----------------------------------------------------------------
-		Core::InterfaceIDType IShaderManager::GetProviderType() const
+		Core::InterfaceIDType ShaderManager::GetProviderType() const
 		{
-			return IShader::InterfaceID;
+			return Shader::InterfaceID;
 		}
 		//-----------------------------------------------------------------
 		/// Get Resource From File
@@ -76,7 +76,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr IShaderManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr ShaderManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetShaderFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -88,7 +88,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr IShaderManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr ShaderManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetShaderFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -103,14 +103,14 @@ namespace ChilliSource
 		/// @param File name
 		/// @return A handle to the Shader
 		//----------------------------------------------------------------
-		ShaderPtr IShaderManager::GetShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
+		ShaderSPtr ShaderManager::GetShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
             if(mpRenderSystem)
             {
                 //Where we load the shader from is based on the render system
                 std::string strShaderFilePath = mpRenderSystem->GetPathToShaders();
                 //The shader is cached by the concrete loader
-                ShaderPtr pShader = CreateShaderResource();
+                ShaderSPtr pShader = CreateShaderResource();
 
                 if(CreateShaderProgramFromFile(ineStorageLocation, strShaderFilePath + inFilePath, pShader))
                 {
@@ -122,7 +122,7 @@ namespace ChilliSource
                     return pShader;
                 }
             }
-			return ShaderPtr();
+			return ShaderSPtr();
 		}
 		//----------------------------------------------------------------
 		/// Get Shader From File
@@ -135,14 +135,14 @@ namespace ChilliSource
 		/// @param File name
 		/// @return A handle to the Shader
 		//----------------------------------------------------------------
-		ShaderPtr IShaderManager::AsyncGetShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
+		ShaderSPtr ShaderManager::AsyncGetShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
             if(mpRenderSystem)
             {
                 //Where we load the shader from is based on the render system
                 std::string strShaderFilePath = mpRenderSystem->GetPathToShaders();
                 //The shader is cached by the concrete loader
-                ShaderPtr pShader = CreateShaderResource();
+                ShaderSPtr pShader = CreateShaderResource();
 
                 pShader->SetName(inFilePath);
                 pShader->SetOwningResourceManager(this);
@@ -155,14 +155,14 @@ namespace ChilliSource
                 }
             }
 
-			return ShaderPtr();
+			return ShaderSPtr();
 		}
         //-----------------------------------------------------------------
         /// Set Render System
         ///
         /// @param Render system 
         //-----------------------------------------------------------------
-        void IShaderManager::SetRenderSystem(IRenderSystem* inpRenderSystem)
+        void ShaderManager::SetRenderSystem(RenderSystem* inpRenderSystem)
         {
             mpRenderSystem = inpRenderSystem;
         }
@@ -170,7 +170,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//----------------------------------------------------------------
-		IShaderManager::~IShaderManager()
+		ShaderManager::~ShaderManager()
 		{
 			
 		}

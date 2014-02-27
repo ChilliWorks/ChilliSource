@@ -55,13 +55,13 @@ namespace ChilliSource
 		struct PlacedCharacter
 		{
 			Core::CRect sUVs;
-			Core::CVector2 vSize;
-			Core::CVector2 vPosition;
+			Core::Vector2 vSize;
+			Core::Vector2 vPosition;
 		};
 		
 		typedef std::vector<PlacedCharacter> CharacterList;
         
-		class CFont : public Core::IResource
+		class Font : public Core::Resource
 		{
 		public:
 
@@ -69,8 +69,8 @@ namespace ChilliSource
 			struct CharacterInfo
 			{
 				Core::CRect sUVs;
-                Core::CVector2 vSize;
-                Core::CVector2 vOffset;
+                Core::Vector2 vSize;
+                Core::Vector2 vOffset;
 			};
             
             struct CKernLookup
@@ -119,8 +119,8 @@ namespace ChilliSource
                 s16 wCharacter;				
             };
 			
-			virtual ~CFont(){}
-			DECLARE_NAMED_INTERFACE(CFont);
+			virtual ~Font(){}
+			DECLARE_NAMED_INTERFACE(Font);
 			//---------------------------------------------------------------------
 			/// Is A
 			///
@@ -132,13 +132,13 @@ namespace ChilliSource
             ///
             /// @param Texture containing the font
             //-------------------------------------------
-            void SetTexture(const TexturePtr& inpTex);
+            void SetTexture(const TextureSPtr& inpTex);
 			//-------------------------------------------
 			/// Get Texture
 			///
 			/// @return Font texture 
 			//-------------------------------------------
-			const TexturePtr& GetTexture() const;
+			const TextureSPtr& GetTexture() const;
 			//-------------------------------------------
 			/// Set Character Data
 			///
@@ -147,7 +147,7 @@ namespace ChilliSource
 			///
 			/// @param Sprite data containing UV's etc
 			//-------------------------------------------
-			void SetSpriteSheet(const SpriteSheetPtr& inpData);
+			void SetSpriteSheet(const SpriteSheetSPtr& inpData);
 			//-------------------------------------------
 			/// Get Mode Character Height
 			///
@@ -206,11 +206,11 @@ namespace ChilliSource
             static void SetGlobalKerningOffset(f32 infOffset);
 		
         private:
-            friend class IFontManager;
-            friend class CFontLoader;
+            friend class FontManager;
+            friend class FontLoader;
                     
 			//Only the font manager can create this
-            CFont() : mfLineHeight(0.0f)
+            Font() : mfLineHeight(0.0f)
             {
                 maFirstLookup.clear();
                 maPairs.clear();
@@ -242,10 +242,10 @@ namespace ChilliSource
             std::vector<CKernPair> maPairs;
                     
 			//The font bitmap
-			TexturePtr mpTexture;
+			TextureSPtr mpTexture;
 			
 			//The location and width etc of each character on the tpage
-			SpriteSheetPtr mpCharacterData;
+			SpriteSheetSPtr mpCharacterData;
             
             f32 mfLineHeight;
             

@@ -21,10 +21,10 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		class ISystem : public IQueryableInterface
+		class System : public QueryableInterface
 		{
 		public:
-			virtual ~ISystem(){}
+			virtual ~System(){}
             
             //----------------------------------------------------
             /// Get Interface ID
@@ -40,7 +40,7 @@ namespace ChilliSource
             virtual const std::string& GetInterfaceTypeName() const = 0;
 		};
 		
-		typedef std::shared_ptr<ISystem> SystemPtr;
+		typedef std::shared_ptr<System> SystemSPtr;
 	}
 }
 

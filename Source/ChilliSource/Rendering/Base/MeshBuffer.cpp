@@ -22,7 +22,7 @@ namespace ChilliSource
 		///
 		/// @param Buffer description
 		//------------------------------------------------
-		IMeshBuffer::IMeshBuffer(BufferDescription &inBuffDesc) : mBufferDesc(inBuffDesc), mVertexDecl(inBuffDesc.VertexLayout), mVertexCount(0), mIndexCount(0)
+		MeshBuffer::MeshBuffer(BufferDescription &inBuffDesc) : mBufferDesc(inBuffDesc), mVertexDecl(inBuffDesc.VertexLayout), mVertexCount(0), mIndexCount(0)
 		{
 
 		}
@@ -31,7 +31,7 @@ namespace ChilliSource
 		///
 		/// @param buffer description
 		//------------------------------------------------
-		void IMeshBuffer::SetBufferDescription(BufferDescription &inBuffDesc)
+		void MeshBuffer::SetBufferDescription(BufferDescription &inBuffDesc)
 		{
 			mBufferDesc = inBuffDesc;
 			mVertexDecl = inBuffDesc.VertexLayout;
@@ -41,7 +41,7 @@ namespace ChilliSource
 		///
 		/// @return buffer description
 		//------------------------------------------------
-		const BufferDescription& IMeshBuffer::GetBufferDescription()
+		const BufferDescription& MeshBuffer::GetBufferDescription()
 		{
 			return mBufferDesc;
 		}
@@ -50,7 +50,7 @@ namespace ChilliSource
 		///
 		/// @return Vertex format
 		//------------------------------------------------
-		CVertexDeclaration& IMeshBuffer::GetVertexDeclaration() 
+		VertexDeclaration& MeshBuffer::GetVertexDeclaration() 
 		{
 			return mVertexDecl;
 		}
@@ -59,7 +59,7 @@ namespace ChilliSource
 		///
 		/// @return Number of vertices in buffer
 		//------------------------------------------------
-		const u32 IMeshBuffer::GetVertexCount() const
+		const u32 MeshBuffer::GetVertexCount() const
 		{
 			return mVertexCount;
 		}
@@ -68,7 +68,7 @@ namespace ChilliSource
 		///
 		/// @return Number of indices in buffer
 		//------------------------------------------------
-		const u32 IMeshBuffer::GetIndexCount() const
+		const u32 MeshBuffer::GetIndexCount() const
 		{
 			return mIndexCount;
 		}
@@ -77,7 +77,7 @@ namespace ChilliSource
 		///
 		/// @return Size of of vertices in buffer
 		//------------------------------------------------
-		const u32 IMeshBuffer::GetVertexCapacity() const
+		const u32 MeshBuffer::GetVertexCapacity() const
 		{
 			return mBufferDesc.VertexDataCapacity;
 		}
@@ -86,7 +86,7 @@ namespace ChilliSource
 		///
 		/// @return Size of of indices in buffer
 		//------------------------------------------------
-		const u32 IMeshBuffer::GetIndexCapacity() const
+		const u32 MeshBuffer::GetIndexCapacity() const
 		{
 			return mBufferDesc.IndexDataCapacity;
 		}
@@ -95,7 +95,7 @@ namespace ChilliSource
 		///
 		/// @param Total number of vertices in buffer
 		//------------------------------------------------
-		void IMeshBuffer::SetVertexCount(u32 inVertexCount)
+		void MeshBuffer::SetVertexCount(u32 inVertexCount)
 		{
 			mVertexCount = inVertexCount;
 		}
@@ -104,7 +104,7 @@ namespace ChilliSource
 		///
 		/// @param Total number of indices in buffer
 		//------------------------------------------------
-		void IMeshBuffer::SetIndexCount(u32 inIndexCount)
+		void MeshBuffer::SetIndexCount(u32 inIndexCount)
 		{
 			mIndexCount = inIndexCount;
 		}
@@ -113,7 +113,7 @@ namespace ChilliSource
 		///
 		/// @param Add to the total number of vertices in buffer
 		//------------------------------------------------
-		void IMeshBuffer::IncrementVertexCount(u32 inVertexCount)
+		void MeshBuffer::IncrementVertexCount(u32 inVertexCount)
 		{
 			mVertexCount += inVertexCount;
 		}
@@ -122,7 +122,7 @@ namespace ChilliSource
 		///
 		/// @param Add to the total number of indices in buffer
 		//------------------------------------------------
-		void IMeshBuffer::IncrementIndexCount(u32 inIndexCount)
+		void MeshBuffer::IncrementIndexCount(u32 inIndexCount)
 		{
 			mIndexCount += inIndexCount;
 		}
@@ -131,7 +131,7 @@ namespace ChilliSource
 		///
 		/// @return Whether the mesh uses lines, tris etc
 		//------------------------------------------------
-		const PrimitiveType IMeshBuffer::GetPrimitiveType() const
+		const PrimitiveType MeshBuffer::GetPrimitiveType() const
 		{
 			return mBufferDesc.ePrimitiveType;
 		}
@@ -140,7 +140,7 @@ namespace ChilliSource
 		///
 		/// @return Number of primitives in the mesh based on the primitive type
 		//-------------------------------------------------------------------------
-		const u32 IMeshBuffer::GetPrimitiveCount() const
+		const u32 MeshBuffer::GetPrimitiveCount() const
 		{
 			u32 nPrimitives = 0;
 			

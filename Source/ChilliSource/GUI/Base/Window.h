@@ -118,13 +118,13 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer
 			//-----------------------------------------------------
-            void Draw(CCanvasRenderer * inpCanvas);
+            void Draw(CanvasRenderer * inpCanvas);
 #endif
 			
             bool mbListeningForTouches;
             
 			// Granting friendly access for the Scene
-			friend void Core::CScene::BecomeInactive();
+			friend void Core::Scene::BecomeInactive();
             
         private:
             Input::InputSystem* mpInputSystem;

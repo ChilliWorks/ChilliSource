@@ -17,7 +17,7 @@ namespace ChilliSource
         ///
         /// Default
         //---------------------------------------------------------
-        CUTF8String::CUTF8String() : mudwLength(0), mbIsLengthCacheValid(false)
+        UTF8String::UTF8String() : mudwLength(0), mbIsLengthCacheValid(false)
         {
 
         }
@@ -26,7 +26,7 @@ namespace ChilliSource
         ///
         /// From code points contained in STL string
         //---------------------------------------------------------
-        CUTF8String::CUTF8String(const std::string& inCodePoints) : mudwLength(0), mbIsLengthCacheValid(false)
+        UTF8String::UTF8String(const std::string& inCodePoints) : mudwLength(0), mbIsLengthCacheValid(false)
         {
             mCodePoints.assign(inCodePoints.begin(), inCodePoints.end());
         }
@@ -35,7 +35,7 @@ namespace ChilliSource
         ///
         /// From code points contained in c string
         //---------------------------------------------------------
-        CUTF8String::CUTF8String(const s8* instrCString) : mudwLength(0), mbIsLengthCacheValid(false)
+        UTF8String::UTF8String(const s8* instrCString) : mudwLength(0), mbIsLengthCacheValid(false)
         {
             u32 udwLength = strlen(instrCString);
             
@@ -46,7 +46,7 @@ namespace ChilliSource
         ///
         /// From code points in CString
         //---------------------------------------------------------
-        CUTF8String::CUTF8String(const CodePoint* inpCodePoints, u32 inudwNumCodePoints) : mudwLength(0), mbIsLengthCacheValid(false)
+        UTF8String::UTF8String(const CodePoint* inpCodePoints, u32 inudwNumCodePoints) : mudwLength(0), mbIsLengthCacheValid(false)
         {
             mCodePoints.assign(inpCodePoints, inpCodePoints + inudwNumCodePoints);
         }
@@ -55,7 +55,7 @@ namespace ChilliSource
         ///
         /// @returns The number of UTF-8 characters in the string
         //---------------------------------------------------------
-        u32 CUTF8String::length() const
+        u32 UTF8String::length() const
         {
             return size();
         }
@@ -64,7 +64,7 @@ namespace ChilliSource
         ///
         /// @returns The number of UTF-8 characters in the string
         //---------------------------------------------------------
-        u32 CUTF8String::size() const
+        u32 UTF8String::size() const
         {
             //UTF-8 is a multi-byte standard which means the characters
             //are not fixed length but each character contains the 'trail' bytes bit pattern of 10xxxxxx. 
@@ -89,7 +89,7 @@ namespace ChilliSource
         /// @param Index into string
         /// @return UTF8 character at that index
         //---------------------------------------------------------
-        CUTF8String::Char CUTF8String::at(u32 inudwIndex) const
+        UTF8String::Char UTF8String::at(u32 inudwIndex) const
         {
             Char Result = 0;
             u32 udwOffset = 0;
@@ -108,7 +108,7 @@ namespace ChilliSource
         ///
         /// @return Iterator pointing to the first character 
         //---------------------------------------------------------
-        const CUTF8String::const_iterator CUTF8String::begin() const
+        const UTF8String::const_iterator UTF8String::begin() const
         {
             if(mCodePoints.size() > 0)
             {
@@ -122,7 +122,7 @@ namespace ChilliSource
         ///
         /// @return Iterator pointing to the last character 
         //---------------------------------------------------------
-        const CUTF8String::const_iterator CUTF8String::end() const
+        const UTF8String::const_iterator UTF8String::end() const
         {
             if(mCodePoints.size() > 0)
             {
@@ -136,7 +136,7 @@ namespace ChilliSource
         ///
         /// @return Iterator pointing to the first character 
         //---------------------------------------------------------
-        CUTF8String::iterator CUTF8String::begin() 
+        UTF8String::iterator UTF8String::begin() 
         {
             if(mCodePoints.size() > 0)
             {
@@ -150,7 +150,7 @@ namespace ChilliSource
         ///
         /// @return Iterator pointing to the last character 
         //---------------------------------------------------------
-        CUTF8String::iterator CUTF8String::end() 
+        UTF8String::iterator UTF8String::end() 
         {
             if(mCodePoints.size() > 0)
             {
@@ -168,10 +168,10 @@ namespace ChilliSource
         /// @param Iterator pointing to lead codepoint
         /// @return Character starting at that codepoint
         //---------------------------------------------------------
-        CUTF8String::Char CUTF8String::next(iterator& inpIt) const
+        UTF8String::Char UTF8String::next(iterator& inpIt) const
         {
             u32 udwOffset = 0;
-            CUTF8String::Char Result = GetCharacter(inpIt, udwOffset);
+            UTF8String::Char Result = GetCharacter(inpIt, udwOffset);
 
             inpIt += udwOffset;
 
@@ -182,7 +182,7 @@ namespace ChilliSource
         ///
         /// @return The first character 
         //---------------------------------------------------------
-        CUTF8String::Char CUTF8String::front() const
+        UTF8String::Char UTF8String::front() const
         {
             return *begin();
         }
@@ -191,7 +191,7 @@ namespace ChilliSource
         ///
         /// @return The last character 
         //---------------------------------------------------------
-        CUTF8String::Char CUTF8String::back() const
+        UTF8String::Char UTF8String::back() const
         {
             return *(end() - 1);
         }
@@ -202,7 +202,7 @@ namespace ChilliSource
         ///
         /// @param String to append
         //---------------------------------------------------------
-        void CUTF8String::append(const CUTF8String& instrUTF8String)
+        void UTF8String::append(const UTF8String& instrUTF8String)
         {
             mbIsLengthCacheValid = false;
 
@@ -215,7 +215,7 @@ namespace ChilliSource
         ///
         /// @param Character to append
         //---------------------------------------------------------
-        void CUTF8String::appendChar(CUTF8String::Char inChar)
+        void UTF8String::appendChar(UTF8String::Char inChar)
         {
             mbIsLengthCacheValid = false;
             
@@ -274,7 +274,7 @@ namespace ChilliSource
         ///
         /// @param Character to append
         //---------------------------------------------------------
-        void CUTF8String::appendCodePoints(CUTF8String::Char inChar)
+        void UTF8String::appendCodePoints(UTF8String::Char inChar)
         {
             mbIsLengthCacheValid = false;
             
@@ -323,7 +323,7 @@ namespace ChilliSource
         /// @param The length of the sub string.
         /// @return The sub string.
         //---------------------------------------------------------
-        CUTF8String CUTF8String::substr(u32 inudwStartPosition, u32 inudwLength)
+        UTF8String UTF8String::substr(u32 inudwStartPosition, u32 inudwLength)
         {
             std::string strCodePoints;
             u32 udwPosition = 0;
@@ -343,14 +343,14 @@ namespace ChilliSource
                 udwPosition += (*it & 0xc0) != 0x80;
             }
 
-            return CUTF8String(strCodePoints);
+            return UTF8String(strCodePoints);
         }
         //---------------------------------------------------------
         /// Data
         ///
         /// @return Pointer to the code points
         //---------------------------------------------------------
-        const CUTF8String::CodePoint* CUTF8String::data() const
+        const UTF8String::CodePoint* UTF8String::data() const
         {
             return mCodePoints.empty()? nullptr : &mCodePoints[0];
         }
@@ -359,7 +359,7 @@ namespace ChilliSource
         ///
         /// @return Size of the code points in bytes
         //---------------------------------------------------------
-        u32 CUTF8String::data_size() const
+        u32 UTF8String::data_size() const
         {
             return mCodePoints.size() * sizeof(CodePoint);
         }
@@ -370,10 +370,10 @@ namespace ChilliSource
         /// @param Out: The number of code points for that char
         /// @return Multibyte character
         //----------------------------------------------------------
-        CUTF8String::Char CUTF8String::GetCharacter(const_iterator inpIt, u32& outudwNumCodePointsInCharacter) const
+        UTF8String::Char UTF8String::GetCharacter(const_iterator inpIt, u32& outudwNumCodePointsInCharacter) const
         {
             s8	cFirstByte = (*inpIt);
-            CUTF8String::Char Result = 0;
+            UTF8String::Char Result = 0;
 
             //Single byte code (ASCII)
             if(cFirstByte > 0)
@@ -418,7 +418,7 @@ namespace ChilliSource
         ///
         /// @param Iterator pointing to character to erase
         //---------------------------------------------------------
-        void CUTF8String::erase(CUTF8String::iterator inpIt)
+        void UTF8String::erase(UTF8String::iterator inpIt)
         {
             u32 udwOffset = 0;
             GetCharacter(inpIt, udwOffset);
@@ -445,7 +445,7 @@ namespace ChilliSource
         ///
         /// Clear the string but does not free any memory
         //---------------------------------------------------------
-        void CUTF8String::clear()
+        void UTF8String::clear()
         {
             mCodePoints.clear();
             mudwLength = 0;
@@ -459,16 +459,16 @@ namespace ChilliSource
         /// 
         /// @return std string
         //---------------------------------------------------------
-        std::string CUTF8String::ToASCII() const
+        std::string UTF8String::ToASCII() const
         {
             std::string strResult(mCodePoints.begin(), mCodePoints.end());
             
             return strResult;
         }
         
-        CUTF8String operator+(const CUTF8String& instrUTF8String, const CUTF8String& instrUTF8String2)
+        UTF8String operator+(const UTF8String& instrUTF8String, const UTF8String& instrUTF8String2)
         {
-            CUTF8String strResult = instrUTF8String;
+            UTF8String strResult = instrUTF8String;
             strResult.append(instrUTF8String2);
             return strResult;
         }

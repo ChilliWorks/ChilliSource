@@ -48,7 +48,7 @@ namespace ChilliSource
 			
 			static CEvent1<TimeEventDelegate> mOnTimerUpdateEvent;
             
-			friend class CApplication; //Only application can invoke the update
+			friend class Application; //Only application can invoke the update
 		};
 	}
 }

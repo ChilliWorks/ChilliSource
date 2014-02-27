@@ -66,7 +66,7 @@ namespace ChilliSource
 			}
 			// Animate
 			mfPreviousValueDiff = mfProgress - mfPreviousValue;
-			mPreviousValueTimeStamp = Core::CApplication::GetSystemTimeInMilliseconds();
+			mPreviousValueTimeStamp = Core::Application::GetSystemTimeInMilliseconds();
         }
         //------------------------------------------------
         /// Get Progress
@@ -83,7 +83,7 @@ namespace ChilliSource
         {
             if(mfAnimationTime != 0)
             {
-                f32 fTimeSinceValueSet = Core::CApplication::GetSystemTimeInMilliseconds() - mPreviousValueTimeStamp;
+                f32 fTimeSinceValueSet = Core::Application::GetSystemTimeInMilliseconds() - mPreviousValueTimeStamp;
                 f32 fTimeRatio = ChilliSource::Core::CMathUtils::Min(fTimeSinceValueSet / mfAnimationTime, 1.0f);
                 f32 fAnimatedProgress = Core::CMathUtils::Clamp(mfPreviousValue + (mfPreviousValueDiff * fTimeRatio), 0.0f, 1.0f);
                 return fAnimatedProgress;
@@ -110,7 +110,7 @@ namespace ChilliSource
             return mfAnimationTime;
         }
         
-        void ProgressBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void ProgressBar::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
             GUIView::Draw(inpCanvas);
         }

@@ -25,12 +25,12 @@ namespace ChilliSource
 		///
 		/// Default
 		//------------------------------------------------------
-		CSpriteBatch::CSpriteBatch(u32 inudwCapacity, IRenderSystem * inpRenderSystem, BufferUsage ineUsage) 
+		SpriteBatch::SpriteBatch(u32 inudwCapacity, RenderSystem * inpRenderSystem, BufferUsage ineUsage) 
         : mpSpriteBuffer(nullptr), mdwTag(0), mudwNumSpritesBuiltIndicesFor(0)
 		{
 			BufferDescription desc;
 			desc.eUsageFlag = ineUsage;
-			desc.VertexDataCapacity = (inudwCapacity + 1) * kudwVertsPerSprite * sizeof(CSpriteComponent::SpriteVertex); 
+			desc.VertexDataCapacity = (inudwCapacity + 1) * kudwVertsPerSprite * sizeof(SpriteComponent::SpriteVertex); 
 			desc.IndexDataCapacity  = (inudwCapacity + 1) * sizeof(u16) * kudwIndicesPerSprite;
 			desc.ePrimitiveType = PrimitiveType::k_tri;
 			desc.eAccessFlag = BufferAccess::k_read;
@@ -46,7 +46,7 @@ namespace ChilliSource
         ///
         /// @param Sprite array
 		//------------------------------------------------------
-		void CSpriteBatch::Build(std::vector<CSpriteComponent::SpriteData>* inpSprites)
+		void SpriteBatch::Build(std::vector<SpriteComponent::SpriteData>* inpSprites)
 		{
 			//Sanity check
 			if(!mpSpriteBuffer) return;
@@ -59,13 +59,13 @@ namespace ChilliSource
 			mpSpriteBuffer->SetIndexCount(udwNumIndices);
 			
 			//Get the buffer locations
-			CSpriteComponent::SpriteVertex* pVBuffer = nullptr;
+			SpriteComponent::SpriteVertex* pVBuffer = nullptr;
 			mpSpriteBuffer->LockVertex((f32**)&pVBuffer, 0, 0);
 
 			u32 VertIdx = 0;
 									
 			//The vertex data depends on the sprite vertex layout.
-			for(std::vector<CSpriteComponent::SpriteData>::iterator pSpriteItr = inpSprites->begin(); pSpriteItr != inpSprites->end(); ++pSpriteItr)
+			for(std::vector<SpriteComponent::SpriteData>::iterator pSpriteItr = inpSprites->begin(); pSpriteItr != inpSprites->end(); ++pSpriteItr)
 			{
 				MapSpriteIntoBuffer(&pVBuffer[VertIdx], (*pSpriteItr));
 				VertIdx+=4;
@@ -85,13 +85,13 @@ namespace ChilliSource
         /// @param Pointer to sprite offset in buffer
         /// @param Sprite to map
         //-------------------------------------------------------
-		void CSpriteBatch::MapSpriteIntoBuffer(CSpriteComponent::SpriteVertex* inpBuffer, const CSpriteComponent::SpriteData &inpSprite)
+		void SpriteBatch::MapSpriteIntoBuffer(SpriteComponent::SpriteVertex* inpBuffer, const SpriteComponent::SpriteData &inpSprite)
         {
 			//---Map the vertex data into the buffer	
-			inpBuffer[(u32)CSpriteComponent::Verts::k_topLeft] = inpSprite.sVerts[(u32)CSpriteComponent::Verts::k_topLeft];
-			inpBuffer[(u32)CSpriteComponent::Verts::k_bottomLeft] = inpSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft];
-			inpBuffer[(u32)CSpriteComponent::Verts::k_topRight] = inpSprite.sVerts[(u32)CSpriteComponent::Verts::k_topRight];
-			inpBuffer[(u32)CSpriteComponent::Verts::k_bottomRight] = inpSprite.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight];
+			inpBuffer[(u32)SpriteComponent::Verts::k_topLeft] = inpSprite.sVerts[(u32)SpriteComponent::Verts::k_topLeft];
+			inpBuffer[(u32)SpriteComponent::Verts::k_bottomLeft] = inpSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft];
+			inpBuffer[(u32)SpriteComponent::Verts::k_topRight] = inpSprite.sVerts[(u32)SpriteComponent::Verts::k_topRight];
+			inpBuffer[(u32)SpriteComponent::Verts::k_bottomRight] = inpSprite.sVerts[(u32)SpriteComponent::Verts::k_bottomRight];
 		}
         //------------------------------------------------------
         /// Remap Sprite
@@ -101,12 +101,12 @@ namespace ChilliSource
         /// @param Index of which sprite to replace
         /// @param New sprite to map over the contents
         //------------------------------------------------------
-		void CSpriteBatch::RemapSprite(u32 inudwIndex, const CSpriteComponent::SpriteData& inpSprite)
+		void SpriteBatch::RemapSprite(u32 inudwIndex, const SpriteComponent::SpriteData& inpSprite)
         {
 			//No validation, cause it to crash as you want
 			mpSpriteBuffer->Bind();
 			
-            CSpriteComponent::SpriteVertex* pVBuffer = nullptr;
+            SpriteComponent::SpriteVertex* pVBuffer = nullptr;
 			mpSpriteBuffer->LockVertex((f32**)&pVBuffer, 0, 0);
 			
 			pVBuffer += kudwVertsPerSprite * inudwIndex;
@@ -120,7 +120,7 @@ namespace ChilliSource
         /// If required sets indices for the given number of sprites.
         /// Skips over if the indices have already been filled in enough
         //------------------------------------------------------
-		void CSpriteBatch::BuildIndicesForNumberSprites(u32 inudwNumSprites)
+		void SpriteBatch::BuildIndicesForNumberSprites(u32 inudwNumSprites)
         {
 			if(inudwNumSprites > mudwNumSpritesBuiltIndicesFor) 
             {
@@ -149,7 +149,7 @@ namespace ChilliSource
         /// @param Offset into mesh buffer
         /// @param Stride within mesh buffer
 		//------------------------------------------------------
-		void CSpriteBatch::Render(IRenderSystem* inpRenderSystem, const CMaterial& inMaterial, u32 inudwOffset, u32 inudwStride) const
+		void SpriteBatch::Render(RenderSystem* inpRenderSystem, const Material& inMaterial, u32 inudwOffset, u32 inudwStride) const
 		{
             if(inudwStride > 0)
             {
@@ -162,7 +162,7 @@ namespace ChilliSource
 #ifdef DEBUG_STATS
                 DebugStats::AddToEvent("Verts", (inudwStride*2)/3);
 #endif
-                inpRenderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Core::CMatrix4x4::IDENTITY);
+                inpRenderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Core::Matrix4x4::IDENTITY);
             }
 		}
         //------------------------------------------------------
@@ -172,7 +172,7 @@ namespace ChilliSource
 		///
 		/// @param Active render system
 		//------------------------------------------------------
-		void CSpriteBatch::Render(IRenderSystem* inpRenderSystem, const CMaterial& inMaterial) const
+		void SpriteBatch::Render(RenderSystem* inpRenderSystem, const Material& inMaterial) const
 		{
             if(mpSpriteBuffer->GetIndexCount() > 0)
             {
@@ -185,7 +185,7 @@ namespace ChilliSource
 #ifdef DEBUG_STATS
                 DebugStats::AddToEvent("Verts", (mpSpriteBuffer->GetIndexCount()*2)/3);
 #endif
-                inpRenderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Core::CMatrix4x4::IDENTITY);
+                inpRenderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Core::Matrix4x4::IDENTITY);
             }
 		}
 		//------------------------------------------------------
@@ -193,7 +193,7 @@ namespace ChilliSource
 		///
 		/// Associated data usually used to determine layer
 		//------------------------------------------------------
-		s32 CSpriteBatch::GetTag() const
+		s32 SpriteBatch::GetTag() const
 		{
 			return mdwTag;
 		}
@@ -202,7 +202,7 @@ namespace ChilliSource
 		///
 		/// Associated data usually used to determine layer
 		//------------------------------------------------------
-		void CSpriteBatch::SetTag(s32 indwValue)
+		void SpriteBatch::SetTag(s32 indwValue)
 		{
 			mdwTag = indwValue;
 		}
@@ -210,7 +210,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//------------------------------------------------------
-		CSpriteBatch::~CSpriteBatch() 
+		SpriteBatch::~SpriteBatch() 
 		{
 			CS_SAFE_DELETE(mpSpriteBuffer);
 		}

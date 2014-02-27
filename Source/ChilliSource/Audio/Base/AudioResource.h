@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		class AudioResource : public Core::IResource
+		class AudioResource : public Core::Resource
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(AudioResource);

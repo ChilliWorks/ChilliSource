@@ -59,7 +59,7 @@ namespace ChilliSource
             /// @param File object for the locale file
             /// @return Success
             //----------------------------------------------------------------------------
-            static bool LoadLocalisedText(FileStreamPtr& incLocaleFile);
+            static bool LoadLocalisedText(FileStreamSPtr& incLocaleFile);
             //----------------------------------------------------------------------------
             /// Load Text ID
             ///
@@ -67,11 +67,11 @@ namespace ChilliSource
             /// @param File object for the text ids file
             /// @return Success
             //----------------------------------------------------------------------------
-            static bool LoadTextID(FileStreamPtr& incIDFile);
+            static bool LoadTextID(FileStreamSPtr& incIDFile);
             
         private:
             
-            typedef CHashedArray<std::string, LocalisedTextKey> IDToLookupIndex;
+            typedef HashedArray<std::string, LocalisedTextKey> IDToLookupIndex;
             static IDToLookupIndex* mpTextLookup;
 			static UTF8String * mpText;
             static u32 mudwLineCount;

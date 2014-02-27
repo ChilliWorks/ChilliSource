@@ -22,16 +22,16 @@ namespace ChilliSource
         
         struct RenderCommand
         {
-            CMaterial Material;
+            Material Material;
             u32 udwOffset;
             u32 udwStride;
         };
         
-		class CDynamicSpriteBatch
+		class DynamicSpriteBatch
 		{
 		public:
-			CDynamicSpriteBatch(IRenderSystem* inpRenderSystem);
-            ~CDynamicSpriteBatch();
+			DynamicSpriteBatch(RenderSystem* inpRenderSystem);
+            ~DynamicSpriteBatch();
             
 			//-------------------------------------------------------
 			/// Render
@@ -44,7 +44,7 @@ namespace ChilliSource
             /// @param Render system
             /// @param Sprite data to batch
 			//-------------------------------------------------------
-			void Render(IRenderSystem* inpRenderSystem, const CSpriteComponent::SpriteData& inpSprite, const Core::CMatrix4x4 * inpTransform = nullptr);
+			void Render(RenderSystem* inpRenderSystem, const SpriteComponent::SpriteData& inpSprite, const Core::Matrix4x4 * inpTransform = nullptr);
             //-------------------------------------------------------
             /// Force Command Change
             ///
@@ -60,7 +60,7 @@ namespace ChilliSource
             ///
             /// @param Render system
 			//-------------------------------------------------------
-			void ForceRender(IRenderSystem* inpRenderSystem);
+			void ForceRender(RenderSystem* inpRenderSystem);
 			
 		private:
             
@@ -74,15 +74,15 @@ namespace ChilliSource
             /// 
             /// @param Render system
             //----------------------------------------------------------
-            void BuildAndFlushBatch(IRenderSystem* inpRenderSystem);
+            void BuildAndFlushBatch(RenderSystem* inpRenderSystem);
 			
 		private:
         
-			CSpriteBatch* mpBatch[kudwNumBuffers];
-			std::vector<CSpriteComponent::SpriteData> maSpriteCache;
+			SpriteBatch* mpBatch[kudwNumBuffers];
+			std::vector<SpriteComponent::SpriteData> maSpriteCache;
             std::vector<RenderCommand> maRenderCommands;
             
-            MaterialPtr mpLastMaterial;
+            MaterialSPtr mpLastMaterial;
             
             u32 mudwCurrentRenderSpriteBatch;
             u32 mudwSpriteCommandCounter;

@@ -24,13 +24,13 @@ namespace ChilliSource
 		/// A static mesh component. This defines a 3D mesh that can
 		/// be manipulated, textured but not animated.
 		//===============================================================
-		class CStaticMeshComponent : public IRenderComponent
+		class StaticMeshComponent : public RenderComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CStaticMeshComponent);
+			DECLARE_NAMED_INTERFACE(StaticMeshComponent);
 			
-            CStaticMeshComponent();
-			~CStaticMeshComponent();
+            StaticMeshComponent();
+			~StaticMeshComponent();
 			//----------------------------------------------------------
 			/// Is A
 			///
@@ -82,7 +82,7 @@ namespace ChilliSource
 			///
 			/// @param Handle to material
 			//-----------------------------------------------------------
-			void SetMaterial(const MaterialPtr& inpMaterial) override;
+			void SetMaterial(const MaterialSPtr& inpMaterial) override;
 			//-----------------------------------------------------------
 			/// Set Material For Sub Mesh
 			///
@@ -91,7 +91,7 @@ namespace ChilliSource
 			/// @param Handle to material
 			/// @Param Index to the submesh
 			//-----------------------------------------------------------
-			void SetMaterialForSubMesh(const MaterialPtr& inpMaterial, u32 indwSubMeshIndex);
+			void SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, u32 indwSubMeshIndex);
             //-----------------------------------------------------------
 			/// Set Material For Sub Mesh
 			///
@@ -100,7 +100,7 @@ namespace ChilliSource
 			/// @param Handle to material
 			/// @param The name of the submesh.
 			//-----------------------------------------------------------
-			void SetMaterialForSubMesh(const MaterialPtr& inpMaterial, const std::string& instrSubMeshName);
+			void SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, const std::string& instrSubMeshName);
 			//-----------------------------------------------------------
 			/// Get Material Of Sub Mesh
 			///
@@ -109,7 +109,7 @@ namespace ChilliSource
 			/// @param Index to the sub mesh
 			/// @return Handle to material
 			//-----------------------------------------------------------
-			MaterialPtr GetMaterialOfSubMesh(u32 indwSubMeshIndex) const;
+			MaterialSPtr GetMaterialOfSubMesh(u32 indwSubMeshIndex) const;
             //-----------------------------------------------------------
 			/// Get Material Of Sub Mesh
 			///
@@ -118,14 +118,14 @@ namespace ChilliSource
 			/// @param The name of the submesh.
 			/// @return Handle to material
 			//-----------------------------------------------------------
-			MaterialPtr GetMaterialOfSubMesh(const std::string& instrSubMeshName) const;
+			MaterialSPtr GetMaterialOfSubMesh(const std::string& instrSubMeshName) const;
 			//----------------------------------------------------------
 			/// Attach Mesh
 			///
 			/// Attach a mesh to this component
 			/// @param Mesh object
 			//----------------------------------------------------------
-			void AttachMesh(const MeshPtr& inpModel);
+			void AttachMesh(const MeshSPtr& inpModel);
             //----------------------------------------------------------
 			/// Attach Mesh
 			///
@@ -133,13 +133,13 @@ namespace ChilliSource
             /// material
 			/// @param Mesh object
 			//----------------------------------------------------------
-            void AttachMesh(const MeshPtr& inpModel, const MaterialPtr& inpMaterial);
+            void AttachMesh(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial);
             //----------------------------------------------------------
             /// Get Mesh
             ///
             /// @return The components internal mesh
             //----------------------------------------------------------
-            const MeshPtr& GetMesh() const;
+            const MeshSPtr& GetMesh() const;
 			
 		private:
 			//----------------------------------------------------------
@@ -151,7 +151,7 @@ namespace ChilliSource
             /// @param Active camera component
             /// @param The current shader pass.
 			//----------------------------------------------------------
-			void Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass) override;
+			void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass) override;
             //-----------------------------------------------------
             /// Render Shadow Map
             ///
@@ -160,7 +160,7 @@ namespace ChilliSource
             /// @param Render system
             /// @param Active camera component
             //-----------------------------------------------------
-            void RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam) override;
+            void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam) override;
             //----------------------------------------------------
             /// On Attached To Entity
             ///
@@ -192,14 +192,14 @@ namespace ChilliSource
             
 		private:
 			
-			MeshPtr mpModel;
-			std::vector<MaterialPtr> mMaterials;
+			MeshSPtr mpModel;
+			std::vector<MaterialSPtr> mMaterials;
             
             bool mbBoundingSphereValid;
             bool mbAABBValid;
             bool mbOOBBValid;
             
-            static MaterialPtr mspShadowMapMaterial;
+            static MaterialSPtr mspShadowMapMaterial;
 		};
 	}
 }

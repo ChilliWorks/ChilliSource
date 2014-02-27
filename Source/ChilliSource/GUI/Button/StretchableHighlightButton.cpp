@@ -42,7 +42,7 @@ namespace ChilliSource
         /// Constructor
         //-----------------------------------------------------------
         StretchableHighlightButton::StretchableHighlightButton()
-        :   HighlightColour(0.7f, 0.7f, 0.7f, 1.0f), mbSelected(false), HeightMaintain(false), WidthMaintain(false), mCurrentColour(Core::CColour::WHITE)
+        :   HighlightColour(0.7f, 0.7f, 0.7f, 1.0f), mbSelected(false), HeightMaintain(false), WidthMaintain(false), mCurrentColour(Core::Colour::WHITE)
         {
             memset(&msNormalIndices, 0, sizeof(u32) * 9);
             memset(&msHighlightIndices, 0, sizeof(u32) * 9);
@@ -72,7 +72,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("NormalSpriteSheet", strValue))
             {
-                SetNormalSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eNormalSpriteSheetLocation, strValue));
+                SetNormalSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eNormalSpriteSheetLocation, strValue));
             }
             //---Sprite sheet
             Core::StorageLocation eHighlightSpriteSheetLocation = Core::StorageLocation::k_package;
@@ -82,7 +82,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("HighlightSpriteSheet", strValue))
             {
-                SetHighlightSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eHighlightSpriteSheetLocation, strValue));
+                SetHighlightSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eHighlightSpriteSheetLocation, strValue));
             }
 			//---Default index ID
 			if(insParams.TryGetValue("BaseNormalSpriteSheetIndexID", strValue))
@@ -212,7 +212,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Set Normal Sprite Sheet
         //-----------------------------------------------------------
-        void StretchableHighlightButton::SetNormalSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void StretchableHighlightButton::SetNormalSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
         {
             NormalSpriteSheet = inpSpriteSheet;
             mCurrentSpriteSheet = NormalSpriteSheet;
@@ -225,7 +225,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Set Highlight Sprite Sheet
         //-----------------------------------------------------------
-        void StretchableHighlightButton::SetHighlightSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void StretchableHighlightButton::SetHighlightSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
         {
             HighlightSpriteSheet = inpSpriteSheet;
             
@@ -237,14 +237,14 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Normal Sprite Sheet
         //-----------------------------------------------------------
-        const Rendering::SpriteSheetPtr& StretchableHighlightButton::GetNormalSpriteSheet() const
+        const Rendering::SpriteSheetSPtr& StretchableHighlightButton::GetNormalSpriteSheet() const
         {
             return NormalSpriteSheet; 
         }
         //-----------------------------------------------------------
         /// Get Highlight Sprite Sheet
         //-----------------------------------------------------------
-        const Rendering::SpriteSheetPtr& StretchableHighlightButton::GetHighlightSpriteSheet() const
+        const Rendering::SpriteSheetSPtr& StretchableHighlightButton::GetHighlightSpriteSheet() const
         {
             return HighlightSpriteSheet; 
         }
@@ -367,25 +367,25 @@ namespace ChilliSource
         //--------------------------------------------------------
         /// Set Highlight Colour
         //--------------------------------------------------------
-        void StretchableHighlightButton::SetHighlightColour(const Core::CColour & inValue)
+        void StretchableHighlightButton::SetHighlightColour(const Core::Colour & inValue)
         {
             HighlightColour = inValue;
         }
         //--------------------------------------------------------
         /// Get Highlight Colour
         //--------------------------------------------------------
-        const Core::CColour & StretchableHighlightButton::GetHighlightColour() const
+        const Core::Colour & StretchableHighlightButton::GetHighlightColour() const
         {
             return HighlightColour;
         }
         //-----------------------------------------------------------
         /// Draw
         //-----------------------------------------------------------
-        void StretchableHighlightButton::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void StretchableHighlightButton::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
             //Check if this is on screen
-			Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_topRight);
-			Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Core::AlignmentAnchor::k_bottomLeft);
+			Core::Vector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
+			Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
 			
 			if(vTopRight.y < 0 || vBottomLeft.y > Core::CScreen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::CScreen::GetOrientedWidth())
 			{
@@ -395,31 +395,31 @@ namespace ChilliSource
 			
             if(Visible && mCurrentSpriteSheet)
             {			
-                Core::CVector2 vPanelSize = GetAbsoluteSize();
-                Core::CVector2 vPanelPos = GetAbsoluteScreenSpacePosition();
-                Core::CVector2 vTopLeft = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topLeft);
-                Core::CVector2 vPatchPos;
+                Core::Vector2 vPanelSize = GetAbsoluteSize();
+                Core::Vector2 vPanelPos = GetAbsoluteScreenSpacePosition();
+                Core::Vector2 vTopLeft = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topLeft);
+                Core::Vector2 vPatchPos;
                 
-                Core::CColour AbsColour = GetAbsoluteColour() * mCurrentColour;
+                Core::Colour AbsColour = GetAbsoluteColour() * mCurrentColour;
                 
                 //We need to use a matrix so that we can rotate all the patches with respect
                 //to the view
-                Core::CMatrix3x3 matTransform;
-                Core::CMatrix3x3 matPatchTransform;
-                Core::CMatrix3x3 matViewTransform;
+                Core::Matrix3x3 matTransform;
+                Core::Matrix3x3 matPatchTransform;
+                Core::Matrix3x3 matViewTransform;
                 
-                matViewTransform.SetTransform(vPanelPos, Core::CVector2(1, 1), GetAbsoluteRotation());
+                matViewTransform.SetTransform(vPanelPos, Core::Vector2(1, 1), GetAbsoluteRotation());
                 
                 //Get the patch sizes
-                Core::CVector2 vTLPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwTopLeft);
-                Core::CVector2 vTRPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwTopRight);
-                Core::CVector2 vBLPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwBottomLeft);
-                Core::CVector2 vBRPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwBottomRight);
-                Core::CVector2 vMLPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwLeftCentre);
-                Core::CVector2 vMRPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwRightCentre);
-                Core::CVector2 vTCPatchSize;
-                Core::CVector2 vBCPatchSize;
-                Core::CVector2 vMCPatchSize;
+                Core::Vector2 vTLPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwTopLeft);
+                Core::Vector2 vTRPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwTopRight);
+                Core::Vector2 vBLPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwBottomLeft);
+                Core::Vector2 vBRPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwBottomRight);
+                Core::Vector2 vMLPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwLeftCentre);
+                Core::Vector2 vMRPatchSize = mCurrentSpriteSheet->GetSizeForFrame(msCurrentIndices.udwRightCentre);
+                Core::Vector2 vTCPatchSize;
+                Core::Vector2 vBCPatchSize;
+                Core::Vector2 vMCPatchSize;
                 
                 //Check to see if they are going to fit in the bounds of the view
                 f32 fTotal = vTLPatchSize.y + vBLPatchSize.y;
@@ -462,99 +462,99 @@ namespace ChilliSource
                 //Render ourself
                 //Draw the corners first
                 matPatchTransform.Translate(vTopLeft);
-                Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+                Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform,
                                    vTLPatchSize, 
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwTopLeft), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_topLeft);
+                                   Rendering::AlignmentAnchor::k_topLeft);
                 
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topRight));
-                Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topRight));
+                Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vTRPatchSize,  
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwTopRight), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_topRight);
+                                   Rendering::AlignmentAnchor::k_topRight);
                 
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_bottomLeft));
-                Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft));
+                Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vBLPatchSize, 
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwBottomLeft), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_bottomLeft);
+                                   Rendering::AlignmentAnchor::k_bottomLeft);
                 
-                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_bottomRight));
-                Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+                matPatchTransform.Translate(GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomRight));
+                Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vBRPatchSize,  
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwBottomRight), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_bottomRight);
+                                   Rendering::AlignmentAnchor::k_bottomRight);
                 
                 //Draw the top and bottom 
                 vTCPatchSize.x = vPanelSize.x - (vTLPatchSize.x + vTRPatchSize.x);
                 vTCPatchSize.y = vTLPatchSize.y;
                 vPatchPos.x = vTopLeft.x + vTLPatchSize.x;
-                vPatchPos.y = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_topCentre).y;
+                vPatchPos.y = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_topCentre).y;
                 
                 matPatchTransform.Translate(vPatchPos);
-                Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+                Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vTCPatchSize, 
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwTopCentre), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_topLeft);
+                                   Rendering::AlignmentAnchor::k_topLeft);
                 
                 
                 vBCPatchSize.x = vPanelSize.x - (vBLPatchSize.x + vBRPatchSize.x);
                 vBCPatchSize.y = vBLPatchSize.y;
                 vPatchPos.x = vTopLeft.x + vBLPatchSize.x;
-                vPatchPos.y = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_bottomCentre).y;
+                vPatchPos.y = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_bottomCentre).y;
                 
                 matPatchTransform.Translate(vPatchPos);
-                Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+                Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vBCPatchSize, 
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwBottomCentre), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_bottomLeft);
+                                   Rendering::AlignmentAnchor::k_bottomLeft);
                 
                 //Draw the left and right
                 vMLPatchSize.y = vPanelSize.y - (vTLPatchSize.y + vBLPatchSize.y);
                 vBCPatchSize.x = vTLPatchSize.x;
-                vPatchPos.x = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_middleLeft).x;
+                vPatchPos.x = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_middleLeft).x;
                 vPatchPos.y = vTopLeft.y - vTLPatchSize.y;
                 
                 matPatchTransform.Translate(vPatchPos);
-                Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+                Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vMLPatchSize, 
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwLeftCentre), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_topLeft);
+                                   Rendering::AlignmentAnchor::k_topLeft);
                 
                 vMRPatchSize.y = vPanelSize.y - (vTRPatchSize.y + vBRPatchSize.y);
                 vMRPatchSize.x = vTRPatchSize.x;
-                vPatchPos.x = GetAbsoluteAnchorPoint(Core::AlignmentAnchor::k_middleRight).x;
+                vPatchPos.x = GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor::k_middleRight).x;
                 vPatchPos.y = vTopLeft.y - vTRPatchSize.y;
                 
                 matPatchTransform.Translate(vPatchPos);
-                Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+                Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform, 
                                    vMRPatchSize, 
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwRightCentre), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_topRight);
+                                   Rendering::AlignmentAnchor::k_topRight);
                 
                 //Draw the centre
                 vMCPatchSize.x = vPanelSize.x - (vMLPatchSize.x + vMRPatchSize.x);
@@ -563,13 +563,13 @@ namespace ChilliSource
                 vPatchPos.y = vTopLeft.y - vTLPatchSize.y;
                 
                 matPatchTransform.Translate(vPatchPos);
-                Core::CMatrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
+                Core::Matrix3x3::Multiply(&matPatchTransform, &matViewTransform, &matTransform);
                 inpCanvas->DrawBox(matTransform,
                                    vMCPatchSize, 
 								   mCurrentSpriteSheet->GetTexture(),
                                    mCurrentSpriteSheet->GetUVsForFrame(msCurrentIndices.udwMiddleCentre), 
                                    AbsColour, 
-                                   Core::AlignmentAnchor::k_topLeft);
+                                   Rendering::AlignmentAnchor::k_topLeft);
                 
                 //Render subviews
                 GUIView::Draw(inpCanvas);
@@ -580,7 +580,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         void StretchableHighlightButton::SetWidthMaintainingAspect(f32 infRelWidth, f32 infAbsWidth)
         {
-            Core::CVector2 vCurrentSize = GetAbsoluteSize();
+            Core::Vector2 vCurrentSize = GetAbsoluteSize();
 			f32 fAspectRatio = vCurrentSize.y / vCurrentSize.x;
 			SetSize(infRelWidth, 0.0f, infAbsWidth, 0.0f);
 			
@@ -597,7 +597,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         void StretchableHighlightButton::SetHeightMaintainingAspect(f32 infRelHeight, f32 infAbsHeight)
         {
-            Core::CVector2 vCurrentSize = GetAbsoluteSize();
+            Core::Vector2 vCurrentSize = GetAbsoluteSize();
 			f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
 			SetSize(0.0f, infRelHeight, 0.0f, infAbsHeight);
 			
@@ -691,7 +691,7 @@ namespace ChilliSource
 				
 				if (NormalSpriteSheet)
 				{
-					mCurrentColour = Core::CColour::WHITE;
+					mCurrentColour = Core::Colour::WHITE;
 					mCurrentSpriteSheet = NormalSpriteSheet;
 					msCurrentIndices = msNormalIndices;
 				}

@@ -25,91 +25,91 @@ namespace ChilliSource
 	namespace Core
 	{
 		
-		class CQuaternion;
+		class Quaternion;
 		//================================================================
 		/// Description:
 		///
 		/// 4x4 matrix container with a wrapper around matrix maths
 		/// including transforms and multiplication
 		//================================================================
-		class CMatrix4x4
+		class Matrix4x4
 		{
 		public:
             static const u32 kMatrixWidth = 4;
             static const u32 kMatrixDims  = kMatrixWidth * kMatrixWidth;
             
-			CMatrix4x4();
-			CMatrix4x4(const f32* paMatrix);
-			CMatrix4x4(f32 m00, f32 m01, f32 m02, f32 m03,
+			Matrix4x4();
+			Matrix4x4(const f32* paMatrix);
+			Matrix4x4(f32 m00, f32 m01, f32 m02, f32 m03,
                        f32 m10, f32 m11, f32 m12, f32 m13,
                        f32 m20, f32 m21, f32 m22, f32 m23,
                        f32 m30, f32 m31, f32 m32, f32 m33);
-            CMatrix4x4(const CMatrix3x3& inmat);
+            Matrix4x4(const Matrix3x3& inmat);
 			
 			//---Methods
-			CMatrix4x4 Inverse() const;
-			CMatrix4x4 GetTranspose() const;
+			Matrix4x4 Inverse() const;
+			Matrix4x4 GetTranspose() const;
 
-			CVector3 Right() const;
-            CVector3 Up() const;
-            CVector3 Forward() const;
+			Vector3 Right() const;
+            Vector3 Up() const;
+            Vector3 Forward() const;
             
 			void Translate(f32 inX, f32 inY, f32 inZ);
-			void Translate(const CVector3 &inVec);
+			void Translate(const Vector3 &inVec);
 			void RotateX(f32 infAngleRads);
 			void RotateY(f32 infAngleRads);
 			void RotateZ(f32 infAngleRads);
 			
 			void Rotate(f32 inXAxis, f32 inYAxis, f32 inZAxis, f32 infAngleRads);
-			void Rotate(const CVector3 &vAxis, f32 infAngleRads);
+			void Rotate(const Vector3 &vAxis, f32 infAngleRads);
 			
 			void Scale(f32 inScale);
 			void Scale(f32 inX, f32 inY, f32 inZ);
-			void Scale(const CVector3 &Vec);
+			void Scale(const Vector3 &Vec);
 
-			void LookAt(const CVector3 &vPos, const CVector3 &vTarget, const CVector3 &vUp);
+			void LookAt(const Vector3 &vPos, const Vector3 &vTarget, const Vector3 &vUp);
 			
-			CVector3 GetTranslation() const;
-			void SetTranslation(const CVector3& invTrans); 
+			Vector3 GetTranslation() const;
+			void SetTranslation(const Vector3& invTrans); 
 			
-			void SetTransform(const CVector3 & inTranslate, const CVector3 & inScale, const CQuaternion & inOrientation);
-			void DecomposeTransforms(CVector3 & outTranslate, CVector3 & outScale, CQuaternion & outOrientation) const;
+			void SetTransform(const Vector3 & inTranslate, const Vector3 & inScale, const Quaternion & inOrientation);
+			void DecomposeTransforms(Vector3 & outTranslate, Vector3 & outScale, Quaternion & outOrientation) const;
 			f32 GetTrace();
 			
 			//---Operators
 			f32 operator()(u32 inRow, u32 inColumn) const;
 
-			CMatrix4x4 operator+(const CMatrix4x4 &rhs) const;			
-			CMatrix4x4 operator-(const CMatrix4x4 &rhs) const;
+			Matrix4x4 operator+(const Matrix4x4 &rhs) const;			
+			Matrix4x4 operator-(const Matrix4x4 &rhs) const;
 			
-			const CMatrix4x4& operator+=(const CMatrix4x4 &rhs);
-			const CMatrix4x4& operator-=(const CMatrix4x4 &rhs);		
-			const CMatrix4x4& operator*=(const CMatrix4x4 &rhs);		
-			const CMatrix4x4& operator*=(f32 Scale);
+			const Matrix4x4& operator+=(const Matrix4x4 &rhs);
+			const Matrix4x4& operator-=(const Matrix4x4 &rhs);		
+			const Matrix4x4& operator*=(const Matrix4x4 &rhs);		
+			const Matrix4x4& operator*=(f32 Scale);
 			
-			bool operator==(const CMatrix4x4 &rhs) const;
+			bool operator==(const Matrix4x4 &rhs) const;
 			
-			bool operator!=(const CMatrix4x4 &rhs) const;
+			bool operator!=(const Matrix4x4 &rhs) const;
 			
-			CMatrix4x4 operator*(const CMatrix4x4 &rhs) const;
+			Matrix4x4 operator*(const Matrix4x4 &rhs) const;
 
 			
-			static void Multiply(const CMatrix4x4 *  p1, const CMatrix4x4 *   p2, CMatrix4x4 *  pOut);
-            static void Multiply(const CVector2* inpVec, const CMatrix4x4* inpMat, CVector2* outpVec);
-            static void Multiply(const CVector3* inpVec, const CMatrix4x4* inpMat, CVector3* outpVec);
-            static void Multiply(const CVector4* inpVec, const CMatrix4x4* inpMat, CVector4* outpVec);
+			static void Multiply(const Matrix4x4 *  p1, const Matrix4x4 *   p2, Matrix4x4 *  pOut);
+            static void Multiply(const Vector2* inpVec, const Matrix4x4* inpMat, Vector2* outpVec);
+            static void Multiply(const Vector3* inpVec, const Matrix4x4* inpMat, Vector3* outpVec);
+            static void Multiply(const Vector4* inpVec, const Matrix4x4* inpMat, Vector4* outpVec);
 			
             
-            static CMatrix4x4 CreateOrthoMatrix(f32 infWidth, f32 infHeight, f32 infNear, f32 infFar);
-            static CMatrix4x4 CreateOrthoMatrixOffset(f32 infLeft, f32 infRight, f32 infBottom, f32 infTop, f32 infNear, f32 infFar);
+            static Matrix4x4 CreateOrthoMatrix(f32 infWidth, f32 infHeight, f32 infNear, f32 infFar);
+            static Matrix4x4 CreateOrthoMatrixOffset(f32 infLeft, f32 infRight, f32 infBottom, f32 infTop, f32 infNear, f32 infFar);
             
-			static const CMatrix4x4 IDENTITY;
+			static const Matrix4x4 IDENTITY;
 			
 		public:
 			f32 m[kMatrixDims];
 		};
 		
-		inline void CMatrix4x4::Multiply(const CMatrix4x4* inp1, const CMatrix4x4* inp2, CMatrix4x4* outp3)
+		inline void Matrix4x4::Multiply(const Matrix4x4* inp1, const Matrix4x4* inp2, Matrix4x4* outp3)
         {
 #if defined TARGET_OS_IPHONE && defined ENABLE_QUICK_MATH
             CS_ASSERT(inp1 != outp3 && inp2 != outp3, "The input matrices must differ from the output Matrix (see vDSP_mmul difference between iOS6 and iOS7)");
@@ -141,14 +141,14 @@ namespace ChilliSource
 #endif
 		}
         
-        inline void CMatrix4x4::Multiply(const CVector2* inpVec, const CMatrix4x4* inpMat, CVector2* outpVec)
+        inline void Matrix4x4::Multiply(const Vector2* inpVec, const Matrix4x4* inpMat, Vector2* outpVec)
         {
             const f32* m = inpMat->m;
             
             outpVec->x = inpVec->x * m[0] + inpVec->y * m[4] + m[12];
 			outpVec->y = inpVec->x * m[1] + inpVec->y * m[5] + m[13];
         }
-        inline void CMatrix4x4::Multiply(const CVector3* inpVec, const CMatrix4x4* inpMat, CVector3* outpVec)
+        inline void Matrix4x4::Multiply(const Vector3* inpVec, const Matrix4x4* inpMat, Vector3* outpVec)
         {
             const f32* m = inpMat->m;
             
@@ -156,7 +156,7 @@ namespace ChilliSource
 			outpVec->y = inpVec->x * m[1] + inpVec->y * m[5] + inpVec->z * m[9] + m[13];
 			outpVec->z = inpVec->x * m[2] + inpVec->y * m[6] + inpVec->z * m[10] + m[14];
         }
-        inline void CMatrix4x4::Multiply(const CVector4* inpVec, const CMatrix4x4* inpMat, CVector4* outpVec)
+        inline void Matrix4x4::Multiply(const Vector4* inpVec, const Matrix4x4* inpMat, Vector4* outpVec)
         {
             const f32* m = inpMat->m;
             
@@ -166,12 +166,12 @@ namespace ChilliSource
 			outpVec->w = inpVec->x * m[3] + inpVec->y * m[7] + inpVec->z * m[11] + inpVec->w * m[15];
         }
 		
-		CMatrix4x4 operator*(const CMatrix4x4 & inMat, f32 infScale);
-		CMatrix4x4 operator*(f32 infScale, const CMatrix4x4 & inMat);
+		Matrix4x4 operator*(const Matrix4x4 & inMat, f32 infScale);
+		Matrix4x4 operator*(f32 infScale, const Matrix4x4 & inMat);
 
-		inline CVector4 operator*(const CVector4& vec, const CMatrix4x4 &mat)
+		inline Vector4 operator*(const Vector4& vec, const Matrix4x4 &mat)
 		{
-			CVector4 Result; 
+			Vector4 Result; 
 			
 			Result.x = mat.m[0] * vec.x + mat.m[4] * vec.y + mat.m[8] * vec.z + mat.m[12] * vec.w;
 			Result.y = mat.m[1] * vec.x + mat.m[5] * vec.y + mat.m[9] * vec.z + mat.m[13] * vec.w;
@@ -181,9 +181,9 @@ namespace ChilliSource
 			return Result;
 		}
 		
-		inline CVector3 operator*(const CVector3& vec, const CMatrix4x4 &mat)
+		inline Vector3 operator*(const Vector3& vec, const Matrix4x4 &mat)
 		{
-			CVector3 Result; 
+			Vector3 Result; 
 	
 			Result.x = mat.m[0] * vec.x + mat.m[4] * vec.y + mat.m[8] * vec.z + mat.m[12];
 			Result.y = mat.m[1] * vec.x + mat.m[5] * vec.y + mat.m[9] * vec.z + mat.m[13];
@@ -192,9 +192,9 @@ namespace ChilliSource
 			return Result;
 		}
         
-        inline CVector2 operator*(const CVector2& vec, const CMatrix4x4 &mat)
+        inline Vector2 operator*(const Vector2& vec, const Matrix4x4 &mat)
 		{
-			CVector2 Result; 
+			Vector2 Result; 
     
 			Result.x = mat.m[0] * vec.x + mat.m[4] * vec.y + mat.m[12];
 			Result.y = mat.m[1] * vec.x + mat.m[5] * vec.y + mat.m[13];

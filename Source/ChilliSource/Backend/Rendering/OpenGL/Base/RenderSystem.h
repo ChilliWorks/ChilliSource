@@ -34,7 +34,7 @@ namespace ChilliSource
 		/// Creates and manages the OpenGL ES context and
 		/// handles the rendering of scene objects
 		//=======================================================
-		class CRenderSystem : public ChilliSource::Rendering::IRenderSystem
+		class CRenderSystem : public ChilliSource::Rendering::RenderSystem
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(CRenderSystem);
@@ -93,7 +93,7 @@ namespace ChilliSource
 			/// Create a hardware accelerated VBO
 			/// @return An instantiated buffer
 			//----------------------------------------------------------
-			Rendering::IMeshBuffer* CreateBuffer(Rendering::BufferDescription &inDesc) override;
+			Rendering::MeshBuffer* CreateBuffer(Rendering::BufferDescription &inDesc) override;
 			//----------------------------------------------------------
 			/// Render Vertex Buffer
 			///
@@ -104,7 +104,7 @@ namespace ChilliSource
             /// @param Number of vertices to render
 			/// @param The world matrix to apply transformations
 			//----------------------------------------------------------
-			void RenderVertexBuffer(Rendering::IMeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::CMatrix4x4& inmatWorld) override;
+			void RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4x4& inmatWorld) override;
 			//----------------------------------------------------------
 			/// Render Buffer
 			///
@@ -116,7 +116,7 @@ namespace ChilliSource
             /// @param Number of indices to render
 			/// @param The world matrix to apply transformations
 			//----------------------------------------------------------
-			void RenderBuffer(Rendering::IMeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::CMatrix4x4& inmatWorld) override;
+			void RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4x4& inmatWorld) override;
             //----------------------------------------------------------
 			/// Apply Camera
 			///
@@ -127,7 +127,7 @@ namespace ChilliSource
 			/// @param Camera view matrix
 			/// @param Frame buffer clear colour
 			//----------------------------------------------------------
-			void ApplyCamera(const Core::CVector3& invPos, const Core::CMatrix4x4& inmatView, const Core::CMatrix4x4& inmatProj, const Core::CColour& inClearCol) override;
+			void ApplyCamera(const Core::Vector3& invPos, const Core::Matrix4x4& inmatView, const Core::Matrix4x4& inmatProj, const Core::Colour& inClearCol) override;
             //----------------------------------------------------------
             /// Set Light
             ///
@@ -135,7 +135,7 @@ namespace ChilliSource
             ///
             /// @param lighting components
             //----------------------------------------------------------
-            void SetLight(Rendering::ILightComponent* inpLightComponent) override;
+            void SetLight(Rendering::LightComponent* inpLightComponent) override;
 			//----------------------------------------------------------
 			/// Apply Material
 			///
@@ -143,7 +143,7 @@ namespace ChilliSource
 			///
 			/// @param Material
 			//----------------------------------------------------------
-			void ApplyMaterial(const Rendering::CMaterial& inMaterial) override;
+			void ApplyMaterial(const Rendering::Material& inMaterial) override;
             //----------------------------------------------------------
 			/// Apply Joints
 			///
@@ -151,7 +151,7 @@ namespace ChilliSource
 			///
 			/// @param Dynamic array of joint matrices.
 			//----------------------------------------------------------
-            void ApplyJoints(const std::vector<Core::CMatrix4x4>& inaJoints) override;
+            void ApplyJoints(const std::vector<Core::Matrix4x4>& inaJoints) override;
 			//----------------------------------------------------------
 			/// Create Render Target
 			///
@@ -161,13 +161,13 @@ namespace ChilliSource
             /// @param Height
 			/// @return An instantiated target
 			//----------------------------------------------------------
-			Rendering::IRenderTarget* CreateRenderTarget(u32 inudwWidth, u32 inudwHeight) override;
+			Rendering::RenderTarget* CreateRenderTarget(u32 inudwWidth, u32 inudwHeight) override;
 			//----------------------------------------------------------
 			/// Get Default Render Target
 			///
 			/// @return Onscreen render target
 			//----------------------------------------------------------
-			Rendering::IRenderTarget* GetDefaultRenderTarget() override;
+			Rendering::RenderTarget* GetDefaultRenderTarget() override;
 			//----------------------------------------------------------
 			/// Resize Frame Buffer
 			///
@@ -277,7 +277,7 @@ namespace ChilliSource
             /// @param Position of the bottom left corner of the rect
             /// @param Size of the scissor region
             //---------------------------------------------------------
-            void SetScissorRegion(const Core::CVector2& invPosition, const Core::CVector2& invSize) override;
+            void SetScissorRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize) override;
             //----------------------------------------------------------
 			/// Set Cull Face
 			///
@@ -318,7 +318,7 @@ namespace ChilliSource
             ///
             /// @param Mesh buffer pointer.
             //----------------------------------------------------------
-            void RemoveBuffer(Rendering::IMeshBuffer* inpBuffer);
+            void RemoveBuffer(Rendering::MeshBuffer* inpBuffer);
             //----------------------------------------------------------
 			/// Check for OpenGL Extension
 			///
@@ -333,19 +333,19 @@ namespace ChilliSource
             ///
             /// @param Material
             //----------------------------------------------------------
-            void ApplyRenderStates(const Rendering::CMaterial& inMaterial);
+            void ApplyRenderStates(const Rendering::Material& inMaterial);
             //----------------------------------------------------------
             /// Get Attribute Locations
             ///
             /// @param Shader
             //----------------------------------------------------------
-            void GetAttributeLocations(const ShaderPtr& inpShader);
+            void GetAttributeLocations(const ShaderSPtr& inpShader);
             //----------------------------------------------------------
             /// Get Uniform Locations
             ///
             /// @param Material
             //----------------------------------------------------------
-            void GetUniformLocations(const Rendering::CMaterial &inMaterial);
+            void GetUniformLocations(const Rendering::Material &inMaterial);
             //----------------------------------------------------------
             /// Apply Textures
             ///
@@ -353,7 +353,7 @@ namespace ChilliSource
             ///
             /// @param Material
             //----------------------------------------------------------
-            void ApplyTextures(const Rendering::CMaterial &inMaterial);
+            void ApplyTextures(const Rendering::Material &inMaterial);
             //----------------------------------------------------------
             /// Apply Lighting Values
             ///
@@ -361,7 +361,7 @@ namespace ChilliSource
             ///
             /// @param Material
             //----------------------------------------------------------
-            void ApplyLightingValues(const Rendering::CMaterial &inMaterial);
+            void ApplyLightingValues(const Rendering::Material &inMaterial);
 			//------------------------------------------------------------
 			/// Enable Vertex Attribute For Semantic (Programmable pipeline)
 			///
@@ -370,7 +370,7 @@ namespace ChilliSource
 			///
 			/// @param Element
 			//------------------------------------------------------------
-			void EnableVertexAttributeForSemantic(Rendering::IMeshBuffer* inpBuffer);
+			void EnableVertexAttributeForSemantic(Rendering::MeshBuffer* inpBuffer);
 			//------------------------------------------------------------
 			/// Get Primitive Type
 			///
@@ -384,13 +384,13 @@ namespace ChilliSource
 			///
 			/// Clear the back buffer to the clear colour
 			//----------------------------------------------------------
-			void BeginFrame(Rendering::IRenderTarget* inpActiveRenderTarget) override;
+			void BeginFrame(Rendering::RenderTarget* inpActiveRenderTarget) override;
 			//----------------------------------------------------------
 			/// End Frame
 			///
 			/// Present the buffer to the screen
 			//----------------------------------------------------------
-			void EndFrame(Rendering::IRenderTarget* inpActiveRenderTarget) override;
+			void EndFrame(Rendering::RenderTarget* inpActiveRenderTarget) override;
 			//----------------------------------------------------------
 			/// Apply Shader Variables
 			///
@@ -399,7 +399,7 @@ namespace ChilliSource
 			/// @param Material
 			/// @param Shader program
 			//----------------------------------------------------------
-			void ApplyShaderVariables(const Rendering::CMaterial &inMaterial, GLuint inShaderProg);
+			void ApplyShaderVariables(const Rendering::Material &inMaterial, GLuint inShaderProg);
             //----------------------------------------------------------
             /// Apply Lighting
             ///
@@ -408,7 +408,7 @@ namespace ChilliSource
             /// @param Material
             /// @param Lighting component
             //----------------------------------------------------------
-            void ApplyLighting(const Rendering::CMaterial &inMaterial, Rendering::ILightComponent* inpLightComponent);
+            void ApplyLighting(const Rendering::Material &inMaterial, Rendering::LightComponent* inpLightComponent);
 			//----------------------------------------------------------
 			/// Force Refresh Render States
 			///
@@ -450,26 +450,26 @@ namespace ChilliSource
 			
 		private:
 			s32 GetLocationForVertexSemantic(Rendering::VertexDataSemantic ineSemantic);
-            bool ApplyVertexAttributePointr(Rendering::IMeshBuffer* inpBuffer,
+            bool ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
                                             GLuint inudwLocation, GLint indwSize, GLenum ineType, GLboolean inbNormalized, GLsizei indwStride, const GLvoid* inpOffset);
             
-            Rendering::ILightComponent* mpLightComponent;
+            Rendering::LightComponent* mpLightComponent;
             
-            Core::CColour mNewClearColour;
-			Core::CColour mClearColour;
-            Core::CColour mCurrentEmissive;
-            Core::CColour mCurrentAmbient;
-            Core::CColour mCurrentDiffuse;
-            Core::CColour mCurrentSpecular;
+            Core::Colour mNewClearColour;
+			Core::Colour mClearColour;
+            Core::Colour mCurrentEmissive;
+            Core::Colour mCurrentAmbient;
+            Core::Colour mCurrentDiffuse;
+            Core::Colour mCurrentSpecular;
             bool mbEmissiveSet;
             bool mbAmbientSet;
             bool mbDiffuseSet;
             bool mbSpecularSet;
             
-			Core::CMatrix4x4 mmatProj;
-			Core::CMatrix4x4 mmatViewProj;
-            Core::CMatrix4x4 mmatView;
-            Core::CVector3 mvCameraPos;
+			Core::Matrix4x4 mmatProj;
+			Core::Matrix4x4 mmatViewProj;
+            Core::Matrix4x4 mmatView;
+            Core::Vector3 mvCameraPos;
             
 			CTextureManager mTexManager;
             CCubemapManager mCubemapManager;
@@ -515,10 +515,10 @@ namespace ChilliSource
             
 			CRenderTarget* mpDefaultRenderTarget;
             
-            Core::CVector2 mvCachedScissorPos;
-            Core::CVector2 mvCachedScissorSize;
+            Core::Vector2 mvCachedScissorPos;
+            Core::Vector2 mvCachedScissorSize;
             
-            const Rendering::CMaterial* mpCurrentMaterial;
+            const Rendering::Material* mpCurrentMaterial;
             
             u32 mudwViewWidth;
             u32 mudwViewHeight;
@@ -529,7 +529,7 @@ namespace ChilliSource
             
             struct VertexAttribSet
             {
-                Rendering::IMeshBuffer * pBuffer;
+                Rendering::MeshBuffer * pBuffer;
                 GLint size;
                 GLenum type;
                 GLboolean normalised;

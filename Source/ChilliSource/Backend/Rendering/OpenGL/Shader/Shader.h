@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CShader : public ChilliSource::Rendering::IShader
+		class CShader : public ChilliSource::Rendering::Shader
 		{
 		public:
 			
@@ -109,7 +109,7 @@ namespace ChilliSource
             std::vector<LocationLookup> maUniforms;
 		};
 		
-		typedef std::shared_ptr<CShader> ShaderPtr;
+		typedef std::shared_ptr<CShader> ShaderSPtr;
 		typedef std::weak_ptr<CShader> ShaderWeakPtr;
 	}
 }

@@ -20,7 +20,7 @@ namespace ChilliSource
         /*
          IInformationProvider is the base class for objects representing interfaces into a data store of some kind
          */
-        class IInformationProvider : public Core::IQueryableInterface
+        class IInformationProvider : public Core::QueryableInterface
             {
         public:
             virtual ~IInformationProvider(){}

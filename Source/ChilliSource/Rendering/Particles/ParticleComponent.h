@@ -25,16 +25,16 @@ namespace ChilliSource
 		///
 		/// Multiple emitters that create the system
 		//====================================================
-		class CParticleComponent : public IRenderComponent
+		class ParticleComponent : public RenderComponent
 		{
 		public:
             
-            typedef std::function<void(CParticleComponent*)> EmittersFinishedDelegate;
+            typedef std::function<void(ParticleComponent*)> EmittersFinishedDelegate;
 			
-			DECLARE_NAMED_INTERFACE(CParticleComponent);
+			DECLARE_NAMED_INTERFACE(ParticleComponent);
 			
-			CParticleComponent();
-            ~CParticleComponent();
+			ParticleComponent();
+            ~ParticleComponent();
 			//----------------------------------------------------------
 			/// Is A
 			///
@@ -52,7 +52,7 @@ namespace ChilliSource
 			///
 			/// @param Emitter
 			//---------------------------------------------------
-			void AddEmitter(CParticleEmitter* inpEmitter);
+			void AddEmitter(ParticleEmitter* inpEmitter);
 		
 
 			//---------------------------------------------------
@@ -65,7 +65,7 @@ namespace ChilliSource
 			///
 			/// @param Index
 			//---------------------------------------------------
-			CParticleEmitter* GetEmitter(u32 inudwIndex);
+			ParticleEmitter* GetEmitter(u32 inudwIndex);
 			
             //---------------------------------------------------
             /// Add Effector
@@ -74,7 +74,7 @@ namespace ChilliSource
             ///
             /// @param Effector
             //---------------------------------------------------
-            void AddEffector(IParticleEffector* inpEffector);
+            void AddEffector(ParticleEffector* inpEffector);
             //---------------------------------------------------
             /// Start Emitting
             ///
@@ -120,7 +120,7 @@ namespace ChilliSource
             /// @param Active camera component
             /// @param The current shader pass.
             //-------------------------------------------------
-            void Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass) override;
+            void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass) override;
             //-----------------------------------------------------
             /// Render Shadow Map
             ///
@@ -129,13 +129,13 @@ namespace ChilliSource
             /// @param Render system
             /// @param Active camera component
             //-----------------------------------------------------
-            void RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam) override{};
+            void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam) override {};
 			//-------------------------------------------------
 			/// Set Owning System
 			///
 			/// @param Particle system
 			//-------------------------------------------------
-			void SetOwningSystem(CParticleSystem* inpSystem);
+			void SetOwningSystem(ParticleSystem* inpSystem);
 			//-------------------------------------------------
 			/// Remove From World System
 			//-------------------------------------------------
@@ -155,10 +155,10 @@ namespace ChilliSource
 			
 		private:
 			
-			std::vector<CParticleEmitter*> mEmitters;
-			std::vector<IParticleEffector*> mEffectors;
+			std::vector<ParticleEmitter*> mEmitters;
+			std::vector<ParticleEffector*> mEffectors;
 			
-			CParticleSystem* mpOwningSystem;
+			ParticleSystem* mpOwningSystem;
             
             f32 mfUpdateScaleFactor;
             

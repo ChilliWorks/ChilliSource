@@ -19,14 +19,14 @@ namespace ChilliSource
         ///
         /// A system for updating animation mesh components.
         //======================================================
-        class CAnimatedMeshComponentUpdater : public Core::ISystem, public Core::IUpdateable
+        class AnimatedMeshComponentUpdater : public Core::System, public Core::IUpdateable
         {
         public:
-            DECLARE_NAMED_INTERFACE(CAnimatedMeshComponentUpdater);
+            DECLARE_NAMED_INTERFACE(AnimatedMeshComponentUpdater);
             //------------------------------------------------
 			/// Constructor
 			//------------------------------------------------
-            CAnimatedMeshComponentUpdater();
+            AnimatedMeshComponentUpdater();
             //------------------------------------------------
 			/// Is A
 			///
@@ -42,7 +42,7 @@ namespace ChilliSource
             ///
             /// @param The component.
 			//------------------------------------------------
-			void AddComponent(CAnimatedMeshComponent* inpAnimatedMesh);
+			void AddComponent(AnimatedMeshComponent* inpAnimatedMesh);
             //------------------------------------------------
 			/// Update
 			///
@@ -59,9 +59,9 @@ namespace ChilliSource
             ///
             /// @param The component.
 			//------------------------------------------------
-			void RemoveComponent(CAnimatedMeshComponent* inpAnimatedMesh);
+			void RemoveComponent(AnimatedMeshComponent* inpAnimatedMesh);
         private:
-            std::vector<CAnimatedMeshComponent*> mapComponentsToUpdate;
+            std::vector<AnimatedMeshComponent*> mapComponentsToUpdate;
         };
     }
 }

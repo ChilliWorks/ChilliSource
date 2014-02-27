@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace Social
     {
-		class SMSCompositionActivity : public Core::IActivity
+		class SMSCompositionActivity : public Core::Activity
         {
 		public:
 
@@ -36,7 +36,7 @@ namespace ChilliSource
 			
 			typedef std::function<void(SendResult)> SendResultDelegate;
 			
-			virtual void Present(const std::vector<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const SendResultDelegate & inCallback) = 0;
+			virtual void Present(const std::vector<Core::UTF8String> & inastrRecipientNumbers, const Core::UTF8String & instrContents, const SendResultDelegate & inCallback) = 0;
 			virtual void Dismiss() = 0;
 		};
 		

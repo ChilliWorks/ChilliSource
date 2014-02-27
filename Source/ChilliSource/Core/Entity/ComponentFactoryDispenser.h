@@ -12,43 +12,43 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
-#define GET_COMPONENT_FACTORY(FACTORY_TYPE) ChilliSource::Core::CComponentFactoryDispenser::GetSingletonPtr()->GetFactoryWithInterface<FACTORY_TYPE>() 
+#define GET_COMPONENT_FACTORY(FACTORY_TYPE) ChilliSource::Core::ComponentFactoryDispenser::GetSingletonPtr()->GetFactoryWithInterface<FACTORY_TYPE>() 
 
 namespace ChilliSource
 {
     namespace Core
     {
         
-        class CComponentFactoryDispenser
+        class ComponentFactoryDispenser
         {
         public:
-            CComponentFactoryDispenser(CApplication* inpApp);
-            ~CComponentFactoryDispenser();
+            ComponentFactoryDispenser(Application* inpApp);
+            ~ComponentFactoryDispenser();
             //--------------------------------------------------------------------------------------------------
             /// Get Singleton Ptr
             ///
             /// @return Singleton instance
             //--------------------------------------------------------------------------------------------------
-            static CComponentFactoryDispenser* GetSingletonPtr();
+            static ComponentFactoryDispenser* GetSingletonPtr();
 			//--------------------------------------------------------------------------------------------------
             /// @return Singleton instance
             //--------------------------------------------------------------------------------------------------
-            static CComponentFactoryDispenser& GetSingleton();
+            static ComponentFactoryDispenser& GetSingleton();
             //--------------------------------------------------------------------------------------------------
             /// Register Component Factory
             ///
             /// Adds a component factory to the application pool. 
             /// @param Component factory
             //--------------------------------------------------------------------------------------------------
-            void RegisterComponentFactory(IComponentFactory * inpComponentFactory);
+            void RegisterComponentFactory(ComponentFactory * inpComponentFactory);
             //--------------------------------------------------------------------------------------------------
             /// Get Factory Producing
             ///
             /// Looks for a factory that can create the given type
-            /// @param The type ID of the object you wish to create (i.e. CMesh, ITexture)
+            /// @param The type ID of the object you wish to create (i.e. Mesh, Texture)
             /// @return Factory that can produce the given interface or nullptr if none available
             //--------------------------------------------------------------------------------------------------
-            IComponentFactory* GetFactoryProducing(const std::string & insName);
+            ComponentFactory* GetFactoryProducing(const std::string & insName);
             //--------------------------------------------------------------------------------------------------
             /// Get Factory Producing
             ///
@@ -56,7 +56,7 @@ namespace ChilliSource
             /// @param The type ID of the object you wish to create (i.e. Sprite, Static Mesh)
             /// @return Factory that creates the given component
             //--------------------------------------------------------------------------------------------------
-            IComponentFactory* GetFactoryProducing(InterfaceIDType inInterfaceID);
+            ComponentFactory* GetFactoryProducing(InterfaceIDType inInterfaceID);
             //--------------------------------------------------------------------------------------------------
             /// Get Factory With Interface
             ///
@@ -64,7 +64,7 @@ namespace ChilliSource
             /// @param The type ID of the factory interface you are seeking
             /// @return Factory that implements the given interface or nullptr if none available
             //--------------------------------------------------------------------------------------------------
-            IComponentFactory* GetFactoryWithInterface(InterfaceIDType inInterfaceID);
+            ComponentFactory* GetFactoryWithInterface(InterfaceIDType inInterfaceID);
             //--------------------------------------------------------------------------------------------------
 			/// Get Factory With Interface
 			///
@@ -78,11 +78,11 @@ namespace ChilliSource
             
         private:
             
-            std::vector<IComponentFactory*> mComponentFactories;
+            std::vector<ComponentFactory*> mComponentFactories;
             
             
-            static CComponentFactoryDispenser* pInstance;
-            CApplication* mpApp;
+            static ComponentFactoryDispenser* pInstance;
+            Application* mpApp;
         };
     }
 }

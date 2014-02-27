@@ -22,16 +22,16 @@ namespace ChilliSource
 		///
 		/// Default
 		//--------------------------------------------
-		CTimer::CTimer() : mfCurrentTime(0.0f), mbIsTimerActive(false)
+		Timer::Timer() : mfCurrentTime(0.0f), mbIsTimerActive(false)
 		{
-            CCoreTimer::GetTimerUpdateEvent().AddListener(MakeDelegate(this, &CTimer::Update));
+            CCoreTimer::GetTimerUpdateEvent().AddListener(MakeDelegate(this, &Timer::Update));
 		}
 		//--------------------------------------------
 		/// Start
 		///
 		/// Begin the timer 
 		//--------------------------------------------
-		void CTimer::Start()
+		void Timer::Start()
 		{
 			mbIsTimerActive = true;
 		}
@@ -40,7 +40,7 @@ namespace ChilliSource
 		///
 		/// Reset the elapsed time
 		//--------------------------------------------
-		void CTimer::Reset()
+		void Timer::Reset()
 		{
 			mfCurrentTime = 0.0f;
 		}
@@ -49,7 +49,7 @@ namespace ChilliSource
 		///
 		/// Stop the timer
 		//--------------------------------------------
-		void CTimer::Stop()
+		void Timer::Stop()
 		{
 			mbIsTimerActive = false;
 		}
@@ -59,7 +59,7 @@ namespace ChilliSource
         /// check if timer is active
         /// @return mbIsTimerActive
         //--------------------------------------------
-        const bool CTimer::IsTimerActive() const
+        const bool Timer::IsTimerActive() const
         {
             return mbIsTimerActive;
         }
@@ -69,7 +69,7 @@ namespace ChilliSource
 		/// Calculate the time elapsed since starting
 		/// @return Delta time
 		//--------------------------------------------
-		const f32 CTimer::GetTimeElapsed() const
+		const f32 Timer::GetTimeElapsed() const
 		{
 			return mfCurrentTime;
 		}
@@ -80,7 +80,7 @@ namespace ChilliSource
 		/// elapsed
 		/// @param Time between frames
 		//----------------------------------------------------
-		void CTimer::Update(const f32 dt)
+		void Timer::Update(const f32 dt)
 		{
 			if(mbIsTimerActive)
 			{
@@ -133,7 +133,7 @@ namespace ChilliSource
 		/// @param Callback to be triggered
 		/// @param Seconds after which callback is triggerd
 		//----------------------------------------------------
-		void CTimer::RegisterTimeElapsedDelegate(TimeEventDelegate inDelegate, f32 infNumSecondsTilTrigger)
+		void Timer::RegisterTimeElapsedDelegate(TimeEventDelegate inDelegate, f32 infNumSecondsTilTrigger)
 		{
 			maTimeElapsedDelegates.push_back(std::pair<TimeEventDelegate, f32>(inDelegate, infNumSecondsTilTrigger));
 		}
@@ -143,7 +143,7 @@ namespace ChilliSource
 		/// Unsubscribe from being triggered after time period
 		/// @param Callback to remove
 		//----------------------------------------------------
-		void CTimer::DeregisterTimeElapsedDelegate(TimeEventDelegate inDelegate)
+		void Timer::DeregisterTimeElapsedDelegate(TimeEventDelegate inDelegate)
 		{
 			for(std::vector< std::pair<TimeEventDelegate, f32> >::iterator it = maTimeElapsedDelegates.begin(); it != maTimeElapsedDelegates.end(); ++it)
 			{
@@ -163,7 +163,7 @@ namespace ChilliSource
 		/// @param Callback to be triggered
 		/// @param Seconds after which callback is triggerd
 		//----------------------------------------------------
-		void CTimer::RegisterPeriodicUpdateDelegate(TimeEventDelegate inDelegate, f32 infNumSecondsBetweenTrigger)
+		void Timer::RegisterPeriodicUpdateDelegate(TimeEventDelegate inDelegate, f32 infNumSecondsBetweenTrigger)
 		{
 			PeriodicUpdateData Data;
 			Data.Delegate = inDelegate;
@@ -178,7 +178,7 @@ namespace ChilliSource
 		/// Unsubscribe from being triggered after time period
 		/// @param Callback to remove
 		//----------------------------------------------------
-		void CTimer::DeregisterPeriodicUpdateDelegate(TimeEventDelegate inDelegate)
+		void Timer::DeregisterPeriodicUpdateDelegate(TimeEventDelegate inDelegate)
 		{
 			for(std::vector<PeriodicUpdateData>::iterator it = maPeriodicUpdateDelegates.begin(); it != maPeriodicUpdateDelegates.end(); ++it)
 			{
@@ -194,12 +194,12 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//--------------------------------------------
-		CTimer::~CTimer()
+		Timer::~Timer()
 		{
 			maTimerBeganDelegates.clear();
 			maTimeElapsedDelegates.clear();
 			
-            CCoreTimer::GetTimerUpdateEvent().RemoveListener(CSCore::MakeDelegate(this, &CTimer::Update));
+            CCoreTimer::GetTimerUpdateEvent().RemoveListener(CSCore::MakeDelegate(this, &Timer::Update));
 		}
 	}
 }

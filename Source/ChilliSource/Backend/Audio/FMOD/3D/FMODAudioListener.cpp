@@ -35,7 +35,7 @@ namespace ChilliSource
 		/// @param 3D forward direction vector
 		/// @param 3D up direction vector (perpendicular to forward)
 		//-------------------------------------------------------------
-		void CFMODAudioListener::Set3DLocation(Core::CVector3& invPos, Core::CVector3& invVel, Core::CVector3& invForward, Core::CVector3& invUp)
+		void CFMODAudioListener::Set3DLocation(Core::Vector3& invPos, Core::Vector3& invVel, Core::Vector3& invForward, Core::Vector3& invUp)
 		{
 			mpFMODSystem->set3DListenerAttributes(0, reinterpret_cast<FMOD_VECTOR*>(&invPos), reinterpret_cast<FMOD_VECTOR*>(&invVel), reinterpret_cast<FMOD_VECTOR*>(&invForward), reinterpret_cast<FMOD_VECTOR*>(&invUp));
 		}

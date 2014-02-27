@@ -44,7 +44,7 @@ namespace ChilliSource
         ///
         /// Default
         //--------------------------------------------------------
-        ImageView::ImageView() : UVs(Core::CVector2(0, 0), Core::CVector2(1, 1)), UVOffsets(Core::CVector2(0, 0), Core::CVector2(1, 1)), SpriteSheetIndex(0), SizeFromImage(false),
+        ImageView::ImageView() : UVs(Core::Vector2(0, 0), Core::Vector2(1, 1)), UVOffsets(Core::Vector2(0, 0), Core::Vector2(1, 1)), SpriteSheetIndex(0), SizeFromImage(false),
         HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), ActAsSpacer(false), FlipHorizontal(false), FlipVertical(false), mbFillMaintain(false), mbFitMaintain(false)
         {
             
@@ -57,7 +57,7 @@ namespace ChilliSource
         /// @param Param dictionary
         //------------------------------------------------------
         ImageView::ImageView(const Core::ParamDictionary& insParams)
-        : GUIView(insParams), UVs(Core::CVector2(0, 0), Core::CVector2(1, 1)), UVOffsets(Core::CVector2(0, 0), Core::CVector2(1, 1)), SpriteSheetIndex(0),
+        : GUIView(insParams), UVs(Core::Vector2(0, 0), Core::Vector2(1, 1)), UVOffsets(Core::Vector2(0, 0), Core::Vector2(1, 1)), SpriteSheetIndex(0),
         SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), ActAsSpacer(false), FlipHorizontal(false), FlipVertical(false), mbFillMaintain(false), mbFitMaintain(false)
         {
             std::string strValue;
@@ -70,7 +70,7 @@ namespace ChilliSource
             }
             if(insParams.TryGetValue("Texture", strValue))
             {
-                Texture = LOAD_RESOURCE(Rendering::ITexture, eTextureLocation, strValue);
+                Texture = LOAD_RESOURCE(Rendering::Texture, eTextureLocation, strValue);
             }
             //---Sprite sheet
             Core::StorageLocation eSpriteSheetLocation = Core::StorageLocation::k_package;
@@ -121,31 +121,31 @@ namespace ChilliSource
             //---Set Maintain Width
             if(insParams.TryGetValue("SetHeightMaintain", strValue))
             {
-                Core::CVector2 vSize = Core::ParseVector2(strValue);
+                Core::Vector2 vSize = Core::ParseVector2(strValue);
                 SetHeightMaintainingAspect(vSize.x, vSize.y);
             }
             //---Set Maintain Height
             if(insParams.TryGetValue("SetWidthMaintain", strValue))
             {
-                Core::CVector2 vSize = Core::ParseVector2(strValue);
+                Core::Vector2 vSize = Core::ParseVector2(strValue);
                 SetWidthMaintainingAspect(vSize.x, vSize.y);
             }
             //---Set Fill Maintain
             if(insParams.TryGetValue("SetFillMaintain", strValue))
             {
-                Core::CVector4 vSize = Core::ParseVector4(strValue);
+                Core::Vector4 vSize = Core::ParseVector4(strValue);
                 SetFillMaintainingAspect(vSize.x, vSize.y, vSize.z, vSize.w);
             }
             //---Set Fit Maintain
             if(insParams.TryGetValue("SetFitMaintain", strValue))
             {
-                Core::CVector4 vSize = Core::ParseVector4(strValue);
+                Core::Vector4 vSize = Core::ParseVector4(strValue);
                 SetFitMaintainingAspect(vSize.x, vSize.y, vSize.z, vSize.w);
             }
             //---UV
             if(insParams.TryGetValue("UVs", strValue))
             {
-                Core::CVector4 vRaw = Core::ParseVector4(strValue);
+                Core::Vector4 vRaw = Core::ParseVector4(strValue);
                 UVs.vOrigin.x = vRaw.x;
                 UVs.vOrigin.y = vRaw.y;
                 UVs.vSize.x = vRaw.z;
@@ -154,7 +154,7 @@ namespace ChilliSource
             //---UV Offsets
             if(insParams.TryGetValue("UVOffsets", strValue))
             {
-                Core::CVector4 vRaw = Core::ParseVector4(strValue);
+                Core::Vector4 vRaw = Core::ParseVector4(strValue);
                 UVOffsets.vOrigin.x = vRaw.x;
                 UVOffsets.vOrigin.y = vRaw.y;
                 UVOffsets.vSize.x = vRaw.z;
@@ -189,8 +189,8 @@ namespace ChilliSource
         {
             f32 fWidthOfArea = outsUVs.Right() - outsUVs.Left();
             f32 fHeightOfArea = outsUVs.Bottom() - outsUVs.Top();
-            Core::CVector2 vTopLeft = Core::CVector2((fWidthOfArea*insOffsets.Left())+outsUVs.Left(), (fHeightOfArea*insOffsets.Top())+outsUVs.Top());
-            Core::CVector2 vBottomRight = Core::CVector2((fWidthOfArea*insOffsets.Right()), (fHeightOfArea*insOffsets.Bottom()));
+            Core::Vector2 vTopLeft = Core::Vector2((fWidthOfArea*insOffsets.Left())+outsUVs.Left(), (fHeightOfArea*insOffsets.Top())+outsUVs.Top());
+            Core::Vector2 vBottomRight = Core::Vector2((fWidthOfArea*insOffsets.Right()), (fHeightOfArea*insOffsets.Bottom()));
             outsUVs = Core::Rectangle(vTopLeft, vBottomRight);
         }
         //--------------------------------------------------------
@@ -200,7 +200,7 @@ namespace ChilliSource
         ///
         /// @param Canvas renderer pointer
         //--------------------------------------------------------
-        void ImageView::Draw(Rendering::CCanvasRenderer* inpCanvas)
+        void ImageView::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
             if(!IsOnscreen() || !Visible)
             {
@@ -211,7 +211,7 @@ namespace ChilliSource
             
             if(ActAsSpacer == false)
             {
-                Rendering::TexturePtr pTexture;
+                Rendering::TextureSPtr pTexture;
                 Core::Rectangle sNewUVs;
                 
                 if(Texture)
@@ -225,7 +225,7 @@ namespace ChilliSource
                     sNewUVs = SpriteSheet->GetUVsForFrame(SpriteSheetIndex);
                 }
                 
-                if(UVOffsets.TopLeft() != Core::CVector2::ZERO || UVOffsets.BottomRight() != Core::CVector2::ONE)
+                if(UVOffsets.TopLeft() != Core::Vector2::ZERO || UVOffsets.BottomRight() != Core::Vector2::ONE)
                 {
                     CalculateUVs(UVs, UVOffsets, sNewUVs);
                 }
@@ -253,14 +253,14 @@ namespace ChilliSource
         //--------------------------------------------------------
         void ImageView::SetSpriteSheet(const std::string& instrSpriteSheet, Core::StorageLocation ineLocation)
         {
-            SpriteSheet = LOAD_RESOURCE(Rendering::CSpriteSheet, ineLocation, instrSpriteSheet);
+            SpriteSheet = LOAD_RESOURCE(Rendering::SpriteSheet, ineLocation, instrSpriteSheet);
         }
         //--------------------------------------------------------
         /// Set Sprite Sheet
         ///
         /// @param Sprite sheet
         //--------------------------------------------------------
-        void ImageView::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+        void ImageView::SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
         {
             SpriteSheet = inpSpriteSheet;
         }
@@ -269,7 +269,7 @@ namespace ChilliSource
         ///
         /// @param Sprite sheet
         //--------------------------------------------------------
-        const Rendering::SpriteSheetPtr& ImageView::GetSpriteSheet() const
+        const Rendering::SpriteSheetSPtr& ImageView::GetSpriteSheet() const
         {
             return SpriteSheet;
         }
@@ -321,7 +321,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //--------------------------------------------------------
-        void ImageView::SetTexture(const Rendering::TexturePtr& inpTexture)
+        void ImageView::SetTexture(const Rendering::TextureSPtr& inpTexture)
         {
             Texture = inpTexture;
             
@@ -335,7 +335,7 @@ namespace ChilliSource
         ///
         /// @param Texture shared pointer
         //--------------------------------------------------------
-        const Rendering::TexturePtr& ImageView::GetTexture() const
+        const Rendering::TextureSPtr& ImageView::GetTexture() const
         {
             return Texture;
         }
@@ -418,7 +418,7 @@ namespace ChilliSource
         //--------------------------------------------------------
         void ImageView::SetSizeFromImage()
         {
-            SetSize(Core::UnifiedVector2(Core::CVector2::ZERO, GetSizeFromImage()));
+            SetSize(Core::UnifiedVector2(Core::Vector2::ZERO, GetSizeFromImage()));
         }
 		
         //--------------------------------------------------------
@@ -426,20 +426,20 @@ namespace ChilliSource
         ///
         /// @return Absolute size of the image
         //--------------------------------------------------------
-        Core::CVector2 ImageView::GetSizeFromImage() const
+        Core::Vector2 ImageView::GetSizeFromImage() const
         {
             CS_ASSERT((Texture || SpriteSheet), "Must have a sprite sheet or texture");
             
             if(Texture)
             {
-                return Core::CVector2((f32)Texture->GetWidth(), (f32)Texture->GetHeight());
+                return Core::Vector2((f32)Texture->GetWidth(), (f32)Texture->GetHeight());
             }
             else if(SpriteSheet)
             {
                 return SpriteSheet->GetSizeForFrame(SpriteSheetIndex);
             }
             
-            return Core::CVector2::ZERO;
+            return Core::Vector2::ZERO;
         }
         //--------------------------------------------------------
         /// Enable Width From Image
@@ -537,7 +537,7 @@ namespace ChilliSource
 			if(fScaleY == 0.0f)
 				return;
             
-            Core::CVector2 vCurrentSize = GetSizeFromImage();
+            Core::Vector2 vCurrentSize = GetSizeFromImage();
             f32 fAspectRatio = vCurrentSize.y / vCurrentSize.x;
             
             vCurrentSize = GetAbsoluteSize();
@@ -562,7 +562,7 @@ namespace ChilliSource
 			if(fScaleX == 0.0f)
 				return;
             
-            Core::CVector2 vCurrentSize = GetSizeFromImage();
+            Core::Vector2 vCurrentSize = GetSizeFromImage();
             f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
             
             vCurrentSize = GetAbsoluteSize();
@@ -589,8 +589,8 @@ namespace ChilliSource
             if(GetParentViewPtr() == nullptr)
                 return;
             
-            Core::CVector2 vParentSize(GetParentViewPtr()->GetAbsoluteSize());
-            Core::CVector2 vImageSize(GetSizeFromImage());
+            Core::Vector2 vParentSize(GetParentViewPtr()->GetAbsoluteSize());
+            Core::Vector2 vImageSize(GetSizeFromImage());
             
             f32 fParentRatio = (vParentSize.x * infRelWidth) / (vParentSize.y * infRelHeight);
             f32 fImageRatio = vImageSize.x / vImageSize.y;
@@ -624,8 +624,8 @@ namespace ChilliSource
             if(GetParentViewPtr() == nullptr)
                 return;
             
-            Core::CVector2 vParentSize(GetParentViewPtr()->GetAbsoluteSize());
-            Core::CVector2 vImageSize(GetSizeFromImage());
+            Core::Vector2 vParentSize(GetParentViewPtr()->GetAbsoluteSize());
+            Core::Vector2 vImageSize(GetSizeFromImage());
             
             f32 fParentRatio = (vParentSize.x * infRelWidth) / (vParentSize.y * infRelHeight);
             f32 fImageRatio = vImageSize.x / vImageSize.y;

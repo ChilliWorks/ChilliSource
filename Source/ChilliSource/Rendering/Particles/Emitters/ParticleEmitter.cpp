@@ -26,9 +26,9 @@ namespace ChilliSource
         ///
         /// @param Param Dictionary
         //-------------------------------------------------------------
-        CParticleEmitter::CParticleEmitter(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, CParticleComponent* inpComponent)
+        ParticleEmitter::ParticleEmitter(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent)
         : mudwMaxNumParticles(100), mudwMaxNumParticlesPerEmission(1), mfEmissionFreq(0.5f), mfCurrentTime(0.0f), mfLastEmissionTime(0.0f), mfTimeToLive(1.0f), mvInitialScale(1.0f, 1.0f), mbShouldLoop(true)
-        ,mfEnergyLoss(1.0f/mfTimeToLive), mpOwningComponent(inpComponent), mbIsEmitting(true), mudwNumUsed(0), mpMaterial(inpMaterial),msParticleUVs(Core::CVector2::ZERO, Core::CVector2(1.0f,1.0f))
+        ,mfEnergyLoss(1.0f/mfTimeToLive), mpOwningComponent(inpComponent), mbIsEmitting(true), mudwNumUsed(0), mpMaterial(inpMaterial),msParticleUVs(Core::Vector2::ZERO, Core::Vector2(1.0f,1.0f))
 		,mudwBurstCounter(0), mbIsEmittingFinished(false)
         ,mbIsGlobalSpace(true)
         {
@@ -88,10 +88,10 @@ namespace ChilliSource
             mudwMaxNumParticles = (std::ceil(mfTimeToLive/mfEmissionFreq) * mudwMaxNumParticlesPerEmission);
             
             // Allocate all the memory upfront
-			mParticles.vTranslation = new Core::CVector3[mudwMaxNumParticles];
-            mParticles.vScale = new Core::CVector3[mudwMaxNumParticles];
-            mParticles.vVelocity = new Core::CVector3[mudwMaxNumParticles];
-			mParticles.Col = new Core::CColour[mudwMaxNumParticles];
+			mParticles.vTranslation = new Core::Vector3[mudwMaxNumParticles];
+            mParticles.vScale = new Core::Vector3[mudwMaxNumParticles];
+            mParticles.vVelocity = new Core::Vector3[mudwMaxNumParticles];
+			mParticles.Col = new Core::Colour[mudwMaxNumParticles];
             mParticles.fEnergy = new f32[mudwMaxNumParticles];
             mParticles.fAngularRotation = new f32[mudwMaxNumParticles];
             
@@ -110,11 +110,11 @@ namespace ChilliSource
         ///
         /// @param Time between frames
         //-----------------------------------------------------
-        void CParticleEmitter::Update(f32 infDT)
+        void ParticleEmitter::Update(f32 infDT)
         {
             mfCurrentTime += infDT;
             
-            const Core::CVector3& vCurrentPos = mpOwningComponent->GetEntityOwner()->Transform().GetWorldPosition();
+            const Core::Vector3& vCurrentPos = mpOwningComponent->GetEntityOwner()->GetTransform().GetWorldPosition();
             const f32 kfTimeSinceLastEmission = mfCurrentTime - mfLastEmissionTime;
             u32 udwNumEmits = kfTimeSinceLastEmission/mfEmissionFreq;
             
@@ -144,17 +144,17 @@ namespace ChilliSource
                     bParticlesActive = true;
                     
                     f32 fLerpFactor = fEmissionStep/kfTimeSinceLastEmission;
-                    Core::CVector3 vPosition = Core::CMathUtils::Lerp(fLerpFactor, mvLastEmissionPos, vCurrentPos) - vCurrentPos;
+                    Core::Vector3 vPosition = Core::CMathUtils::Lerp(fLerpFactor, mvLastEmissionPos, vCurrentPos) - vCurrentPos;
                     fEmissionStep += mfEmissionFreq;
                     
-                    Core::CQuaternion qOrientation;
-                    Core::CVector3 vScale(Core::CVector3::ONE);
+                    Core::Quaternion qOrientation;
+                    Core::Vector3 vScale(Core::Vector3::ONE);
                     
                     if(mbIsGlobalSpace)
                     {
                         vPosition = vCurrentPos + vPosition;
-                        qOrientation = mpOwningComponent->GetEntityOwner()->Transform().GetWorldOrientation();
-                        vScale = mpOwningComponent->GetEntityOwner()->Transform().GetWorldScale();
+                        qOrientation = mpOwningComponent->GetEntityOwner()->GetTransform().GetWorldOrientation();
+                        vScale = mpOwningComponent->GetEntityOwner()->GetTransform().GetWorldScale();
                     }
                     
                     mParticles.fEnergy[i] = 1.0f;
@@ -172,7 +172,7 @@ namespace ChilliSource
                         mParticles.vVelocity[i] = qOrientation * mParticles.vVelocity[i];
                     }
                     
-                    for(std::vector<IParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
+                    for(std::vector<ParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
                     {
                         (*itEffector)->Init(&mParticles, i);
                     }
@@ -233,10 +233,10 @@ namespace ChilliSource
         /// @param Particle array index
         /// @param DT
         //-----------------------------------------------------
-        void CParticleEmitter::UpdateParticle(u32 inudwParticleIndex, f32 infDT)
+        void ParticleEmitter::UpdateParticle(u32 inudwParticleIndex, f32 infDT)
         {
             //Apply the effector to each particle
-            for(std::vector<IParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
+            for(std::vector<ParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
             {
                 if(mParticles.fEnergy[inudwParticleIndex] <= (*itEffector)->GetActiveEnergyLevel())
                 {
@@ -255,23 +255,23 @@ namespace ChilliSource
         ///
         /// @param Render system
         //-----------------------------------------------------
-        void CParticleEmitter::Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam)
+        void ParticleEmitter::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam)
         {
-            CSpriteComponent::SpriteData sData;
+            SpriteComponent::SpriteData sData;
             // Get world matrix
-            const Core::CMatrix4x4 & matTrans = mpOwningComponent->GetEntityOwner()->Transform().GetWorldTransform();
+            const Core::Matrix4x4 & matTrans = mpOwningComponent->GetEntityOwner()->GetTransform().GetWorldTransform();
             
             // Get quaternion to particle space
-            Core::CQuaternion qParticleRot = Core::CQuaternion(matTrans).Conjugate();
+            Core::Quaternion qParticleRot = Core::Quaternion(matTrans).Conjugate();
             
-            const Core::CMatrix4x4 & matCamWorld = inpCam->GetEntityOwner()->Transform().GetWorldTransform();
+            const Core::Matrix4x4 & matCamWorld = inpCam->GetEntityOwner()->GetTransform().GetWorldTransform();
             // Get cameras up and right vectors in particle space
             
-            Core::CVector3 vRight = matCamWorld.Right();
-            Core::CVector3 vUp = matCamWorld.Up();
-            Core::CVector3 vForward = matCamWorld.Forward();
+            Core::Vector3 vRight = matCamWorld.Right();
+            Core::Vector3 vUp = matCamWorld.Up();
+            Core::Vector3 vForward = matCamWorld.Forward();
             
-            const Core::CMatrix4x4 * pTransform = nullptr;
+            const Core::Matrix4x4 * pTransform = nullptr;
             if(mbIsGlobalSpace == false)
             {
                 pTransform = &matTrans;
@@ -285,7 +285,7 @@ namespace ChilliSource
                 if(mParticles.fEnergy[i] > 0.0f && mParticles.Col[i].a > 0.0f)
                 {
                     // Rotate per particle
-                    Core::CQuaternion qRot(vForward, mParticles.fAngularRotation[i]);
+                    Core::Quaternion qRot(vForward, mParticles.fAngularRotation[i]);
 
                     UpdateSpriteData(mParticles.vTranslation[i], mParticles.Col[i], sData, qRot * vRight, qRot * vUp, mParticles.vScale[i]);
                     
@@ -301,7 +301,7 @@ namespace ChilliSource
         ///
         /// Particle emitters will resume emitting
         //---------------------------------------------------
-        void CParticleEmitter::StartEmitting()
+        void ParticleEmitter::StartEmitting()
         {
             mbIsEmitting = true;
         }
@@ -310,7 +310,7 @@ namespace ChilliSource
         ///
         /// Particle emitters will emit particles once
         //---------------------------------------------------
-        void CParticleEmitter::EmitBurst()
+        void ParticleEmitter::EmitBurst()
         {
 			StartEmitting();
 			mudwBurstCounter++;
@@ -321,7 +321,7 @@ namespace ChilliSource
         /// No new particles will be emitted once the current
         /// ones die
         //---------------------------------------------------
-        void CParticleEmitter::StopEmitting()
+        void ParticleEmitter::StopEmitting()
         {
             mbIsEmitting = false;
         }
@@ -332,7 +332,7 @@ namespace ChilliSource
         ///
         /// @param Particle effector
         //-----------------------------------------------------
-        void CParticleEmitter::AddEffector(IParticleEffector* inpEffector)
+        void ParticleEmitter::AddEffector(ParticleEffector* inpEffector)
         {
             mEffectors.push_back(inpEffector);
         }
@@ -344,9 +344,9 @@ namespace ChilliSource
         ///
         /// @param Particle effector
         //-----------------------------------------------------
-        void CParticleEmitter::RemoveEffector(IParticleEffector* inpEffector)
+        void ParticleEmitter::RemoveEffector(ParticleEffector* inpEffector)
         {
-            for(std::vector<IParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
+            for(std::vector<ParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
             {
                 if(*itEffector == inpEffector)
                 {
@@ -364,7 +364,7 @@ namespace ChilliSource
         ///
         /// @param Velocity vector
         //-----------------------------------------------------
-        void CParticleEmitter::SetVelocity(f32 infVelocity)
+        void ParticleEmitter::SetVelocity(f32 infVelocity)
         {
             mfInitialVelocity = infVelocity;
         }
@@ -375,7 +375,7 @@ namespace ChilliSource
         ///
         /// @param Colour
         //-----------------------------------------------------
-        void CParticleEmitter::SetColour(const Core::CColour inColour)
+        void ParticleEmitter::SetColour(const Core::Colour inColour)
         {
             mInitialColour = inColour;
         }
@@ -388,7 +388,7 @@ namespace ChilliSource
         ///
         /// @param Number of particles
         //-----------------------------------------------------
-        void CParticleEmitter::SetNumParticlesPerEmission(u32 inudwNumParticles)
+        void ParticleEmitter::SetNumParticlesPerEmission(u32 inudwNumParticles)
         {
             mudwMaxNumParticlesPerEmission = inudwNumParticles;
         }
@@ -399,7 +399,7 @@ namespace ChilliSource
         ///
         /// @param Material ptr
         //-----------------------------------------------------
-        void CParticleEmitter::SetMaterial(const MaterialPtr& inpMaterial)
+        void ParticleEmitter::SetMaterial(const MaterialSPtr& inpMaterial)
         {
             mpMaterial = inpMaterial;
         }
@@ -411,14 +411,14 @@ namespace ChilliSource
         ///
         /// @param Frequency in seconds
         //-----------------------------------------------------
-        void CParticleEmitter::SetEmissionFrequency(f32 infFreq)
+        void ParticleEmitter::SetEmissionFrequency(f32 infFreq)
         {
             mfEmissionFreq = infFreq;
         }
 		//-------------------------------------------------
 		/// Sets the UVs used for a particle
 		//-------------------------------------------------
-		void CParticleEmitter::SetParticleUVs(const Core::Rectangle & insUVs)
+		void ParticleEmitter::SetParticleUVs(const Core::Rectangle & insUVs)
         {
 			msParticleUVs = insUVs;
 		}
@@ -429,7 +429,7 @@ namespace ChilliSource
         ///
         /// @param Lifetime in seconds
         //-----------------------------------------------------
-        void CParticleEmitter::SetLifetime(f32 infLifetime)
+        void ParticleEmitter::SetLifetime(f32 infLifetime)
         {
             mfTimeToLive = infLifetime;
             
@@ -449,7 +449,7 @@ namespace ChilliSource
         ///
         /// @param Toggle on/off
         //-----------------------------------------------------
-        void CParticleEmitter::SetLooping(bool inbLooping)
+        void ParticleEmitter::SetLooping(bool inbLooping)
         {
             mbShouldLoop = inbLooping;
         }
@@ -458,43 +458,43 @@ namespace ChilliSource
 		///
 		/// Rebuild the sprite data
 		//-----------------------------------------------------
-		void CParticleEmitter::UpdateSpriteData(const Core::CVector3& invPos, const Core::CColour & insTintColour, CSpriteComponent::SpriteData& outsData,
-                                                const Core::CVector3& invRight, const Core::CVector3& invUp, const Core::CVector3& invScale)
+		void ParticleEmitter::UpdateSpriteData(const Core::Vector3& invPos, const Core::Colour & insTintColour, SpriteComponent::SpriteData& outsData,
+                                                const Core::Vector3& invRight, const Core::Vector3& invUp, const Core::Vector3& invScale)
 		{
-			Core::CColour::ByteColour Col = Core::CColour::ColourToByteColour(insTintColour);
+			Core::Colour::ByteColour Col = Core::Colour::ColourToByteColour(insTintColour);
 			
-			outsData.sVerts[(u32)CSpriteComponent::Verts::k_topLeft].Col = Col;
-            outsData.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft].Col = Col;
-            outsData.sVerts[(u32)CSpriteComponent::Verts::k_topRight].Col = Col;
-            outsData.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight].Col = Col;
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].Col = Col;
+            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].Col = Col;
+            outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].Col = Col;
+            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].Col = Col;
 			
-			outsData.sVerts[(u32)CSpriteComponent::Verts::k_topLeft].vTex = msParticleUVs.TopLeft();
-			outsData.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft].vTex = msParticleUVs.BottomLeft();
-			outsData.sVerts[(u32)CSpriteComponent::Verts::k_topRight].vTex = msParticleUVs.TopRight();
-			outsData.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight].vTex = msParticleUVs.BottomRight();
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vTex = msParticleUVs.TopLeft();
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vTex = msParticleUVs.BottomLeft();
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].vTex = msParticleUVs.TopRight();
+			outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vTex = msParticleUVs.BottomRight();
 			
 			outsData.pMaterial = mpMaterial;
             outsData.pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
 			
-            Core::CVector3 vHalfRight = (0.5f * mvInitialScale.x * invScale.x) * invRight;
-            Core::CVector3 vHalfUp = (0.5f * mvInitialScale.y * invScale.y) * invUp;
+            Core::Vector3 vHalfRight = (0.5f * mvInitialScale.x * invScale.x) * invRight;
+            Core::Vector3 vHalfUp = (0.5f * mvInitialScale.y * invScale.y) * invUp;
             
-            Core::CVector4 vTemp(vHalfUp.x - vHalfRight.x, vHalfUp.y - vHalfRight.y, vHalfUp.z - vHalfRight.z, 1.0f);
-            outsData.sVerts[(u32)CSpriteComponent::Verts::k_topLeft].vPos = invPos + vTemp;
+            Core::Vector4 vTemp(vHalfUp.x - vHalfRight.x, vHalfUp.y - vHalfRight.y, vHalfUp.z - vHalfRight.z, 1.0f);
+            outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos = invPos + vTemp;
             
             vTemp.x = vHalfUp.x + vHalfRight.x; vTemp.y = vHalfUp.y + vHalfRight.y; vTemp.z = vHalfUp.z + vHalfRight.z;
-            outsData.sVerts[(u32)CSpriteComponent::Verts::k_topRight].vPos = invPos + vTemp;
+            outsData.sVerts[(u32)SpriteComponent::Verts::k_topRight].vPos = invPos + vTemp;
             
             vTemp.x = -vHalfUp.x - vHalfRight.x; vTemp.y = -vHalfUp.y - vHalfRight.y; vTemp.z = -vHalfUp.z - vHalfRight.z;
-            outsData.sVerts[(u32)CSpriteComponent::Verts::k_bottomLeft].vPos = invPos + vTemp;
+            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].vPos = invPos + vTemp;
             
             vTemp.x = -vHalfUp.x + vHalfRight.x; vTemp.y = -vHalfUp.y + vHalfRight.y; vTemp.z = -vHalfUp.z + vHalfRight.z;
-            outsData.sVerts[(u32)CSpriteComponent::Verts::k_bottomRight].vPos = invPos + vTemp;
+            outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomRight].vPos = invPos + vTemp;
 		}
         //-------------------------------------------------------
         /// Destructor
         //-------------------------------------------------------
-        CParticleEmitter::~CParticleEmitter()
+        ParticleEmitter::~ParticleEmitter()
         {
             delete[] mParticles.vTranslation;
             delete[] mParticles.vScale;

@@ -272,8 +272,8 @@ namespace ChilliSource
             CAESEncrypt::Encrypt(pudwDocBinary, udwEncryptedSize, kstrLocalDataStoreEncryptionKey, reinterpret_cast<u8*>(pdwDocEncrypted));
             
             // Write to disk
-            IFileSystem* pFileSystem = CApplication::GetFileSystemPtr();
-            FileStreamPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, kstrLocalDataStoreEncryptedFilename, FileMode::k_writeBinary);
+            FileSystem* pFileSystem = Application::GetFileSystemPtr();
+            FileStreamSPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, kstrLocalDataStoreEncryptedFilename, FileMode::k_writeBinary);
             if(pFileStream->IsOpen() && !pFileStream->IsBad())
             {
                 pFileStream->Write(pdwDocEncrypted, udwEncryptedSize);
@@ -296,10 +296,10 @@ namespace ChilliSource
         //----------------------------------------------------------------
 		void CLocalDataStore::RefreshFromFile()
         {
-            IFileSystem* pFileSystem = CApplication::GetFileSystemPtr();
+            FileSystem* pFileSystem = Application::GetFileSystemPtr();
             if(pFileSystem->DoesFileExist(StorageLocation::k_saveData, kstrLocalDataStoreEncryptedFilename))
             {
-                FileStreamPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, kstrLocalDataStoreEncryptedFilename, FileMode::k_read);
+                FileStreamSPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, kstrLocalDataStoreEncryptedFilename, FileMode::k_read);
                 if(pFileStream->IsOpen() && !pFileStream->IsBad())
                 {
                     std::string strEncryptedXML;

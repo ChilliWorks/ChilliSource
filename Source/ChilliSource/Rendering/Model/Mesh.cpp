@@ -22,64 +22,64 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(CMesh);
+        DEFINE_NAMED_INTERFACE(Mesh);
 		//--------------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------------
-		CMesh::CMesh() 
-		: mpRenderSystem(nullptr), mudwTotalVerts(0), mudwTotalIndices(0), mpSkeleton(new CSkeleton())
+		Mesh::Mesh() 
+		: mpRenderSystem(nullptr), mudwTotalVerts(0), mudwTotalIndices(0), mpSkeleton(new Skeleton())
 		{
 		}
 		//---------------------------------------------------------------------
 		/// Is A
 		//---------------------------------------------------------------------
-		bool CMesh::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool Mesh::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == CMesh::InterfaceID;
+			return inInterfaceID == Mesh::InterfaceID;
 		}
 		//-----------------------------------------------------------------
 		/// Get AABB
 		//-----------------------------------------------------------------
-		const Core::AABB& CMesh::GetAABB()
+		const Core::AABB& Mesh::GetAABB()
 		{
 			return mBoundingBox;
 		}
 		//-----------------------------------------------------------------
         /// Get Number of Vertices
         //-----------------------------------------------------------------
-        u32 CMesh::GetNumVerts()
+        u32 Mesh::GetNumVerts()
         {
             return mudwTotalVerts;
         }
         //-----------------------------------------------------------------
         /// Get Number of Indices
         //-----------------------------------------------------------------
-        u32 CMesh::GetNumIndices()
+        u32 Mesh::GetNumIndices()
         {
             return mudwTotalIndices;
         }
 		//-----------------------------------------------------------------
 		/// Get Skeleton
 		//-----------------------------------------------------------------
-		const SkeletonPtr& CMesh::GetSkeletonPtr() const
+		const SkeletonSPtr& Mesh::GetSkeletonPtr() const
 		{
 			return mpSkeleton;
 		}
 		//-----------------------------------------------------------------
 		/// Get Number of Sub Meshes
 		//-----------------------------------------------------------------
-		u32 CMesh::GetNumSubMeshes() const
+		u32 Mesh::GetNumSubMeshes() const
 		{
 			return mSubMeshes.size();
 		}
 		//-----------------------------------------------------------------
 		/// Get Sub-mesh at Index
 		//-----------------------------------------------------------------
-		SubMeshPtr CMesh::GetSubMeshAtIndex(u32 inIndex) const
+		SubMeshSPtr Mesh::GetSubMeshAtIndex(u32 inIndex) const
 		{
 			if(inIndex > mSubMeshes.size())
 			{
-				return SubMeshPtr();
+				return SubMeshSPtr();
 			}
 			
 			return mSubMeshes[inIndex];
@@ -87,23 +87,23 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Get Sub-mesh by Name
 		//-----------------------------------------------------------------
-		SubMeshPtr CMesh::GetSubMeshByName(const std::string& instrName) const
+		SubMeshSPtr Mesh::GetSubMeshByName(const std::string& instrName) const
 		{
-			for (std::vector<SubMeshPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for (std::vector<SubMeshSPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
 				if ((*it)->GetName() == instrName)
 					return (*it);
 			}
 			
-			return SubMeshPtr();
+			return SubMeshSPtr();
 		}
         //-----------------------------------------------------------------
 		/// Get Sub-mesh Index by Name
 		//-----------------------------------------------------------------
-		s32 CMesh::GetSubMeshIndexByName(const std::string& instrName) const
+		s32 Mesh::GetSubMeshIndexByName(const std::string& instrName) const
 		{
             u32 dwCount = 0;
-			for (std::vector<SubMeshPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for (std::vector<SubMeshSPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
 				if ((*it)->GetName() == instrName)
 					return dwCount;
@@ -115,20 +115,20 @@ namespace ChilliSource
         //-----------------------------------------------------------------
 		/// Create Sub Mesh
 		//-----------------------------------------------------------------
-		SubMeshPtr CMesh::CreateSubMesh(const std::string& instrName)
+		SubMeshSPtr Mesh::CreateSubMesh(const std::string& instrName)
 		{
-			SubMeshPtr newMesh(new CSubMesh(instrName));
+			SubMeshSPtr newMesh(new SubMesh(instrName));
 			mSubMeshes.push_back(newMesh);
 			return newMesh;
 		}
 		//-----------------------------------------------------------------
 		/// Remove Sub Mesh By Name
 		//-----------------------------------------------------------------
-		void CMesh::RemoveSubMeshByName(const std::string& instrName)
+		void Mesh::RemoveSubMeshByName(const std::string& instrName)
 		{
 			int index = -1;
 			int currentIndex = 0;
-			for (std::vector<SubMeshPtr>::iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for (std::vector<SubMeshSPtr>::iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
 				if ((*it)->GetName() == instrName)
 					index = currentIndex;
@@ -143,10 +143,10 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Set Bounds
 		//-----------------------------------------------------------------
-		void CMesh::SetBounds(const ChilliSource::Core::CVector3& invMinBounds, const ChilliSource::Core::CVector3& invMaxBounds)
+		void Mesh::SetBounds(const ChilliSource::Core::Vector3& invMinBounds, const ChilliSource::Core::Vector3& invMaxBounds)
 		{
 			//Calculate the size of this meshes bounding box
-			Core::CVector3 vSize = invMaxBounds - invMinBounds;
+			Core::Vector3 vSize = invMaxBounds - invMinBounds;
 			
 			//Build our bounding box based on the size of all our sub-meshes
 			mBoundingBox = Core::AABB((invMaxBounds + invMinBounds) * 0.5f, vSize);
@@ -154,21 +154,21 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Render
 		//-----------------------------------------------------------------
-		void CMesh::Render(IRenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const std::vector<MaterialPtr>& inMaterials, const SkinnedAnimationGroupPtr& inpAnimationGroup) const
+		void Mesh::Render(RenderSystem* inpRenderSystem, const Core::Matrix4x4 &inmatWorld, const std::vector<MaterialSPtr>& inMaterials, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const
 		{
             CS_ASSERT(inMaterials.size() > 0, "Must have at least one material to render");
 
-            std::vector<CSubMesh*> aOpaqueSubMeshes;
+            std::vector<SubMesh*> aOpaqueSubMeshes;
             aOpaqueSubMeshes.reserve(mSubMeshes.size());
             
-            std::vector<CSubMesh*> aTransparentSubMeshes;
+            std::vector<SubMesh*> aTransparentSubMeshes;
             aTransparentSubMeshes.reserve(mSubMeshes.size());
             
             //render all opaque stuff first
 			u32 udwCurrMaterial = 0;
-			for(std::vector<SubMeshPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for(std::vector<SubMeshSPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
-                const MaterialPtr& pMaterial = inMaterials[udwCurrMaterial];
+                const MaterialSPtr& pMaterial = inMaterials[udwCurrMaterial];
                 udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
                 
 				if (pMaterial->GetActiveShaderProgram() != nullptr)
@@ -186,9 +186,9 @@ namespace ChilliSource
             
 			//render all opaque stuff first
             udwCurrMaterial = 0;
-			for(std::vector<CSubMesh*>::const_iterator it = aOpaqueSubMeshes.begin(); it != aOpaqueSubMeshes.end(); ++it)
+			for(std::vector<SubMesh*>::const_iterator it = aOpaqueSubMeshes.begin(); it != aOpaqueSubMeshes.end(); ++it)
 			{
-                const MaterialPtr& pMaterial = inMaterials[udwCurrMaterial];
+                const MaterialSPtr& pMaterial = inMaterials[udwCurrMaterial];
                 udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
 					
 #ifdef DEBUG_STATS
@@ -199,9 +199,9 @@ namespace ChilliSource
 			
 			//then transparent stuff
 			udwCurrMaterial = 0;
-			for(std::vector<CSubMesh*>::const_iterator it = aTransparentSubMeshes.begin(); it != aTransparentSubMeshes.end(); ++it)
+			for(std::vector<SubMesh*>::const_iterator it = aTransparentSubMeshes.begin(); it != aTransparentSubMeshes.end(); ++it)
 			{
-                const MaterialPtr& pMaterial = inMaterials[udwCurrMaterial];
+                const MaterialSPtr& pMaterial = inMaterials[udwCurrMaterial];
                 udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
 				
 #ifdef DEBUG_STATS
@@ -213,12 +213,12 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Calc Vertex And Index Counts
 		//-----------------------------------------------------------------
-		void CMesh::CalcVertexAndIndexCounts()
+		void Mesh::CalcVertexAndIndexCounts()
 		{
 			mudwTotalVerts = 0;
 			mudwTotalIndices = 0;
 			
-			for(std::vector<SubMeshPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
+			for(std::vector<SubMeshSPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
 				mudwTotalVerts += (*it)->GetNumVerts();
 				mudwTotalIndices += (*it)->GetNumIndices();
@@ -227,7 +227,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Destructor
 		//-----------------------------------------------------------------
-		CMesh::~CMesh()
+		Mesh::~Mesh()
 		{
 			mSubMeshes.clear();
 		}

@@ -24,22 +24,22 @@ namespace ChilliSource
 		struct MeshBatchVertex
 		{
 			MeshBatchVertex(){}
-			MeshBatchVertex(const Core::CVector4 &invPos, const Core::CVector3 &invNorm, const Core::CVector2 &invTexCoord)
+			MeshBatchVertex(const Core::Vector4 &invPos, const Core::Vector3 &invNorm, const Core::Vector2 &invTexCoord)
 			: Pos(invPos), Norm(invNorm), Tex(invTexCoord)
             {
 				
             }
-			Core::CVector4 Pos;
-			Core::CVector3 Norm;
-			Core::CVector2 Tex;
+			Core::Vector4 Pos;
+			Core::Vector3 Norm;
+			Core::Vector2 Tex;
 		};
 		
 		
-		class CMeshBatch
+		class MeshBatch
 		{
 		public:
-			CMeshBatch();
-			~CMeshBatch();
+			MeshBatch();
+			~MeshBatch();
 			//------------------------------------------------------
 			/// Add Mesh
 			///
@@ -48,19 +48,19 @@ namespace ChilliSource
 			/// @param Static mesh component
 			/// @param Transform
 			//------------------------------------------------------
-			void AddMesh(const StaticMeshComponentPtr &inpSprite, const Core::CMatrix4x4& inmatTransform);
+			void AddMesh(const StaticMeshComponentSPtr &inpSprite, const Core::Matrix4x4& inmatTransform);
 			//------------------------------------------------------
 			/// Set Material
 			///
 			/// @param Material
 			//------------------------------------------------------
-			void SetMaterial(MaterialPtr inpMaterial);
+			void SetMaterial(MaterialSPtr inpMaterial);
 			//------------------------------------------------------
 			/// Get Material
 			///
 			/// @return Material
 			//------------------------------------------------------
-			const MaterialPtr& GetMaterial() const;
+			const MaterialSPtr& GetMaterial() const;
 			//------------------------------------------------------
 			/// Render
 			///
@@ -68,7 +68,7 @@ namespace ChilliSource
 			///
 			/// @param Active render system
 			//------------------------------------------------------
-			void Render(IRenderSystem* inpRenderSystem) const;
+			void Render(RenderSystem* inpRenderSystem) const;
 			//------------------------------------------------------
 			/// Get Tag
 			///
@@ -89,7 +89,7 @@ namespace ChilliSource
 			///
 			/// @param Render system
 			//------------------------------------------------------
-			void CreateStaticBuffer(IRenderSystem* inpRenderSystem);
+			void CreateStaticBuffer(RenderSystem* inpRenderSystem);
 			//------------------------------------------------------
 			/// Build
 			///
@@ -106,13 +106,13 @@ namespace ChilliSource
 			u32 mudwIndexCount;
 			
 			//The shared material
-			MaterialPtr mpMaterial;
+			MaterialSPtr mpMaterial;
 			
 			//---Render Buffer
-			IMeshBuffer* mpMeshBuffer;
+			MeshBuffer* mpMeshBuffer;
 			
 			//List of sprites in the batch
-			typedef std::unordered_map<StaticMeshComponentPtr, Core::CMatrix4x4> MapMeshToTransform;
+			typedef std::unordered_map<StaticMeshComponentSPtr, Core::Matrix4x4> MapMeshToTransform;
 			MapMeshToTransform mmapMeshCache;
 		};
 	}

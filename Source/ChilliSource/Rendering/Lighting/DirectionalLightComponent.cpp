@@ -16,12 +16,12 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(CDirectionalLightComponent);
+		DEFINE_NAMED_INTERFACE(DirectionalLightComponent);
         
         //----------------------------------------------------------
         /// Constructor
         //----------------------------------------------------------
-        CDirectionalLightComponent::CDirectionalLightComponent(const TexturePtr& inpShadowMapTarget, const TexturePtr& inpShadowMapDebugTarget)
+        DirectionalLightComponent::DirectionalLightComponent(const TextureSPtr& inpShadowMapTarget, const TextureSPtr& inpShadowMapDebugTarget)
         : mpShadowMap(inpShadowMapTarget)
         , mpShadowMapDebug(inpShadowMapDebugTarget)
         , mfShadowTolerance(0.0f)
@@ -31,31 +31,31 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CDirectionalLightComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool DirectionalLightComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == ILightComponent::InterfaceID || inInterfaceID == CDirectionalLightComponent::InterfaceID;
+			return inInterfaceID == LightComponent::InterfaceID || inInterfaceID == DirectionalLightComponent::InterfaceID;
 		}
         //----------------------------------------------------------
         /// Set Shadow Volume
         //----------------------------------------------------------
-        void CDirectionalLightComponent::SetShadowVolume(f32 infWidth, f32 infHeight, f32 infNear, f32 infFar)
+        void DirectionalLightComponent::SetShadowVolume(f32 infWidth, f32 infHeight, f32 infNear, f32 infFar)
         {
-            mmatProj = Core::CMatrix4x4::CreateOrthoMatrix(infWidth, infHeight, infNear, infFar);
+            mmatProj = Core::Matrix4x4::CreateOrthoMatrix(infWidth, infHeight, infNear, infFar);
             
             mbCacheValid = false;
         }
         //----------------------------------------------------------
         /// Get Direction
         //----------------------------------------------------------
-        const Core::CVector3& CDirectionalLightComponent::GetDirection() const
+        const Core::Vector3& DirectionalLightComponent::GetDirection() const
         {
             if(GetEntityOwner() != nullptr)
             {
-                mvDirection = GetEntityOwner()->Transform().GetWorldOrientation() * Core::CVector3::Z_UNIT_NEGATIVE;
+                mvDirection = GetEntityOwner()->GetTransform().GetWorldOrientation() * Core::Vector3::Z_UNIT_NEGATIVE;
             }
             else
             {
-                mvDirection = Core::CVector3::Z_UNIT_NEGATIVE;
+                mvDirection = Core::Vector3::Z_UNIT_NEGATIVE;
             }
             
             return mvDirection;
@@ -63,13 +63,13 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Light Matrix
         //----------------------------------------------------------
-        const Core::CMatrix4x4& CDirectionalLightComponent::GetLightMatrix() const
+        const Core::Matrix4x4& DirectionalLightComponent::GetLightMatrix() const
         {
             //The matrix is a view projection
             if(mbMatrixCacheValid == false && GetEntityOwner() != nullptr)
             {
-                Core::CMatrix4x4 matView = GetEntityOwner()->Transform().GetWorldTransform().Inverse();
-                Core::CMatrix4x4::Multiply(&matView, &mmatProj, &mmatLight);
+                Core::Matrix4x4 matView = GetEntityOwner()->GetTransform().GetWorldTransform().Inverse();
+                Core::Matrix4x4::Multiply(&matView, &mmatProj, &mmatLight);
                 mbMatrixCacheValid = true;
             }
             
@@ -78,14 +78,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Shadow Tolerance
         //----------------------------------------------------------
-        f32 CDirectionalLightComponent::GetShadowTolerance() const
+        f32 DirectionalLightComponent::GetShadowTolerance() const
         {
             return mfShadowTolerance;
         }
         //----------------------------------------------------------
         /// Set Shadow Tolerance
         //----------------------------------------------------------
-        void CDirectionalLightComponent::SetShadowTolerance(f32 infTolerance)
+        void DirectionalLightComponent::SetShadowTolerance(f32 infTolerance)
         {
             mfShadowTolerance = infTolerance;
             
@@ -94,35 +94,35 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Shadow Map Ptr
         //----------------------------------------------------------
-        const TexturePtr& CDirectionalLightComponent::GetShadowMapPtr() const
+        const TextureSPtr& DirectionalLightComponent::GetShadowMapPtr() const
         {
             return mpShadowMap;
         }
         //----------------------------------------------------------
         /// Get Shadow Map Debug Ptr
         //----------------------------------------------------------
-        const TexturePtr& CDirectionalLightComponent::GetShadowMapDebugPtr() const
+        const TextureSPtr& DirectionalLightComponent::GetShadowMapDebugPtr() const
         {
             return mpShadowMapDebug;
         }
         //----------------------------------------------------
         /// On Attached To Entity
         //----------------------------------------------------
-        void CDirectionalLightComponent::OnAttachedToEntity()
+        void DirectionalLightComponent::OnAttachedToEntity()
         {
-            GetEntityOwner()->Transform().GetTransformChangedEvent().AddListener(Core::MakeDelegate(this, &CDirectionalLightComponent::OnEntityTransformChanged));
+            GetEntityOwner()->GetTransform().GetTransformChangedEvent().AddListener(Core::MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged));
         }
         //----------------------------------------------------
         /// On Detached From Entity
         //----------------------------------------------------
-        void CDirectionalLightComponent::OnDetachedFromEntity()
+        void DirectionalLightComponent::OnDetachedFromEntity()
         {
-            GetEntityOwner()->Transform().GetTransformChangedEvent().RemoveListener(Core::MakeDelegate(this, &CDirectionalLightComponent::OnEntityTransformChanged));
+            GetEntityOwner()->GetTransform().GetTransformChangedEvent().RemoveListener(Core::MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged));
         }
         //----------------------------------------------------
         /// On Entity Transform Changed
         //----------------------------------------------------
-        void CDirectionalLightComponent::OnEntityTransformChanged()
+        void DirectionalLightComponent::OnEntityTransformChanged()
         {
             mbMatrixCacheValid = false;
             mbCacheValid = false;

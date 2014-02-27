@@ -18,11 +18,11 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CXMLSpriteSheetLoader : public Core::IResourceProvider
+		class XMLSpriteSheetLoader : public Core::ResourceProvider
 		{
 		public:
-			CXMLSpriteSheetLoader();
-			virtual ~CXMLSpriteSheetLoader();
+			XMLSpriteSheetLoader();
+			virtual ~XMLSpriteSheetLoader();
 			
 			//-------------------------------------------------------------------------
 			/// Is A
@@ -57,7 +57,7 @@ namespace ChilliSource
 			/// @param Out: Resource object
 			/// @return Whether the resource loaded
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource) override;
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource) override;
 		};
 	}
 }

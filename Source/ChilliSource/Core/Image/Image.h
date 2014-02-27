@@ -25,10 +25,10 @@ namespace ChilliSource
             k_ETC1
 		};
 		
-		class CImage : public IResource
+		class Image : public Resource
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CImage);
+			DECLARE_NAMED_INTERFACE(Image);
 			enum class Format
 			{
 				k_RGBA4444,
@@ -42,9 +42,9 @@ namespace ChilliSource
                 k_default
 			};
 			
-			///@param inpData - The passed pointer becomes owned by the CImage and should have been allocated using malloc
-			CImage();
-			~CImage();
+			///@param inpData - The passed pointer becomes owned by the Image and should have been allocated using malloc
+			Image();
+			~Image();
 		
             //----------------------------------------------------------------
             /// Get Format BPP

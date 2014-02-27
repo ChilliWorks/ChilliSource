@@ -24,14 +24,14 @@ namespace ChilliSource
 	namespace Rendering
 	{
 		//-------------------------------------------------------------------------
-		/// CMoModelLoader class.
-		/// Loads mo model files into a CMesh resource.
+		/// MoModelLoader class.
+		/// Loads mo model files into a Mesh resource.
 		//-------------------------------------------------------------------------
-		class CMoModelLoader : public Core::IResourceProvider
+		class MoModelLoader : public Core::ResourceProvider
 		{
 		public:
-			CMoModelLoader(Core::CApplication* inpApp);
-			virtual ~CMoModelLoader();
+			MoModelLoader(Core::Application* inpApp);
+			virtual ~MoModelLoader();
 			
 			//-------------------------------------------------------------------------
 			/// Is A
@@ -57,8 +57,8 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------
 			/// Populate Existing Mesh From File
 			///
-			/// Fills an existing CMesh with data from a file. This will overwrite any
-			/// Previous data in the CMesh. The sub meshes in the mesh must already have been
+			/// Fills an existing Mesh with data from a file. This will overwrite any
+			/// Previous data in the Mesh. The sub meshes in the mesh must already have been
 			/// initialised and must be big enough to fit the new data. If they are too small,
 			/// an error will be thrown and the output mesh will be empty.
 			///
@@ -67,12 +67,12 @@ namespace ChilliSource
 			/// @param Filename
 			/// @param The path to this files materials. Assumed to be the same directory as the file if left blank.
 			//----------------------------------------------------------------------------
-			void PopulateExistingMeshFromFile(const MeshPtr& inpMesh, Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath = "");
+			void PopulateExistingMeshFromFile(const MeshSPtr& inpMesh, Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath = "");
 			//----------------------------------------------------------------------------
 			/// Async Populate Existing Mesh From File
 			///
-			/// Fills an existing CMesh with data from a file. This will overwrite any
-			/// Previous data in the CMesh. The sub meshes in the mesh must already have been
+			/// Fills an existing Mesh with data from a file. This will overwrite any
+			/// Previous data in the Mesh. The sub meshes in the mesh must already have been
 			/// initialised and must be big enough to fit the new data. If they are too small,
 			/// an error will be thrown and the output mesh will be empty. This is all handled
 			/// in the background, asynchonously.
@@ -82,7 +82,7 @@ namespace ChilliSource
 			/// @param Filename
 			/// @param The path to this files materials. Assumed to be the same directory as the file if left blank.
 			//----------------------------------------------------------------------------
-			void AsyncPopulateExistingMeshFromFile(const MeshPtr& inpMesh, Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath = "");
+			void AsyncPopulateExistingMeshFromFile(const MeshSPtr& inpMesh, Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& inMaterialPath = "");
 		private:
             //----------------------------------------------------------------------------
             /// Mesh Data Quantities
@@ -103,7 +103,7 @@ namespace ChilliSource
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource) override;
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource) override;
 			//----------------------------------------------------------------------------
 			/// Async Create Resource From File
 			///
@@ -112,7 +112,7 @@ namespace ChilliSource
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource) override;
+			bool AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource) override;
 			//----------------------------------------------------------------------------
 			/// Create Mesh From File
 			///
@@ -122,7 +122,7 @@ namespace ChilliSource
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool CreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource);
+			bool CreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Async Create Mesh From File
 			///
@@ -132,7 +132,7 @@ namespace ChilliSource
 			/// @param the output resource pointer
 			/// @return whether or not this was successful
 			//----------------------------------------------------------------------------
-			bool AsyncCreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource);
+			bool AsyncCreateMeshFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// LoadMeshDataTask
 			///
@@ -141,14 +141,14 @@ namespace ChilliSource
 			/// @param The path to this files materials. Assumed to be the same directory as the file if left blank.
 			/// @param the output resource pointer
 			//----------------------------------------------------------------------------
-			void LoadMeshDataTask(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshPtr& outpResource);
+			void LoadMeshDataTask(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, const std::string& instrMaterialPath, const MeshSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Build Mesh Task
 			///
 			/// @param the mesh declaration
 			/// @param the output resource pointer
 			//----------------------------------------------------------------------------
-			void BuildMeshTask(MeshDescriptor& inMeshDescriptor, const MeshPtr& outpResource);
+			void BuildMeshTask(MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// LoadDataForExistingMeshTask
 			///
@@ -157,14 +157,14 @@ namespace ChilliSource
 			/// @param The path to this files materials. Assumed to be the same directory as the file if left blank.
 			/// @param the output resource pointer
 			//----------------------------------------------------------------------------
-			void LoadDataForExistingMeshTask(Core::StorageLocation ineStorageLocation, const std::string &inFilePath,  const std::string& instrMaterialPath, const MeshPtr& outpResource);
+			void LoadDataForExistingMeshTask(Core::StorageLocation ineStorageLocation, const std::string &inFilePath,  const std::string& instrMaterialPath, const MeshSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Build Existing Mesh Task
 			///
 			/// @param the mesh declaration
 			/// @param the output resource pointer
 			//----------------------------------------------------------------------------
-			void BuildExistingMeshTask(MeshDescriptor& inMeshDescriptor, const MeshPtr& outpResource);
+			void BuildExistingMeshTask(MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// BuildMesh
 			///
@@ -175,7 +175,7 @@ namespace ChilliSource
 			/// @param whether or not the mesh needs prepared. Defaults to true.
 			/// @return success or failure.
 			//----------------------------------------------------------------------------
-			bool BuildMesh(MeshDescriptor& inMeshDescriptor, const MeshPtr& outpResource, bool inbNeedsPrepared = true);
+			bool BuildMesh(MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource, bool inbNeedsPrepared = true);
 			//----------------------------------------------------------------------------
 			/// Read File
 			///
@@ -199,7 +199,7 @@ namespace ChilliSource
             /// @param OUT: A struct containing info on the number of meshes, nodes and joints.
 			/// @return Whether the file is correct
 			//-----------------------------------------------------------------------------
-			bool ReadGlobalHeader(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, const std::string &inFilePath, MeshDataQuantities& outMeshDataQuantities);
+			bool ReadGlobalHeader(const ChilliSource::Core::FileStreamSPtr& inpStream, MeshDescriptor& inMeshDescriptor, const std::string &inFilePath, MeshDataQuantities& outMeshDataQuantities);
 			//-----------------------------------------------------------------------------
 			/// Read Skeleton
 			///
@@ -209,7 +209,7 @@ namespace ChilliSource
 			/// @param the output MoModel Declaration
 			/// @return Whether the file is correct
 			//-----------------------------------------------------------------------------
-			bool ReadSkeletonData(const ChilliSource::Core::FileStreamPtr& inpStream, const MeshDataQuantities& inQuantities, MeshDescriptor& inMeshDescriptor);
+			bool ReadSkeletonData(const ChilliSource::Core::FileStreamSPtr& inpStream, const MeshDataQuantities& inQuantities, MeshDescriptor& inMeshDescriptor);
 			//-----------------------------------------------------------------------------
 			/// Read Mesh Header
 			///
@@ -219,7 +219,7 @@ namespace ChilliSource
 			/// @param the output MoModel Declaration
 			/// @return Whether the file is correct
 			//-----------------------------------------------------------------------------
-			bool ReadMeshHeader(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, SubMeshDescriptor& outSubMeshDescriptor,
+			bool ReadMeshHeader(const ChilliSource::Core::FileStreamSPtr& inpStream, MeshDescriptor& inMeshDescriptor, SubMeshDescriptor& outSubMeshDescriptor,
 								const std::string& instrMaterialPath);
 			//-----------------------------------------------------------------------------
 			/// Read Mesh Data
@@ -230,7 +230,7 @@ namespace ChilliSource
 			/// @param the output MoModel Declaration
 			/// @return Whether the file is correct
 			//-----------------------------------------------------------------------------
-			bool ReadMeshData(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, SubMeshDescriptor& outSubMeshDescriptor);
+			bool ReadMeshData(const ChilliSource::Core::FileStreamSPtr& inpStream, MeshDescriptor& inMeshDescriptor, SubMeshDescriptor& outSubMeshDescriptor);
 			//-----------------------------------------------------------------------------
 			/// Read Vertex Declaration
 			///
@@ -240,7 +240,7 @@ namespace ChilliSource
 			/// @param File stream
 			/// @param MoModel declaration
 			//-----------------------------------------------------------------------------
-			void ReadVertexDeclaration(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor);
+			void ReadVertexDeclaration(const ChilliSource::Core::FileStreamSPtr& inpStream, MeshDescriptor& inMeshDescriptor);
 			//----------------------------------------------------------------------------
 			/// Read Value (Templated)
 			///
@@ -248,7 +248,7 @@ namespace ChilliSource
 			/// @param File stream
 			/// @return Value of type T
 			//----------------------------------------------------------------------------
-			template <typename T> T ReadValue(const ChilliSource::Core::FileStreamPtr& inpFileStream)
+			template <typename T> T ReadValue(const ChilliSource::Core::FileStreamSPtr& inpFileStream)
 			{
 				T Value;
 				inpFileStream->Read(reinterpret_cast<s8*>(&Value), sizeof(T));
@@ -256,8 +256,8 @@ namespace ChilliSource
 			}
 		private:	
 			
-			Core::CApplication* mpApp;
-			friend class CMeshManager;
+			Core::Application* mpApp;
+			friend class MeshManager;
 		};
 	}
 }

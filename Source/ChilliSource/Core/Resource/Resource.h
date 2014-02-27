@@ -22,13 +22,13 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		class IResourceManager;
+		class ResourceManager;
 	
-		class IResource : public IQueryableInterface
+		class Resource : public QueryableInterface
 		{
 		public:
-			IResource();
-			virtual ~IResource(){}
+			Resource();
+			virtual ~Resource(){}
 			
 			//-------------------------------------------------------
 			/// Get Name
@@ -47,13 +47,13 @@ namespace ChilliSource
 			///
 			/// @param The resource manager who has ownership of us
 			//-------------------------------------------------------
-			void SetOwningResourceManager(IResourceManager* inpResMgr);
+			void SetOwningResourceManager(ResourceManager* inpResMgr);
 			//-------------------------------------------------------
 			/// Get Owning Resource Manager
 			///
 			/// @return The resource manager who has ownership of us
 			//-------------------------------------------------------
-			IResourceManager* GetOwningResourceManager();
+			ResourceManager* GetOwningResourceManager();
 			//-------------------------------------------------------
 			/// Is Loaded
 			///
@@ -112,7 +112,7 @@ namespace ChilliSource
 			bool mbIsHighRes;
 			bool mbIsLoaded;
 			
-			IResourceManager* mpOwningResMgr;
+			ResourceManager* mpOwningResMgr;
 
 			std::shared_ptr<std::condition_variable> mpCondition;
 			std::shared_ptr<std::mutex> mpMutex;

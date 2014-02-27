@@ -24,7 +24,7 @@ namespace ChilliSource
         /// on the running device. This cannot be used until
         /// Init() is called on the render system.
         //========================================================
-        class CRenderCapabilities : public Rendering::IRenderCapabilities
+        class CRenderCapabilities : public Rendering::RenderCapabilities
         {
         public:
             DECLARE_NAMED_INTERFACE(CRenderCapabilities);

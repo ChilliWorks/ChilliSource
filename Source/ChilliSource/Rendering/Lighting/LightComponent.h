@@ -19,33 +19,33 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class ILightComponent : public Core::IComponent
+		class LightComponent : public Core::Component
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(ILightComponent);
+			DECLARE_NAMED_INTERFACE(LightComponent);
             
             //----------------------------------------------------------
             /// Constructor
             //----------------------------------------------------------
-			ILightComponent();
+			LightComponent();
             //----------------------------------------------------------
 			/// Set Colour
 			///
 			/// @param Colour of the light
 			//----------------------------------------------------------
-			void SetColour(const Core::CColour &inColour);
+			void SetColour(const Core::Colour &inColour);
             //----------------------------------------------------------
 			/// Get Colour
 			///
 			/// @return Colour of the light with intensity applied
 			//----------------------------------------------------------
-            const Core::CColour& GetColour() const;
+            const Core::Colour& GetColour() const;
             //----------------------------------------------------------
 			/// Get World Position
 			///
 			/// @return Position in world space
 			//----------------------------------------------------------
-			const Core::CVector3& GetWorldPosition() const;
+			const Core::Vector3& GetWorldPosition() const;
             //----------------------------------------------------------
 			/// Set Intensity
 			///
@@ -63,7 +63,7 @@ namespace ChilliSource
             ///
             /// @return Matrix to transform into light space
             //----------------------------------------------------------
-            virtual const Core::CMatrix4x4& GetLightMatrix() const = 0;
+            virtual const Core::Matrix4x4& GetLightMatrix() const = 0;
             //----------------------------------------------------------
             /// Is Cache Valid
             ///
@@ -88,10 +88,10 @@ namespace ChilliSource
             
         protected:
             
-            mutable Core::CMatrix4x4 mmatLight;
+            mutable Core::Matrix4x4 mmatLight;
             
-            Core::CColour mColour;
-            mutable Core::CColour mIntenseColour;
+            Core::Colour mColour;
+            mutable Core::Colour mIntenseColour;
             
             f32 mfIntensity;
             

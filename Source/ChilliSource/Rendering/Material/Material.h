@@ -24,12 +24,12 @@ namespace ChilliSource
 	namespace Rendering
 	{
 		typedef std::unordered_map<std::string, f32> MapStringToFloat;
-		typedef std::unordered_map<std::string, Core::CVector2> MapStringToVec2;
-		typedef std::unordered_map<std::string, Core::CVector3> MapStringToVec3;
-		typedef std::unordered_map<std::string, Core::CVector4> MapStringToVec4;
-		typedef std::unordered_map<std::string, Core::CMatrix4x4> MapStringToMat4;
-		typedef std::unordered_map<std::string, std::vector<Core::CMatrix4x4> > MapStringToMat4Array;
-		typedef std::unordered_map<std::string, Core::CColour> MapStringToCol;
+		typedef std::unordered_map<std::string, Core::Vector2> MapStringToVec2;
+		typedef std::unordered_map<std::string, Core::Vector3> MapStringToVec3;
+		typedef std::unordered_map<std::string, Core::Vector4> MapStringToVec4;
+		typedef std::unordered_map<std::string, Core::Matrix4x4> MapStringToMat4;
+		typedef std::unordered_map<std::string, std::vector<Core::Matrix4x4> > MapStringToMat4Array;
+		typedef std::unordered_map<std::string, Core::Colour> MapStringToCol;
         
         //============================================
 		/// Alpha Blend
@@ -78,12 +78,12 @@ namespace ChilliSource
             k_total
         };
 		
-		class CMaterial : public Core::IResource
+		class Material : public Core::Resource
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CMaterial);
+			DECLARE_NAMED_INTERFACE(Material);
 		
-            CMaterial();
+            Material();
 			
 			//----------------------------------------------------------
 			/// Clone
@@ -92,7 +92,7 @@ namespace ChilliSource
 			///
 			/// @return Cloned instance
 			//----------------------------------------------------------
-			MaterialPtr Clone() const;
+			MaterialSPtr Clone() const;
 			//----------------------------------------------------------
 			/// Is A
 			///
@@ -112,13 +112,13 @@ namespace ChilliSource
 			///
 			/// @return Shader resource for rendering with 
 			//----------------------------------------------------------
-			const ShaderPtr& GetActiveShaderProgram() const;
+			const ShaderSPtr& GetActiveShaderProgram() const;
             //----------------------------------------------------------
 			/// Set Shader Program
 			///
 			/// @param Shader resource
 			//----------------------------------------------------------
-			void SetShaderProgram(ShaderPass inePass, const ShaderPtr &inpShaderProgram);
+			void SetShaderProgram(ShaderPass inePass, const ShaderSPtr &inpShaderProgram);
             //----------------------------------------------------------
 			/// Clear Textures
 			//----------------------------------------------------------
@@ -129,38 +129,38 @@ namespace ChilliSource
 			/// @param Texture 
 			/// @param At index
 			//----------------------------------------------------------
-			void SetTexture(const TexturePtr &inpTexture, u32 inudwIndex = 0);
+			void SetTexture(const TextureSPtr &inpTexture, u32 inudwIndex = 0);
 			//----------------------------------------------------------
 			/// Add Texture
 			///
 			/// @param Texture 
 			//----------------------------------------------------------
-			void AddTexture(const TexturePtr &inpTexture);
+			void AddTexture(const TextureSPtr &inpTexture);
 			//----------------------------------------------------------
 			/// Get Texture
 			///
 			/// @param Index to check
 			/// @return Texture 
 			//----------------------------------------------------------
-			const TexturePtr& GetTexture(u32 inudwIndex = 0) const;
+			const TextureSPtr& GetTexture(u32 inudwIndex = 0) const;
 			//----------------------------------------------------------
 			/// Get Textures
 			///
 			/// @return Texture array
 			//----------------------------------------------------------
-			const std::vector<TexturePtr>& GetTextures() const;
+			const std::vector<TextureSPtr>& GetTextures() const;
             //----------------------------------------------------------
 			/// Set Cubemap
 			///
 			/// @param Cubemap
 			//----------------------------------------------------------
-			void SetCubemap(const CubemapPtr &inpCubemap);
+			void SetCubemap(const CubemapSPtr &inpCubemap);
 			//----------------------------------------------------------
 			/// Get Cubemap
 			///
 			/// @return Cubemap
 			//----------------------------------------------------------
-			const CubemapPtr& GetCubemap() const;
+			const CubemapSPtr& GetCubemap() const;
 			//----------------------------------------------------------
 			/// Is Transparent
 			///
@@ -239,19 +239,19 @@ namespace ChilliSource
             /// @param Position of lower left corner
             /// @param Dimensions
             //----------------------------------------------------------
-            void SetScissoringRegion(const Core::CVector2& invPosition, const Core::CVector2& invSize);
+            void SetScissoringRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize);
             //----------------------------------------------------------
             /// Get Scissoring Region Position
             ///
             /// @return Position of lower left corner
             //----------------------------------------------------------
-            const Core::CVector2& GetScissoringRegionPosition() const;
+            const Core::Vector2& GetScissoringRegionPosition() const;
             //----------------------------------------------------------
             /// Get Scissoring Region Size
             ///
             /// @return Dimensions
             //----------------------------------------------------------
-            const Core::CVector2& GetScissoringRegionSize() const;
+            const Core::Vector2& GetScissoringRegionSize() const;
 			//----------------------------------------------------------
 			/// Set Blend Function
 			///
@@ -291,28 +291,28 @@ namespace ChilliSource
 			/// Set the emissive colour
 			/// @param emissive colour
 			//----------------------------------------------------------
-			void SetEmissive(const Core::CColour& inEmissive);
+			void SetEmissive(const Core::Colour& inEmissive);
 			//----------------------------------------------------------
 			/// Get Emissive
 			///
 			/// Get the emissive colour of the material
 			/// @return Ambient light colour
 			//----------------------------------------------------------
-			const Core::CColour& GetEmissive() const;
+			const Core::Colour& GetEmissive() const;
             //----------------------------------------------------------
 			/// Set Ambient
 			///
 			/// Set the default colour of the material
 			/// @param Ambient light colour
 			//----------------------------------------------------------
-			void SetAmbient(const Core::CColour& inAmbient);
+			void SetAmbient(const Core::Colour& inAmbient);
 			//----------------------------------------------------------
 			/// Get Ambient
 			///
 			/// Get the default colour of the material
 			/// @return Ambient light colour
 			//----------------------------------------------------------
-			const Core::CColour& GetAmbient() const;
+			const Core::Colour& GetAmbient() const;
 			//----------------------------------------------------------
 			/// Set Diffuse
 			///
@@ -320,28 +320,28 @@ namespace ChilliSource
 			/// by light position
 			/// @param Diffuse light colour
 			//----------------------------------------------------------
-			void SetDiffuse(const Core::CColour& inDiffuse);
+			void SetDiffuse(const Core::Colour& inDiffuse);
 			//----------------------------------------------------------
 			/// Get Diffuse
 			///
 			/// Get the diffuse colour of the material
 			/// @return Diffuse light colour
 			//----------------------------------------------------------
-			const Core::CColour& GetDiffuse() const;
+			const Core::Colour& GetDiffuse() const;
 			//----------------------------------------------------------
 			/// Set Specular
 			///
 			/// Set the specular colour of the material highlight
 			/// @param Specular light colour
 			//----------------------------------------------------------
-			void SetSpecular(const Core::CColour& inSpecular);
+			void SetSpecular(const Core::Colour& inSpecular);
 			//----------------------------------------------------------
 			/// Get Specular
 			///
 			/// Get the specular colour of the material
 			/// @return Specular light colour
 			//----------------------------------------------------------
-			const Core::CColour& GetSpecular() const;
+			const Core::Colour& GetSpecular() const;
 			//-----------------------------------------------------------
 			/// Set Shader Float Value
 			///
@@ -359,7 +359,7 @@ namespace ChilliSource
 			/// @param Variable name
 			/// @param Vector2 data
 			//-----------------------------------------------------------
-			void SetShaderVec2Value(const std::string& instrVarName, const Core::CVector2 &invValue);
+			void SetShaderVec2Value(const std::string& instrVarName, const Core::Vector2 &invValue);
 			//-----------------------------------------------------------
 			/// Set Shader Vec3 Value
 			///
@@ -368,7 +368,7 @@ namespace ChilliSource
 			/// @param Variable name
 			/// @param Vector3 data
 			//-----------------------------------------------------------
-			void SetShaderVec3Value(const std::string& instrVarName, const Core::CVector3 &invValue);
+			void SetShaderVec3Value(const std::string& instrVarName, const Core::Vector3 &invValue);
 			//-----------------------------------------------------------
 			/// Set Shader Vec4 Value
 			///
@@ -377,7 +377,7 @@ namespace ChilliSource
 			/// @param Variable name
 			/// @param Vector4 data
 			//-----------------------------------------------------------
-			void SetShaderVec4Value(const std::string& instrVarName, const Core::CVector4 &invValue);
+			void SetShaderVec4Value(const std::string& instrVarName, const Core::Vector4 &invValue);
 			//-----------------------------------------------------------
 			/// Set Shader Matrix Value
 			///
@@ -386,7 +386,7 @@ namespace ChilliSource
 			/// @param Variable name
 			/// @param Matrix data
 			//-----------------------------------------------------------
-			void SetShaderMatrixValue(const std::string& instrVarName, const Core::CMatrix4x4 &inmatValue);
+			void SetShaderMatrixValue(const std::string& instrVarName, const Core::Matrix4x4 &inmatValue);
 			//-----------------------------------------------------------
 			/// Set Shader Matrix Array Value
 			///
@@ -395,7 +395,7 @@ namespace ChilliSource
 			/// @param Variable name
 			/// @param Matrix data
 			//-----------------------------------------------------------
-			void SetShaderMatrixArrayValue(const std::string& instrVarName, const std::vector<Core::CMatrix4x4>& inmatValue);
+			void SetShaderMatrixArrayValue(const std::string& instrVarName, const std::vector<Core::Matrix4x4>& inmatValue);
 			//-----------------------------------------------------------
 			/// Set Shader Colour Value
 			///
@@ -404,7 +404,7 @@ namespace ChilliSource
 			/// @param Variable name
 			/// @param Colour data
 			//-----------------------------------------------------------
-			void SetShaderColourValue(const std::string& instrVarName, const Core::CColour &incolValue);
+			void SetShaderColourValue(const std::string& instrVarName, const Core::Colour &incolValue);
             //----------------------------------------------------------
             /// Is Cache Valid
             ///
@@ -435,20 +435,20 @@ namespace ChilliSource
 
 		private:
             
-            std::vector<TexturePtr> mTextures;
+            std::vector<TextureSPtr> mTextures;
             
-            CubemapPtr mpCubemap;
+            CubemapSPtr mpCubemap;
             
-            ShaderPtr maShaderPrograms[(u32)ShaderPass::k_total];
-            ShaderPtr mpActiveShaderProgram;
+            ShaderSPtr maShaderPrograms[(u32)ShaderPass::k_total];
+            ShaderSPtr mpActiveShaderProgram;
 			
-			Core::CColour mEmissive;
-            Core::CColour mAmbient;
-			Core::CColour mDiffuse;
-			Core::CColour mSpecular;
+			Core::Colour mEmissive;
+            Core::Colour mAmbient;
+			Core::Colour mDiffuse;
+			Core::Colour mSpecular;
             
-            Core::CVector2 mvScissorPos;
-            Core::CVector2 mvScissorSize;
+            Core::Vector2 mvScissorPos;
+            Core::Vector2 mvScissorSize;
 			
 			AlphaBlend mSrcBlendFunc;
 			AlphaBlend mDstBlendFunc;
@@ -464,8 +464,8 @@ namespace ChilliSource
 			bool mbIsDepthTestEnabled;
             bool mbIsCullingEnabled;
             
-            friend class IMaterialManager;
-			friend class CMaterialLoader;
+            friend class MaterialManager;
+			friend class MaterialLoader;
 		};
 	}
 }

@@ -18,12 +18,12 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(CPointLightComponent);
+        DEFINE_NAMED_INTERFACE(PointLightComponent);
 
 		//----------------------------------------------------------
 		/// Constructor
         //----------------------------------------------------------
-		CPointLightComponent::CPointLightComponent()
+		PointLightComponent::PointLightComponent()
             : mbMatrixCacheValid(false), mfRadius(1.0f), mfMinLightInfluence(0.05f), mfRangeOfInfluence(0.0f), mfConstantAttenuation(0.0f), mfLinearAttenuation(0.0f), mfQuadraticAttenuation(0.0f)
 		{
             SetRadius(mfRadius);
@@ -32,14 +32,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CPointLightComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool PointLightComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == ILightComponent::InterfaceID || inInterfaceID == CPointLightComponent::InterfaceID;
+			return inInterfaceID == LightComponent::InterfaceID || inInterfaceID == PointLightComponent::InterfaceID;
 		}
         //----------------------------------------------------------
         /// Set Radius
         //----------------------------------------------------------
-        void CPointLightComponent::SetRadius(f32 infRadius)
+        void PointLightComponent::SetRadius(f32 infRadius)
         {
             mfRadius = infRadius;
             mbCacheValid = false;
@@ -47,7 +47,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Min Light Influence
         //----------------------------------------------------------
-        void CPointLightComponent::SetMinLightInfluence(f32 infMinLightInfluence)
+        void PointLightComponent::SetMinLightInfluence(f32 infMinLightInfluence)
         {
             mfMinLightInfluence = infMinLightInfluence;
             mbCacheValid = false;
@@ -55,55 +55,55 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Radius
         //----------------------------------------------------------
-        f32 CPointLightComponent::GetRadius() const
+        f32 PointLightComponent::GetRadius() const
         {
             return mfRadius;
         }
         //----------------------------------------------------------
         /// Get Min Light Influence
         //----------------------------------------------------------
-        f32 CPointLightComponent::GetMinLightInfluence() const
+        f32 PointLightComponent::GetMinLightInfluence() const
         {
             return mfMinLightInfluence;
         }
         //----------------------------------------------------------
         /// Get Constant Attenuation
         //----------------------------------------------------------
-        f32 CPointLightComponent::GetConstantAttenuation() const
+        f32 PointLightComponent::GetConstantAttenuation() const
         {
             return mfConstantAttenuation;
         }
         //----------------------------------------------------------
         /// Get Linear Attenuation
         //----------------------------------------------------------
-        f32 CPointLightComponent::GetLinearAttenuation() const
+        f32 PointLightComponent::GetLinearAttenuation() const
         {
             return mfLinearAttenuation;
         }
         //----------------------------------------------------------
         /// Get Quadratic Attenuation
         //----------------------------------------------------------
-        f32 CPointLightComponent::GetQuadraticAttenuation() const
+        f32 PointLightComponent::GetQuadraticAttenuation() const
         {
             return mfQuadraticAttenuation;
         }
         //----------------------------------------------------------
         /// Get Range Of Influence
         //----------------------------------------------------------
-        f32 CPointLightComponent::GetRangeOfInfluence() const
+        f32 PointLightComponent::GetRangeOfInfluence() const
         {
             return mfRangeOfInfluence;
         }
         //----------------------------------------------------------
         /// Get Light Matrix
         //----------------------------------------------------------
-        const Core::CMatrix4x4& CPointLightComponent::GetLightMatrix() const
+        const Core::Matrix4x4& PointLightComponent::GetLightMatrix() const
         {
             //The point light matrix is simply a light view matrix
             //as the projection is done in the shader
             if(mbMatrixCacheValid == false && GetEntityOwner() != nullptr)
             {
-                mmatLight = GetEntityOwner()->Transform().GetWorldTransform().Inverse();
+                mmatLight = GetEntityOwner()->GetTransform().GetWorldTransform().Inverse();
                 mbMatrixCacheValid = true;
             }
             
@@ -112,21 +112,21 @@ namespace ChilliSource
         //----------------------------------------------------
         /// On Attached To Entity
         //----------------------------------------------------
-        void CPointLightComponent::OnAttachedToEntity()
+        void PointLightComponent::OnAttachedToEntity()
         {
-            GetEntityOwner()->Transform().GetTransformChangedEvent() += Core::MakeDelegate(this, &CPointLightComponent::OnEntityTransformChanged);
+            GetEntityOwner()->GetTransform().GetTransformChangedEvent() += Core::MakeDelegate(this, &PointLightComponent::OnEntityTransformChanged);
         }
         //----------------------------------------------------
         /// On Detached From Entity
         //----------------------------------------------------
-        void CPointLightComponent::OnDetachedFromEntity()
+        void PointLightComponent::OnDetachedFromEntity()
         {
-            GetEntityOwner()->Transform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &CPointLightComponent::OnEntityTransformChanged);
+            GetEntityOwner()->GetTransform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &PointLightComponent::OnEntityTransformChanged);
         }
         //----------------------------------------------------
         /// On Entity Transform Changed
         //----------------------------------------------------
-        void CPointLightComponent::OnEntityTransformChanged()
+        void PointLightComponent::OnEntityTransformChanged()
         {
             mbMatrixCacheValid = false;
             mbCacheValid = false;
@@ -134,7 +134,7 @@ namespace ChilliSource
         //----------------------------------------------------
         /// Calculate Lighting Values
         //----------------------------------------------------
-        void CPointLightComponent::CalculateLightingValues()
+        void PointLightComponent::CalculateLightingValues()
         {
             if (mfRadius > 0.0f)
             {

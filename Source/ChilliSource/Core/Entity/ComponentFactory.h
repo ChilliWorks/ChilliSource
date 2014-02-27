@@ -21,19 +21,19 @@ namespace ChilliSource
 {
 	namespace Core
 	{	
-		class IComponentFactory : public IQueryableInterface
+		class ComponentFactory : public QueryableInterface
 		{
 		public:
             
-			IComponentFactory(){}
-			virtual ~IComponentFactory(){}
+			ComponentFactory(){}
+			virtual ~ComponentFactory(){}
 			virtual bool CanProduceComponentWithInterface(InterfaceIDType inInterfaceID) const = 0;
 			virtual bool CanProduceComponentWithTypeName(const std::string & incName) const = 0;
 			
 			//This is the method used to create a component from a data-description of same.
-			virtual ComponentPtr CreateComponent(const std::string & insTypeName, const ChilliSource::Core::ParamDictionary & insParamDictionary){
+			virtual ComponentSPtr CreateComponent(const std::string & insTypeName, const ChilliSource::Core::ParamDictionary & insParamDictionary){
 				CS_WARNING_LOG("Calling default ComponentFactory::CreateComponent with typename: " + insTypeName + ". Derived factories should override this method for their component classes.");
-				return ComponentPtr();
+				return ComponentSPtr();
 			};  
 			
 		};

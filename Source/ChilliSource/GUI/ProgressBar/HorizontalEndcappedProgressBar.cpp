@@ -32,16 +32,16 @@ namespace ChilliSource
 		{
 
 			mpBGImage = HorizontalStretchableImagePtr(new HorizontalStretchableImage());
-			mpBGImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
+			mpBGImage->SetLocalAlignment(Rendering::AlignmentAnchor::k_middleLeft);
 			mpBGImage->EnableAlignmentToParent(true);
-			mpBGImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
+			mpBGImage->SetAlignmentToParent(Rendering::AlignmentAnchor::k_middleLeft);
             mpBGImage->EnableTouchConsumption(false);
 			AddSubview(mpBGImage);
 			
 			mpFillImage = HorizontalStretchableImagePtr(new HorizontalStretchableImage());
-			mpFillImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
+			mpFillImage->SetLocalAlignment(Rendering::AlignmentAnchor::k_middleLeft);
 			mpFillImage->EnableAlignmentToParent(true);
-			mpFillImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
+			mpFillImage->SetAlignmentToParent(Rendering::AlignmentAnchor::k_middleLeft);
             mpFillImage->EnableTouchConsumption(false);
 			AddSubview(mpFillImage);
 		}
@@ -54,16 +54,16 @@ namespace ChilliSource
 		: ProgressBar(insParams), HeightFromImage(false)
 		{
 			mpBGImage = HorizontalStretchableImagePtr(new HorizontalStretchableImage());
-			mpBGImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
+			mpBGImage->SetLocalAlignment(Rendering::AlignmentAnchor::k_middleLeft);
 			mpBGImage->EnableAlignmentToParent(true);
-			mpBGImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
+			mpBGImage->SetAlignmentToParent(Rendering::AlignmentAnchor::k_middleLeft);
             mpBGImage->EnableTouchConsumption(false);
 			AddSubview(mpBGImage);
 			
 			mpFillImage = HorizontalStretchableImagePtr(new HorizontalStretchableImage());
-			mpFillImage->SetLocalAlignment(Core::AlignmentAnchor::k_middleLeft);
+			mpFillImage->SetLocalAlignment(Rendering::AlignmentAnchor::k_middleLeft);
 			mpFillImage->EnableAlignmentToParent(true);
-			mpFillImage->SetAlignmentToParent(Core::AlignmentAnchor::k_middleLeft);
+			mpFillImage->SetAlignmentToParent(Rendering::AlignmentAnchor::k_middleLeft);
             mpFillImage->EnableTouchConsumption(false);
 			AddSubview(mpFillImage);
 			
@@ -77,7 +77,7 @@ namespace ChilliSource
             }
 			if(insParams.TryGetValue("SpriteSheet", strValue))
 			{
-				SetSpriteSheet(LOAD_RESOURCE(Rendering::CSpriteSheet, eSpriteSheetLocation, strValue));
+				SetSpriteSheet(LOAD_RESOURCE(Rendering::SpriteSheet, eSpriteSheetLocation, strValue));
 			}
 			//---Sprite sheet ID
 			if(insParams.TryGetValue("BaseFillSpriteSheetIndexID", strValue))
@@ -147,7 +147,7 @@ namespace ChilliSource
 		///
 		/// @param Sprite Sheet
 		//------------------------------------------------------------------------
-		void HorizontalEndcappedProgressBar::SetSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet)
+		void HorizontalEndcappedProgressBar::SetSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet)
 		{
 			SpriteSheet = inpSpriteSheet;
 			mpBGImage->SetSpriteSheet(inpSpriteSheet);
@@ -158,7 +158,7 @@ namespace ChilliSource
 		///
 		/// @return Sprite Sheet
 		//------------------------------------------------------------------------
-		const Rendering::SpriteSheetPtr& HorizontalEndcappedProgressBar::GetSpriteSheet() const
+		const Rendering::SpriteSheetSPtr& HorizontalEndcappedProgressBar::GetSpriteSheet() const
 		{
 			return SpriteSheet;
 		}
@@ -251,7 +251,7 @@ namespace ChilliSource
 		///
 		/// @param Colour of progress bar
 		//------------------------------------------------------------------------
-		void HorizontalEndcappedProgressBar::SetFillColour(const Core::CColour& inColour)
+		void HorizontalEndcappedProgressBar::SetFillColour(const Core::Colour& inColour)
 		{
 			FillColour = inColour;
 			mpFillImage->SetColour(inColour);
@@ -261,7 +261,7 @@ namespace ChilliSource
 		///
 		/// @return Colour of progress bar
 		//------------------------------------------------------------------------
-		const Core::CColour& HorizontalEndcappedProgressBar::GetFillColour() const
+		const Core::Colour& HorizontalEndcappedProgressBar::GetFillColour() const
 		{
 			return FillColour;
 		}
@@ -270,7 +270,7 @@ namespace ChilliSource
 		///
 		/// @param Colour of background
 		//------------------------------------------------------------------------
-		void HorizontalEndcappedProgressBar::SetBackgroundColour(const Core::CColour& inColour)
+		void HorizontalEndcappedProgressBar::SetBackgroundColour(const Core::Colour& inColour)
 		{
 			BackgroundColour = inColour;
 			mpBGImage->SetColour(inColour);
@@ -280,7 +280,7 @@ namespace ChilliSource
 		///
 		/// @return Colour of background
 		//------------------------------------------------------------------------
-		const Core::CColour& HorizontalEndcappedProgressBar::GetBackgroundColour() const
+		const Core::Colour& HorizontalEndcappedProgressBar::GetBackgroundColour() const
 		{
 			return BackgroundColour;
 		}
@@ -316,12 +316,12 @@ namespace ChilliSource
 		///
 		/// @param Renderer
 		//------------------------------------------------------------------------
-		void HorizontalEndcappedProgressBar::Draw(Rendering::CCanvasRenderer* inpCanvas)
+		void HorizontalEndcappedProgressBar::Draw(Rendering::CanvasRenderer* inpCanvas)
 		{
 			if(Visible && SpriteSheet)
 			{
 
-				Core::CVector2 vMyAbsSize = GetAbsoluteSize();
+				Core::Vector2 vMyAbsSize = GetAbsoluteSize();
 				
 				f32 fFullProgressWidth = vMyAbsSize.x - mpBGImage->GetCombinedCapWidth() + mpFillImage->GetCombinedCapWidth();
 				f32 fFillWidth = GetProgress() * fFullProgressWidth;
@@ -342,10 +342,10 @@ namespace ChilliSource
 				
 				f32 fFillDrawHeight = vMyAbsSize.y - (fBGImageHeight-fFillImageHeight);		
 				
-				mpBGImage->SetSize(Core::UnifiedVector2(Core::CVector2::ZERO,vMyAbsSize));
+				mpBGImage->SetSize(Core::UnifiedVector2(Core::Vector2::ZERO,vMyAbsSize));
 				mpBGImage->Draw(inpCanvas);
 				
-				mpFillImage->SetSize(Core::UnifiedVector2(Core::CVector2::ZERO,Core::CVector2(fFillWidth,fFillDrawHeight)));
+				mpFillImage->SetSize(Core::UnifiedVector2(Core::Vector2::ZERO,Core::Vector2(fFillWidth,fFillDrawHeight)));
 				mpFillImage->Draw(inpCanvas);
 			}
             

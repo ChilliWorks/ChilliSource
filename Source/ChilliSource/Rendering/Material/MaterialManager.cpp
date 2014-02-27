@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(IMaterialManager);
+		DEFINE_NAMED_INTERFACE(MaterialManager);
 		
 		//----------------------------------------------------------------
 		/// Is A
@@ -29,36 +29,36 @@ namespace ChilliSource
 		/// @param The interface to compare
 		/// @return Whether the object implements that interface
 		//----------------------------------------------------------------
-		bool IMaterialManager::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool MaterialManager::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IMaterialManager::InterfaceID;
+			return inInterfaceID == MaterialManager::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Get Resource Type
 		///
 		/// @return The type of resource this manager handles
 		//----------------------------------------------------------------
-		Core::InterfaceIDType IMaterialManager::GetResourceType() const
+		Core::InterfaceIDType MaterialManager::GetResourceType() const
 		{
-			return CMaterial::InterfaceID;
+			return Material::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Manages Resource Of Type
 		///
 		/// @return Whether this object manages the object of type
 		//----------------------------------------------------------------
-		bool IMaterialManager::ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const
+		bool MaterialManager::ManagesResourceOfType(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == CMaterial::InterfaceID;
+			return inInterfaceID == Material::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Get Provider Type
 		///
 		/// @return The type of resource it consumes from resource provider
 		//----------------------------------------------------------------
-		Core::InterfaceIDType IMaterialManager::GetProviderType() const
+		Core::InterfaceIDType MaterialManager::GetProviderType() const
 		{
-			return CMaterial::InterfaceID;
+			return Material::InterfaceID;
 		}
 		//-----------------------------------------------------------------
 		/// Get Resource From File
@@ -68,7 +68,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr IMaterialManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr MaterialManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetMaterialFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -80,7 +80,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr IMaterialManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr MaterialManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetMaterialFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -96,13 +96,13 @@ namespace ChilliSource
 		/// @param Material type
 		/// @return A handle to the Material
 		//----------------------------------------------------------------
-		MaterialPtr IMaterialManager::GetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
+		MaterialSPtr MaterialManager::GetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourcePtr pResource(new CMaterial());
+				Core::ResourceSPtr pResource(new Material());
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
 					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, inFilePath, pResource))
@@ -110,7 +110,7 @@ namespace ChilliSource
 						CS_DEBUG_LOG("Loading Material " + inFilePath);
 						mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
 						
-						MaterialPtr pMaterial = std::static_pointer_cast<CMaterial>(pResource);
+						MaterialSPtr pMaterial = std::static_pointer_cast<Material>(pResource);
 						pMaterial->SetName(inFilePath);
 						pMaterial->SetOwningResourceManager(this);
 						pMaterial->SetFilename(inFilePath);
@@ -123,11 +123,11 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				return std::static_pointer_cast<CMaterial>(pExistingResource->second);
+				return std::static_pointer_cast<Material>(pExistingResource->second);
 			}
 			
 			CS_ERROR_LOG("Cannot find resource for Material with path " + inFilePath);
-			return Core::CApplication::GetDefaultMaterial();
+			return Core::Application::GetDefaultMaterial();
 		}
 		//----------------------------------------------------------------
 		/// Async Get Material From File
@@ -141,16 +141,16 @@ namespace ChilliSource
 		/// @param Material type
 		/// @return A handle to the Material
 		//----------------------------------------------------------------
-		MaterialPtr IMaterialManager::AsyncGetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
+		MaterialSPtr MaterialManager::AsyncGetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourcePtr pResource(new CMaterial());
+				Core::ResourceSPtr pResource(new Material());
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
-					MaterialPtr pMaterial = std::static_pointer_cast<CMaterial>(pResource);
+					MaterialSPtr pMaterial = std::static_pointer_cast<Material>(pResource);
 					pMaterial->SetName(inFilePath);
 					pMaterial->SetFilename(inFilePath);
 					pMaterial->SetStorageLocation(ineStorageLocation);
@@ -168,11 +168,11 @@ namespace ChilliSource
 			} 
 			else 
 			{
-				return std::static_pointer_cast<CMaterial>(pExistingResource->second);
+				return std::static_pointer_cast<Material>(pExistingResource->second);
 			}
 			
 			CS_ERROR_LOG("Cannot find resource for Material with path " + inFilePath);
-			return MaterialPtr();
+			return MaterialSPtr();
 		}
 	}
 }

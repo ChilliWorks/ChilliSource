@@ -22,7 +22,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//-------------------------------------------------------
-		IResource::IResource(): mpOwningResMgr(nullptr), mbIsHighRes(false), mbIsLoaded(false), mpMutex(new std::mutex()),
+		Resource::Resource(): mpOwningResMgr(nullptr), mbIsHighRes(false), mbIsLoaded(false), mpMutex(new std::mutex()),
         mpCondition(new std::condition_variable()), meStorageLocation(StorageLocation::k_none), mstrFilename("")
 		{
 		}
@@ -31,7 +31,7 @@ namespace ChilliSource
 		///
 		/// @return The resource's name
 		//-------------------------------------------------------
-		const std::string& IResource::GetName() const
+		const std::string& Resource::GetName() const
 		{
 			return mstrName;
 		}
@@ -40,7 +40,7 @@ namespace ChilliSource
 		///
 		/// @param The resource's name (usually the filename)
 		//-------------------------------------------------------
-		void IResource::SetName(const std::string& instrName)
+		void Resource::SetName(const std::string& instrName)
 		{
 			mstrName = instrName;
 		}
@@ -49,7 +49,7 @@ namespace ChilliSource
 		///
 		/// @return Whether the resource is loaded into memory
 		//-------------------------------------------------------
-		bool IResource::IsLoaded() const
+		bool Resource::IsLoaded() const
 		{
 			return mbIsLoaded;
 		}
@@ -58,7 +58,7 @@ namespace ChilliSource
 		///
 		/// @param Whether the resource is loaded into memory
 		//-------------------------------------------------------
-		void IResource::SetLoaded(bool inbLoaded)
+		void Resource::SetLoaded(bool inbLoaded)
 		{
 			mbIsLoaded = inbLoaded;
 
@@ -72,7 +72,7 @@ namespace ChilliSource
 		///
 		/// @param The filename of the resource.
 		//-------------------------------------------------------
-		void IResource::SetFilename(std::string instrFilename)
+		void Resource::SetFilename(std::string instrFilename)
 		{
 			mstrFilename = instrFilename;
 		}
@@ -81,7 +81,7 @@ namespace ChilliSource
 		///
 		/// @return The filename of the resource.
 		//-------------------------------------------------------
-		const std::string& IResource::GetFilename() const
+		const std::string& Resource::GetFilename() const
 		{
 			return mstrFilename;
 		}
@@ -90,7 +90,7 @@ namespace ChilliSource
 		///
 		/// @param The storage location of the resource.
 		//-------------------------------------------------------
-		void IResource::SetStorageLocation(StorageLocation ineStorageLocation)
+		void Resource::SetStorageLocation(StorageLocation ineStorageLocation)
 		{
 			meStorageLocation = ineStorageLocation;
 		}
@@ -99,7 +99,7 @@ namespace ChilliSource
 		///
 		/// @return The storage location of the resource.
 		//-------------------------------------------------------
-		const StorageLocation& IResource::GetStorageLocation() const
+		const StorageLocation& Resource::GetStorageLocation() const
 		{
 			return meStorageLocation;
 		}
@@ -108,7 +108,7 @@ namespace ChilliSource
 		///
 		/// @param The resource manager who has ownership of us
 		//-------------------------------------------------------
-		void IResource::SetOwningResourceManager(IResourceManager* inpResMgr)
+		void Resource::SetOwningResourceManager(ResourceManager* inpResMgr)
 		{
 			mpOwningResMgr = inpResMgr;
 		}
@@ -117,7 +117,7 @@ namespace ChilliSource
 		///
 		/// @return The resource manager who has ownership of us
 		//-------------------------------------------------------
-		IResourceManager* IResource::GetOwningResourceManager()
+		ResourceManager* Resource::GetOwningResourceManager()
 		{
 			return mpOwningResMgr;
 		}
@@ -126,7 +126,7 @@ namespace ChilliSource
 		///
 		/// Block the calling thread until the resource has loaded
 		//-------------------------------------------------------
-		void IResource::WaitTilLoaded()
+		void Resource::WaitTilLoaded()
 		{
             std::unique_lock<std::mutex> Lock(*mpMutex);
 
@@ -140,7 +140,7 @@ namespace ChilliSource
 		///
 		/// Tell our owning resource manager to free us
 		//-------------------------------------------------------
-		void IResource::Release()
+		void Resource::Release()
 		{
 			if (mpOwningResMgr) 
             {

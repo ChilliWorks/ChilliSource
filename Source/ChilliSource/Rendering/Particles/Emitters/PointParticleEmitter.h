@@ -16,10 +16,10 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        class CPointParticleEmitter : public CParticleEmitter
+        class PointParticleEmitter : public ParticleEmitter
         {
         public:
-            CPointParticleEmitter(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, CParticleComponent* inpComponent);
+            PointParticleEmitter(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent);
 
             //-----------------------------------------------------
             /// Create
@@ -31,7 +31,7 @@ namespace ChilliSource
             /// @param Owning system
             /// @return Ownership of point emitter
             //-----------------------------------------------------
-            static CParticleEmitter* Create(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, CParticleComponent* inpComponent);
+            static ParticleEmitter* Create(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent);
             
         private:
             //-----------------------------------------------------

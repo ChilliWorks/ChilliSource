@@ -18,7 +18,7 @@ namespace ChilliSource
         //==================================================================================
         const u32 kudwBlockAlignmentSize = 16;	//16 byte aligned
 
-        class CStaticMemPool
+        class StaticMemPool
         {
         public:
             //----------------------------------------------------------------------
@@ -29,11 +29,11 @@ namespace ChilliSource
             /// @param Size of memory pool in bytes
             /// @param Alignment in bytes
             //----------------------------------------------------------------------
-            CStaticMemPool(u32 inudwHeapSize, u32 inudwAlignmentSize = kudwBlockAlignmentSize);
+            StaticMemPool(u32 inudwHeapSize, u32 inudwAlignmentSize = kudwBlockAlignmentSize);
             //----------------------------------------------------------------------
             /// Destructor
             //----------------------------------------------------------------------
-            ~CStaticMemPool();
+            ~StaticMemPool();
 
             //----------------------------------------------------------------------
             /// Allocate

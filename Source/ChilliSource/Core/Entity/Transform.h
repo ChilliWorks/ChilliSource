@@ -21,12 +21,12 @@ namespace ChilliSource
 {
     namespace Core
     {
-        class CTransform
+        class Transform
         {
         public:
             typedef std::function<void()> TransformChangedDelegate;
             
-            CTransform();
+            Transform();
             //----------------------------------------------------------
             /// Set Look At
             ///
@@ -35,7 +35,7 @@ namespace ChilliSource
             /// @param Look target
             /// @param Up direction
             //----------------------------------------------------------
-            void SetLookAt(const Core::CVector3& invPos, const Core::CVector3& invTarget, const Core::CVector3& invUp);
+            void SetLookAt(const Core::Vector3& invPos, const Core::Vector3& invTarget, const Core::Vector3& invUp);
             //----------------------------------------------------------------
 			/// Set Position Scale Orientation
 			///
@@ -43,7 +43,7 @@ namespace ChilliSource
             /// @param Scale vector
             /// @param Orientation quaternion
 			//----------------------------------------------------------------
-            void SetPositionScaleOrientation(const CVector3& invPos, const CVector3& invScale, const CQuaternion& invOrientation);
+            void SetPositionScaleOrientation(const Vector3& invPos, const Vector3& invScale, const Quaternion& invOrientation);
             //----------------------------------------------------------------
 			/// Set Position
 			///
@@ -57,19 +57,19 @@ namespace ChilliSource
 			///
 			/// @param Position vector
 			//----------------------------------------------------------------
-			void SetPosition(const CVector3 &invPos);
+			void SetPosition(const Vector3 &invPos);
 			//----------------------------------------------------------------
 			/// Get Local Position
 			///
 			/// @return The position of the object 
 			//----------------------------------------------------------------
-			const CVector3& GetLocalPosition() const;
+			const Vector3& GetLocalPosition() const;
             //----------------------------------------------------------------
 			/// Get World Position
 			///
 			/// @return The relative position of the object 
 			//----------------------------------------------------------------
-			const CVector3& GetWorldPosition() const;
+			const Vector3& GetWorldPosition() const;
 			//----------------------------------------------------------------
 			/// Move By
 			///
@@ -83,25 +83,25 @@ namespace ChilliSource
 			///
 			/// Movement direction vector
 			//----------------------------------------------------------------
-			void MoveBy(const CVector3 &invPos);
+			void MoveBy(const Vector3 &invPos);
 			//----------------------------------------------------------------
 			/// Set Orientation
 			///
 			/// @param Orientation quaternion
 			//----------------------------------------------------------------
-			void SetOrientation(const CQuaternion & inqOrientation);
+			void SetOrientation(const Quaternion & inqOrientation);
 			//----------------------------------------------------------------
 			/// Get Local Orientation
 			///
 			/// @return Orientation quaternion
 			//----------------------------------------------------------------
-			const CQuaternion& GetLocalOrientation() const;
+			const Quaternion& GetLocalOrientation() const;
             //----------------------------------------------------------------
 			/// Get World Orientation
 			///
 			/// @return Orientation quaternion relative to parent tranform
 			//----------------------------------------------------------------
-			const CQuaternion& GetWorldOrientation() const;
+			const Quaternion& GetWorldOrientation() const;
 			//----------------------------------------------------------------
 			/// Rotate X By
 			///
@@ -145,7 +145,7 @@ namespace ChilliSource
 			/// @param Axis vector
 			/// @param Angle in radians
 			//----------------------------------------------------------------
-			void RotateBy(const CVector3 &vAxis, f32 infAngleRads);
+			void RotateBy(const Vector3 &vAxis, f32 infAngleRads);
 			//----------------------------------------------------------------
 			/// Rotate To
 			///
@@ -165,7 +165,7 @@ namespace ChilliSource
 			/// @param Axis vector
 			/// @param Angle in radians
 			//----------------------------------------------------------------
-			void RotateTo(const CVector3 &vAxis, f32 infAngleRads);
+			void RotateTo(const Vector3 &vAxis, f32 infAngleRads);
 			//----------------------------------------------------------------
 			/// Scale By
 			///
@@ -191,7 +191,7 @@ namespace ChilliSource
 			///
 			/// @param Axis vector
 			//----------------------------------------------------------------
-			void ScaleBy(const CVector3 &Vec);
+			void ScaleBy(const Vector3 &Vec);
 			//----------------------------------------------------------------
 			/// Scale To
 			///
@@ -217,19 +217,19 @@ namespace ChilliSource
 			///
 			/// @param Axis vector
 			//----------------------------------------------------------------
-			void ScaleTo(const CVector3 &Vec);
+			void ScaleTo(const Vector3 &Vec);
 			//----------------------------------------------------------------
 			/// Get Scale
 			///
 			/// @return The scale of object
 			//----------------------------------------------------------------
-			const CVector3& GetLocalScale() const;
+			const Vector3& GetLocalScale() const;
             //----------------------------------------------------------------
 			/// Get World Scale
 			///
 			/// @return The relative scale of object
 			//----------------------------------------------------------------
-			const CVector3& GetWorldScale() const;
+			const Vector3& GetWorldScale() const;
             
             
             //----------------------------------------------------------------
@@ -270,13 +270,13 @@ namespace ChilliSource
 			///
 			/// @return The currently cached transform (rebuilds if invalid)
 			//----------------------------------------------------------------
-			const CMatrix4x4& GetLocalTransform() const;
+			const Matrix4x4& GetLocalTransform() const;
             //----------------------------------------------------------------
             /// Get World Transform
             ///
             /// @return The tranform in relation to its parent transform
             //----------------------------------------------------------------
-			const CMatrix4x4& GetWorldTransform() const;
+			const Matrix4x4& GetWorldTransform() const;
             //----------------------------------------------------------------
             /// Set World Transform
             ///
@@ -284,7 +284,7 @@ namespace ChilliSource
             ///
             /// @param Objects transformation matrix
             //----------------------------------------------------------------
-            void SetWorldTransform(const CMatrix4x4& inmatTransform);
+            void SetWorldTransform(const Matrix4x4& inmatTransform);
             //----------------------------------------------------------------
             /// Set Local Transform
             ///
@@ -292,7 +292,7 @@ namespace ChilliSource
             ///
             /// @param Objects transformation matrix
             //----------------------------------------------------------------
-            void SetLocalTransform(const CMatrix4x4& inmatTransform);
+            void SetLocalTransform(const Matrix4x4& inmatTransform);
             //----------------------------------------------------------------
             /// Is Transform Valid
             ///
@@ -307,12 +307,12 @@ namespace ChilliSource
             ///
             /// @param Transform object
             //----------------------------------------------------------------
-            void SetParentTransform(CTransform* inpTransform);
+            void SetParentTransform(Transform* inpTransform);
 			//----------------------------------------------------------------
             /// Get Parent Transform
             /// @return what it says on tin
             //----------------------------------------------------------------
-            CTransform* GetParentTransform() const;
+            Transform* GetParentTransform() const;
 			//----------------------------------------------------------------
             /// Add Child Transform
             ///
@@ -321,7 +321,7 @@ namespace ChilliSource
             ///
             /// @param Transform object
             //----------------------------------------------------------------
-            void AddChildTransform(CTransform* inpTransform);
+            void AddChildTransform(Transform* inpTransform);
 			//----------------------------------------------------------------
             /// Remove Child Transform
             ///
@@ -331,7 +331,7 @@ namespace ChilliSource
             /// @param Transform object
 			/// @return Whether the child was removed successfully
             //----------------------------------------------------------------
-            bool RemoveChildTransform(CTransform* inpTransform);
+            bool RemoveChildTransform(Transform* inpTransform);
 			//----------------------------------------------------------------
             /// Remove All Child Transforms
             ///
@@ -368,24 +368,24 @@ namespace ChilliSource
             
         private:
             
-            mutable CMatrix4x4 mmatTransform;
-            mutable CMatrix4x4 mmatWorldTransform;
+            mutable Matrix4x4 mmatTransform;
+            mutable Matrix4x4 mmatWorldTransform;
             
-            CVector3 mvPosition;
-			CVector3 mvScale;
-			CQuaternion mqOrientation;
+            Vector3 mvPosition;
+			Vector3 mvScale;
+			Quaternion mqOrientation;
             
             f32         mfOpacity;
             
-            mutable CVector3 mvWorldPosition;
-			mutable CVector3 mvWorldScale;
-			mutable CQuaternion mqWorldOrientation;
+            mutable Vector3 mvWorldPosition;
+			mutable Vector3 mvWorldScale;
+			mutable Quaternion mqWorldOrientation;
             
             CEvent0<TransformChangedDelegate> mTransformChangedEvent;
             
-            CTransform* mpParentTransform;
+            Transform* mpParentTransform;
 			
-			std::vector<CTransform*> mChildTransforms;
+			std::vector<Transform*> mChildTransforms;
             
             mutable bool mbIsTransformCacheValid;
             mutable bool mbIsParentTransformCacheValid;

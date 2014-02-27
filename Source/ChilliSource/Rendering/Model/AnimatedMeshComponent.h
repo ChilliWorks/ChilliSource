@@ -36,11 +36,11 @@ namespace ChilliSource
         //===============================================================
 		/// Events
 		//===============================================================
-        typedef std::function<void(CAnimatedMeshComponent*)> AnimationChangedDelegate;
+        typedef std::function<void(AnimatedMeshComponent*)> AnimationChangedDelegate;
         typedef Core::CEvent1<AnimationChangedDelegate> AnimationChangedEvent;
-        typedef std::function<void(CAnimatedMeshComponent*)> AnimationCompletionDelegate;
+        typedef std::function<void(AnimatedMeshComponent*)> AnimationCompletionDelegate;
         typedef Core::CEvent1<AnimationCompletionDelegate> AnimationCompletionEvent;
-        typedef std::function<void(CAnimatedMeshComponent*)> AnimationLoopedDelegate;
+        typedef std::function<void(AnimatedMeshComponent*)> AnimationLoopedDelegate;
         typedef Core::CEvent1<AnimationLoopedDelegate> AnimationLoopedEvent;
 		//===============================================================
 		/// Animated Mesh component
@@ -48,13 +48,13 @@ namespace ChilliSource
 		/// An animated mesh component. This defines a 3D mesh that can
 		/// be manipulated, textured and animated.
 		//===============================================================
-		class CAnimatedMeshComponent : public IRenderComponent
+		class AnimatedMeshComponent : public RenderComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CAnimatedMeshComponent);
+			DECLARE_NAMED_INTERFACE(AnimatedMeshComponent);
 			
-			CAnimatedMeshComponent();
-			~CAnimatedMeshComponent();
+			AnimatedMeshComponent();
+			~AnimatedMeshComponent();
 			//----------------------------------------------------------
 			/// Is A
 			///
@@ -106,7 +106,7 @@ namespace ChilliSource
 			///
 			/// @param Handle to material
 			//-----------------------------------------------------------
-			void SetMaterial(const MaterialPtr& inpMaterial) override;
+			void SetMaterial(const MaterialSPtr& inpMaterial) override;
 			//-----------------------------------------------------------
 			/// Set Material For Sub Mesh
 			///
@@ -115,7 +115,7 @@ namespace ChilliSource
 			/// @param Handle to material
 			/// @Param Index to the submesh
 			//-----------------------------------------------------------
-			void SetMaterialForSubMesh(const MaterialPtr& inpMaterial, u32 indwSubMeshIndex);
+			void SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, u32 indwSubMeshIndex);
             //-----------------------------------------------------------
 			/// Set Material For Sub Mesh
 			///
@@ -124,7 +124,7 @@ namespace ChilliSource
 			/// @param Handle to material
 			/// @param The name of the submesh.
 			//-----------------------------------------------------------
-			void SetMaterialForSubMesh(const MaterialPtr& inpMaterial, const std::string& instrSubMeshName);
+			void SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, const std::string& instrSubMeshName);
 			//-----------------------------------------------------------
 			/// Get Material Of Sub Mesh
 			///
@@ -133,7 +133,7 @@ namespace ChilliSource
 			/// @param Index to the sub mesh
 			/// @return Handle to material
 			//-----------------------------------------------------------
-			const MaterialPtr GetMaterialOfSubMesh(u32 indwSubMeshIndex) const;
+			const MaterialSPtr GetMaterialOfSubMesh(u32 indwSubMeshIndex) const;
             //-----------------------------------------------------------
 			/// Get Material Of Sub Mesh
 			///
@@ -142,14 +142,14 @@ namespace ChilliSource
 			/// @param The name of the submesh.
 			/// @return Handle to material
 			//-----------------------------------------------------------
-			MaterialPtr GetMaterialOfSubMesh(const std::string& instrSubMeshName) const;
+			MaterialSPtr GetMaterialOfSubMesh(const std::string& instrSubMeshName) const;
 			//----------------------------------------------------------
 			/// Attach Mesh
 			///
 			/// Attach a mesh to this component
 			/// @param Mesh object
 			//----------------------------------------------------------
-			void AttachMesh(const MeshPtr& inpModel);
+			void AttachMesh(const MeshSPtr& inpModel);
             //----------------------------------------------------------
             /// Attach Mesh
             ///
@@ -157,13 +157,13 @@ namespace ChilliSource
             /// material
             /// @param Mesh object
             //----------------------------------------------------------
-            void AttachMesh(const MeshPtr& inpModel, const MaterialPtr& inpMaterial);
+            void AttachMesh(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial);
             //----------------------------------------------------------
             /// Get Mesh
             ///
             /// @return The components internal mesh
             //----------------------------------------------------------
-            const MeshPtr& GetMesh() const;
+            const MeshSPtr& GetMesh() const;
 			//----------------------------------------------------------
 			/// Attach Animation
 			///
@@ -186,7 +186,7 @@ namespace ChilliSource
             /// @param The animation pointer.
             /// @param the position of the animation on the blendline.
 			//----------------------------------------------------------
-			void AttachAnimation(const SkinnedAnimationPtr& inpAnimation, f32 infBlendlinePosition = 0.0f);
+			void AttachAnimation(const SkinnedAnimationSPtr& inpAnimation, f32 infBlendlinePosition = 0.0f);
             //----------------------------------------------------------
 			/// Detatch Animation
 			///
@@ -195,13 +195,13 @@ namespace ChilliSource
             /// @param The animation pointer.
             /// @param the position of the animation on the blendline.
 			//----------------------------------------------------------
-			void DetatchAnimation(const SkinnedAnimationPtr& inpAnimation);
+			void DetatchAnimation(const SkinnedAnimationSPtr& inpAnimation);
             //----------------------------------------------------------
 			/// Get Animations
             ///
             /// @param OUT: A list of all attached animations.
 			//----------------------------------------------------------
-            void GetAnimations(std::vector<SkinnedAnimationPtr>& outapSkinnedAnimationList);
+            void GetAnimations(std::vector<SkinnedAnimationSPtr>& outapSkinnedAnimationList);
             //----------------------------------------------------------
 			/// Fade Out
 			///
@@ -233,7 +233,7 @@ namespace ChilliSource
             /// @param The entity.
             /// @param the name of the node to attach to.
 			//----------------------------------------------------------
-			void AttachEntity(const Core::EntityPtr& inpEntity, const std::string& instrNodeName);
+			void AttachEntity(const Core::EntitySPtr& inpEntity, const std::string& instrNodeName);
             //----------------------------------------------------------
 			/// Detatch Entity
 			///
@@ -242,7 +242,7 @@ namespace ChilliSource
 			///
             /// @param The entity.
 			//----------------------------------------------------------
-			void DetatchEntity(Core::CEntity* inpEntity);
+			void DetatchEntity(Core::Entity* inpEntity);
             //----------------------------------------------------------
 			/// Detatch All Entities
 			///
@@ -404,7 +404,7 @@ namespace ChilliSource
             /// @param Active camera component
             /// @param The current shader pass.
 			//----------------------------------------------------------
-			void Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass) override;
+			void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass) override;
             //-----------------------------------------------------
             /// Render Shadow Map
             ///
@@ -413,7 +413,7 @@ namespace ChilliSource
             /// @param Render system
             /// @param Active camera component
             //-----------------------------------------------------
-            void RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam) override;
+            void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam) override;
             //----------------------------------------------------------
 			/// Update Animation
 			///
@@ -453,12 +453,12 @@ namespace ChilliSource
             void ApplyDefaultMaterials();
             
 		private:
-            typedef std::vector<std::pair<Core::EntityWeakPtr, s32> > AttachedEntityList;
+            typedef std::vector<std::pair<Core::EntityWPtr, s32> > AttachedEntityList;
             AttachedEntityList maAttachedEntities;
-			MeshPtr mpModel;
-			std::vector<MaterialPtr> mMaterials;
-			SkinnedAnimationGroupPtr mActiveAnimationGroup;
-            SkinnedAnimationGroupPtr mFadingAnimationGroup;
+			MeshSPtr mpModel;
+			std::vector<MaterialSPtr> mMaterials;
+			SkinnedAnimationGroupSPtr mActiveAnimationGroup;
+            SkinnedAnimationGroupSPtr mFadingAnimationGroup;
 			f32 mfPlaybackPosition;
 			f32 mfPlaybackSpeedMultiplier;
             f32 mfBlendlinePosition;
@@ -475,7 +475,7 @@ namespace ChilliSource
             AnimationLoopedEvent mAnimationLoopedEvent;
             AnimationChangedEvent mAnimationChangedEvent;
             
-            static MaterialPtr mspShadowMapMaterial;
+            static MaterialSPtr mspShadowMapMaterial;
 		};
 	}
 }

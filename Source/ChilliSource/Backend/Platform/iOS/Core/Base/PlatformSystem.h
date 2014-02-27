@@ -29,7 +29,7 @@ namespace ChilliSource
 		/// Allows generic access to platform 
 		/// specific code via common function calls
 		//---------------------------------------------
-		class CPlatformSystem : public Core::IPlatformSystem
+		class CPlatformSystem : public Core::PlatformSystem
 		{
 		public:
 			CPlatformSystem();
@@ -47,7 +47,7 @@ namespace ChilliSource
 			///
 			/// @param the system list
 			//-------------------------------------------------
-			void CreateDefaultSystems(std::vector<Core::SystemPtr> & inaSystems);
+			void CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems);
 			//-------------------------------------------------
 			/// Post Create Systems
 			///
@@ -104,7 +104,7 @@ namespace ChilliSource
 			/// @param Vector of existing systems. The return value is added to this vector if not nullptr.
 			/// @return A handle to the given system or nullptr if the platform cannot support it
 			//-----------------------------------------
-			Core::ISystem* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemPtr> & inaExistingSystems) const;
+			Core::System* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr> & inaExistingSystems) const;
 			
 			//==========================================
 			//--- Activity Creation
@@ -124,7 +124,7 @@ namespace ChilliSource
 			/// @param InterfaceID to generate
 			/// @return A handle to the given activity or nullptr if the platform cannot support it
 			//-----------------------------------------
-            Core::IActivity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const;
+            Core::Activity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const;
 			
 			//==========================================
 			//---InformationProvider Creation
@@ -150,9 +150,9 @@ namespace ChilliSource
 			/// Get Screen Dimensions
 			///
 			/// Retrieves the screen dimensions. These dimensions are always in the default orientation for the device.
-			/// @return A CVector2 containing the screen size in its x + y components
+			/// @return A Vector2 containing the screen size in its x + y components
 			//-----------------------------------------------------------------------------------------------------------
-			Core::CVector2 GetScreenDimensions() const;
+			Core::Vector2 GetScreenDimensions() const;
 			//--------------------------------------------------------------
 			/// Get Device Model Name
 			///
@@ -183,14 +183,14 @@ namespace ChilliSource
 			/// Get the active locale of the device
 			/// @return Locale ID
 			//--------------------------------------------------------------
-            Core::CLocale GetLocale() const;
+            Core::Locale GetLocale() const;
 			//--------------------------------------------------------------
 			/// Get Locale
 			///
 			/// Get the active language of the device in locale format
 			/// @return Locale ID
 			//--------------------------------------------------------------
-            Core::CLocale GetLanguage() const;
+            Core::Locale GetLanguage() const;
 			//-------------------------------------------------
 			/// Get Screen Density
             ///
@@ -264,7 +264,7 @@ namespace ChilliSource
             /// @param System list
             /// @return A pointer to the system
             //--------------------------------------------
-			Core::ISystem * CreateHttpConnectionSystem(std::vector<Core::SystemPtr>& inSystems) const;
+			Core::System * CreateHttpConnectionSystem(std::vector<Core::SystemSPtr>& inSystems) const;
  
             //--------------------------------------------
 			/// Create Activities
@@ -273,10 +273,10 @@ namespace ChilliSource
 			///
 			/// @return Ownership of the activity
 			//--------------------------------------------
-			Core::IActivity* CreateSMSCompositionActivity() const;
-			Core::IActivity* CreateEmailCompositionActivity() const;
-			Core::IActivity * CreateDefaultVideoPlayerActivity() const;
-			Core::IActivity * CreateWebViewActivity() const;
+			Core::Activity* CreateSMSCompositionActivity() const;
+			Core::Activity* CreateEmailCompositionActivity() const;
+			Core::Activity * CreateDefaultVideoPlayerActivity() const;
+			Core::Activity * CreateWebViewActivity() const;
 			
             //--------------------------------------------
             /// Create Information Providers
@@ -287,7 +287,7 @@ namespace ChilliSource
             //--------------------------------------------
 			Core::IInformationProvider* CreateContactInformationProvider() const;
 			
-            typedef std::function<Core::ISystem*(std::vector<Core::SystemPtr>&)> SystemCreationFunction;
+            typedef std::function<Core::System*(std::vector<Core::SystemSPtr>&)> SystemCreationFunction;
             
             //--------------------------------------------
             /// Add System Function
@@ -310,9 +310,9 @@ namespace ChilliSource
             /// @param Exisiting systems
             /// @return Pointer to system
             //-------------------------------------------
-			Core::ISystem* FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemPtr>& inSystems) const;
+			Core::System* FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemSPtr>& inSystems) const;
 			
-            typedef std::function<Core::IActivity*()> ActivityCreationFunction;
+            typedef std::function<Core::Activity*()> ActivityCreationFunction;
 			
 			//--------------------------------------------
             /// Add Activity Function

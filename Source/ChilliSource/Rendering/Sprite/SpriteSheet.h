@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CSpriteSheet : public Core::IResource
+		class SpriteSheet : public Core::Resource
 		{
 		public:
 			
@@ -39,10 +39,10 @@ namespace ChilliSource
 			
 			typedef Frame SpriteFrame;
 			
-			DECLARE_NAMED_INTERFACE(CSpriteSheet);
+			DECLARE_NAMED_INTERFACE(SpriteSheet);
 			
-			CSpriteSheet();
-			virtual ~CSpriteSheet(){}
+			SpriteSheet();
+			virtual ~SpriteSheet(){}
 			
 			//---------------------------------------------------------------------
 			/// Is A
@@ -116,68 +116,68 @@ namespace ChilliSource
 			/// @param ID for frame 
 			/// param Vec2 containing size for the frame
 			//---------------------------------------------------------------------
-			Core::CVector2 GetSizeForFrame(u32 inudwFrameID) const;
+			Core::Vector2 GetSizeForFrame(u32 inudwFrameID) const;
 			//---------------------------------------------------------------------
 			/// Get Size For Frame
 			///
 			/// @param ID for frame 
 			/// @param Vec2 set to size for the frame
 			//---------------------------------------------------------------------
-			void GetSizeForFrame(u32 inudwFrameID, Core::CVector2 & outvSize) const;
+			void GetSizeForFrame(u32 inudwFrameID, Core::Vector2 & outvSize) const;
 			//---------------------------------------------------------------------
 			/// Get Offset For Frame
 			///
 			/// @param ID for frame 
 			/// return Vec2 containing offset for the frame
 			//---------------------------------------------------------------------
-			Core::CVector2 GetOffsetForFrame(u32 inudwFrameID) const;
+			Core::Vector2 GetOffsetForFrame(u32 inudwFrameID) const;
 			//---------------------------------------------------------------------
 			/// Get Offset For Frame
 			///
 			/// @param ID for frame 
 			/// @param Vec2 set to offset for the frame
 			//---------------------------------------------------------------------
-			void GetOffsetForFrame(u32 inudwFrameID, Core::CVector2 & outvOffset) const;	
+			void GetOffsetForFrame(u32 inudwFrameID, Core::Vector2 & outvOffset) const;	
             //---------------------------------------------------------------------
 			/// Get Size For Frame
 			///
 			/// @param ID for frame 
 			/// param Vec2 containing density independent size for the frame
 			//---------------------------------------------------------------------
-			Core::CVector2 GetDPISizeForFrame(u32 inudwFrameID) const;
+			Core::Vector2 GetDPISizeForFrame(u32 inudwFrameID) const;
 			//---------------------------------------------------------------------
 			/// Get Size For Frame
 			///
 			/// @param ID for frame 
 			/// param Vec2 containing density independent size for the frame
 			//---------------------------------------------------------------------
-			void GetDPISizeForFrame(u32 inudwFrameID, Core::CVector2 & outvSize) const;
+			void GetDPISizeForFrame(u32 inudwFrameID, Core::Vector2 & outvSize) const;
 			//---------------------------------------------------------------------
 			/// Get DPI Offset For Frame
 			///
 			/// @param ID for frame 
 			/// @param Vec2 set to teh density independent offset for the frame
 			//---------------------------------------------------------------------
-			Core::CVector2 GetDPIOffsetForFrame(u32 inudwFrameID) const;
+			Core::Vector2 GetDPIOffsetForFrame(u32 inudwFrameID) const;
 			//---------------------------------------------------------------------
 			/// Get DPI Offset For Frame
 			///
 			/// @param ID for frame 
 			/// @param Vec2 set to teh density independent offset for the frame
 			//---------------------------------------------------------------------
-			void GetDPIOffsetForFrame(u32 inudwFrameID, Core::CVector2 & outvOffset) const;	
+			void GetDPIOffsetForFrame(u32 inudwFrameID, Core::Vector2 & outvOffset) const;	
 			//---------------------------------------------------------------------
 			/// Set Texture
 			///
 			/// @param Texture
 			//---------------------------------------------------------------------
-			void SetTexture(const TexturePtr& inpTex);
+			void SetTexture(const TextureSPtr& inpTex);
 			//---------------------------------------------------------------------
 			/// Get Texture
 			///
 			/// return Texture
 			//---------------------------------------------------------------------
-			const TexturePtr& GetTexture() const;			
+			const TextureSPtr& GetTexture() const;			
 			//---------------------------------------------------------------------
 			/// Animations
 			//---------------------------------------------------------------------		
@@ -237,7 +237,7 @@ namespace ChilliSource
             //---------------------------------------------------------------------
             s16 GetSpriteSheetHeight() { return mwSpriteSheetHeight; }
 		private:
-			TexturePtr mpTexture;
+			TextureSPtr mpTexture;
 			
             s16        mwSpriteSheetWidth;
             s16        mwSpriteSheetHeight;
@@ -248,7 +248,7 @@ namespace ChilliSource
             std::vector<u32> mIDLookups;
             std::vector<std::string> mStringIDLookups;
 			
-			friend class ISpriteSheetManager;
+			friend class SpriteSheetManager;
 		};
 	}
 }

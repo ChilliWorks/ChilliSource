@@ -18,7 +18,7 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		DEFINE_NAMED_INTERFACE(CImage);
+		DEFINE_NAMED_INTERFACE(Image);
 		
 		const u8 gcstrPVRTexIdentifier[4] = {'P', 'V', 'R', '!'};
 		
@@ -114,7 +114,7 @@ namespace ChilliSource
 		/// @param Format
         /// @return Bits per pixel
 		//----------------------------------------------------------------
-        u8 CImage::GetFormatBPP(CImage::Format ineFormat)
+        u8 Image::GetFormatBPP(Image::Format ineFormat)
         {
             return kBPP[(u32)ineFormat];
         }
@@ -124,8 +124,8 @@ namespace ChilliSource
 		///
 		/// Default
 		//----------------------------------------------------------------
-		CImage::CImage()
-		:meFormat(CImage::Format::k_RGBA8888), mudwWidth(0), mudwHeight(0), mpRawData(nullptr), meCompression(ImageCompression::k_none), mbHasAlpha(false), mudwDataLength(0), mpImageData(nullptr)
+		Image::Image()
+		:meFormat(Image::Format::k_RGBA8888), mudwWidth(0), mudwHeight(0), mpRawData(nullptr), meCompression(ImageCompression::k_none), mbHasAlpha(false), mudwDataLength(0), mpImageData(nullptr)
 		{
 			
 		}
@@ -134,7 +134,7 @@ namespace ChilliSource
 		///
 		/// @param Width of the image in pixels
 		//--------------------------------------------------
-		void CImage::SetWidth(u32 inudwWidth)
+		void Image::SetWidth(u32 inudwWidth)
 		{
 			mudwWidth = inudwWidth;
 		}
@@ -143,7 +143,7 @@ namespace ChilliSource
 		///
 		/// @param Height of the image in pixels
 		//--------------------------------------------------
-		void CImage::SetHeight(u32 inudwHeight)
+		void Image::SetHeight(u32 inudwHeight)
 		{
 			mudwHeight = inudwHeight;
 		}
@@ -152,7 +152,7 @@ namespace ChilliSource
 		///
 		/// @param Image data in bytes
 		//--------------------------------------------------
-		void CImage::SetData(u8* inpData)
+		void Image::SetData(u8* inpData)
 		{
 			mpRawData = inpData;
 			mpImageData = inpData;
@@ -162,7 +162,7 @@ namespace ChilliSource
 		///
 		/// @param Image format
 		//--------------------------------------------------
-		void CImage::SetFormat(Format ineFormat)
+		void Image::SetFormat(Format ineFormat)
 		{
 			meFormat = ineFormat;
 		}
@@ -171,7 +171,7 @@ namespace ChilliSource
 		///
 		/// @param image compression type
 		//--------------------------------------------------
-		void CImage::SetCompression(ImageCompression ineCompression)
+		void Image::SetCompression(ImageCompression ineCompression)
 		{
 			meCompression = ineCompression;
 		}
@@ -180,7 +180,7 @@ namespace ChilliSource
 		///
 		/// @param data length
 		//--------------------------------------------------
-		void CImage::SetDataLength(u32 inudwDataLength)
+		void Image::SetDataLength(u32 inudwDataLength)
 		{
 			mudwDataLength = inudwDataLength;
 		}
@@ -191,16 +191,16 @@ namespace ChilliSource
 		/// @param Interface type to query
 		/// @return Whether the object is of given type
 		//----------------------------------------------------------------
-		bool CImage::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool Image::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == CImage::InterfaceID;
+			return inInterfaceID == Image::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Get Format
 		///
 		/// @return Image format (RGB, RGBA, etc)
 		//----------------------------------------------------------------
-		CImage::Format CImage::GetFormat() const
+		Image::Format Image::GetFormat() const
 		{
 			return meFormat;
 		}
@@ -209,7 +209,7 @@ namespace ChilliSource
 		///
 		/// @return Image width
 		//----------------------------------------------------------------
-		u32 CImage::GetWidth() const
+		u32 Image::GetWidth() const
 		{
 			return mudwWidth;
 		}
@@ -218,7 +218,7 @@ namespace ChilliSource
 		///
 		/// @return Image height
 		//----------------------------------------------------------------
-		u32 CImage::GetHeight() const
+		u32 Image::GetHeight() const
 		{
 			return mudwHeight;
 		}
@@ -227,7 +227,7 @@ namespace ChilliSource
 		///
 		/// @return Raw image data
 		//----------------------------------------------------------------
-		const u8* CImage::GetData() const
+		const u8* Image::GetData() const
 		{
 			return mpImageData;
 		}
@@ -236,7 +236,7 @@ namespace ChilliSource
 		///
 		/// @return Image label
 		//----------------------------------------------------------------
-		const std::string& CImage::GetName() const
+		const std::string& Image::GetName() const
 		{
 			return mImageName;
 		}
@@ -245,7 +245,7 @@ namespace ChilliSource
 		///
 		/// @param Image label
 		//----------------------------------------------------------------
-		void CImage::SetName(const std::string& instrName)
+		void Image::SetName(const std::string& instrName)
 		{
 			mImageName = instrName;
 		}
@@ -254,7 +254,7 @@ namespace ChilliSource
 		///
 		/// @return PVR image compression type (NONE, 4BPP, 2BPP)
 		//----------------------------------------------------------------
-		ImageCompression CImage::GetCompression() const
+		ImageCompression Image::GetCompression() const
 		{
 			return meCompression;
 		}
@@ -263,7 +263,7 @@ namespace ChilliSource
 		///
 		/// @return Return size of the image in bytes
 		//----------------------------------------------------------------
-		u32 CImage::GetDataLength() const
+		u32 Image::GetDataLength() const
 		{
 			return mudwDataLength;
 		}
@@ -273,7 +273,7 @@ namespace ChilliSource
 		/// Unpack the texture data in accordance with the
 		/// PVR format
 		//--------------------------------------------------
-		void CImage::UnpackPVRData()
+		void Image::UnpackPVRData()
 		{
 			//Get the header data from the image file
 			PVRTexHeader* pPVRHeader = reinterpret_cast<PVRTexHeader*>(mpRawData);
@@ -303,7 +303,7 @@ namespace ChilliSource
         /// Unpack the texture data in accordance with the
         /// PVR format
         //--------------------------------------------------
-        void CImage::UnpackLegacyPVRTCData(void* inpPVRHeader)
+        void Image::UnpackLegacyPVRTCData(void* inpPVRHeader)
         {
             PVRTexHeader* pPVRHeader = static_cast<PVRTexHeader*>(inpPVRHeader);
             
@@ -346,7 +346,7 @@ namespace ChilliSource
         /// Unpack the texture data in accordance with the
         /// PVR format
         //--------------------------------------------------
-        void CImage::UnpackPVRTCData()
+        void Image::UnpackPVRTCData()
         {
             //Get the header data from the image file
 			PVRTCTexHeader* pPVRTCHeader = reinterpret_cast<PVRTCTexHeader*>(mpRawData);
@@ -355,7 +355,7 @@ namespace ChilliSource
             if(pPVRTCHeader->udwVersion == PVRTC_VERSION_MISMATCH)
             {
                 //TODO:: Endianess is not correct, need to flip bits in the header data, possibly image data?
-                CS_FATAL_LOG("CImage::UnpackPVRTCData >> Endianess Check failed for creating PVR");
+                CS_FATAL_LOG("Image::UnpackPVRTCData >> Endianess Check failed for creating PVR");
             }
             
             u64 udwPFormat = pPVRTCHeader->udwPixelFormat;
@@ -449,7 +449,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//---------------------------------------------------------------
-		CImage::~CImage()
+		Image::~Image()
 		{
 			free(mpRawData);
 		}

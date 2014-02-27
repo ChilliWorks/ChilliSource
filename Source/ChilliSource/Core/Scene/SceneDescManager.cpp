@@ -16,45 +16,45 @@ namespace ChilliSource
 {
     namespace Core
     {
-        DEFINE_NAMED_INTERFACE(CSceneDescManager);
+        DEFINE_NAMED_INTERFACE(SceneDescManager);
         
-        bool CSceneDescManager::IsA(InterfaceIDType inInterfaceID) const
+        bool SceneDescManager::IsA(InterfaceIDType inInterfaceID) const
         {
-            return CSceneDescManager::InterfaceID == inInterfaceID;
+            return SceneDescManager::InterfaceID == inInterfaceID;
         }
         
-        InterfaceIDType CSceneDescManager::GetResourceType() const
+        InterfaceIDType SceneDescManager::GetResourceType() const
         {
-            return CSceneDesc::InterfaceID;
+            return SceneDesc::InterfaceID;
         }
         
-        InterfaceIDType CSceneDescManager::GetProviderType() const
+        InterfaceIDType SceneDescManager::GetProviderType() const
         {
-            return CSceneDesc::InterfaceID;
+            return SceneDesc::InterfaceID;
         }
         
-        bool CSceneDescManager::ManagesResourceOfType(InterfaceIDType inInterfaceID) const
+        bool SceneDescManager::ManagesResourceOfType(InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == CSceneDesc::InterfaceID;
+            return inInterfaceID == SceneDesc::InterfaceID;
         }
         
-        ResourcePtr CSceneDescManager::GetResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        ResourceSPtr SceneDescManager::GetResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             return GetSceneDescFromFile(ineStorageLocation, instrFilePath);
         }
         
-        ResourcePtr CSceneDescManager::AsyncGetResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        ResourceSPtr SceneDescManager::AsyncGetResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             return AsyncGetSceneDescFromFile(ineStorageLocation, instrFilePath);
         }
         
-        SceneDescPtr CSceneDescManager::GetSceneDescFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        SceneDescSPtr SceneDescManager::GetSceneDescFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
             
             if(pExistingResource == mMapFilenameToResource.end())
             {
-                ResourcePtr pResource(new CSceneDesc());
+                ResourceSPtr pResource(new SceneDesc());
                 for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
                 {
                     if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
@@ -62,7 +62,7 @@ namespace ChilliSource
                         CS_DEBUG_LOG("Loading Scene Description " + instrFilePath);
                         mMapFilenameToResource.emplace(instrFilePath, pResource);
                         
-                        SceneDescPtr pSceneDesc = std::static_pointer_cast<CSceneDesc>(pResource);
+                        SceneDescSPtr pSceneDesc = std::static_pointer_cast<SceneDesc>(pResource);
                         pSceneDesc->SetName(instrFilePath);
                         pSceneDesc->SetOwningResourceManager(this);
                         pSceneDesc->SetFilename(instrFilePath);
@@ -74,22 +74,22 @@ namespace ChilliSource
                 }
             }
             else
-                return std::static_pointer_cast<CSceneDesc>(pExistingResource->second);
+                return std::static_pointer_cast<SceneDesc>(pExistingResource->second);
             
             CS_ERROR_LOG("Cannot find resource for Scene Description with path " + instrFilePath);
-            return SceneDescPtr();
+            return SceneDescSPtr();
         }
         
-        SceneDescPtr CSceneDescManager::AsyncGetSceneDescFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        SceneDescSPtr SceneDescManager::AsyncGetSceneDescFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
             
             if(pExistingResource == mMapFilenameToResource.end())
             {
-                ResourcePtr pResource(new CSceneDesc());
+                ResourceSPtr pResource(new SceneDesc());
                 for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
                 {
-                    SceneDescPtr pSceneDesc = std::static_pointer_cast<CSceneDesc>(pResource);
+                    SceneDescSPtr pSceneDesc = std::static_pointer_cast<SceneDesc>(pResource);
                     pSceneDesc->SetName(instrFilePath);
                     pSceneDesc->SetOwningResourceManager(this);
                     pSceneDesc->SetFilename(instrFilePath);
@@ -106,10 +106,10 @@ namespace ChilliSource
                 }
             }
             else
-                return std::static_pointer_cast<CSceneDesc>(pExistingResource->second);
+                return std::static_pointer_cast<SceneDesc>(pExistingResource->second);
             
             CS_ERROR_LOG("Cannot find resource for Scene Description with path " + instrFilePath);
-            return SceneDescPtr();
+            return SceneDescSPtr();
         }
         
     }

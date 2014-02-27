@@ -16,11 +16,11 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		class CLocale
+		class Locale
 		{
 		public:
-            CLocale(std::string instrLanguageCode, std::string instrCountryCode = std::string());
-            ~CLocale();
+            Locale(std::string instrLanguageCode, std::string instrCountryCode = std::string());
+            ~Locale();
 			//---------------------------------------------------------------------
 			/// Get Locale Code
 			///

@@ -19,8 +19,8 @@ namespace ChilliSource
         ///
         /// @param Param Dictionary
         //-------------------------------------------------------------
-        CConeParticleEmitter::CConeParticleEmitter(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, CParticleComponent* inpComponent)
-        :CParticleEmitter(inParams, inpMaterial, inpComponent)
+        ConeParticleEmitter::ConeParticleEmitter(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent)
+        :ParticleEmitter(inParams, inpMaterial, inpComponent)
         {
             std::string strTemp;
             
@@ -45,9 +45,9 @@ namespace ChilliSource
         /// @param Owning system
         /// @return Ownership of point emitter
         //-----------------------------------------------------
-        CParticleEmitter* CConeParticleEmitter::Create(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, CParticleComponent* inpComponent)
+        ParticleEmitter* ConeParticleEmitter::Create(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent)
         {
-            return new CConeParticleEmitter(inParams, inpMaterial, inpComponent);
+            return new ConeParticleEmitter(inParams, inpMaterial, inpComponent);
         }
 		//-----------------------------------------------------
 		/// Emit
@@ -59,10 +59,10 @@ namespace ChilliSource
 		/// @param Particles
 		/// @param Index of current particle
 		//-----------------------------------------------------
-		void CConeParticleEmitter::Emit(Particle* inpParticles, u32 udwParticleIndex)
+		void ConeParticleEmitter::Emit(Particle* inpParticles, u32 udwParticleIndex)
         {
             f32 fBoxAreaSq = mfBoxArea * mfBoxArea;
-            Core::CVector3 vDir;
+            Core::Vector3 vDir;
             do
             {
                 vDir.x = Core::CMathUtils::RandomInRange(-mfBoxArea, mfBoxArea);

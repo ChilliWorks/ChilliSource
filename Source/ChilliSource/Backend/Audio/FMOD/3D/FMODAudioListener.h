@@ -40,7 +40,7 @@ namespace ChilliSource
 			/// @param 3D forward direction vector
 			/// @param 3D up direction vector (perpendicular to forward)
 			//-------------------------------------------------------------
-			void Set3DLocation(Core::CVector3& invPos, Core::CVector3& invVel, Core::CVector3& invForward, Core::CVector3& invUp);
+			void Set3DLocation(Core::Vector3& invPos, Core::Vector3& invVel, Core::Vector3& invForward, Core::Vector3& invUp);
 			
 		private:
 			

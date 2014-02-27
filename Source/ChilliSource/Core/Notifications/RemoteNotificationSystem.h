@@ -20,17 +20,17 @@ namespace ChilliSource
     {
         typedef std::function<void(const std::string&)> RemoteTokenReceivedDelegate;
 		
-        class IRemoteNotificationSystem : public ChilliSource::Core::ISystem
+        class RemoteNotificationSystem : public ChilliSource::Core::System
         {
         public:
-            DECLARE_NAMED_INTERFACE(IRemoteNotificationSystem);
+            DECLARE_NAMED_INTERFACE(RemoteNotificationSystem);
             //---------------------------------------------------------------
             /// Create
             ///
             /// Creates a new platform specfic instance of the remote
             /// notification system.
             //---------------------------------------------------------------
-            static IRemoteNotificationSystem* Create();
+            static RemoteNotificationSystem* Create();
             //---------------------------------------------------------------
             /// Is A
             ///

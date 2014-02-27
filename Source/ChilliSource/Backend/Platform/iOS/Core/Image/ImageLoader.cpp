@@ -37,7 +37,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool ImageLoader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IResourceProvider::InterfaceID;
+			return inInterfaceID == ResourceProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Can Create Resource Of Kind
@@ -47,7 +47,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool ImageLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == Core::CImage::InterfaceID;
+			return inInterfaceID == Core::Image::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Can Create Resource From File With Extension
@@ -67,9 +67,9 @@ namespace ChilliSource
 		/// @param Out: Resource
 		/// @return Whether the resource loaded 
 		//----------------------------------------------------------------
-		bool ImageLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool ImageLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
 		{
-			return CreateImageFromFile(ineStorageLocation, inFilePath, Core::CImage::Format::k_default, outpResource);
+			return CreateImageFromFile(ineStorageLocation, inFilePath, Core::Image::Format::k_default, outpResource);
 		}
 		//----------------------------------------------------------------
 		/// Create Image From File
@@ -80,9 +80,9 @@ namespace ChilliSource
 		/// @param Out: Resource
 		/// @return Whether the resource loaded 
 		//----------------------------------------------------------------
-		bool ImageLoader::CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
+		bool ImageLoader::CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::ResourceSPtr& outpResource)
 		{
-			Core::FileStreamPtr pImageFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
+			Core::FileStreamSPtr pImageFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
    
             if(pImageFile && !pImageFile->IsBad())
 			{
@@ -98,18 +98,18 @@ namespace ChilliSource
                 
                 if(strExtension == PNGExtension)
                 {
-                    CreatePNGImageFromFile(abyData.data(), abyData.size(), ineFormat, (Core::CImage*)outpResource.get());
+                    CreatePNGImageFromFile(abyData.data(), abyData.size(), ineFormat, (Core::Image*)outpResource.get());
 					return true;
                 }
                 else if(strExtension == PVRExtension)
                 {
-                    CreatePVRImageFromFile(abyData.data(), abyData.size(), (Core::CImage*)outpResource.get());
+                    CreatePVRImageFromFile(abyData.data(), abyData.size(), (Core::Image*)outpResource.get());
 					return true;
                 }
                 else if(strExtension == JPGExtension || strExtension == JPEGExtension)	
                 {
                     CS_WARNING_LOG("JPG image loading is not cross-platform and will only work on iOS. Do not use PNGs in a cross-platform project.");
-                    CreateJPGImageFromFile(abyData.data(), abyData.size(), ineFormat, (Core::CImage*)outpResource.get());
+                    CreateJPGImageFromFile(abyData.data(), abyData.size(), ineFormat, (Core::Image*)outpResource.get());
 					return true;
                 }
             }
@@ -127,7 +127,7 @@ namespace ChilliSource
 		/// @param Image format
 		/// @param Out: Image resource
 		//----------------------------------------------------------------
-		void ImageLoader::CreatePNGImageFromFile(const s8* inpbyData, u32 inudwDataSize, Core::CImage::Format ineFormat, Core::CImage* outpImage)
+		void ImageLoader::CreatePNGImageFromFile(const s8* inpbyData, u32 inudwDataSize, Core::Image::Format ineFormat, Core::Image* outpImage)
 		{
             CFDataRef pData = CFDataCreateWithBytesNoCopy(nullptr, (u8*)inpbyData, inudwDataSize, kCFAllocatorNull);
             CGDataProviderRef imgDataProvider = CGDataProviderCreateWithCFData(pData);
@@ -156,14 +156,14 @@ namespace ChilliSource
 			if(CGColorSpaceGetModel(ColorSpaceInfo) == kCGColorSpaceModelMonochrome)
 			{
 				//If the inFormat is specified as LUM_8 then we should try to load as such, even if it has alpha
-				if(bHasAlpha && ineFormat != Core::CImage::Format::k_Lum8)
+				if(bHasAlpha && ineFormat != Core::Image::Format::k_Lum8)
 				{
-					ineFormat = Core::CImage::Format::k_LumA88;
+					ineFormat = Core::Image::Format::k_LumA88;
 					ColorSpaceInfo = CGColorSpaceCreateDeviceRGB();
 				}
 				else 
 				{
-					ineFormat = Core::CImage::Format::k_Lum8;
+					ineFormat = Core::Image::Format::k_Lum8;
                     ColorSpaceInfo = CGColorSpaceCreateDeviceRGB();
 				}
 			}
@@ -184,7 +184,7 @@ namespace ChilliSource
             CFRelease(pData);
 
 	
-			if(ineFormat == Core::CImage::Format::k_default)
+			if(ineFormat == Core::Image::Format::k_default)
 			{
 				ineFormat = meDefaultFormat;
 			}
@@ -192,7 +192,7 @@ namespace ChilliSource
 			//We always load the image as RGBA_8888 but we convert on the fly to the correct format
 			switch(ineFormat)
 			{
-				case Core::CImage::Format::k_RGBA4444:
+				case Core::Image::Format::k_RGBA4444:
 				{
 					CS_DEBUG_LOG("Converting to RGBA_4444");
 				
@@ -202,7 +202,7 @@ namespace ChilliSource
 					pubyBitmapData8888 = pubyBitmapData4444;
 					break;
 				}
-				case Core::CImage::Format::k_RGB565:
+				case Core::Image::Format::k_RGB565:
 				{
 					CS_DEBUG_LOG("Converting to RGBA_565");
 					
@@ -212,7 +212,7 @@ namespace ChilliSource
 					pubyBitmapData8888 = pubyBitmapData565;
 					break;
 				}
-				case Core::CImage::Format::k_LumA88:
+				case Core::Image::Format::k_LumA88:
 				{
 					CS_DEBUG_LOG("Converting to LUMA_88");
 					
@@ -222,7 +222,7 @@ namespace ChilliSource
 					pubyBitmapData8888 = pubyBitmapData88;
 					break;
 				}
-                case Core::CImage::Format::k_Lum8:
+                case Core::Image::Format::k_Lum8:
                 {
                     CS_DEBUG_LOG("Converting to LUM_8");
                     
@@ -253,7 +253,7 @@ namespace ChilliSource
 		/// @param Image format
 		/// @param Out: Image resource
         //----------------------------------------------------------------
-        void ImageLoader::CreateJPGImageFromFile(const s8* inpbyData, u32 inudwDataSize, Core::CImage::Format ineFormat, Core::CImage* outpImage)
+        void ImageLoader::CreateJPGImageFromFile(const s8* inpbyData, u32 inudwDataSize, Core::Image::Format ineFormat, Core::Image* outpImage)
         {
             CFDataRef pData = CFDataCreateWithBytesNoCopy(nullptr, (u8*)inpbyData, inudwDataSize, kCFAllocatorNull);
             CGDataProviderRef imgDataProvider = CGDataProviderCreateWithCFData(pData);
@@ -290,7 +290,7 @@ namespace ChilliSource
 			//We always load the image as RGBA_8888 but we convert on the fly to the correct format
 			switch(ineFormat)
 			{
-				case Core::CImage::Format::k_RGBA4444:
+				case Core::Image::Format::k_RGBA4444:
 				{
 					CS_DEBUG_LOG("Converting to RGBA_4444");
 					
@@ -300,7 +300,7 @@ namespace ChilliSource
 					pubyBitmapData8888 = pubyBitmapData4444;
 					break;
 				}
-				case Core::CImage::Format::k_RGB565:
+				case Core::Image::Format::k_RGB565:
 				{
 					CS_DEBUG_LOG("Converting to RGB_565");
 					
@@ -330,14 +330,14 @@ namespace ChilliSource
 		/// @param Whether the asset is high res
 		/// @param Out: Image resource
 		//----------------------------------------------------------------
-		void ImageLoader::CreatePVRImageFromFile(const s8* inpbyData, u32 inudwDataSize, Core::CImage* outpImage)
+		void ImageLoader::CreatePVRImageFromFile(const s8* inpbyData, u32 inudwDataSize, Core::Image* outpImage)
 		{
             s8* pData = (s8*)malloc(inudwDataSize);
             memcpy(pData, inpbyData, sizeof(s8) * inudwDataSize);
           
 			outpImage->SetData((u8*)pData);
             outpImage->UnpackPVRData();
-			outpImage->SetFormat(Core::CImage::Format::k_RGBA8888);
+			outpImage->SetFormat(Core::Image::Format::k_RGBA8888);
 		}
 		//----------------------------------------------------------------
 		/// RGBA8888 To RGB565

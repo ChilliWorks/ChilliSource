@@ -39,13 +39,13 @@ namespace ChilliSource
             ///
             /// @param Texture shared pointer
             //-----------------------------------------------------------
-            void SetOnImage(const Rendering::TexturePtr& inpTexture);
+            void SetOnImage(const Rendering::TextureSPtr& inpTexture);
 			//-----------------------------------------------------------
 			/// Get On Image
 			///
 			/// @return Texture for non-selected button
 			//-----------------------------------------------------------
-			const Rendering::TexturePtr& GetOnImage() const;
+			const Rendering::TextureSPtr& GetOnImage() const;
             //-----------------------------------------------------------
             /// Set Off Image
             ///
@@ -53,13 +53,13 @@ namespace ChilliSource
             ///
             /// @param Texture shared pointer
             //-----------------------------------------------------------
-            void SetOffImage(const Rendering::TexturePtr& inpTexture);
+            void SetOffImage(const Rendering::TextureSPtr& inpTexture);
 			//-----------------------------------------------------------
 			/// Get Off Image
 			///
 			/// @return Texture for selected button
 			//-----------------------------------------------------------
-			const Rendering::TexturePtr& GetOffImage() const;
+			const Rendering::TextureSPtr& GetOffImage() const;
             //-----------------------------------------------------------
             /// Set On UVs
             ///
@@ -81,25 +81,25 @@ namespace ChilliSource
             ///
             /// @param Sprite sheet with with On image
             //-----------------------------------------------------------
-            void SetOnSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+            void SetOnSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
 			//-----------------------------------------------------------
 			/// Set Off Sprite Sheet
 			///
 			/// @param Sprite sheet with with Off image
 			//-----------------------------------------------------------
-			void SetOffSpriteSheet(const Rendering::SpriteSheetPtr& inpSpriteSheet);
+			void SetOffSpriteSheet(const Rendering::SpriteSheetSPtr& inpSpriteSheet);
             //-----------------------------------------------------------
             /// Get On Sprite Sheet
             ///
             /// @return Sprite sheet with default image
             //-----------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetOnSpriteSheet() const;
+			const Rendering::SpriteSheetSPtr& GetOnSpriteSheet() const;
 			//-----------------------------------------------------------
 			/// Get Off Sprite Sheet
 			///
 			/// @return Sprite sheet with Off image
 			//-----------------------------------------------------------
-			const Rendering::SpriteSheetPtr& GetOffSpriteSheet() const;
+			const Rendering::SpriteSheetSPtr& GetOffSpriteSheet() const;
             //-----------------------------------------------------------
             /// Set On Sprite Sheet Index
             ///
@@ -250,7 +250,7 @@ namespace ChilliSource
 			///
 			/// @return Absolute size of the image
 			//--------------------------------------------------------
-			Core::CVector2 GetSizeFromImage() const;
+			Core::Vector2 GetSizeFromImage() const;
 			//--------------------------------------------------------
 			/// Layout Content
 			///
@@ -333,14 +333,14 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer
 			//-----------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvasRenderer);
+			void Draw(Rendering::CanvasRenderer* inpCanvasRenderer);
             
         protected:
 			//---Properties
-			DECLARE_PROPERTY_A(Rendering::TexturePtr, OnTexture, SetOnImage, GetOnImage);
-			DECLARE_PROPERTY_A(Rendering::TexturePtr, OffTexture, SetOffImage, GetOffImage);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, OnSpriteSheet, SetOnSpriteSheet, GetOnSpriteSheet);
-			DECLARE_PROPERTY_A(Rendering::SpriteSheetPtr, OffSpriteSheet, SetOffSpriteSheet, GetOffSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::TextureSPtr, OnTexture, SetOnImage, GetOnImage);
+			DECLARE_PROPERTY_A(Rendering::TextureSPtr, OffTexture, SetOffImage, GetOffImage);
+			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, OnSpriteSheet, SetOnSpriteSheet, GetOnSpriteSheet);
+			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, OffSpriteSheet, SetOffSpriteSheet, GetOffSpriteSheet);
 
 			DECLARE_PROPERTY_A(u32,OnSpriteSheetIndex, SetOnSpriteSheetIndex, GetOnSpriteSheetIndex);
 			DECLARE_PROPERTY_A(u32, OffSpriteSheetIndex, SetOffSpriteSheetIndex, GetOffSpriteSheetIndex);

@@ -21,7 +21,7 @@ namespace ChilliSource
 		///
 		/// A wrapper around normalised rgba colours.
 		//==========================================================
-		class CColour
+		class Colour
 		{
 		public:
             struct ByteColour
@@ -32,76 +32,76 @@ namespace ChilliSource
                 u8 a;
             };
             
-            CColour();
-			explicit CColour(f32 inR, f32 inG, f32 inB, f32 inA);
-			explicit CColour(u8 inR, u8 inG, u8 inB, u8 inA);
-            explicit CColour(u32 inudwRGBA);
-			static CColour FromByteRGBA(u8 inR, u8 inG, u8 inB, u8 inA);
-            static CColour::ByteColour ColourToByteColour(const CColour& inCol);
+            Colour();
+			explicit Colour(f32 inR, f32 inG, f32 inB, f32 inA);
+			explicit Colour(u8 inR, u8 inG, u8 inB, u8 inA);
+            explicit Colour(u32 inudwRGBA);
+			static Colour FromByteRGBA(u8 inR, u8 inG, u8 inB, u8 inA);
+            static Colour::ByteColour ColourToByteColour(const Colour& inCol);
 			
 			//---------------------------------
 			// Operators
 			//---------------------------------
-			CColour operator=(CColour Col){r = Col.r; g = Col.g; b = Col.b; a = Col.a; return *this;};
+			Colour operator=(Colour Col){r = Col.r; g = Col.g; b = Col.b; a = Col.a; return *this;};
 			
-			CColour operator+(const CColour Col) const
-			{CColour Result; Result.r = this->r + Col.r; Result.g = this->g + Col.g; Result.b = this->b + Col.b; Result.a = this->a + Col.a; return Result;}
+			Colour operator+(const Colour Col) const
+			{Colour Result; Result.r = this->r + Col.r; Result.g = this->g + Col.g; Result.b = this->b + Col.b; Result.a = this->a + Col.a; return Result;}
 			
-			CColour operator+(const f32 Scale) const
-			{CColour Result; Result.r = this->r + Scale; Result.g = this->g + Scale; Result.b = this->b + Scale; Result.a = this->a + Scale; return Result;}
+			Colour operator+(const f32 Scale) const
+			{Colour Result; Result.r = this->r + Scale; Result.g = this->g + Scale; Result.b = this->b + Scale; Result.a = this->a + Scale; return Result;}
 			
-			CColour operator-(const CColour Col) const
-			{CColour Result; Result.r = this->r - Col.r; Result.g = this->g - Col.g; Result.b = this->b - Col.b; Result.a = this->a - Col.a; return Result;}
+			Colour operator-(const Colour Col) const
+			{Colour Result; Result.r = this->r - Col.r; Result.g = this->g - Col.g; Result.b = this->b - Col.b; Result.a = this->a - Col.a; return Result;}
 			
-			CColour operator-(const f32 Scale) const
-			{CColour Result; Result.r = this->r - Scale; Result.g = this->g - Scale; Result.b = this->b - Scale; Result.a = this->a - Scale; return Result;}
+			Colour operator-(const f32 Scale) const
+			{Colour Result; Result.r = this->r - Scale; Result.g = this->g - Scale; Result.b = this->b - Scale; Result.a = this->a - Scale; return Result;}
 			
-			CColour operator*(const CColour Col) const
-			{CColour Result; Result.r = this->r * Col.r; Result.g = this->g * Col.g; Result.b = this->b * Col.b; Result.a = this->a * Col.a; return Result;}
+			Colour operator*(const Colour Col) const
+			{Colour Result; Result.r = this->r * Col.r; Result.g = this->g * Col.g; Result.b = this->b * Col.b; Result.a = this->a * Col.a; return Result;}
 			
-			CColour operator*(const f32 Scale) const
-			{CColour Result; Result.r = this->r * Scale; Result.g = this->g * Scale; Result.b = this->b * Scale; Result.a = this->a * Scale; return Result;}
+			Colour operator*(const f32 Scale) const
+			{Colour Result; Result.r = this->r * Scale; Result.g = this->g * Scale; Result.b = this->b * Scale; Result.a = this->a * Scale; return Result;}
 			
-			const CColour& operator+=(const CColour &Col){this->r += Col.r; this->g += Col.g; this->b += Col.b; this->a += Col.a; return *this;}
+			const Colour& operator+=(const Colour &Col){this->r += Col.r; this->g += Col.g; this->b += Col.b; this->a += Col.a; return *this;}
 			
-			const CColour& operator-=(const CColour &Col){this->r -= Col.r; this->g -= Col.g; this->b -= Col.b; this->a -= Col.a; return *this;}
+			const Colour& operator-=(const Colour &Col){this->r -= Col.r; this->g -= Col.g; this->b -= Col.b; this->a -= Col.a; return *this;}
 			
-			const CColour& operator*=(const CColour &Col){this->r *= Col.r; this->g *= Col.g; this->b *= Col.b; this->a *= Col.a; return *this;}
+			const Colour& operator*=(const Colour &Col){this->r *= Col.r; this->g *= Col.g; this->b *= Col.b; this->a *= Col.a; return *this;}
 			
-			const CColour& operator+=(const f32 Scale){this->r += Scale; this->g += Scale; this->b += Scale; this->a += Scale; return *this;}
+			const Colour& operator+=(const f32 Scale){this->r += Scale; this->g += Scale; this->b += Scale; this->a += Scale; return *this;}
 			
-			const CColour& operator-=(const f32 Scale){this->r -= Scale; this->g -= Scale; this->b -= Scale; this->a -= Scale; return *this;}
+			const Colour& operator-=(const f32 Scale){this->r -= Scale; this->g -= Scale; this->b -= Scale; this->a -= Scale; return *this;}
 			
-			const CColour& operator*=(const f32 Scale){this->r *= Scale; this->g *= Scale; this->b *= Scale; this->a *= Scale; return *this;}
+			const Colour& operator*=(const f32 Scale){this->r *= Scale; this->g *= Scale; this->b *= Scale; this->a *= Scale; return *this;}
 			
-			bool operator==(const CColour &Col) const{return (Col.r == r && Col.g == g && Col.b == b && Col.a == a);}
+			bool operator==(const Colour &Col) const{return (Col.r == r && Col.g == g && Col.b == b && Col.a == a);}
 			
-			bool operator!=(const CColour &Col) const{return (Col.r != r || Col.g != g || Col.b != b || Col.a != a);}
+			bool operator!=(const Colour &Col) const{return (Col.r != r || Col.g != g || Col.b != b || Col.a != a);}
 			
-			bool operator>(const CColour &Col) const{return Col.r > r || Col.g > g || Col.b > b || Col.a > a;}
+			bool operator>(const Colour &Col) const{return Col.r > r || Col.g > g || Col.b > b || Col.a > a;}
 			
-			bool operator<(const CColour &Col) const{return Col.r < r || Col.g < g || Col.b < b || Col.a < a;}
+			bool operator<(const Colour &Col) const{return Col.r < r || Col.g < g || Col.b < b || Col.a < a;}
 			
-			bool operator>=(const CColour &Col) const{return Col.r >= r || Col.g >= g || Col.b >= b || Col.a >= a;}
+			bool operator>=(const Colour &Col) const{return Col.r >= r || Col.g >= g || Col.b >= b || Col.a >= a;}
 			
-			bool operator<=(const CColour &Col) const{return Col.r <= r || Col.g <= g || Col.b <= b || Col.a <= a;}
+			bool operator<=(const Colour &Col) const{return Col.r <= r || Col.g <= g || Col.b <= b || Col.a <= a;}
 			
-			static const CColour WHITE;
-			static const CColour TRANSPARENT;
-			static const CColour BLACK;
-			static const CColour GREY;
-			static const CColour RED;
-			static const CColour GREEN;
-			static const CColour BLUE;
-			static const CColour MAGENTA;
-			static const CColour YELLOW;
-			static const CColour CYAN;
-			static const CColour CORNFLOWER_BLUE;
-            static const CColour LIGHTGREY;
-            static const CColour TURQUOISE;
-            static const CColour ORANGE;
-            static const CColour PURPLE;
-            static const CColour PINK;
+			static const Colour WHITE;
+			static const Colour TRANSPARENT;
+			static const Colour BLACK;
+			static const Colour GREY;
+			static const Colour RED;
+			static const Colour GREEN;
+			static const Colour BLUE;
+			static const Colour MAGENTA;
+			static const Colour YELLOW;
+			static const Colour CYAN;
+			static const Colour CORNFLOWER_BLUE;
+            static const Colour LIGHTGREY;
+            static const Colour TURQUOISE;
+            static const Colour ORANGE;
+            static const Colour PURPLE;
+            static const Colour PINK;
 			
 			//All the named HTML colours, the ultimate goal for Mr Downie
 			

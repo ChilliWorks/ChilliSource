@@ -19,20 +19,20 @@ namespace ChilliSource
     {
         struct Particle
         {
-            Core::CVector3* vScale;
-            Core::CVector3* vTranslation;
-			Core::CColour* Col;				//The colour of the particle
-            Core::CVector3* vVelocity;		//The speed of the particle in 3D space
+            Core::Vector3* vScale;
+            Core::Vector3* vTranslation;
+			Core::Colour* Col;				//The colour of the particle
+            Core::Vector3* vVelocity;		//The speed of the particle in 3D space
             f32* fEnergy;					//Measures the full lifetime of the particle from birth at 1 to death at 0
             f32* fAngularRotation;
         };
         
-        class CParticleEmitter
+        class ParticleEmitter
         {
         public:
             
-            CParticleEmitter(const Core::ParamDictionary& inParams, const MaterialPtr &inpMaterial, CParticleComponent* inpComponent);
-            virtual~CParticleEmitter();
+            ParticleEmitter(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent);
+            virtual~ParticleEmitter();
             //-----------------------------------------------------
             /// Update
             ///
@@ -50,7 +50,7 @@ namespace ChilliSource
             ///
             /// @param Render system
             //-----------------------------------------------------
-            void Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam);
+            void Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam);
             //---------------------------------------------------
             /// Start Emitting
             ///
@@ -77,7 +77,7 @@ namespace ChilliSource
             ///
             /// @param Particle effector
             //-----------------------------------------------------
-            void AddEffector(IParticleEffector* inpEffector);
+            void AddEffector(ParticleEffector* inpEffector);
             //-----------------------------------------------------
             /// Remove Effector
             ///
@@ -86,7 +86,7 @@ namespace ChilliSource
             ///
             /// @param Particle effector
             //-----------------------------------------------------
-            void RemoveEffector(IParticleEffector* inpEffector);
+            void RemoveEffector(ParticleEffector* inpEffector);
             //-----------------------------------------------------
             /// Set Velocity
             ///
@@ -103,7 +103,7 @@ namespace ChilliSource
             ///
             /// @param Colour
             //-----------------------------------------------------
-            void SetColour(const Core::CColour inColour);
+            void SetColour(const Core::Colour inColour);
             //-----------------------------------------------------
             /// Set Number of Particles Per Emission
             ///
@@ -121,7 +121,7 @@ namespace ChilliSource
             ///
             /// @param Material ptr
             //-----------------------------------------------------
-            void SetMaterial(const MaterialPtr& inpMaterial);
+            void SetMaterial(const MaterialSPtr& inpMaterial);
             //-----------------------------------------------------
             /// Set Emission Frequency
             ///
@@ -186,23 +186,23 @@ namespace ChilliSource
 			///
 			/// Rebuild the sprite data
 			//-----------------------------------------------------
-			void UpdateSpriteData(const Core::CVector3& invPos, const Core::CColour & insTintColour, CSpriteComponent::SpriteData& outsData,
-                                  const Core::CVector3& invRight, const Core::CVector3& invUp, const Core::CVector3& invScale);
+			void UpdateSpriteData(const Core::Vector3& invPos, const Core::Colour & insTintColour, SpriteComponent::SpriteData& outsData,
+                                  const Core::Vector3& invRight, const Core::Vector3& invUp, const Core::Vector3& invScale);
             
         protected:
             
             Particle mParticles;
-            std::vector<IParticleEffector*> mEffectors;
+            std::vector<ParticleEffector*> mEffectors;
             
             f32 mfInitialVelocity;
             f32 mfMinInitialVelocity;
             
-            Core::CColour mInitialColour;
-            Core::CVector3 mvLastEmissionPos;
+            Core::Colour mInitialColour;
+            Core::Vector3 mvLastEmissionPos;
             
 			Core::Rectangle msParticleUVs;
 			
-            MaterialPtr mpMaterial;
+            MaterialSPtr mpMaterial;
             
             u32 mudwMaxNumParticles;
             u32 mudwMaxNumParticlesPerEmission;
@@ -213,7 +213,7 @@ namespace ChilliSource
             f32 mfEmissionFreq;
             f32 mfTimeToLive;
             f32 mfEnergyLoss;
-            Core::CVector2 mvInitialScale;
+            Core::Vector2 mvInitialScale;
             
             bool mbShouldLoop;
             bool mbIsEmitting;
@@ -221,7 +221,7 @@ namespace ChilliSource
             bool mbIsEmittingFinished;
             bool mbIsGlobalSpace;
             
-            CParticleComponent* mpOwningComponent;
+            ParticleComponent* mpOwningComponent;
         };
     }
 }

@@ -20,12 +20,12 @@ namespace ChilliSource
 {
 	namespace Social
 	{
-		class TwitterAuthenticationActivity : public Core::IActivity
+		class TwitterAuthenticationActivity : public Core::Activity
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(TwitterAuthenticationActivity);
 			
-            static IActivity* CreateTwitterAuthenticationActivity();
+            static Activity* CreateTwitterAuthenticationActivity();
             
 			struct AuthenticationPINResult
 			{

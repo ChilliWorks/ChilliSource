@@ -20,7 +20,7 @@ namespace ChilliSource
 {
     namespace Web
     {
-        class WebViewActivity : public Core::IActivity
+        class WebViewActivity : public Core::Activity
         {
         public:
             

@@ -28,15 +28,15 @@ namespace ChilliSource
 			PrimitiveType ePrimitiveType;
 			BufferAccess eAccessFlag;
 			BufferUsage eUsageFlag;
-			CVertexDeclaration VertexLayout;
+			VertexDeclaration VertexLayout;
 			u32 IndexSize;
 		};
 		
-		class IMeshBuffer
+		class MeshBuffer
 		{
 		public:
-			IMeshBuffer(BufferDescription &inBuffDesc);
-			virtual ~IMeshBuffer(){}
+			MeshBuffer(BufferDescription &inBuffDesc);
+			virtual ~MeshBuffer(){}
             //-----------------------------------------------------
             /// Bind
             ///
@@ -97,7 +97,7 @@ namespace ChilliSource
 			///
 			/// @return Vertex format
 			//------------------------------------------------
-			CVertexDeclaration& GetVertexDeclaration();
+			VertexDeclaration& GetVertexDeclaration();
 			//------------------------------------------------
 			/// Get Vertex Count
 			///
@@ -161,7 +161,7 @@ namespace ChilliSource
 
 		protected:
 			
-			CVertexDeclaration mVertexDecl;
+			VertexDeclaration mVertexDecl;
 			BufferDescription mBufferDesc;
 			
 			u32 mVertexCount;

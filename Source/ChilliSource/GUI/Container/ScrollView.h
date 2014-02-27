@@ -115,19 +115,19 @@ namespace ChilliSource
             ///
             /// @param Velocity
             //-----------------------------------------------------
-            void SetVelocity(const Core::CVector2& invVelocity);
+            void SetVelocity(const Core::Vector2& invVelocity);
             //-----------------------------------------------------
             /// Set Absolute Content Size
             ///
             /// @param Content size
             //-----------------------------------------------------
-            void SetAbsoluteContentSize(const Core::CVector2& invSize);
+            void SetAbsoluteContentSize(const Core::Vector2& invSize);
             //-----------------------------------------------------
             /// Get Absolute Content Size
             ///
             /// @return Content size
             //-----------------------------------------------------
-            Core::CVector2 GetAbsoluteContentSize() const;
+            Core::Vector2 GetAbsoluteContentSize() const;
             //-------------------------------------------------------
 			/// Draw
 			///
@@ -136,7 +136,7 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer pointer
 			//-------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			void Draw(Rendering::CanvasRenderer* inpCanvas);
 			//-------------------------------------------------------
 			/// Sets Debug Drawing
 			///
@@ -151,7 +151,7 @@ namespace ChilliSource
 			///
 			/// @return The current absolute position of the scroll view
 			//-----------------------------------------------------------
-            Core::CVector2 GetAbsoluteContentPosition() const;
+            Core::Vector2 GetAbsoluteContentPosition() const;
          	//-----------------------------------------------------------
 			/// Get Container View
 			///
@@ -162,12 +162,12 @@ namespace ChilliSource
             
         private:
             
-            Core::CVector2 mvVelocity;
+            Core::Vector2 mvVelocity;
             
             GUIViewSPtr mpContainerView;
             
-			Core::CVector2 mvRealPreviousTouchPosition;
-			Core::CVector2 mvNextRealPreviousTouchPosition;
+			Core::Vector2 mvRealPreviousTouchPosition;
+			Core::Vector2 mvNextRealPreviousTouchPosition;
 			bool mbTouchActive;
 			bool mbTouchMoved;
 			

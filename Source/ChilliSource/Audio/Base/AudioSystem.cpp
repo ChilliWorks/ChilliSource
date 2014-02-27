@@ -116,7 +116,7 @@ namespace ChilliSource
 		///
 		/// @return Audio component factory pointer
 		//-------------------------------------------------------
-		Core::IComponentFactory* AudioSystem::GetComponentFactoryPtr(u32 inudwIndex)
+		Core::ComponentFactory* AudioSystem::GetComponentFactoryPtr(u32 inudwIndex)
 		{
 			return mpAudioComponentFactory;
 		}
@@ -125,7 +125,7 @@ namespace ChilliSource
 		///
 		/// @return Audio component factory
 		//-------------------------------------------------------
-		Core::IComponentFactory& AudioSystem::GetComponentFactory(u32 inudwIndex)
+		Core::ComponentFactory& AudioSystem::GetComponentFactory(u32 inudwIndex)
 		{
 			return *mpAudioComponentFactory;
 		}

@@ -20,12 +20,12 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(CSpriteComponent);
+        DEFINE_NAMED_INTERFACE(SpriteComponent);
 		//----------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------
-		CSpriteComponent::CSpriteComponent() : mUVs(Core::CVector2(0, 0), Core::CVector2(1, 1)), mbFlippedVertical(false), mbFlippedHorizontal(false), 
-        mbCornerPosCacheValid(false), meAlignment(Core::AlignmentAnchor::k_middleCentre), mbUVCacheValid(false), mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
+		SpriteComponent::SpriteComponent() : mUVs(Core::Vector2(0, 0), Core::Vector2(1, 1)), mbFlippedVertical(false), mbFlippedHorizontal(false), 
+        mbCornerPosCacheValid(false), meAlignment(AlignmentAnchor::k_middleCentre), mbUVCacheValid(false), mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
 		{
             mByteColourWithOpacity.r = 255;
             mByteColourWithOpacity.g = 255;
@@ -35,23 +35,23 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CSpriteComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool SpriteComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return  (inInterfaceID == CSpriteComponent::InterfaceID) || 
-                    (inInterfaceID == IRenderComponent::InterfaceID) ||
-                    (inInterfaceID == IVolumeComponent::InterfaceID);
+			return  (inInterfaceID == SpriteComponent::InterfaceID) || 
+                    (inInterfaceID == RenderComponent::InterfaceID) ||
+                    (inInterfaceID == VolumeComponent::InterfaceID);
 		}
 		//----------------------------------------------------
 		/// Get Axis Aligned Bounding Box
 		//----------------------------------------------------
-		const Core::AABB& CSpriteComponent::GetAABB()
+		const Core::AABB& SpriteComponent::GetAABB()
 		{
 			if(mpEntityOwner && !mbAABBValid)
 			{
                 mbAABBValid = true;
                 
 				//Rebuild the box
-				mBoundingBox.SetOrigin(mpEntityOwner->Transform().GetWorldPosition());
+				mBoundingBox.SetOrigin(mpEntityOwner->GetTransform().GetWorldPosition());
 				mBoundingBox.SetSize(mvDimensions);
 			}
 			return mBoundingBox;
@@ -59,27 +59,27 @@ namespace ChilliSource
 		//----------------------------------------------------
 		/// Get Object Oriented Bounding Box
 		//----------------------------------------------------
-		const Core::OOBB& CSpriteComponent::GetOOBB()
+		const Core::OOBB& SpriteComponent::GetOOBB()
 		{
 			if(mpEntityOwner && !mbOOBBValid)
 			{
                 mbOOBBValid = true;
                 
 				mOBBoundingBox.SetSize(mvDimensions);
-				mOBBoundingBox.SetTransform(mpEntityOwner->Transform().GetWorldTransform());
+				mOBBoundingBox.SetTransform(mpEntityOwner->GetTransform().GetWorldTransform());
 			}
 			return mOBBoundingBox;
 		}
 		//----------------------------------------------------
 		/// Get Bounding Sphere
 		//----------------------------------------------------
-		const Core::Sphere& CSpriteComponent::GetBoundingSphere()
+		const Core::Sphere& SpriteComponent::GetBoundingSphere()
 		{
 			if(mpEntityOwner && !mbBoundingSphereValid)
 			{
                 mbBoundingSphereValid = true;
                 
-				mBoundingSphere.vOrigin = mpEntityOwner->Transform().GetWorldPosition();
+				mBoundingSphere.vOrigin = mpEntityOwner->GetTransform().GetWorldPosition();
 				mBoundingSphere.fRadius = std::max(mvDimensions.x, mvDimensions.y) * 0.5f;
 			}
 			return mBoundingSphere;
@@ -87,23 +87,23 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Dimensions Unfactored
 		//-----------------------------------------------------------
-		void CSpriteComponent::SetDimensions(const Core::CVector2 &invDims)
+		void SpriteComponent::SetDimensions(const Core::Vector2 &invDims)
 		{
 			SetDimensions(invDims.x, invDims.y);
 		}
 		//-----------------------------------------------------------
 		/// Set Dimensions Unfactored
 		//-----------------------------------------------------------
-		void CSpriteComponent::SetDimensions(const f32 infWidth, const f32 infHeight)
+		void SpriteComponent::SetDimensions(const f32 infWidth, const f32 infHeight)
 		{
 			mbCornerPosCacheValid = false;
 			
-			mvDimensions = Core::CVector2(infWidth, infHeight);
+			mvDimensions = Core::Vector2(infWidth, infHeight);
 		}
 		//-----------------------------------------------------------
 		/// Set Width Unfactored
 		//-----------------------------------------------------------
-		void CSpriteComponent::SetWidth(const f32 infWidth)
+		void SpriteComponent::SetWidth(const f32 infWidth)
 		{
 			mbCornerPosCacheValid = false;
 			
@@ -112,7 +112,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Height Unfactored
 		//-----------------------------------------------------------
-		void CSpriteComponent::SetHeight(const f32 infHeight)
+		void SpriteComponent::SetHeight(const f32 infHeight)
 		{
 			mbCornerPosCacheValid = false;
 			
@@ -121,14 +121,14 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get Dimensions
 		//-----------------------------------------------------------
-		const Core::CVector2& CSpriteComponent::GetDimensions() const
+		const Core::Vector2& SpriteComponent::GetDimensions() const
 		{
 			return mvDimensions;
 		}
 		//-----------------------------------------------------------
 		/// Set UV's
 		//-----------------------------------------------------------
-		void CSpriteComponent::SetUVs(const Core::CRect &inUVs)
+		void SpriteComponent::SetUVs(const Core::CRect &inUVs)
 		{
 			mUVs = inUVs;
             
@@ -137,7 +137,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set UV's
 		//-----------------------------------------------------------
-		void CSpriteComponent::SetUVs(const f32 infUStart, const f32 infUWidth, const f32 infVStart, const f32 infVHeight)
+		void SpriteComponent::SetUVs(const f32 infUStart, const f32 infUWidth, const f32 infVStart, const f32 infVHeight)
 		{
 			mUVs.vOrigin.x = infUStart;
 			mUVs.vSize.x = infUWidth;
@@ -149,14 +149,14 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get UVs
 		//-----------------------------------------------------------
-		const Core::CRect& CSpriteComponent::GetUVs() const
+		const Core::CRect& SpriteComponent::GetUVs() const
 		{
 			return mUVs;
 		}
 		//-----------------------------------------------------------
 		/// Set Colour
 		//-----------------------------------------------------------
-		void CSpriteComponent::SetColour(const Core::CColour &inCol)
+		void SpriteComponent::SetColour(const Core::Colour &inCol)
 		{
 			mColour = inCol;
             SetColourWithOpacity(mColour);
@@ -164,22 +164,22 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Colour
 		//-----------------------------------------------------------
-		void CSpriteComponent::SetColour(const f32 infR, const f32 infG, const f32 infB, const f32 infA)
+		void SpriteComponent::SetColour(const f32 infR, const f32 infG, const f32 infB, const f32 infA)
 		{
-			mColour = Core::CColour(infR, infG, infB, infA);
+			mColour = Core::Colour(infR, infG, infB, infA);
             SetColourWithOpacity(mColour);
 		}
 		//-----------------------------------------------------------
 		/// Get Colour
 		//-----------------------------------------------------------
-		const Core::CColour& CSpriteComponent::GetColour() const
+		const Core::Colour& SpriteComponent::GetColour() const
 		{
 			return mColour;
 		}
 		//-----------------------------------------------------------
 		/// Get Current Frame
 		//-----------------------------------------------------------
-		const Core::CRect& CSpriteComponent::GetCurrentFrame()
+		const Core::CRect& SpriteComponent::GetCurrentFrame()
 		{
 			if (mbFlippedHorizontal) 
 			{
@@ -208,7 +208,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Flipped Horizontal
 		//-----------------------------------------------------------
-		void CSpriteComponent::SetFlippedHorizontal(bool inbValue)
+		void SpriteComponent::SetFlippedHorizontal(bool inbValue)
 		{
 			mbFlippedHorizontal = inbValue;
             mbUVCacheValid = false;
@@ -216,14 +216,14 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get Flipped Horizontal
 		//-----------------------------------------------------------
-		bool CSpriteComponent::GetFlippedHorizontal() const
+		bool SpriteComponent::GetFlippedHorizontal() const
 		{
 			return mbFlippedHorizontal;
 		}
 		//-----------------------------------------------------------
 		/// Set Flipped Vertical
 		//-----------------------------------------------------------
-		void CSpriteComponent::SetFlippedVertical(bool inbValue)
+		void SpriteComponent::SetFlippedVertical(bool inbValue)
 		{
 			mbFlippedVertical = inbValue;
             mbUVCacheValid = false;
@@ -231,14 +231,14 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get Flipped Vertical
 		//-----------------------------------------------------------
-		bool CSpriteComponent::GetFlippedVertical() const
+		bool SpriteComponent::GetFlippedVertical() const
 		{
 			return mbFlippedVertical;
 		}
 		//-----------------------------------------------------------
 		/// Set Origin Alignment
 		//-----------------------------------------------------------
-		void CSpriteComponent::SetOriginAlignment(Core::AlignmentAnchor ineAlignment)
+		void SpriteComponent::SetOriginAlignment(AlignmentAnchor ineAlignment)
         {
 			meAlignment = ineAlignment;
 			mbCornerPosCacheValid = false;
@@ -246,14 +246,14 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get Origin Alignment
 		//-----------------------------------------------------------
-		Core::AlignmentAnchor CSpriteComponent::GetOriginAlignment() const
+		AlignmentAnchor SpriteComponent::GetOriginAlignment() const
         {
 			return meAlignment;
 		}
         //-----------------------------------------------------------
         /// Get Sprite Data
         //-----------------------------------------------------------
-        const CSpriteComponent::SpriteData& CSpriteComponent::GetSpriteData()
+        const SpriteComponent::SpriteData& SpriteComponent::GetSpriteData()
         {
             CalculateSpriteData();
             
@@ -262,7 +262,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Calculate Sprite Data
         //-----------------------------------------------------------
-        void CSpriteComponent::CalculateSpriteData()
+        void SpriteComponent::CalculateSpriteData()
         {
             //Update the vertex positions
             if(!mbCornerPosCacheValid) 
@@ -300,7 +300,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Render
         //-----------------------------------------------------------
-        void CSpriteComponent::Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass)
+        void SpriteComponent::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass)
         {
             CalculateSpriteData();
             
@@ -316,7 +316,7 @@ namespace ChilliSource
         //------------------------------------------------------------
         /// On Transform Changed
         //------------------------------------------------------------
-        void CSpriteComponent::OnTransformChanged()
+        void SpriteComponent::OnTransformChanged()
         {
             mbCornerPosCacheValid = false;
             mbBoundingSphereValid = false;
@@ -326,7 +326,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Upper Left Corner Position
         //-----------------------------------------------------------
-		const ChilliSource::Core::CVector4 & CSpriteComponent::GetUpperLeftCornerPos()
+		const ChilliSource::Core::Vector4 & SpriteComponent::GetUpperLeftCornerPos()
         {
 			if (!mbCornerPosCacheValid)
             {
@@ -338,7 +338,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Lower Left Corner Position
         //-----------------------------------------------------------
-		const ChilliSource::Core::CVector4 & CSpriteComponent::GetLowerLeftCornerPos()
+		const ChilliSource::Core::Vector4 & SpriteComponent::GetLowerLeftCornerPos()
         {
 			if (!mbCornerPosCacheValid) 
             {
@@ -350,7 +350,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Upper Right Corner Position
         //-----------------------------------------------------------
-		const ChilliSource::Core::CVector4 & CSpriteComponent::GetUpperRightCornerPos()
+		const ChilliSource::Core::Vector4 & SpriteComponent::GetUpperRightCornerPos()
         {
 			if (!mbCornerPosCacheValid) 
             {
@@ -362,7 +362,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Lower Right Corner Position
         //-----------------------------------------------------------
-		const ChilliSource::Core::CVector4 & CSpriteComponent::GetLowerRightCornerPos()
+		const ChilliSource::Core::Vector4 & SpriteComponent::GetLowerRightCornerPos()
         {
 			if (!mbCornerPosCacheValid) 
             {
@@ -374,60 +374,60 @@ namespace ChilliSource
 		//----------------------------------------------------
 		/// On Attached To Entity
 		//----------------------------------------------------
-		void CSpriteComponent::OnAttachedToEntity()
+		void SpriteComponent::OnAttachedToEntity()
 		{
-			mpEntityOwner->Transform().GetTransformChangedEvent() += Core::MakeDelegate(this, &CSpriteComponent::OnTransformChanged);
+			mpEntityOwner->GetTransform().GetTransformChangedEvent() += Core::MakeDelegate(this, &SpriteComponent::OnTransformChanged);
             
             OnTransformChanged();
 		}
 		//----------------------------------------------------
 		/// On Detached From Entity
 		//----------------------------------------------------
-		void CSpriteComponent::OnDetachedFromEntity()
+		void SpriteComponent::OnDetachedFromEntity()
 		{
-			mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &CSpriteComponent::OnTransformChanged);
+			mpEntityOwner->GetTransform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &SpriteComponent::OnTransformChanged);
 		}
         //-----------------------------------------------------------
         /// Calculate Corner Positions
         //-----------------------------------------------------------
-		void CSpriteComponent::CalculateCornerPositions()
+		void SpriteComponent::CalculateCornerPositions()
         {
-            mmatTransformCache = mpEntityOwner->Transform().GetWorldTransform();
+            mmatTransformCache = mpEntityOwner->GetTransform().GetWorldTransform();
             
-			Core::CVector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
-			Core::CVector2 vAlignedPos;
-            Core::Align(meAlignment, vHalfSize, vAlignedPos);
+			Core::Vector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
+			Core::Vector2 vAlignedPos;
+            Align(meAlignment, vHalfSize, vAlignedPos);
             
-            Core::CVector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
-            Core::CVector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
+            Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
+            Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topLeft]);
+            Core::Matrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topLeft]);
             
             vTemp.x = vHalfSize.x;
             vTemp.y = vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topRight]);
+            Core::Matrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topRight]);
             
             vTemp.x = -vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_bottomLeft]);
+            Core::Matrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_bottomLeft]);
             
             vTemp.x = vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_bottomRight]);
+            Core::Matrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_bottomRight]);
             
 			mbCornerPosCacheValid = true;
             
-            Core::CColour pCurrentColour = GetColour();
+            Core::Colour pCurrentColour = GetColour();
             
-            f32 fOpacity = mpEntityOwner->Transform().GetWorldOpacity();
+            f32 fOpacity = mpEntityOwner->GetTransform().GetWorldOpacity();
             
-            SetColourWithOpacity(Core::CColour(pCurrentColour.r * fOpacity,
+            SetColourWithOpacity(Core::Colour(pCurrentColour.r * fOpacity,
                                                pCurrentColour.g * fOpacity,
                                                pCurrentColour.b * fOpacity,
                                                pCurrentColour.a * fOpacity));
@@ -436,31 +436,31 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Set Colour With Opacity
         //-----------------------------------------------------------
-        void CSpriteComponent::SetColourWithOpacity(const Core::CColour &inCol)
+        void SpriteComponent::SetColourWithOpacity(const Core::Colour &inCol)
         {
             mColourWithOpacity = inCol;
-            mByteColourWithOpacity = Core::CColour::ColourToByteColour(mColourWithOpacity);
+            mByteColourWithOpacity = Core::Colour::ColourToByteColour(mColourWithOpacity);
         }
         //-----------------------------------------------------------
         /// Set Colour With Opacity
         //-----------------------------------------------------------
-        void CSpriteComponent::SetColourWithOpacity(const f32 infR, const f32 infG, const f32 infB, const f32 infA)
+        void SpriteComponent::SetColourWithOpacity(const f32 infR, const f32 infG, const f32 infB, const f32 infA)
         {
-			mColourWithOpacity = Core::CColour(infR, infG, infB, infA);
-            mByteColourWithOpacity = Core::CColour::ColourToByteColour(mColourWithOpacity);
+			mColourWithOpacity = Core::Colour(infR, infG, infB, infA);
+            mByteColourWithOpacity = Core::Colour::ColourToByteColour(mColourWithOpacity);
         }
         //-----------------------------------------------------------
         /// Get Colour With Opacity
         //-----------------------------------------------------------
-        const Core::CColour& CSpriteComponent::GetColourWithOpacity() const
+        const Core::Colour& SpriteComponent::GetColourWithOpacity() const
         {
             return mColourWithOpacity;
         }
-        CSpriteComponent::~CSpriteComponent()
+        SpriteComponent::~SpriteComponent()
 		{
             if(mpEntityOwner)
             {
-                mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &CSpriteComponent::OnTransformChanged);
+                mpEntityOwner->GetTransform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &SpriteComponent::OnTransformChanged);
             }
 		}
 	}

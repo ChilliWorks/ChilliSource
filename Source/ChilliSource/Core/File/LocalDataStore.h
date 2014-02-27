@@ -27,7 +27,7 @@ namespace ChilliSource
             // Application is a friend as it is the only place
             // our data store is created and subscribes to the
             // suspend event
-            friend class CApplication;
+            friend class Application;
         
         public:
             //----------------------------------------------------------------

@@ -18,7 +18,7 @@ namespace ChilliSource
 {
 	namespace Core
 	{		
-		CEntityAnimation::CEntityAnimation(const EntityAnimationData* inpAnimData, CEntity* inpTarget, u32 inudwQueryFlags, f32 infInTime, f32 infOutTime)
+		EntityAnimation::EntityAnimation(const EntityAnimationData* inpAnimData, Entity* inpTarget, u32 inudwQueryFlags, f32 infInTime, f32 infOutTime)
 		:mpTarget(inpTarget)
         ,mudwFrameCount(inpAnimData->udwKeyframeCount)
 		,mpafFrameTimes(inpAnimData->afKeyframeTimes)
@@ -54,32 +54,32 @@ namespace ChilliSource
             }
 		}
         
-        void CEntityAnimation::SetInAndOutTime(f32 inInTime, f32 inOutTime)
+        void EntityAnimation::SetInAndOutTime(f32 inInTime, f32 inOutTime)
         {
             mfInTime = inInTime;
             mfOutTime = inOutTime;
             SetDuration(inOutTime - mfInTime);
         }
         
-        void CEntityAnimation::SetInterpolationMode(InterpolationType ineType)
+        void EntityAnimation::SetInterpolationMode(InterpolationType ineType)
         {
             switch (ineType)
             {
                 case InterpolationType::k_linear:
-                    mInterpolateDelegate = Core::MakeDelegate(this, &CEntityAnimation::Lerp);
+                    mInterpolateDelegate = Core::MakeDelegate(this, &EntityAnimation::Lerp);
                     break;
                 case InterpolationType::k_step:
-                    mInterpolateDelegate = Core::MakeDelegate(this, &CEntityAnimation::Step);
+                    mInterpolateDelegate = Core::MakeDelegate(this, &EntityAnimation::Step);
                     break;
             }
         }
         
-        CEntity* CEntityAnimation::GetTarget()
+        Entity* EntityAnimation::GetTarget()
         {
             return mpTarget;
         }
         
-        void CEntityAnimation::ToFrame(u32 inudwFrameNumber)
+        void EntityAnimation::ToFrame(u32 inudwFrameNumber)
         {
             if(inudwFrameNumber < mudwFrameCount)
             {
@@ -88,7 +88,7 @@ namespace ChilliSource
             }
         }
 		
- 		void CEntityAnimation::UpdateInternal()
+ 		void EntityAnimation::UpdateInternal()
 		{	
             f32 fAdjustedAnimPos = mfAnimPos + mfInTime;
             
@@ -116,48 +116,48 @@ namespace ChilliSource
             mInterpolateDelegate(lowIndex, highIndex, fProgression);
         }
         
-        void CEntityAnimation::Step(u32 inudwLowFrame, u32 inudwHighFrame, f32 infT)
+        void EntityAnimation::Step(u32 inudwLowFrame, u32 inudwHighFrame, f32 infT)
         {
             u32 udwFrame = inudwLowFrame + floor(infT + 0.5f);
             // Interpolate translation
-			CVector3 vLerpedTranslation = mpasFrameValues.get()[udwFrame].vTranslation;
+			Vector3 vLerpedTranslation = mpasFrameValues.get()[udwFrame].vTranslation;
             
 			// Interpolate scale
-			CVector3 vLerpedScale = mpasFrameValues.get()[udwFrame].vScale;
+			Vector3 vLerpedScale = mpasFrameValues.get()[udwFrame].vScale;
             
 			// Interpolate orientation
-			CQuaternion qLerpedOrientation = mpasFrameValues.get()[udwFrame].qOrientation;
+			Quaternion qLerpedOrientation = mpasFrameValues.get()[udwFrame].qOrientation;
             
-            mpTarget->Transform().SetPositionScaleOrientation(vLerpedTranslation, vLerpedScale, qLerpedOrientation);
+            mpTarget->GetTransform().SetPositionScaleOrientation(vLerpedTranslation, vLerpedScale, qLerpedOrientation);
             
             //Interpolate Opacity
             f32 fOpacity = mpasFrameValues.get()[udwFrame].fOpacity;
             
-            if(mpTarget->Transform().GetLocalOpacity() != fOpacity)
+            if(mpTarget->GetTransform().GetLocalOpacity() != fOpacity)
             {
-                mpTarget->Transform().FadeTo(fOpacity);
+                mpTarget->GetTransform().FadeTo(fOpacity);
             }
         }
         
-        void CEntityAnimation::Lerp(u32 inudwLowFrame, u32 inudwHighFrame, f32 infT)
+        void EntityAnimation::Lerp(u32 inudwLowFrame, u32 inudwHighFrame, f32 infT)
         {
             // Interpolate translation
-			CVector3 vLerpedTranslation = CMathUtils::Lerp(infT, mpasFrameValues.get()[inudwLowFrame].vTranslation, mpasFrameValues.get()[inudwHighFrame].vTranslation);
+			Vector3 vLerpedTranslation = CMathUtils::Lerp(infT, mpasFrameValues.get()[inudwLowFrame].vTranslation, mpasFrameValues.get()[inudwHighFrame].vTranslation);
             
 			// Interpolate scale
-			CVector3 vLerpedScale = CMathUtils::Lerp(infT, mpasFrameValues.get()[inudwLowFrame].vScale, mpasFrameValues.get()[inudwHighFrame].vScale);
+			Vector3 vLerpedScale = CMathUtils::Lerp(infT, mpasFrameValues.get()[inudwLowFrame].vScale, mpasFrameValues.get()[inudwHighFrame].vScale);
             
 			// Interpolate orientation
-			CQuaternion qLerpedOrientation = CQuaternion::Slerp(mpasFrameValues.get()[inudwLowFrame].qOrientation, mpasFrameValues.get()[inudwHighFrame].qOrientation, infT);
+			Quaternion qLerpedOrientation = Quaternion::Slerp(mpasFrameValues.get()[inudwLowFrame].qOrientation, mpasFrameValues.get()[inudwHighFrame].qOrientation, infT);
             
-            mpTarget->Transform().SetPositionScaleOrientation(vLerpedTranslation, vLerpedScale, qLerpedOrientation);
+            mpTarget->GetTransform().SetPositionScaleOrientation(vLerpedTranslation, vLerpedScale, qLerpedOrientation);
             
             //Interpolate Opacity
             f32 fOpacity = CMathUtils::Lerp(infT, mpasFrameValues.get()[inudwLowFrame].fOpacity, mpasFrameValues.get()[inudwHighFrame].fOpacity);
             
-            if(mpTarget->Transform().GetLocalOpacity() != fOpacity)
+            if(mpTarget->GetTransform().GetLocalOpacity() != fOpacity)
             {
-                mpTarget->Transform().FadeTo(fOpacity);
+                mpTarget->GetTransform().FadeTo(fOpacity);
             }
         }
 	}

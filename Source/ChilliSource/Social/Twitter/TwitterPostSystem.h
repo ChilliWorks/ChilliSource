@@ -89,7 +89,7 @@ namespace ChilliSource
             std::string strLocalImagePath;
 		};
 		
-		class TwitterPostSystem: public ChilliSource::Core::ISystem
+		class TwitterPostSystem: public ChilliSource::Core::System
 		{
 		public:
 			
@@ -106,10 +106,10 @@ namespace ChilliSource
 			typedef std::function<void(const PostResult&)> PostResultDelegate;
 			
             //Create platform specific system
-            static TwitterPostSystem* CreateSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::COAuthSystem* inpOAuthSystem);
+            static TwitterPostSystem* CreateSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem);
             
 			TwitterPostSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem,
-							   Core::COAuthSystem* inpOAuthSystem);
+							   Core::OAuthSystem* inpOAuthSystem);
 			//------------------------------------------------------------------------
 			/// Destructor
 			//------------------------------------------------------------------------
@@ -156,9 +156,9 @@ namespace ChilliSource
 			//------------------------------------------------------------------------
 			/// Delegate called with the authorisation view is dismissed.
 			///
-			/// @param Pointer to IActivity that has been dismissed
+			/// @param Pointer to Activity that has been dismissed
 			//------------------------------------------------------------------------
-			virtual void OnAuthorisationDismissed(Core::IActivity* inpActivity) = 0;
+			virtual void OnAuthorisationDismissed(Core::Activity* inpActivity) = 0;
 
         protected:
 			//------------------------------------------------------------------------
@@ -229,7 +229,7 @@ namespace ChilliSource
 			virtual void SaveOAuthTokenKeyAndSecretKey();
 
 			Networking::HttpConnectionSystem*					mpHttpConnectionSystem;
-			Core::COAuthSystem*							mpOAuthSystem;
+			Core::OAuthSystem*							mpOAuthSystem;
 
 			// Customer Key and Secret are used to generate OAuth tokens
 			// You can find them in the Twitter application. These values

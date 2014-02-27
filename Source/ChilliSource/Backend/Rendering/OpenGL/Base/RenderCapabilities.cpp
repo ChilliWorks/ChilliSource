@@ -27,7 +27,7 @@ namespace ChilliSource
         //-------------------------------------------------
         bool CRenderCapabilities::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-            return (Rendering::IRenderCapabilities::InterfaceID == inInterfaceID || CRenderCapabilities::InterfaceID == inInterfaceID);
+            return (Rendering::RenderCapabilities::InterfaceID == inInterfaceID || CRenderCapabilities::InterfaceID == inInterfaceID);
         }
         //-------------------------------------------------
         /// Calculate Capabilities

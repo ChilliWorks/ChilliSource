@@ -27,14 +27,14 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(CAnimatedMeshComponent);
+		DEFINE_NAMED_INTERFACE(AnimatedMeshComponent);
         
-        MaterialPtr CAnimatedMeshComponent::mspShadowMapMaterial;
+        MaterialSPtr AnimatedMeshComponent::mspShadowMapMaterial;
         
 		//----------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------
-		CAnimatedMeshComponent::CAnimatedMeshComponent() 
+		AnimatedMeshComponent::AnimatedMeshComponent() 
         : mfPlaybackPosition(0.0f), mfPlaybackSpeedMultiplier(1.0f), mfBlendlinePosition(0.0f),
         meBlendType(AnimationBlendType::k_linear), mePlaybackType(AnimationPlaybackType::k_once), meFadeType(AnimationBlendType::k_linear), mfFadeTimer(0.0f), mfFadeMaxTime(0.0f), mfFadePlaybackPosition(0.0f),
         mfFadeBlendlinePosition(0.0f), mbFinished(false), mbAnimationDataDirty(true)
@@ -44,32 +44,32 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CAnimatedMeshComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool AnimatedMeshComponent::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
-			return  (inInterfaceID == CAnimatedMeshComponent::InterfaceID) ||
-                    (inInterfaceID == IRenderComponent::InterfaceID) ||
-                    (inInterfaceID == IVolumeComponent::InterfaceID);
+			return  (inInterfaceID == AnimatedMeshComponent::InterfaceID) ||
+                    (inInterfaceID == RenderComponent::InterfaceID) ||
+                    (inInterfaceID == VolumeComponent::InterfaceID);
 		}
 		//----------------------------------------------------
 		/// Get Axis Aligned Bounding Box
 		//----------------------------------------------------
-		const Core::AABB& CAnimatedMeshComponent::GetAABB()
+		const Core::AABB& AnimatedMeshComponent::GetAABB()
 		{
 			if(mpEntityOwner)
 			{
 				//Rebuild the box
                 const Core::AABB& cAABB = mpModel->GetAABB();
-                const Core::CMatrix4x4& matWorld = mpEntityOwner->Transform().GetWorldTransform();
-                Core::CVector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
-                Core::CVector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
-                Core::CVector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
-                Core::CVector3 vBackTopRight(cAABB.BackTopRight() * matWorld);
-                Core::CVector3 vFrontBottomLeft(cAABB.FrontBottomLeft() * matWorld);
-                Core::CVector3 vFrontBottomRight(cAABB.FrontBottomRight() * matWorld);
-                Core::CVector3 vFrontTopLeft(cAABB.FrontTopLeft() *matWorld);
-                Core::CVector3 vFrontTopRight(cAABB.FrontTopRight() * matWorld);
+                const Core::Matrix4x4& matWorld = mpEntityOwner->GetTransform().GetWorldTransform();
+                Core::Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
+                Core::Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
+                Core::Vector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
+                Core::Vector3 vBackTopRight(cAABB.BackTopRight() * matWorld);
+                Core::Vector3 vFrontBottomLeft(cAABB.FrontBottomLeft() * matWorld);
+                Core::Vector3 vFrontBottomRight(cAABB.FrontBottomRight() * matWorld);
+                Core::Vector3 vFrontTopLeft(cAABB.FrontTopLeft() *matWorld);
+                Core::Vector3 vFrontTopRight(cAABB.FrontTopRight() * matWorld);
                 
-                Core::CVector3 vMin(std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity());
+                Core::Vector3 vMin(std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity());
                 vMin.x = std::min(vMin.x, vBackBottomLeft.x);
                 vMin.x = std::min(vMin.x, vBackBottomRight.x);
                 vMin.x = std::min(vMin.x, vBackTopLeft.x);
@@ -97,7 +97,7 @@ namespace ChilliSource
                 vMin.z = std::min(vMin.z, vFrontTopLeft.z);
                 vMin.z = std::min(vMin.z, vFrontTopRight.z);
                 
-                Core::CVector3 vMax(-std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity());
+                Core::Vector3 vMax(-std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity());
                 vMax.x = std::max(vMax.x, vBackBottomLeft.x);
                 vMax.x = std::max(vMax.x, vBackBottomRight.x);
                 vMax.x = std::max(vMax.x, vBackTopLeft.x);
@@ -135,23 +135,23 @@ namespace ChilliSource
 		//----------------------------------------------------
 		/// Get Object Oriented Bounding Box
 		//----------------------------------------------------
-		const Core::OOBB& CAnimatedMeshComponent::GetOOBB()
+		const Core::OOBB& AnimatedMeshComponent::GetOOBB()
 		{
 			if(mpEntityOwner)
 			{
-				mOBBoundingBox.SetTransform(mpEntityOwner->Transform().GetWorldTransform());
+				mOBBoundingBox.SetTransform(mpEntityOwner->GetTransform().GetWorldTransform());
 			}
 			return mOBBoundingBox;
 		}
 		//----------------------------------------------------
 		/// Get Bounding Sphere
 		//----------------------------------------------------
-		const Core::Sphere& CAnimatedMeshComponent::GetBoundingSphere()
+		const Core::Sphere& AnimatedMeshComponent::GetBoundingSphere()
 		{
 			if(mpEntityOwner)
 			{
                 const Core::AABB& sAABB = GetAABB();
-                Core::CVector3 vSize = sAABB.GetSize();
+                Core::Vector3 vSize = sAABB.GetSize();
 				mBoundingSphere.vOrigin = sAABB.GetOrigin();
 				mBoundingSphere.fRadius = std::max(vSize.x, vSize.y) * 0.5f;
 			}
@@ -160,7 +160,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Is Transparent
 		//-----------------------------------------------------------
-		bool CAnimatedMeshComponent::IsTransparent()
+		bool AnimatedMeshComponent::IsTransparent()
 		{
 			for (int i = 0; i < mMaterials.size(); ++i)
 			{
@@ -172,7 +172,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Material
 		//-----------------------------------------------------------
-		void CAnimatedMeshComponent::SetMaterial(const MaterialPtr& inpMaterial)
+		void AnimatedMeshComponent::SetMaterial(const MaterialSPtr& inpMaterial)
 		{
 			mpMaterial = inpMaterial;
 			
@@ -185,7 +185,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Material For Sub Mesh
 		//-----------------------------------------------------------
-		void CAnimatedMeshComponent::SetMaterialForSubMesh(const MaterialPtr& inpMaterial, u32 indwSubMeshIndex)
+		void AnimatedMeshComponent::SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, u32 indwSubMeshIndex)
 		{
 			if (indwSubMeshIndex < mMaterials.size())
 			{
@@ -200,7 +200,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Set Material For Sub Mesh
         //-----------------------------------------------------------
-        void CAnimatedMeshComponent::SetMaterialForSubMesh(const MaterialPtr& inpMaterial, const std::string& instrSubMeshName)
+        void AnimatedMeshComponent::SetMaterialForSubMesh(const MaterialSPtr& inpMaterial, const std::string& instrSubMeshName)
         {
             if (nullptr != mpModel)
             {
@@ -219,7 +219,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get Material Of Sub Mesh
 		//-----------------------------------------------------------
-		const MaterialPtr CAnimatedMeshComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
+		const MaterialSPtr AnimatedMeshComponent::GetMaterialOfSubMesh(u32 indwSubMeshIndex) const
 		{
 			if (indwSubMeshIndex < mMaterials.size())
 			{
@@ -227,12 +227,12 @@ namespace ChilliSource
 			}
 			
             CS_ERROR_LOG("Failed to get material from sub mesh " + Core::ToString(indwSubMeshIndex));
-			return MaterialPtr();
+			return MaterialSPtr();
 		}
         //-----------------------------------------------------------
         /// Get Material Of Sub Mesh
         //-----------------------------------------------------------
-        MaterialPtr CAnimatedMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
+        MaterialSPtr AnimatedMeshComponent::GetMaterialOfSubMesh(const std::string& instrSubMeshName) const
         {
             if (nullptr != mpModel)
             {
@@ -245,12 +245,12 @@ namespace ChilliSource
             }
 			
             CS_ERROR_LOG("Failed to get material from sub mesh " + instrSubMeshName);
-			return MaterialPtr();
+			return MaterialSPtr();
         }
 		//----------------------------------------------------------
 		/// Attach Mesh
 		//----------------------------------------------------------
-		void CAnimatedMeshComponent::AttachMesh(const MeshPtr& inpModel)
+		void AnimatedMeshComponent::AttachMesh(const MeshSPtr& inpModel)
 		{
 			mpModel = inpModel;
             // Update OOBB
@@ -266,7 +266,7 @@ namespace ChilliSource
             }
             while (mMaterials.size() < inpModel->GetNumSubMeshes())
             {
-                mMaterials.push_back(MaterialPtr());
+                mMaterials.push_back(MaterialSPtr());
             }
 			
 			ApplyDefaultMaterials();
@@ -278,7 +278,7 @@ namespace ChilliSource
         /// material
         /// @param Mesh object
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::AttachMesh(const MeshPtr& inpModel, const MaterialPtr& inpMaterial)
+        void AnimatedMeshComponent::AttachMesh(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial)
         {
             mpModel = inpModel;
 			mpMaterial = inpMaterial;
@@ -295,7 +295,7 @@ namespace ChilliSource
             }
             while (mMaterials.size() < inpModel->GetNumSubMeshes())
             {
-                mMaterials.push_back(MaterialPtr());
+                mMaterials.push_back(MaterialSPtr());
             }
             
             SetMaterial(inpMaterial);
@@ -303,21 +303,21 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Mesh
         //----------------------------------------------------------
-        const MeshPtr& CAnimatedMeshComponent::GetMesh() const
+        const MeshSPtr& AnimatedMeshComponent::GetMesh() const
         {
             return mpModel;
         }
 		//----------------------------------------------------------
         /// Attach Animation
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::AttachAnimation(Core::StorageLocation ineStorageLocation, const std::string& instrAnimation, f32 infBlendlinePosition)
+        void AnimatedMeshComponent::AttachAnimation(Core::StorageLocation ineStorageLocation, const std::string& instrAnimation, f32 infBlendlinePosition)
         {
-            AttachAnimation(LOAD_RESOURCE(CSkinnedAnimation, ineStorageLocation, instrAnimation), infBlendlinePosition);
+            AttachAnimation(LOAD_RESOURCE(SkinnedAnimation, ineStorageLocation, instrAnimation), infBlendlinePosition);
         }
         //----------------------------------------------------------
         /// Attach Animation
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::AttachAnimation(const SkinnedAnimationPtr& inpAnimation, f32 infBlendlinePosition)
+        void AnimatedMeshComponent::AttachAnimation(const SkinnedAnimationSPtr& inpAnimation, f32 infBlendlinePosition)
         {
             if (nullptr != mActiveAnimationGroup)
             {
@@ -328,7 +328,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Animations
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::GetAnimations(std::vector<SkinnedAnimationPtr>& outapSkinnedAnimationList)
+        void AnimatedMeshComponent::GetAnimations(std::vector<SkinnedAnimationSPtr>& outapSkinnedAnimationList)
         {
             if (nullptr != mActiveAnimationGroup)
             {
@@ -338,7 +338,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Detatch Animation
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::DetatchAnimation(const SkinnedAnimationPtr& inpAnimation)
+        void AnimatedMeshComponent::DetatchAnimation(const SkinnedAnimationSPtr& inpAnimation)
         {
             if (nullptr != mActiveAnimationGroup)
             {
@@ -348,12 +348,12 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Fade Out
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::FadeOut(AnimationBlendType ineFadeType, f32 infFadeOutTime)
+        void AnimatedMeshComponent::FadeOut(AnimationBlendType ineFadeType, f32 infFadeOutTime)
         {
             if (nullptr != mActiveAnimationGroup && true == mActiveAnimationGroup->IsPrepared())
             {
                 mFadingAnimationGroup = mActiveAnimationGroup;
-                mActiveAnimationGroup = SkinnedAnimationGroupPtr(new CSkinnedAnimationGroup(mpModel->GetSkeletonPtr()));
+                mActiveAnimationGroup = SkinnedAnimationGroupSPtr(new SkinnedAnimationGroup(mpModel->GetSkeletonPtr()));
                 mfFadePlaybackPosition = mfPlaybackPosition;
                 mfFadeBlendlinePosition = mfBlendlinePosition;
                 mfFadeMaxTime = infFadeOutTime;
@@ -370,7 +370,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Clear Animations
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::ClearAnimations()
+        void AnimatedMeshComponent::ClearAnimations()
         {
             if (mActiveAnimationGroup != nullptr)
             {
@@ -385,7 +385,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Attach Entity
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::AttachEntity(const Core::EntityPtr& inpEntity, const std::string& instrNodeName)
+        void AnimatedMeshComponent::AttachEntity(const Core::EntitySPtr& inpEntity, const std::string& instrNodeName)
         {
             if (nullptr == mpEntityOwner)
             {
@@ -402,7 +402,7 @@ namespace ChilliSource
             //check that it has not already been added.
             for (AttachedEntityList::const_iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
             {
-                if (Core::EntityPtr pEntity = it->first.lock())
+                if (Core::EntitySPtr pEntity = it->first.lock())
                 {
                     if (pEntity.get() == inpEntity.get())
                     {
@@ -419,17 +419,17 @@ namespace ChilliSource
             }
             
             mpEntityOwner->AddChild(inpEntity);
-            maAttachedEntities.push_back(std::pair<Core::EntityWeakPtr, s32>(Core::EntityWeakPtr(inpEntity), dwNodeIndex));
+            maAttachedEntities.push_back(std::pair<Core::EntityWPtr, s32>(Core::EntityWPtr(inpEntity), dwNodeIndex));
         }
         //----------------------------------------------------------
         /// Detatch Entity
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::DetatchEntity(Core::CEntity* inpEntity)
+        void AnimatedMeshComponent::DetatchEntity(Core::Entity* inpEntity)
         {
             AttachedEntityList::iterator it;
             for (it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
             {
-                if (Core::EntityPtr pEntity = it->first.lock())
+                if (Core::EntitySPtr pEntity = it->first.lock())
                 {
                     if (pEntity.get() == inpEntity)
                     {
@@ -447,11 +447,11 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Detatch All Entities
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::DetatchAllEntities()
+        void AnimatedMeshComponent::DetatchAllEntities()
         {
             for (AttachedEntityList::const_iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
             {
-                if (Core::EntityPtr pEntity = it->first.lock())
+                if (Core::EntitySPtr pEntity = it->first.lock())
                 {
                     pEntity->RemoveFromParent();
                 }
@@ -462,14 +462,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Blendline Position
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::SetBlendlinePosition(f32 infBlendlinePosition)
+        void AnimatedMeshComponent::SetBlendlinePosition(f32 infBlendlinePosition)
         {
             mfBlendlinePosition = infBlendlinePosition;
         }
         //----------------------------------------------------------
         /// Set Playback Type
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::SetPlaybackType(AnimationPlaybackType inePlaybackType)
+        void AnimatedMeshComponent::SetPlaybackType(AnimationPlaybackType inePlaybackType)
         {
             mePlaybackType = inePlaybackType;
             mbFinished = false;
@@ -477,14 +477,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Playback Speed Multiplier
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::SetPlaybackSpeedMultiplier(f32 infSpeedMultiplier)
+        void AnimatedMeshComponent::SetPlaybackSpeedMultiplier(f32 infSpeedMultiplier)
         {
             mfPlaybackSpeedMultiplier = infSpeedMultiplier;
         }
         //----------------------------------------------------------
         /// Set Playback Position
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::SetPlaybackPosition(f32 infPosition)
+        void AnimatedMeshComponent::SetPlaybackPosition(f32 infPosition)
         {
             mfPlaybackPosition = infPosition;
             mbFinished = false;
@@ -493,7 +493,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Playback Position Normalised
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::SetPlaybackPositionNormalised(f32 infPosition)
+        void AnimatedMeshComponent::SetPlaybackPositionNormalised(f32 infPosition)
         {
             mfPlaybackPosition = infPosition * GetAnimationLength();
             mbFinished = false;
@@ -501,49 +501,49 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Blend Type
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::SetBlendType(AnimationBlendType ineBlendType)
+        void AnimatedMeshComponent::SetBlendType(AnimationBlendType ineBlendType)
         {
             meBlendType = ineBlendType;
         }
         //----------------------------------------------------------
         /// Get Animation Changed Event
         //----------------------------------------------------------
-        AnimationChangedEvent& CAnimatedMeshComponent::GetAnimationChangedEvent()
+        AnimationChangedEvent& AnimatedMeshComponent::GetAnimationChangedEvent()
         {
             return mAnimationChangedEvent;
         }
         //----------------------------------------------------------
         /// Get Animation Completion Event
         //----------------------------------------------------------
-        AnimationCompletionEvent& CAnimatedMeshComponent::GetAnimationCompletionEvent()
+        AnimationCompletionEvent& AnimatedMeshComponent::GetAnimationCompletionEvent()
         {
             return mAnimationCompletionEvent;
         }
         //----------------------------------------------------------
         /// Get Animation Looped Event
         //----------------------------------------------------------
-        AnimationLoopedEvent& CAnimatedMeshComponent::GetAnimationLoopedEvent()
+        AnimationLoopedEvent& AnimatedMeshComponent::GetAnimationLoopedEvent()
         {
             return mAnimationLoopedEvent;
         }
         //----------------------------------------------------------
         /// Get Blendline Position
         //----------------------------------------------------------
-        f32 CAnimatedMeshComponent::GetBlendlinePosition() const
+        f32 AnimatedMeshComponent::GetBlendlinePosition() const
         {
             return mfBlendlinePosition;
         }
         //----------------------------------------------------------
         /// Get Playback Type
         //----------------------------------------------------------
-        AnimationPlaybackType CAnimatedMeshComponent::GetPlaybackType() const
+        AnimationPlaybackType AnimatedMeshComponent::GetPlaybackType() const
         {
             return mePlaybackType;
         }
         //----------------------------------------------------------
         /// Get Animation Length
         //----------------------------------------------------------
-        f32 CAnimatedMeshComponent::GetAnimationLength()
+        f32 AnimatedMeshComponent::GetAnimationLength()
         {
             if (mActiveAnimationGroup != nullptr)
             {
@@ -554,42 +554,42 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Playback Speed Multiplier
         //----------------------------------------------------------
-        f32 CAnimatedMeshComponent::GetPlaybackSpeedMultiplier() const
+        f32 AnimatedMeshComponent::GetPlaybackSpeedMultiplier() const
         {
             return mfPlaybackSpeedMultiplier;
         }
         //----------------------------------------------------------
         /// Get Playback Position
         //----------------------------------------------------------
-        f32 CAnimatedMeshComponent::GetPlaybackPosition() const
+        f32 AnimatedMeshComponent::GetPlaybackPosition() const
         {
             return mfPlaybackPosition;
         }
         //----------------------------------------------------------
         /// get Playback Position Normalised
         //----------------------------------------------------------
-        f32 CAnimatedMeshComponent::GetPlaybackPositionNormalised()
+        f32 AnimatedMeshComponent::GetPlaybackPositionNormalised()
         {
             return mfPlaybackPosition / GetAnimationLength();
         }
         //----------------------------------------------------------
         /// Get Blend Type
         //----------------------------------------------------------
-        AnimationBlendType CAnimatedMeshComponent::GetBlendType() const
+        AnimationBlendType AnimatedMeshComponent::GetBlendType() const
         {
             return meBlendType;
         }
         //----------------------------------------------------------
         /// Has Finished
         //----------------------------------------------------------
-        bool CAnimatedMeshComponent::HasFinished() const
+        bool AnimatedMeshComponent::HasFinished() const
         {
             return mbFinished;
         }
         //----------------------------------------------------------
         /// Update
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::Update(f32 infDeltaTime)
+        void AnimatedMeshComponent::Update(f32 infDeltaTime)
         {
             if (nullptr != mpEntityOwner && nullptr != mpEntityOwner->GetOwningScene())
             {
@@ -599,29 +599,29 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Destructor
 		//----------------------------------------------------------
-		CAnimatedMeshComponent::~CAnimatedMeshComponent()
+		AnimatedMeshComponent::~AnimatedMeshComponent()
 		{
 		}
 		//----------------------------------------------------
 		/// On Attached To Entity
 		//----------------------------------------------------
-		void CAnimatedMeshComponent::OnAttachedToEntity()
+		void AnimatedMeshComponent::OnAttachedToEntity()
 		{
             SetPlaybackPosition(0.0f);
-            Core::CApplication::GetSystemImplementing<CAnimatedMeshComponentUpdater>()->AddComponent(this);
+            Core::Application::GetSystemImplementing<AnimatedMeshComponentUpdater>()->AddComponent(this);
 		}
         //----------------------------------------------------
         /// On Detached From Entity
         //----------------------------------------------------
-        void CAnimatedMeshComponent::OnDetachedFromEntity()
+        void AnimatedMeshComponent::OnDetachedFromEntity()
         {
             DetatchAllEntities();
-            Core::CApplication::GetSystemImplementing<CAnimatedMeshComponentUpdater>()->RemoveComponent(this);
+            Core::Application::GetSystemImplementing<AnimatedMeshComponentUpdater>()->RemoveComponent(this);
         }
 		//----------------------------------------------------------
         /// Render
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::Render(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam, ShaderPass ineShaderPass)
+        void AnimatedMeshComponent::Render(RenderSystem* inpRenderSystem, CameraComponent* inpCam, ShaderPass ineShaderPass)
 		{
             if (nullptr != mActiveAnimationGroup)
             {
@@ -645,27 +645,27 @@ namespace ChilliSource
                 //render the model with the animation data.
                 if (mActiveAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), mMaterials, mActiveAnimationGroup);
+                    mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), mMaterials, mActiveAnimationGroup);
                 }
                 else if (mFadingAnimationGroup != nullptr && mFadingAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), mMaterials, mFadingAnimationGroup);
+                    mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), mMaterials, mFadingAnimationGroup);
                 }
             }
 		}
         //-----------------------------------------------------
         /// Render Shadow Map
         //-----------------------------------------------------
-        void CAnimatedMeshComponent::RenderShadowMap(IRenderSystem* inpRenderSystem, CCameraComponent* inpCam)
+        void AnimatedMeshComponent::RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam)
         {
             if (nullptr != mActiveAnimationGroup)
             {
                 if (mspShadowMapMaterial == nullptr)
                 {
-                    mspShadowMapMaterial = Core::CApplication::GetSystemImplementing<CMaterialFactory>()->CreateAnimatedDirectionalShadowMap();
+                    mspShadowMapMaterial = Core::Application::GetSystemImplementing<MaterialFactory>()->CreateAnimatedDirectionalShadowMap();
                 }
                 
-                std::vector<MaterialPtr> aMaterials;
+                std::vector<MaterialSPtr> aMaterials;
                 mspShadowMapMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
                 aMaterials.push_back(mspShadowMapMaterial);
                 
@@ -677,18 +677,18 @@ namespace ChilliSource
                 //render the model with the animation data.
                 if (mActiveAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), aMaterials, mActiveAnimationGroup);
+                    mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), aMaterials, mActiveAnimationGroup);
                 }
                 else if (mFadingAnimationGroup != nullptr && mFadingAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), aMaterials, mFadingAnimationGroup);
+                    mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), aMaterials, mFadingAnimationGroup);
                 }
             }
         }
         //----------------------------------------------------------
         /// Update Animation
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::UpdateAnimation(f32 infDeltaTime)
+        void AnimatedMeshComponent::UpdateAnimation(f32 infDeltaTime)
         {
             if (nullptr != mpEntityOwner && nullptr != mpEntityOwner->GetOwningScene() && nullptr != mActiveAnimationGroup && mActiveAnimationGroup->GetAnimationCount() != 0)
             {
@@ -709,7 +709,7 @@ namespace ChilliSource
                     }
                     else
                     {
-                        mFadingAnimationGroup = SkinnedAnimationGroupPtr();
+                        mFadingAnimationGroup = SkinnedAnimationGroupSPtr();
                     }
                 }
                 mActiveAnimationGroup->BuildMatrices();
@@ -721,7 +721,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Update Animation Timer
 		//----------------------------------------------------------
-		void CAnimatedMeshComponent::UpdateAnimationTimer(f32 infDeltaTime)
+		void AnimatedMeshComponent::UpdateAnimationTimer(f32 infDeltaTime)
 		{
             if (nullptr != mActiveAnimationGroup)
             {
@@ -761,18 +761,18 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Update Attached Entities
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::UpdateAttachedEntities()
+        void AnimatedMeshComponent::UpdateAttachedEntities()
         {
             if (nullptr != mActiveAnimationGroup)
             {
                 for (AttachedEntityList::iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end();)
                 {
-                    if (Core::EntityPtr pEntity = it->first.lock())
+                    if (Core::EntitySPtr pEntity = it->first.lock())
                     {
                         s32 dwNodeIndex = it->second;
                         
-                        const Core::CMatrix4x4& matTransform = mActiveAnimationGroup->GetMatrixAtIndex(dwNodeIndex);
-                        pEntity->Transform().SetLocalTransform(matTransform);
+                        const Core::Matrix4x4& matTransform = mActiveAnimationGroup->GetMatrixAtIndex(dwNodeIndex);
+                        pEntity->GetTransform().SetLocalTransform(matTransform);
                         ++it;
                     }
                     else
@@ -785,10 +785,10 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Reset
         //----------------------------------------------------------
-        void CAnimatedMeshComponent::Reset()
+        void AnimatedMeshComponent::Reset()
         {
             DetatchAllEntities();
-			mActiveAnimationGroup = SkinnedAnimationGroupPtr(new CSkinnedAnimationGroup(mpModel->GetSkeletonPtr()));
+			mActiveAnimationGroup = SkinnedAnimationGroupSPtr(new SkinnedAnimationGroup(mpModel->GetSkeletonPtr()));
             mFadingAnimationGroup.reset();
             mfBlendlinePosition = 0.0f;
             mfFadeTimer = 0.0f;
@@ -797,7 +797,7 @@ namespace ChilliSource
         //----------------------------------------------------
         /// Apply Default Materials
         //----------------------------------------------------
-        void CAnimatedMeshComponent::ApplyDefaultMaterials()
+        void AnimatedMeshComponent::ApplyDefaultMaterials()
         {
             // if the first mesh contains a default material name, then get all the default materials.
 			if (mpModel->GetNumSubMeshes() > 0 && mpModel->GetSubMeshAtIndex(0)->GetDefaultMaterialName() != "")
@@ -806,14 +806,14 @@ namespace ChilliSource
 				for (u32 i = 0; i < mpModel->GetNumSubMeshes(); i++)
 				{
 					//get the material name
-					SubMeshPtr subMesh = mpModel->GetSubMeshAtIndex(i);
+					SubMeshSPtr subMesh = mpModel->GetSubMeshAtIndex(i);
 					std::string matName = subMesh->GetDefaultMaterialName();
                     Core::StorageLocation eStorageLocation = subMesh->GetDefaultMaterialStorageLocation();
                     
 					//try and load the material
-					MaterialPtr pMaterial;
+					MaterialSPtr pMaterial;
 					if (matName != "")
-						pMaterial = LOAD_RESOURCE(CMaterial, eStorageLocation, matName);
+						pMaterial = LOAD_RESOURCE(Material, eStorageLocation, matName);
                     
 					//if the material load has failed, either fall back on the previous material, or stop getting materials if this is the
 					//first mesh as theres no material to fall back on.

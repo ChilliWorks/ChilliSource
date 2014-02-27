@@ -24,7 +24,7 @@ namespace ChilliSource
         //=======================================================================
         /// Key - K
         //=======================================================================
-        template <typename K, typename T> class CHashedArray
+        template <typename K, typename T> class HashedArray
         {
         public:
 
@@ -39,7 +39,7 @@ namespace ChilliSource
             /// @param Size/Capcity of the array
             /// @param Hash function
             //-------------------------------------------
-            CHashedArray(u32 inudwCapacity, const HashDelegate& inDelegate) 
+            HashedArray(u32 inudwCapacity, const HashDelegate& inDelegate) 
             : mudwCapacity(inudwCapacity), mudwSize(0), mHashDelegate(inDelegate), mbSortCacheValid(true)
             {
                 CS_ASSERT(inudwCapacity > 0, "Cannot create an array with capacity zero");
@@ -50,7 +50,7 @@ namespace ChilliSource
             ///
             /// @param Copy
             //-------------------------------------------
-            CHashedArray(const CHashedArray& inRHS) 
+            HashedArray(const HashedArray& inRHS) 
             : mudwCapacity(inRHS.mudwCapacity), mudwSize(inRHS.mudwSize), mHashDelegate(inRHS.mHashDelegate), mbSortCacheValid(inRHS.mbSortCacheValid)
             {
                 mpaStorage = new KeyValue[inRHS.mudwSize];
@@ -62,7 +62,7 @@ namespace ChilliSource
             ///
             /// @param Copy
             //-------------------------------------------
-            void operator=(const CHashedArray& inRHS)
+            void operator=(const HashedArray& inRHS)
             {
                 mudwCapacity = inRHS.mudwCapacity;
                 mudwSize = inRHS.mudwSize;
@@ -106,7 +106,7 @@ namespace ChilliSource
             {
                 if(!mbSortCacheValid)
                 {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, CHashedArray::LessThanSortPredicate);
+                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
                     mbSortCacheValid = true;
                 }
                 
@@ -151,7 +151,7 @@ namespace ChilliSource
             {
                 if(!mbSortCacheValid)
                 {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, CHashedArray::LessThanSortPredicate);
+                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
                     mbSortCacheValid = true;
                 }
                 
@@ -177,7 +177,7 @@ namespace ChilliSource
             {
                 if(!mbSortCacheValid)
                 {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, CHashedArray::LessThanSortPredicate);
+                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
                     mbSortCacheValid = true;
                 }
                 
@@ -328,7 +328,7 @@ namespace ChilliSource
         //=======================================================================
         /// Key - String
         //=======================================================================
-        template <typename T> class CHashedArray <std::string, T>
+        template <typename T> class HashedArray <std::string, T>
         {
         public:
             
@@ -343,7 +343,7 @@ namespace ChilliSource
             ///
             /// @param Size/Capcity of the array
             //-------------------------------------------
-            CHashedArray(u32 inudwCapacity) 
+            HashedArray(u32 inudwCapacity) 
             : mudwCapacity(inudwCapacity), mudwSize(0), mbSortCacheValid(true)
             {
                 CS_ASSERT(inudwCapacity > 0, "Cannot create an array with capacity zero");
@@ -354,7 +354,7 @@ namespace ChilliSource
             ///
             /// @param Copy
             //-------------------------------------------
-            CHashedArray(const CHashedArray& inRHS) 
+            HashedArray(const HashedArray& inRHS) 
             : mudwCapacity(inRHS.mudwCapacity), mudwSize(inRHS.mudwSize), mbSortCacheValid(inRHS.mbSortCacheValid)
             {
                 mpaStorage = new KeyValue[inRHS.mudwSize];
@@ -366,7 +366,7 @@ namespace ChilliSource
             ///
             /// @param Copy
             //-------------------------------------------
-            void operator=(const CHashedArray& inRHS)
+            void operator=(const HashedArray& inRHS)
             {
                 mudwCapacity = inRHS.mudwCapacity;
                 mudwSize = inRHS.mudwSize;
@@ -408,7 +408,7 @@ namespace ChilliSource
             {
                 if(!mbSortCacheValid)
                 {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, CHashedArray::LessThanSortPredicate);
+                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
                     mbSortCacheValid = true;
                 }
                 
@@ -451,7 +451,7 @@ namespace ChilliSource
             {
                 if(!mbSortCacheValid)
                 {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, CHashedArray::LessThanSortPredicate);
+                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
                     mbSortCacheValid = true;
                 }
                 
@@ -475,7 +475,7 @@ namespace ChilliSource
             {
                 if(!mbSortCacheValid)
                 {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, CHashedArray::LessThanSortPredicate);
+                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
                     mbSortCacheValid = true;
                 }
                 
@@ -620,7 +620,7 @@ namespace ChilliSource
         //=======================================================================
         /// Key - u32
         //=======================================================================
-        template <typename T> class CHashedArray <u32, T>
+        template <typename T> class HashedArray <u32, T>
         {
         public:
             
@@ -635,7 +635,7 @@ namespace ChilliSource
             ///
             /// @param Size/Capcity of the array
             //-------------------------------------------
-            CHashedArray(u32 inudwCapacity) 
+            HashedArray(u32 inudwCapacity) 
             : mudwCapacity(inudwCapacity), mudwSize(0), mbSortCacheValid(true)
             {
                 CS_ASSERT(inudwCapacity > 0, "Cannot create an array with capacity zero");
@@ -646,7 +646,7 @@ namespace ChilliSource
             ///
             /// @param Copy
             //-------------------------------------------
-            CHashedArray(const CHashedArray& inRHS) 
+            HashedArray(const HashedArray& inRHS) 
             : mudwCapacity(inRHS.mudwCapacity), mudwSize(inRHS.mudwSize), mbSortCacheValid(inRHS.mbSortCacheValid)
             {
                 mpaStorage = new KeyValue[inRHS.mudwSize];
@@ -658,7 +658,7 @@ namespace ChilliSource
             ///
             /// @param Copy
             //-------------------------------------------
-            void operator=(const CHashedArray& inRHS)
+            void operator=(const HashedArray& inRHS)
             {
                 mudwCapacity = inRHS.mudwCapacity;
                 mudwSize = inRHS.mudwSize;
@@ -699,7 +699,7 @@ namespace ChilliSource
             {
                 if(!mbSortCacheValid)
                 {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, CHashedArray::LessThanSortPredicate);
+                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
                     mbSortCacheValid = true;
                 }
                 
@@ -742,7 +742,7 @@ namespace ChilliSource
             {
                 if(!mbSortCacheValid)
                 {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, CHashedArray::LessThanSortPredicate);
+                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
                     mbSortCacheValid = true;
                 }
                 
@@ -766,7 +766,7 @@ namespace ChilliSource
             {
                 if(!mbSortCacheValid)
                 {
-                    std::sort(mpaStorage, mpaStorage + mudwSize, CHashedArray::LessThanSortPredicate);
+                    std::sort(mpaStorage, mpaStorage + mudwSize, HashedArray::LessThanSortPredicate);
                     mbSortCacheValid = true;
                 }
                 

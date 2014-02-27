@@ -18,7 +18,7 @@ namespace ChilliSource
 {
     namespace iOS
     {
-        class CRemoteNotificationSystem : public Core::IRemoteNotificationSystem
+        class CRemoteNotificationSystem : public Core::RemoteNotificationSystem
         {
         public:
             //-------------------------------------------------------------------------

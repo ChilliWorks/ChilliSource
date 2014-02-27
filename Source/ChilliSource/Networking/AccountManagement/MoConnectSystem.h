@@ -24,19 +24,19 @@ namespace ChilliSource
 {
 	namespace Networking
     {
-		class MoConnectSystem : public Core::ISystem
+		class MoConnectSystem : public Core::System
         {
 		public:
             //Credentials
 			static const std::string kstrFacebookLoginType;
 			static const std::string kstrEmailLoginType;
             
-			MoConnectSystem(HttpConnectionSystem * inpHttpSystem, const std::string& instrMoConnectServerURL, Core::COAuthSystem * inpOAuthSystem);
+			MoConnectSystem(HttpConnectionSystem * inpHttpSystem, const std::string& instrMoConnectServerURL, Core::OAuthSystem * inpOAuthSystem);
 			
 			DECLARE_NAMED_INTERFACE(MoConnectSystem);
 			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			
-            Core::COAuthSystem* GetOAuthSystem();
+            Core::OAuthSystem* GetOAuthSystem();
             
 			bool HasSignedInUser() const;
 			const std::string& GetCurrentUserID() const;
@@ -282,7 +282,7 @@ namespace ChilliSource
             
 			Core::CEvent1<EventDelegate> mSignedInUserChangesEvent;
 			HttpConnectionSystem* mpHttpConnectionSystem;
-            Core::COAuthSystem*  mpOAuthSystem;
+            Core::OAuthSystem*  mpOAuthSystem;
             LocalUserProfileDelegate mLocalUserProfileDelegate;
 			
 			struct RequestInfo

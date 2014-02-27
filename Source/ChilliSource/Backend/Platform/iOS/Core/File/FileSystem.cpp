@@ -129,10 +129,10 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Create File Stream
         //--------------------------------------------------------------
-        Core::FileStreamPtr CFileSystem::CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const
+        Core::FileStreamSPtr CFileSystem::CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const
         {
             //create the file stream
-            Core::FileStreamPtr newFilestream = Core::FileStreamPtr(new Core::IFileStream());
+            Core::FileStreamSPtr newFilestream = Core::FileStreamSPtr(new Core::FileStream());
             
             //check the requested storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -168,7 +168,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         bool CFileSystem::CreateFile(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const
         {
-            Core::FileStreamPtr pFileStream = CreateFileStream(ineStorageLocation, instrDirectory, Core::FileMode::k_writeBinary);
+            Core::FileStreamSPtr pFileStream = CreateFileStream(ineStorageLocation, instrDirectory, Core::FileMode::k_writeBinary);
 			
             if (pFileStream.get() == nullptr || pFileStream->IsOpen() == false || pFileStream->IsBad() == true)
             {

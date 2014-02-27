@@ -1,5 +1,5 @@
 /*
- *  IState.cpp
+ *  State.cpp
  *  moFlo
  *
  *  Created by Stuart McGaw on 07/01/2011.
@@ -21,13 +21,13 @@ namespace ChilliSource
 		///
 		/// Create a new scene for this state
 		//-----------------------------------------
-		IState::IState(CScene* inpScene) : mbOwnsScene(true)
+		State::State(Scene* inpScene) : mbOwnsScene(true)
 		{
-            mpStateMgr = CApplication::GetStateManagerPtr();
+            mpStateMgr = Application::GetStateManagerPtr();
             
 			if(!inpScene)
 			{
-				mpScene = new CScene(mpStateMgr->GetApplicationPtr()->GetInputSystemPtr());
+				mpScene = new Scene(mpStateMgr->GetApplicationPtr()->GetInputSystemPtr());
 			}
 			else
 			{
@@ -41,7 +41,7 @@ namespace ChilliSource
 		/// Handy accessors for the main application
 		/// @return Application handle
 		//-----------------------------------------
-		CApplication& IState::GetApplication()
+		Application& State::GetApplication()
 		{
 			return mpStateMgr->GetApplication();
 		}
@@ -51,7 +51,7 @@ namespace ChilliSource
 		/// Handy accessors for the main application
 		/// @return Application handle
 		//-----------------------------------------
-		CApplication* IState::GetApplicationPtr()
+		Application* State::GetApplicationPtr()
 		{
 			return mpStateMgr->GetApplicationPtr();
 		}
@@ -60,7 +60,7 @@ namespace ChilliSource
 		///
 		/// @return Scene to present modally
 		//------------------------------------------
-		CScene* IState::GetScenePtr()
+		Scene* State::GetScenePtr()
 		{
 			return mpScene;
 		}
@@ -69,7 +69,7 @@ namespace ChilliSource
 		///
 		/// @return Pointer to state manager
 		//------------------------------------------
-		CStateManager* IState::GetStateManagerPtr() const 
+		StateManager* State::GetStateManagerPtr() const 
 		{ 
 			return mpStateMgr; 
 		}
@@ -79,7 +79,7 @@ namespace ChilliSource
         /// @return Whether the state is the top of 
         /// the hierarchy
         //------------------------------------------
-		bool IState::IsActiveState() const 
+		bool State::IsActiveState() const 
         { 
 			return mpStateMgr->GetActiveState().get() == this;
 		}
@@ -92,14 +92,14 @@ namespace ChilliSource
         ///
         /// @return Whether to receive notices
         //-----------------------------------------
-        bool IState::ShouldReceiveNotifications() const
+        bool State::ShouldReceiveNotifications() const
         {
             return false;
         }
 		//-----------------------------------------
 		/// Destructor
 		//-----------------------------------------
-		IState::~IState() 
+		State::~State() 
 		{
 			if(mbOwnsScene)
 			{
@@ -107,9 +107,9 @@ namespace ChilliSource
 			}
 		}
         
-        void IState::DebugPrint(std::string instrMessage)
+        void State::DebugPrint(std::string instrMessage)
         {
-            CS_DEBUG_LOG("IState "+ToString((u32)this)+" - "+instrMessage);
+            CS_DEBUG_LOG("State "+ToString((u32)this)+" - "+instrMessage);
             CS_DEBUG_LOG("name = "+GetName());
             CS_DEBUG_LOG("mpScene = "+ToString((u32)mpScene));
             CS_DEBUG_LOG("mbOwnsScene = "+ToString(mbOwnsScene));

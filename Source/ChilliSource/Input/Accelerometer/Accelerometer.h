@@ -33,7 +33,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			/// Delegates
 			//----------------------------------------------------
-			typedef std::function<void(const Core::CVector3&)> AccelerationUpdatedDelegate;
+			typedef std::function<void(const Core::Vector3&)> AccelerationUpdatedDelegate;
 			//----------------------------------------------------
 			/// Constructor
 			//----------------------------------------------------
@@ -57,7 +57,7 @@ namespace ChilliSource
 			/// @return The acceleration applied to the device
 			/// measured in "G"s.
 			//----------------------------------------------------
-			virtual const Core::CVector3& GetAcceleration() const = 0;
+			virtual const Core::Vector3& GetAcceleration() const = 0;
 			//----------------------------------------------------
 			/// Get Acceleration Updated Event
 			///

@@ -17,7 +17,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CMaterialLoader : public Core::IResourceProvider
+		class MaterialLoader : public Core::ResourceProvider
 		{
 		public:
 			//-------------------------------------------------------------------------
@@ -25,7 +25,7 @@ namespace ChilliSource
 			///
 			/// @param The render capabilities.
 			//-------------------------------------------------------------------------
-			CMaterialLoader(IRenderCapabilities* inpRenderCapabilities);
+			MaterialLoader(RenderCapabilities* inpRenderCapabilities);
 			//-------------------------------------------------------------------------
 			/// Is A
 			///
@@ -66,7 +66,7 @@ namespace ChilliSource
 			/// @param Out: Resource object
 			/// @return Whether the resource was loaded 
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource) override;
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource) override;
 			//----------------------------------------------------------------------------
 			/// Async Create Resource From File
 			///
@@ -75,7 +75,7 @@ namespace ChilliSource
 			/// @param Out: Resource object
 			/// @return Whether the resource was loaded 
 			//----------------------------------------------------------------------------
-			bool AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource) override;
+			bool AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource) override;
 			//----------------------------------------------------------------------------
 			/// Build Material Task
 			///
@@ -83,13 +83,13 @@ namespace ChilliSource
 			/// @param Filename
 			/// @param Out: Resource object
 			//----------------------------------------------------------------------------
-			void BuildMaterialTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			void BuildMaterialTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Set Loaded Task
 			///
 			/// @param Out: Resource object
 			//----------------------------------------------------------------------------
-			void SetLoadedTask(Core::ResourcePtr& outpResource);
+			void SetLoadedTask(Core::ResourceSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Build Material From File
 			///
@@ -105,7 +105,7 @@ namespace ChilliSource
                                        std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles,
                                        std::vector<TextureDesc>& outaTextureFiles,
                                        std::vector<TextureDesc>& outaCubemapFiles,
-                                       Core::ResourcePtr& outpResource);
+                                       Core::ResourceSPtr& outpResource);
 			//----------------------------------------------------------------------------
 			/// Convert String To Blend Function
 			///
@@ -134,7 +134,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
             void GetShaderFilesForMaterialType(const std::string& instrType, std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles) const;
 
-            IRenderCapabilities* mpRenderCapabilities;
+            RenderCapabilities* mpRenderCapabilities;
 		};
 	}
 }

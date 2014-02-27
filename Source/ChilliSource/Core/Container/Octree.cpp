@@ -25,7 +25,7 @@ namespace ChilliSource
 		/// @param Centre point of the game world
 		/// @param Half width and height of the box enclosing the world
 		//----------------------------------------------------------------
-		COctree::COctree(const Core::CVector3& invWorldCentre, f32 infHalfSize): mudwCurrentNumNodes(0), mfWorldWidth(infHalfSize * 2.0f * kfLooseScale)
+		Octree::Octree(const Core::Vector3& invWorldCentre, f32 infHalfSize): mudwCurrentNumNodes(0), mfWorldWidth(infHalfSize * 2.0f * kfLooseScale)
 		{
 			//Create the root node and allocate the octants upfront. 
 			mpRoot = mTree[0] = CreateOctant(invWorldCentre, infHalfSize, 0, 0);
@@ -39,7 +39,7 @@ namespace ChilliSource
 		/// @param Parent cube half width and height
 		/// @param Current tree depth
 		//---------------------------------------------------------------
-		COctree::Node* COctree::CreateOctant(const Core::CVector3& invCentre, f32 infHalfSize, s32 inuwDepth, u32 inudwOffset)
+		Octree::Node* Octree::CreateOctant(const Core::Vector3& invCentre, f32 infHalfSize, s32 inuwDepth, u32 inudwOffset)
 		{
             inuwDepth += 1;
             
@@ -50,12 +50,12 @@ namespace ChilliSource
 			}
 			
 			//Create the new child node
-			COctree::Node* pNode = new Node();
+			Octree::Node* pNode = new Node();
 			pNode->BoundingSphere = Sphere(invCentre, infHalfSize * kfLooseScale);
 			pNode->udwDepth = inuwDepth;
             pNode->udwTreeOffset = inudwOffset;
 
-			Core::CVector3 vOffset;
+			Core::Vector3 vOffset;
 			f32 fStep = infHalfSize * 0.5f;
 			
 			//Recurively construct the eight grand-children of the node
@@ -85,7 +85,7 @@ namespace ChilliSource
         /// @param Empty container to be filled
         /// @param Query mask
         //--------------------------------------------------------------------------------------------------
-        void COctree::QuerySceneForVisibleComponents(const Core::CFrustum* inpFrustum, std::vector<ComponentPtr> &outComponents, u32 inudwQueryMask)
+        void Octree::QuerySceneForVisibleComponents(const Core::Frustum* inpFrustum, std::vector<ComponentSPtr> &outComponents, u32 inudwQueryMask)
         {
             //Check if the node is inside the frustum
             if(inpFrustum->SphereCullTest(mpRoot->BoundingSphere))
@@ -103,7 +103,7 @@ namespace ChilliSource
 		///
 		/// @param Node to add 
 		//---------------------------------------------------------------
-		void COctree::Add(const VolumeComponentPtr& inpComponent)
+		void Octree::Add(const VolumeComponentSPtr& inpComponent)
 		{
 			//We can use an equation to work out how deep to place the
 			//component and which node to attach it to without recursing the entire tree.
@@ -127,7 +127,7 @@ namespace ChilliSource
             
 
             
-//            CVector3 vNodePos = BSphere.vOrigin/s;
+//            Vector3 vNodePos = BSphere.vOrigin/s;
 //            int i = (int)pos.x + N / 2;
 //            int j = (int)pos.y + N / 2;
 //            int k = (int)pos.z + N / 2;
@@ -139,7 +139,7 @@ namespace ChilliSource
 		///
 		/// @param Component to remove
 		//---------------------------------------------------------------
-		void COctree::Remove(const VolumeComponentPtr& inpComponent)
+		void Octree::Remove(const VolumeComponentSPtr& inpComponent)
 		{
 //			//Use the radius of the object to work out what depth it is at
 //			Sphere BSphere = inpComponent->GetBoundingSphere();
@@ -147,15 +147,15 @@ namespace ChilliSource
 //			
 //			//Now find it in the child nodes at this depth
 //			//Find a node at that depth
-//			COctree::Node* pOctant = mpRoot;
+//			Octree::Node* pOctant = mpRoot;
 //			while(pOctant->uwDepth != (uwDepth - 1))
 //			{
-//                CVector3 vClosest(std::numeric_limits<f32>::max(), std::numeric_limits<f32>::max(), std::numeric_limits<f32>::max());
+//                Vector3 vClosest(std::numeric_limits<f32>::max(), std::numeric_limits<f32>::max(), std::numeric_limits<f32>::max());
 //                u32 uwNearestIndex = 0;
 //                
 //                for(u32 i=0; i<kuwNumChildNodes; ++i)
 //                {
-//                    CVector3 vDistance = pOctant->paChild[i]->vCentre - BSphere.vOrigin;
+//                    Vector3 vDistance = pOctant->paChild[i]->vCentre - BSphere.vOrigin;
 //                    if(vDistance < vClosest)
 //                    {
 //                        uwNearestIndex = i;
@@ -185,7 +185,7 @@ namespace ChilliSource
         /// Recurse through all the child nodes and get the 
         /// entities from them
         //----------------------------------------------------------
-        void COctree::GetChildNodeAttachedToNode(COctree::Node* pNode, const CFrustum* inpFrustum, std::vector<ComponentPtr> &outComponents, u32 inudwQueryMask)
+        void Octree::GetChildNodeAttachedToNode(Octree::Node* pNode, const Frustum* inpFrustum, std::vector<ComponentSPtr> &outComponents, u32 inudwQueryMask)
         {
             if(pNode)
             {
@@ -208,7 +208,7 @@ namespace ChilliSource
         /// Recurse through all the components and do the cull
         /// test
         //----------------------------------------------------------
-        void COctree::GetComponentsAttachedToNode(COctree::Node* pNode, std::vector<ComponentPtr> &outComponents, u32 inudwQueryMask)
+        void Octree::GetComponentsAttachedToNode(Octree::Node* pNode, std::vector<ComponentSPtr> &outComponents, u32 inudwQueryMask)
         {
             if(pNode)
             {
@@ -230,7 +230,7 @@ namespace ChilliSource
 		///
 		/// Release all the memory held by the octree
 		//---------------------------------------------------------------
-		void COctree::Destroy()
+		void Octree::Destroy()
 		{
 			for(u32 i=0; i<kudwTotalNumNodes; ++i)
             {
@@ -241,7 +241,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//----------------------------------------------------------------
-		COctree::~COctree()
+		Octree::~Octree()
 		{
 			Destroy();
 		}

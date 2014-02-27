@@ -16,10 +16,10 @@ namespace ChilliSource
 {
     namespace Core
     {
-        class ILocalNotificationScheduler
+        class LocalNotificationScheduler
         {
         public:
-            virtual ~ILocalNotificationScheduler(){};
+            virtual ~LocalNotificationScheduler(){};
             //------------------------------------------------------------------------------
             /// Schedule Notification
             ///

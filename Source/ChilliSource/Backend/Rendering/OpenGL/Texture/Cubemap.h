@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CCubemap : public ChilliSource::Rendering::ICubemap
+		class CCubemap : public ChilliSource::Rendering::Cubemap
 		{
 		public:
 
@@ -31,7 +31,7 @@ namespace ChilliSource
 			/// @param Source images (Must be 6)
 			/// @param Whether to create mip maps
 			//--------------------------------------------------
-			void Init(const std::vector<Core::ResourcePtr>& inapSourceImages, bool inbWithMipsMaps);
+			void Init(const std::vector<Core::ResourceSPtr>& inapSourceImages, bool inbWithMipsMaps);
 			//--------------------------------------------------
 			/// Is A
 			///
@@ -70,7 +70,7 @@ namespace ChilliSource
             /// @return The format of the image used to create
             ///			the texture.
             //--------------------------------------------------
-            Core::CImage::Format GetImageFormat() const;
+            Core::Image::Format GetImageFormat() const;
             //--------------------------------------------------
 			/// Set Filter
 			///
@@ -78,7 +78,7 @@ namespace ChilliSource
 			/// @param S filter mode
 			/// @param T filter mode
 			//--------------------------------------------------
-			void SetFilter(Rendering::ITexture::Filter ineSFilter, Rendering::ITexture::Filter ineTFilter) override;
+			void SetFilter(Rendering::Texture::Filter ineSFilter, Rendering::Texture::Filter ineTFilter) override;
 			//--------------------------------------------------
 			/// Set Wrap Mode
 			///
@@ -86,7 +86,7 @@ namespace ChilliSource
 			/// @param S wrap mode
 			/// @param T wrap mode
 			//--------------------------------------------------
-			void SetWrapMode(Rendering::ITexture::WrapMode inSWrapMode, Rendering::ITexture::WrapMode inTWrapMode) override;
+			void SetWrapMode(Rendering::Texture::WrapMode inSWrapMode, Rendering::Texture::WrapMode inTWrapMode) override;
             
         private:
             //--------------------------------------------------
@@ -108,18 +108,18 @@ namespace ChilliSource
             
             GLuint mGLTextureID;
             
-            Rendering::ITexture::Filter meSFilter;
-			Rendering::ITexture::Filter meTFilter;
-			Rendering::ITexture::WrapMode meSWrapMode;
-			Rendering::ITexture::WrapMode meTWrapMode;
+            Rendering::Texture::Filter meSFilter;
+			Rendering::Texture::Filter meTFilter;
+			Rendering::Texture::WrapMode meSWrapMode;
+			Rendering::Texture::WrapMode meTWrapMode;
             
-            Core::CImage::Format meImageFormat;
+            Core::Image::Format meImageFormat;
             
             bool mbHasTextureFilterModeChanged;
             bool mbHasMipMaps;
             
             CCubemapManager* mpCubemapManager;
-            Rendering::IRenderCapabilities* mpRenderCapabilities;
+            Rendering::RenderCapabilities* mpRenderCapabilities;
 		};
 	}
 }

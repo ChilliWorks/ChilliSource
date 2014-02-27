@@ -175,7 +175,7 @@ namespace ChilliSource
                 sInfo.PropertyID = PropID;
                 sInfo.StreamID = StreamID;
                 sInfo.ReadStream = ReadStream;
-                sInfo.ConnectionOpenTime = Core::CApplication::GetSystemTime();
+                sInfo.ConnectionOpenTime = Core::Application::GetSystemTime();
                 
 #ifdef DEBUG
                 //LogConnectionAddress(ReadStream);
@@ -361,7 +361,7 @@ namespace ChilliSource
             //exceeded their lifespan
             for(ConnectionPool::iterator it = mPersistentConnectionPool.begin(); it != mPersistentConnectionPool.end(); /*No increment*/)
             {
-                if(Core::CApplication::GetSystemTime() > (it->ConnectionOpenTime + kudwKeepAliveTimeInSeconds))
+                if(Core::Application::GetSystemTime() > (it->ConnectionOpenTime + kudwKeepAliveTimeInSeconds))
                 {
                     //Close the old stream
                     CFReadStreamClose(it->ReadStream);

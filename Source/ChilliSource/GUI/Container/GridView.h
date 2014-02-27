@@ -154,7 +154,7 @@ namespace ChilliSource
 			///
 			/// @param Canvas renderer pointer
 			//-------------------------------------------------------
-			void Draw(Rendering::CCanvasRenderer* inpCanvas);
+			void Draw(Rendering::CanvasRenderer* inpCanvas);
 			//-------------------------------------------------------
 			/// Sets Debug Drawing
 			///
@@ -209,7 +209,7 @@ namespace ChilliSource
 			///
 			/// @param Cell size
 			//-------------------------------------------------------
-			void LayoutContentColumnMajor(const Core::CVector2& invCellSize, u32 udwNumCols, u32 udwNumRows);
+			void LayoutContentColumnMajor(const Core::Vector2& invCellSize, u32 udwNumCols, u32 udwNumRows);
 			//-------------------------------------------------------
 			/// Layout Content Row Major
 			///
@@ -219,7 +219,7 @@ namespace ChilliSource
 			///
 			/// @param Cell size
 			//-------------------------------------------------------
-			void LayoutContentRowMajor(const Core::CVector2& invCellSize, u32 udwNumCols, u32 udwNumRows);
+			void LayoutContentRowMajor(const Core::Vector2& invCellSize, u32 udwNumCols, u32 udwNumRows);
 
 		protected:
             GUIView::Subviews mapGridSubviews;

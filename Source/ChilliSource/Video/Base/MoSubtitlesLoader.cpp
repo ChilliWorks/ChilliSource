@@ -63,7 +63,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool MoSubtitlesLoader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IResourceProvider::InterfaceID;
+			return inInterfaceID == ResourceProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		// Can Create Resource of Kind
@@ -88,7 +88,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		// Create Resource From File
 		//--------------------------------------------------------------
-		bool MoSubtitlesLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool MoSubtitlesLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
 		{
             SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(outpResource);
             
@@ -97,7 +97,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		// Async Create Resource From File
 		//--------------------------------------------------------------
-		bool MoSubtitlesLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool MoSubtitlesLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)  
 		{
 			SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(outpResource);
 			
@@ -198,7 +198,7 @@ namespace ChilliSource
             pStyle->udwFontSize = inStyleJson.get(kstrTagStyleFontSize, kstrDefaultFontSize).asUInt();
             pStyle->Colour = Core::ParseColour(inStyleJson.get(kstrTagStyleFontColour, kstrDefaultColour).asString());
             pStyle->FadeTimeMS = ParseTime(inStyleJson.get(kstrTagStyleFadeTime, (s32)kDefaultFadeTimeMS).asString());
-            pStyle->eAlignment = Core::AlignmentAnchorFromString(inStyleJson.get(kstrTagStyleAlignment, kstrDefaultAlignment).asString());
+            pStyle->eAlignment = Rendering::AlignmentAnchorFromString(inStyleJson.get(kstrTagStyleAlignment, kstrDefaultAlignment).asString());
             pStyle->Bounds = LoadBounds(inStyleJson.get(kstrTagStyleBounds, ""));
             
             return pStyle;
@@ -241,7 +241,7 @@ namespace ChilliSource
         	f32 fLeft = (f32)inBoundsJson.get(kstrTagStyleBoundsLeft, kfDefaultLeft).asDouble();
         	f32 fRight = (f32)inBoundsJson.get(kstrTagStyleBoundsRight, kfDefaultRight).asDouble();
             
-            return Core::Rectangle(ChilliSource::Core::CVector2(fLeft, fTop), ChilliSource::Core::CVector2(fRight - fLeft, fBottom - fTop));
+            return Core::Rectangle(ChilliSource::Core::Vector2(fLeft, fTop), ChilliSource::Core::Vector2(fRight - fLeft, fBottom - fTop));
         }
         //-------------------------------------------------------------------------
         // Parse Time

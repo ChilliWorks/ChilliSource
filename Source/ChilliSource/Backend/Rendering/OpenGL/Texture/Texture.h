@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CTexture : public ChilliSource::Rendering::ITexture
+		class CTexture : public ChilliSource::Rendering::Texture
 		{
 		public:
 
@@ -31,20 +31,20 @@ namespace ChilliSource
 			/// @param Width
 			/// @param Height
 			//--------------------------------------------------
-			void Init(u32 inudwWidth, u32 inudwHeight, Core::CImage::Format ineFormat);
+			void Init(u32 inudwWidth, u32 inudwHeight, Core::Image::Format ineFormat);
 			//--------------------------------------------------
 			/// Init
 			///
 			/// @param Source image
 			/// @param Whether to create mip maps
 			//--------------------------------------------------
-			void Init(Core::CImage * pSourceImage, bool inbWithMipsMaps);
+			void Init(Core::Image * pSourceImage, bool inbWithMipsMaps);
             //----------------------------------------------------------------
             /// Create Image From Texture
             ///
             /// @param Image To Initialize from this Texture
             //----------------------------------------------------------------
-            bool CreateImage(Core::ImagePtr& outpImage);
+            bool CreateImage(Core::ImageSPtr& outpImage);
 			//--------------------------------------------------
 			/// Is A
 			///
@@ -99,7 +99,7 @@ namespace ChilliSource
             /// @return The format of the image used to create
             ///			the texture.
             //--------------------------------------------------
-            Core::CImage::Format GetImageFormat() const; 
+            Core::Image::Format GetImageFormat() const; 
             //--------------------------------------------------
             /// Reset
             ///
@@ -176,7 +176,7 @@ namespace ChilliSource
 			WrapMode meSWrapMode;
 			WrapMode meTWrapMode;
             
-            Core::CImage::Format meImageFormat;
+            Core::Image::Format meImageFormat;
             
 			bool mbHasMipMaps;
             bool mbHasTextureFilterModeChanged;
@@ -184,7 +184,7 @@ namespace ChilliSource
             s32 mdwTextureSlot;
 
             CTextureManager* mpTextureManager;
-            Rendering::IRenderCapabilities* mpRenderCapabilities;
+            Rendering::RenderCapabilities* mpRenderCapabilities;
             
             static u32 udwCurrentActiveSlot;
             

@@ -17,10 +17,10 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class CDirectionalLightComponent : public ILightComponent
+		class DirectionalLightComponent : public LightComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CDirectionalLightComponent);
+			DECLARE_NAMED_INTERFACE(DirectionalLightComponent);
 			
             //----------------------------------------------------------
             /// Constructor
@@ -28,7 +28,7 @@ namespace ChilliSource
             /// @param Shadow map target texture
             /// @param Shadow map debug target texture
             //----------------------------------------------------------
-			CDirectionalLightComponent(const TexturePtr& inpShadowMapTarget, const TexturePtr& inpShadowMapDebugTarget = TexturePtr());
+			DirectionalLightComponent(const TextureSPtr& inpShadowMapTarget, const TextureSPtr& inpShadowMapDebugTarget = TextureSPtr());
 			//----------------------------------------------------------
 			/// Is A
 			///
@@ -64,13 +64,13 @@ namespace ChilliSource
             /// @return Direction vector of light
             /// (only applies to directional lights)
             //----------------------------------------------------------
-            const Core::CVector3& GetDirection() const;
+            const Core::Vector3& GetDirection() const;
             //----------------------------------------------------------
             /// Get Light Matrix
             ///
             /// @return Matrix to transform into light space
             //----------------------------------------------------------
-            const Core::CMatrix4x4& GetLightMatrix() const override;
+            const Core::Matrix4x4& GetLightMatrix() const override;
             //----------------------------------------------------
 			/// On Attached To Entity
 			///
@@ -97,22 +97,22 @@ namespace ChilliSource
 			///
 			/// @return Shadow map texture
 			//----------------------------------------------------------
-			const TexturePtr& GetShadowMapPtr() const;
+			const TextureSPtr& GetShadowMapPtr() const;
             //----------------------------------------------------------
 			/// Get Shadow Map Debug Ptr
 			///
 			/// @return Shadow map debug colour texture
 			//----------------------------------------------------------
-			const TexturePtr& GetShadowMapDebugPtr() const;
+			const TextureSPtr& GetShadowMapDebugPtr() const;
             
         private:
             
-            Core::CMatrix4x4 mmatProj;
+            Core::Matrix4x4 mmatProj;
             
-            TexturePtr mpShadowMap;
-            TexturePtr mpShadowMapDebug;
+            TextureSPtr mpShadowMap;
+            TextureSPtr mpShadowMapDebug;
             
-            mutable Core::CVector3 mvDirection;
+            mutable Core::Vector3 mvDirection;
             
             f32 mfShadowTolerance;
             

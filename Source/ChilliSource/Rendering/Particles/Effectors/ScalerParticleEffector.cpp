@@ -19,7 +19,7 @@ namespace ChilliSource
         ///
         /// @param Param dictionary
         //----------------------------------------------------
-        CScalerParticleEffector::CScalerParticleEffector(const Core::ParamDictionary& insParams)
+        ScalerParticleEffector::ScalerParticleEffector(const Core::ParamDictionary& insParams)
         :mbInitialSet(false)
         {
             mfActiveEnergyLevel = 0.0f;
@@ -48,9 +48,9 @@ namespace ChilliSource
         /// @param Param dictionary
         /// @return Ownership of effector
         //-----------------------------------------------------
-        IParticleEffector* CScalerParticleEffector::Create(const Core::ParamDictionary& inParams)
+        ParticleEffector* ScalerParticleEffector::Create(const Core::ParamDictionary& inParams)
         {
-            return new CScalerParticleEffector(inParams);
+            return new ScalerParticleEffector(inParams);
         }
         //-----------------------------------------------------
         /// Init
@@ -60,7 +60,7 @@ namespace ChilliSource
         ///
         /// @param Particle to intialise
         //-----------------------------------------------------
-        void CScalerParticleEffector::Init(Particle* inpParticle, u32 inudwIndex)
+        void ScalerParticleEffector::Init(Particle* inpParticle, u32 inudwIndex)
         {
             //Doesn't require initing
         }
@@ -73,7 +73,7 @@ namespace ChilliSource
         /// @param Particle to effect
         /// @param Time between frames
         //-----------------------------------------------------
-        void CScalerParticleEffector::Apply(Particle* inpParticle, u32 inudwIndex, f32 infDt)
+        void ScalerParticleEffector::Apply(Particle* inpParticle, u32 inudwIndex, f32 infDt)
         {
             f32 fEnergy = inpParticle->fEnergy[inudwIndex];
             
@@ -85,7 +85,7 @@ namespace ChilliSource
                 mvInitialScale = inpParticle->vScale[inudwIndex];
             }
             
-            Core::CVector3 vDiff = (mvTargetScale - mvInitialScale) * (1.0f - fEnergy);
+            Core::Vector3 vDiff = (mvTargetScale - mvInitialScale) * (1.0f - fEnergy);
             inpParticle->vScale[inudwIndex] = mvInitialScale + vDiff;
         }
     }

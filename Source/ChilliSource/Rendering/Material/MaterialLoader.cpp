@@ -36,7 +36,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Constructor
 		//-------------------------------------------------------------------------
-		CMaterialLoader::CMaterialLoader(IRenderCapabilities* inpRenderCapabilities)
+		MaterialLoader::MaterialLoader(RenderCapabilities* inpRenderCapabilities)
 			: mpRenderCapabilities(inpRenderCapabilities)
 		{
 			CS_ASSERT(mpRenderCapabilities, "Material loader is missing required system: Render Capabilities.");
@@ -44,64 +44,64 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Is A
 		//-------------------------------------------------------------------------
-		bool CMaterialLoader::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool MaterialLoader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IResourceProvider::InterfaceID;
+			return inInterfaceID == ResourceProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource of Kind
 		//----------------------------------------------------------------------------
-		bool CMaterialLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
+		bool MaterialLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == CMaterial::InterfaceID);
+			return (inInterfaceID == Material::InterfaceID);
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource From File With Extension
 		//----------------------------------------------------------------------------
-		bool CMaterialLoader::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
+		bool MaterialLoader::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
 		{
 			return (inExtension == kstrMaterialExtension);
 		}
 		//----------------------------------------------------------------------------
 		/// Create Resource From File
 		//----------------------------------------------------------------------------
-		bool CMaterialLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool MaterialLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)  
 		{
             std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > > aShaderFiles;
             std::vector<TextureDesc> aTextureFiles;
             std::vector<TextureDesc> aCubemapFiles;
             if(BuildMaterialFromFile(ineStorageLocation, inFilePath, aShaderFiles, aTextureFiles, aCubemapFiles, outpResource) == true)
 			{
-                MaterialPtr pMaterial = std::static_pointer_cast<CMaterial>(outpResource);
+                MaterialSPtr pMaterial = std::static_pointer_cast<Material>(outpResource);
                 
-                IShaderManager* pShaderManager = GET_RESOURCE_MANAGER(IShaderManager);
+                ShaderManager* pShaderManager = GET_RESOURCE_MANAGER(ShaderManager);
                 if(pShaderManager != nullptr)
                 {
                     for(u32 i=0; i<aShaderFiles.size(); ++i)
                     {
                         if(aShaderFiles[i].second.second.empty() == false)
                         {
-                            ShaderPtr pShader = pShaderManager->GetShaderFromFile(aShaderFiles[i].second.first, aShaderFiles[i].second.second);
+                            ShaderSPtr pShader = pShaderManager->GetShaderFromFile(aShaderFiles[i].second.first, aShaderFiles[i].second.second);
                             pMaterial->SetShaderProgram(aShaderFiles[i].first, pShader);
                         }
                     }
                 }
                 
-                ITextureManager* pTextureManager = GET_RESOURCE_MANAGER(ITextureManager);
+                TextureManager* pTextureManager = GET_RESOURCE_MANAGER(TextureManager);
                 if(pTextureManager != nullptr)
                 {
                     for(u32 i=0; i<aTextureFiles.size(); ++i)
                     {
-                        pMaterial->AddTexture(pTextureManager->GetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::CImage::Format::k_default, aTextureFiles[i].mbMipMapped));
+                        pMaterial->AddTexture(pTextureManager->GetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::Image::Format::k_default, aTextureFiles[i].mbMipMapped));
                     }
                 }
                 
-                ICubemapManager* pCubemapManager = GET_RESOURCE_MANAGER(ICubemapManager);
+                CubemapManager* pCubemapManager = GET_RESOURCE_MANAGER(CubemapManager);
                 if(pCubemapManager != nullptr)
                 {
                     for(u32 i=0; i<aCubemapFiles.size(); ++i)
                     {
-                        pMaterial->SetCubemap(pCubemapManager->GetCubemapFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile, Core::CImage::Format::k_default, aCubemapFiles[i].mbMipMapped));
+                        pMaterial->SetCubemap(pCubemapManager->GetCubemapFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile, Core::Image::Format::k_default, aCubemapFiles[i].mbMipMapped));
                     }
                 }
                 
@@ -115,10 +115,10 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Async Create Resource From File
 		//----------------------------------------------------------------------------
-		bool CMaterialLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool MaterialLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)  
 		{
 			//Start the material building task.
-			Core::Task<Core::StorageLocation, const std::string&, Core::ResourcePtr&> BuildMaterialTask(this, &CMaterialLoader::BuildMaterialTask, ineStorageLocation, inFilePath, outpResource);
+			Core::Task<Core::StorageLocation, const std::string&, Core::ResourceSPtr&> BuildMaterialTask(this, &MaterialLoader::BuildMaterialTask, ineStorageLocation, inFilePath, outpResource);
 			Core::CTaskScheduler::ScheduleTask(BuildMaterialTask);
 			
 			return true;
@@ -126,7 +126,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Build Material Task
 		//----------------------------------------------------------------------------
-		void CMaterialLoader::BuildMaterialTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		void MaterialLoader::BuildMaterialTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
 		{
 			//build the material
             std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > > aShaderFiles;
@@ -134,36 +134,36 @@ namespace ChilliSource
             std::vector<TextureDesc> aCubemapFiles;
 			if(BuildMaterialFromFile(ineStorageLocation, inFilePath, aShaderFiles, aTextureFiles, aCubemapFiles, outpResource) == true)
 			{
-                MaterialPtr pMaterial = std::static_pointer_cast<CMaterial>(outpResource);
+                MaterialSPtr pMaterial = std::static_pointer_cast<Material>(outpResource);
                 
-                IShaderManager* pShaderManager = GET_RESOURCE_MANAGER(IShaderManager);
+                ShaderManager* pShaderManager = GET_RESOURCE_MANAGER(ShaderManager);
                 if(pShaderManager != nullptr)
                 {
                     for(u32 i=0; i<aShaderFiles.size(); ++i)
                     {
-                        ShaderPtr pShader = pShaderManager->AsyncGetShaderFromFile(aShaderFiles[i].second.first, aShaderFiles[i].second.second);
+                        ShaderSPtr pShader = pShaderManager->AsyncGetShaderFromFile(aShaderFiles[i].second.first, aShaderFiles[i].second.second);
                         pMaterial->SetShaderProgram(aShaderFiles[i].first, pShader);
                         pShader->WaitTilLoaded();
                     }
                 }
                 
-                ITextureManager* pTextureManager = GET_RESOURCE_MANAGER(ITextureManager);
+                TextureManager* pTextureManager = GET_RESOURCE_MANAGER(TextureManager);
                 if(pTextureManager != nullptr)
                 {
                     for(u32 i=0; i<aTextureFiles.size(); ++i)
                     {
-                        TexturePtr pTexture = pTextureManager->AsyncGetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::CImage::Format::k_default, aTextureFiles[i].mbMipMapped);
+                        TextureSPtr pTexture = pTextureManager->AsyncGetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::Image::Format::k_default, aTextureFiles[i].mbMipMapped);
                         pMaterial->AddTexture(pTexture);
                         pTexture->WaitTilLoaded();
                     }
                 }
                 
-                ICubemapManager* pCubemapManager = GET_RESOURCE_MANAGER(ICubemapManager);
+                CubemapManager* pCubemapManager = GET_RESOURCE_MANAGER(CubemapManager);
                 if(pCubemapManager != nullptr)
                 {
                     for(u32 i=0; i<aCubemapFiles.size(); ++i)
                     {
-                        CubemapPtr pCubemap = pCubemapManager->AsyncGetCubemapFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile, Core::CImage::Format::k_default, aCubemapFiles[i].mbMipMapped);
+                        CubemapSPtr pCubemap = pCubemapManager->AsyncGetCubemapFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile, Core::Image::Format::k_default, aCubemapFiles[i].mbMipMapped);
                         pMaterial->SetCubemap(pCubemap);
                         pCubemap->WaitTilLoaded();
                     }
@@ -171,24 +171,24 @@ namespace ChilliSource
                 
                 pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
                 
-                Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<Core::ResourcePtr&>(this, &CMaterialLoader::SetLoadedTask, outpResource));
+                Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<Core::ResourceSPtr&>(this, &MaterialLoader::SetLoadedTask, outpResource));
 			}
 		}
 		//----------------------------------------------------------------------------
 		/// Set Loaded Task
 		//----------------------------------------------------------------------------
-		void CMaterialLoader::SetLoadedTask(Core::ResourcePtr& outpResource)
+		void MaterialLoader::SetLoadedTask(Core::ResourceSPtr& outpResource)
 		{
 			outpResource->SetLoaded(true);
 		}
 		//----------------------------------------------------------------------------
 		/// Build Material From File
 		//----------------------------------------------------------------------------
-		bool CMaterialLoader::BuildMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath,
+		bool MaterialLoader::BuildMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath,
                                                     std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles,
                                                     std::vector<TextureDesc>& outaTextureFiles,
                                                     std::vector<TextureDesc>& outaCubemapFiles,
-                                                    Core::ResourcePtr& outpResource)
+                                                    Core::ResourceSPtr& outpResource)
 		{
             const u32 kudwNumShaderNodes = 3;
             const std::pair<std::string, ShaderPass> kaShaderNodes[kudwNumShaderNodes] =
@@ -198,7 +198,7 @@ namespace ChilliSource
                 std::make_pair("PointLightPass", ShaderPass::k_point)
             };
             
-			CMaterial* pMaterial = (CMaterial*)(outpResource.get());
+			Material* pMaterial = (Material*)(outpResource.get());
 			
 			//Load the XML file
 			TiXmlDocument Document(inFilePath);
@@ -277,25 +277,25 @@ namespace ChilliSource
 					TiXmlElement * pEmissiveEl = Core::XMLUtils::FirstChildElementWithName(pLightingEl, "Emissive");
 					if(pEmissiveEl)
 					{
-						pMaterial->mEmissive = Core::XMLUtils::GetAttributeValueOrDefault<Core::CColour>(pEmissiveEl, "value", Core::CColour::WHITE);
+						pMaterial->mEmissive = Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(pEmissiveEl, "value", Core::Colour::WHITE);
 					}
                     //---Ambient Lighting
 					TiXmlElement * pAmbientEl = Core::XMLUtils::FirstChildElementWithName(pLightingEl, "Ambient");
 					if(pAmbientEl)
 					{
-						pMaterial->mAmbient = Core::XMLUtils::GetAttributeValueOrDefault<Core::CColour>(pAmbientEl, "value", Core::CColour::WHITE);
+						pMaterial->mAmbient = Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(pAmbientEl, "value", Core::Colour::WHITE);
 					}
 					//---Diffuse Lighting
 					TiXmlElement * pDiffuseEl = Core::XMLUtils::FirstChildElementWithName(pLightingEl, "Diffuse");
 					if(pDiffuseEl)
 					{
-						pMaterial->mDiffuse = Core::XMLUtils::GetAttributeValueOrDefault<Core::CColour>(pDiffuseEl, "value", Core::CColour::WHITE);
+						pMaterial->mDiffuse = Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(pDiffuseEl, "value", Core::Colour::WHITE);
 					}
 					//---Specular Lighting
 					TiXmlElement * pSpecularEl = Core::XMLUtils::FirstChildElementWithName(pLightingEl, "Specular");
 					if(pSpecularEl)
 					{
-						pMaterial->mSpecular = Core::XMLUtils::GetAttributeValueOrDefault<Core::CColour>(pSpecularEl, "value", Core::CColour::WHITE);
+						pMaterial->mSpecular = Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(pSpecularEl, "value", Core::Colour::WHITE);
 					}
 					//---Intensity
 					TiXmlElement * pShininessEl = Core::XMLUtils::FirstChildElementWithName(pLightingEl, "Shininess");
@@ -342,27 +342,27 @@ namespace ChilliSource
 						}
 						else if(strType == "Vec2")
 						{
-							pMaterial->mMapVec2ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::CVector2>(pShaderVarEl, "value", Core::CVector2::ZERO)));
+							pMaterial->mMapVec2ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector2>(pShaderVarEl, "value", Core::Vector2::ZERO)));
 						}
 						else if(strType == "Vec3")
 						{
-							pMaterial->mMapVec3ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::CVector3>(pShaderVarEl, "value", Core::CVector3::ZERO)));
+							pMaterial->mMapVec3ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector3>(pShaderVarEl, "value", Core::Vector3::ZERO)));
 						}
 						else if(strType == "Vec4")
 						{
-							pMaterial->mMapVec4ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::CVector4>(pShaderVarEl, "value", Core::CVector4::ZERO)));
+							pMaterial->mMapVec4ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector4>(pShaderVarEl, "value", Core::Vector4::ZERO)));
 						}
 						else if(strType == "Colour")
 						{
-							pMaterial->mMapColShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::CColour>(pShaderVarEl, "value", Core::CColour::WHITE)));
+							pMaterial->mMapColShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(pShaderVarEl, "value", Core::Colour::WHITE)));
 						}
 						else if(strType == "Matrix")
 						{
-							pMaterial->mMapMat4ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::CMatrix4x4>(pShaderVarEl, "value", Core::CMatrix4x4::IDENTITY)));
+							pMaterial->mMapMat4ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Matrix4x4>(pShaderVarEl, "value", Core::Matrix4x4::IDENTITY)));
 						}
 						else if(strType == "MatrixArray")
 						{
-							pMaterial->mMapMat4ArrayShaderVars.insert(std::make_pair(strName, std::vector<Core::CMatrix4x4>()));
+							pMaterial->mMapMat4ArrayShaderVars.insert(std::make_pair(strName, std::vector<Core::Matrix4x4>()));
 						}
 						//Move on to the next variable
 						pShaderVarEl =  Core::XMLUtils::NextSiblingElementWithName(pShaderVarEl);
@@ -406,7 +406,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
 		/// Get Shader Files For Material Type
 		//----------------------------------------------------------------------------
-        void CMaterialLoader::GetShaderFilesForMaterialType(const std::string& instrType, std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles) const
+        void MaterialLoader::GetShaderFilesForMaterialType(const std::string& instrType, std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles) const
         {
             if(instrType == "Sprite")
             {
@@ -535,7 +535,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Convert String To Blend Function
 		//----------------------------------------------------------------------------
-		AlphaBlend CMaterialLoader::ConvertStringToBlendFunction(const std::string &instrFunc)
+		AlphaBlend MaterialLoader::ConvertStringToBlendFunction(const std::string &instrFunc)
 		{
 			if(instrFunc == "Zero")					return AlphaBlend::k_zero;
 			if(instrFunc == "One")					return AlphaBlend::k_one;
@@ -552,7 +552,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
 		/// Convert String To Cull Face
 		//----------------------------------------------------------------------------
-		CullFace CMaterialLoader::ConvertStringToCullFace(const std::string &instrFace)
+		CullFace MaterialLoader::ConvertStringToCullFace(const std::string &instrFace)
 		{
 			if(instrFace == "Front")    return CullFace::k_front;
 			if(instrFace == "Back")		return CullFace::k_back;

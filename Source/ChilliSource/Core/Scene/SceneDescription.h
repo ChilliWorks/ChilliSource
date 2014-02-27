@@ -14,7 +14,6 @@
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
-#include <ChilliSource/Core/Scene/ForwardDeclarations.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/XML/rapidxml_utils.hpp>
 
@@ -26,9 +25,9 @@ namespace ChilliSource
 	{
 		struct EntityTransform
 		{
-			CVector3	vTranslation;
-			CQuaternion qOrientation;
-			CVector3	vScale;
+			Vector3	vTranslation;
+			Quaternion qOrientation;
+			Vector3	vScale;
 			f32         fOpacity;
             
 			EntityTransform();
@@ -36,7 +35,7 @@ namespace ChilliSource
 			void FromXml(rapidxml::xml_node<> * inpEl);
 		};
 		
-		class CSceneDesc : public IResource
+		class SceneDesc : public Resource
 		{
 		public:
             struct ComponentDesc
@@ -75,23 +74,23 @@ namespace ChilliSource
 			};
             
             
-            DECLARE_NAMED_INTERFACE(CSceneDesc);
+            DECLARE_NAMED_INTERFACE(SceneDesc);
             
             bool IsA(InterfaceIDType inInterfaceID) const override;
             
-            typedef std::function<EntityPtr(const EntityDesc&)> CustomEntityDelegate;
-            EntityPtr BuildScene(CustomEntityDelegate inCustomEntityDelegate = CustomEntityDelegate());
+            typedef std::function<EntitySPtr(const EntityDesc&)> CustomEntityDelegate;
+            EntitySPtr BuildScene(CustomEntityDelegate inCustomEntityDelegate = CustomEntityDelegate());
             
 			bool LoadFromFile(StorageLocation ineStorageLocation, const std::string & incName);
             void WriteToFile(StorageLocation ineStorageLocation, const std::string & incName);
-            CSceneDesc::EntityDesc*  GetDescriptionForEntityWithName(const std::string & instrName);
+            SceneDesc::EntityDesc*  GetDescriptionForEntityWithName(const std::string & instrName);
 			
         protected:
-            EntityPtr    CreateEntity(EntityDesc & insEntityDesc, CustomEntityDelegate &inCustomEntityDelegate);
-            void         CreateContentsForEntity(CEntity & insEntity, CSceneDesc::EntityDesc & insEntDesc, CustomEntityDelegate &inCustomEntityDelegate);
-            ComponentPtr CreateComponent(ComponentDesc& insComponentDesc);
+            EntitySPtr    CreateEntity(EntityDesc & insEntityDesc, CustomEntityDelegate &inCustomEntityDelegate);
+            void         CreateContentsForEntity(Entity & insEntity, SceneDesc::EntityDesc & insEntDesc, CustomEntityDelegate &inCustomEntityDelegate);
+            ComponentSPtr CreateComponent(ComponentDesc& insComponentDesc);
 
-            CSceneDesc::EntityDesc*  RecursiveNameSearch(CSceneDesc::EntityDesc* inpDesc, const std::string & instrName);
+            SceneDesc::EntityDesc*  RecursiveNameSearch(SceneDesc::EntityDesc* inpDesc, const std::string & instrName);
             
 			EntityDesc							sRootEntity;
 		};

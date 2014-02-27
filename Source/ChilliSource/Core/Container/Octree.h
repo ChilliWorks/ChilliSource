@@ -51,9 +51,9 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		class COctree
+		class Octree
 		{
-            typedef std::vector<VolumeComponentPtr> ObjectList;
+            typedef std::vector<VolumeComponentSPtr> ObjectList;
             
             struct Node
 			{
@@ -66,8 +66,8 @@ namespace ChilliSource
 			};
 			
 		public:
-			COctree(const Core::CVector3& invWorldCentre, f32 infHalfSize);
-			~COctree();
+			Octree(const Core::Vector3& invWorldCentre, f32 infHalfSize);
+			~Octree();
             //--------------------------------------------------------------------------------------------------
             /// Query Scene For Visible Components
             ///
@@ -78,7 +78,7 @@ namespace ChilliSource
             /// @param Empty container to be filled
             /// @param Query mask
             //--------------------------------------------------------------------------------------------------
-            void QuerySceneForVisibleComponents(const Core::CFrustum* inpFrustum, std::vector<ComponentPtr> &outComponents, u32 inudwQueryMask);
+            void QuerySceneForVisibleComponents(const Core::Frustum* inpFrustum, std::vector<ComponentSPtr> &outComponents, u32 inudwQueryMask);
 			//---------------------------------------------------------------
 			/// Add 
 			///
@@ -87,7 +87,7 @@ namespace ChilliSource
 			///
 			/// @param Node to add 
 			//---------------------------------------------------------------
-			void Add(const VolumeComponentPtr& inpComponent);
+			void Add(const VolumeComponentSPtr& inpComponent);
 			//---------------------------------------------------------------
 			/// Remove 
 			///
@@ -95,7 +95,7 @@ namespace ChilliSource
 			///
 			/// @param Node to remove
 			//---------------------------------------------------------------
-			void Remove(const VolumeComponentPtr& inpComponent);
+			void Remove(const VolumeComponentSPtr& inpComponent);
 			//---------------------------------------------------------------
 			/// Destroy
 			///
@@ -113,21 +113,21 @@ namespace ChilliSource
 			/// @param Parent cube half width and height
 			/// @param Current tree depth
 			//---------------------------------------------------------------
-			COctree::Node* CreateOctant(const Core::CVector3& invWorldCentre, f32 infHalfSize, s32 inuwDepth, u32 inudwOffset);
+			Octree::Node* CreateOctant(const Core::Vector3& invWorldCentre, f32 infHalfSize, s32 inuwDepth, u32 inudwOffset);
             //----------------------------------------------------------
 			/// Get Child Node Attached To Node
 			///
 			/// Recurse through all the child nodes and get the 
 			/// entities from them
 			//----------------------------------------------------------
-			void GetChildNodeAttachedToNode(COctree::Node* pNode, const Core::CFrustum* inpFrustum, std::vector<ComponentPtr> &outComponents, u32 inudwQueryMask);
+			void GetChildNodeAttachedToNode(Octree::Node* pNode, const Core::Frustum* inpFrustum, std::vector<ComponentSPtr> &outComponents, u32 inudwQueryMask);
 			//----------------------------------------------------------
 			/// Get Components Attached To Node
 			///
 			/// Recurse through all the components and do the cull
             /// test
 			//----------------------------------------------------------
-			void GetComponentsAttachedToNode(COctree::Node* pNode, std::vector<ComponentPtr> &outComponents, u32 inudwQueryMask);
+			void GetComponentsAttachedToNode(Octree::Node* pNode, std::vector<ComponentSPtr> &outComponents, u32 inudwQueryMask);
 			
 		private:
 		

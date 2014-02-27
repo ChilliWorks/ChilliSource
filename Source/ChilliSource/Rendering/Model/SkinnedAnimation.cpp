@@ -13,63 +13,63 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(CSkinnedAnimation);
+		DEFINE_NAMED_INTERFACE(SkinnedAnimation);
 		//--------------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------------
-		CSkinnedAnimation::CSkinnedAnimation() : mfFrameTime(0.0f)
+		SkinnedAnimation::SkinnedAnimation() : mfFrameTime(0.0f)
 		{
 		}
 		//---------------------------------------------------------------------
 		/// Is A
 		//---------------------------------------------------------------------
-		bool CSkinnedAnimation::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool SkinnedAnimation::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == CSkinnedAnimation::InterfaceID;
+			return inInterfaceID == SkinnedAnimation::InterfaceID;
 		}
 		//---------------------------------------------------------------------
 		/// Get Frame At Index
 		//---------------------------------------------------------------------
-		SkinnedAnimationFramePtr CSkinnedAnimation::GetFrameAtIndex(u32 indwFrameIndex) const
+		SkinnedAnimationFrameSPtr SkinnedAnimation::GetFrameAtIndex(u32 indwFrameIndex) const
 		{
 			if (indwFrameIndex < mFrames.size())
 			{
 				return mFrames[indwFrameIndex];
 			}
-			return SkinnedAnimationFramePtr();
+			return SkinnedAnimationFrameSPtr();
 		}
 		//---------------------------------------------------------------------
 		/// Get Frame Time
 		//---------------------------------------------------------------------
-		f32 CSkinnedAnimation::GetFrameTime() const
+		f32 SkinnedAnimation::GetFrameTime() const
 		{
 			return mfFrameTime;
 		}
 		//---------------------------------------------------------------------
 		/// Get Num Frames
 		//---------------------------------------------------------------------
-		u32 CSkinnedAnimation::GetNumFrames() const
+		u32 SkinnedAnimation::GetNumFrames() const
 		{
 			return mFrames.size();
 		}
 		//---------------------------------------------------------------------
 		/// Add Frame
 		//---------------------------------------------------------------------
-		void CSkinnedAnimation::AddFrame(const SkinnedAnimationFramePtr& inpAnimationFrame)
+		void SkinnedAnimation::AddFrame(const SkinnedAnimationFrameSPtr& inpAnimationFrame)
 		{
 			mFrames.push_back(inpAnimationFrame);
 		}
 		//---------------------------------------------------------------------
 		/// Set Frame Rate
 		//---------------------------------------------------------------------
-		void CSkinnedAnimation::SetFrameTime(f32 infFrameTime)
+		void SkinnedAnimation::SetFrameTime(f32 infFrameTime)
 		{
 			mfFrameTime = infFrameTime;
 		}
 		//-----------------------------------------------------------------
 		/// Destructor
 		//-----------------------------------------------------------------
-		CSkinnedAnimation::~CSkinnedAnimation()
+		SkinnedAnimation::~SkinnedAnimation()
 		{
 			mFrames.clear();
 		}

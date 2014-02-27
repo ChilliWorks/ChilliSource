@@ -23,7 +23,7 @@ namespace ChilliSource
         /// available on all platforms and you should be sure it is supported
         /// if using it.
         //====================================================================
-        class CETC1ImageProvider : public Core::IImageResourceProvider
+        class ETC1ImageProvider : public Core::ImageResourceProvider
         {
         public:
             //----------------------------------------------------------------
@@ -56,7 +56,7 @@ namespace ChilliSource
             /// @param Out: Resource
             /// @return Whether the resource loaded
             //----------------------------------------------------------------
-            bool CreateResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string & inFilePath, ChilliSource::Core::ResourcePtr& outpResource) override;
+            bool CreateResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string & inFilePath, ChilliSource::Core::ResourceSPtr& outpResource) override;
             //----------------------------------------------------------------
             /// Create Image From File
             ///
@@ -66,7 +66,7 @@ namespace ChilliSource
             /// @param Out: Resource
             /// @return Whether the resource loaded
             //----------------------------------------------------------------
-            bool CreateImageFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string & inFilePath, ChilliSource::Core::CImage::Format ineFormat, ChilliSource::Core::ResourcePtr& outpResource);
+            bool CreateImageFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string & inFilePath, ChilliSource::Core::Image::Format ineFormat, ChilliSource::Core::ResourceSPtr& outpResource);
         private:
             struct ETC1Header
             {

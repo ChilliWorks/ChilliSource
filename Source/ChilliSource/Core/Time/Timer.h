@@ -28,11 +28,11 @@ namespace ChilliSource
 		/// timer.
 		//============================================
 		
-		class CTimer
+		class Timer
 		{
 		public:
-			CTimer();
-			~CTimer();
+			Timer();
+			~Timer();
 			
 			//--------------------------------------------
 			/// Start

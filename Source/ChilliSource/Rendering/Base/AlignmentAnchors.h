@@ -15,7 +15,7 @@
 
 namespace ChilliSource
 {
-    namespace Core
+    namespace Rendering
     {
         //---Anchor points for view alignment
         enum class AlignmentAnchor
@@ -41,7 +41,7 @@ namespace ChilliSource
         /// @param Half size
         /// @param Out anchor point
         //---------------------------------------------------------------
-        void Align(AlignmentAnchor ineAlignment, const CVector2& invHalfSize, CVector2& outvAlignmentPoint);
+        void Align(AlignmentAnchor ineAlignment, const Core::Vector2& invHalfSize, Core::Vector2& outvAlignmentPoint);
         //---------------------------------------------------------------
         /// Alignment Anchor From String
         ///
@@ -66,7 +66,7 @@ namespace ChilliSource
         /// @param Half size
         /// @param Out anchor point
         //---------------------------------------------------------------
-        void GetAnchorPoint(AlignmentAnchor ineAlignment, const CVector2& invHalfSize, CVector2& outvAlignmentPoint);
+        void GetAnchorPoint(AlignmentAnchor ineAlignment, const Core::Vector2& invHalfSize, Core::Vector2& outvAlignmentPoint);
     }
 }
 

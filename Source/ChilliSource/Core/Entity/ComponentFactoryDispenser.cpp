@@ -19,13 +19,13 @@ namespace ChilliSource
 {
     namespace Core
     {
-        CComponentFactoryDispenser* CComponentFactoryDispenser::pInstance = nullptr;
+        ComponentFactoryDispenser* ComponentFactoryDispenser::pInstance = nullptr;
         //----------------------------------------------------
         /// Constructor
         ///
         /// Singleton instance
         //----------------------------------------------------
-        CComponentFactoryDispenser::CComponentFactoryDispenser(CApplication* inpApp) : mpApp(inpApp)
+        ComponentFactoryDispenser::ComponentFactoryDispenser(Application* inpApp) : mpApp(inpApp)
         {
             pInstance = this;
         }
@@ -34,14 +34,14 @@ namespace ChilliSource
         ///
         /// @return Singleton instance
         //--------------------------------------------------------------------------------------------------
-        CComponentFactoryDispenser* CComponentFactoryDispenser::GetSingletonPtr()
+        ComponentFactoryDispenser* ComponentFactoryDispenser::GetSingletonPtr()
         {
             return pInstance;
         }
 		//--------------------------------------------------------------------------------------------------
 		/// @return Singleton instance
 		//--------------------------------------------------------------------------------------------------
-		CComponentFactoryDispenser& CComponentFactoryDispenser::GetSingleton()
+		ComponentFactoryDispenser& ComponentFactoryDispenser::GetSingleton()
         {
 			return *pInstance;
 		}
@@ -51,7 +51,7 @@ namespace ChilliSource
 		/// Adds a component factory to the application pool. 
 		/// @param Component factory
 		//--------------------------------------------------------------------------------------------------
-		void CComponentFactoryDispenser::RegisterComponentFactory(IComponentFactory * inpComponentFactory)
+		void ComponentFactoryDispenser::RegisterComponentFactory(ComponentFactory * inpComponentFactory)
 		{
 			mComponentFactories.push_back(inpComponentFactory);
 		}
@@ -59,12 +59,12 @@ namespace ChilliSource
         /// Get Factory Producing
         ///
         /// Looks for a factory that can create the given type
-        /// @param The type ID of the object you wish to create (i.e. CMesh, ITexture)
+        /// @param The type ID of the object you wish to create (i.e. Mesh, Texture)
         /// @return Factory that can produce the given interface or NULL if none available
         //--------------------------------------------------------------------------------------------------
-        IComponentFactory* CComponentFactoryDispenser::GetFactoryProducing(const std::string & insName)
+        ComponentFactory* ComponentFactoryDispenser::GetFactoryProducing(const std::string & insName)
         {
-            for (std::vector<IComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
+            for (std::vector<ComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
 			{
                 if((*it)->CanProduceComponentWithTypeName(insName)) 
                 {
@@ -82,9 +82,9 @@ namespace ChilliSource
         /// @param The type ID of the object you wish to create (i.e. Sprite, Static Mesh)
         /// @return Factory that creates the given component
         //--------------------------------------------------------------------------------------------------
-        IComponentFactory* CComponentFactoryDispenser::GetFactoryProducing(InterfaceIDType inInterfaceID)
+        ComponentFactory* ComponentFactoryDispenser::GetFactoryProducing(InterfaceIDType inInterfaceID)
         {
-            for (std::vector<IComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
+            for (std::vector<ComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
 			{
                 if((*it)->CanProduceComponentWithInterface(inInterfaceID)) 
                 {
@@ -102,9 +102,9 @@ namespace ChilliSource
         /// @param The type ID of the factory interface you are seeking
         /// @return Factory that implements the given interface or NULL if none available
         //--------------------------------------------------------------------------------------------------
-        IComponentFactory* CComponentFactoryDispenser::GetFactoryWithInterface(InterfaceIDType inInterfaceID)
+        ComponentFactory* ComponentFactoryDispenser::GetFactoryWithInterface(InterfaceIDType inInterfaceID)
         {
-            for(std::vector<IComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
+            for(std::vector<ComponentFactory*>::iterator it = mComponentFactories.begin(); it != mComponentFactories.end(); ++it) 
 			{
                 if((*it)->IsA(inInterfaceID)) 
                 {
@@ -118,7 +118,7 @@ namespace ChilliSource
         //--------------------------------------------------------------------
         /// Destructor
         //--------------------------------------------------------------------
-        CComponentFactoryDispenser::~CComponentFactoryDispenser()
+        ComponentFactoryDispenser::~ComponentFactoryDispenser()
         {
 
         }
