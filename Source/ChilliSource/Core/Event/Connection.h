@@ -10,7 +10,7 @@
 #ifndef _CHILLISOURCE_CORE_EVENT_CONNECTION_H_
 #define _CHILLISOURCE_CORE_EVENT_CONNECTION_H_
 
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {

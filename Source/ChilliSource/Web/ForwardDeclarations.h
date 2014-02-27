@@ -9,7 +9,9 @@
 #ifndef _CHILLISOURCE_WEB_FORWARDDECLARATIONS_H_
 #define _CHILLISOURCE_WEB_FORWARDDECLARATIONS_H_
 
-#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/StandardMacros.h>
+
+#include <memory>
 
 namespace ChilliSource
 {
