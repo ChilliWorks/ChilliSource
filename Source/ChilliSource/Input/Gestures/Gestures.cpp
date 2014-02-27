@@ -49,34 +49,6 @@ namespace ChilliSource
 			m_touchMoveConnection = mpView->GetTouchMovedEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnTouchMoved));
 			m_touchEndConnection = mpView->GetTouchEndEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnTouchEnded));
 		}
-		//----------------------------------------------------
-		/// Register Gesture Delegate
-		///
-		/// Triggered when the delegate of object type is
-		/// recognized.
-		/// @param Event listener
-		//----------------------------------------------------
-		void Gesture::RegisterGestureDelegate(GestureEventDelegate inEventDelegate)
-		{
-			mGestureDelegates.push_back(inEventDelegate);
-		}
-		//----------------------------------------------------
-		/// Deregister Gesture Delegate
-		///
-		/// Usubscribe the listener for event notifications
-		/// @param Event listener
-		//----------------------------------------------------
-		void Gesture::DeregisterGestureDelegate(GestureEventDelegate inEventDelegate)
-		{
-			for(GestureDelegatesList::iterator it = mGestureDelegates.begin(); it != mGestureDelegates.end(); ++it)
-            {
-                if(*it == inEventDelegate)
-                {
-                    mGestureDelegates.erase(it);
-                    return;
-                }
-            }
-		}
         //----------------------------------------------------
 		/// Surface Destroyed
 		///
@@ -95,10 +67,7 @@ namespace ChilliSource
 		//----------------------------------------------------
         void Gesture::NotifyGestureTriggered()
         {
-            for(GestureDelegatesListItr it = mGestureDelegates.begin(); it != mGestureDelegates.end(); ++it)
-            {
-                (*it)(*this);
-            }
+            m_gestureEvent.NotifyConnections(this);
         }
 		//================================================
 		/// Swipe Gesture
@@ -245,62 +214,6 @@ namespace ChilliSource
 		{
 		}
 		//----------------------------------------------------
-		/// Register Gesture Began Delegate
-		///
-		/// Triggered when the delegate of object type is
-		/// recognized.
-		/// @param Event listener
-		//----------------------------------------------------
-		void PinchGesture::RegisterGestureBeganDelegate(GestureEventDelegate inEventDelegate)
-		{
-			mGestureBeganDelegates.push_back(inEventDelegate);
-		}
-		//----------------------------------------------------
-		/// Deregister Gesture Began Delegate
-		///
-		/// Usubscribe the listener for event notifications
-		/// @param Event listener
-		//----------------------------------------------------
-		void PinchGesture::DeregisterGestureBeganDelegate(GestureEventDelegate inEventDelegate)
-		{
-            for(GestureDelegatesList::iterator it = mGestureBeganDelegates.begin(); it != mGestureBeganDelegates.end(); ++it)
-            {
-                if(*it == inEventDelegate)
-                {
-                    mGestureBeganDelegates.erase(it);
-                    return;
-                }
-            }
-		}
-		//----------------------------------------------------
-		/// Register Gesture Delegate
-		///
-		/// Triggered when the delegate of object type is
-		/// recognized.
-		/// @param Event listener
-		//----------------------------------------------------
-		void PinchGesture::RegisterGestureEndedDelegate(GestureEventDelegate inEventDelegate)
-		{
-			mGestureEndedDelegates.push_back(inEventDelegate);
-		}
-		//----------------------------------------------------
-		/// Deregister Gesture Delegate
-		///
-		/// Usubscribe the listener for event notifications
-		/// @param Event listener
-		//----------------------------------------------------
-		void PinchGesture::DeregisterGestureEndedDelegate(GestureEventDelegate inEventDelegate)
-		{
-            for(GestureDelegatesList::iterator it = mGestureEndedDelegates.begin(); it != mGestureEndedDelegates.end(); ++it)
-            {
-                if(*it == inEventDelegate)
-                {
-                    mGestureEndedDelegates.erase(it);
-                    return;
-                }
-            }
-		}
-		//----------------------------------------------------
 		/// Get Start Displacement
 		///
 		/// @return Start Displacement
@@ -369,9 +282,7 @@ namespace ChilliSource
 				mfStartAngle = atan2f(cV.y, cV.x);
 				mfDAngle = 0.0f;
 				
-				// Call the gesture began delegate
-				for (GestureDelegatesListItr it = mGestureBeganDelegates.begin(); it != mGestureBeganDelegates.end(); ++it)
-					(*it)(*this);
+                m_gestureBeganEvent.NotifyConnections(this);
 			}
 		}
 		void PinchGesture::OnTouchMoved(const TouchInfo &Info)
@@ -425,10 +336,7 @@ namespace ChilliSource
                     else
                         mfRatio = 0.0f;
                     
-                    for (GestureDelegatesListItr it = mGestureEndedDelegates.begin(); it != mGestureEndedDelegates.end(); ++it)
-                    {
-                        (*it)(*this);
-                    }
+                    m_gestureEndedEvent.NotifyConnections(this);
                 }
                 
                 mbFirstTouchBegan = mbSecondTouchBegan = false;
@@ -625,62 +533,6 @@ namespace ChilliSource
 		: Gesture(inpTouchDevice), mMinDistanceRequiredSqrd(2000), mfInitialHoldDuration(0.8f), mbFirstRun(true), mCurrentTouches(0), mbIsGestureActive(false), mCurrentID(0)
 		{
 		}
-		//----------------------------------------------------
-		/// RegisterGestureBeganDelegate
-		///
-		/// Triggered when the delegate of object type is
-		/// recognized.
-		/// @param Event listener
-		//----------------------------------------------------
-		void DragGesture::RegisterGestureBeganDelegate(GestureEventDelegate inEventDelegate)
-		{
-			mGestureBeganDelegates.push_back(inEventDelegate);
-		}
-		//----------------------------------------------------
-		/// DeregisterGestureBeganDelegate
-		///
-		/// Usubscribe the listener for event notifications
-		/// @param Event listener
-		//----------------------------------------------------
-		void DragGesture::DeregisterGestureBeganDelegate(GestureEventDelegate inEventDelegate)
-		{
-            for(GestureDelegatesList::iterator it = mGestureBeganDelegates.begin(); it != mGestureBeganDelegates.end(); ++it)
-            {
-                if(*it == inEventDelegate)
-                {
-                    mGestureBeganDelegates.erase(it);
-                    return;
-                }
-            }
-		}
-		//----------------------------------------------------
-		/// Register Gesture Delegate
-		///
-		/// Triggered when the delegate of object type is
-		/// recognized.
-		/// @param Event listener
-		//----------------------------------------------------
-		void DragGesture::RegisterGestureEndedDelegate(GestureEventDelegate inEventDelegate)
-		{
-			mGestureEndedDelegates.push_back(inEventDelegate);
-		}
-		//----------------------------------------------------
-		/// Deregister Gesture Delegate
-		///
-		/// Usubscribe the listener for event notifications
-		/// @param Event listener
-		//----------------------------------------------------
-		void DragGesture::DeregisterGestureEndedDelegate(GestureEventDelegate inEventDelegate)
-		{
-            for(GestureDelegatesList::iterator it = mGestureEndedDelegates.begin(); it != mGestureEndedDelegates.end(); ++it)
-            {
-                if(*it == inEventDelegate)
-                {
-                    mGestureEndedDelegates.erase(it);
-                    return;
-                }
-            }
-		}
 		//---Touch Delegates
 		//----------------------------------------------------
 		/// On Touch Delegates
@@ -723,10 +575,7 @@ namespace ChilliSource
 					
 					mbFirstRun = false;
 					
-					for(GestureDelegatesListItr it = mGestureBeganDelegates.begin(); it != mGestureBeganDelegates.end(); ++it)
-					{
-						(*it)(*this);
-					}
+                    m_gestureBeganEvent.NotifyConnections(this);
 				}			
 				
 				//Make sure we are holding down before we declare a drag gesture recognized
@@ -770,10 +619,7 @@ namespace ChilliSource
                     mvPreviousLocation = Info.vPreviousLocation;
                         
                     //Fire off the delegates
-                    for(GestureDelegatesListItr it = mGestureEndedDelegates.begin(); it != mGestureEndedDelegates.end(); ++it)
-                    {
-                        (*it)(*this);
-                    }
+                    m_gestureEndedEvent.NotifyConnections(this);
                     
                     if(mCurrentTouches == 0)
                     {
@@ -812,92 +658,6 @@ namespace ChilliSource
 		CHoldGesture::CHoldGesture(TouchScreen* inpTouchDevice) 
 		: Gesture(inpTouchDevice), mfMaxDistanceAllowedSqrd(100), mfHoldDuration(0.8f), mbIsGestureActive(false), mudwNumberOfTouch(0), mfInitialHoldTime(0.2f), mbIsGestureStarted(false)
 		{
-		}
-		//----------------------------------------------------
-		/// RegisterGestureBeganDelegate
-		///
-		/// Triggered when the delegate of object type is
-		/// recognized.
-		/// @param Event listener
-		//----------------------------------------------------
-		void CHoldGesture::RegisterGestureBeganDelegate(GestureEventDelegate inEventDelegate)
-		{
-			mGestureBeganDelegates.push_back(inEventDelegate);
-		}
-		//----------------------------------------------------
-		/// DeregisterGestureBeganDelegate
-		///
-		/// Usubscribe the listener for event notifications
-		/// @param Event listener
-		//----------------------------------------------------
-		void CHoldGesture::DeregisterGestureBeganDelegate(GestureEventDelegate inEventDelegate)
-		{
-            for(GestureDelegatesList::iterator it = mGestureBeganDelegates.begin(); it != mGestureBeganDelegates.end(); ++it)
-            {
-                if(*it == inEventDelegate)
-                {
-                    mGestureBeganDelegates.erase(it);
-                    return;
-                }
-            }
-		}
-		//----------------------------------------------------
-		/// Register Gesture Delegate
-		///
-		/// Triggered when the delegate of object type is
-		/// recognized.
-		/// @param Event listener
-		//----------------------------------------------------
-		void CHoldGesture::RegisterGestureEndedDelegate(GestureEventDelegate inEventDelegate)
-		{
-			mGestureEndedDelegates.push_back(inEventDelegate);
-		}
-		//----------------------------------------------------
-		/// Deregister Gesture Delegate
-		///
-		/// Usubscribe the listener for event notifications
-		/// @param Event listener
-		//----------------------------------------------------
-		void CHoldGesture::DeregisterGestureEndedDelegate(GestureEventDelegate inEventDelegate)
-		{
-            for(GestureDelegatesList::iterator it = mGestureEndedDelegates.begin(); it != mGestureEndedDelegates.end(); ++it)
-            {
-                if(*it == inEventDelegate)
-                {
-                    mGestureEndedDelegates.erase(it);
-                    return;
-                }
-            }
-		}
-        
-        //----------------------------------------------------
-		/// Register Gesture Delegate
-		///
-		/// Triggered when the Hold gesture is aborted before completion is
-        /// recognized.
-		/// @param Event listener
-		//----------------------------------------------------
-        void CHoldGesture::RegisterGestureCancelledDelegate(GestureEventDelegate inEventDelegate)
-        {
-            mGestureCancelledDelegates.push_back(inEventDelegate);
-        }
-        
-        //----------------------------------------------------
-		/// Deregister Gesture Delegate
-		///
-		/// Usubscribe the listener for event notifications
-		/// @param Event listener
-		//----------------------------------------------------
-		void CHoldGesture::DeregisterGestureCancelledDelegate(GestureEventDelegate inEventDelegate)
-		{
-            for(GestureDelegatesList::iterator it = mGestureCancelledDelegates.begin(); it != mGestureCancelledDelegates.end(); ++it)
-            {
-                if(*it == inEventDelegate)
-                {
-                    mGestureCancelledDelegates.erase(it);
-                    return;
-                }
-            }
 		}
         
 		//---Touch Delegates
@@ -950,10 +710,7 @@ namespace ChilliSource
                 if(mTimer.GetTimeElapsed() > mfInitialHoldTime)
                 {
                     // Trigger the registered delegates
-                    for(GestureDelegatesListItr it = mGestureBeganDelegates.begin(); it != mGestureBeganDelegates.end(); ++it)
-                    {
-                        (*it)(*this);
-                    }
+                    m_gestureBeganEvent.NotifyConnections(this);
                     
                     mbIsGestureActive = true;
                 }
@@ -980,10 +737,7 @@ namespace ChilliSource
 		{
             if(mbIsGestureStarted)
             {
-                for(GestureDelegatesListItr it = mGestureCancelledDelegates.begin(); it != mGestureCancelledDelegates.end(); ++it)
-                {
-                    (*it)(*this);
-                }
+                m_gestureCancelledEvent.NotifyConnections(this);
                 
                 ResetGesture();
             }
@@ -994,12 +748,8 @@ namespace ChilliSource
         {
             if(mbIsGestureStarted)
             {
-                //Fire off the delegates
-                for(GestureDelegatesListItr it = mGestureEndedDelegates.begin(); it != mGestureEndedDelegates.end(); ++it)
-                {
-                    (*it)(*this);
-                }
-
+                m_gestureEndedEvent.NotifyConnections(this);
+                
                 ResetGesture();
             }
         }

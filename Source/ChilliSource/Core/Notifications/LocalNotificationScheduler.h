@@ -28,7 +28,7 @@ namespace ChilliSource
             ///
             /// @param Notification
             //------------------------------------------------------------------------------
-            virtual void ScheduleNotification(const Notification& insNotification) = 0;
+            virtual void ScheduleNotification(const NotificationSPtr& insNotification) = 0;
             //-------------------------------------------------------------------------
             /// Try Get Notifications Scheduled Within Time Period
             ///
@@ -40,7 +40,7 @@ namespace ChilliSource
             /// @param Out: Notifications that meet criteria
             /// @return Whether any notifications exist within that time period
             //-------------------------------------------------------------------------
-            virtual bool TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Notification>& outaNotifications) = 0;
+            virtual bool TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<NotificationSPtr>& outaNotifications) = 0;
             //-------------------------------------------------------------------------
             /// Cancel By ID
             ///

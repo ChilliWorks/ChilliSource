@@ -18,8 +18,8 @@ namespace ChilliSource
         bool NotificationScheduler::bAppNotificationsEnabled = true;
         bool NotificationScheduler::bPushNotificationsEnabled = true;
         
-        std::deque<Notification> NotificationScheduler::NotificationQueue;
-        std::vector<Notification> NotificationScheduler::TimedAppNotifications;
+        std::deque<NotificationSPtr> NotificationScheduler::NotificationQueue;
+        std::vector<NotificationSPtr> NotificationScheduler::TimedAppNotifications;
         
         LocalNotificationScheduler* NotificationScheduler::mspLocalNotificationScheduler = nullptr;
 
@@ -44,46 +44,44 @@ namespace ChilliSource
         /// the front of the queue.
         ///
         /// @param Notification Type (Push, System or In-App)
-        /// @param Notification 
+        /// @param Params
+        /// @param ID
         /// @param Priority (High priority will leap-frog lower priority in the queue
+        /// @return Connection to presented event
         //------------------------------------------------------------------------------
-        void NotificationScheduler::ScheduleNotification(NotificationType ineType, const Notification& insNotification, NotificationPriority inePriority, const Notification::NotificationPresentedDelegate& inpDelegate)
+        ConnectionUPtr NotificationScheduler::ScheduleNotification(NotificationType ineType, const Core::ParamDictionary& insParams, NotificationID inID, NotificationPriority inePriority, const Notification::NotificationPresentedDelegate& in_delegate)
         {
+            ConnectionUPtr presentedConnection;
+            
             switch(ineType)
             {
                 case NotificationType::k_app:
                     if(bAppNotificationsEnabled)
                     {
+                        NotificationSPtr notification(std::make_shared<Notification>());
+                        notification->eType = ineType;
+                        notification->ePriority = inePriority;
+                        notification->TriggerTime = 0;
+                        notification->bDismissed = false;
+                        notification->bTriggered = false;
+                        notification->ID = inID;
+                        notification->sParams = insParams;
+                        
+                        if(in_delegate != nullptr)
+                        {
+                            presentedConnection = notification->m_notificationPresentedEvent.OpenConnection(in_delegate);
+                        }
+                        
                         switch(inePriority)
                         {
                             case NotificationPriority::k_standard:
                             {
-                                Notification sNotification(insNotification);
-                                sNotification.eType = ineType;
-                                sNotification.ePriority = inePriority;
-                                sNotification.TriggerTime = 0;
-                                sNotification.bDismissed = false;
-                                sNotification.bTriggered = false;
-                                if(inpDelegate)
-                                {
-                                    sNotification.pNotificationPresentedEvent += inpDelegate;
-                                }                            
-                                NotificationQueue.push_back(sNotification);
+                                NotificationQueue.push_back(notification);
                                 break;
                             }
                             case NotificationPriority::k_high:
                             {
-                                Notification sNotification(insNotification);
-                                sNotification.eType = ineType;
-                                sNotification.ePriority = inePriority;
-                                sNotification.TriggerTime = 0;
-                                sNotification.bDismissed = false;
-                                sNotification.bTriggered = false;
-                                if(inpDelegate)
-                                {
-                                    sNotification.pNotificationPresentedEvent += inpDelegate;
-                                }
-                                NotificationQueue.push_front(sNotification);
+                                NotificationQueue.push_front(notification);
                                 break;
                             }
                         }
@@ -97,6 +95,7 @@ namespace ChilliSource
                     break;
             }
         
+            return presentedConnection;
         }
         //------------------------------------------------------------------------------
         /// Schedule Notification For Time
@@ -105,24 +104,35 @@ namespace ChilliSource
         /// Upon reaching the head of the queue it will trigger.
         ///
         /// @param Notification Type (Push, System or In-App)
-        /// @param Notification 
+        /// @param Params
+        /// @param ID
         /// @param Time in seconds at which it should trigger
         /// @param Priority (High priority will leap-frog lower priority in the queue
+        /// @return Connection to presented event
         //------------------------------------------------------------------------------
-        void NotificationScheduler::ScheduleNotificationForTime(NotificationType ineType, const Notification& insNotification, TimeIntervalSecs inTime, NotificationPriority inePriority)
+        ConnectionUPtr NotificationScheduler::ScheduleNotificationForTime(NotificationType ineType, const Core::ParamDictionary& insParams, NotificationID inID, TimeIntervalSecs inTime, NotificationPriority inePriority, const Notification::NotificationPresentedDelegate& in_delegate)
         {
+            ConnectionUPtr presentedConnection;
+            
             switch(ineType)
             {
                 case NotificationType::k_app:
                     if(bAppNotificationsEnabled)
                     {
-                        Notification sNotification(insNotification);
-                        sNotification.eType = ineType;
-                        sNotification.ePriority = inePriority;
-                        sNotification.TriggerTime = inTime;
-                        sNotification.bDismissed = false;
-                        sNotification.bTriggered = false;
-                        TimedAppNotifications.push_back(sNotification);
+                        NotificationSPtr notification(std::make_shared<Notification>());
+                        notification->eType = ineType;
+                        notification->ePriority = inePriority;
+                        notification->TriggerTime = inTime;
+                        notification->bDismissed = false;
+                        notification->bTriggered = false;
+                        notification->ID = inID;
+                        notification->sParams = insParams;
+                        TimedAppNotifications.push_back(notification);
+                        
+                        if(in_delegate != nullptr)
+                        {
+                            presentedConnection = notification->m_notificationPresentedEvent.OpenConnection(in_delegate);
+                        }
                     }
                     break;
                 case NotificationType::k_push:
@@ -131,16 +141,20 @@ namespace ChilliSource
                 case NotificationType::k_system:
                     if(bSystemNotificationsEnabled)
                     {
-                        Notification sNotification(insNotification);
-                        sNotification.eType = ineType;
-                        sNotification.ePriority = inePriority;
-                        sNotification.TriggerTime = inTime;
-                        sNotification.bDismissed = false;
-                        sNotification.bTriggered = false;
-                        mspLocalNotificationScheduler->ScheduleNotification(sNotification);
+                        NotificationSPtr notification(std::make_shared<Notification>());
+                        notification->eType = ineType;
+                        notification->ePriority = inePriority;
+                        notification->TriggerTime = inTime;
+                        notification->bDismissed = false;
+                        notification->bTriggered = false;
+                        notification->ID = inID;
+                        notification->sParams = insParams;
+                        mspLocalNotificationScheduler->ScheduleNotification(notification);
                     }
                     break;
             }
+            
+            return presentedConnection;
         }
         //------------------------------------------------------------------------------
         /// Schedule Notification After Time
@@ -149,24 +163,35 @@ namespace ChilliSource
         /// into the queue. Upon reaching the head of the queue it will trigger.
         ///
         /// @param Notification Type (Push, System or In-App)
-        /// @param Notification 
+        /// @param Params
+        /// @param ID
         /// @param Time in seconds at which it should trigger
         /// @param Priority (High priority will leap-frog lower priority in the queue
+        /// @return Connection to presented event
         //------------------------------------------------------------------------------
-        void NotificationScheduler::ScheduleNotificationAfterTime(NotificationType ineType, const Notification& insNotification, TimeIntervalSecs inTime, NotificationPriority inePriority)
+        ConnectionUPtr NotificationScheduler::ScheduleNotificationAfterTime(NotificationType ineType, const Core::ParamDictionary& insParams, NotificationID inID, TimeIntervalSecs inTime, NotificationPriority inePriority, const Notification::NotificationPresentedDelegate& in_delegate)
         {
+            ConnectionUPtr presentedConnection;
+            
             switch(ineType)
             {
                 case NotificationType::k_app:
                     if(bAppNotificationsEnabled)
                     {
-                        Notification sNotification(insNotification);
-                        sNotification.eType = ineType;
-                        sNotification.ePriority = inePriority;
-                        sNotification.TriggerTime = Core::Application::GetSystemTime() + inTime;
-                        sNotification.bDismissed = false;
-                        sNotification.bTriggered = false;
-                        TimedAppNotifications.push_back(sNotification);
+                        NotificationSPtr notification(std::make_shared<Notification>());
+                        notification->eType = ineType;
+                        notification->ePriority = inePriority;
+                        notification->TriggerTime = Core::Application::GetSystemTime() + inTime;
+                        notification->bDismissed = false;
+                        notification->bTriggered = false;
+                        notification->ID = inID;
+                        notification->sParams = insParams;
+                        TimedAppNotifications.push_back(notification);
+                        
+                        if(in_delegate != nullptr)
+                        {
+                            presentedConnection = notification->m_notificationPresentedEvent.OpenConnection(in_delegate);
+                        }
                         break;
                     }
                     break;
@@ -176,16 +201,20 @@ namespace ChilliSource
                 case NotificationType::k_system:
                     if(bSystemNotificationsEnabled)
                     {
-                        Notification sNotification(insNotification);
-                        sNotification.eType = ineType;
-                        sNotification.ePriority = inePriority;
-                        sNotification.TriggerTime = Core::Application::GetSystemTime() + inTime;
-                        sNotification.bDismissed = false;
-                        sNotification.bTriggered = false;
-                        mspLocalNotificationScheduler->ScheduleNotification(sNotification);
+                        NotificationSPtr notification(std::make_shared<Notification>());
+                        notification->eType = ineType;
+                        notification->ePriority = inePriority;
+                        notification->TriggerTime = Core::Application::GetSystemTime() + inTime;
+                        notification->bDismissed = false;
+                        notification->bTriggered = false;
+                        notification->ID = inID;
+                        notification->sParams = insParams;
+                        mspLocalNotificationScheduler->ScheduleNotification(notification);
                     }
                     break;
             }
+            
+            return presentedConnection;
         }
         //-------------------------------------------------------------------------
         /// Try Get Notifications Scheduled Within Time Period
@@ -199,7 +228,7 @@ namespace ChilliSource
         /// @param Out: Notifications that meet criteria
         /// @return Whether any notifications exist within that time period
         //-------------------------------------------------------------------------
-        bool NotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(NotificationType ineType, TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Notification>& outaNotifications)
+        bool NotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(NotificationType ineType, TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<NotificationSPtr>& outaNotifications)
         {
             switch(ineType)
             {
@@ -257,9 +286,9 @@ namespace ChilliSource
             switch(ineType)
             {
                 case NotificationType::k_app:
-                    for(std::vector<Notification>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end(); /*No Increment*/)
+                    for(std::vector<NotificationSPtr>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end(); /*No Increment*/)
                     {  
-                        if(inID == it->ID)
+                        if(inID == (*it)->ID)
                         {
                             it = TimedAppNotifications.erase(it);
                         }
@@ -313,12 +342,12 @@ namespace ChilliSource
             //Update the app notifications
             TimeIntervalSecs CurrentTime = Core::Application::GetSystemTime();
             
-            for(std::vector<Notification>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end(); /*No Increment*/)
+            for(std::vector<NotificationSPtr>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end(); /*No Increment*/)
             {  
-                if(CurrentTime >= it->TriggerTime)
+                if(CurrentTime >= (*it)->TriggerTime)
                 {
                     //This notification should be triggered
-                    switch(it->ePriority)
+                    switch((*it)->ePriority)
                     {
                         case NotificationPriority::k_standard:
                             NotificationQueue.push_back((*it));
@@ -340,18 +369,18 @@ namespace ChilliSource
             //the next notification
             if(!NotificationQueue.empty() && gfTimeBetweenNotifications >= kfMinTimeBetweenNotifications)
             {
-                if(NotificationQueue.front().bDismissed)
+                if(NotificationQueue.front()->bDismissed)
                 {
                     //Ditch the old one
                     NotificationQueue.pop_front();
                 }
                 
-                if(!NotificationQueue.empty() && !NotificationQueue.front().bTriggered)
+                if(!NotificationQueue.empty() && !NotificationQueue.front()->bTriggered)
                 {
                     //Trigger the next one
-                    if(Core::Application::GetStateManagerPtr()->OnNotificationReceived(&NotificationQueue.front()))
+                    if(Core::Application::GetStateManagerPtr()->OnNotificationReceived(NotificationQueue.front().get()))
                     {
-                        NotificationQueue.front().bTriggered = true;
+                        NotificationQueue.front()->bTriggered = true;
                     }
 
                     gfTimeBetweenNotifications = 0.0f;
@@ -366,26 +395,24 @@ namespace ChilliSource
         ///
         /// @param Notification
         //-------------------------------------------------------------------------
-        void NotificationScheduler::OnNotificationReceived(const Notification& insNotification)
+        void NotificationScheduler::OnNotificationReceived(const NotificationSPtr& insNotification)
         {
-            if(IsTypeEnabled(insNotification.eType))
+            if(IsTypeEnabled(insNotification->eType))
             {
-                switch(insNotification.ePriority)
+                switch(insNotification->ePriority)
                 {
                     case NotificationPriority::k_standard:
                     {
-                        Notification notification = insNotification;
-                        notification.bDismissed = false;
-                        notification.bTriggered = false;
-                        NotificationQueue.push_back(notification);
+                        insNotification->bDismissed = false;
+                        insNotification->bTriggered = false;
+                        NotificationQueue.push_back(insNotification);
                         break;
                     }
                     case NotificationPriority::k_high:
                     {
-                        Notification notification = insNotification;
-                        notification.bDismissed = false;
-                        notification.bTriggered = false;
-                        NotificationQueue.push_front(notification);                    
+                        insNotification->bDismissed = false;
+                        insNotification->bTriggered = false;
+                        NotificationQueue.push_front(insNotification);
                         break;
                     }
                 }

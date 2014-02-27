@@ -14,9 +14,10 @@
 #define _MO_FLO_INPUT_GESTURES_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Core/Time/Timer.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Core/Time/Timer.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
 
 #include <functional>
@@ -33,27 +34,22 @@ namespace ChilliSource
 		class Gesture
 		{
 		public:
-			typedef std::function<void(const Gesture&)> GestureEventDelegate;
+			typedef std::function<void(const Gesture*)> GestureEventDelegate;
 			
             Gesture(GUI::GUIView* inpView);
             Gesture(TouchScreen* inpTouchDevice);
 			virtual ~Gesture(){}
 			
 			//----------------------------------------------------
-			/// Register Gesture Delegate
-			///
-			/// Triggered when the delegate of object type is
-			/// recognized.
-			/// @param Event listener
+            /// @author S Downie
+            ///
+            /// @return Event that is triggered when the gesture
+            /// occurs
 			//----------------------------------------------------
-			void RegisterGestureDelegate(GestureEventDelegate inEventDelegate);
-			//----------------------------------------------------
-			/// Deregister Gesture Delegate
-			///
-			/// Usubscribe the listener for event notifications
-			/// @param Event listener
-			//----------------------------------------------------
-			void DeregisterGestureDelegate(GestureEventDelegate inEventDelegate);
+            inline Core::IConnectableEvent<GestureEventDelegate>& GetGestureEvent()
+            {
+                return m_gestureEvent;
+            }
 			
 			//---Touch Delegates
 			//----------------------------------------------------
@@ -85,9 +81,6 @@ namespace ChilliSource
 			
 		protected:
 			
-			typedef std::vector<GestureEventDelegate> GestureDelegatesList;
-			typedef GestureDelegatesList::iterator GestureDelegatesListItr;
-			
 			u16 mNumContactPointsRequired;	
 			bool mbIsGestureInvalid;
 			Core::Timer mTimer;
@@ -100,7 +93,7 @@ namespace ChilliSource
             
         private:
             
-            GestureDelegatesList mGestureDelegates;
+            Core::Event<GestureEventDelegate> m_gestureEvent;
 		};
 		
 		//================================================
@@ -194,36 +187,26 @@ namespace ChilliSource
             PinchGesture(GUI::GUIView* inpSurface);
             PinchGesture(TouchScreen* inpTouchDevice);
 			
+            //----------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Event that is triggered when the gesture
+            /// begins
 			//----------------------------------------------------
-			/// Register Gesture Delegate
-			///
-			/// Triggered when the delegate of object type is
-			/// recognized.
-			/// @param Event listener
+            inline Core::IConnectableEvent<GestureEventDelegate>& GetGestureBeganEvent()
+            {
+                return m_gestureBeganEvent;
+            }
+            //----------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Event that is triggered when the gesture
+            /// ends
 			//----------------------------------------------------
-			void RegisterGestureBeganDelegate(GestureEventDelegate inEventDelegate);
-			//----------------------------------------------------
-			/// Deregister Gesture Delegate
-			///
-			/// Usubscribe the listener for event notifications
-			/// @param Event listener
-			//----------------------------------------------------
-			void DeregisterGestureBeganDelegate(GestureEventDelegate inEventDelegate);
-			//----------------------------------------------------
-			/// Register Gesture Delegate
-			///
-			/// Triggered when the delegate of object type is
-			/// recognized.
-			/// @param Event listener
-			//----------------------------------------------------
-			void RegisterGestureEndedDelegate(GestureEventDelegate inEventDelegate);
-			//----------------------------------------------------
-			/// Deregister Gesture Delegate
-			///
-			/// Usubscribe the listener for event notifications
-			/// @param Event listener
-			//----------------------------------------------------
-			void DeregisterGestureEndedDelegate(GestureEventDelegate inEventDelegate);
+            inline Core::IConnectableEvent<GestureEventDelegate>& GetGestureEndedEvent()
+            {
+                return m_gestureEndedEvent;
+            }
 			//----------------------------------------------------
 			/// Get Start Displacement
 			///
@@ -283,8 +266,8 @@ namespace ChilliSource
 			f32				mfCurrentDisplacement;	// Cached sqrt(|mvCurrentPos2 - mvCurrentPos1|)
 			f32				mfCurrentAngle;
 			
-			GestureDelegatesList mGestureBeganDelegates;
-			GestureDelegatesList mGestureEndedDelegates;
+            Core::Event<GestureEventDelegate> m_gestureBeganEvent;
+            Core::Event<GestureEventDelegate> m_gestureEndedEvent;
 		};
 		//================================================
 		/// Tap Gesture
@@ -376,36 +359,26 @@ namespace ChilliSource
 			DragGesture(GUI::GUIView* inpSurface);
             DragGesture(TouchScreen* inpTouchDevice);
 			
+            //----------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Event that is triggered when the gesture
+            /// begins
 			//----------------------------------------------------
-			/// RegisterGestureBeganDelegate
-			///
-			/// Triggered when the delegate of object type is
-			/// begun.
-			/// @param Event listener
+            inline Core::IConnectableEvent<GestureEventDelegate>& GetGestureBeganEvent()
+            {
+                return m_gestureBeganEvent;
+            }
+            //----------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Event that is triggered when the gesture
+            /// ends
 			//----------------------------------------------------
-			void RegisterGestureBeganDelegate(GestureEventDelegate inEventDelegate);			
-			//----------------------------------------------------
-			/// DeregisterGestureBeganDelegate
-			///
-			/// Usubscribe the listener for event notifications
-			/// @param Event listener
-			//----------------------------------------------------
-			void DeregisterGestureBeganDelegate(GestureEventDelegate inEventDelegate);
-			//----------------------------------------------------
-			/// Register Gesture Delegate
-			///
-			/// Triggered when the delegate of object type is
-			/// recognized.
-			/// @param Event listener
-			//----------------------------------------------------
-			void RegisterGestureEndedDelegate(GestureEventDelegate inEventDelegate);
-			//----------------------------------------------------
-			/// Deregister Gesture Delegate
-			///
-			/// Usubscribe the listener for event notifications
-			/// @param Event listener
-			//----------------------------------------------------
-			void DeregisterGestureEndedDelegate(GestureEventDelegate inEventDelegate);
+            inline Core::IConnectableEvent<GestureEventDelegate>& GetGestureEndedEvent()
+            {
+                return m_gestureEndedEvent;
+            }
             //----------------------------------------------------
 			/// Get Swipe start position
 			///
@@ -452,8 +425,8 @@ namespace ChilliSource
 			bool mbIsGestureActive;		// true if the gesture is valid - if it becomes invalid it can never validate again, until we go back to a first touch
 			f32 mfInitialHoldDuration;
 			
-			GestureDelegatesList mGestureBeganDelegates;
-			GestureDelegatesList mGestureEndedDelegates;
+            Core::Event<GestureEventDelegate> m_gestureBeganEvent;
+            Core::Event<GestureEventDelegate> m_gestureEndedEvent;
 		};
 		//================================================
 		/// Hold Gesture
@@ -467,53 +440,36 @@ namespace ChilliSource
 			CHoldGesture(GUI::GUIView* inpSurface);
             CHoldGesture(TouchScreen* inpTouchDevice);
 			
-			//----------------------------------------------------
-			/// Register Gesture Delegate
-			///
-			/// Triggered when the delegate of object type is
-			/// recognized.
-			/// @param Event listener
-			//----------------------------------------------------
-			void RegisterGestureBeganDelegate(GestureEventDelegate inEventDelegate);
-			//----------------------------------------------------
-			/// Deregister Gesture Delegate
-			///
-			/// Usubscribe the listener for event notifications
-			/// @param Event listener
-			//----------------------------------------------------
-			void DeregisterGestureBeganDelegate(GestureEventDelegate inEventDelegate);
-			//----------------------------------------------------
-			/// Register Gesture Delegate
-			///
-			/// Triggered when the delegate of object type is
-			/// recognized.
-			/// @param Event listener
-			//----------------------------------------------------
-			void RegisterGestureEndedDelegate(GestureEventDelegate inEventDelegate);
-			//----------------------------------------------------
-			/// Deregister Gesture Delegate
-			///
-			/// Usubscribe the listener for event notifications
-			/// @param Event listener
-			//----------------------------------------------------
-			void DeregisterGestureEndedDelegate(GestureEventDelegate inEventDelegate);
-            
             //----------------------------------------------------
-			/// Register Gesture Delegate
-			///
-			/// Triggered when the Hold gesture is aborted before completion is
-			/// recognized.
-			/// @param Event listener
+            /// @author S Downie
+            ///
+            /// @return Event that is triggered when the gesture
+            /// begins
 			//----------------------------------------------------
-			void RegisterGestureCancelledDelegate(GestureEventDelegate inEventDelegate);
+            inline Core::IConnectableEvent<GestureEventDelegate>& GetGestureBeganEvent()
+            {
+                return m_gestureBeganEvent;
+            }
+            //----------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Event that is triggered when the gesture
+            /// ends
 			//----------------------------------------------------
-			/// Deregister Gesture Delegate
-			///
-			/// Usubscribe the listener for event notifications
-			/// @param Event listener
+            inline Core::IConnectableEvent<GestureEventDelegate>& GetGestureEndedEvent()
+            {
+                return m_gestureEndedEvent;
+            }
+            //----------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Event that is triggered when the gesture
+            /// is cancelled
 			//----------------------------------------------------
-			void DeregisterGestureCancelledDelegate(GestureEventDelegate inEventDelegate);
-            
+            inline Core::IConnectableEvent<GestureEventDelegate>& GetGestureCancelledEvent()
+            {
+                return m_gestureCancelledEvent;
+            }
 			
 			void OnGestureUpdate(f32 infDT);
 			
@@ -564,10 +520,11 @@ namespace ChilliSource
 			f32 mfInitialHoldTime;
 			u32 mudwNumberOfTouch;
 			bool mbIsGestureActive;		// true if the gesture is valid - if it becomes invalid it can never validate again, until we go back to a first touch
-			bool mbIsGestureStarted;    // true if the gesture has begun, i.e. onTouchBegan was called. This is used instead of in the touch moved to cancel the gesture 
-			GestureDelegatesList mGestureBeganDelegates;
-			GestureDelegatesList mGestureEndedDelegates;
-            GestureDelegatesList mGestureCancelledDelegates;
+			bool mbIsGestureStarted;    // true if the gesture has begun, i.e. onTouchBegan was called. This is used instead of in the touch moved to cancel the gesture
+            
+            Core::Event<GestureEventDelegate> m_gestureBeganEvent;
+            Core::Event<GestureEventDelegate> m_gestureEndedEvent;
+            Core::Event<GestureEventDelegate> m_gestureCancelledEvent;
 		};
 		
 		typedef std::shared_ptr<PinchGesture> PinchGesturePtr;

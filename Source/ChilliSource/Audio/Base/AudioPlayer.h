@@ -55,8 +55,7 @@ namespace ChilliSource
             /// @param Whether to loop or not
             /// @return ID of file provide access
             //------------------------------------------------
-            static u32 PlayEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffectFile,
-                                  bool inbLooping, AudioEventDelegate inAudioFinishedEvent = nullptr);
+            static u32 PlayEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffectFile, bool inbLooping);
             //------------------------------------------------
             /// Play 
             ///
@@ -203,8 +202,6 @@ namespace ChilliSource
             static AudioComponentFactory* mpAudioComponentFactory;
             
             static AudioComponentSPtr mpMusicComponent;
-            
-            static Core::ConnectionUPtr m_audioFinishedConnection;
             
             static f32 mfEffectVolume;
             

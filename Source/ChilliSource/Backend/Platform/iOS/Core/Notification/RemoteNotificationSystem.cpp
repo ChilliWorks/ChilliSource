@@ -68,12 +68,12 @@ namespace ChilliSource
             
             NSLog(@"Recieved Remote Notification %@", inpPayload);
             
-            Core::Notification sNotification;
-            sNotification.bDismissed = false;
-            sNotification.eType = Core::NotificationType::k_push;
-            sNotification.TriggerTime = Core::Application::GetSystemTime();
-            sNotification.ID = 0;
-            sNotification.ePriority = Core::NotificationPriority::k_standard;
+            Core::NotificationSPtr notification(std::make_shared<Core::Notification>());
+            notification->bDismissed = false;
+            notification->eType = Core::NotificationType::k_push;
+            notification->TriggerTime = Core::Application::GetSystemTime();
+            notification->ID = 0;
+            notification->ePriority = Core::NotificationPriority::k_standard;
             
             // Add the message
             NSObject* pApsObject = [inpPayload objectForKey:@"aps"];
@@ -88,7 +88,7 @@ namespace ChilliSource
                     if(pBodyObject != nil && [pBodyObject isKindOfClass:[NSString class]])
                     {
                         NSString* pstrBody = (NSString*) pBodyObject;
-                        sNotification.sParams.SetValueForKey("message", Core::StringUtils::NSStringToString(pstrBody));
+                        notification->sParams.SetValueForKey("message", Core::StringUtils::NSStringToString(pstrBody));
                     }
                 }
             }
@@ -102,13 +102,13 @@ namespace ChilliSource
                     if([pPayloadObject isKindOfClass:[NSString class]])
                     {
                         NSString* pstrPayloadString = (NSString*)pPayloadObject;
-                        sNotification.sParams.SetValueForKey(Core::StringUtils::NSStringToString(key),
+                        notification->sParams.SetValueForKey(Core::StringUtils::NSStringToString(key),
                                                              Core::StringUtils::NSStringToString(pstrPayloadString));
                     }
                 }
             }
             
-            Core::NotificationScheduler::OnNotificationReceived(sNotification);
+            Core::NotificationScheduler::OnNotificationReceived(notification);
         }
     }
 }

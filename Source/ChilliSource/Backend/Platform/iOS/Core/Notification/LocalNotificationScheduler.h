@@ -34,7 +34,7 @@ namespace ChilliSource
             ///
             /// @param Notification 
             //------------------------------------------------------------------------------
-            void ScheduleNotification(const Core::Notification& insNotification);
+            void ScheduleNotification(const Core::NotificationSPtr& insNotification) override;
             //-------------------------------------------------------------------------
             /// Cancel By ID
             ///
@@ -42,13 +42,13 @@ namespace ChilliSource
             ///
             /// @param ID type
             //-------------------------------------------------------------------------
-            void CancelByID(Core::NotificationID inID);
+            void CancelByID(Core::NotificationID inID) override;
             //-------------------------------------------------------------------------
             /// Cancel All 
             ///
             /// Terminate all currently scheduled notifications
             //-------------------------------------------------------------------------
-            void CancelAll();
+            void CancelAll() override;
             //-------------------------------------------------------------------------
             /// Try Get Notifications Scheduled Within Time Period
             ///
@@ -60,7 +60,7 @@ namespace ChilliSource
             /// @param Out: Notifications that meet criteria
             /// @return Whether any notifications exist within that time period
             //-------------------------------------------------------------------------
-            bool TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Core::Notification>& outaNotifications);
+            bool TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Core::NotificationSPtr>& outaNotifications) override;
             //-------------------------------------------------------------------------
             /// Application Did Finish Launching With Options
             ///
@@ -98,7 +98,7 @@ namespace ChilliSource
             /// @param Apple UILocalNotification
             /// @param Out: moFlow notification
             //-------------------------------------------------------------------------
-            static void ConvertUILocalNotificationToNotification(UILocalNotification* inpUILocal, Core::Notification& outsNotification);
+            static void ConvertUILocalNotificationToNotification(UILocalNotification* inpUILocal, Core::NotificationSPtr& out_notification);
         };
     }
 }

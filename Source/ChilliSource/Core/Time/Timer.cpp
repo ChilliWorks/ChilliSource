@@ -15,8 +15,6 @@ namespace ChilliSource
 {
 	namespace Core 
 	{
-		#define MS_TO_SECS(x) (f32)(x) * 0.001f
-		#define NS_TO_SECS(x) (f32)(x) * 0.000000001f
 		//--------------------------------------------
 		/// Constructor 
 		///

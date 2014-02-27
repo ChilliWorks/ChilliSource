@@ -22,9 +22,9 @@ namespace ChilliSource
         ///
         /// @param Notification 
         //------------------------------------------------------------------------------
-        void CLocalNotificationScheduler::ScheduleNotification(const Core::Notification& insNotification)
+        void CLocalNotificationScheduler::ScheduleNotification(const Core::NotificationSPtr& insNotification)
         {
-            NSDate* pDate = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)insNotification.TriggerTime];
+            NSDate* pDate = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)insNotification->TriggerTime];
             
             //Create the notifications
 			UILocalNotification* pNotification = [[[UILocalNotification alloc] init] autorelease];
@@ -32,11 +32,11 @@ namespace ChilliSource
 			pNotification.timeZone = [NSTimeZone defaultTimeZone];
 			
 			pNotification.alertAction = @"View";
-			pNotification.alertBody = Core::StringUtils::StringToNSString(insNotification.sParams.ValueForKey("Body"));
+			pNotification.alertBody = Core::StringUtils::StringToNSString(insNotification->sParams.ValueForKey("Body"));
 			
-            if( insNotification.sParams.HasValue("Sound") )
+            if( insNotification->sParams.HasValue("Sound") )
             {
-                pNotification.soundName = Core::StringUtils::StringToNSString(insNotification.sParams.ValueForKey("Sound"));
+                pNotification.soundName = Core::StringUtils::StringToNSString(insNotification->sParams.ValueForKey("Sound"));
             }
             else {
                 pNotification.soundName = UILocalNotificationDefaultSoundName;
@@ -44,15 +44,15 @@ namespace ChilliSource
 			pNotification.applicationIconBadgeNumber = 1;
             
             NSMutableDictionary* pParams = [[NSMutableDictionary alloc] init];
-            for(Core::StringToStringMap::const_iterator it = insNotification.sParams.begin(); it != insNotification.sParams.end(); ++it)
+            for(Core::StringToStringMap::const_iterator it = insNotification->sParams.begin(); it != insNotification->sParams.end(); ++it)
             {
                 [pParams setObject:Core::StringUtils::StringToNSString(it->first) forKey:Core::StringUtils::StringToNSString(it->second)];
             }
 			
 			//Encode the type ID into the notification so we can retrieve it at the other end
 			NSDictionary* pInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                                   [NSNumber numberWithUnsignedInt:(u32)insNotification.ID], @"ID",
-                                   [NSNumber numberWithUnsignedInt:(u32)insNotification.ePriority], @"Priority",
+                                   [NSNumber numberWithUnsignedInt:(u32)insNotification->ID], @"ID",
+                                   [NSNumber numberWithUnsignedInt:(u32)insNotification->ePriority], @"Priority",
                                    pParams, @"Params",
                                    nil];
             
@@ -94,7 +94,7 @@ namespace ChilliSource
         /// @param Out: Notifications that meet criteria
         /// @return Whether any notifications exist within that time period
         //-------------------------------------------------------------------------
-        bool CLocalNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Core::Notification>& outaNotifications)
+        bool CLocalNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Core::NotificationSPtr>& outaNotifications)
         {
             outaNotifications.clear();
             
@@ -105,9 +105,9 @@ namespace ChilliSource
                 
 				if(std::abs(dwDeltaSecs) <= inPeriod) 
 				{
-                    Core::Notification sNotification;
-                    ConvertUILocalNotificationToNotification(pNotification, sNotification);
-					outaNotifications.push_back(sNotification);
+                    Core::NotificationSPtr notification(std::make_shared<Core::Notification>());
+                    ConvertUILocalNotificationToNotification(pNotification, notification);
+					outaNotifications.push_back(notification);
 				}
 			}
             
@@ -140,9 +140,9 @@ namespace ChilliSource
             UILocalNotification* pLocalNotification = [inpOptions objectForKey:UIApplicationLaunchOptionsLocalNotificationKey];
             if(pLocalNotification) 
             {
-                Core::Notification sNotification;
-                ConvertUILocalNotificationToNotification(pLocalNotification, sNotification);
-                Core::NotificationScheduler::OnNotificationReceived(sNotification);
+                Core::NotificationSPtr notification(std::make_shared<Core::Notification>());
+                ConvertUILocalNotificationToNotification(pLocalNotification, notification);
+                Core::NotificationScheduler::OnNotificationReceived(notification);
                 return true;
             }
             
@@ -173,9 +173,9 @@ namespace ChilliSource
             //Reset the badge number
             inpApplication.applicationIconBadgeNumber = (inpApplication.applicationIconBadgeNumber - 1);
             
-            Core::Notification sNotification;
-            ConvertUILocalNotificationToNotification(inpNotification, sNotification);
-            Core::NotificationScheduler::OnNotificationReceived(sNotification);
+            Core::NotificationSPtr notification(std::make_shared<Core::Notification>());
+            ConvertUILocalNotificationToNotification(inpNotification, notification);
+            Core::NotificationScheduler::OnNotificationReceived(notification);
         }
         //-------------------------------------------------------------------------
         /// Convert UILocalNotification to Notification
@@ -183,20 +183,20 @@ namespace ChilliSource
         /// @param Apple UILocalNotification
         /// @param Out: moFlow notification
         //-------------------------------------------------------------------------
-        void CLocalNotificationScheduler::ConvertUILocalNotificationToNotification(UILocalNotification* inpUILocal, Core::Notification& outsNotification)
+        void CLocalNotificationScheduler::ConvertUILocalNotificationToNotification(UILocalNotification* inpUILocal, Core::NotificationSPtr& out_notification)
         {
-            outsNotification.bDismissed = false;
-            outsNotification.eType = Core::NotificationType::k_system;
-            outsNotification.TriggerTime = (TimeIntervalSecs)[inpUILocal.fireDate timeIntervalSince1970];
+            out_notification->bDismissed = false;
+            out_notification->eType = Core::NotificationType::k_system;
+            out_notification->TriggerTime = (TimeIntervalSecs)[inpUILocal.fireDate timeIntervalSince1970];
             
-            outsNotification.ID = (Core::NotificationID)[[inpUILocal.userInfo objectForKey:@"ID"] unsignedIntValue];
-            outsNotification.ePriority = (Core::NotificationPriority)[[inpUILocal.userInfo objectForKey:@"Priority"] unsignedIntValue];
+            out_notification->ID = (Core::NotificationID)[[inpUILocal.userInfo objectForKey:@"ID"] unsignedIntValue];
+            out_notification->ePriority = (Core::NotificationPriority)[[inpUILocal.userInfo objectForKey:@"Priority"] unsignedIntValue];
             
             NSDictionary* pParams = (NSDictionary*)[inpUILocal.userInfo objectForKey:@"Params"];
             
             for(id key in pParams)
             {
-                outsNotification.sParams.SetValueForKey(Core::StringUtils::NSStringToString([pParams objectForKey:key]), Core::StringUtils::NSStringToString(key));
+                out_notification->sParams.SetValueForKey(Core::StringUtils::NSStringToString([pParams objectForKey:key]), Core::StringUtils::NSStringToString(key));
             }                                       
         }
     }

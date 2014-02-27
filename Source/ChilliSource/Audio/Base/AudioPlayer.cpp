@@ -29,7 +29,6 @@ namespace ChilliSource
         std::vector<bool> AudioPlayer::mabComponentLooping;
         
         AudioComponentSPtr AudioPlayer::mpMusicComponent;
-        Core::ConnectionUPtr AudioPlayer::m_audioFinishedConnection;
         
         AudioPlayer::MapNameToResource AudioPlayer::mmapNamesToResources;
         
@@ -104,8 +103,7 @@ namespace ChilliSource
         //------------------------------------------------
         /// Play Effect
         //------------------------------------------------
-        u32 AudioPlayer::PlayEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffectFile,
-                                     bool inbLooping, AudioEventDelegate inAudioFinishedEvent)
+        u32 AudioPlayer::PlayEffect(Core::StorageLocation ineStorageLocation, const std::string& instrEffectFile, bool inbLooping)
         {
             MapNameToResource::iterator pIt = mmapNamesToResources.find(instrEffectFile);
             u32 udwIndex = 0;
@@ -119,10 +117,6 @@ namespace ChilliSource
                 pComp->SetLooping(inbLooping);
                 pComp->Play();
                 pComp->SetVolume(mfEffectVolume);
-                if(nullptr != inAudioFinishedEvent)
-                {
-                    m_audioFinishedConnection = pComp->GetAudioFinishedEvent().OpenConnection(inAudioFinishedEvent);
-                }
                 maudwComponentPauseCount[udwIndex] = 0;
                 mabComponentLooping[udwIndex] = inbLooping;
             }
@@ -216,7 +210,6 @@ namespace ChilliSource
             {
                 mAudioComponentCache[inudwEffectID]->Stop();
                 mAudioComponentCache[inudwEffectID]->SetAudioSource(AudioResourceSPtr());
-                mAudioComponentCache[inudwEffectID]->GetAudioFinishedEvent().CloseAllConnections();
                 maudwComponentPauseCount[inudwEffectID] = 0;
                 mabComponentLooping[inudwEffectID] = false;
             }

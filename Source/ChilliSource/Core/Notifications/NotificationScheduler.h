@@ -83,11 +83,13 @@ namespace ChilliSource
             /// the front of the queue.
             ///
             /// @param Notification Type (Push, System or In-App)
-            /// @param Notification 
+            /// @param Params
+            /// @param ID
             /// @param Priority (High priority will leap-frog lower priority in the queue
             /// @param Delegate An optional callback delegate to allow application to track notifications
+            /// @return Connection to presented event
             //------------------------------------------------------------------------------
-            static void ScheduleNotification(NotificationType ineType, const Notification& insNotification, NotificationPriority inePriority = NotificationPriority::k_standard, const Notification::NotificationPresentedDelegate& inpDelegate = nullptr);
+            static ConnectionUPtr ScheduleNotification(NotificationType ineType, const Core::ParamDictionary& insParams, NotificationID inID, NotificationPriority inePriority = NotificationPriority::k_standard, const Notification::NotificationPresentedDelegate& in_delegate = nullptr);
             //------------------------------------------------------------------------------
             /// Schedule Notification For Time
             ///
@@ -95,11 +97,13 @@ namespace ChilliSource
             /// Upon reaching the head of the queue it will trigger.
             ///
             /// @param Notification Type (Push, System or In-App)
-            /// @param Notification 
+            /// @param Params
+            /// @param ID
             /// @param Time in seconds at which it should trigger
             /// @param Priority (High priority will leap-frog lower priority in the queue
+            /// @return Connection to presented event
             //------------------------------------------------------------------------------
-            static void ScheduleNotificationForTime(NotificationType ineType, const Notification& insNotification, TimeIntervalSecs inTime, NotificationPriority inePriority = NotificationPriority::k_standard);
+            static ConnectionUPtr ScheduleNotificationForTime(NotificationType ineType, const Core::ParamDictionary& insParams, NotificationID inID, TimeIntervalSecs inTime, NotificationPriority inePriority = NotificationPriority::k_standard, const Notification::NotificationPresentedDelegate& in_delegate = nullptr);
             //------------------------------------------------------------------------------
             /// Schedule Notification After Time
             ///
@@ -107,11 +111,13 @@ namespace ChilliSource
             /// into the queue. Upon reaching the head of the queue it will trigger.
             ///
             /// @param Notification Type (Push, System or In-App)
-            /// @param Notification 
+            /// @param Params
+            /// @param ID
             /// @param Time in seconds at which it should trigger
             /// @param Priority (High priority will leap-frog lower priority in the queue
+            /// @return Connection to presented event
             //------------------------------------------------------------------------------
-            static void ScheduleNotificationAfterTime(NotificationType ineType, const Notification& insNotification, TimeIntervalSecs inTime, NotificationPriority inePriority = NotificationPriority::k_standard);
+            static ConnectionUPtr ScheduleNotificationAfterTime(NotificationType ineType, const Core::ParamDictionary& insParams, NotificationID inID, TimeIntervalSecs inTime, NotificationPriority inePriority = NotificationPriority::k_standard, const Notification::NotificationPresentedDelegate& in_delegate = nullptr);
             //-------------------------------------------------------------------------
             /// Try Get Notifications Scheduled Within Time Period
             ///
@@ -124,7 +130,7 @@ namespace ChilliSource
             /// @param Out: Notifications that meet criteria
             /// @return Whether any notifications exist within that time period
             //-------------------------------------------------------------------------
-            static bool TryGetNotificationsScheduledWithinTimePeriod(NotificationType ineType, TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Notification>& outaNotifications);
+            static bool TryGetNotificationsScheduledWithinTimePeriod(NotificationType ineType, TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<NotificationSPtr>& outaNotifications);
             //-------------------------------------------------------------------------
             /// Enable Notifications
             ///
@@ -159,7 +165,7 @@ namespace ChilliSource
             ///
             /// @param Notification
             //-------------------------------------------------------------------------
-            static void OnNotificationReceived(const Notification& insNotification);
+            static void OnNotificationReceived(const NotificationSPtr& insNotification);
             //-------------------------------------------------------------------------
             /// Update
             ///
@@ -184,8 +190,8 @@ namespace ChilliSource
             static bool bAppNotificationsEnabled;
             static bool bPushNotificationsEnabled;
             
-            static std::deque<Notification> NotificationQueue;
-            static std::vector<Notification> TimedAppNotifications;
+            static std::deque<NotificationSPtr> NotificationQueue;
+            static std::vector<NotificationSPtr> TimedAppNotifications;
 
             static LocalNotificationScheduler* mspLocalNotificationScheduler;
         };
