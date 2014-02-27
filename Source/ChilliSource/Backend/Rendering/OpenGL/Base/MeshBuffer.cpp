@@ -299,6 +299,7 @@ namespace ChilliSource
 
             Bind();
             
+            glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, nullptr, mBufferUsage);
 			f32* pVBuffer = nullptr;
 			LockVertex(&pVBuffer, 0, 0);
 			memcpy(pVBuffer, mpVertexDataBackup, GetVertexCapacity());
@@ -306,6 +307,7 @@ namespace ChilliSource
 
             if(mIndexBuffer != 0)
             {
+                glBufferData(GL_ELEMENT_ARRAY_BUFFER, mBufferDesc.IndexDataCapacity, nullptr, mBufferUsage);
                 u16* pIBuffer = nullptr;
                 LockIndex(&pIBuffer, 0, 0);
                 memcpy(pIBuffer, mpIndexDataBackup, GetIndexCapacity());
