@@ -15,9 +15,9 @@ namespace ChilliSource
 {
 	namespace Core
 	{	
-        u32 CLocalisedText::mudwLineCount = 0;
-        UTF8String* CLocalisedText::mpText = nullptr;
-        CLocalisedText::IDToLookupIndex* CLocalisedText::mpTextLookup = nullptr;
+        u32 LocalisedText::mudwLineCount = 0;
+        UTF8String* LocalisedText::mpText = nullptr;
+        LocalisedText::IDToLookupIndex* LocalisedText::mpTextLookup = nullptr;
         
 		//---------------------------------------------------------------------
 		/// Get Text
@@ -25,7 +25,7 @@ namespace ChilliSource
 		/// @param The key corresponding to some localised text
 		/// @return The localised text string
 		//---------------------------------------------------------------------
-		const UTF8String& CLocalisedText::GetText(const LocalisedTextKey &inKey) 
+		const UTF8String& LocalisedText::GetText(const LocalisedTextKey &inKey) 
 		{
 			if(inKey >= 0 && inKey < (s32)mudwLineCount)
 			{
@@ -33,7 +33,7 @@ namespace ChilliSource
 				return strText;
 			}
 
-			return CStringUtils::UTF8_MISSING;
+			return StringUtils::UTF8_MISSING;
 		}
         //---------------------------------------------------------------------
         /// Get Text
@@ -41,7 +41,7 @@ namespace ChilliSource
         /// @param String key
         /// @return The localised text string
         //---------------------------------------------------------------------
-        const UTF8String& CLocalisedText::GetText(const std::string &instrID) 
+        const UTF8String& LocalisedText::GetText(const std::string &instrID) 
         {
 			CS_ASSERT(mpTextLookup, "Text Lookup IDs are missing");
 
@@ -64,7 +64,7 @@ namespace ChilliSource
 		/// @param File name
 		/// @return Success
 		//----------------------------------------------------------------------------
-        bool CLocalisedText::LoadTextFromFile(StorageLocation ineLocation, const std::string & inFilePath, const std::string & inFileName)
+        bool LocalisedText::LoadTextFromFile(StorageLocation ineLocation, const std::string & inFilePath, const std::string & inFileName)
 		{
             CS_SAFE_DELETE_ARRAY(mpText);
             CS_SAFE_DELETE(mpTextLookup);
@@ -94,7 +94,7 @@ namespace ChilliSource
         /// @param File object for the locale file
         /// @return Success
         //----------------------------------------------------------------------------
-        bool CLocalisedText::LoadLocalisedText(FileStreamSPtr& incLocaleFile)
+        bool LocalisedText::LoadLocalisedText(FileStreamSPtr& incLocaleFile)
         {
             //if bad, then bail!
 			if (incLocaleFile == nullptr || incLocaleFile->IsBad() == true)
@@ -242,7 +242,7 @@ namespace ChilliSource
         /// @param File object for the text ids file
         /// @return Success
         //----------------------------------------------------------------------------
-        bool CLocalisedText::LoadTextID(FileStreamSPtr& incIDFile)
+        bool LocalisedText::LoadTextID(FileStreamSPtr& incIDFile)
         {
 			if(incIDFile == nullptr || incIDFile->IsBad())
 			{

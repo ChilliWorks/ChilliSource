@@ -89,11 +89,11 @@ namespace ChilliSource
 			NSMutableArray * pNamesArray = [[NSMutableArray alloc] initWithCapacity:inastrRecipientAddresses.size()];
 			
 			for (u32 nRecipient = 0; nRecipient < inastrRecipientAddresses.size(); nRecipient++){
-				[pNamesArray addObject:Core::CStringUtils::UTF8StringToNSString(inastrRecipientAddresses[nRecipient])];
+				[pNamesArray addObject:Core::StringUtils::UTF8StringToNSString(inastrRecipientAddresses[nRecipient])];
 			}
 			[mpVC setToRecipients:pNamesArray];
-			[mpVC setMessageBody: Core::CStringUtils::UTF8StringToNSString(instrContents) isHTML:inbFormatAsHtml];
-			[mpVC setSubject: Core::CStringUtils::UTF8StringToNSString(instrSubject)];
+			[mpVC setMessageBody: Core::StringUtils::UTF8StringToNSString(instrContents) isHTML:inbFormatAsHtml];
+			[mpVC setSubject: Core::StringUtils::UTF8StringToNSString(instrSubject)];
             
             //add the attachment if one is available.
             if (inAttachment.mstrFilename.size() > 0)
@@ -113,7 +113,7 @@ namespace ChilliSource
 				}
                 
                 std::string strPath, strBasename;
-                Core::CStringUtils::SplitFilename(inAttachment.mstrFilename, strBasename, strPath);
+                Core::StringUtils::SplitFilename(inAttachment.mstrFilename, strBasename, strPath);
                 NSData* pData = [NSData dataWithContentsOfFile: [NSString stringWithUTF8String:strFilename.c_str()]];
                 [mpVC addAttachmentData:pData mimeType:[NSString stringWithUTF8String:inAttachment.mstrMIMEType.c_str()] fileName:[NSString stringWithUTF8String:strBasename.c_str()]];
             }

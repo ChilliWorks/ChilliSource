@@ -95,7 +95,7 @@ namespace ChilliSource
 			}
             else
             {
-				return Core::CStringUtils::BLANK;
+				return Core::StringUtils::BLANK;
 			}
 		}
         //------------------------
@@ -109,7 +109,7 @@ namespace ChilliSource
 			}
             else
             {
-				return Core::CStringUtils::BLANK;
+				return Core::StringUtils::BLANK;
 			}
 		}
 		//------------------------
@@ -118,7 +118,7 @@ namespace ChilliSource
 		void MoConnectSystem::SetCurrentUserName(const std::string& instrName)
         {
 			mstrUserName = instrName;
-			CLocalDataStore* pLDS = CLocalDataStore::GetSingletonPtr();
+			LocalDataStore* pLDS = LocalDataStore::GetSingletonPtr();
 			pLDS->SetValueForKey(kstrMoConnectUserKey, mstrUserName); // User is inherently not going to be anon
 			pLDS->Synchronise();
 		}
@@ -778,7 +778,7 @@ namespace ChilliSource
         //------------------------
 		bool MoConnectSystem::TryRestoreUserDetails()
         {
-			CLocalDataStore* pLDS = CLocalDataStore::GetSingletonPtr();
+			LocalDataStore* pLDS = LocalDataStore::GetSingletonPtr();
 			pLDS->TryGetValue(kstrMoConnectUserKey, mstrUserName); //(not having a name is not at all blocking)
             
             std::string strTokenKey;
@@ -843,7 +843,7 @@ namespace ChilliSource
                 strMoConnectOAuthSecretKey = kstrMoConnectOAuthSecretKey;
             }
 			
-            CLocalDataStore* pLDS = CLocalDataStore::GetSingletonPtr();
+            LocalDataStore* pLDS = LocalDataStore::GetSingletonPtr();
             pLDS->SetValueForKey(strMoConnectIdKey, mstrUserID);
             pLDS->SetValueForKey(strMoConnectRealmKey, mstrRealm);
             if(!strMoConnectUserNameKey.empty())
@@ -854,8 +854,8 @@ namespace ChilliSource
             // decode before saving as the OAuth System set key/secret methods
             // automatically URL encode whatever string they are given - we don't
             // want to URL encode and already URL encoded string
-            pLDS->SetValueForKey(strMoConnectOAuthTokenKey, CBaseEncoding::URLDecode(strTokenKey));
-            pLDS->SetValueForKey(strMoConnectOAuthSecretKey, CBaseEncoding::URLDecode(strTokenSecret));
+            pLDS->SetValueForKey(strMoConnectOAuthTokenKey, BaseEncoding::URLDecode(strTokenKey));
+            pLDS->SetValueForKey(strMoConnectOAuthSecretKey, BaseEncoding::URLDecode(strTokenSecret));
             pLDS->Synchronise();
 		}
         //------------------------
@@ -863,7 +863,7 @@ namespace ChilliSource
         //------------------------
 		void MoConnectSystem::ForgetSavedUserDetails(bool inbAnonymous)
 		{
-			CLocalDataStore* pLDS = CLocalDataStore::GetSingletonPtr();
+			LocalDataStore* pLDS = LocalDataStore::GetSingletonPtr();
 			
 			if(inbAnonymous)
             {

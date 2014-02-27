@@ -114,7 +114,7 @@ namespace ChilliSource
             //If the object is too big for the world just add it to the root node
             if(mpRoot->BoundingSphere.Contains(BSphere))
             {
-                udwDepth = std::min((u32)floorf(CMathUtils::Log2f(mfWorldWidth/BSphere.fRadius)), kudwMaximumTreeDepth);
+                udwDepth = std::min((u32)floorf(MathUtils::Log2f(mfWorldWidth/BSphere.fRadius)), kudwMaximumTreeDepth);
                 
                 //Insert it into the tree
                 mTree[udwDepth]->Components.push_back(inpComponent);

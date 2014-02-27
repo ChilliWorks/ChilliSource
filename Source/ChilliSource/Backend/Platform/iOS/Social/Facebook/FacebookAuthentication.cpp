@@ -20,7 +20,7 @@ NSArray* CreateNSArrayFromStringArray(const std::vector<std::string> & inaString
     
     for (u32 i = 0; i < inaStrings.size(); ++i)
     {
-        [pResult addObject: ChilliSource::Core::CStringUtils::StringToNSString(inaStrings[i])];
+        [pResult addObject: ChilliSource::Core::StringUtils::StringToNSString(inaStrings[i])];
     }
     
     return pResult;
@@ -112,7 +112,7 @@ namespace ChilliSource
                 {
                     if(mAuthenticateDelegate)
                     {
-                        sResponse.strToken = Core::CStringUtils::NSStringToString([[inpSession accessTokenData] accessToken]);
+                        sResponse.strToken = Core::StringUtils::NSStringToString([[inpSession accessTokenData] accessToken]);
                         sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_success;
                         mAuthenticateDelegate(sResponse);
                     }
@@ -143,7 +143,7 @@ namespace ChilliSource
 		
         std::string CFacebookAuthenticationSystem::GetActiveToken() const
 		{
-			return Core::CStringUtils::NSStringToString(FBSession.activeSession.accessTokenData.accessToken);
+			return Core::StringUtils::NSStringToString(FBSession.activeSession.accessTokenData.accessToken);
 		}
         
         void CFacebookAuthenticationSystem::AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
@@ -237,7 +237,7 @@ namespace ChilliSource
         
         bool CFacebookAuthenticationSystem::HasPermission(const std::string& instrPermission) const
         {
-            return ([FBSession.activeSession.permissions indexOfObject:CStringUtils::StringToNSString(instrPermission)] != NSNotFound);
+            return ([FBSession.activeSession.permissions indexOfObject:StringUtils::StringToNSString(instrPermission)] != NSNotFound);
         }
 		
 		void CFacebookAuthenticationSystem::SignOut()

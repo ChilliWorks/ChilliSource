@@ -28,11 +28,11 @@ namespace ChilliSource
             //Radius
             if(inParams.TryGetValue("Radius", strTemp))
             {
-                fRadius =Core::CMathUtils::Clamp( Core::ParseF32(strTemp), 1.0f, 89.0f);
+                fRadius =Core::MathUtils::Clamp( Core::ParseF32(strTemp), 1.0f, 89.0f);
             }
             
-            mfBoxArea = sinf(Core::CMathUtils::DegToRad(fRadius));
-            mfBoxHeight = cosf(Core::CMathUtils::DegToRad(fRadius));
+            mfBoxArea = sinf(Core::MathUtils::DegToRad(fRadius));
+            mfBoxHeight = cosf(Core::MathUtils::DegToRad(fRadius));
             
         }
         //-----------------------------------------------------
@@ -65,8 +65,8 @@ namespace ChilliSource
             Core::Vector3 vDir;
             do
             {
-                vDir.x = Core::CMathUtils::RandomInRange(-mfBoxArea, mfBoxArea);
-                vDir.z = Core::CMathUtils::RandomInRange(-mfBoxArea, mfBoxArea);
+                vDir.x = Core::MathUtils::RandomInRange(-mfBoxArea, mfBoxArea);
+                vDir.z = Core::MathUtils::RandomInRange(-mfBoxArea, mfBoxArea);
             }while(fBoxAreaSq < (vDir.x *vDir.x + vDir.z *vDir.z));
             
             vDir.y = mfBoxHeight;

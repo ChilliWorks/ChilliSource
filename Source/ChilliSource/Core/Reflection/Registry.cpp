@@ -51,7 +51,7 @@ namespace ChilliSource
             //------------------------------------------------------------
             CMetaClass* CRegistry::GetClass(const std::string& instrName)
             {
-                u32 udwNameHash = CHashCRC32::GenerateHashCode(instrName);
+                u32 udwNameHash = HashCRC32::GenerateHashCode(instrName);
                 for(std::vector<CMetaClass*>::iterator it = MetaClasses.begin(); it != MetaClasses.end(); ++it)
                 {
                     if((*it)->GetNameHash() == udwNameHash)

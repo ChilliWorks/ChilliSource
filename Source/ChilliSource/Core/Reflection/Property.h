@@ -46,9 +46,9 @@ namespace ChilliSource
                     pProp->mudwOffset = CPropertyConcrete<PropType, ClassType>::GetOffset(inpValue);
                     pProp->mpClass = inpMetaClass;
                     pProp->mpStaticValue = nullptr;
-                    pProp->mudwNameHash = CHashCRC32::GenerateHashCode(instrName);  
+                    pProp->mudwNameHash = HashCRC32::GenerateHashCode(instrName);  
                     pProp->mstrType = instrType;
-                    pProp->mudwTypeHash = CHashCRC32::GenerateHashCode(instrType);
+                    pProp->mudwTypeHash = HashCRC32::GenerateHashCode(instrType);
                     inpMetaClass->AddProperty(pProp);
                     return pProp;
                 }
@@ -69,9 +69,9 @@ namespace ChilliSource
                     pProp->mudwSize = sizeof(PropType);
                     pProp->mpClass = inpMetaClass;
                     pProp->mpStaticValue = inpValue;
-                    pProp->mudwNameHash = CHashCRC32::GenerateHashCode(instrName);
+                    pProp->mudwNameHash = HashCRC32::GenerateHashCode(instrName);
                     pProp->mstrType = instrType;
-                    pProp->mudwTypeHash = CHashCRC32::GenerateHashCode(instrType);
+                    pProp->mudwTypeHash = HashCRC32::GenerateHashCode(instrType);
                     inpMetaClass->AddProperty(pProp);
                     return pProp;
                 }

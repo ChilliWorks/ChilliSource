@@ -104,7 +104,7 @@ namespace ChilliSource
         {
             // Get the kerning file
             std::string strFileName, strExtension;
-			Core::CStringUtils::SplitBaseFilename(inFilePath, strFileName, strExtension);
+			Core::StringUtils::SplitBaseFilename(inFilePath, strFileName, strExtension);
             const std::string stdKerningFilePath(strFileName+"."+kstrKerningExtension);
 			ChilliSource::Core::FileStreamSPtr pKerningStream = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, stdKerningFilePath, Core::FileMode::k_read);
             
@@ -117,7 +117,7 @@ namespace ChilliSource
         {
             // Get the kerning file
             std::string strFileName, strExtension;
-			Core::CStringUtils::SplitBaseFilename(inFilePath, strFileName, strExtension);
+			Core::StringUtils::SplitBaseFilename(inFilePath, strFileName, strExtension);
             const std::string stdKerningFilePath(strFileName+"."+kstrKerningExtension);
 			Core::FileStreamSPtr pKerningStream = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, stdKerningFilePath, Core::FileMode::k_read);
             

@@ -156,7 +156,7 @@ namespace ChilliSource
             std::string strExtension;
             
             //Get the name of the file and append the high res identifier to it
-            Core::CStringUtils::SplitBaseFilename(inFilePath, strName, strExtension);
+            Core::StringUtils::SplitBaseFilename(inFilePath, strName, strExtension);
             Core::FileStreamSPtr idFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineLocation, strName + ".mospriteid", Core::FileMode::k_read);
             
             std::vector<u32> IDLookup;
@@ -183,7 +183,7 @@ namespace ChilliSource
                     }
                     else
                     {
-                        IDLookup.push_back(Core::CHashCRC32::GenerateHashCode(strID));
+                        IDLookup.push_back(Core::HashCRC32::GenerateHashCode(strID));
                         IDStringLookup.push_back(strID);
                         strID.clear();
                     }					

@@ -41,7 +41,7 @@ namespace ChilliSource
         //----------------------------------------------
         f32 SliderBar::GetValue() const
         {
-            return Core::CMathUtils::Clamp(mfSliderValue, 0.0f, 1.0f);
+            return Core::MathUtils::Clamp(mfSliderValue, 0.0f, 1.0f);
         }
         //----------------------------------------------
         /// Set Value
@@ -50,7 +50,7 @@ namespace ChilliSource
         //----------------------------------------------
         void SliderBar::SetValue(f32 infValue)
         {
-            mfSliderValue=Core::CMathUtils::Clamp(infValue, 0.0f, 1.0f);
+            mfSliderValue=Core::MathUtils::Clamp(infValue, 0.0f, 1.0f);
         }		
 		
     }

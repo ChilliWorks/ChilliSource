@@ -106,8 +106,8 @@
     pNewTextView.backgroundColor = [UIColor clearColor];
     
     //setup the text.
-    [pNewTextView setText: ChilliSource::Core::CStringUtils::UTF8StringToNSString(ChilliSource::Core::CLocalisedText::GetText(inpSubtitle->strTextID))];
-    [pNewTextView setFont:[UIFont fontWithName: ChilliSource::Core::CStringUtils::StringToNSString(pStyle->strFontName) size: pStyle->udwFontSize]];
+    [pNewTextView setText: ChilliSource::Core::StringUtils::UTF8StringToNSString(ChilliSource::Core::LocalisedText::GetText(inpSubtitle->strTextID))];
+    [pNewTextView setFont:[UIFont fontWithName: ChilliSource::Core::StringUtils::StringToNSString(pStyle->strFontName) size: pStyle->udwFontSize]];
     [pNewTextView setTextColor:[UIColor colorWithRed:pStyle->Colour.r green:pStyle->Colour.g blue:pStyle->Colour.b alpha:0.0f]];
     [pNewTextView setEditable:NO];
     [pNewTextView setUserInteractionEnabled:NO];

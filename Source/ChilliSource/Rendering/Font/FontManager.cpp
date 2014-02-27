@@ -100,7 +100,7 @@ namespace ChilliSource
             //It's the texture that is passed in so we need to load the alphabet file
             std::string strFontFile;
             std::string strExt;
-            Core::CStringUtils::SplitBaseFilename(inFilePath, strFontFile, strExt);
+            Core::StringUtils::SplitBaseFilename(inFilePath, strFontFile, strExt);
             strFontFile += ".alphabet";
             
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(strFontFile);

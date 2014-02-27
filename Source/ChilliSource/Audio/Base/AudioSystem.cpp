@@ -46,7 +46,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void AudioSystem::SetMasterEffectVolume(f32 infVolume)
 		{
-			mfMasterEffectVolume = Core::CMathUtils::Clamp(infVolume, 0.0f, 1.0f);
+			mfMasterEffectVolume = Core::MathUtils::Clamp(infVolume, 0.0f, 1.0f);
 			
 			//Trigger the active sounds OnMasterVolumeChanged delegate
 			mOnMasterEffectVolumeChangedEvent.Invoke();
@@ -59,7 +59,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void AudioSystem::SetMasterStreamVolume(f32 infVolume)
 		{
-			mfMasterStreamVolume = Core::CMathUtils::Clamp(infVolume, 0.0f, 1.0f);
+			mfMasterStreamVolume = Core::MathUtils::Clamp(infVolume, 0.0f, 1.0f);
 			
 			//Trigger the active sounds OnMasterVolumeChanged delegate
 			mOnMasterStreamVolumeChangedEvent.Invoke();

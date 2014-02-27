@@ -43,12 +43,12 @@ namespace ChilliSource
         NSDictionary* CreateNSDisctionaryFromPostDesc(const FacebookPostDesc& insDesc)
         {
             NSDictionary* pPostParams = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
-                                                                                       Core::CStringUtils::StringToNSString(insDesc.strURL), @"link",
-                                                                                       Core::CStringUtils::StringToNSString(insDesc.strPictureURL), @"picture",
-                                                                                       Core::CStringUtils::StringToNSString(insDesc.strName), @"name",
-                                                                                       Core::CStringUtils::StringToNSString(insDesc.strCaption), @"caption",
-                                                                                       Core::CStringUtils::StringToNSString(insDesc.strDescription), @"description",
-                                                                                       Core::CStringUtils::StringToNSString(insDesc.strTo), @"to",
+                                                                                       Core::StringUtils::StringToNSString(insDesc.strURL), @"link",
+                                                                                       Core::StringUtils::StringToNSString(insDesc.strPictureURL), @"picture",
+                                                                                       Core::StringUtils::StringToNSString(insDesc.strName), @"name",
+                                                                                       Core::StringUtils::StringToNSString(insDesc.strCaption), @"caption",
+                                                                                       Core::StringUtils::StringToNSString(insDesc.strDescription), @"description",
+                                                                                       Core::StringUtils::StringToNSString(insDesc.strTo), @"to",
                                          nil];
             
             return pPostParams;
@@ -102,16 +102,16 @@ namespace ChilliSource
             
             if(!insDesc.strTo.empty())
             {
-                params = [NSMutableDictionary dictionaryWithObjectsAndKeys:Core::CStringUtils::StringToNSString(insDesc.strTo), @"to", nil];
+                params = [NSMutableDictionary dictionaryWithObjectsAndKeys:Core::StringUtils::StringToNSString(insDesc.strTo), @"to", nil];
             }
             else
             {
-                params = [NSMutableDictionary dictionaryWithObjectsAndKeys:Core::CStringUtils::StringToNSString(strFriends), @"suggestions", nil];
+                params = [NSMutableDictionary dictionaryWithObjectsAndKeys:Core::StringUtils::StringToNSString(strFriends), @"suggestions", nil];
             }
             
             [FBWebDialogs presentRequestsDialogModallyWithSession:nil
-                                                          message:Core::CStringUtils::StringToNSString(insDesc.strDescription)
-                                                            title:Core::CStringUtils::StringToNSString(insDesc.strCaption)
+                                                          message:Core::StringUtils::StringToNSString(insDesc.strDescription)
+                                                            title:Core::StringUtils::StringToNSString(insDesc.strCaption)
                                                        parameters:params
                                                           handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error)
              {
@@ -201,9 +201,9 @@ namespace ChilliSource
             }
             
             return [FBDialogs presentOSIntegratedShareDialogModallyFrom:[UIApplication sharedApplication].keyWindow.rootViewController
-                                                            initialText:Core::CStringUtils::StringToNSString(insDesc.strName + " " + insDesc.strDescription)
+                                                            initialText:Core::StringUtils::StringToNSString(insDesc.strName + " " + insDesc.strDescription)
                                                                   image:nil
-                                                                    url:[NSURL URLWithString:Core::CStringUtils::StringToNSString(insDesc.strURL)]
+                                                                    url:[NSURL URLWithString:Core::StringUtils::StringToNSString(insDesc.strURL)]
                                                                 handler:^(FBOSIntegratedShareDialogResult result, NSError *error)
                     {
                         if (error)

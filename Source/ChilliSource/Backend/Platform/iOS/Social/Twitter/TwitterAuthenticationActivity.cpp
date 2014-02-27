@@ -218,7 +218,7 @@ namespace ChilliSource
 			{
 				if(mpPINTextFeild.text != nil)
 				{
-					strPIN = Core::CStringUtils::NSStringToString(mpPINTextFeild.text);
+					strPIN = Core::StringUtils::NSStringToString(mpPINTextFeild.text);
 				}
 			}
 			else
@@ -452,7 +452,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				NSURL* pUrl = [NSURL URLWithString:Core::CStringUtils::StringToNSString(instrURL)];
+				NSURL* pUrl = [NSURL URLWithString:Core::StringUtils::StringToNSString(instrURL)];
 				[mpWebView loadRequest:[NSURLRequest requestWithURL:pUrl]];
 				mpWebView.hidden = NO;
 				mpWebDelegate = [[UITwitterAuthenticationWebDelegate alloc] init];

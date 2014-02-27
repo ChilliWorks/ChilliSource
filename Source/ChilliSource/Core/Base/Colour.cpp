@@ -80,10 +80,10 @@ namespace ChilliSource
         {
             Colour::ByteColour Col;
             
-            inCol.r <= 0.0f ? Col.r = 0 : Col.r = CMathUtils::Round(inCol.r * 255.0f);
-            inCol.g <= 0.0f ? Col.g = 0 : Col.g = CMathUtils::Round(inCol.g * 255.0f);
-            inCol.b <= 0.0f ? Col.b = 0 : Col.b = CMathUtils::Round(inCol.b * 255.0f);
-            inCol.a <= 0.0f ? Col.a = 0 : Col.a = CMathUtils::Round(inCol.a * 255.0f);
+            inCol.r <= 0.0f ? Col.r = 0 : Col.r = MathUtils::Round(inCol.r * 255.0f);
+            inCol.g <= 0.0f ? Col.g = 0 : Col.g = MathUtils::Round(inCol.g * 255.0f);
+            inCol.b <= 0.0f ? Col.b = 0 : Col.b = MathUtils::Round(inCol.b * 255.0f);
+            inCol.a <= 0.0f ? Col.a = 0 : Col.a = MathUtils::Round(inCol.a * 255.0f);
 
             return Col;
         }

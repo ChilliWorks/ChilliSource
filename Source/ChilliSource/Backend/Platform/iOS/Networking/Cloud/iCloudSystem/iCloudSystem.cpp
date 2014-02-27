@@ -139,7 +139,7 @@ namespace ChilliSource
                 NSURL *storageURL = [[NSFileManager defaultManager] 
                                         URLForUbiquityContainerIdentifier:nil];
                 
-                return ChilliSource::Core::CStringUtils::NSStringToString([storageURL absoluteString]);
+                return ChilliSource::Core::StringUtils::NSStringToString([storageURL absoluteString]);
             }
             else 
             {
@@ -158,7 +158,7 @@ namespace ChilliSource
             {
                 std::string strConstructedPath = mstrICloudDirectoryPath + GetAppendedFilePathToStorageArea(ineStorageArea, instrDir);
                 NSURL *ubiq = [[NSURL alloc] initWithString:[[[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil] absoluteString]];
-                NSURL *ubiquitousPackage = [[NSURL alloc] initWithString:[[ubiq URLByAppendingPathComponent:(CStringUtils::StringToNSString(GetAppendedFilePathToStorageArea(ineStorageArea, instrDir)))] absoluteString]];
+                NSURL *ubiquitousPackage = [[NSURL alloc] initWithString:[[ubiq URLByAppendingPathComponent:(StringUtils::StringToNSString(GetAppendedFilePathToStorageArea(ineStorageArea, instrDir)))] absoluteString]];
 
                 BOOL* isDir;
                 if(![mpcFileManager fileExistsAtPath:[ubiquitousPackage absoluteString] isDirectory:isDir])
@@ -186,7 +186,7 @@ namespace ChilliSource
         void CiCloudSystem::CreateFile(CloudStorageArea ineStorageArea, const std::string& instrFileName, const std::string& instrData)
         {
             NSMutableData *data = [[NSMutableData alloc] initWithBytes:instrData.data() length:instrData.length()];
-            [[CiCloudSystemController sharedInstance] writeDocumentWithAbsolutePath:ChilliSource::Core::CStringUtils::StringToNSString(GetAppendedFilePathToStorageArea(ineStorageArea, instrFileName))
+            [[CiCloudSystemController sharedInstance] writeDocumentWithAbsolutePath:ChilliSource::Core::StringUtils::StringToNSString(GetAppendedFilePathToStorageArea(ineStorageArea, instrFileName))
                                                                                   :data
                                                                                   :nil];
             return;
@@ -239,14 +239,14 @@ namespace ChilliSource
             mmFileToSyncDelegateMap.insert(std::make_pair(GetCloudStoragePath() + strConstructedPath, CloudFileSyncRequest(ineStorageLocation, instrFilePath, inSyncConflictDelegate, inSyncCompleteDelegate)));
             
             //We need to Open the file stored in the cloud or create it if it doesnt exist, NOTE::we only want to create the cloud file if a local file exists and the cloud file doesnt
-            [[CiCloudSystemController sharedInstance] openDocument:CStringUtils::StringToNSString(strConstructedPath) :(OnOpenCloudFileCompletedDelegate(this, &CiCloudSystem::OnCloudFileOpened)) :bExists];
+            [[CiCloudSystemController sharedInstance] openDocument:StringUtils::StringToNSString(strConstructedPath) :(OnOpenCloudFileCompletedDelegate(this, &CiCloudSystem::OnCloudFileOpened)) :bExists];
             
             return true;
         }
         
         void CiCloudSystem::OnCloudFileOpened(MoFlowUIDocument* incOpenedDoc, BOOL inbJustCreated)
         {
-            std::string strFileState = CStringUtils::NSStringToString([CiCloudSystemController stringForState:[incOpenedDoc documentState]]);
+            std::string strFileState = StringUtils::NSStringToString([CiCloudSystemController stringForState:[incOpenedDoc documentState]]);
             CS_DEBUG_LOG("CiCloudSystem::OnCloudFileOpened with state " + strFileState);
             
             //Should always callback with a MoFloUIDocument - whether valid or not
@@ -256,7 +256,7 @@ namespace ChilliSource
             }
 
             //Get the file url string
-            std::string mstrFileName = CStringUtils::NSStringToString([[incOpenedDoc fileURL] absoluteString]);
+            std::string mstrFileName = StringUtils::NSStringToString([[incOpenedDoc fileURL] absoluteString]);
             CS_DEBUG_LOG(mstrFileName);
             
             //Find the delegates this url refares to
@@ -376,7 +376,7 @@ namespace ChilliSource
                         FileSyncConflict* pConflict = new Networking::CloudStorageSystem::FileSyncConflict(psRequest.meLocalStorageLocation,
                                                                     psRequest.mstrLocalFilePath,
                                                                     GetCloudStorageAreaForStorageArea(psRequest.meLocalStorageLocation),
-                                                                    CStringUtils::NSStringToString([[incOpenedDoc fileURL] absoluteString]),
+                                                                    StringUtils::NSStringToString([[incOpenedDoc fileURL] absoluteString]),
                                                                     strLocalContents,
                                                                     strCloudContents);
                         
@@ -439,7 +439,7 @@ namespace ChilliSource
                         
                         std::string strFilePath = insFileSyncConflict->mstrCloudFilePath;
                         NSMutableData *data = [[NSMutableData alloc] initWithBytes:strLocalContents.data() length:strLocalContents.length()];
-                        [[CiCloudSystemController sharedInstance] writeDocumentWithAbsolutePath:CStringUtils::StringToNSString(strFilePath)
+                        [[CiCloudSystemController sharedInstance] writeDocumentWithAbsolutePath:StringUtils::StringToNSString(strFilePath)
                                                                                               :data
                                                                                               :inpSyncCompleteDelegate];
                         

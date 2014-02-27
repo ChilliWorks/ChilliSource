@@ -92,7 +92,7 @@ namespace ChilliSource
 					std::string strExtension;
 					
 					//Get the extension of each file in the directory.
-					CStringUtils::SplitBaseFilename((*it), strName, strExtension);
+					StringUtils::SplitBaseFilename((*it), strName, strExtension);
 					
 					//Do we have a resource manager that can handle this?
 					ResourceManager* pResMgr = mpResMgrDispenser->GetResourceManagerForExtension(strExtension);

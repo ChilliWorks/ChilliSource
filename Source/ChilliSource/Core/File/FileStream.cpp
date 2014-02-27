@@ -31,7 +31,7 @@ namespace ChilliSource
             const u32 kudwChunkSize = 256;
             s8 byData[kudwChunkSize];
             
-            CHashMD5::MD5 Hash;
+            HashMD5::MD5 Hash;
             s32 dwSize = kudwChunkSize;
             
             while(dwSize != 0)

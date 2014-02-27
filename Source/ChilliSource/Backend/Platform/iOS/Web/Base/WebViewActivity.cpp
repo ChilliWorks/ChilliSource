@@ -48,7 +48,7 @@ namespace ChilliSource
 				
                 mstrAnchor = "";
                 
-				NSURL* pUrl = [NSURL URLWithString:Core::CStringUtils::StringToNSString(instrURL)];
+				NSURL* pUrl = [NSURL URLWithString:Core::StringUtils::StringToNSString(instrURL)];
 				
 				[mpWebView loadRequest:[NSURLRequest requestWithURL:pUrl]];
 				
@@ -113,9 +113,9 @@ namespace ChilliSource
                 Core::FileStreamSPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FileMode::k_read);
                 pHTMLFile->GetAll(strHTMLFileContents);
                 
-                NSString* pstrHTML = Core::CStringUtils::StringToNSString(strHTMLFileContents);
+                NSString* pstrHTML = Core::StringUtils::StringToNSString(strHTMLFileContents);
 
-                [mpWebView loadHTMLString:pstrHTML baseURL:[NSURL fileURLWithPath:Core::CStringUtils::StringToNSString(strPath)]];
+                [mpWebView loadHTMLString:pstrHTML baseURL:[NSURL fileURLWithPath:Core::StringUtils::StringToNSString(strPath)]];
                 
                 mpWebView.backgroundColor = [UIColor clearColor];
                 mpWebView.opaque = NO;
@@ -299,7 +299,7 @@ namespace ChilliSource
 {
 	if(navigationType == UIWebViewNavigationTypeLinkClicked)
 	{
-        std::string strScheme = ChilliSource::Core::CStringUtils::NSStringToString([[request URL] scheme]);
+        std::string strScheme = ChilliSource::Core::StringUtils::NSStringToString([[request URL] scheme]);
         
         if(strScheme != "file")
         {
@@ -316,7 +316,7 @@ namespace ChilliSource
     if(mpDelegate->HasAnchor())
     {
         std::string strJavaScript = "window.location.href = '" + mpDelegate->GetAnchor() + "';";
-        [webView stringByEvaluatingJavaScriptFromString:ChilliSource::Core::CStringUtils::StringToNSString(strJavaScript)];
+        [webView stringByEvaluatingJavaScriptFromString:ChilliSource::Core::StringUtils::StringToNSString(strJavaScript)];
     }
     
     mpDelegate->AddDismissButton();

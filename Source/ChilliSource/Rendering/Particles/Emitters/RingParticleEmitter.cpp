@@ -63,8 +63,8 @@ namespace ChilliSource
             
     
             Core::Vector3 vPos;
-            vPos.x = Core::CMathUtils::RandomInRange(-1.0f, 1.0f);
-            vPos.z = Core::CMathUtils::RandomInRange(-1.0f, 1.0f);
+            vPos.x = Core::MathUtils::RandomInRange(-1.0f, 1.0f);
+            vPos.z = Core::MathUtils::RandomInRange(-1.0f, 1.0f);
             
             vPos.Normalise() *=  mfRadius;
             

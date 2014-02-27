@@ -68,7 +68,7 @@ namespace ChilliSource
                 return;
             
             Networking::IAPTransactionPtr pTransaction(new Networking::IAPTransaction());
-            pTransaction->strProductID = Core::CStringUtils::NSStringToString(inProductID);
+            pTransaction->strProductID = Core::StringUtils::NSStringToString(inProductID);
             
             bool bHasReceipt = false;
             Networking::IAPTransaction::Status eResult = Networking::IAPTransaction::Status::k_failed;
@@ -96,11 +96,11 @@ namespace ChilliSource
             
             if(pTransaction)
             {
-                pTransaction->strTransactionID = Core::CStringUtils::NSStringToString(inpTransaction.transactionIdentifier);
+                pTransaction->strTransactionID = Core::StringUtils::NSStringToString(inpTransaction.transactionIdentifier);
                 
                 if(bHasReceipt)
                 {
-                    pTransaction->strReceipt = Core::CBaseEncoding::Base64Encode((s8*)[inpTransaction.transactionReceipt bytes], [inpTransaction.transactionReceipt length]);
+                    pTransaction->strReceipt = Core::BaseEncoding::Base64Encode((s8*)[inpTransaction.transactionReceipt bytes], [inpTransaction.transactionReceipt length]);
                 }
             }
             
@@ -133,7 +133,7 @@ namespace ChilliSource
 			
 			for (u32 nID = 0; nID < inaProductIDs.size(); nID++)
             {
-				[idSet addObject:Core::CStringUtils::StringToNSString(inaProductIDs[nID])];
+				[idSet addObject:Core::StringUtils::StringToNSString(inaProductIDs[nID])];
 			}
 			
             [mpStoreKitSystem requestProducts:idSet forDelegate:fastdelegate::MakeDelegate(this, &CIAPSystem::OnProductDescriptionRequestComplete)];
@@ -174,15 +174,15 @@ namespace ChilliSource
                 for(SKProduct* pProduct in inProducts)
                 {
                     Networking::IAPProductDesc sDesc;
-                    sDesc.strID = Core::CStringUtils::NSStringToString(pProduct.productIdentifier);
-                    sDesc.strName = Core::CStringUtils::NSStringToString(pProduct.localizedTitle);
-                    sDesc.strDescription = Core::CStringUtils::NSStringToString(pProduct.localizedDescription);
+                    sDesc.strID = Core::StringUtils::NSStringToString(pProduct.productIdentifier);
+                    sDesc.strName = Core::StringUtils::NSStringToString(pProduct.localizedTitle);
+                    sDesc.strDescription = Core::StringUtils::NSStringToString(pProduct.localizedDescription);
                     
                     [pFormatter setLocale:pProduct.priceLocale];
-                    sDesc.strFormattedPrice = Core::CStringUtils::NSStringToString([pFormatter stringFromNumber:pProduct.price]);
+                    sDesc.strFormattedPrice = Core::StringUtils::NSStringToString([pFormatter stringFromNumber:pProduct.price]);
                     
                     NSLocale* storeLocale = pProduct.priceLocale;
-                    sDesc.strCountryCode = Core::CStringUtils::NSStringToString((NSString*)CFLocaleGetValue((CFLocaleRef)storeLocale, kCFLocaleCountryCode));
+                    sDesc.strCountryCode = Core::StringUtils::NSStringToString((NSString*)CFLocaleGetValue((CFLocaleRef)storeLocale, kCFLocaleCountryCode));
                     
                     aResults.push_back(sDesc);
                 }
@@ -221,7 +221,7 @@ namespace ChilliSource
         void CIAPSystem::RequestProductPurchase(const std::string& instrProductID)
         {
             CS_ASSERT(IsProductIDRegistered(mProductRegInfos, instrProductID), "Products must be registered with the IAP system before purchasing");
-            NSString* productID = Core::CStringUtils::StringToNSString(instrProductID);
+            NSString* productID = Core::StringUtils::StringToNSString(instrProductID);
             [mpStoreKitSystem requestPurchaseWithProductID:productID andQuantity:1];
         }
         //---------------------------------------------------------------
@@ -229,7 +229,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void CIAPSystem::CloseTransaction(const Networking::IAPTransactionPtr& inpTransaction, const Networking::IAPTransactionCloseDelegate& inDelegate)
         {
-            [mpStoreKitSystem closeTransactionWithID:Core::CStringUtils::StringToNSString(inpTransaction->strTransactionID)];
+            [mpStoreKitSystem closeTransactionWithID:Core::StringUtils::StringToNSString(inpTransaction->strTransactionID)];
             
             if(inDelegate)
             {

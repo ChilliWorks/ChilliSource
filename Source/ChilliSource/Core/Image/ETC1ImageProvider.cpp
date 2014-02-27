@@ -50,7 +50,7 @@ namespace ChilliSource
         bool ETC1ImageProvider::CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::ResourceSPtr& outpResource)
         {
             //ensure the extension is correct.
-            if (ChilliSource::Core::CStringUtils::EndsWith(inFilePath, ETC1Extension, true) == false)
+            if (ChilliSource::Core::StringUtils::EndsWith(inFilePath, ETC1Extension, true) == false)
                 return false;
 
             Core::FileStreamSPtr pImageFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);

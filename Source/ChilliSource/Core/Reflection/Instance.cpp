@@ -26,7 +26,7 @@ namespace ChilliSource
             CInstance::CInstance(const std::string& instrName, CMetaClass* inpClass)
             :mstrName(instrName), mpClass(inpClass), mpInstance(nullptr)
             {
-                mudwNameHash = CHashCRC32::GenerateHashCode(instrName);
+                mudwNameHash = HashCRC32::GenerateHashCode(instrName);
             }
             //--------------------------------------------------------
             /// Create 
@@ -100,7 +100,7 @@ namespace ChilliSource
             void CInstance::SetName(const std::string& instrName)
             {
                 mstrName = instrName;
-                mudwNameHash = CHashCRC32::GenerateHashCode(instrName);
+                mudwNameHash = HashCRC32::GenerateHashCode(instrName);
             }
             //--------------------------------------------------------
             /// Get Class

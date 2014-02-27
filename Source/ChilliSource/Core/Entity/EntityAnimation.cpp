@@ -105,9 +105,9 @@ namespace ChilliSource
             
             f32 fMin = mpafFrameTimes.get()[lowIndex];
             f32 fMax = mpafFrameTimes.get()[highIndex];
-            f32 fProgression = ( mudwFrameCount == 1 ? 1.0f : CMathUtils::NormalisedRange(fAdjustedAnimPos, fMin, fMax) );
+            f32 fProgression = ( mudwFrameCount == 1 ? 1.0f : MathUtils::NormalisedRange(fAdjustedAnimPos, fMin, fMax) );
             
-            fProgression = CMathUtils::Clamp(fProgression, 0.0f, 1.0f);
+            fProgression = MathUtils::Clamp(fProgression, 0.0f, 1.0f);
             
             if(highIndex == 0 && lowIndex == 0)
                 return;
@@ -141,10 +141,10 @@ namespace ChilliSource
         void EntityAnimation::Lerp(u32 inudwLowFrame, u32 inudwHighFrame, f32 infT)
         {
             // Interpolate translation
-			Vector3 vLerpedTranslation = CMathUtils::Lerp(infT, mpasFrameValues.get()[inudwLowFrame].vTranslation, mpasFrameValues.get()[inudwHighFrame].vTranslation);
+			Vector3 vLerpedTranslation = MathUtils::Lerp(infT, mpasFrameValues.get()[inudwLowFrame].vTranslation, mpasFrameValues.get()[inudwHighFrame].vTranslation);
             
 			// Interpolate scale
-			Vector3 vLerpedScale = CMathUtils::Lerp(infT, mpasFrameValues.get()[inudwLowFrame].vScale, mpasFrameValues.get()[inudwHighFrame].vScale);
+			Vector3 vLerpedScale = MathUtils::Lerp(infT, mpasFrameValues.get()[inudwLowFrame].vScale, mpasFrameValues.get()[inudwHighFrame].vScale);
             
 			// Interpolate orientation
 			Quaternion qLerpedOrientation = Quaternion::Slerp(mpasFrameValues.get()[inudwLowFrame].qOrientation, mpasFrameValues.get()[inudwHighFrame].qOrientation, infT);
@@ -152,7 +152,7 @@ namespace ChilliSource
             mpTarget->GetTransform().SetPositionScaleOrientation(vLerpedTranslation, vLerpedScale, qLerpedOrientation);
             
             //Interpolate Opacity
-            f32 fOpacity = CMathUtils::Lerp(infT, mpasFrameValues.get()[inudwLowFrame].fOpacity, mpasFrameValues.get()[inudwHighFrame].fOpacity);
+            f32 fOpacity = MathUtils::Lerp(infT, mpasFrameValues.get()[inudwLowFrame].fOpacity, mpasFrameValues.get()[inudwHighFrame].fOpacity);
             
             if(mpTarget->GetTransform().GetLocalOpacity() != fOpacity)
             {

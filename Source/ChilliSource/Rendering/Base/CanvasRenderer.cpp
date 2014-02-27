@@ -96,11 +96,11 @@ namespace ChilliSource
                 Core::Vector2 vNewBottomLeft = invPosition;
                 Core::Vector2 vNewTopRight = invPosition+invSize;
                 
-                vNewBottomLeft.x = Core::CMathUtils::Max(vNewBottomLeft.x, vOldBottomLeft.x);
-                vNewBottomLeft.y = Core::CMathUtils::Max(vNewBottomLeft.y, vOldBottomLeft.y);
+                vNewBottomLeft.x = Core::MathUtils::Max(vNewBottomLeft.x, vOldBottomLeft.x);
+                vNewBottomLeft.y = Core::MathUtils::Max(vNewBottomLeft.y, vOldBottomLeft.y);
                 
-                vNewTopRight.x = Core::CMathUtils::Min(vNewTopRight.x, vOldTopRight.x);
-                vNewTopRight.y = Core::CMathUtils::Min(vNewTopRight.y, vOldTopRight.y);
+                vNewTopRight.x = Core::MathUtils::Min(vNewTopRight.x, vOldTopRight.x);
+                vNewTopRight.y = Core::MathUtils::Min(vNewTopRight.y, vOldTopRight.y);
                 
                 Core::Vector2 vNewSize = vNewTopRight - vNewBottomLeft;
                 

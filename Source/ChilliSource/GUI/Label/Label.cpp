@@ -227,7 +227,7 @@ namespace ChilliSource
 
 			if(!TextID.empty())
 			{
-				SetText(Core::CLocalisedText::GetText(instrText));
+				SetText(Core::LocalisedText::GetText(instrText));
 			}
 			else
 			{

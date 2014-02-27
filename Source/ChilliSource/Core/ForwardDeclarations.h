@@ -72,6 +72,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         CS_FORWARD_DECLARE_CLASS(FileStream);
         CS_FORWARD_DECLARE_CLASS(FileSystem);
+        CS_FORWARD_DECLARE_CLASS(LocalDataStore);
         CS_FORWARD_DECLARE_CLASS(TweakableConstants);
         enum class StorageLocation;
         //---------------------------------------------------------

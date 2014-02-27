@@ -15,23 +15,22 @@ namespace ChilliSource
 {
     namespace Core
     {
-        class CHashCRC32
+        namespace HashCRC32
         {
-        public:
             //-------------------------------------------------------------
             /// Generate Hash Code
             ///
             /// @param String to hash
             /// @return CRC 32 hash code
             //-------------------------------------------------------------
-            static u32 GenerateHashCode(const std::string &instrVal);
+            u32 GenerateHashCode(const std::string &instrVal);
             //-------------------------------------------------------------
             /// Generate Hash Code
             ///
             /// @param Null terminated string to hash
             /// @return CRC 32 hash code
             //-------------------------------------------------------------
-            static u32 GenerateHashCode(const s8* instrVal);
+            u32 GenerateHashCode(const s8* instrVal);
             //-------------------------------------------------------------
             /// Generate Hash Code
             ///
@@ -39,8 +38,8 @@ namespace ChilliSource
             /// @param Size of data in bytes
             /// @return CRC 32 hash code
             //-------------------------------------------------------------
-            static u32 GenerateHashCode(const s8* inbyVal, u32 inudwSizeInBytes);
-        };
+            u32 GenerateHashCode(const s8* inbyVal, u32 inudwSizeInBytes);
+        }
     }
 }
 

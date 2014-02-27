@@ -32,11 +32,11 @@ namespace ChilliSource
 			pNotification.timeZone = [NSTimeZone defaultTimeZone];
 			
 			pNotification.alertAction = @"View";
-			pNotification.alertBody = Core::CStringUtils::StringToNSString(insNotification.sParams.ValueForKey("Body"));
+			pNotification.alertBody = Core::StringUtils::StringToNSString(insNotification.sParams.ValueForKey("Body"));
 			
             if( insNotification.sParams.HasValue("Sound") )
             {
-                pNotification.soundName = Core::CStringUtils::StringToNSString(insNotification.sParams.ValueForKey("Sound"));
+                pNotification.soundName = Core::StringUtils::StringToNSString(insNotification.sParams.ValueForKey("Sound"));
             }
             else {
                 pNotification.soundName = UILocalNotificationDefaultSoundName;
@@ -46,7 +46,7 @@ namespace ChilliSource
             NSMutableDictionary* pParams = [[NSMutableDictionary alloc] init];
             for(Core::StringToStringMap::const_iterator it = insNotification.sParams.begin(); it != insNotification.sParams.end(); ++it)
             {
-                [pParams setObject:Core::CStringUtils::StringToNSString(it->first) forKey:Core::CStringUtils::StringToNSString(it->second)];
+                [pParams setObject:Core::StringUtils::StringToNSString(it->first) forKey:Core::StringUtils::StringToNSString(it->second)];
             }
 			
 			//Encode the type ID into the notification so we can retrieve it at the other end
@@ -196,7 +196,7 @@ namespace ChilliSource
             
             for(id key in pParams)
             {
-                outsNotification.sParams.SetValueForKey(Core::CStringUtils::NSStringToString([pParams objectForKey:key]), Core::CStringUtils::NSStringToString(key));
+                outsNotification.sParams.SetValueForKey(Core::StringUtils::NSStringToString([pParams objectForKey:key]), Core::StringUtils::NSStringToString(key));
             }                                       
         }
     }

@@ -127,7 +127,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		bool Rectangle::Contains(const Vector2& invPoint) const
 		{
-			return CIntersection::Intersects(*this, invPoint);
+			return ShapeIntersection::Intersects(*this, invPoint);
 		}
 		//-----------------------------------------------
 		/// Contains (Rect)
@@ -137,7 +137,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		bool Rectangle::Contains(const Rectangle& inRect) const
 		{
-			return CIntersection::Intersects(*this, inRect);
+			return ShapeIntersection::Intersects(*this, inRect);
 		}
 		//-----------------------------------------------
 		/// Normalised
@@ -228,7 +228,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		bool Circle::Contains(const Vector2 & invPoint) const
 		{
-			return CIntersection::Intersects(*this, invPoint);
+			return ShapeIntersection::Intersects(*this, invPoint);
 		}
 		//-----------------------------------------------
 		/// Contains (Circle)
@@ -238,7 +238,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		bool Circle::Contains(const Circle & inCircle) const
 		{
-			return CIntersection::Intersects(*this, inCircle);
+			return ShapeIntersection::Intersects(*this, inCircle);
 		}
 		//================================================
 		/// Sphere
@@ -257,7 +257,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		bool Sphere::Contains(const Vector3 & invPoint) const
 		{
-			return CIntersection::Intersects(*this, invPoint);
+			return ShapeIntersection::Intersects(*this, invPoint);
 		}
 		//-----------------------------------------------
 		/// Contains (Sphere)
@@ -267,7 +267,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		bool Sphere::Contains(const Sphere & inSphere) const
 		{
-			return CIntersection::Intersects(*this, inSphere);
+			return ShapeIntersection::Intersects(*this, inSphere);
 		}
 		//-----------------------------------------------
 		/// Contains (Ray)
@@ -277,7 +277,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		bool Sphere::Contains(const Ray &inRay) const
 		{
-			return CIntersection::Intersects(*this, inRay);
+			return ShapeIntersection::Intersects(*this, inRay);
 		}
 		//================================================
 		/// AABB
@@ -420,7 +420,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		bool AABB::Contains(const Vector3 &invPoint) const
 		{
-			return	CIntersection::Intersects(*this, invPoint);
+			return	ShapeIntersection::Intersects(*this, invPoint);
 		}
 		//-----------------------------------------------
 		/// Contains (AABB)
@@ -430,7 +430,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		bool AABB::Contains(const AABB &inAABB) const
 		{
-			return	CIntersection::Intersects(*this, inAABB);
+			return	ShapeIntersection::Intersects(*this, inAABB);
 		}
 		//-----------------------------------------------
 		/// Contains (Ray)
@@ -442,7 +442,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		bool AABB::Contains(const Ray &inRay, f32 &outfT1, f32 &outfT2) const
 		{
-			return CIntersection::Intersects(*this, inRay, outfT1, outfT2);
+			return ShapeIntersection::Intersects(*this, inRay, outfT1, outfT2);
 		}
         //-----------------------------------------------
         /// Union
@@ -796,22 +796,22 @@ namespace ChilliSource
             //the diagonal
             BoundingSphere.fRadius *= 1.412f;
             
-			if(Core::CIntersection::Intersects(BoundingSphere, mLeftClipPlane) == Core::CIntersection::Result::k_outside)
+			if(Core::ShapeIntersection::Intersects(BoundingSphere, mLeftClipPlane) == Core::ShapeIntersection::Result::k_outside)
                 return false;
 
-			if(Core::CIntersection::Intersects(BoundingSphere, mRightClipPlane) == Core::CIntersection::Result::k_outside)
+			if(Core::ShapeIntersection::Intersects(BoundingSphere, mRightClipPlane) == Core::ShapeIntersection::Result::k_outside)
                 return false;
 
-			if(Core::CIntersection::Intersects(BoundingSphere, mTopClipPlane) == Core::CIntersection::Result::k_outside)
+			if(Core::ShapeIntersection::Intersects(BoundingSphere, mTopClipPlane) == Core::ShapeIntersection::Result::k_outside)
                 return false;
 
-			if(Core::CIntersection::Intersects(BoundingSphere, mBottomClipPlane) == Core::CIntersection::Result::k_outside)
+			if(Core::ShapeIntersection::Intersects(BoundingSphere, mBottomClipPlane) == Core::ShapeIntersection::Result::k_outside)
                 return false;
         
-            if(Core::CIntersection::Intersects(BoundingSphere, mNearClipPlane) == Core::CIntersection::Result::k_outside)
+            if(Core::ShapeIntersection::Intersects(BoundingSphere, mNearClipPlane) == Core::ShapeIntersection::Result::k_outside)
                 return false;
     
-			if(Core::CIntersection::Intersects(BoundingSphere, mFarClipPlane) == Core::CIntersection::Result::k_outside)
+			if(Core::ShapeIntersection::Intersects(BoundingSphere, mFarClipPlane) == Core::ShapeIntersection::Result::k_outside)
                 return false;
 
 			return true;

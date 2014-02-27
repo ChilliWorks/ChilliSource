@@ -16,10 +16,8 @@ namespace ChilliSource
 {
     namespace Core
     {
-        class CLaunchingActions
+        namespace LaunchingActions
         {
-        public:
-            
             typedef fastdelegate::FastDelegate1<const std::string&> ActionDelegate;
             
             //-----------------------------------------------------------------------
@@ -32,7 +30,7 @@ namespace ChilliSource
             /// @param Action type
             /// @param Delegate
             //-----------------------------------------------------------------------
-            static void SubscribeForActionType(const std::string& instrActionType, const ActionDelegate& inDelegate);
+            void SubscribeForActionType(const std::string& instrActionType, const ActionDelegate& inDelegate);
             //-----------------------------------------------------------------------
             /// Unsubscribe For Action Type
             ///
@@ -40,7 +38,7 @@ namespace ChilliSource
             ///
             /// @param Action type
             //-----------------------------------------------------------------------
-            static void UnsubscribeForActionType(const std::string& instrActionType);
+            void UnsubscribeForActionType(const std::string& instrActionType);
             //-----------------------------------------------------------------------
             /// Application Did Receive Launching URL
             ///
@@ -48,7 +46,7 @@ namespace ChilliSource
             ///
             /// @param Launching URL that must be decoded into an action
             //-----------------------------------------------------------------------
-            static void ApplicationDidReceiveLaunchingURL(const std::string& instrURL);
+            void ApplicationDidReceiveLaunchingURL(const std::string& instrURL);
         };
     }
 }

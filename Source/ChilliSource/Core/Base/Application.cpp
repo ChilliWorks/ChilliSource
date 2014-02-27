@@ -133,7 +133,7 @@ namespace ChilliSource
 
             //init tweakable constants and local data store.
 			new TweakableConstants();
-			new CLocalDataStore();
+			new LocalDataStore();
 
             //Set up the device helper
             Device::Init(pPlatformSystem);
@@ -153,7 +153,7 @@ namespace ChilliSource
 				PushInitialState();
 
 			//Register for update events
-			CLocalDataStore::GetSingleton().SubscribeToApplicationSuspendEvent();
+			LocalDataStore::GetSingleton().SubscribeToApplicationSuspendEvent();
 
 			//Begin the update loop
 			pPlatformSystem->Run();
@@ -456,10 +456,10 @@ namespace ChilliSource
         void Application::RefreshMasterText(StorageLocation ineStorageLocation, const std::string& instrDirectory)
         {
             //Load any localised text from file 
-            if(!Core::CLocalisedText::LoadTextFromFile(ineStorageLocation, instrDirectory, Core::Device::GetLanguage().GetLanguageCode() + ".mofloloca"))
+            if(!Core::LocalisedText::LoadTextFromFile(ineStorageLocation, instrDirectory, Core::Device::GetLanguage().GetLanguageCode() + ".mofloloca"))
             {
                 //Default to english
-                Core::CLocalisedText::LoadTextFromFile(ineStorageLocation, instrDirectory, "en.mofloloca");
+                Core::LocalisedText::LoadTextFromFile(ineStorageLocation, instrDirectory, "en.mofloloca");
             }
         }
         //--------------------------------------------------------------------------------------------------
@@ -657,7 +657,7 @@ namespace ChilliSource
             //We do not need to render as often as we update so this callback will be triggered
             //less freqenctly than the update frequency suggests. We must work out how many times to update based on the time since last frame
             //and our actual update frequency. We carry the remainder to the next frame until we have a full update cycle
-            s_updateIntervalRemainder = CMathUtils::Min(s_updateIntervalRemainder + infDt, GetUpdateIntervalMax());
+            s_updateIntervalRemainder = MathUtils::Min(s_updateIntervalRemainder + infDt, GetUpdateIntervalMax());
             
 			//Force the input system to distribute any buffered input
 			if(mpInputSystem != nullptr)

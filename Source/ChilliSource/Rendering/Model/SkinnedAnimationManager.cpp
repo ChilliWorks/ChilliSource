@@ -82,7 +82,7 @@ namespace ChilliSource
 				{
 					//Check if the resource provider can load this extension
 					std::string strName, strExt;
-					Core::CStringUtils::SplitBaseFilename(instrFilePath, strName, strExt);
+					Core::StringUtils::SplitBaseFilename(instrFilePath, strName, strExt);
 					
 					if(mResourceProviders[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
 					{
@@ -126,7 +126,7 @@ namespace ChilliSource
 				{
 					//Check if the resource provider can load this extension
 					std::string strName, strExt;
-					Core::CStringUtils::SplitBaseFilename(instrFilePath, strName, strExt);
+					Core::StringUtils::SplitBaseFilename(instrFilePath, strName, strExt);
 					
 					if(mResourceProviders[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
 					{

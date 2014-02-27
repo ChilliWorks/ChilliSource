@@ -105,10 +105,10 @@ namespace ChilliSource
 				for (TiXmlElement * pAnimEl = Core::XMLUtils::FirstChildElementWithName(pAnimsEl, "Animation"); pAnimEl != nullptr; pAnimEl = XMLUtils::NextSiblingElementWithName(pAnimEl))
 				{
 					
-					std::string strName = XMLUtils::GetAttributeValueOrDefault<std::string>(pAnimEl,"name",CStringUtils::BLANK);
-					std::string strFrames = XMLUtils::GetAttributeValueOrDefault<std::string>(pAnimEl,"frames",CStringUtils::BLANK);
+					std::string strName = XMLUtils::GetAttributeValueOrDefault<std::string>(pAnimEl,"name",StringUtils::BLANK);
+					std::string strFrames = XMLUtils::GetAttributeValueOrDefault<std::string>(pAnimEl,"frames",StringUtils::BLANK);
 					
-                    std::vector<std::string> astrFrames = CStringUtils::Split(strFrames," ");
+                    std::vector<std::string> astrFrames = StringUtils::Split(strFrames," ");
 					//TODO: WTF?
 					std::vector<u32> aIndices;
 				}
