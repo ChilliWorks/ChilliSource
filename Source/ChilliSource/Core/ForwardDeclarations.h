@@ -29,10 +29,14 @@ namespace ChilliSource
         //---------------------------------------------------------
         CS_FORWARD_DECLARE_CLASS(Activity);
         CS_FORWARD_DECLARE_CLASS(Application);
+        CS_FORWARD_DECLARE_CLASS(ApplicationEvents);
         CS_FORWARD_DECLARE_CLASS(Colour);
+        CS_FORWARD_DECLARE_CLASS(Device);
         CS_FORWARD_DECLARE_CLASS(IInformationProvider);
+        CS_FORWARD_DECLARE_CLASS(Logging);
         CS_FORWARD_DECLARE_CLASS(PlatformSystem);
         CS_FORWARD_DECLARE_CLASS(QueryableInterface);
+        CS_FORWARD_DECLARE_CLASS(Screen);
         //---------------------------------------------------------
         /// Container
         //---------------------------------------------------------
@@ -156,10 +160,12 @@ namespace ChilliSource
         //---------------------------------------------------------
         CS_FORWARD_DECLARE_CLASS(WaitCondition);
         template <typename... TArgTypes> class Task;
+        CS_FORWARD_DECLARE_CLASS(TaskScheduler);
         CS_FORWARD_DECLARE_CLASS(ThreadPool);
         //---------------------------------------------------------
         /// Time
         //---------------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(CoreTimer);
         CS_FORWARD_DECLARE_CLASS(PerformanceTimer);
         CS_FORWARD_DECLARE_CLASS(Timer);
         //---------------------------------------------------------

@@ -13,10 +13,10 @@ namespace ChilliSource
 {
     namespace Core
     {
-        Core::ThreadPool* CTaskScheduler::pThreadPool = nullptr;
+        Core::ThreadPool* TaskScheduler::pThreadPool = nullptr;
         
-        std::recursive_mutex CTaskScheduler::MainThreadTaskMutex;
-        std::vector<CTaskScheduler::GenericTaskType> CTaskScheduler::MainThreadTasks;
+        std::recursive_mutex TaskScheduler::MainThreadTaskMutex;
+        std::vector<TaskScheduler::GenericTaskType> TaskScheduler::MainThreadTasks;
 
         //-------------------------------------------------
         /// Init
@@ -27,7 +27,7 @@ namespace ChilliSource
         ///
         /// @param Number of threads
         //------------------------------------------------
-        void CTaskScheduler::Init(u32 udwNumThreads)
+        void TaskScheduler::Init(u32 udwNumThreads)
         {
             pThreadPool = new Core::ThreadPool(udwNumThreads);
         }
@@ -36,7 +36,7 @@ namespace ChilliSource
         ///
         /// @return Number of tasks waiting to be executed
         //----------------------------------------------------
-        u32 CTaskScheduler::GetNumPendingTasks() 
+        u32 TaskScheduler::GetNumPendingTasks() 
         {
             return pThreadPool->GetNumQueuedTasks();
         }
@@ -45,7 +45,7 @@ namespace ChilliSource
         ///
         /// Unschedule all pending tasks
         //----------------------------------------------------
-        void CTaskScheduler::Clear()
+        void TaskScheduler::Clear()
         {
             pThreadPool->ClearQueuedTasks();
         }
@@ -55,7 +55,7 @@ namespace ChilliSource
         /// Execute any tasks that have been scehduled
         /// for the main thread
         //----------------------------------------------------
-        void CTaskScheduler::ExecuteMainThreadTasks()
+        void TaskScheduler::ExecuteMainThreadTasks()
         {
             std::unique_lock<std::recursive_mutex> Lock(MainThreadTaskMutex);
             

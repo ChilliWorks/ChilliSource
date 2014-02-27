@@ -22,7 +22,7 @@ namespace ChilliSource
 		//--------------------------------------------
 		Timer::Timer() : mfCurrentTime(0.0f), mbIsTimerActive(false)
 		{
-            CCoreTimer::GetTimerUpdateEvent().AddListener(TimeEventDelegate(this, &Timer::Update));
+            CoreTimer::GetTimerUpdateEvent().AddListener(TimeEventDelegate(this, &Timer::Update));
 		}
 		//--------------------------------------------
 		/// Start
@@ -194,7 +194,7 @@ namespace ChilliSource
 			maTimerBeganDelegates.clear();
 			maTimeElapsedDelegates.clear();
 			
-            CCoreTimer::GetTimerUpdateEvent().RemoveListener(TimeEventDelegate(this, &Timer::Update));
+            CoreTimer::GetTimerUpdateEvent().RemoveListener(TimeEventDelegate(this, &Timer::Update));
 		}
 	}
 }

@@ -103,7 +103,7 @@ namespace ChilliSource
 			
 			//Load model as task
             Core::Task<Core::StorageLocation, const std::string&, SubtitlesSPtr&> task(this, &MoSubtitlesLoader::LoadMoSubtitlesTask,ineStorageLocation, inFilePath, pSubtitles);
-			Core::CTaskScheduler::ScheduleTask(task);
+			Core::TaskScheduler::ScheduleTask(task);
 			
 			return true;
 		}

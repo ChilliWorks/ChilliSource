@@ -120,7 +120,7 @@ namespace ChilliSource
 		{
 			//Load model as task
 			Core::Task<Core::StorageLocation, const std::string&, const std::string&, const MeshSPtr&> MeshTask(this, &MoModelLoader::LoadMeshDataTask, ineStorageLocation, inFilePath, instrMaterialPath, outpResource);
-			Core::CTaskScheduler::ScheduleTask(MeshTask);
+			Core::TaskScheduler::ScheduleTask(MeshTask);
 			
 			return true;
 		}
@@ -137,7 +137,7 @@ namespace ChilliSource
 			}
 			
 			//start a main thread task for loading the data into a mesh
-			Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<MeshDescriptor&,const MeshSPtr&>(this, &MoModelLoader::BuildMeshTask, descriptor, outpResource));
+			Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<MeshDescriptor&,const MeshSPtr&>(this, &MoModelLoader::BuildMeshTask, descriptor, outpResource));
 		}
 		//----------------------------------------------------------------------------
 		/// Build Mesh Task
@@ -183,7 +183,7 @@ namespace ChilliSource
 			
 			//Load image as a task. Once it completed we can load the texture as it should be done on the main thread
 			Core::Task<Core::StorageLocation, const std::string&, const std::string&, const MeshSPtr&> MeshTask(this, &MoModelLoader::LoadDataForExistingMeshTask, ineStorageLocation, inFilePath, strMatPath, inpMesh);
-			Core::CTaskScheduler::ScheduleTask(MeshTask);
+			Core::TaskScheduler::ScheduleTask(MeshTask);
 		}
 		//----------------------------------------------------------------------------
 		/// LoadDataForExistingMeshTask
@@ -198,7 +198,7 @@ namespace ChilliSource
 			}
 			
 			//start a main thread task for loading the data into a mesh
-			Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<MeshDescriptor&, const MeshSPtr&>(this, &MoModelLoader::BuildExistingMeshTask, descriptor, outpResource));
+			Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<MeshDescriptor&, const MeshSPtr&>(this, &MoModelLoader::BuildExistingMeshTask, descriptor, outpResource));
 		}
 		//----------------------------------------------------------------------------
 		/// Build Existing Mesh Task

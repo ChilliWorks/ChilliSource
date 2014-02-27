@@ -388,7 +388,7 @@ namespace ChilliSource
 		{
 			//Begin the read loop
 			//Run this as a threaded task
-			Core::CTaskScheduler::ScheduleTask(Core::Task<CFReadStreamRef>(this, &CHttpConnectionSystem::CHttpRequest::PollReadStream, mConnectionInfo.ReadStream));
+			Core::TaskScheduler::ScheduleTask(Core::Task<CFReadStreamRef>(this, &CHttpConnectionSystem::CHttpRequest::PollReadStream, mConnectionInfo.ReadStream));
 		}
 		//------------------------------------------------------------------
 		/// Update

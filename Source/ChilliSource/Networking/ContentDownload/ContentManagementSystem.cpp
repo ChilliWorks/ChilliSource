@@ -208,7 +208,7 @@ namespace ChilliSource
 					//Unzip all the files and overwrite the old manifest
 					Core::WaitCondition waitCondition(mPackageDetails.size());
 					
-					Core::CTaskScheduler::ForEach(mPackageDetails.begin(), mPackageDetails.end(), this, &ContentManagementSystem::ExtractFilesFromPackage, &waitCondition);
+					Core::TaskScheduler::ForEach(mPackageDetails.begin(), mPackageDetails.end(), this, &ContentManagementSystem::ExtractFilesFromPackage, &waitCondition);
 					
 					//Wait on all the packages being unzipped
 					waitCondition.Wait();
@@ -224,7 +224,7 @@ namespace ChilliSource
 					//Remove any unused files from the documents
 					Core::WaitCondition waitCondition(mRemovePackageIDs.size());
 					
-					Core::CTaskScheduler::ForEach(mRemovePackageIDs.begin(), mRemovePackageIDs.end(), this, &ContentManagementSystem::DeleteDirectory, &waitCondition);
+					Core::TaskScheduler::ForEach(mRemovePackageIDs.begin(), mRemovePackageIDs.end(), this, &ContentManagementSystem::DeleteDirectory, &waitCondition);
 					
 					//Wait on all the packages being removed
 					waitCondition.Wait();

@@ -23,7 +23,7 @@ namespace ChilliSource
 	{
 		typedef fastdelegate::FastDelegate1<const f32> TimeEventDelegate;
 		
-		class CCoreTimer
+		class CoreTimer
 		{
 		public:
 			
