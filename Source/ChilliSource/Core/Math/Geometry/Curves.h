@@ -111,7 +111,7 @@ namespace ChilliSource
 				}
 				
 				f32 fInterpAmount = (infS - mfCachedDists[nMinIndex])/(mfCachedDists[nMaxIndex]-mfCachedDists[nMinIndex]);
-				fInterpAmount = CMathUtils::Clamp(fInterpAmount, 0.0f,1.0f);
+				fInterpAmount = MathUtils::Clamp(fInterpAmount, 0.0f,1.0f);
 				
 				f32 fResult = mfCachedParamDists[nMinIndex] + fInterpAmount * (mfCachedParamDists[nMaxIndex] - mfCachedParamDists[nMinIndex]);
 								
@@ -136,7 +136,7 @@ namespace ChilliSource
 				}
 				
 				f32 fInterpAmount = (infT - mfCachedParamDists[nMinIndex])/(mfCachedParamDists[nMaxIndex]-mfCachedParamDists[nMinIndex]);
-				fInterpAmount = CMathUtils::Clamp(fInterpAmount, 0.0f,1.0f);
+				fInterpAmount = MathUtils::Clamp(fInterpAmount, 0.0f,1.0f);
 				
 				f32 fResult = mfCachedDists[nMinIndex] + fInterpAmount * (mfCachedDists[nMaxIndex] - mfCachedDists[nMinIndex]);
 								

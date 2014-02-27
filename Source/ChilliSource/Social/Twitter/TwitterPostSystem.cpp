@@ -110,7 +110,7 @@ namespace ChilliSource
 			if(mpHttpConnectionSystem->CheckReachability())
 			{
 				// Construct our Tweet request URL
-				std::string strStatus = Social::TwitterDefault::TWITTER_STATUS_STRING + Core::CBaseEncoding::URLEncode(insDesc.strText.ToASCII());
+				std::string strStatus = Social::TwitterDefault::TWITTER_STATUS_STRING + Core::BaseEncoding::URLEncode(insDesc.strText.ToASCII());
 				std::string strStatusURL = Social::TwitterURL::TWITTER_STATUS_UPDATE_URL;
 				std::string strOAuthHeader;
 
@@ -290,7 +290,7 @@ namespace ChilliSource
 			std::string strTokenKey;
 			std::string strSecretKey;
 
-			ChilliSource::Core::CLocalDataStore& pLocalData = ChilliSource::Core::CLocalDataStore::GetSingleton();
+			ChilliSource::Core::LocalDataStore& pLocalData = ChilliSource::Core::LocalDataStore::GetSingleton();
 
 			if(pLocalData.TryGetValue(Social::TwitterDataStore::kstrDataStoreKey[(u32)Social::TwitterDataStore::DataStoreKey::k_OAuthToken], strTokenKey))
 			{
@@ -322,7 +322,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		void TwitterPostSystem::SaveOAuthTokenKeyAndSecretKey()
 		{
-			ChilliSource::Core::CLocalDataStore& pLocalData = ChilliSource::Core::CLocalDataStore::GetSingleton();
+			ChilliSource::Core::LocalDataStore& pLocalData = ChilliSource::Core::LocalDataStore::GetSingleton();
 
 			// Save our OAuth Token and Secret
 			mpOAuthSystem->GetOAuthTokenKey(mstrSavedOAuthTokenKey);

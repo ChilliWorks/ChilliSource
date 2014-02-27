@@ -21,7 +21,7 @@ namespace ChilliSource
 	{
 		typedef s32 LocalisedTextKey;
 		
-		class CLocalisedText 
+		class LocalisedText 
 		{
 		public:
             

@@ -53,7 +53,7 @@ namespace ChilliSource
         bool MoImageProvider::CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::ResourceSPtr& outpResource)
         {
             //ensure the extension is correct.
-            if (ChilliSource::Core::CStringUtils::EndsWith(inFilePath, MoImageExtension, true) == false)
+            if (ChilliSource::Core::StringUtils::EndsWith(inFilePath, MoImageExtension, true) == false)
                 return false;
 
             Core::FileStreamSPtr pImageFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
@@ -161,7 +161,7 @@ namespace ChilliSource
                 inflateEnd(&infstream);
                 
                 // Checksum test
-                u32 udwInflatedChecksum = CHashCRC32::GenerateHashCode((const s8*)pubyBitmapData, sHeader.udwOriginalDataSize);
+                u32 udwInflatedChecksum = HashCRC32::GenerateHashCode((const s8*)pubyBitmapData, sHeader.udwOriginalDataSize);
                 if(sHeader.uddwChecksum != (u64)udwInflatedChecksum)
                 {
                     CS_ERROR_LOG("MoImage checksum of "+ToString(udwInflatedChecksum)+" does not match expected checksum "+ToString(sHeader.uddwChecksum));

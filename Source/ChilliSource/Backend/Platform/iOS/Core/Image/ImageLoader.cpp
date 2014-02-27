@@ -90,7 +90,7 @@ namespace ChilliSource
                 std::string strExtension;
                 
                 //Get the name of the file and append the high res identifier to it
-                Core::CStringUtils::SplitBaseFilename(inFilePath, strName, strExtension);
+                Core::StringUtils::SplitBaseFilename(inFilePath, strName, strExtension);
                 
                 //Based on the extension decide how to load the file
                 std::string abyData;

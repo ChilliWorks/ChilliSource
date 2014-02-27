@@ -79,7 +79,7 @@ namespace ChilliSource
 		*--*/
 		void OAuthSystem::SetConsumerKey(const std::string& instrConsumerKey)
 		{
-		    mstrConsumerKey.assign(CBaseEncoding::URLEncode(instrConsumerKey));
+		    mstrConsumerKey.assign(BaseEncoding::URLEncode(instrConsumerKey));
 		}
 
 		/*++
@@ -109,7 +109,7 @@ namespace ChilliSource
 		*--*/
 		void OAuthSystem::SetConsumerSecret(const std::string& instrConsumerSecret)
 		{
-		    mstrConsumerSecret = CBaseEncoding::URLEncode(instrConsumerSecret);
+		    mstrConsumerSecret = BaseEncoding::URLEncode(instrConsumerSecret);
 		}
 
 		/*++
@@ -139,7 +139,7 @@ namespace ChilliSource
 		*--*/
 		void OAuthSystem::SetOAuthTokenKey(const std::string& instrOAuthTokenKey)
 		{
-		    mstrOAuthTokenKey = CBaseEncoding::URLEncode(instrOAuthTokenKey);
+		    mstrOAuthTokenKey = BaseEncoding::URLEncode(instrOAuthTokenKey);
 		}
 
 		/*++
@@ -169,7 +169,7 @@ namespace ChilliSource
 		*--*/
 		void OAuthSystem::SetOAuthTokenSecret(const std::string& instrOAuthTokenSecret)
 		{
-		    mstrOAuthTokenSecret = CBaseEncoding::URLEncode(instrOAuthTokenSecret);
+		    mstrOAuthTokenSecret = BaseEncoding::URLEncode(instrOAuthTokenSecret);
 		}
 
 		/*++
@@ -410,10 +410,10 @@ namespace ChilliSource
 		        break;
 		    }
 		    //CS_DEBUG_LOG("\nCOAuthSystem::GetSignature() - URLEncoding URL...");
-		    strSigBase.append(CBaseEncoding::URLEncode(instrRawUrl));
+		    strSigBase.append(BaseEncoding::URLEncode(instrRawUrl));
 		    strSigBase.append("&");
 		    //CS_DEBUG_LOG("\nCOAuthSystem::GetSignature() - URLEncoding params...");
-		    strSigBase.append(CBaseEncoding::URLEncode(strRawParams));
+		    strSigBase.append(BaseEncoding::URLEncode(strRawParams));
 
 		    //CS_DEBUG_LOG("\nCOAuthSystem::GetSignature() - Signature Raw URL is: \""+instrRawUrl+"\"");
 		    //CS_DEBUG_LOG("OAuthSystem::GetSignature() - Signature Raw Params is: \""+strRawParams+"\"");
@@ -442,13 +442,13 @@ namespace ChilliSource
 		                          (u8*)bypDigest);
 
 		    /* Do a base64 encode of signature - SHA 1 digest is 160 bits*/
-		    std::string strBase64String = CBaseEncoding::Base64Encode((s8*)bypDigest, 20);
+		    std::string strBase64String = BaseEncoding::Base64Encode((s8*)bypDigest, 20);
 		    //CS_DEBUG_LOG("OAuthSystem::GetSignature() - Base64 of signature SHA1:\""+strBase64String+"\"");
 
 
 		    //CS_DEBUG_LOG("OAuthSystem::GetSignature() - Encoding Base64 signature...");
 		    /* Do an url encode */
-		    outstrOAuthSignature = CBaseEncoding::URLEncode(strBase64String);
+		    outstrOAuthSignature = BaseEncoding::URLEncode(strBase64String);
 		    //CS_DEBUG_LOG("OAuthSystem::GetSignature() - Encoding result:\""+outstrOAuthSignature+"\"");
 
 		    return (outstrOAuthSignature.length()) ? true : false;
@@ -513,7 +513,7 @@ namespace ChilliSource
 		                strDataVal = strDataKeyVal.substr(dwPos2 + 1);
 
 		                /* Put this key=value pair in map */
-		                mapRawKeyValuePairs[strDataKey] = CBaseEncoding::URLEncode(strDataVal);
+		                mapRawKeyValuePairs[strDataKey] = BaseEncoding::URLEncode(strDataVal);
 		            }
 		            dataPart = dataPart.substr(dwSep + 1);
 		        }
@@ -529,7 +529,7 @@ namespace ChilliSource
 		            strDataVal = strDataKeyVal.substr(dwPos2 + 1);
 
 		            /* Put this key=value pair in map */
-		            mapRawKeyValuePairs[strDataKey] = CBaseEncoding::URLEncode(strDataVal);
+		            mapRawKeyValuePairs[strDataKey] = BaseEncoding::URLEncode(strDataVal);
 		        }
 		    }
 

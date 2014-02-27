@@ -57,7 +57,7 @@ namespace ChilliSource
         void ProgressBar::SetProgress(f32 infProgress)
         {            
             mfPreviousValue = GetProgress();
-            mfProgress = Core::CMathUtils::Clamp(infProgress, 0.0f, 1.0f);
+            mfProgress = Core::MathUtils::Clamp(infProgress, 0.0f, 1.0f);
 			
 			// Going backward: jump to it
 			if(mfProgress < mfPreviousValue)
@@ -84,8 +84,8 @@ namespace ChilliSource
             if(mfAnimationTime != 0)
             {
                 f32 fTimeSinceValueSet = Core::Application::GetSystemTimeInMilliseconds() - mPreviousValueTimeStamp;
-                f32 fTimeRatio = ChilliSource::Core::CMathUtils::Min(fTimeSinceValueSet / mfAnimationTime, 1.0f);
-                f32 fAnimatedProgress = Core::CMathUtils::Clamp(mfPreviousValue + (mfPreviousValueDiff * fTimeRatio), 0.0f, 1.0f);
+                f32 fTimeRatio = ChilliSource::Core::MathUtils::Min(fTimeSinceValueSet / mfAnimationTime, 1.0f);
+                f32 fAnimatedProgress = Core::MathUtils::Clamp(mfPreviousValue + (mfPreviousValueDiff * fTimeRatio), 0.0f, 1.0f);
                 return fAnimatedProgress;
                 
             }

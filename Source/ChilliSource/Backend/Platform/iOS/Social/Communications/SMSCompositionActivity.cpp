@@ -51,11 +51,11 @@ namespace ChilliSource{
 			NSMutableArray * pNamesArray = [[NSMutableArray alloc] initWithCapacity:inastrRecipientNumbers.size()];
 			
 			for (u32 nRecipient = 0; nRecipient < inastrRecipientNumbers.size(); nRecipient++){			
-				[pNamesArray addObject:Core::CStringUtils::UTF8StringToNSString(inastrRecipientNumbers[nRecipient])];
+				[pNamesArray addObject:Core::StringUtils::UTF8StringToNSString(inastrRecipientNumbers[nRecipient])];
 			}
 			mpVC.recipients = pNamesArray;
 			
-			mpVC.body = Core::CStringUtils::UTF8StringToNSString(instrContents);
+			mpVC.body = Core::StringUtils::UTF8StringToNSString(instrContents);
 			[pRootVC presentModalViewController:mpVC animated:YES];
 			
 			[mpVC release];

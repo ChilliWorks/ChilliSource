@@ -81,7 +81,7 @@ namespace ChilliSource
 			
 			//get the path to the curent file
 			std::string filename, filepath;
-			ChilliSource::Core::CStringUtils::SplitFilename(inFilePath, filename, filepath);
+			ChilliSource::Core::StringUtils::SplitFilename(inFilePath, filename, filepath);
 			
 			return CreateMeshFromFile(ineStorageLocation, inFilePath, filepath, pMesh);
 		}
@@ -109,7 +109,7 @@ namespace ChilliSource
 			
 			//get the path to the curent file
 			std::string filename, filepath;
-			ChilliSource::Core::CStringUtils::SplitFilename(inFilePath, filename, filepath);
+			ChilliSource::Core::StringUtils::SplitFilename(inFilePath, filename, filepath);
 			
 			return AsyncCreateMeshFromFile(ineStorageLocation, inFilePath, filepath, pMesh);
 		}
@@ -157,7 +157,7 @@ namespace ChilliSource
 			if (inMaterialPath.length() == 0)
 			{
 				std::string filename;
-				ChilliSource::Core::CStringUtils::SplitFilename(inFilePath, filename, strMatPath);
+				ChilliSource::Core::StringUtils::SplitFilename(inFilePath, filename, strMatPath);
 			}
 			
 			if (ReadFile(ineStorageLocation, inFilePath, strMatPath, descriptor) == false)
@@ -178,7 +178,7 @@ namespace ChilliSource
 			if (inMaterialPath.length() == 0)
 			{
 				std::string filename;
-				ChilliSource::Core::CStringUtils::SplitFilename(inFilePath, filename, strMatPath);
+				ChilliSource::Core::StringUtils::SplitFilename(inFilePath, filename, strMatPath);
 			}
 			
 			//Load image as a task. Once it completed we can load the texture as it should be done on the main thread
@@ -472,7 +472,7 @@ namespace ChilliSource
 					else 
 						strMaterialFilename += bySingleChar;
 				}
-				inSubMeshDescriptor.mstrMaterialName = ChilliSource::Core::CStringUtils::StandardisePath(instrMaterialPath) + strMaterialFilename;
+				inSubMeshDescriptor.mstrMaterialName = ChilliSource::Core::StringUtils::StandardisePath(instrMaterialPath) + strMaterialFilename;
 			}
 			
 			return true;

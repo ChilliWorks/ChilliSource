@@ -660,7 +660,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------
 		bool Entity::HasName()
 		{
-			return mstrName != CStringUtils::BLANK;
+			return mstrName != StringUtils::BLANK;
 		}
 		//-------------------------------------------------------------
 		/// Set Name

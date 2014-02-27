@@ -52,7 +52,7 @@ namespace ChilliSource
             inpCurrentManifest->LoadFile(Core::StorageLocation::k_DLC, "ContentManifest.moman");
             
             //If there is no DLC we should check to see if there ever was any
-            if(!inpCurrentManifest->RootElement() && Core::CLocalDataStore::GetSingletonPtr()->HasValueForKey("MOCMSCachedDLC"))
+            if(!inpCurrentManifest->RootElement() && Core::LocalDataStore::GetSingletonPtr()->HasValueForKey("MOCMSCachedDLC"))
             {
                 mbDLCCachePurged = true;
             }
@@ -81,8 +81,8 @@ namespace ChilliSource
 		std::string ContentManagementSystem::CalculateChecksum(Core::StorageLocation ineLocation, const std::string& instrFilePath)
 		{
             std::string strMD5Checksum = Core::Application::GetFileSystemPtr()->GetFileMD5Checksum(ineLocation, instrFilePath);
-			std::string strBase64Encoded = Core::CBaseEncoding::Base64Encode(strMD5Checksum);
-			Core::CStringUtils::ChopTrailingChars(strBase64Encoded, '=');
+			std::string strBase64Encoded = Core::BaseEncoding::Base64Encode(strMD5Checksum);
+			Core::StringUtils::ChopTrailingChars(strBase64Encoded, '=');
 			return strBase64Encoded;
 		}
         //-----------------------------------------------------------
@@ -240,7 +240,7 @@ namespace ChilliSource
                 
                 //Store that we have DLC cached. If there is no DLC on next check then 
                 //we know the cache has been purged and we have to block on download
-                Core::CLocalDataStore::GetSingletonPtr()->SetValueForKey("MOCMSCachedDLC", true);
+                Core::LocalDataStore::GetSingletonPtr()->SetValueForKey("MOCMSCachedDLC", true);
                 
                 //Tell the delegate all is good
                 inDelegate(Result::k_contentSucceeded);

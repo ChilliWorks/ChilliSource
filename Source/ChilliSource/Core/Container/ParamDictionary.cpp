@@ -34,7 +34,7 @@ namespace ChilliSource{
 			if (pEntry != end()){
 				return pEntry->second;
 			} else {
-				return CStringUtils::BLANK;
+				return StringUtils::BLANK;
 			}
 
 		}

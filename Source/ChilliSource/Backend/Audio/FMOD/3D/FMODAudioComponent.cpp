@@ -156,7 +156,7 @@ namespace ChilliSource
 		{
 			if(mpFMODChannel)
 			{
-                f32 fVolume = Core::CMathUtils::Clamp(infVolume, 0.0f, 1.0f);
+                f32 fVolume = Core::MathUtils::Clamp(infVolume, 0.0f, 1.0f);
                 mfCurrentVolume = fVolume;
 				
 				if(mpAudioSource && mpAudioSource->IsStreamed())

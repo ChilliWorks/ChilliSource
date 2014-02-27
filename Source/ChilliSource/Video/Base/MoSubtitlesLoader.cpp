@@ -121,7 +121,7 @@ namespace ChilliSource
         {
             //read the JSON
             Json::Value root;
-            ChilliSource::Core::CUtils::ReadJson(ineStorageLocation, inFilePath, &root);
+            ChilliSource::Core::Utils::ReadJson(ineStorageLocation, inFilePath, &root);
             
             //get the version number
             u32 udwVersionNumber = root.get(kstrTagVersionNumber, 0).asUInt();

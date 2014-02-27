@@ -110,7 +110,7 @@ namespace ChilliSource
         void MoMetricsSystem::LoadPendingSessions()
         {
             Json::Value jSessions;
-            if(Core::CUtils::ReadJson(Core::StorageLocation::k_cache, "PendingSessions.mometrics", &jSessions))
+            if(Core::Utils::ReadJson(Core::StorageLocation::k_cache, "PendingSessions.mometrics", &jSessions))
             {
                 if(jSessions.isMember("Closed"))
                 {
@@ -193,7 +193,7 @@ namespace ChilliSource
             
             Destroy();
             
-            Core::CUtils::StringToFile(Core::StorageLocation::k_cache, "PendingSessions.mometrics", jSessions.toUnformattedString());
+            Core::Utils::StringToFile(Core::StorageLocation::k_cache, "PendingSessions.mometrics", jSessions.toUnformattedString());
             
             mbSessionsStarted = false;
 		}

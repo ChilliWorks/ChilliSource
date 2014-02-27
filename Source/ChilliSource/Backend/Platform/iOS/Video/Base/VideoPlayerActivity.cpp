@@ -109,7 +109,7 @@ namespace ChilliSource
             std::string strPath;
             static_cast<CFileSystem*>(Core::Application::GetFileSystemPtr())->GetBestPathToFile(ineLocation, instrFileName, strPath);
             
-            NSURL* pMovieURL = [NSURL fileURLWithPath:Core::CStringUtils::StringToNSString(strPath)];
+            NSURL* pMovieURL = [NSURL fileURLWithPath:Core::StringUtils::StringToNSString(strPath)];
             mpMoviePlayerController = [[MPMoviePlayerController alloc] initWithContentURL:pMovieURL];
             
             AudioSessionAddPropertyListener(kAudioSessionProperty_AudioRouteChange, AudioRouteCallback, mpMoviePlayerController);
@@ -301,8 +301,8 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void CVideoPlayerActivity::SetupMovieView()
         {
-            f32 fOrientedWidthDensityCorrected = Core::CScreen::GetOrientedWidth() * Core::CScreen::GetInverseDensity();
-            f32 fOrientedHeightDensityCorrected = Core::CScreen::GetOrientedHeight() * Core::CScreen::GetInverseDensity();
+            f32 fOrientedWidthDensityCorrected = Core::Screen::GetOrientedWidth() * Core::Screen::GetInverseDensity();
+            f32 fOrientedHeightDensityCorrected = Core::Screen::GetOrientedHeight() * Core::Screen::GetInverseDensity();
             
             mpMoviePlayerController.backgroundView.backgroundColor = [UIColor colorWithRed:mBackgroundColour.r green:mBackgroundColour.g blue:mBackgroundColour.b alpha:mBackgroundColour.a];
             [[mpMoviePlayerController view] setFrame:CGRectMake(0, 0, fOrientedWidthDensityCorrected, fOrientedHeightDensityCorrected)];
@@ -378,7 +378,7 @@ namespace ChilliSource
             if (mpVideoOverlayView == nil)
             {
                 //create the overlay
-                CGRect rect = CGRectMake(0, 0, Core::CScreen::GetOrientedWidth() * Core::CScreen::GetInverseDensity(), Core::CScreen::GetOrientedHeight() * Core::CScreen::GetInverseDensity());
+                CGRect rect = CGRectMake(0, 0, Core::Screen::GetOrientedWidth() * Core::Screen::GetInverseDensity(), Core::Screen::GetOrientedHeight() * Core::Screen::GetInverseDensity());
                 mpVideoOverlayView = [[UIView alloc] initWithFrame: rect];
                 UIView* rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
                 [rootView addSubview:mpVideoOverlayView];

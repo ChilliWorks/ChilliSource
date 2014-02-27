@@ -20,10 +20,8 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		class CIntersection
+		namespace ShapeIntersection
 		{
-		public:
-            
             enum class Result
             {
                 k_outside,
@@ -34,68 +32,59 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			/// AABB vs Ray
 			//----------------------------------------------------------------
-			static bool Intersects(const AABB& inAABB, const Ray& inRay, f32 &outfT1, f32 &outfT2);
+			bool Intersects(const AABB& inAABB, const Ray& inRay, f32 &outfT1, f32 &outfT2);
 			//----------------------------------------------------------------
 			/// AABB vs Point
 			//----------------------------------------------------------------
-			static bool Intersects(const AABB& inAABB, const Vector3& invPoint);
+			bool Intersects(const AABB& inAABB, const Vector3& invPoint);
 			//----------------------------------------------------------------
 			/// AABB vs AABB
 			//----------------------------------------------------------------
-			static bool Intersects(const AABB& inAABBLHS, const AABB& inAABBRHS);
-			
-			//----------------------------------------------------------------
-			/// OOBB vs Ray
-			//----------------------------------------------------------------
-			static bool Intersects(const OOBB& inOOBB, const Ray& inRay);
-			
+			bool Intersects(const AABB& inAABBLHS, const AABB& inAABBRHS);
 			//----------------------------------------------------------------
 			/// Sphere vs Ray
 			//----------------------------------------------------------------
-			static bool Intersects(const Sphere& inSphere, const Ray& inRay);
+			bool Intersects(const Sphere& inSphere, const Ray& inRay);
 			//----------------------------------------------------------------
 			/// Sphere vs Point
 			//----------------------------------------------------------------
-			static bool Intersects(const Sphere& inSphere, const Vector3& invPoint);
+			bool Intersects(const Sphere& inSphere, const Vector3& invPoint);
 			//----------------------------------------------------------------
 			/// Sphere vs Sphere
 			//----------------------------------------------------------------
-			static bool Intersects(const Sphere& inSphereLHS, const Sphere& inSphereRHS);
+			bool Intersects(const Sphere& inSphereLHS, const Sphere& inSphereRHS);
             //----------------------------------------------------------------
             /// Sphere vs Plane
             //----------------------------------------------------------------
-            static CIntersection::Result Intersects(const Sphere& inSphere, const Plane& inPlane);
+            Result Intersects(const Sphere& inSphere, const Plane& inPlane);
             //----------------------------------------------------------------
             /// Plane vs Plane
             //----------------------------------------------------------------
-            static bool Intersects(const Plane& inPlaneLHS, const Plane& inPlaneRHS, Ray& outIntersection);
+            bool Intersects(const Plane& inPlaneLHS, const Plane& inPlaneRHS, Ray& outIntersection);
 			//----------------------------------------------------------------
 			/// Circle vs Circle
 			//----------------------------------------------------------------
-			static bool Intersects(const Circle& inCircleLHS, const Circle& inCircleRHS);
+			bool Intersects(const Circle& inCircleLHS, const Circle& inCircleRHS);
 			//----------------------------------------------------------------
 			/// Circle vs Point
 			//----------------------------------------------------------------
-			static bool Intersects(const Circle& inCircle, const Vector3& invPoint);
+			bool Intersects(const Circle& inCircle, const Vector3& invPoint);
             //----------------------------------------------------------------
             /// Line vs Line
             //----------------------------------------------------------------
-			static bool Intersects(const Line& inLineLHS, const Line& inLineRHS, Vector3& outvIntersection);
+			bool Intersects(const Line& inLineLHS, const Line& inLineRHS, Vector3& outvIntersection);
 			//----------------------------------------------------------------
 			/// Rect vs Rect
 			//----------------------------------------------------------------
-			static bool Intersects(const CRect& inRectLHS, const CRect& inRectRHS);
+			bool Intersects(const CRect& inRectLHS, const CRect& inRectRHS);
 			//----------------------------------------------------------------
 			/// Rect vs Point
 			//----------------------------------------------------------------
-			static bool Intersects(const CRect& inRect, const Vector3& invPoint);
-			
-		private:
-			
+			bool Intersects(const CRect& inRect, const Vector3& invPoint);
 			//----------------------------------------------------------------
 			/// Ray vs Slab
 			//----------------------------------------------------------------
-			static bool RaySlabIntersect(f32 infStart, f32 infDir, f32 infMin, f32 infMax, f32& outfFirstT, f32& outfLastT);
+			bool RaySlabIntersect(f32 infStart, f32 infDir, f32 infMin, f32 infMax, f32& outfFirstT, f32& outfLastT);
 		};
 	}
 }

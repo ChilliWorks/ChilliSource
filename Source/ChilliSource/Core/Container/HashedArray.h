@@ -389,7 +389,7 @@ namespace ChilliSource
                     return false;
                 }
                 
-                u32 udwHash = CHashCRC32::GenerateHashCode(inKey);
+                u32 udwHash = HashCRC32::GenerateHashCode(inKey);
                 mpaStorage[mudwSize].first = udwHash;
                 mpaStorage[mudwSize].second = inValue;
                 mbSortCacheValid = false;
@@ -412,7 +412,7 @@ namespace ChilliSource
                     mbSortCacheValid = true;
                 }
                 
-                u32 udwHash = CHashCRC32::GenerateHashCode(inKey);
+                u32 udwHash = HashCRC32::GenerateHashCode(inKey);
                 s32 dwIndex = FindIndex(udwHash);
                 
                 if(dwIndex >= 0)
@@ -455,7 +455,7 @@ namespace ChilliSource
                     mbSortCacheValid = true;
                 }
                 
-                u32 udwHash = CHashCRC32::GenerateHashCode(inKey);
+                u32 udwHash = HashCRC32::GenerateHashCode(inKey);
                 s32 dwIndex = FindIndex(udwHash);
                 
                 if(dwIndex >= 0)
@@ -479,7 +479,7 @@ namespace ChilliSource
                     mbSortCacheValid = true;
                 }
                 
-                u32 udwHash = CHashCRC32::GenerateHashCode(inKey);
+                u32 udwHash = HashCRC32::GenerateHashCode(inKey);
                 s32 dwIndex = FindIndex(udwHash);
                 
                 if(dwIndex >= 0)

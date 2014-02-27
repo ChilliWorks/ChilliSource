@@ -1,17 +1,13 @@
-/*
- * File: Utilities.h
- * Date: 25/10/2010 2010 
- * Description: 
- */
+//
+//  Utils.h
+//  Chilli Source
+//
+//  Created by Scott Downie on 25/10/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
-/*
- * Author: Scott Downie
- * Version: v 1.0
- * Copyright ©2010 Tag Games Limited - All rights reserved 
- */
-
-#ifndef _MO_FLO_CORE_UTILS_H_
-#define _MO_FLO_CORE_UTILS_H_
+#ifndef _CHILLISOURCE_CORE_BASE_UTILS_H_
+#define _CHILLISOURCE_CORE_BASE_UTILS_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/File/FileStream.h>
@@ -19,29 +15,28 @@
 
 #include <vector>
 
-#define BYTE_SWAP_2(src) ChilliSource::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(src))
-#define BYTE_SWAP_4(src) ChilliSource::Core::CUtils::Endian4ByteSwap(reinterpret_cast<u32*>(src))
+#define BYTE_SWAP_2(src) ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(src))
+#define BYTE_SWAP_4(src) ChilliSource::Core::Utils::Endian4ByteSwap(reinterpret_cast<u32*>(src))
 
 namespace ChilliSource
 {
 	namespace Core
 	{
-		class CUtils
+		namespace Utils
 		{
-		public:
 			//------------------------------------------------------
 			/// Endian Byte Swap
 			///
 			/// Converts the endianness of the given bytes
 			//------------------------------------------------------
-			static inline s16 Endian2ByteSwap(const u16* pSrc)
+			inline s16 Endian2ByteSwap(const u16* pSrc)
 			{
 				u16 Result = *pSrc;
 				// Use bit manipulations instead of accessing individual bytes from memory, much faster.
 				return (Result >> 8) | (Result << 8);
 			}
 			
-            static inline s16 Endian2ByteSwap(const s16* pSrc)
+            inline s16 Endian2ByteSwap(const s16* pSrc)
 			{
 				u16 Result = *pSrc;
 				// Use bit manipulations instead of accessing individual bytes from memory, much faster.
@@ -49,14 +44,14 @@ namespace ChilliSource
 			}
             
 			// Specialization for 4-byte types.
-			static inline s32 Endian4ByteSwap(const u32* pSrc)
+			inline s32 Endian4ByteSwap(const u32* pSrc)
 			{
 				u32 Result = *pSrc;
 				// Use bit manipulations instead of accessing individual bytes from memory, much faster.
 				return (Result >> 24) | ((Result & 0x00ff0000) >> 8) | ((Result & 0x0000ff00) << 8) | (Result << 24);
 			}
             
-            static inline s32 Endian4ByteSwap(const s32* pSrc)
+            inline s32 Endian4ByteSwap(const s32* pSrc)
 			{
 				u32 Result = *pSrc;
 				// Use bit manipulations instead of accessing individual bytes from memory, much faster.
@@ -64,29 +59,29 @@ namespace ChilliSource
 			}
             
             template<typename T>
-            static inline T BitwiseRotateRight(T inValue)
+            inline T BitwiseRotateRight(T inValue)
             {
                 return (inValue >> 1) | (inValue << (sizeof(T)*8 -1));
             }
             
             template<typename T>
-            static inline T BitwiseRotateLeft(T inValue)
+            inline T BitwiseRotateLeft(T inValue)
             {
                 return (inValue << 1) | (inValue >> (sizeof(T)*8 -1));
             }
             
-            static bool ReadJson(StorageLocation ineStorageLocation, const std::string & instrPath, Json::Value * outpJson);
+            bool ReadJson(StorageLocation ineStorageLocation, const std::string & instrPath, Json::Value * outpJson);
             
-            static bool          FileToString(StorageLocation ineStorageLocation, const std::string & instrPath, std::string & outstrFileContent);
-            static FileStreamSPtr StringToFile(StorageLocation ineStorageLocation, const std::string & instrPath, const std::string& instrFileOut);
+            bool          FileToString(StorageLocation ineStorageLocation, const std::string & instrPath, std::string & outstrFileContent);
+            FileStreamSPtr StringToFile(StorageLocation ineStorageLocation, const std::string & instrPath, const std::string& instrFileOut);
             
-            static bool ZlibCompressString(const std::string &instrUncompressed, std::string& outstrCompressed);
+            bool ZlibCompressString(const std::string &instrUncompressed, std::string& outstrCompressed);
 
-            static bool ZlibDecompressString(const std::string &instrCompressed, std::string& outstrUncompress, u32 inOutputSizeGuess);
+            bool ZlibDecompressString(const std::string &instrCompressed, std::string& outstrUncompress, u32 inOutputSizeGuess);
             
             // Optimised removal of many elements from a vector while preserving the order of the vector
             template<typename ELEMENT>
-            static u32 VectorRemoveMany(std::vector<ELEMENT> & inaElements, std::vector<ELEMENT>& inaRemovables)
+            u32 VectorRemoveMany(std::vector<ELEMENT> & inaElements, std::vector<ELEMENT>& inaRemovables)
             {
                 if(inaRemovables.empty())
                     return 0;
@@ -126,7 +121,7 @@ namespace ChilliSource
                 return uRemoved;
             }
             
-            static Vector2 ScaleMaintainingAspectRatio(const Vector2& invCurrentSize, const Vector2& invTargetSize, bool inbFitInside = false);
+            Vector2 ScaleMaintainingAspectRatio(const Vector2& invCurrentSize, const Vector2& invTargetSize, bool inbFitInside = false);
 		};
 	}
 }

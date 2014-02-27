@@ -389,8 +389,8 @@ namespace ChilliSource
             u32 udwNumCols = 0;
             u32 udwNumRows = 0;
             
-            MaxNumRows ? udwNumRows = Core::CMathUtils::Min(MaxNumRows, udwNumContentToDraw) : udwNumRows = (u32)std::ceil((f32)udwNumContentToDraw/(f32)MaxNumColumns);
-            MaxNumColumns ? udwNumCols = Core::CMathUtils::Min(MaxNumColumns, udwNumContentToDraw) : udwNumCols = (u32)std::ceil((f32)udwNumContentToDraw/(f32)MaxNumRows);
+            MaxNumRows ? udwNumRows = Core::MathUtils::Min(MaxNumRows, udwNumContentToDraw) : udwNumRows = (u32)std::ceil((f32)udwNumContentToDraw/(f32)MaxNumColumns);
+            MaxNumColumns ? udwNumCols = Core::MathUtils::Min(MaxNumColumns, udwNumContentToDraw) : udwNumCols = (u32)std::ceil((f32)udwNumContentToDraw/(f32)MaxNumRows);
             
             if(!RowFill)
             {
@@ -473,7 +473,7 @@ namespace ChilliSource
 				Core::Vector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
 				Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
 				
-				if(vTopRight.y < 0 || vBottomLeft.y > Core::CScreen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::CScreen::GetOrientedWidth())
+				if(vTopRight.y < 0 || vBottomLeft.y > Core::Screen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::Screen::GetOrientedWidth())
 				{
 					//Offscreen
 					return;

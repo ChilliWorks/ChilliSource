@@ -17,15 +17,15 @@
 //------------------------------------------------------------
 /// Logging macros
 //------------------------------------------------------------
-#define CS_DEBUG_LOG(in_object)						(ChilliSource::Core::CLogging::LogVerbose(in_object))
-#define CS_WARNING_LOG(in_object)                   (ChilliSource::Core::CLogging::LogWarning(in_object))
-#define CS_ERROR_LOG(in_object)						(ChilliSource::Core::CLogging::LogError(in_object))
-#define CS_FATAL_LOG(in_object)						(ChilliSource::Core::CLogging::LogFatal(in_object))
+#define CS_DEBUG_LOG(in_object)						(ChilliSource::Core::Logging::LogVerbose(in_object))
+#define CS_WARNING_LOG(in_object)                   (ChilliSource::Core::Logging::LogWarning(in_object))
+#define CS_ERROR_LOG(in_object)						(ChilliSource::Core::Logging::LogError(in_object))
+#define CS_FATAL_LOG(in_object)						(ChilliSource::Core::Logging::LogFatal(in_object))
 //------------------------------------------------------------
 /// Assertion macros
 //------------------------------------------------------------
 #ifdef DEBUG
-#define CS_ASSERT(in_query, in_message) if((in_query) == 0){ChilliSource::Core::CLogging::LogFatal(in_message);}
+#define CS_ASSERT(in_query, in_message) if((in_query) == 0){ChilliSource::Core::Logging::LogFatal(in_message);}
 #else
 #define CS_ASSERT(in_query, in_message)
 #endif

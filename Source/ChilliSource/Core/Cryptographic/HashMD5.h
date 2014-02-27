@@ -39,23 +39,22 @@ namespace ChilliSource
 {
     namespace Core
     {
-        class CHashMD5
+        namespace HashMD5
         {
-        public:
             //-------------------------------------------------------------
             /// Generate Hash Code
             ///
             /// @param String to hash
             /// @return MD5 hex hash code
             //-------------------------------------------------------------
-            static std::string GenerateHexHashCode(const std::string &instrVal);
+            std::string GenerateHexHashCode(const std::string &instrVal);
             //-------------------------------------------------------------
             /// Generate Hash Code
             ///
             /// @param Null terminated string to hash
             /// @return MD5 hex hash code
             //-------------------------------------------------------------
-            static std::string GenerateHexHashCode(const s8* instrVal);
+            std::string GenerateHexHashCode(const s8* instrVal);
             //-------------------------------------------------------------
             /// Generate Hash Code
             ///
@@ -63,21 +62,21 @@ namespace ChilliSource
             /// @param Size of data
             /// @return MD5 hex hash code
             //-------------------------------------------------------------
-            static std::string GenerateHexHashCode(const s8* instrVal, u32 inudwSize);
+            std::string GenerateHexHashCode(const s8* instrVal, u32 inudwSize);
             //-------------------------------------------------------------
             /// Generate Hash Code
             ///
             /// @param String to hash
             /// @return MD5 binary hash code
             //-------------------------------------------------------------
-            static std::string GenerateBinaryHashCode(const std::string &instrVal);
+            std::string GenerateBinaryHashCode(const std::string &instrVal);
             //-------------------------------------------------------------
             /// Generate Hash Code
             ///
             /// @param Null terminated string to hash
             /// @return MD5 binary hash code
             //-------------------------------------------------------------
-            static std::string GenerateBinaryHashCode(const s8* instrVal);
+            std::string GenerateBinaryHashCode(const s8* instrVal);
             //-------------------------------------------------------------
             /// Generate Hash Code
             ///
@@ -85,10 +84,10 @@ namespace ChilliSource
             /// @param Size of data
             /// @return MD5 binary hash code
             //-------------------------------------------------------------
-            static std::string GenerateBinaryHashCode(const s8* instrVal, u32 inudwSize);
-            
-        public:
-            
+            std::string GenerateBinaryHashCode(const s8* instrVal, u32 inudwSize);
+            //-------------------------------------------------------------
+            /// MD5 Generation class.
+            //-------------------------------------------------------------
             class MD5
             {
             public:
@@ -130,7 +129,7 @@ namespace ChilliSource
                 static inline void HH(uint4 &a, uint4 b, uint4 c, uint4 d, uint4 x, uint4 s, uint4 ac);
                 static inline void II(uint4 &a, uint4 b, uint4 c, uint4 d, uint4 x, uint4 s, uint4 ac);
             };
-        };
+        }
     }
 }
 

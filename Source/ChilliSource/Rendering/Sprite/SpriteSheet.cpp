@@ -67,7 +67,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------
         u32 SpriteSheet::GetFrameIndexByID(const std::string& inID) const
         {
-            u32 udwHashedString = Core::CHashCRC32::GenerateHashCode(inID);
+            u32 udwHashedString = Core::HashCRC32::GenerateHashCode(inID);
             for(u32 i=0; i<mIDLookups.size(); ++i)
             {
                 if(mIDLookups[i] == udwHashedString)
@@ -88,7 +88,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------
         bool SpriteSheet::HasFrameWithID(const std::string& inID) const
         {
-            u32 udwHashedString = Core::CHashCRC32::GenerateHashCode(inID);
+            u32 udwHashedString = Core::HashCRC32::GenerateHashCode(inID);
             for(u32 i=0; i<mIDLookups.size(); ++i)
             {
                 if(mIDLookups[i] == udwHashedString)
@@ -114,7 +114,7 @@ namespace ChilliSource
             }
             
             CS_WARNING_LOG("Sprite not found for Frame Index: " + Core::ToString(inudwFrameIndex));
-            return Core::CStringUtils::BLANK;
+            return Core::StringUtils::BLANK;
         }		
 		//---------------------------------------------------------------------
 		/// Get Num Sprite Frames
@@ -230,8 +230,8 @@ namespace ChilliSource
         //---------------------------------------------------------------------
         void SpriteSheet::GetDPISizeForFrame(u32 inudwFrameID, Core::Vector2 & outvSize) const
         {
-            outvSize.x = mFrames[inudwFrameID].Width * (1.0f/Core::CScreen::GetDensity());
-			outvSize.y = mFrames[inudwFrameID].Height * (1.0f/Core::CScreen::GetDensity());
+            outvSize.x = mFrames[inudwFrameID].Width * (1.0f/Core::Screen::GetDensity());
+			outvSize.y = mFrames[inudwFrameID].Height * (1.0f/Core::Screen::GetDensity());
         }
         //---------------------------------------------------------------------
         /// Get DPI Offset For Frame
@@ -253,8 +253,8 @@ namespace ChilliSource
         //---------------------------------------------------------------------
         void SpriteSheet::GetDPIOffsetForFrame(u32 inudwFrameID, Core::Vector2 & outvOffset) const
         {
-            outvOffset.x = mFrames[inudwFrameID].OffsetX * (1.0f/Core::CScreen::GetDensity());
-			outvOffset.y = mFrames[inudwFrameID].OffsetY * (1.0f/Core::CScreen::GetDensity());
+            outvOffset.x = mFrames[inudwFrameID].OffsetX * (1.0f/Core::Screen::GetDensity());
+			outvOffset.y = mFrames[inudwFrameID].OffsetY * (1.0f/Core::Screen::GetDensity());
         }
 		//---------------------------------------------------------------------
 		/// Set Texture
@@ -298,7 +298,7 @@ namespace ChilliSource
 			if (inudwIndex < mAnimationNames.size())
 				return mAnimationNames[inudwIndex];
 			
-			return Core::CStringUtils::BLANK;
+			return Core::StringUtils::BLANK;
 		}
 		const std::vector<u32> * SpriteSheet::GetFramesForAnimation(u32 inudwAnimIndex) const
 		{

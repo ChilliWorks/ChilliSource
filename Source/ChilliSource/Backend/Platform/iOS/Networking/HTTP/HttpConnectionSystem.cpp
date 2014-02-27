@@ -108,8 +108,8 @@ namespace ChilliSource
             s32 dwPortNum = CFURLGetPortNumber(pURL);
             CFStringRef pstrHostName = CFURLCopyHostName(pURL);
             CFStringRef pstrScheme = CFURLCopyScheme(pURL);
-            std::string strHostName = Core::CStringUtils::NSStringToString((NSString*)pstrHostName);
-            std::string strScheme = Core::CStringUtils::NSStringToString((NSString*)pstrScheme);
+            std::string strHostName = Core::StringUtils::NSStringToString((NSString*)pstrHostName);
+            std::string strScheme = Core::StringUtils::NSStringToString((NSString*)pstrScheme);
             CFRelease(pstrHostName);
             CFRelease(pstrScheme);
             
@@ -131,7 +131,7 @@ namespace ChilliSource
             //We use the scheme, host and port to identify connections by generating a hash that uniquely identifes
             //a connection. Then because CFNumber does not allow unsigned ints we must create an incremental counter
             //to act as a UDID!
-            ConnectionID PropID = Core::CHashCRC32::GenerateHashCode(strScheme + strHostName + Core::ToString(dwPortNum));
+            ConnectionID PropID = Core::HashCRC32::GenerateHashCode(strScheme + strHostName + Core::ToString(dwPortNum));
             ConnectionID StreamID = 0;
             bool bConnectionAlreadyExists = false;
             
@@ -418,7 +418,7 @@ namespace ChilliSource
                 }
 			}
             //Track the time the request has been active so we can manually timeout
-            else if(!mbCompleted && !mbReceivedResponse && ((mfActiveTime += (Core::CMathUtils::Min(infDT, 0.5f))) > kfDefaultHTTPTimeout))
+            else if(!mbCompleted && !mbReceivedResponse && ((mfActiveTime += (Core::MathUtils::Min(infDT, 0.5f))) > kfDefaultHTTPTimeout))
             {
                 CS_DEBUG_LOG("HTTP Connection timed out on request: " + msDetails.strURL);
 				//Flag to stop the polling thread which should
@@ -473,7 +473,7 @@ namespace ChilliSource
                                 {
                                     CFStringRef CFUrl = CFHTTPMessageCopyHeaderFieldValue(CFResponse, CFSTR("Location"));
                                     
-                                    std::string strCFUrl = Core::CStringUtils::NSStringToString((NSString*)CFUrl);
+                                    std::string strCFUrl = Core::StringUtils::NSStringToString((NSString*)CFUrl);
                                     
                                     msDetails.strRedirectionURL = strCFUrl;
                                     

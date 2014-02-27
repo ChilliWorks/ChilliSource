@@ -22,7 +22,7 @@ namespace ChilliSource
 {
 	namespace Core
     {
-		class CLocalDataStore
+		class LocalDataStore
         {
             // Application is a friend as it is the only place
             // our data store is created and subscribes to the
@@ -37,7 +37,7 @@ namespace ChilliSource
             ///
             /// @return Reference to singleton
             //----------------------------------------------------------------
-			static CLocalDataStore& GetSingleton();
+			static LocalDataStore& GetSingleton();
             //----------------------------------------------------------------
             /// Get Singleton Pointer
             ///
@@ -45,7 +45,7 @@ namespace ChilliSource
             ///
             /// @return Pointer to singleton
             //----------------------------------------------------------------
-			static CLocalDataStore* GetSingletonPtr();
+			static LocalDataStore* GetSingletonPtr();
 			//----------------------------------------------------------------
             /// Has Value For Key
             ///
@@ -262,7 +262,7 @@ namespace ChilliSource
             //----------------------------------------------------------------
             /// Constructor
             //----------------------------------------------------------------
-			CLocalDataStore();
+			LocalDataStore();
             //----------------------------------------------------------------
             /// Refresh From File
             ///
@@ -285,7 +285,7 @@ namespace ChilliSource
             // Member vars
 			bool                        mbBackingValid;
 			ParamDictionary             mBackingDictionary;
-			static CLocalDataStore*     mpSingletonInstance;
+			static LocalDataStore*     mpSingletonInstance;
             
             ConnectionUPtr m_appSuspendedConnection;
 		};

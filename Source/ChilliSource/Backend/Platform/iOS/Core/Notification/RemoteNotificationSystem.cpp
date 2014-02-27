@@ -51,7 +51,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------------
         void CRemoteNotificationSystem::OnRemoteTokenReceived(NSData* inpToken)
         {
-            mstrToken = Core::CBaseEncoding::Base64Encode((const s8*)[inpToken bytes], inpToken.length);
+            mstrToken = Core::BaseEncoding::Base64Encode((const s8*)[inpToken bytes], inpToken.length);
             
             if(mDelegate != nullptr)
             {
@@ -88,7 +88,7 @@ namespace ChilliSource
                     if(pBodyObject != nil && [pBodyObject isKindOfClass:[NSString class]])
                     {
                         NSString* pstrBody = (NSString*) pBodyObject;
-                        sNotification.sParams.SetValueForKey("message", Core::CStringUtils::NSStringToString(pstrBody));
+                        sNotification.sParams.SetValueForKey("message", Core::StringUtils::NSStringToString(pstrBody));
                     }
                 }
             }
@@ -102,8 +102,8 @@ namespace ChilliSource
                     if([pPayloadObject isKindOfClass:[NSString class]])
                     {
                         NSString* pstrPayloadString = (NSString*)pPayloadObject;
-                        sNotification.sParams.SetValueForKey(Core::CStringUtils::NSStringToString(key),
-                                                             Core::CStringUtils::NSStringToString(pstrPayloadString));
+                        sNotification.sParams.SetValueForKey(Core::StringUtils::NSStringToString(key),
+                                                             Core::StringUtils::NSStringToString(pstrPayloadString));
                     }
                 }
             }

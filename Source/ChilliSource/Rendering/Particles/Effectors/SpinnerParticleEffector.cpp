@@ -24,14 +24,14 @@ namespace ChilliSource
         {
             mfActiveEnergyLevel = 0.0f;
             
-            mfRandomOffset = Core::CMathUtils::RandomInRange(0.0f, 1.0f);
+            mfRandomOffset = Core::MathUtils::RandomInRange(0.0f, 1.0f);
             
             std::string strTemp;
 
             //Linear force
             if(insParams.TryGetValue("AngVelocity", strTemp))
             {
-                mfAngVelocity = Core::CMathUtils::DegToRad( Core::ParseF32(strTemp) );
+                mfAngVelocity = Core::MathUtils::DegToRad( Core::ParseF32(strTemp) );
             }
             //Energy level
             if(insParams.TryGetValue("AtEnergyLevel", strTemp))
@@ -74,7 +74,7 @@ namespace ChilliSource
         //-----------------------------------------------------
         void SpinnerParticleEffector::Apply(Particle* inpParticle, u32 inudwIndex, f32 infDt)
         {
-            f32 fRand = Core::CMathUtils::GetPseudoRandom(inudwIndex + 1) + mfRandomOffset - 1.0f;
+            f32 fRand = Core::MathUtils::GetPseudoRandom(inudwIndex + 1) + mfRandomOffset - 1.0f;
             f32 fAngVelocity = mfAngVelocity * fRand;
             
             inpParticle->fAngularRotation[inudwIndex] +=  fAngVelocity * infDt;

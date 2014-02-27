@@ -33,7 +33,7 @@ namespace ChilliSource
 			//Each hierarchy can only have on window
 			mpRootWindow = this;
             
-			Core::Vector2 vAbsSize = Core::CScreen::GetOrientedDimensions();
+			Core::Vector2 vAbsSize = Core::Screen::GetOrientedDimensions();
             
 			//The window is fullscreen and centred
 			SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), vAbsSize));
@@ -91,7 +91,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void Window::OnScreenOrientationChanged(Core::ScreenOrientation ineOrientation)
 		{
-			Core::Vector2 vAbsSize = Core::CScreen::GetOrientedDimensions();
+			Core::Vector2 vAbsSize = Core::Screen::GetOrientedDimensions();
             
 			//The window is fullscreen and centred
 			SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), vAbsSize));

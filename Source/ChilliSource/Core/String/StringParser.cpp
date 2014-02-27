@@ -89,7 +89,7 @@ namespace ChilliSource
         //------------------------------------------------------------
         bool ParseBool(const std::string& in_string)
         {
-            return (CStringUtils::StartsWith(in_string, "true") || CStringUtils::StartsWith(in_string, "yes") || CStringUtils::StartsWith(in_string, "1"));
+            return (StringUtils::StartsWith(in_string, "true") || StringUtils::StartsWith(in_string, "yes") || StringUtils::StartsWith(in_string, "1"));
         }
         //------------------------------------------------------------
         //------------------------------------------------------------

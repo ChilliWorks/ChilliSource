@@ -97,7 +97,7 @@ namespace ChilliSource
             //It's the texture that is passed in so we need to load the binary file
             std::string strSpriteSheetFile;
             std::string strExt;
-            Core::CStringUtils::SplitBaseFilename(inFilePath, strSpriteSheetFile, strExt);
+            Core::StringUtils::SplitBaseFilename(inFilePath, strSpriteSheetFile, strExt);
             strSpriteSheetFile += ".bin";
             
 			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(strSpriteSheetFile);

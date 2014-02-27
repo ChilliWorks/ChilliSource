@@ -13,68 +13,73 @@ namespace ChilliSource
 {
     namespace Core
     {
-        const u32 kudwAESBlockSize = 16;
-        
-        u32 CAESEncrypt::CalculateAlignedSize(u32 inudwDataSize)
+        namespace AESEncrypt
         {
-            u32 udwMod (inudwDataSize % kudwAESBlockSize);
-            
-            if(udwMod == 0)
+            namespace
             {
-                //already aligned, no need to add
-                return inudwDataSize;
+                const u32 kudwAESBlockSize = 16;
             }
-            
-            u32 udwEncryptedSize = inudwDataSize + (kudwAESBlockSize - udwMod); // otherwise add the difference to the next boundary
-            return udwEncryptedSize;
-        }
-
-        void CAESEncrypt::Encrypt(const u8* inpData, u32 inudwDataLength, const std::string& instrPrivateKey, u8* outpData)
-        {
-            CS_ASSERT(instrPrivateKey.size() == 16, "AES Encryption keys must be 16 bytes");
-            
-            AES_KEY sKey;
-            if(!AES_set_encrypt_key((const u8*)instrPrivateKey.data(), 128, &sKey) == 0)
+            u32 CalculateAlignedSize(u32 inudwDataSize)
             {
-                CS_FATAL_LOG("AES: Cannot set decryption key");
-            }
-            
-            s32 dwBytesRemaining = (s32)inudwDataLength;
-            
-            const u8* pReadData = inpData;
-            u8* pWriteData = outpData;
-            
-            while(dwBytesRemaining > 0)
-            {
-                AES_encrypt(pReadData, pWriteData, &sKey);
+                u32 udwMod (inudwDataSize % kudwAESBlockSize);
                 
-                pReadData += kudwAESBlockSize;
-                pWriteData += kudwAESBlockSize;
-                dwBytesRemaining -= kudwAESBlockSize;
-            }
-        }
-        
-        void CAESEncrypt::Decrypt(const u8* inpData, u32 inudwDataLength, const std::string& instrPrivateKey, u8* outpData)
-        {
-            CS_ASSERT(instrPrivateKey.size() == 16, "AES Encryption keys must be 16 bytes");
-            
-            AES_KEY sKey;
-            if(!AES_set_decrypt_key((const u8*)instrPrivateKey.data(), 128, &sKey) == 0)
-            {
-                CS_FATAL_LOG("AES: Cannot set decryption key");
+                if(udwMod == 0)
+                {
+                    //already aligned, no need to add
+                    return inudwDataSize;
+                }
+                
+                u32 udwEncryptedSize = inudwDataSize + (kudwAESBlockSize - udwMod); // otherwise add the difference to the next boundary
+                return udwEncryptedSize;
             }
 
-            s32 dwBytesRemaining = (s32)inudwDataLength;
-            
-            const u8* pReadData = inpData;
-            u8* pWriteData = outpData;
-            
-            while(dwBytesRemaining > 0)
+            void Encrypt(const u8* inpData, u32 inudwDataLength, const std::string& instrPrivateKey, u8* outpData)
             {
-                AES_decrypt(pReadData, pWriteData, &sKey);
-                pReadData += kudwAESBlockSize;
-                pWriteData += kudwAESBlockSize;
-                dwBytesRemaining -= kudwAESBlockSize;
+                CS_ASSERT(instrPrivateKey.size() == 16, "AES Encryption keys must be 16 bytes");
+                
+                AES_KEY sKey;
+                if(!AES_set_encrypt_key((const u8*)instrPrivateKey.data(), 128, &sKey) == 0)
+                {
+                    CS_FATAL_LOG("AES: Cannot set decryption key");
+                }
+                
+                s32 dwBytesRemaining = (s32)inudwDataLength;
+                
+                const u8* pReadData = inpData;
+                u8* pWriteData = outpData;
+                
+                while(dwBytesRemaining > 0)
+                {
+                    AES_encrypt(pReadData, pWriteData, &sKey);
+                    
+                    pReadData += kudwAESBlockSize;
+                    pWriteData += kudwAESBlockSize;
+                    dwBytesRemaining -= kudwAESBlockSize;
+                }
+            }
+            
+            void Decrypt(const u8* inpData, u32 inudwDataLength, const std::string& instrPrivateKey, u8* outpData)
+            {
+                CS_ASSERT(instrPrivateKey.size() == 16, "AES Encryption keys must be 16 bytes");
+                
+                AES_KEY sKey;
+                if(!AES_set_decrypt_key((const u8*)instrPrivateKey.data(), 128, &sKey) == 0)
+                {
+                    CS_FATAL_LOG("AES: Cannot set decryption key");
+                }
+
+                s32 dwBytesRemaining = (s32)inudwDataLength;
+                
+                const u8* pReadData = inpData;
+                u8* pWriteData = outpData;
+                
+                while(dwBytesRemaining > 0)
+                {
+                    AES_decrypt(pReadData, pWriteData, &sKey);
+                    pReadData += kudwAESBlockSize;
+                    pWriteData += kudwAESBlockSize;
+                    dwBytesRemaining -= kudwAESBlockSize;
+                }
             }
         }
     }

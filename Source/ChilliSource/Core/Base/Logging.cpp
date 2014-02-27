@@ -48,7 +48,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        bool CLogging::mbInitialised = false;
+        bool Logging::mbInitialised = false;
 
 #ifdef MOFLOW_LOG_TO_FILE
         const u32 kudwMaxLogBufferSize = 2048;
@@ -76,7 +76,7 @@ namespace ChilliSource
         ///
         /// Initialise the logging system
         //----------------------------------------------
-        void CLogging::Init()
+        void Logging::Init()
         {
 #ifdef MOFLOW_LOG_TO_FILE
             //Clear the old file
@@ -94,7 +94,7 @@ namespace ChilliSource
         /// @param Message
         /// Logging Level: VERBOSE
         //----------------------------------------------
-        void CLogging::LogVerbose(const std::string &instrMessage)
+        void Logging::LogVerbose(const std::string &instrMessage)
         {
 #if LOG_LEVEL == LOG_VERBOSE
 #ifdef TARGET_ANDROID
@@ -128,7 +128,7 @@ namespace ChilliSource
         /// @param Message
         /// Logging Level: WARNING
         //----------------------------------------------
-        void CLogging::LogWarning(const std::string &instrMessage)
+        void Logging::LogWarning(const std::string &instrMessage)
         {
 #if LOG_LEVEL <= LOG_WARNING
 #ifdef TARGET_ANDROID
@@ -162,7 +162,7 @@ namespace ChilliSource
         /// @param Message
         /// Logging Level: ERROR
         //----------------------------------------------
-        void CLogging::LogError(const std::string &instrMessage)
+        void Logging::LogError(const std::string &instrMessage)
         {
 #if LOG_LEVEL <= LOG_ERROR
 #ifdef TARGET_ANDROID
@@ -193,7 +193,7 @@ namespace ChilliSource
         /// @param Message
         /// Logging Level: FATAL
         //----------------------------------------------
-        void CLogging::LogFatal(const std::string &instrMessage)
+        void Logging::LogFatal(const std::string &instrMessage)
         {
 #ifdef TARGET_ANDROID
             LOGE(("FATAL: " + instrMessage).c_str());
@@ -238,7 +238,7 @@ namespace ChilliSource
         ///
         /// @param Out: Populated string stream
         //----------------------------------------------
-        void CLogging::GetLogData(std::stringstream& outStream)
+        void Logging::GetLogData(std::stringstream& outStream)
         {
             //Clear the old file
             Core::FileStreamSPtr pLogFile = Core::Application::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FM_READ);

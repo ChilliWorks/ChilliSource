@@ -408,7 +408,7 @@ namespace ChilliSource
             
             for(std::vector<RenderComponent*>::const_iterator it = inaRenderCache.begin(); it != inaRenderCache.end(); ++it)
             {
-                if(Core::CIntersection::Intersects(aLightSphere, (*it)->GetBoundingSphere()) == true)
+                if(Core::ShapeIntersection::Intersects(aLightSphere, (*it)->GetBoundingSphere()) == true)
                 {
                     outaRenderCache.push_back(*it);
                 }

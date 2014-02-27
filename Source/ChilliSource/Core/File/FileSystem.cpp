@@ -70,7 +70,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         void FileSystem::SetPackageDLCDirectory(const std::string& instrDirectory)
         {
-            mstrPackageDLCPath = CStringUtils::StandardisePath(instrDirectory);
+            mstrPackageDLCPath = StringUtils::StandardisePath(instrDirectory);
         }
         //--------------------------------------------
         /// Get Device Resource Directory
@@ -146,7 +146,7 @@ namespace ChilliSource
             const u32 kudwChunkSize = 256;
             s8 byData[kudwChunkSize];
             
-            CHashMD5::MD5 Hash;
+            HashMD5::MD5 Hash;
             s32 dwSize = kudwChunkSize;
             
             FileStreamSPtr pFile = CreateFileStream(ineLocation, instrFilePath, FileMode::k_readBinary);
@@ -184,7 +184,7 @@ namespace ChilliSource
 			for (std::vector<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
 			{
                 std::string strFileHash = GetFileMD5Checksum(ineStorageLocation, instrDirectory + *it);
-                std::string strPathHash = CHashMD5::GenerateBinaryHashCode(it->c_str(), it->length());
+                std::string strPathHash = HashMD5::GenerateBinaryHashCode(it->c_str(), it->length());
                 astrHashes.push_back(strFileHash);
                 astrHashes.push_back(strPathHash);
 			}
@@ -203,7 +203,7 @@ namespace ChilliSource
             std::string strOutput = 0;
 			if (strHashableDirectoryContents.length() > 0)
             {
-				strOutput = CHashMD5::GenerateBinaryHashCode(strHashableDirectoryContents.c_str(), strHashableDirectoryContents.length());
+				strOutput = HashMD5::GenerateBinaryHashCode(strHashableDirectoryContents.c_str(), strHashableDirectoryContents.length());
             }
 			return strOutput;
 		}
@@ -235,7 +235,7 @@ namespace ChilliSource
 				pFile->Read(abyContents, dwLength);
 
 				//get the hash
-				udwOutput = CHashCRC32::GenerateHashCode(abyContents, dwLength);
+				udwOutput = HashCRC32::GenerateHashCode(abyContents, dwLength);
 				CS_SAFE_DELETE_ARRAY(abyContents);
 			}
 			return udwOutput;
@@ -253,7 +253,7 @@ namespace ChilliSource
 			for (std::vector<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
 			{
 				u32 udwFileHash = GetFileCRC32Checksum(ineStorageLocation, instrDirectory + *it);
-				u32 udwPathHash = CHashCRC32::GenerateHashCode(it->c_str(), it->length());
+				u32 udwPathHash = HashCRC32::GenerateHashCode(it->c_str(), it->length());
 				audwHashes.push_back(udwFileHash);
 				audwHashes.push_back(udwPathHash);
 			}
@@ -271,7 +271,7 @@ namespace ChilliSource
 			//return the hash of this as the output
 			u32 udwOutput = 0;
 			if (strHashableDirectoryContents.length() > 0)
-				udwOutput = CHashCRC32::GenerateHashCode(strHashableDirectoryContents.c_str(), strHashableDirectoryContents.length());
+				udwOutput = HashCRC32::GenerateHashCode(strHashableDirectoryContents.c_str(), strHashableDirectoryContents.length());
 			return udwOutput;
 		}
 

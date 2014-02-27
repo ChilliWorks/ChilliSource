@@ -33,7 +33,7 @@ namespace ChilliSource
             /// to specific hashing function
             static InterfaceIDType InterfaceIDHash(const std::string& instrName)
             {
-                return Core::CHashCRC32::GenerateHashCode(instrName);
+                return Core::HashCRC32::GenerateHashCode(instrName);
             }
             
 			QueryableInterface(){}
@@ -55,7 +55,7 @@ virtual const ::std::string& GetInterfaceTypeName() const;
         
 #define DEFINE_NAMED_INTERFACE(x) \
 const ::ChilliSource::Core::InterfaceIDType x::InterfaceID = ::ChilliSource::Core::QueryableInterface::InterfaceIDHash(#x); \
-const ::std::string x::TypeName = ::ChilliSource::Core::CStringUtils::StandardiseClassName(#x); \
+const ::std::string x::TypeName = ::ChilliSource::Core::StringUtils::StandardiseClassName(#x); \
 ::ChilliSource::Core::InterfaceIDType x::GetInterfaceID() const \
 { \
     return InterfaceID; \

@@ -106,8 +106,8 @@
     pNewTextView.backgroundColor = [UIColor clearColor];
     
     //setup the text.
-    [pNewTextView setText: ChilliSource::Core::CStringUtils::UTF8StringToNSString(ChilliSource::Core::CLocalisedText::GetText(inpSubtitle->strTextID))];
-    [pNewTextView setFont:[UIFont fontWithName: ChilliSource::Core::CStringUtils::StringToNSString(pStyle->strFontName) size: pStyle->udwFontSize]];
+    [pNewTextView setText: ChilliSource::Core::StringUtils::UTF8StringToNSString(ChilliSource::Core::LocalisedText::GetText(inpSubtitle->strTextID))];
+    [pNewTextView setFont:[UIFont fontWithName: ChilliSource::Core::StringUtils::StringToNSString(pStyle->strFontName) size: pStyle->udwFontSize]];
     [pNewTextView setTextColor:[UIColor colorWithRed:pStyle->Colour.r green:pStyle->Colour.g blue:pStyle->Colour.b alpha:0.0f]];
     [pNewTextView setEditable:NO];
     [pNewTextView setUserInteractionEnabled:NO];
@@ -247,7 +247,7 @@
 //--------------------------------------------------------
 -(CGRect) CalculateTextBoxRect:(const ChilliSource::Core::Rectangle&)inRelativeBounds
 {
-    ChilliSource::Core::Vector2 vScreenDimensions(ChilliSource::Core::CScreen::GetOrientedWidth() * ChilliSource::Core::CScreen::GetInverseDensity(), ChilliSource::Core::CScreen::GetOrientedHeight() * ChilliSource::Core::CScreen::GetInverseDensity());
+    ChilliSource::Core::Vector2 vScreenDimensions(ChilliSource::Core::Screen::GetOrientedWidth() * ChilliSource::Core::Screen::GetInverseDensity(), ChilliSource::Core::Screen::GetOrientedHeight() * ChilliSource::Core::Screen::GetInverseDensity());
     ChilliSource::Core::Vector2 vVideoDimensions = mpVideoPlayer->GetVideoDimensions();
     float fScreenAspectRatio = vScreenDimensions.x / vScreenDimensions.y;
     float fVideoAspectRatio = vVideoDimensions.x / vVideoDimensions.y;

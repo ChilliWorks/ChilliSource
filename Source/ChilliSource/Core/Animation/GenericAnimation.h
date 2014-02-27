@@ -176,7 +176,7 @@ namespace ChilliSource
             T GetValue() const
             {
                 f32 fProg = this->GetProgression();
-                return Core::CMathUtils::Lerp(fProg, mStartVal, mEndVal);
+                return Core::MathUtils::Lerp(fProg, mStartVal, mEndVal);
             }
             
         protected:
@@ -250,7 +250,7 @@ namespace ChilliSource
                 
                 if (fAmplitude > 1.0f)
                 {
-                    f32 fCeil = ChilliSource::Core::kPI - asinf(1.0f / fAmplitude);
+                    f32 fCeil = MathUtils::kPI - asinf(1.0f / fAmplitude);
                     fValue = sin(fProg * fCeil * (f32)mudwNumBounces) * fAmplitude;
                 }
                 

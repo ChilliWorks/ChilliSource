@@ -222,7 +222,7 @@ namespace ChilliSource
                 mfAnimPos = mfDuration*0.5f;
             }
             
-            mfAnimPos = Core::CMathUtils::Clamp(mfAnimPos, 0.0f, mfDuration);
+            mfAnimPos = Core::MathUtils::Clamp(mfAnimPos, 0.0f, mfDuration);
             
             UpdateInternal();
             
@@ -239,7 +239,7 @@ namespace ChilliSource
         
         void Animation::SetProgression(f32 infProgress)
         {
-            f32 fProgress = Core::CMathUtils::Clamp(infProgress, 0.0f, 1.0f);
+            f32 fProgress = Core::MathUtils::Clamp(infProgress, 0.0f, 1.0f);
             
             if(!mbForward)
                 fProgress = 1.0f - fProgress;

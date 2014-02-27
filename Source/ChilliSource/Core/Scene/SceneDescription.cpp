@@ -146,7 +146,7 @@ namespace ChilliSource
 		bool SceneDesc::LoadFromFile(StorageLocation ineStorageLocation, const std::string & incName)
 		{
             std::string strFile;
-            bool bReadFile = CUtils::FileToString(ineStorageLocation, incName, strFile);
+            bool bReadFile = Utils::FileToString(ineStorageLocation, incName, strFile);
             
             if(!bReadFile)
                 return false;
@@ -184,7 +184,7 @@ namespace ChilliSource
                 pFirstChild->name("Root");            
             
             std::string strFile = rapidxml::doc_to_string<char>(&doc);
-            CUtils::StringToFile(ineStorageLocation, incName, strFile);
+            Utils::StringToFile(ineStorageLocation, incName, strFile);
 		}
         
         SceneDesc::EntityDesc*  SceneDesc::GetDescriptionForEntityWithName(const std::string & instrName)

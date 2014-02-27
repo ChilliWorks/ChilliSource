@@ -73,11 +73,11 @@ namespace ChilliSource
             //Inform subscripted to this event and receive if text was rejected lower down
             bool bRejectText = false;
             
-            mOnKeyboardTextChangeEvent.NotifyConnections(Core::CStringUtils::NSStringToUTF8String(inpstrText), &bRejectText);
+            mOnKeyboardTextChangeEvent.NotifyConnections(Core::StringUtils::NSStringToUTF8String(inpstrText), &bRejectText);
             
             if(!bRejectText)
             {
-                mstrText = Core::CStringUtils::NSStringToUTF8String(inpstrText);
+                mstrText = Core::StringUtils::NSStringToUTF8String(inpstrText);
             }
             
             return !bRejectText;
@@ -111,7 +111,7 @@ namespace ChilliSource
 		void CVirtualKeyboard::SetText(const Core::UTF8String& instrText)
         {
             mstrText = instrText;
-            mpTextView.text = Core::CStringUtils::UTF8StringToNSString(mstrText);
+            mpTextView.text = Core::StringUtils::UTF8StringToNSString(mstrText);
         }
         //-------------------------------------------
         /// SetKeyboardType

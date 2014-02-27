@@ -71,7 +71,7 @@ namespace ChilliSource
 		{
             Core::Matrix4x4 matProj = (GetView() * GetProjection()).Inverse();
             
-            Core::Vector2 vScreenSize(Core::CScreen::GetOrientedDimensions());
+            Core::Vector2 vScreenSize(Core::Screen::GetOrientedDimensions());
 			//Normalise the screen space co-ordinates into clip space
 			f32 nx = ((2.0f * (invScreenPos.x/vScreenSize.x)) - 1.0f);
 			f32 ny = ((2.0f * (invScreenPos.y/vScreenSize.y)) - 1.0f);
@@ -103,7 +103,7 @@ namespace ChilliSource
 			Core::Matrix4x4 matToClip = (GetView() * GetProjection());
 			Core::Vector4 vScreenPos = Core::Vector4(invWorldPos, 1.0f) * matToClip;
 			
-            Core::Vector2 vScreenSize(Core::CScreen::GetOrientedDimensions());
+            Core::Vector2 vScreenSize(Core::Screen::GetOrientedDimensions());
 			
 			// Normalize co-ordinates
 			vScreenPos.x = vScreenPos.x / vScreenPos.w;
@@ -175,7 +175,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CameraComponent::CalculatePerspectiveMatrix()
 		{
-			f32 Top = mDesc.fNearClipping * (f32)tanf(mDesc.fFOV * Core::kPI / 360.0f);
+			f32 Top = mDesc.fNearClipping * (f32)tanf(mDesc.fFOV * Core::MathUtils::kPI / 360.0f);
 			f32 Bottom = -Top;
 			f32 Left = Bottom * mDesc.fAspect;
 			f32 Right = Top * mDesc.fAspect;	

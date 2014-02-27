@@ -25,40 +25,40 @@ namespace ChilliSource
         const std::string kstrLocalDataStoreEncryptedFilename   = "App.elds";
         const std::string kstrLocalDataStoreEncryptionKey       = "aV0r71^jX01}pXMk";
         
-        CLocalDataStore* CLocalDataStore::mpSingletonInstance = nullptr;
+        LocalDataStore* LocalDataStore::mpSingletonInstance = nullptr;
 		
 		//----------------------------------------------------------------
         /// Get Singleton
         //----------------------------------------------------------------
-		CLocalDataStore& CLocalDataStore::GetSingleton()
+		LocalDataStore& LocalDataStore::GetSingleton()
         {
 			return *mpSingletonInstance;
 		}
         //----------------------------------------------------------------
         /// Get Singleton Pointer
         //----------------------------------------------------------------
-		CLocalDataStore* CLocalDataStore::GetSingletonPtr()
+		LocalDataStore* LocalDataStore::GetSingletonPtr()
         {
 			return mpSingletonInstance;
 		}
 		//----------------------------------------------------------------
         /// Has Value For Key
         //----------------------------------------------------------------
-		bool CLocalDataStore::HasValueForKey(const std::string& instrKey)
+		bool LocalDataStore::HasValueForKey(const std::string& instrKey)
         {
 			return mBackingDictionary.HasValue(instrKey);
 		}
         //----------------------------------------------------------------
         /// Try Get Value
         //----------------------------------------------------------------
-		bool CLocalDataStore::TryGetValue(const std::string& instrKey, std::string& outstrValue)
+		bool LocalDataStore::TryGetValue(const std::string& instrKey, std::string& outstrValue)
         {
 			return mBackingDictionary.TryGetValue(instrKey, outstrValue);
 		}
         //----------------------------------------------------------------
         /// Try Get Value
         //----------------------------------------------------------------
-		bool CLocalDataStore::TryGetValue(const std::string& instrKey, bool& outbValue)
+		bool LocalDataStore::TryGetValue(const std::string& instrKey, bool& outbValue)
         {
 			std::string strTempValue;
 			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
@@ -71,7 +71,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Try Get Value
         //----------------------------------------------------------------
-		bool CLocalDataStore::TryGetValue(const std::string& instrKey, u16& outuwValue)
+		bool LocalDataStore::TryGetValue(const std::string& instrKey, u16& outuwValue)
         {
 			std::string strTempValue;
 			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
@@ -84,7 +84,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Try Get Value
         //----------------------------------------------------------------
-		bool CLocalDataStore::TryGetValue(const std::string& instrKey, s16& outwValue)
+		bool LocalDataStore::TryGetValue(const std::string& instrKey, s16& outwValue)
         {
 			std::string strTempValue;
 			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
@@ -97,7 +97,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Try Get Value
         //----------------------------------------------------------------
-		bool CLocalDataStore::TryGetValue(const std::string& instrKey, u32& outudwValue)
+		bool LocalDataStore::TryGetValue(const std::string& instrKey, u32& outudwValue)
         {
 			std::string strTempValue;
 			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
@@ -110,7 +110,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Try Get Value
         //----------------------------------------------------------------
-		bool CLocalDataStore::TryGetValue(const std::string& instrKey, s32& outdwValue)
+		bool LocalDataStore::TryGetValue(const std::string& instrKey, s32& outdwValue)
         {
 			std::string strTempValue;
 			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
@@ -123,7 +123,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Try Get Value
         //----------------------------------------------------------------
-		bool CLocalDataStore::TryGetValue(const std::string& instrKey, u64& outuddwValue)
+		bool LocalDataStore::TryGetValue(const std::string& instrKey, u64& outuddwValue)
         {
 			std::string strTempValue;
 			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
@@ -136,7 +136,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Try Get Value
         //----------------------------------------------------------------
-		bool CLocalDataStore::TryGetValue(const std::string& instrKey, s64& outddwValue)
+		bool LocalDataStore::TryGetValue(const std::string& instrKey, s64& outddwValue)
         {
 			std::string strTempValue;
 			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
@@ -149,7 +149,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Try Get Value
         //----------------------------------------------------------------
-		bool CLocalDataStore::TryGetValue(const std::string& instrKey, f32& outfValue)
+		bool LocalDataStore::TryGetValue(const std::string& instrKey, f32& outfValue)
         {
 			std::string strTempValue;
 			bool bSuccess = mBackingDictionary.TryGetValue(instrKey, strTempValue);
@@ -162,7 +162,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Set Value For Key
         //----------------------------------------------------------------
-		void CLocalDataStore::SetValueForKey(const std::string& instrKey, const std::string& instrValue)
+		void LocalDataStore::SetValueForKey(const std::string& instrKey, const std::string& instrValue)
         {
 			mBackingDictionary[instrKey] = instrValue;
 			mbBackingValid = false;
@@ -170,63 +170,63 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Set Value For Key
         //----------------------------------------------------------------
-		void CLocalDataStore::SetValueForKey(const std::string& instrKey, bool inbValue)
+		void LocalDataStore::SetValueForKey(const std::string& instrKey, bool inbValue)
         {
 			SetValueForKey(instrKey, ToString(inbValue));
 		}
         //----------------------------------------------------------------
         /// Set Value For Key
         //----------------------------------------------------------------
-		void CLocalDataStore::SetValueForKey(const std::string& instrKey, u16 inuwValue)
+		void LocalDataStore::SetValueForKey(const std::string& instrKey, u16 inuwValue)
         {
 			SetValueForKey(instrKey, ToString(inuwValue));			
 		}
         //----------------------------------------------------------------
         /// Set Value For Key
         //----------------------------------------------------------------
-		void CLocalDataStore::SetValueForKey(const std::string& instrKey, s16 inwValue)
+		void LocalDataStore::SetValueForKey(const std::string& instrKey, s16 inwValue)
         {
 			SetValueForKey(instrKey, ToString(inwValue));
 		}
         //----------------------------------------------------------------
         /// Set Value For Key
         //----------------------------------------------------------------
-		void CLocalDataStore::SetValueForKey(const std::string& instrKey, u32 inudwValue)
+		void LocalDataStore::SetValueForKey(const std::string& instrKey, u32 inudwValue)
         {
 			SetValueForKey(instrKey, ToString(inudwValue));
 		}
         //----------------------------------------------------------------
         /// Set Value For Key
         //----------------------------------------------------------------
-		void CLocalDataStore::SetValueForKey(const std::string& instrKey, s32 indwValue)
+		void LocalDataStore::SetValueForKey(const std::string& instrKey, s32 indwValue)
         {
 			SetValueForKey(instrKey, ToString(indwValue));
 		}
         //----------------------------------------------------------------
         /// Set Value For Key
         //----------------------------------------------------------------
-		void CLocalDataStore::SetValueForKey(const std::string& instrKey, u64 inuddwValue)
+		void LocalDataStore::SetValueForKey(const std::string& instrKey, u64 inuddwValue)
         {
 			SetValueForKey(instrKey, ToString(inuddwValue));
 		}
         //----------------------------------------------------------------
         /// Set Value For Key
         //----------------------------------------------------------------
-		void CLocalDataStore::SetValueForKey(const std::string& instrKey, s64 inddwValue)
+		void LocalDataStore::SetValueForKey(const std::string& instrKey, s64 inddwValue)
         {
 			SetValueForKey(instrKey, ToString(inddwValue));
 		}
         //----------------------------------------------------------------
         /// Set Value For Key
         //----------------------------------------------------------------
-		void CLocalDataStore::SetValueForKey(const std::string& instrKey, f32 infValue)
+		void LocalDataStore::SetValueForKey(const std::string& instrKey, f32 infValue)
         {
 			SetValueForKey(instrKey, ToString(infValue));
 		}
         //----------------------------------------------------------------
         /// Try Erase Key
         //----------------------------------------------------------------
-		bool CLocalDataStore::TryEraseKey(const std::string& instrKey)
+		bool LocalDataStore::TryEraseKey(const std::string& instrKey)
         {
 			ParamDictionary::iterator pEntry = mBackingDictionary.find(instrKey);
 			if(mBackingDictionary.end() != pEntry)
@@ -240,7 +240,7 @@ namespace ChilliSource
         //------------------------
         /// Clear
         //------------------------
-        void CLocalDataStore::Clear()
+        void LocalDataStore::Clear()
         {
             mBackingDictionary.clear();
             mbBackingValid = false;
@@ -249,7 +249,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Synchronise
         //----------------------------------------------------------------
-		void CLocalDataStore::Synchronise()
+		void LocalDataStore::Synchronise()
         {
 			if(mbBackingValid)
             {
@@ -267,9 +267,9 @@ namespace ChilliSource
             xmlDoc.Accept(&xmlPrinter);
             std::string strDocToBeEncrypted = xmlPrinter.CStr();
             const u8* pudwDocBinary = reinterpret_cast<const u8*>(strDocToBeEncrypted.c_str());
-            u32 udwEncryptedSize = CAESEncrypt::CalculateAlignedSize(strDocToBeEncrypted.size());
+            u32 udwEncryptedSize = AESEncrypt::CalculateAlignedSize(strDocToBeEncrypted.size());
             s8* pdwDocEncrypted = new s8[udwEncryptedSize];
-            CAESEncrypt::Encrypt(pudwDocBinary, udwEncryptedSize, kstrLocalDataStoreEncryptionKey, reinterpret_cast<u8*>(pdwDocEncrypted));
+            AESEncrypt::Encrypt(pudwDocBinary, udwEncryptedSize, kstrLocalDataStoreEncryptionKey, reinterpret_cast<u8*>(pdwDocEncrypted));
             
             // Write to disk
             FileSystem* pFileSystem = Application::GetFileSystemPtr();
@@ -286,7 +286,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Constructor
         //----------------------------------------------------------------
-        CLocalDataStore::CLocalDataStore()
+        LocalDataStore::LocalDataStore()
         {
 			mpSingletonInstance = this;
 			RefreshFromFile();
@@ -294,7 +294,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Refresh From File
         //----------------------------------------------------------------
-		void CLocalDataStore::RefreshFromFile()
+		void LocalDataStore::RefreshFromFile()
         {
             FileSystem* pFileSystem = Application::GetFileSystemPtr();
             if(pFileSystem->DoesFileExist(StorageLocation::k_saveData, kstrLocalDataStoreEncryptedFilename))
@@ -309,7 +309,7 @@ namespace ChilliSource
                     u32 udwEncryptedSize = strEncryptedXML.size();
                     s8* pbyData = new s8[udwEncryptedSize];
                     const u8* udwDocBinary = reinterpret_cast<const u8*>(strEncryptedXML.c_str());
-                    CAESEncrypt::Decrypt(udwDocBinary, udwEncryptedSize, kstrLocalDataStoreEncryptionKey, reinterpret_cast<u8*>(pbyData));
+                    AESEncrypt::Decrypt(udwDocBinary, udwEncryptedSize, kstrLocalDataStoreEncryptionKey, reinterpret_cast<u8*>(pbyData));
                     
                     TiXmlDocument xmlDoc;
                     xmlDoc.Parse(pbyData, 0, TIXML_DEFAULT_ENCODING);
@@ -340,14 +340,14 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Subscribe To Application SuspendEvent
         //----------------------------------------------------------------
-        void CLocalDataStore::SubscribeToApplicationSuspendEvent()
+        void LocalDataStore::SubscribeToApplicationSuspendEvent()
 		{
-			m_appSuspendedConnection = ApplicationEvents::GetLateSuspendEvent().OpenConnection(Core::MakeDelegate(this, &CLocalDataStore::OnApplicationSuspended));
+			m_appSuspendedConnection = ApplicationEvents::GetLateSuspendEvent().OpenConnection(Core::MakeDelegate(this, &LocalDataStore::OnApplicationSuspended));
 		}
         //----------------------------------------------------------------
         /// On Application Suspended
         //----------------------------------------------------------------
-		void CLocalDataStore::OnApplicationSuspended()
+		void LocalDataStore::OnApplicationSuspended()
         {
 			Synchronise();
 		}

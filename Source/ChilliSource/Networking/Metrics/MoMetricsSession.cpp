@@ -110,7 +110,7 @@ namespace ChilliSource
             mQueuedEvents.clear();
             
             Json::Value jSession;
-            Core::CUtils::ReadJson(Core::StorageLocation::k_cache, instrID + ".mosession", &jSession);
+            Core::Utils::ReadJson(Core::StorageLocation::k_cache, instrID + ".mosession", &jSession);
             
             mstrID = jSession["ID"].asString();
             mstrToken = jSession["Token"].asString();
@@ -188,7 +188,7 @@ namespace ChilliSource
                 jSession["Country"] = msLocation.strCountry;
             }
             
-            Core::CUtils::StringToFile(Core::StorageLocation::k_cache, mstrID + ".mosession", jSession.toUnformattedString());
+            Core::Utils::StringToFile(Core::StorageLocation::k_cache, mstrID + ".mosession", jSession.toUnformattedString());
             
 			mQueuedEvents.clear();
         }
@@ -281,11 +281,11 @@ namespace ChilliSource
 			cJData["Application"] = cJApp;
 			
 			Json::Value cJDevice(Json::objectValue);
-			cJDevice["Type"] = Core::CDevice::GetManufacturerName() + Core::CDevice::GetModelName() + Core::CDevice::GetModelTypeName();
-			cJDevice["OS"] = Core::CDevice::GetOSVersion();
-			cJDevice["Locale"] = Core::CDevice::GetLocale().GetCountryCode();
-			cJDevice["Language"] = Core::CDevice::GetLanguage().GetLocaleCode();
-			cJDevice["DeviceID"] =  Core::CDevice::GetUDID();
+			cJDevice["Type"] = Core::Device::GetManufacturerName() + Core::Device::GetModelName() + Core::Device::GetModelTypeName();
+			cJDevice["OS"] = Core::Device::GetOSVersion();
+			cJDevice["Locale"] = Core::Device::GetLocale().GetCountryCode();
+			cJDevice["Language"] = Core::Device::GetLanguage().GetLocaleCode();
+			cJDevice["DeviceID"] =  Core::Device::GetUDID();
 			cJData["Device"] = cJDevice;
 			
             Json::Value cJSession(Json::objectValue);

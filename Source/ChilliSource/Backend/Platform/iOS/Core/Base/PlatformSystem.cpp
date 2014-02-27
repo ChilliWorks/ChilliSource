@@ -91,7 +91,7 @@ namespace ChilliSource
 			Core::NotificationScheduler::Initialise(new CLocalNotificationScheduler());
 			Core::Application::SetFileSystem(new iOS::CFileSystem());
 
-			Core::CLogging::Init();
+			Core::Logging::Init();
 		}
         //--------------------------------------------
         /// Add System Function
@@ -200,7 +200,7 @@ namespace ChilliSource
             inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialFactory()));
             
 			//Initialise the render system
-			Core::Application::GetRenderSystemPtr()->Init((u32)Core::CScreen::GetRawDimensions().x, (u32)Core::CScreen::GetRawDimensions().y);
+			Core::Application::GetRenderSystemPtr()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
             
 			//Create the renderer
 			Core::Application::SetRenderer(new Rendering::Renderer(Core::Application::GetRenderSystemPtr()));
@@ -451,7 +451,7 @@ namespace ChilliSource
 		{
 			NSString * nsType = [[UIDevice currentDevice] model];
 
-			return (ChilliSource::Core::CStringUtils::NSStringToString(nsType));
+			return (ChilliSource::Core::StringUtils::NSStringToString(nsType));
 		}
 		//--------------------------------------------------------------
 		/// Get Device Model Type Name
@@ -468,7 +468,7 @@ namespace ChilliSource
 			free(machine);
 
 			std::string strOutput;
-			std::string strModelType = ChilliSource::Core::CStringUtils::NSStringToString(platform);
+			std::string strModelType = ChilliSource::Core::StringUtils::NSStringToString(platform);
 			bool bRecord = false;
 			for(std::string::const_iterator it = strModelType.begin(); it != strModelType.end(); ++it)
 			{
@@ -501,7 +501,7 @@ namespace ChilliSource
         std::string CPlatformSystem::GetOSVersion() const
         {
             NSString* NSVersion = [[UIDevice currentDevice] systemVersion];
-			return ChilliSource::Core::CStringUtils::NSStringToString(NSVersion);
+			return ChilliSource::Core::StringUtils::NSStringToString(NSVersion);
         }
         //--------------------------------------------------------------
 		/// Get Locale
@@ -534,7 +534,7 @@ namespace ChilliSource
 			std::string strLocaleCode = [NSUserLocale UTF8String];
 
 			//break this locale into parts(language/country code/extra)
-			std::vector<std::string> strLocaleBrokenUp = ChilliSource::Core::CStringUtils::Split(strLocaleCode, "-", 0);
+			std::vector<std::string> strLocaleBrokenUp = ChilliSource::Core::StringUtils::Split(strLocaleCode, "-", 0);
 
 			if (strLocaleBrokenUp.size() > 1)
 			{
@@ -584,12 +584,12 @@ namespace ChilliSource
                     uid = [UIDevice currentDevice].identifierForVendor;
                 }
                 
-                return ChilliSource::Core::CStringUtils::NSStringToString([uid UUIDString]);
+                return ChilliSource::Core::StringUtils::NSStringToString([uid UUIDString]);
             }
             else
             {
                 NSString* strUDID = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
-                return ChilliSource::Core::CStringUtils::NSStringToString(strUDID);
+                return ChilliSource::Core::StringUtils::NSStringToString(strUDID);
             }
         }
         //-------------------------------------------------
@@ -600,7 +600,7 @@ namespace ChilliSource
         std::string CPlatformSystem::GetAppVersion() const
         {
             NSString* strVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
-            return ChilliSource::Core::CStringUtils::NSStringToString(strVersion);
+            return ChilliSource::Core::StringUtils::NSStringToString(strVersion);
         }
 		//--------------------------------------------------------------
 		/// Get Number Of CPU Cores
@@ -630,7 +630,7 @@ namespace ChilliSource
         //--------------------------------------------------------------------------------------------------
         void CPlatformSystem::MakeToast(const Core::UTF8String& instrText) const
         {
-            ToastNotification* pToast = [[ToastNotification alloc] initWithMessage:Core::CStringUtils::UTF8StringToNSString(instrText)];
+            ToastNotification* pToast = [[ToastNotification alloc] initWithMessage:Core::StringUtils::UTF8StringToNSString(instrText)];
             [[EAGLView sharedInstance] addSubview:pToast];
             [pToast animateIn];
         }
@@ -648,8 +648,8 @@ namespace ChilliSource
         void CPlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const
         {
             iOSShowSystemConfirmDialog(inudwID, 
-                                       Core::CStringUtils::UTF8StringToNSString(instrTitle), Core::CStringUtils::UTF8StringToNSString(instrMessage), 
-                                       Core::CStringUtils::UTF8StringToNSString(instrConfirm), Core::CStringUtils::UTF8StringToNSString(instrCancel));
+                                       Core::StringUtils::UTF8StringToNSString(instrTitle), Core::StringUtils::UTF8StringToNSString(instrMessage), 
+                                       Core::StringUtils::UTF8StringToNSString(instrConfirm), Core::StringUtils::UTF8StringToNSString(instrCancel));
         }
         //--------------------------------------------------------------------------------------------------
         /// Show System Dialog
@@ -664,8 +664,8 @@ namespace ChilliSource
         void CPlatformSystem::ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const
         {
             iOSShowSystemDialog(inudwID,
-                                Core::CStringUtils::UTF8StringToNSString(instrTitle), Core::CStringUtils::UTF8StringToNSString(instrMessage),
-                                Core::CStringUtils::UTF8StringToNSString(instrConfirm));
+                                Core::StringUtils::UTF8StringToNSString(instrTitle), Core::StringUtils::UTF8StringToNSString(instrMessage),
+                                Core::StringUtils::UTF8StringToNSString(instrConfirm));
         }
 		//--------------------------------------------------------------
 		/// Get System Time
@@ -693,7 +693,7 @@ namespace ChilliSource
                 NSString *platform = [NSString stringWithCString:machine encoding:NSASCIIStringEncoding];
                 free(machine);
                 
-                std::string strDeviceName = ChilliSource::Core::CStringUtils::NSStringToString(platform);
+                std::string strDeviceName = ChilliSource::Core::StringUtils::NSStringToString(platform);
                 
                 //3.5 inch screens
                 if (strDeviceName == "iPhone1,1" || strDeviceName == "iPhone1,2" || strDeviceName == "iPhone2,1" || strDeviceName == "iPhone3,1" || strDeviceName == "iPhone3,2" ||

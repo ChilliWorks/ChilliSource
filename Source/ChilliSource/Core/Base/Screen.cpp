@@ -13,19 +13,19 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		Vector2 CScreen::mvRawDims;
-		Vector2 CScreen::mvOrientedDims;
-		ScreenOrientation CScreen::mOrientation = ScreenOrientation::k_undefined;
-		bool CScreen::mbIsHighDefinition = false;
-        f32 CScreen::mfDensityScale = kfDefaultNormalResScreenDensity;
-        f32 CScreen::mfInverseDensityScale = kfDefaultNormalResScreenDensity;
+		Vector2 Screen::mvRawDims;
+		Vector2 Screen::mvOrientedDims;
+		ScreenOrientation Screen::mOrientation = ScreenOrientation::k_undefined;
+		bool Screen::mbIsHighDefinition = false;
+        f32 Screen::mfDensityScale = kfDefaultNormalResScreenDensity;
+        f32 Screen::mfInverseDensityScale = kfDefaultNormalResScreenDensity;
 
 		//----------------------------------------------------------------
 		/// Set Raw Dimensions
 		///
 		/// @param Screen size in default orientation
 		//----------------------------------------------------------------
-		void CScreen::SetRawDimensions(const Vector2 & invRawScreenDimensions)
+		void Screen::SetRawDimensions(const Vector2 & invRawScreenDimensions)
 		{
 			mvRawDims = invRawScreenDimensions;
 
@@ -44,7 +44,7 @@ namespace ChilliSource
 		///
 		/// @return Vector containing the width and height of the screen
 		//----------------------------------------------------------------
-		const Vector2& CScreen::GetRawDimensions() 
+		const Vector2& Screen::GetRawDimensions() 
 		{
 			return mvRawDims;
 		}
@@ -54,7 +54,7 @@ namespace ChilliSource
 		/// @return Vector containing the width and height of the screen
 		/// in the current orientation
 		//----------------------------------------------------------------
-		const Vector2& CScreen::GetOrientedDimensions() 
+		const Vector2& Screen::GetOrientedDimensions() 
 		{
 			return mvOrientedDims;
 		}
@@ -63,7 +63,7 @@ namespace ChilliSource
 		///
 		/// @return Width of the screen
 		//----------------------------------------------------------------
-		const u32 CScreen::GetOrientedWidth()
+		const u32 Screen::GetOrientedWidth()
 		{
 			return (u32)mvOrientedDims.x;
 		}
@@ -72,7 +72,7 @@ namespace ChilliSource
 		///
 		/// @return Height of the screen
 		//----------------------------------------------------------------
-		const u32 CScreen::GetOrientedHeight()
+		const u32 Screen::GetOrientedHeight()
 		{
 			return (u32)mvOrientedDims.y;
 		}
@@ -82,7 +82,7 @@ namespace ChilliSource
 		/// @param Screen orientation
 		/// @return True if the orientation is portrait up or down 
 		//----------------------------------------------------------------
-		bool CScreen::IsPortraitOrientation(ScreenOrientation inOrientation)
+		bool Screen::IsPortraitOrientation(ScreenOrientation inOrientation)
 		{
 			return inOrientation == ScreenOrientation::k_portraitUp || inOrientation == ScreenOrientation::k_portraitDown;
 		}
@@ -92,7 +92,7 @@ namespace ChilliSource
 		/// @param Screen orientation
 		/// @return True if the orientation is landscape left or right 
 		//----------------------------------------------------------------
-		bool CScreen::IsLandscapeOrientation(ScreenOrientation inOrientation)
+		bool Screen::IsLandscapeOrientation(ScreenOrientation inOrientation)
 		{
 			return inOrientation == ScreenOrientation::k_landscapeLeft || inOrientation == ScreenOrientation::k_landscapeRight;
 		}
@@ -103,7 +103,7 @@ namespace ChilliSource
 		/// @param Screen orientation
 		/// @return True if the orientations are both landscape or portrait
 		//----------------------------------------------------------------
-		bool CScreen::HaveSameAspectRatio(ScreenOrientation inOrientation1, ScreenOrientation inOrientation2)
+		bool Screen::HaveSameAspectRatio(ScreenOrientation inOrientation1, ScreenOrientation inOrientation2)
 		{
 			return IsPortraitOrientation(inOrientation1) == IsPortraitOrientation(inOrientation2);
 		}
@@ -113,7 +113,7 @@ namespace ChilliSource
 		/// Change the screen orientation
 		/// @param New screen orientation
 		//----------------------------------------------------------------
-		void CScreen::SetOrientation(ScreenOrientation ineTargetOrientation)
+		void Screen::SetOrientation(ScreenOrientation ineTargetOrientation)
 		{
 			if(mOrientation != ineTargetOrientation)
 			{
@@ -135,7 +135,7 @@ namespace ChilliSource
 		///
 		/// @return Screen orientation
 		//----------------------------------------------------------------
-		ScreenOrientation CScreen::GetOrientation() 
+		ScreenOrientation Screen::GetOrientation() 
 		{
 			return mOrientation;
 		}
@@ -150,7 +150,7 @@ namespace ChilliSource
         ///
         /// @return The density scale factor of the screen
         //----------------------------------------------------------------
-        f32 CScreen::GetDensity()
+        f32 Screen::GetDensity()
         {
             return mfDensityScale;
         }
@@ -165,7 +165,7 @@ namespace ChilliSource
         ///
         /// @return The inverse of density scale factor of the screen
         //----------------------------------------------------------------
-        f32 CScreen::GetInverseDensity()
+        f32 Screen::GetInverseDensity()
         {
             return mfInverseDensityScale;
         }
@@ -180,7 +180,7 @@ namespace ChilliSource
         ///
         /// @param The density scale factor of the screen
         //----------------------------------------------------------------
-        void CScreen::SetDensity(f32 infDensityScalar)
+        void Screen::SetDensity(f32 infDensityScalar)
         {
             mfDensityScale = infDensityScalar;
             mfInverseDensityScale = 1.0f/infDensityScalar;

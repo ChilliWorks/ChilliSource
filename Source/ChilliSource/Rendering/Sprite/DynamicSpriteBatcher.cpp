@@ -157,7 +157,7 @@ namespace ChilliSource
             maRenderCommands.clear();
                 
             //Swap the buffers
-            mudwCurrentRenderSpriteBatch = Core::CMathUtils::Wrap(++mudwCurrentRenderSpriteBatch, 0u, kudwBufferArrayBounds);
+            mudwCurrentRenderSpriteBatch = Core::MathUtils::Wrap(++mudwCurrentRenderSpriteBatch, 0u, kudwBufferArrayBounds);
 		}
         //----------------------------------------------------------
         /// Destructor

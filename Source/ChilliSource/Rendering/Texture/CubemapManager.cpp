@@ -110,7 +110,7 @@ namespace ChilliSource
 			{
                 std::string strPath;
                 std::string strExt;
-                Core::CStringUtils::SplitBaseFilename(inFilePath, strPath, strExt);
+                Core::StringUtils::SplitBaseFilename(inFilePath, strPath, strExt);
                 
 				for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
 				{
@@ -186,7 +186,7 @@ namespace ChilliSource
 			{
                 std::string strPath;
                 std::string strExt;
-                Core::CStringUtils::SplitBaseFilename(inFilePath, strPath, strExt);
+                Core::StringUtils::SplitBaseFilename(inFilePath, strPath, strExt);
                 strExt = "." + strExt;
                 
 				ImageDesc Desc;
@@ -228,7 +228,7 @@ namespace ChilliSource
 		{
             std::string strPath;
             std::string strExt;
-            Core::CStringUtils::SplitBaseFilename(inDesc.strFilenames[0], strPath, strExt);
+            Core::StringUtils::SplitBaseFilename(inDesc.strFilenames[0], strPath, strExt);
             
 			for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
 			{

@@ -353,7 +353,7 @@ namespace ChilliSource
                      transAIt != inFrameA->mNodeTranslations.end() && transBIt != inFrameB->mNodeTranslations.end();)
                 {
                     //lerp
-                    Core::Vector3 newTrans = Core::CMathUtils::Lerp(infInterpFactor, *transAIt, *transBIt);
+                    Core::Vector3 newTrans = Core::MathUtils::Lerp(infInterpFactor, *transAIt, *transBIt);
                     
                     //add to frame
                     outFrame->mNodeTranslations.push_back(newTrans);
@@ -387,7 +387,7 @@ namespace ChilliSource
                      scaleAIt != inFrameA->mNodeScalings.end() && scaleBIt != inFrameB->mNodeScalings.end();)
                 {
                     //lerp
-                    Core::Vector3 newScale = Core::CMathUtils::Lerp(infInterpFactor, *scaleAIt, *scaleBIt);
+                    Core::Vector3 newScale = Core::MathUtils::Lerp(infInterpFactor, *scaleAIt, *scaleBIt);
                     
                     //add to frame
                     outFrame->mNodeScalings.push_back(newScale);

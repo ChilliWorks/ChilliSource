@@ -28,7 +28,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             CMetaClass::CMetaClass(const std::string& instrName, u32 inudwSize) : mstrName(instrName), mudwSize(inudwSize), mpBaseClass(nullptr)
             {
-                mudwNameHash = CHashCRC32::GenerateHashCode(instrName);
+                mudwNameHash = HashCRC32::GenerateHashCode(instrName);
             }
             //--------------------------------------------------------
             /// Register Instance Create Delegate
@@ -132,7 +132,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             CProperty* CMetaClass::GetProperty(const std::string& instrPropName) const
             {
-                u32 udwNameHash = CHashCRC32::GenerateHashCode(instrPropName);
+                u32 udwNameHash = HashCRC32::GenerateHashCode(instrPropName);
                 
                 for(std::vector<CProperty*>::const_iterator it = mProperties.begin(); it != mProperties.end(); ++it)
                 {
@@ -153,7 +153,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             CInstance* CMetaClass::GetInstance(const std::string& instrName) const
             {
-                u32 udwNameHash = CHashCRC32::GenerateHashCode(instrName);
+                u32 udwNameHash = HashCRC32::GenerateHashCode(instrName);
                 
                 for(std::vector<CInstance*>::const_iterator it = mInstances.begin(); it != mInstances.end(); ++it)
                 {

@@ -144,7 +144,7 @@ namespace ChilliSource
                     bParticlesActive = true;
                     
                     f32 fLerpFactor = fEmissionStep/kfTimeSinceLastEmission;
-                    Core::Vector3 vPosition = Core::CMathUtils::Lerp(fLerpFactor, mvLastEmissionPos, vCurrentPos) - vCurrentPos;
+                    Core::Vector3 vPosition = Core::MathUtils::Lerp(fLerpFactor, mvLastEmissionPos, vCurrentPos) - vCurrentPos;
                     fEmissionStep += mfEmissionFreq;
                     
                     Core::Quaternion qOrientation;

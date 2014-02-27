@@ -104,7 +104,7 @@ namespace ChilliSource
         {
             // Get the kerning file
             std::string strFileName, strExtension;
-			Core::CStringUtils::SplitBaseFilename(inFilePath, strFileName, strExtension);
+			Core::StringUtils::SplitBaseFilename(inFilePath, strFileName, strExtension);
             const std::string stdKerningFilePath(strFileName+"."+kstrKerningExtension);
 			ChilliSource::Core::FileStreamSPtr pKerningStream = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, stdKerningFilePath, Core::FileMode::k_read);
             
@@ -117,7 +117,7 @@ namespace ChilliSource
         {
             // Get the kerning file
             std::string strFileName, strExtension;
-			Core::CStringUtils::SplitBaseFilename(inFilePath, strFileName, strExtension);
+			Core::StringUtils::SplitBaseFilename(inFilePath, strFileName, strExtension);
             const std::string stdKerningFilePath(strFileName+"."+kstrKerningExtension);
 			Core::FileStreamSPtr pKerningStream = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, stdKerningFilePath, Core::FileMode::k_read);
             
@@ -125,7 +125,7 @@ namespace ChilliSource
             {
 				s32 dwKerningPairs;
 				pKerningStream->Read((s8*)&dwKerningPairs, sizeof(s32));
-				dwKerningPairs = Core::CUtils::Endian4ByteSwap(&dwKerningPairs);
+				dwKerningPairs = Core::Utils::Endian4ByteSwap(&dwKerningPairs);
 				
 				// Kerning stored in a first character look up register
 				std::vector<Font::CKernLookup> aKernLookup;
@@ -139,13 +139,13 @@ namespace ChilliSource
 					s16 dwSpacing;
 					
 					pKerningStream->Read((s8*)&dwChar1, sizeof(s16));
-					dwChar1 = Core::CUtils::Endian2ByteSwap(&dwChar1);
+					dwChar1 = Core::Utils::Endian2ByteSwap(&dwChar1);
 					
 					pKerningStream->Read((s8*)&dwChar2, sizeof(s16));
-					dwChar2 = Core::CUtils::Endian2ByteSwap(&dwChar2);
+					dwChar2 = Core::Utils::Endian2ByteSwap(&dwChar2);
 					
 					pKerningStream->Read((s8*)&dwSpacing, sizeof(s16));
-					dwSpacing = Core::CUtils::Endian2ByteSwap(&dwSpacing);
+					dwSpacing = Core::Utils::Endian2ByteSwap(&dwSpacing);
 					
 					// Check if we are on a new c1
 					if(aKernLookup.empty())

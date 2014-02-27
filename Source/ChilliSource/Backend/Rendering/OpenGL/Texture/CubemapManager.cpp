@@ -63,7 +63,7 @@ namespace ChilliSource
                             
                             std::string strPath;
                             std::string strExt;
-                            Core::CStringUtils::SplitBaseFilename(pOpenGLCubemap->GetFilename(), strPath, strExt);
+                            Core::StringUtils::SplitBaseFilename(pOpenGLCubemap->GetFilename(), strPath, strExt);
                             
                             for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
                             {
