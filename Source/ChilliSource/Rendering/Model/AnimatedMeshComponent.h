@@ -14,8 +14,8 @@
 #include <ChilliSource/Rendering/Base/RenderComponent.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
 
 #include <functional>
 
@@ -37,11 +37,11 @@ namespace ChilliSource
 		/// Events
 		//===============================================================
         typedef std::function<void(AnimatedMeshComponent*)> AnimationChangedDelegate;
-        typedef Core::CEvent1<AnimationChangedDelegate> AnimationChangedEvent;
+        typedef Core::Event<AnimationChangedDelegate> AnimationChangedEvent;
         typedef std::function<void(AnimatedMeshComponent*)> AnimationCompletionDelegate;
-        typedef Core::CEvent1<AnimationCompletionDelegate> AnimationCompletionEvent;
+        typedef Core::Event<AnimationCompletionDelegate> AnimationCompletionEvent;
         typedef std::function<void(AnimatedMeshComponent*)> AnimationLoopedDelegate;
-        typedef Core::CEvent1<AnimationLoopedDelegate> AnimationLoopedEvent;
+        typedef Core::Event<AnimationLoopedDelegate> AnimationLoopedEvent;
 		//===============================================================
 		/// Animated Mesh component
 		///

@@ -131,6 +131,8 @@ namespace ChilliSource
 			std::vector< std::pair<TimeEventDelegate, f32> > maTimeElapsedDelegates;
 			std::vector<PeriodicUpdateData> maPeriodicUpdateDelegates;
 			std::vector<TimeEventDelegate> maPeriodicUpdateDelegatesDelayedRemove;
+            
+            ConnectionUPtr m_coreTimerUpdateConnection;
 		};
 	}
 }

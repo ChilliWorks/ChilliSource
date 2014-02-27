@@ -302,7 +302,7 @@ namespace ChilliSource
 				mpCancelAlert = nil;
 				mpBaseView = nil;
 				
-				mOnDismissedEvent.Invoke(this);
+				mOnDismissedEvent.NotifyConnections(this);
 			}
 		}
 		

@@ -191,7 +191,7 @@ namespace ChilliSource
             static u32 FindFreeComponentIndex();
             
         private:
-            
+        
             static std::vector<AudioComponentSPtr> mAudioComponentCache;
             static std::vector<u32> maudwComponentPauseCount;
             static std::vector<bool> mabComponentLooping;
@@ -203,6 +203,8 @@ namespace ChilliSource
             static AudioComponentFactory* mpAudioComponentFactory;
             
             static AudioComponentSPtr mpMusicComponent;
+            
+            static Core::ConnectionUPtr m_audioFinishedConnection;
             
             static f32 mfEffectVolume;
             

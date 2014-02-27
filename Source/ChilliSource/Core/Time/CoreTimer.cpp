@@ -16,14 +16,14 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-        CEvent1<TimeEventDelegate> CCoreTimer::mOnTimerUpdateEvent;
+        Event<TimeEventDelegate> CCoreTimer::mOnTimerUpdateEvent;
         
 		//----------------------------------------------------
 		/// Get Timer Update Event
 		///
 		/// @return The event
 		//----------------------------------------------------
-		IEvent<TimeEventDelegate>& CCoreTimer::GetTimerUpdateEvent()
+		IConnectableEvent<TimeEventDelegate>& CCoreTimer::GetTimerUpdateEvent()
 		{
 			return mOnTimerUpdateEvent;
 		}
@@ -34,7 +34,7 @@ namespace ChilliSource
         //----------------------------------------------------
 		void CCoreTimer::Update(f32 infDT)
 		{
-			mOnTimerUpdateEvent.Invoke(infDT);
+			mOnTimerUpdateEvent.NotifyConnections(infDT);
 		}
 	}
 }

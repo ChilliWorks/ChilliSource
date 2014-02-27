@@ -70,7 +70,7 @@ namespace ChilliSource
         {
             if(mbIsUpdating)
             {
-                mAccelerationUpdatedEvent.Invoke(GetAcceleration());
+                mAccelerationUpdatedEvent.NotifyConnections(GetAcceleration());
             }
         }
         //----------------------------------------------------

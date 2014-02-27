@@ -24,7 +24,7 @@ namespace ChilliSource
             
 			HorizontalSliderBar();
 			HorizontalSliderBar(const Core::ParamDictionary& insParams);
-			~HorizontalSliderBar();
+			
 			//------------------------------------------------------
 			/// Draw
 			///
@@ -141,6 +141,8 @@ namespace ChilliSource
             
 			ImageViewSPtr mpBackgroundImage;
 			ImageViewSPtr mpSliderImage;
+            
+            Core::ConnectionUPtr m_movedWithinConnection;
             
 			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedSliderSize, SetSliderSize, GetSliderSize);
             

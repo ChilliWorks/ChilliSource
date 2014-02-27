@@ -12,7 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Activity.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
+#include <ChilliSource/Core/Event/Event.h>
 
 #include <functional>
 
@@ -77,7 +77,7 @@ namespace ChilliSource
 			/// @return Event triggered when activity is
 			/// dismissed
 			//-----------------------------------------------
-			Core::IEvent<Core::ActivityDismissedEvent>& GetDismissedEvent();
+			Core::IConnectableEvent<Core::ActivityDismissedEvent>& GetDismissedEvent();
 			//-----------------------------------------------
 			/// Set Authentication PIN Result Delegate
 			///
@@ -87,10 +87,10 @@ namespace ChilliSource
 			void SetAuthenticationPINResultDelegate(const ChilliSource::Social::TwitterAuthenticationActivity::AuthenticationPINResultDelegate inCallback);
 		
 		protected:
-			Core::CEvent1<Core::ActivityDismissedEvent>                                             mOnDismissedEvent;
-			ChilliSource::Social::TwitterAuthenticationActivity::AuthenticationPINResultDelegate	mOnPINResultDelegate;
-			std::string																		mstrURL;
-			std::string																		mstrPIN;
+			Core::Event<Core::ActivityDismissedEvent> mOnDismissedEvent;
+			TwitterAuthenticationActivity::AuthenticationPINResultDelegate mOnPINResultDelegate;
+			std::string	mstrURL;
+			std::string	mstrPIN;
 		};
 	}
 }

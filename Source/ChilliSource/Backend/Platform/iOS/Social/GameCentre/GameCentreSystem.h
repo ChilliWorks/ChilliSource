@@ -11,10 +11,10 @@
 #define _MO_FLO_IOS_PLATFORM_GAME_CENTRE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/System/System.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/Container/WorkerQueue.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/String/UTF8String.h>
+#include <ChilliSource/Core/System/System.h>
 
 #include <thread>
 
@@ -134,7 +134,7 @@ namespace ChilliSource
 			///
 			/// Raised when the game centre user changes (new signin/signout)
 			//---------------------------------------------------------------------
-			Core::IEvent<AuthenticationChangedDelegate> & OnAuthenticationChangedEvent();
+			Core::IConnectableEvent<AuthenticationChangedDelegate> & OnAuthenticationChangedEvent();
 			
 			///////////////////////////////////////////////////////////////////////////
 			// LEADERBOARDS
@@ -218,7 +218,7 @@ namespace ChilliSource
 			//---------------------------------------------------------------------
 			///Subscribe to achievement reset event
 			//---------------------------------------------------------------------
-			Core::IEvent<AchievementsResetDelegate>& OnAchievementResetEvent();
+			Core::IConnectableEvent<AchievementsResetDelegate>& OnAchievementResetEvent();
 			
 		private:
             //--------------------------------------------------------------------
@@ -339,9 +339,9 @@ namespace ChilliSource
             
             std::unordered_map<std::string, LeaderboardScoreResults> mMapNameRequestToLeaderboardScoreResults;
 			std::unordered_map<std::string, LeaderboardScoreRequestDelegate> mMapRequestNameToRequestDelegate;
-			Core::CEvent1<AuthenticationChangedDelegate> mAuthenticationChangedEvent;
-			Core::CEvent1<LeaderboardsInfoRequestEventDelegate> mLeaderboardsInfoRequestEvent;
-			Core::CEvent1<AchievementsResetDelegate> mAchievementsResetEvent;
+			Core::Event<AuthenticationChangedDelegate> mAuthenticationChangedEvent;
+			Core::Event<LeaderboardsInfoRequestEventDelegate> mLeaderboardsInfoRequestEvent;
+			Core::Event<AchievementsResetDelegate> mAchievementsResetEvent;
 			
 			bool mbIsGameCentreSupported;
 			bool mbProcessRequests;
@@ -351,6 +351,9 @@ namespace ChilliSource
             
 			std::vector<std::string> mastrCompletedAchievements;
 			NSArray * mpAchievementDescriptions;//<Cheeky little NSArray of GKAchivementDescription objects
+            
+            Core::ConnectionUPtr m_localAuthenticationChangedConnection;
+            Core::ConnectionUPtr m_leaderboardInfoConnection;
 			
             bool mbUseTurnBasedMultiplayer;     // true if we want to use turn-based multiplayer, otherwise false.
             u32 mudwNumOpenRequests;

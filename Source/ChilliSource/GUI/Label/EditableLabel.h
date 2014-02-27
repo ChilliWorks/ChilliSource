@@ -10,8 +10,8 @@
 #define _MO_FLO_GUI_GUI_EDITABLE_LABEL
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/GUI/Label/Label.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Input/Keyboard/VirtualKeyboard.h>
 
 namespace ChilliSource
@@ -40,7 +40,7 @@ namespace ChilliSource
 			///
 			/// @param Keyboard Event Delegate
 			//-------------------------------------------------
-			Core::IEvent<Input::KeyboardEventDelegate>& GetKeyboardShowEvent();
+			Core::IConnectableEvent<Input::KeyboardEventDelegate>& GetKeyboardShowEvent();
 			//-------------------------------------------------
 			/// Get Keyboard Hide Event
 			///
@@ -49,7 +49,7 @@ namespace ChilliSource
 			///
 			/// @param Keyboard Event Delegate
 			//-------------------------------------------------
-			Core::IEvent<Input::KeyboardEventDelegate>& GetKeyboardHideEvent();
+			Core::IConnectableEvent<Input::KeyboardEventDelegate>& GetKeyboardHideEvent();
 			//-------------------------------------------------
 			/// Get Text Change Event
 			///
@@ -58,7 +58,7 @@ namespace ChilliSource
 			///
 			/// @param Text Change Event Delegate
 			//-------------------------------------------------
-			Core::IEvent<TextChangeEventDelegate>& GetTextChangeEvent();
+			Core::IConnectableEvent<TextChangeEventDelegate>& GetTextChangeEvent();
 			//-------------------------------------------------
 			/// Set Keyboard
 			///
@@ -241,9 +241,13 @@ namespace ChilliSource
 
 			Input::VirtualKeyboard* mpKeyboard;
 
-			Core::CEvent0<Input::KeyboardEventDelegate> mOnKeyboardShowEvent;
-			Core::CEvent0<Input::KeyboardEventDelegate> mOnKeyboardHideEvent;
-			Core::CEvent1<TextChangeEventDelegate> mOnTextChangeEvent;
+			Core::Event<Input::KeyboardEventDelegate> mOnKeyboardShowEvent;
+			Core::Event<Input::KeyboardEventDelegate> mOnKeyboardHideEvent;
+			Core::Event<TextChangeEventDelegate> mOnTextChangeEvent;
+            
+            Core::ConnectionUPtr m_keyboardShownConnection;
+            Core::ConnectionUPtr m_keyboardHiddenConnection;
+            Core::ConnectionUPtr m_keyboardTextChangedConnection;
 
 			f32 mfTimeToShow;
 			bool mbShowKeyboard;

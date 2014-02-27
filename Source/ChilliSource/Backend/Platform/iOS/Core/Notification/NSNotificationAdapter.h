@@ -10,7 +10,7 @@
 #define _NS_NOTIFICATION_ADAPTER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
+#include <ChilliSource/Core/Event/Event.h>
 
 #import <Foundation/Foundation.h>
 
@@ -21,8 +21,8 @@ typedef std::function<void()> NotificationEventDelegate;
 @interface NSNotificationAdapter : NSObject 
 {    
     //---Media Player
-    ChilliSource::Core::CEvent0<NotificationEventDelegate> mMPLoadStateChangeEvent;
-    ChilliSource::Core::CEvent0<NotificationEventDelegate> mMPPlaybackDidFinishEvent;
+    CSCore::Event<NotificationEventDelegate> mMPLoadStateChangeEvent;
+    CSCore::Event<NotificationEventDelegate> mMPPlaybackDidFinishEvent;
 }
 
 //-----------------------------------------------
@@ -55,13 +55,13 @@ typedef std::function<void()> NotificationEventDelegate;
 ///
 /// @return Event Object
 //-----------------------------------------------
--(ChilliSource::Core::IEvent<NotificationEventDelegate>&) GetMPLoadStateChangeEvent;
+-(CSCore::IConnectableEvent<NotificationEventDelegate>&) GetMPLoadStateChangeEvent;
 //-----------------------------------------------
 /// Get Movie Player Playback Did Finish Event
 ///
 /// @return Event Object
 //-----------------------------------------------
--(ChilliSource::Core::IEvent<NotificationEventDelegate>&) GetMPPlaybackDidFinishEvent;
+-(CSCore::IConnectableEvent<NotificationEventDelegate>&) GetMPPlaybackDidFinishEvent;
 
 //---Notification callbacks
 //-----------------------------------------------

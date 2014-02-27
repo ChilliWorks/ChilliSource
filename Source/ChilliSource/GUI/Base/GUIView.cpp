@@ -516,7 +516,7 @@ namespace ChilliSource
         ///
         /// @return Touch began event
         //-----------------------------------------------------------
-        Core::IEvent<Input::TouchEventDelegate> & GUIView::GetTouchBeganEvent()
+        Core::IConnectableEvent<Input::TouchEventDelegate> & GUIView::GetTouchBeganEvent()
         {
             return mTouchBeganEvent;
         }
@@ -528,7 +528,7 @@ namespace ChilliSource
         ///
         /// @return Touch moved event
         //-----------------------------------------------------------
-        Core::IEvent<Input::TouchEventDelegate> & GUIView::GetTouchMovedEvent()
+        Core::IConnectableEvent<Input::TouchEventDelegate> & GUIView::GetTouchMovedEvent()
         {
             return mTouchMovedEvent;
         }
@@ -540,7 +540,7 @@ namespace ChilliSource
         ///
         /// @return Touch end event
         //-----------------------------------------------------------
-        Core::IEvent<Input::TouchEventDelegate> & GUIView::GetTouchEndEvent()
+        Core::IConnectableEvent<Input::TouchEventDelegate> & GUIView::GetTouchEndEvent()
         {
             return mTouchEndedEvent;
         }
@@ -1729,7 +1729,7 @@ namespace ChilliSource
 				if(IsAcceptTouchesOutsideOfBoundsEnabled() || bContains)
 				{
 					mInputEvents.OnTouchBegan(this, insTouchInfo);
-                    mTouchBeganEvent.Invoke(insTouchInfo);
+                    mTouchBeganEvent.NotifyConnections(insTouchInfo);
 					//We consume this touch as it is within us
 					if(IsTouchConsumptionEnabled(TouchType::k_began) && bContains)
 					{
@@ -1783,7 +1783,7 @@ namespace ChilliSource
                 //If we contain this touch we can consume it
                 if(mInputEvents.OnTouchMoved(this, insTouchInfo))
                 {
-                    mTouchMovedEvent.Invoke(insTouchInfo);
+                    mTouchMovedEvent.NotifyConnections(insTouchInfo);
                     if(IsTouchConsumptionEnabled(TouchType::k_moved))
                     {
                         mSubviewsCopy.clear();
@@ -1817,7 +1817,7 @@ namespace ChilliSource
                     (*it)->OnTouchEnded(insTouchInfo);
                 }
                 
-                mTouchEndedEvent.Invoke(insTouchInfo);
+                mTouchEndedEvent.NotifyConnections(insTouchInfo);
                 mInputEvents.OnTouchEnded(this, insTouchInfo);
             }
             mSubviewsCopy.clear();

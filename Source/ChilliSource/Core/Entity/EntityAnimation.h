@@ -12,7 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Animation/GenericAnimation.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Scene/SceneDescription.h>
 #include <ChilliSource/Core/Scene/SceneAnimation.h>
 

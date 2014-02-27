@@ -41,8 +41,8 @@ namespace ChilliSource
 			SetName("RootWindow");
             
 			//Register for screen rotation events
-			Core::CApplicationEvents::GetScreenOrientationChangedEvent() += Core::MakeDelegate(this, &Window::OnScreenOrientationChanged);
-			Core::CApplicationEvents::GetScreenResizedEvent() += Core::MakeDelegate(this, &Window::OnScreenResized);
+			m_screenOrientationChangedConnection = Core::ApplicationEvents::GetScreenOrientationChangedEvent().OpenConnection(Core::MakeDelegate(this, &Window::OnScreenOrientationChanged));
+			m_screenResizedConnection = Core::ApplicationEvents::GetScreenResizedEvent().OpenConnection(Core::MakeDelegate(this, &Window::OnScreenResized));
 		}
 		//-----------------------------------------------------
 		/// Set Input System
@@ -69,22 +69,19 @@ namespace ChilliSource
         {
             if(mpInputSystem && mpInputSystem->GetTouchScreenPtr() && !mbListeningForTouches)
 			{
-				mpInputSystem->GetTouchScreenPtr()->GetTouchBeganEvent() += Core::MakeDelegate(this, &Window::_OnTouchBegan);
-				mpInputSystem->GetTouchScreenPtr()->GetTouchMovedEvent() += Core::MakeDelegate(this, &Window::_OnTouchMoved);
-				mpInputSystem->GetTouchScreenPtr()->GetTouchEndEvent() += Core::MakeDelegate(this, &Window::_OnTouchEnded);
+				m_touchBeganConnection = mpInputSystem->GetTouchScreenPtr()->GetTouchBeganEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnTouchBegan));
+				m_touchMoveConnection = mpInputSystem->GetTouchScreenPtr()->GetTouchMovedEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnTouchMoved));
+				m_touchEndConnection = mpInputSystem->GetTouchScreenPtr()->GetTouchEndEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnTouchEnded));
                 mbListeningForTouches=true;
 			}
         }
         
         void Window::UnlistenFromTouches()
         {
-            if(mpInputSystem && mpInputSystem->GetTouchScreenPtr() && mbListeningForTouches)
-			{
-				mpInputSystem->GetTouchScreenPtr()->GetTouchBeganEvent() -= Core::MakeDelegate(this, &Window::_OnTouchBegan);
-				mpInputSystem->GetTouchScreenPtr()->GetTouchMovedEvent() -= Core::MakeDelegate(this, &Window::_OnTouchMoved);
-				mpInputSystem->GetTouchScreenPtr()->GetTouchEndEvent() -= Core::MakeDelegate(this, &Window::_OnTouchEnded);
-                mbListeningForTouches=false;
-			}
+            m_touchBeganConnection = nullptr;
+            m_touchMoveConnection = nullptr;
+            m_touchEndConnection = nullptr;
+            mbListeningForTouches = false;
         }
 		//-----------------------------------------------------------
 		/// On Screen Orientation Changed
@@ -153,7 +150,7 @@ namespace ChilliSource
 			//If the touch has not been consumed we then notify
 			//the outside world
             mSubviewsCopy.clear();
-            mTouchBeganEvent.Invoke(insTouchInfo);
+            mTouchBeganEvent.NotifyConnections(insTouchInfo);
 		}
 		//-----------------------------------------------------------
 		/// On Touch Moved
@@ -186,7 +183,7 @@ namespace ChilliSource
 			//If the touch has not been consumed we then notify
 			//the outside world
             mSubviewsCopy.clear();
-            mTouchMovedEvent.Invoke(insTouchInfo);
+            mTouchMovedEvent.NotifyConnections(insTouchInfo);
 		}
 		//-----------------------------------------------------------
 		/// On Touch Ended
@@ -213,7 +210,7 @@ namespace ChilliSource
 			//If the touch has not been consumed we then notify
 			//the outside world
             mSubviewsCopy.clear();
-            mTouchEndedEvent.Invoke(insTouchInfo);
+            mTouchEndedEvent.NotifyConnections(insTouchInfo);
 		}
         //-----------------------------------------------------------
         /// On Touch Began
@@ -280,9 +277,6 @@ namespace ChilliSource
 			//Deregister for touch delegates
 			//The window is responsible for receiving input for this scene
 			UnlistenFromTouches();
-            
-			Core::CApplicationEvents::GetScreenOrientationChangedEvent() -= Core::MakeDelegate(this, &Window::OnScreenOrientationChanged);
-			Core::CApplicationEvents::GetScreenResizedEvent() -= Core::MakeDelegate(this, &Window::OnScreenResized);
 		}
 	}
 }

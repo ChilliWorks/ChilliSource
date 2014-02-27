@@ -22,7 +22,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		/// Get Acceleration Updated Event
 		//----------------------------------------------------
-		Core::IEvent<Accelerometer::AccelerationUpdatedDelegate>& Accelerometer::GetAccelerationUpdatedEvent()
+		Core::IConnectableEvent<Accelerometer::AccelerationUpdatedDelegate>& Accelerometer::GetAccelerationUpdatedEvent()
 		{
 			return mAccelerationUpdatedEvent;
 		}

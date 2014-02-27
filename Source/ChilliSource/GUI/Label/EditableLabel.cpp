@@ -64,7 +64,7 @@ namespace ChilliSource
         ///
         /// @param Keyboard Event Delegate
         //-------------------------------------------------
-        Core::IEvent<Input::KeyboardEventDelegate>& EditableLabel::GetKeyboardShowEvent()
+        Core::IConnectableEvent<Input::KeyboardEventDelegate>& EditableLabel::GetKeyboardShowEvent()
         {
             return mOnKeyboardShowEvent;
         }
@@ -76,7 +76,7 @@ namespace ChilliSource
         ///
         /// @param Keyboard Event Delegate
         //-------------------------------------------------
-        Core::IEvent<Input::KeyboardEventDelegate>& EditableLabel::GetKeyboardHideEvent()
+        Core::IConnectableEvent<Input::KeyboardEventDelegate>& EditableLabel::GetKeyboardHideEvent()
         {
             return mOnKeyboardHideEvent;
         }
@@ -88,7 +88,7 @@ namespace ChilliSource
         ///
         /// @param Text Change Event Delegate
         //-------------------------------------------------
-        Core::IEvent<EditableLabel::TextChangeEventDelegate>& EditableLabel::GetTextChangeEvent()
+        Core::IConnectableEvent<EditableLabel::TextChangeEventDelegate>& EditableLabel::GetTextChangeEvent()
         {
             return mOnTextChangeEvent;
         }
@@ -162,8 +162,8 @@ namespace ChilliSource
             if(mpKeyboard)
             {
                 //Stop listening to old keyboard
-                mpKeyboard->GetKeyboardShowEvent() -= Core::MakeDelegate(this, &EditableLabel::OnKeyboardShown);
-                mpKeyboard->GetKeyboardHideEvent() -= Core::MakeDelegate(this, &EditableLabel::OnKeyboardHidden);
+                m_keyboardShownConnection = nullptr;
+                m_keyboardHiddenConnection = nullptr;
             }
             
             if(inpKeyboard)
@@ -171,8 +171,8 @@ namespace ChilliSource
                 mpKeyboard = inpKeyboard;
                 
                 //Stop listening to old keyboard
-                mpKeyboard->GetKeyboardShowEvent() += Core::MakeDelegate(this, &EditableLabel::OnKeyboardShown);
-                mpKeyboard->GetKeyboardHideEvent() += Core::MakeDelegate(this, &EditableLabel::OnKeyboardHidden);
+                m_keyboardShownConnection = mpKeyboard->GetKeyboardShowEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardShown));
+                m_keyboardHiddenConnection = mpKeyboard->GetKeyboardHideEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardHidden));
             }
             else
             {
@@ -212,8 +212,8 @@ namespace ChilliSource
             if(pKeyboardListener == this)
             {
                 mpKeyboard->SetText(Text);
-                mpKeyboard->GetKeyboardTextChangeEvent() += Core::MakeDelegate(this, &EditableLabel::OnKeyboardTextChanged);
-                mOnKeyboardShowEvent.Invoke();
+                m_keyboardTextChangedConnection = mpKeyboard->GetKeyboardTextChangeEvent().OpenConnection(Core::MakeDelegate(this, &EditableLabel::OnKeyboardTextChanged));
+                mOnKeyboardShowEvent.NotifyConnections();
             }
         }
         
@@ -246,7 +246,7 @@ namespace ChilliSource
                 if(mutf8strSeparator.size() > 0)
                     mutf8strTextWithSeparators = GetTextWithSeparators();
 
-                mOnTextChangeEvent.Invoke(this);
+                mOnTextChangeEvent.NotifyConnections(this);
             }
 		}
         //-------------------------------------------------
@@ -258,9 +258,9 @@ namespace ChilliSource
         {
             if(pKeyboardListener == this)
             {
-                mpKeyboard->GetKeyboardTextChangeEvent() -= Core::MakeDelegate(this, &EditableLabel::OnKeyboardTextChanged);
+                m_keyboardTextChangedConnection = nullptr;
                 pKeyboardListener = nullptr;
-                mOnKeyboardHideEvent.Invoke();
+                mOnKeyboardHideEvent.NotifyConnections();
                
             }
         }
@@ -530,14 +530,6 @@ namespace ChilliSource
 				{
 					mpKeyboard->Hide();
 				}
-            }
-            
-            if(mpKeyboard)
-            {
-                //Stop listening to old keyboard
-                mpKeyboard->GetKeyboardShowEvent() -= Core::MakeDelegate(this, &EditableLabel::OnKeyboardShown);
-                mpKeyboard->GetKeyboardTextChangeEvent() -= Core::MakeDelegate(this, &EditableLabel::OnKeyboardTextChanged);
-                mpKeyboard->GetKeyboardHideEvent() -= Core::MakeDelegate(this, &EditableLabel::OnKeyboardHidden);
             }
         }
     }

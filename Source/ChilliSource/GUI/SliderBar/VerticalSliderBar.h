@@ -25,7 +25,6 @@ namespace ChilliSource
 
             VerticalSliderBar();
             VerticalSliderBar(const Core::ParamDictionary& insParams);
-			~VerticalSliderBar();
             //------------------------------------------------------
             /// Draw
             ///
@@ -140,6 +139,8 @@ namespace ChilliSource
             
             ImageViewSPtr mpBackgroundImage;
             ImageViewSPtr mpSliderImage;
+            
+            Core::ConnectionUPtr m_sliderMovedConnection;
 
 			DECLARE_PROPERTY_A(Core::UnifiedVector2, UnifiedSliderSize, SetSliderSize, GetSliderSize);
 

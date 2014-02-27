@@ -20,7 +20,7 @@ namespace ChilliSource
         /// @return Event thats triggered when the video gets dismissed
         ///			by the player.
         //--------------------------------------------------------------
-        Core::IEvent<VideoDismissedEventDelegate>& VideoPlayerActivity::GetDismissedEvent()
+        Core::IConnectableEvent<VideoDismissedEventDelegate>& VideoPlayerActivity::GetDismissedEvent()
         {
             return mOnDismissedEvent;
         }
@@ -29,7 +29,7 @@ namespace ChilliSource
         ///
         /// @return Event thats triggered when the video stops
         //--------------------------------------------------------------
-        Core::IEvent<VideoPlaybackEventDelegate>& VideoPlayerActivity::GetPlaybackCompleteEvent()
+        Core::IConnectableEvent<VideoPlaybackEventDelegate>& VideoPlayerActivity::GetPlaybackCompleteEvent()
         {
             return mOnPlaybackCompleteEvent;
         }

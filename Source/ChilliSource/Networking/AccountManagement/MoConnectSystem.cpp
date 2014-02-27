@@ -179,7 +179,7 @@ namespace ChilliSource
 		//------------------------
         /// Signed In User ChangesEvent
         //------------------------
-		IEvent<MoConnectSystem::EventDelegate>& MoConnectSystem::SignedInUserChangesEvent()
+		IConnectableEvent<MoConnectSystem::EventDelegate>& MoConnectSystem::SignedInUserChangesEvent()
         {
 			return mSignedInUserChangesEvent;
 		}
@@ -758,7 +758,7 @@ namespace ChilliSource
 				mpPendingLoginsRequest = nullptr;
 			}
             
-			mSignedInUserChangesEvent.Invoke(this);
+			mSignedInUserChangesEvent.NotifyConnections(this);
 		}
 		//------------------------
         /// Has Loaded LoginT ypes

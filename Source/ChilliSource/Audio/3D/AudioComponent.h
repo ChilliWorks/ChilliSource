@@ -13,9 +13,9 @@
 #define _MO_FLO_AUDIO_AUDIO_COMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Entity/Component.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Audio/Base/AudioResource.h>
+#include <ChilliSource/Core/Entity/Component.h>
+#include <ChilliSource/Core/Event/Event.h>
 
 #include <functional>
 
@@ -31,7 +31,6 @@ namespace ChilliSource
 			DECLARE_NAMED_INTERFACE(AudioComponent);
 			
 			AudioComponent(AudioSystem* inpOwningSystem);
-			virtual ~AudioComponent();
             
             //----------------------------------------------------------
 			/// Is A
@@ -110,7 +109,7 @@ namespace ChilliSource
 			/// complete notifications
 			/// @return Audio event 
 			//---------------------------------------------------------------------
-			Core::IEvent<AudioEventDelegate>& GetAudioFinishedEvent();
+			Core::IConnectableEvent<AudioEventDelegate>& GetAudioFinishedEvent();
 			//---------------------------------------------------------------------
 			/// On Master Volume Changed
 			///
@@ -144,10 +143,12 @@ namespace ChilliSource
             
 			AudioResourceSPtr mpAudioSource;
             
+            Core::ConnectionUPtr m_masterVolumeChangedConnection;
+            
 			f32 mfCurrentVolume;
             f32 mfCurrentFrequency;
             
-			Core::CEvent1<AudioEventDelegate> mOnPlaybackCompleteEvent;
+			Core::Event<AudioEventDelegate> mOnPlaybackCompleteEvent;
 		};
 	}
 }

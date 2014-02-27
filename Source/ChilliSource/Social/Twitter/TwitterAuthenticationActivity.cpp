@@ -47,7 +47,7 @@ namespace ChilliSource
 		/// @return Event triggered when activity is
 		/// dismissed
 		//-----------------------------------------------
-		Core::IEvent<Core::ActivityDismissedEvent>& TwitterAuthenticationActivity::GetDismissedEvent()
+		Core::IConnectableEvent<Core::ActivityDismissedEvent>& TwitterAuthenticationActivity::GetDismissedEvent()
 		{
 			return mOnDismissedEvent;
 		}

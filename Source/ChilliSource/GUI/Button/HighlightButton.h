@@ -436,6 +436,10 @@ namespace ChilliSource
  
             Audio::AudioComponentSPtr mpSelectAudioEffect;
 			Audio::AudioComponentSPtr mpDeselectAudioEffect;
+            
+            Core::ConnectionUPtr m_pressedInsideConnection;
+            Core::ConnectionUPtr m_releasedInsideConnection;
+            Core::ConnectionUPtr m_movedWithinConnection;
 			
             Core::Rectangle msDefaultUVs;
             Core::Rectangle msHighlightUVs;

@@ -114,14 +114,14 @@ namespace ChilliSource
         //----------------------------------------------------
         void PointLightComponent::OnAttachedToEntity()
         {
-            GetEntityOwner()->GetTransform().GetTransformChangedEvent() += Core::MakeDelegate(this, &PointLightComponent::OnEntityTransformChanged);
+            m_transformChangedConnection = GetEntityOwner()->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &PointLightComponent::OnEntityTransformChanged));
         }
         //----------------------------------------------------
         /// On Detached From Entity
         //----------------------------------------------------
         void PointLightComponent::OnDetachedFromEntity()
         {
-            GetEntityOwner()->GetTransform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &PointLightComponent::OnEntityTransformChanged);
+            m_transformChangedConnection = nullptr;
         }
         //----------------------------------------------------
         /// On Entity Transform Changed

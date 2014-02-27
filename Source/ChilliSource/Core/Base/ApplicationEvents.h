@@ -10,8 +10,8 @@
 #define _MO_FLO_CORE_APPLICATION_EVENTS_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Event/Event.h>
 
 namespace ChilliSource
 {
@@ -22,7 +22,7 @@ namespace ChilliSource
 		typedef std::function<void(u32, u32)> ApplicationScreenResizeDelegate;
         typedef std::function<void(const std::string&)> ApplicationReceivesURLDelegate;
 		
-        class CApplicationEvents
+        class ApplicationEvents
         {
         public:
             
@@ -31,61 +31,61 @@ namespace ChilliSource
             ///
             /// @return Event that is triggered when the application resumes
             //-----------------------------------------------------------------
-            static CEvent0<ApplicationSystemDelegate>& GetResumeEvent();
+            static Event<ApplicationSystemDelegate>& GetResumeEvent();
             //-----------------------------------------------------------------
             /// Get Suspend Event
             ///
             /// @return Event that is triggered on application suspension
             //-----------------------------------------------------------------
-            static CEvent0<ApplicationSystemDelegate>& GetSuspendEvent();
+            static Event<ApplicationSystemDelegate>& GetSuspendEvent();
 			//-----------------------------------------------------------------
             /// Get Late Suspend Event
             ///
             /// @return Event that is triggered on application suspension after GetSuspendEvent
             //-----------------------------------------------------------------
-            static CEvent0<ApplicationSystemDelegate>& GetLateSuspendEvent();
+            static Event<ApplicationSystemDelegate>& GetLateSuspendEvent();
             //-----------------------------------------------------------------
             /// Get Low Memory Event
             ///
             /// @return Event that is triggered when the application 
             /// receives a memory warning
             //-----------------------------------------------------------------
-            static CEvent0<ApplicationSystemDelegate>& GetLowMemoryEvent();
+            static Event<ApplicationSystemDelegate>& GetLowMemoryEvent();
             //-----------------------------------------------------------------
             /// Get Screen Orientation Changed Event
             ///
             /// @return Event that is triggered when screen rotates
             //-----------------------------------------------------------------
-            static CEvent1<ApplicationScreenOrientationDelegate>& GetScreenOrientationChangedEvent();
+            static Event<ApplicationScreenOrientationDelegate>& GetScreenOrientationChangedEvent();
             //-----------------------------------------------------------------
             /// Get Back Event
             ///
             /// @return Event that is triggered when back is pressed
             //-----------------------------------------------------------------
-            static CEvent0<ApplicationSystemDelegate>& GetGoBackEvent();
+            static Event<ApplicationSystemDelegate>& GetGoBackEvent();
 			//-----------------------------------------------------------------
             /// Get Screen Resized Event
             ///
             /// @return Event that is triggered when screen resizes
             //-----------------------------------------------------------------
-            static CEvent2<ApplicationScreenResizeDelegate>& GetScreenResizedEvent();
+            static Event<ApplicationScreenResizeDelegate>& GetScreenResizedEvent();
 			//-----------------------------------------------------------------
             /// GetReceivesURLEvent
             ///
             /// @return Event that is triggered when the app receives a URL string
             //-----------------------------------------------------------------
-            static CEvent1<ApplicationReceivesURLDelegate>& GetReceivesURLEvent();  
+            static Event<ApplicationReceivesURLDelegate>& GetReceivesURLEvent();
         private:
             
-            static CEvent0<ApplicationSystemDelegate> mResumeEvent;
-            static CEvent0<ApplicationSystemDelegate> mSuspendEvent;
-			static CEvent0<ApplicationSystemDelegate> mLateSuspendEvent;
-            static CEvent0<ApplicationSystemDelegate> mLowMemoryEvent;
+            static Event<ApplicationSystemDelegate> mResumeEvent;
+            static Event<ApplicationSystemDelegate> mSuspendEvent;
+			static Event<ApplicationSystemDelegate> mLateSuspendEvent;
+            static Event<ApplicationSystemDelegate> mLowMemoryEvent;
             
-            static CEvent1<ApplicationScreenOrientationDelegate> mScreenOrientationChangedEvent;
-            static CEvent0<ApplicationSystemDelegate> mGoBackEvent;
-			static CEvent2<ApplicationScreenResizeDelegate> mScreenResizedEvent;
-			static CEvent1<ApplicationReceivesURLDelegate> mReceivesURLEvent;
+            static Event<ApplicationScreenOrientationDelegate> mScreenOrientationChangedEvent;
+            static Event<ApplicationSystemDelegate> mGoBackEvent;
+			static Event<ApplicationScreenResizeDelegate> mScreenResizedEvent;
+			static Event<ApplicationReceivesURLDelegate> mReceivesURLEvent;
         };
     }
 }

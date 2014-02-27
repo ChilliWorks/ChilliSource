@@ -627,7 +627,7 @@ namespace ChilliSource
         ///
         /// @return TransformChangedDelegate event
         //----------------------------------------------------------------
-        IEvent<Transform::TransformChangedDelegate>& Transform::GetTransformChangedEvent()
+        IConnectableEvent<Transform::TransformChangedDelegate>& Transform::GetTransformChangedEvent()
         {
             return mTransformChangedEvent;
         }
@@ -646,7 +646,7 @@ namespace ChilliSource
                 (*it)->OnParentTransformChanged();
             }
             
-            mTransformChangedEvent.Invoke();
+            mTransformChangedEvent.NotifyConnections();
         }
         //----------------------------------------------------------------
         /// On Parent Transform Changed 
@@ -659,6 +659,20 @@ namespace ChilliSource
             mbIsParentTransformCacheValid = false;
             
             OnTransformChanged();
+        }
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        void Transform::Reset()
+        {
+            mbIsTransformCacheValid = false;
+            mbIsParentTransformCacheValid = false;
+            mvPosition = Vector3::ZERO;
+            mvScale = Vector3::ONE;
+            mqWorldOrientation = Quaternion::IDENTITY;
+            mpParentTransform = nullptr;
+            mfOpacity = 1.0f;
+            mChildTransforms.clear();
+            mTransformChangedEvent.CloseAllConnections();
         }
     }
 }

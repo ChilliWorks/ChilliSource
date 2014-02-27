@@ -40,11 +40,11 @@ namespace ChilliSource
             /// @return Event triggered when the button is 
             /// activated
             //--------------------------------------------------
-            Core::IEvent<ButtonEventDelegate>& GetActivatedEvent();
+            Core::IConnectableEvent<ButtonEventDelegate>& GetActivatedEvent();
             
         protected:
             
-            Core::CEvent1<ButtonEventDelegate> mOnButtonActivatedEvent;
+            Core::Event<ButtonEventDelegate> mOnButtonActivatedEvent;
         };
     }
 }

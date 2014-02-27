@@ -77,7 +77,7 @@ NSNotificationAdapter* gpSharedInstance = nil;
 ///
 /// @return Event Object
 //-----------------------------------------------
--(ChilliSource::Core::IEvent<NotificationEventDelegate>&) GetMPLoadStateChangeEvent
+-(CSCore::IConnectableEvent<NotificationEventDelegate>&) GetMPLoadStateChangeEvent
 {
     return mMPLoadStateChangeEvent;
 }
@@ -86,7 +86,7 @@ NSNotificationAdapter* gpSharedInstance = nil;
 ///
 /// @return Event Object
 //-----------------------------------------------
--(ChilliSource::Core::IEvent<NotificationEventDelegate>&) GetMPPlaybackDidFinishEvent
+-(CSCore::IConnectableEvent<NotificationEventDelegate>&) GetMPPlaybackDidFinishEvent
 {
     return mMPPlaybackDidFinishEvent;
 }
@@ -95,14 +95,14 @@ NSNotificationAdapter* gpSharedInstance = nil;
 //-----------------------------------------------
 -(void) OnMoviePlayerLoadStateChanged
 {
-    mMPLoadStateChangeEvent.Invoke();
+    mMPLoadStateChangeEvent.NotifyConnections();
 }
 //-----------------------------------------------
 /// On Movie Player Playback Did Finish
 //-----------------------------------------------
 -(void) OnMoviePlayerPlaybackDidFinish
 {
-    mMPPlaybackDidFinishEvent.Invoke();
+    mMPPlaybackDidFinishEvent.NotifyConnections();
 }
 
 @end

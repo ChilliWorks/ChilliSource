@@ -33,19 +33,19 @@ BOOL kbUseAnimationForDismiss = YES;
 
 - (void)turnBasedMatchmakerViewControllerWasCancelled:(GKTurnBasedMatchmakerViewController *)viewController
 {
-    mWasCancelledEvent.Invoke();
+    mWasCancelledEvent.NotifyConnections();
 }
 
 // Matchmaking has failed with an error
 - (void)turnBasedMatchmakerViewController:(GKTurnBasedMatchmakerViewController *)viewController didFailWithError:(NSError *)error
 {
-    mDidFailEvent.Invoke();    
+    mDidFailEvent.NotifyConnections();
 }
 
 // A turned-based match has been found, the game should start
 - (void)turnBasedMatchmakerViewController:(GKTurnBasedMatchmakerViewController *)viewController didFindMatch:(GKTurnBasedMatch *)match
 {
-    mDidFindMatchEvent.Invoke(match);
+    mDidFindMatchEvent.NotifyConnections(match);
 }
 
 // Called when a users chooses to quit a match and that player has the current turn.  The developer should call playerQuitInTurnWithOutcome:nextPlayer:matchData:completionHandler: on the match passing in appropriate values.  They can also update matchOutcome for other players as appropriate.
@@ -66,17 +66,17 @@ BOOL kbUseAnimationForDismiss = YES;
                                   matchData:match.matchData completionHandler:nil];    
 }
 
-- (ChilliSource::Core::IEvent<GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent>&) GetWasCancelledEvent
+- (CSCore::IConnectableEvent<GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent>&) GetWasCancelledEvent
 {
     return mWasCancelledEvent;
 }
 
-- (ChilliSource::Core::IEvent<GameCentreTurnBasedMatchmakerViewControllerDidFailEvent>&) GetDidFailEvent
+- (CSCore::IConnectableEvent<GameCentreTurnBasedMatchmakerViewControllerDidFailEvent>&) GetDidFailEvent
 {
     return mDidFailEvent;
 }
 
-- (ChilliSource::Core::IEvent<GameCentreTurnBasedMatchmakerViewControllerDidFindMatchEvent>&) GetDidFindMatchEvent
+- (CSCore::IConnectableEvent<GameCentreTurnBasedMatchmakerViewControllerDidFindMatchEvent>&) GetDidFindMatchEvent
 {
     return mDidFindMatchEvent;
 }
@@ -94,24 +94,24 @@ BOOL kbUseAnimationForDismiss = YES;
 	return gameCentreTurnBasedEventHandlerInstance;
 }
 
-- (ChilliSource::Core::IEvent<HandleInviteFromGameCenterEventDelegate>&) GetHandleInviteFromGameCenterEvent
+- (CSCore::IConnectableEvent<HandleInviteFromGameCenterEventDelegate>&) GetHandleInviteFromGameCenterEvent
 {
     return mHandleInviteFromGameCenterEvent;
 }
 
-- (ChilliSource::Core::IEvent<HandleTurnEventForMatchEventDelegate>&) GetHandleTurnEventForMatchEvent
+- (CSCore::IConnectableEvent<HandleTurnEventForMatchEventDelegate>&) GetHandleTurnEventForMatchEvent
 {
     return mHandleTurnEventForMatchEvent;
 }
 
-- (ChilliSource::Core::IEvent<HandleMatchEndedEventDelegate>&) GetHandleMatchEndedEvent
+- (CSCore::IConnectableEvent<HandleMatchEndedEventDelegate>&) GetHandleMatchEndedEvent
 {
     return mHandleMatchEndedEvent;
 }
 
 - (void)handleInviteFromGameCenter:(NSArray *)playersToInvite;		
 {
-    mHandleInviteFromGameCenterEvent.Invoke(playersToInvite);
+    mHandleInviteFromGameCenterEvent.NotifyConnections(playersToInvite);
 }
 
 // handleTurnEventForMatch is called when a turn is passed to another participant.  Note this may arise from one of the following events:
@@ -121,7 +121,7 @@ BOOL kbUseAnimationForDismiss = YES;
 // The application needs to be prepared to handle this even while the participant might be engaged in a different match
 - (void)handleTurnEventForMatch:(GKTurnBasedMatch *)match didBecomeActive:(BOOL)didBecomeActive
 {
-    mHandleTurnEventForMatchEvent.Invoke(match, didBecomeActive == YES ? true : false);
+    mHandleTurnEventForMatchEvent.NotifyConnections(match, didBecomeActive == YES ? true : false);
 }
 
 // handleTurnEventForMatch is called when a turn is passed to another participant.  Note this may arise from one of the following events:
@@ -131,13 +131,13 @@ BOOL kbUseAnimationForDismiss = YES;
 // The application needs to be prepared to handle this even while the participant might be engaged in a different match
 - (void)handleTurnEventForMatch:(GKTurnBasedMatch *)match
 {
-    mHandleTurnEventForMatchEvent.Invoke(match, false);
+    mHandleTurnEventForMatchEvent.NotifyConnections(match, false);
 }
 
 // handleMatchEnded is called when the match has ended.
 - (void)handleMatchEnded:(GKTurnBasedMatch *)match
 {
-    mHandleMatchEndedEvent.Invoke(match);
+    mHandleMatchEndedEvent.NotifyConnections(match);
 }
 
 @end
@@ -237,7 +237,7 @@ BOOL kbUseAnimationForDismiss = YES;
 ///
 /// @return Event Object
 //-----------------------------------------------
-- (ChilliSource::Core::IEvent<GKNotificationEventDelegate>&) GetGKLocalAuthenticationChangedEvent
+- (CSCore::IConnectableEvent<GKNotificationEventDelegate>&) GetGKLocalAuthenticationChangedEvent
 {
 	return mGKPlayerAuthenticationChangeEvent;
 }
@@ -246,7 +246,7 @@ BOOL kbUseAnimationForDismiss = YES;
 //-----------------------------------------------
 - (void) OnAuthenticationChanged
 {
-	mGKPlayerAuthenticationChangeEvent.Invoke();
+	mGKPlayerAuthenticationChangeEvent.NotifyConnections();
 }
 
 @end

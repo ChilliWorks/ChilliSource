@@ -48,9 +48,9 @@ namespace ChilliSource
             memset(&msHighlightIndices, 0, sizeof(u32) * 9);
             memset(&msCurrentIndices, 0, sizeof(u32) * 9);
             
-            mInputEvents.GetPressedInsideEvent() += Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonSelect);
-            mInputEvents.GetReleasedInsideEvent() += Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonActivated);
-            mInputEvents.GetMovedWithinEvent() += Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonDeselectThreshold);
+            m_pressedInsideConnection = mInputEvents.GetPressedInsideEvent().OpenConnection(Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonSelect));
+            m_releasedInsideConnection = mInputEvents.GetReleasedInsideEvent().OpenConnection(Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonActivated));
+            m_movedWithinConnection = mInputEvents.GetMovedWithinEvent().OpenConnection(Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonDeselectThreshold));
         }
         //-----------------------------------------------------------
         /// Constructor
@@ -205,9 +205,9 @@ namespace ChilliSource
 				EnableHeightMaintainingAspect(Core::ParseBool(strValue));
 			}
             
-            mInputEvents.GetPressedInsideEvent() += Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonSelect);
-            mInputEvents.GetReleasedInsideEvent() += Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonActivated);
-            mInputEvents.GetMovedWithinEvent() += Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonDeselectThreshold);
+            m_pressedInsideConnection = mInputEvents.GetPressedInsideEvent().OpenConnection(Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonSelect));
+            m_releasedInsideConnection = mInputEvents.GetReleasedInsideEvent().OpenConnection(Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonActivated));
+            m_movedWithinConnection = mInputEvents.GetMovedWithinEvent().OpenConnection(Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonDeselectThreshold));
         }
         //-----------------------------------------------------------
         /// Set Normal Sprite Sheet
@@ -674,7 +674,7 @@ namespace ChilliSource
             if(mbSelected)
 			{
 				OnButtonDeselect(inpButton, insTouchInfo);
-				mOnButtonActivatedEvent.Invoke(this);
+				mOnButtonActivatedEvent.NotifyConnections(this);
 			}
         }
         //-----------------------------------------------------------

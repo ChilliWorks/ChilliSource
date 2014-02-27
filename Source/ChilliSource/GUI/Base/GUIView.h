@@ -864,7 +864,7 @@ namespace ChilliSource
             ///
             /// @return Touch began event
             //-----------------------------------------------------------
-            Core::IEvent<Input::TouchEventDelegate> & GetTouchBeganEvent();
+            Core::IConnectableEvent<Input::TouchEventDelegate> & GetTouchBeganEvent();
             //-----------------------------------------------------------
             /// Get Touch Moved Event
             ///
@@ -873,7 +873,7 @@ namespace ChilliSource
             ///
             /// @return Touch moved event
             //-----------------------------------------------------------
-            Core::IEvent<Input::TouchEventDelegate> & GetTouchMovedEvent();
+            Core::IConnectableEvent<Input::TouchEventDelegate> & GetTouchMovedEvent();
             //-----------------------------------------------------------
             /// Get Touch End Event
             ///
@@ -882,7 +882,7 @@ namespace ChilliSource
             ///
             /// @return Touch end event
             //-----------------------------------------------------------
-            Core::IEvent<Input::TouchEventDelegate> & GetTouchEndEvent();
+            Core::IConnectableEvent<Input::TouchEventDelegate> & GetTouchEndEvent();
             
 		protected:
 
@@ -929,9 +929,9 @@ namespace ChilliSource
 
 		protected:
 
-            Core::CEvent1<Input::TouchEventDelegate> mTouchBeganEvent;
-            Core::CEvent1<Input::TouchEventDelegate> mTouchMovedEvent;
-            Core::CEvent1<Input::TouchEventDelegate> mTouchEndedEvent;
+            Core::Event<Input::TouchEventDelegate> mTouchBeganEvent;
+            Core::Event<Input::TouchEventDelegate> mTouchMovedEvent;
+            Core::Event<Input::TouchEventDelegate> mTouchEndedEvent;
             
 			Subviews mSubviews;
 			Subviews mSubviewsCopy;

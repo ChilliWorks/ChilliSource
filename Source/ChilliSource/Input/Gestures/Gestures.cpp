@@ -32,9 +32,9 @@ namespace ChilliSource
 		Gesture::Gesture(TouchScreen* inpTouchDevice) : mbIsGestureInvalid(false), mpView(nullptr), mpTouchDevice(inpTouchDevice)
 		{
 			//Register for touch notifications
-			inpTouchDevice->GetTouchBeganEvent() += Core::MakeDelegate(this, &Gesture::OnTouchBegan);
-			inpTouchDevice->GetTouchMovedEvent() += Core::MakeDelegate(this, &Gesture::OnTouchMoved);
-			inpTouchDevice->GetTouchEndEvent() += Core::MakeDelegate(this, &Gesture::OnTouchEnded);
+			m_touchBeganConnection = inpTouchDevice->GetTouchBeganEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnTouchBegan));
+			m_touchMoveConnection = inpTouchDevice->GetTouchMovedEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnTouchMoved));
+			m_touchEndConnection = inpTouchDevice->GetTouchEndEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnTouchEnded));
 		}
         //----------------------------------------------------
 		/// Constructor
@@ -45,9 +45,9 @@ namespace ChilliSource
 		Gesture::Gesture(GUI::GUIView* inpView) : mbIsGestureInvalid(false), mpView(inpView), mpTouchDevice(nullptr)
 		{
 			//Register for touch notifications
-			mpView->GetTouchBeganEvent() += Core::MakeDelegate(this, &Gesture::OnTouchBegan);
-			mpView->GetTouchMovedEvent() += Core::MakeDelegate(this, &Gesture::OnTouchMoved);
-			mpView->GetTouchEndEvent() += Core::MakeDelegate(this, &Gesture::OnTouchEnded);
+			m_touchBeganConnection = mpView->GetTouchBeganEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnTouchBegan));
+			m_touchMoveConnection = mpView->GetTouchMovedEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnTouchMoved));
+			m_touchEndConnection = mpView->GetTouchEndEvent().OpenConnection(Core::MakeDelegate(this, &Gesture::OnTouchEnded));
 		}
 		//----------------------------------------------------
 		/// Register Gesture Delegate
@@ -70,12 +70,11 @@ namespace ChilliSource
 		{
 			for(GestureDelegatesList::iterator it = mGestureDelegates.begin(); it != mGestureDelegates.end(); ++it)
             {
-                //EVENT::FIX
-//                if(*it == inEventDelegate)
-//                {
-//                    mGestureDelegates.erase(it);
-//                    return;
-//                }
+                if(*it == inEventDelegate)
+                {
+                    mGestureDelegates.erase(it);
+                    return;
+                }
             }
 		}
         //----------------------------------------------------
@@ -101,27 +100,6 @@ namespace ChilliSource
                 (*it)(*this);
             }
         }
-		//----------------------------------------------------
-		/// Destructor
-		///
-		//----------------------------------------------------
-		Gesture::~Gesture()
-		{
-            if(mpView)
-            {
-                mpView->GetTouchBeganEvent() -= Core::MakeDelegate(this, &Gesture::OnTouchBegan);
-                mpView->GetTouchMovedEvent() -= Core::MakeDelegate(this, &Gesture::OnTouchMoved);
-                mpView->GetTouchEndEvent() -= Core::MakeDelegate(this, &Gesture::OnTouchEnded);
-                mpView = nullptr;
-            }
-            else if(mpTouchDevice)
-            {
-                mpTouchDevice->GetTouchBeganEvent() -= Core::MakeDelegate(this, &Gesture::OnTouchBegan);
-                mpTouchDevice->GetTouchMovedEvent() -= Core::MakeDelegate(this, &Gesture::OnTouchMoved);
-                mpTouchDevice->GetTouchEndEvent() -= Core::MakeDelegate(this, &Gesture::OnTouchEnded);
-                mpTouchDevice = nullptr;
-            }
-		}
 		//================================================
 		/// Swipe Gesture
 		///
@@ -287,12 +265,11 @@ namespace ChilliSource
 		{
             for(GestureDelegatesList::iterator it = mGestureBeganDelegates.begin(); it != mGestureBeganDelegates.end(); ++it)
             {
-                //EVENT::FIX
-//                if(*it == inEventDelegate)
-//                {
-//                    mGestureBeganDelegates.erase(it);
-//                    return;
-//                }
+                if(*it == inEventDelegate)
+                {
+                    mGestureBeganDelegates.erase(it);
+                    return;
+                }
             }
 		}
 		//----------------------------------------------------
@@ -316,12 +293,11 @@ namespace ChilliSource
 		{
             for(GestureDelegatesList::iterator it = mGestureEndedDelegates.begin(); it != mGestureEndedDelegates.end(); ++it)
             {
-                //EVENT::FIX
-//                if(*it == inEventDelegate)
-//                {
-//                    mGestureEndedDelegates.erase(it);
-//                    return;
-//                }
+                if(*it == inEventDelegate)
+                {
+                    mGestureEndedDelegates.erase(it);
+                    return;
+                }
             }
 		}
 		//----------------------------------------------------
@@ -670,12 +646,11 @@ namespace ChilliSource
 		{
             for(GestureDelegatesList::iterator it = mGestureBeganDelegates.begin(); it != mGestureBeganDelegates.end(); ++it)
             {
-                //EVENT::FIX
-//                if(*it == inEventDelegate)
-//                {
-//                    mGestureBeganDelegates.erase(it);
-//                    return;
-//                }
+                if(*it == inEventDelegate)
+                {
+                    mGestureBeganDelegates.erase(it);
+                    return;
+                }
             }
 		}
 		//----------------------------------------------------
@@ -699,12 +674,11 @@ namespace ChilliSource
 		{
             for(GestureDelegatesList::iterator it = mGestureEndedDelegates.begin(); it != mGestureEndedDelegates.end(); ++it)
             {
-                //EVENT::FIX
-//                if(*it == inEventDelegate)
-//                {
-//                    mGestureEndedDelegates.erase(it);
-//                    return;
-//                }
+                if(*it == inEventDelegate)
+                {
+                    mGestureEndedDelegates.erase(it);
+                    return;
+                }
             }
 		}
 		//---Touch Delegates
@@ -860,12 +834,11 @@ namespace ChilliSource
 		{
             for(GestureDelegatesList::iterator it = mGestureBeganDelegates.begin(); it != mGestureBeganDelegates.end(); ++it)
             {
-                //EVENT::FIX
-//                if(*it == inEventDelegate)
-//                {
-//                    mGestureBeganDelegates.erase(it);
-//                    return;
-//                }
+                if(*it == inEventDelegate)
+                {
+                    mGestureBeganDelegates.erase(it);
+                    return;
+                }
             }
 		}
 		//----------------------------------------------------
@@ -889,12 +862,11 @@ namespace ChilliSource
 		{
             for(GestureDelegatesList::iterator it = mGestureEndedDelegates.begin(); it != mGestureEndedDelegates.end(); ++it)
             {
-                //EVENT::FIX
-//                if(*it == inEventDelegate)
-//                {
-//                    mGestureEndedDelegates.erase(it);
-//                    return;
-//                }
+                if(*it == inEventDelegate)
+                {
+                    mGestureEndedDelegates.erase(it);
+                    return;
+                }
             }
 		}
         
@@ -920,12 +892,11 @@ namespace ChilliSource
 		{
             for(GestureDelegatesList::iterator it = mGestureCancelledDelegates.begin(); it != mGestureCancelledDelegates.end(); ++it)
             {
-                //EVENT::FIX
-//                if(*it == inEventDelegate)
-//                {
-//                    mGestureCancelledDelegates.erase(it);
-//                    return;
-//                }
+                if(*it == inEventDelegate)
+                {
+                    mGestureCancelledDelegates.erase(it);
+                    return;
+                }
             }
 		}
         

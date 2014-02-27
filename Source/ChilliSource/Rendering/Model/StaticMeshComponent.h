@@ -30,7 +30,6 @@ namespace ChilliSource
 			DECLARE_NAMED_INTERFACE(StaticMeshComponent);
 			
             StaticMeshComponent();
-			~StaticMeshComponent();
 			//----------------------------------------------------------
 			/// Is A
 			///
@@ -194,6 +193,8 @@ namespace ChilliSource
 			
 			MeshSPtr mpModel;
 			std::vector<MaterialSPtr> mMaterials;
+            
+            Core::ConnectionUPtr m_transformChangedConnection;
             
             bool mbBoundingSphereValid;
             bool mbAABBValid;

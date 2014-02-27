@@ -11,9 +11,9 @@
 #define _MOFLO_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
-#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/JSON/json.h>
+#include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
 
 namespace ChilliSource

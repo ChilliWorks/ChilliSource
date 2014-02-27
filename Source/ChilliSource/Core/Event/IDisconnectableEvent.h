@@ -11,13 +11,12 @@
 #define _CHILLISOURCE_CORE_EVENT_IDISCONNECTABLEEVENT_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
 
 namespace ChilliSource
 {
     namespace Core
     {
-        class Connection;
-        
         //-----------------------------------------------------------------
         /// An interface that allows connections to be closed on an event
         ///

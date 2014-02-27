@@ -24,7 +24,7 @@ namespace ChilliSource
 		//--------------------------------------------
 		Timer::Timer() : mfCurrentTime(0.0f), mbIsTimerActive(false)
 		{
-            CCoreTimer::GetTimerUpdateEvent().AddListener(MakeDelegate(this, &Timer::Update));
+            m_coreTimerUpdateConnection = CCoreTimer::GetTimerUpdateEvent().OpenConnection(MakeDelegate(this, &Timer::Update));
 		}
 		//--------------------------------------------
 		/// Start
@@ -105,12 +105,11 @@ namespace ChilliSource
 				{
 					for(std::vector<PeriodicUpdateData>::iterator itIn = maPeriodicUpdateDelegates.begin(); itIn != maPeriodicUpdateDelegates.end(); ++itIn)
 					{
-                        //EVENT::FIX
-//						if(*itOut == itIn->Delegate)
-//						{
-//							maPeriodicUpdateDelegates.erase(itIn);
-//							break;
-//						}
+						if(*itOut == itIn->Delegate)
+						{
+							maPeriodicUpdateDelegates.erase(itIn);
+							break;
+						}
 					}
 				}
 				maPeriodicUpdateDelegatesDelayedRemove.clear();
@@ -147,12 +146,11 @@ namespace ChilliSource
 		{
 			for(std::vector< std::pair<TimeEventDelegate, f32> >::iterator it = maTimeElapsedDelegates.begin(); it != maTimeElapsedDelegates.end(); ++it)
 			{
-                //EVENT::FIX
-//				if(inDelegate == it->first)
-//				{
-//					maTimeElapsedDelegates.erase(it);
-//					break;
-//				}
+				if(inDelegate == it->first)
+				{
+					maTimeElapsedDelegates.erase(it);
+					break;
+				}
 			}
 		}
 		//----------------------------------------------------
@@ -182,12 +180,11 @@ namespace ChilliSource
 		{
 			for(std::vector<PeriodicUpdateData>::iterator it = maPeriodicUpdateDelegates.begin(); it != maPeriodicUpdateDelegates.end(); ++it)
 			{
-                //EVENT::FIX
-//				if(inDelegate == it->Delegate)
-//				{
-//					maPeriodicUpdateDelegatesDelayedRemove.push_back(it->Delegate);
-//					break;
-//				}
+				if(inDelegate == it->Delegate)
+				{
+					maPeriodicUpdateDelegatesDelayedRemove.push_back(it->Delegate);
+					break;
+				}
 			}
 		}
 		//--------------------------------------------
@@ -198,8 +195,6 @@ namespace ChilliSource
 		{
 			maTimerBeganDelegates.clear();
 			maTimeElapsedDelegates.clear();
-			
-            CCoreTimer::GetTimerUpdateEvent().RemoveListener(CSCore::MakeDelegate(this, &Timer::Update));
 		}
 	}
 }

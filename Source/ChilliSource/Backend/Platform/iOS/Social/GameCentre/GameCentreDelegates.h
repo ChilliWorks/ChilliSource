@@ -10,7 +10,7 @@
 #define _MOFLO_PLATFORM_IOS_GAMECENTREDELEGATES_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
+#include <ChilliSource/Core/Event/Event.h>
 
 #import <Foundation/Foundation.h>
 #import <GameKit/GameKit.h>
@@ -29,9 +29,9 @@ typedef std::function<void(GKTurnBasedMatch*)> HandleMatchEndedEventDelegate;
 
 @interface GameCentreTurnBasedMatchmakerViewControllerDelegate : NSObject <GKTurnBasedMatchmakerViewControllerDelegate> 
 {
-    ChilliSource::Core::CEvent0<GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent>    mWasCancelledEvent;
-    ChilliSource::Core::CEvent0<GameCentreTurnBasedMatchmakerViewControllerDidFailEvent>         mDidFailEvent;
-    ChilliSource::Core::CEvent1<GameCentreTurnBasedMatchmakerViewControllerDidFindMatchEvent>    mDidFindMatchEvent;
+    CSCore::Event<GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent>    mWasCancelledEvent;
+    CSCore::Event<GameCentreTurnBasedMatchmakerViewControllerDidFailEvent>         mDidFailEvent;
+    CSCore::Event<GameCentreTurnBasedMatchmakerViewControllerDidFindMatchEvent>    mDidFindMatchEvent;
 }
 
 +(GameCentreTurnBasedMatchmakerViewControllerDelegate*) instance;
@@ -48,22 +48,22 @@ typedef std::function<void(GKTurnBasedMatch*)> HandleMatchEndedEventDelegate;
 // Called when a users chooses to quit a match and that player has the current turn.  The developer should call playerQuitInTurnWithOutcome:nextPlayer:matchData:completionHandler: on the match passing in appropriate values.  They can also update matchOutcome for other players as appropriate.
 - (void)turnBasedMatchmakerViewController:(GKTurnBasedMatchmakerViewController *)viewController playerQuitForMatch:(GKTurnBasedMatch *)match;
 
-- (ChilliSource::Core::IEvent<GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent>&) GetWasCancelledEvent;
-- (ChilliSource::Core::IEvent<GameCentreTurnBasedMatchmakerViewControllerDidFailEvent>&) GetDidFailEvent;
-- (ChilliSource::Core::IEvent<GameCentreTurnBasedMatchmakerViewControllerDidFindMatchEvent>&) GetDidFindMatchEvent;
+- (CSCore::IConnectableEvent<GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent>&) GetWasCancelledEvent;
+- (CSCore::IConnectableEvent<GameCentreTurnBasedMatchmakerViewControllerDidFailEvent>&) GetDidFailEvent;
+- (CSCore::IConnectableEvent<GameCentreTurnBasedMatchmakerViewControllerDidFindMatchEvent>&) GetDidFindMatchEvent;
 @end
 
 @interface GameCentreTurnBasedEventHandlerDelegate : NSObject <GKTurnBasedEventHandlerDelegate> 
 {
-    ChilliSource::Core::CEvent1<HandleInviteFromGameCenterEventDelegate>     mHandleInviteFromGameCenterEvent;
-    ChilliSource::Core::CEvent2<HandleTurnEventForMatchEventDelegate>        mHandleTurnEventForMatchEvent;
-    ChilliSource::Core::CEvent1<HandleMatchEndedEventDelegate>               mHandleMatchEndedEvent;
+    CSCore::Event<HandleInviteFromGameCenterEventDelegate>     mHandleInviteFromGameCenterEvent;
+    CSCore::Event<HandleTurnEventForMatchEventDelegate>        mHandleTurnEventForMatchEvent;
+    CSCore::Event<HandleMatchEndedEventDelegate>               mHandleMatchEndedEvent;
 }
 +(GameCentreTurnBasedEventHandlerDelegate*) instance;
 
-- (ChilliSource::Core::IEvent<HandleInviteFromGameCenterEventDelegate>&) GetHandleInviteFromGameCenterEvent;
-- (ChilliSource::Core::IEvent<HandleTurnEventForMatchEventDelegate>&) GetHandleTurnEventForMatchEvent;
-- (ChilliSource::Core::IEvent<HandleMatchEndedEventDelegate>&) GetHandleMatchEndedEvent;
+- (CSCore::IConnectableEvent<HandleInviteFromGameCenterEventDelegate>&) GetHandleInviteFromGameCenterEvent;
+- (CSCore::IConnectableEvent<HandleTurnEventForMatchEventDelegate>&) GetHandleTurnEventForMatchEvent;
+- (CSCore::IConnectableEvent<HandleMatchEndedEventDelegate>&) GetHandleMatchEndedEvent;
 
 - (void)handleInviteFromGameCenter:(NSArray *)playersToInvite;		
 
@@ -100,7 +100,7 @@ typedef std::function<void(GKTurnBasedMatch*)> HandleMatchEndedEventDelegate;
 @interface GameCentreAuthenticationListener : NSObject
 {
 	//---Game Kit
-	ChilliSource::Core::CEvent0<GKNotificationEventDelegate> mGKPlayerAuthenticationChangeEvent;
+	CSCore::Event<GKNotificationEventDelegate> mGKPlayerAuthenticationChangeEvent;
 }
 //-----------------------------------------------
 /// Shared instance
@@ -119,7 +119,7 @@ typedef std::function<void(GKTurnBasedMatch*)> HandleMatchEndedEventDelegate;
 ///
 /// @return Event Object
 //-----------------------------------------------
-- (ChilliSource::Core::IEvent<GKNotificationEventDelegate>&) GetGKLocalAuthenticationChangedEvent;
+- (CSCore::IConnectableEvent<GKNotificationEventDelegate>&) GetGKLocalAuthenticationChangedEvent;
 //-----------------------------------------------
 /// On Authentication Changed
 //-----------------------------------------------

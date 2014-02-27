@@ -11,7 +11,7 @@
 #define _MO_FLO_IOSPLATFORM_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
@@ -103,6 +103,10 @@ namespace ChilliSource
             /// @return If the tweet exceeds the character limit imposed by Twitter
 			//------------------------------------------------------------------------
 			bool TryPostUsingMoFlow(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback);
+            
+        private:
+            
+            Core::ConnectionUPtr m_authorisationDismissedConnection;
         };
     }
 }

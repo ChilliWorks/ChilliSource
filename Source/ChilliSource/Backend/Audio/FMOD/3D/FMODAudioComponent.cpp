@@ -144,7 +144,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		void CFMODAudioComponent::OnPlaybackComplete()
 		{
-            mOnPlaybackCompleteEvent.Invoke(this);
+            mOnPlaybackCompleteEvent.NotifyConnections(this);
 			SetChannel(nullptr);
 		}
 		//---------------------------------------------------------------------

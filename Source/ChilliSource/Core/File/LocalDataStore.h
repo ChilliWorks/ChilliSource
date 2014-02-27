@@ -286,6 +286,8 @@ namespace ChilliSource
 			bool                        mbBackingValid;
 			ParamDictionary             mBackingDictionary;
 			static CLocalDataStore*     mpSingletonInstance;
+            
+            ConnectionUPtr m_appSuspendedConnection;
 		};
 	}
 }

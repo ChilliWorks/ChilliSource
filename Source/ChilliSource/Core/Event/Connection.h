@@ -10,12 +10,12 @@
 #ifndef _CHILLISOURCE_CORE_EVENT_CONNECTION_H_
 #define _CHILLISOURCE_CORE_EVENT_CONNECTION_H_
 
+#include <ChilliSource/Core/ForwardDeclarations.h>
+
 namespace ChilliSource
 {
     namespace Core
     {
-        class IDisconnectableEvent;
-        
         //----------------------------------------------------------------
         /// A connection is a channel to an event. When a listener
         /// is registered with an event a scoped connection is created

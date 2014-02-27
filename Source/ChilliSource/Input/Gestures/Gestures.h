@@ -37,7 +37,7 @@ namespace ChilliSource
 			
             Gesture(GUI::GUIView* inpView);
             Gesture(TouchScreen* inpTouchDevice);
-			virtual ~Gesture();
+			virtual ~Gesture(){}
 			
 			//----------------------------------------------------
 			/// Register Gesture Delegate
@@ -93,6 +93,10 @@ namespace ChilliSource
 			Core::Timer mTimer;
             GUI::GUIView* mpView;
             TouchScreen* mpTouchDevice;
+            
+            Core::ConnectionUPtr m_touchBeganConnection;
+            Core::ConnectionUPtr m_touchMoveConnection;
+            Core::ConnectionUPtr m_touchEndConnection;
             
         private:
             

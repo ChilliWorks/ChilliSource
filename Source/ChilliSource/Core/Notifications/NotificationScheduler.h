@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
 
 #include <functional>
@@ -54,15 +54,15 @@ namespace ChilliSource
             {
                 bDismissed = true;
                 
-                pNotificationDismissedEvent.Invoke();
-                pNotificationDismissedEvent.RemoveAllListeners();
+                m_notificationDismissedEvent.NotifyConnections();
+                m_notificationDismissedEvent.CloseAllConnections();
             }
                   
             bool bDismissed;
             bool bTriggered;
             
-            CEvent0<NotificationDismissedDelegate> pNotificationDismissedEvent;
-            CEvent1<NotificationPresentedDelegate> pNotificationPresentedEvent;
+            Event<NotificationDismissedDelegate> m_notificationDismissedEvent;
+            Event<NotificationPresentedDelegate> m_notificationPresentedEvent;
         };
         
         class NotificationScheduler

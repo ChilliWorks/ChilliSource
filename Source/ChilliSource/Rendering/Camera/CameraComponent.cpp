@@ -479,8 +479,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		void CameraComponent::EnableViewportRotationWithScreen(bool inbEnable)
 		{
-			inbEnable ? Core::CApplicationEvents::GetScreenOrientationChangedEvent() += Core::MakeDelegate(this, &CameraComponent::SetViewportOrientation) :
-						Core::CApplicationEvents::GetScreenOrientationChangedEvent() -= Core::MakeDelegate(this, &CameraComponent::SetViewportOrientation);
+			m_screenOrientationChangedConnection = inbEnable ? Core::ApplicationEvents::GetScreenOrientationChangedEvent().OpenConnection(Core::MakeDelegate(this, &CameraComponent::SetViewportOrientation)) : nullptr;
 		}
 		//------------------------------------------------------
 		/// Enable Viewport Resize with Screen
@@ -490,8 +489,8 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		void CameraComponent::EnableViewportResizeWithScreen(bool inbEnable)
 		{
-			inbEnable ? Core::CApplicationEvents::GetScreenResizedEvent() += Core::MakeDelegate<CameraComponent, CameraComponent, void, u32, u32>(this, &CameraComponent::SetViewportSize) :
-						Core::CApplicationEvents::GetScreenResizedEvent() -= Core::MakeDelegate<CameraComponent, CameraComponent, void, u32, u32>(this, &CameraComponent::SetViewportSize);
+            m_screenResizedConnection = inbEnable ? Core::ApplicationEvents::GetScreenResizedEvent().OpenConnection(Core::MakeDelegate<CameraComponent, CameraComponent, void, u32, u32>(this, &CameraComponent::SetViewportSize))
+                                                             : nullptr;
 		}
 		//-----------------------------------------------------
 		/// Destructor

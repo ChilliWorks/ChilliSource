@@ -16,9 +16,9 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Input/Base/InputDevice.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
 
 #include <functional>
 #include <thread>
@@ -59,9 +59,9 @@ namespace ChilliSource
 			
 			DECLARE_NAMED_INTERFACE(TouchScreen);
 			
-			Core::IEvent<TouchEventDelegate> & GetTouchBeganEvent();
-			Core::IEvent<TouchEventDelegate> & GetTouchMovedEvent();
-			Core::IEvent<TouchEventDelegate> & GetTouchEndEvent();
+			Core::IConnectableEvent<TouchEventDelegate> & GetTouchBeganEvent();
+			Core::IConnectableEvent<TouchEventDelegate> & GetTouchMovedEvent();
+			Core::IConnectableEvent<TouchEventDelegate> & GetTouchEndEvent();
 			
             void Enable();
             void Disable();
@@ -111,9 +111,9 @@ namespace ChilliSource
             //-----------------------------------------------------------
             void RemoveActiveTouch(const TouchInfo& inTouchInfo);
             
-			Core::CEvent1<TouchEventDelegate> mTouchBeganEvent;
-			Core::CEvent1<TouchEventDelegate> mTouchMovedEvent;
-			Core::CEvent1<TouchEventDelegate> mTouchEndedEvent;
+			Core::Event<TouchEventDelegate> mTouchBeganEvent;
+			Core::Event<TouchEventDelegate> mTouchMovedEvent;
+			Core::Event<TouchEventDelegate> mTouchEndedEvent;
 			
             
 			TouchList mOpenTouches;

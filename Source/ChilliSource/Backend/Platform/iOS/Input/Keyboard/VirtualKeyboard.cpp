@@ -59,7 +59,7 @@ namespace ChilliSource
 				mbIsActive = true;
 				
 				//Notify our listeners
-				mOnKeyboardShowEvent.Invoke();
+				mOnKeyboardShowEvent.NotifyConnections();
 			}
 		}
 		//-------------------------------------------
@@ -73,7 +73,7 @@ namespace ChilliSource
             //Inform subscripted to this event and receive if text was rejected lower down
             bool bRejectText = false;
             
-            mOnKeyboardTextChangeEvent.Invoke<const Core::UTF8String&, bool*>(Core::CStringUtils::NSStringToUTF8String(inpstrText), &bRejectText);
+            mOnKeyboardTextChangeEvent.NotifyConnections(Core::CStringUtils::NSStringToUTF8String(inpstrText), &bRejectText);
             
             if(!bRejectText)
             {
@@ -97,7 +97,7 @@ namespace ChilliSource
 				mbIsActive = false;
 				
 				//Notify our listeners
-				mOnKeyboardHideEvent.Invoke();
+				mOnKeyboardHideEvent.NotifyConnections();
 				
 				mstrText.clear();
 				mpTextView.text = @"";

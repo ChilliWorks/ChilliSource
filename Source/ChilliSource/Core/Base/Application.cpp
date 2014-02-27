@@ -721,7 +721,7 @@ namespace ChilliSource
 		{
 			CS_DEBUG_LOG("Memory Warning. Clearing resource cache...");
 			ResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
-			CApplicationEvents::GetLowMemoryEvent().Invoke();
+			ApplicationEvents::GetLowMemoryEvent().NotifyConnections();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// On Go Back
@@ -732,7 +732,7 @@ namespace ChilliSource
 		{
 			CS_DEBUG_LOG("Go back event.");
 			mStateMgr.GetActiveState()->OnGoBack();
-			CApplicationEvents::GetGoBackEvent().Invoke();
+			ApplicationEvents::GetGoBackEvent().NotifyConnections();
 		}
 		//----------------------------------------------------------------------
 		/// Set Orientation
@@ -789,8 +789,8 @@ namespace ChilliSource
 				mpRenderSystem->Suspend();
 			}
             
-			CApplicationEvents::GetSuspendEvent().Invoke();
-			CApplicationEvents::GetLateSuspendEvent().Invoke();
+			ApplicationEvents::GetSuspendEvent().NotifyConnections();
+			ApplicationEvents::GetLateSuspendEvent().NotifyConnections();
 			
 			CS_DEBUG_LOG("App Finished Suspending...");
 		}
@@ -819,7 +819,7 @@ namespace ChilliSource
 			}
             
 			s_isSuspending = false;
-			CApplicationEvents::GetResumeEvent().Invoke();
+			ApplicationEvents::GetResumeEvent().NotifyConnections();
             
 			//Tell the active state to continue
 			mStateMgr.Resume();
@@ -846,7 +846,7 @@ namespace ChilliSource
 				pTouchScreen->SetScreenHeight(CScreen::GetOrientedHeight());
 			}
             
-			CApplicationEvents::GetScreenResizedEvent().Invoke(inudwWidth, inudwHeight);
+			ApplicationEvents::GetScreenResizedEvent().NotifyConnections(inudwWidth, inudwHeight);
             
 			CS_DEBUG_LOG("Screen resized Notification");
 		}
@@ -867,7 +867,7 @@ namespace ChilliSource
             
 			//Flip the screen
 			SetOrientation(ineOrientation);
-			CApplicationEvents::GetScreenOrientationChangedEvent().Invoke(ineOrientation);
+			ApplicationEvents::GetScreenOrientationChangedEvent().NotifyConnections(ineOrientation);
             
 			CS_DEBUG_LOG("Screen Oriented Notification");
 

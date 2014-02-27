@@ -342,7 +342,7 @@ namespace ChilliSource
         //----------------------------------------------------
         void StaticMeshComponent::OnAttachedToEntity()
         {
-            mpEntityOwner->GetTransform().GetTransformChangedEvent() += Core::MakeDelegate(this, &StaticMeshComponent::OnEntityTransformChanged);
+            m_transformChangedConnection = mpEntityOwner->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &StaticMeshComponent::OnEntityTransformChanged));
             
             OnEntityTransformChanged();
         }
@@ -360,7 +360,7 @@ namespace ChilliSource
         //----------------------------------------------------
         void StaticMeshComponent::OnDetachedFromEntity()
         {
-            mpEntityOwner->GetTransform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &StaticMeshComponent::OnEntityTransformChanged);
+            m_transformChangedConnection = nullptr;
         }
         //----------------------------------------------------
         /// Apply Default Materials
@@ -404,15 +404,5 @@ namespace ChilliSource
             
             mpMaterial = mMaterials[0];
         }
-		//----------------------------------------------------------
-		/// Destructor
-		//----------------------------------------------------------
-		StaticMeshComponent::~StaticMeshComponent()
-		{
-			if(mpEntityOwner)
-            {
-                mpEntityOwner->GetTransform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &StaticMeshComponent::OnEntityTransformChanged);
-            }
-		}
 	}
 }

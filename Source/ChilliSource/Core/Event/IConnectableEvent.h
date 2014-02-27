@@ -11,14 +11,12 @@
 #define _CHILLISOURCE_CORE_EVENT_ICONNECTABLEEVENT_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
 
 namespace ChilliSource
 {
     namespace Core
     {
-        class Connection;
-        typedef std::unique_ptr<Connection> ConnectionUPtr;
-        
         //-----------------------------------------------------------------
         /// An IConnectableEvent represents an object which can have multiple listeners
         /// (connections) with the given DelegateType. The subclass Event is what

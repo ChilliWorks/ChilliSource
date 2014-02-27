@@ -376,7 +376,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void SpriteComponent::OnAttachedToEntity()
 		{
-			mpEntityOwner->GetTransform().GetTransformChangedEvent() += Core::MakeDelegate(this, &SpriteComponent::OnTransformChanged);
+			m_transformChangedConnection = mpEntityOwner->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &SpriteComponent::OnTransformChanged));
             
             OnTransformChanged();
 		}
@@ -385,7 +385,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void SpriteComponent::OnDetachedFromEntity()
 		{
-			mpEntityOwner->GetTransform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &SpriteComponent::OnTransformChanged);
+            m_transformChangedConnection = nullptr;
 		}
         //-----------------------------------------------------------
         /// Calculate Corner Positions
@@ -456,12 +456,5 @@ namespace ChilliSource
         {
             return mColourWithOpacity;
         }
-        SpriteComponent::~SpriteComponent()
-		{
-            if(mpEntityOwner)
-            {
-                mpEntityOwner->GetTransform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &SpriteComponent::OnTransformChanged);
-            }
-		}
 	}
 }

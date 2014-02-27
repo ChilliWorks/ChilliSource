@@ -169,7 +169,8 @@ namespace ChilliSource
 			FMOD::System* mpFMODSystem;
 			FMOD::EventSystem* mpFMODEventSystem;
 			FMOD::EventProject* mpFMODEventProject;
-
+            
+            Core::ConnectionUPtr m_appLowMemoryConnection;
 		};
 	}
 }

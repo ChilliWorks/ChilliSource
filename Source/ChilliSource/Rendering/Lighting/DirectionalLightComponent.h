@@ -114,6 +114,8 @@ namespace ChilliSource
             
             mutable Core::Vector3 mvDirection;
             
+            Core::ConnectionUPtr m_transformChangedConnection;
+            
             f32 mfShadowTolerance;
             
             mutable bool mbMatrixCacheValid;

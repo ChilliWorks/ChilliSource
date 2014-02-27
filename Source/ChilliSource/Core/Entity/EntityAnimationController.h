@@ -112,7 +112,7 @@ namespace ChilliSource
 			///
             //----------------------------------------------
             typedef std::function<void(EntityAnimationController*)> EventAnimationCompletion;
-            Core::IEvent<EventAnimationCompletion> & GetEventCompletion() { return mAnimationCompletionEvent; }
+            Core::IConnectableEvent<EventAnimationCompletion> & GetEventCompletion() { return mAnimationCompletionEvent; }
 			
             //----------------------------------------------
             /// Get Event Looped
@@ -120,7 +120,7 @@ namespace ChilliSource
             /// Return event to subscribe to for animation looped events
 			///
             //----------------------------------------------
-            Core::IEvent<EventAnimationCompletion> & GetEventLooped() { return mAnimationLoopedEvent; }
+            Core::IConnectableEvent<EventAnimationCompletion> & GetEventLooped() { return mAnimationLoopedEvent; }
             
 			bool GetIsFinished() const;
 		protected:
@@ -145,10 +145,10 @@ namespace ChilliSource
 			const EntityAnimationData* GetEntityAnimationDataWithName(const std::string & instrName) const;
 
 
-			std::unordered_map<std::string, EntityAnimationData>	mmapAnimDataToEntityName;
-			std::vector<EntityAnimContext>			masPlayingAnimations;
-            CEvent1<EventAnimationCompletion>           mAnimationCompletionEvent;
-            CEvent1<EventAnimationCompletion>           mAnimationLoopedEvent;
+			std::unordered_map<std::string, EntityAnimationData> mmapAnimDataToEntityName;
+			std::vector<EntityAnimContext> masPlayingAnimations;
+            Event<EventAnimationCompletion> mAnimationCompletionEvent;
+            Event<EventAnimationCompletion> mAnimationLoopedEvent;
             
             bool mbPaused;
 		};

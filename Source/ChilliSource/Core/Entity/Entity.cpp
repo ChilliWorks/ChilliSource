@@ -701,7 +701,7 @@ namespace ChilliSource
             RemoveFromScene();
             
             mstrName = std::string();
-            mLocalTransform = Transform();
+            mLocalTransform.Reset();
             
             mbVisible = true;
 			mpEntityAnimationController = EntityAnimationControllerSPtr();

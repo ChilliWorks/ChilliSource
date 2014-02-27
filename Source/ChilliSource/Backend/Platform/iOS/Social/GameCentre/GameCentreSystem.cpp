@@ -250,7 +250,7 @@ namespace ChilliSource
 			{
 				//We need to register for log-out notifications
                 [[GameCentreAuthenticationListener instance] BeginListeningForGKLocalAuthenticationChanged];
-				[[GameCentreAuthenticationListener instance] GetGKLocalAuthenticationChangedEvent].AddListener(Core::MakeDelegate(this, &CGameCentreSystem::OnLocalAuthenticationChanged));
+				m_localAuthenticationChangedConnection = [[GameCentreAuthenticationListener instance] GetGKLocalAuthenticationChangedEvent].OpenConnection(Core::MakeDelegate(this, &CGameCentreSystem::OnLocalAuthenticationChanged));
 				
 				AuthenticateClient();
 				
@@ -403,7 +403,7 @@ namespace ChilliSource
 			pPostRequest->mstrTag = instrTag;
 			pPostRequest->mpErrorDelegate = inpErrorDelegate;
 			
-			mLeaderboardsInfoRequestEvent.AddListener(inCallback);
+			m_leaderboardInfoConnection = mLeaderboardsInfoRequestEvent.OpenConnection(inCallback);
 			AddRequestToQueue(pPostRequest);
 		}
 		//--------------------------------------------------------------------
@@ -509,7 +509,7 @@ namespace ChilliSource
 		{
 			[GKAchievement resetAchievementsWithCompletionHandler:^(NSError* inpError)
 			 {
-				mAchievementsResetEvent.Invoke(nil == inpError);
+				mAchievementsResetEvent.NotifyConnections(nil == inpError);
 			 }];
 		}
 		//---------------------------------------------------------------------
@@ -526,7 +526,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		///Subscribe to achievement reset event
 		//---------------------------------------------------------------------
-		Core::IEvent<CGameCentreSystem::AchievementsResetDelegate>& CGameCentreSystem::OnAchievementResetEvent()
+		Core::IConnectableEvent<CGameCentreSystem::AchievementsResetDelegate>& CGameCentreSystem::OnAchievementResetEvent()
 		{
 			return mAchievementsResetEvent;
 		}
@@ -536,7 +536,7 @@ namespace ChilliSource
 		///
 		/// Raised when the game centre user changes (new signin/signout)
 		//---------------------------------------------------------------------
-		Core::IEvent<CGameCentreSystem::AuthenticationChangedDelegate>& CGameCentreSystem::OnAuthenticationChangedEvent()
+		Core::IConnectableEvent<CGameCentreSystem::AuthenticationChangedDelegate>& CGameCentreSystem::OnAuthenticationChangedEvent()
 		{
 			return mAuthenticationChangedEvent;
 		}
@@ -997,7 +997,7 @@ namespace ChilliSource
 				mLeaderboardsInfo.mNames.push_back(ChilliSource::Core::CStringUtils::NSStringToUTF8String([pTitles objectAtIndex:i]));
 			}
 			
-			mLeaderboardsInfoRequestEvent.Invoke(mLeaderboardsInfo);
+			mLeaderboardsInfoRequestEvent.NotifyConnections(mLeaderboardsInfo);
 		}
 		//---------------------------------------------------------------------
 		/// On Local Authentication Changed
@@ -1018,7 +1018,7 @@ namespace ChilliSource
                     
                     CS_DEBUG_LOG("Game Center - Local Player signs in");
     
-                    mAuthenticationChangedEvent.Invoke(true);
+                    mAuthenticationChangedEvent.NotifyConnections(true);
                     
                     //Load friends
                     RequestFriendsInformation("FriendInfo", nullptr);
@@ -1033,7 +1033,7 @@ namespace ChilliSource
 			else 
 			{
 				CS_DEBUG_LOG("Game Center - Local Player signs out");
-				mAuthenticationChangedEvent.Invoke(false);
+				mAuthenticationChangedEvent.NotifyConnections(false);
 			}
 			
 		}

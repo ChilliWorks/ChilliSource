@@ -197,6 +197,10 @@ namespace ChilliSource
             
             Core::Colour mBackgroundColour;
             
+            Core::ConnectionUPtr m_appResumedConnection;
+            Core::ConnectionUPtr m_moviePlayerLoadStateChangedConnection;
+            Core::ConnectionUPtr m_moviePlayerPlaybackFinishedConnection;
+            
             bool mbIsAppSuspended;
             bool mbKeepAppRunning;
         };

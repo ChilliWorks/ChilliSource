@@ -12,7 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Activity.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 
@@ -70,7 +70,7 @@ namespace ChilliSource
             /// @return Event triggered when activity is
             /// dismissed
             //-----------------------------------------------
-            Core::IEvent<Core::ActivityDismissedEvent>& GetDismissedEvent();
+            Core::IConnectableEvent<Core::ActivityDismissedEvent>& GetDismissedEvent();
             //-----------------------------------------------
             /// Set Size
             ///
@@ -89,7 +89,7 @@ namespace ChilliSource
             virtual Core::UnifiedVector2 GetSize() const = 0;
         protected:
             
-            Core::CEvent1<Core::ActivityDismissedEvent> mOnDismissedEvent;
+            Core::Event<Core::ActivityDismissedEvent> mOnDismissedEvent;
         };
     }
 }

@@ -359,7 +359,7 @@ namespace ChilliSource
                 mfFadeMaxTime = infFadeOutTime;
                 mfFadeTimer = 0.0f;
                 SetPlaybackPosition(0.0f);
-                mAnimationChangedEvent.Invoke(this);
+                mAnimationChangedEvent.NotifyConnections(this);
             }
             else if (nullptr != mActiveAnimationGroup)
             {
@@ -379,7 +379,7 @@ namespace ChilliSource
                 SetPlaybackPosition(0.0f);
                 mfBlendlinePosition = 0.0f;
                 mfFadeTimer = 0.0f;
-                mAnimationChangedEvent.Invoke(this);
+                mAnimationChangedEvent.NotifyConnections(this);
             }
         }
         //----------------------------------------------------------
@@ -736,7 +736,7 @@ namespace ChilliSource
                         {
                             mfPlaybackPosition = mActiveAnimationGroup->GetAnimationLength();
                             mbFinished = true;
-                            mAnimationCompletionEvent.Invoke(this);
+                            mAnimationCompletionEvent.NotifyConnections(this);
                         }
                         break;
                     }
@@ -745,7 +745,7 @@ namespace ChilliSource
                         while (mfPlaybackPosition >= mActiveAnimationGroup->GetAnimationLength() && mActiveAnimationGroup->GetAnimationLength() > 0.0f)
                         {
                             mfPlaybackPosition -= mActiveAnimationGroup->GetAnimationLength();
-                            mAnimationLoopedEvent.Invoke(this);
+                            mAnimationLoopedEvent.NotifyConnections(this);
                         }
                         break;
                     }

@@ -12,7 +12,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Activity.h>
 #include <ChilliSource/Core/Base/Colour.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource
@@ -79,13 +79,13 @@ namespace ChilliSource
             /// @return Event thats triggered when the video gets dismissed
             ///			by the player.
             //--------------------------------------------------------------
-            Core::IEvent<VideoDismissedEventDelegate>& GetDismissedEvent();
+            Core::IConnectableEvent<VideoDismissedEventDelegate>& GetDismissedEvent();
             //--------------------------------------------------------------
             /// Get Playback Complete Event
             ///
             /// @return Event thats triggered when the video stops
             //--------------------------------------------------------------
-            Core::IEvent<VideoPlaybackEventDelegate>& GetPlaybackCompleteEvent();
+            Core::IConnectableEvent<VideoPlaybackEventDelegate>& GetPlaybackCompleteEvent();
             //--------------------------------------------------------------
             /// Gets the current time of the video
             ///
@@ -95,8 +95,8 @@ namespace ChilliSource
             
         protected:
 
-            Core::CEvent0<VideoDismissedEventDelegate> mOnDismissedEvent;
-            Core::CEvent0<VideoPlaybackEventDelegate> mOnPlaybackCompleteEvent;
+            Core::Event<VideoDismissedEventDelegate> mOnDismissedEvent;
+            Core::Event<VideoPlaybackEventDelegate> mOnPlaybackCompleteEvent;
         };
     }
 }

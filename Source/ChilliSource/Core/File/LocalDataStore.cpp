@@ -342,7 +342,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         void CLocalDataStore::SubscribeToApplicationSuspendEvent()
 		{
-			CApplicationEvents::GetLateSuspendEvent() += Core::MakeDelegate(this, &CLocalDataStore::OnApplicationSuspended);
+			m_appSuspendedConnection = ApplicationEvents::GetLateSuspendEvent().OpenConnection(Core::MakeDelegate(this, &CLocalDataStore::OnApplicationSuspended));
 		}
         //----------------------------------------------------------------
         /// On Application Suspended

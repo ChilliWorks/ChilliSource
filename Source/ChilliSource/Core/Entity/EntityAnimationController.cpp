@@ -134,9 +134,9 @@ namespace ChilliSource
                     bLooped = bLooped && masPlayingAnimations[nAnim].pAnimActual->IsLooped();
                 }
                 if(bFinished)
-                    mAnimationCompletionEvent.Invoke(this);
+                    mAnimationCompletionEvent.NotifyConnections(this);
                 else if(bLooped)
-                    mAnimationLoopedEvent.Invoke(this);
+                    mAnimationLoopedEvent.NotifyConnections(this);
             }
 		}
 		

@@ -30,7 +30,7 @@ namespace ChilliSource
         /// @return Event triggered when activity is
         /// dismissed
         //-----------------------------------------------
-        Core::IEvent<Core::ActivityDismissedEvent>& WebViewActivity::GetDismissedEvent()
+        Core::IConnectableEvent<Core::ActivityDismissedEvent>& WebViewActivity::GetDismissedEvent()
         {
             return mOnDismissedEvent;
         }

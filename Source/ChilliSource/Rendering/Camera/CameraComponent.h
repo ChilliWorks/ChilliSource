@@ -302,6 +302,9 @@ namespace ChilliSource
 			Core::Matrix4x4 mmatView;		//View matrix
 			Core::Matrix4x4 mmatViewProj;	//View projection;
             
+            Core::ConnectionUPtr m_screenOrientationChangedConnection;
+            Core::ConnectionUPtr m_screenResizedConnection;
+            
             RendererSortPredicateSPtr mpOpaqueSortPredicate;
             RendererSortPredicateSPtr mpTransparentSortPredicate;
             

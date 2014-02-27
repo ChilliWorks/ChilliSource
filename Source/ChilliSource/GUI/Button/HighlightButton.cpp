@@ -62,9 +62,9 @@ namespace ChilliSource
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
 			
-            mInputEvents.GetPressedInsideEvent() += Core::MakeDelegate(this, &HighlightButton::OnButtonSelect);
-            mInputEvents.GetReleasedInsideEvent() += Core::MakeDelegate(this, &HighlightButton::OnButtonActivated);
-            mInputEvents.GetMovedWithinEvent() += Core::MakeDelegate(this, &HighlightButton::OnButtonDeselectThreshold);
+            m_pressedInsideConnection = mInputEvents.GetPressedInsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightButton::OnButtonSelect));
+            m_releasedInsideConnection = mInputEvents.GetReleasedInsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightButton::OnButtonActivated));
+            m_movedWithinConnection = mInputEvents.GetMovedWithinEvent().OpenConnection(Core::MakeDelegate(this, &HighlightButton::OnButtonDeselectThreshold));
         }
         //------------------------------------------------------------
         /// Constructor
@@ -231,9 +231,9 @@ namespace ChilliSource
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
 			
-            mInputEvents.GetPressedInsideEvent() += Core::MakeDelegate(this, &HighlightButton::OnButtonSelect);
-            mInputEvents.GetReleasedInsideEvent() += Core::MakeDelegate(this, &HighlightButton::OnButtonActivated);
-            mInputEvents.GetMovedWithinEvent() += Core::MakeDelegate(this, &HighlightButton::OnButtonDeselectThreshold);
+            m_pressedInsideConnection = mInputEvents.GetPressedInsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightButton::OnButtonSelect));
+            m_releasedInsideConnection = mInputEvents.GetReleasedInsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightButton::OnButtonActivated));
+            m_movedWithinConnection = mInputEvents.GetMovedWithinEvent().OpenConnection(Core::MakeDelegate(this, &HighlightButton::OnButtonDeselectThreshold));
         }
         //-----------------------------------------------------------
         /// Get Background Image View
@@ -609,7 +609,7 @@ namespace ChilliSource
 			if(mbSelected)
 			{
 				OnButtonDeselect(inpButton, insTouchInfo);
-				mOnButtonActivatedEvent.Invoke(this);
+				mOnButtonActivatedEvent.NotifyConnections(this);
 			}
         }
 		//-----------------------------------------------------------

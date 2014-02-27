@@ -40,15 +40,15 @@ namespace ChilliSource
 		{
 			return (this->ID == inOther.ID);
 		}
-		Core::IEvent<TouchEventDelegate> & TouchScreen::GetTouchBeganEvent()
+		Core::IConnectableEvent<TouchEventDelegate> & TouchScreen::GetTouchBeganEvent()
 		{
 			return mTouchBeganEvent;
 		}
-		Core::IEvent<TouchEventDelegate> & TouchScreen::GetTouchMovedEvent()
+		Core::IConnectableEvent<TouchEventDelegate> & TouchScreen::GetTouchMovedEvent()
 		{
 			return mTouchMovedEvent;
 		}
-		Core::IEvent<TouchEventDelegate> & TouchScreen::GetTouchEndEvent()
+		Core::IConnectableEvent<TouchEventDelegate> & TouchScreen::GetTouchEndEvent()
 		{
 			return mTouchEndedEvent;
 		}
@@ -88,14 +88,14 @@ namespace ChilliSource
                 {
                     case TouchInputType::k_began:
                         AddActiveTouch(*pTouch);
-                        mTouchBeganEvent.Invoke(*pTouch);
+                        mTouchBeganEvent.NotifyConnections(*pTouch);
                         break;
                     case TouchInputType::k_moved:
                         UpdateActiveTouch(*pTouch);
-                        mTouchMovedEvent.Invoke(*pTouch);
+                        mTouchMovedEvent.NotifyConnections(*pTouch);
                         break;
                     case TouchInputType::k_ended:
-                        mTouchEndedEvent.Invoke(*pTouch);
+                        mTouchEndedEvent.NotifyConnections(*pTouch);
                         RemoveActiveTouch(*pTouch);
                         break;
                 };

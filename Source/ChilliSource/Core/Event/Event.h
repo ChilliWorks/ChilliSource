@@ -11,6 +11,7 @@
 #define _CHILLISOURCE_CORE_EVENT_EVENT_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Event/Connection.h>
 #include <ChilliSource/Core/Event/IConnectableEvent.h>
 #include <ChilliSource/Core/Event/IDisconnectableEvent.h>
@@ -21,10 +22,6 @@ namespace ChilliSource
 {
     namespace Core
     {
-        typedef std::shared_ptr<Connection> ConnectionSPtr;
-        typedef std::unique_ptr<Connection> ConnectionUPtr;
-        typedef std::weak_ptr<Connection> ConnectionWPtr;
-        
         //-----------------------------------------------------------------
         /// An Event represents an object which can have multiple listeners
         /// (connections) with the given DelegateType.
@@ -42,6 +39,15 @@ namespace ChilliSource
             /// @author S Downie
             //-------------------------------------------------------------
             Event(){}
+            //-------------------------------------------------------------
+            /// Destructor closes all open connections
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------------
+            ~Event()
+            {
+                CloseAllConnections();
+            }
             //-------------------------------------------------------------
             /// No copying of events is allowed. If you wish to make a
             /// shallow copy of an event then hold a pointer to it.
@@ -67,7 +73,6 @@ namespace ChilliSource
                 connection->SetOwningEvent(this);
             
                 ConnectionDesc desc;
-                desc.m_isOpen = true;
                 desc.m_delegate = in_delegate;
                 desc.m_connection = connection.get();
                 m_connections.push_back(desc);
@@ -95,7 +100,7 @@ namespace ChilliSource
                         }
                         else
                         {
-                            desc.m_isOpen = false;
+                            desc.m_connection = nullptr;
                         }
                         
                         return;
@@ -118,7 +123,7 @@ namespace ChilliSource
                 u32 numConnections = m_connections.size();
                 for(u32 i=0; i<numConnections; ++i)
                 {
-                    if(m_connections[i].m_isOpen == true)
+                    if(m_connections[i].m_connection != nullptr)
                     {
                         m_connections[i].m_delegate(in_args...);
                     }
@@ -127,6 +132,23 @@ namespace ChilliSource
                 m_isNotifying = false;
                 
                 RemoveClosedConnections();
+            }
+            //-------------------------------------------------------------
+            /// Closes all the currently open connections
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------------
+            void CloseAllConnections()
+            {
+                for(u32 i=0; i<m_connections.size(); ++i)
+                {
+                    if(m_connections[i].m_connection != nullptr)
+                    {
+                        m_connections[i].m_connection->SetOwningEvent(nullptr);
+                    }
+                }
+                
+                m_connections.clear();
             }
     
         private:
@@ -140,7 +162,7 @@ namespace ChilliSource
             {
                 for(typename ConnectionList::iterator it = m_connections.begin(); it != m_connections.end(); )
                 {
-                    if(it->m_isOpen == false)
+                    if(it->m_connection == nullptr)
                     {
                         it = m_connections.erase(it);
                     }
@@ -157,7 +179,6 @@ namespace ChilliSource
             {
                 TDelegateType m_delegate;
                 Connection* m_connection = nullptr;
-                bool m_isOpen = false;
             };
     
             typedef std::vector<ConnectionDesc> ConnectionList;

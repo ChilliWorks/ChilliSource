@@ -10,8 +10,8 @@
 #define MOFLOW_INPUT_ACCELEROMETER_H
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Math/Vector3.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Input/Base/InputDevice.h>
 
 #include <functional>
@@ -65,7 +65,7 @@ namespace ChilliSource
 			/// acceleration is updated. The acceleration will not
 			/// necessarily have changed between updates.
 			//----------------------------------------------------
-			Core::IEvent<AccelerationUpdatedDelegate>& GetAccelerationUpdatedEvent();
+			Core::IConnectableEvent<AccelerationUpdatedDelegate>& GetAccelerationUpdatedEvent();
 			//----------------------------------------------------
 			/// Stop Updating
 			///
@@ -77,7 +77,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			virtual ~Accelerometer();
 		protected:
-			Core::CEvent1<AccelerationUpdatedDelegate> mAccelerationUpdatedEvent;
+			Core::Event<AccelerationUpdatedDelegate> mAccelerationUpdatedEvent;
 		};
 	}
 }

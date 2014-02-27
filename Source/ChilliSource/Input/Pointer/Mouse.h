@@ -3,8 +3,8 @@
 #define _MO_FLO_INPUT_MOUSE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Input/Base/InputDevice.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
 
 namespace ChilliSource
 {
@@ -47,25 +47,25 @@ namespace ChilliSource
 			///
 			/// @return Event triggered on mouse button down
 			//------------------------------------------------------
-			Core::IEvent<MouseEventDelegate> & GetMousePressedEvent();
+			Core::IConnectableEvent<MouseEventDelegate> & GetMousePressedEvent();
 			//------------------------------------------------------
 			/// Get Mouse Moved Event
 			///
 			/// @return Event triggered on mouse moved
 			//------------------------------------------------------
-			Core::IEvent<MouseEventDelegate> & GetMouseMovedEvent();
+			Core::IConnectableEvent<MouseEventDelegate> & GetMouseMovedEvent();
 			//------------------------------------------------------
 			/// Get Mouse Released Event
 			///
 			/// @return Event triggered on mouse button up
 			//------------------------------------------------------
-			Core::IEvent<MouseEventDelegate> & GetMouseReleasedEvent();
+			Core::IConnectableEvent<MouseEventDelegate> & GetMouseReleasedEvent();
 
 		protected:
 
-			Core::CEvent1<MouseEventDelegate> mOnMouseMovedEvent;
-			Core::CEvent1<MouseEventDelegate> mOnMousePressedEvent;
-			Core::CEvent1<MouseEventDelegate> mOnMouseReleasedEvent;
+			Core::Event<MouseEventDelegate> mOnMouseMovedEvent;
+			Core::Event<MouseEventDelegate> mOnMousePressedEvent;
+			Core::Event<MouseEventDelegate> mOnMouseReleasedEvent;
 
 			//Tracks the state of the mouse buttons
 			bool mbaButtonsDown[(u32)MouseInputType::k_total];

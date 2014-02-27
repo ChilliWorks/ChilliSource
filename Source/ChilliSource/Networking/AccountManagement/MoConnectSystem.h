@@ -11,7 +11,7 @@
 #define _MOFLOW_NETWORKING_MOCONNECTSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
@@ -173,7 +173,7 @@ namespace ChilliSource
                                               const std::string& instrLanguage, const std::string& instrCountryCode, const PushNotificationResultDelegate& inDelegate);
 			
 			typedef std::function<void(MoConnectSystem*)> EventDelegate;
-			Core::IEvent<EventDelegate>& SignedInUserChangesEvent();
+			Core::IConnectableEvent<EventDelegate>& SignedInUserChangesEvent();
 			
             bool HasLoadedLoginTypes();
 			bool CurrentAccountHasLogin(const std::string& instrType);
@@ -280,7 +280,7 @@ namespace ChilliSource
 			std::vector<std::string> mastrCurrentAccountLogins;
 			HttpRequest* mpPendingLoginsRequest;
             
-			Core::CEvent1<EventDelegate> mSignedInUserChangesEvent;
+			Core::Event<EventDelegate> mSignedInUserChangesEvent;
 			HttpConnectionSystem* mpHttpConnectionSystem;
             Core::OAuthSystem*  mpOAuthSystem;
             LocalUserProfileDelegate mLocalUserProfileDelegate;

@@ -16,10 +16,10 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/Base/AudioManager.h>
 #include <ChilliSource/Audio/3D/AudioComponentFactory.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
 
 namespace ChilliSource
 {
@@ -151,7 +151,7 @@ namespace ChilliSource
 			/// listen for this event
 			/// @return Audio event
 			//-------------------------------------------------------
-			Core::IEvent<AudioVolumeEventDelegate>& GetMasterEffectVolumeChangedEvent();
+			Core::IConnectableEvent<AudioVolumeEventDelegate>& GetMasterEffectVolumeChangedEvent();
 			//-------------------------------------------------------
 			/// Get Master Stream Volume Changed Event
 			///
@@ -159,7 +159,7 @@ namespace ChilliSource
 			/// listen for this event
 			/// @return Audio event
 			//-------------------------------------------------------
-			Core::IEvent<AudioVolumeEventDelegate>& GetMasterStreamVolumeChangedEvent();
+			Core::IConnectableEvent<AudioVolumeEventDelegate>& GetMasterStreamVolumeChangedEvent();
 			//----------------------------------------------------
 			/// Get Number Of Component Factories
 			///
@@ -181,8 +181,8 @@ namespace ChilliSource
 			
 		protected:
 			
-			Core::CEvent0<AudioVolumeEventDelegate> mOnMasterEffectVolumeChangedEvent;
-			Core::CEvent0<AudioVolumeEventDelegate> mOnMasterStreamVolumeChangedEvent;
+			Core::Event<AudioVolumeEventDelegate> mOnMasterEffectVolumeChangedEvent;
+			Core::Event<AudioVolumeEventDelegate> mOnMasterStreamVolumeChangedEvent;
 			
 			AudioManager* mpAudioManager;
 			AudioComponentFactory* mpAudioComponentFactory;

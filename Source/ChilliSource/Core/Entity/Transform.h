@@ -10,10 +10,10 @@
 #define _MO_FLO_CORE_TRANSFORM_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
 
 #include <functional>
 
@@ -347,7 +347,15 @@ namespace ChilliSource
             ///
             /// @return TransformChangedDelegate event
             //----------------------------------------------------------------
-            IEvent<TransformChangedDelegate>& GetTransformChangedEvent();
+            IConnectableEvent<TransformChangedDelegate>& GetTransformChangedEvent();
+            
+            //----------------------------------------------------------------
+            /// Resets the transform back to identity and removes any
+            /// connections
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------
+            void Reset();
             
         private:
             
@@ -375,13 +383,13 @@ namespace ChilliSource
 			Vector3 mvScale;
 			Quaternion mqOrientation;
             
-            f32         mfOpacity;
+            f32 mfOpacity;
             
             mutable Vector3 mvWorldPosition;
 			mutable Vector3 mvWorldScale;
 			mutable Quaternion mqWorldOrientation;
             
-            CEvent0<TransformChangedDelegate> mTransformChangedEvent;
+            Event<TransformChangedDelegate> mTransformChangedEvent;
             
             Transform* mpParentTransform;
 			

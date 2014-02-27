@@ -10,7 +10,7 @@
 #define _MO_FLO_INPUT_VIRTUAL_KEYBOARD_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/String/UTF8String.h>
 
 #include <functional>
@@ -65,17 +65,17 @@ namespace ChilliSource
             virtual void SetKeyboardType(KeyboardType ineKeyboardType) = 0;
             virtual void SetCapitalisationMethod(KeyboardCapitalisation ineKeyboardCapitalisation) = 0;
 			
-			Core::IEvent<KeyboardEventDelegate>& GetKeyboardShowEvent() {return mOnKeyboardShowEvent;}
-			Core::IEvent<KeyboardEventDelegate>& GetKeyboardHideEvent() {return mOnKeyboardHideEvent;}
-			Core::IEvent<TextInputEventDelegate>& GetKeyboardTextChangeEvent() {return mOnKeyboardTextChangeEvent;}
+			Core::IConnectableEvent<KeyboardEventDelegate>& GetKeyboardShowEvent() {return mOnKeyboardShowEvent;}
+			Core::IConnectableEvent<KeyboardEventDelegate>& GetKeyboardHideEvent() {return mOnKeyboardHideEvent;}
+			Core::IConnectableEvent<TextInputEventDelegate>& GetKeyboardTextChangeEvent() {return mOnKeyboardTextChangeEvent;}
 			
 			bool IsActive() {return mbIsActive;}
 			
 		protected:
 			
-			Core::CEvent0<KeyboardEventDelegate> mOnKeyboardShowEvent;
-			Core::CEvent0<KeyboardEventDelegate> mOnKeyboardHideEvent;
-			Core::CEvent2<TextInputEventDelegate> mOnKeyboardTextChangeEvent;
+			Core::Event<KeyboardEventDelegate> mOnKeyboardShowEvent;
+			Core::Event<KeyboardEventDelegate> mOnKeyboardHideEvent;
+			Core::Event<TextInputEventDelegate> mOnKeyboardTextChangeEvent;
 			
 			Core::UTF8String mstrText;
 			

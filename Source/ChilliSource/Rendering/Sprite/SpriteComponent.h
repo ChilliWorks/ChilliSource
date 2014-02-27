@@ -63,7 +63,6 @@ namespace ChilliSource
 			
 			DECLARE_NAMED_INTERFACE(SpriteComponent);
 			SpriteComponent();
-            virtual ~SpriteComponent();
 			//----------------------------------------------------------
 			/// Is A
 			///
@@ -355,6 +354,9 @@ namespace ChilliSource
 			//-----------------------------------------------------------
 			const Core::Colour& GetColourWithOpacity() const;
 		private:
+            
+            Core::ConnectionUPtr m_transformChangedConnection;
+            
 			SpriteData mSpriteData;
             
             Core::Matrix4x4 mmatTransformCache;

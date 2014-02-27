@@ -39,7 +39,7 @@ namespace ChilliSource
             mpAudioComponentFactory = new CFMODAudioComponentFactory(this, mpAudioManager);
             
 			// Subscribe to memory warnings so we can clear FMOD's cache
-            Core::CApplicationEvents::GetLowMemoryEvent() += Core::MakeDelegate(this, &CFMODSystem::OnApplicationMemoryWarning);
+            m_appLowMemoryConnection = Core::ApplicationEvents::GetLowMemoryEvent().OpenConnection(Core::MakeDelegate(this, &CFMODSystem::OnApplicationMemoryWarning));
 			
 			//Create the FMOD event system
 			ErrorCheck(FMOD::EventSystem_Create(&mpFMODEventSystem));

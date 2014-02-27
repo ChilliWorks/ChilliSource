@@ -61,12 +61,12 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Event
         //---------------------------------------------------------
-        template <typename TDelegateType> class IEvent; //TODO: These should be removed!
-        template <typename TDelegateType> class CEvent0;
-        template <typename TDelegateType> class CEvent1;
-        template <typename TDelegateType> class CEvent2;
-        template <typename TDelegateType> class CEvent3;
-        template <typename TDelegateType> class CEvent4;
+        template <typename TDelegateType> class Event;
+        template <typename TDelegateType> class IConnectableEvent;
+        CS_FORWARD_DECLARE_CLASS(IDisconnectableEvent);
+        CS_FORWARD_DECLARE_CLASS(Connection);
+        
+
         //---------------------------------------------------------
         /// File
         //---------------------------------------------------------

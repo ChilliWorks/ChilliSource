@@ -23,7 +23,7 @@ namespace ChilliSource
         ///
         /// @return Event
         //-----------------------------------------------------------
-        Core::IEvent<GUIEventDelegate>& InputEvents::GetPressedInsideEvent()
+        Core::IConnectableEvent<GUIEventDelegate>& InputEvents::GetPressedInsideEvent()
         {
             return mTouchPressedInside;
         }
@@ -35,7 +35,7 @@ namespace ChilliSource
         ///
         /// @return Event
         //-----------------------------------------------------------
-        Core::IEvent<GUIEventDelegate>& InputEvents::GetReleasedInsideEvent()
+        Core::IConnectableEvent<GUIEventDelegate>& InputEvents::GetReleasedInsideEvent()
         {
             return mTouchReleasedInside;
         }
@@ -47,7 +47,7 @@ namespace ChilliSource
         ///
         /// @return Event
         //-----------------------------------------------------------
-        Core::IEvent<GUIEventDelegate>& InputEvents::GetReleasedOutsideEvent()
+        Core::IConnectableEvent<GUIEventDelegate>& InputEvents::GetReleasedOutsideEvent()
         {
             return mTouchReleasedOutside;
         }
@@ -59,7 +59,7 @@ namespace ChilliSource
         ///
         /// @return Event
         //-----------------------------------------------------------
-        Core::IEvent<GUIEventDelegate>& InputEvents::GetMovedOutsideEvent()
+        Core::IConnectableEvent<GUIEventDelegate>& InputEvents::GetMovedOutsideEvent()
         {   
             return mTouchMoveExit;    
         }
@@ -71,7 +71,7 @@ namespace ChilliSource
         ///
         /// @return Event
         //-----------------------------------------------------------
-        Core::IEvent<GUIEventDelegate>& InputEvents::GetMovedInsideEvent()
+        Core::IConnectableEvent<GUIEventDelegate>& InputEvents::GetMovedInsideEvent()
         {
             return mTouchMoveEnter;
         }
@@ -83,7 +83,7 @@ namespace ChilliSource
         ///
         /// @return Event
         //-----------------------------------------------------------
-        Core::IEvent<GUIEventDelegate>& InputEvents::GetMovedWithinEvent()
+        Core::IConnectableEvent<GUIEventDelegate>& InputEvents::GetMovedWithinEvent()
         {
             return mTouchMovedWithin;
         }
@@ -101,7 +101,7 @@ namespace ChilliSource
             //We must contain this point to be notified so we can trigger an event
             //Events: PressedInside
             //Possible: Released outside, Moved Outside, Moved Within
-            mTouchPressedInside.Invoke(inpView, insTouchInfo);
+            mTouchPressedInside.NotifyConnections(inpView, insTouchInfo);
             mOpenTouches.push_back(insTouchInfo.ID);
             
             return true;
@@ -124,18 +124,18 @@ namespace ChilliSource
             {
                 //Event: Moved inside
                 //The touch has moved into us raise an event
-                mTouchMoveEnter.Invoke(inpView, insTouchInfo);
+                mTouchMoveEnter.NotifyConnections(inpView, insTouchInfo);
             }
             else if(it != mOpenTouches.end() && bContains)
             {
                 //Event: Moved within
-                mTouchMovedWithin.Invoke(inpView, insTouchInfo);
+                mTouchMovedWithin.NotifyConnections(inpView, insTouchInfo);
             }
             else if(it != mOpenTouches.end() && !bContains)
             {
                 //If the touch started within us then we can trigger an event
                 //Event: Moved outside
-                mTouchMoveExit.Invoke(inpView, insTouchInfo);
+                mTouchMoveExit.NotifyConnections(inpView, insTouchInfo);
             }
             
             return bContains;
@@ -154,7 +154,7 @@ namespace ChilliSource
             if(inpView->Contains(insTouchInfo.vLocation))
             {
                 //We contained the touch when it was released we can raise an event
-                mTouchReleasedInside.Invoke(inpView, insTouchInfo);
+                mTouchReleasedInside.NotifyConnections(inpView, insTouchInfo);
                 
                 if(it != mOpenTouches.end())
                 {
@@ -165,7 +165,7 @@ namespace ChilliSource
             else if(it != mOpenTouches.end())
             {
                 //If the touch started within us then we can trigger an event
-                mTouchReleasedOutside.Invoke(inpView, insTouchInfo);
+                mTouchReleasedOutside.NotifyConnections(inpView, insTouchInfo);
                 mOpenTouches.erase(it);
             }
         }  

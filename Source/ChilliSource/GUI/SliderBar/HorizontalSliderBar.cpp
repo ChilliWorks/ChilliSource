@@ -52,7 +52,7 @@ namespace ChilliSource
             mpSliderImage->EnableUserInteraction(false);
             mpBackgroundImage->AddSubview(mpSliderImage);
             
-            mInputEvents.GetMovedWithinEvent() += Core::MakeDelegate(this, &HorizontalSliderBar::OnSliderMoved);
+            m_movedWithinConnection = mInputEvents.GetMovedWithinEvent().OpenConnection(Core::MakeDelegate(this, &HorizontalSliderBar::OnSliderMoved));
         }
 		//------------------------------------------------------
 		/// Constructor
@@ -126,7 +126,7 @@ namespace ChilliSource
 				SetSliderSize(Core::UnifiedVector2(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w));
 			}
             
-			mInputEvents.GetMovedWithinEvent() += Core::MakeDelegate(this, &HorizontalSliderBar::OnSliderMoved);
+			m_movedWithinConnection = mInputEvents.GetMovedWithinEvent().OpenConnection(Core::MakeDelegate(this, &HorizontalSliderBar::OnSliderMoved));
 		}
 		//--------------------------------------------------------
 		/// Set Bar Sprite Sheet
@@ -301,12 +301,5 @@ namespace ChilliSource
                 GUIView::Draw(inpCanvas);
             }
         }
-		//------------------------------------------------------
-		/// Destructor
-		//------------------------------------------------------
-		HorizontalSliderBar::~HorizontalSliderBar()
-		{
-			mInputEvents.GetMovedWithinEvent() -= Core::MakeDelegate(this, &HorizontalSliderBar::OnSliderMoved);
-		}
     }
 }

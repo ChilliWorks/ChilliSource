@@ -12,8 +12,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Activity.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/String/UTF8String.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
 
 #include <vector>
 

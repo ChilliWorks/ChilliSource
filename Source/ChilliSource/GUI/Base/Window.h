@@ -128,6 +128,13 @@ namespace ChilliSource
             
         private:
             Input::InputSystem* mpInputSystem;
+            
+            Core::ConnectionUPtr m_screenOrientationChangedConnection;
+            Core::ConnectionUPtr m_screenResizedConnection;
+            
+            Core::ConnectionUPtr m_touchBeganConnection;
+            Core::ConnectionUPtr m_touchMoveConnection;
+            Core::ConnectionUPtr m_touchEndConnection;
         };
     }
 }

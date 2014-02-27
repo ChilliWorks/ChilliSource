@@ -182,7 +182,7 @@ namespace ChilliSource
 				mpDismissButton = nil;
 				mpWebDelegate = nil;
 				
-				mOnDismissedEvent.Invoke(this);
+				mOnDismissedEvent.NotifyConnections(this);
 			}
 		}
 		//-----------------------------------------------

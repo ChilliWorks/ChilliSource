@@ -49,7 +49,7 @@ namespace ChilliSource
 			mfMasterEffectVolume = Core::CMathUtils::Clamp(infVolume, 0.0f, 1.0f);
 			
 			//Trigger the active sounds OnMasterVolumeChanged delegate
-			mOnMasterEffectVolumeChangedEvent.Invoke();
+			mOnMasterEffectVolumeChangedEvent.NotifyConnections();
 		}
 		//-------------------------------------------------------
 		/// Set Master Stream Volume
@@ -62,7 +62,7 @@ namespace ChilliSource
 			mfMasterStreamVolume = Core::CMathUtils::Clamp(infVolume, 0.0f, 1.0f);
 			
 			//Trigger the active sounds OnMasterVolumeChanged delegate
-			mOnMasterStreamVolumeChangedEvent.Invoke();
+			mOnMasterStreamVolumeChangedEvent.NotifyConnections();
 		}
 		//-------------------------------------------------------
 		/// Get Master Effect Volume
@@ -136,7 +136,7 @@ namespace ChilliSource
 		/// listen for this event
 		/// @return Audio event
 		//-------------------------------------------------------
-		Core::IEvent<AudioVolumeEventDelegate>& AudioSystem::GetMasterEffectVolumeChangedEvent()
+		Core::IConnectableEvent<AudioVolumeEventDelegate>& AudioSystem::GetMasterEffectVolumeChangedEvent()
 		{
 			return mOnMasterEffectVolumeChangedEvent;
 		}
@@ -147,7 +147,7 @@ namespace ChilliSource
 		/// listen for this event
 		/// @return Audio event
 		//-------------------------------------------------------
-		Core::IEvent<AudioVolumeEventDelegate>& AudioSystem::GetMasterStreamVolumeChangedEvent()
+		Core::IConnectableEvent<AudioVolumeEventDelegate>& AudioSystem::GetMasterStreamVolumeChangedEvent()
 		{
 			return mOnMasterStreamVolumeChangedEvent;
 		}

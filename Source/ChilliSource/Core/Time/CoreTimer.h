@@ -14,7 +14,7 @@
 #define _MO_FLO_CORE_CORE_TIMER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
+#include <ChilliSource/Core/Event/Event.h>
 
 #include <functional>
 
@@ -33,7 +33,7 @@ namespace ChilliSource
 			///
 			/// @return The event
 			//----------------------------------------------------
-			static IEvent<TimeEventDelegate>& GetTimerUpdateEvent();
+			static IConnectableEvent<TimeEventDelegate>& GetTimerUpdateEvent();
 
 		private:
             
@@ -46,7 +46,7 @@ namespace ChilliSource
 			
 		private:
 			
-			static CEvent1<TimeEventDelegate> mOnTimerUpdateEvent;
+			static Event<TimeEventDelegate> mOnTimerUpdateEvent;
             
 			friend class Application; //Only application can invoke the update
 		};

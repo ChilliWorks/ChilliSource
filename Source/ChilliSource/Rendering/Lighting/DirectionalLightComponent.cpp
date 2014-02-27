@@ -110,14 +110,14 @@ namespace ChilliSource
         //----------------------------------------------------
         void DirectionalLightComponent::OnAttachedToEntity()
         {
-            GetEntityOwner()->GetTransform().GetTransformChangedEvent().AddListener(Core::MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged));
+            m_transformChangedConnection = GetEntityOwner()->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged));
         }
         //----------------------------------------------------
         /// On Detached From Entity
         //----------------------------------------------------
         void DirectionalLightComponent::OnDetachedFromEntity()
         {
-            GetEntityOwner()->GetTransform().GetTransformChangedEvent().RemoveListener(Core::MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged));
+            m_transformChangedConnection = nullptr;
         }
         //----------------------------------------------------
         /// On Entity Transform Changed
