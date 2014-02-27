@@ -7,14 +7,14 @@
  *
  */
 
+#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
-
-#include <ChilliSource/Core/Entity/Entity.h>
 
 namespace ChilliSource
 {
@@ -376,7 +376,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void CSpriteComponent::OnAttachedToEntity()
 		{
-			mpEntityOwner->Transform().GetTransformChangedEvent() += Core::CTransform::TransformChangedDelegate(this, &CSpriteComponent::OnTransformChanged);
+			mpEntityOwner->Transform().GetTransformChangedEvent() += Core::MakeDelegate(this, &CSpriteComponent::OnTransformChanged);
             
             OnTransformChanged();
 		}
@@ -385,7 +385,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void CSpriteComponent::OnDetachedFromEntity()
 		{
-			mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::CTransform::TransformChangedDelegate(this, &CSpriteComponent::OnTransformChanged);
+			mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &CSpriteComponent::OnTransformChanged);
 		}
         //-----------------------------------------------------------
         /// Calculate Corner Positions
@@ -460,7 +460,7 @@ namespace ChilliSource
 		{
             if(mpEntityOwner)
             {
-                mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::CTransform::TransformChangedDelegate(this, &CSpriteComponent::OnTransformChanged);
+                mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &CSpriteComponent::OnTransformChanged);
             }
 		}
 	}

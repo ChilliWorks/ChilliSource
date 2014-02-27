@@ -10,9 +10,9 @@
 #define _MO_FLO_RENDERING_PARTICLES_PARTICLE_EMITTER_FACTORY_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
+#include <functional>
 #include <unordered_map>
 
 namespace ChilliSource
@@ -22,7 +22,7 @@ namespace ChilliSource
         class CParticleEmitterFactory
         {
         public:
-            typedef fastdelegate::FastDelegate3<const Core::ParamDictionary&, const MaterialPtr&, CParticleComponent*, CParticleEmitter*> EmitterCreateDelegate; 
+            typedef std::function<CParticleEmitter*(const Core::ParamDictionary&, const MaterialPtr&, CParticleComponent*)> EmitterCreateDelegate;
 
             //------------------------------------------------------------------
             /// Register 

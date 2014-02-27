@@ -22,6 +22,7 @@
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
 #include <ChilliSource/GUI/Base/Window.h>
 
@@ -32,7 +33,7 @@ namespace ChilliSource
         //---Matrix caches
         Core::CMatrix4x4 CRenderer::matViewProjCache;
 		
-		typedef fastdelegate::FastDelegate2<IRenderComponent*, IRenderComponent*, bool> RenderSortDelegate;
+		typedef std::function<bool(IRenderComponent*, IRenderComponent*)> RenderSortDelegate;
 		
 		//----------------------------------------------------------
 		/// Constructor
@@ -276,7 +277,7 @@ namespace ChilliSource
             if(pOpaqueSort)
             {
                 pOpaqueSort->PrepareForSort(&inaRenderables);
-				std::sort(inaRenderables.begin(), inaRenderables.end(), RenderSortDelegate(pOpaqueSort.get(), &CRendererSortPredicate::SortItem));
+				std::sort(inaRenderables.begin(), inaRenderables.end(), Core::MakeDelegate(pOpaqueSort.get(), &CRendererSortPredicate::SortItem));
             }
         }
         //----------------------------------------------------------
@@ -293,7 +294,7 @@ namespace ChilliSource
 			if(pTransparentSort)
             {
 				pTransparentSort->PrepareForSort(&inaRenderables);
-				std::sort(inaRenderables.begin(), inaRenderables.end(), RenderSortDelegate(pTransparentSort.get(), &CRendererSortPredicate::SortItem));
+				std::sort(inaRenderables.begin(), inaRenderables.end(), Core::MakeDelegate(pTransparentSort.get(), &CRendererSortPredicate::SortItem));
 			}
         }
         //----------------------------------------------------------

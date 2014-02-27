@@ -11,11 +11,12 @@
 #define _MO_FLO_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
 #include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -102,7 +103,7 @@ namespace ChilliSource
                 k_notAuthenticated
 			};
 			
-			typedef fastdelegate::FastDelegate1<const PostResult&> PostResultDelegate;
+			typedef std::function<void(const PostResult&)> PostResultDelegate;
 			
             //Create platform specific system
             static TwitterPostSystem* CreateSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::COAuthSystem* inpOAuthSystem);

@@ -13,8 +13,8 @@
 #include <ChilliSource/Core/Reflection/ForwardDeclarations.h>
 #include <ChilliSource/Core/Reflection/Instance.h>
 #include <ChilliSource/Core/Reflection/Registry.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 
+#include <functional>
 #include <unordered_map>
 #include <vector>
 
@@ -24,8 +24,8 @@ namespace ChilliSource
     {
         namespace Reflect
         {
-            typedef fastdelegate::FastDelegate1<CInstance*, void*> InstanceCreateDelegate;
-            typedef fastdelegate::FastDelegate1<void*> InstanceDestroyDelegate;
+            typedef std::function<void*(CInstance*)> InstanceCreateDelegate;
+            typedef std::function<void(void*)> InstanceDestroyDelegate;
             
             //===============================================================================
             /// Meta Class

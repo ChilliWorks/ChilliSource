@@ -10,9 +10,11 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
+#include <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
+
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-#include <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/NativeSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Image/ImageLoader.h>
 #include <ChilliSource/Backend/Platform/iOS/Input/Base/InputSystem.h>
@@ -67,24 +69,24 @@ namespace ChilliSource
 		/// Default
 		//-----------------------------------------
 		CPlatformSystem::CPlatformSystem()
-            : mfPhysicalScreenSize(-1.0f)
+        : mfPhysicalScreenSize(-1.0f)
 		{
             //---Systems
-			AddSystemFunc(Networking::HttpConnectionSystem::InterfaceID,SystemCreationFunction(this, &CPlatformSystem::CreateHttpConnectionSystem));
+			AddSystemFunc(Networking::HttpConnectionSystem::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateHttpConnectionSystem));
 
-            AddActivityFunc(Social::EmailCompositionActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateEmailCompositionActivity));
+            AddActivityFunc(Social::EmailCompositionActivity::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateEmailCompositionActivity));
  
             //---Activities
-            AddActivityFunc(Video::VideoPlayerActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateDefaultVideoPlayerActivity));
-			AddActivityFunc(Web::WebViewActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateWebViewActivity));
+            AddActivityFunc(Video::VideoPlayerActivity::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateDefaultVideoPlayerActivity));
+			AddActivityFunc(Web::WebViewActivity::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateWebViewActivity));
 			
 			if(CSMSCompositionActivity::SupportedByDevice())
             {
-				AddActivityFunc(Social::SMSCompositionActivity::InterfaceID, ActivityCreationFunction(this, &CPlatformSystem::CreateSMSCompositionActivity));
+				AddActivityFunc(Social::SMSCompositionActivity::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateSMSCompositionActivity));
             }
 			
             //---Info providers
-			AddInfoProviderFunc(Social::ContactInformationProvider::InterfaceID, InfoProviderCreationFunction(this, &CPlatformSystem::CreateContactInformationProvider));
+			AddInfoProviderFunc(Social::ContactInformationProvider::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateContactInformationProvider));
 
 			Core::CNotificationScheduler::Initialise(new CLocalNotificationScheduler());
 			Core::CApplication::SetFileSystem(new iOS::CFileSystem());

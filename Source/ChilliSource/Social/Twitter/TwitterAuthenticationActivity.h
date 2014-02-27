@@ -12,8 +12,9 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Activity.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -31,7 +32,7 @@ namespace ChilliSource
 				std::string strPIN;	// PIN entered by user
 			};
 			
-			typedef fastdelegate::FastDelegate1<const AuthenticationPINResult&> AuthenticationPINResultDelegate;
+			typedef std::function<void(const AuthenticationPINResult&)> AuthenticationPINResultDelegate;
 			
 			//--------------------------------------------------------------
 			/// Is A

@@ -10,8 +10,9 @@
 #define _MOFLOW_CORE_CONTAINERS_HASHED_ARRAY_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -27,7 +28,7 @@ namespace ChilliSource
         {
         public:
 
-            typedef fastdelegate::FastDelegate1<K, u32> HashDelegate;
+            typedef std::function<u32(K)> HashDelegate;
             typedef std::pair<u32, T> KeyValue;
             typedef KeyValue* iterator;
             typedef const KeyValue* const_iterator;
@@ -332,7 +333,7 @@ namespace ChilliSource
         public:
             
             typedef std::string K;
-            typedef fastdelegate::FastDelegate1<K, u32> HashDelegate;
+            typedef std::function<u32(K)> HashDelegate;
             typedef std::pair<u32, T> KeyValue;
             typedef KeyValue* iterator;
             typedef const KeyValue* const_iterator;
@@ -624,7 +625,7 @@ namespace ChilliSource
         public:
             
             typedef u32 K;
-            typedef fastdelegate::FastDelegate1<K, u32> HashDelegate;
+            typedef std::function<u32(K)> HashDelegate;
             typedef std::pair<u32, T> KeyValue;
             typedef KeyValue* iterator;
             typedef const KeyValue* const_iterator;

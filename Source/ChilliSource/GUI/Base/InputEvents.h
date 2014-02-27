@@ -17,7 +17,7 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        typedef fastdelegate::FastDelegate2<GUIView*, const Input::TouchInfo&> GUIEventDelegate;
+        typedef std::function<void(GUIView*, const Input::TouchInfo&)> GUIEventDelegate;
         
         class InputEvents
         {

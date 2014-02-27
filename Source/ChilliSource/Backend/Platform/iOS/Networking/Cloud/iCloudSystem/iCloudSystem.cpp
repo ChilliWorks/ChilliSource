@@ -10,6 +10,8 @@
 #include <ChilliSource/Backend/Platform/iOS/Networking/Cloud/iCloudSystem/ICloudSystemController.h>
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
+
 #include <sys/stat.h>
 #import <UIKit/UIKit.h>
 #import <sys/utsname.h>
@@ -239,7 +241,7 @@ namespace ChilliSource
             mmFileToSyncDelegateMap.insert(std::make_pair(GetCloudStoragePath() + strConstructedPath, CloudFileSyncRequest(ineStorageLocation, instrFilePath, inSyncConflictDelegate, inSyncCompleteDelegate)));
             
             //We need to Open the file stored in the cloud or create it if it doesnt exist, NOTE::we only want to create the cloud file if a local file exists and the cloud file doesnt
-            [[CiCloudSystemController sharedInstance] openDocument:CStringUtils::StringToNSString(strConstructedPath) :(OnOpenCloudFileCompletedDelegate(this, &CiCloudSystem::OnCloudFileOpened)) :bExists];
+            [[CiCloudSystemController sharedInstance] openDocument:CStringUtils::StringToNSString(strConstructedPath) : (Core::MakeDelegate(this, &CiCloudSystem::OnCloudFileOpened)) :bExists];
             
             return true;
         }
@@ -382,7 +384,7 @@ namespace ChilliSource
                         
                         mvsCachedConflicts.push_back(pConflict);
                         //Call the delegate
-                        psRequest.mpcSyncConflictDelegate(Networking::CloudStorageSystem::OnConflictResolvedDelegate(this, &CiCloudSystem::OnConflictResolved), pConflict);
+                        psRequest.mpcSyncConflictDelegate(Core::MakeDelegate(this, &CiCloudSystem::OnConflictResolved), pConflict);
                     }
                     else
                     {
@@ -469,7 +471,7 @@ namespace ChilliSource
         void CiCloudSystem::QueryForAllCloudFiles()
         {
             if(IsCloudStorageEnabled())
-                [[CiCloudSystemController sharedInstance] queryContentsOfICloudDirectory:(Networking::CloudStorageSystem::OnQueryFilesCompletedDelegate(this, &CiCloudSystem::QueryDidFinishGathering))];
+                [[CiCloudSystemController sharedInstance] queryContentsOfICloudDirectory:(Core::MakeDelegate(this, &CiCloudSystem::QueryDidFinishGathering))];
         }
         
         //Callback from any query made to retrieve files from cloud

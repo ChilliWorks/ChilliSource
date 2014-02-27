@@ -9,6 +9,8 @@
 #ifndef _CHILLISOURCE_CORE_BASE_MAKEDELEGATE_H_
 #define _CHILLISOURCE_CORE_BASE_MAKEDELEGATE_H_
 
+#include <functional>
+
 namespace ChilliSource
 {
 	namespace Core

@@ -10,13 +10,13 @@
 #define _NS_NOTIFICATION_ADAPTER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
 #import <Foundation/Foundation.h>
 
+#include <functional>
 
-typedef fastdelegate::FastDelegate0<> NotificationEventDelegate;
+typedef std::function<void()> NotificationEventDelegate;
 
 @interface NSNotificationAdapter : NSObject 
 {    

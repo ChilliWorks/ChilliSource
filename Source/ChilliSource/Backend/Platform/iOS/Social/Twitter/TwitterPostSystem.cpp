@@ -7,6 +7,7 @@
 //
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
@@ -69,8 +70,8 @@ namespace ChilliSource
 					if(Core::CApplication::GetPlatformSystemPtr()->CanCreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>())
 					{
 						mpAuthenticationView = Core::CApplication::GetPlatformSystemPtr()->CreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>();
-						mpAuthenticationView->SetAuthenticationPINResultDelegate(ChilliSource::Social::TwitterAuthenticationActivity::AuthenticationPINResultDelegate(this, &TwitterPostSystem::OnPINComplete));
-						mpAuthenticationView->GetDismissedEvent() += Core::ActivityDismissedEvent(this, &TwitterPostSystem::OnAuthorisationDismissed);
+						mpAuthenticationView->SetAuthenticationPINResultDelegate(Core::MakeDelegate(this, &TwitterPostSystem::OnPINComplete));
+						mpAuthenticationView->GetDismissedEvent() += Core::MakeDelegate(this, &TwitterPostSystem::OnAuthorisationDismissed);
 						mpAuthenticationView->Present();
 					}
 				}
@@ -255,7 +256,7 @@ namespace ChilliSource
 			// User has cancelled
 			if(mpAuthenticationView)
 			{
-				mpAuthenticationView->GetDismissedEvent() -= Core::ActivityDismissedEvent(this, &CTwitterPostSystem::OnAuthorisationDismissed);
+				mpAuthenticationView->GetDismissedEvent() -= Core::MakeDelegate(this, &CTwitterPostSystem::OnAuthorisationDismissed);
 				CS_SAFE_DELETE(mpAuthenticationView);
 			}
 		}

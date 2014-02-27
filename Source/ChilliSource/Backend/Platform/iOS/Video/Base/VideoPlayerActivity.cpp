@@ -14,6 +14,7 @@
 #include <ChilliSource/Backend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
@@ -78,7 +79,7 @@ namespace ChilliSource
         meSubtitlesLocation(Core::StorageLocation::k_none)
         
         {
-            ChilliSource::Core::CApplicationEvents::GetResumeEvent() += ChilliSource::Core::ApplicationSystemDelegate(this, &CVideoPlayerActivity::OnResume);
+            ChilliSource::Core::CApplicationEvents::GetResumeEvent() += Core::MakeDelegate(this, &CVideoPlayerActivity::OnResume);
             mpTapListener = [[CVideoPlayerTapListener alloc] init];
         }
 		//--------------------------------------------------------------
@@ -182,9 +183,9 @@ namespace ChilliSource
         void CVideoPlayerActivity::ListenForMoviePlayerNotifications()
         {
             [[NSNotificationAdapter sharedInstance] BeginListeningForMPLoadStateChanged];
-            [[NSNotificationAdapter sharedInstance] GetMPLoadStateChangeEvent].AddListener(NotificationEventDelegate(this, &CVideoPlayerActivity::OnLoadStateChanged));
+            [[NSNotificationAdapter sharedInstance] GetMPLoadStateChangeEvent].AddListener(Core::MakeDelegate(this, &CVideoPlayerActivity::OnLoadStateChanged));
             [[NSNotificationAdapter sharedInstance] BeginListeningForMPPlaybackDidFinish];
-            [[NSNotificationAdapter sharedInstance] GetMPPlaybackDidFinishEvent].AddListener(NotificationEventDelegate(this, &CVideoPlayerActivity::OnPlaybackFinished));
+            [[NSNotificationAdapter sharedInstance] GetMPPlaybackDidFinishEvent].AddListener(Core::MakeDelegate(this, &CVideoPlayerActivity::OnPlaybackFinished));
         }
         //---------------------------------------------------------------
         /// Stop Listening For Movie Player Notifications
@@ -195,9 +196,9 @@ namespace ChilliSource
         void CVideoPlayerActivity::StopListeningForMoviePlayerNotifications()
         {
             [[NSNotificationAdapter sharedInstance] StopListeningForMPLoadStateChanged];
-            [[NSNotificationAdapter sharedInstance] GetMPLoadStateChangeEvent].RemoveListener(NotificationEventDelegate(this, &CVideoPlayerActivity::OnLoadStateChanged));
+            [[NSNotificationAdapter sharedInstance] GetMPLoadStateChangeEvent].RemoveListener(Core::MakeDelegate(this, &CVideoPlayerActivity::OnLoadStateChanged));
             [[NSNotificationAdapter sharedInstance] StopListeningForMPPlaybackDidFinish];
-            [[NSNotificationAdapter sharedInstance] GetMPPlaybackDidFinishEvent].RemoveListener(NotificationEventDelegate(this, &CVideoPlayerActivity::OnPlaybackFinished));
+            [[NSNotificationAdapter sharedInstance] GetMPPlaybackDidFinishEvent].RemoveListener(Core::MakeDelegate(this, &CVideoPlayerActivity::OnPlaybackFinished));
         }
         //--------------------------------------------------------------
         /// Is Playing
@@ -285,7 +286,7 @@ namespace ChilliSource
             if([mpMoviePlayerController loadState] != MPMovieLoadStateUnknown)
             {
                 [[NSNotificationAdapter sharedInstance] StopListeningForMPLoadStateChanged];
-                [[NSNotificationAdapter sharedInstance] GetMPLoadStateChangeEvent].RemoveListener(NotificationEventDelegate(this, &CVideoPlayerActivity::OnLoadStateChanged));
+                [[NSNotificationAdapter sharedInstance] GetMPLoadStateChangeEvent].RemoveListener(Core::MakeDelegate(this, &CVideoPlayerActivity::OnLoadStateChanged));
                 
                 SetupMovieView();
                 AttachMovieViewToWindow();
@@ -344,7 +345,7 @@ namespace ChilliSource
             mpMoviePlayerController = nil;
             
             [[NSNotificationAdapter sharedInstance] StopListeningForMPPlaybackDidFinish];
-            [[NSNotificationAdapter sharedInstance] GetMPPlaybackDidFinishEvent].RemoveListener(NotificationEventDelegate(this, &CVideoPlayerActivity::OnPlaybackFinished));
+            [[NSNotificationAdapter sharedInstance] GetMPPlaybackDidFinishEvent].RemoveListener(Core::MakeDelegate(this, &CVideoPlayerActivity::OnPlaybackFinished));
             
             mOnPlaybackCompleteEvent.Invoke();
         }
@@ -385,7 +386,7 @@ namespace ChilliSource
                 //setup the tap gesture if we can dismiss with tap
                 if (mbCanDismissWithTap && mpTapListener != nil)
                 {
-                    [mpTapListener SetupWithView: mpVideoOverlayView AndDelegate:ChilliSource::iOS::VideoPlayerTappedDelegate(this, &CVideoPlayerActivity::OnTapped)];
+                    [mpTapListener SetupWithView: mpVideoOverlayView AndDelegate:Core::MakeDelegate(this, &CVideoPlayerActivity::OnTapped)];
                 }
                 
                 //create the subtitles renderer
@@ -449,7 +450,7 @@ namespace ChilliSource
         CVideoPlayerActivity::~CVideoPlayerActivity()
         {
             [mpTapListener release];
-            ChilliSource::Core::CApplicationEvents::GetResumeEvent() -= ChilliSource::Core::ApplicationSystemDelegate(this, &CVideoPlayerActivity::OnResume);
+            ChilliSource::Core::CApplicationEvents::GetResumeEvent() -= Core::MakeDelegate(this, &CVideoPlayerActivity::OnResume);
             
             StopListeningForMoviePlayerNotifications();
         }

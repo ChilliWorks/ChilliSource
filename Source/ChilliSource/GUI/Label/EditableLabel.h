@@ -24,7 +24,7 @@ namespace ChilliSource
 
 			DECLARE_META_CLASS(EditableLabel)
 
-			typedef fastdelegate::FastDelegate1<EditableLabel*> TextChangeEventDelegate;
+			typedef std::function<void(EditableLabel*)> TextChangeEventDelegate;
 
 			static const s8 kbySecureEntryCharacter = '*';
 

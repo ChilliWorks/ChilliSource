@@ -8,8 +8,6 @@
 
 #include <ChilliSource/Input/Accelerometer/Accelerometer.h>
 
-#include <ChilliSource/Core/Base/FastDelegate.h>
-
 namespace ChilliSource
 {
 	namespace Input

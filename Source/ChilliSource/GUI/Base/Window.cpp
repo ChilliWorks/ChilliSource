@@ -9,6 +9,7 @@
 #include <ChilliSource/GUI/Base/Window.h>
 
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 
 #include <ChilliSource/Input/Base/InputSystem.h>
 
@@ -40,8 +41,8 @@ namespace ChilliSource
 			SetName("RootWindow");
             
 			//Register for screen rotation events
-			Core::CApplicationEvents::GetScreenOrientationChangedEvent() += Core::ApplicationScreenOrientationDelegate(this, &Window::OnScreenOrientationChanged);
-			Core::CApplicationEvents::GetScreenResizedEvent() += Core::ApplicationScreenResizeDelegate(this, &Window::OnScreenResized);
+			Core::CApplicationEvents::GetScreenOrientationChangedEvent() += Core::MakeDelegate(this, &Window::OnScreenOrientationChanged);
+			Core::CApplicationEvents::GetScreenResizedEvent() += Core::MakeDelegate(this, &Window::OnScreenResized);
 		}
 		//-----------------------------------------------------
 		/// Set Input System
@@ -68,9 +69,9 @@ namespace ChilliSource
         {
             if(mpInputSystem && mpInputSystem->GetTouchScreenPtr() && !mbListeningForTouches)
 			{
-				mpInputSystem->GetTouchScreenPtr()->GetTouchBeganEvent() += Input::TouchEventDelegate(this, &Window::_OnTouchBegan);
-				mpInputSystem->GetTouchScreenPtr()->GetTouchMovedEvent() += Input::TouchEventDelegate(this, &Window::_OnTouchMoved);
-				mpInputSystem->GetTouchScreenPtr()->GetTouchEndEvent() += Input::TouchEventDelegate(this, &Window::_OnTouchEnded);
+				mpInputSystem->GetTouchScreenPtr()->GetTouchBeganEvent() += Core::MakeDelegate(this, &Window::_OnTouchBegan);
+				mpInputSystem->GetTouchScreenPtr()->GetTouchMovedEvent() += Core::MakeDelegate(this, &Window::_OnTouchMoved);
+				mpInputSystem->GetTouchScreenPtr()->GetTouchEndEvent() += Core::MakeDelegate(this, &Window::_OnTouchEnded);
                 mbListeningForTouches=true;
 			}
         }
@@ -79,9 +80,9 @@ namespace ChilliSource
         {
             if(mpInputSystem && mpInputSystem->GetTouchScreenPtr() && mbListeningForTouches)
 			{
-				mpInputSystem->GetTouchScreenPtr()->GetTouchBeganEvent() -= Input::TouchEventDelegate(this, &Window::_OnTouchBegan);
-				mpInputSystem->GetTouchScreenPtr()->GetTouchMovedEvent() -= Input::TouchEventDelegate(this, &Window::_OnTouchMoved);
-				mpInputSystem->GetTouchScreenPtr()->GetTouchEndEvent() -= Input::TouchEventDelegate(this, &Window::_OnTouchEnded);
+				mpInputSystem->GetTouchScreenPtr()->GetTouchBeganEvent() -= Core::MakeDelegate(this, &Window::_OnTouchBegan);
+				mpInputSystem->GetTouchScreenPtr()->GetTouchMovedEvent() -= Core::MakeDelegate(this, &Window::_OnTouchMoved);
+				mpInputSystem->GetTouchScreenPtr()->GetTouchEndEvent() -= Core::MakeDelegate(this, &Window::_OnTouchEnded);
                 mbListeningForTouches=false;
 			}
         }
@@ -280,8 +281,8 @@ namespace ChilliSource
 			//The window is responsible for receiving input for this scene
 			UnlistenFromTouches();
             
-			Core::CApplicationEvents::GetScreenOrientationChangedEvent() -= Core::ApplicationScreenOrientationDelegate(this, &Window::OnScreenOrientationChanged);
-			Core::CApplicationEvents::GetScreenResizedEvent() -= Core::ApplicationScreenResizeDelegate(this, &Window::OnScreenResized);
+			Core::CApplicationEvents::GetScreenOrientationChangedEvent() -= Core::MakeDelegate(this, &Window::OnScreenOrientationChanged);
+			Core::CApplicationEvents::GetScreenResizedEvent() -= Core::MakeDelegate(this, &Window::OnScreenResized);
 		}
 	}
 }

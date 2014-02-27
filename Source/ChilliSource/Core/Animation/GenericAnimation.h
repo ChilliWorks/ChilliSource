@@ -15,8 +15,9 @@
 #define _MOFLO_CORE_GENERICANIMATION_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -42,8 +43,8 @@ namespace ChilliSource
         {
         public:
 
-            typedef fastdelegate::FastDelegate1<IAnimation *> OnCompleteDelegate;
-            typedef fastdelegate::FastDelegate1<IAnimation *> OnStartDelegate;
+            typedef std::function<void(IAnimation*)> OnCompleteDelegate;
+            typedef std::function<void(IAnimation*)> OnStartDelegate;
 
             IAnimation(f32 infDuration = 0.0f, f32 infStartDelay = 0.0f);
             
@@ -106,8 +107,8 @@ namespace ChilliSource
         template <typename T> class ValueAnimation : public IAnimation
         {
         public:
-            typedef typename fastdelegate::FastDelegate1<const T &> SetCRValueDelegate;
-            typedef typename fastdelegate::FastDelegate1<T> SetValueDelegate;
+            typedef typename std::function<void(const T &)> SetCRValueDelegate;
+            typedef typename std::function<void(T)> SetValueDelegate;
             
             ValueAnimation(f32 infDuration)
             :IAnimation(infDuration)

@@ -8,9 +8,10 @@
  */
 
 // INCLUDED FILES
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
+#include <ChilliSource/Core/Entity/EntityAnimation.h>
 
-#include "EntityAnimation.h"
 #include <float.h>
 
 namespace ChilliSource
@@ -65,10 +66,10 @@ namespace ChilliSource
             switch (ineType)
             {
                 case InterpolationType::k_linear:
-                    mInterpolateDelegate = fastdelegate::MakeDelegate(this, &CEntityAnimation::Lerp);
+                    mInterpolateDelegate = Core::MakeDelegate(this, &CEntityAnimation::Lerp);
                     break;
                 case InterpolationType::k_step:
-                    mInterpolateDelegate = fastdelegate::MakeDelegate(this, &CEntityAnimation::Step);
+                    mInterpolateDelegate = Core::MakeDelegate(this, &CEntityAnimation::Step);
                     break;
             }
         }

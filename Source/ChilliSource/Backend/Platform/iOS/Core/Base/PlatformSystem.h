@@ -16,7 +16,8 @@
 #include <ChilliSource/ChilliSource.h>
 
 #include <ChilliSource/Core/Base/PlatformSystem.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -286,7 +287,7 @@ namespace ChilliSource
             //--------------------------------------------
 			Core::IInformationProvider* CreateContactInformationProvider() const;
 			
-            typedef fastdelegate::FastDelegate1<std::vector<Core::SystemPtr> &, Core::ISystem*> SystemCreationFunction;
+            typedef std::function<Core::ISystem*(std::vector<Core::SystemPtr>&)> SystemCreationFunction;
             
             //--------------------------------------------
             /// Add System Function
@@ -311,7 +312,7 @@ namespace ChilliSource
             //-------------------------------------------
 			Core::ISystem* FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemPtr>& inSystems) const;
 			
-			typedef fastdelegate::FastDelegate0<Core::IActivity*> ActivityCreationFunction;
+            typedef std::function<Core::IActivity*()> ActivityCreationFunction;
 			
 			//--------------------------------------------
             /// Add Activity Function
@@ -324,7 +325,7 @@ namespace ChilliSource
             //-------------------------------------------
             void AddActivityFunc(Core::InterfaceIDType inInterfaceID, ActivityCreationFunction inFunction);
 			
-			typedef fastdelegate::FastDelegate0<Core::IInformationProvider*> InfoProviderCreationFunction;
+            typedef std::function<Core::IInformationProvider*()> InfoProviderCreationFunction;
 			
             //--------------------------------------------
             /// Add Info Provider Function

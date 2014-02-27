@@ -10,7 +10,8 @@
 #define _MOFLOW_NETWORKING_CONTENT_DOWNLOADER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -25,7 +26,7 @@ namespace ChilliSource
                 k_flushed
             };
             
-            typedef fastdelegate::FastDelegate2<Result, const std::string&> Delegate;
+            typedef std::function<void(Result, const std::string&)> Delegate;
         }
         
         class IContentDownloader

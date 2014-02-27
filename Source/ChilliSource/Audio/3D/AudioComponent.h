@@ -13,16 +13,17 @@
 #define _MO_FLO_AUDIO_AUDIO_COMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Audio/Base/AudioResource.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
 	namespace Audio
 	{
-        typedef fastdelegate::FastDelegate1<AudioComponent*> AudioEventDelegate;
+        typedef std::function<void(AudioComponent*)> AudioEventDelegate;
         
 		class AudioComponent : public Core::IComponent
 		{

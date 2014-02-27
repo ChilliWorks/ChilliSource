@@ -16,11 +16,11 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Input/Base/InputDevice.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
+#include <functional>
 #include <thread>
 
 namespace ChilliSource
@@ -46,7 +46,7 @@ namespace ChilliSource
 		
 		//Delegates
 		
-		typedef fastdelegate::FastDelegate1<const TouchInfo &> TouchEventDelegate;
+		typedef std::function<void(const TouchInfo&)> TouchEventDelegate;
 		
 		class TouchScreen : public InputDevice
 		{

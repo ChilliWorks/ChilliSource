@@ -6,7 +6,7 @@
 
 #include <ChilliSource/Core/Threading/ThreadPool.h>
 
-#include <ChilliSource/Core/Base/FastDelegate.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 
 namespace ChilliSource
 {
@@ -20,7 +20,7 @@ namespace ChilliSource
             //create the threads
             for (u32 i=0; i<in_numThreads; ++i)
             {  
-                m_threadGroup.push_back(std::thread(fastdelegate::MakeDelegate(this, &ThreadPool::DoTaskOrWait)));
+                m_threadGroup.push_back(std::thread(Core::MakeDelegate(this, &ThreadPool::DoTaskOrWait)));
             }
         }
         //----------------------------------------------

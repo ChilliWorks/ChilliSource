@@ -8,7 +8,6 @@
 
 #include <ChilliSource/Core/LaunchingActions/LaunchingActions.h>
 
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/String/StringUtils.h>

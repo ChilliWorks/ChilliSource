@@ -10,7 +10,6 @@
 #define _MOFLOW_CORE_OBJECT_POOL_H
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 
 #include <new>
 

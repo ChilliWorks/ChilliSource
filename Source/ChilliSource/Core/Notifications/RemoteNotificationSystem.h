@@ -10,14 +10,15 @@
 #define _MOFLOW_CORE_NOTIFICATIONS_REMOTENOTIFICATIONSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/System/System.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
 	namespace Core
     {
-        typedef fastdelegate::FastDelegate1<const std::string&> RemoteTokenReceivedDelegate;
+        typedef std::function<void(const std::string&)> RemoteTokenReceivedDelegate;
 		
         class IRemoteNotificationSystem : public ChilliSource::Core::ISystem
         {

@@ -17,10 +17,10 @@ namespace ChilliSource
 {
     namespace Core
     {
-        typedef fastdelegate::FastDelegate0<> ApplicationSystemDelegate;
-        typedef fastdelegate::FastDelegate1<ScreenOrientation> ApplicationScreenOrientationDelegate;
-		typedef fastdelegate::FastDelegate2<u32, u32> ApplicationScreenResizeDelegate;
-        typedef fastdelegate::FastDelegate1<const std::string &> ApplicationReceivesURLDelegate;
+        typedef std::function<void()> ApplicationSystemDelegate;
+        typedef std::function<void(ScreenOrientation)> ApplicationScreenOrientationDelegate;
+		typedef std::function<void(u32, u32)> ApplicationScreenResizeDelegate;
+        typedef std::function<void(const std::string&)> ApplicationReceivesURLDelegate;
 		
         class CApplicationEvents
         {

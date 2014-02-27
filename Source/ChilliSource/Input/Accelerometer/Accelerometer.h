@@ -10,10 +10,11 @@
 #define MOFLOW_INPUT_ACCELEROMETER_H
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Input/Base/InputDevice.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -32,7 +33,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			/// Delegates
 			//----------------------------------------------------
-			typedef fastdelegate::FastDelegate1<const Core::CVector3&> AccelerationUpdatedDelegate;
+			typedef std::function<void(const Core::CVector3&)> AccelerationUpdatedDelegate;
 			//----------------------------------------------------
 			/// Constructor
 			//----------------------------------------------------

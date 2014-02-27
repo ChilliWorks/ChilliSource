@@ -10,7 +10,6 @@
 #define _MOFLOW_PLATFORM_IOS_IAPSYSTEM_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/IAP/StoreKitIAPSystem.h>
 

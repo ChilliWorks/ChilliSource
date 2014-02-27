@@ -11,7 +11,6 @@
 #define _MOFLO_PLATFORM_IOS_SOCIAL_FACEBOOKAUTHENTICATION_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
 
 #include <FacebookSDK/FacebookSDK.h>

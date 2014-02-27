@@ -53,7 +53,7 @@ namespace ChilliSource
             
 			void SignOutCurrentUser();
 			
-			typedef fastdelegate::FastDelegate1<TimeIntervalSecs> ServerTimeDelegate;
+			typedef std::function<void(TimeIntervalSecs)> ServerTimeDelegate;
 			void GetServerTime(const ServerTimeDelegate& inDelegate);
 			
 			enum class AccountCreateResult
@@ -62,7 +62,7 @@ namespace ChilliSource
                 k_noServerResponse,
                 k_serverRefuses
 			};
-			typedef fastdelegate::FastDelegate2<MoConnectSystem*,AccountCreateResult> AccountCreateDelegate;
+			typedef std::function<void(MoConnectSystem*, AccountCreateResult)> AccountCreateDelegate;
 			void CreateNewAccount(AccountCreateDelegate inDel);
 			
 			enum class RegisterLoginResult
@@ -76,7 +76,7 @@ namespace ChilliSource
 				k_invalidForm = 2000,            // The form is improperly formatted
 				k_invalidType = 2001,            // A param in the form is invalidly formatted
 			};
-			typedef fastdelegate::FastDelegate2<MoConnectSystem*,RegisterLoginResult> RegisterLoginDelegate;
+			typedef std::function<void(MoConnectSystem*, RegisterLoginResult)> RegisterLoginDelegate;
 			//-----------------------------------------------------------
 			/// Register Login Email
 			///
@@ -115,7 +115,7 @@ namespace ChilliSource
                 std::string strToken;
                 std::string strTokenSecret;
             };
-			typedef fastdelegate::FastDelegate3<MoConnectSystem*, SignInResult, const std::vector<SignedInUser>& > SignInDelegate;
+			typedef std::function<void(MoConnectSystem*, SignInResult, const std::vector<SignedInUser>&)> SignInDelegate;
 			//-----------------------------------------------------------
 			/// Sign In Via Email
 			///
@@ -150,7 +150,7 @@ namespace ChilliSource
                 k_failedInternalServerError,
                 k_failedClientError
 			};
-			typedef fastdelegate::FastDelegate3<u32, RequestResult, Json::Value&> RequestResultDelegate;
+			typedef std::function<void(u32, RequestResult, Json::Value&)> RequestResultDelegate;
 			u32 MakeRequest(const std::string& instrMethod, const RequestResultDelegate& inDelegate);
 			u32 MakeRequest(const std::string& instrMethod, Json::Value& incPayload, const RequestResultDelegate& inDelegate);
 			void CancelRequest(u32 inudwID);
@@ -168,11 +168,11 @@ namespace ChilliSource
                 k_success,
                 k_failed
             };
-            typedef fastdelegate::FastDelegate1<const PushNotificationResult> PushNotificationResultDelegate;
+            typedef std::function<void(const PushNotificationResult)> PushNotificationResultDelegate;
             void RegisterForPushNotifications(const PushNotificationType ineType, const std::string& instrToken,
                                               const std::string& instrLanguage, const std::string& instrCountryCode, const PushNotificationResultDelegate& inDelegate);
 			
-			typedef fastdelegate::FastDelegate1<MoConnectSystem*> EventDelegate;
+			typedef std::function<void(MoConnectSystem*)> EventDelegate;
 			Core::IEvent<EventDelegate>& SignedInUserChangesEvent();
 			
             bool HasLoadedLoginTypes();
@@ -196,13 +196,13 @@ namespace ChilliSource
                 k_undefined
             };
             
-            typedef fastdelegate::FastDelegate3<const bool, const HttpRequest::CompletionResult, const IAPReceipt> ValidateReceiptDelegate;
+            typedef std::function<void(const bool, const HttpRequest::CompletionResult, const IAPReceipt)> ValidateReceiptDelegate;
             void ValidateIAPReceipt(const IAPType ineType,
                                     const ChilliSource::Networking::IAPTransactionPtr& inpTransInfo,
                                     ValidateReceiptDelegate inDelegate);
             void RedeemIAP(const std::string& instrReceiptId);
             
-			typedef fastdelegate::FastDelegate2<MoConnectSystem*, const Json::Value&> LocalUserProfileDelegate;
+			typedef std::function<void(MoConnectSystem*, const Json::Value&)> LocalUserProfileDelegate;
             
 			//-----------------------------------------------------------
 			/// Request Local User Profile

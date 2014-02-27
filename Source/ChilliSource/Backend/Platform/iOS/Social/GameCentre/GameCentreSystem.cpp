@@ -10,8 +10,8 @@
 #include <ChilliSource/Backend/Platform/iOS/Social/GameCentre/GameCentreSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Social/GameCentre/GameCentreDelegates.h>
 
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 
 #include <Foundation/Foundation.h>
 #include <UIKit/UIKit.h>
@@ -250,7 +250,7 @@ namespace ChilliSource
 			{
 				//We need to register for log-out notifications
                 [[GameCentreAuthenticationListener instance] BeginListeningForGKLocalAuthenticationChanged];
-				[[GameCentreAuthenticationListener instance] GetGKLocalAuthenticationChangedEvent].AddListener(GKNotificationEventDelegate(this, &CGameCentreSystem::OnLocalAuthenticationChanged));
+				[[GameCentreAuthenticationListener instance] GetGKLocalAuthenticationChangedEvent].AddListener(Core::MakeDelegate(this, &CGameCentreSystem::OnLocalAuthenticationChanged));
 				
 				AuthenticateClient();
 				

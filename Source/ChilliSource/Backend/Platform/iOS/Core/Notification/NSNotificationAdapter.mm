@@ -8,8 +8,6 @@
 
 #import <ChilliSource/Backend/Platform/iOS/Core/Notification/NSNotificationAdapter.h>
 
-#include <ChilliSource/Core/Base/FastDelegate.h>
-
 #import <GameKit/GameKit.h>
 #import <MediaPlayer/MediaPlayer.h>
 

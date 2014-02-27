@@ -10,10 +10,11 @@
 #define _MOFLOW_PLATFORM_IOS_VIDEO_VIDEOPLAYERTAPLISTENER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 
 #import <Foundation/Foundation.h>
-#include <MediaPlayer/MediaPlayer.h>
+#import <MediaPlayer/MediaPlayer.h>
+
+#include <functional>
 
 @class UIView;
 @class UITapGestureRecognizer;
@@ -26,7 +27,7 @@ namespace ChilliSource
         //========================================================
         /// Delegates
         //========================================================
-        typedef fastdelegate::FastDelegate0<> VideoPlayerTappedDelegate;
+        typedef std::function<void()> VideoPlayerTappedDelegate;
     }
 }
 //========================================================

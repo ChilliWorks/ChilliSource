@@ -13,6 +13,7 @@
 #include <ChilliSource/Audio/3D/AudioComponent.h>
 #include <ChilliSource/Audio/Base/AudioSystem.h>
 
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 
 namespace ChilliSource
@@ -52,22 +53,22 @@ namespace ChilliSource
 			//Register for master volume changed event
 			if(mpAudioSource && mpAudioSource->IsStreamed())
 			{
-				mpOwningSystem->GetMasterStreamVolumeChangedEvent() -= AudioVolumeEventDelegate(this, &AudioComponent::OnMasterVolumeChanged);
+				mpOwningSystem->GetMasterStreamVolumeChangedEvent() -= Core::MakeDelegate(this, &AudioComponent::OnMasterVolumeChanged);
 			}
 			else if(mpAudioSource)
 			{
-				mpOwningSystem->GetMasterEffectVolumeChangedEvent() -= AudioVolumeEventDelegate(this, &AudioComponent::OnMasterVolumeChanged);
+				mpOwningSystem->GetMasterEffectVolumeChangedEvent() -= Core::MakeDelegate(this, &AudioComponent::OnMasterVolumeChanged);
 			}
 			
 			mpAudioSource = inpAudioSource;
 			
 			if(mpAudioSource && mpAudioSource->IsStreamed())
 			{
-				mpOwningSystem->GetMasterStreamVolumeChangedEvent() += AudioVolumeEventDelegate(this, &AudioComponent::OnMasterVolumeChanged);
+				mpOwningSystem->GetMasterStreamVolumeChangedEvent() += Core::MakeDelegate(this, &AudioComponent::OnMasterVolumeChanged);
 			}
 			else if(mpAudioSource)
 			{
-				mpOwningSystem->GetMasterEffectVolumeChangedEvent() += AudioVolumeEventDelegate(this, &AudioComponent::OnMasterVolumeChanged);
+				mpOwningSystem->GetMasterEffectVolumeChangedEvent() += Core::MakeDelegate(this, &AudioComponent::OnMasterVolumeChanged);
 			}
 		}
 		//------------------------------------------------------
@@ -131,11 +132,11 @@ namespace ChilliSource
             //Register for master volume changed event
 			if(mpAudioSource && mpAudioSource->IsStreamed())
 			{
-				mpOwningSystem->GetMasterStreamVolumeChangedEvent() -= AudioVolumeEventDelegate(this, &AudioComponent::OnMasterVolumeChanged);
+				mpOwningSystem->GetMasterStreamVolumeChangedEvent() -= Core::MakeDelegate(this, &AudioComponent::OnMasterVolumeChanged);
 			}
 			else if(mpAudioSource)
 			{
-				mpOwningSystem->GetMasterEffectVolumeChangedEvent() -= AudioVolumeEventDelegate(this, &AudioComponent::OnMasterVolumeChanged);
+				mpOwningSystem->GetMasterEffectVolumeChangedEvent() -= Core::MakeDelegate(this, &AudioComponent::OnMasterVolumeChanged);
 			}
 		} 
 	}

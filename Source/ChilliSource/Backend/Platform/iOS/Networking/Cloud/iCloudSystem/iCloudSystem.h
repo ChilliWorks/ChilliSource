@@ -27,7 +27,7 @@ namespace ChilliSource
         public:
             DECLARE_NAMED_INTERFACE(CiCloudSystem);
             
-            typedef fastdelegate::FastDelegate2<MoFlowUIDocument* , BOOL> OnOpenCloudFileCompletedDelegate;
+            typedef std::function<void(MoFlowUIDocument*, bool)> OnOpenCloudFileCompletedDelegate;
             
             CiCloudSystem(ChilliSource::Networking::HttpConnectionSystem* inpcHttpConnectionSystem);
             

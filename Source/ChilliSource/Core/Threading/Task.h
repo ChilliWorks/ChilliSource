@@ -10,8 +10,6 @@
 #ifndef _CHILLISOURCE_CORE_THREADING_TASK_H_
 #define _CHILLISOURCE_CORE_THREADING_TASK_H_
 
-#include <ChilliSource/Core/Base/FastDelegate.h>
-
 #include <thread>
 #include <type_traits>
 

@@ -15,6 +15,7 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/Base/Screen.h>
@@ -47,9 +48,9 @@ namespace ChilliSource
             memset(&msHighlightIndices, 0, sizeof(u32) * 9);
             memset(&msCurrentIndices, 0, sizeof(u32) * 9);
             
-            mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &StretchableHighlightButton::OnButtonSelect);
-            mInputEvents.GetReleasedInsideEvent() += GUIEventDelegate(this, &StretchableHighlightButton::OnButtonActivated);
-            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &StretchableHighlightButton::OnButtonDeselectThreshold);
+            mInputEvents.GetPressedInsideEvent() += Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonSelect);
+            mInputEvents.GetReleasedInsideEvent() += Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonActivated);
+            mInputEvents.GetMovedWithinEvent() += Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonDeselectThreshold);
         }
         //-----------------------------------------------------------
         /// Constructor
@@ -204,9 +205,9 @@ namespace ChilliSource
 				EnableHeightMaintainingAspect(Core::ParseBool(strValue));
 			}
             
-            mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &StretchableHighlightButton::OnButtonSelect);
-            mInputEvents.GetReleasedInsideEvent() += GUIEventDelegate(this, &StretchableHighlightButton::OnButtonActivated);
-            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &StretchableHighlightButton::OnButtonDeselectThreshold);
+            mInputEvents.GetPressedInsideEvent() += Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonSelect);
+            mInputEvents.GetReleasedInsideEvent() += Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonActivated);
+            mInputEvents.GetMovedWithinEvent() += Core::MakeDelegate(this, &StretchableHighlightButton::OnButtonDeselectThreshold);
         }
         //-----------------------------------------------------------
         /// Set Normal Sprite Sheet

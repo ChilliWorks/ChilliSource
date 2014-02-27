@@ -335,8 +335,9 @@ namespace ChilliSource
             DelegateListItr it = inFirst;
             for ( ; it != inLast; ++it)
             {
-                if ((*it).mDelegate == inValue)
-                    return it;
+                //EVENT::FIX
+//                if ((*it).mDelegate == inValue)
+//                    return it;
             }
             return inLast;
         }

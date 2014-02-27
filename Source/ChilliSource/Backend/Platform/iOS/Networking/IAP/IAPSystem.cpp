@@ -8,6 +8,7 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Networking/IAP/IAPSystem.h>
 
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 
@@ -57,7 +58,7 @@ namespace ChilliSource
             if(mTransactionDelegate == nullptr)
                 return;
             
-            [mpStoreKitSystem startListeningForTransactions:fastdelegate::MakeDelegate(this, &CIAPSystem::OnTransactionUpdate)];
+            [mpStoreKitSystem startListeningForTransactions:Core::MakeDelegate(this, &CIAPSystem::OnTransactionUpdate)];
         }
         //---------------------------------------------------------------
         /// On Transaction Update
@@ -136,7 +137,7 @@ namespace ChilliSource
 				[idSet addObject:Core::CStringUtils::StringToNSString(inaProductIDs[nID])];
 			}
 			
-            [mpStoreKitSystem requestProducts:idSet forDelegate:fastdelegate::MakeDelegate(this, &CIAPSystem::OnProductDescriptionRequestComplete)];
+            [mpStoreKitSystem requestProducts:idSet forDelegate:Core::MakeDelegate(this, &CIAPSystem::OnProductDescriptionRequestComplete)];
             
             [idSet release];
         }

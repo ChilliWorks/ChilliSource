@@ -18,8 +18,9 @@
 #include <ChilliSource/Backend/Audio/FMOD/3D/FMODAudioComponentFactory.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
 
 #include <fmodiphone.h>
 
@@ -38,7 +39,7 @@ namespace ChilliSource
             mpAudioComponentFactory = new CFMODAudioComponentFactory(this, mpAudioManager);
             
 			// Subscribe to memory warnings so we can clear FMOD's cache
-            Core::CApplicationEvents::GetLowMemoryEvent() += Core::ApplicationSystemDelegate(this, &CFMODSystem::OnApplicationMemoryWarning);
+            Core::CApplicationEvents::GetLowMemoryEvent() += Core::MakeDelegate(this, &CFMODSystem::OnApplicationMemoryWarning);
 			
 			//Create the FMOD event system
 			ErrorCheck(FMOD::EventSystem_Create(&mpFMODEventSystem));

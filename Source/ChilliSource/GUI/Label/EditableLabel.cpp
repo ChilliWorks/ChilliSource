@@ -8,6 +8,7 @@
 
 #include <ChilliSource/GUI/Label/EditableLabel.h>
 #include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
@@ -161,8 +162,8 @@ namespace ChilliSource
             if(mpKeyboard)
             {
                 //Stop listening to old keyboard
-                mpKeyboard->GetKeyboardShowEvent() -= Input::KeyboardEventDelegate(this, &EditableLabel::OnKeyboardShown);
-                mpKeyboard->GetKeyboardHideEvent() -= Input::KeyboardEventDelegate(this, &EditableLabel::OnKeyboardHidden);
+                mpKeyboard->GetKeyboardShowEvent() -= Core::MakeDelegate(this, &EditableLabel::OnKeyboardShown);
+                mpKeyboard->GetKeyboardHideEvent() -= Core::MakeDelegate(this, &EditableLabel::OnKeyboardHidden);
             }
             
             if(inpKeyboard)
@@ -170,8 +171,8 @@ namespace ChilliSource
                 mpKeyboard = inpKeyboard;
                 
                 //Stop listening to old keyboard
-                mpKeyboard->GetKeyboardShowEvent() += Input::KeyboardEventDelegate(this, &EditableLabel::OnKeyboardShown);
-                mpKeyboard->GetKeyboardHideEvent() += Input::KeyboardEventDelegate(this, &EditableLabel::OnKeyboardHidden);
+                mpKeyboard->GetKeyboardShowEvent() += Core::MakeDelegate(this, &EditableLabel::OnKeyboardShown);
+                mpKeyboard->GetKeyboardHideEvent() += Core::MakeDelegate(this, &EditableLabel::OnKeyboardHidden);
             }
             else
             {
@@ -211,7 +212,7 @@ namespace ChilliSource
             if(pKeyboardListener == this)
             {
                 mpKeyboard->SetText(Text);
-                mpKeyboard->GetKeyboardTextChangeEvent() += Input::TextInputEventDelegate(this, &EditableLabel::OnKeyboardTextChanged);
+                mpKeyboard->GetKeyboardTextChangeEvent() += Core::MakeDelegate(this, &EditableLabel::OnKeyboardTextChanged);
                 mOnKeyboardShowEvent.Invoke();
             }
         }
@@ -257,7 +258,7 @@ namespace ChilliSource
         {
             if(pKeyboardListener == this)
             {
-                mpKeyboard->GetKeyboardTextChangeEvent() -= Input::TextInputEventDelegate(this, &EditableLabel::OnKeyboardTextChanged);
+                mpKeyboard->GetKeyboardTextChangeEvent() -= Core::MakeDelegate(this, &EditableLabel::OnKeyboardTextChanged);
                 pKeyboardListener = nullptr;
                 mOnKeyboardHideEvent.Invoke();
                
@@ -534,9 +535,9 @@ namespace ChilliSource
             if(mpKeyboard)
             {
                 //Stop listening to old keyboard
-                mpKeyboard->GetKeyboardShowEvent() -= Input::KeyboardEventDelegate(this, &EditableLabel::OnKeyboardShown);
-                mpKeyboard->GetKeyboardTextChangeEvent() -= Input::TextInputEventDelegate(this, &EditableLabel::OnKeyboardTextChanged);
-                mpKeyboard->GetKeyboardHideEvent() -= Input::KeyboardEventDelegate(this, &EditableLabel::OnKeyboardHidden);
+                mpKeyboard->GetKeyboardShowEvent() -= Core::MakeDelegate(this, &EditableLabel::OnKeyboardShown);
+                mpKeyboard->GetKeyboardTextChangeEvent() -= Core::MakeDelegate(this, &EditableLabel::OnKeyboardTextChanged);
+                mpKeyboard->GetKeyboardHideEvent() -= Core::MakeDelegate(this, &EditableLabel::OnKeyboardHidden);
             }
         }
     }

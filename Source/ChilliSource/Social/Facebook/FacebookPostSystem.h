@@ -48,7 +48,7 @@ namespace ChilliSource
                 k_failed
 			};
 			
-			typedef fastdelegate::FastDelegate1<const PostResult&> PostResultDelegate;
+			typedef std::function<void(const PostResult&)> PostResultDelegate;
             
             static IFacebookPostSystem* CreatePostSystem(ChilliSource::Social::FacebookAuthenticationSystem* inpAuthSystem);
             

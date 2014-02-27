@@ -11,9 +11,10 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/System.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+
+#include <functional>
 
 namespace ChilliSource 
 {
@@ -102,13 +103,13 @@ namespace ChilliSource
             //--------------------------------------------------------------------------------------------------------//
             typedef std::vector<std::string> ICloudFileList;
             
-            typedef fastdelegate::FastDelegate1<ICloudFileList> OnQueryFilesCompletedDelegate;
+            typedef std::function<void(ICloudFileList)> OnQueryFilesCompletedDelegate;
             
-            typedef fastdelegate::FastDelegate0<> OnSyncFileCompletedDelegate;
-            typedef fastdelegate::FastDelegate3<FileConflictChoice, FileSyncConflict*, OnSyncFileCompletedDelegate> OnConflictResolvedDelegate;
+            typedef std::function<void()> OnSyncFileCompletedDelegate;
+            typedef std::function<void(FileConflictChoice, FileSyncConflict*, OnSyncFileCompletedDelegate)> OnConflictResolvedDelegate;
             
             //The system will pass a delegate for the calling class to call when resolved
-            typedef fastdelegate::FastDelegate2<OnConflictResolvedDelegate, FileSyncConflict*> OnSyncConflictDelegate;
+            typedef std::function<void(OnConflictResolvedDelegate, FileSyncConflict*)> OnSyncConflictDelegate;
             
             //--------------------------------------------------------------------------------------------------------//
             

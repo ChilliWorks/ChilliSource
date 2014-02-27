@@ -10,16 +10,17 @@
 #define _MO_FLO_INPUT_VIRTUAL_KEYBOARD_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/String/UTF8String.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
 	namespace Input
 	{
-		typedef fastdelegate::FastDelegate0<> KeyboardEventDelegate;
-		typedef fastdelegate::FastDelegate2<const Core::UTF8String&, bool*> TextInputEventDelegate;
+		typedef std::function<void()> KeyboardEventDelegate;
+		typedef std::function<void(const Core::UTF8String&, bool*)> TextInputEventDelegate;
         
         enum class KeyboardType
 		{

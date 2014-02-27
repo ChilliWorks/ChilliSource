@@ -9,7 +9,6 @@
 
 #include <ChilliSource/Rendering/Particles/ParticleComponent.h>
 
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Rendering/Particles/ParticleSystem.h>
 #include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
 

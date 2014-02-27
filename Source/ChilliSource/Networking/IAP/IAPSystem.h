@@ -10,9 +10,10 @@
 #define _MOFLOW_NETWORKING_IAPSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -39,7 +40,7 @@ namespace ChilliSource
             Type eType;
         };
         
-        typedef fastdelegate::FastDelegate1<const std::vector<IAPProductDesc>&> IAPProductDescDelegate;
+        typedef std::function<void(const std::vector<IAPProductDesc>&)> IAPProductDescDelegate;
         
 
         struct IAPTransaction
@@ -60,8 +61,8 @@ namespace ChilliSource
         };
         
         typedef std::shared_ptr<IAPTransaction> IAPTransactionPtr;
-        typedef fastdelegate::FastDelegate2<IAPTransaction::Status, const IAPTransactionPtr&> IAPTransactionDelegate;
-        typedef fastdelegate::FastDelegate2<const std::string&, const std::string&> IAPTransactionCloseDelegate;
+        typedef std::function<void(IAPTransaction::Status, const IAPTransactionPtr&)> IAPTransactionDelegate;
+        typedef std::function<void(const std::string&, const std::string&)> IAPTransactionCloseDelegate;
         
         
 		class IAPSystem : public ChilliSource::Core::ISystem

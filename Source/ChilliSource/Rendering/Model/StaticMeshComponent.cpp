@@ -15,6 +15,7 @@
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
@@ -341,7 +342,7 @@ namespace ChilliSource
         //----------------------------------------------------
         void CStaticMeshComponent::OnAttachedToEntity()
         {
-            mpEntityOwner->Transform().GetTransformChangedEvent() += Core::CTransform::TransformChangedDelegate(this, &CStaticMeshComponent::OnEntityTransformChanged);
+            mpEntityOwner->Transform().GetTransformChangedEvent() += Core::MakeDelegate(this, &CStaticMeshComponent::OnEntityTransformChanged);
             
             OnEntityTransformChanged();
         }
@@ -359,7 +360,7 @@ namespace ChilliSource
         //----------------------------------------------------
         void CStaticMeshComponent::OnDetachedFromEntity()
         {
-            mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::CTransform::TransformChangedDelegate(this, &CStaticMeshComponent::OnEntityTransformChanged);
+            mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &CStaticMeshComponent::OnEntityTransformChanged);
         }
         //----------------------------------------------------
         /// Apply Default Materials
@@ -410,7 +411,7 @@ namespace ChilliSource
 		{
 			if(mpEntityOwner)
             {
-                mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::CTransform::TransformChangedDelegate(this, &CStaticMeshComponent::OnEntityTransformChanged);
+                mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &CStaticMeshComponent::OnEntityTransformChanged);
             }
 		}
 	}

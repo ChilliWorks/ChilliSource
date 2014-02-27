@@ -9,6 +9,8 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
 
+#include <ChilliSource/Core/Base/MakeDelegate.h>
+
 #include <FacebookSDK/FacebookSDK.h>
 
 #ifdef __IPHONE_6_0
@@ -16,8 +18,8 @@
 #include <Social/Social.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookUtils.h>
-    #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookUtils.h>
-    #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookUtils.h>
+#include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookUtils.h>
+#include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookUtils.h>
 #endif
 
 namespace ChilliSource
@@ -74,7 +76,7 @@ namespace ChilliSource
                     aWritePerms.push_back("publish_actions");
                     if(insDesc.strTo != "")
                         aWritePerms.push_back("publish_stream");
-                    mpAuthSystem->AuthoriseWritePermissions(aWritePerms, fastdelegate::MakeDelegate(this, &CFacebookPostSystem::OnPublishPermissionAuthorised));
+                    mpAuthSystem->AuthoriseWritePermissions(aWritePerms, Core::MakeDelegate(this, &CFacebookPostSystem::OnPublishPermissionAuthorised));
                 }
             }
             else

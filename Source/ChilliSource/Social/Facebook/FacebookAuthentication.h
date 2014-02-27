@@ -11,8 +11,9 @@
 #define _MOFLO_SOCIAL_FACEBOOK_FACEBOOKAUTHENTICATION_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/System/System.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -39,7 +40,7 @@ namespace ChilliSource
                 std::string strToken;
             };
             
-            typedef fastdelegate::FastDelegate1<const AuthenticateResponse&> AuthenticationCompleteDelegate;
+            typedef std::function<void(const AuthenticateResponse&)> AuthenticationCompleteDelegate;
             
 			DECLARE_NAMED_INTERFACE(FacebookAuthenticationSystem);
 			

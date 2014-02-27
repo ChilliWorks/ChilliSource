@@ -77,11 +77,11 @@ namespace ChilliSource
 		public:
             
             //---Callbacks
-            typedef fastdelegate::FastDelegate1<const LeaderboardsInfo&> LeaderboardsInfoRequestEventDelegate;
-            typedef fastdelegate::FastDelegate1<bool> AuthenticationChangedDelegate;
-            typedef fastdelegate::FastDelegate1<const LeaderboardScoreResults&> LeaderboardScoreRequestDelegate;
-            typedef fastdelegate::FastDelegate1<const std::string&> RequestErrorDelegate;
-			typedef fastdelegate::FastDelegate1<bool> AchievementsResetDelegate;
+            typedef std::function<void(const LeaderboardsInfo&)> LeaderboardsInfoRequestEventDelegate;
+            typedef std::function<void(bool)> AuthenticationChangedDelegate;
+            typedef std::function<void(const LeaderboardScoreResults&)> LeaderboardScoreRequestDelegate;
+            typedef std::function<void(const std::string&)> RequestErrorDelegate;
+			typedef std::function<void(bool)> AchievementsResetDelegate;
             
 			DECLARE_NAMED_INTERFACE(CGameCentreSystem);
 			CGameCentreSystem(bool inbUseTurnBasedMultiplayer = false);

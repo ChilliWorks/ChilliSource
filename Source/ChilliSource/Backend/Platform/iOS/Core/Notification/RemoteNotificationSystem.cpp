@@ -9,7 +9,6 @@
 #include <ChilliSource/Backend/Platform/iOS/Core/Notification/RemoteNotificationSystem.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 

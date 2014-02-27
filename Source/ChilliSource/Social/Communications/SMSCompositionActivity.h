@@ -13,16 +13,16 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Activity.h>
 #include <ChilliSource/Core/String/UTF8String.h>
-#include <ChilliSource/Core/Event/GenericEvent.h>
 
+#include <functional>
 #include <vector>
 
-namespace ChilliSource {
-	namespace Social {
-		
-		
-		
-		class SMSCompositionActivity : public Core::IActivity{
+namespace ChilliSource
+{
+	namespace Social
+    {
+		class SMSCompositionActivity : public Core::IActivity
+        {
 		public:
 
 			DECLARE_NAMED_INTERFACE(SMSCompositionActivity);
@@ -34,7 +34,7 @@ namespace ChilliSource {
                 k_cancelled
 			};
 			
-			typedef fastdelegate::FastDelegate1<SendResult> SendResultDelegate;
+			typedef std::function<void(SendResult)> SendResultDelegate;
 			
 			virtual void Present(const std::vector<Core::CUTF8String> & inastrRecipientNumbers, const Core::CUTF8String & instrContents, const SendResultDelegate & inCallback) = 0;
 			virtual void Dismiss() = 0;

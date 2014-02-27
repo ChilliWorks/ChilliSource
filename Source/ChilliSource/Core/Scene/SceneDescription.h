@@ -11,13 +11,14 @@
 #define _MOFLO_CORE_SCENEDESCRIPTION_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Core/Scene/ForwardDeclarations.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/Core/XML/rapidxml_utils.hpp>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -78,7 +79,7 @@ namespace ChilliSource
             
             bool IsA(InterfaceIDType inInterfaceID) const override;
             
-            typedef fastdelegate::FastDelegate1<const EntityDesc&, EntityPtr> CustomEntityDelegate;
+            typedef std::function<EntityPtr(const EntityDesc&)> CustomEntityDelegate;
             EntityPtr BuildScene(CustomEntityDelegate inCustomEntityDelegate = CustomEntityDelegate());
             
 			bool LoadFromFile(StorageLocation ineStorageLocation, const std::string & incName);

@@ -9,6 +9,7 @@
 #include <ChilliSource/GUI/SliderBar/HorizontalSliderBar.h>
 #include <ChilliSource/GUI/Image/ImageView.h>
 
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
@@ -51,7 +52,7 @@ namespace ChilliSource
             mpSliderImage->EnableUserInteraction(false);
             mpBackgroundImage->AddSubview(mpSliderImage);
             
-            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &HorizontalSliderBar::OnSliderMoved);
+            mInputEvents.GetMovedWithinEvent() += Core::MakeDelegate(this, &HorizontalSliderBar::OnSliderMoved);
         }
 		//------------------------------------------------------
 		/// Constructor
@@ -125,7 +126,7 @@ namespace ChilliSource
 				SetSliderSize(Core::UnifiedVector2(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w));
 			}
             
-			mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &HorizontalSliderBar::OnSliderMoved);
+			mInputEvents.GetMovedWithinEvent() += Core::MakeDelegate(this, &HorizontalSliderBar::OnSliderMoved);
 		}
 		//--------------------------------------------------------
 		/// Set Bar Sprite Sheet
@@ -305,7 +306,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		HorizontalSliderBar::~HorizontalSliderBar()
 		{
-			mInputEvents.GetMovedWithinEvent() -= GUIEventDelegate(this, &HorizontalSliderBar::OnSliderMoved);
+			mInputEvents.GetMovedWithinEvent() -= Core::MakeDelegate(this, &HorizontalSliderBar::OnSliderMoved);
 		}
     }
 }

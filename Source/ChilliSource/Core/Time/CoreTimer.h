@@ -14,14 +14,15 @@
 #define _MO_FLO_CORE_CORE_TIMER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
 	namespace Core
 	{
-		typedef fastdelegate::FastDelegate1<const f32> TimeEventDelegate;
+		typedef std::function<void(const f32)> TimeEventDelegate;
 		
 		class CCoreTimer
 		{

@@ -9,6 +9,7 @@
 
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
 
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 
 namespace ChilliSource
@@ -109,14 +110,14 @@ namespace ChilliSource
         //----------------------------------------------------
         void CDirectionalLightComponent::OnAttachedToEntity()
         {
-            GetEntityOwner()->Transform().GetTransformChangedEvent() += fastdelegate::MakeDelegate(this, &CDirectionalLightComponent::OnEntityTransformChanged);
+            GetEntityOwner()->Transform().GetTransformChangedEvent().AddListener(Core::MakeDelegate(this, &CDirectionalLightComponent::OnEntityTransformChanged));
         }
         //----------------------------------------------------
         /// On Detached From Entity
         //----------------------------------------------------
         void CDirectionalLightComponent::OnDetachedFromEntity()
         {
-            GetEntityOwner()->Transform().GetTransformChangedEvent() -= fastdelegate::MakeDelegate(this, &CDirectionalLightComponent::OnEntityTransformChanged);
+            GetEntityOwner()->Transform().GetTransformChangedEvent().RemoveListener(Core::MakeDelegate(this, &CDirectionalLightComponent::OnEntityTransformChanged));
         }
         //----------------------------------------------------
         /// On Entity Transform Changed

@@ -11,9 +11,10 @@
 #define _MOFLOW_NETWORKING_HTTPCONNECTIONSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/System/System.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -62,7 +63,7 @@ namespace ChilliSource
                 k_flushed       //The request buffer is full and the buffer needs to be flushed
 			};
             
-			typedef fastdelegate::FastDelegate2<HttpRequest*, CompletionResult> CompletionDelegate;
+			typedef std::function<void(HttpRequest*, CompletionResult)> CompletionDelegate;
 			//----------------------------------------------------------------------------------------
 			/// Get Details
 			///

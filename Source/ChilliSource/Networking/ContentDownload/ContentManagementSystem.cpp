@@ -14,6 +14,7 @@
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/File/LocalDataStore.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/Minizip/unzip.h>
@@ -130,7 +131,7 @@ namespace ChilliSource
             ClearDownloadData();
             
             //Have the downloader request the manifest in it's own way
-            if(mpContentDownloader->DownloadContentManifest(ContentDownloader::Delegate(this, &ContentManagementSystem::OnContentManifestDownloadComplete)))
+            if(mpContentDownloader->DownloadContentManifest(Core::MakeDelegate(this, &ContentManagementSystem::OnContentManifestDownloadComplete)))
             {
                 //The request has started successfully
                 mOnUpdateCheckCompleteDelegate = inDelegate;
@@ -171,7 +172,7 @@ namespace ChilliSource
             	//Add a temp directory so that the packages are stored atomically and only overwrite
                 //the originals on full success
                 Core::CApplication::GetFileSystemPtr()->CreateDirectory(Core::StorageLocation::k_DLC, "Temp");
-                mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, ContentDownloader::Delegate(this, &ContentManagementSystem::OnContentDownloadComplete));
+                mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete));
             }
             else
             {
@@ -187,7 +188,7 @@ namespace ChilliSource
         void ContentManagementSystem::DownloadNextPackage()
         {
             mudwCurrentPackageDownload++;
-            mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, ContentDownloader::Delegate(this, &ContentManagementSystem::OnContentDownloadComplete));
+            mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete));
         }
         //-----------------------------------------------------------
         /// Install Updates

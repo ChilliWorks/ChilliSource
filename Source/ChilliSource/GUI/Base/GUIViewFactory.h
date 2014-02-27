@@ -10,10 +10,11 @@
 #define _MOFLO_GUI_GUIVIEWFACTORY_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/XML/rapidxml_forward.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -35,7 +36,7 @@ namespace ChilliSource
         class GUIViewFactory
         {
         public:  
-            typedef fastdelegate::FastDelegate1<const Core::ParamDictionary&, GUIViewSPtr> GUIViewCreateDelegate; 
+            typedef std::function<GUIViewSPtr(const Core::ParamDictionary&)> GUIViewCreateDelegate;
             //--------------------------------------------------------
             /// Register Defaults
             ///

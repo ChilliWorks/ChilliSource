@@ -7,9 +7,10 @@
 //
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 
 #import <StoreKit/StoreKit.h>
+
+#include <functional>
 
 namespace StoreKitIAP
 {
@@ -22,8 +23,8 @@ namespace StoreKitIAP
         k_resumed
     };
     
-    typedef fastdelegate::FastDelegate1<NSArray*> ProductsDelegate;
-    typedef fastdelegate::FastDelegate3<NSString*, TransactionResult, SKPaymentTransaction*> TransactionUpdateDelegate;
+    typedef std::function<void(NSArray*)> ProductsDelegate;
+    typedef std::function<void(NSString*, TransactionResult, SKPaymentTransaction*)> TransactionUpdateDelegate;
 }
 
 @interface StoreKitIAPSystem : NSObject<SKProductsRequestDelegate, SKPaymentTransactionObserver>

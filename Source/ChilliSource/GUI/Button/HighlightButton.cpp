@@ -14,6 +14,7 @@
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/String/StringParser.h>
@@ -61,9 +62,9 @@ namespace ChilliSource
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
 			
-            mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &HighlightButton::OnButtonSelect);
-            mInputEvents.GetReleasedInsideEvent() += GUIEventDelegate(this, &HighlightButton::OnButtonActivated);
-            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &HighlightButton::OnButtonDeselectThreshold);
+            mInputEvents.GetPressedInsideEvent() += Core::MakeDelegate(this, &HighlightButton::OnButtonSelect);
+            mInputEvents.GetReleasedInsideEvent() += Core::MakeDelegate(this, &HighlightButton::OnButtonActivated);
+            mInputEvents.GetMovedWithinEvent() += Core::MakeDelegate(this, &HighlightButton::OnButtonDeselectThreshold);
         }
         //------------------------------------------------------------
         /// Constructor
@@ -230,9 +231,9 @@ namespace ChilliSource
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
 			
-            mInputEvents.GetPressedInsideEvent() += GUIEventDelegate(this, &HighlightButton::OnButtonSelect);
-            mInputEvents.GetReleasedInsideEvent() += GUIEventDelegate(this, &HighlightButton::OnButtonActivated);
-            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &HighlightButton::OnButtonDeselectThreshold);
+            mInputEvents.GetPressedInsideEvent() += Core::MakeDelegate(this, &HighlightButton::OnButtonSelect);
+            mInputEvents.GetReleasedInsideEvent() += Core::MakeDelegate(this, &HighlightButton::OnButtonActivated);
+            mInputEvents.GetMovedWithinEvent() += Core::MakeDelegate(this, &HighlightButton::OnButtonDeselectThreshold);
         }
         //-----------------------------------------------------------
         /// Get Background Image View

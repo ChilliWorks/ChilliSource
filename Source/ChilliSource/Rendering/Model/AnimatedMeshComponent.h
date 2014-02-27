@@ -15,8 +15,9 @@
 #include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -35,11 +36,11 @@ namespace ChilliSource
         //===============================================================
 		/// Events
 		//===============================================================
-        typedef fastdelegate::FastDelegate1<CAnimatedMeshComponent*> AnimationChangedDelegate;
+        typedef std::function<void(CAnimatedMeshComponent*)> AnimationChangedDelegate;
         typedef Core::CEvent1<AnimationChangedDelegate> AnimationChangedEvent;
-        typedef fastdelegate::FastDelegate1<CAnimatedMeshComponent*> AnimationCompletionDelegate;
+        typedef std::function<void(CAnimatedMeshComponent*)> AnimationCompletionDelegate;
         typedef Core::CEvent1<AnimationCompletionDelegate> AnimationCompletionEvent;
-        typedef fastdelegate::FastDelegate1<CAnimatedMeshComponent*> AnimationLoopedDelegate;
+        typedef std::function<void(CAnimatedMeshComponent*)> AnimationLoopedDelegate;
         typedef Core::CEvent1<AnimationLoopedDelegate> AnimationLoopedEvent;
 		//===============================================================
 		/// Animated Mesh component

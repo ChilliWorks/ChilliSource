@@ -40,7 +40,7 @@ namespace ChilliSource
                 k_cancel
             };
             
-            typedef fastdelegate::FastDelegate2<u32, Result> Delegate;
+            typedef std::function<void(u32, Result)> Delegate;
         }
         
 		//--------------------------------------------------------------------------------------------------

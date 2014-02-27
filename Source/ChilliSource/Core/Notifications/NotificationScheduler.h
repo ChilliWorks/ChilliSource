@@ -12,9 +12,9 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
 
+#include <functional>
 #include <queue>
 
 namespace ChilliSource
@@ -40,8 +40,8 @@ namespace ChilliSource
         
         struct Notification
         {
-            typedef fastdelegate::FastDelegate0<> NotificationDismissedDelegate;
-            typedef fastdelegate::FastDelegate1<const void*> NotificationPresentedDelegate;
+            typedef std::function<void()> NotificationDismissedDelegate;
+            typedef std::function<void(const void*)> NotificationPresentedDelegate;
             
             Core::ParamDictionary sParams;
             NotificationID ID;
@@ -87,7 +87,7 @@ namespace ChilliSource
             /// @param Priority (High priority will leap-frog lower priority in the queue
             /// @param Delegate An optional callback delegate to allow application to track notifications
             //------------------------------------------------------------------------------
-            static void ScheduleNotification(NotificationType ineType, const Notification& insNotification, NotificationPriority inePriority = NotificationPriority::k_standard, Notification::NotificationPresentedDelegate inpDelegate = nullptr);
+            static void ScheduleNotification(NotificationType ineType, const Notification& insNotification, NotificationPriority inePriority = NotificationPriority::k_standard, const Notification::NotificationPresentedDelegate& inpDelegate = nullptr);
             //------------------------------------------------------------------------------
             /// Schedule Notification For Time
             ///

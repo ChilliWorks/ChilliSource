@@ -11,8 +11,9 @@
 #define _MOFLO_CORE_ACTIVITY_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -27,7 +28,7 @@ namespace ChilliSource
             virtual ~IActivity(){}
         };
         
-        typedef fastdelegate::FastDelegate1<IActivity*> ActivityDismissedEvent;
+        typedef std::function<void(IActivity*)> ActivityDismissedEvent;
     }
 }
 

@@ -7,6 +7,7 @@
  *
  */
 
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/File/LocalDataStore.h>
 #include <ChilliSource/Core/String/StringUtils.h>
@@ -130,7 +131,7 @@ namespace ChilliSource
 			HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrMoConnectURL + "/ping";
 			requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
-			mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::TimeRequestCompletes));
+			mpHttpConnectionSystem->MakeRequest(requestDetails, Core::MakeDelegate(this, &MoConnectSystem::TimeRequestCompletes));
 			mTimeRequestCallback = inDelegate;
 		}
         //------------------------
@@ -205,7 +206,7 @@ namespace ChilliSource
             
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");
-			mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::AccountCreateRequestCompletes));
+			mpHttpConnectionSystem->MakeRequest(requestDetails, Core::MakeDelegate(this, &MoConnectSystem::AccountCreateRequestCompletes));
 			
 			mAccountCreateCallback = inDel;
 		}
@@ -304,7 +305,7 @@ namespace ChilliSource
                 
                 GenerateAuthenticationHeader(requestDetails.strURL, requestDetails.sHeaders);
 				
-				mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::RegisterLoginRequestCompletes));
+				mpHttpConnectionSystem->MakeRequest(requestDetails, Core::MakeDelegate(this, &MoConnectSystem::RegisterLoginRequestCompletes));
                 
                 // Assume we're going to succeed, then undo it if we don't
 				mastrCurrentAccountLogins.push_back(injData["Type"].asString());
@@ -434,13 +435,13 @@ namespace ChilliSource
             // Retrieve accounts only
             if(inbRetrieveAccountsOnly)
             {
-                mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::RetrieveAccountsRequestCompletes));
+                mpHttpConnectionSystem->MakeRequest(requestDetails, Core::MakeDelegate(this, &MoConnectSystem::RetrieveAccountsRequestCompletes));
                 mRetrieveAccountsCallback = inDel;
             }
             // Actual sign in request
             else
             {
-                mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::SignInRequestCompletes));
+                mpHttpConnectionSystem->MakeRequest(requestDetails, Core::MakeDelegate(this, &MoConnectSystem::SignInRequestCompletes));
                 mSignInCallback = inDel;
             }
 		}
@@ -608,7 +609,7 @@ namespace ChilliSource
 			Json::FastWriter cWriter;
 			requestDetails.strBody = cWriter.write(cRegistrationMsg);
 			CS_DEBUG_LOG("RegisterForPushNotifications:"+requestDetails.strBody);
-			mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::PushNotificationRequestCompletes));
+			mpHttpConnectionSystem->MakeRequest(requestDetails, Core::MakeDelegate(this, &MoConnectSystem::PushNotificationRequestCompletes));
             
             mPushNotificationCallback = inDelegate;
         }
@@ -679,7 +680,7 @@ namespace ChilliSource
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");
 			
-			mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::OnLocalUserProfileReceived));
+			mpHttpConnectionSystem->MakeRequest(requestDetails, Core::MakeDelegate(this, &MoConnectSystem::OnLocalUserProfileReceived));
 			
 			mLocalUserProfileDelegate = ineDelegate;
         }
@@ -925,7 +926,7 @@ namespace ChilliSource
 			requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
 			requestDetails.strBody = sNewRequest.cPayload.toUnformattedString();
             GenerateAuthenticationHeader(requestDetails.strURL, requestDetails.sHeaders);
-            sNewRequest.pHttpRequest = mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this,&MoConnectSystem::GeneralRequestCompletes));
+            sNewRequest.pHttpRequest = mpHttpConnectionSystem->MakeRequest(requestDetails, Core::MakeDelegate(this,&MoConnectSystem::GeneralRequestCompletes));
 			masOpenRequests.push_back(sNewRequest);
 			
 			return sNewRequest.udwID;
@@ -1095,7 +1096,7 @@ namespace ChilliSource
 			Json::FastWriter cWriter;
 			requestDetails.strBody = cWriter.write(cIAPMsg);
 			CS_DEBUG_LOG("ValidateIAPReceipt:"+requestDetails.strBody);
-			mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::OnIAPRecieptValidationResponse));
+			mpHttpConnectionSystem->MakeRequest(requestDetails, Core::MakeDelegate(this, &MoConnectSystem::OnIAPRecieptValidationResponse));
             
             mValidateReceiptDelegate = inDelegate;
         }
@@ -1217,7 +1218,7 @@ namespace ChilliSource
 			Json::FastWriter cWriter;
 			requestDetails.strBody = cWriter.write(cIAPMsg);
 			CS_DEBUG_LOG("RedeemIAP:"+requestDetails.strBody);
-			mpHttpConnectionSystem->MakeRequest(requestDetails, HttpRequest::CompletionDelegate(this, &MoConnectSystem::OnIAPRedeemedResponse));
+			mpHttpConnectionSystem->MakeRequest(requestDetails, Core::MakeDelegate(this, &MoConnectSystem::OnIAPRedeemedResponse));
         }
         //------------------------
         /// On IAP Redeemed Response

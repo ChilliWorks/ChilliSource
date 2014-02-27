@@ -9,6 +9,7 @@
 
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
 
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 
 #include <limits.h>
@@ -113,14 +114,14 @@ namespace ChilliSource
         //----------------------------------------------------
         void CPointLightComponent::OnAttachedToEntity()
         {
-            GetEntityOwner()->Transform().GetTransformChangedEvent() += fastdelegate::MakeDelegate(this, &CPointLightComponent::OnEntityTransformChanged);
+            GetEntityOwner()->Transform().GetTransformChangedEvent() += Core::MakeDelegate(this, &CPointLightComponent::OnEntityTransformChanged);
         }
         //----------------------------------------------------
         /// On Detached From Entity
         //----------------------------------------------------
         void CPointLightComponent::OnDetachedFromEntity()
         {
-            GetEntityOwner()->Transform().GetTransformChangedEvent() -= fastdelegate::MakeDelegate(this, &CPointLightComponent::OnEntityTransformChanged);
+            GetEntityOwner()->Transform().GetTransformChangedEvent() -= Core::MakeDelegate(this, &CPointLightComponent::OnEntityTransformChanged);
         }
         //----------------------------------------------------
         /// On Entity Transform Changed

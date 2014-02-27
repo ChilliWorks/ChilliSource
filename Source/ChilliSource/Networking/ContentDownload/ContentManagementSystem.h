@@ -36,8 +36,8 @@ namespace ChilliSource
                 k_contentFailed
             };
             
-            typedef fastdelegate::FastDelegate1<UpdateResult> CheckForUpdateDelegate;
-            typedef fastdelegate::FastDelegate1<Result> CompleteDelegate;
+            typedef std::function<void(UpdateResult)> CheckForUpdateDelegate;
+            typedef std::function<void(Result)> CompleteDelegate;
 			
             //-----------------------------------------------------------
             /// Constructor

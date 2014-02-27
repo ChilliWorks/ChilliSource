@@ -19,8 +19,8 @@ namespace ChilliSource
 {
     namespace Video
     {
-		typedef fastdelegate::FastDelegate0<> VideoDismissedEventDelegate;
-		typedef fastdelegate::FastDelegate0<> VideoPlaybackEventDelegate;
+		typedef std::function<void()> VideoDismissedEventDelegate;
+		typedef std::function<void()> VideoPlaybackEventDelegate;
         
         class VideoPlayerActivity : public Core::IActivity
         {

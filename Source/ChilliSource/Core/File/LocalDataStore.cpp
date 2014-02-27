@@ -10,6 +10,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/File/LocalDataStore.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Cryptographic/aes.h>
@@ -341,7 +342,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         void CLocalDataStore::SubscribeToApplicationSuspendEvent()
 		{
-			CApplicationEvents::GetLateSuspendEvent() += ApplicationSystemDelegate(this, &CLocalDataStore::OnApplicationSuspended);
+			CApplicationEvents::GetLateSuspendEvent() += Core::MakeDelegate(this, &CLocalDataStore::OnApplicationSuspended);
 		}
         //----------------------------------------------------------------
         /// On Application Suspended

@@ -10,22 +10,22 @@
 #define _MOFLO_PLATFORM_IOS_GAMECENTREDELEGATES_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Event/GenericEvent.h>
 
 #import <Foundation/Foundation.h>
 #import <GameKit/GameKit.h>
 #import <GameKit/GKTurnBasedMatch.h>
 
+#include <functional>
 
-typedef fastdelegate::FastDelegate0<> GKNotificationEventDelegate;
-typedef fastdelegate::FastDelegate0<> GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent;
-typedef fastdelegate::FastDelegate0<> GameCentreTurnBasedMatchmakerViewControllerDidFailEvent;
-typedef fastdelegate::FastDelegate1<GKTurnBasedMatch*> GameCentreTurnBasedMatchmakerViewControllerDidFindMatchEvent;
+typedef std::function<void()> GKNotificationEventDelegate;
+typedef std::function<void()> GameCentreTurnBasedMatchmakerViewControllerWasCancelledEvent;
+typedef std::function<void()> GameCentreTurnBasedMatchmakerViewControllerDidFailEvent;
+typedef std::function<void(GKTurnBasedMatch*)> GameCentreTurnBasedMatchmakerViewControllerDidFindMatchEvent;
 
-typedef fastdelegate::FastDelegate1<NSArray*> HandleInviteFromGameCenterEventDelegate;
-typedef fastdelegate::FastDelegate2<GKTurnBasedMatch*, bool> HandleTurnEventForMatchEventDelegate;
-typedef fastdelegate::FastDelegate1<GKTurnBasedMatch*> HandleMatchEndedEventDelegate;
+typedef std::function<void(NSArray*)> HandleInviteFromGameCenterEventDelegate;
+typedef std::function<void(GKTurnBasedMatch*, bool)> HandleTurnEventForMatchEventDelegate;
+typedef std::function<void(GKTurnBasedMatch*)> HandleMatchEndedEventDelegate;
 
 @interface GameCentreTurnBasedMatchmakerViewControllerDelegate : NSObject <GKTurnBasedMatchmakerViewControllerDelegate> 
 {

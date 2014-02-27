@@ -47,7 +47,7 @@ namespace ChilliSource
         /// @param Notification 
         /// @param Priority (High priority will leap-frog lower priority in the queue
         //------------------------------------------------------------------------------
-        void CNotificationScheduler::ScheduleNotification(NotificationType ineType, const Notification& insNotification, NotificationPriority inePriority, Notification::NotificationPresentedDelegate inpDelegate)
+        void CNotificationScheduler::ScheduleNotification(NotificationType ineType, const Notification& insNotification, NotificationPriority inePriority, const Notification::NotificationPresentedDelegate& inpDelegate)
         {
             switch(ineType)
             {
@@ -64,7 +64,7 @@ namespace ChilliSource
                                 sNotification.TriggerTime = 0;
                                 sNotification.bDismissed = false;
                                 sNotification.bTriggered = false;
-                                if(!inpDelegate.empty())
+                                if(inpDelegate)
                                 {
                                     sNotification.pNotificationPresentedEvent += inpDelegate;
                                 }                            
@@ -79,7 +79,7 @@ namespace ChilliSource
                                 sNotification.TriggerTime = 0;
                                 sNotification.bDismissed = false;
                                 sNotification.bTriggered = false;
-                                if(!inpDelegate.empty())
+                                if(inpDelegate)
                                 {
                                     sNotification.pNotificationPresentedEvent += inpDelegate;
                                 }

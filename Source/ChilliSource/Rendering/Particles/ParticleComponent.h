@@ -11,9 +11,10 @@
 #define _MO_FLO_RENDERING_PARTICLE_COMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Rendering/Base/RenderComponent.h>
 #include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitter.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -28,7 +29,7 @@ namespace ChilliSource
 		{
 		public:
             
-            typedef fastdelegate::FastDelegate1<CParticleComponent*> EmittersFinishedDelegate;
+            typedef std::function<void(CParticleComponent*)> EmittersFinishedDelegate;
 			
 			DECLARE_NAMED_INTERFACE(CParticleComponent);
 			

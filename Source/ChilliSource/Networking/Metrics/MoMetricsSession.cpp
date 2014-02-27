@@ -10,6 +10,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Utils.h>
 
 namespace ChilliSource
@@ -291,7 +292,7 @@ namespace ChilliSource
 			cJSession["Data"] = cJData;
             cJSession["Timestamp"] = (u32)Core::CApplication::GetSystemTime();
 			
-            MetricsRequest sRequest = {cJSession, "/session/create", HttpRequest::CompletionDelegate(this, &MoMetricsSession::OnAuthTokensRequestComplete), false};
+            MetricsRequest sRequest = {cJSession, "/session/create", Core::MakeDelegate(this, &MoMetricsSession::OnAuthTokensRequestComplete), false};
             QueueRequest(sRequest);
             MakeNextRequest();
         }
@@ -343,7 +344,7 @@ namespace ChilliSource
 			cJSession["Data"] = cJData;
             cJSession["Timestamp"] = (u32)Core::CApplication::GetSystemTime();
 			
-            MetricsRequest sRequest = {cJSession, "/session/update", HttpRequest::CompletionDelegate(this, &MoMetricsSession::OnLocationUpdateRequestComplete), true};
+            MetricsRequest sRequest = {cJSession, "/session/update", Core::MakeDelegate(this, &MoMetricsSession::OnLocationUpdateRequestComplete), true};
             QueueRequest(sRequest);
             MakeNextRequest();
         }
@@ -424,7 +425,7 @@ namespace ChilliSource
             Json::FastWriter jWriter;
 			sRequestDetails.strBody = jWriter.write(sRequest.jBody);
             
-            HttpRequest* pRequest = mpHttpSystem->MakeRequest(sRequestDetails, HttpRequest::CompletionDelegate(this, &MoMetricsSession::OnQueuedRequestComplete));
+            HttpRequest* pRequest = mpHttpSystem->MakeRequest(sRequestDetails, Core::MakeDelegate(this, &MoMetricsSession::OnQueuedRequestComplete));
             
             mmapRequestToDelegate.insert(std::make_pair(pRequest, sRequest.Delegate));
         }
@@ -557,7 +558,7 @@ namespace ChilliSource
 			
 			jMessage["Data"] = jEvents;
             
-            MetricsRequest sRequest = {jMessage, "/events/add", HttpRequest::CompletionDelegate(this, &MoMetricsSession::FlushEventsRequestCompletes), true};
+            MetricsRequest sRequest = {jMessage, "/events/add", Core::MakeDelegate(this, &MoMetricsSession::FlushEventsRequestCompletes), true};
             QueueRequest(sRequest);
             MakeNextRequest();
 		}
@@ -595,7 +596,7 @@ namespace ChilliSource
             Json::Value jPostBody(Json::objectValue);
 			jPostBody["Timestamp"] = (u32)GetLastActivityTime();
             
-            MetricsRequest sRequest = {jPostBody, "/session/close", HttpRequest::CompletionDelegate(this, &MoMetricsSession::OnCloseRequestComplete), true};
+            MetricsRequest sRequest = {jPostBody, "/session/close", Core::MakeDelegate(this, &MoMetricsSession::OnCloseRequestComplete), true};
             QueueRequest(sRequest);
             MakeNextRequest();
 			

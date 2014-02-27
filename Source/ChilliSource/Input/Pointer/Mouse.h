@@ -18,7 +18,7 @@ namespace ChilliSource
             k_total
 		};
 
-		typedef fastdelegate::FastDelegate1<const Mouse*> MouseEventDelegate;
+		typedef std::function<void(const Mouse*)> MouseEventDelegate;
 
 		class Mouse : public InputDevice
 		{

@@ -9,6 +9,7 @@
 #include <ChilliSource/Networking/ContentDownload/MoContentDownloader.h>
 
 #include <ChilliSource/Core/Base/Device.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/JSON/json.h>
 
 namespace ChilliSource
@@ -66,7 +67,7 @@ namespace ChilliSource
 				RequestDetails.eType = HttpRequestDetails::Type::k_post;
                 RequestDetails.strBody = JWriter.write(JDeviceData);
                 
-                mpHttpConnectionSystem->MakeRequest(RequestDetails, HttpRequest::CompletionDelegate(this, &MoContentDownloader::OnContentManifestDownloadComplete));
+                mpHttpConnectionSystem->MakeRequest(RequestDetails, Core::MakeDelegate(this, &MoContentDownloader::OnContentManifestDownloadComplete));
                 return true;
             }
             else
@@ -89,7 +90,7 @@ namespace ChilliSource
             HttpRequestDetails RequestDetails;
             RequestDetails.strURL = instrURL;
             RequestDetails.eType = HttpRequestDetails::Type::k_get;
-            mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(RequestDetails, HttpRequest::CompletionDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
+            mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(RequestDetails, Core::MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
         }
         //----------------------------------------------------------------
         /// On Content Manifest Download Complete
@@ -190,7 +191,7 @@ namespace ChilliSource
                                 RequestDetails.strURL = RequestDetails.strRedirectionURL;
                                 RequestDetails.strRedirectionURL = "";
                                 RequestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_get;
-                                mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(RequestDetails, HttpRequest::CompletionDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
+                                mpCurrentRequest = mpHttpConnectionSystem->MakeRequest(RequestDetails, Core::MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
                                 break;
                             }
                         }

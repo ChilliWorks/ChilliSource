@@ -9,6 +9,7 @@
 #include <ChilliSource/GUI/SliderBar/VerticalSliderBar.h>
 
 #include <ChilliSource/GUI/Image/ImageView.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #include <ChilliSource/Core/String/StringParser.h>
@@ -50,7 +51,7 @@ namespace ChilliSource
             mpSliderImage->EnableUserInteraction(false);
             mpBackgroundImage->AddSubview(mpSliderImage);
             
-            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &VerticalSliderBar::OnSliderMoved);
+            mInputEvents.GetMovedWithinEvent() += Core::MakeDelegate(this, &VerticalSliderBar::OnSliderMoved);
         }
         //------------------------------------------------------
         /// Constructor
@@ -124,7 +125,7 @@ namespace ChilliSource
                 SetSliderSize(Core::UnifiedVector2(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w));
             }
             
-            mInputEvents.GetMovedWithinEvent() += GUIEventDelegate(this, &VerticalSliderBar::OnSliderMoved);
+            mInputEvents.GetMovedWithinEvent() += CSCore::MakeDelegate(this, &VerticalSliderBar::OnSliderMoved);
         }
         //--------------------------------------------------------
         /// Set Bar Sprite Sheet
@@ -313,7 +314,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		VerticalSliderBar::~VerticalSliderBar()
 		{
-			mInputEvents.GetMovedWithinEvent() -= GUIEventDelegate(this, &VerticalSliderBar::OnSliderMoved);
+			mInputEvents.GetMovedWithinEvent() -= Core::MakeDelegate(this, &VerticalSliderBar::OnSliderMoved);
 		}
     }
 }

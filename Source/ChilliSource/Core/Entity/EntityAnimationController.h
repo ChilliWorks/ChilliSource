@@ -111,7 +111,7 @@ namespace ChilliSource
             /// Return event to subscribe to for animation completion events
 			///
             //----------------------------------------------
-            typedef fastdelegate::FastDelegate1<CEntityAnimationController*> EventAnimationCompletion;
+            typedef std::function<void(CEntityAnimationController*)> EventAnimationCompletion;
             Core::IEvent<EventAnimationCompletion> & GetEventCompletion() { return mAnimationCompletionEvent; }
 			
             //----------------------------------------------

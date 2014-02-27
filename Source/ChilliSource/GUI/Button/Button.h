@@ -23,7 +23,7 @@ namespace ChilliSource
 {
     namespace GUI
     {
-        typedef fastdelegate::FastDelegate1<Button*> ButtonEventDelegate;
+        typedef std::function<void(Button*)> ButtonEventDelegate;
         
         class Button : public GUIView
         {

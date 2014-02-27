@@ -30,7 +30,7 @@ namespace ChilliSource
 		const f32 kfDefaultRolloff		= 1.0f;
 		const f32 kfDefaultDistance		= 1.0f;
 		
-        typedef fastdelegate::FastDelegate0<> AudioVolumeEventDelegate;
+        typedef std::function<void()> AudioVolumeEventDelegate;
 		
 		class AudioSystem : public Core::ISystem, public Core::IUpdateable, public Core::IComponentProducer
 		{

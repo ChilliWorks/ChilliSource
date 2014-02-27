@@ -58,7 +58,7 @@ namespace ChilliSource
 			CEntity*						mpTarget;			// Entity to be animated
         protected:
             
-            typedef fastdelegate::FastDelegate3<u32, u32, f32> InterpolateDelegate;
+            typedef std::function<void(u32, u32, f32)> InterpolateDelegate;
             
             u32 mudwFrameCount;
             const std::shared_ptr<f32> mpafFrameTimes; // Array of pointers to frame times

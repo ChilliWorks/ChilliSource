@@ -10,7 +10,8 @@
 #define _MOFLO_CORE_LAUNCHING_ACTIONS_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -20,7 +21,7 @@ namespace ChilliSource
         {
         public:
             
-            typedef fastdelegate::FastDelegate1<const std::string&> ActionDelegate;
+            typedef std::function<void(const std::string&)> ActionDelegate;
             
             //-----------------------------------------------------------------------
             /// Subscribe For Action Type

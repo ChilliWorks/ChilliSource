@@ -36,7 +36,7 @@ namespace ChilliSource
                 k_failed,
                 k_cancelled
 			};
-			typedef fastdelegate::FastDelegate1<SendResult> SendResultDelegate;
+			typedef std::function<void(SendResult)> SendResultDelegate;
             //-------------------------------------------------------
             /// Attachment
             ///

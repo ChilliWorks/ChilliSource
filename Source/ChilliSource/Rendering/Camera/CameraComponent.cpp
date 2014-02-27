@@ -12,6 +12,7 @@
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
 namespace ChilliSource
@@ -478,8 +479,8 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		void CCameraComponent::EnableViewportRotationWithScreen(bool inbEnable)
 		{
-			inbEnable ? Core::CApplicationEvents::GetScreenOrientationChangedEvent() += Core::ApplicationScreenOrientationDelegate(this, &CCameraComponent::SetViewportOrientation) :
-						Core::CApplicationEvents::GetScreenOrientationChangedEvent() -= Core::ApplicationScreenOrientationDelegate(this, &CCameraComponent::SetViewportOrientation);
+			inbEnable ? Core::CApplicationEvents::GetScreenOrientationChangedEvent() += Core::MakeDelegate(this, &CCameraComponent::SetViewportOrientation) :
+						Core::CApplicationEvents::GetScreenOrientationChangedEvent() -= Core::MakeDelegate(this, &CCameraComponent::SetViewportOrientation);
 		}
 		//------------------------------------------------------
 		/// Enable Viewport Resize with Screen
@@ -489,8 +490,8 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		void CCameraComponent::EnableViewportResizeWithScreen(bool inbEnable)
 		{
-			inbEnable ? Core::CApplicationEvents::GetScreenResizedEvent() += Core::ApplicationScreenResizeDelegate(this, &CCameraComponent::SetViewportSize) :
-						Core::CApplicationEvents::GetScreenResizedEvent() -= Core::ApplicationScreenResizeDelegate(this, &CCameraComponent::SetViewportSize);
+			inbEnable ? Core::CApplicationEvents::GetScreenResizedEvent() += Core::MakeDelegate<CCameraComponent, CCameraComponent, void, u32, u32>(this, &CCameraComponent::SetViewportSize) :
+						Core::CApplicationEvents::GetScreenResizedEvent() -= Core::MakeDelegate<CCameraComponent, CCameraComponent, void, u32, u32>(this, &CCameraComponent::SetViewportSize);
 		}
 		//-----------------------------------------------------
 		/// Destructor

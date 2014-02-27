@@ -7,6 +7,7 @@
  *
  */
 
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/File/LocalDataStore.h>
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
@@ -124,7 +125,7 @@ namespace ChilliSource
 					sHttpRequest.sHeaders.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
 					sHttpRequest.sHeaders.SetValueForKey(Social::TwitterOAuthAPIHeaders::TWITTER_OAUTH_REQUEST_HEADER_AUTHORIZATION, strOAuthHeader);
 
-					mpHttpConnectionSystem->MakeRequest(sHttpRequest, Networking::HttpRequest::CompletionDelegate(this, &TwitterPostSystem::OnStatusUpdateComplete));
+					mpHttpConnectionSystem->MakeRequest(sHttpRequest, Core::MakeDelegate(this, &TwitterPostSystem::OnStatusUpdateComplete));
 					bResult = true;
 				}
 			}
@@ -206,7 +207,7 @@ namespace ChilliSource
 					sHttpRequest.sHeaders.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
 					sHttpRequest.sHeaders.SetValueForKey(Social::TwitterOAuthAPIHeaders::TWITTER_OAUTH_REQUEST_HEADER_AUTHORIZATION, strOAuthHeader);
 
-					mpHttpConnectionSystem->MakeRequest(sHttpRequest, Networking::HttpRequest::CompletionDelegate(this, &TwitterPostSystem::OnRequestOAuthTokenComplete));
+					mpHttpConnectionSystem->MakeRequest(sHttpRequest, Core::MakeDelegate(this, &TwitterPostSystem::OnRequestOAuthTokenComplete));
 					bResult = true;
 				}
 			}
@@ -259,7 +260,7 @@ namespace ChilliSource
 					sHttpRequest.sHeaders.SetValueForKey("Content-Type", "application/x-www-form-urlencoded");
 					sHttpRequest.sHeaders.SetValueForKey(Social::TwitterOAuthAPIHeaders::TWITTER_OAUTH_REQUEST_HEADER_AUTHORIZATION, strOAuthHeader);
 
-					mpHttpConnectionSystem->MakeRequest(sHttpRequest, Networking::HttpRequest::CompletionDelegate(this, &TwitterPostSystem::OnRequestOAuthAccessTokenComplete));
+					mpHttpConnectionSystem->MakeRequest(sHttpRequest, Core::MakeDelegate(this, &TwitterPostSystem::OnRequestOAuthAccessTokenComplete));
 					bResult = true;
 				}
 			}

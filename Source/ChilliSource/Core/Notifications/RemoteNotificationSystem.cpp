@@ -8,8 +8,6 @@
 
 #include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
 
-#include <ChilliSource/Core/Base/FastDelegate.h>
-
 #ifdef TARGET_OS_IPHONE
 #	include <ChilliSource/Backend/Platform/iOS/Core/Notification/RemoteNotificationSystem.h>
 #elif defined(TARGET_ANDROID)

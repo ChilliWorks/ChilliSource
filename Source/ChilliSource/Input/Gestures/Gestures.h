@@ -16,9 +16,10 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Time/Timer.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/GUI/Base/GUIView.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
@@ -32,7 +33,7 @@ namespace ChilliSource
 		class Gesture
 		{
 		public:
-			typedef fastdelegate::FastDelegate1<const Gesture&> GestureEventDelegate;
+			typedef std::function<void(const Gesture&)> GestureEventDelegate;
 			
             Gesture(GUI::GUIView* inpView);
             Gesture(TouchScreen* inpTouchDevice);
