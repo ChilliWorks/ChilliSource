@@ -86,7 +86,7 @@ namespace ChilliSource
 		/// @param Static mesh component
 		/// @param Transform
 		//------------------------------------------------------
-		void MeshBatch::AddMesh(const StaticMeshComponentSPtr &inpMesh, const Core::CMatrix4x4& inmatTransform)
+		void MeshBatch::AddMesh(const StaticMeshComponentSPtr &inpMesh, const Core::Matrix4x4& inmatTransform)
 		{
 			mmapMeshCache.insert(std::make_pair(inpMesh, inmatTransform));
 		}
@@ -125,7 +125,7 @@ namespace ChilliSource
 			for(MapMeshToTransform::const_iterator it = mmapMeshCache.begin(); it != mmapMeshCache.end(); ++it)
 			{
 				//build the normal matrix. NOTE: This normal matrix will NOT work if there is a scale component to the transform.
-				Core::CMatrix4x4 NormalMatrix = it->second;
+				Core::Matrix4x4 NormalMatrix = it->second;
 				NormalMatrix.m[12] = 0.0f;
 				NormalMatrix.m[13] = 0.0f;
 				NormalMatrix.m[14] = 0.0f;
@@ -156,8 +156,8 @@ namespace ChilliSource
                         memcpy(&sTempVert, _pVSubBuffer + i, VertexStride);
                         
                         //Transform the vertex
-                        Core::CMatrix4x4::Multiply(&sTempVert.Pos, &it->second, &sTempVert.Pos);
-                        Core::CMatrix4x4::Multiply(&sTempVert.Norm, &NormalMatrix, &sTempVert.Norm);
+                        Core::Matrix4x4::Multiply(&sTempVert.Pos, &it->second, &sTempVert.Pos);
+                        Core::Matrix4x4::Multiply(&sTempVert.Norm, &NormalMatrix, &sTempVert.Norm);
                         
                         //Copy the vertex into our new buffer
                         memcpy(pVBatchBuffer, &sTempVert, VertexStride);
@@ -232,7 +232,7 @@ namespace ChilliSource
 #ifdef DEBUG_STATS
             DebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
 #endif
-			inpRenderSystem->RenderBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetIndexCount(), Core::CMatrix4x4::IDENTITY);
+			inpRenderSystem->RenderBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetIndexCount(), Core::Matrix4x4::IDENTITY);
 		}
 		//------------------------------------------------------
 		/// Get Material

@@ -143,10 +143,10 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Set Bounds
 		//-----------------------------------------------------------------
-		void Mesh::SetBounds(const ChilliSource::Core::CVector3& invMinBounds, const ChilliSource::Core::CVector3& invMaxBounds)
+		void Mesh::SetBounds(const ChilliSource::Core::Vector3& invMinBounds, const ChilliSource::Core::Vector3& invMaxBounds)
 		{
 			//Calculate the size of this meshes bounding box
-			Core::CVector3 vSize = invMaxBounds - invMinBounds;
+			Core::Vector3 vSize = invMaxBounds - invMinBounds;
 			
 			//Build our bounding box based on the size of all our sub-meshes
 			mBoundingBox = Core::AABB((invMaxBounds + invMinBounds) * 0.5f, vSize);
@@ -154,7 +154,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Render
 		//-----------------------------------------------------------------
-		void Mesh::Render(RenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const std::vector<MaterialSPtr>& inMaterials, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const
+		void Mesh::Render(RenderSystem* inpRenderSystem, const Core::Matrix4x4 &inmatWorld, const std::vector<MaterialSPtr>& inMaterials, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const
 		{
             CS_ASSERT(inMaterials.size() > 0, "Must have at least one material to render");
 

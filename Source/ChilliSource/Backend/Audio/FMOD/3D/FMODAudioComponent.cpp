@@ -208,7 +208,7 @@ namespace ChilliSource
 		/// @param 3D position vector
 		/// @param 3D velocity vector
 		//---------------------------------------------------------------------
-		void CFMODAudioComponent::Set3DLocation(Core::CVector3& invPosition, Core::CVector3& invVelocity)
+		void CFMODAudioComponent::Set3DLocation(Core::Vector3& invPosition, Core::Vector3& invVelocity)
 		{
 			if(mpFMODChannel)
 			{

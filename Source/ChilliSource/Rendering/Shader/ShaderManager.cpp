@@ -76,7 +76,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr ShaderManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr ShaderManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetShaderFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -88,7 +88,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr ShaderManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr ShaderManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetShaderFromFile(ineStorageLocation, instrFilePath);
 		}

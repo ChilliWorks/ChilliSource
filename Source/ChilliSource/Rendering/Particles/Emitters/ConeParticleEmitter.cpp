@@ -62,7 +62,7 @@ namespace ChilliSource
 		void ConeParticleEmitter::Emit(Particle* inpParticles, u32 udwParticleIndex)
         {
             f32 fBoxAreaSq = mfBoxArea * mfBoxArea;
-            Core::CVector3 vDir;
+            Core::Vector3 vDir;
             do
             {
                 vDir.x = Core::CMathUtils::RandomInRange(-mfBoxArea, mfBoxArea);

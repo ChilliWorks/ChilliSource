@@ -12,7 +12,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        void CPerformanceTimer::Start()
+        void PerformanceTimer::Start()
         {
 #ifdef TARGET_WINDOWS
             QueryPerformanceFrequency(&mFrequency);
@@ -22,7 +22,7 @@ namespace ChilliSource
 #endif
         }
         
-        void CPerformanceTimer::Stop()
+        void PerformanceTimer::Stop()
         {
             TimeValue StopTime;
 #ifdef TARGET_WINDOWS
@@ -33,22 +33,22 @@ namespace ChilliSource
             mffLastDurationMicroS = GetTimeDurationMicroS(mStartTime, StopTime);
         }
         
-        f64 CPerformanceTimer::GetTimeTakenS() const
+        f64 PerformanceTimer::GetTimeTakenS() const
         {
             return mffLastDurationMicroS * 0.000001;
         }
         
-        f64 CPerformanceTimer::GetTimeTakenMS() const
+        f64 PerformanceTimer::GetTimeTakenMS() const
         {
             return mffLastDurationMicroS * 0.001;
         }
         
-        f64 CPerformanceTimer::GetTimeTakenMicroS() const
+        f64 PerformanceTimer::GetTimeTakenMicroS() const
         {
             return mffLastDurationMicroS;
         }
         
-        f64 CPerformanceTimer::GetTimeDurationMicroS(const TimeValue& inStart, const TimeValue& inEnd)
+        f64 PerformanceTimer::GetTimeDurationMicroS(const TimeValue& inStart, const TimeValue& inEnd)
         {
             f64 ffStartTimeMicro, ffStopTimeMicro = 0.0;
             

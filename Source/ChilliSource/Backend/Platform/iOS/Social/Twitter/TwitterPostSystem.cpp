@@ -27,7 +27,7 @@ namespace ChilliSource
 		/// Constructor
 		//------------------------------------------------------------------------
 		CTwitterPostSystem::CTwitterPostSystem(iOS::CHttpConnectionSystem* inpHttpConnectionSystem,
-											   Core::COAuthSystem* inpOAuthSystem) : Social::TwitterPostSystem(inpHttpConnectionSystem, inpOAuthSystem)
+											   Core::OAuthSystem* inpOAuthSystem) : Social::TwitterPostSystem(inpHttpConnectionSystem, inpOAuthSystem)
 		{
 			
 		}

@@ -21,7 +21,7 @@ namespace ChilliSource
 {
     namespace Core 
     {
-        struct CSceneAnimationDesc
+        struct SceneAnimationDesc
         {
             //--------------------------------------------------------------
             /// LoadFromBinaryFile
@@ -51,17 +51,17 @@ namespace ChilliSource
 				std::shared_ptr<f32> afKeyframeTimes;
 				std::shared_ptr<EntityTransform>	aKeyframeValues;
                 
-				void FromBinaryStream(const Core::FileStreamPtr & inStream);
-				void ToBinaryStream(const Core::FileStreamPtr & inStream);
+				void FromBinaryStream(const Core::FileStreamSPtr & inStream);
+				void ToBinaryStream(const Core::FileStreamSPtr & inStream);
 			};
             
             std::vector<EntityAnimationDesc>	asEntityAnimations;
         };
         
-        class CSceneAnimation : public ChilliSource::Core::IResource
+        class SceneAnimation : public ChilliSource::Core::Resource
         {
         public:
-            DECLARE_NAMED_INTERFACE(CSceneAnimation);
+            DECLARE_NAMED_INTERFACE(SceneAnimation);
             bool IsA(InterfaceIDType inInterface) const override;
             
             //--------------------------------------------------------------
@@ -74,8 +74,8 @@ namespace ChilliSource
             /// @param Output, instances animations in this scene animation
             /// @return Success
             //---------------------------------------------------------------
-            bool ApplyAnimationToScene(const EntityPtr& inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList) const;
-            bool ApplyAnimationToScene(CEntity* inpRootNode, std::vector<EntityAnimationPtr> &outEntityAnimList) const;
+            bool ApplyAnimationToScene(const EntitySPtr& inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList) const;
+            bool ApplyAnimationToScene(Entity* inpRootNode, std::vector<EntityAnimationPtr> &outEntityAnimList) const;
             
             //--------------------------------------------------------------
             /// PlayAnimation
@@ -88,8 +88,8 @@ namespace ChilliSource
             /// @param Playback mode
             /// @return Success
             //---------------------------------------------------------------
-            bool PlayAnimation(const EntityPtr& inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode = AnimationPlayMode::k_once, InterpolationType ineInterType = InterpolationType::k_linear) const;
-            bool PlayAnimation(CEntity* inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode = AnimationPlayMode::k_once, InterpolationType ineInterType = InterpolationType::k_linear) const;
+            bool PlayAnimation(const EntitySPtr& inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode = AnimationPlayMode::k_once, InterpolationType ineInterType = InterpolationType::k_linear) const;
+            bool PlayAnimation(Entity* inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode = AnimationPlayMode::k_once, InterpolationType ineInterType = InterpolationType::k_linear) const;
             
             //--------------------------------------------------------------
             /// SetSceneAnimDesc
@@ -98,10 +98,10 @@ namespace ChilliSource
             ///
             /// @param Scene animation data
             //---------------------------------------------------------------
-            void SetSceneAnimDesc(const CSceneAnimationDesc& inAnimation);
+            void SetSceneAnimDesc(const SceneAnimationDesc& inAnimation);
             
         protected:
-            CSceneAnimationDesc msAnimation;
+            SceneAnimationDesc msAnimation;
         };
     }
 }

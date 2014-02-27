@@ -25,7 +25,7 @@ namespace ChilliSource
         {
             for (u32 i = 0; i < mpSkeleton->GetNumNodes(); ++i)
             {
-                mCurrentAnimationMatrices.push_back(Core::CMatrix4x4());
+                mCurrentAnimationMatrices.push_back(Core::Matrix4x4());
             }
         }
         //----------------------------------------------------------
@@ -155,7 +155,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Build Matrices
         //----------------------------------------------------------
-        void SkinnedAnimationGroup::BuildMatrices(s32 indwCurrentParent, const Core::CMatrix4x4& inParentMatrix)
+        void SkinnedAnimationGroup::BuildMatrices(s32 indwCurrentParent, const Core::Matrix4x4& inParentMatrix)
         {
             const std::vector<SkeletonNodeSPtr>& nodes = mpSkeleton->GetNodes();
 			u32 currIndex = 0;
@@ -164,7 +164,7 @@ namespace ChilliSource
 				if ((*it)->mdwParentIndex == indwCurrentParent)
 				{
 					//get the world translation and orientation
-					Core::CMatrix4x4 localMat;
+					Core::Matrix4x4 localMat;
                     if(mCurrentAnimationData->mNodeTranslations.empty() == false)
                     {
                         localMat.SetTransform(mCurrentAnimationData->mNodeTranslations[currIndex], mCurrentAnimationData->mNodeScalings[currIndex], mCurrentAnimationData->mNodeOrientations[currIndex]);
@@ -183,25 +183,25 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Matrix At Index
         //----------------------------------------------------------
-        const Core::CMatrix4x4& SkinnedAnimationGroup::GetMatrixAtIndex(s32 indwIndex) const
+        const Core::Matrix4x4& SkinnedAnimationGroup::GetMatrixAtIndex(s32 indwIndex) const
         {
             if (indwIndex < mCurrentAnimationMatrices.size())
             {
                 return mCurrentAnimationMatrices[indwIndex];
             }
-            return Core::CMatrix4x4::IDENTITY;
+            return Core::Matrix4x4::IDENTITY;
         }
         //----------------------------------------------------------
         /// Apply Inverse Bind Pose
         //----------------------------------------------------------
-        void SkinnedAnimationGroup::ApplyInverseBindPose(const std::vector<Core::CMatrix4x4>& inInverseBindPoseMatrices, std::vector<Core::CMatrix4x4>& outCombinedMatrices)
+        void SkinnedAnimationGroup::ApplyInverseBindPose(const std::vector<Core::Matrix4x4>& inInverseBindPoseMatrices, std::vector<Core::Matrix4x4>& outCombinedMatrices)
         {
             const std::vector<s32>& kadwJoints = mpSkeleton->GetJointIndices();
             
             outCombinedMatrices.clear();
             for (u32 i = 0; i < kadwJoints.size(); ++i)
             {
-                outCombinedMatrices.push_back(Core::CMatrix4x4());
+                outCombinedMatrices.push_back(Core::Matrix4x4());
             }
             
             //check that they have the same number of joints
@@ -213,7 +213,7 @@ namespace ChilliSource
 			//iterate through and multiply together to get the new array
 			s32 count = 0;
 			std::vector<s32>::const_iterator joint = kadwJoints.begin();
-			for (std::vector<Core::CMatrix4x4>::const_iterator ibp = inInverseBindPoseMatrices.begin(); 
+			for (std::vector<Core::Matrix4x4>::const_iterator ibp = inInverseBindPoseMatrices.begin(); 
 				 joint != kadwJoints.end() && ibp != inInverseBindPoseMatrices.end();)
 			{
 				//multiply together
@@ -348,12 +348,12 @@ namespace ChilliSource
             {
                 //iterate through each translation
                 outFrame->mNodeTranslations.reserve(inFrameB->mNodeTranslations.size());
-                std::vector<Core::CVector3>::const_iterator transAIt = inFrameA->mNodeTranslations.begin();
-                for (std::vector<Core::CVector3>::const_iterator transBIt = inFrameB->mNodeTranslations.begin(); 
+                std::vector<Core::Vector3>::const_iterator transAIt = inFrameA->mNodeTranslations.begin();
+                for (std::vector<Core::Vector3>::const_iterator transBIt = inFrameB->mNodeTranslations.begin(); 
                      transAIt != inFrameA->mNodeTranslations.end() && transBIt != inFrameB->mNodeTranslations.end();)
                 {
                     //lerp
-                    Core::CVector3 newTrans = Core::CMathUtils::Lerp(infInterpFactor, *transAIt, *transBIt);
+                    Core::Vector3 newTrans = Core::CMathUtils::Lerp(infInterpFactor, *transAIt, *transBIt);
                     
                     //add to frame
                     outFrame->mNodeTranslations.push_back(newTrans);
@@ -365,12 +365,12 @@ namespace ChilliSource
                 
                 //iterate through each orientation
                 outFrame->mNodeOrientations.reserve(inFrameB->mNodeOrientations.size());
-                std::vector<Core::CQuaternion>::const_iterator orientAIt = inFrameA->mNodeOrientations.begin();
-                for (std::vector<Core::CQuaternion>::const_iterator orientBIt = inFrameB->mNodeOrientations.begin();
+                std::vector<Core::Quaternion>::const_iterator orientAIt = inFrameA->mNodeOrientations.begin();
+                for (std::vector<Core::Quaternion>::const_iterator orientBIt = inFrameB->mNodeOrientations.begin();
                      orientAIt != inFrameA->mNodeOrientations.end() && orientBIt != inFrameB->mNodeOrientations.end();)
                 {
                     //lerp
-                    Core::CQuaternion newOrient = Core::CQuaternion::Slerp(*orientAIt, *orientBIt, infInterpFactor);
+                    Core::Quaternion newOrient = Core::Quaternion::Slerp(*orientAIt, *orientBIt, infInterpFactor);
                     
                     //add to frame
                     outFrame->mNodeOrientations.push_back(newOrient);
@@ -382,12 +382,12 @@ namespace ChilliSource
                 
                 //iterate through each scale
                 outFrame->mNodeScalings.reserve(inFrameB->mNodeScalings.size());
-                std::vector<Core::CVector3>::const_iterator scaleAIt = inFrameA->mNodeScalings.begin();
-                for (std::vector<Core::CVector3>::const_iterator scaleBIt = inFrameB->mNodeScalings.begin();
+                std::vector<Core::Vector3>::const_iterator scaleAIt = inFrameA->mNodeScalings.begin();
+                for (std::vector<Core::Vector3>::const_iterator scaleBIt = inFrameB->mNodeScalings.begin();
                      scaleAIt != inFrameA->mNodeScalings.end() && scaleBIt != inFrameB->mNodeScalings.end();)
                 {
                     //lerp
-                    Core::CVector3 newScale = Core::CMathUtils::Lerp(infInterpFactor, *scaleAIt, *scaleBIt);
+                    Core::Vector3 newScale = Core::CMathUtils::Lerp(infInterpFactor, *scaleAIt, *scaleBIt);
                     
                     //add to frame
                     outFrame->mNodeScalings.push_back(newScale);

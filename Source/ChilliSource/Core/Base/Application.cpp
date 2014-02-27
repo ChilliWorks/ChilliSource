@@ -56,7 +56,7 @@ namespace ChilliSource
         //---Static Definitions
         TimeIntervalSecs Application::uddwCurrentAppTime = 0;
 		
-        CStateManager Application::mStateMgr;
+        StateManager Application::mStateMgr;
         Rendering::FontSPtr Application::pDefaultFont;
         Rendering::MeshSPtr Application::pDefaultMesh;
         Rendering::MaterialSPtr Application::pDefaultMaterial;
@@ -68,17 +68,17 @@ namespace ChilliSource
         
         Rendering::RenderSystem* Application::mpRenderSystem = nullptr;
         Input::InputSystem * Application::mpInputSystem = nullptr;
-        IPlatformSystem* Application::pPlatformSystem = nullptr;
+        PlatformSystem* Application::pPlatformSystem = nullptr;
 		Audio::AudioSystem* Application::pAudioSystem = nullptr;
 		Rendering::Renderer* Application::mpRenderer = nullptr;
-		IFileSystem* Application::mspFileSystem = nullptr;
+		FileSystem* Application::mspFileSystem = nullptr;
         
         std::vector<IUpdateable*> Application::mUpdateableSystems;
-        std::vector<SystemPtr> Application::mSystems;
+        std::vector<SystemSPtr> Application::mSystems;
         
         ScreenOrientation Application::meDefaultOrientation = ScreenOrientation::k_landscapeRight;
         
-        CResourceManagerDispenser* Application::mpResourceManagerDispenser = nullptr;
+        ResourceManagerDispenser* Application::mpResourceManagerDispenser = nullptr;
 
         SystemConfirmDialog::Delegate Application::mActiveSysConfirmDelegate;
 
@@ -94,8 +94,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		Application::Application()
 		{
-            mpResourceManagerDispenser = new CResourceManagerDispenser(this);
-            mpComponentFactoryDispenser = new CComponentFactoryDispenser(this);
+            mpResourceManagerDispenser = new ResourceManagerDispenser(this);
+            mpComponentFactoryDispenser = new ComponentFactoryDispenser(this);
             mStateMgr.SetOwningApplication(this);
 
 #ifdef TARGET_WINDOWS
@@ -103,7 +103,7 @@ namespace ChilliSource
 			meDefaultOrientation = PORTRAIT_UP;
 #endif
             
-			pPlatformSystem = IPlatformSystem::Create();
+			pPlatformSystem = PlatformSystem::Create();
 		}
         //--------------------------------------------------------------------------------------------------
         /// Resolution Sort Predicate
@@ -132,7 +132,7 @@ namespace ChilliSource
             DetermineResourceDirectories();
 
             //init tweakable constants and local data store.
-			new CTweakableConstants();
+			new TweakableConstants();
 			new CLocalDataStore();
 
             //Set up the device helper
@@ -194,7 +194,7 @@ namespace ChilliSource
                 strDeviceDir = strDefaultDeviceDir;
             }
             
-            IFileSystem::SetResourceDirectories(strDeviceDir, strDefaultDeviceDir, strDefaultDir, fAssetDensity);
+            FileSystem::SetResourceDirectories(strDeviceDir, strDefaultDeviceDir, strDefaultDir, fAssetDensity);
         }
 		//--------------------------------------------------------------------------------------------------
 		/// Get System Implementing
@@ -203,9 +203,9 @@ namespace ChilliSource
 		/// @param The type ID of the system you wish to implement
 		/// @return System that implements the given interface or nullptr if no system
 		//--------------------------------------------------------------------------------------------------
-		SystemPtr Application::GetSystemImplementing(InterfaceIDType inInterfaceID)
+		SystemSPtr Application::GetSystemImplementing(InterfaceIDType inInterfaceID)
 		{
-			for (std::vector<SystemPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
+			for (std::vector<SystemSPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
 			{
 				if ((*it)->IsA(inInterfaceID)) 
 				{
@@ -214,7 +214,7 @@ namespace ChilliSource
 			}
 			
 			CS_WARNING_LOG("Application cannot find implementing systems");
-			return SystemPtr();
+			return SystemSPtr();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get Systems Implementing
@@ -223,10 +223,10 @@ namespace ChilliSource
 		/// and fills an array with them.
 		/// @param The type ID of the system you wish to implement
 		//--------------------------------------------------------------------------------------------------
-		void Application::GetSystemsImplementing(InterfaceIDType inInterfaceID, std::vector<SystemPtr> & outSystems)
+		void Application::GetSystemsImplementing(InterfaceIDType inInterfaceID, std::vector<SystemSPtr> & outSystems)
 		{
 			outSystems.clear();
-			for (std::vector<SystemPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
+			for (std::vector<SystemSPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
 			{
 				if ((*it)->IsA(inInterfaceID)) 
 				{
@@ -243,9 +243,9 @@ namespace ChilliSource
 		/// @param The type ID of the resource you wish to create (i.e. Model, Texture)
 		/// @return Resource provider that loads the resource type
 		//--------------------------------------------------------------------------------------------------
-		IResourceProvider* Application::GetResourceProviderProducing(InterfaceIDType inInterfaceID, const std::string & inExtension)
+		ResourceProvider* Application::GetResourceProviderProducing(InterfaceIDType inInterfaceID, const std::string & inExtension)
 		{
-			for (std::vector<IResourceProvider*>::iterator pProv = mResourceProviders.begin(); pProv != mResourceProviders.end(); ++pProv) 
+			for (std::vector<ResourceProvider*>::iterator pProv = mResourceProviders.begin(); pProv != mResourceProviders.end(); ++pProv) 
 			{
 				if ((*pProv)->CanCreateResourceFromFileWithExtension(inExtension)) 
 				{
@@ -261,7 +261,7 @@ namespace ChilliSource
         ///
         /// @return Application state manager
         //--------------------------------------------------------------------------------------------------
-        CStateManager& Application::GetStateManager() 
+        StateManager& Application::GetStateManager() 
         {
             return mStateMgr;
         }
@@ -270,7 +270,7 @@ namespace ChilliSource
         ///
         /// @return Handle to application state manager
         //--------------------------------------------------------------------------------------------------
-        CStateManager* Application::GetStateManagerPtr() 
+        StateManager* Application::GetStateManagerPtr() 
         {
             return &mStateMgr;
         }
@@ -336,7 +336,7 @@ namespace ChilliSource
 		void Application::PostCreateSystems()
 		{
             //Loop round all the created systems and categorise them
-			for(std::vector<SystemPtr>::iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
+			for(std::vector<SystemSPtr>::iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
 			{
 				if ((*it)->IsA(IUpdateable::InterfaceID))
 				{
@@ -352,9 +352,9 @@ namespace ChilliSource
                         mpComponentFactoryDispenser->RegisterComponentFactory(pProducer->GetComponentFactoryPtr(i));
                     }
 				}
-				if ((*it)->IsA(IResourceProvider::InterfaceID)) 
+				if ((*it)->IsA(ResourceProvider::InterfaceID)) 
 				{
-					mResourceProviders.push_back((*it)->GetInterface<IResourceProvider>());
+					mResourceProviders.push_back((*it)->GetInterface<ResourceProvider>());
 				}
 			}
 
@@ -600,10 +600,10 @@ namespace ChilliSource
 		///
 		/// @param the file system
 		//--------------------------------------------------------------------------------------------------
-		void Application::SetFileSystem(IFileSystem* inpSystem)
+		void Application::SetFileSystem(FileSystem* inpSystem)
 		{
 			mspFileSystem = inpSystem;
-			mSystems.push_back(SystemPtr(mspFileSystem));
+			mSystems.push_back(SystemSPtr(mspFileSystem));
 		}
 		 //--------------------------------------------------------------------------------------------------
 		/// Set Has Touch Input
@@ -697,7 +697,7 @@ namespace ChilliSource
             
 			CCoreTimer::Update(infDT);
             
-            CNotificationScheduler::Update(infDT);
+            NotificationScheduler::Update(infDT);
             
 			//Update sub systems
             if (mbUpdateSystems == true)
@@ -720,7 +720,7 @@ namespace ChilliSource
 		void Application::OnApplicationMemoryWarning()
 		{
 			CS_DEBUG_LOG("Memory Warning. Clearing resource cache...");
-			CResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
+			ResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
 			CApplicationEvents::GetLowMemoryEvent().Invoke();
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -833,7 +833,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void Application::OnScreenResized(u32 inudwWidth, u32 inudwHeight) 
 		{	
-			CScreen::SetRawDimensions(Core::CVector2((f32)inudwWidth, (f32)inudwHeight));
+			CScreen::SetRawDimensions(Core::Vector2((f32)inudwWidth, (f32)inudwHeight));
             
 			if(mpRenderSystem)
 			{
@@ -891,7 +891,7 @@ namespace ChilliSource
 			//We have an issue with the order of destruction of systems.
 			while(mSystems.empty() == false)
 			{
-				SystemPtr pSystem = mSystems.back();
+				SystemSPtr pSystem = mSystems.back();
 				mSystems.pop_back();
 				pSystem.reset();
 			}

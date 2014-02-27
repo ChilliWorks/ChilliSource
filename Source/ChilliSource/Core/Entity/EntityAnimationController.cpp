@@ -32,7 +32,7 @@ namespace ChilliSource
             mmapAnimDataToEntityName.clear();
         }
 		
-		void CEntityAnimationController::LoadDataFromSceneAnimDesc(const CSceneAnimationDesc & insSceneDesc, bool inbClearExistingData)
+		void CEntityAnimationController::LoadDataFromSceneAnimDesc(const SceneAnimationDesc & insSceneDesc, bool inbClearExistingData)
         {
 			// Reset the existing animation data
             if (inbClearExistingData)
@@ -40,7 +40,7 @@ namespace ChilliSource
 			
 			for (u32 nAnim = 0; nAnim < insSceneDesc.asEntityAnimations.size(); nAnim++) 
             {
-				const CSceneAnimationDesc::EntityAnimationDesc & sDesc = insSceneDesc.asEntityAnimations[nAnim];
+				const SceneAnimationDesc::EntityAnimationDesc & sDesc = insSceneDesc.asEntityAnimations[nAnim];
 				
 				EntityAnimationData sData;
 				sData.afKeyframeTimes = sDesc.afKeyframeTimes;
@@ -65,24 +65,24 @@ namespace ChilliSource
 			masPlayingAnimations.clear();
 		}
 		
-		EntityAnimationPtr CEntityAnimationController::CreateAnimation(const std::string & instrAnimName, CEntity* inpAnimTarget, u32 inudwQueryFlags)
+		EntityAnimationPtr CEntityAnimationController::CreateAnimation(const std::string & instrAnimName, Entity* inpAnimTarget, u32 inudwQueryFlags)
         {
 			const EntityAnimationData* pData = GetEntityAnimationDataWithName(instrAnimName);
 			assert(pData);
 			
-			EntityAnimationPtr pResult = EntityAnimationPtr(new CEntityAnimation(pData, inpAnimTarget, inudwQueryFlags));
+			EntityAnimationPtr pResult = EntityAnimationPtr(new EntityAnimation(pData, inpAnimTarget, inudwQueryFlags));
 			assert(pResult);
 			
 			masPlayingAnimations.push_back(EntityAnimContext(pResult, false));
 			return pResult;			
 		}
 		
-		EntityAnimationPtr CEntityAnimationController::CreateAndPlayAnimation(const std::string & instrAnimName, CEntity* inpAnimTarget, AnimationPlayMode inePlayMode)
+		EntityAnimationPtr CEntityAnimationController::CreateAndPlayAnimation(const std::string & instrAnimName, Entity* inpAnimTarget, AnimationPlayMode inePlayMode)
 		{
 			const EntityAnimationData* pData = GetEntityAnimationDataWithName(instrAnimName);
 			assert(pData);
 			
-			EntityAnimationPtr pResult = EntityAnimationPtr(new CEntityAnimation(pData, inpAnimTarget));
+			EntityAnimationPtr pResult = EntityAnimationPtr(new EntityAnimation(pData, inpAnimTarget));
 			assert(pResult);
 			
 			masPlayingAnimations.push_back(EntityAnimContext(pResult, false));
@@ -140,7 +140,7 @@ namespace ChilliSource
             }
 		}
 		
-		void CEntityAnimationController::ApplyAnimationToEntity(const CSceneAnimationDesc& insSceneAnimDesc, const EntityPtr& inpcEntity, AnimationPlayMode inePlayMode)
+		void CEntityAnimationController::ApplyAnimationToEntity(const SceneAnimationDesc& insSceneAnimDesc, const EntitySPtr& inpcEntity, AnimationPlayMode inePlayMode)
 		{
 			// Now setup a temporary animation for this entity
 			LoadDataFromSceneAnimDesc(insSceneAnimDesc, true);
@@ -148,9 +148,9 @@ namespace ChilliSource
 			// Loop through each individual animation and queue its animation
 			for (u32 nAnim = 0; nAnim < insSceneAnimDesc.asEntityAnimations.size(); nAnim++) 
 			{
-                const CSceneAnimationDesc::EntityAnimationDesc & sCurrentAnimation(insSceneAnimDesc.asEntityAnimations[nAnim]);
+                const SceneAnimationDesc::EntityAnimationDesc & sCurrentAnimation(insSceneAnimDesc.asEntityAnimations[nAnim]);
 //				string strName = sCurrentAnimation.strTargetPath;
-				CEntity* pEntity = inpcEntity->FindChildEntityWithName(sCurrentAnimation.strTargetPath);
+				Entity* pEntity = inpcEntity->FindChildEntityWithName(sCurrentAnimation.strTargetPath);
 				if(pEntity)
                 {
 					CreateAndPlayAnimation(sCurrentAnimation.strName, pEntity, inePlayMode);

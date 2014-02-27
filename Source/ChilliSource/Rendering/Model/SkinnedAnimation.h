@@ -25,14 +25,14 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		struct SkinnedAnimationFrame
 		{
-			std::vector<Core::CVector3> mNodeTranslations;
-			std::vector<Core::CQuaternion> mNodeOrientations;
-            std::vector<Core::CVector3> mNodeScalings;
+			std::vector<Core::Vector3> mNodeTranslations;
+			std::vector<Core::Quaternion> mNodeOrientations;
+            std::vector<Core::Vector3> mNodeScalings;
 		};
 		//---------------------------------------------------------------------
 		/// Skeletal Animation Resource.
 		//---------------------------------------------------------------------
-		class SkinnedAnimation : public Core::IResource
+		class SkinnedAnimation : public Core::Resource
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(SkinnedAnimation);

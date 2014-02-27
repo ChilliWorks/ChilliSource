@@ -45,7 +45,7 @@ namespace ChilliSource
         struct UnifiedVector2
         {
             UnifiedVector2(){}
-            UnifiedVector2(const Core::CVector2& invRelative, const Core::CVector2& invAbsolute) : vRelative(invRelative), vAbsolute(invAbsolute){}
+            UnifiedVector2(const Core::Vector2& invRelative, const Core::Vector2& invAbsolute) : vRelative(invRelative), vAbsolute(invAbsolute){}
             UnifiedVector2(f32 infRelX, f32 infRelY, f32 infAbsX, f32 infAbsY) : vRelative(infRelX, infRelY), vAbsolute(infAbsX, infAbsY){}
 
             //------------------------------------------------------
@@ -53,16 +53,16 @@ namespace ChilliSource
             ///
             /// @return Absolute vector
             //------------------------------------------------------
-            const Core::CVector2& GetAbsolute() const;
+            const Core::Vector2& GetAbsolute() const;
             //------------------------------------------------------
             /// Get Relative
             ///
             /// @return Relative vector
             //------------------------------------------------------
-            const Core::CVector2& GetRelative() const;
+            const Core::Vector2& GetRelative() const;
 
-            Core::CVector2 vRelative;
-            Core::CVector2 vAbsolute;
+            Core::Vector2 vRelative;
+            Core::Vector2 vAbsolute;
 
             //---------------------------------
             // Operators

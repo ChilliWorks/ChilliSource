@@ -50,9 +50,9 @@ namespace ChilliSource
 		/// @param Look target
 		/// @param Up direction
 		//----------------------------------------------------------
-		void CameraComponent::SetLookAt(const Core::CVector3& invPos, const Core::CVector3& invTarget, const Core::CVector3& invUp)
+		void CameraComponent::SetLookAt(const Core::Vector3& invPos, const Core::Vector3& invTarget, const Core::Vector3& invUp)
 		{
-            Core::CEntity * pParent(GetEntityOwner());
+            Core::Entity * pParent(GetEntityOwner());
 
             CS_ASSERT((pParent!=nullptr), "CameraComponent has no parent entity");
             
@@ -66,17 +66,17 @@ namespace ChilliSource
 		/// @param Point in screen space with orientation
 		/// @return Ray in world space with camera view direction
 		//------------------------------------------------------
-		Core::Ray CameraComponent::Unproject(const Core::CVector2 &invScreenPos)
+		Core::Ray CameraComponent::Unproject(const Core::Vector2 &invScreenPos)
 		{
-            Core::CMatrix4x4 matProj = (GetView() * GetProjection()).Inverse();
+            Core::Matrix4x4 matProj = (GetView() * GetProjection()).Inverse();
             
-            Core::CVector2 vScreenSize(Core::CScreen::GetOrientedDimensions());
+            Core::Vector2 vScreenSize(Core::CScreen::GetOrientedDimensions());
 			//Normalise the screen space co-ordinates into clip space
 			f32 nx = ((2.0f * (invScreenPos.x/vScreenSize.x)) - 1.0f);
 			f32 ny = ((2.0f * (invScreenPos.y/vScreenSize.y)) - 1.0f);
 			
-			Core::CVector4 vNear(nx, ny, -1.0f, 1.0f);
-            Core::CVector4 vFar(nx,ny, 1.0f, 1.0f);
+			Core::Vector4 vNear(nx, ny, -1.0f, 1.0f);
+            Core::Vector4 vFar(nx,ny, 1.0f, 1.0f);
             vNear = vNear * matProj;
             vFar = vFar * matProj;
             
@@ -96,13 +96,13 @@ namespace ChilliSource
 		/// Convert from a point in world space to a point in
 		/// screen space
 		//------------------------------------------------------
-		Core::CVector2 CameraComponent::Project(const Core::CVector3 &invWorldPos)
+		Core::Vector2 CameraComponent::Project(const Core::Vector3 &invWorldPos)
 		{
 			//Convert the world space position to clip space
-			Core::CMatrix4x4 matToClip = (GetView() * GetProjection());
-			Core::CVector4 vScreenPos = Core::CVector4(invWorldPos, 1.0f) * matToClip;
+			Core::Matrix4x4 matToClip = (GetView() * GetProjection());
+			Core::Vector4 vScreenPos = Core::Vector4(invWorldPos, 1.0f) * matToClip;
 			
-            Core::CVector2 vScreenSize(Core::CScreen::GetOrientedDimensions());
+            Core::Vector2 vScreenSize(Core::CScreen::GetOrientedDimensions());
 			
 			// Normalize co-ordinates
 			vScreenPos.x = vScreenPos.x / vScreenPos.w;
@@ -113,7 +113,7 @@ namespace ChilliSource
 			vScreenPos.y = (vScreenSize.y * 0.5f)* vScreenPos.y + vScreenSize.y * 0.5f;
 
 			//Return 2D screen space co-ordinates
-			return (Core::CVector2)vScreenPos;
+			return (Core::Vector2)vScreenPos;
 		}
 		//----------------------------------------------------------
 		/// Use Orthographic View
@@ -141,7 +141,7 @@ namespace ChilliSource
 		///
 		/// @param Vector containing width and height
 		//----------------------------------------------------------
-		void CameraComponent::SetViewportSize(const Core::CVector2 &invSize)
+		void CameraComponent::SetViewportSize(const Core::Vector2 &invSize)
 		{
 			mDesc.vViewSize = invSize;
 			mbProjectionCacheValid = false;
@@ -163,7 +163,7 @@ namespace ChilliSource
 		///
 		/// @param Vector containing width and height
 		//----------------------------------------------------------
-		const Core::CVector2& CameraComponent::GetViewportSize()
+		const Core::Vector2& CameraComponent::GetViewportSize()
 		{ 
 			return mDesc.vViewSize; 
 		}	
@@ -187,7 +187,7 @@ namespace ChilliSource
 			f32 F = (2.0f * mDesc.fNearClipping)/(Top - Bottom);
 			f32 G = (2.0f * mDesc.fNearClipping)/(Right - Left);
 
-			mmatProj = Core::CMatrix4x4
+			mmatProj = Core::Matrix4x4
 				(
 				G, 0, 0, 0, 
 				0, F, 0, 0, 
@@ -204,7 +204,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CameraComponent::CalculateOrthographicMatrix()
 		{
-			mmatOrthoProj = Core::CMatrix4x4::CreateOrthoMatrix(mDesc.vViewSize.x, mDesc.vViewSize.y, mDesc.fNearClipping, mDesc.fFarClipping);
+			mmatOrthoProj = Core::Matrix4x4::CreateOrthoMatrix(mDesc.vViewSize.x, mDesc.vViewSize.y, mDesc.fNearClipping, mDesc.fFarClipping);
 			mbProjectionCacheValid = true;
 		}
 		//------------------------------------------------------
@@ -227,7 +227,7 @@ namespace ChilliSource
 		///
 		/// @return Orthographic projection matrix
 		//------------------------------------------------------
-		const Core::CMatrix4x4& CameraComponent::GetOrthoProjection() const
+		const Core::Matrix4x4& CameraComponent::GetOrthoProjection() const
 		{
 			return mmatOrthoProj;
 		}
@@ -239,7 +239,7 @@ namespace ChilliSource
 		/// 
 		/// @return Projection matrix
 		//------------------------------------------------------
-		const Core::CMatrix4x4& CameraComponent::GetProjection() 
+		const Core::Matrix4x4& CameraComponent::GetProjection() 
 		{
 			if(!mbProjectionCacheValid)
 			{
@@ -264,7 +264,7 @@ namespace ChilliSource
 		///
 		/// @return View matrix
 		//------------------------------------------------------
-		const Core::CMatrix4x4& CameraComponent::GetView()
+		const Core::Matrix4x4& CameraComponent::GetView()
 		{
 			if(mpEntityOwner)
 			{
@@ -278,7 +278,7 @@ namespace ChilliSource
 		///
 		/// @return Pointer to camera frustum
 		//------------------------------------------------------
-		const Core::CFrustum* CameraComponent::GetFrustumPtr() const
+		const Core::Frustum* CameraComponent::GetFrustumPtr() const
 		{
 			return &mFrustum;
 		}
@@ -289,7 +289,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void CameraComponent::UpdateFrustum()
 		{
-			Core::CMatrix4x4::Multiply(&GetView(), &GetProjection(), &mmatViewProj);
+			Core::Matrix4x4::Multiply(&GetView(), &GetProjection(), &mmatViewProj);
 
 			//Re-calculate the clip planes
 			mFrustum.CalculateClippingPlanes(mmatViewProj);
@@ -300,10 +300,10 @@ namespace ChilliSource
 		/// Orientate the given matrix to face the cameras
 		/// view vector
 		//------------------------------------------------------
-		void CameraComponent::Billboard(const Core::CMatrix4x4& inmatBillboarded, Core::CMatrix4x4& outmatBillboarded)
+		void CameraComponent::Billboard(const Core::Matrix4x4& inmatBillboarded, Core::Matrix4x4& outmatBillboarded)
 		{
-            const Core::CMatrix4x4 matView = GetView();
-            Core::CMatrix4x4::Multiply(&inmatBillboarded, &matView, &outmatBillboarded);
+            const Core::Matrix4x4 matView = GetView();
+            Core::Matrix4x4::Multiply(&inmatBillboarded, &matView, &outmatBillboarded);
             
 			outmatBillboarded.m[12] = inmatBillboarded.m[12];
 			outmatBillboarded.m[13] = inmatBillboarded.m[13];
@@ -394,7 +394,7 @@ namespace ChilliSource
 		///
 		/// @param Render buffer clear colour
 		//------------------------------------------------------
-		void CameraComponent::SetClearColour(const Core::CColour &inCol)
+		void CameraComponent::SetClearColour(const Core::Colour &inCol)
 		{
 			mDesc.ClearCol = inCol;
 		}
@@ -403,7 +403,7 @@ namespace ChilliSource
 		///
 		/// @return Render buffer clear colour
 		//------------------------------------------------------
-		const Core::CColour& CameraComponent::GetClearColour() const
+		const Core::Colour& CameraComponent::GetClearColour() const
 		{
 			return mDesc.ClearCol;
 		}

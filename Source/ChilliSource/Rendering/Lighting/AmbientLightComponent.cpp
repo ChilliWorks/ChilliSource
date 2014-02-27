@@ -25,7 +25,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Light Matrix
         //----------------------------------------------------------
-        const Core::CMatrix4x4& AmbientLightComponent::GetLightMatrix() const
+        const Core::Matrix4x4& AmbientLightComponent::GetLightMatrix() const
         {
             return mmatLight;
         }

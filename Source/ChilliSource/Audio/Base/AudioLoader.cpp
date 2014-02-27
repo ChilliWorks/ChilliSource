@@ -27,7 +27,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		AudioLoader::AudioLoader(AudioSystem* inpAudioSystem) : mAudioManager(inpAudioSystem->GetAudioManager())
 		{
-            Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(const_cast<AudioManager*>(&mAudioManager));
+            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(const_cast<AudioManager*>(&mAudioManager));
 		}
 		//-------------------------------------------------------------------------
 		/// Is A
@@ -37,7 +37,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		bool AudioLoader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IResourceProvider::InterfaceID;
+			return inInterfaceID == ResourceProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource of Kind

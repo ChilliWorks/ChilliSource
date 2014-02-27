@@ -51,7 +51,7 @@ namespace ChilliSource
         //------------------------
         /// Constructor
         //------------------------
-		MoConnectSystem::MoConnectSystem(HttpConnectionSystem* inpHttpSystem, const std::string& instrMoConnectServerURL, Core::COAuthSystem* inpOAuthSystem)
+		MoConnectSystem::MoConnectSystem(HttpConnectionSystem* inpHttpSystem, const std::string& instrMoConnectServerURL, Core::OAuthSystem* inpOAuthSystem)
 		:mpHttpConnectionSystem(inpHttpSystem)
         ,mbHasSignedInUser(false)
         ,mstrMoConnectURL(instrMoConnectServerURL)
@@ -73,7 +73,7 @@ namespace ChilliSource
         //------------------------
         /// Get OAuth System
         //------------------------
-        Core::COAuthSystem* MoConnectSystem::GetOAuthSystem()
+        Core::OAuthSystem* MoConnectSystem::GetOAuthSystem()
         {
             return mpOAuthSystem;
         }
@@ -171,7 +171,7 @@ namespace ChilliSource
 		void MoConnectSystem::GenerateAuthenticationHeader(const std::string& instrURL, Core::ParamDictionary& outsHeader) const
         {
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpPost, instrURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpPost, instrURL, "", strOAuthHeader);
             outsHeader.SetValueForKey("Authorization", strOAuthHeader);
             outsHeader.SetValueForKey("Content-Type", "application/json");
 		}
@@ -197,7 +197,7 @@ namespace ChilliSource
             mpOAuthSystem->SetOAuthTokenSecret("");
             
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             CS_DEBUG_LOG(strOAuthHeader);
             
             mpOAuthSystem->SetOAuthTokenKey(mstrOAuthToken);
@@ -420,7 +420,7 @@ namespace ChilliSource
             mpOAuthSystem->SetOAuthTokenSecret("");
             
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             
             mpOAuthSystem->SetOAuthTokenKey(mstrOAuthToken);
             mpOAuthSystem->SetOAuthTokenSecret(mstrOAuthTokenSecret);
@@ -599,7 +599,7 @@ namespace ChilliSource
 			cRegistrationMsg["Data"] = cRegistrationDetails;
             
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             CS_DEBUG_LOG(strOAuthHeader);
             
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
@@ -674,7 +674,7 @@ namespace ChilliSource
 			requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
 			
 			std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");
@@ -720,7 +720,7 @@ namespace ChilliSource
             }
             
 			std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             
             // Put the token back
             mpOAuthSystem->SetOAuthTokenKey(mstrOAuthToken);
@@ -1086,7 +1086,7 @@ namespace ChilliSource
 			cIAPMsg["Data"] = cIAPDetails;
       
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             CS_DEBUG_LOG(strOAuthHeader);
             
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
@@ -1209,7 +1209,7 @@ namespace ChilliSource
 			cIAPMsg["Data"] = cIAPDetails;
             
             std::string strOAuthHeader;
-            mpOAuthSystem->GetOAuthHeader(Core::COAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
+            mpOAuthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
             CS_DEBUG_LOG(strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");

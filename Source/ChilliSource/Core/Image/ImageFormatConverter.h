@@ -32,7 +32,7 @@ namespace ChilliSource
             ///
             /// @param The image pointer.
             //---------------------------------------------------
-            void RGBA8888ToRGB888(Core::CImage* inpImage);
+            void RGBA8888ToRGB888(Core::Image* inpImage);
             //---------------------------------------------------
             /// RGBA8888 To RGBA4444
             ///
@@ -41,7 +41,7 @@ namespace ChilliSource
             ///
             /// @param The image pointer.
             //---------------------------------------------------
-            void RGBA8888ToRGBA4444(Core::CImage* inpImage);
+            void RGBA8888ToRGBA4444(Core::Image* inpImage);
             //---------------------------------------------------
             /// RGBA8888 To RGB565
             ///
@@ -50,7 +50,7 @@ namespace ChilliSource
             ///
             /// @param The image pointer.
             //---------------------------------------------------
-            void RGBA8888ToRGB565(Core::CImage* inpImage);
+            void RGBA8888ToRGB565(Core::Image* inpImage);
             //---------------------------------------------------
             /// RGBA8888 To LUMA88
             ///
@@ -59,7 +59,7 @@ namespace ChilliSource
             ///
             /// @param The image pointer.
             //---------------------------------------------------
-            void RGBA8888ToLUMA88(Core::CImage* inpImage);
+            void RGBA8888ToLUMA88(Core::Image* inpImage);
             //---------------------------------------------------
             /// RGBA8888 To LUM8
             ///
@@ -68,7 +68,7 @@ namespace ChilliSource
             ///
             /// @param The image pointer.
             //---------------------------------------------------
-            void RGBA8888ToLUM8(Core::CImage* inpImage);
+            void RGBA8888ToLUM8(Core::Image* inpImage);
             //---------------------------------------------------
             /// RGBA8888 To Depth 32
             ///
@@ -77,7 +77,7 @@ namespace ChilliSource
             ///
             /// @param The image pointer.
             //---------------------------------------------------
-            void RGBA8888ToDepth32(Core::CImage* inpImage);
+            void RGBA8888ToDepth32(Core::Image* inpImage);
             //---------------------------------------------------
             /// RGBA8888 To Depth 16
             ///
@@ -86,7 +86,7 @@ namespace ChilliSource
             ///
             /// @param The image pointer.
             //---------------------------------------------------
-            void RGBA8888ToDepth16(Core::CImage* inpImage);
+            void RGBA8888ToDepth16(Core::Image* inpImage);
         }
     }
 }

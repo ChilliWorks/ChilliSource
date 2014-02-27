@@ -22,7 +22,7 @@ namespace ChilliSource
 		//------------------------------------
 		/// Mesh Manager
 		//------------------------------------
-		class MeshManager : public Core::IResourceManager
+		class MeshManager : public Core::ResourceManager
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(MeshManager);
@@ -63,7 +63,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -72,7 +72,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceSPtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//----------------------------------------------------------------
 			/// Get Model From File
 			///

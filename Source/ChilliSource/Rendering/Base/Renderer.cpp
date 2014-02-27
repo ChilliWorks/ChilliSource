@@ -30,7 +30,7 @@ namespace ChilliSource
 	namespace Rendering
 	{
         //---Matrix caches
-        Core::CMatrix4x4 Renderer::matViewProjCache;
+        Core::Matrix4x4 Renderer::matViewProjCache;
 		
 		typedef fastdelegate::FastDelegate2<RenderComponent*, RenderComponent*, bool> RenderSortDelegate;
 		
@@ -84,14 +84,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Render To Screen
 		//----------------------------------------------------------
-		void Renderer::RenderToScreen(Core::CScene* inpScene)
+		void Renderer::RenderToScreen(Core::Scene* inpScene)
 		{
             RenderSceneToTarget(inpScene, mpRenderSystem->GetDefaultRenderTarget());
 		}
         //----------------------------------------------------------
         /// Render To Texture
         //----------------------------------------------------------
-        void Renderer::RenderToTexture(Core::CScene* inpScene, const TextureSPtr& inpColourTarget, const TextureSPtr& inpDepthTarget)
+        void Renderer::RenderToTexture(Core::Scene* inpScene, const TextureSPtr& inpColourTarget, const TextureSPtr& inpDepthTarget)
 		{
             //get the width and height
             u32 udwWidth = 1;
@@ -115,7 +115,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Render Scene To Target
 		//----------------------------------------------------------
-		void Renderer::RenderSceneToTarget(Core::CScene* inpScene, RenderTarget* inpRenderTarget)
+		void Renderer::RenderSceneToTarget(Core::Scene* inpScene, RenderTarget* inpRenderTarget)
         {
 			//Traverse the scene graph and get all renderable objects
             std::vector<RenderComponent*> aPreFilteredRenderCache;
@@ -132,7 +132,7 @@ namespace ChilliSource
                 //Apply the world view projection matrix
                 mpRenderSystem->ApplyCamera(mpActiveCamera->GetEntityOwner()->Transform().GetWorldPosition(), mpActiveCamera->GetView(), mpActiveCamera->GetProjection(), mpActiveCamera->GetClearColour());
                 //Calculate the view-projection matrix as we will need it for sorting
-                Core::CMatrix4x4::Multiply(&mpActiveCamera->GetView(), &mpActiveCamera->GetProjection(), &matViewProjCache);
+                Core::Matrix4x4::Multiply(&mpActiveCamera->GetView(), &mpActiveCamera->GetProjection(), &matViewProjCache);
                 
                 //Render shadow maps
                 RenderShadowMap(mpActiveCamera, aDirLightCache, aPreFilteredRenderCache);
@@ -216,7 +216,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Find Renderable Objects In Scene
 		//----------------------------------------------------------
-        void Renderer::FindRenderableObjectsInScene(Core::CScene* pScene, std::vector<RenderComponent*>& outaRenderCache, std::vector<CameraComponent*>& outaCameraCache,
+        void Renderer::FindRenderableObjectsInScene(Core::Scene* pScene, std::vector<RenderComponent*>& outaRenderCache, std::vector<CameraComponent*>& outaCameraCache,
                                           std::vector<DirectionalLightComponent*>& outaDirectionalLightComponentCache, std::vector<PointLightComponent*>& outaPointLightComponentCache, AmbientLightComponent*& outpAmbientLight) const
 		{
             static std::vector<LightComponent*> aLightComponentCache;
@@ -357,7 +357,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void Renderer::RenderUI(GUI::Window* inpWindow)
         {
-            mpRenderSystem->ApplyCamera(Core::CVector3::ZERO, Core::CMatrix4x4::IDENTITY, CreateOverlayProjection(inpWindow), ChilliSource::Core::CColour::CORNFLOWER_BLUE);
+            mpRenderSystem->ApplyCamera(Core::Vector3::ZERO, Core::Matrix4x4::IDENTITY, CreateOverlayProjection(inpWindow), ChilliSource::Core::Colour::CORNFLOWER_BLUE);
 			mCanvas.Render(inpWindow, 1.0f);
         }
         //----------------------------------------------------------
@@ -448,12 +448,12 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Create Overlay Projection
         //----------------------------------------------------------
-        Core::CMatrix4x4 Renderer::CreateOverlayProjection(GUI::Window* inpWindow) const
+        Core::Matrix4x4 Renderer::CreateOverlayProjection(GUI::Window* inpWindow) const
         {
-            const Core::CVector2 kvOverlayDimensions(inpWindow->GetAbsoluteSize());
+            const Core::Vector2 kvOverlayDimensions(inpWindow->GetAbsoluteSize());
             const f32 kfOverlayNear = 1.0f;
             const f32 kfOverlayFar = 100.0f;
-            return Core::CMatrix4x4::CreateOrthoMatrixOffset(0, kvOverlayDimensions.x, 0, kvOverlayDimensions.y, kfOverlayNear, kfOverlayFar);
+            return Core::Matrix4x4::CreateOrthoMatrixOffset(0, kvOverlayDimensions.x, 0, kvOverlayDimensions.y, kfOverlayNear, kfOverlayFar);
         }
 	}
 }

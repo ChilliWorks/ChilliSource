@@ -172,25 +172,25 @@ namespace ChilliSource
             ///
             /// @param Colour
             //-------------------------------------------------------
-            virtual void SetTextColour(const Core::CColour& inColour);
+            virtual void SetTextColour(const Core::Colour& inColour);
 			//-------------------------------------------------------
 			/// Get Text Colour
 			///
 			/// @return Colour
 			//-------------------------------------------------------
-			const Core::CColour& GetTextColour() const;
+			const Core::Colour& GetTextColour() const;
             //-------------------------------------------------------
             /// Set Text Outline Colour
             ///
             /// @param Text outline colour for scaleable fonts
             //-------------------------------------------------------
-            void SetTextOutlineColour(const Core::CColour& inColour);
+            void SetTextOutlineColour(const Core::Colour& inColour);
 			//-------------------------------------------------------
 			/// Get Text Outline Colour
 			///
 			/// @return Colour for outline of scaleable fonts
 			//-------------------------------------------------------
-			const Core::CColour& GetTextOutlineColour() const;
+			const Core::Colour& GetTextOutlineColour() const;
             //-------------------------------------------------------
             /// Enable Background
             ///
@@ -400,8 +400,8 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(Rendering::FontSPtr, Font, SetFont, GetFont);
             DECLARE_PROPERTY_A(bool, ScalableFont, SetScalableFont, GetScalableFont)
             DECLARE_PROPERTY_A(f32, ScalableHeight, SetScalableHeight, GetScalableHeight);
-			DECLARE_PROPERTY_A(Core::CColour, TextColour, SetTextColour, GetTextColour);
-            DECLARE_PROPERTY_A(Core::CColour, TextOutlineColour, SetTextOutlineColour, GetTextOutlineColour);
+			DECLARE_PROPERTY_A(Core::Colour, TextColour, SetTextColour, GetTextColour);
+            DECLARE_PROPERTY_A(Core::Colour, TextOutlineColour, SetTextOutlineColour, GetTextOutlineColour);
 			DECLARE_PROPERTY_A(bool, Background, EnableBackground, IsBackgroundEnabled);
 			DECLARE_PROPERTY_A(bool, Autosizing, EnableAutosizing, IsAutosizingEnabled);
             DECLARE_PROPERTY_A(bool, TextOutlined, EnableTextOutline, IsTextOutlineEnabled);

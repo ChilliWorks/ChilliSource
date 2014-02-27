@@ -72,7 +72,7 @@ namespace ChilliSource
 		class CGameCentreAchievementsStatusRequest;
 		class CGameCentreAchievementDescriptionsRequest;
 		
-		class CGameCentreSystem : public Core::ISystem
+		class CGameCentreSystem : public Core::System
 		{
 		public:
             

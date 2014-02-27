@@ -21,7 +21,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        class CPerformanceTimer
+        class PerformanceTimer
         {
         public:
             

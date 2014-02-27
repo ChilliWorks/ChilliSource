@@ -24,7 +24,7 @@ namespace ChilliSource
 		///
 		/// Any object that can be rendered
 		//====================================================
-		class RenderComponent : public Core::IVolumeComponent
+		class RenderComponent : public Core::VolumeComponent
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(RenderComponent);
@@ -99,7 +99,7 @@ namespace ChilliSource
             ///
             /// @return Objects transform
             //-----------------------------------------------------
-            const Core::CMatrix4x4& GetTransformationMatrix();
+            const Core::Matrix4x4& GetTransformationMatrix();
 			//-----------------------------------------------------
             /// Render 
             ///

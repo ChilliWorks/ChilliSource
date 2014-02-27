@@ -54,7 +54,7 @@ namespace ChilliSource
             
         private:
             
-            Core::CVector3 mvForce;
+            Core::Vector3 mvForce;
         };
     }
 }

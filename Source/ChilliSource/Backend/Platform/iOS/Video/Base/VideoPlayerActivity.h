@@ -47,7 +47,7 @@ namespace ChilliSource
             /// @param Whether or not the video can be dismissed by tapping.
             /// @param Background colour
             //--------------------------------------------------------------
-            void Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour) override;
+            void Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour) override;
             //--------------------------------------------------------------
             /// Present With Subtitles
             ///
@@ -62,7 +62,7 @@ namespace ChilliSource
             //--------------------------------------------------------------
             void PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
                                       Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
-                                      bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour) override;
+                                      bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour) override;
             //--------------------------------------------------------------
             /// Is Playing
             ///
@@ -103,7 +103,7 @@ namespace ChilliSource
             ///
             /// @return the actual dimensions of the playing video.
             //--------------------------------------------------------------
-            Core::CVector2 GetVideoDimensions();
+            Core::Vector2 GetVideoDimensions();
         private:
             //---------------------------------------------------------------
             /// On Tapped
@@ -195,7 +195,7 @@ namespace ChilliSource
             CVideoPlayerTapListener* mpTapListener;
             CSubtitlesRenderer* mpSubtitlesRenderer;
             
-            Core::CColour mBackgroundColour;
+            Core::Colour mBackgroundColour;
             
             bool mbIsAppSuspended;
             bool mbKeepAppRunning;

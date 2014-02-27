@@ -25,7 +25,7 @@ namespace ChilliSource
         {
         public:
 			CTwitterPostSystem(iOS::CHttpConnectionSystem* inpHttpConnectionSystem,
-							   Core::COAuthSystem* inpOAuthSystem);
+							   Core::OAuthSystem* inpOAuthSystem);
 			~CTwitterPostSystem();
 			//------------------------------------------------------------------------
             /// Is A

@@ -18,7 +18,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        template <typename T> class CObjectPool
+        template <typename T> class ObjectPool
         {
             typedef std::vector<T*> Pool;
             typedef std::shared_ptr<T> ObjectSharedPtr;
@@ -31,7 +31,7 @@ namespace ChilliSource
             ///
             /// @param Initial Capacity
             //---------------------------------------------------------
-            CObjectPool(u32 inudwInitialCapacity)
+            ObjectPool(u32 inudwInitialCapacity)
             {
                 //Fill the pool with blank objects
                 maActivePool.reserve(inudwInitialCapacity);
@@ -82,7 +82,7 @@ namespace ChilliSource
                 ObjectPtr pObj = Create();
                 
                 //Make sure the shared pointer doesn't delete the memory. Give it our own deallocator
-                return ObjectSharedPtr(pObj, fastdelegate::FastDelegate1<T*>(const_cast<CObjectPool<T>*>(this), &CObjectPool<T>::Release));
+                return ObjectSharedPtr(pObj, fastdelegate::FastDelegate1<T*>(const_cast<ObjectPool<T>*>(this), &ObjectPool<T>::Release));
             }
             //----------------------------------------------------------
             /// Release
@@ -126,7 +126,7 @@ namespace ChilliSource
             /// Destructor
             ///
             //---------------------------------------------------------
-            ~CObjectPool()
+            ~ObjectPool()
             {
                 Destroy();
             }

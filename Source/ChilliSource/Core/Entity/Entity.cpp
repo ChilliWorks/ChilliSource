@@ -22,7 +22,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//-------------------------------------------------------------
-		CEntity::CEntity() : mbVisible(true), mpParent(nullptr), mpOwningScene(nullptr), mpEntityAnimationController(EntityAnimationControllerPtr())
+		Entity::Entity() : mbVisible(true), mpParent(nullptr), mpOwningScene(nullptr), mpEntityAnimationController(EntityAnimationControllerSPtr())
 		{
 		}
 		//-------------------------------------------------------------
@@ -30,7 +30,7 @@ namespace ChilliSource
 		///
 		/// @param Entity to derive transform from
 		//-------------------------------------------------------------
-		void CEntity::AddChild(const EntityPtr& inpEntity)
+		void Entity::AddChild(const EntitySPtr& inpEntity)
 		{
             if(inpEntity->mpParent == this)
                 return;
@@ -54,7 +54,7 @@ namespace ChilliSource
 		///
 		/// @param Entity no longer with hierarchical relationship
 		//-------------------------------------------------------------
-		void CEntity::RemoveChild(const EntityPtr& inpEntity)
+		void Entity::RemoveChild(const EntitySPtr& inpEntity)
 		{
 			SharedEntityList::iterator it = std::find(mEntities.begin(), mEntities.end(), inpEntity);
 			
@@ -77,7 +77,7 @@ namespace ChilliSource
 		/// Remove All Children
 		///
 		//-------------------------------------------------------------
-		void CEntity::RemoveAllChildren()
+		void Entity::RemoveAllChildren()
 		{
 			mLocalTransform.RemoveAllChildTransforms();
 			
@@ -100,7 +100,7 @@ namespace ChilliSource
 		/// Detahc the entity from its parent. If it has no parent
         /// then remove it from the scene
 		//-------------------------------------------------------------
-		void CEntity::RemoveFromParent()
+		void Entity::RemoveFromParent()
 		{
 			if (!GetParent())
             {
@@ -124,7 +124,7 @@ namespace ChilliSource
 		///
 		/// @param Scene
 		//-------------------------------------------------------------
-		void CEntity::AddToScene(CScene* inpScene)
+		void Entity::AddToScene(Scene* inpScene)
 		{
 			inpScene->AddEntity(shared_from_this());
 			
@@ -138,7 +138,7 @@ namespace ChilliSource
 		///
 		/// @param Scene
 		//-------------------------------------------------------------
-		void CEntity::RemoveFromScene(CScene* inpScene)
+		void Entity::RemoveFromScene(Scene* inpScene)
 		{
             for(SharedEntityList::iterator it = mEntities.begin(); it != mEntities.end(); ++it)
 			{
@@ -154,7 +154,7 @@ namespace ChilliSource
 		///
 		/// @param Scene
 		//-------------------------------------------------------------
-		void CEntity::RemoveFromScene()
+		void Entity::RemoveFromScene()
 		{
 			if(mpOwningScene)
 			{
@@ -169,7 +169,7 @@ namespace ChilliSource
 		///
 		/// @return Pointer to the parent entity of this
 		//------------------------------------------------------------------
-		CEntity* CEntity::GetParent() 
+		Entity* Entity::GetParent() 
 		{ 
 			return mpParent; 
 		}
@@ -182,7 +182,7 @@ namespace ChilliSource
 		///
 		/// @return A child entity with the specified name
 		//------------------------------------------------------------------
-		CEntity* CEntity::FindChildEntityWithName(const std::string& instrName)
+		Entity* Entity::FindChildEntityWithName(const std::string& instrName)
 		{
 			std::string strName = mstrName;
 			
@@ -194,7 +194,7 @@ namespace ChilliSource
             {
 				for (SharedEntityList::iterator it = mEntities.begin(); it != mEntities.end(); ++it)
 				{
-					CEntity* pcEntity = (*it)->FindChildEntityWithName(instrName);
+					Entity* pcEntity = (*it)->FindChildEntityWithName(instrName);
 					if (pcEntity)
 						return pcEntity;
 				}
@@ -207,7 +207,7 @@ namespace ChilliSource
         /// 
         /// @return A JSON object of the hierarchy of entities and components
         //------------------------------------------------------------------
-        Json::Value CEntity::ToJSON() const
+        Json::Value Entity::ToJSON() const
         {
             Json::Value jResult;
             Json::Value jComponents(Json::arrayValue), jEntities(Json::arrayValue);
@@ -235,7 +235,7 @@ namespace ChilliSource
         ///
         /// @return the number of child entities
         //------------------------------------------------------------------
-        u32 CEntity::GetNumberOfChildEntities() const
+        u32 Entity::GetNumberOfChildEntities() const
         {
             return mEntities.size();
         }
@@ -249,13 +249,13 @@ namespace ChilliSource
         ///
         /// @return A child entity with the specified name
         //------------------------------------------------------------------
-        EntityPtr CEntity::GetImmediateChildWithName(const std::string &instrName)
+        EntitySPtr Entity::GetImmediateChildWithName(const std::string &instrName)
         {
             for(SharedEntityList::iterator it = mEntities.begin(); it != mEntities.end(); ++it)
                 if((*it)->GetName() == instrName)
                     return (*it);
             
-            return EntityPtr();
+            return EntitySPtr();
         }
         //------------------------------------------------------------------
         /// Get Entity AnimationC ontroller Ptr
@@ -264,7 +264,7 @@ namespace ChilliSource
         ///
         /// @return Anim controller
         //------------------------------------------------------------------
-		EntityAnimationControllerPtr CEntity::GetEntityAnimationControllerPtr()
+		EntityAnimationControllerSPtr Entity::GetEntityAnimationControllerPtr()
 		{
 			return mpEntityAnimationController;
 		}
@@ -275,7 +275,7 @@ namespace ChilliSource
         ///
         /// @return Anim controller
         //------------------------------------------------------------------
-		EntityAnimationControllerPtr& CEntity::GetEntityAnimationController()
+		EntityAnimationControllerSPtr& Entity::GetEntityAnimationController()
 		{
 			return mpEntityAnimationController;
 		}
@@ -284,7 +284,7 @@ namespace ChilliSource
         /// 
         /// @return List of child entities
         //------------------------------------------------------------------
-        SharedEntityList& CEntity::GetChildEntities()
+        SharedEntityList& Entity::GetChildEntities()
         {
             return mEntities;
         }
@@ -293,7 +293,7 @@ namespace ChilliSource
 		///
 		/// @param Scene owner
 		//-------------------------------------------------------------
-		void CEntity::SetOwningScene(CScene* inpScene)
+		void Entity::SetOwningScene(Scene* inpScene)
 		{
 			mpOwningScene = inpScene;
 			
@@ -311,25 +311,25 @@ namespace ChilliSource
 		///
 		/// @return Scene owner
 		//-------------------------------------------------------------
-		CScene* CEntity::GetOwningScene()
+		Scene* Entity::GetOwningScene()
 		{
 			return mpOwningScene;
 		}
         //----------------------------------------------------------------
-        /// Transform
+        /// GEt Transform
         ///
         /// @return Transform object to allow for spatial manipulation
         //----------------------------------------------------------------
-        CTransform& CEntity::Transform()
+        Transform& Entity::GetTransform()
         {
             return mLocalTransform;
         }
         //----------------------------------------------------------------
-        /// Transform
+        /// Get Transform
         ///
         /// @return Transform object to allow for spatial manipulation
         //----------------------------------------------------------------
-        const CTransform& CEntity::Transform() const
+        const Transform& Entity::GetTransform() const
         {
             return mLocalTransform;
         }
@@ -338,7 +338,7 @@ namespace ChilliSource
         ///
         /// @param Whether any renderable components should be shown
         //-------------------------------------------------------------
-        void CEntity::SetVisible(bool inbVisible)
+        void Entity::SetVisible(bool inbVisible)
         {
             mbVisible = inbVisible;
         }
@@ -347,7 +347,7 @@ namespace ChilliSource
         ///
         /// @return Whether any renderable components should be shown
         //-------------------------------------------------------------
-        bool CEntity::IsVisible() const
+        bool Entity::IsVisible() const
         {
             return mpParent ? mbVisible && mpParent->IsVisible() : mbVisible;
         }
@@ -356,7 +356,7 @@ namespace ChilliSource
 		///
 		/// @return the first component of the given type
 		//-------------------------------------------------------------
-		ComponentPtr CEntity::GetManagedComponent(InterfaceIDType inInterfaceID, u32 inudwQueryMask) const
+		ComponentSPtr Entity::GetManagedComponent(InterfaceIDType inInterfaceID, u32 inudwQueryMask) const
 		{
 			for(ComponentList::const_iterator itr = mComponents.begin(); itr != mComponents.end(); ++itr) 
 			{
@@ -370,7 +370,7 @@ namespace ChilliSource
 				}
 			}
 			
-			return ComponentPtr();
+			return ComponentSPtr();
 		}
 		//-------------------------------------------------------------
 		/// Get Components  (Managed)
@@ -382,7 +382,7 @@ namespace ChilliSource
 		/// @param Out - Vector to populate with components
 		/// @param Whether to clear the vector before populating
 		//-------------------------------------------------------------
-		void CEntity::GetManagedComponents(InterfaceIDType inInterfaceID, std::vector<ComponentPtr> & outComponentsWithInterface, u32 inudwQueryMask, bool inbClearVectorBeforeUsing) const
+		void Entity::GetManagedComponents(InterfaceIDType inInterfaceID, std::vector<ComponentSPtr> & outComponentsWithInterface, u32 inudwQueryMask, bool inbClearVectorBeforeUsing) const
 		{
 			if (inbClearVectorBeforeUsing) 
 			{
@@ -406,7 +406,7 @@ namespace ChilliSource
 		///
 		/// @return the first component of the given type
 		//-------------------------------------------------------------
-		IComponent* CEntity::GetComponent(InterfaceIDType inInterfaceID, u32 inudwQueryMask) const
+		Component* Entity::GetComponent(InterfaceIDType inInterfaceID, u32 inudwQueryMask) const
 		{
 			for(ComponentList::const_iterator itr = mComponents.begin(); itr != mComponents.end(); ++itr) 
 			{
@@ -432,7 +432,7 @@ namespace ChilliSource
 		/// @param Out - Vector to populate with components
 		/// @param Whether to clear the vector before populating
 		//-------------------------------------------------------------
-		void CEntity::GetComponents(InterfaceIDType inInterfaceID, std::vector<IComponent*> & outComponentsWithInterface, u32 inudwQueryMask, bool inbClearVectorBeforeUsing) const
+		void Entity::GetComponents(InterfaceIDType inInterfaceID, std::vector<Component*> & outComponentsWithInterface, u32 inudwQueryMask, bool inbClearVectorBeforeUsing) const
 		{
 			if (inbClearVectorBeforeUsing) 
 			{
@@ -457,7 +457,7 @@ namespace ChilliSource
 		/// @return the first component of the given type. This will
         /// recurse into chile entities
 		//-------------------------------------------------------------
-		ComponentPtr CEntity::GetManagedComponentRecursive(InterfaceIDType inInterfaceID, u32 inudwQueryMask) const
+		ComponentSPtr Entity::GetManagedComponentRecursive(InterfaceIDType inInterfaceID, u32 inudwQueryMask) const
 		{
 			for(ComponentList::const_iterator itr = mComponents.begin(); itr != mComponents.end(); ++itr) 
 			{
@@ -473,7 +473,7 @@ namespace ChilliSource
             
             for(SharedEntityList::const_iterator it = mEntities.begin(); it != mEntities.end(); ++it)
             {
-                ComponentPtr pComp = (*it)->GetManagedComponentRecursive(inInterfaceID, inudwQueryMask);
+                ComponentSPtr pComp = (*it)->GetManagedComponentRecursive(inInterfaceID, inudwQueryMask);
                 
                 if(pComp)
                 {
@@ -481,7 +481,7 @@ namespace ChilliSource
                 }
             }
 			
-			return ComponentPtr();
+			return ComponentSPtr();
 		}
 		//-------------------------------------------------------------
 		/// Get Components  (Managed Recursive)
@@ -494,7 +494,7 @@ namespace ChilliSource
 		/// @param Out - Vector to populate with components
 		/// @param Whether to clear the vector before populating
 		//-------------------------------------------------------------
-		void CEntity::GetManagedComponentsRecursive(InterfaceIDType inInterfaceID, std::vector<ComponentPtr> & outComponentsWithInterface, u32 inudwQueryMask, bool inbClearVectorBeforeUsing) const
+		void Entity::GetManagedComponentsRecursive(InterfaceIDType inInterfaceID, std::vector<ComponentSPtr> & outComponentsWithInterface, u32 inudwQueryMask, bool inbClearVectorBeforeUsing) const
 		{
 			if (inbClearVectorBeforeUsing) 
 			{
@@ -524,7 +524,7 @@ namespace ChilliSource
 		/// @return the first component of the given type. This will
         /// recurse into chile entities
 		//-------------------------------------------------------------
-		IComponent* CEntity::GetComponentRecursive(InterfaceIDType inInterfaceID, u32 inudwQueryMask) const
+		Component* Entity::GetComponentRecursive(InterfaceIDType inInterfaceID, u32 inudwQueryMask) const
 		{
 			for(ComponentList::const_iterator itr = mComponents.begin(); itr != mComponents.end(); ++itr) 
 			{
@@ -540,7 +540,7 @@ namespace ChilliSource
             
             for(SharedEntityList::const_iterator it = mEntities.begin(); it != mEntities.end(); ++it)
             {
-                IComponent* pComp = (*it)->GetComponentRecursive(inInterfaceID, inudwQueryMask);
+                Component* pComp = (*it)->GetComponentRecursive(inInterfaceID, inudwQueryMask);
                 
                 if(pComp)
                 {
@@ -561,7 +561,7 @@ namespace ChilliSource
 		/// @param Out - Vector to populate with components
 		/// @param Whether to clear the vector before populating
 		//-------------------------------------------------------------
-		void CEntity::GetComponentsRecursive(InterfaceIDType inInterfaceID, std::vector<IComponent*> & outComponentsWithInterface, u32 inudwQueryMask, bool inbClearVectorBeforeUsing) const
+		void Entity::GetComponentsRecursive(InterfaceIDType inInterfaceID, std::vector<Component*> & outComponentsWithInterface, u32 inudwQueryMask, bool inbClearVectorBeforeUsing) const
 		{
 			if (inbClearVectorBeforeUsing) 
 			{
@@ -590,7 +590,7 @@ namespace ChilliSource
 		///
 		/// @param Component to attach to the entity
 		//-------------------------------------------------------------
-		void CEntity::Attach(const ComponentPtr & inpComponent)
+		void Entity::Attach(const ComponentSPtr & inpComponent)
 		{
 			mComponents.push_back(inpComponent);
 			inpComponent->SetEntityOwner(this);
@@ -600,7 +600,7 @@ namespace ChilliSource
 		///
 		/// @param Component to remove from the entity
 		//-------------------------------------------------------------
-		void CEntity::Detach(const ComponentPtr & inpComponent)
+		void Entity::Detach(const ComponentSPtr & inpComponent)
 		{
 			if(inpComponent)
 			{
@@ -622,7 +622,7 @@ namespace ChilliSource
 		///
 		/// Removes all components
 		//-------------------------------------------------------------
-		void CEntity::DetachAll()
+		void Entity::DetachAll()
 		{
             while(mComponents.size() > 0)
             {
@@ -636,9 +636,9 @@ namespace ChilliSource
 		///
 		/// @return Entity
 		//------------------------------------------------------------------
-		EntityPtr CreateEntity()
+		EntitySPtr CreateEntity()
 		{
-			return EntityPtr(new CEntity());
+			return EntitySPtr(new Entity());
 		}
 		//------------------------------------------------------------------
 		/// Create Entity
@@ -647,9 +647,9 @@ namespace ChilliSource
 		///
 		/// @return Entity
 		//------------------------------------------------------------------
-		EntityPtr CreateEntity(const ComponentPtr & inpComponent)
+		EntitySPtr CreateEntity(const ComponentSPtr & inpComponent)
 		{
-			EntityPtr pEntity(new CEntity());
+			EntitySPtr pEntity(new Entity());
 			pEntity->Attach(inpComponent);
 			return pEntity;
 		}
@@ -658,7 +658,7 @@ namespace ChilliSource
 		///
 		/// @return Whether this entity is named
 		//-------------------------------------------------------------
-		bool CEntity::HasName()
+		bool Entity::HasName()
 		{
 			return mstrName != CStringUtils::BLANK;
 		}
@@ -667,7 +667,7 @@ namespace ChilliSource
 		///
 		/// @param Give this entity a name
 		//-------------------------------------------------------------
-		void CEntity::SetName(const std::string & incName)
+		void Entity::SetName(const std::string & incName)
 		{
 			mstrName = incName;
 		}
@@ -676,7 +676,7 @@ namespace ChilliSource
 		///
 		/// @return Entity name
 		//-------------------------------------------------------------
-		const std::string & CEntity::GetName() const
+		const std::string & Entity::GetName() const
 		{
 			return mstrName;
 		}
@@ -687,7 +687,7 @@ namespace ChilliSource
         /// useful for pooling
         ///
         //------------------------------------------------------------------
-        void CEntity::Reset()
+        void Entity::Reset()
         {
             ComponentList ComponentsCopy = mComponents;
             for (ComponentList::const_iterator itr = ComponentsCopy.begin(); itr != ComponentsCopy.end(); ++itr)
@@ -701,17 +701,17 @@ namespace ChilliSource
             RemoveFromScene();
             
             mstrName = std::string();
-            mLocalTransform = CTransform();
+            mLocalTransform = Transform();
             
             mbVisible = true;
-			mpEntityAnimationController = EntityAnimationControllerPtr();
+			mpEntityAnimationController = EntityAnimationControllerSPtr();
         }
         //------------------------------------------------------------------
         /// Get All Managed Components
         ///
         /// @return Array of components
         //------------------------------------------------------------------
-        const ComponentList& CEntity::GetAllManagedComponents() const
+        const ComponentList& Entity::GetAllManagedComponents() const
         {
             return mComponents;
         }
@@ -719,7 +719,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//-------------------------------------------------------------
-		CEntity::~CEntity()
+		Entity::~Entity()
 		{
 			ComponentList ComponentsCopy = mComponents;
             for (ComponentList::const_iterator itr = ComponentsCopy.begin(); itr != ComponentsCopy.end(); ++itr) 

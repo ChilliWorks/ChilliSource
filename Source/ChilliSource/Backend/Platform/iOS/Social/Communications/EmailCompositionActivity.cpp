@@ -59,7 +59,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         /// Present
         //-------------------------------------------------------
-		void CEmailCompositionActivity::Present(const std::vector<Core::CUTF8String>& inastrRecipientAddresses, const Core::CUTF8String& instrSubject, const Core::CUTF8String& instrContents, const SendResultDelegate& inCallback, bool inbFormatAsHtml)
+		void CEmailCompositionActivity::Present(const std::vector<Core::UTF8String>& inastrRecipientAddresses, const Core::UTF8String& instrSubject, const Core::UTF8String& instrContents, const SendResultDelegate& inCallback, bool inbFormatAsHtml)
         {
             Attachment emptyAttachment;
             emptyAttachment.mstrFilename = "";
@@ -70,7 +70,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         /// Present With Attachments
         //-------------------------------------------------------
-		void CEmailCompositionActivity::PresentWithAttachment(const std::vector<Core::CUTF8String> & inastrRecipientAddresses, const Core::CUTF8String & instrSubject, const Core::CUTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
+		void CEmailCompositionActivity::PresentWithAttachment(const std::vector<Core::UTF8String> & inastrRecipientAddresses, const Core::UTF8String & instrSubject, const Core::UTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
         {
 			mpVC = [[MFMailComposeViewController alloc] init];
             if ([MFMailComposeViewController canSendMail] == false)

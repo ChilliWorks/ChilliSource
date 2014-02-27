@@ -109,7 +109,7 @@ namespace ChilliSource
                 }
             }
             
-            Core::CNotificationScheduler::OnNotificationReceived(sNotification);
+            Core::NotificationScheduler::OnNotificationReceived(sNotification);
         }
     }
 }

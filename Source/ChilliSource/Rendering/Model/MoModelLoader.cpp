@@ -56,7 +56,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		bool MoModelLoader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IResourceProvider::InterfaceID;
+			return inInterfaceID == ResourceProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource of Kind
@@ -75,7 +75,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Create Resource From File
 		//----------------------------------------------------------------------------
-		bool MoModelLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool MoModelLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)  
 		{
 			MeshSPtr pMesh = std::static_pointer_cast<Mesh>(outpResource);
 			
@@ -103,7 +103,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Async Create Resource From File
 		//----------------------------------------------------------------------------
-		bool MoModelLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool MoModelLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
 		{
 			MeshSPtr pMesh = std::static_pointer_cast<Mesh>(outpResource);
 			
@@ -231,7 +231,7 @@ namespace ChilliSource
 		{
 			bool mbSuccess = true;
 			
-			Core::FileStreamPtr stream = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
+			Core::FileStreamSPtr stream = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
 	
 			MeshDataQuantities quantities;
 			mbSuccess = ReadGlobalHeader(stream, inMeshDescriptor, inFilePath, quantities);
@@ -269,7 +269,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------------------
 		/// Read Global Header
 		//-----------------------------------------------------------------------------
-		bool MoModelLoader::ReadGlobalHeader(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, const std::string &inFilePath, MeshDataQuantities& outMeshDataQuantities)
+		bool MoModelLoader::ReadGlobalHeader(const ChilliSource::Core::FileStreamSPtr& inpStream, MeshDescriptor& inMeshDescriptor, const std::string &inFilePath, MeshDataQuantities& outMeshDataQuantities)
 		{
 			//Check file for corruption
 			if(nullptr == inpStream || true == inpStream->IsBad())
@@ -358,7 +358,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------------------
 		/// Read Skeleton
 		//-----------------------------------------------------------------------------
-		bool MoModelLoader::ReadSkeletonData(const ChilliSource::Core::FileStreamPtr& inpStream, const MeshDataQuantities& inQuantities, MeshDescriptor& inMeshDescriptor)
+		bool MoModelLoader::ReadSkeletonData(const ChilliSource::Core::FileStreamSPtr& inpStream, const MeshDataQuantities& inQuantities, MeshDescriptor& inMeshDescriptor)
 		{
 			if (true == inMeshDescriptor.mFeatures.mbHasAnimationData)
 			{
@@ -407,7 +407,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------------------
 		/// Read Mesh Header
 		//-----------------------------------------------------------------------------
-		bool MoModelLoader::ReadMeshHeader(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, SubMeshDescriptor& inSubMeshDescriptor, 
+		bool MoModelLoader::ReadMeshHeader(const ChilliSource::Core::FileStreamSPtr& inpStream, MeshDescriptor& inMeshDescriptor, SubMeshDescriptor& inSubMeshDescriptor, 
 											const std::string& instrMaterialPath)
 		{
 			//read mesh name
@@ -480,14 +480,14 @@ namespace ChilliSource
 		//-----------------------------------------------------------------------------
 		/// Read Mesh Data
 		//-----------------------------------------------------------------------------
-		bool MoModelLoader::ReadMeshData(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor, SubMeshDescriptor& inSubMeshDescriptor)
+		bool MoModelLoader::ReadMeshData(const ChilliSource::Core::FileStreamSPtr& inpStream, MeshDescriptor& inMeshDescriptor, SubMeshDescriptor& inSubMeshDescriptor)
 		{
 			//read the inverse bind matrices
             if (true == inMeshDescriptor.mFeatures.mbHasAnimationData)
 			{
                 for (u32 i = 0; i < inMeshDescriptor.mpSkeleton->GetNumJoints(); i++)
                 {
-                    ChilliSource::Core::CMatrix4x4 IBPMat;
+                    ChilliSource::Core::Matrix4x4 IBPMat;
                     for (u32 j = 0; j < 16; j++)
                     {
                         IBPMat.m[j] = ReadValue<f32>(inpStream);
@@ -509,7 +509,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------------------
 		/// Read Vertex Declaration
 		//-----------------------------------------------------------------------------
-		void MoModelLoader::ReadVertexDeclaration(const ChilliSource::Core::FileStreamPtr& inpStream, MeshDescriptor& inMeshDescriptor)
+		void MoModelLoader::ReadVertexDeclaration(const ChilliSource::Core::FileStreamSPtr& inpStream, MeshDescriptor& inMeshDescriptor)
 		{
 			//build the vertex declaration from the file
 			u8 dwNumVertexElements = ReadValue<u8>(inpStream);

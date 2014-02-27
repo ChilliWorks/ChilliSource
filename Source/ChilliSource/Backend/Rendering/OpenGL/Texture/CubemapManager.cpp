@@ -34,7 +34,7 @@ namespace ChilliSource
 		/// @param Out: Cubemap resource
 		/// @return Success
 		//----------------------------------------------------------------
-		bool CCubemapManager::CreateCubemapFromImages(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapSPtr& outpCubemap)
+		bool CCubemapManager::CreateCubemapFromImages(const std::vector<Core::ResourceSPtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapSPtr& outpCubemap)
 		{
 			std::static_pointer_cast<CCubemap>(outpCubemap)->Init(inaImages, inbWithMipsMaps);
 			return true;
@@ -58,7 +58,7 @@ namespace ChilliSource
                         //If the Cubemap was loaded from file then reload it.
                         if(pOpenGLCubemap->GetFilename() != "" && pOpenGLCubemap->GetStorageLocation() != Core::SL_NONE)
                         {
-                            std::vector<Core::ResourcePtr> aImages;
+                            std::vector<Core::ResourceSPtr> aImages;
                             aImages.reserve(6);
                             
                             std::string strPath;
@@ -73,10 +73,10 @@ namespace ChilliSource
                                     
                                     for(u32 i=0; i<6; ++i)
                                     {
-                                        Core::ResourcePtr pSourceImage(new Core::CImage());
-                                        Core::CImage* pImage = (Core::CImage*)(pSourceImage.get());
+                                        Core::ResourceSPtr pSourceImage(new Core::Image());
+                                        Core::Image* pImage = (Core::Image*)(pSourceImage.get());
                                         std::string strFileName = strPath + ToString(i+1) + strExt;
-                                        if(static_cast<IImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(pOpenGLCubemap->GetStorageLocation(), strFileName, pOpenGLCubemap->GetImageFormat(), pSourceImage))
+                                        if(static_cast<ImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(pOpenGLCubemap->GetStorageLocation(), strFileName, pOpenGLCubemap->GetImageFormat(), pSourceImage))
                                         {
                                             pImage->SetName(strFileName);
                                             pImage->SetLoaded(true);

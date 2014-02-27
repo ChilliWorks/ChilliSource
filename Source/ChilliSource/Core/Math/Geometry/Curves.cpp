@@ -17,8 +17,8 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		template<typename T> const u16 CCatmullRomSpline<T>::wLengthSamplesPerSegment = 259;
-		template<typename T> const float CCatmullRomSpline<T>::mfSmallTDelta = 0.005f;
+		template<typename T> const u16 CatmullRomSpline<T>::wLengthSamplesPerSegment = 259;
+		template<typename T> const float CatmullRomSpline<T>::mfSmallTDelta = 0.005f;
 	}
 }
 

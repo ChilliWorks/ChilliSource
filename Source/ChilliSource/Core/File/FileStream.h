@@ -51,19 +51,19 @@ namespace ChilliSource
             k_end
 		};
 		//=================================================================
-		/// IFileStream
+		/// FileStream
 		///
 		/// A filestream is used for all reading and writing of files.
 		/// This will emulate the functionality of fstream and allows for
 		/// cross platform file reading.
 		//=================================================================
-		class IFileStream
+		class FileStream
 		{
 		public:
 			//--------------------------------------------------------------------------------------------------
 			/// Destructor
 			//--------------------------------------------------------------------------------------------------
-            virtual ~IFileStream(){}
+            virtual ~FileStream(){}
 			//--------------------------------------------------------------------------------------------------
 			/// Is Open
 			///
@@ -337,7 +337,7 @@ namespace ChilliSource
             /// @param Type of checksum to report
             /// @return SHA1 checksum
             //--------------------------------------------------------------
-            std::string GetSHA1Checksum(ChilliSource::Core::CSHA1::ReportType ineReportType);
+            std::string GetSHA1Checksum(ChilliSource::Core::SHA1::ReportType ineReportType);
             //--------------------------------------------------------------------------------------------------
 			/// Open
 			///
@@ -364,7 +364,7 @@ namespace ChilliSource
 			///
 			/// This is defined protected so that only the FileSystem can create it.
 			//--------------------------------------------------------------------------------------------------
-			IFileStream(){};
+			FileStream(){};
 
 		protected:
 

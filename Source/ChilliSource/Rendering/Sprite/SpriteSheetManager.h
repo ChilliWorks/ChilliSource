@@ -22,7 +22,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class SpriteSheetManager : public Core::IResourceManager
+		class SpriteSheetManager : public Core::ResourceManager
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(SpriteSheetManager);
@@ -66,7 +66,7 @@ namespace ChilliSource
             /// @param Whether or not mip maps should be used
             /// @return the spritesheet resource pointer
 			//----------------------------------------------------------------
-			SpriteSheetSPtr GetSpriteSheetFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default, bool inbWithMipsMaps = false);
+			SpriteSheetSPtr GetSpriteSheetFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::Image::Format ineFormat = Core::Image::Format::k_default, bool inbWithMipsMaps = false);
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///
@@ -75,7 +75,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			
 		private:
             

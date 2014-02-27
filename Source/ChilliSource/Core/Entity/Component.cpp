@@ -14,12 +14,12 @@ namespace ChilliSource
 
 	namespace Core
 	{
-		IComponent::IComponent()
+		Component::Component()
 		:mpEntityOwner(nullptr), mudwQueryMask(0)
 		{
 			
 		}
-		IComponent::~IComponent()
+		Component::~Component()
 		{
 
 		}
@@ -28,7 +28,7 @@ namespace ChilliSource
 		///
 		/// @return Entity to which component is attached
 		//----------------------------------------------------
-		CEntity * IComponent::GetEntityOwner()
+		Entity * Component::GetEntityOwner()
 		{
 			return mpEntityOwner;
 		}
@@ -37,7 +37,7 @@ namespace ChilliSource
 		///
 		/// @return Entity to which component is attached
 		//----------------------------------------------------
-		const CEntity * IComponent::GetEntityOwner() const
+		const Entity * Component::GetEntityOwner() const
 		{
 			return mpEntityOwner;
 		}
@@ -46,7 +46,7 @@ namespace ChilliSource
 		///
 		/// @param Entity to which component is attached
 		//----------------------------------------------------
-		void IComponent::SetEntityOwner(CEntity* inpOwner)
+		void Component::SetEntityOwner(Entity* inpOwner)
 		{
 			if(mpEntityOwner != nullptr)
 			{
@@ -65,7 +65,7 @@ namespace ChilliSource
 		///
 		/// @return Query mask for filtering
 		//----------------------------------------------------
-		u32 IComponent::GetQueryMask() const
+		u32 Component::GetQueryMask() const
 		{
 			return mudwQueryMask;
 		}
@@ -74,7 +74,7 @@ namespace ChilliSource
 		///
 		/// @param Filter mask
 		//----------------------------------------------------
-		void IComponent::SetQueryMask(u32 inudwQueryMask)
+		void Component::SetQueryMask(u32 inudwQueryMask)
 		{
 			mudwQueryMask = inudwQueryMask;
 		}

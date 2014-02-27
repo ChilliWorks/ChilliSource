@@ -1,5 +1,5 @@
 /*
- *  IResourceProvider.h
+ *  ResourceProvider.h
  *  MoFlow
  *
  *  Created by Tag Games on 30/09/2010.
@@ -20,23 +20,23 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		/// IResourceProvider defines an interface for systems which produce resource objects from files
-		class IResourceProvider : public ISystem
+		/// ResourceProvider defines an interface for systems which produce resource objects from files
+		class ResourceProvider : public System
 		{
 		public:
-			virtual ~IResourceProvider(){}
-			DECLARE_NAMED_INTERFACE(IResourceProvider);
+			virtual ~ResourceProvider(){}
+			DECLARE_NAMED_INTERFACE(ResourceProvider);
 			virtual bool CanCreateResourceOfKind(InterfaceIDType inInterfaceID) const = 0;
 			virtual bool CanCreateResourceFromFileWithExtension(const std::string & inExtension) const = 0;
 			
 			//---Filepath is relative to the resources directory - either the documents or the package
-			virtual bool CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource) = 0;
-			virtual bool AsyncCreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
+			virtual bool CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource) = 0;
+			virtual bool AsyncCreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource)
             {
                 CS_WARNING_LOG("No implementation for AsyncCreateResourceFromFile"); 
                 return false;
             };
-			virtual bool StreamResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource)
+			virtual bool StreamResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource)
             {
                 CS_WARNING_LOG("No implementation for StreamResourceFromFile"); 
                 return false;

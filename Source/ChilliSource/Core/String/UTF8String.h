@@ -17,7 +17,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        class CUTF8String
+        class UTF8String
         {
         public:
             
@@ -27,10 +27,10 @@ namespace ChilliSource
             typedef const u8* const_iterator;
             typedef u8* iterator;
             
-            CUTF8String();
-            CUTF8String(const std::string& inCodePoints);
-            CUTF8String(const s8* instrCString);
-            CUTF8String(const CodePoint* inpCodePoints, u32 inudwNumCodePoints);
+            UTF8String();
+            UTF8String(const std::string& inCodePoints);
+            UTF8String(const s8* instrCString);
+            UTF8String(const CodePoint* inpCodePoints, u32 inudwNumCodePoints);
             
             //---------------------------------------------------------
             /// Length (Alias of size)
@@ -104,7 +104,7 @@ namespace ChilliSource
             ///
             /// @param String to append
             //---------------------------------------------------------
-            void append(const CUTF8String& instrUTF8String);
+            void append(const UTF8String& instrUTF8String);
             //---------------------------------------------------------
             /// Append (+= operator)
             ///
@@ -112,7 +112,7 @@ namespace ChilliSource
             ///
             /// @param Character to append
             //---------------------------------------------------------
-            void appendChar(CUTF8String::Char inChar);
+            void appendChar(UTF8String::Char inChar);
             //---------------------------------------------------------
             /// Append (+= operator)
             ///
@@ -120,7 +120,7 @@ namespace ChilliSource
             ///
             /// @param Codepoints to append
             //---------------------------------------------------------
-            void appendCodePoints(CUTF8String::Char inChar);
+            void appendCodePoints(UTF8String::Char inChar);
             //---------------------------------------------------------
             /// substr
             ///
@@ -131,7 +131,7 @@ namespace ChilliSource
             /// @param The length of the sub string.
             /// @return The sub string.
             //---------------------------------------------------------
-            CUTF8String substr(u32 inudwStartPosition = 0, u32 inudwLength = npos);
+            UTF8String substr(u32 inudwStartPosition = 0, u32 inudwLength = npos);
             //---------------------------------------------------------
             /// Data
             ///
@@ -175,15 +175,15 @@ namespace ChilliSource
             {
                 return at(inudwIndex);
             }
-            void operator+=(const CUTF8String& instrUTF8String)
+            void operator+=(const UTF8String& instrUTF8String)
             {
                 this->append(instrUTF8String);
             }
-            void operator+=(CUTF8String::Char inChar)
+            void operator+=(UTF8String::Char inChar)
             {
                 this->appendChar(inChar);
             }
-            bool operator==(const CUTF8String& instrUTF8String) const
+            bool operator==(const UTF8String& instrUTF8String) const
             {
                 if(mCodePoints.size() != instrUTF8String.mCodePoints.size())
                 {
@@ -200,7 +200,7 @@ namespace ChilliSource
                 
                 return true;
             }
-            bool operator!=(const CUTF8String& instrUTF8String) const
+            bool operator!=(const UTF8String& instrUTF8String) const
             {
                 if(mCodePoints.size() != instrUTF8String.mCodePoints.size())
                 {
@@ -217,9 +217,9 @@ namespace ChilliSource
                 
                 return false;
             }
-            CUTF8String operator=(const std::string& inCodePoints)
+            UTF8String operator=(const std::string& inCodePoints)
             {
-                return CUTF8String(inCodePoints);
+                return UTF8String(inCodePoints);
             }
             
         private:
@@ -244,9 +244,9 @@ namespace ChilliSource
             mutable bool mbIsLengthCacheValid;
         };
         
-        CUTF8String operator+(const CUTF8String& instrUTF8String, const CUTF8String& instrUTF8String2);
+        UTF8String operator+(const UTF8String& instrUTF8String, const UTF8String& instrUTF8String2);
         
-        typedef CUTF8String UTF8String;
+        typedef UTF8String UTF8String;
     }
 }
 

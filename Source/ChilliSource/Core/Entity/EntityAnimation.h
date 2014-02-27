@@ -33,21 +33,21 @@ namespace ChilliSource
 		/*
 		 An EntityAnimation object. It extends Animation
 		 */
-		class CEntityAnimation : public Animation
+		class EntityAnimation : public Animation
 		{
 		public:
 			//----------------------------------------------
-			/// CEntityAnimation
+			/// EntityAnimation
 			///
 			/// 
 			/// @param A const pointer to a EntityAnimationData struct. 
 			/// The pointer and its contents must be valid through the lifetime of the NodeAnimation
 			/// @param Entity which the animation is to manipulate.
 			//----------------------------------------------
-			CEntityAnimation(const EntityAnimationData* inpAnimData, CEntity* inpTarget, u32 inudwQueryFlags = 0, f32 infInTime = -1, f32 infOutTime = -1);			
+			EntityAnimation(const EntityAnimationData* inpAnimData, Entity* inpTarget, u32 inudwQueryFlags = 0, f32 infInTime = -1, f32 infOutTime = -1);			
             void SetInAndOutTime(f32 inInTime, f32 inOutTime);
             void ToFrame(u32 inudwFrameNumber);
-            CEntity* GetTarget();
+            Entity* GetTarget();
             
             void SetInterpolationMode(InterpolationType ineType);
 		protected:
@@ -55,7 +55,7 @@ namespace ChilliSource
             void Step(u32 inudwLowFrame, u32 inudwHighFrame, f32 infT);
             void Lerp(u32 inudwLowFrame, u32 inudwHighFrame, f32 infT);
         public:
-			CEntity*						mpTarget;			// Entity to be animated
+			Entity*						mpTarget;			// Entity to be animated
         protected:
             
             typedef fastdelegate::FastDelegate3<u32, u32, f32> InterpolateDelegate;

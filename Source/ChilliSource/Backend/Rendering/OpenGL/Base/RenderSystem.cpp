@@ -50,9 +50,9 @@ namespace ChilliSource
         mpRenderCapabilities(nullptr)
 		{
 			//Register the GL texture and shader managers
-            Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mTexManager);
-            Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mCubemapManager);
-            Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mShaderManager);
+            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mTexManager);
+            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mCubemapManager);
+            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mShaderManager);
             
 #ifdef TARGET_OS_IPHONE
             //Create the context with the specified GLES version
@@ -226,17 +226,17 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Joints
         //----------------------------------------------------------
-        void CRenderSystem::ApplyJoints(const std::vector<Core::CMatrix4x4>& inaJoints)
+        void CRenderSystem::ApplyJoints(const std::vector<Core::Matrix4x4>& inaJoints)
         {
             if(mJointsHandle != -1)
             {
                 //remove the final column from the joint matrix data as it is always going to be [0 0 0 1].
-                std::vector<Core::CVector4> aJointVectors;
-                for (std::vector<Core::CMatrix4x4>::const_iterator it = inaJoints.begin(); it != inaJoints.end(); ++it)
+                std::vector<Core::Vector4> aJointVectors;
+                for (std::vector<Core::Matrix4x4>::const_iterator it = inaJoints.begin(); it != inaJoints.end(); ++it)
                 {
-                    aJointVectors.push_back(Core::CVector4(it->m[0], it->m[4], it->m[8], it->m[12]));
-                    aJointVectors.push_back(Core::CVector4(it->m[1], it->m[5], it->m[9], it->m[13]));
-                    aJointVectors.push_back(Core::CVector4(it->m[2], it->m[6], it->m[10], it->m[14]));
+                    aJointVectors.push_back(Core::Vector4(it->m[0], it->m[4], it->m[8], it->m[12]));
+                    aJointVectors.push_back(Core::Vector4(it->m[1], it->m[5], it->m[9], it->m[13]));
+                    aJointVectors.push_back(Core::Vector4(it->m[2], it->m[6], it->m[10], it->m[14]));
                 }
                 
                 glUniform4fv(mJointsHandle, aJointVectors.size(), (GLfloat*)&(aJointVectors[0]));
@@ -515,13 +515,13 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Apply Camera
 		//----------------------------------------------------------
-		void CRenderSystem::ApplyCamera(const Core::CVector3& invPosition, const Core::CMatrix4x4& inmatView, const Core::CMatrix4x4& inmatProj, const Core::CColour& inClearCol)
+		void CRenderSystem::ApplyCamera(const Core::Vector3& invPosition, const Core::Matrix4x4& inmatView, const Core::Matrix4x4& inmatProj, const Core::Colour& inClearCol)
 		{
 			//Set the new view matrix based on the camera position
 			mmatView = inmatView;
 			mmatProj = inmatProj;
             mvCameraPos = invPosition;
-            Core::CMatrix4x4::Multiply(&mmatView, &mmatProj, &mmatViewProj);
+            Core::Matrix4x4::Multiply(&mmatView, &mmatProj, &mmatViewProj);
 			
 			//Set the clear colour
             mNewClearColour = inClearCol;
@@ -586,7 +586,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Vertex Buffer
         //----------------------------------------------------------
-        void CRenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::CMatrix4x4& inmatWorld)
+        void CRenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4x4& inmatWorld)
 		{
 #ifdef DEBUG_STATS
             DebugStats::AddToEvent("DrawCalls", 1u);
@@ -594,8 +594,8 @@ namespace ChilliSource
 #endif
             
 			//Set the new model view matrix based on the camera view matrix and the object matrix
-            static Core::CMatrix4x4 matWorldViewProj;
-            Core::CMatrix4x4::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
+            static Core::Matrix4x4 matWorldViewProj;
+            Core::Matrix4x4::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
 			glUniformMatrix4fv(mmatWVPHandle, 1, GL_FALSE, (GLfloat*)matWorldViewProj.m);
 			
             if(mmatWorldHandle != -1)
@@ -621,15 +621,15 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Buffer
         //----------------------------------------------------------
-        void CRenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::CMatrix4x4& inmatWorld)
+        void CRenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4x4& inmatWorld)
 		{
 #ifdef DEBUG_STATS
             DebugStats::AddToEvent("DrawCalls", 1u);
 #endif
 
 			//Set the new model view matrix based on the camera view matrix and the object matrix
-            static Core::CMatrix4x4 matWorldViewProj;
-            Core::CMatrix4x4::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
+            static Core::Matrix4x4 matWorldViewProj;
+            Core::Matrix4x4::Multiply(&inmatWorld, &mmatViewProj, &matWorldViewProj);
 			glUniformMatrix4fv(mmatWVPHandle, 1, GL_FALSE, (GLfloat*)matWorldViewProj.m);
             
             if(mmatWorldHandle != -1)
@@ -853,7 +853,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Scissor Region
         //---------------------------------------------------------
-        void CRenderSystem::SetScissorRegion(const Core::CVector2& invPosition, const Core::CVector2& invSize)
+        void CRenderSystem::SetScissorRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize)
         {
             if(mbInvalidateAllCaches || mvCachedScissorPos != invPosition || mvCachedScissorSize != invSize)
             {

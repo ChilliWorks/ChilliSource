@@ -15,8 +15,8 @@ namespace ChilliSource
         std::string CDevice::mstrDeviceModel;
 		std::string CDevice::mstrDeviceModelType;
 		std::string CDevice::mstrDeviceManufacturer;
-		CLocale CDevice::mLocale = kUnknownLocale;
-		CLocale CDevice::mLanguage = kUnknownLocale;
+		Locale CDevice::mLocale = kUnknownLocale;
+		Locale CDevice::mLanguage = kUnknownLocale;
         std::string CDevice::mstrOSVersion;
         std::string CDevice::mstrDeviceID;
 		u32 CDevice::mudwNumCores = 0;
@@ -27,7 +27,7 @@ namespace ChilliSource
         ///
         /// @param Platform system
         //---------------------------------------------
-        void CDevice::Init(IPlatformSystem* inpPlatformSystem)
+        void CDevice::Init(PlatformSystem* inpPlatformSystem)
         {
             mstrDeviceModel = inpPlatformSystem->GetDeviceModelName();
             mstrDeviceModelType = inpPlatformSystem->GetDeviceModelTypeName();
@@ -71,7 +71,7 @@ namespace ChilliSource
         ///
         /// @return the locale
         //---------------------------------------------
-        CLocale& CDevice::GetLocale()
+        Locale& CDevice::GetLocale()
         {
             return mLocale;
         }
@@ -80,7 +80,7 @@ namespace ChilliSource
         ///
         /// @return the language in locale format
         //---------------------------------------------
-        CLocale& CDevice::GetLanguage()
+        Locale& CDevice::GetLanguage()
         {
             return mLanguage;
         }

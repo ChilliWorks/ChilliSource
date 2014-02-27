@@ -39,22 +39,22 @@ namespace ChilliSource
         //----------------------------------------------------------
         void DirectionalLightComponent::SetShadowVolume(f32 infWidth, f32 infHeight, f32 infNear, f32 infFar)
         {
-            mmatProj = Core::CMatrix4x4::CreateOrthoMatrix(infWidth, infHeight, infNear, infFar);
+            mmatProj = Core::Matrix4x4::CreateOrthoMatrix(infWidth, infHeight, infNear, infFar);
             
             mbCacheValid = false;
         }
         //----------------------------------------------------------
         /// Get Direction
         //----------------------------------------------------------
-        const Core::CVector3& DirectionalLightComponent::GetDirection() const
+        const Core::Vector3& DirectionalLightComponent::GetDirection() const
         {
             if(GetEntityOwner() != nullptr)
             {
-                mvDirection = GetEntityOwner()->Transform().GetWorldOrientation() * Core::CVector3::Z_UNIT_NEGATIVE;
+                mvDirection = GetEntityOwner()->Transform().GetWorldOrientation() * Core::Vector3::Z_UNIT_NEGATIVE;
             }
             else
             {
-                mvDirection = Core::CVector3::Z_UNIT_NEGATIVE;
+                mvDirection = Core::Vector3::Z_UNIT_NEGATIVE;
             }
             
             return mvDirection;
@@ -62,13 +62,13 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Light Matrix
         //----------------------------------------------------------
-        const Core::CMatrix4x4& DirectionalLightComponent::GetLightMatrix() const
+        const Core::Matrix4x4& DirectionalLightComponent::GetLightMatrix() const
         {
             //The matrix is a view projection
             if(mbMatrixCacheValid == false && GetEntityOwner() != nullptr)
             {
-                Core::CMatrix4x4 matView = GetEntityOwner()->Transform().GetWorldTransform().Inverse();
-                Core::CMatrix4x4::Multiply(&matView, &mmatProj, &mmatLight);
+                Core::Matrix4x4 matView = GetEntityOwner()->Transform().GetWorldTransform().Inverse();
+                Core::Matrix4x4::Multiply(&matView, &mmatProj, &mmatLight);
                 mbMatrixCacheValid = true;
             }
             

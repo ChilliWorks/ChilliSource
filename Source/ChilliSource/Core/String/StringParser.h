@@ -100,7 +100,7 @@ namespace ChilliSource
         ///
         /// @return The vector value.
         //------------------------------------------------------------
-        CVector2 ParseVector2(const std::string& in_string);
+        Vector2 ParseVector2(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a 3 component vector. The vector must be
         /// in the format "x y z", i.e F32 values, space delimited. Failure
@@ -112,7 +112,7 @@ namespace ChilliSource
         ///
         /// @return The vector value.
         //------------------------------------------------------------
-        CVector3 ParseVector3(const std::string& in_string);
+        Vector3 ParseVector3(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a 4 component vector. The vector must be
         /// in the format "x y z w", i.e F32 values, space delimited.
@@ -124,7 +124,7 @@ namespace ChilliSource
         ///
         /// @return The vector value.
         //------------------------------------------------------------
-        CVector4 ParseVector4(const std::string& in_string);
+        Vector4 ParseVector4(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a matrix. The matrix should be provided
         /// in row major format, space delimited. failure to parse will
@@ -136,7 +136,7 @@ namespace ChilliSource
         ///
         /// @return The matrix value.
         //------------------------------------------------------------
-        CMatrix4x4 ParseMatrix4(const std::string& in_string);
+        Matrix4x4 ParseMatrix4(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a quaternion. The quaternion must be
         /// in the format "w x y z", i.e F32 values, space delimited.
@@ -148,7 +148,7 @@ namespace ChilliSource
         ///
         /// @return The quaternion value.
         //------------------------------------------------------------
-        CQuaternion ParseQuaternion(const std::string& in_string);
+        Quaternion ParseQuaternion(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a colour. The colour must be
         /// in the format "r g b a", i.e F32 values, space delimited.
@@ -161,7 +161,7 @@ namespace ChilliSource
         ///
         /// @return The colour value.
         //------------------------------------------------------------
-        CColour ParseColour(const std::string& in_string);
+        Colour ParseColour(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a storage location. Acceptable storage locations are:
         ///  - Package

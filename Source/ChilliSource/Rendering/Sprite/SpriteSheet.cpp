@@ -170,9 +170,9 @@ namespace ChilliSource
 		/// @param ID for frame 
 		/// param Vec2 containing size for the frame
 		//---------------------------------------------------------------------
-		Core::CVector2 SpriteSheet::GetSizeForFrame(u32 inudwFrameID) const
+		Core::Vector2 SpriteSheet::GetSizeForFrame(u32 inudwFrameID) const
         {
-			Core::CVector2 sResult;
+			Core::Vector2 sResult;
 			GetSizeForFrame(inudwFrameID, sResult);
 			return sResult;
 		}
@@ -182,7 +182,7 @@ namespace ChilliSource
 		/// @param ID for frame 
 		/// @param Vec2 set to size for the frame
 		//---------------------------------------------------------------------
-		void SpriteSheet::GetSizeForFrame(u32 inudwFrameID, Core::CVector2 & outvSize) const
+		void SpriteSheet::GetSizeForFrame(u32 inudwFrameID, Core::Vector2 & outvSize) const
         {
 			outvSize.x = mFrames[inudwFrameID].Width;
 			outvSize.y = mFrames[inudwFrameID].Height;
@@ -193,9 +193,9 @@ namespace ChilliSource
 		/// @param ID for frame 
 		/// return Vec2 containing offset for the frame
 		//---------------------------------------------------------------------
-		Core::CVector2 SpriteSheet::GetOffsetForFrame(u32 inudwFrameID) const
+		Core::Vector2 SpriteSheet::GetOffsetForFrame(u32 inudwFrameID) const
         {
-			Core::CVector2 vResult;
+			Core::Vector2 vResult;
 			GetOffsetForFrame(inudwFrameID,vResult);
 			return vResult;
 		}
@@ -205,7 +205,7 @@ namespace ChilliSource
 		/// @param ID for frame 
 		/// @param Vec2 set to offset for the frame
 		//---------------------------------------------------------------------
-		void SpriteSheet::GetOffsetForFrame(u32 inudwFrameID, Core::CVector2 & outvOffset) const
+		void SpriteSheet::GetOffsetForFrame(u32 inudwFrameID, Core::Vector2 & outvOffset) const
         {
 			outvOffset.x = mFrames[inudwFrameID].OffsetX;
 			outvOffset.y = mFrames[inudwFrameID].OffsetY;
@@ -216,9 +216,9 @@ namespace ChilliSource
         /// @param ID for frame 
         /// param Vec2 containing density independent size for the frame
         //---------------------------------------------------------------------
-        Core::CVector2 SpriteSheet::GetDPISizeForFrame(u32 inudwFrameID) const
+        Core::Vector2 SpriteSheet::GetDPISizeForFrame(u32 inudwFrameID) const
         {
-            Core::CVector2 sResult;
+            Core::Vector2 sResult;
 			GetDPISizeForFrame(inudwFrameID, sResult);
 			return sResult;
         }
@@ -228,7 +228,7 @@ namespace ChilliSource
         /// @param ID for frame 
         /// param Vec2 containing density independent size for the frame
         //---------------------------------------------------------------------
-        void SpriteSheet::GetDPISizeForFrame(u32 inudwFrameID, Core::CVector2 & outvSize) const
+        void SpriteSheet::GetDPISizeForFrame(u32 inudwFrameID, Core::Vector2 & outvSize) const
         {
             outvSize.x = mFrames[inudwFrameID].Width * (1.0f/Core::CScreen::GetDensity());
 			outvSize.y = mFrames[inudwFrameID].Height * (1.0f/Core::CScreen::GetDensity());
@@ -239,9 +239,9 @@ namespace ChilliSource
         /// @param ID for frame 
         /// @param Vec2 set to teh density independent offset for the frame
         //---------------------------------------------------------------------
-        Core::CVector2 SpriteSheet::GetDPIOffsetForFrame(u32 inudwFrameID) const
+        Core::Vector2 SpriteSheet::GetDPIOffsetForFrame(u32 inudwFrameID) const
         {
-            Core::CVector2 vResult;
+            Core::Vector2 vResult;
 			GetDPIOffsetForFrame(inudwFrameID,vResult);
 			return vResult;
         }
@@ -251,7 +251,7 @@ namespace ChilliSource
         /// @param ID for frame 
         /// @param Vec2 set to teh density independent offset for the frame
         //---------------------------------------------------------------------
-        void SpriteSheet::GetDPIOffsetForFrame(u32 inudwFrameID, Core::CVector2 & outvOffset) const
+        void SpriteSheet::GetDPIOffsetForFrame(u32 inudwFrameID, Core::Vector2 & outvOffset) const
         {
             outvOffset.x = mFrames[inudwFrameID].OffsetX * (1.0f/Core::CScreen::GetDensity());
 			outvOffset.y = mFrames[inudwFrameID].OffsetY * (1.0f/Core::CScreen::GetDensity());

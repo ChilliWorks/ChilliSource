@@ -232,7 +232,7 @@ namespace ChilliSource
             /// @param The entity.
             /// @param the name of the node to attach to.
 			//----------------------------------------------------------
-			void AttachEntity(const Core::EntityPtr& inpEntity, const std::string& instrNodeName);
+			void AttachEntity(const Core::EntitySPtr& inpEntity, const std::string& instrNodeName);
             //----------------------------------------------------------
 			/// Detatch Entity
 			///
@@ -241,7 +241,7 @@ namespace ChilliSource
 			///
             /// @param The entity.
 			//----------------------------------------------------------
-			void DetatchEntity(Core::CEntity* inpEntity);
+			void DetatchEntity(Core::Entity* inpEntity);
             //----------------------------------------------------------
 			/// Detatch All Entities
 			///
@@ -452,7 +452,7 @@ namespace ChilliSource
             void ApplyDefaultMaterials();
             
 		private:
-            typedef std::vector<std::pair<Core::EntityWeakPtr, s32> > AttachedEntityList;
+            typedef std::vector<std::pair<Core::EntityWPtr, s32> > AttachedEntityList;
             AttachedEntityList maAttachedEntities;
 			MeshSPtr mpModel;
 			std::vector<MaterialSPtr> mMaterials;

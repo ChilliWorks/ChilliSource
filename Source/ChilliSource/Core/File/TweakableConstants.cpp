@@ -10,9 +10,9 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-        f32 SamplePointCurve(const CTweakableConstants::CurvePoint * inpPointsArray, u32 inudwCount, f32 infXValue);
+        f32 SamplePointCurve(const TweakableConstants::CurvePoint * inpPointsArray, u32 inudwCount, f32 infXValue);
 		
-		f32 SamplePointCurve(const CTweakableConstants::CurvePoint * inpPointsArray, u32 inudwCount, f32 infXValue){
+		f32 SamplePointCurve(const TweakableConstants::CurvePoint * inpPointsArray, u32 inudwCount, f32 infXValue){
 			
 			u32 udwLowerIndex = 0;
 			u32 udwUpperIndex = 0;
@@ -40,21 +40,21 @@ namespace ChilliSource
 			return FLT_MAX;
 		}
 		
-		CTweakableConstants::CTweakableConstants()
+		TweakableConstants::TweakableConstants()
 		{
 			LoadValues();
 			msSingleton = this;
 		}
-		CTweakableConstants::~CTweakableConstants(){
+		TweakableConstants::~TweakableConstants(){
 			
 		}
-		CTweakableConstants &   CTweakableConstants::GetSingleton(){
+		TweakableConstants &   TweakableConstants::GetSingleton(){
 			return *msSingleton;
 		}
-		CTweakableConstants *   CTweakableConstants::GetSingletonPtr(){
+		TweakableConstants *   TweakableConstants::GetSingletonPtr(){
 			return msSingleton;
 		}
-		void CTweakableConstants::AddSourceFile(StorageLocation ineStorageLocation, const std::string & fileName, bool loadNow)
+		void TweakableConstants::AddSourceFile(StorageLocation ineStorageLocation, const std::string & fileName, bool loadNow)
         {
 			bool bAlreadyExists = false;
             
@@ -82,11 +82,11 @@ namespace ChilliSource
 			}
 			
 		}
-		void CTweakableConstants::Reload(){
+		void TweakableConstants::Reload(){
 			LoadValues();
 		}
 		
-		float CTweakableConstants::GetFloat(const std::string & inNameSpace,const std::string & inConstName) const{
+		float TweakableConstants::GetFloat(const std::string & inNameSpace,const std::string & inConstName) const{
 			MapNamespaceToConstantsGroupCItr pConstantsGroup = mNamespaces.find(inNameSpace);
 			
 			if (pConstantsGroup != mNamespaces.end()){
@@ -100,11 +100,11 @@ namespace ChilliSource
 			
 			return FLT_MAX;
 		}
-		float CTweakableConstants::GetFloat(const std::string & constName) const{
+		float TweakableConstants::GetFloat(const std::string & constName) const{
 			return GetFloat(mBlank,constName);
 		}
 		
-		int CTweakableConstants::GetInt(const std::string & inNameSpace, const std::string & inConstName) const{
+		int TweakableConstants::GetInt(const std::string & inNameSpace, const std::string & inConstName) const{
 			MapNamespaceToConstantsGroupCItr pConstantsGroup = mNamespaces.find(inNameSpace);
 			
 			if (pConstantsGroup != mNamespaces.end()){
@@ -117,11 +117,11 @@ namespace ChilliSource
 			CS_WARNING_LOG("Request for undefined TweakConstant int in namespace: " + inNameSpace + " with name: " + inConstName);
 			return INT_MAX;
 		}
-		int CTweakableConstants::GetInt(const std::string & constName) const{
+		int TweakableConstants::GetInt(const std::string & constName) const{
 			return GetInt(mBlank,constName);
 		}
 		
-		const std::string & CTweakableConstants::GetString(const std::string & inNameSpace, const std::string & inConstName) const{
+		const std::string & TweakableConstants::GetString(const std::string & inNameSpace, const std::string & inConstName) const{
 			MapNamespaceToConstantsGroupCItr pConstantsGroup = mNamespaces.find(inNameSpace);
 			
 			if (pConstantsGroup != mNamespaces.end()){
@@ -134,11 +134,11 @@ namespace ChilliSource
 			CS_WARNING_LOG("Request for undefined TweakConstant string in namespace: " + inNameSpace + " with name: " + inConstName);
 			return mBlank;
 		}
-		const std::string & CTweakableConstants::GetString(const std::string & constName) const{
+		const std::string & TweakableConstants::GetString(const std::string & constName) const{
 			return GetString(mBlank,constName);
 		}
 		
-		bool CTweakableConstants::GetBool(const std::string & inNameSpace, const std::string & inConstName) const{
+		bool TweakableConstants::GetBool(const std::string & inNameSpace, const std::string & inConstName) const{
 			
 			MapNamespaceToConstantsGroupCItr pConstantsGroup = mNamespaces.find(inNameSpace);
 			
@@ -152,10 +152,10 @@ namespace ChilliSource
 			CS_WARNING_LOG("Request for undefined TweakConstant boolean in namespace: " + inNameSpace + " with name: " + inConstName);
 			return false;
 		} 
-		bool CTweakableConstants::GetBool(const std::string & constName) const{
+		bool TweakableConstants::GetBool(const std::string & constName) const{
 			return GetBool(mBlank,constName);
 		}
-		f32 CTweakableConstants::SampleCurve(const std::string & inNameSpace, const std::string & inCurveName, f32 infXValue) const{
+		f32 TweakableConstants::SampleCurve(const std::string & inNameSpace, const std::string & inCurveName, f32 infXValue) const{
 			
 			MapNamespaceToConstantsGroupCItr pConstantsGroup = mNamespaces.find(inNameSpace);
 			
@@ -170,10 +170,10 @@ namespace ChilliSource
 			return FLT_MAX;
 			
 		}
-		f32 CTweakableConstants::SampleCurve(const std::string & inCurveName, f32 infXValue) const{
+		f32 TweakableConstants::SampleCurve(const std::string & inCurveName, f32 infXValue) const{
 			return SampleCurve(mBlank,inCurveName,infXValue);
 		}
-		void CTweakableConstants::LoadValues(){
+		void TweakableConstants::LoadValues(){
 			
 			mNamespaces.clear();
 			
@@ -187,7 +187,7 @@ namespace ChilliSource
 			
 		}
 		
-		void CTweakableConstants::LoadFile(StorageLocation ineStorageLocation, const std::string & fileName){
+		void TweakableConstants::LoadFile(StorageLocation ineStorageLocation, const std::string & fileName){
 			TiXmlDocument Document;
 			Document.LoadFile(ineStorageLocation, fileName);
 			
@@ -205,7 +205,7 @@ namespace ChilliSource
 			}
 		}
 		
-		void CTweakableConstants::ParseFileElement(TiXmlElement * inpElement, const std::string & inCurrentNamespace){
+		void TweakableConstants::ParseFileElement(TiXmlElement * inpElement, const std::string & inCurrentNamespace){
 			const char * pName = inpElement->Attribute("name");
 			const char * pValue = inpElement->Attribute("value");
 			
@@ -267,7 +267,7 @@ namespace ChilliSource
 			}
 		}
 		
-		CTweakableConstants * CTweakableConstants::msSingleton = 0;
+		TweakableConstants * TweakableConstants::msSingleton = 0;
 	}
 	
 }

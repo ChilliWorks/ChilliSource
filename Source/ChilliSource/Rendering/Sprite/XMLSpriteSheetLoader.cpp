@@ -36,7 +36,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		bool XMLSpriteSheetLoader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IResourceProvider::InterfaceID;
+			return inInterfaceID == ResourceProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource of Kind
@@ -67,7 +67,7 @@ namespace ChilliSource
 		/// @param Out: Resource object
 		/// @return Whether the resource loaded
 		//----------------------------------------------------------------------------
-		bool XMLSpriteSheetLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool XMLSpriteSheetLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
 		{
 			using namespace Core;
             

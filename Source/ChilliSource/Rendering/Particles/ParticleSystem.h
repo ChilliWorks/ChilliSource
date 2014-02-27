@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class ParticleSystem : public Core::ISystem, public Core::IUpdateable, public Core::IComponentProducer
+		class ParticleSystem : public Core::System, public Core::IUpdateable, public Core::IComponentProducer
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(ParticleSystem);
@@ -71,13 +71,13 @@ namespace ChilliSource
 			///
 			/// @return Particle component factory
 			//-------------------------------------------
-			Core::IComponentFactory* GetComponentFactoryPtr(u32 inudwIndex) override;
+			Core::ComponentFactory* GetComponentFactoryPtr(u32 inudwIndex) override;
 			//-------------------------------------------
 			/// Get Component Factory  
 			///
 			/// @return Particle component factory
 			//-------------------------------------------
-			Core::IComponentFactory& GetComponentFactory(u32 inudwIndex) override;
+			Core::ComponentFactory& GetComponentFactory(u32 inudwIndex) override;
             //-------------------------------------------
 			/// Get Emitter Factory
 			///

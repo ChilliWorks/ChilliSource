@@ -24,17 +24,17 @@ namespace ChilliSource
         {
 			mCameraViewProj = Renderer::matViewProjCache;
             
-            CMatrix4x4 matViewTrans;
-            CMatrix4x4 matWorld;
+            Matrix4x4 matViewTrans;
+            Matrix4x4 matWorld;
             
             for(u32 i = 0; i < inpRenderable->size(); ++i)
             {
-                Core::CMatrix4x4 matLocalTrans;
+                Core::Matrix4x4 matLocalTrans;
                 matLocalTrans.SetTranslation((*inpRenderable)[i]->GetAABB().GetOrigin() - (*inpRenderable)[i]->GetEntityOwner()->Transform().GetWorldPosition());
                 
-                Core::CMatrix4x4::Multiply(&((*inpRenderable)[i]->GetTransformationMatrix()), &matLocalTrans, &matWorld);
+                Core::Matrix4x4::Multiply(&((*inpRenderable)[i]->GetTransformationMatrix()), &matLocalTrans, &matWorld);
                 
-                Core::CMatrix4x4::Multiply(&matWorld, &mCameraViewProj, &matViewTrans);
+                Core::Matrix4x4::Multiply(&matWorld, &mCameraViewProj, &matViewTrans);
                 (*inpRenderable)[i]->SetSortValue(matViewTrans.GetTranslation().z);
             }
 		}

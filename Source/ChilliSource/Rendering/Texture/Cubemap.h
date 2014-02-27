@@ -18,7 +18,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class Cubemap : public Core::IResource
+		class Cubemap : public Core::Resource
 		{
 		public:
 			

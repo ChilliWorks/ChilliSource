@@ -28,11 +28,11 @@ namespace ChilliSource
 		/// Responsible for updating, culling and scene
 		/// hierarchy.
 		//--------------------------------------------------------------------------------------------------
-		class CScene
+		class Scene
 		{
 		public:
-			CScene(Input::InputSystem* inpInputSystem = nullptr, f32 infWorldHalfSize = 100);
-			~CScene();
+			Scene(Input::InputSystem* inpInputSystem = nullptr, f32 infWorldHalfSize = 100);
+			~Scene();
 
 			//-------------------------------------------------------
 			/// Add Entity
@@ -41,7 +41,7 @@ namespace ChilliSource
 			///
 			/// @param Entity pointer
 			//-------------------------------------------------------
-			void AddEntity(const EntityPtr& inpEntity);
+			void AddEntity(const EntitySPtr& inpEntity);
 			//-------------------------------------------------------
 			/// Get Entity List
 			///
@@ -68,7 +68,7 @@ namespace ChilliSource
 			///
 			/// @return A reference to the octree that manages the spatial relationship of the scene nodes
 			//--------------------------------------------------------------------------------------------------
-			//const COctree& GetSpatialGraph() const;
+			//const Octree& GetSpatialGraph() const;
 			
 			//==================================================================================================
 			// SCENE QUERYING
@@ -81,7 +81,7 @@ namespace ChilliSource
 			/// @param Ray to check intersection
 			/// @param A handle to a container to fill with intersecting components
 			//--------------------------------------------------------------------------------------------------
-			void QuerySceneForIntersection(const Core::Ray &inRay, std::vector<IVolumeComponent*> &outIntersectComponents, bool mbIsDepthSorted = false, u32 inudwQueryMask = 0);
+			void QuerySceneForIntersection(const Core::Ray &inRay, std::vector<VolumeComponent*> &outIntersectComponents, bool mbIsDepthSorted = false, u32 inudwQueryMask = 0);
 			//--------------------------------------------------------------------------------------------------
 			/// Query Scene For Components
 			///
@@ -202,7 +202,7 @@ namespace ChilliSource
 			///
 			/// @param Entity pointer
 			//-------------------------------------------------------
-			void RemoveEntity(const EntityPtr& inpEntity);
+			void RemoveEntity(const EntitySPtr& inpEntity);
             //-------------------------------------------------------
 			/// Remove All Entities
 			///
@@ -212,13 +212,13 @@ namespace ChilliSource
             
 		protected:
 			
-			//COctree mSpatialGraph;				//Scene culling tree
+			//Octree mSpatialGraph;				//Scene culling tree
 			
 			GUI::Window* mpRootWindow;        //Main window for attaching UI components
 			
 			SharedEntityList mEntities;
             
-            friend class CEntity;
+            friend class Entity;
 		};		
 	}
 }

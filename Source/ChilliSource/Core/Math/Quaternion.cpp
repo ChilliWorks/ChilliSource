@@ -4,28 +4,28 @@
 
 using namespace ChilliSource::Core;
 
-const CQuaternion CQuaternion::IDENTITY(0,0,0,1);
-const CQuaternion CQuaternion::ZERO(0,0,0,0);
+const Quaternion Quaternion::IDENTITY(0,0,0,1);
+const Quaternion Quaternion::ZERO(0,0,0,0);
 
-CQuaternion::CQuaternion()
+Quaternion::Quaternion()
 :x(0),y(0),z(0),w(1)
 {
 	
 }
 
-CQuaternion::CQuaternion(const f32 _x, const f32 _y, const f32 _z, const f32 _w)
+Quaternion::Quaternion(const f32 _x, const f32 _y, const f32 _z, const f32 _w)
 :w(_w),x(_x),y(_y),z(_z)
 {
 }
 
-CQuaternion::CQuaternion(const CVector3 & V, f32 theta)
+Quaternion::Quaternion(const Vector3 & V, f32 theta)
 {
 	SetAxisAngle(V,theta);
 }
 //-----------------------------------------------------------------------
-CQuaternion::CQuaternion(const CVector3& xaxis, const CVector3& yaxis, const CVector3& zaxis)
+Quaternion::Quaternion(const Vector3& xaxis, const Vector3& yaxis, const Vector3& zaxis)
 {
-	CMatrix4x4 matRot;
+	Matrix4x4 matRot;
 	
 	matRot.m[0] = xaxis.x;
 	matRot.m[1] = xaxis.y;
@@ -39,9 +39,9 @@ CQuaternion::CQuaternion(const CVector3& xaxis, const CVector3& yaxis, const CVe
 	matRot.m[9] = zaxis.y;
 	matRot.m[10] = zaxis.z;
 	
-	(*this) = CQuaternion(matRot);
+	(*this) = Quaternion(matRot);
 }
-f32 CQuaternion::GetAngle() const {
+f32 Quaternion::GetAngle() const {
 	f32 fSqrLength = (x * x + y * y + z * z);
 
 	if (fSqrLength > 0){
@@ -50,20 +50,20 @@ f32 CQuaternion::GetAngle() const {
 
 	return 0.0f;
 }
-CVector3 CQuaternion::GetAxis() const {
+Vector3 Quaternion::GetAxis() const {
 	f32 fSqrLength = (x * x + y * y + z * z);
 
 	if (fSqrLength > 0){
 		f32 fInvLength = 1.0f / std::sqrt(fSqrLength);
-		return CVector3(x * fInvLength, y * fInvLength, z * fInvLength);
+		return Vector3(x * fInvLength, y * fInvLength, z * fInvLength);
 	} else {
-		return CVector3::X_UNIT_POSITIVE;
+		return Vector3::X_UNIT_POSITIVE;
 	}
 }
 
-void CQuaternion::ToEulerAxes (CVector3& xaxis, CVector3& yaxis, CVector3& zaxis) const
+void Quaternion::ToEulerAxes (Vector3& xaxis, Vector3& yaxis, Vector3& zaxis) const
 {
-	CMatrix4x4 matRot;
+	Matrix4x4 matRot;
 	
 	ToRotationMatrix(matRot);
 	
@@ -79,7 +79,7 @@ void CQuaternion::ToEulerAxes (CVector3& xaxis, CVector3& yaxis, CVector3& zaxis
 	zaxis.y = matRot(2, 1);
 	zaxis.z = matRot(2, 2);
 }
-CQuaternion::CQuaternion(const CMatrix4x4& inMat)
+Quaternion::Quaternion(const Matrix4x4& inMat)
 {
 	// Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
 	// article "Quaternion Calculus and Fast Animation".
@@ -119,9 +119,9 @@ CQuaternion::CQuaternion(const CMatrix4x4& inMat)
 		*apkQuat[k] = (inMat(k,i)+inMat(i,k))*fRoot;
 	}
 }
-void CQuaternion::SetAxisAngle(const CVector3 &V, f32 theta)
+void Quaternion::SetAxisAngle(const Vector3 &V, f32 theta)
 {
-	CVector3 Vnorm = V.NormalisedCopy();
+	Vector3 Vnorm = V.NormalisedCopy();
 
 	f32 fHalfAngle = theta/2.0f;
 	f32 fSinAngle = (f32)sin(fHalfAngle);
@@ -130,7 +130,7 @@ void CQuaternion::SetAxisAngle(const CVector3 &V, f32 theta)
 	z = Vnorm.z * fSinAngle;
 	w = (f32)cos(fHalfAngle);
 }
-void CQuaternion::SetAxisAngle(f32 infX, f32 infY, f32 infZ, f32 theta)
+void Quaternion::SetAxisAngle(f32 infX, f32 infY, f32 infZ, f32 theta)
 {
 	f32 fHalfAngle = theta/2.0f;
 	f32 fSinAngle = (f32)sin(fHalfAngle);
@@ -140,9 +140,9 @@ void CQuaternion::SetAxisAngle(f32 infX, f32 infY, f32 infZ, f32 theta)
 	w = (f32)cos(fHalfAngle);
 }
 
-CQuaternion CQuaternion::Slerp(const CQuaternion &q1, const CQuaternion &q2, float t, bool inbShortestPath) 
+Quaternion Quaternion::Slerp(const Quaternion &q1, const Quaternion &q2, float t, bool inbShortestPath) 
 {
-	CQuaternion result, _q2 = q2;
+	Quaternion result, _q2 = q2;
 	
 	float cosOmega = q1.w*q2.w + q1.x*q2.x + q1.y*q2.y + q1.z*q2.z;
 	
@@ -184,10 +184,10 @@ CQuaternion CQuaternion::Slerp(const CQuaternion &q1, const CQuaternion &q2, flo
 	return result;
 }
 
-CQuaternion CQuaternion::NLerp(const ChilliSource::Core::CQuaternion &q1, const ChilliSource::Core::CQuaternion &q2, float t, bool inbShortestPath)
+Quaternion Quaternion::NLerp(const ChilliSource::Core::Quaternion &q1, const ChilliSource::Core::Quaternion &q2, float t, bool inbShortestPath)
 {
     const f32 fDot = q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.x * q2.x + q1.w * q2.w;
-    CQuaternion rVal;
+    Quaternion rVal;
     if(fDot < 0.0f && inbShortestPath)
         rVal = q1 + (t * ((q2 * -1.0f) - q1));
     else
@@ -197,21 +197,21 @@ CQuaternion CQuaternion::NLerp(const ChilliSource::Core::CQuaternion &q1, const 
     return rVal;
 }
 
-CQuaternion::~CQuaternion()
+Quaternion::~Quaternion()
 {
 }
 
-f32 CQuaternion::Modulus() const
+f32 Quaternion::Modulus() const
 {
     return sqrtf(w * w + x * x + y * y + z * z);
 }
 
-f32 CQuaternion::ModulusSquared() const
+f32 Quaternion::ModulusSquared() const
 {
     return (w * w + x * x + y * y + z * z);
 }
 
-CQuaternion & CQuaternion::NormaliseSelf()
+Quaternion & Quaternion::NormaliseSelf()
 {
 	f32 s = 1.0f / Modulus();
 	w *= s;
@@ -222,9 +222,9 @@ CQuaternion & CQuaternion::NormaliseSelf()
 	return *this;
 }
 
-CQuaternion CQuaternion::Conjugate() const
+Quaternion Quaternion::Conjugate() const
 {
-	CQuaternion quat;
+	Quaternion quat;
 	quat.x = -x;
 	quat.y = -y;
 	quat.z = -z;
@@ -232,12 +232,12 @@ CQuaternion CQuaternion::Conjugate() const
 	return quat;
 }
 
-CQuaternion CQuaternion::Inverse() const
+Quaternion Quaternion::Inverse() const
 {
     return Conjugate() / ModulusSquared();
 }
 
-void CQuaternion::ToRotationMatrix(CMatrix4x4 & inMatrix) const
+void Quaternion::ToRotationMatrix(Matrix4x4 & inMatrix) const
 {
 	f32 x2 = x * x;
 	f32 y2 = y * y;
@@ -249,7 +249,7 @@ void CQuaternion::ToRotationMatrix(CMatrix4x4 & inMatrix) const
 	f32 wy = w * y;
 	f32 wz = w * z;
 	
-	inMatrix = CMatrix4x4
+	inMatrix = Matrix4x4
 	( 
 	 1.0f - 2.0f * (y2 + z2),	2.0f * (xy + wz),			2.0f * (xz - wy),			0.0f,
 	 2.0f * (xy - wz),			1.0f - 2.0f * (x2 + z2),	2.0f * (yz + wx),			0.0f,
@@ -258,10 +258,10 @@ void CQuaternion::ToRotationMatrix(CMatrix4x4 & inMatrix) const
 	 );
 }
 
-CMatrix4x4 CQuaternion::ToRotationMatrix4x4() const
+Matrix4x4 Quaternion::ToRotationMatrix4x4() const
 {
 
-	CMatrix4x4 Result;
+	Matrix4x4 Result;
 	this->ToRotationMatrix(Result);
 
 	return Result;

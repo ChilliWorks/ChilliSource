@@ -39,7 +39,7 @@ namespace ChilliSource
         {
             mAudioComponentCache.reserve(mudwCapacity);
             
-            mpAudioComponentFactory = (AudioComponentFactory*)Core::CComponentFactoryDispenser::GetSingletonPtr()->GetFactoryProducing(AudioComponent::InterfaceID);
+            mpAudioComponentFactory = (AudioComponentFactory*)Core::ComponentFactoryDispenser::GetSingletonPtr()->GetFactoryProducing(AudioComponent::InterfaceID);
             
             for(u32 udwComp = 0; udwComp < mudwCapacity; ++udwComp)
             {
@@ -59,7 +59,7 @@ namespace ChilliSource
             {
                 if(!mpAudioManager)
                 {
-                    mpAudioManager = (AudioManager*)Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(AudioResource::InterfaceID);
+                    mpAudioManager = (AudioManager*)Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(AudioResource::InterfaceID);
                 }
                 
                 AudioResourceSPtr pResource = mpAudioManager->GetSoundFromFile(ineStorageLocation, instrEffect);
@@ -81,7 +81,7 @@ namespace ChilliSource
             {
                 if(!mpAudioManager)
                 {
-                    mpAudioManager = (AudioManager*)Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(AudioResource::InterfaceID);
+                    mpAudioManager = (AudioManager*)Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(AudioResource::InterfaceID);
                 }
                 
                 // Make sure our effect is stopped

@@ -29,7 +29,7 @@ namespace ChilliSource
 		//===============================================
 		struct InverseBindPose
 		{
-			std::vector<ChilliSource::Core::CMatrix4x4> mInverseBindPoseMatrices;
+			std::vector<ChilliSource::Core::Matrix4x4> mInverseBindPoseMatrices;
 		};
 		typedef std::shared_ptr<InverseBindPose> InverseBindPosePtr;
 		
@@ -127,7 +127,7 @@ namespace ChilliSource
 			/// @param the minimum bounds.
 			/// @param the maximum bounds.
 			//-----------------------------------------------------------------
-			void Build(void* inpVertexData, void*inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Core::CVector3 invMin, Core::CVector3 invMax);
+			void Build(void* inpVertexData, void*inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Core::Vector3 invMin, Core::Vector3 invMax);
 			//-----------------------------------------------------------------
 			/// Set Default Material Name
 			/// 
@@ -155,7 +155,7 @@ namespace ChilliSource
 			/// @param the render system.
 			/// @param World transform matrix
 			//-----------------------------------------------------------------
-			void Render(RenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const MaterialSPtr& inpMaterial, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const;
+			void Render(RenderSystem* inpRenderSystem, const Core::Matrix4x4 &inmatWorld, const MaterialSPtr& inpMaterial, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const;
 			
 			//Only model loaders can alter the mesh construct
 			friend class MeshManager;

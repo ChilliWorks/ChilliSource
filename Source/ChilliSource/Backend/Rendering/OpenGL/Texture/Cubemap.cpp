@@ -28,27 +28,27 @@ namespace ChilliSource
             /// @param MoFlow image format
             /// @return GL image format
             //--------------------------------------------------
-            GLenum FormatConverter(Core::CImage::Format ineFormat)
+            GLenum FormatConverter(Core::Image::Format ineFormat)
             {
                 switch(ineFormat)
                 {
                     default:
-                    case Core::CImage::Format::k_RGBA8888:
+                    case Core::Image::Format::k_RGBA8888:
                         return GL_RGBA;
                         break;
-                    case Core::CImage::Format::k_RGB888:
+                    case Core::Image::Format::k_RGB888:
                         return GL_RGB;
                         break;
-                    case Core::CImage::Format::k_RGBA4444:
+                    case Core::Image::Format::k_RGBA4444:
                         return GL_RGBA;
                         break;
-                    case Core::CImage::Format::k_RGB565:
+                    case Core::Image::Format::k_RGB565:
                         return GL_RGB;
                         break;
-                    case Core::CImage::Format::k_LumA88:
+                    case Core::Image::Format::k_LumA88:
                         return GL_LUMINANCE_ALPHA;
                         break;
-                    case Core::CImage::Format::k_Lum8:
+                    case Core::Image::Format::k_Lum8:
                         return GL_LUMINANCE;
                         break;
                 };
@@ -59,27 +59,27 @@ namespace ChilliSource
             /// @param MoFlow image format
             /// @return GL image type
             //--------------------------------------------------
-            GLenum TypeConverter(Core::CImage::Format ineFormat)
+            GLenum TypeConverter(Core::Image::Format ineFormat)
             {
                 switch(ineFormat)
                 {
                     default:
-                    case Core::CImage::Format::k_RGBA8888:
+                    case Core::Image::Format::k_RGBA8888:
                         return GL_UNSIGNED_BYTE;
                         break;
-                    case Core::CImage::Format::k_RGB888:
+                    case Core::Image::Format::k_RGB888:
                         return GL_UNSIGNED_BYTE;
                         break;
-                    case Core::CImage::Format::k_RGBA4444:
+                    case Core::Image::Format::k_RGBA4444:
                         return GL_UNSIGNED_SHORT_4_4_4_4;
                         break;
-                    case Core::CImage::Format::k_RGB565:
+                    case Core::Image::Format::k_RGB565:
                         return GL_UNSIGNED_SHORT_5_6_5;
                         break;
-                    case Core::CImage::Format::k_LumA88:
+                    case Core::Image::Format::k_LumA88:
                         return GL_UNSIGNED_BYTE;
                         break;
-                    case Core::CImage::Format::k_Lum8:
+                    case Core::Image::Format::k_Lum8:
                         return GL_UNSIGNED_BYTE;
                         break;
                 };
@@ -89,11 +89,11 @@ namespace ChilliSource
             ///
             /// @param Array of 6 images
             //--------------------------------------------------
-            void CubemapImage2D(const std::vector<Core::ResourcePtr>& inapSourceImages)
+            void CubemapImage2D(const std::vector<Core::ResourceSPtr>& inapSourceImages)
             {
                 for(u32 i=0; i<6; ++i)
                 {
-                    Core::CImage* pSourceImage = (Core::CImage*)inapSourceImages[i].get();
+                    Core::Image* pSourceImage = (Core::Image*)inapSourceImages[i].get();
                     glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, FormatConverter(pSourceImage->GetFormat()), pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0,
                                  FormatConverter(pSourceImage->GetFormat()), TypeConverter(pSourceImage->GetFormat()), pSourceImage->GetData());
                 }
@@ -104,11 +104,11 @@ namespace ChilliSource
             /// @param Format
             /// @param Array of 6 images
             //--------------------------------------------------
-            void CubemapCompressedImage2D(GLenum inFormat, const std::vector<Core::ResourcePtr>& inapSourceImages)
+            void CubemapCompressedImage2D(GLenum inFormat, const std::vector<Core::ResourceSPtr>& inapSourceImages)
             {
                 for(u32 i=0; i<6; ++i)
                 {
-                    Core::CImage* pSourceImage = (Core::CImage*)inapSourceImages[i].get();
+                    Core::Image* pSourceImage = (Core::Image*)inapSourceImages[i].get();
                     glCompressedTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, inFormat, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, pSourceImage->GetDataLength(), pSourceImage->GetData());
                 }
             }
@@ -121,7 +121,7 @@ namespace ChilliSource
         :mpCubemapManager(inpManager),
         meSFilter(Rendering::Texture::Filter::k_linear), meTFilter(Rendering::Texture::Filter::k_linear),
         meSWrapMode(Rendering::Texture::WrapMode::k_clamp), meTWrapMode(Rendering::Texture::WrapMode::k_clamp),
-        mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), meImageFormat(Core::CImage::Format::k_RGBA8888),
+        mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), meImageFormat(Core::Image::Format::k_RGBA8888),
         mpRenderCapabilities(nullptr)
         {
             mpRenderCapabilities = Core::Application::GetSystemImplementing<Rendering::RenderCapabilities>();
@@ -129,7 +129,7 @@ namespace ChilliSource
 		//--------------------------------------------------
 		/// Init
 		//--------------------------------------------------
-		void CCubemap::Init(const std::vector<Core::ResourcePtr>& inapSourceImages, bool inbWithMipsMaps)
+		void CCubemap::Init(const std::vector<Core::ResourceSPtr>& inapSourceImages, bool inbWithMipsMaps)
 		{
             CS_ASSERT(inapSourceImages.size() == 6, "Cubemaps must have 6 face textures");
             
@@ -141,7 +141,7 @@ namespace ChilliSource
             
             UpdateTextureParameters();
 
-            Core::CImage* pSourceImage = (Core::CImage*)inapSourceImages[0].get();
+            Core::Image* pSourceImage = (Core::Image*)inapSourceImages[0].get();
             meImageFormat = pSourceImage->GetFormat();
             
             switch(pSourceImage->GetCompression())
@@ -162,10 +162,10 @@ namespace ChilliSource
                     switch(pSourceImage->GetFormat())
                     {
                         default:
-                        case Core::CImage::Format::k_RGBA8888:
+                        case Core::Image::Format::k_RGBA8888:
                             CubemapCompressedImage2D(GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG, inapSourceImages);
                             break;
-                        case Core::CImage::Format::k_RGB888:
+                        case Core::Image::Format::k_RGB888:
                             CubemapCompressedImage2D(GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG, inapSourceImages);                            
                             break;
                     };
@@ -178,10 +178,10 @@ namespace ChilliSource
                     switch(pSourceImage->GetFormat())
                     {
                         default:
-                        case Core::CImage::Format::k_RGBA8888:
+                        case Core::Image::Format::k_RGBA8888:
                             CubemapCompressedImage2D(GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG, inapSourceImages);
                             break;
-                        case Core::CImage::Format::k_RGB888:
+                        case Core::Image::Format::k_RGB888:
                             CubemapCompressedImage2D(GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG, inapSourceImages);
                             break;
                     };
@@ -347,7 +347,7 @@ namespace ChilliSource
         //--------------------------------------------------
         /// Get Image Format
         //--------------------------------------------------
-        Core::CImage::Format CCubemap::GetImageFormat() const
+        Core::Image::Format CCubemap::GetImageFormat() const
         {
             return meImageFormat;
         }

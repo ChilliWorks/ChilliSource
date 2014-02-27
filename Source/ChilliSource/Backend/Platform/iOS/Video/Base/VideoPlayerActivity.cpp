@@ -101,7 +101,7 @@ namespace ChilliSource
         /// @param Whether to allow dismissing of the video
         /// @param Background colour
         //--------------------------------------------------------------
-        void CVideoPlayerActivity::Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour)
+        void CVideoPlayerActivity::Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour)
         {
             mBackgroundColour = inBackgroundColour;
             
@@ -133,7 +133,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         void CVideoPlayerActivity::PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
                                                         Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
-                                                        bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour)
+                                                        bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour)
         {
             //setup the subtitles
             meSubtitlesLocation = ineSubtitlesLocation;
@@ -260,9 +260,9 @@ namespace ChilliSource
         /// @return the dimensions of the video as displayed on screen
         /// minus the black borders.
         //--------------------------------------------------------------
-        Core::CVector2 CVideoPlayerActivity::GetVideoDimensions()
+        Core::Vector2 CVideoPlayerActivity::GetVideoDimensions()
         {
-            return Core::CVector2(mpMoviePlayerController.naturalSize.width, mpMoviePlayerController.naturalSize.height);
+            return Core::Vector2(mpMoviePlayerController.naturalSize.width, mpMoviePlayerController.naturalSize.height);
         }
         //---------------------------------------------------------------
         /// On Tapped

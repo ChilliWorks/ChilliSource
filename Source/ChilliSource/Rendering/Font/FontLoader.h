@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class FontLoader : public Core::IResourceProvider
+		class FontLoader : public Core::ResourceProvider
 		{
 		public:
 
@@ -61,7 +61,7 @@ namespace ChilliSource
 			/// @param Out: Resource object
 			/// @return Whether the resource was created successfully
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string& inFilePath, Core::ResourcePtr& outpResource) override;
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string& inFilePath, Core::ResourceSPtr& outpResource) override;
             //----------------------------------------------------------------------------
 			/// Has Kerning Info
 			///

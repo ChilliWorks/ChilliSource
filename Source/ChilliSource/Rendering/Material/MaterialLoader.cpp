@@ -46,7 +46,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		bool MaterialLoader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IResourceProvider::InterfaceID;
+			return inInterfaceID == ResourceProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource of Kind
@@ -65,7 +65,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Create Resource From File
 		//----------------------------------------------------------------------------
-		bool MaterialLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool MaterialLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)  
 		{
             std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > > aShaderFiles;
             std::vector<TextureDesc> aTextureFiles;
@@ -92,7 +92,7 @@ namespace ChilliSource
                 {
                     for(u32 i=0; i<aTextureFiles.size(); ++i)
                     {
-                        pMaterial->AddTexture(pTextureManager->GetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::CImage::Format::k_default, aTextureFiles[i].mbMipMapped));
+                        pMaterial->AddTexture(pTextureManager->GetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::Image::Format::k_default, aTextureFiles[i].mbMipMapped));
                     }
                 }
                 
@@ -101,7 +101,7 @@ namespace ChilliSource
                 {
                     for(u32 i=0; i<aCubemapFiles.size(); ++i)
                     {
-                        pMaterial->SetCubemap(pCubemapManager->GetCubemapFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile, Core::CImage::Format::k_default, aCubemapFiles[i].mbMipMapped));
+                        pMaterial->SetCubemap(pCubemapManager->GetCubemapFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile, Core::Image::Format::k_default, aCubemapFiles[i].mbMipMapped));
                     }
                 }
                 
@@ -115,10 +115,10 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Async Create Resource From File
 		//----------------------------------------------------------------------------
-		bool MaterialLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool MaterialLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)  
 		{
 			//Start the material building task.
-			Core::Task<Core::StorageLocation, const std::string&, Core::ResourcePtr&> BuildMaterialTask(this, &MaterialLoader::BuildMaterialTask, ineStorageLocation, inFilePath, outpResource);
+			Core::Task<Core::StorageLocation, const std::string&, Core::ResourceSPtr&> BuildMaterialTask(this, &MaterialLoader::BuildMaterialTask, ineStorageLocation, inFilePath, outpResource);
 			Core::CTaskScheduler::ScheduleTask(BuildMaterialTask);
 			
 			return true;
@@ -126,7 +126,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Build Material Task
 		//----------------------------------------------------------------------------
-		void MaterialLoader::BuildMaterialTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		void MaterialLoader::BuildMaterialTask(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
 		{
 			//build the material
             std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > > aShaderFiles;
@@ -152,7 +152,7 @@ namespace ChilliSource
                 {
                     for(u32 i=0; i<aTextureFiles.size(); ++i)
                     {
-                        TextureSPtr pTexture = pTextureManager->AsyncGetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::CImage::Format::k_default, aTextureFiles[i].mbMipMapped);
+                        TextureSPtr pTexture = pTextureManager->AsyncGetTextureFromFile(aTextureFiles[i].meLocation, aTextureFiles[i].mstrFile, Core::Image::Format::k_default, aTextureFiles[i].mbMipMapped);
                         pMaterial->AddTexture(pTexture);
                         pTexture->WaitTilLoaded();
                     }
@@ -163,7 +163,7 @@ namespace ChilliSource
                 {
                     for(u32 i=0; i<aCubemapFiles.size(); ++i)
                     {
-                        CubemapSPtr pCubemap = pCubemapManager->AsyncGetCubemapFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile, Core::CImage::Format::k_default, aCubemapFiles[i].mbMipMapped);
+                        CubemapSPtr pCubemap = pCubemapManager->AsyncGetCubemapFromFile(aCubemapFiles[i].meLocation, aCubemapFiles[i].mstrFile, Core::Image::Format::k_default, aCubemapFiles[i].mbMipMapped);
                         pMaterial->SetCubemap(pCubemap);
                         pCubemap->WaitTilLoaded();
                     }
@@ -171,13 +171,13 @@ namespace ChilliSource
                 
                 pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
                 
-                Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<Core::ResourcePtr&>(this, &MaterialLoader::SetLoadedTask, outpResource));
+                Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<Core::ResourceSPtr&>(this, &MaterialLoader::SetLoadedTask, outpResource));
 			}
 		}
 		//----------------------------------------------------------------------------
 		/// Set Loaded Task
 		//----------------------------------------------------------------------------
-		void MaterialLoader::SetLoadedTask(Core::ResourcePtr& outpResource)
+		void MaterialLoader::SetLoadedTask(Core::ResourceSPtr& outpResource)
 		{
 			outpResource->SetLoaded(true);
 		}
@@ -188,7 +188,7 @@ namespace ChilliSource
                                                     std::vector<std::pair<ShaderPass, std::pair<Core::StorageLocation, std::string> > >& outaShaderFiles,
                                                     std::vector<TextureDesc>& outaTextureFiles,
                                                     std::vector<TextureDesc>& outaCubemapFiles,
-                                                    Core::ResourcePtr& outpResource)
+                                                    Core::ResourceSPtr& outpResource)
 		{
             const u32 kudwNumShaderNodes = 3;
             const std::pair<std::string, ShaderPass> kaShaderNodes[kudwNumShaderNodes] =
@@ -277,25 +277,25 @@ namespace ChilliSource
 					TiXmlElement * pEmissiveEl = Core::XMLUtils::FirstChildElementWithName(pLightingEl, "Emissive");
 					if(pEmissiveEl)
 					{
-						pMaterial->mEmissive = Core::XMLUtils::GetAttributeValueOrDefault<Core::CColour>(pEmissiveEl, "value", Core::CColour::WHITE);
+						pMaterial->mEmissive = Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(pEmissiveEl, "value", Core::Colour::WHITE);
 					}
                     //---Ambient Lighting
 					TiXmlElement * pAmbientEl = Core::XMLUtils::FirstChildElementWithName(pLightingEl, "Ambient");
 					if(pAmbientEl)
 					{
-						pMaterial->mAmbient = Core::XMLUtils::GetAttributeValueOrDefault<Core::CColour>(pAmbientEl, "value", Core::CColour::WHITE);
+						pMaterial->mAmbient = Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(pAmbientEl, "value", Core::Colour::WHITE);
 					}
 					//---Diffuse Lighting
 					TiXmlElement * pDiffuseEl = Core::XMLUtils::FirstChildElementWithName(pLightingEl, "Diffuse");
 					if(pDiffuseEl)
 					{
-						pMaterial->mDiffuse = Core::XMLUtils::GetAttributeValueOrDefault<Core::CColour>(pDiffuseEl, "value", Core::CColour::WHITE);
+						pMaterial->mDiffuse = Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(pDiffuseEl, "value", Core::Colour::WHITE);
 					}
 					//---Specular Lighting
 					TiXmlElement * pSpecularEl = Core::XMLUtils::FirstChildElementWithName(pLightingEl, "Specular");
 					if(pSpecularEl)
 					{
-						pMaterial->mSpecular = Core::XMLUtils::GetAttributeValueOrDefault<Core::CColour>(pSpecularEl, "value", Core::CColour::WHITE);
+						pMaterial->mSpecular = Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(pSpecularEl, "value", Core::Colour::WHITE);
 					}
 					//---Intensity
 					TiXmlElement * pShininessEl = Core::XMLUtils::FirstChildElementWithName(pLightingEl, "Shininess");
@@ -342,27 +342,27 @@ namespace ChilliSource
 						}
 						else if(strType == "Vec2")
 						{
-							pMaterial->mMapVec2ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::CVector2>(pShaderVarEl, "value", Core::CVector2::ZERO)));
+							pMaterial->mMapVec2ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector2>(pShaderVarEl, "value", Core::Vector2::ZERO)));
 						}
 						else if(strType == "Vec3")
 						{
-							pMaterial->mMapVec3ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::CVector3>(pShaderVarEl, "value", Core::CVector3::ZERO)));
+							pMaterial->mMapVec3ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector3>(pShaderVarEl, "value", Core::Vector3::ZERO)));
 						}
 						else if(strType == "Vec4")
 						{
-							pMaterial->mMapVec4ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::CVector4>(pShaderVarEl, "value", Core::CVector4::ZERO)));
+							pMaterial->mMapVec4ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Vector4>(pShaderVarEl, "value", Core::Vector4::ZERO)));
 						}
 						else if(strType == "Colour")
 						{
-							pMaterial->mMapColShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::CColour>(pShaderVarEl, "value", Core::CColour::WHITE)));
+							pMaterial->mMapColShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Colour>(pShaderVarEl, "value", Core::Colour::WHITE)));
 						}
 						else if(strType == "Matrix")
 						{
-							pMaterial->mMapMat4ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::CMatrix4x4>(pShaderVarEl, "value", Core::CMatrix4x4::IDENTITY)));
+							pMaterial->mMapMat4ShaderVars.insert(std::make_pair(strName, Core::XMLUtils::GetAttributeValueOrDefault<Core::Matrix4x4>(pShaderVarEl, "value", Core::Matrix4x4::IDENTITY)));
 						}
 						else if(strType == "MatrixArray")
 						{
-							pMaterial->mMapMat4ArrayShaderVars.insert(std::make_pair(strName, std::vector<Core::CMatrix4x4>()));
+							pMaterial->mMapMat4ArrayShaderVars.insert(std::make_pair(strName, std::vector<Core::Matrix4x4>()));
 						}
 						//Move on to the next variable
 						pShaderVarEl =  Core::XMLUtils::NextSiblingElementWithName(pShaderVarEl);

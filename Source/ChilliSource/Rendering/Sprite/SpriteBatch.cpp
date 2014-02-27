@@ -162,7 +162,7 @@ namespace ChilliSource
 #ifdef DEBUG_STATS
                 DebugStats::AddToEvent("Verts", (inudwStride*2)/3);
 #endif
-                inpRenderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Core::CMatrix4x4::IDENTITY);
+                inpRenderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Core::Matrix4x4::IDENTITY);
             }
 		}
         //------------------------------------------------------
@@ -185,7 +185,7 @@ namespace ChilliSource
 #ifdef DEBUG_STATS
                 DebugStats::AddToEvent("Verts", (mpSpriteBuffer->GetIndexCount()*2)/3);
 #endif
-                inpRenderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Core::CMatrix4x4::IDENTITY);
+                inpRenderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Core::Matrix4x4::IDENTITY);
             }
 		}
 		//------------------------------------------------------

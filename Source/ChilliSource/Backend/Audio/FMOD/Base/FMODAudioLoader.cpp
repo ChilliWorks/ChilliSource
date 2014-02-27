@@ -57,7 +57,7 @@ namespace ChilliSource
 		/// @param Out: Resource object
 		/// @return Success
 		//----------------------------------------------------------------------------
-		bool CFMODAudioLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool CFMODAudioLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)  
 		{
             std::string strFilePath;
             static_cast<iOS::CFileSystem*>(Core::Application::GetFileSystemPtr())->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
@@ -79,7 +79,7 @@ namespace ChilliSource
 		/// @param Out: Resource object
 		/// @return Success
 		//----------------------------------------------------------------------------
-		bool CFMODAudioLoader::StreamResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool CFMODAudioLoader::StreamResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
 		{
             std::string strFilePath;
             static_cast<iOS::CFileSystem*>(Core::Application::GetFileSystemPtr())->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);

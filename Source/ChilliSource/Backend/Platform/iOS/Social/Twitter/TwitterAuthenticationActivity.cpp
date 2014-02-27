@@ -96,8 +96,8 @@ namespace ChilliSource
 			if(!mpWebView)
 			{
 				Core::UnifiedVector2 vWebViewUnifiedSize = Core::UnifiedVector2(0.0f, 0.0f, mvPointSize.x, (mvPointSize.y - (kfDefaultButtonPointHeight + (kfDefaultPaddingPointSizeTop * 2))));
-				Core::CVector2 vWebAbsoluteSize = (mvPointSize * vWebViewUnifiedSize.GetRelative()) + vWebViewUnifiedSize.GetAbsolute();
-				Core::CVector2 vWebAbsolutePosition = (mvPointSize - vWebAbsoluteSize);
+				Core::Vector2 vWebAbsoluteSize = (mvPointSize * vWebViewUnifiedSize.GetRelative()) + vWebViewUnifiedSize.GetAbsolute();
+				Core::Vector2 vWebAbsolutePosition = (mvPointSize - vWebAbsoluteSize);
 				
 				//Create the view and present it, centered on screen
 				mpWebView = [[UIWebView alloc] initWithFrame:CGRectMake(vWebAbsolutePosition.x, vWebAbsolutePosition.y, vWebAbsoluteSize.x, vWebAbsoluteSize.y)];

@@ -17,6 +17,6 @@ namespace ChilliSource
 	{
 		DEFINE_NAMED_INTERFACE(IUpdateable);
 		DEFINE_NAMED_INTERFACE(IComponentProducer);
-		DEFINE_NAMED_INTERFACE(IResourceProvider);
+		DEFINE_NAMED_INTERFACE(ResourceProvider);
 	}
 }

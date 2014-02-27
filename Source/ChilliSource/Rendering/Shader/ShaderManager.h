@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class ShaderManager : public Core::IResourceManager
+		class ShaderManager : public Core::ResourceManager
 		{
 		public:
 		
@@ -87,7 +87,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -96,7 +96,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceSPtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
             //-----------------------------------------------------------------
             /// Set Render System
             ///

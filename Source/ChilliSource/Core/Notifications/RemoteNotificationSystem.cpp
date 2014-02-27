@@ -24,11 +24,11 @@ namespace ChilliSource
 {
 	namespace Core
     {
-        DEFINE_NAMED_INTERFACE(IRemoteNotificationSystem);
+        DEFINE_NAMED_INTERFACE(RemoteNotificationSystem);
         //---------------------------------------------------------------
         /// Create
         //---------------------------------------------------------------
-        IRemoteNotificationSystem* IRemoteNotificationSystem::Create()
+        RemoteNotificationSystem* RemoteNotificationSystem::Create()
         {
 #ifdef TARGET_OS_IPHONE
         	return new iOS::CRemoteNotificationSystem();
@@ -44,9 +44,9 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// Is A
         //---------------------------------------------------------------
-        bool IRemoteNotificationSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+        bool RemoteNotificationSystem::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == IRemoteNotificationSystem::InterfaceID;
+            return inInterfaceID == RemoteNotificationSystem::InterfaceID;
         }
     }
 }

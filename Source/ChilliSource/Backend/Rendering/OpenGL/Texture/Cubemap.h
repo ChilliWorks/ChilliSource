@@ -31,7 +31,7 @@ namespace ChilliSource
 			/// @param Source images (Must be 6)
 			/// @param Whether to create mip maps
 			//--------------------------------------------------
-			void Init(const std::vector<Core::ResourcePtr>& inapSourceImages, bool inbWithMipsMaps);
+			void Init(const std::vector<Core::ResourceSPtr>& inapSourceImages, bool inbWithMipsMaps);
 			//--------------------------------------------------
 			/// Is A
 			///
@@ -70,7 +70,7 @@ namespace ChilliSource
             /// @return The format of the image used to create
             ///			the texture.
             //--------------------------------------------------
-            Core::CImage::Format GetImageFormat() const;
+            Core::Image::Format GetImageFormat() const;
             //--------------------------------------------------
 			/// Set Filter
 			///
@@ -113,7 +113,7 @@ namespace ChilliSource
 			Rendering::Texture::WrapMode meSWrapMode;
 			Rendering::Texture::WrapMode meTWrapMode;
             
-            Core::CImage::Format meImageFormat;
+            Core::Image::Format meImageFormat;
             
             bool mbHasTextureFilterModeChanged;
             bool mbHasMipMaps;

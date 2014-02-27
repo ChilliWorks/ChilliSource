@@ -35,7 +35,7 @@ namespace ChilliSource
 			/// @param Out: Cubemap resource
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateCubemapFromImages(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapSPtr& outpCubemap);
+			bool CreateCubemapFromImages(const std::vector<Core::ResourceSPtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapSPtr& outpCubemap);
 			//----------------------------------------------------------------
 			/// Restore
 			///
@@ -63,7 +63,7 @@ namespace ChilliSource
 		private:
 #ifdef TARGET_ANDROID
 			std::vector<Rendering::CubemapWeakPtr> mapCubemapCache;
-			std::unordered_map<CCubemap*, Core::ImagePtr> mapBackedUpImages;
+			std::unordered_map<CCubemap*, Core::ImageSPtr> mapBackedUpImages;
 #endif
 		};
 	}

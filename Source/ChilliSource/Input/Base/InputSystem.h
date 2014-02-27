@@ -23,7 +23,7 @@ namespace ChilliSource
 
 	namespace Input
 	{
-		class InputSystem : public Core::ISystem, public Core::IUpdateable
+		class InputSystem : public Core::System, public Core::IUpdateable
 		{
 		public:
 			virtual ~InputSystem(){};

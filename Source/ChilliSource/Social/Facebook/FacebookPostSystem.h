@@ -35,7 +35,7 @@ namespace ChilliSource
 			void ToJSON(Json::Value& outsRoot) const;
 		};
 		
-		class IFacebookPostSystem : public ChilliSource::Core::ISystem
+		class IFacebookPostSystem : public ChilliSource::Core::System
 		{
 		public:
 			

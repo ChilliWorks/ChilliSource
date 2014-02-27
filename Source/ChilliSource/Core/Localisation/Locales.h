@@ -21,16 +21,16 @@ namespace ChilliSource
 		/// This provides some default locales to
     	/// compare against.
 		//---------------------------------------------
-        const CLocale kUnknownLocale("unknown");
-        const CLocale kEnglishLocale("en");
-        const CLocale kFrenchLocale("fr");
-        const CLocale kGermanLocale("de");
-        const CLocale kItalianLocale("it");
-        const CLocale kSpanishLocale("es");
-        const CLocale kPolishLocale("pl");
-        const CLocale kCzechLocale("cs");
-        const CLocale kRussianLocale("ru");
-        const CLocale kJapaneseLocale("jp");
+        const Locale kUnknownLocale("unknown");
+        const Locale kEnglishLocale("en");
+        const Locale kFrenchLocale("fr");
+        const Locale kGermanLocale("de");
+        const Locale kItalianLocale("it");
+        const Locale kSpanishLocale("es");
+        const Locale kPolishLocale("pl");
+        const Locale kCzechLocale("cs");
+        const Locale kRussianLocale("ru");
+        const Locale kJapaneseLocale("jp");
     }
 }
 

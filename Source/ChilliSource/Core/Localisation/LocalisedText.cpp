@@ -70,14 +70,14 @@ namespace ChilliSource
             CS_SAFE_DELETE(mpTextLookup);
             mudwLineCount = 0;
             
-			FileStreamPtr localFile = Application::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath + inFileName, FileMode::k_read);
+			FileStreamSPtr localFile = Application::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath + inFileName, FileMode::k_read);
             // Load localised text
 			if(LoadLocalisedText(localFile) == false)
             {
                 return false;
             }
             
-			FileStreamPtr idFile = Application::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath + "TagText.id", FileMode::k_read);
+			FileStreamSPtr idFile = Application::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath + "TagText.id", FileMode::k_read);
             // Load in string IDs
             if(LoadTextID(idFile) == false)
             {
@@ -94,7 +94,7 @@ namespace ChilliSource
         /// @param File object for the locale file
         /// @return Success
         //----------------------------------------------------------------------------
-        bool CLocalisedText::LoadLocalisedText(FileStreamPtr& incLocaleFile)
+        bool CLocalisedText::LoadLocalisedText(FileStreamSPtr& incLocaleFile)
         {
             //if bad, then bail!
 			if (incLocaleFile == nullptr || incLocaleFile->IsBad() == true)
@@ -242,7 +242,7 @@ namespace ChilliSource
         /// @param File object for the text ids file
         /// @return Success
         //----------------------------------------------------------------------------
-        bool CLocalisedText::LoadTextID(FileStreamPtr& incIDFile)
+        bool CLocalisedText::LoadTextID(FileStreamSPtr& incIDFile)
         {
 			if(incIDFile == nullptr || incIDFile->IsBad())
 			{

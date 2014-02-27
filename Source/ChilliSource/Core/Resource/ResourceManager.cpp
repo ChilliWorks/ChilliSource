@@ -19,7 +19,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//-----------------------------------------------------------------
-		IResourceManager::IResourceManager() : mpApplicationOwner(nullptr)
+		ResourceManager::ResourceManager() : mpApplicationOwner(nullptr)
 		{
 		}
 		//-----------------------------------------------------------------
@@ -27,7 +27,7 @@ namespace ChilliSource
 		///
 		/// @param Application
 		//-----------------------------------------------------------------
-		void IResourceManager::SetApplicationOwner(Application* inpApplication)
+		void ResourceManager::SetApplicationOwner(Application* inpApplication)
 		{
 			mpApplicationOwner = inpApplication;
 		}
@@ -36,7 +36,7 @@ namespace ChilliSource
 		///
 		/// @param Vector of the resource loaders that this manager will use
 		//-----------------------------------------------------------------
-		void IResourceManager::SetResourceProviders(const std::vector<IResourceProvider*> & inVecResourceProviders)
+		void ResourceManager::SetResourceProviders(const std::vector<ResourceProvider*> & inVecResourceProviders)
 		{
 			mResourceProviders = inVecResourceProviders;
 		}
@@ -46,7 +46,7 @@ namespace ChilliSource
 		/// @param Extension 
 		/// @return Whether the manager handles resources with extension 
 		//-----------------------------------------------------------------
-		bool IResourceManager::ManagesResourceWithExtension(const std::string &instrExtension) const
+		bool ResourceManager::ManagesResourceWithExtension(const std::string &instrExtension) const
 		{
 			for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 			{
@@ -68,13 +68,13 @@ namespace ChilliSource
 		///
 		/// @param Resource pointer
 		//-----------------------------------------------------------------
-		void IResourceManager::Release(IResource* inpResource)
+		void ResourceManager::Release(Resource* inpResource)
 		{
 			for(MapStringToResourcePtr::iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it)
 			{
 				if(it->second.get() == inpResource)
 				{
-					ResourcePtr pResource = it->second;
+					ResourceSPtr pResource = it->second;
 					CS_ASSERT((pResource.use_count() <= 2), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + pResource->GetName() + ")");
 					CS_DEBUG_LOG("Releasing resource from cache " + inpResource->GetName());
 					mMapFilenameToResource.erase(it);
@@ -90,11 +90,11 @@ namespace ChilliSource
 		/// are sharing them and a get call is issued the resource will
 		/// be loaded again. You have been warned. Use ReleseAllUnused()
 		//-----------------------------------------------------------------
-		void IResourceManager::ReleaseAll()
+		void ResourceManager::ReleaseAll()
 		{
 			for(MapStringToResourcePtr::iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it)
 			{
-				ResourcePtr pResource = it->second;
+				ResourceSPtr pResource = it->second;
 				CS_ASSERT((pResource.use_count() <= 2), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + pResource->GetName() + ")");
 				CS_DEBUG_LOG("Releasing resource from cache " + pResource->GetName());
 			}
@@ -107,7 +107,7 @@ namespace ChilliSource
 		/// Safer release method that will purge the cache of any
 		/// resources not currently in use
 		//-----------------------------------------------------------------
-		u32 IResourceManager::ReleaseAllUnused()
+		u32 ResourceManager::ReleaseAllUnused()
 		{
             u32 udwNumReleased = 0;
 			for(MapStringToResourcePtr::iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); )
@@ -135,9 +135,9 @@ namespace ChilliSource
 		/// @param file extension string
 		/// @return resource provider
 		//-----------------------------------------------------------------
-		IResourceProvider* IResourceManager::GetResourceProviderByExtension(const std::string &instrExtension)
+		ResourceProvider* ResourceManager::GetResourceProviderByExtension(const std::string &instrExtension)
 		{
-			for (std::vector<IResourceProvider*>::iterator it = mResourceProviders.begin(); it != mResourceProviders.end(); it++)
+			for (std::vector<ResourceProvider*>::iterator it = mResourceProviders.begin(); it != mResourceProviders.end(); it++)
 			{
 				if ((*it)->CanCreateResourceFromFileWithExtension(instrExtension) == true)
 				{
@@ -154,7 +154,7 @@ namespace ChilliSource
         ///
         /// @return List of current loaded resources
         //-----------------------------------------------------------------
-        std::vector<ResourceDesc> IResourceManager::GetAllLoadedResources() const
+        std::vector<ResourceDesc> ResourceManager::GetAllLoadedResources() const
         {
             std::vector<ResourceDesc> asUsedResources;
             for(MapStringToResourcePtr::const_iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it )

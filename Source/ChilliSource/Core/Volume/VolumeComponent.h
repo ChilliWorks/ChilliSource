@@ -24,12 +24,12 @@ namespace ChilliSource
         /// Any object that has a AABB, OOBB or Bounding
         /// Sphere.
         //====================================================
-        class IVolumeComponent : public Core::IComponent
+        class VolumeComponent : public Core::Component
         {
         public:
-            DECLARE_NAMED_INTERFACE(IVolumeComponent);
-            IVolumeComponent() : mfQueryIntersectionValue(0.0f){};
-            virtual ~IVolumeComponent(){}
+            DECLARE_NAMED_INTERFACE(VolumeComponent);
+            VolumeComponent() : mfQueryIntersectionValue(0.0f){};
+            virtual ~VolumeComponent(){}
 
             //----------------------------------------------------
             /// Get Axis Aligned Bounding Box

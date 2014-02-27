@@ -24,7 +24,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------
-		SpriteComponent::SpriteComponent() : mUVs(Core::CVector2(0, 0), Core::CVector2(1, 1)), mbFlippedVertical(false), mbFlippedHorizontal(false), 
+		SpriteComponent::SpriteComponent() : mUVs(Core::Vector2(0, 0), Core::Vector2(1, 1)), mbFlippedVertical(false), mbFlippedHorizontal(false), 
         mbCornerPosCacheValid(false), meAlignment(AlignmentAnchor::k_middleCentre), mbUVCacheValid(false), mbBoundingSphereValid(false), mbAABBValid(false), mbOOBBValid(false)
 		{
             mByteColourWithOpacity.r = 255;
@@ -39,7 +39,7 @@ namespace ChilliSource
 		{
 			return  (inInterfaceID == SpriteComponent::InterfaceID) || 
                     (inInterfaceID == RenderComponent::InterfaceID) ||
-                    (inInterfaceID == IVolumeComponent::InterfaceID);
+                    (inInterfaceID == VolumeComponent::InterfaceID);
 		}
 		//----------------------------------------------------
 		/// Get Axis Aligned Bounding Box
@@ -87,7 +87,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Dimensions Unfactored
 		//-----------------------------------------------------------
-		void SpriteComponent::SetDimensions(const Core::CVector2 &invDims)
+		void SpriteComponent::SetDimensions(const Core::Vector2 &invDims)
 		{
 			SetDimensions(invDims.x, invDims.y);
 		}
@@ -98,7 +98,7 @@ namespace ChilliSource
 		{
 			mbCornerPosCacheValid = false;
 			
-			mvDimensions = Core::CVector2(infWidth, infHeight);
+			mvDimensions = Core::Vector2(infWidth, infHeight);
 		}
 		//-----------------------------------------------------------
 		/// Set Width Unfactored
@@ -121,7 +121,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Get Dimensions
 		//-----------------------------------------------------------
-		const Core::CVector2& SpriteComponent::GetDimensions() const
+		const Core::Vector2& SpriteComponent::GetDimensions() const
 		{
 			return mvDimensions;
 		}
@@ -156,7 +156,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Colour
 		//-----------------------------------------------------------
-		void SpriteComponent::SetColour(const Core::CColour &inCol)
+		void SpriteComponent::SetColour(const Core::Colour &inCol)
 		{
 			mColour = inCol;
             SetColourWithOpacity(mColour);
@@ -166,13 +166,13 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void SpriteComponent::SetColour(const f32 infR, const f32 infG, const f32 infB, const f32 infA)
 		{
-			mColour = Core::CColour(infR, infG, infB, infA);
+			mColour = Core::Colour(infR, infG, infB, infA);
             SetColourWithOpacity(mColour);
 		}
 		//-----------------------------------------------------------
 		/// Get Colour
 		//-----------------------------------------------------------
-		const Core::CColour& SpriteComponent::GetColour() const
+		const Core::Colour& SpriteComponent::GetColour() const
 		{
 			return mColour;
 		}
@@ -326,7 +326,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Upper Left Corner Position
         //-----------------------------------------------------------
-		const ChilliSource::Core::CVector4 & SpriteComponent::GetUpperLeftCornerPos()
+		const ChilliSource::Core::Vector4 & SpriteComponent::GetUpperLeftCornerPos()
         {
 			if (!mbCornerPosCacheValid)
             {
@@ -338,7 +338,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Lower Left Corner Position
         //-----------------------------------------------------------
-		const ChilliSource::Core::CVector4 & SpriteComponent::GetLowerLeftCornerPos()
+		const ChilliSource::Core::Vector4 & SpriteComponent::GetLowerLeftCornerPos()
         {
 			if (!mbCornerPosCacheValid) 
             {
@@ -350,7 +350,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Upper Right Corner Position
         //-----------------------------------------------------------
-		const ChilliSource::Core::CVector4 & SpriteComponent::GetUpperRightCornerPos()
+		const ChilliSource::Core::Vector4 & SpriteComponent::GetUpperRightCornerPos()
         {
 			if (!mbCornerPosCacheValid) 
             {
@@ -362,7 +362,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Get Lower Right Corner Position
         //-----------------------------------------------------------
-		const ChilliSource::Core::CVector4 & SpriteComponent::GetLowerRightCornerPos()
+		const ChilliSource::Core::Vector4 & SpriteComponent::GetLowerRightCornerPos()
         {
 			if (!mbCornerPosCacheValid) 
             {
@@ -376,7 +376,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void SpriteComponent::OnAttachedToEntity()
 		{
-			mpEntityOwner->Transform().GetTransformChangedEvent() += Core::CTransform::TransformChangedDelegate(this, &SpriteComponent::OnTransformChanged);
+			mpEntityOwner->Transform().GetTransformChangedEvent() += Core::Transform::TransformChangedDelegate(this, &SpriteComponent::OnTransformChanged);
             
             OnTransformChanged();
 		}
@@ -385,7 +385,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void SpriteComponent::OnDetachedFromEntity()
 		{
-			mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::CTransform::TransformChangedDelegate(this, &SpriteComponent::OnTransformChanged);
+			mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::Transform::TransformChangedDelegate(this, &SpriteComponent::OnTransformChanged);
 		}
         //-----------------------------------------------------------
         /// Calculate Corner Positions
@@ -394,40 +394,40 @@ namespace ChilliSource
         {
             mmatTransformCache = mpEntityOwner->Transform().GetWorldTransform();
             
-			Core::CVector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
-			Core::CVector2 vAlignedPos;
+			Core::Vector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
+			Core::Vector2 vAlignedPos;
             Align(meAlignment, vHalfSize, vAlignedPos);
             
-            Core::CVector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
-            Core::CVector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
+            Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
+            Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topLeft]);
+            Core::Matrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topLeft]);
             
             vTemp.x = vHalfSize.x;
             vTemp.y = vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topRight]);
+            Core::Matrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_topRight]);
             
             vTemp.x = -vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_bottomLeft]);
+            Core::Matrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_bottomLeft]);
             
             vTemp.x = vHalfSize.x;
             vTemp.y = -vHalfSize.y;
 
 			vTemp += vCentrePos;
-            Core::CMatrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_bottomRight]);
+            Core::Matrix4x4::Multiply(&vTemp, &mmatTransformCache, &mavVertexPos[(u32)Verts::k_bottomRight]);
             
 			mbCornerPosCacheValid = true;
             
-            Core::CColour pCurrentColour = GetColour();
+            Core::Colour pCurrentColour = GetColour();
             
             f32 fOpacity = mpEntityOwner->Transform().GetWorldOpacity();
             
-            SetColourWithOpacity(Core::CColour(pCurrentColour.r * fOpacity,
+            SetColourWithOpacity(Core::Colour(pCurrentColour.r * fOpacity,
                                                pCurrentColour.g * fOpacity,
                                                pCurrentColour.b * fOpacity,
                                                pCurrentColour.a * fOpacity));
@@ -436,23 +436,23 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// Set Colour With Opacity
         //-----------------------------------------------------------
-        void SpriteComponent::SetColourWithOpacity(const Core::CColour &inCol)
+        void SpriteComponent::SetColourWithOpacity(const Core::Colour &inCol)
         {
             mColourWithOpacity = inCol;
-            mByteColourWithOpacity = Core::CColour::ColourToByteColour(mColourWithOpacity);
+            mByteColourWithOpacity = Core::Colour::ColourToByteColour(mColourWithOpacity);
         }
         //-----------------------------------------------------------
         /// Set Colour With Opacity
         //-----------------------------------------------------------
         void SpriteComponent::SetColourWithOpacity(const f32 infR, const f32 infG, const f32 infB, const f32 infA)
         {
-			mColourWithOpacity = Core::CColour(infR, infG, infB, infA);
-            mByteColourWithOpacity = Core::CColour::ColourToByteColour(mColourWithOpacity);
+			mColourWithOpacity = Core::Colour(infR, infG, infB, infA);
+            mByteColourWithOpacity = Core::Colour::ColourToByteColour(mColourWithOpacity);
         }
         //-----------------------------------------------------------
         /// Get Colour With Opacity
         //-----------------------------------------------------------
-        const Core::CColour& SpriteComponent::GetColourWithOpacity() const
+        const Core::Colour& SpriteComponent::GetColourWithOpacity() const
         {
             return mColourWithOpacity;
         }
@@ -460,7 +460,7 @@ namespace ChilliSource
 		{
             if(mpEntityOwner)
             {
-                mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::CTransform::TransformChangedDelegate(this, &SpriteComponent::OnTransformChanged);
+                mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::Transform::TransformChangedDelegate(this, &SpriteComponent::OnTransformChanged);
             }
 		}
 	}

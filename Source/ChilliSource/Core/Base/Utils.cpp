@@ -40,7 +40,7 @@ bool CUtils::ReadJson(ChilliSource::Core::StorageLocation ineStorageLocation, co
 
 bool CUtils::FileToString(StorageLocation ineStorageLocation, const std::string & instrPath, std::string & outstrFileContent)
 {
-    FileStreamPtr pFile = Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_read);
+    FileStreamSPtr pFile = Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_read);
     
     if(!pFile || pFile->IsOpen() == false)
     {
@@ -53,14 +53,14 @@ bool CUtils::FileToString(StorageLocation ineStorageLocation, const std::string 
     return true;
 }
 
-FileStreamPtr CUtils::StringToFile(StorageLocation ineStorageLocation, const std::string & instrPath, const std::string& instrFileOut)
+FileStreamSPtr CUtils::StringToFile(StorageLocation ineStorageLocation, const std::string & instrPath, const std::string& instrFileOut)
 {
-    FileStreamPtr pFile = Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_write);
+    FileStreamSPtr pFile = Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_write);
     
     if(!pFile || pFile->IsOpen() == false)
     {
         CS_WARNING_LOG("CUtils::StringToFile| Could not open file" + instrPath);
-        return FileStreamPtr();
+        return FileStreamSPtr();
     }
     
     pFile->Write(instrFileOut);
@@ -115,16 +115,16 @@ bool CUtils::ZlibDecompressString(const std::string &instrCompressed, std::strin
     return false;
 }
 
-CVector2 CUtils::ScaleMaintainingAspectRatio(const CVector2& invCurrentSize, const CVector2& invTargetSize, bool inbFitInside)
+Vector2 CUtils::ScaleMaintainingAspectRatio(const Vector2& invCurrentSize, const Vector2& invTargetSize, bool inbFitInside)
 {
     if(invCurrentSize == invTargetSize)
     {
         return invCurrentSize;
     }
     
-    CVector2 vResult;
+    Vector2 vResult;
     
-    CVector2 vDiff(invTargetSize.x - invCurrentSize.x, invTargetSize.y - invCurrentSize.y);
+    Vector2 vDiff(invTargetSize.x - invCurrentSize.x, invTargetSize.y - invCurrentSize.y);
 	
 	// reverse the checks below so the smallest value is picked instead
 	if(inbFitInside)

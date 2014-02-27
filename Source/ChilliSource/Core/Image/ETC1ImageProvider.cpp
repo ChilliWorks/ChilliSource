@@ -19,41 +19,41 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Is A
         //----------------------------------------------------------------
-        bool CETC1ImageProvider::IsA(Core::InterfaceIDType inInterfaceID) const
+        bool ETC1ImageProvider::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == ChilliSource::Core::IResourceProvider::InterfaceID;
+            return inInterfaceID == ChilliSource::Core::ResourceProvider::InterfaceID;
         }
         //----------------------------------------------------------------
         /// Can Create Resource Of Kind
         //----------------------------------------------------------------
-        bool CETC1ImageProvider::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
+        bool ETC1ImageProvider::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == Core::CImage::InterfaceID;
+            return inInterfaceID == Core::Image::InterfaceID;
         }
         //----------------------------------------------------------------
         /// Can Create Resource From File With Extension
         //----------------------------------------------------------------
-        bool CETC1ImageProvider::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
+        bool ETC1ImageProvider::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
         {
             return (inExtension == ETC1Extension);
         }
         //----------------------------------------------------------------
         /// Create Resource From File
         //----------------------------------------------------------------
-        bool CETC1ImageProvider::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+        bool ETC1ImageProvider::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
         {
-            return CreateImageFromFile(ineStorageLocation, inFilePath, Core::CImage::Format::k_default, outpResource);
+            return CreateImageFromFile(ineStorageLocation, inFilePath, Core::Image::Format::k_default, outpResource);
         }
         //----------------------------------------------------------------
         /// Create Image From File
         //----------------------------------------------------------------
-        bool CETC1ImageProvider::CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
+        bool ETC1ImageProvider::CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::ResourceSPtr& outpResource)
         {
             //ensure the extension is correct.
             if (ChilliSource::Core::CStringUtils::EndsWith(inFilePath, ETC1Extension, true) == false)
                 return false;
 
-            Core::FileStreamPtr pImageFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
+            Core::FileStreamSPtr pImageFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
 
             if (pImageFile != nullptr && pImageFile->IsOpen() == true && pImageFile->IsBad() == false)
             {
@@ -89,8 +89,8 @@ namespace ChilliSource
                 pImageFile->Close();
 
                 //setup the output image
-                Core::CImage* outpImage = (Core::CImage*)outpResource.get();
-                outpImage->SetFormat(Core::CImage::Format::k_RGBA8888);
+                Core::Image* outpImage = (Core::Image*)outpResource.get();
+                outpImage->SetFormat(Core::Image::Format::k_RGBA8888);
                 outpImage->SetData(pData);
                 outpImage->SetDataLength(dwDataSize);
                 outpImage->SetWidth(sHeader.wTextureWidth);

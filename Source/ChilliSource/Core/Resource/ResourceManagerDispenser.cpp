@@ -20,30 +20,30 @@ namespace ChilliSource
 {
     namespace Core
     {
-        CResourceManagerDispenser* CResourceManagerDispenser::pInstance = nullptr;
+        ResourceManagerDispenser* ResourceManagerDispenser::pInstance = nullptr;
         //----------------------------------------------------
         /// Constructor
         ///
         /// Singleton instance
         //----------------------------------------------------
-        CResourceManagerDispenser::CResourceManagerDispenser(Application* inpApp) : mpApp(inpApp)
+        ResourceManagerDispenser::ResourceManagerDispenser(Application* inpApp) : mpApp(inpApp)
         {
             pInstance = this;
-			mpResourceGroupMgr = new IResourceGroupManager(pInstance);
+			mpResourceGroupMgr = new ResourceGroupManager(pInstance);
         }
         //--------------------------------------------------------------------------------------------------
         /// Get Singleton Ptr
         ///
         /// @return Singleton instance
         //--------------------------------------------------------------------------------------------------
-        CResourceManagerDispenser* CResourceManagerDispenser::GetSingletonPtr()
+        ResourceManagerDispenser* ResourceManagerDispenser::GetSingletonPtr()
         {
             return pInstance;
         }
 		//--------------------------------------------------------------------------------------------------
 		/// @return Singleton instance
 		//--------------------------------------------------------------------------------------------------
-		CResourceManagerDispenser& CResourceManagerDispenser::GetSingleton()
+		ResourceManagerDispenser& ResourceManagerDispenser::GetSingleton()
         {
 			return *pInstance;
 		}
@@ -54,7 +54,7 @@ namespace ChilliSource
 		/// that they themselves cannot provide
 		/// @param Handle to resource manager
 		//--------------------------------------------------------------------------------------------------
-		void CResourceManagerDispenser::RegisterResourceManager(IResourceManager * inpResourceManager)
+		void ResourceManagerDispenser::RegisterResourceManager(ResourceManager * inpResourceManager)
 		{
 			inpResourceManager->SetApplicationOwner(mpApp);
 			mResourceManagers.push_back(inpResourceManager);
@@ -66,9 +66,9 @@ namespace ChilliSource
         /// @param The type ID of the manager interface you are seeking
         /// @return Manager that implements the given interface or nullptr if none available
         //--------------------------------------------------------------------------------------------------
-        IResourceManager* CResourceManagerDispenser::GetResourceManagerWithInterface(InterfaceIDType inInterfaceID)
+        ResourceManager* ResourceManagerDispenser::GetResourceManagerWithInterface(InterfaceIDType inInterfaceID)
         {
-            for (std::vector<IResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr) 
+            for (std::vector<ResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr) 
 			{
 				if ((*pMgr)->IsA(inInterfaceID)) 
 				{
@@ -86,9 +86,9 @@ namespace ChilliSource
 		/// a resource of given type
 		/// @param Resource type ID that you wish to load
 		//--------------------------------------------------------------------------------------------------
-		IResourceManager* CResourceManagerDispenser::GetResourceManagerForType(InterfaceIDType inResourceInterfaceID)
+		ResourceManager* ResourceManagerDispenser::GetResourceManagerForType(InterfaceIDType inResourceInterfaceID)
 		{
-			for (std::vector<IResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr) 
+			for (std::vector<ResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr) 
 			{
 				if ((*pMgr)->ManagesResourceOfType(inResourceInterfaceID)) 
 				{
@@ -106,9 +106,9 @@ namespace ChilliSource
 		/// a resource with the given extension
 		/// @param Resource extension string
 		//--------------------------------------------------------------------------------------------------
-		IResourceManager* CResourceManagerDispenser::GetResourceManagerForExtension(const std::string &instrExtension)
+		ResourceManager* ResourceManagerDispenser::GetResourceManagerForExtension(const std::string &instrExtension)
 		{
-			for (std::vector<IResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr) 
+			for (std::vector<ResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr) 
 			{
 				if((*pMgr)->ManagesResourceWithExtension(instrExtension)) 
 				{
@@ -124,14 +124,14 @@ namespace ChilliSource
 		///
 		/// Release the cached resources that are not in use
 		//----------------------------------------------------------------------
-		void CResourceManagerDispenser::FreeResourceCaches()
+		void ResourceManagerDispenser::FreeResourceCaches()
 		{
 			//Tell our resource managers to ditch their cache
             u32 udwReleasedCount = 0;
 			do
 			{
                 udwReleasedCount = 0;
-                for (std::vector<IResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr)
+                for (std::vector<ResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr)
                 {
                     udwReleasedCount += (*pMgr)->ReleaseAllUnused();
                 }
@@ -146,7 +146,7 @@ namespace ChilliSource
         ///
         /// @return A reference to the resource group manager
         //--------------------------------------------------------------------------------------------------
-        IResourceGroupManager& CResourceManagerDispenser::GetResourceGroupManager()
+        ResourceGroupManager& ResourceManagerDispenser::GetResourceGroupManager()
         {
             return *mpResourceGroupMgr;
         }
@@ -155,7 +155,7 @@ namespace ChilliSource
         ///
         /// @return A pointer to the resource group manager
         //--------------------------------------------------------------------------------------------------
-        IResourceGroupManager* CResourceManagerDispenser::GetResourceGroupManagerPtr()
+        ResourceGroupManager* ResourceManagerDispenser::GetResourceGroupManagerPtr()
         {
             return mpResourceGroupMgr;
         }
@@ -168,15 +168,15 @@ namespace ChilliSource
         ///
         /// @param Vector of resource provider pointers
         //----------------------------------------------------------------------
-        void CResourceManagerDispenser::SetResourceProviders(const std::vector<IResourceProvider*> inProviders)
+        void ResourceManagerDispenser::SetResourceProviders(const std::vector<ResourceProvider*> inProviders)
         {
             //For each resource manager, give it resource providers of the same resource type
-			for (std::vector<IResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr) 
+			for (std::vector<ResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr) 
 			{
 				InterfaceIDType ResourceType = (*pMgr)->GetProviderType();
-				std::vector<IResourceProvider*> UsefulResourceProviders;
+				std::vector<ResourceProvider*> UsefulResourceProviders;
 				
-				for (std::vector<IResourceProvider*>::const_iterator pProv = inProviders.begin(); pProv != inProviders.end(); ++pProv) 
+				for (std::vector<ResourceProvider*>::const_iterator pProv = inProviders.begin(); pProv != inProviders.end(); ++pProv) 
 				{
 					if ((*pProv)->CanCreateResourceOfKind(ResourceType)) 
 					{
@@ -189,7 +189,7 @@ namespace ChilliSource
         //--------------------------------------------------------------------
         /// Destructor
         //--------------------------------------------------------------------
-        CResourceManagerDispenser::~CResourceManagerDispenser()
+        ResourceManagerDispenser::~ResourceManagerDispenser()
         {
             CS_SAFE_DELETE(mpResourceGroupMgr);
         }

@@ -78,7 +78,7 @@ namespace ChilliSource
             static bool ReadJson(StorageLocation ineStorageLocation, const std::string & instrPath, Json::Value * outpJson);
             
             static bool          FileToString(StorageLocation ineStorageLocation, const std::string & instrPath, std::string & outstrFileContent);
-            static FileStreamPtr StringToFile(StorageLocation ineStorageLocation, const std::string & instrPath, const std::string& instrFileOut);
+            static FileStreamSPtr StringToFile(StorageLocation ineStorageLocation, const std::string & instrPath, const std::string& instrFileOut);
             
             static bool ZlibCompressString(const std::string &instrUncompressed, std::string& outstrCompressed);
 
@@ -126,7 +126,7 @@ namespace ChilliSource
                 return uRemoved;
             }
             
-            static CVector2 ScaleMaintainingAspectRatio(const CVector2& invCurrentSize, const CVector2& invTargetSize, bool inbFitInside = false);
+            static Vector2 ScaleMaintainingAspectRatio(const Vector2& invCurrentSize, const Vector2& invTargetSize, bool inbFitInside = false);
 		};
 	}
 }

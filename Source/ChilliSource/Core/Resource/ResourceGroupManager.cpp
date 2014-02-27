@@ -29,7 +29,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//-----------------------------------------------------
-		IResourceGroupManager::IResourceGroupManager(CResourceManagerDispenser* inpResMgrDispenser) 
+		ResourceGroupManager::ResourceGroupManager(ResourceManagerDispenser* inpResMgrDispenser) 
 		: mpResMgrDispenser(inpResMgrDispenser)
 		{
 
@@ -41,7 +41,7 @@ namespace ChilliSource
 		/// @param Group name (must be unique)
 		/// @param Folder directory that houses resources
 		//-----------------------------------------------------
-		void IResourceGroupManager::CreateGroup(const std::string& instrGroupName, const std::string& instrDirectory)
+		void ResourceGroupManager::CreateGroup(const std::string& instrGroupName, const std::string& instrDirectory)
 		{
 			MapStringToResourceGroupItr pExistingResource = mMapNameToResourceGroup.find(instrGroupName);
 			
@@ -66,7 +66,7 @@ namespace ChilliSource
 		/// directory. This will load them into the relative
 		/// resource managers resource pool
 		//-----------------------------------------------------
-		void IResourceGroupManager::LoadGroup(const std::string& instrGroupName)
+		void ResourceGroupManager::LoadGroup(const std::string& instrGroupName)
 		{
 			MapStringToResourceGroupItr pExistingResource = mMapNameToResourceGroup.find(instrGroupName);
 			
@@ -95,7 +95,7 @@ namespace ChilliSource
 					CStringUtils::SplitBaseFilename((*it), strName, strExtension);
 					
 					//Do we have a resource manager that can handle this?
-					IResourceManager* pResMgr = mpResMgrDispenser->GetResourceManagerForExtension(strExtension);
+					ResourceManager* pResMgr = mpResMgrDispenser->GetResourceManagerForExtension(strExtension);
 					
 					if(!pResMgr)
 					{
@@ -120,7 +120,7 @@ namespace ChilliSource
 		/// Free the resources inside the given groups 
 		/// directory but hold on to the group.
 		//-----------------------------------------------------
-		void IResourceGroupManager::UnloadGroup(const std::string& instrGroupName)
+		void ResourceGroupManager::UnloadGroup(const std::string& instrGroupName)
 		{
 			MapStringToResourceGroupItr pExistingResource = mMapNameToResourceGroup.find(instrGroupName);
 			
@@ -131,7 +131,7 @@ namespace ChilliSource
 				pExistingResource->second->meCurrentStatus = CResourceGroup::Status::k_notLoaded;
 				
 				//Tell the resource manager to unload the object from it's cache
-				for(std::vector<ResourcePtr>::iterator it = pExistingResource->second->mResources.begin(); it != pExistingResource->second->mResources.end(); ++it)
+				for(std::vector<ResourceSPtr>::iterator it = pExistingResource->second->mResources.begin(); it != pExistingResource->second->mResources.end(); ++it)
 				{
 					(*it)->Release();
 				}
@@ -148,7 +148,7 @@ namespace ChilliSource
 		/// Free the resources inside the given groups 
 		/// directory and remove the group from the set
 		//-----------------------------------------------------
-		void IResourceGroupManager::DestroyGroup(const std::string& instrGroupName)
+		void ResourceGroupManager::DestroyGroup(const std::string& instrGroupName)
 		{
 			MapStringToResourceGroupItr pExistingResource = mMapNameToResourceGroup.find(instrGroupName);
 			
@@ -170,7 +170,7 @@ namespace ChilliSource
 		/// resources have been freed. We will need to load 
 		/// them again on request
 		//-----------------------------------------------------
-		void IResourceGroupManager::InvalidateCache()
+		void ResourceGroupManager::InvalidateCache()
 		{
 			for(MapStringToResourceGroupItr it = mMapNameToResourceGroup.begin(); it != mMapNameToResourceGroup.end(); ++it)
 			{
@@ -183,13 +183,13 @@ namespace ChilliSource
 		///
 		/// Free all the resources for our groups. 
 		//-----------------------------------------------------
-		void IResourceGroupManager::UnloadAll()
+		void ResourceGroupManager::UnloadAll()
 		{
 			for(MapStringToResourceGroupItr it = mMapNameToResourceGroup.begin(); it != mMapNameToResourceGroup.end(); ++it)
 			{
 				it->second->meCurrentStatus = CResourceGroup::Status::k_notLoaded;
 				//Tell the resource manager to let it go!
-				for(std::vector<ResourcePtr>::iterator jt = it->second->mResources.begin(); jt != it->second->mResources.end(); ++jt)
+				for(std::vector<ResourceSPtr>::iterator jt = it->second->mResources.begin(); jt != it->second->mResources.end(); ++jt)
 				{
 					(*jt)->Release();
 				}
@@ -203,7 +203,7 @@ namespace ChilliSource
 		/// Free all the resources for our groups and remove
 		/// the groups from the set
 		//-----------------------------------------------------
-		void IResourceGroupManager::DestroyAll()
+		void ResourceGroupManager::DestroyAll()
 		{
 			UnloadAll();
 			mMapNameToResourceGroup.clear();
@@ -212,7 +212,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//-----------------------------------------------------
-		IResourceGroupManager::~IResourceGroupManager()
+		ResourceGroupManager::~ResourceGroupManager()
 		{
 			DestroyAll();
 		}

@@ -141,7 +141,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        std::string ToString(const CVector2& in_value)
+        std::string ToString(const Vector2& in_value)
         {
             std::stringstream stream;
 			stream << in_value.x << " " << in_value.y;
@@ -149,7 +149,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        std::string ToString(const CVector3& in_value)
+        std::string ToString(const Vector3& in_value)
         {
             std::stringstream stream;
 			stream << in_value.x << " " << in_value.y << " " << in_value.z;
@@ -157,7 +157,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        std::string ToString(const CVector4& in_value)
+        std::string ToString(const Vector4& in_value)
         {
             std::stringstream stream;
 			stream << in_value.x << " " << in_value.y << " " << in_value.z << " " << in_value.w;
@@ -165,7 +165,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        std::string ToString(const CMatrix4x4& in_value)
+        std::string ToString(const Matrix4x4& in_value)
         {
             std::stringstream stream;
 			stream << in_value.m[0] << " "
@@ -188,7 +188,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        std::string ToString(const CQuaternion& in_value)
+        std::string ToString(const Quaternion& in_value)
         {
             std::stringstream stream;
 			stream  << in_value.w << " " << in_value.x << " " << in_value.y << " " << in_value.z;
@@ -196,7 +196,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        std::string ToString(const CColour& in_value)
+        std::string ToString(const Colour& in_value)
         {
             std::stringstream stream;
 			stream << in_value.r << " " << in_value.g << " " << in_value.b << " " << in_value.a;

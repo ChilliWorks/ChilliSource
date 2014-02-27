@@ -110,7 +110,7 @@ namespace ChilliSource
                 }
 
                 std::string strHTMLFileContents;
-                Core::FileStreamPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FileMode::k_read);
+                Core::FileStreamSPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FileMode::k_read);
                 pHTMLFile->GetAll(strHTMLFileContents);
                 
                 NSString* pstrHTML = Core::CStringUtils::StringToNSString(strHTMLFileContents);

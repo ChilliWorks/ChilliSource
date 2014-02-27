@@ -38,7 +38,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			/// AABB vs Point
 			//----------------------------------------------------------------
-			static bool Intersects(const AABB& inAABB, const CVector3& invPoint);
+			static bool Intersects(const AABB& inAABB, const Vector3& invPoint);
 			//----------------------------------------------------------------
 			/// AABB vs AABB
 			//----------------------------------------------------------------
@@ -56,7 +56,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			/// Sphere vs Point
 			//----------------------------------------------------------------
-			static bool Intersects(const Sphere& inSphere, const CVector3& invPoint);
+			static bool Intersects(const Sphere& inSphere, const Vector3& invPoint);
 			//----------------------------------------------------------------
 			/// Sphere vs Sphere
 			//----------------------------------------------------------------
@@ -76,11 +76,11 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			/// Circle vs Point
 			//----------------------------------------------------------------
-			static bool Intersects(const Circle& inCircle, const CVector3& invPoint);
+			static bool Intersects(const Circle& inCircle, const Vector3& invPoint);
             //----------------------------------------------------------------
             /// Line vs Line
             //----------------------------------------------------------------
-			static bool Intersects(const Line& inLineLHS, const Line& inLineRHS, CVector3& outvIntersection);
+			static bool Intersects(const Line& inLineLHS, const Line& inLineRHS, Vector3& outvIntersection);
 			//----------------------------------------------------------------
 			/// Rect vs Rect
 			//----------------------------------------------------------------
@@ -88,7 +88,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			/// Rect vs Point
 			//----------------------------------------------------------------
-			static bool Intersects(const CRect& inRect, const CVector3& invPoint);
+			static bool Intersects(const CRect& inRect, const Vector3& invPoint);
 			
 		private:
 			

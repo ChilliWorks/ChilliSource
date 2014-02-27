@@ -251,7 +251,7 @@ namespace ChilliSource
 		///
 		/// @param Colour of progress bar
 		//------------------------------------------------------------------------
-		void HorizontalEndcappedProgressBar::SetFillColour(const Core::CColour& inColour)
+		void HorizontalEndcappedProgressBar::SetFillColour(const Core::Colour& inColour)
 		{
 			FillColour = inColour;
 			mpFillImage->SetColour(inColour);
@@ -261,7 +261,7 @@ namespace ChilliSource
 		///
 		/// @return Colour of progress bar
 		//------------------------------------------------------------------------
-		const Core::CColour& HorizontalEndcappedProgressBar::GetFillColour() const
+		const Core::Colour& HorizontalEndcappedProgressBar::GetFillColour() const
 		{
 			return FillColour;
 		}
@@ -270,7 +270,7 @@ namespace ChilliSource
 		///
 		/// @param Colour of background
 		//------------------------------------------------------------------------
-		void HorizontalEndcappedProgressBar::SetBackgroundColour(const Core::CColour& inColour)
+		void HorizontalEndcappedProgressBar::SetBackgroundColour(const Core::Colour& inColour)
 		{
 			BackgroundColour = inColour;
 			mpBGImage->SetColour(inColour);
@@ -280,7 +280,7 @@ namespace ChilliSource
 		///
 		/// @return Colour of background
 		//------------------------------------------------------------------------
-		const Core::CColour& HorizontalEndcappedProgressBar::GetBackgroundColour() const
+		const Core::Colour& HorizontalEndcappedProgressBar::GetBackgroundColour() const
 		{
 			return BackgroundColour;
 		}
@@ -321,7 +321,7 @@ namespace ChilliSource
 			if(Visible && SpriteSheet)
 			{
 
-				Core::CVector2 vMyAbsSize = GetAbsoluteSize();
+				Core::Vector2 vMyAbsSize = GetAbsoluteSize();
 				
 				f32 fFullProgressWidth = vMyAbsSize.x - mpBGImage->GetCombinedCapWidth() + mpFillImage->GetCombinedCapWidth();
 				f32 fFillWidth = GetProgress() * fFullProgressWidth;
@@ -342,10 +342,10 @@ namespace ChilliSource
 				
 				f32 fFillDrawHeight = vMyAbsSize.y - (fBGImageHeight-fFillImageHeight);		
 				
-				mpBGImage->SetSize(Core::UnifiedVector2(Core::CVector2::ZERO,vMyAbsSize));
+				mpBGImage->SetSize(Core::UnifiedVector2(Core::Vector2::ZERO,vMyAbsSize));
 				mpBGImage->Draw(inpCanvas);
 				
-				mpFillImage->SetSize(Core::UnifiedVector2(Core::CVector2::ZERO,Core::CVector2(fFillWidth,fFillDrawHeight)));
+				mpFillImage->SetSize(Core::UnifiedVector2(Core::Vector2::ZERO,Core::Vector2(fFillWidth,fFillDrawHeight)));
 				mpFillImage->Draw(inpCanvas);
 			}
             

@@ -113,7 +113,7 @@ namespace ChilliSource
             ///
             /// @return Matrix to transform into light space
             //----------------------------------------------------------
-            const Core::CMatrix4x4& GetLightMatrix() const override;
+            const Core::Matrix4x4& GetLightMatrix() const override;
             //----------------------------------------------------
 			/// On Attached To Entity
 			///

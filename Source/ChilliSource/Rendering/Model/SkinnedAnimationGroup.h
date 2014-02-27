@@ -91,14 +91,14 @@ namespace ChilliSource
             /// @param the current parent.
             /// @param the parent matrix.
 			//----------------------------------------------------------
-			void BuildMatrices(s32 indwCurrentParent = -1, const Core::CMatrix4x4& inParentMatrix = Core::CMatrix4x4());
+			void BuildMatrices(s32 indwCurrentParent = -1, const Core::Matrix4x4& inParentMatrix = Core::Matrix4x4());
             //----------------------------------------------------------
 			/// Get Matrix At Index
             ///
             /// @param the index of the required matrix.
             /// @return the matrix.
 			//----------------------------------------------------------
-            const Core::CMatrix4x4& GetMatrixAtIndex(s32 indwIndex) const;
+            const Core::Matrix4x4& GetMatrixAtIndex(s32 indwIndex) const;
             //----------------------------------------------------------
 			/// Apply Inverse Bind Pose
             ///
@@ -108,7 +108,7 @@ namespace ChilliSource
             /// @param the inverse bind pose matrices.
             /// @param OUT: The combined matrices.
 			//----------------------------------------------------------
-			void ApplyInverseBindPose(const std::vector<Core::CMatrix4x4>& inInverseBindPoseMatrices, std::vector<Core::CMatrix4x4>& outCombinedMatrices);
+			void ApplyInverseBindPose(const std::vector<Core::Matrix4x4>& inInverseBindPoseMatrices, std::vector<Core::Matrix4x4>& outCombinedMatrices);
             //----------------------------------------------------------
 			/// Get Animation Length
             ///
@@ -182,7 +182,7 @@ namespace ChilliSource
             SkeletonSPtr mpSkeleton;
             std::vector<AnimationItemPtr> mAnimations;
             SkinnedAnimationFrameSPtr mCurrentAnimationData;
-            std::vector<Core::CMatrix4x4> mCurrentAnimationMatrices;
+            std::vector<Core::Matrix4x4> mCurrentAnimationMatrices;
             bool mbAnimationLengthDirty;
             f32 mfAnimationLength;
             bool mbPrepared;

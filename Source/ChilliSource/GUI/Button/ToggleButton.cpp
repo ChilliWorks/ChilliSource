@@ -50,12 +50,12 @@ namespace ChilliSource
         //-----------------------------------------------------------
         ToggleButton::ToggleButton() 
         : mpBackgroundImage(new ImageView()), OnSpriteSheetIndex(0), OffSpriteSheetIndex(0),
-        msOnUVs(Core::CVector2::ZERO, Core::CVector2::ONE),
-        msOffUVs(Core::CVector2::ZERO, Core::CVector2::ONE),
+        msOnUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
+        msOffUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), mbToggledOn(false)
         {
-            mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::CVector2(1.0f, 1.0f), Core::CVector2(0, 0)));
-            mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::CVector2(0.5f, 0.5f), Core::CVector2(0, 0)));
+            mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
+            mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::Vector2(0.5f, 0.5f), Core::Vector2(0, 0)));
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
 			
@@ -70,7 +70,7 @@ namespace ChilliSource
         //------------------------------------------------------------
         ToggleButton::ToggleButton(const Core::ParamDictionary& insParams) 
         : Button(insParams), mpBackgroundImage(new ImageView()), OnSpriteSheetIndex(0), OffSpriteSheetIndex(0),
-        msOnUVs(Core::CVector2::ZERO, Core::CVector2::ONE), msOffUVs(Core::CVector2::ZERO, Core::CVector2::ONE),
+        msOnUVs(Core::Vector2::ZERO, Core::Vector2::ONE), msOffUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), mbToggledOn(false)
         {
             std::string strValue;
@@ -161,14 +161,14 @@ namespace ChilliSource
 			//---Set Maintain Height
 			if(insParams.TryGetValue("SetHeightMaintain", strValue))
 			{
-				Core::CVector2 vSize = Core::ParseVector2(strValue);
+				Core::Vector2 vSize = Core::ParseVector2(strValue);
 				HeightMaintain = true;
 				SetHeightMaintainingAspect(vSize.x, vSize.y);
 			}
 			//---Set Maintain Width
 			if(insParams.TryGetValue("SetWidthMaintain", strValue))
 			{
-				Core::CVector2 vSize = Core::ParseVector2(strValue);
+				Core::Vector2 vSize = Core::ParseVector2(strValue);
 				WidthMaintain = true;
 				SetWidthMaintainingAspect(vSize.x, vSize.y);
 			}
@@ -195,8 +195,8 @@ namespace ChilliSource
                 SetDeselectAudioEffect(pAudioFactory->CreateAudioComponent(eSelectAudioLocation, strValue, false, false));
             }
             
-            mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::CVector2(1.0f, 1.0f), Core::CVector2(0, 0)));
-            mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::CVector2(0.5f, 0.5f), Core::CVector2(0, 0)));
+            mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
+            mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::Vector2(0.5f, 0.5f), Core::Vector2(0, 0)));
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
 			
@@ -622,7 +622,7 @@ namespace ChilliSource
 		{
 			if(SizeFromImage)
 			{
-				Core::CVector2 vImageSize = mpBackgroundImage->GetSizeFromImage();
+				Core::Vector2 vImageSize = mpBackgroundImage->GetSizeFromImage();
 				SetSize(0.0f, 0.0f, vImageSize.x, vImageSize.y);
 			}
 			else if(HeightMaintain)
@@ -654,19 +654,19 @@ namespace ChilliSource
 		///
 		/// @return Absolute size of the image
 		//--------------------------------------------------------
-		Core::CVector2 ToggleButton::GetSizeFromImage() const
+		Core::Vector2 ToggleButton::GetSizeFromImage() const
 		{
-			Core::CVector2 vAbsSize;
+			Core::Vector2 vAbsSize;
             if(GetBackgroundImageView()->GetTexture())
 			{
-				return Core::CVector2((f32)GetBackgroundImageView()->GetTexture()->GetWidth(), (f32)GetBackgroundImageView()->GetTexture()->GetHeight());
+				return Core::Vector2((f32)GetBackgroundImageView()->GetTexture()->GetWidth(), (f32)GetBackgroundImageView()->GetTexture()->GetHeight());
 			}
 			else if(GetBackgroundImageView()->GetSpriteSheet())
 			{
 				return GetBackgroundImageView()->GetSpriteSheet()->GetSizeForFrame(GetBackgroundImageView()->GetSpriteSheetIndex());
 			}
 			
-			return Core::CVector2::ZERO;
+			return Core::Vector2::ZERO;
 		}
         //--------------------------------------------------------
         /// Set Width Maintaining Aspect
@@ -686,7 +686,7 @@ namespace ChilliSource
 			if(fScaleY == 0.0f)
 				return;
             
-            Core::CVector2 vCurrentSize = GetSizeFromImage();
+            Core::Vector2 vCurrentSize = GetSizeFromImage();
             f32 fAspectRatio = vCurrentSize.y / vCurrentSize.x;
             
             vCurrentSize = GetAbsoluteSize();
@@ -711,7 +711,7 @@ namespace ChilliSource
 			if(fScaleX == 0.0f)
 				return;
             
-            Core::CVector2 vCurrentSize = GetSizeFromImage();
+            Core::Vector2 vCurrentSize = GetSizeFromImage();
             f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
             
             vCurrentSize = GetAbsoluteSize();

@@ -28,7 +28,7 @@ namespace ChilliSource
         //-------------------------------------------------------------
         ParticleEmitter::ParticleEmitter(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent)
         : mudwMaxNumParticles(100), mudwMaxNumParticlesPerEmission(1), mfEmissionFreq(0.5f), mfCurrentTime(0.0f), mfLastEmissionTime(0.0f), mfTimeToLive(1.0f), mvInitialScale(1.0f, 1.0f), mbShouldLoop(true)
-        ,mfEnergyLoss(1.0f/mfTimeToLive), mpOwningComponent(inpComponent), mbIsEmitting(true), mudwNumUsed(0), mpMaterial(inpMaterial),msParticleUVs(Core::CVector2::ZERO, Core::CVector2(1.0f,1.0f))
+        ,mfEnergyLoss(1.0f/mfTimeToLive), mpOwningComponent(inpComponent), mbIsEmitting(true), mudwNumUsed(0), mpMaterial(inpMaterial),msParticleUVs(Core::Vector2::ZERO, Core::Vector2(1.0f,1.0f))
 		,mudwBurstCounter(0), mbIsEmittingFinished(false)
         ,mbIsGlobalSpace(true)
         {
@@ -88,10 +88,10 @@ namespace ChilliSource
             mudwMaxNumParticles = (std::ceil(mfTimeToLive/mfEmissionFreq) * mudwMaxNumParticlesPerEmission);
             
             // Allocate all the memory upfront
-			mParticles.vTranslation = new Core::CVector3[mudwMaxNumParticles];
-            mParticles.vScale = new Core::CVector3[mudwMaxNumParticles];
-            mParticles.vVelocity = new Core::CVector3[mudwMaxNumParticles];
-			mParticles.Col = new Core::CColour[mudwMaxNumParticles];
+			mParticles.vTranslation = new Core::Vector3[mudwMaxNumParticles];
+            mParticles.vScale = new Core::Vector3[mudwMaxNumParticles];
+            mParticles.vVelocity = new Core::Vector3[mudwMaxNumParticles];
+			mParticles.Col = new Core::Colour[mudwMaxNumParticles];
             mParticles.fEnergy = new f32[mudwMaxNumParticles];
             mParticles.fAngularRotation = new f32[mudwMaxNumParticles];
             
@@ -114,7 +114,7 @@ namespace ChilliSource
         {
             mfCurrentTime += infDT;
             
-            const Core::CVector3& vCurrentPos = mpOwningComponent->GetEntityOwner()->Transform().GetWorldPosition();
+            const Core::Vector3& vCurrentPos = mpOwningComponent->GetEntityOwner()->Transform().GetWorldPosition();
             const f32 kfTimeSinceLastEmission = mfCurrentTime - mfLastEmissionTime;
             u32 udwNumEmits = kfTimeSinceLastEmission/mfEmissionFreq;
             
@@ -144,11 +144,11 @@ namespace ChilliSource
                     bParticlesActive = true;
                     
                     f32 fLerpFactor = fEmissionStep/kfTimeSinceLastEmission;
-                    Core::CVector3 vPosition = Core::CMathUtils::Lerp(fLerpFactor, mvLastEmissionPos, vCurrentPos) - vCurrentPos;
+                    Core::Vector3 vPosition = Core::CMathUtils::Lerp(fLerpFactor, mvLastEmissionPos, vCurrentPos) - vCurrentPos;
                     fEmissionStep += mfEmissionFreq;
                     
-                    Core::CQuaternion qOrientation;
-                    Core::CVector3 vScale(Core::CVector3::ONE);
+                    Core::Quaternion qOrientation;
+                    Core::Vector3 vScale(Core::Vector3::ONE);
                     
                     if(mbIsGlobalSpace)
                     {
@@ -259,19 +259,19 @@ namespace ChilliSource
         {
             SpriteComponent::SpriteData sData;
             // Get world matrix
-            const Core::CMatrix4x4 & matTrans = mpOwningComponent->GetEntityOwner()->Transform().GetWorldTransform();
+            const Core::Matrix4x4 & matTrans = mpOwningComponent->GetEntityOwner()->Transform().GetWorldTransform();
             
             // Get quaternion to particle space
-            Core::CQuaternion qParticleRot = Core::CQuaternion(matTrans).Conjugate();
+            Core::Quaternion qParticleRot = Core::Quaternion(matTrans).Conjugate();
             
-            const Core::CMatrix4x4 & matCamWorld = inpCam->GetEntityOwner()->Transform().GetWorldTransform();
+            const Core::Matrix4x4 & matCamWorld = inpCam->GetEntityOwner()->Transform().GetWorldTransform();
             // Get cameras up and right vectors in particle space
             
-            Core::CVector3 vRight = matCamWorld.Right();
-            Core::CVector3 vUp = matCamWorld.Up();
-            Core::CVector3 vForward = matCamWorld.Forward();
+            Core::Vector3 vRight = matCamWorld.Right();
+            Core::Vector3 vUp = matCamWorld.Up();
+            Core::Vector3 vForward = matCamWorld.Forward();
             
-            const Core::CMatrix4x4 * pTransform = nullptr;
+            const Core::Matrix4x4 * pTransform = nullptr;
             if(mbIsGlobalSpace == false)
             {
                 pTransform = &matTrans;
@@ -285,7 +285,7 @@ namespace ChilliSource
                 if(mParticles.fEnergy[i] > 0.0f && mParticles.Col[i].a > 0.0f)
                 {
                     // Rotate per particle
-                    Core::CQuaternion qRot(vForward, mParticles.fAngularRotation[i]);
+                    Core::Quaternion qRot(vForward, mParticles.fAngularRotation[i]);
 
                     UpdateSpriteData(mParticles.vTranslation[i], mParticles.Col[i], sData, qRot * vRight, qRot * vUp, mParticles.vScale[i]);
                     
@@ -375,7 +375,7 @@ namespace ChilliSource
         ///
         /// @param Colour
         //-----------------------------------------------------
-        void ParticleEmitter::SetColour(const Core::CColour inColour)
+        void ParticleEmitter::SetColour(const Core::Colour inColour)
         {
             mInitialColour = inColour;
         }
@@ -458,10 +458,10 @@ namespace ChilliSource
 		///
 		/// Rebuild the sprite data
 		//-----------------------------------------------------
-		void ParticleEmitter::UpdateSpriteData(const Core::CVector3& invPos, const Core::CColour & insTintColour, SpriteComponent::SpriteData& outsData,
-                                                const Core::CVector3& invRight, const Core::CVector3& invUp, const Core::CVector3& invScale)
+		void ParticleEmitter::UpdateSpriteData(const Core::Vector3& invPos, const Core::Colour & insTintColour, SpriteComponent::SpriteData& outsData,
+                                                const Core::Vector3& invRight, const Core::Vector3& invUp, const Core::Vector3& invScale)
 		{
-			Core::CColour::ByteColour Col = Core::CColour::ColourToByteColour(insTintColour);
+			Core::Colour::ByteColour Col = Core::Colour::ColourToByteColour(insTintColour);
 			
 			outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].Col = Col;
             outsData.sVerts[(u32)SpriteComponent::Verts::k_bottomLeft].Col = Col;
@@ -476,10 +476,10 @@ namespace ChilliSource
 			outsData.pMaterial = mpMaterial;
             outsData.pMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
 			
-            Core::CVector3 vHalfRight = (0.5f * mvInitialScale.x * invScale.x) * invRight;
-            Core::CVector3 vHalfUp = (0.5f * mvInitialScale.y * invScale.y) * invUp;
+            Core::Vector3 vHalfRight = (0.5f * mvInitialScale.x * invScale.x) * invRight;
+            Core::Vector3 vHalfUp = (0.5f * mvInitialScale.y * invScale.y) * invUp;
             
-            Core::CVector4 vTemp(vHalfUp.x - vHalfRight.x, vHalfUp.y - vHalfRight.y, vHalfUp.z - vHalfRight.z, 1.0f);
+            Core::Vector4 vTemp(vHalfUp.x - vHalfRight.x, vHalfUp.y - vHalfRight.y, vHalfUp.z - vHalfRight.z, 1.0f);
             outsData.sVerts[(u32)SpriteComponent::Verts::k_topLeft].vPos = invPos + vTemp;
             
             vTemp.x = vHalfUp.x + vHalfRight.x; vTemp.y = vHalfUp.y + vHalfRight.y; vTemp.z = vHalfUp.z + vHalfRight.z;

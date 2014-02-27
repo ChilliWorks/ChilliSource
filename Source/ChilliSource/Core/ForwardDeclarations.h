@@ -28,38 +28,38 @@ namespace ChilliSource
         /// Base
         //---------------------------------------------------------
         CS_FORWARD_DECLARE_CLASS(Application);
-        CS_FORWARD_DECLARE_CLASS(CColour);
+        CS_FORWARD_DECLARE_CLASS(Colour);
         CS_FORWARD_DECLARE_CLASS(IInformationProvider);
-        CS_FORWARD_DECLARE_CLASS(IPlatformSystem);
-        CS_FORWARD_DECLARE_CLASS(IQueryableInterface);
+        CS_FORWARD_DECLARE_CLASS(PlatformSystem);
+        CS_FORWARD_DECLARE_CLASS(QueryableInterface);
         //---------------------------------------------------------
         /// Container
         //---------------------------------------------------------
-        template <typename TKey, typename TValue> class CHashedArray;
-        template <typename TType> class CObjectPool;
-        CS_FORWARD_DECLARE_CLASS(COctree);
+        template <typename TKey, typename TValue> class HashedArray;
+        template <typename TType> class ObjectPool;
+        CS_FORWARD_DECLARE_CLASS(Octree);
         CS_FORWARD_DECLARE_CLASS(ParamDictionary);
-        CS_FORWARD_DECLARE_CLASS(CStaticMemPool);
+        CS_FORWARD_DECLARE_CLASS(StaticMemPool);
         template <typename T> class WorkerQueue;
         //---------------------------------------------------------
         /// Cryptographic
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CHMAC_SHA1);
-        CS_FORWARD_DECLARE_CLASS(COAuthSystem);
-        CS_FORWARD_DECLARE_CLASS(CSHA1);
+        CS_FORWARD_DECLARE_CLASS(HMAC_SHA1);
+        CS_FORWARD_DECLARE_CLASS(OAuthSystem);
+        CS_FORWARD_DECLARE_CLASS(SHA1);
         //---------------------------------------------------------
         /// Entity
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(IComponent);
-        CS_FORWARD_DECLARE_CLASS(IComponentFactory);
-        CS_FORWARD_DECLARE_CLASS(CComponentFactoryDispenser);
-        CS_FORWARD_DECLARE_CLASS(CEntity);
-        CS_FORWARD_DECLARE_CLASS(CEntityAnimation);
-        CS_FORWARD_DECLARE_CLASS(CTransform);
+        CS_FORWARD_DECLARE_CLASS(Component);
+        CS_FORWARD_DECLARE_CLASS(ComponentFactory);
+        CS_FORWARD_DECLARE_CLASS(ComponentFactoryDispenser);
+        CS_FORWARD_DECLARE_CLASS(Entity);
+        CS_FORWARD_DECLARE_CLASS(EntityAnimation);
+        CS_FORWARD_DECLARE_CLASS(Transform);
         //---------------------------------------------------------
         /// Event
         //---------------------------------------------------------
-        template <typename TDelegateType> class IEvent;
+        template <typename TDelegateType> class IEvent; //TODO: These should be removed!
         template <typename TDelegateType> class CEvent0;
         template <typename TDelegateType> class CEvent1;
         template <typename TDelegateType> class CEvent2;
@@ -68,26 +68,26 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// File
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(IFileStream);
-        CS_FORWARD_DECLARE_CLASS(IFileSystem);
-        CS_FORWARD_DECLARE_CLASS(CTweakableConstants);
+        CS_FORWARD_DECLARE_CLASS(FileStream);
+        CS_FORWARD_DECLARE_CLASS(FileSystem);
+        CS_FORWARD_DECLARE_CLASS(TweakableConstants);
         enum class StorageLocation;
         //---------------------------------------------------------
         /// Image
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CETC1ImageProvider);
-        CS_FORWARD_DECLARE_CLASS(CImage);
-        CS_FORWARD_DECLARE_CLASS(IImageResourceProvider);
-        CS_FORWARD_DECLARE_CLASS(CMoImageProvider);
+        CS_FORWARD_DECLARE_CLASS(ETC1ImageProvider);
+        CS_FORWARD_DECLARE_CLASS(Image);
+        CS_FORWARD_DECLARE_CLASS(ImageResourceProvider);
+        CS_FORWARD_DECLARE_CLASS(MoImageProvider);
         //---------------------------------------------------------
         /// Localisation
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CLocale);
+        CS_FORWARD_DECLARE_CLASS(Locale);
         //---------------------------------------------------------
         /// Math
         //---------------------------------------------------------
-        template <typename T> class CCatmullRomSpline;
-        template <typename T> class CMultiLineSegment;
+        template <typename T> class CatmullRomSpline;
+        template <typename T> class MultiLineSegment;
         CS_FORWARD_DECLARE_CLASS(UVRect);
         CS_FORWARD_DECLARE_CLASS(Rectangle);
         CS_FORWARD_DECLARE_CLASS(Circle);
@@ -97,55 +97,55 @@ namespace ChilliSource
         CS_FORWARD_DECLARE_CLASS(Ray);
         CS_FORWARD_DECLARE_CLASS(Line);
         CS_FORWARD_DECLARE_CLASS(Plane);
-        CS_FORWARD_DECLARE_CLASS(CFrustum);
-        CS_FORWARD_DECLARE_CLASS(CMatrix3x3);
-        CS_FORWARD_DECLARE_CLASS(CMatrix4x4);
-        CS_FORWARD_DECLARE_CLASS(CQuaternion);
+        CS_FORWARD_DECLARE_CLASS(Frustum);
+        CS_FORWARD_DECLARE_CLASS(Matrix3x3);
+        CS_FORWARD_DECLARE_CLASS(Matrix4x4);
+        CS_FORWARD_DECLARE_CLASS(Quaternion);
         CS_FORWARD_DECLARE_CLASS(UnifiedScalar);
         CS_FORWARD_DECLARE_CLASS(UnifiedVector2);
         CS_FORWARD_DECLARE_CLASS(UnifiedRectangle);
-        CS_FORWARD_DECLARE_CLASS(CVector2);
-        CS_FORWARD_DECLARE_CLASS(CVector3);
-        CS_FORWARD_DECLARE_CLASS(CVector4);
+        CS_FORWARD_DECLARE_CLASS(Vector2);
+        CS_FORWARD_DECLARE_CLASS(Vector3);
+        CS_FORWARD_DECLARE_CLASS(Vector4);
         //---------------------------------------------------------
         /// Notifications
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(ILocalNotificationScheduler);
-        CS_FORWARD_DECLARE_CLASS(CNotificationScheduler);
+        CS_FORWARD_DECLARE_CLASS(LocalNotificationScheduler);
+        CS_FORWARD_DECLARE_CLASS(NotificationScheduler);
         CS_FORWARD_DECLARE_CLASS(Notification);
-        CS_FORWARD_DECLARE_CLASS(IRemoteNotificationSystem);
+        CS_FORWARD_DECLARE_CLASS(RemoteNotificationSystem);
         //---------------------------------------------------------
         /// Resource
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(IResource);
-        CS_FORWARD_DECLARE_CLASS(IResourceGroupManager);
-        CS_FORWARD_DECLARE_CLASS(IResourceManager);
-        CS_FORWARD_DECLARE_CLASS(CResourceManagerDispenser);
-        CS_FORWARD_DECLARE_CLASS(IResourceProvider);
+        CS_FORWARD_DECLARE_CLASS(Resource);
+        CS_FORWARD_DECLARE_CLASS(ResourceGroupManager);
+        CS_FORWARD_DECLARE_CLASS(ResourceManager);
+        CS_FORWARD_DECLARE_CLASS(ResourceManagerDispenser);
+        CS_FORWARD_DECLARE_CLASS(ResourceProvider);
         //---------------------------------------------------------
         /// Scene
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CScene);
-        CS_FORWARD_DECLARE_CLASS(CSceneAnimation);
-        CS_FORWARD_DECLARE_CLASS(CSceneAnimationDesc);
-        CS_FORWARD_DECLARE_CLASS(CSceneAnimationProvider);
-        CS_FORWARD_DECLARE_CLASS(CSceneAnimDescManager);
-        CS_FORWARD_DECLARE_CLASS(CSceneDescManager);
-        CS_FORWARD_DECLARE_CLASS(CSceneDesc);
-        CS_FORWARD_DECLARE_CLASS(CSceneProvider);
+        CS_FORWARD_DECLARE_CLASS(Scene);
+        CS_FORWARD_DECLARE_CLASS(SceneAnimation);
+        CS_FORWARD_DECLARE_CLASS(SceneAnimationDesc);
+        CS_FORWARD_DECLARE_CLASS(SceneAnimationProvider);
+        CS_FORWARD_DECLARE_CLASS(SceneAnimDescManager);
+        CS_FORWARD_DECLARE_CLASS(SceneDescManager);
+        CS_FORWARD_DECLARE_CLASS(SceneDesc);
+        CS_FORWARD_DECLARE_CLASS(SceneProvider);
         //---------------------------------------------------------
         /// State
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(IState);
-        CS_FORWARD_DECLARE_CLASS(CStateManager);
+        CS_FORWARD_DECLARE_CLASS(State);
+        CS_FORWARD_DECLARE_CLASS(StateManager);
         //---------------------------------------------------------
         /// String
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CUTF8String);
+        CS_FORWARD_DECLARE_CLASS(UTF8String);
         //---------------------------------------------------------
         /// System
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(ISystem);
+        CS_FORWARD_DECLARE_CLASS(System);
         //---------------------------------------------------------
         /// Threading
         //---------------------------------------------------------
@@ -155,12 +155,12 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Time
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CPerformanceTimer);
-        CS_FORWARD_DECLARE_CLASS(CTimer);
+        CS_FORWARD_DECLARE_CLASS(PerformanceTimer);
+        CS_FORWARD_DECLARE_CLASS(Timer);
         //---------------------------------------------------------
         /// Volume
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(IVolumeComponent);
+        CS_FORWARD_DECLARE_CLASS(VolumeComponent);
 	}
 }
 

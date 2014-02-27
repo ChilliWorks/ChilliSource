@@ -204,15 +204,15 @@ namespace ChilliSource
             
             struct PatchSize
             {
-				ChilliSource::Core::CVector2 vSizeTopLeft;
-				ChilliSource::Core::CVector2 vSizeTopRight;
-				ChilliSource::Core::CVector2 vSizeBottomLeft;
-				ChilliSource::Core::CVector2 vSizeBottomRight;
-				ChilliSource::Core::CVector2 vSizeTopCentre;
-				ChilliSource::Core::CVector2 vSizeBottomCentre;
-				ChilliSource::Core::CVector2 vSizeLeftCentre;
-				ChilliSource::Core::CVector2 vSizeRightCentre;
-				ChilliSource::Core::CVector2 vSizeMiddleCentre;
+				ChilliSource::Core::Vector2 vSizeTopLeft;
+				ChilliSource::Core::Vector2 vSizeTopRight;
+				ChilliSource::Core::Vector2 vSizeBottomLeft;
+				ChilliSource::Core::Vector2 vSizeBottomRight;
+				ChilliSource::Core::Vector2 vSizeTopCentre;
+				ChilliSource::Core::Vector2 vSizeBottomCentre;
+				ChilliSource::Core::Vector2 vSizeLeftCentre;
+				ChilliSource::Core::Vector2 vSizeRightCentre;
+				ChilliSource::Core::Vector2 vSizeMiddleCentre;
             };
 			
 			void CalculatePatchSize(PatchSize& outSizePatch);

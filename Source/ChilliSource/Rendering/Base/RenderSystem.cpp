@@ -29,11 +29,11 @@ namespace ChilliSource
 		RenderSystem::RenderSystem()
         : mpRenderFactory(nullptr), mpSpriteBatcher(nullptr)
 		{
-            Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mMeshManager);
-			Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mSkinnedAnimationManager);
-			Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mFontManager);
-			Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mMaterialManager);
-			Core::CResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mSpriteManager);
+            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mMeshManager);
+			Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mSkinnedAnimationManager);
+			Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mFontManager);
+			Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mMaterialManager);
+			Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mSpriteManager);
 		}
         //----------------------------------------------------
         /// Get Dynamic Sprite Batch Pointer
@@ -63,7 +63,7 @@ namespace ChilliSource
 		///
 		/// 
 		//-------------------------------------------------------
-		Core::IComponentFactory* RenderSystem::GetComponentFactoryPtr(u32 inudwIndex)
+		Core::ComponentFactory* RenderSystem::GetComponentFactoryPtr(u32 inudwIndex)
 		{
             if(mpRenderFactory == nullptr)
             {
@@ -77,7 +77,7 @@ namespace ChilliSource
 		///
 		/// 
 		//-------------------------------------------------------
-		Core::IComponentFactory& RenderSystem::GetComponentFactory(u32 inudwIndex)
+		Core::ComponentFactory& RenderSystem::GetComponentFactory(u32 inudwIndex)
 		{
             if(mpRenderFactory == nullptr)
             {

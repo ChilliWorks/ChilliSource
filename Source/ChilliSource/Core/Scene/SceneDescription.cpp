@@ -21,8 +21,8 @@ namespace ChilliSource
 	{
 		EntityTransform::EntityTransform() 
 		:vScale(1.0f,1.0f,1.0f)
-		,vTranslation(CVector3::ZERO)
-		,qOrientation(CQuaternion::IDENTITY)
+		,vTranslation(Vector3::ZERO)
+		,qOrientation(Quaternion::IDENTITY)
 		,fOpacity(1.0f)
 		{
 		}
@@ -31,11 +31,11 @@ namespace ChilliSource
 		{
             inpEl->name("Transform");
             			
-			if (vTranslation != CVector3::ZERO)
+			if (vTranslation != Vector3::ZERO)
                 rapidxml::add_new_attribute(inpEl, "translation", ToString(vTranslation).c_str());
-			if (qOrientation != CQuaternion::IDENTITY)
+			if (qOrientation != Quaternion::IDENTITY)
 				rapidxml::add_new_attribute(inpEl, "orientation", ToString(qOrientation).c_str());
-			if (vScale != CVector3(1,1,1))
+			if (vScale != Vector3(1,1,1))
 				rapidxml::add_new_attribute(inpEl, "scale", ToString(vScale).c_str());
             if(fOpacity != 1.0f)
                 rapidxml::add_new_attribute(inpEl, "opacity", ToString(fOpacity).c_str());
@@ -65,23 +65,23 @@ namespace ChilliSource
         }
 		
         
-        DEFINE_NAMED_INTERFACE(CSceneDesc);
+        DEFINE_NAMED_INTERFACE(SceneDesc);
         
-        bool CSceneDesc::IsA(InterfaceIDType inInterfaceID) const
+        bool SceneDesc::IsA(InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == CSceneDesc::InterfaceID;
+            return inInterfaceID == SceneDesc::InterfaceID;
         }
         
         
-        EntityPtr CSceneDesc::BuildScene(CustomEntityDelegate inCustomEntityDelegate)
+        EntitySPtr SceneDesc::BuildScene(CustomEntityDelegate inCustomEntityDelegate)
         {
-            EntityPtr pRoot = CreateEntity(sRootEntity, inCustomEntityDelegate);
+            EntitySPtr pRoot = CreateEntity(sRootEntity, inCustomEntityDelegate);
             return pRoot;
         }
         
-        EntityPtr CSceneDesc::CreateEntity(CSceneDesc::EntityDesc & insEntDesc, CustomEntityDelegate &inCustomEntityDelegate)
+        EntitySPtr SceneDesc::CreateEntity(SceneDesc::EntityDesc & insEntDesc, CustomEntityDelegate &inCustomEntityDelegate)
         {
-            EntityPtr pResult;
+            EntitySPtr pResult;
             
             if(insEntDesc.bCustomEntityDefinition && inCustomEntityDelegate)
             {
@@ -93,7 +93,7 @@ namespace ChilliSource
                 
                 for(u32 nComponent = 0; nComponent <insEntDesc.aComponents.size(); nComponent++)
                 {
-                    ComponentPtr pComponent = CreateComponent(insEntDesc.aComponents[nComponent]);
+                    ComponentSPtr pComponent = CreateComponent(insEntDesc.aComponents[nComponent]);
                     if(pComponent)
                         pResult->Attach(pComponent);
                 }
@@ -106,11 +106,11 @@ namespace ChilliSource
             return pResult;
         }
         
-        void CSceneDesc::CreateContentsForEntity(ChilliSource::Core::CEntity &insEntity, CSceneDesc::EntityDesc & insEntDesc, CustomEntityDelegate &inCustomEntityDelegate)
+        void SceneDesc::CreateContentsForEntity(ChilliSource::Core::Entity &insEntity, SceneDesc::EntityDesc & insEntDesc, CustomEntityDelegate &inCustomEntityDelegate)
         {
             for (u32 nEntity = 0; nEntity < insEntDesc.aChildEntities.size(); nEntity++) 
 			{
-				EntityPtr pEnt = CreateEntity(insEntDesc.aChildEntities[nEntity], inCustomEntityDelegate);
+				EntitySPtr pEnt = CreateEntity(insEntDesc.aChildEntities[nEntity], inCustomEntityDelegate);
 				if (pEnt)
 					insEntity.AddChild(pEnt);
 			}
@@ -120,11 +120,11 @@ namespace ChilliSource
         }
         
         
-        ComponentPtr CSceneDesc::CreateComponent(ChilliSource::Core::CSceneDesc::ComponentDesc &insComponentDesc)
+        ComponentSPtr SceneDesc::CreateComponent(ChilliSource::Core::SceneDesc::ComponentDesc &insComponentDesc)
         {
-            ComponentPtr pResult;
+            ComponentSPtr pResult;
             
-            IComponentFactory* pCompFac = CComponentFactoryDispenser::GetSingleton().GetFactoryProducing(insComponentDesc.strType);
+            ComponentFactory* pCompFac = ComponentFactoryDispenser::GetSingleton().GetFactoryProducing(insComponentDesc.strType);
             if(pCompFac)
             {
                 pResult = pCompFac->CreateComponent(insComponentDesc.strType, insComponentDesc.sParams);
@@ -143,7 +143,7 @@ namespace ChilliSource
             return pResult;
         }
         
-		bool CSceneDesc::LoadFromFile(StorageLocation ineStorageLocation, const std::string & incName)
+		bool SceneDesc::LoadFromFile(StorageLocation ineStorageLocation, const std::string & incName)
 		{
             std::string strFile;
             bool bReadFile = CUtils::FileToString(ineStorageLocation, incName, strFile);
@@ -171,7 +171,7 @@ namespace ChilliSource
             return true;		
 		}
 		
-		void CSceneDesc::WriteToFile(StorageLocation ineStorageLocation, const std::string & incName)
+		void SceneDesc::WriteToFile(StorageLocation ineStorageLocation, const std::string & incName)
 		{
             rapidxml::xml_document<> doc;
             
@@ -187,17 +187,17 @@ namespace ChilliSource
             CUtils::StringToFile(ineStorageLocation, incName, strFile);
 		}
         
-        CSceneDesc::EntityDesc*  CSceneDesc::GetDescriptionForEntityWithName(const std::string & instrName)
+        SceneDesc::EntityDesc*  SceneDesc::GetDescriptionForEntityWithName(const std::string & instrName)
         {
             return RecursiveNameSearch(&sRootEntity, instrName);
         }
         
-        CSceneDesc::EntityDesc*  CSceneDesc::RecursiveNameSearch(CSceneDesc::EntityDesc* inpDesc, const std::string & instrName)
+        SceneDesc::EntityDesc*  SceneDesc::RecursiveNameSearch(SceneDesc::EntityDesc* inpDesc, const std::string & instrName)
         {
             if(inpDesc->strName == instrName)
                 return inpDesc;
             
-            CSceneDesc::EntityDesc* pEntityDesc = nullptr;
+            SceneDesc::EntityDesc* pEntityDesc = nullptr;
             
             for(u32 udwChild = 0; udwChild < inpDesc->aChildEntities.size() && !pEntityDesc; ++udwChild)
             {
@@ -208,7 +208,7 @@ namespace ChilliSource
 
         }
 
-		void CSceneDesc::EntityDesc::ToXml(rapidxml::xml_node<> * inpParentEl) const
+		void SceneDesc::EntityDesc::ToXml(rapidxml::xml_node<> * inpParentEl) const
 		{
             rapidxml::xml_node<> * pEntityEl = rapidxml::add_new_child(inpParentEl, bCustomEntityDefinition ? "CustomEntity" : "Entity");
             
@@ -243,7 +243,7 @@ namespace ChilliSource
 			}
 		}
 
-		void CSceneDesc::EntityDesc::FromXml(rapidxml::xml_node<> * inpEntityEl)
+		void SceneDesc::EntityDesc::FromXml(rapidxml::xml_node<> * inpEntityEl)
 		{
 			// Read Entity/CustomEntity
 			bCustomEntityDefinition = !inpEntityEl->isNamed("Entity");
@@ -299,14 +299,14 @@ namespace ChilliSource
 						
 		}		
 				
-		void CSceneDesc::ComponentDesc::ToXml(rapidxml::xml_node<> * inpParentEl) const{
+		void SceneDesc::ComponentDesc::ToXml(rapidxml::xml_node<> * inpParentEl) const{
             
             rapidxml::xml_node<> *pComponentEl = rapidxml::add_new_child(inpParentEl, strType.c_str());
                     
             rapidxml::xml_node<> *pParams = rapidxml::add_new_child(pComponentEl, "Params");
             sParams.ToXml(pParams);
 		}
-		void CSceneDesc::ComponentDesc::FromXml(rapidxml::xml_node<> * inpComponentEl){
+		void SceneDesc::ComponentDesc::FromXml(rapidxml::xml_node<> * inpComponentEl){
             
             strType= inpComponentEl->name();
             for(rapidxml::xml_attribute<> * pAttr = inpComponentEl->first_attribute(); pAttr != nullptr; pAttr = pAttr->next_attribute())

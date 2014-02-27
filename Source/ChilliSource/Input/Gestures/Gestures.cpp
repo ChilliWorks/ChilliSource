@@ -385,7 +385,7 @@ namespace ChilliSource
 				mfRatio = 1.0f;
 				
 				// Determine the start angle
-				Core::CVector2 cV = mvStartPos2 - mvStartPos1;
+				Core::Vector2 cV = mvStartPos2 - mvStartPos1;
 				mfStartAngle = atan2f(cV.y, cV.x);
 				mfDAngle = 0.0f;
 				
@@ -413,7 +413,7 @@ namespace ChilliSource
 					mfRatio = 0.0f;
 				
 				// Determine the start angle
-				Core::CVector2 cV = mvCurrentPos2 - mvCurrentPos1;
+				Core::Vector2 cV = mvCurrentPos2 - mvCurrentPos1;
 				mfCurrentAngle = atan2f(cV.y, cV.x);
 				mfDAngle = mfCurrentAngle - mfStartAngle;
 				
@@ -455,13 +455,13 @@ namespace ChilliSource
             }
 		}
         
-        void PinchGesture::PopulateStartPositions(ChilliSource::Core::CVector2& outvFirstPosition, ChilliSource::Core::CVector2& outvSecondPosition) const
+        void PinchGesture::PopulateStartPositions(ChilliSource::Core::Vector2& outvFirstPosition, ChilliSource::Core::Vector2& outvSecondPosition) const
         {
             outvFirstPosition = mvStartPos1;
             outvSecondPosition = mvStartPos2;
         }
         
-        void PinchGesture::PopulateCurrentPositions(ChilliSource::Core::CVector2& outvFirstPosition, ChilliSource::Core::CVector2& outvSecondPosition) const
+        void PinchGesture::PopulateCurrentPositions(ChilliSource::Core::Vector2& outvFirstPosition, ChilliSource::Core::Vector2& outvSecondPosition) const
         {
             outvFirstPosition = mvCurrentPos1;
             outvSecondPosition = mvCurrentPos2;
@@ -550,7 +550,7 @@ namespace ChilliSource
 		{
 			//Ok we know by now whether we had a single tap (gesture will be valid)! Let's check if we have met the multi tap criteria
 			//That is that the taps happen within the given time
-			Core::CVector2 v = (Info.vLocation - mvStartPos);
+			Core::Vector2 v = (Info.vLocation - mvStartPos);
 			if(v.LengthSquared() < mudwMaxDistAllowedSqrd && CheckForTap() && ((mNumTapsRequired == 1) || CheckForMultiTap()))
 			{				
 				mCurrentNumTaps++;
@@ -760,7 +760,7 @@ namespace ChilliSource
                     mvPreviousLocation = Info.vPreviousLocation;
 					
 					//Calculate the distance travelled
-					Core::CVector2 vVelocity = mvLocation - mvStartPos;
+					Core::Vector2 vVelocity = mvLocation - mvStartPos;
 					
 					if(vVelocity.LengthSquared() > mMinDistanceRequiredSqrd)
 					{
@@ -984,7 +984,7 @@ namespace ChilliSource
 		{
 			if (mbIsGestureStarted)
 			{
-				Core::CVector2 vDistance = Info.vLocation - mvLocation;
+				Core::Vector2 vDistance = Info.vLocation - mvLocation;
 				
 				// Check the movement of the touch
 				if(vDistance.LengthSquared() > mfMaxDistanceAllowedSqrd)

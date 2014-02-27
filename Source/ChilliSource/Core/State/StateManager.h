@@ -31,10 +31,10 @@ namespace ChilliSource
 		///
 		/// Also creates and owns the scene graph for the app.
 		//---------------------------------------------------------
-		class CStateManager
+		class StateManager
 		{
 		public:
-			CStateManager();
+			StateManager();
 			
             //---------------------------------------------------------
             /// Set Owning Application
@@ -59,56 +59,56 @@ namespace ChilliSource
 			///
 			/// @return all States
 			//---------------------------------------------------------
-            const std::vector<StatePtr>& GetStates() const;
+            const std::vector<StateSPtr>& GetStates() const;
 			//---------------------------------------------------------
 			/// Get Active State
 			///
 			/// @return State on top of the hierarchy
 			//---------------------------------------------------------
-			const StatePtr& GetActiveState() const;
+			const StateSPtr& GetActiveState() const;
 			//---------------------------------------------------------
             /// Get Is State In Hierarchy
 			///
 			/// @return returns true if inpcState is in state stack, otherwise false
 			//---------------------------------------------------------
-            bool GetIsStateInHierarchy(IState* inpState) const;
+            bool GetIsStateInHierarchy(State* inpState) const;
             //---------------------------------------------------------
             /// Get Num Instances of State In Hierarchy
             ///
             /// @return The number of times the state appears in the stack
             //---------------------------------------------------------
-            u32 GetNumInstancesOfStateInHierarchy(IState* inpState) const;
+            u32 GetNumInstancesOfStateInHierarchy(State* inpState) const;
 			//---------------------------------------------------------
             /// Get Is State Pending
 			///
 			/// @return returns true if inpcState is pending to be pushed in state operation stack
 			//---------------------------------------------------------
-            bool GetIsStatePending(IState* inpState) const;
+            bool GetIsStatePending(State* inpState) const;
 			//---------------------------------------------------------
             /// Get Child State
 			///
-			/// @return If this state exists within hierarchy then returns child state, otherwise returns StatePtr() (nullptr)
+			/// @return If this state exists within hierarchy then returns child state, otherwise returns StateSPtr() (nullptr)
 			//---------------------------------------------------------
-            const StatePtr& GetChildState(IState* inpState) const;
+            const StateSPtr& GetChildState(State* inpState) const;
 			//---------------------------------------------------------
             /// Get Parent State
 			///
-			/// @return If this state exists within hierarchy then returns parent state, otherwise returns StatePtr() (nullptr)
+			/// @return If this state exists within hierarchy then returns parent state, otherwise returns StateSPtr() (nullptr)
 			//---------------------------------------------------------
-            const StatePtr& GetParentState(IState* inpState) const;
+            const StateSPtr& GetParentState(State* inpState) const;
             //---------------------------------------------------------
             /// Find State With Pointer
             ///
             /// @param Raw pointer
             /// @return Equivalent shared pointer if found in hierarchy
             //---------------------------------------------------------
-            const StatePtr& FindStateWithPointer(IState* inpState) const;
+            const StateSPtr& FindStateWithPointer(State* inpState) const;
 			//---------------------------------------------------------
 			/// Get Active Scene Ptr
 			///
 			/// @return State on top of the hierarchys scene
 			//---------------------------------------------------------
-			CScene* GetActiveScenePtr();
+			Scene* GetActiveScenePtr();
 			//---------------------------------------------------------
 			/// Push
 			///
@@ -117,7 +117,7 @@ namespace ChilliSource
 			///
 			/// @param New active state
 			//---------------------------------------------------------
-			void Push(const StatePtr &inpState);
+			void Push(const StateSPtr &inpState);
 			//---------------------------------------------------------
 			/// Pop
 			///
@@ -134,7 +134,7 @@ namespace ChilliSource
 			/// will become active. If the given state is now on the
 			/// stack the
 			//---------------------------------------------------------
-			void PopToState(IState * inpTarget);
+			void PopToState(State * inpTarget);
 			//---------------------------------------------------------
 			/// Pop To State Unique
 			///
@@ -142,7 +142,7 @@ namespace ChilliSource
 			/// specified state is topmost and is unique in the stack.
 			/// The given state will become active.
 			//---------------------------------------------------------
-			void PopToStateUnique(IState * inpTarget);
+			void PopToStateUnique(State * inpTarget);
 			//---------------------------------------------------------
 			/// ClearStack
 			///
@@ -163,13 +163,13 @@ namespace ChilliSource
 			///
 			/// @param State to become active
 			//---------------------------------------------------------
-			void Change(const StatePtr &inpState);
+			void Change(const StateSPtr &inpState);
 			//------------------------------------------------------------------
 			/// Get Factory Producing
 			///
 			/// @return a handle to a factory that can create object of type ID
 			//------------------------------------------------------------------
-			IComponentFactory* GetFactoryProducing(InterfaceIDType inInterfaceID);
+			ComponentFactory* GetFactoryProducing(InterfaceIDType inInterfaceID);
 			//-------------------------------------------------------------------------
 			/// On Notification Received
 			///
@@ -250,7 +250,7 @@ namespace ChilliSource
             ///
             /// @param State to push
             //---------------------------------------------------------
-            void PushHierarchy(const StatePtr& inpState);
+            void PushHierarchy(const StateSPtr& inpState);
 			
 			enum class StateOperationAction
             {
@@ -264,19 +264,19 @@ namespace ChilliSource
 			struct StateOperation
 			{
 				StateOperation(StateOperationAction ineAction) : eAction(ineAction), pRawState(nullptr){}
-				StateOperation(StateOperationAction ineAction, const StatePtr& inpState) : eAction(ineAction), pState(inpState), pRawState(nullptr){}
-				StateOperation(StateOperationAction ineAction, IState * inpState) : eAction(ineAction), pRawState(inpState){}
+				StateOperation(StateOperationAction ineAction, const StateSPtr& inpState) : eAction(ineAction), pState(inpState), pRawState(nullptr){}
+				StateOperation(StateOperationAction ineAction, State * inpState) : eAction(ineAction), pRawState(inpState){}
 
 				StateOperationAction eAction;
-				StatePtr pState;
-				IState * pRawState;
+				StateSPtr pState;
+				State * pRawState;
 			};
 			
 		private:
 		
 			Application* mpApp;
 			
-			std::vector<StatePtr> mStateHierarchy;              //The alive states. A state can be pushed onto the stack to become the active state. Yet the other states will not be destroyed. Hierarchy is now a vector, so that states within can be inspected, since std::stack is a little opaque
+			std::vector<StateSPtr> mStateHierarchy;              //The alive states. A state can be pushed onto the stack to become the active state. Yet the other states will not be destroyed. Hierarchy is now a vector, so that states within can be inspected, since std::stack is a little opaque
 			std::list<StateOperation> mStateOperationQueue;
             
             bool mbStartState;

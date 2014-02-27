@@ -31,7 +31,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Colour
         //----------------------------------------------------------
-        void LightComponent::SetColour(const Core::CColour &inColour)
+        void LightComponent::SetColour(const Core::Colour &inColour)
         {
             mColour = inColour;
             
@@ -40,7 +40,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Colour
         //----------------------------------------------------------
-        const Core::CColour& LightComponent::GetColour() const
+        const Core::Colour& LightComponent::GetColour() const
         {
             mIntenseColour = mColour * mfIntensity;
             return mIntenseColour;
@@ -48,14 +48,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get World Position
         //----------------------------------------------------------
-        const Core::CVector3& LightComponent::GetWorldPosition() const
+        const Core::Vector3& LightComponent::GetWorldPosition() const
         {
             if(GetEntityOwner() != nullptr)
             {
                 return GetEntityOwner()->Transform().GetWorldPosition();
             }
             
-            return Core::CVector3::ZERO;
+            return Core::Vector3::ZERO;
         }
         //----------------------------------------------------------
         /// Set Intensity

@@ -18,7 +18,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        void CSceneAnimationDesc::EntityAnimationDesc::FromBinaryStream(const Core::FileStreamPtr & inStream)
+        void SceneAnimationDesc::EntityAnimationDesc::FromBinaryStream(const Core::FileStreamSPtr & inStream)
 		{
 			inStream->Read((s8*)&udwKeyframeCount,sizeof(u32));
             
@@ -39,7 +39,7 @@ namespace ChilliSource
 			inStream->Read((s8*)&strTargetPath[0],nPathLength);
 		}
 		
-		void CSceneAnimationDesc::EntityAnimationDesc::ToBinaryStream(const Core::FileStreamPtr & inStream)
+		void SceneAnimationDesc::EntityAnimationDesc::ToBinaryStream(const Core::FileStreamSPtr & inStream)
 		{
 			u32 nEntries = udwKeyframeCount;
 			inStream->Write((s8*)&nEntries,(s32)sizeof(u32));
@@ -57,9 +57,9 @@ namespace ChilliSource
 		}
         
         
-        bool CSceneAnimationDesc::LoadFromBinaryFile(StorageLocation ineStorageLocation, const std::string & inFilePath)
+        bool SceneAnimationDesc::LoadFromBinaryFile(StorageLocation ineStorageLocation, const std::string & inFilePath)
         {
-            Core::FileStreamPtr AnimFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
+            Core::FileStreamSPtr AnimFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
             if (AnimFile->IsOpen())
             {
                 u32 nAnimations;
@@ -73,9 +73,9 @@ namespace ChilliSource
             return false;
         }
         
-        void CSceneAnimationDesc::SaveToBinaryFile(StorageLocation ineStorageLocation, const std::string & inFilePath)
+        void SceneAnimationDesc::SaveToBinaryFile(StorageLocation ineStorageLocation, const std::string & inFilePath)
         {
-            Core::FileStreamPtr AnimFile= Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_writeBinary);
+            Core::FileStreamSPtr AnimFile= Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_writeBinary);
 			
 			u32 nAnimations = asEntityAnimations.size();
 			AnimFile->Write((s8*)&nAnimations, (s32)sizeof(u32));
@@ -85,33 +85,33 @@ namespace ChilliSource
         }
         
         
-        DEFINE_NAMED_INTERFACE(CSceneAnimation);
+        DEFINE_NAMED_INTERFACE(SceneAnimation);
         
-        bool CSceneAnimation::IsA(InterfaceIDType inInterface) const
+        bool SceneAnimation::IsA(InterfaceIDType inInterface) const
         {
-            return  inInterface == CSceneAnimation::InterfaceID;
+            return  inInterface == SceneAnimation::InterfaceID;
         }
         
-        bool CSceneAnimation::ApplyAnimationToScene(const EntityPtr &inpRootNode, std::vector<EntityAnimationPtr> &outEntityAnimList) const
+        bool SceneAnimation::ApplyAnimationToScene(const EntitySPtr &inpRootNode, std::vector<EntityAnimationPtr> &outEntityAnimList) const
         {
             return ApplyAnimationToScene(inpRootNode.get(), outEntityAnimList);
         }
         
-        bool CSceneAnimation::ApplyAnimationToScene(CEntity* inpRootNode, std::vector<EntityAnimationPtr> &outEntityAnimList) const
+        bool SceneAnimation::ApplyAnimationToScene(Entity* inpRootNode, std::vector<EntityAnimationPtr> &outEntityAnimList) const
         {
             if(!inpRootNode)
             {
-                CS_WARNING_LOG("CSceneAnimation:Tried to apply animation to nullptr Entity.");
+                CS_WARNING_LOG("SceneAnimation:Tried to apply animation to nullptr Entity.");
                 return false;
             }
             
             
-            EntityAnimationControllerPtr pAnimController = inpRootNode->GetEntityAnimationControllerPtr();
+            EntityAnimationControllerSPtr pAnimController = inpRootNode->GetEntityAnimationControllerPtr();
             
             //If we don't already have an animation controller set up, let's set one up now
             if(!pAnimController)
             {
-                inpRootNode->GetEntityAnimationController() = EntityAnimationControllerPtr(new CEntityAnimationController());
+                inpRootNode->GetEntityAnimationController() = EntityAnimationControllerSPtr(new CEntityAnimationController());
                 pAnimController = inpRootNode->GetEntityAnimationControllerPtr();
             }
             
@@ -120,8 +120,8 @@ namespace ChilliSource
             outEntityAnimList.reserve(outEntityAnimList.size() + msAnimation.asEntityAnimations.size());
             for (u32 nAnim = 0; nAnim < msAnimation.asEntityAnimations.size(); nAnim++) 
 			{				
-                const CSceneAnimationDesc::EntityAnimationDesc& sCurrentAnim(msAnimation.asEntityAnimations[nAnim]);                         
-				CEntity* pAnimEntity =  inpRootNode->FindChildEntityWithName(sCurrentAnim.strTargetPath);
+                const SceneAnimationDesc::EntityAnimationDesc& sCurrentAnim(msAnimation.asEntityAnimations[nAnim]);                         
+				Entity* pAnimEntity =  inpRootNode->FindChildEntityWithName(sCurrentAnim.strTargetPath);
 				
 				if (pAnimEntity)
 					outEntityAnimList.push_back(pAnimController->CreateAnimation(sCurrentAnim.strName, pAnimEntity));
@@ -130,12 +130,12 @@ namespace ChilliSource
             return true;
         }
         
-        bool CSceneAnimation::PlayAnimation(const EntityPtr& inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode, InterpolationType ineInterpType) const
+        bool SceneAnimation::PlayAnimation(const EntitySPtr& inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode, InterpolationType ineInterpType) const
         {
             return PlayAnimation(inpRootNode.get(), outEntityAnimList, inePlayMode, ineInterpType);
         }
         
-        bool CSceneAnimation::PlayAnimation(CEntity* inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode, InterpolationType ineInterpType) const
+        bool SceneAnimation::PlayAnimation(Entity* inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode, InterpolationType ineInterpType) const
         {
             u32 udwCurrentAnims = outEntityAnimList.size();
             if(!ApplyAnimationToScene(inpRootNode, outEntityAnimList))
@@ -150,7 +150,7 @@ namespace ChilliSource
             return true;
         }
         
-        void CSceneAnimation::SetSceneAnimDesc(const CSceneAnimationDesc &inAnimation)
+        void SceneAnimation::SetSceneAnimDesc(const SceneAnimationDesc &inAnimation)
         {
             msAnimation = inAnimation;
         }

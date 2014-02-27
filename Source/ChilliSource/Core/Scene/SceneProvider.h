@@ -16,10 +16,10 @@ namespace ChilliSource
 {
     namespace Core
     {
-        class CSceneProvider : public ChilliSource::Core::IResourceProvider
+        class SceneProvider : public ChilliSource::Core::ResourceProvider
         {
         public:
-            DECLARE_NAMED_INTERFACE(CSceneProvider);
+            DECLARE_NAMED_INTERFACE(SceneProvider);
             
             bool IsA(InterfaceIDType inInterface) const override;
             
@@ -27,12 +27,12 @@ namespace ChilliSource
             bool CanCreateResourceFromFileWithExtension(const std::string & inExtension) const override;
             
             //---Filepath is relative to the resources directory - either the documents or the package
-            bool CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource) override;
-            bool AsyncCreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource) override;
+            bool CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource) override;
+            bool AsyncCreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource) override;
             
         private:
-            bool LoadMoScene(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource);
-            void LoadAsyncMoScene(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource);
+            bool LoadMoScene(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource);
+            void LoadAsyncMoScene(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource);
             
         };
     }

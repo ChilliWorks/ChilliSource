@@ -42,14 +42,14 @@ namespace ChilliSource
 			std::string mstrName;
 			u32 mudwNumVertices;
 			u32 mudwNumIndices;
-			ChilliSource::Core::CVector3 mvMinBounds;
-			ChilliSource::Core::CVector3 mvMaxBounds;
+			ChilliSource::Core::Vector3 mvMinBounds;
+			ChilliSource::Core::Vector3 mvMaxBounds;
 			std::string mstrTextureName;
 			std::string mstrMaterialName;
             Core::StorageLocation meMaterialStorageLocation;
 			u8* mpVertexData;
 			u8* mpIndexData;
-			std::vector<ChilliSource::Core::CMatrix4x4> mInverseBindPoseMatrices;
+			std::vector<ChilliSource::Core::Matrix4x4> mInverseBindPoseMatrices;
 			PrimitiveType ePrimitiveType;            
 		};
 		//-------------------------------------------------------------------------
@@ -62,8 +62,8 @@ namespace ChilliSource
 			MeshFeatureDescriptor mFeatures;
 			VertexDeclaration mVertexDeclaration;
 			u32 mudwIndexSize;
-			ChilliSource::Core::CVector3 mvMinBounds;
-			ChilliSource::Core::CVector3 mvMaxBounds;
+			ChilliSource::Core::Vector3 mvMinBounds;
+			ChilliSource::Core::Vector3 mvMaxBounds;
 			SkeletonSPtr mpSkeleton;
 			std::vector<SubMeshDescriptor> mMeshes;
 		};

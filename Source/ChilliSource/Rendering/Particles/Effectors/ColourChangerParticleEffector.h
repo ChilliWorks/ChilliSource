@@ -54,8 +54,8 @@ namespace ChilliSource
         private:
             
             bool mbInitialColourSet;
-            Core::CColour mInitialColour;
-            Core::CColour mTargetColour;
+            Core::Colour mInitialColour;
+            Core::Colour mTargetColour;
         };
     }
 }

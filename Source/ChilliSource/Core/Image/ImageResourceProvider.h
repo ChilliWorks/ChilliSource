@@ -18,7 +18,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        class IImageResourceProvider : public Core::IResourceProvider
+        class ImageResourceProvider : public Core::ResourceProvider
         {
         public:
 
@@ -29,18 +29,18 @@ namespace ChilliSource
             /// @param File path to resource
             /// @return Instantiated resource
             //----------------------------------------------------------------
-            virtual bool CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource) = 0;
+            virtual bool CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::ResourceSPtr& outpResource) = 0;
             //--------------------------------------------------
             /// Set Default Format
             ///
             /// @param Image format that will be used in lieu
             /// of specific
             //--------------------------------------------------
-            static void SetDefaultFormat(Core::CImage::Format ineFormat);
+            static void SetDefaultFormat(Core::Image::Format ineFormat);
             
         protected:
             
-            static Core::CImage::Format meDefaultFormat;
+            static Core::Image::Format meDefaultFormat;
         };
     }
 }

@@ -15,10 +15,10 @@
 namespace ChilliSource {
     namespace Core
     {
-        class CSceneAnimationProvider : public ChilliSource::Core::IResourceProvider
+        class SceneAnimationProvider : public ChilliSource::Core::ResourceProvider
         {
         public:
-            DECLARE_NAMED_INTERFACE(CSceneAnimationProvider);
+            DECLARE_NAMED_INTERFACE(SceneAnimationProvider);
             
             bool IsA(InterfaceIDType inInterfaceID) const override;
             
@@ -26,10 +26,10 @@ namespace ChilliSource {
             bool CanCreateResourceFromFileWithExtension(const std::string & inExtension) const override;
             
             //---Filepath is relative to the resources directory - either the documents or the package
-            bool CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource) override;
+            bool CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource) override;
             
         private:
-            bool LoadMoSceneAnim(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourcePtr& outpResource);
+            bool LoadMoSceneAnim(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource);
         };
     }
 }

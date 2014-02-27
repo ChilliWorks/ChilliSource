@@ -280,7 +280,7 @@ namespace ChilliSource
             
             
             //We want to copy our local copies contents straight to the server
-            FileStreamPtr pFileStream = Application::GetFileSystemPtr()->CreateFileStream(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath, ChilliSource::Core::FileMode::k_read);
+            FileStreamSPtr pFileStream = Application::GetFileSystemPtr()->CreateFileStream(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath, ChilliSource::Core::FileMode::k_read);
             
             std::string strLocalContents = "";
             
@@ -295,7 +295,7 @@ namespace ChilliSource
             if(!bExists)
             {
                 //Cloud version exists, local version does not - create local from cloud
-                FileStreamPtr pFileStream = Application::GetFileSystemPtr()->CreateFileStream(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath, ChilliSource::Core::FileMode::k_write);
+                FileStreamSPtr pFileStream = Application::GetFileSystemPtr()->CreateFileStream(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath, ChilliSource::Core::FileMode::k_write);
                 pFileStream->Write(strCloudContents);
                 pFileStream->Close();
                 
@@ -398,7 +398,7 @@ namespace ChilliSource
             {
                 case CloudStorageSystem::FileConflictChoice::k_copyCloudToLocal:
                 {
-                    FileStreamPtr pFileStream = Application::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, ChilliSource::Core::FileMode::k_write);
+                    FileStreamSPtr pFileStream = Application::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, ChilliSource::Core::FileMode::k_write);
                     
                     if(pFileStream)
                     {
@@ -430,7 +430,7 @@ namespace ChilliSource
                 case CloudStorageSystem::FileConflictChoice::k_copyLocalToCloud:
                 {
                     //We want to copy our local copies contents straight to the server
-                    FileStreamPtr pFileStream = Application::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, ChilliSource::Core::FileMode::k_read);
+                    FileStreamSPtr pFileStream = Application::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, ChilliSource::Core::FileMode::k_read);
                     
                     if(pFileStream)
                     {

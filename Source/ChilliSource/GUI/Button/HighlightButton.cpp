@@ -52,12 +52,12 @@ namespace ChilliSource
         //-----------------------------------------------------------
         HighlightButton::HighlightButton() 
         : mpBackgroundImage(new ImageView()), NormalSpriteSheetIndex(0), HighlightSpriteSheetIndex(0), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
-        msDefaultUVs(Core::CVector2::ZERO, Core::CVector2::ONE),
-        msHighlightUVs(Core::CVector2::ZERO, Core::CVector2::ONE),
+        msDefaultUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
+        msHighlightUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
         mbSelected(false), SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), mbFillMaintain(false), mbFitMaintain(false)
         {
-            mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::CVector2(1.0f, 1.0f), Core::CVector2(0, 0)));
-            mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::CVector2(0.5f, 0.5f), Core::CVector2(0, 0)));
+            mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
+            mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::Vector2(0.5f, 0.5f), Core::Vector2(0, 0)));
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
 			
@@ -72,8 +72,8 @@ namespace ChilliSource
         //------------------------------------------------------------
         HighlightButton::HighlightButton(const Core::ParamDictionary& insParams) 
         : Button(insParams), mpBackgroundImage(new ImageView()), NormalSpriteSheetIndex(0), HighlightSpriteSheetIndex(0),
-        msDefaultUVs(Core::CVector2::ZERO, Core::CVector2::ONE),
-        msHighlightUVs(Core::CVector2::ZERO, Core::CVector2::ONE),
+        msDefaultUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
+        msHighlightUVs(Core::Vector2::ZERO, Core::Vector2::ONE),
         mbSelected(false), HighlightColour(0.7f, 0.7f, 0.7f, 1.0f),
 		SizeFromImage(false), HeightMaintain(false), WidthMaintain(false), WidthFromImage(false), HeightFromImage(false), mbFillMaintain(false), mbFitMaintain(false)
         {
@@ -180,27 +180,27 @@ namespace ChilliSource
 			//---Set Maintain Height
 			if(insParams.TryGetValue("SetHeightMaintain", strValue))
 			{
-				Core::CVector2 vSize = Core::ParseVector2(strValue);
+				Core::Vector2 vSize = Core::ParseVector2(strValue);
 				HeightMaintain = true;
 				SetHeightMaintainingAspect(vSize.x, vSize.y);
 			}
 			//---Set Maintain Width
 			if(insParams.TryGetValue("SetWidthMaintain", strValue))
 			{
-				Core::CVector2 vSize = Core::ParseVector2(strValue);
+				Core::Vector2 vSize = Core::ParseVector2(strValue);
 				WidthMaintain = true;
 				SetWidthMaintainingAspect(vSize.x, vSize.y);
 			}
             //---Set Fill Maintain
             if(insParams.TryGetValue("SetFillMaintain", strValue))
             {
-                Core::CVector4 vSize = Core::ParseVector4(strValue);
+                Core::Vector4 vSize = Core::ParseVector4(strValue);
                 SetFillMaintainingAspect(vSize.x, vSize.y, vSize.z, vSize.w);
             }
             //---Set Fit Maintain
             if(insParams.TryGetValue("SetFitMaintain", strValue))
             {
-                Core::CVector4 vSize = Core::ParseVector4(strValue);
+                Core::Vector4 vSize = Core::ParseVector4(strValue);
                 SetFitMaintainingAspect(vSize.x, vSize.y, vSize.z, vSize.w);
             }
             //---Audio effect
@@ -225,8 +225,8 @@ namespace ChilliSource
                 SetDeselectAudioEffect(pAudioFactory->CreateAudioComponent(eDeselectAudioLocation, strValue, false, false));
             }
             
-            mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::CVector2(1.0f, 1.0f), Core::CVector2(0, 0)));
-            mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::CVector2(0.5f, 0.5f), Core::CVector2(0, 0)));
+            mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
+            mpBackgroundImage->SetPosition(Core::UnifiedVector2(Core::Vector2(0.5f, 0.5f), Core::Vector2(0, 0)));
             mpBackgroundImage->EnableUserInteraction(false);
             AddSubview(mpBackgroundImage);
 			
@@ -481,7 +481,7 @@ namespace ChilliSource
 		/// @param Tint colour to apply when the button is
 		/// selected
 		//--------------------------------------------------------
-		void HighlightButton::SetHighlightColour(const Core::CColour & inValue)
+		void HighlightButton::SetHighlightColour(const Core::Colour & inValue)
 		{
 			HighlightColour = inValue;
 		}
@@ -491,7 +491,7 @@ namespace ChilliSource
 		/// @return Tint colour to apply when the button is
 		/// selected
 		//--------------------------------------------------------
-		const Core::CColour & HighlightButton::GetHighlightColour() const
+		const Core::Colour & HighlightButton::GetHighlightColour() const
 		{
 			return HighlightColour;
 		}
@@ -577,11 +577,11 @@ namespace ChilliSource
 				{
 					mpBackgroundImage->SetTexture(NormalTexture);
                     mpBackgroundImage->SetUVs(msDefaultUVs);
-                    mpBackgroundImage->SetColour(Core::CColour::WHITE);
+                    mpBackgroundImage->SetColour(Core::Colour::WHITE);
 				}
 				else if(NormalSpriteSheet)
 				{
-					mpBackgroundImage->SetColour(Core::CColour::WHITE);
+					mpBackgroundImage->SetColour(Core::Colour::WHITE);
 					mpBackgroundImage->SetSpriteSheetIndex(NormalSpriteSheetIndex);
 					mpBackgroundImage->SetSpriteSheet(NormalSpriteSheet);
 				}
@@ -628,7 +628,7 @@ namespace ChilliSource
 		{
 			if(SizeFromImage)
 			{
-				Core::CVector2 vImageSize = mpBackgroundImage->GetSizeFromImage();
+				Core::Vector2 vImageSize = mpBackgroundImage->GetSizeFromImage();
 				SetSize(0.0f, 0.0f, vImageSize.x, vImageSize.y);
 			}
             else if(HeightFromImage)
@@ -767,7 +767,7 @@ namespace ChilliSource
 		///
 		/// @return Absolute size of the image
 		//--------------------------------------------------------
-		Core::CVector2 HighlightButton::GetSizeFromImage() const
+		Core::Vector2 HighlightButton::GetSizeFromImage() const
 		{
 			return GetBackgroundImageView()->GetSizeFromImage();
 		}
@@ -789,7 +789,7 @@ namespace ChilliSource
 			if(fScaleY == 0.0f)
 				return;
             
-            Core::CVector2 vCurrentSize = GetSizeFromImage();
+            Core::Vector2 vCurrentSize = GetSizeFromImage();
             f32 fAspectRatio = vCurrentSize.y / vCurrentSize.x;
             
             vCurrentSize = GetAbsoluteSize();
@@ -814,7 +814,7 @@ namespace ChilliSource
 			if(fScaleX == 0.0f)
 				return;
             
-            Core::CVector2 vCurrentSize = GetSizeFromImage();
+            Core::Vector2 vCurrentSize = GetSizeFromImage();
             f32 fAspectRatio = vCurrentSize.x / vCurrentSize.y;
             
             vCurrentSize = GetAbsoluteSize();
@@ -881,8 +881,8 @@ namespace ChilliSource
             if(GetParentViewPtr() == nullptr)
                 return;
             
-            Core::CVector2 vParentSize(GetParentViewPtr()->GetAbsoluteSize());
-            Core::CVector2 vImageSize(GetSizeFromImage());
+            Core::Vector2 vParentSize(GetParentViewPtr()->GetAbsoluteSize());
+            Core::Vector2 vImageSize(GetSizeFromImage());
             
             f32 fParentRatio = (vParentSize.x * infRelWidth) / (vParentSize.y * infRelHeight);
             f32 fImageRatio = vImageSize.x / vImageSize.y;
@@ -916,8 +916,8 @@ namespace ChilliSource
             if(GetParentViewPtr() == nullptr)
                 return;
             
-            Core::CVector2 vParentSize(GetParentViewPtr()->GetAbsoluteSize());
-            Core::CVector2 vImageSize(GetSizeFromImage());
+            Core::Vector2 vParentSize(GetParentViewPtr()->GetAbsoluteSize());
+            Core::Vector2 vImageSize(GetSizeFromImage());
             
             f32 fParentRatio = (vParentSize.x * infRelWidth) / (vParentSize.y * infRelHeight);
             f32 fImageRatio = vImageSize.x / vImageSize.y;

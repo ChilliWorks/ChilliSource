@@ -68,7 +68,7 @@ namespace ChilliSource
 {
 	namespace Networking 
     {
-		class MoMetricsSystem : public Core::ISystem 
+		class MoMetricsSystem : public Core::System 
         {
 		public:
 			DECLARE_NAMED_INTERFACE(MoMetricsSystem);

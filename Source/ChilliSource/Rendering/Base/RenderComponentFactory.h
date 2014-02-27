@@ -23,7 +23,7 @@ namespace ChilliSource
 		///
 		/// Allows objects to instantiate renderable components
 		//======================================================
-		class RenderComponentFactory : public Core::IComponentFactory
+		class RenderComponentFactory : public Core::ComponentFactory
 		{
 		public: 
 			DECLARE_NAMED_INTERFACE(RenderComponentFactory);
@@ -64,7 +64,7 @@ namespace ChilliSource
             /// @param Type Name
             /// @param Param Dictionary
             //--------------------------------------------------------
-            Core::ComponentPtr CreateComponent(const std::string & insTypeName, const Core::ParamDictionary & insParamDictionary);
+            Core::ComponentSPtr CreateComponent(const std::string & insTypeName, const Core::ParamDictionary & insParamDictionary);
 			//--------------------------------------------------------
 			/// Get Owning Render System Pointer
 			///
@@ -77,8 +77,8 @@ namespace ChilliSource
 			///
 			/// A number of overloads 
 			//---------------------------------------------------------------------------
-			SpriteComponentSPtr CreateSpriteComponent(const Core::CVector2 &invDims, const MaterialSPtr& inMaterial);
-			SpriteComponentSPtr CreateSpriteComponent(const Core::CVector2 &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath);
+			SpriteComponentSPtr CreateSpriteComponent(const Core::Vector2 &invDims, const MaterialSPtr& inMaterial);
+			SpriteComponentSPtr CreateSpriteComponent(const Core::Vector2 &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath);
 			SpriteComponentSPtr CreateSpriteComponent(const SpriteSheetSPtr& pSpriteSheet, u32 inTpageIndex, const MaterialSPtr& inpMaterial);
 			SpriteComponentSPtr CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheet, u32 inTpageIndex, const MaterialSPtr& inpMaterial);
             SpriteComponentSPtr CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheet, const std::string& inTpageID, const MaterialSPtr& inpMaterial);

@@ -36,11 +36,11 @@ namespace ChilliSource
             Core::StorageLocation eStorageLocation;
         };
         
-		class IResourceManager : public IQueryableInterface
+		class ResourceManager : public QueryableInterface
 		{	
 		public:
-			IResourceManager();
-			virtual ~IResourceManager(){}
+			ResourceManager();
+			virtual ~ResourceManager(){}
 			//-----------------------------------------------------------------
 			/// Set Application Owner
 			///
@@ -78,7 +78,7 @@ namespace ChilliSource
 			///
 			/// @param Vector of the resource loaders that this manager will use
 			//-----------------------------------------------------------------
-			void SetResourceProviders(const std::vector<IResourceProvider*> & inVecResourceProviders);
+			void SetResourceProviders(const std::vector<ResourceProvider*> & inVecResourceProviders);
 			//-----------------------------------------------------------------
 			/// Release
 			///
@@ -89,7 +89,7 @@ namespace ChilliSource
 			///
 			/// @param Resource pointer
 			//-----------------------------------------------------------------
-			virtual void Release(IResource* inpResource);
+			virtual void Release(Resource* inpResource);
 			//-----------------------------------------------------------------
 			/// Release All
 			///
@@ -115,7 +115,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to resource type
 			//-----------------------------------------------------------------
-			virtual ResourcePtr GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath) = 0;
+			virtual ResourceSPtr GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath) = 0;
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -128,7 +128,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to resource type
 			//-----------------------------------------------------------------
-			virtual ResourcePtr AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath) {return ResourcePtr();};
+			virtual ResourceSPtr AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath) {return ResourceSPtr();};
 			//-----------------------------------------------------------------
 			/// Get Resource Provider By Extension
 			///
@@ -138,7 +138,7 @@ namespace ChilliSource
 			/// @param file extension string
 			/// @return resource provider
 			//-----------------------------------------------------------------
-			IResourceProvider* GetResourceProviderByExtension(const std::string &instrExtension);
+			ResourceProvider* GetResourceProviderByExtension(const std::string &instrExtension);
             //-----------------------------------------------------------------
             /// Get All Loaded Resources
             ///
@@ -149,10 +149,10 @@ namespace ChilliSource
 			virtual std::vector<ResourceDesc> GetAllLoadedResources() const;
 		protected:
 			
-			std::vector<IResourceProvider*> mResourceProviders;
+			std::vector<ResourceProvider*> mResourceProviders;
 			Application* mpApplicationOwner;
 			
-			typedef std::unordered_map<std::string, ResourcePtr> MapStringToResourcePtr;
+			typedef std::unordered_map<std::string, ResourceSPtr> MapStringToResourcePtr;
 			MapStringToResourcePtr mMapFilenameToResource;
 		};
 	}

@@ -49,9 +49,9 @@ namespace ChilliSource
             
             struct SpriteVertex
             {
-                Core::CVector4 vPos;
-                Core::CVector2 vTex;
-                Core::CColour::ByteColour Col;
+                Core::Vector4 vPos;
+                Core::Vector2 vTex;
+                Core::Colour::ByteColour Col;
             };
             
             struct SpriteData
@@ -104,7 +104,7 @@ namespace ChilliSource
 			///
 			/// @param Vector containing width and height
 			//-----------------------------------------------------------
-			void SetDimensions(const Core::CVector2 &invDims);
+			void SetDimensions(const Core::Vector2 &invDims);
 			//-----------------------------------------------------------
 			/// Set Dimensions
 			///
@@ -129,14 +129,14 @@ namespace ChilliSource
 			///
 			/// @return Vector containing width and height
 			//-----------------------------------------------------------
-			const Core::CVector2& GetDimensions() const;
+			const Core::Vector2& GetDimensions() const;
 			//-----------------------------------------------------------
 			/// Get Dimensions Unfactored
 			///
 			/// @return Vector containing width and height, without applying
 			/// the screen factor
 			//-----------------------------------------------------------
-			const Core::CVector2& GetDimensionsUnfactored() const;
+			const Core::Vector2& GetDimensionsUnfactored() const;
 			//-----------------------------------------------------------
 			/// Set UV's
 			///
@@ -169,7 +169,7 @@ namespace ChilliSource
 			///
 			/// @param Colour containing RGBA
 			//-----------------------------------------------------------
-			void SetColour(const Core::CColour &inCol);
+			void SetColour(const Core::Colour &inCol);
 			//-----------------------------------------------------------
 			/// Set Colour
 			///
@@ -186,7 +186,7 @@ namespace ChilliSource
 			///
 			/// @return Sprite colour
 			//-----------------------------------------------------------
-			const Core::CColour& GetColour() const;
+			const Core::Colour& GetColour() const;
 
 			//-----------------------------------------------------------
 			/// Get Current Frame
@@ -244,25 +244,25 @@ namespace ChilliSource
             ///
             /// @return Position of corner after transform
             //-----------------------------------------------------------
-            const ChilliSource::Core::CVector4 & GetUpperLeftCornerPos();
+            const ChilliSource::Core::Vector4 & GetUpperLeftCornerPos();
             //-----------------------------------------------------------
             /// Get Lower Left Corner Position
             ///
             /// @return Position of corner after transform
             //-----------------------------------------------------------
-			const ChilliSource::Core::CVector4 & GetLowerLeftCornerPos();
+			const ChilliSource::Core::Vector4 & GetLowerLeftCornerPos();
             //-----------------------------------------------------------
             /// Get Upper Right Corner Position
             ///
             /// @return Position of corner after transform
             //-----------------------------------------------------------
-			const ChilliSource::Core::CVector4 & GetUpperRightCornerPos();
+			const ChilliSource::Core::Vector4 & GetUpperRightCornerPos();
             //-----------------------------------------------------------
             /// Get Lower Right Corner Position
             ///
             /// @return Position of corner after transform
             //-----------------------------------------------------------
-			const ChilliSource::Core::CVector4 & GetLowerRightCornerPos();
+			const ChilliSource::Core::Vector4 & GetLowerRightCornerPos();
             //-----------------------------------------------------------
             /// Get Sprite Data
             ///
@@ -335,7 +335,7 @@ namespace ChilliSource
 			///
 			/// @param Colour containing RGBA
 			//-----------------------------------------------------------
-			void SetColourWithOpacity(const Core::CColour &inCol);
+			void SetColourWithOpacity(const Core::Colour &inCol);
 			//-----------------------------------------------------------
 			/// Set Colour With Opacity
 			///
@@ -353,23 +353,23 @@ namespace ChilliSource
 			///
 			/// @return Sprite colour
 			//-----------------------------------------------------------
-			const Core::CColour& GetColourWithOpacity() const;
+			const Core::Colour& GetColourWithOpacity() const;
 		private:
 			SpriteData mSpriteData;
             
-            Core::CMatrix4x4 mmatTransformCache;
+            Core::Matrix4x4 mmatTransformCache;
             
-            Core::CVector4 mavVertexPos[kudwVertsPerSprite];
+            Core::Vector4 mavVertexPos[kudwVertsPerSprite];
 
-			Core::CVector2 mvDimensions;
+			Core::Vector2 mvDimensions;
 			
 			Core::CRect mUVs;
 			Core::CRect mTransformedUVs;
             
-            Core::CColour mColour;
+            Core::Colour mColour;
             
-            Core::CColour mColourWithOpacity;
-            Core::CColour::ByteColour mByteColourWithOpacity;
+            Core::Colour mColourWithOpacity;
+            Core::Colour::ByteColour mByteColourWithOpacity;
 			
             AlignmentAnchor     meAlignment;
             

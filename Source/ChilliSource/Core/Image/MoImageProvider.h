@@ -16,7 +16,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        class CMoImageProvider : public IImageResourceProvider
+        class MoImageProvider : public ImageResourceProvider
         {
         public:
             //----------------------------------------------------------------
@@ -49,7 +49,7 @@ namespace ChilliSource
             /// @param Out: Resource
             /// @return Whether the resource loaded
             //----------------------------------------------------------------
-            bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource) override;
+            bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource) override;
             //----------------------------------------------------------------
             /// Create Image From File
             ///
@@ -59,7 +59,7 @@ namespace ChilliSource
             /// @param Out: Resource
             /// @return Whether the resource loaded
             //----------------------------------------------------------------
-            bool CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource);
+            bool CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::ResourceSPtr& outpResource);
         private:
             struct ImageHeaderVersion2
             {
@@ -85,14 +85,14 @@ namespace ChilliSource
             /// @param Pointer to image data file
             /// @param Pointer to resource destination
             //----------------------------------------------------------------
-            void ReadFileVersion2(Core::FileStreamPtr inpImageFile, Core::ResourcePtr& outpResource);
+            void ReadFileVersion2(Core::FileStreamSPtr inpImageFile, Core::ResourceSPtr& outpResource);
             //----------------------------------------------------------------
             /// Reads a version 3 formatted .moimage file
             ///
             /// @param Pointer to image data file
             /// @param Pointer to resource destination
             //----------------------------------------------------------------
-            void ReadFileVersion3(Core::FileStreamPtr inpImageFile, Core::ResourcePtr& outpResource);
+            void ReadFileVersion3(Core::FileStreamSPtr inpImageFile, Core::ResourceSPtr& outpResource);
             //----------------------------------------------------------------
             /// Get Format Info
             ///
@@ -104,7 +104,7 @@ namespace ChilliSource
             /// @return Whether the format was found
             //----------------------------------------------------------------
             bool GetFormatInfo(const u32 inudwFormat, const u32 inudwWidth, const u32 inudwHeight,
-                               Core::CImage::Format& outFormat, u32& outudwImageSize);
+                               Core::Image::Format& outFormat, u32& outudwImageSize);
         };
     }
 }

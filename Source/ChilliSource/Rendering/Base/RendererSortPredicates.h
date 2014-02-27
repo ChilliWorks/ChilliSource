@@ -53,7 +53,7 @@ namespace ChilliSource
             void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr);
             bool SortItem(RenderComponent* p1, RenderComponent* p2);
 		private:
-			Core::CMatrix4x4 mCameraViewProj;
+			Core::Matrix4x4 mCameraViewProj;
 		};
         
         //---------------------------------------------------------

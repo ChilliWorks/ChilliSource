@@ -42,7 +42,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		bool MoAnimLoader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IResourceProvider::InterfaceID;
+			return inInterfaceID == ResourceProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------------------
 		/// Can Create Resource of Kind
@@ -61,7 +61,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Create Resource From File
 		//----------------------------------------------------------------------------
-		bool MoAnimLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)  
+		bool MoAnimLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)  
 		{
 			SkinnedAnimationSPtr pAnim = std::static_pointer_cast<SkinnedAnimation>(outpResource);
 			
@@ -70,7 +70,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Async Create Resource From File
 		//----------------------------------------------------------------------------
-		bool MoAnimLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool MoAnimLoader::AsyncCreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
 		{
 			SkinnedAnimationSPtr pAnim = std::static_pointer_cast<SkinnedAnimation>(outpResource);
 			
@@ -94,7 +94,7 @@ namespace ChilliSource
 		{
             bool mbSuccess = true;
 			
-			Core::FileStreamPtr stream = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
+			Core::FileStreamSPtr stream = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
 			
 			u32 udwNumFrames = 0;
 			s32 dwNumSkeletonNodes = 0;
@@ -113,7 +113,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Read Header
 		//----------------------------------------------------------------------------
-		bool MoAnimLoader::ReadHeader(const ChilliSource::Core::FileStreamPtr& inpStream, const std::string & inFilePath, const SkinnedAnimationSPtr& outpResource, u32& outudwNumFrames, s32& outdwNumSkeletonNodes)
+		bool MoAnimLoader::ReadHeader(const ChilliSource::Core::FileStreamSPtr& inpStream, const std::string & inFilePath, const SkinnedAnimationSPtr& outpResource, u32& outudwNumFrames, s32& outdwNumSkeletonNodes)
 		{
 			//Check file for corruption
 			if(inpStream == nullptr || inpStream->IsBad() == true)
@@ -162,7 +162,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		/// Read Animation Data
 		//----------------------------------------------------------------------------
-		bool MoAnimLoader::ReadAnimationData(const ChilliSource::Core::FileStreamPtr& inpStream, u32 inudwNumFrames, s32 indwNumSkeletonNodes, const SkinnedAnimationSPtr& outpResource)
+		bool MoAnimLoader::ReadAnimationData(const ChilliSource::Core::FileStreamSPtr& inpStream, u32 inudwNumFrames, s32 indwNumSkeletonNodes, const SkinnedAnimationSPtr& outpResource)
 		{
 			for (u32 i = 0; i < inudwNumFrames; i++)
 			{
@@ -173,20 +173,20 @@ namespace ChilliSource
 				for (s32 j = 0; j < indwNumSkeletonNodes; j++)
 				{
 					//create new translation
-					Core::CVector3 translation;
+					Core::Vector3 translation;
 					translation.x = ReadValue<f32>(inpStream);
 					translation.y = ReadValue<f32>(inpStream);
 					translation.z = ReadValue<f32>(inpStream);
 	
 					//create new orientation
-					Core::CQuaternion orientation;
+					Core::Quaternion orientation;
 					orientation.x = ReadValue<f32>(inpStream);
 					orientation.y = ReadValue<f32>(inpStream);
 					orientation.z = ReadValue<f32>(inpStream);
 					orientation.w = ReadValue<f32>(inpStream);
                     
                     //create new scale
-					Core::CVector3 scale;
+					Core::Vector3 scale;
 					scale.x = ReadValue<f32>(inpStream);
 					scale.y = ReadValue<f32>(inpStream);
 					scale.z = ReadValue<f32>(inpStream);

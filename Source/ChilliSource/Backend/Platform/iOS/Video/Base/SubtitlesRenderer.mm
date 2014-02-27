@@ -247,12 +247,12 @@
 //--------------------------------------------------------
 -(CGRect) CalculateTextBoxRect:(const ChilliSource::Core::Rectangle&)inRelativeBounds
 {
-    ChilliSource::Core::CVector2 vScreenDimensions(ChilliSource::Core::CScreen::GetOrientedWidth() * ChilliSource::Core::CScreen::GetInverseDensity(), ChilliSource::Core::CScreen::GetOrientedHeight() * ChilliSource::Core::CScreen::GetInverseDensity());
-    ChilliSource::Core::CVector2 vVideoDimensions = mpVideoPlayer->GetVideoDimensions();
+    ChilliSource::Core::Vector2 vScreenDimensions(ChilliSource::Core::CScreen::GetOrientedWidth() * ChilliSource::Core::CScreen::GetInverseDensity(), ChilliSource::Core::CScreen::GetOrientedHeight() * ChilliSource::Core::CScreen::GetInverseDensity());
+    ChilliSource::Core::Vector2 vVideoDimensions = mpVideoPlayer->GetVideoDimensions();
     float fScreenAspectRatio = vScreenDimensions.x / vScreenDimensions.y;
     float fVideoAspectRatio = vVideoDimensions.x / vVideoDimensions.y;
     
-    ChilliSource::Core::CVector2 vVideoViewDimensions;
+    ChilliSource::Core::Vector2 vVideoViewDimensions;
     if (fScreenAspectRatio < fVideoAspectRatio)
     {
         vVideoViewDimensions.x = vScreenDimensions.x;
@@ -264,7 +264,7 @@
         vVideoViewDimensions.y = vScreenDimensions.y;
     }
     
-    ChilliSource::Core::CVector2 vVideoViewTopLeft = (vScreenDimensions - vVideoViewDimensions) * 0.5f;
+    ChilliSource::Core::Vector2 vVideoViewTopLeft = (vScreenDimensions - vVideoViewDimensions) * 0.5f;
     return CGRectMake(vVideoViewTopLeft.x + inRelativeBounds.Left() * vVideoViewDimensions.x, vVideoViewTopLeft.y + inRelativeBounds.Top() * vVideoViewDimensions.y, inRelativeBounds.vSize.x * vVideoViewDimensions.x, inRelativeBounds.vSize.y * vVideoViewDimensions.y);
     
 }

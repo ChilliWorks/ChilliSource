@@ -28,63 +28,63 @@ namespace ChilliSource
 		/// 3x3 matrix container with a wrapper around matrix maths
 		/// including transforms and multiplication
 		//===============================================================
-		class CMatrix3x3
+		class Matrix3x3
 		{
 		public:
             static const u32 kMatrixWidth = 3;
             static const u32 kMatrixDims  = kMatrixWidth * kMatrixWidth;
             
-			CMatrix3x3();
-			CMatrix3x3(const f32* paMatrix);
-			CMatrix3x3(f32 m00, f32 m01, f32 m02, 
+			Matrix3x3();
+			Matrix3x3(const f32* paMatrix);
+			Matrix3x3(f32 m00, f32 m01, f32 m02, 
 					   f32 m10, f32 m11, f32 m12, 
 					   f32 m20, f32 m21, f32 m22);
-			CMatrix3x3(const class CMatrix4x4& incMatrix4x4);
+			Matrix3x3(const class Matrix4x4& incMatrix4x4);
 			
 			//---Methods
-			CMatrix3x3 GetTranspose() const;
+			Matrix3x3 GetTranspose() const;
 
 			
 			void Translate(f32 inX, f32 inY);
-			void Translate(const CVector2 &inVec);
+			void Translate(const Vector2 &inVec);
 	
 			void Rotate(f32 infAngleRads);
 			
 			void Scale(f32 inScale);
 			void Scale(f32 inX, f32 inY);
-			void Scale(const CVector2 &Vec);
+			void Scale(const Vector2 &Vec);
 
-			void SetTransform(const CVector2 & inTranslate, const CVector2 & inScale, f32 infAngleRads);
-            void SetTranslation(const CVector2& invTranslation);
+			void SetTransform(const Vector2 & inTranslate, const Vector2 & inScale, f32 infAngleRads);
+            void SetTranslation(const Vector2& invTranslation);
             
 			//---Operators
 			f32 operator()(u32 inRow, u32 inColumn) const;
 
-			CMatrix3x3 operator+(const CMatrix3x3 &rhs) const;			
-			CMatrix3x3 operator-(const CMatrix3x3 &rhs) const;
+			Matrix3x3 operator+(const Matrix3x3 &rhs) const;			
+			Matrix3x3 operator-(const Matrix3x3 &rhs) const;
 			
-			const CMatrix3x3& operator+=(const CMatrix3x3 &rhs);
-			const CMatrix3x3& operator-=(const CMatrix3x3 &rhs);		
-			const CMatrix3x3& operator*=(const CMatrix3x3 &rhs);		
-			const CMatrix3x3& operator*=(f32 Scale);
+			const Matrix3x3& operator+=(const Matrix3x3 &rhs);
+			const Matrix3x3& operator-=(const Matrix3x3 &rhs);		
+			const Matrix3x3& operator*=(const Matrix3x3 &rhs);		
+			const Matrix3x3& operator*=(f32 Scale);
 			
-			bool operator==(const CMatrix3x3 &rhs) const;
+			bool operator==(const Matrix3x3 &rhs) const;
 			
-			bool operator!=(const CMatrix3x3 &rhs) const;
+			bool operator!=(const Matrix3x3 &rhs) const;
 			
-			CMatrix3x3 operator*(const CMatrix3x3 &rhs) const;
+			Matrix3x3 operator*(const Matrix3x3 &rhs) const;
 			
-			static void Multiply(const CMatrix3x3 *  p1, const CMatrix3x3 *   p2, CMatrix3x3 *  pOut);
-            static void Multiply(const CVector2* inpVec, const CMatrix3x3* inpMat, CVector2* outpVec);
+			static void Multiply(const Matrix3x3 *  p1, const Matrix3x3 *   p2, Matrix3x3 *  pOut);
+            static void Multiply(const Vector2* inpVec, const Matrix3x3* inpMat, Vector2* outpVec);
 			
-			static const CMatrix3x3 IDENTITY;
+			static const Matrix3x3 IDENTITY;
 			
 		public:
 			f32 m[kMatrixDims];
 		};
 		
 		
-		inline void CMatrix3x3::Multiply(const CMatrix3x3 *  inp1, const CMatrix3x3 *  inp2, CMatrix3x3 *  inpOut)
+		inline void Matrix3x3::Multiply(const Matrix3x3 *  inp1, const Matrix3x3 *  inp2, Matrix3x3 *  inpOut)
         {
 #if defined TARGET_OS_IPHONE && defined ENABLE_QUICK_MATH
             vDSP_mmul(const_cast<f32*>(inp1->m), 1, const_cast<f32*>(inp2->m), 1, inpOut->m, 1, 3, 3, 3);
@@ -107,7 +107,7 @@ namespace ChilliSource
 #endif
 		}
         
-        inline void CMatrix3x3::Multiply(const CVector2* inpVec, const CMatrix3x3* inpMat, CVector2* outpVec)
+        inline void Matrix3x3::Multiply(const Vector2* inpVec, const Matrix3x3* inpMat, Vector2* outpVec)
         {
             const f32* m = inpMat->m;
             
@@ -115,21 +115,21 @@ namespace ChilliSource
 			outpVec->y = m[1] * inpVec->x + m[4] * inpVec->y + m[7];
         }
 		
-		CMatrix3x3 operator*(const CMatrix3x3 & inMat, f32 infScale);
-		CMatrix3x3 operator*(f32 infScale, const CMatrix3x3 & inMat);
+		Matrix3x3 operator*(const Matrix3x3 & inMat, f32 infScale);
+		Matrix3x3 operator*(f32 infScale, const Matrix3x3 & inMat);
 
-        inline CVector2 operator*(const CVector2& vec, const CMatrix3x3 &mat)
+        inline Vector2 operator*(const Vector2& vec, const Matrix3x3 &mat)
 		{
-			CVector2 Result; 
+			Vector2 Result; 
     
 			Result.x = mat.m[0] * vec.x + mat.m[3] * vec.y + mat.m[6];
 			Result.y = mat.m[1] * vec.x + mat.m[4] * vec.y + mat.m[7];
 			
 			return Result;
 		}
-		inline CVector3 operator*(const CVector3& vec, const CMatrix3x3 &mat)
+		inline Vector3 operator*(const Vector3& vec, const Matrix3x3 &mat)
 		{
-			CVector3 Result; 
+			Vector3 Result; 
 			
 			Result.x = mat.m[0] * vec.x + mat.m[3] * vec.y + mat.m[6] * vec.z;
 			Result.y = mat.m[1] * vec.x + mat.m[4] * vec.y + mat.m[7] * vec.z;

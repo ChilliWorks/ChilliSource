@@ -57,8 +57,8 @@ namespace ChilliSource
         Label::Label() : MaxNumLines(0), TextScale(1.0f), CharacterSpacing(0.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
 		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), ScalableFont(false), ScalableHeight(0), TextOutlined(false), FlipVertical(false), mbLastDrawWasClipped(false), mbLastDrawHadInvalidCharacter(false)
         {
-            SetColour(Core::CColour(0.18f, 0.3f, 0.4f, 0.6f));
-            Rendering::TextureManager* pMgr = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::TextureManager>();
+            SetColour(Core::Colour(0.18f, 0.3f, 0.4f, 0.6f));
+            Rendering::TextureManager* pMgr = Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::TextureManager>();
             mpWhiteTex = pMgr->GetDefaultTexture();
             
             //Grab the default font
@@ -113,14 +113,14 @@ namespace ChilliSource
             if(insParams.TryGetValue("UnifiedMaxSize", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::CVector4 vRawSize = Core::ParseVector4(strValue);
+                Core::Vector4 vRawSize = Core::ParseVector4(strValue);
                 SetMaximumSize(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w);
             }
             //---Unified maximum size
             if(insParams.TryGetValue("UnifiedMinSize", strValue))
             {
                 //Convert this to a vector4 that we can then conver to unified vector2
-                Core::CVector4 vRawSize = Core::ParseVector4(strValue);
+                Core::Vector4 vRawSize = Core::ParseVector4(strValue);
                 SetMinimumSize(vRawSize.x, vRawSize.y, vRawSize.z, vRawSize.w);
             }
             //---Line spacing
@@ -187,7 +187,7 @@ namespace ChilliSource
                 FlipVertical = true;
             }
             
-            Rendering::TextureManager* pMgr = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::TextureManager>();
+            Rendering::TextureManager* pMgr = Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<Rendering::TextureManager>();
             mpWhiteTex = pMgr->GetDefaultTexture();
             
             if(!Font)
@@ -480,7 +480,7 @@ namespace ChilliSource
         ///
         /// @param Colour
         //-------------------------------------------------------
-        void Label::SetTextColour(const Core::CColour& inColour)
+        void Label::SetTextColour(const Core::Colour& inColour)
         {
             TextColour = inColour;
         }
@@ -489,7 +489,7 @@ namespace ChilliSource
 		///
 		/// @return Colour
 		//-------------------------------------------------------
-		const Core::CColour& Label::GetTextColour() const
+		const Core::Colour& Label::GetTextColour() const
 		{
 			return TextColour;
 		}
@@ -600,8 +600,8 @@ namespace ChilliSource
             if(Visible)
             {
                 //Check if this is on screen
-                Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
-                Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
+                Core::Vector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
+                Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
                 
                 if(vTopRight.y < 0 || vBottomLeft.y > Core::CScreen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::CScreen::GetOrientedWidth())
                 {
@@ -612,8 +612,8 @@ namespace ChilliSource
                 DoAutosizing(inpCanvas);
                 
                 //Calculate the size of the label box
-                Core::CVector2 vAbsoluteLabelSize = GetAbsoluteSize();
-                Core::CColour AbsCol = GetAbsoluteColour();
+                Core::Vector2 vAbsoluteLabelSize = GetAbsoluteSize();
+                Core::Colour AbsCol = GetAbsoluteColour();
 
                 //Check if we force clip our children 
                 if(ClipSubviews)
@@ -624,7 +624,7 @@ namespace ChilliSource
                 //Draw ourself
                 if(Background)
                 {
-                    inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::CVector2::ZERO, Core::CVector2::ZERO), AbsCol);
+                    inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), mpWhiteTex, Core::Rectangle(Core::Vector2::ZERO, Core::Vector2::ZERO), AbsCol);
                 }
                 
                 f32 fAssetTextScale = GetGlobalTextScale();
@@ -646,7 +646,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                    Core::CColour sDrawColour = TextColour * GetAbsoluteColour();
+                    Core::Colour sDrawColour = TextColour * GetAbsoluteColour();
 #if DEBUG_STRING_CLIPPING
                     if(mbLastDrawWasClipped || mbLastDrawHadInvalidCharacter)
                     {
@@ -702,8 +702,8 @@ namespace ChilliSource
                 //maximum size
                 
                 //Convert min and max to absolute co-ordinates
-                Core::CVector2 vAbsMaxSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMaxSize.GetRelative()) + UnifiedMaxSize.GetAbsolute() : UnifiedMaxSize.GetAbsolute();
-                Core::CVector2 vAbsMinSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMinSize.GetRelative()) + UnifiedMinSize.GetAbsolute() : UnifiedMinSize.GetAbsolute();
+                Core::Vector2 vAbsMaxSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMaxSize.GetRelative()) + UnifiedMaxSize.GetAbsolute() : UnifiedMaxSize.GetAbsolute();
+                Core::Vector2 vAbsMinSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMinSize.GetRelative()) + UnifiedMinSize.GetAbsolute() : UnifiedMinSize.GetAbsolute();
                 
                 f32 fNewRelWidth = 0.0f;
                 f32 fNewRelHeight = 0.0f;
@@ -838,7 +838,7 @@ namespace ChilliSource
         {
             if(ScalableFont)
             {
-                f32 fAssetScale = Core::IFileSystem::GetDeviceResourcesDensity();
+                f32 fAssetScale = Core::FileSystem::GetDeviceResourcesDensity();
                 return ScalableHeight == 0 ? fAssetScale : (ScalableHeight * fAssetScale) / Font->GetLineHeight();
             }
             return mfGlobalTextScale;
@@ -866,7 +866,7 @@ namespace ChilliSource
         ///
         /// @param Text outline colour for scaleable fonts
         //-------------------------------------------------------
-        void Label::SetTextOutlineColour(const Core::CColour& inColour)
+        void Label::SetTextOutlineColour(const Core::Colour& inColour)
         {
             TextOutlineColour = inColour;
         }
@@ -875,7 +875,7 @@ namespace ChilliSource
         ///
         /// @return Colour for outline of scaleable fonts
         //-------------------------------------------------------
-        const Core::CColour& Label::GetTextOutlineColour() const
+        const Core::Colour& Label::GetTextOutlineColour() const
         {
             return TextOutlineColour;
         }

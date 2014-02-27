@@ -31,11 +31,11 @@ namespace ChilliSource
 			bool bShouldRotateToScreen;
 			bool bShouldResizeToScreen;
 			
-			Core::CColour ClearCol; 
-			Core::CVector2 vViewSize;
+			Core::Colour ClearCol; 
+			Core::Vector2 vViewSize;
 		};
 		
-		class CameraComponent : public Core::IComponent
+		class CameraComponent : public Core::Component
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(CameraComponent);
@@ -57,7 +57,7 @@ namespace ChilliSource
 			/// @param Look target
 			/// @param Up direction
 			//----------------------------------------------------------
-			void SetLookAt(const Core::CVector3& invPos, const Core::CVector3& invTarget, const Core::CVector3& invUp);
+			void SetLookAt(const Core::Vector3& invPos, const Core::Vector3& invTarget, const Core::Vector3& invUp);
 			//----------------------------------------------------------
 			/// Use Orthographic View
 			///
@@ -76,7 +76,7 @@ namespace ChilliSource
 			///
 			/// @param Vector containing width and height
 			//----------------------------------------------------------
-			void SetViewportSize(const Core::CVector2 &invSize);
+			void SetViewportSize(const Core::Vector2 &invSize);
 			//----------------------------------------------------------
 			/// Set Viewport Size
 			///
@@ -89,7 +89,7 @@ namespace ChilliSource
 			///
 			/// @param Vector containing width and height
 			//----------------------------------------------------------
-			const Core::CVector2& GetViewportSize();			
+			const Core::Vector2& GetViewportSize();			
 			//------------------------------------------------------
 			/// Set Field Of View
 			///
@@ -119,7 +119,7 @@ namespace ChilliSource
 			///
 			/// @param Render buffer clear colour
 			//------------------------------------------------------
-			void SetClearColour(const Core::CColour &inCol);
+			void SetClearColour(const Core::Colour &inCol);
 			//------------------------------------------------------
 			/// Enable Viewport Rotation with Screen
 			///
@@ -163,20 +163,20 @@ namespace ChilliSource
 			///
 			/// @return Render buffer clear colour
 			//------------------------------------------------------
-			const Core::CColour& GetClearColour() const;
+			const Core::Colour& GetClearColour() const;
 			
 			//------------------------------------------------------
 			/// Get Projection 
 			///
 			/// @return Projection matrix
 			//------------------------------------------------------
-			const Core::CMatrix4x4& GetProjection();
+			const Core::Matrix4x4& GetProjection();
 			//------------------------------------------------------
 			/// Get View 
 			///
 			/// @return View matrix
 			//------------------------------------------------------
-			const Core::CMatrix4x4& GetView();
+			const Core::Matrix4x4& GetView();
 			//------------------------------------------------------
 			/// Set Viewport Orientation
 			///
@@ -190,7 +190,7 @@ namespace ChilliSource
 			///
 			/// @return Orthographic projection matrix
 			//------------------------------------------------------
-			const Core::CMatrix4x4& GetOrthoProjection() const;
+			const Core::Matrix4x4& GetOrthoProjection() const;
 			//------------------------------------------------------
 			/// Unproject
 			///
@@ -199,21 +199,21 @@ namespace ChilliSource
 			/// @param Point in screen space
 			/// @return Ray in world space with camera view direction
 			//------------------------------------------------------
-			virtual Core::Ray Unproject(const Core::CVector2 &invScreenPos);
+			virtual Core::Ray Unproject(const Core::Vector2 &invScreenPos);
 			//------------------------------------------------------
 			/// Project
 			///
 			/// Convert from a point in world space to a point in
 			/// screen space
 			//------------------------------------------------------
-			virtual Core::CVector2 Project(const Core::CVector3 &invWorldPos);
+			virtual Core::Vector2 Project(const Core::Vector3 &invWorldPos);
 			
 			//------------------------------------------------------
 			/// Get Frustum Pointer
 			///
 			/// @return Pointer to camera frustum
 			//------------------------------------------------------
-			const Core::CFrustum* GetFrustumPtr() const;
+			const Core::Frustum* GetFrustumPtr() const;
             //------------------------------------------------------
             /// Update Frustum
             ///
@@ -226,7 +226,7 @@ namespace ChilliSource
             /// Orientate the given matrix to face the cameras
             /// view vector
             //------------------------------------------------------
-            void Billboard(const Core::CMatrix4x4& inmatBillboarded, Core::CMatrix4x4& outmatBillboarded);
+            void Billboard(const Core::Matrix4x4& inmatBillboarded, Core::Matrix4x4& outmatBillboarded);
 
 			CameraDescription& GetDescription() { return mDesc; }
             
@@ -293,14 +293,14 @@ namespace ChilliSource
 			bool mbProjectionCacheValid;
 			
 			CameraDescription mDesc;
-			Core::CFrustum mFrustum;
+			Core::Frustum mFrustum;
 			
 			Core::ScreenOrientation mViewOrientation;
 			
-			Core::CMatrix4x4 mmatOrthoProj; //Ortho projection matrix;
-			Core::CMatrix4x4 mmatProj;		//Projection matrix depending on whether we are an ortho or perspective camera
-			Core::CMatrix4x4 mmatView;		//View matrix
-			Core::CMatrix4x4 mmatViewProj;	//View projection;
+			Core::Matrix4x4 mmatOrthoProj; //Ortho projection matrix;
+			Core::Matrix4x4 mmatProj;		//Projection matrix depending on whether we are an ortho or perspective camera
+			Core::Matrix4x4 mmatView;		//View matrix
+			Core::Matrix4x4 mmatViewProj;	//View projection;
             
             RendererSortPredicateSPtr mpOpaqueSortPredicate;
             RendererSortPredicateSPtr mpTransparentSortPredicate;

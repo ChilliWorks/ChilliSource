@@ -23,7 +23,7 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		class CHMAC_SHA1 : public ChilliSource::Core::CSHA1
+		class HMAC_SHA1 : public ChilliSource::Core::SHA1
 		{
 			private:
 				s8 m_ipad[64];
@@ -43,14 +43,14 @@ namespace ChilliSource
 					HMAC_BUF_LEN		= 4096
 				} ;
 
-				CHMAC_SHA1()
+				HMAC_SHA1()
 					:szReport(new char[HMAC_BUF_LEN]),
 					 AppendBuf1(new char[HMAC_BUF_LEN]),
 					 AppendBuf2(new char[HMAC_BUF_LEN]),
 					 SHA1_Key(new char[HMAC_BUF_LEN])
 				{}
 
-				~CHMAC_SHA1()
+				~HMAC_SHA1()
 				{
 					delete[] szReport ;
 					delete[] AppendBuf1 ;
@@ -58,7 +58,7 @@ namespace ChilliSource
 					delete[] SHA1_Key ;
 				}
 
-				void HMAC_SHA1(u8 *text, int text_len, u8 *key, int key_len, u8 *digest);
+				void Generate(u8 *text, int text_len, u8 *key, int key_len, u8 *digest);
 		};
 	}
 }

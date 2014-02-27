@@ -124,7 +124,7 @@ namespace ChilliSource
             bool mbListeningForTouches;
             
 			// Granting friendly access for the Scene
-			friend void Core::CScene::BecomeInactive();
+			friend void Core::Scene::BecomeInactive();
             
         private:
             Input::InputSystem* mpInputSystem;

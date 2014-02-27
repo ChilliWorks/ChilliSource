@@ -64,7 +64,7 @@ namespace ChilliSource
         typedef fastdelegate::FastDelegate2<const std::string&, const std::string&> IAPTransactionCloseDelegate;
         
         
-		class IAPSystem : public ChilliSource::Core::ISystem
+		class IAPSystem : public ChilliSource::Core::System
         {
         public:
             DECLARE_NAMED_INTERFACE(IAPSystem);

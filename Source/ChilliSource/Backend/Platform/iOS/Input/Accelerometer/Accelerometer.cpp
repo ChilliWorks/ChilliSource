@@ -76,9 +76,9 @@ namespace ChilliSource
         //----------------------------------------------------
         /// Get Acceleration
         //----------------------------------------------------
-        const Core::CVector3& CAccelerometer::GetAcceleration() const
+        const Core::Vector3& CAccelerometer::GetAcceleration() const
         {
-            mvAcceleration = Core::CVector3(m_motionManager.accelerometerData.acceleration.x, m_motionManager.accelerometerData.acceleration.y, m_motionManager.accelerometerData.acceleration.z);
+            mvAcceleration = Core::Vector3(m_motionManager.accelerometerData.acceleration.x, m_motionManager.accelerometerData.acceleration.y, m_motionManager.accelerometerData.acceleration.z);
             return mvAcceleration;
         }
         //----------------------------------------------------

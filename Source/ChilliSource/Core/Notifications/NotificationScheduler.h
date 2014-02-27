@@ -21,7 +21,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        class ILocalNotificationScheduler;
+        class LocalNotificationScheduler;
         
         enum class NotificationType
         {
@@ -65,7 +65,7 @@ namespace ChilliSource
             CEvent1<NotificationPresentedDelegate> pNotificationPresentedEvent;
         };
         
-        class CNotificationScheduler
+        class NotificationScheduler
         {
         public:
             //------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ namespace ChilliSource
             ///
             /// @param local
             //------------------------------------------------------------------------------
-            static void Initialise(ILocalNotificationScheduler* inLocalNS);
+            static void Initialise(LocalNotificationScheduler* inLocalNS);
             //------------------------------------------------------------------------------
             /// Schedule Notification
             ///
@@ -187,7 +187,7 @@ namespace ChilliSource
             static std::deque<Notification> NotificationQueue;
             static std::vector<Notification> TimedAppNotifications;
 
-            static ILocalNotificationScheduler* mspLocalNotificationScheduler;
+            static LocalNotificationScheduler* mspLocalNotificationScheduler;
         };
     }
 }

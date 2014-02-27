@@ -128,7 +128,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Build
 		//-----------------------------------------------------------------
-		void SubMesh::Build(void* inpVertexData, void* inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Core::CVector3 invMin, Core::CVector3 invMax)
+		void SubMesh::Build(void* inpVertexData, void* inpIndexData, u32 inudwNumVertices, u32 indwNumIndices, Core::Vector3 invMin, Core::Vector3 invMax)
 		{
 			mpMeshBuffer->SetVertexCount(inudwNumVertices);
 			mpMeshBuffer->SetIndexCount(indwNumIndices);
@@ -162,7 +162,7 @@ namespace ChilliSource
                 mpMeshBuffer->UnlockIndex();
 			}
 			//Calculate the size of this meshes bounding box
-			Core::CVector3 vSize = invMax - invMin;
+			Core::Vector3 vSize = invMax - invMin;
 			
 			//Build our bounding box based on the size of all our sub-meshes
 			mBoundingBox = Core::AABB((invMax + invMin) * 0.5f, vSize);
@@ -192,7 +192,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Render
 		//-----------------------------------------------------------------
-		void SubMesh::Render(RenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const MaterialSPtr& inpMaterial, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const
+		void SubMesh::Render(RenderSystem* inpRenderSystem, const Core::Matrix4x4 &inmatWorld, const MaterialSPtr& inpMaterial, const SkinnedAnimationGroupSPtr& inpAnimationGroup) const
 		{
             CS_ASSERT(mpMeshBuffer->GetVertexCount() > 0, "Cannot render Sub Mesh without vertices");
             CS_ASSERT(inpMaterial.get() && inpMaterial->GetActiveShaderProgram(), "Cannot render Sub Mesh without a material or active shader.");
@@ -202,7 +202,7 @@ namespace ChilliSource
             if (inpAnimationGroup != nullptr)
             {
                 //Apply inverse bind pose matrix.
-                std::vector<Core::CMatrix4x4> combinedMatrices;
+                std::vector<Core::Matrix4x4> combinedMatrices;
                 inpAnimationGroup->ApplyInverseBindPose(mpInverseBindPose->mInverseBindPoseMatrices, combinedMatrices);
                 inpRenderSystem->ApplyJoints(combinedMatrices);
             }

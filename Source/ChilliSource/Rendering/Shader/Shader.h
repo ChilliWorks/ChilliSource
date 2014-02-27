@@ -27,7 +27,7 @@ namespace ChilliSource
             k_fragment
 		};
 		
-		class Shader : public Core::IResource
+		class Shader : public Core::Resource
 		{
 		public:
 			

@@ -26,7 +26,7 @@ namespace ChilliSource
 		typedef u32 InterfaceIDType;
 
 		//Queryable
-		class IQueryableInterface
+		class QueryableInterface
 		{
 		public:
             /// Allow hashing of TypeName strings at runtime without direct reference 
@@ -36,8 +36,8 @@ namespace ChilliSource
                 return Core::CHashCRC32::GenerateHashCode(instrName);
             }
             
-			IQueryableInterface(){}
-			virtual ~IQueryableInterface(){}
+			QueryableInterface(){}
+			virtual ~QueryableInterface(){}
 			virtual bool IsA(InterfaceIDType inInterfaceID) const = 0;
 			
 			/// As GetInterface is currently implemented using dynamic_cast it is relatively expensive
@@ -54,7 +54,7 @@ virtual ::ChilliSource::Core::InterfaceIDType GetInterfaceID() const; \
 virtual const ::std::string& GetInterfaceTypeName() const;
         
 #define DEFINE_NAMED_INTERFACE(x) \
-const ::ChilliSource::Core::InterfaceIDType x::InterfaceID = ::ChilliSource::Core::IQueryableInterface::InterfaceIDHash(#x); \
+const ::ChilliSource::Core::InterfaceIDType x::InterfaceID = ::ChilliSource::Core::QueryableInterface::InterfaceIDHash(#x); \
 const ::std::string x::TypeName = ::ChilliSource::Core::CStringUtils::StandardiseClassName(#x); \
 ::ChilliSource::Core::InterfaceIDType x::GetInterfaceID() const \
 { \

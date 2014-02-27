@@ -267,7 +267,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Scissoring Region
         //----------------------------------------------------------
-        void Material::SetScissoringRegion(const Core::CVector2& invPosition, const Core::CVector2& invSize)
+        void Material::SetScissoringRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize)
         {
             mvScissorPos = invPosition;
             mvScissorSize = invSize;
@@ -277,14 +277,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Scissoring Region Position
         //----------------------------------------------------------
-        const Core::CVector2& Material::GetScissoringRegionPosition() const
+        const Core::Vector2& Material::GetScissoringRegionPosition() const
         {
             return mvScissorPos;
         }
         //----------------------------------------------------------
         /// Get Scissoring Region Size
         //----------------------------------------------------------
-        const Core::CVector2& Material::GetScissoringRegionSize() const
+        const Core::Vector2& Material::GetScissoringRegionSize() const
         {
             return mvScissorSize;
         }
@@ -329,7 +329,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Set Emissive
 		//----------------------------------------------------------
-		void Material::SetEmissive(const Core::CColour& inEmissive)
+		void Material::SetEmissive(const Core::Colour& inEmissive)
 		{
 			mEmissive = inEmissive;
             
@@ -338,14 +338,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Emissive
 		//----------------------------------------------------------
-		const Core::CColour& Material::GetEmissive() const
+		const Core::Colour& Material::GetEmissive() const
 		{
 			return mEmissive;
 		}
         //----------------------------------------------------------
 		/// Set Ambient
 		//----------------------------------------------------------
-		void Material::SetAmbient(const Core::CColour& inAmbient)
+		void Material::SetAmbient(const Core::Colour& inAmbient)
 		{
 			mAmbient = inAmbient;
             
@@ -354,14 +354,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Ambient
 		//----------------------------------------------------------
-		const Core::CColour& Material::GetAmbient() const
+		const Core::Colour& Material::GetAmbient() const
 		{
 			return mAmbient;
 		}
 		//----------------------------------------------------------
 		/// Set Diffuse
 		//----------------------------------------------------------
-		void Material::SetDiffuse(const Core::CColour& inDiffuse)
+		void Material::SetDiffuse(const Core::Colour& inDiffuse)
 		{
 			mDiffuse = inDiffuse;
             
@@ -370,14 +370,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Diffuse
 		//----------------------------------------------------------
-		const Core::CColour& Material::GetDiffuse() const
+		const Core::Colour& Material::GetDiffuse() const
 		{
 			return mDiffuse;
 		}
 		//----------------------------------------------------------
 		/// Set Specular
 		//----------------------------------------------------------
-		void Material::SetSpecular(const Core::CColour& inSpecular)
+		void Material::SetSpecular(const Core::Colour& inSpecular)
 		{
 			mSpecular = inSpecular;
             
@@ -386,7 +386,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Specular
 		//----------------------------------------------------------
-		const Core::CColour& Material::GetSpecular() const
+		const Core::Colour& Material::GetSpecular() const
 		{
 			return mSpecular;
 		}
@@ -403,7 +403,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Shader Vec2 Value
 		//-----------------------------------------------------------
-		void Material::SetShaderVec2Value(const std::string& instrVarName, const Core::CVector2 &invValue)
+		void Material::SetShaderVec2Value(const std::string& instrVarName, const Core::Vector2 &invValue)
 		{
 			mMapVec2ShaderVars[instrVarName] = invValue;
             
@@ -413,7 +413,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Shader Vec3 Value
 		//-----------------------------------------------------------
-		void Material::SetShaderVec3Value(const std::string& instrVarName, const Core::CVector3 &invValue)
+		void Material::SetShaderVec3Value(const std::string& instrVarName, const Core::Vector3 &invValue)
 		{
 			mMapVec3ShaderVars[instrVarName] = invValue;
             
@@ -423,7 +423,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Shader Vec4 Value
 		//-----------------------------------------------------------
-		void Material::SetShaderVec4Value(const std::string& instrVarName, const Core::CVector4 &invValue)
+		void Material::SetShaderVec4Value(const std::string& instrVarName, const Core::Vector4 &invValue)
 		{
             mMapVec4ShaderVars[instrVarName] = invValue;
             
@@ -433,7 +433,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Shader Matrix Value
 		//-----------------------------------------------------------
-		void Material::SetShaderMatrixValue(const std::string& instrVarName, const Core::CMatrix4x4 &inmatValue)
+		void Material::SetShaderMatrixValue(const std::string& instrVarName, const Core::Matrix4x4 &inmatValue)
 		{
 			mMapMat4ShaderVars[instrVarName] = inmatValue;
             
@@ -443,7 +443,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Shader Matrix Array Value
 		//-----------------------------------------------------------
-		void Material::SetShaderMatrixArrayValue(const std::string& instrVarName, const std::vector<Core::CMatrix4x4>& inmatValue)
+		void Material::SetShaderMatrixArrayValue(const std::string& instrVarName, const std::vector<Core::Matrix4x4>& inmatValue)
 		{
 			mMapMat4ArrayShaderVars[instrVarName] = inmatValue;
             
@@ -453,7 +453,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		/// Set Shader Colour Value
 		//-----------------------------------------------------------
-		void Material::SetShaderColourValue(const std::string& instrVarName, const Core::CColour &incolValue)
+		void Material::SetShaderColourValue(const std::string& instrVarName, const Core::Colour &incolValue)
 		{
             mMapColShaderVars[instrVarName] = incolValue;
             

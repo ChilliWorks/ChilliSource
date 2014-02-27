@@ -22,41 +22,41 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Is A
         //----------------------------------------------------------------
-        bool CMoImageProvider::IsA(Core::InterfaceIDType inInterfaceID) const
+        bool MoImageProvider::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == IResourceProvider::InterfaceID;
+            return inInterfaceID == ResourceProvider::InterfaceID;
         }
         //----------------------------------------------------------------
         /// Can Create Resource Of Kind
         //----------------------------------------------------------------
-        bool CMoImageProvider::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
+        bool MoImageProvider::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == Core::CImage::InterfaceID;
+            return inInterfaceID == Core::Image::InterfaceID;
         }
         //----------------------------------------------------------------
         /// Can Create Resource From File With Extension
         //----------------------------------------------------------------
-        bool CMoImageProvider::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
+        bool MoImageProvider::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
         {
             return (inExtension == MoImageExtension);
         }
         //----------------------------------------------------------------
         /// Create Resource From File
         //----------------------------------------------------------------
-        bool CMoImageProvider::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+        bool MoImageProvider::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
         {
-            return CreateImageFromFile(ineStorageLocation, inFilePath, Core::CImage::Format::k_default, outpResource);
+            return CreateImageFromFile(ineStorageLocation, inFilePath, Core::Image::Format::k_default, outpResource);
         }
         //----------------------------------------------------------------
         /// Create Image From File
         //----------------------------------------------------------------
-        bool CMoImageProvider::CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
+        bool MoImageProvider::CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::ResourceSPtr& outpResource)
         {
             //ensure the extension is correct.
             if (ChilliSource::Core::CStringUtils::EndsWith(inFilePath, MoImageExtension, true) == false)
                 return false;
 
-            Core::FileStreamPtr pImageFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
+            Core::FileStreamSPtr pImageFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
 
             if(pImageFile && !pImageFile->IsBad())
             {
@@ -89,7 +89,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Reads a version 2 formatted .moimage file
         //----------------------------------------------------------------
-        void CMoImageProvider::ReadFileVersion2(Core::FileStreamPtr inpImageFile, Core::ResourcePtr& outpResource)
+        void MoImageProvider::ReadFileVersion2(Core::FileStreamSPtr inpImageFile, Core::ResourceSPtr& outpResource)
         {
             //Read the header
             ImageHeaderVersion2 sHeader;
@@ -100,7 +100,7 @@ namespace ChilliSource
             inpImageFile->Read((s8*)&sHeader.udwDataSize, sizeof(u32));
             
             u32 udwSize = 0;
-            Core::CImage::Format eFormat;
+            Core::Image::Format eFormat;
             bool bFoundFormat = GetFormatInfo(sHeader.udwImageFormat, sHeader.udwWidth, sHeader.udwHeight, eFormat, udwSize);
             CS_ASSERT(bFoundFormat, "Invalid MoImage Format.");
             
@@ -109,7 +109,7 @@ namespace ChilliSource
             inpImageFile->Read((s8*)pubyBitmapData, udwSize);
             inpImageFile->Close();
             
-            Core::CImage* outpImage = (Core::CImage*)outpResource.get();
+            Core::Image* outpImage = (Core::Image*)outpResource.get();
             outpImage->SetFormat(eFormat);
             outpImage->SetData(pubyBitmapData);
             outpImage->SetWidth(sHeader.udwWidth);
@@ -118,7 +118,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Reads a version 3 formatted .moimage file
         //----------------------------------------------------------------
-        void CMoImageProvider::ReadFileVersion3(Core::FileStreamPtr inpImageFile, Core::ResourcePtr& outpResource)
+        void MoImageProvider::ReadFileVersion3(Core::FileStreamSPtr inpImageFile, Core::ResourceSPtr& outpResource)
         {
             //Read the header
             ImageHeaderVersion3 sHeader;
@@ -131,7 +131,7 @@ namespace ChilliSource
             inpImageFile->Read((s8*)&sHeader.udwCompressedDataSize, sizeof(u32));
             
             u32 udwSize = 0;
-            Core::CImage::Format eFormat;
+            Core::Image::Format eFormat;
             bool bFoundFormat = GetFormatInfo(sHeader.udwImageFormat, sHeader.udwWidth, sHeader.udwHeight, eFormat, udwSize);
             CS_ASSERT(bFoundFormat, "Invalid MoImage Format.");
             
@@ -177,7 +177,7 @@ namespace ChilliSource
                 inpImageFile->Close();
             }
             
-            Core::CImage* outpImage = (Core::CImage*)outpResource.get();
+            Core::Image* outpImage = (Core::Image*)outpResource.get();
             outpImage->SetFormat(eFormat);
             outpImage->SetData(pubyBitmapData);
             outpImage->SetWidth(sHeader.udwWidth);
@@ -186,33 +186,33 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// Get Format Info
         //----------------------------------------------------------------
-        bool CMoImageProvider::GetFormatInfo(const u32 inudwFormat, const u32 inudwWidth, const u32 inudwHeight,
-                                             Core::CImage::Format& outFormat, u32& outudwImageSize)
+        bool MoImageProvider::GetFormatInfo(const u32 inudwFormat, const u32 inudwWidth, const u32 inudwHeight,
+                                             Core::Image::Format& outFormat, u32& outudwImageSize)
         {
             switch(inudwFormat)
             {
                 case 1:
-                    outFormat = Core::CImage::Format::k_Lum8;
+                    outFormat = Core::Image::Format::k_Lum8;
                     outudwImageSize = inudwWidth * inudwHeight * 1;
                     return true;
                 case 2:
-                    outFormat = Core::CImage::Format::k_LumA88;
+                    outFormat = Core::Image::Format::k_LumA88;
                     outudwImageSize = inudwWidth * inudwHeight * 2;
                     return true;
                 case 3:
-                    outFormat = Core::CImage::Format::k_RGB565;
+                    outFormat = Core::Image::Format::k_RGB565;
                     outudwImageSize = inudwWidth * inudwHeight * 2;
                     return true;
                 case 4:
-                    outFormat = Core::CImage::Format::k_RGBA4444;
+                    outFormat = Core::Image::Format::k_RGBA4444;
                     outudwImageSize = inudwWidth * inudwHeight * 2;
                     return true;
                 case 5:
-                    outFormat = Core::CImage::Format::k_RGB888;
+                    outFormat = Core::Image::Format::k_RGB888;
                     outudwImageSize = inudwWidth * inudwHeight * 3;
                     return true;
                 case 6:
-                    outFormat = Core::CImage::Format::k_RGBA8888;
+                    outFormat = Core::Image::Format::k_RGBA8888;
                     outudwImageSize = inudwWidth * inudwHeight * 4;
                     return true;
                 default:

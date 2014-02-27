@@ -85,7 +85,7 @@ namespace ChilliSource
                 mvInitialScale = inpParticle->vScale[inudwIndex];
             }
             
-            Core::CVector3 vDiff = (mvTargetScale - mvInitialScale) * (1.0f - fEnergy);
+            Core::Vector3 vDiff = (mvTargetScale - mvInitialScale) * (1.0f - fEnergy);
             inpParticle->vScale[inudwIndex] = mvInitialScale + vDiff;
         }
     }

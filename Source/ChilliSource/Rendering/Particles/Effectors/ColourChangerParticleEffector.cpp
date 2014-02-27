@@ -82,8 +82,8 @@ namespace ChilliSource
                 mInitialColour = inpParticle->Col[inudwIndex];
             }
             
-            Core::CColour cColourDiff = (mTargetColour - mInitialColour) * (1.0f - fEnergy);
-            Core::CColour cColourNew = mInitialColour + cColourDiff;
+            Core::Colour cColourDiff = (mTargetColour - mInitialColour) * (1.0f - fEnergy);
+            Core::Colour cColourNew = mInitialColour + cColourDiff;
             
 			inpParticle->Col[inudwIndex] = cColourNew *cColourNew.a;
         }

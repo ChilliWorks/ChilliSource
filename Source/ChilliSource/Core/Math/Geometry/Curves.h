@@ -23,14 +23,14 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		template <typename T> class CCatmullRomSpline {
+		template <typename T> class CatmullRomSpline {
 		public:
-			CCatmullRomSpline()
+			CatmullRomSpline()
 			{
 				mbLengthCacheValid = false;
 				mfDeltaT = 0;
 			}
-			CCatmullRomSpline(const std::vector<T> & inPoints)
+			CatmullRomSpline(const std::vector<T> & inPoints)
 			: mPoints(inPoints)
 			{
 				mbLengthCacheValid = false;
@@ -185,13 +185,13 @@ namespace ChilliSource
 			std::vector<T> mPoints;
 		};
 		
-		template <typename T> class CMultiLineSegment {
+		template <typename T> class MultiLineSegment {
 		public:
-			CMultiLineSegment()
+			MultiLineSegment()
 			{
 				mbLengthCacheValid = false;
 			}
-			CMultiLineSegment(const std::vector<T> & inPoints)
+			MultiLineSegment(const std::vector<T> & inPoints)
 			: mPoints(inPoints)
 			{
 				mbLengthCacheValid = false;

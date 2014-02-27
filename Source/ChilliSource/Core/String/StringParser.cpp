@@ -93,68 +93,68 @@ namespace ChilliSource
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
-        CVector2 ParseVector2(const std::string& in_string)
+        Vector2 ParseVector2(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
             
 			if (udwSize != 2)
 			{
-				return CVector2::ZERO;
+				return Vector2::ZERO;
 			}
 			else
 			{
-                CVector2 vRet;
+                Vector2 vRet;
                 sscanf(in_string.c_str(), "%f %f", &vRet.x, &vRet.y);
 				return vRet;
 			}
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
-        CVector3 ParseVector3(const std::string& in_string)
+        Vector3 ParseVector3(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
             
 			if (udwSize != 3)
 			{
-				return CVector3::ZERO;
+				return Vector3::ZERO;
 			}
 			else
 			{
-				CVector3 vRet;
+				Vector3 vRet;
                 sscanf(in_string.c_str(), "%f %f %f", &vRet.x, &vRet.y, &vRet.z);
 				return vRet;
 			}
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
-        CVector4 ParseVector4(const std::string& in_string)
+        Vector4 ParseVector4(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
 			
 			if (udwSize != 4)
 			{
-				return CVector4::ZERO;
+				return Vector4::ZERO;
 			}
 			else
 			{
-				CVector4 vRet;
+				Vector4 vRet;
                 sscanf(in_string.c_str(), "%f %f %f %f", &vRet.x, &vRet.y, &vRet.z, &vRet.w);
 				return vRet;
 			}
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
-        CMatrix4x4 ParseMatrix4(const std::string& in_string)
+        Matrix4x4 ParseMatrix4(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
             
 			if (udwSize != 16)
 			{
-				return CMatrix4x4::IDENTITY;
+				return Matrix4x4::IDENTITY;
 			}
 			else
 			{
-                CMatrix4x4 matRet;
+                Matrix4x4 matRet;
                 
                 sscanf(in_string.c_str(), "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f ",
                        &matRet.m[0],    &matRet.m[1],     &matRet.m[2],     &matRet.m[3],
@@ -168,28 +168,28 @@ namespace ChilliSource
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
-        CQuaternion ParseQuaternion(const std::string& in_string)
+        Quaternion ParseQuaternion(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
             
 			if (udwSize != 4)
 			{
-				return CQuaternion::IDENTITY;
+				return Quaternion::IDENTITY;
 			}
 			else
 			{
-                CQuaternion qRet;
+                Quaternion qRet;
                 sscanf(in_string.c_str(), "%f %f %f %f", &qRet.w, &qRet.x, &qRet.y, &qRet.z);
                 return qRet;
 			}
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
-        CColour ParseColour(const std::string& in_string)
+        Colour ParseColour(const std::string& in_string)
         {
             u32 udwSize = EnumerateItems(in_string);
             
-			CColour cRet(CColour::BLACK);
+			Colour cRet(Colour::BLACK);
             
 			if (udwSize == 4)
 			{

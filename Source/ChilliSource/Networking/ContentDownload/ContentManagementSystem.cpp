@@ -582,7 +582,7 @@ namespace ChilliSource
             std::string strFile = "Temp/" + insPackageDetails.strID + ".packzip";
 
             //Append to the file as it can take multiple writes
-            Core::FileStreamPtr pFileStream = Core::Application::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_DLC, strFile, Core::FileMode::k_writeBinaryAppend);
+            Core::FileStreamSPtr pFileStream = Core::Application::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_DLC, strFile, Core::FileMode::k_writeBinaryAppend);
 			pFileStream->Write((s8*)instrZippedPackage.data(), (s32)instrZippedPackage.size());
             pFileStream->Close();
             

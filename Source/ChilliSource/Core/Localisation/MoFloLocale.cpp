@@ -13,13 +13,13 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		CLocale::CLocale(std::string instrLanguageCode, std::string instrCountryCode)
+		Locale::Locale(std::string instrLanguageCode, std::string instrCountryCode)
 		{
 			mstrLanguageCode = instrLanguageCode;
 			mstrCountryCode = instrCountryCode;
 			mstrLocaleCode = mstrLanguageCode + "-" + mstrCountryCode;
 		}
-		CLocale::~CLocale()
+		Locale::~Locale()
 		{
 
 		}
@@ -28,7 +28,7 @@ namespace ChilliSource
 		///
 		/// @return The full locale code.
 		//---------------------------------------------------------------------
-		const std::string& CLocale::GetLocaleCode() const
+		const std::string& Locale::GetLocaleCode() const
 		{
 			return mstrLocaleCode;
 		}
@@ -37,7 +37,7 @@ namespace ChilliSource
 		///
 		/// @return The country code.
 		//---------------------------------------------------------------------
-		const std::string& CLocale::GetCountryCode() const
+		const std::string& Locale::GetCountryCode() const
 		{
 			return mstrCountryCode;
 		}
@@ -46,7 +46,7 @@ namespace ChilliSource
 		///
 		/// @return The language code.
 		//---------------------------------------------------------------------
-		const std::string& CLocale::GetLanguageCode() const
+		const std::string& Locale::GetLanguageCode() const
 		{
 			return mstrLanguageCode;
 		}
@@ -55,7 +55,7 @@ namespace ChilliSource
 		///
 		/// @param The full locale code.
 		//---------------------------------------------------------------------
-		void CLocale::SetLocaleCode(const std::string& instrCode)
+		void Locale::SetLocaleCode(const std::string& instrCode)
 		{
 			mstrLocaleCode = instrCode;
 		}
@@ -64,7 +64,7 @@ namespace ChilliSource
 		///
 		/// @param The country code.
 		//---------------------------------------------------------------------
-		void CLocale::SetCountryCode(const std::string& instrCode)
+		void Locale::SetCountryCode(const std::string& instrCode)
 		{
 			mstrCountryCode = instrCode;
 		}
@@ -73,7 +73,7 @@ namespace ChilliSource
 		///
 		/// @param The language code.
 		//---------------------------------------------------------------------
-		void CLocale::SetLanguageCode(const std::string& instrCode)
+		void Locale::SetLanguageCode(const std::string& instrCode)
 		{
 			mstrLanguageCode = instrCode;
 		}

@@ -273,13 +273,13 @@ namespace ChilliSource
         ///
         /// @param Cell size
         //-------------------------------------------------------
-        void GridView::LayoutContentColumnMajor(const Core::CVector2& invCellSize, u32 udwNumCols, u32 udwNumRows)
+        void GridView::LayoutContentColumnMajor(const Core::Vector2& invCellSize, u32 udwNumCols, u32 udwNumRows)
         {
             const f32 fColumnSpacing = (GetAbsoluteSize().x * RelativeColumnSpacing) + AbsoluteColumnSpacing;
             const f32 fRowSpacing = (GetAbsoluteSize().y * RelativeRowSpacing) + AbsoluteRowSpacing;
             
             //Layout based on the cell size
-            Core::CVector2 vCellPosition;
+            Core::Vector2 vCellPosition;
             
             u32 udwRow = 0;
             u32 udwCol = 0;
@@ -289,7 +289,7 @@ namespace ChilliSource
                 (*pView)->EnableAlignmentToParent(true);
                 (*pView)->SetAlignmentToParent(Rendering::AlignmentAnchor::k_topLeft);
                 (*pView)->SetLocalAlignment(Rendering::AlignmentAnchor::k_topLeft);
-                (*pView)->SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::CVector2(0.0f, 0.0f), vCellPosition));
+                (*pView)->SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2(0.0f, 0.0f), vCellPosition));
                 vCellPosition.x += (invCellSize.x + fColumnSpacing);
                 
                 //If we have a fixed column and row width we must wrap the content
@@ -317,13 +317,13 @@ namespace ChilliSource
         ///
         /// @param Cell size
         //-------------------------------------------------------
-        void GridView::LayoutContentRowMajor(const Core::CVector2& invCellSize, u32 udwNumCols, u32 udwNumRows)
+        void GridView::LayoutContentRowMajor(const Core::Vector2& invCellSize, u32 udwNumCols, u32 udwNumRows)
         {
             const f32 fColumnSpacing = (GetAbsoluteSize().x * RelativeColumnSpacing) + AbsoluteColumnSpacing;
             const f32 fRowSpacing = (GetAbsoluteSize().y * RelativeRowSpacing) + AbsoluteRowSpacing;
             
             //Layout based on the cell size
-            Core::CVector2 vCellPosition;
+            Core::Vector2 vCellPosition;
             
             u32 udwRow = 0;
             u32 udwCol = 0;
@@ -333,7 +333,7 @@ namespace ChilliSource
                 (*pView)->EnableAlignmentToParent(true);
                 (*pView)->SetAlignmentToParent(Rendering::AlignmentAnchor::k_topLeft);
 				(*pView)->SetLocalAlignment(Rendering::AlignmentAnchor::k_topLeft);
-                (*pView)->SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::CVector2(0.0f, 0.0f), vCellPosition));
+                (*pView)->SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2(0.0f, 0.0f), vCellPosition));
                 vCellPosition.y -= (invCellSize.y + fRowSpacing);
                 
                 //If we have a fixed column and row width we must wrap the content
@@ -371,10 +371,10 @@ namespace ChilliSource
             }
                
             //Find the largest object. This will be our 'cell' size
-            Core::CVector2 vCellSize;
+            Core::Vector2 vCellSize;
             for(Subviews::iterator pView = mapGridSubviews.begin(); pView != mapGridSubviews.end(); ++pView)
             {
-                Core::CVector2 vViewSize = (*pView)->GetAbsoluteSize();
+                Core::Vector2 vViewSize = (*pView)->GetAbsoluteSize();
                 if(vViewSize.x > vCellSize.x)
                 {
                     vCellSize.x = vViewSize.x;
@@ -470,8 +470,8 @@ namespace ChilliSource
             if(Visible)
             {
 				//Check if this is on screen
-				Core::CVector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
-				Core::CVector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
+				Core::Vector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
+				Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
 				
 				if(vTopRight.y < 0 || vBottomLeft.y > Core::CScreen::GetOrientedHeight() || vTopRight.x < 0 || vBottomLeft.x > Core::CScreen::GetOrientedWidth())
 				{
@@ -485,8 +485,8 @@ namespace ChilliSource
 #if DEBUG_DRAWING
 				if(GridView::mbDrawDebug)
 				{
-					Rendering::TextureManager* pMgr = (Rendering::TextureManager*)(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Rendering::Texture::InterfaceID));
-					inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), pMgr->GetDefaultTexture(), Core::Rectangle(Core::CVector2::ZERO, Core::CVector2::ZERO), Core::CColour(1.0f,0.0f,0.0f,0.5f));
+					Rendering::TextureManager* pMgr = (Rendering::TextureManager*)(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Rendering::Texture::InterfaceID));
+					inpCanvas->DrawBox(GetTransform(), GetAbsoluteSize(), pMgr->GetDefaultTexture(), Core::Rectangle(Core::Vector2::ZERO, Core::Vector2::ZERO), Core::Colour(1.0f,0.0f,0.0f,0.5f));
 				}
 #endif
 				

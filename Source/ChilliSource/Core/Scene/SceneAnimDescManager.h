@@ -17,10 +17,10 @@ namespace ChilliSource
 {
     namespace Core
     {
-        class CSceneAnimDescManager : public IResourceManager
+        class SceneAnimDescManager : public ResourceManager
         {
         public:
-            DECLARE_NAMED_INTERFACE(CSceneAnimDescManager);
+            DECLARE_NAMED_INTERFACE(SceneAnimDescManager);
             
             bool IsA(InterfaceIDType inInterfaceID) const override;
             
@@ -33,9 +33,9 @@ namespace ChilliSource
             
             SceneAnimationPtr AsyncGetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath);
             
-            ResourcePtr GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+            ResourceSPtr GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
             
-            ResourcePtr AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+            ResourceSPtr AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
             
         };
     }

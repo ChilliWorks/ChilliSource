@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class SpriteSheet : public Core::IResource
+		class SpriteSheet : public Core::Resource
 		{
 		public:
 			
@@ -116,56 +116,56 @@ namespace ChilliSource
 			/// @param ID for frame 
 			/// param Vec2 containing size for the frame
 			//---------------------------------------------------------------------
-			Core::CVector2 GetSizeForFrame(u32 inudwFrameID) const;
+			Core::Vector2 GetSizeForFrame(u32 inudwFrameID) const;
 			//---------------------------------------------------------------------
 			/// Get Size For Frame
 			///
 			/// @param ID for frame 
 			/// @param Vec2 set to size for the frame
 			//---------------------------------------------------------------------
-			void GetSizeForFrame(u32 inudwFrameID, Core::CVector2 & outvSize) const;
+			void GetSizeForFrame(u32 inudwFrameID, Core::Vector2 & outvSize) const;
 			//---------------------------------------------------------------------
 			/// Get Offset For Frame
 			///
 			/// @param ID for frame 
 			/// return Vec2 containing offset for the frame
 			//---------------------------------------------------------------------
-			Core::CVector2 GetOffsetForFrame(u32 inudwFrameID) const;
+			Core::Vector2 GetOffsetForFrame(u32 inudwFrameID) const;
 			//---------------------------------------------------------------------
 			/// Get Offset For Frame
 			///
 			/// @param ID for frame 
 			/// @param Vec2 set to offset for the frame
 			//---------------------------------------------------------------------
-			void GetOffsetForFrame(u32 inudwFrameID, Core::CVector2 & outvOffset) const;	
+			void GetOffsetForFrame(u32 inudwFrameID, Core::Vector2 & outvOffset) const;	
             //---------------------------------------------------------------------
 			/// Get Size For Frame
 			///
 			/// @param ID for frame 
 			/// param Vec2 containing density independent size for the frame
 			//---------------------------------------------------------------------
-			Core::CVector2 GetDPISizeForFrame(u32 inudwFrameID) const;
+			Core::Vector2 GetDPISizeForFrame(u32 inudwFrameID) const;
 			//---------------------------------------------------------------------
 			/// Get Size For Frame
 			///
 			/// @param ID for frame 
 			/// param Vec2 containing density independent size for the frame
 			//---------------------------------------------------------------------
-			void GetDPISizeForFrame(u32 inudwFrameID, Core::CVector2 & outvSize) const;
+			void GetDPISizeForFrame(u32 inudwFrameID, Core::Vector2 & outvSize) const;
 			//---------------------------------------------------------------------
 			/// Get DPI Offset For Frame
 			///
 			/// @param ID for frame 
 			/// @param Vec2 set to teh density independent offset for the frame
 			//---------------------------------------------------------------------
-			Core::CVector2 GetDPIOffsetForFrame(u32 inudwFrameID) const;
+			Core::Vector2 GetDPIOffsetForFrame(u32 inudwFrameID) const;
 			//---------------------------------------------------------------------
 			/// Get DPI Offset For Frame
 			///
 			/// @param ID for frame 
 			/// @param Vec2 set to teh density independent offset for the frame
 			//---------------------------------------------------------------------
-			void GetDPIOffsetForFrame(u32 inudwFrameID, Core::CVector2 & outvOffset) const;	
+			void GetDPIOffsetForFrame(u32 inudwFrameID, Core::Vector2 & outvOffset) const;	
 			//---------------------------------------------------------------------
 			/// Set Texture
 			///

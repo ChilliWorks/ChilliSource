@@ -20,7 +20,7 @@ namespace ChilliSource
 		const f32 kTexelOffset		= 1.0f;
 		const f32 kHalfTexelOffset	= kTexelOffset * 0.5f;
 		
-		class Texture : public Core::IResource
+		class Texture : public Core::Resource
 		{
 		public:
 			

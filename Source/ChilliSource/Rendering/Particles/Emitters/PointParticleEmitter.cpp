@@ -53,7 +53,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		void PointParticleEmitter::Emit(Particle* inpParticles, u32 udwParticleIndex)
         {
-			Core::CVector3 vDirection(Core::CMathUtils::RandomInRange(-1.0f, 1.0f),
+			Core::Vector3 vDirection(Core::CMathUtils::RandomInRange(-1.0f, 1.0f),
 									  Core::CMathUtils::RandomInRange(-1.0f, 1.0f),
 									  Core::CMathUtils::RandomInRange(-1.0f, 1.0f));
 			

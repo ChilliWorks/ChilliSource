@@ -64,13 +64,13 @@ namespace ChilliSource
             /// @return Direction vector of light
             /// (only applies to directional lights)
             //----------------------------------------------------------
-            const Core::CVector3& GetDirection() const;
+            const Core::Vector3& GetDirection() const;
             //----------------------------------------------------------
             /// Get Light Matrix
             ///
             /// @return Matrix to transform into light space
             //----------------------------------------------------------
-            const Core::CMatrix4x4& GetLightMatrix() const override;
+            const Core::Matrix4x4& GetLightMatrix() const override;
             //----------------------------------------------------
 			/// On Attached To Entity
 			///
@@ -107,12 +107,12 @@ namespace ChilliSource
             
         private:
             
-            Core::CMatrix4x4 mmatProj;
+            Core::Matrix4x4 mmatProj;
             
             TextureSPtr mpShadowMap;
             TextureSPtr mpShadowMapDebug;
             
-            mutable Core::CVector3 mvDirection;
+            mutable Core::Vector3 mvDirection;
             
             f32 mfShadowTolerance;
             

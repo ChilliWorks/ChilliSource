@@ -331,21 +331,21 @@ namespace ChilliSource
 			///
 			/// @return Absolute size of the image
 			//--------------------------------------------------------
-			Core::CVector2 GetSizeFromImage() const;
+			Core::Vector2 GetSizeFromImage() const;
             //--------------------------------------------------------
 			/// Set Highlight Colour
 			///
 			/// @param Tint colour to apply when the button is
 			/// selected
 			//--------------------------------------------------------
-			void SetHighlightColour(const Core::CColour & inValue);
+			void SetHighlightColour(const Core::Colour & inValue);
 			//--------------------------------------------------------
 			/// Get Highlight Colour
 			///
 			/// @return Tint colour to apply when the button is
 			/// selected
 			//--------------------------------------------------------
-			const Core::CColour & GetHighlightColour() const;
+			const Core::Colour & GetHighlightColour() const;
 			//--------------------------------------------------------
 			/// Layout Content
 			///
@@ -418,7 +418,7 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, NormalSpriteSheet, SetNormalSpriteSheet, GetNormalSpriteSheet);
 			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, HighlightSpriteSheet, SetHighlightSpriteSheet, GetHighlightSpriteSheet);
 
-			DECLARE_PROPERTY_A(Core::CColour, HighlightColour, SetHighlightColour, GetHighlightColour);
+			DECLARE_PROPERTY_A(Core::Colour, HighlightColour, SetHighlightColour, GetHighlightColour);
 
 			DECLARE_PROPERTY_A(u32, NormalSpriteSheetIndex, SetNormalSpriteSheetIndex, GetNormalSpriteSheetIndex);
 			DECLARE_PROPERTY_A(u32, HighlightSpriteSheetIndex, SetHighlightSpriteSheetIndex, GetHighlightSpriteSheetIndex);

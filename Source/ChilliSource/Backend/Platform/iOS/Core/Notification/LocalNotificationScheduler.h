@@ -21,7 +21,7 @@ namespace ChilliSource
 {
     namespace iOS
     {
-        class CLocalNotificationScheduler : public Core::ILocalNotificationScheduler
+        class CLocalNotificationScheduler : public Core::LocalNotificationScheduler
         {
         public:
             CLocalNotificationScheduler(){};

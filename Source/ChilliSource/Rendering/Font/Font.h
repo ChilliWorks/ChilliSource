@@ -55,13 +55,13 @@ namespace ChilliSource
 		struct PlacedCharacter
 		{
 			Core::CRect sUVs;
-			Core::CVector2 vSize;
-			Core::CVector2 vPosition;
+			Core::Vector2 vSize;
+			Core::Vector2 vPosition;
 		};
 		
 		typedef std::vector<PlacedCharacter> CharacterList;
         
-		class Font : public Core::IResource
+		class Font : public Core::Resource
 		{
 		public:
 
@@ -69,8 +69,8 @@ namespace ChilliSource
 			struct CharacterInfo
 			{
 				Core::CRect sUVs;
-                Core::CVector2 vSize;
-                Core::CVector2 vOffset;
+                Core::Vector2 vSize;
+                Core::Vector2 vOffset;
 			};
             
             struct CKernLookup

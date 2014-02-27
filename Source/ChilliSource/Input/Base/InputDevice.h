@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace Input
 	{
-		class InputDevice : public Core::IQueryableInterface
+		class InputDevice : public Core::QueryableInterface
 		{
 		public:
 			InputDevice(){}

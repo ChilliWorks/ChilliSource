@@ -22,7 +22,7 @@ namespace ChilliSource
 		 * See http://developers.facebook.com/docs/authentication/permissions/ for definitions of what these provide
          **/
 		
-		class FacebookAuthenticationSystem : public Core::ISystem
+		class FacebookAuthenticationSystem : public Core::System
 		{
 		public:
             

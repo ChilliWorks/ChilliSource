@@ -18,7 +18,7 @@ namespace ChilliSource
 {	
 	namespace Rendering
 	{
-		class CubemapManager: public Core::IResourceManager
+		class CubemapManager: public Core::ResourceManager
 		{
 		public:
 			
@@ -65,7 +65,7 @@ namespace ChilliSource
 			/// @param Generate mip-maps. Default = false
 			/// @return A handle to the Cubemap
 			//----------------------------------------------------------------
-			CubemapSPtr GetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default, bool inbWithMipsMaps = false);
+			CubemapSPtr GetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat = Core::Image::Format::k_default, bool inbWithMipsMaps = false);
 			//-----------------------------------------------------------------
 			/// Async Get Cubemap From File
 			///
@@ -80,7 +80,7 @@ namespace ChilliSource
 			/// @param Enable mip-mapping
 			/// @return Generic pointer to resource type
 			//-----------------------------------------------------------------
-			CubemapSPtr AsyncGetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat = Core::CImage::Format::k_default, bool inbWithMipsMaps = false);
+			CubemapSPtr AsyncGetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat = Core::Image::Format::k_default, bool inbWithMipsMaps = false);
 			//-----------------------------------------------------------------
 			/// Get Resource From File
 			///
@@ -89,7 +89,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//-----------------------------------------------------------------
 			/// Async Get Resource From File
 			///
@@ -98,7 +98,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceSPtr AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//----------------------------------------------------------------
 			/// Create Cubemap Resource
 			///
@@ -113,16 +113,16 @@ namespace ChilliSource
 			///
 			/// @param Image to create moFlo Cubemap from
 			//----------------------------------------------------------------
-			virtual bool CreateCubemapFromImages(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, CubemapSPtr& outpCubemap) = 0;
+			virtual bool CreateCubemapFromImages(const std::vector<Core::ResourceSPtr>& inaImages, bool inbWithMipsMaps, CubemapSPtr& outpCubemap) = 0;
 		protected:
 			
 			struct ImageDesc
 			{
 				std::string strFilenames[6];
-				Core::CImage::Format eImageFormat;
+				Core::Image::Format eImageFormat;
 				bool bUseMipmaps;
                 Core::StorageLocation eStorageLocation;
-				std::vector<Core::ResourcePtr> pImageResources;
+				std::vector<Core::ResourceSPtr> pImageResources;
 				CubemapSPtr pCubemapResource;
 			};
 			
@@ -143,7 +143,7 @@ namespace ChilliSource
 			/// @param With mipmapping
 			/// @param Cubemap to create
 			//-----------------------------------------------------------------------------------
-			void CubemapLoadTask(const std::vector<Core::ResourcePtr>& inaImages, bool inbWithMipsMaps, CubemapSPtr& outpCubemap);
+			void CubemapLoadTask(const std::vector<Core::ResourceSPtr>& inaImages, bool inbWithMipsMaps, CubemapSPtr& outpCubemap);
 		};
 	}
 	

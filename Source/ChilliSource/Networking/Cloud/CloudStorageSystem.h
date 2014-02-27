@@ -19,7 +19,7 @@ namespace ChilliSource
 {
     namespace Networking
     {
-        class CloudStorageSystem : public ChilliSource::Core::ISystem
+        class CloudStorageSystem : public ChilliSource::Core::System
         {
         public:
             

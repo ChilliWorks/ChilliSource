@@ -12,29 +12,29 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
-#define GET_RESOURCE_MANAGER(TYPE) ChilliSource::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<TYPE>() 
-#define LOAD_RESOURCE(TYPE, LOCATION, FILENAME) std::static_pointer_cast<TYPE>(ChilliSource::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(TYPE::InterfaceID)->GetResourceFromFile(LOCATION, FILENAME))
-#define ASYNC_LOAD_RESOURCE(TYPE, LOCATION, FILENAME) std::static_pointer_cast<TYPE>(ChilliSource::Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(TYPE::InterfaceID)->AsyncGetResourceFromFile(LOCATION, FILENAME))
+#define GET_RESOURCE_MANAGER(TYPE) ChilliSource::Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<TYPE>() 
+#define LOAD_RESOURCE(TYPE, LOCATION, FILENAME) std::static_pointer_cast<TYPE>(ChilliSource::Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(TYPE::InterfaceID)->GetResourceFromFile(LOCATION, FILENAME))
+#define ASYNC_LOAD_RESOURCE(TYPE, LOCATION, FILENAME) std::static_pointer_cast<TYPE>(ChilliSource::Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(TYPE::InterfaceID)->AsyncGetResourceFromFile(LOCATION, FILENAME))
 
 namespace ChilliSource
 {
     namespace Core
     {
-		class CResourceManagerDispenser
+		class ResourceManagerDispenser
         {
         public:
-            CResourceManagerDispenser(Application* inpApp);
-            ~CResourceManagerDispenser();
+            ResourceManagerDispenser(Application* inpApp);
+            ~ResourceManagerDispenser();
             //--------------------------------------------------------------------------------------------------
             /// Get Singleton Ptr
             ///
             /// @return Singleton instance
             //--------------------------------------------------------------------------------------------------
-            static CResourceManagerDispenser* GetSingletonPtr();
+            static ResourceManagerDispenser* GetSingletonPtr();
 			//--------------------------------------------------------------------------------------------------
             /// @return Singleton instance
             //--------------------------------------------------------------------------------------------------
-            static CResourceManagerDispenser& GetSingleton();
+            static ResourceManagerDispenser& GetSingleton();
             //--------------------------------------------------------------------------------------------------
 			/// Register Resource Manager
 			///
@@ -42,7 +42,7 @@ namespace ChilliSource
 			/// that they themselves cannot provide
 			/// @param Handle to resource manager
 			//--------------------------------------------------------------------------------------------------
-			void RegisterResourceManager(IResourceManager * inpResourceManager);
+			void RegisterResourceManager(ResourceManager * inpResourceManager);
             //--------------------------------------------------------------------------------------------------
             /// Get Resource Manager With Interface
             ///
@@ -50,7 +50,7 @@ namespace ChilliSource
             /// @param The type ID of the manager interface you are seeking
             /// @return Manager that implements the given interface or nullptr if none available
             //--------------------------------------------------------------------------------------------------
-            IResourceManager* GetResourceManagerWithInterface(InterfaceIDType inInterfaceID);
+            ResourceManager* GetResourceManagerWithInterface(InterfaceIDType inInterfaceID);
             //--------------------------------------------------------------------------------------------------
 			/// Get Resource Manager With Interface
 			///
@@ -68,7 +68,7 @@ namespace ChilliSource
 			/// a resource of given type
 			/// @param Resource type ID that you wish to load
 			//--------------------------------------------------------------------------------------------------
-			IResourceManager* GetResourceManagerForType(InterfaceIDType inResourceInterfaceID);
+			ResourceManager* GetResourceManagerForType(InterfaceIDType inResourceInterfaceID);
 			//--------------------------------------------------------------------------------------------------
 			/// Get Resource Manager For Extension
 			///
@@ -76,19 +76,19 @@ namespace ChilliSource
 			/// a resource with the given extension
 			/// @param Resource extension string
 			//--------------------------------------------------------------------------------------------------
-			IResourceManager* GetResourceManagerForExtension(const std::string &instrExtension);
+			ResourceManager* GetResourceManagerForExtension(const std::string &instrExtension);
             //--------------------------------------------------------------------------------------------------
 			/// Get Resource Group Manager
 			///
 			/// @return A reference to the resource group manager
 			//--------------------------------------------------------------------------------------------------
-			IResourceGroupManager& GetResourceGroupManager();
+			ResourceGroupManager& GetResourceGroupManager();
 			//--------------------------------------------------------------------------------------------------
 			/// Get Resource Group Manager Pointer
 			///
 			/// @return A pointer to the resource group manager
 			//--------------------------------------------------------------------------------------------------
-			IResourceGroupManager* GetResourceGroupManagerPtr();
+			ResourceGroupManager* GetResourceGroupManagerPtr();
             //----------------------------------------------------------------------
             /// Free Resource Caches
             ///
@@ -104,14 +104,14 @@ namespace ChilliSource
             ///
             /// @param Vector of resource provider pointers
             //----------------------------------------------------------------------
-            void SetResourceProviders(const std::vector<IResourceProvider*> inProviders);
+            void SetResourceProviders(const std::vector<ResourceProvider*> inProviders);
             
         private:
-            std::vector<IResourceManager*> mResourceManagers;
+            std::vector<ResourceManager*> mResourceManagers;
             Application* mpApp;
-            IResourceGroupManager* mpResourceGroupMgr;
+            ResourceGroupManager* mpResourceGroupMgr;
             
-            static CResourceManagerDispenser* pInstance;
+            static ResourceManagerDispenser* pInstance;
         };
     }
 }

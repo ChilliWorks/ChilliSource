@@ -14,7 +14,7 @@ namespace ChilliSource
         /// @param Size of memory pool in bytes
         /// @param Alignment in bytes
         //----------------------------------------------------------------------
-        CStaticMemPool::CStaticMemPool(u32 inudwHeapSize, u32 inudwAlignmentSize)
+        StaticMemPool::StaticMemPool(u32 inudwHeapSize, u32 inudwAlignmentSize)
             : mudwAlignmentSize(inudwAlignmentSize), mudwFreeMemory(inudwHeapSize), mudwUsedMemory(0)
         {
             //Allocate the static memory size
@@ -38,7 +38,7 @@ namespace ChilliSource
 
             for(u32 i=0; i<udwNumChunksRequired; ++i, pBlock+=mudwAlignmentSize)
             {
-                CStaticMemPool::MemChunk Chunk;
+                StaticMemPool::MemChunk Chunk;
                 //Assign this chunk a section of the pool to manage
                 Chunk.pbyData = pBlock;
 
@@ -52,7 +52,7 @@ namespace ChilliSource
         ///
         /// @param Pointer to memory held by pool
         //-----------------------------------------------------------------------
-        void CStaticMemPool::Release(void* inpData)
+        void StaticMemPool::Release(void* inpData)
         {
             for(std::vector<MemChunk>::iterator it = mChunks.begin(); it != mChunks.end(); ++it)
             {
@@ -75,7 +75,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------
         /// Destructor
         //----------------------------------------------------------------------
-        CStaticMemPool::~CStaticMemPool()
+        StaticMemPool::~StaticMemPool()
         {
             free(mpMemPool);
         }

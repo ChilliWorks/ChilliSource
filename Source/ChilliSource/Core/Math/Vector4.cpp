@@ -5,14 +5,14 @@ namespace ChilliSource
 {
 	namespace Core 
 	{
-		const CVector4 CVector4::ZERO;
+		const Vector4 Vector4::ZERO;
 		
 		//---------------------------------------------------------
 		/// Constructor
 		///
 		/// Initialise to zero
 		//---------------------------------------------------------
-		CVector4::CVector4(void) : x(0.0f), y(0.0f), z(0.0f), w(1.0f)
+		Vector4::Vector4(void) : x(0.0f), y(0.0f), z(0.0f), w(1.0f)
 		{
 		}
 		//---------------------------------------------------------
@@ -24,7 +24,7 @@ namespace ChilliSource
 		/// @param Z component
 		/// @param W component
 		//---------------------------------------------------------
-		CVector4::CVector4(const f32 fX, const f32 fY, const f32 fZ, const f32 fW) : x(fX), y(fY), z(fZ), w(fW)
+		Vector4::Vector4(const f32 fX, const f32 fY, const f32 fZ, const f32 fW) : x(fX), y(fY), z(fZ), w(fW)
 		{
 		}
 		//---------------------------------------------------------
@@ -33,7 +33,7 @@ namespace ChilliSource
 		/// Initialise with copy
 		/// @param Vector to copy
 		//---------------------------------------------------------
-		CVector4::CVector4(const CVector4 &Vec)
+		Vector4::Vector4(const Vector4 &Vec)
 		{
 			(*this) = Vec;
 		}
@@ -43,7 +43,7 @@ namespace ChilliSource
 		/// Initialise with copy and ignore w component
 		/// @param Vector to copy
 		//---------------------------------------------------------
-		CVector4::CVector4(const CVector3 &Vec, f32 inW) : x(Vec.x), y(Vec.y), z(Vec.z), w(inW)
+		Vector4::Vector4(const Vector3 &Vec, f32 inW) : x(Vec.x), y(Vec.y), z(Vec.z), w(inW)
 		{
 			
 		}
@@ -56,7 +56,7 @@ namespace ChilliSource
 		/// @param The adjoining vector
 		/// @param The vector product result of the calculation
 		//---------------------------------------------------------
-		void CVector4::CrossProduct(const CVector4 &Vec, CVector4 &Out)
+		void Vector4::CrossProduct(const Vector4 &Vec, Vector4 &Out)
 		{
             CrossProduct(this, &Vec, &Out);
 		}
@@ -69,9 +69,9 @@ namespace ChilliSource
 		/// @param The adjoining vector
 		/// @param The vector product result of the calculation
 		//---------------------------------------------------------
-		CVector4 CVector4::CrossProduct(const CVector4 &Vec, const CVector4 &Vec2)
+		Vector4 Vector4::CrossProduct(const Vector4 &Vec, const Vector4 &Vec2)
 		{
-            CVector4 Out;
+            Vector4 Out;
             
             CrossProduct(&Vec, &Vec2, &Out);
             
@@ -83,7 +83,7 @@ namespace ChilliSource
 		/// Normalises this vector
 		///  
 		//---------------------------------------------------------
-        CVector4 & CVector4::Normalise()
+        Vector4 & Vector4::Normalise()
 		{
 			//Calculate Magnitude
 			f32 fMag = Length();
@@ -103,9 +103,9 @@ namespace ChilliSource
 		/// @return Normalised copy of this vector
 		///  
 		//---------------------------------------------------------
-		CVector4 CVector4::NormalisedCopy() const 
+		Vector4 Vector4::NormalisedCopy() const 
 		{
-			CVector4 Result;
+			Vector4 Result;
 			//Calculate Magnitude
 			f32 fMag = Length();
 			//Prevent division by zero
@@ -125,7 +125,7 @@ namespace ChilliSource
 		/// no costly sqrt function
 		/// @return The magnitude of the vector squared
 		//---------------------------------------------------------
-		f32 CVector4::LengthSquared() const
+		f32 Vector4::LengthSquared() const
 		{
 			return (this->x * this->x + this->y * this->y + this->z * this->z + this->w * this->w);
 		}
@@ -135,14 +135,14 @@ namespace ChilliSource
 		/// Calculate the magnitude of a vector
 		/// @return The magnitude of the vector
 		//---------------------------------------------------------
-		f32 CVector4::Length() const
+		f32 Vector4::Length() const
 		{
 			//Calculate Magnitude
 			return (f32)sqrt(this->x * this->x + this->y * this->y + this->z * this->z + this->w * this->w);
 		}
-        CVector4 CVector4::InversedCopy() const
+        Vector4 Vector4::InversedCopy() const
         {
-            CVector4 Out;
+            Vector4 Out;
 			
 			if(this->x != 0.0f)
 			{
@@ -163,7 +163,7 @@ namespace ChilliSource
             
 			return Out;
         }
-        CVector4 & CVector4::Inverse()
+        Vector4 & Vector4::Inverse()
         {
             if(this->x != 0.0f)
 			{
@@ -184,14 +184,14 @@ namespace ChilliSource
             
             return *this;
         }
-        void CVector4::Multiply(const CVector4* inpVec, const CVector4* inpVec2, CVector4* outpVec)
+        void Vector4::Multiply(const Vector4* inpVec, const Vector4* inpVec2, Vector4* outpVec)
         {
             outpVec->x = inpVec->x * inpVec2->x; 
             outpVec->y = inpVec->y * inpVec2->y; 
             outpVec->z = inpVec->z * inpVec2->z;
             outpVec->w = inpVec->w * inpVec2->w;
         }
-        void CVector4::CrossProduct(const CVector4* inpVec, const CVector4* inpVec2, CVector4* outpVec)
+        void Vector4::CrossProduct(const Vector4* inpVec, const Vector4* inpVec2, Vector4* outpVec)
         {
             outpVec->x = (inpVec->y * inpVec2->z - inpVec->z * inpVec2->y);
 			outpVec->y = (inpVec->z * inpVec2->x - inpVec->x * inpVec2->z);

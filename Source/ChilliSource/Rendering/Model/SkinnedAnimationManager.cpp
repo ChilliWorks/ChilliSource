@@ -56,14 +56,14 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Get Resource From File
 		//-----------------------------------------------------------------
-		Core::ResourcePtr SkinnedAnimationManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr SkinnedAnimationManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetSkinnedAnimationFromFile(ineStorageLocation, instrFilePath);
 		}
 		//-----------------------------------------------------------------
 		/// Async Get Resource From File
 		//-----------------------------------------------------------------
-		Core::ResourcePtr SkinnedAnimationManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr SkinnedAnimationManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetSkinnedAnimationFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -76,7 +76,7 @@ namespace ChilliSource
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourcePtr pResource(new SkinnedAnimation());
+				Core::ResourceSPtr pResource(new SkinnedAnimation());
 				
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
@@ -94,7 +94,7 @@ namespace ChilliSource
 							pResource->SetName(instrFilePath);
 							pResource->SetFilename(instrFilePath);
 							pResource->SetStorageLocation(ineStorageLocation);
-							pResource->SetOwningResourceManager(static_cast<Core::IResourceManager*>(this));
+							pResource->SetOwningResourceManager(static_cast<Core::ResourceManager*>(this));
 							pResource->SetLoaded(true);
 							
 							return std::static_pointer_cast<SkinnedAnimation>(pResource);
@@ -120,7 +120,7 @@ namespace ChilliSource
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourcePtr pResource(new SkinnedAnimation());
+				Core::ResourceSPtr pResource(new SkinnedAnimation());
 				
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{

@@ -27,7 +27,7 @@ namespace ChilliSource
         /// subtitles over videos played using the video player
         /// activity.
 		//=======================================================
-		class Subtitles : public Core::IResource
+		class Subtitles : public Core::Resource
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(Subtitles);
@@ -39,7 +39,7 @@ namespace ChilliSource
                 std::string strName;
                 std::string strFontName;
                 u32 udwFontSize;
-                Core::CColour Colour;
+                Core::Colour Colour;
                 Core::Rectangle Bounds;
                 Rendering::AlignmentAnchor eAlignment;
                 TimeIntervalMs FadeTimeMS;

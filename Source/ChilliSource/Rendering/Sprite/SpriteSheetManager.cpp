@@ -77,9 +77,9 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr SpriteSheetManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr SpriteSheetManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
-			return GetSpriteSheetFromFile(ineStorageLocation, instrFilePath, Core::CImage::Format::k_default, false);
+			return GetSpriteSheetFromFile(ineStorageLocation, instrFilePath, Core::Image::Format::k_default, false);
 		}
 		//----------------------------------------------------------------
 		/// Get Sprite Data From File
@@ -92,7 +92,7 @@ namespace ChilliSource
         /// @param whether or not to use mipmaps
         /// @return The sprites sheet resource pointer
 		//----------------------------------------------------------------
-		SpriteSheetSPtr SpriteSheetManager::GetSpriteSheetFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat, bool inbWithMipsMaps)
+		SpriteSheetSPtr SpriteSheetManager::GetSpriteSheetFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::Image::Format ineFormat, bool inbWithMipsMaps)
 		{
             //It's the texture that is passed in so we need to load the binary file
             std::string strSpriteSheetFile;
@@ -104,7 +104,7 @@ namespace ChilliSource
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourcePtr pResource(new SpriteSheet());
+				Core::ResourceSPtr pResource(new SpriteSheet());
 				
 				for(size_t nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
@@ -123,7 +123,7 @@ namespace ChilliSource
                         
                         if(!mpTextureManager)
                         {
-                            mpTextureManager = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<TextureManager>();
+                            mpTextureManager = Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<TextureManager>();
                         }
                         
                         std::string strNewFilePath = inFilePath;

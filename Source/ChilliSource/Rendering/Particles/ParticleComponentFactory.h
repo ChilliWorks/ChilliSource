@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class ParticleComponentFactory : public Core::IComponentFactory
+		class ParticleComponentFactory : public Core::ComponentFactory
 		{
 		public: 
 			ParticleComponentFactory(ParticleSystem* inpParticleSystem, ParticleEmitterFactory* inpEmitterFactory, ParticleEffectorFactory* inpEffectorFactory);

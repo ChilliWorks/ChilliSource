@@ -62,14 +62,14 @@ namespace ChilliSource
         {
             
     
-            Core::CVector3 vPos;
+            Core::Vector3 vPos;
             vPos.x = Core::CMathUtils::RandomInRange(-1.0f, 1.0f);
             vPos.z = Core::CMathUtils::RandomInRange(-1.0f, 1.0f);
             
             vPos.Normalise() *=  mfRadius;
             
             inpParticles->vTranslation[udwParticleIndex] += vPos;
-            inpParticles->vVelocity[udwParticleIndex] = Core::CVector3::Y_UNIT_POSITIVE * mfInitialVelocity;
+            inpParticles->vVelocity[udwParticleIndex] = Core::Vector3::Y_UNIT_POSITIVE * mfInitialVelocity;
             
         }
     }

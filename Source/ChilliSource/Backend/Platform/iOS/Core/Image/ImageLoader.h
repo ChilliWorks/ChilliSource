@@ -24,7 +24,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{		
-		class ImageLoader : public Core::IImageResourceProvider
+		class ImageLoader : public Core::ImageResourceProvider
 		{
 		public:
 			
@@ -59,7 +59,7 @@ namespace ChilliSource
 			/// @param Out: Resource
 			/// @return Whether the resource loaded 
 			//----------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource) override;
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource) override;
 			//----------------------------------------------------------------
 			/// Create Image From File
 			///
@@ -69,7 +69,7 @@ namespace ChilliSource
 			/// @param Out: Resource
 			/// @return Whether the resource loaded 
 			//----------------------------------------------------------------
-			bool CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource);
+			bool CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::ResourceSPtr& outpResource);
 			
 		private:
             //----------------------------------------------------------------
@@ -83,7 +83,7 @@ namespace ChilliSource
 			/// @param Image format
 			/// @param Out: Image resource
             //----------------------------------------------------------------
-            void CreatePNGImageFromFile(const s8* inpbyData, u32 inudwDataSize, Core::CImage::Format ineFormat, Core::CImage* outpImage);
+            void CreatePNGImageFromFile(const s8* inpbyData, u32 inudwDataSize, Core::Image::Format ineFormat, Core::Image* outpImage);
             //----------------------------------------------------------------
             /// Create JPG Image From File
             ///
@@ -95,7 +95,7 @@ namespace ChilliSource
 			/// @param Image format
 			/// @param Out: Image resource
             //----------------------------------------------------------------
-            void CreateJPGImageFromFile(const s8* inpbyData, u32 inudwDataSize, Core::CImage::Format ineFormat, Core::CImage* outpImage);
+            void CreateJPGImageFromFile(const s8* inpbyData, u32 inudwDataSize, Core::Image::Format ineFormat, Core::Image* outpImage);
 			//----------------------------------------------------------------
 			/// Create PVR Image From File
 			///
@@ -106,7 +106,7 @@ namespace ChilliSource
 			/// @param Whether the asset is high res
 			/// @param Out: Image resource
 			//----------------------------------------------------------------
-			void CreatePVRImageFromFile(const s8* inpbyData, u32 inudwDataSize, Core::CImage* outpImage);
+			void CreatePVRImageFromFile(const s8* inpbyData, u32 inudwDataSize, Core::Image* outpImage);
 			//----------------------------------------------------------------
 			/// RGBA8888 To RGB565
 			///

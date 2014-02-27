@@ -36,7 +36,7 @@ namespace ChilliSource
 			///
 			/// @param SceneDesc to clone data
 			//----------------------------------------------
-			void LoadDataFromSceneAnimDesc(const CSceneAnimationDesc & insSceneAnimDesc, bool inbClearExistingData = true);
+			void LoadDataFromSceneAnimDesc(const SceneAnimationDesc & insSceneAnimDesc, bool inbClearExistingData = true);
 			
 			//----------------------------------------------
 			/// ReleaseAnimations
@@ -52,7 +52,7 @@ namespace ChilliSource
 			/// Creates and retains an EntityAnimation object with animdata with the given name and target entity.
 			/// Will return an empty pointer if it cannot find animdata with the given name or the target entity is nullptr.
 			//----------------------------------------------
-			EntityAnimationPtr CreateAnimation(const std::string & instrAnimName, ChilliSource::Core::CEntity* inpAnimTarget, u32 inudwQueryFlags = 0);
+			EntityAnimationPtr CreateAnimation(const std::string & instrAnimName, ChilliSource::Core::Entity* inpAnimTarget, u32 inudwQueryFlags = 0);
 			
 			//----------------------------------------------
 			/// CreateAnimation
@@ -60,7 +60,7 @@ namespace ChilliSource
 			/// Creates and retains an EntityAnimation object with animdata with the given name and target entity.
 			/// Will return an empty pointer if it cannot find animdata with the given name or the target entity is nullptr.
 			//----------------------------------------------
-			EntityAnimationPtr CreateAndPlayAnimation(const std::string & instrAnimName, ChilliSource::Core::CEntity* inpAnimTarget, AnimationPlayMode inePlayMode);
+			EntityAnimationPtr CreateAndPlayAnimation(const std::string & instrAnimName, ChilliSource::Core::Entity* inpAnimTarget, AnimationPlayMode inePlayMode);
             
             //----------------------------------------------
             /// Pause
@@ -103,7 +103,7 @@ namespace ChilliSource
             /// Given the animation held in insSceneDesc, apply it to the entity hierarchy specified by inpcEntity
 			///
             //----------------------------------------------
-			void ApplyAnimationToEntity(const CSceneAnimationDesc& insSceneAnimDesc, const EntityPtr& inpcEntity, AnimationPlayMode inePlayMode);
+			void ApplyAnimationToEntity(const SceneAnimationDesc& insSceneAnimDesc, const EntitySPtr& inpcEntity, AnimationPlayMode inePlayMode);
 
             //----------------------------------------------
             /// GetEventCompletion

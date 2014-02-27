@@ -55,17 +55,17 @@ namespace ChilliSource
         };
         typedef std::shared_ptr<StorageLocationAndFilename> StorageLocationAndFilenamePtr;
 		//=========================================================================================
-		/// IFileSystem
+		/// FileSystem
         ///
         /// Frontend for MoFlows file system. All file input and output in MoFlow should be handled
         /// through this to maintain cross platform support.
 		//=========================================================================================
-		class IFileSystem : public ISystem
+		class FileSystem : public System
 		{
-			DECLARE_NAMED_INTERFACE(IFileSystem);
+			DECLARE_NAMED_INTERFACE(FileSystem);
 		public:
-            IFileSystem();
-			virtual ~IFileSystem(){}
+            FileSystem();
+			virtual ~FileSystem(){}
 			//-------------------------------------------------------------------------
 			/// Is A
 			///
@@ -117,7 +117,7 @@ namespace ChilliSource
             /// @param The filepath.
             /// @param The file mode.
             //--------------------------------------------------------------
-            virtual FileStreamPtr CreateFileStream(StorageLocation ineStorageLocation, const std::string& instrFilepath, FileMode ineFileMode) const = 0;
+            virtual FileStreamSPtr CreateFileStream(StorageLocation ineStorageLocation, const std::string& instrFilepath, FileMode ineFileMode) const = 0;
             //--------------------------------------------------------------
             /// Create File
             ///

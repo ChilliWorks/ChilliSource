@@ -65,7 +65,7 @@ namespace ChilliSource
 			///
 			/// @param Scene to render
 			//----------------------------------------------------------
-			void RenderToScreen(Core::CScene* inpScene);
+			void RenderToScreen(Core::Scene* inpScene);
 			//----------------------------------------------------------
 			/// Render To Texture
 			///
@@ -78,7 +78,7 @@ namespace ChilliSource
 			/// @param Texture to render colour to.
             /// @param Texture to render depth to.
 			//----------------------------------------------------------
-			void RenderToTexture(Core::CScene* inpScene, const TextureSPtr &inpColourTarget, const TextureSPtr& inpDepthTarget = TextureSPtr());
+			void RenderToTexture(Core::Scene* inpScene, const TextureSPtr &inpColourTarget, const TextureSPtr& inpDepthTarget = TextureSPtr());
 			//----------------------------------------------------------
 			/// Get Active Camera Pointer
 			///
@@ -86,7 +86,7 @@ namespace ChilliSource
 			//----------------------------------------------------------
 			CameraComponent* GetActiveCameraPtr();
             
-            static Core::CMatrix4x4 matViewProjCache;
+            static Core::Matrix4x4 matViewProjCache;
 			
 		private:
 			
@@ -138,7 +138,7 @@ namespace ChilliSource
             /// @param Scene
             /// @param Target
             //----------------------------------------------------------
-            void RenderSceneToTarget(Core::CScene* inpScene, RenderTarget* inpRenderTarget);
+            void RenderSceneToTarget(Core::Scene* inpScene, RenderTarget* inpRenderTarget);
 			//----------------------------------------------------------
 			/// Find Renderable Objects In Scene
 			///
@@ -151,7 +151,7 @@ namespace ChilliSource
             /// @param Out: Dir lights
             /// @param Out: Point lights
 			//----------------------------------------------------------
-			void FindRenderableObjectsInScene(Core::CScene* pScene, std::vector<RenderComponent*>& outaRenderCache, std::vector<CameraComponent*>& outaCameraCache,
+			void FindRenderableObjectsInScene(Core::Scene* pScene, std::vector<RenderComponent*>& outaRenderCache, std::vector<CameraComponent*>& outaCameraCache,
                                               std::vector<DirectionalLightComponent*>& outaDirectionalLightComponentCache, std::vector<PointLightComponent*>& outaPointLightComponentCache, AmbientLightComponent*& outpAmbientLight) const;
             //----------------------------------------------------------
             /// Cull Renderables
@@ -203,7 +203,7 @@ namespace ChilliSource
             /// rendering
             /// @return Projection matrix for overlay rendering
             //----------------------------------------------------------
-            Core::CMatrix4x4 CreateOverlayProjection(GUI::Window* inpWindow) const;
+            Core::Matrix4x4 CreateOverlayProjection(GUI::Window* inpWindow) const;
             //----------------------------------------------------------
             /// Sort Opaque
             ///

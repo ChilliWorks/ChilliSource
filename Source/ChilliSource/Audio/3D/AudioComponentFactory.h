@@ -25,7 +25,7 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		class AudioComponentFactory : public Core::IComponentFactory
+		class AudioComponentFactory : public Core::ComponentFactory
 		{
 		public:
 			AudioComponentFactory(AudioSystem* inpAudioSystem, AudioManager* inpAudioMgr);

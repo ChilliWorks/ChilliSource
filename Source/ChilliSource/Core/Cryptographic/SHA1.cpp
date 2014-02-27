@@ -13,7 +13,7 @@
 
 	Version 1.6 - 2005-02-07 (thanks to Howard Kapustein for patches)
 	- You can set the endianness in your files, no need to modify the
-	  header file of the CSHA1 class any more
+	  header file of the SHA1 class any more
 	- Aligned data support
 	- Made support/compilation of the utility functions (ReportHash
 	  and HashFile) optional (useful, if bytes count, for example in
@@ -75,19 +75,19 @@ namespace ChilliSource
 	{
         const u32 kudwMaxSHA1Length = 80;
         
-		CSHA1::CSHA1()
+		SHA1::SHA1()
 		{
 			m_block = (SHA1_WORKSPACE_BLOCK *)m_workspace;
 
 			Reset();
 		}
 
-		CSHA1::~CSHA1()
+		SHA1::~SHA1()
 		{
 			Reset();
 		}
 
-		void CSHA1::Reset()
+		void SHA1::Reset()
 		{
 			// SHA1 initialization constants
 			m_state[0] = 0x67452301;
@@ -100,7 +100,7 @@ namespace ChilliSource
 			m_count[1] = 0;
 		}
 
-		void CSHA1::Transform(u32 *state, u8 *buffer)
+		void SHA1::Transform(u32 *state, u8 *buffer)
 		{
 			// Copy state[] to working vars
 			u32 a = state[0], b = state[1], c = state[2], d = state[3], e = state[4];
@@ -143,7 +143,7 @@ namespace ChilliSource
 		}
 
 		// Use this function to hash in binary data and strings
-		void CSHA1::Update(u8 *data, u32 len)
+		void SHA1::Update(u8 *data, u32 len)
 		{
 			u32 i, j;
 
@@ -170,7 +170,7 @@ namespace ChilliSource
 
 #ifdef SHA1_UTILITY_FUNCTIONS
 		// Hash in file contents
-		bool CSHA1::HashFile(char *szFileName)
+		bool SHA1::HashFile(char *szFileName)
 		{
 			unsigned long ulFileSize, ulRest, ulBlocks;
 			unsigned long i;
@@ -214,7 +214,7 @@ namespace ChilliSource
 		}
 #endif
 
-		void CSHA1::Final()
+		void SHA1::Final()
 		{
 			u32 i;
 			u8 finalcount[8];
@@ -248,7 +248,7 @@ namespace ChilliSource
 
 #ifdef SHA1_UTILITY_FUNCTIONS
 		// Get the final hash as a pre-formatted string
-		void CSHA1::ReportHash(char *szReport, ReportType eReportType)
+		void SHA1::ReportHash(char *szReport, ReportType eReportType)
 		{
 			unsigned char i;
 			char szTemp[16];
@@ -289,12 +289,12 @@ namespace ChilliSource
 #endif
 
 		// Get the raw message digest
-		void CSHA1::GetHash(u8 *puDest)
+		void SHA1::GetHash(u8 *puDest)
 		{
 			memcpy(puDest, m_digest, 20);
 		}
         
-        std::string CSHA1::GetHash(ReportType ineType)
+        std::string SHA1::GetHash(ReportType ineType)
         {
             char cHash[kudwMaxSHA1Length];
             memset(cHash, 0, kudwMaxSHA1Length);

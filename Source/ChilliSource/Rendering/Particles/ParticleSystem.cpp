@@ -130,7 +130,7 @@ namespace ChilliSource
 		///
 		/// @return Particle component factory
 		//-------------------------------------------
-		Core::IComponentFactory* ParticleSystem::GetComponentFactoryPtr(u32 inudwIndex)
+		Core::ComponentFactory* ParticleSystem::GetComponentFactoryPtr(u32 inudwIndex)
 		{
 			return mpParticleFactory;
 		}
@@ -139,7 +139,7 @@ namespace ChilliSource
 		///
 		/// @return Particle component factory
 		//-------------------------------------------
-		Core::IComponentFactory& ParticleSystem::GetComponentFactory(u32 inudwIndex)
+		Core::ComponentFactory& ParticleSystem::GetComponentFactory(u32 inudwIndex)
 		{
 			return *mpParticleFactory;
 		}

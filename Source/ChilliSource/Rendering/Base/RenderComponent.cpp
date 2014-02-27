@@ -56,7 +56,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		/// Get Transformation Matrix
 		//-----------------------------------------------------
-		const Core::CMatrix4x4& RenderComponent::GetTransformationMatrix()
+		const Core::Matrix4x4& RenderComponent::GetTransformationMatrix()
 		{
 			return mpEntityOwner->Transform().GetWorldTransform();
 		}

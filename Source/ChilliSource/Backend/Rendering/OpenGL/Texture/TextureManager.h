@@ -35,16 +35,16 @@ namespace ChilliSource
 			/// @param Out: Texture resource
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateEmptyTexture(u32 inudwWidth, u32 inudwHeight, Core::CImage::Format ineFormat, ChilliSource::Rendering::TextureSPtr& outpTexture);
+			bool CreateEmptyTexture(u32 inudwWidth, u32 inudwHeight, Core::Image::Format ineFormat, ChilliSource::Rendering::TextureSPtr& outpTexture);
             //----------------------------------------------------------------
 			/// Create Image From Texture
 			///
 			/// Rendersystem specific implementations should override this
-			/// to return a shared pointer to their CImage object
+			/// to return a shared pointer to their Image object
 			///
 			/// @param mopFlow Texture to create Image from
 			//----------------------------------------------------------------
-			bool CreateImageFromTexture(Rendering::Texture* inpTexture, Core::ImagePtr& outpImage);
+			bool CreateImageFromTexture(Rendering::Texture* inpTexture, Core::ImageSPtr& outpImage);
 			//----------------------------------------------------------------
 			/// Create Texture From Image
 			///
@@ -53,7 +53,7 @@ namespace ChilliSource
 			/// @param Out: Texture resource
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateTextureFromImage(Core::CImage * inpImage, bool inbWithMipsMaps, ChilliSource::Rendering::TextureSPtr& outpTexture);
+			bool CreateTextureFromImage(Core::Image * inpImage, bool inbWithMipsMaps, ChilliSource::Rendering::TextureSPtr& outpTexture);
 			//----------------------------------------------------------------
 			/// Backup
 			///
@@ -88,7 +88,7 @@ namespace ChilliSource
 		private:
 #ifdef TARGET_ANDROID
 			std::vector<Rendering::TextureWeakPtr> mapTextureCache;
-			std::unordered_map<CTexture*, Core::ImagePtr> mapBackedUpImages;
+			std::unordered_map<CTexture*, Core::ImageSPtr> mapBackedUpImages;
 #endif
 		};
 	}

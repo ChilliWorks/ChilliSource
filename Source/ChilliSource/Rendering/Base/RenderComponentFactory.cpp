@@ -44,19 +44,19 @@ namespace ChilliSource
         {
 			if(!mpSpriteSheetManager)
             {
-                mpSpriteSheetManager = static_cast<SpriteSheetManager*>(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(SpriteSheet::InterfaceID));
+                mpSpriteSheetManager = static_cast<SpriteSheetManager*>(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(SpriteSheet::InterfaceID));
             }
             if(!mpTextureManager)
             {
-                mpTextureManager = static_cast<TextureManager*>(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Texture::InterfaceID));
+                mpTextureManager = static_cast<TextureManager*>(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Texture::InterfaceID));
             }
             if(!mpMaterialManager)
             {
-                mpMaterialManager = static_cast<MaterialManager*>(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Material::InterfaceID));
+                mpMaterialManager = static_cast<MaterialManager*>(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Material::InterfaceID));
             }
             if(!mpMeshManager)
             {
-                mpMeshManager = static_cast<MeshManager*>(Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Mesh::InterfaceID));
+                mpMeshManager = static_cast<MeshManager*>(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Mesh::InterfaceID));
             }
             if (!mpRenderCapabilities)
             {
@@ -118,7 +118,7 @@ namespace ChilliSource
         /// @param Type Name
         /// @param Param Dictionary
         //--------------------------------------------------------
-        Core::ComponentPtr RenderComponentFactory::CreateComponent(const std::string & insTypeName, const Core::ParamDictionary & insParamDictionary)
+        Core::ComponentSPtr RenderComponentFactory::CreateComponent(const std::string & insTypeName, const Core::ParamDictionary & insParamDictionary)
         {
             if (insTypeName == StaticMeshComponent::TypeName) 
             {
@@ -170,7 +170,7 @@ namespace ChilliSource
 				
 				if (insParamDictionary.HasValue("ClearColour")) 
                 {
-					Core::CColour cClearCol = Core::ParseColour(insParamDictionary.ValueForKey("ClearColour"));
+					Core::Colour cClearCol = Core::ParseColour(insParamDictionary.ValueForKey("ClearColour"));
 					pResult->SetClearColour(cClearCol);
 				}
 				
@@ -199,7 +199,7 @@ namespace ChilliSource
 						{
 							udwTargetDensity = Core::ParseS32(strTargetDensity);
 						}
-						f32 fScale = udwTargetDensity / Core::IFileSystem::GetDeviceResourcesDensity();
+						f32 fScale = udwTargetDensity / Core::FileSystem::GetDeviceResourcesDensity();
 						
 						pSprite->GetMaterial()->SetTexture(pSpriteSheet->GetTexture());
 						pSprite->SetDimensions(pSpriteSheet->GetSizeForFrame(udwIndex) * fScale);
@@ -207,7 +207,7 @@ namespace ChilliSource
 					}
 					else
 					{
-						pSprite = CreateSpriteComponent(Core::CVector2::ZERO, Core::StorageLocation::k_package, strMaterialName);
+						pSprite = CreateSpriteComponent(Core::Vector2::ZERO, Core::StorageLocation::k_package, strMaterialName);
 					}
 				
 					if (insParamDictionary.HasValue("Transparent"))
@@ -237,7 +237,7 @@ namespace ChilliSource
 				return pSprite;
 			}
 			
-			return Core::ComponentPtr();				
+			return Core::ComponentSPtr();				
         }
 		//--------------------------------------------------------
 		/// Get Owning Render System Pointer
@@ -256,7 +256,7 @@ namespace ChilliSource
         /// @param Material file
         /// @return an instantiated sprite object
         //---------------------------------------------------------------------------
-        SpriteComponentSPtr RenderComponentFactory::CreateSpriteComponent(const Core::CVector2 &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath)
+        SpriteComponentSPtr RenderComponentFactory::CreateSpriteComponent(const Core::Vector2 &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath)
         {
             SpriteComponentSPtr pSprite(new SpriteComponent());
             pSprite->SetMaterial(mpMaterialManager->GetMaterialFromFile(ineStorageLocation, instrMaterialFilePath));
@@ -270,7 +270,7 @@ namespace ChilliSource
         /// @param Material
         /// @return an instantiated sprite object
         //---------------------------------------------------------------------------
-        SpriteComponentSPtr RenderComponentFactory::CreateSpriteComponent(const Core::CVector2 &invDims, const MaterialSPtr& inpMaterial)
+        SpriteComponentSPtr RenderComponentFactory::CreateSpriteComponent(const Core::Vector2 &invDims, const MaterialSPtr& inpMaterial)
         {
             SpriteComponentSPtr pSprite(new SpriteComponent());
             pSprite->SetDimensions(invDims);
@@ -532,7 +532,7 @@ namespace ChilliSource
 			desc.fFOV = infFOV/desc.fAspect;
 			desc.fNearClipping = infNear;
 			desc.fFarClipping = infFar;
-			desc.ClearCol = Core::CColour::WHITE;
+			desc.ClearCol = Core::Colour::WHITE;
 			desc.IsOrthographic = inbIsOrthographic;
 			desc.bShouldResizeToScreen = true;
 			desc.bShouldRotateToScreen = true;
@@ -565,11 +565,11 @@ namespace ChilliSource
             if(mpRenderCapabilities->IsShadowMappingSupported() == true && inudwShadowMapRes > 0)
             {
                 pShadowMap = mpTextureManager->CreateTextureResource();
-                mpTextureManager->CreateEmptyTexture(inudwShadowMapRes, inudwShadowMapRes, Core::CImage::Format::k_Depth16, pShadowMap);
+                mpTextureManager->CreateEmptyTexture(inudwShadowMapRes, inudwShadowMapRes, Core::Image::Format::k_Depth16, pShadowMap);
 
 #ifdef MOFLOW_SHADOW_DEBUG
                 pShadowMapDebug = mpTextureManager->CreateTextureResource();
-                mpTextureManager->CreateEmptyTexture(inudwShadowMapRes, inudwShadowMapRes, Core::CImage::Format::k_RGB888, pShadowMapDebug);
+                mpTextureManager->CreateEmptyTexture(inudwShadowMapRes, inudwShadowMapRes, Core::Image::Format::k_RGB888, pShadowMapDebug);
 #endif
             }
             

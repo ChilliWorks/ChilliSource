@@ -169,14 +169,14 @@ namespace ChilliSource
 			/// @param Tint colour to apply when the button is
 			/// selected
 			//--------------------------------------------------------
-			void SetHighlightColour(const Core::CColour & inValue);
+			void SetHighlightColour(const Core::Colour & inValue);
 			//--------------------------------------------------------
 			/// Get Highlight Colour
 			///
 			/// @return Tint colour to apply when the button is
 			/// selected
 			//--------------------------------------------------------
-			const Core::CColour & GetHighlightColour() const;
+			const Core::Colour & GetHighlightColour() const;
             //-----------------------------------------------------------
 			/// Draw
 			///
@@ -285,7 +285,7 @@ namespace ChilliSource
             SpriteSheetIndex msHighlightIndices;
             Audio::AudioComponentSPtr mpSelectAudioEffect;
 			Audio::AudioComponentSPtr mpDeselectAudioEffect;
-            Core::CColour mCurrentColour;
+            Core::Colour mCurrentColour;
 			bool mbSelected;
             
             //---Properties
@@ -293,7 +293,7 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(Rendering::SpriteSheetSPtr, HighlightSpriteSheet, SetHighlightSpriteSheet, GetHighlightSpriteSheet);
 			DECLARE_PROPERTY_A(std::string, BaseNormalSpriteSheetIndexID, SetBaseNormalSpriteSheetIndexID, GetBaseNormalSpriteSheetIndexID);
 			DECLARE_PROPERTY_A(std::string, BaseHighlightSpriteSheetIndexID, SetBaseHighlightSpriteSheetIndexID, GetBaseHighlightSpriteSheetIndexID);
-			DECLARE_PROPERTY_A(Core::CColour, HighlightColour, SetHighlightColour, GetHighlightColour);
+			DECLARE_PROPERTY_A(Core::Colour, HighlightColour, SetHighlightColour, GetHighlightColour);
 			DECLARE_PROPERTY_A(bool, HeightMaintain, EnableHeightMaintainingAspect, IsHeightMaintainingAspectEnabled);
 			DECLARE_PROPERTY_A(bool, WidthMaintain, EnableWidthMaintainingAspect, IsWidthMaintainingAspectEnabled);
 		};

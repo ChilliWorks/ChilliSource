@@ -16,45 +16,45 @@ namespace ChilliSource
 {
     namespace Core
     {
-        DEFINE_NAMED_INTERFACE(CSceneAnimDescManager);
+        DEFINE_NAMED_INTERFACE(SceneAnimDescManager);
         
-        bool CSceneAnimDescManager::IsA(InterfaceIDType inInterfaceID) const
+        bool SceneAnimDescManager::IsA(InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == CSceneAnimDescManager::InterfaceID;
+            return inInterfaceID == SceneAnimDescManager::InterfaceID;
         }
         
-        InterfaceIDType CSceneAnimDescManager::GetResourceType() const
+        InterfaceIDType SceneAnimDescManager::GetResourceType() const
         {
-            return CSceneAnimation::InterfaceID;
+            return SceneAnimation::InterfaceID;
         }
         
-        InterfaceIDType CSceneAnimDescManager::GetProviderType() const
+        InterfaceIDType SceneAnimDescManager::GetProviderType() const
         {
-            return CSceneAnimation::InterfaceID;
+            return SceneAnimation::InterfaceID;
         }
         
-        bool CSceneAnimDescManager::ManagesResourceOfType(InterfaceIDType inInterfaceID) const
+        bool SceneAnimDescManager::ManagesResourceOfType(InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == CSceneAnimation::InterfaceID;
+            return inInterfaceID == SceneAnimation::InterfaceID;
         }
         
-        ResourcePtr CSceneAnimDescManager::GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        ResourceSPtr SceneAnimDescManager::GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             return GetSceneAnimationFromFile(ineStorageLocation, instrFilePath);
         }
         
-        ResourcePtr CSceneAnimDescManager::AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        ResourceSPtr SceneAnimDescManager::AsyncGetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             return AsyncGetSceneAnimationFromFile(ineStorageLocation, instrFilePath);
         }
         
-        SceneAnimationPtr CSceneAnimDescManager::GetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        SceneAnimationPtr SceneAnimDescManager::GetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
             
             if(pExistingResource == mMapFilenameToResource.end())
             {
-                ResourcePtr pResource(new CSceneAnimation());
+                ResourceSPtr pResource(new SceneAnimation());
                 for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
                 {
                     if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
@@ -62,7 +62,7 @@ namespace ChilliSource
                         CS_DEBUG_LOG("Loading Scene Animation " + instrFilePath);
                         mMapFilenameToResource.emplace(instrFilePath, pResource);
                         
-                        SceneAnimationPtr pSceneAnim = std::static_pointer_cast<CSceneAnimation>(pResource);
+                        SceneAnimationPtr pSceneAnim = std::static_pointer_cast<SceneAnimation>(pResource);
                         pSceneAnim->SetName(instrFilePath);
                         pSceneAnim->SetOwningResourceManager(this);
                         pSceneAnim->SetFilename(instrFilePath);
@@ -74,23 +74,23 @@ namespace ChilliSource
                 }
             }
             else
-                return std::static_pointer_cast<CSceneAnimation>(pExistingResource->second);
+                return std::static_pointer_cast<SceneAnimation>(pExistingResource->second);
             
             CS_ERROR_LOG("Cannot find resource for Scene Description with path " + instrFilePath);
             return SceneAnimationPtr();
         }
         
-        SceneAnimationPtr CSceneAnimDescManager::AsyncGetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        SceneAnimationPtr SceneAnimDescManager::AsyncGetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
             
             if(pExistingResource == mMapFilenameToResource.end())
             {
-                ResourcePtr pResource(new CSceneAnimation());
+                ResourceSPtr pResource(new SceneAnimation());
                 for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
                 {
                     
-                    SceneAnimationPtr pSceneAnim = std::static_pointer_cast<CSceneAnimation>(pResource);
+                    SceneAnimationPtr pSceneAnim = std::static_pointer_cast<SceneAnimation>(pResource);
                     pSceneAnim->SetName(instrFilePath);
                     pSceneAnim->SetOwningResourceManager(this);
                     pSceneAnim->SetFilename(instrFilePath);
@@ -106,7 +106,7 @@ namespace ChilliSource
                 }
             }
             else
-                return std::static_pointer_cast<CSceneAnimation>(pExistingResource->second);
+                return std::static_pointer_cast<SceneAnimation>(pExistingResource->second);
             
             CS_ERROR_LOG("Cannot find resource for Scene Description with path " + instrFilePath);
             return SceneAnimationPtr();

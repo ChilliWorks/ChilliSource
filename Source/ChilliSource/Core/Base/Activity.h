@@ -21,7 +21,7 @@ namespace ChilliSource
         /*
          IActivity represents a class offering UI to perform a specific task
         */
-        class IActivity : public Core::IQueryableInterface
+        class IActivity : public Core::QueryableInterface
         {
         public:
             virtual ~IActivity(){}

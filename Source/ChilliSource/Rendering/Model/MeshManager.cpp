@@ -74,7 +74,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr MeshManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr MeshManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetModelFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -86,7 +86,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr MeshManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr MeshManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetModelFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -105,7 +105,7 @@ namespace ChilliSource
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourcePtr pResource(new Mesh());
+				Core::ResourceSPtr pResource(new Mesh());
 				
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
@@ -123,7 +123,7 @@ namespace ChilliSource
 							pResource->SetName(inFilePath);
 							pResource->SetFilename(inFilePath);
 							pResource->SetStorageLocation(ineStorageLocation);
-							pResource->SetOwningResourceManager(static_cast<Core::IResourceManager*>(this));
+							pResource->SetOwningResourceManager(static_cast<Core::ResourceManager*>(this));
 							pResource->SetLoaded(true);
 							
 							return std::static_pointer_cast<Mesh>(pResource);
@@ -156,7 +156,7 @@ namespace ChilliSource
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourcePtr pResource(new Mesh());
+				Core::ResourceSPtr pResource(new Mesh());
 				
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{

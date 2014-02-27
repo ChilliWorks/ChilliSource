@@ -317,7 +317,7 @@ namespace ChilliSource
 			///
 			/// @return Absolute size of the image
 			//--------------------------------------------------------
-			Core::CVector2 GetSizeFromImage() const;
+			Core::Vector2 GetSizeFromImage() const;
 			//--------------------------------------------------------
 			/// Layout Content
 			///

@@ -42,11 +42,11 @@ namespace ChilliSource
 			virtual ~IComponentProducer(){}
 			
 			DECLARE_NAMED_INTERFACE(IComponentProducer);
-			//Returns a reference to an IComponentFactory
-			virtual IComponentFactory & GetComponentFactory(u32 inudwIndex) = 0;
+			//Returns a reference to an ComponentFactory
+			virtual ComponentFactory & GetComponentFactory(u32 inudwIndex) = 0;
 			
-			//Returns a pointer to an IComponentFactory
-			virtual IComponentFactory * GetComponentFactoryPtr(u32 inudwIndex) = 0;
+			//Returns a pointer to an ComponentFactory
+			virtual ComponentFactory * GetComponentFactoryPtr(u32 inudwIndex) = 0;
 	
 			virtual u32 GetNumComponentFactories() const = 0;
 		};

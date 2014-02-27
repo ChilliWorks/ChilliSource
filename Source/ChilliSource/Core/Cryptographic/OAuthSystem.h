@@ -50,11 +50,11 @@ namespace ChilliSource
 		const std::string OAUTHLIB_PIN_END_TAG_TWITTER_RESP				= "</code>";
 		const std::string OAUTHLIB_AUTHHEADER_STRING					= "OAuth ";
 
-		class COAuthSystem : public Core::ISystem
+		class OAuthSystem : public Core::System
 		{
 		public:
 
-			DECLARE_NAMED_INTERFACE(COAuthSystem);
+			DECLARE_NAMED_INTERFACE(OAuthSystem);
 
 			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 
@@ -69,8 +69,8 @@ namespace ChilliSource
 			typedef std::list<std::string> OAuthKeyValueList;
 			typedef std::map<std::string, std::string> OAuthKeyValuePairsMap;
 
-			COAuthSystem();
-			~COAuthSystem();
+			OAuthSystem();
+			~OAuthSystem();
             
             static std::string GenerateNonceTimeStamp();
 

@@ -126,25 +126,25 @@ namespace ChilliSource
 			///
 			/// @param Colour of progress bar
 			//------------------------------------------------------------------------
-			void SetFillColour(const Core::CColour& inColour);
+			void SetFillColour(const Core::Colour& inColour);
 			//------------------------------------------------------------------------
 			/// Get Fill Colour
 			///
 			/// @return Colour of progress bar
 			//------------------------------------------------------------------------
-			const Core::CColour& GetFillColour() const;
+			const Core::Colour& GetFillColour() const;
 			//------------------------------------------------------------------------
 			/// Set Background Colour
 			///
 			/// @param Colour of background
 			//------------------------------------------------------------------------
-			void SetBackgroundColour(const Core::CColour& inColour);
+			void SetBackgroundColour(const Core::Colour& inColour);
 			//------------------------------------------------------------------------
 			/// Get Background Colour
 			///
 			/// @return Colour of background
 			//------------------------------------------------------------------------
-			const Core::CColour& GetBackgroundColour() const;
+			const Core::Colour& GetBackgroundColour() const;
 			//------------------------------------------------------------------------
 			/// Draw
 			///
@@ -161,8 +161,8 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(std::string, BaseFillSpriteSheetIndexID, SetBaseFillSpriteSheetIndexID, GetBaseFillSpriteSheetIndexID);
 			DECLARE_PROPERTY_A(std::string, BaseBackgroundSpriteSheetIndexID, SetBaseBackgroundSpriteSheetIndexID, GetBaseBackgroundSpriteSheetIndexID);
             
-			DECLARE_PROPERTY_A(Core::CColour, FillColour, SetFillColour, GetFillColour);
-			DECLARE_PROPERTY_A(Core::CColour, BackgroundColour, SetBackgroundColour, GetBackgroundColour);
+			DECLARE_PROPERTY_A(Core::Colour, FillColour, SetFillColour, GetFillColour);
+			DECLARE_PROPERTY_A(Core::Colour, BackgroundColour, SetBackgroundColour, GetBackgroundColour);
 			
             
             DECLARE_PROPERTY_A(bool, WidthFromImage, EnableWidthFromImage, IsWidthFromImageEnabled);

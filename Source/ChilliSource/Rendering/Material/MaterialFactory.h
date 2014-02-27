@@ -16,7 +16,7 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        class MaterialFactory : public Core::ISystem
+        class MaterialFactory : public Core::System
         {
         public:
             

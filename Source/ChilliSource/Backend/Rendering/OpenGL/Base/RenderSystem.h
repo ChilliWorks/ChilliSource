@@ -104,7 +104,7 @@ namespace ChilliSource
             /// @param Number of vertices to render
 			/// @param The world matrix to apply transformations
 			//----------------------------------------------------------
-			void RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::CMatrix4x4& inmatWorld) override;
+			void RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4x4& inmatWorld) override;
 			//----------------------------------------------------------
 			/// Render Buffer
 			///
@@ -116,7 +116,7 @@ namespace ChilliSource
             /// @param Number of indices to render
 			/// @param The world matrix to apply transformations
 			//----------------------------------------------------------
-			void RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::CMatrix4x4& inmatWorld) override;
+			void RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4x4& inmatWorld) override;
             //----------------------------------------------------------
 			/// Apply Camera
 			///
@@ -127,7 +127,7 @@ namespace ChilliSource
 			/// @param Camera view matrix
 			/// @param Frame buffer clear colour
 			//----------------------------------------------------------
-			void ApplyCamera(const Core::CVector3& invPos, const Core::CMatrix4x4& inmatView, const Core::CMatrix4x4& inmatProj, const Core::CColour& inClearCol) override;
+			void ApplyCamera(const Core::Vector3& invPos, const Core::Matrix4x4& inmatView, const Core::Matrix4x4& inmatProj, const Core::Colour& inClearCol) override;
             //----------------------------------------------------------
             /// Set Light
             ///
@@ -151,7 +151,7 @@ namespace ChilliSource
 			///
 			/// @param Dynamic array of joint matrices.
 			//----------------------------------------------------------
-            void ApplyJoints(const std::vector<Core::CMatrix4x4>& inaJoints) override;
+            void ApplyJoints(const std::vector<Core::Matrix4x4>& inaJoints) override;
 			//----------------------------------------------------------
 			/// Create Render Target
 			///
@@ -277,7 +277,7 @@ namespace ChilliSource
             /// @param Position of the bottom left corner of the rect
             /// @param Size of the scissor region
             //---------------------------------------------------------
-            void SetScissorRegion(const Core::CVector2& invPosition, const Core::CVector2& invSize) override;
+            void SetScissorRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize) override;
             //----------------------------------------------------------
 			/// Set Cull Face
 			///
@@ -455,21 +455,21 @@ namespace ChilliSource
             
             Rendering::LightComponent* mpLightComponent;
             
-            Core::CColour mNewClearColour;
-			Core::CColour mClearColour;
-            Core::CColour mCurrentEmissive;
-            Core::CColour mCurrentAmbient;
-            Core::CColour mCurrentDiffuse;
-            Core::CColour mCurrentSpecular;
+            Core::Colour mNewClearColour;
+			Core::Colour mClearColour;
+            Core::Colour mCurrentEmissive;
+            Core::Colour mCurrentAmbient;
+            Core::Colour mCurrentDiffuse;
+            Core::Colour mCurrentSpecular;
             bool mbEmissiveSet;
             bool mbAmbientSet;
             bool mbDiffuseSet;
             bool mbSpecularSet;
             
-			Core::CMatrix4x4 mmatProj;
-			Core::CMatrix4x4 mmatViewProj;
-            Core::CMatrix4x4 mmatView;
-            Core::CVector3 mvCameraPos;
+			Core::Matrix4x4 mmatProj;
+			Core::Matrix4x4 mmatViewProj;
+            Core::Matrix4x4 mmatView;
+            Core::Vector3 mvCameraPos;
             
 			CTextureManager mTexManager;
             CCubemapManager mCubemapManager;
@@ -515,8 +515,8 @@ namespace ChilliSource
             
 			CRenderTarget* mpDefaultRenderTarget;
             
-            Core::CVector2 mvCachedScissorPos;
-            Core::CVector2 mvCachedScissorSize;
+            Core::Vector2 mvCachedScissorPos;
+            Core::Vector2 mvCachedScissorSize;
             
             const Rendering::Material* mpCurrentMaterial;
             

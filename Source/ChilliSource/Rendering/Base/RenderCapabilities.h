@@ -25,7 +25,7 @@ namespace ChilliSource
         /// texture size. This should not be used prior to the render
         /// system being initialised.
         //===============================================================
-        class RenderCapabilities : public Core::ISystem
+        class RenderCapabilities : public Core::System
         {
         public:
             DECLARE_NAMED_INTERFACE(RenderCapabilities);

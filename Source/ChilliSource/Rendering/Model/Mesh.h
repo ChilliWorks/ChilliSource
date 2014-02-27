@@ -25,7 +25,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class Mesh : public Core::IResource
+		class Mesh : public Core::Resource
 		{
 		public:
 			
@@ -100,7 +100,7 @@ namespace ChilliSource
 			/// @param World transform matrix
 			/// @param The array of materials.
 			//-----------------------------------------------------------------
-			void Render(RenderSystem* inpRenderSystem, const Core::CMatrix4x4 &inmatWorld, const std::vector<MaterialSPtr>& inMaterials, 
+			void Render(RenderSystem* inpRenderSystem, const Core::Matrix4x4 &inmatWorld, const std::vector<MaterialSPtr>& inMaterials, 
                         const SkinnedAnimationGroupSPtr& inpAnimationGroup = SkinnedAnimationGroupSPtr()) const;
 		private:
 			//Only the mesh loader can create this
@@ -132,7 +132,7 @@ namespace ChilliSource
 			/// @param the minimum bounds
 			/// @param the maximum bounds.
 			//-----------------------------------------------------------------
-			void SetBounds(const ChilliSource::Core::CVector3& invMinBounds, const ChilliSource::Core::CVector3& invMaxBounds);
+			void SetBounds(const ChilliSource::Core::Vector3& invMinBounds, const ChilliSource::Core::Vector3& invMaxBounds);
 			//-----------------------------------------------------------------
 			/// Calc Vertex And Index Counts
 			///

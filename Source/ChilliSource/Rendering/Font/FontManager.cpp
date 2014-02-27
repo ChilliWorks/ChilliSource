@@ -81,9 +81,9 @@ namespace ChilliSource
         /// @param The storage location to load from
 		/// @param File name
 		//-----------------------------------------------------------------
-		Core::ResourcePtr FontManager::GetResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr FontManager::GetResourceFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
-			return GetFontFromFile(ineStorageLocation, instrFilePath, Core::CImage::Format::k_default);
+			return GetFontFromFile(ineStorageLocation, instrFilePath, Core::Image::Format::k_default);
 		}
 		//----------------------------------------------------------------
 		/// Get Font From File
@@ -95,7 +95,7 @@ namespace ChilliSource
 		/// @param File name
 		/// @param Image format
 		//----------------------------------------------------------------
-		FontSPtr FontManager::GetFontFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::CImage::Format ineFormat)
+		FontSPtr FontManager::GetFontFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &inFilePath, Core::Image::Format ineFormat)
 		{
             //It's the texture that is passed in so we need to load the alphabet file
             std::string strFontFile;
@@ -107,7 +107,7 @@ namespace ChilliSource
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourcePtr pResource(new Font());
+				Core::ResourceSPtr pResource(new Font());
 				
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
@@ -124,7 +124,7 @@ namespace ChilliSource
                         
                         if(!mpSpriteSheetManager)
                         {
-                            mpSpriteSheetManager = Core::CResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<SpriteSheetManager>();
+                            mpSpriteSheetManager = Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerWithInterface<SpriteSheetManager>();
                         }
                         
                         SpriteSheetSPtr pFontData = mpSpriteSheetManager->GetSpriteSheetFromFile(ineStorageLocation, inFilePath, ineFormat, false);

@@ -69,7 +69,7 @@ namespace ChilliSource
 			///
 			/// @return The acceleration in Gs.
 			//----------------------------------------------------
-			const Core::CVector3& GetAcceleration() const override;;
+			const Core::Vector3& GetAcceleration() const override;;
 			//----------------------------------------------------
 			/// Stop Updating
 			///
@@ -82,7 +82,7 @@ namespace ChilliSource
 			~CAccelerometer();
 		protected:
             
-			mutable Core::CVector3 mvAcceleration;
+			mutable Core::Vector3 mvAcceleration;
             bool mbIsUpdating;
             
             CMMotionManager* m_motionManager;

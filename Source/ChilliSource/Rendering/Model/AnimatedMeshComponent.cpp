@@ -48,7 +48,7 @@ namespace ChilliSource
 		{
 			return  (inInterfaceID == AnimatedMeshComponent::InterfaceID) ||
                     (inInterfaceID == RenderComponent::InterfaceID) ||
-                    (inInterfaceID == IVolumeComponent::InterfaceID);
+                    (inInterfaceID == VolumeComponent::InterfaceID);
 		}
 		//----------------------------------------------------
 		/// Get Axis Aligned Bounding Box
@@ -59,17 +59,17 @@ namespace ChilliSource
 			{
 				//Rebuild the box
                 const Core::AABB& cAABB = mpModel->GetAABB();
-                const Core::CMatrix4x4& matWorld = mpEntityOwner->Transform().GetWorldTransform();
-                Core::CVector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
-                Core::CVector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
-                Core::CVector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
-                Core::CVector3 vBackTopRight(cAABB.BackTopRight() * matWorld);
-                Core::CVector3 vFrontBottomLeft(cAABB.FrontBottomLeft() * matWorld);
-                Core::CVector3 vFrontBottomRight(cAABB.FrontBottomRight() * matWorld);
-                Core::CVector3 vFrontTopLeft(cAABB.FrontTopLeft() *matWorld);
-                Core::CVector3 vFrontTopRight(cAABB.FrontTopRight() * matWorld);
+                const Core::Matrix4x4& matWorld = mpEntityOwner->Transform().GetWorldTransform();
+                Core::Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
+                Core::Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
+                Core::Vector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
+                Core::Vector3 vBackTopRight(cAABB.BackTopRight() * matWorld);
+                Core::Vector3 vFrontBottomLeft(cAABB.FrontBottomLeft() * matWorld);
+                Core::Vector3 vFrontBottomRight(cAABB.FrontBottomRight() * matWorld);
+                Core::Vector3 vFrontTopLeft(cAABB.FrontTopLeft() *matWorld);
+                Core::Vector3 vFrontTopRight(cAABB.FrontTopRight() * matWorld);
                 
-                Core::CVector3 vMin(std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity());
+                Core::Vector3 vMin(std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity(), std::numeric_limits<f32>::infinity());
                 vMin.x = std::min(vMin.x, vBackBottomLeft.x);
                 vMin.x = std::min(vMin.x, vBackBottomRight.x);
                 vMin.x = std::min(vMin.x, vBackTopLeft.x);
@@ -97,7 +97,7 @@ namespace ChilliSource
                 vMin.z = std::min(vMin.z, vFrontTopLeft.z);
                 vMin.z = std::min(vMin.z, vFrontTopRight.z);
                 
-                Core::CVector3 vMax(-std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity());
+                Core::Vector3 vMax(-std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity(), -std::numeric_limits<f32>::infinity());
                 vMax.x = std::max(vMax.x, vBackBottomLeft.x);
                 vMax.x = std::max(vMax.x, vBackBottomRight.x);
                 vMax.x = std::max(vMax.x, vBackTopLeft.x);
@@ -151,7 +151,7 @@ namespace ChilliSource
 			if(mpEntityOwner)
 			{
                 const Core::AABB& sAABB = GetAABB();
-                Core::CVector3 vSize = sAABB.GetSize();
+                Core::Vector3 vSize = sAABB.GetSize();
 				mBoundingSphere.vOrigin = sAABB.GetOrigin();
 				mBoundingSphere.fRadius = std::max(vSize.x, vSize.y) * 0.5f;
 			}
@@ -385,7 +385,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Attach Entity
         //----------------------------------------------------------
-        void AnimatedMeshComponent::AttachEntity(const Core::EntityPtr& inpEntity, const std::string& instrNodeName)
+        void AnimatedMeshComponent::AttachEntity(const Core::EntitySPtr& inpEntity, const std::string& instrNodeName)
         {
             if (nullptr == mpEntityOwner)
             {
@@ -402,7 +402,7 @@ namespace ChilliSource
             //check that it has not already been added.
             for (AttachedEntityList::const_iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
             {
-                if (Core::EntityPtr pEntity = it->first.lock())
+                if (Core::EntitySPtr pEntity = it->first.lock())
                 {
                     if (pEntity.get() == inpEntity.get())
                     {
@@ -424,12 +424,12 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Detatch Entity
         //----------------------------------------------------------
-        void AnimatedMeshComponent::DetatchEntity(Core::CEntity* inpEntity)
+        void AnimatedMeshComponent::DetatchEntity(Core::Entity* inpEntity)
         {
             AttachedEntityList::iterator it;
             for (it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
             {
-                if (Core::EntityPtr pEntity = it->first.lock())
+                if (Core::EntitySPtr pEntity = it->first.lock())
                 {
                     if (pEntity.get() == inpEntity)
                     {
@@ -451,7 +451,7 @@ namespace ChilliSource
         {
             for (AttachedEntityList::const_iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end(); ++it)
             {
-                if (Core::EntityPtr pEntity = it->first.lock())
+                if (Core::EntitySPtr pEntity = it->first.lock())
                 {
                     pEntity->RemoveFromParent();
                 }
@@ -767,11 +767,11 @@ namespace ChilliSource
             {
                 for (AttachedEntityList::iterator it = maAttachedEntities.begin(); it != maAttachedEntities.end();)
                 {
-                    if (Core::EntityPtr pEntity = it->first.lock())
+                    if (Core::EntitySPtr pEntity = it->first.lock())
                     {
                         s32 dwNodeIndex = it->second;
                         
-                        const Core::CMatrix4x4& matTransform = mActiveAnimationGroup->GetMatrixAtIndex(dwNodeIndex);
+                        const Core::Matrix4x4& matTransform = mActiveAnimationGroup->GetMatrixAtIndex(dwNodeIndex);
                         pEntity->Transform().SetLocalTransform(matTransform);
                         ++it;
                     }

@@ -68,7 +68,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr MaterialManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr MaterialManager::GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return GetMaterialFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -80,7 +80,7 @@ namespace ChilliSource
 		/// @param File path to resource
 		/// @return Generic pointer to object type
 		//-----------------------------------------------------------------
-		Core::ResourcePtr MaterialManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
+		Core::ResourceSPtr MaterialManager::AsyncGetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
 			return AsyncGetMaterialFromFile(ineStorageLocation, instrFilePath);
 		}
@@ -102,7 +102,7 @@ namespace ChilliSource
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourcePtr pResource(new Material());
+				Core::ResourceSPtr pResource(new Material());
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
 					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, inFilePath, pResource))
@@ -147,7 +147,7 @@ namespace ChilliSource
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
-				Core::ResourcePtr pResource(new Material());
+				Core::ResourceSPtr pResource(new Material());
 				for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 				{
 					MaterialSPtr pMaterial = std::static_pointer_cast<Material>(pResource);

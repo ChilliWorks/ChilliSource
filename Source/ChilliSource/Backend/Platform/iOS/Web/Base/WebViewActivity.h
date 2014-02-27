@@ -137,8 +137,8 @@ namespace ChilliSource
 			UIWebDelegate* mpWebDelegate;
 			
 			Core::UnifiedVector2 mvUnifiedSize;
-			Core::CVector2 mvAbsoluteSize;
-			Core::CVector2 mvAbsolutePosition;
+			Core::Vector2 mvAbsoluteSize;
+			Core::Vector2 mvAbsolutePosition;
             f32 mfDismissButtonScale;
 			
             std::string mstrAnchor;

@@ -22,7 +22,7 @@ namespace ChilliSource
 {
 	namespace Audio 
 	{
-		class AudioManager : public Core::IResourceManager
+		class AudioManager : public Core::ResourceManager
 		{
 		public:
 			DECLARE_NAMED_INTERFACE(AudioManager);
@@ -63,7 +63,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Generic pointer to object type
 			//-----------------------------------------------------------------
-			Core::ResourcePtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
+			Core::ResourceSPtr GetResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
 			//----------------------------------------------------------------
 			/// Get Sound From File
 			///
@@ -96,7 +96,7 @@ namespace ChilliSource
 			///
 			/// @param Handle to the sound effect you want to destroy
 			//-----------------------------------------------------------------
-			void Destroy(const Core::ResourcePtr& inpSoundEffect);
+			void Destroy(const Core::ResourceSPtr& inpSoundEffect);
 			//-----------------------------------------------------------------
 			/// Destroy All 
 			///
