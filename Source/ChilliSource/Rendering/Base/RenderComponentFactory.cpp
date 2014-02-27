@@ -527,7 +527,7 @@ namespace ChilliSource
 		CameraComponentSPtr RenderComponentFactory::CreateCameraComponent(const f32 infFOV, const f32 infNear, const f32 infFar, bool inbIsOrthographic)
 		{
 			CameraDescription desc;
-			desc.vViewSize = Core::CScreen::GetOrientedDimensions();
+			desc.vViewSize = Core::Screen::GetOrientedDimensions();
 			desc.fAspect = (desc.vViewSize.x/desc.vViewSize.y);
 			desc.fFOV = infFOV/desc.fAspect;
 			desc.fNearClipping = infNear;
@@ -538,7 +538,7 @@ namespace ChilliSource
 			desc.bShouldRotateToScreen = true;
 			
 			CameraComponentSPtr pCamera(new CameraComponent(desc));
-			pCamera->SetViewportOrientation(Core::CScreen::GetOrientation());
+			pCamera->SetViewportOrientation(Core::Screen::GetOrientation());
 			return pCamera;
 		}
         //---------------------------------------------------------------------------

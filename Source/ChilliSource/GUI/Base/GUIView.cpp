@@ -1578,7 +1578,7 @@ namespace ChilliSource
             Core::Vector2 vTopRight = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_topRight);
             Core::Vector2 vBottomLeft = GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft);
         
-            return (vTopRight.y >= 0 && vBottomLeft.y <= Core::CScreen::GetOrientedHeight() && vTopRight.x >= 0 && vBottomLeft.x <= Core::CScreen::GetOrientedWidth());
+            return (vTopRight.y >= 0 && vBottomLeft.y <= Core::Screen::GetOrientedHeight() && vTopRight.x >= 0 && vBottomLeft.x <= Core::Screen::GetOrientedWidth());
         }
         
         //---Functional overrides

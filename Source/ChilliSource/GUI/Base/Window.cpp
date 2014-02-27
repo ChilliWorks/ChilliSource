@@ -32,7 +32,7 @@ namespace ChilliSource
 			//Each hierarchy can only have on window
 			mpRootWindow = this;
             
-			Core::Vector2 vAbsSize = Core::CScreen::GetOrientedDimensions();
+			Core::Vector2 vAbsSize = Core::Screen::GetOrientedDimensions();
             
 			//The window is fullscreen and centred
 			SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), vAbsSize));
@@ -40,8 +40,8 @@ namespace ChilliSource
 			SetName("RootWindow");
             
 			//Register for screen rotation events
-			Core::CApplicationEvents::GetScreenOrientationChangedEvent() += Core::ApplicationScreenOrientationDelegate(this, &Window::OnScreenOrientationChanged);
-			Core::CApplicationEvents::GetScreenResizedEvent() += Core::ApplicationScreenResizeDelegate(this, &Window::OnScreenResized);
+			Core::ApplicationEvents::GetScreenOrientationChangedEvent() += Core::ApplicationScreenOrientationDelegate(this, &Window::OnScreenOrientationChanged);
+			Core::ApplicationEvents::GetScreenResizedEvent() += Core::ApplicationScreenResizeDelegate(this, &Window::OnScreenResized);
 		}
 		//-----------------------------------------------------
 		/// Set Input System
@@ -93,7 +93,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void Window::OnScreenOrientationChanged(Core::ScreenOrientation ineOrientation)
 		{
-			Core::Vector2 vAbsSize = Core::CScreen::GetOrientedDimensions();
+			Core::Vector2 vAbsSize = Core::Screen::GetOrientedDimensions();
             
 			//The window is fullscreen and centred
 			SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), vAbsSize));
@@ -280,8 +280,8 @@ namespace ChilliSource
 			//The window is responsible for receiving input for this scene
 			UnlistenFromTouches();
             
-			Core::CApplicationEvents::GetScreenOrientationChangedEvent() -= Core::ApplicationScreenOrientationDelegate(this, &Window::OnScreenOrientationChanged);
-			Core::CApplicationEvents::GetScreenResizedEvent() -= Core::ApplicationScreenResizeDelegate(this, &Window::OnScreenResized);
+			Core::ApplicationEvents::GetScreenOrientationChangedEvent() -= Core::ApplicationScreenOrientationDelegate(this, &Window::OnScreenOrientationChanged);
+			Core::ApplicationEvents::GetScreenResizedEvent() -= Core::ApplicationScreenResizeDelegate(this, &Window::OnScreenResized);
 		}
 	}
 }

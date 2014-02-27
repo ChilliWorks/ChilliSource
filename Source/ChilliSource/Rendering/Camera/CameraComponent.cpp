@@ -70,7 +70,7 @@ namespace ChilliSource
 		{
             Core::Matrix4x4 matProj = (GetView() * GetProjection()).Inverse();
             
-            Core::Vector2 vScreenSize(Core::CScreen::GetOrientedDimensions());
+            Core::Vector2 vScreenSize(Core::Screen::GetOrientedDimensions());
 			//Normalise the screen space co-ordinates into clip space
 			f32 nx = ((2.0f * (invScreenPos.x/vScreenSize.x)) - 1.0f);
 			f32 ny = ((2.0f * (invScreenPos.y/vScreenSize.y)) - 1.0f);
@@ -102,7 +102,7 @@ namespace ChilliSource
 			Core::Matrix4x4 matToClip = (GetView() * GetProjection());
 			Core::Vector4 vScreenPos = Core::Vector4(invWorldPos, 1.0f) * matToClip;
 			
-            Core::Vector2 vScreenSize(Core::CScreen::GetOrientedDimensions());
+            Core::Vector2 vScreenSize(Core::Screen::GetOrientedDimensions());
 			
 			// Normalize co-ordinates
 			vScreenPos.x = vScreenPos.x / vScreenPos.w;
@@ -478,8 +478,8 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		void CameraComponent::EnableViewportRotationWithScreen(bool inbEnable)
 		{
-			inbEnable ? Core::CApplicationEvents::GetScreenOrientationChangedEvent() += Core::ApplicationScreenOrientationDelegate(this, &CameraComponent::SetViewportOrientation) :
-						Core::CApplicationEvents::GetScreenOrientationChangedEvent() -= Core::ApplicationScreenOrientationDelegate(this, &CameraComponent::SetViewportOrientation);
+			inbEnable ? Core::ApplicationEvents::GetScreenOrientationChangedEvent() += Core::ApplicationScreenOrientationDelegate(this, &CameraComponent::SetViewportOrientation) :
+						Core::ApplicationEvents::GetScreenOrientationChangedEvent() -= Core::ApplicationScreenOrientationDelegate(this, &CameraComponent::SetViewportOrientation);
 		}
 		//------------------------------------------------------
 		/// Enable Viewport Resize with Screen
@@ -489,8 +489,8 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		void CameraComponent::EnableViewportResizeWithScreen(bool inbEnable)
 		{
-			inbEnable ? Core::CApplicationEvents::GetScreenResizedEvent() += Core::ApplicationScreenResizeDelegate(this, &CameraComponent::SetViewportSize) :
-						Core::CApplicationEvents::GetScreenResizedEvent() -= Core::ApplicationScreenResizeDelegate(this, &CameraComponent::SetViewportSize);
+			inbEnable ? Core::ApplicationEvents::GetScreenResizedEvent() += Core::ApplicationScreenResizeDelegate(this, &CameraComponent::SetViewportSize) :
+						Core::ApplicationEvents::GetScreenResizedEvent() -= Core::ApplicationScreenResizeDelegate(this, &CameraComponent::SetViewportSize);
 		}
 		//-----------------------------------------------------
 		/// Destructor

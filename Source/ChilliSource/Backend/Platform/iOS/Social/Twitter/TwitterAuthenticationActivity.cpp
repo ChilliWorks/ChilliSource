@@ -58,7 +58,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		void CTwitterAuthenticationActivity::Present()
 		{
-			mvPointSize = (Core::CScreen::GetOrientedDimensions() / Core::CScreen::GetDensity());
+			mvPointSize = (Core::Screen::GetOrientedDimensions() / Core::Screen::GetDensity());
 			mvAbsoluteSize = (mvPointSize * mvUnifiedSize.GetRelative()) + mvUnifiedSize.GetAbsolute();
 			mvAbsolutePositionTopLeft = (mvPointSize - mvAbsoluteSize) / 2;
 			mvAbsolutePositionCentre = mvAbsolutePositionTopLeft + (mvAbsoluteSize / 2);

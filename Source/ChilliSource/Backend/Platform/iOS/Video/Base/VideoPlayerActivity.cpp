@@ -78,7 +78,7 @@ namespace ChilliSource
         meSubtitlesLocation(Core::StorageLocation::k_none)
         
         {
-            ChilliSource::Core::CApplicationEvents::GetResumeEvent() += ChilliSource::Core::ApplicationSystemDelegate(this, &CVideoPlayerActivity::OnResume);
+            ChilliSource::Core::ApplicationEvents::GetResumeEvent() += ChilliSource::Core::ApplicationSystemDelegate(this, &CVideoPlayerActivity::OnResume);
             mpTapListener = [[CVideoPlayerTapListener alloc] init];
         }
 		//--------------------------------------------------------------
@@ -299,8 +299,8 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void CVideoPlayerActivity::SetupMovieView()
         {
-            f32 fOrientedWidthDensityCorrected = Core::CScreen::GetOrientedWidth() * Core::CScreen::GetInverseDensity();
-            f32 fOrientedHeightDensityCorrected = Core::CScreen::GetOrientedHeight() * Core::CScreen::GetInverseDensity();
+            f32 fOrientedWidthDensityCorrected = Core::Screen::GetOrientedWidth() * Core::Screen::GetInverseDensity();
+            f32 fOrientedHeightDensityCorrected = Core::Screen::GetOrientedHeight() * Core::Screen::GetInverseDensity();
             
             mpMoviePlayerController.backgroundView.backgroundColor = [UIColor colorWithRed:mBackgroundColour.r green:mBackgroundColour.g blue:mBackgroundColour.b alpha:mBackgroundColour.a];
             [[mpMoviePlayerController view] setFrame:CGRectMake(0, 0, fOrientedWidthDensityCorrected, fOrientedHeightDensityCorrected)];
@@ -376,7 +376,7 @@ namespace ChilliSource
             if (mpVideoOverlayView == nil)
             {
                 //create the overlay
-                CGRect rect = CGRectMake(0, 0, Core::CScreen::GetOrientedWidth() * Core::CScreen::GetInverseDensity(), Core::CScreen::GetOrientedHeight() * Core::CScreen::GetInverseDensity());
+                CGRect rect = CGRectMake(0, 0, Core::Screen::GetOrientedWidth() * Core::Screen::GetInverseDensity(), Core::Screen::GetOrientedHeight() * Core::Screen::GetInverseDensity());
                 mpVideoOverlayView = [[UIView alloc] initWithFrame: rect];
                 UIView* rootView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
                 [rootView addSubview:mpVideoOverlayView];
@@ -449,7 +449,7 @@ namespace ChilliSource
         CVideoPlayerActivity::~CVideoPlayerActivity()
         {
             [mpTapListener release];
-            ChilliSource::Core::CApplicationEvents::GetResumeEvent() -= ChilliSource::Core::ApplicationSystemDelegate(this, &CVideoPlayerActivity::OnResume);
+            ChilliSource::Core::ApplicationEvents::GetResumeEvent() -= ChilliSource::Core::ApplicationSystemDelegate(this, &CVideoPlayerActivity::OnResume);
             
             StopListeningForMoviePlayerNotifications();
         }

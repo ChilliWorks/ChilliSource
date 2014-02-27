@@ -46,10 +46,10 @@ namespace ChilliSource
                 //Build the JSON request with the device info so the server can decide what
                 //assets are suitable for us
                 Json::Value JDeviceData(Json::objectValue);
-                JDeviceData["Type"] = Core::CDevice::GetManufacturerName() + Core::CDevice::GetModelName() + Core::CDevice::GetModelTypeName();
-                JDeviceData["OS"] = Core::CDevice::GetOSVersion();
-                JDeviceData["Locale"] = Core::CDevice::GetLocale().GetCountryCode();
-                JDeviceData["Language"] = Core::CDevice::GetLanguage().GetLocaleCode();
+                JDeviceData["Type"] = Core::Device::GetManufacturerName() + Core::Device::GetModelName() + Core::Device::GetModelTypeName();
+                JDeviceData["OS"] = Core::Device::GetOSVersion();
+                JDeviceData["Locale"] = Core::Device::GetLocale().GetCountryCode();
+                JDeviceData["Language"] = Core::Device::GetLanguage().GetLocaleCode();
                 
                 //The server uses the tags to determine which content to serve
                 Json::Value JTags(Json::arrayValue);

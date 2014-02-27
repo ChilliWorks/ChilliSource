@@ -125,9 +125,9 @@ namespace ChilliSource
 			pPlatformSystem->Init();
             
 			//Set the screen helper classes dimensions
-            Core::CScreen::SetRawDimensions(pPlatformSystem->GetScreenDimensions());
-            Core::CScreen::SetOrientation(meDefaultOrientation);
-            Core::CScreen::SetDensity(pPlatformSystem->GetScreenDensity());
+            Core::Screen::SetRawDimensions(pPlatformSystem->GetScreenDimensions());
+            Core::Screen::SetOrientation(meDefaultOrientation);
+            Core::Screen::SetDensity(pPlatformSystem->GetScreenDensity());
             
             DetermineResourceDirectories();
 
@@ -136,10 +136,10 @@ namespace ChilliSource
 			new CLocalDataStore();
 
             //Set up the device helper
-            CDevice::Init(pPlatformSystem);
+            Device::Init(pPlatformSystem);
 
 			//Set up the task scheduler
-			CTaskScheduler::Init(Core::CDevice::GetNumCPUCores() * 2);
+			CTaskScheduler::Init(Core::Device::GetNumCPUCores() * 2);
 
 			//System setup
 			pPlatformSystem->CreateDefaultSystems(mSystems);
@@ -174,8 +174,8 @@ namespace ChilliSource
             //Sort the info by resolution low to high
             std::sort(aDirectoryInfos.begin(), aDirectoryInfos.end(), ResolutionSortPredicate);
             
-            u32 udwCurrentRes = CScreen::GetOrientedWidth() * CScreen::GetOrientedHeight();
-            f32 fCurrenctDensity = CScreen::GetDensity();
+            u32 udwCurrentRes = Screen::GetOrientedWidth() * Screen::GetOrientedHeight();
+            f32 fCurrenctDensity = Screen::GetDensity();
             f32 fAssetDensity = 1.0f;
             for(std::vector<ResourceDirectoryInfo>::const_iterator it = aDirectoryInfos.begin(); it != aDirectoryInfos.end(); ++it)
             {
@@ -369,7 +369,7 @@ namespace ChilliSource
         void Application::LoadDefaultResources()
         {
             Json::Value jRoot;
-            if(CUtils::ReadJson(StorageLocation::k_package, "App.config", &jRoot) == true)
+            if(Utils::ReadJson(StorageLocation::k_package, "App.config", &jRoot) == true)
             {
                 if(jRoot.isMember("MaxFPS"))
                 {
@@ -456,7 +456,7 @@ namespace ChilliSource
         void Application::RefreshMasterText(StorageLocation ineStorageLocation, const std::string& instrDirectory)
         {
             //Load any localised text from file 
-            if(!Core::CLocalisedText::LoadTextFromFile(ineStorageLocation, instrDirectory, Core::CDevice::GetLanguage().GetLanguageCode() + ".mofloloca"))
+            if(!Core::CLocalisedText::LoadTextFromFile(ineStorageLocation, instrDirectory, Core::Device::GetLanguage().GetLanguageCode() + ".mofloloca"))
             {
                 //Default to english
                 Core::CLocalisedText::LoadTextFromFile(ineStorageLocation, instrDirectory, "en.mofloloca");
@@ -721,7 +721,7 @@ namespace ChilliSource
 		{
 			CS_DEBUG_LOG("Memory Warning. Clearing resource cache...");
 			ResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
-			CApplicationEvents::GetLowMemoryEvent().Invoke();
+			ApplicationEvents::GetLowMemoryEvent().Invoke();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// On Go Back
@@ -732,7 +732,7 @@ namespace ChilliSource
 		{
 			CS_DEBUG_LOG("Go back event.");
 			mStateMgr.GetActiveState()->OnGoBack();
-			CApplicationEvents::GetGoBackEvent().Invoke();
+			ApplicationEvents::GetGoBackEvent().Invoke();
 		}
 		//----------------------------------------------------------------------
 		/// Set Orientation
@@ -751,7 +751,7 @@ namespace ChilliSource
 			if(HasTouchInput() == true)
 			{
 				Input::TouchScreen * pTouchScreen = GetSystemImplementing(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreenPtr();
-				pTouchScreen->SetScreenHeight(CScreen::GetOrientedHeight());
+				pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());
 			}
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -789,8 +789,8 @@ namespace ChilliSource
 				mpRenderSystem->Suspend();
 			}
             
-			CApplicationEvents::GetSuspendEvent().Invoke();
-			CApplicationEvents::GetLateSuspendEvent().Invoke();
+			ApplicationEvents::GetSuspendEvent().Invoke();
+			ApplicationEvents::GetLateSuspendEvent().Invoke();
 			
 			CS_DEBUG_LOG("App Finished Suspending...");
 		}
@@ -819,7 +819,7 @@ namespace ChilliSource
 			}
             
 			s_isSuspending = false;
-			CApplicationEvents::GetResumeEvent().Invoke();
+			ApplicationEvents::GetResumeEvent().Invoke();
             
 			//Tell the active state to continue
 			mStateMgr.Resume();
@@ -833,7 +833,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void Application::OnScreenResized(u32 inudwWidth, u32 inudwHeight) 
 		{	
-			CScreen::SetRawDimensions(Core::Vector2((f32)inudwWidth, (f32)inudwHeight));
+			Screen::SetRawDimensions(Core::Vector2((f32)inudwWidth, (f32)inudwHeight));
             
 			if(mpRenderSystem)
 			{
@@ -843,10 +843,10 @@ namespace ChilliSource
 			if(HasTouchInput() == true)
 			{
 				Input::TouchScreen * pTouchScreen = GetSystemImplementing(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreenPtr();
-				pTouchScreen->SetScreenHeight(CScreen::GetOrientedHeight());
+				pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());
 			}
             
-			CApplicationEvents::GetScreenResizedEvent().Invoke(inudwWidth, inudwHeight);
+			ApplicationEvents::GetScreenResizedEvent().Invoke(inudwWidth, inudwHeight);
             
 			CS_DEBUG_LOG("Screen resized Notification");
 		}
@@ -858,16 +858,16 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void Application::OnScreenChangedOrientation(ScreenOrientation ineOrientation) 
 		{		
-			CScreen::SetOrientation(ineOrientation);
+			Screen::SetOrientation(ineOrientation);
             
 			if(mpRenderSystem)
 			{
-				mpRenderSystem->OnScreenOrientationChanged(Core::CScreen::GetOrientedWidth(), Core::CScreen::GetOrientedHeight());
+				mpRenderSystem->OnScreenOrientationChanged(Core::Screen::GetOrientedWidth(), Core::Screen::GetOrientedHeight());
 			}
             
 			//Flip the screen
 			SetOrientation(ineOrientation);
-			CApplicationEvents::GetScreenOrientationChangedEvent().Invoke(ineOrientation);
+			ApplicationEvents::GetScreenOrientationChangedEvent().Invoke(ineOrientation);
             
 			CS_DEBUG_LOG("Screen Oriented Notification");
 

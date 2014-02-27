@@ -12,22 +12,22 @@ namespace ChilliSource
 {
     namespace Core
     {
-        std::string CDevice::mstrDeviceModel;
-		std::string CDevice::mstrDeviceModelType;
-		std::string CDevice::mstrDeviceManufacturer;
-		Locale CDevice::mLocale = kUnknownLocale;
-		Locale CDevice::mLanguage = kUnknownLocale;
-        std::string CDevice::mstrOSVersion;
-        std::string CDevice::mstrDeviceID;
-		u32 CDevice::mudwNumCores = 0;
-		f32 CDevice::mfPhysicalScreenSize = 0.0f;
+        std::string Device::mstrDeviceModel;
+		std::string Device::mstrDeviceModelType;
+		std::string Device::mstrDeviceManufacturer;
+		Locale Device::mLocale = kUnknownLocale;
+		Locale Device::mLanguage = kUnknownLocale;
+        std::string Device::mstrOSVersion;
+        std::string Device::mstrDeviceID;
+		u32 Device::mudwNumCores = 0;
+		f32 Device::mfPhysicalScreenSize = 0.0f;
         
         //---------------------------------------------
         /// Init
         ///
         /// @param Platform system
         //---------------------------------------------
-        void CDevice::Init(PlatformSystem* inpPlatformSystem)
+        void Device::Init(PlatformSystem* inpPlatformSystem)
         {
             mstrDeviceModel = inpPlatformSystem->GetDeviceModelName();
             mstrDeviceModelType = inpPlatformSystem->GetDeviceModelTypeName();
@@ -44,7 +44,7 @@ namespace ChilliSource
         ///
         /// @return Device model Name
         //---------------------------------------------
-        const std::string& CDevice::GetModelName()
+        const std::string& Device::GetModelName()
         {
         	return mstrDeviceModel;
         }
@@ -53,7 +53,7 @@ namespace ChilliSource
         ///
         /// @return Device model type Name
         //---------------------------------------------
-        const std::string& CDevice::GetModelTypeName()
+        const std::string& Device::GetModelTypeName()
         {
         	return mstrDeviceModelType;
         }
@@ -62,7 +62,7 @@ namespace ChilliSource
         ///
         /// @return Device manufacturer Name
         //---------------------------------------------
-        const std::string& CDevice::GetManufacturerName()
+        const std::string& Device::GetManufacturerName()
         {
         	return mstrDeviceManufacturer;
         }
@@ -71,7 +71,7 @@ namespace ChilliSource
         ///
         /// @return the locale
         //---------------------------------------------
-        Locale& CDevice::GetLocale()
+        Locale& Device::GetLocale()
         {
             return mLocale;
         }
@@ -80,7 +80,7 @@ namespace ChilliSource
         ///
         /// @return the language in locale format
         //---------------------------------------------
-        Locale& CDevice::GetLanguage()
+        Locale& Device::GetLanguage()
         {
             return mLanguage;
         }
@@ -89,7 +89,7 @@ namespace ChilliSource
         ///
         /// @return String containing OS version
         //---------------------------------------------
-        const std::string& CDevice::GetOSVersion()
+        const std::string& Device::GetOSVersion()
         {
             return mstrOSVersion;
         }
@@ -98,7 +98,7 @@ namespace ChilliSource
         ///
         /// @return String containing unique device ID
         //---------------------------------------------
-        const std::string& CDevice::GetUDID()
+        const std::string& Device::GetUDID()
         {
             return mstrDeviceID;
         }
@@ -107,7 +107,7 @@ namespace ChilliSource
 		///
 		/// @return The number of cores available on device
 		//--------------------------------------------
-		u32 CDevice::GetNumCPUCores()
+		u32 Device::GetNumCPUCores()
 		{
 			return mudwNumCores;
 		}
@@ -117,7 +117,7 @@ namespace ChilliSource
 		/// @param The physical size of the screen in
 		/// inches.
 		//--------------------------------------------
-		f32 CDevice::GetPhysicalScreenSize()
+		f32 Device::GetPhysicalScreenSize()
 		{
 			return mfPhysicalScreenSize;
 		}

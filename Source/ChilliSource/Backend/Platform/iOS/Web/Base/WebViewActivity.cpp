@@ -135,8 +135,8 @@ namespace ChilliSource
         void CWebViewActivity::CreateWebview()
         {
             //Create the  view and present it, centered on screen
-            mvAbsoluteSize = (Core::CScreen::GetOrientedDimensions() * Core::CScreen::GetInverseDensity() * mvUnifiedSize.GetRelative()) + mvUnifiedSize.GetAbsolute();
-            mvAbsolutePosition =  (Core::CScreen::GetOrientedDimensions() * Core::CScreen::GetInverseDensity() - mvAbsoluteSize)/2;
+            mvAbsoluteSize = (Core::Screen::GetOrientedDimensions() * Core::Screen::GetInverseDensity() * mvUnifiedSize.GetRelative()) + mvUnifiedSize.GetAbsolute();
+            mvAbsolutePosition =  (Core::Screen::GetOrientedDimensions() * Core::Screen::GetInverseDensity() - mvAbsoluteSize)/2;
             mpWebView = [[UIWebView alloc] initWithFrame:CGRectMake(mvAbsolutePosition.x, mvAbsolutePosition.y, mvAbsoluteSize.x, mvAbsoluteSize.y)];
         }
         //-----------------------------------------------

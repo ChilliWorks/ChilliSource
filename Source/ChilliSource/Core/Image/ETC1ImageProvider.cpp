@@ -63,19 +63,19 @@ namespace ChilliSource
                 pImageFile->Read((s8*)sHeader.abyPKMTag, sizeof(u8) * 6);
 
                 pImageFile->Read((s8*)&sHeader.wNumberOfMipmaps, sizeof(u16));
-                sHeader.wNumberOfMipmaps = ChilliSource::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wNumberOfMipmaps));
+                sHeader.wNumberOfMipmaps = ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wNumberOfMipmaps));
 
                 pImageFile->Read((s8*)&sHeader.wTextureWidth, sizeof(u16));
-                sHeader.wTextureWidth = ChilliSource::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wTextureWidth));
+                sHeader.wTextureWidth = ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wTextureWidth));
 
                 pImageFile->Read((s8*)&sHeader.wTextureHeight, sizeof(u16));
-                sHeader.wTextureHeight = ChilliSource::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wTextureHeight));
+                sHeader.wTextureHeight = ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wTextureHeight));
 
                 pImageFile->Read((s8*)&sHeader.wOriginalWidth, sizeof(u16));
-                sHeader.wOriginalWidth = ChilliSource::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wOriginalWidth));
+                sHeader.wOriginalWidth = ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wOriginalWidth));
 
                 pImageFile->Read((s8*)&sHeader.wOriginalHeight, sizeof(u16));
-                sHeader.wOriginalHeight = ChilliSource::Core::CUtils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wOriginalHeight));
+                sHeader.wOriginalHeight = ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(&sHeader.wOriginalHeight));
 
                 //get the size of the rest of the data
                 const u32 kstrHeaderSize = 16;

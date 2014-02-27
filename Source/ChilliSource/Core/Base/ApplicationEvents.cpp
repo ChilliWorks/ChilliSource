@@ -12,23 +12,23 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		CEvent0<ApplicationSystemDelegate> CApplicationEvents::mResumeEvent;
-		CEvent0<ApplicationSystemDelegate> CApplicationEvents::mSuspendEvent;
-		CEvent0<ApplicationSystemDelegate> CApplicationEvents::mLateSuspendEvent;
+		CEvent0<ApplicationSystemDelegate> ApplicationEvents::mResumeEvent;
+		CEvent0<ApplicationSystemDelegate> ApplicationEvents::mSuspendEvent;
+		CEvent0<ApplicationSystemDelegate> ApplicationEvents::mLateSuspendEvent;
 
-		CEvent0<ApplicationSystemDelegate> CApplicationEvents::mLowMemoryEvent;
+		CEvent0<ApplicationSystemDelegate> ApplicationEvents::mLowMemoryEvent;
 
-		CEvent1<ApplicationScreenOrientationDelegate> CApplicationEvents::mScreenOrientationChangedEvent;
-		CEvent0<ApplicationSystemDelegate> CApplicationEvents::mGoBackEvent;
-		CEvent2<ApplicationScreenResizeDelegate> CApplicationEvents::mScreenResizedEvent;
-		CEvent1<ApplicationReceivesURLDelegate> CApplicationEvents::mReceivesURLEvent;
+		CEvent1<ApplicationScreenOrientationDelegate> ApplicationEvents::mScreenOrientationChangedEvent;
+		CEvent0<ApplicationSystemDelegate> ApplicationEvents::mGoBackEvent;
+		CEvent2<ApplicationScreenResizeDelegate> ApplicationEvents::mScreenResizedEvent;
+		CEvent1<ApplicationReceivesURLDelegate> ApplicationEvents::mReceivesURLEvent;
 
 		//-----------------------------------------------------------------
 		/// Get Application Resume Event
 		///
 		/// @return Event that is triggered when the application resumes
 		//-----------------------------------------------------------------
-		CEvent0<ApplicationSystemDelegate>& CApplicationEvents::GetResumeEvent()
+		CEvent0<ApplicationSystemDelegate>& ApplicationEvents::GetResumeEvent()
 		{
 			return mResumeEvent;
 		}
@@ -37,7 +37,7 @@ namespace ChilliSource
 		///
 		/// @return Event that is triggered on application suspension
 		//-----------------------------------------------------------------
-		CEvent0<ApplicationSystemDelegate>& CApplicationEvents::GetSuspendEvent()
+		CEvent0<ApplicationSystemDelegate>& ApplicationEvents::GetSuspendEvent()
 		{
 			return mSuspendEvent;
 		}
@@ -46,7 +46,7 @@ namespace ChilliSource
 		///
 		/// @return Event that is triggered on application suspension after GetSuspendEvent
 		//-----------------------------------------------------------------
-		CEvent0<ApplicationSystemDelegate>& CApplicationEvents::GetLateSuspendEvent()
+		CEvent0<ApplicationSystemDelegate>& ApplicationEvents::GetLateSuspendEvent()
 		{
 			return mLateSuspendEvent;
 		}
@@ -56,7 +56,7 @@ namespace ChilliSource
 		/// @return Event that is triggered when the application 
 		/// receives memory warning
 		//-----------------------------------------------------------------
-		CEvent0<ApplicationSystemDelegate>& CApplicationEvents::GetLowMemoryEvent()
+		CEvent0<ApplicationSystemDelegate>& ApplicationEvents::GetLowMemoryEvent()
 		{
 			return mLowMemoryEvent;
 		}
@@ -65,7 +65,7 @@ namespace ChilliSource
 		///
 		/// @return Event that is triggered when screen resizes
 		//-----------------------------------------------------------------
-		CEvent2<ApplicationScreenResizeDelegate>& CApplicationEvents::GetScreenResizedEvent()
+		CEvent2<ApplicationScreenResizeDelegate>& ApplicationEvents::GetScreenResizedEvent()
 		{
 			return mScreenResizedEvent;
 		}
@@ -74,7 +74,7 @@ namespace ChilliSource
 		///
 		/// @return Event that is triggered when screen rotates
 		//-----------------------------------------------------------------
-		CEvent1<ApplicationScreenOrientationDelegate>& CApplicationEvents::GetScreenOrientationChangedEvent()
+		CEvent1<ApplicationScreenOrientationDelegate>& ApplicationEvents::GetScreenOrientationChangedEvent()
 		{
 			return mScreenOrientationChangedEvent;
 		}
@@ -83,7 +83,7 @@ namespace ChilliSource
 		///
 		/// @return Event that is triggered when back is pressed
 		//-----------------------------------------------------------------
-		CEvent0<ApplicationSystemDelegate>& CApplicationEvents::GetGoBackEvent()
+		CEvent0<ApplicationSystemDelegate>& ApplicationEvents::GetGoBackEvent()
 		{
 			return mGoBackEvent;
 		}
@@ -92,7 +92,7 @@ namespace ChilliSource
 		///
 		/// @return Event that is triggered when the app receives a URL string
 		//-----------------------------------------------------------------
-		CEvent1<ApplicationReceivesURLDelegate>& CApplicationEvents::GetReceivesURLEvent()
+		CEvent1<ApplicationReceivesURLDelegate>& ApplicationEvents::GetReceivesURLEvent()
 		{
 			return mReceivesURLEvent;	
 		}

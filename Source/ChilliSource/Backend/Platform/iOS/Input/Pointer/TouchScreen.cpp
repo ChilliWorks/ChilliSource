@@ -20,7 +20,7 @@ namespace ChilliSource
 		{
 			gpTouchScreenInstance = this;
             
-            mfScale = Core::CScreen::GetDensity();
+            mfScale = Core::Screen::GetDensity();
 		}
 		CTouchScreen::~CTouchScreen()
 		{

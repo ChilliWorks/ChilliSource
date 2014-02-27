@@ -29,7 +29,7 @@ namespace ChilliSource
         const f32 kfDefaultNormalResScreenDensity = 1.0f;
         const f32 kfDefaultHighResScreenDensity = 2.0f;
 		
-		class CScreen
+		class Screen
 		{
 		public:
 			//----------------------------------------------------------------

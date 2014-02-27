@@ -247,7 +247,7 @@
 //--------------------------------------------------------
 -(CGRect) CalculateTextBoxRect:(const ChilliSource::Core::Rectangle&)inRelativeBounds
 {
-    ChilliSource::Core::Vector2 vScreenDimensions(ChilliSource::Core::CScreen::GetOrientedWidth() * ChilliSource::Core::CScreen::GetInverseDensity(), ChilliSource::Core::CScreen::GetOrientedHeight() * ChilliSource::Core::CScreen::GetInverseDensity());
+    ChilliSource::Core::Vector2 vScreenDimensions(ChilliSource::Core::Screen::GetOrientedWidth() * ChilliSource::Core::Screen::GetInverseDensity(), ChilliSource::Core::Screen::GetOrientedHeight() * ChilliSource::Core::Screen::GetInverseDensity());
     ChilliSource::Core::Vector2 vVideoDimensions = mpVideoPlayer->GetVideoDimensions();
     float fScreenAspectRatio = vScreenDimensions.x / vScreenDimensions.y;
     float fVideoAspectRatio = vVideoDimensions.x / vVideoDimensions.y;

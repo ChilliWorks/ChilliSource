@@ -230,8 +230,8 @@ namespace ChilliSource
         //---------------------------------------------------------------------
         void SpriteSheet::GetDPISizeForFrame(u32 inudwFrameID, Core::Vector2 & outvSize) const
         {
-            outvSize.x = mFrames[inudwFrameID].Width * (1.0f/Core::CScreen::GetDensity());
-			outvSize.y = mFrames[inudwFrameID].Height * (1.0f/Core::CScreen::GetDensity());
+            outvSize.x = mFrames[inudwFrameID].Width * (1.0f/Core::Screen::GetDensity());
+			outvSize.y = mFrames[inudwFrameID].Height * (1.0f/Core::Screen::GetDensity());
         }
         //---------------------------------------------------------------------
         /// Get DPI Offset For Frame
@@ -253,8 +253,8 @@ namespace ChilliSource
         //---------------------------------------------------------------------
         void SpriteSheet::GetDPIOffsetForFrame(u32 inudwFrameID, Core::Vector2 & outvOffset) const
         {
-            outvOffset.x = mFrames[inudwFrameID].OffsetX * (1.0f/Core::CScreen::GetDensity());
-			outvOffset.y = mFrames[inudwFrameID].OffsetY * (1.0f/Core::CScreen::GetDensity());
+            outvOffset.x = mFrames[inudwFrameID].OffsetX * (1.0f/Core::Screen::GetDensity());
+			outvOffset.y = mFrames[inudwFrameID].OffsetY * (1.0f/Core::Screen::GetDensity());
         }
 		//---------------------------------------------------------------------
 		/// Set Texture

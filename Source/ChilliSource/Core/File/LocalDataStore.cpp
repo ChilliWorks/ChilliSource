@@ -341,7 +341,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         void CLocalDataStore::SubscribeToApplicationSuspendEvent()
 		{
-			CApplicationEvents::GetLateSuspendEvent() += ApplicationSystemDelegate(this, &CLocalDataStore::OnApplicationSuspended);
+			ApplicationEvents::GetLateSuspendEvent() += ApplicationSystemDelegate(this, &CLocalDataStore::OnApplicationSuspended);
 		}
         //----------------------------------------------------------------
         /// On Application Suspended

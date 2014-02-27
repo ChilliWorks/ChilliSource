@@ -19,7 +19,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        class CLogging
+        class Logging
         {
         public:
             //----------------------------------------------

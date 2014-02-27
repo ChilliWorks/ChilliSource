@@ -89,7 +89,7 @@ namespace ChilliSource
 			Core::NotificationScheduler::Initialise(new CLocalNotificationScheduler());
 			Core::Application::SetFileSystem(new iOS::CFileSystem());
 
-			Core::CLogging::Init();
+			Core::Logging::Init();
 		}
         //--------------------------------------------
         /// Add System Function
@@ -198,7 +198,7 @@ namespace ChilliSource
             inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialFactory()));
             
 			//Initialise the render system
-			Core::Application::GetRenderSystemPtr()->Init((u32)Core::CScreen::GetRawDimensions().x, (u32)Core::CScreen::GetRawDimensions().y);
+			Core::Application::GetRenderSystemPtr()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
             
 			//Create the renderer
 			Core::Application::SetRenderer(new Rendering::Renderer(Core::Application::GetRenderSystemPtr()));

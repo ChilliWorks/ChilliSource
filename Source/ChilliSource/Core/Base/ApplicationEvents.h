@@ -22,7 +22,7 @@ namespace ChilliSource
 		typedef fastdelegate::FastDelegate2<u32, u32> ApplicationScreenResizeDelegate;
         typedef fastdelegate::FastDelegate1<const std::string &> ApplicationReceivesURLDelegate;
 		
-        class CApplicationEvents
+        class ApplicationEvents
         {
         public:
             
