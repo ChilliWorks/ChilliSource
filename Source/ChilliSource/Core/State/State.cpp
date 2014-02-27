@@ -23,7 +23,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		IState::IState(CScene* inpScene) : mbOwnsScene(true)
 		{
-            mpStateMgr = CApplication::GetStateManagerPtr();
+            mpStateMgr = Application::GetStateManagerPtr();
             
 			if(!inpScene)
 			{
@@ -41,7 +41,7 @@ namespace ChilliSource
 		/// Handy accessors for the main application
 		/// @return Application handle
 		//-----------------------------------------
-		CApplication& IState::GetApplication()
+		Application& IState::GetApplication()
 		{
 			return mpStateMgr->GetApplication();
 		}
@@ -51,7 +51,7 @@ namespace ChilliSource
 		/// Handy accessors for the main application
 		/// @return Application handle
 		//-----------------------------------------
-		CApplication* IState::GetApplicationPtr()
+		Application* IState::GetApplicationPtr()
 		{
 			return mpStateMgr->GetApplicationPtr();
 		}

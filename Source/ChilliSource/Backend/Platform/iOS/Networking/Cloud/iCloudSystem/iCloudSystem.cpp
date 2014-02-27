@@ -224,7 +224,7 @@ namespace ChilliSource
             }
             
             //First we need to check if this file exists locally
-            bool bExists = ChilliSource::Core::CApplication::GetFileSystemPtr()->DoesFileExist(ineStorageLocation, instrFilePath);
+            bool bExists = ChilliSource::Core::Application::GetFileSystemPtr()->DoesFileExist(ineStorageLocation, instrFilePath);
 
             int dwFilePathOffset = instrFilePath.find_last_of("/");
             
@@ -280,7 +280,7 @@ namespace ChilliSource
             
             
             //We want to copy our local copies contents straight to the server
-            FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath, ChilliSource::Core::FileMode::k_read);
+            FileStreamPtr pFileStream = Application::GetFileSystemPtr()->CreateFileStream(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath, ChilliSource::Core::FileMode::k_read);
             
             std::string strLocalContents = "";
             
@@ -289,13 +289,13 @@ namespace ChilliSource
             
             std::string strCloudContents = [incOpenedDoc contentsAsSTDString];
             
-            bool bExists = ChilliSource::Core::CApplication::GetFileSystemPtr()->DoesFileExist(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath);
+            bool bExists = ChilliSource::Core::Application::GetFileSystemPtr()->DoesFileExist(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath);
             
             //If no local file we still want to sync if cloud file exists
             if(!bExists)
             {
                 //Cloud version exists, local version does not - create local from cloud
-                FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath, ChilliSource::Core::FileMode::k_write);
+                FileStreamPtr pFileStream = Application::GetFileSystemPtr()->CreateFileStream(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath, ChilliSource::Core::FileMode::k_write);
                 pFileStream->Write(strCloudContents);
                 pFileStream->Close();
                 
@@ -331,7 +331,7 @@ namespace ChilliSource
                 struct stat output;
                 
                 //get the filepath
-                std::string path = CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(it->second.meLocalStorageLocation) + it->second.mstrLocalFilePath;
+                std::string path = Application::GetFileSystemPtr()->GetStorageLocationDirectory(it->second.meLocalStorageLocation) + it->second.mstrLocalFilePath;
                 
                 //Get the stat for the file
                 stat(path.c_str(), &output);
@@ -398,7 +398,7 @@ namespace ChilliSource
             {
                 case CloudStorageSystem::FileConflictChoice::k_copyCloudToLocal:
                 {
-                    FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, ChilliSource::Core::FileMode::k_write);
+                    FileStreamPtr pFileStream = Application::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, ChilliSource::Core::FileMode::k_write);
                     
                     if(pFileStream)
                     {
@@ -430,7 +430,7 @@ namespace ChilliSource
                 case CloudStorageSystem::FileConflictChoice::k_copyLocalToCloud:
                 {
                     //We want to copy our local copies contents straight to the server
-                    FileStreamPtr pFileStream = CApplication::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, ChilliSource::Core::FileMode::k_read);
+                    FileStreamPtr pFileStream = Application::GetFileSystemPtr()->CreateFileStream(insFileSyncConflict->meLocalFileLocation, insFileSyncConflict->mstrLocalFilePath, ChilliSource::Core::FileMode::k_read);
                     
                     if(pFileStream)
                     {

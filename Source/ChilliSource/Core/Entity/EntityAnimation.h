@@ -31,9 +31,9 @@ namespace ChilliSource
 		};
 		
 		/*
-		 An EntityAnimation object. It extends IAnimation
+		 An EntityAnimation object. It extends Animation
 		 */
-		class CEntityAnimation : public IAnimation
+		class CEntityAnimation : public Animation
 		{
 		public:
 			//----------------------------------------------
@@ -67,9 +67,6 @@ namespace ChilliSource
             f32 mfOutTime; // Float for the end of the animation
             InterpolateDelegate mInterpolateDelegate;
 		};
-		
-		typedef std::shared_ptr<CEntityAnimation> EntityAnimationPtr;
-        typedef std::weak_ptr<CEntityAnimation> EntityAnimationWPtr;
 	}
 }
 

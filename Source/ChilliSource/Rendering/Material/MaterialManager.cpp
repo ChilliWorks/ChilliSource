@@ -127,7 +127,7 @@ namespace ChilliSource
 			}
 			
 			CS_ERROR_LOG("Cannot find resource for Material with path " + inFilePath);
-			return Core::CApplication::GetDefaultMaterial();
+			return Core::Application::GetDefaultMaterial();
 		}
 		//----------------------------------------------------------------
 		/// Async Get Material From File

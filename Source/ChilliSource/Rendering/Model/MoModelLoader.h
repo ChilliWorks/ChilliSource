@@ -30,7 +30,7 @@ namespace ChilliSource
 		class MoModelLoader : public Core::IResourceProvider
 		{
 		public:
-			MoModelLoader(Core::CApplication* inpApp);
+			MoModelLoader(Core::Application* inpApp);
 			virtual ~MoModelLoader();
 			
 			//-------------------------------------------------------------------------
@@ -256,7 +256,7 @@ namespace ChilliSource
 			}
 		private:	
 			
-			Core::CApplication* mpApp;
+			Core::Application* mpApp;
 			friend class MeshManager;
 		};
 	}

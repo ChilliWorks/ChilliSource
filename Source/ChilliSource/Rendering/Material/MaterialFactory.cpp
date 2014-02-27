@@ -390,7 +390,7 @@ namespace ChilliSource
         {
         	if(mpRenderCapabilities == nullptr)
 			{
-        		mpRenderCapabilities = Core::CApplication::GetSystemImplementing<RenderCapabilities>();
+        		mpRenderCapabilities = Core::Application::GetSystemImplementing<RenderCapabilities>();
         		CS_ASSERT(mpRenderCapabilities, "Material Factor is missing required system: Render Capabilities.");
 			}
 

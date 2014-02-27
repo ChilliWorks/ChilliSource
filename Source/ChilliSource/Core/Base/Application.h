@@ -51,11 +51,11 @@ namespace ChilliSource
 		/// must override the initialisation methods to create
 		/// the subsystems they require.
 		//--------------------------------------------------------------------------------------------------
-		class CApplication
+		class Application
 		{
 		public:
-			CApplication();
-			virtual ~CApplication();
+			Application();
+			virtual ~Application();
 			
 			//--------------------------------------------------------------------------------------------------
 			/// Run

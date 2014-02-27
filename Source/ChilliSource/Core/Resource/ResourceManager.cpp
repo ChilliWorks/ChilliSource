@@ -27,7 +27,7 @@ namespace ChilliSource
 		///
 		/// @param Application
 		//-----------------------------------------------------------------
-		void IResourceManager::SetApplicationOwner(CApplication* inpApplication)
+		void IResourceManager::SetApplicationOwner(Application* inpApplication)
 		{
 			mpApplicationOwner = inpApplication;
 		}

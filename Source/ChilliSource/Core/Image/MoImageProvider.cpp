@@ -56,7 +56,7 @@ namespace ChilliSource
             if (ChilliSource::Core::CStringUtils::EndsWith(inFilePath, MoImageExtension, true) == false)
                 return false;
 
-            Core::FileStreamPtr pImageFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
+            Core::FileStreamPtr pImageFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
 
             if(pImageFile && !pImageFile->IsBad())
             {

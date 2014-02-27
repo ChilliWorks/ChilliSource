@@ -21,9 +21,6 @@ namespace ChilliSource
 {
 	namespace Core 
 	{
-		class CEntity;
-		typedef std::shared_ptr<CEntity> EntityPtr;
-        typedef std::weak_ptr<CEntity> EntityWeakPtr;
 		typedef std::vector<ComponentPtr> ComponentList;
 		
 #ifdef ENTITY_LINKED_LIST

@@ -40,7 +40,7 @@ bool CUtils::ReadJson(ChilliSource::Core::StorageLocation ineStorageLocation, co
 
 bool CUtils::FileToString(StorageLocation ineStorageLocation, const std::string & instrPath, std::string & outstrFileContent)
 {
-    FileStreamPtr pFile = CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_read);
+    FileStreamPtr pFile = Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_read);
     
     if(!pFile || pFile->IsOpen() == false)
     {
@@ -55,7 +55,7 @@ bool CUtils::FileToString(StorageLocation ineStorageLocation, const std::string 
 
 FileStreamPtr CUtils::StringToFile(StorageLocation ineStorageLocation, const std::string & instrPath, const std::string& instrFileOut)
 {
-    FileStreamPtr pFile = CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_write);
+    FileStreamPtr pFile = Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_write);
     
     if(!pFile || pFile->IsOpen() == false)
     {

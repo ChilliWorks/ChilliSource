@@ -91,8 +91,6 @@ namespace ChilliSource
 			
 			u32 mudwQueryMask;
 		};
-		typedef std::shared_ptr<IComponent> ComponentPtr;
-		typedef std::weak_ptr<IComponent> ComponentWeakPtr;
 	}
 }
 

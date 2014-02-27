@@ -22,7 +22,7 @@ namespace ChilliSource
         class CComponentFactoryDispenser
         {
         public:
-            CComponentFactoryDispenser(CApplication* inpApp);
+            CComponentFactoryDispenser(Application* inpApp);
             ~CComponentFactoryDispenser();
             //--------------------------------------------------------------------------------------------------
             /// Get Singleton Ptr
@@ -82,7 +82,7 @@ namespace ChilliSource
             
             
             static CComponentFactoryDispenser* pInstance;
-            CApplication* mpApp;
+            Application* mpApp;
         };
     }
 }

@@ -363,7 +363,7 @@ namespace ChilliSource
                 
                 if(mpView)
                 {
-                    pTouchScreen = Core::CApplication::GetInputSystemPtr()->GetTouchScreenPtr();
+                    pTouchScreen = Core::Application::GetInputSystemPtr()->GetTouchScreenPtr();
                 }
                 
 				TouchScreen::TouchList& cTouchList = pTouchScreen->GetTouchList();

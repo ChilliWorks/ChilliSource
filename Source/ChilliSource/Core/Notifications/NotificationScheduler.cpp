@@ -163,7 +163,7 @@ namespace ChilliSource
                         Notification sNotification(insNotification);
                         sNotification.eType = ineType;
                         sNotification.ePriority = inePriority;
-                        sNotification.TriggerTime = Core::CApplication::GetSystemTime() + inTime;
+                        sNotification.TriggerTime = Core::Application::GetSystemTime() + inTime;
                         sNotification.bDismissed = false;
                         sNotification.bTriggered = false;
                         TimedAppNotifications.push_back(sNotification);
@@ -179,7 +179,7 @@ namespace ChilliSource
                         Notification sNotification(insNotification);
                         sNotification.eType = ineType;
                         sNotification.ePriority = inePriority;
-                        sNotification.TriggerTime = Core::CApplication::GetSystemTime() + inTime;
+                        sNotification.TriggerTime = Core::Application::GetSystemTime() + inTime;
                         sNotification.bDismissed = false;
                         sNotification.bTriggered = false;
                         mspLocalNotificationScheduler->ScheduleNotification(sNotification);
@@ -311,7 +311,7 @@ namespace ChilliSource
             gfTimeBetweenNotifications += infDt;
             
             //Update the app notifications
-            TimeIntervalSecs CurrentTime = Core::CApplication::GetSystemTime();
+            TimeIntervalSecs CurrentTime = Core::Application::GetSystemTime();
             
             for(std::vector<Notification>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end(); /*No Increment*/)
             {  
@@ -349,7 +349,7 @@ namespace ChilliSource
                 if(!NotificationQueue.empty() && !NotificationQueue.front().bTriggered)
                 {
                     //Trigger the next one
-                    if(Core::CApplication::GetStateManagerPtr()->OnNotificationReceived(&NotificationQueue.front()))
+                    if(Core::Application::GetStateManagerPtr()->OnNotificationReceived(&NotificationQueue.front()))
                     {
                         NotificationQueue.front().bTriggered = true;
                     }

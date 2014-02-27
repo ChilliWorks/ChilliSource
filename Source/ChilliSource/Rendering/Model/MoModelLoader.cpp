@@ -48,7 +48,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Constructor
 		//-------------------------------------------------------------------------
-		MoModelLoader::MoModelLoader(Core::CApplication* inpApp) : mpApp(inpApp)
+		MoModelLoader::MoModelLoader(Core::Application* inpApp) : mpApp(inpApp)
 		{
 		}
 		//-------------------------------------------------------------------------
@@ -231,7 +231,7 @@ namespace ChilliSource
 		{
 			bool mbSuccess = true;
 			
-			Core::FileStreamPtr stream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
+			Core::FileStreamPtr stream = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
 	
 			MeshDataQuantities quantities;
 			mbSuccess = ReadGlobalHeader(stream, inMeshDescriptor, inFilePath, quantities);

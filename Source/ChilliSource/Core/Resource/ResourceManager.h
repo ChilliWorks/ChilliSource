@@ -46,7 +46,7 @@ namespace ChilliSource
 			///
 			/// @param Application
 			//-----------------------------------------------------------------
-			void SetApplicationOwner(CApplication* inpApplication);
+			void SetApplicationOwner(Application* inpApplication);
 			//-----------------------------------------------------------------
 			/// Get Resource Type
 			///
@@ -150,7 +150,7 @@ namespace ChilliSource
 		protected:
 			
 			std::vector<IResourceProvider*> mResourceProviders;
-			CApplication* mpApplicationOwner;
+			Application* mpApplicationOwner;
 			
 			typedef std::unordered_map<std::string, ResourcePtr> MapStringToResourcePtr;
 			MapStringToResourcePtr mMapFilenameToResource;

@@ -35,7 +35,7 @@ namespace ChilliSource
         : mpContentDownloader(inpContentDownloader), mpServerManifest(nullptr), 
         muRunningToDownloadTotal(0), muRunningDownloadedTotal(0), mbDLCCachePurged(false)
         {
-            mstrContentDirectory = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_DLC);
+            mstrContentDirectory = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_DLC);
         }
         //-----------------------------------------------------------
         /// Load Local Manifest 
@@ -79,7 +79,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		std::string ContentManagementSystem::CalculateChecksum(Core::StorageLocation ineLocation, const std::string& instrFilePath)
 		{
-            std::string strMD5Checksum = Core::CApplication::GetFileSystemPtr()->GetFileMD5Checksum(ineLocation, instrFilePath);
+            std::string strMD5Checksum = Core::Application::GetFileSystemPtr()->GetFileMD5Checksum(ineLocation, instrFilePath);
 			std::string strBase64Encoded = Core::CBaseEncoding::Base64Encode(strMD5Checksum);
 			Core::CStringUtils::ChopTrailingChars(strBase64Encoded, '=');
 			return strBase64Encoded;
@@ -170,7 +170,7 @@ namespace ChilliSource
             {
             	//Add a temp directory so that the packages are stored atomically and only overwrite
                 //the originals on full success
-                Core::CApplication::GetFileSystemPtr()->CreateDirectory(Core::StorageLocation::k_DLC, "Temp");
+                Core::Application::GetFileSystemPtr()->CreateDirectory(Core::StorageLocation::k_DLC, "Temp");
                 mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, ContentDownloader::Delegate(this, &ContentManagementSystem::OnContentDownloadComplete));
             }
             else
@@ -560,7 +560,7 @@ namespace ChilliSource
                 {
                     //It exists in the bundle let's remove the old version from DLC cache
                     //Remove old content
-                    Core::CApplication::GetFileSystemPtr()->DeleteFile(Core::StorageLocation::k_DLC, strPackageID + "/" + strFileName);
+                    Core::Application::GetFileSystemPtr()->DeleteFile(Core::StorageLocation::k_DLC, strPackageID + "/" + strFileName);
                     
                     //On to the next file
                     pFileEl = Core::XMLUtils::NextSiblingElementWithName(pFileEl);
@@ -582,7 +582,7 @@ namespace ChilliSource
             std::string strFile = "Temp/" + insPackageDetails.strID + ".packzip";
 
             //Append to the file as it can take multiple writes
-            Core::FileStreamPtr pFileStream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_DLC, strFile, Core::FileMode::k_writeBinaryAppend);
+            Core::FileStreamPtr pFileStream = Core::Application::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_DLC, strFile, Core::FileMode::k_writeBinaryAppend);
 			pFileStream->Write((s8*)instrZippedPackage.data(), (s32)instrZippedPackage.size());
             pFileStream->Close();
             
@@ -694,12 +694,12 @@ namespace ChilliSource
                 {
                     //There is a nested folder so we need to create the directory structure
                     std::string strPath = GetPathExcludingFileName(strFilePath);
-                    Core::CApplication::GetFileSystemPtr()->CreateDirectory(Core::StorageLocation::k_DLC, "/" + strPath);
+                    Core::Application::GetFileSystemPtr()->CreateDirectory(Core::StorageLocation::k_DLC, "/" + strPath);
                 }
                 
                 if(IsFile(strFilePath))
                 {
-                    Core::CApplication::GetFileSystemPtr()->CreateFile(Core::StorageLocation::k_DLC, "/" + strFilePath, pbyDataBuffer, FileInfo.uncompressed_size);
+                    Core::Application::GetFileSystemPtr()->CreateFile(Core::StorageLocation::k_DLC, "/" + strFilePath, pbyDataBuffer, FileInfo.uncompressed_size);
                 }
                 
                 //Close current file and jump to the next
@@ -749,17 +749,17 @@ namespace ChilliSource
         {
             if(inbCheckOnlyBundle)
             {
-                if(Core::CApplication::GetFileSystemPtr()->DoesFileExist(Core::StorageLocation::k_package, Core::CApplication::GetFileSystemPtr()->GetPackageDLCDirectory() + instrFilename))
+                if(Core::Application::GetFileSystemPtr()->DoesFileExist(Core::StorageLocation::k_package, Core::Application::GetFileSystemPtr()->GetPackageDLCDirectory() + instrFilename))
                 {
                     //Check if the file has become corrupted
-                    return (CalculateChecksum(Core::StorageLocation::k_package, Core::CApplication::GetFileSystemPtr()->GetPackageDLCDirectory() + instrFilename) == instrChecksum);
+                    return (CalculateChecksum(Core::StorageLocation::k_package, Core::Application::GetFileSystemPtr()->GetPackageDLCDirectory() + instrFilename) == instrChecksum);
                 }
                 
                 return false;
             }
             else
             {
-                if(Core::CApplication::GetFileSystemPtr()->DoesFileExist(Core::StorageLocation::k_DLC, instrFilename))
+                if(Core::Application::GetFileSystemPtr()->DoesFileExist(Core::StorageLocation::k_DLC, instrFilename))
                 {
                     //Check if the file has become corrupted
                     return (CalculateChecksum(Core::StorageLocation::k_DLC, instrFilename) == instrChecksum);
@@ -777,7 +777,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void ContentManagementSystem::DeleteDirectory(const std::string& instrDirectory) const
         {
-            ChilliSource::Core::CApplication::GetFileSystemPtr()->DeleteDirectory(Core::StorageLocation::k_DLC, instrDirectory);
+            ChilliSource::Core::Application::GetFileSystemPtr()->DeleteDirectory(Core::StorageLocation::k_DLC, instrDirectory);
         }
     }
 }

@@ -41,19 +41,19 @@ namespace ChilliSource
             ///
             /// @param Moflow application
             //---------------------------------------------------------
-            void SetOwningApplication(CApplication* inpApp);
+            void SetOwningApplication(Application* inpApp);
             //---------------------------------------------------------
             /// Get Application
             ///
             /// @return Moflow application
             //---------------------------------------------------------
-			CApplication& GetApplication();
+			Application& GetApplication();
             //---------------------------------------------------------
             /// Get Application Pointer
             ///
             /// @return Moflow application pointer
             //---------------------------------------------------------
-			CApplication* GetApplicationPtr();
+			Application* GetApplicationPtr();
 			//---------------------------------------------------------
 			/// Get all States
 			///
@@ -274,14 +274,14 @@ namespace ChilliSource
 			
 		private:
 		
-			CApplication* mpApp;
+			Application* mpApp;
 			
 			std::vector<StatePtr> mStateHierarchy;              //The alive states. A state can be pushed onto the stack to become the active state. Yet the other states will not be destroyed. Hierarchy is now a vector, so that states within can be inspected, since std::stack is a little opaque
 			std::list<StateOperation> mStateOperationQueue;
             
             bool mbStartState;
 			
-			friend class CApplication;
+			friend class Application;
 			friend class IApplicationDelegates;
 		};
 	}

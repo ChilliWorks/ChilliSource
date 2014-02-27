@@ -26,7 +26,7 @@ namespace ChilliSource
         ///
         /// Singleton instance
         //----------------------------------------------------
-        CResourceManagerDispenser::CResourceManagerDispenser(CApplication* inpApp) : mpApp(inpApp)
+        CResourceManagerDispenser::CResourceManagerDispenser(Application* inpApp) : mpApp(inpApp)
         {
             pInstance = this;
 			mpResourceGroupMgr = new IResourceGroupManager(pInstance);

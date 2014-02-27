@@ -62,7 +62,7 @@ namespace ChilliSource
             mpWhiteTex = pMgr->GetDefaultTexture();
             
             //Grab the default font
-            Font = Core::CApplication::GetDefaultFont();
+            Font = Core::Application::GetDefaultFont();
             
             ConsumesTouches = false;
             
@@ -193,7 +193,7 @@ namespace ChilliSource
             if(!Font)
             {
                 //Load default placeholder font
-                Font = Core::CApplication::GetDefaultFont();
+                Font = Core::Application::GetDefaultFont();
             }
         }
         //-------------------------------------------------------
@@ -654,7 +654,7 @@ namespace ChilliSource
                         sDrawColour.g = (mbLastDrawHadInvalidCharacter? 1.0 : 0.0);
                         sDrawColour.b = 0.0;
                         sDrawColour.a = 1.0;
-                        TimeIntervalSecs uqwMillis = Core::CApplication::GetSystemTimeInMilliseconds() & 511;
+                        TimeIntervalSecs uqwMillis = Core::Application::GetSystemTimeInMilliseconds() & 511;
                         f32 fFade = ((f32)uqwMillis) / 511.0f;
                         
                         if(fFade<0.5){

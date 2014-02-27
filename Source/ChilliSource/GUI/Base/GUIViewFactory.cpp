@@ -103,7 +103,7 @@ namespace ChilliSource
 		{
 			GUIViewSPtr pRootView;
 
-            Core::FileStreamPtr pFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrScriptFile, Core::FileMode::k_read);
+            Core::FileStreamPtr pFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrScriptFile, Core::FileMode::k_read);
             assert(pFile);
             
             std::string strFile;

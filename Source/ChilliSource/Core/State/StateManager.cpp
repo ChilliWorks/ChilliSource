@@ -31,7 +31,7 @@ namespace ChilliSource
 		///
         /// @param Moflow application
 		//---------------------------------------------------------
-        void CStateManager::SetOwningApplication(CApplication* inpApp)
+        void CStateManager::SetOwningApplication(Application* inpApp)
         {
             mpApp = inpApp;
         }
@@ -40,7 +40,7 @@ namespace ChilliSource
         ///
         /// @return Moflow application
         //---------------------------------------------------------
-        CApplication& CStateManager::GetApplication()
+        Application& CStateManager::GetApplication()
         {
             return *mpApp;
         }
@@ -49,7 +49,7 @@ namespace ChilliSource
         ///
         /// @return Moflow application pointer
         //---------------------------------------------------------
-        CApplication* CStateManager::GetApplicationPtr()
+        Application* CStateManager::GetApplicationPtr()
         {
             return mpApp;
         }

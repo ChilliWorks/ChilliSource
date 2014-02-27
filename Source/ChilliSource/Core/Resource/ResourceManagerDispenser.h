@@ -23,7 +23,7 @@ namespace ChilliSource
 		class CResourceManagerDispenser
         {
         public:
-            CResourceManagerDispenser(CApplication* inpApp);
+            CResourceManagerDispenser(Application* inpApp);
             ~CResourceManagerDispenser();
             //--------------------------------------------------------------------------------------------------
             /// Get Singleton Ptr
@@ -108,7 +108,7 @@ namespace ChilliSource
             
         private:
             std::vector<IResourceManager*> mResourceManagers;
-            CApplication* mpApp;
+            Application* mpApp;
             IResourceGroupManager* mpResourceGroupMgr;
             
             static CResourceManagerDispenser* pInstance;

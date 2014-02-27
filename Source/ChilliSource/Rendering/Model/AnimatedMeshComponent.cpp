@@ -608,7 +608,7 @@ namespace ChilliSource
 		void AnimatedMeshComponent::OnAttachedToEntity()
 		{
             SetPlaybackPosition(0.0f);
-            Core::CApplication::GetSystemImplementing<AnimatedMeshComponentUpdater>()->AddComponent(this);
+            Core::Application::GetSystemImplementing<AnimatedMeshComponentUpdater>()->AddComponent(this);
 		}
         //----------------------------------------------------
         /// On Detached From Entity
@@ -616,7 +616,7 @@ namespace ChilliSource
         void AnimatedMeshComponent::OnDetachedFromEntity()
         {
             DetatchAllEntities();
-            Core::CApplication::GetSystemImplementing<AnimatedMeshComponentUpdater>()->RemoveComponent(this);
+            Core::Application::GetSystemImplementing<AnimatedMeshComponentUpdater>()->RemoveComponent(this);
         }
 		//----------------------------------------------------------
         /// Render
@@ -662,7 +662,7 @@ namespace ChilliSource
             {
                 if (mspShadowMapMaterial == nullptr)
                 {
-                    mspShadowMapMaterial = Core::CApplication::GetSystemImplementing<MaterialFactory>()->CreateAnimatedDirectionalShadowMap();
+                    mspShadowMapMaterial = Core::Application::GetSystemImplementing<MaterialFactory>()->CreateAnimatedDirectionalShadowMap();
                 }
                 
                 std::vector<MaterialSPtr> aMaterials;

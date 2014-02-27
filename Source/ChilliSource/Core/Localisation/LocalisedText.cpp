@@ -70,14 +70,14 @@ namespace ChilliSource
             CS_SAFE_DELETE(mpTextLookup);
             mudwLineCount = 0;
             
-			FileStreamPtr localFile = CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath + inFileName, FileMode::k_read);
+			FileStreamPtr localFile = Application::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath + inFileName, FileMode::k_read);
             // Load localised text
 			if(LoadLocalisedText(localFile) == false)
             {
                 return false;
             }
             
-			FileStreamPtr idFile = CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath + "TagText.id", FileMode::k_read);
+			FileStreamPtr idFile = Application::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath + "TagText.id", FileMode::k_read);
             // Load in string IDs
             if(LoadTextID(idFile) == false)
             {

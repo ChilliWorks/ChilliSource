@@ -34,7 +34,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Constructor
 		//-------------------------------------------------------------------------
-		MoAnimLoader::MoAnimLoader(Core::CApplication* inpApp) : mpApp(inpApp)
+		MoAnimLoader::MoAnimLoader(Core::Application* inpApp) : mpApp(inpApp)
 		{
 		}
 		//-------------------------------------------------------------------------
@@ -94,7 +94,7 @@ namespace ChilliSource
 		{
             bool mbSuccess = true;
 			
-			Core::FileStreamPtr stream = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
+			Core::FileStreamPtr stream = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
 			
 			u32 udwNumFrames = 0;
 			s32 dwNumSkeletonNodes = 0;

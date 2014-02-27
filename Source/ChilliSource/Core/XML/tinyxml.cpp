@@ -39,7 +39,7 @@ bool TiXmlBase::condenseWhiteSpace = true;
 #ifdef TIXML_MOFLO
 ChilliSource::Core::FileStreamPtr TiXmlFOpen(ChilliSource::Core::StorageLocation ineStorageLocation, std::string instrFilename, ChilliSource::Core::FileMode ineFileMode)
 {
-    return ChilliSource::Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilename, ineFileMode);
+    return ChilliSource::Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilename, ineFileMode);
 }
 #else
 

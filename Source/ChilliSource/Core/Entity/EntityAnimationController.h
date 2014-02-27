@@ -152,8 +152,6 @@ namespace ChilliSource
             
             bool mbPaused;
 		};
-		
-		typedef std::shared_ptr<CEntityAnimationController> EntityAnimationControllerPtr;
 	}
 }
 

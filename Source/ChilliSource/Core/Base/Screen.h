@@ -136,7 +136,7 @@ namespace ChilliSource
             //----------------------------------------------------------------
             static void SetDensity(f32 infDensityScalar);
 
-			friend class CApplication;
+			friend class Application;
 			friend class CApplicationDelegates;
 		private:
 

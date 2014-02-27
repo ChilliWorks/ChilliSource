@@ -87,7 +87,7 @@ namespace ChilliSource
 			AddInfoProviderFunc(Social::ContactInformationProvider::InterfaceID, InfoProviderCreationFunction(this, &CPlatformSystem::CreateContactInformationProvider));
 
 			Core::CNotificationScheduler::Initialise(new CLocalNotificationScheduler());
-			Core::CApplication::SetFileSystem(new iOS::CFileSystem());
+			Core::Application::SetFileSystem(new iOS::CFileSystem());
 
 			Core::CLogging::Init();
 		}
@@ -174,16 +174,16 @@ namespace ChilliSource
 			//create the main systems
             Rendering::RenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
             inaSystems.push_back(Core::SystemPtr(pRenderSystem));
-			Core::CApplication::SetRenderSystem(pRenderSystem);
+			Core::Application::SetRenderSystem(pRenderSystem);
             
             Input::InputSystem* pInputSystem = new iOS::CInputSystem();
             inaSystems.push_back(Core::SystemPtr(pInputSystem));
-            Core::CApplication::SetInputSystem(pInputSystem);
+            Core::Application::SetInputSystem(pInputSystem);
             
             Audio::AudioSystem * pAudioSystem = new iOS::CFMODSystem();
 			inaSystems.push_back(Core::SystemPtr(pAudioSystem));
 			inaSystems.push_back(Core::SystemPtr(new iOS::CFMODAudioLoader(pAudioSystem)));
-			Core::CApplication::SetAudioSystem(pAudioSystem);
+			Core::Application::SetAudioSystem(pAudioSystem);
             
 			//create other important systems
 			OpenGL::CRenderCapabilities* pRenderCapabilities = new OpenGL::CRenderCapabilities();
@@ -198,15 +198,15 @@ namespace ChilliSource
             inaSystems.push_back(Core::SystemPtr(new Rendering::MaterialFactory()));
             
 			//Initialise the render system
-			Core::CApplication::GetRenderSystemPtr()->Init((u32)Core::CScreen::GetRawDimensions().x, (u32)Core::CScreen::GetRawDimensions().y);
+			Core::Application::GetRenderSystemPtr()->Init((u32)Core::CScreen::GetRawDimensions().x, (u32)Core::CScreen::GetRawDimensions().y);
             
 			//Create the renderer
-			Core::CApplication::SetRenderer(new Rendering::Renderer(Core::CApplication::GetRenderSystemPtr()));
+			Core::Application::SetRenderer(new Rendering::Renderer(Core::Application::GetRenderSystemPtr()));
             
 			//Initialise the input system
-			if(Core::CApplication::GetInputSystemPtr() != nullptr)
+			if(Core::Application::GetInputSystemPtr() != nullptr)
 			{
-				Core::CApplication::SetHasTouchInput((Core::CApplication::GetInputSystemPtr()->GetTouchScreenPtr() != nullptr));
+				Core::Application::SetHasTouchInput((Core::Application::GetInputSystemPtr()->GetTouchScreenPtr() != nullptr));
 			}
 		}
 		//-------------------------------------------------
@@ -219,7 +219,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void CPlatformSystem::PostCreateSystems()
 		{
-            if(Core::CApplication::GetAudioSystemPtr() != nullptr)
+            if(Core::Application::GetAudioSystemPtr() != nullptr)
 			{
 				Audio::AudioPlayer::Init();
 			}

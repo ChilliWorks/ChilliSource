@@ -15,7 +15,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        IAnimation::IAnimation(f32 infDuration, f32 infStartDelay)
+        Animation::Animation(f32 infDuration, f32 infStartDelay)
         :mfAnimPos(0), mfDuration(infDuration),mfTimeScaleFactor(1.0f), mfStartDelay(infStartDelay )
         {
             mePlayMode = AnimationPlayMode::k_once;
@@ -26,55 +26,55 @@ namespace ChilliSource
             mbStarted = false;
         }
         
-        IAnimation::~IAnimation(){}
+        Animation::~Animation(){}
         
-        void IAnimation::SetOnCompleteDelegate(OnCompleteDelegate inDelegate)
+        void Animation::SetOnCompleteDelegate(OnCompleteDelegate inDelegate)
         {
             OnComplete = inDelegate;
         }
         
-        void IAnimation::SetOnStartDelegate(OnStartDelegate inDelegate)
+        void Animation::SetOnStartDelegate(OnStartDelegate inDelegate)
         {
             OnStart = inDelegate;
         }
         
-        void IAnimation::SetStartDelay(f32 infStartDelay)
+        void Animation::SetStartDelay(f32 infStartDelay)
         {
             mfStartDelay = infStartDelay;
         }
         
-        f32 IAnimation::GetStartDelay()
+        f32 Animation::GetStartDelay()
         {
             return mfStartDelay;
         }
         
-        f32 IAnimation::GetDelayRemaining()
+        f32 Animation::GetDelayRemaining()
         {
             return mfAnimDelayRemaining;
         }
         
-        void IAnimation::SetDuration(f32 infValue)
+        void Animation::SetDuration(f32 infValue)
         {
             mfDuration = infValue;
         }
-        f32 IAnimation::GetDuration() const
+        f32 Animation::GetDuration() const
         {
             return mfDuration;
         }
         
-        void IAnimation::SetTimeScaleFactor(f32 infValue)
+        void Animation::SetTimeScaleFactor(f32 infValue)
         {
             mfTimeScaleFactor = std::max(0.0f,infValue);
         }
-        f32 IAnimation::GetTimeScaleFactor(f32 infValue) const{
+        f32 Animation::GetTimeScaleFactor(f32 infValue) const{
             return mfTimeScaleFactor;
         }
         
-        AnimationPlayMode IAnimation::GetPlayMode() const{
+        AnimationPlayMode Animation::GetPlayMode() const{
             return mePlayMode;
         }
         
-        void IAnimation::Play(AnimationPlayMode inePlayMode)
+        void Animation::Play(AnimationPlayMode inePlayMode)
         {
             switch (inePlayMode)
             {
@@ -107,20 +107,20 @@ namespace ChilliSource
             mbFinished = false;
         }
         
-        void IAnimation::Stop()
+        void Animation::Stop()
         {
             mbPlaying = false;
         }
         
-        bool IAnimation::IsPlaying() const
+        bool Animation::IsPlaying() const
         {
             return mbPlaying;
         }
-        bool IAnimation::IsForward() const
+        bool Animation::IsForward() const
         {
             return mbForward;
         }
-        void IAnimation::Update(f32 infDT)
+        void Animation::Update(f32 infDT)
         {
     #if DEBUG
             if(infDT > 0.2f)
@@ -232,12 +232,12 @@ namespace ChilliSource
             }
         }
         
-        f32 IAnimation::GetProgression() const
+        f32 Animation::GetProgression() const
         {
             return (mfDuration==0.0f)? 1.0f : mfAnimPos/mfDuration;
         }
         
-        void IAnimation::SetProgression(f32 infProgress)
+        void Animation::SetProgression(f32 infProgress)
         {
             f32 fProgress = Core::CMathUtils::Clamp(infProgress, 0.0f, 1.0f);
             
@@ -247,17 +247,17 @@ namespace ChilliSource
             mfAnimPos = fProgress * mfDuration;
         }
         
-        bool IAnimation::IsFinished() const
+        bool Animation::IsFinished() const
         {
             return mbFinished;
         }
         
-        bool IAnimation::IsLooped() const
+        bool Animation::IsLooped() const
         {
             return mbLooped;
         }
         
-        bool IAnimation::IsStarted() const
+        bool Animation::IsStarted() const
         {
             return mbStarted;
         }

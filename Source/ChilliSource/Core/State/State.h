@@ -138,14 +138,14 @@ namespace ChilliSource
 			/// Handy accessors for the main application
 			/// @return Application handle
 			//-----------------------------------------
-			CApplication& GetApplication();
+			Application& GetApplication();
 			//-----------------------------------------
 			/// Get Application
 			///
 			/// Handy accessors for the main application
 			/// @return Application handle
 			//-----------------------------------------
-			CApplication* GetApplicationPtr();
+			Application* GetApplicationPtr();
 			//------------------------------------------
 			/// Get Scene
 			///

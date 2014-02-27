@@ -25,7 +25,7 @@ namespace ChilliSource
         ///
         /// Singleton instance
         //----------------------------------------------------
-        CComponentFactoryDispenser::CComponentFactoryDispenser(CApplication* inpApp) : mpApp(inpApp)
+        CComponentFactoryDispenser::CComponentFactoryDispenser(Application* inpApp) : mpApp(inpApp)
         {
             pInstance = this;
         }

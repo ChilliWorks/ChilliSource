@@ -82,7 +82,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool ImageLoader::CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
 		{
-			Core::FileStreamPtr pImageFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
+			Core::FileStreamPtr pImageFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
    
             if(pImageFile && !pImageFile->IsBad())
 			{

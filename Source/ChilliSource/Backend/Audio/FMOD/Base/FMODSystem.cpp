@@ -72,7 +72,7 @@ namespace ChilliSource
 		void CFMODSystem::LoadEventData(Core::StorageLocation ineLocation, const std::string& instrFilePath)
 		{
             std::string strFilePath;
-            Core::CApplication::GetFileSystemPtr()->GetBestPathToFile(ineLocation, instrFilePath, strFilePath);
+            Core::Application::GetFileSystemPtr()->GetBestPathToFile(ineLocation, instrFilePath, strFilePath);
             ErrorCheck(mpFMODEventSystem->load(strFilePath.c_str(), nullptr, &mpFMODEventProject));
 		}
 		//-------------------------------------------------------
