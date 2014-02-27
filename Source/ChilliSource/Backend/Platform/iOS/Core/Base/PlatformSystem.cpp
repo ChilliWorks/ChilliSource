@@ -325,7 +325,7 @@ namespace ChilliSource
 		/// @param InterfaceID to generate
 		/// @return A handle to the given activity or nullptr if the platform cannot support it
 		//-----------------------------------------
-		Core::IActivity* CPlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
+		Core::Activity* CPlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
         {
 			MapInterfaceIDToActivityFunc::const_iterator pFunc(mmapInterfaceIDToActivityFunc.find(inInterfaceID));
 			
@@ -385,19 +385,19 @@ namespace ChilliSource
         ///
         /// @return Ownership of the activity
         //--------------------------------------------
-		Core::IActivity* CPlatformSystem::CreateSMSCompositionActivity() const
+		Core::Activity* CPlatformSystem::CreateSMSCompositionActivity() const
         {
 			return new CSMSCompositionActivity();
 		}
-		Core::IActivity* CPlatformSystem::CreateEmailCompositionActivity() const
+		Core::Activity* CPlatformSystem::CreateEmailCompositionActivity() const
         {
 			return new CEmailCompositionActivity();
 		}
-		Core::IActivity * CPlatformSystem::CreateDefaultVideoPlayerActivity() const
+		Core::Activity * CPlatformSystem::CreateDefaultVideoPlayerActivity() const
         {
             return new CVideoPlayerActivity();
         }
-		Core::IActivity * CPlatformSystem::CreateWebViewActivity() const
+		Core::Activity * CPlatformSystem::CreateWebViewActivity() const
         {
             return new CWebViewActivity();
         }

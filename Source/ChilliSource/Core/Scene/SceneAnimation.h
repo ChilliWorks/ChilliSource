@@ -14,7 +14,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
-#include <ChilliSource/Core/Scene/ForwardDeclarations.h>
 #include <ChilliSource/Core/Entity/EntityAnimation.h>
 
 namespace ChilliSource
@@ -74,8 +73,8 @@ namespace ChilliSource
             /// @param Output, instances animations in this scene animation
             /// @return Success
             //---------------------------------------------------------------
-            bool ApplyAnimationToScene(const EntitySPtr& inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList) const;
-            bool ApplyAnimationToScene(Entity* inpRootNode, std::vector<EntityAnimationPtr> &outEntityAnimList) const;
+            bool ApplyAnimationToScene(const EntitySPtr& inpRootNode, std::vector<EntityAnimationSPtr>& outEntityAnimList) const;
+            bool ApplyAnimationToScene(Entity* inpRootNode, std::vector<EntityAnimationSPtr> &outEntityAnimList) const;
             
             //--------------------------------------------------------------
             /// PlayAnimation
@@ -88,8 +87,8 @@ namespace ChilliSource
             /// @param Playback mode
             /// @return Success
             //---------------------------------------------------------------
-            bool PlayAnimation(const EntitySPtr& inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode = AnimationPlayMode::k_once, InterpolationType ineInterType = InterpolationType::k_linear) const;
-            bool PlayAnimation(Entity* inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode = AnimationPlayMode::k_once, InterpolationType ineInterType = InterpolationType::k_linear) const;
+            bool PlayAnimation(const EntitySPtr& inpRootNode, std::vector<EntityAnimationSPtr>& outEntityAnimList, AnimationPlayMode inePlayMode = AnimationPlayMode::k_once, InterpolationType ineInterType = InterpolationType::k_linear) const;
+            bool PlayAnimation(Entity* inpRootNode, std::vector<EntityAnimationSPtr>& outEntityAnimList, AnimationPlayMode inePlayMode = AnimationPlayMode::k_once, InterpolationType ineInterType = InterpolationType::k_linear) const;
             
             //--------------------------------------------------------------
             /// SetSceneAnimDesc

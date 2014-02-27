@@ -130,7 +130,7 @@ namespace ChilliSource
             if(mpActiveCamera)
             {
                 //Apply the world view projection matrix
-                mpRenderSystem->ApplyCamera(mpActiveCamera->GetEntityOwner()->Transform().GetWorldPosition(), mpActiveCamera->GetView(), mpActiveCamera->GetProjection(), mpActiveCamera->GetClearColour());
+                mpRenderSystem->ApplyCamera(mpActiveCamera->GetEntityOwner()->GetTransform().GetWorldPosition(), mpActiveCamera->GetView(), mpActiveCamera->GetProjection(), mpActiveCamera->GetClearColour());
                 //Calculate the view-projection matrix as we will need it for sorting
                 Core::Matrix4x4::Multiply(&mpActiveCamera->GetView(), &mpActiveCamera->GetProjection(), &matViewProjCache);
                 

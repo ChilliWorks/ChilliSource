@@ -59,7 +59,7 @@ namespace ChilliSource
 			{
 				//Rebuild the box
                 const Core::AABB& cAABB = mpModel->GetAABB();
-                const Core::Matrix4x4& matWorld = mpEntityOwner->Transform().GetWorldTransform();
+                const Core::Matrix4x4& matWorld = mpEntityOwner->GetTransform().GetWorldTransform();
                 Core::Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
                 Core::Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
                 Core::Vector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
@@ -139,7 +139,7 @@ namespace ChilliSource
 		{
 			if(mpEntityOwner)
 			{
-				mOBBoundingBox.SetTransform(mpEntityOwner->Transform().GetWorldTransform());
+				mOBBoundingBox.SetTransform(mpEntityOwner->GetTransform().GetWorldTransform());
 			}
 			return mOBBoundingBox;
 		}
@@ -419,7 +419,7 @@ namespace ChilliSource
             }
             
             mpEntityOwner->AddChild(inpEntity);
-            maAttachedEntities.push_back(std::pair<Core::EntityWeakPtr, s32>(Core::EntityWeakPtr(inpEntity), dwNodeIndex));
+            maAttachedEntities.push_back(std::pair<Core::EntityWPtr, s32>(Core::EntityWPtr(inpEntity), dwNodeIndex));
         }
         //----------------------------------------------------------
         /// Detatch Entity
@@ -645,11 +645,11 @@ namespace ChilliSource
                 //render the model with the animation data.
                 if (mActiveAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), mMaterials, mActiveAnimationGroup);
+                    mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), mMaterials, mActiveAnimationGroup);
                 }
                 else if (mFadingAnimationGroup != nullptr && mFadingAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), mMaterials, mFadingAnimationGroup);
+                    mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), mMaterials, mFadingAnimationGroup);
                 }
             }
 		}
@@ -677,11 +677,11 @@ namespace ChilliSource
                 //render the model with the animation data.
                 if (mActiveAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), aMaterials, mActiveAnimationGroup);
+                    mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), aMaterials, mActiveAnimationGroup);
                 }
                 else if (mFadingAnimationGroup != nullptr && mFadingAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), aMaterials, mFadingAnimationGroup);
+                    mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), aMaterials, mFadingAnimationGroup);
                 }
             }
         }
@@ -772,7 +772,7 @@ namespace ChilliSource
                         s32 dwNodeIndex = it->second;
                         
                         const Core::Matrix4x4& matTransform = mActiveAnimationGroup->GetMatrixAtIndex(dwNodeIndex);
-                        pEntity->Transform().SetLocalTransform(matTransform);
+                        pEntity->GetTransform().SetLocalTransform(matTransform);
                         ++it;
                     }
                     else

@@ -127,14 +127,14 @@ namespace ChilliSource
 			// Interpolate orientation
 			Quaternion qLerpedOrientation = mpasFrameValues.get()[udwFrame].qOrientation;
             
-            mpTarget->Transform().SetPositionScaleOrientation(vLerpedTranslation, vLerpedScale, qLerpedOrientation);
+            mpTarget->GetTransform().SetPositionScaleOrientation(vLerpedTranslation, vLerpedScale, qLerpedOrientation);
             
             //Interpolate Opacity
             f32 fOpacity = mpasFrameValues.get()[udwFrame].fOpacity;
             
-            if(mpTarget->Transform().GetLocalOpacity() != fOpacity)
+            if(mpTarget->GetTransform().GetLocalOpacity() != fOpacity)
             {
-                mpTarget->Transform().FadeTo(fOpacity);
+                mpTarget->GetTransform().FadeTo(fOpacity);
             }
         }
         
@@ -149,14 +149,14 @@ namespace ChilliSource
 			// Interpolate orientation
 			Quaternion qLerpedOrientation = Quaternion::Slerp(mpasFrameValues.get()[inudwLowFrame].qOrientation, mpasFrameValues.get()[inudwHighFrame].qOrientation, infT);
             
-            mpTarget->Transform().SetPositionScaleOrientation(vLerpedTranslation, vLerpedScale, qLerpedOrientation);
+            mpTarget->GetTransform().SetPositionScaleOrientation(vLerpedTranslation, vLerpedScale, qLerpedOrientation);
             
             //Interpolate Opacity
             f32 fOpacity = CMathUtils::Lerp(infT, mpasFrameValues.get()[inudwLowFrame].fOpacity, mpasFrameValues.get()[inudwHighFrame].fOpacity);
             
-            if(mpTarget->Transform().GetLocalOpacity() != fOpacity)
+            if(mpTarget->GetTransform().GetLocalOpacity() != fOpacity)
             {
-                mpTarget->Transform().FadeTo(fOpacity);
+                mpTarget->GetTransform().FadeTo(fOpacity);
             }
         }
 	}

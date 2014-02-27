@@ -102,7 +102,7 @@ namespace ChilliSource
             //as the projection is done in the shader
             if(mbMatrixCacheValid == false && GetEntityOwner() != nullptr)
             {
-                mmatLight = GetEntityOwner()->Transform().GetWorldTransform().Inverse();
+                mmatLight = GetEntityOwner()->GetTransform().GetWorldTransform().Inverse();
                 mbMatrixCacheValid = true;
             }
             
@@ -113,14 +113,14 @@ namespace ChilliSource
         //----------------------------------------------------
         void PointLightComponent::OnAttachedToEntity()
         {
-            GetEntityOwner()->Transform().GetTransformChangedEvent() += fastdelegate::MakeDelegate(this, &PointLightComponent::OnEntityTransformChanged);
+            GetEntityOwner()->GetTransform().GetTransformChangedEvent() += fastdelegate::MakeDelegate(this, &PointLightComponent::OnEntityTransformChanged);
         }
         //----------------------------------------------------
         /// On Detached From Entity
         //----------------------------------------------------
         void PointLightComponent::OnDetachedFromEntity()
         {
-            GetEntityOwner()->Transform().GetTransformChangedEvent() -= fastdelegate::MakeDelegate(this, &PointLightComponent::OnEntityTransformChanged);
+            GetEntityOwner()->GetTransform().GetTransformChangedEvent() -= fastdelegate::MakeDelegate(this, &PointLightComponent::OnEntityTransformChanged);
         }
         //----------------------------------------------------
         /// On Entity Transform Changed

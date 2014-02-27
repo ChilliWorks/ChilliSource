@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace Social 
 	{
-        class EmailCompositionActivity : public Core::IActivity
+        class EmailCompositionActivity : public Core::Activity
         {
 		public:
 			DECLARE_NAMED_INTERFACE(EmailCompositionActivity);

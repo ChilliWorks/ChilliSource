@@ -50,7 +50,7 @@ namespace ChilliSource
         {
             if(GetEntityOwner() != nullptr)
             {
-                mvDirection = GetEntityOwner()->Transform().GetWorldOrientation() * Core::Vector3::Z_UNIT_NEGATIVE;
+                mvDirection = GetEntityOwner()->GetTransform().GetWorldOrientation() * Core::Vector3::Z_UNIT_NEGATIVE;
             }
             else
             {
@@ -67,7 +67,7 @@ namespace ChilliSource
             //The matrix is a view projection
             if(mbMatrixCacheValid == false && GetEntityOwner() != nullptr)
             {
-                Core::Matrix4x4 matView = GetEntityOwner()->Transform().GetWorldTransform().Inverse();
+                Core::Matrix4x4 matView = GetEntityOwner()->GetTransform().GetWorldTransform().Inverse();
                 Core::Matrix4x4::Multiply(&matView, &mmatProj, &mmatLight);
                 mbMatrixCacheValid = true;
             }
@@ -109,14 +109,14 @@ namespace ChilliSource
         //----------------------------------------------------
         void DirectionalLightComponent::OnAttachedToEntity()
         {
-            GetEntityOwner()->Transform().GetTransformChangedEvent() += fastdelegate::MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged);
+            GetEntityOwner()->GetTransform().GetTransformChangedEvent() += fastdelegate::MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged);
         }
         //----------------------------------------------------
         /// On Detached From Entity
         //----------------------------------------------------
         void DirectionalLightComponent::OnDetachedFromEntity()
         {
-            GetEntityOwner()->Transform().GetTransformChangedEvent() -= fastdelegate::MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged);
+            GetEntityOwner()->GetTransform().GetTransformChangedEvent() -= fastdelegate::MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged);
         }
         //----------------------------------------------------
         /// On Entity Transform Changed

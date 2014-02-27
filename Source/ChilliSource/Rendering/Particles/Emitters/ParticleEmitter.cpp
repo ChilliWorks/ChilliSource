@@ -114,7 +114,7 @@ namespace ChilliSource
         {
             mfCurrentTime += infDT;
             
-            const Core::Vector3& vCurrentPos = mpOwningComponent->GetEntityOwner()->Transform().GetWorldPosition();
+            const Core::Vector3& vCurrentPos = mpOwningComponent->GetEntityOwner()->GetTransform().GetWorldPosition();
             const f32 kfTimeSinceLastEmission = mfCurrentTime - mfLastEmissionTime;
             u32 udwNumEmits = kfTimeSinceLastEmission/mfEmissionFreq;
             
@@ -153,8 +153,8 @@ namespace ChilliSource
                     if(mbIsGlobalSpace)
                     {
                         vPosition = vCurrentPos + vPosition;
-                        qOrientation = mpOwningComponent->GetEntityOwner()->Transform().GetWorldOrientation();
-                        vScale = mpOwningComponent->GetEntityOwner()->Transform().GetWorldScale();
+                        qOrientation = mpOwningComponent->GetEntityOwner()->GetTransform().GetWorldOrientation();
+                        vScale = mpOwningComponent->GetEntityOwner()->GetTransform().GetWorldScale();
                     }
                     
                     mParticles.fEnergy[i] = 1.0f;
@@ -259,12 +259,12 @@ namespace ChilliSource
         {
             SpriteComponent::SpriteData sData;
             // Get world matrix
-            const Core::Matrix4x4 & matTrans = mpOwningComponent->GetEntityOwner()->Transform().GetWorldTransform();
+            const Core::Matrix4x4 & matTrans = mpOwningComponent->GetEntityOwner()->GetTransform().GetWorldTransform();
             
             // Get quaternion to particle space
             Core::Quaternion qParticleRot = Core::Quaternion(matTrans).Conjugate();
             
-            const Core::Matrix4x4 & matCamWorld = inpCam->GetEntityOwner()->Transform().GetWorldTransform();
+            const Core::Matrix4x4 & matCamWorld = inpCam->GetEntityOwner()->GetTransform().GetWorldTransform();
             // Get cameras up and right vectors in particle space
             
             Core::Vector3 vRight = matCamWorld.Right();

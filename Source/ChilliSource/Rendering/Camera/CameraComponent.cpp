@@ -56,7 +56,7 @@ namespace ChilliSource
 
             CS_ASSERT((pParent!=nullptr), "CameraComponent has no parent entity");
             
-            pParent->Transform().SetLookAt(invPos, invTarget, invUp);
+            pParent->GetTransform().SetLookAt(invPos, invTarget, invUp);
 		}
 		//------------------------------------------------------
 		/// Unproject
@@ -268,7 +268,7 @@ namespace ChilliSource
 		{
 			if(mpEntityOwner)
 			{
-				mmatView = mpEntityOwner->Transform().GetWorldTransform().Inverse();
+				mmatView = mpEntityOwner->GetTransform().GetWorldTransform().Inverse();
 			}
 
 			return mmatView;

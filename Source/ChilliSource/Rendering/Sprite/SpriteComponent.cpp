@@ -51,7 +51,7 @@ namespace ChilliSource
                 mbAABBValid = true;
                 
 				//Rebuild the box
-				mBoundingBox.SetOrigin(mpEntityOwner->Transform().GetWorldPosition());
+				mBoundingBox.SetOrigin(mpEntityOwner->GetTransform().GetWorldPosition());
 				mBoundingBox.SetSize(mvDimensions);
 			}
 			return mBoundingBox;
@@ -66,7 +66,7 @@ namespace ChilliSource
                 mbOOBBValid = true;
                 
 				mOBBoundingBox.SetSize(mvDimensions);
-				mOBBoundingBox.SetTransform(mpEntityOwner->Transform().GetWorldTransform());
+				mOBBoundingBox.SetTransform(mpEntityOwner->GetTransform().GetWorldTransform());
 			}
 			return mOBBoundingBox;
 		}
@@ -79,7 +79,7 @@ namespace ChilliSource
 			{
                 mbBoundingSphereValid = true;
                 
-				mBoundingSphere.vOrigin = mpEntityOwner->Transform().GetWorldPosition();
+				mBoundingSphere.vOrigin = mpEntityOwner->GetTransform().GetWorldPosition();
 				mBoundingSphere.fRadius = std::max(mvDimensions.x, mvDimensions.y) * 0.5f;
 			}
 			return mBoundingSphere;
@@ -376,7 +376,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void SpriteComponent::OnAttachedToEntity()
 		{
-			mpEntityOwner->Transform().GetTransformChangedEvent() += Core::Transform::TransformChangedDelegate(this, &SpriteComponent::OnTransformChanged);
+			mpEntityOwner->GetTransform().GetTransformChangedEvent() += Core::Transform::TransformChangedDelegate(this, &SpriteComponent::OnTransformChanged);
             
             OnTransformChanged();
 		}
@@ -385,14 +385,14 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void SpriteComponent::OnDetachedFromEntity()
 		{
-			mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::Transform::TransformChangedDelegate(this, &SpriteComponent::OnTransformChanged);
+			mpEntityOwner->GetTransform().GetTransformChangedEvent() -= Core::Transform::TransformChangedDelegate(this, &SpriteComponent::OnTransformChanged);
 		}
         //-----------------------------------------------------------
         /// Calculate Corner Positions
         //-----------------------------------------------------------
 		void SpriteComponent::CalculateCornerPositions()
         {
-            mmatTransformCache = mpEntityOwner->Transform().GetWorldTransform();
+            mmatTransformCache = mpEntityOwner->GetTransform().GetWorldTransform();
             
 			Core::Vector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
 			Core::Vector2 vAlignedPos;
@@ -425,7 +425,7 @@ namespace ChilliSource
             
             Core::Colour pCurrentColour = GetColour();
             
-            f32 fOpacity = mpEntityOwner->Transform().GetWorldOpacity();
+            f32 fOpacity = mpEntityOwner->GetTransform().GetWorldOpacity();
             
             SetColourWithOpacity(Core::Colour(pCurrentColour.r * fOpacity,
                                                pCurrentColour.g * fOpacity,
@@ -460,7 +460,7 @@ namespace ChilliSource
 		{
             if(mpEntityOwner)
             {
-                mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::Transform::TransformChangedDelegate(this, &SpriteComponent::OnTransformChanged);
+                mpEntityOwner->GetTransform().GetTransformChangedEvent() -= Core::Transform::TransformChangedDelegate(this, &SpriteComponent::OnTransformChanged);
             }
 		}
 	}

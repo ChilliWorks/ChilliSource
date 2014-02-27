@@ -19,14 +19,15 @@ namespace ChilliSource
         /// Animation
         //---------------------------------------------------------
         CS_FORWARD_DECLARE_CLASS(Animation);
-        CS_FORWARD_DECLARE_CLASS(ValueAnimation);
-        CS_FORWARD_DECLARE_CLASS(LinearAnimation);
-        CS_FORWARD_DECLARE_CLASS(BounceAnimation);
-        CS_FORWARD_DECLARE_CLASS(KeyframeAnimation);
+        template <typename TType> class ValueAnimation;
+        template <typename TType> class LinearAnimation;
+        template <typename TType> class BounceAnimation;
+        template <typename TType> class KeyframeAnimation;
         enum class InterpolationType;
         //---------------------------------------------------------
         /// Base
         //---------------------------------------------------------
+        CS_FORWARD_DECLARE_CLASS(Activity);
         CS_FORWARD_DECLARE_CLASS(Application);
         CS_FORWARD_DECLARE_CLASS(Colour);
         CS_FORWARD_DECLARE_CLASS(IInformationProvider);
@@ -55,6 +56,7 @@ namespace ChilliSource
         CS_FORWARD_DECLARE_CLASS(ComponentFactoryDispenser);
         CS_FORWARD_DECLARE_CLASS(Entity);
         CS_FORWARD_DECLARE_CLASS(EntityAnimation);
+        CS_FORWARD_DECLARE_CLASS(EntityAnimationController);
         CS_FORWARD_DECLARE_CLASS(Transform);
         //---------------------------------------------------------
         /// Event
@@ -146,6 +148,8 @@ namespace ChilliSource
         /// System
         //---------------------------------------------------------
         CS_FORWARD_DECLARE_CLASS(System);
+        CS_FORWARD_DECLARE_CLASS(IUpdateable);
+        CS_FORWARD_DECLARE_CLASS(IComponentProducer);
         //---------------------------------------------------------
         /// Threading
         //---------------------------------------------------------

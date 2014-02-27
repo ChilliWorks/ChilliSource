@@ -30,7 +30,7 @@ namespace ChilliSource
             for(u32 i = 0; i < inpRenderable->size(); ++i)
             {
                 Core::Matrix4x4 matLocalTrans;
-                matLocalTrans.SetTranslation((*inpRenderable)[i]->GetAABB().GetOrigin() - (*inpRenderable)[i]->GetEntityOwner()->Transform().GetWorldPosition());
+                matLocalTrans.SetTranslation((*inpRenderable)[i]->GetAABB().GetOrigin() - (*inpRenderable)[i]->GetEntityOwner()->GetTransform().GetWorldPosition());
                 
                 Core::Matrix4x4::Multiply(&((*inpRenderable)[i]->GetTransformationMatrix()), &matLocalTrans, &matWorld);
                 

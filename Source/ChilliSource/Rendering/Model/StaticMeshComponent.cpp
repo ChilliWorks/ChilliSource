@@ -56,7 +56,7 @@ namespace ChilliSource
                 
 				//Rebuild the box
                 const Core::AABB& cAABB = mpModel->GetAABB();
-                const Core::Matrix4x4& matWorld = mpEntityOwner->Transform().GetWorldTransform();
+                const Core::Matrix4x4& matWorld = mpEntityOwner->GetTransform().GetWorldTransform();
                 Core::Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
                 Core::Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
                 Core::Vector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
@@ -137,7 +137,7 @@ namespace ChilliSource
 			{
                 mbOOBBValid = true;
                 
-				mOBBoundingBox.SetTransform(mpEntityOwner->Transform().GetWorldTransform());
+				mOBBoundingBox.SetTransform(mpEntityOwner->GetTransform().GetWorldTransform());
                 // Origin and Size updated in AttachMesh
 			}
 			return mOBBoundingBox;
@@ -318,7 +318,7 @@ namespace ChilliSource
                 mMaterials[i]->SetActiveShaderProgram(ineShaderPass);
             }
 
-			mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), mMaterials);
+			mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), mMaterials);
 		}
         //----------------------------------------------------------
         /// Render Shadow Map
@@ -334,14 +334,14 @@ namespace ChilliSource
             mspShadowMapMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             aMaterials.push_back(mspShadowMapMaterial);
             
-			mpModel->Render(inpRenderSystem, mpEntityOwner->Transform().GetWorldTransform(), aMaterials);
+			mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), aMaterials);
 		}
         //----------------------------------------------------
         /// On Attached To Entity
         //----------------------------------------------------
         void StaticMeshComponent::OnAttachedToEntity()
         {
-            mpEntityOwner->Transform().GetTransformChangedEvent() += Core::Transform::TransformChangedDelegate(this, &StaticMeshComponent::OnEntityTransformChanged);
+            mpEntityOwner->GetTransform().GetTransformChangedEvent() += Core::Transform::TransformChangedDelegate(this, &StaticMeshComponent::OnEntityTransformChanged);
             
             OnEntityTransformChanged();
         }
@@ -359,7 +359,7 @@ namespace ChilliSource
         //----------------------------------------------------
         void StaticMeshComponent::OnDetachedFromEntity()
         {
-            mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::Transform::TransformChangedDelegate(this, &StaticMeshComponent::OnEntityTransformChanged);
+            mpEntityOwner->GetTransform().GetTransformChangedEvent() -= Core::Transform::TransformChangedDelegate(this, &StaticMeshComponent::OnEntityTransformChanged);
         }
         //----------------------------------------------------
         /// Apply Default Materials
@@ -410,7 +410,7 @@ namespace ChilliSource
 		{
 			if(mpEntityOwner)
             {
-                mpEntityOwner->Transform().GetTransformChangedEvent() -= Core::Transform::TransformChangedDelegate(this, &StaticMeshComponent::OnEntityTransformChanged);
+                mpEntityOwner->GetTransform().GetTransformChangedEvent() -= Core::Transform::TransformChangedDelegate(this, &StaticMeshComponent::OnEntityTransformChanged);
             }
 		}
 	}

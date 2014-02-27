@@ -19,15 +19,15 @@ namespace ChilliSource
     namespace Core
     {
         /*
-         IActivity represents a class offering UI to perform a specific task
+         Activity represents a class offering UI to perform a specific task
         */
-        class IActivity : public Core::QueryableInterface
+        class Activity : public Core::QueryableInterface
         {
         public:
-            virtual ~IActivity(){}
+            virtual ~Activity(){}
         };
         
-        typedef fastdelegate::FastDelegate1<IActivity*> ActivityDismissedEvent;
+        typedef fastdelegate::FastDelegate1<Activity*> ActivityDismissedEvent;
     }
 }
 

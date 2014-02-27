@@ -155,9 +155,9 @@ namespace ChilliSource
 			//------------------------------------------------------------------------
 			/// Delegate called with the authorisation view is dismissed.
 			///
-			/// @param Pointer to IActivity that has been dismissed
+			/// @param Pointer to Activity that has been dismissed
 			//------------------------------------------------------------------------
-			virtual void OnAuthorisationDismissed(Core::IActivity* inpActivity) = 0;
+			virtual void OnAuthorisationDismissed(Core::Activity* inpActivity) = 0;
 
         protected:
 			//------------------------------------------------------------------------

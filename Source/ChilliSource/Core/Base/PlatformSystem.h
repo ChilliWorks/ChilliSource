@@ -163,7 +163,7 @@ namespace ChilliSource
             /// @param InterfaceID to generate
             /// @return A handle to the given activity or nullptr if the platform cannot support it
             //-----------------------------------------
-            virtual IActivity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const = 0;
+            virtual Activity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const = 0;
             //-----------------------------------------
             /// Create Activity With Interface
             ///

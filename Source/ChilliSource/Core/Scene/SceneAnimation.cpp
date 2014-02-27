@@ -92,12 +92,12 @@ namespace ChilliSource
             return  inInterface == SceneAnimation::InterfaceID;
         }
         
-        bool SceneAnimation::ApplyAnimationToScene(const EntitySPtr &inpRootNode, std::vector<EntityAnimationPtr> &outEntityAnimList) const
+        bool SceneAnimation::ApplyAnimationToScene(const EntitySPtr &inpRootNode, std::vector<EntityAnimationSPtr> &outEntityAnimList) const
         {
             return ApplyAnimationToScene(inpRootNode.get(), outEntityAnimList);
         }
         
-        bool SceneAnimation::ApplyAnimationToScene(Entity* inpRootNode, std::vector<EntityAnimationPtr> &outEntityAnimList) const
+        bool SceneAnimation::ApplyAnimationToScene(Entity* inpRootNode, std::vector<EntityAnimationSPtr> &outEntityAnimList) const
         {
             if(!inpRootNode)
             {
@@ -111,7 +111,7 @@ namespace ChilliSource
             //If we don't already have an animation controller set up, let's set one up now
             if(!pAnimController)
             {
-                inpRootNode->GetEntityAnimationController() = EntityAnimationControllerSPtr(new CEntityAnimationController());
+                inpRootNode->GetEntityAnimationController() = EntityAnimationControllerSPtr(new EntityAnimationController());
                 pAnimController = inpRootNode->GetEntityAnimationControllerPtr();
             }
             
@@ -130,12 +130,12 @@ namespace ChilliSource
             return true;
         }
         
-        bool SceneAnimation::PlayAnimation(const EntitySPtr& inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode, InterpolationType ineInterpType) const
+        bool SceneAnimation::PlayAnimation(const EntitySPtr& inpRootNode, std::vector<EntityAnimationSPtr>& outEntityAnimList, AnimationPlayMode inePlayMode, InterpolationType ineInterpType) const
         {
             return PlayAnimation(inpRootNode.get(), outEntityAnimList, inePlayMode, ineInterpType);
         }
         
-        bool SceneAnimation::PlayAnimation(Entity* inpRootNode, std::vector<EntityAnimationPtr>& outEntityAnimList, AnimationPlayMode inePlayMode, InterpolationType ineInterpType) const
+        bool SceneAnimation::PlayAnimation(Entity* inpRootNode, std::vector<EntityAnimationSPtr>& outEntityAnimList, AnimationPlayMode inePlayMode, InterpolationType ineInterpType) const
         {
             u32 udwCurrentAnims = outEntityAnimList.size();
             if(!ApplyAnimationToScene(inpRootNode, outEntityAnimList))

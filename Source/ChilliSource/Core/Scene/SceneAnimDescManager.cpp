@@ -48,7 +48,7 @@ namespace ChilliSource
             return AsyncGetSceneAnimationFromFile(ineStorageLocation, instrFilePath);
         }
         
-        SceneAnimationPtr SceneAnimDescManager::GetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        SceneAnimationSPtr SceneAnimDescManager::GetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
             
@@ -62,7 +62,7 @@ namespace ChilliSource
                         CS_DEBUG_LOG("Loading Scene Animation " + instrFilePath);
                         mMapFilenameToResource.emplace(instrFilePath, pResource);
                         
-                        SceneAnimationPtr pSceneAnim = std::static_pointer_cast<SceneAnimation>(pResource);
+                        SceneAnimationSPtr pSceneAnim = std::static_pointer_cast<SceneAnimation>(pResource);
                         pSceneAnim->SetName(instrFilePath);
                         pSceneAnim->SetOwningResourceManager(this);
                         pSceneAnim->SetFilename(instrFilePath);
@@ -77,10 +77,10 @@ namespace ChilliSource
                 return std::static_pointer_cast<SceneAnimation>(pExistingResource->second);
             
             CS_ERROR_LOG("Cannot find resource for Scene Description with path " + instrFilePath);
-            return SceneAnimationPtr();
+            return SceneAnimationSPtr();
         }
         
-        SceneAnimationPtr SceneAnimDescManager::AsyncGetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
+        SceneAnimationSPtr SceneAnimDescManager::AsyncGetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
             MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
             
@@ -90,7 +90,7 @@ namespace ChilliSource
                 for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
                 {
                     
-                    SceneAnimationPtr pSceneAnim = std::static_pointer_cast<SceneAnimation>(pResource);
+                    SceneAnimationSPtr pSceneAnim = std::static_pointer_cast<SceneAnimation>(pResource);
                     pSceneAnim->SetName(instrFilePath);
                     pSceneAnim->SetOwningResourceManager(this);
                     pSceneAnim->SetFilename(instrFilePath);
@@ -109,7 +109,7 @@ namespace ChilliSource
                 return std::static_pointer_cast<SceneAnimation>(pExistingResource->second);
             
             CS_ERROR_LOG("Cannot find resource for Scene Description with path " + instrFilePath);
-            return SceneAnimationPtr();
+            return SceneAnimationSPtr();
         }
     }
 }

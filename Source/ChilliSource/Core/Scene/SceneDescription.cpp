@@ -115,8 +115,8 @@ namespace ChilliSource
 					insEntity.AddChild(pEnt);
 			}
             
-            insEntity.Transform().SetPositionScaleOrientation(insEntDesc.sTransform.vTranslation, insEntDesc.sTransform.vScale, insEntDesc.sTransform.qOrientation);
-            insEntity.Transform().FadeTo(insEntDesc.sTransform.fOpacity);
+            insEntity.GetTransform().SetPositionScaleOrientation(insEntDesc.sTransform.vTranslation, insEntDesc.sTransform.vScale, insEntDesc.sTransform.qOrientation);
+            insEntity.GetTransform().FadeTo(insEntDesc.sTransform.fOpacity);
         }
         
         

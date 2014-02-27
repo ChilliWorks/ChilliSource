@@ -30,9 +30,9 @@ namespace ChilliSource
             bool ManagesResourceOfType(InterfaceIDType inInterfaceID) const override;
             
             
-            SceneDescPtr GetSceneDescFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath);
+            SceneDescSPtr GetSceneDescFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath);
             
-            SceneDescPtr AsyncGetSceneDescFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath);
+            SceneDescSPtr AsyncGetSceneDescFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath);
             
             ResourceSPtr GetResourceFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath) override;
             

@@ -123,7 +123,7 @@ namespace ChilliSource
 			/// @param InterfaceID to generate
 			/// @return A handle to the given activity or nullptr if the platform cannot support it
 			//-----------------------------------------
-            Core::IActivity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const;
+            Core::Activity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const;
 			
 			//==========================================
 			//---InformationProvider Creation
@@ -272,10 +272,10 @@ namespace ChilliSource
 			///
 			/// @return Ownership of the activity
 			//--------------------------------------------
-			Core::IActivity* CreateSMSCompositionActivity() const;
-			Core::IActivity* CreateEmailCompositionActivity() const;
-			Core::IActivity * CreateDefaultVideoPlayerActivity() const;
-			Core::IActivity * CreateWebViewActivity() const;
+			Core::Activity* CreateSMSCompositionActivity() const;
+			Core::Activity* CreateEmailCompositionActivity() const;
+			Core::Activity * CreateDefaultVideoPlayerActivity() const;
+			Core::Activity * CreateWebViewActivity() const;
 			
             //--------------------------------------------
             /// Create Information Providers
@@ -311,7 +311,7 @@ namespace ChilliSource
             //-------------------------------------------
 			Core::System* FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemSPtr>& inSystems) const;
 			
-			typedef fastdelegate::FastDelegate0<Core::IActivity*> ActivityCreationFunction;
+			typedef fastdelegate::FastDelegate0<Core::Activity*> ActivityCreationFunction;
 			
 			//--------------------------------------------
             /// Add Activity Function

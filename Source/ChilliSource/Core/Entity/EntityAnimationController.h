@@ -18,15 +18,15 @@ namespace ChilliSource
 {
 	namespace Core
     {
-		class CEntityAnimationController 
+		class EntityAnimationController 
         {
 		public:	
 			//----------------------------------------------
-			/// CEntityAnimationController
+			/// EntityAnimationController
 			///
 			//----------------------------------------------
-			CEntityAnimationController();
-			virtual ~CEntityAnimationController();
+			EntityAnimationController();
+			virtual ~EntityAnimationController();
 			
 			//----------------------------------------------
 			/// LoadDataFromSceneDesc
@@ -52,7 +52,7 @@ namespace ChilliSource
 			/// Creates and retains an EntityAnimation object with animdata with the given name and target entity.
 			/// Will return an empty pointer if it cannot find animdata with the given name or the target entity is nullptr.
 			//----------------------------------------------
-			EntityAnimationPtr CreateAnimation(const std::string & instrAnimName, ChilliSource::Core::Entity* inpAnimTarget, u32 inudwQueryFlags = 0);
+			EntityAnimationSPtr CreateAnimation(const std::string & instrAnimName, ChilliSource::Core::Entity* inpAnimTarget, u32 inudwQueryFlags = 0);
 			
 			//----------------------------------------------
 			/// CreateAnimation
@@ -60,7 +60,7 @@ namespace ChilliSource
 			/// Creates and retains an EntityAnimation object with animdata with the given name and target entity.
 			/// Will return an empty pointer if it cannot find animdata with the given name or the target entity is nullptr.
 			//----------------------------------------------
-			EntityAnimationPtr CreateAndPlayAnimation(const std::string & instrAnimName, ChilliSource::Core::Entity* inpAnimTarget, AnimationPlayMode inePlayMode);
+			EntityAnimationSPtr CreateAndPlayAnimation(const std::string & instrAnimName, ChilliSource::Core::Entity* inpAnimTarget, AnimationPlayMode inePlayMode);
             
             //----------------------------------------------
             /// Pause
@@ -111,7 +111,7 @@ namespace ChilliSource
             /// Return event to subscribe to for animation completion events
 			///
             //----------------------------------------------
-            typedef fastdelegate::FastDelegate1<CEntityAnimationController*> EventAnimationCompletion;
+            typedef fastdelegate::FastDelegate1<EntityAnimationController*> EventAnimationCompletion;
             Core::IEvent<EventAnimationCompletion> & GetEventCompletion() { return mAnimationCompletionEvent; }
 			
             //----------------------------------------------
@@ -131,13 +131,13 @@ namespace ChilliSource
 					bDisposeOnComplete = false;
 				}
 				
-				EntityAnimContext(EntityAnimationPtr inpAnimActual, bool inbDisposeOnComplete)
+				EntityAnimContext(EntityAnimationSPtr inpAnimActual, bool inbDisposeOnComplete)
 				:pAnimActual(inpAnimActual)
 				,bDisposeOnComplete(inbDisposeOnComplete)
 				{
 				}
 				
-				EntityAnimationPtr	pAnimActual;
+				EntityAnimationSPtr	pAnimActual;
 				bool				bDisposeOnComplete;
 			};
 

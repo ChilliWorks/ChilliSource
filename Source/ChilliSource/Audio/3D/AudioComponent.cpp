@@ -118,7 +118,7 @@ namespace ChilliSource
 		{
 			if(mpEntityOwner)
 			{
-				Core::Vector3 vCurrentPos = mpEntityOwner->Transform().GetWorldPosition();
+				Core::Vector3 vCurrentPos = mpEntityOwner->GetTransform().GetWorldPosition();
 				Core::Vector3 vCurrentVel = Core::Vector3::ZERO;
 				Set3DLocation(vCurrentPos, vCurrentVel);
 			}

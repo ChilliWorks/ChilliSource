@@ -22,7 +22,7 @@ namespace ChilliSource {
 		
 		
 		
-		class SMSCompositionActivity : public Core::IActivity{
+		class SMSCompositionActivity : public Core::Activity{
 		public:
 
 			DECLARE_NAMED_INTERFACE(SMSCompositionActivity);

@@ -53,7 +53,7 @@ namespace ChilliSource
 	{
 		class Octree
 		{
-            typedef std::vector<VolumeComponentPtr> ObjectList;
+            typedef std::vector<VolumeComponentSPtr> ObjectList;
             
             struct Node
 			{
@@ -87,7 +87,7 @@ namespace ChilliSource
 			///
 			/// @param Node to add 
 			//---------------------------------------------------------------
-			void Add(const VolumeComponentPtr& inpComponent);
+			void Add(const VolumeComponentSPtr& inpComponent);
 			//---------------------------------------------------------------
 			/// Remove 
 			///
@@ -95,7 +95,7 @@ namespace ChilliSource
 			///
 			/// @param Node to remove
 			//---------------------------------------------------------------
-			void Remove(const VolumeComponentPtr& inpComponent);
+			void Remove(const VolumeComponentSPtr& inpComponent);
 			//---------------------------------------------------------------
 			/// Destroy
 			///

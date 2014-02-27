@@ -250,7 +250,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Delegate called with the authorisation view is dismissed.
 		//------------------------------------------------------------------------
-		void CTwitterPostSystem::OnAuthorisationDismissed(Core::IActivity* inpActivity)
+		void CTwitterPostSystem::OnAuthorisationDismissed(Core::Activity* inpActivity)
 		{
 			// User has cancelled
 			if(mpAuthenticationView)

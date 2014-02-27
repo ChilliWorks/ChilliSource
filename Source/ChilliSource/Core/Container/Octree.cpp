@@ -103,7 +103,7 @@ namespace ChilliSource
 		///
 		/// @param Node to add 
 		//---------------------------------------------------------------
-		void Octree::Add(const VolumeComponentPtr& inpComponent)
+		void Octree::Add(const VolumeComponentSPtr& inpComponent)
 		{
 			//We can use an equation to work out how deep to place the
 			//component and which node to attach it to without recursing the entire tree.
@@ -139,7 +139,7 @@ namespace ChilliSource
 		///
 		/// @param Component to remove
 		//---------------------------------------------------------------
-		void Octree::Remove(const VolumeComponentPtr& inpComponent)
+		void Octree::Remove(const VolumeComponentSPtr& inpComponent)
 		{
 //			//Use the radius of the object to work out what depth it is at
 //			Sphere BSphere = inpComponent->GetBoundingSphere();

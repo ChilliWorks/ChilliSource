@@ -435,7 +435,7 @@ namespace ChilliSource
 		    	strSecretSigningKey.append(mstrOAuthTokenSecret);
 		    }
 
-		    objHMACSHA1.HMAC_SHA1((u8*)strSigBase.c_str(),
+		    objHMACSHA1.Generate((u8*)strSigBase.c_str(),
 		    					  strSigBase.length(),
 		                          (u8*)strSecretSigningKey.c_str(),
 		                          strSecretSigningKey.length(),

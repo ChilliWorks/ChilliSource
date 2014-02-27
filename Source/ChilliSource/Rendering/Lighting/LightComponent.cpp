@@ -52,7 +52,7 @@ namespace ChilliSource
         {
             if(GetEntityOwner() != nullptr)
             {
-                return GetEntityOwner()->Transform().GetWorldPosition();
+                return GetEntityOwner()->GetTransform().GetWorldPosition();
             }
             
             return Core::Vector3::ZERO;

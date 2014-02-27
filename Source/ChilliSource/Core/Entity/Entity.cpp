@@ -38,7 +38,7 @@ namespace ChilliSource
             inpEntity->RemoveFromParent();
                 
 			mEntities.push_back(inpEntity);
-			mLocalTransform.AddChildTransform(&inpEntity->Transform());
+			mLocalTransform.AddChildTransform(&inpEntity->GetTransform());
 			
 			//Set the parent and add it to the scene
 			inpEntity->mpParent = this;
@@ -60,7 +60,7 @@ namespace ChilliSource
 			
 			if(it != mEntities.end())
 			{
-				mLocalTransform.RemoveChildTransform(&inpEntity->Transform());
+				mLocalTransform.RemoveChildTransform(&inpEntity->GetTransform());
 				
 				inpEntity->mpParent = nullptr;
 				
