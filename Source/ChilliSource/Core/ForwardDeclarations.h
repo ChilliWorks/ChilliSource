@@ -65,8 +65,6 @@ namespace ChilliSource
         template <typename TDelegateType> class IConnectableEvent;
         CS_FORWARD_DECLARE_CLASS(IDisconnectableEvent);
         CS_FORWARD_DECLARE_CLASS(Connection);
-        
-
         //---------------------------------------------------------
         /// File
         //---------------------------------------------------------
