@@ -40,10 +40,9 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Colour
         //----------------------------------------------------------
-        const Core::Colour& LightComponent::GetColour() const
+        Core::Colour LightComponent::GetColour() const
         {
-            mIntenseColour = mColour * mfIntensity;
-            return mIntenseColour;
+            return mColour * mfIntensity;
         }
         //----------------------------------------------------------
         /// Get World Position

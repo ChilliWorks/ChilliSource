@@ -51,25 +51,25 @@ namespace ChilliSource
 			/// @return whether or not the accelerometer is
             /// currently updating.
 			//----------------------------------------------------
-			bool IsUpdating() const override;;
+			bool IsUpdating() const override;
 			//----------------------------------------------------
 			/// Start Updating
 			///
 			/// Start listening for accelerometer changes.
 			//----------------------------------------------------
-			void StartUpdating() override;;
+			void StartUpdating() override;
             //----------------------------------------------------
             /// Update
             ///
             /// @param Time since last update
             //----------------------------------------------------
-            void Update(f32 infDT) override;;
+            void Update(f32 infDT) override;
 			//----------------------------------------------------
 			/// Get Acceleration
 			///
 			/// @return The acceleration in Gs.
 			//----------------------------------------------------
-			const Core::Vector3& GetAcceleration() const override;;
+            Core::Vector3 GetAcceleration() const override;
 			//----------------------------------------------------
 			/// Stop Updating
 			///
@@ -82,7 +82,6 @@ namespace ChilliSource
 			~CAccelerometer();
 		protected:
             
-			mutable Core::Vector3 mvAcceleration;
             bool mbIsUpdating;
             
             CMMotionManager* m_motionManager;

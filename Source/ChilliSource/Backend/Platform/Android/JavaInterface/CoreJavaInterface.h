@@ -16,10 +16,10 @@
 
 #include <jni.h>
 #include <map>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Core/Base/Application.h>
 
-extern ChilliSource::Core::CApplication* (*BootFunctionPtr)();
+extern ChilliSource::Core::Application* (*BootFunctionPtr)();
 
 namespace ChilliSource
 {
@@ -46,7 +46,7 @@ namespace ChilliSource
 			///
 			/// @param the application pointer.
 			//--------------------------------------------------------------------------------------
-			void SetApplication(ChilliSource::Core::CApplication* inApplication);
+			void SetApplication(ChilliSource::Core::Application* inApplication);
 			//--------------------------------------------------------------------------------------
 			/// Destroy Application
 			///
@@ -58,7 +58,7 @@ namespace ChilliSource
 			///
 			/// @return returns the global instance of the MoFlow application.
 			//--------------------------------------------------------------------------------------
-			ChilliSource::Core::CApplication* GetApplication();
+			ChilliSource::Core::Application* GetApplication();
 			//-----------------------------------------
 			/// Set Max FPS
 			///
@@ -248,7 +248,7 @@ namespace ChilliSource
             ///
             /// @param Text
             //--------------------------------------------------------------------------------------------------
-            void MakeToast(const UTF8String& instrText);
+            void MakeToast(const Core::UTF8String& instrText);
             //--------------------------------------------------------------------------------------------------
             /// Show System Confirm Dialog
             ///
@@ -260,7 +260,7 @@ namespace ChilliSource
             /// @param Confirm text
             /// @param Cancel text
             //--------------------------------------------------------------------------------------------------
-            void ShowSystemConfirmDialog(s32 indwDialogID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm, const UTF8String& instrCancel);
+            void ShowSystemConfirmDialog(s32 indwDialogID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel);
             //--------------------------------------------------------------------------------------------------
             /// Show System Dialog
             ///
@@ -271,7 +271,7 @@ namespace ChilliSource
             /// @param Message text
             /// @param Confirm text
             //--------------------------------------------------------------------------------------------------
-            void ShowSystemDialog(s32 indwDialogID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm);
+            void ShowSystemDialog(s32 indwDialogID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm);
             //-----------------------------------------------------------------------------------------------------
             /// Force Quit
             ///
@@ -292,7 +292,7 @@ namespace ChilliSource
             f32 GetPhysicalScreenSize();
             
 		private:
-			ChilliSource::Core::CApplication* mApplication;
+			ChilliSource::Core::Application* mApplication;
 			s32 mdwScreenWidth;
 			s32 mdwScreenHeight;
 			std::string mstrDeviceModel;

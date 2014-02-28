@@ -25,7 +25,7 @@ namespace ChilliSource
             //---------------------------------------------------
             /// Constructor
             //---------------------------------------------------
-            MaterialFactory();
+            MaterialFactory(TextureManager* in_texMgr, ShaderManager* in_shaderMgr, CubemapManager* in_cubemapMgr, RenderCapabilities* in_renderCapabilities);
             //---------------------------------------------------
             /// Is A
             ///
@@ -251,10 +251,10 @@ namespace ChilliSource
             
         private:
             
-            mutable TextureManager* mpTextureManager;
-            mutable ShaderManager* mpShaderManager;
-            mutable CubemapManager* mpCubemapManager;
-            mutable RenderCapabilities* mpRenderCapabilities;
+            TextureManager* mpTextureManager;
+            ShaderManager* mpShaderManager;
+            CubemapManager* mpCubemapManager;
+            RenderCapabilities* mpRenderCapabilities;
         };
     }
 }

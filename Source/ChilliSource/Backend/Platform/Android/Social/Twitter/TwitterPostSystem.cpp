@@ -7,11 +7,11 @@
  *
  */
 
-#include <ChilliSource/Core/Main/Application.h>
-#include <ChilliSource/Platform/Android/HttpConnectionSystem.h>
-#include <ChilliSource/Platform/Android/PlatformSystem.h>
-#include <ChilliSource/Platform/Android/Social/Twitter/TwitterPostSystem.h>
-#include <ChilliSource/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Backend/Platform/Android/HttpConnectionSystem.h>
+#include <ChilliSource/Backend/Platform/Android/PlatformSystem.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterPostSystem.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
 
 namespace ChilliSource
 {
@@ -54,9 +54,9 @@ namespace ChilliSource
 				if(RequestOAuthToken(strAuthoiseURL))
 				{
 					// Show authentication view
-					if(Core::CApplication::GetPlatformSystemPtr()->CanCreateActivityWithInterface<ChilliSource::Social::ITwitterAuthenticationActivity>())
+					if(Core::Application::GetPlatformSystemPtr()->CanCreateActivityWithInterface<ChilliSource::Social::ITwitterAuthenticationActivity>())
 					{
-						mpAuthenticationView = Core::CApplication::GetPlatformSystemPtr()->CreateActivityWithInterface<ChilliSource::Social::ITwitterAuthenticationActivity>();
+						mpAuthenticationView = Core::Application::GetPlatformSystemPtr()->CreateActivityWithInterface<ChilliSource::Social::ITwitterAuthenticationActivity>();
 						mpAuthenticationView->SetAuthenticationPINResultDelegate(ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResultDelegate(this, &CTwitterPostSystem::OnPINComplete));
 						mpAuthenticationView->GetDismissedEvent() += ChilliSource::ActivityDismissedEvent(this, &CTwitterPostSystem::OnAuthorisationDismissed);
 						mpAuthenticationView->Present();

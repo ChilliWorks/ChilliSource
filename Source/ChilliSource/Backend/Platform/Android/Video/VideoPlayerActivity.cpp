@@ -7,18 +7,18 @@
  *
  */
 
-#include <ChilliSource/Platform/Android/Video/VideoPlayerActivity.h>
+#include <ChilliSource/Backend/Platform/Android/Video/VideoPlayerActivity.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Platform/Android/JavaInterface/VideoPlayerJavaInterface.h>
-#include <ChilliSource/Core/Main/Application.h>
-#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/VideoPlayerJavaInterface.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Main/ApplicationEvents.h>
+#include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Core/Locale/LocalisedText.h>
-#include <ChilliSource/Video/Main/Subtitles.h>
-#include <ChilliSource/Video/Main/SubtitlesManager.h>
+#include <ChilliSource/Core/Localisation/LocalisedText.h>
+#include <ChilliSource/Video/Base/Subtitles.h>
+#include <ChilliSource/Video/Base/SubtitlesManager.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 namespace ChilliSource
@@ -57,25 +57,25 @@ namespace ChilliSource
         	if (ineLocation == Core::SL_PACKAGE)
         	{
         		bIsPackage = true;
-        		strFilename = Core::CApplication::GetFileSystemPtr()->GetDirectoryForPackageFile(instrFileName);
+        		strFilename = Core::Application::GetFileSystemPtr()->GetDirectoryForPackageFile(instrFileName);
         	}
         	else if (ineLocation == Core::SL_DLC)
 			{
-        		if (Core::CApplication::GetFileSystemPtr()->DoesFileExistInCachedDLC(instrFileName) == true)
+        		if (Core::Application::GetFileSystemPtr()->DoesFileExistInCachedDLC(instrFileName) == true)
         		{
         			bIsPackage = false;
-        			strFilename = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(Core::SL_DLC) + instrFileName;
+        			strFilename = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(Core::SL_DLC) + instrFileName;
         		}
         		else
         		{
         			bIsPackage = true;
-        			strFilename = Core::CApplication::GetFileSystemPtr()->GetDirectoryForPackageFile(Core::CApplication::GetFileSystemPtr()->GetPackageDLCDirectory() + instrFileName);
+        			strFilename = Core::Application::GetFileSystemPtr()->GetDirectoryForPackageFile(Core::Application::GetFileSystemPtr()->GetPackageDLCDirectory() + instrFileName);
         		}
 			}
         	else
         	{
         		bIsPackage = false;
-        		strFilename = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(ineLocation) + instrFileName;
+        		strFilename = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(ineLocation) + instrFileName;
         	}
 
         	//start the video

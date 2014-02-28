@@ -7,9 +7,9 @@
  *
  */
 
-#include <ChilliSource/Platform/Android/ImageLoading/PngImage.h>
-#include <ChilliSource/Platform/Android/ImageLoading/LibPng/png.h>
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Backend/Platform/Android/ImageLoading/PngImage.h>
+#include <ChilliSource/Backend/Platform/Android/ImageLoading/LibPng/png.h>
+#include <ChilliSource/Core/Base/Application.h>
 
 namespace ChilliSource
 {

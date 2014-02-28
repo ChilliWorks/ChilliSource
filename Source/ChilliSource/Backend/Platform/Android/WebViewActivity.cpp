@@ -7,17 +7,17 @@
  *
  */
 
-#include <ChilliSource/Platform/Android/WebViewActivity.h>
-#include <ChilliSource/Platform/Android/FileIO/FileSystem.h>
+#include <ChilliSource/Backend/Platform/Android/WebViewActivity.h>
+#include <ChilliSource/Backend/Platform/Android/FileIO/FileSystem.h>
 
 #include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Core/Main/Screen.h>
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Base/Application.h>
 
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/File/FileStream.h>
 
-#include <ChilliSource/Platform/Android/JavaInterface/WebViewJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/WebViewJavaInterface.h>
 
 namespace ChilliSource
 {
@@ -75,7 +75,7 @@ namespace ChilliSource
 				strFile = instrFile;                    
 			}
 
-			Android::CFileSystem* pFileSystem = static_cast<Android::CFileSystem*>(Core::CApplication::GetFileSystemPtr());
+			Android::CFileSystem* pFileSystem = static_cast<Android::CFileSystem*>(Core::Application::GetFileSystemPtr());
 
 			Core::FileStreamPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FM_READ);
 			std::string strHTMLFileContents;

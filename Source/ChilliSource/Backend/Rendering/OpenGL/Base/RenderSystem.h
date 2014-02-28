@@ -325,6 +325,10 @@ namespace ChilliSource
 			/// @return Whether the given extension is supported
 			//----------------------------------------------------------
 			static bool CheckForOpenGLExtension(const std::string& instrExtension);
+            
+            inline CTextureManager* GetTextureManager() {return &mTexManager;}
+            inline CCubemapManager* GetCubemapManager() {return &mCubemapManager;}
+            inline CShaderManager* GetShaderManager() {return &mShaderManager;}
 			
 		private:
             

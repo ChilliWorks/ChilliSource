@@ -39,7 +39,7 @@ namespace ChilliSource
 			///
 			/// @return Colour of the light with intensity applied
 			//----------------------------------------------------------
-            const Core::Colour& GetColour() const;
+            Core::Colour GetColour() const;
             //----------------------------------------------------------
 			/// Get World Position
 			///
@@ -91,7 +91,6 @@ namespace ChilliSource
             mutable Core::Matrix4x4 mmatLight;
             
             Core::Colour mColour;
-            mutable Core::Colour mIntenseColour;
             
             f32 mfIntensity;
             

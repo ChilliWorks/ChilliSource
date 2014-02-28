@@ -7,10 +7,10 @@
  *
  */
 
-#include <ChilliSource/Platform/Android/Social/Communications/EmailCompositionActivity.h>
-#include <ChilliSource/Platform/Android/JavaInterface/EmailCompositionJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Communications/EmailCompositionActivity.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/EmailCompositionJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource
@@ -69,15 +69,15 @@ namespace ChilliSource
 			std::string strFilename;
 			if (inAttachment.mstrFilename.size() > 0)
 			{
-				if (inAttachment.meStorageLocation == Core::SL_PACKAGE || (inAttachment.meStorageLocation == Core::SL_DLC && Core::CApplication::GetFileSystemPtr()->DoesFileExistInCachedDLC(inAttachment.mstrFilename) == false))
+				if (inAttachment.meStorageLocation == Core::SL_PACKAGE || (inAttachment.meStorageLocation == Core::SL_DLC && Core::Application::GetFileSystemPtr()->DoesFileExistInCachedDLC(inAttachment.mstrFilename) == false))
 				{
-					Core::CApplication::GetFileSystemPtr()->CreateDirectory(Core::SL_CACHE, kstrTempAttachmentDirectory);
-					Core::CApplication::GetFileSystemPtr()->CopyFile(inAttachment.meStorageLocation, inAttachment.mstrFilename, Core::SL_CACHE, kstrTempAttachmentDirectory + inAttachment.mstrFilename);
-					strFilename = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(Core::SL_CACHE) + kstrTempAttachmentDirectory + inAttachment.mstrFilename;
+					Core::Application::GetFileSystemPtr()->CreateDirectory(Core::SL_CACHE, kstrTempAttachmentDirectory);
+					Core::Application::GetFileSystemPtr()->CopyFile(inAttachment.meStorageLocation, inAttachment.mstrFilename, Core::SL_CACHE, kstrTempAttachmentDirectory + inAttachment.mstrFilename);
+					strFilename = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(Core::SL_CACHE) + kstrTempAttachmentDirectory + inAttachment.mstrFilename;
 				}
 				else
 				{
-					strFilename = Core::CApplication::GetFileSystemPtr()->GetStorageLocationDirectory(inAttachment.meStorageLocation) + inAttachment.mstrFilename;
+					strFilename = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(inAttachment.meStorageLocation) + inAttachment.mstrFilename;
 				}
 			}
 
@@ -117,8 +117,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		CEmailCompositionActivity::~CEmailCompositionActivity()
 		{
-			DEBUG_LOG("Removing Temporary attachment files.");
-			Core::CApplication::GetFileSystemPtr()->DeleteDirectory(Core::SL_CACHE, kstrTempAttachmentDirectory);
+			Core::Application::GetFileSystemPtr()->DeleteDirectory(Core::SL_CACHE, kstrTempAttachmentDirectory);
 		}
 	}
 }

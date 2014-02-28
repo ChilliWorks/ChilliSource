@@ -64,7 +64,7 @@ namespace ChilliSource
             /// @return Direction vector of light
             /// (only applies to directional lights)
             //----------------------------------------------------------
-            const Core::Vector3& GetDirection() const;
+            Core::Vector3 GetDirection() const;
             //----------------------------------------------------------
             /// Get Light Matrix
             ///
@@ -111,8 +111,6 @@ namespace ChilliSource
             
             TextureSPtr mpShadowMap;
             TextureSPtr mpShadowMapDebug;
-            
-            mutable Core::Vector3 mvDirection;
             
             Core::ConnectionUPtr m_transformChangedConnection;
             

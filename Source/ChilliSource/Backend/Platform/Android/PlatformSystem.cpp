@@ -10,28 +10,28 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <ChilliSource/Platform/Android/PlatformSystem.h>
-#include <ChilliSource/Platform/Android/ImageLoader.h>
-#include <ChilliSource/Platform/Android/Input/InputSystem.h>
-#include <ChilliSource/Platform/Android/WebViewActivity.h>
-#include <ChilliSource/Platform/Android/Video/VideoPlayerActivity.h>
+#include <ChilliSource/Backend/Platform/Android/PlatformSystem.h>
+#include <ChilliSource/Backend/Platform/Android/ImageLoader.h>
+#include <ChilliSource/Backend/Platform/Android/Input/InputSystem.h>
+#include <ChilliSource/Backend/Platform/Android/WebViewActivity.h>
+#include <ChilliSource/Backend/Platform/Android/Video/VideoPlayerActivity.h>
 
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Platform/Android/JavaInterface/CoreJavaInterface.h>
-#include <ChilliSource/Platform/Android/FMOD/FMODSystem.h>
-#include <ChilliSource/Platform/Android/FMOD/FMODAudioLoader.h>
-#include <ChilliSource/Platform/Android/HttpConnectionSystem.h>
-#include <ChilliSource/Platform/Android/FileIO/FileSystem.h>
-#include <ChilliSource/Platform/Android/LocalNotificationScheduler.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/CoreJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/FMOD/FMODSystem.h>
+#include <ChilliSource/Backend/Platform/Android/FMOD/FMODAudioLoader.h>
+#include <ChilliSource/Backend/Platform/Android/HttpConnectionSystem.h>
+#include <ChilliSource/Backend/Platform/Android/FileIO/FileSystem.h>
+#include <ChilliSource/Backend/Platform/Android/LocalNotificationScheduler.h>
 
-#include <ChilliSource/Platform/Android/Social/Communications/EmailCompositionActivity.h>
-#include <ChilliSource/Platform/Android/Social/Communications/SMSCompositionActivity.h>
-#include <ChilliSource/Platform/Android/Social/Communications/ContactInformationProvider.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Communications/EmailCompositionActivity.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Communications/SMSCompositionActivity.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Communications/ContactInformationProvider.h>
 
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 
-#include <ChilliSource/Rendering/Main/RenderSystem.h>
-#include <ChilliSource/Rendering/Main/Renderer.h>
+#include <ChilliSource/Rendering/Base/RenderSystem.h>
+#include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Sprite/SpriteSheetLoader.h>
 #include <ChilliSource/Rendering/Sprite/XMLSpriteSheetLoader.h>
 #include <ChilliSource/Rendering/Material/MaterialLoader.h>
@@ -39,28 +39,26 @@
 #include <ChilliSource/Rendering/Font/FontLoader.h>
 #include <ChilliSource/Rendering/Model/AnimatedMeshComponentUpdater.h>
 
-#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 #include <ChilliSource/Core/Image/MoImageProvider.h>
 #include <ChilliSource/Core/Image/ETC1ImageProvider.h>
 
-#include <ChilliSource/Audio/Main/AudioSystem.h>
-#include <ChilliSource/Audio/Main/AudioPlayer.h>
+#include <ChilliSource/Audio/Base/AudioSystem.h>
+#include <ChilliSource/Audio/Base/AudioPlayer.h>
 
 #include <ChilliSource/Rendering/GUI/GUIViewFactory.h>
 
-#include <ChilliSource/Input/Main/InputSystem.h>
+#include <ChilliSource/Input/Base/InputSystem.h>
 
-#include <ChilliSource/Backend/Rendering/OpenGL/RenderSystem.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/RenderCapabilities.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
 
 namespace ChilliSource 
 {
 	namespace Android
 	{
-		DEFINE_CREATABLE(IPlatformSystem, CPlatformSystem);
-
 		//-----------------------------------------
 		/// Constructor
 		//-----------------------------------------
@@ -81,7 +79,7 @@ namespace ChilliSource
 			AddInfoProviderFunc(Social::IContactInformationProvider::InterfaceID, InfoProviderCreationFunction(this, &CPlatformSystem::CreateContactInformationProvider));
 
 			CNotificationScheduler::Initialise(new CLocalNotificationScheduler());
-			Core::CApplication::SetFileSystem(new Android::CFileSystem());
+			Core::Application::SetFileSystem(new Android::CFileSystem());
 			ChilliSource::CLogging::Init();
 		}
 		//--------------------------------------------
@@ -157,16 +155,16 @@ namespace ChilliSource
 			//create the main systems
 			Rendering::IRenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
 			inaSystems.push_back(Core::SystemPtr(pRenderSystem));
-			Core::CApplication::SetRenderSystem(pRenderSystem);
+			Core::Application::SetRenderSystem(pRenderSystem);
 
 			Input::IInputSystem* pInputSystem = new Android::CInputSystem();
 			inaSystems.push_back(Core::SystemPtr(pInputSystem));
-			Core::CApplication::SetInputSystem(pInputSystem);
+			Core::Application::SetInputSystem(pInputSystem);
 
 			Audio::IAudioSystem* pAudioSystem = new Android::CFMODSystem();
 			inaSystems.push_back(Core::SystemPtr(pAudioSystem));
 			inaSystems.push_back(Core::SystemPtr(new Android::CFMODAudioLoader(pAudioSystem)));
-			Core::CApplication::SetAudioSystem(pAudioSystem);
+			Core::Application::SetAudioSystem(pAudioSystem);
 
 			//create other important systems
 			OpenGL::CRenderCapabilities* pRenderCapabilities = new OpenGL::CRenderCapabilities();
@@ -182,15 +180,15 @@ namespace ChilliSource
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CMaterialFactory()));
 
 			//Initialise the render system
-			Core::CApplication::GetRenderSystemPtr()->Init((u32)Core::CScreen::GetRawDimensions().x, (u32)Core::CScreen::GetRawDimensions().y);
+			Core::Application::GetRenderSystemPtr()->Init((u32)Core::CScreen::GetRawDimensions().x, (u32)Core::CScreen::GetRawDimensions().y);
 
 			//Create the renderer
-			Core::CApplication::SetRenderer(new Rendering::CRenderer(Core::CApplication::GetRenderSystemPtr()));
+			Core::Application::SetRenderer(new Rendering::CRenderer(Core::Application::GetRenderSystemPtr()));
 
 			//Initialise the input system
-			if(Core::CApplication::GetInputSystemPtr() != NULL)
+			if(Core::Application::GetInputSystemPtr() != NULL)
 			{
-				Core::CApplication::SetHasTouchInput((Core::CApplication::GetInputSystemPtr()->GetTouchScreenPtr() != NULL));
+				Core::Application::SetHasTouchInput((Core::Application::GetInputSystemPtr()->GetTouchScreenPtr() != NULL));
 			}
 		}
 		//-------------------------------------------------
@@ -198,7 +196,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void CPlatformSystem::PostCreateSystems()
 		{
-			if(Core::CApplication::GetAudioSystemPtr() != NULL)
+			if(Core::Application::GetAudioSystemPtr() != NULL)
 			{
 				Audio::CAudioPlayer::Init();
 			}

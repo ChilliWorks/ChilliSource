@@ -27,8 +27,8 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Constructor
         //---------------------------------------------------
-        MaterialFactory::MaterialFactory()
-        : mpTextureManager(nullptr), mpShaderManager(nullptr), mpCubemapManager(nullptr), mpRenderCapabilities(nullptr)
+        MaterialFactory::MaterialFactory(TextureManager* in_texMgr, ShaderManager* in_shaderMgr, CubemapManager* in_cubemapMgr, RenderCapabilities* in_renderCapabilities)
+        : mpTextureManager(in_texMgr), mpShaderManager(in_shaderMgr), mpCubemapManager(in_cubemapMgr), mpRenderCapabilities(in_renderCapabilities)
         {
             
         }
@@ -352,11 +352,6 @@ namespace ChilliSource
         //---------------------------------------------------
         TextureManager* MaterialFactory::GetTextureManager() const
         {
-            if(mpTextureManager == nullptr)
-            {
-                mpTextureManager = GET_RESOURCE_MANAGER(TextureManager);
-            }
-            
             return mpTextureManager;
         }
         //---------------------------------------------------
@@ -364,11 +359,6 @@ namespace ChilliSource
         //---------------------------------------------------
         ShaderManager* MaterialFactory::GetShaderManager() const
         {
-            if(mpShaderManager == nullptr)
-            {
-                mpShaderManager = GET_RESOURCE_MANAGER(ShaderManager);
-            }
-            
             return mpShaderManager;
         }
         //---------------------------------------------------
@@ -376,11 +366,6 @@ namespace ChilliSource
         //---------------------------------------------------
         CubemapManager* MaterialFactory::GetCubemapManager() const
         {
-            if(mpCubemapManager == nullptr)
-            {
-                mpCubemapManager = GET_RESOURCE_MANAGER(CubemapManager);
-            }
-            
             return mpCubemapManager;
         }
         //---------------------------------------------------
@@ -388,12 +373,6 @@ namespace ChilliSource
         //---------------------------------------------------
         RenderCapabilities* MaterialFactory::GetRenderCapabilities() const
         {
-        	if(mpRenderCapabilities == nullptr)
-			{
-        		mpRenderCapabilities = Core::Application::GetSystemImplementing<RenderCapabilities>();
-        		CS_ASSERT(mpRenderCapabilities, "Material Factor is missing required system: Render Capabilities.");
-			}
-
 			return mpRenderCapabilities;
         }
     }

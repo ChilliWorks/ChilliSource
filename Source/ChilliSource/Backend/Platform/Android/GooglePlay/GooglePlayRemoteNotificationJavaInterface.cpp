@@ -99,7 +99,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		void CGooglePlayRemoteNotificationJavaInterface::OnRemoteTokenReceived(const std::string& instrToken)
 		{
-			ChilliSource::Android::CGooglePlayRemoteNotificationSystem* pRemoteNotificationSys = Core::CApplication::GetSystemImplementing<ChilliSource::Android::CGooglePlayRemoteNotificationSystem>();
+			ChilliSource::Android::CGooglePlayRemoteNotificationSystem* pRemoteNotificationSys = Core::Application::GetSystemImplementing<ChilliSource::Android::CGooglePlayRemoteNotificationSystem>();
 			MOFLOW_ASSERT(pRemoteNotificationSys, "Unable to get remote notification system.");
 			pRemoteNotificationSys->OnRemoteTokenReceived(instrToken);
 		}
@@ -108,7 +108,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		void CGooglePlayRemoteNotificationJavaInterface::OnRemoteNotificationReceived(const Core::ParamDictionary& insParams)
 		{
-			ChilliSource::Android::CGooglePlayRemoteNotificationSystem* pRemoteNotificationSys = Core::CApplication::GetSystemImplementing<ChilliSource::Android::CGooglePlayRemoteNotificationSystem>();
+			ChilliSource::Android::CGooglePlayRemoteNotificationSystem* pRemoteNotificationSys = Core::Application::GetSystemImplementing<ChilliSource::Android::CGooglePlayRemoteNotificationSystem>();
 			MOFLOW_ASSERT(pRemoteNotificationSys, "Unable to get remote notification system.");
 			pRemoteNotificationSys->OnRemoteNotificationReceived(insParams);
 		}

@@ -462,7 +462,8 @@ namespace ChilliSource
                 
                 if(mLightDirHandle >= 0)
                 {
-                    glUniform3fv(mLightDirHandle, 1, (const GLfloat*)&pLightComponent->GetDirection());
+                    Core::Vector3 vDirection = pLightComponent->GetDirection();
+                    glUniform3fv(mLightDirHandle, 1, (const GLfloat*)&vDirection);
                 }
                 if(pLightComponent->GetShadowMapPtr() != nullptr)
                 {
@@ -505,7 +506,8 @@ namespace ChilliSource
 
             if(mLightColHandle >= 0)
             {
-                glUniform4fv(mLightColHandle, 1, (const GLfloat*)&inpLightComponent->GetColour());
+                Core::Colour colour = inpLightComponent->GetColour();
+                glUniform4fv(mLightColHandle, 1, (const GLfloat*)&colour);
             }
             if(mLightMatrixHandle >= 0)
             {

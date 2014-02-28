@@ -137,7 +137,7 @@ namespace ChilliSource
             static void SetDensity(f32 infDensityScalar);
 
 			friend class Application;
-			friend class CApplicationDelegates;
+
 		private:
 
 			static Vector2 mvRawDims;

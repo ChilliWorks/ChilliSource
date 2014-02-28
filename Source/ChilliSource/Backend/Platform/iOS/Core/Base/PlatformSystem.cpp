@@ -174,7 +174,7 @@ namespace ChilliSource
 		void CPlatformSystem::CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems)
 		{
 			//create the main systems
-            Rendering::RenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
+            OpenGL::CRenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
             inaSystems.push_back(Core::SystemSPtr(pRenderSystem));
 			Core::Application::SetRenderSystem(pRenderSystem);
             
@@ -197,7 +197,7 @@ namespace ChilliSource
 			inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialLoader(pRenderCapabilities)));
 			inaSystems.push_back(Core::SystemSPtr(new Rendering::FontLoader()));
             inaSystems.push_back(Core::SystemSPtr(new Rendering::AnimatedMeshComponentUpdater()));
-            inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialFactory()));
+            inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialFactory(pRenderSystem->GetTextureManager(), pRenderSystem->GetShaderManager(), pRenderSystem->GetCubemapManager(), pRenderCapabilities)));
             
 			//Initialise the render system
 			Core::Application::GetRenderSystemPtr()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);

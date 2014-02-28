@@ -8,25 +8,25 @@
  */
 
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Platform/Android/JavaInterface/CoreJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/CoreJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
-#include <ChilliSource/Core/Main/ApplicationEvents.h>
-#include <ChilliSource/Core/Main/PlatformSystem.h>
-#include <ChilliSource/Core/Main/LaunchingActions.h>
+#include <ChilliSource/Core/Base/ApplicationEvents.h>
+#include <ChilliSource/Core/Base/PlatformSystem.h>
+#include <ChilliSource/Core/Base/LaunchingActions.h>
 
-#include <ChilliSource/Platform/Android/JavaInterface/TouchInputJavaInterface.h>
-#include <ChilliSource/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>
-#include <ChilliSource/Platform/Android/JavaInterface/SharedPreferencesJavaInterface.h>
-#include <ChilliSource/Platform/Android/JavaInterface/WebViewJavaInterface.h>
-#include <ChilliSource/Platform/Android/JavaInterface/ContactInformationProviderJavaInterface.h>
-#include <ChilliSource/Platform/Android/JavaInterface/SMSCompositionJavaInterface.h>
-#include <ChilliSource/Platform/Android/JavaInterface/TwitterAuthenticationActivityJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/TouchInputJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/SharedPreferencesJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/WebViewJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/ContactInformationProviderJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/SMSCompositionJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/TwitterAuthenticationActivityJavaInterface.h>
 
 //--------------------------------------------------------------------------------------
 /// Globals
 //--------------------------------------------------------------------------------------
-ChilliSource::Core::CApplication* (*BootFunctionPtr)() = NULL;
+ChilliSource::Core::Application* (*BootFunctionPtr)() = NULL;
 //--------------------------------------------------------------------------------------
 /// C function declarations
 //--------------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_SetupCoreJava
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_Initialise(JNIEnv* inpEnv, jobject inThis)
 {
 	//create the application
-	ChilliSource::Core::CApplication* pApplication = BootFunctionPtr();
+	ChilliSource::Core::Application* pApplication = BootFunctionPtr();
 	ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CCoreJavaInterface>()->SetApplication(pApplication);
 
 	//setup other interfaces
@@ -102,7 +102,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_Initialise(JN
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_Resume(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Core::CApplication::Resume();
+	ChilliSource::Core::Application::Resume();
 }
 //--------------------------------------------------------------------------------------
 /// Suspend
@@ -114,7 +114,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_Resume(JNIEnv
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_Suspend(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Core::CApplication::Suspend();
+	ChilliSource::Core::Application::Suspend();
 }
 //--------------------------------------------------------------------------------------
 /// Destroy
@@ -139,7 +139,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_DestroyApplic
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_FrameBegin(JNIEnv* inpEnv, jobject inThis, f32 infDeltaTime, s64 inddwTimestamp)
 {
 	//Create the message with the time between frames
-	ChilliSource::Core::CApplication::OnFrameBegin((f32)infDeltaTime, (u64)inddwTimestamp);
+	ChilliSource::Core::Application::OnFrameBegin((f32)infDeltaTime, (u64)inddwTimestamp);
 }
 //--------------------------------------------------------------------------------------
 /// Memory Warning
@@ -152,7 +152,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_FrameBegin(JN
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_MemoryWarning(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Core::CApplication::OnApplicationMemoryWarning();
+	ChilliSource::Core::Application::OnApplicationMemoryWarning();
 }
 //--------------------------------------------------------------------------------------
 /// Orientation Changed
@@ -178,7 +178,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OrientationCh
 		DEBUG_LOG("Changing orientation to landscape");
 	}
 
-	ChilliSource::Core::CApplication::OnScreenChangedOrientation(eScreenOrientation);
+	ChilliSource::Core::Application::OnScreenChangedOrientation(eScreenOrientation);
 }
 //--------------------------------------------------------------------------------------
 /// On Back Pressed
@@ -191,7 +191,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OrientationCh
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OnBackPressed(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Core::CApplication::OnGoBack();
+	ChilliSource::Core::Application::OnGoBack();
 }
 //--------------------------------------------------------------------------------------
 /// On Dialog Confirm Pressed
@@ -205,7 +205,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OnBackPressed
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OnDialogConfirmPressed(JNIEnv* inpEnv, jobject inThis, s32 indwID)
 {
-	ChilliSource::Core::CApplication::OnSystemConfirmDialogResult((u32)indwID, ChilliSource::SystemConfirmDialog::CONFIRM);
+	ChilliSource::Core::Application::OnSystemConfirmDialogResult((u32)indwID, ChilliSource::SystemConfirmDialog::CONFIRM);
 }
 //--------------------------------------------------------------------------------------
 /// On Dialog Cancel Pressed
@@ -219,7 +219,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OnDialogConfi
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OnDialogCancelPressed(JNIEnv* inpEnv, jobject inThis, s32 indwID)
 {
-	ChilliSource::Core::CApplication::OnSystemConfirmDialogResult((u32)indwID, ChilliSource::SystemConfirmDialog::CANCEL);
+	ChilliSource::Core::Application::OnSystemConfirmDialogResult((u32)indwID, ChilliSource::SystemConfirmDialog::CANCEL);
 }
 //--------------------------------------------------------------------------------------
 /// Application Did Receive Launching URL
@@ -286,7 +286,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		/// Set Application
 		//--------------------------------------------------------------------------------------
-		void CCoreJavaInterface::SetApplication(ChilliSource::Core::CApplication* inApplication)
+		void CCoreJavaInterface::SetApplication(ChilliSource::Core::Application* inApplication)
 		{
 			mApplication = inApplication;
 		}
@@ -301,7 +301,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		/// Get Application
 		//--------------------------------------------------------------------------------------
-		ChilliSource::Core::CApplication* CCoreJavaInterface::GetApplication()
+		ChilliSource::Core::Application* CCoreJavaInterface::GetApplication()
 		{
 			return mApplication;
 		}

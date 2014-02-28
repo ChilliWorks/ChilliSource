@@ -11,7 +11,7 @@
 #define _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_JAVAINTERFACE_H_
 
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Core/Main/QueryableInterface.h>
+#include <ChilliSource/Core/Base/QueryableInterface.h>
 #include <jni.h>
 
 namespace ChilliSource
@@ -24,7 +24,7 @@ namespace ChilliSource
 		/// Handles all of the java interfaces and provides an
 		/// interface to access them.
 		//========================================================
-		class IJavaInterface : public Core::IQueryableInterface
+		class IJavaInterface : public Core::QueryableInterface
 		{
 		public:
 			//--------------------------------------------------------

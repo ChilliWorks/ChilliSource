@@ -10,13 +10,13 @@
 
 
 
-#include <ChilliSource/Platform/Android/ImageLoader.h>
+#include <ChilliSource/Backend/Platform/Android/ImageLoader.h>
 #include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 
 #include <ChilliSource/Core/Image/Image.h>
 
-#include <ChilliSource/Platform/Android/ImageLoading/PngImage.h>
+#include <ChilliSource/Backend/Platform/Android/ImageLoading/PngImage.h>
 
 namespace ChilliSource
 {
@@ -64,7 +64,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool ImageLoader::CreateImageFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
 		{
-            Core::FileStreamPtr pImageFile = Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FM_READ_BINARY);
+            Core::FileStreamPtr pImageFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FM_READ_BINARY);
             
 			if(pImageFile && !pImageFile->IsBad())
 			{

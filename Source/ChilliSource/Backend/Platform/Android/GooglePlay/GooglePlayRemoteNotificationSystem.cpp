@@ -77,7 +77,7 @@ namespace ChilliSource
 
 			sNotification.bDismissed = false;
 			sNotification.eType = NOTICE_PUSH;
-			sNotification.TriggerTime = Core::CApplication::GetSystemTime();
+			sNotification.TriggerTime = Core::Application::GetSystemTime();
 			sNotification.ID = 0;
 			sNotification.ePriority = NOTICE_STANDARD;
 			sNotification.sParams = insParams;

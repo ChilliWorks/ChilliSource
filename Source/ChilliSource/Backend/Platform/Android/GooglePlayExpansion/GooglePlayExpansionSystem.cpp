@@ -94,8 +94,8 @@ namespace ChilliSource
     		mpJavaInterface = new CGooglePlayExpansionJavaInterface();
 	        ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(JavaInterfacePtr(mpJavaInterface));
 
-			Core::CApplicationEvents::GetResumeEvent() += Core::ApplicationSystemDelegate(this, &CGooglePlayExpansionSystem::OnApplicationResume);
-			Core::CApplicationEvents::GetLateSuspendEvent() += Core::ApplicationSystemDelegate(this, &CGooglePlayExpansionSystem::OnApplicationSuspend);
+			Core::ApplicationEvents::GetResumeEvent() += Core::ApplicationSystemDelegate(this, &CGooglePlayExpansionSystem::OnApplicationResume);
+			Core::ApplicationEvents::GetLateSuspendEvent() += Core::ApplicationSystemDelegate(this, &CGooglePlayExpansionSystem::OnApplicationSuspend);
     	}
         //-------------------------------------------------------------
         /// Is A
@@ -145,7 +145,7 @@ namespace ChilliSource
         {
         	for(u32 i=0; i<mudwNumExpansions; ++i)
         	{
-        		if(!Core::CApplication::GetFileSystemPtr()->DoesFileExist(Core::SL_ROOT, mpJavaInterface->GetExpansionPath(i)))
+        		if(!Core::Application::GetFileSystemPtr()->DoesFileExist(Core::SL_ROOT, mpJavaInterface->GetExpansionPath(i)))
         		{
         			return false;
         		}
@@ -247,7 +247,7 @@ namespace ChilliSource
 				return;
 			}
 
-        	Core::CApplication::GetFileSystemPtr()->DeleteFile(Core::SL_CACHE, "GoogleExpansionDownloader.cache");
+        	Core::Application::GetFileSystemPtr()->DeleteFile(Core::SL_CACHE, "GoogleExpansionDownloader.cache");
         	mpJavaInterface->Download();
         }
         //-------------------------------------------------------------
@@ -293,7 +293,7 @@ namespace ChilliSource
         //-------------------------------------------------------------
         bool CGooglePlayExpansionSystem::DoInstalledFilesExist() const
         {
-        	return Core::CApplication::GetFileSystemPtr()->DoesFileExist(Core::SL_CACHE, "GoogleExpansionDownloader.cache");
+        	return Core::Application::GetFileSystemPtr()->DoesFileExist(Core::SL_CACHE, "GoogleExpansionDownloader.cache");
         }
         //-------------------------------------------------------------
 		/// Get Uncompressed Zip Size
@@ -411,7 +411,7 @@ namespace ChilliSource
 				Unzip(mpJavaInterface->GetExpansionPath(i), jManifest);
 			}
 
-			Core::CApplication::GetFileSystemPtr()->CreateFile(Core::SL_CACHE, "AndroidExpansion.manifest", (s8*)jManifest.toUnformattedString().data(), jManifest.toUnformattedString().size());
+			Core::Application::GetFileSystemPtr()->CreateFile(Core::SL_CACHE, "AndroidExpansion.manifest", (s8*)jManifest.toUnformattedString().data(), jManifest.toUnformattedString().size());
 
 			CachePackageDescriptions();
 
@@ -436,15 +436,15 @@ namespace ChilliSource
         		{
         			if(jManifest[i]["IsDirectory"].asBool())
         			{
-        				Core::CApplication::GetFileSystemPtr()->DeleteDirectory(Core::SL_DLC, jManifest[i]["Path"].asString());
+        				Core::Application::GetFileSystemPtr()->DeleteDirectory(Core::SL_DLC, jManifest[i]["Path"].asString());
         			}
         			else
         			{
-        				Core::CApplication::GetFileSystemPtr()->DeleteFile(Core::SL_DLC, jManifest[i]["Path"].asString());
+        				Core::Application::GetFileSystemPtr()->DeleteFile(Core::SL_DLC, jManifest[i]["Path"].asString());
         			}
         		}
 
-        		Core::CApplication::GetFileSystemPtr()->DeleteFile(Core::SL_DLC, "AndroidExpansion.manifest");
+        		Core::Application::GetFileSystemPtr()->DeleteFile(Core::SL_DLC, "AndroidExpansion.manifest");
         	}
         }
 
@@ -501,7 +501,7 @@ namespace ChilliSource
         //-------------------------------------------------------------
         void CGooglePlayExpansionSystem::Unzip(const std::string& instrZipPath, Json::Value& outjManifest)
         {
-        	Core::CApplication::GetFileSystemPtr()->CreateDirectory(Core::SL_DLC, "");
+        	Core::Application::GetFileSystemPtr()->CreateDirectory(Core::SL_DLC, "");
 
         	unzFile ZippedFile = unzOpen(instrZipPath.c_str());
 
@@ -550,7 +550,7 @@ namespace ChilliSource
 						jManifestEntry["Path"] = GetRootFolderExcludingPath(strFilePath);
 
 						std::string strPath = GetPathExcludingFileName(strFilePath);
-						Core::CApplication::GetFileSystemPtr()->CreateDirectory(Core::SL_DLC, "/" + strPath);
+						Core::Application::GetFileSystemPtr()->CreateDirectory(Core::SL_DLC, "/" + strPath);
 					}
 					else
 					{
@@ -561,7 +561,7 @@ namespace ChilliSource
 
 					if(IsFile(strFilePath))
 					{
-						Core::CApplication::GetFileSystemPtr()->CreateFile(Core::SL_DLC, "/" + strFilePath, pbyDataBuffer, FileInfo.uncompressed_size);
+						Core::Application::GetFileSystemPtr()->CreateFile(Core::SL_DLC, "/" + strFilePath, pbyDataBuffer, FileInfo.uncompressed_size);
 					}
 
 					outjManifest.append(jManifestEntry);
@@ -594,7 +594,7 @@ namespace ChilliSource
 				jDesc.append(jExpansion);
 			}
 
-			Core::CApplication::GetFileSystemPtr()->CreateFile(Core::SL_CACHE, "GoogleExpansionDownloader.cache", (s8*)jDesc.toUnformattedString().data(), jDesc.toUnformattedString().size());
+			Core::Application::GetFileSystemPtr()->CreateFile(Core::SL_CACHE, "GoogleExpansionDownloader.cache", (s8*)jDesc.toUnformattedString().data(), jDesc.toUnformattedString().size());
         }
 		//-------------------------------------------------------------
 		/// Unzip Finished Task
@@ -636,8 +636,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------
     	CGooglePlayExpansionSystem::~CGooglePlayExpansionSystem()
     	{
-    		Core::CApplicationEvents::GetResumeEvent() -= Core::ApplicationSystemDelegate(this, &CGooglePlayExpansionSystem::OnApplicationResume);
-    		Core::CApplicationEvents::GetLateSuspendEvent() -= Core::ApplicationSystemDelegate(this, &CGooglePlayExpansionSystem::OnApplicationSuspend);
+    		Core::ApplicationEvents::GetResumeEvent() -= Core::ApplicationSystemDelegate(this, &CGooglePlayExpansionSystem::OnApplicationResume);
+    		Core::ApplicationEvents::GetLateSuspendEvent() -= Core::ApplicationSystemDelegate(this, &CGooglePlayExpansionSystem::OnApplicationSuspend);
 
     		if(gpActiveExpansionSystem == this)
     		{
