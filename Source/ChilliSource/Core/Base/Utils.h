@@ -21,6 +21,54 @@ namespace ChilliSource
 	{
 		namespace Utils
 		{
+            //------------------------------------------------------
+			/// performs a bitmask set on a with b.
+			///
+            /// @author I Copland
+            ///
+            /// @param The bitmask to set.
+            /// @param The bitmask to apply.
+			//------------------------------------------------------
+            template <typename TType> inline void BitmapSet(TType& in_a, TType in_b)
+            {
+                in_a |= in_b;
+            }
+            //------------------------------------------------------
+			/// performs a bitmask clear on a with b.
+			///
+            /// @author I Copland
+            ///
+            /// @param The bitmask to set.
+            /// @param The bitmask to apply.
+			//------------------------------------------------------
+            template <typename TType> inline void BitmapClear(TType& in_a, TType in_b)
+            {
+                in_a &= (~in_b);
+            }
+            //------------------------------------------------------
+			/// performs a bitmask flip on a with b.
+			///
+            /// @author I Copland
+            ///
+            /// @param The bitmask to set.
+            /// @param The bitmask to apply.
+			//------------------------------------------------------
+            template <typename TType> inline void BitmapFlip(TType& in_a, TType in_b)
+            {
+                in_a ^= in_b;
+            }
+            //------------------------------------------------------
+			/// performs a bitmask check on a with b.
+			///
+            /// @author I Copland
+            ///
+            /// @param The bitmask to set.
+            /// @param The bitmask to apply.
+			//------------------------------------------------------
+            template <typename TType> inline bool BitmapCheck(TType in_a, TType in_b)
+            {
+                return (in_a & in_b);
+            }
 			//------------------------------------------------------
 			/// Endian Byte Swap
 			///

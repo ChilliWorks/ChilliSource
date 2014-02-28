@@ -317,7 +317,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		std::string Application::GetAppVersion()
 		{
-			return APP_REVISION_NUMBER;
+			return pPlatformSystem->GetAppVersion();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Post Create Systems
