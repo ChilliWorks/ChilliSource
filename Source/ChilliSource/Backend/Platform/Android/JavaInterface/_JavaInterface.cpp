@@ -47,12 +47,12 @@ namespace ChilliSource
 			pEnv->DeleteLocalRef(javaInterfaceClass);
 
 			if (ref.mMethodID == 0 || ref.mClassID == 0)
-				ERROR_LOG("Could not get method and class ID\nClassname \""+instrClassName+"\"\nMethodname \""+instrMethodName+"\"\nSigniture \""+instrSignature+"\"");
+				CS_LOG_ERROR("Could not get method and class ID\nClassname \""+instrClassName+"\"\nMethodname \""+instrMethodName+"\"\nSigniture \""+instrSignature+"\"");
 
 			if (mStaticMethodRefMap.find(instrMethodName) == mStaticMethodRefMap.end())
 				mStaticMethodRefMap[instrMethodName] = ref;
 			else
-				ERROR_LOG("Could not add method reference - method name already exists.");
+				CS_LOG_ERROR("Could not add method reference - method name already exists.");
 		}
 
 		//--------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ namespace ChilliSource
 			if (mStaticMethodRefMap.find(instrMethodName) != mStaticMethodRefMap.end())
 				ref = mStaticMethodRefMap[instrMethodName];
 			else
-				ERROR_LOG("Could not find method reference. Have you initialised it in the Java Interface?");
+				CS_LOG_ERROR("Could not find method reference. Have you initialised it in the Java Interface?");
 
 			return ref;
 		}
@@ -87,7 +87,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		/// Create JString From UTF8String
 		//--------------------------------------------------------------------------------------
-		jstring _IJavaInterface::CreateJStringFromUTF8String(UTF8String instrString)
+		jstring _IJavaInterface::CreateJStringFromUTF8String(Core::UTF8String instrString)
 		{
 			JNIEnv* pEnv = GetJNIEnvironmentPtr();
 			if (pEnv != NULL)
@@ -140,7 +140,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		/// Create UTF8String From JString
 		//--------------------------------------------------------------------------------------
-		UTF8String _IJavaInterface::CreateUTF8StringFromJString(jstring injstrString)
+		Core::UTF8String _IJavaInterface::CreateUTF8StringFromJString(jstring injstrString)
 		{
 			JNIEnv* pEnv = GetJNIEnvironmentPtr();
 			if (pEnv != NULL && injstrString != NULL)
@@ -148,7 +148,7 @@ namespace ChilliSource
 				const char * cString = pEnv->GetStringUTFChars(injstrString, JNI_FALSE);
 				if (cString != NULL)
 				{
-					UTF8String utf8String = UTF8String(cString);
+					Core::UTF8String utf8String = Core::UTF8String(cString);
 					pEnv->ReleaseStringUTFChars(injstrString, cString);
 					return utf8String;
 				}

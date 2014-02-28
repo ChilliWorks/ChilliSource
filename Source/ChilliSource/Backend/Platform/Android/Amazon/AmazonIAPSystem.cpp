@@ -26,7 +26,7 @@ namespace ChilliSource
 			/// @return Whether or not the given product ID exists within the
 			/// given product infos.
 	        //---------------------------------------------------------------
-	        bool IsProductIDRegistered(const DYNAMIC_ARRAY<Networking::IAPProductRegInfo>& inProductRegInfos, const std::string& instrProductID)
+	        bool IsProductIDRegistered(const std::vector<Networking::IAPProductRegInfo>& inProductRegInfos, const std::string& instrProductID)
 	        {
 	            for(u32 i=0; i<inProductRegInfos.size(); ++i)
 	            {
@@ -53,14 +53,14 @@ namespace ChilliSource
 					strPrivateKey = inParams.ValueForKey(kstrAmazonPrivateKeyKey);
 				}
 
-				mpJavaInterface = AmazonIAPJavaInterfacePtr(new CAmazonIAPJavaInterface(strPrivateKey, Core::CDevice::GetUDID()));
+				mpJavaInterface = AmazonIAPJavaInterfacePtr(new CAmazonIAPJavaInterface(strPrivateKey, Core::Device::GetUDID()));
 	        	ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
 			}
 		}
         //---------------------------------------------------------------
         /// Register Products
         //---------------------------------------------------------------
-        void CAmazonIAPSystem::RegisterProducts(const DYNAMIC_ARRAY<Networking::IAPProductRegInfo>& inaProducts)
+        void CAmazonIAPSystem::RegisterProducts(const std::vector<Networking::IAPProductRegInfo>& inaProducts)
         {
             maProductRegInfos = inaProducts;
         }
@@ -112,7 +112,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// Request Product Descriptions
         //---------------------------------------------------------------
-        void CAmazonIAPSystem::RequestProductDescriptions(const DYNAMIC_ARRAY<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void CAmazonIAPSystem::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
         	if (mpJavaInterface != NULL)
         	{
@@ -124,7 +124,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void CAmazonIAPSystem::RequestAllProductDescriptions(const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
-            DYNAMIC_ARRAY<std::string> aIDs;
+            std::vector<std::string> aIDs;
             aIDs.reserve(maProductRegInfos.size());
 
             for(u32 i=0; i<maProductRegInfos.size(); ++i)
@@ -151,7 +151,7 @@ namespace ChilliSource
         {
         	if (mpJavaInterface != NULL)
         	{
-        		MOFLOW_ASSERT(IsProductIDRegistered(maProductRegInfos, instrProductID), "Products must be registered with the IAP system before purchasing.");
+        		CS_ASSERT(IsProductIDRegistered(maProductRegInfos, instrProductID), "Products must be registered with the IAP system before purchasing.");
         		mpJavaInterface->RequestProductPurchase(instrProductID);
         	}
         }

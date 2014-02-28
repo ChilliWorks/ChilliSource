@@ -50,7 +50,7 @@ namespace ChilliSource
 			void OnRemoteNotificationReceived(const Core::ParamDictionary& insParams);
         };
 
-        typedef SHARED_PTR<CGooglePlayRemoteNotificationJavaInterface> GooglePlayRemoteNotificationJavaInterfacePtr;
+        typedef std::shared_ptr<CGooglePlayRemoteNotificationJavaInterface> GooglePlayRemoteNotificationJavaInterfacePtr;
     }
 }
 

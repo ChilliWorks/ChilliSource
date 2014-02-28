@@ -12,7 +12,6 @@
 
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterface.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 
 namespace ChilliSource
 {
@@ -31,7 +30,7 @@ namespace ChilliSource
 			//------------------------------------------------
 			/// Delegates
 			//------------------------------------------------
-			typedef fastdelegate::FastDelegate1<const Core::CVector3&> AccelerationChangedDelegate;
+			typedef std::function<void(const Core::Vector3&)> AccelerationChangedDelegate;
 			//------------------------------------------------
 			/// Constructor
 			//------------------------------------------------

@@ -32,7 +32,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------
 			/// Create JString From UTF8String
 			//--------------------------------------------------------------------------------------
-			jstring CreateJStringFromUTF8String(const UTF8String& instrString)
+			jstring CreateJStringFromUTF8String(const Core::UTF8String& instrString)
 			{
 				JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 				if (pEnv != NULL)
@@ -81,7 +81,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------
 			/// Create UTF8String From JString
 			//--------------------------------------------------------------------------------------
-			UTF8String CreateUTF8StringFromJString(jstring injstrString)
+			Core::UTF8String CreateUTF8StringFromJString(jstring injstrString)
 			{
 				JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 				if (pEnv != NULL && injstrString != NULL)
@@ -89,7 +89,7 @@ namespace ChilliSource
 					const char * cString = pEnv->GetStringUTFChars(injstrString, JNI_FALSE);
 					if (cString != NULL)
 					{
-						UTF8String utf8String = UTF8String(cString);
+						Core::UTF8String utf8String = Core::UTF8String(cString);
 						pEnv->ReleaseStringUTFChars(injstrString, cString);
 						return utf8String;
 					}

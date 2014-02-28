@@ -106,7 +106,7 @@ namespace ChilliSource
 		//-------------------------------------------
 		/// Find System Implementing
 		//-------------------------------------------
-		Core::ISystem* CPlatformSystem::FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const DYNAMIC_ARRAY<Core::SystemPtr>& inSystems) const
+		Core::ISystem* CPlatformSystem::FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemPtr>& inSystems) const
 		{
 			for(u32 nSystem = 0; nSystem < inSystems.size(); nSystem++)
 			{
@@ -150,7 +150,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		/// Create Default Systems
 		//-------------------------------------------------
-		void CPlatformSystem::CreateDefaultSystems(DYNAMIC_ARRAY<Core::SystemPtr> & inaSystems)
+		void CPlatformSystem::CreateDefaultSystems(std::vector<Core::SystemPtr> & inaSystems)
 		{
 			//create the main systems
 			Rendering::IRenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
@@ -212,7 +212,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		/// Create and Add System With Interface
 		//-----------------------------------------
-		Core::ISystem* CPlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<Core::SystemPtr> & inaExistingSystems) const
+		Core::ISystem* CPlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemPtr> & inaExistingSystems) const
 		{
 			Core::ISystem * pResult = NULL;
 
@@ -278,7 +278,7 @@ namespace ChilliSource
 		//--------------------------------------------
 		/// Create Http Connection System
 		//--------------------------------------------
-		Core::ISystem * CPlatformSystem::CreateHttpConnectionSystem(DYNAMIC_ARRAY<Core::SystemPtr>& inSystems) const
+		Core::ISystem * CPlatformSystem::CreateHttpConnectionSystem(std::vector<Core::SystemPtr>& inSystems) const
 		{
 			return new Android::CHttpConnectionSystem();
 		}
@@ -319,9 +319,9 @@ namespace ChilliSource
 		//---------------------------------------------
 		/// Get Screen Dimensions
 		//---------------------------------------------
-		Core::CVector2 CPlatformSystem::GetScreenDimensions() const
+		Core::Vector2 CPlatformSystem::GetScreenDimensions() const
 		{
-			Core::CVector2 Result;
+			Core::Vector2 Result;
 			CoreJavaInterfacePtr pCoreJI = CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>();
 			Result.x = pCoreJI->GetScreenWidth();
 			Result.y = pCoreJI->GetScreenHeight();
@@ -329,7 +329,7 @@ namespace ChilliSource
 			s32 dwOrientation = pCoreJI->GetOrientation();
 #ifdef DEBUG
 			if(dwOrientation < 0)
-				ERROR_LOG("CPlatformSystem::GetScreenDimensions() - Could not get orientation of device!");
+				CS_LOG_ERROR("CPlatformSystem::GetScreenDimensions() - Could not get orientation of device!");
 #endif
 			if(ChilliSource::Core::LANDSCAPE_RIGHT == dwOrientation)
 			{
@@ -378,7 +378,7 @@ namespace ChilliSource
 			std::string strLocale = CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->GetDefaultLocaleCode();
 
 			//break this locale into parts(language/country code/extra)
-			DYNAMIC_ARRAY<std::string> strLocaleBrokenUp = ChilliSource::Core::CStringUtils::Split(strLocale, "_", 0);
+			std::vector<std::string> strLocaleBrokenUp = ChilliSource::Core::StringUtils::Split(strLocale, "_", 0);
 
 			if (strLocaleBrokenUp.size() > 1)
 			{

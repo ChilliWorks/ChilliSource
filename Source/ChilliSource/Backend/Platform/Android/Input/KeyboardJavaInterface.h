@@ -29,9 +29,9 @@ namespace ChilliSource
 			//-----------------------------------------------
 			/// Events
 			//-----------------------------------------------
-			typedef fastdelegate::FastDelegate1<const UTF8String&> TextAddedDelegate;
-			typedef fastdelegate::FastDelegate0<> TextDeletedDelegate;
-			typedef fastdelegate::FastDelegate0<> KeyboardDismissedDelegate;
+			typedef std::function<void(const Core::UTF8String&)> TextAddedDelegate;
+			typedef std::function<void()> TextDeletedDelegate;
+			typedef std::function<void()> KeyboardDismissedDelegate;
 			//-----------------------------------------------
 			/// Constructor
 			//-----------------------------------------------
@@ -102,7 +102,7 @@ namespace ChilliSource
 			///
 			/// @param The new text.
 			//-----------------------------------------------
-			void OnTextAdded(const UTF8String& instrText);
+			void OnTextAdded(const Core::UTF8String& instrText);
 			//-----------------------------------------------
 			/// On Text Deleted
 			///

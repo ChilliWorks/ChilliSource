@@ -9,7 +9,7 @@
 #include <ChilliSource/Backend/Platform/Android/Input/Accelerometer.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/AccelerometerJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 
 namespace ChilliSource
 {
@@ -34,7 +34,7 @@ namespace ChilliSource
 		//------------------------------------------------
 		bool CAccelerometer::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IAccelerometer::InterfaceID;
+			return inInterfaceID == Accelerometer::InterfaceID;
 		}
 		//----------------------------------------------------
 		/// Is Updating
@@ -54,13 +54,13 @@ namespace ChilliSource
 			if (false == mbIsUpdating)
 			{
 				mbIsUpdating = true;
-				mpAccelerometerJI->StartListening(CAccelerometerJavaInterface::AccelerationChangedDelegate(this, &CAccelerometer::OnAccelerationChanged));
+				mpAccelerometerJI->StartListening(Core::MakeDelegate(this, &CAccelerometer::OnAccelerationChanged));
 			}
 		}
 		//------------------------------------------------
 		/// Get Acceleration
 		//------------------------------------------------
-		const Core::CVector3& CAccelerometer::GetAcceleration() const
+		Core::Vector3 CAccelerometer::GetAcceleration() const
 		{
 			return mvAcceleration;
 		}
@@ -78,16 +78,10 @@ namespace ChilliSource
 		//------------------------------------------------
 		/// On Acceleration Changed
 		//------------------------------------------------
-		void CAccelerometer::OnAccelerationChanged(const Core::CVector3& invAcceleration)
+		void CAccelerometer::OnAccelerationChanged(const Core::Vector3& invAcceleration)
 		{
 			mvAcceleration = invAcceleration;
-			mAccelerationUpdatedEvent.Invoke(mvAcceleration);
-		}
-		//------------------------------------------------
-		/// Destructor
-		//------------------------------------------------
-		CAccelerometer::~CAccelerometer()
-		{
+			mAccelerationUpdatedEvent.NotifyConnections(mvAcceleration);
 		}
 	}
 }

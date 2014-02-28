@@ -40,7 +40,7 @@ namespace ChilliSource
 			///
 			/// @param HTML file name
 			//-----------------------------------------------
-			void PresentFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFile, f32 infDismissButtonScale = 0.075f);
+			void PresentFromFile(Core::StorageLocation ineStorageLocation, const std::string& instrFile, f32 infDismissButtonScale = 0.075f);
 			//-----------------------------------------------
 			/// Present In External Browser
 			///
@@ -91,11 +91,11 @@ namespace ChilliSource
 
 		private:
 			ChilliSource::UnifiedVector2 mvUnifiedSize;
-			ChilliSource::Core::CVector2 mvAbsoluteSize;
+			ChilliSource::Core::Vector2 mvAbsoluteSize;
 			static u32 msudwCurrentIndex;
 			u32 mudwIndex;
 
-			typedef HASH_MAP<u32, CWebViewActivity*> MapIndexToWebView;
+			typedef std::unordered_map<u32, CWebViewActivity*> MapIndexToWebView;
 			typedef MapIndexToWebView::iterator MapIndexToWebViewItr;
 
 			static MapIndexToWebView mmapIndexToWebView;

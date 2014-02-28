@@ -49,22 +49,22 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Present
         //--------------------------------------------------------------
-        void CVideoPlayerActivity::Present(Core::STORAGE_LOCATION ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour)
+        void CVideoPlayerActivity::Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour)
         {
         	//calculate the storage location and full filename.
         	bool bIsPackage;
         	std::string strFilename;
-        	if (ineLocation == Core::SL_PACKAGE)
+        	if (ineLocation == Core::StorageLocation::k_package)
         	{
         		bIsPackage = true;
         		strFilename = Core::Application::GetFileSystemPtr()->GetDirectoryForPackageFile(instrFileName);
         	}
-        	else if (ineLocation == Core::SL_DLC)
+        	else if (ineLocation == Core::StorageLocation::k_DLC)
 			{
         		if (Core::Application::GetFileSystemPtr()->DoesFileExistInCachedDLC(instrFileName) == true)
         		{
         			bIsPackage = false;
-        			strFilename = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(Core::SL_DLC) + instrFileName;
+        			strFilename = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrFileName;
         		}
         		else
         		{
@@ -86,8 +86,8 @@ namespace ChilliSource
         //--------------------------------------------------------------
 		/// Present
 		//--------------------------------------------------------------
-		void CVideoPlayerActivity::PresentWithSubtitles(Core::STORAGE_LOCATION ineVideoLocation, const std::string& instrVideoFilename,
-														Core::STORAGE_LOCATION ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
+		void CVideoPlayerActivity::PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
+														Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
 														bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour)
 		{
 			mpSubtitles = LOAD_RESOURCE(ChilliSource::Video::CSubtitles, ineSubtitlesLocation, instrSubtitlesFilename);
@@ -157,14 +157,14 @@ namespace ChilliSource
 		//---------------------------------------------------------------
 		void CVideoPlayerActivity::VideoDismissedTask()
 		{
-			mOnDismissedEvent.Invoke();
+			mOnDismissedEvent.NotifyConnections();
 		}
 		//---------------------------------------------------------------
 		/// Video Stopped Task
 		//---------------------------------------------------------------
 		void CVideoPlayerActivity::VideoStoppedTask()
 		{
-			mOnPlaybackCompleteEvent.Invoke();
+			mOnPlaybackCompleteEvent.NotifyConnections();
 			mpSubtitles.reset();
 		}
 		//---------------------------------------------------------------
@@ -180,12 +180,12 @@ namespace ChilliSource
 				mCurrentSubtitleTimeMS = currentTimeMS;
 
 				//get the current subtitles
-				DYNAMIC_ARRAY<ChilliSource::Video::CSubtitles::SubtitlePtr> pSubtitleArray = mpSubtitles->GetSubtitlesAtTime(mCurrentSubtitleTimeMS);
+				std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr> pSubtitleArray = mpSubtitles->GetSubtitlesAtTime(mCurrentSubtitleTimeMS);
 
 				//add any new subtitles
-				for (DYNAMIC_ARRAY<ChilliSource::Video::CSubtitles::SubtitlePtr>::iterator it = pSubtitleArray.begin(); it != pSubtitleArray.end(); ++it)
+				for (std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr>::iterator it = pSubtitleArray.begin(); it != pSubtitleArray.end(); ++it)
 				{
-					HASH_MAP<ChilliSource::Video::CSubtitles::SubtitlePtr, s64>::iterator mapEntry = maSubtitleMap.find(*it);
+					std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, s64>::iterator mapEntry = maSubtitleMap.find(*it);
 					if (mapEntry == maSubtitleMap.end())
 					{
 						ChilliSource::UTF8String strText = ChilliSource::Core::CLocalisedText::GetText((*it)->strTextID);
@@ -197,15 +197,15 @@ namespace ChilliSource
 				}
 
 				//update the current text views
-				for (HASH_MAP<ChilliSource::Video::CSubtitles::SubtitlePtr, s64>::iterator it = maSubtitleMap.begin(); it != maSubtitleMap.end(); ++it)
+				for (std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, s64>::iterator it = maSubtitleMap.begin(); it != maSubtitleMap.end(); ++it)
 				{
 					UpdateSubtitle(it->first, it->second, mCurrentSubtitleTimeMS);
 				}
 
 				//removes any text views that are no longer needed.
-				for (DYNAMIC_ARRAY<ChilliSource::Video::CSubtitles::SubtitlePtr>::iterator it = maSubtitlesToRemove.begin(); it != maSubtitlesToRemove.end(); ++it)
+				for (std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr>::iterator it = maSubtitlesToRemove.begin(); it != maSubtitlesToRemove.end(); ++it)
 				{
-					HASH_MAP<ChilliSource::Video::CSubtitles::SubtitlePtr, s64>::iterator mapEntry = maSubtitleMap.find(*it);
+					std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, s64>::iterator mapEntry = maSubtitleMap.find(*it);
 					if (mapEntry != maSubtitleMap.end())
 					{
 						mpVideoPlayerJavaInterface->RemoveSubtitle(mapEntry->second);

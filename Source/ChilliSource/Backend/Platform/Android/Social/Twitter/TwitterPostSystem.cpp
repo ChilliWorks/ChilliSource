@@ -92,7 +92,7 @@ namespace ChilliSource
 		{
 			bool bResult = false;
 
-			MOFLOW_ASSERT(insDesc.strLocalImagePath.size() == 0, "The android twitter post system does not support image post.");
+			CS_ASSERT(insDesc.strLocalImagePath.size() == 0, "The android twitter post system does not support image post.");
 
 			// Set our callback
 			mCompletionDelegate = inResultCallback;
@@ -137,7 +137,7 @@ namespace ChilliSource
 			if(mpAuthenticationView)
 			{
 				mpAuthenticationView->GetDismissedEvent() -= ChilliSource::ActivityDismissedEvent(this, &CTwitterPostSystem::OnAuthorisationDismissed);
-				SAFE_DELETE(mpAuthenticationView);
+				CS_SAFEDELETE(mpAuthenticationView);
 			}
 		}
 	}

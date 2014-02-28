@@ -13,22 +13,11 @@
 #include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 
-//@class UIView;
-//@class UILabel;
-//@class UIActivityIndicatorView;
-//@class UIButton;
-//@class UITwitterAuthenticationWebDelegate;
-//@class UITwitterTextFieldDelegate;
-//@class UITwitterAlertDelegate;
-//@protocol UIWebViewDelegate;
-//@protocol UITextFieldDelegate;
-//@protocol UIAlertViewDelegate;
-
 namespace ChilliSource
 {
 	namespace Android
 	{
-		class CTwitterAuthenticationActivity : public Social::ITwitterAuthenticationActivity
+		class CTwitterAuthenticationActivity : public Social::TwitterAuthenticationActivity
 		{
 		public:
 			CTwitterAuthenticationActivity();
@@ -69,10 +58,10 @@ namespace ChilliSource
 			//-----------------------------------------------
 			void OnPINComplete();
 			
-			ChilliSource::UnifiedVector2					mvUnifiedSize;
-			ChilliSource::Core::CVector2					mvAbsoluteSize;
-			ChilliSource::Core::CVector2					mvAbsolutePositionTopLeft;
-			ChilliSource::Core::CVector2					mvAbsolutePositionCentre;
+			Core::UnifiedVector2			mvUnifiedSize;
+			Core::Vector2					mvAbsoluteSize;
+			Core::Vector2					mvAbsolutePositionTopLeft;
+			Core::Vector2					mvAbsolutePositionCentre;
 		};
 	}
 }

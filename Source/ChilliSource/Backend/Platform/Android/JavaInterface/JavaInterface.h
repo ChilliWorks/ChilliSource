@@ -12,7 +12,10 @@
 
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
+
 #include <jni.h>
+
+#include <map>
 
 namespace ChilliSource
 {

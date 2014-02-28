@@ -398,7 +398,7 @@ namespace ChilliSource
 			//----------------------------------------------------------
 			/// Render
 			///
-			/// Invoke render on objects mesh
+			/// NotifyConnections render on objects mesh
             ///
             /// @param Render system visitor
             /// @param Active camera component

@@ -17,7 +17,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CLocalNotificationScheduler : public ILocalNotificationScheduler
+		class CLocalNotificationScheduler : public Core::LocalNotificationScheduler
 		{
 		public:
 			CLocalNotificationScheduler();
@@ -30,7 +30,7 @@ namespace ChilliSource
 			///
 			/// @param Notification
 			//------------------------------------------------------------------------------
-			void ScheduleNotification(const Notification& insNotification);
+			void ScheduleNotification(const Core::NotificationSPtr& insNotification) override;
 	        //-------------------------------------------------------------------------
 	        /// Try Get Notifications Scheduled Within Time Period
 	        ///
@@ -42,7 +42,7 @@ namespace ChilliSource
 	        /// @param Out: Notifications that meet criteria
 	        /// @return Whether any notifications exist within that time period
 	        //-------------------------------------------------------------------------
-	        bool TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, DYNAMIC_ARRAY<Notification>& outaNotifications);
+	        bool TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Core::NotificationSPtr>& outaNotifications) override;
 			//-------------------------------------------------------------------------
 			/// Cancel By ID
 			///
@@ -50,19 +50,19 @@ namespace ChilliSource
 			///
 			/// @param ID type
 			//-------------------------------------------------------------------------
-			void CancelByID(NotificationID inID);
+			void CancelByID(Core::NotificationID inID) override;
 			//-------------------------------------------------------------------------
 			/// Cancel All
 			///
 			/// Terminate all currently scheduled notifications
 			//-------------------------------------------------------------------------
-			void CancelAll();
+			void CancelAll() override;
 			//-------------------------------------------------------------------------
 			/// Application Did Receive Local Notification
 			///
 			/// Called when game receives a local notification
 			//-------------------------------------------------------------------------
-			static void ApplicationDidReceiveLocalNotification(const Notification& insNotification);
+			static void ApplicationDidReceiveLocalNotification(const Core::NotificationSPtr& insNotification);
 
 		private:
 			LocalNotificationJavaInterfacePtr mpLocalNotificationJavaInterface;

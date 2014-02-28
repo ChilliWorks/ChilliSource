@@ -17,7 +17,7 @@ namespace ChilliSource
 {
     namespace Android
     {
-        class CGooglePlayRemoteNotificationSystem : public Core::IRemoteNotificationSystem
+        class CGooglePlayRemoteNotificationSystem : public Core::RemoteNotificationSystem
         {
         public:
             //---------------------------------------------------------------

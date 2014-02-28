@@ -17,7 +17,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------------------------------------------
-		CFileStreamAPK::CFileStreamAPK(CThread::Mutex* inpMinizipMutex)
+		CFileStreamAPK::CFileStreamAPK(std::mutex* inpMinizipMutex)
 			: mbOpen(false), mbError(false), mUnzipper(NULL), mpMinizipMutex(inpMinizipMutex), mpDataBuffer(NULL)
 		{
 		}
@@ -34,14 +34,14 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Open APK
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::OpenFromAPK(const std::string& instrApkPath, const unz_file_pos& inFilePos, Core::FILE_MODE ineMode)
+		void CFileStreamAPK::OpenFromAPK(const std::string& instrApkPath, const unz_file_pos& inFilePos, Core::FileMode ineMode)
 		{
-			CThread::ScopedLock lock(*mpMinizipMutex);
+			std::unique_lock<std::mutex> lock(*mpMinizipMutex);
 			mUnzipper = unzOpen(instrApkPath.c_str());
 
 			if (mUnzipper == NULL)
 			{
-				FATAL_LOG("Failed to open APK");
+				CS_LOG_FATAL("Failed to open APK");
 			}
 
 			Open(inFilePos, ineMode);
@@ -49,7 +49,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Open
 		//--------------------------------------------------------------------------------------------------			
-		void CFileStreamAPK::Open(const unz_file_pos& inFilePos, Core::FILE_MODE ineMode)
+		void CFileStreamAPK::Open(const unz_file_pos& inFilePos, Core::FileMode ineMode)
 		{
 			meFileMode = ineMode;
 
@@ -251,18 +251,18 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// SeekG
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::SeekG(s32 indwPosition, Core::SEEK_DIR ineDir)
+		void CFileStreamAPK::SeekG(s32 indwPosition, Core::SeekDir ineDir)
 		{
 			std::ios_base::seekdir dir;
 			switch (ineDir)
 			{
-				case Core::SD_BEGINNING:
+				case Core::SeekDir::k_beginning:
 					dir = std::ios_base::beg;
 					break;
-				case Core::SD_CURRENT:
+				case Core::SeekDir::k_current:
 					dir = std::ios_base::cur;
 					break;
-				case Core::SD_END:
+				case Core::SeekDir::k_end:
 					dir = std::ios_base::end;
 					break;
 			}
@@ -287,14 +287,14 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void CFileStreamAPK::Write(s8* inpbyChar, s32 indwStreamSize)
 		{
-			ERROR_LOG("Cannot write to Android APK");
+			CS_LOG_ERROR("Cannot write to Android APK");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Write
 		//--------------------------------------------------------------------------------------------------
 		void CFileStreamAPK::Write(const std::string& _instrString)
 		{
-			ERROR_LOG("Cannot write to Android APK");
+			CS_LOG_ERROR("Cannot write to Android APK");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// TellP
@@ -313,18 +313,18 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// SeekP
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::SeekP(s32 indwPosition, Core::SEEK_DIR ineDir)
+		void CFileStreamAPK::SeekP(s32 indwPosition, Core::SeekDir ineDir)
 		{
 			std::ios_base::seekdir dir;
 			switch (ineDir)
 			{
-				case Core::SD_BEGINNING:
+				case Core::SeekDir::k_beginning:
 					dir = std::ios_base::beg;
 					break;
-				case Core::SD_CURRENT:
+				case Core::SeekDir::k_current:
 					dir = std::ios_base::cur;
 					break;
-				case Core::SD_END:
+				case Core::SeekDir::k_end:
 					dir = std::ios_base::end;
 					break;
 			}
@@ -345,25 +345,25 @@ namespace ChilliSource
 		{
 			switch (meFileMode)
 			{
-				case Core::FM_READ:
+				case Core::FileMode::k_read:
 					return (std::ios_base::in);
-				case Core::FM_READ_BINARY:
+				case Core::FileMode::k_readBinary:
 					return (std::ios_base::in | std::ios_base::binary);
-				case Core::FM_WRITE:
+				case Core::FileMode::k_write:
 					return (std::ios_base::out);
-				case Core::FM_WRITE_APPEND:
+				case Core::FileMode::k_writeAppend:
 					return (std::ios_base::out | std::ios_base::app);
-				case Core::FM_WRITE_AT_END:
+				case Core::FileMode::k_writeAtEnd:
 					return (std::ios_base::out | std::ios_base::ate);
-				case Core::FM_WRITE_TRUNCATE:
+				case Core::FileMode::k_writeTruncate:
 					return (std::ios_base::out | std::ios_base::trunc);
-				case Core::FM_WRITE_BINARY:
+				case Core::FileMode::k_writeBinary:
 					return (std::ios_base::out | std::ios_base::binary);
-				case Core::FM_WRITE_BINARY_APPEND:
+				case Core::FileMode::k_writeBinaryAppend:
 					return (std::ios_base::out | std::ios_base::binary | std::ios_base::app);
-				case Core::FM_WRITE_BINARY_AT_END:
+				case Core::FileMode::k_writeBinaryAtEnd:
 					return (std::ios_base::out | std::ios_base::binary | std::ios_base::ate);
-				case Core::FM_WRITE_BINARY_TRUNCATE:
+				case Core::FileMode::k_writeBinaryTruncate:
 					return (std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
 				default:
 					return (std::ios_base::in);

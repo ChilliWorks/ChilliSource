@@ -101,7 +101,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		MeshSPtr MeshManager::GetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
 		{
-			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
+			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
@@ -152,7 +152,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		MeshSPtr MeshManager::AsyncGetModelFromFile(Core::StorageLocation ineStorageLocation, const std::string &inFilePath)
 		{
-			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
+			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{

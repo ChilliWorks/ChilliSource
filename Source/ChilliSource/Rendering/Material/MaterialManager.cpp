@@ -98,7 +98,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		MaterialSPtr MaterialManager::GetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
-			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
+			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
@@ -143,7 +143,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		MaterialSPtr MaterialManager::AsyncGetMaterialFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
-			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
+			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{

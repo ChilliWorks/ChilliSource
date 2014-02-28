@@ -529,7 +529,7 @@ namespace ChilliSource
             static f32 mfUpdateSpeed;
             
             static f32 s_updateIntervalRemainder;
-            static bool s_shouldInvokeResumeEvent;
+            static bool s_shouldNotifyConnectionsResumeEvent;
             static bool s_isFirstFrame;
             static bool s_isSuspending;
 		};

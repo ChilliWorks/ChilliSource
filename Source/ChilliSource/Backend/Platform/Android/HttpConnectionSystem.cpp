@@ -17,8 +17,6 @@
 
 namespace ChilliSource
 {
-	using namespace Networking;
-	
 	namespace Android
 	{
 		const u32 kudwBufferSize = 1024 * 50;
@@ -27,12 +25,12 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		bool CHttpConnectionSystem::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IHttpConnectionSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
+			return inInterfaceID == Networking::HttpConnectionSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Make Request 
 		//--------------------------------------------------------------------------------------------------
-		HttpRequestPtr CHttpConnectionSystem::MakeRequest(const HttpRequestDetails & insRequestDetails, IHttpRequest::CompletionDelegate inOnComplete)
+		Networking::HttpRequest* CHttpConnectionSystem::MakeRequest(const Networking::HttpRequestDetails & insRequestDetails, Networking::HttpRequest::CompletionDelegate inOnComplete)
         {
             //The ownership of the request is with the request itself
 			CHttpRequest* pRequest = new CHttpRequest(insRequestDetails, inOnComplete);
@@ -74,7 +72,7 @@ namespace ChilliSource
             {
                 if((*it)->HasCompleted())
                 {
-                    SAFE_DELETE(*it);
+                    CS_SAFEDELETE(*it);
                     mapRequests.erase(it);
                 }
                 else
@@ -87,7 +85,7 @@ namespace ChilliSource
 		/// Http Request
 		//=====================================================================================================
 		CHttpConnectionSystem::CHttpRequest::CHttpRequest(const Networking::HttpRequestDetails& insDetails,
-														  const Networking::IHttpRequest::CompletionDelegate& inCompletionDelegate) : msDetails(insDetails),
+														  const Networking::HttpRequest::CompletionDelegate& inCompletionDelegate) : msDetails(insDetails),
 														  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  mbCompleted(false),
 														  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  mCompletionDelegate(inCompletionDelegate),
 														  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  mbThreadCompleted(false),
@@ -96,7 +94,7 @@ namespace ChilliSource
 		{
 			//Begin the read loop
 			//Run this as a threaded task
-			ChilliSource::CTaskScheduler::ScheduleTask(Task0(this, &CHttpConnectionSystem::CHttpRequest::PerformRequest));
+			Core::TaskScheduler::ScheduleTask(Core::Task<>(this, &CHttpConnectionSystem::CHttpRequest::PerformRequest));
 		}
 		//------------------------------------------------------------------
 		/// Update
@@ -107,14 +105,14 @@ namespace ChilliSource
 			if(mbCompleted == true)
 			{
                 mbRequestCompleted = true;
-                if(mCompletionDelegate != NULL)
+                if(mCompletionDelegate != nullptr)
                 {
-                    if(meRequestResult != CANCELLED)
+                    if(meRequestResult != HttpRequest::CompletionResult::k_cancelled)
                     {
                     	mCompletionDelegate(this, meRequestResult);
                     }
 
-                    mCompletionDelegate = NULL;
+                    mCompletionDelegate = nullptr;
                 }
 			}
 		}
@@ -123,22 +121,22 @@ namespace ChilliSource
 		//------------------------------------------------------------------
 		void CHttpConnectionSystem::CHttpRequest::PerformRequest()
 		{
-			HTTP_REQUEST_TYPE eType = HRT_GET;
-			if (msDetails.eType == Networking::HttpRequestDetails::POST)
-				eType = HRT_POST;
+			HttpRequestType eType = HttpRequestType::k_get;
+			if (msDetails.eType == Networking::HttpRequestDetails::Type::k_post)
+				eType = HttpRequestType::k_post;
 
-			DEBUG_LOG("CHttpConnectionSystem::CHttpRequest::PerformRequest() - Check for request type...");
+			CS_LOG_DEBUG("CHttpConnectionSystem::CHttpRequest::PerformRequest() - Check for request type...");
 
 			s32 dwResponseCode;
-			HTTP_REQUEST_RESULT_CODE eRequestResult;
+			HttpRequestResultCode eRequestResult;
 			if(msDetails.sHeaders.empty())
 			{
-				DEBUG_LOG("CHttpConnectionSystem::CHttpRequest::PerformRequest() - Performing standard request...");
+				CS_LOG_DEBUG("CHttpConnectionSystem::CHttpRequest::PerformRequest() - Performing standard request...");
 				eRequestResult = SCHttpConnectionJavaInterface::HttpRequest(msDetails.strURL, eType, msDetails.strBody, mResponseData, msDetails.strRedirectionURL, dwResponseCode);
 			}
 			else
 			{
-				DEBUG_LOG("CHttpConnectionSystem::CHttpRequest::PerformRequest() - Performing request with headers...");
+				CS_LOG_DEBUG("CHttpConnectionSystem::CHttpRequest::PerformRequest() - Performing request with headers...");
 				eRequestResult = SCHttpConnectionJavaInterface::HttpRequest(msDetails.strURL, eType, msDetails.sHeaders, msDetails.strBody, mResponseData, msDetails.strRedirectionURL, dwResponseCode, true /* TODO: Add bKeepAlive boolean to msDetails*/);
 			}
 			mudwResponseCode = dwResponseCode;
@@ -147,15 +145,15 @@ namespace ChilliSource
 			{
 				switch (eRequestResult)
 				{
-				case HRRC_SUCCESS:
-					meRequestResult = IHttpRequest::COMPLETED;
+				case HttpRequestResultCode::k_success:
+					meRequestResult = HttpRequest::CompletionResult::k_completed;
 					break;
-				case HRRC_COULDNOTCONNECT:
-				case HRRC_COULDNOTMAKEREQUEST:
-					meRequestResult = IHttpRequest::FAILED;
+				case HttpRequestResultCode::k_couldNotConnect:
+				case HttpRequestResultCode::k_couldNotMakeRequest:
+					meRequestResult = HttpRequest::CompletionResult::k_failed;
 					break;
-				case HRRC_TIMEOUT:
-					meRequestResult = IHttpRequest::TIMEOUT;
+				case HttpRequestResultCode::k_timeout:
+					meRequestResult = HttpRequest::CompletionResult::k_timeout;
 					break;
 				default:
 					break;
@@ -171,7 +169,7 @@ namespace ChilliSource
 		void CHttpConnectionSystem::CHttpRequest::Cancel()
 		{
             mbCompleted = true;
-            meRequestResult = IHttpRequest::CANCELLED;
+            meRequestResult = HttpRequest::CompletionResult::k_cancelled;
 		}
 		//----------------------------------------------------------------------------------------
 		/// Has Completed
@@ -190,7 +188,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------------
 		/// Get Completion Delegate
 		//----------------------------------------------------------------------------------------
-		const Networking::IHttpRequest::CompletionDelegate & CHttpConnectionSystem::CHttpRequest::GetCompletionDelegate() const
+		const Networking::HttpRequest::CompletionDelegate & CHttpConnectionSystem::CHttpRequest::GetCompletionDelegate() const
 		{
 			return mCompletionDelegate;
 		}
@@ -217,6 +215,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------------
 		u32 CHttpConnectionSystem::CHttpRequest::GetBytesRead() const
 		{
+			//TODO: Implement this.
 			return 0;
 		}
 	}

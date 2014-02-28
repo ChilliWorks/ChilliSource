@@ -11,11 +11,12 @@
 #define _MOFLO_PLATFORM_ANDROID_FILEIO_FILE_STREAM_ANDROID_APK_
 
 #include <ChilliSource/Core/File/FileStream.h>
+#include <ChilliSource/Core/Minizip/unzip.h>
+
 #include <fstream>
 #include <ios>
-#include <ChilliSource/Core/Minizip/unzip.h>
+#include <mutex>
 #include <sstream>
-#include <ChilliSource/Core/Threading/Thread.h>
 
 namespace ChilliSource
 {
@@ -27,7 +28,7 @@ namespace ChilliSource
 		/// A filestream is used for all reading and writing of files. This will emulate the functionality
 		/// of fstream and allows for cross platform filereading.
 		//======================================================================================================
-		class CFileStreamAPK : public Core::IFileStream
+		class CFileStreamAPK : public Core::FileStream
 		{
 		public:
 			//--------------------------------------------------------------------------------------------------
@@ -206,12 +207,12 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------------------
 			/// SeekG
 			///
-			/// Sets the position of the get pointer, using the specified SEEK_DIR
+			/// Sets the position of the get pointer, using the specified SeekDir
 			///
 			/// @param the new position.
 			/// @param the direction from which to seek.
 			//--------------------------------------------------------------------------------------------------
-			void SeekG(s32 indwPosition, Core::SEEK_DIR ineDir);
+			void SeekG(s32 indwPosition, Core::SeekDir ineDir);
 			//--------------------------------------------------------------------------------------------------
 			/// Sync
 			///
@@ -260,12 +261,12 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------------------
 			/// SeekP
 			///
-			/// Sets the position of the put pointer, using the specified SEEK_DIR
+			/// Sets the position of the put pointer, using the specified SeekDir
 			///
 			/// @param the new position.
 			/// @param the direction from which to seek.
 			//--------------------------------------------------------------------------------------------------
-			void SeekP(s32 indwPosition, Core::SEEK_DIR ineDir);
+			void SeekP(s32 indwPosition, Core::SeekDir ineDir);
 			//--------------------------------------------------------------------------------------------------
 			/// Flush
 			///
@@ -278,7 +279,7 @@ namespace ChilliSource
 			///
 			/// This is defined protected so that only the FileSystem can create it.
 			//--------------------------------------------------------------------------------------------------
-			CFileStreamAPK(CThread::Mutex* inpMinizipMutex);
+			CFileStreamAPK(std::mutex* inpMinizipMutex);
 			//--------------------------------------------------------------------------------------------------
 			/// OpenFromAPK
 			///
@@ -288,7 +289,7 @@ namespace ChilliSource
 			/// @param The zip file position.
 			/// @param File mode
 			//--------------------------------------------------------------------------------------------------
-			void OpenFromAPK(const std::string& instrApkPath, const unz_file_pos& inFilePos, Core::FILE_MODE ineMode);
+			void OpenFromAPK(const std::string& instrApkPath, const unz_file_pos& inFilePos, Core::FileMode ineMode);
 			//--------------------------------------------------------------------------------------------------
 			/// Open
 			///
@@ -297,11 +298,11 @@ namespace ChilliSource
 			/// @param The zip file position.
 			/// @param The file mode with which the file should be opened.
 			//--------------------------------------------------------------------------------------------------
-			void Open(const unz_file_pos& inFilePos, Core::FILE_MODE ineMode);
+			void Open(const unz_file_pos& inFilePos, Core::FileMode ineMode);
 			//--------------------------------------------------------------------------------------------------
 			/// Get File Mode
 			///
-			/// Converts the FILE_MODE enum into a ios_base::openmode for opening the file.
+			/// Converts the FileMode enum into a ios_base::openmode for opening the file.
 			///
 			/// @return the STL openmode.
 			//--------------------------------------------------------------------------------------------------
@@ -309,13 +310,13 @@ namespace ChilliSource
 			
 			friend class CFileSystem;
 		private:
-			CThread::Mutex* mpMinizipMutex;
+			std::mutex* mpMinizipMutex;
 			unzFile mUnzipper;
 			bool mbError;
 			bool mbOpen;
 
 			s8 * mpDataBuffer;
-			Core::FILE_MODE meFileMode;
+			Core::FileMode meFileMode;
 			std::stringstream mStringStream;
 		};
 	}

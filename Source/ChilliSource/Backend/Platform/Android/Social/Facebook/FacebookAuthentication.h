@@ -26,13 +26,13 @@ namespace ChilliSource
 
 			bool IsA(Core::InterfaceIDType inID) const;
 
-			void Authenticate(const DYNAMIC_ARRAY<std::string>& inastrReadPermissions = DYNAMIC_ARRAY<std::string>(), const AuthenticationCompleteDelegate& inDelegate = NULL);
+			void Authenticate(const std::vector<std::string>& inastrReadPermissions = std::vector<std::string>(), const AuthenticationCompleteDelegate& inDelegate = NULL);
 
 			bool IsSignedIn() const;
             std::string GetActiveToken() const;
 
-            void AuthoriseWritePermissions(const DYNAMIC_ARRAY<std::string> & inaWritePerms, const AuthenticationCompleteDelegate& inDelegate);
-            void AuthoriseReadPermissions(const DYNAMIC_ARRAY<std::string> & inaReadPerms, const AuthenticationCompleteDelegate& inDelegate);
+            void AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const AuthenticationCompleteDelegate& inDelegate);
+            void AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const AuthenticationCompleteDelegate& inDelegate);
 
             bool HasPermission(const std::string& instrPermission) const;
 
@@ -44,11 +44,11 @@ namespace ChilliSource
 			void OnAuthoriseReadPermissionsComplete(bool inbSuccess);
 			void OnAuthoriseWritePermissionsComplete(bool inbSuccess);
 
-			const SHARED_PTR<CFacebookJavaInterface>& GetJavaInterface() const;
+			const std::shared_ptr<CFacebookJavaInterface>& GetJavaInterface() const;
 
 		private:
 
-			SHARED_PTR<CFacebookJavaInterface> mpJavaInterface;
+			std::shared_ptr<CFacebookJavaInterface> mpJavaInterface;
 
 			AuthenticationCompleteDelegate mAuthDelegate;
 			AuthenticationCompleteDelegate mAuthReadDelegate;

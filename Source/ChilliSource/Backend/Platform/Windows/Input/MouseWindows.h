@@ -25,7 +25,7 @@ namespace ChilliSource
 			/// 
 			/// @return Position of cursor on screen
 			//------------------------------------------------------
-			ChilliSource::Core::CVector2 GetPosition() const;
+			ChilliSource::Core::Vector2 GetPosition() const;
 
 		private:
 

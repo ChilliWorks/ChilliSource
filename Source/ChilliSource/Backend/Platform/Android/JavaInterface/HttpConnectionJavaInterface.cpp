@@ -30,7 +30,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		/// Http Request
 		//--------------------------------------------------------------------------------------
-		HTTP_REQUEST_RESULT_CODE SCHttpConnectionJavaInterface::HttpRequest(const std::string& instrUrl, HTTP_REQUEST_TYPE ineRequestType,
+		HttpRequestResultCode SCHttpConnectionJavaInterface::HttpRequest(const std::string& instrUrl, HttpRequestType ineRequestType,
 				const std::string& instrBody, std::string& outstrResponse, std::string& outstrRedirect, s32& outdwResponseCode)
 		{
 			return HttpRequest(instrUrl, ineRequestType, Core::ParamDictionary(), instrBody, outstrResponse,outstrRedirect, outdwResponseCode, false);
@@ -38,18 +38,18 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		/// Http Request
 		//--------------------------------------------------------------------------------------
-		HTTP_REQUEST_RESULT_CODE SCHttpConnectionJavaInterface::HttpRequest(const std::string& instrUrl, HTTP_REQUEST_TYPE ineRequestType,
+		HttpRequestResultCode SCHttpConnectionJavaInterface::HttpRequest(const std::string& instrUrl, HttpRequestType ineRequestType,
 				Core::ParamDictionary insHeaders, const std::string& instrBody,
 				std::string& outstrResponse, std::string& outstrRedirect, s32& outdwResponseCode,
 				bool inbKeepAlive)
 		{
-			HTTP_REQUEST_RESULT_CODE eOutput = HRRC_COULDNOTMAKEREQUEST;
+			HttpRequestResultCode eOutput = HttpRequestResultCode::k_couldNotMakeRequest;
 			MethodReference sdMethodRef = GetStaticMethodReference("HttpRequestWithHeaders");
 			if (sdMethodRef.mMethodID != 0 && sdMethodRef.mClassID != 0)
 			{
 				JNIEnv* env = GetJNIEnvironmentPtr();
 				bool bIsPost = false;
-				if (ineRequestType == HRT_POST)
+				if (ineRequestType == HttpRequestType::k_post)
 					bIsPost = true;
 
 				//Create an array out headers ParamDictionary as this is easier to pass to Java
@@ -85,19 +85,19 @@ namespace ChilliSource
 						inbKeepAlive));
 
 				//get the result codes
-				eOutput = (HTTP_REQUEST_RESULT_CODE)GetIntElementFromJArray(jadwResultCode, 0);
+				eOutput = (HttpRequestResultCode)GetIntElementFromJArray(jadwResultCode, 0);
 				outdwResponseCode = GetIntElementFromJArray(jadwHttpResponseCode, 0);
 
 				//if successful, get the response
-				if (eOutput == HRRC_SUCCESS)
+				if (eOutput == HttpRequestResultCode::k_success)
 				{
 					int dwLength = GetIntElementFromJArray(jadwResultLength, 0);
 					std::string strResponse = CreateSTDStringFromJByteArray(jabyData, dwLength);
 					outstrResponse.append(strResponse);
 
-					if(outdwResponseCode == moNetworking::kHTTPMovedTemporarily)
+					if(outdwResponseCode == Networking::kHTTPMovedTemporarily)
 					{
-						jstring jstrRedirect =(jstring)env->GetObjectArrayElement(jastrRedirect, 0);
+						jstring jstrRedirect = (jstring)env->GetObjectArrayElement(jastrRedirect, 0);
 						outstrRedirect = CreateSTDStringFromJString(jstrRedirect);
 					}
 				}

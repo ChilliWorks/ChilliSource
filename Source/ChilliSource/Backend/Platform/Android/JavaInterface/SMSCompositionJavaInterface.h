@@ -40,8 +40,8 @@ namespace ChilliSource
 			/// @param result callback delegate
 			/// @param bool if to format as html
 			//--------------------------------------------------------------------------------------
-			static void Present(const std::vector<CUTF8String> & inastrRecipientNumbers, //Vector of email addresses
-								const CUTF8String & instrContents);
+			static void Present(const std::vector<Core::UTF8String> & inastrRecipientNumbers, //Vector of email addresses
+								const Core::UTF8String & instrContents);
 			//--------------------------------------------------------------------------------------
 			/// Dismiss
 			///

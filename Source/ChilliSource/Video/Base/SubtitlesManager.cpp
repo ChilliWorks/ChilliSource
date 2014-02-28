@@ -64,7 +64,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		SubtitlesSPtr SubtitlesManager::GetSubtitlesFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
-			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
+			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
@@ -99,7 +99,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		SubtitlesSPtr SubtitlesManager::AsyncGetSubtitlesFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath)
 		{
-			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
+			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{

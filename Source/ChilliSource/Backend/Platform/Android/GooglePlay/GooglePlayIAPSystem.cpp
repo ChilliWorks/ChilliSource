@@ -29,9 +29,9 @@ namespace ChilliSource
 			/// @param Out: Type if found
 			/// @return Whether product was found
 			//---------------------------------------------------------------
-			bool TryGetRegisteredProductType(const DYNAMIC_ARRAY<Networking::IAPProductRegInfo>& inProductRegInfos, const std::string& instrProductID, Networking::IAPProductRegInfo::Type& outeType)
+			bool TryGetRegisteredProductType(const std::vector<Networking::IAPProductRegInfo>& inProductRegInfos, const std::string& instrProductID, Networking::IAPProductRegInfo::Type& outeType)
 			{
-				for(DYNAMIC_ARRAY<Networking::IAPProductRegInfo>::const_iterator it = inProductRegInfos.begin(); it != inProductRegInfos.end(); ++it)
+				for(std::vector<Networking::IAPProductRegInfo>::const_iterator it = inProductRegInfos.begin(); it != inProductRegInfos.end(); ++it)
 				{
 					if(it->strID == instrProductID)
 					{
@@ -60,7 +60,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// Register Products
         //---------------------------------------------------------------
-        void CGooglePlayIAPSystem::RegisterProducts(const DYNAMIC_ARRAY<Networking::IAPProductRegInfo>& inaProducts)
+        void CGooglePlayIAPSystem::RegisterProducts(const std::vector<Networking::IAPProductRegInfo>& inaProducts)
         {
             mProductRegInfos = inaProducts;
         }
@@ -102,7 +102,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// Request Product Descriptions
         //---------------------------------------------------------------
-        void CGooglePlayIAPSystem::RequestProductDescriptions(const DYNAMIC_ARRAY<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void CGooglePlayIAPSystem::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
         	mpJavaInterface->RequestProductDescriptions(inaProductIDs, inRequestDelegate);
         }
@@ -111,7 +111,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void CGooglePlayIAPSystem::RequestAllProductDescriptions(const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
-            DYNAMIC_ARRAY<std::string> aIDs;
+            std::vector<std::string> aIDs;
             aIDs.reserve(mProductRegInfos.size());
 
             for(u32 i=0; i<mProductRegInfos.size(); ++i)
@@ -136,7 +136,7 @@ namespace ChilliSource
         	Networking::IAPProductRegInfo::Type eType;
         	if(!TryGetRegisteredProductType(mProductRegInfos, instrProductID, eType))
         	{
-        		FATAL_LOG("Cannot find IAP product with ID " + instrProductID + ". Please register it");
+        		CS_LOG_FATAL("Cannot find IAP product with ID " + instrProductID + ". Please register it");
         		return;
         	}
 

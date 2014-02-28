@@ -36,11 +36,11 @@ namespace ChilliSource
 		}
 		void CSMSCompositionActivity::Present(const std::vector<CUTF8String> & inastrRecipientNumbers, const CUTF8String & instrContents, const SendResultDelegate & inCallback)
 		{
-			DEBUG_LOG("<<<<<<<<<< CSMSCompositionActivity::Present 1 >>>>>>>>>");
+			CS_LOG_DEBUG("<<<<<<<<<< CSMSCompositionActivity::Present 1 >>>>>>>>>");
 			mCallback = inCallback;
-			DEBUG_LOG("<<<<<<<<<< CSMSCompositionActivity::Present 2 >>>>>>>>>");
+			CS_LOG_DEBUG("<<<<<<<<<< CSMSCompositionActivity::Present 2 >>>>>>>>>");
 			SCSMSCompositionJavaInterface::Present(inastrRecipientNumbers,instrContents);
-			DEBUG_LOG("<<<<<<<<<< CSMSCompositionActivity::Present 3 >>>>>>>>>");
+			CS_LOG_DEBUG("<<<<<<<<<< CSMSCompositionActivity::Present 3 >>>>>>>>>");
 		}
 		void CSMSCompositionActivity::Dismiss()
 		{

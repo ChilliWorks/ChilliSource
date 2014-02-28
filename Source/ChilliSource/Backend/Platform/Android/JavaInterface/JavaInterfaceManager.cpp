@@ -81,7 +81,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		JavaInterfacePtr CJavaInterfaceManager::GetJavaInterface(Core::InterfaceIDType inInterfaceID)
 		{
-			for (DYNAMIC_ARRAY<JavaInterfacePtr>::const_iterator it = mJavaInterfaces.begin(); it != mJavaInterfaces.end(); ++it)
+			for (std::vector<JavaInterfacePtr>::const_iterator it = mJavaInterfaces.begin(); it != mJavaInterfaces.end(); ++it)
 			{
 				if ((*it)->IsA(inInterfaceID))
 				{
@@ -89,16 +89,16 @@ namespace ChilliSource
 				}
 			}
 
-			WARNING_LOG("JavaInterfaceManager cannot find a JavaInterface with the requested interface.");
+			CS_LOG_WARNING("JavaInterfaceManager cannot find a JavaInterface with the requested interface.");
 			return JavaInterfacePtr();
 		}
 		//--------------------------------------------------------
 		/// Get Java Interfaces
 		//--------------------------------------------------------
-		void CJavaInterfaceManager::GetJavaInterfaces(Core::InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<JavaInterfacePtr>& outJavaInterfaces)
+		void CJavaInterfaceManager::GetJavaInterfaces(Core::InterfaceIDType inInterfaceID, std::vector<JavaInterfacePtr>& outJavaInterfaces)
 		{
 			outJavaInterfaces.clear();
-			for (DYNAMIC_ARRAY<JavaInterfacePtr>::const_iterator it = mJavaInterfaces.begin(); it != mJavaInterfaces.end(); ++it)
+			for (std::vector<JavaInterfacePtr>::const_iterator it = mJavaInterfaces.begin(); it != mJavaInterfaces.end(); ++it)
 			{
 				if ((*it)->IsA(inInterfaceID))
 				{

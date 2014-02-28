@@ -31,7 +31,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------
 			/// Delegates
 			//--------------------------------------------------------------
-			typedef fastdelegate::FastDelegate1<s32> ResultDelegate;
+			typedef std::function<void(s32)> ResultDelegate;
 			//--------------------------------------------------------------
 			/// Constructor
 			//--------------------------------------------------------------
@@ -54,7 +54,7 @@ namespace ChilliSource
 			/// @param bool if to format as html
 			/// @param result callback delegate
 			//--------------------------------------------------------------
-			void Present(const DYNAMIC_ARRAY<CUTF8String>& inastrRecipientAddresses, const CUTF8String& instrSubject, const CUTF8String& instrContents,
+			void Present(const std::vector<Core::UTF8String>& inastrRecipientAddresses, const Core::UTF8String& instrSubject, const Core::UTF8String& instrContents,
 						const std::string& instrAttachmentFilename, bool inbFormatAsHtml, const ResultDelegate& inDelegate);
 			//--------------------------------------------------------------
 			/// On Email Closed

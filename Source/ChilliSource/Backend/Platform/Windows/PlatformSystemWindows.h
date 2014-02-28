@@ -135,9 +135,9 @@ namespace ChilliSource
 			/// Get Screen Dimensions
 			///
 			/// Retrieves the screen dimensions. These dimensions are always in the default orientation for the device.
-			/// @return A CVector2 containing the screen size in its x + y components
+			/// @return A Vector2 containing the screen size in its x + y components
 			//-----------------------------------------------------------------------------------------------------------
-			Core::CVector2 GetScreenDimensions() const;
+			Core::Vector2 GetScreenDimensions() const;
 			//--------------------------------------------------------------
 			/// Get Device Model Name
 			///

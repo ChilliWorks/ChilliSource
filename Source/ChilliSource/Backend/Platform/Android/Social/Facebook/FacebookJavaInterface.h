@@ -49,7 +49,7 @@ namespace ChilliSource
 			/// Attempt to open an existing session or prompt the user to login if no
 			/// session exists
 			//--------------------------------------------------------------------------------------
-			void Authenticate(const DYNAMIC_ARRAY<std::string>& inaReadPerms);
+			void Authenticate(const std::vector<std::string>& inaReadPerms);
 			//--------------------------------------------------------------------------------------
 			/// Is Signed In
 			///
@@ -77,7 +77,7 @@ namespace ChilliSource
 		    ///
 			/// @param List of read permissions IDs
 			//--------------------------------------------------------------------------------------
-		    void AuthoriseReadPermissions(const DYNAMIC_ARRAY<std::string>& inaReadPerms);
+		    void AuthoriseReadPermissions(const std::vector<std::string>& inaReadPerms);
 			//--------------------------------------------------------------------------------------
 			/// Authorise Write Permissions
 			///
@@ -86,7 +86,7 @@ namespace ChilliSource
 		    ///
 			/// @param List of write permissions IDs
 			//--------------------------------------------------------------------------------------
-		    void AuthoriseWritePermissions(const DYNAMIC_ARRAY<std::string>& inaWritePerms);
+		    void AuthoriseWritePermissions(const std::vector<std::string>& inaWritePerms);
 			//--------------------------------------------------------------------------------------
 			/// Sign Out
 			///
@@ -99,14 +99,14 @@ namespace ChilliSource
 		    /// Attempt to make a Graph API request to post to feed with the following
 		    /// path and key value array
 			//--------------------------------------------------------------------------------------
-		    void TryPostToFeed(const std::string& instrGraphPath, const DYNAMIC_ARRAY<std::string>& inaKeyValues);
+		    void TryPostToFeed(const std::string& instrGraphPath, const std::vector<std::string>& inaKeyValues);
 			//--------------------------------------------------------------------------------------
 			/// Try Post To Feed
 			///
 		    /// Attempt to make a Graph API request to post to feed with the following
 		    /// path and key value array
 			//--------------------------------------------------------------------------------------
-		    void TryPostRequest(const DYNAMIC_ARRAY<std::string>& inaKeyValues);
+		    void TryPostRequest(const std::vector<std::string>& inaKeyValues);
 		    //--------------------------------------------------------------------------------------
 			/// Publish Install
 			///

@@ -49,7 +49,7 @@ namespace ChilliSource
 			/// 		taps.
 			/// @param Background colour
             //--------------------------------------------------------------
-            void Present(Core::STORAGE_LOCATION ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour);
+            void Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour);
             //--------------------------------------------------------------
 			/// Present With Subtitles
 			///
@@ -62,8 +62,8 @@ namespace ChilliSource
 			/// @param Whether or not the video can be dismissed by tapping.
             /// @param Background colour
 			//--------------------------------------------------------------
-			void PresentWithSubtitles(Core::STORAGE_LOCATION ineVideoLocation, const std::string& instrVideoFilename,
-									  Core::STORAGE_LOCATION ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
+			void PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
+									  Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
 									  bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour);
             //--------------------------------------------------------------
             /// Is Playing
@@ -131,8 +131,8 @@ namespace ChilliSource
         private:
             VideoPlayerJavaInterfacePtr mpVideoPlayerJavaInterface;
             ChilliSource::Video::SubtitlesPtr mpSubtitles;
-            HASH_MAP<ChilliSource::Video::CSubtitles::SubtitlePtr, s64> maSubtitleMap;
-            DYNAMIC_ARRAY<ChilliSource::Video::CSubtitles::SubtitlePtr> maSubtitlesToRemove;
+            std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, s64> maSubtitleMap;
+            std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr> maSubtitlesToRemove;
             TimeIntervalMs mCurrentSubtitleTimeMS;
         };
     }

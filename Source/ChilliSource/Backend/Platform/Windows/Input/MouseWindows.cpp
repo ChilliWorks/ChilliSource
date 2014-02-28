@@ -52,13 +52,13 @@ namespace ChilliSource
 		/// 
 		/// @return Position of cursor on screen
 		//------------------------------------------------------
-		ChilliSource::Core::CVector2 CMouse::GetPosition() const
+		ChilliSource::Core::Vector2 CMouse::GetPosition() const
 		{
 			s32 dwX, dwY = 0;
 			glfwGetMousePos(&dwX, &dwY);
 
 			dwY = Core::CScreen::GetOrientedHeight() - dwY; 
-			return ChilliSource::Core::CVector2((f32)dwX, (f32)dwY);
+			return ChilliSource::Core::Vector2((f32)dwX, (f32)dwY);
 		}
 		//---GLFW Mouse Delegates
 		//----------------------------------------------
@@ -71,12 +71,12 @@ namespace ChilliSource
 		{
 			if(gpMouseInstance)
 			{
-				gpMouseInstance->mOnMouseMovedEvent.Invoke(gpMouseInstance);
+				gpMouseInstance->mOnMouseMovedEvent.NotifyConnections(gpMouseInstance);
 				
 				//We may want to fake touch input
 				if(gpMouseInstance->mpTouchProxy && gpMouseInstance->mbaButtonsDown[Input::MOUSE_LEFT_BUTTON])
 				{
-					gpMouseInstance->mpTouchProxy->MoveTouch(gpMouseInstance->mudwCurrentTouchID, Core::CVector2((f32)indwPosX, (f32)indwPosY), gpMouseInstance->mpTouchProxy->GetLastTimeStamp());
+					gpMouseInstance->mpTouchProxy->MoveTouch(gpMouseInstance->mudwCurrentTouchID, Core::Vector2((f32)indwPosX, (f32)indwPosY), gpMouseInstance->mpTouchProxy->GetLastTimeStamp());
 				}
 			}
 		}
@@ -94,19 +94,19 @@ namespace ChilliSource
 				{
 				case GLFW_PRESS:
 					gpMouseInstance->mbaButtonsDown[indwButtonID] = true;
-					gpMouseInstance->mOnMousePressedEvent.Invoke(gpMouseInstance);
+					gpMouseInstance->mOnMousePressedEvent.NotifyConnections(gpMouseInstance);
 					
 					//We may want to fake touch input
 					if(gpMouseInstance->mpTouchProxy)
 					{
 						s32 dwXPos, dwYPos = 0;
 						glfwGetMousePos(&dwXPos, &dwYPos);
-						gpMouseInstance->mudwCurrentTouchID = gpMouseInstance->mpTouchProxy->StartTouch(Core::CVector2((f32)dwXPos, (f32)dwYPos), gpMouseInstance->mpTouchProxy->GetLastTimeStamp());
+						gpMouseInstance->mudwCurrentTouchID = gpMouseInstance->mpTouchProxy->StartTouch(Core::Vector2((f32)dwXPos, (f32)dwYPos), gpMouseInstance->mpTouchProxy->GetLastTimeStamp());
 					}
 					break;
 				case GLFW_RELEASE:
 					gpMouseInstance->mbaButtonsDown[indwButtonID] = false;
-					gpMouseInstance->mOnMouseReleasedEvent.Invoke(gpMouseInstance);
+					gpMouseInstance->mOnMouseReleasedEvent.NotifyConnections(gpMouseInstance);
 
 					//We may want to fake touch input
 					if(gpMouseInstance->mpTouchProxy)

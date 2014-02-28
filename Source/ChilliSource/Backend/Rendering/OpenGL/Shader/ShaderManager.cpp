@@ -55,7 +55,7 @@ namespace ChilliSource
 			std::shared_ptr<CShader> pGLShader = std::static_pointer_cast<CShader>(outpShader);
 			
 			//Check if this program already exists
-			MapStringToResourcePtr::iterator pShaderResource = mMapFilenameToResource.find(instrFilePath);
+			MapStringToResourceSPtr::iterator pShaderResource = mMapFilenameToResource.find(instrFilePath);
 			
 			//If the shaderptr already exists then just return that
 			if(pShaderResource != mMapFilenameToResource.end())
@@ -103,7 +103,7 @@ namespace ChilliSource
 			std::shared_ptr<CShader> pGLShader = std::static_pointer_cast<CShader>(outpShader);
 			
 			//Check if this program already exists
-			MapStringToResourcePtr::iterator pShaderResource = mMapFilenameToResource.find(instrFilePath);
+			MapStringToResourceSPtr::iterator pShaderResource = mMapFilenameToResource.find(instrFilePath);
 			
 			//If the program already exists then just return that
 			//Check for vertex shader in cache
@@ -204,7 +204,7 @@ namespace ChilliSource
 #ifdef TARGET_ANDROID
 			if(mpRenderSystem)
 			{
-				for(MapStringToResourcePtr::iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it)
+				for(MapStringToResourceSPtr::iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it)
 				{
 					if(it->second->IsLoaded())
 					{

@@ -56,7 +56,7 @@ namespace ChilliSource
 			/// @param Out: Resource
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			bool CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource);
 			//----------------------------------------------------------------
 			/// Create Image From File
 			///
@@ -66,7 +66,7 @@ namespace ChilliSource
 			/// @param Out: Resource
 			/// @return Sucess
 			//----------------------------------------------------------------
-			bool CreateImageFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource);
+			bool CreateImageFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::ResourceSPtr& outpResource);
 
 		private:
 			//----------------------------------------------------------------
@@ -81,7 +81,7 @@ namespace ChilliSource
 			/// @param Out: Image data
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreatePNGImageFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::CImage* outpImage);
+			bool CreatePNGImageFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::Image* outpImage);
 			//----------------------------------------------------------------
 			/// RGBA8888 To RGB565
 			///

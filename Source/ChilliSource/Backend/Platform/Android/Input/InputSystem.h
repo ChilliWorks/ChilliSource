@@ -24,24 +24,25 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CInputSystem : public Input::IInputSystem
+		class CInputSystem : public Input::InputSystem
 		{
 		public:
-			CInputSystem();
-			virtual ~CInputSystem();
-			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const;
+
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+
+			bool CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const override;
+			Input::InputDevice* GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID) override;
+
+			Input::TouchScreen* GetTouchScreenPtr() override;
+			Input::Accelerometer* GetAccelerometerPtr() override;
+			Input::VirtualKeyboard* GetVirtualKeyboardPtr() override;
 			
-			virtual bool CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const;
-			virtual Input::IInputDevice * GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID);
+			void Update(float infDT);
 			
+			void FlushBufferedInput() override;
 			
-			virtual Input::ITouchScreen * GetTouchScreenPtr();
-			virtual Input::IAccelerometer * GetAccelerometerPtr();
-			virtual void Update(float infDT);
+		private:
 			
-			virtual Input::IVirtualKeyboard* GetVirtualKeyboardPtr();
-			virtual void FlushBufferedInput();
-		protected:
 			CTouchScreen mTouchScreen;
 			CAccelerometer mAccelerometer;
 			CVirtualKeyboard mVirtualKeyboard;

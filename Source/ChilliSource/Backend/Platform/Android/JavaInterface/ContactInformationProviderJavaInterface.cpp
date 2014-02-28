@@ -7,8 +7,8 @@
  *
  */
 
-#include "ContactInformationProviderJavaInterface.h"
-#include <Platform/Android/Social/Communications/ContactInformationProvider.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/ContactInformationProviderJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Communications/ContactInformationProvider.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 //function definitions
@@ -37,17 +37,17 @@ void Java_com_taggames_moflow_nativeinterface_CContactInformationProviderNativeI
 	for(int udwName = 0; udwName < inudwSize; ++udwName)
 	{
 		jstring jstrName = (jstring)inpEnv->GetObjectArrayElement(instrNames,udwName);
-		ChilliSource::UTF8String strName = ChilliSource::Android::_IJavaInterface::CreateUTF8StringFromJString(jstrName);
+		CSCore::UTF8String strName = ChilliSource::Android::_IJavaInterface::CreateUTF8StringFromJString(jstrName);
 		ChilliSource::Android::SCContactInformationProviderJavaInterface::mastrNames.push_back(strName);
 		env->DeleteLocalRef(jstrName);
 
 		jstring jstrNumber =  (jstring)inpEnv->GetObjectArrayElement(instrNumbers,udwName);
-		ChilliSource::UTF8String strNumber = ChilliSource::Android::_IJavaInterface::CreateUTF8StringFromJString(jstrNumber);
+		CSCore::UTF8String strNumber = ChilliSource::Android::_IJavaInterface::CreateUTF8StringFromJString(jstrNumber);
 		ChilliSource::Android::SCContactInformationProviderJavaInterface::mastrNumbers.push_back(strNumber);
 		env->DeleteLocalRef(jstrNumber);
 
 		jstring jstrEmail =  (jstring)inpEnv->GetObjectArrayElement(instrEmails,udwName);
-		ChilliSource::UTF8String strEmail = ChilliSource::Android::_IJavaInterface::CreateUTF8StringFromJString(jstrEmail);
+		CSCore::UTF8String strEmail = ChilliSource::Android::_IJavaInterface::CreateUTF8StringFromJString(jstrEmail);
 		ChilliSource::Android::SCContactInformationProviderJavaInterface::mastrEmails.push_back(strEmail);
 		env->DeleteLocalRef(jstrEmail);
 	}
@@ -59,9 +59,9 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		std::vector<UTF8String> SCContactInformationProviderJavaInterface::mastrNames;
-		std::vector<UTF8String> SCContactInformationProviderJavaInterface::mastrNumbers;
-		std::vector<UTF8String> SCContactInformationProviderJavaInterface::mastrEmails;
+		std::vector<CSCore::UTF8String> SCContactInformationProviderJavaInterface::mastrNames;
+		std::vector<CSCore::UTF8String> SCContactInformationProviderJavaInterface::mastrNumbers;
+		std::vector<CSCore::UTF8String> SCContactInformationProviderJavaInterface::mastrEmails;
 		CContactInformationProvider * SCContactInformationProviderJavaInterface::mpContactProvider = NULL;
 
 		//--------------------------------------------------------------------------------------

@@ -70,7 +70,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		void ResourceManager::Release(Resource* inpResource)
 		{
-			for(MapStringToResourcePtr::iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it)
+			for(MapStringToResourceSPtr::iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it)
 			{
 				if(it->second.get() == inpResource)
 				{
@@ -92,7 +92,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		void ResourceManager::ReleaseAll()
 		{
-			for(MapStringToResourcePtr::iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it)
+			for(MapStringToResourceSPtr::iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it)
 			{
 				ResourceSPtr pResource = it->second;
 				CS_ASSERT((pResource.use_count() <= 2), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + pResource->GetName() + ")");
@@ -110,7 +110,7 @@ namespace ChilliSource
 		u32 ResourceManager::ReleaseAllUnused()
 		{
             u32 udwNumReleased = 0;
-			for(MapStringToResourcePtr::iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); )
+			for(MapStringToResourceSPtr::iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); )
 			{
 				if(it->second.use_count() == 1)
 				{
@@ -157,7 +157,7 @@ namespace ChilliSource
         std::vector<ResourceDesc> ResourceManager::GetAllLoadedResources() const
         {
             std::vector<ResourceDesc> asUsedResources;
-            for(MapStringToResourcePtr::const_iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it )
+            for(MapStringToResourceSPtr::const_iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it )
 			{
                 ResourceDesc sResource;
                 sResource.eStorageLocation = it->second->GetStorageLocation();
