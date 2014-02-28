@@ -20,7 +20,7 @@ namespace ChilliSource
 		//--------------------------------------------
 		Timer::Timer()
 		{
-            m_coreTimerUpdateConnection = CCoreTimer::GetTimerUpdateEvent().OpenConnection(MakeDelegate(this, &Timer::Update));
+            m_coreTimerUpdateConnection = CoreTimer::GetTimerUpdateEvent().OpenConnection(MakeDelegate(this, &Timer::Update));
 		}
 		//--------------------------------------------
 		/// Start

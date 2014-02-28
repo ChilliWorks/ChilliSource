@@ -18,7 +18,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        class CTaskScheduler
+        class TaskScheduler
         {
         public:
         

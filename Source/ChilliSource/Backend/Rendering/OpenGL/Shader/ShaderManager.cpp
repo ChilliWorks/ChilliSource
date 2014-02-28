@@ -118,7 +118,7 @@ namespace ChilliSource
 			mMapFilenameToResource.insert(std::make_pair(instrFilePath, outpShader));
 			
 			//create a task for loading the shader in the background
-            Core::CTaskScheduler::ScheduleTask(Core::Task<Core::StorageLocation, const std::string&, const std::string&, ChilliSource::Rendering::ShaderSPtr&>(this, &CShaderManager::LoadShaderTask, ineStorageLocation, instrFilePath + "." + kstrGLVertexShaderExtension, instrFilePath + "." + kstrGLFragmentShaderExtension, outpShader));
+            Core::TaskScheduler::ScheduleTask(Core::Task<Core::StorageLocation, const std::string&, const std::string&, ChilliSource::Rendering::ShaderSPtr&>(this, &CShaderManager::LoadShaderTask, ineStorageLocation, instrFilePath + "." + kstrGLVertexShaderExtension, instrFilePath + "." + kstrGLFragmentShaderExtension, outpShader));
 			
 			return true;
 		}
@@ -161,7 +161,7 @@ namespace ChilliSource
 			}
 			
 			//schedule a task for the main thread to compile the shader
-			Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<const std::string&, const std::string&, ChilliSource::Rendering::ShaderSPtr&>(this, &CShaderManager::CompileShaderTask, sstrVS.str(), sstrPS.str(), outpShader));
+			Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const std::string&, const std::string&, ChilliSource::Rendering::ShaderSPtr&>(this, &CShaderManager::CompileShaderTask, sstrVS.str(), sstrPS.str(), outpShader));
 		}
 		//---------------------------------------------------------
 		/// Compile Shader Task

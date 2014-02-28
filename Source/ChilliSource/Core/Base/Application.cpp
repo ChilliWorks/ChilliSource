@@ -139,7 +139,7 @@ namespace ChilliSource
             Device::Init(pPlatformSystem);
 
 			//Set up the task scheduler
-			CTaskScheduler::Init(Core::Device::GetNumCPUCores() * 2);
+			TaskScheduler::Init(Core::Device::GetNumCPUCores() * 2);
 
 			//System setup
 			pPlatformSystem->CreateDefaultSystems(mSystems);
@@ -652,7 +652,7 @@ namespace ChilliSource
 			//Update the app time since start
 			SetAppElapsedTime(inuddwTimestamp);
             
-			CTaskScheduler::ExecuteMainThreadTasks();
+			TaskScheduler::ExecuteMainThreadTasks();
             
             //We do not need to render as often as we update so this callback will be triggered
             //less freqenctly than the update frequency suggests. We must work out how many times to update based on the time since last frame
@@ -695,7 +695,7 @@ namespace ChilliSource
 		{
             infDT *= mfUpdateSpeed;
             
-			CCoreTimer::Update(infDT);
+			CoreTimer::Update(infDT);
             
             NotificationScheduler::Update(infDT);
             

@@ -205,7 +205,7 @@ namespace ChilliSource
 
 				//Load image as a task. Once it completed we can load the Cubemap as it should be done on the main thread
 				Core::Task<ImageDesc&> ImageLoadTask(this, &CubemapManager::ImageLoadTask, Desc);
-				Core::CTaskScheduler::ScheduleTask(ImageLoadTask);
+				Core::TaskScheduler::ScheduleTask(ImageLoadTask);
 				
 				//add resource to the resource map
 				mMapFilenameToResource.insert(std::make_pair(inFilePath, std::static_pointer_cast<Core::Resource>(Desc.pCubemapResource)));
@@ -247,7 +247,7 @@ namespace ChilliSource
                     }
                     
                     //Load the Cubemap from this image
-                    Core::CTaskScheduler::ScheduleMainThreadTask(Core::Task<const std::vector<Core::ResourceSPtr>&, bool, CubemapSPtr&>(this, &CubemapManager::CubemapLoadTask, inDesc.pImageResources, inDesc.bUseMipmaps, inDesc.pCubemapResource));
+                    Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const std::vector<Core::ResourceSPtr>&, bool, CubemapSPtr&>(this, &CubemapManager::CubemapLoadTask, inDesc.pImageResources, inDesc.bUseMipmaps, inDesc.pCubemapResource));
                     return;
                 }
 			}

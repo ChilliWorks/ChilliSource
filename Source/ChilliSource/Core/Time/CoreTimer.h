@@ -24,7 +24,7 @@ namespace ChilliSource
 	{
 		typedef std::function<void(const f32)> TimeEventDelegate;
 		
-		class CCoreTimer
+		class CoreTimer
 		{
 		public:
 			

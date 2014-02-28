@@ -76,7 +76,7 @@ namespace ChilliSource
 			
 			//Load model as task
 			Core::Task<Core::StorageLocation, const std::string&, const SkinnedAnimationSPtr&> AnimTask(this, &MoAnimLoader::ReadAnimationTask,ineStorageLocation, inFilePath, pAnim);
-			Core::CTaskScheduler::ScheduleTask(AnimTask);
+			Core::TaskScheduler::ScheduleTask(AnimTask);
 			
 			return true;
 		}
