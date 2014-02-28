@@ -46,7 +46,7 @@ namespace ChilliSource
 			if (LoadUDID() == false)
 				CalculateUDID();
 
-			DEBUG_LOG("UDID: " + mstrUDID);
+			CS_LOG_DEBUG("UDID: " + mstrUDID);
 			mbInitialised = true;
 		}
 		//-----------------------------------------
@@ -81,7 +81,7 @@ namespace ChilliSource
 			else if (bASPUDIDExists == true)
 				mstrUDID = strASPUDID;
 			else
-				FATAL_LOG("Something has gone seriously wrong with the loading of UDIDs :S");
+				CS_LOG_FATAL("Something has gone seriously wrong with the loading of UDIDs :S");
 
 			return true;
 		}
@@ -135,7 +135,7 @@ namespace ChilliSource
 			//first of all seed rand with something that is as unique as possible: allocate a random bit of memory and add this to current time.
 			u32* pRandomMemory = new u32;
 			u32 udwSeed = ((u32)pRandomMemory) + time(NULL);
-			SAFE_DELETE(pRandomMemory);
+			CS_SAFEDELETE(pRandomMemory);
 			srand(udwSeed);
 
 			//generate a random number. perform a sequence of rand() calls incase MAX_RAND is really low.

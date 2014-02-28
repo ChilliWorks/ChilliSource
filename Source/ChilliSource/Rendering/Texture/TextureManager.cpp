@@ -104,7 +104,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		TextureSPtr TextureManager::GetTextureFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, bool inbWithMipsMaps)
 		{
-			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
+			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
@@ -158,7 +158,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		TextureSPtr TextureManager::AsyncGetTextureFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, bool inbWithMipsMaps)
 		{
-			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
+			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{

@@ -18,17 +18,18 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CContactInformationProvider: public ChilliSource::Social::IContactInformationProvider
+		class CContactInformationProvider: public ChilliSource::Social::ContactInformationProvider
 		{
 		public:
-			virtual bool IsA(Core::InterfaceIDType inID) const;
 
-			virtual void LoadInformation();
+			bool IsA(Core::InterfaceIDType inID) const override;
 
-			virtual u32 GetNumberContacts();
-			virtual const Social::ContactRecord & GetContactAtIndex(u32 inudwIndex);
+			void LoadInformation() override;
 
-			void SetContacts(std::vector<Social::ContactRecord> inasContact);
+			u32 GetNumberContacts() override;
+			const Social::ContactRecord & GetContactAtIndex(u32 inudwIndex) override;
+
+			void SetContacts(const std::vector<Social::ContactRecord>& inasContact);
 
 		private:
 			std::vector<Social::ContactRecord> masContacts;

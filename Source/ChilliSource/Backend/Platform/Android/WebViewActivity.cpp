@@ -57,7 +57,7 @@ namespace ChilliSource
 		///
 		/// @param HTML file name
 		//-----------------------------------------------
-		void CWebViewActivity::PresentFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFile, f32 infDismissButtonScale)
+		void CWebViewActivity::PresentFromFile(Core::StorageLocation ineStorageLocation, const std::string& instrFile, f32 infDismissButtonScale)
 		{
 			size_t udwAnchorStart = instrFile.find_last_of('#');
 			bool bHasAnchor=(udwAnchorStart!=std::string::npos);
@@ -77,7 +77,7 @@ namespace ChilliSource
 
 			Android::CFileSystem* pFileSystem = static_cast<Android::CFileSystem*>(Core::Application::GetFileSystemPtr());
 
-			Core::FileStreamPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FM_READ);
+			Core::FileStreamSPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FM_READ);
 			std::string strHTMLFileContents;
 			pHTMLFile->GetAll(strHTMLFileContents);
 			pHTMLFile->Close();
@@ -87,15 +87,15 @@ namespace ChilliSource
 
             switch(ineStorageLocation)
             {
-                case Core::SL_PACKAGE:
+                case Core::StorageLocation::k_package:
                 default:
                 	//Remove assets and add this special path
                 	strPath = "file:///android_asset/" + strPath;
                     break;
-            	case Core::SL_CACHE:
+            	case Core::StorageLocation::k_cache:
             		strPath = "file://" + strPath;
             		break;
-                case Core::SL_DLC:
+                case Core::StorageLocation::k_DLC:
                 	if(pFileSystem->DoesFileExistInCachedDLC(strFile))
                 	{
                 		strPath = "file://" + strPath;
@@ -178,7 +178,7 @@ namespace ChilliSource
 			if(pIndex != CWebViewActivity::mmapIndexToWebView.end())
 			{
 				if(pIndex->second)
-					pIndex->second->mOnDismissedEvent.Invoke(pIndex->second);
+					pIndex->second->mOnDismissedEvent.NotifyConnections(pIndex->second);
 			}
 		}
 	}

@@ -13,7 +13,7 @@
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
-#include <ChilliSource/Core/Base/LaunchingActions.h>
+#include <ChilliSource/Core/LaunchingActions/LaunchingActions.h>
 
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/TouchInputJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>
@@ -169,13 +169,13 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OrientationCh
 
 	if (indwOrientation == 1)
 	{
-		eScreenOrientation = ChilliSource::Core::PORTRAIT_UP;
-		DEBUG_LOG("Changing orientation to portrait");
+		eScreenOrientation = ChilliSource::Core::ScreenOrientation::k_portraitUp;
+		CS_LOG_DEBUG("Changing orientation to portrait");
 	}
 	else
 	{
-		eScreenOrientation = ChilliSource::Core::LANDSCAPE_LEFT;
-		DEBUG_LOG("Changing orientation to landscape");
+		eScreenOrientation = ChilliSource::Core::ScreenOrientation::k_landscapeLeft;
+		CS_LOG_DEBUG("Changing orientation to landscape");
 	}
 
 	ChilliSource::Core::Application::OnScreenChangedOrientation(eScreenOrientation);
@@ -205,7 +205,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OnBackPressed
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OnDialogConfirmPressed(JNIEnv* inpEnv, jobject inThis, s32 indwID)
 {
-	ChilliSource::Core::Application::OnSystemConfirmDialogResult((u32)indwID, ChilliSource::SystemConfirmDialog::CONFIRM);
+	ChilliSource::Core::Application::OnSystemConfirmDialogResult((u32)indwID, ChilliSource::Core::SystemConfirmDialog::Result::k_confirm);
 }
 //--------------------------------------------------------------------------------------
 /// On Dialog Cancel Pressed
@@ -219,7 +219,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OnDialogConfi
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OnDialogCancelPressed(JNIEnv* inpEnv, jobject inThis, s32 indwID)
 {
-	ChilliSource::Core::Application::OnSystemConfirmDialogResult((u32)indwID, ChilliSource::SystemConfirmDialog::CANCEL);
+	ChilliSource::Core::Application::OnSystemConfirmDialogResult((u32)indwID, ChilliSource::Core::SystemConfirmDialog::Result::k_cancel);
 }
 //--------------------------------------------------------------------------------------
 /// Application Did Receive Launching URL
@@ -231,7 +231,7 @@ void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_OnDialogCance
 //--------------------------------------------------------------------------------------
 void Java_com_taggames_moflow_nativeinterface_CCoreNativeInterface_ApplicationDidReceiveLaunchingURL(JNIEnv* inpEnv, jobject inThis, jstring instrURL)
 {
-	ChilliSource::CLaunchingActions::ApplicationDidReceiveLaunchingURL(ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrURL));
+	CSCore::LaunchingActions::ApplicationDidReceiveLaunchingURL(ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrURL));
 }
 
 namespace ChilliSource
@@ -396,18 +396,17 @@ namespace ChilliSource
 			JNIEnv* env = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			s32 dwOSOrientation = env->CallIntMethod(GetJavaObject(), GetMethodID("GetOrientation"));
 			s32 dwOSConstOrientationLandscape = env->CallIntMethod(GetJavaObject(), GetMethodID("GetOrientationLandscapeConstant"));
-			s32 dwOSConstOrientationProtrait = env->CallIntMethod(GetJavaObject(), GetMethodID("GetOrientationPortraitConstant"));
+			s32 dwOSConstOrientationPortrait = env->CallIntMethod(GetJavaObject(), GetMethodID("GetOrientationPortraitConstant"));
 
 			// Here we need to map the orientation reported back by Android to
 			// moFlow orientation
-			if(dwOSOrientation == dwOSConstOrientationProtrait)
+			if(dwOSOrientation == dwOSConstOrientationPortrait)
 			{
-				dwResult = ChilliSource::Core::PORTRAIT_UP;
+				dwResult = (s32)Core::ScreenOrientation::k_portraitUp;
 			}
-			else
-			if(dwOSOrientation == dwOSConstOrientationLandscape)
+			else if(dwOSOrientation == dwOSConstOrientationLandscape)
 			{
-				dwResult = ChilliSource::Core::LANDSCAPE_RIGHT;
+				dwResult = (s32)Core::ScreenOrientation::k_landscapeRight;
 			}
 
 			return dwResult;
@@ -567,7 +566,7 @@ namespace ChilliSource
         //--------------------------------------------------------------------------------------------------
         /// Make Toast
         //--------------------------------------------------------------------------------------------------
-        void CCoreJavaInterface::MakeToast(const UTF8String& instrText)
+        void CCoreJavaInterface::MakeToast(const Core::UTF8String& instrText)
         {
 			JNIEnv* env = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrMessage = JavaInterfaceUtils::CreateJStringFromUTF8String(instrText);
@@ -577,7 +576,7 @@ namespace ChilliSource
         //--------------------------------------------------------------------------------------------------
         /// Show System Confirm Dialog
         //--------------------------------------------------------------------------------------------------
-        void CCoreJavaInterface::ShowSystemConfirmDialog(s32 indwDialogID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm, const UTF8String& instrCancel)
+        void CCoreJavaInterface::ShowSystemConfirmDialog(s32 indwDialogID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel)
         {
 			JNIEnv* env = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrTitle = JavaInterfaceUtils::CreateJStringFromUTF8String(instrTitle);
@@ -593,7 +592,7 @@ namespace ChilliSource
         //--------------------------------------------------------------------------------------------------
         /// Show System Dialog
         //--------------------------------------------------------------------------------------------------
-        void CCoreJavaInterface::ShowSystemDialog(s32 indwDialogID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm)
+        void CCoreJavaInterface::ShowSystemDialog(s32 indwDialogID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm)
         {
 			JNIEnv* env = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrTitle = JavaInterfaceUtils::CreateJStringFromUTF8String(instrTitle);

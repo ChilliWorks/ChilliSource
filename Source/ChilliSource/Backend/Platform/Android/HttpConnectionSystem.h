@@ -18,7 +18,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{	
-		class CHttpConnectionSystem : public Networking::IHttpConnectionSystem, public Core::IUpdateable
+		class CHttpConnectionSystem : public Networking::HttpConnectionSystem, public Core::IUpdateable
 		{
 		public:
 			
@@ -28,7 +28,7 @@ namespace ChilliSource
 			/// @param Interace ID
 			/// @return Whether object if of argument type
 			//--------------------------------------------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType inInterfaceID) const;
+            bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//--------------------------------------------------------------------------------------------------
 			/// Make Request 
 			///
@@ -37,13 +37,13 @@ namespace ChilliSource
 			/// @param (Optional) A function to call when the request is completed. Note that the request can be completed by failure/cancellation as well as success.
 			/// @return A pointer to the request. The system owns this pointer. Returns NULL if the request cannot be created.
 			//--------------------------------------------------------------------------------------------------
-            Networking::HttpRequestPtr MakeRequest(const Networking::HttpRequestDetails & insRequestDetails, Networking::IHttpRequest::CompletionDelegate inOnComplete = Networking::IHttpRequest::CompletionDelegate());
+            Networking::HttpRequest* MakeRequest(const Networking::HttpRequestDetails & insRequestDetails, Networking::HttpRequest::CompletionDelegate inOnComplete = Networking::HttpRequest::CompletionDelegate()) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Cancel All Requests
 			///
             /// Equivalent to calling the above on every incomplete request in progress.
             //--------------------------------------------------------------------------------------------------
-            void CancelAllRequests();
+            void CancelAllRequests() override;
             //--------------------------------------------------------------------------------------------------
             /// Check Reachability
             ///
@@ -51,7 +51,7 @@ namespace ChilliSource
             ///
             /// @return Success if URL is reachable
             //--------------------------------------------------------------------------------------------------
-            bool CheckReachability() const;
+            bool CheckReachability() const override;
 			//--------------------------------------------------------------------------------------------------
 			/// Update
 			///
@@ -64,10 +64,10 @@ namespace ChilliSource
 			
 		private:
 			
-			class CHttpRequest : public Networking::IHttpRequest
+			class CHttpRequest : public Networking::HttpRequest
             {
 			public:
-				CHttpRequest(const Networking::HttpRequestDetails & insDetails, const Networking::IHttpRequest::CompletionDelegate & inCompletionDelegate);
+				CHttpRequest(const Networking::HttpRequestDetails & insDetails, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate);
 
 				//------------------------------------------------------------------
 				/// Update
@@ -102,7 +102,7 @@ namespace ChilliSource
 				///
 				/// @return The delegate that will be invoked on request complete
 				//----------------------------------------------------------------------------------------
-                const Networking::IHttpRequest::CompletionDelegate & GetCompletionDelegate() const;
+                const Networking::HttpRequest::CompletionDelegate & GetCompletionDelegate() const;
 				//----------------------------------------------------------------------------------------
 				/// Get Response String
 				///
@@ -132,7 +132,7 @@ namespace ChilliSource
 				
 			private:
 				
-				Networking::IHttpRequest::CompletionDelegate mCompletionDelegate;
+				Networking::HttpRequest::CompletionDelegate mCompletionDelegate;
                 Networking::HttpRequestDetails msDetails;
 				
                 //Shared resources between thread and main

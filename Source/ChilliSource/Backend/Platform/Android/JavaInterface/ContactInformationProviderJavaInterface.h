@@ -11,15 +11,15 @@
 #define _MOFLO_PLATFORM_ANDROID_JAVAINTERFACE_CONTACTIONINFOPROVIDER_H_
 
 #include <ChilliSource/Social/Communications/ContactInformationProvider.h>
-#include <Platform/Android/Social/Communications/ContactInformationProvider.h>
-#include <vector>
+#include <ChilliSource/Backend/Platform/Android/Social/Communications/ContactInformationProvider.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/_JavaInterface.h>
+
+#include <vector>
 
 namespace ChilliSource
 {
 	namespace Android
 	{
-
 		class SCContactInformationProviderJavaInterface : public ChilliSource::Android::_IJavaInterface
 		{
 		public:
@@ -41,16 +41,15 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------
 			static void LoadInformation(CContactInformationProvider * inpContactProvider);
 
-			static std::vector<UTF8String> mastrNames;
-			static std::vector<UTF8String> mastrNumbers;
-			static std::vector<UTF8String> mastrEmails;
+			static std::vector<Core::UTF8String> mastrNames;
+			static std::vector<Core::UTF8String> mastrNumbers;
+			static std::vector<Core::UTF8String> mastrEmails;
+
 		private:
+
 			static std::vector<Social::ContactRecord> CreateContacts();
 
-
 			static CContactInformationProvider * mpContactProvider;
-
-
 		};
 
 	}

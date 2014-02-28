@@ -152,8 +152,8 @@ namespace ChilliSource
 			std::vector<ResourceProvider*> mResourceProviders;
 			Application* mpApplicationOwner;
 			
-			typedef std::unordered_map<std::string, ResourceSPtr> MapStringToResourcePtr;
-			MapStringToResourcePtr mMapFilenameToResource;
+			typedef std::unordered_map<std::string, ResourceSPtr> MapStringToResourceSPtr;
+			MapStringToResourceSPtr mMapFilenameToResource;
 		};
 	}
 }

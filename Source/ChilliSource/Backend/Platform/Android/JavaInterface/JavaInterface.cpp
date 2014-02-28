@@ -46,7 +46,7 @@ namespace ChilliSource
 				jclass jClassType = pEnv->FindClass(instrInterfaceName.c_str());
 				if (jClassType == NULL)
 				{
-					FATAL_LOG("Cannot find native interface class '" + instrInterfaceName + "'");
+					CS_LOG_FATAL("Cannot find native interface class '" + instrInterfaceName + "'");
 				}
 
 				//get the class instance
@@ -54,7 +54,7 @@ namespace ChilliSource
 				jobject jClassInstance = pEnv->NewObject(jClassType, jConstructor);
 				if (jClassInstance == NULL)
 				{
-					FATAL_LOG("Cannot create native interface instance '" + instrInterfaceName + "'");
+					CS_LOG_FATAL("Cannot create native interface instance '" + instrInterfaceName + "'");
 				}
 
 				//create a global reference to the instance
@@ -66,7 +66,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				FATAL_LOG("Cannot create native interface " + instrInterfaceName + ", as it has already been created!");
+				CS_LOG_FATAL("Cannot create native interface " + instrInterfaceName + ", as it has already been created!");
 			}
 		}
 		//--------------------------------------------------------
@@ -91,12 +91,12 @@ namespace ChilliSource
 					}
 					else
 					{
-						FATAL_LOG("Could not add method reference '" + instrMethodName + "' - method name already exists.");
+						CS_LOG_FATAL("Could not add method reference '" + instrMethodName + "' - method name already exists.");
 					}
 				}
 				else
 				{
-					FATAL_LOG("Could not create method reference '" + instrMethodName + "'");
+					CS_LOG_FATAL("Could not create method reference '" + instrMethodName + "'");
 				}
 
 				//delete local references
@@ -104,7 +104,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				FATAL_LOG("Cannot create method reference as the native interface has not been created!");
+				CS_LOG_FATAL("Cannot create method reference as the native interface has not been created!");
 			}
 		}
 		//--------------------------------------------------------
@@ -125,7 +125,7 @@ namespace ChilliSource
 				return it->second;
 			}
 
-			FATAL_LOG("Could not find method reference '" + instrMethodName + "', was it created?");
+			CS_LOG_FATAL("Could not find method reference '" + instrMethodName + "', was it created?");
 			return NULL;
 		}
 	}

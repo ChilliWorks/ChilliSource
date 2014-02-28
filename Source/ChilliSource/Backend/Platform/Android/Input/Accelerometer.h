@@ -22,7 +22,7 @@ namespace ChilliSource
 		/// Listens to and stores the acceleration read from the
 		/// hardware accelerometer.
 		//======================================================
-		class CAccelerometer : public Input::IAccelerometer
+		class CAccelerometer : public Input::Accelerometer
 		{
 		public:
 			//------------------------------------------------
@@ -35,37 +35,34 @@ namespace ChilliSource
 			/// @return whether or not the accelerometer is
             /// currently updating.
 			//----------------------------------------------------
-			bool IsUpdating() const;
+			bool IsUpdating() const override;
 			//------------------------------------------------
 			/// Is A
 			///
 			/// @return whether or not this object implements
 			/// the given interface.
 			//------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//----------------------------------------------------
 			/// Start Updating
 			///
 			/// Start listening for accelerometer changes.
 			//----------------------------------------------------
-			void StartUpdating();
+			void StartUpdating() override;
 			//------------------------------------------------
 			/// Get Acceleration
 			///
 			/// @return The acceleration applied to the device
 			/// measured in "G"s.
 			//------------------------------------------------
-			const Core::CVector3& GetAcceleration() const;
+			Core::Vector3 GetAcceleration() const override;
 			//----------------------------------------------------
 			/// Stop Updating
 			///
 			/// Stop listening for accelerometer changes.
 			//----------------------------------------------------
-			void StopUpdating();
-			//------------------------------------------------
-			/// Destructor
-			//------------------------------------------------
-			virtual ~CAccelerometer();
+			void StopUpdating() override;
+
 		protected:
 			//------------------------------------------------
 			/// On Acceleration Changed
@@ -74,9 +71,9 @@ namespace ChilliSource
 			///
 			/// @param The new acceleration.
 			//------------------------------------------------
-			void OnAccelerationChanged(const Core::CVector3& invAcceleration);
+			void OnAccelerationChanged(const Core::Vector3& invAcceleration);
 
-			Core::CVector3 mvAcceleration;
+			Core::Vector3 mvAcceleration;
 			AccelerometerJavaInterfacePtr mpAccelerometerJI;
 			bool mbIsUpdating;
 		};

@@ -9,17 +9,15 @@
 #ifndef _MO_FLO_PLATFORM_ANDROID_VIRTUAL_KEYBOARD_H_
 #define _MO_FLO_PLATFORM_ANDROID_VIRTUAL_KEYBOARD_H_
 
-#include <ChilliSource/Core/Main/FastDelegate.h>
-#include <ChilliSource/Core/Main/GenericEvent.h>
-#include <ChilliSource/Core/System/SystemConcepts.h>
-#include <ChilliSource/Input/VirtualKeyboard.h>
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Core/System/SystemConcepts.h>
+#include <ChilliSource/Input/Keyboard/VirtualKeyboard.h>
 
 namespace ChilliSource
 {
 	namespace Android
 	{
-		class CVirtualKeyboard : public Input::IVirtualKeyboard
+		class CVirtualKeyboard : public Input::VirtualKeyboard
 		{
 		public:
 			CVirtualKeyboard();
@@ -60,7 +58,7 @@ namespace ChilliSource
 			///
 			/// @param Text cache for keyboard
 			//-------------------------------------------
-			void SetText(const UTF8String& instrText);
+			void SetText(const Core::UTF8String& instrText);
 		private:
 			//-------------------------------------------
 			/// On Text Added
@@ -68,7 +66,7 @@ namespace ChilliSource
 			/// Updates the keyboard text when new text
 			/// is received from the keyboard.
 			//-------------------------------------------
-			void OnTextAdded(const UTF8String& instrText);
+			void OnTextAdded(const Core::UTF8String& instrText);
 			//-------------------------------------------
 			/// On Text Deleted
 			///
@@ -83,7 +81,7 @@ namespace ChilliSource
 			//-------------------------------------------
 			void OnKeyboardDismissed();
 
-			UTF8String mstrText;
+			Core::UTF8String mstrText;
 			KeyboardJavaInterfacePtr mpKeyboardJavaInterface;
 		};
 	}

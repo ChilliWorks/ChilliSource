@@ -75,7 +75,7 @@ namespace ChilliSource
 			/// @param the UTF8String
 			/// @return the new java string
 			//--------------------------------------------------------------------------------------
-			static jstring CreateJStringFromUTF8String(UTF8String instrString);
+			static jstring CreateJStringFromUTF8String(Core::UTF8String instrString);
 			//--------------------------------------------------------------------------------------
 			/// Create STDString From JString
 			///
@@ -102,7 +102,7 @@ namespace ChilliSource
 			/// @param the java string
 			/// @return the new UTF8String
 			//--------------------------------------------------------------------------------------
-			static UTF8String CreateUTF8StringFromJString(jstring injstrString);
+			static Core::UTF8String CreateUTF8StringFromJString(jstring injstrString);
 			//--------------------------------------------------------------------------------------
 			/// Get Int Element From JArray
 			///

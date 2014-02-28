@@ -89,7 +89,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------------
 			/// Constructor
 			//----------------------------------------------------------------------------------
-			CPngImage(Core::STORAGE_LOCATION ineStorageLocation, std::string instrFilename);
+			CPngImage(Core::StorageLocation ineStorageLocation, std::string instrFilename);
 			//----------------------------------------------------------------------------------
 			/// Destructor
 			//----------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ namespace ChilliSource
 			/// @param The storage location to load from.
 			/// @param The file path.
 			//----------------------------------------------------------------------------------
-			void Load(Core::STORAGE_LOCATION ineStorageLocation, std::string instrFilename);
+			void Load(Core::StorageLocation ineStorageLocation, std::string instrFilename);
 			//----------------------------------------------------------------------------------
 			/// Release
 			///
@@ -139,7 +139,7 @@ namespace ChilliSource
 			///
 			/// @return the image format
 			//----------------------------------------------------------------------------------
-			Core::CImage::Format GetImageFormat();
+			Core::Image::Format GetImageFormat();
 			//----------------------------------------------------------------------------------
 			/// Convert Format From RGB888 To LUM8
 			///
@@ -172,13 +172,13 @@ namespace ChilliSource
 			///
 			/// @param the stream lib png should use to read the data.
 			//----------------------------------------------------------------------------------
-			bool LoadWithLibPng(Core::FileStreamPtr inStream);
+			bool LoadWithLibPng(Core::FileStreamSPtr inStream);
 
 			bool mbIsLoaded;
 			s32 mdwHeight;
 			s32 mdwWidth;
 			u8 * mpData;
-			Core::CImage::Format meFormat;
+			Core::Image::Format meFormat;
 		};
 	}
 }

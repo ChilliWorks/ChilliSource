@@ -9,6 +9,7 @@
 #include <ChilliSource/Backend/Platform/Android/Input/VirtualKeyboard.h>
 #include <ChilliSource/Backend/Platform/Android/Input/KeyboardJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Utils.h>
 
 namespace ChilliSource
@@ -27,9 +28,9 @@ namespace ChilliSource
 				CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpKeyboardJavaInterface);
 			}
 
-			mpKeyboardJavaInterface->SetTextAddedDelegate(fastdelegate::MakeDelegate(this, &CVirtualKeyboard::OnTextAdded));
-			mpKeyboardJavaInterface->SetTextDeletedDelegate(fastdelegate::MakeDelegate(this, &CVirtualKeyboard::OnTextDeleted));
-			mpKeyboardJavaInterface->SetKeyboardDismissedDelegate(fastdelegate::MakeDelegate(this, &CVirtualKeyboard::OnKeyboardDismissed));
+			mpKeyboardJavaInterface->SetTextAddedDelegate(Core::MakeDelegate(this, &CVirtualKeyboard::OnTextAdded));
+			mpKeyboardJavaInterface->SetTextDeletedDelegate(Core::MakeDelegate(this, &CVirtualKeyboard::OnTextDeleted));
+			mpKeyboardJavaInterface->SetKeyboardDismissedDelegate(Core::MakeDelegate(this, &CVirtualKeyboard::OnKeyboardDismissed));
 		}
 		//-------------------------------------------
 		/// Show
@@ -43,7 +44,7 @@ namespace ChilliSource
 				mbIsActive = true;
 
 				//Notify our listeners
-				mOnKeyboardShowEvent.Invoke();
+				mOnKeyboardShowEvent.NotifyConnections();
 			}
 		}
 		//-------------------------------------------
@@ -57,7 +58,7 @@ namespace ChilliSource
 				mbIsActive = false;
 
 				//Notify our listeners
-				mOnKeyboardHideEvent.Invoke();
+				mOnKeyboardHideEvent.NotifyConnections();
 
 				mstrText.clear();
 			}
@@ -79,19 +80,19 @@ namespace ChilliSource
 		//-------------------------------------------
 		/// Set Text
 		//-------------------------------------------
-		void CVirtualKeyboard::SetText(const UTF8String& instrText)
+		void CVirtualKeyboard::SetText(const Core::UTF8String& instrText)
 		{
 			mstrText = instrText;
 		}
 		//-------------------------------------------
 		/// On Text Added
 		//-------------------------------------------
-		void CVirtualKeyboard::OnTextAdded(const UTF8String& instrText)
+		void CVirtualKeyboard::OnTextAdded(const Core::UTF8String& instrText)
 		{
-			UTF8String strNewText = mstrText + instrText;
+			Core::UTF8String strNewText = mstrText + instrText;
 
 			bool bRejectText = false;
-			mOnKeyboardTextChangeEvent.Invoke<const UTF8String&, bool*>(strNewText, &bRejectText);
+			mOnKeyboardTextChangeEvent.NotifyConnections(strNewText, &bRejectText);
 
 			if(!bRejectText)
 			{
@@ -103,14 +104,14 @@ namespace ChilliSource
 		//-------------------------------------------
 		void CVirtualKeyboard::OnTextDeleted()
 		{
-			UTF8String strNewText = mstrText;
+			Core::UTF8String strNewText = mstrText;
 			if (strNewText.size() > 0)
 			{
 				strNewText = mstrText.substr(0, mstrText.length() - 1);
 			}
 
 			bool bRejectText = false;
-			mOnKeyboardTextChangeEvent.Invoke<const UTF8String&, bool*>(strNewText, &bRejectText);
+			mOnKeyboardTextChangeEvent.NotifyConnections(strNewText, &bRejectText);
 
 			if(!bRejectText)
 			{
@@ -127,7 +128,7 @@ namespace ChilliSource
 				mbIsActive = false;
 
 				//Notify our listeners
-				mOnKeyboardHideEvent.Invoke();
+				mOnKeyboardHideEvent.NotifyConnections();
 
 				mstrText.clear();
 			}

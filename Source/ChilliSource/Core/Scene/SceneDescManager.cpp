@@ -50,7 +50,7 @@ namespace ChilliSource
         
         SceneDescSPtr SceneDescManager::GetSceneDescFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
-            MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
+            MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
             
             if(pExistingResource == mMapFilenameToResource.end())
             {
@@ -82,7 +82,7 @@ namespace ChilliSource
         
         SceneDescSPtr SceneDescManager::AsyncGetSceneDescFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
-            MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
+            MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
             
             if(pExistingResource == mMapFilenameToResource.end())
             {

@@ -61,7 +61,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		void CGooglePlayRemoteNotificationSystem::OnRemoteTokenReceived(const std::string& instrToken)
 		{
-			mstrToken = ChilliSource::CBaseEncoding::Base64Encode(instrToken);
+			mstrToken = Core::BaseEncoding::Base64Encode(instrToken);
 			if(mDelegate != NULL)
 			{
 				mDelegate(mstrToken);
@@ -73,17 +73,16 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		void CGooglePlayRemoteNotificationSystem::OnRemoteNotificationReceived(const Core::ParamDictionary& insParams)
 		{
-			ChilliSource::Notification sNotification;
+			Core::NotificationSPtr notification(std::make_shared<CSCore::Notification>());
 
-			sNotification.bDismissed = false;
-			sNotification.eType = NOTICE_PUSH;
-			sNotification.TriggerTime = Core::Application::GetSystemTime();
-			sNotification.ID = 0;
-			sNotification.ePriority = NOTICE_STANDARD;
-			sNotification.sParams = insParams;
+			notification->bDismissed = false;
+			notification->eType = Core::NotificationType::k_push;
+			notification->TriggerTime = Core::Application::GetSystemTime();
+			notification->ID = 0;
+			notification->ePriority = Core::NotificationPriority::k_standard;
+			notification->sParams = insParams;
 
-			WARNING_LOG("Remote notification received: " + sNotification.sParams.ToString());
-			CNotificationScheduler::OnNotificationReceived(sNotification);
+			Core::NotificationScheduler::OnNotificationReceived(notification);
 		}
     }
 }

@@ -36,7 +36,7 @@ namespace ChilliSource
 			return masContacts[inudwIndex];
 		}
 
-		void CContactInformationProvider::SetContacts(std::vector<Social::ContactRecord> inasContacts)
+		void CContactInformationProvider::SetContacts(const std::vector<Social::ContactRecord>& inasContacts)
 		{
 			masContacts = inasContacts;
 		}

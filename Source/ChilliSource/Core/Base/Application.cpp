@@ -81,7 +81,7 @@ namespace ChilliSource
         SystemConfirmDialog::Delegate Application::mActiveSysConfirmDelegate;
 
         f32 Application::s_updateIntervalRemainder = 0.0f;
-        bool Application::s_shouldInvokeResumeEvent = false;
+        bool Application::s_shouldNotifyConnectionsResumeEvent = false;
         bool Application::s_isFirstFrame = true;
         bool Application::s_isSuspending = false;
         
@@ -621,9 +621,9 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void Application::OnFrameBegin(f32 infDt, TimeIntervalSecs inuddwTimestamp)
 		{
-            if(s_shouldInvokeResumeEvent == true)
+            if(s_shouldNotifyConnectionsResumeEvent == true)
 			{
-				s_shouldInvokeResumeEvent = false;
+				s_shouldNotifyConnectionsResumeEvent = false;
 				OnApplicationResumed();
 			}
             
@@ -790,7 +790,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void Application::Resume()
 		{
-            s_shouldInvokeResumeEvent = true;
+            s_shouldNotifyConnectionsResumeEvent = true;
 
 			//We must restart the application timer. This will automatically restart system updates
 			pPlatformSystem->SetUpdaterActive(true);

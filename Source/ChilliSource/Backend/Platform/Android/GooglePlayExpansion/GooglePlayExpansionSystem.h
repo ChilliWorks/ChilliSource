@@ -10,7 +10,6 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAYEXPANSION_GOOGLEPLAYEXPANSIONSYSTEM_H
 #define _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAYEXPANSION_GOOGLEPLAYEXPANSIONSYSTEM_H
 
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterface.h>
@@ -21,26 +20,23 @@ namespace ChilliSource
     {
     	class CGooglePlayExpansionJavaInterface;
 
-    	namespace DownloadStatus
+    	enum class DownloadStatus
     	{
-    		enum ENUM
-    		{
-    			DOWNLOADING,
-    			INSTALLING,
-    			COMPLETE,
-    			PAUSED_NO_WIFI,
-    			PAUSED,
-    			FAILED,
-    			FAILED_INSUFFICIENT_STORAGE
-    		};
-    	}
+    		k_downloading,
+    		k_installing,
+    		k_complete,
+    		k_pausedNoWiFi,
+    		k_paused,
+    		k_failed,
+    		k_failedInsufficientStorage
+    	};
 
-        class CGooglePlayExpansionSystem : public Core::ISystem
+        class CGooglePlayExpansionSystem : public Core::System
         {
         public:
         	CS_DECLARE_NAMEDTYPE(CGooglePlayExpansionSystem);
 
-        	typedef fastdelegate::FastDelegate1<DownloadStatus::ENUM> DownloadStatusDelegate;
+        	typedef std::function<void(DownloadStatus)> DownloadStatusDelegate;
 
         	CGooglePlayExpansionSystem();
         	~CGooglePlayExpansionSystem();
@@ -108,7 +104,7 @@ namespace ChilliSource
             u64 GetRequiredStorageSpaceInBytes();
 
             //----Called from Java
-            void OnDownloadStatusChanged(DownloadStatus::ENUM ineStatus);
+            void OnDownloadStatusChanged(DownloadStatus ineStatus);
 
         private:
 
@@ -187,7 +183,7 @@ namespace ChilliSource
             ///
             /// @param Status
     		//-------------------------------------------------------------
-            void UnzipCompleteTask(DownloadStatus::ENUM ineStatus);
+            void UnzipCompleteTask(DownloadStatus ineStatus);
             //-------------------------------------------------------------
             /// Do Expansion Download Files Exist
             ///
@@ -205,6 +201,9 @@ namespace ChilliSource
         private:
 
             DownloadStatusDelegate mDownloadStatusDelegate;
+
+            Core::ConnectionUPtr m_appResumeConnection;
+            Core::ConnectionUPtr m_appSuspendConnection;
 
             u32 mudwNumExpansions;
             f32 mfInstallProgress;

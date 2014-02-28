@@ -72,7 +72,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		SkinnedAnimationSPtr SkinnedAnimationManager::GetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
-			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
+			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
@@ -116,7 +116,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		SkinnedAnimationSPtr SkinnedAnimationManager::AsyncGetSkinnedAnimationFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
 		{
-			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
+			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{

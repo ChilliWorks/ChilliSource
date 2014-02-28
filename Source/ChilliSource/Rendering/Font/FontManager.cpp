@@ -103,7 +103,7 @@ namespace ChilliSource
             Core::StringUtils::SplitBaseFilename(inFilePath, strFontFile, strExt);
             strFontFile += ".alphabet";
             
-			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(strFontFile);
+			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(strFontFile);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{

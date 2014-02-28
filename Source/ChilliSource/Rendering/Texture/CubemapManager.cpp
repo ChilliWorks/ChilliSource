@@ -104,7 +104,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		CubemapSPtr CubemapManager::GetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, bool inbWithMipsMaps)
 		{
-			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
+			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{
@@ -180,7 +180,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		CubemapSPtr CubemapManager::AsyncGetCubemapFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, bool inbWithMipsMaps)
 		{
-			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
+			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(inFilePath);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{

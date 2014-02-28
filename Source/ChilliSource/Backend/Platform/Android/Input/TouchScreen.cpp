@@ -25,7 +25,7 @@ namespace ChilliSource
 		}
 		bool CTouchScreen::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == Input::ITouchScreen::InterfaceID;
+			return inInterfaceID == Input::TouchScreen::InterfaceID;
 		}
 		//---------------------------------------------------------------------
 		/// On Touch Began
@@ -33,7 +33,7 @@ namespace ChilliSource
 		void CTouchScreen::OnTouchBegan(s32 indwID, f32 infX, f32 infY)
 		{
 			//Grab the touch location from the OS
-			size_t InternalEventID = StartTouch(Core::CVector2(infX, infY), mffLastTimeStamp);
+			size_t InternalEventID = StartTouch(Core::Vector2(infX, infY), mffLastTimeStamp);
 			mMapNativeTouchesToID.insert(std::make_pair(indwID,InternalEventID));
 		}
 		//---------------------------------------------------------------------
@@ -45,7 +45,7 @@ namespace ChilliSource
 
 			if (pKey != mMapNativeTouchesToID.end())
 			{
-				MoveTouch(pKey->second, Core::CVector2(infX, infY), mffLastTimeStamp);
+				MoveTouch(pKey->second, Core::Vector2(infX, infY), mffLastTimeStamp);
 			}
 		}
 		//---------------------------------------------------------------------

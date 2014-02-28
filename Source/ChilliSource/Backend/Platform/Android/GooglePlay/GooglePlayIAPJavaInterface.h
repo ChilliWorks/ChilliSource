@@ -9,8 +9,8 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAY_GOOGLEPLAYIAPJAVAINTERFACE_H_
 #define _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAY_GOOGLEPLAYIAPJAVAINTERFACE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterface.h>
-
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 
 namespace ChilliSource
@@ -64,7 +64,7 @@ namespace ChilliSource
 			/// @param List of product IDs to request descriptions for
             /// @param Delegate to invoke when the request completes
             //---------------------------------------------------------------
-            void RequestProductDescriptions(const DYNAMIC_ARRAY<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate);
+            void RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate);
             //---------------------------------------------------------------
 			/// Cancel Product Descriptions Request
 			///
@@ -112,14 +112,14 @@ namespace ChilliSource
             ///
             /// @param List of product descriptions
             //---------------------------------------------------------------
-            void OnProductDescriptionsRequestComplete(const DYNAMIC_ARRAY<moNetworking::IAPProductDesc>& inaProducts);
+            void OnProductDescriptionsRequestComplete(const std::vector<Networking::IAPProductDesc>& inaProducts);
             //---------------------------------------------------------------
     		/// On Transaction Status Updated
             ///
             /// @param Status ID
             /// @param Transaction description
             //---------------------------------------------------------------
-            void OnTransactionStatusUpdated(u32 inudwStatus, const moNetworking::IAPTransaction& inTransaction);
+            void OnTransactionStatusUpdated(u32 inudwStatus, const Networking::IAPTransaction& inTransaction);
             //---------------------------------------------------------------
     		/// On Transaction Closed
             ///
@@ -135,7 +135,7 @@ namespace ChilliSource
             Networking::IAPTransactionCloseDelegate mTransactionCloseDelegate;
 		};
 
-		typedef SHARED_PTR<CGooglePlayIAPJavaInterface> GooglePlayIAPJavaInterfacePtr;
+		typedef std::shared_ptr<CGooglePlayIAPJavaInterface> GooglePlayIAPJavaInterfacePtr;
 	}
 }
 

@@ -167,14 +167,14 @@ namespace ChilliSource
 		/// Attempt to open an existing session or prompt the user to login if no
 		/// session exists
 		//--------------------------------------------------------------------------------------
-		void CFacebookJavaInterface::Authenticate(const DYNAMIC_ARRAY<std::string>& inaReadPerms)
+		void CFacebookJavaInterface::Authenticate(const std::vector<std::string>& inaReadPerms)
 		{
 			JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaPermissions = pEnv->NewObjectArray(inaReadPerms.size(), jStringClass, jstrEmptyString);
 	    	u32 udwPermissionCount = 0;
-	    	for(DYNAMIC_ARRAY<std::string>::const_iterator it = inaReadPerms.begin(); it != inaReadPerms.end(); ++it)
+	    	for(std::vector<std::string>::const_iterator it = inaReadPerms.begin(); it != inaReadPerms.end(); ++it)
 	    	{
 	    		jstring jstrPermission = JavaInterfaceUtils::CreateJStringFromSTDString((*it));
 	    		pEnv->SetObjectArrayElement(jaPermissions, udwPermissionCount, jstrPermission);
@@ -232,14 +232,14 @@ namespace ChilliSource
 	    ///
 		/// @param List of read permissions IDs
 		//--------------------------------------------------------------------------------------
-	    void CFacebookJavaInterface::AuthoriseReadPermissions(const DYNAMIC_ARRAY<std::string>& inaReadPerms)
+	    void CFacebookJavaInterface::AuthoriseReadPermissions(const std::vector<std::string>& inaReadPerms)
 	    {
 	    	JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaPermissions = pEnv->NewObjectArray(inaReadPerms.size(), jStringClass, jstrEmptyString);
 	    	u32 udwPermissionCount = 0;
-	    	for(DYNAMIC_ARRAY<std::string>::const_iterator it = inaReadPerms.begin(); it != inaReadPerms.end(); ++it)
+	    	for(std::vector<std::string>::const_iterator it = inaReadPerms.begin(); it != inaReadPerms.end(); ++it)
 	    	{
 	    		jstring jstrPermission = JavaInterfaceUtils::CreateJStringFromSTDString((*it));
 	    		pEnv->SetObjectArrayElement(jaPermissions, udwPermissionCount, jstrPermission);
@@ -260,14 +260,14 @@ namespace ChilliSource
 	    ///
 		/// @param List of write permissions IDs
 		//--------------------------------------------------------------------------------------
-	    void CFacebookJavaInterface::AuthoriseWritePermissions(const DYNAMIC_ARRAY<std::string>& inaWritePerms)
+	    void CFacebookJavaInterface::AuthoriseWritePermissions(const std::vector<std::string>& inaWritePerms)
 	    {
 	    	JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaPermissions = pEnv->NewObjectArray(inaWritePerms.size(), jStringClass, jstrEmptyString);
 	    	u32 udwPermissionCount = 0;
-	    	for(DYNAMIC_ARRAY<std::string>::const_iterator it = inaWritePerms.begin(); it != inaWritePerms.end(); ++it)
+	    	for(std::vector<std::string>::const_iterator it = inaWritePerms.begin(); it != inaWritePerms.end(); ++it)
 	    	{
 	    		jstring jstrPermission = JavaInterfaceUtils::CreateJStringFromSTDString((*it));
 	    		pEnv->SetObjectArrayElement(jaPermissions, udwPermissionCount, jstrPermission);
@@ -296,14 +296,14 @@ namespace ChilliSource
 	    /// Attempt to make a Graph API request to post to feed with the following
 	    /// path and key value array
 		//--------------------------------------------------------------------------------------
-	    void CFacebookJavaInterface::TryPostToFeed(const std::string& instrGraphPath, const DYNAMIC_ARRAY<std::string>& inaKeyValues)
+	    void CFacebookJavaInterface::TryPostToFeed(const std::string& instrGraphPath, const std::vector<std::string>& inaKeyValues)
 	    {
 	    	JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaKeyValues = pEnv->NewObjectArray(inaKeyValues.size(), jStringClass, jstrEmptyString);
 	    	u32 i = 0;
-	    	for(DYNAMIC_ARRAY<std::string>::const_iterator it = inaKeyValues.begin(); it != inaKeyValues.end(); ++it, ++i)
+	    	for(std::vector<std::string>::const_iterator it = inaKeyValues.begin(); it != inaKeyValues.end(); ++it, ++i)
 	    	{
 	    		jstring jstrElement = JavaInterfaceUtils::CreateJStringFromSTDString((*it));
 	    		pEnv->SetObjectArrayElement(jaKeyValues, i, jstrElement);
@@ -323,14 +323,14 @@ namespace ChilliSource
 	    /// Attempt to make a Graph API request to post to feed with the following
 	    /// path and key value array
 		//--------------------------------------------------------------------------------------
-	    void CFacebookJavaInterface::TryPostRequest(const DYNAMIC_ARRAY<std::string>& inaKeyValues)
+	    void CFacebookJavaInterface::TryPostRequest(const std::vector<std::string>& inaKeyValues)
 	    {
 	    	JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaKeyValues = pEnv->NewObjectArray(inaKeyValues.size(), jStringClass, jstrEmptyString);
 	    	u32 i = 0;
-	    	for(DYNAMIC_ARRAY<std::string>::const_iterator it = inaKeyValues.begin(); it != inaKeyValues.end(); ++it, ++i)
+	    	for(std::vector<std::string>::const_iterator it = inaKeyValues.begin(); it != inaKeyValues.end(); ++it, ++i)
 	    	{
 	    		jstring jstrElement = JavaInterfaceUtils::CreateJStringFromSTDString((*it));
 	    		pEnv->SetObjectArrayElement(jaKeyValues, i, jstrElement);

@@ -24,12 +24,12 @@ namespace ChilliSource
 		/// An enum for the different response codes from the android
 		/// HttpRequest.
 		//===========================================================
-		enum HTTP_REQUEST_RESULT_CODE
+		enum class HttpRequestResultCode
 		{
-			HRRC_SUCCESS,
-			HRRC_COULDNOTCONNECT,
-			HRRC_TIMEOUT,
-			HRRC_COULDNOTMAKEREQUEST
+			k_success,
+			k_couldNotConnect,
+			k_timeout,
+			k_couldNotMakeRequest
 		};
 
 		//===========================================================
@@ -37,10 +37,10 @@ namespace ChilliSource
 		///
 		/// An enum for the types of http request
 		//===========================================================
-		enum HTTP_REQUEST_TYPE
+		enum class HttpRequestType
 		{
-			HRT_GET,
-			HRT_POST
+			k_get,
+			k_post
 		};
 
 		class SCHttpConnectionJavaInterface : public _IJavaInterface
@@ -67,7 +67,7 @@ namespace ChilliSource
 			/// @param Output parameter containing the response string.
 			/// @return The response code.
 			//--------------------------------------------------------------------------------------
-			static HTTP_REQUEST_RESULT_CODE HttpRequest(const std::string& instrUrl, HTTP_REQUEST_TYPE ineRequestType,
+			static HttpRequestResultCode HttpRequest(const std::string& instrUrl, HttpRequestType ineRequestType,
 														const std::string& instrBody, std::string& outstrResponse, std::string& outstrRedirect, s32& outdwResponseCode);
 			//--------------------------------------------------------------------------------------
 			/// Http Request
@@ -83,7 +83,7 @@ namespace ChilliSource
 			/// @param Whether or not to use a persistent connection
 			/// @return The response code.
 			//--------------------------------------------------------------------------------------
-			static HTTP_REQUEST_RESULT_CODE HttpRequest(const std::string& instrUrl, HTTP_REQUEST_TYPE ineRequestType,
+			static HttpRequestResultCode HttpRequest(const std::string& instrUrl, HttpRequestType ineRequestType,
 														Core::ParamDictionary insHeaders, const std::string& instrBody,
 														std::string& outstrResponse, std::string& outstrRedirect, s32& outdwResponseCode,
 														bool inbKeepAlive);

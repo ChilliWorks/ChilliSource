@@ -39,9 +39,9 @@ void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnTextAdded(J
 	ChilliSource::Android::KeyboardJavaInterfacePtr pKeyboardJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CKeyboardJavaInterface>();
 	if (pKeyboardJI != NULL)
 	{
-		ChilliSource::UTF8String strText = ChilliSource::Android::JavaInterfaceUtils::CreateUTF8StringFromJString(injstrText);
-		ChilliSource::Task1<const ChilliSource::UTF8String&> task(pKeyboardJI.get(), &ChilliSource::Android::CKeyboardJavaInterface::OnTextAdded, strText);
-		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(task);
+		CSCore::UTF8String strText = ChilliSource::Android::JavaInterfaceUtils::CreateUTF8StringFromJString(injstrText);
+		CSCore::Task<const CSCore::UTF8String&> task(pKeyboardJI.get(), &ChilliSource::Android::CKeyboardJavaInterface::OnTextAdded, strText);
+		CSCore::TaskScheduler::ScheduleMainThreadTask(task);
 	}
 	inpEnv->DeleteLocalRef(injstrText);
 }
@@ -59,8 +59,8 @@ void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnTextDeleted
 	ChilliSource::Android::KeyboardJavaInterfacePtr pKeyboardJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CKeyboardJavaInterface>();
 	if (pKeyboardJI != NULL)
 	{
-		ChilliSource::Task0 task(pKeyboardJI.get(), &ChilliSource::Android::CKeyboardJavaInterface::OnTextDeleted);
-		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(task);
+		CSCore::Task<> task(pKeyboardJI.get(), &ChilliSource::Android::CKeyboardJavaInterface::OnTextDeleted);
+		CSCore::TaskScheduler::ScheduleMainThreadTask(task);
 	}
 }
 //-----------------------------------------------
@@ -76,8 +76,8 @@ void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnKeyboardDis
 	ChilliSource::Android::KeyboardJavaInterfacePtr pKeyboardJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CKeyboardJavaInterface>();
 	if (pKeyboardJI != NULL)
 	{
-		ChilliSource::Task0 task(pKeyboardJI.get(), &ChilliSource::Android::CKeyboardJavaInterface::OnKeyboardDismissed);
-		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(task);
+		CSCore::Task<> task(pKeyboardJI.get(), &ChilliSource::Android::CKeyboardJavaInterface::OnKeyboardDismissed);
+		CSCore::TaskScheduler::ScheduleMainThreadTask(task);
 	}
 }
 
@@ -101,12 +101,12 @@ namespace ChilliSource
 			{
 				switch (ineKeyboardType)
 				{
-				case Input::KEYBOARD_TEXT:
+				case Input::KeyboardType::k_text:
 					return 0;
-				case Input::KEYBOARD_NUMERIC:
+				case Input::KeyboardType::k_numeric:
 					return 1;
 				default:
-					ERROR_LOG("Invalid keyboard type, cannot be converted.");
+					CS_LOG_ERROR("Invalid keyboard type, cannot be converted.");
 					return 0;
 				}
 			}
@@ -125,16 +125,16 @@ namespace ChilliSource
 			{
 				switch (ineKeyboardCapitalisation)
 				{
-				case Input::KEYBOARD_CAPS_NONE:
+				case Input::KeyboardCapitalisation::k_none:
 					return 0;
-				case Input::KEYBOARD_CAPS_SENTENCES:
+				case Input::KeyboardCapitalisation::k_sentences:
 					return 1;
-				case Input::KEYBOARD_CAPS_WORDS:
+				case Input::KeyboardCapitalisation::k_words:
 					return 2;
-				case Input::KEYBOARD_CAPS_ALL:
+				case Input::KeyboardCapitalisation::k_all:
 					return 3;
 				default:
-					ERROR_LOG("Invalid keyboard capitalisation, cannot be converted.");
+					CS_LOG_ERROR("Invalid keyboard capitalisation, cannot be converted.");
 					return 0;
 				}
 			}
@@ -217,7 +217,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// On Text Added
 		//-----------------------------------------------
-		void CKeyboardJavaInterface::OnTextAdded(const UTF8String& instrText)
+		void CKeyboardJavaInterface::OnTextAdded(const Core::UTF8String& instrText)
 		{
 			if (mTextAddedDelegate != NULL)
 			{

@@ -73,13 +73,13 @@ namespace ChilliSource
 			 @remarks
 			 Format is "x y" (i.e. 2x f32 inValues, space delimited)
 			 */
-			static std::string ToString(const CVector2& inVal);
+			static std::string ToString(const Vector2& inVal);
 
 			/** Converts a Vector3 to a String. 
 			 @remarks
 			 Format is "x y z" (i.e. 3x f32 inValues, space delimited)
 			 */
-			static std::string ToString(const CVector3& inVal);
+			static std::string ToString(const Vector3& inVal);
 
 			/** Converts a Vector4 to a String. 
 			 @remarks
@@ -153,14 +153,14 @@ namespace ChilliSource
 			 Format is "x y" ie. 2 f32 components, space delimited. Failure to Parse returns
 			 Vector2::ZERO.
 			 */
-			static CVector2 ParseVector2(const std::string& inVal);
+			static Vector2 ParseVector2(const std::string& inVal);
 
 			/** Parses a Vector3 out of a String.
 			 @remarks
 			 Format is "x y z" ie. 3 f32 components, space delimited. Failure to Parse returns
 			 Vector3::ZERO.
 			 */
-			static CVector3 ParseVector3(const std::string& inVal);
+			static Vector3 ParseVector3(const std::string& inVal);
 
 			/** Parses a Vector4 out of a String.
 			 @remarks

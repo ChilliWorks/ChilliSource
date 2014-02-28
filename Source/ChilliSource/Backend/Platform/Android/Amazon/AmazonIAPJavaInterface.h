@@ -71,7 +71,7 @@ namespace ChilliSource
 			/// @param List of product IDs to request descriptions for
             /// @param Delegate to invoke when the request completes
             //---------------------------------------------------------------
-            void RequestProductDescriptions(const DYNAMIC_ARRAY<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate);
+            void RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate);
             //---------------------------------------------------------------
 			/// Cancel Product Descriptions Request
 			///
@@ -115,14 +115,14 @@ namespace ChilliSource
             ///
             /// @param List of product descriptions
             //---------------------------------------------------------------
-            void OnProductDescriptionsRequestComplete(const DYNAMIC_ARRAY<moNetworking::IAPProductDesc>& inaProducts);
+            void OnProductDescriptionsRequestComplete(const std::vector<Networking::IAPProductDesc>& inaProducts);
             //---------------------------------------------------------------
     		/// On Transaction Status Updated
             ///
             /// @param Status ID
             /// @param Transaction description
             //---------------------------------------------------------------
-            void OnTransactionStatusUpdated(u32 inudwStatus, const moNetworking::IAPTransaction& inTransaction);
+            void OnTransactionStatusUpdated(u32 inudwStatus, const Networking::IAPTransaction& inTransaction);
             //---------------------------------------------------------------
     		/// On Transaction Closed
             ///
@@ -138,7 +138,7 @@ namespace ChilliSource
             Networking::IAPTransactionCloseDelegate mTransactionCloseDelegate;
 		};
 
-		typedef SHARED_PTR<CAmazonIAPJavaInterface> AmazonIAPJavaInterfacePtr;
+		typedef std::shared_ptr<CAmazonIAPJavaInterface> AmazonIAPJavaInterfacePtr;
 	}
 }
 

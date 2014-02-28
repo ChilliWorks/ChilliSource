@@ -14,41 +14,32 @@
 
 using namespace ChilliSource::Input;
 using namespace ChilliSource::Core;
-using namespace ChilliSource::AndroidPlatform;
-
-CInputSystem::CInputSystem()
-: IInputSystem()
-{
-	
-}
-CInputSystem::~CInputSystem()
-{
-	
-}
+using namespace ChilliSource::Android;
 
 bool CInputSystem::IsA(Core::InterfaceIDType inInterfaceID) const
 {
-	return inInterfaceID == IInputSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
+	return inInterfaceID == InputSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
 }
 
 bool CInputSystem::CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const
 {
-	return inInterfaceID == ITouchScreen::InterfaceID;
+	return inInterfaceID == TouchScreen::InterfaceID;
 }
-IInputDevice * CInputSystem::GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID)
+InputDevice* CInputSystem::GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID)
 {
-	if (inInterfaceID == ITouchScreen::InterfaceID) {
+	if (inInterfaceID == TouchScreen::InterfaceID)
+	{
 		return &mTouchScreen;
 	}
 	
 	return NULL;
 }
-IAccelerometer * CInputSystem::GetAccelerometerPtr()
+Accelerometer* CInputSystem::GetAccelerometerPtr()
 {
 	return &mAccelerometer;
 }
 
-ITouchScreen * CInputSystem::GetTouchScreenPtr()
+TouchScreen* CInputSystem::GetTouchScreenPtr()
 {
 	return &mTouchScreen;
 }
@@ -57,7 +48,7 @@ void CInputSystem::Update(float infDT)
 	mffTimeStamp += infDT;
 	mTouchScreen.SetCurrentAppTime(mffTimeStamp);
 }
-IVirtualKeyboard* CInputSystem::GetVirtualKeyboardPtr()
+VirtualKeyboard* CInputSystem::GetVirtualKeyboardPtr()
 {
 	return &mVirtualKeyboard;
 }

@@ -8,6 +8,7 @@
 
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookPostSystem.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 
 namespace ChilliSource
 {
@@ -39,14 +40,14 @@ namespace ChilliSource
                 else
                 {
                     msPostDesc = insDesc;
-                    DYNAMIC_ARRAY<std::string> aWritePerms;
+                    std::vector<std::string> aWritePerms;
                     aWritePerms.push_back("publish_actions");
-                    mpAuthSystem->AuthoriseWritePermissions(aWritePerms, fastdelegate::MakeDelegate(this, &CFacebookPostSystem::OnPublishPermissionAuthorised));
+                    mpAuthSystem->AuthoriseWritePermissions(aWritePerms, Core::MakeDelegate(this, &CFacebookPostSystem::OnPublishPermissionAuthorised));
                 }
             }
             else
             {
-                ERROR_LOG("Facebook Post: User must be authenticated");
+                CS_LOG_ERROR("Facebook Post: User must be authenticated");
             }
 		}
 
@@ -63,18 +64,18 @@ namespace ChilliSource
                 else
                 {
                     msPostDesc = insDesc;
-                    DYNAMIC_ARRAY<std::string> aWritePerms;
+                    std::vector<std::string> aWritePerms;
                     aWritePerms.push_back("publish_actions");
-                    mpAuthSystem->AuthoriseWritePermissions(aWritePerms, fastdelegate::MakeDelegate(this, &CFacebookPostSystem::OnPublishPermissionAuthorised));
+                    mpAuthSystem->AuthoriseWritePermissions(aWritePerms, Core::MakeDelegate(this, &CFacebookPostSystem::OnPublishPermissionAuthorised));
                 }
             }
             else
             {
-                ERROR_LOG("Facebook Post: User must be authenticated");
+                CS_LOG_ERROR("Facebook Post: User must be authenticated");
             }
 		}
 
-		void CreateKeyValueArrayFromPostDesc(const FacebookPostDesc& insDesc, DYNAMIC_ARRAY<std::string>& outaKeyValues)
+		void CreateKeyValueArrayFromPostDesc(const FacebookPostDesc& insDesc, std::vector<std::string>& outaKeyValues)
 		{
 			outaKeyValues.push_back("link");
 			outaKeyValues.push_back(insDesc.strURL);
@@ -92,7 +93,7 @@ namespace ChilliSource
 			outaKeyValues.push_back(insDesc.strDescription);
         }
 
-		void CreateKeyValueArrayFromRequestPostDesc(const FacebookPostDesc& insDesc, DYNAMIC_ARRAY<std::string>& outaKeyValues)
+		void CreateKeyValueArrayFromRequestPostDesc(const FacebookPostDesc& insDesc, std::vector<std::string>& outaKeyValues)
 		{
 			outaKeyValues.push_back("picture");
 			outaKeyValues.push_back(insDesc.strPictureURL);
@@ -118,14 +119,14 @@ namespace ChilliSource
             	strGraphPath = insDesc.strTo + "/feed";
             }
 
-            DYNAMIC_ARRAY<std::string> aPostParamsKeyValue;
+            std::vector<std::string> aPostParamsKeyValue;
             CreateKeyValueArrayFromPostDesc(insDesc, aPostParamsKeyValue);
             mpJavaInterface->TryPostToFeed(strGraphPath, aPostParamsKeyValue);
 		}
 
 		void CFacebookPostSystem::PostRequest(const Social::FacebookPostDesc& insDesc)
 		{
-            DYNAMIC_ARRAY<std::string> aPostParamsKeyValue;
+            std::vector<std::string> aPostParamsKeyValue;
             CreateKeyValueArrayFromRequestPostDesc(insDesc, aPostParamsKeyValue);
             mpJavaInterface->TryPostRequest(aPostParamsKeyValue);
 		}

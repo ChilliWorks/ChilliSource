@@ -36,7 +36,7 @@ namespace ChilliSource
 			/// @param URL
 			/// @param size of webview
 			//-----------------------------------------------
-			static void Present(u32 inudwIndex, const std::string& instrURL, const ChilliSource::Core::CVector2& invSize);
+			static void Present(u32 inudwIndex, const std::string& instrURL, const ChilliSource::Core::Vector2& invSize);
 			//-----------------------------------------------
 			/// Present from file
 			///
@@ -48,7 +48,7 @@ namespace ChilliSource
 			/// @param Base path of assets
 			/// @param Anchor
 			//-----------------------------------------------
-			static void PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const ChilliSource::Core::CVector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor);
+			static void PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const ChilliSource::Core::Vector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor);
 			//-----------------------------------------------
 			/// Present from external browser
 			///

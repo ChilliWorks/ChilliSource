@@ -10,6 +10,8 @@
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/AccelerometerJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+
 #include <jni.h>
 
 //------------------------------------------
@@ -105,7 +107,7 @@ namespace ChilliSource
 		{
 			if (true == mbListening && NULL != mAccelerationChangedDelegate)
 			{
-				mAccelerationChangedDelegate(Core::CVector3(infAccelerationX, infAccelerationY, infAccelerationZ));
+				mAccelerationChangedDelegate(Core::Vector3(infAccelerationX, infAccelerationY, infAccelerationZ));
 			}
 		}
 	}

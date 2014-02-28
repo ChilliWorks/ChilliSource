@@ -21,7 +21,7 @@ extern "C"
 
 void Java_com_taggames_moflow_nativeinterface_CLocalNotificationNativeInterface_ApplicationDidReceiveLocalNotification(JNIEnv* inpEnv, jobject thiz, jobjectArray inastrKeys, jobjectArray inastrValues)
 {
-	DEBUG_LOG("GETTING NOTIFICATION");
+	CS_LOG_DEBUG("GETTING NOTIFICATION");
 	ChilliSource::Notification sNotification;
 	sNotification.bDismissed = false;
 	sNotification.eType = ChilliSource::NOTICE_SYSTEM;
@@ -47,7 +47,7 @@ void Java_com_taggames_moflow_nativeinterface_CLocalNotificationNativeInterface_
 			inpEnv->ReleaseStringUTFChars(jstrValue, cString);
 			strValue =  stdString;
 		}
-		DEBUG_LOG(strKey + " - " + strValue);
+		CS_LOG_DEBUG(strKey + " - " + strValue);
 		if(strKey == "NotificationID")
 		{
 			sNotification.ID = ChilliSource::Core::CStringConverter::ParseInt(strValue);

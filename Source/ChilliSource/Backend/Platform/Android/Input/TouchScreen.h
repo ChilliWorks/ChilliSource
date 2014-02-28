@@ -16,17 +16,19 @@
 
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
 
+#include <unordered_map>
+
 namespace ChilliSource
 {
 	namespace Android
 	{
-		class CTouchScreen : public Input::ITouchScreen
+		class CTouchScreen : public Input::TouchScreen
 		{
 		public:
 			CTouchScreen();
 			~CTouchScreen();
 			
-			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 
 			//---------------------------------------------------------------------
 			/// On Touch Began
@@ -46,10 +48,10 @@ namespace ChilliSource
 			/// registers when a touch ends.
 			//---------------------------------------------------------------------
 			void OnTouchEnded(s32 indwID, f32 infX, f32 infY);
-		protected:
 
-			
-			typedef HASH_MAP<s32, size_t> MapNativeTouchToID;
+		private:
+
+			typedef std::unordered_map<s32, size_t> MapNativeTouchToID;
 			MapNativeTouchToID mMapNativeTouchesToID;
 		};
 	}

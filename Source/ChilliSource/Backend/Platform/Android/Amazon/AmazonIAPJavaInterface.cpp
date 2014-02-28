@@ -10,7 +10,7 @@
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
-#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <jni.h>
@@ -38,12 +38,12 @@ void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnProdu
 	if (pInterface != NULL)
 	{
 		u32 udwNumProducts = inpEnv->GetArrayLength(inaIDs);
-		DYNAMIC_ARRAY<moNetworking::IAPProductDesc> aProducts;
+		std::vector<CSNetworking::IAPProductDesc> aProducts;
 		aProducts.reserve(udwNumProducts);
 
 		for(u32 i=0; i<udwNumProducts; ++i)
 		{
-			moNetworking::IAPProductDesc sDesc;
+			CSNetworking::IAPProductDesc sDesc;
 			jstring jstrID = (jstring)inpEnv->GetObjectArrayElement(inaIDs, i);
 			sDesc.strID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrID);
 
@@ -59,7 +59,7 @@ void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnProdu
 			aProducts.push_back(sDesc);
 		}
 
-		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task1<const DYNAMIC_ARRAY<moNetworking::IAPProductDesc>&>(pInterface.get(), &ChilliSource::Android::CAmazonIAPJavaInterface::OnProductDescriptionsRequestComplete, aProducts));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::vector<CSNetworking::IAPProductDesc>&>(pInterface.get(), &ChilliSource::Android::CAmazonIAPJavaInterface::OnProductDescriptionsRequestComplete, aProducts));
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -77,11 +77,11 @@ void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnTrans
 	ChilliSource::Android::AmazonIAPJavaInterfacePtr pInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CAmazonIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
-		moNetworking::IAPTransaction sTransaction;
+		CSNetworking::IAPTransaction sTransaction;
 		sTransaction.strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
 		sTransaction.strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
 		sTransaction.strReceipt = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrReceipt);
-		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task2<u32, const moNetworking::IAPTransaction&>(pInterface.get(), &ChilliSource::Android::CAmazonIAPJavaInterface::OnTransactionStatusUpdated, inudwResult, sTransaction));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<u32, const CSNetworking::IAPTransaction&>(pInterface.get(), &ChilliSource::Android::CAmazonIAPJavaInterface::OnTransactionStatusUpdated, inudwResult, sTransaction));
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnTrans
 	{
 		std::string strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
 		std::string strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
-		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task2<const std::string&, const std::string&>(pInterface.get(), &ChilliSource::Android::CAmazonIAPJavaInterface::OnTransactionClosed, strProductID, strTransactionID));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::string&, const std::string&>(pInterface.get(), &ChilliSource::Android::CAmazonIAPJavaInterface::OnTransactionClosed, strProductID, strTransactionID));
 	}
 }
 
@@ -168,7 +168,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// Request Product Descriptions
         //---------------------------------------------------------------
-        void CAmazonIAPJavaInterface::RequestProductDescriptions(const DYNAMIC_ARRAY<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void CAmazonIAPJavaInterface::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
         	mProductsRequestDelegate = inRequestDelegate;
         	if(mProductsRequestDelegate != NULL)
@@ -177,7 +177,7 @@ namespace ChilliSource
 
 				jobjectArray jaProductIDs = pEnv->NewObjectArray(inaProductIDs.size(), pEnv->FindClass("java/lang/String"), pEnv->NewStringUTF(""));
 				u32 udwProductIDIndex = 0;
-				for(DYNAMIC_ARRAY<std::string>::const_iterator it = inaProductIDs.begin(); it != inaProductIDs.end(); ++it)
+				for(std::vector<std::string>::const_iterator it = inaProductIDs.begin(); it != inaProductIDs.end(); ++it)
 				{
 					jstring jstrProductID = JavaInterfaceUtils::CreateJStringFromSTDString(*it);
 					pEnv->SetObjectArrayElement(jaProductIDs, udwProductIDIndex, jstrProductID);
@@ -192,7 +192,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// On Product Descriptions Request Complete
         //---------------------------------------------------------------
-        void CAmazonIAPJavaInterface::OnProductDescriptionsRequestComplete(const DYNAMIC_ARRAY<moNetworking::IAPProductDesc>& inaProducts)
+        void CAmazonIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<Networking::IAPProductDesc>& inaProducts)
         {
         	if(mProductsRequestDelegate != NULL)
         	{
@@ -221,11 +221,11 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// On Transaction Status Updated
         //---------------------------------------------------------------
-        void CAmazonIAPJavaInterface::OnTransactionStatusUpdated(u32 inudwStatus, const moNetworking::IAPTransaction& inTransaction)
+        void CAmazonIAPJavaInterface::OnTransactionStatusUpdated(u32 inudwStatus, const Networking::IAPTransaction& inTransaction)
         {
         	if(mTransactionStatusDelegate != NULL)
         	{
-				Networking::IAPTransaction::Status eStatus = Networking::IAPTransaction::FAILED;
+				Networking::IAPTransaction::Status eStatus = Networking::IAPTransaction::Status::k_failed;
 
 				//This requires a little bit of faith. These numbers correspond to the constants defined
 				//in the java class CPurchaseTransaction
@@ -237,17 +237,17 @@ namespace ChilliSource
 				switch(inudwStatus)
 				{
 					case kudwPurchaseSucceeded:
-						eStatus = Networking::IAPTransaction::SUCCEEDED;
+						eStatus = Networking::IAPTransaction::Status::k_succeeded;
 						break;
 					case kudwPurchaseResumed:
-						eStatus = Networking::IAPTransaction::RESUMED;
+						eStatus = Networking::IAPTransaction::Status::k_resumed;
 						break;
 					case kudwPurchaseRestored:
-						eStatus = Networking::IAPTransaction::RESTORED;
+						eStatus = Networking::IAPTransaction::Status::k_restored;
 						break;
 					case kudwPurchaseFailed:
 					default:
-						eStatus = Networking::IAPTransaction::FAILED;
+						eStatus = Networking::IAPTransaction::Status::k_failed;
 						break;
 				}
 

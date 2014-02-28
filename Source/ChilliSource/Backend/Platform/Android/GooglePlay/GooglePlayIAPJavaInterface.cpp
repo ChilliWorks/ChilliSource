@@ -14,6 +14,7 @@
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 
 #include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
@@ -43,12 +44,12 @@ void Java_com_taggames_moflow_googleplay_iap_CGooglePlayIAPNativeInterface_Nativ
 	if (pInterface != NULL)
 	{
 		u32 udwNumProducts = inpEnv->GetArrayLength(inaIDs);
-		DYNAMIC_ARRAY<moNetworking::IAPProductDesc> aProducts;
+		std::vector<CSNetworking::IAPProductDesc> aProducts;
 		aProducts.reserve(udwNumProducts);
 
 		for(u32 i=0; i<udwNumProducts; ++i)
 		{
-			moNetworking::IAPProductDesc sDesc;
+			CSNetworking::IAPProductDesc sDesc;
 			jstring jstrID = (jstring)inpEnv->GetObjectArrayElement(inaIDs, i);
 			sDesc.strID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrID);
 
@@ -64,7 +65,7 @@ void Java_com_taggames_moflow_googleplay_iap_CGooglePlayIAPNativeInterface_Nativ
 			aProducts.push_back(sDesc);
 		}
 
-		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task1<const DYNAMIC_ARRAY<moNetworking::IAPProductDesc>&>(pInterface.get(), &ChilliSource::Android::CGooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete, aProducts));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::vector<CSNetworking::IAPProductDesc>&>(pInterface.get(), &ChilliSource::Android::CGooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete, aProducts));
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -82,12 +83,12 @@ void Java_com_taggames_moflow_googleplay_iap_CGooglePlayIAPNativeInterface_Nativ
 	ChilliSource::Android::GooglePlayIAPJavaInterfacePtr pInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CGooglePlayIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
-		moNetworking::IAPTransaction sTransaction;
+		CSNetworking::IAPTransaction sTransaction;
 		sTransaction.strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
 		sTransaction.strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
 		sTransaction.strReceipt = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrReceipt);
 
-		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task2<u32, const moNetworking::IAPTransaction&>(pInterface.get(), &ChilliSource::Android::CGooglePlayIAPJavaInterface::OnTransactionStatusUpdated, inudwResult, sTransaction));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<u32, const CSNetworking::IAPTransaction&>(pInterface.get(), &ChilliSource::Android::CGooglePlayIAPJavaInterface::OnTransactionStatusUpdated, inudwResult, sTransaction));
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -103,7 +104,7 @@ void Java_com_taggames_moflow_googleplay_iap_CGooglePlayIAPNativeInterface_Nativ
 	{
 		const std::string strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
 		const std::string strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
-		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task2<std::string, std::string>(pInterface.get(), &ChilliSource::Android::CGooglePlayIAPJavaInterface::OnTransactionClosed, strProductID, strTransactionID));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<std::string, std::string>(pInterface.get(), &ChilliSource::Android::CGooglePlayIAPJavaInterface::OnTransactionClosed, strProductID, strTransactionID));
 	}
 }
 
@@ -124,9 +125,9 @@ namespace ChilliSource
 			void AddToPendingCache(const std::string& instrTransactionID)
 			{
 				Json::Value jData;
-				Core::CUtils::ReadJson(Core::SL_CACHE, kstrPendingCacheFile, &jData);
+				Core::Utils::ReadJson(Core::StorageLocation::k_cache, kstrPendingCacheFile, &jData);
 				jData[instrTransactionID] = 0;
-				Core::CUtils::StringToFile(Core::SL_CACHE, kstrPendingCacheFile, jData.toUnformattedString());
+				Core::Utils::StringToFile(Core::StorageLocation::k_cache, kstrPendingCacheFile, jData.toUnformattedString());
 			}
 			//---------------------------------------------------------------
 			/// Remove From Pending Cache
@@ -140,10 +141,10 @@ namespace ChilliSource
 			{
 				//Remove the transaction from the pending cache
 				Json::Value jData;
-				if(Core::CUtils::ReadJson(Core::SL_CACHE, kstrPendingCacheFile, &jData))
+				if(Core::Utils::ReadJson(Core::StorageLocation::k_cache, kstrPendingCacheFile, &jData))
 				{
 					jData.removeMember(instrTransactionID);
-					Core::CUtils::StringToFile(Core::SL_CACHE, kstrPendingCacheFile, jData.toUnformattedString());
+					Core::Utils::StringToFile(Core::StorageLocation::k_cache, kstrPendingCacheFile, jData.toUnformattedString());
 				}
 			}
 		}
@@ -195,7 +196,7 @@ namespace ChilliSource
         	env->CallVoidMethod(GetJavaObject(), GetMethodID("RestorePendingUnmanagedTransactions"));
 
         	Json::Value jData;
-        	if(Core::CUtils::ReadJson(Core::SL_CACHE, kstrPendingCacheFile, &jData))
+        	if(Core::Utils::ReadJson(Core::StorageLocation::k_cache, kstrPendingCacheFile, &jData))
         	{
         		const Json::Value::Members aMembers = jData.getMemberNames();
         		jobjectArray jaTransactionIDs = env->NewObjectArray(aMembers.size(), env->FindClass("java/lang/String"), env->NewStringUTF(""));
@@ -222,7 +223,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// Request Product Descriptions
         //---------------------------------------------------------------
-        void CGooglePlayIAPJavaInterface::RequestProductDescriptions(const DYNAMIC_ARRAY<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void CGooglePlayIAPJavaInterface::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
         	mProductsRequestDelegate = inRequestDelegate;
 
@@ -234,7 +235,7 @@ namespace ChilliSource
 			jobjectArray jaProductIDs = env->NewObjectArray(inaProductIDs.size(), env->FindClass("java/lang/String"), env->NewStringUTF(""));
 
 			u32 udwProductIDIndex = 0;
-			for(DYNAMIC_ARRAY<std::string>::const_iterator it = inaProductIDs.begin(); it != inaProductIDs.end(); ++it)
+			for(std::vector<std::string>::const_iterator it = inaProductIDs.begin(); it != inaProductIDs.end(); ++it)
 			{
 				jstring jstrProductID = JavaInterfaceUtils::CreateJStringFromSTDString(*it);
 				env->SetObjectArrayElement(jaProductIDs, udwProductIDIndex, jstrProductID);
@@ -249,7 +250,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// On Product Descriptions Request Complete
         //---------------------------------------------------------------
-        void CGooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete(const DYNAMIC_ARRAY<moNetworking::IAPProductDesc>& inaProducts)
+        void CGooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<Networking::IAPProductDesc>& inaProducts)
         {
         	if(mProductsRequestDelegate == NULL)
         		return;
@@ -275,10 +276,10 @@ namespace ChilliSource
 
         	switch(ineType)
         	{
-        		case Networking::IAPProductRegInfo::MANAGED:
+        		case Networking::IAPProductRegInfo::Type::k_managed:
         			udwType = kManagedType;
         			break;
-        		case Networking::IAPProductRegInfo::UNMANAGED:
+        		case Networking::IAPProductRegInfo::Type::k_unmanaged:
         			udwType = kUnManagedType;
         			break;
         	}
@@ -291,12 +292,12 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// On Transaction Status Updated
         //---------------------------------------------------------------
-        void CGooglePlayIAPJavaInterface::OnTransactionStatusUpdated(u32 inudwStatus, const moNetworking::IAPTransaction& inTransaction)
+        void CGooglePlayIAPJavaInterface::OnTransactionStatusUpdated(u32 inudwStatus, const Networking::IAPTransaction& inTransaction)
         {
         	if(mTransactionStatusDelegate == NULL)
         		return;
 
-        	Networking::IAPTransaction::Status eStatus = Networking::IAPTransaction::FAILED;
+        	Networking::IAPTransaction::Status eStatus = Networking::IAPTransaction::Status::k_failed;
 
         	//This requires a little bit of faith. These numbers correspond to the constants defined
         	//in the java transaction description
@@ -309,23 +310,23 @@ namespace ChilliSource
         	switch(inudwStatus)
         	{
         		case 0:
-        			eStatus = Networking::IAPTransaction::SUCCEEDED;
+        			eStatus = Networking::IAPTransaction::Status::k_succeeded;
         			AddToPendingCache(inTransaction.strTransactionID);
         			break;
         		case 1:
-        			eStatus = Networking::IAPTransaction::FAILED;
+        			eStatus = Networking::IAPTransaction::Status::k_failed;
         			break;
         		case 2:
-        			eStatus = Networking::IAPTransaction::CANCELLED;
+        			eStatus = Networking::IAPTransaction::Status::k_cancelled;
         			break;
         		case 3:
-        			eStatus = Networking::IAPTransaction::RESTORED;
+        			eStatus = Networking::IAPTransaction::Status::k_restored;
         			break;
         		case 4:
-        			eStatus = Networking::IAPTransaction::RESUMED;
+        			eStatus = Networking::IAPTransaction::Status::k_resumed;
         			break;
            		case 5:
-            		eStatus = Networking::IAPTransaction::REFUNDED;
+            		eStatus = Networking::IAPTransaction::Status::k_refunded;
             		break;
         	}
 

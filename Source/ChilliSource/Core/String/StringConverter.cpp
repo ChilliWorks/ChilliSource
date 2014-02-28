@@ -144,14 +144,14 @@ namespace ChilliSource
 		}
 		
 		//-----------------------------------------------------------------------
-		std::string  CStringConverter:: ToString(const CVector2& val)
+		std::string  CStringConverter:: ToString(const Vector2& val)
 		{
 			stringstream stream;
 			stream << val.x << " " << val.y;
 			return stream.str();
 		}
 		//-----------------------------------------------------------------------
-		std::string  CStringConverter:: ToString(const CVector3& val)
+		std::string  CStringConverter:: ToString(const Vector3& val)
 		{
 			stringstream stream;
 			stream << val.x << " " << val.y << " " << val.z;
@@ -285,33 +285,33 @@ namespace ChilliSource
 					|| StringUtils::StartsWith(val, "1"));
 		}
 		//-----------------------------------------------------------------------
-		CVector2  CStringConverter:: ParseVector2(const std::string& val)
+		Vector2  CStringConverter:: ParseVector2(const std::string& val)
 		{
             u32 udwSize = EnumerateItems(val);
 
 			if (udwSize != 2)
 			{
-				return CVector2::ZERO;
+				return Vector2::ZERO;
 			}
 			else
 			{
-                CVector2 vRet;
+                Vector2 vRet;
                 sscanf(val.c_str(), "%f %f", &vRet.x, &vRet.y);
 				return vRet;
 			}
 		}
 		//-----------------------------------------------------------------------
-		CVector3  CStringConverter:: ParseVector3(const std::string& val)
+		Vector3  CStringConverter:: ParseVector3(const std::string& val)
 		{
             u32 udwSize = EnumerateItems(val);
 
 			if (udwSize != 3)
 			{
-				return CVector3::ZERO;
+				return Vector3::ZERO;
 			}
 			else
 			{
-				CVector3 vRet;
+				Vector3 vRet;
                 sscanf(val.c_str(), "%f %f %f", &vRet.x, &vRet.y, &vRet.z);
 				return vRet;
 			}

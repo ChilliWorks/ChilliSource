@@ -219,7 +219,7 @@ namespace ChilliSource
 				if((*it)->HasCompleted())
 				{
 					//...and remove the completed request
-					SAFE_DELETE(*it);
+					CS_SAFEDELETE(*it);
 					it = mapRequests.erase(it);
 				}
 				else

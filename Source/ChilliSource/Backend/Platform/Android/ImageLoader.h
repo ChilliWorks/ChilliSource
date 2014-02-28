@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class ImageLoader : public IImageResourceProvider
+		class ImageLoader : public Core::ImageResourceProvider
 		{
 		public:
 			ImageLoader();
@@ -55,7 +55,7 @@ namespace ChilliSource
 			/// @param File path to resource
 			/// @return Instantiated resource
 			//----------------------------------------------------------------
-			virtual bool CreateResourceFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource);
+			virtual bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource);
 			//----------------------------------------------------------------
 			/// Create Image From File
 			///
@@ -64,7 +64,7 @@ namespace ChilliSource
 			/// @param the image format
 			/// @return Instantiated resource
 			//----------------------------------------------------------------
-			virtual bool CreateImageFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource);
+			virtual bool CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::ResourceSPtr& outpResource);
 		private:
 			//----------------------------------------------------------------
 			/// Create Png Image From File
@@ -77,28 +77,28 @@ namespace ChilliSource
 			/// @param The image format
 			/// @return Instantiated resource
 			//----------------------------------------------------------------
-			void CreatePNGImageFromFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::CImage* outpImage);
+			void CreatePNGImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::Image* outpImage);
 			//----------------------------------------------------------------
 			/// Format Contains Alpha
 			///
 			/// @param The image format
 			/// @return whether or not this image format contains an alpha channel
 			//----------------------------------------------------------------
-			bool FormatContainsAlpha(Core::CImage::Format ineFormat) const;
+			bool FormatContainsAlpha(Core::Image::Format ineFormat) const;
 			//----------------------------------------------------------------
 			/// Format Is Greyscale
 			///
 			/// @param The image format
 			/// @return whether or not this image format is greyscale
 			//----------------------------------------------------------------
-			bool FormatIsGreyscale(Core::CImage::Format ineFormat) const;
+			bool FormatIsGreyscale(Core::Image::Format ineFormat) const;
 			//----------------------------------------------------------------
 			/// Remove Alpha From Format Type
 			///
 			/// @param The image format
 			/// @return the equivelant of this format that does not have alpha
 			//----------------------------------------------------------------
-			Core::CImage::Format RemoveAlphaFromFormatType(Core::CImage::Format ineFormat) const;
+			Core::Image::Format RemoveAlphaFromFormatType(Core::Image::Format ineFormat) const;
 		};
 	}
 }

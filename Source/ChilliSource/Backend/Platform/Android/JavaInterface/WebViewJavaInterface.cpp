@@ -45,7 +45,7 @@ namespace ChilliSource
 			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CWebViewNativeInterface","Dismiss", "(I)V");
 			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CWebViewNativeInterface","AddDismissButton", "(IF)V");
 		}
-		void SCWebViewJavaInterface::Present(u32 inudwIndex, const std::string& instrURL, const ChilliSource::Core::CVector2& invSize)
+		void SCWebViewJavaInterface::Present(u32 inudwIndex, const std::string& instrURL, const ChilliSource::Core::Vector2& invSize)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("Present");
 
@@ -62,7 +62,7 @@ namespace ChilliSource
 				env->DeleteLocalRef(jstrURL);
 			}
 		}
-		void SCWebViewJavaInterface::PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const ChilliSource::Core::CVector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor)
+		void SCWebViewJavaInterface::PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const ChilliSource::Core::Vector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("PresentFromFile");
 

@@ -22,7 +22,7 @@ namespace ChilliSource
 		CFacebookAuthenticationSystem::CFacebookAuthenticationSystem()
 		: mAuthDelegate(NULL), mAuthReadDelegate(NULL), mAuthWriteDelegate(NULL)
 		{
-			mpJavaInterface = SHARED_PTR<CFacebookJavaInterface>(new CFacebookJavaInterface());
+			mpJavaInterface = std::shared_ptr<CFacebookJavaInterface>(new CFacebookJavaInterface());
 			mpJavaInterface->SetAuthenticationSystem(this);
 	        ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
 		}
@@ -32,7 +32,7 @@ namespace ChilliSource
 			return (inID == CFacebookAuthenticationSystem::InterfaceID) || (inID == IFacebookAuthenticationSystem::InterfaceID);
 		}
 
-		void CFacebookAuthenticationSystem::Authenticate(const DYNAMIC_ARRAY<std::string>& inastrReadPermissions, const AuthenticationCompleteDelegate& inDelegate)
+		void CFacebookAuthenticationSystem::Authenticate(const std::vector<std::string>& inastrReadPermissions, const AuthenticationCompleteDelegate& inDelegate)
 		{
 			mAuthDelegate = inDelegate;
 			mpJavaInterface->Authenticate(inastrReadPermissions);
@@ -48,13 +48,13 @@ namespace ChilliSource
 			return mpJavaInterface->GetActiveToken();
 		}
 
-        void CFacebookAuthenticationSystem::AuthoriseWritePermissions(const DYNAMIC_ARRAY<std::string> & inaWritePerms, const AuthenticationCompleteDelegate& inDelegate)
+        void CFacebookAuthenticationSystem::AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const AuthenticationCompleteDelegate& inDelegate)
         {
         	mAuthWriteDelegate = inDelegate;
         	mpJavaInterface->AuthoriseWritePermissions(inaWritePerms);
         }
 
-        void CFacebookAuthenticationSystem::AuthoriseReadPermissions(const DYNAMIC_ARRAY<std::string> & inaReadPerms, const AuthenticationCompleteDelegate& inDelegate)
+        void CFacebookAuthenticationSystem::AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const AuthenticationCompleteDelegate& inDelegate)
         {
         	mAuthReadDelegate = inDelegate;
         	mpJavaInterface->AuthoriseReadPermissions(inaReadPerms);
@@ -135,7 +135,7 @@ namespace ChilliSource
 			}
 		}
 
-		const SHARED_PTR<CFacebookJavaInterface>& CFacebookAuthenticationSystem::GetJavaInterface() const
+		const std::shared_ptr<CFacebookJavaInterface>& CFacebookAuthenticationSystem::GetJavaInterface() const
 		{
 			return mpJavaInterface;
 		}

@@ -17,7 +17,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CGooglePlayIAPSystem : public Networking::IIAPSystem
+		class CGooglePlayIAPSystem : public Networking::IAPSystem
 		{
 		public:
             //---------------------------------------------------------------
@@ -39,7 +39,7 @@ namespace ChilliSource
             ///
             /// @param List of products
             //---------------------------------------------------------------
-            void RegisterProducts(const DYNAMIC_ARRAY<Networking::IAPProductRegInfo>& inaProducts);
+            void RegisterProducts(const std::vector<Networking::IAPProductRegInfo>& inaProducts);
 
             //---------------------------------------------------------------
 			/// Get Provider ID
@@ -87,7 +87,7 @@ namespace ChilliSource
 			/// @param List of product IDs to request descriptions for
             /// @param Delegate to invoke when the request completes
             //---------------------------------------------------------------
-            void RequestProductDescriptions(const DYNAMIC_ARRAY<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate);
+            void RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate);
             //---------------------------------------------------------------
             /// Request All Product Descriptions
             ///
@@ -138,7 +138,7 @@ namespace ChilliSource
 
 		private:
 
-            DYNAMIC_ARRAY<Networking::IAPProductRegInfo> mProductRegInfos;
+            std::vector<Networking::IAPProductRegInfo> mProductRegInfos;
 
             GooglePlayIAPJavaInterfacePtr mpJavaInterface;
 		};

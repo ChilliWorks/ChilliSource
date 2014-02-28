@@ -50,7 +50,7 @@ namespace ChilliSource
         
         SceneAnimationSPtr SceneAnimDescManager::GetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
-            MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
+            MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
             
             if(pExistingResource == mMapFilenameToResource.end())
             {
@@ -82,7 +82,7 @@ namespace ChilliSource
         
         SceneAnimationSPtr SceneAnimDescManager::AsyncGetSceneAnimationFromFile(StorageLocation ineStorageLocation, const std::string &instrFilePath)
         {
-            MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
+            MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(instrFilePath);
             
             if(pExistingResource == mMapFilenameToResource.end())
             {

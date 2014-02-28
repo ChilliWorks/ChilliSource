@@ -30,15 +30,15 @@ namespace ChilliSource
 		{
 			if (inpPng == NULL)
 			{
-				ERROR_LOG("ReadPngData() has failed because inpPng is NULL :S");
+				CS_LOG_ERROR("ReadPngData() has failed because inpPng is NULL :S");
 				return;
 			}
 
-			ChilliSource::Core::IFileStream* pStream = (ChilliSource::Core::IFileStream*)png_get_io_ptr(inpPng);
+			ChilliSource::Core::FileStream* pStream = (ChilliSource::Core::FileStream*)png_get_io_ptr(inpPng);
 
 			if (pStream->IsBad() == true || pStream->IsOpen() == false)
 			{
-				ERROR_LOG("ReadPngData() has failed due to a problem with the filestream.");
+				CS_LOG_ERROR("ReadPngData() has failed due to a problem with the filestream.");
 				png_error(inpPng, "Read Error");
 			}
 
@@ -53,18 +53,18 @@ namespace ChilliSource
 			mdwHeight = -1;
 			mdwWidth = -1;
 			mpData = NULL;
-			meFormat = Core::CImage::RGBA_8888;
+			meFormat = Core::Image::Format::k_RGBA8888;
 		}
 		//----------------------------------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------------------------------
-		CPngImage::CPngImage(Core::STORAGE_LOCATION ineStorageLocation, std::string instrFilename)
+		CPngImage::CPngImage(Core::StorageLocation ineStorageLocation, std::string instrFilename)
 		{
 			mbIsLoaded = false;
 			mdwHeight = -1;
 			mdwWidth = -1;
 			mpData = NULL;
-			meFormat = Core::CImage::RGBA_8888;
+			meFormat = Core::Image::Format::k_RGBA8888;
 
 			Load(ineStorageLocation, instrFilename);
 		}
@@ -81,13 +81,13 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Load
 		//----------------------------------------------------------------------------------
-		void CPngImage::Load(Core::STORAGE_LOCATION ineStorageLocation, std::string instrFilename)
+		void CPngImage::Load(Core::StorageLocation ineStorageLocation, std::string instrFilename)
 		{
 			//create the file stream
-			ChilliSource::Core::FileStreamPtr stream = ChilliSource::Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilename, ChilliSource::Core::FM_READ_BINARY);
+			ChilliSource::Core::FileStreamSPtr stream = ChilliSource::Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilename, ChilliSource::Core::FileMode::k_readBinary);
 
 			//insure the stream is not broken
-			if (stream == ChilliSource::Core::FileStreamPtr() || stream->IsBad() == true || stream->IsOpen() == false)
+			if (stream == ChilliSource::Core::FileStreamSPtr() || stream->IsBad() == true || stream->IsOpen() == false)
 			{
 				stream->Close();
 				return;
@@ -148,14 +148,14 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Get Image Format
 		//----------------------------------------------------------------------------------
-		Core::CImage::Format CPngImage::GetImageFormat()
+		Core::Image::Format CPngImage::GetImageFormat()
 		{
 			return meFormat;
 		}
 		//----------------------------------------------------------------------------------
 		/// Load with lib png
 		//----------------------------------------------------------------------------------
-		bool CPngImage::LoadWithLibPng(Core::FileStreamPtr inStream)
+		bool CPngImage::LoadWithLibPng(Core::FileStreamSPtr inStream)
 		{
 			//-------- Intialisation
 			//read the header to insure it is indeed a png
@@ -168,7 +168,7 @@ namespace ChilliSource
 			//if its not a PNG return.
 			if (bIsPng == false)
 			{
-				ERROR_LOG("PNG header invalid.");
+				CS_LOG_ERROR("PNG header invalid.");
 				return false;
 			}
 
@@ -176,7 +176,7 @@ namespace ChilliSource
 			png_structp pPng = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 			if (!pPng)
 			{
-				ERROR_LOG("Could not create pPng");
+				CS_LOG_ERROR("Could not create pPng");
 				return false;
 			}
 
@@ -184,7 +184,7 @@ namespace ChilliSource
 			png_infop pInfo = png_create_info_struct(pPng);
 			if (!pInfo)
 			{
-				ERROR_LOG("Could not create pInfo");
+				CS_LOG_ERROR("Could not create pInfo");
 				png_destroy_read_struct(&pPng, (png_infopp)NULL, (png_infopp)NULL);
 				return false;
 			}
@@ -192,7 +192,7 @@ namespace ChilliSource
 			//setup jump
 			if (setjmp(png_jmpbuf(pPng)))
 			{
-				ERROR_LOG("Error while loading PNG.");
+				CS_LOG_ERROR("Error while loading PNG.");
 				png_destroy_read_struct(&pPng, &pInfo, (png_infopp)NULL);
 				return false;
 			}
@@ -264,19 +264,19 @@ namespace ChilliSource
 			switch (dwColorType)
 			{
 			case PNG_COLOR_TYPE_GRAY:
-				meFormat = Core::CImage::LUM_8;
+				meFormat = Core::Image::Format::k_Lum8;
 				break;
 			case PNG_COLOR_TYPE_GRAY_ALPHA:
-				meFormat = Core::CImage::LUMA_88;
+				meFormat = Core::Image::Format::k_LumA88;
 				break;
 			case PNG_COLOR_TYPE_RGB:
-				meFormat = Core::CImage::RGB_888;
+				meFormat = Core::Image::Format::k_RGB888;
 				break;
 			case PNG_COLOR_TYPE_RGB_ALPHA:
-				meFormat = Core::CImage::RGBA_8888;
+				meFormat = Core::Image::Format::k_RGBA8888;
 				break;
 			default:
-				ERROR_LOG("Trying to load a PNG with an unknown colour format!");
+				CS_LOG_ERROR("Trying to load a PNG with an unknown colour format!");
 				png_read_end(pPng, NULL);
 				png_destroy_read_struct(&pPng, &pInfo, (png_infopp)NULL);
 				return false;
@@ -301,9 +301,9 @@ namespace ChilliSource
 			const u32 udwBytesPerPixel = 2;
 			u32 udwArea = mdwWidth * mdwHeight;
 
-			if (meFormat != Core::CImage::RGB_888)
+			if (meFormat != Core::Image::Format::k_RGB888)
 			{
-				ERROR_LOG("Trying to convert from RGB888 to LUM8 but current format is not RGB888!");
+				CS_LOG_ERROR("Trying to convert from RGB888 to LUM8 but current format is not RGB888!");
 				return;
 			}
 
@@ -318,9 +318,9 @@ namespace ChilliSource
 			}
 
 
-			SAFE_DELETE_ARRAY(mpData);
+			CS_SAFEDELETE_ARRAY(mpData);
 			mpData = (u8*)pubyBitmapData8;
-			meFormat = Core::CImage::LUM_8;
+			meFormat = Core::Image::Format::k_Lum8;
 		}
 		//----------------------------------------------------------------------------------
 		/// Convert Format From RGB8888 To LUMA88
@@ -330,9 +330,9 @@ namespace ChilliSource
 			const u32 udwBytesPerPixel = 2;
 			u32 udwArea = mdwWidth * mdwHeight;
 
-			if (meFormat != Core::CImage::RGBA_8888)
+			if (meFormat != Core::Image::Format::k_RGBA8888)
 			{
-				ERROR_LOG("Trying to convert from RGBA8888 to LUMA88 but current format is not RGBA8888!");
+				CS_LOG_ERROR("Trying to convert from RGBA8888 to LUMA88 but current format is not RGBA8888!");
 				return;
 			}
 
@@ -346,9 +346,9 @@ namespace ChilliSource
 				pPixel16->mbyA = pPixel32->mbyA;
 			}
 
-			SAFE_DELETE_ARRAY(mpData);
+			CS_SAFEDELETE_ARRAY(mpData);
 			mpData = (u8*)pubyBitmapData88;
-			meFormat = Core::CImage::LUMA_88;
+			meFormat = Core::Image::Format::k_LumA88;
 		}
 		//----------------------------------------------------------------------------------
 		/// Convert Format From RGB888 To RGB565
@@ -358,9 +358,9 @@ namespace ChilliSource
 			const u32 udwBytesPerPixel = 2;
 			u32 udwArea = mdwWidth * mdwHeight;
 
-			if (meFormat != Core::CImage::RGB_888)
+			if (meFormat != Core::Image::Format::k_RGB888)
 			{
-				ERROR_LOG("Trying to convert from RGB888 to RGB565 but current format is not RGB888!");
+				CS_LOG_ERROR("Trying to convert from RGB888 to RGB565 but current format is not RGB888!");
 				return;
 			}
 
@@ -376,9 +376,9 @@ namespace ChilliSource
 						((((pPixel24->mbyB) & 0xFF) >> 3) <<  0);
 			}
 
-			SAFE_DELETE_ARRAY(mpData);
+			CS_SAFEDELETE_ARRAY(mpData);
 			mpData = (u8*)pubyBitmapData565;
-			meFormat = Core::CImage::RGB_565;
+			meFormat = Core::Image::Format::k_RGB565;
 		}
 		//----------------------------------------------------------------------------------
 		/// Convert Format From RGBA8888 To RGBA4444
@@ -388,9 +388,9 @@ namespace ChilliSource
 			const u32 udwBytesPerPixel = 2;
 			u32 udwArea = mdwWidth * mdwHeight;
 
-			if (meFormat != Core::CImage::RGBA_8888)
+			if (meFormat != Core::Image::Format::k_RGBA8888)
 			{
-				ERROR_LOG("Trying to convert from RGBA8888 to RGBA4444 but current format is not RGBA8888!");
+				CS_LOG_ERROR("Trying to convert from RGBA8888 to RGBA4444 but current format is not RGBA8888!");
 				return;
 			}
 
@@ -407,9 +407,9 @@ namespace ChilliSource
 				((((*pPixel32 >> 24) & 0xFF) >> 4) << 0); // A
 			}
 
-			SAFE_DELETE_ARRAY(mpData);
+			CS_SAFEDELETE_ARRAY(mpData);
 			mpData = (u8*)pubyBitmapData4444;
-			meFormat = Core::CImage::RGBA_4444;
+			meFormat = Core::Image::Format::k_RGBA4444;
 		}
 	}
 }

@@ -10,7 +10,7 @@
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/EmailCompositionJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
-#include <Platform/Android/Social/Communications/EmailCompositionActivity.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Communications/EmailCompositionActivity.h>
 
 //function definitions
 extern "C"
@@ -60,7 +60,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Present
 		//--------------------------------------------------------------
-		void CEmailCompositionJavaInterface::Present(const DYNAMIC_ARRAY<CUTF8String>& inastrRecipientAddresses, const CUTF8String& instrSubject, const CUTF8String& instrContents,
+		void CEmailCompositionJavaInterface::Present(const std::vector<Core::UTF8String>& inastrRecipientAddresses, const Core::UTF8String& instrSubject, const Core::UTF8String& instrContents,
 													const std::string& instrAttachmentFilename, bool inbFormatAsHtml, const ResultDelegate& inDelegate)
 		{
 			mDelegate = inDelegate;
@@ -70,7 +70,7 @@ namespace ChilliSource
 			//build the recipient list
 			u32 udwCount = 0;
 			jobjectArray ajstrRecipients = pEnv->NewObjectArray(inastrRecipientAddresses.size(), pEnv->FindClass("java/lang/String"), pEnv->NewStringUTF(""));
-			for(std::vector<CUTF8String>::const_iterator it = inastrRecipientAddresses.begin(); it != inastrRecipientAddresses.end(); ++it)
+			for(std::vector<Core::UTF8String>::const_iterator it = inastrRecipientAddresses.begin(); it != inastrRecipientAddresses.end(); ++it)
 			{
 				jstring jstrRecipient = JavaInterfaceUtils::CreateJStringFromUTF8String(*it);
 				pEnv->SetObjectArrayElement(ajstrRecipients,udwCount++, jstrRecipient);

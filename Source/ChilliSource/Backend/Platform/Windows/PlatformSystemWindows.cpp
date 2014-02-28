@@ -284,11 +284,11 @@ namespace ChilliSource
 		/// Get Screen Dimensions
 		///
 		/// Retrieves the screen dimensions. These dimensions are always in the default orientation for the device.
-		/// @return A CVector2 containing the screen size in it's x + y components
+		/// @return A Vector2 containing the screen size in it's x + y components
 		//-----------------------------------------------------------------------------------------------------------
-		Core::CVector2 CPlatformSystem::GetScreenDimensions() const
+		Core::Vector2 CPlatformSystem::GetScreenDimensions() const
 		{
-			Core::CVector2 Result;
+			Core::Vector2 Result;
 
 			s32 dwWidth, dwHeight = 0;
 			glfwGetWindowSize(&dwWidth, &dwHeight);

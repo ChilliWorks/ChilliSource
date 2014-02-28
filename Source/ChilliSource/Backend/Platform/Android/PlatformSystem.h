@@ -23,9 +23,9 @@ namespace ChilliSource
 		//=============================================
 		/// Delegates
 		//=============================================
-		typedef fastdelegate::FastDelegate0<IActivity*> ActivityCreationFunction;
-		typedef fastdelegate::FastDelegate1<DYNAMIC_ARRAY<Core::SystemPtr> &, Core::ISystem*> SystemCreationFunction;
-		typedef fastdelegate::FastDelegate0<IInformationProvider*> InfoProviderCreationFunction;
+		typedef std::function<IActivity*()> ActivityCreationFunction;
+		typedef std::function<Core::ISystem*(std::vector<Core::SystemPtr>&)> SystemCreationFunction;
+		typedef std::function<void(IInformationProvider*)> InfoProviderCreationFunction;
 		//=============================================
 		/// Platform System
 		///
@@ -33,7 +33,6 @@ namespace ChilliSource
 		//=============================================
 		class CPlatformSystem : public IPlatformSystem
 		{
-			DECLARE_CREATABLE(IPlatformSystem, CPlatformSystem);
 		public:
 			CPlatformSystem();
 			virtual ~CPlatformSystem();
@@ -50,7 +49,7 @@ namespace ChilliSource
 			///
 			/// @param the system list
 			//-------------------------------------------------
-			void CreateDefaultSystems(DYNAMIC_ARRAY<Core::SystemPtr> & inaSystems);
+			void CreateDefaultSystems(std::vector<Core::SystemPtr> & inaSystems);
 			//-------------------------------------------------
 			/// Post Create Systems
 			///
@@ -106,7 +105,7 @@ namespace ChilliSource
 			/// @param Vector of existing systems. The return value is added to this vector if not NULL.
 			/// @return A handle to the given system or NULL if the platform cannot support it
 			//-----------------------------------------
-			Core::ISystem* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<Core::SystemPtr> & inaExistingSystems) const;
+			Core::ISystem* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemPtr> & inaExistingSystems) const;
 			//==========================================
 			//--- Activity Creation
 			//==========================================
@@ -149,9 +148,9 @@ namespace ChilliSource
 			/// Get Screen Dimensions
 			///
 			/// Retrieves the screen dimensions. These dimensions are always in the default orientation for the device.
-			/// @return A CVector2 containing the screen size in its x + y components
+			/// @return A Vector2 containing the screen size in its x + y components
 			//-----------------------------------------------------------------------------------------------------------
-			Core::CVector2 GetScreenDimensions() const;
+			Core::Vector2 GetScreenDimensions() const;
 			//--------------------------------------------------------------
 			/// Get Device Model Name
 			///
@@ -198,7 +197,7 @@ namespace ChilliSource
 			///
 			/// @return A pointer to the ResourceProvider
 			//--------------------------------------------
-			Core::IResourceProvider* CreateDefaultImageLoader(DYNAMIC_ARRAY<Core::SystemPtr>& inSystems) const;
+			Core::IResourceProvider* CreateDefaultImageLoader(std::vector<Core::SystemPtr>& inSystems) const;
 			//-------------------------------------------------
 			/// Get Screen Density
 			///
@@ -271,7 +270,7 @@ namespace ChilliSource
 			///
 			/// @return A pointer to the system
 			//--------------------------------------------
-			Core::ISystem * CreateHttpConnectionSystem(DYNAMIC_ARRAY<Core::SystemPtr>& inSystems) const;
+			Core::ISystem * CreateHttpConnectionSystem(std::vector<Core::SystemPtr>& inSystems) const;
 			//--------------------------------------------
 			/// Create Activities
 			///
@@ -312,7 +311,7 @@ namespace ChilliSource
 			/// @param Exisiting systems
 			/// @return Pointer to system
 			//-------------------------------------------
-			Core::ISystem* FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const DYNAMIC_ARRAY<Core::SystemPtr>& inSystems) const;
+			Core::ISystem* FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemPtr>& inSystems) const;
 			//--------------------------------------------
 			/// Add Activity Function
 			///
@@ -352,13 +351,13 @@ namespace ChilliSource
 			
 			CUDIDManager mUDIDManager;
 
-			typedef HASH_MAP<Core::InterfaceIDType, SystemCreationFunction> MapInterfaceIDToSystemFunc;
+			typedef std::unordered_map<Core::InterfaceIDType, SystemCreationFunction> MapInterfaceIDToSystemFunc;
 			MapInterfaceIDToSystemFunc mmapInterfaceIDToSystemFunc;
 
-			typedef HASH_MAP<Core::InterfaceIDType, ActivityCreationFunction> MapInterfaceIDToActivityFunc;
+			typedef std::unordered_map<Core::InterfaceIDType, ActivityCreationFunction> MapInterfaceIDToActivityFunc;
 			MapInterfaceIDToActivityFunc mmapInterfaceIDToActivityFunc;
 
-			typedef HASH_MAP<Core::InterfaceIDType, InfoProviderCreationFunction> MapInterfaceIDToInfoProviderFunc;
+			typedef std::unordered_map<Core::InterfaceIDType, InfoProviderCreationFunction> MapInterfaceIDToInfoProviderFunc;
 			MapInterfaceIDToInfoProviderFunc mmapInterfaceIDToInfoProviderFunc;
 		};
 	}

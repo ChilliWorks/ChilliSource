@@ -20,7 +20,7 @@ namespace ChilliSource
         //-----------------------------------------------------------------
         /// An IConnectableEvent represents an object which can have multiple listeners
         /// (connections) with the given DelegateType. The subclass Event is what
-        /// should be instanced by objects as they have an Invoke method.
+        /// should be instanced by objects as they have an NotifyConnections method.
         /// Objects should though expose the IConnectableEvent interface to prevent
         /// other objects invoking the event.
         ///

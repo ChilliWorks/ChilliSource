@@ -62,18 +62,18 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		/// Present With Attachment
 		//-------------------------------------------------------
-		void CEmailCompositionActivity::PresentWithAttachment(const DYNAMIC_ARRAY<CUTF8String> & inastrRecipientAddresses, const CUTF8String & instrSubject, const CUTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
+		void CEmailCompositionActivity::PresentWithAttachment(const std::vector<CUTF8String> & inastrRecipientAddresses, const CUTF8String & instrSubject, const CUTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
 		{
 			mCallback = inCallback;
 
 			std::string strFilename;
 			if (inAttachment.mstrFilename.size() > 0)
 			{
-				if (inAttachment.meStorageLocation == Core::SL_PACKAGE || (inAttachment.meStorageLocation == Core::SL_DLC && Core::Application::GetFileSystemPtr()->DoesFileExistInCachedDLC(inAttachment.mstrFilename) == false))
+				if (inAttachment.meStorageLocation == Core::StorageLocation::k_package || (inAttachment.meStorageLocation == Core::StorageLocation::k_DLC && Core::Application::GetFileSystemPtr()->DoesFileExistInCachedDLC(inAttachment.mstrFilename) == false))
 				{
-					Core::Application::GetFileSystemPtr()->CreateDirectory(Core::SL_CACHE, kstrTempAttachmentDirectory);
-					Core::Application::GetFileSystemPtr()->CopyFile(inAttachment.meStorageLocation, inAttachment.mstrFilename, Core::SL_CACHE, kstrTempAttachmentDirectory + inAttachment.mstrFilename);
-					strFilename = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(Core::SL_CACHE) + kstrTempAttachmentDirectory + inAttachment.mstrFilename;
+					Core::Application::GetFileSystemPtr()->CreateDirectory(Core::StorageLocation::k_cache, kstrTempAttachmentDirectory);
+					Core::Application::GetFileSystemPtr()->CopyFile(inAttachment.meStorageLocation, inAttachment.mstrFilename, Core::StorageLocation::k_cache, kstrTempAttachmentDirectory + inAttachment.mstrFilename);
+					strFilename = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_cache) + kstrTempAttachmentDirectory + inAttachment.mstrFilename;
 				}
 				else
 				{
@@ -117,7 +117,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		CEmailCompositionActivity::~CEmailCompositionActivity()
 		{
-			Core::Application::GetFileSystemPtr()->DeleteDirectory(Core::SL_CACHE, kstrTempAttachmentDirectory);
+			Core::Application::GetFileSystemPtr()->DeleteDirectory(Core::StorageLocation::k_cache, kstrTempAttachmentDirectory);
 		}
 	}
 }

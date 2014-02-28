@@ -22,7 +22,7 @@ namespace ChilliSource
 		/// The amazon implementation of the IAP system. The moFlow SKU pre-processor
 		/// flag MOFLOWSKU_IABMETHOD_AMAZON should be set for this to be used.
 		//========================================================================
-		class CAmazonIAPSystem : public Networking::IIAPSystem
+		class CAmazonIAPSystem : public Networking::IAPSystem
 		{
 		public:
             //---------------------------------------------------------------
@@ -43,7 +43,7 @@ namespace ChilliSource
             ///
             /// @param List of products
             //---------------------------------------------------------------
-            void RegisterProducts(const DYNAMIC_ARRAY<Networking::IAPProductRegInfo>& inaProducts);
+            void RegisterProducts(const std::vector<Networking::IAPProductRegInfo>& inaProducts);
             //---------------------------------------------------------------
 			/// Get Provider ID
 			///
@@ -88,7 +88,7 @@ namespace ChilliSource
 			/// @param List of product IDs to request descriptions for
             /// @param Delegate to invoke when the request completes
             //---------------------------------------------------------------
-            void RequestProductDescriptions(const DYNAMIC_ARRAY<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate);
+            void RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate);
             //---------------------------------------------------------------
             /// Request All Product Descriptions
             ///
@@ -134,7 +134,7 @@ namespace ChilliSource
             //---------------------------------------------------------------
             void RestoreManagedPurchases();
 		private:
-            DYNAMIC_ARRAY<Networking::IAPProductRegInfo> maProductRegInfos;
+            std::vector<Networking::IAPProductRegInfo> maProductRegInfos;
             AmazonIAPJavaInterfacePtr mpJavaInterface;
 		};
 	}

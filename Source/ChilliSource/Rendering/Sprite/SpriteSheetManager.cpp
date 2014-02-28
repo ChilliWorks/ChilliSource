@@ -100,7 +100,7 @@ namespace ChilliSource
             Core::StringUtils::SplitBaseFilename(inFilePath, strSpriteSheetFile, strExt);
             strSpriteSheetFile += ".bin";
             
-			MapStringToResourcePtr::iterator pExistingResource = mMapFilenameToResource.find(strSpriteSheetFile);
+			MapStringToResourceSPtr::iterator pExistingResource = mMapFilenameToResource.find(strSpriteSheetFile);
 			
 			if(pExistingResource == mMapFilenameToResource.end()) 
 			{

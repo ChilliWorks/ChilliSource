@@ -88,7 +88,7 @@ namespace ChilliSource
 			///
 			/// @return Java Interface that implements the given interface or NULL if none
 			//--------------------------------------------------------
-			template <typename T> SHARED_PTR<T> GetJavaInterface();
+			template <typename T> std::shared_ptr<T> GetJavaInterface();
 			//--------------------------------------------------------
 			/// Get Java Interface
 			///
@@ -96,7 +96,7 @@ namespace ChilliSource
 			///
 			/// @return Java Interface that implements the given interface or NULL if none
 			//--------------------------------------------------------
-			template <typename T, typename U> SHARED_PTR<T> GetJavaInterface();
+			template <typename T, typename U> std::shared_ptr<T> GetJavaInterface();
 			//--------------------------------------------------------
 			/// Get Java Interfaces
 			///
@@ -106,7 +106,7 @@ namespace ChilliSource
 			/// @param The type ID of the Java Interface you wish to implement
 			/// @param OUT: The array of java interfaces.
 			//--------------------------------------------------------
-			void GetJavaInterfaces(Core::InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<JavaInterfacePtr>& outJavaInterfaces);
+			void GetJavaInterfaces(Core::InterfaceIDType inInterfaceID, std::vector<JavaInterfacePtr>& outJavaInterfaces);
 			//--------------------------------------------------------
 			/// Get Java Interfaces
 			///
@@ -115,7 +115,7 @@ namespace ChilliSource
 			///
 			/// @param OUT: The array of java interfaces.
 			//--------------------------------------------------------
-			template <typename T> void GetJavaInterfaces(DYNAMIC_ARRAY<SHARED_PTR<T> >& outJavaInterfaces);
+			template <typename T> void GetJavaInterfaces(std::vector<std::shared_ptr<T> >& outJavaInterfaces);
 			//--------------------------------------------------------
 			/// Destructor
 			//--------------------------------------------------------
@@ -127,7 +127,7 @@ namespace ChilliSource
 			CJavaInterfaceManager();
 
 			static CJavaInterfaceManager* mpJavaInterfaceManagerSingleton;
-			DYNAMIC_ARRAY<JavaInterfacePtr> mJavaInterfaces;
+			std::vector<JavaInterfacePtr> mJavaInterfaces;
 			JavaVM* mpJavaVM;
 		};
 		//========================================================
@@ -136,41 +136,41 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		/// Get Java Interface
 		//--------------------------------------------------------
-		template <typename T> SHARED_PTR<T> CJavaInterfaceManager::GetJavaInterface()
+		template <typename T> std::shared_ptr<T> CJavaInterfaceManager::GetJavaInterface()
 		{
 			JavaInterfacePtr pJavaInterface = GetJavaInterface(T::InterfaceID);
 
 			if (pJavaInterface != NULL)
 			{
-				return SHARED_PTR_CAST<T>(pJavaInterface);
+				return std::static_pointer_cast<T>(pJavaInterface);
 			}
 
-			return SHARED_PTR<T>();
+			return std::shared_ptr<T>();
 		}
 		//--------------------------------------------------------
 		/// Get Java Interface
 		//--------------------------------------------------------
-		template <typename T, typename U> SHARED_PTR<T> CJavaInterfaceManager::GetJavaInterface()
+		template <typename T, typename U> std::shared_ptr<T> CJavaInterfaceManager::GetJavaInterface()
 		{
 			JavaInterfacePtr pJavaInterface = GetJavaInterface(U::InterfaceID);
 
 			if (pJavaInterface != NULL)
 			{
-				return SHARED_PTR_CAST<T>(pJavaInterface);
+				return std::static_pointer_cast<T>(pJavaInterface);
 			}
 
-			return SHARED_PTR<T>();
+			return std::shared_ptr<T>();
 		}
 		//--------------------------------------------------------
 		/// Get Java Interfaces
 		//--------------------------------------------------------
-		template <typename T> void CJavaInterfaceManager::GetJavaInterfaces(DYNAMIC_ARRAY<SHARED_PTR<T> >& outJavaInterfaces)
+		template <typename T> void CJavaInterfaceManager::GetJavaInterfaces(std::vector<std::shared_ptr<T> >& outJavaInterfaces)
 		{
 			for (size_t nJavaInterface = 0; nJavaInterface < mJavaInterfaces.size(); nJavaInterface++)
 			{
 				if (mJavaInterfaces[nJavaInterface]->IsA(T::InterfaceID))
 				{
-					outJavaInterfaces.push_back(SHARED_PTR_CAST<T>(mJavaInterfaces[nJavaInterface]));
+					outJavaInterfaces.push_back(std::static_pointer_cast<T>(mJavaInterfaces[nJavaInterface]));
 				}
 			}
 		}

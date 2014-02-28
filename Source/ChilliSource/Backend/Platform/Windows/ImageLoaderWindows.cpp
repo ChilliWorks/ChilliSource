@@ -41,7 +41,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool ImageLoader::CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == Core::CImage::InterfaceID;
+			return inInterfaceID == Core::Image::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Can Create Resource From File With Extension
@@ -61,10 +61,10 @@ namespace ChilliSource
 		/// @param Out: Resource
 		/// @return Success
 		//----------------------------------------------------------------
-		bool ImageLoader::CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool ImageLoader::CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
 		{
 			//Based on the extension decide how to load the file
-			return CreateImageFromFile(ineLocation, inFilePath, Core::CImage::FORMAT_DEFAULT, outpResource);
+			return CreateImageFromFile(ineLocation, inFilePath, Core::Image::FORMAT_DEFAULT, outpResource);
 		}
 		//----------------------------------------------------------------
 		/// Create Image From File
@@ -75,7 +75,7 @@ namespace ChilliSource
 		/// @param Out: Resource
 		/// @return Sucess
 		//----------------------------------------------------------------
-		bool ImageLoader::CreateImageFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
+		bool ImageLoader::CreateImageFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::ResourceSPtr& outpResource)
 		{
             Core::FileStreamSPtr pImageFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath, Core::FileMode::k_readBinary);
 	
@@ -92,7 +92,7 @@ namespace ChilliSource
 
 				if(strExtension == PNGExtension)
 				{
-					CreatePNGImageFromFile(ineLocation, inFilePath, ineFormat, (Core::CImage*)outpResource.get());
+					CreatePNGImageFromFile(ineLocation, inFilePath, ineFormat, (Core::Image*)outpResource.get());
 					return true;
 				}
 			}
@@ -110,14 +110,14 @@ namespace ChilliSource
 		/// @param Out: Image data
 		/// @return Success
 		//----------------------------------------------------------------
-		bool ImageLoader::CreatePNGImageFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::CImage* outpImage)
+		bool ImageLoader::CreatePNGImageFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::Image* outpImage)
 		{
 			ChilliSource::Windows::CPngImage image;
 			image.Load(ineLocation, inFilePath);
 
 			if(image.IsLoaded())
 			{
-				if(ineFormat == Core::CImage::FORMAT_DEFAULT)
+				if(ineFormat == Core::Image::FORMAT_DEFAULT)
 				{
 					ineFormat = meDefaultFormat;
 				}
@@ -131,7 +131,7 @@ namespace ChilliSource
 				//We always load the image as RGBA_8888 but we convert on the fly to the correct format
 				switch(ineFormat)
 				{
-				case Core::CImage::RGBA_4444:
+				case Core::Image::RGBA_4444:
 					{
 						CS_LOG_DEBUG("Converting to RGBA_4444");
 
@@ -141,7 +141,7 @@ namespace ChilliSource
 						pubyBitmapData8888 = pubyBitmapData4444;
 						break;
 					}
-				case Core::CImage::RGB_565:
+				case Core::Image::RGB_565:
 					{
 						CS_LOG_DEBUG("Converting to RGBA_565");
 
@@ -151,7 +151,7 @@ namespace ChilliSource
 						pubyBitmapData8888 = pubyBitmapData565;
 						break;
 					}
-				case Core::CImage::LUMA_88:
+				case Core::Image::LUMA_88:
 					{
 						CS_LOG_DEBUG("Converting to LUMA_88");
 

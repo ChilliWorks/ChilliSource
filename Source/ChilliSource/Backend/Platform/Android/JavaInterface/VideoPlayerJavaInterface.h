@@ -22,9 +22,9 @@ namespace ChilliSource
 		//=================================================================
 		/// Delegates
 		//=================================================================
-		typedef fastdelegate::FastDelegate0<> OnVideoStoppedDelegate;
-		typedef fastdelegate::FastDelegate0<> OnVideoDismissedDelegate;
-		typedef fastdelegate::FastDelegate0<> OnUpdateSubtitlesDelegate;
+		typedef std::function<void()> OnVideoStoppedDelegate;
+		typedef std::function<void()> OnVideoDismissedDelegate;
+		typedef std::function<void()> OnUpdateSubtitlesDelegate;
 		//=================================================================
 		/// Video Player Java Interface
 		///
