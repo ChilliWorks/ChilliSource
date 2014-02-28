@@ -28,13 +28,13 @@
 #include <ChilliSource/Rendering/Sprite/SpriteSheetLoader.h>
 #include <ChilliSource/Rendering/Sprite/XMLSpriteSheetLoader.h>
 #include <ChilliSource/Rendering/Font/FontLoader.h>
-#include <ChilliSource/Rendering/Main/Renderer.h>
+#include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Model/AnimatedMeshComponentUpdater.h>
 
-#include <ChilliSource/Audio/Main/AudioLoader.h>
-#include <ChilliSource/Audio/Main/AudioPlayer.h>
+#include <ChilliSource/Audio/Base/AudioLoader.h>
+#include <ChilliSource/Audio/Base/AudioPlayer.h>
 
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/MoImageProvider.h>
 
 #include <ChilliSource/Rendering/GUI/GUIViewFactory.h>
@@ -59,7 +59,7 @@ namespace ChilliSource
 		CPlatformSystem::CPlatformSystem() : mbIsRunning(true), mbIsSuspended(false), muddwAppStartTime(0), mffAppPreviousTime(0.0)
 		{
 			//CNotificationScheduler::Initialise(new CLocalNotificationScheduler(), new CRemoteNotificationScheduler());
-			Core::CApplication::SetFileSystem(new Windows::CFileSystem());
+			Core::Application::SetFileSystem(new Windows::CFileSystem());
 			ChilliSource::CLogging::Init();
 		}
 		//-----------------------------------------
@@ -105,16 +105,16 @@ namespace ChilliSource
 			//create the main systems
 			Rendering::IRenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
 			inaSystems.push_back(Core::SystemPtr(pRenderSystem));
-			Core::CApplication::SetRenderSystem(pRenderSystem);
+			Core::Application::SetRenderSystem(pRenderSystem);
 
 			Input::IInputSystem* pInputSystem = new Windows::CInputSystem();
 			inaSystems.push_back(Core::SystemPtr(pInputSystem));
-			Core::CApplication::SetInputSystem(pInputSystem);
+			Core::Application::SetInputSystem(pInputSystem);
 
 			Audio::IAudioSystem* pAudioSystem = new Windows::CFMODSystem();
 			inaSystems.push_back(Core::SystemPtr(pAudioSystem));
 			inaSystems.push_back(Core::SystemPtr(new Windows::CFMODAudioLoader(pAudioSystem)));
-			Core::CApplication::SetAudioSystem(pAudioSystem);
+			Core::Application::SetAudioSystem(pAudioSystem);
 
 			//create other important systems
 			OpenGL::CRenderCapabilities* pRenderCapabilities = new OpenGL::CRenderCapabilities();
@@ -129,15 +129,15 @@ namespace ChilliSource
 			inaSystems.push_back(Core::SystemPtr(new Rendering::CMaterialFactory()));
 
 			//Initialise the render system
-			Core::CApplication::GetRenderSystemPtr()->Init((u32)Core::CScreen::GetRawDimensions().x, (u32)Core::CScreen::GetRawDimensions().y);
+			Core::Application::GetRenderSystemPtr()->Init((u32)Core::CScreen::GetRawDimensions().x, (u32)Core::CScreen::GetRawDimensions().y);
             
 			//Create the renderer
-			Core::CApplication::SetRenderer(new Rendering::CRenderer(Core::CApplication::GetRenderSystemPtr()));
+			Core::Application::SetRenderer(new Rendering::CRenderer(Core::Application::GetRenderSystemPtr()));
             
 			//Initialise the input system
-			if(Core::CApplication::GetInputSystemPtr() != NULL)
+			if(Core::Application::GetInputSystemPtr() != NULL)
 			{
-				Core::CApplication::SetHasTouchInput((Core::CApplication::GetInputSystemPtr()->GetTouchScreenPtr() != NULL));
+				Core::Application::SetHasTouchInput((Core::Application::GetInputSystemPtr()->GetTouchScreenPtr() != NULL));
 			}
 		}
 		//-------------------------------------------------
@@ -150,7 +150,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void CPlatformSystem::PostCreateSystems()
 		{
-			if(Core::CApplication::GetAudioSystemPtr() != NULL)
+			if(Core::Application::GetAudioSystemPtr() != NULL)
 			{
 				Audio::CAudioPlayer::Init();
 			}
@@ -174,7 +174,7 @@ namespace ChilliSource
 					u64 uddwAppRunningTime = ((u64)mffAppPreviousTime - muddwAppStartTime);
 
 					//Update event
-					Core::CApplication::OnFrameBegin(fDt, uddwAppRunningTime);
+					Core::Application::OnFrameBegin(fDt, uddwAppRunningTime);
 
 					mffAppPreviousTime = ffAppCurrentTime;
 				}
@@ -462,11 +462,11 @@ namespace ChilliSource
 		{
 			if(MessageBoxA(NULL, instrTitle.ToASCII().c_str(), instrMessage.ToASCII().c_str(), MB_OKCANCEL) == IDOK)
 			{
-				Core::CApplication::OnSystemConfirmDialogResult(inudwID, ChilliSource::SystemConfirmDialog::CONFIRM);
+				Core::Application::OnSystemConfirmDialogResult(inudwID, ChilliSource::SystemConfirmDialog::CONFIRM);
 			}
 			else
 			{
-				Core::CApplication::OnSystemConfirmDialogResult(inudwID, ChilliSource::SystemConfirmDialog::CANCEL);
+				Core::Application::OnSystemConfirmDialogResult(inudwID, ChilliSource::SystemConfirmDialog::CANCEL);
 			} 
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -494,7 +494,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void CPlatformSystem::OnWindowResized(s32 indwWidth, s32 indwHeight)
 		{
-			Core::CApplication::OnScreenResized((u32)indwWidth, (u32)indwHeight);
+			Core::Application::OnScreenResized((u32)indwWidth, (u32)indwHeight);
 		}
 		//-------------------------------------------------
 		/// On Window Closed (GLFW)
@@ -503,8 +503,8 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void CPlatformSystem::OnWindowClosed()
 		{
-			Core::CApplication::Suspend();
-			Core::CApplication::Quit();
+			Core::Application::Suspend();
+			Core::Application::Quit();
 			glfwTerminate();
 		}
 		//-----------------------------------------

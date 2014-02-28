@@ -7,9 +7,9 @@
 *
 */
 
-#include <ChilliSource/Platform/Windows/ImageLoading/PngImage.h>
-#include <ChilliSource/Platform/Windows/ImageLoading/LibPng/png.h>
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Backend/Platform/Windows/ImageLoading/PngImage.h>
+#include <ChilliSource/Backend/Platform/Windows/ImageLoading/LibPng/png.h>
+#include <ChilliSource/Core/Base/Application.h>
 
 //----------------------------------------------------------------------------------
 /// Read Png Data
@@ -80,7 +80,7 @@ namespace ChilliSource
 		void CPngImage::Load(Core::STORAGE_LOCATION ineLocation, const std::string& instrFilename)
 		{
 			//create the file stream
-			ChilliSource::Core::FileStreamPtr stream = ChilliSource::Core::CApplication::GetFileSystemPtr()->CreateFileStream(ineLocation, instrFilename, ChilliSource::Core::FM_READ_BINARY);
+			ChilliSource::Core::FileStreamPtr stream = ChilliSource::Core::Application::GetFileSystemPtr()->CreateFileStream(ineLocation, instrFilename, ChilliSource::Core::FM_READ_BINARY);
 
 			//insure the stream is not broken
 			if (stream == ChilliSource::Core::FileStreamPtr() || stream->IsBad() == true || stream->IsOpen() == false)
