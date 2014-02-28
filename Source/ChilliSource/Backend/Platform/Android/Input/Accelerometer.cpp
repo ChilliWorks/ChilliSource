@@ -6,8 +6,8 @@
 //  Copyright 2013 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Platform/Android/Input/Accelerometer.h>
-#include <ChilliSource/Platform/Android/JavaInterface/AccelerometerJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Input/Accelerometer.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/AccelerometerJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 
 

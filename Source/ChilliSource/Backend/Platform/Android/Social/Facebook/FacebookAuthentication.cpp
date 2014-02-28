@@ -6,8 +6,8 @@
  * Copyright �2012 Tag Games Limited - All rights reserved
  */
 
-#include <ChilliSource/Platform/Android/Social/Facebook/FacebookAuthentication.h>
-#include <ChilliSource/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 
 namespace ChilliSource
@@ -17,7 +17,7 @@ namespace ChilliSource
 
 	namespace Android
 	{
-		DEFINE_NAMED_INTERFACE(CFacebookAuthenticationSystem);
+		CS_DEFINE_NAMEDTYPE(CFacebookAuthenticationSystem);
 
 		CFacebookAuthenticationSystem::CFacebookAuthenticationSystem()
 		: mAuthDelegate(NULL), mAuthReadDelegate(NULL), mAuthWriteDelegate(NULL)

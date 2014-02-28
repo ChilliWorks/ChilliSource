@@ -238,7 +238,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		DEFINE_NAMED_INTERFACE(CCoreJavaInterface);
+		CS_DEFINE_NAMEDTYPE(CCoreJavaInterface);
 
 		//--------------------------------------------------------------------------------------
 		/// Constructor

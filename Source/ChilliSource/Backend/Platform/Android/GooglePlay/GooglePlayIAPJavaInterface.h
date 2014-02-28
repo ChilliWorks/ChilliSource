@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAY_GOOGLEPLAYIAPJAVAINTERFACE_H_
 #define _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAY_GOOGLEPLAYIAPJAVAINTERFACE_H_
 
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterface.h>
 
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 
@@ -20,7 +20,7 @@ namespace ChilliSource
 		class CGooglePlayIAPJavaInterface : public IJavaInterface
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CGooglePlayIAPJavaInterface);
+			CS_DECLARE_NAMEDTYPE(CGooglePlayIAPJavaInterface);
 
 			CGooglePlayIAPJavaInterface(const std::string& instrPublicKey);
 

@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Platform/Android/JavaInterface/EmailCompositionJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/EmailCompositionJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 #include <Platform/Android/Social/Communications/EmailCompositionActivity.h>
@@ -41,7 +41,7 @@ namespace ChilliSource
 	namespace Android
 	{
 
-		DEFINE_NAMED_INTERFACE(CEmailCompositionJavaInterface);
+		CS_DEFINE_NAMEDTYPE(CEmailCompositionJavaInterface);
 		//--------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------

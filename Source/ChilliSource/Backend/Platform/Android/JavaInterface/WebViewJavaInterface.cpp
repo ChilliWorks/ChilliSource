@@ -7,8 +7,8 @@
  *
  */
 
-#include "WebViewJavaInterface.h"
-#include <ChilliSource/Platform/Android/WebViewActivity.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/WebViewJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/WebViewActivity.h>
 
 //function definitions
 extern "C"

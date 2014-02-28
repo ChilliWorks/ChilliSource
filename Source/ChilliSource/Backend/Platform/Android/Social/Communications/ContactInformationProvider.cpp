@@ -8,8 +8,8 @@
  */
 
 
-#include <ChilliSource/Platform/Android/Social/Communications/ContactInformationProvider.h>
-#include <ChilliSource/Platform/Android/JavaInterface/ContactInformationProviderJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Communications/ContactInformationProvider.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/ContactInformationProviderJavaInterface.h>
 
 namespace ChilliSource
 {

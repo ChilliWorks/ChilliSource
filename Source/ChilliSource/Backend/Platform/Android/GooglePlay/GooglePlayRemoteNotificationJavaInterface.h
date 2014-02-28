@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAY_GOOGLEPLAYREMOTENOTIFICATIONJAVAINTERFACE_H_
 #define _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAY_GOOGLEPLAYREMOTENOTIFICATIONJAVAINTERFACE_H_
 
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterface.h>
 
 namespace ChilliSource
 {
@@ -18,7 +18,7 @@ namespace ChilliSource
         class CGooglePlayRemoteNotificationJavaInterface : public IJavaInterface
         {
         public:
-        	DECLARE_NAMED_INTERFACE(CGooglePlayRemoteNotificationJavaInterface);
+        	CS_DECLARE_NAMEDTYPE(CGooglePlayRemoteNotificationJavaInterface);
         	//--------------------------------------------------------------
 			/// Constructor
 			//--------------------------------------------------------------

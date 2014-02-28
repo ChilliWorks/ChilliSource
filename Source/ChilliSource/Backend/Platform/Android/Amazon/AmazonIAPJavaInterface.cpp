@@ -105,7 +105,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		DEFINE_NAMED_INTERFACE(CAmazonIAPJavaInterface);
+		CS_DEFINE_NAMEDTYPE(CAmazonIAPJavaInterface);
 		//--------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------

@@ -9,7 +9,7 @@
 #ifndef MOFLOW_PLATFORM_ANDROID_AMAZON_AMAZONIAPJAVAINTERFACE_H
 #define MOFLOW_PLATFORM_ANDROID_AMAZON_AMAZONIAPJAVAINTERFACE_H
 
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterface.h>
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 
 namespace ChilliSource
@@ -25,7 +25,7 @@ namespace ChilliSource
 		class CAmazonIAPJavaInterface : public IJavaInterface
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CAmazonIAPJavaInterface);
+			CS_DECLARE_NAMEDTYPE(CAmazonIAPJavaInterface);
 			//--------------------------------------------------------------
 			/// Constructor
 			///

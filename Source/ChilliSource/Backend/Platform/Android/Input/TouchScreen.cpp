@@ -8,8 +8,8 @@
  *
  */
 
-#include <ChilliSource/Platform/Android/Input/TouchScreen.h>
-#include <ChilliSource/Platform/Android/JavaInterface/TouchInputJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Input/TouchScreen.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/TouchInputJavaInterface.h>
 
 namespace ChilliSource
 {

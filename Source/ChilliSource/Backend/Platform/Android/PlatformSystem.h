@@ -13,8 +13,8 @@
 #ifndef _MO_FLO_PLATFORM_ANDROID_PLATFORM_SYSTEM_H_
 #define _MO_FLO_PLATFORM_ANDROID_PLATFORM_SYSTEM_H_
 
-#include <ChilliSource/Core/Main/PlatformSystem.h>
-#include <ChilliSource/Platform/Android/UDIDManager.h>
+#include <ChilliSource/Core/Base/PlatformSystem.h>
+#include <ChilliSource/Backend/Platform/Android/UDIDManager.h>
 
 namespace ChilliSource
 {

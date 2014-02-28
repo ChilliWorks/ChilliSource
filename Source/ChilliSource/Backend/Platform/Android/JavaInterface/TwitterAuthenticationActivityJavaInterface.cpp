@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Platform/Android/JavaInterface/TwitterAuthenticationActivityJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/TwitterAuthenticationActivityJavaInterface.h>
 
 //function definitions
 extern "C"

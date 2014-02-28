@@ -11,7 +11,7 @@
 #define _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_LOCALNOTIFCATIONSJAVAINTERFACE_H_
 
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterface.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
 namespace ChilliSource
@@ -27,7 +27,7 @@ namespace ChilliSource
 		class CLocalNotificationJavaInterface : public IJavaInterface
 		{
 		public:
-			DECLARE_NAMED_INTERFACE();
+			CS_DECLARE_NAMEDTYPE();
 			//--------------------------------------------------------------
 			/// Constructor
 			//--------------------------------------------------------------

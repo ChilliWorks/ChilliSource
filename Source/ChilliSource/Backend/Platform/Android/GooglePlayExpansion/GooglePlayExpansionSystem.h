@@ -10,10 +10,10 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAYEXPANSION_GOOGLEPLAYEXPANSIONSYSTEM_H
 #define _MOFLOW_PLATFORM_ANDROID_GOOGLEPLAYEXPANSION_GOOGLEPLAYEXPANSIONSYSTEM_H
 
-#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/JSON/json.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterface.h>
 
 namespace ChilliSource
 {
@@ -38,7 +38,7 @@ namespace ChilliSource
         class CGooglePlayExpansionSystem : public Core::ISystem
         {
         public:
-        	DECLARE_NAMED_INTERFACE(CGooglePlayExpansionSystem);
+        	CS_DECLARE_NAMEDTYPE(CGooglePlayExpansionSystem);
 
         	typedef fastdelegate::FastDelegate1<DownloadStatus::ENUM> DownloadStatusDelegate;
 
@@ -216,7 +216,7 @@ namespace ChilliSource
         {
         public:
 
-        	DECLARE_NAMED_INTERFACE(CGooglePlayExpansionJavaInterface);
+        	CS_DECLARE_NAMEDTYPE(CGooglePlayExpansionJavaInterface);
 
         	CGooglePlayExpansionJavaInterface();
 

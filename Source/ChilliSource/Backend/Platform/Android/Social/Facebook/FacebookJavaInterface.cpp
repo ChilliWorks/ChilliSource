@@ -6,9 +6,9 @@
  * Copyright �2012 Tag Games Limited - All rights reserved
  */
 
-#include <ChilliSource/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
-#include <ChilliSource/Platform/Android/Social/Facebook/FacebookAuthentication.h>
-#include <ChilliSource/Platform/Android/Social/Facebook/FacebookPostSystem.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookPostSystem.h>
 
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
@@ -116,7 +116,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		DEFINE_NAMED_INTERFACE(CFacebookJavaInterface);
+		CS_DEFINE_NAMEDTYPE(CFacebookJavaInterface);
 
 		CFacebookJavaInterface::CFacebookJavaInterface()
 		{

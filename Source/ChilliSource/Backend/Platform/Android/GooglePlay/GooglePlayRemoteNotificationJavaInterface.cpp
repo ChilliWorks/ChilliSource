@@ -6,17 +6,17 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
-#include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
 
 #include <jni.h>
 
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
-#include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
+#include <ChilliSource/Backend/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
 
 extern "C"
 {
@@ -69,7 +69,7 @@ namespace ChilliSource
 {
     namespace Android
     {
-    	DEFINE_NAMED_INTERFACE(CGooglePlayRemoteNotificationJavaInterface);
+    	CS_DEFINE_NAMEDTYPE(CGooglePlayRemoteNotificationJavaInterface);
 
     	//--------------------------------------------------------------
 		/// Constructor

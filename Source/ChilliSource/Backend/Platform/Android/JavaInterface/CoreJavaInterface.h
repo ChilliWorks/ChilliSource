@@ -28,7 +28,7 @@ namespace ChilliSource
 		class CCoreJavaInterface : public IJavaInterface
 		{
 		public:
-			DECLARE_NAMED_INTERFACE();
+			CS_DECLARE_NAMEDTYPE();
 			//--------------------------------------------------------------------------------------
 			/// Constructor
 			//--------------------------------------------------------------------------------------

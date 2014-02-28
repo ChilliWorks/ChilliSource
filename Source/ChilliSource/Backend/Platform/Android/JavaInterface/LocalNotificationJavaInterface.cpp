@@ -7,10 +7,10 @@
  *
  */
 
-#include <ChilliSource/Platform/Android/JavaInterface/LocalNotificationJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/LocalNotificationJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
-#include <ChilliSource/Platform/Android/LocalNotificationScheduler.h>
+#include <ChilliSource/Backend/Platform/Android/LocalNotificationScheduler.h>
 
 #include <jni.h>
 
@@ -72,7 +72,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		DEFINE_NAMED_INTERFACE(CLocalNotificationJavaInterface);
+		CS_DEFINE_NAMEDTYPE(CLocalNotificationJavaInterface);
 		//--------------------------------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------------------------------

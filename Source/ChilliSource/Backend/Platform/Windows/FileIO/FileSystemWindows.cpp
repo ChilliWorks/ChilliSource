@@ -7,10 +7,10 @@
 *
 */
 
-#include <ChilliSource/Platform/Windows/FileIO/FileSystemWindows.h>
+#include <ChilliSource/Backend/Platform/Windows/FileIO/FileSystemWindows.h>
 #include <ChilliSource/Core/File/FileStream.h>
 
-#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 #include <ChilliSource/Core/boost/filesystem.hpp>

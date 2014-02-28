@@ -12,7 +12,7 @@
 #include <jni.h>
 #include <map>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
-#include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/_JavaInterface.h>
 
 namespace ChilliSource
 {

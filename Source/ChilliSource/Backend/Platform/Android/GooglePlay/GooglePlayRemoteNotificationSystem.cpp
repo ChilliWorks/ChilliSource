@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
-#include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
+#include <ChilliSource/Backend/Platform/Android/GooglePlay/GooglePlayRemoteNotificationSystem.h>
 
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
 
 namespace ChilliSource
 {

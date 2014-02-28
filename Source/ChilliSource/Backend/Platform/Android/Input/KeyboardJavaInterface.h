@@ -10,8 +10,8 @@
 #define _MOFLOW_PLATFORM_ANDROID_INPUT_KEYBOARDJAVAINTERFACE_H_
 
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
-#include <ChilliSource/Input/VirtualKeyboard.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Input/Keyboard/VirtualKeyboard.h>
 
 namespace ChilliSource
 {
@@ -25,7 +25,7 @@ namespace ChilliSource
 		class CKeyboardJavaInterface : public IJavaInterface
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CKeyboardJavaInterface);
+			CS_DECLARE_NAMEDTYPE(CKeyboardJavaInterface);
 			//-----------------------------------------------
 			/// Events
 			//-----------------------------------------------

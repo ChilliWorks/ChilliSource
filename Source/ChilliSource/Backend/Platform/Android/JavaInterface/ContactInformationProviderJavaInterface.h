@@ -13,7 +13,7 @@
 #include <ChilliSource/Social/Communications/ContactInformationProvider.h>
 #include <Platform/Android/Social/Communications/ContactInformationProvider.h>
 #include <vector>
-#include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/_JavaInterface.h>
 
 namespace ChilliSource
 {

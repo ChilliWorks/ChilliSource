@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Platform/Android/Amazon/AmazonIAPSystem.h>
+#include <ChilliSource/Backend/Platform/Android/Amazon/AmazonIAPSystem.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Core/Main/Device.h>
+#include <ChilliSource/Core/Base/Device.h>
 
 namespace ChilliSource
 {

@@ -7,14 +7,13 @@
  *
  */
 
-#include <ChilliSource/Platform/Android/HttpConnectionSystem.h>
+#include <ChilliSource/Backend/Platform/Android/HttpConnectionSystem.h>
 
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Core/Threading/Thread.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
 #include <sstream>
-#include <ChilliSource/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>
 
 namespace ChilliSource
 {

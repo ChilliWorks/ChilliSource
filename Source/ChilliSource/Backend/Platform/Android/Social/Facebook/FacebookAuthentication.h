@@ -10,7 +10,7 @@
 #define _MOFLO_PLATFORM_ANDROID_SOCIAL_FACEBOOKAUTHENTICATION_H_
 
 #include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
-#include <ChilliSource/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
 
 namespace ChilliSource
 {
@@ -20,7 +20,7 @@ namespace ChilliSource
 		{
 		public:
 
-			DECLARE_NAMED_INTERFACE(CFacebookAuthenticationSystem);
+			CS_DECLARE_NAMEDTYPE(CFacebookAuthenticationSystem);
 
 			CFacebookAuthenticationSystem();
 

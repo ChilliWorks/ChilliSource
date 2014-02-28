@@ -6,7 +6,7 @@
  * Copyright �2011 Tag Games Limited - All rights reserved
  */
 
-#include <ChilliSource/Platform/Android/JavaInterface/SharedPreferencesJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/SharedPreferencesJavaInterface.h>
 
 namespace ChilliSource
 {

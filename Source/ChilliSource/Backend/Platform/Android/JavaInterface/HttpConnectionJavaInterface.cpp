@@ -8,8 +8,8 @@
 
 //includes
 #include <ChilliSource/Networking/HTTP/HttpConnectionSystem.h>
-#include <ChilliSource/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>
-#include <ChilliSource/Platform/Android/JavaInterface/CoreJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/HttpConnectionJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/CoreJavaInterface.h>
 
 namespace ChilliSource
 {

@@ -7,8 +7,8 @@
  *
  */
 
-#include <ChilliSource/Platform/Android/FileIO/FileStreamAndroidAPK.h>
-#include <ChilliSource/Platform/Android/FileIO/FileSystem.h>
+#include <ChilliSource/Backend/Platform/Android/FileIO/FileStreamAndroidAPK.h>
+#include <ChilliSource/Backend/Platform/Android/FileIO/FileSystem.h>
 
 namespace ChilliSource
 {

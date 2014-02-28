@@ -10,8 +10,8 @@
 #define _MOFLO_PLATFORM_ANDROID_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
 
 #include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
-#include <ChilliSource/Platform/Android/Social/Facebook/FacebookAuthentication.h>
-#include <ChilliSource/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
 
 namespace ChilliSource
 {

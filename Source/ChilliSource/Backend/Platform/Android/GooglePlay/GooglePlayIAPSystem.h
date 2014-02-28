@@ -11,7 +11,7 @@
 
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 
-#include <ChilliSource/Platform/Android/GooglePlay/GooglePlayIAPJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/GooglePlay/GooglePlayIAPJavaInterface.h>
 
 namespace ChilliSource
 {

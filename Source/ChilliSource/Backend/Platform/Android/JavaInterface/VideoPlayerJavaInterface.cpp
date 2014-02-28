@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Platform/Android/JavaInterface/VideoPlayerJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/VideoPlayerJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 #include <jni.h>
@@ -69,7 +69,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		DEFINE_NAMED_INTERFACE(CVideoPlayerJavaInterface);
+		CS_DEFINE_NAMEDTYPE(CVideoPlayerJavaInterface);
 		//--------------------------------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------------------------------

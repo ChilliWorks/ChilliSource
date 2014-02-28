@@ -6,14 +6,14 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Platform/Android/GooglePlay/GooglePlayIAPJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/GooglePlay/GooglePlayIAPJavaInterface.h>
 
 #include <jni.h>
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 
-#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
@@ -148,7 +148,7 @@ namespace ChilliSource
 			}
 		}
 
-		DEFINE_NAMED_INTERFACE(CGooglePlayIAPJavaInterface);
+		CS_DEFINE_NAMEDTYPE(CGooglePlayIAPJavaInterface);
 
 		CGooglePlayIAPJavaInterface::CGooglePlayIAPJavaInterface(const std::string& instrPublicKey)
 		{

@@ -10,7 +10,7 @@
 #define _MOFLO_PLATFORM_ANDROID_INPUT_SHAREDPREFERENCES_INTERFACE_JAVA_INTERFACE_
 
 #include <jni.h>
-#include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/_JavaInterface.h>
 
 namespace ChilliSource
 {

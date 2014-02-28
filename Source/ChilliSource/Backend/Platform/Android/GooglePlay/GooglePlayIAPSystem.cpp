@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Platform/Android/GooglePlay/GooglePlayIAPSystem.h>
+#include <ChilliSource/Backend/Platform/Android/GooglePlay/GooglePlayIAPSystem.h>
 
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 

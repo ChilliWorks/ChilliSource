@@ -10,7 +10,7 @@
 #ifndef _MOFLO_PLATFORM_ANDROID_JAVAINTERFACE_SMSCOMPOSITIONJAVAINTERFACE_H_
 #define _MOFLO_PLATFORM_ANDROID_JAVAINTERFACE_SMSCOMPOSITIONJAVAINTERFACE_H_
 
-#include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/_JavaInterface.h>
 
 namespace ChilliSource
 {

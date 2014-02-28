@@ -11,8 +11,8 @@
 #define MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_ACCELEROMETERJAVAINTERFACE_H
 
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
-#include <ChilliSource/Core/Main/FastDelegate.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Core/Base/FastDelegate.h>
 
 namespace ChilliSource
 {
@@ -27,7 +27,7 @@ namespace ChilliSource
 		class CAccelerometerJavaInterface : public IJavaInterface
 		{
 		public:
-			DECLARE_NAMED_INTERFACE();
+			CS_DECLARE_NAMEDTYPE();
 			//------------------------------------------------
 			/// Delegates
 			//------------------------------------------------

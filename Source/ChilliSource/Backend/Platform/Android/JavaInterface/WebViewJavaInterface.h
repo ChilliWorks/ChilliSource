@@ -9,7 +9,7 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_CORE_WEBVIEW_INTERFACE_
 #define _MOFLOW_PLATFORM_ANDROID_CORE_WEBVIEW_INTERFACE_
 
-#include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/_JavaInterface.h>
 
 namespace ChilliSource
 {

@@ -8,12 +8,12 @@
  */
 
 #include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Base/Screen.h>
 
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 
-#include <ChilliSource/Platform/Android/JavaInterface/TwitterAuthenticationActivityJavaInterface.h>
-#include <ChilliSource/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/TwitterAuthenticationActivityJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
 
 namespace ChilliSource
 {

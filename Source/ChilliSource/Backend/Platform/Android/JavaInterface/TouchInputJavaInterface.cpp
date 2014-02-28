@@ -5,8 +5,8 @@
  */
 
 //includes
-#include <ChilliSource/Platform/Android/JavaInterface/TouchInputJavaInterface.h>
-#include <ChilliSource/Platform/Android/JavaInterface/CoreJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/TouchInputJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/CoreJavaInterface.h>
 
 //function definitions
 extern "C"

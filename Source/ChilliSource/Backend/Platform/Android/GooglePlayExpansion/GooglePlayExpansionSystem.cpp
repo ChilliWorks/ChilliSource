@@ -6,12 +6,12 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Platform/Android/GooglePlayExpansion/GooglePlayExpansionSystem.h>
+#include <ChilliSource/Backend/Platform/Android/GooglePlayExpansion/GooglePlayExpansionSystem.h>
 
-#include <ChilliSource/Core/Main/Application.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Core/Main/Utils.h>
-#include <ChilliSource/Core/Main/ApplicationEvents.h>
+#include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Minizip/unzip.h>
 
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
@@ -83,7 +83,7 @@ namespace ChilliSource
 {
     namespace Android
     {
-    	DEFINE_NAMED_INTERFACE(CGooglePlayExpansionSystem);
+    	CS_DEFINE_NAMEDTYPE(CGooglePlayExpansionSystem);
 		//--------------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------------
@@ -648,7 +648,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------
 		/// Java Interface
 		//--------------------------------------------------------------------
-    	DEFINE_NAMED_INTERFACE(CGooglePlayExpansionJavaInterface);
+    	CS_DEFINE_NAMEDTYPE(CGooglePlayExpansionJavaInterface);
 
     	bool CGooglePlayExpansionJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
     	{

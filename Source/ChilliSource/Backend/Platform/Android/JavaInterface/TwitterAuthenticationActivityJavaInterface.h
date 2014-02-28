@@ -9,8 +9,8 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_JAVA_INTERFACE_TWITTER_AUTHENTICATION_ACTIVITY_JAVA_INTERFACE_
 #define _MOFLOW_PLATFORM_ANDROID_JAVA_INTERFACE_TWITTER_AUTHENTICATION_ACTIVITY_JAVA_INTERFACE_
 
-#include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
-#include <ChilliSource/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/_JavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
 
 namespace ChilliSource
 {

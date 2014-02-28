@@ -7,7 +7,7 @@
 //
 
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Platform/Android/JavaInterface/AccelerometerJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/AccelerometerJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
 #include <jni.h>
@@ -44,7 +44,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		DEFINE_NAMED_INTERFACE(CAccelerometerJavaInterface);
+		CS_DEFINE_NAMEDTYPE(CAccelerometerJavaInterface);
 		//-----------------------------------------------
 		/// Constructor
 		//-----------------------------------------------

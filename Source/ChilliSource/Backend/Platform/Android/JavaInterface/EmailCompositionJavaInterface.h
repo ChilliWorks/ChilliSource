@@ -11,7 +11,7 @@
 #define MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_EMAILCOMPOSITION_H
 
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterface.h>
 #include <ChilliSource/Social/Communications/EmailCompositionActivity.h>
 
 namespace ChilliSource
@@ -21,7 +21,7 @@ namespace ChilliSource
 		class CEmailCompositionJavaInterface: public ChilliSource::Android::IJavaInterface
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(SCEmailCompositionJavaInterface);
+			CS_DECLARE_NAMEDTYPE(SCEmailCompositionJavaInterface);
 
 			//--------------------------------------------------------------
 			/// Result Codes

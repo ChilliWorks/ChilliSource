@@ -6,7 +6,7 @@
 //  Copyright 2014 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Platform/Android/Input/KeyboardJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Input/KeyboardJavaInterface.h>
 
 #include <jni.h>
 
@@ -140,7 +140,7 @@ namespace ChilliSource
 			}
 		}
 
-		DEFINE_NAMED_INTERFACE(CKeyboardJavaInterface);
+		CS_DEFINE_NAMEDTYPE(CKeyboardJavaInterface);
 		//-----------------------------------------------
 		/// Constructor
 		//-----------------------------------------------

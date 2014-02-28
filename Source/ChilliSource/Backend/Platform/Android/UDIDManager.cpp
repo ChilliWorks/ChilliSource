@@ -7,10 +7,10 @@
  *
  */
 
-#include <ChilliSource/Platform/Android/UDIDManager.h>
+#include <ChilliSource/Backend/Platform/Android/UDIDManager.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Platform/Android/JavaInterface/CoreJavaInterface.h>
-#include <ChilliSource/Platform/Android/JavaInterface/SharedPreferencesJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/CoreJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/SharedPreferencesJavaInterface.h>
 #include <ChilliSource/Core/File/LocalDataStore.h>
 #include <ChilliSource/Core/Cryptographic/HashMD5.h>
 #include <ctime>

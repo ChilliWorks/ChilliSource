@@ -11,7 +11,7 @@
 
 #include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
 
-#include <ChilliSource/Platform/Android/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
 
 namespace ChilliSource
 {

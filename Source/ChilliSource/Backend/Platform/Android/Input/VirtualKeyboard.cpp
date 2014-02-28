@@ -6,10 +6,10 @@
 //  Copyright �2010 Tag Games Limited. All rights reserved.
 //
 
-#include <ChilliSource/Platform/Android/Input/VirtualKeyboard.h>
-#include <ChilliSource/Platform/Android/Input/KeyboardJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Input/VirtualKeyboard.h>
+#include <ChilliSource/Backend/Platform/Android/Input/KeyboardJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-#include <ChilliSource/Core/Main/Utils.h>
+#include <ChilliSource/Core/Base/Utils.h>
 
 namespace ChilliSource
 {

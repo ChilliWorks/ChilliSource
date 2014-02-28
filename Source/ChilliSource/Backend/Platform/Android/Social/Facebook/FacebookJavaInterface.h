@@ -9,7 +9,7 @@
 #ifndef _MOFLO_PLATFORM_ANDROID_FACEBOOK_JAVA_INTERFACE_
 #define _MOFLO_PLATFORM_ANDROID_FACEBOOK_JAVA_INTERFACE_
 
-#include <ChilliSource/Platform/Android/JavaInterface/JavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterface.h>
 
 namespace ChilliSource
 {
@@ -24,7 +24,7 @@ namespace ChilliSource
 
 			CFacebookJavaInterface();
 
-			DECLARE_NAMED_INTERFACE(CFacebookJavaInterface);
+			CS_DECLARE_NAMEDTYPE(CFacebookJavaInterface);
 			bool IsA(Core::InterfaceIDType inInterfaceID) const;
 
 			//--------------------------------------------------------------------------------------

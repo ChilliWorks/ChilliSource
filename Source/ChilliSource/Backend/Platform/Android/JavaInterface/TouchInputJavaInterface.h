@@ -15,8 +15,8 @@
 #define _MOFLO_PLATFORM_ANDROID_TOUCH_INPUT_JAVA_INTERFACE_JAVA_INTERFACE_
 
 #include <map>
-#include <ChilliSource/Platform/Android/JavaInterface/_JavaInterface.h>
-#include <ChilliSource/Platform/Android/Input/TouchScreen.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/_JavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Input/TouchScreen.h>
 #include <jni.h>
 
 namespace ChilliSource
