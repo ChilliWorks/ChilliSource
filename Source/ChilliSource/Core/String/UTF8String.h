@@ -217,9 +217,10 @@ namespace ChilliSource
                 
                 return false;
             }
-            UTF8String operator=(const std::string& inCodePoints)
+            UTF8String& operator=(const std::string& inCodePoints)
             {
-                return UTF8String(inCodePoints);
+                *this = UTF8String(inCodePoints);
+                return *this;
             }
             
         private:

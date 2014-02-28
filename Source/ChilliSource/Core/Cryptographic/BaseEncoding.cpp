@@ -321,7 +321,7 @@ namespace ChilliSource
                 else
                 if(*inpHex >= 'A' && *inpHex <= 'F')
                 {
-                    return 10 + ('A' - *inpHex);
+                    return 10 + (*inpHex - 'A');
                 }
                 else
                 {

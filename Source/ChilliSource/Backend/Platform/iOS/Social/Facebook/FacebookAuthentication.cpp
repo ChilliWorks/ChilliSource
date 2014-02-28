@@ -207,8 +207,6 @@ namespace ChilliSource
                             
                             bPermissionMismatch = ![[FBSession activeSession].permissions containsObject:permissionName];
                             
-                            [permissionName release];
-                            
                             if(bPermissionMismatch)
                             {
                                 break;

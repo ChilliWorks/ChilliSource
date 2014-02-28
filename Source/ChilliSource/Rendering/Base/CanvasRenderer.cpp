@@ -469,6 +469,10 @@ namespace ChilliSource
 										  const Core::Vector2& invBounds, u32 inudwNumLines, GUI::TextJustification ineHorizontalJustification, GUI::TextJustification ineVerticalJustification,
                                           bool inbFlipVertical, GUI::TextOverflowBehaviour ineBehaviour, bool * outpClipped, bool * outpInvalidCharacterFound)
 		{
+            // don't attempt to draw zero or negative sized text
+            if(infTextSize <= 0.0f)
+                return;
+            
             bool bClipped=false;
             
             outCharacters.reserve(inText.length());
@@ -483,7 +487,7 @@ namespace ChilliSource
             infCharacterSpacing *= infTextSize;
 			infLineSpacing *= infTextSize;
             const f32 fLineHeight = infLineSpacing * inpFont->GetLineHeight();
-   
+            
             CharacterList CurrentLine;
             u32 udwCurrentNumLines = 1;
             
@@ -506,13 +510,13 @@ namespace ChilliSource
                 
                 //Decide whether to wrap or clip. If max num lines is zero this means wrap text infinetly
                 if(!bNoMoreLines && (inudwNumLines == 0 || udwCurrentNumLines <= inudwNumLines))
-                { 
+                {
                     //Construct the characters position and size from the font sheet and add it to the line
                     BuildCharacter(inpFont, Char, NextChar, vCursorPos, infTextSize, infCharacterSpacing, fLastCharacterWidth, CurrentLine, outpInvalidCharacterFound);
                     
                     //Offset the cursor to the start of the next character
                     vCursorPos.x += fLastCharacterWidth;
-
+                    
                     //Added by Joe 9/1/14
                     //Prepare to relocate last character to the next line if it breaches the bounds
                     //by removing it from the current line and stepping back the iterator
@@ -521,7 +525,14 @@ namespace ChilliSource
                     {
                         bExceededBounds=true;
                         
-                        if(inText.begin() != it && Char != kSpaceCharacter && Char != kTabCharacter)
+                        if(CurrentLine.size()==1)
+                        {
+                            // don't add any more lines because the width of the bounds is too
+                            // small to allow one of the characters to appear at all.
+                            bNoMoreLines=true;
+                        }
+                        
+                        else if(inText.begin() != it && Char != kSpaceCharacter && Char != kTabCharacter)
                         {
                             it--;
                             vCursorPos.x -= fLastCharacterWidth;
@@ -529,69 +540,72 @@ namespace ChilliSource
                         }
                     }
                     
-                    //If we are a return character or we exceed the bounds then we must wrap the text
-                    if(Char == kReturnCharacter || bExceededBounds)
+                    if(!bNoMoreLines)
                     {
-                        Wrap(ineHorizontalJustification, fLineHeight, invBounds, CurrentLine, vCursorPos, outCharacters);
-                        
-                        //Make sure we don't exceed our vertical bounds
-                        if(vCursorPos.y - fLineHeight <= -invBounds.y || udwCurrentNumLines==inudwNumLines)
+                        //If we are a return character or we exceed the bounds then we must wrap the text
+                        if(Char == kReturnCharacter || bExceededBounds)
                         {
-                            bNoMoreLines = true;
-                            vCursorPos.y += fLineHeight;
-                        }
-                        else
-                        {
-                            udwCurrentNumLines++; 
-                        }
-                    }
-                    //Check if we need to wrap before the next space so that words are not split
-                    //across multiple lines
-                    else if(Char == kSpaceCharacter || Char == kTabCharacter)
-                    {
-                        //Find the length to the next space/tab from the cursor pos
-                        //and if it exceed the bounds then wrap
-                        f32 fLengthToNextSpace = vCursorPos.x;
-                        Core::UTF8String::iterator jt = it;
-                        Core::UTF8String::Char LookAheadChar;
-                        Core::UTF8String::Char LookAheadNextChar;
-                        CharacterList CurrentLineTemp;
-                        
-                        //This while loop exits through break statements only.
-                        while(jt != inText.end())
-                        {
-                            LookAheadChar = inText.next(jt);
-
-                            //Break if the next spacing or return character is reached
-                            if(LookAheadChar == kSpaceCharacter || LookAheadChar == kTabCharacter || LookAheadChar == kReturnCharacter)
-                                break;
+                            Wrap(ineHorizontalJustification, fLineHeight, invBounds, CurrentLine, vCursorPos, outCharacters);
                             
-                            LookAheadNextChar = LookAheadChar;
-                            Core::UTF8String::iterator jt2 = jt;
-                            if(jt!=inText.end())
-                                LookAheadNextChar=inText.next(jt2);
-                            
-                            //Construct the characters position and size from the font sheet to get the width
-                            BuildCharacter(inpFont, LookAheadChar, LookAheadNextChar, Core::Vector2::ZERO, infTextSize, infCharacterSpacing, fLastCharacterWidth, CurrentLineTemp, outpInvalidCharacterFound);
-                            fLengthToNextSpace += fLastCharacterWidth;
-                            
-                            if(fLengthToNextSpace > invBounds.x)
+                            //Make sure we don't exceed our vertical bounds
+                            if(vCursorPos.y - fLineHeight <= -invBounds.y || udwCurrentNumLines==inudwNumLines)
                             {
-                                //We can wrap to the next line
-                                Wrap(ineHorizontalJustification, fLineHeight, invBounds, CurrentLine, vCursorPos, outCharacters);
- 
-                                //Make sure we don't exceed our vertical bounds
-                                if(vCursorPos.y - fLineHeight <= -invBounds.y || udwCurrentNumLines==inudwNumLines)
-                                {
-                                    bNoMoreLines = true;
-                                    vCursorPos.y += fLineHeight;
-                                }
-                                else
-                                {
-                                    udwCurrentNumLines++;
-                                }
+                                bNoMoreLines = true;
+                                vCursorPos.y += fLineHeight;
+                            }
+                            else
+                            {
+                                udwCurrentNumLines++;
+                            }
+                        }
+                        //Check if we need to wrap before the next space so that words are not split
+                        //across multiple lines
+                        else if(Char == kSpaceCharacter || Char == kTabCharacter)
+                        {
+                            //Find the length to the next space/tab from the cursor pos
+                            //and if it exceed the bounds then wrap
+                            f32 fLengthToNextSpace = vCursorPos.x;
+                            Core::UTF8String::iterator jt = it;
+                            Core::UTF8String::Char LookAheadChar;
+                            Core::UTF8String::Char LookAheadNextChar;
+                            CharacterList CurrentLineTemp;
+                            
+                            //This while loop exits through break statements only.
+                            while(jt != inText.end())
+                            {
+                                LookAheadChar = inText.next(jt);
                                 
-                                break;
+                                //Break if the next spacing or return character is reached
+                                if(LookAheadChar == kSpaceCharacter || LookAheadChar == kTabCharacter || LookAheadChar == kReturnCharacter)
+                                    break;
+                                
+                                LookAheadNextChar = LookAheadChar;
+                                Core::UTF8String::iterator jt2 = jt;
+                                if(jt!=inText.end())
+                                    LookAheadNextChar=inText.next(jt2);
+                                
+                                //Construct the characters position and size from the font sheet to get the width
+                                BuildCharacter(inpFont, LookAheadChar, LookAheadNextChar, Core::Vector2::ZERO, infTextSize, infCharacterSpacing, fLastCharacterWidth, CurrentLineTemp, outpInvalidCharacterFound);
+                                fLengthToNextSpace += fLastCharacterWidth;
+                                
+                                if(fLengthToNextSpace > invBounds.x)
+                                {
+                                    //We can wrap to the next line
+                                    Wrap(ineHorizontalJustification, fLineHeight, invBounds, CurrentLine, vCursorPos, outCharacters);
+                                    
+                                    //Make sure we don't exceed our vertical bounds
+                                    if(vCursorPos.y - fLineHeight <= -invBounds.y || udwCurrentNumLines==inudwNumLines)
+                                    {
+                                        bNoMoreLines = true;
+                                        vCursorPos.y += fLineHeight;
+                                    }
+                                    else
+                                    {
+                                        udwCurrentNumLines++;
+                                    }
+                                    
+                                    break;
+                                }
                             }
                         }
                     }
@@ -646,7 +660,7 @@ namespace ChilliSource
                     fOffsetY = -((invBounds.y * 0.5f) - fHeight);
                     break;
             };
-
+            
 			for(CharacterList::iterator it = outCharacters.begin(); it != outCharacters.end(); ++it)
 			{
                 it->vPosition.y += fOffsetY;
@@ -759,9 +773,9 @@ namespace ChilliSource
                 }
                 
                 inCurrentLine.clear();
-                outvCursor.y -= infLineSpacing;
             }
             
+            outvCursor.y -= infLineSpacing;
             outvCursor.x = 0.0f;
 		}
 		//-----------------------------------------------------

@@ -122,6 +122,11 @@ namespace ChilliSource
                     return;
                 }
                 
+                if(!jRoot.isMember("Action") || !jRoot.isMember("Data"))
+                {
+                    return;
+                }
+                
                 std::string strAction = jRoot["Action"].asString();
                 std::string strData = jRoot["Data"].asString();
                 

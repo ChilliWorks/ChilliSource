@@ -538,6 +538,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CRenderSystem::BeginFrame(Rendering::RenderTarget* inpActiveRenderTarget)
 		{
+#ifdef TARGET_OS_IPHONE
+            //Sometimes iOS steals the context and doesn't return it.
+            if([EAGLContext currentContext] != mContext)
+            {
+                [EAGLContext setCurrentContext:mContext];
+            }
+#endif
+            
 #ifdef DEBUG
 			CheckForGLErrors();
 #endif
