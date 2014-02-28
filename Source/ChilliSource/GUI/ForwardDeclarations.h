@@ -20,57 +20,57 @@ namespace ChilliSource
         //--------------------------------------------------------
         /// Base
         //--------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(GUIView);
-        CS_FORWARD_DECLARE_CLASS(GUIViewFactory);
-        CS_FORWARD_DECLARE_CLASS(InputEvents);
-        CS_FORWARD_DECLARE_CLASS(Window);
+        CS_FORWARDDECLARE_CLASS(GUIView);
+        CS_FORWARDDECLARE_CLASS(GUIViewFactory);
+        CS_FORWARDDECLARE_CLASS(InputEvents);
+        CS_FORWARDDECLARE_CLASS(Window);
         //--------------------------------------------------------
         /// Button
         //--------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(Button);
-        CS_FORWARD_DECLARE_CLASS(HighlightButton);
-        CS_FORWARD_DECLARE_CLASS(StretchableHighlightButton);
-        CS_FORWARD_DECLARE_CLASS(ToggleButton);
+        CS_FORWARDDECLARE_CLASS(Button);
+        CS_FORWARDDECLARE_CLASS(HighlightButton);
+        CS_FORWARDDECLARE_CLASS(StretchableHighlightButton);
+        CS_FORWARDDECLARE_CLASS(ToggleButton);
         //--------------------------------------------------------
         /// Container
         //--------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(GridView);
-        CS_FORWARD_DECLARE_CLASS(HorizontalList);
-        CS_FORWARD_DECLARE_CLASS(ScrollView);
-        CS_FORWARD_DECLARE_CLASS(VerticalList);
+        CS_FORWARDDECLARE_CLASS(GridView);
+        CS_FORWARDDECLARE_CLASS(HorizontalList);
+        CS_FORWARDDECLARE_CLASS(ScrollView);
+        CS_FORWARDDECLARE_CLASS(VerticalList);
         //--------------------------------------------------------
         /// Debug
         //--------------------------------------------------------
-#ifdef DEBUG_STATS
-        CS_FORWARD_DECLARE_CLASS(DebugStatsView);
+#ifdef CS_ENABLE_DEBUGSTATS
+        CS_FORWARDDECLARE_CLASS(DebugStatsView);
 #endif
         //--------------------------------------------------------
         /// Image
         //--------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(HorizontalStretchableImage);
-        CS_FORWARD_DECLARE_CLASS(ImageView);
-        CS_FORWARD_DECLARE_CLASS(StretchableImage);
-        CS_FORWARD_DECLARE_CLASS(VerticalStretchableImage);
+        CS_FORWARDDECLARE_CLASS(HorizontalStretchableImage);
+        CS_FORWARDDECLARE_CLASS(ImageView);
+        CS_FORWARDDECLARE_CLASS(StretchableImage);
+        CS_FORWARDDECLARE_CLASS(VerticalStretchableImage);
         //--------------------------------------------------------
         /// Label
         //--------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(EditableLabel);
-        CS_FORWARD_DECLARE_CLASS(FormattedLabel);
-        CS_FORWARD_DECLARE_CLASS(Label);
+        CS_FORWARDDECLARE_CLASS(EditableLabel);
+        CS_FORWARDDECLARE_CLASS(FormattedLabel);
+        CS_FORWARDDECLARE_CLASS(Label);
         //--------------------------------------------------------
         /// Progress Bar
         //--------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(HorizontalClippingProgressBar);
-        CS_FORWARD_DECLARE_CLASS(HorizontalEndcappedProgressBar);
-        CS_FORWARD_DECLARE_CLASS(HorizontalProgressBar);
-        CS_FORWARD_DECLARE_CLASS(ProgressBar);
-        CS_FORWARD_DECLARE_CLASS(VerticalEndcappedProgressBar);
+        CS_FORWARDDECLARE_CLASS(HorizontalClippingProgressBar);
+        CS_FORWARDDECLARE_CLASS(HorizontalEndcappedProgressBar);
+        CS_FORWARDDECLARE_CLASS(HorizontalProgressBar);
+        CS_FORWARDDECLARE_CLASS(ProgressBar);
+        CS_FORWARDDECLARE_CLASS(VerticalEndcappedProgressBar);
         //--------------------------------------------------------
         /// Slider Bar
         //--------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(HorizontalSliderBar);
-        CS_FORWARD_DECLARE_CLASS(SliderBar);
-        CS_FORWARD_DECLARE_CLASS(VerticalSliderBar);
+        CS_FORWARDDECLARE_CLASS(HorizontalSliderBar);
+        CS_FORWARDDECLARE_CLASS(SliderBar);
+        CS_FORWARDDECLARE_CLASS(VerticalSliderBar);
     }
 }
 

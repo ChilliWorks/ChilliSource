@@ -16,7 +16,7 @@
 //#include <ChilliSource/Core/Reflection/Method.h>
 #include <ChilliSource/Core/Reflection/Registry.h>
 
-#ifdef ENABLE_MOFLOW_REFLECTION
+#ifdef CS_ENABLE_REFLECTION
 #include <ChilliSource/Core/Reflection/Reflection.h>
 
 //--------------------------------------------------------

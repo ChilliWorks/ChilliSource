@@ -20,31 +20,31 @@ namespace ChilliSource
         //--------------------------------------------------
         /// Accelerometer
         //--------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(Accelerometer);
+        CS_FORWARDDECLARE_CLASS(Accelerometer);
         //--------------------------------------------------
         /// Base
         //--------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(InputDevice);
-        CS_FORWARD_DECLARE_CLASS(InputDeviceFactory);
-        CS_FORWARD_DECLARE_CLASS(InputSystem);
+        CS_FORWARDDECLARE_CLASS(InputDevice);
+        CS_FORWARDDECLARE_CLASS(InputDeviceFactory);
+        CS_FORWARDDECLARE_CLASS(InputSystem);
         //--------------------------------------------------
         /// Gestures
         //--------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(Gesture);
-        CS_FORWARD_DECLARE_CLASS(TapCSwipeGestureGesture);
-        CS_FORWARD_DECLARE_CLASS(SwipeGesture);
-        CS_FORWARD_DECLARE_CLASS(PinchGesture);
-        CS_FORWARD_DECLARE_CLASS(DragGesture);
-        CS_FORWARD_DECLARE_CLASS(RotationGesture);
+        CS_FORWARDDECLARE_CLASS(Gesture);
+        CS_FORWARDDECLARE_CLASS(TapCSwipeGestureGesture);
+        CS_FORWARDDECLARE_CLASS(SwipeGesture);
+        CS_FORWARDDECLARE_CLASS(PinchGesture);
+        CS_FORWARDDECLARE_CLASS(DragGesture);
+        CS_FORWARDDECLARE_CLASS(RotationGesture);
         //--------------------------------------------------
         /// Keyboard
         //--------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(VirtualKeyboard);
+        CS_FORWARDDECLARE_CLASS(VirtualKeyboard);
         //--------------------------------------------------
         /// Pointer
         //--------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(Mouse);
-        CS_FORWARD_DECLARE_CLASS(TouchScreen);
+        CS_FORWARDDECLARE_CLASS(Mouse);
+        CS_FORWARDDECLARE_CLASS(TouchScreen);
 	}
 }
 

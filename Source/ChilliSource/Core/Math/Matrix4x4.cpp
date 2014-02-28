@@ -216,7 +216,7 @@ namespace ChilliSource
 		{
 			Matrix4x4 cResult;
             
-#if defined TARGET_OS_IPHONE && defined ENABLE_QUICK_MATH
+#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
             vDSP_mtrans(const_cast<f32*>(m), 1, cResult.m, 1, 4, 4);
 #else            
             cResult.m[0]  = m[0];

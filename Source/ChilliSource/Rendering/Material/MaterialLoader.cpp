@@ -257,7 +257,7 @@ namespace ChilliSource
 					}
 					else
 					{
-						CS_ERROR_LOG("Material: No blend function exists for the following " + strSrcFunc + ", " + strDstFunc);
+						CS_LOG_ERROR("Material: No blend function exists for the following " + strSrcFunc + ", " + strDstFunc);
 					}
 				}
                 //Get the cull face

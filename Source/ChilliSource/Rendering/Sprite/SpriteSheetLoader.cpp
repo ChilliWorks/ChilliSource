@@ -149,7 +149,7 @@ namespace ChilliSource
                 pFrame += udwNumElementsPerSprite;
 			}
 			
-			CS_SAFE_DELETE_ARRAY(SBuffer);
+			CS_SAFEDELETE_ARRAY(SBuffer);
             
             // Load in string IDs
             std::string strName;
@@ -163,7 +163,7 @@ namespace ChilliSource
             std::vector<std::string> IDStringLookup;
 			if(idFile == nullptr || idFile->IsBad())
 			{
-				CS_WARNING_LOG("Sprite loader ID lookups unavailable: .mospriteid missing");
+				CS_LOG_WARNING("Sprite loader ID lookups unavailable: .mospriteid missing");
 				
 				if(idFile->IsOpen())
 					idFile->Close();

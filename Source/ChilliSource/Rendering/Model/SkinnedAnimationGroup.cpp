@@ -105,7 +105,7 @@ namespace ChilliSource
                             mCurrentAnimationData = LerpBetweenFrames(pFrame1, pFrame2, fFactor);
                             break;
                         default:
-                            CS_ERROR_LOG("Invalid animation blend type given.");
+                            CS_LOG_ERROR("Invalid animation blend type given.");
                             mCurrentAnimationData = pFrame1;
                             break;
                     }
@@ -120,7 +120,7 @@ namespace ChilliSource
                 }
                 else 
                 {
-                    CS_ERROR_LOG("Something has gone wrong when blending animations.");
+                    CS_LOG_ERROR("Something has gone wrong when blending animations.");
                     return;
                 }
                 mbPrepared = true;
@@ -133,7 +133,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_ERROR_LOG("No animations attached to the animation group!");
+                CS_LOG_ERROR("No animations attached to the animation group!");
 				return;
             }
         }
@@ -148,7 +148,7 @@ namespace ChilliSource
                     mCurrentAnimationData = LerpBetweenFrames(mCurrentAnimationData, inpAnimationGroup->mCurrentAnimationData, infBlendFactor);
                     break;
                 default:
-                    CS_ERROR_LOG("Invalid animation blend type given.");
+                    CS_LOG_ERROR("Invalid animation blend type given.");
                     break;
             }
         }
@@ -207,7 +207,7 @@ namespace ChilliSource
             //check that they have the same number of joints
 			if (kadwJoints.size() != inInverseBindPoseMatrices.size())
 			{
-				CS_ERROR_LOG("Cannot apply bind pose matrices to joint matrices, becuase they are not from the same skeleton.");
+				CS_LOG_ERROR("Cannot apply bind pose matrices to joint matrices, becuase they are not from the same skeleton.");
 			}
 			
 			//iterate through and multiply together to get the new array
@@ -273,7 +273,7 @@ namespace ChilliSource
                     
                     if (mfAnimationLength != 0.0f && mfAnimationLength != fAnimationLength)
                     {
-                        CS_ERROR_LOG("All grouped animations must have the same length!");
+                        CS_LOG_ERROR("All grouped animations must have the same length!");
                         mfAnimationLength = 0.0f;
                         return;
                     }
@@ -298,7 +298,7 @@ namespace ChilliSource
             //report errors if the playback position provided does not make sense
             if (infPlaybackPosition < 0.0f)
             {
-                CS_ERROR_LOG("A playback position below 0 does not make sense.");
+                CS_LOG_ERROR("A playback position below 0 does not make sense.");
             }
             
             //calculate the two frame indices this is between

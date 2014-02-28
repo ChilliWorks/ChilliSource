@@ -257,7 +257,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_ERROR_LOG("No app ID specified in plist (FacebookAppID)");
+                CS_LOG_ERROR("No app ID specified in plist (FacebookAppID)");
             }
         }
         

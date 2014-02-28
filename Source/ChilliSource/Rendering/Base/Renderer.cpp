@@ -111,7 +111,7 @@ namespace ChilliSource
             RenderTarget* pOffscreenTarget = mpRenderSystem->CreateRenderTarget(udwWidth, udwHeight);
             pOffscreenTarget->SetTargetTextures(inpColourTarget, inpDepthTarget);
             RenderSceneToTarget(inpScene, pOffscreenTarget);
-            CS_SAFE_DELETE(pOffscreenTarget);
+            CS_SAFEDELETE(pOffscreenTarget);
 		}
         //----------------------------------------------------------
 		/// Render Scene To Target
@@ -338,7 +338,7 @@ namespace ChilliSource
             
             mpRenderSystem->EndFrame(pRenderTarget);
             
-            CS_SAFE_DELETE(pRenderTarget);
+            CS_SAFEDELETE(pRenderTarget);
 		}
         //----------------------------------------------------------
 		/// Render

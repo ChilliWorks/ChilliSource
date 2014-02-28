@@ -10,7 +10,7 @@
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderTarget.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
 
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #include <OpenGLES/EAGL.h>
 #include <OpenGLES/EAGLDrawable.h>
@@ -107,7 +107,7 @@ namespace ChilliSource
 				*inBuffer = 0;
 			}
         }
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
         //------------------------------------------------------
         /// Create Default Render Target
         //------------------------------------------------------
@@ -162,7 +162,7 @@ namespace ChilliSource
             if(gCurrentlyBoundRenderBuffer == inpRenderTarget->mRenderBuffer || gCurrentlyBoundRenderBuffer == inpRenderTarget->mDepthBuffer)
                 gCurrentlyBoundRenderBuffer = -1;
             
-            CS_SAFE_DELETE(inpRenderTarget);
+            CS_SAFEDELETE(inpRenderTarget);
         }
 #endif
         //--------------------------------------------------
@@ -220,29 +220,29 @@ namespace ChilliSource
             {
                 if (CreateAndAttachDepthBuffer() == false)
                 {
-                    CS_ERROR_LOG("Failed to attach Depth Buffer to render target.");
+                    CS_LOG_ERROR("Failed to attach Depth Buffer to render target.");
                 }
             }
             
-#ifdef DEBUG
+#ifdef CS_ENABLE_DEBUG
             GLenum eStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
             switch(eStatus)
             {
                 case GL_FRAMEBUFFER_COMPLETE:
                     break;
                 case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-                    CS_ERROR_LOG("Render Target's frame buffer has incomplete attachment!");
+                    CS_LOG_ERROR("Render Target's frame buffer has incomplete attachment!");
                     break;
-#ifdef MOFLOW_OPENGLES2
+#ifdef CS_OPENGLVERSION_ES
                 case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS:
-                    CS_ERROR_LOG("Render Target's frame buffer has incomplete dimensions!");
+                    CS_LOG_ERROR("Render Target's frame buffer has incomplete dimensions!");
                     break;
 #endif
                 case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-                    CS_ERROR_LOG("Render Target's frame buffer has missing attachment!");
+                    CS_LOG_ERROR("Render Target's frame buffer has missing attachment!");
                     break;
                 case GL_FRAMEBUFFER_UNSUPPORTED:
-                    CS_ERROR_LOG("Render Target's frame buffer is unsupported!");
+                    CS_LOG_ERROR("Render Target's frame buffer is unsupported!");
                     break;
             }
 #endif
@@ -263,7 +263,7 @@ namespace ChilliSource
 			//Attach the depth buffer to the framebuffer
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, mDepthBuffer);
 			
-#ifdef DEBUG
+#ifdef CS_ENABLE_DEBUG
             //Check it has worked
             GLint Depth = 0;
 			glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_DEPTH_SIZE,  (GLint*)&Depth);
@@ -289,7 +289,7 @@ namespace ChilliSource
         //------------------------------------------------------
         void CRenderTarget::Discard()
         {
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
             GLenum Attachments[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
             BindFrameBuffer(mFrameBuffer);
             glDiscardFramebufferEXT(GL_FRAMEBUFFER, 2, Attachments);

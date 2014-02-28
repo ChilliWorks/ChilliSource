@@ -30,7 +30,7 @@ namespace ChilliSource
 			//Default template is unspported
 			template <typename T> static const T GetAttributeValueOrDefault(TiXmlElement* inpElement, const std::string & inAttributeName, const T & inDefault)
 			{
-				CS_WARNING_LOG("Called GetAttributeValueOrDefault on an unsupported type");
+				CS_LOG_WARNING("Called GetAttributeValueOrDefault on an unsupported type");
 			}
 			
 			static TiXmlElement* FirstChildElementWithName(TiXmlElement* inpParentElement, const std::string & inName);

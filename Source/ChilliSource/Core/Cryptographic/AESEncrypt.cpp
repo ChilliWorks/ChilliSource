@@ -40,7 +40,7 @@ namespace ChilliSource
                 AES_KEY sKey;
                 if(!AES_set_encrypt_key((const u8*)instrPrivateKey.data(), 128, &sKey) == 0)
                 {
-                    CS_FATAL_LOG("AES: Cannot set decryption key");
+                    CS_LOG_FATAL("AES: Cannot set decryption key");
                 }
                 
                 s32 dwBytesRemaining = (s32)inudwDataLength;
@@ -65,7 +65,7 @@ namespace ChilliSource
                 AES_KEY sKey;
                 if(!AES_set_decrypt_key((const u8*)instrPrivateKey.data(), 128, &sKey) == 0)
                 {
-                    CS_FATAL_LOG("AES: Cannot set decryption key");
+                    CS_LOG_FATAL("AES: Cannot set decryption key");
                 }
 
                 s32 dwBytesRemaining = (s32)inudwDataLength;

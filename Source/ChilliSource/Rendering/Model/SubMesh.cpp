@@ -16,7 +16,7 @@
 #include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
 #include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
 
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
@@ -208,7 +208,7 @@ namespace ChilliSource
             }
 			
 			mpMeshBuffer->Bind();
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
             DebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
 #endif
             if(mpMeshBuffer->GetIndexCount() > 0)
@@ -225,7 +225,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		SubMesh::~SubMesh()
 		{
-			CS_SAFE_DELETE(mpMeshBuffer);
+			CS_SAFEDELETE(mpMeshBuffer);
 		}
 	}
 }

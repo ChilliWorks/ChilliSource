@@ -111,7 +111,7 @@ namespace ChilliSource
 					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, strSpriteSheetFile, pResource)) 
 					{
 						//Add it to the cache
-						CS_DEBUG_LOG("Loading sprite data " + strSpriteSheetFile);
+						CS_LOG_DEBUG("Loading sprite data " + strSpriteSheetFile);
 						mMapFilenameToResource.insert(std::make_pair(strSpriteSheetFile, pResource));
 						
 						SpriteSheetSPtr pSpriteSheet = std::static_pointer_cast<SpriteSheet>(pResource);
@@ -140,7 +140,7 @@ namespace ChilliSource
 			}
 			
 			//Resource not found
-			CS_ERROR_LOG("Cannot find resource for sprite data with path " + inFilePath);
+			CS_LOG_ERROR("Cannot find resource for sprite data with path " + inFilePath);
 			return SpriteSheetSPtr();
 		}
 	}

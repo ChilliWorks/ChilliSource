@@ -76,7 +76,7 @@ namespace ChilliSource
 				}
 			}
             
-            CS_WARNING_LOG("Application cannot find resource manager for type");
+            CS_LOG_WARNING("Application cannot find resource manager for type");
             return nullptr;
         }
 		//--------------------------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ namespace ChilliSource
 				}
 			}
 			
-			CS_WARNING_LOG("Application cannot find resource manager for type");
+			CS_LOG_WARNING("Application cannot find resource manager for type");
 			return nullptr;
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -116,7 +116,7 @@ namespace ChilliSource
 				}
 			}
 			
-			CS_WARNING_LOG("Application cannot find resource manager for extension " + instrExtension);
+			CS_LOG_WARNING("Application cannot find resource manager for extension " + instrExtension);
 			return nullptr;
 		}
         //----------------------------------------------------------------------
@@ -191,7 +191,7 @@ namespace ChilliSource
         //--------------------------------------------------------------------
         ResourceManagerDispenser::~ResourceManagerDispenser()
         {
-            CS_SAFE_DELETE(mpResourceGroupMgr);
+            CS_SAFEDELETE(mpResourceGroupMgr);
         }
     }
 }

@@ -20,10 +20,10 @@ namespace ChilliSource
         //------------------------------------------------------
         /// Base
         //------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(MoSubtitlesLoader);
-        CS_FORWARD_DECLARE_CLASS(Subtitles);
-        CS_FORWARD_DECLARE_CLASS(SubtitlesManager);
-        CS_FORWARD_DECLARE_CLASS(VideoPlayerActivity);
+        CS_FORWARDDECLARE_CLASS(MoSubtitlesLoader);
+        CS_FORWARDDECLARE_CLASS(Subtitles);
+        CS_FORWARDDECLARE_CLASS(SubtitlesManager);
+        CS_FORWARDDECLARE_CLASS(VideoPlayerActivity);
     }
 }
 

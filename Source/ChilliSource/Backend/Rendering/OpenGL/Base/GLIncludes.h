@@ -1,7 +1,7 @@
 #ifndef _MOFOW_RENDERINGPLATFORM_OPENGL_GLINCLUDES_H_
 #define _MOFOW_RENDERINGPLATFORM_OPENGL_GLINCLUDES_H_
 
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
 #include <OpenGLES/EAGL.h>
@@ -14,10 +14,10 @@
 #include <GLES2/gl2ext.h>
 #endif
 
-#if defined TARGET_OS_IPHONE || defined TARGET_ANDROID
-#define MOFLOW_OPENGLES2
+#if defined CS_TARGETPLATFORM_IOS || defined TARGET_ANDROID
+#define CS_OPENGLVERSION_ES
 #elif defined TARGET_WINDOWS
-#define MOFLOW_OPENGL
+#define CS_OPENGLVERSION_STANDARD
 #endif
 
 //---Missing OpenGL definitions

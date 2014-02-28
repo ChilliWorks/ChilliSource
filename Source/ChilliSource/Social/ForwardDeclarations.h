@@ -20,19 +20,19 @@ namespace ChilliSource
         //------------------------------------------------------
         /// Communications
         //------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(ContactInformationProvider);
-        CS_FORWARD_DECLARE_CLASS(EmailCompositionActivity);
-        CS_FORWARD_DECLARE_CLASS(SMSCompositionActivity);
+        CS_FORWARDDECLARE_CLASS(ContactInformationProvider);
+        CS_FORWARDDECLARE_CLASS(EmailCompositionActivity);
+        CS_FORWARDDECLARE_CLASS(SMSCompositionActivity);
         //------------------------------------------------------
         /// Facebook
         //------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(FacebookAuthenticationSystem);
-        CS_FORWARD_DECLARE_CLASS(IFacebookPostSystem);
+        CS_FORWARDDECLARE_CLASS(FacebookAuthenticationSystem);
+        CS_FORWARDDECLARE_CLASS(IFacebookPostSystem);
         //------------------------------------------------------
         /// Twitter
         //------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(TwitterAuthenticationActivity);
-        CS_FORWARD_DECLARE_CLASS(TwitterPostSystem);
+        CS_FORWARDDECLARE_CLASS(TwitterAuthenticationActivity);
+        CS_FORWARDDECLARE_CLASS(TwitterPostSystem);
 	}
 }
 

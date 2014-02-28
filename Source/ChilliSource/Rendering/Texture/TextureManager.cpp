@@ -121,7 +121,7 @@ namespace ChilliSource
 						TextureSPtr pTexture = CreateTextureResource();
 						if(CreateTextureFromImage(pImage, inbWithMipsMaps, pTexture))
 						{
-							CS_DEBUG_LOG("Loading texture " + inFilePath);
+							CS_LOG_DEBUG("Loading texture " + inFilePath);
 							
 							mMapFilenameToResource.insert(std::make_pair(inFilePath, std::static_pointer_cast<Core::Resource>(pTexture)));
 							pTexture->SetName(inFilePath);
@@ -139,7 +139,7 @@ namespace ChilliSource
 				return std::static_pointer_cast<Texture>(pExistingResource->second);
 			}
 			
-			CS_ERROR_LOG("Cannot find resource for texture with path " + inFilePath);
+			CS_LOG_ERROR("Cannot find resource for texture with path " + inFilePath);
 			return GetDefaultTexture();
 		}
 		//-----------------------------------------------------------------
@@ -200,7 +200,7 @@ namespace ChilliSource
 			{
 				if(static_cast<Core::ImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(inDesc.eStorageLocation, inDesc.strFilename, inDesc.eImageFormat, inDesc.pImageResource))
 				{
-					CS_DEBUG_LOG("Loading image " + inDesc.strFilename);
+					CS_LOG_DEBUG("Loading image " + inDesc.strFilename);
 					
 					Core::Image* pImage = (Core::Image*)(inDesc.pImageResource.get());
 					pImage->SetName(inDesc.strFilename);
@@ -212,7 +212,7 @@ namespace ChilliSource
 				}
 			}
 			
-			CS_ERROR_LOG("Cannot find resource for image with name " + inDesc.strFilename);
+			CS_LOG_ERROR("Cannot find resource for image with name " + inDesc.strFilename);
 		}
 		//-----------------------------------------------------------------------------------
 		/// Texture Load Task
@@ -233,7 +233,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				CS_ERROR_LOG("Cannot create texture from image " + pImage->GetName());
+				CS_LOG_ERROR("Cannot create texture from image " + pImage->GetName());
 				outpTexture = GetDefaultTexture();
 			}
 
@@ -282,7 +282,7 @@ namespace ChilliSource
 
 			CreateTextureFromImage(pImage, false, mpDefaultTexture);
 
-			CS_SAFE_DELETE(pImage);
+			CS_SAFEDELETE(pImage);
 		}
 	}
 }

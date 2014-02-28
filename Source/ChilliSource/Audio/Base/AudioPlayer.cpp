@@ -122,7 +122,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_ERROR_LOG("Sound effect: " + instrEffectFile + " not found in cache");
+                CS_LOG_ERROR("Sound effect: " + instrEffectFile + " not found in cache");
             }
             
             return udwIndex;
@@ -222,11 +222,11 @@ namespace ChilliSource
             if(nullptr != mpMusicComponent)
             {
                 mpMusicComponent->Stop();
-                CS_DEBUG_LOG("Music stopped");
+                CS_LOG_DEBUG("Music stopped");
             }
             else
             {
-            	CS_ERROR_LOG("Music component is nullptr");
+            	CS_LOG_ERROR("Music component is nullptr");
             }
         }
         //------------------------------------------------

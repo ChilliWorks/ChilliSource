@@ -355,7 +355,7 @@ namespace ChilliSource
             if(pPVRTCHeader->udwVersion == PVRTC_VERSION_MISMATCH)
             {
                 //TODO:: Endianess is not correct, need to flip bits in the header data, possibly image data?
-                CS_FATAL_LOG("Image::UnpackPVRTCData >> Endianess Check failed for creating PVR");
+                CS_LOG_FATAL("Image::UnpackPVRTCData >> Endianess Check failed for creating PVR");
             }
             
             u64 udwPFormat = pPVRTCHeader->udwPixelFormat;
@@ -417,7 +417,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                    CS_FATAL_LOG("Unrecognised PixelFormat for image");
+                    CS_LOG_FATAL("Unrecognised PixelFormat for image");
                 }
             }
             else
@@ -428,7 +428,7 @@ namespace ChilliSource
                 //or zero if there are fewer than four channels; for example, {8,8,8,8} or {5,6,5,0}.
                 
                 //TODO:: Should never reach here through pvr format
-                CS_FATAL_LOG("Unimplemented PixelFormat for image");
+                CS_LOG_FATAL("Unimplemented PixelFormat for image");
             }
             
             if(bSupported)
@@ -441,7 +441,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_FATAL_LOG("Unimplemented PixelFormat for image");
+                CS_LOG_FATAL("Unimplemented PixelFormat for image");
             }
         }
         

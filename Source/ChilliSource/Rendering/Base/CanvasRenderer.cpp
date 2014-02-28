@@ -17,7 +17,7 @@
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
@@ -165,7 +165,7 @@ namespace ChilliSource
             //Draw us!
 			mOverlayBatcher.Render(mpRenderSystem, msCachedSprite);
             
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
             DebugStats::AddToEvent("GUI", 1);
 #endif
         }
@@ -215,7 +215,7 @@ namespace ChilliSource
                 mOverlayBatcher.Render(mpRenderSystem, msCachedSprite);
 			}
             
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
             DebugStats::AddToEvent("GUI", 1);
 #endif
 		}
@@ -299,7 +299,7 @@ namespace ChilliSource
                 }
             }
             
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
             DebugStats::AddToEvent("GUI", 1);
 #endif
         }
@@ -732,7 +732,7 @@ namespace ChilliSource
 					outfCharacterWidth = 0.0f;
                     if(outpInvalidCharacterFound)
                         (*outpInvalidCharacterFound)=true;
-					CS_ERROR_LOG("Invalid character in text component");
+					CS_LOG_ERROR("Invalid character in text component");
 					break;
 				}
 			}

@@ -14,7 +14,7 @@ GameCentreTurnBasedEventHandlerDelegate * gameCentreTurnBasedEventHandlerInstanc
 GameCentreLeaderboardDelegate * leaderboardDelegateInstance = nil;
 GameCentreAchievementsDelegate * achievementDelegateInstance = nil;
 GameCentreAuthenticationListener* authenticationListener = nil;
-#ifdef GAMECENTRE_DISABLE_ANIMATIONS
+#ifdef CS_ENABLE_NOGAMECENTREANIMATIONS
 BOOL kbUseAnimationForDismiss = NO;
 #else
 BOOL kbUseAnimationForDismiss = YES;

@@ -12,7 +12,7 @@
 #include <ChilliSource/Rendering/Base/VertexLayouts.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
@@ -159,7 +159,7 @@ namespace ChilliSource
 			
                 //Tell the render system to draw the contents of the buffer
                 inpRenderSystem->ApplyMaterial(inMaterial);
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
                 DebugStats::AddToEvent("Verts", (inudwStride*2)/3);
 #endif
                 inpRenderSystem->RenderBuffer(mpSpriteBuffer, inudwOffset, inudwStride, Core::Matrix4x4::IDENTITY);
@@ -182,7 +182,7 @@ namespace ChilliSource
                 
                 //Tell the render system to draw the contents of the buffer
                 inpRenderSystem->ApplyMaterial(inMaterial);
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
                 DebugStats::AddToEvent("Verts", (mpSpriteBuffer->GetIndexCount()*2)/3);
 #endif
                 inpRenderSystem->RenderBuffer(mpSpriteBuffer, 0, mpSpriteBuffer->GetIndexCount(), Core::Matrix4x4::IDENTITY);
@@ -212,7 +212,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		SpriteBatch::~SpriteBatch() 
 		{
-			CS_SAFE_DELETE(mpSpriteBuffer);
+			CS_SAFEDELETE(mpSpriteBuffer);
 		}
 	}
 }

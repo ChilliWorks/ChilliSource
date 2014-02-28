@@ -190,7 +190,7 @@ namespace ChilliSource
             
             if(strDeviceDir.empty())
             {
-                CS_WARNING_LOG("No resource folder can be found for this device switching to default directory");
+                CS_LOG_WARNING("No resource folder can be found for this device switching to default directory");
                 strDeviceDir = strDefaultDeviceDir;
             }
             
@@ -213,7 +213,7 @@ namespace ChilliSource
 				}
 			}
 			
-			CS_WARNING_LOG("Application cannot find implementing systems");
+			CS_LOG_WARNING("Application cannot find implementing systems");
 			return SystemSPtr();
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -234,7 +234,7 @@ namespace ChilliSource
 				}
 			}
 			
-			CS_WARNING_LOG("Application cannot find implementing systems");
+			CS_LOG_WARNING("Application cannot find implementing systems");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get Resource Provider Producing
@@ -253,7 +253,7 @@ namespace ChilliSource
 				}
 			}
 			
-			CS_WARNING_LOG("Application cannot find resource provider");
+			CS_LOG_WARNING("Application cannot find resource provider");
 			return nullptr;
 		}
         //--------------------------------------------------------------------------------------------------
@@ -644,7 +644,7 @@ namespace ChilliSource
                 return;
             }
             
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
             Debugging::DebugStats::RecordEvent("FrameTime", infDt);
 			Debugging::DebugStats::RecordEvent("FPS", 1.0f/infDt);
 #endif
@@ -679,7 +679,7 @@ namespace ChilliSource
             //Render the scene
             mpRenderer->RenderToScreen(Core::Application::GetStateManagerPtr()->GetActiveScenePtr());
             
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
 			DebugStats::Clear();
 #endif
 		}
@@ -719,7 +719,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void Application::OnApplicationMemoryWarning()
 		{
-			CS_DEBUG_LOG("Memory Warning. Clearing resource cache...");
+			CS_LOG_DEBUG("Memory Warning. Clearing resource cache...");
 			ResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
 			ApplicationEvents::GetLowMemoryEvent().NotifyConnections();
 		}
@@ -730,7 +730,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void Application::OnGoBack()
 		{
-			CS_DEBUG_LOG("Go back event.");
+			CS_LOG_DEBUG("Go back event.");
 			mStateMgr.GetActiveState()->OnGoBack();
 			ApplicationEvents::GetGoBackEvent().NotifyConnections();
 		}
@@ -773,7 +773,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void Application::Suspend()
 		{
-            CS_DEBUG_LOG("App Suspending...");
+            CS_LOG_DEBUG("App Suspending...");
     
 			s_isSuspending = true;
             
@@ -792,7 +792,7 @@ namespace ChilliSource
 			ApplicationEvents::GetSuspendEvent().NotifyConnections();
 			ApplicationEvents::GetLateSuspendEvent().NotifyConnections();
 			
-			CS_DEBUG_LOG("App Finished Suspending...");
+			CS_LOG_DEBUG("App Finished Suspending...");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Resume
@@ -811,7 +811,7 @@ namespace ChilliSource
 		//----------------------------------------------
 		void Application::OnApplicationResumed()
 		{
-			CS_DEBUG_LOG("App Resuming...");
+			CS_LOG_DEBUG("App Resuming...");
             
 			if(mpRenderSystem != nullptr)
 			{
@@ -824,7 +824,7 @@ namespace ChilliSource
 			//Tell the active state to continue
 			mStateMgr.Resume();
 			
-			CS_DEBUG_LOG("App Finished Resuming...");
+			CS_LOG_DEBUG("App Finished Resuming...");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// On Screen Resized
@@ -848,7 +848,7 @@ namespace ChilliSource
             
 			ApplicationEvents::GetScreenResizedEvent().NotifyConnections(inudwWidth, inudwHeight);
             
-			CS_DEBUG_LOG("Screen resized Notification");
+			CS_LOG_DEBUG("Screen resized Notification");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// On Screen Changed Orientation
@@ -869,7 +869,7 @@ namespace ChilliSource
 			SetOrientation(ineOrientation);
 			ApplicationEvents::GetScreenOrientationChangedEvent().NotifyConnections(ineOrientation);
             
-			CS_DEBUG_LOG("Screen Oriented Notification");
+			CS_LOG_DEBUG("Screen Oriented Notification");
 
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -884,9 +884,9 @@ namespace ChilliSource
 			pDefaultMesh.reset();
 			pDefaultMaterial.reset();
 
-			CS_SAFE_DELETE(pPlatformSystem);
-            CS_SAFE_DELETE(mpResourceManagerDispenser);
-            CS_SAFE_DELETE(mpComponentFactoryDispenser);
+			CS_SAFEDELETE(pPlatformSystem);
+            CS_SAFEDELETE(mpResourceManagerDispenser);
+            CS_SAFEDELETE(mpComponentFactoryDispenser);
 
 			//We have an issue with the order of destruction of systems.
 			while(mSystems.empty() == false)

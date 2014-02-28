@@ -12,7 +12,7 @@
 #include <algorithm>
 #include <cctype>
 
-#if (TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE) && __OBJC__
+#if CS_TARGETPLATFORM_IOS && __OBJC__
 #import <Foundation/Foundation.h>
 #endif
 
@@ -667,7 +667,7 @@ namespace ChilliSource
                 }
             }
             
-    #if (TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE) && __OBJC__
+    #if CS_TARGETPLATFORM_IOS && __OBJC__
             /**
              //Given a NSString it converts it to a UTF-8 string
              @param input string

@@ -207,7 +207,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         std::string ToString(const StorageLocation& in_storageLocation);
         
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
         //---------------------------------------------------------
         /// Converts a size_t to a string.
         ///

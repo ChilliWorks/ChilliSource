@@ -583,30 +583,30 @@ namespace ChilliSource
             }
             else
             {
-                 //   CS_DEBUG_LOG("StateManager state not accepting notifications. for notification "+ToString(inpsNotification->ID)+" priority "+ToString(inpsNotification->ePriority)+" type "+ToString(inpsNotification->eType));
+                 //   CS_LOG_DEBUG("StateManager state not accepting notifications. for notification "+ToString(inpsNotification->ID)+" priority "+ToString(inpsNotification->ePriority)+" type "+ToString(inpsNotification->eType));
             }
 			return false;
         }
         
         void StateManager::DebugPrint(std::string instrMessage){
-            CS_DEBUG_LOG("StateManager "+ToString((u32)this)+" - "+instrMessage);
-            CS_DEBUG_LOG("mpApp = "+ToString((u32)mpApp));
-            CS_DEBUG_LOG("mStateOperationQueue size:"+ToString(mStateOperationQueue.size()));
+            CS_LOG_DEBUG("StateManager "+ToString((u32)this)+" - "+instrMessage);
+            CS_LOG_DEBUG("mpApp = "+ToString((u32)mpApp));
+            CS_LOG_DEBUG("mStateOperationQueue size:"+ToString(mStateOperationQueue.size()));
     
             
-            CS_DEBUG_LOG("mStateHierarchy size:"+ToString(mStateHierarchy.size()));
+            CS_LOG_DEBUG("mStateHierarchy size:"+ToString(mStateHierarchy.size()));
 
             
             for(s32 i=0;i<mStateHierarchy.size();i++){
-                CS_DEBUG_LOG("("+ToString(i)+") "+ToString((u32)mStateHierarchy[i].get())+" name:"+mStateHierarchy[i]->GetName());
+                CS_LOG_DEBUG("("+ToString(i)+") "+ToString((u32)mStateHierarchy[i].get())+" name:"+mStateHierarchy[i]->GetName());
             }
             
-            CS_DEBUG_LOG("mStateOperationQueue size:"+ToString(mStateOperationQueue.size()));
+            CS_LOG_DEBUG("mStateOperationQueue size:"+ToString(mStateOperationQueue.size()));
 
             s32 udwCount=0;
             std::list<StateOperation>::iterator it=mStateOperationQueue.begin();
             while(it!=mStateOperationQueue.end()){
-                CS_DEBUG_LOG("("+ToString(udwCount)+") eAction:"+ToString((u32)(*it).eAction)+" pState:"+ToString((u32)(*it).pState.get())+" pRawState:"+ToString((u32)(*it).pRawState));
+                CS_LOG_DEBUG("("+ToString(udwCount)+") eAction:"+ToString((u32)(*it).eAction)+" pState:"+ToString((u32)(*it).pState.get())+" pRawState:"+ToString((u32)(*it).pRawState));
                 udwCount++;
                 it++;
             }

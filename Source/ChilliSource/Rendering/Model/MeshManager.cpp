@@ -118,7 +118,7 @@ namespace ChilliSource
 						if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, inFilePath, pResource)) 
 						{
 							//Add it to the cache
-							CS_DEBUG_LOG("Loading model " + inFilePath);
+							CS_LOG_DEBUG("Loading model " + inFilePath);
 							mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
 							pResource->SetName(inFilePath);
 							pResource->SetFilename(inFilePath);
@@ -137,7 +137,7 @@ namespace ChilliSource
 			}
 			
 			//Resource not found
-			CS_ERROR_LOG("Cannot find resource for model with path " + inFilePath);
+			CS_LOG_ERROR("Cannot find resource for model with path " + inFilePath);
 			return GetDefaultMesh();
 		}
 		//----------------------------------------------------------------
@@ -167,7 +167,7 @@ namespace ChilliSource
 					if(mResourceProviders[nProvider]->CanCreateResourceFromFileWithExtension(strExt))
 					{
 						
-						CS_DEBUG_LOG("Loading model " + inFilePath);
+						CS_LOG_DEBUG("Loading model " + inFilePath);
 						
 						pResource->SetName(inFilePath);
 						pResource->SetFilename(inFilePath);
@@ -190,7 +190,7 @@ namespace ChilliSource
 			}
 			
 			//Resource not found
-			CS_ERROR_LOG("Cannot find resource for model with path " + inFilePath);
+			CS_LOG_ERROR("Cannot find resource for model with path " + inFilePath);
 			return GetDefaultMesh();
 		}
 		//----------------------------------------------------------------
@@ -275,7 +275,7 @@ namespace ChilliSource
 				}
 				else 
 				{
-					CS_ERROR_LOG("Sub mesh data exceeds its buffer capacity. Mesh will return empty!");
+					CS_LOG_ERROR("Sub mesh data exceeds its buffer capacity. Mesh will return empty!");
 					bSuccess = false;
 				}
 				

@@ -55,7 +55,7 @@ namespace ChilliSource
                 if(maReleasePool.empty())
                 {
                     maReleasePool.push_back(new T());
-                    CS_WARNING_LOG("Object Pool - Exceeding initial capacity (" + ToString((u32)maReleasePool.size() + (u32)maActivePool.size()) + ")");
+                    CS_LOG_WARNING("Object Pool - Exceeding initial capacity (" + ToString((u32)maReleasePool.size() + (u32)maActivePool.size()) + ")");
                 }
 
                 T* pObj = maReleasePool.back();

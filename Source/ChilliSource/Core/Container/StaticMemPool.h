@@ -47,7 +47,7 @@ namespace ChilliSource
             {
                 if(mudwFreeMemory < inudwSize)
                 {
-                    CS_ERROR_LOG("Static mem pool out of memory");
+                    CS_LOG_ERROR("Static mem pool out of memory");
                     return nullptr;
                 }
 

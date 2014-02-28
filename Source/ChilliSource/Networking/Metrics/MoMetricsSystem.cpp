@@ -200,7 +200,7 @@ namespace ChilliSource
         
         void MoMetricsSystem::Destroy()
         {
-            CS_SAFE_DELETE(mpCurrentSession);
+            CS_SAFEDELETE(mpCurrentSession);
             
             for(std::vector<MoMetricsSession*>::iterator it = maPendingClosedSessions.begin(); it != maPendingClosedSessions.end(); ++it)
             {

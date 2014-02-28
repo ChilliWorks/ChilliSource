@@ -13,7 +13,7 @@
 
 #include <ChilliSource/Input/Base/InputSystem.h>
 
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/GUI/Debug/DebugStatsView.h>
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
@@ -245,7 +245,7 @@ namespace ChilliSource
         {
             
         }
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
         //-----------------------------------------------------
         /// Draw
         ///

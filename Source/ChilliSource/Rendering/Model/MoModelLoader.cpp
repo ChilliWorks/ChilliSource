@@ -274,21 +274,21 @@ namespace ChilliSource
 			//Check file for corruption
 			if(nullptr == inpStream || true == inpStream->IsBad())
 			{
-				CS_ERROR_LOG("Cannot open MoModel file: " + inFilePath);
+				CS_LOG_ERROR("Cannot open MoModel file: " + inFilePath);
 				return false;
 			}
 			
 			u32 udwFileCheckValue = ReadValue<u32>(inpStream);
 			if(udwFileCheckValue != kgMoModelFileCheckValue)
 			{
-				CS_ERROR_LOG("MoModel file has corruption(incorrect File Check Value): " + inFilePath);
+				CS_LOG_ERROR("MoModel file has corruption(incorrect File Check Value): " + inFilePath);
 				return false;
 			}
 			
 			u32 udwVersionNum = ReadValue<u32>(inpStream);
 			if (udwVersionNum < kgMoModelMinVersion || udwVersionNum > kgMoModelMaxVersion)
 			{
-				CS_ERROR_LOG("Unsupported MoModel version: " + inFilePath);
+				CS_LOG_ERROR("Unsupported MoModel version: " + inFilePath);
 				return false;
 			}
 			
@@ -317,12 +317,12 @@ namespace ChilliSource
                         //A breaking change was made to animated models in version 11.
                         if (udwVersionNum < 11)
                         {
-                            CS_ERROR_LOG("Model contains old format animation data, please update to momodel version 11: " + inFilePath);
+                            CS_LOG_ERROR("Model contains old format animation data, please update to momodel version 11: " + inFilePath);
                             return false;
                         }
 						break;
 					default:
-						CS_ERROR_LOG("Unknown feature type in MoModel(" + inFilePath + ")feature declaration!");
+						CS_LOG_ERROR("Unknown feature type in MoModel(" + inFilePath + ")feature declaration!");
 						break;
 				}
 			}
@@ -521,7 +521,7 @@ namespace ChilliSource
 				switch (MoModelVertexElement(dwVertexElement))
 				{
 					case MoModelVertexElement::k_none:
-						CS_ERROR_LOG("Unknown vertex type in vertex declaration!");
+						CS_LOG_ERROR("Unknown vertex type in vertex declaration!");
 						break;
 					case MoModelVertexElement::k_position:
 						apVertElements[i].eType = VertexDataType::k_float4;

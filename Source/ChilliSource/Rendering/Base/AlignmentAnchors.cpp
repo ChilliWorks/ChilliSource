@@ -176,7 +176,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				CS_ERROR_LOG("Alignment Anchor: Invalid string " + instrString);
+				CS_LOG_ERROR("Alignment Anchor: Invalid string " + instrString);
 				return AlignmentAnchor::k_middleCentre;
 			}
 		}

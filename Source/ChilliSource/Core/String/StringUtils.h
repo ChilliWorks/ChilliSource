@@ -16,7 +16,7 @@
 #include <sstream>
 #include <string>
 
-#if (TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE) && __OBJC__
+#if CS_TARGETPLATFORM_IOS && __OBJC__
 @class NSString;
 #endif
 
@@ -191,7 +191,7 @@ namespace ChilliSource
                 return instrString.ToASCII();
             }
             
-#if (TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE) && __OBJC__
+#if CS_TARGETPLATFORM_IOS && __OBJC__
             /**
 			 //Given a NSString it converts it to a UTF-8 string
 			 @param input string

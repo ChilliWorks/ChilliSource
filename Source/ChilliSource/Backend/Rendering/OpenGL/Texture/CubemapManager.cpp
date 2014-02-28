@@ -90,7 +90,7 @@ namespace ChilliSource
                                     }
                                     else
                                     {
-                                        CS_ERROR_LOG("Cannot find all resources for Cubemap with base path " + pOpenGLCubemap->GetFilename());
+                                        CS_LOG_ERROR("Cannot find all resources for Cubemap with base path " + pOpenGLCubemap->GetFilename());
                                     }
                                     
                                     break;

@@ -12,7 +12,7 @@
 
 #include <ChilliSource/Core/Math/MathUtils.h>
 
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
@@ -108,7 +108,7 @@ namespace ChilliSource
         {
             if(!maSpriteCache.empty())
             {
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
                 if(!maRenderCommands.empty())
                 {
                     RenderCommand &sLastCommand = maRenderCommands.back();

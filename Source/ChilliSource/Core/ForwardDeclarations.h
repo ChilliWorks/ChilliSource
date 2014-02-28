@@ -20,7 +20,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Animation
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(Animation);
+        CS_FORWARDDECLARE_CLASS(Animation);
         template <typename TType> class ValueAnimation;
         template <typename TType> class LinearAnimation;
         template <typename TType> class BounceAnimation;
@@ -29,149 +29,149 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Base
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(Activity);
-        CS_FORWARD_DECLARE_CLASS(Application);
-        CS_FORWARD_DECLARE_CLASS(ApplicationEvents);
-        CS_FORWARD_DECLARE_CLASS(Colour);
-        CS_FORWARD_DECLARE_CLASS(Device);
-        CS_FORWARD_DECLARE_CLASS(IInformationProvider);
-        CS_FORWARD_DECLARE_CLASS(Logging);
-        CS_FORWARD_DECLARE_CLASS(PlatformSystem);
-        CS_FORWARD_DECLARE_CLASS(QueryableInterface);
-        CS_FORWARD_DECLARE_CLASS(Screen);
+        CS_FORWARDDECLARE_CLASS(Activity);
+        CS_FORWARDDECLARE_CLASS(Application);
+        CS_FORWARDDECLARE_CLASS(ApplicationEvents);
+        CS_FORWARDDECLARE_CLASS(Colour);
+        CS_FORWARDDECLARE_CLASS(Device);
+        CS_FORWARDDECLARE_CLASS(IInformationProvider);
+        CS_FORWARDDECLARE_CLASS(Logging);
+        CS_FORWARDDECLARE_CLASS(PlatformSystem);
+        CS_FORWARDDECLARE_CLASS(QueryableInterface);
+        CS_FORWARDDECLARE_CLASS(Screen);
         //---------------------------------------------------------
         /// Container
         //---------------------------------------------------------
         template <typename TKey, typename TValue> class HashedArray;
         template <typename TType> class ObjectPool;
-        CS_FORWARD_DECLARE_CLASS(Octree);
-        CS_FORWARD_DECLARE_CLASS(ParamDictionary);
-        CS_FORWARD_DECLARE_CLASS(StaticMemPool);
+        CS_FORWARDDECLARE_CLASS(Octree);
+        CS_FORWARDDECLARE_CLASS(ParamDictionary);
+        CS_FORWARDDECLARE_CLASS(StaticMemPool);
         template <typename T> class WorkerQueue;
         //---------------------------------------------------------
         /// Cryptographic
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(HMAC_SHA1);
-        CS_FORWARD_DECLARE_CLASS(OAuthSystem);
-        CS_FORWARD_DECLARE_CLASS(SHA1);
+        CS_FORWARDDECLARE_CLASS(HMAC_SHA1);
+        CS_FORWARDDECLARE_CLASS(OAuthSystem);
+        CS_FORWARDDECLARE_CLASS(SHA1);
         //---------------------------------------------------------
         /// Entity
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(Component);
-        CS_FORWARD_DECLARE_CLASS(ComponentFactory);
-        CS_FORWARD_DECLARE_CLASS(ComponentFactoryDispenser);
-        CS_FORWARD_DECLARE_CLASS(Entity);
-        CS_FORWARD_DECLARE_CLASS(EntityAnimation);
-        CS_FORWARD_DECLARE_CLASS(EntityAnimationController);
-        CS_FORWARD_DECLARE_CLASS(Transform);
+        CS_FORWARDDECLARE_CLASS(Component);
+        CS_FORWARDDECLARE_CLASS(ComponentFactory);
+        CS_FORWARDDECLARE_CLASS(ComponentFactoryDispenser);
+        CS_FORWARDDECLARE_CLASS(Entity);
+        CS_FORWARDDECLARE_CLASS(EntityAnimation);
+        CS_FORWARDDECLARE_CLASS(EntityAnimationController);
+        CS_FORWARDDECLARE_CLASS(Transform);
         //---------------------------------------------------------
         /// Event
         //---------------------------------------------------------
         template <typename TDelegateType> class Event;
         template <typename TDelegateType> class IConnectableEvent;
-        CS_FORWARD_DECLARE_CLASS(IDisconnectableEvent);
-        CS_FORWARD_DECLARE_CLASS(Connection);
+        CS_FORWARDDECLARE_CLASS(IDisconnectableEvent);
+        CS_FORWARDDECLARE_CLASS(Connection);
         //---------------------------------------------------------
         /// File
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(FileStream);
-        CS_FORWARD_DECLARE_CLASS(FileSystem);
-        CS_FORWARD_DECLARE_CLASS(LocalDataStore);
-        CS_FORWARD_DECLARE_CLASS(TweakableConstants);
+        CS_FORWARDDECLARE_CLASS(FileStream);
+        CS_FORWARDDECLARE_CLASS(FileSystem);
+        CS_FORWARDDECLARE_CLASS(LocalDataStore);
+        CS_FORWARDDECLARE_CLASS(TweakableConstants);
         enum class StorageLocation;
         //---------------------------------------------------------
         /// Image
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(ETC1ImageProvider);
-        CS_FORWARD_DECLARE_CLASS(Image);
-        CS_FORWARD_DECLARE_CLASS(ImageResourceProvider);
-        CS_FORWARD_DECLARE_CLASS(MoImageProvider);
+        CS_FORWARDDECLARE_CLASS(ETC1ImageProvider);
+        CS_FORWARDDECLARE_CLASS(Image);
+        CS_FORWARDDECLARE_CLASS(ImageResourceProvider);
+        CS_FORWARDDECLARE_CLASS(MoImageProvider);
         //---------------------------------------------------------
         /// Localisation
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(Locale);
+        CS_FORWARDDECLARE_CLASS(Locale);
         //---------------------------------------------------------
         /// Math
         //---------------------------------------------------------
         template <typename T> class CatmullRomSpline;
         template <typename T> class MultiLineSegment;
-        CS_FORWARD_DECLARE_CLASS(UVRect);
-        CS_FORWARD_DECLARE_CLASS(Rectangle);
-        CS_FORWARD_DECLARE_CLASS(Circle);
-        CS_FORWARD_DECLARE_CLASS(Sphere);
-        CS_FORWARD_DECLARE_CLASS(AABB);
-        CS_FORWARD_DECLARE_CLASS(OOBB);
-        CS_FORWARD_DECLARE_CLASS(Ray);
-        CS_FORWARD_DECLARE_CLASS(Line);
-        CS_FORWARD_DECLARE_CLASS(Plane);
-        CS_FORWARD_DECLARE_CLASS(Frustum);
-        CS_FORWARD_DECLARE_CLASS(Matrix3x3);
-        CS_FORWARD_DECLARE_CLASS(Matrix4x4);
-        CS_FORWARD_DECLARE_CLASS(Quaternion);
-        CS_FORWARD_DECLARE_CLASS(UnifiedScalar);
-        CS_FORWARD_DECLARE_CLASS(UnifiedVector2);
-        CS_FORWARD_DECLARE_CLASS(UnifiedRectangle);
-        CS_FORWARD_DECLARE_CLASS(Vector2);
-        CS_FORWARD_DECLARE_CLASS(Vector3);
-        CS_FORWARD_DECLARE_CLASS(Vector4);
+        CS_FORWARDDECLARE_CLASS(UVRect);
+        CS_FORWARDDECLARE_CLASS(Rectangle);
+        CS_FORWARDDECLARE_CLASS(Circle);
+        CS_FORWARDDECLARE_CLASS(Sphere);
+        CS_FORWARDDECLARE_CLASS(AABB);
+        CS_FORWARDDECLARE_CLASS(OOBB);
+        CS_FORWARDDECLARE_CLASS(Ray);
+        CS_FORWARDDECLARE_CLASS(Line);
+        CS_FORWARDDECLARE_CLASS(Plane);
+        CS_FORWARDDECLARE_CLASS(Frustum);
+        CS_FORWARDDECLARE_CLASS(Matrix3x3);
+        CS_FORWARDDECLARE_CLASS(Matrix4x4);
+        CS_FORWARDDECLARE_CLASS(Quaternion);
+        CS_FORWARDDECLARE_CLASS(UnifiedScalar);
+        CS_FORWARDDECLARE_CLASS(UnifiedVector2);
+        CS_FORWARDDECLARE_CLASS(UnifiedRectangle);
+        CS_FORWARDDECLARE_CLASS(Vector2);
+        CS_FORWARDDECLARE_CLASS(Vector3);
+        CS_FORWARDDECLARE_CLASS(Vector4);
         //---------------------------------------------------------
         /// Notifications
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(LocalNotificationScheduler);
-        CS_FORWARD_DECLARE_CLASS(NotificationScheduler);
-        CS_FORWARD_DECLARE_CLASS(Notification);
-        CS_FORWARD_DECLARE_CLASS(RemoteNotificationSystem);
+        CS_FORWARDDECLARE_CLASS(LocalNotificationScheduler);
+        CS_FORWARDDECLARE_CLASS(NotificationScheduler);
+        CS_FORWARDDECLARE_CLASS(Notification);
+        CS_FORWARDDECLARE_CLASS(RemoteNotificationSystem);
         //---------------------------------------------------------
         /// Resource
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(Resource);
-        CS_FORWARD_DECLARE_CLASS(ResourceGroupManager);
-        CS_FORWARD_DECLARE_CLASS(ResourceManager);
-        CS_FORWARD_DECLARE_CLASS(ResourceManagerDispenser);
-        CS_FORWARD_DECLARE_CLASS(ResourceProvider);
+        CS_FORWARDDECLARE_CLASS(Resource);
+        CS_FORWARDDECLARE_CLASS(ResourceGroupManager);
+        CS_FORWARDDECLARE_CLASS(ResourceManager);
+        CS_FORWARDDECLARE_CLASS(ResourceManagerDispenser);
+        CS_FORWARDDECLARE_CLASS(ResourceProvider);
         //---------------------------------------------------------
         /// Scene
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(Scene);
-        CS_FORWARD_DECLARE_CLASS(SceneAnimation);
-        CS_FORWARD_DECLARE_CLASS(SceneAnimationDesc);
-        CS_FORWARD_DECLARE_CLASS(SceneAnimationProvider);
-        CS_FORWARD_DECLARE_CLASS(SceneAnimDescManager);
-        CS_FORWARD_DECLARE_CLASS(SceneDescManager);
-        CS_FORWARD_DECLARE_CLASS(SceneDesc);
-        CS_FORWARD_DECLARE_CLASS(SceneProvider);
+        CS_FORWARDDECLARE_CLASS(Scene);
+        CS_FORWARDDECLARE_CLASS(SceneAnimation);
+        CS_FORWARDDECLARE_CLASS(SceneAnimationDesc);
+        CS_FORWARDDECLARE_CLASS(SceneAnimationProvider);
+        CS_FORWARDDECLARE_CLASS(SceneAnimDescManager);
+        CS_FORWARDDECLARE_CLASS(SceneDescManager);
+        CS_FORWARDDECLARE_CLASS(SceneDesc);
+        CS_FORWARDDECLARE_CLASS(SceneProvider);
         //---------------------------------------------------------
         /// State
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(State);
-        CS_FORWARD_DECLARE_CLASS(StateManager);
+        CS_FORWARDDECLARE_CLASS(State);
+        CS_FORWARDDECLARE_CLASS(StateManager);
         //---------------------------------------------------------
         /// String
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(UTF8String);
+        CS_FORWARDDECLARE_CLASS(UTF8String);
         //---------------------------------------------------------
         /// System
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(System);
-        CS_FORWARD_DECLARE_CLASS(IUpdateable);
-        CS_FORWARD_DECLARE_CLASS(IComponentProducer);
+        CS_FORWARDDECLARE_CLASS(System);
+        CS_FORWARDDECLARE_CLASS(IUpdateable);
+        CS_FORWARDDECLARE_CLASS(IComponentProducer);
         //---------------------------------------------------------
         /// Threading
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(WaitCondition);
+        CS_FORWARDDECLARE_CLASS(WaitCondition);
         template <typename... TArgTypes> class Task;
-        CS_FORWARD_DECLARE_CLASS(TaskScheduler);
-        CS_FORWARD_DECLARE_CLASS(ThreadPool);
+        CS_FORWARDDECLARE_CLASS(TaskScheduler);
+        CS_FORWARDDECLARE_CLASS(ThreadPool);
         //---------------------------------------------------------
         /// Time
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CoreTimer);
-        CS_FORWARD_DECLARE_CLASS(PerformanceTimer);
-        CS_FORWARD_DECLARE_CLASS(Timer);
+        CS_FORWARDDECLARE_CLASS(CoreTimer);
+        CS_FORWARDDECLARE_CLASS(PerformanceTimer);
+        CS_FORWARDDECLARE_CLASS(Timer);
         //---------------------------------------------------------
         /// Volume
         //---------------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(VolumeComponent);
+        CS_FORWARDDECLARE_CLASS(VolumeComponent);
 	}
 }
 

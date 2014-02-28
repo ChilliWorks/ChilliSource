@@ -19,7 +19,7 @@
 #include <sstream>
 #include <thread>
 
-#ifdef DEBUG
+#ifdef CS_ENABLE_DEBUG
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
@@ -177,7 +177,7 @@ namespace ChilliSource
                 sInfo.ReadStream = ReadStream;
                 sInfo.ConnectionOpenTime = Core::Application::GetSystemTime();
                 
-#ifdef DEBUG
+#ifdef CS_ENABLE_DEBUG
                 //LogConnectionAddress(ReadStream);
 #endif
                 
@@ -202,7 +202,7 @@ namespace ChilliSource
         //--------------------------------------------------------------------------------------------------
         void CHttpConnectionSystem::LogConnectionAddress(CFReadStreamRef inReadStreamRef) const
         {
-#ifdef DEBUG
+#ifdef CS_ENABLE_DEBUG
             CFDataRef       sockObj;
             s32             sock;
             BOOL            success;
@@ -348,7 +348,7 @@ namespace ChilliSource
                     }
                     
                     //...and remove the completed request
-                    CS_SAFE_DELETE(*it);
+                    CS_SAFEDELETE(*it);
                     it = mapRequests.erase(it);
                 }
                 else
@@ -420,7 +420,7 @@ namespace ChilliSource
             //Track the time the request has been active so we can manually timeout
             else if(!mbCompleted && !mbReceivedResponse && ((mfActiveTime += (Core::MathUtils::Min(infDT, 0.5f))) > kfDefaultHTTPTimeout))
             {
-                CS_DEBUG_LOG("HTTP Connection timed out on request: " + msDetails.strURL);
+                CS_LOG_DEBUG("HTTP Connection timed out on request: " + msDetails.strURL);
 				//Flag to stop the polling thread which should
 				//exit gracefully
 				mfActiveTime = 0.0f;

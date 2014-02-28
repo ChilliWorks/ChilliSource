@@ -566,7 +566,7 @@ namespace ChilliSource
             Rendering::CullFace meCurrentCullFace;
             Rendering::DepthFunction meDepthFunc;
             
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
             EAGLContext* mContext;
 #elif defined TARGET_ANDROID
             std::vector<CMeshBuffer*> mMeshBuffers;

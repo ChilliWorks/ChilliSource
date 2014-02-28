@@ -96,7 +96,7 @@ namespace ChilliSource
 				}
 			}
 			
-			CS_WARNING_LOG("Request for undefined TweakConstant float in namespace: " + inNameSpace + " with name: " + inConstName);
+			CS_LOG_WARNING("Request for undefined TweakConstant float in namespace: " + inNameSpace + " with name: " + inConstName);
 			
 			return FLT_MAX;
 		}
@@ -114,7 +114,7 @@ namespace ChilliSource
 				}
 			}
 			
-			CS_WARNING_LOG("Request for undefined TweakConstant int in namespace: " + inNameSpace + " with name: " + inConstName);
+			CS_LOG_WARNING("Request for undefined TweakConstant int in namespace: " + inNameSpace + " with name: " + inConstName);
 			return INT_MAX;
 		}
 		int TweakableConstants::GetInt(const std::string & constName) const{
@@ -131,7 +131,7 @@ namespace ChilliSource
 				}
 			}
 			
-			CS_WARNING_LOG("Request for undefined TweakConstant string in namespace: " + inNameSpace + " with name: " + inConstName);
+			CS_LOG_WARNING("Request for undefined TweakConstant string in namespace: " + inNameSpace + " with name: " + inConstName);
 			return mBlank;
 		}
 		const std::string & TweakableConstants::GetString(const std::string & constName) const{
@@ -149,7 +149,7 @@ namespace ChilliSource
 				}
 			}
 			
-			CS_WARNING_LOG("Request for undefined TweakConstant boolean in namespace: " + inNameSpace + " with name: " + inConstName);
+			CS_LOG_WARNING("Request for undefined TweakConstant boolean in namespace: " + inNameSpace + " with name: " + inConstName);
 			return false;
 		} 
 		bool TweakableConstants::GetBool(const std::string & constName) const{
@@ -166,7 +166,7 @@ namespace ChilliSource
 				}
 			}
 			
-			CS_WARNING_LOG("Request for undefined TweakConstant curve in namespace: " + inNameSpace + " with name: " + inCurveName);
+			CS_LOG_WARNING("Request for undefined TweakConstant curve in namespace: " + inNameSpace + " with name: " + inCurveName);
 			return FLT_MAX;
 			
 		}

@@ -6,9 +6,9 @@
 
 #include <string>
 
-#define USETWEAKABLECONSTANTS
+#define CS_ENABLE_TWEAKABLECONSTANTS
 
-#ifdef USETWEAKABLECONSTANTS
+#ifdef CS_ENABLE_TWEAKABLECONSTANTS
 
 //Constants in root namespace
 #define TC_FLOAT(name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetFloat(#name)
@@ -112,6 +112,6 @@ namespace ChilliSource
 #define TC_STR(x) x
 #define TC_BOOL(x) x
 
-#endif //USETWEAKABLECONSTANTS
+#endif //CS_ENABLE_TWEAKABLECONSTANTS
 
 #endif //TWEAKABLECONSTANTS_H

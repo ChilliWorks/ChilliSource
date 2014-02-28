@@ -44,24 +44,24 @@ namespace ChilliSource
 			switch(mBufferDesc.eAccessFlag)
 			{
 				case Rendering::BufferAccess::k_write:
-#ifdef MOFLOW_OPENGL
+#ifdef CS_OPENGLVERSION_STANDARD
 					mBufferAccess = GL_WRITE_ONLY;
-#elif defined MOFLOW_OPENGLES2
+#elif defined CS_OPENGLVERSION_ES
 					mBufferAccess = GL_WRITE_ONLY_OES;
 #endif
 					break;
 				case Rendering::BufferAccess::k_read:
-#ifdef MOFLOW_OPENGL
+#ifdef CS_OPENGLVERSION_STANDARD
 					mBufferAccess = GL_WRITE_ONLY;
-#elif defined MOFLOW_OPENGLES2
+#elif defined CS_OPENGLVERSION_ES
 					mBufferAccess = GL_WRITE_ONLY_OES;
 #endif
 					break;
 				case Rendering::BufferAccess::k_readWrite:
 				default:
-#ifdef MOFLOW_OPENGL
+#ifdef CS_OPENGLVERSION_STANDARD
 					mBufferAccess = GL_WRITE_ONLY;
-#elif defined MOFLOW_OPENGLES2
+#elif defined CS_OPENGLVERSION_ES
 					mBufferAccess = GL_WRITE_ONLY_OES;
 #endif
 					break;
@@ -112,9 +112,9 @@ namespace ChilliSource
 					glBufferData(GL_ARRAY_BUFFER, mBufferDesc.VertexDataCapacity, nullptr, mBufferUsage);
 				}
 
-#ifdef MOFLOW_OPENGL
+#ifdef CS_OPENGLVERSION_STANDARD
 				(*outppBuffer) = static_cast<f32*>(glMapBuffer(GL_ARRAY_BUFFER, mBufferAccess));
-#elif defined MOFLOW_OPENGLES2
+#elif defined CS_OPENGLVERSION_ES
 				(*outppBuffer) = static_cast<f32*>(glMapBufferOES(GL_ARRAY_BUFFER, mBufferAccess));
 #endif
 				mpVertexData = (*outppBuffer);
@@ -151,9 +151,9 @@ namespace ChilliSource
             
 			if(mbMapBufferAvailable)
 			{
-#ifdef MOFLOW_OPENGL
+#ifdef CS_OPENGLVERSION_STANDARD
 				(*outppBuffer) = static_cast<u16*>(glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferAccess));
-#elif defined MOFLOW_OPENGLES2
+#elif defined CS_OPENGLVERSION_ES
 				(*outppBuffer) = static_cast<u16*>(glMapBufferOES(GL_ELEMENT_ARRAY_BUFFER, mBufferAccess));
 #endif
 				mpIndexData = (*outppBuffer);
@@ -181,9 +181,9 @@ namespace ChilliSource
 			if(mbMapBufferAvailable)
 			{
 				mpVertexData = nullptr;
-#ifdef MOFLOW_OPENGL
+#ifdef CS_OPENGLVERSION_STANDARD
 				return glUnmapBuffer(GL_ARRAY_BUFFER);
-#elif defined MOFLOW_OPENGLES2
+#elif defined CS_OPENGLVERSION_ES
 				return glUnmapBufferOES(GL_ARRAY_BUFFER);
 #endif
 			}
@@ -207,9 +207,9 @@ namespace ChilliSource
 			if(mbMapBufferAvailable)
 			{
 				mpIndexData = nullptr;
-#ifdef MOFLOW_OPENGL
+#ifdef CS_OPENGLVERSION_STANDARD
 				return glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
-#elif defined MOFLOW_OPENGLES2
+#elif defined CS_OPENGLVERSION_ES
 				return glUnmapBufferOES(GL_ELEMENT_ARRAY_BUFFER);
 #endif
 			}
@@ -314,8 +314,8 @@ namespace ChilliSource
                 UnlockIndex();
             }
 
-			CS_SAFE_DELETE_ARRAY(mpVertexDataBackup);
-			CS_SAFE_DELETE_ARRAY(mpIndexDataBackup);
+			CS_SAFEDELETE_ARRAY(mpVertexDataBackup);
+			CS_SAFEDELETE_ARRAY(mpIndexDataBackup);
 		}
 		//-----------------------------------------------------
 		/// Set Owning Render System
@@ -377,10 +377,10 @@ namespace ChilliSource
 			mVertexBuffer = 0;
 			mIndexBuffer  = 0;
 
-			CS_SAFE_DELETE_ARRAY(mpVertexData);
-			CS_SAFE_DELETE_ARRAY(mpIndexData);
-			CS_SAFE_DELETE_ARRAY(mpVertexDataBackup);
-			CS_SAFE_DELETE_ARRAY(mpIndexDataBackup);
+			CS_SAFEDELETE_ARRAY(mpVertexData);
+			CS_SAFEDELETE_ARRAY(mpIndexData);
+			CS_SAFEDELETE_ARRAY(mpVertexDataBackup);
+			CS_SAFEDELETE_ARRAY(mpIndexDataBackup);
 		}
 	}
 }

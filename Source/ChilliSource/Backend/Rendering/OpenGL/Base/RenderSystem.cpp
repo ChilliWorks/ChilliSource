@@ -22,13 +22,13 @@
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
 #include <UIKit/UIKit.h>
 #else
 #include <ChilliSource/Core/Base/Application.h>
 #endif
 
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
@@ -54,14 +54,14 @@ namespace ChilliSource
             Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mCubemapManager);
             Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mShaderManager);
             
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
             //Create the context with the specified GLES version
 			mContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
             
 			//Set the current context
             if(!mContext || ![EAGLContext setCurrentContext: mContext])
             {
-                CS_FATAL_LOG("Cannot Create OpenGL ES 2.0 Context");
+                CS_LOG_FATAL("Cannot Create OpenGL ES 2.0 Context");
             }
 #endif
 		}
@@ -83,7 +83,7 @@ namespace ChilliSource
 			if(GLEW_OK != GlewError)
 			{
 				//Problem: glewInit failed, something is seriously wrong.
-				CS_FATAL_LOG("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
+				CS_LOG_FATAL("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
 			}
 #endif
 #ifdef TARGET_ANDROID
@@ -112,7 +112,7 @@ namespace ChilliSource
         {
 			mbInvalidateAllCaches = true;
 			
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
             if([EAGLContext currentContext] != mContext)
             {
                 [EAGLContext setCurrentContext:mContext];
@@ -538,7 +538,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CRenderSystem::BeginFrame(Rendering::RenderTarget* inpActiveRenderTarget)
 		{
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
             //Sometimes iOS steals the context and doesn't return it.
             if([EAGLContext currentContext] != mContext)
             {
@@ -546,7 +546,7 @@ namespace ChilliSource
             }
 #endif
             
-#ifdef DEBUG
+#ifdef CS_ENABLE_DEBUG
 			CheckForGLErrors();
 #endif
 			if (inpActiveRenderTarget != nullptr)
@@ -596,7 +596,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CRenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4x4& inmatWorld)
 		{
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
             DebugStats::AddToEvent("DrawCalls", 1u);
 			DebugStats::AddToEvent("Verts", inudwNumVerts);
 #endif
@@ -631,7 +631,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CRenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4x4& inmatWorld)
 		{
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
             DebugStats::AddToEvent("DrawCalls", 1u);
 #endif
 
@@ -666,7 +666,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CRenderSystem::EndFrame(Rendering::RenderTarget* inpActiveRenderTarget)
 		{
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
             if (mpDefaultRenderTarget != nullptr && mpDefaultRenderTarget == inpActiveRenderTarget)
             {
                 CRenderTarget::PresentDefaultRenderTarget(mContext, mpDefaultRenderTarget);
@@ -690,7 +690,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CRenderSystem::ResizeFrameBuffer(u32 inudwWidth, u32 inudwHeight)
 		{
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
             if(mudwViewWidth != inudwWidth || mudwViewHeight != inudwHeight)
             {
                 if(mpDefaultRenderTarget)
@@ -971,7 +971,7 @@ namespace ChilliSource
 						break;
 					case Rendering::AlphaBlend::k_unknown:
 					default:
-						CS_ERROR_LOG("Open GL ES Unknown blend function");
+						CS_LOG_ERROR("Open GL ES Unknown blend function");
 						break;
 				};
                 
@@ -1004,7 +1004,7 @@ namespace ChilliSource
 						break;
 					case Rendering::AlphaBlend::k_unknown:
 					default:
-						CS_ERROR_LOG("Open GL ES Unknown blend function");
+						CS_LOG_ERROR("Open GL ES Unknown blend function");
 						break;
 				};
 				
@@ -1117,7 +1117,7 @@ namespace ChilliSource
 			//Check we don't exceed the GL limits of this device
 			if(udwAttributeCount > (u32)mdwMaxVertAttribs)
 			{
-				CS_FATAL_LOG("OpenGL ES 2.0: Shader exceeds maximum vertex attributes " + Core::ToString(mdwMaxVertAttribs));
+				CS_LOG_FATAL("OpenGL ES 2.0: Shader exceeds maximum vertex attributes " + Core::ToString(mdwMaxVertAttribs));
 			}
 			
             // Enable and disable the vertex attribs that have changed
@@ -1178,7 +1178,7 @@ namespace ChilliSource
 				case Rendering::PrimitiveType::k_line:
 					return GL_LINES;
 				default:
-					CS_ERROR_LOG("Invalid primitive type OpenGLES");
+					CS_LOG_ERROR("Invalid primitive type OpenGLES");
 					return -1;
 			}
 		}
@@ -1276,25 +1276,25 @@ namespace ChilliSource
 				switch (*it)
 				{
                     case GL_NO_ERROR:
-                        CS_ERROR_LOG("GL_NO_ERROR -> Somethings gone wrong, this should not be getting reported as an error.");
+                        CS_LOG_ERROR("GL_NO_ERROR -> Somethings gone wrong, this should not be getting reported as an error.");
                         break;
                     case GL_INVALID_ENUM:
-                        CS_ERROR_LOG("GL_INVALID_ENUM -> An unacceptable value is specified for an enumerated argument. The offending command is ignored and has no other side effect than to set the error flag.");
+                        CS_LOG_ERROR("GL_INVALID_ENUM -> An unacceptable value is specified for an enumerated argument. The offending command is ignored and has no other side effect than to set the error flag.");
                         break;
                     case GL_INVALID_VALUE:
-                        CS_ERROR_LOG("GL_INVALID_VALUE -> A numeric argument is out of range. The offending command is ignored and has no other side effect than to set the error flag.");
+                        CS_LOG_ERROR("GL_INVALID_VALUE -> A numeric argument is out of range. The offending command is ignored and has no other side effect than to set the error flag.");
                         break;
                     case GL_INVALID_OPERATION:
-                        CS_ERROR_LOG("GL_INVALID_OPERATION -> The specified operation is not allowed in the current state. The offending command is ignored and has no other side effect than to set the error flag.");
+                        CS_LOG_ERROR("GL_INVALID_OPERATION -> The specified operation is not allowed in the current state. The offending command is ignored and has no other side effect than to set the error flag.");
                         break;
                     case GL_INVALID_FRAMEBUFFER_OPERATION:
-                        CS_ERROR_LOG("GL_INVALID_FRAMEBUFFER_OPERATION -> The command is trying to render to or read from the framebuffer while the currently bound framebuffer is not framebuffer complete (i.e. the return value from glCheckFramebufferStatus is not GL_FRAMEBUFFER_COMPLETE). The offending command is ignored and has no other side effect than to set the error flag.");
+                        CS_LOG_ERROR("GL_INVALID_FRAMEBUFFER_OPERATION -> The command is trying to render to or read from the framebuffer while the currently bound framebuffer is not framebuffer complete (i.e. the return value from glCheckFramebufferStatus is not GL_FRAMEBUFFER_COMPLETE). The offending command is ignored and has no other side effect than to set the error flag.");
                         break;
                     case GL_OUT_OF_MEMORY:
-                        CS_ERROR_LOG("GL_OUT_OF_MEMORY -> There is not enough memory left to execute the command. The state of the GL is undefined, except for the state of the error flags, after this error is recorded.");
+                        CS_LOG_ERROR("GL_OUT_OF_MEMORY -> There is not enough memory left to execute the command. The state of the GL is undefined, except for the state of the error flags, after this error is recorded.");
                         break;
                     default:
-                        CS_ERROR_LOG("Something's gone wrong, unknown GL error code.");
+                        CS_LOG_ERROR("Something's gone wrong, unknown GL error code.");
                         break;
 				}
 			}
@@ -1304,7 +1304,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CRenderSystem::Destroy()
 		{
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
             if(mpDefaultRenderTarget)
             {
                 CRenderTarget::DestroyDefaultRenderTarget(mContext, mpDefaultRenderTarget);

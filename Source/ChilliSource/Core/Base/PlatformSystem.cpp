@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
 #   include <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
 #elif defined TARGET_ANDROID
 #   include <ChilliSource/Backend/Platform/Android/PlatformSystem.h>
@@ -24,7 +24,7 @@ namespace ChilliSource
         //-----------------------------------------
         PlatformSystem* PlatformSystem::Create()
         {
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
             return new iOS::CPlatformSystem();
 #elif defined TARGET_ANDROID
             return new Android::CPlatformSystem();

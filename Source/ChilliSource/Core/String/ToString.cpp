@@ -221,7 +221,7 @@ namespace ChilliSource
             }
         }
         
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
         //---------------------------------------------------------
         //---------------------------------------------------------
         std::string ToString(size_t in_value)

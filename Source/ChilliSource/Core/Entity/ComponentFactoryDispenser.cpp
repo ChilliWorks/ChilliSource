@@ -72,7 +72,7 @@ namespace ChilliSource
                 }
 			}
 			
-			CS_WARNING_LOG("Application cannot find factory producing: " + insName);
+			CS_LOG_WARNING("Application cannot find factory producing: " + insName);
 			return nullptr;
         }
         //--------------------------------------------------------------------------------------------------
@@ -92,7 +92,7 @@ namespace ChilliSource
                 }
 			}
 			
-			CS_WARNING_LOG("Application cannot find factory for interface ID: " + ToString(inInterfaceID));
+			CS_LOG_WARNING("Application cannot find factory for interface ID: " + ToString(inInterfaceID));
 			return nullptr;
         }
         //--------------------------------------------------------------------------------------------------
@@ -112,7 +112,7 @@ namespace ChilliSource
                 }
 			}
             
-            CS_WARNING_LOG("Cannot find component producer for interface ID: " + ToString(inInterfaceID));
+            CS_LOG_WARNING("Cannot find component producer for interface ID: " + ToString(inInterfaceID));
             return nullptr;
         }
         //--------------------------------------------------------------------

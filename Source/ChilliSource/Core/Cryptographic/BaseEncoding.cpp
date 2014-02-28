@@ -325,7 +325,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                    CS_ERROR_LOG("Invalid hex value of \""+ToString(*inpHex)+"\"");
+                    CS_LOG_ERROR("Invalid hex value of \""+ToString(*inpHex)+"\"");
                 }
                 
                 return -1;

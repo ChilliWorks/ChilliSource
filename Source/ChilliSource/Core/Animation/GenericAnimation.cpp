@@ -96,7 +96,7 @@ namespace ChilliSource
                     break;
 
                 default :
-                    CS_FATAL_LOG("Cannot play animation with given mode");
+                    CS_LOG_FATAL("Cannot play animation with given mode");
                     break;
             }
 
@@ -122,10 +122,10 @@ namespace ChilliSource
         }
         void Animation::Update(f32 infDT)
         {
-    #if DEBUG
+#if CS_ENABLE_DEBUG
             if(infDT > 0.2f)
                 infDT = 0.2f;
-    #endif
+#endif
             //Return if not playing
             if (!mbPlaying)
             {

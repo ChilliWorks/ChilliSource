@@ -9,7 +9,7 @@
 
 #include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
 
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
 #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookAuthentication.h>
 #elif TARGET_ANDROID
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthentication.h>
@@ -23,7 +23,7 @@ namespace ChilliSource
         
         FacebookAuthenticationSystem* FacebookAuthenticationSystem::CreateSystem()
         {
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
             return new ChilliSource::iOS::CFacebookAuthenticationSystem();
 #elif TARGET_ANDROID
             return new ChilliSource::Android::CFacebookAuthenticationSystem();

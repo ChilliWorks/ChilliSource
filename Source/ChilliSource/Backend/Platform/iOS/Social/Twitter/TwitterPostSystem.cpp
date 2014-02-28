@@ -77,10 +77,10 @@ namespace ChilliSource
 				}
 				else
 				{
-					CS_DEBUG_LOG("CTwitterPostSystem::Authenticate() - Unable to get OAuth token!");
+					CS_LOG_DEBUG("CTwitterPostSystem::Authenticate() - Unable to get OAuth token!");
 					return false;
 				}
-				CS_DEBUG_LOG("CTwitterPostSystem::Authenticate() - Got request token URL of \""+strAuthoiseURL+"\"");
+				CS_LOG_DEBUG("CTwitterPostSystem::Authenticate() - Got request token URL of \""+strAuthoiseURL+"\"");
 				bResult = false;
 			}
 			else
@@ -88,7 +88,7 @@ namespace ChilliSource
 				// We have keys, so set them and rock on!
 				mpOAuthSystem->SetOAuthTokenKey(mstrSavedOAuthTokenKey);
 				mpOAuthSystem->SetOAuthTokenSecret(mstrSavedOAuthTokenSecret);
-				CS_DEBUG_LOG("CTwitterPostSystem::Authenticate() - Set OAuth key token \""+mstrSavedOAuthTokenKey+"\" and OAuth secret token \""+mstrSavedOAuthTokenSecret+"\"");
+				CS_LOG_DEBUG("CTwitterPostSystem::Authenticate() - Set OAuth key token \""+mstrSavedOAuthTokenKey+"\" and OAuth secret token \""+mstrSavedOAuthTokenSecret+"\"");
 				bResult = true;
 			}
 			
@@ -156,7 +156,7 @@ namespace ChilliSource
                         bImageAttached = [pComposeViewController addImage:pImage];
                         if(!bImageAttached)
                         {
-                            CS_ERROR_LOG("CTwitterPostSystem::TryPostUsingiOS - Failed to attach image to tweet, most likely because limit has been reached");
+                            CS_LOG_ERROR("CTwitterPostSystem::TryPostUsingiOS - Failed to attach image to tweet, most likely because limit has been reached");
                         }
                     }
                 }
@@ -256,7 +256,7 @@ namespace ChilliSource
 			// User has cancelled
 			if(mpAuthenticationView)
 			{
-				CS_SAFE_DELETE(mpAuthenticationView);
+				CS_SAFEDELETE(mpAuthenticationView);
 			}
 		}
     }

@@ -325,8 +325,8 @@ namespace ChilliSource
             {
                 if (mbOwnsData)
                 {
-                    CS_SAFE_DELETE(mpafKeyframeTimes);
-                    CS_SAFE_DELETE(mpaKeyValues);
+                    CS_SAFEDELETE(mpafKeyframeTimes);
+                    CS_SAFEDELETE(mpaKeyValues);
                 }
             }
             

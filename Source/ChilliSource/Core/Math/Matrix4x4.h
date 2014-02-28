@@ -16,7 +16,7 @@
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector4.h>
 
-#if defined TARGET_OS_IPHONE && defined ENABLE_QUICK_MATH
+#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
     #include <Accelerate/Accelerate.h>
 #endif
 
@@ -111,7 +111,7 @@ namespace ChilliSource
 		
 		inline void Matrix4x4::Multiply(const Matrix4x4* inp1, const Matrix4x4* inp2, Matrix4x4* outp3)
         {
-#if defined TARGET_OS_IPHONE && defined ENABLE_QUICK_MATH
+#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
             CS_ASSERT(inp1 != outp3 && inp2 != outp3, "The input matrices must differ from the output Matrix (see vDSP_mmul difference between iOS6 and iOS7)");
             vDSP_mmul(const_cast<f32*>(inp1->m), 1, const_cast<f32*>(inp2->m), 1, outp3->m, 1, 4, 4, 4);
 #else

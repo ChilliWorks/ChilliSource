@@ -48,7 +48,7 @@ namespace ChilliSource
 			ErrorCheck(mpFMODEventSystem->getSystemObject(&mpFMODSystem));
 			
 			//Initialise the system with the number of virtual channels
-#ifdef FMOD_IOS_PLAYANDRECORD
+#ifdef CS_ENABLE_FMODIOSPLAYANDRECORD
             FMOD_IPHONE_EXTRADRIVERDATA driverData;
             driverData.forceSpeakerOutput = true;
             driverData.forceMixWithOthers = false;
@@ -251,7 +251,7 @@ namespace ChilliSource
 		{
 			if(ineResult != FMOD_OK)
 			{
-				CS_FATAL_LOG("FMOD error: " + std::string(FMOD_ErrorString(ineResult)));
+				CS_LOG_FATAL("FMOD error: " + std::string(FMOD_ErrorString(ineResult)));
 			}
 		}
 		//-------------------------------------------------------
@@ -285,8 +285,8 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		CFMODSystem::~CFMODSystem()
 		{
-            CS_SAFE_DELETE(mpAudioComponentFactory);
-			CS_SAFE_DELETE(mpAudioManager);
+            CS_SAFEDELETE(mpAudioComponentFactory);
+			CS_SAFEDELETE(mpAudioManager);
 			Destroy();
 		}
 	}

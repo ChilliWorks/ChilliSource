@@ -108,7 +108,7 @@ namespace ChilliSource
             /// @param Touch data
             //-----------------------------------------------------------
             void OnTouchEnded(const Input::TouchInfo & insTouchInfo);
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
             //-----------------------------------------------------
 			/// Draw
 			///

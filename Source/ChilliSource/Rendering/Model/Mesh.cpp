@@ -14,7 +14,7 @@
 #include <limits>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
@@ -191,7 +191,7 @@ namespace ChilliSource
                 const MaterialSPtr& pMaterial = inMaterials[udwCurrMaterial];
                 udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
 					
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
                 DebugStats::AddToEvent("Meshes", 1);
 #endif
                 (*it)->Render(inpRenderSystem, inmatWorld, pMaterial, inpAnimationGroup);
@@ -204,7 +204,7 @@ namespace ChilliSource
                 const MaterialSPtr& pMaterial = inMaterials[udwCurrMaterial];
                 udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
 				
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
                 DebugStats::AddToEvent("Meshes_Trans", 1);
 #endif
                 (*it)->Render(inpRenderSystem, inmatWorld, pMaterial, inpAnimationGroup);

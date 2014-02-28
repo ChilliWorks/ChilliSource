@@ -20,7 +20,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Base
         //---------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(WebViewActivity);
+        CS_FORWARDDECLARE_CLASS(WebViewActivity);
     }
 }
 
