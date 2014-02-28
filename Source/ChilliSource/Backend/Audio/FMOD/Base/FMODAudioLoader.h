@@ -20,7 +20,7 @@
 
 namespace ChilliSource
 {
-	namespace iOS
+	namespace FMOD
 	{
         class CFMODSystem;
         

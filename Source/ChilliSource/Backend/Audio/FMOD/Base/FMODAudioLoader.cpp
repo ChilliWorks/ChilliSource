@@ -18,7 +18,7 @@
 
 namespace ChilliSource
 {
-	namespace iOS
+	namespace FMOD
 	{
 		const std::string kstrWAVExtension("wav");
 		const std::string kstrAACExtension("aac");

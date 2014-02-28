@@ -182,9 +182,9 @@ namespace ChilliSource
             inaSystems.push_back(Core::SystemSPtr(pInputSystem));
             Core::Application::SetInputSystem(pInputSystem);
             
-            Audio::AudioSystem * pAudioSystem = new iOS::CFMODSystem();
+            Audio::AudioSystem * pAudioSystem = new FMOD::CFMODSystem();
 			inaSystems.push_back(Core::SystemSPtr(pAudioSystem));
-			inaSystems.push_back(Core::SystemSPtr(new iOS::CFMODAudioLoader(pAudioSystem)));
+			inaSystems.push_back(Core::SystemSPtr(new FMOD::CFMODAudioLoader(pAudioSystem)));
 			Core::Application::SetAudioSystem(pAudioSystem);
             
 			//create other important systems

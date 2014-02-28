@@ -19,7 +19,7 @@
 
 namespace ChilliSource
 {
-	namespace iOS
+	namespace FMOD
 	{
 		class CFMODAudioComponentFactory : public Audio::AudioComponentFactory
 		{

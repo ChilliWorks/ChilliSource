@@ -21,7 +21,7 @@
 
 namespace ChilliSource 
 {
-	namespace iOS
+	namespace FMOD
 	{
 		class CFMODAudioResource : public Audio::AudioResource 
 		{
@@ -49,7 +49,7 @@ namespace ChilliSource
             //----------------------------------------------------------
             void SetLooping(bool inbShouldLoop) override;
             
-			FMOD::Sound* mpFMODSound;
+			::FMOD::Sound* mpFMODSound;
 		};
 	}
 }

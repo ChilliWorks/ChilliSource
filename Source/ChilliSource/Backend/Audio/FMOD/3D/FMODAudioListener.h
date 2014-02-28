@@ -21,12 +21,12 @@
 
 namespace ChilliSource
 {
-	namespace iOS
+	namespace FMOD
 	{
 		class CFMODAudioListener : public Audio::AudioListener
 		{
 		public:
-			CFMODAudioListener(FMOD::System* inpFMODSystem);
+			CFMODAudioListener(::FMOD::System* inpFMODSystem);
 			virtual ~CFMODAudioListener(){}
 			
 			//------------------------------------------------------------
@@ -44,7 +44,7 @@ namespace ChilliSource
 			
 		private:
 			
-			FMOD::System* mpFMODSystem;
+			::FMOD::System* mpFMODSystem;
 		};
 		
 		typedef std::shared_ptr<CFMODAudioListener> FMODAudioListenerPtr;

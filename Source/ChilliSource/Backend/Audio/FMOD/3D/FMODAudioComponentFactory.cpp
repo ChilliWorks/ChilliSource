@@ -17,7 +17,7 @@
 
 namespace ChilliSource
 {
-	namespace iOS
+	namespace FMOD
 	{
         CS_DEFINE_NAMEDTYPE(CFMODAudioComponentFactory);
 

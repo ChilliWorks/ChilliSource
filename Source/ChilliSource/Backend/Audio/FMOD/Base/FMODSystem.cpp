@@ -22,11 +22,13 @@
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
 
+#ifdef CS_TARGETPLATFORM_IOS
 #include <fmodiphone.h>
+#endif
 
 namespace ChilliSource
 {
-	namespace iOS
+	namespace FMOD
 	{
 		//-------------------------------------------------------
 		/// Constructor
@@ -42,7 +44,7 @@ namespace ChilliSource
             m_appLowMemoryConnection = Core::ApplicationEvents::GetLowMemoryEvent().OpenConnection(Core::MakeDelegate(this, &CFMODSystem::OnApplicationMemoryWarning));
 			
 			//Create the FMOD event system
-			ErrorCheck(FMOD::EventSystem_Create(&mpFMODEventSystem));
+			ErrorCheck(::FMOD::EventSystem_Create(&mpFMODEventSystem));
 			
 			//Get the FMOD system
 			ErrorCheck(mpFMODEventSystem->getSystemObject(&mpFMODSystem));
@@ -87,7 +89,7 @@ namespace ChilliSource
 		{
             if(mpFMODEventProject)
             {
-                FMOD::EventGroup * pcEventRelease = nullptr;
+                ::FMOD::EventGroup * pcEventRelease = nullptr;
                 u32 udwGroupID = 0;
                 
                 // get all groups and free them
@@ -108,7 +110,7 @@ namespace ChilliSource
 		{
             if(mpFMODEventProject)
             {
-                FMOD::EventGroup * pcEventRelease = nullptr;
+                ::FMOD::EventGroup * pcEventRelease = nullptr;
                 
                 // get groups and free it
                 if(mpFMODEventProject->getGroup(instrEventGroup.c_str(), false, &pcEventRelease) == FMOD_OK)
@@ -128,7 +130,7 @@ namespace ChilliSource
 		{
 			if(mpFMODEventProject != nullptr)
 			{	
-				FMOD::EventGroup * pPreloadGroup = nullptr;
+				::FMOD::EventGroup * pPreloadGroup = nullptr;
 				mpFMODEventProject->getGroup(instrGroupName.c_str(), true, &pPreloadGroup);
 			}
 		}
@@ -193,7 +195,7 @@ namespace ChilliSource
 		void CFMODSystem::PlaySound(Audio::AudioComponent* inpAudioComponent)
 		{
 			//We let FMOD manages the channels 
-			FMOD::Channel* pActiveChannel = nullptr;
+			::FMOD::Channel* pActiveChannel = nullptr;
 			ErrorCheck(mpFMODSystem->playSound(FMOD_CHANNEL_FREE, std::static_pointer_cast<CFMODAudioResource>(inpAudioComponent->GetAudioSource())->mpFMODSound, false, &pActiveChannel));
 			
 			//Give the sound it's channel so we can query the state
@@ -206,11 +208,11 @@ namespace ChilliSource
 		///
 		/// @param name of event
 		//-------------------------------------------------------
-		FMOD::Event* CFMODSystem::PlayEvent(const std::string& instrEventName)
+		::FMOD::Event* CFMODSystem::PlayEvent(const std::string& instrEventName)
 		{
 			if(mpFMODEventProject != nullptr)
 			{
-				FMOD::Event * pEvent = nullptr;
+				::FMOD::Event * pEvent = nullptr;
 				ErrorCheck(mpFMODEventProject->getEvent(instrEventName.c_str(), FMOD_EVENT_DEFAULT, &pEvent));
                 
                 if(pEvent)

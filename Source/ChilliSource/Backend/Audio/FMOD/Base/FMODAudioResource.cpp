@@ -15,7 +15,7 @@
 
 namespace ChilliSource
 {
-	namespace iOS
+	namespace FMOD
 	{
 		//-------------------------------------------------
 		/// Constructor

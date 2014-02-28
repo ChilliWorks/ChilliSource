@@ -12,7 +12,7 @@
 
 namespace ChilliSource
 {
-    namespace iOS
+    namespace FMOD
     {
         //----------------------------------------------------
 		/// FMOD - On Channel Audio Complete Callback
@@ -28,10 +28,10 @@ namespace ChilliSource
 				case FMOD_CHANNEL_CALLBACKTYPE_END:
 				{
 					//Convert from the dodgy signature to our actual channel object
-					FMOD::Channel* pChannel = (FMOD::Channel*)inpChannel;
+					::FMOD::Channel* pChannel = (::FMOD::Channel*)inpChannel;
 					
 					//Grab the instance pointer so we can notify the correct resource 
-					ChilliSource::iOS::CFMODAudioComponent* pAudioResource = nullptr;
+					CFMODAudioComponent* pAudioResource = nullptr;
 					pChannel->getUserData((void**)&pAudioResource);
 					
 					//Now trigger the real callback
@@ -116,7 +116,7 @@ namespace ChilliSource
 		///
 		/// @param A handle to the channel that is playing us.
 		//---------------------------------------------------------------------
-		void CFMODAudioComponent::SetChannel(FMOD::Channel* inpChannel)
+		void CFMODAudioComponent::SetChannel(::FMOD::Channel* inpChannel)
 		{
             if (mpFMODChannel != nullptr)
             {

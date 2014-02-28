@@ -21,7 +21,7 @@
 
 namespace ChilliSource
 {
-	namespace iOS
+	namespace FMOD
 	{
 		const u32 kudwMaxFMODChannels = 32;
 		
@@ -119,7 +119,7 @@ namespace ChilliSource
 			///
 			/// @param name of event
 			//-------------------------------------------------------
-			FMOD::Event * PlayEvent(const std::string& instrEventName);
+			::FMOD::Event * PlayEvent(const std::string& instrEventName);
 			//-------------------------------------------------------
 			/// Update
 			///
@@ -145,7 +145,7 @@ namespace ChilliSource
 			///
 			/// @return FMOD Event System
 			//-------------------------------------------------------
-            FMOD::EventSystem* GetFMODEventSystem() { return mpFMODEventSystem; }
+            ::FMOD::EventSystem* GetFMODEventSystem() { return mpFMODEventSystem; }
             
 		private:
             //-------------------------------------------------------
@@ -166,9 +166,9 @@ namespace ChilliSource
 			
 		private:
 			
-			FMOD::System* mpFMODSystem;
-			FMOD::EventSystem* mpFMODEventSystem;
-			FMOD::EventProject* mpFMODEventProject;
+			::FMOD::System* mpFMODSystem;
+			::FMOD::EventSystem* mpFMODEventSystem;
+			::FMOD::EventProject* mpFMODEventProject;
             
             Core::ConnectionUPtr m_appLowMemoryConnection;
 		};

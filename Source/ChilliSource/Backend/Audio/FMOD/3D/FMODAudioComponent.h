@@ -17,7 +17,7 @@
 
 namespace ChilliSource
 {
-    namespace iOS
+    namespace FMOD
     {
         class CFMODAudioComponent : public Audio::AudioComponent
         {
@@ -91,11 +91,11 @@ namespace ChilliSource
 			///
 			/// @param A handle to the channel that is playing us.
 			//---------------------------------------------------------------------
-			void SetChannel(FMOD::Channel* inpChannel);
+			void SetChannel(::FMOD::Channel* inpChannel);
             
         private:
             
-			FMOD::Channel* mpFMODChannel;
+			::FMOD::Channel* mpFMODChannel;
             
             friend FMOD_RESULT F_CALLBACK OnChannelAudioCompleteCallback(FMOD_CHANNEL* inpChannel, FMOD_CHANNEL_CALLBACKTYPE type, void *commanddata1, void *commanddata2);
         };

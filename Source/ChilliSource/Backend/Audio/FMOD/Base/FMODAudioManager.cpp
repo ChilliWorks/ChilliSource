@@ -12,7 +12,7 @@
 
 namespace ChilliSource
 {
-	namespace iOS
+	namespace FMOD
 	{
 		//-----------------------------------------------------------------
 		/// Create Audio Resource

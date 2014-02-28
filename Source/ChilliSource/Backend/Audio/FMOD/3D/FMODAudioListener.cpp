@@ -14,14 +14,14 @@
 
 namespace ChilliSource
 {
-	namespace iOS
+	namespace FMOD
 	{
 		//------------------------------------------------------------
 		/// Constructor
 		///
 		/// @param FMOD system
 		//------------------------------------------------------------
-		CFMODAudioListener::CFMODAudioListener(FMOD::System* inpFMODSystem) : mpFMODSystem(inpFMODSystem)
+		CFMODAudioListener::CFMODAudioListener(::FMOD::System* inpFMODSystem) : mpFMODSystem(inpFMODSystem)
 		{
 		}
 		//------------------------------------------------------------
