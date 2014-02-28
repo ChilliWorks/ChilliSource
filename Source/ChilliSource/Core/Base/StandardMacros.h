@@ -49,4 +49,6 @@
     typedef std::shared_ptr<const in_className> in_className##CSPtr;    \
     typedef std::weak_ptr<const in_className> in_className##CWPtr;
 
+
+
 #endif

@@ -96,7 +96,7 @@ namespace ChilliSource
         //----------------------------------------------
         void Logging::LogVerbose(const std::string &instrMessage)
         {
-#if LOG_LEVEL == LOG_VERBOSE
+#ifdef CS_LOGLEVEL_VERBOSE
 #ifdef TARGET_ANDROID
             CS_ANDROID_LOG_DEBUG(instrMessage.c_str());
 #elif CS_TARGETPLATFORM_IOS
@@ -130,7 +130,7 @@ namespace ChilliSource
         //----------------------------------------------
         void Logging::LogWarning(const std::string &instrMessage)
         {
-#if LOG_LEVEL <= LOG_WARNING
+#ifdef CS_LOGLEVEL_WARNING
 #ifdef TARGET_ANDROID
             CS_ANDROID_LOG_WARNING(("WARNING: " + instrMessage).c_str());
 #elif CS_TARGETPLATFORM_IOS
@@ -164,7 +164,7 @@ namespace ChilliSource
         //----------------------------------------------
         void Logging::LogError(const std::string &instrMessage)
         {
-#if LOG_LEVEL <= LOG_ERROR
+#if CS_LOGLEVEL_ERROR
 #ifdef TARGET_ANDROID
             CS_ANDROID_LOG_ERROR(("ERROR: " + instrMessage).c_str());
 #elif CS_TARGETPLATFORM_IOS
