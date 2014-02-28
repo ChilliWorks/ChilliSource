@@ -8,15 +8,15 @@
 */
 
 #include <ChilliSource/Backend/Platform/Windows/FileIO/FileSystemWindows.h>
-#include <ChilliSource/Core/File/FileStream.h>
 
 #include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
-#include <ChilliSource/Core/boost/filesystem.hpp>
+//This includes windows so needs to come after other engine includes, else it might cause problems with other includes
+#include <ChilliSource/Backend/Platform/Windows/FileIO/WindowsFileUtils.h>
 
 #include <iostream>
-
 #include <windows.h>
 #include <shlobj.h>
 
@@ -66,7 +66,7 @@ namespace ChilliSource
 		Core::FileStreamSPtr CFileSystem::CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const
 		{
 			//create the file stream
-			Core::FileStreamSPtr newFilestream = Core::FileStreamSPtr(new Core::IFileStream());
+			Core::FileStreamSPtr newFilestream = Core::FileStreamSPtr(new Core::FileStream());
 
 			//check the requested storage location is available
 			if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -79,7 +79,7 @@ namespace ChilliSource
 			std::string filepath = GetStorageLocationDirectory(ineStorageLocation) + instrFilepath;
 
 			//if this is not a read stream, insure that the storage location is writable.
-			if (ineFileMode != Core::FM_READ && ineFileMode != Core::FileMode::k_readBinary)
+			if (ineFileMode != Core::FileMode::k_read && ineFileMode != Core::FileMode::k_readBinary)
 			{
 				if (IsStorageLocationWritable(ineStorageLocation) == false)
 				{
@@ -230,10 +230,13 @@ namespace ChilliSource
             CreateDirectory(ineDestinationStorageLocation, strPath);
             
             //try and copy the files
-            boost::filesystem::path SrcPath(strSrcPath);
-            boost::filesystem::path DstPath(GetStorageLocationDirectory(ineDestinationStorageLocation) + instrDestinationFilepath);
-            boost::filesystem::copy_file(SrcPath, DstPath, boost::filesystem::copy_option::overwrite_if_exists);
-            return boost::filesystem::exists(DstPath);
+			std::string destPath = GetStorageLocationDirectory(ineDestinationStorageLocation) + instrDestinationFilepath;
+			if (WindowsFileUtils::WindowsCopyFile(strSrcPath.c_str(), destPath.c_str(), FALSE) == FALSE)
+			{
+				return false;
+			}
+
+			return false;
 		}
 		//--------------------------------------------------------------
 		/// Copy Directory
@@ -310,8 +313,8 @@ namespace ChilliSource
 			}
 
 			//remove the file
-			boost::filesystem::path DstPath(GetStorageLocationDirectory(ineStorageLocation) + instrFilepath);
-			boost::filesystem::remove(DstPath);
+			std::string filename = GetStorageLocationDirectory(ineStorageLocation) + instrFilepath;
+			WindowsFileUtils::WindowsDeleteFile(filename.c_str());
 
 			//return successful
 			return true;
@@ -336,8 +339,8 @@ namespace ChilliSource
 			}
 
 			//remove the directory
-			boost::filesystem::path DstPath(GetStorageLocationDirectory(ineStorageLocation) + instrDirectory);
-			boost::filesystem::remove(DstPath);
+			std::string directory = GetStorageLocationDirectory(ineStorageLocation) + instrDirectory;
+			WindowsFileUtils::WindowsRemoveDirectory(directory.c_str());
 
 			//return successful
 			return true;

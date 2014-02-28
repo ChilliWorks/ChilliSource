@@ -28,7 +28,7 @@ namespace ChilliSource
 		/// This class should be used over fstream in order to insure cross platform
 		/// compatability.
 		//--------------------------------------------------------------------------------------------------
-		class CFileSystem : public Core::IFileSystem
+		class CFileSystem : public Core::FileSystem
 		{
 		public:
 			CFileSystem();

@@ -26,7 +26,7 @@ void ReadPngData(png_structp png_ptr, png_bytep data, png_size_t length)
 	if (png_ptr == NULL)
 		return;
 
-	ChilliSource::Core::IFileStream* pStream = (ChilliSource::Core::IFileStream*)png_get_io_ptr(png_ptr);
+	ChilliSource::Core::FileStream* pStream = (ChilliSource::Core::FileStream*)png_get_io_ptr(png_ptr);
 	pStream->Read((s8*)data, length);
 
 	if (pStream->IsBad() == true)
