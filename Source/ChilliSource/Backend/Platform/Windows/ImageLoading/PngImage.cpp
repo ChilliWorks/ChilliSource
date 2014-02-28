@@ -50,7 +50,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------------------------------
-		CPngImage::CPngImage(Core::STORAGE_LOCATION ineLocation, const std::string& instrFilename)
+		CPngImage::CPngImage(Core::StorageLocation ineLocation, const std::string& instrFilename)
 		{
 			mbIsLoaded = false;
 			mdwHeight = -1;
@@ -77,7 +77,7 @@ namespace ChilliSource
 		/// @param std::string instrFilename - the path to the file relative to either
 		///									   documents or the package.
 		//----------------------------------------------------------------------------------
-		void CPngImage::Load(Core::STORAGE_LOCATION ineLocation, const std::string& instrFilename)
+		void CPngImage::Load(Core::StorageLocation ineLocation, const std::string& instrFilename)
 		{
 			//create the file stream
 			ChilliSource::Core::FileStreamPtr stream = ChilliSource::Core::Application::GetFileSystemPtr()->CreateFileStream(ineLocation, instrFilename, ChilliSource::Core::FM_READ_BINARY);

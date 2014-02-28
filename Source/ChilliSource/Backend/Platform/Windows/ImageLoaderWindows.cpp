@@ -61,7 +61,7 @@ namespace ChilliSource
 		/// @param Out: Resource
 		/// @return Success
 		//----------------------------------------------------------------
-		bool ImageLoader::CreateResourceFromFile(Core::STORAGE_LOCATION ineLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
+		bool ImageLoader::CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourcePtr& outpResource)
 		{
 			//Based on the extension decide how to load the file
 			return CreateImageFromFile(ineLocation, inFilePath, Core::CImage::FORMAT_DEFAULT, outpResource);
@@ -75,7 +75,7 @@ namespace ChilliSource
 		/// @param Out: Resource
 		/// @return Sucess
 		//----------------------------------------------------------------
-		bool ImageLoader::CreateImageFromFile(Core::STORAGE_LOCATION ineLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
+		bool ImageLoader::CreateImageFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
 		{
             Core::FileStreamPtr pImageFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath, Core::FM_READ_BINARY);
 	
@@ -110,7 +110,7 @@ namespace ChilliSource
 		/// @param Out: Image data
 		/// @return Success
 		//----------------------------------------------------------------
-		bool ImageLoader::CreatePNGImageFromFile(Core::STORAGE_LOCATION ineLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::CImage* outpImage)
+		bool ImageLoader::CreatePNGImageFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::CImage* outpImage)
 		{
 			ChilliSource::Windows::CPngImage image;
 			image.Load(ineLocation, inFilePath);

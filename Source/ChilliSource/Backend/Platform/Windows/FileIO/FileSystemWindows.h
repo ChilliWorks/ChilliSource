@@ -45,9 +45,9 @@ namespace ChilliSource
 			///
 			/// @param The storage location 
 			/// @param The filepath relative to the storage location
-			/// @param FILE_MODEL ineMode The file mode. The file can be opened as read or write.
+			/// @param FileModeL ineMode The file mode. The file can be opened as read or write.
 			//--------------------------------------------------------------------------------------------------
-			Core::FileStreamPtr CreateFileStream(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFilename, Core::FILE_MODE ineMode) const;
+			Core::FileStreamPtr CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilename, Core::FileMode ineMode) const;
 			//--------------------------------------------------------------
             /// Create File
             ///
@@ -60,7 +60,7 @@ namespace ChilliSource
             /// @param Data size
 			/// @return Success
             //--------------------------------------------------------------
-			bool CreateFile(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const;
+			bool CreateFile(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const;
 			//--------------------------------------------------------------
             /// Create Directory
             ///
@@ -70,7 +70,7 @@ namespace ChilliSource
             /// @param The filepath relative to the storage location
 			/// @return Success
             //--------------------------------------------------------------
-			bool CreateDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory) const;
+			bool CreateDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const;
 			//--------------------------------------------------------------
 			/// Copy File
 			///
@@ -82,8 +82,8 @@ namespace ChilliSource
 			/// @param The destination filepath
 			/// @return Whether or not the file was copied
 			//--------------------------------------------------------------
-			bool CopyFile(Core::STORAGE_LOCATION ineSourceLocation, const std::string& instrSourcePath, 
-							Core::STORAGE_LOCATION ineDestLocation, const std::string& instrDestPath) const;
+			bool CopyFile(Core::StorageLocation ineSourceLocation, const std::string& instrSourcePath, 
+							Core::StorageLocation ineDestLocation, const std::string& instrDestPath) const;
 			//--------------------------------------------------------------
 			/// Copy Directory
 			///
@@ -95,8 +95,8 @@ namespace ChilliSource
 			/// @param The destination filepath
 			/// @return Whether or not the file was copied
 			//--------------------------------------------------------------
-			bool CopyDirectory(Core::STORAGE_LOCATION ineSourceLocation, const std::string& instrSourcePath, 
-							Core::STORAGE_LOCATION ineDestLocation, const std::string& instrDestPath) const;
+			bool CopyDirectory(Core::StorageLocation ineSourceLocation, const std::string& instrSourcePath, 
+							Core::StorageLocation ineDestLocation, const std::string& instrDestPath) const;
 			//--------------------------------------------------------------
 			/// Delete File
 			///
@@ -106,7 +106,7 @@ namespace ChilliSource
 			/// @param File path
 			/// @return Whether successfully deleted
 			//--------------------------------------------------------------
-			bool DeleteFile(Core::STORAGE_LOCATION ineLocation, const std::string& instrFilePath) const;
+			bool DeleteFile(Core::StorageLocation ineLocation, const std::string& instrFilePath) const;
 			//--------------------------------------------------------------
 			/// Delete Directory
 			///
@@ -116,7 +116,7 @@ namespace ChilliSource
 			/// @param File path
 			/// @return Whether successfully deleted
 			//--------------------------------------------------------------
-			bool DeleteDirectory(Core::STORAGE_LOCATION ineLocation, const std::string& instrFilePath) const;
+			bool DeleteDirectory(Core::StorageLocation ineLocation, const std::string& instrFilePath) const;
 			//--------------------------------------------------------------
             /// Get File Names With Extension In Directory
             ///
@@ -130,7 +130,7 @@ namespace ChilliSource
             /// @param The extension
             /// @param Output dynamic array containing the filenames.
             //--------------------------------------------------------------
-            void GetFileNamesWithExtensionInDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
+            void GetFileNamesWithExtensionInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
                                                       const std::string& instrExtension, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath = false) const;
 			//--------------------------------------------------------------
 			/// Get Path For Files With Name In Directory
@@ -145,7 +145,7 @@ namespace ChilliSource
 			/// @param The name
 			/// @param Output dynamic array containing the filenames.
 			//--------------------------------------------------------------
-			void GetPathForFilesWithNameInDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
+			void GetPathForFilesWithNameInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
 				const std::string& instrName, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath = false) const;
             //--------------------------------------------------------------
             /// Get File Names In Directory
@@ -158,7 +158,7 @@ namespace ChilliSource
             /// @param Flag to determine whether or not to recurse into sub directories
             /// @param Output dynamic array containing the filenames.
             //--------------------------------------------------------------
-            void GetFileNamesInDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
+            void GetFileNamesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
                                          std::vector<std::string> &outstrFileNames, bool inbAppendFullPath = false) const;
             //--------------------------------------------------------------
             /// Get Directories In Directory
@@ -171,7 +171,7 @@ namespace ChilliSource
             /// @param Flag to determine whether or not to recurse into sub directories
             /// @param Output dynamic array containing the dir names.
             //--------------------------------------------------------------
-            void GetDirectoriesInDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories, 
+            void GetDirectoriesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories, 
                                            std::vector<std::string> &outstrDirectories, bool inbAppendFullPath = false) const;
             //--------------------------------------------------------------
             /// Does File Exist
@@ -182,7 +182,7 @@ namespace ChilliSource
             /// @param The filepath
             /// @return Whether or not it exists.
             //--------------------------------------------------------------
-            bool DoesFileExist(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrFilepath) const;
+            bool DoesFileExist(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const;
 			//--------------------------------------------------------------
 			/// Does File Exist In Cached DLC
 			///
@@ -206,7 +206,7 @@ namespace ChilliSource
             /// @param The directory
             /// @return Whether or not it exists.
             //--------------------------------------------------------------
-            bool DoesDirectoryExist(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory) const;
+            bool DoesDirectoryExist(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const;
             //--------------------------------------------------------------
 			/// Is Storage Location Available
 			///
@@ -214,7 +214,7 @@ namespace ChilliSource
 			/// @return whether or not the storage location is available on
             ///         this device.
 			//--------------------------------------------------------------
-			bool IsStorageLocationAvailable(Core::STORAGE_LOCATION ineStorageLocation) const;
+			bool IsStorageLocationAvailable(Core::StorageLocation ineStorageLocation) const;
             //--------------------------------------------------------------
 			/// Get Storage Location Directory
 			///
@@ -222,7 +222,7 @@ namespace ChilliSource
 			/// @return The directory. returns an empty string if the location
             ///         is not available.
 			//--------------------------------------------------------------
-			std::string GetStorageLocationDirectory(Core::STORAGE_LOCATION ineStorageLocation) const;
+			std::string GetStorageLocationDirectory(Core::StorageLocation ineStorageLocation) const;
             //--------------------------------------------------------------
             /// Get Directory For DLC File
             ///

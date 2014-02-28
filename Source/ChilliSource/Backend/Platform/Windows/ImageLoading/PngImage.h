@@ -26,7 +26,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------------
 			/// Constructor
 			//----------------------------------------------------------------------------------
-			CPngImage(Core::STORAGE_LOCATION ineLocation, const std::string& instrFilename);
+			CPngImage(Core::StorageLocation ineLocation, const std::string& instrFilename);
 			//----------------------------------------------------------------------------------
 			/// Destructor
 			//----------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ namespace ChilliSource
 			/// @param std::string instrFilename - the path to the file relative to either
 			///									   documents or the package.
 			//----------------------------------------------------------------------------------
-			void Load(Core::STORAGE_LOCATION ineLocation, const std::string& instrFilename);
+			void Load(Core::StorageLocation ineLocation, const std::string& instrFilename);
 			//----------------------------------------------------------------------------------
 			/// Release
 			///
