@@ -80,7 +80,7 @@ namespace ChilliSource
 		void CPngImage::Load(Core::StorageLocation ineLocation, const std::string& instrFilename)
 		{
 			//create the file stream
-			ChilliSource::Core::FileStreamSPtr stream = ChilliSource::Core::Application::GetFileSystemPtr()->CreateFileStream(ineLocation, instrFilename, ChilliSource::Core::FM_READ_BINARY);
+			ChilliSource::Core::FileStreamSPtr stream = ChilliSource::Core::Application::GetFileSystemPtr()->CreateFileStream(ineLocation, instrFilename, ChilliSource::Core::FileMode::k_readBinary);
 
 			//insure the stream is not broken
 			if (stream == ChilliSource::Core::FileStreamSPtr() || stream->IsBad() == true || stream->IsOpen() == false)

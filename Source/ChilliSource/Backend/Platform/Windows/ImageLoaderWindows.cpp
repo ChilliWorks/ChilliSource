@@ -77,14 +77,14 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool ImageLoader::CreateImageFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
 		{
-            Core::FileStreamSPtr pImageFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath, Core::FM_READ_BINARY);
+            Core::FileStreamSPtr pImageFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath, Core::FileMode::k_readBinary);
 	
 			if(pImageFile && !pImageFile->IsBad())
 			{
                 std::string strName;
                 std::string strExtension;
                 
-                Core::CStringUtils::SplitBaseFilename(inFilePath, strName, strExtension);
+                Core::StringUtils::SplitBaseFilename(inFilePath, strName, strExtension);
                 
 				//Based on the extension decide how to load the file
 				std::string abyData;

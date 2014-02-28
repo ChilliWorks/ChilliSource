@@ -56,9 +56,9 @@ namespace ChilliSource
 			mstrDocumentsPath = strWorkingDir + "\\Documents\\";
 			mstrLibraryPath = strWorkingDir + "\\Library\\";
 
-			this->CreateDirectory(Core::SL_SAVEDATA, "");
-			this->CreateDirectory(Core::SL_CACHE, "");
-			this->CreateDirectory(Core::SL_DLC, "");
+			this->CreateDirectory(Core::StorageLocation::k_saveData, "");
+			this->CreateDirectory(Core::StorageLocation::k_cache, "");
+			this->CreateDirectory(Core::StorageLocation::k_DLC, "");
 		}
 		//--------------------------------------------------------------
 		/// Create File Stream
@@ -79,7 +79,7 @@ namespace ChilliSource
 			std::string filepath = GetStorageLocationDirectory(ineStorageLocation) + instrFilepath;
 
 			//if this is not a read stream, insure that the storage location is writable.
-			if (ineFileMode != Core::FM_READ && ineFileMode != Core::FM_READ_BINARY)
+			if (ineFileMode != Core::FM_READ && ineFileMode != Core::FileMode::k_readBinary)
 			{
 				if (IsStorageLocationWritable(ineStorageLocation) == false)
 				{
@@ -89,27 +89,27 @@ namespace ChilliSource
 			}
 			else
 			{
-                if(ineStorageLocation == Core::SL_PACKAGE)
+                if(ineStorageLocation == Core::StorageLocation::k_package)
                 {
                     //Attempt to load the device specific asset first
                     for(u32 i=0; i<3; ++i)
                     {
-                        if(DoesFileExist(GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + instrFilepath))
+                        if(DoesFileExist(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + instrFilepath))
                         {
-                            filepath = GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + instrFilepath;
+                            filepath = GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + instrFilepath;
                             break;
                         }
                     }
                 }
                 //if its a DLC stream, make sure that it exists in the DLC cache, if not fall back on the package
-                else if (ineStorageLocation == Core::SL_DLC && DoesItemExistInDLCCache(instrFilepath, false) == false)
+                else if (ineStorageLocation == Core::StorageLocation::k_DLC && DoesItemExistInDLCCache(instrFilepath, false) == false)
                 {
                     //Attempt to load the device specific asset first
                     for(u32 i=0; i<3; ++i)
                     {
-                        if(DoesFileExist(GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrFilepath))
+                        if(DoesFileExist(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrFilepath))
                         {
-                            filepath = GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrFilepath;
+                            filepath = GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrFilepath;
                             break;
                         }
                     }
@@ -125,7 +125,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		bool CFileSystem::CreateFile(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const
 		{
-			Core::FileStreamSPtr pFileStream = CreateFileStream(ineStorageLocation, instrDirectory, Core::FM_WRITE_BINARY);
+			Core::FileStreamSPtr pFileStream = CreateFileStream(ineStorageLocation, instrDirectory, Core::FileMode::k_writeBinary);
 
 			if (pFileStream.get() == NULL || pFileStream->IsOpen() == false || pFileStream->IsBad() == true)
 			{
@@ -193,26 +193,26 @@ namespace ChilliSource
             }
             
             std::string strSrcPath;
-            if(ineSourceStorageLocation == Core::SL_PACKAGE)
+            if(ineSourceStorageLocation == Core::StorageLocation::k_package)
             {
                 //Attempt to load the device specific asset first
                 for(u32 i=0; i<3; ++i)
                 {
-                    if(DoesFileExist(GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + instrSourceFilepath))
+                    if(DoesFileExist(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + instrSourceFilepath))
                     {
-                        strSrcPath = GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + instrSourceFilepath;
+                        strSrcPath = GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + instrSourceFilepath;
                         break;
                     }
                 }
             }
-            else if(ineSourceStorageLocation == Core::SL_DLC && DoesItemExistInDLCCache(instrSourceFilepath, false) == false)
+            else if(ineSourceStorageLocation == Core::StorageLocation::k_DLC && DoesItemExistInDLCCache(instrSourceFilepath, false) == false)
             {
                 //Attempt to load the device specific asset first
                 for(u32 i=0; i<3; ++i)
                 {
-                    if(DoesFileExist(GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrSourceFilepath))
+                    if(DoesFileExist(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrSourceFilepath))
                     {
-                        strSrcPath = GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrSourceFilepath;
+                        strSrcPath = GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrSourceFilepath;
                         break;
                     }
                 }
@@ -224,7 +224,7 @@ namespace ChilliSource
             
             //get the path to the file
             std::string strPath, strName;
-            ChilliSource::Core::CStringUtils::SplitFilename(instrDestinationFilepath, strName, strPath);
+            ChilliSource::Core::StringUtils::SplitFilename(instrDestinationFilepath, strName, strPath);
             
             //create the output directory
             CreateDirectory(ineDestinationStorageLocation, strPath);
@@ -277,8 +277,8 @@ namespace ChilliSource
 			}
 
 			//copy each of these files individually
-			std::string strSourceProperPath = Core::CStringUtils::StandardisePath(instrSourceDirectory);
-			std::string strDestProperPath = Core::CStringUtils::StandardisePath(instrDestinationDirectory);
+			std::string strSourceProperPath = Core::StringUtils::StandardisePath(instrSourceDirectory);
+			std::string strDestProperPath = Core::StringUtils::StandardisePath(instrDestinationDirectory);
 			for (std::vector<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
 			{
 				if (CopyFile(ineSourceStorageLocation, strSourceProperPath + *it, 
@@ -359,18 +359,18 @@ namespace ChilliSource
             
             switch(ineStorageLocation)
             {
-                case Core::SL_PACKAGE:
+                case Core::StorageLocation::k_package:
                     for(u32 i=0; i<3; ++i)
                     {
                         astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(ineStorageLocation) + mastrResourceDirectory[i] + instrDirectory);
                     }
                     break;
-                case Core::SL_DLC:
+                case Core::StorageLocation::k_DLC:
                     for(u32 i=0; i<3; ++i)
                     {
-                        astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrDirectory);
+                        astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrDirectory);
                     }
-                    astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::SL_DLC) + instrDirectory);
+                    astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrDirectory);
                     break;
                 default:
                     astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(ineStorageLocation) + instrDirectory);
@@ -379,7 +379,7 @@ namespace ChilliSource
             
             for(std::vector<std::string>::iterator it = astrDirectoriesToCheck.begin(); it != astrDirectoriesToCheck.end(); ++it)
             {
-                std::string path = ChilliSource::Core::CStringUtils::StandardisePath(*it);
+                std::string path = ChilliSource::Core::StringUtils::StandardisePath(*it);
                 boost::filesystem::path DstPath(path);
                 
                 if (inbRecurseIntoSubDirectories == true)
@@ -390,11 +390,11 @@ namespace ChilliSource
                     while(it != end) 
                     {
                         //Add to list
-                        if(boost::filesystem::is_regular_file(it->status()) && Core::CStringUtils::EndsWith(it->filename(), instrExtension, false))
+                        if(boost::filesystem::is_regular_file(it->status()) && Core::StringUtils::EndsWith(it->filename(), instrExtension, false))
                         {
                             if(inbAppendFullPath)
                             {
-                                outstrFileNames.push_back(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory) + it->filename());
+                                outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + it->filename());
                             }
                             else
                             {
@@ -413,12 +413,12 @@ namespace ChilliSource
                     {
                         for(boost::filesystem::directory_iterator dir_iter(DstPath); dir_iter != end_it ; ++dir_iter)
                         {
-                            if(boost::filesystem::is_regular_file(dir_iter->status()) && Core::CStringUtils::EndsWith(dir_iter->filename(), instrExtension, false))
+                            if(boost::filesystem::is_regular_file(dir_iter->status()) && Core::StringUtils::EndsWith(dir_iter->filename(), instrExtension, false))
                             {
                                 //Add to list
                                 if(inbAppendFullPath)
                                 {
-                                    outstrFileNames.push_back(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
+                                    outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
                                 }
                                 else
                                 {
@@ -461,18 +461,18 @@ namespace ChilliSource
             
             switch(ineStorageLocation)
             {
-                case Core::SL_PACKAGE:
+                case Core::StorageLocation::k_package:
                     for(u32 i=0; i<3; ++i)
                     {
                         astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(ineStorageLocation) + mastrResourceDirectory[i] + instrDirectory);
                     }
                     break;
-                case Core::SL_DLC:
+                case Core::StorageLocation::k_DLC:
                     for(u32 i=0; i<3; ++i)
                     {
-                        astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrDirectory);
+                        astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrDirectory);
                     }
-                    astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::SL_DLC) + instrDirectory);
+                    astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrDirectory);
                     break;
                 default:
                     astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(ineStorageLocation) + instrDirectory);
@@ -481,7 +481,7 @@ namespace ChilliSource
             
             for(std::vector<std::string>::iterator it = astrDirectoriesToCheck.begin(); it != astrDirectoriesToCheck.end(); ++it)
             {
-                std::string path = ChilliSource::Core::CStringUtils::StandardisePath(*it);
+                std::string path = ChilliSource::Core::StringUtils::StandardisePath(*it);
                 boost::filesystem::path DstPath(path);
                 
                 if (inbRecurseIntoSubDirectories == true)
@@ -492,11 +492,11 @@ namespace ChilliSource
                     while(it != end) 
                     {
                         //Add to list
-                        if(boost::filesystem::is_regular_file(it->status()) && Core::CStringUtils::EndsWith(it->filename(), instrName, false))
+                        if(boost::filesystem::is_regular_file(it->status()) && Core::StringUtils::EndsWith(it->filename(), instrName, false))
                         {
                             if(inbAppendFullPath)
                             {
-                                outstrFileNames.push_back(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory) + it->filename());
+                                outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + it->filename());
                             }
                             else
                             {
@@ -515,12 +515,12 @@ namespace ChilliSource
                     {
                         for(boost::filesystem::directory_iterator dir_iter(DstPath); dir_iter != end_it ; ++dir_iter)
                         {
-                            if(boost::filesystem::is_regular_file(dir_iter->status()) && Core::CStringUtils::EndsWith(dir_iter->filename(), instrName, false))
+                            if(boost::filesystem::is_regular_file(dir_iter->status()) && Core::StringUtils::EndsWith(dir_iter->filename(), instrName, false))
                             {
                                 //Add to list
                                 if(inbAppendFullPath)
                                 {
-                                    outstrFileNames.push_back(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
+                                    outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
                                 }
                                 else
                                 {
@@ -553,18 +553,18 @@ namespace ChilliSource
             
             switch(ineStorageLocation)
             {
-                case Core::SL_PACKAGE:
+                case Core::StorageLocation::k_package:
                     for(u32 i=0; i<3; ++i)
                     {
                         astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(ineStorageLocation) + mastrResourceDirectory[i] + instrDirectory);
                     }
                     break;
-                case Core::SL_DLC:
+                case Core::StorageLocation::k_DLC:
                     for(u32 i=0; i<3; ++i)
                     {
-                        astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrDirectory);
+                        astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrDirectory);
                     }
-                    astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::SL_DLC) + instrDirectory);
+                    astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrDirectory);
                     break;
                 default:
                     astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(ineStorageLocation) + instrDirectory);
@@ -573,7 +573,7 @@ namespace ChilliSource
             
             for(std::vector<std::string>::iterator it = astrDirectoriesToCheck.begin(); it != astrDirectoriesToCheck.end(); ++it)
             {
-                std::string path = ChilliSource::Core::CStringUtils::StandardisePath(*it);
+                std::string path = ChilliSource::Core::StringUtils::StandardisePath(*it);
                 boost::filesystem::path DstPath(path);
                 
                 if (inbRecurseIntoSubDirectories == true)
@@ -588,7 +588,7 @@ namespace ChilliSource
                         {
                             if(inbAppendFullPath)
                             {
-                                outstrFileNames.push_back(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory) + it->filename());
+                                outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + it->filename());
                             }
                             else
                             {
@@ -612,7 +612,7 @@ namespace ChilliSource
                                 //Add to list
                                 if(inbAppendFullPath)
                                 {
-                                    outstrFileNames.push_back(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
+                                    outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
                                 }
                                 else
                                 {
@@ -645,18 +645,18 @@ namespace ChilliSource
             
             switch(ineStorageLocation)
             {
-                case Core::SL_PACKAGE:
+                case Core::StorageLocation::k_package:
                     for(u32 i=0; i<3; ++i)
                     {
                         astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(ineStorageLocation) + mastrResourceDirectory[i] + instrDirectory);
                     }
                     break;
-                case Core::SL_DLC:
+                case Core::StorageLocation::k_DLC:
                     for(u32 i=0; i<3; ++i)
                     {
-                        astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrDirectory);
+                        astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrDirectory);
                     }
-                    astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::SL_DLC) + instrDirectory);
+                    astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrDirectory);
                     break;
                 default:
                     astrDirectoriesToCheck.push_back(GetStorageLocationDirectory(ineStorageLocation) + instrDirectory);
@@ -665,7 +665,7 @@ namespace ChilliSource
             
             for(std::vector<std::string>::iterator it = astrDirectoriesToCheck.begin(); it != astrDirectoriesToCheck.end(); ++it)
             {
-                std::string path = ChilliSource::Core::CStringUtils::StandardisePath(*it);
+                std::string path = ChilliSource::Core::StringUtils::StandardisePath(*it);
                 boost::filesystem::path DstPath(path);
                 
                 if (inbRecurseIntoSubDirectories == true)
@@ -680,7 +680,7 @@ namespace ChilliSource
                         {
                             if(inbAppendFullPath)
                             {
-                                outstrDirectories.push_back(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory) + it->filename());
+                                outstrDirectories.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + it->filename());
                             }
                             else
                             {
@@ -704,7 +704,7 @@ namespace ChilliSource
                                 //Add to list
                                 if(inbAppendFullPath)
                                 {
-                                    outstrDirectories.push_back(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
+                                    outstrDirectories.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
                                 }
                                 else
                                 {
@@ -729,7 +729,7 @@ namespace ChilliSource
         std::string CFileSystem::GetDirectoryForDLCFile(const std::string& instrFilePath) const
         {
             std::string strResult;
-            std::string strPath = ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_DLC) + instrFilePath);
+            std::string strPath = ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrFilePath);
             
             if(DoesFileExist(strPath))
             {
@@ -739,7 +739,7 @@ namespace ChilliSource
             {
                 for(u32 i=0; i<3; ++i)
                 {
-                    strPath = ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrFilePath);
+                    strPath = ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + mstrPackageDLCPath + instrFilePath);
                     if(DoesFileExist(strPath))
                     {
                         strResult = strPath;
@@ -762,7 +762,7 @@ namespace ChilliSource
             
             for(u32 i=0; i<3; ++i)
             {
-                std::string strPath = ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_PACKAGE) + mastrResourceDirectory[i] + instrFilePath);
+                std::string strPath = ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mastrResourceDirectory[i] + instrFilePath);
                 if(DoesFileExist(strPath))
                 {
                     strResult = strPath;
@@ -784,7 +784,7 @@ namespace ChilliSource
                 return false;
             }
             
-            if(ineStorageLocation == Core::SL_PACKAGE)
+            if(ineStorageLocation == Core::StorageLocation::k_package)
             {
                 for(u32 i=0; i<3; ++i)
                 {
@@ -801,18 +801,18 @@ namespace ChilliSource
             std::string path = GetStorageLocationDirectory(ineStorageLocation) + instrFilepath;
             
             //if its a DLC stream, make sure that it exists in the DLC cache, if not fall back on the package
-            if (ineStorageLocation == Core::SL_DLC)
+            if (ineStorageLocation == Core::StorageLocation::k_DLC)
             {
                 if (DoesItemExistInDLCCache(instrFilepath, false) == true)
                 {
                     return true;
                 }
                 
-                return DoesFileExist(Core::SL_PACKAGE, mstrPackageDLCPath + instrFilepath);
+                return DoesFileExist(Core::StorageLocation::k_package, mstrPackageDLCPath + instrFilepath);
             }
             
             //return whether or not the file exists
-			return DoesFileExist(ChilliSource::Core::CStringUtils::StandardisePath(path));
+			return DoesFileExist(ChilliSource::Core::StringUtils::StandardisePath(path));
 		}
 		//--------------------------------------------------------------
 		/// Does Directory Exist
@@ -826,7 +826,7 @@ namespace ChilliSource
                 return false;
             }
             
-            if(ineStorageLocation == Core::SL_PACKAGE)
+            if(ineStorageLocation == Core::StorageLocation::k_package)
             {
                 for(u32 i=0; i<3; ++i)
                 {
@@ -843,18 +843,18 @@ namespace ChilliSource
             std::string path = GetStorageLocationDirectory(ineStorageLocation) + instrDirectory;
             
             //if its a DLC stream, make sure that it exists in the DLC cache, if not fall back on the package
-            if (ineStorageLocation == Core::SL_DLC)
+            if (ineStorageLocation == Core::StorageLocation::k_DLC)
             {
                 if (DoesItemExistInDLCCache(instrDirectory, true) == true)
                 {
                     return true;
                 }
                 
-                return DoesDirectoryExist(Core::SL_PACKAGE, mstrPackageDLCPath + instrDirectory);
+                return DoesDirectoryExist(Core::StorageLocation::k_package, mstrPackageDLCPath + instrDirectory);
             }
             
             //return whether or not the dir exists
-			return DoesDirectoryExist(ChilliSource::Core::CStringUtils::StandardisePath(path));
+			return DoesDirectoryExist(ChilliSource::Core::StringUtils::StandardisePath(path));
 		}
         //--------------------------------------------------------------
 		/// Does File Exist
@@ -862,7 +862,7 @@ namespace ChilliSource
 		bool CFileSystem::DoesFileExist(const std::string& instrFilepath) const
 		{
 			//return whether or not the file exists
-			boost::filesystem::path DstPath(ChilliSource::Core::CStringUtils::StandardisePath(instrFilepath));
+			boost::filesystem::path DstPath(ChilliSource::Core::StringUtils::StandardisePath(instrFilepath));
 			return boost::filesystem::exists(DstPath);
 		}
 		//--------------------------------------------------------------
@@ -877,8 +877,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		bool CFileSystem::DoesFileExistInPackageDLC(const std::string& instrFilepath) const
 		{
-			std::string path = GetStorageLocationDirectory(Core::SL_PACKAGE) + mstrPackageDLCPath + instrFilepath;
-			boost::filesystem::path DstPath(ChilliSource::Core::CStringUtils::StandardisePath(path));
+			std::string path = GetStorageLocationDirectory(Core::StorageLocation::k_package) + mstrPackageDLCPath + instrFilepath;
+			boost::filesystem::path DstPath(ChilliSource::Core::StringUtils::StandardisePath(path));
 			return boost::filesystem::exists(DstPath);
 		}
 		//--------------------------------------------------------------
@@ -887,7 +887,7 @@ namespace ChilliSource
 		bool CFileSystem::DoesDirectoryExist(const std::string& instrDirectory) const
 		{
 			//return whether or not the dir exists
-			boost::filesystem::path DstPath(ChilliSource::Core::CStringUtils::StandardisePath(instrDirectory));
+			boost::filesystem::path DstPath(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory));
 			return boost::filesystem::exists(DstPath);
 		}
 		//--------------------------------------------------------------
@@ -897,10 +897,10 @@ namespace ChilliSource
 		{
 			switch (ineStorageLocation) 
 			{
-			case Core::SL_PACKAGE:
-			case Core::SL_SAVEDATA:
-			case Core::SL_CACHE:
-			case Core::SL_DLC:
+			case Core::StorageLocation::k_package:
+			case Core::StorageLocation::k_saveData:
+			case Core::StorageLocation::k_cache:
+			case Core::StorageLocation::k_DLC:
 			case Core::SL_ROOT:
 				return true;
 			default:
@@ -916,16 +916,16 @@ namespace ChilliSource
 			std::string strStorageLocationPath;
 			switch (ineStorageLocation) 
 			{
-			case Core::SL_PACKAGE:
+			case Core::StorageLocation::k_package:
 				strStorageLocationPath = mstrBundlePath;
 				break;
-			case Core::SL_SAVEDATA:
+			case Core::StorageLocation::k_saveData:
 				strStorageLocationPath = mstrDocumentsPath + kstrSaveDataPath;
 				break;
-			case Core::SL_CACHE:
+			case Core::StorageLocation::k_cache:
 				strStorageLocationPath = mstrLibraryPath + kstrCachePath;
 				break;
-			case Core::SL_DLC:
+			case Core::StorageLocation::k_DLC:
 				strStorageLocationPath = mstrLibraryPath + kstrDLCPath;
 				break;
 			case Core::SL_ROOT:
@@ -944,13 +944,13 @@ namespace ChilliSource
 		bool CFileSystem::DoesItemExistInDLCCache(const std::string& instrPath, bool inbFolder) const
 		{
 			//Check that this storage location is available
-			if (IsStorageLocationAvailable(Core::SL_DLC) == false)
+			if (IsStorageLocationAvailable(Core::StorageLocation::k_DLC) == false)
 			{
 				CS_LOG_ERROR("Requested Storage Location is not available!");
 				return false;
 			}
 
-			boost::filesystem::path DstPath(ChilliSource::Core::CStringUtils::StandardisePath(GetStorageLocationDirectory(Core::SL_DLC) + instrPath));
+			boost::filesystem::path DstPath(ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath));
 			return boost::filesystem::exists(DstPath);
 		}
 	}
