@@ -23,7 +23,7 @@ namespace ChilliSource
     {
 		typedef std::unordered_map<std::string,std::string> StringToStringMap;
 		
-		struct ParamDictionary : public StringToStringMap
+		class ParamDictionary : public StringToStringMap
         {
 		public:
 			//Returns true and assigns to outValue if key exists, leaves outvalue alone and returns false

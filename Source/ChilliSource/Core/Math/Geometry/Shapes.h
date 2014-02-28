@@ -22,14 +22,13 @@ namespace ChilliSource
 		//---Defaults
 		const f32 kDefaultRayLength = 5000.0f;
 		
-		struct Ray;
 		//================================================
 		/// UV-Rect
 		///
 		/// Container for a rectangle with it's origin 
 		/// at top left and using shorts instead of floats
 		//================================================
-		struct UVRect
+		class UVRect
 		{
 		public:	
 			UVRect();
@@ -46,7 +45,7 @@ namespace ChilliSource
 		/// Container for a rectangle with it's origin 
 		/// at top left
 		//================================================
-		struct Rectangle
+		class Rectangle
 		{
 		public:	
 			Rectangle(){}
@@ -147,8 +146,9 @@ namespace ChilliSource
 		/// Container for a circle with it's origin 
 		/// at centre
 		//================================================
-		struct Circle
+		class Circle
 		{
+		public:
 			Circle(){}
 			Circle(const Vector2 &invOrigin, const f32 infRadius);
 			//-----------------------------------------------
@@ -176,7 +176,7 @@ namespace ChilliSource
 		/// Container for a sphere with it's origin 
 		/// at centre
 		//================================================
-		struct Sphere
+		class Sphere
 		{
 			Sphere(){}
 			Sphere(const Vector3 &invOrigin, const f32 infRadius);
@@ -212,8 +212,9 @@ namespace ChilliSource
 		/// Container for a axis-aligned bounding box 
 		/// with it's origin at centre
 		//================================================
-		struct AABB
+		class AABB
 		{
+		public:
 			AABB(){}
 			AABB(const Vector3 &invOrigin, const Vector3 &invSize);
 			//-----------------------------------------------
@@ -448,8 +449,9 @@ namespace ChilliSource
 		///
 		/// Container for a ray
 		//===============================================
-		struct Ray
+		class Ray
 		{
+		public:
 			Ray(){}
 			Ray(const Vector3 &invOrigin, const Vector3 &invDirection, const f32 infLength = kDefaultRayLength);
 			
@@ -475,8 +477,9 @@ namespace ChilliSource
         ///
         /// Shape described by a start and end position
         //===============================================
-		struct Line
+		class Line
         {
+		public:
             Line(){}
             Line(const Vector3 &invStartPos, const Vector3 &invEndPos)
             : vStartPos(invStartPos), vEndPos(invEndPos)
@@ -489,8 +492,9 @@ namespace ChilliSource
 		///
 		/// Container for a plane
 		//===============================================
-		struct Plane
+		class Plane
 		{
+		public:
 			Plane(){}
 			Plane(const Vector3& incOrigin, const Vector3& incNormal);
 			Plane(f32 a, f32 b, f32 c, f32 d);
