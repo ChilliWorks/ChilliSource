@@ -12,6 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
+#include <algorithm>
 #include <cmath>
 #include <vector>
 

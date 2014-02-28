@@ -21,7 +21,7 @@
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 
 #include <functional>
-#include <thread>
+#include <mutex>
 
 namespace ChilliSource
 {

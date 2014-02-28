@@ -16,7 +16,8 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
-#include <thread>
+#include <condition_variable>
+#include <mutex>
 
 namespace ChilliSource
 {

@@ -10,6 +10,9 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/WorkerQueue.h>
 
+#include <atomic>
+#include <condition_variable>
+#include <mutex>
 #include <queue>
 
 namespace ChilliSource
