@@ -7,8 +7,6 @@
  *
  */
 
-#include <ChilliSource/Revision.h>
-
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
