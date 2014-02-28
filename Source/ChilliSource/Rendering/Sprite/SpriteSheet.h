@@ -39,7 +39,7 @@ namespace ChilliSource
 			
 			typedef Frame SpriteFrame;
 			
-			DECLARE_NAMED_INTERFACE(SpriteSheet);
+			CS_DECLARE_NAMEDTYPE(SpriteSheet);
 			
 			SpriteSheet();
 			virtual ~SpriteSheet(){}

@@ -13,8 +13,6 @@
 #include <ChilliSource/GUI/Base/GUIView.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 
-#define DEBUG_STRING_CLIPPING 0
-
 namespace ChilliSource
 {
     namespace GUI

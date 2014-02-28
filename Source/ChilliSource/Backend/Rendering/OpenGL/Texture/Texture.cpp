@@ -146,8 +146,8 @@ namespace ChilliSource
 #endif
 					break;
 				case Core::ImageCompression::k_PVR2Bpp:
-#ifndef TARGET_OS_IPHONE
-                    CS_FATAL_LOG("PVR compressed textures are only supported on iOS.");
+#ifndef CS_TARGETPLATFORM_IOS
+                    CS_LOG_FATAL("PVR compressed textures are only supported on iOS.");
 #else
 					switch(pSourceImage->GetFormat())
                     {
@@ -162,8 +162,8 @@ namespace ChilliSource
 #endif
 					break;
 				case Core::ImageCompression::k_PVR4Bpp:
-#ifndef TARGET_OS_IPHONE
-                    CS_FATAL_LOG("PVR compressed textures are only supported on iOS.");
+#ifndef CS_TARGETPLATFORM_IOS
+                    CS_LOG_FATAL("PVR compressed textures are only supported on iOS.");
 #else
 					switch(pSourceImage->GetFormat())
                     {
@@ -219,7 +219,7 @@ namespace ChilliSource
             GLuint udwCheck = glCheckFramebufferStatus(GL_FRAMEBUFFER);
             if(udwCheck != GL_FRAMEBUFFER_COMPLETE)
             {
-                CS_ERROR_LOG("Framebuffer Not Complete!");
+                CS_LOG_ERROR("Framebuffer Not Complete!");
                 return false;
             }
             
@@ -317,7 +317,7 @@ namespace ChilliSource
             
 			if(inudwWidth > pRenderCapabilities->GetMaxTextureSize() || inudwHeight > pRenderCapabilities->GetMaxTextureSize())
 			{
-				CS_ERROR_LOG("OpenGL ES does not support textures of this size on this hardware - Empty texture");
+				CS_LOG_ERROR("OpenGL ES does not support textures of this size on this hardware - Empty texture");
 			}
         }
 		//--------------------------------------------------
@@ -339,7 +339,7 @@ namespace ChilliSource
 		{
 			if(inSlot > mpRenderCapabilities->GetNumTextureUnits())
 			{
-				CS_FATAL_LOG("Attempting to bind to texture unit not supported on this device: " + Core::ToString(inSlot));
+				CS_LOG_FATAL("Attempting to bind to texture unit not supported on this device: " + Core::ToString(inSlot));
 			}
 			
             SetActiveTextureSlot(inSlot);

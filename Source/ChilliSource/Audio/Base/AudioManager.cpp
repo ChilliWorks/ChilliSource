@@ -19,7 +19,7 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		DEFINE_NAMED_INTERFACE(AudioManager);
+		CS_DEFINE_NAMEDTYPE(AudioManager);
 		//----------------------------------------------------------------
 		/// Is A
 		///
@@ -88,7 +88,7 @@ namespace ChilliSource
 				if(mResourceProviders[nProvider]->StreamResourceFromFile(ineStorageLocation, inFilePath, pResource)) 
 				{
 					//Add it to the cache
-					CS_DEBUG_LOG("Streaming sound " + inFilePath);
+					CS_LOG_DEBUG("Streaming sound " + inFilePath);
 					AudioResourceSPtr pAudio = std::static_pointer_cast<AudioResource>(pResource);
 					pAudio->SetName(inFilePath);
 					pAudio->SetOwningResourceManager(this);
@@ -98,7 +98,7 @@ namespace ChilliSource
 			}
 		
 			//Resource not found
-			CS_ERROR_LOG("Cannot find resource for sound with path " + inFilePath);
+			CS_LOG_ERROR("Cannot find resource for sound with path " + inFilePath);
 			return AudioResourceSPtr();
 		}
 		//----------------------------------------------------------------
@@ -124,7 +124,7 @@ namespace ChilliSource
 					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, inFilePath, pResource)) 
 					{
 						//Add it to the cache
-						CS_DEBUG_LOG("Loading sound " + inFilePath);
+						CS_LOG_DEBUG("Loading sound " + inFilePath);
 						
 						AudioResourceSPtr pAudio = std::static_pointer_cast<AudioResource>(pResource);
 						mMapFileNamesToSoundEffect.insert(std::make_pair(inFilePath, pAudio));
@@ -141,7 +141,7 @@ namespace ChilliSource
 			}
 			
 			//Resource not found
-			CS_ERROR_LOG("Cannot find resource for sound with path " + inFilePath);
+			CS_LOG_ERROR("Cannot find resource for sound with path " + inFilePath);
 			return AudioResourceSPtr();
 		}
 		//----------------------------------------------------------------
@@ -174,13 +174,13 @@ namespace ChilliSource
 			{
 				if(it->second == pSound)
 				{
-					CS_DEBUG_LOG("Destroying sound effect " + pSound->GetName());
+					CS_LOG_DEBUG("Destroying sound effect " + pSound->GetName());
 					mMapFileNamesToSoundEffect.erase(it);
 					return;
 				}
 			}
 			
-			CS_ERROR_LOG("Destroying sound effect " + pSound->GetName());
+			CS_LOG_ERROR("Destroying sound effect " + pSound->GetName());
 		}
 		//-----------------------------------------------------------------
 		/// Destroy All Sound Effects
@@ -188,7 +188,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		void AudioManager::DestroyAll()
 		{
-			CS_DEBUG_LOG("Clearing sound effect cache");
+			CS_LOG_DEBUG("Clearing sound effect cache");
 			for(MapStringToSoundEffectPtrItr it = mMapFileNamesToSoundEffect.begin(); it != mMapFileNamesToSoundEffect.end(); ++it)
 			{
 				//If we are the only person using this then kill it dead

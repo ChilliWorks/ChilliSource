@@ -16,7 +16,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        DEFINE_NAMED_INTERFACE(SceneDescManager);
+        CS_DEFINE_NAMEDTYPE(SceneDescManager);
         
         bool SceneDescManager::IsA(InterfaceIDType inInterfaceID) const
         {
@@ -59,7 +59,7 @@ namespace ChilliSource
                 {
                     if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
                     {
-                        CS_DEBUG_LOG("Loading Scene Description " + instrFilePath);
+                        CS_LOG_DEBUG("Loading Scene Description " + instrFilePath);
                         mMapFilenameToResource.emplace(instrFilePath, pResource);
                         
                         SceneDescSPtr pSceneDesc = std::static_pointer_cast<SceneDesc>(pResource);
@@ -76,7 +76,7 @@ namespace ChilliSource
             else
                 return std::static_pointer_cast<SceneDesc>(pExistingResource->second);
             
-            CS_ERROR_LOG("Cannot find resource for Scene Description with path " + instrFilePath);
+            CS_LOG_ERROR("Cannot find resource for Scene Description with path " + instrFilePath);
             return SceneDescSPtr();
         }
         
@@ -98,7 +98,7 @@ namespace ChilliSource
 
                     if(mResourceProviders[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, instrFilePath, pResource))
                     {
-                        CS_DEBUG_LOG("Loading Scene Description " + instrFilePath);
+                        CS_LOG_DEBUG("Loading Scene Description " + instrFilePath);
                         mMapFilenameToResource.emplace(instrFilePath, pResource);
                                                 
                         return pSceneDesc;
@@ -108,7 +108,7 @@ namespace ChilliSource
             else
                 return std::static_pointer_cast<SceneDesc>(pExistingResource->second);
             
-            CS_ERROR_LOG("Cannot find resource for Scene Description with path " + instrFilePath);
+            CS_LOG_ERROR("Cannot find resource for Scene Description with path " + instrFilePath);
             return SceneDescSPtr();
         }
         

@@ -220,17 +220,17 @@ namespace ChilliSource
 								}
 								else
 								{
-									CS_FATAL_LOG("Failed to create shader: " + pShader->GetFilename());
+									CS_LOG_FATAL("Failed to create shader: " + pShader->GetFilename());
 								}
 							}
 							else
 							{
-								CS_FATAL_LOG("Failed to reload shader: " + pShader->GetFilename());
+								CS_LOG_FATAL("Failed to reload shader: " + pShader->GetFilename());
 							}
 						}
 						else
 						{
-							CS_FATAL_LOG("Failed to reload shader: " + pShader->GetFilename());
+							CS_LOG_FATAL("Failed to reload shader: " + pShader->GetFilename());
 						}
 					}
 				}

@@ -127,7 +127,7 @@ namespace ChilliSource
             u32 udwVersionNumber = root.get(kstrTagVersionNumber, 0).asUInt();
             if (udwVersionNumber != 1)
             {
-                CS_ERROR_LOG("MoSubtitles file '" + inFilePath + "' has version number '" + Core::ToString(udwVersionNumber) + "'. Only version 1 is supported.");
+                CS_LOG_ERROR("MoSubtitles file '" + inFilePath + "' has version number '" + Core::ToString(udwVersionNumber) + "'. Only version 1 is supported.");
                 return false;
             }
             
@@ -143,14 +143,14 @@ namespace ChilliSource
                     }
                     else
                     {
-                        CS_ERROR_LOG("MoSubtitles file '" + inFilePath + "' failed to load.");
+                        CS_LOG_ERROR("MoSubtitles file '" + inFilePath + "' failed to load.");
                         return false;
                     }
                 }
             }
             else
             {
-                CS_ERROR_LOG("MoSubtitles file '" + inFilePath + "' does not have styles.");
+                CS_LOG_ERROR("MoSubtitles file '" + inFilePath + "' does not have styles.");
                 return false;
             }
             
@@ -166,14 +166,14 @@ namespace ChilliSource
                     }
                     else
                     {
-                        CS_ERROR_LOG("MoSubtitles file '" + inFilePath + "' failed to load.");
+                        CS_LOG_ERROR("MoSubtitles file '" + inFilePath + "' failed to load.");
                         return false;
                     }
                 }
             }
             else
             {
-                CS_ERROR_LOG("MoSubtitles file '" + inFilePath + "' does not have subtitles.");
+                CS_LOG_ERROR("MoSubtitles file '" + inFilePath + "' does not have subtitles.");
                 return false;
             }
             
@@ -190,7 +190,7 @@ namespace ChilliSource
             pStyle->strName = inStyleJson.get(kstrTagStyleName,"").asString();
             if(pStyle->strName == "")
             {
-                CS_ERROR_LOG("Subtitle style must have a name.");
+                CS_LOG_ERROR("Subtitle style must have a name.");
                 return Subtitles::StylePtr();
             }
             
@@ -214,7 +214,7 @@ namespace ChilliSource
             pSubtitle->strStyleName = inSubtitleJson.get(kstrTagSubtitleStyle, "").asString();
             if (pSubtitle->strStyleName == "")
             {
-            	CS_ERROR_LOG("Subtitle must have a style.");
+            	CS_LOG_ERROR("Subtitle must have a style.");
             	return Subtitles::SubtitlePtr();
             }
             
@@ -222,7 +222,7 @@ namespace ChilliSource
             pSubtitle->strTextID = inSubtitleJson.get(kstrTagSubtitleTextID, "").asString();
             if (pSubtitle->strTextID == "")
             {
-                CS_ERROR_LOG("Subtitle must have a text ID.");
+                CS_LOG_ERROR("Subtitle must have a text ID.");
                 return Subtitles::SubtitlePtr();
             }
             

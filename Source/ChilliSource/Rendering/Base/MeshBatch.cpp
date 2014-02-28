@@ -13,7 +13,7 @@
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
 
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
@@ -57,7 +57,7 @@ namespace ChilliSource
 					//insure this is using the correct vertex declaration.
 					VertexDeclaration declaration = pSubMesh->GetInternalMeshBuffer()->GetVertexDeclaration();
 					if (!(declaration == VertexLayout::kMesh))
-						CS_ERROR_LOG("Mesh in mesh batch is not using the correct vertex layout!");
+						CS_LOG_ERROR("Mesh in mesh batch is not using the correct vertex layout!");
 				}
                 
                 mudwVertexCount += pMesh->GetNumVerts();
@@ -229,7 +229,7 @@ namespace ChilliSource
 		
 			//Tell the render system to draw the contents of the buffer
 			inpRenderSystem->ApplyMaterial(*mpMaterial.get());
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
             DebugStats::AddToEvent("Verts", mpMeshBuffer->GetVertexCount()); // Guess that indices use all verts
 #endif
 			inpRenderSystem->RenderBuffer(mpMeshBuffer, 0, mpMeshBuffer->GetIndexCount(), Core::Matrix4x4::IDENTITY);
@@ -276,7 +276,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		MeshBatch::~MeshBatch() 
 		{
-			CS_SAFE_DELETE(mpMeshBuffer)
+			CS_SAFEDELETE(mpMeshBuffer)
 		}
 	}
 }

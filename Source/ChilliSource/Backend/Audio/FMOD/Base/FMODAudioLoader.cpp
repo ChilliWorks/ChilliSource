@@ -64,7 +64,7 @@ namespace ChilliSource
             
             if(strFilePath.empty())
             {
-                CS_ERROR_LOG("Cannot load audio from the given Storage Location.");
+                CS_LOG_ERROR("Cannot load audio from the given Storage Location.");
                 return false;
             }
 			
@@ -86,7 +86,7 @@ namespace ChilliSource
             
             if(strFilePath.empty())
             {
-                CS_ERROR_LOG("Cannot load audio from the given Storage Location.");
+                CS_LOG_ERROR("Cannot load audio from the given Storage Location.");
                 return false;
             }
 			

@@ -22,7 +22,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(ParticleComponentFactory);
+		CS_DEFINE_NAMEDTYPE(ParticleComponentFactory);
 		
 		//--------------------------------------------------------
 		/// Constructor
@@ -142,12 +142,12 @@ namespace ChilliSource
                     }
                     else
                     {
-                        CS_ERROR_LOG("Particle file: " + instrScriptFile + " no material found for file");
+                        CS_LOG_ERROR("Particle file: " + instrScriptFile + " no material found for file");
                     }
                 }
                 else
                 {
-                    CS_ERROR_LOG("Particle file: " + instrScriptFile + " no material found"); 
+                    CS_LOG_ERROR("Particle file: " + instrScriptFile + " no material found"); 
                 }
                 
                 //---Emitters
@@ -168,7 +168,7 @@ namespace ChilliSource
                         }
                         else
                         {
-                            CS_ERROR_LOG("Particle file: " + instrScriptFile + " no emitters shape found");
+                            CS_LOG_ERROR("Particle file: " + instrScriptFile + " no emitters shape found");
                         }
                         
                         //Jump to the next emitter
@@ -177,7 +177,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                    CS_ERROR_LOG("Particle file: " + instrScriptFile + " no emitters found");
+                    CS_LOG_ERROR("Particle file: " + instrScriptFile + " no emitters found");
                 }
                 
                 //---Effectors
@@ -205,7 +205,7 @@ namespace ChilliSource
 			} 
             else 
             {
-				CS_ERROR_LOG("Particle component factory could not load file: " + instrScriptFile);
+				CS_LOG_ERROR("Particle component factory could not load file: " + instrScriptFile);
 			}
             
 			mpParticleSystem->AddParticleComponent(pParticleComp.get());			

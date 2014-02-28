@@ -74,7 +74,7 @@ namespace ChilliSource
 			};
             
             
-            DECLARE_NAMED_INTERFACE(SceneDesc);
+            CS_DECLARE_NAMEDTYPE(SceneDesc);
             
             bool IsA(InterfaceIDType inInterfaceID) const override;
             

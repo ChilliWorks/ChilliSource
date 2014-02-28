@@ -22,7 +22,7 @@ namespace ChilliSource
 		class LightComponent : public Core::Component
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(LightComponent);
+			CS_DECLARE_NAMEDTYPE(LightComponent);
             
             //----------------------------------------------------------
             /// Constructor

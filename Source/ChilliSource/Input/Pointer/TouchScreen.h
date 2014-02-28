@@ -57,7 +57,7 @@ namespace ChilliSource
 
 			virtual ~TouchScreen();
 			
-			DECLARE_NAMED_INTERFACE(TouchScreen);
+			CS_DECLARE_NAMEDTYPE(TouchScreen);
 			
 			Core::IConnectableEvent<TouchEventDelegate> & GetTouchBeganEvent();
 			Core::IConnectableEvent<TouchEventDelegate> & GetTouchMovedEvent();

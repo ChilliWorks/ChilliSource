@@ -85,7 +85,7 @@ namespace ChilliSource
         }
         
         
-        DEFINE_NAMED_INTERFACE(SceneAnimation);
+        CS_DEFINE_NAMEDTYPE(SceneAnimation);
         
         bool SceneAnimation::IsA(InterfaceIDType inInterface) const
         {
@@ -101,7 +101,7 @@ namespace ChilliSource
         {
             if(!inpRootNode)
             {
-                CS_WARNING_LOG("SceneAnimation:Tried to apply animation to nullptr Entity.");
+                CS_LOG_WARNING("SceneAnimation:Tried to apply animation to nullptr Entity.");
                 return false;
             }
             

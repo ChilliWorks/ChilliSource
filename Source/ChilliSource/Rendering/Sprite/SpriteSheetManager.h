@@ -25,7 +25,7 @@ namespace ChilliSource
 		class SpriteSheetManager : public Core::ResourceManager
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(SpriteSheetManager);
+			CS_DECLARE_NAMEDTYPE(SpriteSheetManager);
 			SpriteSheetManager();
 
 			//----------------------------------------------------------------

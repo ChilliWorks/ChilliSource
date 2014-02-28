@@ -27,7 +27,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(AnimatedMeshComponent);
+		CS_DEFINE_NAMEDTYPE(AnimatedMeshComponent);
         
         MaterialSPtr AnimatedMeshComponent::mspShadowMapMaterial;
         
@@ -226,7 +226,7 @@ namespace ChilliSource
 				return mMaterials[indwSubMeshIndex];
 			}
 			
-            CS_ERROR_LOG("Failed to get material from sub mesh " + Core::ToString(indwSubMeshIndex));
+            CS_LOG_ERROR("Failed to get material from sub mesh " + Core::ToString(indwSubMeshIndex));
 			return MaterialSPtr();
 		}
         //-----------------------------------------------------------
@@ -244,7 +244,7 @@ namespace ChilliSource
                 }
             }
 			
-            CS_ERROR_LOG("Failed to get material from sub mesh " + instrSubMeshName);
+            CS_LOG_ERROR("Failed to get material from sub mesh " + instrSubMeshName);
 			return MaterialSPtr();
         }
 		//----------------------------------------------------------
@@ -389,13 +389,13 @@ namespace ChilliSource
         {
             if (nullptr == mpEntityOwner)
             {
-                CS_ERROR_LOG("Could not attach entity to animated mesh becuase the mesh is not yet attached to an entity.");
+                CS_LOG_ERROR("Could not attach entity to animated mesh becuase the mesh is not yet attached to an entity.");
                 return;
             }
             
             if (nullptr != inpEntity->GetParent() || nullptr != inpEntity->GetOwningScene())
             {
-                CS_ERROR_LOG("Could not attach entity to animated mesh becuase the entity already has a parent.");
+                CS_LOG_ERROR("Could not attach entity to animated mesh becuase the entity already has a parent.");
                 return;
             }
             
@@ -414,7 +414,7 @@ namespace ChilliSource
             s32 dwNodeIndex = mpModel->GetSkeletonPtr()->GetNodeIndexByName(instrNodeName);
             if (dwNodeIndex == -1)
             {
-                CS_ERROR_LOG("Could not attach entity to the animated mesh becuase the skeleton node name could not be found.");
+                CS_LOG_ERROR("Could not attach entity to the animated mesh becuase the skeleton node name could not be found.");
                 return;
             }
             

@@ -28,7 +28,7 @@ namespace ChilliSource
 		class AudioComponent : public Core::Component
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(AudioComponent);
+			CS_DECLARE_NAMEDTYPE(AudioComponent);
 			
 			AudioComponent(AudioSystem* inpOwningSystem);
             

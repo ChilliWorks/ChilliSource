@@ -54,7 +54,7 @@ namespace ChilliSource
 		{
 		public:
 
-			DECLARE_NAMED_INTERFACE(OAuthSystem);
+			CS_DECLARE_NAMEDTYPE(OAuthSystem);
 
 			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 

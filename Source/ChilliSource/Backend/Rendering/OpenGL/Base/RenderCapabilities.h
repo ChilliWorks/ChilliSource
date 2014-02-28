@@ -27,7 +27,7 @@ namespace ChilliSource
         class CRenderCapabilities : public Rendering::RenderCapabilities
         {
         public:
-            DECLARE_NAMED_INTERFACE(CRenderCapabilities);
+            CS_DECLARE_NAMEDTYPE(CRenderCapabilities);
             //-------------------------------------------------
 			/// Constructor
 			//-------------------------------------------------

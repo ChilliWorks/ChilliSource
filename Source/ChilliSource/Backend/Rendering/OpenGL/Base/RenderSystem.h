@@ -37,7 +37,7 @@ namespace ChilliSource
 		class CRenderSystem : public ChilliSource::Rendering::RenderSystem
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CRenderSystem);
+			CS_DECLARE_NAMEDTYPE(CRenderSystem);
 			CRenderSystem();
             ~CRenderSystem();
             //----------------------------------------------------------
@@ -570,7 +570,7 @@ namespace ChilliSource
             Rendering::CullFace meCurrentCullFace;
             Rendering::DepthFunction meDepthFunc;
             
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
             EAGLContext* mContext;
 #elif defined TARGET_ANDROID
             std::vector<CMeshBuffer*> mMeshBuffers;

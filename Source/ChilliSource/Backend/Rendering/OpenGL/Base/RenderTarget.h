@@ -14,7 +14,7 @@
 #include <ChilliSource/Rendering/Base/RenderTarget.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
 
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
 @class EAGLContext;
 #endif
 
@@ -25,7 +25,7 @@ namespace ChilliSource
 		class CRenderTarget : public ChilliSource::Rendering::RenderTarget
 		{
 		public:
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
             //------------------------------------------------------
             /// Create Default Render Target
             ///

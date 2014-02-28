@@ -28,7 +28,7 @@ namespace ChilliSource
 		class Image : public Resource
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(Image);
+			CS_DECLARE_NAMEDTYPE(Image);
 			enum class Format
 			{
 				k_RGBA4444,

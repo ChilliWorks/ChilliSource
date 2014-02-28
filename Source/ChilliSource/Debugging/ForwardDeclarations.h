@@ -20,8 +20,8 @@ namespace ChilliSource
         //--------------------------------------------------
         /// Base
         //--------------------------------------------------
-#ifdef DEBUG_STATS
-        CS_FORWARD_DECLARE_CLASS(DebugStats);
+#ifdef CS_ENABLE_DEBUGSTATS
+        CS_FORWARDDECLARE_CLASS(DebugStats);
 #endif
     }
 }

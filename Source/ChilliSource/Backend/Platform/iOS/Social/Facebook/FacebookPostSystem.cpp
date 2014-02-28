@@ -32,7 +32,7 @@ namespace ChilliSource
         : mpAuthSystem(inpAuthSystem)
 		{
 			mCompletionDelegate = nullptr;
-#if DEBUG
+#if CS_ENABLE_DEBUG
             [FBSettings enableBetaFeature:FBBetaFeaturesShareDialog];
 #endif
 		}
@@ -81,7 +81,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_ERROR_LOG("Facebook Post: User must be authenticated");
+                CS_LOG_ERROR("Facebook Post: User must be authenticated");
             }
         }
         

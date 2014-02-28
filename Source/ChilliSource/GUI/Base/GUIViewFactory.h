@@ -84,7 +84,7 @@ namespace ChilliSource
 			{
 				mmapDelegateToType.insert(std::make_pair(instrName, GUIViewCreateDelegate(&CreateGUI<T>)));
 
-#ifdef ENABLE_MOFLOW_REFLECTION
+#ifdef CS_ENABLE_REFLECTION
 				T::StaticMetaClass->SetBaseClass(BaseType::StaticMetaClass);
 #endif
 			}

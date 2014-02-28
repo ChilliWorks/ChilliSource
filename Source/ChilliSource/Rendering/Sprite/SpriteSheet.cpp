@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(SpriteSheet);
+        CS_DEFINE_NAMEDTYPE(SpriteSheet);
 		//-------------------------------------------------------------------------
 		/// Constructor
 		///
@@ -76,7 +76,7 @@ namespace ChilliSource
                 }
             }
             
-//            CS_WARNING_LOG("Sprite not found for ID: " + inID);
+//            CS_LOG_WARNING("Sprite not found for ID: " + inID);
             return 0;
         }
         
@@ -113,7 +113,7 @@ namespace ChilliSource
                 return mStringIDLookups[inudwFrameIndex];
             }
             
-            CS_WARNING_LOG("Sprite not found for Frame Index: " + Core::ToString(inudwFrameIndex));
+            CS_LOG_WARNING("Sprite not found for Frame Index: " + Core::ToString(inudwFrameIndex));
             return Core::StringUtils::BLANK;
         }		
 		//---------------------------------------------------------------------

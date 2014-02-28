@@ -28,7 +28,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(StaticMeshComponent);
+        CS_DEFINE_NAMEDTYPE(StaticMeshComponent);
     
         MaterialSPtr StaticMeshComponent::mspShadowMapMaterial;
         
@@ -228,7 +228,7 @@ namespace ChilliSource
 				return mMaterials[indwSubMeshIndex];
 			}
 			
-            CS_ERROR_LOG("Failed to get material from sub mesh " + Core::ToString(indwSubMeshIndex));
+            CS_LOG_ERROR("Failed to get material from sub mesh " + Core::ToString(indwSubMeshIndex));
 			return MaterialSPtr();
 		}
         //-----------------------------------------------------------
@@ -246,7 +246,7 @@ namespace ChilliSource
                 }
             }
 			
-            CS_ERROR_LOG("Failed to get material from sub mesh " + instrSubMeshName);
+            CS_LOG_ERROR("Failed to get material from sub mesh " + instrSubMeshName);
 			return MaterialSPtr();
         }
 		//----------------------------------------------------------

@@ -31,7 +31,7 @@ namespace ChilliSource
 			
 			virtual ~Mesh();
 			
-			DECLARE_NAMED_INTERFACE(Mesh);
+			CS_DECLARE_NAMEDTYPE(Mesh);
 			
 			//---------------------------------------------------------------------
 			/// Is A

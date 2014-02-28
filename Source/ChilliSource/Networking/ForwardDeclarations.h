@@ -19,33 +19,33 @@ namespace ChilliSource
         //--------------------------------------------------
         /// Account Management
         //--------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(MoConnectSystem);
+        CS_FORWARDDECLARE_CLASS(MoConnectSystem);
         //--------------------------------------------------
         /// Cloud
         //--------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(CloudStorageSystem);
+        CS_FORWARDDECLARE_CLASS(CloudStorageSystem);
         //--------------------------------------------------
         /// Content Download
         //--------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(IContentDownloader);
-        CS_FORWARD_DECLARE_CLASS(ContentManagementSystem);
-        CS_FORWARD_DECLARE_CLASS(MoContentDownloader);
+        CS_FORWARDDECLARE_CLASS(IContentDownloader);
+        CS_FORWARDDECLARE_CLASS(ContentManagementSystem);
+        CS_FORWARDDECLARE_CLASS(MoContentDownloader);
         //--------------------------------------------------
         /// Http
         //--------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(HttpConnectionSystem);
-        CS_FORWARD_DECLARE_CLASS(HttpRequest);
-        CS_FORWARD_DECLARE_CLASS(HttpRequestDetails);
+        CS_FORWARDDECLARE_CLASS(HttpConnectionSystem);
+        CS_FORWARDDECLARE_CLASS(HttpRequest);
+        CS_FORWARDDECLARE_CLASS(HttpRequestDetails);
         //--------------------------------------------------
         /// IAP
         //--------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(IAPSystem);
+        CS_FORWARDDECLARE_CLASS(IAPSystem);
         //--------------------------------------------------
         /// Metrics
         //--------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(MoMetricsSession);
-        CS_FORWARD_DECLARE_CLASS(MoMetricsSystem);
-        CS_FORWARD_DECLARE_CLASS(IExternalMetrics);
+        CS_FORWARDDECLARE_CLASS(MoMetricsSession);
+        CS_FORWARDDECLARE_CLASS(MoMetricsSystem);
+        CS_FORWARDDECLARE_CLASS(IExternalMetrics);
 	}
 }
 

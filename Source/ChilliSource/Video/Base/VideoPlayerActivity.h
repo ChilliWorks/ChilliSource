@@ -25,7 +25,7 @@ namespace ChilliSource
         class VideoPlayerActivity : public Core::Activity
         {
         public:
-            DECLARE_NAMED_INTERFACE(VideoPlayerActivity);
+            CS_DECLARE_NAMEDTYPE(VideoPlayerActivity);
 			
             VideoPlayerActivity(){}
             virtual ~VideoPlayerActivity(){}

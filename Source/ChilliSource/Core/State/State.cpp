@@ -103,17 +103,17 @@ namespace ChilliSource
 		{
 			if(mbOwnsScene)
 			{
-				CS_SAFE_DELETE(mpScene);
+				CS_SAFEDELETE(mpScene);
 			}
 		}
         
         void State::DebugPrint(std::string instrMessage)
         {
-            CS_DEBUG_LOG("State "+ToString((u32)this)+" - "+instrMessage);
-            CS_DEBUG_LOG("name = "+GetName());
-            CS_DEBUG_LOG("mpScene = "+ToString((u32)mpScene));
-            CS_DEBUG_LOG("mbOwnsScene = "+ToString(mbOwnsScene));
-            CS_DEBUG_LOG("mpStateMgr = "+ToString((u32)mpStateMgr));
+            CS_LOG_DEBUG("State "+ToString((u32)this)+" - "+instrMessage);
+            CS_LOG_DEBUG("name = "+GetName());
+            CS_LOG_DEBUG("mpScene = "+ToString((u32)mpScene));
+            CS_LOG_DEBUG("mbOwnsScene = "+ToString(mbOwnsScene));
+            CS_LOG_DEBUG("mpStateMgr = "+ToString((u32)mpStateMgr));
         }
         
 	}

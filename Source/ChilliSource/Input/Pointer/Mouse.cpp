@@ -5,7 +5,7 @@ namespace ChilliSource
 {
 	namespace Input
 	{
-		DEFINE_NAMED_INTERFACE(Mouse);
+		CS_DEFINE_NAMEDTYPE(Mouse);
 
 		//------------------------------------------------------
 		/// Constructor

@@ -23,7 +23,7 @@ namespace ChilliSource
         class RemoteNotificationSystem : public ChilliSource::Core::System
         {
         public:
-            DECLARE_NAMED_INTERFACE(RemoteNotificationSystem);
+            CS_DECLARE_NAMEDTYPE(RemoteNotificationSystem);
             //---------------------------------------------------------------
             /// Create
             ///

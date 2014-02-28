@@ -12,7 +12,7 @@ namespace ChilliSource
 {
     namespace Video
     {
-		DEFINE_NAMED_INTERFACE(VideoPlayerActivity);
+		CS_DEFINE_NAMEDTYPE(VideoPlayerActivity);
 
         //--------------------------------------------------------------
         /// Get Dismissed Event

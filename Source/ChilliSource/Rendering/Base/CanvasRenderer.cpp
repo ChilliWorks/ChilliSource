@@ -17,16 +17,18 @@
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
-
-#define MAX_KERN_RATIO 0.25
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
+        namespace
+        {
+            const f32 k_maxKernRatio = 0.25;
+        }
 		//----------------------------------------------------------
 		/// Constructor
 		///
@@ -165,7 +167,7 @@ namespace ChilliSource
             //Draw us!
 			mOverlayBatcher.Render(mpRenderSystem, msCachedSprite);
             
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
             DebugStats::AddToEvent("GUI", 1);
 #endif
         }
@@ -215,7 +217,7 @@ namespace ChilliSource
                 mOverlayBatcher.Render(mpRenderSystem, msCachedSprite);
 			}
             
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
             DebugStats::AddToEvent("GUI", 1);
 #endif
 		}
@@ -299,7 +301,7 @@ namespace ChilliSource
                 }
             }
             
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
             DebugStats::AddToEvent("GUI", 1);
 #endif
         }
@@ -698,9 +700,9 @@ namespace ChilliSource
                     {
                         f32 fKernAmount = (inpFont->GetKerningBetweenCharacters(inCharacter, inNextCharacter) * infTextScale);
                         
-                        if(fKernAmount > (fCharWidth * MAX_KERN_RATIO))
+                        if(fKernAmount > (fCharWidth * k_maxKernRatio))
                         {
-                            fKernAmount = fCharWidth * MAX_KERN_RATIO;
+                            fKernAmount = fCharWidth * k_maxKernRatio;
                         }
                         
                         fCharWidth -= fKernAmount;
@@ -732,7 +734,7 @@ namespace ChilliSource
 					outfCharacterWidth = 0.0f;
                     if(outpInvalidCharacterFound)
                         (*outpInvalidCharacterFound)=true;
-					CS_ERROR_LOG("Invalid character in text component");
+					CS_LOG_ERROR("Invalid character in text component");
 					break;
 				}
 			}

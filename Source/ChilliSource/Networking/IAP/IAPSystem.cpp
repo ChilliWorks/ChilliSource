@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
 #	include <ChilliSource/Backend/Platform/iOS/Networking/IAP/IAPSystem.h>
 #elif defined(TARGET_ANDROID)
 #	ifdef MOFLOWSKU_IAPMETHOD_GOOGLEPLAY
@@ -22,13 +22,13 @@ namespace ChilliSource
 {
 	namespace Networking
     {
-        DEFINE_NAMED_INTERFACE(IAPSystem);
+        CS_DEFINE_NAMEDTYPE(IAPSystem);
         //---------------------------------------------------------------
         /// Create
         //---------------------------------------------------------------
         IAPSystem* IAPSystem::Create(const Core::ParamDictionary& inParams)
         {
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
         	return new iOS::CIAPSystem();
 #elif defined(TARGET_ANDROID)
 #	ifdef MOFLOWSKU_IAPMETHOD_GOOGLEPLAY

@@ -25,7 +25,7 @@ namespace ChilliSource
 		{
 		public:
 			virtual ~ResourceProvider(){}
-			DECLARE_NAMED_INTERFACE(ResourceProvider);
+			CS_DECLARE_NAMEDTYPE(ResourceProvider);
 			virtual bool CanCreateResourceOfKind(InterfaceIDType inInterfaceID) const = 0;
 			virtual bool CanCreateResourceFromFileWithExtension(const std::string & inExtension) const = 0;
 			
@@ -33,12 +33,12 @@ namespace ChilliSource
 			virtual bool CreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource) = 0;
 			virtual bool AsyncCreateResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource)
             {
-                CS_WARNING_LOG("No implementation for AsyncCreateResourceFromFile"); 
+                CS_LOG_WARNING("No implementation for AsyncCreateResourceFromFile"); 
                 return false;
             };
 			virtual bool StreamResourceFromFile(StorageLocation ineStorageLocation, const std::string & inFilePath, ResourceSPtr& outpResource)
             {
-                CS_WARNING_LOG("No implementation for StreamResourceFromFile"); 
+                CS_LOG_WARNING("No implementation for StreamResourceFromFile"); 
                 return false;
             }
 			

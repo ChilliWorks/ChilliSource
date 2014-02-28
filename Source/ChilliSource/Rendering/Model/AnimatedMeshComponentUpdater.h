@@ -22,7 +22,7 @@ namespace ChilliSource
         class AnimatedMeshComponentUpdater : public Core::System, public Core::IUpdateable
         {
         public:
-            DECLARE_NAMED_INTERFACE(AnimatedMeshComponentUpdater);
+            CS_DECLARE_NAMEDTYPE(AnimatedMeshComponentUpdater);
             //------------------------------------------------
 			/// Constructor
 			//------------------------------------------------

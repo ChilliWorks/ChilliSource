@@ -22,7 +22,7 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        DEFINE_NAMED_INTERFACE(MaterialFactory);
+        CS_DEFINE_NAMEDTYPE(MaterialFactory);
         
         //---------------------------------------------------
         /// Constructor
@@ -218,7 +218,7 @@ namespace ChilliSource
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
             
-#ifdef MOFLOW_SHADOW_DEBUG
+#ifdef CS_ENABLE_DEBUGSHADOW
             pMaterial->SetColourWriteEnabled(true);
 #else
             pMaterial->SetColourWriteEnabled(false);
@@ -339,7 +339,7 @@ namespace ChilliSource
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
             
-#ifdef MOFLOW_SHADOW_DEBUG
+#ifdef CS_ENABLE_DEBUGSHADOW
             pMaterial->SetColourWriteEnabled(true);
 #else
             pMaterial->SetColourWriteEnabled(false);

@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(RenderSystem);
+        CS_DEFINE_NAMEDTYPE(RenderSystem);
 		//-------------------------------------------------------
 		/// Constructor
 		///
@@ -91,8 +91,8 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		RenderSystem::~RenderSystem()
 		{
-			CS_SAFE_DELETE(mpRenderFactory);
-            CS_SAFE_DELETE(mpSpriteBatcher);
+			CS_SAFEDELETE(mpRenderFactory);
+            CS_SAFEDELETE(mpSpriteBatcher);
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace ChilliSource
 		class DirectionalLightComponent : public LightComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(DirectionalLightComponent);
+			CS_DECLARE_NAMEDTYPE(DirectionalLightComponent);
 			
             //----------------------------------------------------------
             /// Constructor

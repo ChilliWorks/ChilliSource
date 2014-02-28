@@ -27,7 +27,7 @@ namespace ChilliSource
         class VolumeComponent : public Core::Component
         {
         public:
-            DECLARE_NAMED_INTERFACE(VolumeComponent);
+            CS_DECLARE_NAMEDTYPE(VolumeComponent);
             VolumeComponent() : mfQueryIntersectionValue(0.0f){};
             virtual ~VolumeComponent(){}
 

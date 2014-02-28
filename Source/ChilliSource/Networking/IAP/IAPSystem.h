@@ -68,7 +68,7 @@ namespace ChilliSource
 		class IAPSystem : public ChilliSource::Core::System
         {
         public:
-            DECLARE_NAMED_INTERFACE(IAPSystem);
+            CS_DECLARE_NAMEDTYPE(IAPSystem);
             
             //---------------------------------------------------------------
             /// Create

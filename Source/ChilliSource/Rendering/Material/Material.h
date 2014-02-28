@@ -81,7 +81,7 @@ namespace ChilliSource
 		class Material : public Core::Resource
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(Material);
+			CS_DECLARE_NAMEDTYPE(Material);
 		
             Material();
 			

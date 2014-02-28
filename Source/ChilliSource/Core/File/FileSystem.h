@@ -62,7 +62,7 @@ namespace ChilliSource
 		//=========================================================================================
 		class FileSystem : public System
 		{
-			DECLARE_NAMED_INTERFACE(FileSystem);
+			CS_DECLARE_NAMEDTYPE(FileSystem);
 		public:
             FileSystem();
 			virtual ~FileSystem(){}

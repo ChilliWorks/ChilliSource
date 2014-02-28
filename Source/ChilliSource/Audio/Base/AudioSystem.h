@@ -38,7 +38,7 @@ namespace ChilliSource
 			AudioSystem();
 			virtual ~AudioSystem();
 			
-			DECLARE_NAMED_INTERFACE(AudioSystem);
+			CS_DECLARE_NAMEDTYPE(AudioSystem);
 
 			//-------------------------------------------------------
 			/// Is A

@@ -67,7 +67,7 @@ namespace ChilliSource
             //----------------------------------------------
             static void LogFatal(const std::string &instrMessage);
             
-    #ifdef MOFLOW_LOG_TO_FILE
+    #ifdef CS_ENABLE_LOGTOFILE
             //----------------------------------------------
             /// Get Log Data
             ///

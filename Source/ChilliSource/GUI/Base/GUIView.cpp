@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Base/BitOps.h>
+#include <ChilliSource/Core/Base/Utils.h>
 
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
@@ -220,7 +220,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		void GUIView::OnTransformChanged(u32 inudwInvalidFlags)
 		{
-			BITMASK_CLEAR(mudwCacheValidaters, inudwInvalidFlags);
+            Core::Utils::BitmapClear(mudwCacheValidaters, inudwInvalidFlags);
 			
 			for(GUIView::Subviews::iterator it = mSubviews.begin(); it != mSubviews.end(); ++it)
 			{
@@ -1421,7 +1421,7 @@ namespace ChilliSource
         //------------------------------------------------------
         const Core::Vector2& GUIView::GetAbsolutePosition() const
         {
-			if(!BITMASK_CHECK(mudwCacheValidaters, (u32)TransformCache::k_absPos))
+			if(!Core::Utils::BitmapCheck(mudwCacheValidaters, (u32)TransformCache::k_absPos))
 			{
 				//The absolute position is the position on screen and
 				//therefore must take out parents position into account 
@@ -1493,10 +1493,10 @@ namespace ChilliSource
             //and the relative size of us
             if(mpParentView)
             {
-				if(!BITMASK_CHECK(mudwCacheValidaters, (u32)TransformCache::k_absSize))
+				if(!Core::Utils::BitmapCheck(mudwCacheValidaters, (u32)TransformCache::k_absSize))
 				{
 					mvAbsoluteSize = ((mpParentView->GetAbsoluteSize() * GetSize().GetRelative()) + GetSize().GetAbsolute()) * GetAbsoluteScale();
-					BITMASK_SET(mudwCacheValidaters, (u32)TransformCache::k_absSize);
+                    Core::Utils::BitmapSet(mudwCacheValidaters, (u32)TransformCache::k_absSize);
 				}
 				
                 return mvAbsoluteSize;
@@ -1545,7 +1545,7 @@ namespace ChilliSource
         //-----------------------------------------------------
         const Core::Matrix3x3& GUIView::GetTransform() const
         {
-			if(!BITMASK_CHECK(mudwCacheValidaters, (u32)TransformCache::k_transform))
+			if(!Core::Utils::BitmapCheck(mudwCacheValidaters, (u32)TransformCache::k_transform))
 			{
 				if(mpParentView)
 				{
@@ -1561,7 +1561,7 @@ namespace ChilliSource
 					mmatTransform.SetTransform(GetAbsolutePosition(), Core::Vector2::ONE, Rotation);
 				}
 				
-				BITMASK_SET(mudwCacheValidaters, (u32)TransformCache::k_transform);
+				Core::Utils::BitmapSet(mudwCacheValidaters, (u32)TransformCache::k_transform);
 			}
             
             return mmatTransform;

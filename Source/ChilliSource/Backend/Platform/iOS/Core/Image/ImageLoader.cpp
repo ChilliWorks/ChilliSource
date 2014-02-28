@@ -108,7 +108,7 @@ namespace ChilliSource
                 }
                 else if(strExtension == JPGExtension || strExtension == JPEGExtension)	
                 {
-                    CS_WARNING_LOG("JPG image loading is not cross-platform and will only work on iOS. Do not use PNGs in a cross-platform project.");
+                    CS_LOG_WARNING("JPG image loading is not cross-platform and will only work on iOS. Do not use PNGs in a cross-platform project.");
                     CreateJPGImageFromFile(abyData.data(), abyData.size(), ineFormat, (Core::Image*)outpResource.get());
 					return true;
                 }
@@ -194,7 +194,7 @@ namespace ChilliSource
 			{
 				case Core::Image::Format::k_RGBA4444:
 				{
-					CS_DEBUG_LOG("Converting to RGBA_4444");
+					CS_LOG_DEBUG("Converting to RGBA_4444");
 				
 					u8* pubyBitmapData4444 = RGBA8888ToRGBA4444(pubyBitmapData8888, udwArea);
 			
@@ -204,7 +204,7 @@ namespace ChilliSource
 				}
 				case Core::Image::Format::k_RGB565:
 				{
-					CS_DEBUG_LOG("Converting to RGBA_565");
+					CS_LOG_DEBUG("Converting to RGBA_565");
 					
 					u8* pubyBitmapData565 = RGBA8888ToRGB565(pubyBitmapData8888, udwArea);
 					
@@ -214,7 +214,7 @@ namespace ChilliSource
 				}
 				case Core::Image::Format::k_LumA88:
 				{
-					CS_DEBUG_LOG("Converting to LUMA_88");
+					CS_LOG_DEBUG("Converting to LUMA_88");
 					
 					u8* pubyBitmapData88 = RGBA8888ToLUM88(pubyBitmapData8888, udwArea);
 					
@@ -224,7 +224,7 @@ namespace ChilliSource
 				}
                 case Core::Image::Format::k_Lum8:
                 {
-                    CS_DEBUG_LOG("Converting to LUM_8");
+                    CS_LOG_DEBUG("Converting to LUM_8");
                     
                     u8* pubyBitmapData8 = RGBA8888ToLUM8(pubyBitmapData8888, udwArea);
                     
@@ -292,7 +292,7 @@ namespace ChilliSource
 			{
 				case Core::Image::Format::k_RGBA4444:
 				{
-					CS_DEBUG_LOG("Converting to RGBA_4444");
+					CS_LOG_DEBUG("Converting to RGBA_4444");
 					
 					u8* pubyBitmapData4444 = RGBA8888ToRGBA4444(pubyBitmapData8888, udwArea);
 					
@@ -302,7 +302,7 @@ namespace ChilliSource
 				}
 				case Core::Image::Format::k_RGB565:
 				{
-					CS_DEBUG_LOG("Converting to RGB_565");
+					CS_LOG_DEBUG("Converting to RGB_565");
 					
 					u8* pubyBitmapData565 = RGBA8888ToRGB565(pubyBitmapData8888, udwArea);
 					

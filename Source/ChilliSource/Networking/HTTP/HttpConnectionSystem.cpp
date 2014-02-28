@@ -13,7 +13,7 @@ namespace ChilliSource
 {
 	namespace Networking
     {
-		DEFINE_NAMED_INTERFACE(HttpConnectionSystem);
+		CS_DEFINE_NAMEDTYPE(HttpConnectionSystem);
         
         u32 HttpConnectionSystem::mudwMaxBufferSize = 0;
         
@@ -32,7 +32,7 @@ namespace ChilliSource
             CS_ASSERT(inpRequest, "inpRequest cannot be null!");
             if(inpRequest->GetResponseCode() != kHTTPMovedTemporarily)
             {
-                CS_ERROR_LOG("Trying to redirect on a non-redirected request");
+                CS_LOG_ERROR("Trying to redirect on a non-redirected request");
             }
             else
             {

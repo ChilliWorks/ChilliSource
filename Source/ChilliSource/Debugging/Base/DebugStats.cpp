@@ -11,7 +11,7 @@
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #include <ChilliSource/GUI/Debug/DebugStatsView.h>
 
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
 
 namespace ChilliSource
 {

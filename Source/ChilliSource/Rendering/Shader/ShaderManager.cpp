@@ -19,7 +19,7 @@ namespace ChilliSource
 	namespace Rendering
 	{
 		
-		DEFINE_NAMED_INTERFACE(ShaderManager);
+		CS_DEFINE_NAMEDTYPE(ShaderManager);
 		
 		//----------------------------------------------------------------
 		/// Constructor

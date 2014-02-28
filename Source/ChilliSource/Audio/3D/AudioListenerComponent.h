@@ -26,7 +26,7 @@ namespace ChilliSource
 		class AudioListenerComponent : public Core::Component
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(AudioListenerComponent);
+			CS_DECLARE_NAMEDTYPE(AudioListenerComponent);
 			
 			AudioListenerComponent();
 			virtual ~AudioListenerComponent();

@@ -15,7 +15,7 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		DEFINE_NAMED_INTERFACE(OAuthSystem);
+		CS_DEFINE_NAMEDTYPE(OAuthSystem);
         
         static u32 udwNonceCounter = 0;
 
@@ -409,15 +409,15 @@ namespace ChilliSource
 		        }
 		        break;
 		    }
-		    //CS_DEBUG_LOG("\nCOAuthSystem::GetSignature() - URLEncoding URL...");
+		    //CS_LOG_DEBUG("\nCOAuthSystem::GetSignature() - URLEncoding URL...");
 		    strSigBase.append(BaseEncoding::URLEncode(instrRawUrl));
 		    strSigBase.append("&");
-		    //CS_DEBUG_LOG("\nCOAuthSystem::GetSignature() - URLEncoding params...");
+		    //CS_LOG_DEBUG("\nCOAuthSystem::GetSignature() - URLEncoding params...");
 		    strSigBase.append(BaseEncoding::URLEncode(strRawParams));
 
-		    //CS_DEBUG_LOG("\nCOAuthSystem::GetSignature() - Signature Raw URL is: \""+instrRawUrl+"\"");
-		    //CS_DEBUG_LOG("OAuthSystem::GetSignature() - Signature Raw Params is: \""+strRawParams+"\"");
-		    //CS_DEBUG_LOG("OAuthSystem::GetSignature() - Signature string is: \""+strSigBase+"\"");
+		    //CS_LOG_DEBUG("\nCOAuthSystem::GetSignature() - Signature Raw URL is: \""+instrRawUrl+"\"");
+		    //CS_LOG_DEBUG("OAuthSystem::GetSignature() - Signature Raw Params is: \""+strRawParams+"\"");
+		    //CS_LOG_DEBUG("OAuthSystem::GetSignature() - Signature string is: \""+strSigBase+"\"");
 
 		    /* Now, hash the signature base string using HMAC_SHA1 class */
 		    ChilliSource::Core::HMAC_SHA1 objHMACSHA1;
@@ -427,7 +427,7 @@ namespace ChilliSource
 		    memset(bypDigest, 0, OAUTHLIB_BUFFSIZE_LARGE);
 
 		    /* Signing key is composed of consumer_secret&token_secret */
-		    //CS_DEBUG_LOG("OAuthSystem::GetSignature() - Signing with customer secret:\""+mstrConsumerSecret+"\"");
+		    //CS_LOG_DEBUG("OAuthSystem::GetSignature() - Signing with customer secret:\""+mstrConsumerSecret+"\"");
 		    strSecretSigningKey.assign(mstrConsumerSecret);
 		    strSecretSigningKey.append("&");
 		    if(mstrOAuthTokenSecret.length())
@@ -443,13 +443,13 @@ namespace ChilliSource
 
 		    /* Do a base64 encode of signature - SHA 1 digest is 160 bits*/
 		    std::string strBase64String = BaseEncoding::Base64Encode((s8*)bypDigest, 20);
-		    //CS_DEBUG_LOG("OAuthSystem::GetSignature() - Base64 of signature SHA1:\""+strBase64String+"\"");
+		    //CS_LOG_DEBUG("OAuthSystem::GetSignature() - Base64 of signature SHA1:\""+strBase64String+"\"");
 
 
-		    //CS_DEBUG_LOG("OAuthSystem::GetSignature() - Encoding Base64 signature...");
+		    //CS_LOG_DEBUG("OAuthSystem::GetSignature() - Encoding Base64 signature...");
 		    /* Do an url encode */
 		    outstrOAuthSignature = BaseEncoding::URLEncode(strBase64String);
-		    //CS_DEBUG_LOG("OAuthSystem::GetSignature() - Encoding result:\""+outstrOAuthSignature+"\"");
+		    //CS_LOG_DEBUG("OAuthSystem::GetSignature() - Encoding result:\""+outstrOAuthSignature+"\"");
 
 		    return (outstrOAuthSignature.length()) ? true : false;
 		}
@@ -667,7 +667,7 @@ namespace ChilliSource
 		            mstrOAuthScreenName = strDummy;
 		        }
 				
-				//CS_DEBUG_LOG("OAuthSystem::ExtractOAuthTokenKeySecret() - Key:\""+mstrOAuthTokenKey+"\", Secret:\""+mstrOAuthTokenSecret+"\", Name:\""+mstrOAuthScreenName+"\"");
+				//CS_LOG_DEBUG("OAuthSystem::ExtractOAuthTokenKeySecret() - Key:\""+mstrOAuthTokenKey+"\", Secret:\""+mstrOAuthTokenSecret+"\", Name:\""+mstrOAuthScreenName+"\"");
 		    }
 		    return true;
 		}

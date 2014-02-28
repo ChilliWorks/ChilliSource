@@ -14,7 +14,7 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Matrix4x4.h>
 
-#if defined TARGET_OS_IPHONE && defined ENABLE_QUICK_MATH
+#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
 #include <Accelerate/Accelerate.h>
 #endif
 
@@ -86,7 +86,7 @@ namespace ChilliSource
 		
 		inline void Matrix3x3::Multiply(const Matrix3x3 *  inp1, const Matrix3x3 *  inp2, Matrix3x3 *  inpOut)
         {
-#if defined TARGET_OS_IPHONE && defined ENABLE_QUICK_MATH
+#if defined CS_TARGETPLATFORM_IOS && defined CS_ENABLE_FASTMATH
             vDSP_mmul(const_cast<f32*>(inp1->m), 1, const_cast<f32*>(inp2->m), 1, inpOut->m, 1, 3, 3, 3);
 #else
 			const f32 *  p1 = inp1->m;

@@ -20,7 +20,7 @@ namespace ChilliSource
 	
 	namespace Networking
     {
-		DEFINE_NAMED_INTERFACE(MoConnectSystem);
+		CS_DEFINE_NAMEDTYPE(MoConnectSystem);
 		
 		const std::string MoConnectSystem::kstrFacebookLoginType = "facebook";
 		const std::string MoConnectSystem::kstrEmailLoginType = "email";
@@ -31,7 +31,7 @@ namespace ChilliSource
         const std::string kstrIAPApple = "apple";
         const std::string kstrIAPnGoogle = "google";
         const std::string kstrIAPUnknown = "iap-unknown";
-#if DEBUG
+#if CS_ENABLE_DEBUG
         const std::string kstrEnvironment = "-dev";
 #else
         const std::string kstrEnvironment = "";
@@ -199,7 +199,7 @@ namespace ChilliSource
             
             std::string strOAuthHeader;
             mpOAuthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
-            CS_DEBUG_LOG(strOAuthHeader);
+            CS_LOG_DEBUG(strOAuthHeader);
             
             mpOAuthSystem->SetOAuthTokenKey(mstrOAuthToken);
             mpOAuthSystem->SetOAuthTokenSecret(mstrOAuthTokenSecret);
@@ -334,7 +334,7 @@ namespace ChilliSource
 			
 			if(ineResult == HttpRequest::CompletionResult::k_completed)
             {
-				CS_DEBUG_LOG("RegisterLoginResponse:" + inpRequest->GetResponseString());
+				CS_LOG_DEBUG("RegisterLoginResponse:" + inpRequest->GetResponseString());
 				Json::Reader cReader;
 				Json::Value cJResponse;
                 
@@ -601,14 +601,14 @@ namespace ChilliSource
             
             std::string strOAuthHeader;
             mpOAuthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
-            CS_DEBUG_LOG(strOAuthHeader);
+            CS_LOG_DEBUG(strOAuthHeader);
             
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");
 			
 			Json::FastWriter cWriter;
 			requestDetails.strBody = cWriter.write(cRegistrationMsg);
-			CS_DEBUG_LOG("RegisterForPushNotifications:"+requestDetails.strBody);
+			CS_LOG_DEBUG("RegisterForPushNotifications:"+requestDetails.strBody);
 			mpHttpConnectionSystem->MakeRequest(requestDetails, Core::MakeDelegate(this, &MoConnectSystem::PushNotificationRequestCompletes));
             
             mPushNotificationCallback = inDelegate;
@@ -625,7 +625,7 @@ namespace ChilliSource
                 case PushNotificationType::k_googleGCM:
                     return kstrPushNotificationGoogleGCM;
                     default:
-                    CS_ERROR_LOG("Unsupported push notification type!");
+                    CS_LOG_ERROR("Unsupported push notification type!");
                     break;
             }
             
@@ -642,19 +642,19 @@ namespace ChilliSource
             {
                 if(ineResult == HttpRequest::CompletionResult::k_failed)
                 {
-                    CS_ERROR_LOG("Push notification registration failed!");
+                    CS_LOG_ERROR("Push notification registration failed!");
                 }
                 else if(ineResult == HttpRequest::CompletionResult::k_cancelled)
                 {
-                    CS_ERROR_LOG("Push notification registration was cancelled.");
+                    CS_LOG_ERROR("Push notification registration was cancelled.");
                 }
                 else if(ineResult == HttpRequest::CompletionResult::k_timeout)
                 {
-                    CS_ERROR_LOG("Push notification registration timed out.");
+                    CS_LOG_ERROR("Push notification registration timed out.");
                 }
                 else if(ineResult == HttpRequest::CompletionResult::k_flushed)
                 {
-                    CS_ERROR_LOG("Push notification registration buffer need to be flushed.");
+                    CS_LOG_ERROR("Push notification registration buffer need to be flushed.");
                 }
                 
                 eResult = PushNotificationResult::k_failed;
@@ -1071,7 +1071,7 @@ namespace ChilliSource
                                                   const IAPTransactionPtr& inpTransInfo,
                                                   ValidateReceiptDelegate inDelegate)
         {
-            CS_DEBUG_LOG("MoConnectSystem::ValidateIAPReceipt");
+            CS_LOG_DEBUG("MoConnectSystem::ValidateIAPReceipt");
             HttpRequestDetails requestDetails;
 
             requestDetails.strURL = mstrRealm + "/iap/production";
@@ -1088,14 +1088,14 @@ namespace ChilliSource
       
             std::string strOAuthHeader;
             mpOAuthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
-            CS_DEBUG_LOG(strOAuthHeader);
+            CS_LOG_DEBUG(strOAuthHeader);
             
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");
 			
 			Json::FastWriter cWriter;
 			requestDetails.strBody = cWriter.write(cIAPMsg);
-			CS_DEBUG_LOG("ValidateIAPReceipt:"+requestDetails.strBody);
+			CS_LOG_DEBUG("ValidateIAPReceipt:"+requestDetails.strBody);
 			mpHttpConnectionSystem->MakeRequest(requestDetails, Core::MakeDelegate(this, &MoConnectSystem::OnIAPRecieptValidationResponse));
             
             mValidateReceiptDelegate = inDelegate;
@@ -1112,7 +1112,7 @@ namespace ChilliSource
                 case IAPType::k_google:
                     return kstrIAPnGoogle;
                 default:
-                    CS_ERROR_LOG("Unsupported push notification type!");
+                    CS_LOG_ERROR("Unsupported push notification type!");
                     break;
             }
             
@@ -1130,7 +1130,7 @@ namespace ChilliSource
             
             if(HttpRequest::CompletionResult::k_completed == ineResult)
             {
-                CS_DEBUG_LOG("MoConnectSystem::OnRecieptValidationResponse");
+                CS_LOG_DEBUG("MoConnectSystem::OnRecieptValidationResponse");
                 if(kHTTPResponseOK == inpRequest->GetResponseCode())
                 {
                     Json::Reader cReader;
@@ -1140,7 +1140,7 @@ namespace ChilliSource
                         if(cJResponse.isObject() && cJResponse.isMember("Error"))
                         {
                             // Error
-                            CS_DEBUG_LOG("MoConnectSystem::OnRecieptValidationResponse() - This ain't right!");
+                            CS_LOG_DEBUG("MoConnectSystem::OnRecieptValidationResponse() - This ain't right!");
                         }
                         else
                         {
@@ -1183,12 +1183,12 @@ namespace ChilliSource
                 }
                 else
                 {
-                    CS_ERROR_LOG("Unable to validate IAP receipt.\nGot response code \""+ToString(inpRequest->GetResponseCode())+"\"");
+                    CS_LOG_ERROR("Unable to validate IAP receipt.\nGot response code \""+ToString(inpRequest->GetResponseCode())+"\"");
                 }
             }
             else
             {
-                CS_ERROR_LOG("Unable to validate IAP receipt as HTTP request did not complete. Instead we got result: "+ToString((u32)ineResult));
+                CS_LOG_ERROR("Unable to validate IAP receipt as HTTP request did not complete. Instead we got result: "+ToString((u32)ineResult));
             }
             
             mValidateReceiptDelegate(bIsValid, ineResult, sIAP);
@@ -1198,7 +1198,7 @@ namespace ChilliSource
         //------------------------
         void MoConnectSystem::RedeemIAP(const std::string& instrReceiptId)
         {
-            CS_DEBUG_LOG("MoConnectSystem::RedeemIAP");
+            CS_LOG_DEBUG("MoConnectSystem::RedeemIAP");
             HttpRequestDetails requestDetails;
 			requestDetails.strURL = mstrRealm + "/iap/redeem";
 			requestDetails.eType = ChilliSource::Networking::HttpRequestDetails::Type::k_post;
@@ -1211,13 +1211,13 @@ namespace ChilliSource
             
             std::string strOAuthHeader;
             mpOAuthSystem->GetOAuthHeader(Core::OAuthSystem::OAuthHttpRequestType::k_httpPost, requestDetails.strURL, "", strOAuthHeader);
-            CS_DEBUG_LOG(strOAuthHeader);
+            CS_LOG_DEBUG(strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Authorization", strOAuthHeader);
             requestDetails.sHeaders.SetValueForKey("Content-Type", "application/json");
 			
 			Json::FastWriter cWriter;
 			requestDetails.strBody = cWriter.write(cIAPMsg);
-			CS_DEBUG_LOG("RedeemIAP:"+requestDetails.strBody);
+			CS_LOG_DEBUG("RedeemIAP:"+requestDetails.strBody);
 			mpHttpConnectionSystem->MakeRequest(requestDetails, Core::MakeDelegate(this, &MoConnectSystem::OnIAPRedeemedResponse));
         }
         //------------------------
@@ -1233,7 +1233,7 @@ namespace ChilliSource
                 {
                     if(!cJResponse.isNull())
                     {
-                        CS_ERROR_LOG("Unable to redeem iap.");
+                        CS_LOG_ERROR("Unable to redeem iap.");
                     }
                 }
             }

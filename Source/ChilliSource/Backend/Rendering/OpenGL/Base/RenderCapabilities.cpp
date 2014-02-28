@@ -14,7 +14,7 @@ namespace ChilliSource
 {
     namespace OpenGL
     {
-        DEFINE_NAMED_INTERFACE(CRenderCapabilities);
+        CS_DEFINE_NAMEDTYPE(CRenderCapabilities);
         //-------------------------------------------------
         /// Constructor
         //-------------------------------------------------
@@ -36,7 +36,7 @@ namespace ChilliSource
         {
 			mbHighPrecisionInFragmentShaderSupported = true;
 
-#ifdef MOFLOW_OPENGLES2
+#ifdef CS_OPENGLVERSION_ES
             s32 adwFragmentHighRange[2], dwFragmentHighPrecision;
             glGetShaderPrecisionFormat(GL_FRAGMENT_SHADER, GL_HIGH_FLOAT, adwFragmentHighRange, &dwFragmentHighPrecision);
             if (dwFragmentHighPrecision == 0 && adwFragmentHighRange[0] == 0 && adwFragmentHighRange[1] == 0)

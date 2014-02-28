@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
 
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
 #	include <ChilliSource/Backend/Platform/iOS/Core/Notification/RemoteNotificationSystem.h>
 #elif defined(TARGET_ANDROID)
 #	ifdef MOFLOWSKU_REMOTENOTIFICATIONMETHOD_GOOGLEPLAY
@@ -22,13 +22,13 @@ namespace ChilliSource
 {
 	namespace Core
     {
-        DEFINE_NAMED_INTERFACE(RemoteNotificationSystem);
+        CS_DEFINE_NAMEDTYPE(RemoteNotificationSystem);
         //---------------------------------------------------------------
         /// Create
         //---------------------------------------------------------------
         RemoteNotificationSystem* RemoteNotificationSystem::Create()
         {
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
         	return new iOS::CRemoteNotificationSystem();
 #elif defined(TARGET_ANDROID)
 #	ifdef MOFLOWSKU_REMOTENOTIFICATIONMETHOD_GOOGLEPLAY

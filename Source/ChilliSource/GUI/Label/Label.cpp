@@ -583,7 +583,7 @@ namespace ChilliSource
                 return TextJustification::k_bottom;
             }
             
-            CS_FATAL_LOG("No justification matches type");
+            CS_LOG_FATAL("No justification matches type");
             
             return TextJustification::k_left;
         }
@@ -647,29 +647,6 @@ namespace ChilliSource
                 else
                 {
                     Core::Colour sDrawColour = TextColour * GetAbsoluteColour();
-#if DEBUG_STRING_CLIPPING
-                    if(mbLastDrawWasClipped || mbLastDrawHadInvalidCharacter)
-                    {
-                        sDrawColour.r = (mbLastDrawWasClipped? 1.0 : 0.0);
-                        sDrawColour.g = (mbLastDrawHadInvalidCharacter? 1.0 : 0.0);
-                        sDrawColour.b = 0.0;
-                        sDrawColour.a = 1.0;
-                        TimeIntervalSecs uqwMillis = Core::Application::GetSystemTimeInMilliseconds() & 511;
-                        f32 fFade = ((f32)uqwMillis) / 511.0f;
-                        
-                        if(fFade<0.5){
-                            sDrawColour.r*=(fFade * 2.0);
-                            sDrawColour.g*=(fFade * 2.0);
-                            sDrawColour.b*=(fFade * 2.0);
-                        }
-                        else
-                        {
-                            sDrawColour.r=std::min(sDrawColour.r + ((fFade-0.5) * 2.0),  1.0);
-                            sDrawColour.g=std::min(sDrawColour.g + ((fFade-0.5) * 2.0),  1.0);
-                            sDrawColour.b=std::min(sDrawColour.b + ((fFade-0.5) * 2.0),  1.0);
-                        }
-                    }
-#endif
                     inpCanvas->DrawString(Text, GetTransform(), TextScale * fAssetTextScale, Font, mCachedChars, sDrawColour,
                                           vAbsoluteLabelSize, CharacterSpacing, LineSpacing, HorizontalJustification, VerticalJustification, FlipVertical, TextOverflowBehaviour::k_clip, MaxNumLines,&mbLastDrawWasClipped,&mbLastDrawHadInvalidCharacter);
                     

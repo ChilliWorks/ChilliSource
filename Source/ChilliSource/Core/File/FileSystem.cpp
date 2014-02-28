@@ -34,7 +34,7 @@ namespace ChilliSource
                 return StorageLocation::k_none;
         }
         
-    	DEFINE_NAMED_INTERFACE(FileSystem);
+    	CS_DEFINE_NAMEDTYPE(FileSystem);
 
         const std::string kstrDefaultPackageDLCDirectory = "DLC/";
         
@@ -236,7 +236,7 @@ namespace ChilliSource
 
 				//get the hash
 				udwOutput = HashCRC32::GenerateHashCode(abyContents, dwLength);
-				CS_SAFE_DELETE_ARRAY(abyContents);
+				CS_SAFEDELETE_ARRAY(abyContents);
 			}
 			return udwOutput;
 		}
@@ -313,7 +313,7 @@ namespace ChilliSource
 
 
 			u32 udwTotalFiles = astrFilenames.size();
-			CS_DEBUG_LOG("Total Files = " + ToString(udwTotalFiles) + ", Total Size = " + ToString(udwTotalSize));
+			CS_LOG_DEBUG("Total Files = " + ToString(udwTotalFiles) + ", Total Size = " + ToString(udwTotalSize));
 			return udwTotalSize;
 		}
         

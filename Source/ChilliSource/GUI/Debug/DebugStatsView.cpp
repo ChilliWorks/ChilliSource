@@ -7,7 +7,7 @@
  *
  */
 
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
 
 #include <ChilliSource/GUI/Debug/DebugStatsView.h>
 
@@ -32,15 +32,15 @@ namespace ChilliSource
             
             mfTextScale = kfBestFitTextSize/kfCurrentLetterHeight   ;
             
-			DEFINE_DEBUG_STAT(FPS);
-			DEFINE_DEBUG_STAT(FrameTime);
-			DEFINE_DEBUG_STAT(DrawCalls);
-			DEFINE_DEBUG_STAT(Verts);
-            DEFINE_DEBUG_STAT(Meshes);
-            DEFINE_DEBUG_STAT(Meshes_Trans);
-            DEFINE_DEBUG_STAT(Sprites);
-            DEFINE_DEBUG_STAT(Sprites_Trans);
-            DEFINE_DEBUG_STAT(GUI);
+			CS_DEFINE_DEBUGSTAT(FPS);
+			CS_DEFINE_DEBUGSTAT(FrameTime);
+			CS_DEFINE_DEBUGSTAT(DrawCalls);
+			CS_DEFINE_DEBUGSTAT(Verts);
+            CS_DEFINE_DEBUGSTAT(Meshes);
+            CS_DEFINE_DEBUGSTAT(Meshes_Trans);
+            CS_DEFINE_DEBUGSTAT(Sprites);
+            CS_DEFINE_DEBUGSTAT(Sprites_Trans);
+            CS_DEFINE_DEBUGSTAT(GUI);
 			
 			EnableUserInteraction(false);
 			EnableTouchConsumption(false);
@@ -63,15 +63,15 @@ namespace ChilliSource
         
         void DebugStatsView::RefreshStats()
         {
-            SET_DEBUG_STAT(FPS);
-            SET_DEBUG_STAT(FrameTime);
-            SET_DEBUG_STAT(DrawCalls);
-            SET_DEBUG_STAT(Verts);
-            SET_DEBUG_STAT(Meshes);
-            SET_DEBUG_STAT(Meshes_Trans);
-            SET_DEBUG_STAT(Sprites);
-            SET_DEBUG_STAT(Sprites_Trans);
-            SET_DEBUG_STAT(GUI);
+            CS_SET_DEBUGSTAT(FPS);
+            CS_SET_DEBUGSTAT(FrameTime);
+            CS_SET_DEBUGSTAT(DrawCalls);
+            CS_SET_DEBUGSTAT(Verts);
+            CS_SET_DEBUGSTAT(Meshes);
+            CS_SET_DEBUGSTAT(Meshes_Trans);
+            CS_SET_DEBUGSTAT(Sprites);
+            CS_SET_DEBUGSTAT(Sprites_Trans);
+            CS_SET_DEBUGSTAT(GUI);
         }
 		
 		const DebugStatsViewPtr& DebugStatsView::GetSingletonPtr()

@@ -19,7 +19,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(CameraComponent);
+		CS_DEFINE_NAMEDTYPE(CameraComponent);
 		//------------------------------------------------------
 		/// Constructor
 		///

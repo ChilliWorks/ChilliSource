@@ -10,17 +10,17 @@
 #ifndef _MO_FLO_GUI_DEFAULTS_DEBUG_STATS_H_
 #define _MO_FLO_GUI_DEFAULTS_DEBUG_STATS_H_
 
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Image/ImageView.h>
 #include <ChilliSource/GUI/Label/Label.h>
 
-#define DECLARE_DEBUG_STAT(NAME) \
+#define CS_DECLARE_DEBUGSTAT(NAME) \
 LabelSPtr mpLabel##NAME; \
 LabelSPtr mpValue##NAME 
 
-#define DEFINE_DEBUG_STAT(NAME) \
+#define CS_DEFINE_DEBUGSTAT(NAME) \
 mpLabel##NAME = LabelSPtr(new Label()); \
 mpLabel##NAME->SetText(#NAME); \
 mpLabel##NAME->SetTextScale(mfTextScale); \
@@ -47,7 +47,7 @@ mpValue##NAME->EnableTouchConsumption(false); \
 mpValue##NAME->EnableBackground(false); \
 mpLabel##NAME->AddSubview(mpValue##NAME) 
 
-#define SET_DEBUG_STAT(NAME) \
+#define CS_SET_DEBUGSTAT(NAME) \
 {\
     std::string strValue = DebugStats::GetValueForEvent(#NAME);\
     if(strValue.empty())\
@@ -71,15 +71,15 @@ namespace ChilliSource
 			
 		public:
 			
-			DECLARE_DEBUG_STAT(FPS);
-			DECLARE_DEBUG_STAT(FrameTime);
-			DECLARE_DEBUG_STAT(DrawCalls);
-			DECLARE_DEBUG_STAT(Verts);
-            DECLARE_DEBUG_STAT(Meshes);
-            DECLARE_DEBUG_STAT(Meshes_Trans);
-            DECLARE_DEBUG_STAT(Sprites);
-            DECLARE_DEBUG_STAT(Sprites_Trans);
-            DECLARE_DEBUG_STAT(GUI);
+			CS_DECLARE_DEBUGSTAT(FPS);
+			CS_DECLARE_DEBUGSTAT(FrameTime);
+			CS_DECLARE_DEBUGSTAT(DrawCalls);
+			CS_DECLARE_DEBUGSTAT(Verts);
+            CS_DECLARE_DEBUGSTAT(Meshes);
+            CS_DECLARE_DEBUGSTAT(Meshes_Trans);
+            CS_DECLARE_DEBUGSTAT(Sprites);
+            CS_DECLARE_DEBUGSTAT(Sprites_Trans);
+            CS_DECLARE_DEBUGSTAT(GUI);
 			
 		private:
 			
@@ -91,6 +91,12 @@ namespace ChilliSource
 		};
 	}
 }
+
+#else
+
+#define CS_DECLARE_DEBUGSTAT(NAME)
+#define CS_DEFINE_DEBUGSTAT(NAME) 
+#define CS_SET_DEBUGSTAT(NAME)
 
 #endif
 

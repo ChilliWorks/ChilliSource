@@ -120,7 +120,7 @@ namespace ChilliSource
             };
 			
 			virtual ~Font(){}
-			DECLARE_NAMED_INTERFACE(Font);
+			CS_DECLARE_NAMEDTYPE(Font);
 			//---------------------------------------------------------------------
 			/// Is A
 			///

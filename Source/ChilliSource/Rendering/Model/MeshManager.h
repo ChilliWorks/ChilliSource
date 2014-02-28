@@ -25,7 +25,7 @@ namespace ChilliSource
 		class MeshManager : public Core::ResourceManager
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(MeshManager);
+			CS_DECLARE_NAMEDTYPE(MeshManager);
 			
 			MeshManager();
 			virtual ~MeshManager();

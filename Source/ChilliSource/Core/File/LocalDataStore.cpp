@@ -280,7 +280,7 @@ namespace ChilliSource
                 pFileStream->Close();
             }
             
-            CS_SAFE_DELETE_ARRAY(pdwDocEncrypted)
+            CS_SAFEDELETE_ARRAY(pdwDocEncrypted)
             mbBackingValid = true;
 		}
         //----------------------------------------------------------------
@@ -319,7 +319,7 @@ namespace ChilliSource
                         mBackingDictionary.FromXml(pRoot);
                     }
                     
-                    CS_SAFE_DELETE_ARRAY(pbyData);
+                    CS_SAFEDELETE_ARRAY(pbyData);
                 }
             }
             else

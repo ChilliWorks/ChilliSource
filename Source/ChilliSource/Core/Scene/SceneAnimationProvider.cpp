@@ -15,7 +15,7 @@
 namespace ChilliSource{
     namespace Core
     {
-        DEFINE_NAMED_INTERFACE(SceneAnimationProvider);
+        CS_DEFINE_NAMEDTYPE(SceneAnimationProvider);
         
         const std::string kMoSceneAnimExtension("moscene.animations");
         

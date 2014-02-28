@@ -20,7 +20,7 @@ namespace ChilliSource
 		class SubtitlesManager : public Core::ResourceManager
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(SubtitlesManager);
+			CS_DECLARE_NAMEDTYPE(SubtitlesManager);
 			//----------------------------------------------------------------
 			/// Is A
 			///

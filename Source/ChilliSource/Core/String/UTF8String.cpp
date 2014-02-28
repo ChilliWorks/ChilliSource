@@ -259,7 +259,7 @@ namespace ChilliSource
             else
             {
                 udwNumCodePoints = 0;
-                CS_DEBUG_LOG("Invalid UT8 format");
+                CS_LOG_DEBUG("Invalid UT8 format");
             }
             
             for(u32 i=0; i<udwNumCodePoints; ++i)
@@ -305,7 +305,7 @@ namespace ChilliSource
             else if((*pLeadCodePoint) < 0xC0)
             {
                 udwNumCodePoints = 0;
-                CS_DEBUG_LOG("Invalid UT8 format");
+                CS_LOG_DEBUG("Invalid UT8 format");
             }
             
             for(u32 i=0; i<udwNumCodePoints; ++i)

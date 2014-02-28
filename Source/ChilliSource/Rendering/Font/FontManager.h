@@ -25,7 +25,7 @@ namespace ChilliSource
 		class FontManager : public Core::ResourceManager
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(FontManager);
+			CS_DECLARE_NAMEDTYPE(FontManager);
 			FontManager();
 			
 			//----------------------------------------------------------------

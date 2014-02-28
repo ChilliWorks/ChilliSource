@@ -15,7 +15,7 @@ namespace ChilliSource
 {
 	namespace Video
 	{
-		DEFINE_NAMED_INTERFACE(SubtitlesManager);
+		CS_DEFINE_NAMEDTYPE(SubtitlesManager);
 		
 		//----------------------------------------------------------------
 		/// Is A
@@ -73,7 +73,7 @@ namespace ChilliSource
 				{
 					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, inFilePath, pResource))
 					{
-						CS_DEBUG_LOG("Loading Subtitles " + inFilePath);
+						CS_LOG_DEBUG("Loading Subtitles " + inFilePath);
 						mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
 						
 						SubtitlesSPtr pSubtitles = std::static_pointer_cast<Subtitles>(pResource);
@@ -91,7 +91,7 @@ namespace ChilliSource
 				return std::static_pointer_cast<Subtitles>(pExistingResource->second);
 			}
 			
-			CS_ERROR_LOG("Cannot find resource for Subtitles with path " + inFilePath);
+			CS_LOG_ERROR("Cannot find resource for Subtitles with path " + inFilePath);
 			return SubtitlesSPtr();
 		}
 		//----------------------------------------------------------------
@@ -115,7 +115,7 @@ namespace ChilliSource
 					
 					if(mResourceProviders[nProvider]->AsyncCreateResourceFromFile(ineStorageLocation, inFilePath, pResource))
 					{
-						CS_DEBUG_LOG("Loading Subtitles " + inFilePath);
+						CS_LOG_DEBUG("Loading Subtitles " + inFilePath);
 						mMapFilenameToResource.insert(std::make_pair(inFilePath, pResource));
 						return pSubtitles;
 					}
@@ -126,7 +126,7 @@ namespace ChilliSource
 				return std::static_pointer_cast<Subtitles>(pExistingResource->second);
 			}
 			
-			CS_ERROR_LOG("Cannot find resource for Subtitles with path " + inFilePath);
+			CS_LOG_ERROR("Cannot find resource for Subtitles with path " + inFilePath);
 			return SubtitlesSPtr();
 		}
 	}

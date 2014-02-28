@@ -22,7 +22,7 @@ namespace ChilliSource
 		{
 		public:
 			
-			DECLARE_NAMED_INTERFACE(Cubemap);
+			CS_DECLARE_NAMEDTYPE(Cubemap);
 			
 			virtual void Bind(u32 inSlot = 0) = 0;
 			virtual void Unbind() = 0;

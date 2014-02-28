@@ -22,9 +22,9 @@
 #include <android/log.h>
 extern "C"
 {
-    #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, "MoFlow", "%s", __VA_ARGS__)
-    #define LOGW(...) __android_log_print(ANDROID_LOG_WARN, "MoFlow", "%s", __VA_ARGS__)
-    #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, "MoFlow", "%s", __VA_ARGS__)
+    #define CS_ANDROID_LOG_DEBUG(...) __android_log_print(ANDROID_LOG_DEBUG, "MoFlow", "%s", __VA_ARGS__)
+    #define CS_ANDROID_LOG_WARNING(...) __android_log_print(ANDROID_LOG_WARN, "MoFlow", "%s", __VA_ARGS__)
+    #define CS_ANDROID_LOG_ERROR(...) __android_log_print(ANDROID_LOG_ERROR, "MoFlow", "%s", __VA_ARGS__)
 }
 #endif
 
@@ -32,15 +32,15 @@ extern "C"
 #include <Windows.h>
 #endif
 
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
 #include <Foundation/NSThread.h>
 #endif
 
-#ifdef DEBUG
+#ifdef CS_ENABLE_DEBUG
 #include <cassert>
 #endif
 
-#if (TARGET_IPHONE_SIMULATOR || TARGET_OS_IPHONE) && __OBJC__
+#if CS_TARGETPLATFORM_IOS && __OBJC__
 #import <Foundation/Foundation.h>
 #endif
 
@@ -50,7 +50,7 @@ namespace ChilliSource
     {
         bool Logging::mbInitialised = false;
 
-#ifdef MOFLOW_LOG_TO_FILE
+#ifdef CS_ENABLE_LOGTOFILE
         const u32 kudwMaxLogBufferSize = 2048;
         const s8* kstrFileName = "MoFloLog.txt";
         
@@ -78,7 +78,7 @@ namespace ChilliSource
         //----------------------------------------------
         void Logging::Init()
         {
-#ifdef MOFLOW_LOG_TO_FILE
+#ifdef CS_ENABLE_LOGTOFILE
             //Clear the old file
             Core::FileStreamSPtr pLogFile = Core::Application::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FM_WRITE);
             pLogFile->Write("MoFlow Log File");
@@ -96,10 +96,10 @@ namespace ChilliSource
         //----------------------------------------------
         void Logging::LogVerbose(const std::string &instrMessage)
         {
-#if LOG_LEVEL == LOG_VERBOSE
+#ifdef CS_LOGLEVEL_VERBOSE
 #ifdef TARGET_ANDROID
-            LOGD(instrMessage.c_str());
-#elif TARGET_OS_IPHONE
+            CS_ANDROID_LOG_DEBUG(instrMessage.c_str());
+#elif CS_TARGETPLATFORM_IOS
             NSString* pLog = [[NSString alloc] initWithUTF8String:instrMessage.c_str()];
             NSLog(@"moFlo: %@ ", pLog);
             [pLog release];
@@ -107,7 +107,7 @@ namespace ChilliSource
             std::cout << "moFlo: " + instrMessage << std::endl;
 #endif
 
-#ifdef MOFLOW_LOG_TO_FILE
+#ifdef CS_ENABLE_LOGTOFILE
             gstrLogBuffer += ("\nmoFlo: " + instrMessage);
             
             //Check whether to flush the buffer
@@ -130,10 +130,10 @@ namespace ChilliSource
         //----------------------------------------------
         void Logging::LogWarning(const std::string &instrMessage)
         {
-#if LOG_LEVEL <= LOG_WARNING
+#ifdef CS_LOGLEVEL_WARNING
 #ifdef TARGET_ANDROID
-            LOGW(("WARNING: " + instrMessage).c_str());
-#elif TARGET_OS_IPHONE
+            CS_ANDROID_LOG_WARNING(("WARNING: " + instrMessage).c_str());
+#elif CS_TARGETPLATFORM_IOS
             NSString* pLog = [[NSString alloc] initWithUTF8String:instrMessage.c_str()];
             NSLog(@"moFlo: WARNING %@ ", pLog);
             [pLog release];
@@ -141,7 +141,7 @@ namespace ChilliSource
             std::cout << "moFlo WARNING: " + instrMessage << std::endl;
 #endif
 
-#ifdef MOFLOW_LOG_TO_FILE
+#ifdef CS_ENABLE_LOGTOFILE
             gstrLogBuffer += ("\nmoFlo WARNING: " + instrMessage);
             
             //Check whether to flush the buffer
@@ -164,10 +164,10 @@ namespace ChilliSource
         //----------------------------------------------
         void Logging::LogError(const std::string &instrMessage)
         {
-#if LOG_LEVEL <= LOG_ERROR
+#if CS_LOGLEVEL_ERROR
 #ifdef TARGET_ANDROID
-            LOGE(("ERROR: " + instrMessage).c_str());
-#elif TARGET_OS_IPHONE
+            CS_ANDROID_LOG_ERROR(("ERROR: " + instrMessage).c_str());
+#elif CS_TARGETPLATFORM_IOS
             NSString* pLog = [[NSString alloc] initWithUTF8String:instrMessage.c_str()];
             NSLog(@"moFlo: ERROR %@ ", pLog);
             [pLog release];
@@ -175,7 +175,7 @@ namespace ChilliSource
             std::cout << "moFlo ERROR: " + instrMessage << std::endl;
 #endif
    
-#ifdef MOFLOW_LOG_TO_FILE
+#ifdef CS_ENABLE_LOGTOFILE
             gstrLogBuffer += ("\nmoFlo ERROR: " + instrMessage);
             
             //Force flush the buffer on an error
@@ -196,11 +196,11 @@ namespace ChilliSource
         void Logging::LogFatal(const std::string &instrMessage)
         {
 #ifdef TARGET_ANDROID
-            LOGE(("FATAL: " + instrMessage).c_str());
-            LOGE("moFlo is exiting...");
+            CS_ANDROID_LOG_ERROR(("FATAL: " + instrMessage).c_str());
+            CS_ANDROID_LOG_ERROR("moFlo is exiting...");
 #endif
         
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
             NSLog(@"%@", [NSThread callStackSymbols]);
 
             NSString* pLog = [[NSString alloc] initWithUTF8String:instrMessage.c_str()];
@@ -214,7 +214,7 @@ namespace ChilliSource
             MessageBoxA(NULL, instrMessage.c_str(), "moFlow fatal error!", MB_OK);
 #endif
 
-#ifdef MOFLOW_LOG_TO_FILE
+#ifdef CS_ENABLE_LOGTOFILE
             gstrLogBuffer += ("\nmoFlo FATAL: " + instrMessage);
             gstrLogBuffer += ("\nmoFlo is exiting...");
             
@@ -230,7 +230,7 @@ namespace ChilliSource
 #endif
         }
     
-#ifdef MOFLOW_LOG_TO_FILE
+#ifdef CS_ENABLE_LOGTOFILE
         //----------------------------------------------
         /// Get Log Data
         ///

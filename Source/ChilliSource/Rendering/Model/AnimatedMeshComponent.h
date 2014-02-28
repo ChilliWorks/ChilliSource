@@ -51,7 +51,7 @@ namespace ChilliSource
 		class AnimatedMeshComponent : public RenderComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(AnimatedMeshComponent);
+			CS_DECLARE_NAMEDTYPE(AnimatedMeshComponent);
 			
 			AnimatedMeshComponent();
 			~AnimatedMeshComponent();

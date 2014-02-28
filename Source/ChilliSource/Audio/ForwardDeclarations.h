@@ -20,19 +20,19 @@ namespace ChilliSource
         //--------------------------------------------------
         /// 3D
         //--------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(AudioComponent);
-        CS_FORWARD_DECLARE_CLASS(AudioComponentFactory);
-        CS_FORWARD_DECLARE_CLASS(AudioListener);
-        CS_FORWARD_DECLARE_CLASS(AudioListenerComponent);
+        CS_FORWARDDECLARE_CLASS(AudioComponent);
+        CS_FORWARDDECLARE_CLASS(AudioComponentFactory);
+        CS_FORWARDDECLARE_CLASS(AudioListener);
+        CS_FORWARDDECLARE_CLASS(AudioListenerComponent);
         //--------------------------------------------------
         /// Base
         //--------------------------------------------------
-        CS_FORWARD_DECLARE_CLASS(AudioLoader);
-        CS_FORWARD_DECLARE_CLASS(AudioManager);
-        CS_FORWARD_DECLARE_CLASS(AudioPlayer);
-        CS_FORWARD_DECLARE_CLASS(AudioResource);
-        CS_FORWARD_DECLARE_CLASS(AudioSystem);
-        CS_FORWARD_DECLARE_CLASS(SoundEvent);
+        CS_FORWARDDECLARE_CLASS(AudioLoader);
+        CS_FORWARDDECLARE_CLASS(AudioManager);
+        CS_FORWARDDECLARE_CLASS(AudioPlayer);
+        CS_FORWARDDECLARE_CLASS(AudioResource);
+        CS_FORWARDDECLARE_CLASS(AudioSystem);
+        CS_FORWARDDECLARE_CLASS(SoundEvent);
 	}
 }
 

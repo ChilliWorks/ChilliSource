@@ -31,7 +31,7 @@ namespace ChilliSource{
 		class ContactInformationProvider : public Core::IInformationProvider{
 		public:
 			
-			DECLARE_NAMED_INTERFACE(ContactInformationProvider);
+			CS_DECLARE_NAMEDTYPE(ContactInformationProvider);
 			
 			virtual void LoadInformation() = 0;
 			

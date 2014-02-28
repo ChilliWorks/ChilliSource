@@ -20,7 +20,7 @@ namespace ChilliSource
 		class PointLightComponent : public LightComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(PointLightComponent);
+			CS_DECLARE_NAMEDTYPE(PointLightComponent);
 			
             //----------------------------------------------------------
             /// Constructor

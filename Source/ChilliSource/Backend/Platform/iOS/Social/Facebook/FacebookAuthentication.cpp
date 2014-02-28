@@ -33,7 +33,7 @@ namespace ChilliSource
     
 	namespace iOS
 	{
-		DEFINE_NAMED_INTERFACE(CFacebookAuthenticationSystem);
+		CS_DEFINE_NAMEDTYPE(CFacebookAuthenticationSystem);
 		
 		bool CFacebookAuthenticationSystem::IsA(Core::InterfaceIDType inID) const
 		{
@@ -257,7 +257,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_ERROR_LOG("No app ID specified in plist (FacebookAppID)");
+                CS_LOG_ERROR("No app ID specified in plist (FacebookAppID)");
             }
         }
         

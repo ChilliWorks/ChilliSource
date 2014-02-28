@@ -14,9 +14,9 @@
 namespace ChilliSource{
 
 	namespace Social{
-		DEFINE_NAMED_INTERFACE(ContactInformationProvider);
-		DEFINE_NAMED_INTERFACE(SMSCompositionActivity);
-		DEFINE_NAMED_INTERFACE(EmailCompositionActivity);
+		CS_DEFINE_NAMEDTYPE(ContactInformationProvider);
+		CS_DEFINE_NAMEDTYPE(SMSCompositionActivity);
+		CS_DEFINE_NAMEDTYPE(EmailCompositionActivity);
 	}
 
 }

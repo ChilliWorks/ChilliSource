@@ -27,7 +27,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_ERROR_LOG("Not enough memory to allocate static mem pool of size " + ToString(inudwHeapSize));
+                CS_LOG_ERROR("Not enough memory to allocate static mem pool of size " + ToString(inudwHeapSize));
             }
 
             //Let's allocate the chunks that manage the memory pool

@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/File/LocalDataStore.h>
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
 #include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterPostSystem.h>
 #elif TARGET_ANDROID
 #include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterPostSystem.h>
@@ -22,11 +22,11 @@ namespace ChilliSource
 {
 	namespace Social
 	{
-		DEFINE_NAMED_INTERFACE(TwitterPostSystem);
+		CS_DEFINE_NAMEDTYPE(TwitterPostSystem);
 
         TwitterPostSystem* TwitterPostSystem::CreateSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem)
         {
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
             return new ChilliSource::iOS::CTwitterPostSystem(static_cast<iOS::CHttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
 #elif TARGET_ANDROID
             return new ChilliSource::Android::CTwitterPostSystem(static_cast<Android::CHttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
@@ -73,10 +73,10 @@ namespace ChilliSource
         			bResult = true;
         		}
 				else
-					CS_ERROR_LOG("CTwitterPostSystem::Init() - ERROR: Twitter does not have an OAuth system!");
+					CS_LOG_ERROR("CTwitterPostSystem::Init() - ERROR: Twitter does not have an OAuth system!");
         	}
         	else
-        		CS_ERROR_LOG("CTwitterPostSystem::Init() - ERROR: Twitter customer key and/or customer secret string(s) empty!");
+        		CS_LOG_ERROR("CTwitterPostSystem::Init() - ERROR: Twitter customer key and/or customer secret string(s) empty!");
 			
         	return bResult;
         }
@@ -86,7 +86,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------
         bool TwitterPostSystem::Authenticate()
         {
-        	CS_WARNING_LOG("TwitterPostSystem::Authenticate() - This platform does not have an Authenticate() method\n\tTwitter may not function correctly or at all!");
+        	CS_LOG_WARNING("TwitterPostSystem::Authenticate() - This platform does not have an Authenticate() method\n\tTwitter may not function correctly or at all!");
 
         	return true;
         }
@@ -274,7 +274,7 @@ namespace ChilliSource
 		{
 			if(ineResult == ChilliSource::Networking::HttpRequest::CompletionResult::k_completed)
 			{
-				CS_DEBUG_LOG("CTwitterPostSystem::OnRequestOAuthAccessTokenComplete() - Got response:\n"+inpRequest->GetResponseString());
+				CS_LOG_DEBUG("CTwitterPostSystem::OnRequestOAuthAccessTokenComplete() - Got response:\n"+inpRequest->GetResponseString());
 				// Tell OAuth system to save access token and secret from web response
 				mpOAuthSystem->ExtractOAuthTokenKeySecret(inpRequest->GetResponseString());
 				SaveOAuthTokenKeyAndSecretKey();

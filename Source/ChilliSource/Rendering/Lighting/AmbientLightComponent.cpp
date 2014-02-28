@@ -13,7 +13,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(AmbientLightComponent);
+		CS_DEFINE_NAMEDTYPE(AmbientLightComponent);
         
 		//----------------------------------------------------------
 		/// Is A

@@ -106,7 +106,7 @@ namespace ChilliSource
 		class HttpConnectionSystem : public ChilliSource::Core::System
         {
 		public:
-			DECLARE_NAMED_INTERFACE(HttpConnectionSystem);
+			CS_DECLARE_NAMEDTYPE(HttpConnectionSystem);
             
             //--------------------------------------------------------------------------------------------------
 			/// Make Request

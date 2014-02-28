@@ -30,7 +30,7 @@ namespace ChilliSource
 		class Subtitles : public Core::Resource
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(Subtitles);
+			CS_DECLARE_NAMEDTYPE(Subtitles);
             //----------------------------------------------------------
 			/// Style
 			//----------------------------------------------------------

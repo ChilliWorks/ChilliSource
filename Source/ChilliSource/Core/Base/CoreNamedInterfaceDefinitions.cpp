@@ -15,8 +15,8 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		DEFINE_NAMED_INTERFACE(IUpdateable);
-		DEFINE_NAMED_INTERFACE(IComponentProducer);
-		DEFINE_NAMED_INTERFACE(ResourceProvider);
+		CS_DEFINE_NAMEDTYPE(IUpdateable);
+		CS_DEFINE_NAMEDTYPE(IComponentProducer);
+		CS_DEFINE_NAMEDTYPE(ResourceProvider);
 	}
 }

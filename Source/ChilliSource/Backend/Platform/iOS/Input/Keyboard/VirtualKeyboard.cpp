@@ -132,7 +132,7 @@ namespace ChilliSource
                     mpTextView.keyboardType = UIKeyboardTypeNumberPad;
                     break;
                 default:
-                	CS_ERROR_LOG("Invalid keyboard type passed to virtual keyboard!");
+                	CS_LOG_ERROR("Invalid keyboard type passed to virtual keyboard!");
                 	mpTextView.keyboardType = UIKeyboardTypeASCIICapable;
                     break;
             }
@@ -162,7 +162,7 @@ namespace ChilliSource
                     mpTextView.autocapitalizationType = UITextAutocapitalizationTypeAllCharacters;
                     break;
                 default:
-                    CS_WARNING_LOG("Unknown Capitalisation Method");
+                    CS_LOG_WARNING("Unknown Capitalisation Method");
             }
         }
 		//--------------------------------------------

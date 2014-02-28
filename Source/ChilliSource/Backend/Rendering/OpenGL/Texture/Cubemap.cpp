@@ -156,8 +156,8 @@ namespace ChilliSource
 #endif
                     break;
                 case Core::ImageCompression::k_PVR2Bpp:
-#ifndef TARGET_OS_IPHONE
-                    CS_FATAL_LOG("PVR compressed textures are only supported on iOS.");
+#ifndef CS_TARGETPLATFORM_IOS
+                    CS_LOG_FATAL("PVR compressed textures are only supported on iOS.");
 #else
                     switch(pSourceImage->GetFormat())
                     {
@@ -172,8 +172,8 @@ namespace ChilliSource
 #endif
                     break;
                 case Core::ImageCompression::k_PVR4Bpp:
-#ifndef TARGET_OS_IPHONE
-                    CS_FATAL_LOG("PVR compressed textures are only supported on iOS.");
+#ifndef CS_TARGETPLATFORM_IOS
+                    CS_LOG_FATAL("PVR compressed textures are only supported on iOS.");
 #else
                     switch(pSourceImage->GetFormat())
                     {
@@ -208,7 +208,7 @@ namespace ChilliSource
 		{
 			if(inSlot > mpRenderCapabilities->GetNumTextureUnits())
 			{
-				CS_FATAL_LOG("Attempting to bind to texture unit not supported on this device: " + Core::ToString(inSlot));
+				CS_LOG_FATAL("Attempting to bind to texture unit not supported on this device: " + Core::ToString(inSlot));
 			}
 			
             CTexture::SetActiveTextureSlot(inSlot);

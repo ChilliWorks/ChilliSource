@@ -48,7 +48,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_ERROR_LOG("Cannot create particle emitter of type: " + instrType);
+                CS_LOG_ERROR("Cannot create particle emitter of type: " + instrType);
                 return nullptr;
             }
         }

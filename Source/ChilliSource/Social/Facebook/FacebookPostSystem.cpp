@@ -10,7 +10,7 @@
 
 #include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
 
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
 #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
 #elif TARGET_ANDROID
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookPostSystem.h>
@@ -26,11 +26,11 @@ namespace ChilliSource
 {
 	namespace Social
 	{
-		DEFINE_NAMED_INTERFACE(IFacebookPostSystem);
+		CS_DEFINE_NAMEDTYPE(IFacebookPostSystem);
         
         IFacebookPostSystem* IFacebookPostSystem::CreatePostSystem(ChilliSource::Social::FacebookAuthenticationSystem* inpAuthSystem)
         {
-#ifdef TARGET_OS_IPHONE
+#ifdef CS_TARGETPLATFORM_IOS
             return new ChilliSource::iOS::CFacebookPostSystem(inpAuthSystem);
 #elif TARGET_ANDROID
             return new ChilliSource::Android::CFacebookPostSystem(inpAuthSystem);

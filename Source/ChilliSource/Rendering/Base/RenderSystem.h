@@ -34,7 +34,7 @@ namespace ChilliSource
 		class RenderSystem : public Core::System, public Core::IComponentProducer
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(RenderSystem);
+			CS_DECLARE_NAMEDTYPE(RenderSystem);
 			RenderSystem();
 			virtual ~RenderSystem();
 			

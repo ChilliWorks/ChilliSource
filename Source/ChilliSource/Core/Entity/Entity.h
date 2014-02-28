@@ -23,7 +23,7 @@ namespace ChilliSource
 	{
 		typedef std::vector<ComponentSPtr> ComponentList;
 		
-#ifdef ENTITY_LINKED_LIST
+#ifdef CS_ENABLE_ENTITYLINKEDLIST
 		typedef std::list<EntitySPtr> SharedEntityList;
 		typedef std::list<Entity*> EntityList;
 #else		

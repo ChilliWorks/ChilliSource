@@ -23,7 +23,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(FontManager);
+		CS_DEFINE_NAMEDTYPE(FontManager);
 		
 		//-----------------------------------------------------------------
 		/// Constructor
@@ -113,7 +113,7 @@ namespace ChilliSource
 				{
 					if(mResourceProviders[nProvider]->CreateResourceFromFile(ineStorageLocation, strFontFile, pResource)) 
 					{
-						CS_DEBUG_LOG("Loading font " + strFontFile);
+						CS_LOG_DEBUG("Loading font " + strFontFile);
                         
 						mMapFilenameToResource.insert(std::make_pair(strFontFile, pResource));
 						
@@ -139,7 +139,7 @@ namespace ChilliSource
 			}
 			
 			//Resource not found
-			CS_ERROR_LOG("Cannot find resource for font with path " + inFilePath);
+			CS_LOG_ERROR("Cannot find resource for font with path " + inFilePath);
 			return FontSPtr();
 		}
 	}

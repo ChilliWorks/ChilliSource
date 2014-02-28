@@ -27,7 +27,7 @@ namespace ChilliSource
 		{
 		public:
 			virtual ~InputSystem(){};
-			DECLARE_NAMED_INTERFACE(InputSystem);
+			CS_DECLARE_NAMEDTYPE(InputSystem);
 			
 			virtual bool CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const = 0;
 			virtual InputDevice * GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID) = 0;

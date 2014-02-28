@@ -77,7 +77,7 @@ namespace ChilliSource
                 else
                 if(2 == udwVersion)
                 {
-                    CS_WARNING_LOG("File \""+inFilePath+"\" moimage version 2 is deprecated. Please use version 3 which is supported from revision 86 in the tool repository.");
+                    CS_LOG_WARNING("File \""+inFilePath+"\" moimage version 2 is deprecated. Please use version 3 which is supported from revision 86 in the tool repository.");
                     ReadFileVersion2(pImageFile, outpResource);
                 }
                 
@@ -164,7 +164,7 @@ namespace ChilliSource
                 u32 udwInflatedChecksum = HashCRC32::GenerateHashCode((const s8*)pubyBitmapData, sHeader.udwOriginalDataSize);
                 if(sHeader.uddwChecksum != (u64)udwInflatedChecksum)
                 {
-                    CS_ERROR_LOG("MoImage checksum of "+ToString(udwInflatedChecksum)+" does not match expected checksum "+ToString(sHeader.uddwChecksum));
+                    CS_LOG_ERROR("MoImage checksum of "+ToString(udwInflatedChecksum)+" does not match expected checksum "+ToString(sHeader.uddwChecksum));
                 }
                 
                 free(pubyCompressedData);

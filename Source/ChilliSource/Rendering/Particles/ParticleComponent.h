@@ -31,7 +31,7 @@ namespace ChilliSource
             
             typedef std::function<void(ParticleComponent*)> EmittersFinishedDelegate;
 			
-			DECLARE_NAMED_INTERFACE(ParticleComponent);
+			CS_DECLARE_NAMEDTYPE(ParticleComponent);
 			
 			ParticleComponent();
             ~ParticleComponent();

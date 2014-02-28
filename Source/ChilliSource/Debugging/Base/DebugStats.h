@@ -10,7 +10,7 @@
 #ifndef _MO_FLO_CORE_DEBUG_STATS_H_
 #define _MO_FLO_CORE_DEBUG_STATS_H_
 
-#ifdef DEBUG_STATS
+#ifdef CS_ENABLE_DEBUGSTATS
 
 #include <ChilliSource/ChilliSource.h>
 

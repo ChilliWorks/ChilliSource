@@ -88,10 +88,10 @@ namespace ChilliSource
                     }
                     break;
                 case NotificationType::k_push:
-                    CS_ERROR_LOG("Push notifications can not be scheduled within the app");
+                    CS_LOG_ERROR("Push notifications can not be scheduled within the app");
                     break;
                 case NotificationType::k_system:
-                    CS_ERROR_LOG("System notifications must be scheduled with a time");
+                    CS_LOG_ERROR("System notifications must be scheduled with a time");
                     break;
             }
         
@@ -136,7 +136,7 @@ namespace ChilliSource
                     }
                     break;
                 case NotificationType::k_push:
-                    CS_ERROR_LOG("Push notifications can not be scheduled within the app");
+                    CS_LOG_ERROR("Push notifications can not be scheduled within the app");
                     break;
                 case NotificationType::k_system:
                     if(bSystemNotificationsEnabled)
@@ -196,7 +196,7 @@ namespace ChilliSource
                     }
                     break;
                 case NotificationType::k_push:
-                    CS_ERROR_LOG("Push notifications can not be scheduled within the app");
+                    CS_LOG_ERROR("Push notifications can not be scheduled within the app");
                     break;
                 case NotificationType::k_system:
                     if(bSystemNotificationsEnabled)
@@ -233,10 +233,10 @@ namespace ChilliSource
             switch(ineType)
             {
                 case NotificationType::k_app:
-                    CS_WARNING_LOG("NotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod is not implemented for type NOTICE_APP");
+                    CS_LOG_WARNING("NotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod is not implemented for type NOTICE_APP");
                     break;
                 case NotificationType::k_push:
-                    CS_FATAL_LOG("Push notifications can not be checked within the app");
+                    CS_LOG_FATAL("Push notifications can not be checked within the app");
                     break;
                 case NotificationType::k_system:
                     return mspLocalNotificationScheduler->TryGetNotificationsScheduledWithinTimePeriod(inTime, inPeriod, outaNotifications);
@@ -299,7 +299,7 @@ namespace ChilliSource
                     }
                     break;
                 case NotificationType::k_push:
-                    CS_FATAL_LOG("Push notifications can not be cancelled within the app");
+                    CS_LOG_FATAL("Push notifications can not be cancelled within the app");
                     break;
                 case NotificationType::k_system:
                     mspLocalNotificationScheduler->CancelByID(inID);
@@ -321,7 +321,7 @@ namespace ChilliSource
                     TimedAppNotifications.clear();
                     break;
                 case NotificationType::k_push:
-                    CS_FATAL_LOG("Push notifications can not be cancelled within the app");
+                    CS_LOG_FATAL("Push notifications can not be cancelled within the app");
                     break;
                 case NotificationType::k_system:
                     mspLocalNotificationScheduler->CancelAll();

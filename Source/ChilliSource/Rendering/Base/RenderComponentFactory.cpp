@@ -33,7 +33,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(RenderComponentFactory);
+		CS_DEFINE_NAMEDTYPE(RenderComponentFactory);
         //--------------------------------------------------------
         /// Constructor
         ///
@@ -143,7 +143,7 @@ namespace ChilliSource
 				} 
                 else 
                 {
-					CS_WARNING_LOG("Insufficient parameters to create a StaticMeshComponent");
+					CS_LOG_WARNING("Insufficient parameters to create a StaticMeshComponent");
 				}
 			} 
             else if (insTypeName == CameraComponent::TypeName) 
@@ -567,7 +567,7 @@ namespace ChilliSource
                 pShadowMap = mpTextureManager->CreateTextureResource();
                 mpTextureManager->CreateEmptyTexture(inudwShadowMapRes, inudwShadowMapRes, Core::Image::Format::k_Depth16, pShadowMap);
 
-#ifdef MOFLOW_SHADOW_DEBUG
+#ifdef CS_ENABLE_DEBUGSHADOW
                 pShadowMapDebug = mpTextureManager->CreateTextureResource();
                 mpTextureManager->CreateEmptyTexture(inudwShadowMapRes, inudwShadowMapRes, Core::Image::Format::k_RGB888, pShadowMapDebug);
 #endif

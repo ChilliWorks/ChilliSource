@@ -1,5 +1,0 @@
-#ifndef _MO_FLO_REVISION_H
-#define _MO_FLO_REVISION_H
-#define APP_REVISION_NUMBER ""
-#define MOFLOW_REVISION_NUMBER ""
-#endif

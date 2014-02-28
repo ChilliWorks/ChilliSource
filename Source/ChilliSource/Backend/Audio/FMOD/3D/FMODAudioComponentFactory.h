@@ -26,7 +26,7 @@ namespace ChilliSource
 		public:
 			CFMODAudioComponentFactory(Audio::AudioSystem* inpAudioSystem, Audio::AudioManager* inpAudioMgr);
 	
-			DECLARE_NAMED_INTERFACE(CFMODAudioComponentFactory);
+			CS_DECLARE_NAMEDTYPE(CFMODAudioComponentFactory);
 			
             //-------------------------------------------------------
 			/// Is A

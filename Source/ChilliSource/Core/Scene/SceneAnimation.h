@@ -60,7 +60,7 @@ namespace ChilliSource
         class SceneAnimation : public ChilliSource::Core::Resource
         {
         public:
-            DECLARE_NAMED_INTERFACE(SceneAnimation);
+            CS_DECLARE_NAMEDTYPE(SceneAnimation);
             bool IsA(InterfaceIDType inInterface) const override;
             
             //--------------------------------------------------------------
