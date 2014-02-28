@@ -266,7 +266,7 @@ namespace ChilliSource
 			}
 
 			//get all the files in the directory
-			DYNAMIC_ARRAY<std::string> astrFilenames;
+			std::vector<std::string> astrFilenames;
 			GetFileNamesInDirectory(ineSourceStorageLocation, instrSourceDirectory, true, astrFilenames);
 
 			//error if there are no files
@@ -279,7 +279,7 @@ namespace ChilliSource
 			//copy each of these files individually
 			std::string strSourceProperPath = Core::CStringUtils::StandardisePath(instrSourceDirectory);
 			std::string strDestProperPath = Core::CStringUtils::StandardisePath(instrDestinationDirectory);
-			for (DYNAMIC_ARRAY<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
+			for (std::vector<std::string>::iterator it = astrFilenames.begin(); it != astrFilenames.end(); ++it)
 			{
 				if (CopyFile(ineSourceStorageLocation, strSourceProperPath + *it, 
 					ineDestinationStorageLocation, strDestProperPath + *it) == false)
@@ -346,7 +346,7 @@ namespace ChilliSource
 		/// Get File Names With Extension In Directory
 		//--------------------------------------------------------------
 		void CFileSystem::GetFileNamesWithExtensionInDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
-			const std::string& instrExtension, DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath) const
+			const std::string& instrExtension, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
 		{
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -448,7 +448,7 @@ namespace ChilliSource
 		/// @param Output dynamic array containing the filenames.
 		//--------------------------------------------------------------
 		void CFileSystem::GetPathForFilesWithNameInDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
-			const std::string& instrName, DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath) const
+			const std::string& instrName, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
 		{
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -540,7 +540,7 @@ namespace ChilliSource
 		/// Get File Names In Directory
 		//--------------------------------------------------------------
 		void CFileSystem::GetFileNamesInDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories, 
-			DYNAMIC_ARRAY<std::string> &outstrFileNames, bool inbAppendFullPath) const
+			std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
 		{
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -632,7 +632,7 @@ namespace ChilliSource
 		/// Get Directories In Directory
 		//--------------------------------------------------------------
 		void CFileSystem::GetDirectoriesInDirectory(Core::STORAGE_LOCATION ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
-			DYNAMIC_ARRAY<std::string> &outstrDirectories, bool inbAppendFullPath) const
+			std::vector<std::string> &outstrDirectories, bool inbAppendFullPath) const
 		{
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)

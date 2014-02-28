@@ -48,7 +48,7 @@ namespace ChilliSource
 			///
 			/// @param the system list
 			//-------------------------------------------------
-			void CreateDefaultSystems(DYNAMIC_ARRAY<Core::SystemPtr> & inaSystems);
+			void CreateDefaultSystems(std::vector<Core::SystemPtr> & inaSystems);
 			//-------------------------------------------------
 			/// Post Create Systems
 			///
@@ -102,7 +102,7 @@ namespace ChilliSource
 			/// @param Vector of exisiting systems to append
 			/// @return Pointer to the given system or NULL
 			//--------------------------------------------
-			Core::ISystem* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<Core::SystemPtr>& inaExisitingSystems) const;
+			Core::ISystem* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemPtr>& inaExisitingSystems) const;
 			//--------------------------------------------
 			/// Can Create Activity With Interface
 			///

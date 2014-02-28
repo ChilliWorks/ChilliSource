@@ -100,7 +100,7 @@ namespace ChilliSource
 		///
 		/// @param the system list
 		//-------------------------------------------------
-		void CPlatformSystem::CreateDefaultSystems(DYNAMIC_ARRAY<Core::SystemPtr> & inaSystems)
+		void CPlatformSystem::CreateDefaultSystems(std::vector<Core::SystemPtr> & inaSystems)
 		{
 			//create the main systems
 			Rendering::IRenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
@@ -219,10 +219,10 @@ namespace ChilliSource
 		/// @param Vector of exisiting systems to append
 		/// @return Pointer to the given system or NULL
 		//--------------------------------------------
-		Core::ISystem* CPlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, DYNAMIC_ARRAY<Core::SystemPtr>& inaExisitingSystems) const
+		Core::ISystem* CPlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemPtr>& inaExisitingSystems) const
 		{
 			//Check if it already exists to prevent multiples
-			for(DYNAMIC_ARRAY<Core::SystemPtr>::const_iterator it = inaExisitingSystems.begin(); it != inaExisitingSystems.end(); ++it)
+			for(std::vector<Core::SystemPtr>::const_iterator it = inaExisitingSystems.begin(); it != inaExisitingSystems.end(); ++it)
 			{
 				if((*it)->IsA(inInterfaceID))
 				{
