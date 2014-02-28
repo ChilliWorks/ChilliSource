@@ -40,14 +40,23 @@
 //------------------------------------------------------------
 /// Forward declaration macros.
 //------------------------------------------------------------
-#define CS_FORWARDDECLARE_CLASS(in_className)                          \
-    class in_className;                                                 \
-    typedef std::unique_ptr<in_className> in_className##UPtr;           \
-    typedef std::shared_ptr<in_className> in_className##SPtr;           \
-    typedef std::weak_ptr<in_className> in_className##WPtr;             \
-    typedef std::unique_ptr<const in_className> in_className##CUPtr;    \
-    typedef std::shared_ptr<const in_className> in_className##CSPtr;    \
-    typedef std::weak_ptr<const in_className> in_className##CWPtr;
+#define CS_FORWARDDECLARE_CLASS(in_className)							\
+	class in_className;													\
+	typedef std::unique_ptr<in_className> in_className##UPtr;           \
+	typedef std::shared_ptr<in_className> in_className##SPtr;           \
+	typedef std::weak_ptr<in_className> in_className##WPtr;             \
+	typedef std::unique_ptr<const in_className> in_className##CUPtr;    \
+	typedef std::shared_ptr<const in_className> in_className##CSPtr;    \
+	typedef std::weak_ptr<const in_className> in_className##CWPtr;
+
+#define CS_FORWARDDECLARE_STRUCT(in_structName)							\
+	struct in_structName;												\
+	typedef std::unique_ptr<in_structName> in_structName##UPtr;			\
+	typedef std::shared_ptr<in_structName> in_structName##SPtr;			\
+	typedef std::weak_ptr<in_structName> in_structName##WPtr;			\
+	typedef std::unique_ptr<const in_structName> in_structName##CUPtr;	\
+	typedef std::shared_ptr<const in_structName> in_structName##CSPtr;	\
+	typedef std::weak_ptr<const in_structName> in_structName##CWPtr;
 
 
 

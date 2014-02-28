@@ -119,7 +119,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(LocalNotificationScheduler);
         CS_FORWARDDECLARE_CLASS(NotificationScheduler);
-        CS_FORWARDDECLARE_CLASS(Notification);
+		CS_FORWARDDECLARE_STRUCT(Notification);
         CS_FORWARDDECLARE_CLASS(RemoteNotificationSystem);
         //---------------------------------------------------------
         /// Resource
