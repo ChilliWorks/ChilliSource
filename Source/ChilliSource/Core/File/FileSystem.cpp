@@ -29,7 +29,7 @@ namespace ChilliSource
             else if(instrStorage == "SaveData")
             	return StorageLocation::k_saveData;
             else if(instrStorage == "Root")
-            	return StorageLocation::k_Root;
+            	return StorageLocation::k_root;
             else
                 return StorageLocation::k_none;
         }
@@ -59,7 +59,7 @@ namespace ChilliSource
                 case StorageLocation::k_saveData:
                 case StorageLocation::k_cache:
                 case StorageLocation::k_DLC:
-                case StorageLocation::k_Root:
+                case StorageLocation::k_root:
                     return true;
                 default:
                     return false;

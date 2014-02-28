@@ -13,6 +13,7 @@
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/JSON/forwards.h>
 
+#include <algorithm>
 #include <vector>
 
 namespace ChilliSource
