@@ -18,7 +18,6 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-
 		//=================================================================
 		/// Media Player Java Interface
 		///
@@ -45,7 +44,7 @@ namespace ChilliSource
 			///
 			/// @param a reference to the notification to be sent
 			//--------------------------------------------------------------------------------------
-			void ScheduleNotification(const Notification& insNotification);
+			void ScheduleNotification(const Core::NotificationSPtr& insNotification);
 			//-------------------------------------------------------------------------
 			/// Cancel By ID
 			///
@@ -53,7 +52,7 @@ namespace ChilliSource
 			///
 			/// @param ID type
 			//-------------------------------------------------------------------------
-			void CancelByID(NotificationID inID);
+			void CancelByID(Core::NotificationID inID);
 			//-------------------------------------------------------------------------
 			/// Cancel All
 			///

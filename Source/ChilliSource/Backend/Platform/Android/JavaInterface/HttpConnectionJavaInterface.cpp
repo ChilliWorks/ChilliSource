@@ -95,7 +95,7 @@ namespace ChilliSource
 					std::string strResponse = CreateSTDStringFromJByteArray(jabyData, dwLength);
 					outstrResponse.append(strResponse);
 
-					if(outdwResponseCode == moNetworking::kHTTPMovedTemporarily)
+					if(outdwResponseCode == Networking::kHTTPMovedTemporarily)
 					{
 						jstring jstrRedirect = (jstring)env->GetObjectArrayElement(jastrRedirect, 0);
 						outstrRedirect = CreateSTDStringFromJString(jstrRedirect);
