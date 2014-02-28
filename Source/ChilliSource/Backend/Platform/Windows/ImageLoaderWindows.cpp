@@ -77,7 +77,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool ImageLoader::CreateImageFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::CImage::Format ineFormat, Core::ResourcePtr& outpResource)
 		{
-            Core::FileStreamPtr pImageFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath, Core::FM_READ_BINARY);
+            Core::FileStreamSPtr pImageFile = Core::Application::GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath, Core::FM_READ_BINARY);
 	
 			if(pImageFile && !pImageFile->IsBad())
 			{
@@ -133,7 +133,7 @@ namespace ChilliSource
 				{
 				case Core::CImage::RGBA_4444:
 					{
-						DEBUG_LOG("Converting to RGBA_4444");
+						CS_LOG_DEBUG("Converting to RGBA_4444");
 
 						u8* pubyBitmapData4444 = RGBA8888ToRGBA4444(pubyBitmapData8888, udwArea);
 
@@ -143,7 +143,7 @@ namespace ChilliSource
 					}
 				case Core::CImage::RGB_565:
 					{
-						DEBUG_LOG("Converting to RGBA_565");
+						CS_LOG_DEBUG("Converting to RGBA_565");
 
 						u8* pubyBitmapData565 = RGBA8888ToRGB565(pubyBitmapData8888, udwArea);
 
@@ -153,7 +153,7 @@ namespace ChilliSource
 					}
 				case Core::CImage::LUMA_88:
 					{
-						DEBUG_LOG("Converting to LUMA_88");
+						CS_LOG_DEBUG("Converting to LUMA_88");
 
 						u8* pubyBitmapData88 = RGBA8888ToLUM88(pubyBitmapData8888, udwArea);
 
@@ -179,7 +179,7 @@ namespace ChilliSource
 			}
 			else
 			{
-				ERROR_LOG("Failed to load image: " + inFilePath);
+				CS_LOG_ERROR("Failed to load image: " + inFilePath);
 				image.Release();
 				return false;
 			}

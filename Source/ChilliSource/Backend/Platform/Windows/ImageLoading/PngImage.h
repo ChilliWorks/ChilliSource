@@ -76,9 +76,9 @@ namespace ChilliSource
 			/// Load with lib png
 			///
 			/// Loads the png data using lib png
-			/// @param FileStreamPtr inStream - the stream lib png should use to read the data.
+			/// @param FileStreamSPtr inStream - the stream lib png should use to read the data.
 			//----------------------------------------------------------------------------------
-			bool LoadWithLibPng(Core::FileStreamPtr inStream);
+			bool LoadWithLibPng(Core::FileStreamSPtr inStream);
 
 			bool mbIsLoaded;
 			s32 mdwHeight;

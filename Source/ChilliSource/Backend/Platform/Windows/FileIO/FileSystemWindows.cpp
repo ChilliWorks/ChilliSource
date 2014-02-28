@@ -63,15 +63,15 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Create File Stream
 		//--------------------------------------------------------------
-		Core::FileStreamPtr CFileSystem::CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const
+		Core::FileStreamSPtr CFileSystem::CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const
 		{
 			//create the file stream
-			Core::FileStreamPtr newFilestream = Core::FileStreamPtr(new Core::IFileStream());
+			Core::FileStreamSPtr newFilestream = Core::FileStreamSPtr(new Core::IFileStream());
 
 			//check the requested storage location is available
 			if (IsStorageLocationAvailable(ineStorageLocation) == false)
 			{
-				ERROR_LOG("Requested Storage Location is not available on this platform!");
+				CS_LOG_ERROR("Requested Storage Location is not available on this platform!");
 				return newFilestream;
 			}
 
@@ -83,7 +83,7 @@ namespace ChilliSource
 			{
 				if (IsStorageLocationWritable(ineStorageLocation) == false)
 				{
-					ERROR_LOG("Cannot write to the requested Storage Location!");
+					CS_LOG_ERROR("Cannot write to the requested Storage Location!");
 					return newFilestream;
 				}
 			}
@@ -125,11 +125,11 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		bool CFileSystem::CreateFile(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const
 		{
-			Core::FileStreamPtr pFileStream = CreateFileStream(ineStorageLocation, instrDirectory, Core::FM_WRITE_BINARY);
+			Core::FileStreamSPtr pFileStream = CreateFileStream(ineStorageLocation, instrDirectory, Core::FM_WRITE_BINARY);
 
 			if (pFileStream.get() == NULL || pFileStream->IsOpen() == false || pFileStream->IsBad() == true)
 			{
-				ERROR_LOG("Failed to create file: " + instrDirectory);
+				CS_LOG_ERROR("Failed to create file: " + instrDirectory);
 				return false;
 			}
 
@@ -145,14 +145,14 @@ namespace ChilliSource
 			//check the requested storage location is available
 			if (IsStorageLocationAvailable(ineStorageLocation) == false)
 			{
-				ERROR_LOG("Requested Storage Location is not available on this platform!");
+				CS_LOG_ERROR("Requested Storage Location is not available on this platform!");
 				return false;
 			}
 
 			//insure that the storage location is writable.
 			if (IsStorageLocationWritable(ineStorageLocation) == false)
 			{
-				ERROR_LOG("Cannot write to the requested Storage Location!");
+				CS_LOG_ERROR("Cannot write to the requested Storage Location!");
 				return false;
 			}
 
@@ -168,27 +168,27 @@ namespace ChilliSource
             //check the requested source storage location is available
             if (IsStorageLocationAvailable(ineSourceStorageLocation) == false)
             {
-                ERROR_LOG("Requested source Storage Location is not available on this platform!");
+                CS_LOG_ERROR("Requested source Storage Location is not available on this platform!");
                 return false;
             }
             
             //check the requested destination storage location is available
             if (IsStorageLocationAvailable(ineDestinationStorageLocation) == false)
             {
-                ERROR_LOG("Requested destination Storage Location is not available on this platform!");
+                CS_LOG_ERROR("Requested destination Storage Location is not available on this platform!");
                 return false;
             }
             
             //insure that the destination location is writable.
             if (IsStorageLocationWritable(ineDestinationStorageLocation) == false)
             {
-                ERROR_LOG("Cannot write to the destination Storage Location!");
+                CS_LOG_ERROR("Cannot write to the destination Storage Location!");
                 return false;
             }
             
             if(!DoesFileExist(ineSourceStorageLocation, instrSourceFilepath))
             {
-                ERROR_LOG("Source file does not exist");
+                CS_LOG_ERROR("Source file does not exist");
                 return false;
             }
             
@@ -247,21 +247,21 @@ namespace ChilliSource
 			//check the requested source storage location is available
 			if (IsStorageLocationAvailable(ineSourceStorageLocation) == false)
 			{
-				ERROR_LOG("Requested source Storage Location is not available on this platform!");
+				CS_LOG_ERROR("Requested source Storage Location is not available on this platform!");
 				return false;
 			}
 
 			//check the requested destination storage location is available
 			if (IsStorageLocationAvailable(ineDestinationStorageLocation) == false)
 			{
-				ERROR_LOG("Requested destination Storage Location is not available on this platform!");
+				CS_LOG_ERROR("Requested destination Storage Location is not available on this platform!");
 				return false;
 			}
 
 			//insure that the destination location is writable.
 			if (IsStorageLocationWritable(ineDestinationStorageLocation) == false)
 			{
-				ERROR_LOG("Cannot write to the destination Storage Location!");
+				CS_LOG_ERROR("Cannot write to the destination Storage Location!");
 				return false;
 			}
 
@@ -272,7 +272,7 @@ namespace ChilliSource
 			//error if there are no files
 			if (astrFilenames.size() == 0)
 			{
-				ERROR_LOG("Cannot copy contents of directory as there are no files: " + instrSourceDirectory);
+				CS_LOG_ERROR("Cannot copy contents of directory as there are no files: " + instrSourceDirectory);
 				return false;
 			}
 
@@ -298,14 +298,14 @@ namespace ChilliSource
 			//check the requested storage location is available
 			if (IsStorageLocationAvailable(ineStorageLocation) == false)
 			{
-				ERROR_LOG("Requested Storage Location is not available on this platform!");
+				CS_LOG_ERROR("Requested Storage Location is not available on this platform!");
 				return false;
 			}
 
 			//insure that the storage location is writable.
 			if (IsStorageLocationWritable(ineStorageLocation) == false)
 			{
-				ERROR_LOG("Cannot write to the requested Storage Location!");
+				CS_LOG_ERROR("Cannot write to the requested Storage Location!");
 				return false;
 			}
 
@@ -324,14 +324,14 @@ namespace ChilliSource
 			//check the requested storage location is available
 			if (IsStorageLocationAvailable(ineStorageLocation) == false)
 			{
-				ERROR_LOG("Requested Storage Location is not available on this platform!");
+				CS_LOG_ERROR("Requested Storage Location is not available on this platform!");
 				return false;
 			}
 
 			//insure that the storage location is writable.
 			if (IsStorageLocationWritable(ineStorageLocation) == false)
 			{
-				ERROR_LOG("Cannot write to the requested Storage Location!");
+				CS_LOG_ERROR("Cannot write to the requested Storage Location!");
 				return false;
 			}
 
@@ -351,7 +351,7 @@ namespace ChilliSource
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available!");
+                CS_LOG_ERROR("Requested Storage Location is not available!");
                 return;
             }
             
@@ -453,7 +453,7 @@ namespace ChilliSource
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available!");
+                CS_LOG_ERROR("Requested Storage Location is not available!");
                 return;
             }
             
@@ -545,7 +545,7 @@ namespace ChilliSource
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available!");
+                CS_LOG_ERROR("Requested Storage Location is not available!");
                 return;
             }
             
@@ -637,7 +637,7 @@ namespace ChilliSource
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available!");
+                CS_LOG_ERROR("Requested Storage Location is not available!");
                 return;
             }
             
@@ -780,7 +780,7 @@ namespace ChilliSource
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available!");
+                CS_LOG_ERROR("Requested Storage Location is not available!");
                 return false;
             }
             
@@ -822,7 +822,7 @@ namespace ChilliSource
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
             {
-                ERROR_LOG("Requested Storage Location is not available!");
+                CS_LOG_ERROR("Requested Storage Location is not available!");
                 return false;
             }
             
@@ -932,7 +932,7 @@ namespace ChilliSource
 				strStorageLocationPath = "";
 				break;
 			default:
-				ERROR_LOG("Storage Location not available on this platform!");
+				CS_LOG_ERROR("Storage Location not available on this platform!");
 				break;
 			}
 
@@ -946,7 +946,7 @@ namespace ChilliSource
 			//Check that this storage location is available
 			if (IsStorageLocationAvailable(Core::SL_DLC) == false)
 			{
-				ERROR_LOG("Requested Storage Location is not available!");
+				CS_LOG_ERROR("Requested Storage Location is not available!");
 				return false;
 			}
 

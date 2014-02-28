@@ -40,7 +40,7 @@ namespace ChilliSource
 			mSessionHandle = ::WinHttpOpen(L"MyWinHttpClient", WINHTTP_ACCESS_TYPE_NO_PROXY, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
 			if(!mSessionHandle)
 			{
-				FATAL_LOG("Failed to open WinHTTP session");
+				CS_LOG_FATAL("Failed to open WinHTTP session");
 			}
 
 			//Set the connection timeout time
@@ -87,7 +87,7 @@ namespace ChilliSource
 			//Crack the URL.
 			if(!WinHttpCrackUrl(strWideURL.c_str(), (DWORD)strWideURL.length(), 0, &sUrlComp))
 			{
-				ERROR_LOG("Cannot crack URL: " + insRequestDetails.strURL);
+				CS_LOG_ERROR("Cannot crack URL: " + insRequestDetails.strURL);
 				return NULL;
 			}
 
@@ -98,7 +98,7 @@ namespace ChilliSource
 
 			if(!ConnectionHandle)
 			{
-				ERROR_LOG("Failed to connect to server: " + insRequestDetails.strURL);
+				CS_LOG_ERROR("Failed to connect to server: " + insRequestDetails.strURL);
 				return NULL;
 			}
 
@@ -132,7 +132,7 @@ namespace ChilliSource
 
 			if(!RequestHandle)
 			{
-				ERROR_LOG("Failed to open request: " + insRequestDetails.strURL);
+				CS_LOG_ERROR("Failed to open request: " + insRequestDetails.strURL);
 				WinHttpCloseHandle(ConnectionHandle);
 				return NULL;
 			}
@@ -160,14 +160,14 @@ namespace ChilliSource
 								SECURITY_FLAG_IGNORE_UNKNOWN_CA|SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE;
 			if(!WinHttpSetOption(inRequestHandle, WINHTTP_OPTION_SECURITY_FLAGS, &dwOptions, sizeof(DWORD)))
 			{
-				ERROR_LOG("Failed to set HTTP SSL security flag options");
+				CS_LOG_ERROR("Failed to set HTTP SSL security flag options");
 				return false;
 			}
 
 			dwOptions = WINHTTP_FLAG_SECURE_PROTOCOL_SSL3;
 			if(!WinHttpSetOption(mSessionHandle, WINHTTP_OPTION_SECURE_PROTOCOLS, &dwOptions, sizeof(DWORD)))
 			{
-				ERROR_LOG("Failed to set HTTP SSL secure protocol options");
+				CS_LOG_ERROR("Failed to set HTTP SSL secure protocol options");
 				return false;
 			}
 
@@ -286,7 +286,7 @@ namespace ChilliSource
 			//Track the time the request has been active so we can manually timeout
 			else if(!mbCompleted && !mbReceivedResponse && ((mfActiveTime += (Core::CMathUtils::Min(infDT, 0.5f))) > kfDefaultHTTPTimeout))
 			{
-				DEBUG_LOG("HTTP Connection timed out on request: " + msDetails.strURL);
+				CS_LOG_DEBUG("HTTP Connection timed out on request: " + msDetails.strURL);
 				//Flag to stop the polling thread which should 
 				//exit gracefully
 				mfActiveTime = 0.0f;
@@ -354,7 +354,7 @@ namespace ChilliSource
 			{
 				if(!WinHttpQueryDataAvailable(inRequestHandle, &dwBytesToBeRead))
 				{
-					ERROR_LOG("No data avilable from server");
+					CS_LOG_ERROR("No data avilable from server");
 					WinHttpCloseHandle(inRequestHandle);
 					WinHttpCloseHandle(inConnectionHandle);
 					meRequestResult = IHttpRequest::FAILED;
@@ -365,7 +365,7 @@ namespace ChilliSource
 
 				if(!WinHttpReadData(inRequestHandle, abyDataBuffer, sizeof(abyDataBuffer), &dwBytesRead))
 				{
-					ERROR_LOG("Failed to read data from server");
+					CS_LOG_ERROR("Failed to read data from server");
 					WinHttpCloseHandle(inRequestHandle);
 					WinHttpCloseHandle(inConnectionHandle);
 					meRequestResult = IHttpRequest::FAILED;

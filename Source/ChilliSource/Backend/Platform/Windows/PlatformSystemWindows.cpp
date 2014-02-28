@@ -73,14 +73,14 @@ namespace ChilliSource
 
 			if(!glfwInit())
 			{
-				FATAL_LOG("Cannot initialise GLFW");
+				CS_LOG_FATAL("Cannot initialise GLFW");
 			}
 
 			//Set the window based on the retina resolution
 			if(glfwOpenWindow(960, 640, 8, 8, 8, 8, 8, 0, GLFW_WINDOW) != GL_TRUE)
 			{
 				glfwTerminate();
-				FATAL_LOG("Cannot create GLFW window");
+				CS_LOG_FATAL("Cannot create GLFW window");
 			}
 
 			glfwSetWindowTitle("MoFlow");
@@ -400,7 +400,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		std::string CPlatformSystem::GetDeviceID()
 		{
-			ERROR_LOG("CPlatformSystem::GetDeviceID() has not been implemented!");
+			CS_LOG_ERROR("CPlatformSystem::GetDeviceID() has not been implemented!");
 			return "FAKE ID";
 		}
 		//--------------------------------------------------------------
@@ -433,7 +433,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		f32 CPlatformSystem::GetPhysicalScreenSize()
 		{
-			WARNING_LOG("GetPhysicalScreenSize() is not implemented on windows!");
+			CS_LOG_WARNING("GetPhysicalScreenSize() is not implemented on windows!");
 			return 0.0f;
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -445,7 +445,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void CPlatformSystem::MakeToast(const UTF8String& instrText) const
 		{
-			WARNING_LOG("Toast not available on Windows");
+			CS_LOG_WARNING("Toast not available on Windows");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Show System Confirm Dialog

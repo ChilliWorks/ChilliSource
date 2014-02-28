@@ -80,10 +80,10 @@ namespace ChilliSource
 		void CPngImage::Load(Core::StorageLocation ineLocation, const std::string& instrFilename)
 		{
 			//create the file stream
-			ChilliSource::Core::FileStreamPtr stream = ChilliSource::Core::Application::GetFileSystemPtr()->CreateFileStream(ineLocation, instrFilename, ChilliSource::Core::FM_READ_BINARY);
+			ChilliSource::Core::FileStreamSPtr stream = ChilliSource::Core::Application::GetFileSystemPtr()->CreateFileStream(ineLocation, instrFilename, ChilliSource::Core::FM_READ_BINARY);
 
 			//insure the stream is not broken
-			if (stream == ChilliSource::Core::FileStreamPtr() || stream->IsBad() == true || stream->IsOpen() == false)
+			if (stream == ChilliSource::Core::FileStreamSPtr() || stream->IsBad() == true || stream->IsOpen() == false)
 			{
 				stream->Close();
 				return;
@@ -156,9 +156,9 @@ namespace ChilliSource
 		/// Load with lib png
 		///
 		/// Loads the png data using lib png
-		/// @param FileStreamPtr inStream - the steam lib png should use to read the data.
+		/// @param FileStreamSPtr inStream - the steam lib png should use to read the data.
 		//----------------------------------------------------------------------------------
-		bool CPngImage::LoadWithLibPng(Core::FileStreamPtr inStream)
+		bool CPngImage::LoadWithLibPng(Core::FileStreamSPtr inStream)
 		{
 			//insure that it is indeed a png
 			const s32 dwHeaderSize = 8;
@@ -167,7 +167,7 @@ namespace ChilliSource
 
 			if (png_sig_cmp(ubyHeader, 0, dwHeaderSize) == true)
 			{
-				ERROR_LOG("PNG header invalid.");
+				CS_LOG_ERROR("PNG header invalid.");
 				return false;
 			}
 
@@ -175,7 +175,7 @@ namespace ChilliSource
 			png_structp pPng = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 			if (!pPng)
 			{
-				ERROR_LOG("Could not create pPng");
+				CS_LOG_ERROR("Could not create pPng");
 				return false;
 			}
 
@@ -183,7 +183,7 @@ namespace ChilliSource
 			png_infop pInfo = png_create_info_struct(pPng);
 			if (!pInfo)
 			{
-				ERROR_LOG("Could not create pInfo");
+				CS_LOG_ERROR("Could not create pInfo");
 				png_destroy_read_struct(&pPng, (png_infopp)NULL, (png_infopp)NULL);
 				return false;
 			}
@@ -191,7 +191,7 @@ namespace ChilliSource
 			//setup jump
 			if (setjmp(png_jmpbuf(pPng)))
 			{
-				ERROR_LOG("Error while loading PNG.");
+				CS_LOG_ERROR("Error while loading PNG.");
 				png_destroy_read_struct(&pPng, &pInfo, (png_infopp)NULL);
 				return false;
 			}

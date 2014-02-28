@@ -47,7 +47,7 @@ namespace ChilliSource
 			/// @param The filepath relative to the storage location
 			/// @param FileModeL ineMode The file mode. The file can be opened as read or write.
 			//--------------------------------------------------------------------------------------------------
-			Core::FileStreamPtr CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilename, Core::FileMode ineMode) const;
+			Core::FileStreamSPtr CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilename, Core::FileMode ineMode) const;
 			//--------------------------------------------------------------
             /// Create File
             ///
