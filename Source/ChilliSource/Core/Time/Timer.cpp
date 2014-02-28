@@ -59,6 +59,8 @@ namespace ChilliSource
             ConnectionDesc desc;
             desc.m_delegate = in_delegate;
             desc.m_connection = connection.get();
+            desc.m_elapsedSinceLastUpdate = 0.0f;
+            desc.m_updatePeriod = in_periodSecs;
             m_connections.push_back(desc);
             
             return connection;
