@@ -281,8 +281,8 @@ namespace ChilliSource
 		//-----------------------------------------------------------------------
 		bool  CStringConverter:: ParseBool(const std::string& val)
 		{
-			return (CStringUtils::StartsWith(val, "true") || CStringUtils::StartsWith(val, "yes")
-					|| CStringUtils::StartsWith(val, "1"));
+			return (StringUtils::StartsWith(val, "true") || StringUtils::StartsWith(val, "yes")
+					|| StringUtils::StartsWith(val, "1"));
 		}
 		//-----------------------------------------------------------------------
 		CVector2  CStringConverter:: ParseVector2(const std::string& val)

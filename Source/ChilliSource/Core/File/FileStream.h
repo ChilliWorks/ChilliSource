@@ -236,7 +236,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------------------
 			/// SeekG
 			///
-			/// Sets the position of the get pointer, using the specified SEEK_DIR
+			/// Sets the position of the get pointer, using the specified SeekDir
 			///
 			/// @param the new position.
 			/// @param the direction from which to seek.
@@ -309,7 +309,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------------------
 			/// SeekP
 			///
-			/// Sets the position of the put pointer, using the specified SEEK_DIR
+			/// Sets the position of the put pointer, using the specified SeekDir
 			///
 			/// @param the new position.
 			/// @param the direction from which to seek.

@@ -33,7 +33,7 @@ namespace ChilliSource
             k_saveData,
             k_cache,
             k_DLC,
-            k_Root
+            k_root
         };
         //============================================
 		/// Storage Location From String

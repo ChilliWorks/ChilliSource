@@ -64,7 +64,7 @@ namespace ChilliSource
         //----------------------------------------------
         void FlushBuffer()
         {
-            Core::FileStreamSPtr pLogFile = Core::Application::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FM_WRITE_APPEND);
+            Core::FileStreamSPtr pLogFile = Core::Application::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FileMode::FileMode::k_writeAppend);
             pLogFile->Write(gstrLogBuffer);
             gstrLogBuffer.clear();
             pLogFile->Close();
@@ -80,7 +80,7 @@ namespace ChilliSource
         {
 #ifdef CS_ENABLE_LOGTOFILE
             //Clear the old file
-            Core::FileStreamSPtr pLogFile = Core::Application::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FM_WRITE);
+            Core::FileStreamSPtr pLogFile = Core::Application::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FileMode::k_write);
             pLogFile->Write("MoFlow Log File");
             pLogFile->Close();
 #endif

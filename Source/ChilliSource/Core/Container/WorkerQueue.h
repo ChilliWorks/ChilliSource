@@ -11,8 +11,9 @@
 
 #include <ChilliSource/ChilliSource.h>
 
+#include <condition_variable>
+#include <mutex>
 #include <queue>
-#include <thread>
 
 namespace ChilliSource
 {
