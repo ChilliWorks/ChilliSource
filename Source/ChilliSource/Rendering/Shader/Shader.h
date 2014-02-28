@@ -32,7 +32,7 @@ namespace ChilliSource
 		public:
 			
 			virtual ~Shader(){}
-			DECLARE_NAMED_INTERFACE(Shader);
+			CS_DECLARE_NAMEDTYPE(Shader);
 			
 		protected:
 			

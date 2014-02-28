@@ -19,7 +19,7 @@ namespace ChilliSource
 {
     namespace Social
     {
-        DEFINE_NAMED_INTERFACE(FacebookAuthenticationSystem);
+        CS_DEFINE_NAMEDTYPE(FacebookAuthenticationSystem);
         
         FacebookAuthenticationSystem* FacebookAuthenticationSystem::CreateSystem()
         {

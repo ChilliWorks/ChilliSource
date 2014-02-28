@@ -21,12 +21,14 @@
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
-#define MAX_KERN_RATIO 0.25
-
 namespace ChilliSource
 {
 	namespace Rendering
 	{
+        namespace
+        {
+            const f32 k_maxKernRatio = 0.25;
+        }
 		//----------------------------------------------------------
 		/// Constructor
 		///
@@ -698,9 +700,9 @@ namespace ChilliSource
                     {
                         f32 fKernAmount = (inpFont->GetKerningBetweenCharacters(inCharacter, inNextCharacter) * infTextScale);
                         
-                        if(fKernAmount > (fCharWidth * MAX_KERN_RATIO))
+                        if(fKernAmount > (fCharWidth * k_maxKernRatio))
                         {
-                            fKernAmount = fCharWidth * MAX_KERN_RATIO;
+                            fKernAmount = fCharWidth * k_maxKernRatio;
                         }
                         
                         fCharWidth -= fKernAmount;

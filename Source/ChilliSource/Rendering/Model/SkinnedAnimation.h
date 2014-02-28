@@ -35,7 +35,7 @@ namespace ChilliSource
 		class SkinnedAnimation : public Core::Resource
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(SkinnedAnimation);
+			CS_DECLARE_NAMEDTYPE(SkinnedAnimation);
 			virtual ~SkinnedAnimation();
 			
 			//---------------------------------------------------------------------

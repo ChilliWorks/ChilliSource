@@ -24,7 +24,7 @@ namespace ChilliSource
 		public:
 			//Define an interface for this platform specific version as the
 			//app delegate needs to be able to query for this system specifically. (Avoiding system casts).
-			DECLARE_NAMED_INTERFACE(CFacebookAuthenticationSystem);
+			CS_DECLARE_NAMEDTYPE(CFacebookAuthenticationSystem);
             
             ~CFacebookAuthenticationSystem();
 			

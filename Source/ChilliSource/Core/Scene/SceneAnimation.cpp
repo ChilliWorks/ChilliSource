@@ -85,7 +85,7 @@ namespace ChilliSource
         }
         
         
-        DEFINE_NAMED_INTERFACE(SceneAnimation);
+        CS_DEFINE_NAMEDTYPE(SceneAnimation);
         
         bool SceneAnimation::IsA(InterfaceIDType inInterface) const
         {

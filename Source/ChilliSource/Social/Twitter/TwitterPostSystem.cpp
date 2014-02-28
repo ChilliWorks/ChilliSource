@@ -22,7 +22,7 @@ namespace ChilliSource
 {
 	namespace Social
 	{
-		DEFINE_NAMED_INTERFACE(TwitterPostSystem);
+		CS_DEFINE_NAMEDTYPE(TwitterPostSystem);
 
         TwitterPostSystem* TwitterPostSystem::CreateSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem)
         {

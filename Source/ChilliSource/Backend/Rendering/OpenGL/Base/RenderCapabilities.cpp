@@ -14,7 +14,7 @@ namespace ChilliSource
 {
     namespace OpenGL
     {
-        DEFINE_NAMED_INTERFACE(CRenderCapabilities);
+        CS_DEFINE_NAMEDTYPE(CRenderCapabilities);
         //-------------------------------------------------
         /// Constructor
         //-------------------------------------------------

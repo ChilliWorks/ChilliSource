@@ -19,7 +19,7 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		DEFINE_NAMED_INTERFACE(AudioManager);
+		CS_DEFINE_NAMEDTYPE(AudioManager);
 		//----------------------------------------------------------------
 		/// Is A
 		///

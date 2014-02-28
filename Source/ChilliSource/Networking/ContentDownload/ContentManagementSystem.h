@@ -19,7 +19,7 @@ namespace ChilliSource
         class ContentManagementSystem : public Core::System
         {
         public:
-            DECLARE_NAMED_INTERFACE(ContentManagementSystem);
+            CS_DECLARE_NAMEDTYPE(ContentManagementSystem);
             
             enum class UpdateResult
             {

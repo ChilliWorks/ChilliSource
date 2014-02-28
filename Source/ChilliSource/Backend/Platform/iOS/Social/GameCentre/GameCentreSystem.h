@@ -83,7 +83,7 @@ namespace ChilliSource
             typedef std::function<void(const std::string&)> RequestErrorDelegate;
 			typedef std::function<void(bool)> AchievementsResetDelegate;
             
-			DECLARE_NAMED_INTERFACE(CGameCentreSystem);
+			CS_DECLARE_NAMEDTYPE(CGameCentreSystem);
 			CGameCentreSystem(bool inbUseTurnBasedMultiplayer = false);
 			virtual ~CGameCentreSystem();
 			

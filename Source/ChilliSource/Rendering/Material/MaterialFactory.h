@@ -20,7 +20,7 @@ namespace ChilliSource
         {
         public:
             
-            DECLARE_NAMED_INTERFACE(MaterialFactory);
+            CS_DECLARE_NAMEDTYPE(MaterialFactory);
             
             //---------------------------------------------------
             /// Constructor

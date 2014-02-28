@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(SpriteSheetManager);
+		CS_DEFINE_NAMEDTYPE(SpriteSheetManager);
 		
 		//-----------------------------------------------------------------
 		/// Constructor

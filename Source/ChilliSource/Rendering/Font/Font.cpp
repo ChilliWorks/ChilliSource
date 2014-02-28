@@ -22,7 +22,7 @@ namespace ChilliSource
         
         f32 Font::mfGlobalKerningOffset = 0.0f;
         
-        DEFINE_NAMED_INTERFACE(Font);
+        CS_DEFINE_NAMEDTYPE(Font);
         
 		//---------------------------------------------------------------------
 		/// Is A

@@ -61,7 +61,7 @@ namespace ChilliSource
                 MaterialSPtr pMaterial;
             };
 			
-			DECLARE_NAMED_INTERFACE(SpriteComponent);
+			CS_DECLARE_NAMEDTYPE(SpriteComponent);
 			SpriteComponent();
 			//----------------------------------------------------------
 			/// Is A

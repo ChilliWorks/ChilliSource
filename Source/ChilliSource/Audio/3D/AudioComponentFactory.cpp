@@ -16,7 +16,7 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-        DEFINE_NAMED_INTERFACE(AudioComponentFactory);
+        CS_DEFINE_NAMEDTYPE(AudioComponentFactory);
 		//--------------------------------------------------------
 		/// Constructor
 		///

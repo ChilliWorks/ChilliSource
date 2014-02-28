@@ -23,7 +23,7 @@ namespace ChilliSource
 		class AudioResource : public Core::Resource
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(AudioResource);
+			CS_DECLARE_NAMEDTYPE(AudioResource);
 			virtual ~AudioResource(){}
         
 			//---------------------------------------------------------------------

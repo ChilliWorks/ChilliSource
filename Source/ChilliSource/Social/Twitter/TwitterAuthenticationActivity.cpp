@@ -19,7 +19,7 @@ namespace ChilliSource
 {
 	namespace Social
 	{
-		DEFINE_NAMED_INTERFACE(TwitterAuthenticationActivity);
+		CS_DEFINE_NAMEDTYPE(TwitterAuthenticationActivity);
         
         Core::Activity* TwitterAuthenticationActivity::CreateTwitterAuthenticationActivity()
         {

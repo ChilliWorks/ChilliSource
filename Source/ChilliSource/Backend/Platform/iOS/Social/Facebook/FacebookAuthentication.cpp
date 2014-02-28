@@ -33,7 +33,7 @@ namespace ChilliSource
     
 	namespace iOS
 	{
-		DEFINE_NAMED_INTERFACE(CFacebookAuthenticationSystem);
+		CS_DEFINE_NAMEDTYPE(CFacebookAuthenticationSystem);
 		
 		bool CFacebookAuthenticationSystem::IsA(Core::InterfaceIDType inID) const
 		{

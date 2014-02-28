@@ -15,9 +15,6 @@
 
 #include <vector>
 
-#define BYTE_SWAP_2(src) ChilliSource::Core::Utils::Endian2ByteSwap(reinterpret_cast<u16*>(src))
-#define BYTE_SWAP_4(src) ChilliSource::Core::Utils::Endian4ByteSwap(reinterpret_cast<u32*>(src))
-
 namespace ChilliSource
 {
 	namespace Core

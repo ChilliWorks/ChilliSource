@@ -24,7 +24,7 @@ namespace ChilliSource
 		class ParticleSystem : public Core::System, public Core::IUpdateable, public Core::IComponentProducer
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(ParticleSystem);
+			CS_DECLARE_NAMEDTYPE(ParticleSystem);
 			
 			ParticleSystem();
 			

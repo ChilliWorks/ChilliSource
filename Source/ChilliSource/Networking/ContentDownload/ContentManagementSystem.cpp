@@ -23,7 +23,7 @@ namespace ChilliSource
 {
     namespace Networking
     {
-        DEFINE_NAMED_INTERFACE(ContentManagementSystem);
+        CS_DEFINE_NAMEDTYPE(ContentManagementSystem);
         
         //-----------------------------------------------------------
         /// Constructor

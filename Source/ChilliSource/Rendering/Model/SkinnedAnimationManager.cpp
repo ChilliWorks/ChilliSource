@@ -17,7 +17,7 @@ namespace ChilliSource
 	namespace Rendering
 	{
 		
-		DEFINE_NAMED_INTERFACE(SkinnedAnimationManager);
+		CS_DEFINE_NAMEDTYPE(SkinnedAnimationManager);
 		
 		//-----------------------------------------------------------------
 		/// Constructor

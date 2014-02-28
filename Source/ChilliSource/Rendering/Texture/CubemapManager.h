@@ -22,7 +22,7 @@ namespace ChilliSource
 		{
 		public:
 			
-			DECLARE_NAMED_INTERFACE(CubemapManager);
+			CS_DECLARE_NAMEDTYPE(CubemapManager);
 			
 			CubemapManager();
 			virtual ~CubemapManager(){}

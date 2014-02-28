@@ -22,7 +22,7 @@ namespace ChilliSource
 {
 	namespace Networking
     {
-        DEFINE_NAMED_INTERFACE(IAPSystem);
+        CS_DEFINE_NAMEDTYPE(IAPSystem);
         //---------------------------------------------------------------
         /// Create
         //---------------------------------------------------------------

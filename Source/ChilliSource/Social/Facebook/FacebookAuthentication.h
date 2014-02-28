@@ -42,7 +42,7 @@ namespace ChilliSource
             
             typedef std::function<void(const AuthenticateResponse&)> AuthenticationCompleteDelegate;
             
-			DECLARE_NAMED_INTERFACE(FacebookAuthenticationSystem);
+			CS_DECLARE_NAMEDTYPE(FacebookAuthenticationSystem);
 			
             virtual ~FacebookAuthenticationSystem(){}
 			

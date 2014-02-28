@@ -21,7 +21,7 @@ namespace ChilliSource
 	
 	namespace Networking
     {
-		DEFINE_NAMED_INTERFACE(MoMetricsSystem);
+		CS_DEFINE_NAMEDTYPE(MoMetricsSystem);
 		
 		MoMetricsSystem * MoMetricsSystem::mpSingletonInstance = nullptr;
 		

@@ -22,9 +22,9 @@
 #include <android/log.h>
 extern "C"
 {
-    #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, "MoFlow", "%s", __VA_ARGS__)
-    #define LOGW(...) __android_log_print(ANDROID_LOG_WARN, "MoFlow", "%s", __VA_ARGS__)
-    #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, "MoFlow", "%s", __VA_ARGS__)
+    #define CS_ANDROID_LOG_DEBUG(...) __android_log_print(ANDROID_LOG_DEBUG, "MoFlow", "%s", __VA_ARGS__)
+    #define CS_ANDROID_LOG_WARNING(...) __android_log_print(ANDROID_LOG_WARN, "MoFlow", "%s", __VA_ARGS__)
+    #define CS_ANDROID_LOG_ERROR(...) __android_log_print(ANDROID_LOG_ERROR, "MoFlow", "%s", __VA_ARGS__)
 }
 #endif
 
@@ -98,7 +98,7 @@ namespace ChilliSource
         {
 #if LOG_LEVEL == LOG_VERBOSE
 #ifdef TARGET_ANDROID
-            LOGD(instrMessage.c_str());
+            CS_ANDROID_LOG_DEBUG(instrMessage.c_str());
 #elif CS_TARGETPLATFORM_IOS
             NSString* pLog = [[NSString alloc] initWithUTF8String:instrMessage.c_str()];
             NSLog(@"moFlo: %@ ", pLog);
@@ -132,7 +132,7 @@ namespace ChilliSource
         {
 #if LOG_LEVEL <= LOG_WARNING
 #ifdef TARGET_ANDROID
-            LOGW(("WARNING: " + instrMessage).c_str());
+            CS_ANDROID_LOG_WARNING(("WARNING: " + instrMessage).c_str());
 #elif CS_TARGETPLATFORM_IOS
             NSString* pLog = [[NSString alloc] initWithUTF8String:instrMessage.c_str()];
             NSLog(@"moFlo: WARNING %@ ", pLog);
@@ -166,7 +166,7 @@ namespace ChilliSource
         {
 #if LOG_LEVEL <= LOG_ERROR
 #ifdef TARGET_ANDROID
-            LOGE(("ERROR: " + instrMessage).c_str());
+            CS_ANDROID_LOG_ERROR(("ERROR: " + instrMessage).c_str());
 #elif CS_TARGETPLATFORM_IOS
             NSString* pLog = [[NSString alloc] initWithUTF8String:instrMessage.c_str()];
             NSLog(@"moFlo: ERROR %@ ", pLog);
@@ -196,8 +196,8 @@ namespace ChilliSource
         void Logging::LogFatal(const std::string &instrMessage)
         {
 #ifdef TARGET_ANDROID
-            LOGE(("FATAL: " + instrMessage).c_str());
-            LOGE("moFlo is exiting...");
+            CS_ANDROID_LOG_ERROR(("FATAL: " + instrMessage).c_str());
+            CS_ANDROID_LOG_ERROR("moFlo is exiting...");
 #endif
         
 #ifdef CS_TARGETPLATFORM_IOS

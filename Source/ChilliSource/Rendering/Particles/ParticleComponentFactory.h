@@ -25,7 +25,7 @@ namespace ChilliSource
 		public: 
 			ParticleComponentFactory(ParticleSystem* inpParticleSystem, ParticleEmitterFactory* inpEmitterFactory, ParticleEffectorFactory* inpEffectorFactory);
             
-			DECLARE_NAMED_INTERFACE(ParticleComponentFactory);
+			CS_DECLARE_NAMEDTYPE(ParticleComponentFactory);
             
             //-------------------------------------------------------
             /// Is A

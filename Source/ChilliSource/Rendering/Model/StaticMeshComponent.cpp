@@ -28,7 +28,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(StaticMeshComponent);
+        CS_DEFINE_NAMEDTYPE(StaticMeshComponent);
     
         MaterialSPtr StaticMeshComponent::mspShadowMapMaterial;
         

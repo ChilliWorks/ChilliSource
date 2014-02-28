@@ -25,7 +25,7 @@ namespace ChilliSource
 		public:
 			
 			virtual ~Texture(){}
-			DECLARE_NAMED_INTERFACE(Texture);
+			CS_DECLARE_NAMEDTYPE(Texture);
 			
 			enum class Filter
 			{

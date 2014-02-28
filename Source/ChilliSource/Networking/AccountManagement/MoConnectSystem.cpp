@@ -20,7 +20,7 @@ namespace ChilliSource
 	
 	namespace Networking
     {
-		DEFINE_NAMED_INTERFACE(MoConnectSystem);
+		CS_DEFINE_NAMEDTYPE(MoConnectSystem);
 		
 		const std::string MoConnectSystem::kstrFacebookLoginType = "facebook";
 		const std::string MoConnectSystem::kstrEmailLoginType = "email";

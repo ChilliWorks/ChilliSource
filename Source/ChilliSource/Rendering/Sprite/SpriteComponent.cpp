@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(SpriteComponent);
+        CS_DEFINE_NAMEDTYPE(SpriteComponent);
 		//----------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------

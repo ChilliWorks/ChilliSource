@@ -13,7 +13,7 @@ namespace ChilliSource
 {
     namespace Web
     {
-        DEFINE_NAMED_INTERFACE(WebViewActivity);
+        CS_DEFINE_NAMEDTYPE(WebViewActivity);
         //--------------------------------------------------------------
         /// Is A
         ///

@@ -16,7 +16,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(ParticleComponent);
+        CS_DEFINE_NAMEDTYPE(ParticleComponent);
 		//=====================================================
 		/// Particle Component
 		///

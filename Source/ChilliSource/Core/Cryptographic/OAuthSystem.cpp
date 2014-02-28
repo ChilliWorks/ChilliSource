@@ -15,7 +15,7 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-		DEFINE_NAMED_INTERFACE(OAuthSystem);
+		CS_DEFINE_NAMEDTYPE(OAuthSystem);
         
         static u32 udwNonceCounter = 0;
 

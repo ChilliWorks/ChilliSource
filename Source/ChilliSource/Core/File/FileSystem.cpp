@@ -34,7 +34,7 @@ namespace ChilliSource
                 return StorageLocation::k_none;
         }
         
-    	DEFINE_NAMED_INTERFACE(FileSystem);
+    	CS_DEFINE_NAMEDTYPE(FileSystem);
 
         const std::string kstrDefaultPackageDLCDirectory = "DLC/";
         

@@ -27,7 +27,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(AnimatedMeshComponent);
+		CS_DEFINE_NAMEDTYPE(AnimatedMeshComponent);
         
         MaterialSPtr AnimatedMeshComponent::mspShadowMapMaterial;
         

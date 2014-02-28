@@ -13,7 +13,7 @@ namespace ChilliSource
 {
 	namespace Video
 	{
-		DEFINE_NAMED_INTERFACE(Subtitles);
+		CS_DEFINE_NAMEDTYPE(Subtitles);
 		//------------------------------------------------
 		/// Constructor
 		//------------------------------------------------

@@ -47,13 +47,13 @@ namespace ChilliSource
 			}
 		};
 		
-#define DECLARE_NAMED_INTERFACE(x) \
+#define CS_DECLARE_NAMEDTYPE(x) \
 static const ::ChilliSource::Core::InterfaceIDType InterfaceID; \
 static const ::std::string TypeName; \
 virtual ::ChilliSource::Core::InterfaceIDType GetInterfaceID() const; \
 virtual const ::std::string& GetInterfaceTypeName() const;
         
-#define DEFINE_NAMED_INTERFACE(x) \
+#define CS_DEFINE_NAMEDTYPE(x) \
 const ::ChilliSource::Core::InterfaceIDType x::InterfaceID = ::ChilliSource::Core::QueryableInterface::InterfaceIDHash(#x); \
 const ::std::string x::TypeName = ::ChilliSource::Core::StringUtils::StandardiseClassName(#x); \
 ::ChilliSource::Core::InterfaceIDType x::GetInterfaceID() const \

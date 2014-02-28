@@ -80,12 +80,12 @@ namespace ChilliSource
 			//Read the first four bytes to get the number of sprites. Remeber to flip the endianness
 			s16 NumSprites = 0;
 			binary_file->Read(reinterpret_cast<s8*>(&NumSprites), sizeof(s16));
-			NumSprites = BYTE_SWAP_2(&NumSprites);
+			NumSprites = Core::Utils::Endian2ByteSwap(&NumSprites);
 			
 			//Read the header 2 bytes in but just discard it
 			s16 wBinVersion = 0;
 			binary_file->Read(reinterpret_cast<s8*>(&wBinVersion), sizeof(s16));
-            wBinVersion = BYTE_SWAP_2(&wBinVersion);
+            wBinVersion = Core::Utils::Endian2ByteSwap(&wBinVersion);
             
             s16 wSpriteSheetWidth = 0;
             s16 wSpriteSheetHeight = 0;
@@ -98,10 +98,10 @@ namespace ChilliSource
                 if(wBinVersion >=2)
                 {
                     binary_file->Read(reinterpret_cast<s8*>(&wSpriteSheetWidth), sizeof(s16));
-                    wSpriteSheetWidth = BYTE_SWAP_2(&wSpriteSheetWidth);
+                    wSpriteSheetWidth = Core::Utils::Endian2ByteSwap(&wSpriteSheetWidth);
                     
                     binary_file->Read(reinterpret_cast<s8*>(&wSpriteSheetHeight), sizeof(s16));
-                    wSpriteSheetHeight = BYTE_SWAP_2(&wSpriteSheetHeight);
+                    wSpriteSheetHeight = Core::Utils::Endian2ByteSwap(&wSpriteSheetHeight);
                 }
             }
             
@@ -117,7 +117,7 @@ namespace ChilliSource
 			//Swap for endianess as the tool does it backwards!
 			for(u32 i = 0; i<NumElements; ++i)
 			{
-				SBuffer[i] = BYTE_SWAP_2(&SBuffer[i]);
+				SBuffer[i] = Core::Utils::Endian2ByteSwap(&SBuffer[i]);
 			}
 			
 			//Now copy the data into our sprite data buffer as it is now in the correct format

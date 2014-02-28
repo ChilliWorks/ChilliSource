@@ -9,23 +9,22 @@
 
 #include <ChilliSource/Core/Image/Image.h>
 
-#define PVR_TEXTURE_FLAG_TYPE_MASK	0xff
-
-#define PVRTC_VERSION_MATCHES 0x03525650
-#define PVRTC_VERSION_MISMATCH 0x50565203
-
 namespace ChilliSource
 {
 	namespace Core
 	{
-		DEFINE_NAMED_INTERFACE(Image);
-		
-		const u8 gcstrPVRTexIdentifier[4] = {'P', 'V', 'R', '!'};
-		
-		const u32 kPVRTextureFlagTypeRGBA4444 = 16;
-		const u32 kPVRTextureFlagTypePVRTC_2 = 24;
-		const u32 kPVRTextureFlagTypePVRTC_4 = 25;
-		
+		CS_DEFINE_NAMEDTYPE(Image);
+        
+        namespace
+        {
+            const u8 gcstrPVRTexIdentifier[4] = {'P', 'V', 'R', '!'};
+            const u32 kPVRTextureFlagTypeRGBA4444 = 16;
+            const u32 kPVRTextureFlagTypePVRTC_2 = 24;
+            const u32 kPVRTextureFlagTypePVRTC_4 = 25;
+            const u32 k_pvrTextureFlagTypeMask = 0xff;
+            const u32 k_pvrVersionMismatch = 0x50565203;
+		}
+        
         //Old Texture Format : Not Supported in newer tools
 		struct PVRTexHeader
 		{
@@ -309,7 +308,7 @@ namespace ChilliSource
             
 			//Get the flags for the compression format
 			u32 udwFlags = pPVRHeader->udwFlags;
-			u32 udwFormatFlags = udwFlags & PVR_TEXTURE_FLAG_TYPE_MASK;
+			u32 udwFormatFlags = udwFlags & k_pvrTextureFlagTypeMask;
 			
 			//The only compression formats we support are 2 bits per pixel and 4 bits per pixel
 			if(udwFormatFlags == kPVRTextureFlagTypePVRTC_4 || udwFormatFlags == kPVRTextureFlagTypePVRTC_2)
@@ -352,7 +351,7 @@ namespace ChilliSource
 			PVRTCTexHeader* pPVRTCHeader = reinterpret_cast<PVRTCTexHeader*>(mpRawData);
 
             //Check the version so determine endianess correctness
-            if(pPVRTCHeader->udwVersion == PVRTC_VERSION_MISMATCH)
+            if(pPVRTCHeader->udwVersion == k_pvrVersionMismatch)
             {
                 //TODO:: Endianess is not correct, need to flip bits in the header data, possibly image data?
                 CS_LOG_FATAL("Image::UnpackPVRTCData >> Endianess Check failed for creating PVR");

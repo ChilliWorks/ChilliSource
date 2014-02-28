@@ -38,7 +38,7 @@ namespace ChilliSource
 		class CameraComponent : public Core::Component
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(CameraComponent);
+			CS_DECLARE_NAMEDTYPE(CameraComponent);
 			CameraComponent(const CameraDescription &inCamDesc);
 			~CameraComponent();
 			//----------------------------------------------------------

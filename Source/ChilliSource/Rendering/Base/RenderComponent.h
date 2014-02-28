@@ -27,7 +27,7 @@ namespace ChilliSource
 		class RenderComponent : public Core::VolumeComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(RenderComponent);
+			CS_DECLARE_NAMEDTYPE(RenderComponent);
 			RenderComponent();
 			virtual ~RenderComponent(){}
 			

@@ -1,3 +1,11 @@
+//
+//  TweakableConstants.cpp
+//  Chilli Source
+//
+//  Created by Stuart McGaw
+//  Copyright 2010 Tag Games. All rights reserved.
+//
+
 #include <ChilliSource/Core/File/TweakableConstants.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/XML/tinyxml.h>

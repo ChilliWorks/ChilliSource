@@ -25,7 +25,7 @@ namespace ChilliSource
         class CiCloudSystem : public Networking::CloudStorageSystem
         {
         public:
-            DECLARE_NAMED_INTERFACE(CiCloudSystem);
+            CS_DECLARE_NAMEDTYPE(CiCloudSystem);
             
             typedef std::function<void(MoFlowUIDocument*, bool)> OnOpenCloudFileCompletedDelegate;
             

@@ -24,7 +24,7 @@ namespace ChilliSource
 		{
 		public:
 
-			DECLARE_NAMED_INTERFACE(Mouse);
+			CS_DECLARE_NAMEDTYPE(Mouse);
 			Mouse();
 			Mouse(TouchScreen* inpTouchProxy);
 			virtual ~Mouse(){}

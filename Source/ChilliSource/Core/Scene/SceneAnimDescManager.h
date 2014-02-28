@@ -20,7 +20,7 @@ namespace ChilliSource
         class SceneAnimDescManager : public ResourceManager
         {
         public:
-            DECLARE_NAMED_INTERFACE(SceneAnimDescManager);
+            CS_DECLARE_NAMEDTYPE(SceneAnimDescManager);
             
             bool IsA(InterfaceIDType inInterfaceID) const override;
             

@@ -31,7 +31,7 @@ namespace ChilliSource
 			AudioComponentFactory(AudioSystem* inpAudioSystem, AudioManager* inpAudioMgr);
             virtual ~AudioComponentFactory(){}
             
-			DECLARE_NAMED_INTERFACE(AudioComponentFactory);
+			CS_DECLARE_NAMEDTYPE(AudioComponentFactory);
             //--------------------------------------------------------
 			/// Create Audio Component
 			///

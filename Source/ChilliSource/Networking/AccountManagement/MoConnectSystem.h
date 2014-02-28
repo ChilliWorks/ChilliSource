@@ -33,7 +33,7 @@ namespace ChilliSource
             
 			MoConnectSystem(HttpConnectionSystem * inpHttpSystem, const std::string& instrMoConnectServerURL, Core::OAuthSystem * inpOAuthSystem);
 			
-			DECLARE_NAMED_INTERFACE(MoConnectSystem);
+			CS_DECLARE_NAMEDTYPE(MoConnectSystem);
 			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			
             Core::OAuthSystem* GetOAuthSystem();

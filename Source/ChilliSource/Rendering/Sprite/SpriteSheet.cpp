@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(SpriteSheet);
+        CS_DEFINE_NAMEDTYPE(SpriteSheet);
 		//-------------------------------------------------------------------------
 		/// Constructor
 		///

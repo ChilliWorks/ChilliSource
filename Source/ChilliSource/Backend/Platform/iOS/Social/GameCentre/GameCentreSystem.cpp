@@ -40,7 +40,7 @@ namespace ChilliSource
 		const GameCentreRequestID kudwGameCentreAchievementsStatusRequestID     = 201107;
 		const GameCentreRequestID kudwGameCentreAchievementDescriptionsRequestID = 201108;
 		
-		DEFINE_NAMED_INTERFACE(CGameCentreSystem);
+		CS_DEFINE_NAMEDTYPE(CGameCentreSystem);
         
 		//===============================================================
 		/// Generic Game Centre Request

@@ -12,7 +12,7 @@ namespace ChilliSource
 {
 	namespace Input
 	{
-		DEFINE_NAMED_INTERFACE(Accelerometer);
+		CS_DEFINE_NAMEDTYPE(Accelerometer);
 		//----------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------

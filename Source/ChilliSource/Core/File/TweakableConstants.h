@@ -1,3 +1,11 @@
+//
+//  TweakableConstants.h
+//  Chilli Source
+//
+//  Created by Stuart McGaw
+//  Copyright 2010 Tag Games. All rights reserved.
+//
+
 #ifndef _MOFLO_CORE_TWEAKABLECONSTANTS_H
 #define _MOFLO_CORE_TWEAKABLECONSTANTS_H
 
@@ -5,24 +13,6 @@
 #include <ChilliSource/Core/XML/tinyxml.h>
 
 #include <string>
-
-#define CS_ENABLE_TWEAKABLECONSTANTS
-
-#ifdef CS_ENABLE_TWEAKABLECONSTANTS
-
-//Constants in root namespace
-#define TC_FLOAT(name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetFloat(#name)
-#define TC_INT(name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetInt(#name)
-#define TC_STR(name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetString(#name)
-#define TC_BOOL(name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetBool(#name)
-#define TC_SAMPLECURVE(name,value) ::ChilliSource::Core::TweakableConstants::GetSingleton().SampleCurve(#name,value)
-
-//Constants in namespace
-#define TC_FLOATNS(namespace,name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetFloat(#namespace,#name)
-#define TC_INTNS(namespace,name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetInt(#namespace,#name)
-#define TC_STRNS(namespace,name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetString(#namespace,#name)
-#define TC_BOOLNS(namespace,name) ::ChilliSource::Core::TweakableConstants::GetSingleton().GetBool(#namespace,#name)
-#define TC_SAMPLECURVENS(namespace,name,value) ::ChilliSource::Core::TweakableConstants::GetSingleton().SampleCurve(#namespace,#name,value)
 
 namespace ChilliSource
 {
@@ -100,18 +90,7 @@ namespace ChilliSource
 			std::vector<Core::StorageLocationAndFilenamePtr> mFileNames;
 			std::string mBlank;//blank string to return for failed string constant lookups
 		};
-		
-		
 	}
 }
-
-#else
-#include "BakedConstants.h"
-#define TC_FLOAT(x) x
-#define TC_INT(x) x
-#define TC_STR(x) x
-#define TC_BOOL(x) x
-
-#endif //CS_ENABLE_TWEAKABLECONSTANTS
 
 #endif //TWEAKABLECONSTANTS_H

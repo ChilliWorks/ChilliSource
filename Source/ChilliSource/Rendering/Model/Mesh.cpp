@@ -22,7 +22,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        DEFINE_NAMED_INTERFACE(Mesh);
+        CS_DEFINE_NAMEDTYPE(Mesh);
 		//--------------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------------

@@ -18,7 +18,7 @@ namespace ChilliSource
 	{
 		MeshSPtr MeshManager::mpDefaultMesh;
         
-		DEFINE_NAMED_INTERFACE(MeshManager);
+		CS_DEFINE_NAMEDTYPE(MeshManager);
 		
 		//-----------------------------------------------------------------
 		/// Constructor

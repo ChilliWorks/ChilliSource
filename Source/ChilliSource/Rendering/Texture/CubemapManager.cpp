@@ -19,7 +19,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(CubemapManager);
+		CS_DEFINE_NAMEDTYPE(CubemapManager);
 		
 		//----------------------------------------------------------------
 		/// Constructor

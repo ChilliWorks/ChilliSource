@@ -28,7 +28,7 @@ namespace ChilliSource
         class RenderCapabilities : public Core::System
         {
         public:
-            DECLARE_NAMED_INTERFACE(RenderCapabilities);
+            CS_DECLARE_NAMEDTYPE(RenderCapabilities);
             //-------------------------------------------------------
             /// Is Shadow Mapping Supported
             ///

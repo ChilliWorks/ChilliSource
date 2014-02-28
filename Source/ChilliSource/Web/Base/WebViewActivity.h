@@ -24,7 +24,7 @@ namespace ChilliSource
         {
         public:
             
-            DECLARE_NAMED_INTERFACE(WebViewActivity);
+            CS_DECLARE_NAMEDTYPE(WebViewActivity);
             //--------------------------------------------------------------
             /// Is A
             ///

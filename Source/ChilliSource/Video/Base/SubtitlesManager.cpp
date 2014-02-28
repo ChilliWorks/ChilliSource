@@ -15,7 +15,7 @@ namespace ChilliSource
 {
 	namespace Video
 	{
-		DEFINE_NAMED_INTERFACE(SubtitlesManager);
+		CS_DEFINE_NAMEDTYPE(SubtitlesManager);
 		
 		//----------------------------------------------------------------
 		/// Is A

@@ -24,7 +24,7 @@ namespace ChilliSource
         class EmailCompositionActivity : public Core::Activity
         {
 		public:
-			DECLARE_NAMED_INTERFACE(EmailCompositionActivity);
+			CS_DECLARE_NAMEDTYPE(EmailCompositionActivity);
 			//-------------------------------------------------------
             /// Send Result
             ///

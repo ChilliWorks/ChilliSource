@@ -18,7 +18,7 @@ namespace ChilliSource {
         class SceneAnimationProvider : public ChilliSource::Core::ResourceProvider
         {
         public:
-            DECLARE_NAMED_INTERFACE(SceneAnimationProvider);
+            CS_DECLARE_NAMEDTYPE(SceneAnimationProvider);
             
             bool IsA(InterfaceIDType inInterfaceID) const override;
             

@@ -25,7 +25,7 @@ namespace ChilliSource
         {
 		public:
 
-			DECLARE_NAMED_INTERFACE(SMSCompositionActivity);
+			CS_DECLARE_NAMEDTYPE(SMSCompositionActivity);
 			
 			enum class SendResult
             {

@@ -113,7 +113,7 @@ namespace ChilliSource
             
             //--------------------------------------------------------------------------------------------------------//
             
-            DECLARE_NAMED_INTERFACE(CloudStorageSystem);
+            CS_DECLARE_NAMEDTYPE(CloudStorageSystem);
             
             virtual ~CloudStorageSystem(){}
             

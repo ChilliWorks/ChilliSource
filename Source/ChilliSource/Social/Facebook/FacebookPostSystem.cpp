@@ -26,7 +26,7 @@ namespace ChilliSource
 {
 	namespace Social
 	{
-		DEFINE_NAMED_INTERFACE(IFacebookPostSystem);
+		CS_DEFINE_NAMEDTYPE(IFacebookPostSystem);
         
         IFacebookPostSystem* IFacebookPostSystem::CreatePostSystem(ChilliSource::Social::FacebookAuthenticationSystem* inpAuthSystem)
         {

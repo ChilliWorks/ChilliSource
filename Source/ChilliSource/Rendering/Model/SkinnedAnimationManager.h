@@ -24,7 +24,7 @@ namespace ChilliSource
 		class SkinnedAnimationManager : public Core::ResourceManager
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(SkinnedAnimationManager);
+			CS_DECLARE_NAMEDTYPE(SkinnedAnimationManager);
 			SkinnedAnimationManager();
 			virtual ~SkinnedAnimationManager();
 			

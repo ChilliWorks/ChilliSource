@@ -27,7 +27,7 @@ namespace ChilliSource
 		class StaticMeshComponent : public RenderComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(StaticMeshComponent);
+			CS_DECLARE_NAMEDTYPE(StaticMeshComponent);
 			
             StaticMeshComponent();
 			//----------------------------------------------------------

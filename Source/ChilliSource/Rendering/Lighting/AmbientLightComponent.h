@@ -20,7 +20,7 @@ namespace ChilliSource
 		class AmbientLightComponent : public LightComponent
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(AmbientLightComponent);
+			CS_DECLARE_NAMEDTYPE(AmbientLightComponent);
 			
 			//----------------------------------------------------------
 			/// Is A

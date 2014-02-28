@@ -39,7 +39,7 @@ namespace ChilliSource
 		{
 		public:
 			
-			DECLARE_NAMED_INTERFACE(IFacebookPostSystem);
+			CS_DECLARE_NAMEDTYPE(IFacebookPostSystem);
 			
 			enum class PostResult
 			{

@@ -28,7 +28,7 @@ namespace ChilliSource
 			IUpdateable(){}
 			virtual ~IUpdateable(){}
 			
-			DECLARE_NAMED_INTERFACE(IUpdateable);
+			CS_DECLARE_NAMEDTYPE(IUpdateable);
 			//Update this thing given the passed time delta in seconds
 			virtual void Update(f32 infDT) = 0;
 		};
@@ -41,7 +41,7 @@ namespace ChilliSource
 			IComponentProducer(){}
 			virtual ~IComponentProducer(){}
 			
-			DECLARE_NAMED_INTERFACE(IComponentProducer);
+			CS_DECLARE_NAMEDTYPE(IComponentProducer);
 			//Returns a reference to an ComponentFactory
 			virtual ComponentFactory & GetComponentFactory(u32 inudwIndex) = 0;
 			

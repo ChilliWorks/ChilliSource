@@ -14,7 +14,6 @@
 
 #ifdef CS_ENABLE_REFLECTION
 #include <ChilliSource/Core/Reflection/Reflection.h>
-#define DECLARE_ACTION 
 #else
 
 #endif

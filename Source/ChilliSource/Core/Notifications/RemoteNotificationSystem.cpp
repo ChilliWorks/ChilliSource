@@ -22,7 +22,7 @@ namespace ChilliSource
 {
 	namespace Core
     {
-        DEFINE_NAMED_INTERFACE(RemoteNotificationSystem);
+        CS_DEFINE_NAMEDTYPE(RemoteNotificationSystem);
         //---------------------------------------------------------------
         /// Create
         //---------------------------------------------------------------

@@ -310,15 +310,6 @@ namespace ChilliSource
 		{
 			return pPlatformSystem->GetSystemTimeMS();
 		}
-        //--------------------------------------------------------------------------------------------------
-		/// Get MoFlow Version
-		///
-		/// @return String containing the engine version number
-		//--------------------------------------------------------------------------------------------------
-		std::string Application::GetMoFlowVersion()
-		{
-			return MOFLOW_REVISION_NUMBER;
-		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get App Version
 		///

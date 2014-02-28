@@ -23,7 +23,7 @@ namespace ChilliSource
 		class TwitterAuthenticationActivity : public Core::Activity
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(TwitterAuthenticationActivity);
+			CS_DECLARE_NAMEDTYPE(TwitterAuthenticationActivity);
 			
             static Activity* CreateTwitterAuthenticationActivity();
             

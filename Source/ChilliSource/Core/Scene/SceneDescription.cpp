@@ -65,7 +65,7 @@ namespace ChilliSource
         }
 		
         
-        DEFINE_NAMED_INTERFACE(SceneDesc);
+        CS_DEFINE_NAMEDTYPE(SceneDesc);
         
         bool SceneDesc::IsA(InterfaceIDType inInterfaceID) const
         {

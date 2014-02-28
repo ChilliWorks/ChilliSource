@@ -33,7 +33,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(RenderComponentFactory);
+		CS_DEFINE_NAMEDTYPE(RenderComponentFactory);
         //--------------------------------------------------------
         /// Constructor
         ///

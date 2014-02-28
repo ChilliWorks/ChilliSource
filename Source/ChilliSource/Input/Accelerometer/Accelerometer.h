@@ -29,7 +29,7 @@ namespace ChilliSource
 		class Accelerometer : public InputDevice
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(Accelerometer);
+			CS_DECLARE_NAMEDTYPE(Accelerometer);
 			//----------------------------------------------------
 			/// Delegates
 			//----------------------------------------------------

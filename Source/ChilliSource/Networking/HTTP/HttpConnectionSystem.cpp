@@ -13,7 +13,7 @@ namespace ChilliSource
 {
 	namespace Networking
     {
-		DEFINE_NAMED_INTERFACE(HttpConnectionSystem);
+		CS_DEFINE_NAMEDTYPE(HttpConnectionSystem);
         
         u32 HttpConnectionSystem::mudwMaxBufferSize = 0;
         

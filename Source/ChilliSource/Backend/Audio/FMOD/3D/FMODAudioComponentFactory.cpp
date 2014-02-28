@@ -19,7 +19,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-        DEFINE_NAMED_INTERFACE(CFMODAudioComponentFactory);
+        CS_DEFINE_NAMEDTYPE(CFMODAudioComponentFactory);
 
 		//--------------------------------------------------------
 		/// Constructor

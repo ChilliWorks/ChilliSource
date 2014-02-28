@@ -13,7 +13,7 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        DEFINE_NAMED_INTERFACE(AnimatedMeshComponentUpdater);
+        CS_DEFINE_NAMEDTYPE(AnimatedMeshComponentUpdater);
         //------------------------------------------------
         /// Constructor
         //------------------------------------------------

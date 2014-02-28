@@ -23,7 +23,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(FontManager);
+		CS_DEFINE_NAMEDTYPE(FontManager);
 		
 		//-----------------------------------------------------------------
 		/// Constructor

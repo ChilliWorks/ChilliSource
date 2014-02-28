@@ -25,7 +25,7 @@ namespace ChilliSource
 {
 	namespace iOS
     {
-        DEFINE_NAMED_INTERFACE(CiCloudSystem);
+        CS_DEFINE_NAMEDTYPE(CiCloudSystem);
         
         using namespace ChilliSource::Core;
         

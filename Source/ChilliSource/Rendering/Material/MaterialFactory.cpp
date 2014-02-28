@@ -22,7 +22,7 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        DEFINE_NAMED_INTERFACE(MaterialFactory);
+        CS_DEFINE_NAMEDTYPE(MaterialFactory);
         
         //---------------------------------------------------
         /// Constructor

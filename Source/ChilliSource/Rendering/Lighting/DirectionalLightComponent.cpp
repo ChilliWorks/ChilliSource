@@ -16,7 +16,7 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		DEFINE_NAMED_INTERFACE(DirectionalLightComponent);
+		CS_DEFINE_NAMEDTYPE(DirectionalLightComponent);
         
         //----------------------------------------------------------
         /// Constructor

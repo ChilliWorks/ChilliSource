@@ -189,12 +189,6 @@ namespace ChilliSource
 			/// @return Resource provider that loads the resource type
 			//--------------------------------------------------------------------------------------------------
 			ResourceProvider* GetResourceProviderProducing(InterfaceIDType inInterfaceID, const std::string & inExtension);
-            //--------------------------------------------------------------------------------------------------
-            /// Get MoFlow Version
-            ///
-            /// @return String containing the engine version number
-            //--------------------------------------------------------------------------------------------------
-            static std::string GetMoFlowVersion();
 			//--------------------------------------------------------------------------------------------------
 			/// Get App Version
 			///

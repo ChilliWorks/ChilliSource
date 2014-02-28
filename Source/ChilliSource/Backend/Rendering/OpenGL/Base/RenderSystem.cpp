@@ -36,7 +36,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-        DEFINE_NAMED_INTERFACE(CRenderSystem);
+        CS_DEFINE_NAMEDTYPE(CRenderSystem);
         
         bool gbIsMapBufferAvailable = true;
         

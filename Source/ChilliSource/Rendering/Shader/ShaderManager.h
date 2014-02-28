@@ -24,7 +24,7 @@ namespace ChilliSource
 		{
 		public:
 		
-			DECLARE_NAMED_INTERFACE(ShaderManager);
+			CS_DECLARE_NAMEDTYPE(ShaderManager);
 			
 			ShaderManager();
 			virtual ~ShaderManager();

@@ -16,7 +16,7 @@ namespace ChilliSource
 {
     namespace Core
     {
-        DEFINE_NAMED_INTERFACE(SceneDescManager);
+        CS_DEFINE_NAMEDTYPE(SceneDescManager);
         
         bool SceneDescManager::IsA(InterfaceIDType inInterfaceID) const
         {

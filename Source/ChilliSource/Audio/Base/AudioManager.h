@@ -25,7 +25,7 @@ namespace ChilliSource
 		class AudioManager : public Core::ResourceManager
 		{
 		public:
-			DECLARE_NAMED_INTERFACE(AudioManager);
+			CS_DECLARE_NAMEDTYPE(AudioManager);
 			
 			AudioManager(){}
 			virtual ~AudioManager(){}

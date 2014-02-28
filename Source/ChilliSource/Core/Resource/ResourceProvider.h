@@ -25,7 +25,7 @@ namespace ChilliSource
 		{
 		public:
 			virtual ~ResourceProvider(){}
-			DECLARE_NAMED_INTERFACE(ResourceProvider);
+			CS_DECLARE_NAMEDTYPE(ResourceProvider);
 			virtual bool CanCreateResourceOfKind(InterfaceIDType inInterfaceID) const = 0;
 			virtual bool CanCreateResourceFromFileWithExtension(const std::string & inExtension) const = 0;
 			

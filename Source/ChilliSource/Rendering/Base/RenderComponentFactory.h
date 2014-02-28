@@ -26,7 +26,7 @@ namespace ChilliSource
 		class RenderComponentFactory : public Core::ComponentFactory
 		{
 		public: 
-			DECLARE_NAMED_INTERFACE(RenderComponentFactory);
+			CS_DECLARE_NAMEDTYPE(RenderComponentFactory);
 			RenderComponentFactory(RenderSystem* inpRenderSystem);
 			virtual ~RenderComponentFactory(){}
             //--------------------------------------------------------

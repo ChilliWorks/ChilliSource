@@ -24,7 +24,7 @@ namespace ChilliSource
 		{
 		public:
 			
-			DECLARE_NAMED_INTERFACE(MaterialManager);
+			CS_DECLARE_NAMEDTYPE(MaterialManager);
 
 			//----------------------------------------------------------------
 			/// Is A
