@@ -8,7 +8,8 @@
  */
 
 #include <ChilliSource/Backend/Platform/Android/Social/Communications/SMSCompositionActivity.h>
-#include <ChilliSource/Backend/Platform/Android/JavaInterface/SMSCompositionJavaInterface.h>
+
+#include <ChilliSource/Backend/Platform/Android/Social/Communications/SMSCompositionJavaInterface.h>
 
 namespace ChilliSource
 {

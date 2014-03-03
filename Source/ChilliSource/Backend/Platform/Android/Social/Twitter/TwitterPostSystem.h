@@ -10,11 +10,11 @@
 #ifndef _MO_FLO_ANDROIDPLATFORM_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
 #define _MO_FLO_ANDROIDPLATFORM_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
 
-#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
+#include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
-#include <ChilliSource/Backend/Platform/Android/HttpConnectionSystem.h>
 
 namespace ChilliSource
 {
