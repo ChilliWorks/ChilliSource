@@ -14,7 +14,9 @@
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
+
 #include <limits>
+#include <algorithm>
 
 namespace ChilliSource
 {

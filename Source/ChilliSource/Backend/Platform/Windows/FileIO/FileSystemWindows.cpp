@@ -8,17 +8,19 @@
 */
 
 #include <ChilliSource/Backend/Platform/Windows/FileIO/FileSystemWindows.h>
-#include <ChilliSource/Core/File/FileStream.h>
 
+#include <ChilliSource/Backend/Platform/Windows/String/WindowsStringUtils.h>
 #include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
-#include <ChilliSource/Core/boost/filesystem.hpp>
+//This includes windows so needs to come after other engine includes, else it might cause problems with other includes
+#include <ChilliSource/Backend/Platform/Windows/FileIO/WindowsFileUtils.h>
 
 #include <iostream>
-
-#include <windows.h>
 #include <shlobj.h>
+#include <stack>
+#include <windows.h>
 
 //Stupid windows! Why would you #define function names. Heaven forbid that
 //someone else would want to use that function name in their code
@@ -33,8 +35,8 @@ namespace ChilliSource
 	{
 		//constants
 		const std::string kstrSaveDataPath  = "SaveData\\";
-		const std::string kstrCachePath  = "Caches\\Cache\\";
-		const std::string kstrDLCPath  = "Caches\\DLC\\";
+		const std::string kstrCachePath = "Caches\\Cache\\";
+		const std::string kstrDLCPath = "Caches\\DLC\\";
 
 		CFileSystem::CFileSystem()
 		{
@@ -47,18 +49,19 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void CFileSystem::Initialise()
 		{
-			s8 NPath[MAX_PATH];
-			GetModuleFileName(NULL, NPath, MAX_PATH);
-			std::string::size_type pos = std::string(NPath).find_last_of( "\\/" );
-			std::string strWorkingDir(std::string(NPath).substr(0, pos));
+			wchar_t pathChars[MAX_PATH];
+			GetModuleFileName(NULL, pathChars, MAX_PATH);
+			std::string path = WindowsStringUtils::UTF16ToUTF8(std::wstring(pathChars));
+			std::string::size_type pos = path.find_last_of("\\/");
+			std::string strWorkingDir(path.substr(0, pos));
 
 			mstrBundlePath = strWorkingDir + "\\assets\\";
 			mstrDocumentsPath = strWorkingDir + "\\Documents\\";
 			mstrLibraryPath = strWorkingDir + "\\Library\\";
 
-			this->CreateDirectory(Core::StorageLocation::k_saveData, "");
-			this->CreateDirectory(Core::StorageLocation::k_cache, "");
-			this->CreateDirectory(Core::StorageLocation::k_DLC, "");
+			CreateDirectory(Core::StorageLocation::k_saveData, "");
+			CreateDirectory(Core::StorageLocation::k_cache, "");
+			CreateDirectory(Core::StorageLocation::k_DLC, "");
 		}
 		//--------------------------------------------------------------
 		/// Create File Stream
@@ -66,7 +69,7 @@ namespace ChilliSource
 		Core::FileStreamSPtr CFileSystem::CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const
 		{
 			//create the file stream
-			Core::FileStreamSPtr newFilestream = Core::FileStreamSPtr(new Core::IFileStream());
+			Core::FileStreamSPtr newFilestream = Core::FileStreamSPtr(new Core::FileStream());
 
 			//check the requested storage location is available
 			if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -79,7 +82,7 @@ namespace ChilliSource
 			std::string filepath = GetStorageLocationDirectory(ineStorageLocation) + instrFilepath;
 
 			//if this is not a read stream, insure that the storage location is writable.
-			if (ineFileMode != Core::FM_READ && ineFileMode != Core::FileMode::k_readBinary)
+			if (ineFileMode != Core::FileMode::k_read && ineFileMode != Core::FileMode::k_readBinary)
 			{
 				if (IsStorageLocationWritable(ineStorageLocation) == false)
 				{
@@ -230,10 +233,14 @@ namespace ChilliSource
             CreateDirectory(ineDestinationStorageLocation, strPath);
             
             //try and copy the files
-            boost::filesystem::path SrcPath(strSrcPath);
-            boost::filesystem::path DstPath(GetStorageLocationDirectory(ineDestinationStorageLocation) + instrDestinationFilepath);
-            boost::filesystem::copy_file(SrcPath, DstPath, boost::filesystem::copy_option::overwrite_if_exists);
-            return boost::filesystem::exists(DstPath);
+			std::wstring sourcePath = WindowsStringUtils::UTF8ToUTF16(instrSourceFilepath);
+			std::wstring destPath = WindowsStringUtils::UTF8ToUTF16(GetStorageLocationDirectory(ineDestinationStorageLocation) + instrDestinationFilepath);
+			if (WindowsFileUtils::WindowsCopyFile(sourcePath.c_str(), destPath.c_str(), FALSE) == FALSE)
+			{
+				return false;
+			}
+
+			return false;
 		}
 		//--------------------------------------------------------------
 		/// Copy Directory
@@ -310,8 +317,8 @@ namespace ChilliSource
 			}
 
 			//remove the file
-			boost::filesystem::path DstPath(GetStorageLocationDirectory(ineStorageLocation) + instrFilepath);
-			boost::filesystem::remove(DstPath);
+			std::wstring filename = WindowsStringUtils::UTF8ToUTF16(GetStorageLocationDirectory(ineStorageLocation) + instrFilepath);
+			WindowsFileUtils::WindowsDeleteFile(filename.c_str());
 
 			//return successful
 			return true;
@@ -336,8 +343,8 @@ namespace ChilliSource
 			}
 
 			//remove the directory
-			boost::filesystem::path DstPath(GetStorageLocationDirectory(ineStorageLocation) + instrDirectory);
-			boost::filesystem::remove(DstPath);
+			std::wstring directory = WindowsStringUtils::UTF8ToUTF16(GetStorageLocationDirectory(ineStorageLocation) + instrDirectory);
+			WindowsFileUtils::WindowsRemoveDirectory(directory.c_str());
 
 			//return successful
 			return true;
@@ -379,55 +386,24 @@ namespace ChilliSource
             
             for(std::vector<std::string>::iterator it = astrDirectoriesToCheck.begin(); it != astrDirectoriesToCheck.end(); ++it)
             {
-                std::string path = ChilliSource::Core::StringUtils::StandardisePath(*it);
-                boost::filesystem::path DstPath(path);
-                
-                if (inbRecurseIntoSubDirectories == true)
-                {
-                    boost::filesystem::recursive_directory_iterator it(DstPath);
-                    boost::filesystem::recursive_directory_iterator end;
-                    
-                    while(it != end) 
-                    {
-                        //Add to list
-                        if(boost::filesystem::is_regular_file(it->status()) && Core::StringUtils::EndsWith(it->filename(), instrExtension, false))
-                        {
-                            if(inbAppendFullPath)
-                            {
-                                outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + it->filename());
-                            }
-                            else
-                            {
-                                outstrFileNames.push_back(it->filename());
-                            }
-                        }
-                        
-                        ++it;
-                    }
-                }
-                else
-                {
-                    boost::filesystem::directory_iterator end_it;
-                    
-                    if(boost::filesystem::exists(DstPath) && boost::filesystem::is_directory(DstPath))
-                    {
-                        for(boost::filesystem::directory_iterator dir_iter(DstPath); dir_iter != end_it ; ++dir_iter)
-                        {
-                            if(boost::filesystem::is_regular_file(dir_iter->status()) && Core::StringUtils::EndsWith(dir_iter->filename(), instrExtension, false))
-                            {
-                                //Add to list
-                                if(inbAppendFullPath)
-                                {
-                                    outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
-                                }
-                                else
-                                {
-                                    outstrFileNames.push_back(dir_iter->filename());
-                                }
-                            }
-                        }
-                    }
-                }
+				std::vector<std::string> files;
+				std::vector<std::string> directories;
+				ListDirectoryContents(*it, inbRecurseIntoSubDirectories, directories, files);
+
+				for (const std::string& file : files)
+				{
+					if (Core::StringUtils::EndsWith(file, instrExtension, false) == true)
+					{
+						if (inbAppendFullPath)
+						{
+							outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + file);
+						}
+						else
+						{
+							outstrFileNames.push_back(file);
+						}
+					}
+				}
             }
             
             std::sort(outstrFileNames.begin(), outstrFileNames.end());
@@ -481,55 +457,24 @@ namespace ChilliSource
             
             for(std::vector<std::string>::iterator it = astrDirectoriesToCheck.begin(); it != astrDirectoriesToCheck.end(); ++it)
             {
-                std::string path = ChilliSource::Core::StringUtils::StandardisePath(*it);
-                boost::filesystem::path DstPath(path);
-                
-                if (inbRecurseIntoSubDirectories == true)
-                {
-                    boost::filesystem::recursive_directory_iterator it(DstPath);
-                    boost::filesystem::recursive_directory_iterator end;
-                    
-                    while(it != end) 
-                    {
-                        //Add to list
-                        if(boost::filesystem::is_regular_file(it->status()) && Core::StringUtils::EndsWith(it->filename(), instrName, false))
-                        {
-                            if(inbAppendFullPath)
-                            {
-                                outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + it->filename());
-                            }
-                            else
-                            {
-                                outstrFileNames.push_back(it->filename());
-                            }
-                        }
-                        
-                        ++it;
-                    }
-                }
-                else
-                {
-                    boost::filesystem::directory_iterator end_it;
-                    
-                    if(boost::filesystem::exists(DstPath) && boost::filesystem::is_directory(DstPath))
-                    {
-                        for(boost::filesystem::directory_iterator dir_iter(DstPath); dir_iter != end_it ; ++dir_iter)
-                        {
-                            if(boost::filesystem::is_regular_file(dir_iter->status()) && Core::StringUtils::EndsWith(dir_iter->filename(), instrName, false))
-                            {
-                                //Add to list
-                                if(inbAppendFullPath)
-                                {
-                                    outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
-                                }
-                                else
-                                {
-                                    outstrFileNames.push_back(dir_iter->filename());
-                                }
-                            }
-                        }
-                    }
-                }
+				std::vector<std::string> files;
+				std::vector<std::string> directories;
+				ListDirectoryContents(*it, inbRecurseIntoSubDirectories, directories, files);
+
+				for (const std::string& file : files)
+				{
+					if (Core::StringUtils::EndsWith(file, instrName, false) == true)
+					{
+						if (inbAppendFullPath)
+						{
+							outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + file);
+						}
+						else
+						{
+							outstrFileNames.push_back(file);
+						}
+					}
+				}
             }
             
             std::sort(outstrFileNames.begin(), outstrFileNames.end());
@@ -573,55 +518,21 @@ namespace ChilliSource
             
             for(std::vector<std::string>::iterator it = astrDirectoriesToCheck.begin(); it != astrDirectoriesToCheck.end(); ++it)
             {
-                std::string path = ChilliSource::Core::StringUtils::StandardisePath(*it);
-                boost::filesystem::path DstPath(path);
-                
-                if (inbRecurseIntoSubDirectories == true)
-                {
-                    boost::filesystem::recursive_directory_iterator it(DstPath);
-                    boost::filesystem::recursive_directory_iterator end;
-                    
-                    while(it != end) 
-                    {
-                        //Add to list
-                        if(boost::filesystem::is_regular_file(it->status()))
-                        {
-                            if(inbAppendFullPath)
-                            {
-                                outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + it->filename());
-                            }
-                            else
-                            {
-                                outstrFileNames.push_back(it->filename());
-                            }
-                        }
-                        
-                        ++it;
-                    }
-                }
-                else
-                {
-                    boost::filesystem::directory_iterator end_it;
-                    
-                    if(boost::filesystem::exists(DstPath) && boost::filesystem::is_directory(DstPath))
-                    {
-                        for(boost::filesystem::directory_iterator dir_iter(DstPath); dir_iter != end_it ; ++dir_iter)
-                        {
-                            if(boost::filesystem::is_regular_file(dir_iter->status()))
-                            {
-                                //Add to list
-                                if(inbAppendFullPath)
-                                {
-                                    outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
-                                }
-                                else
-                                {
-                                    outstrFileNames.push_back(dir_iter->filename());
-                                }
-                            }
-                        }
-                    }
-                }
+				std::vector<std::string> files;
+				std::vector<std::string> directories;
+				ListDirectoryContents(*it, inbRecurseIntoSubDirectories, directories, files);
+
+				for (const std::string& file : files)
+				{
+					if (inbAppendFullPath)
+					{
+						outstrFileNames.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + file);
+					}
+					else
+					{
+						outstrFileNames.push_back(file);
+					}
+				}
             }
             
             std::sort(outstrFileNames.begin(), outstrFileNames.end());
@@ -665,55 +576,21 @@ namespace ChilliSource
             
             for(std::vector<std::string>::iterator it = astrDirectoriesToCheck.begin(); it != astrDirectoriesToCheck.end(); ++it)
             {
-                std::string path = ChilliSource::Core::StringUtils::StandardisePath(*it);
-                boost::filesystem::path DstPath(path);
-                
-                if (inbRecurseIntoSubDirectories == true)
-                {
-                    boost::filesystem::recursive_directory_iterator it(DstPath);
-                    boost::filesystem::recursive_directory_iterator end;
-                    
-                    while(it != end) 
-                    {
-                        //Add to list
-                        if(boost::filesystem::is_directory(it->status()))
-                        {
-                            if(inbAppendFullPath)
-                            {
-                                outstrDirectories.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + it->filename());
-                            }
-                            else
-                            {
-                                outstrDirectories.push_back(it->filename());
-                            }
-                        }
-                        
-                        ++it;
-                    }
-                }
-                else
-                {
-                    boost::filesystem::directory_iterator end_it;
-                    
-                    if(boost::filesystem::exists(DstPath) && boost::filesystem::is_directory(DstPath))
-                    {
-                        for(boost::filesystem::directory_iterator dir_iter(DstPath); dir_iter != end_it ; ++dir_iter)
-                        {
-                            if(boost::filesystem::is_directory(dir_iter->status()))
-                            {
-                                //Add to list
-                                if(inbAppendFullPath)
-                                {
-                                    outstrDirectories.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + dir_iter->filename());
-                                }
-                                else
-                                {
-                                    outstrDirectories.push_back(dir_iter->filename());
-                                }
-                            }
-                        }
-                    }
-                }
+				std::vector<std::string> files;
+				std::vector<std::string> directories;
+				ListDirectoryContents(*it, inbRecurseIntoSubDirectories, directories, files);
+
+				for (const std::string& directory : directories)
+				{
+					if (inbAppendFullPath)
+					{
+						outstrDirectories.push_back(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory) + directory);
+					}
+					else
+					{
+						outstrDirectories.push_back(directory);
+					}
+				}
             }
             
             std::sort(outstrDirectories.begin(), outstrDirectories.end());
@@ -862,8 +739,9 @@ namespace ChilliSource
 		bool CFileSystem::DoesFileExist(const std::string& instrFilepath) const
 		{
 			//return whether or not the file exists
-			boost::filesystem::path DstPath(ChilliSource::Core::StringUtils::StandardisePath(instrFilepath));
-			return boost::filesystem::exists(DstPath);
+			std::wstring filepath = WindowsStringUtils::UTF8ToUTF16(Core::StringUtils::StandardisePath(instrFilepath));
+			DWORD attributes = GetFileAttributes(filepath.c_str());
+			return (attributes != INVALID_FILE_ATTRIBUTES && !(attributes & FILE_ATTRIBUTE_DIRECTORY));
 		}
 		//--------------------------------------------------------------
 		/// Does File Exist In Cached DLC
@@ -878,17 +756,17 @@ namespace ChilliSource
 		bool CFileSystem::DoesFileExistInPackageDLC(const std::string& instrFilepath) const
 		{
 			std::string path = GetStorageLocationDirectory(Core::StorageLocation::k_package) + mstrPackageDLCPath + instrFilepath;
-			boost::filesystem::path DstPath(ChilliSource::Core::StringUtils::StandardisePath(path));
-			return boost::filesystem::exists(DstPath);
+			return DoesFileExist(path);
 		}
 		//--------------------------------------------------------------
 		/// Does Directory Exist
 		//--------------------------------------------------------------
 		bool CFileSystem::DoesDirectoryExist(const std::string& instrDirectory) const
 		{
-			//return whether or not the dir exists
-			boost::filesystem::path DstPath(ChilliSource::Core::StringUtils::StandardisePath(instrDirectory));
-			return boost::filesystem::exists(DstPath);
+			//return whether or not the file exists
+			std::wstring directoryPath = WindowsStringUtils::UTF8ToUTF16(Core::StringUtils::StandardisePath(instrDirectory));
+			DWORD attributes = GetFileAttributes(directoryPath.c_str());
+			return (attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY));
 		}
 		//--------------------------------------------------------------
 		/// Is Storage Location Available
@@ -901,7 +779,7 @@ namespace ChilliSource
 			case Core::StorageLocation::k_saveData:
 			case Core::StorageLocation::k_cache:
 			case Core::StorageLocation::k_DLC:
-			case Core::SL_ROOT:
+			case Core::StorageLocation::k_root:
 				return true;
 			default:
 				return false;
@@ -928,7 +806,7 @@ namespace ChilliSource
 			case Core::StorageLocation::k_DLC:
 				strStorageLocationPath = mstrLibraryPath + kstrDLCPath;
 				break;
-			case Core::SL_ROOT:
+			case Core::StorageLocation::k_root:
 				strStorageLocationPath = "";
 				break;
 			default:
@@ -950,8 +828,69 @@ namespace ChilliSource
 				return false;
 			}
 
-			boost::filesystem::path DstPath(ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath));
-			return boost::filesystem::exists(DstPath);
+			std::wstring itemPath = WindowsStringUtils::UTF8ToUTF16(Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrPath));
+			DWORD attributes = GetFileAttributes(itemPath.c_str());
+			return (attributes != INVALID_FILE_ATTRIBUTES);
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool CFileSystem::ListDirectoryContents(const std::string& in_directory, bool in_recursive, std::vector<std::string>& out_directories, std::vector<std::string>& out_files) const
+		{
+			std::wstring path = WindowsStringUtils::UTF8ToUTF16(ChilliSource::Core::StringUtils::StandardisePath(in_directory));
+
+			std::stack<std::wstring> directoryStack;
+			directoryStack.push(path);
+
+			while (directoryStack.size() > 0)
+			{
+				path = directoryStack.top();
+				directoryStack.pop();
+
+				std::wstring relativePath = path.substr(in_directory.length(), path.length() - in_directory.length());
+
+				WIN32_FIND_DATA fileData;
+				HANDLE fileHandle = WindowsFileUtils::WindowsFindFirstFile(path.c_str(), &fileData);
+				if (fileHandle == INVALID_HANDLE_VALUE)
+				{
+					return false;
+				}
+				else
+				{
+					do
+					{
+						if (wcscmp(fileData.cFileName, L".") != 0 && wcscmp(fileData.cFileName, L"..") != 0)
+						{
+							if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+							{
+								std::wstring directoryPath = relativePath + L"/" + fileData.cFileName;
+								if (in_recursive == true)
+								{
+									directoryStack.push(directoryPath);
+								}
+
+								out_directories.push_back(WindowsStringUtils::UTF16ToUTF8(directoryPath));
+							}
+							else
+							{
+								std::wstring filePath = relativePath + L"/" + fileData.cFileName;
+								out_files.push_back(WindowsStringUtils::UTF16ToUTF8(filePath));
+							}
+						}
+					} 
+					while (WindowsFileUtils::WindowsFindNextFile(fileHandle, &fileData) != 0);
+
+					if (GetLastError() != ERROR_NO_MORE_FILES)
+					{
+						FindClose(fileHandle);
+						return false;
+					}
+					
+					FindClose(fileHandle);
+					fileHandle = INVALID_HANDLE_VALUE;
+				}
+			}
+
+			return false;
 		}
 	}
 }

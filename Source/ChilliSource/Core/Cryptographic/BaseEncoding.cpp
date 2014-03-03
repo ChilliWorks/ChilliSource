@@ -34,6 +34,8 @@
 
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 
+#include <algorithm>
+
 namespace ChilliSource
 {
     namespace Core

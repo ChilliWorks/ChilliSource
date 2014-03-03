@@ -12,7 +12,7 @@
 
 #include <climits>
 #include <cfloat>
-
+#include <algorithm>
 
 namespace ChilliSource
 {

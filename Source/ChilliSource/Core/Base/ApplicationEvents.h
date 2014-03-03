@@ -13,6 +13,8 @@
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Event/Event.h>
 
+#include <functional>
+
 namespace ChilliSource
 {
     namespace Core

@@ -35,7 +35,7 @@ namespace ChilliSource
         //--------------------------------------------------
         CS_FORWARDDECLARE_CLASS(HttpConnectionSystem);
         CS_FORWARDDECLARE_CLASS(HttpRequest);
-        CS_FORWARDDECLARE_CLASS(HttpRequestDetails);
+        CS_FORWARDDECLARE_STRUCT(HttpRequestDetails);
         //--------------------------------------------------
         /// IAP
         //--------------------------------------------------

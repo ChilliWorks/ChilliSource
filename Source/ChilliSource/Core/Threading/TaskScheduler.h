@@ -90,7 +90,7 @@ namespace ChilliSource
                 for(; inIt != inItEnd; ++inIt)
                 {
                     TArg Value = (*inIt);
-                    pThreadPool->Schedule(Task<TArg>(inpSender, func, Value, inpWaitCondition));
+					pThreadPool->Schedule(Task<TArg>(inpSender, func, inpWaitCondition, Value));
                 }
             }
             //----------------------------------------------------

@@ -23,7 +23,7 @@ namespace ChilliSource
 {
 	namespace Windows
 	{
-		class CInputSystem : public Input::IInputSystem
+		class CInputSystem : public Input::InputSystem
 		{
 		public:
 			CInputSystem();
@@ -48,7 +48,7 @@ namespace ChilliSource
 			/// @param Interface of input type to retreive
 			/// @return Pointer to input type or NULL
 			//---------------------------------------------------------------
-			virtual Input::IInputDevice * GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID);
+			virtual Input::InputDevice * GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID);
 			//---------------------------------------------------------------
 			/// Update
 			///
@@ -67,13 +67,13 @@ namespace ChilliSource
 			///
 			/// @return Pointer to mouse device
 			//---------------------------------------------------------------
-			Input::IMouse * GetMousePtr();
+			Input::Mouse * GetMousePtr();
 			//---------------------------------------------------------------
 			/// Get Touch Screen Pointer
 			///
 			/// @return Pointer to touch screen device
 			//---------------------------------------------------------------
-			Input::ITouchScreen * GetTouchScreenPtr();
+			Input::TouchScreen * GetTouchScreenPtr();
 
 		protected:
 

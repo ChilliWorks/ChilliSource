@@ -78,7 +78,7 @@ namespace ChilliSource
         bool CRenderSystem::Init(u32 inudwWidth, u32 inudwHeight)
 		{
             CS_ASSERT((inudwWidth > 0 && inudwHeight > 0), "Cannot create and OpenGL ES view with size ZERO");
-#ifdef TARGET_WINDOWS
+#ifdef CS_TARGETPLATFORM_WINDOWS
 			GLenum GlewError = glewInit();
 			if(GLEW_OK != GlewError)
 			{
@@ -676,7 +676,7 @@ namespace ChilliSource
 #else
             glViewport(0, 0, mudwViewWidth, mudwViewHeight);
 #endif
-#ifdef TARGET_WINDOWS
+#ifdef CS_TARGETPLATFORM_WINDOWS
 			glfwSwapBuffers();
 #endif
 		}

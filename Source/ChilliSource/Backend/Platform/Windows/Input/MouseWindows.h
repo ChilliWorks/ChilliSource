@@ -9,11 +9,11 @@ namespace ChilliSource
 {
 	namespace Windows
 	{
-		class CMouse : public Input::IMouse
+		class CMouse : public Input::Mouse
 		{
 		public:
 			CMouse();
-			CMouse(Input::ITouchScreen* inpTouchProxy);
+			CMouse(Input::TouchScreen* inpTouchProxy);
 			virtual ~CMouse();
 
 			//-------------------------------------------------------
