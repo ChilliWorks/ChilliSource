@@ -12,7 +12,7 @@
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 
-#include <limits.h>
+#include <limits>
 
 namespace ChilliSource
 {

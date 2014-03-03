@@ -10,6 +10,8 @@
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/VideoPlayerJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
+#include <ChilliSource/Core/Base/Colour.h>
+
 #include <jni.h>
 
 //------------------------------------------
@@ -102,7 +104,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Present
 		//--------------------------------------------------------------
-		void CVideoPlayerJavaInterface::Present(bool inbInAPK, std::string instrFilename, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour,
+		void CVideoPlayerJavaInterface::Present(bool inbInAPK, std::string instrFilename, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour,
 												const OnVideoDismissedDelegate& inDismissedDelegate, const OnVideoStoppedDelegate& inStoppedDelegate)
 		{
 			mVideoDismissedDelegate = inDismissedDelegate;
@@ -178,7 +180,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Create Subtitle
 		//--------------------------------------------------------------
-		s64 CVideoPlayerJavaInterface::CreateSubtitle(const CUTF8String& inText, const std::string& instrFontName, u32 inudwFontSize, const std::string& instrAlignment, f32 infX, f32 infY, f32 infWidth, f32 infHeight)
+		s64 CVideoPlayerJavaInterface::CreateSubtitle(const Core::UTF8String& inText, const std::string& instrFontName, u32 inudwFontSize, const std::string& instrAlignment, f32 infX, f32 infY, f32 infWidth, f32 infHeight)
 		{
 			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrText = JavaInterfaceUtils::CreateJStringFromUTF8String(inText);

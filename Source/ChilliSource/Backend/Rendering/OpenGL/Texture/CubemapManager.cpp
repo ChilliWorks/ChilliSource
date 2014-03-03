@@ -47,7 +47,7 @@ namespace ChilliSource
 		void CCubemapManager::Restore()
 		{
 #ifdef TARGET_ANDROID
-			for(std::vector<Rendering::CubemapWeakPtr>::iterator it = mapCubemapCache.begin(); it != mapCubemapCache.end(); ++it)
+			for(std::vector<Rendering::CubemapWPtr>::iterator it = mapCubemapCache.begin(); it != mapCubemapCache.end(); ++it)
 			{
 				if (Rendering::CubemapSPtr pCubemap = (*it).lock())
 				{
@@ -56,7 +56,7 @@ namespace ChilliSource
 						std::shared_ptr<CCubemap> pOpenGLCubemap = std::static_pointer_cast<CCubemap>(pCubemap);
                         
                         //If the Cubemap was loaded from file then reload it.
-                        if(pOpenGLCubemap->GetFilename() != "" && pOpenGLCubemap->GetStorageLocation() != Core::SL_NONE)
+                        if(pOpenGLCubemap->GetFilename() != "" && pOpenGLCubemap->GetStorageLocation() != Core::StorageLocation::k_none)
                         {
                             std::vector<Core::ResourceSPtr> aImages;
                             aImages.reserve(6);
@@ -75,8 +75,8 @@ namespace ChilliSource
                                     {
                                         Core::ResourceSPtr pSourceImage(new Core::Image());
                                         Core::Image* pImage = (Core::Image*)(pSourceImage.get());
-                                        std::string strFileName = strPath + ToString(i+1) + strExt;
-                                        if(static_cast<ImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(pOpenGLCubemap->GetStorageLocation(), strFileName, pOpenGLCubemap->GetImageFormat(), pSourceImage))
+                                        std::string strFileName = strPath + Core::ToString(i+1) + strExt;
+                                        if(static_cast<Core::ImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(pOpenGLCubemap->GetStorageLocation(), strFileName, pOpenGLCubemap->GetImageFormat(), pSourceImage))
                                         {
                                             pImage->SetName(strFileName);
                                             pImage->SetLoaded(true);
@@ -115,7 +115,7 @@ namespace ChilliSource
 		void CCubemapManager::AddRestorableCubemap(const Rendering::CubemapSPtr& inpCubemap)
 		{
 #ifdef TARGET_ANDROID
-			mapCubemapCache.push_back(Rendering::CubemapWeakPtr(inpCubemap));
+			mapCubemapCache.push_back(Rendering::CubemapWPtr(inpCubemap));
 #endif
 		}
 		//----------------------------------------------------------------
@@ -129,7 +129,7 @@ namespace ChilliSource
 		void CCubemapManager::RemoveRestorableCubemap(CCubemap* inpCubemap)
 		{
 #ifdef TARGET_ANDROID
-			for(std::vector<Rendering::CubemapWeakPtr>::iterator it = mapCubemapCache.begin(); it != mapCubemapCache.end(); ++it)
+			for(std::vector<Rendering::CubemapWPtr>::iterator it = mapCubemapCache.begin(); it != mapCubemapCache.end(); ++it)
 			{
 				if (Rendering::CubemapSPtr pCubemap = (*it).lock())
 				{

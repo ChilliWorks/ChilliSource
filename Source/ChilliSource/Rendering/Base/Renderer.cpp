@@ -26,6 +26,8 @@
 #include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
 #include <ChilliSource/GUI/Base/Window.h>
 
+#include <algorithm>
+
 namespace ChilliSource
 {
 	namespace Rendering

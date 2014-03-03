@@ -57,9 +57,9 @@ namespace ChilliSource
 			//load the UDID from the local data store
 			std::string strLDSUDID = "";
 			bool bLDSUDIDExists = false;
-			if (ChilliSource::Core::CLocalDataStore::GetSingletonPtr()->HasValueForKey(kstrUDIDStorageKey) == true)
+			if (Core::LocalDataStore::GetSingletonPtr()->HasValueForKey(kstrUDIDStorageKey) == true)
 			{
-				bLDSUDIDExists = ChilliSource::Core::CLocalDataStore::GetSingletonPtr()->TryGetValue(kstrUDIDStorageKey, strLDSUDID);
+				bLDSUDIDExists = Core::LocalDataStore::GetSingletonPtr()->TryGetValue(kstrUDIDStorageKey, strLDSUDID);
 			}
 
 			//load the UDID from the android data store
@@ -91,8 +91,8 @@ namespace ChilliSource
 		void CUDIDManager::SaveUDID()
 		{
 			//store in the local data store
-			ChilliSource::Core::CLocalDataStore::GetSingletonPtr()->SetValueForKey(kstrUDIDStorageKey, mstrUDID);
-			ChilliSource::Core::CLocalDataStore::GetSingletonPtr()->Synchronise();
+			Core::LocalDataStore::GetSingletonPtr()->SetValueForKey(kstrUDIDStorageKey, mstrUDID);
+			Core::LocalDataStore::GetSingletonPtr()->Synchronise();
 
 			//store in shared preferences
 			SCSharedPreferencesJavaInterface::SetString(kstrSharedPrefsDocName, kstrUDIDStorageKey, mstrUDID);
@@ -108,7 +108,7 @@ namespace ChilliSource
 			std::string strMacAddress = pCoreJI->GetMacAddress();
 			if (strMacAddress != "")
 			{
-				mstrUDID = "m-" + ChilliSource::CHashMD5::GenerateHexHashCode(strMacAddress);
+				mstrUDID = "m-" + Core::HashMD5::GenerateHexHashCode(strMacAddress);
 				SaveUDID();
 				return;
 			}
@@ -117,7 +117,7 @@ namespace ChilliSource
 			std::string strAndroidID = pCoreJI->GetAndroidID();
 			if (strAndroidID != "")
 			{
-				mstrUDID = "a-" + ChilliSource::CHashMD5::GenerateHexHashCode(strAndroidID);
+				mstrUDID = "a-" + Core::HashMD5::GenerateHexHashCode(strAndroidID);
 				SaveUDID();
 				return;
 			}
@@ -126,7 +126,7 @@ namespace ChilliSource
 			std::string strTelephonyID = pCoreJI->GetTelephonyDeviceID();
 			if (strTelephonyID != "")
 			{
-				mstrUDID = "t-" + ChilliSource::CHashMD5::GenerateHexHashCode(strTelephonyID);
+				mstrUDID = "t-" + Core::HashMD5::GenerateHexHashCode(strTelephonyID);
 				SaveUDID();
 				return;
 			}
@@ -146,7 +146,7 @@ namespace ChilliSource
 				dwRandomNumber += rand();
 
 			//use this random number to generate a UDID
-			mstrUDID = "r-" + ChilliSource::CHashMD5::GenerateHexHashCode(STRING_CAST(dwRandomNumber));
+			mstrUDID = "r-" + Core::HashMD5::GenerateHexHashCode(Core::ToString(dwRandomNumber));
 			SaveUDID();
 		}
 		//-----------------------------------------

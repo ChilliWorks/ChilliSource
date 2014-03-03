@@ -10,7 +10,6 @@
 #ifndef _MO_FLO_ANDROIDPLATFORM_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
 #define _MO_FLO_ANDROIDPLATFORM_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
 
-#include <ChilliSource/Core/Event/GenericEvent.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
 #include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
@@ -21,11 +20,10 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CTwitterPostSystem: public ChilliSource::Social::ITwitterPostSystem
+		class CTwitterPostSystem: public Social::TwitterPostSystem
 		{
 		public:
-			CTwitterPostSystem(Android::CHttpConnectionSystem* inpHttpConnectionSystem,
-							   Networking::COAuthSystem* inpOAuthSystem);
+			CTwitterPostSystem(Android::CHttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem);
 			~CTwitterPostSystem();
             //------------------------------------------------------------------------
             /// Is A
@@ -58,7 +56,7 @@ namespace ChilliSource
             ///
             /// @return If the tweet exceeds the character limit imposed by Twitter
 			//------------------------------------------------------------------------
-			bool TryPost(const Social::TwitterPostDesc & insDesc, const Social::ITwitterPostSystem::PostResultDelegate & inResultCallback);
+			bool TryPost(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback);
 
 		private:
 			//------------------------------------------------------------------------
@@ -66,13 +64,17 @@ namespace ChilliSource
 			///
 			/// @param PIN entered by user
 			//------------------------------------------------------------------------
-			void OnPINComplete(const ChilliSource::Social::ITwitterAuthenticationActivity::AuthenticationPINResult &inResult);
+			void OnPINComplete(const Social::TwitterAuthenticationActivity::AuthenticationPINResult &inResult);
 			//------------------------------------------------------------------------
 			/// Delegate called with the authorisation view is dismissed.
 			///
 			/// @param Pointer to IActivity that has been dismissed
 			//------------------------------------------------------------------------
-			void OnAuthorisationDismissed(ChilliSource::IActivity* inpActivity);
+			void OnAuthorisationDismissed(Core::Activity* inpActivity);
+
+		private:
+
+			Core::ConnectionUPtr m_authorisationDismissedConnection;
 		};
 	}
 }

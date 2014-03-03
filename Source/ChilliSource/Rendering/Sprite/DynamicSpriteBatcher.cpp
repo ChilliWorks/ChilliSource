@@ -88,11 +88,11 @@ namespace ChilliSource
                 RenderCommand &sLastCommand = maRenderCommands.back();
                 
                 //Make a copy of the material that this batch will use
-                sLastCommand.Material = *(mpLastMaterial.get());
+                sLastCommand.m_material = *(mpLastMaterial.get());
                 //The offset of the indices for this batch
-                sLastCommand.udwOffset = ((maSpriteCache.size() - mudwSpriteCommandCounter) * kudwIndicesPerSprite) * sizeof(s16);
+                sLastCommand.m_offset = ((maSpriteCache.size() - mudwSpriteCommandCounter) * kudwIndicesPerSprite) * sizeof(s16);
                 //The number of indices in this batch
-                sLastCommand.udwStride = mudwSpriteCommandCounter * kudwIndicesPerSprite;
+                sLastCommand.m_stride = mudwSpriteCommandCounter * kudwIndicesPerSprite;
                 mudwSpriteCommandCounter = 0;
             }
 		}
@@ -151,7 +151,7 @@ namespace ChilliSource
             for(std::vector<RenderCommand>::iterator it = maRenderCommands.begin(); it != maRenderCommands.end(); ++it)
             {
                 //Render the last filled buffer
-                mpBatch[mudwCurrentRenderSpriteBatch]->Render(inpRenderSystem, it->Material, it->udwOffset, it->udwStride);
+                mpBatch[mudwCurrentRenderSpriteBatch]->Render(inpRenderSystem, it->m_material, it->m_offset, it->m_stride);
             }
                 
             maRenderCommands.clear();

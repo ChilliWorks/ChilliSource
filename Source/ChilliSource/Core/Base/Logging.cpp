@@ -20,6 +20,7 @@
 
 #ifdef TARGET_ANDROID
 #include <android/log.h>
+#include <cstdlib>
 extern "C"
 {
     #define CS_ANDROID_LOG_DEBUG(...) __android_log_print(ANDROID_LOG_DEBUG, "MoFlow", "%s", __VA_ARGS__)

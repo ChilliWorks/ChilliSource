@@ -67,11 +67,13 @@ namespace ChilliSource
 			Audio::AudioListenerSPtr CreateAudioListener();
 			
 		private:
+#ifdef TARGET_ANDROID
+            std::string m_DLCDirectory;
+            std::string m_cacheDirectory;
+            std::string m_saveDataDirectory;
+#endif
 			
 			CFMODSystem* mpFMODSystem;
-			std::string mstrBundlePath;
-			std::string mstrDocumentsPath;
-            std::string mstrDLCPath;
 		};
 	}
 }

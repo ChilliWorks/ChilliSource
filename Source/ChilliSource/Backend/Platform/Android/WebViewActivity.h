@@ -10,15 +10,17 @@
 #ifndef _MO_FLO_PLATFORM_ANDROID_WEB_VIEW_ACTIVITY_H_
 #define _MO_FLO_PLATFORM_ANDROID_WEB_VIEW_ACTIVITY_H_
 
-#include <ChilliSource/Core/WebViewActivity.h>
-#include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/Math/UnifiedCoordinates.h>
+#include <ChilliSource/Web/Base/WebViewActivity.h>
+
+#include <unordered_map>
 
 namespace ChilliSource
 {
 	namespace Android
 	{
-		class CWebViewActivity: public ChilliSource::IWebViewActivity
+		class CWebViewActivity: public Web::WebViewActivity
 		{
 		public:
 			CWebViewActivity();
@@ -62,7 +64,7 @@ namespace ChilliSource
 			///
 			/// @param Unified Vector of size
 			//-----------------------------------------------
-			void SetSize(const ChilliSource::UnifiedVector2 & invSize);
+			void SetSize(const Core::UnifiedVector2 & invSize);
 			//-----------------------------------------------
 			/// Get Size
 			///
@@ -70,7 +72,7 @@ namespace ChilliSource
 			///
 			/// return Unified Vector of size
 			//-----------------------------------------------
-			ChilliSource::UnifiedVector2 GetSize() const;
+			Core::UnifiedVector2 GetSize() const;
 			//-----------------------------------------------
 			/// On WebView Dismissed
 			///
@@ -90,8 +92,8 @@ namespace ChilliSource
 			void AddDismissButton(f32 infSize);
 
 		private:
-			ChilliSource::UnifiedVector2 mvUnifiedSize;
-			ChilliSource::Core::Vector2 mvAbsoluteSize;
+			Core::UnifiedVector2 mvUnifiedSize;
+			Core::Vector2 mvAbsoluteSize;
 			static u32 msudwCurrentIndex;
 			u32 mudwIndex;
 

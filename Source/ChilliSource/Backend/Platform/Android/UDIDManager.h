@@ -10,6 +10,8 @@
 #ifndef _MO_FLO_PLATFORM_ANDROID_UDID_MANAGER_H_
 #define _MO_FLO_PLATFORM_ANDROID_UDID_MANAGER_H_
 
+#include <string>
+
 namespace ChilliSource
 {
 	namespace Android

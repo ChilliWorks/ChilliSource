@@ -59,6 +59,12 @@ namespace ChilliSource
 #else
             ErrorCheck(mpFMODEventSystem->init(kudwMaxFMODChannels, FMOD_INIT_NORMAL, nullptr));
 #endif
+
+#ifdef CS_ENABLE_FMODANDROIDOPENSL
+			mpFMODSystem->setOutput(FMOD_OUTPUTTYPE_OPENSL);
+#else
+			mpFMODSystem->setOutput(FMOD_OUTPUTTYPE_AUDIOTRACK);
+#endif
 			
 			//Set defaults
 			mpFMODSystem->set3DSettings(Audio::kfDefaultDoppler, Audio::kfDefaultDistance, Audio::kfDefaultRolloff);
@@ -74,6 +80,10 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void CFMODSystem::LoadEventData(Core::StorageLocation ineLocation, const std::string& instrFilePath)
 		{
+#ifdef TARGET_ANDROID
+			CS_ASSERT(ineLocation != Core::StorageLocation::k_package, "FMOD Android cannot load from package");
+#endif
+
             std::string strFilePath;
             Core::Application::GetFileSystemPtr()->GetBestPathToFile(ineLocation, instrFilePath, strFilePath);
             ErrorCheck(mpFMODEventSystem->load(strFilePath.c_str(), nullptr, &mpFMODEventProject));

@@ -23,15 +23,15 @@ namespace ChilliSource
 		//=============================================
 		/// Delegates
 		//=============================================
-		typedef std::function<IActivity*()> ActivityCreationFunction;
-		typedef std::function<Core::ISystem*(std::vector<Core::SystemPtr>&)> SystemCreationFunction;
-		typedef std::function<void(IInformationProvider*)> InfoProviderCreationFunction;
+		typedef std::function<Core::Activity*()> ActivityCreationFunction;
+		typedef std::function<Core::System*(std::vector<Core::SystemSPtr>&)> SystemCreationFunction;
+		typedef std::function<Core::IInformationProvider*()> InfoProviderCreationFunction;
 		//=============================================
 		/// Platform System
 		///
 		/// Android platform system
 		//=============================================
-		class CPlatformSystem : public IPlatformSystem
+		class CPlatformSystem : public Core::PlatformSystem
 		{
 		public:
 			CPlatformSystem();
@@ -49,7 +49,7 @@ namespace ChilliSource
 			///
 			/// @param the system list
 			//-------------------------------------------------
-			void CreateDefaultSystems(std::vector<Core::SystemPtr> & inaSystems);
+			void CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems);
 			//-------------------------------------------------
 			/// Post Create Systems
 			///
@@ -105,7 +105,7 @@ namespace ChilliSource
 			/// @param Vector of existing systems. The return value is added to this vector if not NULL.
 			/// @return A handle to the given system or NULL if the platform cannot support it
 			//-----------------------------------------
-			Core::ISystem* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemPtr> & inaExistingSystems) const;
+			Core::System* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr> & inaExistingSystems) const;
 			//==========================================
 			//--- Activity Creation
 			//==========================================
@@ -124,7 +124,7 @@ namespace ChilliSource
 			/// @param InterfaceID to generate
 			/// @return A handle to the given activity or NULL if the platform cannot support it
 			//-----------------------------------------
-			virtual IActivity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const;
+			virtual Core::Activity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const;
 			//==========================================
 			//---InformationProvider Creation
 			//==========================================
@@ -143,7 +143,7 @@ namespace ChilliSource
 			/// @param InterfaceID to generate
 			/// @return A handle to the given system or NULL if the platform cannot support it
 			//-----------------------------------------
-			virtual IInformationProvider* CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const;
+			virtual Core::IInformationProvider* CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const;
 			//-----------------------------------------------------------------------------------------------------------
 			/// Get Screen Dimensions
 			///
@@ -181,14 +181,14 @@ namespace ChilliSource
 			/// Get the active locale of the device
 			/// @return Locale ID
 			//--------------------------------------------------------------
-            Core::CLocale GetLocale() const;
+            Core::Locale GetLocale() const;
 			//--------------------------------------------------------------
 			/// Get Langauge
 			///
 			/// Get the active language of the device in locale format
 			/// @return Locale ID
 			//--------------------------------------------------------------
-            Core::CLocale GetLanguage() const;
+            Core::Locale GetLanguage() const;
 			//--------------------------------------------
 			/// Create Default Image Loader
 			///
@@ -197,7 +197,7 @@ namespace ChilliSource
 			///
 			/// @return A pointer to the ResourceProvider
 			//--------------------------------------------
-			Core::IResourceProvider* CreateDefaultImageLoader(std::vector<Core::SystemPtr>& inSystems) const;
+			Core::ResourceProvider* CreateDefaultImageLoader(std::vector<Core::SystemSPtr>& inSystems) const;
 			//-------------------------------------------------
 			/// Get Screen Density
 			///
@@ -237,7 +237,7 @@ namespace ChilliSource
             ///
             /// @param Text
             //--------------------------------------------------------------------------------------------------
-            void MakeToast(const UTF8String& instrText) const;
+            void MakeToast(const Core::UTF8String& instrText) const;
             //--------------------------------------------------------------------------------------------------
             /// Show System Confirm Dialog
             ///
@@ -249,7 +249,7 @@ namespace ChilliSource
             /// @param Confirm text
             /// @param Cancel text
             //--------------------------------------------------------------------------------------------------
-    		void ShowSystemConfirmDialog(u32 inudwID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm, const UTF8String& instrCancel) const;
+    		void ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const;
             //--------------------------------------------------------------------------------------------------
             /// Show System Dialog
             ///
@@ -260,7 +260,7 @@ namespace ChilliSource
             /// @param Message text
             /// @param Confirm text
             //--------------------------------------------------------------------------------------------------
-    		void ShowSystemDialog(u32 inudwID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm) const;
+    		void ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const;
 		private:
 			//--------------------------------------------
 			/// Create Http Connection System
@@ -270,7 +270,7 @@ namespace ChilliSource
 			///
 			/// @return A pointer to the system
 			//--------------------------------------------
-			Core::ISystem * CreateHttpConnectionSystem(std::vector<Core::SystemPtr>& inSystems) const;
+			Core::System* CreateHttpConnectionSystem(std::vector<Core::SystemSPtr>& inSystems) const;
 			//--------------------------------------------
 			/// Create Activities
 			///
@@ -278,10 +278,10 @@ namespace ChilliSource
 			///
 			/// @return Ownership of the activity
 			//--------------------------------------------
-			IActivity* CreateSMSCompositionActivity() const;
-			IActivity * CreateWebViewActivity() const;
-			IActivity* CreateEmailCompositionActivity() const;
-			IActivity * CreateDefaultVideoPlayerActivity() const;
+			Core::Activity* CreateSMSCompositionActivity() const;
+			Core::Activity* CreateWebViewActivity() const;
+			Core::Activity* CreateEmailCompositionActivity() const;
+			Core::Activity* CreateDefaultVideoPlayerActivity() const;
 			//--------------------------------------------
 			/// Create Information Providers
 			///
@@ -289,7 +289,7 @@ namespace ChilliSource
 			///
 			/// @return Ownership of the info provider
 			//--------------------------------------------
-			IInformationProvider* CreateContactInformationProvider() const;
+			Core::IInformationProvider* CreateContactInformationProvider() const;
 			//--------------------------------------------
 			/// Add System Function
 			///
@@ -311,7 +311,7 @@ namespace ChilliSource
 			/// @param Exisiting systems
 			/// @return Pointer to system
 			//-------------------------------------------
-			Core::ISystem* FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemPtr>& inSystems) const;
+			Core::System* FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemSPtr>& inSystems) const;
 			//--------------------------------------------
 			/// Add Activity Function
 			///

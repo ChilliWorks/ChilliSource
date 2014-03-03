@@ -29,7 +29,7 @@ namespace ChilliSource
 
 		bool CFacebookAuthenticationSystem::IsA(Core::InterfaceIDType inID) const
 		{
-			return (inID == CFacebookAuthenticationSystem::InterfaceID) || (inID == IFacebookAuthenticationSystem::InterfaceID);
+			return (inID == CFacebookAuthenticationSystem::InterfaceID) || (inID == FacebookAuthenticationSystem::InterfaceID);
 		}
 
 		void CFacebookAuthenticationSystem::Authenticate(const std::vector<std::string>& inastrReadPermissions, const AuthenticationCompleteDelegate& inDelegate)
@@ -83,11 +83,11 @@ namespace ChilliSource
 				if(inbSuccess)
 				{
 					sResponse.strToken = GetActiveToken();
-		            sResponse.eResult = IFacebookAuthenticationSystem::AR_SUCCESS;
+		            sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_success;
 				}
 				else
 				{
-		            sResponse.eResult = IFacebookAuthenticationSystem::AR_FAILED;
+		            sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_failed;
 				}
 
 				mAuthDelegate(sResponse);
@@ -103,11 +103,11 @@ namespace ChilliSource
 				if(inbSuccess)
 				{
 					sResponse.strToken = GetActiveToken();
-		            sResponse.eResult = IFacebookAuthenticationSystem::AR_SUCCESS;
+		            sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_success;
 				}
 				else
 				{
-		            sResponse.eResult = IFacebookAuthenticationSystem::AR_FAILED;
+		            sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_failed;
 				}
 
 				mAuthReadDelegate(sResponse);
@@ -123,11 +123,11 @@ namespace ChilliSource
 				if(inbSuccess)
 				{
 					sResponse.strToken = GetActiveToken();
-		            sResponse.eResult = IFacebookAuthenticationSystem::AR_SUCCESS;
+		            sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_success;
 				}
 				else
 				{
-		            sResponse.eResult = IFacebookAuthenticationSystem::AR_FAILED;
+		            sResponse.eResult = FacebookAuthenticationSystem::AuthenticateResult::k_failed;
 				}
 
 				mAuthWriteDelegate(sResponse);

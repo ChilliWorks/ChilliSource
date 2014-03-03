@@ -10,10 +10,14 @@
 #ifndef _MOFLOW_PLATFORM_ANDROID_VIDEO_VIDEOPLAYER_H_
 #define _MOFLOW_PLATFORM_ANDROID_VIDEO_VIDEOPLAYER_H_
 
-#include <ChilliSource/Video/Main/VideoPlayerActivity.h>
-#include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Video/Main/Subtitles.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Video/ForwardDeclarations.h>
+#include <ChilliSource/Video/Base/Subtitles.h>
+#include <ChilliSource/Video/Base/VideoPlayerActivity.h>
+
+#include <unordered_map>
+#include <vector>
 
 namespace ChilliSource
 {
@@ -24,7 +28,7 @@ namespace ChilliSource
     	///
     	/// An activity for displaying the Android video player.
     	//==================================================================
-        class CVideoPlayerActivity : public Video::IVideoPlayerActivity
+        class CVideoPlayerActivity : public Video::VideoPlayerActivity
         {
         public:
 			//--------------------------------------------------------------
@@ -37,7 +41,7 @@ namespace ChilliSource
 			/// @param Interface ID
 			/// @param Whether activity is of given type
 			//--------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inID) const;
+			bool IsA(Core::InterfaceIDType inID) const override;
             //--------------------------------------------------------------
             /// Present
             ///
@@ -49,7 +53,7 @@ namespace ChilliSource
 			/// 		taps.
 			/// @param Background colour
             //--------------------------------------------------------------
-            void Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour);
+            void Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour) override;
             //--------------------------------------------------------------
 			/// Present With Subtitles
 			///
@@ -64,31 +68,31 @@ namespace ChilliSource
 			//--------------------------------------------------------------
 			void PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
 									  Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
-									  bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour);
+									  bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour) override;
             //--------------------------------------------------------------
             /// Is Playing
             ///
             /// @return Whether a video is currently playing
             //--------------------------------------------------------------
-            bool IsPlaying() const;
+            bool IsPlaying() const override;
             //--------------------------------------------------------------
             /// Dismiss
             ///
             /// End playback of the currently playing video
             //--------------------------------------------------------------
-            void Dismiss();
+            void Dismiss() override;
             //--------------------------------------------------------------
             /// Get Duration
             ///
             /// @return The length of the video in seconds
             //--------------------------------------------------------------
-            f32 GetDuration() const;
+            f32 GetDuration() const override;
             //--------------------------------------------------------------
             /// Get Time
             ///
             /// @return How far through the video
             //--------------------------------------------------------------
-            f32 GetTime() const;
+            f32 GetTime() const override;
         private:
 			//---------------------------------------------------------------
 			/// On Video Dismissed
@@ -126,13 +130,13 @@ namespace ChilliSource
 			///
 			/// Updates a single subtitle.
 			//---------------------------------------------------------------
-			void UpdateSubtitle(const ChilliSource::Video::CSubtitles::SubtitlePtr& inpSubtitle, s64 inlwSubtitleID, TimeIntervalMs inTimeMS);
+			void UpdateSubtitle(const Video::Subtitles::SubtitlePtr& inpSubtitle, s64 inlwSubtitleID, TimeIntervalMs inTimeMS);
             
         private:
             VideoPlayerJavaInterfacePtr mpVideoPlayerJavaInterface;
-            ChilliSource::Video::SubtitlesPtr mpSubtitles;
-            std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, s64> maSubtitleMap;
-            std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr> maSubtitlesToRemove;
+            Video::SubtitlesSPtr mpSubtitles;
+            std::unordered_map<Video::Subtitles::SubtitlePtr, s64> maSubtitleMap;
+            std::vector<Video::Subtitles::SubtitlePtr> maSubtitlesToRemove;
             TimeIntervalMs mCurrentSubtitleTimeMS;
         };
     }

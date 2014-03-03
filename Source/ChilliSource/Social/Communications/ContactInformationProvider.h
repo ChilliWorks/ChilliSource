@@ -14,11 +14,12 @@
 #include <ChilliSource/Core/String/UTF8String.h>
 #include <ChilliSource/Core/Base/InformationProvider.h>
 
-namespace ChilliSource{
-
-	namespace Social {
-		
-		struct ContactRecord {
+namespace ChilliSource
+{
+	namespace Social
+    {
+		struct ContactRecord
+        {
 		
 			Core::UTF8String strName;
 			bool bHasEmail;
@@ -28,7 +29,8 @@ namespace ChilliSource{
 			
 		};
 		
-		class ContactInformationProvider : public Core::IInformationProvider{
+		class ContactInformationProvider : public Core::IInformationProvider
+        {
 		public:
 			
 			CS_DECLARE_NAMEDTYPE(ContactInformationProvider);

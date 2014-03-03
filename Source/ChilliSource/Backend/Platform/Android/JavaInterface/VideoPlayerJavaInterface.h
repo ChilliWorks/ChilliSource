@@ -12,7 +12,6 @@
 
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterface.h>
-#include <ChilliSource/Core/Base/FastDelegate.h>
 #include <jni.h>
 
 namespace ChilliSource
@@ -63,7 +62,7 @@ namespace ChilliSource
 			/// @param video dismissed delegate.
 			/// @param video stopped delegate.
 			//--------------------------------------------------------------
-			void Present(bool inbInAPK, std::string instrFilename, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour,
+			void Present(bool inbInAPK, std::string instrFilename, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour,
 						const OnVideoDismissedDelegate& inDismissedDelegate, const OnVideoStoppedDelegate& inStoppedDelegate);
 			//--------------------------------------------------------------
 			/// Is Playing
@@ -116,7 +115,7 @@ namespace ChilliSource
 			/// @param Height.
 			/// @return The subtitle id.
 			//--------------------------------------------------------------
-			s64 CreateSubtitle(const CUTF8String& inText, const std::string& instrFontName, u32 inudwFontSize, const std::string& instrAlignment, f32 infX, f32 infY, f32 infWidth, f32 infHeight);
+			s64 CreateSubtitle(const Core::UTF8String& inText, const std::string& instrFontName, u32 inudwFontSize, const std::string& instrAlignment, f32 infX, f32 infY, f32 infWidth, f32 infHeight);
 			//--------------------------------------------------------------
 			/// Set Subtitle Colour
 			///

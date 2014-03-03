@@ -60,7 +60,7 @@ void Java_com_taggames_moflow_nativeinterface_CLocalNotificationNativeInterface_
 		}
 		if(strKey == "Priority")
 		{
-			notification->ePriority = (ChilliSource::NotificationPriority)CSCore::ParseS32(strValue);
+			notification->ePriority = (CSCore::NotificationPriority)CSCore::ParseS32(strValue);
 			continue;
 		}
 		notification->sParams.SetValueForKey(strKey,strValue);
@@ -93,23 +93,23 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Schedule Notification
 		//-------------------------------------------------------------------------
-		void CLocalNotificationJavaInterface::ScheduleNotification(const Notification& insNotification)
+		void CLocalNotificationJavaInterface::ScheduleNotification(const Core::NotificationSPtr& insNotification)
 		{
 			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 
 			//Convert Trigger time from seconds to milliseconds as this is what will be used on the Android end;
-			u64 uqwFireDate = insNotification.TriggerTime * 1000;
+			u64 uqwFireDate = insNotification->TriggerTime * 1000;
 
-			jstring jstrAlertBody = JavaInterfaceUtils::CreateJStringFromSTDString(insNotification.sParams.ValueForKey("Body"));
-			u32 udwID = insNotification.ID;
-			u32 udwPriority = insNotification.ePriority;
+			jstring jstrAlertBody = JavaInterfaceUtils::CreateJStringFromSTDString(insNotification->sParams.ValueForKey("Body"));
+			u32 udwID = insNotification->ID;
+			u32 udwPriority = (u32)insNotification->ePriority;
 
 			//Create 2 arrays from ParamDictionary as this is easier to pass to Java
-			jobjectArray ajstrKey = pEnv->NewObjectArray(insNotification.sParams.size(), pEnv->FindClass("java/lang/String"), pEnv->NewStringUTF(""));
-			jobjectArray ajstrValue = pEnv->NewObjectArray(insNotification.sParams.size(), pEnv->FindClass("java/lang/String"), pEnv->NewStringUTF(""));;
+			jobjectArray ajstrKey = pEnv->NewObjectArray(insNotification->sParams.size(), pEnv->FindClass("java/lang/String"), pEnv->NewStringUTF(""));
+			jobjectArray ajstrValue = pEnv->NewObjectArray(insNotification->sParams.size(), pEnv->FindClass("java/lang/String"), pEnv->NewStringUTF(""));;
 
 			u32 udwParamCount = 0;
-			for(Core::StringToStringMap::const_iterator it = insNotification.sParams.begin(); it != insNotification.sParams.end(); ++it)
+			for(Core::StringToStringMap::const_iterator it = insNotification->sParams.begin(); it != insNotification->sParams.end(); ++it)
 			{
 				jstring jstrFirst = JavaInterfaceUtils::CreateJStringFromSTDString(it->first);
 				jstring jstrSecond = JavaInterfaceUtils::CreateJStringFromSTDString(it->second);

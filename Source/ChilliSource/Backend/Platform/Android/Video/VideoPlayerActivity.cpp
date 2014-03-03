@@ -11,6 +11,7 @@
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/VideoPlayerJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
@@ -44,12 +45,12 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		bool CVideoPlayerActivity::IsA(Core::InterfaceIDType inID) const
 		{
-			return inID == Video::IVideoPlayerActivity::InterfaceID;
+			return inID == Video::VideoPlayerActivity::InterfaceID;
 		}
         //--------------------------------------------------------------
         /// Present
         //--------------------------------------------------------------
-        void CVideoPlayerActivity::Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour)
+        void CVideoPlayerActivity::Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour)
         {
         	//calculate the storage location and full filename.
         	bool bIsPackage;
@@ -79,8 +80,8 @@ namespace ChilliSource
         	}
 
         	//start the video
-        	OnVideoDismissedDelegate dismissedDelegate(this, &CVideoPlayerActivity::OnVideoDismissed);
-        	OnVideoStoppedDelegate stoppedDelegate(this, &CVideoPlayerActivity::OnVideoStopped);
+        	OnVideoDismissedDelegate dismissedDelegate(Core::MakeDelegate(this, &CVideoPlayerActivity::OnVideoDismissed));
+        	OnVideoStoppedDelegate stoppedDelegate(Core::MakeDelegate(this, &CVideoPlayerActivity::OnVideoStopped));
         	mpVideoPlayerJavaInterface->Present(bIsPackage, strFilename, inbCanDismissWithTap, inBackgroundColour, dismissedDelegate, stoppedDelegate);
         }
         //--------------------------------------------------------------
@@ -88,10 +89,10 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		void CVideoPlayerActivity::PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
 														Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
-														bool inbCanDismissWithTap, const Core::CColour& inBackgroundColour)
+														bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour)
 		{
-			mpSubtitles = LOAD_RESOURCE(ChilliSource::Video::CSubtitles, ineSubtitlesLocation, instrSubtitlesFilename);
-			mpVideoPlayerJavaInterface->SetUpdateSubtitlesDelegate(OnUpdateSubtitlesDelegate(this, &CVideoPlayerActivity::OnUpdateSubtitles));
+			mpSubtitles = LOAD_RESOURCE(Video::Subtitles, ineSubtitlesLocation, instrSubtitlesFilename);
+			mpVideoPlayerJavaInterface->SetUpdateSubtitlesDelegate(Core::MakeDelegate(this, &CVideoPlayerActivity::OnUpdateSubtitles));
 			Present(ineVideoLocation, instrVideoFilename, inbCanDismissWithTap, inBackgroundColour);
 		}
         //--------------------------------------------------------------
@@ -134,8 +135,8 @@ namespace ChilliSource
 			//playback complete event occurs on a thread and at a time the
 			//user would expect.
 
-			Task0 task(this, &CVideoPlayerActivity::VideoDismissedTask);
-			CTaskScheduler::ScheduleMainThreadTask(task);
+			Core::Task<> task(this, &CVideoPlayerActivity::VideoDismissedTask);
+			Core::TaskScheduler::ScheduleMainThreadTask(task);
 		}
         //---------------------------------------------------------------
         /// On Video Stopped
@@ -149,8 +150,8 @@ namespace ChilliSource
         	//playback complete event occurs on a thread and at a time the
         	//user would expect.
 
-			Task0 task(this, &CVideoPlayerActivity::VideoStoppedTask);
-			CTaskScheduler::ScheduleMainThreadTask(task);
+        	Core::Task<> task(this, &CVideoPlayerActivity::VideoStoppedTask);
+			Core::TaskScheduler::ScheduleMainThreadTask(task);
         }
 		//---------------------------------------------------------------
 		/// Video Dismissed Task
@@ -180,32 +181,32 @@ namespace ChilliSource
 				mCurrentSubtitleTimeMS = currentTimeMS;
 
 				//get the current subtitles
-				std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr> pSubtitleArray = mpSubtitles->GetSubtitlesAtTime(mCurrentSubtitleTimeMS);
+				std::vector<Video::Subtitles::SubtitlePtr> pSubtitleArray = mpSubtitles->GetSubtitlesAtTime(mCurrentSubtitleTimeMS);
 
 				//add any new subtitles
-				for (std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr>::iterator it = pSubtitleArray.begin(); it != pSubtitleArray.end(); ++it)
+				for (std::vector<Video::Subtitles::SubtitlePtr>::iterator it = pSubtitleArray.begin(); it != pSubtitleArray.end(); ++it)
 				{
-					std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, s64>::iterator mapEntry = maSubtitleMap.find(*it);
+					std::unordered_map<Video::Subtitles::SubtitlePtr, s64>::iterator mapEntry = maSubtitleMap.find(*it);
 					if (mapEntry == maSubtitleMap.end())
 					{
-						ChilliSource::UTF8String strText = ChilliSource::Core::CLocalisedText::GetText((*it)->strTextID);
-						ChilliSource::Video::CSubtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName((*it)->strStyleName);
-						s64 lwSubtitleID = mpVideoPlayerJavaInterface->CreateSubtitle(strText, pStyle->strFontName,pStyle->udwFontSize, Core::StringFromAlignmentAnchor(pStyle->eAlignment), pStyle->Bounds.vOrigin.x, pStyle->Bounds.vOrigin.y, pStyle->Bounds.vSize.x, pStyle->Bounds.vSize.y);
+						Core::UTF8String strText = Core::LocalisedText::GetText((*it)->strTextID);
+						Video::Subtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName((*it)->strStyleName);
+						s64 lwSubtitleID = mpVideoPlayerJavaInterface->CreateSubtitle(strText, pStyle->strFontName,pStyle->udwFontSize, Rendering::StringFromAlignmentAnchor(pStyle->eAlignment), pStyle->Bounds.vOrigin.x, pStyle->Bounds.vOrigin.y, pStyle->Bounds.vSize.x, pStyle->Bounds.vSize.y);
 						mpVideoPlayerJavaInterface->SetSubtitleColour(lwSubtitleID, 0.0f, 0.0f, 0.0f, 0.0f);
-						maSubtitleMap.insert(std::pair<ChilliSource::Video::CSubtitles::SubtitlePtr, s64>(*it, lwSubtitleID));
+						maSubtitleMap.insert(std::pair<Video::Subtitles::SubtitlePtr, s64>(*it, lwSubtitleID));
 					}
 				}
 
 				//update the current text views
-				for (std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, s64>::iterator it = maSubtitleMap.begin(); it != maSubtitleMap.end(); ++it)
+				for (std::unordered_map<Video::Subtitles::SubtitlePtr, s64>::iterator it = maSubtitleMap.begin(); it != maSubtitleMap.end(); ++it)
 				{
 					UpdateSubtitle(it->first, it->second, mCurrentSubtitleTimeMS);
 				}
 
 				//removes any text views that are no longer needed.
-				for (std::vector<ChilliSource::Video::CSubtitles::SubtitlePtr>::iterator it = maSubtitlesToRemove.begin(); it != maSubtitlesToRemove.end(); ++it)
+				for (std::vector<Video::Subtitles::SubtitlePtr>::iterator it = maSubtitlesToRemove.begin(); it != maSubtitlesToRemove.end(); ++it)
 				{
-					std::unordered_map<ChilliSource::Video::CSubtitles::SubtitlePtr, s64>::iterator mapEntry = maSubtitleMap.find(*it);
+					std::unordered_map<Video::Subtitles::SubtitlePtr, s64>::iterator mapEntry = maSubtitleMap.find(*it);
 					if (mapEntry != maSubtitleMap.end())
 					{
 						mpVideoPlayerJavaInterface->RemoveSubtitle(mapEntry->second);
@@ -218,9 +219,9 @@ namespace ChilliSource
 		//---------------------------------------------------------------
 		/// Update Subtitle
 		//---------------------------------------------------------------
-		void CVideoPlayerActivity::UpdateSubtitle(const ChilliSource::Video::CSubtitles::SubtitlePtr& inpSubtitle, s64 inlwSubtitleID, TimeIntervalMs inTimeMS)
+		void CVideoPlayerActivity::UpdateSubtitle(const Video::Subtitles::SubtitlePtr& inpSubtitle, s64 inlwSubtitleID, TimeIntervalMs inTimeMS)
 		{
-			ChilliSource::Video::CSubtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->strStyleName);
+			Video::Subtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->strStyleName);
 
 			f32 fFade = 0.0f;
 			s64 lwRelativeTime = ((s64)inTimeMS) - ((s64)inpSubtitle->StartTimeMS);

@@ -210,9 +210,9 @@ namespace ChilliSource
 					{
 						std::shared_ptr<CShader> pShader = std::static_pointer_cast<CShader>(it->second);
 
-						if(pShader->LoadAndCompileShader(pShader->GetStorageLocation(), pShader->GetFilename() + "." + kstrGLVertexShaderExtension, Rendering::SHADER_TYPE_VERTEX))
+						if(pShader->LoadAndCompileShader(pShader->GetStorageLocation(), pShader->GetFilename() + "." + kstrGLVertexShaderExtension, Rendering::ShaderType::k_vertex))
 						{
-							if(pShader->LoadAndCompileShader(pShader->GetStorageLocation(), pShader->GetFilename() + "." + kstrGLFragmentShaderExtension, Rendering::SHADER_TYPE_FRAGMENT))
+							if(pShader->LoadAndCompileShader(pShader->GetStorageLocation(), pShader->GetFilename() + "." + kstrGLFragmentShaderExtension, Rendering::ShaderType::k_fragment))
 							{
 								if(pShader->CreateProgram())
 								{

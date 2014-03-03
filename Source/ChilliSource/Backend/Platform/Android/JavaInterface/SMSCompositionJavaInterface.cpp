@@ -7,8 +7,8 @@
  *
  */
 
-#include "SMSCompositionJavaInterface.h"
-#include "Platform/Android/Social/Communications/SMSCompositionActivity.h"
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/SMSCompositionJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Communications/SMSCompositionActivity.h>
 
 //function definitions
 extern "C"
@@ -41,8 +41,8 @@ namespace ChilliSource
 			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CSMSCompositionNativeInterface","PresentSMS", "([Ljava/lang/String;Ljava/lang/String;)V");
 		}
 
-		void SCSMSCompositionJavaInterface::Present(const std::vector<CUTF8String> & inastrRecipientNumbers, //Vector of email addresses
-								const CUTF8String & instrContents)
+		void SCSMSCompositionJavaInterface::Present(const std::vector<Core::UTF8String> & inastrRecipientNumbers, //Vector of email addresses
+								const Core::UTF8String & instrContents)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("PresentSMS");
 			if (sdMethodRef.mMethodID != 0 && sdMethodRef.mClassID != 0)
@@ -50,7 +50,7 @@ namespace ChilliSource
 				JNIEnv* env = GetJNIEnvironmentPtr();
 				jobjectArray ajstrRecipients = env->NewObjectArray(inastrRecipientNumbers.size(), env->FindClass("java/lang/String"), env->NewStringUTF(""));
 				u32 udwRecipientCount = 0;
-				for(std::vector<CUTF8String>::const_iterator it = inastrRecipientNumbers.begin(); it != inastrRecipientNumbers.end(); ++it)
+				for(std::vector<Core::UTF8String>::const_iterator it = inastrRecipientNumbers.begin(); it != inastrRecipientNumbers.end(); ++it)
 				{
 					jstring jstrNumbers = CreateJStringFromUTF8String((*it));
 					env->SetObjectArrayElement(ajstrRecipients,udwRecipientCount, jstrNumbers);

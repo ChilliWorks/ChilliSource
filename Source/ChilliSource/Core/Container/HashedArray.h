@@ -12,6 +12,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
+#include <algorithm>
 #include <functional>
 
 namespace ChilliSource

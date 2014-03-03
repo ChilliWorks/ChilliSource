@@ -16,7 +16,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CFacebookAuthenticationSystem : public Social::IFacebookAuthenticationSystem
+		class CFacebookAuthenticationSystem : public Social::FacebookAuthenticationSystem
 		{
 		public:
 

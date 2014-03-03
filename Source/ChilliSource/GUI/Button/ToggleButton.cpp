@@ -22,6 +22,8 @@
 #include <ChilliSource/Audio/3D/AudioComponent.h>
 #include <ChilliSource/Audio/3D/AudioComponentFactory.h>
 
+#include <cmath>
+
 namespace ChilliSource
 {
     namespace GUI
@@ -178,11 +180,11 @@ namespace ChilliSource
             Core::StorageLocation eDeselectAudioLocation = Core::StorageLocation::k_package;
             if(insParams.TryGetValue("SelectAudioEffectLocation", strValue))
             {
-                eSelectAudioLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eSelectAudioLocation = Core::ParseStorageLocation(strValue);
             }
 			if(insParams.TryGetValue("DeselectAudioEffectLocation", strValue))
             {
-                eDeselectAudioLocation = ChilliSource::Core::ParseStorageLocation(strValue);
+                eDeselectAudioLocation = Core::ParseStorageLocation(strValue);
             }
             //---Audio effect
             if(insParams.TryGetValue("SelectAudioEffect", strValue))
@@ -193,7 +195,7 @@ namespace ChilliSource
 			if(insParams.TryGetValue("DeselectAudioEffect", strValue))
             {
                 Audio::AudioComponentFactory* pAudioFactory = GET_COMPONENT_FACTORY(Audio::AudioComponentFactory);
-                SetDeselectAudioEffect(pAudioFactory->CreateAudioComponent(eSelectAudioLocation, strValue, false, false));
+                SetDeselectAudioEffect(pAudioFactory->CreateAudioComponent(eDeselectAudioLocation, strValue, false, false));
             }
             
             mpBackgroundImage->SetSize(Core::UnifiedVector2(Core::Vector2(1.0f, 1.0f), Core::Vector2(0, 0)));
