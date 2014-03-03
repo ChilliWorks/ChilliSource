@@ -7,12 +7,11 @@
  */
 
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
+
+#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
+#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthentication.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookPostSystem.h>
-
-#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceUtils.h>
-#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
-
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <jni.h>

@@ -8,8 +8,9 @@
  */
 
 #include <ChilliSource/Backend/Platform/Android/Social/Communications/EmailCompositionActivity.h>
-#include <ChilliSource/Backend/Platform/Android/JavaInterface/EmailCompositionJavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
+
+#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <ChilliSource/Backend/Platform/Android/Social/Communications/EmailCompositionJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/File/FileSystem.h>

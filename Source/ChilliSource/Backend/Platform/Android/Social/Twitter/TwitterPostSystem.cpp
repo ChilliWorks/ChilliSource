@@ -7,9 +7,10 @@
  *
  */
 
-#include <ChilliSource/Backend/Platform/Android/HttpConnectionSystem.h>
-#include <ChilliSource/Backend/Platform/Android/PlatformSystem.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterPostSystem.h>
+
+#include <ChilliSource/Backend/Platform/Android/Core/Base/PlatformSystem.h>
+#include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterAuthenticationActivity.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>

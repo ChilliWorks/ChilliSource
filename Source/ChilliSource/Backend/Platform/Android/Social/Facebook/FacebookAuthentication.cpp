@@ -7,8 +7,9 @@
  */
 
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthentication.h>
+
+#include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookJavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 
 namespace ChilliSource
 {

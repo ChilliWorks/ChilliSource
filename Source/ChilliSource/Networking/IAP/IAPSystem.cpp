@@ -12,9 +12,9 @@
 #	include <ChilliSource/Backend/Platform/iOS/Networking/IAP/IAPSystem.h>
 #elif defined(CS_TARGETPLATFORM_ANDROID)
 #	ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
-#		include <ChilliSource/Backend/Platform/Android/GooglePlay/GooglePlayIAPSystem.h>
+#		include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayIAPSystem.h>
 #	elif defined(CS_ANDROIDEXTENSION_AMAZON)
-#		include <ChilliSource/Backend/Platform/Android/Amazon/AmazonIAPSystem.h>
+#		include <ChilliSource/Backend/Platform/Android/Extensions/Amazon/AmazonIAPSystem.h>
 #	endif
 #endif
 

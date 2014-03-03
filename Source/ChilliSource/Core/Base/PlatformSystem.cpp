@@ -11,7 +11,7 @@
 #ifdef CS_TARGETPLATFORM_IOS
 #   include <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
 #elif defined CS_TARGETPLATFORM_ANDROID
-#   include <ChilliSource/Backend/Platform/Android/PlatformSystem.h>
+#   include <ChilliSource/Backend/Platform/Android/Core/Base/PlatformSystem.h>
 #elif defined CS_TARGETPLATFORM_WINDOWS
 #   include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
 #endif
