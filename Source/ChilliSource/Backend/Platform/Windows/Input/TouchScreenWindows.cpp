@@ -1,5 +1,5 @@
 
-#include <ChilliSource/Platform/Windows/Input/TouchscreenWindows.h>
+#include <ChilliSource/Backend/Platform/Windows/Input/TouchscreenWindows.h>
 
 namespace ChilliSource
 {
@@ -10,7 +10,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		bool CTouchScreen::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == Input::ITouchScreen::InterfaceID;
+			return inInterfaceID == Input::TouchScreen::InterfaceID;
 		}
 	}
 }

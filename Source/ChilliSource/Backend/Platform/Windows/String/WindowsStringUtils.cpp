@@ -12,7 +12,7 @@ namespace ChilliSource
 {
 	namespace Windows
 	{
-		namespace WindowsFileUtils
+		namespace WindowsStringUtils
 		{
 			//------------------------------------------------------------
 			//------------------------------------------------------------

@@ -15,6 +15,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 
+#include <string>
+
 namespace ChilliSource
 {
     namespace Core

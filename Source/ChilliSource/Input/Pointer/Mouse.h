@@ -6,6 +6,8 @@
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Input/Base/InputDevice.h>
 
+#include <functional>
+
 namespace ChilliSource
 {
 	namespace Input

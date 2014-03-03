@@ -1,11 +1,11 @@
 
-#include <ChilliSource/Platform/Windows/Input/MouseWindows.h>
+#include <ChilliSource/Backend/Platform/Windows/Input/MouseWindows.h>
 
-#include <ChilliSource/Platform/Windows/OpenGL/glfw.h>
+#include <Platform/Windows/glfw.h>
 
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
 
-#include <ChilliSource/Core/Main/Screen.h>
+#include <ChilliSource/Core/Base/Screen.h>
 
 namespace ChilliSource
 {
@@ -32,7 +32,7 @@ namespace ChilliSource
 		///
 		/// @param Touch screen proxy
 		//------------------------------------------------------
-		CMouse::CMouse(Input::ITouchScreen* inpTouchProxy) : IMouse(inpTouchProxy), mudwCurrentTouchID(0)
+		CMouse::CMouse(Input::TouchScreen* inpTouchProxy) : Mouse(inpTouchProxy), mudwCurrentTouchID(0)
 		{
 			//Register for glfw mouse callbacks
 			glfwSetMousePosCallback((GLFWmouseposfun)&CMouse::OnMouseMoved);
@@ -45,7 +45,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		bool CMouse::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == Input::IMouse::InterfaceID;
+			return inInterfaceID == Input::Mouse::InterfaceID;
 		}
 		//------------------------------------------------------
 		/// Get Position
@@ -57,7 +57,7 @@ namespace ChilliSource
 			s32 dwX, dwY = 0;
 			glfwGetMousePos(&dwX, &dwY);
 
-			dwY = Core::CScreen::GetOrientedHeight() - dwY; 
+			dwY = Core::Screen::GetOrientedHeight() - dwY; 
 			return ChilliSource::Core::Vector2((f32)dwX, (f32)dwY);
 		}
 		//---GLFW Mouse Delegates
@@ -74,7 +74,7 @@ namespace ChilliSource
 				gpMouseInstance->mOnMouseMovedEvent.NotifyConnections(gpMouseInstance);
 				
 				//We may want to fake touch input
-				if(gpMouseInstance->mpTouchProxy && gpMouseInstance->mbaButtonsDown[Input::MOUSE_LEFT_BUTTON])
+				if(gpMouseInstance->mpTouchProxy && gpMouseInstance->mbaButtonsDown[(s32)Input::MouseInputType::k_leftButton])
 				{
 					gpMouseInstance->mpTouchProxy->MoveTouch(gpMouseInstance->mudwCurrentTouchID, Core::Vector2((f32)indwPosX, (f32)indwPosY), gpMouseInstance->mpTouchProxy->GetLastTimeStamp());
 				}

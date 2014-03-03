@@ -118,7 +118,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------------
         void Timer::RemoveClosedConnections()
         {
-            for(typename ConnectionList::iterator it = m_connections.begin(); it != m_connections.end(); )
+            for(ConnectionList::iterator it = m_connections.begin(); it != m_connections.end(); )
             {
                 if(it->m_connection == nullptr)
                 {

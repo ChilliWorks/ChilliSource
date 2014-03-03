@@ -280,7 +280,7 @@ namespace ChilliSource
 						mCompletionDelegate(this, meRequestResult);
 					}
 					
-					mCompletionDelegate = NULL;
+					mCompletionDelegate = nullptr;
 				}
 			}
 			//Track the time the request has been active so we can manually timeout
@@ -297,7 +297,7 @@ namespace ChilliSource
 				if(mCompletionDelegate)
 				{
 					mCompletionDelegate(this, HttpRequest::CompletionResult::k_timeout);
-					mCompletionDelegate = NULL;
+					mCompletionDelegate = nullptr;
 				}
 			}
 		}

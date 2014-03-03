@@ -101,7 +101,7 @@ namespace ChilliSource
 		void CPlatformSystem::CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems)
 		{
 			//create the main systems
-			Rendering::RenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
+			OpenGL::CRenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
 			inaSystems.push_back(Core::SystemSPtr(pRenderSystem));
 			Core::Application::SetRenderSystem(pRenderSystem);
 
@@ -109,9 +109,9 @@ namespace ChilliSource
 			inaSystems.push_back(Core::SystemSPtr(pInputSystem));
 			Core::Application::SetInputSystem(pInputSystem);
 
-			Audio::AudioSystem* pAudioSystem = new FMOD::FMODSystem();
+			Audio::AudioSystem* pAudioSystem = new FMOD::CFMODSystem();
 			inaSystems.push_back(Core::SystemSPtr(pAudioSystem));
-			inaSystems.push_back(Core::SystemSPtr(new FMOD::FMODAudioLoader(pAudioSystem)));
+			inaSystems.push_back(Core::SystemSPtr(new FMOD::CFMODAudioLoader(pAudioSystem)));
 			Core::Application::SetAudioSystem(pAudioSystem);
 
 			//create other important systems
@@ -124,7 +124,7 @@ namespace ChilliSource
 			inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialLoader(pRenderCapabilities)));
 			inaSystems.push_back(Core::SystemSPtr(new Rendering::FontLoader()));
 			inaSystems.push_back(Core::SystemSPtr(new Rendering::AnimatedMeshComponentUpdater()));
-			inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialFactory()));
+			inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialFactory(pRenderSystem->GetTextureManager(), pRenderSystem->GetShaderManager(), pRenderSystem->GetCubemapManager(), pRenderCapabilities)));
 
 			//Initialise the render system
 			Core::Application::GetRenderSystemPtr()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
@@ -208,7 +208,7 @@ namespace ChilliSource
 		//--------------------------------------------
 		bool CPlatformSystem::CanCreateSystemWithInterface(Core::InterfaceIDType inInterfaceID) const
 		{
-			return	inInterfaceID == Networking::IHttpConnectionSystem::InterfaceID;
+			return	inInterfaceID == Networking::HttpConnectionSystem::InterfaceID;
 		}
 		//--------------------------------------------
 		/// Create and Add System With Interface
@@ -306,7 +306,7 @@ namespace ChilliSource
 			OSVERSIONINFOEX osvi;
 			ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX)); osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
 			GetVersionEx((OSVERSIONINFO*) &osvi);
-			return std::string(STRING_CAST((u32)osvi.dwMajorVersion) + "." + STRING_CAST((u32)osvi.dwMinorVersion));
+			return std::string(Core::ToString((u32)osvi.dwMajorVersion) + "." + Core::ToString((u32)osvi.dwMinorVersion));
 		}
 		//--------------------------------------------------------------
 		/// Get Locale

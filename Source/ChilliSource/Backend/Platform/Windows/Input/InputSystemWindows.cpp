@@ -14,7 +14,7 @@
 
 using namespace ChilliSource::Input;
 using namespace ChilliSource::Core;
-using namespace ChilliSource::WindowsPlatform;
+using namespace ChilliSource::Windows;
 
 CInputSystem::CInputSystem() : mMouse(&mTouchScreen)
 {
@@ -31,7 +31,7 @@ CInputSystem::~CInputSystem()
 //---------------------------------------------------------------
 bool CInputSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 {
-	return inInterfaceID == IInputSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
+	return inInterfaceID == InputSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
 }
 //---------------------------------------------------------------
 /// Can Create Device With Interface
@@ -41,7 +41,7 @@ bool CInputSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 //---------------------------------------------------------------
 bool CInputSystem::CanCreateDeviceWithInterface(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 {
-	return inInterfaceID == ITouchScreen::InterfaceID || inInterfaceID == IMouse::InterfaceID;
+	return inInterfaceID == TouchScreen::InterfaceID || inInterfaceID == Mouse::InterfaceID;
 }
 //---------------------------------------------------------------
 /// Get Device With Interface
@@ -49,13 +49,13 @@ bool CInputSystem::CanCreateDeviceWithInterface(ChilliSource::Core::InterfaceIDT
 /// @param Interface of input type to retreive
 /// @return Pointer to input type or NULL
 //---------------------------------------------------------------
-IInputDevice * CInputSystem::GetDeviceWithInterface(ChilliSource::Core::InterfaceIDType inInterfaceID)
+InputDevice * CInputSystem::GetDeviceWithInterface(ChilliSource::Core::InterfaceIDType inInterfaceID)
 {
-	if(inInterfaceID == ITouchScreen::InterfaceID) 
+	if(inInterfaceID == TouchScreen::InterfaceID) 
 	{
 		return &mTouchScreen;
 	}
-	else if(inInterfaceID == IMouse::InterfaceID)
+	else if(inInterfaceID == Mouse::InterfaceID)
 	{
 		return &mMouse;
 	}
@@ -67,7 +67,7 @@ IInputDevice * CInputSystem::GetDeviceWithInterface(ChilliSource::Core::Interfac
 ///
 /// @return Pointer to touch screen device
 //---------------------------------------------------------------
-ITouchScreen * CInputSystem::GetTouchScreenPtr()
+TouchScreen * CInputSystem::GetTouchScreenPtr()
 {
 	return &mTouchScreen;
 }
@@ -76,7 +76,7 @@ ITouchScreen * CInputSystem::GetTouchScreenPtr()
 ///
 /// @return Pointer to mouse device
 //---------------------------------------------------------------
-IMouse * CInputSystem::GetMousePtr()
+Mouse * CInputSystem::GetMousePtr()
 {
 	return &mMouse;
 }
