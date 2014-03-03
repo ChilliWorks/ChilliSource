@@ -20,7 +20,7 @@
 #include <ChilliSource/Backend/Platform/iOS/Input/Base/InputSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerActivity.h>
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
-#include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioLoader.h>
+#include <ChilliSource/Backend/Audio/FMOD/Base/AudioLoader.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Notification/ToastNotification.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/IAP/IAPSystem.h>
@@ -182,9 +182,9 @@ namespace ChilliSource
             inaSystems.push_back(Core::SystemSPtr(pInputSystem));
             Core::Application::SetInputSystem(pInputSystem);
             
-            Audio::AudioSystem * pAudioSystem = new FMOD::CFMODSystem();
+            Audio::AudioSystem * pAudioSystem = new FMOD::FMODSystem();
 			inaSystems.push_back(Core::SystemSPtr(pAudioSystem));
-			inaSystems.push_back(Core::SystemSPtr(new FMOD::CFMODAudioLoader(pAudioSystem)));
+			inaSystems.push_back(Core::SystemSPtr(new FMOD::AudioLoader(pAudioSystem)));
 			Core::Application::SetAudioSystem(pAudioSystem);
             
 			//create other important systems
