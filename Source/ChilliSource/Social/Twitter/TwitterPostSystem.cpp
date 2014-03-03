@@ -27,9 +27,9 @@ namespace ChilliSource
         TwitterPostSystem* TwitterPostSystem::CreateSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem)
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return new ChilliSource::iOS::CTwitterPostSystem(static_cast<iOS::CHttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
+            return new ChilliSource::iOS::CTwitterPostSystem(static_cast<iOS::HttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
 #elif CS_TARGETPLATFORM_ANDROID
-            return new ChilliSource::Android::CTwitterPostSystem(static_cast<Android::CHttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
+            return new ChilliSource::Android::CTwitterPostSystem(static_cast<Android::HttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
 #endif
 			return nullptr;
         }

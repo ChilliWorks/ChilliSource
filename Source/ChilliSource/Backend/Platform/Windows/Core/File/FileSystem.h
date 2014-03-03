@@ -10,6 +10,7 @@
 #ifndef _MOFLO_PLATFORM_WINDOWS_FILEIO_FILESYSTEM_
 #define _MOFLO_PLATFORM_WINDOWS_FILEIO_FILESYSTEM_
 
+#include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
@@ -28,10 +29,10 @@ namespace ChilliSource
 		/// This class should be used over fstream in order to insure cross platform
 		/// compatability.
 		//--------------------------------------------------------------------------------------------------
-		class CFileSystem : public Core::FileSystem
+		class FileSystem : public Core::FileSystem
 		{
 		public:
-			CFileSystem();
+			FileSystem();
 			//--------------------------------------------------------------------------------------------------
 			/// Description:
 			///

@@ -33,7 +33,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool ImageLoader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == Core::ResourceProvider::InterfaceID;
+			return inInterfaceID == Core::ResourceProvider::InterfaceID || inInterfaceID == Core::ImageResourceProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Can Create Resource Of Kind
@@ -114,7 +114,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool ImageLoader::CreatePNGImageFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::Image* outpImage)
 		{
-			ChilliSource::Windows::CPngImage image;
+			ChilliSource::Windows::PngImage image;
 			image.Load(ineLocation, inFilePath);
 
 			if(image.IsLoaded())

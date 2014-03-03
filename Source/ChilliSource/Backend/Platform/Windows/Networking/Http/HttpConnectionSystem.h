@@ -10,6 +10,7 @@
 #ifndef _MOFLO_PLATFORM_WINDOWS_HTTPCONNECTIONSYSTEM_H_
 #define _MOFLO_PLATFORM_WINDOWS_HTTPCONNECTIONSYSTEM_H_
 
+#include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Networking/HTTP/HttpConnectionSystem.h>
 
@@ -20,7 +21,7 @@ namespace ChilliSource
 		//Windows typedefs so we don't have to include windows.h in the header
 		typedef void* HINTERNET;
 
-		class CHttpConnectionSystem : public Networking::HttpConnectionSystem, public Core::IUpdateable
+		class HttpConnectionSystem : public Networking::HttpConnectionSystem, public Core::IUpdateable
 		{
 		public:
 			//--------------------------------------------------------------------------------------------------
@@ -28,13 +29,13 @@ namespace ChilliSource
 			///
 			/// Creates a WinHTTP session
 			//--------------------------------------------------------------------------------------------------
-			CHttpConnectionSystem();
+			HttpConnectionSystem();
 			//--------------------------------------------------------------------------------------------------
 			/// Destructor
 			///
 			/// Destroys WinHTTP session
 			//--------------------------------------------------------------------------------------------------
-			~CHttpConnectionSystem();
+			~HttpConnectionSystem();
 			//--------------------------------------------------------------------------------------------------
 			/// Is A
 			///
@@ -100,7 +101,7 @@ namespace ChilliSource
 			class CHttpRequest : public Networking::HttpRequest
             {
 			public:
-				CHttpRequest(const Networking::HttpRequestDetails & insDetails, const CHttpConnectionSystem::ConnectionInfo& insConnectionInfo, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate);
+				CHttpRequest(const Networking::HttpRequestDetails & insDetails, const HttpConnectionSystem::ConnectionInfo& insConnectionInfo, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate);
 
 				//------------------------------------------------------------------
 				/// Update
@@ -175,7 +176,7 @@ namespace ChilliSource
 				
 				Networking::HttpRequest::CompletionDelegate mCompletionDelegate;
                 Networking::HttpRequestDetails msDetails;
-                CHttpConnectionSystem::ConnectionInfo mConnectionInfo;
+                HttpConnectionSystem::ConnectionInfo mConnectionInfo;
                 
                 f32 mfActiveTime;
                 

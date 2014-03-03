@@ -9,6 +9,8 @@
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_FILE_WINDOWSFILEUTILS_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_FILE_WINDOWSFILEUTILS_H_
 
+#include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
+
 #include <windows.h>
 
 namespace ChilliSource

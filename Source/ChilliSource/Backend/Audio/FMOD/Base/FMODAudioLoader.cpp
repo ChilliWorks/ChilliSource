@@ -86,7 +86,7 @@ namespace ChilliSource
 			return true;
 #else
             std::string strFilePath;
-            static_cast<iOS::CFileSystem*>(Core::Application::GetFileSystemPtr())->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
+            Core::Application::GetFileSystemPtr()->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
             
             if(strFilePath.empty())
             {
@@ -133,7 +133,7 @@ namespace ChilliSource
 			return true;
 #else
             std::string strFilePath;
-            static_cast<iOS::CFileSystem*>(Core::Application::GetFileSystemPtr())->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
+            Core::Application::GetFileSystemPtr()->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
             
             if(strFilePath.empty())
             {

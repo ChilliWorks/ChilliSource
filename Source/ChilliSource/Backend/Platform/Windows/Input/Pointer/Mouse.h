@@ -2,6 +2,7 @@
 #ifndef _MO_FLO_WINDOWSPLATFORM_INPUT_MOUSE_H_
 #define _MO_FLO_WINDOWSPLATFORM_INPUT_MOUSE_H_
 
+#include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Input/ForwardDeclarations.h>
 #include <ChilliSource/Input/Pointer/Mouse.h>
 
@@ -9,12 +10,12 @@ namespace ChilliSource
 {
 	namespace Windows
 	{
-		class CMouse : public Input::Mouse
+		class Mouse : public Input::Mouse
 		{
 		public:
-			CMouse();
-			CMouse(Input::TouchScreen* inpTouchProxy);
-			virtual ~CMouse();
+			Mouse();
+			Mouse(Input::TouchScreen* inpTouchProxy);
+			virtual ~Mouse();
 
 			//-------------------------------------------------------
 			/// Is A

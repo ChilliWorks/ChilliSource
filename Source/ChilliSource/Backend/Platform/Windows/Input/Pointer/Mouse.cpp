@@ -10,17 +10,17 @@ namespace ChilliSource
 {
 	namespace Windows
 	{
-		CMouse* gpMouseInstance = NULL;
+		Mouse* gpMouseInstance = NULL;
 		//----------------------------------------------------
 		/// Constructor
 		///
 		/// Default
 		//----------------------------------------------------
-		CMouse::CMouse() : mudwCurrentTouchID(0)
+		Mouse::Mouse() : mudwCurrentTouchID(0)
 		{
 			//Register for glfw mouse callbacks
-			glfwSetMousePosCallback((GLFWmouseposfun)&CMouse::OnMouseMoved);
-			glfwSetMouseButtonCallback((GLFWmousebuttonfun)&CMouse::OnMouseButtonPressed);
+			glfwSetMousePosCallback((GLFWmouseposfun)&Mouse::OnMouseMoved);
+			glfwSetMouseButtonCallback((GLFWmousebuttonfun)&Mouse::OnMouseButtonPressed);
 
 			gpMouseInstance = this;
 		}
@@ -31,18 +31,18 @@ namespace ChilliSource
 		///
 		/// @param Touch screen proxy
 		//------------------------------------------------------
-		CMouse::CMouse(Input::TouchScreen* inpTouchProxy) : Mouse(inpTouchProxy), mudwCurrentTouchID(0)
+		Mouse::Mouse(Input::TouchScreen* inpTouchProxy) : Input::Mouse(inpTouchProxy), mudwCurrentTouchID(0)
 		{
 			//Register for glfw mouse callbacks
-			glfwSetMousePosCallback((GLFWmouseposfun)&CMouse::OnMouseMoved);
-			glfwSetMouseButtonCallback((GLFWmousebuttonfun)&CMouse::OnMouseButtonPressed);
+			glfwSetMousePosCallback((GLFWmouseposfun)&Mouse::OnMouseMoved);
+			glfwSetMouseButtonCallback((GLFWmousebuttonfun)&Mouse::OnMouseButtonPressed);
 
 			gpMouseInstance = this;
 		}
 		//-------------------------------------------------------
 		/// Is A
 		//-------------------------------------------------------
-		bool CMouse::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool Mouse::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == Input::Mouse::InterfaceID;
 		}
@@ -51,7 +51,7 @@ namespace ChilliSource
 		/// 
 		/// @return Position of cursor on screen
 		//------------------------------------------------------
-		ChilliSource::Core::Vector2 CMouse::GetPosition() const
+		ChilliSource::Core::Vector2 Mouse::GetPosition() const
 		{
 			s32 dwX, dwY = 0;
 			glfwGetMousePos(&dwX, &dwY);
@@ -66,7 +66,7 @@ namespace ChilliSource
 		/// @param Cursor X Pos
 		/// @param Cursor Y Pos
 		//----------------------------------------------
-		void CMouse::OnMouseMoved(s32 indwPosX, s32 indwPosY)
+		void Mouse::OnMouseMoved(s32 indwPosX, s32 indwPosY)
 		{
 			if(gpMouseInstance)
 			{
@@ -85,7 +85,7 @@ namespace ChilliSource
 		/// @param Button ID
 		/// @param Button status
 		//----------------------------------------------
-		void CMouse::OnMouseButtonPressed(s32 indwButtonID, s32 indwMouseButtonState)
+		void Mouse::OnMouseButtonPressed(s32 indwButtonID, s32 indwMouseButtonState)
 		{
 			if(gpMouseInstance)
 			{
@@ -121,7 +121,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		/// Destructor
 		//----------------------------------------------------
-		CMouse::~CMouse()
+		Mouse::~Mouse()
 		{
 			//Remove as listener
 			glfwSetMousePosCallback(NULL);

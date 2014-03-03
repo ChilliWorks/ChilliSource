@@ -50,10 +50,10 @@ namespace ChilliSource
 		///
 		/// Default
 		//-----------------------------------------
-		CPlatformSystem::CPlatformSystem() : mbIsRunning(true), mbIsSuspended(false), muddwAppStartTime(0), mffAppPreviousTime(0.0)
+		PlatformSystem::PlatformSystem() : mbIsRunning(true), mbIsSuspended(false), muddwAppStartTime(0), mffAppPreviousTime(0.0)
 		{
 			//CNotificationScheduler::Initialise(new CLocalNotificationScheduler(), new CRemoteNotificationScheduler());
-			Core::Application::SetFileSystem(new Windows::CFileSystem());
+			Core::Application::SetFileSystem(new Windows::FileSystem());
 			Core::Logging::Init();
 		}
 		//-----------------------------------------
@@ -61,7 +61,7 @@ namespace ChilliSource
 		///
 		/// Create the GLFW window
 		//-----------------------------------------
-		void CPlatformSystem::Init()
+		void PlatformSystem::Init()
 		{
 			QueryPerformanceFrequency(&gFrequency);
 
@@ -80,8 +80,8 @@ namespace ChilliSource
 			glfwSetWindowTitle("MoFlow");
 
 			//Register callbacks
-			glfwSetWindowSizeCallback((GLFWwindowsizefun)&CPlatformSystem::OnWindowResized);
-			glfwSetWindowCloseCallback((GLFWwindowclosefun)&CPlatformSystem::OnWindowClosed);
+			glfwSetWindowSizeCallback((GLFWwindowsizefun)&PlatformSystem::OnWindowResized);
+			glfwSetWindowCloseCallback((GLFWwindowclosefun)&PlatformSystem::OnWindowClosed);
 
             //Initialise GUI factory
             GUI::GUIViewFactory::RegisterDefaults();
@@ -94,14 +94,14 @@ namespace ChilliSource
 		///
 		/// @param the system list
 		//-------------------------------------------------
-		void CPlatformSystem::CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems)
+		void PlatformSystem::CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems)
 		{
 			//create the main systems
 			OpenGL::CRenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
 			inaSystems.push_back(Core::SystemSPtr(pRenderSystem));
 			Core::Application::SetRenderSystem(pRenderSystem);
 
-			Input::InputSystem* pInputSystem = new Windows::CInputSystem();
+			Input::InputSystem* pInputSystem = new Windows::InputSystem();
 			inaSystems.push_back(Core::SystemSPtr(pInputSystem));
 			Core::Application::SetInputSystem(pInputSystem);
 
@@ -142,7 +142,7 @@ namespace ChilliSource
 		///
 		/// @param the system list
 		//-------------------------------------------------
-		void CPlatformSystem::PostCreateSystems()
+		void PlatformSystem::PostCreateSystems()
 		{
 			if(Core::Application::GetAudioSystemPtr() != NULL)
 			{
@@ -154,7 +154,7 @@ namespace ChilliSource
 		///
 		/// Begin the game loop
 		//-----------------------------------------
-		void CPlatformSystem::Run()
+		void PlatformSystem::Run()
 		{
 			muddwAppStartTime = (u64)glfwGetTime();
 
@@ -182,7 +182,7 @@ namespace ChilliSource
 		///
 		/// @param Whether to end or begin
 		//-----------------------------------------
-		void CPlatformSystem::SetUpdaterActive(bool inbIsActive)
+		void PlatformSystem::SetUpdaterActive(bool inbIsActive)
 		{
 			mbIsSuspended = !inbIsActive;
 		}
@@ -192,7 +192,7 @@ namespace ChilliSource
 		/// Stops the update loop causing the 
 		/// application to terminate
 		//--------------------------------------------
-		void CPlatformSystem::TerminateUpdater()
+		void PlatformSystem::TerminateUpdater()
 		{
 			mbIsRunning = false;
 		}
@@ -202,7 +202,7 @@ namespace ChilliSource
 		/// @param Interface ID
 		/// @param Whether system can be created
 		//--------------------------------------------
-		bool CPlatformSystem::CanCreateSystemWithInterface(Core::InterfaceIDType inInterfaceID) const
+		bool PlatformSystem::CanCreateSystemWithInterface(Core::InterfaceIDType inInterfaceID) const
 		{
 			return	inInterfaceID == Networking::HttpConnectionSystem::InterfaceID;
 		}
@@ -213,7 +213,7 @@ namespace ChilliSource
 		/// @param Vector of exisiting systems to append
 		/// @return Pointer to the given system or NULL
 		//--------------------------------------------
-		Core::System* CPlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr>& inaExisitingSystems) const
+		Core::System* PlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr>& inaExisitingSystems) const
 		{
 			//Check if it already exists to prevent multiples
 			for(std::vector<Core::SystemSPtr>::const_iterator it = inaExisitingSystems.begin(); it != inaExisitingSystems.end(); ++it)
@@ -228,7 +228,7 @@ namespace ChilliSource
 
 			if(inInterfaceID == Networking::HttpConnectionSystem::InterfaceID)
 			{
-				pSystem = new CHttpConnectionSystem();
+				pSystem = new HttpConnectionSystem();
 				inaExisitingSystems.push_back(Core::SystemSPtr(pSystem));
 			}
 
@@ -240,7 +240,7 @@ namespace ChilliSource
 		/// @param Interface ID
 		/// @return Whether activity can be created
 		//--------------------------------------------
-		bool CPlatformSystem::CanCreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
+		bool PlatformSystem::CanCreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
 		{
 			return false;
 		}
@@ -250,7 +250,7 @@ namespace ChilliSource
 		/// @param Interface ID
 		/// @return Ownership of activity instance or NULL
 		//--------------------------------------------
-		Core::Activity* CPlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
+		Core::Activity* PlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
 		{
 			return NULL;
 		}
@@ -260,7 +260,7 @@ namespace ChilliSource
 		/// @param Interface ID
 		/// @return Whether provider can be created
 		//--------------------------------------------
-		bool CPlatformSystem::CanCreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
+		bool PlatformSystem::CanCreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
 		{
 			return false;
 		}
@@ -270,7 +270,7 @@ namespace ChilliSource
 		/// @param Interface ID
 		/// @return Ownership of provider instance or NULL
 		//--------------------------------------------
-		Core::IInformationProvider* CPlatformSystem::CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
+		Core::IInformationProvider* PlatformSystem::CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
 		{
 			return NULL;
 		}
@@ -280,7 +280,7 @@ namespace ChilliSource
 		/// Retrieves the screen dimensions. These dimensions are always in the default orientation for the device.
 		/// @return A Vector2 containing the screen size in it's x + y components
 		//-----------------------------------------------------------------------------------------------------------
-		Core::Vector2 CPlatformSystem::GetScreenDimensions() const
+		Core::Vector2 PlatformSystem::GetScreenDimensions() const
 		{
 			Core::Vector2 Result;
 
@@ -297,7 +297,7 @@ namespace ChilliSource
 		///
 		/// @return  String containing the OS version of the device
 		//--------------------------------------------------------------
-		std::string CPlatformSystem::GetOSVersion() const
+		std::string PlatformSystem::GetOSVersion() const
 		{
 			OSVERSIONINFOEX osvi;
 			ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX)); osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
@@ -310,7 +310,7 @@ namespace ChilliSource
 		/// Get the active language locale of the device
 		/// @return Locale ID
 		//--------------------------------------------------------------
-		Core::Locale CPlatformSystem::GetLocale() const
+		Core::Locale PlatformSystem::GetLocale() const
 		{
 			wchar_t localeName[LOCALE_NAME_MAX_LENGTH]={0};
 
@@ -332,7 +332,7 @@ namespace ChilliSource
 		///
 		/// @return The above information stringified
 		//--------------------------------------------------------------
-		std::string CPlatformSystem::GetDeviceModelName() const
+		std::string PlatformSystem::GetDeviceModelName() const
 		{
 			return "Windows";
 		}
@@ -341,7 +341,7 @@ namespace ChilliSource
 		///
 		/// @return The above information stringified
 		//--------------------------------------------------------------
-		std::string CPlatformSystem::GetDeviceModelTypeName() const
+		std::string PlatformSystem::GetDeviceModelTypeName() const
 		{
 			return "PC";
 		}
@@ -350,7 +350,7 @@ namespace ChilliSource
 		///
 		/// @return The above information stringified
 		//--------------------------------------------------------------
-		std::string CPlatformSystem::GetDeviceManufacturerName() const
+		std::string PlatformSystem::GetDeviceManufacturerName() const
 		{
 			return "Microsoft";
 		}
@@ -360,7 +360,7 @@ namespace ChilliSource
 		/// Get the active language of the device in locale format
 		/// @return Locale ID
 		//--------------------------------------------------------------
-		Core::Locale CPlatformSystem::GetLanguage() const
+		Core::Locale PlatformSystem::GetLanguage() const
 		{
 			wchar_t localeName[LOCALE_NAME_MAX_LENGTH]={0};
 
@@ -383,7 +383,7 @@ namespace ChilliSource
 		/// @return The density scale factor of the screen
 		/// to convert from DIPS to physical pixels
 		//-------------------------------------------------
-		f32 CPlatformSystem::GetScreenDensity() const
+		f32 PlatformSystem::GetScreenDensity() const
 		{
 			return 1.0f;
 		}
@@ -392,9 +392,9 @@ namespace ChilliSource
 		///
 		/// @return The UDID of the device
 		//-------------------------------------------------
-		std::string CPlatformSystem::GetDeviceID()
+		std::string PlatformSystem::GetDeviceID()
 		{
-			CS_LOG_ERROR("CPlatformSystem::GetDeviceID() has not been implemented!");
+			CS_LOG_ERROR("PlatformSystem::GetDeviceID() has not been implemented!");
 			return "FAKE ID";
 		}
 		//--------------------------------------------------------------
@@ -402,7 +402,7 @@ namespace ChilliSource
 		///
 		/// @return The number of cores available
 		//--------------------------------------------------------------
-		u32 CPlatformSystem::GetNumberOfCPUCores() const
+		u32 PlatformSystem::GetNumberOfCPUCores() const
 		{
 			SYSTEM_INFO SysInfo;
 			GetSystemInfo(&SysInfo);
@@ -413,7 +413,7 @@ namespace ChilliSource
 		///
 		/// @return the current time in milliseconds
 		//--------------------------------------------------------------
-		u64 CPlatformSystem::GetSystemTimeMS() const
+		u64 PlatformSystem::GetSystemTimeMS() const
 		{
 			LARGE_INTEGER currentTime;
             QueryPerformanceCounter(&currentTime);
@@ -425,7 +425,7 @@ namespace ChilliSource
 		/// @return The physical size of the screen in
 		/// inches.
 		//-------------------------------------------------
-		f32 CPlatformSystem::GetPhysicalScreenSize()
+		f32 PlatformSystem::GetPhysicalScreenSize()
 		{
 			CS_LOG_WARNING("GetPhysicalScreenSize() is not implemented on windows!");
 			return 0.0f;
@@ -437,7 +437,7 @@ namespace ChilliSource
 		///
 		/// @param Text
 		//--------------------------------------------------------------------------------------------------
-		void CPlatformSystem::MakeToast(const Core::UTF8String& instrText) const
+		void PlatformSystem::MakeToast(const Core::UTF8String& instrText) const
 		{
 			CS_LOG_WARNING("Toast not available on Windows");
 		}
@@ -452,7 +452,7 @@ namespace ChilliSource
 		/// @param Confirm text
 		/// @param Cancel text
 		//--------------------------------------------------------------------------------------------------
-		void CPlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const
+		void PlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const
 		{
 			if(MessageBoxA(NULL, instrTitle.ToASCII().c_str(), instrMessage.ToASCII().c_str(), MB_OKCANCEL) == IDOK)
 			{
@@ -473,7 +473,7 @@ namespace ChilliSource
         /// @param Message text
         /// @param Confirm text
         //--------------------------------------------------------------------------------------------------
-		void CPlatformSystem::ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const
+		void PlatformSystem::ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const
 		{
 			MessageBoxA(NULL, instrTitle.ToASCII().c_str(), instrMessage.ToASCII().c_str(), MB_OK);
 		}
@@ -486,7 +486,7 @@ namespace ChilliSource
 		/// @param Window width
 		/// @param Window Height
 		//-------------------------------------------------
-		void CPlatformSystem::OnWindowResized(s32 indwWidth, s32 indwHeight)
+		void PlatformSystem::OnWindowResized(s32 indwWidth, s32 indwHeight)
 		{
 			Core::Application::OnScreenResized((u32)indwWidth, (u32)indwHeight);
 		}
@@ -495,7 +495,7 @@ namespace ChilliSource
 		///
 		/// Triggered when glfw exits the window
 		//-------------------------------------------------
-		void CPlatformSystem::OnWindowClosed()
+		void PlatformSystem::OnWindowClosed()
 		{
 			Core::Application::Suspend();
 			Core::Application::Quit();
@@ -506,7 +506,7 @@ namespace ChilliSource
 		///
 		/// 
 		//-----------------------------------------
-		CPlatformSystem::~CPlatformSystem()
+		PlatformSystem::~PlatformSystem()
 		{
 			glfwTerminate();
 		}

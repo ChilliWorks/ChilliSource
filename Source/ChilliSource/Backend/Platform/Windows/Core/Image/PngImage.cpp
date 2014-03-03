@@ -41,7 +41,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------------------------------
-		CPngImage::CPngImage()
+		PngImage::PngImage()
 		{
 			mbIsLoaded = false;
 			mdwHeight = -1;
@@ -51,7 +51,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------------------------------
-		CPngImage::CPngImage(Core::StorageLocation ineLocation, const std::string& instrFilename)
+		PngImage::PngImage(Core::StorageLocation ineLocation, const std::string& instrFilename)
 		{
 			mbIsLoaded = false;
 			mdwHeight = -1;
@@ -63,7 +63,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Destructor
 		//----------------------------------------------------------------------------------
-		CPngImage::~CPngImage()
+		PngImage::~PngImage()
 		{
 			if (mbIsLoaded == true)
 			{
@@ -78,7 +78,7 @@ namespace ChilliSource
 		/// @param std::string instrFilename - the path to the file relative to either
 		///									   documents or the package.
 		//----------------------------------------------------------------------------------
-		void CPngImage::Load(Core::StorageLocation ineLocation, const std::string& instrFilename)
+		void PngImage::Load(Core::StorageLocation ineLocation, const std::string& instrFilename)
 		{
 			//create the file stream
 			ChilliSource::Core::FileStreamSPtr stream = ChilliSource::Core::Application::GetFileSystemPtr()->CreateFileStream(ineLocation, instrFilename, ChilliSource::Core::FileMode::k_readBinary);
@@ -105,7 +105,7 @@ namespace ChilliSource
 		/// Releases the image data
 		/// @param bool inReleaseImageData - Whether or not to release the image data
 		//----------------------------------------------------------------------------------
-		void CPngImage::Release(bool inReleaseImageData)
+		void PngImage::Release(bool inReleaseImageData)
 		{
 			if (mbIsLoaded != false)
 			{
@@ -122,7 +122,7 @@ namespace ChilliSource
 		///
 		/// returns whether or not the image is loaded
 		//----------------------------------------------------------------------------------
-		bool CPngImage::IsLoaded()
+		bool PngImage::IsLoaded()
 		{
 			return mbIsLoaded;
 		}
@@ -131,7 +131,7 @@ namespace ChilliSource
 		///
 		/// returns the height of the image
 		//----------------------------------------------------------------------------------
-		s32 CPngImage::GetHeight()
+		s32 PngImage::GetHeight()
 		{
 			return mdwHeight;
 		}
@@ -140,7 +140,7 @@ namespace ChilliSource
 		///
 		/// returns the width of the image
 		//----------------------------------------------------------------------------------
-		s32 CPngImage::GetWidth()
+		s32 PngImage::GetWidth()
 		{
 			return mdwWidth;
 		}
@@ -149,7 +149,7 @@ namespace ChilliSource
 		///
 		/// returns the image data.
 		//----------------------------------------------------------------------------------
-		u8 * CPngImage::GetImageData()
+		u8 * PngImage::GetImageData()
 		{
 			return mpData;
 		}
@@ -159,7 +159,7 @@ namespace ChilliSource
 		/// Loads the png data using lib png
 		/// @param FileStreamSPtr inStream - the steam lib png should use to read the data.
 		//----------------------------------------------------------------------------------
-		bool CPngImage::LoadWithLibPng(Core::FileStreamSPtr inStream)
+		bool PngImage::LoadWithLibPng(Core::FileStreamSPtr inStream)
 		{
 			//insure that it is indeed a png
 			const s32 dwHeaderSize = 8;

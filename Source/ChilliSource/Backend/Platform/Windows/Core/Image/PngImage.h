@@ -10,27 +10,28 @@
 #ifndef _MOFLO_WINDOWSPLATFORM_IMAGELOADING_PNGIMAGE_
 #define _MOFLO_WINDOWSPLATFORM_IMAGELOADING_PNGIMAGE_
 
+#include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource
 {
 	namespace Windows
 	{
-		class CPngImage
+		class PngImage
 		{
 		public:
 			//----------------------------------------------------------------------------------
 			/// Constructor
 			//----------------------------------------------------------------------------------
-			CPngImage();
+			PngImage();
 			//----------------------------------------------------------------------------------
 			/// Constructor
 			//----------------------------------------------------------------------------------
-			CPngImage(Core::StorageLocation ineLocation, const std::string& instrFilename);
+			PngImage(Core::StorageLocation ineLocation, const std::string& instrFilename);
 			//----------------------------------------------------------------------------------
 			/// Destructor
 			//----------------------------------------------------------------------------------
-			virtual ~CPngImage();
+			virtual ~PngImage();
 			//----------------------------------------------------------------------------------
 			/// Load PNG
 			///

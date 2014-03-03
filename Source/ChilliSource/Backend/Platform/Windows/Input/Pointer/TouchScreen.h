@@ -14,17 +14,18 @@
 #ifndef _MOFLO_PLATFORM_WINDOWS_TOUCHSCREEN_H_
 #define _MOFLO_PLATFORM_WINDOWS_TOUCHSCREEN_H_
 
+#include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
 
 namespace ChilliSource
 {
 	namespace Windows
 	{
-		class CTouchScreen : public Input::TouchScreen
+		class TouchScreen : public Input::TouchScreen
 		{
 		public:
-			CTouchScreen(){}
-			virtual ~CTouchScreen(){}
+			TouchScreen(){}
+			virtual ~TouchScreen(){}
 
 			//-------------------------------------------------------
 			/// Is A

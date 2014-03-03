@@ -14,6 +14,7 @@
 #ifndef _MOFLO_PLATFORM_WINDOWS_INPUTSYSTEM_H_
 #define _MOFLO_PLATFORM_WINDOWS_INPUTSYSTEM_H_
 
+#include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/Windows/Input/Pointer/Mouse.h>
 #include <ChilliSource/Backend/Platform/Windows/Input/Pointer/Touchscreen.h>
 #include <ChilliSource/Input/Base/InputSystem.h>
@@ -22,11 +23,11 @@ namespace ChilliSource
 {
 	namespace Windows
 	{
-		class CInputSystem : public Input::InputSystem
+		class InputSystem : public Input::InputSystem
 		{
 		public:
-			CInputSystem();
-			virtual ~CInputSystem();
+			InputSystem();
+			virtual ~InputSystem();
 			//---------------------------------------------------------------
 			/// Is A
 			///
@@ -76,8 +77,8 @@ namespace ChilliSource
 
 		protected:
 
-			CTouchScreen mTouchScreen;
-			CMouse mMouse;
+			TouchScreen mTouchScreen;
+			Mouse mMouse;
 		};
 	}
 }

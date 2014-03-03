@@ -22,8 +22,6 @@
 
 namespace ChilliSource
 {
-	using namespace Networking;
-
 	namespace Windows
 	{
 		const u32 kudwBufferSize = 1024 * 50;
@@ -35,7 +33,7 @@ namespace ChilliSource
 		///
 		/// Creates a WinHTTP session
 		//--------------------------------------------------------------------------------------------------
-		CHttpConnectionSystem::CHttpConnectionSystem()
+		HttpConnectionSystem::HttpConnectionSystem()
 		{
 			mSessionHandle = ::WinHttpOpen(L"MyWinHttpClient", WINHTTP_ACCESS_TYPE_NO_PROXY, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
 			if(!mSessionHandle)
@@ -44,7 +42,7 @@ namespace ChilliSource
 			}
 
 			//Set the connection timeout time
-			const s32 kdwTimeoutMS = (s32)(kfDefaultHTTPTimeout * 1000.0f);
+			const s32 kdwTimeoutMS = (s32)(Networking::kfDefaultHTTPTimeout * 1000.0f);
 			::WinHttpSetTimeouts(mSessionHandle, kdwTimeoutMS, kdwTimeoutMS, kdwTimeoutMS, kdwTimeoutMS);
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -53,9 +51,9 @@ namespace ChilliSource
 		/// @param Interace ID
 		/// @return Whether object if of argument type
 		//--------------------------------------------------------------------------------------------------
-		bool CHttpConnectionSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool HttpConnectionSystem::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == HttpConnectionSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
+			return inInterfaceID == Networking::HttpConnectionSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Make Request 
@@ -65,7 +63,7 @@ namespace ChilliSource
 		/// @param (Optional) A function to call when the request is completed. Note that the request can be completed by failure/cancellation as well as success.
 		/// @return A pointer to the request. The system owns this pointer. Returns NULL if the request cannot be created.
 		//--------------------------------------------------------------------------------------------------
-		HttpRequest* CHttpConnectionSystem::MakeRequest(const HttpRequestDetails & insRequestDetails, HttpRequest::CompletionDelegate inOnComplete)
+		Networking::HttpRequest* HttpConnectionSystem::MakeRequest(const Networking::HttpRequestDetails & insRequestDetails, Networking::HttpRequest::CompletionDelegate inOnComplete)
 		{
 			URL_COMPONENTS sUrlComp;
 			DWORD dwUrlLen = 0;
@@ -103,7 +101,7 @@ namespace ChilliSource
 			}
 
 			//Set up the request based on whether it is POST or GET and whether it is SSL
-			LPCWSTR strTypeVerb = (insRequestDetails.eType == HttpRequestDetails::Type::k_get ? L"GET" : L"POST");
+			LPCWSTR strTypeVerb = (insRequestDetails.eType == Networking::HttpRequestDetails::Type::k_get ? L"GET" : L"POST");
 			DWORD dwFlags = 0;
 			HINTERNET RequestHandle = 0;
 
@@ -154,7 +152,7 @@ namespace ChilliSource
 		/// @param Request handle
 		/// @return Success
 		//--------------------------------------------------------------------------------------------------
-		bool CHttpConnectionSystem::ApplySSLSettings(HINTERNET inRequestHandle) const
+		bool HttpConnectionSystem::ApplySSLSettings(HINTERNET inRequestHandle) const
 		{
 			DWORD dwOptions =	SECURITY_FLAG_IGNORE_CERT_CN_INVALID|SECURITY_FLAG_IGNORE_CERT_DATE_INVALID |
 								SECURITY_FLAG_IGNORE_UNKNOWN_CA|SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE;
@@ -178,7 +176,7 @@ namespace ChilliSource
 		///
 		/// Equivalent to calling the above on every incomplete request in progress.
 		//--------------------------------------------------------------------------------------------------
-		void CHttpConnectionSystem::CancelAllRequests()
+		void HttpConnectionSystem::CancelAllRequests()
 		{
 			for(u32 nRequest = 0; nRequest < mapRequests.size(); nRequest++)
 			{
@@ -192,7 +190,7 @@ namespace ChilliSource
 		///
 		/// @return Success if URL is reachable
 		//--------------------------------------------------------------------------------------------------
-		bool CHttpConnectionSystem::CheckReachability() const
+		bool HttpConnectionSystem::CheckReachability() const
 		{
 			return true;
 		}
@@ -204,7 +202,7 @@ namespace ChilliSource
 		///
 		/// @param Time between frames
 		//--------------------------------------------------------------------------------------------------
-		void CHttpConnectionSystem::Update(f32 infDT)
+		void HttpConnectionSystem::Update(f32 infDT)
 		{
 			RequestVector RequestCopy = mapRequests;
 
@@ -233,7 +231,7 @@ namespace ChilliSource
 		///
 		/// Destroys the WinHTTP session
 		//--------------------------------------------------------------------------------------------------
-		CHttpConnectionSystem::~CHttpConnectionSystem()
+		HttpConnectionSystem::~HttpConnectionSystem()
 		{
 			if(mSessionHandle)
 			{
@@ -248,13 +246,13 @@ namespace ChilliSource
 		/// @param Request details
 		/// @param Completion delegate
 		//=====================================================================================================
-		CHttpConnectionSystem::CHttpRequest::CHttpRequest(const Networking::HttpRequestDetails & insDetails, const CHttpConnectionSystem::ConnectionInfo& insConnectionInfo, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate)
+		HttpConnectionSystem::CHttpRequest::CHttpRequest(const Networking::HttpRequestDetails & insDetails, const HttpConnectionSystem::ConnectionInfo& insConnectionInfo, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate)
 			: msDetails(insDetails), mbCompleted(false), mCompletionDelegate(inCompletionDelegate), mfActiveTime(0.0f), mbReceivedResponse(false), mbThreadCompleted(false),
 			mudwResponseCode(0), mudwBytesRead(0), mbRequestCompleted(false), mConnectionInfo(insConnectionInfo), mudwBytesReadThisBlock(0)
 		{
 			//Begin the read loop
 			//Run this as a threaded task
-			Core::TaskScheduler::ScheduleTask(Core::Task<HINTERNET, HINTERNET>(Core::MakeDelegate(this, &CHttpConnectionSystem::CHttpRequest::PollReadStream), mConnectionInfo.RequestHandle, mConnectionInfo.ConnectionHandle));
+			Core::TaskScheduler::ScheduleTask(Core::Task<HINTERNET, HINTERNET>(Core::MakeDelegate(this, &HttpConnectionSystem::CHttpRequest::PollReadStream), mConnectionInfo.RequestHandle, mConnectionInfo.ConnectionHandle));
 		}
 		//------------------------------------------------------------------
 		/// Update
@@ -265,7 +263,7 @@ namespace ChilliSource
 		///
 		/// @param Time since last frame
 		//------------------------------------------------------------------
-		void CHttpConnectionSystem::CHttpRequest::Update(f32 infDT)
+		void HttpConnectionSystem::CHttpRequest::Update(f32 infDT)
 		{
 			//Check if the data has finished streaming and invoke the completion delegate on the main thread
 			if(mbCompleted)
@@ -284,7 +282,7 @@ namespace ChilliSource
 				}
 			}
 			//Track the time the request has been active so we can manually timeout
-			else if(!mbCompleted && !mbReceivedResponse && ((mfActiveTime += (Core::MathUtils::Min(infDT, 0.5f))) > kfDefaultHTTPTimeout))
+			else if (!mbCompleted && !mbReceivedResponse && ((mfActiveTime += (Core::MathUtils::Min(infDT, 0.5f))) > Networking::kfDefaultHTTPTimeout))
 			{
 				CS_LOG_DEBUG("HTTP Connection timed out on request: " + msDetails.strURL);
 				//Flag to stop the polling thread which should 
@@ -307,7 +305,7 @@ namespace ChilliSource
 		/// Reads data from the open stream when it becomes available
 		/// buffers the data flags on complete
 		//------------------------------------------------------------------
-		void CHttpConnectionSystem::CHttpRequest::PollReadStream(HINTERNET inRequestHandle, HINTERNET inConnectionHandle)
+		void HttpConnectionSystem::CHttpRequest::PollReadStream(HINTERNET inRequestHandle, HINTERNET inConnectionHandle)
 		{
 			if(WinHttpSendRequest(inRequestHandle, 0, WINHTTP_NO_REQUEST_DATA, (LPVOID)msDetails.strBody.data(), msDetails.strBody.length(), msDetails.strBody.length(), NULL))
 			{
@@ -407,7 +405,7 @@ namespace ChilliSource
 		///
 		/// Close the request and invoke the completion delegate with the cancel response
 		//----------------------------------------------------------------------------------------
-		void CHttpConnectionSystem::CHttpRequest::Cancel()
+		void HttpConnectionSystem::CHttpRequest::Cancel()
 		{
 			mbCompleted = true;
 			mbReceivedResponse = true;
@@ -418,7 +416,7 @@ namespace ChilliSource
 		///
 		/// @return Whether the request has completed - regardless of success or failure
 		//----------------------------------------------------------------------------------------
-		bool CHttpConnectionSystem::CHttpRequest::HasCompleted() const
+		bool HttpConnectionSystem::CHttpRequest::HasCompleted() const
 		{
 			return mbRequestCompleted && mbThreadCompleted;
 		}
@@ -427,7 +425,7 @@ namespace ChilliSource
 		///
 		/// @return The original request details (i.e. whether it is post/get the body and header)
 		//----------------------------------------------------------------------------------------
-		const Networking::HttpRequestDetails & CHttpConnectionSystem::CHttpRequest::GetDetails() const
+		const Networking::HttpRequestDetails & HttpConnectionSystem::CHttpRequest::GetDetails() const
 		{
 			return msDetails;
 		}
@@ -436,7 +434,7 @@ namespace ChilliSource
 		///
 		/// @return The delegate that will be invoked on request complete
 		//----------------------------------------------------------------------------------------
-		const Networking::HttpRequest::CompletionDelegate & CHttpConnectionSystem::CHttpRequest::GetCompletionDelegate() const
+		const Networking::HttpRequest::CompletionDelegate & HttpConnectionSystem::CHttpRequest::GetCompletionDelegate() const
 		{
 			return mCompletionDelegate;
 		}
@@ -445,7 +443,7 @@ namespace ChilliSource
 		///
 		/// @return The contents of the response as a string. This could be binary data
 		//----------------------------------------------------------------------------------------
-		const std::string & CHttpConnectionSystem::CHttpRequest::GetResponseString() const
+		const std::string & HttpConnectionSystem::CHttpRequest::GetResponseString() const
 		{
 			return mResponseData;
 		}
@@ -454,7 +452,7 @@ namespace ChilliSource
 		///
 		/// @return HTTP response code (i.e. 200 = OK, 400 = Error)
 		//----------------------------------------------------------------------------------------
-		u32 CHttpConnectionSystem::CHttpRequest::GetResponseCode() const 
+		u32 HttpConnectionSystem::CHttpRequest::GetResponseCode() const 
 		{
 			return mudwResponseCode;
 		}
@@ -463,7 +461,7 @@ namespace ChilliSource
 		///
 		/// @return Number of bytes read til now
 		//----------------------------------------------------------------------------------------
-		u32 CHttpConnectionSystem::CHttpRequest::GetBytesRead() const
+		u32 HttpConnectionSystem::CHttpRequest::GetBytesRead() const
 		{
 			return mudwBytesRead;
 		}
@@ -472,7 +470,7 @@ namespace ChilliSource
 		///
 		/// @return Connection Info
 		//----------------------------------------------------------------------------------------
-		const CHttpConnectionSystem::ConnectionInfo& CHttpConnectionSystem::CHttpRequest::GetConnectionInfo()
+		const HttpConnectionSystem::ConnectionInfo& HttpConnectionSystem::CHttpRequest::GetConnectionInfo()
 		{
 			return mConnectionInfo;
 		}

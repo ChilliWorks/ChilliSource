@@ -13,6 +13,7 @@
 #ifndef _MO_FLO_PLATFORM_WINDOWS_PLATFORM_SYSTEM_H_
 #define _MO_FLO_PLATFORM_WINDOWS_PLATFORM_SYSTEM_H_
 
+#include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
@@ -26,11 +27,11 @@ namespace ChilliSource
 		/// Allows generic access to platform 
 		/// specific code via common function calls
 		//---------------------------------------------
-		class CPlatformSystem : public Core::PlatformSystem
+		class PlatformSystem : public Core::PlatformSystem
 		{
 		public:
-			CPlatformSystem();
-			virtual ~CPlatformSystem();
+			PlatformSystem();
+			virtual ~PlatformSystem();
 
 			//-----------------------------------------
 			/// Init

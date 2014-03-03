@@ -8,7 +8,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		/// Is A
 		//-------------------------------------------------------
-		bool CTouchScreen::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool TouchScreen::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == Input::TouchScreen::InterfaceID;
 		}
