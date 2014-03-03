@@ -14,21 +14,21 @@
 #ifndef _MO_FLO_AUDIO_FMOD_FMOD_AUDIO_LOADER_H_
 #define _MO_FLO_AUDIO_FMOD_FMOD_AUDIO_LOADER_H_
 
-#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/Base/AudioLoader.h>
+#include <ChilliSource/Backend/Audio/FMOD/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
 
 namespace ChilliSource
 {
 	namespace FMOD
 	{
-        class CFMODSystem;
+        class FMODSystem;
         
-		class CFMODAudioLoader : public Audio::AudioLoader
+		class AudioLoader : public Audio::AudioLoader
 		{
 		public:
 			
-			CFMODAudioLoader(Audio::AudioSystem* inpFMODSystem);
+			AudioLoader(Audio::AudioSystem* inpFMODSystem);
 	
 			//----------------------------------------------------------------------------
 			/// Can Create Resource From File With Extension
@@ -73,7 +73,7 @@ namespace ChilliSource
             std::string m_saveDataDirectory;
 #endif
 			
-			CFMODSystem* mpFMODSystem;
+			FMODSystem* mpFMODSystem;
 		};
 	}
 }

@@ -13,11 +13,13 @@
 #ifndef _MO_FLO_AUDIO_FMOD_FMOD_SYSTEM_H_
 #define _MO_FLO_AUDIO_FMOD_FMOD_SYSTEM_H_
 
+#include <ChilliSource/Audio/Base/AudioSystem.h>
+#include <ChilliSource/Backend/Audio/FMOD/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
+
 #include <fmod.hpp>
 #include <fmod_errors.h>
 #include <fmod_event.hpp>
-
-#include <ChilliSource/Audio/Base/AudioSystem.h>
 
 namespace ChilliSource
 {
@@ -25,11 +27,11 @@ namespace ChilliSource
 	{
 		const u32 kudwMaxFMODChannels = 32;
 		
-		class CFMODSystem : public Audio::AudioSystem
+		class FMODSystem : public Audio::AudioSystem
 		{
 		public:
-			CFMODSystem();
-			virtual ~CFMODSystem();
+			FMODSystem();
+			virtual ~FMODSystem();
 			
 			//-------------------------------------------------------
 			/// Load Event Data

@@ -10,7 +10,8 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioResource.h>
+#include <ChilliSource/Backend/Audio/FMOD/Base/AudioResource.h>
+
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
 
 namespace ChilliSource
@@ -20,21 +21,21 @@ namespace ChilliSource
 		//-------------------------------------------------
 		/// Constructor
 		//-------------------------------------------------
-		CFMODAudioResource::CFMODAudioResource() : mpFMODSound(nullptr)
+		AudioResource::AudioResource() : mpFMODSound(nullptr)
 		{
             Audio::AudioResource::SetStreamed(false);
 		}
         //-------------------------------------------------
         /// Is A
         //-------------------------------------------------
-        bool CFMODAudioResource::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+        bool AudioResource::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
         {
             return (inInterfaceID == Audio::AudioResource::InterfaceID);
         }
 		//--------------------------------------------------
 		/// Get Length
 		//--------------------------------------------------
-		f32 CFMODAudioResource::GetLength()
+		f32 AudioResource::GetLength()
 		{
             u32 udwLengthInMs = 0;
             
@@ -49,7 +50,7 @@ namespace ChilliSource
         //--------------------------------------------------
         /// Set Looping
         //--------------------------------------------------
-        void CFMODAudioResource::SetLooping(bool inbShouldLoop)
+        void AudioResource::SetLooping(bool inbShouldLoop)
         {
             if (mpFMODSound != nullptr)
             {
@@ -59,7 +60,7 @@ namespace ChilliSource
 		//--------------------------------------------------
 		/// Destructor
 		//--------------------------------------------------
-		CFMODAudioResource::~CFMODAudioResource()
+		AudioResource::~AudioResource()
 		{
             if (mpFMODSound != nullptr)
             {

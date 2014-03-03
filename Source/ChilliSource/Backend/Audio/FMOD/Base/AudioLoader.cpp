@@ -10,10 +10,10 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioLoader.h>
-#include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioResource.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
+#include <ChilliSource/Backend/Audio/FMOD/Base/AudioLoader.h>
 
+#include <ChilliSource/Backend/Audio/FMOD/Base/AudioResource.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 
 namespace ChilliSource
@@ -30,8 +30,8 @@ namespace ChilliSource
 		///
 		/// Register this object as a model provider
 		//-------------------------------------------------------------------------
-		CFMODAudioLoader::CFMODAudioLoader(Audio::AudioSystem* inpFMODSystem) 
-		: AudioLoader(inpFMODSystem), mpFMODSystem(static_cast<CFMODSystem*>(inpFMODSystem))
+		AudioLoader::AudioLoader(Audio::AudioSystem* inpFMODSystem) 
+		: Audio::AudioLoader(inpFMODSystem), mpFMODSystem(static_cast<FMODSystem*>(inpFMODSystem))
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
             m_cacheDirectory = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_cache);
@@ -46,7 +46,7 @@ namespace ChilliSource
 		/// @param Extension to compare
 		/// @return Whether the object can create a resource with the given extension
 		//----------------------------------------------------------------------------
-		bool CFMODAudioLoader::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
+		bool AudioLoader::CanCreateResourceFromFileWithExtension(const std::string & inExtension) const
 		{
 			return	(inExtension == kstrWAVExtension) || (inExtension == kstrAACExtension) || (inExtension == kstrOGGExtension) ||
 					(inExtension == kstrAIFFExtension);
@@ -59,7 +59,7 @@ namespace ChilliSource
 		/// @param Out: Resource object
 		/// @return Success
 		//----------------------------------------------------------------------------
-		bool CFMODAudioLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)  
+		bool AudioLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)  
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
             switch (ineStorageLocation)
@@ -106,7 +106,7 @@ namespace ChilliSource
 		/// @param Out: Resource object
 		/// @return Success
 		//----------------------------------------------------------------------------
-		bool CFMODAudioLoader::StreamResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
+		bool AudioLoader::StreamResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
             switch (ineStorageLocation)
@@ -151,7 +151,7 @@ namespace ChilliSource
 		///
 		/// @return Audio listener
 		//----------------------------------------------------------------------------
-		Audio::AudioListenerSPtr CFMODAudioLoader::CreateAudioListener()
+		Audio::AudioListenerSPtr AudioLoader::CreateAudioListener()
 		{
 			return mpFMODSystem->CreateAudioListener();
 		}

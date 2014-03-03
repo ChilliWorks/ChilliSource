@@ -13,6 +13,7 @@
 #ifndef _MO_FLO_AUDIO_FMOD_FMOD_AUDIO_RESOURCE_H_
 #define _MO_FLO_AUDIO_FMOD_FMOD_AUDIO_RESOURCE_H_
 
+#include <ChilliSource/Backend/Audio/FMOD/ForwardDeclarations.h>
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/Base/AudioResource.h>
 
@@ -23,11 +24,11 @@ namespace ChilliSource
 {
 	namespace FMOD
 	{
-		class CFMODAudioResource : public Audio::AudioResource 
+		class AudioResource : public Audio::AudioResource 
 		{
 		public:
-            CFMODAudioResource();
-            ~CFMODAudioResource();
+            AudioResource();
+            ~AudioResource();
             //----------------------------------------------------------
             /// Is A
             ///

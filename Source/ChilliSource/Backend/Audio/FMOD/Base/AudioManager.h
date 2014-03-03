@@ -10,14 +10,15 @@
 #ifndef _MO_FLO_PLATFORM_IOS_FMOD_FMOD_AUDIO_MANAGER_H_
 #define _MO_FLO_PLATFORM_IOS_FMOD_FMOD_AUDIO_MANAGER_H_
 
-#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/Base/AudioManager.h>
+#include <ChilliSource/Backend/Audio/FMOD/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {
 	namespace FMOD
 	{
-		class CFMODAudioManager : public Audio::AudioManager
+		class AudioManager : public Audio::AudioManager
 		{
 		public:
 			

@@ -11,16 +11,16 @@
  */
 
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
-#include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioManager.h>
-#include <ChilliSource/Backend/Audio/FMOD/3D/FMODAudioListener.h>
-#include <ChilliSource/Backend/Audio/FMOD/3D/FMODAudioComponent.h>
-#include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioResource.h>
-#include <ChilliSource/Backend/Audio/FMOD/3D/FMODAudioComponentFactory.h>
 
+#include <ChilliSource/Backend/Audio/FMOD/Base/AudioManager.h>
+#include <ChilliSource/Backend/Audio/FMOD/3D/AudioListener.h>
+#include <ChilliSource/Backend/Audio/FMOD/3D/AudioComponent.h>
+#include <ChilliSource/Backend/Audio/FMOD/Base/AudioResource.h>
+#include <ChilliSource/Backend/Audio/FMOD/3D/AudioComponentFactory.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
 #include <fmodiphone.h>
@@ -35,13 +35,13 @@ namespace ChilliSource
 		///
 		/// Initialise FMOD
 		//-------------------------------------------------------
-		CFMODSystem::CFMODSystem() : mpFMODSystem(nullptr), mpFMODEventSystem(nullptr), mpFMODEventProject(nullptr)
+		FMODSystem::FMODSystem() : mpFMODSystem(nullptr), mpFMODEventSystem(nullptr), mpFMODEventProject(nullptr)
 		{
-			mpAudioManager = new CFMODAudioManager();
-            mpAudioComponentFactory = new CFMODAudioComponentFactory(this, mpAudioManager);
+			mpAudioManager = new AudioManager();
+            mpAudioComponentFactory = new AudioComponentFactory(this, mpAudioManager);
             
 			// Subscribe to memory warnings so we can clear FMOD's cache
-            m_appLowMemoryConnection = Core::ApplicationEvents::GetLowMemoryEvent().OpenConnection(Core::MakeDelegate(this, &CFMODSystem::OnApplicationMemoryWarning));
+            m_appLowMemoryConnection = Core::ApplicationEvents::GetLowMemoryEvent().OpenConnection(Core::MakeDelegate(this, &FMODSystem::OnApplicationMemoryWarning));
 			
 			//Create the FMOD event system
 			ErrorCheck(::FMOD::EventSystem_Create(&mpFMODEventSystem));
@@ -78,7 +78,7 @@ namespace ChilliSource
         /// @param Location
 		/// @param File path
 		//-------------------------------------------------------
-		void CFMODSystem::LoadEventData(Core::StorageLocation ineLocation, const std::string& instrFilePath)
+		void FMODSystem::LoadEventData(Core::StorageLocation ineLocation, const std::string& instrFilePath)
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
 			CS_ASSERT(ineLocation != Core::StorageLocation::k_package, "FMOD Android cannot load from package");
@@ -95,7 +95,7 @@ namespace ChilliSource
 		///
 		/// @param File path
 		//-------------------------------------------------------
-		void CFMODSystem::UnloadEventData()
+		void FMODSystem::UnloadEventData()
 		{
             if(mpFMODEventProject)
             {
@@ -116,7 +116,7 @@ namespace ChilliSource
 		///
 		/// @param File path
 		//-------------------------------------------------------
-		void CFMODSystem::UnloadEventData(const std::string& instrEventGroup)
+		void FMODSystem::UnloadEventData(const std::string& instrEventGroup)
 		{
             if(mpFMODEventProject)
             {
@@ -136,7 +136,7 @@ namespace ChilliSource
 		///
 		/// @param The name of the group
 		//-------------------------------------------------------
-		void CFMODSystem::PreloadEventGroup(const std::string& instrGroupName)
+		void FMODSystem::PreloadEventGroup(const std::string& instrGroupName)
 		{
 			if(mpFMODEventProject != nullptr)
 			{	
@@ -153,9 +153,9 @@ namespace ChilliSource
 		/// @param File path
 		/// @param Sound handle to be initialised with sound
 		//-------------------------------------------------------
-		void CFMODSystem::CreateSound(const std::string& instrFilePath, Audio::AudioResource* inpAudio)
+		void FMODSystem::CreateSound(const std::string& instrFilePath, Audio::AudioResource* inpAudio)
 		{
-			ErrorCheck(mpFMODSystem->createSound(instrFilePath.c_str(), FMOD_SOFTWARE, nullptr, &static_cast<CFMODAudioResource*>(inpAudio)->mpFMODSound));
+			ErrorCheck(mpFMODSystem->createSound(instrFilePath.c_str(), FMOD_SOFTWARE, nullptr, &static_cast<AudioResource*>(inpAudio)->mpFMODSound));
 		}
 		//-------------------------------------------------------
 		/// Create 3D Sound
@@ -166,9 +166,9 @@ namespace ChilliSource
 		/// @param File path
 		/// @param Sound handle to be initialised with sound
 		//-------------------------------------------------------
-		void CFMODSystem::Create3DSound(const std::string& instrFilePath, Audio::AudioResource* inpAudio)
+		void FMODSystem::Create3DSound(const std::string& instrFilePath, Audio::AudioResource* inpAudio)
 		{
-			ErrorCheck(mpFMODSystem->createSound(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_3D, nullptr, &static_cast<CFMODAudioResource*>(inpAudio)->mpFMODSound));
+			ErrorCheck(mpFMODSystem->createSound(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_3D, nullptr, &static_cast<AudioResource*>(inpAudio)->mpFMODSound));
 		}
 		//-------------------------------------------------------
 		/// Create Stream
@@ -178,9 +178,9 @@ namespace ChilliSource
 		/// @param File path
 		/// @param Stream handle
 		//-------------------------------------------------------
-		void CFMODSystem::CreateStream(const std::string& instrFilePath, Audio::AudioResource* inpAudio)
+		void FMODSystem::CreateStream(const std::string& instrFilePath, Audio::AudioResource* inpAudio)
 		{
-			ErrorCheck(mpFMODSystem->createStream(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_LOOP_NORMAL, nullptr, &static_cast<CFMODAudioResource*>(inpAudio)->mpFMODSound));
+			ErrorCheck(mpFMODSystem->createStream(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_LOOP_NORMAL, nullptr, &static_cast<AudioResource*>(inpAudio)->mpFMODSound));
 		}
 		//-------------------------------------------------------
 		/// Create 3d Stream
@@ -190,9 +190,9 @@ namespace ChilliSource
 		/// @param File path
 		/// @param Stream handle
 		//-------------------------------------------------------
-		void CFMODSystem::Create3DStream(const std::string& instrFilePath, Audio::AudioResource* inpAudio)
+		void FMODSystem::Create3DStream(const std::string& instrFilePath, Audio::AudioResource* inpAudio)
 		{
-			ErrorCheck(mpFMODSystem->createStream(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_LOOP_NORMAL|FMOD_3D, nullptr, &static_cast<CFMODAudioResource*>(inpAudio)->mpFMODSound));
+			ErrorCheck(mpFMODSystem->createStream(instrFilePath.c_str(), FMOD_SOFTWARE|FMOD_LOOP_NORMAL|FMOD_3D, nullptr, &static_cast<AudioResource*>(inpAudio)->mpFMODSound));
 		}
 		//-------------------------------------------------------
 		/// Play Sound
@@ -202,14 +202,14 @@ namespace ChilliSource
 		///
 		/// @param FMOD sound handle
 		//-------------------------------------------------------
-		void CFMODSystem::PlaySound(Audio::AudioComponent* inpAudioComponent)
+		void FMODSystem::PlaySound(Audio::AudioComponent* inpAudioComponent)
 		{
 			//We let FMOD manages the channels 
 			::FMOD::Channel* pActiveChannel = nullptr;
-			ErrorCheck(mpFMODSystem->playSound(FMOD_CHANNEL_FREE, std::static_pointer_cast<CFMODAudioResource>(inpAudioComponent->GetAudioSource())->mpFMODSound, false, &pActiveChannel));
+			ErrorCheck(mpFMODSystem->playSound(FMOD_CHANNEL_FREE, std::static_pointer_cast<AudioResource>(inpAudioComponent->GetAudioSource())->mpFMODSound, false, &pActiveChannel));
 			
 			//Give the sound it's channel so we can query the state
-			static_cast<CFMODAudioComponent*>(inpAudioComponent)->SetChannel(pActiveChannel);
+			static_cast<AudioComponent*>(inpAudioComponent)->SetChannel(pActiveChannel);
 		}
 		//-------------------------------------------------------
 		/// Play Event
@@ -218,7 +218,7 @@ namespace ChilliSource
 		///
 		/// @param name of event
 		//-------------------------------------------------------
-		::FMOD::Event* CFMODSystem::PlayEvent(const std::string& instrEventName)
+		::FMOD::Event* FMODSystem::PlayEvent(const std::string& instrEventName)
 		{
 			if(mpFMODEventProject != nullptr)
 			{
@@ -240,7 +240,7 @@ namespace ChilliSource
 		/// Tell the system to update
 		/// @param Time since last frame
 		//-------------------------------------------------------
-		void CFMODSystem::Update(f32 dt)
+		void FMODSystem::Update(f32 dt)
 		{
 			ErrorCheck(mpFMODEventSystem->update());
 		}
@@ -249,9 +249,9 @@ namespace ChilliSource
 		///
 		/// @return Audio listener
 		//----------------------------------------------------------------------------
-		Audio::AudioListenerSPtr CFMODSystem::CreateAudioListener()
+		Audio::AudioListenerSPtr FMODSystem::CreateAudioListener()
 		{
-			return FMODAudioListenerPtr(new CFMODAudioListener(mpFMODSystem));
+			return FMODAudioListenerPtr(new AudioListener(mpFMODSystem));
 		}
 		//-------------------------------------------------------
 		/// Error Check
@@ -259,7 +259,7 @@ namespace ChilliSource
 		/// Log any FMOD errors
 		/// @param Result of FMOD function return
 		//-------------------------------------------------------
-		void CFMODSystem::ErrorCheck(FMOD_RESULT ineResult)
+		void FMODSystem::ErrorCheck(FMOD_RESULT ineResult)
 		{
 			if(ineResult != FMOD_OK)
 			{
@@ -273,7 +273,7 @@ namespace ChilliSource
         /// that the OS has thrown a memory warning. We should
         /// release the FMOD event cache at this point
         //-------------------------------------------------------
-		void CFMODSystem::OnApplicationMemoryWarning()
+		void FMODSystem::OnApplicationMemoryWarning()
 		{
 			if(mpFMODEventProject!= nullptr)
 			{
@@ -286,7 +286,7 @@ namespace ChilliSource
 		///
 		/// Release the FMOD system
 		//-------------------------------------------------------
-		void CFMODSystem::Destroy()
+		void FMODSystem::Destroy()
 		{
             ErrorCheck(mpFMODEventSystem->release());
 			mpFMODEventSystem = nullptr;
@@ -295,7 +295,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//-------------------------------------------------------
-		CFMODSystem::~CFMODSystem()
+		FMODSystem::~FMODSystem()
 		{
             CS_SAFEDELETE(mpAudioComponentFactory);
 			CS_SAFEDELETE(mpAudioManager);

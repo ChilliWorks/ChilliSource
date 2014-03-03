@@ -18,16 +18,16 @@ namespace ChilliSource
 		//------------------------------------------------------
 		/// 3D
 		//------------------------------------------------------
-		CS_FORWARDDECLARE_CLASS(CFMODAudioComponent);
-		CS_FORWARDDECLARE_CLASS(CFMODAudioComponentFactory);
-		CS_FORWARDDECLARE_CLASS(CFMODAudioListener);
+		CS_FORWARDDECLARE_CLASS(AudioComponent);
+		CS_FORWARDDECLARE_CLASS(AudioComponentFactory);
+		CS_FORWARDDECLARE_CLASS(AudioListener);
 		//------------------------------------------------------
 		/// Base
 		//------------------------------------------------------
-		CS_FORWARDDECLARE_CLASS(CFMODAudioLoader);
-		CS_FORWARDDECLARE_CLASS(CFMODAudioManager);
-		CS_FORWARDDECLARE_CLASS(CFMODAudioResource);
-		CS_FORWARDDECLARE_CLASS(CFMODSystem);
+		CS_FORWARDDECLARE_CLASS(AudioLoader);
+		CS_FORWARDDECLARE_CLASS(AudioManager);
+		CS_FORWARDDECLARE_CLASS(AudioResource);
+		CS_FORWARDDECLARE_CLASS(FMODSystem);
 	}
 }
 

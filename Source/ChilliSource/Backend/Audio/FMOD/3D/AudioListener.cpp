@@ -10,7 +10,7 @@
  * Copyright ©2010 Tag Games Limited - All rights reserved 
  */
 
-#include <ChilliSource/Backend/Audio/FMOD/3D/FMODAudioListener.h>
+#include <ChilliSource/Backend/Audio/FMOD/3D/AudioListener.h>
 
 namespace ChilliSource
 {
@@ -21,7 +21,7 @@ namespace ChilliSource
 		///
 		/// @param FMOD system
 		//------------------------------------------------------------
-		CFMODAudioListener::CFMODAudioListener(::FMOD::System* inpFMODSystem) : mpFMODSystem(inpFMODSystem)
+		AudioListener::AudioListener(::FMOD::System* inpFMODSystem) : mpFMODSystem(inpFMODSystem)
 		{
 		}
 		//------------------------------------------------------------
@@ -35,7 +35,7 @@ namespace ChilliSource
 		/// @param 3D forward direction vector
 		/// @param 3D up direction vector (perpendicular to forward)
 		//-------------------------------------------------------------
-		void CFMODAudioListener::Set3DLocation(Core::Vector3& invPos, Core::Vector3& invVel, Core::Vector3& invForward, Core::Vector3& invUp)
+		void AudioListener::Set3DLocation(Core::Vector3& invPos, Core::Vector3& invVel, Core::Vector3& invForward, Core::Vector3& invUp)
 		{
 			mpFMODSystem->set3DListenerAttributes(0, reinterpret_cast<FMOD_VECTOR*>(&invPos), reinterpret_cast<FMOD_VECTOR*>(&invVel), reinterpret_cast<FMOD_VECTOR*>(&invForward), reinterpret_cast<FMOD_VECTOR*>(&invUp));
 		}

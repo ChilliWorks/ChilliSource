@@ -8,7 +8,7 @@
 
 #include <ChilliSource/Audio/Base/AudioSystem.h>
 
-#include <ChilliSource/Backend/Audio/FMOD/3D/FMODAudioComponent.h>
+#include <ChilliSource/Backend/Audio/FMOD/3D/AudioComponent.h>
 
 namespace ChilliSource
 {
@@ -31,7 +31,7 @@ namespace ChilliSource
 					::FMOD::Channel* pChannel = (::FMOD::Channel*)inpChannel;
 					
 					//Grab the instance pointer so we can notify the correct resource 
-					CFMODAudioComponent* pAudioResource = nullptr;
+					AudioComponent* pAudioResource = nullptr;
 					pChannel->getUserData((void**)&pAudioResource);
 					
 					//Now trigger the real callback
@@ -52,7 +52,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//---------------------------------------------------------------------
-		CFMODAudioComponent::CFMODAudioComponent(Audio::AudioSystem* inpOwningSystem) : AudioComponent(inpOwningSystem), mpFMODChannel(nullptr)
+		AudioComponent::AudioComponent(Audio::AudioSystem* inpOwningSystem) : Audio::AudioComponent(inpOwningSystem), mpFMODChannel(nullptr)
         {
         }
         //---------------------------------------------------------------------
@@ -60,7 +60,7 @@ namespace ChilliSource
 		///
 		/// Begin playback of the sound
 		//---------------------------------------------------------------------
-		void CFMODAudioComponent::Play()
+		void AudioComponent::Play()
 		{
 			//Check if we are simply resuming or whether we are starting from scratch
 			if(mpFMODChannel)
@@ -83,7 +83,7 @@ namespace ChilliSource
 		///
 		/// Stop playback of the sound
 		//---------------------------------------------------------------------
-		void CFMODAudioComponent::Pause()
+		void AudioComponent::Pause()
 		{
 			if(mpFMODChannel)
 			{
@@ -95,7 +95,7 @@ namespace ChilliSource
 		///
 		/// Stop playback of the sound
 		//---------------------------------------------------------------------
-		void CFMODAudioComponent::Stop()
+		void AudioComponent::Stop()
 		{
 			if (mpFMODChannel)
             {
@@ -107,7 +107,7 @@ namespace ChilliSource
 		///
 		/// @param Whether to loop the sound or not
 		//---------------------------------------------------------------------
-		void CFMODAudioComponent::SetLooping(bool inbShouldLoop)
+		void AudioComponent::SetLooping(bool inbShouldLoop)
 		{
             mpAudioSource->SetLooping(inbShouldLoop);
 		}
@@ -116,7 +116,7 @@ namespace ChilliSource
 		///
 		/// @param A handle to the channel that is playing us.
 		//---------------------------------------------------------------------
-		void CFMODAudioComponent::SetChannel(::FMOD::Channel* inpChannel)
+		void AudioComponent::SetChannel(::FMOD::Channel* inpChannel)
 		{
             if (mpFMODChannel != nullptr)
             {
@@ -142,7 +142,7 @@ namespace ChilliSource
 		///
 		/// Triggered by FMOD when the channel has finished with us 
 		//---------------------------------------------------------------------
-		void CFMODAudioComponent::OnPlaybackComplete()
+		void AudioComponent::OnPlaybackComplete()
 		{
             mOnPlaybackCompleteEvent.NotifyConnections(this);
 			SetChannel(nullptr);
@@ -152,7 +152,7 @@ namespace ChilliSource
 		///
 		/// @param Volume level in normalised range [0, 1]
 		//---------------------------------------------------------------------
-		void CFMODAudioComponent::SetVolume(f32 infVolume)
+		void AudioComponent::SetVolume(f32 infVolume)
 		{
 			if(mpFMODChannel)
 			{
@@ -174,7 +174,7 @@ namespace ChilliSource
 		///
 		/// @param Frequency
 		//---------------------------------------------------------------------
-		void CFMODAudioComponent::SetFrequency(f32 infFreq)
+		void AudioComponent::SetFrequency(f32 infFreq)
 		{
 			if(mpFMODChannel)
 			{
@@ -191,7 +191,7 @@ namespace ChilliSource
         ///
         /// @return Frequency
         //---------------------------------------------------------------------
-        f32 CFMODAudioComponent::GetFrequency() const
+        f32 AudioComponent::GetFrequency() const
         {
             if (mpFMODChannel)
         	{
@@ -208,7 +208,7 @@ namespace ChilliSource
 		/// @param 3D position vector
 		/// @param 3D velocity vector
 		//---------------------------------------------------------------------
-		void CFMODAudioComponent::Set3DLocation(Core::Vector3& invPosition, Core::Vector3& invVelocity)
+		void AudioComponent::Set3DLocation(Core::Vector3& invPosition, Core::Vector3& invVelocity)
 		{
 			if(mpFMODChannel)
 			{
@@ -220,7 +220,7 @@ namespace ChilliSource
 		///
 		/// @return Whether the sound is playing or not
 		//---------------------------------------------------------------------
-		bool CFMODAudioComponent::IsPlaying() const
+		bool AudioComponent::IsPlaying() const
 		{
             bool bIsPlaying = false;
 			//No channel. No sound
@@ -231,7 +231,7 @@ namespace ChilliSource
             
             return bIsPlaying;
 		}
-		CFMODAudioComponent::~CFMODAudioComponent()
+		AudioComponent::~AudioComponent()
 		{
             SetChannel(nullptr);
         }

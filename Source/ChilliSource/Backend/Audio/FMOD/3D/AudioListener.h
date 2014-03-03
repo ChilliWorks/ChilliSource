@@ -15,6 +15,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/3D/AudioListener.h>
+#include <ChilliSource/Backend/Audio/FMOD/ForwardDeclarations.h>
 
 #include <fmod.hpp>
 #include <fmod_errors.h>
@@ -23,11 +24,11 @@ namespace ChilliSource
 {
 	namespace FMOD
 	{
-		class CFMODAudioListener : public Audio::AudioListener
+		class AudioListener : public Audio::AudioListener
 		{
 		public:
-			CFMODAudioListener(::FMOD::System* inpFMODSystem);
-			virtual ~CFMODAudioListener(){}
+			AudioListener(::FMOD::System* inpFMODSystem);
+			virtual ~AudioListener(){}
 			
 			//------------------------------------------------------------
 			/// Set 3D Location
@@ -47,8 +48,8 @@ namespace ChilliSource
 			::FMOD::System* mpFMODSystem;
 		};
 		
-		typedef std::shared_ptr<CFMODAudioListener> FMODAudioListenerPtr;
-		typedef std::weak_ptr<CFMODAudioListener> FMODAudioListenerWeakPtr;
+		typedef std::shared_ptr<AudioListener> FMODAudioListenerPtr;
+		typedef std::weak_ptr<AudioListener> FMODAudioListenerWeakPtr;
 	}
 }
 

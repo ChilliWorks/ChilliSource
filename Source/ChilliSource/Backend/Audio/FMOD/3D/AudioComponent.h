@@ -12,6 +12,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/3D/AudioComponent.h>
+#include <ChilliSource/Backend/Audio/FMOD/ForwardDeclarations.h>
 
 #include <fmod.hpp>
 
@@ -19,11 +20,11 @@ namespace ChilliSource
 {
     namespace FMOD
     {
-        class CFMODAudioComponent : public Audio::AudioComponent
+        class AudioComponent : public Audio::AudioComponent
         {
         public:
-            CFMODAudioComponent(Audio::AudioSystem* inpOwningSystem);
-			~CFMODAudioComponent();
+            AudioComponent(Audio::AudioSystem* inpOwningSystem);
+			~AudioComponent();
             //---------------------------------------------------------------------
 			/// Play
 			///

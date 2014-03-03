@@ -7,8 +7,9 @@
  *
  */
 
-#include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioManager.h>
-#include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioResource.h>
+#include <ChilliSource/Backend/Audio/FMOD/Base/AudioManager.h>
+
+#include <ChilliSource/Backend/Audio/FMOD/Base/AudioResource.h>
 
 namespace ChilliSource
 {
@@ -19,9 +20,9 @@ namespace ChilliSource
 		///
 		/// @return Concrete audio resource based on the audio system
 		//-----------------------------------------------------------------
-		Audio::AudioResourceSPtr CFMODAudioManager::CreateAudioResource() const
+		Audio::AudioResourceSPtr AudioManager::CreateAudioResource() const
 		{
-			return Audio::AudioResourceSPtr(new CFMODAudioResource());
+			return Audio::AudioResourceSPtr(new AudioResource());
 		}
 	}
 }

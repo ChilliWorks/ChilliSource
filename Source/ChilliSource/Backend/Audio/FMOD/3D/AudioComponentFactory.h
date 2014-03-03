@@ -15,18 +15,19 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Audio/3D/AudioComponentFactory.h>
+#include <ChilliSource/Backend/Audio/FMOD/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource
 {
 	namespace FMOD
 	{
-		class CFMODAudioComponentFactory : public Audio::AudioComponentFactory
+		class AudioComponentFactory : public Audio::AudioComponentFactory
 		{
 		public:
-			CFMODAudioComponentFactory(Audio::AudioSystem* inpAudioSystem, Audio::AudioManager* inpAudioMgr);
+			AudioComponentFactory(Audio::AudioSystem* inpAudioSystem, Audio::AudioManager* inpAudioMgr);
 	
-			CS_DECLARE_NAMEDTYPE(CFMODAudioComponentFactory);
+			CS_DECLARE_NAMEDTYPE(AudioComponentFactory);
 			
             //-------------------------------------------------------
 			/// Is A
