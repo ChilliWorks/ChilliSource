@@ -72,15 +72,15 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void CTextureManager::Backup()
 		{
-#ifdef TARGET_ANDROID
-			for(std::vector<Rendering::TextureWeakPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
+#ifdef CS_TARGETPLATFORM_ANDROID
+			for(std::vector<Rendering::TextureWPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
 			{
 				if (Rendering::TextureSPtr pTexture = (*it).lock())
 				{
 					if(pTexture->IsLoaded())
 					{
 						//if the image was not loaded from file, then we'll need to cache it
-						if(pTexture->GetFilename() == "" && pTexture->GetStorageLocation() == Core::SL_NONE)
+						if(pTexture->GetFilename() == "" && pTexture->GetStorageLocation() == Core::StorageLocation::k_none)
 						{
 //							Core::ImageSPtr pImage;
 //							CreateImageFromTexture(pTexture.get(), pImage);
@@ -104,12 +104,12 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void CTextureManager::Restore()
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 
 			//rebuild the default texture
 			CreateDefaultTexture();
 
-			for(std::vector<Rendering::TextureWeakPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
+			for(std::vector<Rendering::TextureWPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
 			{
 				if (Rendering::TextureSPtr pTexture = (*it).lock())
 				{
@@ -120,11 +120,11 @@ namespace ChilliSource
 						Core::ResourceSPtr pImageResource = std::static_pointer_cast<Core::Resource>(pImage);
 
 						//If the texture was loaded from file then reload it.
-						if(pOpenGLTexture->GetFilename() != "" && pOpenGLTexture->GetStorageLocation() != Core::SL_NONE)
+						if(pOpenGLTexture->GetFilename() != "" && pOpenGLTexture->GetStorageLocation() != Core::StorageLocation::k_none)
 						{
 							for (u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++)
 							{
-								if(static_cast<ImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(pOpenGLTexture->GetStorageLocation(), pOpenGLTexture->GetFilename(), pOpenGLTexture->GetImageFormat(), pImageResource))
+								if(static_cast<Core::ImageResourceProvider*>(mResourceProviders[nProvider])->CreateImageFromFile(pOpenGLTexture->GetStorageLocation(), pOpenGLTexture->GetFilename(), pOpenGLTexture->GetImageFormat(), pImageResource))
 								{
 									pImage->SetName(pOpenGLTexture->GetFilename());
 									pImage->SetLoaded(true);
@@ -162,8 +162,8 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void CTextureManager::AddRestorableTexture(const Rendering::TextureSPtr& inpTexture)
 		{
-#ifdef TARGET_ANDROID
-			mapTextureCache.push_back(Rendering::TextureWeakPtr(inpTexture));
+#ifdef CS_TARGETPLATFORM_ANDROID
+			mapTextureCache.push_back(Rendering::TextureWPtr(inpTexture));
 #endif
 		}
 		//----------------------------------------------------------------
@@ -176,8 +176,8 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void CTextureManager::RemoveRestorableTexture(CTexture* inpTexture)
 		{
-#ifdef TARGET_ANDROID
-			for(std::vector<Rendering::TextureWeakPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
+#ifdef CS_TARGETPLATFORM_ANDROID
+			for(std::vector<Rendering::TextureWPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
 			{
 				if (Rendering::TextureSPtr pTexture = (*it).lock())
 				{

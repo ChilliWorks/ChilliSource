@@ -7,18 +7,18 @@
  *
  */
 
-#include "SMSCompositionActivity.h"
-#include "Platform/Android/JavaInterface/SMSCompositionJavaInterface.h"
+#include <ChilliSource/Backend/Platform/Android/Social/Communications/SMSCompositionActivity.h>
+#include <ChilliSource/Backend/Platform/Android/JavaInterface/SMSCompositionJavaInterface.h>
 
 namespace ChilliSource
 {
 	namespace Android
 	{
-		ChilliSource::Social::ISMSCompositionActivity::SendResultDelegate CSMSCompositionActivity::mCallback;
+		Social::SMSCompositionActivity::SendResultDelegate CSMSCompositionActivity::mCallback;
 
 		bool CSMSCompositionActivity::IsA(Core::InterfaceIDType inID) const
 		{
-			return inID == CSMSCompositionActivity::InterfaceID;
+			return inID == CSMSCompositionActivity::InterfaceID || inID == Social::SMSCompositionActivity::InterfaceID;
 		}
 
 		bool CSMSCompositionActivity::SupportedByDevice()
@@ -32,25 +32,23 @@ namespace ChilliSource
 		}
 		CSMSCompositionActivity::~CSMSCompositionActivity()
 		{
-			mCallback = NULL;
+
 		}
-		void CSMSCompositionActivity::Present(const std::vector<CUTF8String> & inastrRecipientNumbers, const CUTF8String & instrContents, const SendResultDelegate & inCallback)
+		void CSMSCompositionActivity::Present(const std::vector<Core::UTF8String> & inastrRecipientNumbers, const Core::UTF8String & instrContents, const SendResultDelegate & inCallback)
 		{
-			CS_LOG_DEBUG("<<<<<<<<<< CSMSCompositionActivity::Present 1 >>>>>>>>>");
 			mCallback = inCallback;
-			CS_LOG_DEBUG("<<<<<<<<<< CSMSCompositionActivity::Present 2 >>>>>>>>>");
 			SCSMSCompositionJavaInterface::Present(inastrRecipientNumbers,instrContents);
-			CS_LOG_DEBUG("<<<<<<<<<< CSMSCompositionActivity::Present 3 >>>>>>>>>");
 		}
 		void CSMSCompositionActivity::Dismiss()
 		{
+			//TODO: Should this be commented back in?
 			//SCEmailCompositionJavaInterface::Dismiss();
 		}
 
 		void CSMSCompositionActivity::OnSMSClosed()
 		{
 			if(mCallback)
-				mCallback(ISMSCompositionActivity::SR_SUCCEED);
+				mCallback(SMSCompositionActivity::SendResult::k_succeed);
 		}
 
 	}

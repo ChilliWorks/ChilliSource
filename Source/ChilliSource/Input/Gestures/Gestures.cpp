@@ -16,6 +16,8 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 
+#include <cmath>
+
 namespace ChilliSource
 {
 	namespace Input
@@ -308,7 +310,7 @@ namespace ChilliSource
 				mfCurrentAngle = atan2f(cV.y, cV.x);
 				mfDAngle = mfCurrentAngle - mfStartAngle;
 				
-				if (!mbIsGestureInvalid || (u32)abs(mfCurrentDisplacement * mfCurrentDisplacement) > mMinDistanceRequiredSqrd)
+				if (!mbIsGestureInvalid || (u32)std::abs(mfCurrentDisplacement * mfCurrentDisplacement) > mMinDistanceRequiredSqrd)
 				{
 					mbIsGestureInvalid = false;
 					

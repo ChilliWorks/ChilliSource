@@ -14,6 +14,8 @@
 #include <ChilliSource/Core/File/TweakableConstants.h>
 #include <ChilliSource/Networking/AccountManagement/MoConnectSystem.h>
 
+#include <algorithm>
+
 namespace ChilliSource
 {
 	using namespace Core;

@@ -7,10 +7,10 @@
 //
 
 #include <ChilliSource/Core/String/StringParser.h>
-
-#include <string>
-
 #include <ChilliSource/Core/String/StringUtils.h>
+
+#include <cstdlib>
+#include <string>
 
 namespace ChilliSource
 {

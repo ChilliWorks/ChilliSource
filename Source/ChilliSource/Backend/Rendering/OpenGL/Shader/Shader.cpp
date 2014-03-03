@@ -16,6 +16,8 @@
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
 
+#include <algorithm>
+
 namespace ChilliSource
 {
 	namespace OpenGL

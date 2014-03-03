@@ -178,6 +178,7 @@ namespace ChilliSource
 		//================================================
 		class Sphere
 		{
+        public:
 			Sphere(){}
 			Sphere(const Vector3 &invOrigin, const f32 infRadius);
 			//-----------------------------------------------

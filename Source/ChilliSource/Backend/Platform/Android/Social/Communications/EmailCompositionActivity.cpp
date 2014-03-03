@@ -11,6 +11,7 @@
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/EmailCompositionJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/JavaInterface/JavaInterfaceManager.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
 namespace ChilliSource
@@ -51,18 +52,18 @@ namespace ChilliSource
         //-------------------------------------------------------
         /// Present
         //-------------------------------------------------------
-		void CEmailCompositionActivity::Present(const std::vector<CUTF8String> & inastrRecipientAddresses, const CUTF8String & instrSubject, const CUTF8String & instrContents, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
+		void CEmailCompositionActivity::Present(const std::vector<Core::UTF8String> & inastrRecipientAddresses, const Core::UTF8String & instrSubject, const Core::UTF8String & instrContents, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
 		{
 			Attachment emptyAttachment;
 			emptyAttachment.mstrFilename = "";
 			emptyAttachment.mstrMIMEType = "";
-			emptyAttachment.meStorageLocation = Core::SL_NONE;
+			emptyAttachment.meStorageLocation = Core::StorageLocation::k_none;
 			PresentWithAttachment(inastrRecipientAddresses, instrSubject, instrContents, emptyAttachment, inCallback, inbFormatAsHtml);
 		}
 		//-------------------------------------------------------
 		/// Present With Attachment
 		//-------------------------------------------------------
-		void CEmailCompositionActivity::PresentWithAttachment(const std::vector<CUTF8String> & inastrRecipientAddresses, const CUTF8String & instrSubject, const CUTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
+		void CEmailCompositionActivity::PresentWithAttachment(const std::vector<Core::UTF8String> & inastrRecipientAddresses, const Core::UTF8String & instrSubject, const Core::UTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
 		{
 			mCallback = inCallback;
 
@@ -81,7 +82,7 @@ namespace ChilliSource
 				}
 			}
 
-			mpJavaInterface->Present(inastrRecipientAddresses, instrSubject, instrContents, strFilename, inbFormatAsHtml, CEmailCompositionJavaInterface::ResultDelegate(this, &CEmailCompositionActivity::OnEmailClosed));
+			mpJavaInterface->Present(inastrRecipientAddresses, instrSubject, instrContents, strFilename, inbFormatAsHtml, Core::MakeDelegate(this, &CEmailCompositionActivity::OnEmailClosed));
 		}
         //-------------------------------------------------------
         /// Dismiss
@@ -100,13 +101,13 @@ namespace ChilliSource
 				switch (indwResultCode)
 				{
 					case CEmailCompositionJavaInterface::kdwResultSuccess:
-						mCallback(IEmailCompositionActivity::SR_SUCCEED);
+						mCallback(EmailCompositionActivity::SendResult::k_succeed);
 						break;
 					case CEmailCompositionJavaInterface::kdwResultCancelled:
-						mCallback(IEmailCompositionActivity::SR_CANCELLED);
+						mCallback(EmailCompositionActivity::SendResult::k_cancelled);
 						break;
 					default:
-						mCallback(IEmailCompositionActivity::SR_FAILED);
+						mCallback(EmailCompositionActivity::SendResult::k_failed);
 						break;
 				}
 			}

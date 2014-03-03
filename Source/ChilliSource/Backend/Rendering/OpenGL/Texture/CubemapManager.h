@@ -61,8 +61,8 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			void RemoveRestorableCubemap(CCubemap* inpCubemap);
 		private:
-#ifdef TARGET_ANDROID
-			std::vector<Rendering::CubemapWeakPtr> mapCubemapCache;
+#ifdef CS_TARGETPLATFORM_ANDROID
+			std::vector<Rendering::CubemapWPtr> mapCubemapCache;
 			std::unordered_map<CCubemap*, Core::ImageSPtr> mapBackedUpImages;
 #endif
 		};

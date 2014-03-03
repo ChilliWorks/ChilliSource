@@ -22,9 +22,9 @@ namespace ChilliSource
         
         struct RenderCommand
         {
-            Material Material;
-            u32 udwOffset;
-            u32 udwStride;
+            Material m_material;
+            u32 m_offset;
+            u32 m_stride;
         };
         
 		class DynamicSpriteBatch

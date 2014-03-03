@@ -44,7 +44,7 @@ namespace ChilliSource
 		void CWebViewActivity::Present(const std::string& instrURL, f32 infDismissButtonScale)
 		{
 			//Transform webview from unified vector to absolute for use in java
-			mvAbsoluteSize = (Core::CScreen::GetOrientedDimensions() * mvUnifiedSize.GetRelative()) + mvUnifiedSize.GetAbsolute();
+			mvAbsoluteSize = (Core::Screen::GetOrientedDimensions() * mvUnifiedSize.GetRelative()) + mvUnifiedSize.GetAbsolute();
 			SCWebViewJavaInterface::Present(mudwIndex,instrURL,mvAbsoluteSize);
 			CWebViewActivity::mmapIndexToWebView.insert(std::make_pair(mudwIndex,this));
 			AddDismissButton(mvAbsoluteSize.x * infDismissButtonScale);
@@ -77,7 +77,7 @@ namespace ChilliSource
 
 			Android::CFileSystem* pFileSystem = static_cast<Android::CFileSystem*>(Core::Application::GetFileSystemPtr());
 
-			Core::FileStreamSPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FM_READ);
+			Core::FileStreamSPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FileMode::k_read);
 			std::string strHTMLFileContents;
 			pHTMLFile->GetAll(strHTMLFileContents);
 			pHTMLFile->Close();
@@ -113,7 +113,7 @@ namespace ChilliSource
 				strPath = strPath.substr(0, udwOffset) + "/";
 			}
 
-            mvAbsoluteSize = (Core::CScreen::GetOrientedDimensions() * mvUnifiedSize.GetRelative()) + mvUnifiedSize.GetAbsolute();
+            mvAbsoluteSize = (Core::Screen::GetOrientedDimensions() * mvUnifiedSize.GetRelative()) + mvUnifiedSize.GetAbsolute();
 
 			SCWebViewJavaInterface::PresentFromFile(mudwIndex, strHTMLFileContents, mvAbsoluteSize, strPath, strAnchor);
 			CWebViewActivity::mmapIndexToWebView.insert(std::make_pair(mudwIndex,this));
@@ -157,7 +157,7 @@ namespace ChilliSource
 		///
 		/// @param Unified Vector
 		//-----------------------------------------------
-		void CWebViewActivity::SetSize(const ChilliSource::UnifiedVector2 & invSize)
+		void CWebViewActivity::SetSize(const Core::UnifiedVector2 & invSize)
 		{
 			mvUnifiedSize = invSize;
 		}
@@ -168,7 +168,8 @@ namespace ChilliSource
 		///
 		/// return Unified Vector of size
 		//-----------------------------------------------
-		ChilliSource::UnifiedVector2 CWebViewActivity::GetSize() const {
+		Core::UnifiedVector2 CWebViewActivity::GetSize() const
+		{
 			return mvUnifiedSize;
 		}
 

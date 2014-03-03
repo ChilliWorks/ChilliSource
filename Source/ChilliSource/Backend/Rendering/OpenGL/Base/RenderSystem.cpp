@@ -86,7 +86,7 @@ namespace ChilliSource
 				CS_LOG_FATAL("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
 			}
 #endif
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
             //Check for map buffer support
             gbIsMapBufferAvailable = CRenderSystem::CheckForOpenGLExtension("GL_OES_mapbuffer");
 #endif
@@ -132,7 +132,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CRenderSystem::BackupContext()
         {
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
         	//Context is about to be lost do a data backup
         	BackupMeshBuffers();
         	mTexManager.Backup();
@@ -143,7 +143,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CRenderSystem::RestoreContext()
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
             ForceRefreshRenderStates();
             RestoreMeshBuffers();
             mGLCurrentShaderProgram = 0;
@@ -588,7 +588,7 @@ namespace ChilliSource
 			pBuffer->SetMapBufferAvailable(gbIsMapBufferAvailable);
 			pBuffer->SetOwningRenderSystem(this);
             
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 			mMeshBuffers.push_back(pBuffer);
 #endif
 			return pBuffer;
@@ -1223,7 +1223,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CRenderSystem::BackupMeshBuffers()
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 			for(std::vector<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
 			{
 				(*it)->Backup();
@@ -1235,7 +1235,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CRenderSystem::RestoreMeshBuffers()
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 			for(std::vector<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
 			{
 				(*it)->Restore();
@@ -1247,7 +1247,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CRenderSystem::RemoveBuffer(Rendering::MeshBuffer* inpBuffer)
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 			for(std::vector<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
 			{
 				if ((*it) == inpBuffer)

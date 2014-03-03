@@ -8,8 +8,9 @@
  */
 
 #include <ChilliSource/Core/Scene/Scene.h>
-
 #include <ChilliSource/GUI/Base/Window.h>
+
+#include <algorithm>
 
 namespace ChilliSource
 {

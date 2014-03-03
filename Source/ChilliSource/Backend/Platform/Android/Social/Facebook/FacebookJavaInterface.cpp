@@ -43,7 +43,7 @@ void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnAuthent
 {
 	if(gpAndroidAuthSystem)
 	{
-		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task1<bool>(gpAndroidAuthSystem, &ChilliSource::Android::CFacebookAuthenticationSystem::OnAuthenticationComplete, inbSuccess));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidAuthSystem, &ChilliSource::Android::CFacebookAuthenticationSystem::OnAuthenticationComplete, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -59,7 +59,7 @@ void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnReadAut
 {
 	if(gpAndroidAuthSystem)
 	{
-		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task1<bool>(gpAndroidAuthSystem, &ChilliSource::Android::CFacebookAuthenticationSystem::OnAuthoriseReadPermissionsComplete, inbSuccess));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidAuthSystem, &ChilliSource::Android::CFacebookAuthenticationSystem::OnAuthoriseReadPermissionsComplete, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -75,7 +75,7 @@ void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnWriteAu
 {
 	if(gpAndroidAuthSystem)
 	{
-		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task1<bool>(gpAndroidAuthSystem, &ChilliSource::Android::CFacebookAuthenticationSystem::OnAuthoriseWritePermissionsComplete, inbSuccess));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidAuthSystem, &ChilliSource::Android::CFacebookAuthenticationSystem::OnAuthoriseWritePermissionsComplete, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -91,7 +91,7 @@ void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnPostToF
 {
 	if(gpAndroidPostSystem)
 	{
-		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task1<bool>(gpAndroidPostSystem, &ChilliSource::Android::CFacebookPostSystem::OnPostToFeedComplete, inbSuccess));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidPostSystem, &ChilliSource::Android::CFacebookPostSystem::OnPostToFeedComplete, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -107,7 +107,7 @@ void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnPostReq
 {
 	if(gpAndroidPostSystem)
 	{
-		ChilliSource::CTaskScheduler::ScheduleMainThreadTask(ChilliSource::Task1<bool>(gpAndroidPostSystem, &ChilliSource::Android::CFacebookPostSystem::OnPostRequestComplete, inbSuccess));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidPostSystem, &ChilliSource::Android::CFacebookPostSystem::OnPostRequestComplete, inbSuccess));
 	}
 }
 

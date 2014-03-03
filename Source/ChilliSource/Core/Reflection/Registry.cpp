@@ -6,10 +6,11 @@
 //  Copyright (c) 2011 Tag Games. All rights reserved.
 //
 
+#include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 #include <ChilliSource/Core/Reflection/Registry.h>
 #include <ChilliSource/Core/Reflection/MetaClass.h>
 
-#include <ChilliSource/Core/Cryptographic/HashCRC32.h>
+#include <algorithm>
 
 namespace ChilliSource
 {

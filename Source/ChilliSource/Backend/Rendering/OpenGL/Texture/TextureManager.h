@@ -86,8 +86,8 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			void RemoveRestorableTexture(CTexture* inpTexture);
 		private:
-#ifdef TARGET_ANDROID
-			std::vector<Rendering::TextureWeakPtr> mapTextureCache;
+#ifdef CS_TARGETPLATFORM_ANDROID
+			std::vector<Rendering::TextureWPtr> mapTextureCache;
 			std::unordered_map<CTexture*, Core::ImageSPtr> mapBackedUpImages;
 #endif
 		};

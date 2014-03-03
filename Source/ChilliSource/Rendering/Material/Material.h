@@ -16,6 +16,9 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Vector4.h>
+#include <ChilliSource/Core/Math/Matrix4x4.h>
 
 #include <unordered_map>
 

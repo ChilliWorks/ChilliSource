@@ -40,7 +40,7 @@ namespace ChilliSource
         /// @param Out: Notifications that meet criteria
         /// @return Whether any notifications exist within that time period
         //-------------------------------------------------------------------------
-        bool CLocalNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Notification>& outaNotifications)
+        bool CLocalNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Core::NotificationSPtr>& outaNotifications)
         {
         	CS_LOG_WARNING("Unimplemented method: CLocalNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod");
         	return false;
@@ -53,7 +53,7 @@ namespace ChilliSource
 		///
 		/// @param Notification
 		//------------------------------------------------------------------------------
-		void CLocalNotificationScheduler::ScheduleNotification(const Notification& insNotification)
+		void CLocalNotificationScheduler::ScheduleNotification(const Core::NotificationSPtr& insNotification)
 		{
 			mpLocalNotificationJavaInterface->ScheduleNotification(insNotification);
 		}
@@ -64,7 +64,7 @@ namespace ChilliSource
 		///
 		/// @param ID type
 		//-------------------------------------------------------------------------
-		void CLocalNotificationScheduler::CancelByID(NotificationID inID)
+		void CLocalNotificationScheduler::CancelByID(Core::NotificationID inID)
 		{
 			mpLocalNotificationJavaInterface->CancelByID(inID);
 		}
@@ -82,9 +82,9 @@ namespace ChilliSource
 		///
 		/// Called when game receives a local notification
 		//-------------------------------------------------------------------------
-		void CLocalNotificationScheduler::ApplicationDidReceiveLocalNotification(const Notification& insNotification)
+		void CLocalNotificationScheduler::ApplicationDidReceiveLocalNotification(const Core::NotificationSPtr& insNotification)
 		{
-			CNotificationScheduler::OnNotificationReceived(insNotification);
+			Core::NotificationScheduler::OnNotificationReceived(insNotification);
 		}
 	}
 }

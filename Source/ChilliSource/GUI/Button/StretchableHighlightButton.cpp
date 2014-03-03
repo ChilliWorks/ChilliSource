@@ -24,6 +24,8 @@
 #include <ChilliSource/Audio/3D/AudioComponent.h>
 #include <ChilliSource/Audio/3D/AudioComponentFactory.h>
 
+#include <cmath>
+
 namespace ChilliSource
 {
     namespace GUI

@@ -512,8 +512,7 @@ namespace ChilliSource
 		void StretchableImage::CalculatePatchSize(PatchSize& outPatchSize)
 		{
 			Core::Vector2 vPanelSize = GetAbsoluteSize();
-			Core::Vector2 vPanelPos = GetAbsoluteScreenSpacePosition();
-			
+
 			//Get the patch sizes
 			outPatchSize.vSizeTopLeft = SpriteSheet->GetSizeForFrame(msIndices.udwTopLeft);
 			outPatchSize.vSizeTopRight = SpriteSheet->GetSizeForFrame(msIndices.udwTopRight);

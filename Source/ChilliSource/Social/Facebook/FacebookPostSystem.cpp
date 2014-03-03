@@ -12,7 +12,7 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
-#elif TARGET_ANDROID
+#elif CS_TARGETPLATFORM_ANDROID
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookPostSystem.h>
 #endif
 
@@ -32,7 +32,7 @@ namespace ChilliSource
         {
 #ifdef CS_TARGETPLATFORM_IOS
             return new ChilliSource::iOS::CFacebookPostSystem(inpAuthSystem);
-#elif TARGET_ANDROID
+#elif CS_TARGETPLATFORM_ANDROID
             return new ChilliSource::Android::CFacebookPostSystem(inpAuthSystem);
 #endif
 			return nullptr;

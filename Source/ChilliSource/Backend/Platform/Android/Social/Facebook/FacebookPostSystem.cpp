@@ -16,7 +16,7 @@ namespace ChilliSource
 
 	namespace Android
 	{
-		CFacebookPostSystem::CFacebookPostSystem(Social::IFacebookAuthenticationSystem* inpAuthSystem) : mpAuthSystem(inpAuthSystem)
+		CFacebookPostSystem::CFacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem) : mpAuthSystem(inpAuthSystem)
 		{
 			mpJavaInterface = static_cast<CFacebookAuthenticationSystem*>(mpAuthSystem)->GetJavaInterface();
 			mpJavaInterface->SetPostSystem(this);
@@ -131,17 +131,23 @@ namespace ChilliSource
             mpJavaInterface->TryPostRequest(aPostParamsKeyValue);
 		}
 
-		void CFacebookPostSystem::OnPublishPermissionAuthorised(const Social::IFacebookAuthenticationSystem::AuthenticateResponse& insResponse)
+		void CFacebookPostSystem::OnPublishPermissionAuthorised(const Social::FacebookAuthenticationSystem::AuthenticateResponse& insResponse)
 		{
             switch(insResponse.eResult)
             {
-                case IFacebookAuthenticationSystem::AR_SUCCESS:
+                case FacebookAuthenticationSystem::AuthenticateResult::k_success:
                     Post(msPostDesc);
                     break;
-                case IFacebookAuthenticationSystem::AR_FAILED:
+                case FacebookAuthenticationSystem::AuthenticateResult::k_permissionMismatch:
                     if(mCompletionDelegate)
                     {
-                        mCompletionDelegate(Social::IFacebookPostSystem::PR_FAILED);
+                        mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_cancelled);
+                    }
+                	break;
+                case FacebookAuthenticationSystem::AuthenticateResult::k_failed:
+                    if(mCompletionDelegate)
+                    {
+                        mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_failed);
                     }
                     break;
             }
@@ -156,11 +162,11 @@ namespace ChilliSource
 
 			if(inbSuccess)
 			{
-				mCompletionDelegate(Social::IFacebookPostSystem::PR_SUCCESS);
+				mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_success);
 			}
 			else
 			{
-				mCompletionDelegate(Social::IFacebookPostSystem::PR_FAILED);
+				mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_failed);
             }
 		}
 
@@ -173,11 +179,11 @@ namespace ChilliSource
 
 			if(inbSuccess)
 			{
-				mRequestCompleteDelegate(Social::IFacebookPostSystem::PR_SUCCESS);
+				mRequestCompleteDelegate(Social::IFacebookPostSystem::PostResult::k_success);
 			}
 			else
 			{
-				mRequestCompleteDelegate(Social::IFacebookPostSystem::PR_FAILED);
+				mRequestCompleteDelegate(Social::IFacebookPostSystem::PostResult::k_failed);
             }
 		}
 	}

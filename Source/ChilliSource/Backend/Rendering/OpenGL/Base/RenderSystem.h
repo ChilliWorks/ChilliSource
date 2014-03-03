@@ -572,7 +572,7 @@ namespace ChilliSource
             
 #ifdef CS_TARGETPLATFORM_IOS
             EAGLContext* mContext;
-#elif defined TARGET_ANDROID
+#elif defined CS_TARGETPLATFORM_ANDROID
             std::vector<CMeshBuffer*> mMeshBuffers;
 #endif
 		};

@@ -8,6 +8,8 @@
 
 #include <ChilliSource/Core/Entity/Transform.h>
 
+#include <algorithm>
+
 namespace ChilliSource
 {
     namespace Core

@@ -18,8 +18,9 @@
 
 #include <iostream>
 
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 #include <android/log.h>
+#include <cstdlib>
 extern "C"
 {
     #define CS_ANDROID_LOG_DEBUG(...) __android_log_print(ANDROID_LOG_DEBUG, "MoFlow", "%s", __VA_ARGS__)
@@ -97,7 +98,7 @@ namespace ChilliSource
         void Logging::LogVerbose(const std::string &instrMessage)
         {
 #ifdef CS_LOGLEVEL_VERBOSE
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
             CS_ANDROID_LOG_DEBUG(instrMessage.c_str());
 #elif CS_TARGETPLATFORM_IOS
             NSString* pLog = [[NSString alloc] initWithUTF8String:instrMessage.c_str()];
@@ -131,7 +132,7 @@ namespace ChilliSource
         void Logging::LogWarning(const std::string &instrMessage)
         {
 #ifdef CS_LOGLEVEL_WARNING
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
             CS_ANDROID_LOG_WARNING(("WARNING: " + instrMessage).c_str());
 #elif CS_TARGETPLATFORM_IOS
             NSString* pLog = [[NSString alloc] initWithUTF8String:instrMessage.c_str()];
@@ -165,7 +166,7 @@ namespace ChilliSource
         void Logging::LogError(const std::string &instrMessage)
         {
 #if CS_LOGLEVEL_ERROR
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
             CS_ANDROID_LOG_ERROR(("ERROR: " + instrMessage).c_str());
 #elif CS_TARGETPLATFORM_IOS
             NSString* pLog = [[NSString alloc] initWithUTF8String:instrMessage.c_str()];
@@ -195,7 +196,7 @@ namespace ChilliSource
         //----------------------------------------------
         void Logging::LogFatal(const std::string &instrMessage)
         {
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
             CS_ANDROID_LOG_ERROR(("FATAL: " + instrMessage).c_str());
             CS_ANDROID_LOG_ERROR("moFlo is exiting...");
 #endif
@@ -223,7 +224,7 @@ namespace ChilliSource
                 FlushBuffer();
 #endif
 
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
             exit(1);
 #else
             assert(false);
