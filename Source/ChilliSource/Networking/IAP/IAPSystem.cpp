@@ -10,7 +10,7 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 #	include <ChilliSource/Backend/Platform/iOS/Networking/IAP/IAPSystem.h>
-#elif defined(TARGET_ANDROID)
+#elif defined(CS_TARGETPLATFORM_ANDROID)
 #	ifdef MOFLOWSKU_IAPMETHOD_GOOGLEPLAY
 #		include <ChilliSource/Backend/Platform/Android/GooglePlay/GooglePlayIAPSystem.h>
 #	elif defined(MOFLOWSKU_IAPMETHOD_AMAZON)
@@ -30,7 +30,7 @@ namespace ChilliSource
         {
 #ifdef CS_TARGETPLATFORM_IOS
         	return new iOS::CIAPSystem();
-#elif defined(TARGET_ANDROID)
+#elif defined(CS_TARGETPLATFORM_ANDROID)
 #	ifdef MOFLOWSKU_IAPMETHOD_GOOGLEPLAY
         	return new Android::CGooglePlayIAPSystem(inParams);
 #	elif defined(MOFLOWSKU_IAPMETHOD_AMAZON)

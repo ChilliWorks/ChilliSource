@@ -72,7 +72,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void CTextureManager::Backup()
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 			for(std::vector<Rendering::TextureWPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
 			{
 				if (Rendering::TextureSPtr pTexture = (*it).lock())
@@ -104,7 +104,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void CTextureManager::Restore()
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 
 			//rebuild the default texture
 			CreateDefaultTexture();
@@ -162,7 +162,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void CTextureManager::AddRestorableTexture(const Rendering::TextureSPtr& inpTexture)
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 			mapTextureCache.push_back(Rendering::TextureWPtr(inpTexture));
 #endif
 		}
@@ -176,7 +176,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void CTextureManager::RemoveRestorableTexture(CTexture* inpTexture)
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 			for(std::vector<Rendering::TextureWPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
 			{
 				if (Rendering::TextureSPtr pTexture = (*it).lock())

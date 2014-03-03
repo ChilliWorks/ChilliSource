@@ -14,7 +14,7 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 #include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterPostSystem.h>
-#elif TARGET_ANDROID
+#elif CS_TARGETPLATFORM_ANDROID
 #include <ChilliSource/Backend/Platform/Android/Social/Twitter/TwitterPostSystem.h>
 #endif
 
@@ -28,7 +28,7 @@ namespace ChilliSource
         {
 #ifdef CS_TARGETPLATFORM_IOS
             return new ChilliSource::iOS::CTwitterPostSystem(static_cast<iOS::CHttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
-#elif TARGET_ANDROID
+#elif CS_TARGETPLATFORM_ANDROID
             return new ChilliSource::Android::CTwitterPostSystem(static_cast<Android::CHttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
 #endif
 			return nullptr;

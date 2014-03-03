@@ -33,7 +33,7 @@ namespace ChilliSource
 		CFMODAudioLoader::CFMODAudioLoader(Audio::AudioSystem* inpFMODSystem) 
 		: AudioLoader(inpFMODSystem), mpFMODSystem(static_cast<CFMODSystem*>(inpFMODSystem))
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
             m_cacheDirectory = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_cache);
 			m_DLCDirectory = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_DLC);
 			m_saveDataDirectory = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_saveData);
@@ -61,7 +61,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool CFMODAudioLoader::CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)  
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
             switch (ineStorageLocation)
 			{
                 case Core::StorageLocation::k_package:
@@ -108,7 +108,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool CFMODAudioLoader::StreamResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
             switch (ineStorageLocation)
 			{
                 case Core::StorageLocation::k_package:

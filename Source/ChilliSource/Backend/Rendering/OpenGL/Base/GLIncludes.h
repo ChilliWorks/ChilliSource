@@ -3,7 +3,7 @@
 
 //---Missing OpenGL definitions
 #define GL_GLEXT_PROTOTYPES
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 typedef char GLchar;
 #endif
 
@@ -20,7 +20,7 @@ typedef char GLchar;
 #include <GLES2/gl2ext.h>
 #endif
 
-#if defined CS_TARGETPLATFORM_IOS || defined TARGET_ANDROID
+#if defined CS_TARGETPLATFORM_IOS || defined CS_TARGETPLATFORM_ANDROID
 #define CS_OPENGLVERSION_ES
 #elif defined TARGET_WINDOWS
 #define CS_OPENGLVERSION_STANDARD

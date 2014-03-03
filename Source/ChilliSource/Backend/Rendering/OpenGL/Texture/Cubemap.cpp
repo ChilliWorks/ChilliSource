@@ -151,7 +151,7 @@ namespace ChilliSource
                     CubemapImage2D(inapSourceImages);
                     break;
                 case Core::ImageCompression::k_ETC1:
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
                     CubemapCompressedImage2D(GL_ETC1_RGB8_OES, inapSourceImages);
 #endif
                     break;

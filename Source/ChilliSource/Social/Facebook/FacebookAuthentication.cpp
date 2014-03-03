@@ -11,7 +11,7 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookAuthentication.h>
-#elif TARGET_ANDROID
+#elif CS_TARGETPLATFORM_ANDROID
 #include <ChilliSource/Backend/Platform/Android/Social/Facebook/FacebookAuthentication.h>
 #endif
 
@@ -25,7 +25,7 @@ namespace ChilliSource
         {
 #ifdef CS_TARGETPLATFORM_IOS
             return new ChilliSource::iOS::CFacebookAuthenticationSystem();
-#elif TARGET_ANDROID
+#elif CS_TARGETPLATFORM_ANDROID
             return new ChilliSource::Android::CFacebookAuthenticationSystem();
 #endif
 			return nullptr;

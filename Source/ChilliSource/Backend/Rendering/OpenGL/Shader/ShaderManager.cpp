@@ -201,7 +201,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		void CShaderManager::Restore()
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 			if(mpRenderSystem)
 			{
 				for(MapStringToResourceSPtr::iterator it = mMapFilenameToResource.begin(); it != mMapFilenameToResource.end(); ++it)

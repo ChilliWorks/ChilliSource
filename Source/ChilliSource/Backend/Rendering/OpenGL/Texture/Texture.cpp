@@ -141,7 +141,7 @@ namespace ChilliSource
                     };
 					break;
 				case Core::ImageCompression::k_ETC1:
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 					glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_ETC1_RGB8_OES, pSourceImage->GetWidth(), pSourceImage->GetHeight(), 0, pSourceImage->GetDataLength(), pSourceImage->GetData());
 #endif
 					break;

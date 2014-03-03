@@ -80,7 +80,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void CFMODSystem::LoadEventData(Core::StorageLocation ineLocation, const std::string& instrFilePath)
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 			CS_ASSERT(ineLocation != Core::StorageLocation::k_package, "FMOD Android cannot load from package");
 #endif
 

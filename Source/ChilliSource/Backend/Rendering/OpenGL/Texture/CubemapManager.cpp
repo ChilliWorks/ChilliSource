@@ -46,7 +46,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void CCubemapManager::Restore()
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 			for(std::vector<Rendering::CubemapWPtr>::iterator it = mapCubemapCache.begin(); it != mapCubemapCache.end(); ++it)
 			{
 				if (Rendering::CubemapSPtr pCubemap = (*it).lock())
@@ -114,7 +114,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void CCubemapManager::AddRestorableCubemap(const Rendering::CubemapSPtr& inpCubemap)
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 			mapCubemapCache.push_back(Rendering::CubemapWPtr(inpCubemap));
 #endif
 		}
@@ -128,7 +128,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void CCubemapManager::RemoveRestorableCubemap(CCubemap* inpCubemap)
 		{
-#ifdef TARGET_ANDROID
+#ifdef CS_TARGETPLATFORM_ANDROID
 			for(std::vector<Rendering::CubemapWPtr>::iterator it = mapCubemapCache.begin(); it != mapCubemapCache.end(); ++it)
 			{
 				if (Rendering::CubemapSPtr pCubemap = (*it).lock())
