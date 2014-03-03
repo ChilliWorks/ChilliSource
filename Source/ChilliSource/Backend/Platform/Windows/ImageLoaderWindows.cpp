@@ -31,7 +31,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		bool ImageLoader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IResourceProvider::InterfaceID;
+			return inInterfaceID == Core::ResourceProvider::InterfaceID;
 		}
 		//----------------------------------------------------------------
 		/// Can Create Resource Of Kind
@@ -64,7 +64,7 @@ namespace ChilliSource
 		bool ImageLoader::CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
 		{
 			//Based on the extension decide how to load the file
-			return CreateImageFromFile(ineLocation, inFilePath, Core::Image::FORMAT_DEFAULT, outpResource);
+			return CreateImageFromFile(ineLocation, inFilePath, Core::Image::Format::k_default, outpResource);
 		}
 		//----------------------------------------------------------------
 		/// Create Image From File
@@ -117,7 +117,7 @@ namespace ChilliSource
 
 			if(image.IsLoaded())
 			{
-				if(ineFormat == Core::Image::FORMAT_DEFAULT)
+				if(ineFormat == Core::Image::Format::k_default)
 				{
 					ineFormat = meDefaultFormat;
 				}
@@ -131,7 +131,7 @@ namespace ChilliSource
 				//We always load the image as RGBA_8888 but we convert on the fly to the correct format
 				switch(ineFormat)
 				{
-				case Core::Image::RGBA_4444:
+				case Core::Image::Format::k_RGBA4444:
 					{
 						CS_LOG_DEBUG("Converting to RGBA_4444");
 
@@ -141,7 +141,7 @@ namespace ChilliSource
 						pubyBitmapData8888 = pubyBitmapData4444;
 						break;
 					}
-				case Core::Image::RGB_565:
+				case Core::Image::Format::k_RGB565:
 					{
 						CS_LOG_DEBUG("Converting to RGBA_565");
 
@@ -151,7 +151,7 @@ namespace ChilliSource
 						pubyBitmapData8888 = pubyBitmapData565;
 						break;
 					}
-				case Core::Image::LUMA_88:
+				case Core::Image::Format::k_LumA88:
 					{
 						CS_LOG_DEBUG("Converting to LUMA_88");
 

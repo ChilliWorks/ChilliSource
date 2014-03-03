@@ -28,7 +28,7 @@ extern "C"
 }
 #endif
 
-#ifdef TARGET_WINDOWS
+#ifdef CS_TARGETPLATFORM_WINDOWS
 #include <Windows.h>
 #endif
 
@@ -210,7 +210,7 @@ namespace ChilliSource
             [pLog release];
 #endif
         
-#ifdef TARGET_WINDOWS 
+#ifdef CS_TARGETPLATFORM_WINDOWS 
             MessageBoxA(NULL, instrMessage.c_str(), "moFlow fatal error!", MB_OK);
 #endif
 

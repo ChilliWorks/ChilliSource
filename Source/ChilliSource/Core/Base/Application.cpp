@@ -96,7 +96,7 @@ namespace ChilliSource
             mpComponentFactoryDispenser = new ComponentFactoryDispenser(this);
             mStateMgr.SetOwningApplication(this);
 
-#ifdef TARGET_WINDOWS
+#ifdef CS_TARGETPLATFORM_WINDOWS
 			//Because windows by default is landscape, this needs to be flipped.
 			meDefaultOrientation = PORTRAIT_UP;
 #endif

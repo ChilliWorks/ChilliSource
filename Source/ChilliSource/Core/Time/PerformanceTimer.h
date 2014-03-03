@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-#ifdef TARGET_WINDOWS   
+#ifdef CS_TARGETPLATFORM_WINDOWS   
     #include <windows.h>
 #else          
     #include <sys/time.h>
@@ -25,7 +25,7 @@ namespace ChilliSource
         {
         public:
             
-#ifdef TARGET_WINDOWS
+#ifdef CS_TARGETPLATFORM_WINDOWS
             typedef LARGE_INTEGER TimeValue;
 #else
             typedef timeval TimeValue;

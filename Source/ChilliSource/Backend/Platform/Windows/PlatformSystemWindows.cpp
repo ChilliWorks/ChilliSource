@@ -37,14 +37,12 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/MoImageProvider.h>
 
-#include <ChilliSource/Rendering/GUI/GUIViewFactory.h>
+#include <ChilliSource/GUI/Base/GUIViewFactory.h>
 
 #include <windows.h>
 
 namespace ChilliSource 
 {
-	DEFINE_CREATABLE(IPlatformSystem, Windows::CPlatformSystem);
-
 	//This is global as LARGE_INTEGER is defined in windows.h. Including windows.h in PlatformSystemWindows.h will cause compiler errors
 	//in FileSystemWindows.h
 	LARGE_INTEGER gFrequency;
@@ -60,7 +58,7 @@ namespace ChilliSource
 		{
 			//CNotificationScheduler::Initialise(new CLocalNotificationScheduler(), new CRemoteNotificationScheduler());
 			Core::Application::SetFileSystem(new Windows::CFileSystem());
-			ChilliSource::CLogging::Init();
+			Core::Logging::Init();
 		}
 		//-----------------------------------------
 		/// Init
@@ -90,7 +88,7 @@ namespace ChilliSource
 			glfwSetWindowCloseCallback((GLFWwindowclosefun)&CPlatformSystem::OnWindowClosed);
 
             //Initialise GUI factory
-            Rendering::CGUIViewFactory::RegisterDefaults();
+            GUI::GUIViewFactory::RegisterDefaults();
 		}
 		//-------------------------------------------------
 		/// Add Default Systems
@@ -100,39 +98,39 @@ namespace ChilliSource
 		///
 		/// @param the system list
 		//-------------------------------------------------
-		void CPlatformSystem::CreateDefaultSystems(std::vector<Core::SystemPtr> & inaSystems)
+		void CPlatformSystem::CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems)
 		{
 			//create the main systems
-			Rendering::IRenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
-			inaSystems.push_back(Core::SystemPtr(pRenderSystem));
+			Rendering::RenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
+			inaSystems.push_back(Core::SystemSPtr(pRenderSystem));
 			Core::Application::SetRenderSystem(pRenderSystem);
 
-			Input::IInputSystem* pInputSystem = new Windows::CInputSystem();
-			inaSystems.push_back(Core::SystemPtr(pInputSystem));
+			Input::InputSystem* pInputSystem = new Windows::CInputSystem();
+			inaSystems.push_back(Core::SystemSPtr(pInputSystem));
 			Core::Application::SetInputSystem(pInputSystem);
 
-			Audio::IAudioSystem* pAudioSystem = new Windows::CFMODSystem();
-			inaSystems.push_back(Core::SystemPtr(pAudioSystem));
-			inaSystems.push_back(Core::SystemPtr(new Windows::CFMODAudioLoader(pAudioSystem)));
+			Audio::AudioSystem* pAudioSystem = new FMOD::FMODSystem();
+			inaSystems.push_back(Core::SystemSPtr(pAudioSystem));
+			inaSystems.push_back(Core::SystemSPtr(new FMOD::FMODAudioLoader(pAudioSystem)));
 			Core::Application::SetAudioSystem(pAudioSystem);
 
 			//create other important systems
 			OpenGL::CRenderCapabilities* pRenderCapabilities = new OpenGL::CRenderCapabilities();
-			inaSystems.push_back(Core::SystemPtr(pRenderCapabilities));
-			inaSystems.push_back(Core::SystemPtr(new Windows::ImageLoader()));
-			inaSystems.push_back(Core::SystemPtr(new CMoImageProvider()));
-			inaSystems.push_back(Core::SystemPtr(new Rendering::CSpriteSheetLoader()));
-			inaSystems.push_back(Core::SystemPtr(new Rendering::CXMLSpriteSheetLoader()));
-			inaSystems.push_back(Core::SystemPtr(new Rendering::CMaterialLoader(pRenderCapabilities)));
-			inaSystems.push_back(Core::SystemPtr(new Rendering::CFontLoader()));
-			inaSystems.push_back(Core::SystemPtr(new Rendering::CAnimatedMeshComponentUpdater()));
-			inaSystems.push_back(Core::SystemPtr(new Rendering::CMaterialFactory()));
+			inaSystems.push_back(Core::SystemSPtr(pRenderCapabilities));
+			inaSystems.push_back(Core::SystemSPtr(new Windows::ImageLoader()));
+			inaSystems.push_back(Core::SystemSPtr(new Core::MoImageProvider()));
+			inaSystems.push_back(Core::SystemSPtr(new Rendering::SpriteSheetLoader()));
+			inaSystems.push_back(Core::SystemSPtr(new Rendering::XMLSpriteSheetLoader()));
+			inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialLoader(pRenderCapabilities)));
+			inaSystems.push_back(Core::SystemSPtr(new Rendering::FontLoader()));
+			inaSystems.push_back(Core::SystemSPtr(new Rendering::AnimatedMeshComponentUpdater()));
+			inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialFactory()));
 
 			//Initialise the render system
-			Core::Application::GetRenderSystemPtr()->Init((u32)Core::CScreen::GetRawDimensions().x, (u32)Core::CScreen::GetRawDimensions().y);
+			Core::Application::GetRenderSystemPtr()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
             
 			//Create the renderer
-			Core::Application::SetRenderer(new Rendering::CRenderer(Core::Application::GetRenderSystemPtr()));
+			Core::Application::SetRenderer(new Rendering::Renderer(Core::Application::GetRenderSystemPtr()));
             
 			//Initialise the input system
 			if(Core::Application::GetInputSystemPtr() != NULL)
@@ -152,7 +150,7 @@ namespace ChilliSource
 		{
 			if(Core::Application::GetAudioSystemPtr() != NULL)
 			{
-				Audio::CAudioPlayer::Init();
+				Audio::AudioPlayer::Init();
 			}
 		}
 		//-----------------------------------------
@@ -219,10 +217,10 @@ namespace ChilliSource
 		/// @param Vector of exisiting systems to append
 		/// @return Pointer to the given system or NULL
 		//--------------------------------------------
-		Core::ISystem* CPlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemPtr>& inaExisitingSystems) const
+		Core::System* CPlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr>& inaExisitingSystems) const
 		{
 			//Check if it already exists to prevent multiples
-			for(std::vector<Core::SystemPtr>::const_iterator it = inaExisitingSystems.begin(); it != inaExisitingSystems.end(); ++it)
+			for(std::vector<Core::SystemSPtr>::const_iterator it = inaExisitingSystems.begin(); it != inaExisitingSystems.end(); ++it)
 			{
 				if((*it)->IsA(inInterfaceID))
 				{
@@ -230,12 +228,12 @@ namespace ChilliSource
 				}
 			}
 
-			Core::ISystem* pSystem = NULL;
+			Core::System* pSystem = NULL;
 
-			if(inInterfaceID == Networking::IHttpConnectionSystem::InterfaceID)
+			if(inInterfaceID == Networking::HttpConnectionSystem::InterfaceID)
 			{
 				pSystem = new CHttpConnectionSystem();
-				inaExisitingSystems.push_back(Core::SystemPtr(pSystem));
+				inaExisitingSystems.push_back(Core::SystemSPtr(pSystem));
 			}
 
 			return pSystem;
@@ -256,7 +254,7 @@ namespace ChilliSource
 		/// @param Interface ID
 		/// @return Ownership of activity instance or NULL
 		//--------------------------------------------
-		IActivity* CPlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
+		Core::Activity* CPlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
 		{
 			return NULL;
 		}
@@ -276,7 +274,7 @@ namespace ChilliSource
 		/// @param Interface ID
 		/// @return Ownership of provider instance or NULL
 		//--------------------------------------------
-		IInformationProvider* CPlatformSystem::CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
+		Core::IInformationProvider* CPlatformSystem::CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
 		{
 			return NULL;
 		}
@@ -316,22 +314,22 @@ namespace ChilliSource
 		/// Get the active language locale of the device
 		/// @return Locale ID
 		//--------------------------------------------------------------
-		Core::CLocale CPlatformSystem::GetLocale() const
+		Core::Locale CPlatformSystem::GetLocale() const
 		{
 			wchar_t localeName[LOCALE_NAME_MAX_LENGTH]={0};
 
 			if(GetUserDefaultLocaleName(localeName, LOCALE_NAME_MAX_LENGTH * sizeof(wchar_t)))
 			{
-				if(wcscmp(localeName, L"en") == 0)	return Core::CLocale("en");
-				if(wcscmp(localeName, L"fr") == 0)	return Core::CLocale("fr");
-				if(wcscmp(localeName, L"it") == 0)  return Core::CLocale("it");
-				if(wcscmp(localeName, L"de") == 0)  return Core::CLocale("de");
-				if(wcscmp(localeName, L"es") == 0)  return Core::CLocale("es");
-				if(wcscmp(localeName, L"jp") == 0)  return Core::CLocale("jp");
+				if(wcscmp(localeName, L"en") == 0)	return Core::Locale("en");
+				if(wcscmp(localeName, L"fr") == 0)	return Core::Locale("fr");
+				if(wcscmp(localeName, L"it") == 0)  return Core::Locale("it");
+				if(wcscmp(localeName, L"de") == 0)  return Core::Locale("de");
+				if(wcscmp(localeName, L"es") == 0)  return Core::Locale("es");
+				if(wcscmp(localeName, L"jp") == 0)  return Core::Locale("jp");
 			}
 
 			//Just default to english
-			return Core::CLocale("en");
+			return Core::Locale("en");
 		}
 		//--------------------------------------------------------------
 		/// Get Device Model Name
@@ -366,22 +364,22 @@ namespace ChilliSource
 		/// Get the active language of the device in locale format
 		/// @return Locale ID
 		//--------------------------------------------------------------
-		Core::CLocale CPlatformSystem::GetLanguage() const
+		Core::Locale CPlatformSystem::GetLanguage() const
 		{
 			wchar_t localeName[LOCALE_NAME_MAX_LENGTH]={0};
 
 			if(GetUserDefaultLocaleName(localeName, LOCALE_NAME_MAX_LENGTH * sizeof(wchar_t)))
 			{
-				if(wcscmp(localeName, L"en") == 0)	return Core::CLocale("en");
-				if(wcscmp(localeName, L"fr") == 0)	return Core::CLocale("fr");
-				if(wcscmp(localeName, L"it") == 0)  return Core::CLocale("it");
-				if(wcscmp(localeName, L"de") == 0)  return Core::CLocale("de");
-				if(wcscmp(localeName, L"es") == 0)  return Core::CLocale("es");
-				if(wcscmp(localeName, L"jp") == 0)  return Core::CLocale("jp");
+				if(wcscmp(localeName, L"en") == 0)	return Core::Locale("en");
+				if(wcscmp(localeName, L"fr") == 0)	return Core::Locale("fr");
+				if(wcscmp(localeName, L"it") == 0)  return Core::Locale("it");
+				if(wcscmp(localeName, L"de") == 0)  return Core::Locale("de");
+				if(wcscmp(localeName, L"es") == 0)  return Core::Locale("es");
+				if(wcscmp(localeName, L"jp") == 0)  return Core::Locale("jp");
 			}
 
 			//Just default to english
-			return Core::CLocale("en");
+			return Core::Locale("en");
 		}
 		//-------------------------------------------------
 		/// Get Screen Density
@@ -443,7 +441,7 @@ namespace ChilliSource
 		///
 		/// @param Text
 		//--------------------------------------------------------------------------------------------------
-		void CPlatformSystem::MakeToast(const UTF8String& instrText) const
+		void CPlatformSystem::MakeToast(const Core::UTF8String& instrText) const
 		{
 			CS_LOG_WARNING("Toast not available on Windows");
 		}
@@ -458,15 +456,15 @@ namespace ChilliSource
 		/// @param Confirm text
 		/// @param Cancel text
 		//--------------------------------------------------------------------------------------------------
-		void CPlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm, const UTF8String& instrCancel) const
+		void CPlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const
 		{
 			if(MessageBoxA(NULL, instrTitle.ToASCII().c_str(), instrMessage.ToASCII().c_str(), MB_OKCANCEL) == IDOK)
 			{
-				Core::Application::OnSystemConfirmDialogResult(inudwID, ChilliSource::SystemConfirmDialog::CONFIRM);
+				Core::Application::OnSystemConfirmDialogResult(inudwID, Core::SystemConfirmDialog::Result::k_confirm);
 			}
 			else
 			{
-				Core::Application::OnSystemConfirmDialogResult(inudwID, ChilliSource::SystemConfirmDialog::CANCEL);
+				Core::Application::OnSystemConfirmDialogResult(inudwID, Core::SystemConfirmDialog::Result::k_cancel);
 			} 
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -479,7 +477,7 @@ namespace ChilliSource
         /// @param Message text
         /// @param Confirm text
         //--------------------------------------------------------------------------------------------------
-        void CPlatformSystem::ShowSystemDialog(u32 inudwID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm) const
+		void CPlatformSystem::ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const
 		{
 			MessageBoxA(NULL, instrTitle.ToASCII().c_str(), instrMessage.ToASCII().c_str(), MB_OK);
 		}

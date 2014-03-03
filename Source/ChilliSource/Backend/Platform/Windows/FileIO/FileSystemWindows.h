@@ -253,10 +253,23 @@ namespace ChilliSource
             /// Does File Exist
             //--------------------------------------------------------------
             bool DoesFileExist(const std::string& instrFilepath) const;
-            //--------------------------------------------------------------
-            /// Does Directory Exist
-            //--------------------------------------------------------------
-            bool DoesDirectoryExist(const std::string& instrDirectory) const;
+			//--------------------------------------------------------------
+			/// Does Directory Exist
+			//--------------------------------------------------------------
+			bool DoesDirectoryExist(const std::string& instrDirectory) const;
+			//--------------------------------------------------------------
+			/// Lists all files and sub-directories inside the given directory.
+			/// All paths will be relative to the given directory.
+			///
+			/// @author I Copland
+			///
+			/// @param The directory.
+			/// @param Whether or not to recurse into sub directories.
+			/// @param Out: The sub directories.
+			/// @param Out: The files.
+			/// @return Whether or not this succeeded.
+			//--------------------------------------------------------------
+			bool ListDirectoryContents(const std::string& in_directory, bool in_recursive, std::vector<std::string>& out_directories, std::vector<std::string>& out_files) const;
 
 		private:
 

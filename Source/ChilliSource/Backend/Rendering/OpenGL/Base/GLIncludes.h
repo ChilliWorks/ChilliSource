@@ -6,9 +6,9 @@
 #include <OpenGLES/ES2/glext.h>
 #include <OpenGLES/EAGL.h>
 #include <OpenGLES/EAGLDrawable.h>
-#elif TARGET_WINDOWS
-#include <ChilliSource/Platform/Windows/OpenGL/glew.h>
-#include <ChilliSource/Platform/Windows/OpenGL/glfw.h>
+#elif defined CS_TARGETPLATFORM_WINDOWS
+#include <Platform/Windows/glew.h>
+#include <Platform/Windows/glfw.h>
 #else
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
@@ -16,7 +16,7 @@
 
 #if defined CS_TARGETPLATFORM_IOS || defined TARGET_ANDROID
 #define CS_OPENGLVERSION_ES
-#elif defined TARGET_WINDOWS
+#elif defined CS_TARGETPLATFORM_WINDOWS
 #define CS_OPENGLVERSION_STANDARD
 #endif
 

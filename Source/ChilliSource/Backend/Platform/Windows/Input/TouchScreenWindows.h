@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace Windows
 	{
-		class CTouchScreen : public Input::ITouchScreen
+		class CTouchScreen : public Input::TouchScreen
 		{
 		public:
 			CTouchScreen(){}

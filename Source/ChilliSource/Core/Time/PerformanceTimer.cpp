@@ -14,7 +14,7 @@ namespace ChilliSource
     {
         void PerformanceTimer::Start()
         {
-#ifdef TARGET_WINDOWS
+#ifdef CS_TARGETPLATFORM_WINDOWS
             QueryPerformanceFrequency(&mFrequency);
             QueryPerformanceCounter(&mStartTime);
 #else
@@ -25,7 +25,7 @@ namespace ChilliSource
         void PerformanceTimer::Stop()
         {
             TimeValue StopTime;
-#ifdef TARGET_WINDOWS
+#ifdef CS_TARGETPLATFORM_WINDOWS
             QueryPerformanceCounter(&StopTime);
 #else
             gettimeofday(&StopTime, 0);
@@ -52,7 +52,7 @@ namespace ChilliSource
         {
             f64 ffStartTimeMicro, ffStopTimeMicro = 0.0;
             
-#ifdef TARGET_WINDOWS
+#ifdef CS_TARGETPLATFORM_WINDOWS
             //ffStartTimeMicro = inStart.QuadPart * (1000000.0 / mFrequency.QuadPart);
             //ffStopTimeMicro = inEnd.QuadPart * (1000000.0 / mFrequency.QuadPart);
 #else

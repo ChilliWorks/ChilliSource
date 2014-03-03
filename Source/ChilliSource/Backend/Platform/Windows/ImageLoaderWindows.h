@@ -21,7 +21,7 @@ namespace ChilliSource
 {
 	namespace Windows
 	{
-		class ImageLoader : public IImageResourceProvider
+		class ImageLoader : public Core::ImageResourceProvider
 		{
 		public:
 			

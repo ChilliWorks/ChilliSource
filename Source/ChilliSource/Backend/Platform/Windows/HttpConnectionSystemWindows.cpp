@@ -10,8 +10,8 @@
 #include <ChilliSource/Backend/Platform/Windows/HttpConnectionSystemWindows.h>
 
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Core/Threading/Thread.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 
 #include <Windows.h>
@@ -44,7 +44,7 @@ namespace ChilliSource
 			}
 
 			//Set the connection timeout time
-			const s32 kdwTimeoutMS = kfDefaultHTTPTimeout * 1000;
+			const s32 kdwTimeoutMS = (s32)(kfDefaultHTTPTimeout * 1000.0f);
 			::WinHttpSetTimeouts(mSessionHandle, kdwTimeoutMS, kdwTimeoutMS, kdwTimeoutMS, kdwTimeoutMS);
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -55,7 +55,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		bool CHttpConnectionSystem::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == IHttpConnectionSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
+			return inInterfaceID == HttpConnectionSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Make Request 
@@ -65,7 +65,7 @@ namespace ChilliSource
 		/// @param (Optional) A function to call when the request is completed. Note that the request can be completed by failure/cancellation as well as success.
 		/// @return A pointer to the request. The system owns this pointer. Returns NULL if the request cannot be created.
 		//--------------------------------------------------------------------------------------------------
-		HttpRequestPtr CHttpConnectionSystem::MakeRequest(const HttpRequestDetails & insRequestDetails, IHttpRequest::CompletionDelegate inOnComplete)
+		HttpRequest* CHttpConnectionSystem::MakeRequest(const HttpRequestDetails & insRequestDetails, HttpRequest::CompletionDelegate inOnComplete)
 		{
 			URL_COMPONENTS sUrlComp;
 			DWORD dwUrlLen = 0;
@@ -103,7 +103,7 @@ namespace ChilliSource
 			}
 
 			//Set up the request based on whether it is POST or GET and whether it is SSL
-			LPCWSTR strTypeVerb = (insRequestDetails.eType == HttpRequestDetails::GET ? L"GET" : L"POST");
+			LPCWSTR strTypeVerb = (insRequestDetails.eType == HttpRequestDetails::Type::k_get ? L"GET" : L"POST");
 			DWORD dwFlags = 0;
 			HINTERNET RequestHandle = 0;
 
@@ -248,13 +248,13 @@ namespace ChilliSource
 		/// @param Request details
 		/// @param Completion delegate
 		//=====================================================================================================
-		CHttpConnectionSystem::CHttpRequest::CHttpRequest(const Networking::HttpRequestDetails & insDetails, const CHttpConnectionSystem::ConnectionInfo& insConnectionInfo, const Networking::IHttpRequest::CompletionDelegate & inCompletionDelegate)
+		CHttpConnectionSystem::CHttpRequest::CHttpRequest(const Networking::HttpRequestDetails & insDetails, const CHttpConnectionSystem::ConnectionInfo& insConnectionInfo, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate)
 			: msDetails(insDetails), mbCompleted(false), mCompletionDelegate(inCompletionDelegate), mfActiveTime(0.0f), mbReceivedResponse(false), mbThreadCompleted(false),
 			mudwResponseCode(0), mudwBytesRead(0), mbRequestCompleted(false), mConnectionInfo(insConnectionInfo), mudwBytesReadThisBlock(0)
 		{
 			//Begin the read loop
 			//Run this as a threaded task
-			CTaskScheduler::ScheduleTask(Task2<HINTERNET, HINTERNET>(this, &CHttpConnectionSystem::CHttpRequest::PollReadStream, mConnectionInfo.RequestHandle, mConnectionInfo.ConnectionHandle));	
+			Core::TaskScheduler::ScheduleTask(Core::Task<HINTERNET, HINTERNET>(Core::MakeDelegate(this, &CHttpConnectionSystem::CHttpRequest::PollReadStream), mConnectionInfo.RequestHandle, mConnectionInfo.ConnectionHandle));
 		}
 		//------------------------------------------------------------------
 		/// Update
@@ -275,7 +275,7 @@ namespace ChilliSource
 
 				if(mCompletionDelegate)
 				{
-					if(meRequestResult == IHttpRequest::CANCELLED)
+					if(meRequestResult == HttpRequest::CompletionResult::k_cancelled)
 					{
 						mCompletionDelegate(this, meRequestResult);
 					}
@@ -284,7 +284,7 @@ namespace ChilliSource
 				}
 			}
 			//Track the time the request has been active so we can manually timeout
-			else if(!mbCompleted && !mbReceivedResponse && ((mfActiveTime += (Core::CMathUtils::Min(infDT, 0.5f))) > kfDefaultHTTPTimeout))
+			else if(!mbCompleted && !mbReceivedResponse && ((mfActiveTime += (Core::MathUtils::Min(infDT, 0.5f))) > kfDefaultHTTPTimeout))
 			{
 				CS_LOG_DEBUG("HTTP Connection timed out on request: " + msDetails.strURL);
 				//Flag to stop the polling thread which should 
@@ -296,7 +296,7 @@ namespace ChilliSource
 
 				if(mCompletionDelegate)
 				{
-					mCompletionDelegate(this, IHttpRequest::TIMEOUT);
+					mCompletionDelegate(this, HttpRequest::CompletionResult::k_timeout);
 					mCompletionDelegate = NULL;
 				}
 			}
@@ -319,7 +319,7 @@ namespace ChilliSource
 				{
 					WinHttpCloseHandle(inRequestHandle);
 					WinHttpCloseHandle(inConnectionHandle);
-					meRequestResult = IHttpRequest::FAILED;
+					meRequestResult = HttpRequest::CompletionResult::k_failed;
 					mbCompleted = true;
 					mbThreadCompleted = true;
 					return;
@@ -329,7 +329,7 @@ namespace ChilliSource
 			{
 				WinHttpCloseHandle(inRequestHandle);
 				WinHttpCloseHandle(inConnectionHandle);
-				meRequestResult = IHttpRequest::FAILED;
+				meRequestResult = HttpRequest::CompletionResult::k_failed;
 				mbCompleted = true;
 				mbThreadCompleted = true;
 				return;
@@ -357,7 +357,7 @@ namespace ChilliSource
 					CS_LOG_ERROR("No data avilable from server");
 					WinHttpCloseHandle(inRequestHandle);
 					WinHttpCloseHandle(inConnectionHandle);
-					meRequestResult = IHttpRequest::FAILED;
+					meRequestResult = HttpRequest::CompletionResult::k_failed;
 					mbCompleted = true;
 					mbThreadCompleted = true;
 					return;
@@ -368,7 +368,7 @@ namespace ChilliSource
 					CS_LOG_ERROR("Failed to read data from server");
 					WinHttpCloseHandle(inRequestHandle);
 					WinHttpCloseHandle(inConnectionHandle);
-					meRequestResult = IHttpRequest::FAILED;
+					meRequestResult = HttpRequest::CompletionResult::k_failed;
 					mbCompleted = true;
 					mbThreadCompleted = true;
 					return;
@@ -387,14 +387,14 @@ namespace ChilliSource
 						strBuffer.clear();
 						strBuffer.str("");
 						mudwBytesReadThisBlock = 0;
-						mCompletionDelegate(this, IHttpRequest::FLUSHED);
+						mCompletionDelegate(this, HttpRequest::CompletionResult::k_flushed);
 					}
 				}
 
 			} while (dwBytesRead > 0);	
 
 			mResponseData = strBuffer.str();
-			meRequestResult = IHttpRequest::COMPLETED;
+			meRequestResult = HttpRequest::CompletionResult::k_completed;
 			mbCompleted = true;
 
 			WinHttpCloseHandle(inRequestHandle);
@@ -411,7 +411,7 @@ namespace ChilliSource
 		{
 			mbCompleted = true;
 			mbReceivedResponse = true;
-			meRequestResult = IHttpRequest::CANCELLED;
+			meRequestResult = HttpRequest::CompletionResult::k_cancelled;
 		}
 		//----------------------------------------------------------------------------------------
 		/// Has Completed
@@ -436,7 +436,7 @@ namespace ChilliSource
 		///
 		/// @return The delegate that will be invoked on request complete
 		//----------------------------------------------------------------------------------------
-		const Networking::IHttpRequest::CompletionDelegate & CHttpConnectionSystem::CHttpRequest::GetCompletionDelegate() const
+		const Networking::HttpRequest::CompletionDelegate & CHttpConnectionSystem::CHttpRequest::GetCompletionDelegate() const
 		{
 			return mCompletionDelegate;
 		}

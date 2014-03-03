@@ -15,7 +15,6 @@
 
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
-#include <ChilliSource/Core/Base/CustomCreator.h>
 
 namespace ChilliSource
 {
@@ -27,9 +26,8 @@ namespace ChilliSource
 		/// Allows generic access to platform 
 		/// specific code via common function calls
 		//---------------------------------------------
-		class CPlatformSystem : public IPlatformSystem
+		class CPlatformSystem : public Core::PlatformSystem
 		{
-			DECLARE_CREATABLE(IPlatformSystem, CPlatformSystem);
 		public:
 			CPlatformSystem();
 			virtual ~CPlatformSystem();
@@ -48,7 +46,7 @@ namespace ChilliSource
 			///
 			/// @param the system list
 			//-------------------------------------------------
-			void CreateDefaultSystems(std::vector<Core::SystemPtr> & inaSystems);
+			void CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems);
 			//-------------------------------------------------
 			/// Post Create Systems
 			///
@@ -102,7 +100,7 @@ namespace ChilliSource
 			/// @param Vector of exisiting systems to append
 			/// @return Pointer to the given system or NULL
 			//--------------------------------------------
-			Core::ISystem* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemPtr>& inaExisitingSystems) const;
+			Core::System* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr>& inaExisitingSystems) const;
 			//--------------------------------------------
 			/// Can Create Activity With Interface
 			///
@@ -116,7 +114,7 @@ namespace ChilliSource
 			/// @param Interface ID
 			/// @return Ownership of activity instance or NULL
 			//--------------------------------------------
-			IActivity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const;
+			Core::Activity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const;
 			//--------------------------------------------
 			/// Can Create Information Provider With Interface
 			///
@@ -130,7 +128,7 @@ namespace ChilliSource
 			/// @param Interface ID
 			/// @return Ownership of provider instance or NULL
 			//--------------------------------------------
-			IInformationProvider* CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const;
+			Core::IInformationProvider* CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const;
 			//-----------------------------------------------------------------------------------------------------------
 			/// Get Screen Dimensions
 			///
@@ -168,14 +166,14 @@ namespace ChilliSource
 			/// Get the active language locale of the device
 			/// @return Locale ID
 			//--------------------------------------------------------------
-			Core::CLocale GetLocale() const;
+			Core::Locale GetLocale() const;
 			//--------------------------------------------------------------
 			/// Get Langauge
 			///
 			/// Get the active language of the device in locale format
 			/// @return Locale ID
 			//--------------------------------------------------------------
-            Core::CLocale GetLanguage() const;
+            Core::Locale GetLanguage() const;
 			//-------------------------------------------------
 			/// Get Screen Density
 			///
@@ -221,7 +219,7 @@ namespace ChilliSource
 			///
 			/// @param Text
 			//--------------------------------------------------------------------------------------------------
-			void MakeToast(const UTF8String& instrText) const;
+			void MakeToast(const Core::UTF8String& instrText) const;
 			//--------------------------------------------------------------------------------------------------
 			/// Show System Confirm Dialog
 			///
@@ -233,7 +231,7 @@ namespace ChilliSource
 			/// @param Confirm text
 			/// @param Cancel text
 			//--------------------------------------------------------------------------------------------------
-			void ShowSystemConfirmDialog(u32 inudwID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm, const UTF8String& instrCancel) const;
+			void ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const;
 			//--------------------------------------------------------------------------------------------------
             /// Show System Dialog
             ///
@@ -244,7 +242,7 @@ namespace ChilliSource
             /// @param Message text
             /// @param Confirm text
             //--------------------------------------------------------------------------------------------------
-            void ShowSystemDialog(u32 inudwID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm) const;
+			void ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const;
 		private:
 
 			//---GLFW Delegates

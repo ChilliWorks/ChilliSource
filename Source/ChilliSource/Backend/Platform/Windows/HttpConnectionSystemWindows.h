@@ -21,7 +21,7 @@ namespace ChilliSource
 		//Windows typedefs so we don't have to include windows.h in the header
 		typedef void* HINTERNET;
 
-		class CHttpConnectionSystem : public Networking::IHttpConnectionSystem, public Core::IUpdateable
+		class CHttpConnectionSystem : public Networking::HttpConnectionSystem, public Core::IUpdateable
 		{
 		public:
 			//--------------------------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ namespace ChilliSource
 			/// @param (Optional) A function to call when the request is completed. Note that the request can be completed by failure/cancellation as well as success.
 			/// @return A pointer to the request. The system owns this pointer. Returns NULL if the request cannot be created.
 			//--------------------------------------------------------------------------------------------------
-            Networking::HttpRequestPtr MakeRequest(const Networking::HttpRequestDetails & insRequestDetails, Networking::IHttpRequest::CompletionDelegate inOnComplete = Networking::IHttpRequest::CompletionDelegate());
+            Networking::HttpRequest* MakeRequest(const Networking::HttpRequestDetails & insRequestDetails, Networking::HttpRequest::CompletionDelegate inOnComplete = Networking::HttpRequest::CompletionDelegate()) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Cancel All Requests
 			///
@@ -98,10 +98,10 @@ namespace ChilliSource
 
         private:
 			
-			class CHttpRequest : public Networking::IHttpRequest
+			class CHttpRequest : public Networking::HttpRequest
             {
 			public:
-				CHttpRequest(const Networking::HttpRequestDetails & insDetails, const CHttpConnectionSystem::ConnectionInfo& insConnectionInfo, const Networking::IHttpRequest::CompletionDelegate & inCompletionDelegate);
+				CHttpRequest(const Networking::HttpRequestDetails & insDetails, const CHttpConnectionSystem::ConnectionInfo& insConnectionInfo, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate);
 
 				//------------------------------------------------------------------
 				/// Update
@@ -136,7 +136,7 @@ namespace ChilliSource
 				///
 				/// @return The delegate that will be invoked on request complete
 				//----------------------------------------------------------------------------------------
-                const Networking::IHttpRequest::CompletionDelegate & GetCompletionDelegate() const;
+                const Networking::HttpRequest::CompletionDelegate & GetCompletionDelegate() const;
 				//----------------------------------------------------------------------------------------
 				/// Get Response String
 				///
@@ -174,7 +174,7 @@ namespace ChilliSource
 				
 			private:
 				
-				Networking::IHttpRequest::CompletionDelegate mCompletionDelegate;
+				Networking::HttpRequest::CompletionDelegate mCompletionDelegate;
                 Networking::HttpRequestDetails msDetails;
                 CHttpConnectionSystem::ConnectionInfo mConnectionInfo;
                 

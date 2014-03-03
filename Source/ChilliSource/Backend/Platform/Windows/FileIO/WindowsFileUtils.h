@@ -63,6 +63,28 @@ namespace ChilliSource
 			/// @return Whether or not the directory was deleted.
 			//--------------------------------------------------------
 			BOOL WindowsRemoveDirectory(LPCTSTR in_directory);
+			//--------------------------------------------------------
+			/// Firsts the first file in the given directory. The
+			/// directory can contain wildcard characters (* or ?).
+			///
+			/// @author I Copland
+			///
+			/// @param the directory to find.
+			/// @param Out: Data on the found file.
+			/// @return A handle to the first found file.
+			//--------------------------------------------------------
+			HANDLE WindowsFindFirstFile(LPCTSTR in_directory, LPWIN32_FIND_DATA in_findFileData);
+			//--------------------------------------------------------
+			/// Continues a file seach started using FileFirstFile. The
+			/// directory can contain wildcard characters (* or ?).
+			///
+			/// @author I Copland
+			///
+			/// @param the directory to find.
+			/// @param Out: Data on the found file.
+			/// @return A handle to the first found file.
+			//--------------------------------------------------------
+			BOOL WindowsFindNextFile(HANDLE in_previousFile, LPWIN32_FIND_DATA in_findFileData);
 		}
 	}
 }

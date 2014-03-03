@@ -108,9 +108,9 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(Matrix3x3);
         CS_FORWARDDECLARE_CLASS(Matrix4x4);
         CS_FORWARDDECLARE_CLASS(Quaternion);
-        CS_FORWARDDECLARE_CLASS(UnifiedScalar);
-        CS_FORWARDDECLARE_CLASS(UnifiedVector2);
-        CS_FORWARDDECLARE_CLASS(UnifiedRectangle);
+        CS_FORWARDDECLARE_STRUCT(UnifiedScalar);
+		CS_FORWARDDECLARE_STRUCT(UnifiedVector2);
+		CS_FORWARDDECLARE_STRUCT(UnifiedRectangle);
         CS_FORWARDDECLARE_CLASS(Vector2);
         CS_FORWARDDECLARE_CLASS(Vector3);
         CS_FORWARDDECLARE_CLASS(Vector4);
