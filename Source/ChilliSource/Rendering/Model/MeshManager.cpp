@@ -218,7 +218,7 @@ namespace ChilliSource
 			apVertElements[0].eSemantic = VertexDataSemantic::k_position;
 			VertexDeclaration vertDeclaration(dwNumVertexElements, apVertElements);
 			
-			for (int i = 0; i < indwNumSubMeshes; i++)
+			for (u32 i = 0; i < indwNumSubMeshes; i++)
 			{
 				SubMeshSPtr newMesh = pMesh->CreateSubMesh("mesh" + Core::ToString(i));
 				newMesh->Prepare(mpApplicationOwner->GetRenderSystemPtr(), vertDeclaration, 2, inudwVertexDataSize, indwIndexDataSize);

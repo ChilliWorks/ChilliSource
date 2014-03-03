@@ -138,16 +138,9 @@ namespace ChilliSource
 			
 			//build the feature declaration from the file
 			u32 dwNumFeatures = (u32)ReadValue<u8>(inpStream);
-			for (u32 i = 0; i < dwNumFeatures; i++)
+			if (dwNumFeatures != 0)
 			{
-				u32 dwFeatureType = (u32)ReadValue<u8>(inpStream);
-				
-				switch (dwFeatureType)
-				{
-					default:
-						CS_LOG_ERROR("Unknown feature type in MoAnim(" + inFilePath + ")feature declaration!");
-						break;
-				}
+				CS_LOG_ERROR("Unknown feature type in MoAnim(" + inFilePath + ")feature declaration!");
 			}
 			
 			//read num frames and skeleton nodes

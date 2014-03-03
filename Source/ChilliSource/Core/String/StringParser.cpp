@@ -53,7 +53,7 @@ namespace ChilliSource
         //------------------------------------------------------------
         f32 ParseF32(const std::string& in_string)
         {
-            return strtod(in_string.c_str(), NULL);
+            return (f32)strtod(in_string.c_str(), NULL);
         }
         //------------------------------------------------------------
         //------------------------------------------------------------

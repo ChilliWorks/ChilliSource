@@ -50,7 +50,8 @@ namespace ChilliSource
         
         f64 PerformanceTimer::GetTimeDurationMicroS(const TimeValue& inStart, const TimeValue& inEnd)
         {
-            f64 ffStartTimeMicro, ffStopTimeMicro = 0.0;
+			f64 ffStartTimeMicro = 0.0f;
+			f64 ffStopTimeMicro = 0.0;
             
 #ifdef CS_TARGETPLATFORM_WINDOWS
             //ffStartTimeMicro = inStart.QuadPart * (1000000.0 / mFrequency.QuadPart);

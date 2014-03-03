@@ -129,7 +129,7 @@ namespace ChilliSource
 				(*outppBuffer) = mpVertexData;
 			}
             mbCacheValid = false;
-			return ((*outppBuffer));
+			return ((*outppBuffer) != nullptr);
 		}
 		//-----------------------------------------------------
 		/// Lock Index
@@ -168,7 +168,7 @@ namespace ChilliSource
 				(*outppBuffer) = mpIndexData;
 			}
             mbCacheValid = false;
-            return ((*outppBuffer));
+            return ((*outppBuffer) != nullptr);
 		}
 		//-----------------------------------------------------
 		/// Unlock Vertex
@@ -182,9 +182,9 @@ namespace ChilliSource
 			{
 				mpVertexData = nullptr;
 #ifdef CS_OPENGLVERSION_STANDARD
-				return glUnmapBuffer(GL_ARRAY_BUFFER);
+				return (glUnmapBuffer(GL_ARRAY_BUFFER) == GL_TRUE);
 #elif defined CS_OPENGLVERSION_ES
-				return glUnmapBufferOES(GL_ARRAY_BUFFER);
+				return (glUnmapBufferOES(GL_ARRAY_BUFFER) == GL_TRUE);
 #endif
 			}
 			else
@@ -208,9 +208,9 @@ namespace ChilliSource
 			{
 				mpIndexData = nullptr;
 #ifdef CS_OPENGLVERSION_STANDARD
-				return glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+				return (glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER) == GL_TRUE);
 #elif defined CS_OPENGLVERSION_ES
-				return glUnmapBufferOES(GL_ELEMENT_ARRAY_BUFFER);
+				return (glUnmapBufferOES(GL_ELEMENT_ARRAY_BUFFER) == GL_TRUE);
 #endif
 			}
 			else

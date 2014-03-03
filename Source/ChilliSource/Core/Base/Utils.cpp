@@ -35,7 +35,7 @@ namespace ChilliSource
                 
                 if(!jReader.parse(strJsonString, *outpJson))
                 {
-                    CS_LOG_WARNING("Utils::ReadJson| Json could not be parsed:" + jReader.getFormatedErrorMessages());
+					CS_LOG_WARNING("Utils::ReadJson| Json could not be parsed:" + jReader.getFormattedErrorMessages());
                     return false;
                 }
                 
@@ -74,7 +74,7 @@ namespace ChilliSource
 
             bool ZlibCompressString(const std::string &instrUncompressed, std::string &outstrCompressed)
             {
-                uLongf maxCompSize = instrUncompressed.size() * 1.1f + 12;
+				uLongf maxCompSize = (uLongf)(instrUncompressed.size() * 1.1f + 12);
                 
                 outstrCompressed.clear();
                 outstrCompressed.resize(maxCompSize);

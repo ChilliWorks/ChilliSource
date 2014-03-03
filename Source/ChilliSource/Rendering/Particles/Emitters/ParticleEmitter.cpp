@@ -85,7 +85,7 @@ namespace ChilliSource
                 mbIsGlobalSpace = Core::ParseBool(strTemp);
             }
             
-            mudwMaxNumParticles = (std::ceil(mfTimeToLive/mfEmissionFreq) * mudwMaxNumParticlesPerEmission);
+			mudwMaxNumParticles = (u32)(std::ceil(mfTimeToLive / mfEmissionFreq) * mudwMaxNumParticlesPerEmission);
             
             // Allocate all the memory upfront
 			mParticles.vTranslation = new Core::Vector3[mudwMaxNumParticles];
@@ -116,7 +116,7 @@ namespace ChilliSource
             
             const Core::Vector3& vCurrentPos = mpOwningComponent->GetEntityOwner()->GetTransform().GetWorldPosition();
             const f32 kfTimeSinceLastEmission = mfCurrentTime - mfLastEmissionTime;
-            u32 udwNumEmits = kfTimeSinceLastEmission/mfEmissionFreq;
+			u32 udwNumEmits = (u32)(kfTimeSinceLastEmission / mfEmissionFreq);
             
             //If we force a burst emit then we override the frequency
             if(mudwBurstCounter > 0)

@@ -869,7 +869,7 @@ namespace ChilliSource
             {
                 mvCachedScissorPos = invPosition;
                 mvCachedScissorSize = invSize;
-                glScissor(invPosition.x, invPosition.y, invSize.x, invSize.y);
+				glScissor((GLsizei)invPosition.x, (GLsizei)invPosition.y, (GLsizei)invSize.x, (GLsizei)invSize.y);
             }
         }
         //----------------------------------------------------------
@@ -1084,7 +1084,7 @@ namespace ChilliSource
             // If mesh buffer has changed we need to reset all its vertex attributes
             if(((ChilliSource::OpenGL::CMeshBuffer*)inpBuffer)->IsCacheValid() == false)
             {
-                for(u32 i =0; i < mdwMaxVertAttribs; i++)
+                for(s32 i =0; i < mdwMaxVertAttribs; i++)
                 {
                     if(mpVertexAttribs[i].pBuffer == inpBuffer)
                         mpVertexAttribs[i].pBuffer = nullptr;

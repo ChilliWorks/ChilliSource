@@ -84,7 +84,7 @@ namespace ChilliSource
                 f32 B = 2.0f * vDelta.DotProduct(inRay.vDirection);
                 f32 C = vDelta.DotProduct(vDelta) - inSphere.fRadius * inSphere.fRadius;
                 f32 D = B * B - 4.0f * A * C;
-                return D >= 0.0f ? (-B - sqrt(D))/(2.0f * A) : std::numeric_limits<f32>::infinity();
+                return (D >= 0.0f); //returning true if equation has real roots.
             }
             //----------------------------------------------------------------
             /// Sphere vs Point

@@ -68,7 +68,7 @@ namespace ChilliSource
 			//------------------------------------------------------
             template <typename TType> inline bool BitmapCheck(TType in_a, TType in_b)
             {
-                return (in_a & in_b);
+                return (in_a & in_b) != 0;
             }
 			//------------------------------------------------------
 			/// Endian Byte Swap

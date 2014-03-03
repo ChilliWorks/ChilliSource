@@ -83,7 +83,7 @@ namespace ChilliSource
         {
             if(mfAnimationTime != 0)
             {
-                f32 fTimeSinceValueSet = Core::Application::GetSystemTimeInMilliseconds() - mPreviousValueTimeStamp;
+                f32 fTimeSinceValueSet = (f32)Core::Application::GetSystemTimeInMilliseconds() - mPreviousValueTimeStamp;
                 f32 fTimeRatio = ChilliSource::Core::MathUtils::Min(fTimeSinceValueSet / mfAnimationTime, 1.0f);
                 f32 fAnimatedProgress = Core::MathUtils::Clamp(mfPreviousValue + (mfPreviousValueDiff * fTimeRatio), 0.0f, 1.0f);
                 return fAnimatedProgress;

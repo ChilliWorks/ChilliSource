@@ -118,7 +118,7 @@ namespace ChilliSource
         
         void EntityAnimation::Step(u32 inudwLowFrame, u32 inudwHighFrame, f32 infT)
         {
-            u32 udwFrame = inudwLowFrame + floor(infT + 0.5f);
+            u32 udwFrame = inudwLowFrame + (s32)floor(infT + 0.5f);
             // Interpolate translation
 			Vector3 vLerpedTranslation = mpasFrameValues.get()[udwFrame].vTranslation;
             

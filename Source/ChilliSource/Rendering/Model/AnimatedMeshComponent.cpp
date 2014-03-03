@@ -162,7 +162,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		bool AnimatedMeshComponent::IsTransparent()
 		{
-			for (int i = 0; i < mMaterials.size(); ++i)
+			for (u32 i = 0; i < mMaterials.size(); ++i)
 			{
 				if (mMaterials[i]->IsTransparent() == true)
 					return true;
@@ -205,7 +205,7 @@ namespace ChilliSource
             if (nullptr != mpModel)
             {
                 s32 indwIndex = mpModel->GetSubMeshIndexByName(instrSubMeshName);
-                if (indwIndex >= 0 && indwIndex < mMaterials.size())
+                if (indwIndex >= 0 && indwIndex < (s32)mMaterials.size())
                 {
                     mMaterials[indwIndex] = inpMaterial;
                     
@@ -238,7 +238,7 @@ namespace ChilliSource
             {
                 s32 indwIndex = mpModel->GetSubMeshIndexByName(instrSubMeshName);
                 
-                if (indwIndex >= 0 && indwIndex < mMaterials.size())
+                if (indwIndex >= 0 && indwIndex < (s32)mMaterials.size())
                 {
                     return mMaterials[indwIndex];
                 }

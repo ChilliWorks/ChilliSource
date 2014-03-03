@@ -166,7 +166,7 @@ namespace ChilliSource
 			u8 ubyHeader[dwHeaderSize];
 			inStream->Read((s8*)ubyHeader, dwHeaderSize);
 
-			if (png_sig_cmp(ubyHeader, 0, dwHeaderSize) == true)
+			if (png_sig_cmp(ubyHeader, 0, dwHeaderSize) > 0)
 			{
 				CS_LOG_ERROR("PNG header invalid.");
 				return false;
@@ -250,7 +250,7 @@ namespace ChilliSource
 			s32 dwRowBytes = png_get_rowbytes(pPng, pInfo);
 			mpData = new u8[dwRowBytes * udwHeight];
 
-			for (u32 pass = 0; pass < number_of_passes; pass++)
+			for (s32 pass = 0; pass < number_of_passes; pass++)
 			{
 				for (u32 y = 0; y < udwHeight; y += 1)
 				{

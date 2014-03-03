@@ -299,7 +299,7 @@ namespace ChilliSource
 			
 			//build the feature declaration from the file
 			u32 dwNumFeatures = (u32)ReadValue<u8>(inpStream);
-			for (int i = 0; i < dwNumFeatures; i++)
+			for (u32 i = 0; i < dwNumFeatures; i++)
 			{
 				u32 dwFeatureType = (u32)ReadValue<u8>(inpStream);
 				
@@ -366,7 +366,7 @@ namespace ChilliSource
                 
 				//read the skeleton nodes
                 std::unordered_map<u32, s32> jointToNodeMap;
-				for (u32 i = 0; i < inQuantities.mdwNumSkeletonNodes; i++)
+				for (s32 i = 0; i < inQuantities.mdwNumSkeletonNodes; i++)
 				{
                     //get the skeleton node name name
                     std::string strName;
@@ -396,7 +396,7 @@ namespace ChilliSource
 				}
                 
                 //build the list of joints
-                for (int i = 0; i < inQuantities.mudwNumJoints; ++i)
+                for (u32 i = 0; i < inQuantities.mudwNumJoints; ++i)
                 {
                     inMeshDescriptor.mpSkeleton->AddJointIndex(jointToNodeMap[i]);
                 }
