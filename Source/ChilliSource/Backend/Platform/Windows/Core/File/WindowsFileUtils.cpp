@@ -6,7 +6,7 @@
 //  Copyright 2014 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Backend/Platform/Windows/FileIO/WindowsFileUtils.h>
+#include <ChilliSource/Backend/Platform/Windows/Core/File/WindowsFileUtils.h>
 
 namespace ChilliSource
 {

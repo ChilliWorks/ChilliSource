@@ -7,10 +7,10 @@
 *
 */
 
-#include <ChilliSource/Backend/Platform/Windows/Input/InputSystemWindows.h>
+#include <ChilliSource/Backend/Platform/Windows/Input/Base/InputSystem.h>
 
-#include <ChilliSource/Core/Time/Timer.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Time/Timer.h>
 
 using namespace ChilliSource::Input;
 using namespace ChilliSource::Core;

@@ -11,7 +11,6 @@
 #define _MOFLO_PLATFORM_WINDOWS_HTTPCONNECTIONSYSTEM_H_
 
 #include <ChilliSource/Core/System/SystemConcepts.h>
-
 #include <ChilliSource/Networking/HTTP/HttpConnectionSystem.h>
 
 namespace ChilliSource

@@ -14,8 +14,8 @@
 #ifndef _MOFLO_PLATFORM_WINDOWS_IMAGELOADER_H_
 #define _MOFLO_PLATFORM_WINDOWS_IMAGELOADER_H_
 
-#include <ChilliSource/Core/Image/ImageResourceProvider.h>
 #include <ChilliSource/Core/Image/Image.h>
+#include <ChilliSource/Core/Image/ImageResourceProvider.h>
 
 namespace ChilliSource
 {

@@ -7,12 +7,12 @@
 *
 */
 
-#include <ChilliSource/Backend/Platform/Windows/HttpConnectionSystemWindows.h>
+#include <ChilliSource/Backend/Platform/Windows/Networking/Http/HttpConnectionSystem.h>
 
-#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <Windows.h>
 #include <winhttp.h>

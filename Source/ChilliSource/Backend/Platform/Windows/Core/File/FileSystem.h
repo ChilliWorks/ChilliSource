@@ -10,10 +10,10 @@
 #ifndef _MOFLO_PLATFORM_WINDOWS_FILEIO_FILESYSTEM_
 #define _MOFLO_PLATFORM_WINDOWS_FILEIO_FILESYSTEM_
 
-#include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/File/FileStream.h>
-#include <string>
+#include <ChilliSource/Core/File/FileSystem.h>
 
+#include <string>
 
 namespace ChilliSource
 {

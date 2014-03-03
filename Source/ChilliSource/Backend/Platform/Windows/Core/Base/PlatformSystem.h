@@ -13,8 +13,8 @@
 #ifndef _MO_FLO_PLATFORM_WINDOWS_PLATFORM_SYSTEM_H_
 #define _MO_FLO_PLATFORM_WINDOWS_PLATFORM_SYSTEM_H_
 
-#include <ChilliSource/Core/Base/PlatformSystem.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
+#include <ChilliSource/Core/Base/PlatformSystem.h>
 
 namespace ChilliSource
 {

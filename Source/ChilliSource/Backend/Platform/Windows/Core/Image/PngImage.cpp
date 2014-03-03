@@ -7,8 +7,9 @@
 *
 */
 
-#include <ChilliSource/Backend/Platform/Windows/ImageLoading/PngImage.h>
-#include <ChilliSource/Backend/Platform/Windows/ImageLoading/LibPng/png.h>
+#include <ChilliSource/Backend/Platform/Windows/Core/Image/PngImage.h>
+
+#include <ChilliSource/Backend/Platform/Windows/Core/Image/LibPng/png.h>
 #include <ChilliSource/Core/Base/Application.h>
 
 //----------------------------------------------------------------------------------

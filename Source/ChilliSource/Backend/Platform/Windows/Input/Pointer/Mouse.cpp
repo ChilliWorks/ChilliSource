@@ -1,11 +1,10 @@
 
-#include <ChilliSource/Backend/Platform/Windows/Input/MouseWindows.h>
-
-#include <Platform/Windows/glfw.h>
-
-#include <ChilliSource/Input/Pointer/TouchScreen.h>
+#include <ChilliSource/Backend/Platform/Windows/Input/Pointer/Mouse.h>
 
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Input/Pointer/TouchScreen.h>
+
+#include <Platform/Windows/glfw.h>
 
 namespace ChilliSource
 {

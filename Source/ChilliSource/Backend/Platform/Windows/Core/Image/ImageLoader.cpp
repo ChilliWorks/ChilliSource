@@ -8,20 +8,22 @@
 *
 */
 
-#include <ChilliSource/Backend/Platform/Windows/ImageLoaderWindows.h>
-#include <ChilliSource/Backend/Platform/Windows/ImageLoading/PngImage.h>
+#include <ChilliSource/Backend/Platform/Windows/Core/Image/ImageLoader.h>
 
+#include <ChilliSource/Backend/Platform/Windows/Core/Image/PngImage.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Image/Image.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
 namespace ChilliSource
 {
 	namespace Windows
 	{
-		const std::string PNGExtension("png");
-
+		namespace
+		{
+			const std::string PNGExtension("png");
+		}
 		//----------------------------------------------------------------
 		/// Is A
 		///

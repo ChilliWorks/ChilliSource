@@ -12,32 +12,28 @@
 
 #define WIN32_LEAN_AND_MEAN
 
-#include <ChilliSource/Backend/Platform/Windows/PlatformSystemWindows.h>
-#include <ChilliSource/Backend/Platform/Windows/ImageLoaderWindows.h>
-#include <ChilliSource/Backend/Platform/Windows/Input/InputSystemWindows.h>
-#include <ChilliSource/Backend/Platform/Windows/FileIO/FileSystemWindows.h>
-#include <ChilliSource/Backend/Platform/Windows/HttpConnectionSystemWindows.h>
-#include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
-#include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioLoader.h>
-
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
-
-#include <ChilliSource/Rendering/Material/MaterialLoader.h>
-#include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheetLoader.h>
-#include <ChilliSource/Rendering/Sprite/XMLSpriteSheetLoader.h>
-#include <ChilliSource/Rendering/Font/FontLoader.h>
-#include <ChilliSource/Rendering/Base/Renderer.h>
-#include <ChilliSource/Rendering/Model/AnimatedMeshComponentUpdater.h>
+#include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
 
 #include <ChilliSource/Audio/Base/AudioLoader.h>
 #include <ChilliSource/Audio/Base/AudioPlayer.h>
-
+#include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioLoader.h>
+#include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
+#include <ChilliSource/Backend/Platform/Windows/Core/File/FileSystem.h>
+#include <ChilliSource/Backend/Platform/Windows/Core/Image/ImageLoader.h>
+#include <ChilliSource/Backend/Platform/Windows/Input/Base/InputSystem.h>
+#include <ChilliSource/Backend/Platform/Windows/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/MoImageProvider.h>
-
 #include <ChilliSource/GUI/Base/GUIViewFactory.h>
+#include <ChilliSource/Rendering/Base/Renderer.h>
+#include <ChilliSource/Rendering/Font/FontLoader.h>
+#include <ChilliSource/Rendering/Material/MaterialLoader.h>
+#include <ChilliSource/Rendering/Material/MaterialFactory.h>
+#include <ChilliSource/Rendering/Model/AnimatedMeshComponentUpdater.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheetLoader.h>
+#include <ChilliSource/Rendering/Sprite/XMLSpriteSheetLoader.h>
 
 #include <windows.h>
 

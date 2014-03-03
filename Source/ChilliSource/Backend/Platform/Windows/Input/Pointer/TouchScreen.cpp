@@ -1,5 +1,5 @@
 
-#include <ChilliSource/Backend/Platform/Windows/Input/TouchscreenWindows.h>
+#include <ChilliSource/Backend/Platform/Windows/Input/Pointer/TouchScreen.h>
 
 namespace ChilliSource
 {

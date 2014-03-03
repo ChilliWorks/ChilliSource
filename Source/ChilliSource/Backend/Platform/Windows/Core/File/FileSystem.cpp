@@ -7,20 +7,19 @@
 *
 */
 
-#include <ChilliSource/Backend/Platform/Windows/FileIO/FileSystemWindows.h>
+#include <ChilliSource/Backend/Platform/Windows/Core/File/FileSystem.h>
 
-#include <ChilliSource/Backend/Platform/Windows/String/WindowsStringUtils.h>
+#include <ChilliSource/Backend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
-//This includes windows so needs to come after other engine includes, else it might cause problems with other includes
-#include <ChilliSource/Backend/Platform/Windows/FileIO/WindowsFileUtils.h>
-
 #include <iostream>
 #include <shlobj.h>
 #include <stack>
-#include <windows.h>
+
+//This includes windows so needs to come last, else it might cause problems with other includes
+#include <ChilliSource/Backend/Platform/Windows/Core/File/WindowsFileUtils.h>
 
 //Stupid windows! Why would you #define function names. Heaven forbid that
 //someone else would want to use that function name in their code

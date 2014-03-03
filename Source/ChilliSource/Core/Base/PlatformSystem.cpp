@@ -13,7 +13,7 @@
 #elif defined CS_TARGETPLATFORM_ANDROID
 #   include <ChilliSource/Backend/Platform/Android/PlatformSystem.h>
 #elif defined CS_TARGETPLATFORM_WINDOWS
-#   include <ChilliSource/Backend/Platform/Windows/PlatformSystemWindows.h>
+#   include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
 #endif
 
 namespace ChilliSource
