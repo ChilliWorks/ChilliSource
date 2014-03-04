@@ -60,11 +60,14 @@ namespace ChilliSource
                 return inLHS.udwMaxRes < inRHS.udwMaxRes;
             }
         }
+        
+        Application* Application::s_application = nullptr;
+        
         //----------------------------------------------------
         //----------------------------------------------------
         Application* Application::Get()
         {
-            return nullptr;
+            return s_application;
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -73,6 +76,8 @@ namespace ChilliSource
             mpInputSystem(nullptr), pPlatformSystem(nullptr), pAudioSystem(nullptr), mpRenderer(nullptr), mspFileSystem(nullptr), meDefaultOrientation(ScreenOrientation::k_landscapeRight),
             mpResourceManagerDispenser(nullptr), s_updateIntervalRemainder(0.0f), s_shouldNotifyConnectionsResumeEvent(false), s_isFirstFrame(true), s_isSuspending(false)
 		{
+            CS_ASSERT(s_application == nullptr, "Application already exists!");
+            s_application = this;
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -246,6 +251,42 @@ namespace ChilliSource
         FileSystem* Application::GetFileSystemPtr()
         {
             return mspFileSystem;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        void Application::SetRenderer(Rendering::Renderer* in_system)
+        {
+            mpRenderer = in_system;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        void Application::SetRenderSystem(Rendering::RenderSystem* in_system)
+        {
+            mpRenderSystem = in_system;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        void Application::SetPlatformSystem(PlatformSystem* in_system)
+        {
+            pPlatformSystem = in_system;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        void Application::SetInputSystem(Input::InputSystem* in_system)
+        {
+            mpInputSystem = in_system;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        void Application::SetAudioSystem(Audio::AudioSystem* in_system)
+        {
+            pAudioSystem = in_system;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        void Application::SetFileSystem(FileSystem* in_system)
+        {
+            mspFileSystem = in_system;
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -437,6 +478,12 @@ namespace ChilliSource
             mpResourceManagerDispenser->SetResourceProviders(mResourceProviders);
 
             pPlatformSystem->PostCreateSystems();
+            
+            //Initialise the input system
+			if(GetInputSystemPtr() != nullptr)
+			{
+				SetHasTouchInput((GetInputSystemPtr()->GetTouchScreenPtr() != nullptr));
+			}
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -604,6 +651,8 @@ namespace ChilliSource
 				mSystems.pop_back();
 				pSystem.reset();
 			}
+            
+            s_application = nullptr;
 		}
 	}
 }

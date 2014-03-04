@@ -272,7 +272,7 @@ namespace ChilliSource
             AESEncrypt::Encrypt(pudwDocBinary, udwEncryptedSize, kstrLocalDataStoreEncryptionKey, reinterpret_cast<u8*>(pdwDocEncrypted));
             
             // Write to disk
-            FileSystem* pFileSystem = Application::GetFileSystemPtr();
+            FileSystem* pFileSystem = Application::Get()->GetFileSystemPtr();
             FileStreamSPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, kstrLocalDataStoreEncryptedFilename, FileMode::k_writeBinary);
             if(pFileStream->IsOpen() && !pFileStream->IsBad())
             {
@@ -296,7 +296,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
 		void LocalDataStore::RefreshFromFile()
         {
-            FileSystem* pFileSystem = Application::GetFileSystemPtr();
+            FileSystem* pFileSystem = Application::Get()->GetFileSystemPtr();
             if(pFileSystem->DoesFileExist(StorageLocation::k_saveData, kstrLocalDataStoreEncryptedFilename))
             {
                 FileStreamSPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, kstrLocalDataStoreEncryptedFilename, FileMode::k_read);

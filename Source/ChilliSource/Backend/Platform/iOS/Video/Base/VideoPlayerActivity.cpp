@@ -167,7 +167,7 @@ namespace ChilliSource
             if(mbKeepAppRunning == false)
             {
                 mbIsAppSuspended = true;
-                Core::Application::Get()->Suspend();
+                Core::Application::Get()->OnSuspend();
             }
             
             [mpMoviePlayerController play];
@@ -329,7 +329,7 @@ namespace ChilliSource
             if(mbIsAppSuspended == true)
             {
                 //Resume the application
-                Core::Application::Get()->Resume();
+                Core::Application::Get()->OnResume();
                 mbIsAppSuspended = false;
             }
             

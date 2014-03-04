@@ -204,12 +204,6 @@ namespace ChilliSource
             
 			//Create the renderer
 			Core::Application::Get()->SetRenderer(new Rendering::Renderer(Core::Application::Get()->GetRenderSystemPtr()));
-            
-			//Initialise the input system
-			if(Core::Application::Get()->GetInputSystemPtr() != nullptr)
-			{
-				Core::Application::Get()->SetHasTouchInput((Core::Application::Get()->GetInputSystemPtr()->GetTouchScreenPtr() != nullptr));
-			}
 		}
 		//-------------------------------------------------
 		/// Post Create Systems

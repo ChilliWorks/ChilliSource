@@ -6,9 +6,10 @@
 //  Copyright 2010 Tag Games. All rights reserved.
 //
 
-#import <ChilliSource/Core/Base/PlatformSystem.h>
 #import <ChilliSource/Backend/Platform/iOS/Core/Base/NativeSystem.h>
 
+#import <ChilliSource/Backend/Platform/iOS/Core/Dialogue/DialogueSystem.h>
+#import <ChilliSource/Core/Base/PlatformSystem.h>
 #import <ChilliSource/Core/Base/Application.h>
 
 #import <mach/mach.h>
@@ -163,14 +164,18 @@ static mach_timebase_info_data_t gMachtimeBase;
 }
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex 
 {
-	// NO = 0, YES = 1
-	if(buttonIndex == 0)
+    ChilliSource::iOS::DialogueSystem* dialogueSystem = ChilliSource::Core::Application::Get()->GetSystemImplementing<ChilliSource::iOS::DialogueSystem>();
+    if (dialogueSystem != nullptr)
     {
-        ChilliSource::Core::Application::Get()->OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::SystemConfirmDialog::Result::k_cancel);
-    }
-    else 
-    {
-        ChilliSource::Core::Application::Get()->OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::SystemConfirmDialog::Result::k_confirm);
+        // NO = 0, YES = 1
+        if(buttonIndex == 0)
+        {
+            dialogueSystem->OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::DialogueSystem::DialogueResult::k_cancel);
+        }
+        else
+        {
+            dialogueSystem->OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::DialogueSystem::DialogueResult::k_confirm);
+        }
     }
 }
 //----------------------------------------------

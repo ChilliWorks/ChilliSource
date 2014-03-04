@@ -271,6 +271,54 @@ namespace ChilliSource
 			/// @return Pointer to the file system
 			//-----------------------------------------------------
 			FileSystem* GetFileSystemPtr();
+            //-----------------------------------------------------
+			/// Sets the renderer.
+            ///
+            /// @author I Copland
+			///
+			/// @param Handle application renderer
+			//-----------------------------------------------------
+			void SetRenderer(Rendering::Renderer* in_system);
+			//-----------------------------------------------------
+			/// Sets the render system.
+            ///
+            /// @author I Copland
+			///
+			/// @param Handle to platfrom specific render system
+			//-----------------------------------------------------
+			void SetRenderSystem(Rendering::RenderSystem* in_system);
+            //-----------------------------------------------------
+			/// Sets the platform system.
+            ///
+            /// @author I Copland
+			///
+            /// @param Pointer to the platform system
+            //-----------------------------------------------------
+			void SetPlatformSystem(PlatformSystem* in_system);
+			//-----------------------------------------------------
+			/// Sets the input system.
+            ///
+            /// @author I Copland
+			///
+			/// @param Pointer to the input system
+			//-----------------------------------------------------
+			void SetInputSystem(Input::InputSystem* in_system);
+			//-----------------------------------------------------
+			/// Sets the audio system.
+            ///
+            /// @author I Copland
+			///
+			/// @param Pointer to the input system
+			//-----------------------------------------------------
+			void SetAudioSystem(Audio::AudioSystem* in_system);
+			//-----------------------------------------------------
+			/// Sets the file system.
+            ///
+            /// @author I Copland
+			///
+			/// @return Pointer to the file system
+			//-----------------------------------------------------
+			void SetFileSystem(FileSystem* in_system);
             //----------------------------------------------------
 			/// Triggered by an frame begin event. 
             ///
