@@ -25,6 +25,18 @@ namespace ChilliSource
 		{
 		public:
             
+            //-----------------------------------------------------
+			/// Refreshes the master text. This should be called
+            /// whenever the master text changes on disc, for example
+            /// after a DLC update.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The storage location of the master text.
+            /// @param Directory path excluding name, i.e. if root then
+            /// just "" should be passed.
+            //-----------------------------------------------------
+            static void RefreshMasterText(StorageLocation ineStorageLocation, const std::string& instrDirectory);
 			//---------------------------------------------------------------------
 			/// Get Text
 			///

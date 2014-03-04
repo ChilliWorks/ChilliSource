@@ -9,6 +9,7 @@
 
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/Device.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 namespace ChilliSource
@@ -19,6 +20,17 @@ namespace ChilliSource
         UTF8String* LocalisedText::mpText = nullptr;
         LocalisedText::IDToLookupIndex* LocalisedText::mpTextLookup = nullptr;
         
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void LocalisedText::RefreshMasterText(StorageLocation ineStorageLocation, const std::string& instrDirectory)
+        {
+            //Load any localised text from file
+            if(!Core::LocalisedText::LoadTextFromFile(ineStorageLocation, instrDirectory, Core::Device::GetLanguage().GetLanguageCode() + ".mofloloca"))
+            {
+                //Default to english
+                Core::LocalisedText::LoadTextFromFile(ineStorageLocation, instrDirectory, "en.mofloloca");
+            }
+        }
 		//---------------------------------------------------------------------
 		/// Get Text
 		///
@@ -86,7 +98,6 @@ namespace ChilliSource
             
             return true;
 		}
-        
         //----------------------------------------------------------------------------
         /// Load Localised Text
         ///
