@@ -8,29 +8,27 @@
  */
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
+
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderTarget.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureManager.h>
-
-#include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Image/ImageFormatConverter.h>
 #include <ChilliSource/Core/Base/Application.h>
-
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderTarget.h>
+#include <ChilliSource/Core/Image/ImageFormatConverter.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
 
 namespace ChilliSource
 {
 	namespace OpenGL
 	{
-        CTexture::TextureUnit* CTexture::paTextureUnits = nullptr;
-        u32 CTexture::udwCurrentActiveSlot = 0;
+        Texture::TextureUnit* Texture::paTextureUnits = nullptr;
+        u32 Texture::udwCurrentActiveSlot = 0;
 		
 		//---------------------------------------------------------------
 		/// Constructor
 		///
 		/// @param Source image to create texture from
 		//---------------------------------------------------------------
-		CTexture::CTexture(CTextureManager* inpTextureManager)
+		Texture::Texture(TextureManager* inpTextureManager)
         : meSFilter(Filter::k_linear), meTFilter(Filter::k_linear), meSWrapMode(WrapMode::k_clamp), meTWrapMode(WrapMode::k_clamp), mGLTexID(0),
         mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), mdwTextureSlot(0), meImageFormat(Core::Image::Format::k_RGBA8888), mpTextureManager(inpTextureManager),
         mpRenderCapabilities(nullptr)
@@ -44,7 +42,7 @@ namespace ChilliSource
 		/// @param Width
 		/// @param Height
 		//--------------------------------------------------
-		void CTexture::Init(u32 inudwWidth, u32 inudwHeight, Core::Image::Format ineFormat)
+		void Texture::Init(u32 inudwWidth, u32 inudwHeight, Core::Image::Format ineFormat)
 		{
             ErrorCheck(inudwWidth, inudwHeight);
 			
@@ -95,7 +93,7 @@ namespace ChilliSource
 		/// @param Source image
 		/// @param Whether to create mip maps
 		//--------------------------------------------------
-		void CTexture::Init(Core::Image * pSourceImage, bool inbWithMipsMaps)
+		void Texture::Init(Core::Image * pSourceImage, bool inbWithMipsMaps)
 		{
             meImageFormat = pSourceImage->GetFormat();
             
@@ -189,7 +187,7 @@ namespace ChilliSource
         ///
         /// @param Image To Initialize from this Texture
         //----------------------------------------------------------------
-        bool CTexture::CreateImage(Core::ImageSPtr& outpImage)
+        bool Texture::CreateImage(Core::ImageSPtr& outpImage)
         {           
             GLuint udwFrameBufferID;
             
@@ -267,7 +265,7 @@ namespace ChilliSource
                     break;
             }
 
-            CRenderTarget::ClearCache();
+            RenderTarget::ClearCache();
             ClearCache();
 
             glBindFramebuffer(GL_FRAMEBUFFER, 0); // Hack to resolve implementation issue for glDeleteFramebuffers not resetting bound buffer to zero
@@ -280,7 +278,7 @@ namespace ChilliSource
 		///
 		/// Flush the currently bound texture cache
 		//--------------------------------------------------
-		void CTexture::ClearCache()
+		void Texture::ClearCache()
 		{
             if (paTextureUnits != nullptr)
             {
@@ -310,7 +308,7 @@ namespace ChilliSource
         /// @param Width
         /// @param Height
         //---------------------------------------------------
-        void CTexture::ErrorCheck(u32 inudwWidth, u32 inudwHeight)
+        void Texture::ErrorCheck(u32 inudwWidth, u32 inudwHeight)
         {
             Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::GetSystemImplementing<Rendering::RenderCapabilities>();
             CS_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
@@ -326,7 +324,7 @@ namespace ChilliSource
 		/// @param Interface ID type
 		/// @return Whether the object is of this type
 		//--------------------------------------------------
-		bool CTexture::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool Texture::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == Texture::InterfaceID;
 		}
@@ -335,7 +333,7 @@ namespace ChilliSource
 		///
 		/// @param Texture unit to bind texture to (default 0)
 		//--------------------------------------------------
-		void CTexture::Bind(u32 inSlot)
+		void Texture::Bind(u32 inSlot)
 		{
 			if(inSlot > mpRenderCapabilities->GetNumTextureUnits())
 			{
@@ -354,7 +352,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Bind
         //---------------------------------------------------
-        void CTexture::Bind(GLenum inType, u32 inudwSlot, GLint inTextureID, u8* inpObjectID)
+        void Texture::Bind(GLenum inType, u32 inudwSlot, GLint inTextureID, u8* inpObjectID)
         {
             if(!paTextureUnits)
 			{
@@ -382,7 +380,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Set Active Texture Slot
         //---------------------------------------------------
-        void CTexture::SetActiveTextureSlot(u32 inudwSlot)
+        void Texture::SetActiveTextureSlot(u32 inudwSlot)
         {
             if(inudwSlot != udwCurrentActiveSlot)
             {
@@ -395,7 +393,7 @@ namespace ChilliSource
         ///
         /// Update the texture filter and repeat modes
         //---------------------------------------------------
-        void CTexture::UpdateTextureParameters()
+        void Texture::UpdateTextureParameters()
         {
             mbHasTextureFilterModeChanged = false;
             
@@ -472,7 +470,7 @@ namespace ChilliSource
 		///
 		/// Unbind this texture from a slot if it is bound
 		//--------------------------------------------------
-		void CTexture::Unbind()
+		void Texture::Unbind()
 		{
             Unbind((u8*)this);
 		}
@@ -483,7 +481,7 @@ namespace ChilliSource
         ///
         /// @param Object ID
 		//--------------------------------------------------
-		void CTexture::Unbind(u8* inpObjectID)
+		void Texture::Unbind(u8* inpObjectID)
 		{
             Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::GetSystemImplementing<Rendering::RenderCapabilities>();
             CS_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
@@ -507,7 +505,7 @@ namespace ChilliSource
 		///
 		/// @return The GL generated texture handle
 		//--------------------------------------------------
-		GLuint CTexture::GetTextureID() const 
+		GLuint Texture::GetTextureID() const 
 		{
 			return mGLTexID;
 		}
@@ -517,7 +515,7 @@ namespace ChilliSource
 		/// @return Whether or not this was told to use
 		///			mip maps
 		//--------------------------------------------------
-		bool CTexture::HasMipMaps() const
+		bool Texture::HasMipMaps() const
 		{
 			return mbHasMipMaps;
 		}
@@ -527,7 +525,7 @@ namespace ChilliSource
 		/// @return The format of the image used to create
 		///			the texture.
 		//--------------------------------------------------
-		Core::Image::Format CTexture::GetImageFormat() const
+		Core::Image::Format Texture::GetImageFormat() const
 		{
 			return meImageFormat;
 		}
@@ -538,7 +536,7 @@ namespace ChilliSource
 		/// @param S filter mode
 		/// @param T filter mode
 		//--------------------------------------------------
-		void CTexture::SetFilter(Filter ineSFilter, Filter ineTFilter)
+		void Texture::SetFilter(Filter ineSFilter, Filter ineTFilter)
 		{
 			meSFilter = ineSFilter;
 			meTFilter = ineTFilter;
@@ -552,7 +550,7 @@ namespace ChilliSource
 		/// @param S wrap mode
 		/// @param T wrap mode
 		//--------------------------------------------------
-		void CTexture::SetWrapMode(WrapMode inSWrapMode, WrapMode inTWrapMode)
+		void Texture::SetWrapMode(WrapMode inSWrapMode, WrapMode inTWrapMode)
 		{
 			meSWrapMode = inSWrapMode;
 			meTWrapMode = inTWrapMode;
@@ -568,7 +566,7 @@ namespace ChilliSource
         ///
         /// @param Object ID
         //--------------------------------------------------
-        void CTexture::Reset(GLuint& inTextureID, u8* inpObjectID)
+        void Texture::Reset(GLuint& inTextureID, u8* inpObjectID)
         {
             if(inTextureID > 0)
             {
@@ -598,7 +596,7 @@ namespace ChilliSource
         /// calling init. Init will need to be called
         /// again before the texture can be used.
         //--------------------------------------------------
-        void CTexture::Reset()
+        void Texture::Reset()
         {
         	Reset(mGLTexID, (u8*)this);
         }
@@ -606,7 +604,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//--------------------------------------------------
-		CTexture::~CTexture()
+		Texture::~Texture()
 		{
 			mpTextureManager->RemoveRestorableTexture(this);
 			Reset(mGLTexID, (u8*)this);

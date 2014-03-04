@@ -14,14 +14,15 @@
 #define _MOFLOW_OPENGL_SHADERMANAGER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Shader/ShaderManager.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
+#include <ChilliSource/Rendering/Shader/ShaderManager.h>
 
 namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CShaderManager : public ChilliSource::Rendering::ShaderManager
+		class ShaderManager : public ChilliSource::Rendering::ShaderManager
 		{
 		public:
 			//----------------------------------------------------------------

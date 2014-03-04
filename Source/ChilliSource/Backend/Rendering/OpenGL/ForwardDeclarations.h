@@ -6,23 +6,32 @@
 //  Copyright (c) 2012 Tag Games. All rights reserved.
 //
 
-#ifndef _MOFLOW_OPENGL_FORWARDDECLARATIONS_H_
-#define _MOFLOW_OPENGL_FORWARDDECLARATIONS_H_
+#ifndef _CHILLISOURCE_BACKEND_RENDERING_OPENGL_FORWARDDECLARATIONS_H_
+#define _CHILLISOURCE_BACKEND_RENDERING_OPENGL_FORWARDDECLARATIONS_H_
 
 namespace ChilliSource
 {
     namespace OpenGL
     {
-        class CTextureManager;
-        class CCubemapManager;
-        class CShaderManager;
-        class CRenderTarget;
-        class CMeshBuffer;
-        class CTexture;
-        class CCubemap;
-        class CShader;
-        class CRenderSystem;
-        class CRenderCapabilities;
+        //----------------------------------------------------
+        /// Base
+        //----------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(MeshBuffer);
+        CS_FORWARDDECLARE_CLASS(RenderCapabilities);
+        CS_FORWARDDECLARE_CLASS(RenderSystem);
+        CS_FORWARDDECLARE_CLASS(RenderTarget);
+        //----------------------------------------------------
+        /// Shader
+        //----------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(Shader);
+        CS_FORWARDDECLARE_CLASS(ShaderManager);
+        //----------------------------------------------------
+        /// Texture
+        //----------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(Cubemap);
+        CS_FORWARDDECLARE_CLASS(CubemapManager);
+        CS_FORWARDDECLARE_CLASS(Texture);
+        CS_FORWARDDECLARE_CLASS(TextureManager);
     }
 }
 

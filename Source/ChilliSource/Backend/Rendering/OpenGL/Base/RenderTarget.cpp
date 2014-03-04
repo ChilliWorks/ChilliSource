@@ -8,6 +8,7 @@
  */
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderTarget.h>
+
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
@@ -20,7 +21,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-        CRenderTarget* CRenderTarget::pCurrentlyBoundTarget = nullptr;
+        RenderTarget* RenderTarget::pCurrentlyBoundTarget = nullptr;
         
         GLint gCurrentlyBoundFrameBuffer = -1;
         GLint gCurrentlyBoundRenderBuffer = -1;
@@ -111,9 +112,9 @@ namespace ChilliSource
         //------------------------------------------------------
         /// Create Default Render Target
         //------------------------------------------------------
-        CRenderTarget* CRenderTarget::CreateDefaultRenderTarget(EAGLContext* inpContext, u32 inudwWidth, u32 inudwHeight)
+        RenderTarget* RenderTarget::CreateDefaultRenderTarget(EAGLContext* inpContext, u32 inudwWidth, u32 inudwHeight)
         {
-            CRenderTarget* pDefaultRenderTarget = new CRenderTarget();
+            RenderTarget* pDefaultRenderTarget = new RenderTarget();
             pDefaultRenderTarget->Init(inudwWidth, inudwHeight);
             
             BindFrameBuffer(pDefaultRenderTarget->mFrameBuffer);
@@ -141,7 +142,7 @@ namespace ChilliSource
         //------------------------------------------------------
         /// Present Default Render Target
         //------------------------------------------------------
-        void CRenderTarget::PresentDefaultRenderTarget(EAGLContext* inpContext, CRenderTarget* inpRenderTarget)
+        void RenderTarget::PresentDefaultRenderTarget(EAGLContext* inpContext, RenderTarget* inpRenderTarget)
         {
             BindRenderBuffer(inpRenderTarget->mRenderBuffer);
             [inpContext presentRenderbuffer:GL_RENDERBUFFER];
@@ -149,12 +150,12 @@ namespace ChilliSource
         //------------------------------------------------------
         /// Destroy Default Render Target
         //------------------------------------------------------
-        void CRenderTarget::DestroyDefaultRenderTarget(EAGLContext* inpContext, CRenderTarget* inpRenderTarget)
+        void RenderTarget::DestroyDefaultRenderTarget(EAGLContext* inpContext, RenderTarget* inpRenderTarget)
         {
             [inpContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:nil];
             
-            if(CRenderTarget::pCurrentlyBoundTarget == inpRenderTarget)
-                CRenderTarget::pCurrentlyBoundTarget = nullptr;
+            if(RenderTarget::pCurrentlyBoundTarget == inpRenderTarget)
+                RenderTarget::pCurrentlyBoundTarget = nullptr;
             
             if(gCurrentlyBoundFrameBuffer == inpRenderTarget->mFrameBuffer)
                 gCurrentlyBoundFrameBuffer = -1;
@@ -170,9 +171,9 @@ namespace ChilliSource
         ///
         /// Flush the currently bound texture cache
         //--------------------------------------------------
-        void CRenderTarget::ClearCache()
+        void RenderTarget::ClearCache()
         {
-            CRenderTarget::pCurrentlyBoundTarget = nullptr;
+            RenderTarget::pCurrentlyBoundTarget = nullptr;
             gCurrentlyBoundFrameBuffer = -1;
             gCurrentlyBoundRenderBuffer = -1;
         }
@@ -181,7 +182,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//------------------------------------------------------
-        CRenderTarget::CRenderTarget() 
+        RenderTarget::RenderTarget() 
         : mFrameBuffer(0), mRenderBuffer(0), mDepthBuffer(0)
 		{
 		}
@@ -191,7 +192,7 @@ namespace ChilliSource
 		/// @param Width of the render target
 		/// @param Height of the render target
 		//------------------------------------------------------
-		void CRenderTarget::Init(u32 inudwWidth, u32 inudwHeight)
+		void RenderTarget::Init(u32 inudwWidth, u32 inudwHeight)
 		{
 			mudwWidth = inudwWidth;
 			mudwHeight = inudwHeight;
@@ -201,7 +202,7 @@ namespace ChilliSource
         //------------------------------------------------------
         /// Set Target Textures
         //------------------------------------------------------
-        void CRenderTarget::SetTargetTextures(const Rendering::TextureSPtr& inpColourTexture, const Rendering::TextureSPtr& inpDepthTexture)
+        void RenderTarget::SetTargetTextures(const Rendering::TextureSPtr& inpColourTexture, const Rendering::TextureSPtr& inpDepthTexture)
         {
             DeleteRenderBuffer(&mRenderBuffer);
             DeleteRenderBuffer(&mDepthBuffer);
@@ -209,12 +210,12 @@ namespace ChilliSource
 			
             if (inpColourTexture != nullptr)
             {
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, std::static_pointer_cast<CTexture>(inpColourTexture)->GetTextureID(), 0);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, std::static_pointer_cast<Texture>(inpColourTexture)->GetTextureID(), 0);
             }
             
             if (inpDepthTexture != nullptr)
             {
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, std::static_pointer_cast<CTexture>(inpDepthTexture)->GetTextureID(), 0);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, std::static_pointer_cast<Texture>(inpDepthTexture)->GetTextureID(), 0);
             }
             else
             {
@@ -253,7 +254,7 @@ namespace ChilliSource
 		/// Instantiate a render buffer and bind it to the
 		/// frame buffer object
 		//------------------------------------------------------
-		bool CRenderTarget::CreateAndAttachDepthBuffer()
+		bool RenderTarget::CreateAndAttachDepthBuffer()
 		{
             BindFrameBuffer(mFrameBuffer);
             CreateRenderBuffer(&mDepthBuffer);
@@ -275,19 +276,19 @@ namespace ChilliSource
 		//------------------------------------------------------
 		/// Bind
 		//------------------------------------------------------
-		void CRenderTarget::Bind()
+		void RenderTarget::Bind()
 		{ 
-            if(CRenderTarget::pCurrentlyBoundTarget != this)
+            if(RenderTarget::pCurrentlyBoundTarget != this)
             {
                 BindFrameBuffer(mFrameBuffer);
                 glViewport(0, 0, mudwWidth, mudwHeight);
-                CRenderTarget::pCurrentlyBoundTarget = this;
+                RenderTarget::pCurrentlyBoundTarget = this;
             }
 		}
         //------------------------------------------------------
         /// Discard
         //------------------------------------------------------
-        void CRenderTarget::Discard()
+        void RenderTarget::Discard()
         {
 #ifdef CS_TARGETPLATFORM_IOS
             GLenum Attachments[] = {GL_COLOR_ATTACHMENT0, GL_DEPTH_ATTACHMENT};
@@ -298,12 +299,12 @@ namespace ChilliSource
 		//------------------------------------------------------
 		/// Destroy
 		//------------------------------------------------------
-		void CRenderTarget::Destroy()
+		void RenderTarget::Destroy()
 		{
-            if(CRenderTarget::pCurrentlyBoundTarget == this)
+            if(RenderTarget::pCurrentlyBoundTarget == this)
             {
                 glBindFramebuffer(GL_FRAMEBUFFER, 0);
-                CRenderTarget::pCurrentlyBoundTarget = nullptr;
+                RenderTarget::pCurrentlyBoundTarget = nullptr;
             }
             
             DeleteRenderBuffer(&mRenderBuffer);
@@ -313,7 +314,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		/// Destructor
 		//------------------------------------------------------
-		CRenderTarget::~CRenderTarget()
+		RenderTarget::~RenderTarget()
 		{
 			Destroy();
 		}

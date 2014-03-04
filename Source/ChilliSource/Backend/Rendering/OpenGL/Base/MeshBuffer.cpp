@@ -8,13 +8,14 @@
  */
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/MeshBuffer.h>
+
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
 
 namespace ChilliSource
 {
 	namespace OpenGL
 	{
-        CMeshBuffer* CMeshBuffer::pCurrentlyBoundBuffer = nullptr;
+        MeshBuffer* MeshBuffer::pCurrentlyBoundBuffer = nullptr;
         
 		//-----------------------------------------------------
 		/// Constructor
@@ -23,7 +24,7 @@ namespace ChilliSource
 		/// the given buffer description
 		/// @param Buffer desciption
 		//-----------------------------------------------------
-		CMeshBuffer::CMeshBuffer(ChilliSource::Rendering::BufferDescription &inBuffDesc) 
+		MeshBuffer::MeshBuffer(ChilliSource::Rendering::BufferDescription &inBuffDesc) 
         : ChilliSource::Rendering::MeshBuffer(inBuffDesc), mVertexBuffer(0), mIndexBuffer(0), mBufferUsage(0), mBufferAccess(0),
           mpVertexData(nullptr), mpIndexData(nullptr), mpVertexDataBackup(nullptr), mpIndexDataBackup(nullptr), mbMapBufferAvailable(false), mbCacheValid(false)
 		{
@@ -76,21 +77,21 @@ namespace ChilliSource
                 glBufferData(GL_ELEMENT_ARRAY_BUFFER, mBufferDesc.IndexDataCapacity, nullptr, mBufferUsage);
             }
             
-            CMeshBuffer::pCurrentlyBoundBuffer = this;
+            MeshBuffer::pCurrentlyBoundBuffer = this;
 		}
 		//-----------------------------------------------------
 		/// Bind
 		///
 		/// Set the active buffer by binding to the context
 		//-----------------------------------------------------
-		void CMeshBuffer::Bind()
+		void MeshBuffer::Bind()
 		{
-            if(CMeshBuffer::pCurrentlyBoundBuffer != this)
+            if(MeshBuffer::pCurrentlyBoundBuffer != this)
             {
                 glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
                 
-                CMeshBuffer::pCurrentlyBoundBuffer = this;
+                MeshBuffer::pCurrentlyBoundBuffer = this;
             }
 		}
 		//-----------------------------------------------------
@@ -103,7 +104,7 @@ namespace ChilliSource
 		/// @param The vertex layout stride
 		/// @return If successful
 		//-----------------------------------------------------
-		bool CMeshBuffer::LockVertex(f32** outppBuffer, u32 inDataOffset, u32 inDataStride)
+		bool MeshBuffer::LockVertex(f32** outppBuffer, u32 inDataOffset, u32 inDataStride)
 		{
 			if(mbMapBufferAvailable)
 			{
@@ -141,7 +142,7 @@ namespace ChilliSource
 		/// @param The vertex layout stride
 		/// @return If successful
 		//-----------------------------------------------------
-		bool CMeshBuffer::LockIndex(u16** outppBuffer, u32 inDataOffset, u32 inDataStride)
+		bool MeshBuffer::LockIndex(u16** outppBuffer, u32 inDataOffset, u32 inDataStride)
 		{
             if(!mIndexBuffer)
             {
@@ -176,7 +177,7 @@ namespace ChilliSource
 		/// Releases the buffer from mapping
 		/// @return If successful
 		//-----------------------------------------------------
-		bool CMeshBuffer::UnlockVertex()
+		bool MeshBuffer::UnlockVertex()
 		{
 			if(mbMapBufferAvailable)
 			{
@@ -199,7 +200,7 @@ namespace ChilliSource
 		/// Releases the buffer from mapping
 		/// @return If successful
 		//-----------------------------------------------------
-		bool CMeshBuffer::UnlockIndex()
+		bool MeshBuffer::UnlockIndex()
 		{
             if(!mIndexBuffer)
                 return false;
@@ -225,7 +226,7 @@ namespace ChilliSource
 		/// @param Whether the GL implementation supports
 		/// the map buffer extension
 		//-----------------------------------------------------
-		void CMeshBuffer::SetMapBufferAvailable(bool inbEnabled)
+		void MeshBuffer::SetMapBufferAvailable(bool inbEnabled)
 		{
 			mbMapBufferAvailable = inbEnabled;
 		}
@@ -235,7 +236,7 @@ namespace ChilliSource
 		/// Backs up the data in the mesh buffer to make
 		/// sure it is not lost on context loss
 		//-----------------------------------------------------
-		void CMeshBuffer::Backup()
+		void MeshBuffer::Backup()
 		{
 			
 			if(!mpIndexDataBackup)
@@ -277,10 +278,10 @@ namespace ChilliSource
 		/// Restore the mesh buffer data from the last
 		/// backup after the context has been re-created
 		//-----------------------------------------------------
-		void CMeshBuffer::Restore()
+		void MeshBuffer::Restore()
 		{
             //Force bind as we may have been bound from before context destruction
-            CMeshBuffer::pCurrentlyBoundBuffer = nullptr;
+            MeshBuffer::pCurrentlyBoundBuffer = nullptr;
             
             if(mpVertexDataBackup == nullptr)
             {
@@ -325,7 +326,7 @@ namespace ChilliSource
 		///
 		/// @param Pointer to render system
 		//-----------------------------------------------------
-		void CMeshBuffer::SetOwningRenderSystem(CRenderSystem* inpSystem)
+		void MeshBuffer::SetOwningRenderSystem(RenderSystem* inpSystem)
 		{
 			mpRenderSystem = inpSystem;
 		}
@@ -338,7 +339,7 @@ namespace ChilliSource
         ///
         /// @return Has mesh buffer been modifier
         //-----------------------------------------------------
-        bool CMeshBuffer::IsCacheValid() const
+        bool MeshBuffer::IsCacheValid() const
         {
             return mbCacheValid;
         }
@@ -348,7 +349,7 @@ namespace ChilliSource
         /// The owning render system has seen that the
         /// buffer has changed and applied vertex pointers
         //-----------------------------------------------------
-        void CMeshBuffer::SetCacheValid()
+        void MeshBuffer::SetCacheValid()
         {
             mbCacheValid = true;
         }
@@ -356,16 +357,16 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//-----------------------------------------------------
-		CMeshBuffer::~CMeshBuffer()
+		MeshBuffer::~MeshBuffer()
 		{
 			if(mpRenderSystem)
 			{
 				mpRenderSystem->RemoveBuffer(this);
 			}
 
-            if(CMeshBuffer::pCurrentlyBoundBuffer == this)
+            if(MeshBuffer::pCurrentlyBoundBuffer == this)
             {
-                CMeshBuffer::pCurrentlyBoundBuffer = nullptr;
+                MeshBuffer::pCurrentlyBoundBuffer = nullptr;
             }
             
 			glDeleteBuffers(1, &mVertexBuffer);

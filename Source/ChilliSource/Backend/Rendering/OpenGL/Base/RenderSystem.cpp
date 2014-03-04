@@ -8,19 +8,18 @@
  */
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
+
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/MeshBuffer.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderTarget.h>
-
-#include <ChilliSource/Rendering/Lighting/LightComponent.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
+#include <ChilliSource/Core/Base/PlatformSystem.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
 #include <ChilliSource/Rendering/Lighting/DirectionalLightComponent.h>
+#include <ChilliSource/Rendering/Lighting/LightComponent.h>
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
-
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/Base/PlatformSystem.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
 #include <UIKit/UIKit.h>
@@ -36,14 +35,14 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-        CS_DEFINE_NAMEDTYPE(CRenderSystem);
+        CS_DEFINE_NAMEDTYPE(RenderSystem);
         
         bool gbIsMapBufferAvailable = true;
         
 		//----------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------
-		CRenderSystem::CRenderSystem()
+		RenderSystem::RenderSystem()
 		: mpDefaultRenderTarget(nullptr), mpCurrentMaterial(nullptr), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0), mpVertexAttribs(nullptr),
         mbEmissiveSet(false), mbAmbientSet(false), mbDiffuseSet(false), mbSpecularSet(false), mudwNumBoundTextures(0), mSrcBlendFunc(Rendering::AlphaBlend::k_unknown), mDstBlendFunc(Rendering::AlphaBlend::k_unknown),
         meCurrentCullFace(Rendering::CullFace::k_front), meDepthFunc(Rendering::DepthFunction::k_less), mpLightComponent(nullptr), mbBlendFunctionLocked(false), mpaTextureHandles(nullptr), mbInvalidateLigthingCache(true),
@@ -68,14 +67,14 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Is A
 		//----------------------------------------------------------
-		bool CRenderSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool RenderSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
 		{
 			return	(inInterfaceID == RenderSystem::InterfaceID) || (inInterfaceID == Core::IComponentProducer::InterfaceID);
 		}
         //----------------------------------------------------------
         /// Init
         //----------------------------------------------------------
-        bool CRenderSystem::Init(u32 inudwWidth, u32 inudwHeight)
+        bool RenderSystem::Init(u32 inudwWidth, u32 inudwHeight)
 		{
             CS_ASSERT((inudwWidth > 0 && inudwHeight > 0), "Cannot create and OpenGL ES view with size ZERO");
 #ifdef CS_TARGETPLATFORM_WINDOWS
@@ -88,10 +87,10 @@ namespace ChilliSource
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
             //Check for map buffer support
-            gbIsMapBufferAvailable = CRenderSystem::CheckForOpenGLExtension("GL_OES_mapbuffer");
+            gbIsMapBufferAvailable = RenderSystem::CheckForOpenGLExtension("GL_OES_mapbuffer");
 #endif
             
-            mpRenderCapabilities = Core::Application::GetSystemImplementing<CRenderCapabilities>();
+            mpRenderCapabilities = Core::Application::GetSystemImplementing<RenderCapabilities>();
             CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
             mpRenderCapabilities->CalculateCapabilities();
             
@@ -108,7 +107,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Resume
         //----------------------------------------------------------
-        void CRenderSystem::Resume()
+        void RenderSystem::Resume()
         {
 			mbInvalidateAllCaches = true;
 			
@@ -123,14 +122,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Suspend
         //----------------------------------------------------------
-        void CRenderSystem::Suspend()
+        void RenderSystem::Suspend()
         {
         	BackupContext();
         }
         //----------------------------------------------------------
         /// Backup Context
         //----------------------------------------------------------
-        void CRenderSystem::BackupContext()
+        void RenderSystem::BackupContext()
         {
 #ifdef CS_TARGETPLATFORM_ANDROID
         	//Context is about to be lost do a data backup
@@ -141,7 +140,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Restore Context
 		//----------------------------------------------------------
-		void CRenderSystem::RestoreContext()
+		void RenderSystem::RestoreContext()
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
             ForceRefreshRenderStates();
@@ -155,7 +154,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Light
         //----------------------------------------------------------
-        void CRenderSystem::SetLight(Rendering::LightComponent* inpLightComponent)
+        void RenderSystem::SetLight(Rendering::LightComponent* inpLightComponent)
         {
             if(inpLightComponent == mpLightComponent && mbInvalidateAllCaches == false)
             {
@@ -173,7 +172,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Apply Material
 		//----------------------------------------------------------
-		void CRenderSystem::ApplyMaterial(const Rendering::Material& inMaterial)
+		void RenderSystem::ApplyMaterial(const Rendering::Material& inMaterial)
 		{
 			//Enable the hardware states
             if(mbInvalidateAllCaches || !mpCurrentMaterial || mpCurrentMaterial != &inMaterial || !mpCurrentMaterial->IsCacheValid())
@@ -186,7 +185,7 @@ namespace ChilliSource
                 {
                     ApplyRenderStates(inMaterial);
                     
-                    ShaderSPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
+                    ShaderSPtr pShader = std::static_pointer_cast<Shader>(inMaterial.GetActiveShaderProgram());
                     GLuint GLShaderProgram = pShader->GetProgramID();
                     
                     if(GLShaderProgram != 0)
@@ -226,7 +225,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Joints
         //----------------------------------------------------------
-        void CRenderSystem::ApplyJoints(const std::vector<Core::Matrix4x4>& inaJoints)
+        void RenderSystem::ApplyJoints(const std::vector<Core::Matrix4x4>& inaJoints)
         {
             if(mJointsHandle != -1)
             {
@@ -245,7 +244,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Apply Render States
 		//----------------------------------------------------------
-		void CRenderSystem::ApplyRenderStates(const Rendering::Material& inMaterial)
+		void RenderSystem::ApplyRenderStates(const Rendering::Material& inMaterial)
         {
             EnableAlphaBlending(inMaterial.IsTransparent());
             SetBlendFunction(inMaterial.GetSourceBlendFunction(), inMaterial.GetDestBlendFunction());
@@ -262,7 +261,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Get Attribute Locations
 		//----------------------------------------------------------
-		void CRenderSystem::GetAttributeLocations(const ShaderSPtr& inpShader)
+		void RenderSystem::GetAttributeLocations(const ShaderSPtr& inpShader)
         {
             //Get the handles to the shader attributes
             
@@ -300,9 +299,9 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Get Uniform Locations
 		//----------------------------------------------------------
-		void CRenderSystem::GetUniformLocations(const Rendering::Material &inMaterial)
+		void RenderSystem::GetUniformLocations(const Rendering::Material &inMaterial)
         {
-            ShaderSPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
+            ShaderSPtr pShader = std::static_pointer_cast<Shader>(inMaterial.GetActiveShaderProgram());
             
             //Get the required handles to the shader variables (Uniform)
             mmatWVPHandle = pShader->GetUniformLocation("umatWorldViewProj");
@@ -348,9 +347,9 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Apply Shader Variables
 		//----------------------------------------------------------
-		void CRenderSystem::ApplyShaderVariables(const Rendering::Material &inMaterial, GLuint inShaderProg)
+		void RenderSystem::ApplyShaderVariables(const Rendering::Material &inMaterial, GLuint inShaderProg)
 		{
-            ShaderSPtr pShader = std::static_pointer_cast<CShader>(inMaterial.GetActiveShaderProgram());
+            ShaderSPtr pShader = std::static_pointer_cast<Shader>(inMaterial.GetActiveShaderProgram());
 			//Get and set all the custom shader variables
 			for(Rendering::MapStringToFloat::const_iterator it = inMaterial.mMapFloatShaderVars.begin(); it!= inMaterial.mMapFloatShaderVars.end(); ++it)
 			{
@@ -391,7 +390,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Textures
         //----------------------------------------------------------
-        void CRenderSystem::ApplyTextures(const Rendering::Material &inMaterial)
+        void RenderSystem::ApplyTextures(const Rendering::Material &inMaterial)
         {
             for(u32 i=0; i<inMaterial.GetTextures().size(); ++i)
             {
@@ -417,7 +416,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Lighting Values
         //----------------------------------------------------------
-        void CRenderSystem::ApplyLightingValues(const Rendering::Material &inMaterial)
+        void RenderSystem::ApplyLightingValues(const Rendering::Material &inMaterial)
         {
             if(mEmissiveHandle != -1 && (mbInvalidateAllCaches || mbEmissiveSet == false || mCurrentEmissive != inMaterial.GetEmissive()))
             {
@@ -447,7 +446,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Apply Lighting
         //----------------------------------------------------------
-        void CRenderSystem::ApplyLighting(const Rendering::Material &inMaterial, Rendering::LightComponent* inpLightComponent)
+        void RenderSystem::ApplyLighting(const Rendering::Material &inMaterial, Rendering::LightComponent* inpLightComponent)
         {
             if(mbInvalidateLigthingCache == false || inpLightComponent == nullptr)
                 return;
@@ -517,7 +516,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Apply Camera
 		//----------------------------------------------------------
-		void CRenderSystem::ApplyCamera(const Core::Vector3& invPosition, const Core::Matrix4x4& inmatView, const Core::Matrix4x4& inmatProj, const Core::Colour& inClearCol)
+		void RenderSystem::ApplyCamera(const Core::Vector3& invPosition, const Core::Matrix4x4& inmatView, const Core::Matrix4x4& inmatProj, const Core::Colour& inClearCol)
 		{
 			//Set the new view matrix based on the camera position
 			mmatView = inmatView;
@@ -531,14 +530,14 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Get Default Render Target
 		//----------------------------------------------------------
-		Rendering::RenderTarget* CRenderSystem::GetDefaultRenderTarget()
+		Rendering::RenderTarget* RenderSystem::GetDefaultRenderTarget()
 		{
 			return mpDefaultRenderTarget;
 		}
 		//----------------------------------------------------------
 		/// Begin Frame
 		//----------------------------------------------------------
-		void CRenderSystem::BeginFrame(Rendering::RenderTarget* inpActiveRenderTarget)
+		void RenderSystem::BeginFrame(Rendering::RenderTarget* inpActiveRenderTarget)
 		{
 #ifdef CS_TARGETPLATFORM_IOS
             //Sometimes iOS steals the context and doesn't return it.
@@ -572,9 +571,9 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Create Render Target
 		//----------------------------------------------------------
-		Rendering::RenderTarget* CRenderSystem::CreateRenderTarget(u32 inudwWidth, u32 inudwHeight)
+		Rendering::RenderTarget* RenderSystem::CreateRenderTarget(u32 inudwWidth, u32 inudwHeight)
 		{
-			CRenderTarget* pDefaultRenderTarget = new CRenderTarget();
+			RenderTarget* pDefaultRenderTarget = new RenderTarget();
 			pDefaultRenderTarget->Init(inudwWidth, inudwHeight);
 			
 			return pDefaultRenderTarget;
@@ -582,9 +581,9 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Create Buffer
 		//----------------------------------------------------------
-		Rendering::MeshBuffer* CRenderSystem::CreateBuffer(Rendering::BufferDescription &inDesc)
+		Rendering::MeshBuffer* RenderSystem::CreateBuffer(Rendering::BufferDescription &inDesc)
 		{
-			CMeshBuffer* pBuffer = new CMeshBuffer(inDesc);
+			MeshBuffer* pBuffer = new MeshBuffer(inDesc);
 			pBuffer->SetMapBufferAvailable(gbIsMapBufferAvailable);
 			pBuffer->SetOwningRenderSystem(this);
             
@@ -596,7 +595,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Vertex Buffer
         //----------------------------------------------------------
-        void CRenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4x4& inmatWorld)
+        void RenderSystem::RenderVertexBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const Core::Matrix4x4& inmatWorld)
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
             DebugStats::AddToEvent("DrawCalls", 1u);
@@ -631,7 +630,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Render Buffer
         //----------------------------------------------------------
-        void CRenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4x4& inmatWorld)
+        void RenderSystem::RenderBuffer(Rendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const Core::Matrix4x4& inmatWorld)
 		{
 #ifdef CS_ENABLE_DEBUGSTATS
             DebugStats::AddToEvent("DrawCalls", 1u);
@@ -666,12 +665,12 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// End Frame
 		//----------------------------------------------------------
-		void CRenderSystem::EndFrame(Rendering::RenderTarget* inpActiveRenderTarget)
+		void RenderSystem::EndFrame(Rendering::RenderTarget* inpActiveRenderTarget)
 		{
 #ifdef CS_TARGETPLATFORM_IOS
             if (mpDefaultRenderTarget != nullptr && mpDefaultRenderTarget == inpActiveRenderTarget)
             {
-                CRenderTarget::PresentDefaultRenderTarget(mContext, mpDefaultRenderTarget);
+                RenderTarget::PresentDefaultRenderTarget(mContext, mpDefaultRenderTarget);
             }
 #else
             glViewport(0, 0, mudwViewWidth, mudwViewHeight);
@@ -683,25 +682,25 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// On Screen Orientation Changed
 		//----------------------------------------------------------
-        void CRenderSystem::OnScreenOrientationChanged(u32 inudwWidth, u32 inudwHeight)
+        void RenderSystem::OnScreenOrientationChanged(u32 inudwWidth, u32 inudwHeight)
 		{
             ResizeFrameBuffer(inudwWidth, inudwHeight);
 		}
 		//----------------------------------------------------------
 		/// Resize Frame Buffer
 		//----------------------------------------------------------
-		void CRenderSystem::ResizeFrameBuffer(u32 inudwWidth, u32 inudwHeight)
+		void RenderSystem::ResizeFrameBuffer(u32 inudwWidth, u32 inudwHeight)
 		{
 #ifdef CS_TARGETPLATFORM_IOS
             if(mudwViewWidth != inudwWidth || mudwViewHeight != inudwHeight)
             {
                 if(mpDefaultRenderTarget)
                 {
-                    CRenderTarget::DestroyDefaultRenderTarget(mContext, mpDefaultRenderTarget);
+                    RenderTarget::DestroyDefaultRenderTarget(mContext, mpDefaultRenderTarget);
                 }
                 
                 //Create a default frame buffer for on-screen rendering
-                mpDefaultRenderTarget = CRenderTarget::CreateDefaultRenderTarget(mContext, inudwWidth, inudwHeight);
+                mpDefaultRenderTarget = RenderTarget::CreateDefaultRenderTarget(mContext, inudwWidth, inudwHeight);
             }
 #else
             if(mbInvalidateAllCaches || mudwViewWidth != inudwWidth || mudwViewHeight != inudwHeight)
@@ -716,21 +715,21 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Lock Alpha Blending
 		//----------------------------------------------------------
-        void CRenderSystem::LockAlphaBlending()
+        void RenderSystem::LockAlphaBlending()
         {
             msCurrentRenderLocks.mbIsAlphaBlendingEnabled = true;
         }
         //----------------------------------------------------------
 		/// Unlock Alpha Blending
 		//----------------------------------------------------------
-        void CRenderSystem::UnlockAlphaBlending()
+        void RenderSystem::UnlockAlphaBlending()
         {
             msCurrentRenderLocks.mbIsAlphaBlendingEnabled = false;
         }
 		//----------------------------------------------------------
 		/// Enable Alpha Blending
 		//----------------------------------------------------------
-		void CRenderSystem::EnableAlphaBlending(bool inbIsEnabled)
+		void RenderSystem::EnableAlphaBlending(bool inbIsEnabled)
 		{
             if(mbInvalidateAllCaches != true && msCurrentRenderLocks.mbIsAlphaBlendingEnabled == true)
             {
@@ -753,7 +752,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Enable Depth Testing
 		//----------------------------------------------------------
-		void CRenderSystem::EnableDepthTesting(bool inbIsEnabled)
+		void RenderSystem::EnableDepthTesting(bool inbIsEnabled)
 		{
 			//Turn it on
 			if((mbInvalidateAllCaches || !msCurrentRenderFlags.mbIsDepthTestEnabled) && inbIsEnabled)
@@ -771,7 +770,7 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Enable Colour Writing
 		//----------------------------------------------------------
-		void CRenderSystem::EnableColourWriting(bool inbIsEnabled)
+		void RenderSystem::EnableColourWriting(bool inbIsEnabled)
 		{
 			//Turn it on
 			if((mbInvalidateAllCaches || !msCurrentRenderFlags.mbIsColourWriteEnabled) && inbIsEnabled)
@@ -789,21 +788,21 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Lock Depth Writing
 		//----------------------------------------------------------
-        void CRenderSystem::LockDepthWriting()
+        void RenderSystem::LockDepthWriting()
         {
             msCurrentRenderLocks.mbIsDepthWriteEnabled = true;
         }
         //----------------------------------------------------------
 		/// Unlock Depth Writing
 		//----------------------------------------------------------
-        void CRenderSystem::UnlockDepthWriting()
+        void RenderSystem::UnlockDepthWriting()
         {
             msCurrentRenderLocks.mbIsDepthWriteEnabled = false;
         }
 		//----------------------------------------------------------
 		/// Enable Depth Writing
 		//----------------------------------------------------------
-		void CRenderSystem::EnableDepthWriting(bool inbIsEnabled)
+		void RenderSystem::EnableDepthWriting(bool inbIsEnabled)
 		{
             if(mbInvalidateAllCaches != true && msCurrentRenderLocks.mbIsDepthWriteEnabled == true)
             {
@@ -826,7 +825,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Enable Face Culling
 		//----------------------------------------------------------
-		void CRenderSystem::EnableFaceCulling(bool inbIsEnabled)
+		void RenderSystem::EnableFaceCulling(bool inbIsEnabled)
 		{
 			//Turn it on
 			if((mbInvalidateAllCaches || !msCurrentRenderFlags.mbIsCullingEnabled) && inbIsEnabled)
@@ -844,7 +843,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Enable Scissor Testing
         //----------------------------------------------------------
-        void CRenderSystem::EnableScissorTesting(bool inbIsEnabled)
+        void RenderSystem::EnableScissorTesting(bool inbIsEnabled)
         {
             //Turn it on
 			if((mbInvalidateAllCaches || !msCurrentRenderFlags.mbIsScissorTestingEnabled) && inbIsEnabled)
@@ -863,7 +862,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Scissor Region
         //---------------------------------------------------------
-        void CRenderSystem::SetScissorRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize)
+        void RenderSystem::SetScissorRegion(const Core::Vector2& invPosition, const Core::Vector2& invSize)
         {
             if(mbInvalidateAllCaches || mvCachedScissorPos != invPosition || mvCachedScissorSize != invSize)
             {
@@ -875,7 +874,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Cull Face
         //----------------------------------------------------------
-        void CRenderSystem::SetCullFace(Rendering::CullFace ineCullface)
+        void RenderSystem::SetCullFace(Rendering::CullFace ineCullface)
 		{
 			if(mbInvalidateAllCaches || meCurrentCullFace != ineCullface)
             {
@@ -895,7 +894,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Set Depth Function
         //----------------------------------------------------------
-        void CRenderSystem::SetDepthFunction(Rendering::DepthFunction ineFunc)
+        void RenderSystem::SetDepthFunction(Rendering::DepthFunction ineFunc)
         {
             if(mbInvalidateAllCaches || meDepthFunc != ineFunc)
             {
@@ -918,21 +917,21 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Lock Blend Function
 		//----------------------------------------------------------
-        void CRenderSystem::LockBlendFunction()
+        void RenderSystem::LockBlendFunction()
         {
             mbBlendFunctionLocked = true;
         }
         //----------------------------------------------------------
 		/// Unlock Blend Function
 		//----------------------------------------------------------
-        void CRenderSystem::UnlockBlendFunction()
+        void RenderSystem::UnlockBlendFunction()
         {
             mbBlendFunctionLocked = false;
         }
 		//----------------------------------------------------------
 		/// Set Blend Function
 		//----------------------------------------------------------
-		void CRenderSystem::SetBlendFunction(Rendering::AlphaBlend ineSrcFunc, Rendering::AlphaBlend ineDstFunc)
+		void RenderSystem::SetBlendFunction(Rendering::AlphaBlend ineSrcFunc, Rendering::AlphaBlend ineDstFunc)
 		{
             if(mbInvalidateAllCaches != true && mbBlendFunctionLocked == true)
             {
@@ -1016,7 +1015,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Create Attrib State Cache
         //----------------------------------------------------------
-        void CRenderSystem::CreateAttribStateCache()
+        void RenderSystem::CreateAttribStateCache()
         {
             if(mdwMaxVertAttribs == 0)
             {
@@ -1027,7 +1026,7 @@ namespace ChilliSource
             }
         }
         
-        s32 CRenderSystem::GetLocationForVertexSemantic(Rendering::VertexDataSemantic ineSemantic)
+        s32 RenderSystem::GetLocationForVertexSemantic(Rendering::VertexDataSemantic ineSemantic)
         {
             //Determine what client states are required and get their currently bound locations
             switch(ineSemantic)
@@ -1048,7 +1047,7 @@ namespace ChilliSource
                     return -1;
             }
         }
-        bool CRenderSystem::ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
+        bool RenderSystem::ApplyVertexAttributePointr(Rendering::MeshBuffer* inpBuffer,
                                                        GLuint inudwLocation, GLint indwSize, GLenum ineType, GLboolean inbNormalized,
                                                        GLsizei indwStride, const GLvoid* inpOffset)
         {
@@ -1073,7 +1072,7 @@ namespace ChilliSource
 		//------------------------------------------------------------
 		/// Enable Vertex Attribute For Semantic
 		//------------------------------------------------------------
-		void CRenderSystem::EnableVertexAttributeForSemantic(Rendering::MeshBuffer* inpBuffer)
+		void RenderSystem::EnableVertexAttributeForSemantic(Rendering::MeshBuffer* inpBuffer)
 		{
             if(mbInvalidateAllCaches || mdwMaxVertAttribs == 0)
             {
@@ -1082,14 +1081,14 @@ namespace ChilliSource
             
             
             // If mesh buffer has changed we need to reset all its vertex attributes
-            if(((ChilliSource::OpenGL::CMeshBuffer*)inpBuffer)->IsCacheValid() == false)
+            if(((ChilliSource::OpenGL::MeshBuffer*)inpBuffer)->IsCacheValid() == false)
             {
                 for(s32 i =0; i < mdwMaxVertAttribs; i++)
                 {
                     if(mpVertexAttribs[i].pBuffer == inpBuffer)
                         mpVertexAttribs[i].pBuffer = nullptr;
                 }
-                ((ChilliSource::OpenGL::CMeshBuffer*)inpBuffer)->SetCacheValid();
+                ((ChilliSource::OpenGL::MeshBuffer*)inpBuffer)->SetCacheValid();
             }
             
             //Check if the total size of the vertex declaration has changed
@@ -1169,7 +1168,7 @@ namespace ChilliSource
 		//------------------------------------------------------------
 		/// Get Primitive Type
 		//------------------------------------------------------------
-		s32 CRenderSystem::GetPrimitiveType(Rendering::PrimitiveType inType)
+		s32 RenderSystem::GetPrimitiveType(Rendering::PrimitiveType inType)
 		{
 			switch(inType)
 			{
@@ -1187,14 +1186,14 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// Get Path To Shaders
         //----------------------------------------------------------
-        std::string CRenderSystem::GetPathToShaders() const
+        std::string RenderSystem::GetPathToShaders() const
         {
             return "Shaders/OpenGL/";
         }
 		//----------------------------------------------------------
 		/// Check for OpenGL Extension
 		//----------------------------------------------------------
-		bool CRenderSystem::CheckForOpenGLExtension(const std::string& instrExtension)
+		bool RenderSystem::CheckForOpenGLExtension(const std::string& instrExtension)
 		{
 			std::string strExt = (const char*)glGetString(GL_EXTENSIONS);
             return strExt.find(instrExtension) != strExt.npos;
@@ -1202,11 +1201,11 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Force Refresh Render States
 		//----------------------------------------------------------
-		void CRenderSystem::ForceRefreshRenderStates()
+		void RenderSystem::ForceRefreshRenderStates()
 		{
 			//clear the cache.
-			CTexture::ClearCache();
-            CRenderTarget::ClearCache();
+			Texture::ClearCache();
+            RenderTarget::ClearCache();
             
             //Set the default blend function and alpha function
 			SetBlendFunction(Rendering::AlphaBlend::k_sourceAlpha, Rendering::AlphaBlend::k_oneMinusSourceAlpha);
@@ -1221,10 +1220,10 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Backup Mesh Buffers
 		//----------------------------------------------------------
-		void CRenderSystem::BackupMeshBuffers()
+		void RenderSystem::BackupMeshBuffers()
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
-			for(std::vector<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
+			for(std::vector<MeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
 			{
 				(*it)->Backup();
 			}
@@ -1233,10 +1232,10 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Restore Mesh Buffers
 		//----------------------------------------------------------
-		void CRenderSystem::RestoreMeshBuffers()
+		void RenderSystem::RestoreMeshBuffers()
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
-			for(std::vector<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
+			for(std::vector<MeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
 			{
 				(*it)->Restore();
 			}
@@ -1245,10 +1244,10 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Remove Buffer
 		//----------------------------------------------------------
-		void CRenderSystem::RemoveBuffer(Rendering::MeshBuffer* inpBuffer)
+		void RenderSystem::RemoveBuffer(Rendering::MeshBuffer* inpBuffer)
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
-			for(std::vector<CMeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
+			for(std::vector<MeshBuffer*>::iterator it = mMeshBuffers.begin(); it != mMeshBuffers.end(); ++it)
 			{
 				if ((*it) == inpBuffer)
 				{
@@ -1261,7 +1260,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// CheckForGLErrors
 		//----------------------------------------------------------
-		void CRenderSystem::CheckForGLErrors()
+		void RenderSystem::CheckForGLErrors()
 		{
 			//get an array of all the errors that have occurred
 			std::vector<GLenum> errorArray;
@@ -1304,12 +1303,12 @@ namespace ChilliSource
         //----------------------------------------------------------
 		/// Destroy
 		//----------------------------------------------------------
-		void CRenderSystem::Destroy()
+		void RenderSystem::Destroy()
 		{
 #ifdef CS_TARGETPLATFORM_IOS
             if(mpDefaultRenderTarget)
             {
-                CRenderTarget::DestroyDefaultRenderTarget(mContext, mpDefaultRenderTarget);
+                RenderTarget::DestroyDefaultRenderTarget(mContext, mpDefaultRenderTarget);
             }
             
 			//Release the context
@@ -1328,7 +1327,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		/// Destructor
 		//----------------------------------------------------------
-		CRenderSystem::~CRenderSystem()
+		RenderSystem::~RenderSystem()
 		{
             Destroy();
             free(mpbCurrentVertexAttribState);

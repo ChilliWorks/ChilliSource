@@ -18,7 +18,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CTextureManager : public ChilliSource::Rendering::TextureManager
+		class TextureManager : public ChilliSource::Rendering::TextureManager
 		{
 		public:
 			//----------------------------------------------------------------
@@ -84,11 +84,11 @@ namespace ChilliSource
 			///
 			/// @param The texture pointer.
 			//----------------------------------------------------------------
-			void RemoveRestorableTexture(CTexture* inpTexture);
+			void RemoveRestorableTexture(Texture* inpTexture);
 		private:
 #ifdef CS_TARGETPLATFORM_ANDROID
 			std::vector<Rendering::TextureWPtr> mapTextureCache;
-			std::unordered_map<CTexture*, Core::ImageSPtr> mapBackedUpImages;
+			std::unordered_map<Texture*, Core::ImageSPtr> mapBackedUpImages;
 #endif
 		};
 	}

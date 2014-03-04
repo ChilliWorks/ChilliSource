@@ -14,6 +14,7 @@
 #define _MOFLOW_OPENGL_SHADER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
 
@@ -21,11 +22,11 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CShader : public ChilliSource::Rendering::Shader
+		class Shader : public ChilliSource::Rendering::Shader
 		{
 		public:
 			
-			virtual ~CShader();
+			virtual ~Shader();
 			//----------------------------------------------------------
 			/// Is A
 			///
@@ -57,7 +58,7 @@ namespace ChilliSource
 		protected:
 			
 			//No randomly creating this! That means you!
-			CShader();
+			Shader();
 			//----------------------------------------------------------
 			/// Load and Compile Shader
 			///
@@ -95,7 +96,7 @@ namespace ChilliSource
 			//----------------------------------------------------------
 			bool ReadShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, std::stringstream& outstrContents);
 			
-			friend class CShaderManager;
+			friend class ShaderManager;
 			
 		private:
 
@@ -109,8 +110,8 @@ namespace ChilliSource
             std::vector<LocationLookup> maUniforms;
 		};
 		
-		typedef std::shared_ptr<CShader> ShaderSPtr;
-		typedef std::weak_ptr<CShader> ShaderWeakPtr;
+		typedef std::shared_ptr<Shader> ShaderSPtr;
+		typedef std::weak_ptr<Shader> ShaderWeakPtr;
 	}
 }
 

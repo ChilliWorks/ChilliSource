@@ -11,20 +11,20 @@
 #define _MOFLOW_OPENGL_CUBEMAP_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
+#include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
 
 namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CCubemap : public ChilliSource::Rendering::Cubemap
+		class Cubemap : public ChilliSource::Rendering::Cubemap
 		{
 		public:
 
-            ~CCubemap();
+            ~Cubemap();
 			//--------------------------------------------------
 			/// Init
 			///
@@ -94,7 +94,7 @@ namespace ChilliSource
             ///
             /// @param Cubemap manager
             //--------------------------------------------------
-            CCubemap(CCubemapManager* inpManager);
+            Cubemap(CubemapManager* inpManager);
             //---------------------------------------------------
             /// Update Texture Parameters
             ///
@@ -102,7 +102,7 @@ namespace ChilliSource
             //---------------------------------------------------
             void UpdateTextureParameters();
             
-            friend class CCubemapManager;
+            friend class CubemapManager;
             
         private:
             
@@ -118,7 +118,7 @@ namespace ChilliSource
             bool mbHasTextureFilterModeChanged;
             bool mbHasMipMaps;
             
-            CCubemapManager* mpCubemapManager;
+            CubemapManager* mpCubemapManager;
             Rendering::RenderCapabilities* mpRenderCapabilities;
 		};
 	}

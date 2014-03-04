@@ -145,7 +145,7 @@ namespace ChilliSource
 		void CPlatformSystem::CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems)
 		{
 			//create the main systems
-			OpenGL::CRenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
+			OpenGL::RenderSystem* pRenderSystem = new OpenGL::RenderSystem();
 			inaSystems.push_back(Core::SystemSPtr(pRenderSystem));
 			Core::Application::SetRenderSystem(pRenderSystem);
 
@@ -159,7 +159,7 @@ namespace ChilliSource
 			Core::Application::SetAudioSystem(pAudioSystem);
 
 			//create other important systems
-			OpenGL::CRenderCapabilities* pRenderCapabilities = new OpenGL::CRenderCapabilities();
+			OpenGL::RenderCapabilities* pRenderCapabilities = new OpenGL::RenderCapabilities();
 			inaSystems.push_back(Core::SystemSPtr(pRenderCapabilities));
 			inaSystems.push_back(Core::SystemSPtr(new Android::ImageLoader()));
 			inaSystems.push_back(Core::SystemSPtr(new Core::MoImageProvider()));

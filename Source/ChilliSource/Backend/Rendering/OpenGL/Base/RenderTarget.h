@@ -11,8 +11,9 @@
 #define _MOFLOW_OPENGL_RENDERTARGET_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Base/RenderTarget.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
+#include <ChilliSource/Rendering/Base/RenderTarget.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
 @class EAGLContext;
@@ -22,7 +23,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CRenderTarget : public ChilliSource::Rendering::RenderTarget
+		class RenderTarget : public ChilliSource::Rendering::RenderTarget
 		{
 		public:
 #ifdef CS_TARGETPLATFORM_IOS
@@ -37,7 +38,7 @@ namespace ChilliSource
             /// @param The width of the render target.
             /// @param the height of the render target.
             //------------------------------------------------------
-			static CRenderTarget* CreateDefaultRenderTarget(EAGLContext* inpContext, u32 inudwWidth, u32 inudwHeight);
+			static RenderTarget* CreateDefaultRenderTarget(EAGLContext* inpContext, u32 inudwWidth, u32 inudwHeight);
             //------------------------------------------------------
             /// Present Default Render Target
             ///
@@ -46,7 +47,7 @@ namespace ChilliSource
             /// @param The iOS EAGLView
             /// @param the render target to present
             //------------------------------------------------------
-			static void PresentDefaultRenderTarget(EAGLContext* inpContext, CRenderTarget* inpRenderTarget);
+			static void PresentDefaultRenderTarget(EAGLContext* inpContext, RenderTarget* inpRenderTarget);
             //------------------------------------------------------
             /// Destroy Default Render Target
             ///
@@ -55,7 +56,7 @@ namespace ChilliSource
             /// @param The iOS EAGLView
             /// @param the render target to destroy
             //------------------------------------------------------
-			static void DestroyDefaultRenderTarget(EAGLContext* inpContext, CRenderTarget* inpRenderTarget);
+			static void DestroyDefaultRenderTarget(EAGLContext* inpContext, RenderTarget* inpRenderTarget);
 #endif
             //--------------------------------------------------
 			/// Clear Cache
@@ -64,8 +65,8 @@ namespace ChilliSource
 			//--------------------------------------------------
 			static void ClearCache();
             
-            CRenderTarget();
-			virtual ~CRenderTarget();
+            RenderTarget();
+			virtual ~RenderTarget();
             
             //------------------------------------------------------
             /// Init
@@ -120,7 +121,7 @@ namespace ChilliSource
 			GLuint mRenderBuffer;
 			GLuint mDepthBuffer;
             
-            static CRenderTarget* pCurrentlyBoundTarget;
+            static RenderTarget* pCurrentlyBoundTarget;
         
         };
 	}

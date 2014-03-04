@@ -11,9 +11,8 @@
  */
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Shader/Shader.h>
 
 #include <algorithm>
@@ -27,7 +26,7 @@ namespace ChilliSource
             return inLHS.first < inRHS.first;
         }
         
-		CShader::CShader()
+		Shader::Shader()
 		: mGLVertexShader(0), mGLPixelShader(0), mGLProgram(0)
 		{
 			
@@ -39,7 +38,7 @@ namespace ChilliSource
 		/// @param Comparison Type
 		/// @return Whether the class matches the comparison type
 		//----------------------------------------------------------
-		bool CShader::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool Shader::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == Shader::InterfaceID;
 		}
@@ -48,7 +47,7 @@ namespace ChilliSource
 		///
 		/// @return GL identifer of shader program
 		//----------------------------------------------------------
-		GLuint CShader::GetProgramID() const
+		GLuint Shader::GetProgramID() const
 		{
 			return mGLProgram;
 		}
@@ -58,7 +57,7 @@ namespace ChilliSource
 		/// @param Name of attribute to be located
 		/// @return GL identifer of attribute location
 		//----------------------------------------------------------
-        GLint CShader::GetAttributeLocation(const char * instrAttributeName)
+        GLint Shader::GetAttributeLocation(const char * instrAttributeName)
         {
         	// Hash the name string
             LocationLookup sItem( Core::HashCRC32::GenerateHashCode(instrAttributeName), 0);
@@ -84,7 +83,7 @@ namespace ChilliSource
 		/// @param Name of uniform to be located
 		/// @return GL identifer of uniform location
 		//----------------------------------------------------------
-        GLint CShader::GetUniformLocation(const char * instrUniformName)
+        GLint Shader::GetUniformLocation(const char * instrUniformName)
         {
         	// Hash the name string
             LocationLookup sItem( Core::HashCRC32::GenerateHashCode(instrUniformName), 0);
@@ -112,7 +111,7 @@ namespace ChilliSource
 		/// @param Out contents of file
 		/// @return Success
 		//----------------------------------------------------------
-		bool CShader::ReadShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, std::stringstream& outstrContents)
+		bool Shader::ReadShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, std::stringstream& outstrContents)
 		{
 			//Open the shader file for reading only
 			ChilliSource::Core::FileStreamSPtr shaderStream = ChilliSource::Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilePath, ChilliSource::Core::FileMode::k_read);
@@ -142,7 +141,7 @@ namespace ChilliSource
 		/// @param The shader file path
 		/// @return Success or failure
 		//----------------------------------------------------------
-		bool CShader::LoadAndCompileShader(Core::StorageLocation ineStorageLocation, const std::string& instrShaderFile, Rendering::ShaderType ineShaderType)
+		bool Shader::LoadAndCompileShader(Core::StorageLocation ineStorageLocation, const std::string& instrShaderFile, Rendering::ShaderType ineShaderType)
 		{
             maAttributes.clear();
             maUniforms.clear();
@@ -226,7 +225,7 @@ namespace ChilliSource
 		/// @param The shader file path
 		/// @return Success or failure
 		//----------------------------------------------------------
-		bool CShader::CompileShader(const std::string& instrShaderSource, Rendering::ShaderType ineShaderType)
+		bool Shader::CompileShader(const std::string& instrShaderSource, Rendering::ShaderType ineShaderType)
 		{
 			//Convert from our internal shader type to OpenGL's
 			GLuint* pGLShader;
@@ -297,7 +296,7 @@ namespace ChilliSource
 		/// Create shader program from the vertex and pixel shaders
 		/// @return Success
 		//----------------------------------------------------------
-		bool CShader::CreateProgram()
+		bool Shader::CreateProgram()
 		{
 			mGLProgram = glCreateProgram();
 			
@@ -340,7 +339,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//----------------------------------------------------------
-		CShader::~CShader()
+		Shader::~Shader()
 		{
 			if(mGLVertexShader)
 			{
