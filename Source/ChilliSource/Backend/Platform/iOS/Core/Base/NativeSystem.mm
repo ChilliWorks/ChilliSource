@@ -8,7 +8,7 @@
 
 #import <ChilliSource/Backend/Platform/iOS/Core/Base/NativeSystem.h>
 
-#import <ChilliSource/Backend/Platform/iOS/Core/Dialogue/DialogueSystem.h>
+#import <ChilliSource/Backend/Platform/iOS/Core/DialogueBox/DialogueBoxSystem.h>
 #import <ChilliSource/Core/Base/PlatformSystem.h>
 #import <ChilliSource/Core/Base/Application.h>
 
@@ -164,17 +164,17 @@ static mach_timebase_info_data_t gMachtimeBase;
 }
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex 
 {
-    ChilliSource::iOS::DialogueSystem* dialogueSystem = ChilliSource::Core::Application::Get()->GetSystemImplementing<ChilliSource::iOS::DialogueSystem>();
+    ChilliSource::iOS::DialogueBoxSystem* dialogueSystem = ChilliSource::Core::Application::Get()->GetSystemImplementing<ChilliSource::iOS::DialogueBoxSystem>();
     if (dialogueSystem != nullptr)
     {
         // NO = 0, YES = 1
         if(buttonIndex == 0)
         {
-            dialogueSystem->OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::DialogueSystem::DialogueResult::k_cancel);
+            dialogueSystem->OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::DialogueBoxSystem::DialogueResult::k_cancel);
         }
         else
         {
-            dialogueSystem->OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::DialogueSystem::DialogueResult::k_confirm);
+            dialogueSystem->OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::DialogueBoxSystem::DialogueResult::k_confirm);
         }
     }
 }

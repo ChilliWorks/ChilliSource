@@ -1,36 +1,36 @@
 //
-//  DialogueSystem.h
+//  DialogueBoxSystem.h
 //  Chilli Source
 //
 //  Created by Ian Copland on 04/03/2014
 //  Copyright 2014 Tag Games. All rights reserved.
 //
 
-#ifndef _CHILLISOURCE_BACKEND_PLATFORM_CORE_DIALOGUE_DIALOGUESYSTEM_H_
-#define _CHILLISOURCE_BACKEND_PLATFORM_CORE_DIALOGUE_DIALOGUESYSTEM_H_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_CORE_DIALOGUE_DIALOGUESYSTEM_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_CORE_DIALOGUE_DIALOGUESYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Core/Dialogue/DialogueSystem.h>
+#include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
 
 namespace ChilliSource
 {
-	namespace iOS
+	namespace Windows
 	{
 		//-----------------------------------------------------------
 		/// A system used to display platform specific system
         /// dialogue boxes.
 		//-----------------------------------------------------------
-		class DialogueSystem final : public Core::DialogueSystem
+		class DialogueBoxSystem final : public Core::DialogueBoxSystem
 		{
 		public:
-            CS_DECLARE_NAMEDTYPE(DialogueSystem);
+            CS_DECLARE_NAMEDTYPE(DialogueBoxSystem);
             //----------------------------------------------------
 			/// Constructor
             ///
             /// @author I Copland
 			//----------------------------------------------------
-            DialogueSystem();
+            DialogueBoxSystem();
             //----------------------------------------------------
             /// Is A
             ///
@@ -49,7 +49,7 @@ namespace ChilliSource
             /// @param Message text
             /// @param Confirm text
             //------------------------------------------------------
-            void ShowSystemDialogue(u32 in_id, const Core::DialogueSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm) override;
+            void ShowSystemDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm) override;
             //-----------------------------------------------------
             /// Display a system confirmation dialog with the given
             /// ID and delegate.
@@ -63,7 +63,7 @@ namespace ChilliSource
             /// @param Confirm text
             /// @param Cancel text
             //-----------------------------------------------------
-            void ShowSystemConfirmDialogue(u32 in_id, const Core::DialogueSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm, const Core::UTF8String& in_cancel) override;
+            void ShowSystemConfirmDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm, const Core::UTF8String& in_cancel) override;
             //-----------------------------------------------------
             /// Display a toast notification with the given text
             ///
@@ -80,16 +80,16 @@ namespace ChilliSource
             /// @param ID
             /// @param Result
             //------------------------------------------------------
-            void OnSystemConfirmDialogResult(u32 in_id, Core::DialogueSystem::DialogueResult in_result);
+            void OnSystemConfirmDialogResult(u32 in_id, Core::DialogueBoxSystem::DialogueResult in_result);
             //----------------------------------------------------
 			/// Destructor.
             ///
             /// @author I Copland
 			//----------------------------------------------------
-            ~DialogueSystem();
+            ~DialogueBoxSystem();
         private:
             
-			Core::DialogueSystem::DialogueDelegate m_activeSysConfirmDelegate;
+			Core::DialogueBoxSystem::DialogueDelegate m_activeSysConfirmDelegate;
 		};
 	}
 }

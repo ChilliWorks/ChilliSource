@@ -1,50 +1,43 @@
 //
-//  DialogueSystem.h
+//  DialogueBoxSystem.h
 //  Chilli Source
 //
 //  Created by Ian Copland on 04/03/2014
 //  Copyright 2014 Tag Games. All rights reserved.
 //
 
-#ifndef _CHILLISOURCE_CORE_DIALOGUE_DIALOGUESYSTEM_H_
-#define _CHILLISOURCE_CORE_DIALOGUE_DIALOGUESYSTEM_H_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_DIALOGUE_DIALOGUESYSTEM_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_DIALOGUE_DIALOGUESYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
 
 namespace ChilliSource
 {
-	namespace Core
+	namespace Android
 	{
 		//-----------------------------------------------------------
 		/// A system used to display platform specific system
         /// dialogue boxes.
 		//-----------------------------------------------------------
-		class DialogueSystem : public System
+		class DialogueBoxSystem final : public Core::DialogueBoxSystem
 		{
 		public:
-            CS_DECLARE_NAMEDTYPE(DialogueSystem);
+            CS_DECLARE_NAMEDTYPE(DialogueBoxSystem);
             //----------------------------------------------------
-			/// An enum describing the possible results from a
-            /// dialogue box.
-			//----------------------------------------------------
-            enum class DialogueResult
-            {
-                k_confirm,
-                k_cancel
-            };
-            //----------------------------------------------------
-			/// Delegates
-			//----------------------------------------------------
-            typedef std::function<void(u32, DialogueResult)> DialogueDelegate;
-            //----------------------------------------------------
-			/// Creates a new instance of this system.
+			/// Constructor
             ///
             /// @author I Copland
-            ///
-            /// @return The new instance.
 			//----------------------------------------------------
-            DialogueSystem* Create();
+            DialogueBoxSystem();
+            //----------------------------------------------------
+            /// Is A
+            ///
+            /// @return Whether this implements the passed in
+            /// interface id.
+            //-----------------------------------------------------
+            bool IsA(Core::InterfaceIDType in_interfaceID) const override;
             //-----------------------------------------------------
             /// Display a system dialog with the given ID and delegate
             ///
@@ -56,7 +49,7 @@ namespace ChilliSource
             /// @param Message text
             /// @param Confirm text
             //------------------------------------------------------
-            virtual void ShowSystemDialogue(u32 in_id, const DialogueDelegate& in_delegate, const UTF8String& in_title, const UTF8String& in_message, const UTF8String& in_confirm) = 0;
+            void ShowSystemDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm) override;
             //-----------------------------------------------------
             /// Display a system confirmation dialog with the given
             /// ID and delegate.
@@ -70,7 +63,7 @@ namespace ChilliSource
             /// @param Confirm text
             /// @param Cancel text
             //-----------------------------------------------------
-            virtual void ShowSystemConfirmDialogue(u32 in_id, const DialogueDelegate& in_delegate, const UTF8String& in_title, const UTF8String& in_message, const UTF8String& in_confirm, const UTF8String& in_cancel) = 0;
+            void ShowSystemConfirmDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm, const Core::UTF8String& in_cancel) override;
             //-----------------------------------------------------
             /// Display a toast notification with the given text
             ///
@@ -78,13 +71,25 @@ namespace ChilliSource
             ///
             /// @param The text to display.
             //-----------------------------------------------------
-            virtual void MakeToast(const UTF8String& in_text) = 0;
+            void MakeToast(const Core::UTF8String& in_text) override;
+            //------------------------------------------------------
+            /// Triggered from a system dialog confirmation event
+            ///
+            /// @author I Copland
+            ///
+            /// @param ID
+            /// @param Result
+            //------------------------------------------------------
+            void OnSystemConfirmDialogResult(u32 in_id, Core::DialogueBoxSystem::DialogueResult in_result);
             //----------------------------------------------------
 			/// Destructor.
             ///
             /// @author I Copland
 			//----------------------------------------------------
-            virtual ~DialogueSystem();
+            ~DialogueBoxSystem();
+        private:
+            
+			Core::DialogueBoxSystem::DialogueDelegate m_activeSysConfirmDelegate;
 		};
 	}
 }

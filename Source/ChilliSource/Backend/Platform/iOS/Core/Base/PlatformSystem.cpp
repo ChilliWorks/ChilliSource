@@ -14,6 +14,7 @@
 
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
 
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/NativeSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Image/ImageLoader.h>
@@ -198,6 +199,7 @@ namespace ChilliSource
 			inaSystems.push_back(Core::SystemSPtr(new Rendering::FontLoader()));
             inaSystems.push_back(Core::SystemSPtr(new Rendering::AnimatedMeshComponentUpdater()));
             inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialFactory(pRenderSystem->GetTextureManager(), pRenderSystem->GetShaderManager(), pRenderSystem->GetCubemapManager(), pRenderCapabilities)));
+            inaSystems.push_back(Core::SystemSPtr(Core::DialogueBoxSystem::Create()));
             
 			//Initialise the render system
 			Core::Application::Get()->GetRenderSystemPtr()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
