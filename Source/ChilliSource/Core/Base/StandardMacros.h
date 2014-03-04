@@ -57,7 +57,18 @@
 	typedef std::unique_ptr<const in_structName> in_structName##CUPtr;	\
 	typedef std::shared_ptr<const in_structName> in_structName##CSPtr;	\
 	typedef std::weak_ptr<const in_structName> in_structName##CWPtr;
-
-
+//------------------------------------------------------------
+/// Standard input and output macros. As windows has its own
+/// "safe" versions of some standard io functions, these macros 
+/// should be used to ensure the correct version is used for the 
+/// current platform.
+//------------------------------------------------------------
+#ifdef CS_TARGETPLATFORM_WINDOWS
+#	define CS_SSCANF sscanf_s
+#	define CS_SPRINTF sprintf_s
+#else
+#	define CS_SSCANF sscanf
+#	define CS_SPRINTF sprintf
+#endif
 
 #endif

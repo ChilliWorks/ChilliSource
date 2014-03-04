@@ -18,8 +18,6 @@
 #include <ChilliSource/Audio/Base/AudioPlayer.h>
 #include <ChilliSource/Backend/Audio/FMOD/Base/AudioLoader.h>
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
 #include <ChilliSource/Backend/Platform/Windows/Core/File/FileSystem.h>
 #include <ChilliSource/Backend/Platform/Windows/Core/Image/ImageLoader.h>
 #include <ChilliSource/Backend/Platform/Windows/Input/Base/InputSystem.h>
@@ -36,6 +34,10 @@
 #include <ChilliSource/Rendering/Sprite/XMLSpriteSheetLoader.h>
 
 #include <windows.h>
+
+//As the opengl classes need to include glfw.h, they need to be included after windows.h to avoid macro redefinitions.
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
 
 namespace ChilliSource 
 {

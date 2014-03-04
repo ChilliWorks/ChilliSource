@@ -249,7 +249,9 @@ namespace ChilliSource
         TimeIntervalMs MoSubtitlesLoader::ParseTime(const std::string& instrTime)
         {
             u32 udwHours, udwMinutes, udwSeconds, udwMilliseconds;
-            std::sscanf(instrTime.c_str(), "%d:%d:%d:%d", &udwHours, &udwMinutes, &udwSeconds, &udwMilliseconds);
+
+            CS_SSCANF(instrTime.c_str(), "%d:%d:%d:%d", &udwHours, &udwMinutes, &udwSeconds, &udwMilliseconds);
+
             TimeIntervalMs outputMS = ((TimeIntervalMs)udwHours) * 60 * 60 * 1000 + ((TimeIntervalMs)udwMinutes) * 60 * 1000 + ((TimeIntervalMs)udwSeconds) * 1000 + ((TimeIntervalMs)udwMilliseconds);
             return outputMS;
         }

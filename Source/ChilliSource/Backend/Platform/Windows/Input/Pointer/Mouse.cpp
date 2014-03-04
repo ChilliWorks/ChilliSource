@@ -4,6 +4,7 @@
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
 
+//This needs to be included after windows.h
 #include <Platform/Windows/glfw.h>
 
 namespace ChilliSource

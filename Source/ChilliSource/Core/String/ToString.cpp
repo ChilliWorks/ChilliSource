@@ -65,7 +65,7 @@ namespace ChilliSource
         std::string ToString(s32 in_value)
         {
             s8 buffer[16];
-            u32 size = sprintf(buffer, "%d", in_value);
+			u32 size = CS_SPRINTF(buffer, "%d", in_value);
             return std::string(buffer, buffer + size);
         }
         //---------------------------------------------------------
@@ -85,7 +85,7 @@ namespace ChilliSource
         std::string ToString(u32 in_value)
         {
             s8 buffer[16];
-            u32 size = sprintf(buffer, "%d", in_value);
+			u32 size = CS_SPRINTF(buffer, "%d", in_value);
             return std::string(buffer, buffer + size);
         }
         //---------------------------------------------------------

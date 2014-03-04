@@ -21,6 +21,7 @@
 #ifndef _ZLIBIOAPI64_H
 #define _ZLIBIOAPI64_H
 
+#define USE_FILE32API
 #define POINTLESS_OF(args)  args 
 
 #if (!defined(_WIN32)) && (!defined(WIN32))
@@ -62,11 +63,6 @@
  #endif
 #endif
 #endif
-
-#define fopen64 fopen
-#define ftello64 ftell
-#define fseeko64 fseek
-
 
 #ifndef ZPOS64_T
   #ifdef _WIN32
