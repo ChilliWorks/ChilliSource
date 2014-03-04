@@ -22,7 +22,7 @@ namespace ChilliSource
         ///
         /// @param Notification 
         //------------------------------------------------------------------------------
-        void CLocalNotificationScheduler::ScheduleNotification(const Core::NotificationSPtr& insNotification)
+        void LocalNotificationScheduler::ScheduleNotification(const Core::NotificationSPtr& insNotification)
         {
             NSDate* pDate = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)insNotification->TriggerTime];
             
@@ -71,7 +71,7 @@ namespace ChilliSource
         ///
         /// @param ID type
         //-------------------------------------------------------------------------
-        void CLocalNotificationScheduler::CancelByID(Core::NotificationID inID)
+        void LocalNotificationScheduler::CancelByID(Core::NotificationID inID)
         {
 			for(UILocalNotification* pNotification in [[UIApplication sharedApplication] scheduledLocalNotifications]) 
 			{
@@ -94,7 +94,7 @@ namespace ChilliSource
         /// @param Out: Notifications that meet criteria
         /// @return Whether any notifications exist within that time period
         //-------------------------------------------------------------------------
-        bool CLocalNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Core::NotificationSPtr>& outaNotifications)
+        bool LocalNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Core::NotificationSPtr>& outaNotifications)
         {
             outaNotifications.clear();
             
@@ -118,7 +118,7 @@ namespace ChilliSource
         ///
         /// Terminate all currently scheduled notifications
         //-------------------------------------------------------------------------
-        void CLocalNotificationScheduler::CancelAll()
+        void LocalNotificationScheduler::CancelAll()
         {
             [[UIApplication sharedApplication] cancelAllLocalNotifications];
         }
@@ -132,7 +132,7 @@ namespace ChilliSource
         /// @param Launching options dictionary
         /// @return Whether the app was launched with local notifications
         //-------------------------------------------------------------------------
-        bool CLocalNotificationScheduler::ApplicationDidFinishLaunchingWithOptions(UIApplication* inpApplication, NSDictionary* inpOptions)
+        bool LocalNotificationScheduler::ApplicationDidFinishLaunchingWithOptions(UIApplication* inpApplication, NSDictionary* inpOptions)
         {
             //Reset the badge number
             inpApplication.applicationIconBadgeNumber = 0;
@@ -156,7 +156,7 @@ namespace ChilliSource
 		///
 		/// @param UIApplication
 		//-------------------------------------------------------------------------
-		void CLocalNotificationScheduler::ApplicationDidBecomeActive(UIApplication* inpApplication)
+		void LocalNotificationScheduler::ApplicationDidBecomeActive(UIApplication* inpApplication)
 		{
 			//Reset the badge number
             inpApplication.applicationIconBadgeNumber = 0;
@@ -168,7 +168,7 @@ namespace ChilliSource
         ///
         /// @param UILocalNotification
         //-------------------------------------------------------------------------
-        void CLocalNotificationScheduler::ApplicationDidReceiveLocalNotification(UIApplication* inpApplication, UILocalNotification* inpNotification)
+        void LocalNotificationScheduler::ApplicationDidReceiveLocalNotification(UIApplication* inpApplication, UILocalNotification* inpNotification)
         {
             //Reset the badge number
             inpApplication.applicationIconBadgeNumber = (inpApplication.applicationIconBadgeNumber - 1);
@@ -183,7 +183,7 @@ namespace ChilliSource
         /// @param Apple UILocalNotification
         /// @param Out: moFlow notification
         //-------------------------------------------------------------------------
-        void CLocalNotificationScheduler::ConvertUILocalNotificationToNotification(UILocalNotification* inpUILocal, Core::NotificationSPtr& out_notification)
+        void LocalNotificationScheduler::ConvertUILocalNotificationToNotification(UILocalNotification* inpUILocal, Core::NotificationSPtr& out_notification)
         {
             out_notification->bDismissed = false;
             out_notification->eType = Core::NotificationType::k_system;

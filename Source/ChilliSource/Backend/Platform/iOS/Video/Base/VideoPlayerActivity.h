@@ -10,8 +10,9 @@
 #define _MO_FLO_PLATFORM_IOS_VIDEO_VIDEO_PLAYER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Video/Base/VideoPlayerActivity.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Input/Gestures/Gestures.h>
+#include <ChilliSource/Video/Base/VideoPlayerActivity.h>
 
 @class MPMoviePlayerController;
 @class CVideoPlayerTapListener;
@@ -22,14 +23,14 @@ namespace ChilliSource
 {
     namespace iOS
     {
-        class CVideoPlayerActivity : public Video::VideoPlayerActivity
+        class VideoPlayerActivity : public Video::VideoPlayerActivity
         {
         public:
             //--------------------------------------------------------------
             /// Constructor
             //--------------------------------------------------------------
-            CVideoPlayerActivity();
-            ~CVideoPlayerActivity();
+            VideoPlayerActivity();
+            ~VideoPlayerActivity();
 			//--------------------------------------------------------------
 			/// Is A
 			///

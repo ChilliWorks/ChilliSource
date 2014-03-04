@@ -15,6 +15,7 @@
 #define MOFLOW_PLATFORM_IOS_ACCELEROMETER_H
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Input/Accelerometer/Accelerometer.h>
 
@@ -24,13 +25,13 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CAccelerometer : public Input::Accelerometer, public Core::IUpdateable
+		class Accelerometer : public Input::Accelerometer, public Core::IUpdateable
 		{
 		public:
 			//----------------------------------------------------
 			/// Constructor
 			//----------------------------------------------------
-			CAccelerometer();
+			Accelerometer();
             //----------------------------------------------------
 			/// Is A
 			///
@@ -79,7 +80,7 @@ namespace ChilliSource
 			//----------------------------------------------------
 			/// Destructor
 			//----------------------------------------------------
-			~CAccelerometer();
+			~Accelerometer();
 		protected:
             
             bool mbIsUpdating;

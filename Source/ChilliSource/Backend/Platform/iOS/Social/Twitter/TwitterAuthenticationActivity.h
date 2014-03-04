@@ -10,8 +10,10 @@
 #ifndef _MO_FLO_PLATFORM_IOS_SOCIAL_TWITTER_TWITTER_AUTHENTICATION_ACTIVITY_H_
 #define _MO_FLO_PLATFORM_IOS_SOCIAL_TWITTER_TWITTER_AUTHENTICATION_ACTIVITY_H_
 
-#include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
+#include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
 
 #import <UIKit/UIWebView.h>
 #import <UIKit/UITextField.h>
@@ -32,10 +34,10 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CTwitterAuthenticationActivity : public Social::TwitterAuthenticationActivity
+		class TwitterAuthenticationActivity : public Social::TwitterAuthenticationActivity
 		{
 		public:
-			CTwitterAuthenticationActivity();
+			TwitterAuthenticationActivity();
 			//-----------------------------------------------
 			/// Present
 			/// 
@@ -162,27 +164,27 @@ namespace ChilliSource
 
 @interface UITwitterAuthenticationWebDelegate : NSObject<UIWebViewDelegate>
 {
-	ChilliSource::iOS::CTwitterAuthenticationActivity* mpDelegate;
+	ChilliSource::iOS::TwitterAuthenticationActivity* mpDelegate;
 }
--(void) SetCPPDelegate:(ChilliSource::iOS::CTwitterAuthenticationActivity*) inpDelegate;
+-(void) SetCPPDelegate:(ChilliSource::iOS::TwitterAuthenticationActivity*) inpDelegate;
 
 @end
 
 @interface UITwitterTextFieldDelegate : NSObject<UITextFieldDelegate>
 {
-	ChilliSource::iOS::CTwitterAuthenticationActivity* mpDelegate;
+	ChilliSource::iOS::TwitterAuthenticationActivity* mpDelegate;
 	UITextField* mpTextField;
 }
--(void) SetCPPDelegate:(ChilliSource::iOS::CTwitterAuthenticationActivity*) inpDelegate;
+-(void) SetCPPDelegate:(ChilliSource::iOS::TwitterAuthenticationActivity*) inpDelegate;
 -(void) SetTextField:(UITextField*)inpTextField;
 
 @end
 
 @interface UITwitterAlertDelegate : NSObject<UIAlertViewDelegate>
 {
-	ChilliSource::iOS::CTwitterAuthenticationActivity* mpDelegate;
+	ChilliSource::iOS::TwitterAuthenticationActivity* mpDelegate;
 }
--(void) SetCPPDelegate:(ChilliSource::iOS::CTwitterAuthenticationActivity*) inpDelegate;
+-(void) SetCPPDelegate:(ChilliSource::iOS::TwitterAuthenticationActivity*) inpDelegate;
 
 @end
 

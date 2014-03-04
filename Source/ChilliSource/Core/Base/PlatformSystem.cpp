@@ -25,7 +25,7 @@ namespace ChilliSource
         PlatformSystem* PlatformSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return new iOS::CPlatformSystem();
+            return new iOS::PlatformSystem();
 #elif defined CS_TARGETPLATFORM_ANDROID
             return new Android::PlatformSystem();
 #elif defined CS_TARGETPLATFORM_WINDOWS

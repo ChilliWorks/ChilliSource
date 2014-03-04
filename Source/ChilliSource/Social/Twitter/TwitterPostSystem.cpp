@@ -27,9 +27,9 @@ namespace ChilliSource
         TwitterPostSystem* TwitterPostSystem::CreateSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem)
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return new ChilliSource::iOS::CTwitterPostSystem(static_cast<iOS::CHttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
+            return new ChilliSource::iOS::TwitterPostSystem(static_cast<iOS::HttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
 #elif CS_TARGETPLATFORM_ANDROID
-            return new ChilliSource::Android::CTwitterPostSystem(static_cast<Android::HttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
+            return new ChilliSource::Android::TwitterPostSystem(static_cast<Android::HttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
 #endif
 			return nullptr;
         }
@@ -73,10 +73,10 @@ namespace ChilliSource
         			bResult = true;
         		}
 				else
-					CS_LOG_ERROR("CTwitterPostSystem::Init() - ERROR: Twitter does not have an OAuth system!");
+					CS_LOG_ERROR("TwitterPostSystem::Init() - ERROR: Twitter does not have an OAuth system!");
         	}
         	else
-        		CS_LOG_ERROR("CTwitterPostSystem::Init() - ERROR: Twitter customer key and/or customer secret string(s) empty!");
+        		CS_LOG_ERROR("TwitterPostSystem::Init() - ERROR: Twitter customer key and/or customer secret string(s) empty!");
 			
         	return bResult;
         }
@@ -274,7 +274,7 @@ namespace ChilliSource
 		{
 			if(ineResult == ChilliSource::Networking::HttpRequest::CompletionResult::k_completed)
 			{
-				CS_LOG_DEBUG("CTwitterPostSystem::OnRequestOAuthAccessTokenComplete() - Got response:\n"+inpRequest->GetResponseString());
+				CS_LOG_DEBUG("TwitterPostSystem::OnRequestOAuthAccessTokenComplete() - Got response:\n"+inpRequest->GetResponseString());
 				// Tell OAuth system to save access token and secret from web response
 				mpOAuthSystem->ExtractOAuthTokenKeySecret(inpRequest->GetResponseString());
 				SaveOAuthTokenKeyAndSecretKey();

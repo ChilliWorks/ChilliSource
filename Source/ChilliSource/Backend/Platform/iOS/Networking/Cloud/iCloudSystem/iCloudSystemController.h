@@ -33,7 +33,7 @@
 /// @param incOpenFileCompleteDelegate - Delegate to call when the document has been opened/created, this is also called if there is an error (the system will handle it)
 /// @param inbCreateIfNonExistant - used to tell the system to create file on the cloud if it doesnt already
 //-------------------------------------------------------------
-- (void)openDocument:(NSString*)instrFileName :(ChilliSource::iOS::CiCloudSystem::OnOpenCloudFileCompletedDelegate) incOpenFileCompleteDelegate :(BOOL)inbCreateIfNonExistant;
+- (void)openDocument:(NSString*)instrFileName :(ChilliSource::iOS::iCloudSystem::OnOpenCloudFileCompletedDelegate) incOpenFileCompleteDelegate :(BOOL)inbCreateIfNonExistant;
 
 //-------------------------------------------------------------
 /// writeDocumentWithRelativePath

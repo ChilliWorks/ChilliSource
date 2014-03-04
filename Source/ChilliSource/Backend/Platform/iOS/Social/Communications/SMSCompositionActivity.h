@@ -11,6 +11,7 @@
 #define _MOFLO_PLATFORM_IOS_SOCIAL_COMMUNICATIONS_SMSCOMPOSITIONSCREEN_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Social/Communications/SMSCompositionActivity.h>
 
 #include <MessageUI/MessageUI.h>
@@ -20,15 +21,15 @@
 namespace ChilliSource{
 	namespace iOS {
 		
-		class CSMSCompositionActivity : public Social::SMSCompositionActivity 
+		class SMSCompositionActivity : public Social::SMSCompositionActivity 
 		{
 		public:
 			virtual bool IsA(Core::InterfaceIDType inID) const override;
 			
 			static bool SupportedByDevice(); //You must always check this method before constructing an instance of the class or doom will ensue.
 			
-			CSMSCompositionActivity();
-			~CSMSCompositionActivity();
+			SMSCompositionActivity();
+			~SMSCompositionActivity();
 			
 			virtual void Present(const std::vector<Core::UTF8String> & inastrRecipientNumbers, const Core::UTF8String & instrContents, const SMSCompositionActivity::SendResultDelegate & inCallback) override;
 

@@ -31,9 +31,9 @@ namespace ChilliSource
         IFacebookPostSystem* IFacebookPostSystem::CreatePostSystem(ChilliSource::Social::FacebookAuthenticationSystem* inpAuthSystem)
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return new ChilliSource::iOS::CFacebookPostSystem(inpAuthSystem);
+            return new ChilliSource::iOS::FacebookPostSystem(inpAuthSystem);
 #elif CS_TARGETPLATFORM_ANDROID
-            return new ChilliSource::Android::CFacebookPostSystem(inpAuthSystem);
+            return new ChilliSource::Android::FacebookPostSystem(inpAuthSystem);
 #endif
 			return nullptr;
         }

@@ -22,7 +22,7 @@
 //--------------------------------------------------------
 /// init With Video Player
 //--------------------------------------------------------
--(id) InitWithVideoPlayer:(ChilliSource::iOS::CVideoPlayerActivity*)inpVideoPlayer View:(UIView*)inpView StorageLocation:(ChilliSource::Core::StorageLocation)ineStorageLocation Filename:(std::string)instrFilename
+-(id) InitWithVideoPlayer:(ChilliSource::iOS::VideoPlayerActivity*)inpVideoPlayer View:(UIView*)inpView StorageLocation:(ChilliSource::Core::StorageLocation)ineStorageLocation Filename:(std::string)instrFilename
 {
     if(!(self = [super init]))
 	{

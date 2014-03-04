@@ -27,7 +27,7 @@ namespace ChilliSource
 		/// Constructor
 		///
 		//-----------------------------------------------
-		CWebViewActivity::CWebViewActivity() : mpWebView(nil), mpDismissButton(nil), mvUnifiedSize(1.0f,1.0f,0.0f,0.0f), mpActivityIndicator(nil), mfDismissButtonScale(0.075f)
+		WebViewActivity::WebViewActivity() : mpWebView(nil), mpDismissButton(nil), mvUnifiedSize(1.0f,1.0f,0.0f,0.0f), mpActivityIndicator(nil), mfDismissButtonScale(0.075f)
 		{
 		}
 		//-----------------------------------------------
@@ -38,7 +38,7 @@ namespace ChilliSource
 		///
 		/// @param URL
 		//-----------------------------------------------
-		void CWebViewActivity::Present(const std::string& instrURL, f32 infDismissButtonScale)
+		void WebViewActivity::Present(const std::string& instrURL, f32 infDismissButtonScale)
 		{
             mfDismissButtonScale = infDismissButtonScale;
             
@@ -68,7 +68,7 @@ namespace ChilliSource
 		///
 		/// @param HTML file name
 		//-----------------------------------------------
-		void CWebViewActivity::PresentFromFile(Core::StorageLocation ineStorageLocation, const std::string& instrFile, f32 infDismissButtonScale)
+		void WebViewActivity::PresentFromFile(Core::StorageLocation ineStorageLocation, const std::string& instrFile, f32 infDismissButtonScale)
 		{
             mfDismissButtonScale = infDismissButtonScale;
             
@@ -92,7 +92,7 @@ namespace ChilliSource
                     strFile = instrFile;
                 }
                 
-				iOS::CFileSystem* pFileSystem = static_cast<iOS::CFileSystem*>(Core::Application::GetFileSystemPtr());
+				iOS::FileSystem* pFileSystem = static_cast<iOS::FileSystem*>(Core::Application::GetFileSystemPtr());
 
 				std::string strPath;
                 
@@ -132,7 +132,7 @@ namespace ChilliSource
         /// Create a webview instance from the size
         /// member and centre it on-screen
         //-----------------------------------------------
-        void CWebViewActivity::CreateWebview()
+        void WebViewActivity::CreateWebview()
         {
             //Create the  view and present it, centered on screen
             mvAbsoluteSize = (Core::Screen::GetOrientedDimensions() * Core::Screen::GetInverseDensity() * mvUnifiedSize.GetRelative()) + mvUnifiedSize.GetAbsolute();
@@ -146,7 +146,7 @@ namespace ChilliSource
 		///
 		/// @param URL
 		//-----------------------------------------------
-		void CWebViewActivity::PresentInExternalBrowser(const std::string& instrURL)
+		void WebViewActivity::PresentInExternalBrowser(const std::string& instrURL)
 		{
 			[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithUTF8String:instrURL.c_str()]] ];
 		}
@@ -155,7 +155,7 @@ namespace ChilliSource
         ///
         /// Adds the webview to the main view
         //-----------------------------------------------
-        void CWebViewActivity::Display()
+        void WebViewActivity::Display()
         {
             UIView* pView = [[[[UIApplication sharedApplication] keyWindow] rootViewController] view];
             [pView addSubview:mpWebView];
@@ -168,7 +168,7 @@ namespace ChilliSource
 		/// 
 		/// Dismiss the web view interface
 		//-----------------------------------------------
-		void CWebViewActivity::Dismiss()
+		void WebViewActivity::Dismiss()
 		{
 			if(mpWebView)
 			{
@@ -190,7 +190,7 @@ namespace ChilliSource
 		///
 		/// Create a button that can dismiss the web view
 		//-----------------------------------------------
-		void CWebViewActivity::AddDismissButton()
+		void WebViewActivity::AddDismissButton()
 		{
 			if(!mpDismissButton)
 			{
@@ -222,7 +222,7 @@ namespace ChilliSource
         /// Add Activity Indicator
         ///
         //-----------------------------------------------
-        void CWebViewActivity::AddActivityIndicator()
+        void WebViewActivity::AddActivityIndicator()
         {
             if(mpActivityIndicator != nil)
                 return;
@@ -239,7 +239,7 @@ namespace ChilliSource
         /// Remove Activity Indicator
         ///
         //-----------------------------------------------
-        void CWebViewActivity::RemoveActivityIndicator()
+        void WebViewActivity::RemoveActivityIndicator()
         {
             if(mpActivityIndicator == nil)
                 return;
@@ -255,7 +255,7 @@ namespace ChilliSource
 		///
 		/// @param Unified Vector
 		//-----------------------------------------------
-		void CWebViewActivity::SetSize(const Core::UnifiedVector2 & invSize)
+		void WebViewActivity::SetSize(const Core::UnifiedVector2 & invSize)
 		{
 			mvUnifiedSize = invSize;
 		}
@@ -266,17 +266,17 @@ namespace ChilliSource
 		///
 		/// return Unified Vector of size
 		//-----------------------------------------------
-		Core::UnifiedVector2 CWebViewActivity::GetSize() const
+		Core::UnifiedVector2 WebViewActivity::GetSize() const
         {
 			return mvUnifiedSize;			
 		}
         
-        bool CWebViewActivity::HasAnchor()
+        bool WebViewActivity::HasAnchor()
         {
             return (!mstrAnchor.empty());
         }
         
-        const std::string& CWebViewActivity::GetAnchor() const
+        const std::string& WebViewActivity::GetAnchor() const
         {
             return mstrAnchor;
         }
@@ -286,7 +286,7 @@ namespace ChilliSource
 @implementation UIWebDelegate
 
 
--(void) SetCPPDelegate:(ChilliSource::iOS::CWebViewActivity*) inpDelegate
+-(void) SetCPPDelegate:(ChilliSource::iOS::WebViewActivity*) inpDelegate
 {
 	mpDelegate = inpDelegate;
 }

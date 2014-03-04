@@ -1,5 +1,5 @@
     //
-//  CiCloudSystem.cpp
+//  iCloudSystem.cpp
 //  MMCoHMoFlow
 //
 //  Created by Hugh McLaughlin on 13/07/2012.
@@ -7,10 +7,11 @@
 //
 
 #include <ChilliSource/Backend/Platform/iOS/Networking/Cloud/iCloudSystem/iCloudSystem.h>
+
 #include <ChilliSource/Backend/Platform/iOS/Networking/Cloud/iCloudSystem/ICloudSystemController.h>
-#include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/File/FileStream.h>
 
 #include <sys/stat.h>
 #import <UIKit/UIKit.h>
@@ -25,11 +26,11 @@ namespace ChilliSource
 {
 	namespace iOS
     {
-        CS_DEFINE_NAMEDTYPE(CiCloudSystem);
+        CS_DEFINE_NAMEDTYPE(iCloudSystem);
         
         using namespace ChilliSource::Core;
         
-        CiCloudSystem::CiCloudSystem(ChilliSource::Networking::HttpConnectionSystem* inpcHttpConnectionSystem)
+        iCloudSystem::iCloudSystem(ChilliSource::Networking::HttpConnectionSystem* inpcHttpConnectionSystem)
         {
             //You should be checking if IsSupported before creating the system as it is only compatible with >= iOS 5.0 OS's
             if(!IsSupported())
@@ -63,16 +64,16 @@ namespace ChilliSource
         /// @param Type ID
         /// @return Whether the request is of given type
         //-----------------------------------------------
-        bool CiCloudSystem::IsA(Core::InterfaceIDType inInterfaceID) const 
+        bool iCloudSystem::IsA(Core::InterfaceIDType inInterfaceID) const 
         {
-            return inInterfaceID == CiCloudSystem::InterfaceID;
+            return inInterfaceID == iCloudSystem::InterfaceID;
         }
         
         //Returns if the client meets the minimum OS version to use this feature, this should be used to decide to create the system or not
-        bool CiCloudSystem::IsSupported()
+        bool iCloudSystem::IsSupported()
         {
 #if TARGET_IPHONE_SIMULATOR
-            CS_LOG_ERROR("CiCloudSystem::IsSupported - System not supported on simulator");
+            CS_LOG_ERROR("iCloudSystem::IsSupported - System not supported on simulator");
             return false;
 #endif
             
@@ -90,13 +91,13 @@ namespace ChilliSource
             }
             else
             {
-                CS_LOG_ERROR("CiCloudSystem::IsSupported - System not supported on current device, needs to be iOS 5.0 at least");
+                CS_LOG_ERROR("iCloudSystem::IsSupported - System not supported on current device, needs to be iOS 5.0 at least");
                 return false;
             }
         }
 
         //Returns if iCloud has been enabled on the client device
-        bool CiCloudSystem::IsCloudStorageEnabled() const
+        bool iCloudSystem::IsCloudStorageEnabled() const
         {
             NSString* strURLAsString = [[[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil] absoluteString];
             
@@ -115,26 +116,26 @@ namespace ChilliSource
             else 
             {
                 [ubiq release];
-                CS_LOG_ERROR("CiCloudSystem::IsCloudStorageEnabled() - ICloud Not Enabled On Device!");
+                CS_LOG_ERROR("iCloudSystem::IsCloudStorageEnabled() - ICloud Not Enabled On Device!");
                 return false;
             }
             
         }
 
         //Performs any initialisation required
-        void CiCloudSystem::Initialise()
+        void iCloudSystem::Initialise()
         {
             
         }
 
         //Manually Refresh the cache of files stored in the cloud
-        void CiCloudSystem::RefreshCloudContent()
+        void iCloudSystem::RefreshCloudContent()
         {
             QueryForAllCloudFiles();
         }
         
         //If cloud service is enabled returns the path to the storage on device
-        std::string CiCloudSystem::GetCloudStoragePath() const
+        std::string iCloudSystem::GetCloudStoragePath() const
         {        
             if(IsCloudStorageEnabled())
             {
@@ -149,7 +150,7 @@ namespace ChilliSource
             }
         }
 
-        void CiCloudSystem::CreateDirectory(CloudStorageArea ineStorageArea, const std::string& instrDir)
+        void iCloudSystem::CreateDirectory(CloudStorageArea ineStorageArea, const std::string& instrDir)
         {
             if(mstrICloudDirectoryPath == "")
             {
@@ -167,7 +168,7 @@ namespace ChilliSource
                 {
                     if(![mpcFileManager createDirectoryAtURL:ubiquitousPackage withIntermediateDirectories:YES attributes:nil error:nil])
                     {
-                        CS_LOG_ERROR("CiCloudSystem::CreateDirectoryURL - Failed to create Directory - " + strConstructedPath);
+                        CS_LOG_ERROR("iCloudSystem::CreateDirectoryURL - Failed to create Directory - " + strConstructedPath);
                     }
                 }
                 else 
@@ -180,12 +181,12 @@ namespace ChilliSource
             }
             else 
             {
-                CS_LOG_ERROR("CiCloudSystem::CreateDirectory - Failed to create Directory - ICloud Not Enabled!");
+                CS_LOG_ERROR("iCloudSystem::CreateDirectory - Failed to create Directory - ICloud Not Enabled!");
             }
         }
 
         //Create file in cloud only, use syncFile to maintain files in both locations
-        void CiCloudSystem::CreateFile(CloudStorageArea ineStorageArea, const std::string& instrFileName, const std::string& instrData)
+        void iCloudSystem::CreateFile(CloudStorageArea ineStorageArea, const std::string& instrFileName, const std::string& instrData)
         {
             NSMutableData *data = [[NSMutableData alloc] initWithBytes:instrData.data() length:instrData.length()];
             [[CiCloudSystemController sharedInstance] writeDocumentWithAbsolutePath:ChilliSource::Core::StringUtils::StringToNSString(GetAppendedFilePathToStorageArea(ineStorageArea, instrFileName))
@@ -194,20 +195,20 @@ namespace ChilliSource
             return;
         }
 
-        void CiCloudSystem::DeleteFile(CloudStorageArea ineStorageArea, const std::string& instrFileName)
+        void iCloudSystem::DeleteFile(CloudStorageArea ineStorageArea, const std::string& instrFileName)
         {
             //TODO:: Implement
-            CS_LOG_ERROR("CiCloudSystem::DeleteFile:: Not Implemented");
+            CS_LOG_ERROR("iCloudSystem::DeleteFile:: Not Implemented");
         }
         
-        const std::string CiCloudSystem::GetAppendedFilePathToStorageArea(CloudStorageArea ineArea, const std::string& instrRelativeFilePath) const
+        const std::string iCloudSystem::GetAppendedFilePathToStorageArea(CloudStorageArea ineArea, const std::string& instrRelativeFilePath) const
         {
             return "Documents/" + GetStringForStorageArea(ineArea) + "/" + instrRelativeFilePath;
         }
         
 #pragma mark File/Folder Queries
         
-        bool CiCloudSystem::SyncFileToCloud(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string& instrFilePath, CloudStorageSystem::OnSyncFileCompletedDelegate inSyncCompleteDelegate, CloudStorageSystem::OnSyncConflictDelegate inSyncConflictDelegate)
+        bool iCloudSystem::SyncFileToCloud(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string& instrFilePath, CloudStorageSystem::OnSyncFileCompletedDelegate inSyncCompleteDelegate, CloudStorageSystem::OnSyncConflictDelegate inSyncConflictDelegate)
         {
             if(!IsCloudStorageEnabled())
                 return false;
@@ -221,7 +222,7 @@ namespace ChilliSource
             //Show up a warning message if called from a thread other than main
             if(![NSThread isMainThread])
             {
-                CS_LOG_WARNING("CiCloudSystem::SyncFileToCloud -> You are calling this function from inside a thread, objects that rely on autoreleasing in this system will be leaked!");
+                CS_LOG_WARNING("iCloudSystem::SyncFileToCloud -> You are calling this function from inside a thread, objects that rely on autoreleasing in this system will be leaked!");
                 CS_LOG_WARNING("You should create an NSAutoReleasePool at the beginning of your thread and call release when its finished (Ingnore this warning if already implemented)");
             }
             
@@ -241,15 +242,15 @@ namespace ChilliSource
             mmFileToSyncDelegateMap.insert(std::make_pair(GetCloudStoragePath() + strConstructedPath, CloudFileSyncRequest(ineStorageLocation, instrFilePath, inSyncConflictDelegate, inSyncCompleteDelegate)));
             
             //We need to Open the file stored in the cloud or create it if it doesnt exist, NOTE::we only want to create the cloud file if a local file exists and the cloud file doesnt
-            [[CiCloudSystemController sharedInstance] openDocument:StringUtils::StringToNSString(strConstructedPath) : (Core::MakeDelegate(this, &CiCloudSystem::OnCloudFileOpened)) :bExists];
+            [[CiCloudSystemController sharedInstance] openDocument:StringUtils::StringToNSString(strConstructedPath) : (Core::MakeDelegate(this, &iCloudSystem::OnCloudFileOpened)) :bExists];
             
             return true;
         }
         
-        void CiCloudSystem::OnCloudFileOpened(MoFlowUIDocument* incOpenedDoc, BOOL inbJustCreated)
+        void iCloudSystem::OnCloudFileOpened(MoFlowUIDocument* incOpenedDoc, BOOL inbJustCreated)
         {
             std::string strFileState = StringUtils::NSStringToString([CiCloudSystemController stringForState:[incOpenedDoc documentState]]);
-            CS_LOG_DEBUG("CiCloudSystem::OnCloudFileOpened with state " + strFileState);
+            CS_LOG_DEBUG("iCloudSystem::OnCloudFileOpened with state " + strFileState);
             
             //Should always callback with a MoFloUIDocument - whether valid or not
             if(!incOpenedDoc)
@@ -310,7 +311,7 @@ namespace ChilliSource
             
             if(strLocalContents.compare(strCloudContents) == 0)
             {
-                CS_LOG_DEBUG("CiCloudSystem::OnCloudFileOpened - File Contents are Equal no Changes needed");
+                CS_LOG_DEBUG("iCloudSystem::OnCloudFileOpened - File Contents are Equal no Changes needed");
                 
                 //Call the onSync Completed delegate, if any
                 if(psRequest.mpcSyncCompletedDelegate)
@@ -347,7 +348,7 @@ namespace ChilliSource
                 //The locally stored version is the latest version
                 if([pLocalModifiedTime compare:pCloudLastEdited] == NSOrderedDescending)
                 {
-                    CS_LOG_DEBUG("CiCloudSystem::OnCloudFileOpened - Local version is the later version, commiting to iCloud!");
+                    CS_LOG_DEBUG("iCloudSystem::OnCloudFileOpened - Local version is the later version, commiting to iCloud!");
                     
                     //Set the file contents to that of our local file
                     NSMutableData *data = [[NSMutableData alloc] initWithBytes:strLocalContents.data() length:strLocalContents.length()];
@@ -363,7 +364,7 @@ namespace ChilliSource
                     }
                     else
                     {
-                        CS_LOG_ERROR("CiCloudSystem::OnCloudFileOpened - Local file is latest version, but has NULL contents, doing nothing ... ");
+                        CS_LOG_ERROR("iCloudSystem::OnCloudFileOpened - Local file is latest version, but has NULL contents, doing nothing ... ");
                         if (psRequest.mpcSyncCompletedDelegate)
                         {
                             psRequest.mpcSyncCompletedDelegate();
@@ -384,17 +385,17 @@ namespace ChilliSource
                         
                         mvsCachedConflicts.push_back(pConflict);
                         //Call the delegate
-                        psRequest.mpcSyncConflictDelegate(Core::MakeDelegate(this, &CiCloudSystem::OnConflictResolved), pConflict);
+                        psRequest.mpcSyncConflictDelegate(Core::MakeDelegate(this, &iCloudSystem::OnConflictResolved), pConflict);
                     }
                     else
                     {
-                        CS_LOG_ERROR("CiCloudSystem::OnCloudFileOpened - A later version of the file exists on server and no conflict delegate has been provided - doing nothing!");
+                        CS_LOG_ERROR("iCloudSystem::OnCloudFileOpened - A later version of the file exists on server and no conflict delegate has been provided - doing nothing!");
                     }
                 }
             }
         }
         
-        void CiCloudSystem::OnConflictResolved(Networking::CloudStorageSystem::FileConflictChoice ineChoice, Networking::CloudStorageSystem::FileSyncConflict* insFileSyncConflict, Networking::CloudStorageSystem::OnSyncFileCompletedDelegate inpSyncCompleteDelegate)
+        void iCloudSystem::OnConflictResolved(Networking::CloudStorageSystem::FileConflictChoice ineChoice, Networking::CloudStorageSystem::FileSyncConflict* insFileSyncConflict, Networking::CloudStorageSystem::OnSyncFileCompletedDelegate inpSyncCompleteDelegate)
         {
             switch (ineChoice)
             {
@@ -468,14 +469,14 @@ namespace ChilliSource
             }
         }
         
-        void CiCloudSystem::QueryForAllCloudFiles()
+        void iCloudSystem::QueryForAllCloudFiles()
         {
             if(IsCloudStorageEnabled())
-                [[CiCloudSystemController sharedInstance] queryContentsOfICloudDirectory:(Core::MakeDelegate(this, &CiCloudSystem::QueryDidFinishGathering))];
+                [[CiCloudSystemController sharedInstance] queryContentsOfICloudDirectory:(Core::MakeDelegate(this, &iCloudSystem::QueryDidFinishGathering))];
         }
         
         //Callback from any query made to retrieve files from cloud
-        void CiCloudSystem::QueryDidFinishGathering(Networking::CloudStorageSystem::ICloudFileList invFileList)
+        void iCloudSystem::QueryDidFinishGathering(Networking::CloudStorageSystem::ICloudFileList invFileList)
         {
             mvCachedCloudFiles = invFileList;
             

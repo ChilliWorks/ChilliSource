@@ -14,7 +14,7 @@
 #define _MO_FLO_PLATFORM_IOS_PLATFORM_SYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
 #include <functional>
@@ -29,11 +29,11 @@ namespace ChilliSource
 		/// Allows generic access to platform 
 		/// specific code via common function calls
 		//---------------------------------------------
-		class CPlatformSystem : public Core::PlatformSystem
+		class PlatformSystem : public Core::PlatformSystem
 		{
 		public:
-			CPlatformSystem();
-			virtual ~CPlatformSystem();
+			PlatformSystem();
+			virtual ~PlatformSystem();
 			
 			//-----------------------------------------
 			/// Init

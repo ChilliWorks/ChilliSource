@@ -14,7 +14,6 @@
 
 #include <UIKit/UIKit.h>
 
-
 namespace ChilliSource
 {
     namespace iOS
@@ -26,7 +25,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------------
         /// Request Remote Token
         //-------------------------------------------------------------------------
-        void CRemoteNotificationSystem::RequestRemoteToken(const Core::RemoteTokenReceivedDelegate& inDelegate)
+        void RemoteNotificationSystem::RequestRemoteToken(const Core::RemoteTokenReceivedDelegate& inDelegate)
         {
             mDelegate = inDelegate;
             UIRemoteNotificationType Types = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert;
@@ -35,21 +34,21 @@ namespace ChilliSource
         //-------------------------------------------------------------------------
         /// Get Remote Token
         //-------------------------------------------------------------------------
-        const std::string& CRemoteNotificationSystem::GetRemoteToken() const
+        const std::string& RemoteNotificationSystem::GetRemoteToken() const
         {
             return mstrToken;
         }
         //-------------------------------------------------------------------------
         /// Get Provider ID
         //-------------------------------------------------------------------------
-        const std::string& CRemoteNotificationSystem::GetProviderID() const
+        const std::string& RemoteNotificationSystem::GetProviderID() const
         {
             return kstrProviderID;
         }
         //-------------------------------------------------------------------------
         /// On Remote Token Received
         //-------------------------------------------------------------------------
-        void CRemoteNotificationSystem::OnRemoteTokenReceived(NSData* inpToken)
+        void RemoteNotificationSystem::OnRemoteTokenReceived(NSData* inpToken)
         {
             mstrToken = Core::BaseEncoding::Base64Encode((const s8*)[inpToken bytes], inpToken.length);
             
@@ -62,7 +61,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------------
         /// On Remote Notification Received
         //-------------------------------------------------------------------------
-        void CRemoteNotificationSystem::OnRemoteNotificationReceived(UIApplication* inpApplication, NSDictionary* inpPayload)
+        void RemoteNotificationSystem::OnRemoteNotificationReceived(UIApplication* inpApplication, NSDictionary* inpPayload)
         {
             inpApplication.applicationIconBadgeNumber = 0;
             

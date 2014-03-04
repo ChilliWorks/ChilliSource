@@ -8,6 +8,7 @@
  */
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Facebook/FacebookAuthentication.h>
+
 #include <ChilliSource/Core/File/LocalDataStore.h>
 
 #ifdef __IPHONE_6_0
@@ -33,14 +34,14 @@ namespace ChilliSource
     
 	namespace iOS
 	{
-		CS_DEFINE_NAMEDTYPE(CFacebookAuthenticationSystem);
+		CS_DEFINE_NAMEDTYPE(FacebookAuthenticationSystem);
 		
-		bool CFacebookAuthenticationSystem::IsA(Core::InterfaceIDType inID) const
+		bool FacebookAuthenticationSystem::IsA(Core::InterfaceIDType inID) const
 		{
-			return (inID == CFacebookAuthenticationSystem::InterfaceID) || (inID == FacebookAuthenticationSystem::InterfaceID);
+			return (inID == FacebookAuthenticationSystem::InterfaceID) || (inID == FacebookAuthenticationSystem::InterfaceID);
 		}
 		
-		void CFacebookAuthenticationSystem::Authenticate(const std::vector<std::string>& inastrReadPermissions, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
+		void FacebookAuthenticationSystem::Authenticate(const std::vector<std::string>& inastrReadPermissions, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
 		{
             mAuthenticateDelegate = inDelegate;
             mastrPermissions = inastrReadPermissions;
@@ -65,17 +66,17 @@ namespace ChilliSource
             }
 		}
         
-        void CFacebookAuthenticationSystem::CreateNewSession()
+        void FacebookAuthenticationSystem::CreateNewSession()
         {
             OpenSession(true);
         }
         
-        bool CFacebookAuthenticationSystem::TryResumeExisitingSession()
+        bool FacebookAuthenticationSystem::TryResumeExisitingSession()
         {
             return OpenSession(false);
         }
         
-        bool CFacebookAuthenticationSystem::OpenSession(bool bShowLogin)
+        bool FacebookAuthenticationSystem::OpenSession(bool bShowLogin)
         {
             NSArray* pPermissionsArray = mastrPermissions.empty() ? nil : CreateNSArrayFromStringArray(mastrPermissions);
             bool bHasExistingSession = [FBSession openActiveSessionWithReadPermissions:pPermissionsArray
@@ -102,7 +103,7 @@ namespace ChilliSource
             return bHasExistingSession;
         }
         
-        void CFacebookAuthenticationSystem::OnSessionStateChanged(FBSession* inpSession, FBSessionState ineState)
+        void FacebookAuthenticationSystem::OnSessionStateChanged(FBSession* inpSession, FBSessionState ineState)
         {
             AuthenticateResponse sResponse;
             
@@ -136,17 +137,17 @@ namespace ChilliSource
             }
         }
 		
-		bool CFacebookAuthenticationSystem::IsSignedIn() const
+		bool FacebookAuthenticationSystem::IsSignedIn() const
 		{
 			return FBSession.activeSession.isOpen;
 		}
 		
-        std::string CFacebookAuthenticationSystem::GetActiveToken() const
+        std::string FacebookAuthenticationSystem::GetActiveToken() const
 		{
 			return Core::StringUtils::NSStringToString(FBSession.activeSession.accessTokenData.accessToken);
 		}
         
-        void CFacebookAuthenticationSystem::AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
+        void FacebookAuthenticationSystem::AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
         {
             mAuthoriseReadDelegate = inDelegate;
             
@@ -174,7 +175,7 @@ namespace ChilliSource
             [pPermissionsArray release];
         }
         
-        void CFacebookAuthenticationSystem::AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
+        void FacebookAuthenticationSystem::AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const FacebookAuthenticationSystem::AuthenticationCompleteDelegate& inDelegate)
         {
             mAuthoriseWriteDelegate = inDelegate;
             
@@ -233,12 +234,12 @@ namespace ChilliSource
             [pPermissionsArray release];
         }
         
-        bool CFacebookAuthenticationSystem::HasPermission(const std::string& instrPermission) const
+        bool FacebookAuthenticationSystem::HasPermission(const std::string& instrPermission) const
         {
             return ([FBSession.activeSession.permissions indexOfObject:StringUtils::StringToNSString(instrPermission)] != NSNotFound);
         }
 		
-		void CFacebookAuthenticationSystem::SignOut()
+		void FacebookAuthenticationSystem::SignOut()
 		{
             if(IsSignedIn())
             {
@@ -246,7 +247,7 @@ namespace ChilliSource
             }
 		}
         
-        void CFacebookAuthenticationSystem::PublishInstall()
+        void FacebookAuthenticationSystem::PublishInstall()
         {
             NSString* nsAppID = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"FacebookAppID"];
             
@@ -261,7 +262,7 @@ namespace ChilliSource
             }
         }
         
-        CFacebookAuthenticationSystem::~CFacebookAuthenticationSystem()
+        FacebookAuthenticationSystem::~FacebookAuthenticationSystem()
         {
             [FBSession.activeSession close];
         }

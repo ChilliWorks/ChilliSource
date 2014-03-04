@@ -24,9 +24,9 @@ namespace ChilliSource
         Core::Activity* TwitterAuthenticationActivity::CreateTwitterAuthenticationActivity()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return new ChilliSource::iOS::CTwitterAuthenticationActivity();
+            return new ChilliSource::iOS::TwitterAuthenticationActivity();
 #elif CS_TARGETPLATFORM_ANDROID
-            return new ChilliSource::Android::CTwitterAuthenticationActivity();
+            return new ChilliSource::Android::TwitterAuthenticationActivity();
 #endif
 			return nullptr;
         }

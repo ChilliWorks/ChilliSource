@@ -15,6 +15,7 @@
 #define _MOFLO_PLATFORM_IOS_IMAGELOADER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/Image/ImageResourceProvider.h>
 #include <ChilliSource/Core/Image/Image.h>
 

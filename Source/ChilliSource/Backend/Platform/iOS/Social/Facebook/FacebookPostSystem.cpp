@@ -24,11 +24,9 @@
 
 namespace ChilliSource
 {
-	using namespace Social;
-	
 	namespace iOS
 	{
-		CFacebookPostSystem::CFacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem)
+		FacebookPostSystem::FacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem)
         : mpAuthSystem(inpAuthSystem)
 		{
 			mCompletionDelegate = nullptr;
@@ -37,12 +35,12 @@ namespace ChilliSource
 #endif
 		}
 		
-		bool CFacebookPostSystem::IsA(Core::InterfaceIDType inID) const
+		bool FacebookPostSystem::IsA(Core::InterfaceIDType inID) const
 		{
 			return IFacebookPostSystem::InterfaceID == inID;
 		}
         
-        NSDictionary* CreateNSDisctionaryFromPostDesc(const FacebookPostDesc& insDesc)
+        NSDictionary* CreateNSDisctionaryFromPostDesc(const Social::FacebookPostDesc& insDesc)
         {
             NSDictionary* pPostParams = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                                                                        Core::StringUtils::StringToNSString(insDesc.strURL), @"link",
@@ -56,7 +54,7 @@ namespace ChilliSource
             return pPostParams;
         }
         
-		void CFacebookPostSystem::TryPost(const FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback)
+		void FacebookPostSystem::TryPost(const Social::FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback)
 		{
 			mCompletionDelegate = insResultCallback;
 			
@@ -76,7 +74,7 @@ namespace ChilliSource
                     aWritePerms.push_back("publish_actions");
                     if(insDesc.strTo != "")
                         aWritePerms.push_back("publish_stream");
-                    mpAuthSystem->AuthoriseWritePermissions(aWritePerms, Core::MakeDelegate(this, &CFacebookPostSystem::OnPublishPermissionAuthorised));
+                    mpAuthSystem->AuthoriseWritePermissions(aWritePerms, Core::MakeDelegate(this, &FacebookPostSystem::OnPublishPermissionAuthorised));
                 }
             }
             else
@@ -85,7 +83,7 @@ namespace ChilliSource
             }
         }
         
-        void CFacebookPostSystem::TrySendRequest(const Social::FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends)
+        void FacebookPostSystem::TrySendRequest(const Social::FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends)
         {
             std::string strFriends;
             
@@ -154,16 +152,16 @@ namespace ChilliSource
              }];
         }
         
-        void CFacebookPostSystem::OnPublishPermissionAuthorised(const FacebookAuthenticationSystem::AuthenticateResponse& insResponse)
+        void FacebookPostSystem::OnPublishPermissionAuthorised(const Social::FacebookAuthenticationSystem::AuthenticateResponse& insResponse)
         {
             switch(insResponse.eResult)
             {
-                case FacebookAuthenticationSystem::AuthenticateResult::k_success:
+                case Social::FacebookAuthenticationSystem::AuthenticateResult::k_success:
                 {
                     Post(msPostDesc);
                     break;
                 }
-                case FacebookAuthenticationSystem::AuthenticateResult::k_failed:
+                case Social::FacebookAuthenticationSystem::AuthenticateResult::k_failed:
                 {
                     if(mCompletionDelegate)
                     {
@@ -171,7 +169,7 @@ namespace ChilliSource
                     }
                     break;
                 }
-                case FacebookAuthenticationSystem::AuthenticateResult::k_permissionMismatch:
+                case Social::FacebookAuthenticationSystem::AuthenticateResult::k_permissionMismatch:
                 {
                     if(mCompletionDelegate)
                     {
@@ -182,7 +180,7 @@ namespace ChilliSource
             }
         }
         
-        void CFacebookPostSystem::Post(const FacebookPostDesc& insDesc)
+        void FacebookPostSystem::Post(const Social::FacebookPostDesc& insDesc)
         {
             bool bDisplayedNative = TryPostNative(insDesc);
             if(!bDisplayedNative)
@@ -191,7 +189,7 @@ namespace ChilliSource
             }
         }
         
-        bool CFacebookPostSystem::TryPostNative(const Social::FacebookPostDesc& insDesc)
+        bool FacebookPostSystem::TryPostNative(const Social::FacebookPostDesc& insDesc)
         {
             return false;
             
@@ -236,7 +234,7 @@ namespace ChilliSource
                     }];
         }
         
-        void CFacebookPostSystem::PostWebBased(const Social::FacebookPostDesc& insDesc)
+        void FacebookPostSystem::PostWebBased(const Social::FacebookPostDesc& insDesc)
         {
             std::string strToUser = "me";
             if(!insDesc.strTo.empty())

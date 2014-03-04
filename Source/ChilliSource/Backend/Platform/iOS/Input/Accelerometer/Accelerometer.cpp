@@ -12,6 +12,7 @@
  */
 
 #include <ChilliSource/Backend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
+
 #import <CoreMotion/CoreMotion.h>
 
 namespace ChilliSource
@@ -21,7 +22,7 @@ namespace ChilliSource
         //----------------------------------------------------
         /// Constructor
         //----------------------------------------------------
-        CAccelerometer::CAccelerometer()
+        Accelerometer::Accelerometer()
         : mbIsUpdating(false)
         {
             m_motionManager = [[CMMotionManager alloc] init];
@@ -30,7 +31,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         /// Supported By Device
         //-------------------------------------------------------
-        bool CAccelerometer::SupportedByDevice()
+        bool Accelerometer::SupportedByDevice()
         {
             if(NSClassFromString(@"CMMotionManager") == nil)
                 return false;
@@ -44,21 +45,21 @@ namespace ChilliSource
         //----------------------------------------------------
         /// Is A
         //----------------------------------------------------
-        bool CAccelerometer::IsA(Core::InterfaceIDType inInterfaceID) const
+        bool Accelerometer::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-            return inInterfaceID == Accelerometer::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
+            return inInterfaceID == Input::Accelerometer::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
         }
         //----------------------------------------------------
         /// Is Updating
         //----------------------------------------------------
-        bool CAccelerometer::IsUpdating() const
+        bool Accelerometer::IsUpdating() const
         {
             return mbIsUpdating;
         }
         //----------------------------------------------------
         /// Start Updating
         //----------------------------------------------------
-        void CAccelerometer::StartUpdating()
+        void Accelerometer::StartUpdating()
         {
             mbIsUpdating = true;
             [m_motionManager startAccelerometerUpdates];
@@ -66,7 +67,7 @@ namespace ChilliSource
         //----------------------------------------------------
         /// Update
         //----------------------------------------------------
-        void CAccelerometer::Update(f32 infDT)
+        void Accelerometer::Update(f32 infDT)
         {
             if(mbIsUpdating)
             {
@@ -76,14 +77,14 @@ namespace ChilliSource
         //----------------------------------------------------
         /// Get Acceleration
         //----------------------------------------------------
-        Core::Vector3 CAccelerometer::GetAcceleration() const
+        Core::Vector3 Accelerometer::GetAcceleration() const
         {
             return Core::Vector3(m_motionManager.accelerometerData.acceleration.x, m_motionManager.accelerometerData.acceleration.y, m_motionManager.accelerometerData.acceleration.z);
         }
         //----------------------------------------------------
         /// Stop Updating
         //----------------------------------------------------
-        void CAccelerometer::StopUpdating()
+        void Accelerometer::StopUpdating()
         {
             mbIsUpdating = false;
             [m_motionManager stopAccelerometerUpdates];
@@ -91,7 +92,7 @@ namespace ChilliSource
         //----------------------------------------------------
         /// Destructor
         //----------------------------------------------------
-        CAccelerometer::~CAccelerometer()
+        Accelerometer::~Accelerometer()
         {
             [m_motionManager release];
         }

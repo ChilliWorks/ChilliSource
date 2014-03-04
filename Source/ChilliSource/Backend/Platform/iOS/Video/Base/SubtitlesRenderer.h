@@ -27,7 +27,7 @@
     UIView* mpBaseView;
     CADisplayLink* mpDisplayLink;
     ChilliSource::Video::SubtitlesSPtr mpSubtitles;
-    ChilliSource::iOS::CVideoPlayerActivity* mpVideoPlayer;
+    ChilliSource::iOS::VideoPlayerActivity* mpVideoPlayer;
     std::unordered_map<ChilliSource::Video::Subtitles::SubtitlePtr, UITextView*> maTextViewMap;
     std::vector<ChilliSource::Video::Subtitles::SubtitlePtr> maSubtitlesToRemove;
     TimeIntervalMs mCurrentTimeMS;
@@ -41,7 +41,7 @@
 /// @param The subtitles storage location.
 /// @param The subtitles filename.
 //--------------------------------------------------------
--(id) InitWithVideoPlayer:(ChilliSource::iOS::CVideoPlayerActivity*)inpVideoPlayer View:(UIView*)inpView StorageLocation:(ChilliSource::Core::StorageLocation)ineStorageLocation Filename:(std::string)instrFilename;
+-(id) InitWithVideoPlayer:(ChilliSource::iOS::VideoPlayerActivity*)inpVideoPlayer View:(UIView*)inpView StorageLocation:(ChilliSource::Core::StorageLocation)ineStorageLocation Filename:(std::string)instrFilename;
 //--------------------------------------------------------
 /// On Update
 ///

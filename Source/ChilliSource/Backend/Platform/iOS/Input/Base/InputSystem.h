@@ -15,10 +15,11 @@
 #define _MOFLO_PLATFORM_IOS3X_INPUTSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Input/Base/InputSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Input/Pointer/TouchScreen.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/iOS/Input/Accelerometer/Accelerometer.h>
 #include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/VirtualKeyboard.h>
+#include <ChilliSource/Backend/Platform/iOS/Input/Pointer/TouchScreen.h>
+#include <ChilliSource/Input/Base/InputSystem.h>
 
 #include <UIKit/UIKit.h>
 
@@ -26,11 +27,11 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CInputSystem : public Input::InputSystem
+		class InputSystem : public Input::InputSystem
 		{
 		public:
-            CInputSystem();
-			virtual ~CInputSystem();
+            InputSystem();
+			virtual ~InputSystem();
 			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			
 			virtual bool CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const override;
@@ -52,9 +53,9 @@ namespace ChilliSource
             void FlushBufferedInput() override;
 			
 		protected:
-			CTouchScreen mTouchScreen;
-			CAccelerometer* mpAccelerometer;
-			CVirtualKeyboard mVirtualKeyboard;
+			TouchScreen mTouchScreen;
+			Accelerometer* mpAccelerometer;
+			VirtualKeyboard mVirtualKeyboard;
 		};
 	}
 }
