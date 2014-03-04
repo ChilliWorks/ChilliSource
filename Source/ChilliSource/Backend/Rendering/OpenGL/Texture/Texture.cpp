@@ -33,7 +33,7 @@ namespace ChilliSource
         mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), mdwTextureSlot(0), meImageFormat(Core::Image::Format::k_RGBA8888), mpTextureManager(inpTextureManager),
         mpRenderCapabilities(nullptr)
 		{
-            mpRenderCapabilities = Core::Application::GetSystemImplementing<Rendering::RenderCapabilities>();
+            mpRenderCapabilities = Core::Application::Get()->GetSystemImplementing<Rendering::RenderCapabilities>();
             CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
 		}
 		//--------------------------------------------------
@@ -282,7 +282,7 @@ namespace ChilliSource
 		{
             if (paTextureUnits != nullptr)
             {
-                Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::GetSystemImplementing<Rendering::RenderCapabilities>();
+                Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::Get()->GetSystemImplementing<Rendering::RenderCapabilities>();
                 CS_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
                 
                 for(u32 i = 0; i < pRenderCapabilities->GetNumTextureUnits(); ++i)
@@ -310,7 +310,7 @@ namespace ChilliSource
         //---------------------------------------------------
         void Texture::ErrorCheck(u32 inudwWidth, u32 inudwHeight)
         {
-            Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::GetSystemImplementing<Rendering::RenderCapabilities>();
+            Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::Get()->GetSystemImplementing<Rendering::RenderCapabilities>();
             CS_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
             
 			if(inudwWidth > pRenderCapabilities->GetMaxTextureSize() || inudwHeight > pRenderCapabilities->GetMaxTextureSize())
@@ -356,7 +356,7 @@ namespace ChilliSource
         {
             if(!paTextureUnits)
 			{
-                Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::GetSystemImplementing<Rendering::RenderCapabilities>();
+                Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::Get()->GetSystemImplementing<Rendering::RenderCapabilities>();
                 CS_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
                 
                 //Create the available texture unit slots
@@ -483,7 +483,7 @@ namespace ChilliSource
 		//--------------------------------------------------
 		void Texture::Unbind(u8* inpObjectID)
 		{
-            Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::GetSystemImplementing<Rendering::RenderCapabilities>();
+            Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::Get()->GetSystemImplementing<Rendering::RenderCapabilities>();
             CS_ASSERT(pRenderCapabilities, "Cannot find required system: Render Capabilities.");
             
             for (u32 i = 0; i < pRenderCapabilities->GetNumTextureUnits(); ++i)
@@ -570,7 +570,7 @@ namespace ChilliSource
         {
             if(inTextureID > 0)
             {
-                Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::GetSystemImplementing<Rendering::RenderCapabilities>();
+                Rendering::RenderCapabilities* pRenderCapabilities = Core::Application::Get()->GetSystemImplementing<Rendering::RenderCapabilities>();
 				if(pRenderCapabilities == nullptr)
 					return;
 

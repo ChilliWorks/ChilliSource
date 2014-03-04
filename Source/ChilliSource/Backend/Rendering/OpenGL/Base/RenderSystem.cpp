@@ -90,7 +90,7 @@ namespace ChilliSource
             gbIsMapBufferAvailable = RenderSystem::CheckForOpenGLExtension("GL_OES_mapbuffer");
 #endif
             
-            mpRenderCapabilities = Core::Application::GetSystemImplementing<RenderCapabilities>();
+            mpRenderCapabilities = Core::Application::Get()->GetSystemImplementing<RenderCapabilities>();
             CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
             mpRenderCapabilities->CalculateCapabilities();
             

@@ -105,7 +105,7 @@ namespace ChilliSource
             mBackgroundColour = inBackgroundColour;
             
             std::string strPath;
-            static_cast<FileSystem*>(Core::Application::GetFileSystemPtr())->GetBestPathToFile(ineLocation, instrFileName, strPath);
+            static_cast<FileSystem*>(Core::Application::Get()->GetFileSystemPtr())->GetBestPathToFile(ineLocation, instrFileName, strPath);
             
             NSURL* pMovieURL = [NSURL fileURLWithPath:Core::StringUtils::StringToNSString(strPath)];
             mpMoviePlayerController = [[MPMoviePlayerController alloc] initWithContentURL:pMovieURL];
@@ -167,7 +167,7 @@ namespace ChilliSource
             if(mbKeepAppRunning == false)
             {
                 mbIsAppSuspended = true;
-                Core::Application::Suspend();
+                Core::Application::Get()->Suspend();
             }
             
             [mpMoviePlayerController play];
@@ -329,7 +329,7 @@ namespace ChilliSource
             if(mbIsAppSuspended == true)
             {
                 //Resume the application
-                Core::Application::Resume();
+                Core::Application::Get()->Resume();
                 mbIsAppSuspended = false;
             }
             

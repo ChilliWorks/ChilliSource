@@ -65,7 +65,7 @@ namespace ChilliSource
         //----------------------------------------------
         void FlushBuffer()
         {
-            Core::FileStreamSPtr pLogFile = Core::Application::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FileMode::FileMode::k_writeAppend);
+            Core::FileStreamSPtr pLogFile = Core::Application::Get()->GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FileMode::FileMode::k_writeAppend);
             pLogFile->Write(gstrLogBuffer);
             gstrLogBuffer.clear();
             pLogFile->Close();
@@ -81,7 +81,7 @@ namespace ChilliSource
         {
 #ifdef CS_ENABLE_LOGTOFILE
             //Clear the old file
-            Core::FileStreamSPtr pLogFile = Core::Application::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FileMode::k_write);
+            Core::FileStreamSPtr pLogFile = Core::Application::Get()->GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FileMode::k_write);
             pLogFile->Write("MoFlow Log File");
             pLogFile->Close();
 #endif
@@ -242,7 +242,7 @@ namespace ChilliSource
         void Logging::GetLogData(std::stringstream& outStream)
         {
             //Clear the old file
-            Core::FileStreamSPtr pLogFile = Core::Application::GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FM_READ);
+            Core::FileStreamSPtr pLogFile = Core::Application::Get()->GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_cache, kstrFileName, Core::FM_READ);
             pLogFile->Get(outStream);
             outStream << gstrLogBuffer;
             pLogFile->Close();

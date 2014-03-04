@@ -296,7 +296,7 @@ namespace ChilliSource
             Update(infDt);
             
             //Render the scene
-            mpRenderer->RenderToScreen(Core::Application::GetStateManagerPtr()->GetActiveScenePtr());
+            mpRenderer->RenderToScreen(Core::Application::Get()->GetStateManagerPtr()->GetActiveScenePtr());
             
 #ifdef CS_ENABLE_DEBUGSTATS
 			DebugStats::Clear();
@@ -605,36 +605,5 @@ namespace ChilliSource
 				pSystem.reset();
 			}
 		}
-        
-//        //----------------------------------------------------
-//        //----------------------------------------------------
-//        void Application::MakeToast(const UTF8String& instrText)
-//        {
-//            pPlatformSystem->MakeToast(instrText);
-//        }
-//        //----------------------------------------------------
-//        //----------------------------------------------------
-//        void Application::ShowSystemConfirmDialog(u32 inudwID, const SystemConfirmDialog::Delegate& inDelegate, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm, const UTF8String& instrCancel)
-//        {
-//            pPlatformSystem->ShowSystemConfirmDialog(inudwID, instrTitle, instrMessage, instrConfirm, instrCancel);
-//            mActiveSysConfirmDelegate = inDelegate;
-//        }
-//        //----------------------------------------------------
-//        //----------------------------------------------------
-//        void Application::ShowSystemDialog(u32 inudwID, const SystemConfirmDialog::Delegate& inDelegate, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm)
-//        {
-//            pPlatformSystem->ShowSystemDialog(inudwID, instrTitle, instrMessage, instrConfirm);
-//            mActiveSysConfirmDelegate = inDelegate;
-//        }
-//        //----------------------------------------------------
-//        //----------------------------------------------------
-//        void Application::OnSystemConfirmDialogResult(u32 inudwID, SystemConfirmDialog::Result ineResult)
-//        {
-//        	if(mActiveSysConfirmDelegate)
-//        	{
-//        		mActiveSysConfirmDelegate(inudwID, ineResult);
-//        		mActiveSysConfirmDelegate = nullptr;
-//        	}
-//        }
 	}
 }

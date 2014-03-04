@@ -231,7 +231,7 @@ namespace ChilliSource
 		{
 			bool mbSuccess = true;
 			
-			Core::FileStreamSPtr stream = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
+			Core::FileStreamSPtr stream = Core::Application::Get()->GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
 	
 			MeshDataQuantities quantities;
 			mbSuccess = ReadGlobalHeader(stream, inMeshDescriptor, inFilePath, quantities);

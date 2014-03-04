@@ -104,7 +104,7 @@ namespace ChilliSource
 				{
 					strFilename = Core::Application::Get()->GetFileSystemPtr()->GetDirectoryForPackageFile(inAttachment.mstrFilename);
 				}
-				else if (inAttachment.meStorageLocation == Core::StorageLocation::k_DLC && Core::Application::GetFileSystemPtr()->DoesFileExistInCachedDLC(inAttachment.mstrFilename) == false)
+				else if (inAttachment.meStorageLocation == Core::StorageLocation::k_DLC && Core::Application::Get()->GetFileSystemPtr()->DoesFileExistInCachedDLC(inAttachment.mstrFilename) == false)
                 {
                     strFilename = Core::Application::Get()->GetFileSystemPtr()->GetPackageDLCDirectory() + inAttachment.mstrFilename;
                 }

@@ -114,7 +114,7 @@ namespace ChilliSource
 		bool Shader::ReadShaderFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, std::stringstream& outstrContents)
 		{
 			//Open the shader file for reading only
-			ChilliSource::Core::FileStreamSPtr shaderStream = ChilliSource::Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilePath, ChilliSource::Core::FileMode::k_read);
+			ChilliSource::Core::FileStreamSPtr shaderStream = ChilliSource::Core::Application::Get()->GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilePath, ChilliSource::Core::FileMode::k_read);
             
             if (shaderStream == nullptr || shaderStream->IsBad() == true)
 			{

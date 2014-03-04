@@ -36,7 +36,7 @@ static mach_timebase_info_data_t gMachtimeBase;
 	mPreviousFrameTime = (mach_absolute_time() * gMachtimeBase.numer) / gMachtimeBase.denom;
 	mAppStartTime = mPreviousFrameTime;
     
-    ChilliSource::Core::Application::OnFrameBegin(0.0f, (f32)mPreviousFrameTime - (f32)mAppStartTime);
+    ChilliSource::Core::Application::Get()->OnFrameBegin(0.0f, (f32)mPreviousFrameTime - (f32)mAppStartTime);
 	
 	//Begin the update loop
     [self SetMaxFPS:30];
@@ -111,7 +111,7 @@ static mach_timebase_info_data_t gMachtimeBase;
 	
 	mPreviousFrameTime = CurrentTime;
     
-    ChilliSource::Core::Application::OnFrameBegin((f32)fDeltaTime, (f32)mPreviousFrameTime - (f32)mAppStartTime);
+    ChilliSource::Core::Application::Get()->OnFrameBegin((f32)fDeltaTime, (f32)mPreviousFrameTime - (f32)mAppStartTime);
 }
 //------------------------------------------------
 /// Get System Time
@@ -166,11 +166,11 @@ static mach_timebase_info_data_t gMachtimeBase;
 	// NO = 0, YES = 1
 	if(buttonIndex == 0)
     {
-        ChilliSource::Core::Application::OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::SystemConfirmDialog::Result::k_cancel);
+        ChilliSource::Core::Application::Get()->OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::SystemConfirmDialog::Result::k_cancel);
     }
     else 
     {
-        ChilliSource::Core::Application::OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::SystemConfirmDialog::Result::k_confirm);
+        ChilliSource::Core::Application::Get()->OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::SystemConfirmDialog::Result::k_confirm);
     }
 }
 //----------------------------------------------

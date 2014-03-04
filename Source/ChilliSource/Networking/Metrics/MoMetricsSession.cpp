@@ -27,7 +27,7 @@ namespace ChilliSource
         
         void GenerateRequestID(std::string& outstrID)
         {
-            std::string strTime = Core::ToString(Core::Application::GetSystemTime());
+            std::string strTime = Core::ToString(Core::Application::Get()->GetSystemTime());
             std::string strCounter = Core::ToString(udwNonceCounter);
             
             udwNonceCounter++;
@@ -82,7 +82,7 @@ namespace ChilliSource
         : mpHttpSystem(inpHttpSystem), mstrRealmUrl(instrMetricsUrl), mstrAppID(instrAppID), mpExternalMetrics(inpExternalMetrics), mbIsClosed(false), mdwServerTimeDelta(0), mbActionInProgress(false), mbRequestInProgress(false),
         mudwCurrentDelayIndex(0), mLastActionTime(0)
         {
-            mstrID = Core::ToString(Core::Application::GetSystemTime());
+            mstrID = Core::ToString(Core::Application::Get()->GetSystemTime());
         }
         
         void MoMetricsSession::SetConstant(const std::string& instrKey, const std::string& instrValue)
@@ -145,7 +145,7 @@ namespace ChilliSource
                 QueueEvent(sEvent);
             }
             
-            Core::Application::GetFileSystemPtr()->DeleteFile(Core::StorageLocation::k_cache,  instrID + ".mosession");
+            Core::Application::Get()->GetFileSystemPtr()->DeleteFile(Core::StorageLocation::k_cache,  instrID + ".mosession");
         }
         
         void MoMetricsSession::SaveToCache()
@@ -195,7 +195,7 @@ namespace ChilliSource
         
         bool MoMetricsSession::IsExpired() const
         {
-            s32 dwTimeSinceLastActivity = (s32)(Core::Application::GetSystemTime() - GetLastActivityTime());
+            s32 dwTimeSinceLastActivity = (s32)(Core::Application::Get()->GetSystemTime() - GetLastActivityTime());
             return (dwTimeSinceLastActivity > kSessionGraceTimeSecs);
         }
         
@@ -217,7 +217,7 @@ namespace ChilliSource
         
         bool MoMetricsSession::CanPerformNextAction() const
         {
-            return !mQueuedActions.empty() && !mbActionInProgress && ((Core::Application::GetSystemTime() - mLastActionTime) >= kaRetryDelaysSecs[mudwCurrentDelayIndex]);
+            return !mQueuedActions.empty() && !mbActionInProgress && ((Core::Application::Get()->GetSystemTime() - mLastActionTime) >= kaRetryDelaysSecs[mudwCurrentDelayIndex]);
         }
         
         void MoMetricsSession::PerformNextAction()
@@ -225,7 +225,7 @@ namespace ChilliSource
             if(!CanPerformNextAction())
                 return;
             
-            mLastActionTime = Core::Application::GetSystemTime();
+            mLastActionTime = Core::Application::Get()->GetSystemTime();
             mbActionInProgress = true;
             
             switch(mQueuedActions.front())
@@ -277,7 +277,7 @@ namespace ChilliSource
 			
 			Json::Value cJApp(Json::objectValue);
             cJApp["ApplicationID"] = mstrAppID;
-			cJApp["Version"] = Core::Application::GetAppVersion();
+			cJApp["Version"] = Core::Application::Get()->GetAppVersion();
 			cJData["Application"] = cJApp;
 			
 			Json::Value cJDevice(Json::objectValue);
@@ -290,7 +290,7 @@ namespace ChilliSource
 			
             Json::Value cJSession(Json::objectValue);
 			cJSession["Data"] = cJData;
-            cJSession["Timestamp"] = (u32)Core::Application::GetSystemTime();
+            cJSession["Timestamp"] = (u32)Core::Application::Get()->GetSystemTime();
 			
             MetricsRequest sRequest = {cJSession, "/session/create", Core::MakeDelegate(this, &MoMetricsSession::OnAuthTokensRequestComplete), false};
             QueueRequest(sRequest);
@@ -342,7 +342,7 @@ namespace ChilliSource
 			
             Json::Value cJSession(Json::objectValue);
 			cJSession["Data"] = cJData;
-            cJSession["Timestamp"] = (u32)Core::Application::GetSystemTime();
+            cJSession["Timestamp"] = (u32)Core::Application::Get()->GetSystemTime();
 			
             MetricsRequest sRequest = {cJSession, "/session/update", Core::MakeDelegate(this, &MoMetricsSession::OnLocationUpdateRequestComplete), true};
             QueueRequest(sRequest);
@@ -367,7 +367,7 @@ namespace ChilliSource
         
         void MoMetricsSession::UpdateLastActivityTime()
         {
-            mLastActivityTime = Core::Application::GetSystemTime();
+            mLastActivityTime = Core::Application::Get()->GetSystemTime();
         }
         
         TimeIntervalSecs MoMetricsSession::GetLastActivityTime() const
@@ -383,7 +383,7 @@ namespace ChilliSource
             
             sEvent.strType = instrType;
 			sEvent.astrParams = inastrParams;
-			sEvent.udwTimeStamp = (u32)Core::Application::GetSystemTime() + mdwServerTimeDelta;
+			sEvent.udwTimeStamp = (u32)Core::Application::Get()->GetSystemTime() + mdwServerTimeDelta;
 			sEvent.udwCount = 1;
             sEvent.bSummarisable = inbSummarise;
             sEvent.bIgnore = false;

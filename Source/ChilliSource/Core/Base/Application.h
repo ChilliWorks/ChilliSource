@@ -332,50 +332,6 @@ namespace ChilliSource
 			/// Destructor
 			//------------------------------------------------------
             virtual ~Application();
-            
-            //-----------------------------------------------------
-            /// Display a toast notification with the given text
-            ///
-            /// @author I Copland
-            ///
-            /// @param The text to display.
-            //-----------------------------------------------------
-            //void MakeToast(const UTF8String& instrText);
-            //-----------------------------------------------------
-            /// Display a system confirmation dialog with the given
-            /// ID and delegate.
-            ///
-            /// @author I Copland
-            ///
-            /// @param ID
-            /// @param SystemConfirmDialogDelegate
-            /// @param Title text
-            /// @param Message text
-            /// @param Confirm text
-            /// @param Cancel text
-            //-----------------------------------------------------
-            //void ShowSystemConfirmDialog(u32 inudwID, const SystemConfirmDialog::Delegate& inDelegate, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm, const UTF8String& instrCancel);
-            //-----------------------------------------------------
-            /// Display a system dialog with the given ID and delegate
-            ///
-            /// @author I Copland
-            ///
-            /// @param ID
-            /// @param SystemConfirmDialogDelegate
-            /// @param Title text
-            /// @param Message text
-            /// @param Confirm text
-            //------------------------------------------------------
-            //void ShowSystemDialog(u32 inudwID, const SystemConfirmDialog::Delegate& inDelegate, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm);
-            //------------------------------------------------------
-            /// Triggered from a system dialog confirmation event
-            ///
-            /// @author I Copland
-            ///
-            /// @param ID
-            /// @param Result
-            //------------------------------------------------------
-            //void OnSystemConfirmDialogResult(u32 inudwID, SystemConfirmDialog::Result ineResult);
 		protected:
             //------------------------------------------------------
 			/// The users application should override this to add

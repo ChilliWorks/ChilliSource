@@ -17,6 +17,7 @@ namespace ChilliSource
 		/// Core
 		//------------------------------------------------------
 		CS_FORWARDDECLARE_CLASS(PlatformSystem);
+        CS_FORWARDDECLARE_CLASS(DialogueSystem);
         CS_FORWARDDECLARE_CLASS(FileSystem);
         CS_FORWARDDECLARE_CLASS(ImageLoader);
         CS_FORWARDDECLARE_CLASS(LocalNotificationScheduler);

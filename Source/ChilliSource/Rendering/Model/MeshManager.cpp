@@ -312,7 +312,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         MeshSPtr MeshManager::GetDefaultMesh()
         {
-            return Core::Application::GetDefaultMesh();
+            return Core::Application::Get()->GetDefaultMesh();
         }
 		//-----------------------------------------------------------------
 		/// Destructor

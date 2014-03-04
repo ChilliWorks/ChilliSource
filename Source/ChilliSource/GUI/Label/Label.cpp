@@ -62,7 +62,7 @@ namespace ChilliSource
             mpWhiteTex = pMgr->GetDefaultTexture();
             
             //Grab the default font
-            Font = Core::Application::GetDefaultFont();
+            Font = Core::Application::Get()->GetDefaultFont();
             
             ConsumesTouches = false;
             
@@ -193,7 +193,7 @@ namespace ChilliSource
             if(!Font)
             {
                 //Load default placeholder font
-                Font = Core::Application::GetDefaultFont();
+                Font = Core::Application::Get()->GetDefaultFont();
             }
         }
         //-------------------------------------------------------

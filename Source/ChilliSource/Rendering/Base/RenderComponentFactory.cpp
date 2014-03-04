@@ -60,7 +60,7 @@ namespace ChilliSource
             }
             if (!mpRenderCapabilities)
             {
-            	mpRenderCapabilities = Core::Application::GetSystemImplementing<RenderCapabilities>();
+            	mpRenderCapabilities = Core::Application::Get()->GetSystemImplementing<RenderCapabilities>();
             	CS_ASSERT(mpRenderCapabilities, "Render Component Factory is missing required system: Render Capabilities.");
             }
         }

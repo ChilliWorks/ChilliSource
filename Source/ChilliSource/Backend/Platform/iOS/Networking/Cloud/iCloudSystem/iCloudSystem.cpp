@@ -227,7 +227,7 @@ namespace ChilliSource
             }
             
             //First we need to check if this file exists locally
-            bool bExists = ChilliSource::Core::Application::GetFileSystemPtr()->DoesFileExist(ineStorageLocation, instrFilePath);
+            bool bExists = ChilliSource::Core::Application::Get()->GetFileSystemPtr()->DoesFileExist(ineStorageLocation, instrFilePath);
 
             int dwFilePathOffset = instrFilePath.find_last_of("/");
             
@@ -292,7 +292,7 @@ namespace ChilliSource
             
             std::string strCloudContents = [incOpenedDoc contentsAsSTDString];
             
-            bool bExists = ChilliSource::Core::Application::GetFileSystemPtr()->DoesFileExist(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath);
+            bool bExists = ChilliSource::Core::Application::Get()->GetFileSystemPtr()->DoesFileExist(psRequest.meLocalStorageLocation, psRequest.mstrLocalFilePath);
             
             //If no local file we still want to sync if cloud file exists
             if(!bExists)
