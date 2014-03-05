@@ -154,7 +154,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		/// Deconstructor
 		//-----------------------------------------
-		CUDIDManager::~CUDIDManager()
+		UDIDManager::~UDIDManager()
 		{
 		}
 	}

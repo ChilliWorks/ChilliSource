@@ -816,8 +816,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		Core::FileStreamSPtr FileSystem::CreateAPKFileStream(const unz_file_pos& inPos, Core::FileMode ineFileMode) const
 		{
-			Core::FileStreamSPtr newFilestream = Core::FileStreamSPtr(new CFileStreamAPK(&mMinizipMutex));
-			std::shared_ptr<CFileStreamAPK> apkStream = std::static_pointer_cast<CFileStreamAPK>(newFilestream);
+			Core::FileStreamSPtr newFilestream = Core::FileStreamSPtr(new FileStreamAPK(&mMinizipMutex));
+			std::shared_ptr<FileStreamAPK> apkStream = std::static_pointer_cast<FileStreamAPK>(newFilestream);
 			apkStream->OpenFromAPK(mstrPathToAPK, inPos, ineFileMode);
 
 			return newFilestream;
@@ -1036,7 +1036,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Create Base Directory
 		//--------------------------------------------------------------
-		bool CFileSystem::CreateBaseDirectory(const std::string& instrDirectory) const
+		bool FileSystem::CreateBaseDirectory(const std::string& instrDirectory) const
 		{
 			std::string correctedPath = Core::StringUtils::StandardisePath(instrDirectory);
 			std::vector<std::string> pathSections = Core::StringUtils::Split(correctedPath, "/");

@@ -81,13 +81,13 @@ void Java_com_chillisource_core_CoreNativeInterface_Initialise(JNIEnv* inpEnv, j
 	//setup other interfaces
 	JavaVM * pJavaVM;
 	inpEnv->GetJavaVM(&pJavaVM);
-	ChilliSource::Android::SCTouchInputJavaInterface::SetupJavaInterface(pJavaVM);
-	ChilliSource::Android::SCHttpConnectionJavaInterface::SetupJavaInterface(pJavaVM);
-	ChilliSource::Android::SCSharedPreferencesJavaInterface::SetupJavaInterface(pJavaVM);
-	ChilliSource::Android::SCWebViewJavaInterface::SetupJavaInterface(pJavaVM);
-	ChilliSource::Android::SCSMSCompositionJavaInterface::SetupJavaInterface(pJavaVM);
-	ChilliSource::Android::SCContactInformationProviderJavaInterface::SetupJavaInterface(pJavaVM);
-	ChilliSource::Android::SCTwitterAuthenticationActivityJavaInterface::SetupJavaInterface(pJavaVM);
+	ChilliSource::Android::TouchInputJavaInterface::SetupJavaInterface(pJavaVM);
+	ChilliSource::Android::HttpConnectionJavaInterface::SetupJavaInterface(pJavaVM);
+	ChilliSource::Android::SharedPreferencesJavaInterface::SetupJavaInterface(pJavaVM);
+	ChilliSource::Android::WebViewJavaInterface::SetupJavaInterface(pJavaVM);
+	ChilliSource::Android::SMSCompositionJavaInterface::SetupJavaInterface(pJavaVM);
+	ChilliSource::Android::ContactInformationProviderJavaInterface::SetupJavaInterface(pJavaVM);
+	ChilliSource::Android::TwitterAuthenticationActivityJavaInterface::SetupJavaInterface(pJavaVM);
     
 	//run the application
     pApplication->Run();

@@ -34,7 +34,7 @@ namespace ChilliSource
         	: mCurrentSubtitleTimeMS(0)
         {
         	//get the media player java interface or create it if it doesn't yet exist.
-        	mpVideoPlayerJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CVideoPlayerJavaInterface>();
+        	mpVideoPlayerJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<VideoPlayerJavaInterface>();
         	if (mpVideoPlayerJavaInterface == NULL)
         	{
         		mpVideoPlayerJavaInterface = VideoPlayerJavaInterfacePtr(new VideoPlayerJavaInterface());
@@ -81,8 +81,8 @@ namespace ChilliSource
         	}
 
         	//start the video
-        	OnVideoDismissedDelegate dismissedDelegate(Core::MakeDelegate(this, &CVideoPlayerActivity::OnVideoDismissed));
-        	OnVideoStoppedDelegate stoppedDelegate(Core::MakeDelegate(this, &CVideoPlayerActivity::OnVideoStopped));
+        	OnVideoDismissedDelegate dismissedDelegate(Core::MakeDelegate(this, &VideoPlayerActivity::OnVideoDismissed));
+        	OnVideoStoppedDelegate stoppedDelegate(Core::MakeDelegate(this, &VideoPlayerActivity::OnVideoStopped));
         	mpVideoPlayerJavaInterface->Present(bIsPackage, strFilename, inbCanDismissWithTap, inBackgroundColour, dismissedDelegate, stoppedDelegate);
         }
         //--------------------------------------------------------------
@@ -93,7 +93,7 @@ namespace ChilliSource
 														bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour)
 		{
 			mpSubtitles = LOAD_RESOURCE(Video::Subtitles, ineSubtitlesLocation, instrSubtitlesFilename);
-			mpVideoPlayerJavaInterface->SetUpdateSubtitlesDelegate(Core::MakeDelegate(this, &CVideoPlayerActivity::OnUpdateSubtitles));
+			mpVideoPlayerJavaInterface->SetUpdateSubtitlesDelegate(Core::MakeDelegate(this, &VideoPlayerActivity::OnUpdateSubtitles));
 			Present(ineVideoLocation, instrVideoFilename, inbCanDismissWithTap, inBackgroundColour);
 		}
         //--------------------------------------------------------------

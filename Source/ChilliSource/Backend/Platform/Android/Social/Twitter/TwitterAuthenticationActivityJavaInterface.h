@@ -33,7 +33,7 @@ namespace ChilliSource
 			///
 			/// @param The Activity we want to talk to
 			//-----------------------------------------------
-			static void RegisterActivity(ChilliSource::Android::CTwitterAuthenticationActivity* inpActivity);
+			static void RegisterActivity(ChilliSource::Android::TwitterAuthenticationActivity* inpActivity);
 			//-----------------------------------------------
 			/// Present
 			///

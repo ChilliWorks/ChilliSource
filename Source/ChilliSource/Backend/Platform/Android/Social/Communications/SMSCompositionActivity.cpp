@@ -37,7 +37,7 @@ namespace ChilliSource
 			//EmailCompositionJavaInterface::Dismiss();
 		}
 
-		void CSMSCompositionActivity::OnSMSClosed()
+		void SMSCompositionActivity::OnSMSClosed()
 		{
 			if(mCallback)
 				mCallback(SMSCompositionActivity::SendResult::k_succeed);

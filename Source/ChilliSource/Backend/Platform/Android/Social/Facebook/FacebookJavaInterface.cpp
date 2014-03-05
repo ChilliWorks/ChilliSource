@@ -117,7 +117,7 @@ namespace ChilliSource
 	{
 		CS_DEFINE_NAMEDTYPE(FacebookJavaInterface);
 
-		FacebookJavaInterface::CFacebookJavaInterface()
+		FacebookJavaInterface::FacebookJavaInterface()
 		{
 			CreateNativeInterface("com/chillisource/social/FacebookNativeInterface");
 
@@ -145,7 +145,7 @@ namespace ChilliSource
 		///
 		/// @param Auth system
 		//--------------------------------------------------------------------------------------
-		void FacebookJavaInterface::SetAuthenticationSystem(CFacebookAuthenticationSystem* inpAuthSystem)
+		void FacebookJavaInterface::SetAuthenticationSystem(FacebookAuthenticationSystem* inpAuthSystem)
 		{
 			gpAndroidAuthSystem = inpAuthSystem;
 		}
@@ -156,7 +156,7 @@ namespace ChilliSource
 		///
 		/// @param Post system
 		//--------------------------------------------------------------------------------------
-		void FacebookJavaInterface::SetPostSystem(CFacebookPostSystem* inpPostSystem)
+		void FacebookJavaInterface::SetPostSystem(FacebookPostSystem* inpPostSystem)
 		{
 			gpAndroidPostSystem = inpPostSystem;
 		}
@@ -261,7 +261,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 	    void FacebookJavaInterface::AuthoriseWritePermissions(const std::vector<std::string>& inaWritePerms)
 	    {
-	    	JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+	    	JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaPermissions = pEnv->NewObjectArray(inaWritePerms.size(), jStringClass, jstrEmptyString);

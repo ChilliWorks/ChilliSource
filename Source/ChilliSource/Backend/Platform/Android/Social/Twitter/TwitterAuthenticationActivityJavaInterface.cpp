@@ -50,7 +50,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// Register Activity
 		//-----------------------------------------------
-		void TwitterAuthenticationActivityJavaInterface::RegisterActivity(ChilliSource::Android::CTwitterAuthenticationActivity* inpActivity)
+		void TwitterAuthenticationActivityJavaInterface::RegisterActivity(TwitterAuthenticationActivity* inpActivity)
 		{
 			mpActivity = inpActivity;
 		}

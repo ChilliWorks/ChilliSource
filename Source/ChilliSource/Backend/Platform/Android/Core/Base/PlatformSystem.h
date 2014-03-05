@@ -349,7 +349,7 @@ namespace ChilliSource
 
 		private:
 			
-			CUDIDManager mUDIDManager;
+			UDIDManager mUDIDManager;
 
 			typedef std::unordered_map<Core::InterfaceIDType, SystemCreationFunction> MapInterfaceIDToSystemFunc;
 			MapInterfaceIDToSystemFunc mmapInterfaceIDToSystemFunc;

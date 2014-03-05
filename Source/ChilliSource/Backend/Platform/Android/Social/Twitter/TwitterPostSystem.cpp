@@ -59,8 +59,8 @@ namespace ChilliSource
 					if(Core::Application::GetPlatformSystemPtr()->CanCreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>())
 					{
 						mpAuthenticationView = Core::Application::GetPlatformSystemPtr()->CreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>();
-						mpAuthenticationView->SetAuthenticationPINResultDelegate(Core::MakeDelegate(this, &CTwitterPostSystem::OnPINComplete));
-						m_authorisationDismissedConnection = mpAuthenticationView->GetDismissedEvent().OpenConnection(Core::MakeDelegate(this, &CTwitterPostSystem::OnAuthorisationDismissed));
+						mpAuthenticationView->SetAuthenticationPINResultDelegate(Core::MakeDelegate(this, &TwitterPostSystem::OnPINComplete));
+						m_authorisationDismissedConnection = mpAuthenticationView->GetDismissedEvent().OpenConnection(Core::MakeDelegate(this, &TwitterPostSystem::OnAuthorisationDismissed));
 						mpAuthenticationView->Present();
 					}
 				}

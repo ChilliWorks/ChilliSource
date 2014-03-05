@@ -148,7 +148,7 @@ namespace ChilliSource
 			}
 		}
 
-		CS_DEFINE_NAMEDTYPE(CGooglePlayIAPJavaInterface);
+		CS_DEFINE_NAMEDTYPE(GooglePlayIAPJavaInterface);
 
 		GooglePlayIAPJavaInterface::GooglePlayIAPJavaInterface(const std::string& instrPublicKey)
 		{

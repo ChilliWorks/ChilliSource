@@ -22,7 +22,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------
 			jstring CreateJStringFromSTDString(const std::string& instrString)
 			{
-				JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 				if (pEnv != NULL)
 				{
 					jstring jstrNewString = pEnv->NewStringUTF(instrString.c_str());
@@ -35,7 +35,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------
 			jstring CreateJStringFromUTF8String(const Core::UTF8String& instrString)
 			{
-				JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 				if (pEnv != NULL)
 				{
 					jstring jstrNewString = pEnv->NewStringUTF(instrString.ToASCII().c_str());
@@ -48,7 +48,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------
 			std::string CreateSTDStringFromJString(jstring injstrString)
 			{
-				JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 				if (pEnv != NULL && injstrString != NULL)
 				{
 					const char * cString = pEnv->GetStringUTFChars(injstrString, JNI_FALSE);
@@ -66,7 +66,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------
 			std::string CreateSTDStringFromJByteArray(jbyteArray injabyArray, int indwLength)
 			{
-				JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 				if (pEnv != NULL && injabyArray != NULL && indwLength >= 0)
 				{
 					jbyte* pBytes = pEnv->GetByteArrayElements(injabyArray, JNI_FALSE);
@@ -84,7 +84,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------
 			Core::UTF8String CreateUTF8StringFromJString(jstring injstrString)
 			{
-				JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 				if (pEnv != NULL && injstrString != NULL)
 				{
 					const char * cString = pEnv->GetStringUTFChars(injstrString, JNI_FALSE);
@@ -102,7 +102,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------
 			s32 GetIntElementFromJArray(jintArray injadwArray, u32 inudwIndex)
 			{
-				JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 				if (pEnv != NULL && injadwArray != NULL)
 				{
 					jint* pIntegers = pEnv->GetIntArrayElements(injadwArray, JNI_FALSE);

@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		u32 CWebViewActivity::msudwCurrentIndex = 1;
+		u32 WebViewActivity::msudwCurrentIndex = 1;
 		WebViewActivity::MapIndexToWebView WebViewActivity::mmapIndexToWebView;
 		//-----------------------------------------------
 		/// Constructor
@@ -72,7 +72,7 @@ namespace ChilliSource
 				strFile = instrFile;                    
 			}
 
-			Android::CFileSystem* pFileSystem = static_cast<Android::CFileSystem*>(Core::Application::GetFileSystemPtr());
+			Android::FileSystem* pFileSystem = static_cast<Android::FileSystem*>(Core::Application::GetFileSystemPtr());
 
 			Core::FileStreamSPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FileMode::k_read);
 			std::string strHTMLFileContents;
@@ -172,8 +172,8 @@ namespace ChilliSource
 
 		void WebViewActivity::OnWebViewDismissed(u32 inudwIndex)
 		{
-			MapIndexToWebViewItr pIndex = CWebViewActivity::mmapIndexToWebView.find(inudwIndex);
-			if(pIndex != CWebViewActivity::mmapIndexToWebView.end())
+			MapIndexToWebViewItr pIndex = WebViewActivity::mmapIndexToWebView.find(inudwIndex);
+			if(pIndex != WebViewActivity::mmapIndexToWebView.end())
 			{
 				if(pIndex->second)
 					pIndex->second->mOnDismissedEvent.NotifyConnections(pIndex->second);

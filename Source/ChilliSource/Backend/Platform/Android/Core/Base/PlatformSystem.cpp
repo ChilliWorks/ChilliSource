@@ -14,7 +14,7 @@
 
 #include <ChilliSource/Audio/Base/AudioSystem.h>
 #include <ChilliSource/Audio/Base/AudioPlayer.h>
-#include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioLoader.h>
+#include <ChilliSource/Backend/Audio/FMOD/Base/AudioLoader.h>
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
 #include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Core/File/FileSystem.h>
@@ -65,7 +65,7 @@ namespace ChilliSource
 			AddActivityFunc(Web::WebViewActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateWebViewActivity));
 			AddActivityFunc(Social::EmailCompositionActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateEmailCompositionActivity));
 
-			if (CSMSCompositionActivity::SupportedByDevice())
+			if (SMSCompositionActivity::SupportedByDevice())
 				AddActivityFunc(Social::SMSCompositionActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateSMSCompositionActivity));
 
 			AddInfoProviderFunc(Social::ContactInformationProvider::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateContactInformationProvider));
@@ -153,7 +153,7 @@ namespace ChilliSource
 			inaSystems.push_back(Core::SystemSPtr(pInputSystem));
 			Core::Application::SetInputSystem(pInputSystem);
 
-			Audio::AudioSystem* pAudioSystem = new FMOD::System();
+			Audio::AudioSystem* pAudioSystem = new FMOD::FMODSystem();
 			inaSystems.push_back(Core::SystemSPtr(pAudioSystem));
 			inaSystems.push_back(Core::SystemSPtr(new FMOD::AudioLoader(pAudioSystem)));
 			Core::Application::SetAudioSystem(pAudioSystem);

@@ -42,7 +42,7 @@ namespace ChilliSource
                     msPostDesc = insDesc;
                     std::vector<std::string> aWritePerms;
                     aWritePerms.push_back("publish_actions");
-                    mpAuthSystem->AuthoriseWritePermissions(aWritePerms, Core::MakeDelegate(this, &CFacebookPostSystem::OnPublishPermissionAuthorised));
+                    mpAuthSystem->AuthoriseWritePermissions(aWritePerms, Core::MakeDelegate(this, &FacebookPostSystem::OnPublishPermissionAuthorised));
                 }
             }
             else
@@ -66,7 +66,7 @@ namespace ChilliSource
                     msPostDesc = insDesc;
                     std::vector<std::string> aWritePerms;
                     aWritePerms.push_back("publish_actions");
-                    mpAuthSystem->AuthoriseWritePermissions(aWritePerms, Core::MakeDelegate(this, &CFacebookPostSystem::OnPublishPermissionAuthorised));
+                    mpAuthSystem->AuthoriseWritePermissions(aWritePerms, Core::MakeDelegate(this, &FacebookPostSystem::OnPublishPermissionAuthorised));
                 }
             }
             else

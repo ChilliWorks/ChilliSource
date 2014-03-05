@@ -76,7 +76,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------------------------------
-		VideoPlayerJavaInterface::CVideoPlayerJavaInterface()
+		VideoPlayerJavaInterface::VideoPlayerJavaInterface()
 		{
 			CreateNativeInterface("com/chillisource/video/VideoPlayerNativeInterface");
 			CreateMethodReference("Present", "(ZLjava/lang/String;ZZFFFF)V");

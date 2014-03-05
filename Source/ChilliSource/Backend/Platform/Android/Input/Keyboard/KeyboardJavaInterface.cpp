@@ -156,7 +156,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		bool KeyboardJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (CKeyboardJavaInterface::InterfaceID == inInterfaceID);
+			return (KeyboardJavaInterface::InterfaceID == inInterfaceID);
 		}
 		//-----------------------------------------------
 		/// Set Text Added Delegate

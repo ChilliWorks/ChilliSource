@@ -84,7 +84,7 @@ namespace ChilliSource
 		//=====================================================================================================
 		/// Http Request
 		//=====================================================================================================
-		HttpConnectionSystem::HttpRequest::CHttpRequest(const Networking::HttpRequestDetails& insDetails,
+		HttpConnectionSystem::HttpRequest::HttpRequest(const Networking::HttpRequestDetails& insDetails,
 														const Networking::HttpRequest::CompletionDelegate& inCompletionDelegate) : msDetails(insDetails),
 														  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  mbCompleted(false),
 														  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  mCompletionDelegate(inCompletionDelegate),
@@ -94,12 +94,12 @@ namespace ChilliSource
 		{
 			//Begin the read loop
 			//Run this as a threaded task
-			Core::TaskScheduler::ScheduleTask(Core::Task<>(this, &CHttpConnectionSystem::CHttpRequest::PerformRequest));
+			Core::TaskScheduler::ScheduleTask(Core::Task<>(this, &HttpConnectionSystem::HttpRequest::PerformRequest));
 		}
 		//------------------------------------------------------------------
 		/// Update
 		//------------------------------------------------------------------
-		void HttpConnectionSystem::CHttpRequest::Update(f32 infDT)
+		void HttpConnectionSystem::HttpRequest::Update(f32 infDT)
 		{
 			//Check if the data has finished streaming and invoke the completion delegate on the main thread
 			if(mbCompleted == true)
@@ -119,25 +119,21 @@ namespace ChilliSource
 		//------------------------------------------------------------------
 		/// Poll Read Stream
 		//------------------------------------------------------------------
-		void HttpConnectionSystem::CHttpRequest::PerformRequest()
+		void HttpConnectionSystem::HttpRequest::PerformRequest()
 		{
 			HttpRequestType eType = HttpRequestType::k_get;
 			if (msDetails.eType == Networking::HttpRequestDetails::Type::k_post)
 				eType = HttpRequestType::k_post;
 
-			CS_LOG_DEBUG("CHttpConnectionSystem::CHttpRequest::PerformRequest() - Check for request type...");
-
 			s32 dwResponseCode;
 			HttpRequestResultCode eRequestResult;
 			if(msDetails.sHeaders.empty())
 			{
-				CS_LOG_DEBUG("CHttpConnectionSystem::CHttpRequest::PerformRequest() - Performing standard request...");
-				eRequestResult = SCHttpConnectionJavaInterface::HttpRequest(msDetails.strURL, eType, msDetails.strBody, mResponseData, msDetails.strRedirectionURL, dwResponseCode);
+				eRequestResult = HttpConnectionJavaInterface::HttpRequest(msDetails.strURL, eType, msDetails.strBody, mResponseData, msDetails.strRedirectionURL, dwResponseCode);
 			}
 			else
 			{
-				CS_LOG_DEBUG("CHttpConnectionSystem::CHttpRequest::PerformRequest() - Performing request with headers...");
-				eRequestResult = SCHttpConnectionJavaInterface::HttpRequest(msDetails.strURL, eType, msDetails.sHeaders, msDetails.strBody, mResponseData, msDetails.strRedirectionURL, dwResponseCode, true /* TODO: Add bKeepAlive boolean to msDetails*/);
+				eRequestResult = HttpConnectionJavaInterface::HttpRequest(msDetails.strURL, eType, msDetails.sHeaders, msDetails.strBody, mResponseData, msDetails.strRedirectionURL, dwResponseCode, true /* TODO: Add bKeepAlive boolean to msDetails*/);
 			}
 			mudwResponseCode = dwResponseCode;
 

@@ -279,7 +279,7 @@ namespace ChilliSource
 			///
 			/// This is defined protected so that only the FileSystem can create it.
 			//--------------------------------------------------------------------------------------------------
-			CFileStreamAPK(std::mutex* inpMinizipMutex);
+			FileStreamAPK(std::mutex* inpMinizipMutex);
 			//--------------------------------------------------------------------------------------------------
 			/// OpenFromAPK
 			///
@@ -308,7 +308,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------------------
 			std::ios_base::openmode GetFileMode();
 			
-			friend class CFileSystem;
+			friend class FileSystem;
 		private:
 			std::mutex* mpMinizipMutex;
 			unzFile mUnzipper;

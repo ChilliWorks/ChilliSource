@@ -159,7 +159,7 @@ namespace ChilliSource
         /// @param Required space in bytes
         /// @return Whether enough space is available
         //-------------------------------------------------------------
-        bool CooglePlayExpansionSystem::HasEnoughStorageSpace(u64 uddwRequired)
+        bool GooglePlayExpansionSystem::HasEnoughStorageSpace(u64 uddwRequired)
         {
 			u64 uddwAvailableStorage = mpJavaInterface->GetExternalFreeStorageInBytes();
 
@@ -391,7 +391,7 @@ namespace ChilliSource
         		}
         	}
 
-        	Core::Task<> UnzipTask(this, &CGooglePlayExpansionSystem::UnzipTask);
+        	Core::Task<> UnzipTask(this, &GooglePlayExpansionSystem::UnzipTask);
         	Core::TaskScheduler::ScheduleTask(UnzipTask);
         }
         //-------------------------------------------------------------
@@ -417,7 +417,7 @@ namespace ChilliSource
 
 			mpJavaInterface->AllowAppToSleep();
 
-        	Core::Task<DownloadStatus> CompleteTask(this, &CGooglePlayExpansionSystem::UnzipCompleteTask, DownloadStatus::k_complete);
+        	Core::Task<DownloadStatus> CompleteTask(this, &GooglePlayExpansionSystem::UnzipCompleteTask, DownloadStatus::k_complete);
         	Core::TaskScheduler::ScheduleMainThreadTask(CompleteTask);
         }
         //-------------------------------------------------------------

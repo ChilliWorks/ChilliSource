@@ -94,7 +94,7 @@ namespace ChilliSource
 		void ImageLoader::CreatePNGImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::Image* outpImage)
 		{
 			//load the png image
-			ChilliSource::Android::CPngImage image;
+			ChilliSource::Android::PngImage image;
 			image.Load(ineStorageLocation, inFilePath);
 
 			//check the image has loaded

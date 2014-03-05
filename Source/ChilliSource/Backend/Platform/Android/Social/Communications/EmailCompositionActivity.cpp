@@ -83,7 +83,7 @@ namespace ChilliSource
 				}
 			}
 
-			mpJavaInterface->Present(inastrRecipientAddresses, instrSubject, instrContents, strFilename, inbFormatAsHtml, Core::MakeDelegate(this, &CEmailCompositionActivity::OnEmailClosed));
+			mpJavaInterface->Present(inastrRecipientAddresses, instrSubject, instrContents, strFilename, inbFormatAsHtml, Core::MakeDelegate(this, &EmailCompositionActivity::OnEmailClosed));
 		}
         //-------------------------------------------------------
         /// Dismiss
@@ -101,10 +101,10 @@ namespace ChilliSource
 			{
 				switch (indwResultCode)
 				{
-					case CEmailCompositionJavaInterface::kdwResultSuccess:
+					case EmailCompositionJavaInterface::kdwResultSuccess:
 						mCallback(EmailCompositionActivity::SendResult::k_succeed);
 						break;
-					case CEmailCompositionJavaInterface::kdwResultCancelled:
+					case EmailCompositionJavaInterface::kdwResultCancelled:
 						mCallback(EmailCompositionActivity::SendResult::k_cancelled);
 						break;
 					default:

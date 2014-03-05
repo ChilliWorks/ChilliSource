@@ -29,7 +29,7 @@ namespace ChilliSource
 		{
 			if (mpJavaObject == NULL)
 			{
-				JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 
 				pEnv->DeleteGlobalRef(mpJavaObject);
 			}
@@ -41,7 +41,7 @@ namespace ChilliSource
 		{
 			if (mpJavaObject == NULL)
 			{
-				JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 
 				//get the class type
 				jclass jClassType = pEnv->FindClass(instrInterfaceName.c_str());
@@ -77,7 +77,7 @@ namespace ChilliSource
 		{
 			if (mpJavaObject != NULL)
 			{
-				JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 
 				//get the method reference
 				jclass jClassType = pEnv->GetObjectClass(mpJavaObject);

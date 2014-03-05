@@ -66,7 +66,7 @@ namespace ChilliSource
 		{
 			mDelegate = inDelegate;
 
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 
 			//build the recipient list
 			u32 udwCount = 0;
@@ -94,7 +94,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// On Email Closed
 		//--------------------------------------------------------------
-		void CEmailCompositionJavaInterface::OnEmailClosed(s32 indwResultCode)
+		void EmailCompositionJavaInterface::OnEmailClosed(s32 indwResultCode)
 		{
 			if (mDelegate != NULL)
 			{

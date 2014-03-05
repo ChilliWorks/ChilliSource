@@ -44,7 +44,7 @@ namespace ChilliSource
 			///
 			/// @param CTouchScreen* a pointer to the android touch screen.
 			//--------------------------------------------------------------------------------------
-			static void RegisterTouchScreen(CTouchScreen* inpTouchScreen);
+			static void RegisterTouchScreen(TouchScreen* inpTouchScreen);
 			//--------------------------------------------------------------------------------------
 			/// Get Touch Screen
 			///
