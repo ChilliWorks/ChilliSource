@@ -10,8 +10,9 @@
 #define _MO_FLO_PLATFORM_IOS_LOCAL_NOTIFICATION_SCHEDULER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/Notifications/LocalNotificationScheduler.h>
+#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
 @class UIApplication;
 @class UILocalNotification;
@@ -21,11 +22,11 @@ namespace ChilliSource
 {
     namespace iOS
     {
-        class CLocalNotificationScheduler : public Core::LocalNotificationScheduler
+        class LocalNotificationScheduler : public Core::LocalNotificationScheduler
         {
         public:
-            CLocalNotificationScheduler(){};
-			virtual ~CLocalNotificationScheduler(){};
+            LocalNotificationScheduler(){};
+			virtual ~LocalNotificationScheduler(){};
             //------------------------------------------------------------------------------
             /// Schedule Notification 
             ///

@@ -20,7 +20,7 @@
 #include <ChilliSource/Backend/Platform/iOS/Input/Base/InputSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerActivity.h>
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
-#include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioLoader.h>
+#include <ChilliSource/Backend/Audio/FMOD/Base/AudioLoader.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Notification/ToastNotification.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/IAP/IAPSystem.h>
@@ -68,28 +68,28 @@ namespace ChilliSource
 		///
 		/// Default
 		//-----------------------------------------
-		CPlatformSystem::CPlatformSystem()
+		PlatformSystem::PlatformSystem()
         : mfPhysicalScreenSize(-1.0f)
 		{
             //---Systems
-			AddSystemFunc(Networking::HttpConnectionSystem::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateHttpConnectionSystem));
+			AddSystemFunc(Networking::HttpConnectionSystem::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateHttpConnectionSystem));
 
-            AddActivityFunc(Social::EmailCompositionActivity::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateEmailCompositionActivity));
+            AddActivityFunc(Social::EmailCompositionActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateEmailCompositionActivity));
  
             //---Activities
-            AddActivityFunc(Video::VideoPlayerActivity::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateDefaultVideoPlayerActivity));
-			AddActivityFunc(Web::WebViewActivity::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateWebViewActivity));
+            AddActivityFunc(Video::VideoPlayerActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateDefaultVideoPlayerActivity));
+			AddActivityFunc(Web::WebViewActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateWebViewActivity));
 			
-			if(CSMSCompositionActivity::SupportedByDevice())
+			if(SMSCompositionActivity::SupportedByDevice())
             {
-				AddActivityFunc(Social::SMSCompositionActivity::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateSMSCompositionActivity));
+				AddActivityFunc(Social::SMSCompositionActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateSMSCompositionActivity));
             }
 			
             //---Info providers
-			AddInfoProviderFunc(Social::ContactInformationProvider::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateContactInformationProvider));
+			AddInfoProviderFunc(Social::ContactInformationProvider::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateContactInformationProvider));
 
-			Core::NotificationScheduler::Initialise(new CLocalNotificationScheduler());
-			Core::Application::SetFileSystem(new iOS::CFileSystem());
+			Core::NotificationScheduler::Initialise(new LocalNotificationScheduler());
+			Core::Application::SetFileSystem(new iOS::FileSystem());
 
 			Core::Logging::Init();
 		}
@@ -102,7 +102,7 @@ namespace ChilliSource
         /// @param System interface ID
         /// @param Creation delegate
         //-------------------------------------------
-		void CPlatformSystem::AddSystemFunc(Core::InterfaceIDType inInterfaceID, SystemCreationFunction inFunction)
+		void PlatformSystem::AddSystemFunc(Core::InterfaceIDType inInterfaceID, SystemCreationFunction inFunction)
         {
 			mmapInterfaceIDToSystemFunc.insert(std::make_pair(inInterfaceID,inFunction));
 		}
@@ -115,7 +115,7 @@ namespace ChilliSource
         /// @param Activity interface ID
         /// @param Creation delegate
         //-------------------------------------------
-		void CPlatformSystem::AddActivityFunc(Core::InterfaceIDType inInterfaceID, ActivityCreationFunction inFunction)
+		void PlatformSystem::AddActivityFunc(Core::InterfaceIDType inInterfaceID, ActivityCreationFunction inFunction)
         {
 			mmapInterfaceIDToActivityFunc.insert(std::make_pair(inInterfaceID,inFunction));
 		}
@@ -128,7 +128,7 @@ namespace ChilliSource
         /// @param Info provider interface ID
         /// @param Creation delegate
         //-------------------------------------------
-		void CPlatformSystem::AddInfoProviderFunc(Core::InterfaceIDType inInterfaceID, InfoProviderCreationFunction inFunction)
+		void PlatformSystem::AddInfoProviderFunc(Core::InterfaceIDType inInterfaceID, InfoProviderCreationFunction inFunction)
         {
 			mmapInterfaceIDToInfoProviderFunc.insert(std::make_pair(inInterfaceID,inFunction));
 		}
@@ -143,7 +143,7 @@ namespace ChilliSource
         /// @param Exisiting systems
         /// @return Pointer to system
         //-------------------------------------------
-		Core::System* CPlatformSystem::FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemSPtr>& inSystems) const
+		Core::System* PlatformSystem::FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemSPtr>& inSystems) const
         {
 			for(u32 nSystem = 0; nSystem < inSystems.size(); nSystem++)
             {
@@ -158,7 +158,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		/// Init
 		//-----------------------------------------
-		void CPlatformSystem::Init()
+		void PlatformSystem::Init()
 		{
             //Initialise GUI factory
             GUI::GUIViewFactory::RegisterDefaults();
@@ -171,24 +171,24 @@ namespace ChilliSource
 		///
 		/// @param the system list
 		//-------------------------------------------------
-		void CPlatformSystem::CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems)
+		void PlatformSystem::CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems)
 		{
 			//create the main systems
-            OpenGL::CRenderSystem* pRenderSystem = new OpenGL::CRenderSystem();
+            OpenGL::RenderSystem* pRenderSystem = new OpenGL::RenderSystem();
             inaSystems.push_back(Core::SystemSPtr(pRenderSystem));
 			Core::Application::SetRenderSystem(pRenderSystem);
             
-            Input::InputSystem* pInputSystem = new iOS::CInputSystem();
+            Input::InputSystem* pInputSystem = new iOS::InputSystem();
             inaSystems.push_back(Core::SystemSPtr(pInputSystem));
             Core::Application::SetInputSystem(pInputSystem);
             
-            Audio::AudioSystem * pAudioSystem = new FMOD::CFMODSystem();
+            Audio::AudioSystem * pAudioSystem = new FMOD::FMODSystem();
 			inaSystems.push_back(Core::SystemSPtr(pAudioSystem));
-			inaSystems.push_back(Core::SystemSPtr(new FMOD::CFMODAudioLoader(pAudioSystem)));
+			inaSystems.push_back(Core::SystemSPtr(new FMOD::AudioLoader(pAudioSystem)));
 			Core::Application::SetAudioSystem(pAudioSystem);
             
 			//create other important systems
-			OpenGL::CRenderCapabilities* pRenderCapabilities = new OpenGL::CRenderCapabilities();
+			OpenGL::RenderCapabilities* pRenderCapabilities = new OpenGL::RenderCapabilities();
             inaSystems.push_back(Core::SystemSPtr(pRenderCapabilities));
             inaSystems.push_back(Core::SystemSPtr(new iOS::ImageLoader()));
             inaSystems.push_back(Core::SystemSPtr(new Core::MoImageProvider()));
@@ -219,7 +219,7 @@ namespace ChilliSource
 		///
 		/// @param the system list
 		//-------------------------------------------------
-		void CPlatformSystem::PostCreateSystems()
+		void PlatformSystem::PostCreateSystems()
 		{
             if(Core::Application::GetAudioSystemPtr() != nullptr)
 			{
@@ -231,7 +231,7 @@ namespace ChilliSource
         ///
         /// Begin the game loop
         //-----------------------------------------
-        void CPlatformSystem::Run()
+        void PlatformSystem::Run()
         {
             iOSInit();
         }
@@ -242,7 +242,7 @@ namespace ChilliSource
         /// to clamp to. This should be in multiples
         /// of 15 (15, 30, 60)
         //-----------------------------------------
-        void CPlatformSystem::SetMaxFPS(u32 inudwFPS)
+        void PlatformSystem::SetMaxFPS(u32 inudwFPS)
         {
             iOSSetMaxFPS(inudwFPS);
         }
@@ -254,7 +254,7 @@ namespace ChilliSource
 		///
 		/// @param Whether to end or begin
 		//-----------------------------------------
-		void CPlatformSystem::SetUpdaterActive(bool inbIsActive)
+		void PlatformSystem::SetUpdaterActive(bool inbIsActive)
 		{
 			iOSSetUpdaterActive(inbIsActive);
 		}
@@ -264,7 +264,7 @@ namespace ChilliSource
         /// Stops the update loop causing
         /// the application to terminate
         //-----------------------------------------
-        void CPlatformSystem::TerminateUpdater() 
+        void PlatformSystem::TerminateUpdater() 
         {
             iOSInvalidateUpdater();
         }
@@ -274,7 +274,7 @@ namespace ChilliSource
         /// @param Interface ID
         /// @return Whether system can be created
         //----------------------------------------
-		bool CPlatformSystem::CanCreateSystemWithInterface(Core::InterfaceIDType inInterfaceID) const
+		bool PlatformSystem::CanCreateSystemWithInterface(Core::InterfaceIDType inInterfaceID) const
         {
 			MapInterfaceIDToSystemFunc::const_iterator pFunc(mmapInterfaceIDToSystemFunc.find(inInterfaceID));
 
@@ -289,7 +289,7 @@ namespace ChilliSource
         /// @param Vector of existing systems
         /// @return A handle to the given system or nullptr if the platform cannot support it
         //-----------------------------------------
-		Core::System* CPlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr> & inaExistingSystems) const
+		Core::System* PlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr> & inaExistingSystems) const
         {
 			Core::System * pResult = nullptr;
 			
@@ -313,7 +313,7 @@ namespace ChilliSource
 		/// @param Interface ID
 		/// @return Whether activity can be created
 		//----------------------------------------
-		bool CPlatformSystem::CanCreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
+		bool PlatformSystem::CanCreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
         {
 			MapInterfaceIDToActivityFunc::const_iterator pFunc(mmapInterfaceIDToActivityFunc.find(inInterfaceID));
 			
@@ -327,7 +327,7 @@ namespace ChilliSource
 		/// @param InterfaceID to generate
 		/// @return A handle to the given activity or nullptr if the platform cannot support it
 		//-----------------------------------------
-		Core::Activity* CPlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
+		Core::Activity* PlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
         {
 			MapInterfaceIDToActivityFunc::const_iterator pFunc(mmapInterfaceIDToActivityFunc.find(inInterfaceID));
 			
@@ -344,7 +344,7 @@ namespace ChilliSource
 		/// @param Interface ID
 		/// @return Whether system can be created
 		//----------------------------------------
-		bool CPlatformSystem::CanCreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
+		bool PlatformSystem::CanCreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
         {
 			MapInterfaceIDToInfoProviderFunc::const_iterator pFunc(mmapInterfaceIDToInfoProviderFunc.find(inInterfaceID));
 			
@@ -358,7 +358,7 @@ namespace ChilliSource
 		/// @param InterfaceID to generate
 		/// @return A handle to the given system or nullptr if the platform cannot support it
 		//-----------------------------------------
-		Core::IInformationProvider* CPlatformSystem::CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
+		Core::IInformationProvider* PlatformSystem::CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
         {
 			MapInterfaceIDToInfoProviderFunc::const_iterator pFunc(mmapInterfaceIDToInfoProviderFunc.find(inInterfaceID));
 			if (pFunc != mmapInterfaceIDToInfoProviderFunc.end())
@@ -376,9 +376,9 @@ namespace ChilliSource
         /// @param System list
 		/// @return A pointer to the system
 		//--------------------------------------------
-		Core::System * CPlatformSystem::CreateHttpConnectionSystem(std::vector<Core::SystemSPtr>& inSystems) const
+		Core::System * PlatformSystem::CreateHttpConnectionSystem(std::vector<Core::SystemSPtr>& inSystems) const
         {
-			return new CHttpConnectionSystem();
+			return new HttpConnectionSystem();
 		}
         //--------------------------------------------
         /// Create Activities
@@ -387,21 +387,21 @@ namespace ChilliSource
         ///
         /// @return Ownership of the activity
         //--------------------------------------------
-		Core::Activity* CPlatformSystem::CreateSMSCompositionActivity() const
+		Core::Activity* PlatformSystem::CreateSMSCompositionActivity() const
         {
-			return new CSMSCompositionActivity();
+			return new SMSCompositionActivity();
 		}
-		Core::Activity* CPlatformSystem::CreateEmailCompositionActivity() const
+		Core::Activity* PlatformSystem::CreateEmailCompositionActivity() const
         {
-			return new CEmailCompositionActivity();
+			return new EmailCompositionActivity();
 		}
-		Core::Activity * CPlatformSystem::CreateDefaultVideoPlayerActivity() const
+		Core::Activity * PlatformSystem::CreateDefaultVideoPlayerActivity() const
         {
-            return new CVideoPlayerActivity();
+            return new VideoPlayerActivity();
         }
-		Core::Activity * CPlatformSystem::CreateWebViewActivity() const
+		Core::Activity * PlatformSystem::CreateWebViewActivity() const
         {
-            return new CWebViewActivity();
+            return new WebViewActivity();
         }
         //--------------------------------------------
         /// Create Information Providers
@@ -410,9 +410,9 @@ namespace ChilliSource
         ///
         /// @return Ownership of the info provider
         //--------------------------------------------
-		Core::IInformationProvider* CPlatformSystem::CreateContactInformationProvider() const
+		Core::IInformationProvider* PlatformSystem::CreateContactInformationProvider() const
         {
-			return new CContactInformationProvider();
+			return new ContactInformationProvider();
 		}
 		//-----------------------------------------------------------------------------------------------------------
 		/// Get Screen Dimensions
@@ -423,7 +423,7 @@ namespace ChilliSource
         /// The dimensions are always for the base screen size and the density scale factor is use to scale the screen
         /// to the correct resolution. i.e. the Retina screen will be 320x480 and a density of 2.0
 		//-----------------------------------------------------------------------------------------------------------
-		Core::Vector2 CPlatformSystem::GetScreenDimensions() const
+		Core::Vector2 PlatformSystem::GetScreenDimensions() const
 		{
 			Core::Vector2 Result;
 			CGSize Size = [[UIScreen mainScreen] bounds].size;
@@ -447,7 +447,7 @@ namespace ChilliSource
 		///
 		/// @return The above information stringified
 		//--------------------------------------------------------------
-		std::string CPlatformSystem::GetDeviceModelName() const
+		std::string PlatformSystem::GetDeviceModelName() const
 		{
 			NSString * nsType = [[UIDevice currentDevice] model];
 
@@ -458,7 +458,7 @@ namespace ChilliSource
 		///
 		/// @return The above information stringified
 		//--------------------------------------------------------------
-		std::string CPlatformSystem::GetDeviceModelTypeName() const
+		std::string PlatformSystem::GetDeviceModelTypeName() const
 		{
 			size_t size = 0;
 			sysctlbyname("hw.machine", nullptr, &size, nullptr, 0);
@@ -489,7 +489,7 @@ namespace ChilliSource
 		///
 		/// @return The above information stringified
 		//--------------------------------------------------------------
-		std::string CPlatformSystem::GetDeviceManufacturerName() const
+		std::string PlatformSystem::GetDeviceManufacturerName() const
 		{
 			return std::string("Apple");
 		}
@@ -498,7 +498,7 @@ namespace ChilliSource
         ///
         /// @return String containing the OS version of the device
         //--------------------------------------------------------------
-        std::string CPlatformSystem::GetOSVersion() const
+        std::string PlatformSystem::GetOSVersion() const
         {
             NSString* NSVersion = [[UIDevice currentDevice] systemVersion];
 			return ChilliSource::Core::StringUtils::NSStringToString(NSVersion);
@@ -509,7 +509,7 @@ namespace ChilliSource
 		/// Get the active locale of the device
 		/// @return Locale ID
 		//--------------------------------------------------------------
-		Core::Locale CPlatformSystem::GetLocale() const
+		Core::Locale PlatformSystem::GetLocale() const
 		{
 			NSLocale *pcLocale = [NSLocale currentLocale];
 			NSString *pcCountryCode = [pcLocale objectForKey:NSLocaleCountryCode];
@@ -526,7 +526,7 @@ namespace ChilliSource
 		/// Get the active language of the device in locale format
 		/// @return Locale ID
 		//--------------------------------------------------------------
-		Core::Locale CPlatformSystem::GetLanguage() const
+		Core::Locale PlatformSystem::GetLanguage() const
 		{
 			NSUserDefaults* UserDefaults = [NSUserDefaults standardUserDefaults];
 			NSArray* SupportedLanguages = [UserDefaults objectForKey:@"AppleLanguages"];
@@ -553,7 +553,7 @@ namespace ChilliSource
         /// @return The density scale factor of the screen
         /// to convert from DIPS to physical pixels
         //-------------------------------------------------
-        f32 CPlatformSystem::GetScreenDensity() const
+        f32 PlatformSystem::GetScreenDensity() const
         {
             if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 4.0f) 
             {
@@ -569,7 +569,7 @@ namespace ChilliSource
         ///
         /// @return The UDID of the device
         //-------------------------------------------------
-        std::string CPlatformSystem::GetDeviceID()
+        std::string PlatformSystem::GetDeviceID()
         {
             if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0f)
             {
@@ -597,7 +597,7 @@ namespace ChilliSource
         ///
         /// @return The bundle version as found in the plist
         //-------------------------------------------------
-        std::string CPlatformSystem::GetAppVersion() const
+        std::string PlatformSystem::GetAppVersion() const
         {
             NSString* strVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
             return ChilliSource::Core::StringUtils::NSStringToString(strVersion);
@@ -607,7 +607,7 @@ namespace ChilliSource
 		///
 		/// @return The number of cores available
 		//--------------------------------------------------------------
-		u32 CPlatformSystem::GetNumberOfCPUCores() const
+		u32 PlatformSystem::GetNumberOfCPUCores() const
 		{
 			u32 udwNumCores = 1;
 			size_t udwSize = sizeof(udwNumCores);
@@ -628,7 +628,7 @@ namespace ChilliSource
         ///
         /// @param Text
         //--------------------------------------------------------------------------------------------------
-        void CPlatformSystem::MakeToast(const Core::UTF8String& instrText) const
+        void PlatformSystem::MakeToast(const Core::UTF8String& instrText) const
         {
             ToastNotification* pToast = [[ToastNotification alloc] initWithMessage:Core::StringUtils::UTF8StringToNSString(instrText)];
             [[EAGLView sharedInstance] addSubview:pToast];
@@ -645,7 +645,7 @@ namespace ChilliSource
         /// @param Confirm text
         /// @param Cancel text
         //--------------------------------------------------------------------------------------------------
-        void CPlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const
+        void PlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const
         {
             iOSShowSystemConfirmDialog(inudwID, 
                                        Core::StringUtils::UTF8StringToNSString(instrTitle), Core::StringUtils::UTF8StringToNSString(instrMessage), 
@@ -661,7 +661,7 @@ namespace ChilliSource
         /// @param Message text
         /// @param Confirm text
         //--------------------------------------------------------------------------------------------------
-        void CPlatformSystem::ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const
+        void PlatformSystem::ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const
         {
             iOSShowSystemDialog(inudwID,
                                 Core::StringUtils::UTF8StringToNSString(instrTitle), Core::StringUtils::UTF8StringToNSString(instrMessage),
@@ -672,7 +672,7 @@ namespace ChilliSource
 		///
 		/// @return The current time in milliseconds
 		//--------------------------------------------------------------
-		TimeIntervalMs CPlatformSystem::GetSystemTimeMS() const
+		TimeIntervalMs PlatformSystem::GetSystemTimeMS() const
 		{
 			return GetSystemTimeInNanoSeconds() / 1000000;
 		}
@@ -682,7 +682,7 @@ namespace ChilliSource
 		/// @return The physical size of the screen in
 		/// inches.
 		//-------------------------------------------------
-		f32 CPlatformSystem::GetPhysicalScreenSize()
+		f32 PlatformSystem::GetPhysicalScreenSize()
 		{
             if (mfPhysicalScreenSize < 0.0f)
             {
@@ -771,7 +771,7 @@ namespace ChilliSource
 		///
 		/// 
 		//-----------------------------------------
-		CPlatformSystem::~CPlatformSystem()
+		PlatformSystem::~PlatformSystem()
 		{
 			
 		}

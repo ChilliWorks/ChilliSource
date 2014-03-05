@@ -40,7 +40,7 @@ namespace ChilliSource
 		const GameCentreRequestID kudwGameCentreAchievementsStatusRequestID     = 201107;
 		const GameCentreRequestID kudwGameCentreAchievementDescriptionsRequestID = 201108;
 		
-		CS_DEFINE_NAMEDTYPE(CGameCentreSystem);
+		CS_DEFINE_NAMEDTYPE(GameCentreSystem);
         
 		//===============================================================
 		/// Generic Game Centre Request
@@ -52,7 +52,7 @@ namespace ChilliSource
 			virtual ~IGameCentreRequest(){}
 			virtual bool IsA(GameCentreRequestID inTypeID) = 0;
             
-            CGameCentreSystem::RequestErrorDelegate mpErrorDelegate;
+            GameCentreSystem::RequestErrorDelegate mpErrorDelegate;
             
             u32 mudwNumRequestAttempts;
             
@@ -241,7 +241,7 @@ namespace ChilliSource
 		///
 		/// Default
 		//--------------------------------------------------------------------
-		CGameCentreSystem::CGameCentreSystem(bool inbUseTurnBasedMultiplayer) : mbUseTurnBasedMultiplayer(inbUseTurnBasedMultiplayer), mbProcessRequests(true), mudwNumOpenRequests(0),mpAchievementDescriptions(nil)
+		GameCentreSystem::GameCentreSystem(bool inbUseTurnBasedMultiplayer) : mbUseTurnBasedMultiplayer(inbUseTurnBasedMultiplayer), mbProcessRequests(true), mudwNumOpenRequests(0),mpAchievementDescriptions(nil)
 		{
 			//Check to see whether the device supports game centre
 			mbIsGameCentreSupported = IsSupported(mbUseTurnBasedMultiplayer); 
@@ -250,12 +250,12 @@ namespace ChilliSource
 			{
 				//We need to register for log-out notifications
                 [[GameCentreAuthenticationListener instance] BeginListeningForGKLocalAuthenticationChanged];
-				m_localAuthenticationChangedConnection = [[GameCentreAuthenticationListener instance] GetGKLocalAuthenticationChangedEvent].OpenConnection(Core::MakeDelegate(this, &CGameCentreSystem::OnLocalAuthenticationChanged));
+				m_localAuthenticationChangedConnection = [[GameCentreAuthenticationListener instance] GetGKLocalAuthenticationChangedEvent].OpenConnection(Core::MakeDelegate(this, &GameCentreSystem::OnLocalAuthenticationChanged));
 				
 				AuthenticateClient();
 				
 				//Spawn a new thread to handle the request processing
-				mRequestThread = std::thread(std::bind(&CGameCentreSystem::ProcessRequestQueue, this));
+				mRequestThread = std::thread(std::bind(&GameCentreSystem::ProcessRequestQueue, this));
 			}
 		}
 		//----------------------------------------------------------
@@ -265,16 +265,16 @@ namespace ChilliSource
 		/// @param Comparison Type
 		/// @return Whether the class matches the comparison type
 		//----------------------------------------------------------
-		bool CGameCentreSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool GameCentreSystem::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == CGameCentreSystem::InterfaceID;
+			return inInterfaceID == GameCentreSystem::InterfaceID;
 		}
 		//--------------------------------------------------------------------
 		/// Get Is Client Authenticated
 		///
 		/// Returns true if the client is authenticated, or false if not.
 		//--------------------------------------------------------------------
-        bool CGameCentreSystem::GetIsClientAuthenticated() const
+        bool GameCentreSystem::GetIsClientAuthenticated() const
         {
             return mbIsGameCentreSupported;
         }
@@ -284,7 +284,7 @@ namespace ChilliSource
 		/// Check whether the local player is signed-in/registered and
 		/// presents a user interface otherwise
 		//--------------------------------------------------------------------
-		void CGameCentreSystem::AuthenticateClient()
+		void GameCentreSystem::AuthenticateClient()
 		{
             void (^setGKEventHandlerDelegate)(NSError *) = ^ (NSError *pcError)
             {
@@ -324,7 +324,7 @@ namespace ChilliSource
 		///
 		/// @return Whether the device supports game centre
 		//--------------------------------------------------------------------
-		bool CGameCentreSystem::IsSupported(bool inbUseTurnBasedMultiplayer) 
+		bool GameCentreSystem::IsSupported(bool inbUseTurnBasedMultiplayer) 
 		{
 			//Hideously complicated test, bad Apple bad
 			
@@ -360,7 +360,7 @@ namespace ChilliSource
 		///
 		/// @return String identifier for local client
 		//--------------------------------------------------------------------
-		const Core::UTF8String& CGameCentreSystem::GetLocalPlayerID() const
+		const Core::UTF8String& GameCentreSystem::GetLocalPlayerID() const
 		{
 			return mstrPlayerID;
 		}
@@ -369,7 +369,7 @@ namespace ChilliSource
 		///
 		/// @return Username for local client
 		//--------------------------------------------------------------------
-		const Core::UTF8String& CGameCentreSystem::GetLocalPlayerUsername() const
+		const Core::UTF8String& GameCentreSystem::GetLocalPlayerUsername() const
 		{
 			return mstrPlayerName;
 		}
@@ -378,7 +378,7 @@ namespace ChilliSource
 		///
 		/// Show the system leaderboard UI
 		//--------------------------------------------------------------------
-		void CGameCentreSystem::ShowSystemLeaderboardUI()
+		void GameCentreSystem::ShowSystemLeaderboardUI()
 		{
 			UIViewController * pRootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
 			
@@ -393,7 +393,7 @@ namespace ChilliSource
 		/// Will form a game center request to retreive the name and 
 		/// category identifiers of this app's leaderboards
 		//--------------------------------------------------------------------
-		void CGameCentreSystem::RequestLeaderboardNamesandIDs(const LeaderboardsInfoRequestEventDelegate& inCallback, const std::string& instrTag, RequestErrorDelegate inpErrorDelegate)
+		void GameCentreSystem::RequestLeaderboardNamesandIDs(const LeaderboardsInfoRequestEventDelegate& inCallback, const std::string& instrTag, RequestErrorDelegate inpErrorDelegate)
 		{
 			if (!mbIsGameCentreSupported)
 				return;
@@ -415,7 +415,7 @@ namespace ChilliSource
 		/// @param Category ID of the board as specified on iTunes Connect
 		/// @param Score
 		//--------------------------------------------------------------------
-		void CGameCentreSystem::PostScoreToLeaderboard(const std::string& instrCategoryID, u64 inuddwScore, const std::string& instrTag, RequestErrorDelegate inpErrorDelegate)
+		void GameCentreSystem::PostScoreToLeaderboard(const std::string& instrCategoryID, u64 inuddwScore, const std::string& instrTag, RequestErrorDelegate inpErrorDelegate)
 		{
 			if (!mbIsGameCentreSupported)
 				return;
@@ -434,7 +434,7 @@ namespace ChilliSource
 		///
 		/// Request that the server give us the data about the user's friends
 		//---------------------------------------------------------------------
-		void CGameCentreSystem::RequestFriendsInformation(const std::string& instrTag, RequestErrorDelegate inpErrorDelegate)
+		void GameCentreSystem::RequestFriendsInformation(const std::string& instrTag, RequestErrorDelegate inpErrorDelegate)
 		{
 			if (!mbIsGameCentreSupported)
 				return;
@@ -449,7 +449,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		///Pushes a view controller showing the system achievements UI
 		//---------------------------------------------------------------------
-		void CGameCentreSystem::ShowSystemAchievementsUI(){
+		void GameCentreSystem::ShowSystemAchievementsUI(){
 			UIViewController * pRootVC = [UIApplication sharedApplication].keyWindow.rootViewController;
 			
 			GKAchievementViewController * pVC = [[GKAchievementViewController alloc] init];
@@ -463,7 +463,7 @@ namespace ChilliSource
 		/// @param the string Achievement ID of the achievement per iTunes Connect
 		/// @param the progression from 0 - 100 towards this achievement. Calling this with 0 will reveal an achievement set to hidden
 		//---------------------------------------------------------------------
-		void CGameCentreSystem::SetAchievementProgression(const std::string & instrID, double inffProgression, bool inbShowToast, const std::string& instrTag, RequestErrorDelegate inpErrorDelegate){
+		void GameCentreSystem::SetAchievementProgression(const std::string & instrID, double inffProgression, bool inbShowToast, const std::string& instrTag, RequestErrorDelegate inpErrorDelegate){
 			
 			//Check we don't have this achievement
 			std::vector<std::string>::iterator pAchievementID = std::find(mastrCompletedAchievements.begin(),mastrCompletedAchievements.end(),instrID);
@@ -505,7 +505,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		///Resets all achievements
 		//---------------------------------------------------------------------
-		void CGameCentreSystem::ResetAllAchievements()
+		void GameCentreSystem::ResetAllAchievements()
 		{
 			[GKAchievement resetAchievementsWithCompletionHandler:^(NSError* inpError)
 			 {
@@ -515,7 +515,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
         /// Checks if the passed in achievement ID has been unlocked
         //---------------------------------------------------------------------
-        bool CGameCentreSystem::IsAchievementUnlocked(const std::string & instrID)
+        bool GameCentreSystem::IsAchievementUnlocked(const std::string & instrID)
         {
             std::vector<std::string>::iterator it = std::find(mastrCompletedAchievements.begin(), mastrCompletedAchievements.end(), instrID);
             if(it == mastrCompletedAchievements.end())
@@ -526,7 +526,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		///Subscribe to achievement reset event
 		//---------------------------------------------------------------------
-		Core::IConnectableEvent<CGameCentreSystem::AchievementsResetDelegate>& CGameCentreSystem::OnAchievementResetEvent()
+		Core::IConnectableEvent<GameCentreSystem::AchievementsResetDelegate>& GameCentreSystem::OnAchievementResetEvent()
 		{
 			return mAchievementsResetEvent;
 		}
@@ -536,7 +536,7 @@ namespace ChilliSource
 		///
 		/// Raised when the game centre user changes (new signin/signout)
 		//---------------------------------------------------------------------
-		Core::IConnectableEvent<CGameCentreSystem::AuthenticationChangedDelegate>& CGameCentreSystem::OnAuthenticationChangedEvent()
+		Core::IConnectableEvent<GameCentreSystem::AuthenticationChangedDelegate>& GameCentreSystem::OnAuthenticationChangedEvent()
 		{
 			return mAuthenticationChangedEvent;
 		}
@@ -552,8 +552,8 @@ namespace ChilliSource
 		/// @param Minimum range
 		/// @param Maximum range
 		//---------------------------------------------------------------------
-		void CGameCentreSystem::RequestScoresWithinRange(const std::string& instrCategoryID, PlayerScope inePlayerScope, TimeScope ineTimeScope, u32 inudwMinRange, u32 inudwMaxRange, 
-														 CGameCentreSystem::LeaderboardScoreRequestDelegate inpDelegate, const std::string& instrTag, RequestErrorDelegate inpErrorDelegate)
+		void GameCentreSystem::RequestScoresWithinRange(const std::string& instrCategoryID, PlayerScope inePlayerScope, TimeScope ineTimeScope, u32 inudwMinRange, u32 inudwMaxRange, 
+														 GameCentreSystem::LeaderboardScoreRequestDelegate inpDelegate, const std::string& instrTag, RequestErrorDelegate inpErrorDelegate)
 		{
 			if (!mbIsGameCentreSupported)
 				return;
@@ -580,7 +580,7 @@ namespace ChilliSource
 		/// @param Array containing player IDs
 		/// @param Key to marry the name data to the score data
 		//---------------------------------------------------------------------
-		void CGameCentreSystem::RequestNamesForIDs(NSArray* inpPlayerIDs, const std::string& instrKey, const std::string& instrTag, RequestErrorDelegate inpErrorDelegate)
+		void GameCentreSystem::RequestNamesForIDs(NSArray* inpPlayerIDs, const std::string& instrKey, const std::string& instrTag, RequestErrorDelegate inpErrorDelegate)
 		{
 			if (!mbIsGameCentreSupported)
 				return;
@@ -602,7 +602,7 @@ namespace ChilliSource
 		///
 		/// @param Game Centre Request
 		//--------------------------------------------------------------------
-		void CGameCentreSystem::AddRequestToQueue(IGameCentreRequest* inpRequest)
+		void GameCentreSystem::AddRequestToQueue(IGameCentreRequest* inpRequest)
 		{
 			//Check the number of times this request has been processed and if it
 			//exceeds the limit notify the application that this request is borked
@@ -623,7 +623,7 @@ namespace ChilliSource
 		///
 		/// A run loop that handles the queued requests.
 		//---------------------------------------------------------------------
-		void CGameCentreSystem::ProcessRequestQueue()
+		void GameCentreSystem::ProcessRequestQueue()
 		{
 			//Create a new autorelease pool as this runs on a seperate thread
 			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];  
@@ -696,7 +696,7 @@ namespace ChilliSource
 		///
 		/// @param Request
 		//---------------------------------------------------------------------
-		void CGameCentreSystem::ProcessLeaderboardsInfoRequest(CGameCentreLeaderboardsInfoRequest* pRequest)
+		void GameCentreSystem::ProcessLeaderboardsInfoRequest(CGameCentreLeaderboardsInfoRequest* pRequest)
 		{
 			[GKLeaderboard loadCategoriesWithCompletionHandler:^(NSArray* pCategories, NSArray* pTitles, NSError* pError)
 			 {
@@ -728,7 +728,7 @@ namespace ChilliSource
 		/// @param Post score request
 		/// @return Whether the post was successful
 		//---------------------------------------------------------------------
-		void CGameCentreSystem::ProcessPostScoreRequest(CGameCentrePostScoreRequest* pRequest)
+		void GameCentreSystem::ProcessPostScoreRequest(CGameCentrePostScoreRequest* pRequest)
 		{
 			//Create a score request object
 			GKScore* pScoreReporter = [[[GKScore alloc] initWithCategory:[NSString stringWithUTF8String:pRequest->mstrLeaderboardCategoryID.c_str()]] autorelease];
@@ -763,7 +763,7 @@ namespace ChilliSource
 		///
 		/// @param Get scores request
 		//---------------------------------------------------------------------
-		void CGameCentreSystem::ProcessGetScoresRequest(CGameCentreGetScoresRequest* pRequest)
+		void GameCentreSystem::ProcessGetScoresRequest(CGameCentreGetScoresRequest* pRequest)
 		{
 			GKLeaderboard* pLeaderboardRequest = [[[GKLeaderboard alloc] init] autorelease];
 			
@@ -831,7 +831,7 @@ namespace ChilliSource
 		///
 		/// @param Get names request
 		//---------------------------------------------------------------------
-		void CGameCentreSystem::ProcessGetNamesRequest(CGameCentreGetNamesRequest* pRequest)
+		void GameCentreSystem::ProcessGetNamesRequest(CGameCentreGetNamesRequest* pRequest)
 		{
 			[GKPlayer loadPlayersForIdentifiers:pRequest->mpaPlayerIDs withCompletionHandler:^(NSArray* pPlayers, NSError* pError) 
 			 {
@@ -860,7 +860,7 @@ namespace ChilliSource
 		///
 		/// @param Get names request
 		//---------------------------------------------------------------------
-		void CGameCentreSystem::ProcessUpdateAchievementRequest(CGameCentreUpdateAchievementRequest * pRequest){
+		void GameCentreSystem::ProcessUpdateAchievementRequest(CGameCentreUpdateAchievementRequest * pRequest){
 			
 			GKAchievement * pAchievement = [[[GKAchievement alloc] initWithIdentifier:[NSString stringWithUTF8String:pRequest->mstrAchievementID.c_str()]] autorelease];
 			pAchievement.percentComplete = pRequest->mffProgression;
@@ -884,7 +884,7 @@ namespace ChilliSource
 			 
 			 ];
 		}
-		void CGameCentreSystem::ProcessAchievementsStatusRequest(CGameCentreAchievementsStatusRequest * pRequest){
+		void GameCentreSystem::ProcessAchievementsStatusRequest(CGameCentreAchievementsStatusRequest * pRequest){
 			
 			[GKAchievement loadAchievementsWithCompletionHandler:^(NSArray *achievements, NSError *error)
 			 {
@@ -900,7 +900,7 @@ namespace ChilliSource
 			 
 			 ];
 		}
-		void CGameCentreSystem::HandleAchievementStatusArray(NSArray * inpAchievements){
+		void GameCentreSystem::HandleAchievementStatusArray(NSArray * inpAchievements){
 			
 
 			for (GKAchievement* a in inpAchievements){
@@ -912,7 +912,7 @@ namespace ChilliSource
 			CS_LOG_DEBUG("GameCentre:ProcessAchievementsStatusRequest - User has " + Core::ToString((u32)mastrCompletedAchievements.size()) +" achievements");
 
 		}
-		void CGameCentreSystem::ProcessAchievementDescriptionsRequest(CGameCentreAchievementDescriptionsRequest * pRequest){
+		void GameCentreSystem::ProcessAchievementDescriptionsRequest(CGameCentreAchievementDescriptionsRequest * pRequest){
 			[GKAchievementDescription loadAchievementDescriptionsWithCompletionHandler:^(NSArray *descriptions, NSError *error)
 			 {
 			 if (error){
@@ -937,7 +937,7 @@ namespace ChilliSource
 		///
 		/// @param Request
 		//---------------------------------------------------------------------
-		void CGameCentreSystem::ProcessFriendIdentifiersRequest(CGameCentreFriendInfoRequest* pRequest)
+		void GameCentreSystem::ProcessFriendIdentifiersRequest(CGameCentreFriendInfoRequest* pRequest)
 		{
 			GKLocalPlayer* pLocalPlayer = [GKLocalPlayer localPlayer];
 			
@@ -989,7 +989,7 @@ namespace ChilliSource
 		/// The leaderboard names and ID's have been downloaded. Let's unpack 
 		/// and make them available for use
 		//----------------------------------------------------------------------
-		void CGameCentreSystem::OnLeaderboardsInfoRequestComplete(NSArray* pCategories, NSArray* pTitles)
+		void GameCentreSystem::OnLeaderboardsInfoRequestComplete(NSArray* pCategories, NSArray* pTitles)
 		{
 			for(u32 i=0; i<[pCategories count]; ++i)
 			{
@@ -1004,7 +1004,7 @@ namespace ChilliSource
 		///
 		/// The user may have disconnected/connected or logged in or out
 		//---------------------------------------------------------------------
-		void CGameCentreSystem::OnLocalAuthenticationChanged()
+		void GameCentreSystem::OnLocalAuthenticationChanged()
 		{
 			mbIsGameCentreSupported = [GKLocalPlayer localPlayer].authenticated;
 			
@@ -1047,7 +1047,7 @@ namespace ChilliSource
 		/// @param Array of score objects
 		/// @param Name object which we use as the key to marry the data
 		//---------------------------------------------------------------------
-		void CGameCentreSystem::OnScoreRangeRequestComplete(NSArray* inpScores, const std::string& instrKey)
+		void GameCentreSystem::OnScoreRangeRequestComplete(NSArray* inpScores, const std::string& instrKey)
 		{
 			//Build an array of identifiers from the score object
 			NSMutableArray* paIdentifier = [NSMutableArray arrayWithCapacity:[inpScores count]];
@@ -1095,7 +1095,7 @@ namespace ChilliSource
 		/// @param Array of player objects
 		/// @param Key to find the downloaded scores
 		//---------------------------------------------------------------------
-		void CGameCentreSystem::OnNameRequestComplete(NSArray* inpPlayers, const std::string& instrKey)
+		void GameCentreSystem::OnNameRequestComplete(NSArray* inpPlayers, const std::string& instrKey)
 		{
 			//We need to find the data we downloaded earlier with the scores
 			std::unordered_map<std::string, LeaderboardScoreResults>::iterator pLeaderboardScoreResult = mMapNameRequestToLeaderboardScoreResults.find(instrKey);
@@ -1126,7 +1126,7 @@ namespace ChilliSource
 		/// Destructor
 		///
 		//--------------------------------------------------------------------
-		CGameCentreSystem::~CGameCentreSystem()
+		GameCentreSystem::~GameCentreSystem()
 		{
 			mbProcessRequests = false;
 		}

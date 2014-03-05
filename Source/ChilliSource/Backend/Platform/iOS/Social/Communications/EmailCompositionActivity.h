@@ -11,6 +11,7 @@
 #define MOFLOW_PLATFORM_IOS_SOCIAL_COMMUNICATIONS_EMAILCOMPOSITIONSCREEN_H
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Social/Communications/EmailCompositionActivity.h>
 
 #include <MessageUI/MessageUI.h>
@@ -21,13 +22,13 @@ namespace ChilliSource
 {
 	namespace iOS
     {
-        class CEmailCompositionActivity : public Social::EmailCompositionActivity
+        class EmailCompositionActivity : public Social::EmailCompositionActivity
 		{
 		public:
             //-------------------------------------------------------
             /// Constructor
             //-------------------------------------------------------
-            CEmailCompositionActivity();
+            EmailCompositionActivity();
             //-------------------------------------------------------
             /// Supported By Device
             ///
@@ -89,7 +90,7 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// Destructor
             //-------------------------------------------------------
-            virtual ~CEmailCompositionActivity();
+            virtual ~EmailCompositionActivity();
 		private:
 			EmailDelegate* mpDelegate;
 			MFMailComposeViewController * mpVC;

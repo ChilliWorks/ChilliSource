@@ -23,7 +23,7 @@ namespace ChilliSource
         SkinnedAnimationGroup::SkinnedAnimationGroup(const SkeletonSPtr& inpSkeleton)
         : mpSkeleton(inpSkeleton), mbAnimationLengthDirty(true), mfAnimationLength(0.0f), mbPrepared(false)
         {
-            for (u32 i = 0; i < mpSkeleton->GetNumNodes(); ++i)
+            for (s32 i = 0; i < mpSkeleton->GetNumNodes(); ++i)
             {
                 mCurrentAnimationMatrices.push_back(Core::Matrix4x4());
             }
@@ -185,7 +185,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         const Core::Matrix4x4& SkinnedAnimationGroup::GetMatrixAtIndex(s32 indwIndex) const
         {
-            if (indwIndex < mCurrentAnimationMatrices.size())
+            if (indwIndex < (s32)mCurrentAnimationMatrices.size())
             {
                 return mCurrentAnimationMatrices[indwIndex];
             }
@@ -312,7 +312,7 @@ namespace ChilliSource
                 dwFrameAIndex = 0;
             }
             
-            if(dwFrameAIndex >= inpAnimation->GetNumFrames())
+            if(dwFrameAIndex >= (s32)inpAnimation->GetNumFrames())
             {
                 dwFrameAIndex = inpAnimation->GetNumFrames() - 1;
             }
@@ -322,7 +322,7 @@ namespace ChilliSource
                 dwFrameBIndex = 0;
             }
             
-            if(dwFrameBIndex >= inpAnimation->GetNumFrames())
+			if (dwFrameBIndex >= (s32)inpAnimation->GetNumFrames())
             {
                 dwFrameBIndex = inpAnimation->GetNumFrames() - 1;
             }

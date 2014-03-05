@@ -47,7 +47,7 @@ static id _instance;
 	}
 }
 
-- (void)openDocument:(NSString*)instrFileName :(ChilliSource::iOS::CiCloudSystem::OnOpenCloudFileCompletedDelegate) incOpenFileCompleteDelegate :(BOOL)inbCreateIfNonExistant
+- (void)openDocument:(NSString*)instrFileName :(ChilliSource::iOS::iCloudSystem::OnOpenCloudFileCompletedDelegate) incOpenFileCompleteDelegate :(BOOL)inbCreateIfNonExistant
 {
     NSURL *ubiq = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
     NSURL *ubiquitousPackage = [ubiq URLByAppendingPathComponent:instrFileName];

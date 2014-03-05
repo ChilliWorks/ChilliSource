@@ -29,7 +29,7 @@ namespace ChilliSource
         IAPSystem* IAPSystem::Create(const Core::ParamDictionary& inParams)
         {
 #ifdef CS_TARGETPLATFORM_IOS
-        	return new iOS::CIAPSystem();
+        	return new iOS::IAPSystem();
 #elif defined(CS_TARGETPLATFORM_ANDROID)
 #	ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
         	return new Android::CGooglePlayIAPSystem(inParams);

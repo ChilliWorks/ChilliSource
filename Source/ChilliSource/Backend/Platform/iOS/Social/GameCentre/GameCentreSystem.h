@@ -11,6 +11,7 @@
 #define _MO_FLO_IOS_PLATFORM_GAME_CENTRE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/Container/WorkerQueue.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/String/UTF8String.h>
@@ -72,7 +73,7 @@ namespace ChilliSource
 		class CGameCentreAchievementsStatusRequest;
 		class CGameCentreAchievementDescriptionsRequest;
 		
-		class CGameCentreSystem : public Core::System
+		class GameCentreSystem : public Core::System
 		{
 		public:
             
@@ -83,9 +84,9 @@ namespace ChilliSource
             typedef std::function<void(const std::string&)> RequestErrorDelegate;
 			typedef std::function<void(bool)> AchievementsResetDelegate;
             
-			CS_DECLARE_NAMEDTYPE(CGameCentreSystem);
-			CGameCentreSystem(bool inbUseTurnBasedMultiplayer = false);
-			virtual ~CGameCentreSystem();
+			CS_DECLARE_NAMEDTYPE(GameCentreSystem);
+			GameCentreSystem(bool inbUseTurnBasedMultiplayer = false);
+			virtual ~GameCentreSystem();
 			
 			//--------------------------------------------------------------------
 			/// Is Supported
@@ -359,7 +360,7 @@ namespace ChilliSource
             u32 mudwNumOpenRequests;
 		};
 		
-        typedef std::shared_ptr<CGameCentreSystem> GameCentreSystemPtr;
+        typedef std::shared_ptr<GameCentreSystem> GameCentreSystemPtr;
 	}
 }
 #endif

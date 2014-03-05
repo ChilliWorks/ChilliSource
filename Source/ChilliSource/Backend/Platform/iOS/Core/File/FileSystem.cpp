@@ -8,15 +8,14 @@
  */
 
 #include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
+
+#include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/FileStream.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
 #include <UIKit/UIKit.h>
 #include <sys/types.h>
 #include <sys/sysctl.h>
-
-#include <ChilliSource/Core/Base/Utils.h>
-#include <ChilliSource/Core/String/StringUtils.h>
-
 #include <iostream>
 
 namespace ChilliSource
@@ -32,7 +31,7 @@ namespace ChilliSource
         std::string RetrieveDocumentsPath();
         std::string RetrieveLibraryPath();
         
-		CFileSystem::CFileSystem()
+		FileSystem::FileSystem()
 		{
             mstrBundlePath = RetrieveBundlePath();
             mstrDocumentsPath = RetrieveDocumentsPath();
@@ -107,7 +106,7 @@ namespace ChilliSource
         /// Create Hashed Bundle File List
         ///
         //--------------------------------------------------------------
-        void CFileSystem::CreateHashedBundleFileList()
+        void FileSystem::CreateHashedBundleFileList()
         {
             NSAutoreleasePool* pPool = [[NSAutoreleasePool alloc] init];
             NSMutableArray* Contents = [[NSMutableArray alloc] init];
@@ -129,7 +128,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Create File Stream
         //--------------------------------------------------------------
-        Core::FileStreamSPtr CFileSystem::CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const
+        Core::FileStreamSPtr FileSystem::CreateFileStream(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath, Core::FileMode ineFileMode) const
         {
             //create the file stream
             Core::FileStreamSPtr newFilestream = Core::FileStreamSPtr(new Core::FileStream());
@@ -166,7 +165,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Create File
         //--------------------------------------------------------------
-        bool CFileSystem::CreateFile(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const
+        bool FileSystem::CreateFile(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, s8* inpbyData, u32 inudwDataSize) const
         {
             Core::FileStreamSPtr pFileStream = CreateFileStream(ineStorageLocation, instrDirectory, Core::FileMode::k_writeBinary);
 			
@@ -183,7 +182,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Create Directory
         //--------------------------------------------------------------
-        bool CFileSystem::CreateDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
+        bool FileSystem::CreateDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
         {
             //check the requested storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -220,7 +219,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Copy File
         //--------------------------------------------------------------
-        bool CFileSystem::CopyFile(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceFilepath, 
+        bool FileSystem::CopyFile(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceFilepath, 
                                    Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationFilepath) const
         {
             //check the requested source storage location is available
@@ -288,7 +287,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Copy Directory
         //--------------------------------------------------------------
-        bool CFileSystem::CopyDirectory(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceDirectory, 
+        bool FileSystem::CopyDirectory(Core::StorageLocation ineSourceStorageLocation, const std::string& instrSourceDirectory, 
                                         Core::StorageLocation ineDestinationStorageLocation, const std::string& instrDestinationDirectory) const
         {
             //check the requested source storage location is available
@@ -340,7 +339,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Delete File
         //--------------------------------------------------------------
-        bool CFileSystem::DeleteFile(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const
+        bool FileSystem::DeleteFile(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const
         {
             //check the requested storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -372,7 +371,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Delete Directory
         //--------------------------------------------------------------
-        bool CFileSystem::DeleteDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
+        bool FileSystem::DeleteDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
         {
             //check the requested storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -491,7 +490,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Get File Names With Extension In Directory
         //--------------------------------------------------------------
-        void CFileSystem::GetFileNamesWithExtensionInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
+        void FileSystem::GetFileNamesWithExtensionInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
                                                   const std::string& instrExtension, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
         {
             //Check that this storage location is available
@@ -543,7 +542,7 @@ namespace ChilliSource
         /// @param The name
         /// @param Output dynamic array containing the filenames.
         //--------------------------------------------------------------
-        void CFileSystem::GetPathForFilesWithNameInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
+        void FileSystem::GetPathForFilesWithNameInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory,  bool inbRecurseIntoSubDirectories,
                                                         const std::string& instrName, std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
         {
             //Check that this storage location is available
@@ -585,7 +584,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Get File Names In Directory
         //--------------------------------------------------------------
-        void CFileSystem::GetFileNamesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories, 
+        void FileSystem::GetFileNamesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories, 
                                      std::vector<std::string> &outstrFileNames, bool inbAppendFullPath) const
         {
             //Check that this storage location is available
@@ -627,7 +626,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Get Directories In Directory
         //--------------------------------------------------------------
-        void CFileSystem::GetDirectoriesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
+        void FileSystem::GetDirectoriesInDirectory(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory, bool inbRecurseIntoSubDirectories,
                                                     std::vector<std::string> &outstrDirectories, bool inbAppendFullPath) const
         {
             //Check that this storage location is available
@@ -673,7 +672,7 @@ namespace ChilliSource
         /// @param File name to append
         /// @param Out: All the paths for the given location
         //------------------------------------------------------------
-        void CFileSystem::GetPathsForStorageLocation(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, std::vector<std::string>& outaPaths) const
+        void FileSystem::GetPathsForStorageLocation(Core::StorageLocation ineStorageLocation, const std::string& instrFileName, std::vector<std::string>& outaPaths) const
         {
             switch(ineStorageLocation)
             {
@@ -698,7 +697,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Does File Exist
         //--------------------------------------------------------------
-        bool CFileSystem::DoesFileExist(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const
+        bool FileSystem::DoesFileExist(Core::StorageLocation ineStorageLocation, const std::string& instrFilepath) const
         {
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -743,7 +742,7 @@ namespace ChilliSource
         /// @param The filepath.
         /// @return Whether or not it is in the cached DLC.
         //--------------------------------------------------------------
-        bool CFileSystem::DoesFileExistInCachedDLC(const std::string& instrFilepath) const
+        bool FileSystem::DoesFileExistInCachedDLC(const std::string& instrFilepath) const
         {
             return DoesItemExistInDLCCache(instrFilepath, false);
         }
@@ -753,14 +752,14 @@ namespace ChilliSource
         /// @param The filepath.
         /// @return Whether or not it is in the local DLC.
         //--------------------------------------------------------------
-        bool CFileSystem::DoesFileExistInPackageDLC(const std::string& instrFilepath) const
+        bool FileSystem::DoesFileExistInPackageDLC(const std::string& instrFilepath) const
         {
             return DoesFileExist(ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_package) + mstrPackageDLCPath + instrFilepath));
         }
         //--------------------------------------------------------------
         /// Does Directory Exist
         //--------------------------------------------------------------
-        bool CFileSystem::DoesDirectoryExist(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
+        bool FileSystem::DoesDirectoryExist(Core::StorageLocation ineStorageLocation, const std::string& instrDirectory) const
         {
             //Check that this storage location is available
             if (IsStorageLocationAvailable(ineStorageLocation) == false)
@@ -802,7 +801,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Is Storage Location Available
         //--------------------------------------------------------------
-        bool CFileSystem::IsStorageLocationAvailable(Core::StorageLocation ineStorageLocation) const
+        bool FileSystem::IsStorageLocationAvailable(Core::StorageLocation ineStorageLocation) const
         {
             switch (ineStorageLocation) 
             {
@@ -818,7 +817,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Get Storage Location Directory
         //--------------------------------------------------------------
-        std::string CFileSystem::GetStorageLocationDirectory(Core::StorageLocation ineStorageLocation) const
+        std::string FileSystem::GetStorageLocationDirectory(Core::StorageLocation ineStorageLocation) const
         {
             //get the storage location path
             std::string strStorageLocationPath;
@@ -846,7 +845,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Does Item Exist In DLC Cache
         //--------------------------------------------------------------
-        bool CFileSystem::DoesItemExistInDLCCache(const std::string& instrPath, bool inbFolder) const
+        bool FileSystem::DoesItemExistInDLCCache(const std::string& instrPath, bool inbFolder) const
         {
             //Check that this storage location is available
             if (IsStorageLocationAvailable(Core::StorageLocation::k_DLC) == false)
@@ -871,7 +870,7 @@ namespace ChilliSource
         /// @param The filename of the DLC asset.
         /// @return The directory to either the package DLC or cache DLC.
         //--------------------------------------------------------------
-        std::string CFileSystem::GetDirectoryForDLCFile(const std::string& instrFilePath) const
+        std::string FileSystem::GetDirectoryForDLCFile(const std::string& instrFilePath) const
         {
             std::string strResult;
             std::string strPath = ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrFilePath);
@@ -893,7 +892,7 @@ namespace ChilliSource
         /// @param The filename of the package asset.
         /// @return The directory to either the correct device package directory.
         //--------------------------------------------------------------
-        std::string CFileSystem::GetDirectoryForPackageFile(const std::string& instrFilePath) const
+        std::string FileSystem::GetDirectoryForPackageFile(const std::string& instrFilePath) const
         {
             std::string strResult = GetStorageLocationDirectory(Core::StorageLocation::k_package) + instrFilePath;
             
@@ -917,7 +916,7 @@ namespace ChilliSource
         /// @param the filepath.
         /// @return whether or not it exists.
         //--------------------------------------------------------------
-        bool CFileSystem::DoesFileExistInHashedStore(const std::string& instrPath) const
+        bool FileSystem::DoesFileExistInHashedStore(const std::string& instrPath) const
         {
             u32 udwHashedFile = Core::HashCRC32::GenerateHashCode(instrPath);
             
@@ -936,7 +935,7 @@ namespace ChilliSource
         /// @param the filepath.
         /// @return whether or not it exists.
         //--------------------------------------------------------------
-        bool CFileSystem::DoesFileExist(const std::string& instrPath) const
+        bool FileSystem::DoesFileExist(const std::string& instrPath) const
         {
             BOOL bDirectory = NO;
             bool bExists = false;
@@ -959,7 +958,7 @@ namespace ChilliSource
         /// @param the filepath.
         /// @return whether or not it exists.
         //--------------------------------------------------------------
-        bool CFileSystem::DoesFolderExist(const std::string& instrPath) const
+        bool FileSystem::DoesFolderExist(const std::string& instrPath) const
         {
             BOOL bDirectory = NO;
             bool bExists = false;

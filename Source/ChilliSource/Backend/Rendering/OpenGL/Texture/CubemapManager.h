@@ -18,7 +18,7 @@ namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CCubemapManager : public ChilliSource::Rendering::CubemapManager
+		class CubemapManager : public ChilliSource::Rendering::CubemapManager
 		{
 		public:
 			//----------------------------------------------------------------
@@ -59,11 +59,11 @@ namespace ChilliSource
 			///
 			/// @param The Cubemap pointer.
 			//----------------------------------------------------------------
-			void RemoveRestorableCubemap(CCubemap* inpCubemap);
+			void RemoveRestorableCubemap(Cubemap* inpCubemap);
 		private:
 #ifdef CS_TARGETPLATFORM_ANDROID
 			std::vector<Rendering::CubemapWPtr> mapCubemapCache;
-			std::unordered_map<CCubemap*, Core::ImageSPtr> mapBackedUpImages;
+			std::unordered_map<Cubemap*, Core::ImageSPtr> mapBackedUpImages;
 #endif
 		};
 	}

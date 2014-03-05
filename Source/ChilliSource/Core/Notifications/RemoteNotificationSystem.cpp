@@ -29,7 +29,7 @@ namespace ChilliSource
         RemoteNotificationSystem* RemoteNotificationSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-        	return new iOS::CRemoteNotificationSystem();
+        	return new iOS::RemoteNotificationSystem();
 #elif defined(CS_TARGETPLATFORM_ANDROID)
 #	ifdef MOFLOWSKU_REMOTENOTIFICATIONMETHOD_GOOGLEPLAY
         	return new Android::CGooglePlayRemoteNotificationSystem();

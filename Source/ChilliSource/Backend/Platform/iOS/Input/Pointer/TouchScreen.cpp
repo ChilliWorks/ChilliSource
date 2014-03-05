@@ -8,29 +8,30 @@
  */
 
 #include <ChilliSource/Backend/Platform/iOS/Input/Pointer/TouchScreen.h>
+
 #include <ChilliSource/Core/Base/Screen.h>
 
-ChilliSource::iOS::CTouchScreen* gpTouchScreenInstance = nullptr;
+ChilliSource::iOS::TouchScreen* gpTouchScreenInstance = nullptr;
 
 namespace ChilliSource
 {
 	namespace iOS
 	{
-		CTouchScreen::CTouchScreen() 
+		TouchScreen::TouchScreen() 
 		{
 			gpTouchScreenInstance = this;
             
             mfScale = Core::Screen::GetDensity();
 		}
-		CTouchScreen::~CTouchScreen()
+		TouchScreen::~TouchScreen()
 		{
 			gpTouchScreenInstance = nullptr;
 		}
-		bool CTouchScreen::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool TouchScreen::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == Input::TouchScreen::InterfaceID;
 		}
-		void CTouchScreen::OnTouchBegan(UITouch* inpNativeTouch)
+		void TouchScreen::OnTouchBegan(UITouch* inpNativeTouch)
 		{
 			//Grab the touch location from the OS
 			CGPoint TouchLocation = [inpNativeTouch locationInView:inpNativeTouch.view];
@@ -38,7 +39,7 @@ namespace ChilliSource
 			
 			mMapNativeTouchesToID.insert(std::make_pair(inpNativeTouch,InternalEventID));
 		}
-		void CTouchScreen::OnTouchMoved(UITouch* inpNativeTouch)
+		void TouchScreen::OnTouchMoved(UITouch* inpNativeTouch)
 		{
 			MapNativeTouchToID::iterator pKey =  mMapNativeTouchesToID.find(inpNativeTouch);
 			
@@ -48,7 +49,7 @@ namespace ChilliSource
 				MoveTouch(pKey->second, Core::Vector2(TouchLocation.x * mfScale, TouchLocation.y * mfScale), mffLastTimeStamp);
 			}
 		}
-		void CTouchScreen::OnTouchEnded(UITouch* inpNativeTouch)
+		void TouchScreen::OnTouchEnded(UITouch* inpNativeTouch)
 		{
 			MapNativeTouchToID::iterator pKey =  mMapNativeTouchesToID.find(inpNativeTouch);
 			

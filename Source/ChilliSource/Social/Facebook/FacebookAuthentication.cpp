@@ -24,9 +24,9 @@ namespace ChilliSource
         FacebookAuthenticationSystem* FacebookAuthenticationSystem::CreateSystem()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return new ChilliSource::iOS::CFacebookAuthenticationSystem();
+            return new ChilliSource::iOS::FacebookAuthenticationSystem();
 #elif CS_TARGETPLATFORM_ANDROID
-            return new ChilliSource::Android::CFacebookAuthenticationSystem();
+            return new ChilliSource::Android::FacebookAuthenticationSystem();
 #endif
 			return nullptr;
         }

@@ -9,69 +9,71 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Input/Base/InputSystem.h>
 
-#include <ChilliSource/Core/Time/Timer.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Time/Timer.h>
 
-using namespace ChilliSource::Input;
-using namespace ChilliSource::Core;
-using namespace ChilliSource::iOS;
-
-CInputSystem::CInputSystem()
+namespace ChilliSource
 {
-    if(CAccelerometer::SupportedByDevice() == true)
+    namespace iOS
     {
-        mpAccelerometer = new CAccelerometer();
+        InputSystem::InputSystem()
+        {
+            if(Accelerometer::SupportedByDevice() == true)
+            {
+                mpAccelerometer = new Accelerometer();
+            }
+        }
+
+        InputSystem::~InputSystem()
+        {
+            CS_SAFEDELETE(mpAccelerometer);
+        }
+
+        bool InputSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+        {
+            return inInterfaceID == InputSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
+        }
+
+        bool InputSystem::CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const
+        {
+            return inInterfaceID == TouchScreen::InterfaceID;
+        }
+        Input::InputDevice * InputSystem::GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID)
+        {
+            if(inInterfaceID == TouchScreen::InterfaceID) 
+            {
+                return &mTouchScreen;
+            }
+            
+            return nullptr;
+        }
+        Input::Accelerometer * InputSystem::GetAccelerometerPtr()
+        {
+            return mpAccelerometer;
+        }
+
+        Input::TouchScreen * InputSystem::GetTouchScreenPtr()
+        {
+            return &mTouchScreen;
+        }
+        void InputSystem::Update(f32 infDT)
+        {
+            mffTimeStamp += infDT;
+            mTouchScreen.SetCurrentAppTime(mffTimeStamp);
+        }
+        Input::VirtualKeyboard* InputSystem::GetVirtualKeyboardPtr()
+        {
+            return &mVirtualKeyboard;
+        }
+        //-----------------------------------------------------------
+        /// Flush Buffered Input
+        ///
+        /// Have the input elements notify listeners of each
+        /// buffered value then clear the buffered input
+        //-----------------------------------------------------------
+        void InputSystem::FlushBufferedInput()
+        {
+            mTouchScreen.FlushBufferedInput();
+        }
     }
-}
-
-CInputSystem::~CInputSystem()
-{
-	CS_SAFEDELETE(mpAccelerometer);
-}
-
-bool CInputSystem::IsA(Core::InterfaceIDType inInterfaceID) const
-{
-	return inInterfaceID == InputSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
-}
-
-bool CInputSystem::CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const
-{
-	return inInterfaceID == TouchScreen::InterfaceID;
-}
-InputDevice * CInputSystem::GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID)
-{
-	if(inInterfaceID == TouchScreen::InterfaceID) 
-    {
-		return &mTouchScreen;
-	}
-    
-	return nullptr;
-}
-Accelerometer * CInputSystem::GetAccelerometerPtr()
-{
-	return mpAccelerometer;
-}
-
-TouchScreen * CInputSystem::GetTouchScreenPtr()
-{
-	return &mTouchScreen;
-}
-void CInputSystem::Update(f32 infDT)
-{
-    mffTimeStamp += infDT;
-	mTouchScreen.SetCurrentAppTime(mffTimeStamp);
-}
-VirtualKeyboard* CInputSystem::GetVirtualKeyboardPtr()
-{
-	return &mVirtualKeyboard;
-}
-//-----------------------------------------------------------
-/// Flush Buffered Input
-///
-/// Have the input elements notify listeners of each
-/// buffered value then clear the buffered input
-//-----------------------------------------------------------
-void CInputSystem::FlushBufferedInput()
-{
-    mTouchScreen.FlushBufferedInput();
 }

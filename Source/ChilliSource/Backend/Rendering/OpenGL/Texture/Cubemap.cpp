@@ -8,12 +8,11 @@
  */
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
+
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/CubemapManager.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
-
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/ImageFormatConverter.h>
-
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 
 namespace ChilliSource
@@ -117,7 +116,7 @@ namespace ChilliSource
         //--------------------------------------------------
 		/// Cosntructor
 		//--------------------------------------------------
-        CCubemap::CCubemap(CCubemapManager* inpManager)
+        Cubemap::Cubemap(CubemapManager* inpManager)
         :mpCubemapManager(inpManager),
         meSFilter(Rendering::Texture::Filter::k_linear), meTFilter(Rendering::Texture::Filter::k_linear),
         meSWrapMode(Rendering::Texture::WrapMode::k_clamp), meTWrapMode(Rendering::Texture::WrapMode::k_clamp),
@@ -129,7 +128,7 @@ namespace ChilliSource
 		//--------------------------------------------------
 		/// Init
 		//--------------------------------------------------
-		void CCubemap::Init(const std::vector<Core::ResourceSPtr>& inapSourceImages, bool inbWithMipsMaps)
+		void Cubemap::Init(const std::vector<Core::ResourceSPtr>& inapSourceImages, bool inbWithMipsMaps)
 		{
             CS_ASSERT(inapSourceImages.size() == 6, "Cubemaps must have 6 face textures");
             
@@ -197,22 +196,22 @@ namespace ChilliSource
 		//--------------------------------------------------
 		/// Is A
 		//--------------------------------------------------
-		bool CCubemap::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool Cubemap::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == Cubemap::InterfaceID;
 		}
 		//--------------------------------------------------
 		/// Bind
 		//--------------------------------------------------
-		void CCubemap::Bind(u32 inSlot)
+		void Cubemap::Bind(u32 inSlot)
 		{
 			if(inSlot > mpRenderCapabilities->GetNumTextureUnits())
 			{
 				CS_LOG_FATAL("Attempting to bind to texture unit not supported on this device: " + Core::ToString(inSlot));
 			}
 			
-            CTexture::SetActiveTextureSlot(inSlot);
-            CTexture::Bind(GL_TEXTURE_CUBE_MAP, inSlot, mGLTextureID, (u8*)this);
+            Texture::SetActiveTextureSlot(inSlot);
+            Texture::Bind(GL_TEXTURE_CUBE_MAP, inSlot, mGLTextureID, (u8*)this);
 
             //Check if the filter params have changed
             if(mbHasTextureFilterModeChanged)
@@ -227,7 +226,7 @@ namespace ChilliSource
 		/// @param S filter mode
 		/// @param T filter mode
 		//--------------------------------------------------
-		void CCubemap::SetFilter(Rendering::Texture::Filter ineSFilter, Rendering::Texture::Filter ineTFilter)
+		void Cubemap::SetFilter(Rendering::Texture::Filter ineSFilter, Rendering::Texture::Filter ineTFilter)
 		{
 			meSFilter = ineSFilter;
 			meTFilter = ineTFilter;
@@ -241,7 +240,7 @@ namespace ChilliSource
 		/// @param S wrap mode
 		/// @param T wrap mode
 		//--------------------------------------------------
-		void CCubemap::SetWrapMode(Rendering::Texture::WrapMode inSWrapMode, Rendering::Texture::WrapMode inTWrapMode)
+		void Cubemap::SetWrapMode(Rendering::Texture::WrapMode inSWrapMode, Rendering::Texture::WrapMode inTWrapMode)
 		{
 			meSWrapMode = inSWrapMode;
 			meTWrapMode = inTWrapMode;
@@ -251,7 +250,7 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Update Texture Parameters
         //---------------------------------------------------
-        void CCubemap::UpdateTextureParameters()
+        void Cubemap::UpdateTextureParameters()
         {
             mbHasTextureFilterModeChanged = false;
             
@@ -326,38 +325,38 @@ namespace ChilliSource
 		//--------------------------------------------------
 		/// Unbind
 		//--------------------------------------------------
-		void CCubemap::Unbind()
+		void Cubemap::Unbind()
 		{
-            CTexture::Unbind((u8*)this);
+            Texture::Unbind((u8*)this);
 		}
 		//--------------------------------------------------
 		/// Get Texture ID
 		//--------------------------------------------------
-		GLuint CCubemap::GetTextureID() const 
+		GLuint Cubemap::GetTextureID() const 
 		{
 			return mGLTextureID;
 		}
         //--------------------------------------------------
         /// Has Mip Maps
         //--------------------------------------------------
-        bool CCubemap::HasMipMaps() const
+        bool Cubemap::HasMipMaps() const
         {
             return mbHasMipMaps;
         }
         //--------------------------------------------------
         /// Get Image Format
         //--------------------------------------------------
-        Core::Image::Format CCubemap::GetImageFormat() const
+        Core::Image::Format Cubemap::GetImageFormat() const
         {
             return meImageFormat;
         }
         //--------------------------------------------------
         /// Destructor
         //--------------------------------------------------
-        CCubemap::~CCubemap()
+        Cubemap::~Cubemap()
         {
             mpCubemapManager->RemoveRestorableCubemap(this);
-            CTexture::Reset(mGLTextureID, (u8*)this);
+            Texture::Reset(mGLTextureID, (u8*)this);
         }
 	}
 }

@@ -13,7 +13,7 @@
 #elif defined CS_TARGETPLATFORM_ANDROID
 #   include <ChilliSource/Backend/Platform/Android/Core/Base/PlatformSystem.h>
 #elif defined CS_TARGETPLATFORM_WINDOWS
-#   include <ChilliSource/Backend/Platform/Windows/PlatformSystemWindows.h>
+#   include <ChilliSource/Backend/Platform/Windows/Core/Base/PlatformSystem.h>
 #endif
 
 namespace ChilliSource
@@ -25,11 +25,11 @@ namespace ChilliSource
         PlatformSystem* PlatformSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return new iOS::CPlatformSystem();
+            return new iOS::PlatformSystem();
 #elif defined CS_TARGETPLATFORM_ANDROID
-            return new Android::CPlatformSystem();
+            return new Android::PlatformSystem();
 #elif defined CS_TARGETPLATFORM_WINDOWS
-			return new Windows::CPlatformSystem();
+			return new Windows::PlatformSystem();
 #else
             return nullptr;
 #endif

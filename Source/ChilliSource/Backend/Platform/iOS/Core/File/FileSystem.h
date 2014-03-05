@@ -11,11 +11,11 @@
 #define _MOFLO_PLATFORM_IOS_FILEIO_FILESYSTEM_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/File/FileStream.h>
 
 #include <string>
-
 
 namespace ChilliSource
 {
@@ -26,10 +26,10 @@ namespace ChilliSource
         ///
         /// The iOS Backend for the file system
 		//=========================================================================================
-		class CFileSystem : public Core::FileSystem
+		class FileSystem : public Core::FileSystem
 		{
 		public:
-			CFileSystem();
+			FileSystem();
             //--------------------------------------------------------------
             /// Create File Stream
             ///

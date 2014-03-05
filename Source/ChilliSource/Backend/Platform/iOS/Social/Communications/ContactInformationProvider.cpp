@@ -8,6 +8,7 @@
  */
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Communications/ContactInformationProvider.h>
+
 #include <ChilliSource/Core/String/StringUtils.h>
 
 #include <AddressBook/AddressBook.h>
@@ -16,11 +17,11 @@
 namespace ChilliSource{
 
 	namespace iOS {
-		bool CContactInformationProvider::IsA(Core::InterfaceIDType inID) const{
-			return inID == CContactInformationProvider::InterfaceID;
+		bool ContactInformationProvider::IsA(Core::InterfaceIDType inID) const{
+			return inID == ContactInformationProvider::InterfaceID;
 		}
 
-		void CContactInformationProvider::LoadInformation(){
+		void ContactInformationProvider::LoadInformation(){
 			masContacts.clear();
 			
 
@@ -97,10 +98,10 @@ namespace ChilliSource{
 			
 		}
 		
-		u32 CContactInformationProvider::GetNumberContacts(){
+		u32 ContactInformationProvider::GetNumberContacts(){
 			return masContacts.size();
 		}
-		const Social::ContactRecord & CContactInformationProvider::GetContactAtIndex(u32 inudwIndex){
+		const Social::ContactRecord & ContactInformationProvider::GetContactAtIndex(u32 inudwIndex){
 			return masContacts[inudwIndex];
 		}
 		

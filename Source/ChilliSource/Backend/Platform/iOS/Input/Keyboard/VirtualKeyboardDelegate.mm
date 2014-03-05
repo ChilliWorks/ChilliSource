@@ -10,7 +10,7 @@
 
 @implementation VirtualKeyboardDelegate
 
--(VirtualKeyboardDelegate*) initWithKeyboard:(CVirtualKeyboard*) inpKeyboard
+-(VirtualKeyboardDelegate*) initWithKeyboard:(VirtualKeyboard*) inpKeyboard
 {
     self = [super init];
     

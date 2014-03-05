@@ -6,12 +6,13 @@
 //  Copyright (c) 2011 Tag Games. All rights reserved.
 //
 
+#include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterPostSystem.h>
+
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterPostSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
 
 #include <UIKit/UIKit.h>
@@ -27,7 +28,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Constructor
 		//------------------------------------------------------------------------
-		CTwitterPostSystem::CTwitterPostSystem(iOS::CHttpConnectionSystem* inpHttpConnectionSystem,
+		TwitterPostSystem::TwitterPostSystem(iOS::HttpConnectionSystem* inpHttpConnectionSystem,
 											   Core::OAuthSystem* inpOAuthSystem) : Social::TwitterPostSystem(inpHttpConnectionSystem, inpOAuthSystem)
 		{
 			
@@ -35,7 +36,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Destructor
 		//------------------------------------------------------------------------
-		CTwitterPostSystem::~CTwitterPostSystem()
+		TwitterPostSystem::~TwitterPostSystem()
 		{
 			
 		}
@@ -45,7 +46,7 @@ namespace ChilliSource
         /// @param Interface ID
         /// @return Is of interface ID type
         //------------------------------------------------------------------------
-        bool CTwitterPostSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+        bool TwitterPostSystem::IsA(Core::InterfaceIDType inInterfaceID) const
         {
             return inInterfaceID == Social::TwitterPostSystem::InterfaceID;
         }
@@ -53,7 +54,7 @@ namespace ChilliSource
 		/// Run the OAuth process and, if successful, leave the system in state
 		/// ready to communicate with Twitter
 		//------------------------------------------------------------------------
-		bool CTwitterPostSystem::Authenticate()
+		bool TwitterPostSystem::Authenticate()
 		{
 			bool bResult = false;
 			
@@ -77,10 +78,10 @@ namespace ChilliSource
 				}
 				else
 				{
-					CS_LOG_DEBUG("CTwitterPostSystem::Authenticate() - Unable to get OAuth token!");
+					CS_LOG_DEBUG("TwitterPostSystem::Authenticate() - Unable to get OAuth token!");
 					return false;
 				}
-				CS_LOG_DEBUG("CTwitterPostSystem::Authenticate() - Got request token URL of \""+strAuthoiseURL+"\"");
+				CS_LOG_DEBUG("TwitterPostSystem::Authenticate() - Got request token URL of \""+strAuthoiseURL+"\"");
 				bResult = false;
 			}
 			else
@@ -88,7 +89,7 @@ namespace ChilliSource
 				// We have keys, so set them and rock on!
 				mpOAuthSystem->SetOAuthTokenKey(mstrSavedOAuthTokenKey);
 				mpOAuthSystem->SetOAuthTokenSecret(mstrSavedOAuthTokenSecret);
-				CS_LOG_DEBUG("CTwitterPostSystem::Authenticate() - Set OAuth key token \""+mstrSavedOAuthTokenKey+"\" and OAuth secret token \""+mstrSavedOAuthTokenSecret+"\"");
+				CS_LOG_DEBUG("TwitterPostSystem::Authenticate() - Set OAuth key token \""+mstrSavedOAuthTokenKey+"\" and OAuth secret token \""+mstrSavedOAuthTokenSecret+"\"");
 				bResult = true;
 			}
 			
@@ -97,7 +98,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------
         /// Supported By Device
         //------------------------------------------------------------------------
-        bool CTwitterPostSystem::SupportedByDevice()
+        bool TwitterPostSystem::SupportedByDevice()
         {
 			NSString *reqSysVer = @"5.0";
 			NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
@@ -106,7 +107,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Is Image Post Supported
 		//------------------------------------------------------------------------
-		bool CTwitterPostSystem::IsImagePostSupported() const
+		bool TwitterPostSystem::IsImagePostSupported() const
 		{
 			NSString *reqSysVer = @"5.0";
 			NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
@@ -115,7 +116,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------
         /// Try Post
         //------------------------------------------------------------------------
-        bool CTwitterPostSystem::TryPost(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback)
+        bool TwitterPostSystem::TryPost(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback)
         {
 			if(SupportedByDevice())
 				return TryPostUsingiOS(insDesc, inResultCallback);
@@ -128,7 +129,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Try Post Using iOS
 		//------------------------------------------------------------------------
-		bool CTwitterPostSystem::TryPostUsingiOS(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback)
+		bool TwitterPostSystem::TryPostUsingiOS(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback)
 		{
 			if([TWTweetComposeViewController canSendTweet])
             {
@@ -156,7 +157,7 @@ namespace ChilliSource
                         bImageAttached = [pComposeViewController addImage:pImage];
                         if(!bImageAttached)
                         {
-                            CS_LOG_ERROR("CTwitterPostSystem::TryPostUsingiOS - Failed to attach image to tweet, most likely because limit has been reached");
+                            CS_LOG_ERROR("TwitterPostSystem::TryPostUsingiOS - Failed to attach image to tweet, most likely because limit has been reached");
                         }
                     }
                 }
@@ -207,7 +208,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Try Post Using moFlow
 		//------------------------------------------------------------------------
-		bool CTwitterPostSystem::TryPostUsingMoFlow(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback)
+		bool TwitterPostSystem::TryPostUsingMoFlow(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback)
 		{
 			bool bResult = false;
 			
@@ -240,7 +241,7 @@ namespace ChilliSource
 		///
 		/// @param PIN entered by user
 		//------------------------------------------------------------------------
-		void CTwitterPostSystem::OnPINComplete(const ChilliSource::Social::TwitterAuthenticationActivity::AuthenticationPINResult &insResult)
+		void TwitterPostSystem::OnPINComplete(const ChilliSource::Social::TwitterAuthenticationActivity::AuthenticationPINResult &insResult)
 		{
 			if(Social::TwitterPIN::kudwTwitterPINLength == insResult.strPIN.size())
 			{
@@ -251,7 +252,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Delegate called with the authorisation view is dismissed.
 		//------------------------------------------------------------------------
-		void CTwitterPostSystem::OnAuthorisationDismissed(Core::Activity* inpActivity)
+		void TwitterPostSystem::OnAuthorisationDismissed(Core::Activity* inpActivity)
 		{
 			// User has cancelled
 			if(mpAuthenticationView)

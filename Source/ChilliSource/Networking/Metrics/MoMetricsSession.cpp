@@ -383,7 +383,7 @@ namespace ChilliSource
             
             sEvent.strType = instrType;
 			sEvent.astrParams = inastrParams;
-			sEvent.udwTimeStamp = Core::Application::GetSystemTime() + mdwServerTimeDelta;
+			sEvent.udwTimeStamp = (u32)Core::Application::GetSystemTime() + mdwServerTimeDelta;
 			sEvent.udwCount = 1;
             sEvent.bSummarisable = inbSummarise;
             sEvent.bIgnore = false;

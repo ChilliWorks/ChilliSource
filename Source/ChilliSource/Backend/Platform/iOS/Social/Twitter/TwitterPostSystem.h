@@ -11,22 +11,23 @@
 #define _MO_FLO_IOSPLATFORM_SOCIAL_TWITTER_TWITTER_POST_SYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
+#include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/System/System.h>
-#include <ChilliSource/Core/Cryptographic/OAuthSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 
 namespace ChilliSource
 {
     namespace iOS
     {
-        class CTwitterPostSystem : public ChilliSource::Social::TwitterPostSystem
+        class TwitterPostSystem : public ChilliSource::Social::TwitterPostSystem
         {
         public:
-			CTwitterPostSystem(iOS::CHttpConnectionSystem* inpHttpConnectionSystem,
+			TwitterPostSystem(iOS::HttpConnectionSystem* inpHttpConnectionSystem,
 							   Core::OAuthSystem* inpOAuthSystem);
-			~CTwitterPostSystem();
+			~TwitterPostSystem();
 			//------------------------------------------------------------------------
             /// Is A
             ///

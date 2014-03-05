@@ -11,9 +11,9 @@
 #define _MOFLOW_OPENGL_MESHBUFFER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
+#include <ChilliSource/Rendering/Base/MeshBuffer.h>
 
 namespace ChilliSource
 {
@@ -26,11 +26,11 @@ namespace ChilliSource
 		/// Concrete implementation of a vertex buffer object 
 		/// for OpenGL ES
 		//==========================================================
-		class CMeshBuffer : public ChilliSource::Rendering::MeshBuffer
+		class MeshBuffer : public ChilliSource::Rendering::MeshBuffer
 		{
 		public:
-			CMeshBuffer(ChilliSource::Rendering::BufferDescription &inBuffDesc);
-			virtual ~CMeshBuffer();
+			MeshBuffer(ChilliSource::Rendering::BufferDescription &inBuffDesc);
+			virtual ~MeshBuffer();
 			
             //-----------------------------------------------------
             /// Bind
@@ -103,7 +103,7 @@ namespace ChilliSource
 			///
 			/// @param Pointer to render system
 			//-----------------------------------------------------
-			void SetOwningRenderSystem(CRenderSystem* inpSystem);
+			void SetOwningRenderSystem(RenderSystem* inpSystem);
 			//-----------------------------------------------------
             /// Is Cache Valid
             ///
@@ -133,12 +133,12 @@ namespace ChilliSource
             f32* mpVertexDataBackup;
             u16* mpIndexDataBackup;
 
-            CRenderSystem* mpRenderSystem;
+            RenderSystem* mpRenderSystem;
 
             bool mbMapBufferAvailable;
             bool mbCacheValid;
             
-            static CMeshBuffer* pCurrentlyBoundBuffer;
+            static MeshBuffer* pCurrentlyBoundBuffer;
 		};
 	}
 }

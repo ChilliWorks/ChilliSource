@@ -8,15 +8,16 @@
  */
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Communications/SMSCompositionActivity.h>
-#include <ChilliSource/Core/String/StringUtils.h>
+
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
 namespace ChilliSource{
 	namespace iOS {
-		bool CSMSCompositionActivity::IsA(Core::InterfaceIDType inID) const{
-			return inID == CSMSCompositionActivity::InterfaceID;
+		bool SMSCompositionActivity::IsA(Core::InterfaceIDType inID) const{
+			return inID == SMSCompositionActivity::InterfaceID;
 		}
-		bool CSMSCompositionActivity::SupportedByDevice(){
+		bool SMSCompositionActivity::SupportedByDevice(){
 			
 			NSString *reqSysVer = @"4.0";
 			NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
@@ -30,16 +31,16 @@ namespace ChilliSource{
 			return false;
 		}
 		
-		CSMSCompositionActivity::CSMSCompositionActivity()
+		SMSCompositionActivity::SMSCompositionActivity()
 		:mpDelegate(nil)
 		{
 			
 		}
-		CSMSCompositionActivity::~CSMSCompositionActivity(){
+		SMSCompositionActivity::~SMSCompositionActivity(){
 			[mpDelegate release];
 			mpDelegate = nil;
 		}
-		void CSMSCompositionActivity::Present(const std::vector<Core::UTF8String> & inastrRecipientNumbers, const Core::UTF8String & instrContents, const SMSCompositionActivity::SendResultDelegate & inCallback){
+		void SMSCompositionActivity::Present(const std::vector<Core::UTF8String> & inastrRecipientNumbers, const Core::UTF8String & instrContents, const SMSCompositionActivity::SendResultDelegate & inCallback){
 			
 			mpDelegate = [[SMSDelegate alloc] initWithCallback:inCallback];
 						
@@ -62,7 +63,7 @@ namespace ChilliSource{
 			[pNamesArray release];
 
 		}
-		void CSMSCompositionActivity::Dismiss()
+		void SMSCompositionActivity::Dismiss()
         {
 			[mpDelegate release];
 			mpVC.messageComposeDelegate = nil;

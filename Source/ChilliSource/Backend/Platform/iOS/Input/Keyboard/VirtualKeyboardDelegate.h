@@ -18,10 +18,10 @@ using namespace ChilliSource::iOS;
 
 @interface VirtualKeyboardDelegate : NSObject<UITextFieldDelegate>
 {
-    CVirtualKeyboard* mpKeyboard;
+    VirtualKeyboard* mpKeyboard;
 }
 
--(VirtualKeyboardDelegate*) initWithKeyboard:(CVirtualKeyboard*) inpKeyboard;
+-(VirtualKeyboardDelegate*) initWithKeyboard:(VirtualKeyboard*) inpKeyboard;
 
 @end
 

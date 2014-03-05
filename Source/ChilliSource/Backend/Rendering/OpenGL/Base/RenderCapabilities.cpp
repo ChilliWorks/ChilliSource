@@ -7,32 +7,33 @@
 //
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
+
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
 
 namespace ChilliSource
 {
     namespace OpenGL
     {
-        CS_DEFINE_NAMEDTYPE(CRenderCapabilities);
+        CS_DEFINE_NAMEDTYPE(RenderCapabilities);
         //-------------------------------------------------
         /// Constructor
         //-------------------------------------------------
-        CRenderCapabilities::CRenderCapabilities()
+        RenderCapabilities::RenderCapabilities()
         : mbShadowsSupported(false), mbDepthTexturesSupported(false), mudwMaxTextureSize(0), mudwNumTextureUnits(0)
         {
         }
         //-------------------------------------------------
         /// Is A
         //-------------------------------------------------
-        bool CRenderCapabilities::IsA(Core::InterfaceIDType inInterfaceID) const
+        bool RenderCapabilities::IsA(Core::InterfaceIDType inInterfaceID) const
         {
-            return (Rendering::RenderCapabilities::InterfaceID == inInterfaceID || CRenderCapabilities::InterfaceID == inInterfaceID);
+            return (Rendering::RenderCapabilities::InterfaceID == inInterfaceID || RenderCapabilities::InterfaceID == inInterfaceID);
         }
         //-------------------------------------------------
         /// Calculate Capabilities
         //-------------------------------------------------
-        void CRenderCapabilities::CalculateCapabilities()
+        void RenderCapabilities::CalculateCapabilities()
         {
 			mbHighPrecisionInFragmentShaderSupported = true;
 
@@ -49,7 +50,7 @@ namespace ChilliSource
             }
 #endif
             
-            mbDepthTexturesSupported = CRenderSystem::CheckForOpenGLExtension("GL_OES_depth_texture");
+            mbDepthTexturesSupported = RenderSystem::CheckForOpenGLExtension("GL_OES_depth_texture");
             mbShadowsSupported = (mbDepthTexturesSupported && mbHighPrecisionInFragmentShaderSupported);
             glGetIntegerv(GL_MAX_TEXTURE_SIZE, (s32*)&mudwMaxTextureSize);
             glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, (s32*)&mudwNumTextureUnits);
@@ -57,28 +58,28 @@ namespace ChilliSource
         //-------------------------------------------------
         /// Is Shadow Mapping Supported
         //-------------------------------------------------
-        bool CRenderCapabilities::IsShadowMappingSupported() const
+        bool RenderCapabilities::IsShadowMappingSupported() const
         {
             return mbShadowsSupported;
         }
         //-------------------------------------------------
         /// Are Depth Texture Supported
         //-------------------------------------------------
-        bool CRenderCapabilities::AreDepthTexturesSupported() const
+        bool RenderCapabilities::AreDepthTexturesSupported() const
         {
             return mbDepthTexturesSupported;
         }
         //-------------------------------------------------
         /// Get Max Texture Size
         //-------------------------------------------------
-        u32 CRenderCapabilities::GetMaxTextureSize() const
+        u32 RenderCapabilities::GetMaxTextureSize() const
         {
             return mudwMaxTextureSize;
         }
         //-------------------------------------------------
         /// Get Num Texture Units
         //-------------------------------------------------
-        u32 CRenderCapabilities::GetNumTextureUnits() const
+        u32 RenderCapabilities::GetNumTextureUnits() const
         {
             return mudwNumTextureUnits;
         }

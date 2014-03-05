@@ -1038,7 +1038,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		bool GUIView::IsTouchConsumptionEnabled(TouchType ineType) const
 		{
-			return (u32)ineType & ConsumesTouches;
+			return ((u32)ineType & ConsumesTouches) != 0;
 		}
         //-----------------------------------------------------
         /// Enable Inherited Scale

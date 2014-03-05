@@ -7,8 +7,8 @@
 //
 
 #include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/VirtualKeyboard.h>
-#include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/VirtualKeyboardDelegate.h>
 
+#include <ChilliSource/Backend/Platform/iOS/Input/Keyboard/VirtualKeyboardDelegate.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 VirtualKeyboardDelegate* gpDelegate = nil;
@@ -22,7 +22,7 @@ namespace ChilliSource
 		///
 		/// Create and hide the text view
 		//-------------------------------------------
-		CVirtualKeyboard::CVirtualKeyboard() : mpTextView(nil)
+		VirtualKeyboard::VirtualKeyboard() : mpTextView(nil)
 		{
             if(!gpDelegate)
             {
@@ -48,7 +48,7 @@ namespace ChilliSource
 		///
 		/// @param Default text 
 		//-------------------------------------------
-		void CVirtualKeyboard::Show()
+		void VirtualKeyboard::Show()
 		{
 			if(!mbIsActive && [mpTextView canBecomeFirstResponder])
 			{
@@ -68,7 +68,7 @@ namespace ChilliSource
 		/// @param New Text
         /// @return Whether to accept the text
 		//-------------------------------------------
-		bool CVirtualKeyboard::UpdateText(NSString* inpstrText)
+		bool VirtualKeyboard::UpdateText(NSString* inpstrText)
 		{
             //Inform subscripted to this event and receive if text was rejected lower down
             bool bRejectText = false;
@@ -88,7 +88,7 @@ namespace ChilliSource
 		/// Remove the keyboard
 		/// Triggers OnKeyboardHide event
 		//-------------------------------------------
-		void CVirtualKeyboard::Hide()
+		void VirtualKeyboard::Hide()
 		{
 			if(mbIsActive)
 			{
@@ -108,7 +108,7 @@ namespace ChilliSource
         ///
         /// @param Text cache for keyboard
         //-------------------------------------------
-		void CVirtualKeyboard::SetText(const Core::UTF8String& instrText)
+		void VirtualKeyboard::SetText(const Core::UTF8String& instrText)
         {
             mstrText = instrText;
             mpTextView.text = Core::StringUtils::UTF8StringToNSString(mstrText);
@@ -118,7 +118,7 @@ namespace ChilliSource
         ///
         /// @param keyboard type to be set
         //-------------------------------------------
-        void CVirtualKeyboard::SetKeyboardType(Input::KeyboardType ineKeyboardType)
+        void VirtualKeyboard::SetKeyboardType(Input::KeyboardType ineKeyboardType)
         {
             if(!mpTextView)
             	return;
@@ -142,7 +142,7 @@ namespace ChilliSource
         ///
         /// @param Requests keyboard Capitalisation Method to show
         //------------------------
-        void CVirtualKeyboard::SetCapitalisationMethod(Input::KeyboardCapitalisation ineKeyboardCapitalisation)
+        void VirtualKeyboard::SetCapitalisationMethod(Input::KeyboardCapitalisation ineKeyboardCapitalisation)
         {
             if(!mpTextView)
             	return;
@@ -168,7 +168,7 @@ namespace ChilliSource
 		//--------------------------------------------
 		/// Destructor
 		//--------------------------------------------
-		CVirtualKeyboard::~CVirtualKeyboard()
+		VirtualKeyboard::~VirtualKeyboard()
 		{
 			if(mpTextView)
 			{

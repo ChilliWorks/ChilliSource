@@ -7,23 +7,21 @@
 //
 
 #include <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerActivity.h>
-#include <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerTapListener.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/Notification/NSNotificationAdapter.h>
+
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/Notification/NSNotificationAdapter.h>
 #include <ChilliSource/Backend/Platform/iOS/Video/Base/SubtitlesRenderer.h>
-
+#include <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerTapListener.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
-
 #include <ChilliSource/Input/Base/InputSystem.h>
 
 #include <MediaPlayer/MediaPlayer.h>
-
 #include <AudioToolbox/AudioSession.h>
 
 namespace ChilliSource
@@ -74,12 +72,12 @@ namespace ChilliSource
         ///
         /// Default
         //--------------------------------------------------------------
-        CVideoPlayerActivity::CVideoPlayerActivity()
+        VideoPlayerActivity::VideoPlayerActivity()
         : mpMoviePlayerController(nil), mpTapListener(nil), mbKeepAppRunning(false), mbIsAppSuspended(false), mbPlaying(false), mbCanDismissWithTap(false), mpVideoOverlayView(nil), mpSubtitlesRenderer(nil),
         meSubtitlesLocation(Core::StorageLocation::k_none)
         
         {
-            m_appResumedConnection = Core::ApplicationEvents::GetResumeEvent().OpenConnection(Core::MakeDelegate(this, &CVideoPlayerActivity::OnResume));
+            m_appResumedConnection = Core::ApplicationEvents::GetResumeEvent().OpenConnection(Core::MakeDelegate(this, &VideoPlayerActivity::OnResume));
             mpTapListener = [[CVideoPlayerTapListener alloc] init];
         }
 		//--------------------------------------------------------------
@@ -88,7 +86,7 @@ namespace ChilliSource
 		/// @param Interface ID
 		/// @param Whether activity is of given type
 		//--------------------------------------------------------------
-		bool CVideoPlayerActivity::IsA(Core::InterfaceIDType inID) const
+		bool VideoPlayerActivity::IsA(Core::InterfaceIDType inID) const
 		{
 			return inID == Video::VideoPlayerActivity::InterfaceID;
 		}
@@ -102,12 +100,12 @@ namespace ChilliSource
         /// @param Whether to allow dismissing of the video
         /// @param Background colour
         //--------------------------------------------------------------
-        void CVideoPlayerActivity::Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour)
+        void VideoPlayerActivity::Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour)
         {
             mBackgroundColour = inBackgroundColour;
             
             std::string strPath;
-            static_cast<CFileSystem*>(Core::Application::GetFileSystemPtr())->GetBestPathToFile(ineLocation, instrFileName, strPath);
+            static_cast<FileSystem*>(Core::Application::GetFileSystemPtr())->GetBestPathToFile(ineLocation, instrFileName, strPath);
             
             NSURL* pMovieURL = [NSURL fileURLWithPath:Core::StringUtils::StringToNSString(strPath)];
             mpMoviePlayerController = [[MPMoviePlayerController alloc] initWithContentURL:pMovieURL];
@@ -132,7 +130,7 @@ namespace ChilliSource
         /// @param Whether or not the video can be dismissed by tapping.
         /// @param Background colour
         //--------------------------------------------------------------
-        void CVideoPlayerActivity::PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
+        void VideoPlayerActivity::PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
                                                         Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
                                                         bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour)
         {
@@ -148,7 +146,7 @@ namespace ChilliSource
         ///
         /// Use the post iOS 3 movie player to setup the file
         //---------------------------------------------------------------
-        void CVideoPlayerActivity::SetupWithMoviePlayer()
+        void VideoPlayerActivity::SetupWithMoviePlayer()
         {
             [mpMoviePlayerController setControlStyle:MPMovieControlStyleNone];
             [mpMoviePlayerController setFullscreen:YES];
@@ -162,7 +160,7 @@ namespace ChilliSource
         ///
         /// Use the post iOS 3 movie player to play the file
         //---------------------------------------------------------------
-        void CVideoPlayerActivity::PlayWithMoviePlayer()
+        void VideoPlayerActivity::PlayWithMoviePlayer()
         {
             CreateVideoOverlay();
             
@@ -180,12 +178,12 @@ namespace ChilliSource
         /// Register with the notification centre for the relevant
         /// MPMoviePlayer notifications for starting and stopping
         //---------------------------------------------------------------
-        void CVideoPlayerActivity::ListenForMoviePlayerNotifications()
+        void VideoPlayerActivity::ListenForMoviePlayerNotifications()
         {
             [[NSNotificationAdapter sharedInstance] BeginListeningForMPLoadStateChanged];
-            m_moviePlayerLoadStateChangedConnection = [[NSNotificationAdapter sharedInstance] GetMPLoadStateChangeEvent].OpenConnection(Core::MakeDelegate(this, &CVideoPlayerActivity::OnLoadStateChanged));
+            m_moviePlayerLoadStateChangedConnection = [[NSNotificationAdapter sharedInstance] GetMPLoadStateChangeEvent].OpenConnection(Core::MakeDelegate(this, &VideoPlayerActivity::OnLoadStateChanged));
             [[NSNotificationAdapter sharedInstance] BeginListeningForMPPlaybackDidFinish];
-            m_moviePlayerPlaybackFinishedConnection = [[NSNotificationAdapter sharedInstance] GetMPPlaybackDidFinishEvent].OpenConnection(Core::MakeDelegate(this, &CVideoPlayerActivity::OnPlaybackFinished));
+            m_moviePlayerPlaybackFinishedConnection = [[NSNotificationAdapter sharedInstance] GetMPPlaybackDidFinishEvent].OpenConnection(Core::MakeDelegate(this, &VideoPlayerActivity::OnPlaybackFinished));
         }
         //---------------------------------------------------------------
         /// Stop Listening For Movie Player Notifications
@@ -193,7 +191,7 @@ namespace ChilliSource
         /// Deregister with the notification centre for the relevant
         /// MPMoviePlayer notifications for starting and stopping
         //---------------------------------------------------------------
-        void CVideoPlayerActivity::StopListeningForMoviePlayerNotifications()
+        void VideoPlayerActivity::StopListeningForMoviePlayerNotifications()
         {
             m_moviePlayerLoadStateChangedConnection = nullptr;
             m_moviePlayerPlaybackFinishedConnection = nullptr;
@@ -206,7 +204,7 @@ namespace ChilliSource
         ///
         /// @return Whether a video is currently playing
         //--------------------------------------------------------------
-        bool CVideoPlayerActivity::IsPlaying() const
+        bool VideoPlayerActivity::IsPlaying() const
         {
             if(!mpMoviePlayerController)
             {
@@ -220,7 +218,7 @@ namespace ChilliSource
         ///
         /// @return The length of the video in seconds
         //--------------------------------------------------------------
-        f32 CVideoPlayerActivity::GetDuration() const
+        f32 VideoPlayerActivity::GetDuration() const
         {
             if(!mpMoviePlayerController)
             {
@@ -234,7 +232,7 @@ namespace ChilliSource
         ///
         /// End playback of the currently playing video
         //--------------------------------------------------------------
-        void CVideoPlayerActivity::Dismiss()
+        void VideoPlayerActivity::Dismiss()
         {
             if(mpMoviePlayerController)
             {
@@ -252,7 +250,7 @@ namespace ChilliSource
         /// @param whether or not the app should keep running in the
         ///         background.
         //--------------------------------------------------------------
-        void CVideoPlayerActivity::KeepAppRunning(bool inbEnabled)
+        void VideoPlayerActivity::KeepAppRunning(bool inbEnabled)
         {
             mbKeepAppRunning = inbEnabled;
         }
@@ -262,7 +260,7 @@ namespace ChilliSource
         /// @return the dimensions of the video as displayed on screen
         /// minus the black borders.
         //--------------------------------------------------------------
-        Core::Vector2 CVideoPlayerActivity::GetVideoDimensions()
+        Core::Vector2 VideoPlayerActivity::GetVideoDimensions()
         {
             return Core::Vector2(mpMoviePlayerController.naturalSize.width, mpMoviePlayerController.naturalSize.height);
         }
@@ -271,7 +269,7 @@ namespace ChilliSource
         ///
         /// Called when the video is tapped.
         //---------------------------------------------------------------
-        void CVideoPlayerActivity::OnTapped()
+        void VideoPlayerActivity::OnTapped()
         {
             Dismiss();
         }
@@ -281,7 +279,7 @@ namespace ChilliSource
         /// Triggered when the preloading of the video has completed
         /// This will start the playback of the movie
         //---------------------------------------------------------------
-        void CVideoPlayerActivity::OnLoadStateChanged()
+        void VideoPlayerActivity::OnLoadStateChanged()
         {
             //Unless state is unknown, start playback
             if([mpMoviePlayerController loadState] != MPMovieLoadStateUnknown)
@@ -299,7 +297,7 @@ namespace ChilliSource
         ///
         /// Create the movie view frame, size and position
         //---------------------------------------------------------------
-        void CVideoPlayerActivity::SetupMovieView()
+        void VideoPlayerActivity::SetupMovieView()
         {
             f32 fOrientedWidthDensityCorrected = Core::Screen::GetOrientedWidth() * Core::Screen::GetInverseDensity();
             f32 fOrientedHeightDensityCorrected = Core::Screen::GetOrientedHeight() * Core::Screen::GetInverseDensity();
@@ -312,7 +310,7 @@ namespace ChilliSource
         ///
         /// Attach the movie players UIView to the key window
         //---------------------------------------------------------------
-        void CVideoPlayerActivity::AttachMovieViewToWindow()
+        void VideoPlayerActivity::AttachMovieViewToWindow()
         {
             [[[[[UIApplication sharedApplication] keyWindow] rootViewController] view] addSubview:mpMoviePlayerController.view];
             mbPlaying = true;
@@ -322,7 +320,7 @@ namespace ChilliSource
         ///
         /// Triggered when the movie playback ends or is stopped
         //---------------------------------------------------------------
-        void CVideoPlayerActivity::OnPlaybackFinished()
+        void VideoPlayerActivity::OnPlaybackFinished()
         {
             mbPlaying = false;
             
@@ -356,7 +354,7 @@ namespace ChilliSource
         /// Called when the application is resumed. if a video was playing
         /// when suspend was called, it will be resumed.
         //---------------------------------------------------------------
-        void CVideoPlayerActivity::OnResume()
+        void VideoPlayerActivity::OnResume()
         {
             if (mpMoviePlayerController != nil)
             {
@@ -373,7 +371,7 @@ namespace ChilliSource
         /// Creates the video overlay view and sets up any active overlay
         /// views.
         //---------------------------------------------------------------
-        void CVideoPlayerActivity::CreateVideoOverlay()
+        void VideoPlayerActivity::CreateVideoOverlay()
         {
             if (mpVideoOverlayView == nil)
             {
@@ -387,7 +385,7 @@ namespace ChilliSource
                 //setup the tap gesture if we can dismiss with tap
                 if (mbCanDismissWithTap && mpTapListener != nil)
                 {
-                    [mpTapListener SetupWithView: mpVideoOverlayView AndDelegate:Core::MakeDelegate(this, &CVideoPlayerActivity::OnTapped)];
+                    [mpTapListener SetupWithView: mpVideoOverlayView AndDelegate:Core::MakeDelegate(this, &VideoPlayerActivity::OnTapped)];
                 }
                 
                 //create the subtitles renderer
@@ -403,7 +401,7 @@ namespace ChilliSource
         /// Deletes the video overlay view and cleans up any active
         /// overlay views,
         //---------------------------------------------------------------
-        void CVideoPlayerActivity::DeleteVideoOverlay()
+        void VideoPlayerActivity::DeleteVideoOverlay()
         {
             if (mpVideoOverlayView != nil)
             {
@@ -435,7 +433,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// GetTime
         //--------------------------------------------------------------
-        f32 CVideoPlayerActivity::GetTime() const
+        f32 VideoPlayerActivity::GetTime() const
         {
             f32 fTime = 0.0f;
             if (mpMoviePlayerController)
@@ -448,7 +446,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Destructor
         //--------------------------------------------------------------
-        CVideoPlayerActivity::~CVideoPlayerActivity()
+        VideoPlayerActivity::~VideoPlayerActivity()
         {
             [mpTapListener release];
 

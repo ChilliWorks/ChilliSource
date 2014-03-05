@@ -11,17 +11,18 @@
 #define _MOFLO_PLATFORM_IOS_SOCIAL_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
+#include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
 
 namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CFacebookPostSystem : public Social::IFacebookPostSystem
+		class FacebookPostSystem : public Social::IFacebookPostSystem
 		{
 		public:
-			CFacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem);
+			FacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem);
 			
             bool IsA(Core::InterfaceIDType inID) const override;
 			

@@ -203,7 +203,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		s32 FileStream::ReadSome(s8* inpbyBuffer, s32 indwStreamSize)
 		{
-			return mFileStream.readsome(inpbyBuffer, indwStreamSize);
+			return (s32)mFileStream.readsome(inpbyBuffer, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Put Back

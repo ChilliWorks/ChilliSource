@@ -11,6 +11,7 @@
 #define _MOFLO_PLATFORM_IOS_SOCIAL_FACEBOOKAUTHENTICATION_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Social/Facebook/FacebookAuthentication.h>
 
 #include <FacebookSDK/FacebookSDK.h>
@@ -19,14 +20,14 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CFacebookAuthenticationSystem : public Social::FacebookAuthenticationSystem
+		class FacebookAuthenticationSystem : public Social::FacebookAuthenticationSystem
 		{
 		public:
 			//Define an interface for this platform specific version as the
 			//app delegate needs to be able to query for this system specifically. (Avoiding system casts).
-			CS_DECLARE_NAMEDTYPE(CFacebookAuthenticationSystem);
+			CS_DECLARE_NAMEDTYPE(FacebookAuthenticationSystem);
             
-            ~CFacebookAuthenticationSystem();
+            ~FacebookAuthenticationSystem();
 			
             bool IsA(Core::InterfaceIDType inID) const override;
 			

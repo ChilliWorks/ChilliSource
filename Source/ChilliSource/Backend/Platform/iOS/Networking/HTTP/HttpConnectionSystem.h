@@ -11,6 +11,7 @@
 #define _MOFLO_PLATFORM_IOS_HTTPCONNECTIONSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
 
@@ -22,7 +23,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CHttpConnectionSystem : public Networking::HttpConnectionSystem, public Core::IUpdateable
+		class HttpConnectionSystem : public Networking::HttpConnectionSystem, public Core::IUpdateable
 		{
 		public:
 			
@@ -110,7 +111,7 @@ namespace ChilliSource
 			class CHttpRequest : public Networking::HttpRequest
             {
 			public:
-				CHttpRequest(const Networking::HttpRequestDetails & insDetails, const CHttpConnectionSystem::ConnectionInfo& insConnectionInfo, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate);
+				CHttpRequest(const Networking::HttpRequestDetails & insDetails, const HttpConnectionSystem::ConnectionInfo& insConnectionInfo, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate);
                 
 				//------------------------------------------------------------------
 				/// Update
@@ -185,7 +186,7 @@ namespace ChilliSource
 				
 				Networking::HttpRequest::CompletionDelegate mCompletionDelegate;
                 Networking::HttpRequestDetails msDetails;
-                CHttpConnectionSystem::ConnectionInfo mConnectionInfo;
+                HttpConnectionSystem::ConnectionInfo mConnectionInfo;
                 
                 f32 mfActiveTime;
                 

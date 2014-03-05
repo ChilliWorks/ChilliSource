@@ -11,6 +11,7 @@
 #define _MOFLOW_OPENGL_ES2_RENDER_SYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Rendering/Base/RenderSystem.h>
@@ -34,12 +35,12 @@ namespace ChilliSource
 		/// Creates and manages the OpenGL ES context and
 		/// handles the rendering of scene objects
 		//=======================================================
-		class CRenderSystem : public ChilliSource::Rendering::RenderSystem
+		class RenderSystem : public ChilliSource::Rendering::RenderSystem
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(CRenderSystem);
-			CRenderSystem();
-            ~CRenderSystem();
+			CS_DECLARE_NAMEDTYPE(RenderSystem);
+			RenderSystem();
+            ~RenderSystem();
             //----------------------------------------------------------
 			/// Is A
 			///
@@ -326,9 +327,9 @@ namespace ChilliSource
 			//----------------------------------------------------------
 			static bool CheckForOpenGLExtension(const std::string& instrExtension);
             
-            inline CTextureManager* GetTextureManager() {return &mTexManager;}
-            inline CCubemapManager* GetCubemapManager() {return &mCubemapManager;}
-            inline CShaderManager* GetShaderManager() {return &mShaderManager;}
+            inline TextureManager* GetTextureManager() {return &mTexManager;}
+            inline CubemapManager* GetCubemapManager() {return &mCubemapManager;}
+            inline ShaderManager* GetShaderManager() {return &mShaderManager;}
 			
 		private:
             
@@ -475,11 +476,11 @@ namespace ChilliSource
             Core::Matrix4x4 mmatView;
             Core::Vector3 mvCameraPos;
             
-			CTextureManager mTexManager;
-            CCubemapManager mCubemapManager;
-			CShaderManager mShaderManager;
+			TextureManager mTexManager;
+            CubemapManager mCubemapManager;
+			ShaderManager mShaderManager;
 			
-            CRenderCapabilities* mpRenderCapabilities;
+            RenderCapabilities* mpRenderCapabilities;
             
 			GLint mwPosAttributeLocation;
 			GLint mwColAttributeLocation;
@@ -517,7 +518,7 @@ namespace ChilliSource
             GLint mCubemapHandle;
             std::pair<GLint, u32>* mpaTextureHandles;
             
-			CRenderTarget* mpDefaultRenderTarget;
+			RenderTarget* mpDefaultRenderTarget;
             
             Core::Vector2 mvCachedScissorPos;
             Core::Vector2 mvCachedScissorSize;
@@ -573,7 +574,7 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_IOS
             EAGLContext* mContext;
 #elif defined CS_TARGETPLATFORM_ANDROID
-            std::vector<CMeshBuffer*> mMeshBuffers;
+            std::vector<MeshBuffer*> mMeshBuffers;
 #endif
 		};
 	}

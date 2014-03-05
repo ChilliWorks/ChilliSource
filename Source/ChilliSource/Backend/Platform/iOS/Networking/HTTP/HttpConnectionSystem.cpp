@@ -8,13 +8,13 @@
  */
 
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Networking/Base/MoFloReachability.h>
 
-#include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Backend/Platform/iOS/Networking/Base/MoFloReachability.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <sstream>
 #include <thread>
@@ -35,7 +35,7 @@ namespace ChilliSource
         const u32 kudwKeepAliveTimeInSeconds = 120;
         const u32 kudwReadThreadSleepInMS = 100;
         
-        u32 CHttpConnectionSystem::udwStaticNumConnectionsEstablished = 0;
+        u32 HttpConnectionSystem::udwStaticNumConnectionsEstablished = 0;
         
 		//--------------------------------------------------------------------------------------------------
 		/// Is A
@@ -43,9 +43,9 @@ namespace ChilliSource
 		/// @param Interace ID
 		/// @return Whether object if of argument type
 		//--------------------------------------------------------------------------------------------------
-		bool CHttpConnectionSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool HttpConnectionSystem::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == HttpConnectionSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
+			return inInterfaceID == Networking::HttpConnectionSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Make Request
@@ -55,7 +55,7 @@ namespace ChilliSource
 		/// @param (Optional) A function to call when the request is completed. Note that the request can be completed by failure/cancellation as well as success.
 		/// @return A pointer to the request. The system owns this pointer. Returns nullptr if the request cannot be created.
 		//--------------------------------------------------------------------------------------------------
-		HttpRequest* CHttpConnectionSystem::MakeRequest(const HttpRequestDetails & insRequestDetails, HttpRequest::CompletionDelegate inOnComplete)
+		HttpRequest* HttpConnectionSystem::MakeRequest(const HttpRequestDetails & insRequestDetails, HttpRequest::CompletionDelegate inOnComplete)
         {
             //NOTE: The CFNetwork framework handles persistent connections under the hood but it must be
             //coaxed into multiple persistent connections across domains. CFNetwork will reuse connections to the same domain
@@ -200,7 +200,7 @@ namespace ChilliSource
         ///
         /// @param Read stream
         //--------------------------------------------------------------------------------------------------
-        void CHttpConnectionSystem::LogConnectionAddress(CFReadStreamRef inReadStreamRef) const
+        void HttpConnectionSystem::LogConnectionAddress(CFReadStreamRef inReadStreamRef) const
         {
 #ifdef CS_ENABLE_DEBUG
             CFDataRef       sockObj;
@@ -251,7 +251,7 @@ namespace ChilliSource
         ///
         /// @param Read stream
         //--------------------------------------------------------------------------------------------------
-        void CHttpConnectionSystem::ApplySSLSettings(CFReadStreamRef inReadStreamRef) const
+        void HttpConnectionSystem::ApplySSLSettings(CFReadStreamRef inReadStreamRef) const
         {
             CFMutableDictionaryRef pDict = CFDictionaryCreateMutable(kCFAllocatorDefault, 2, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
             CFDictionarySetValue(pDict, kCFStreamSSLValidatesCertificateChain, kCFBooleanFalse);
@@ -267,7 +267,7 @@ namespace ChilliSource
         /// @param Read stream
         /// @return Whether it is open
         //--------------------------------------------------------------------------------------------------
-        bool CHttpConnectionSystem::IsStreamOpen(CFReadStreamRef inReadStreamRef) const
+        bool HttpConnectionSystem::IsStreamOpen(CFReadStreamRef inReadStreamRef) const
         {
             CFStreamStatus CFStatus = CFReadStreamGetStatus(inReadStreamRef);
             return (CFStatus != kCFStreamStatusError &&
@@ -279,7 +279,7 @@ namespace ChilliSource
 		///
 		/// Equivalent to calling the above on every incomplete request in progress.
 		//--------------------------------------------------------------------------------------------------
-		void CHttpConnectionSystem::CancelAllRequests()
+		void HttpConnectionSystem::CancelAllRequests()
         {
 			for(u32 nRequest = 0; nRequest < mapRequests.size(); nRequest++)
             {
@@ -293,7 +293,7 @@ namespace ChilliSource
         ///
         /// @return Success if URL is reachable
         //--------------------------------------------------------------------------------------------------
-        bool CHttpConnectionSystem::CheckReachability() const
+        bool HttpConnectionSystem::CheckReachability() const
         {
             MoFloReachability* pReachability = [MoFloReachability reachabilityForInternetConnection];
             NetworkStatus NetStatus = [pReachability currentReachabilityStatus];
@@ -308,7 +308,7 @@ namespace ChilliSource
 		///
 		/// @param Time between frames
 		//--------------------------------------------------------------------------------------------------
-		void CHttpConnectionSystem::Update(f32 infDT)
+		void HttpConnectionSystem::Update(f32 infDT)
 		{
             RequestVector RequestCopy = mapRequests;
             
@@ -382,13 +382,13 @@ namespace ChilliSource
 		/// @param Request details
 		/// @param Completion delegate
 		//=====================================================================================================
-		CHttpConnectionSystem::CHttpRequest::CHttpRequest(const Networking::HttpRequestDetails & insDetails, const CHttpConnectionSystem::ConnectionInfo& insConnectionInfo, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate)
+		HttpConnectionSystem::CHttpRequest::CHttpRequest(const Networking::HttpRequestDetails & insDetails, const HttpConnectionSystem::ConnectionInfo& insConnectionInfo, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate)
 		: msDetails(insDetails), mbCompleted(false), mCompletionDelegate(inCompletionDelegate), mfActiveTime(0.0f), mbReceivedResponse(false), mbThreadCompleted(false),
         mudwResponseCode(0), mudwBytesRead(0), mbRequestCompleted(false), mConnectionInfo(insConnectionInfo), mudwBytesReadThisBlock(0)
 		{
 			//Begin the read loop
 			//Run this as a threaded task
-			Core::TaskScheduler::ScheduleTask(Core::Task<CFReadStreamRef>(this, &CHttpConnectionSystem::CHttpRequest::PollReadStream, mConnectionInfo.ReadStream));
+			Core::TaskScheduler::ScheduleTask(Core::Task<CFReadStreamRef>(this, &HttpConnectionSystem::CHttpRequest::PollReadStream, mConnectionInfo.ReadStream));
 		}
 		//------------------------------------------------------------------
 		/// Update
@@ -399,7 +399,7 @@ namespace ChilliSource
 		///
 		/// @param Time since last frame
 		//------------------------------------------------------------------
-		void CHttpConnectionSystem::CHttpRequest::Update(f32 infDT)
+		void HttpConnectionSystem::CHttpRequest::Update(f32 infDT)
 		{
 			//Check if the data has finished streaming and invoke the completion delegate on the main thread
 			if(mbCompleted)
@@ -441,7 +441,7 @@ namespace ChilliSource
 		/// Reads data from the open stream when it becomes available
 		/// buffers the data flags on complete
 		//------------------------------------------------------------------
-		void CHttpConnectionSystem::CHttpRequest::PollReadStream(CFReadStreamRef inReadStreamRef)
+		void HttpConnectionSystem::CHttpRequest::PollReadStream(CFReadStreamRef inReadStreamRef)
 		{
             //Poll the stream for data
             CFStreamStatus CFStatus = CFReadStreamGetStatus(inReadStreamRef);
@@ -548,7 +548,7 @@ namespace ChilliSource
 		///
 		/// Close the request and invoke the completion delegate with the cancel response
 		//----------------------------------------------------------------------------------------
-		void CHttpConnectionSystem::CHttpRequest::Cancel()
+		void HttpConnectionSystem::CHttpRequest::Cancel()
 		{
             mbCompleted = true;
             mbReceivedResponse = true;
@@ -559,7 +559,7 @@ namespace ChilliSource
 		///
 		/// @return Whether the request has completed - regardless of success or failure
 		//----------------------------------------------------------------------------------------
-		bool CHttpConnectionSystem::CHttpRequest::HasCompleted() const
+		bool HttpConnectionSystem::CHttpRequest::HasCompleted() const
 		{
 			return mbRequestCompleted && mbThreadCompleted;
 		}
@@ -568,7 +568,7 @@ namespace ChilliSource
 		///
 		/// @return The original request details (i.e. whether it is post/get the body and header)
 		//----------------------------------------------------------------------------------------
-		const Networking::HttpRequestDetails & CHttpConnectionSystem::CHttpRequest::GetDetails() const
+		const Networking::HttpRequestDetails & HttpConnectionSystem::CHttpRequest::GetDetails() const
 		{
 			return msDetails;
 		}
@@ -577,7 +577,7 @@ namespace ChilliSource
 		///
 		/// @return The delegate that will be invoked on request complete
 		//----------------------------------------------------------------------------------------
-		const Networking::HttpRequest::CompletionDelegate & CHttpConnectionSystem::CHttpRequest::GetCompletionDelegate() const
+		const Networking::HttpRequest::CompletionDelegate & HttpConnectionSystem::CHttpRequest::GetCompletionDelegate() const
 		{
 			return mCompletionDelegate;
 		}
@@ -586,7 +586,7 @@ namespace ChilliSource
 		///
 		/// @return The contents of the response as a string. This could be binary data
 		//----------------------------------------------------------------------------------------
-		const std::string & CHttpConnectionSystem::CHttpRequest::GetResponseString() const
+		const std::string & HttpConnectionSystem::CHttpRequest::GetResponseString() const
 		{
 			return mResponseData;
 		}
@@ -595,7 +595,7 @@ namespace ChilliSource
 		///
 		/// @return HTTP response code (i.e. 200 = OK, 400 = Error)
 		//----------------------------------------------------------------------------------------
-		u32 CHttpConnectionSystem::CHttpRequest::GetResponseCode() const
+		u32 HttpConnectionSystem::CHttpRequest::GetResponseCode() const
 		{
 			return mudwResponseCode;
 		}
@@ -604,7 +604,7 @@ namespace ChilliSource
         ///
         /// @return Number of bytes read til now
         //----------------------------------------------------------------------------------------
-        u32 CHttpConnectionSystem::CHttpRequest::GetBytesRead() const
+        u32 HttpConnectionSystem::CHttpRequest::GetBytesRead() const
         {
             return mudwBytesRead;
         }
@@ -613,7 +613,7 @@ namespace ChilliSource
         ///
         /// @return Connection Info
         //----------------------------------------------------------------------------------------
-        const CHttpConnectionSystem::ConnectionInfo& CHttpConnectionSystem::CHttpRequest::GetConnectionInfo()
+        const HttpConnectionSystem::ConnectionInfo& HttpConnectionSystem::CHttpRequest::GetConnectionInfo()
         {
             return mConnectionInfo;
         }

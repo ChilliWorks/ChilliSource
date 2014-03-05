@@ -8,6 +8,7 @@
  */
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/TextureManager.h>
+
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Texture.h>
 #include <ChilliSource/Core/Image/ImageResourceProvider.h>
 
@@ -20,9 +21,9 @@ namespace ChilliSource
 		///
 		/// @return Concrete texture resource based on the render system
 		//----------------------------------------------------------------
-		ChilliSource::Rendering::TextureSPtr CTextureManager::CreateTextureResource()
+		ChilliSource::Rendering::TextureSPtr TextureManager::CreateTextureResource()
 		{
-			Rendering::TextureSPtr pTexture(new CTexture(this));
+			Rendering::TextureSPtr pTexture(new Texture(this));
 			AddRestorableTexture(pTexture);
 			return pTexture;
 		}
@@ -34,9 +35,9 @@ namespace ChilliSource
         ///
         /// @param mopFlow Texture to create Image from
         //----------------------------------------------------------------
-        bool CTextureManager::CreateImageFromTexture(Rendering::Texture* inpTexture, Core::ImageSPtr& outpImage)
+        bool TextureManager::CreateImageFromTexture(Rendering::Texture* inpTexture, Core::ImageSPtr& outpImage)
         {
-            return ((CTexture*)inpTexture)->CreateImage(outpImage);
+            return ((Texture*)inpTexture)->CreateImage(outpImage);
         }
 		//----------------------------------------------------------------
 		/// Create Texture From Image
@@ -46,9 +47,9 @@ namespace ChilliSource
 		/// @param Out: Texture resource
 		/// @return Success
 		//----------------------------------------------------------------
-		bool CTextureManager::CreateTextureFromImage(Core::Image * inpImage, bool inbWithMipsMaps, ChilliSource::Rendering::TextureSPtr& outpTexture)
+		bool TextureManager::CreateTextureFromImage(Core::Image * inpImage, bool inbWithMipsMaps, ChilliSource::Rendering::TextureSPtr& outpTexture)
 		{
-			std::static_pointer_cast<CTexture>(outpTexture)->Init(inpImage, inbWithMipsMaps);
+			std::static_pointer_cast<Texture>(outpTexture)->Init(inpImage, inbWithMipsMaps);
 			return true;
 		}
 		//----------------------------------------------------------------
@@ -58,9 +59,9 @@ namespace ChilliSource
 		/// @param Texture height
 		/// @return Texture resource
 		//----------------------------------------------------------------
-		bool CTextureManager::CreateEmptyTexture(u32 inudwWidth, u32 inudwHeight, Core::Image::Format ineFormat, ChilliSource::Rendering::TextureSPtr& outpTexture)
+		bool TextureManager::CreateEmptyTexture(u32 inudwWidth, u32 inudwHeight, Core::Image::Format ineFormat, ChilliSource::Rendering::TextureSPtr& outpTexture)
 		{
-			std::static_pointer_cast<CTexture>(outpTexture)->Init(inudwWidth, inudwHeight, ineFormat);
+			std::static_pointer_cast<Texture>(outpTexture)->Init(inudwWidth, inudwHeight, ineFormat);
 			outpTexture->SetLoaded(true);
 			return true;
 		}
@@ -70,7 +71,7 @@ namespace ChilliSource
 		/// Backs up all textures that cannot be restored from file in
 		/// memory.
 		//----------------------------------------------------------------
-		void CTextureManager::Backup()
+		void TextureManager::Backup()
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
 			for(std::vector<Rendering::TextureWPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
@@ -84,13 +85,13 @@ namespace ChilliSource
 						{
 //							Core::ImageSPtr pImage;
 //							CreateImageFromTexture(pTexture.get(), pImage);
-//							std::shared_ptr<CTexture> pOpenGLTexture = std::static_pointer_cast<CTexture>(pTexture);
+//							std::shared_ptr<Texture> pOpenGLTexture = std::static_pointer_cast<Texture>(pTexture);
 //							pOpenGLTexture->Reset();
-//							mapBackedUpImages.insert(std::pair<CTexture*, Core::ImageSPtr>(pOpenGLTexture.get(), pImage));
+//							mapBackedUpImages.insert(std::pair<Texture*, Core::ImageSPtr>(pOpenGLTexture.get(), pImage));
 
-							std::shared_ptr<CTexture> pOpenGLTexture = std::static_pointer_cast<CTexture>(pTexture);
+							std::shared_ptr<Texture> pOpenGLTexture = std::static_pointer_cast<Texture>(pTexture);
 							pOpenGLTexture->Reset();
-							mapBackedUpImages.insert(std::pair<CTexture*, Core::ImageSPtr>(pOpenGLTexture.get(), Core::ImageSPtr()));
+							mapBackedUpImages.insert(std::pair<Texture*, Core::ImageSPtr>(pOpenGLTexture.get(), Core::ImageSPtr()));
 						}
 					}
 				}
@@ -102,7 +103,7 @@ namespace ChilliSource
 		///
 		/// Restore all textures either from file or from cached images.
 		//----------------------------------------------------------------
-		void CTextureManager::Restore()
+		void TextureManager::Restore()
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
 
@@ -115,7 +116,7 @@ namespace ChilliSource
 				{
 					if(pTexture->IsLoaded())
 					{
-						std::shared_ptr<CTexture> pOpenGLTexture = std::static_pointer_cast<CTexture>(pTexture);
+						std::shared_ptr<Texture> pOpenGLTexture = std::static_pointer_cast<Texture>(pTexture);
 						Core::ImageSPtr pImage = Core::ImageSPtr(new Core::Image());
 						Core::ResourceSPtr pImageResource = std::static_pointer_cast<Core::Resource>(pImage);
 
@@ -135,7 +136,7 @@ namespace ChilliSource
 						else
 						{
 							//if the image used for this texture was cached, then recreate from it
-							std::unordered_map<CTexture*, Core::ImageSPtr>::iterator it = mapBackedUpImages.find(pOpenGLTexture.get());
+							std::unordered_map<Texture*, Core::ImageSPtr>::iterator it = mapBackedUpImages.find(pOpenGLTexture.get());
 							if (it != mapBackedUpImages.end() && it->second != nullptr)
 							{
 								CreateTextureFromImage(it->second.get(), pOpenGLTexture->HasMipMaps(), pTexture);
@@ -160,7 +161,7 @@ namespace ChilliSource
 		///
 		/// @param The texture pointer.
 		//----------------------------------------------------------------
-		void CTextureManager::AddRestorableTexture(const Rendering::TextureSPtr& inpTexture)
+		void TextureManager::AddRestorableTexture(const Rendering::TextureSPtr& inpTexture)
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
 			mapTextureCache.push_back(Rendering::TextureWPtr(inpTexture));
@@ -174,7 +175,7 @@ namespace ChilliSource
 		///
 		/// @param The texture pointer.
 		//----------------------------------------------------------------
-		void CTextureManager::RemoveRestorableTexture(CTexture* inpTexture)
+		void TextureManager::RemoveRestorableTexture(Texture* inpTexture)
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
 			for(std::vector<Rendering::TextureWPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)

@@ -24,14 +24,14 @@ namespace ChilliSource
         /// on the running device. This cannot be used until
         /// Init() is called on the render system.
         //========================================================
-        class CRenderCapabilities : public Rendering::RenderCapabilities
+        class RenderCapabilities : public Rendering::RenderCapabilities
         {
         public:
-            CS_DECLARE_NAMEDTYPE(CRenderCapabilities);
+            CS_DECLARE_NAMEDTYPE(RenderCapabilities);
             //-------------------------------------------------
 			/// Constructor
 			//-------------------------------------------------
-			CRenderCapabilities();
+			RenderCapabilities();
             //-------------------------------------------------
 			/// Is A
 			///

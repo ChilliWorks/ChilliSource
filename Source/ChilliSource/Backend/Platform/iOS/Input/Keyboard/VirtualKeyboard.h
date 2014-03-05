@@ -10,6 +10,7 @@
 #define _MO_FLO_PLATFORM_IOS_VIRTUAL_KEYBOARD_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #include <ChilliSource/Input/Keyboard/VirtualKeyboard.h>
 
@@ -19,11 +20,11 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CVirtualKeyboard : public Input::VirtualKeyboard
+		class VirtualKeyboard : public Input::VirtualKeyboard
 		{
 		public:
-			CVirtualKeyboard();
-			virtual ~CVirtualKeyboard();
+			VirtualKeyboard();
+			virtual ~VirtualKeyboard();
             //-------------------------------------------
             /// Show 
             ///

@@ -9,61 +9,61 @@
 #include <ChilliSource/Backend/Platform/iOS/Networking/IAP/IAPSystem.h>
 
 #include <ChilliSource/Core/Base/MakeDelegate.h>
-#include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
 namespace ChilliSource
 {
     namespace iOS
     {
-        CIAPSystem::CIAPSystem()
+        IAPSystem::IAPSystem()
         {
             mpStoreKitSystem = [[StoreKitIAPSystem alloc] init];
         }
         //---------------------------------------------------------------
         /// Register Products
         //---------------------------------------------------------------
-        void CIAPSystem::RegisterProducts(const std::vector<Networking::IAPProductRegInfo>& inaProducts)
+        void IAPSystem::RegisterProducts(const std::vector<Networking::IAPProductRegInfo>& inaProducts)
         {
             mProductRegInfos = inaProducts;
         }
         //---------------------------------------------------------------
         /// Get Provider ID
         //---------------------------------------------------------------
-        std::string CIAPSystem::GetProviderID() const
+        std::string IAPSystem::GetProviderID() const
         {
             return "Apple";
         }
         //---------------------------------------------------------------
         /// Get Provider Name
         //---------------------------------------------------------------
-        std::string CIAPSystem::GetProviderName() const
+        std::string IAPSystem::GetProviderName() const
         {
             return "iTunes";
         }
         //---------------------------------------------------------------
         /// Is Purchasing Enabled
         //---------------------------------------------------------------
-        bool CIAPSystem::IsPurchasingEnabled()
+        bool IAPSystem::IsPurchasingEnabled()
         {
             return [mpStoreKitSystem isPurchasingEnabled] == YES;
         }
         //---------------------------------------------------------------
         /// Start Listening For Transaction Updates
         //---------------------------------------------------------------
-        void CIAPSystem::StartListeningForTransactionUpdates(const Networking::IAPTransactionDelegate& inRequestDelegate)
+        void IAPSystem::StartListeningForTransactionUpdates(const Networking::IAPTransactionDelegate& inRequestDelegate)
         {
             mTransactionDelegate = inRequestDelegate;
             
             if(mTransactionDelegate == nullptr)
                 return;
             
-            [mpStoreKitSystem startListeningForTransactions:Core::MakeDelegate(this, &CIAPSystem::OnTransactionUpdate)];
+            [mpStoreKitSystem startListeningForTransactions:Core::MakeDelegate(this, &IAPSystem::OnTransactionUpdate)];
         }
         //---------------------------------------------------------------
         /// On Transaction Update
         //---------------------------------------------------------------
-        void CIAPSystem::OnTransactionUpdate(NSString* inProductID, StoreKitIAP::TransactionResult ineResult, SKPaymentTransaction* inpTransaction)
+        void IAPSystem::OnTransactionUpdate(NSString* inProductID, StoreKitIAP::TransactionResult ineResult, SKPaymentTransaction* inpTransaction)
         {
             if(mTransactionDelegate == nullptr)
                 return;
@@ -110,14 +110,14 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// Stop Listening For Transaction Updates
         //---------------------------------------------------------------
-        void CIAPSystem::StopListeningForTransactionUpdates()
+        void IAPSystem::StopListeningForTransactionUpdates()
         {
             [mpStoreKitSystem stopListeningForTransactions];
         }
         //---------------------------------------------------------------
         /// Request Product Descriptions
         //---------------------------------------------------------------
-        void CIAPSystem::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void IAPSystem::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
             mProductDescDelegate = inRequestDelegate;
             
@@ -137,14 +137,14 @@ namespace ChilliSource
 				[idSet addObject:Core::StringUtils::StringToNSString(inaProductIDs[nID])];
 			}
 			
-            [mpStoreKitSystem requestProducts:idSet forDelegate:Core::MakeDelegate(this, &CIAPSystem::OnProductDescriptionRequestComplete)];
+            [mpStoreKitSystem requestProducts:idSet forDelegate:Core::MakeDelegate(this, &IAPSystem::OnProductDescriptionRequestComplete)];
             
             [idSet release];
         }
         //---------------------------------------------------------------
         /// Request All Product Descriptions
         //---------------------------------------------------------------
-        void CIAPSystem::RequestAllProductDescriptions(const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void IAPSystem::RequestAllProductDescriptions(const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
             std::vector<std::string> aIDs;
             aIDs.reserve(mProductRegInfos.size());
@@ -159,7 +159,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// On Product Description Request Complete
         //---------------------------------------------------------------
-        void CIAPSystem::OnProductDescriptionRequestComplete(NSArray* inProducts)
+        void IAPSystem::OnProductDescriptionRequestComplete(NSArray* inProducts)
         {
             if(mProductDescDelegate == nullptr)
                 return;
@@ -197,7 +197,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// Cancel Product Descriptions Request
         //---------------------------------------------------------------
-        void CIAPSystem::CancelProductDescriptionsRequest()
+        void IAPSystem::CancelProductDescriptionsRequest()
         {
             [mpStoreKitSystem cancelProductsRequest];
         }
@@ -219,7 +219,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// Request Product Purchase
         //---------------------------------------------------------------
-        void CIAPSystem::RequestProductPurchase(const std::string& instrProductID)
+        void IAPSystem::RequestProductPurchase(const std::string& instrProductID)
         {
             CS_ASSERT(IsProductIDRegistered(mProductRegInfos, instrProductID), "Products must be registered with the IAP system before purchasing");
             NSString* productID = Core::StringUtils::StringToNSString(instrProductID);
@@ -228,7 +228,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// Close Transaction
         //---------------------------------------------------------------
-        void CIAPSystem::CloseTransaction(const Networking::IAPTransactionPtr& inpTransaction, const Networking::IAPTransactionCloseDelegate& inDelegate)
+        void IAPSystem::CloseTransaction(const Networking::IAPTransactionPtr& inpTransaction, const Networking::IAPTransactionCloseDelegate& inDelegate)
         {
             [mpStoreKitSystem closeTransactionWithID:Core::StringUtils::StringToNSString(inpTransaction->strTransactionID)];
             
@@ -240,11 +240,11 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// Restore Non Consumable Purchases
         //---------------------------------------------------------------
-        void CIAPSystem::RestoreManagedPurchases()
+        void IAPSystem::RestoreManagedPurchases()
         {
             [mpStoreKitSystem restoreNonConsumablePurchases];
         }
-        CIAPSystem::~CIAPSystem()
+        IAPSystem::~IAPSystem()
         {
             [mpStoreKitSystem release];
         }

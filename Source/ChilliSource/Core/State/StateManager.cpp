@@ -524,7 +524,7 @@ namespace ChilliSource
             {
                 if (mStateHierarchy[i].get() == inpState)
                 {
-                    if (i < mStateHierarchy.size() - 1)
+                    if (i < (s32)mStateHierarchy.size() - 1)
                     {
                         return mStateHierarchy[i + 1];
                     }
@@ -597,7 +597,7 @@ namespace ChilliSource
             CS_LOG_DEBUG("mStateHierarchy size:"+ToString(mStateHierarchy.size()));
 
             
-            for(s32 i=0;i<mStateHierarchy.size();i++){
+            for(u32 i=0;i<mStateHierarchy.size();i++){
                 CS_LOG_DEBUG("("+ToString(i)+") "+ToString((u32)mStateHierarchy[i].get())+" name:"+mStateHierarchy[i]->GetName());
             }
             

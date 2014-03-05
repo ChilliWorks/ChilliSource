@@ -8,11 +8,10 @@
  */
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 
+#include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Base/Screen.h>
-
 #include <ChilliSource/Social/Twitter/TwitterPostSystem.h>
 
 #include <UIKit/UIKit.h>
@@ -37,7 +36,7 @@ namespace ChilliSource
 		/// Constructor
 		///
 		//-----------------------------------------------
-		CTwitterAuthenticationActivity::CTwitterAuthenticationActivity() : mpBaseView(nil),
+		TwitterAuthenticationActivity::TwitterAuthenticationActivity() : mpBaseView(nil),
 																		   mpBusyMessage(nil),
 																		   mpBusyView(nil),
 																		   mpWebView(nil),
@@ -56,7 +55,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// Begin
 		//-----------------------------------------------
-		void CTwitterAuthenticationActivity::Present()
+		void TwitterAuthenticationActivity::Present()
 		{
 			mvPointSize = (Core::Screen::GetOrientedDimensions() / Core::Screen::GetDensity());
 			mvAbsoluteSize = (mvPointSize * mvUnifiedSize.GetRelative()) + mvUnifiedSize.GetAbsolute();
@@ -179,7 +178,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// Presents the authorise URL
 		//-----------------------------------------------
-		void CTwitterAuthenticationActivity::PresentURL(const std::string& instrURL)
+		void TwitterAuthenticationActivity::PresentURL(const std::string& instrURL)
 		{
 			if(!instrURL.empty())
 				ShowAuthoriseURL(instrURL);
@@ -187,7 +186,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// Save PIN entered by user
 		//-----------------------------------------------
-		bool CTwitterAuthenticationActivity::SavePIN(const std::string& instrPIN)
+		bool TwitterAuthenticationActivity::SavePIN(const std::string& instrPIN)
 		{
 			bool bResult = false;
 			std::string strPIN = instrPIN;
@@ -210,7 +209,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// Save PIN From TextField
 		//-----------------------------------------------
-		bool CTwitterAuthenticationActivity::SavePINFromTextField(UITextField* inpTextField)
+		bool TwitterAuthenticationActivity::SavePINFromTextField(UITextField* inpTextField)
 		{
 			std::string strPIN;
 			
@@ -229,7 +228,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// Dismiss
 		//-----------------------------------------------
-		void CTwitterAuthenticationActivity::Dismiss()
+		void TwitterAuthenticationActivity::Dismiss()
 		{
 			if(mpBaseView)
 			{
@@ -309,7 +308,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// Dismiss Text Field Keyboard
 		//-----------------------------------------------
-		void CTwitterAuthenticationActivity::DismissTextFieldKeyboard()
+		void TwitterAuthenticationActivity::DismissTextFieldKeyboard()
 		{
 			if(mpPINTextFeild)
 			{
@@ -320,7 +319,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// Get Alert View Index
 		//-----------------------------------------------
-		NSInteger CTwitterAuthenticationActivity::GetAlertViewIndex(UIAlertView* inpAlertView)
+		NSInteger TwitterAuthenticationActivity::GetAlertViewIndex(UIAlertView* inpAlertView)
 		{
 			if(mpErrorAlert)
 			{
@@ -343,7 +342,7 @@ namespace ChilliSource
 		//-----------------------------------------------
         /// Show/Hide the PIN entry screen
         //-----------------------------------------------
-		void CTwitterAuthenticationActivity::ShowPINEntry(bool inbShow)
+		void TwitterAuthenticationActivity::ShowPINEntry(bool inbShow)
 		{
 			if(mpWebView)
 				mpWebView.hidden = (BOOL)(inbShow == false);
@@ -360,7 +359,7 @@ namespace ChilliSource
 		//-----------------------------------------------
         /// Show/Hide the busy screen
         //-----------------------------------------------
-        void CTwitterAuthenticationActivity::ShowBusyScreen(bool inbShow)
+        void TwitterAuthenticationActivity::ShowBusyScreen(bool inbShow)
 		{
 			if(mpBusyMessage)
 				mpBusyMessage.hidden = (BOOL)(inbShow == false);
@@ -371,7 +370,7 @@ namespace ChilliSource
 		//-----------------------------------------------
         /// On PIN Complete
         //-----------------------------------------------
-		void CTwitterAuthenticationActivity::OnPINComplete()
+		void TwitterAuthenticationActivity::OnPINComplete()
 		{
 			if(mOnPINResultDelegate)
 			{
@@ -385,7 +384,7 @@ namespace ChilliSource
 		//-----------------------------------------------
         /// On PIN Error
         //-----------------------------------------------
-		void CTwitterAuthenticationActivity::OnPINError()
+		void TwitterAuthenticationActivity::OnPINError()
 		{
 			if(!mpAlertDelegate)
 			{
@@ -408,7 +407,7 @@ namespace ChilliSource
 		//-----------------------------------------------
         /// On PIN Cancel
         //-----------------------------------------------
-		void CTwitterAuthenticationActivity::OnPINCancelled()
+		void TwitterAuthenticationActivity::OnPINCancelled()
 		{
 			if(!mpAlertDelegate)
 			{
@@ -435,7 +434,7 @@ namespace ChilliSource
 		//-----------------------------------------------
         /// Display
         //-----------------------------------------------
-        void CTwitterAuthenticationActivity::Display()
+        void TwitterAuthenticationActivity::Display()
 		{
 			ShowPINEntry(false);
 			ShowBusyScreen(true);
@@ -444,7 +443,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// Show authorise web view
 		//-----------------------------------------------
-		void CTwitterAuthenticationActivity::ShowAuthoriseURL(const std::string& instrURL)
+		void TwitterAuthenticationActivity::ShowAuthoriseURL(const std::string& instrURL)
 		{
 			if(!mpWebView)
 			{
@@ -467,7 +466,7 @@ namespace ChilliSource
 
 @implementation UITwitterAuthenticationWebDelegate
 
--(void) SetCPPDelegate:(ChilliSource::iOS::CTwitterAuthenticationActivity*) inpDelegate
+-(void) SetCPPDelegate:(ChilliSource::iOS::TwitterAuthenticationActivity*) inpDelegate
 {
 	mpDelegate = inpDelegate;
 }
@@ -503,7 +502,7 @@ namespace ChilliSource
 
 @implementation UITwitterTextFieldDelegate
 
--(void) SetCPPDelegate:(ChilliSource::iOS::CTwitterAuthenticationActivity *) inpDelegate
+-(void) SetCPPDelegate:(ChilliSource::iOS::TwitterAuthenticationActivity *) inpDelegate
 {
 	mpDelegate = inpDelegate;
 }
@@ -544,7 +543,7 @@ namespace ChilliSource
 
 @implementation UITwitterAlertDelegate
 
--(void) SetCPPDelegate:(ChilliSource::iOS::CTwitterAuthenticationActivity *) inpDelegate
+-(void) SetCPPDelegate:(ChilliSource::iOS::TwitterAuthenticationActivity *) inpDelegate
 {
 	mpDelegate = inpDelegate;
 }

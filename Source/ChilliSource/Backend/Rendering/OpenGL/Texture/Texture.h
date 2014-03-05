@@ -11,20 +11,20 @@
 #define _MOFLOW_OPENGL_TEXTURE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
+#include <ChilliSource/Core/Image/Image.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace ChilliSource
 {
 	namespace OpenGL
 	{
-		class CTexture : public ChilliSource::Rendering::Texture
+		class Texture : public ChilliSource::Rendering::Texture
 		{
 		public:
 
-			virtual ~CTexture();
+			virtual ~Texture();
 			//--------------------------------------------------
 			/// Init
 			///
@@ -149,7 +149,7 @@ namespace ChilliSource
 			static void ClearCache();
 			
 		protected:
-			CTexture(CTextureManager* inpTextureManager);
+			Texture(TextureManager* inpTextureManager);
             //---------------------------------------------------
             /// Error Check
             ///
@@ -167,7 +167,7 @@ namespace ChilliSource
             //---------------------------------------------------
             void UpdateTextureParameters();
 			
-			friend class CTextureManager;
+			friend class TextureManager;
 			
 		protected:
 			GLuint mGLTexID;
@@ -183,7 +183,7 @@ namespace ChilliSource
             
             s32 mdwTextureSlot;
 
-            CTextureManager* mpTextureManager;
+            TextureManager* mpTextureManager;
             Rendering::RenderCapabilities* mpRenderCapabilities;
             
             static u32 udwCurrentActiveSlot;

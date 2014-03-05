@@ -15,6 +15,7 @@
 #define _MOFLO_PLATFORM_IOS_TOUCHSCREEN_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
 
 #include <UIKit/UIKit.h>
@@ -23,11 +24,11 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CTouchScreen : public Input::TouchScreen
+		class TouchScreen : public Input::TouchScreen
 		{
 		public:
-			CTouchScreen();
-			~CTouchScreen();
+			TouchScreen();
+			~TouchScreen();
 			
 			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			

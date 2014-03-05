@@ -28,7 +28,6 @@ namespace ChilliSource
             ///
             /// @return The number of items.
             //------------------------------------------------------------
-            //
             static const u32 EnumerateItems(const std::string& in_stringList)
             {
                 u32 itemCount = 0;
@@ -53,7 +52,7 @@ namespace ChilliSource
         //------------------------------------------------------------
         f32 ParseF32(const std::string& in_string)
         {
-            return strtod(in_string.c_str(), NULL);
+            return (f32)strtod(in_string.c_str(), NULL);
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
@@ -104,7 +103,7 @@ namespace ChilliSource
 			else
 			{
                 Vector2 vRet;
-                sscanf(in_string.c_str(), "%f %f", &vRet.x, &vRet.y);
+				CS_SSCANF(in_string.c_str(), "%f %f", &vRet.x, &vRet.y);
 				return vRet;
 			}
         }
@@ -121,7 +120,7 @@ namespace ChilliSource
 			else
 			{
 				Vector3 vRet;
-                sscanf(in_string.c_str(), "%f %f %f", &vRet.x, &vRet.y, &vRet.z);
+				CS_SSCANF(in_string.c_str(), "%f %f %f", &vRet.x, &vRet.y, &vRet.z);
 				return vRet;
 			}
         }
@@ -138,7 +137,7 @@ namespace ChilliSource
 			else
 			{
 				Vector4 vRet;
-                sscanf(in_string.c_str(), "%f %f %f %f", &vRet.x, &vRet.y, &vRet.z, &vRet.w);
+				CS_SSCANF(in_string.c_str(), "%f %f %f %f", &vRet.x, &vRet.y, &vRet.z, &vRet.w);
 				return vRet;
 			}
         }
@@ -156,11 +155,11 @@ namespace ChilliSource
 			{
                 Matrix4x4 matRet;
                 
-                sscanf(in_string.c_str(), "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f ",
-                       &matRet.m[0],    &matRet.m[1],     &matRet.m[2],     &matRet.m[3],
-                       &matRet.m[4],    &matRet.m[5],     &matRet.m[6],     &matRet.m[7],
-                       &matRet.m[8],    &matRet.m[9],     &matRet.m[10],    &matRet.m[11],
-                       &matRet.m[12],   &matRet.m[13],    &matRet.m[14],    &matRet.m[15]);
+				CS_SSCANF(in_string.c_str(), "%f %f %f %f %f %f %f %f %f %f %f %f %f %f %f %f ",
+						&matRet.m[0], &matRet.m[1], &matRet.m[2], &matRet.m[3],
+						&matRet.m[4], &matRet.m[5], &matRet.m[6], &matRet.m[7],
+						&matRet.m[8], &matRet.m[9], &matRet.m[10], &matRet.m[11],
+						&matRet.m[12], &matRet.m[13], &matRet.m[14], &matRet.m[15]);
                 
                 return matRet;
                 
@@ -179,7 +178,7 @@ namespace ChilliSource
 			else
 			{
                 Quaternion qRet;
-                sscanf(in_string.c_str(), "%f %f %f %f", &qRet.w, &qRet.x, &qRet.y, &qRet.z);
+				CS_SSCANF(in_string.c_str(), "%f %f %f %f", &qRet.w, &qRet.x, &qRet.y, &qRet.z);
                 return qRet;
 			}
         }
@@ -193,12 +192,11 @@ namespace ChilliSource
             
 			if (udwSize == 4)
 			{
-                sscanf(in_string.c_str(), "%f %f %f %f", &cRet.r, &cRet.g, &cRet.b, &cRet.a);
-                
+				CS_SSCANF(in_string.c_str(), "%f %f %f %f", &cRet.r, &cRet.g, &cRet.b, &cRet.a);
 			}
 			else if (udwSize == 3)
 			{
-                sscanf(in_string.c_str(), "%f %f %f", &cRet.r, &cRet.g, &cRet.b);
+                CS_SSCANF(in_string.c_str(), "%f %f %f", &cRet.r, &cRet.g, &cRet.b);
 			}
             return cRet;
         }

@@ -25,9 +25,9 @@ namespace ChilliSource
 		/// @return Concrete shader resource object based on the render
 		/// system
 		//----------------------------------------------------------------
-		ChilliSource::Rendering::ShaderSPtr CShaderManager::CreateShaderResource() const
+		ChilliSource::Rendering::ShaderSPtr ShaderManager::CreateShaderResource() const
 		{
-			return ChilliSource::Rendering::ShaderSPtr(new CShader());
+			return ChilliSource::Rendering::ShaderSPtr(new Shader());
 		}
 		//----------------------------------------------------------------
 		/// Manages Resource With Extension
@@ -35,7 +35,7 @@ namespace ChilliSource
 		/// @param Extension
 		/// @return Whether this object manages object with extension
 		//----------------------------------------------------------------
-		bool CShaderManager::ManagesResourceWithExtension(const std::string &instrExtension) const
+		bool ShaderManager::ManagesResourceWithExtension(const std::string &instrExtension) const
 		{
 			return (instrExtension == kstrGLVertexShaderExtension) || (instrExtension == kstrGLFragmentShaderExtension);
 		}
@@ -50,9 +50,9 @@ namespace ChilliSource
 		/// @param Out: Shader resource
 		/// @return Success
 		//---------------------------------------------------------
-		bool CShaderManager::CreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ChilliSource::Rendering::ShaderSPtr& outpShader)
+		bool ShaderManager::CreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ChilliSource::Rendering::ShaderSPtr& outpShader)
 		{
-			std::shared_ptr<CShader> pGLShader = std::static_pointer_cast<CShader>(outpShader);
+			std::shared_ptr<Shader> pGLShader = std::static_pointer_cast<Shader>(outpShader);
 			
 			//Check if this program already exists
 			MapStringToResourceSPtr::iterator pShaderResource = mMapFilenameToResource.find(instrFilePath);
@@ -98,9 +98,9 @@ namespace ChilliSource
 		/// @param Out: Shader resource
 		/// @return Success
 		//---------------------------------------------------------
-		bool CShaderManager::AsyncCreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ChilliSource::Rendering::ShaderSPtr& outpShader)
+		bool ShaderManager::AsyncCreateShaderProgramFromFile(Core::StorageLocation ineStorageLocation, const std::string &instrFilePath, ChilliSource::Rendering::ShaderSPtr& outpShader)
 		{
-			std::shared_ptr<CShader> pGLShader = std::static_pointer_cast<CShader>(outpShader);
+			std::shared_ptr<Shader> pGLShader = std::static_pointer_cast<Shader>(outpShader);
 			
 			//Check if this program already exists
 			MapStringToResourceSPtr::iterator pShaderResource = mMapFilenameToResource.find(instrFilePath);
@@ -118,7 +118,7 @@ namespace ChilliSource
 			mMapFilenameToResource.insert(std::make_pair(instrFilePath, outpShader));
 			
 			//create a task for loading the shader in the background
-            Core::TaskScheduler::ScheduleTask(Core::Task<Core::StorageLocation, const std::string&, const std::string&, ChilliSource::Rendering::ShaderSPtr&>(this, &CShaderManager::LoadShaderTask, ineStorageLocation, instrFilePath + "." + kstrGLVertexShaderExtension, instrFilePath + "." + kstrGLFragmentShaderExtension, outpShader));
+            Core::TaskScheduler::ScheduleTask(Core::Task<Core::StorageLocation, const std::string&, const std::string&, ChilliSource::Rendering::ShaderSPtr&>(this, &ShaderManager::LoadShaderTask, ineStorageLocation, instrFilePath + "." + kstrGLVertexShaderExtension, instrFilePath + "." + kstrGLFragmentShaderExtension, outpShader));
 			
 			return true;
 		}
@@ -130,9 +130,9 @@ namespace ChilliSource
 		/// @param Pixel shader file path
 		/// @param Out: Shader resource
 		//---------------------------------------------------------
-		void CShaderManager::LoadShaderTask(Core::StorageLocation ineStorageLocation, const std::string &instrVSFilePath, const std::string &instrPSFilePath, ChilliSource::Rendering::ShaderSPtr& outpShader)
+		void ShaderManager::LoadShaderTask(Core::StorageLocation ineStorageLocation, const std::string &instrVSFilePath, const std::string &instrPSFilePath, ChilliSource::Rendering::ShaderSPtr& outpShader)
 		{
-			std::shared_ptr<CShader> pGLShader = std::static_pointer_cast<CShader>(outpShader);
+			std::shared_ptr<Shader> pGLShader = std::static_pointer_cast<Shader>(outpShader);
 			
 			//load the VS
 			std::stringstream sstrVS;
@@ -161,16 +161,16 @@ namespace ChilliSource
 			}
 			
 			//schedule a task for the main thread to compile the shader
-			Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const std::string&, const std::string&, ChilliSource::Rendering::ShaderSPtr&>(this, &CShaderManager::CompileShaderTask, sstrVS.str(), sstrPS.str(), outpShader));
+			Core::TaskScheduler::ScheduleMainThreadTask(Core::Task<const std::string&, const std::string&, ChilliSource::Rendering::ShaderSPtr&>(this, &ShaderManager::CompileShaderTask, sstrVS.str(), sstrPS.str(), outpShader));
 		}
 		//---------------------------------------------------------
 		/// Compile Shader Task
 		///
 		/// @param Out: Shader resource
 		//---------------------------------------------------------
-		void CShaderManager::CompileShaderTask(const std::string& instrVS,const std::string& instrPS, ChilliSource::Rendering::ShaderSPtr& outpShader)
+		void ShaderManager::CompileShaderTask(const std::string& instrVS,const std::string& instrPS, ChilliSource::Rendering::ShaderSPtr& outpShader)
 		{
-			std::shared_ptr<CShader> pGLShader = std::static_pointer_cast<CShader>(outpShader);
+			std::shared_ptr<Shader> pGLShader = std::static_pointer_cast<Shader>(outpShader);
 			
 			//compile the VS
 			if (instrVS != "")
@@ -199,7 +199,7 @@ namespace ChilliSource
 		///
 		/// Restore all the cached shaders after a context loss
 		//-----------------------------------------------------------------
-		void CShaderManager::Restore()
+		void ShaderManager::Restore()
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
 			if(mpRenderSystem)
@@ -208,7 +208,7 @@ namespace ChilliSource
 				{
 					if(it->second->IsLoaded())
 					{
-						std::shared_ptr<CShader> pShader = std::static_pointer_cast<CShader>(it->second);
+						std::shared_ptr<Shader> pShader = std::static_pointer_cast<Shader>(it->second);
 
 						if(pShader->LoadAndCompileShader(pShader->GetStorageLocation(), pShader->GetFilename() + "." + kstrGLVertexShaderExtension, Rendering::ShaderType::k_vertex))
 						{

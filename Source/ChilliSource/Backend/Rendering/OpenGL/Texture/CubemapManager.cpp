@@ -8,6 +8,7 @@
  */
 
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/CubemapManager.h>
+
 #include <ChilliSource/Backend/Rendering/OpenGL/Texture/Cubemap.h>
 #include <ChilliSource/Core/Image/ImageResourceProvider.h>
 
@@ -20,9 +21,9 @@ namespace ChilliSource
 		///
 		/// @return Concrete Cubemap resource based on the render system
 		//----------------------------------------------------------------
-		ChilliSource::Rendering::CubemapSPtr CCubemapManager::CreateCubemapResource()
+		ChilliSource::Rendering::CubemapSPtr CubemapManager::CreateCubemapResource()
 		{
-			Rendering::CubemapSPtr pCubemap(new CCubemap(this));
+			Rendering::CubemapSPtr pCubemap(new Cubemap(this));
 			AddRestorableCubemap(pCubemap);
 			return pCubemap;
 		}
@@ -34,9 +35,9 @@ namespace ChilliSource
 		/// @param Out: Cubemap resource
 		/// @return Success
 		//----------------------------------------------------------------
-		bool CCubemapManager::CreateCubemapFromImages(const std::vector<Core::ResourceSPtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapSPtr& outpCubemap)
+		bool CubemapManager::CreateCubemapFromImages(const std::vector<Core::ResourceSPtr>& inaImages, bool inbWithMipsMaps, ChilliSource::Rendering::CubemapSPtr& outpCubemap)
 		{
-			std::static_pointer_cast<CCubemap>(outpCubemap)->Init(inaImages, inbWithMipsMaps);
+			std::static_pointer_cast<Cubemap>(outpCubemap)->Init(inaImages, inbWithMipsMaps);
 			return true;
 		}
 		//----------------------------------------------------------------
@@ -44,7 +45,7 @@ namespace ChilliSource
 		///
 		/// Restore all Cubemaps either from file or from cached images.
 		//----------------------------------------------------------------
-		void CCubemapManager::Restore()
+		void CubemapManager::Restore()
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
 			for(std::vector<Rendering::CubemapWPtr>::iterator it = mapCubemapCache.begin(); it != mapCubemapCache.end(); ++it)
@@ -53,7 +54,7 @@ namespace ChilliSource
 				{
 					if(pCubemap->IsLoaded())
 					{
-						std::shared_ptr<CCubemap> pOpenGLCubemap = std::static_pointer_cast<CCubemap>(pCubemap);
+						std::shared_ptr<Cubemap> pOpenGLCubemap = std::static_pointer_cast<Cubemap>(pCubemap);
                         
                         //If the Cubemap was loaded from file then reload it.
                         if(pOpenGLCubemap->GetFilename() != "" && pOpenGLCubemap->GetStorageLocation() != Core::StorageLocation::k_none)
@@ -112,7 +113,7 @@ namespace ChilliSource
 		///
 		/// @param The Cubemap pointer.
 		//----------------------------------------------------------------
-		void CCubemapManager::AddRestorableCubemap(const Rendering::CubemapSPtr& inpCubemap)
+		void CubemapManager::AddRestorableCubemap(const Rendering::CubemapSPtr& inpCubemap)
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
 			mapCubemapCache.push_back(Rendering::CubemapWPtr(inpCubemap));
@@ -126,7 +127,7 @@ namespace ChilliSource
 		///
 		/// @param The Cubemap pointer.
 		//----------------------------------------------------------------
-		void CCubemapManager::RemoveRestorableCubemap(CCubemap* inpCubemap)
+		void CubemapManager::RemoveRestorableCubemap(Cubemap* inpCubemap)
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
 			for(std::vector<Rendering::CubemapWPtr>::iterator it = mapCubemapCache.begin(); it != mapCubemapCache.end(); ++it)

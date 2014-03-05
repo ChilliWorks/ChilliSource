@@ -8,10 +8,11 @@
  */
 
 #include <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailCompositionActivity.h>
+
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/EAGLView.h>
-#include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 
 namespace ChilliSource
 {
@@ -20,14 +21,14 @@ namespace ChilliSource
         //-------------------------------------------------------
         /// Constructor
         //-------------------------------------------------------
-        CEmailCompositionActivity::CEmailCompositionActivity()
+        EmailCompositionActivity::EmailCompositionActivity()
             :mpDelegate(nil)
 		{
 		}
         //-------------------------------------------------------
         /// Supported By Device
         //-------------------------------------------------------
-		bool CEmailCompositionActivity::SupportedByDevice()
+		bool EmailCompositionActivity::SupportedByDevice()
         {
 			NSString *reqSysVer = @"3.0";
 			NSString *currSysVer = [[UIDevice currentDevice] systemVersion];
@@ -45,21 +46,21 @@ namespace ChilliSource
         /// @return whether email is supported on the current
         /// device
         //-------------------------------------------------------
-        bool CEmailCompositionActivity::IsSupportedByDevice() const
+        bool EmailCompositionActivity::IsSupportedByDevice() const
         {
             return SupportedByDevice();
         }
         //------------------------------------------------------
         /// Is A
         //------------------------------------------------------
-		bool CEmailCompositionActivity::IsA(Core::InterfaceIDType inID) const
+		bool EmailCompositionActivity::IsA(Core::InterfaceIDType inID) const
         {
-			return inID == CEmailCompositionActivity::InterfaceID;
+			return inID == EmailCompositionActivity::InterfaceID;
 		}
         //-------------------------------------------------------
         /// Present
         //-------------------------------------------------------
-		void CEmailCompositionActivity::Present(const std::vector<Core::UTF8String>& inastrRecipientAddresses, const Core::UTF8String& instrSubject, const Core::UTF8String& instrContents, const SendResultDelegate& inCallback, bool inbFormatAsHtml)
+		void EmailCompositionActivity::Present(const std::vector<Core::UTF8String>& inastrRecipientAddresses, const Core::UTF8String& instrSubject, const Core::UTF8String& instrContents, const SendResultDelegate& inCallback, bool inbFormatAsHtml)
         {
             Attachment emptyAttachment;
             emptyAttachment.mstrFilename = "";
@@ -70,7 +71,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         /// Present With Attachments
         //-------------------------------------------------------
-		void CEmailCompositionActivity::PresentWithAttachment(const std::vector<Core::UTF8String> & inastrRecipientAddresses, const Core::UTF8String & instrSubject, const Core::UTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
+		void EmailCompositionActivity::PresentWithAttachment(const std::vector<Core::UTF8String> & inastrRecipientAddresses, const Core::UTF8String & instrSubject, const Core::UTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
         {
 			mpVC = [[MFMailComposeViewController alloc] init];
             if ([MFMailComposeViewController canSendMail] == false)
@@ -126,7 +127,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         /// Dismiss
         //-------------------------------------------------------
-        void CEmailCompositionActivity::Dismiss()
+        void EmailCompositionActivity::Dismiss()
         {
 			[mpDelegate release];
 			mpVC.mailComposeDelegate = nil;
@@ -142,7 +143,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         /// Destructor
         //-------------------------------------------------------
-        CEmailCompositionActivity::~CEmailCompositionActivity()
+        EmailCompositionActivity::~EmailCompositionActivity()
         {
 			[mpDelegate release];
 			mpDelegate = nil;

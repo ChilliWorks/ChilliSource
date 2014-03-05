@@ -134,7 +134,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Scene);
         CS_FORWARDDECLARE_CLASS(SceneAnimation);
-        CS_FORWARDDECLARE_CLASS(SceneAnimationDesc);
+        CS_FORWARDDECLARE_STRUCT(SceneAnimationDesc);
         CS_FORWARDDECLARE_CLASS(SceneAnimationProvider);
         CS_FORWARDDECLARE_CLASS(SceneAnimDescManager);
         CS_FORWARDDECLARE_CLASS(SceneDescManager);

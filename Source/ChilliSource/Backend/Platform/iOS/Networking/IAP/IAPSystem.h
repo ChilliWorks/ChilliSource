@@ -10,18 +10,19 @@
 #define _MOFLOW_PLATFORM_IOS_IAPSYSTEM_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Networking/IAP/IAPSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/IAP/StoreKitIAPSystem.h>
+#include <ChilliSource/Networking/IAP/IAPSystem.h>
 
 namespace ChilliSource
 {
     namespace iOS
     {
-        class CIAPSystem : public Networking::IAPSystem
+        class IAPSystem : public Networking::IAPSystem
         {
         public:
-            CIAPSystem();
-            ~CIAPSystem();
+            IAPSystem();
+            ~IAPSystem();
 
             //---------------------------------------------------------------
             /// Register Products

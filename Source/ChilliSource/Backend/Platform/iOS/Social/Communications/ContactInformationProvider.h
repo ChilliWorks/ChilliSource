@@ -11,6 +11,7 @@
 #define _MOFLO_PLATFORM_IOS_SOCIAL_COMMUNICATIONS_CCONTACTINFORMATIONSERVICE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Social/Communications/ContactInformationProvider.h>
 
 #include <vector>
@@ -19,7 +20,7 @@ namespace ChilliSource
 {
 	namespace iOS
     {
-		class CContactInformationProvider : public Social::ContactInformationProvider
+		class ContactInformationProvider : public Social::ContactInformationProvider
 		{
 		public:
 			virtual bool IsA(Core::InterfaceIDType inID) const override;;

@@ -211,7 +211,7 @@ BOOL kbUseAnimationForDismiss = YES;
 //-----------------------------------------------
 - (void) BeginListeningForGKLocalAuthenticationChanged
 {
-    if(ChilliSource::iOS::CGameCentreSystem::IsSupported())
+    if(ChilliSource::iOS::GameCentreSystem::IsSupported())
     {
         //Register for notifications
         [[NSNotificationCenter defaultCenter] addObserver:self 
@@ -225,7 +225,7 @@ BOOL kbUseAnimationForDismiss = YES;
 //-----------------------------------------------
 - (void) StopListeningForGKLocalAuthenticationChanged
 {
-    if(ChilliSource::iOS::CGameCentreSystem::IsSupported())
+    if(ChilliSource::iOS::GameCentreSystem::IsSupported())
     {
         [[NSNotificationCenter defaultCenter] removeObserver:self 
                                                         name:GKPlayerAuthenticationDidChangeNotificationName 

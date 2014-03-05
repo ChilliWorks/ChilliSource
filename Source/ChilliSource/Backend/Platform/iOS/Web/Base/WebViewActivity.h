@@ -12,9 +12,10 @@
 #define _MO_FLO_PLATFORM_IOS_WEB_VIEW_ACTIVITY_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Web/Base/WebViewActivity.h>
-#include <ChilliSource/Core/Math/UnifiedCoordinates.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/Math/UnifiedCoordinates.h>
+#include <ChilliSource/Web/Base/WebViewActivity.h>
 
 #include <Foundation/NSObject.h>
 #include <UIKit/UIWebView.h>
@@ -28,10 +29,10 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class CWebViewActivity : public Web::WebViewActivity
+		class WebViewActivity : public Web::WebViewActivity
 		{
 		public:
-			CWebViewActivity();
+			WebViewActivity();
 			
 			//-----------------------------------------------
 			/// Present
@@ -148,9 +149,9 @@ namespace ChilliSource
 
 @interface UIWebDelegate : NSObject<UIWebViewDelegate>
 {
-	ChilliSource::iOS::CWebViewActivity* mpDelegate;
+	ChilliSource::iOS::WebViewActivity* mpDelegate;
 }
--(void) SetCPPDelegate:(ChilliSource::iOS::CWebViewActivity*) inpDelegate;
+-(void) SetCPPDelegate:(ChilliSource::iOS::WebViewActivity*) inpDelegate;
 -(void) OnDismissButtonPressed:(id)inpObject;
 
 @end

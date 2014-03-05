@@ -10,6 +10,7 @@
 #define _MOFLOW_PLATFORM_IOS_REMOTENOTIFICATIONSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
 
 #include <UIKit/UIKit.h>
@@ -18,7 +19,7 @@ namespace ChilliSource
 {
     namespace iOS
     {
-        class CRemoteNotificationSystem : public Core::RemoteNotificationSystem
+        class RemoteNotificationSystem : public Core::RemoteNotificationSystem
         {
         public:
             //-------------------------------------------------------------------------

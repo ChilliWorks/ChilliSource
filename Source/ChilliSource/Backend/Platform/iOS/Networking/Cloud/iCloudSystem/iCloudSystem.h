@@ -10,8 +10,9 @@
 #define _MOFLO_PLATFORM_IOS_ICLOUDSYSTEM_H
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Networking/Cloud/CloudStorageSystem.h>
+#include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/Cloud/iCloudSystem/MoFlowUIDocument.h>
+#include <ChilliSource/Networking/Cloud/CloudStorageSystem.h>
 #include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
 
 #import <UIKit/UIKit.h>
@@ -22,14 +23,14 @@ namespace ChilliSource
 {
 	namespace iOS
     {
-        class CiCloudSystem : public Networking::CloudStorageSystem
+        class iCloudSystem : public Networking::CloudStorageSystem
         {
         public:
-            CS_DECLARE_NAMEDTYPE(CiCloudSystem);
+            CS_DECLARE_NAMEDTYPE(iCloudSystem);
             
             typedef std::function<void(MoFlowUIDocument*, bool)> OnOpenCloudFileCompletedDelegate;
             
-            CiCloudSystem(ChilliSource::Networking::HttpConnectionSystem* inpcHttpConnectionSystem);
+            iCloudSystem(ChilliSource::Networking::HttpConnectionSystem* inpcHttpConnectionSystem);
             
             //----------------------------------------------------------
             /// Is A
