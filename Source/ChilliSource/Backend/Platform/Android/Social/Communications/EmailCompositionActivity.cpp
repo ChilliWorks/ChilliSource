@@ -71,15 +71,15 @@ namespace ChilliSource
 			std::string strFilename;
 			if (inAttachment.mstrFilename.size() > 0)
 			{
-				if (inAttachment.meStorageLocation == Core::StorageLocation::k_package || (inAttachment.meStorageLocation == Core::StorageLocation::k_DLC && Core::Application::GetFileSystemPtr()->DoesFileExistInCachedDLC(inAttachment.mstrFilename) == false))
+				if (inAttachment.meStorageLocation == Core::StorageLocation::k_package || (inAttachment.meStorageLocation == Core::StorageLocation::k_DLC && Core::Application::Get()->GetFileSystem()->DoesFileExistInCachedDLC(inAttachment.mstrFilename) == false))
 				{
-					Core::Application::GetFileSystemPtr()->CreateDirectory(Core::StorageLocation::k_cache, kstrTempAttachmentDirectory);
-					Core::Application::GetFileSystemPtr()->CopyFile(inAttachment.meStorageLocation, inAttachment.mstrFilename, Core::StorageLocation::k_cache, kstrTempAttachmentDirectory + inAttachment.mstrFilename);
-					strFilename = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_cache) + kstrTempAttachmentDirectory + inAttachment.mstrFilename;
+					Core::Application::Get()->GetFileSystem()->CreateDirectory(Core::StorageLocation::k_cache, kstrTempAttachmentDirectory);
+					Core::Application::Get()->GetFileSystem()->CopyFile(inAttachment.meStorageLocation, inAttachment.mstrFilename, Core::StorageLocation::k_cache, kstrTempAttachmentDirectory + inAttachment.mstrFilename);
+					strFilename = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(Core::StorageLocation::k_cache) + kstrTempAttachmentDirectory + inAttachment.mstrFilename;
 				}
 				else
 				{
-					strFilename = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(inAttachment.meStorageLocation) + inAttachment.mstrFilename;
+					strFilename = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(inAttachment.meStorageLocation) + inAttachment.mstrFilename;
 				}
 			}
 
@@ -119,7 +119,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		EmailCompositionActivity::~EmailCompositionActivity()
 		{
-			Core::Application::GetFileSystemPtr()->DeleteDirectory(Core::StorageLocation::k_cache, kstrTempAttachmentDirectory);
+			Core::Application::Get()->GetFileSystem()->DeleteDirectory(Core::StorageLocation::k_cache, kstrTempAttachmentDirectory);
 		}
 	}
 }

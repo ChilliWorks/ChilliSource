@@ -46,121 +46,513 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-        //---Const Definitions
-		const f32 kfDefaultUpdateInterval	= 1.0f/60.0f;
-		const f32 kfUpdateClampThreshold	= 0.33f;                    //The number of seconds after which time between frames is clamped
-		const f32 kfUpdateIntervalMax		= kfUpdateClampThreshold;	//We never carry more than this to the next frame
+        namespace
+        {
+            const f32 k_defaultUpdateInterval = 1.0f/60.0f;
+            const f32 k_updateClampThreshold = 0.33f;
+            const f32 k_updateIntervalMax = k_updateClampThreshold;
+            
+            //----------------------------------------------------
+            /// TODO:
+            //----------------------------------------------------
+            bool ResolutionSortPredicate(const ResourceDirectoryInfo& in_lhs, const ResourceDirectoryInfo& in_rhs)
+            {
+                return in_lhs.m_maxRes < in_rhs.m_maxRes;
+            }
+        }
         
-        //---Static Definitions
-        TimeIntervalSecs Application::uddwCurrentAppTime = 0;
-		
-        StateManager Application::mStateMgr;
-        Rendering::FontSPtr Application::pDefaultFont;
-        Rendering::MeshSPtr Application::pDefaultMesh;
-        Rendering::MaterialSPtr Application::pDefaultMaterial;
-
-        bool Application::mbHasTouchInput = false;
-        bool Application::mbUpdateSystems = true;
-        f32 Application::mfUpdateInterval = kfDefaultUpdateInterval;
-        f32 Application::mfUpdateSpeed = 1.0f;
+        Application* Application::s_application = nullptr;
         
-        Rendering::RenderSystem* Application::mpRenderSystem = nullptr;
-        Input::InputSystem * Application::mpInputSystem = nullptr;
-        PlatformSystem* Application::pPlatformSystem = nullptr;
-		Audio::AudioSystem* Application::pAudioSystem = nullptr;
-		Rendering::Renderer* Application::mpRenderer = nullptr;
-		FileSystem* Application::mspFileSystem = nullptr;
-        
-        std::vector<IUpdateable*> Application::mUpdateableSystems;
-        std::vector<SystemSPtr> Application::mSystems;
-        
-        ScreenOrientation Application::meDefaultOrientation = ScreenOrientation::k_landscapeRight;
-        
-        ResourceManagerDispenser* Application::mpResourceManagerDispenser = nullptr;
-
-        SystemConfirmDialog::Delegate Application::mActiveSysConfirmDelegate;
-
-        f32 Application::s_updateIntervalRemainder = 0.0f;
-        bool Application::s_shouldNotifyConnectionsResumeEvent = false;
-        bool Application::s_isFirstFrame = true;
-        bool Application::s_isSuspending = false;
-        
-		//--------------------------------------------------------------------------------------------------
-		/// Constructor
-		///
-		/// Default
-		//--------------------------------------------------------------------------------------------------
+        //----------------------------------------------------
+        //----------------------------------------------------
+        Application* Application::Get()
+        {
+            return s_application;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
 		Application::Application()
+        : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_inputSystem(nullptr), m_platformSystem(nullptr), m_audioSystem(nullptr),
+        m_renderer(nullptr), m_fileSystem(nullptr), m_defaultOrientation(ScreenOrientation::k_landscapeRight), m_resourceManagerDispenser(nullptr), m_updateIntervalRemainder(0.0f),
+        m_shouldNotifyConnectionsResumeEvent(false), m_isFirstFrame(true), m_isSuspending(false)
 		{
-            mpResourceManagerDispenser = new ResourceManagerDispenser(this);
-            mpComponentFactoryDispenser = new ComponentFactoryDispenser(this);
-            mStateMgr.SetOwningApplication(this);
-
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+		std::string Application::GetAppVersion()
+		{
+			return m_platformSystem->GetAppVersion();
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+		TimeIntervalSecs Application::GetAppElapsedTime()
+		{
+			return m_currentAppTime;
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+        TimeIntervalSecs Application::GetSystemTime()
+        {
+            return time(0);
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+		TimeIntervalMs Application::GetSystemTimeInMilliseconds()
+		{
+			return m_platformSystem->GetSystemTimeMS();
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+		void Application::SetUpdateInterval(f32 infUpdateInterval)
+		{
+			m_updateInterval = infUpdateInterval;
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+		f32 Application::GetUpdateInterval()
+		{
+			return m_updateInterval;
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+		f32 Application::GetUpdateIntervalMax()
+		{
+			return k_updateIntervalMax;
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void Application::SetUpdateSpeed(f32 infSpeed)
+        {
+            m_updateSpeed = infSpeed;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void Application::Quit()
+        {
+            m_platformSystem->TerminateUpdater();
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        const Rendering::FontSPtr& Application::GetDefaultFont()
+        {
+            return m_defaultFont;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        const Rendering::MeshSPtr& Application::GetDefaultMesh()
+        {
+            return m_defaultMesh;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        const Rendering::MaterialSPtr& Application::GetDefaultMaterial()
+        {
+            return m_defaultMaterial;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        StateManager* Application::GetStateManager()
+        {
+            return &m_stateManager;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        Rendering::Renderer* Application::GetRenderer()
+        {
+            return m_renderer;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        Rendering::RenderSystem* Application::GetRenderSystem()
+        {
+            return m_renderSystem;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        PlatformSystem* Application::GetPlatformSystem()
+        {
+            return m_platformSystem;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        Input::InputSystem* Application::GetInputSystem()
+        {
+            return m_inputSystem;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        Audio::AudioSystem* Application::GetAudioSystem()
+        {
+            return m_audioSystem;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        FileSystem* Application::GetFileSystem()
+        {
+            return m_fileSystem;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        void Application::SetRenderer(Rendering::Renderer* in_system)
+        {
+            m_renderer = in_system;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        void Application::SetRenderSystem(Rendering::RenderSystem* in_system)
+        {
+            m_renderSystem = in_system;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        void Application::SetPlatformSystem(PlatformSystem* in_system)
+        {
+            m_platformSystem = in_system;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        void Application::SetInputSystem(Input::InputSystem* in_system)
+        {
+            m_inputSystem = in_system;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        void Application::SetAudioSystem(Audio::AudioSystem* in_system)
+        {
+            m_audioSystem = in_system;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        void Application::SetFileSystem(FileSystem* in_system)
+        {
+            m_fileSystem = in_system;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+		void Application::OnInitialise()
+		{
+            CS_ASSERT(s_application == nullptr, "Application already initialised!");
+            s_application = this;
+            
+            m_resourceManagerDispenser = new ResourceManagerDispenser(this);
+            m_componentFactoryDispenser = new ComponentFactoryDispenser(this);
+            m_stateManager.SetOwningApplication(this);
+            
 #ifdef CS_TARGETPLATFORM_WINDOWS
 			//Because windows by default is landscape, this needs to be flipped.
-			meDefaultOrientation = Core::ScreenOrientation::k_portraitUp;
+			m_defaultOrientation = Core::ScreenOrientation::k_portraitUp;
 #endif
             
-			pPlatformSystem = PlatformSystem::Create();
-		}
-        //--------------------------------------------------------------------------------------------------
-        /// Resolution Sort Predicate
-        ///
-        /// Sorts by directory info resolution (lowest to highest)
-        //--------------------------------------------------------------------------------------------------
-        bool ResolutionSortPredicate(const ResourceDirectoryInfo& inLHS, const ResourceDirectoryInfo& inRHS)
-        {
-            return inLHS.udwMaxRes < inRHS.udwMaxRes;
-        }
-		//--------------------------------------------------------------------------------------------------
-		/// Run
-		///
-		/// Launch the application's setup code and cause it to begin it's update loop
-		//--------------------------------------------------------------------------------------------------
-		void Application::Run()
-		{
 			//Initialise the platform specific API's
-			pPlatformSystem->Init();
+            m_platformSystem = PlatformSystem::Create();
+			m_platformSystem->Init();
             
 			//Set the screen helper classes dimensions
-            Core::Screen::SetRawDimensions(pPlatformSystem->GetScreenDimensions());
-            Core::Screen::SetOrientation(meDefaultOrientation);
-            Core::Screen::SetDensity(pPlatformSystem->GetScreenDensity());
+            Core::Screen::SetRawDimensions(m_platformSystem->GetScreenDimensions());
+            Core::Screen::SetOrientation(m_defaultOrientation);
+            Core::Screen::SetDensity(m_platformSystem->GetScreenDensity());
             
             DetermineResourceDirectories();
-
+            
             //init tweakable constants and local data store.
 			new TweakableConstants();
 			new LocalDataStore();
-
+            
             //Set up the device helper
-            Device::Init(pPlatformSystem);
-
+            Device::Init(m_platformSystem);
+            
 			//Set up the task scheduler
 			TaskScheduler::Init(Core::Device::GetNumCPUCores() * 2);
-
+            
 			//System setup
-			pPlatformSystem->CreateDefaultSystems(mSystems);
+			m_platformSystem->CreateDefaultSystems(m_systems);
             
 			CreateSystems();
 			PostCreateSystems();
             LoadDefaultResources();
-			OnScreenChangedOrientation(meDefaultOrientation);
-
-			if (mStateMgr.GetActiveScenePtr() == nullptr)
+			OnScreenChangedOrientation(m_defaultOrientation);
+            
+            Initialise();
+            
+			if (m_stateManager.GetActiveScenePtr() == nullptr)
+            {
 				PushInitialState();
-
+            }
+            
 			//Register for update events
 			LocalDataStore::GetSingleton().SubscribeToApplicationSuspendEvent();
-
+            
 			//Begin the update loop
-			pPlatformSystem->Run();
+			m_platformSystem->Run();
 		}
-        //--------------------------------------------------------------------------------------------------
-        /// Determine Resource Directories
-        ///
-        /// Depedending on the device decide which folders resources should be loaded from
-        //--------------------------------------------------------------------------------------------------
+        //----------------------------------------------------
+        //----------------------------------------------------
+		void Application::OnResume()
+		{
+            m_shouldNotifyConnectionsResumeEvent = true;
+            
+			//We must restart the application timer. This will automatically restart system updates
+			m_platformSystem->SetUpdaterActive(true);
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+		void Application::OnUpdate(f32 in_deltaTime, TimeIntervalSecs in_timestamp)
+		{
+            if(m_shouldNotifyConnectionsResumeEvent == true)
+			{
+				m_shouldNotifyConnectionsResumeEvent = false;
+				ResumeApplication();
+			}
+            
+            if(m_isSuspending)
+            {
+                // Updating after told to suspend so early out
+                return;
+            }
+            
+#ifdef CS_ENABLE_DEBUGSTATS
+            Debugging::DebugStats::RecordEvent("FrameTime", infDt);
+			Debugging::DebugStats::RecordEvent("FPS", 1.0f/infDt);
+#endif
+            
+			//Update the app time since start
+			m_currentAppTime = in_timestamp;
+            
+			TaskScheduler::ExecuteMainThreadTasks();
+            
+            //We do not need to render as often as we update so this callback will be triggered
+            //less freqenctly than the update frequency suggests. We must work out how many times to update based on the time since last frame
+            //and our actual update frequency. We carry the remainder to the next frame until we have a full update cycle
+            m_updateIntervalRemainder = MathUtils::Min(m_updateIntervalRemainder + in_deltaTime, GetUpdateIntervalMax());
+            
+			//Force the input system to distribute any buffered input
+			if(m_inputSystem != nullptr)
+			{
+				m_inputSystem->FlushBufferedInput();
+			}
+            
+            while((m_updateIntervalRemainder >= Application::GetUpdateInterval()) || m_isFirstFrame)
+            {
+                m_updateIntervalRemainder -=  Application::GetUpdateInterval();
+                m_stateManager.FixedUpdate(Application::GetUpdateInterval());
+                
+                m_isFirstFrame = false;
+            }
+            
+            //Tell the state manager to update the active state
+            Update(in_deltaTime);
+            
+            //Render the scene
+            m_renderer->RenderToScreen(m_stateManager.GetActiveScenePtr());
+            
+#ifdef CS_ENABLE_DEBUGSTATS
+			DebugStats::Clear();
+#endif
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+		void Application::OnScreenChangedOrientation(ScreenOrientation in_orientation)
+		{
+			Screen::SetOrientation(in_orientation);
+            
+			if(m_renderSystem)
+			{
+				m_renderSystem->OnScreenOrientationChanged(Core::Screen::GetOrientedWidth(), Core::Screen::GetOrientedHeight());
+			}
+            
+			//Flip the screen
+			SetOrientation(in_orientation);
+			ApplicationEvents::GetScreenOrientationChangedEvent().NotifyConnections(in_orientation);
+            
+			CS_LOG_DEBUG("Screen Oriented Notification");
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+		void Application::OnScreenResized(u32 in_width, u32 in_height)
+		{
+			Screen::SetRawDimensions(Core::Vector2((f32)in_width, (f32)in_height));
+
+			if (m_renderSystem)
+			{
+				m_renderSystem->OnScreenOrientationChanged(in_width, in_height);
+			}
+
+			if (m_inputSystem != nullptr)
+			{
+				Input::TouchScreen * pTouchScreen = m_inputSystem->GetTouchScreenPtr();
+				if (pTouchScreen != nullptr)
+				{
+					pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());
+				}
+			}
+			ApplicationEvents::GetScreenResizedEvent().NotifyConnections(in_width, in_height);
+            
+			CS_LOG_DEBUG("Screen resized Notification");
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+		void Application::OnApplicationMemoryWarning()
+		{
+			CS_LOG_DEBUG("Memory Warning. Clearing resource cache...");
+			ResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
+			ApplicationEvents::GetLowMemoryEvent().NotifyConnections();
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+		void Application::OnGoBack()
+		{
+			CS_LOG_DEBUG("Go back event.");
+			m_stateManager.GetActiveState()->OnGoBack();
+			ApplicationEvents::GetGoBackEvent().NotifyConnections();
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+		void Application::OnSuspend()
+		{
+            CS_LOG_DEBUG("App Suspending...");
+            
+			m_isSuspending = true;
+            
+			//Tell the active state to save it's data etc
+			m_stateManager.Pause();
+            
+			//We must invalidate the application timer. This will stop sub-system updates
+			m_platformSystem->SetUpdaterActive(false);
+            
+			//We need to rebind or rebuild the context if it was stolen
+			if(m_renderSystem)
+			{
+				m_renderSystem->Suspend();
+			}
+            
+			ApplicationEvents::GetSuspendEvent().NotifyConnections();
+			ApplicationEvents::GetLateSuspendEvent().NotifyConnections();
+			
+			CS_LOG_DEBUG("App Finished Suspending...");
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void Application::OnDestroy()
+        {
+            Destroy();
+
+            m_stateManager.DestroyAll();
+
+			m_defaultFont.reset();
+			m_defaultMesh.reset();
+			m_defaultMaterial.reset();
+
+			CS_SAFEDELETE(m_platformSystem);
+            CS_SAFEDELETE(m_resourceManagerDispenser);
+            CS_SAFEDELETE(m_componentFactoryDispenser);
+            
+			//We have an issue with the order of destruction of systems.
+			while(m_systems.empty() == false)
+			{
+				SystemSPtr system = m_systems.back();
+				m_systems.pop_back();
+				system.reset();
+			}
+            
+            s_application = nullptr;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void Application::AddSystem(const SystemSPtr& in_system)
+        {
+            m_systems.push_back(in_system);
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+		System* Application::GetSystem(InterfaceIDType in_interfaceID)
+		{
+			for (std::vector<SystemSPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
+			{
+				if ((*it)->IsA(in_interfaceID))
+				{
+					return (*it).get();
+				}
+			}
+			
+			CS_LOG_WARNING("Application cannot find implementing systems");
+			return nullptr;
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+		void Application::PostCreateSystems()
+		{
+            //Loop round all the created systems and categorise them
+			for(std::vector<SystemSPtr>::iterator it = m_systems.begin(); it != m_systems.end(); ++it)
+			{
+				if ((*it)->IsA(IUpdateable::InterfaceID))
+				{
+					m_updateableSystems.push_back((*it)->GetInterface<IUpdateable>());
+				}
+				if ((*it)->IsA(IComponentProducer::InterfaceID)) 
+				{
+                    IComponentProducer* pProducer = (*it)->GetInterface<IComponentProducer>();
+                    u32 udwNumFactoriesInSystem = pProducer->GetNumComponentFactories();
+
+                    for(u32 i=0; i<udwNumFactoriesInSystem; ++i)
+                    {
+                        m_componentFactoryDispenser->RegisterComponentFactory(pProducer->GetComponentFactoryPtr(i));
+                    }
+				}
+				if ((*it)->IsA(ResourceProvider::InterfaceID)) 
+				{
+					m_resourceProviders.push_back((*it)->GetInterface<ResourceProvider>());
+				}
+			}
+
+            //Give the resource managers their providers
+            m_resourceManagerDispenser->SetResourceProviders(m_resourceProviders);
+
+            m_platformSystem->PostCreateSystems();
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void Application::LoadDefaultResources()
+        {
+            Json::Value jRoot;
+            if(Utils::ReadJson(StorageLocation::k_package, "App.config", &jRoot) == true)
+            {
+                if(jRoot.isMember("MaxFPS"))
+                {
+                    u32 udwMaxFPS = jRoot["MaxFPS"].asUInt();
+                    m_platformSystem->SetMaxFPS(udwMaxFPS);
+                }
+                
+                if(jRoot.isMember("MasterText"))
+                {
+                    StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["MasterText"].get("Location", "Package").asString());
+                    std::string strPath = jRoot["MasterText"].get("Path", "").asString();
+                    LocalisedText::RefreshMasterText(eStorageLocation, strPath);
+                }
+                
+                if(jRoot.isMember("DefaultMesh"))
+                {
+                    StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultMesh"].get("Location", "Package").asString());
+                    std::string strPath = jRoot["DefaultMesh"].get("Path", "").asString();
+                    m_defaultMesh = LOAD_RESOURCE(Rendering::Mesh, eStorageLocation, strPath);
+                }
+                
+                if(jRoot.isMember("DefaultFont"))
+                {
+                    StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultFont"].get("Location", "Package").asString());
+                    std::string strPath = jRoot["DefaultFont"].get("Path", "").asString();
+                    m_defaultFont = LOAD_RESOURCE(Rendering::Font, eStorageLocation, strPath);
+                }
+                
+                if(jRoot.isMember("DefaultMaterial"))
+                {
+                    StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultMaterial"].get("Location", "Package").asString());
+                    std::string strPath = jRoot["DefaultMaterial"].get("Path", "").asString();
+                    m_defaultMaterial = LOAD_RESOURCE(Rendering::Material, eStorageLocation, strPath);
+                }
+            }
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
         void Application::DetermineResourceDirectories()
         {
             //Get a list of the resource directories and determine which one this device should be
@@ -178,10 +570,10 @@ namespace ChilliSource
             for(std::vector<ResourceDirectoryInfo>::const_iterator it = aDirectoryInfos.begin(); it != aDirectoryInfos.end(); ++it)
             {
                 //The density and the resolution must both be under the maximum for the directory to be selected.
-                if(udwCurrentRes <= it->udwMaxRes && fCurrenctDensity <= it->fMaxDensity)
+                if(udwCurrentRes <= it->m_maxRes && fCurrenctDensity <= it->m_maxDensity)
                 {
-                    strDeviceDir = it->strDirectory;
-                    fAssetDensity = it->fResourcesDensity;
+                    strDeviceDir = it->m_directory;
+                    fAssetDensity = it->m_resourcesDensity;
                     break;
                 }
             }
@@ -194,696 +586,64 @@ namespace ChilliSource
             
             FileSystem::SetResourceDirectories(strDeviceDir, strDefaultDeviceDir, strDefaultDir, fAssetDensity);
         }
-		//--------------------------------------------------------------------------------------------------
-		/// Get System Implementing
-		///
-		/// Looks for a system that implements the given interface (i.e. a 2DRenderSystem etc)
-		/// @param The type ID of the system you wish to implement
-		/// @return System that implements the given interface or nullptr if no system
-		//--------------------------------------------------------------------------------------------------
-		SystemSPtr Application::GetSystemImplementing(InterfaceIDType inInterfaceID)
+        //----------------------------------------------------
+        //----------------------------------------------------
+		void Application::Update(f32 in_detaTime)
 		{
-			for (std::vector<SystemSPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
-			{
-				if ((*it)->IsA(inInterfaceID)) 
-				{
-					return (*it);
-				}
-			}
-			
-			CS_LOG_WARNING("Application cannot find implementing systems");
-			return SystemSPtr();
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Get Systems Implementing
-		///
-		/// Looks for systems that implements the given interface (i.e. a 2DRenderSystem etc)
-		/// and fills an array with them.
-		/// @param The type ID of the system you wish to implement
-		//--------------------------------------------------------------------------------------------------
-		void Application::GetSystemsImplementing(InterfaceIDType inInterfaceID, std::vector<SystemSPtr> & outSystems)
-		{
-			outSystems.clear();
-			for (std::vector<SystemSPtr>::const_iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
-			{
-				if ((*it)->IsA(inInterfaceID)) 
-				{
-					outSystems.push_back((*it));
-				}
-			}
-			
-			CS_LOG_WARNING("Application cannot find implementing systems");
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Get Resource Provider Producing
-		///
-		/// Looks for a resource provider that can create a resource of type
-		/// @param The type ID of the resource you wish to create (i.e. Model, Texture)
-		/// @return Resource provider that loads the resource type
-		//--------------------------------------------------------------------------------------------------
-		ResourceProvider* Application::GetResourceProviderProducing(InterfaceIDType inInterfaceID, const std::string & inExtension)
-		{
-			for (std::vector<ResourceProvider*>::iterator pProv = mResourceProviders.begin(); pProv != mResourceProviders.end(); ++pProv) 
-			{
-				if ((*pProv)->CanCreateResourceFromFileWithExtension(inExtension)) 
-				{
-					return (*pProv);
-				}
-			}
-			
-			CS_LOG_WARNING("Application cannot find resource provider");
-			return nullptr;
-		}
-        //--------------------------------------------------------------------------------------------------
-        /// Get State Manager
-        ///
-        /// @return Application state manager
-        //--------------------------------------------------------------------------------------------------
-        StateManager& Application::GetStateManager() 
-        {
-            return mStateMgr;
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// Get State Manager Pointer
-        ///
-        /// @return Handle to application state manager
-        //--------------------------------------------------------------------------------------------------
-        StateManager* Application::GetStateManagerPtr() 
-        {
-            return &mStateMgr;
-        }
-		//--------------------------------------------------------------------------------------------------
-		/// Get App Elapsed Time
-		///
-		/// @return The time elapsed since the application began
-		//--------------------------------------------------------------------------------------------------
-		TimeIntervalSecs Application::GetAppElapsedTime() 
-		{
-			return uddwCurrentAppTime;
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Set App Elapsed Time
-		///
-		/// @param The time elapsed since the application began
-		//--------------------------------------------------------------------------------------------------
-		void Application::SetAppElapsedTime(TimeIntervalSecs inElapsedTime)
-		{
-			uddwCurrentAppTime = inElapsedTime;
-		}
-        //--------------------------------------------------------------------------------------------------
-        /// Get System Time
-        ///
-        /// @return System clock time in seconds since epoch
-        //--------------------------------------------------------------------------------------------------
-        TimeIntervalSecs Application::GetSystemTime()
-        {
-            return time(0);
-        }
-		//--------------------------------------------------------------------------------------------------
-		/// Get System Time In Milliseconds
-		///
-		/// @return System clock time in milliseconds since epoch
-		//--------------------------------------------------------------------------------------------------
-		TimeIntervalMs Application::GetSystemTimeInMilliseconds()
-		{
-			return pPlatformSystem->GetSystemTimeMS();
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Get App Version
-		///
-		/// @return String containing the application version number
-		//--------------------------------------------------------------------------------------------------
-		std::string Application::GetAppVersion()
-		{
-			return pPlatformSystem->GetAppVersion();
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Post Create Systems
-		///
-		/// Once the systems have been created they are then added to the pool and initialised
-		//--------------------------------------------------------------------------------------------------
-		void Application::PostCreateSystems()
-		{
-            //Loop round all the created systems and categorise them
-			for(std::vector<SystemSPtr>::iterator it = mSystems.begin(); it != mSystems.end(); ++it) 
-			{
-				if ((*it)->IsA(IUpdateable::InterfaceID))
-				{
-					mUpdateableSystems.push_back((*it)->GetInterface<IUpdateable>());
-				}
-				if ((*it)->IsA(IComponentProducer::InterfaceID)) 
-				{
-                    IComponentProducer* pProducer = (*it)->GetInterface<IComponentProducer>();
-                    u32 udwNumFactoriesInSystem = pProducer->GetNumComponentFactories();
-
-                    for(u32 i=0; i<udwNumFactoriesInSystem; ++i)
-                    {
-                        mpComponentFactoryDispenser->RegisterComponentFactory(pProducer->GetComponentFactoryPtr(i));
-                    }
-				}
-				if ((*it)->IsA(ResourceProvider::InterfaceID)) 
-				{
-					mResourceProviders.push_back((*it)->GetInterface<ResourceProvider>());
-				}
-			}
-
-            //Give the resource managers their providers
-            mpResourceManagerDispenser->SetResourceProviders(mResourceProviders);
-
-            pPlatformSystem->PostCreateSystems();
-		}
-        //-----------------------------------------
-		/// Load Default Resources
-		//-----------------------------------------
-        void Application::LoadDefaultResources()
-        {
-            Json::Value jRoot;
-            if(Utils::ReadJson(StorageLocation::k_package, "App.config", &jRoot) == true)
-            {
-                if(jRoot.isMember("MaxFPS"))
-                {
-                    u32 udwMaxFPS = jRoot["MaxFPS"].asUInt();
-                    pPlatformSystem->SetMaxFPS(udwMaxFPS);
-                }
-                
-                if(jRoot.isMember("MasterText"))
-                {
-                    StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["MasterText"].get("Location", "Package").asString());
-                    std::string strPath = jRoot["MasterText"].get("Path", "").asString();
-                    RefreshMasterText(eStorageLocation, strPath);
-                }
-                
-                if(jRoot.isMember("DefaultMesh"))
-                {
-                    StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultMesh"].get("Location", "Package").asString());
-                    std::string strPath = jRoot["DefaultMesh"].get("Path", "").asString();
-                    pDefaultMesh = LOAD_RESOURCE(Rendering::Mesh, eStorageLocation, strPath);
-                }
-                
-                if(jRoot.isMember("DefaultFont"))
-                {
-                    StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultFont"].get("Location", "Package").asString());
-                    std::string strPath = jRoot["DefaultFont"].get("Path", "").asString();
-                    pDefaultFont = LOAD_RESOURCE(Rendering::Font, eStorageLocation, strPath);
-                }
-                
-                if(jRoot.isMember("DefaultMaterial"))
-                {
-                    StorageLocation eStorageLocation = GetStorageLocationFromString(jRoot["DefaultMaterial"].get("Location", "Package").asString());
-                    std::string strPath = jRoot["DefaultMaterial"].get("Path", "").asString();
-                    pDefaultMaterial = LOAD_RESOURCE(Rendering::Material, eStorageLocation, strPath);
-                }
-            }
-        }
-		//-----------------------------------------
-		/// Set Update Interval
-		///
-		/// Reset the time between update calls
-		/// to adjust the frame rate.
-		///
-		/// @param Time between update calls
-		//-----------------------------------------
-		void Application::SetUpdateInterval(f32 infUpdateInterval)
-		{
-			mfUpdateInterval = infUpdateInterval;			
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Get Update Interval
-		///
-		/// @return Time between update calls
-		//--------------------------------------------------------------------------------------------------
-		f32 Application::GetUpdateInterval()
-		{
-			return mfUpdateInterval;
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Get Max Update Interval
-		///
-		/// @return Max time to be processed in a single frame.
-		//--------------------------------------------------------------------------------------------------
-		f32 Application::GetUpdateIntervalMax()
-		{
-			return kfUpdateIntervalMax;
-		}
-        //--------------------------------------------------------------------------------------------------
-        /// Set Update Speed
-        ///
-        /// @param Scaler to speed up or slow down update time
-        //--------------------------------------------------------------------------------------------------
-        void Application::SetUpdateSpeed(f32 infSpeed)
-        {
-            mfUpdateSpeed = infSpeed;
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// Refresh Master Text
-        ///
-        /// Call this after a DLC update to refresh the master text cache from file
-        ///
-        /// @param Storage location
-        /// @param File path excluding name (i.e. if root then "")
-        //--------------------------------------------------------------------------------------------------
-        void Application::RefreshMasterText(StorageLocation ineStorageLocation, const std::string& instrDirectory)
-        {
-            //Load any localised text from file 
-            if(!Core::LocalisedText::LoadTextFromFile(ineStorageLocation, instrDirectory, Core::Device::GetLanguage().GetLanguageCode() + ".mofloloca"))
-            {
-                //Default to english
-                Core::LocalisedText::LoadTextFromFile(ineStorageLocation, instrDirectory, "en.mofloloca");
-            }
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// Make Toast
-        ///
-        /// Display a toast notification with the given text
-        ///
-        /// @param Text
-        //--------------------------------------------------------------------------------------------------
-        void Application::MakeToast(const UTF8String& instrText)
-        {
-            pPlatformSystem->MakeToast(instrText);
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// Get Default Font
-        ///
-        /// @return Default font given to the system by the application delegate
-        //--------------------------------------------------------------------------------------------------
-        const Rendering::FontSPtr& Application::GetDefaultFont()
-        {
-            return pDefaultFont;
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// Get Default Mesh
-        ///
-        /// @return Default mesh given to the system by the application delegate
-        //--------------------------------------------------------------------------------------------------
-        const Rendering::MeshSPtr& Application::GetDefaultMesh()
-        {
-            return pDefaultMesh;
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// Get Default Material
-        ///
-        /// @return Default material given to the system by the application delegate
-        //--------------------------------------------------------------------------------------------------
-        const Rendering::MaterialSPtr& Application::GetDefaultMaterial()
-        {
-            return pDefaultMaterial;
-        }
-        //-----------------------------------------
-        /// Quit
-        ///
-        /// Stop the application and exit 
-        /// gracefully
-        //-----------------------------------------
-        void Application::Quit()
-        {
-            pPlatformSystem->TerminateUpdater();
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// Show System Confirm Dialog
-        ///
-        /// Display a system confirmation dialog with the given ID and delegate
-        ///
-        /// @param ID
-        /// @param SystemConfirmDialogDelegate
-        /// @param Title text
-        /// @param Message text
-        /// @param Confirm text
-        /// @param Cancel text
-        //--------------------------------------------------------------------------------------------------
-        void Application::ShowSystemConfirmDialog(u32 inudwID, const SystemConfirmDialog::Delegate& inDelegate, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm, const UTF8String& instrCancel)
-        {
-        	 pPlatformSystem->ShowSystemConfirmDialog(inudwID, instrTitle, instrMessage, instrConfirm, instrCancel);
-        	 mActiveSysConfirmDelegate = inDelegate;
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// Show System Dialog
-        ///
-        /// Display a system dialog with the given ID and delegate
-        ///
-        /// @param ID
-        /// @param SystemConfirmDialogDelegate
-        /// @param Title text
-        /// @param Message text
-        /// @param Confirm text
-        //--------------------------------------------------------------------------------------------------
-        void Application::ShowSystemDialog(u32 inudwID, const SystemConfirmDialog::Delegate& inDelegate, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm)
-        {
-            pPlatformSystem->ShowSystemDialog(inudwID, instrTitle, instrMessage, instrConfirm);
-            mActiveSysConfirmDelegate = inDelegate;
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// On System Confirm Dialog Result
-        ///
-        /// Triggered from a system dialog confirmation event
-        ///
-        /// @param ID
-        /// @param Result
-        //--------------------------------------------------------------------------------------------------
-        void Application::OnSystemConfirmDialogResult(u32 inudwID, SystemConfirmDialog::Result ineResult)
-        {
-        	if(mActiveSysConfirmDelegate)
-        	{
-        		mActiveSysConfirmDelegate(inudwID, ineResult);
-        		mActiveSysConfirmDelegate = nullptr;
-        	}
-        }
-        //--------------------------------------------------------------------------------------------------
-		/// Set Render System
-		///
-		/// @param the system pointer.
-		//--------------------------------------------------------------------------------------------------
-		void Application::SetRenderSystem(Rendering::RenderSystem* inpSystem)
-		{
-			mpRenderSystem = inpSystem;
-		}
-        //--------------------------------------------------------------------------------------------------
-		/// Set Input System
-		///
-		/// @param the system pointer.
-		//--------------------------------------------------------------------------------------------------
-		void Application::SetInputSystem(Input::InputSystem* inpSystem)
-		{
-			mpInputSystem = inpSystem;
-		}
-        //--------------------------------------------------------------------------------------------------
-		/// Set Audio System
-		///
-		/// @param the system pointer.
-		//--------------------------------------------------------------------------------------------------
-		void Application::SetAudioSystem(Audio::AudioSystem* inpSystem)
-		{
-			pAudioSystem = inpSystem;
-		}
-        //--------------------------------------------------------------------------------------------------
-		/// Set Renderer
-		///
-		/// @param the renderer
-		//--------------------------------------------------------------------------------------------------
-		void Application::SetRenderer(Rendering::Renderer* inpSystem)
-		{
-			mpRenderer = inpSystem;
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Set File System
-		///
-		/// @param the file system
-		//--------------------------------------------------------------------------------------------------
-		void Application::SetFileSystem(FileSystem* inpSystem)
-		{
-			mspFileSystem = inpSystem;
-			mSystems.push_back(SystemSPtr(mspFileSystem));
-		}
-		 //--------------------------------------------------------------------------------------------------
-		/// Set Has Touch Input
-		///
-		/// @param whether or not touch input is available.
-		//--------------------------------------------------------------------------------------------------
-		void Application::SetHasTouchInput(bool inbTouchInput)
-		{
-			mbHasTouchInput = inbTouchInput;
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Has Touch Input
-		///
-		/// @return whether or not touch input is available.
-		//--------------------------------------------------------------------------------------------------
-		bool Application::HasTouchInput()
-		{
-			return mbHasTouchInput;
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// On Frame Begin
-		///
-		/// Triggered on receiving a "frame started" message. This will then update the state manager
-		/// and each updatable subsystem with the time since last frame. It will also update any
-		/// game timers.
-		//--------------------------------------------------------------------------------------------------
-		void Application::OnFrameBegin(f32 infDt, TimeIntervalSecs inuddwTimestamp)
-		{
-            if(s_shouldNotifyConnectionsResumeEvent == true)
-			{
-				s_shouldNotifyConnectionsResumeEvent = false;
-				OnApplicationResumed();
-			}
+            in_detaTime *= m_updateSpeed;
             
-            if(s_isSuspending)
-            {
-                // Updating after told to suspend so early out
-                return;
-            }
+			CoreTimer::Update(in_detaTime);
             
-#ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats::RecordEvent("FrameTime", infDt);
-			Debugging::DebugStats::RecordEvent("FPS", 1.0f/infDt);
-#endif
-            
-			//Update the app time since start
-			SetAppElapsedTime(inuddwTimestamp);
-            
-			TaskScheduler::ExecuteMainThreadTasks();
-            
-            //We do not need to render as often as we update so this callback will be triggered
-            //less freqenctly than the update frequency suggests. We must work out how many times to update based on the time since last frame
-            //and our actual update frequency. We carry the remainder to the next frame until we have a full update cycle
-            s_updateIntervalRemainder = MathUtils::Min(s_updateIntervalRemainder + infDt, GetUpdateIntervalMax());
-            
-			//Force the input system to distribute any buffered input
-			if(mpInputSystem != nullptr)
-			{
-				mpInputSystem->FlushBufferedInput();
-			}
-            
-            while((s_updateIntervalRemainder >= Application::GetUpdateInterval()) || s_isFirstFrame)
-            {
-                s_updateIntervalRemainder -=  Application::GetUpdateInterval();
-                mStateMgr.FixedUpdate(Application::GetUpdateInterval());
-                
-                s_isFirstFrame = false;
-            }
-            
-            //Tell the state manager to update the active state
-            Update(infDt);
-            
-            //Render the scene
-            mpRenderer->RenderToScreen(Core::Application::GetStateManagerPtr()->GetActiveScenePtr());
-            
-#ifdef CS_ENABLE_DEBUGSTATS
-			DebugStats::Clear();
-#endif
-		}
-        //--------------------------------------------------------------------------------------------------
-        /// Update
-        ///
-        /// A single update cycle that updates all updateables, timers and the active state
-        /// This can be called multiple times per frame depending on fixed updates.
-        ///
-        /// @param Time between frames
-        //--------------------------------------------------------------------------------------------------
-		void Application::Update(f32 infDT)
-		{
-            infDT *= mfUpdateSpeed;
-            
-			CoreTimer::Update(infDT);
-            
-            NotificationScheduler::Update(infDT);
+            NotificationScheduler::Update(in_detaTime);
             
 			//Update sub systems
-            if (mbUpdateSystems == true)
+            for(std::vector<IUpdateable*>::iterator it = m_updateableSystems.begin(); it != m_updateableSystems.end(); ++it)
             {
-				for(std::vector<IUpdateable*>::iterator it = mUpdateableSystems.begin(); it != mUpdateableSystems.end(); ++it)
-				{
-					(*it)->Update(infDT);
-				}
+                (*it)->Update(in_detaTime);
             }
 			
 			//Tell the state manager to update the active state
-			mStateMgr.Update(infDT);
+			m_stateManager.Update(in_detaTime);
 		}
-		//--------------------------------------------------------------------------------------------------
-		/// On Application Memory Warning
-		///
-		/// Triggered on receiving a "application memory warning" message.
-		/// This will notify active resource managers to purge their caches
-		//--------------------------------------------------------------------------------------------------
-		void Application::OnApplicationMemoryWarning()
-		{
-			CS_LOG_DEBUG("Memory Warning. Clearing resource cache...");
-			ResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
-			ApplicationEvents::GetLowMemoryEvent().NotifyConnections();
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// On Go Back
-		///
-		/// Triggered on receiving a "go back" event. This is usually caused by a back button being pressed
-		//--------------------------------------------------------------------------------------------------
-		void Application::OnGoBack()
-		{
-			CS_LOG_DEBUG("Go back event.");
-			mStateMgr.GetActiveState()->OnGoBack();
-			ApplicationEvents::GetGoBackEvent().NotifyConnections();
-		}
-		//----------------------------------------------------------------------
-		/// Set Orientation
-		/// 
-		/// Tell the active camera to rotate its view and if we are using
-		/// touch input we must rotate the input co-ordinates
-		/// @param Screen orientation flag
-		//----------------------------------------------------------------------
+        //----------------------------------------------------
+        //----------------------------------------------------
 		void Application::SetOrientation(ScreenOrientation inOrientation)
 		{
-			if(mpRenderer->GetActiveCameraPtr())
+			if(m_renderer->GetActiveCameraPtr())
 			{
-				mpRenderer->GetActiveCameraPtr()->SetViewportOrientation(inOrientation);
+				m_renderer->GetActiveCameraPtr()->SetViewportOrientation(inOrientation);
 			}
             
-			if(HasTouchInput() == true)
-			{
-				Input::TouchScreen * pTouchScreen = GetSystemImplementing(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreenPtr();
-				pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());
-			}
+            Input::TouchScreen * pTouchScreen = GetSystem(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreenPtr();
+            if (pTouchScreen != nullptr)
+            {
+                pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());
+            }
 		}
-		//--------------------------------------------------------------------------------------------------
-		/// Enable System Updating
-		///
-		/// Enabled and disabled the updating of "updateable" systems.
-		///
-		/// @param whether or not to update.
-		//--------------------------------------------------------------------------------------------------
-		void Application::EnableSystemUpdating(bool inbEnable)
-		{
-			mbUpdateSystems = inbEnable;
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Suspend
-		///
-        /// Triggered on receiving a "application will suspend" message.
-		/// This will notify active states to pause and tell the sub systems to stop
-		//--------------------------------------------------------------------------------------------------
-		void Application::Suspend()
-		{
-            CS_LOG_DEBUG("App Suspending...");
-    
-			s_isSuspending = true;
-            
-			//Tell the active state to save it's data etc
-			mStateMgr.Pause();
-            
-			//We must invalidate the application timer. This will stop sub-system updates
-			pPlatformSystem->SetUpdaterActive(false);
-            
-			//We need to rebind or rebuild the context if it was stolen
-			if(mpRenderSystem)
-			{
-				mpRenderSystem->Suspend();
-			}
-            
-			ApplicationEvents::GetSuspendEvent().NotifyConnections();
-			ApplicationEvents::GetLateSuspendEvent().NotifyConnections();
-			
-			CS_LOG_DEBUG("App Finished Suspending...");
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Resume
-		///
-		/// Resumes application from suspended state
-		//--------------------------------------------------------------------------------------------------
-		void Application::Resume()
-		{
-            s_shouldNotifyConnectionsResumeEvent = true;
-
-			//We must restart the application timer. This will automatically restart system updates
-			pPlatformSystem->SetUpdaterActive(true);
-		}
-        //----------------------------------------------
-		/// On Application Resumed
-		//----------------------------------------------
-		void Application::OnApplicationResumed()
+        //----------------------------------------------------
+        //----------------------------------------------------
+		void Application::ResumeApplication()
 		{
 			CS_LOG_DEBUG("App Resuming...");
             
-			if(mpRenderSystem != nullptr)
+			if(m_renderSystem != nullptr)
 			{
-				mpRenderSystem->Resume();
+				m_renderSystem->Resume();
 			}
             
-			s_isSuspending = false;
+			m_isSuspending = false;
 			ApplicationEvents::GetResumeEvent().NotifyConnections();
             
 			//Tell the active state to continue
-			mStateMgr.Resume();
+			m_stateManager.Resume();
 			
 			CS_LOG_DEBUG("App Finished Resuming...");
 		}
-		//--------------------------------------------------------------------------------------------------
-		/// On Screen Resized
-		///
-		/// Triggered on receiving a "screen resized" message
-		//--------------------------------------------------------------------------------------------------
-		void Application::OnScreenResized(u32 inudwWidth, u32 inudwHeight) 
-		{	
-			Screen::SetRawDimensions(Core::Vector2((f32)inudwWidth, (f32)inudwHeight));
-            
-			if(mpRenderSystem)
-			{
-				mpRenderSystem->OnScreenOrientationChanged(inudwWidth, inudwHeight);
-			}
-            
-			if(HasTouchInput() == true)
-			{
-				Input::TouchScreen * pTouchScreen = GetSystemImplementing(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreenPtr();
-				pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());
-			}
-            
-			ApplicationEvents::GetScreenResizedEvent().NotifyConnections(inudwWidth, inudwHeight);
-            
-			CS_LOG_DEBUG("Screen resized Notification");
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// On Screen Changed Orientation
-		///
-		/// Triggered on receiving a "orientation changed" message. Used to tell the camera and input
-		/// to rotate
-		//--------------------------------------------------------------------------------------------------
-		void Application::OnScreenChangedOrientation(ScreenOrientation ineOrientation) 
-		{		
-			Screen::SetOrientation(ineOrientation);
-            
-			if(mpRenderSystem)
-			{
-				mpRenderSystem->OnScreenOrientationChanged(Core::Screen::GetOrientedWidth(), Core::Screen::GetOrientedHeight());
-			}
-            
-			//Flip the screen
-			SetOrientation(ineOrientation);
-			ApplicationEvents::GetScreenOrientationChangedEvent().NotifyConnections(ineOrientation);
-            
-			CS_LOG_DEBUG("Screen Oriented Notification");
-
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Destructor
-		///
-		//--------------------------------------------------------------------------------------------------
+        //----------------------------------------------------
+        //----------------------------------------------------
 		Application::~Application()
 		{
-			mStateMgr.DestroyAll();
-
-			pDefaultFont.reset();
-			pDefaultMesh.reset();
-			pDefaultMaterial.reset();
-
-			CS_SAFEDELETE(pPlatformSystem);
-            CS_SAFEDELETE(mpResourceManagerDispenser);
-            CS_SAFEDELETE(mpComponentFactoryDispenser);
-
-			//We have an issue with the order of destruction of systems.
-			while(mSystems.empty() == false)
-			{
-				SystemSPtr pSystem = mSystems.back();
-				mSystems.pop_back();
-				pSystem.reset();
-			}
+            CS_ASSERT(s_application == nullptr, "Application destructed without calling OnDestroy!");
 		}
 	}
 }

@@ -169,7 +169,8 @@ namespace ChilliSource
 			for(std::vector<SubMeshSPtr>::const_iterator it = mSubMeshes.begin(); it != mSubMeshes.end(); ++it)
 			{
                 const MaterialSPtr& pMaterial = inMaterials[udwCurrMaterial];
-                udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
+                ++udwCurrMaterial;
+                udwCurrMaterial = (u32)std::min(udwCurrMaterial, (u32)inMaterials.size()-1);
                 
 				if (pMaterial->GetActiveShaderProgram() != nullptr)
                 {
@@ -189,7 +190,8 @@ namespace ChilliSource
 			for(std::vector<SubMesh*>::const_iterator it = aOpaqueSubMeshes.begin(); it != aOpaqueSubMeshes.end(); ++it)
 			{
                 const MaterialSPtr& pMaterial = inMaterials[udwCurrMaterial];
-                udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
+                ++udwCurrMaterial;
+                udwCurrMaterial = std::min(udwCurrMaterial, (u32)inMaterials.size()-1);
 					
 #ifdef CS_ENABLE_DEBUGSTATS
                 DebugStats::AddToEvent("Meshes", 1);
@@ -202,7 +204,8 @@ namespace ChilliSource
 			for(std::vector<SubMesh*>::const_iterator it = aTransparentSubMeshes.begin(); it != aTransparentSubMeshes.end(); ++it)
 			{
                 const MaterialSPtr& pMaterial = inMaterials[udwCurrMaterial];
-                udwCurrMaterial = std::min(++udwCurrMaterial, (u32)inMaterials.size()-1);
+                ++udwCurrMaterial;
+                udwCurrMaterial = (u32)std::min(udwCurrMaterial, (u32)inMaterials.size()-1);
 				
 #ifdef CS_ENABLE_DEBUGSTATS
                 DebugStats::AddToEvent("Meshes_Trans", 1);

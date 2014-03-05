@@ -200,7 +200,7 @@ namespace ChilliSource
 		{
 			MeshSPtr pMesh(new Mesh());
 			
-			BuildMesh(mpApplicationOwner->GetRenderSystemPtr(), inMeshDescriptor, pMesh);
+			BuildMesh(mpApplicationOwner->GetRenderSystem(), inMeshDescriptor, pMesh);
 			
 			return pMesh;
 		}
@@ -221,7 +221,7 @@ namespace ChilliSource
 			for (u32 i = 0; i < indwNumSubMeshes; i++)
 			{
 				SubMeshSPtr newMesh = pMesh->CreateSubMesh("mesh" + Core::ToString(i));
-				newMesh->Prepare(mpApplicationOwner->GetRenderSystemPtr(), vertDeclaration, 2, inudwVertexDataSize, indwIndexDataSize);
+				newMesh->Prepare(mpApplicationOwner->GetRenderSystem(), vertDeclaration, 2, inudwVertexDataSize, indwIndexDataSize);
 			}
 			
 			//cleanup
@@ -312,7 +312,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         MeshSPtr MeshManager::GetDefaultMesh()
         {
-            return Core::Application::GetDefaultMesh();
+            return Core::Application::Get()->GetDefaultMesh();
         }
 		//-----------------------------------------------------------------
 		/// Destructor

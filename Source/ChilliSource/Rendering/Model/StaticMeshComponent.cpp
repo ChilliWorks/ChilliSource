@@ -328,7 +328,7 @@ namespace ChilliSource
 		{
             if (mspShadowMapMaterial == nullptr)
             {
-                mspShadowMapMaterial = Core::Application::GetSystemImplementing<MaterialFactory>()->CreateStaticDirectionalShadowMap();
+                mspShadowMapMaterial = Core::Application::Get()->GetSystem<MaterialFactory>()->CreateStaticDirectionalShadowMap();
             }
             
             std::vector<MaterialSPtr> aMaterials;

@@ -70,7 +70,7 @@ namespace ChilliSource
             Core::NotificationSPtr notification(std::make_shared<Core::Notification>());
             notification->bDismissed = false;
             notification->eType = Core::NotificationType::k_push;
-            notification->TriggerTime = Core::Application::GetSystemTime();
+            notification->TriggerTime = Core::Application::Get()->GetSystemTime();
             notification->ID = 0;
             notification->ePriority = Core::NotificationPriority::k_standard;
             

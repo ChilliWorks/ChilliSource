@@ -94,7 +94,7 @@ namespace ChilliSource
 		{
             bool mbSuccess = true;
 			
-			Core::FileStreamSPtr stream = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
+			Core::FileStreamSPtr stream = Core::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
 			
 			u32 udwNumFrames = 0;
 			s32 dwNumSkeletonNodes = 0;

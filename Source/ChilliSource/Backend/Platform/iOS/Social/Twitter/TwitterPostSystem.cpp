@@ -68,9 +68,9 @@ namespace ChilliSource
 				if(RequestOAuthToken(strAuthoiseURL))
 				{
 					// Show authentication view
-					if(Core::Application::GetPlatformSystemPtr()->CanCreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>())
+					if(Core::Application::Get()->GetPlatformSystem()->CanCreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>())
 					{
-						mpAuthenticationView = Core::Application::GetPlatformSystemPtr()->CreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>();
+						mpAuthenticationView = Core::Application::Get()->GetPlatformSystem()->CreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>();
 						mpAuthenticationView->SetAuthenticationPINResultDelegate(Core::MakeDelegate(this, &TwitterPostSystem::OnPINComplete));
 						m_authorisationDismissedConnection = mpAuthenticationView->GetDismissedEvent().OpenConnection(Core::MakeDelegate(this, &TwitterPostSystem::OnAuthorisationDismissed));
 						mpAuthenticationView->Present();
@@ -147,7 +147,7 @@ namespace ChilliSource
                 bool bImageAttached = true;
                 if(insDesc.strLocalImagePath.length() > 0)
                 {
-                    std::string strPath = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(insDesc.eLocalImageStorageLocation) + insDesc.strLocalImagePath;
+                    std::string strPath = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(insDesc.eLocalImageStorageLocation) + insDesc.strLocalImagePath;
                     
                     NSString* pImagePath = Core::StringUtils::StringToNSString(strPath);
                     UIImage* pImage = [UIImage imageWithContentsOfFile:pImagePath];

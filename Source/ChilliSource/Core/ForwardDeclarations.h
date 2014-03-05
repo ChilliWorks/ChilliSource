@@ -55,6 +55,10 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(OAuthSystem);
         CS_FORWARDDECLARE_CLASS(SHA1);
         //---------------------------------------------------------
+        /// Dialogue
+        //---------------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(DialogueBoxSystem);
+        //---------------------------------------------------------
         /// Entity
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Component);

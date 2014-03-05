@@ -28,7 +28,7 @@ namespace ChilliSource
 		{
             const f32 kfBestFitTextSize = 10.0f;
             
-            const f32 kfCurrentLetterHeight = Core::Application::GetDefaultFont()->GetLineHeight();
+            const f32 kfCurrentLetterHeight = Core::Application::Get()->GetDefaultFont()->GetLineHeight();
             
             mfTextScale = kfBestFitTextSize/kfCurrentLetterHeight   ;
             

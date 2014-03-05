@@ -85,7 +85,7 @@ namespace ChilliSource
 #endif
 
             std::string strFilePath;
-            Core::Application::GetFileSystemPtr()->GetBestPathToFile(ineLocation, instrFilePath, strFilePath);
+            Core::Application::Get()->GetFileSystem()->GetBestPathToFile(ineLocation, instrFilePath, strFilePath);
             ErrorCheck(mpFMODEventSystem->load(strFilePath.c_str(), nullptr, &mpFMODEventProject));
 		}
 		//-------------------------------------------------------

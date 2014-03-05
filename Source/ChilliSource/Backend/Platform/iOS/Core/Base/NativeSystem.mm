@@ -6,9 +6,10 @@
 //  Copyright 2010 Tag Games. All rights reserved.
 //
 
-#import <ChilliSource/Core/Base/PlatformSystem.h>
 #import <ChilliSource/Backend/Platform/iOS/Core/Base/NativeSystem.h>
 
+#import <ChilliSource/Backend/Platform/iOS/Core/DialogueBox/DialogueBoxSystem.h>
+#import <ChilliSource/Core/Base/PlatformSystem.h>
 #import <ChilliSource/Core/Base/Application.h>
 
 #import <mach/mach.h>
@@ -36,7 +37,7 @@ static mach_timebase_info_data_t gMachtimeBase;
 	mPreviousFrameTime = (mach_absolute_time() * gMachtimeBase.numer) / gMachtimeBase.denom;
 	mAppStartTime = mPreviousFrameTime;
     
-    ChilliSource::Core::Application::OnFrameBegin(0.0f, (f32)mPreviousFrameTime - (f32)mAppStartTime);
+    ChilliSource::Core::Application::Get()->OnUpdate(0.0f, (f32)mPreviousFrameTime - (f32)mAppStartTime);
 	
 	//Begin the update loop
     [self SetMaxFPS:30];
@@ -111,7 +112,7 @@ static mach_timebase_info_data_t gMachtimeBase;
 	
 	mPreviousFrameTime = CurrentTime;
     
-    ChilliSource::Core::Application::OnFrameBegin((f32)fDeltaTime, (f32)mPreviousFrameTime - (f32)mAppStartTime);
+    ChilliSource::Core::Application::Get()->OnUpdate((f32)fDeltaTime, (f32)mPreviousFrameTime - (f32)mAppStartTime);
 }
 //------------------------------------------------
 /// Get System Time
@@ -163,14 +164,18 @@ static mach_timebase_info_data_t gMachtimeBase;
 }
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex 
 {
-	// NO = 0, YES = 1
-	if(buttonIndex == 0)
+    ChilliSource::iOS::DialogueBoxSystem* dialogueSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::DialogueBoxSystem>();
+    if (dialogueSystem != nullptr)
     {
-        ChilliSource::Core::Application::OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::SystemConfirmDialog::Result::k_cancel);
-    }
-    else 
-    {
-        ChilliSource::Core::Application::OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::SystemConfirmDialog::Result::k_confirm);
+        // NO = 0, YES = 1
+        if(buttonIndex == 0)
+        {
+            dialogueSystem->OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::DialogueBoxSystem::DialogueResult::k_cancel);
+        }
+        else
+        {
+            dialogueSystem->OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::DialogueBoxSystem::DialogueResult::k_confirm);
+        }
     }
 }
 //----------------------------------------------

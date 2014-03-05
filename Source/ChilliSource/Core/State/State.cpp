@@ -23,11 +23,11 @@ namespace ChilliSource
 		//-----------------------------------------
 		State::State(Scene* inpScene) : mbOwnsScene(true)
 		{
-            mpStateMgr = Application::GetStateManagerPtr();
+            mpStateMgr = Application::Get()->GetStateManager();
             
 			if(!inpScene)
 			{
-				mpScene = new Scene(mpStateMgr->GetApplicationPtr()->GetInputSystemPtr());
+				mpScene = new Scene(mpStateMgr->GetApplicationPtr()->GetInputSystem());
 			}
 			else
 			{

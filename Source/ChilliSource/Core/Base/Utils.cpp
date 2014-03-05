@@ -44,7 +44,7 @@ namespace ChilliSource
 
             bool FileToString(StorageLocation ineStorageLocation, const std::string & instrPath, std::string & outstrFileContent)
             {
-                FileStreamSPtr pFile = Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_read);
+                FileStreamSPtr pFile = Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_read);
                 
                 if(!pFile || pFile->IsOpen() == false)
                 {
@@ -59,7 +59,7 @@ namespace ChilliSource
 
             FileStreamSPtr StringToFile(StorageLocation ineStorageLocation, const std::string & instrPath, const std::string& instrFileOut)
             {
-                FileStreamSPtr pFile = Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_write);
+                FileStreamSPtr pFile = Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_write);
                 
                 if(!pFile || pFile->IsOpen() == false)
                 {

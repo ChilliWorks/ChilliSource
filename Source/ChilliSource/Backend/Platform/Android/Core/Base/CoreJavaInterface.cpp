@@ -10,6 +10,7 @@
 #include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
 
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
+#include <ChilliSource/Backend/Platform/Android/Core/DialogueBox/DialogueBoxSystem.h>
 #include <ChilliSource/Backend/Platform/Android/Core/File/SharedPreferencesJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
@@ -90,7 +91,7 @@ void Java_com_chillisource_core_CoreNativeInterface_Initialise(JNIEnv* inpEnv, j
 	ChilliSource::Android::TwitterAuthenticationActivityJavaInterface::SetupJavaInterface(pJavaVM);
     
 	//run the application
-    pApplication->Run();
+    pApplication->OnInitialise();
 }
 
 //--------------------------------------------------------------------------------------
@@ -103,7 +104,7 @@ void Java_com_chillisource_core_CoreNativeInterface_Initialise(JNIEnv* inpEnv, j
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_Resume(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Core::Application::Resume();
+	ChilliSource::Core::Application::Get()->OnResume();
 }
 //--------------------------------------------------------------------------------------
 /// Suspend
@@ -115,7 +116,7 @@ void Java_com_chillisource_core_CoreNativeInterface_Resume(JNIEnv* inpEnv, jobje
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_Suspend(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Core::Application::Suspend();
+	ChilliSource::Core::Application::Get()->OnSuspend();
 }
 //--------------------------------------------------------------------------------------
 /// Destroy
@@ -140,7 +141,7 @@ void Java_com_chillisource_core_CoreNativeInterface_DestroyApplication(JNIEnv* i
 void Java_com_chillisource_core_CoreNativeInterface_FrameBegin(JNIEnv* inpEnv, jobject inThis, f32 infDeltaTime, s64 inddwTimestamp)
 {
 	//Create the message with the time between frames
-	ChilliSource::Core::Application::OnFrameBegin((f32)infDeltaTime, (u64)inddwTimestamp);
+	ChilliSource::Core::Application::Get()->OnUpdate((f32)infDeltaTime, (u64)inddwTimestamp);
 }
 //--------------------------------------------------------------------------------------
 /// Memory Warning
@@ -153,7 +154,7 @@ void Java_com_chillisource_core_CoreNativeInterface_FrameBegin(JNIEnv* inpEnv, j
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_MemoryWarning(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Core::Application::OnApplicationMemoryWarning();
+	ChilliSource::Core::Application::Get()->OnApplicationMemoryWarning();
 }
 //--------------------------------------------------------------------------------------
 /// Orientation Changed
@@ -179,7 +180,7 @@ void Java_com_chillisource_core_CoreNativeInterface_OrientationChanged(JNIEnv* i
 		CS_LOG_DEBUG("Changing orientation to landscape");
 	}
 
-	ChilliSource::Core::Application::OnScreenChangedOrientation(eScreenOrientation);
+	ChilliSource::Core::Application::Get()->OnScreenChangedOrientation(eScreenOrientation);
 }
 //--------------------------------------------------------------------------------------
 /// On Back Pressed
@@ -192,7 +193,7 @@ void Java_com_chillisource_core_CoreNativeInterface_OrientationChanged(JNIEnv* i
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_OnBackPressed(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Core::Application::OnGoBack();
+	ChilliSource::Core::Application::Get()->OnGoBack();
 }
 //--------------------------------------------------------------------------------------
 /// On Dialog Confirm Pressed
@@ -206,7 +207,11 @@ void Java_com_chillisource_core_CoreNativeInterface_OnBackPressed(JNIEnv* inpEnv
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_OnDialogConfirmPressed(JNIEnv* inpEnv, jobject inThis, s32 indwID)
 {
-	ChilliSource::Core::Application::OnSystemConfirmDialogResult((u32)indwID, ChilliSource::Core::SystemConfirmDialog::Result::k_confirm);
+	ChilliSource::Android::DialogueBoxSystem* dialogueBoxSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::Android::DialogueBoxSystem>();
+	if (dialogueBoxSystem != nullptr)
+	{
+		dialogueBoxSystem->OnSystemConfirmDialogResult((u32)indwID, ChilliSource::Core::DialogueBoxSystem::DialogueResult::k_confirm);
+	}
 }
 //--------------------------------------------------------------------------------------
 /// On Dialog Cancel Pressed
@@ -220,7 +225,11 @@ void Java_com_chillisource_core_CoreNativeInterface_OnDialogConfirmPressed(JNIEn
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_OnDialogCancelPressed(JNIEnv* inpEnv, jobject inThis, s32 indwID)
 {
-	ChilliSource::Core::Application::OnSystemConfirmDialogResult((u32)indwID, ChilliSource::Core::SystemConfirmDialog::Result::k_cancel);
+	ChilliSource::Android::DialogueBoxSystem* dialogueBoxSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::Android::DialogueBoxSystem>();
+	if (dialogueBoxSystem != nullptr)
+	{
+		dialogueBoxSystem->OnSystemConfirmDialogResult((u32)indwID, ChilliSource::Core::DialogueBoxSystem::DialogueResult::k_cancel);
+	}
 }
 //--------------------------------------------------------------------------------------
 /// Application Did Receive Launching URL
@@ -296,8 +305,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		void CoreJavaInterface::DestroyApplication()
 		{
-			delete mApplication;
-			mApplication = nullptr;
+			mApplication->OnDestroy();
+			CS_SAFEDELETE(mApplication);
 		}
 		//--------------------------------------------------------------------------------------
 		/// Get Application

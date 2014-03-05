@@ -1,14 +1,14 @@
-/*
- *  moFloApplication.h
- *  moFlo
- *
- *  Created by Scott Downie on 23/09/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  Application.h
+//  Chilli Source
+//
+//  Created by Scott Downie on 23/09/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
-#ifndef _MOFLO_APPLICATION_H_
-#define _MOFLO_APPLICATION_H_
+
+#ifndef _CHILLISOURCE_CORE_BASE_APPLICATION_H_
+#define _CHILLISOURCE_CORE_BASE_APPLICATION_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/State/StateManager.h>
@@ -22,517 +22,549 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-        const u32 kudwUndefinedMaxResolution = std::numeric_limits<u32>::max();
-        const f32 kfUndefinedMaxDensity = std::numeric_limits<f32>::max();
+        const u32 k_undefinedMaxResolution = std::numeric_limits<u32>::max();
+        const f32 k_undefinedMaxDensity = std::numeric_limits<f32>::max();
         struct ResourceDirectoryInfo
         {
-            std::string strDirectory;
-            u32 udwMaxRes;
-            f32 fMaxDensity;
-            f32 fResourcesDensity;
+            std::string m_directory;
+            u32 m_maxRes;
+            f32 m_maxDensity;
+            f32 m_resourcesDensity;
         };
         
-        namespace SystemConfirmDialog
-        {
-            enum class Result
-            {
-                k_confirm,
-                k_cancel
-            };
-            
-            typedef std::function<void(u32, Result)> Delegate;
-        }
-        
-		//--------------------------------------------------------------------------------------------------
-		/// Description:
-		///
-		/// Main hub of the framework. Handles initialisation
-		/// and subsystems (including queries). Developers
-		/// must override the initialisation methods to create
-		/// the subsystems they require.
-		//--------------------------------------------------------------------------------------------------
+		//-----------------------------------------------------------
+		/// The main hub of the engine. The Application controls the
+        /// overall application flow and contains all engine systems.
+        /// This also acts as the entry point into a Chilli Source
+        /// application. The user should override this class to include
+        /// desired systems and add the initial State.
+		//-----------------------------------------------------------
 		class Application
 		{
 		public:
+            //----------------------------------------------------
+			/// Returns the global application instance.
+            ///
+            /// @author I Copland
+            ///
+            /// @return The application instance pointer.
+			//----------------------------------------------------
+            static Application* Get();
+            //----------------------------------------------------
+			/// Constructor
+			//----------------------------------------------------
 			Application();
-			virtual ~Application();
-			
-			//--------------------------------------------------------------------------------------------------
-			/// Run
-			///
-			/// Launch the application's setup code and cause it to begin it's update loop
-			//--------------------------------------------------------------------------------------------------
-			void Run();
-			//--------------------------------------------------------------------------------------------------
-			/// Suspend
-			///
-            /// Triggered on receiving a "application will suspend" message.
-            /// This will notify active states to pause and tell the sub systems to stop
-			//--------------------------------------------------------------------------------------------------
-			static void Suspend();
-			//--------------------------------------------------------------------------------------------------
-			/// Resume
-			///
-			/// Resumes application from suspended state
-			//--------------------------------------------------------------------------------------------------
-			static void Resume();
-			//--------------------------------------------------------------------------------------------------
-			/// On Screen Changed Orientation
-			///
-			/// Triggered on receiving a "orientation changed" message. Used to tell the camera and input
-			/// to rotate
-			//--------------------------------------------------------------------------------------------------
-			static void OnScreenChangedOrientation(ScreenOrientation ineOrientation);
-			//--------------------------------------------------------------------------------------------------
-			/// On Screen Resized
-			///
-			/// Triggered on receiving a "screen resized" message
-			//--------------------------------------------------------------------------------------------------
-			static void OnScreenResized(u32 inudwWidth, u32 inudwHeight);
-			//--------------------------------------------------------------------------------------------------
-			/// On Application Memory Warning
-			///
-			/// Triggered on receiving a "application memory warning" message.
-			/// This will notify active resource managers to purge their caches
-			//--------------------------------------------------------------------------------------------------
-			static void OnApplicationMemoryWarning();
-			//--------------------------------------------------------------------------------------------------
-			/// On Go Back
-			///
-			/// Triggered on receiving a "go back" event. This is usually caused by a back button being pressed
-			//--------------------------------------------------------------------------------------------------
-			static void OnGoBack();
-            //--------------------------------------------------------------------------------------------------
-			/// On Frame Begin
-			///
-			/// Triggered on receiving a "frame started" message. This will then update the state manager
-			/// and each updatable subsystem with the time since last frame
-			//--------------------------------------------------------------------------------------------------
-			static void OnFrameBegin(f32 infDt, TimeIntervalSecs inuddwTimestamp);
-			//--------------------------------------------------------------------------------------------------
-			/// Get System Implementing
-			///
-			/// Looks for a system that implements the given interface (i.e. a 2DRenderSystem etc)
-			/// @param The type ID of the system you wish to implement
-			/// @return System that implements the given interface or nullptr if no system
-			//--------------------------------------------------------------------------------------------------
-			static SystemSPtr GetSystemImplementing(InterfaceIDType inInterfaceID);
-			//--------------------------------------------------------------------------------------------------
-			/// Get System Implementing
-			///
-			/// Looks for a system that implements the given interface (i.e. a 2DRenderSystem etc)
-			/// @param The type ID of the system you wish to implement
-			/// @return System that implements the given interface or nullptr if no system
-			//--------------------------------------------------------------------------------------------------
-			//Templated convenience version of the above saving getting the interface directly
-			template <typename T> static T* GetSystemImplementing()
-			{
-				SystemSPtr pSystem = GetSystemImplementing(T::InterfaceID);
-				
-				if (pSystem != nullptr) 
-				{
-					return static_cast<T*>(pSystem.get());
-				}
-				
-				return nullptr;
-			}
-            //--------------------------------------------------------------------------------------------------
-			/// Get System Implementing
-			///
-			/// Looks for a system that implements the given interface (i.e. a 2DRenderSystem etc)
-			/// @param The type ID of the system you wish to implement
-			/// @return System that implements the given interface or nullptr if no system
-			//--------------------------------------------------------------------------------------------------
-			//Templated convenience version of the above saving getting the interface directly
-			template <typename T, typename U> static T* GetSystemImplementing()
-			{
-				SystemSPtr pSystem = GetSystemImplementing(U::InterfaceID);
-				
-				if (pSystem != nullptr) 
-				{
-					return pSystem->GetInterface<T>();
-				}
-				
-				return nullptr;
-			}
-			//--------------------------------------------------------------------------------------------------
-			/// Get Systems Implementing
-			///
-			/// Looks for systems that implements the given interface (i.e. a 2DRenderSystem etc)
-			/// and fills an array with them.
-			/// @param The type ID of the system you wish to implement
-			//--------------------------------------------------------------------------------------------------
-			static void GetSystemsImplementing(InterfaceIDType inInterfaceID, std::vector<SystemSPtr> & outSystems);
-			//--------------------------------------------------------------------------------------------------
-			/// Get Systems Implementing
-			///
-			/// Looks for systems that implements the given interface (i.e. a 2DRenderSystem etc)
-			/// and fills an array with them.
-			/// @param The type ID of the system you wish to implement
-			//--------------------------------------------------------------------------------------------------
-			//Templated convenience version of the above saving getting the interface directly
-            template <typename T> static void GetSystemsImplementing(std::vector<T*> & outSystems)
-			{
-				for (size_t nSystem = 0; nSystem < mSystems.size(); nSystem++) 
-				{
-					if (mSystems[nSystem]->IsA(T::InterfaceID)) 
-					{
-						outSystems.push_back(static_cast<T*>(mSystems[nSystem].get()));
-					}
-				}
-			}
-			//--------------------------------------------------------------------------------------------------
-			/// Get Resource Provider Producing
-			///
-			/// Looks for a resource provider that can create a resource of type
-			/// @param The type ID of the resource you wish to create (i.e. Model, Texture)
-			/// @return Resource provider that loads the resource type
-			//--------------------------------------------------------------------------------------------------
-			ResourceProvider* GetResourceProviderProducing(InterfaceIDType inInterfaceID, const std::string & inExtension);
-			//--------------------------------------------------------------------------------------------------
-			/// Get App Version
-			///
-			/// @return String containing the application version number
-			//--------------------------------------------------------------------------------------------------
-			static std::string GetAppVersion();
-            //--------------------------------------------------------------------------------------------------
-            /// Make Toast
+			//----------------------------------------------------
+			/// Looks for a system that implements the queryable
+            /// interface provided as a template parameter.
             ///
-            /// Display a toast notification with the given text
+            /// @author I Copland
             ///
-            /// @param Text
-            //--------------------------------------------------------------------------------------------------
-            static void MakeToast(const UTF8String& instrText);
-			//--------------------------------------------------------------------------------------------------
-			/// Get App Elapsed Time
-			///
-			/// @return The time elapsed since the application began
-			//--------------------------------------------------------------------------------------------------
-			static TimeIntervalSecs GetAppElapsedTime();
-			//--------------------------------------------------------------------------------------------------
-			/// Set App Elapsed Time
-			///
-			/// @param The time elapsed since the application began
-			//--------------------------------------------------------------------------------------------------
-			static void SetAppElapsedTime(TimeIntervalSecs inElapsedTime);
-            //--------------------------------------------------------------------------------------------------
-            /// Get System Time
+			/// @return The first system found that implements
+            /// the named interface.
+			//----------------------------------------------------
+			template <typename TNamedType> TNamedType* GetSystem();
+            //----------------------------------------------------
+			/// Looks for a system that implements the queryable
+            /// interface provided as the first template parameter
+            /// and casts it to the type provided in the second.
             ///
-            /// @return System clock time in seconds since epoch
-            //--------------------------------------------------------------------------------------------------
-            static TimeIntervalSecs GetSystemTime();
-			//--------------------------------------------------------------------------------------------------
-            /// Get System Time In Milliseconds
+            /// @author I Copland
             ///
-            /// @return System clock time in milliseconds since epoch
-            //--------------------------------------------------------------------------------------------------
-            static TimeIntervalSecs GetSystemTimeInMilliseconds();
-			//--------------------------------------------------------------------------------------------------
-			/// Set Update Interval
+			/// @return The first system found that implements
+            /// the named interface.
+			//----------------------------------------------------
+			template <typename TCastType, typename TNamedType> TCastType* GetSystem();
+			//-----------------------------------------------------
+			/// Looks for a all systems that implement the given
+            /// queryable interface provided as a template parameter.
 			///
-			/// Reset the time between update calls
-			/// to adjust the frame rate.
+            /// @author I Copland
+            ///
+			/// @param [Out] The list of systems that implement the
+            /// queryable interface.
+			//-----------------------------------------------------
+            template <typename TNamedType> void GetSystems(std::vector<TNamedType*> & out_systems);
+			//-----------------------------------------------------
+            /// Returns the version number of the application on
+            /// the current platform as a string.
+            ///
+            /// @author I Copland.
+            ///
+			/// @return The version string.
+			//-----------------------------------------------------
+			std::string GetAppVersion();
+			//-----------------------------------------------------
+			/// Returns the elapsed time since the application
+            /// started running in seconds.
+			///
+            /// @author I Copland
+            ///
+			/// @return The time in seconds.
+			//-----------------------------------------------------
+			TimeIntervalSecs GetAppElapsedTime();
+            //-----------------------------------------------------
+            /// Returns the system clock time in seconds since epoch.
+            ///
+            /// @author I Copland
+            ///
+            /// @return The time in seconds.
+            //-----------------------------------------------------
+            TimeIntervalSecs GetSystemTime();
+			//-----------------------------------------------------
+            /// Return the system clock time in milliseconds since
+            /// epoch.
+            ///
+            /// @author I Copland
+            ///
+            /// @return The time in milliseconds.
+            //-----------------------------------------------------
+            TimeIntervalSecs GetSystemTimeInMilliseconds();
+			//-----------------------------------------------------
+			/// Set the time between update calls to adjust the
+            /// frame rate.
+            ///
+            /// @author I Copland
 			///
 			/// @param Time between update calls
-			//--------------------------------------------------------------------------------------------------
-			static void SetUpdateInterval(f32 infUpdateInterval);
-			//--------------------------------------------------------------------------------------------------
-			/// Get Update Interval
+			//-----------------------------------------------------
+			void SetUpdateInterval(f32 in_updateInterval);
+			//-----------------------------------------------------
+			/// Returns the time between update calls.
+            ///
+            /// @author I Copland.
 			///
 			/// @return Time between update calls
-			//--------------------------------------------------------------------------------------------------
-			static f32 GetUpdateInterval();
-			//--------------------------------------------------------------------------------------------------
-			/// Get Max Update Interval
+			//-----------------------------------------------------
+			f32 GetUpdateInterval();
+			//-----------------------------------------------------
+			/// Returns the maximum amount of time to be processed
+            /// a single update frame.
+            ///
+            /// @author I Copland
 			///
 			/// @return Max time to be processed in a single frame.
-			//--------------------------------------------------------------------------------------------------
-			static f32 GetUpdateIntervalMax();
-            //--------------------------------------------------------------------------------------------------
-			/// Set Update Speed
+			//-----------------------------------------------------
+			f32 GetUpdateIntervalMax();
+            //-----------------------------------------------------
+			/// Sets a multiplier for slowing or speeding up the
+            /// delta time passed to each system and state.
             ///
-			/// @param Scaler to speed up or slow down update time
-			//--------------------------------------------------------------------------------------------------
-			static void SetUpdateSpeed(f32 infSpeed);
-			//--------------------------------------------------------------------------------------------------
-			/// Get State Manager
+            /// @author I Copland
+            ///
+			/// @param Scaler to speed up or slow down update time.
+			//-----------------------------------------------------
+			void SetUpdateSpeed(f32 in_speed);
+            //-----------------------------------------------------
+            /// Stop the application and exit gracefully
+            ///
+            /// @author I Copland
+            //-----------------------------------------------------
+            void Quit();
+            //-----------------------------------------------------
+			/// Returns the default font described in the App.config
+            /// file.
 			///
-			/// @return Application state manager
-			//--------------------------------------------------------------------------------------------------
-			static StateManager& GetStateManager();
-			//--------------------------------------------------------------------------------------------------
-			/// Get State Manager Pointer
+            /// @author I Copland
+            ///
+            /// @return The default font.
+            //-----------------------------------------------------
+            const Rendering::FontSPtr& GetDefaultFont();
+            //-----------------------------------------------------
+			/// Returns the default mesh described in the App.config
+            /// file.
+            ///
+            /// @author I Copland
+			///
+            /// @return The default mesh.
+            //-----------------------------------------------------
+            const Rendering::MeshSPtr& GetDefaultMesh();
+            //-----------------------------------------------------
+			/// Returns the default material described in the
+            /// App.config file.
+            ///
+            /// @author I Copland
+			///
+            /// @return The default material.
+            //-----------------------------------------------------
+            const Rendering::MaterialSPtr& GetDefaultMaterial();
+			//-----------------------------------------------------
+			/// Returns a pointer to the state manager.
+            ///
+            /// @author I Copland
 			///
 			/// @return Handle to application state manager
-			//--------------------------------------------------------------------------------------------------
-			static StateManager* GetStateManagerPtr();
-			//--------------------------------------------------------------------------------------------------
-			/// Get Renderer Pointer
+			//-----------------------------------------------------
+			StateManager* GetStateManager();
+			//-----------------------------------------------------
+			/// Returns a pointer to the renderer.
+            ///
+            /// @author I Copland
 			///
 			/// @return Handle application renderer
-			//--------------------------------------------------------------------------------------------------
-			static Rendering::Renderer* GetRendererPtr() {return mpRenderer;}
-			//--------------------------------------------------------------------------------------------------
-			/// Get Render System Pointer
+			//-----------------------------------------------------
+			Rendering::Renderer* GetRenderer();
+			//-----------------------------------------------------
+			/// Returns a pointer to the render system.
+            ///
+            /// @author I Copland
 			///
 			/// @return Handle to platfrom specific render system
-			//--------------------------------------------------------------------------------------------------
-			static Rendering::RenderSystem* GetRenderSystemPtr() {return mpRenderSystem;}
-            //--------------------------------------------------------------------------------------------------
-			/// Get Platform System Ptr
+			//-----------------------------------------------------
+			Rendering::RenderSystem* GetRenderSystem();
+            //-----------------------------------------------------
+			/// Returns a pointer to the platform system.
+            ///
+            /// @author I Copland
 			///
             /// @return Pointer to the platform system
-            //--------------------------------------------------------------------------------------------------
-			static PlatformSystem* GetPlatformSystemPtr(){return pPlatformSystem;}
-			//--------------------------------------------------------------------------------------------------
-			/// Get Input System Ptr
+            //-----------------------------------------------------
+			PlatformSystem* GetPlatformSystem();
+			//-----------------------------------------------------
+			/// Returns a pointer to the input system.
+            ///
+            /// @author I Copland
 			///
 			/// @return Pointer to the input system
-			//--------------------------------------------------------------------------------------------------
-			static Input::InputSystem* GetInputSystemPtr(){return mpInputSystem;}
-			//--------------------------------------------------------------------------------------------------
-			/// Get Input System Ptr
+			//-----------------------------------------------------
+			Input::InputSystem* GetInputSystem();
+			//-----------------------------------------------------
+			/// Returns a pointer to the audio system.
+            ///
+            /// @author I Copland
 			///
 			/// @return Pointer to the input system
-			//--------------------------------------------------------------------------------------------------
-			static Audio::AudioSystem* GetAudioSystemPtr(){return pAudioSystem;}
-			//--------------------------------------------------------------------------------------------------
-			/// Get File System Ptr
+			//-----------------------------------------------------
+			Audio::AudioSystem* GetAudioSystem();
+			//-----------------------------------------------------
+			/// Returns a pointer to the file system.
+            ///
+            /// @author I Copland
 			///
 			/// @return Pointer to the file system
-			//--------------------------------------------------------------------------------------------------
-			static FileSystem* GetFileSystemPtr(){return mspFileSystem;}
-            //--------------------------------------------------------------------------------------------------
-			/// Refresh Master Text
-			///
-            /// Call this after a DLC update to refresh the master text cache from file
+			//-----------------------------------------------------
+			FileSystem* GetFileSystem();
+            //-----------------------------------------------------
+			/// Sets the renderer.
             ///
-            /// @param Storage location
-            /// @param File path excluding name (i.e. if root then "")
-            //--------------------------------------------------------------------------------------------------
-            static void RefreshMasterText(StorageLocation ineStorageLocation, const std::string& instrDirectory);
-            //--------------------------------------------------------------------------------------------------
-			/// Get Default Font
+            /// @author I Copland
 			///
-            /// @return Default font given to the system by the application delegate
-            //--------------------------------------------------------------------------------------------------
-            static const Rendering::FontSPtr& GetDefaultFont();
-            //--------------------------------------------------------------------------------------------------
-			/// Get Default Mesh
-			///
-            /// @return Default mesh given to the system by the application delegate
-            //--------------------------------------------------------------------------------------------------
-            static const Rendering::MeshSPtr& GetDefaultMesh();
-            //--------------------------------------------------------------------------------------------------
-			/// Get Default Material
-			///
-            /// @return Default material given to the system by the application delegate
-            //--------------------------------------------------------------------------------------------------
-            static const Rendering::MaterialSPtr& GetDefaultMaterial();
-            //--------------------------------------------------------------------------------------------------
-            /// Quit
+			/// @param Handle application renderer
+			//-----------------------------------------------------
+			void SetRenderer(Rendering::Renderer* in_system);
+			//-----------------------------------------------------
+			/// Sets the render system.
             ///
-            /// Stop the application and exit 
-            /// gracefully
-            //--------------------------------------------------------------------------------------------------
-            static void Quit();
-            //--------------------------------------------------------------------------------------------------
-            /// Show System Confirm Dialog
+            /// @author I Copland
+			///
+			/// @param Handle to platfrom specific render system
+			//-----------------------------------------------------
+			void SetRenderSystem(Rendering::RenderSystem* in_system);
+            //-----------------------------------------------------
+			/// Sets the platform system.
             ///
-            /// Display a system confirmation dialog with the given ID and delegate
+            /// @author I Copland
+			///
+            /// @param Pointer to the platform system
+            //-----------------------------------------------------
+			void SetPlatformSystem(PlatformSystem* in_system);
+			//-----------------------------------------------------
+			/// Sets the input system.
             ///
-            /// @param ID
-            /// @param SystemConfirmDialogDelegate
-            /// @param Title text
-            /// @param Message text
-            /// @param Confirm text
-            /// @param Cancel text
-            //--------------------------------------------------------------------------------------------------
-            static void ShowSystemConfirmDialog(u32 inudwID, const SystemConfirmDialog::Delegate& inDelegate, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm, const UTF8String& instrCancel);
-            //--------------------------------------------------------------------------------------------------
-            /// Show System Dialog
+            /// @author I Copland
+			///
+			/// @param Pointer to the input system
+			//-----------------------------------------------------
+			void SetInputSystem(Input::InputSystem* in_system);
+			//-----------------------------------------------------
+			/// Sets the audio system.
             ///
-            /// Display a system dialog with the given ID and delegate
+            /// @author I Copland
+			///
+			/// @param Pointer to the input system
+			//-----------------------------------------------------
+			void SetAudioSystem(Audio::AudioSystem* in_system);
+			//-----------------------------------------------------
+			/// Sets the file system.
             ///
-            /// @param ID
-            /// @param SystemConfirmDialogDelegate
-            /// @param Title text
-            /// @param Message text
-            /// @param Confirm text
-            //--------------------------------------------------------------------------------------------------
-            static void ShowSystemDialog(u32 inudwID, const SystemConfirmDialog::Delegate& inDelegate, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm);
-            //--------------------------------------------------------------------------------------------------
-            /// On System Confirm Dialog Result
+            /// @author I Copland
+			///
+			/// @return Pointer to the file system
+			//-----------------------------------------------------
+			void SetFileSystem(FileSystem* in_system);
+            //----------------------------------------------------
+			/// Initialises the application and kicks off the update
+            /// loop. This should not be called by a users application.
             ///
-            /// Triggered from a system dialog confirmation event
+            /// @author I Copland
+			//----------------------------------------------------
+			void OnInitialise();
+            //----------------------------------------------------
+			/// Resumes application from suspended state. This should
+            /// not be called by a users application.
             ///
-            /// @param ID
-            /// @param Result
-            //--------------------------------------------------------------------------------------------------
-            static void OnSystemConfirmDialogResult(u32 inudwID, SystemConfirmDialog::Result ineResult);
-            //--------------------------------------------------------------------------------------------------
-			/// Set Render System
-			///
-			/// @param the system pointer.
-			//--------------------------------------------------------------------------------------------------
-			static void SetRenderSystem(Rendering::RenderSystem* inpSystem);
-            //--------------------------------------------------------------------------------------------------
-			/// Set Input System
-			///
-			/// @param the system pointer.
-			//--------------------------------------------------------------------------------------------------
-			static void SetInputSystem(Input::InputSystem* inpSystem);
-            //--------------------------------------------------------------------------------------------------
-			/// Set Audio System
-			///
-			/// @param the system pointer.
-			//--------------------------------------------------------------------------------------------------
-			static void SetAudioSystem(Audio::AudioSystem* inpSystem);
-            //--------------------------------------------------------------------------------------------------
-			/// Set Renderer
-			///
-			/// @param the renderer
-			//--------------------------------------------------------------------------------------------------
-			static void SetRenderer(Rendering::Renderer* inpSystem);
-			//--------------------------------------------------------------------------------------------------
-			/// Set File System
-			///
-			/// @param the file system
-			//--------------------------------------------------------------------------------------------------
-			static void SetFileSystem(FileSystem* inpSystem);
-			//--------------------------------------------------------------------------------------------------
-			/// Set Has Touch Input
-			///
-			/// @param whether or not touch input is available.
-			//--------------------------------------------------------------------------------------------------
-			static void SetHasTouchInput(bool inbTouchInput);
-			//--------------------------------------------------------------------------------------------------
-			/// Has Touch Input
-			///
-			/// @return whether or not touch input is available.
-			//--------------------------------------------------------------------------------------------------
-			static bool HasTouchInput();
-            //----------------------------------------------------------------------
-			/// Set Orientation
-			///
-			/// Tell the active camera to roate its view and if we are using
-			/// touch input we must rotate the input co-ordinates
-			/// @param Screen orientation flag
-			//----------------------------------------------------------------------
-			static void SetOrientation(ScreenOrientation inOrientation);
-			//--------------------------------------------------------------------------------------------------
-			/// Enable System Updating
-			///
-			/// Enabled and disabled the updating of "updateable" systems.
-			///
-			/// @param whether or not to update.
-			//--------------------------------------------------------------------------------------------------
-			static void EnableSystemUpdating(bool inbEnable);
-            //--------------------------------------------------------------------------------------------------
-            /// Update
+            /// @author I Copland
+			//----------------------------------------------------
+			void OnResume();
+            //----------------------------------------------------
+			/// Triggered by an update event. This will update
+            /// the application, systems and states. This should
+            /// not be called by a users application.
             ///
-            /// A single update cycle that updates all updateables, timers and the active state
-            /// This can be called multiple times per frame depending on fixed updates.
+            /// @author I Copland
+            ///
+            /// @param The delta time.
+            /// @param The frame timestamp.
+			//----------------------------------------------------
+			void OnUpdate(f32 in_deltaTime, TimeIntervalSecs in_timestamp);
+            //----------------------------------------------------
+			/// Triggered on receiving a "orientation changed"
+            /// event. Used to tell the camera and input to rotate.
+            /// This should not be called by a users application.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The new orientation.
+			//----------------------------------------------------
+			void OnScreenChangedOrientation(ScreenOrientation in_orientation);
+			//----------------------------------------------------
+			/// Triggered on receiving a "screen resized" event.
+            /// This should not be called by a users application.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The new width.
+            /// @param The new height.
+			//----------------------------------------------------
+			void OnScreenResized(u32 in_width, u32 in_height);
+			//----------------------------------------------------
+			/// Triggered on receiving a "application memory warning"
+            /// event. This will notify active resource managers to
+            /// purge their caches. This should not be called by
+            /// a users application.
+            ///
+            /// @author I Copland
+			//----------------------------------------------------
+			void OnApplicationMemoryWarning();
+            //----------------------------------------------------
+			/// Triggered on receiving a "go back" event. This is
+            /// typically caused by pressing a physical back button
+            /// on the device, For example the Android back button.
+            /// This should not be called by a users application.
+            ///
+            /// @author I Copland
+			//----------------------------------------------------
+			void OnGoBack();
+            //----------------------------------------------------
+            /// Triggered on receiving a "application will suspend"
+            /// message. This will notify active states to pause
+            /// and tell the sub systems to stop. This should not
+            /// be called by a users application.
+            ///
+            /// @author I Copland
+			//----------------------------------------------------
+			void OnSuspend();
+            //----------------------------------------------------
+            /// Releases all systems and states and cleans up the
+            /// application. This should not be called by a users
+            /// application.
+            ///
+            /// @author I Copland
+			//----------------------------------------------------
+			void OnDestroy();
+            //------------------------------------------------------
+			/// Destructor
+			//------------------------------------------------------
+            virtual ~Application();
+		protected:
+            //----------------------------------------------------
+            /// Adds a system to the application. This should only
+            /// be called inside the CreateSystem() method.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The new system to add to the application.
+ 			//----------------------------------------------------
+            void AddSystem(const SystemSPtr& in_system);
+            //------------------------------------------------------
+			/// The users application should override this to add
+            /// desired systems. Systems can only be added in this
+            /// method.
+            ///
+            /// @author I Copland
+			//------------------------------------------------------
+			virtual void CreateSystems() = 0;
+            //------------------------------------------------------
+			/// Initialisation method called after all systems have
+            /// been set up and before the first state is pushed.
+            /// Application initialisation code should be in here.
+            ///
+            /// @author I Copland
+			//------------------------------------------------------
+			virtual void Initialise() = 0;
+            //------------------------------------------------------
+			/// Give the state manager the initial state. This should
+            /// be overriden by the users application to add initial
+            /// state.
+            ///
+            /// @author I Copland
+			//------------------------------------------------------
+			virtual void PushInitialState() = 0;
+            //------------------------------------------------------
+            /// Give the engine the available resource directories
+            /// and the info required to decide which directory the
+            /// current device should use.
+            ///
+            /// @author I Copland
+            ///
+            /// @param [Out] Vector of directory info
+            /// @param [Out] The name of the directory to fall back
+            /// on for resolution dependant assets
+            /// @param [Out] The name of the directory to use as the
+            /// default (i.e. for shared assets)
+            //------------------------------------------------------
+            virtual void SetResourceDirectories(std::vector<ResourceDirectoryInfo>& out_resDependantDirectoryInfos, std::string& out_resDefaultDirectory, std::string& out_defaultDirectory) = 0;
+            //------------------------------------------------------
+			/// Destuction method called just before all systems
+            /// and states are released. Application destruction
+            /// code should be in here.
+            ///
+            /// @author I Copland
+			//------------------------------------------------------
+			virtual void Destroy() = 0;
+        private:
+            //----------------------------------------------------
+            /// Looks for a system that implements the given
+            /// queryable interface.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The interface ID for the requested named
+            /// interface.
+            /// @return The first system found that implements
+            /// the named interface.
+ 			//----------------------------------------------------
+            System* GetSystem(InterfaceIDType in_interfaceID);
+            //------------------------------------------------------
+			/// Once the systems have been created they are then
+            /// added to the pool and initialised.
+            ///
+            /// @author I Copland
+			//------------------------------------------------------
+			void PostCreateSystems();
+            //------------------------------------------------------
+            /// Open the app config file and load any of the specified
+            /// resources to act as the defaults.
+            ///
+            /// @author I Copland
+            //------------------------------------------------------
+            void LoadDefaultResources();
+            //------------------------------------------------------
+            /// Depedending on the device decide which folders
+            /// resources should be loaded from.
+            ///
+            /// @author I Copland
+            //------------------------------------------------------
+            void DetermineResourceDirectories();
+            //------------------------------------------------------
+            /// A single update cycle that updates all updateables,
+            /// timers and the active state This can be called multiple
+            /// times per frame depending on fixed updates.
+            ///
+            /// @author I Copland
             ///
             /// @param Time between frames
-            //--------------------------------------------------------------------------------------------------
-			static void Update(f32 infDT);
-			//--------------------------------------------------------------------------------------------------
-			/// Push Initial State
-			///
-			/// Give the state manager the initial state. Overriden by application to add initial state
-			//--------------------------------------------------------------------------------------------------
-			virtual void PushInitialState() = 0;
-		protected:
-            
-            //---App Delegates
-            //--------------------------------------------------------------------------------------------------
-            /// Set Resource Directories
+            //------------------------------------------------------
+			void Update(f32 in_deltaTime);
+            //------------------------------------------------------
+			/// Tell the active camera to roate its view and if we
+            /// are using touch input we must rotate the input
+            /// co-ordinates.
             ///
-            /// Give MoFlow the available resource directories and the info required to decide which directory
-            /// the current device should use
+            /// @author I Copland
             ///
-            /// @param Out: Vector of directory info
-            /// @param Out: The name of the directory to fall back on for resolution dependant assets
-            /// @param Out: The name of the directory to use as the default (i.e. for shared assets)
-            //--------------------------------------------------------------------------------------------------
-            virtual void SetResourceDirectories(std::vector<ResourceDirectoryInfo>& outaResDependantDirectoryInfos, std::string& outstrResDefaultDirectory, std::string& outstrDefaultDirectory) = 0;
-			//--------------------------------------------------------------------------------------------------
-			/// Create Systems
-			///
-			/// Applications override this to create systems specific to the app or game
-			//--------------------------------------------------------------------------------------------------
-			virtual void CreateSystems() = 0;	
-			//--------------------------------------------------------------------------------------------------
-			/// Post Create Systems
-			///
-			/// Once the systems have been created they are then added to the pool and initialised
-			//--------------------------------------------------------------------------------------------------
-			void PostCreateSystems();
-            //--------------------------------------------------------------------------------------------------
-            /// Load Default Resources
-            ///
-            /// Open the app config file and load any of the specified resources to act as the defaults
-            //--------------------------------------------------------------------------------------------------
-            void LoadDefaultResources();
-            //--------------------------------------------------------------------------------------------------
-            /// Determine Resource Directories
-            ///
-            /// Depedending on the device decide which folders resources should be loaded from
-            //--------------------------------------------------------------------------------------------------
-            void DetermineResourceDirectories();
-        
-        private:
+			/// @param Screen orientation flag
+			//------------------------------------------------------
+			void SetOrientation(ScreenOrientation inOrientation);
             //---------------------------------------------------
             /// Resumes the application. This will be called when
-            /// at the start of the next update following Resume
-            /// being called.
+            /// at the start of the next update following the On
+            /// Resume event.
             ///
-            /// @author Ian Copland
+            /// @author I Copland
             //---------------------------------------------------
-            static void OnApplicationResumed();
-            
-		protected: //---Members
-			
-			static StateManager mStateMgr;		//Handles the state updating and transitioning
-            
-			static Rendering::Renderer* mpRenderer;
-			
-            //---Systems
-            static Rendering::RenderSystem* mpRenderSystem;
-			static Input::InputSystem * mpInputSystem;
-            static PlatformSystem* pPlatformSystem;	//Interface to platform specific API's such as timer etc
-            static Audio::AudioSystem* pAudioSystem;
-            static FileSystem* mspFileSystem;
+            void ResumeApplication();
 
-			static ScreenOrientation meDefaultOrientation;
-			
-			static std::vector<SystemSPtr> mSystems; //All systems in use by the application
-            static std::vector<IUpdateable*> mUpdateableSystems; //All updateable systems in use by the application
+        private:
+            std::vector<SystemSPtr> m_systems;
+            std::vector<IUpdateable*> m_updateableSystems;
             
-            static ResourceManagerDispenser* mpResourceManagerDispenser;
-            ComponentFactoryDispenser* mpComponentFactoryDispenser;
-		
-			static bool mbHasTouchInput;
-            static bool mbUpdateSystems;
-		private:
-			
-			std::vector<ResourceProvider*> mResourceProviders; //All resource provider systems available
+			StateManager m_stateManager;
+			Rendering::Renderer* m_renderer;
+            Rendering::RenderSystem* m_renderSystem;
+			Input::InputSystem * m_inputSystem;
+            PlatformSystem* m_platformSystem;
+            Audio::AudioSystem* m_audioSystem;
+            FileSystem* m_fileSystem;
 
-			static SystemConfirmDialog::Delegate mActiveSysConfirmDelegate;
-        
-			static TimeIntervalSecs uddwCurrentAppTime;
-            static Rendering::FontSPtr pDefaultFont;
-            static Rendering::MeshSPtr pDefaultMesh;
-            static Rendering::MaterialSPtr pDefaultMaterial;
-			static f32 mfUpdateInterval;
-            static f32 mfUpdateSpeed;
+			ScreenOrientation m_defaultOrientation;
             
-            static f32 s_updateIntervalRemainder;
-            static bool s_shouldNotifyConnectionsResumeEvent;
-            static bool s_isFirstFrame;
-            static bool s_isSuspending;
+            ResourceManagerDispenser* m_resourceManagerDispenser;
+            ComponentFactoryDispenser* m_componentFactoryDispenser;
+			std::vector<ResourceProvider*> m_resourceProviders;
+
+			TimeIntervalSecs m_currentAppTime;
+            Rendering::FontSPtr m_defaultFont;
+            Rendering::MeshSPtr m_defaultMesh;
+            Rendering::MaterialSPtr m_defaultMaterial;
+			f32 m_updateInterval;
+            f32 m_updateSpeed;
+            
+            f32 m_updateIntervalRemainder;
+            bool m_shouldNotifyConnectionsResumeEvent;
+            bool m_isFirstFrame;
+            bool m_isSuspending;
+            
+            static Application* s_application;
 		};
+        //----------------------------------------------------
+        //----------------------------------------------------
+        template <typename TNamedType> TNamedType* Application::GetSystem()
+        {
+            System* system = GetSystem(TNamedType::InterfaceID);
+            
+            if (system != nullptr)
+            {
+                return static_cast<TNamedType*>(system);
+            }
+            
+            return nullptr;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        template <typename TCastType, typename TNamedType> TCastType* Application::GetSystem()
+        {
+            System* system = GetSystem(TNamedType::InterfaceID);
+            
+            if (system != nullptr)
+            {
+                return system->GetInterface<TCastType>();
+            }
+            
+            return nullptr;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TNamedType> void Application::GetSystems(std::vector<TNamedType*> & out_systems)
+        {
+            for (size_t systemIndex = 0; systemIndex < m_systems.size(); systemIndex++)
+            {
+                if (m_systems[systemIndex]->IsA(TNamedType::InterfaceID))
+                {
+                    out_systems.push_back(static_cast<TNamedType*>(m_systems[systemIndex].get()));
+                }
+            }
+        }
 	}
 }
 

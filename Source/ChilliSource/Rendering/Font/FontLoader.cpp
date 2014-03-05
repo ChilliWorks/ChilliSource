@@ -74,7 +74,7 @@ namespace ChilliSource
             std::string strGlyphs;
 			
 			//Open the characters for reading only
-			Core::FileStreamSPtr pGlyphsStream = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_read);
+			Core::FileStreamSPtr pGlyphsStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_read);
 
 			if(pGlyphsStream && !pGlyphsStream->IsBad())
 			{
@@ -106,7 +106,7 @@ namespace ChilliSource
             std::string strFileName, strExtension;
 			Core::StringUtils::SplitBaseFilename(inFilePath, strFileName, strExtension);
             const std::string stdKerningFilePath(strFileName+"."+kstrKerningExtension);
-			ChilliSource::Core::FileStreamSPtr pKerningStream = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, stdKerningFilePath, Core::FileMode::k_read);
+			ChilliSource::Core::FileStreamSPtr pKerningStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, stdKerningFilePath, Core::FileMode::k_read);
             
             return (pKerningStream && !pKerningStream->IsBad());
         }
@@ -119,7 +119,7 @@ namespace ChilliSource
             std::string strFileName, strExtension;
 			Core::StringUtils::SplitBaseFilename(inFilePath, strFileName, strExtension);
             const std::string stdKerningFilePath(strFileName+"."+kstrKerningExtension);
-			Core::FileStreamSPtr pKerningStream = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, stdKerningFilePath, Core::FileMode::k_read);
+			Core::FileStreamSPtr pKerningStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, stdKerningFilePath, Core::FileMode::k_read);
             
 			if(pKerningStream && !pKerningStream->IsBad())
             {

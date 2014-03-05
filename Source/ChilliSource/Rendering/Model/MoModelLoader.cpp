@@ -212,7 +212,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool MoModelLoader::BuildMesh(MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource, bool inbNeedsPrepared)
 		{
-			bool bSuccess = MeshManager::BuildMesh(mpApp->GetRenderSystemPtr(), inMeshDescriptor, outpResource, inbNeedsPrepared);
+			bool bSuccess = MeshManager::BuildMesh(mpApp->GetRenderSystem(), inMeshDescriptor, outpResource, inbNeedsPrepared);
 			
 			//cleanup
 			for (std::vector<SubMeshDescriptor>::const_iterator it = inMeshDescriptor.mMeshes.begin(); it != inMeshDescriptor.mMeshes.end(); ++it)
@@ -231,7 +231,7 @@ namespace ChilliSource
 		{
 			bool mbSuccess = true;
 			
-			Core::FileStreamSPtr stream = Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
+			Core::FileStreamSPtr stream = Core::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
 	
 			MeshDataQuantities quantities;
 			mbSuccess = ReadGlobalHeader(stream, inMeshDescriptor, inFilePath, quantities);
