@@ -36,7 +36,7 @@ namespace ChilliSource
         : mpContentDownloader(inpContentDownloader), mpServerManifest(nullptr), 
         muRunningToDownloadTotal(0), muRunningDownloadedTotal(0), mbDLCCachePurged(false)
         {
-            mstrContentDirectory = Core::Application::Get()->GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_DLC);
+            mstrContentDirectory = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(Core::StorageLocation::k_DLC);
         }
         //-----------------------------------------------------------
         /// Load Local Manifest 
@@ -80,7 +80,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		std::string ContentManagementSystem::CalculateChecksum(Core::StorageLocation ineLocation, const std::string& instrFilePath)
 		{
-            std::string strMD5Checksum = Core::Application::Get()->GetFileSystemPtr()->GetFileMD5Checksum(ineLocation, instrFilePath);
+            std::string strMD5Checksum = Core::Application::Get()->GetFileSystem()->GetFileMD5Checksum(ineLocation, instrFilePath);
 			std::string strBase64Encoded = Core::BaseEncoding::Base64Encode(strMD5Checksum);
 			Core::StringUtils::ChopTrailingChars(strBase64Encoded, '=');
 			return strBase64Encoded;
@@ -171,7 +171,7 @@ namespace ChilliSource
             {
             	//Add a temp directory so that the packages are stored atomically and only overwrite
                 //the originals on full success
-                Core::Application::Get()->GetFileSystemPtr()->CreateDirectory(Core::StorageLocation::k_DLC, "Temp");
+                Core::Application::Get()->GetFileSystem()->CreateDirectory(Core::StorageLocation::k_DLC, "Temp");
                 mpContentDownloader->DownloadPackage(mPackageDetails[mudwCurrentPackageDownload].strURL, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete));
             }
             else
@@ -561,7 +561,7 @@ namespace ChilliSource
                 {
                     //It exists in the bundle let's remove the old version from DLC cache
                     //Remove old content
-                    Core::Application::Get()->GetFileSystemPtr()->DeleteFile(Core::StorageLocation::k_DLC, strPackageID + "/" + strFileName);
+                    Core::Application::Get()->GetFileSystem()->DeleteFile(Core::StorageLocation::k_DLC, strPackageID + "/" + strFileName);
                     
                     //On to the next file
                     pFileEl = Core::XMLUtils::NextSiblingElementWithName(pFileEl);
@@ -583,7 +583,7 @@ namespace ChilliSource
             std::string strFile = "Temp/" + insPackageDetails.strID + ".packzip";
 
             //Append to the file as it can take multiple writes
-            Core::FileStreamSPtr pFileStream = Core::Application::Get()->GetFileSystemPtr()->CreateFileStream(Core::StorageLocation::k_DLC, strFile, Core::FileMode::k_writeBinaryAppend);
+            Core::FileStreamSPtr pFileStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(Core::StorageLocation::k_DLC, strFile, Core::FileMode::k_writeBinaryAppend);
 			pFileStream->Write((s8*)instrZippedPackage.data(), (s32)instrZippedPackage.size());
             pFileStream->Close();
             
@@ -695,12 +695,12 @@ namespace ChilliSource
                 {
                     //There is a nested folder so we need to create the directory structure
                     std::string strPath = GetPathExcludingFileName(strFilePath);
-                    Core::Application::Get()->GetFileSystemPtr()->CreateDirectory(Core::StorageLocation::k_DLC, "/" + strPath);
+                    Core::Application::Get()->GetFileSystem()->CreateDirectory(Core::StorageLocation::k_DLC, "/" + strPath);
                 }
                 
                 if(IsFile(strFilePath))
                 {
-                    Core::Application::Get()->GetFileSystemPtr()->CreateFile(Core::StorageLocation::k_DLC, "/" + strFilePath, pbyDataBuffer, FileInfo.uncompressed_size);
+                    Core::Application::Get()->GetFileSystem()->CreateFile(Core::StorageLocation::k_DLC, "/" + strFilePath, pbyDataBuffer, FileInfo.uncompressed_size);
                 }
                 
                 //Close current file and jump to the next
@@ -750,17 +750,17 @@ namespace ChilliSource
         {
             if(inbCheckOnlyBundle)
             {
-                if(Core::Application::Get()->GetFileSystemPtr()->DoesFileExist(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystemPtr()->GetPackageDLCDirectory() + instrFilename))
+                if(Core::Application::Get()->GetFileSystem()->DoesFileExist(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCDirectory() + instrFilename))
                 {
                     //Check if the file has become corrupted
-                    return (CalculateChecksum(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystemPtr()->GetPackageDLCDirectory() + instrFilename) == instrChecksum);
+                    return (CalculateChecksum(Core::StorageLocation::k_package, Core::Application::Get()->GetFileSystem()->GetPackageDLCDirectory() + instrFilename) == instrChecksum);
                 }
                 
                 return false;
             }
             else
             {
-                if(Core::Application::Get()->GetFileSystemPtr()->DoesFileExist(Core::StorageLocation::k_DLC, instrFilename))
+                if(Core::Application::Get()->GetFileSystem()->DoesFileExist(Core::StorageLocation::k_DLC, instrFilename))
                 {
                     //Check if the file has become corrupted
                     return (CalculateChecksum(Core::StorageLocation::k_DLC, instrFilename) == instrChecksum);
@@ -778,7 +778,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         void ContentManagementSystem::DeleteDirectory(const std::string& instrDirectory) const
         {
-            ChilliSource::Core::Application::Get()->GetFileSystemPtr()->DeleteDirectory(Core::StorageLocation::k_DLC, instrDirectory);
+            ChilliSource::Core::Application::Get()->GetFileSystem()->DeleteDirectory(Core::StorageLocation::k_DLC, instrDirectory);
         }
     }
 }

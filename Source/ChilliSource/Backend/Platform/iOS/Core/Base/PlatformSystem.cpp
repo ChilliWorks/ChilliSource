@@ -202,10 +202,10 @@ namespace ChilliSource
             inaSystems.push_back(Core::SystemSPtr(Core::DialogueBoxSystem::Create()));
             
 			//Initialise the render system
-			Core::Application::Get()->GetRenderSystemPtr()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
+			Core::Application::Get()->GetRenderSystem()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
             
 			//Create the renderer
-			Core::Application::Get()->SetRenderer(new Rendering::Renderer(Core::Application::Get()->GetRenderSystemPtr()));
+			Core::Application::Get()->SetRenderer(new Rendering::Renderer(Core::Application::Get()->GetRenderSystem()));
 		}
 		//-------------------------------------------------
 		/// Post Create Systems
@@ -217,7 +217,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::PostCreateSystems()
 		{
-            if(Core::Application::Get()->GetAudioSystemPtr() != nullptr)
+            if(Core::Application::Get()->GetAudioSystem() != nullptr)
 			{
 				Audio::AudioPlayer::Init();
 			}

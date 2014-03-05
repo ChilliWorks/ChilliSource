@@ -34,9 +34,9 @@ namespace ChilliSource
 		: Audio::AudioLoader(inpFMODSystem), mpFMODSystem(static_cast<FMODSystem*>(inpFMODSystem))
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
-            m_cacheDirectory = Core::Application::Get()->GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_cache);
-			m_DLCDirectory = Core::Application::Get()->GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_DLC);
-			m_saveDataDirectory = Core::Application::Get()->GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_saveData);
+            m_cacheDirectory = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(Core::StorageLocation::k_cache);
+			m_DLCDirectory = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(Core::StorageLocation::k_DLC);
+			m_saveDataDirectory = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(Core::StorageLocation::k_saveData);
 #endif
 		}
 		//----------------------------------------------------------------------------
@@ -86,7 +86,7 @@ namespace ChilliSource
 			return true;
 #else
             std::string strFilePath;
-            Core::Application::Get()->GetFileSystemPtr()->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
+            Core::Application::Get()->GetFileSystem()->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
             
             if(strFilePath.empty())
             {
@@ -133,7 +133,7 @@ namespace ChilliSource
 			return true;
 #else
             std::string strFilePath;
-            Core::Application::Get()->GetFileSystemPtr()->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
+            Core::Application::Get()->GetFileSystem()->GetBestPathToFile(ineStorageLocation, inFilePath, strFilePath);
             
             if(strFilePath.empty())
             {

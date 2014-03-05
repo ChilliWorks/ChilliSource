@@ -145,7 +145,7 @@ namespace ChilliSource
                 QueueEvent(sEvent);
             }
             
-            Core::Application::Get()->GetFileSystemPtr()->DeleteFile(Core::StorageLocation::k_cache,  instrID + ".mosession");
+            Core::Application::Get()->GetFileSystem()->DeleteFile(Core::StorageLocation::k_cache,  instrID + ".mosession");
         }
         
         void MoMetricsSession::SaveToCache()

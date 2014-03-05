@@ -59,7 +59,7 @@ namespace ChilliSource
         
         bool SceneAnimationDesc::LoadFromBinaryFile(StorageLocation ineStorageLocation, const std::string & inFilePath)
         {
-            Core::FileStreamSPtr AnimFile = Core::Application::Get()->GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
+            Core::FileStreamSPtr AnimFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_readBinary);
             if (AnimFile->IsOpen())
             {
                 u32 nAnimations;
@@ -75,7 +75,7 @@ namespace ChilliSource
         
         void SceneAnimationDesc::SaveToBinaryFile(StorageLocation ineStorageLocation, const std::string & inFilePath)
         {
-            Core::FileStreamSPtr AnimFile= Core::Application::Get()->GetFileSystemPtr()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_writeBinary);
+            Core::FileStreamSPtr AnimFile= Core::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, inFilePath, Core::FileMode::k_writeBinary);
 			
 			u32 nAnimations = asEntityAnimations.size();
 			AnimFile->Write((s8*)&nAnimations, (s32)sizeof(u32));

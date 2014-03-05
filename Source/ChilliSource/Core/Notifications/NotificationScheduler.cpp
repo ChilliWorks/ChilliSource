@@ -378,7 +378,7 @@ namespace ChilliSource
                 if(!NotificationQueue.empty() && !NotificationQueue.front()->bTriggered)
                 {
                     //Trigger the next one
-                    if(Core::Application::Get()->GetStateManagerPtr()->OnNotificationReceived(NotificationQueue.front().get()))
+                    if(Core::Application::Get()->GetStateManager()->OnNotificationReceived(NotificationQueue.front().get()))
                     {
                         NotificationQueue.front()->bTriggered = true;
                     }

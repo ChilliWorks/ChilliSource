@@ -69,7 +69,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool SpriteSheetLoader::CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource)
 		{
-			ChilliSource::Core::FileStreamSPtr binary_file = Core::Application::Get()->GetFileSystemPtr()->CreateFileStream(ineLocation, inFilePath, ChilliSource::Core::FileMode::k_readBinary);
+			ChilliSource::Core::FileStreamSPtr binary_file = Core::Application::Get()->GetFileSystem()->CreateFileStream(ineLocation, inFilePath, ChilliSource::Core::FileMode::k_readBinary);
 			
 			//If we have not successfully loaded the high res then just load the default
 			if(binary_file->IsOpen() == false)
@@ -157,7 +157,7 @@ namespace ChilliSource
             
             //Get the name of the file and append the high res identifier to it
             Core::StringUtils::SplitBaseFilename(inFilePath, strName, strExtension);
-            Core::FileStreamSPtr idFile = Core::Application::Get()->GetFileSystemPtr()->CreateFileStream(ineLocation, strName + ".mospriteid", Core::FileMode::k_read);
+            Core::FileStreamSPtr idFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(ineLocation, strName + ".mospriteid", Core::FileMode::k_read);
             
             std::vector<u32> IDLookup;
             std::vector<std::string> IDStringLookup;

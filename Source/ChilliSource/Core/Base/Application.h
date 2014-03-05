@@ -22,26 +22,15 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-        const u32 kudwUndefinedMaxResolution = std::numeric_limits<u32>::max();
-        const f32 kfUndefinedMaxDensity = std::numeric_limits<f32>::max();
+        const u32 k_undefinedMaxResolution = std::numeric_limits<u32>::max();
+        const f32 k_undefinedMaxDensity = std::numeric_limits<f32>::max();
         struct ResourceDirectoryInfo
         {
-            std::string strDirectory;
-            u32 udwMaxRes;
-            f32 fMaxDensity;
-            f32 fResourcesDensity;
+            std::string m_directory;
+            u32 m_maxRes;
+            f32 m_maxDensity;
+            f32 m_resourcesDensity;
         };
-        
-        namespace SystemConfirmDialog
-        {
-            enum class Result
-            {
-                k_confirm,
-                k_cancel
-            };
-            
-            typedef std::function<void(u32, Result)> Delegate;
-        }
         
 		//-----------------------------------------------------------
 		/// The main hub of the engine. The Application controls the
@@ -66,13 +55,6 @@ namespace ChilliSource
 			//----------------------------------------------------
 			Application();
 			//----------------------------------------------------
-			/// Launch the application's setup code and cause
-            /// it to begin it's update loop.
-            ///
-            /// @author I Copland
-			//----------------------------------------------------
-			void Run();
-			//----------------------------------------------------
 			/// Looks for a system that implements the queryable
             /// interface provided as a template parameter.
             ///
@@ -81,7 +63,7 @@ namespace ChilliSource
 			/// @return The first system found that implements
             /// the named interface.
 			//----------------------------------------------------
-			template <typename T> T* GetSystemImplementing();
+			template <typename TNamedType> TNamedType* GetSystemImplementing();
             //----------------------------------------------------
 			/// Looks for a system that implements the queryable
             /// interface provided as the first template parameter
@@ -92,7 +74,7 @@ namespace ChilliSource
 			/// @return The first system found that implements
             /// the named interface.
 			//----------------------------------------------------
-			template <typename T, typename U> T* GetSystemImplementing();
+			template <typename TCastType, typename TNamedType> TCastType* GetSystemImplementing();
 			//-----------------------------------------------------
 			/// Looks for a all systems that implement the given
             /// queryable interface provided as a template parameter.
@@ -102,7 +84,7 @@ namespace ChilliSource
 			/// @param [Out] The list of systems that implement the
             /// queryable interface.
 			//-----------------------------------------------------
-            template <typename T> void GetSystemsImplementing(std::vector<T*> & outSystems);
+            template <typename TNamedType> void GetSystemsImplementing(std::vector<TNamedType*> & out_systems);
 			//-----------------------------------------------------
             /// Returns the version number of the application on
             /// the current platform as a string.
@@ -146,7 +128,7 @@ namespace ChilliSource
 			///
 			/// @param Time between update calls
 			//-----------------------------------------------------
-			void SetUpdateInterval(f32 infUpdateInterval);
+			void SetUpdateInterval(f32 in_updateInterval);
 			//-----------------------------------------------------
 			/// Returns the time between update calls.
             ///
@@ -172,16 +154,7 @@ namespace ChilliSource
             ///
 			/// @param Scaler to speed up or slow down update time.
 			//-----------------------------------------------------
-			void SetUpdateSpeed(f32 infSpeed);
-            //------------------------------------------------------
-			/// Enabled and disabled the updating of "updateable"
-            /// systems.
-			///
-            /// @author I Copland
-            ///
-			/// @param whether or not to update.
-			//------------------------------------------------------
-			void EnableSystemUpdating(bool inbEnable);
+			void SetUpdateSpeed(f32 in_speed);
             //-----------------------------------------------------
             /// Stop the application and exit gracefully
             ///
@@ -222,7 +195,7 @@ namespace ChilliSource
 			///
 			/// @return Handle to application state manager
 			//-----------------------------------------------------
-			StateManager* GetStateManagerPtr();
+			StateManager* GetStateManager();
 			//-----------------------------------------------------
 			/// Returns a pointer to the renderer.
             ///
@@ -230,7 +203,7 @@ namespace ChilliSource
 			///
 			/// @return Handle application renderer
 			//-----------------------------------------------------
-			Rendering::Renderer* GetRendererPtr();
+			Rendering::Renderer* GetRenderer();
 			//-----------------------------------------------------
 			/// Returns a pointer to the render system.
             ///
@@ -238,7 +211,7 @@ namespace ChilliSource
 			///
 			/// @return Handle to platfrom specific render system
 			//-----------------------------------------------------
-			Rendering::RenderSystem* GetRenderSystemPtr();
+			Rendering::RenderSystem* GetRenderSystem();
             //-----------------------------------------------------
 			/// Returns a pointer to the platform system.
             ///
@@ -246,7 +219,7 @@ namespace ChilliSource
 			///
             /// @return Pointer to the platform system
             //-----------------------------------------------------
-			PlatformSystem* GetPlatformSystemPtr();
+			PlatformSystem* GetPlatformSystem();
 			//-----------------------------------------------------
 			/// Returns a pointer to the input system.
             ///
@@ -254,7 +227,7 @@ namespace ChilliSource
 			///
 			/// @return Pointer to the input system
 			//-----------------------------------------------------
-			Input::InputSystem* GetInputSystemPtr();
+			Input::InputSystem* GetInputSystem();
 			//-----------------------------------------------------
 			/// Returns a pointer to the audio system.
             ///
@@ -262,7 +235,7 @@ namespace ChilliSource
 			///
 			/// @return Pointer to the input system
 			//-----------------------------------------------------
-			Audio::AudioSystem* GetAudioSystemPtr();
+			Audio::AudioSystem* GetAudioSystem();
 			//-----------------------------------------------------
 			/// Returns a pointer to the file system.
             ///
@@ -270,7 +243,7 @@ namespace ChilliSource
 			///
 			/// @return Pointer to the file system
 			//-----------------------------------------------------
-			FileSystem* GetFileSystemPtr();
+			FileSystem* GetFileSystem();
             //-----------------------------------------------------
 			/// Sets the renderer.
             ///
@@ -320,50 +293,55 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			void SetFileSystem(FileSystem* in_system);
             //----------------------------------------------------
-			/// Triggered by an frame begin event. 
+			/// Initialises the application and kicks off the update
+            /// loop. This should not be called by a users application.
+            ///
+            /// @author I Copland
+			//----------------------------------------------------
+			void OnInitialise();
+            //----------------------------------------------------
+			/// Resumes application from suspended state. This should
+            /// not be called by a users application.
+            ///
+            /// @author I Copland
+			//----------------------------------------------------
+			void OnResume();
+            //----------------------------------------------------
+			/// Triggered by an update event. This will update
+            /// the application, systems and states. This should
+            /// not be called by a users application.
             ///
             /// @author I Copland
             ///
             /// @param The delta time.
             /// @param The frame timestamp.
 			//----------------------------------------------------
-			void OnFrameBegin(f32 infDt, TimeIntervalSecs inuddwTimestamp);
-            //----------------------------------------------------
-            /// Triggered on receiving a "application will suspend"
-            /// message. This will notify active states to pause
-            /// and tell the sub systems to stop.
-            ///
-            /// @author I Copland
-			//----------------------------------------------------
-			void OnSuspend();
-            //----------------------------------------------------
-			/// Resumes application from suspended state.
-            ///
-            /// @author I Copland
-			//----------------------------------------------------
-			void OnResume();
+			void OnUpdate(f32 in_deltaTime, TimeIntervalSecs in_timestamp);
             //----------------------------------------------------
 			/// Triggered on receiving a "orientation changed"
             /// event. Used to tell the camera and input to rotate.
+            /// This should not be called by a users application.
             ///
             /// @author I Copland
             ///
             /// @param The new orientation.
 			//----------------------------------------------------
-			void OnScreenChangedOrientation(ScreenOrientation ineOrientation);
+			void OnScreenChangedOrientation(ScreenOrientation in_orientation);
 			//----------------------------------------------------
 			/// Triggered on receiving a "screen resized" event.
+            /// This should not be called by a users application.
             ///
             /// @author I Copland
             ///
             /// @param The new width.
             /// @param The new height.
 			//----------------------------------------------------
-			void OnScreenResized(u32 inudwWidth, u32 inudwHeight);
+			void OnScreenResized(u32 in_width, u32 in_height);
 			//----------------------------------------------------
 			/// Triggered on receiving a "application memory warning"
             /// event. This will notify active resource managers to
-            /// purge their caches.
+            /// purge their caches. This should not be called by
+            /// a users application.
             ///
             /// @author I Copland
 			//----------------------------------------------------
@@ -372,15 +350,42 @@ namespace ChilliSource
 			/// Triggered on receiving a "go back" event. This is
             /// typically caused by pressing a physical back button
             /// on the device, For example the Android back button.
+            /// This should not be called by a users application.
             ///
             /// @author I Copland
 			//----------------------------------------------------
 			void OnGoBack();
+            //----------------------------------------------------
+            /// Triggered on receiving a "application will suspend"
+            /// message. This will notify active states to pause
+            /// and tell the sub systems to stop. This should not
+            /// be called by a users application.
+            ///
+            /// @author I Copland
+			//----------------------------------------------------
+			void OnSuspend();
+            //----------------------------------------------------
+            /// Releases all systems and states and cleans up the
+            /// application. This should not be called by a users
+            /// application.
+            ///
+            /// @author I Copland
+			//----------------------------------------------------
+			void OnDestroy();
             //------------------------------------------------------
 			/// Destructor
 			//------------------------------------------------------
             virtual ~Application();
 		protected:
+            //----------------------------------------------------
+            /// Adds a system to the application. This should only
+            /// be called inside the CreateSystem() method.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The new system to add to the application.
+ 			//----------------------------------------------------
+            void AddSystem(const SystemSPtr& in_system);
             //------------------------------------------------------
 			/// The users application should override this to add
             /// desired systems. Systems can only be added in this
@@ -418,7 +423,15 @@ namespace ChilliSource
             /// @param [Out] The name of the directory to use as the
             /// default (i.e. for shared assets)
             //------------------------------------------------------
-            virtual void SetResourceDirectories(std::vector<ResourceDirectoryInfo>& outaResDependantDirectoryInfos, std::string& outstrResDefaultDirectory, std::string& outstrDefaultDirectory) = 0;
+            virtual void SetResourceDirectories(std::vector<ResourceDirectoryInfo>& out_resDependantDirectoryInfos, std::string& out_resDefaultDirectory, std::string& out_defaultDirectory) = 0;
+            //------------------------------------------------------
+			/// Destuction method called just before all systems
+            /// and states are released. Application destruction
+            /// code should be in here.
+            ///
+            /// @author I Copland
+			//------------------------------------------------------
+			virtual void Destroy() = 0;
         private:
             //----------------------------------------------------
             /// Looks for a system that implements the given
@@ -431,7 +444,7 @@ namespace ChilliSource
             /// @return The first system found that implements
             /// the named interface.
  			//----------------------------------------------------
-            System* GetSystemImplementing(InterfaceIDType inInterfaceID);
+            System* GetSystemImplementing(InterfaceIDType in_interfaceID);
             //------------------------------------------------------
 			/// Once the systems have been created they are then
             /// added to the pool and initialised.
@@ -462,7 +475,7 @@ namespace ChilliSource
             ///
             /// @param Time between frames
             //------------------------------------------------------
-			void Update(f32 infDT);
+			void Update(f32 in_deltaTime);
             //------------------------------------------------------
 			/// Tell the active camera to roate its view and if we
             /// are using touch input we must rotate the input
@@ -481,100 +494,74 @@ namespace ChilliSource
             /// @author I Copland
             //---------------------------------------------------
             void ResumeApplication();
-            //------------------------------------------------------
-			/// Sets whether or not touch input is available on
-            /// this platform.
-            ///
-            /// @author I Copland
-			///
-			/// @param whether or not touch input is available.
-			//------------------------------------------------------
-			void SetHasTouchInput(bool inbTouchInput);
-			//------------------------------------------------------
-			/// Returns whether or not touch input is available on
-            /// this platform.
-			///
-			/// @return whether or not touch input is available.
-			//------------------------------------------------------
-			bool HasTouchInput();
 
-		protected:
-			
-            std::vector<SystemSPtr> mSystems;
-            std::vector<IUpdateable*> mUpdateableSystems;
-            
         private:
-			StateManager mStateMgr;
+            std::vector<SystemSPtr> m_systems;
+            std::vector<IUpdateable*> m_updateableSystems;
             
-			Rendering::Renderer* mpRenderer;
-			
-            Rendering::RenderSystem* mpRenderSystem;
-			Input::InputSystem * mpInputSystem;
-            PlatformSystem* pPlatformSystem;
-            Audio::AudioSystem* pAudioSystem;
-            FileSystem* mspFileSystem;
+			StateManager m_stateManager;
+			Rendering::Renderer* m_renderer;
+            Rendering::RenderSystem* m_renderSystem;
+			Input::InputSystem * m_inputSystem;
+            PlatformSystem* m_platformSystem;
+            Audio::AudioSystem* m_audioSystem;
+            FileSystem* m_fileSystem;
 
-			ScreenOrientation meDefaultOrientation;
+			ScreenOrientation m_defaultOrientation;
             
-            ResourceManagerDispenser* mpResourceManagerDispenser;
-            ComponentFactoryDispenser* mpComponentFactoryDispenser;
-		
-			bool mbHasTouchInput;
-            bool mbUpdateSystems;
-			
-			std::vector<ResourceProvider*> mResourceProviders;
+            ResourceManagerDispenser* m_resourceManagerDispenser;
+            ComponentFactoryDispenser* m_componentFactoryDispenser;
+			std::vector<ResourceProvider*> m_resourceProviders;
 
-			SystemConfirmDialog::Delegate mActiveSysConfirmDelegate;
-        
-			TimeIntervalSecs uddwCurrentAppTime;
-            Rendering::FontSPtr pDefaultFont;
-            Rendering::MeshSPtr pDefaultMesh;
-            Rendering::MaterialSPtr pDefaultMaterial;
-			f32 mfUpdateInterval;
-            f32 mfUpdateSpeed;
+			TimeIntervalSecs m_currentAppTime;
+            Rendering::FontSPtr m_defaultFont;
+            Rendering::MeshSPtr m_defaultMesh;
+            Rendering::MaterialSPtr m_defaultMaterial;
+			f32 m_updateInterval;
+            f32 m_updateSpeed;
             
-            f32 s_updateIntervalRemainder;
-            bool s_shouldNotifyConnectionsResumeEvent;
-            bool s_isFirstFrame;
-            bool s_isSuspending;
+            f32 m_updateIntervalRemainder;
+            bool m_shouldNotifyConnectionsResumeEvent;
+            bool m_isFirstFrame;
+            bool m_isSuspending;
             
             static Application* s_application;
 		};
         //----------------------------------------------------
         //----------------------------------------------------
-        template <typename T> T* Application::GetSystemImplementing()
+        template <typename TNamedType> TNamedType* Application::GetSystemImplementing()
         {
-            System* pSystem = GetSystemImplementing(T::InterfaceID);
+            System* system = GetSystemImplementing(TNamedType::InterfaceID);
             
-            if (pSystem != nullptr)
+            if (system != nullptr)
             {
-                return static_cast<T*>(pSystem);
+                return static_cast<TNamedType*>(system);
             }
             
             return nullptr;
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        template <typename T, typename U> T* Application::GetSystemImplementing()
+        template <typename TCastType, typename TNamedType> TCastType* Application::GetSystemImplementing()
         {
-            System* pSystem = GetSystemImplementing(U::InterfaceID);
+            System* system = GetSystemImplementing(TNamedType::InterfaceID);
             
-            if (pSystem != nullptr)
+            if (system != nullptr)
             {
-                return pSystem->GetInterface<T>();
+                return system->GetInterface<TCastType>();
             }
             
             return nullptr;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        template <typename T> void Application::GetSystemsImplementing(std::vector<T*> & outSystems)
+        template <typename TNamedType> void Application::GetSystemsImplementing(std::vector<TNamedType*> & out_systems)
         {
-            for (size_t nSystem = 0; nSystem < mSystems.size(); nSystem++)
+            for (size_t systemIndex = 0; systemIndex < m_systems.size(); systemIndex++)
             {
-                if (mSystems[nSystem]->IsA(T::InterfaceID)) 
+                if (m_systems[systemIndex]->IsA(TNamedType::InterfaceID))
                 {
-                    outSystems.push_back(static_cast<T*>(mSystems[nSystem].get()));
+                    out_systems.push_back(static_cast<TNamedType*>(m_systems[systemIndex].get()));
                 }
             }
         }
