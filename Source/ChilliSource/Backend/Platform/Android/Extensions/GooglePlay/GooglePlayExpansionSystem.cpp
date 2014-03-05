@@ -19,7 +19,7 @@
 
 #include <jni.h>
 
-ChilliSource::Android::GooglePlayExpansionSystem* gpActiveExpansionSystem = NULL;
+ChilliSource::Android::GooglePlayExpansionSystem* gpActiveExpansionSystem = nullptr;
 
 extern "C"
 {
@@ -87,7 +87,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------------
-    	GooglePlayExpansionSystem::GooglePlayExpansionSystem() : mfInstallProgress(0.0f), mDownloadStatusDelegate(NULL)
+    	GooglePlayExpansionSystem::GooglePlayExpansionSystem() : mfInstallProgress(0.0f), mDownloadStatusDelegate(nullptr)
     	{
     		gpActiveExpansionSystem = this;
 
@@ -317,7 +317,7 @@ namespace ChilliSource
 
 				//Get file information
 				unz_file_info FileInfo;
-				unzGetCurrentFileInfo(ZippedFile, &FileInfo, byaFileName, uddwFilenameLength, NULL, 0, NULL, 0);
+				unzGetCurrentFileInfo(ZippedFile, &FileInfo, byaFileName, uddwFilenameLength, nullptr, 0, nullptr, 0);
 				uddwTotalSize += FileInfo.uncompressed_size;
 
 				//Close current file and jump to the next
@@ -514,7 +514,7 @@ namespace ChilliSource
         	{
         		s32 dwStatus = unzGoToFirstFile(ZippedFile);
         		u32 udwBufferSize = 0;
-        		s8* pbyDataBuffer = NULL;
+        		s8* pbyDataBuffer = nullptr;
 
         		//Go to the first file in the zip
         		const u64 uddwFilenameLength = 256;
@@ -638,7 +638,7 @@ namespace ChilliSource
     	{
     		if(gpActiveExpansionSystem == this)
     		{
-    			gpActiveExpansionSystem = NULL;
+    			gpActiveExpansionSystem = nullptr;
     		}
     	}
 

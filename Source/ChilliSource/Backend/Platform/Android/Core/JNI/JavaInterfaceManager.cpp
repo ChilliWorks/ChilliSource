@@ -13,14 +13,14 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		JavaInterfaceManager* JavaInterfaceManager::mpJavaInterfaceManagerSingleton = NULL;
+		JavaInterfaceManager* JavaInterfaceManager::mpJavaInterfaceManagerSingleton = nullptr;
 
 		//-------------------------------------------------------
 		/// Get Singleton Ptr
 		//-------------------------------------------------------
 		JavaInterfaceManager* JavaInterfaceManager::GetSingletonPtr()
 		{
-			if (mpJavaInterfaceManagerSingleton == NULL)
+			if (mpJavaInterfaceManagerSingleton == nullptr)
 			{
 				mpJavaInterfaceManagerSingleton = new JavaInterfaceManager();
 			}
@@ -38,7 +38,7 @@ namespace ChilliSource
 		/// Constructor
 		//--------------------------------------------------------
 		JavaInterfaceManager::JavaInterfaceManager()
-		 : mpJavaVM(NULL)
+		 : mpJavaVM(nullptr)
 		{
 		}
 		//--------------------------------------------------------
@@ -60,14 +60,14 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		JNIEnv* JavaInterfaceManager::GetJNIEnvironmentPtr()
 		{
-			if (mpJavaVM != NULL)
+			if (mpJavaVM != nullptr)
 			{
 				JNIEnv* env;
-				mpJavaVM->AttachCurrentThread(&env, NULL);
+				mpJavaVM->AttachCurrentThread(&env, nullptr);
 				return env;
 			}
 
-			return NULL;
+			return nullptr;
 		}
 		//--------------------------------------------------------
 		/// Add Java Interface

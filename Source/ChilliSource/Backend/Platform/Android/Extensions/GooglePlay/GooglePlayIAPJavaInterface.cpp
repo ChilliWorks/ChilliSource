@@ -40,7 +40,7 @@ extern "C"
 void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* inpEnv, jobject inThis, jobjectArray inaIDs, jobjectArray inaNames, jobjectArray inaDescs, jobjectArray inaPrices)
 {
 	ChilliSource::Android::GooglePlayIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayIAPJavaInterface>();
-	if (pInterface != NULL)
+	if (pInterface != nullptr)
 	{
 		u32 udwNumProducts = inpEnv->GetArrayLength(inaIDs);
 		std::vector<CSNetworking::IAPProductDesc> aProducts;
@@ -80,7 +80,7 @@ void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnProdu
 void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* inpEnv, jobject inThis, jint inudwResult, jstring instrProductID, jstring instrTransactionID, jstring instrReceipt)
 {
 	ChilliSource::Android::GooglePlayIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayIAPJavaInterface>();
-	if (pInterface != NULL)
+	if (pInterface != nullptr)
 	{
 		CSNetworking::IAPTransaction sTransaction;
 		sTransaction.strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
@@ -99,7 +99,7 @@ void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTrans
 void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID)
 {
 	ChilliSource::Android::GooglePlayIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayIAPJavaInterface>();
-	if (pInterface != NULL)
+	if (pInterface != nullptr)
 	{
 		const std::string strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
 		const std::string strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
@@ -217,7 +217,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void GooglePlayIAPJavaInterface::StopListeningForTransactionUpdates()
         {
-        	mTransactionStatusDelegate = NULL;
+        	mTransactionStatusDelegate = nullptr;
         }
         //---------------------------------------------------------------
 		/// Request Product Descriptions
@@ -226,7 +226,7 @@ namespace ChilliSource
         {
         	mProductsRequestDelegate = inRequestDelegate;
 
-        	if(mProductsRequestDelegate == NULL)
+        	if(mProductsRequestDelegate == nullptr)
         		return;
 
         	JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
@@ -251,7 +251,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void GooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<Networking::IAPProductDesc>& inaProducts)
         {
-        	if(mProductsRequestDelegate == NULL)
+        	if(mProductsRequestDelegate == nullptr)
         		return;
 
         	mProductsRequestDelegate(inaProducts);
@@ -293,7 +293,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void GooglePlayIAPJavaInterface::OnTransactionStatusUpdated(u32 inudwStatus, const Networking::IAPTransaction& inTransaction)
         {
-        	if(mTransactionStatusDelegate == NULL)
+        	if(mTransactionStatusDelegate == nullptr)
         		return;
 
         	Networking::IAPTransaction::Status eStatus = Networking::IAPTransaction::Status::k_failed;

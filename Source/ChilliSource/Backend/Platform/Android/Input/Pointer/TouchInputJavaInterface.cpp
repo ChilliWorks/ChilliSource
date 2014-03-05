@@ -31,7 +31,7 @@ extern "C"
 void Java_com_chillisource_input_TouchInputNativeInterface_TouchDown(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY)
 {
 	ChilliSource::Android::TouchScreen* touchScreen = ChilliSource::Android::TouchInputJavaInterface::GetTouchScreen();
-	if (touchScreen != NULL)
+	if (touchScreen != nullptr)
 	{
 		touchScreen->OnTouchBegan(indwID, infX, infY);
 	}
@@ -50,7 +50,7 @@ void Java_com_chillisource_input_TouchInputNativeInterface_TouchDown(JNIEnv* inp
 void Java_com_chillisource_input_TouchInputNativeInterface_TouchUp(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY)
 {
 	ChilliSource::Android::TouchScreen* touchScreen = ChilliSource::Android::TouchInputJavaInterface::GetTouchScreen();
-	if (touchScreen != NULL)
+	if (touchScreen != nullptr)
 	{
 		touchScreen->OnTouchEnded(indwID, infX, infY);
 	}
@@ -69,7 +69,7 @@ void Java_com_chillisource_input_TouchInputNativeInterface_TouchUp(JNIEnv* inpEn
 void Java_com_chillisource_input_TouchInputNativeInterface_TouchMoved(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY)
 {
 	ChilliSource::Android::TouchScreen* touchScreen = ChilliSource::Android::TouchInputJavaInterface::GetTouchScreen();
-	if (touchScreen != NULL)
+	if (touchScreen != nullptr)
 	{
 		touchScreen->OnTouchMoved(indwID, infX, infY);
 	}
@@ -81,7 +81,7 @@ namespace ChilliSource
 	namespace Android
 	{
 		//create static member
-		ChilliSource::Android::TouchScreen * TouchInputJavaInterface::mspTouchScreen = NULL;
+		ChilliSource::Android::TouchScreen * TouchInputJavaInterface::mspTouchScreen = nullptr;
 
 		//--------------------------------------------------------------------------------------
 		/// Setup Java Interface

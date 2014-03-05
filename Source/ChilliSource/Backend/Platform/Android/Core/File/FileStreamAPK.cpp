@@ -19,7 +19,7 @@ namespace ChilliSource
 		/// Constructor
 		//--------------------------------------------------------------------------------------------------
 		FileStreamAPK::FileStreamAPK(std::mutex* inpMinizipMutex)
-			: mbOpen(false), mbError(false), mUnzipper(NULL), mpMinizipMutex(inpMinizipMutex), mpDataBuffer(NULL)
+			: mbOpen(false), mbError(false), mUnzipper(nullptr), mpMinizipMutex(inpMinizipMutex), mpDataBuffer(nullptr)
 		{
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ namespace ChilliSource
 			std::unique_lock<std::mutex> lock(*mpMinizipMutex);
 			mUnzipper = unzOpen(instrApkPath.c_str());
 
-			if (mUnzipper == NULL)
+			if (mUnzipper == nullptr)
 			{
 				CS_LOG_FATAL("Failed to open APK");
 			}
@@ -69,7 +69,7 @@ namespace ChilliSource
 					unz_file_info info;
 					const u32 dwFilenameLength = 256;
 					s8 filename[dwFilenameLength];
-					unzGetCurrentFileInfo(mUnzipper, &info, filename, dwFilenameLength, NULL, 0, NULL, 0);
+					unzGetCurrentFileInfo(mUnzipper, &info, filename, dwFilenameLength, nullptr, 0, nullptr, 0);
 
 					//load the file into memory
 					mpDataBuffer = new s8[info.uncompressed_size];
@@ -121,7 +121,7 @@ namespace ChilliSource
 			if(mpDataBuffer)
 			{
 				delete[] mpDataBuffer;
-				mpDataBuffer = NULL;
+				mpDataBuffer = nullptr;
 			}
 
 			if (mbOpen == true && mbError == false)

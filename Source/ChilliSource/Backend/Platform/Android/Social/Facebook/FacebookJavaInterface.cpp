@@ -16,8 +16,8 @@
 
 #include <jni.h>
 
-ChilliSource::Android::FacebookAuthenticationSystem* gpAndroidAuthSystem = NULL;
-ChilliSource::Android::FacebookPostSystem* gpAndroidPostSystem = NULL;
+ChilliSource::Android::FacebookAuthenticationSystem* gpAndroidAuthSystem = nullptr;
+ChilliSource::Android::FacebookPostSystem* gpAndroidPostSystem = nullptr;
 
 //function definitions
 extern "C"

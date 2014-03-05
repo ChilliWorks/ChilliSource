@@ -131,9 +131,9 @@ namespace ChilliSource
 			Core::Application::SetRenderer(new Rendering::Renderer(Core::Application::GetRenderSystemPtr()));
             
 			//Initialise the input system
-			if(Core::Application::GetInputSystemPtr() != NULL)
+			if(Core::Application::GetInputSystemPtr() != nullptr)
 			{
-				Core::Application::SetHasTouchInput((Core::Application::GetInputSystemPtr()->GetTouchScreenPtr() != NULL));
+				Core::Application::SetHasTouchInput((Core::Application::GetInputSystemPtr()->GetTouchScreenPtr() != nullptr));
 			}
 		}
 		//-------------------------------------------------
@@ -146,7 +146,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::PostCreateSystems()
 		{
-			if(Core::Application::GetAudioSystemPtr() != NULL)
+			if(Core::Application::GetAudioSystemPtr() != nullptr)
 			{
 				Audio::AudioPlayer::Init();
 			}
@@ -213,7 +213,7 @@ namespace ChilliSource
 		///
 		/// @param Interface ID
 		/// @param Vector of exisiting systems to append
-		/// @return Pointer to the given system or NULL
+		/// @return Pointer to the given system or nullptr
 		//--------------------------------------------
 		Core::System* PlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr>& inaExisitingSystems) const
 		{
@@ -226,7 +226,7 @@ namespace ChilliSource
 				}
 			}
 
-			Core::System* pSystem = NULL;
+			Core::System* pSystem = nullptr;
 
 			if(inInterfaceID == Networking::HttpConnectionSystem::InterfaceID)
 			{
@@ -250,11 +250,11 @@ namespace ChilliSource
 		/// Create Activity With Interface
 		///
 		/// @param Interface ID
-		/// @return Ownership of activity instance or NULL
+		/// @return Ownership of activity instance or nullptr
 		//--------------------------------------------
 		Core::Activity* PlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
 		{
-			return NULL;
+			return nullptr;
 		}
 		//--------------------------------------------
 		/// Can Create Information Provider With Interface
@@ -270,11 +270,11 @@ namespace ChilliSource
 		/// Create Information Provider With Interface
 		///
 		/// @param Interface ID
-		/// @return Ownership of provider instance or NULL
+		/// @return Ownership of provider instance or nullptr
 		//--------------------------------------------
 		Core::IInformationProvider* PlatformSystem::CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
 		{
-			return NULL;
+			return nullptr;
 		}
 		//-----------------------------------------------------------------------------------------------------------
 		/// Get Screen Dimensions
@@ -456,7 +456,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void PlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const
 		{
-			if(MessageBoxA(NULL, instrTitle.ToASCII().c_str(), instrMessage.ToASCII().c_str(), MB_OKCANCEL) == IDOK)
+			if(MessageBoxA(nullptr, instrTitle.ToASCII().c_str(), instrMessage.ToASCII().c_str(), MB_OKCANCEL) == IDOK)
 			{
 				Core::Application::OnSystemConfirmDialogResult(inudwID, Core::SystemConfirmDialog::Result::k_confirm);
 			}
@@ -477,7 +477,7 @@ namespace ChilliSource
         //--------------------------------------------------------------------------------------------------
 		void PlatformSystem::ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const
 		{
-			MessageBoxA(NULL, instrTitle.ToASCII().c_str(), instrMessage.ToASCII().c_str(), MB_OK);
+			MessageBoxA(nullptr, instrTitle.ToASCII().c_str(), instrMessage.ToASCII().c_str(), MB_OK);
 		}
 		//---GLFW Delegates
 		//-------------------------------------------------

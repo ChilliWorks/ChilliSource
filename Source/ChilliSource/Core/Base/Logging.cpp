@@ -212,7 +212,7 @@ namespace ChilliSource
 #endif
         
 #ifdef CS_TARGETPLATFORM_WINDOWS 
-            MessageBoxA(NULL, instrMessage.c_str(), "moFlow fatal error!", MB_OK);
+            MessageBoxA(nullptr, instrMessage.c_str(), "moFlow fatal error!", MB_OK);
 #endif
 
 #ifdef CS_ENABLE_LOGTOFILE

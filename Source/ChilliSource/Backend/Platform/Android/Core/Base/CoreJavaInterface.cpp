@@ -27,7 +27,7 @@
 //--------------------------------------------------------------------------------------
 /// Globals
 //--------------------------------------------------------------------------------------
-ChilliSource::Core::Application* (*BootFunctionPtr)() = NULL;
+ChilliSource::Core::Application* (*BootFunctionPtr)() = nullptr;
 //--------------------------------------------------------------------------------------
 /// C function declarations
 //--------------------------------------------------------------------------------------
@@ -245,7 +245,7 @@ namespace ChilliSource
 		/// Constructor
 		//--------------------------------------------------------------------------------------
 		CoreJavaInterface::CoreJavaInterface()
-		: mApplication(NULL), mdwScreenWidth(0), mdwScreenHeight(0), mdwOSVersionCode(-1), mdwNumberOfCores(-1), mfScreenDensity(-0.1f), mfPhysicalScreenSize(-0.1f)
+		: mApplication(nullptr), mdwScreenWidth(0), mdwScreenHeight(0), mdwOSVersionCode(-1), mdwNumberOfCores(-1), mfScreenDensity(-0.1f), mfPhysicalScreenSize(-0.1f)
 		{
 			CreateNativeInterface("com/chillisource/core/CoreNativeInterface");
 			CreateMethodReference("GetExternalStorageDirectory", "()Ljava/lang/String;");
@@ -297,7 +297,7 @@ namespace ChilliSource
 		void CoreJavaInterface::DestroyApplication()
 		{
 			delete mApplication;
-			mApplication = NULL;
+			mApplication = nullptr;
 		}
 		//--------------------------------------------------------------------------------------
 		/// Get Application

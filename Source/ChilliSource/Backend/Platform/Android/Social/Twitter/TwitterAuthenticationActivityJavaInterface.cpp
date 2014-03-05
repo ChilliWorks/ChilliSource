@@ -35,7 +35,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		ChilliSource::Android::TwitterAuthenticationActivity* TwitterAuthenticationActivityJavaInterface::mpActivity = NULL;
+		ChilliSource::Android::TwitterAuthenticationActivity* TwitterAuthenticationActivityJavaInterface::mpActivity = nullptr;
 		//-----------------------------------------------
 		/// Setup Java Interface
 		//-----------------------------------------------

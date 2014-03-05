@@ -37,7 +37,7 @@ extern "C"
 void Java_com_chillisource_input_AccelerometerNativeInterface_UpdateAcceleration(JNIEnv* inpEnv, jobject inThis, f32 infAccelerationX, f32 infAccelerationY, f32 infAccelerationZ)
 {
 	ChilliSource::Android::AccelerometerJavaInterfaceSPtr pAccelerometerJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AccelerometerJavaInterface>();
-	if (NULL != pAccelerometerJI)
+	if (nullptr != pAccelerometerJI)
 	{
 		pAccelerometerJI->UpdateAcceleration(infAccelerationX, infAccelerationY, infAccelerationZ);
 	}
@@ -95,7 +95,7 @@ namespace ChilliSource
 		{
 			if (true == mbListening)
 			{
-				mAccelerationChangedDelegate = NULL;
+				mAccelerationChangedDelegate = nullptr;
 				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 				pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("StopListening"));
 				mbListening = false;
@@ -106,7 +106,7 @@ namespace ChilliSource
 		//------------------------------------------------
 		void AccelerometerJavaInterface::UpdateAcceleration(f32 infAccelerationX, f32 infAccelerationY, f32 infAccelerationZ)
 		{
-			if (true == mbListening && NULL != mAccelerationChangedDelegate)
+			if (true == mbListening && nullptr != mAccelerationChangedDelegate)
 			{
 				mAccelerationChangedDelegate(Core::Vector3(infAccelerationX, infAccelerationY, infAccelerationZ));
 			}

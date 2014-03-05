@@ -35,7 +35,7 @@ namespace ChilliSource
         {
         	//get the media player java interface or create it if it doesn't yet exist.
         	mpVideoPlayerJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<VideoPlayerJavaInterface>();
-        	if (mpVideoPlayerJavaInterface == NULL)
+        	if (mpVideoPlayerJavaInterface == nullptr)
         	{
         		mpVideoPlayerJavaInterface = VideoPlayerJavaInterfaceSPtr(new VideoPlayerJavaInterface());
         		JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpVideoPlayerJavaInterface);

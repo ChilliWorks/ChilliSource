@@ -26,7 +26,7 @@ namespace ChilliSource
 
 			bool IsA(Core::InterfaceIDType inID) const;
 
-			void Authenticate(const std::vector<std::string>& inastrReadPermissions = std::vector<std::string>(), const AuthenticationCompleteDelegate& inDelegate = NULL);
+			void Authenticate(const std::vector<std::string>& inastrReadPermissions = std::vector<std::string>(), const AuthenticationCompleteDelegate& inDelegate = nullptr);
 
 			bool IsSignedIn() const;
             std::string GetActiveToken() const;

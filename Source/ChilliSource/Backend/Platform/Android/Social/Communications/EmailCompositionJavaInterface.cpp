@@ -31,7 +31,7 @@ extern "C"
 void Java_com_chillisource_social_EmailCompositionNativeInterface_OnEmailClosed(JNIEnv* inpEnv, jobject inpThis, s32 indwResultCode)
 {
 	ChilliSource::Android::EmailCompositionJavaInterfaceSPtr pJavaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::EmailCompositionJavaInterface>();
-	if (pJavaInterface != NULL)
+	if (pJavaInterface != nullptr)
 	{
 		pJavaInterface->OnEmailClosed(indwResultCode);
 	}
@@ -96,11 +96,11 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		void EmailCompositionJavaInterface::OnEmailClosed(s32 indwResultCode)
 		{
-			if (mDelegate != NULL)
+			if (mDelegate != nullptr)
 			{
 				mDelegate(indwResultCode);
 			}
-			mDelegate = NULL;
+			mDelegate = nullptr;
 		}
 	}
 }

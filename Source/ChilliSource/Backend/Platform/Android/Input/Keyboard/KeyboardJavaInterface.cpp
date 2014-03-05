@@ -36,7 +36,7 @@ extern "C"
 void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextAdded(JNIEnv* inpEnv, jobject inThis, jstring injstrText)
 {
 	ChilliSource::Android::KeyboardJavaInterfaceSPtr pKeyboardJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::KeyboardJavaInterface>();
-	if (pKeyboardJI != NULL)
+	if (pKeyboardJI != nullptr)
 	{
 		CSCore::UTF8String strText = ChilliSource::Android::JavaInterfaceUtils::CreateUTF8StringFromJString(injstrText);
 		CSCore::Task<const CSCore::UTF8String&> task(pKeyboardJI.get(), &ChilliSource::Android::KeyboardJavaInterface::OnTextAdded, strText);
@@ -56,7 +56,7 @@ void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextAdded(JNIEn
 void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextDeleted(JNIEnv* inpEnv, jobject inThis)
 {
 	ChilliSource::Android::KeyboardJavaInterfaceSPtr pKeyboardJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::KeyboardJavaInterface>();
-	if (pKeyboardJI != NULL)
+	if (pKeyboardJI != nullptr)
 	{
 		CSCore::Task<> task(pKeyboardJI.get(), &ChilliSource::Android::KeyboardJavaInterface::OnTextDeleted);
 		CSCore::TaskScheduler::ScheduleMainThreadTask(task);
@@ -73,7 +73,7 @@ void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextDeleted(JNI
 void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnKeyboardDismissed(JNIEnv* inpEnv, jobject inThis)
 {
 	ChilliSource::Android::KeyboardJavaInterfaceSPtr pKeyboardJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::KeyboardJavaInterface>();
-	if (pKeyboardJI != NULL)
+	if (pKeyboardJI != nullptr)
 	{
 		CSCore::Task<> task(pKeyboardJI.get(), &ChilliSource::Android::KeyboardJavaInterface::OnKeyboardDismissed);
 		CSCore::TaskScheduler::ScheduleMainThreadTask(task);
@@ -218,7 +218,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		void KeyboardJavaInterface::OnTextAdded(const Core::UTF8String& instrText)
 		{
-			if (mTextAddedDelegate != NULL)
+			if (mTextAddedDelegate != nullptr)
 			{
 				mTextAddedDelegate(instrText);
 			}
@@ -228,7 +228,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		void KeyboardJavaInterface::OnTextDeleted()
 		{
-			if (mTextDeletedDelegate != NULL)
+			if (mTextDeletedDelegate != nullptr)
 			{
 				mTextDeletedDelegate();
 			}
@@ -238,7 +238,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		void KeyboardJavaInterface::OnKeyboardDismissed()
 		{
-			if (mKeyboardDismissedDelegate != NULL)
+			if (mKeyboardDismissedDelegate != nullptr)
 			{
 				mKeyboardDismissedDelegate();
 			}

@@ -46,7 +46,7 @@ namespace ChilliSource
 		AmazonIAPSystem::AmazonIAPSystem(const Core::ParamDictionary& inParams)
 		{
 			mpJavaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<AmazonIAPJavaInterface>();
-			if (mpJavaInterface == NULL)
+			if (mpJavaInterface == nullptr)
 			{
 				std::string strPrivateKey = "";
 				if (inParams.HasValue(kstrAmazonPrivateKeyKey) == true)
@@ -84,7 +84,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         bool AmazonIAPSystem::IsPurchasingEnabled()
         {
-        	if (mpJavaInterface != NULL)
+        	if (mpJavaInterface != nullptr)
         	{
         		return mpJavaInterface->IsPurchasingEnabled();
         	}
@@ -95,7 +95,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void AmazonIAPSystem::StartListeningForTransactionUpdates(const Networking::IAPTransactionDelegate& inRequestDelegate)
         {
-        	if (mpJavaInterface != NULL)
+        	if (mpJavaInterface != nullptr)
         	{
         		mpJavaInterface->StartListeningForTransactionUpdates(inRequestDelegate);
         	}
@@ -105,7 +105,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void AmazonIAPSystem::StopListeningForTransactionUpdates()
         {
-        	if (mpJavaInterface != NULL)
+        	if (mpJavaInterface != nullptr)
         	{
         		mpJavaInterface->StopListeningForTransactionUpdates();
         	}
@@ -115,7 +115,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void AmazonIAPSystem::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
-        	if (mpJavaInterface != NULL)
+        	if (mpJavaInterface != nullptr)
         	{
         		mpJavaInterface->RequestProductDescriptions(inaProductIDs, inRequestDelegate);
         	}
@@ -140,7 +140,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void AmazonIAPSystem::CancelProductDescriptionsRequest()
         {
-        	if (mpJavaInterface != NULL)
+        	if (mpJavaInterface != nullptr)
         	{
         		mpJavaInterface->CancelProductDescriptionsRequest();
         	}
@@ -150,7 +150,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void AmazonIAPSystem::RequestProductPurchase(const std::string& instrProductID)
         {
-        	if (mpJavaInterface != NULL)
+        	if (mpJavaInterface != nullptr)
         	{
         		CS_ASSERT(IsProductIDRegistered(maProductRegInfos, instrProductID), "Products must be registered with the IAP system before purchasing.");
         		mpJavaInterface->RequestProductPurchase(instrProductID);
@@ -161,7 +161,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void AmazonIAPSystem::CloseTransaction(const Networking::IAPTransactionPtr& inpTransaction, const Networking::IAPTransactionCloseDelegate& inDelegate)
         {
-        	if (mpJavaInterface != NULL)
+        	if (mpJavaInterface != nullptr)
         	{
         		mpJavaInterface->CloseTransaction(inpTransaction->strProductID, inpTransaction->strTransactionID, inDelegate);
         	}
@@ -171,7 +171,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void AmazonIAPSystem::RestoreManagedPurchases()
         {
-        	if (mpJavaInterface != NULL)
+        	if (mpJavaInterface != nullptr)
         	{
         		mpJavaInterface->RestoreManagedPurchases();
         	}

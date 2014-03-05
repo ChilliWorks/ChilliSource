@@ -46,7 +46,7 @@ namespace ChilliSource
 			/// Get Device With Interface
 			///
 			/// @param Interface of input type to retreive
-			/// @return Pointer to input type or NULL
+			/// @return Pointer to input type or nullptr
 			//---------------------------------------------------------------
 			virtual Input::InputDevice * GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID);
 			//---------------------------------------------------------------

@@ -443,7 +443,7 @@ namespace ChilliSource
 			///AABB in Local Space
             AABB mHitBox;
 			
-			mutable Matrix4x4 mmatLocal;
+            Matrix4x4 mmatLocal;
 		};
 		//===============================================
 		/// Ray

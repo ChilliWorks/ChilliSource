@@ -108,7 +108,7 @@ namespace ChilliSource
 				}
 			}
 
-			return NULL;
+			return nullptr;
 		}
 		//-----------------------------------------
 		/// Init
@@ -178,9 +178,9 @@ namespace ChilliSource
 			Core::Application::SetRenderer(new Rendering::Renderer(Core::Application::GetRenderSystemPtr()));
 
 			//Initialise the input system
-			if(Core::Application::GetInputSystemPtr() != NULL)
+			if(Core::Application::GetInputSystemPtr() != nullptr)
 			{
-				Core::Application::SetHasTouchInput((Core::Application::GetInputSystemPtr()->GetTouchScreenPtr() != NULL));
+				Core::Application::SetHasTouchInput((Core::Application::GetInputSystemPtr()->GetTouchScreenPtr() != nullptr));
 			}
 		}
 		//-------------------------------------------------
@@ -188,7 +188,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::PostCreateSystems()
 		{
-			if(Core::Application::GetAudioSystemPtr() != NULL)
+			if(Core::Application::GetAudioSystemPtr() != nullptr)
 			{
 				Audio::AudioPlayer::Init();
 			}
@@ -206,7 +206,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		Core::System* PlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr> & inaExistingSystems) const
 		{
-			Core::System * pResult = NULL;
+			Core::System * pResult = nullptr;
 
 			MapInterfaceIDToSystemFunc::const_iterator pFunc(mmapInterfaceIDToSystemFunc.find(inInterfaceID));
 
@@ -244,7 +244,7 @@ namespace ChilliSource
 				return pFunc->second();
 			}
 
-			return NULL;
+			return nullptr;
 		}
 		//--------------------------------------------
 		/// Can Create Information Provider With Interface
@@ -265,7 +265,7 @@ namespace ChilliSource
 			{
 				return pFunc->second();
 			}
-			return NULL;
+			return nullptr;
 		}
 		//--------------------------------------------
 		/// Create Http Connection System

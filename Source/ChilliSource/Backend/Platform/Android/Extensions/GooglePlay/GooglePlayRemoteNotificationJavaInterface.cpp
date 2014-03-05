@@ -26,7 +26,7 @@ extern "C"
 void Java_com_chillisource_googleplay_GooglePlayRemoteNotificationNativeInterface_NativeOnRemoteTokenReceived(JNIEnv* inpEnv, jobject inThis, jstring instrToken)
 {
 	ChilliSource::Android::GooglePlayRemoteNotificationJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayRemoteNotificationJavaInterface>();
-	if(pInterface != NULL)
+	if(pInterface != nullptr)
 	{
 		const std::string strToken = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrToken);
 		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::string&>(pInterface.get(), &ChilliSource::Android::GooglePlayRemoteNotificationJavaInterface::OnRemoteTokenReceived, strToken));
@@ -36,7 +36,7 @@ void Java_com_chillisource_googleplay_GooglePlayRemoteNotificationNativeInterfac
 void Java_com_chillisource_googleplay_GooglePlayRemoteNotificationNativeInterface_NativeOnRemoteNotificationReceived(JNIEnv* inpEnv, jobject inThis, jobjectArray inaKeys, jobjectArray inaValues)
 {
 	ChilliSource::Android::GooglePlayRemoteNotificationJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayRemoteNotificationJavaInterface>();
-	if(pInterface != NULL)
+	if(pInterface != nullptr)
 	{
 		//Convert the incoming jarrays to a param dictionary
 		CS_ASSERT((inpEnv->GetArrayLength(inaKeys) == inpEnv->GetArrayLength(inaValues)), "CRemoteNotificationJavaInterface::NativeOnRemoteNotificationReceived has received a notification with different quantities of keys and values.");

@@ -27,7 +27,7 @@ namespace ChilliSource
 		{
 			//get the email java interface or create it if it doesn't yet exist.
 			mpJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<EmailCompositionJavaInterface>();
-			if (mpJavaInterface == NULL)
+			if (mpJavaInterface == nullptr)
 			{
 				mpJavaInterface = EmailCompositionJavaInterfaceSPtr(new EmailCompositionJavaInterface());
 				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
@@ -97,7 +97,7 @@ namespace ChilliSource
         //-------------------------------------------------------
 		void EmailCompositionActivity::OnEmailClosed(s32 indwResultCode)
 		{
-			if(mCallback != NULL)
+			if(mCallback != nullptr)
 			{
 				switch (indwResultCode)
 				{
@@ -112,7 +112,7 @@ namespace ChilliSource
 						break;
 				}
 			}
-			mCallback = NULL;
+			mCallback = nullptr;
 		}
 		//-------------------------------------------------------
 		/// Destructor

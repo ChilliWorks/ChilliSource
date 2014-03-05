@@ -49,7 +49,7 @@ namespace ChilliSource
 		void FileSystem::Initialise()
 		{
 			wchar_t pathChars[MAX_PATH];
-			GetModuleFileName(NULL, pathChars, MAX_PATH);
+			GetModuleFileName(nullptr, pathChars, MAX_PATH);
 			std::string path = WindowsStringUtils::UTF16ToUTF8(std::wstring(pathChars));
 			std::string::size_type pos = path.find_last_of("\\/");
 			std::string strWorkingDir(path.substr(0, pos));
@@ -129,7 +129,7 @@ namespace ChilliSource
 		{
 			Core::FileStreamSPtr pFileStream = CreateFileStream(ineStorageLocation, instrDirectory, Core::FileMode::k_writeBinary);
 
-			if (pFileStream.get() == NULL || pFileStream->IsOpen() == false || pFileStream->IsBad() == true)
+			if (pFileStream.get() == nullptr || pFileStream->IsOpen() == false || pFileStream->IsBad() == true)
 			{
 				CS_LOG_ERROR("Failed to create file: " + instrDirectory);
 				return false;
@@ -159,7 +159,7 @@ namespace ChilliSource
 			}
 
 			//create the directory
-			return SHCreateDirectoryExA(NULL, (GetStorageLocationDirectory(ineStorageLocation) + instrDirectory).c_str(), NULL) == ERROR_SUCCESS;
+			return SHCreateDirectoryExA(nullptr, (GetStorageLocationDirectory(ineStorageLocation) + instrDirectory).c_str(), nullptr) == ERROR_SUCCESS;
 		}
 		//--------------------------------------------------------------
 		/// Copy File

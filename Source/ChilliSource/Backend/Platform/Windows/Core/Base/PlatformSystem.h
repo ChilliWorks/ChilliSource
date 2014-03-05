@@ -99,7 +99,7 @@ namespace ChilliSource
 			///
 			/// @param Interface ID
 			/// @param Vector of exisiting systems to append
-			/// @return Pointer to the given system or NULL
+			/// @return Pointer to the given system or nullptr
 			//--------------------------------------------
 			Core::System* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr>& inaExisitingSystems) const;
 			//--------------------------------------------
@@ -113,7 +113,7 @@ namespace ChilliSource
 			/// Create Activity With Interface
 			///
 			/// @param Interface ID
-			/// @return Ownership of activity instance or NULL
+			/// @return Ownership of activity instance or nullptr
 			//--------------------------------------------
 			Core::Activity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const;
 			//--------------------------------------------
@@ -127,7 +127,7 @@ namespace ChilliSource
 			/// Create Information Provider With Interface
 			///
 			/// @param Interface ID
-			/// @return Ownership of provider instance or NULL
+			/// @return Ownership of provider instance or nullptr
 			//--------------------------------------------
 			Core::IInformationProvider* CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const;
 			//-----------------------------------------------------------------------------------------------------------

@@ -63,7 +63,7 @@ namespace ChilliSource
 		std::vector<CSCore::UTF8String> ContactInformationProviderJavaInterface::mastrNames;
 		std::vector<CSCore::UTF8String> ContactInformationProviderJavaInterface::mastrNumbers;
 		std::vector<CSCore::UTF8String> ContactInformationProviderJavaInterface::mastrEmails;
-		ContactInformationProvider * ContactInformationProviderJavaInterface::mpContactProvider = NULL;
+		ContactInformationProvider * ContactInformationProviderJavaInterface::mpContactProvider = nullptr;
 
 		//--------------------------------------------------------------------------------------
 		/// Setup Java Interface

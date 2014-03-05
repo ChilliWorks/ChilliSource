@@ -22,7 +22,7 @@ namespace ChilliSource
 		}
 		TouchScreen::~TouchScreen()
 		{
-			ChilliSource::Android::TouchInputJavaInterface::RegisterTouchScreen(NULL);
+			ChilliSource::Android::TouchInputJavaInterface::RegisterTouchScreen(nullptr);
 		}
 		bool TouchScreen::IsA(Core::InterfaceIDType inInterfaceID) const
 		{

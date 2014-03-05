@@ -60,7 +60,7 @@ namespace ChilliSource
         ///
         /// Looks for a factory that can create the given type
         /// @param The type ID of the object you wish to create (i.e. Mesh, Texture)
-        /// @return Factory that can produce the given interface or NULL if none available
+        /// @return Factory that can produce the given interface or nullptr if none available
         //--------------------------------------------------------------------------------------------------
         ComponentFactory* ComponentFactoryDispenser::GetFactoryProducing(const std::string & insName)
         {
@@ -100,7 +100,7 @@ namespace ChilliSource
         ///
         /// Looks for a factory with the given interface
         /// @param The type ID of the factory interface you are seeking
-        /// @return Factory that implements the given interface or NULL if none available
+        /// @return Factory that implements the given interface or nullptr if none available
         //--------------------------------------------------------------------------------------------------
         ComponentFactory* ComponentFactoryDispenser::GetFactoryWithInterface(InterfaceIDType inInterfaceID)
         {

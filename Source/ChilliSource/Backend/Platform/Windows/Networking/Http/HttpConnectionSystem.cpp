@@ -61,7 +61,7 @@ namespace ChilliSource
 		/// Causes the system to issue a request with the given details.
 		/// @param A HttpRequestDetails struct with valid params per the documentation of HttpRequestDetails
 		/// @param (Optional) A function to call when the request is completed. Note that the request can be completed by failure/cancellation as well as success.
-		/// @return A pointer to the request. The system owns this pointer. Returns NULL if the request cannot be created.
+		/// @return A pointer to the request. The system owns this pointer. Returns nullptr if the request cannot be created.
 		//--------------------------------------------------------------------------------------------------
 		Networking::HttpRequest* HttpConnectionSystem::MakeRequest(const Networking::HttpRequestDetails & insRequestDetails, Networking::HttpRequest::CompletionDelegate inOnComplete)
 		{
@@ -86,7 +86,7 @@ namespace ChilliSource
 			if(!WinHttpCrackUrl(strWideURL.c_str(), (DWORD)strWideURL.length(), 0, &sUrlComp))
 			{
 				CS_LOG_ERROR("Cannot crack URL: " + insRequestDetails.strURL);
-				return NULL;
+				return nullptr;
 			}
 
 			//Weirdly the cracked URL struct only gives you the ability to crack your own URL
@@ -97,7 +97,7 @@ namespace ChilliSource
 			if(!ConnectionHandle)
 			{
 				CS_LOG_ERROR("Failed to connect to server: " + insRequestDetails.strURL);
-				return NULL;
+				return nullptr;
 			}
 
 			//Set up the request based on whether it is POST or GET and whether it is SSL
@@ -119,7 +119,7 @@ namespace ChilliSource
 					if(!ApplySSLSettings(RequestHandle))
 					{
 						WinHttpCloseHandle(ConnectionHandle);
-						return NULL;
+						return nullptr;
 					}
 				}
 			}
@@ -132,7 +132,7 @@ namespace ChilliSource
 			{
 				CS_LOG_ERROR("Failed to open request: " + insRequestDetails.strURL);
 				WinHttpCloseHandle(ConnectionHandle);
-				return NULL;
+				return nullptr;
 			}
 
 			ConnectionInfo sInfo;
@@ -307,9 +307,9 @@ namespace ChilliSource
 		//------------------------------------------------------------------
 		void HttpConnectionSystem::CHttpRequest::PollReadStream(HINTERNET inRequestHandle, HINTERNET inConnectionHandle)
 		{
-			if(WinHttpSendRequest(inRequestHandle, 0, WINHTTP_NO_REQUEST_DATA, (LPVOID)msDetails.strBody.data(), msDetails.strBody.length(), msDetails.strBody.length(), NULL))
+			if(WinHttpSendRequest(inRequestHandle, 0, WINHTTP_NO_REQUEST_DATA, (LPVOID)msDetails.strBody.data(), msDetails.strBody.length(), msDetails.strBody.length(), nullptr))
 			{
-				if(WinHttpReceiveResponse(inRequestHandle, NULL))
+				if(WinHttpReceiveResponse(inRequestHandle, nullptr))
 				{
 					mbReceivedResponse = true;
 				}
@@ -336,7 +336,7 @@ namespace ChilliSource
 			//Get the status from the server
 			DWORD dwCode = 500;
 			DWORD dwSize = sizeof(DWORD);
-			if(WinHttpQueryHeaders(inRequestHandle, WINHTTP_QUERY_STATUS_CODE|WINHTTP_QUERY_FLAG_NUMBER, NULL, &dwCode, &dwSize, NULL))
+			if(WinHttpQueryHeaders(inRequestHandle, WINHTTP_QUERY_STATUS_CODE|WINHTTP_QUERY_FLAG_NUMBER, nullptr, &dwCode, &dwSize, nullptr))
 			{
 				mudwResponseCode = (u32)dwCode;
 			}

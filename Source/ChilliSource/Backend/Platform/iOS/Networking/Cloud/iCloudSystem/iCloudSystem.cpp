@@ -364,7 +364,7 @@ namespace ChilliSource
                     }
                     else
                     {
-                        CS_LOG_ERROR("iCloudSystem::OnCloudFileOpened - Local file is latest version, but has NULL contents, doing nothing ... ");
+                        CS_LOG_ERROR("iCloudSystem::OnCloudFileOpened - Local file is latest version, but has nullptr contents, doing nothing ... ");
                         if (psRequest.mpcSyncCompletedDelegate)
                         {
                             psRequest.mpcSyncCompletedDelegate();

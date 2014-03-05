@@ -47,7 +47,7 @@ namespace ChilliSource
 		/// Get Device With Interface
 		///
 		/// @param Interface of input type to retreive
-		/// @return Pointer to input type or NULL
+		/// @return Pointer to input type or nullptr
 		//---------------------------------------------------------------
 		Input::InputDevice * InputSystem::GetDeviceWithInterface(ChilliSource::Core::InterfaceIDType inInterfaceID)
 		{
@@ -60,7 +60,7 @@ namespace ChilliSource
 				return &mMouse;
 			}
 
-			return NULL;
+			return nullptr;
 		}
 		//---------------------------------------------------------------
 		/// Get Touch Screen Pointer

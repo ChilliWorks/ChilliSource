@@ -24,7 +24,7 @@ namespace ChilliSource
 		{
 			//get the accelerometer java interface or create it if it doesn't yet exist.
 			mpAccelerometerJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<AccelerometerJavaInterface>();
-			if (mpAccelerometerJI == NULL)
+			if (mpAccelerometerJI == nullptr)
 			{
 				mpAccelerometerJI = AccelerometerJavaInterfaceSPtr(new AccelerometerJavaInterface());
 				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpAccelerometerJI);

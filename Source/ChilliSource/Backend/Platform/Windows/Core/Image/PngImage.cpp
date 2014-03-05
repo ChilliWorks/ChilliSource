@@ -24,7 +24,7 @@
 //----------------------------------------------------------------------------------
 void ReadPngData(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-	if (png_ptr == NULL)
+	if (png_ptr == nullptr)
 		return;
 
 	ChilliSource::Core::FileStream* pStream = (ChilliSource::Core::FileStream*)png_get_io_ptr(png_ptr);
@@ -46,7 +46,7 @@ namespace ChilliSource
 			mbIsLoaded = false;
 			mdwHeight = -1;
 			mdwWidth = -1;
-			mpData = NULL;
+			mpData = nullptr;
 		}
 		//----------------------------------------------------------------------------------
 		/// Constructor
@@ -56,7 +56,7 @@ namespace ChilliSource
 			mbIsLoaded = false;
 			mdwHeight = -1;
 			mdwWidth = -1;
-			mpData = NULL;
+			mpData = nullptr;
 
 			Load(ineLocation, instrFilename);
 		}
@@ -114,7 +114,7 @@ namespace ChilliSource
 				mdwWidth = -1;
 				if (inReleaseImageData)
 					delete[] mpData;
-				mpData = (u8*)NULL;
+				mpData = (u8*)nullptr;
 			}
 		}
 		//----------------------------------------------------------------------------------
@@ -173,7 +173,7 @@ namespace ChilliSource
 			}
 
 			//create the png structure
-			png_structp pPng = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+			png_structp pPng = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 			if (!pPng)
 			{
 				CS_LOG_ERROR("Could not create pPng");
@@ -185,7 +185,7 @@ namespace ChilliSource
 			if (!pInfo)
 			{
 				CS_LOG_ERROR("Could not create pInfo");
-				png_destroy_read_struct(&pPng, (png_infopp)NULL, (png_infopp)NULL);
+				png_destroy_read_struct(&pPng, (png_infopp)nullptr, (png_infopp)nullptr);
 				return false;
 			}
 
@@ -193,7 +193,7 @@ namespace ChilliSource
 			if (setjmp(png_jmpbuf(pPng)))
 			{
 				CS_LOG_ERROR("Error while loading PNG.");
-				png_destroy_read_struct(&pPng, &pInfo, (png_infopp)NULL);
+				png_destroy_read_struct(&pPng, &pInfo, (png_infopp)nullptr);
 				return false;
 			}
 
@@ -255,7 +255,7 @@ namespace ChilliSource
 				for (u32 y = 0; y < udwHeight; y += 1)
 				{
 					png_bytep row = (mpData + y * dwRowBytes);
-					png_read_rows(pPng, &row, NULL, 1);
+					png_read_rows(pPng, &row, nullptr, 1);
 				}
 			}
 
@@ -264,10 +264,10 @@ namespace ChilliSource
 			mdwHeight = (s32)udwHeight;
 
 			//end the read
-			png_read_end(pPng, NULL);
+			png_read_end(pPng, nullptr);
 
 			//deallocate everything
-			png_destroy_read_struct(&pPng, &pInfo, (png_infopp)NULL);
+			png_destroy_read_struct(&pPng, &pInfo, (png_infopp)nullptr);
 			return true;
 		}
 	}

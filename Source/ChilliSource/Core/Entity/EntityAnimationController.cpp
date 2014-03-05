@@ -55,7 +55,7 @@ namespace ChilliSource
 		{
 			std::unordered_map<std::string, EntityAnimationData>::const_iterator pEntry = mmapAnimDataToEntityName.find(instrName);
 			if (pEntry == mmapAnimDataToEntityName.end())
-				return NULL;
+				return nullptr;
 			else 
 				return &(pEntry->second);
 		}

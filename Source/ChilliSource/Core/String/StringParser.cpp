@@ -52,19 +52,19 @@ namespace ChilliSource
         //------------------------------------------------------------
         f32 ParseF32(const std::string& in_string)
         {
-            return (f32)strtod(in_string.c_str(), NULL);
+            return (f32)strtod(in_string.c_str(), nullptr);
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
         s32 ParseS32(const std::string& in_string)
         {
-            return strtol(in_string.c_str(), NULL, 10);
+            return strtol(in_string.c_str(), nullptr, 10);
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
         u32 ParseU32(const std::string& in_string)
         {
-            return strtoul(in_string.c_str(), NULL, 10);
+            return strtoul(in_string.c_str(), nullptr, 10);
         }
         //------------------------------------------------------------
         //------------------------------------------------------------

@@ -47,7 +47,7 @@ namespace ChilliSource
 			///
 			/// @param the system list
 			//-------------------------------------------------
-			void CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems);
+			void CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems) override;
 			//-------------------------------------------------
 			/// Post Create Systems
 			///
@@ -56,7 +56,7 @@ namespace ChilliSource
 			///
 			/// @param the system list
 			//-------------------------------------------------
-			void PostCreateSystems();
+			void PostCreateSystems() override;
             //-----------------------------------------
             /// Set Max FPS
             ///
@@ -64,13 +64,13 @@ namespace ChilliSource
             /// to clamp to. This should be in multiples
             /// of 15 (15, 30, 60)
             //-----------------------------------------
-            void SetMaxFPS(u32 inudwFPS);
+            void SetMaxFPS(u32 inudwFPS) override;
             //-----------------------------------------
 			/// Run
 			///
             /// Begin the game loop
 			//-----------------------------------------
-			void Run();
+			void Run() override;
 			//-----------------------------------------
 			/// Set Updater Active
 			///
@@ -79,14 +79,14 @@ namespace ChilliSource
 			///
 			/// @param Whether to end or begin
 			//-----------------------------------------
-			void SetUpdaterActive(bool inbIsActive);
+			void SetUpdaterActive(bool inbIsActive) override;
             //-----------------------------------------
             /// Terminate Updater
             ///
             /// Stops the update loop causing
             /// the application to terminate
             //-----------------------------------------
-            void TerminateUpdater(); 
+            void TerminateUpdater() override;
 			
             //-----------------------------------------
             /// Can Create System With Interface
@@ -94,7 +94,7 @@ namespace ChilliSource
             /// @param Interface ID
             /// @return Whether system can be created
             //----------------------------------------
-			bool CanCreateSystemWithInterface(Core::InterfaceIDType inInterfaceID) const;
+			bool CanCreateSystemWithInterface(Core::InterfaceIDType inInterfaceID) const override;
 			//-----------------------------------------
             /// Create and Add System With Interface
             ///
@@ -104,7 +104,7 @@ namespace ChilliSource
 			/// @param Vector of existing systems. The return value is added to this vector if not nullptr.
 			/// @return A handle to the given system or nullptr if the platform cannot support it
 			//-----------------------------------------
-			Core::System* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr> & inaExistingSystems) const;
+			Core::System* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr> & inaExistingSystems) const override;
 			
 			//==========================================
 			//--- Activity Creation
@@ -115,7 +115,7 @@ namespace ChilliSource
             /// @param Interface ID
             /// @return Whether system can be created
             //----------------------------------------
-            bool CanCreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const;
+            bool CanCreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const override;
 			//-----------------------------------------
             /// Create Activity With Interface
             ///
@@ -124,7 +124,7 @@ namespace ChilliSource
 			/// @param InterfaceID to generate
 			/// @return A handle to the given activity or nullptr if the platform cannot support it
 			//-----------------------------------------
-            Core::Activity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const;
+            Core::Activity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const override;
 			
 			//==========================================
 			//---InformationProvider Creation
@@ -135,7 +135,7 @@ namespace ChilliSource
 			/// @param Interface ID
 			/// @return Whether system can be created
 			//----------------------------------------
-            bool CanCreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const;
+            bool CanCreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const override;
 			
 			//-----------------------------------------
             /// Can Create Information Provider With Interface
@@ -145,59 +145,59 @@ namespace ChilliSource
 			/// @param InterfaceID to generate
 			/// @return A handle to the given system or nullptr if the platform cannot support it
 			//-----------------------------------------
-            Core::IInformationProvider* CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const;
+            Core::IInformationProvider* CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const override;
 			//-----------------------------------------------------------------------------------------------------------
 			/// Get Screen Dimensions
 			///
 			/// Retrieves the screen dimensions. These dimensions are always in the default orientation for the device.
 			/// @return A Vector2 containing the screen size in its x + y components
 			//-----------------------------------------------------------------------------------------------------------
-			Core::Vector2 GetScreenDimensions() const;
+			Core::Vector2 GetScreenDimensions() const override;
 			//--------------------------------------------------------------
 			/// Get Device Model Name
 			///
 			/// @return The above information stringified
 			//--------------------------------------------------------------
-			std::string GetDeviceModelName() const;
+			std::string GetDeviceModelName() const override;
 			//--------------------------------------------------------------
 			/// Get Device Model Type Name
 			///
 			/// @return The above information stringified
 			//--------------------------------------------------------------
-			std::string GetDeviceModelTypeName() const;
+			std::string GetDeviceModelTypeName() const override;
 			//--------------------------------------------------------------
 			/// Get Device Manufacturer Name
 			///
 			/// @return The above information stringified
 			//--------------------------------------------------------------
-			std::string GetDeviceManufacturerName() const;
+			std::string GetDeviceManufacturerName() const override;
             //--------------------------------------------------------------
 			/// Get OS Version
 			///
 			/// @return String containing the OS version of the device
 			//--------------------------------------------------------------
-			std::string GetOSVersion() const;
+			std::string GetOSVersion() const override;
 			//--------------------------------------------------------------
 			/// Get Locale
 			///
 			/// Get the active locale of the device
 			/// @return Locale ID
 			//--------------------------------------------------------------
-            Core::Locale GetLocale() const;
+            Core::Locale GetLocale() const override;
 			//--------------------------------------------------------------
 			/// Get Locale
 			///
 			/// Get the active language of the device in locale format
 			/// @return Locale ID
 			//--------------------------------------------------------------
-            Core::Locale GetLanguage() const;
+            Core::Locale GetLanguage() const override;
 			//-------------------------------------------------
 			/// Get Screen Density
             ///
             /// @return The density scale factor of the screen
             /// to convert from DIPS to physical pixels
             //-------------------------------------------------
-            f32 GetScreenDensity() const;
+            f32 GetScreenDensity() const override;
             //-------------------------------------------------
             /// Get Device ID
             ///
@@ -209,19 +209,19 @@ namespace ChilliSource
             ///
             /// @return The bundle version as found in the plist
             //-------------------------------------------------
-            std::string GetAppVersion() const;
+            std::string GetAppVersion() const override;
 			//--------------------------------------------------------------
 			/// Get Number Of CPU Cores
 			///
 			/// @return The number of cores available
 			//--------------------------------------------------------------
-			u32 GetNumberOfCPUCores() const;
+			u32 GetNumberOfCPUCores() const override;
 			//--------------------------------------------------------------
 			/// Get System Time
 			///
 			/// @return The current time in milliseconds
 			//--------------------------------------------------------------
-			TimeIntervalMs GetSystemTimeMS() const;
+			TimeIntervalMs GetSystemTimeMS() const override;
             //--------------------------------------------------------------------------------------------------
             /// Make Toast
             ///
@@ -229,7 +229,7 @@ namespace ChilliSource
             ///
             /// @param Text
             //--------------------------------------------------------------------------------------------------
-            void MakeToast(const Core::UTF8String& instrText) const;
+            void MakeToast(const Core::UTF8String& instrText) const override;
             //--------------------------------------------------------------------------------------------------
             /// Show System Confirm Dialog
             ///
@@ -241,7 +241,7 @@ namespace ChilliSource
             /// @param Confirm text
             /// @param Cancel text
             //--------------------------------------------------------------------------------------------------
-            void ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const;
+            void ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const override;
             //--------------------------------------------------------------------------------------------------
             /// Show System Dialog
             ///
@@ -252,7 +252,7 @@ namespace ChilliSource
             /// @param Message text
             /// @param Confirm text
             //--------------------------------------------------------------------------------------------------
-            void ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const;
+            void ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const override;
 		private:
 
             //--------------------------------------------

@@ -150,7 +150,7 @@ namespace ChilliSource
 		{
 			Core::FileStreamSPtr pFileStream = CreateFileStream(ineStorageLocation, instrDirectory, Core::FileMode::k_writeBinary);
 
-			if (pFileStream.get() == NULL || pFileStream->IsOpen() == false || pFileStream->IsBad() == true)
+			if (pFileStream.get() == nullptr || pFileStream->IsOpen() == false || pFileStream->IsBad() == true)
 			{
 				CS_LOG_ERROR("Failed to create file: " + instrDirectory);
 				return false;
@@ -833,7 +833,7 @@ namespace ChilliSource
 			std::string strSourceFile = ChilliSource::Core::StringUtils::StandardisePath(GetStorageLocationDirectory(Core::StorageLocation::k_package) + instrPath);
 
 			unzFile unzip = unzOpen(mstrPathToAPK.c_str());
-			if (unzip != NULL)
+			if (unzip != nullptr)
 			{
 				s32 status = unzGoToFirstFile(unzip);
 
@@ -847,7 +847,7 @@ namespace ChilliSource
 					unz_file_info info;
 					const u32 dwFilenameLength = 256;
 					char cfilename[dwFilenameLength];
-					unzGetCurrentFileInfo(unzip, &info, cfilename, dwFilenameLength, NULL, 0, NULL, 0);
+					unzGetCurrentFileInfo(unzip, &info, cfilename, dwFilenameLength, nullptr, 0, nullptr, 0);
 					std::string strFilepath = ChilliSource::Core::StringUtils::StandardisePath(std::string(cfilename));
 
 					//check and see if this file is in the directory we want
@@ -905,7 +905,7 @@ namespace ChilliSource
 
 			//open apk
 			unzFile unzipper = unzOpen(mstrPathToAPK.c_str());
-			if (unzipper == NULL)
+			if (unzipper == nullptr)
 			{
 				CS_LOG_ERROR("Cannot get filenames in package: Failed to open APK.");
 				return;
@@ -921,7 +921,7 @@ namespace ChilliSource
 				unz_file_info info;
 				const u32 udwFilenameLength = 256;
 				char cfilename[udwFilenameLength];
-				unzGetCurrentFileInfo(unzipper, &info, cfilename, udwFilenameLength, NULL, 0, NULL, 0);
+				unzGetCurrentFileInfo(unzipper, &info, cfilename, udwFilenameLength, nullptr, 0, nullptr, 0);
 
 				//get the path and filename
 				std::string filename(cfilename);
@@ -1000,7 +1000,7 @@ namespace ChilliSource
 
 			//open apk
 			unzFile unzipper = unzOpen(mstrPathToAPK.c_str());
-			if (unzipper == NULL)
+			if (unzipper == nullptr)
 			{
 				CS_LOG_ERROR("Cannot get filenames in package: Failed to open APK.");
 				return false;
@@ -1014,7 +1014,7 @@ namespace ChilliSource
 				unz_file_info info;
 				const u32 udwFilenameLength = 256;
 				char cfilename[udwFilenameLength];
-				unzGetCurrentFileInfo(unzipper, &info, cfilename, udwFilenameLength, NULL, 0, NULL, 0);
+				unzGetCurrentFileInfo(unzipper, &info, cfilename, udwFilenameLength, nullptr, 0, nullptr, 0);
 
 				//get the path and filename
 				std::string strFilename(cfilename);
@@ -1071,13 +1071,13 @@ namespace ChilliSource
 			//open the source file
 			Core::FileStreamSPtr sourceStream = Core::FileStreamSPtr(new Core::FileStream());
 			sourceStream->Open(instrSourceFilepath, Core::FileMode::k_readBinary);
-			if (sourceStream.get() == NULL || sourceStream->IsBad() == true || sourceStream->IsOpen() == false)
+			if (sourceStream.get() == nullptr || sourceStream->IsBad() == true || sourceStream->IsOpen() == false)
 				return false;
 
 			//open the source file
 			Core::FileStreamSPtr destinationStream = Core::FileStreamSPtr(new Core::FileStream());
 			destinationStream->Open(instrDestinationFilepath, Core::FileMode::k_writeBinary);
-			if (destinationStream.get() == NULL || destinationStream->IsBad() == true || destinationStream->IsOpen() == false)
+			if (destinationStream.get() == nullptr || destinationStream->IsBad() == true || destinationStream->IsOpen() == false)
 				return false;
 
 			//find the length of the source stream
@@ -1129,14 +1129,14 @@ namespace ChilliSource
 
 			//open up the directory
 			DIR* directory = opendir(strCorrectedDirectory.c_str());
-			if(directory == NULL)
+			if(directory == nullptr)
 			{
 				return false;
 			}
 
 			//iterate through the directory
 			struct dirent* directoryItem;
-			while ((directoryItem = readdir(directory)) != NULL)
+			while ((directoryItem = readdir(directory)) != nullptr)
 			{
 				//filter out "." and ".."
 				if (std::string(directoryItem->d_name) == "." || std::string(directoryItem->d_name) == "..")
@@ -1195,7 +1195,7 @@ namespace ChilliSource
 
 			//open up the directory
 			DIR* directory = opendir(strCorrectedDirectory.c_str());
-			if(directory == NULL)
+			if(directory == nullptr)
 			{
 				s32 errorType = errno;
 
@@ -1221,7 +1221,7 @@ namespace ChilliSource
 
 			//iterate through the directory
 			struct dirent* directoryItem;
-			while ((directoryItem = readdir(directory)) != NULL)
+			while ((directoryItem = readdir(directory)) != nullptr)
 			{
 				//filter out "." and ".."
 				if (std::string(directoryItem->d_name) == "." || std::string(directoryItem->d_name) == "..")

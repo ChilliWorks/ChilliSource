@@ -79,7 +79,7 @@ namespace ChilliSource
 			/// Looks for a java interface that implements the given interface.
 			///
 			/// @param The type ID of the java interface you wish to implement
-			/// @return Java Interface that implements the given interface or NULL if none
+			/// @return Java Interface that implements the given interface or nullptr if none
 			//--------------------------------------------------------
 			IJavaInterfaceSPtr GetJavaInterface(Core::InterfaceIDType inInterfaceID);
 			//--------------------------------------------------------
@@ -87,7 +87,7 @@ namespace ChilliSource
 			///
 			/// Looks for a java interface that implements the given interface.
 			///
-			/// @return Java Interface that implements the given interface or NULL if none
+			/// @return Java Interface that implements the given interface or nullptr if none
 			//--------------------------------------------------------
 			template <typename T> std::shared_ptr<T> GetJavaInterface();
 			//--------------------------------------------------------
@@ -95,7 +95,7 @@ namespace ChilliSource
 			///
 			/// Looks for a java interface that implements the given interface.
 			///
-			/// @return Java Interface that implements the given interface or NULL if none
+			/// @return Java Interface that implements the given interface or nullptr if none
 			//--------------------------------------------------------
 			template <typename T, typename U> std::shared_ptr<T> GetJavaInterface();
 			//--------------------------------------------------------
@@ -141,7 +141,7 @@ namespace ChilliSource
 		{
 			IJavaInterfaceSPtr pJavaInterface = GetJavaInterface(T::InterfaceID);
 
-			if (pJavaInterface != NULL)
+			if (pJavaInterface != nullptr)
 			{
 				return std::static_pointer_cast<T>(pJavaInterface);
 			}
@@ -155,7 +155,7 @@ namespace ChilliSource
 		{
 			IJavaInterfaceSPtr pJavaInterface = GetJavaInterface(U::InterfaceID);
 
-			if (pJavaInterface != NULL)
+			if (pJavaInterface != nullptr)
 			{
 				return std::static_pointer_cast<T>(pJavaInterface);
 			}

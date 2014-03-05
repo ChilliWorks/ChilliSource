@@ -36,7 +36,7 @@ extern "C"
 void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* inpEnv, jobject inThis, jobjectArray inaIDs, jobjectArray inaNames, jobjectArray inaDescs, jobjectArray inaPrices)
 {
 	ChilliSource::Android::AmazonIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
-	if (pInterface != NULL)
+	if (pInterface != nullptr)
 	{
 		u32 udwNumProducts = inpEnv->GetArrayLength(inaIDs);
 		std::vector<CSNetworking::IAPProductDesc> aProducts;
@@ -76,7 +76,7 @@ void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnProductsDescr
 void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* inpEnv, jobject inThis, jint inudwResult, jstring instrProductID, jstring instrTransactionID, jstring instrReceipt)
 {
 	ChilliSource::Android::AmazonIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
-	if (pInterface != NULL)
+	if (pInterface != nullptr)
 	{
 		CSNetworking::IAPTransaction sTransaction;
 		sTransaction.strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
@@ -94,7 +94,7 @@ void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionSt
 void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID)
 {
 	ChilliSource::Android::AmazonIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
-	if (pInterface != NULL)
+	if (pInterface != nullptr)
 	{
 		std::string strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
 		std::string strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
@@ -161,7 +161,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void AmazonIAPJavaInterface::StopListeningForTransactionUpdates()
         {
-        	mTransactionStatusDelegate = NULL;
+        	mTransactionStatusDelegate = nullptr;
 
         	JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
         	pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("StopListeningForTransactionUpdates"));
@@ -172,7 +172,7 @@ namespace ChilliSource
         void AmazonIAPJavaInterface::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
         	mProductsRequestDelegate = inRequestDelegate;
-        	if(mProductsRequestDelegate != NULL)
+        	if(mProductsRequestDelegate != nullptr)
         	{
 				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 
@@ -195,10 +195,10 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void AmazonIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<Networking::IAPProductDesc>& inaProducts)
         {
-        	if(mProductsRequestDelegate != NULL)
+        	if(mProductsRequestDelegate != nullptr)
         	{
         		mProductsRequestDelegate(inaProducts);
-        		mProductsRequestDelegate = NULL;
+        		mProductsRequestDelegate = nullptr;
         	}
         }
         //---------------------------------------------------------------
@@ -224,7 +224,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void AmazonIAPJavaInterface::OnTransactionStatusUpdated(u32 inudwStatus, const Networking::IAPTransaction& inTransaction)
         {
-        	if(mTransactionStatusDelegate != NULL)
+        	if(mTransactionStatusDelegate != nullptr)
         	{
 				Networking::IAPTransaction::Status eStatus = Networking::IAPTransaction::Status::k_failed;
 
@@ -279,10 +279,10 @@ namespace ChilliSource
         //---------------------------------------------------------------
         void AmazonIAPJavaInterface::OnTransactionClosed(const std::string& instrProductID, const std::string& instrTransactionID)
         {
-        	if(mTransactionCloseDelegate != NULL)
+        	if(mTransactionCloseDelegate != nullptr)
         	{
         		mTransactionCloseDelegate(instrProductID, instrTransactionID);
-        		mTransactionCloseDelegate = NULL;
+        		mTransactionCloseDelegate = nullptr;
         	}
         }
         //---------------------------------------------------------------

@@ -27,7 +27,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------
     	GooglePlayRemoteNotificationSystem::GooglePlayRemoteNotificationSystem()
     	{
-    		if(NULL == (mpJavaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<GooglePlayRemoteNotificationJavaInterface>()))
+    		if(nullptr == (mpJavaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<GooglePlayRemoteNotificationJavaInterface>()))
     		{
     			mpJavaInterface = GooglePlayRemoteNotificationJavaInterfaceSPtr(new GooglePlayRemoteNotificationJavaInterface());
 				ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
@@ -61,10 +61,10 @@ namespace ChilliSource
 		void GooglePlayRemoteNotificationSystem::OnRemoteTokenReceived(const std::string& instrToken)
 		{
 			mstrToken = Core::BaseEncoding::Base64Encode(instrToken);
-			if(mDelegate != NULL)
+			if(mDelegate != nullptr)
 			{
 				mDelegate(mstrToken);
-				mDelegate = NULL;
+				mDelegate = nullptr;
 			}
 		}
 		//-------------------------------------------------------------------------

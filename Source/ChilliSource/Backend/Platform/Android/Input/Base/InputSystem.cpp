@@ -36,7 +36,7 @@ namespace ChilliSource
 				return &mTouchScreen;
 			}
 
-			return NULL;
+			return nullptr;
 		}
 		Input::Accelerometer* InputSystem::GetAccelerometerPtr()
 		{

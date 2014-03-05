@@ -40,32 +40,32 @@ namespace ChilliSource
 			///
 			/// @return whether or not the stream is open
 			//--------------------------------------------------------------------------------------------------
-			bool IsOpen();
+			bool IsOpen() override;
 			//--------------------------------------------------------------------------------------------------
 			/// Is Bad
 			///
 			/// @return Checks that the file stream is not corrupt. this calls both fstream::fail() and
 			///			fstream::bad()
 			//--------------------------------------------------------------------------------------------------
-			bool IsBad();
+			bool IsBad() override;
 			//--------------------------------------------------------------------------------------------------
 			/// End Of File
 			///
 			/// @return Checks whether the end of the file has been reached.
 			//--------------------------------------------------------------------------------------------------
-			bool EndOfFile();
+			bool EndOfFile() override;
 			//--------------------------------------------------------------------------------------------------
 			/// Close
 			///
 			/// Closes the filestream.
 			//--------------------------------------------------------------------------------------------------
-			void Close();
+			void Close() override;
 			//--------------------------------------------------------------------------------------------------
 			/// Get
 			///
 			/// @return the next character in the file stream as an integer
 			//--------------------------------------------------------------------------------------------------
-			s32 Get();
+			s32 Get() override;
 			//--------------------------------------------------------------------------------------------------
 			/// Get
 			///
@@ -73,7 +73,7 @@ namespace ChilliSource
 			///
 			/// @param Container for the output value.
 			//--------------------------------------------------------------------------------------------------
-			void Get(s8 & outbyChar);
+			void Get(s8 & outbyChar) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Get
 			///
@@ -82,7 +82,7 @@ namespace ChilliSource
 			/// @param buffer for the output string.
 			/// @param The amount of bytes to read into the buffer.
 			//--------------------------------------------------------------------------------------------------
-			void Get(s8 * outpbyString, s32 indwStreamSize);
+			void Get(s8 * outpbyString, s32 indwStreamSize) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Get
 			///
@@ -93,7 +93,7 @@ namespace ChilliSource
 			/// @param The amount of bytes to read into the buffer.
 			/// @param The delimiting character.
 			//--------------------------------------------------------------------------------------------------
-			void Get(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim);
+			void Get(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Get Line
 			///
@@ -101,7 +101,7 @@ namespace ChilliSource
 			///
 			/// @param OUT: output string.
 			//--------------------------------------------------------------------------------------------------
-			void GetLine(std::string &outstrString);
+			void GetLine(std::string &outstrString) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Get All
 			///
@@ -109,7 +109,7 @@ namespace ChilliSource
 			///
 			/// @param OUT: output string.
 			//--------------------------------------------------------------------------------------------------
-			void GetAll(std::string &outstrString);
+			void GetAll(std::string &outstrString) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Get
 			///
@@ -117,7 +117,7 @@ namespace ChilliSource
 			///
 			/// @param OUT: output string.
 			//--------------------------------------------------------------------------------------------------
-			void Get(std::stringstream &outstrStringStream);
+			void Get(std::stringstream &outstrStringStream) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Get Line
 			///
@@ -126,7 +126,7 @@ namespace ChilliSource
 			/// @param buffer for the output string.
 			/// @param The amount of bytes to read into the buffer.
 			//--------------------------------------------------------------------------------------------------
-			void GetLine(s8 * outpbyString, s32 indwStreamSize);
+			void GetLine(s8 * outpbyString, s32 indwStreamSize) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Get Line
 			///
@@ -137,7 +137,7 @@ namespace ChilliSource
 			/// @param The amount of bytes to read into the buffer.
 			/// @param The delimiting character.
 			//--------------------------------------------------------------------------------------------------
-			void GetLine(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim);
+			void GetLine(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Ignore
 			///
@@ -147,7 +147,7 @@ namespace ChilliSource
 			/// @param The amount of bytes to read into the buffer.
 			/// @param The delimiting character.
 			//--------------------------------------------------------------------------------------------------
-			void Ignore(s32 indwStreamSize = 1, s8 inbyDelim = EOF);
+			void Ignore(s32 indwStreamSize = 1, s8 inbyDelim = EOF) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Peek
 			///
@@ -156,7 +156,7 @@ namespace ChilliSource
 			///
 			/// @return the next byte as an integer.
 			//--------------------------------------------------------------------------------------------------
-			s32 Peek();
+			s32 Peek() override;
 			//--------------------------------------------------------------------------------------------------
 			/// Read
 			///
@@ -165,7 +165,7 @@ namespace ChilliSource
 			/// @param The buffer.
 			/// @param the stream size.
 			//--------------------------------------------------------------------------------------------------
-			void Read(s8* inpbyBuffer, s32 indwStreamSize);
+			void Read(s8* inpbyBuffer, s32 indwStreamSize) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Read Some
 			///
@@ -175,7 +175,7 @@ namespace ChilliSource
 			/// @param the buffer.
 			/// @param the stream size.
 			//--------------------------------------------------------------------------------------------------
-			s32 ReadSome(s8* inpbyBuffer, s32 indwStreamSize);
+			s32 ReadSome(s8* inpbyBuffer, s32 indwStreamSize) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Put Back
 			///
@@ -183,19 +183,19 @@ namespace ChilliSource
 			///
 			/// @param the next char.
 			//--------------------------------------------------------------------------------------------------
-			void PutBack(s8 inbyChar);
+			void PutBack(s8 inbyChar) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Unget
 			///
 			/// Decriments the get pointer by one.
 			//--------------------------------------------------------------------------------------------------
-			void Unget();
+			void Unget() override;
 			//--------------------------------------------------------------------------------------------------
 			/// TellG
 			///
 			/// @return the absolute position of the get pointer.
 			//--------------------------------------------------------------------------------------------------
-			s32 TellG();
+			s32 TellG() override;
 			//--------------------------------------------------------------------------------------------------
 			/// SeekG
 			///
@@ -203,7 +203,7 @@ namespace ChilliSource
 			///
 			/// @param the new position.
 			//--------------------------------------------------------------------------------------------------
-			void SeekG(s32 indwPosition);
+			void SeekG(s32 indwPosition) override;
 			//--------------------------------------------------------------------------------------------------
 			/// SeekG
 			///
@@ -212,13 +212,13 @@ namespace ChilliSource
 			/// @param the new position.
 			/// @param the direction from which to seek.
 			//--------------------------------------------------------------------------------------------------
-			void SeekG(s32 indwPosition, Core::SeekDir ineDir);
+			void SeekG(s32 indwPosition, Core::SeekDir ineDir) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Sync
 			///
 			/// Syncronises with the associated buffer. This effectively means that unread bytes are discarded.
 			//--------------------------------------------------------------------------------------------------
-			s32 Sync();
+			s32 Sync() override;
 			//--------------------------------------------------------------------------------------------------
 			/// Put
 			///
@@ -226,7 +226,7 @@ namespace ChilliSource
 			///
 			/// @param the char to write.
 			//--------------------------------------------------------------------------------------------------
-			void Put(s8 inbyChar);
+			void Put(s8 inbyChar) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Write
 			///
@@ -235,7 +235,7 @@ namespace ChilliSource
 			/// @param the data buffer.
 			/// @param the stream size.
 			//--------------------------------------------------------------------------------------------------
-			void Write(s8* inpbyChar, s32 indwStreamSize);
+			void Write(s8* inpbyChar, s32 indwStreamSize) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Write
 			///
@@ -243,13 +243,13 @@ namespace ChilliSource
 			///
 			/// @param the string.
 			//--------------------------------------------------------------------------------------------------
-			void Write(const std::string& _instrString);
+			void Write(const std::string& _instrString) override;
 			//--------------------------------------------------------------------------------------------------
 			/// TellP
 			///
 			/// @return the currently position of the put pointer
 			//--------------------------------------------------------------------------------------------------
-			s32 TellP();
+			s32 TellP() override;
 			//--------------------------------------------------------------------------------------------------
 			/// SeekP
 			///
@@ -257,7 +257,7 @@ namespace ChilliSource
 			///
 			/// @param the new position.
 			//--------------------------------------------------------------------------------------------------
-			void SeekP(s32 indwPosition);
+			void SeekP(s32 indwPosition) override;
 			//--------------------------------------------------------------------------------------------------
 			/// SeekP
 			///
@@ -266,13 +266,13 @@ namespace ChilliSource
 			/// @param the new position.
 			/// @param the direction from which to seek.
 			//--------------------------------------------------------------------------------------------------
-			void SeekP(s32 indwPosition, Core::SeekDir ineDir);
+			void SeekP(s32 indwPosition, Core::SeekDir ineDir) override;
 			//--------------------------------------------------------------------------------------------------
 			/// Flush
 			///
 			/// Synchronises the associated buffer with the stream.
 			//--------------------------------------------------------------------------------------------------
-			void Flush();
+			void Flush() override;
 		protected:
 			//--------------------------------------------------------------------------------------------------
 			/// Constructor

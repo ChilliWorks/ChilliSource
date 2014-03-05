@@ -21,7 +21,7 @@ namespace ChilliSource
 		CS_DEFINE_NAMEDTYPE(FacebookAuthenticationSystem);
 
 		FacebookAuthenticationSystem::FacebookAuthenticationSystem()
-		: mAuthDelegate(NULL), mAuthReadDelegate(NULL), mAuthWriteDelegate(NULL)
+		: mAuthDelegate(nullptr), mAuthReadDelegate(nullptr), mAuthWriteDelegate(nullptr)
 		{
 			mpJavaInterface = FacebookJavaInterfaceSPtr(new FacebookJavaInterface());
 			mpJavaInterface->SetAuthenticationSystem(this);
@@ -92,7 +92,7 @@ namespace ChilliSource
 				}
 
 				mAuthDelegate(sResponse);
-				mAuthDelegate = NULL;
+				mAuthDelegate = nullptr;
 			}
 		}
 
@@ -112,7 +112,7 @@ namespace ChilliSource
 				}
 
 				mAuthReadDelegate(sResponse);
-				mAuthReadDelegate = NULL;
+				mAuthReadDelegate = nullptr;
 			}
 		}
 
@@ -132,7 +132,7 @@ namespace ChilliSource
 				}
 
 				mAuthWriteDelegate(sResponse);
-				mAuthWriteDelegate = NULL;
+				mAuthWriteDelegate = nullptr;
 			}
 		}
 

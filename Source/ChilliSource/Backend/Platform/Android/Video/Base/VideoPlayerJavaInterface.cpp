@@ -35,7 +35,7 @@ extern "C"
 void Java_com_chillisource_video_VideoPlayerNativeInterface_Dismissed(JNIEnv* inpEnv, jobject inThis)
 {
 	ChilliSource::Android::VideoPlayerJavaInterfaceSPtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
-	if (pVideoPJI != NULL)
+	if (pVideoPJI != nullptr)
 		pVideoPJI->Dismissed();
 }
 //-------------------------------------------
@@ -49,7 +49,7 @@ void Java_com_chillisource_video_VideoPlayerNativeInterface_Dismissed(JNIEnv* in
 void Java_com_chillisource_video_VideoPlayerNativeInterface_Stopped(JNIEnv* inpEnv, jobject inThis)
 {
 	ChilliSource::Android::VideoPlayerJavaInterfaceSPtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
-	if (pVideoPJI != NULL)
+	if (pVideoPJI != nullptr)
 		pVideoPJI->Stopped();
 }
 //-------------------------------------------
@@ -64,7 +64,7 @@ void Java_com_chillisource_video_VideoPlayerNativeInterface_Stopped(JNIEnv* inpE
 void Java_com_chillisource_video_VideoPlayerNativeInterface_UpdateSubtitles(JNIEnv* inpEnv, jobject inThis)
 {
 	ChilliSource::Android::VideoPlayerJavaInterfaceSPtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
-	if (pVideoPJI != NULL)
+	if (pVideoPJI != nullptr)
 		pVideoPJI->UpdateSubtitles();
 }
 
@@ -112,7 +112,7 @@ namespace ChilliSource
 			mVideoStoppedDelegate = inStoppedDelegate;
 
 			bool bHasSubtitles = false;
-			if (mUpdateSubtitlesDelegate != NULL)
+			if (mUpdateSubtitlesDelegate != nullptr)
 			{
 				bHasSubtitles = true;
 			}
@@ -159,10 +159,10 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		void VideoPlayerJavaInterface::Dismissed()
 		{
-			if (mVideoDismissedDelegate != NULL)
+			if (mVideoDismissedDelegate != nullptr)
 			{
 				mVideoDismissedDelegate();
-				mVideoDismissedDelegate = NULL;
+				mVideoDismissedDelegate = nullptr;
 			}
 		}
 		//--------------------------------------------------------------
@@ -170,12 +170,12 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		void VideoPlayerJavaInterface::Stopped()
 		{
-			if (mVideoStoppedDelegate != NULL)
+			if (mVideoStoppedDelegate != nullptr)
 			{
 				mVideoStoppedDelegate();
-				mVideoDismissedDelegate = NULL;
-				mVideoStoppedDelegate = NULL;
-				mUpdateSubtitlesDelegate = NULL;
+				mVideoDismissedDelegate = nullptr;
+				mVideoStoppedDelegate = nullptr;
+				mUpdateSubtitlesDelegate = nullptr;
 			}
 		}
 		//--------------------------------------------------------------
@@ -214,7 +214,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		void VideoPlayerJavaInterface::UpdateSubtitles()
 		{
-			if (mUpdateSubtitlesDelegate != NULL)
+			if (mUpdateSubtitlesDelegate != nullptr)
 			{
 				mUpdateSubtitlesDelegate();
 			}

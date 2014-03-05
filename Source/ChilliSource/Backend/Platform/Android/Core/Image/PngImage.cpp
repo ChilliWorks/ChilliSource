@@ -29,9 +29,9 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		void ReadPngData(png_structp inpPng, png_bytep inpData, png_size_t indwLength)
 		{
-			if (inpPng == NULL)
+			if (inpPng == nullptr)
 			{
-				CS_LOG_ERROR("ReadPngData() has failed because inpPng is NULL :S");
+				CS_LOG_ERROR("ReadPngData() has failed because inpPng is nullptr :S");
 				return;
 			}
 
@@ -53,7 +53,7 @@ namespace ChilliSource
 			mbIsLoaded = false;
 			mdwHeight = -1;
 			mdwWidth = -1;
-			mpData = NULL;
+			mpData = nullptr;
 			meFormat = Core::Image::Format::k_RGBA8888;
 		}
 		//----------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ namespace ChilliSource
 			mbIsLoaded = false;
 			mdwHeight = -1;
 			mdwWidth = -1;
-			mpData = NULL;
+			mpData = nullptr;
 			meFormat = Core::Image::Format::k_RGBA8888;
 
 			Load(ineStorageLocation, instrFilename);
@@ -115,7 +115,7 @@ namespace ChilliSource
 				mdwWidth = -1;
 				if (inReleaseImageData)
 					delete[] mpData;
-				mpData = (u8*)NULL;
+				mpData = (u8*)nullptr;
 			}
 		}
 		//----------------------------------------------------------------------------------
@@ -174,7 +174,7 @@ namespace ChilliSource
 			}
 
 			//create the png structure
-			png_structp pPng = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+			png_structp pPng = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 			if (!pPng)
 			{
 				CS_LOG_ERROR("Could not create pPng");
@@ -186,7 +186,7 @@ namespace ChilliSource
 			if (!pInfo)
 			{
 				CS_LOG_ERROR("Could not create pInfo");
-				png_destroy_read_struct(&pPng, (png_infopp)NULL, (png_infopp)NULL);
+				png_destroy_read_struct(&pPng, (png_infopp)nullptr, (png_infopp)nullptr);
 				return false;
 			}
 
@@ -194,7 +194,7 @@ namespace ChilliSource
 			if (setjmp(png_jmpbuf(pPng)))
 			{
 				CS_LOG_ERROR("Error while loading PNG.");
-				png_destroy_read_struct(&pPng, &pInfo, (png_infopp)NULL);
+				png_destroy_read_struct(&pPng, &pInfo, (png_infopp)nullptr);
 				return false;
 			}
 
@@ -253,7 +253,7 @@ namespace ChilliSource
 				for (u32 y = 0; y < udwHeight; y += 1)
 				{
 					png_bytep row = (mpData + y * dwRowBytes);
-					png_read_rows(pPng, &row, NULL, 1);
+					png_read_rows(pPng, &row, nullptr, 1);
 				}
 			}
 			//store the width and height
@@ -278,17 +278,17 @@ namespace ChilliSource
 				break;
 			default:
 				CS_LOG_ERROR("Trying to load a PNG with an unknown colour format!");
-				png_read_end(pPng, NULL);
-				png_destroy_read_struct(&pPng, &pInfo, (png_infopp)NULL);
+				png_read_end(pPng, nullptr);
+				png_destroy_read_struct(&pPng, &pInfo, (png_infopp)nullptr);
 				return false;
 				break;
 			}
 
 			//end the read
-			png_read_end(pPng, NULL);
+			png_read_end(pPng, nullptr);
 
 			//deallocate everything
-			png_destroy_read_struct(&pPng, &pInfo, (png_infopp)NULL);
+			png_destroy_read_struct(&pPng, &pInfo, (png_infopp)nullptr);
 
 			inStream->Close();
 

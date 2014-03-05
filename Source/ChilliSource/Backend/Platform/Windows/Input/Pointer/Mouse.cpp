@@ -11,7 +11,7 @@ namespace ChilliSource
 {
 	namespace Windows
 	{
-		Mouse* gpMouseInstance = NULL;
+		Mouse* gpMouseInstance = nullptr;
 		//----------------------------------------------------
 		/// Constructor
 		///
@@ -125,12 +125,12 @@ namespace ChilliSource
 		Mouse::~Mouse()
 		{
 			//Remove as listener
-			glfwSetMousePosCallback(NULL);
-			glfwSetMouseButtonCallback(NULL);
+			glfwSetMousePosCallback(nullptr);
+			glfwSetMouseButtonCallback(nullptr);
 
 			if(gpMouseInstance ==  this)
 			{
-				gpMouseInstance = NULL;
+				gpMouseInstance = nullptr;
 			}
 		}
 	}

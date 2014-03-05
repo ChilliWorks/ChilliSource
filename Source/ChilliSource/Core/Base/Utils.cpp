@@ -21,7 +21,7 @@ namespace ChilliSource
             {
                 if(!outpJson)
                 {
-                    CS_LOG_WARNING("Utils::ReadJson| Output is NULL");
+                    CS_LOG_WARNING("Utils::ReadJson| Output is nullptr");
                     return false;
                 }
                 

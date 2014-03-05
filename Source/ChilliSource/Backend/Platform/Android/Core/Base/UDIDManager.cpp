@@ -136,7 +136,7 @@ namespace ChilliSource
 			//--if all this fails, fall back on generating a random hash.
 			//first of all seed rand with something that is as unique as possible: allocate a random bit of memory and add this to current time.
 			u32* pRandomMemory = new u32;
-			u32 udwSeed = ((u32)pRandomMemory) + time(NULL);
+			u32 udwSeed = ((u32)pRandomMemory) + time(nullptr);
 			CS_SAFEDELETE(pRandomMemory);
 			srand(udwSeed);
 

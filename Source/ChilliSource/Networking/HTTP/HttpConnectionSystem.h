@@ -114,7 +114,7 @@ namespace ChilliSource
             /// Causes the system to issue a request with the given details.
             /// @param A HttpRequestDetails struct with valid params per the documentation of HttpRequestDetails
 			/// @param (Optional) A function to call when the request is completed. Note that the request can be completed by failure/cancellation as well as success.
-            /// @return A pointer to the request. The system owns this pointer. Returns NULL if the request cannot be created.
+            /// @return A pointer to the request. The system owns this pointer. Returns nullptr if the request cannot be created.
             //--------------------------------------------------------------------------------------------------
 			virtual HttpRequest* MakeRequest(const HttpRequestDetails & insRequestDetails, HttpRequest::CompletionDelegate inOnComplete = HttpRequest::CompletionDelegate()) = 0;
 			//--------------------------------------------------------------------------------------------------

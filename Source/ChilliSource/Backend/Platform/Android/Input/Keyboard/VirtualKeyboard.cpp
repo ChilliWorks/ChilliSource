@@ -23,7 +23,7 @@ namespace ChilliSource
 		VirtualKeyboard::VirtualKeyboard()
 		{
 			mpKeyboardJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<KeyboardJavaInterface>();
-			if (mpKeyboardJavaInterface == NULL)
+			if (mpKeyboardJavaInterface == nullptr)
 			{
 				mpKeyboardJavaInterface = KeyboardJavaInterfaceSPtr(new KeyboardJavaInterface());
 				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpKeyboardJavaInterface);
@@ -139,9 +139,9 @@ namespace ChilliSource
 		//--------------------------------------------
 		VirtualKeyboard::~VirtualKeyboard()
 		{
-			mpKeyboardJavaInterface->SetTextAddedDelegate(NULL);
-			mpKeyboardJavaInterface->SetTextDeletedDelegate(NULL);
-			mpKeyboardJavaInterface->SetKeyboardDismissedDelegate(NULL);
+			mpKeyboardJavaInterface->SetTextAddedDelegate(nullptr);
+			mpKeyboardJavaInterface->SetTextDeletedDelegate(nullptr);
+			mpKeyboardJavaInterface->SetKeyboardDismissedDelegate(nullptr);
 		}
 	}
 }

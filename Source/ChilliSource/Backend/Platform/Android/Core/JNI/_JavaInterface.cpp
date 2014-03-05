@@ -13,7 +13,7 @@ namespace ChilliSource
 	{
 		//declare private statics
 		std::map<std::string, MethodReference> _IJavaInterface::mStaticMethodRefMap;
-		JavaVM* _IJavaInterface::mspJavaVM = NULL;
+		JavaVM* _IJavaInterface::mspJavaVM = nullptr;
 
 		//--------------------------------------------------------------------------------------
 		/// Get JNI Environment Ptr
@@ -21,7 +21,7 @@ namespace ChilliSource
 		JNIEnv * _IJavaInterface::GetJNIEnvironmentPtr()
 		{
 			JNIEnv* env;
-			mspJavaVM->AttachCurrentThread(&env, NULL);
+			mspJavaVM->AttachCurrentThread(&env, nullptr);
 			return env;
 		}
 		//--------------------------------------------------------------------------------------
@@ -77,12 +77,12 @@ namespace ChilliSource
 		jstring _IJavaInterface::CreateJStringFromSTDString(std::string instrString)
 		{
 			JNIEnv* pEnv = GetJNIEnvironmentPtr();
-			if (pEnv != NULL)
+			if (pEnv != nullptr)
 			{
 				jstring jstrNewString = pEnv->NewStringUTF(instrString.c_str());
 				return jstrNewString;
 			}
-			return NULL;
+			return nullptr;
 		}
 		//--------------------------------------------------------------------------------------
 		/// Create JString From UTF8String
@@ -90,12 +90,12 @@ namespace ChilliSource
 		jstring _IJavaInterface::CreateJStringFromUTF8String(Core::UTF8String instrString)
 		{
 			JNIEnv* pEnv = GetJNIEnvironmentPtr();
-			if (pEnv != NULL)
+			if (pEnv != nullptr)
 			{
 				jstring jstrNewString = pEnv->NewStringUTF(instrString.ToASCII().c_str());
 				return jstrNewString;
 			}
-			return NULL;
+			return nullptr;
 		}
 		//--------------------------------------------------------------------------------------
 		/// Create STDString From JString
@@ -103,10 +103,10 @@ namespace ChilliSource
 		std::string _IJavaInterface::CreateSTDStringFromJString(jstring injstrString)
 		{
 			JNIEnv* pEnv = GetJNIEnvironmentPtr();
-			if (pEnv != NULL && injstrString != NULL)
+			if (pEnv != nullptr && injstrString != nullptr)
 			{
 				const char * cString = pEnv->GetStringUTFChars(injstrString, JNI_FALSE);
-				if (cString != NULL)
+				if (cString != nullptr)
 				{
 					std::string stdString = std::string(cString);
 					pEnv->ReleaseStringUTFChars(injstrString, cString);
@@ -120,13 +120,13 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		std::string _IJavaInterface::CreateSTDStringFromJByteArray(jbyteArray injabyArray, int indwLength)
 		{
-			if (injabyArray != NULL && indwLength > 0)
+			if (injabyArray != nullptr && indwLength > 0)
 			{
 				JNIEnv* pEnv = GetJNIEnvironmentPtr();
-				if (pEnv != NULL)
+				if (pEnv != nullptr)
 				{
 					jbyte* pBytes = pEnv->GetByteArrayElements(injabyArray, JNI_FALSE);
-					if (pBytes != NULL)
+					if (pBytes != nullptr)
 					{
 						std::string strOutput((const char*)pBytes, indwLength);
 						pEnv->ReleaseByteArrayElements(injabyArray, pBytes, 0);
@@ -143,10 +143,10 @@ namespace ChilliSource
 		Core::UTF8String _IJavaInterface::CreateUTF8StringFromJString(jstring injstrString)
 		{
 			JNIEnv* pEnv = GetJNIEnvironmentPtr();
-			if (pEnv != NULL && injstrString != NULL)
+			if (pEnv != nullptr && injstrString != nullptr)
 			{
 				const char * cString = pEnv->GetStringUTFChars(injstrString, JNI_FALSE);
-				if (cString != NULL)
+				if (cString != nullptr)
 				{
 					Core::UTF8String utf8String = Core::UTF8String(cString);
 					pEnv->ReleaseStringUTFChars(injstrString, cString);
@@ -161,10 +161,10 @@ namespace ChilliSource
 		s32 _IJavaInterface::GetIntElementFromJArray(jintArray injadwArray, u32 inudwIndex)
 		{
 			JNIEnv* pEnv = GetJNIEnvironmentPtr();
-			if (pEnv != NULL && injadwArray != NULL)
+			if (pEnv != nullptr && injadwArray != nullptr)
 			{
 				jint* pIntegers = pEnv->GetIntArrayElements(injadwArray, JNI_FALSE);
-				if (pIntegers != NULL)
+				if (pIntegers != nullptr)
 				{
 					s32 dwOutput = pIntegers[inudwIndex];
 					pEnv->ReleaseIntArrayElements(injadwArray, pIntegers, 0);

@@ -20,7 +20,7 @@ namespace ChilliSource
 		{
         	//get the media player java interface or create it if it doesn't yet exist.
 			mpLocalNotificationJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<LocalNotificationJavaInterface>();
-        	if (mpLocalNotificationJavaInterface == NULL)
+        	if (mpLocalNotificationJavaInterface == nullptr)
         	{
         		mpLocalNotificationJavaInterface = LocalNotificationJavaInterfaceSPtr(new LocalNotificationJavaInterface());
         		JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpLocalNotificationJavaInterface);
