@@ -304,37 +304,6 @@ namespace ChilliSource
             /// inches.
             //-------------------------------------------------
             virtual f32 GetPhysicalScreenSize() = 0;
-            //-------------------------------------------------
-            /// Make Toast
-            ///
-            /// Display a toast notification with the given text
-            ///
-            /// @param Text
-            //-------------------------------------------------
-            virtual void MakeToast(const UTF8String& instrText) const = 0;
-            //--------------------------------------------------------------------------------------------------
-            /// Show System Confirm Dialog
-            ///
-            /// Display a system confirmation dialog with the given ID and delegate
-            ///
-            /// @param ID
-            /// @param Title text
-            /// @param Message text
-            /// @param Confirm text
-            /// @param Cancel text
-            //--------------------------------------------------------------------------------------------------
-            virtual void ShowSystemConfirmDialog(u32 inudwID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm, const UTF8String& instrCancel) const = 0;
-            //--------------------------------------------------------------------------------------------------
-            /// Show System Dialog
-            ///
-            /// Display a system dialog with the given ID and delegate
-            ///
-            /// @param ID
-            /// @param Title text
-            /// @param Message text
-            /// @param Confirm text
-            //--------------------------------------------------------------------------------------------------
-            virtual void ShowSystemDialog(u32 inudwID, const UTF8String& instrTitle, const UTF8String& instrMessage, const UTF8String& instrConfirm) const = 0;
         };
     }
 }

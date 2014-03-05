@@ -36,7 +36,6 @@
 -(void) SetUpdaterActive: (BOOL) inbIsActive;
 -(void) dealloc;
 -(u64) GetSystemTime;
--(void) ShowSystemConfirmDialogWithID:(u32)inudwID title:(NSString*)instrTitle message:(NSString*)instrMessage confirm:(NSString*)instrConfirm andCancel:(NSString*)instrCancel;
 @end
 
 extern "C" 

@@ -123,61 +123,6 @@ static mach_timebase_info_data_t gMachtimeBase;
 {
 	return (mach_absolute_time() * gMachtimeBase.numer) / gMachtimeBase.denom;
 }
-//--------------------------------------------------------------------------------------------------
-/// Show System Confirm Dialog
-///
-/// Display a system confirmation dialog with the given ID and delegate
-///
-/// @param ID
-/// @param Title text
-/// @param Message text
-/// @param Confirm text
-/// @param Cancel text
-//--------------------------------------------------------------------------------------------------
--(void) ShowSystemConfirmDialogWithID:(u32)inudwID title:(NSString*)instrTitle message:(NSString*)instrMessage confirm:(NSString*)instrConfirm andCancel:(NSString*)instrCancel
-{
-    UIAlertView* pConfirm = [[UIAlertView alloc] initWithTitle:instrTitle message:instrMessage 
-                                                    delegate:self cancelButtonTitle:instrCancel otherButtonTitles:instrConfirm, nil];
-    
-    pConfirm.tag = inudwID;
-    [pConfirm show];
-    [pConfirm release];
-}
-//--------------------------------------------------------------------------------------------------
-/// Show System Dialog
-///
-/// Display a system dialog with the given ID and delegate
-///
-/// @param ID
-/// @param Title text
-/// @param Message text
-/// @param Confirm text
-//--------------------------------------------------------------------------------------------------
--(void) ShowSystemDialogWithID:(u32)inudwID title:(NSString*)instrTitle message:(NSString*)instrMessage confirm:(NSString*)instrConfirm
-{
-    UIAlertView* pConfirm = [[UIAlertView alloc] initWithTitle:instrTitle message:instrMessage
-                                                      delegate:self cancelButtonTitle:instrConfirm otherButtonTitles:nil];
-    
-    pConfirm.tag = inudwID;
-    [pConfirm show];
-    [pConfirm release];
-}
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex 
-{
-    ChilliSource::iOS::DialogueBoxSystem* dialogueSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::DialogueBoxSystem>();
-    if (dialogueSystem != nullptr)
-    {
-        // NO = 0, YES = 1
-        if(buttonIndex == 0)
-        {
-            dialogueSystem->OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::DialogueBoxSystem::DialogueResult::k_cancel);
-        }
-        else
-        {
-            dialogueSystem->OnSystemConfirmDialogResult(alertView.tag, ChilliSource::Core::DialogueBoxSystem::DialogueResult::k_confirm);
-        }
-    }
-}
 //----------------------------------------------
 /// Dealloc
 ///
@@ -222,12 +167,4 @@ extern "C"
 	{
 		return [gpiOSPlatform GetSystemTime];
 	}
-    void iOSShowSystemConfirmDialog(u32 inudwID, NSString* instrTitle, NSString* instrMessage, NSString* instrConfirm, NSString* instrCancel)
-    {
-        [gpiOSPlatform ShowSystemConfirmDialogWithID:inudwID title:instrTitle message:instrMessage confirm:instrConfirm andCancel:instrCancel];
-    }
-    void iOSShowSystemDialog(u32 inudwID, NSString* instrTitle, NSString* instrMessage, NSString* instrConfirm)
-    {
-        [gpiOSPlatform ShowSystemDialogWithID:inudwID title:instrTitle message:instrMessage confirm:instrConfirm];
-    }
 }
