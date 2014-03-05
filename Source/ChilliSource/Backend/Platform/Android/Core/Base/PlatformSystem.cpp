@@ -177,14 +177,14 @@ namespace ChilliSource
 			Core::Application::Get()->GetRenderSystem()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
 
 			//Create the renderer
-			Core::Application::SetRenderer(new Rendering::Renderer(Core::Application::GetRenderSystemPtr()));
+			Core::Application::Get()->SetRenderer(new Rendering::Renderer(Core::Application::Get()->GetRenderSystem()));
 		}
 		//-------------------------------------------------
 		/// Post Create Systems
 		//-------------------------------------------------
 		void PlatformSystem::PostCreateSystems()
 		{
-			if(Core::Application::GetAudioSystemPtr() != NULL)
+            if(Core::Application::Get()->GetAudioSystem() != nullptr)
 			{
 				Audio::AudioPlayer::Init();
 			}
