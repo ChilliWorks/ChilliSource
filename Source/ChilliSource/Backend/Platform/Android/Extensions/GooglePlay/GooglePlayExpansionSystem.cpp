@@ -145,7 +145,7 @@ namespace ChilliSource
         {
         	for(u32 i=0; i<mudwNumExpansions; ++i)
         	{
-        		if(!Core::Application::GetFileSystemPtr()->DoesFileExist(Core::StorageLocation::k_root, mpJavaInterface->GetExpansionPath(i)))
+        		if(!Core::Application::Get()->GetFileSystem()->DoesFileExist(Core::StorageLocation::k_root, mpJavaInterface->GetExpansionPath(i)))
         		{
         			return false;
         		}
@@ -247,7 +247,7 @@ namespace ChilliSource
 				return;
 			}
 
-        	Core::Application::GetFileSystemPtr()->DeleteFile(Core::StorageLocation::k_cache, "GoogleExpansionDownloader.cache");
+        	Core::Application::Get()->GetFileSystem()->DeleteFile(Core::StorageLocation::k_cache, "GoogleExpansionDownloader.cache");
         	mpJavaInterface->Download();
         }
         //-------------------------------------------------------------
@@ -293,7 +293,7 @@ namespace ChilliSource
         //-------------------------------------------------------------
         bool GooglePlayExpansionSystem::DoInstalledFilesExist() const
         {
-        	return Core::Application::GetFileSystemPtr()->DoesFileExist(Core::StorageLocation::k_cache, "GoogleExpansionDownloader.cache");
+        	return Core::Application::Get()->GetFileSystem()->DoesFileExist(Core::StorageLocation::k_cache, "GoogleExpansionDownloader.cache");
         }
         //-------------------------------------------------------------
 		/// Get Uncompressed Zip Size
@@ -411,7 +411,7 @@ namespace ChilliSource
 				Unzip(mpJavaInterface->GetExpansionPath(i), jManifest);
 			}
 
-			Core::Application::GetFileSystemPtr()->CreateFile(Core::StorageLocation::k_cache, "AndroidExpansion.manifest", (s8*)jManifest.toUnformattedString().data(), jManifest.toUnformattedString().size());
+			Core::Application::Get()->GetFileSystem()->CreateFile(Core::StorageLocation::k_cache, "AndroidExpansion.manifest", (s8*)jManifest.toUnformattedString().data(), jManifest.toUnformattedString().size());
 
 			CachePackageDescriptions();
 
@@ -436,15 +436,15 @@ namespace ChilliSource
         		{
         			if(jManifest[i]["IsDirectory"].asBool())
         			{
-        				Core::Application::GetFileSystemPtr()->DeleteDirectory(Core::StorageLocation::k_DLC, jManifest[i]["Path"].asString());
+        				Core::Application::Get()->GetFileSystem()->DeleteDirectory(Core::StorageLocation::k_DLC, jManifest[i]["Path"].asString());
         			}
         			else
         			{
-        				Core::Application::GetFileSystemPtr()->DeleteFile(Core::StorageLocation::k_DLC, jManifest[i]["Path"].asString());
+        				Core::Application::Get()->GetFileSystem()->DeleteFile(Core::StorageLocation::k_DLC, jManifest[i]["Path"].asString());
         			}
         		}
 
-        		Core::Application::GetFileSystemPtr()->DeleteFile(Core::StorageLocation::k_DLC, "AndroidExpansion.manifest");
+        		Core::Application::Get()->GetFileSystem()->DeleteFile(Core::StorageLocation::k_DLC, "AndroidExpansion.manifest");
         	}
         }
 
@@ -501,7 +501,7 @@ namespace ChilliSource
         //-------------------------------------------------------------
         void GooglePlayExpansionSystem::Unzip(const std::string& instrZipPath, Json::Value& outjManifest)
         {
-        	Core::Application::GetFileSystemPtr()->CreateDirectory(Core::StorageLocation::k_DLC, "");
+        	Core::Application::Get()->GetFileSystem()->CreateDirectory(Core::StorageLocation::k_DLC, "");
 
         	unzFile ZippedFile = unzOpen(instrZipPath.c_str());
 
@@ -550,7 +550,7 @@ namespace ChilliSource
 						jManifestEntry["Path"] = GetRootFolderExcludingPath(strFilePath);
 
 						std::string strPath = GetPathExcludingFileName(strFilePath);
-						Core::Application::GetFileSystemPtr()->CreateDirectory(Core::StorageLocation::k_DLC, "/" + strPath);
+						Core::Application::Get()->GetFileSystem()->CreateDirectory(Core::StorageLocation::k_DLC, "/" + strPath);
 					}
 					else
 					{
@@ -561,7 +561,7 @@ namespace ChilliSource
 
 					if(IsFile(strFilePath))
 					{
-						Core::Application::GetFileSystemPtr()->CreateFile(Core::StorageLocation::k_DLC, "/" + strFilePath, pbyDataBuffer, FileInfo.uncompressed_size);
+						Core::Application::Get()->GetFileSystem()->CreateFile(Core::StorageLocation::k_DLC, "/" + strFilePath, pbyDataBuffer, FileInfo.uncompressed_size);
 					}
 
 					outjManifest.append(jManifestEntry);
@@ -594,7 +594,7 @@ namespace ChilliSource
 				jDesc.append(jExpansion);
 			}
 
-			Core::Application::GetFileSystemPtr()->CreateFile(Core::StorageLocation::k_cache, "GoogleExpansionDownloader.cache", (s8*)jDesc.toUnformattedString().data(), jDesc.toUnformattedString().size());
+			Core::Application::Get()->GetFileSystem()->CreateFile(Core::StorageLocation::k_cache, "GoogleExpansionDownloader.cache", (s8*)jDesc.toUnformattedString().data(), jDesc.toUnformattedString().size());
         }
 		//-------------------------------------------------------------
 		/// Unzip Finished Task

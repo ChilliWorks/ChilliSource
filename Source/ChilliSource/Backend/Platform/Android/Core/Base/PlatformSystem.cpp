@@ -71,7 +71,7 @@ namespace ChilliSource
 			AddInfoProviderFunc(Social::ContactInformationProvider::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateContactInformationProvider));
 
 			Core::NotificationScheduler::Initialise(new LocalNotificationScheduler());
-			Core::Application::SetFileSystem(new FileSystem());
+			Core::Application::Get()->SetFileSystem(new FileSystem());
 			Core::Logging::Init();
 		}
 		//--------------------------------------------
@@ -147,16 +147,16 @@ namespace ChilliSource
 			//create the main systems
 			OpenGL::RenderSystem* pRenderSystem = new OpenGL::RenderSystem();
 			inaSystems.push_back(Core::SystemSPtr(pRenderSystem));
-			Core::Application::SetRenderSystem(pRenderSystem);
+			Core::Application::Get()->SetRenderSystem(pRenderSystem);
 
 			Input::InputSystem* pInputSystem = new Android::InputSystem();
 			inaSystems.push_back(Core::SystemSPtr(pInputSystem));
-			Core::Application::SetInputSystem(pInputSystem);
+			Core::Application::Get()->SetInputSystem(pInputSystem);
 
 			Audio::AudioSystem* pAudioSystem = new FMOD::FMODSystem();
 			inaSystems.push_back(Core::SystemSPtr(pAudioSystem));
 			inaSystems.push_back(Core::SystemSPtr(new FMOD::AudioLoader(pAudioSystem)));
-			Core::Application::SetAudioSystem(pAudioSystem);
+			Core::Application::Get()->SetAudioSystem(pAudioSystem);
 
 			//create other important systems
 			OpenGL::RenderCapabilities* pRenderCapabilities = new OpenGL::RenderCapabilities();
@@ -172,23 +172,17 @@ namespace ChilliSource
 			inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialFactory(pRenderSystem->GetTextureManager(), pRenderSystem->GetShaderManager(), pRenderSystem->GetCubemapManager(), pRenderCapabilities)));
 
 			//Initialise the render system
-			Core::Application::GetRenderSystemPtr()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
+			Core::Application::Get()->GetRenderSystem()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
 
 			//Create the renderer
-			Core::Application::SetRenderer(new Rendering::Renderer(Core::Application::GetRenderSystemPtr()));
-
-			//Initialise the input system
-			if(Core::Application::GetInputSystemPtr() != NULL)
-			{
-				Core::Application::SetHasTouchInput((Core::Application::GetInputSystemPtr()->GetTouchScreenPtr() != NULL));
-			}
+			Core::Application::Get()->SetRenderer(new Rendering::Renderer(Core::Application::Get()->GetRenderSystem()));
 		}
 		//-------------------------------------------------
 		/// Post Create Systems
 		//-------------------------------------------------
 		void PlatformSystem::PostCreateSystems()
 		{
-			if(Core::Application::GetAudioSystemPtr() != NULL)
+			if(Core::Application::Get()->GetAudioSystem() != NULL)
 			{
 				Audio::AudioPlayer::Init();
 			}

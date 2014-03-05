@@ -31,21 +31,21 @@ namespace ChilliSource
         //-----------------------------------------------------
         void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm)
         {
-            Core::Application::Get()->GetPlatformSystemPtr()->ShowSystemDialog(in_id, in_title, in_message, in_confirm);
+            Core::Application::Get()->GetPlatformSystem()->ShowSystemDialog(in_id, in_title, in_message, in_confirm);
             m_activeSysConfirmDelegate = in_delegate;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
         void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm, const Core::UTF8String& in_cancel)
         {
-            Core::Application::Get()->GetPlatformSystemPtr()->ShowSystemConfirmDialog(in_id, in_title, in_message, in_confirm, in_cancel);
+            Core::Application::Get()->GetPlatformSystem()->ShowSystemConfirmDialog(in_id, in_title, in_message, in_confirm, in_cancel);
             m_activeSysConfirmDelegate = in_delegate;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
         void DialogueBoxSystem::MakeToast(const Core::UTF8String& in_text)
         {
-            Core::Application::Get()->GetPlatformSystemPtr()->MakeToast(in_text);
+            Core::Application::Get()->GetPlatformSystem()->MakeToast(in_text);
         }
         //------------------------------------------------------
         //------------------------------------------------------

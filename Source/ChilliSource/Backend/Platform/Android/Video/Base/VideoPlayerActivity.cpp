@@ -59,25 +59,25 @@ namespace ChilliSource
         	if (ineLocation == Core::StorageLocation::k_package)
         	{
         		bIsPackage = true;
-        		strFilename = Core::Application::GetFileSystemPtr()->GetDirectoryForPackageFile(instrFileName);
+        		strFilename = Core::Application::Get()->GetFileSystem()->GetDirectoryForPackageFile(instrFileName);
         	}
         	else if (ineLocation == Core::StorageLocation::k_DLC)
 			{
-        		if (Core::Application::GetFileSystemPtr()->DoesFileExistInCachedDLC(instrFileName) == true)
+        		if (Core::Application::Get()->GetFileSystem()->DoesFileExistInCachedDLC(instrFileName) == true)
         		{
         			bIsPackage = false;
-        			strFilename = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrFileName;
+        			strFilename = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(Core::StorageLocation::k_DLC) + instrFileName;
         		}
         		else
         		{
         			bIsPackage = true;
-        			strFilename = Core::Application::GetFileSystemPtr()->GetDirectoryForPackageFile(Core::Application::GetFileSystemPtr()->GetPackageDLCDirectory() + instrFileName);
+        			strFilename = Core::Application::Get()->GetFileSystem()->GetDirectoryForPackageFile(Core::Application::Get()->GetFileSystem()->GetPackageDLCDirectory() + instrFileName);
         		}
 			}
         	else
         	{
         		bIsPackage = false;
-        		strFilename = Core::Application::GetFileSystemPtr()->GetStorageLocationDirectory(ineLocation) + instrFileName;
+        		strFilename = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(ineLocation) + instrFileName;
         	}
 
         	//start the video

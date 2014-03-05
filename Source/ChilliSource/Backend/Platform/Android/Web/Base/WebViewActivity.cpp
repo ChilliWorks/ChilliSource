@@ -72,7 +72,7 @@ namespace ChilliSource
 				strFile = instrFile;                    
 			}
 
-			Android::FileSystem* pFileSystem = static_cast<Android::FileSystem*>(Core::Application::GetFileSystemPtr());
+			Android::FileSystem* pFileSystem = static_cast<Android::FileSystem*>(Core::Application::Get()->GetFileSystem());
 
 			Core::FileStreamSPtr pHTMLFile = pFileSystem->CreateFileStream(ineStorageLocation, strFile, Core::FileMode::k_read);
 			std::string strHTMLFileContents;
