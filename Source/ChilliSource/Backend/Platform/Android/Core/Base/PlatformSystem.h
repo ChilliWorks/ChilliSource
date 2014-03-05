@@ -31,11 +31,11 @@ namespace ChilliSource
 		///
 		/// Android platform system
 		//=============================================
-		class CPlatformSystem : public Core::PlatformSystem
+		class PlatformSystem : public Core::PlatformSystem
 		{
 		public:
-			CPlatformSystem();
-			virtual ~CPlatformSystem();
+			PlatformSystem();
+			virtual ~PlatformSystem();
 			
 			//-----------------------------------------
 			/// Init

@@ -16,7 +16,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class SCSMSCompositionJavaInterface: public _IJavaInterface
+		class SMSCompositionJavaInterface: public _IJavaInterface
 		{
 		public:
 			//--------------------------------------------------------------------------------------

@@ -16,28 +16,27 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-
-		bool CContactInformationProvider::IsA(Core::InterfaceIDType inID) const
+		bool ContactInformationProvider::IsA(Core::InterfaceIDType inID) const
 		{
-			return inID == CContactInformationProvider::InterfaceID;
+			return inID == ContactInformationProvider::InterfaceID;
 		}
 
-		void CContactInformationProvider::LoadInformation()
+		void ContactInformationProvider::LoadInformation()
 		{
 			masContacts.clear();
-			SCContactInformationProviderJavaInterface::LoadInformation(this);
+			ContactInformationProviderJavaInterface::LoadInformation(this);
 		}
 
-		u32 CContactInformationProvider::GetNumberContacts()
+		u32 ContactInformationProvider::GetNumberContacts()
 		{
 			return masContacts.size();
 		}
-		const Social::ContactRecord & CContactInformationProvider::GetContactAtIndex(u32 inudwIndex)
+		const Social::ContactRecord & ContactInformationProvider::GetContactAtIndex(u32 inudwIndex)
 		{
 			return masContacts[inudwIndex];
 		}
 
-		void CContactInformationProvider::SetContacts(const std::vector<Social::ContactRecord>& inasContacts)
+		void ContactInformationProvider::SetContacts(const std::vector<Social::ContactRecord>& inasContacts)
 		{
 			masContacts = inasContacts;
 		}

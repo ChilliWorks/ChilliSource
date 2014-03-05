@@ -16,13 +16,13 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CFacebookAuthenticationSystem : public Social::FacebookAuthenticationSystem
+		class FacebookAuthenticationSystem : public Social::FacebookAuthenticationSystem
 		{
 		public:
 
-			CS_DECLARE_NAMEDTYPE(CFacebookAuthenticationSystem);
+			CS_DECLARE_NAMEDTYPE(FacebookAuthenticationSystem);
 
-			CFacebookAuthenticationSystem();
+			FacebookAuthenticationSystem();
 
 			bool IsA(Core::InterfaceIDType inID) const;
 
@@ -44,11 +44,11 @@ namespace ChilliSource
 			void OnAuthoriseReadPermissionsComplete(bool inbSuccess);
 			void OnAuthoriseWritePermissionsComplete(bool inbSuccess);
 
-			const std::shared_ptr<CFacebookJavaInterface>& GetJavaInterface() const;
+			const std::shared_ptr<FacebookJavaInterface>& GetJavaInterface() const;
 
 		private:
 
-			std::shared_ptr<CFacebookJavaInterface> mpJavaInterface;
+			std::shared_ptr<FacebookJavaInterface> mpJavaInterface;
 
 			AuthenticationCompleteDelegate mAuthDelegate;
 			AuthenticationCompleteDelegate mAuthReadDelegate;

@@ -12,7 +12,7 @@
 //function definitions
 extern "C"
 {
-	void Java_com_taggames_moflow_nativeinterface_CTwitterAuthenticationViewNativeInterface_OnPINComplete(JNIEnv* inpEnv, jobject inpThis, jstring injstrPIN);
+	void Java_com_chillisource_social_TwitterAuthenticationViewNativeInterface_OnPINComplete(JNIEnv* inpEnv, jobject inpThis, jstring injstrPIN);
 }
 //--------------------------------------------------------------------------------------
 /// On Update Text
@@ -25,40 +25,39 @@ extern "C"
 /// @param the updated keyboard text
 /// @return whether or not the text was accepted.
 //--------------------------------------------------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CTwitterAuthenticationViewNativeInterface_OnPINComplete(JNIEnv* inpEnv, jobject inpThis, jstring injstrPIN)
+void Java_com_chillisource_social_TwitterAuthenticationViewNativeInterface_OnPINComplete(JNIEnv* inpEnv, jobject inpThis, jstring injstrPIN)
 {
 	std::string strPIN = ChilliSource::Android::_IJavaInterface::CreateSTDStringFromJString(injstrPIN);
-	ChilliSource::Android::SCTwitterAuthenticationActivityJavaInterface::OnPINComplete(strPIN);
+	ChilliSource::Android::TwitterAuthenticationActivityJavaInterface::OnPINComplete(strPIN);
 }
 
 namespace ChilliSource
 {
 	namespace Android
 	{
-
-		ChilliSource::Android::CTwitterAuthenticationActivity* SCTwitterAuthenticationActivityJavaInterface::mpActivity = NULL;
+		ChilliSource::Android::TwitterAuthenticationActivity* TwitterAuthenticationActivityJavaInterface::mpActivity = NULL;
 		//-----------------------------------------------
 		/// Setup Java Interface
 		//-----------------------------------------------
-		void SCTwitterAuthenticationActivityJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
+		void TwitterAuthenticationActivityJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
 		{
 			mspJavaVM = inpJavaVM;
 
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CTwitterAuthenticationViewNativeInterface","TwitterAuthViewPresent", "()V");
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CTwitterAuthenticationViewNativeInterface","TwitterAuthViewPresentURL", "(Ljava/lang/String;)V");
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CTwitterAuthenticationViewNativeInterface","TwitterAuthViewDismiss", "()V");
+			InitCallableStaticMethod("com/chillisource/social/TwitterAuthenticationViewNativeInterface","TwitterAuthViewPresent", "()V");
+			InitCallableStaticMethod("com/chillisource/social/TwitterAuthenticationViewNativeInterface","TwitterAuthViewPresentURL", "(Ljava/lang/String;)V");
+			InitCallableStaticMethod("com/chillisource/social/TwitterAuthenticationViewNativeInterface","TwitterAuthViewDismiss", "()V");
 		}
 		//-----------------------------------------------
 		/// Register Activity
 		//-----------------------------------------------
-		void SCTwitterAuthenticationActivityJavaInterface::RegisterActivity(ChilliSource::Android::CTwitterAuthenticationActivity* inpActivity)
+		void TwitterAuthenticationActivityJavaInterface::RegisterActivity(ChilliSource::Android::CTwitterAuthenticationActivity* inpActivity)
 		{
 			mpActivity = inpActivity;
 		}
 		//-----------------------------------------------
 		/// Present
 		//-----------------------------------------------
-		void SCTwitterAuthenticationActivityJavaInterface::Present()
+		void TwitterAuthenticationActivityJavaInterface::Present()
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("TwitterAuthViewPresent");
 
@@ -72,7 +71,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// Present URL
 		//-----------------------------------------------
-		void SCTwitterAuthenticationActivityJavaInterface::PresentURL(const std::string& instrURL)
+		void TwitterAuthenticationActivityJavaInterface::PresentURL(const std::string& instrURL)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("TwitterAuthViewPresentURL");
 
@@ -89,7 +88,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// On PIN Complete
 		//-----------------------------------------------
-		void SCTwitterAuthenticationActivityJavaInterface::OnPINComplete(const std::string instrPIN)
+		void TwitterAuthenticationActivityJavaInterface::OnPINComplete(const std::string instrPIN)
 		{
 			if(mpActivity)
 			{

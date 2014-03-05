@@ -17,7 +17,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CGooglePlayIAPSystem : public Networking::IAPSystem
+		class GooglePlayIAPSystem : public Networking::IAPSystem
 		{
 		public:
             //---------------------------------------------------------------
@@ -29,7 +29,7 @@ namespace ChilliSource
             /// 	GooglePlayPublicKey  	The public key used for connecting
             ///								to the Google Play store.
             //---------------------------------------------------------------
-			CGooglePlayIAPSystem(const Core::ParamDictionary& inParams);
+			GooglePlayIAPSystem(const Core::ParamDictionary& inParams);
 
             //---------------------------------------------------------------
             /// Register Products

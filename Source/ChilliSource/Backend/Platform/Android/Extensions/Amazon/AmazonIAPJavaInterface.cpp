@@ -18,9 +18,9 @@
 
 extern "C"
 {
-	void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* inpEnv, jobject inThis, jobjectArray inaIDs, jobjectArray inaNames, jobjectArray inaDescs, jobjectArray inaPrices);
-	void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* inpEnv, jobject inThis, jint inudwResult, jstring instrProductID, jstring instrTransactionID, jstring instrReceipt);
-	void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID);
+	void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* inpEnv, jobject inThis, jobjectArray inaIDs, jobjectArray inaNames, jobjectArray inaDescs, jobjectArray inaPrices);
+	void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* inpEnv, jobject inThis, jint inudwResult, jstring instrProductID, jstring instrTransactionID, jstring instrReceipt);
+	void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID);
 }
 
 //--------------------------------------------------------------------------------------
@@ -33,9 +33,9 @@ extern "C"
 /// @param Array of product Descriptions
 /// @param Array of product Prices
 //--------------------------------------------------------------------------------------
-void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* inpEnv, jobject inThis, jobjectArray inaIDs, jobjectArray inaNames, jobjectArray inaDescs, jobjectArray inaPrices)
+void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* inpEnv, jobject inThis, jobjectArray inaIDs, jobjectArray inaNames, jobjectArray inaDescs, jobjectArray inaPrices)
 {
-	ChilliSource::Android::AmazonIAPJavaInterfacePtr pInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CAmazonIAPJavaInterface>();
+	ChilliSource::Android::AmazonIAPJavaInterfacePtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
 		u32 udwNumProducts = inpEnv->GetArrayLength(inaIDs);
@@ -60,7 +60,7 @@ void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnProdu
 			aProducts.push_back(sDesc);
 		}
 
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::vector<CSNetworking::IAPProductDesc>&>(pInterface.get(), &ChilliSource::Android::CAmazonIAPJavaInterface::OnProductDescriptionsRequestComplete, aProducts));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::vector<CSNetworking::IAPProductDesc>&>(pInterface.get(), &ChilliSource::Android::AmazonIAPJavaInterface::OnProductDescriptionsRequestComplete, aProducts));
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -73,16 +73,16 @@ void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnProdu
 /// @param Transaction ID
 /// @param Receipt
 //--------------------------------------------------------------------------------------
-void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* inpEnv, jobject inThis, jint inudwResult, jstring instrProductID, jstring instrTransactionID, jstring instrReceipt)
+void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* inpEnv, jobject inThis, jint inudwResult, jstring instrProductID, jstring instrTransactionID, jstring instrReceipt)
 {
-	ChilliSource::Android::AmazonIAPJavaInterfacePtr pInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CAmazonIAPJavaInterface>();
+	ChilliSource::Android::AmazonIAPJavaInterfacePtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
 		CSNetworking::IAPTransaction sTransaction;
 		sTransaction.strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
 		sTransaction.strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
 		sTransaction.strReceipt = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrReceipt);
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<u32, const CSNetworking::IAPTransaction&>(pInterface.get(), &ChilliSource::Android::CAmazonIAPJavaInterface::OnTransactionStatusUpdated, inudwResult, sTransaction));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<u32, const CSNetworking::IAPTransaction&>(pInterface.get(), &ChilliSource::Android::AmazonIAPJavaInterface::OnTransactionStatusUpdated, inudwResult, sTransaction));
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -91,14 +91,14 @@ void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnTrans
 /// @param JNI pEnvironment
 /// @param Pointer to the calling function
 //--------------------------------------------------------------------------------------
-void Java_com_taggames_moflow_amazon_iap_CAmazonIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID)
+void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID)
 {
-	ChilliSource::Android::AmazonIAPJavaInterfacePtr pInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CAmazonIAPJavaInterface>();
+	ChilliSource::Android::AmazonIAPJavaInterfacePtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
 		std::string strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);
 		std::string strTransactionID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrTransactionID);
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::string&, const std::string&>(pInterface.get(), &ChilliSource::Android::CAmazonIAPJavaInterface::OnTransactionClosed, strProductID, strTransactionID));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<const std::string&, const std::string&>(pInterface.get(), &ChilliSource::Android::AmazonIAPJavaInterface::OnTransactionClosed, strProductID, strTransactionID));
 	}
 }
 
@@ -106,13 +106,13 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		CS_DEFINE_NAMEDTYPE(CAmazonIAPJavaInterface);
+		CS_DEFINE_NAMEDTYPE(AmazonIAPJavaInterface);
 		//--------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------
-		CAmazonIAPJavaInterface::CAmazonIAPJavaInterface(const std::string& instrPrivateKey, const std::string& instrUDID)
+		AmazonIAPJavaInterface::AmazonIAPJavaInterface(const std::string& instrPrivateKey, const std::string& instrUDID)
 		{
-			CreateNativeInterface("com/taggames/moflow/amazon/iap/CAmazonIAPNativeInterface");
+			CreateNativeInterface("com/chillisource/amazon/AmazonIAPNativeInterface");
 			CreateMethodReference("Init", "(Ljava/lang/String;Ljava/lang/String;)V");
 			CreateMethodReference("IsPurchasingEnabled", "()Z");
 			CreateMethodReference("RequestProductDescriptions", "([Ljava/lang/String;)V");
@@ -124,7 +124,7 @@ namespace ChilliSource
 			CreateMethodReference("StopListeningForTransactionUpdates", "()V");
 
 			//initialise the system
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrPrivateKey = JavaInterfaceUtils::CreateJStringFromSTDString(instrPrivateKey);
 			jstring jstrUDID = JavaInterfaceUtils::CreateJStringFromSTDString(instrUDID);
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("Init"), jstrPrivateKey, jstrUDID);
@@ -134,47 +134,47 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Is A
 		//--------------------------------------------------------------
-		bool CAmazonIAPJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool AmazonIAPJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == CAmazonIAPJavaInterface::InterfaceID);
+			return (inInterfaceID == AmazonIAPJavaInterface::InterfaceID);
 		}
         //---------------------------------------------------------------
 		/// Is Purchasing Enabled
         //---------------------------------------------------------------
-        bool CAmazonIAPJavaInterface::IsPurchasingEnabled()
+        bool AmazonIAPJavaInterface::IsPurchasingEnabled()
         {
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			return pEnv->CallBooleanMethod(GetJavaObject(), GetMethodID("IsPurchasingEnabled"));
         }
         //---------------------------------------------------------------
 		/// Start Listening For Transaction Updates
         //---------------------------------------------------------------
-        void CAmazonIAPJavaInterface::StartListeningForTransactionUpdates(const Networking::IAPTransactionDelegate& inRequestDelegate)
+        void AmazonIAPJavaInterface::StartListeningForTransactionUpdates(const Networking::IAPTransactionDelegate& inRequestDelegate)
         {
         	mTransactionStatusDelegate = inRequestDelegate;
 
-        	JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+        	JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
         	pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("StartListeningForTransactionUpdates"));
         }
         //---------------------------------------------------------------
 		/// Stop Listening For Transaction Updates
         //---------------------------------------------------------------
-        void CAmazonIAPJavaInterface::StopListeningForTransactionUpdates()
+        void AmazonIAPJavaInterface::StopListeningForTransactionUpdates()
         {
         	mTransactionStatusDelegate = NULL;
 
-        	JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+        	JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
         	pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("StopListeningForTransactionUpdates"));
         }
         //---------------------------------------------------------------
 		/// Request Product Descriptions
         //---------------------------------------------------------------
-        void CAmazonIAPJavaInterface::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void AmazonIAPJavaInterface::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
         	mProductsRequestDelegate = inRequestDelegate;
         	if(mProductsRequestDelegate != NULL)
         	{
-				JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 
 				jobjectArray jaProductIDs = pEnv->NewObjectArray(inaProductIDs.size(), pEnv->FindClass("java/lang/String"), pEnv->NewStringUTF(""));
 				u32 udwProductIDIndex = 0;
@@ -193,7 +193,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// On Product Descriptions Request Complete
         //---------------------------------------------------------------
-        void CAmazonIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<Networking::IAPProductDesc>& inaProducts)
+        void AmazonIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<Networking::IAPProductDesc>& inaProducts)
         {
         	if(mProductsRequestDelegate != NULL)
         	{
@@ -204,17 +204,17 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// Cancel Product Descriptions Request
         //---------------------------------------------------------------
-        void CAmazonIAPJavaInterface::CancelProductDescriptionsRequest()
+        void AmazonIAPJavaInterface::CancelProductDescriptionsRequest()
         {
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("CancelProductDescriptionsRequest"));
         }
         //---------------------------------------------------------------
 		/// Request Product Purchase
         //---------------------------------------------------------------
-        void CAmazonIAPJavaInterface::RequestProductPurchase(const std::string& instrProductID)
+        void AmazonIAPJavaInterface::RequestProductPurchase(const std::string& instrProductID)
         {
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrProductID = JavaInterfaceUtils::CreateJStringFromSTDString(instrProductID);
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("RequestProductPurchase"), jstrProductID);
 			pEnv->DeleteLocalRef(jstrProductID);
@@ -222,7 +222,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// On Transaction Status Updated
         //---------------------------------------------------------------
-        void CAmazonIAPJavaInterface::OnTransactionStatusUpdated(u32 inudwStatus, const Networking::IAPTransaction& inTransaction)
+        void AmazonIAPJavaInterface::OnTransactionStatusUpdated(u32 inudwStatus, const Networking::IAPTransaction& inTransaction)
         {
         	if(mTransactionStatusDelegate != NULL)
         	{
@@ -263,11 +263,11 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// Close Transaction
         //---------------------------------------------------------------
-        void CAmazonIAPJavaInterface::CloseTransaction(const std::string& instrProductID, const std::string& instrTransactionID, const Networking::IAPTransactionCloseDelegate& inDelegate)
+        void AmazonIAPJavaInterface::CloseTransaction(const std::string& instrProductID, const std::string& instrTransactionID, const Networking::IAPTransactionCloseDelegate& inDelegate)
         {
         	mTransactionCloseDelegate = inDelegate;
 
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrProductID = JavaInterfaceUtils::CreateJStringFromSTDString(instrProductID);
 			jstring jstrTransactionID = JavaInterfaceUtils::CreateJStringFromSTDString(instrTransactionID);
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("CloseTransaction"), jstrProductID, jstrTransactionID);
@@ -277,7 +277,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// On Transaction Closed
         //---------------------------------------------------------------
-        void CAmazonIAPJavaInterface::OnTransactionClosed(const std::string& instrProductID, const std::string& instrTransactionID)
+        void AmazonIAPJavaInterface::OnTransactionClosed(const std::string& instrProductID, const std::string& instrTransactionID)
         {
         	if(mTransactionCloseDelegate != NULL)
         	{
@@ -288,9 +288,9 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// Restore Managed Purchases
         //---------------------------------------------------------------
-        void CAmazonIAPJavaInterface::RestoreManagedPurchases()
+        void AmazonIAPJavaInterface::RestoreManagedPurchases()
         {
-        	JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+        	JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
         	pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("RestoreManagedPurchases"));
         }
 	}

@@ -16,7 +16,7 @@
 //function definitions
 extern "C"
 {
-	void Java_com_taggames_moflow_nativeinterface_CEmailCompositionNativeInterface_OnEmailClosed(JNIEnv* inpEnv, jobject inpThis, s32 indwResultCode);
+	void Java_com_chillisource_social_EmailCompositionNativeInterface_OnEmailClosed(JNIEnv* inpEnv, jobject inpThis, s32 indwResultCode);
 }
 //--------------------------------------------------------------------------------------
 /// On Email Closed
@@ -28,9 +28,9 @@ extern "C"
 /// @param the java object calling the function.
 /// @param The result code.
 //--------------------------------------------------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CEmailCompositionNativeInterface_OnEmailClosed(JNIEnv* inpEnv, jobject inpThis, s32 indwResultCode)
+void Java_com_chillisource_social_EmailCompositionNativeInterface_OnEmailClosed(JNIEnv* inpEnv, jobject inpThis, s32 indwResultCode)
 {
-	ChilliSource::Android::EmailCompositionJavaInterfacePtr pJavaInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CEmailCompositionJavaInterface>();
+	ChilliSource::Android::EmailCompositionJavaInterfacePtr pJavaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::EmailCompositionJavaInterface>();
 	if (pJavaInterface != NULL)
 	{
 		pJavaInterface->OnEmailClosed(indwResultCode);
@@ -42,26 +42,26 @@ namespace ChilliSource
 	namespace Android
 	{
 
-		CS_DEFINE_NAMEDTYPE(CEmailCompositionJavaInterface);
+		CS_DEFINE_NAMEDTYPE(EmailCompositionJavaInterface);
 		//--------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------
-		CEmailCompositionJavaInterface::CEmailCompositionJavaInterface()
+		EmailCompositionJavaInterface::EmailCompositionJavaInterface()
 		{
-			CreateNativeInterface("com/taggames/moflow/nativeinterface/CEmailCompositionNativeInterface");
+			CreateNativeInterface("com/chillisource/social/EmailCompositionNativeInterface");
 			CreateMethodReference("Present", "([Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Z)V");
 		}
 		//--------------------------------------------------------------
 		/// Is A
 		//--------------------------------------------------------------
-		bool CEmailCompositionJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool EmailCompositionJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == CEmailCompositionJavaInterface::InterfaceID);
+			return (inInterfaceID == EmailCompositionJavaInterface::InterfaceID);
 		}
 		//--------------------------------------------------------------
 		/// Present
 		//--------------------------------------------------------------
-		void CEmailCompositionJavaInterface::Present(const std::vector<Core::UTF8String>& inastrRecipientAddresses, const Core::UTF8String& instrSubject, const Core::UTF8String& instrContents,
+		void EmailCompositionJavaInterface::Present(const std::vector<Core::UTF8String>& inastrRecipientAddresses, const Core::UTF8String& instrSubject, const Core::UTF8String& instrContents,
 													const std::string& instrAttachmentFilename, bool inbFormatAsHtml, const ResultDelegate& inDelegate)
 		{
 			mDelegate = inDelegate;

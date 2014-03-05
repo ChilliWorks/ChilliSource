@@ -25,7 +25,7 @@ namespace ChilliSource
 		/// Handles all of the java interfaces and provides an
 		/// interface to access them.
 		//========================================================
-		class CJavaInterfaceManager
+		class JavaInterfaceManager
 		{
 		public:
 			//--------------------------------------------------------
@@ -33,13 +33,13 @@ namespace ChilliSource
 			///
 			/// @return a pointer to the singleton instance.
 			//--------------------------------------------------------
-			static CJavaInterfaceManager* GetSingletonPtr();
+			static JavaInterfaceManager* GetSingletonPtr();
 			//--------------------------------------------------------
 			/// Get Singleton
 			///
 			/// @return a reference to the singleton instance.
 			//--------------------------------------------------------
-			static CJavaInterfaceManager& GetSingleton();
+			static JavaInterfaceManager& GetSingleton();
 			//--------------------------------------------------------
 			/// Initialise
 			///
@@ -120,14 +120,14 @@ namespace ChilliSource
 			//--------------------------------------------------------
 			/// Destructor
 			//--------------------------------------------------------
-			~CJavaInterfaceManager();
+			~JavaInterfaceManager();
 		private:
 			//--------------------------------------------------------
 			/// Constructor
 			//--------------------------------------------------------
-			CJavaInterfaceManager();
+			JavaInterfaceManager();
 
-			static CJavaInterfaceManager* mpJavaInterfaceManagerSingleton;
+			static JavaInterfaceManager* mpJavaInterfaceManagerSingleton;
 			std::vector<JavaInterfacePtr> mJavaInterfaces;
 			JavaVM* mpJavaVM;
 		};
@@ -137,7 +137,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		/// Get Java Interface
 		//--------------------------------------------------------
-		template <typename T> std::shared_ptr<T> CJavaInterfaceManager::GetJavaInterface()
+		template <typename T> std::shared_ptr<T> JavaInterfaceManager::GetJavaInterface()
 		{
 			JavaInterfacePtr pJavaInterface = GetJavaInterface(T::InterfaceID);
 
@@ -151,7 +151,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		/// Get Java Interface
 		//--------------------------------------------------------
-		template <typename T, typename U> std::shared_ptr<T> CJavaInterfaceManager::GetJavaInterface()
+		template <typename T, typename U> std::shared_ptr<T> JavaInterfaceManager::GetJavaInterface()
 		{
 			JavaInterfacePtr pJavaInterface = GetJavaInterface(U::InterfaceID);
 
@@ -165,7 +165,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		/// Get Java Interfaces
 		//--------------------------------------------------------
-		template <typename T> void CJavaInterfaceManager::GetJavaInterfaces(std::vector<std::shared_ptr<T> >& outJavaInterfaces)
+		template <typename T> void JavaInterfaceManager::GetJavaInterfaces(std::vector<std::shared_ptr<T> >& outJavaInterfaces)
 		{
 			for (size_t nJavaInterface = 0; nJavaInterface < mJavaInterfaces.size(); nJavaInterface++)
 			{

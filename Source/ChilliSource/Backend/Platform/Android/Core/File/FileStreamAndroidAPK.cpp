@@ -18,14 +18,14 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------------------------------------------
-		CFileStreamAPK::CFileStreamAPK(std::mutex* inpMinizipMutex)
+		FileStreamAPK::FileStreamAPK(std::mutex* inpMinizipMutex)
 			: mbOpen(false), mbError(false), mUnzipper(NULL), mpMinizipMutex(inpMinizipMutex), mpDataBuffer(NULL)
 		{
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Destructor
 		//--------------------------------------------------------------------------------------------------
-		CFileStreamAPK::~CFileStreamAPK()
+		FileStreamAPK::~FileStreamAPK()
 		{
 			if(IsOpen())
 			{
@@ -35,7 +35,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Open APK
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::OpenFromAPK(const std::string& instrApkPath, const unz_file_pos& inFilePos, Core::FileMode ineMode)
+		void FileStreamAPK::OpenFromAPK(const std::string& instrApkPath, const unz_file_pos& inFilePos, Core::FileMode ineMode)
 		{
 			std::unique_lock<std::mutex> lock(*mpMinizipMutex);
 			mUnzipper = unzOpen(instrApkPath.c_str());
@@ -50,7 +50,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Open
 		//--------------------------------------------------------------------------------------------------			
-		void CFileStreamAPK::Open(const unz_file_pos& inFilePos, Core::FileMode ineMode)
+		void FileStreamAPK::Open(const unz_file_pos& inFilePos, Core::FileMode ineMode)
 		{
 			meFileMode = ineMode;
 
@@ -95,28 +95,28 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Is Open
 		//--------------------------------------------------------------------------------------------------
-		bool CFileStreamAPK::IsOpen()
+		bool FileStreamAPK::IsOpen()
 		{
 			return mbOpen;
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Is Bad
 		//--------------------------------------------------------------------------------------------------
-		bool CFileStreamAPK::IsBad()
+		bool FileStreamAPK::IsBad()
 		{
 			return mbError;
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// End Of File
 		//--------------------------------------------------------------------------------------------------
-		bool CFileStreamAPK::EndOfFile()
+		bool FileStreamAPK::EndOfFile()
 		{
 			return mStringStream.eof();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Close
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::Close()
+		void FileStreamAPK::Close()
 		{
 			if(mpDataBuffer)
 			{
@@ -133,126 +133,126 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Get
 		//--------------------------------------------------------------------------------------------------
-		s32 CFileStreamAPK::Get()
+		s32 FileStreamAPK::Get()
 		{
 			return mStringStream.get();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::Get(s8 & outbyChar)
+		void FileStreamAPK::Get(s8 & outbyChar)
 		{
 			mStringStream.get(outbyChar);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::Get(s8 * outpbyString, s32 indwStreamSize)
+		void FileStreamAPK::Get(s8 * outpbyString, s32 indwStreamSize)
 		{
 			mStringStream.get(outpbyString, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::Get(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim)
+		void FileStreamAPK::Get(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim)
 		{
 			mStringStream.get(outpbyString, indwStreamSize, inbyDelim);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get Line
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::GetLine(std::string &outstrString)
+		void FileStreamAPK::GetLine(std::string &outstrString)
 		{
 			mStringStream >> outstrString;
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get All
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::GetAll(std::string &outstrString)
+		void FileStreamAPK::GetAll(std::string &outstrString)
 		{
 			outstrString = mStringStream.str().substr(mStringStream.tellg());
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::Get(std::stringstream &outstrStringStream)
+		void FileStreamAPK::Get(std::stringstream &outstrStringStream)
 		{
 			outstrStringStream << mStringStream.rdbuf();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get Line
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::GetLine(s8 * outpbyString, s32 indwStreamSize)
+		void FileStreamAPK::GetLine(s8 * outpbyString, s32 indwStreamSize)
 		{
 			mStringStream.getline(outpbyString, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get Line
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::GetLine(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim)
+		void FileStreamAPK::GetLine(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim)
 		{
 			mStringStream.getline(outpbyString, indwStreamSize, inbyDelim);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Ignore
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::Ignore(s32 indwStreamSize, s8 inbyDelim)
+		void FileStreamAPK::Ignore(s32 indwStreamSize, s8 inbyDelim)
 		{
 			mStringStream.ignore(indwStreamSize, inbyDelim);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Peek
 		//--------------------------------------------------------------------------------------------------
-		s32 CFileStreamAPK::Peek()
+		s32 FileStreamAPK::Peek()
 		{
 			return mStringStream.peek();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Read
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::Read(s8* inpbyBuffer, s32 indwStreamSize)
+		void FileStreamAPK::Read(s8* inpbyBuffer, s32 indwStreamSize)
 		{
 			mStringStream.read(inpbyBuffer, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Read Some
 		//--------------------------------------------------------------------------------------------------
-		s32 CFileStreamAPK::ReadSome(s8* inpbyBuffer, s32 indwStreamSize)
+		s32 FileStreamAPK::ReadSome(s8* inpbyBuffer, s32 indwStreamSize)
 		{
 			return mStringStream.readsome(inpbyBuffer, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Put Back
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::PutBack(s8 inbyChar)
+		void FileStreamAPK::PutBack(s8 inbyChar)
 		{
 			mStringStream.putback(inbyChar);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Unget
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::Unget()
+		void FileStreamAPK::Unget()
 		{
 			mStringStream.unget();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// TellG
 		//--------------------------------------------------------------------------------------------------
-		s32 CFileStreamAPK::TellG()
+		s32 FileStreamAPK::TellG()
 		{
 			return mStringStream.tellg();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// SeekG
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::SeekG(s32 indwPosition)
+		void FileStreamAPK::SeekG(s32 indwPosition)
 		{
 			mStringStream.seekg(indwPosition, std::ios_base::beg);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// SeekG
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::SeekG(s32 indwPosition, Core::SeekDir ineDir)
+		void FileStreamAPK::SeekG(s32 indwPosition, Core::SeekDir ineDir)
 		{
 			std::ios_base::seekdir dir;
 			switch (ineDir)
@@ -272,49 +272,49 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Sync
 		//--------------------------------------------------------------------------------------------------
-		s32 CFileStreamAPK::Sync()
+		s32 FileStreamAPK::Sync()
 		{
 			return mStringStream.sync();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Put
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::Put(s8 inbyChar)
+		void FileStreamAPK::Put(s8 inbyChar)
 		{
 			mStringStream.put(inbyChar);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Write
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::Write(s8* inpbyChar, s32 indwStreamSize)
+		void FileStreamAPK::Write(s8* inpbyChar, s32 indwStreamSize)
 		{
 			CS_LOG_ERROR("Cannot write to Android APK");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Write
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::Write(const std::string& _instrString)
+		void FileStreamAPK::Write(const std::string& _instrString)
 		{
 			CS_LOG_ERROR("Cannot write to Android APK");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// TellP
 		//--------------------------------------------------------------------------------------------------
-		s32 CFileStreamAPK::TellP()
+		s32 FileStreamAPK::TellP()
 		{
 			return mStringStream.tellp();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// SeekP
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::SeekP(s32 indwPosition)
+		void FileStreamAPK::SeekP(s32 indwPosition)
 		{
 			mStringStream.seekp(indwPosition, std::ios_base::beg);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// SeekP
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::SeekP(s32 indwPosition, Core::SeekDir ineDir)
+		void FileStreamAPK::SeekP(s32 indwPosition, Core::SeekDir ineDir)
 		{
 			std::ios_base::seekdir dir;
 			switch (ineDir)
@@ -334,7 +334,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Flush
 		//--------------------------------------------------------------------------------------------------
-		void CFileStreamAPK::Flush()
+		void FileStreamAPK::Flush()
 		{
 			mStringStream.flush();
 		}
@@ -342,7 +342,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Get File Mode
 		//--------------------------------------------------------------------------------------------------
-		std::ios_base::openmode CFileStreamAPK::GetFileMode()
+		std::ios_base::openmode FileStreamAPK::GetFileMode()
 		{
 			switch (meFileMode)
 			{

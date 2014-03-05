@@ -25,18 +25,18 @@ namespace ChilliSource
 		//---------------------------------------------------------------
 		/// Constructor
 		//---------------------------------------------------------------
-    	CGooglePlayRemoteNotificationSystem::CGooglePlayRemoteNotificationSystem()
+    	GooglePlayRemoteNotificationSystem::GooglePlayRemoteNotificationSystem()
     	{
-    		if(NULL == (mpJavaInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CGooglePlayRemoteNotificationJavaInterface>()))
+    		if(NULL == (mpJavaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<GooglePlayRemoteNotificationJavaInterface>()))
     		{
-    			mpJavaInterface = GooglePlayRemoteNotificationJavaInterfacePtr(new CGooglePlayRemoteNotificationJavaInterface());
-				ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
+    			mpJavaInterface = GooglePlayRemoteNotificationJavaInterfacePtr(new GooglePlayRemoteNotificationJavaInterface());
+				ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
     		}
     	}
 		//-------------------------------------------------------------------------
 		/// Request Remote Token
 		//-------------------------------------------------------------------------
-		void CGooglePlayRemoteNotificationSystem::RequestRemoteToken(const Core::RemoteTokenReceivedDelegate& inDelegate)
+		void GooglePlayRemoteNotificationSystem::RequestRemoteToken(const Core::RemoteTokenReceivedDelegate& inDelegate)
 		{
 			mDelegate = inDelegate;
 			mpJavaInterface->RequestRemoteToken();
@@ -44,21 +44,21 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// Get Remote Token
 		//-------------------------------------------------------------------------
-		const std::string& CGooglePlayRemoteNotificationSystem::GetRemoteToken() const
+		const std::string& GooglePlayRemoteNotificationSystem::GetRemoteToken() const
 		{
 			return mstrToken;
 		}
 		//-------------------------------------------------------------------------
 		/// Get Provider ID
 		//-------------------------------------------------------------------------
-		const std::string& CGooglePlayRemoteNotificationSystem::GetProviderID() const
+		const std::string& GooglePlayRemoteNotificationSystem::GetProviderID() const
 		{
 			return kstrProviderID;
 		}
 		//-------------------------------------------------------------------------
 		/// On Remote Token Received
 		//-------------------------------------------------------------------------
-		void CGooglePlayRemoteNotificationSystem::OnRemoteTokenReceived(const std::string& instrToken)
+		void GooglePlayRemoteNotificationSystem::OnRemoteTokenReceived(const std::string& instrToken)
 		{
 			mstrToken = Core::BaseEncoding::Base64Encode(instrToken);
 			if(mDelegate != NULL)
@@ -70,7 +70,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------------
 		/// On Remote Notification Received
 		//-------------------------------------------------------------------------
-		void CGooglePlayRemoteNotificationSystem::OnRemoteNotificationReceived(const Core::ParamDictionary& insParams)
+		void GooglePlayRemoteNotificationSystem::OnRemoteNotificationReceived(const Core::ParamDictionary& insParams)
 		{
 			Core::NotificationSPtr notification(std::make_shared<CSCore::Notification>());
 

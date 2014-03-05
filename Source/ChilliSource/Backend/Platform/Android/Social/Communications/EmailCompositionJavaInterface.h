@@ -19,10 +19,10 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CEmailCompositionJavaInterface: public ChilliSource::Android::IJavaInterface
+		class EmailCompositionJavaInterface: public ChilliSource::Android::IJavaInterface
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(SCEmailCompositionJavaInterface);
+			CS_DECLARE_NAMEDTYPE(EmailCompositionJavaInterface);
 
 			//--------------------------------------------------------------
 			/// Result Codes
@@ -36,7 +36,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------
 			/// Constructor
 			//--------------------------------------------------------------
-			CEmailCompositionJavaInterface();
+			EmailCompositionJavaInterface();
 			//--------------------------------------------------------------
 			/// Is A
 			///

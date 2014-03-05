@@ -16,17 +16,17 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		CLocalNotificationScheduler::CLocalNotificationScheduler()
+		LocalNotificationScheduler::LocalNotificationScheduler()
 		{
         	//get the media player java interface or create it if it doesn't yet exist.
-			mpLocalNotificationJavaInterface = CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CLocalNotificationJavaInterface>();
+			mpLocalNotificationJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<LocalNotificationJavaInterface>();
         	if (mpLocalNotificationJavaInterface == NULL)
         	{
-        		mpLocalNotificationJavaInterface = LocalNotificationJavaInterfacePtr(new CLocalNotificationJavaInterface());
-        		CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpLocalNotificationJavaInterface);
+        		mpLocalNotificationJavaInterface = LocalNotificationJavaInterfacePtr(new LocalNotificationJavaInterface());
+        		JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpLocalNotificationJavaInterface);
         	}
 		}
-		CLocalNotificationScheduler::~CLocalNotificationScheduler()
+		LocalNotificationScheduler::~LocalNotificationScheduler()
 		{
 
 		}
@@ -41,7 +41,7 @@ namespace ChilliSource
         /// @param Out: Notifications that meet criteria
         /// @return Whether any notifications exist within that time period
         //-------------------------------------------------------------------------
-        bool CLocalNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Core::NotificationSPtr>& outaNotifications)
+        bool LocalNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Core::NotificationSPtr>& outaNotifications)
         {
         	CS_LOG_WARNING("Unimplemented method: CLocalNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod");
         	return false;
@@ -54,7 +54,7 @@ namespace ChilliSource
 		///
 		/// @param Notification
 		//------------------------------------------------------------------------------
-		void CLocalNotificationScheduler::ScheduleNotification(const Core::NotificationSPtr& insNotification)
+		void LocalNotificationScheduler::ScheduleNotification(const Core::NotificationSPtr& insNotification)
 		{
 			mpLocalNotificationJavaInterface->ScheduleNotification(insNotification);
 		}
@@ -65,7 +65,7 @@ namespace ChilliSource
 		///
 		/// @param ID type
 		//-------------------------------------------------------------------------
-		void CLocalNotificationScheduler::CancelByID(Core::NotificationID inID)
+		void LocalNotificationScheduler::CancelByID(Core::NotificationID inID)
 		{
 			mpLocalNotificationJavaInterface->CancelByID(inID);
 		}
@@ -74,7 +74,7 @@ namespace ChilliSource
 		///
 		/// Terminate all currently scheduled notifications
 		//-------------------------------------------------------------------------
-		void CLocalNotificationScheduler::CancelAll()
+		void LocalNotificationScheduler::CancelAll()
 		{
 			mpLocalNotificationJavaInterface->CancelAll();
 		}
@@ -83,7 +83,7 @@ namespace ChilliSource
 		///
 		/// Called when game receives a local notification
 		//-------------------------------------------------------------------------
-		void CLocalNotificationScheduler::ApplicationDidReceiveLocalNotification(const Core::NotificationSPtr& insNotification)
+		void LocalNotificationScheduler::ApplicationDidReceiveLocalNotification(const Core::NotificationSPtr& insNotification)
 		{
 			Core::NotificationScheduler::OnNotificationReceived(insNotification);
 		}

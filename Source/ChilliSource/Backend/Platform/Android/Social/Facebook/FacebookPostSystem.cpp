@@ -16,18 +16,18 @@ namespace ChilliSource
 
 	namespace Android
 	{
-		CFacebookPostSystem::CFacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem) : mpAuthSystem(inpAuthSystem)
+		FacebookPostSystem::FacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem) : mpAuthSystem(inpAuthSystem)
 		{
-			mpJavaInterface = static_cast<CFacebookAuthenticationSystem*>(mpAuthSystem)->GetJavaInterface();
+			mpJavaInterface = static_cast<FacebookAuthenticationSystem*>(mpAuthSystem)->GetJavaInterface();
 			mpJavaInterface->SetPostSystem(this);
 		}
 
-		bool CFacebookPostSystem::IsA(Core::InterfaceIDType inID) const
+		bool FacebookPostSystem::IsA(Core::InterfaceIDType inID) const
 		{
 			return IFacebookPostSystem::InterfaceID == inID;
 		}
 
-		void CFacebookPostSystem::TryPost(const FacebookPostDesc& insDesc, const IFacebookPostSystem::PostResultDelegate& insResultCallback)
+		void FacebookPostSystem::TryPost(const FacebookPostDesc& insDesc, const IFacebookPostSystem::PostResultDelegate& insResultCallback)
 		{
 			mCompletionDelegate = insResultCallback;
 
@@ -51,7 +51,7 @@ namespace ChilliSource
             }
 		}
 
-		void CFacebookPostSystem::TrySendRequest(const Social::FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends)
+		void FacebookPostSystem::TrySendRequest(const Social::FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends)
 		{
 			mRequestCompleteDelegate = insResultCallback;
 
@@ -111,7 +111,7 @@ namespace ChilliSource
 			outaKeyValues.push_back(insDesc.strTo);
         }
 
-		void CFacebookPostSystem::Post(const FacebookPostDesc& insDesc)
+		void FacebookPostSystem::Post(const FacebookPostDesc& insDesc)
 		{
             std::string strGraphPath = "me/feed";
             if(!insDesc.strTo.empty())
@@ -124,14 +124,14 @@ namespace ChilliSource
             mpJavaInterface->TryPostToFeed(strGraphPath, aPostParamsKeyValue);
 		}
 
-		void CFacebookPostSystem::PostRequest(const Social::FacebookPostDesc& insDesc)
+		void FacebookPostSystem::PostRequest(const Social::FacebookPostDesc& insDesc)
 		{
             std::vector<std::string> aPostParamsKeyValue;
             CreateKeyValueArrayFromRequestPostDesc(insDesc, aPostParamsKeyValue);
             mpJavaInterface->TryPostRequest(aPostParamsKeyValue);
 		}
 
-		void CFacebookPostSystem::OnPublishPermissionAuthorised(const Social::FacebookAuthenticationSystem::AuthenticateResponse& insResponse)
+		void FacebookPostSystem::OnPublishPermissionAuthorised(const Social::FacebookAuthenticationSystem::AuthenticateResponse& insResponse)
 		{
             switch(insResponse.eResult)
             {
@@ -153,7 +153,7 @@ namespace ChilliSource
             }
 		}
 
-		void CFacebookPostSystem::OnPostToFeedComplete(bool inbSuccess)
+		void FacebookPostSystem::OnPostToFeedComplete(bool inbSuccess)
 		{
 			if(!mCompletionDelegate)
 			{
@@ -170,7 +170,7 @@ namespace ChilliSource
             }
 		}
 
-		void CFacebookPostSystem::OnPostRequestComplete(bool inbSuccess)
+		void FacebookPostSystem::OnPostRequestComplete(bool inbSuccess)
 		{
 			if(!mRequestCompleteDelegate)
 			{

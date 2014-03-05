@@ -18,7 +18,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CContactInformationProvider: public ChilliSource::Social::ContactInformationProvider
+		class ContactInformationProvider: public ChilliSource::Social::ContactInformationProvider
 		{
 		public:
 

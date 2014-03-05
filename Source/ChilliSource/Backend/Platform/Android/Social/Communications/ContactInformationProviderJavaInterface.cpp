@@ -15,7 +15,7 @@
 //function definitions
 extern "C"
 {
-	void Java_com_taggames_moflow_nativeinterface_CContactInformationProviderNativeInterface_SetData(JNIEnv* inpEnv, jobject thiz, int inudwSize,jobjectArray instrNames,jobjectArray instrNumbers,jobjectArray instrEmails);
+	void Java_com_chillisource_social_ContactInformationProviderNativeInterface_SetData(JNIEnv* inpEnv, jobject thiz, int inudwSize,jobjectArray instrNames,jobjectArray instrNumbers,jobjectArray instrEmails);
 }
 
 //--------------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ extern "C"
 /// @param array of numbers
 /// @param array of emails
 //--------------------------------------------------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CContactInformationProviderNativeInterface_SetData(JNIEnv* inpEnv, jobject thiz, int inudwSize,jobjectArray instrNames,jobjectArray instrNumbers,jobjectArray instrEmails)
+void Java_com_chillisource_social_ContactInformationProviderNativeInterface_SetData(JNIEnv* inpEnv, jobject thiz, int inudwSize,jobjectArray instrNames,jobjectArray instrNumbers,jobjectArray instrEmails)
 {
 	JNIEnv* env = ChilliSource::Android::_IJavaInterface::GetJNIEnvironmentPtr();
 
@@ -39,17 +39,17 @@ void Java_com_taggames_moflow_nativeinterface_CContactInformationProviderNativeI
 	{
 		jstring jstrName = (jstring)inpEnv->GetObjectArrayElement(instrNames,udwName);
 		CSCore::UTF8String strName = ChilliSource::Android::_IJavaInterface::CreateUTF8StringFromJString(jstrName);
-		ChilliSource::Android::SCContactInformationProviderJavaInterface::mastrNames.push_back(strName);
+		ChilliSource::Android::ContactInformationProviderJavaInterface::mastrNames.push_back(strName);
 		env->DeleteLocalRef(jstrName);
 
 		jstring jstrNumber =  (jstring)inpEnv->GetObjectArrayElement(instrNumbers,udwName);
 		CSCore::UTF8String strNumber = ChilliSource::Android::_IJavaInterface::CreateUTF8StringFromJString(jstrNumber);
-		ChilliSource::Android::SCContactInformationProviderJavaInterface::mastrNumbers.push_back(strNumber);
+		ChilliSource::Android::ContactInformationProviderJavaInterface::mastrNumbers.push_back(strNumber);
 		env->DeleteLocalRef(jstrNumber);
 
 		jstring jstrEmail =  (jstring)inpEnv->GetObjectArrayElement(instrEmails,udwName);
 		CSCore::UTF8String strEmail = ChilliSource::Android::_IJavaInterface::CreateUTF8StringFromJString(jstrEmail);
-		ChilliSource::Android::SCContactInformationProviderJavaInterface::mastrEmails.push_back(strEmail);
+		ChilliSource::Android::ContactInformationProviderJavaInterface::mastrEmails.push_back(strEmail);
 		env->DeleteLocalRef(jstrEmail);
 	}
 }
@@ -60,10 +60,10 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		std::vector<CSCore::UTF8String> SCContactInformationProviderJavaInterface::mastrNames;
-		std::vector<CSCore::UTF8String> SCContactInformationProviderJavaInterface::mastrNumbers;
-		std::vector<CSCore::UTF8String> SCContactInformationProviderJavaInterface::mastrEmails;
-		CContactInformationProvider * SCContactInformationProviderJavaInterface::mpContactProvider = NULL;
+		std::vector<CSCore::UTF8String> ContactInformationProviderJavaInterface::mastrNames;
+		std::vector<CSCore::UTF8String> ContactInformationProviderJavaInterface::mastrNumbers;
+		std::vector<CSCore::UTF8String> ContactInformationProviderJavaInterface::mastrEmails;
+		ContactInformationProvider * ContactInformationProviderJavaInterface::mpContactProvider = NULL;
 
 		//--------------------------------------------------------------------------------------
 		/// Setup Java Interface
@@ -73,11 +73,11 @@ namespace ChilliSource
 		///
 		/// @param a pointer to the virtual machine
 		//--------------------------------------------------------------------------------------
-		void SCContactInformationProviderJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
+		void ContactInformationProviderJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
 		{
 			mspJavaVM = inpJavaVM;
 
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CContactInformationProviderNativeInterface","LoadInformation", "()V");
+			InitCallableStaticMethod("com/chillisource/social/ContactInformationProviderNativeInterface","LoadInformation", "()V");
 
 		}
 		//--------------------------------------------------------------------------------------
@@ -87,7 +87,7 @@ namespace ChilliSource
 		/// platform system
 		///
 		//--------------------------------------------------------------------------------------
-		void SCContactInformationProviderJavaInterface::LoadInformation(CContactInformationProvider * inpContactProvider)
+		void ContactInformationProviderJavaInterface::LoadInformation(ContactInformationProvider * inpContactProvider)
 		{
 			mpContactProvider = inpContactProvider;
 
@@ -107,7 +107,7 @@ namespace ChilliSource
 		///
 		/// @return array of data for contacts
 		//--------------------------------------------------------------------------------------
-		std::vector<Social::ContactRecord> SCContactInformationProviderJavaInterface::CreateContacts()
+		std::vector<Social::ContactRecord> ContactInformationProviderJavaInterface::CreateContacts()
 		{
 			std::vector<Social::ContactRecord> asContactRecords;
 

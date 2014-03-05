@@ -28,13 +28,13 @@ namespace ChilliSource
     	///
     	/// An activity for displaying the Android video player.
     	//==================================================================
-        class CVideoPlayerActivity : public Video::VideoPlayerActivity
+        class VideoPlayerActivity : public Video::VideoPlayerActivity
         {
         public:
 			//--------------------------------------------------------------
 			/// Constructor
 			//--------------------------------------------------------------
-            CVideoPlayerActivity();
+            VideoPlayerActivity();
 			//--------------------------------------------------------------
 			/// Is A
 			///

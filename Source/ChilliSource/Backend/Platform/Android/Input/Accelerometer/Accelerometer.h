@@ -22,13 +22,13 @@ namespace ChilliSource
 		/// Listens to and stores the acceleration read from the
 		/// hardware accelerometer.
 		//======================================================
-		class CAccelerometer : public Input::Accelerometer
+		class Accelerometer : public Input::Accelerometer
 		{
 		public:
 			//------------------------------------------------
 			/// Constructor
 			//------------------------------------------------
-			CAccelerometer();
+			Accelerometer();
 			//----------------------------------------------------
 			/// Is Updating
 			///

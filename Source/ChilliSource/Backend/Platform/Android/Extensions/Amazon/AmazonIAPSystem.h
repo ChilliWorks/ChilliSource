@@ -22,7 +22,7 @@ namespace ChilliSource
 		/// The amazon implementation of the IAP system. The moFlow SKU pre-processor
 		/// flag MOFLOWSKU_IABMETHOD_AMAZON should be set for this to be used.
 		//========================================================================
-		class CAmazonIAPSystem : public Networking::IAPSystem
+		class AmazonIAPSystem : public Networking::IAPSystem
 		{
 		public:
             //---------------------------------------------------------------
@@ -34,7 +34,7 @@ namespace ChilliSource
 			/// 	AmazonPrivateKey	The private key used to encrypt
             ///							the on disk Amazon IAP cache.
             //---------------------------------------------------------------
-			CAmazonIAPSystem(const Core::ParamDictionary& inParams);
+			AmazonIAPSystem(const Core::ParamDictionary& inParams);
             //---------------------------------------------------------------
             /// Register Products
             ///

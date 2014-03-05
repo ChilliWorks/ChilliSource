@@ -19,23 +19,23 @@ namespace ChilliSource
 		//------------------------------------------------
 		/// Constructor
 		//------------------------------------------------
-		CAccelerometer::CAccelerometer()
+		Accelerometer::Accelerometer()
 			: mbIsUpdating(false)
 		{
 			//get the accelerometer java interface or create it if it doesn't yet exist.
-			mpAccelerometerJI = CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CAccelerometerJavaInterface>();
+			mpAccelerometerJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<AccelerometerJavaInterface>();
 			if (mpAccelerometerJI == NULL)
 			{
-				mpAccelerometerJI = AccelerometerJavaInterfacePtr(new CAccelerometerJavaInterface());
-				CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpAccelerometerJI);
+				mpAccelerometerJI = AccelerometerJavaInterfacePtr(new AccelerometerJavaInterface());
+				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpAccelerometerJI);
 			}
 		}
 		//------------------------------------------------
 		/// Is A
 		//------------------------------------------------
-		bool CAccelerometer::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool Accelerometer::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == Accelerometer::InterfaceID;
+			return inInterfaceID == Input::Accelerometer::InterfaceID;
 		}
 		//----------------------------------------------------
 		/// Is Updating
@@ -43,32 +43,32 @@ namespace ChilliSource
 		/// @return whether or not the accelerometer is
         /// currently updating.
 		//----------------------------------------------------
-		bool CAccelerometer::IsUpdating() const
+		bool Accelerometer::IsUpdating() const
 		{
 			return mbIsUpdating;
 		}
 		//----------------------------------------------------
 		/// Start Updating
 		//----------------------------------------------------
-		void CAccelerometer::StartUpdating()
+		void Accelerometer::StartUpdating()
 		{
 			if (false == mbIsUpdating)
 			{
 				mbIsUpdating = true;
-				mpAccelerometerJI->StartListening(Core::MakeDelegate(this, &CAccelerometer::OnAccelerationChanged));
+				mpAccelerometerJI->StartListening(Core::MakeDelegate(this, &Accelerometer::OnAccelerationChanged));
 			}
 		}
 		//------------------------------------------------
 		/// Get Acceleration
 		//------------------------------------------------
-		Core::Vector3 CAccelerometer::GetAcceleration() const
+		Core::Vector3 Accelerometer::GetAcceleration() const
 		{
 			return mvAcceleration;
 		}
 		//----------------------------------------------------
 		/// Stop Updating
 		//----------------------------------------------------
-		void CAccelerometer::StopUpdating()
+		void Accelerometer::StopUpdating()
 		{
 			if (true == mbIsUpdating)
 			{
@@ -79,7 +79,7 @@ namespace ChilliSource
 		//------------------------------------------------
 		/// On Acceleration Changed
 		//------------------------------------------------
-		void CAccelerometer::OnAccelerationChanged(const Core::Vector3& invAcceleration)
+		void Accelerometer::OnAccelerationChanged(const Core::Vector3& invAcceleration)
 		{
 			mvAcceleration = invAcceleration;
 			mAccelerationUpdatedEvent.NotifyConnections(mvAcceleration);

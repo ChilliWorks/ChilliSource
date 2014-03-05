@@ -25,7 +25,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class SCTouchInputJavaInterface : public _IJavaInterface
+		class TouchInputJavaInterface : public _IJavaInterface
 		{
 		public:
 			//--------------------------------------------------------------------------------------
@@ -50,9 +50,9 @@ namespace ChilliSource
 			///
 			/// @return CTouchScreen* returns the currently active touch screen or null.
 			//--------------------------------------------------------------------------------------
-			static CTouchScreen* GetTouchScreen();
+			static TouchScreen* GetTouchScreen();
 		private:
-			static CTouchScreen * mspTouchScreen;
+			static TouchScreen * mspTouchScreen;
 		};
 	}
 }

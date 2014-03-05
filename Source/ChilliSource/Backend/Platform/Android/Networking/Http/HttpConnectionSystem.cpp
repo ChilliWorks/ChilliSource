@@ -23,17 +23,17 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Is A
 		//--------------------------------------------------------------------------------------------------
-		bool CHttpConnectionSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool HttpConnectionSystem::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == Networking::HttpConnectionSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Make Request 
 		//--------------------------------------------------------------------------------------------------
-		Networking::HttpRequest* CHttpConnectionSystem::MakeRequest(const Networking::HttpRequestDetails & insRequestDetails, Networking::HttpRequest::CompletionDelegate inOnComplete)
+		Networking::HttpRequest* HttpConnectionSystem::MakeRequest(const Networking::HttpRequestDetails & insRequestDetails, Networking::HttpRequest::CompletionDelegate inOnComplete)
         {
             //The ownership of the request is with the request itself
-			CHttpRequest* pRequest = new CHttpRequest(insRequestDetails, inOnComplete);
+			HttpRequest* pRequest = new HttpRequest(insRequestDetails, inOnComplete);
             
 			mapRequests.push_back(pRequest);
 			return pRequest;
@@ -41,7 +41,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		/// Cancel All Requests
 		//--------------------------------------------------------------------------------------------------
-		void CHttpConnectionSystem::CancelAllRequests()
+		void HttpConnectionSystem::CancelAllRequests()
         {
 			for(u32 nRequest = 0; nRequest < mapRequests.size(); nRequest++)
             {
@@ -51,14 +51,14 @@ namespace ChilliSource
         //--------------------------------------------------------------------------------------------------
         /// Check Reachability
         //--------------------------------------------------------------------------------------------------
-        bool CHttpConnectionSystem::CheckReachability() const
+        bool HttpConnectionSystem::CheckReachability() const
         {
-            return SCHttpConnectionJavaInterface::IsConnected();
+            return HttpConnectionJavaInterface::IsConnected();
         }
 		//--------------------------------------------------------------------------------------------------
 		/// Update
 		//--------------------------------------------------------------------------------------------------
-		void CHttpConnectionSystem::Update(f32 infDT)
+		void HttpConnectionSystem::Update(f32 infDT)
 		{
             RequestVector RequestCopy = mapRequests;
             
@@ -84,8 +84,8 @@ namespace ChilliSource
 		//=====================================================================================================
 		/// Http Request
 		//=====================================================================================================
-		CHttpConnectionSystem::CHttpRequest::CHttpRequest(const Networking::HttpRequestDetails& insDetails,
-														  const Networking::HttpRequest::CompletionDelegate& inCompletionDelegate) : msDetails(insDetails),
+		HttpConnectionSystem::HttpRequest::CHttpRequest(const Networking::HttpRequestDetails& insDetails,
+														const Networking::HttpRequest::CompletionDelegate& inCompletionDelegate) : msDetails(insDetails),
 														  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  mbCompleted(false),
 														  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  mCompletionDelegate(inCompletionDelegate),
 														  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  	  mbThreadCompleted(false),
@@ -99,7 +99,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------
 		/// Update
 		//------------------------------------------------------------------
-		void CHttpConnectionSystem::CHttpRequest::Update(f32 infDT)
+		void HttpConnectionSystem::CHttpRequest::Update(f32 infDT)
 		{
 			//Check if the data has finished streaming and invoke the completion delegate on the main thread
 			if(mbCompleted == true)
@@ -119,7 +119,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------
 		/// Poll Read Stream
 		//------------------------------------------------------------------
-		void CHttpConnectionSystem::CHttpRequest::PerformRequest()
+		void HttpConnectionSystem::CHttpRequest::PerformRequest()
 		{
 			HttpRequestType eType = HttpRequestType::k_get;
 			if (msDetails.eType == Networking::HttpRequestDetails::Type::k_post)
@@ -166,7 +166,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------------
 		/// Cancel
 		//----------------------------------------------------------------------------------------
-		void CHttpConnectionSystem::CHttpRequest::Cancel()
+		void HttpConnectionSystem::HttpRequest::Cancel()
 		{
             mbCompleted = true;
             meRequestResult = HttpRequest::CompletionResult::k_cancelled;
@@ -174,28 +174,28 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------------
 		/// Has Completed
 		//----------------------------------------------------------------------------------------
-		bool CHttpConnectionSystem::CHttpRequest::HasCompleted() const
+		bool HttpConnectionSystem::HttpRequest::HasCompleted() const
 		{
 			return mbRequestCompleted && mbThreadCompleted;
 		}
 		//----------------------------------------------------------------------------------------
 		/// Get Details
 		//----------------------------------------------------------------------------------------
-		const Networking::HttpRequestDetails & CHttpConnectionSystem::CHttpRequest::GetDetails() const
+		const Networking::HttpRequestDetails & HttpConnectionSystem::HttpRequest::GetDetails() const
 		{
 			return msDetails;
 		}
 		//----------------------------------------------------------------------------------------
 		/// Get Completion Delegate
 		//----------------------------------------------------------------------------------------
-		const Networking::HttpRequest::CompletionDelegate & CHttpConnectionSystem::CHttpRequest::GetCompletionDelegate() const
+		const Networking::HttpRequest::CompletionDelegate & HttpConnectionSystem::HttpRequest::GetCompletionDelegate() const
 		{
 			return mCompletionDelegate;
 		}
 		//----------------------------------------------------------------------------------------
 		/// Get Response String
 		//----------------------------------------------------------------------------------------
-		const std::string & CHttpConnectionSystem::CHttpRequest::GetResponseString() const
+		const std::string & HttpConnectionSystem::HttpRequest::GetResponseString() const
 		{
 			return mResponseData;
 		}
@@ -204,7 +204,7 @@ namespace ChilliSource
 		///
 		/// @return HTTP response code (i.e. 200 = OK, 400 = Error)
 		//----------------------------------------------------------------------------------------
-		u32 CHttpConnectionSystem::CHttpRequest::GetResponseCode() const 
+		u32 HttpConnectionSystem::HttpRequest::GetResponseCode() const
 		{
 			return mudwResponseCode;
 		}
@@ -213,7 +213,7 @@ namespace ChilliSource
 		///
 		/// @return Number of bytes read til now
 		//----------------------------------------------------------------------------------------
-		u32 CHttpConnectionSystem::CHttpRequest::GetBytesRead() const
+		u32 HttpConnectionSystem::HttpRequest::GetBytesRead() const
 		{
 			//TODO: Implement this.
 			return 0;

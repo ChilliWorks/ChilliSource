@@ -17,12 +17,12 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CGooglePlayIAPJavaInterface : public IJavaInterface
+		class GooglePlayIAPJavaInterface : public IJavaInterface
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(CGooglePlayIAPJavaInterface);
+			CS_DECLARE_NAMEDTYPE(GooglePlayIAPJavaInterface);
 
-			CGooglePlayIAPJavaInterface(const std::string& instrPublicKey);
+			GooglePlayIAPJavaInterface(const std::string& instrPublicKey);
 
 			//--------------------------------------------------------------
 			/// Is A
@@ -135,7 +135,7 @@ namespace ChilliSource
             Networking::IAPTransactionCloseDelegate mTransactionCloseDelegate;
 		};
 
-		typedef std::shared_ptr<CGooglePlayIAPJavaInterface> GooglePlayIAPJavaInterfacePtr;
+		typedef std::shared_ptr<GooglePlayIAPJavaInterface> GooglePlayIAPJavaInterfacePtr;
 	}
 }
 

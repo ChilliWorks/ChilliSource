@@ -28,13 +28,13 @@ namespace ChilliSource
 		/// A filestream is used for all reading and writing of files. This will emulate the functionality
 		/// of fstream and allows for cross platform filereading.
 		//======================================================================================================
-		class CFileStreamAPK : public Core::FileStream
+		class FileStreamAPK : public Core::FileStream
 		{
 		public:
 			//--------------------------------------------------------------------------------------------------
 			/// Destructor
 			//--------------------------------------------------------------------------------------------------
-			virtual ~CFileStreamAPK();
+			virtual ~FileStreamAPK();
 			//--------------------------------------------------------------------------------------------------
 			/// Is Open
 			///

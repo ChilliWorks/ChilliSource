@@ -21,12 +21,12 @@ namespace ChilliSource
 	namespace Android
 	{
 		u32 CWebViewActivity::msudwCurrentIndex = 1;
-		CWebViewActivity::MapIndexToWebView CWebViewActivity::mmapIndexToWebView;
+		WebViewActivity::MapIndexToWebView WebViewActivity::mmapIndexToWebView;
 		//-----------------------------------------------
 		/// Constructor
 		///
 		//-----------------------------------------------
-		CWebViewActivity::CWebViewActivity() : mvUnifiedSize(1.0f,1.0f,0.0f,0.0f)
+		WebViewActivity::WebViewActivity() : mvUnifiedSize(1.0f,1.0f,0.0f,0.0f)
 		{
 			mudwIndex = msudwCurrentIndex++;
 		}
@@ -38,12 +38,12 @@ namespace ChilliSource
 		///
 		/// @param URL
 		//-----------------------------------------------
-		void CWebViewActivity::Present(const std::string& instrURL, f32 infDismissButtonScale)
+		void WebViewActivity::Present(const std::string& instrURL, f32 infDismissButtonScale)
 		{
 			//Transform webview from unified vector to absolute for use in java
 			mvAbsoluteSize = (Core::Screen::GetOrientedDimensions() * mvUnifiedSize.GetRelative()) + mvUnifiedSize.GetAbsolute();
-			SCWebViewJavaInterface::Present(mudwIndex,instrURL,mvAbsoluteSize);
-			CWebViewActivity::mmapIndexToWebView.insert(std::make_pair(mudwIndex,this));
+			WebViewJavaInterface::Present(mudwIndex,instrURL,mvAbsoluteSize);
+			WebViewActivity::mmapIndexToWebView.insert(std::make_pair(mudwIndex,this));
 			AddDismissButton(mvAbsoluteSize.x * infDismissButtonScale);
 		}
 		//-----------------------------------------------
@@ -54,7 +54,7 @@ namespace ChilliSource
 		///
 		/// @param HTML file name
 		//-----------------------------------------------
-		void CWebViewActivity::PresentFromFile(Core::StorageLocation ineStorageLocation, const std::string& instrFile, f32 infDismissButtonScale)
+		void WebViewActivity::PresentFromFile(Core::StorageLocation ineStorageLocation, const std::string& instrFile, f32 infDismissButtonScale)
 		{
 			size_t udwAnchorStart = instrFile.find_last_of('#');
 			bool bHasAnchor=(udwAnchorStart!=std::string::npos);
@@ -112,8 +112,8 @@ namespace ChilliSource
 
             mvAbsoluteSize = (Core::Screen::GetOrientedDimensions() * mvUnifiedSize.GetRelative()) + mvUnifiedSize.GetAbsolute();
 
-			SCWebViewJavaInterface::PresentFromFile(mudwIndex, strHTMLFileContents, mvAbsoluteSize, strPath, strAnchor);
-			CWebViewActivity::mmapIndexToWebView.insert(std::make_pair(mudwIndex,this));
+			WebViewJavaInterface::PresentFromFile(mudwIndex, strHTMLFileContents, mvAbsoluteSize, strPath, strAnchor);
+			WebViewActivity::mmapIndexToWebView.insert(std::make_pair(mudwIndex,this));
 			AddDismissButton(mvAbsoluteSize.x * infDismissButtonScale);
 		}
 		//-----------------------------------------------
@@ -123,18 +123,18 @@ namespace ChilliSource
 		///
 		/// @param URL
 		//-----------------------------------------------
-		void CWebViewActivity::PresentInExternalBrowser(const std::string& instrURL)
+		void WebViewActivity::PresentInExternalBrowser(const std::string& instrURL)
 		{
-			SCWebViewJavaInterface::PresentInExternalBrowser(instrURL);
+			WebViewJavaInterface::PresentInExternalBrowser(instrURL);
 		}
 		//-----------------------------------------------
 		/// Dismiss
 		///
 		/// Dismiss the web view interface
 		//-----------------------------------------------
-		void CWebViewActivity::Dismiss()
+		void WebViewActivity::Dismiss()
 		{
-			SCWebViewJavaInterface::Dismiss(mudwIndex);
+			WebViewJavaInterface::Dismiss(mudwIndex);
 		}
 		//-----------------------------------------------
 		/// Add Dismiss Button
@@ -142,9 +142,9 @@ namespace ChilliSource
 		/// Create a button that can dismiss the web view
 		/// @param Size of the webview
 		//-----------------------------------------------
-		void CWebViewActivity::AddDismissButton(f32 infSize)
+		void WebViewActivity::AddDismissButton(f32 infSize)
 		{
-			SCWebViewJavaInterface::AddDismissButton(mudwIndex, infSize);
+			WebViewJavaInterface::AddDismissButton(mudwIndex, infSize);
 		}
 
 		//-----------------------------------------------
@@ -154,7 +154,7 @@ namespace ChilliSource
 		///
 		/// @param Unified Vector
 		//-----------------------------------------------
-		void CWebViewActivity::SetSize(const Core::UnifiedVector2 & invSize)
+		void WebViewActivity::SetSize(const Core::UnifiedVector2 & invSize)
 		{
 			mvUnifiedSize = invSize;
 		}
@@ -165,12 +165,12 @@ namespace ChilliSource
 		///
 		/// return Unified Vector of size
 		//-----------------------------------------------
-		Core::UnifiedVector2 CWebViewActivity::GetSize() const
+		Core::UnifiedVector2 WebViewActivity::GetSize() const
 		{
 			return mvUnifiedSize;
 		}
 
-		void CWebViewActivity::OnWebViewDismissed(u32 inudwIndex)
+		void WebViewActivity::OnWebViewDismissed(u32 inudwIndex)
 		{
 			MapIndexToWebViewItr pIndex = CWebViewActivity::mmapIndexToWebView.find(inudwIndex);
 			if(pIndex != CWebViewActivity::mmapIndexToWebView.end())

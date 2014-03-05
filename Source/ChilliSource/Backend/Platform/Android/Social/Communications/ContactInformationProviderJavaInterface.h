@@ -20,7 +20,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class SCContactInformationProviderJavaInterface : public _IJavaInterface
+		class ContactInformationProviderJavaInterface : public _IJavaInterface
 		{
 		public:
 			//--------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ namespace ChilliSource
 
 			static std::vector<Social::ContactRecord> CreateContacts();
 
-			static CContactInformationProvider * mpContactProvider;
+			static ContactInformationProvider * mpContactProvider;
 		};
 
 	}

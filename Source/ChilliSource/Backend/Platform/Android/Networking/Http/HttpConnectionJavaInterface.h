@@ -45,7 +45,7 @@ namespace ChilliSource
 			k_post
 		};
 
-		class SCHttpConnectionJavaInterface : public _IJavaInterface
+		class HttpConnectionJavaInterface : public _IJavaInterface
 		{
 		public:
 			//--------------------------------------------------------------------------------------

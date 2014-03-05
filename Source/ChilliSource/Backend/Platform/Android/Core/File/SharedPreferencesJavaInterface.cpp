@@ -17,21 +17,21 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		/// Setup Java Interface
 		//--------------------------------------------------------------------------------------
-		void SCSharedPreferencesJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
+		void SharedPreferencesJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
 		{
 			mspJavaVM = inpJavaVM;
 
 			//Setup Java calls
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CSharedPreferencesNativeInterface","KeyExists", "(Ljava/lang/String;Ljava/lang/String;)Z");
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CSharedPreferencesNativeInterface","GetString", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CSharedPreferencesNativeInterface","SetString", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CSharedPreferencesNativeInterface","GetBoolean", "(Ljava/lang/String;Ljava/lang/String;Z)Z");
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CSharedPreferencesNativeInterface","SetBoolean", "(Ljava/lang/String;Ljava/lang/String;Z)V");
+			InitCallableStaticMethod("com/chillisource/core/SharedPreferencesNativeInterface","KeyExists", "(Ljava/lang/String;Ljava/lang/String;)Z");
+			InitCallableStaticMethod("com/chillisource/core/SharedPreferencesNativeInterface","GetString", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;");
+			InitCallableStaticMethod("com/chillisource/core/SharedPreferencesNativeInterface","SetString", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+			InitCallableStaticMethod("com/chillisource/core/SharedPreferencesNativeInterface","GetBoolean", "(Ljava/lang/String;Ljava/lang/String;Z)Z");
+			InitCallableStaticMethod("com/chillisource/core/SharedPreferencesNativeInterface","SetBoolean", "(Ljava/lang/String;Ljava/lang/String;Z)V");
 		}
 		//-------------------------------------------------------------------
 		/// Key Exists
 		//-------------------------------------------------------------------
-		bool SCSharedPreferencesJavaInterface::KeyExists(std::string instrName, std::string instrKey)
+		bool SharedPreferencesJavaInterface::KeyExists(std::string instrName, std::string instrKey)
 		{
 			bool strOutput = false;
 			MethodReference sdMethodRef = GetStaticMethodReference("KeyExists");
@@ -54,7 +54,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------
 		/// Get String
 		//-------------------------------------------------------------------
-		std::string SCSharedPreferencesJavaInterface::GetString(std::string instrName, std::string instrKey, std::string instrDefaultValue)
+		std::string SharedPreferencesJavaInterface::GetString(std::string instrName, std::string instrKey, std::string instrDefaultValue)
 		{
 			std::string strOutput = instrDefaultValue;
 			MethodReference sdMethodRef = GetStaticMethodReference("GetString");
@@ -83,7 +83,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------
 		/// Set String
 		//-------------------------------------------------------------------
-		void SCSharedPreferencesJavaInterface::SetString(std::string instrName, std::string instrKey, std::string instrValue)
+		void SharedPreferencesJavaInterface::SetString(std::string instrName, std::string instrKey, std::string instrValue)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("SetString");
 			if (sdMethodRef.mMethodID != 0 && sdMethodRef.mClassID != 0)
@@ -106,7 +106,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------
 		/// Get Boolean
 		//-------------------------------------------------------------------
-		bool SCSharedPreferencesJavaInterface::GetBoolean(std::string instrName, std::string instrKey, bool inbDefaultValue)
+		bool SharedPreferencesJavaInterface::GetBoolean(std::string instrName, std::string instrKey, bool inbDefaultValue)
 		{
 			bool bOutput = inbDefaultValue;
 			MethodReference sdMethodRef = GetStaticMethodReference("GetBoolean");
@@ -129,7 +129,7 @@ namespace ChilliSource
 		//-------------------------------------------------------------------
 		/// Set Boolean
 		//-------------------------------------------------------------------
-		void SCSharedPreferencesJavaInterface::SetBoolean(std::string instrName, std::string instrKey, bool inbValue)
+		void SharedPreferencesJavaInterface::SetBoolean(std::string instrName, std::string instrKey, bool inbValue)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("SetBoolean");
 			if (sdMethodRef.mMethodID != 0 && sdMethodRef.mClassID != 0)
@@ -147,6 +147,5 @@ namespace ChilliSource
 				env->DeleteLocalRef(jstrKey);
 			}
 		}
-
 	}
 }

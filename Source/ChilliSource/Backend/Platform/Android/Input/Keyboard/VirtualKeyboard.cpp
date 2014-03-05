@@ -20,23 +20,23 @@ namespace ChilliSource
 		//-------------------------------------------
 		/// Constructor
 		//-------------------------------------------
-		CVirtualKeyboard::CVirtualKeyboard()
+		VirtualKeyboard::VirtualKeyboard()
 		{
-			mpKeyboardJavaInterface = CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CKeyboardJavaInterface>();
+			mpKeyboardJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<KeyboardJavaInterface>();
 			if (mpKeyboardJavaInterface == NULL)
 			{
-				mpKeyboardJavaInterface = KeyboardJavaInterfacePtr(new CKeyboardJavaInterface());
-				CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpKeyboardJavaInterface);
+				mpKeyboardJavaInterface = KeyboardJavaInterfacePtr(new KeyboardJavaInterface());
+				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpKeyboardJavaInterface);
 			}
 
-			mpKeyboardJavaInterface->SetTextAddedDelegate(Core::MakeDelegate(this, &CVirtualKeyboard::OnTextAdded));
-			mpKeyboardJavaInterface->SetTextDeletedDelegate(Core::MakeDelegate(this, &CVirtualKeyboard::OnTextDeleted));
-			mpKeyboardJavaInterface->SetKeyboardDismissedDelegate(Core::MakeDelegate(this, &CVirtualKeyboard::OnKeyboardDismissed));
+			mpKeyboardJavaInterface->SetTextAddedDelegate(Core::MakeDelegate(this, &VirtualKeyboard::OnTextAdded));
+			mpKeyboardJavaInterface->SetTextDeletedDelegate(Core::MakeDelegate(this, &VirtualKeyboard::OnTextDeleted));
+			mpKeyboardJavaInterface->SetKeyboardDismissedDelegate(Core::MakeDelegate(this, &VirtualKeyboard::OnKeyboardDismissed));
 		}
 		//-------------------------------------------
 		/// Show
 		//-------------------------------------------
-		void CVirtualKeyboard::Show()
+		void VirtualKeyboard::Show()
 		{
 			if(!mbIsActive)
 			{
@@ -51,7 +51,7 @@ namespace ChilliSource
 		//-------------------------------------------
 		/// Hide
 		//-------------------------------------------
-		void CVirtualKeyboard::Hide()
+		void VirtualKeyboard::Hide()
 		{
 			if(mbIsActive)
 			{
@@ -67,28 +67,28 @@ namespace ChilliSource
 		//-------------------------------------------
 		/// Set Keyboard Type
 		//-------------------------------------------
-        void CVirtualKeyboard::SetKeyboardType(Input::KeyboardType ineKeyboardType)
+        void VirtualKeyboard::SetKeyboardType(Input::KeyboardType ineKeyboardType)
         {
         	mpKeyboardJavaInterface->SetKeyboardType(ineKeyboardType);
         }
 		//-------------------------------------------
 		/// Set Capitalisation Method
 		//-------------------------------------------
-        void CVirtualKeyboard::SetCapitalisationMethod(Input::KeyboardCapitalisation ineKeyboardCapitalisation)
+        void VirtualKeyboard::SetCapitalisationMethod(Input::KeyboardCapitalisation ineKeyboardCapitalisation)
         {
         	mpKeyboardJavaInterface->SetCapitalisationMethod(ineKeyboardCapitalisation);
         }
 		//-------------------------------------------
 		/// Set Text
 		//-------------------------------------------
-		void CVirtualKeyboard::SetText(const Core::UTF8String& instrText)
+		void VirtualKeyboard::SetText(const Core::UTF8String& instrText)
 		{
 			mstrText = instrText;
 		}
 		//-------------------------------------------
 		/// On Text Added
 		//-------------------------------------------
-		void CVirtualKeyboard::OnTextAdded(const Core::UTF8String& instrText)
+		void VirtualKeyboard::OnTextAdded(const Core::UTF8String& instrText)
 		{
 			Core::UTF8String strNewText = mstrText + instrText;
 
@@ -103,7 +103,7 @@ namespace ChilliSource
 		//-------------------------------------------
 		/// On Text Deleted
 		//-------------------------------------------
-		void CVirtualKeyboard::OnTextDeleted()
+		void VirtualKeyboard::OnTextDeleted()
 		{
 			Core::UTF8String strNewText = mstrText;
 			if (strNewText.size() > 0)
@@ -122,7 +122,7 @@ namespace ChilliSource
 		//-------------------------------------------
 		/// On Keyboard Dismissed
 		//-------------------------------------------
-		void CVirtualKeyboard::OnKeyboardDismissed()
+		void VirtualKeyboard::OnKeyboardDismissed()
 		{
 			if(mbIsActive)
 			{
@@ -137,7 +137,7 @@ namespace ChilliSource
 		//--------------------------------------------
 		/// Destructor
 		//--------------------------------------------
-		CVirtualKeyboard::~CVirtualKeyboard()
+		VirtualKeyboard::~VirtualKeyboard()
 		{
 			mpKeyboardJavaInterface->SetTextAddedDelegate(NULL);
 			mpKeyboardJavaInterface->SetTextDeletedDelegate(NULL);

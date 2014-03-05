@@ -17,10 +17,10 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CTwitterAuthenticationActivity : public Social::TwitterAuthenticationActivity
+		class TwitterAuthenticationActivity : public Social::TwitterAuthenticationActivity
 		{
 		public:
-			CTwitterAuthenticationActivity();
+			TwitterAuthenticationActivity();
 			//-----------------------------------------------
 			/// Present
 			/// 

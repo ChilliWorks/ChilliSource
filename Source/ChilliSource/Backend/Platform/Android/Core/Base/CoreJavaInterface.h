@@ -25,14 +25,14 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CCoreJavaInterface : public IJavaInterface
+		class CoreJavaInterface : public IJavaInterface
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE();
 			//--------------------------------------------------------------------------------------
 			/// Constructor
 			//--------------------------------------------------------------------------------------
-			CCoreJavaInterface();
+			CoreJavaInterface();
 			//--------------------------------------------------------------------------------------
 			/// Is A
 			///
