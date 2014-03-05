@@ -107,9 +107,6 @@ namespace ChilliSource
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-			//rebuild the default texture
-			CreateDefaultTexture();
-
 			for(std::vector<Rendering::TextureWPtr>::iterator it = mapTextureCache.begin(); it != mapTextureCache.end(); ++it)
 			{
 				if (Rendering::TextureSPtr pTexture = (*it).lock())
@@ -149,6 +146,9 @@ namespace ChilliSource
 					}
 				}
 			}
+            
+            //rebuild the default texture
+			CreateDefaultTexture();
 
 			mapBackedUpImages.clear();
 #endif
