@@ -15,7 +15,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class SCWebViewJavaInterface : public _IJavaInterface
+		class WebViewJavaInterface : public _IJavaInterface
 		{
 		public:
 			//--------------------------------------------------------------------------------------

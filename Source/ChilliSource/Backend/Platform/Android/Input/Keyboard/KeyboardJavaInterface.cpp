@@ -19,9 +19,9 @@
 //-----------------------------------------------
 extern "C"
 {
-	void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnTextAdded(JNIEnv* inpEnv, jobject inThis, jstring injstrText);
-	void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnTextDeleted(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnKeyboardDismissed(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextAdded(JNIEnv* inpEnv, jobject inThis, jstring injstrText);
+	void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextDeleted(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnKeyboardDismissed(JNIEnv* inpEnv, jobject inThis);
 }
 //-----------------------------------------------
 /// Native On Text Added
@@ -33,13 +33,13 @@ extern "C"
 /// @param The java object calling the function.
 /// @param The additional text.
 //-----------------------------------------------
-void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnTextAdded(JNIEnv* inpEnv, jobject inThis, jstring injstrText)
+void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextAdded(JNIEnv* inpEnv, jobject inThis, jstring injstrText)
 {
-	ChilliSource::Android::KeyboardJavaInterfacePtr pKeyboardJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CKeyboardJavaInterface>();
+	ChilliSource::Android::KeyboardJavaInterfacePtr pKeyboardJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::KeyboardJavaInterface>();
 	if (pKeyboardJI != NULL)
 	{
 		CSCore::UTF8String strText = ChilliSource::Android::JavaInterfaceUtils::CreateUTF8StringFromJString(injstrText);
-		CSCore::Task<const CSCore::UTF8String&> task(pKeyboardJI.get(), &ChilliSource::Android::CKeyboardJavaInterface::OnTextAdded, strText);
+		CSCore::Task<const CSCore::UTF8String&> task(pKeyboardJI.get(), &ChilliSource::Android::KeyboardJavaInterface::OnTextAdded, strText);
 		CSCore::TaskScheduler::ScheduleMainThreadTask(task);
 	}
 	inpEnv->DeleteLocalRef(injstrText);
@@ -53,12 +53,12 @@ void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnTextAdded(J
 /// @param The jni environment.
 /// @param The java object calling the function.
 //-----------------------------------------------
-void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnTextDeleted(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextDeleted(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Android::KeyboardJavaInterfacePtr pKeyboardJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CKeyboardJavaInterface>();
+	ChilliSource::Android::KeyboardJavaInterfacePtr pKeyboardJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::KeyboardJavaInterface>();
 	if (pKeyboardJI != NULL)
 	{
-		CSCore::Task<> task(pKeyboardJI.get(), &ChilliSource::Android::CKeyboardJavaInterface::OnTextDeleted);
+		CSCore::Task<> task(pKeyboardJI.get(), &ChilliSource::Android::KeyboardJavaInterface::OnTextDeleted);
 		CSCore::TaskScheduler::ScheduleMainThreadTask(task);
 	}
 }
@@ -70,12 +70,12 @@ void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnTextDeleted
 /// @param The jni environment.
 /// @param The java object calling the function.
 //-----------------------------------------------
-void Java_com_taggames_moflow_input_CKeyboardNativeInterface_NativeOnKeyboardDismissed(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnKeyboardDismissed(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Android::KeyboardJavaInterfacePtr pKeyboardJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CKeyboardJavaInterface>();
+	ChilliSource::Android::KeyboardJavaInterfacePtr pKeyboardJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::KeyboardJavaInterface>();
 	if (pKeyboardJI != NULL)
 	{
-		CSCore::Task<> task(pKeyboardJI.get(), &ChilliSource::Android::CKeyboardJavaInterface::OnKeyboardDismissed);
+		CSCore::Task<> task(pKeyboardJI.get(), &ChilliSource::Android::KeyboardJavaInterface::OnKeyboardDismissed);
 		CSCore::TaskScheduler::ScheduleMainThreadTask(task);
 	}
 }
@@ -139,13 +139,13 @@ namespace ChilliSource
 			}
 		}
 
-		CS_DEFINE_NAMEDTYPE(CKeyboardJavaInterface);
+		CS_DEFINE_NAMEDTYPE(KeyboardJavaInterface);
 		//-----------------------------------------------
 		/// Constructor
 		//-----------------------------------------------
-		CKeyboardJavaInterface::CKeyboardJavaInterface()
+		KeyboardJavaInterface::KeyboardJavaInterface()
 		{
-			CreateNativeInterface("com/taggames/moflow/input/CKeyboardNativeInterface");
+			CreateNativeInterface("com/chillisource/input/KeyboardNativeInterface");
 			CreateMethodReference("Activate", "()V");
 			CreateMethodReference("Deactivate", "()V");
 			CreateMethodReference("SetKeyboardType", "(I)V");
@@ -154,69 +154,69 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// Is A
 		//-----------------------------------------------
-		bool CKeyboardJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool KeyboardJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (CKeyboardJavaInterface::InterfaceID == inInterfaceID);
+			return (KeyboardJavaInterface::InterfaceID == inInterfaceID);
 		}
 		//-----------------------------------------------
 		/// Set Text Added Delegate
 		//-----------------------------------------------
-		void CKeyboardJavaInterface::SetTextAddedDelegate(const TextAddedDelegate& inDelegate)
+		void KeyboardJavaInterface::SetTextAddedDelegate(const TextAddedDelegate& inDelegate)
 		{
 			mTextAddedDelegate = inDelegate;
 		}
 		//-----------------------------------------------
 		/// Set Text Deleted Delegate
 		//-----------------------------------------------
-		void CKeyboardJavaInterface::SetTextDeletedDelegate(const TextDeletedDelegate& inDelegate)
+		void KeyboardJavaInterface::SetTextDeletedDelegate(const TextDeletedDelegate& inDelegate)
 		{
 			mTextDeletedDelegate = inDelegate;
 		}
 		//-----------------------------------------------
 		/// Set Keyboard Dismissed Delegate
 		//-----------------------------------------------
-		void CKeyboardJavaInterface::SetKeyboardDismissedDelegate(const KeyboardDismissedDelegate& inDelegate)
+		void KeyboardJavaInterface::SetKeyboardDismissedDelegate(const KeyboardDismissedDelegate& inDelegate)
 		{
 			mKeyboardDismissedDelegate = inDelegate;
 		}
 		//-----------------------------------------------
 		/// Activate
 		//-----------------------------------------------
-		void CKeyboardJavaInterface::Activate()
+		void KeyboardJavaInterface::Activate()
 		{
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("Activate"));
 		}
 		//-----------------------------------------------
 		/// Deactivate
 		//-----------------------------------------------
-		void CKeyboardJavaInterface::Deactivate()
+		void KeyboardJavaInterface::Deactivate()
 		{
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("Deactivate"));
 		}
 		//-------------------------------------------
 		/// Set Keyboard Type
 		//-------------------------------------------
-        void CKeyboardJavaInterface::SetKeyboardType(Input::KeyboardType ineKeyboardType)
+        void KeyboardJavaInterface::SetKeyboardType(Input::KeyboardType ineKeyboardType)
         {
-        	JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+        	JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
         	s32 dwKeyboardType = KeyboardTypeToInteger(ineKeyboardType);
         	pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("SetKeyboardType"), dwKeyboardType);
         }
 		//-------------------------------------------
 		/// Set Capitalisation Method
 		//-------------------------------------------
-        void CKeyboardJavaInterface::SetCapitalisationMethod(Input::KeyboardCapitalisation ineKeyboardCapitalisation)
+        void KeyboardJavaInterface::SetCapitalisationMethod(Input::KeyboardCapitalisation ineKeyboardCapitalisation)
         {
-        	JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+        	JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
         	s32 dwKeyboardCapitalisation = KeyboardCapitalisationToInteger(ineKeyboardCapitalisation);
         	pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("SetCapitalisationMethod"), dwKeyboardCapitalisation);
         }
 		//-----------------------------------------------
 		/// On Text Added
 		//-----------------------------------------------
-		void CKeyboardJavaInterface::OnTextAdded(const Core::UTF8String& instrText)
+		void KeyboardJavaInterface::OnTextAdded(const Core::UTF8String& instrText)
 		{
 			if (mTextAddedDelegate != NULL)
 			{
@@ -226,7 +226,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// On Text Deleted
 		//-----------------------------------------------
-		void CKeyboardJavaInterface::OnTextDeleted()
+		void KeyboardJavaInterface::OnTextDeleted()
 		{
 			if (mTextDeletedDelegate != NULL)
 			{
@@ -236,7 +236,7 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// On Keyboard Dismissed
 		//-----------------------------------------------
-		void CKeyboardJavaInterface::OnKeyboardDismissed()
+		void KeyboardJavaInterface::OnKeyboardDismissed()
 		{
 			if (mKeyboardDismissedDelegate != NULL)
 			{

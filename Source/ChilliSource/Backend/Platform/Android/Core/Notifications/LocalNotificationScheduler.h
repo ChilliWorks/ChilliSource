@@ -17,11 +17,11 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CLocalNotificationScheduler : public Core::LocalNotificationScheduler
+		class LocalNotificationScheduler : public Core::LocalNotificationScheduler
 		{
 		public:
-			CLocalNotificationScheduler();
-			virtual ~CLocalNotificationScheduler();
+			LocalNotificationScheduler();
+			virtual ~LocalNotificationScheduler();
 			//------------------------------------------------------------------------------
 			/// Schedule Notification
 			///

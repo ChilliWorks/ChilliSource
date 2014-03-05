@@ -48,7 +48,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------------------------------
-		CPngImage::CPngImage()
+		PngImage::PngImage()
 		{
 			mbIsLoaded = false;
 			mdwHeight = -1;
@@ -59,7 +59,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------------------------------
-		CPngImage::CPngImage(Core::StorageLocation ineStorageLocation, std::string instrFilename)
+		PngImage::PngImage(Core::StorageLocation ineStorageLocation, std::string instrFilename)
 		{
 			mbIsLoaded = false;
 			mdwHeight = -1;
@@ -72,7 +72,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Destructor
 		//----------------------------------------------------------------------------------
-		CPngImage::~CPngImage()
+		PngImage::~PngImage()
 		{
 			if (mbIsLoaded == true)
 			{
@@ -82,7 +82,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Load
 		//----------------------------------------------------------------------------------
-		void CPngImage::Load(Core::StorageLocation ineStorageLocation, std::string instrFilename)
+		void PngImage::Load(Core::StorageLocation ineStorageLocation, std::string instrFilename)
 		{
 			//create the file stream
 			ChilliSource::Core::FileStreamSPtr stream = ChilliSource::Core::Application::GetFileSystemPtr()->CreateFileStream(ineStorageLocation, instrFilename, ChilliSource::Core::FileMode::k_readBinary);
@@ -106,7 +106,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Release
 		//----------------------------------------------------------------------------------
-		void CPngImage::Release(bool inReleaseImageData)
+		void PngImage::Release(bool inReleaseImageData)
 		{
 			if (mbIsLoaded != false)
 			{
@@ -121,42 +121,42 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Is Loaded
 		//----------------------------------------------------------------------------------
-		bool CPngImage::IsLoaded()
+		bool PngImage::IsLoaded()
 		{
 			return mbIsLoaded;
 		}
 		//----------------------------------------------------------------------------------
 		/// Get Height
 		//----------------------------------------------------------------------------------
-		s32 CPngImage::GetHeight()
+		s32 PngImage::GetHeight()
 		{
 			return mdwHeight;
 		}
 		//----------------------------------------------------------------------------------
 		/// Get Width
 		//----------------------------------------------------------------------------------
-		s32 CPngImage::GetWidth()
+		s32 PngImage::GetWidth()
 		{
 			return mdwWidth;
 		}
 		//----------------------------------------------------------------------------------
 		/// Get Image Data
 		//----------------------------------------------------------------------------------
-		u8 * CPngImage::GetImageData()
+		u8 * PngImage::GetImageData()
 		{
 			return mpData;
 		}
 		//----------------------------------------------------------------------------------
 		/// Get Image Format
 		//----------------------------------------------------------------------------------
-		Core::Image::Format CPngImage::GetImageFormat()
+		Core::Image::Format PngImage::GetImageFormat()
 		{
 			return meFormat;
 		}
 		//----------------------------------------------------------------------------------
 		/// Load with lib png
 		//----------------------------------------------------------------------------------
-		bool CPngImage::LoadWithLibPng(Core::FileStreamSPtr inStream)
+		bool PngImage::LoadWithLibPng(Core::FileStreamSPtr inStream)
 		{
 			//-------- Intialisation
 			//read the header to insure it is indeed a png
@@ -297,7 +297,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Convert Format From RGB888 To LUM8
 		//----------------------------------------------------------------------------------
-		void CPngImage::ConvertFormatFromRGB888ToLUM8()
+		void PngImage::ConvertFormatFromRGB888ToLUM8()
 		{
 			const u32 udwBytesPerPixel = 2;
 			u32 udwArea = mdwWidth * mdwHeight;
@@ -326,7 +326,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Convert Format From RGB8888 To LUMA88
 		//----------------------------------------------------------------------------------
-		void CPngImage::ConvertFormatFromRGB8888ToLUMA88()
+		void PngImage::ConvertFormatFromRGB8888ToLUMA88()
 		{
 			const u32 udwBytesPerPixel = 2;
 			u32 udwArea = mdwWidth * mdwHeight;
@@ -354,7 +354,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Convert Format From RGB888 To RGB565
 		//----------------------------------------------------------------------------------
-		void CPngImage::ConvertFormatFromRGB888ToRGB565()
+		void PngImage::ConvertFormatFromRGB888ToRGB565()
 		{
 			const u32 udwBytesPerPixel = 2;
 			u32 udwArea = mdwWidth * mdwHeight;
@@ -384,7 +384,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------------
 		/// Convert Format From RGBA8888 To RGBA4444
 		//----------------------------------------------------------------------------------
-		void CPngImage::ConvertFormatFromRGBA8888ToRGBA4444()
+		void PngImage::ConvertFormatFromRGBA8888ToRGBA4444()
 		{
 			const u32 udwBytesPerPixel = 2;
 			u32 udwArea = mdwWidth * mdwHeight;

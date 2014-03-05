@@ -15,16 +15,16 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CFacebookAuthenticationSystem;
-		class CFacebookPostSystem;
+		class FacebookAuthenticationSystem;
+		class FacebookPostSystem;
 
-		class CFacebookJavaInterface : public IJavaInterface
+		class FacebookJavaInterface : public IJavaInterface
 		{
 		public:
 
-			CFacebookJavaInterface();
+			FacebookJavaInterface();
 
-			CS_DECLARE_NAMEDTYPE(CFacebookJavaInterface);
+			CS_DECLARE_NAMEDTYPE(FacebookJavaInterface);
 			bool IsA(Core::InterfaceIDType inInterfaceID) const;
 
 			//--------------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ namespace ChilliSource
 			///
 			/// @param Auth system
 			//--------------------------------------------------------------------------------------
-			void SetAuthenticationSystem(CFacebookAuthenticationSystem* inpAuthSystem);
+			void SetAuthenticationSystem(FacebookAuthenticationSystem* inpAuthSystem);
 			//--------------------------------------------------------------------------------------
 			/// Set Post System
 			///
@@ -42,7 +42,7 @@ namespace ChilliSource
 			///
 			/// @param Post system
 			//--------------------------------------------------------------------------------------
-			void SetPostSystem(CFacebookPostSystem* inpPostSystem);
+			void SetPostSystem(FacebookPostSystem* inpPostSystem);
 			//--------------------------------------------------------------------------------------
 			/// Authenticate
 			///

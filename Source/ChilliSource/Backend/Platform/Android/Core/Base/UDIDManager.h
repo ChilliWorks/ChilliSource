@@ -22,11 +22,11 @@ namespace ChilliSource
 		/// Calculates, stores and manages a UDID for a
 		/// device
 		//==================================================
-		class CUDIDManager
+		class UDIDManager
 		{
 		public:
-			CUDIDManager();
-			virtual ~CUDIDManager();
+			UDIDManager();
+			virtual ~UDIDManager();
 			//-----------------------------------------
 			/// Get UDID
 			///

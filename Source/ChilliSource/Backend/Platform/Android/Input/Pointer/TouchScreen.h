@@ -22,11 +22,11 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CTouchScreen : public Input::TouchScreen
+		class TouchScreen : public Input::TouchScreen
 		{
 		public:
-			CTouchScreen();
-			~CTouchScreen();
+			TouchScreen();
+			~TouchScreen();
 			
 			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 

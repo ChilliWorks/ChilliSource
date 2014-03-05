@@ -20,11 +20,11 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CTwitterPostSystem: public Social::TwitterPostSystem
+		class TwitterPostSystem: public Social::TwitterPostSystem
 		{
 		public:
-			CTwitterPostSystem(Android::CHttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem);
-			~CTwitterPostSystem();
+			TwitterPostSystem(Android::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem);
+			~TwitterPostSystem();
             //------------------------------------------------------------------------
             /// Is A
             ///

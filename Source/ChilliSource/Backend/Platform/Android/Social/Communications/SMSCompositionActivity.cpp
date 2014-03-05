@@ -15,38 +15,29 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		Social::SMSCompositionActivity::SendResultDelegate CSMSCompositionActivity::mCallback;
+		Social::SMSCompositionActivity::SendResultDelegate SMSCompositionActivity::mCallback;
 
-		bool CSMSCompositionActivity::IsA(Core::InterfaceIDType inID) const
+		bool SMSCompositionActivity::IsA(Core::InterfaceIDType inID) const
 		{
-			return inID == CSMSCompositionActivity::InterfaceID || inID == Social::SMSCompositionActivity::InterfaceID;
+			return inID == SMSCompositionActivity::InterfaceID || inID == Social::SMSCompositionActivity::InterfaceID;
 		}
 
-		bool CSMSCompositionActivity::SupportedByDevice()
+		bool SMSCompositionActivity::SupportedByDevice()
 		{
 			return true;
 		}
-
-		CSMSCompositionActivity::CSMSCompositionActivity()
-		{
-
-		}
-		CSMSCompositionActivity::~CSMSCompositionActivity()
-		{
-
-		}
-		void CSMSCompositionActivity::Present(const std::vector<Core::UTF8String> & inastrRecipientNumbers, const Core::UTF8String & instrContents, const SendResultDelegate & inCallback)
+		void SMSCompositionActivity::Present(const std::vector<Core::UTF8String> & inastrRecipientNumbers, const Core::UTF8String & instrContents, const SendResultDelegate & inCallback)
 		{
 			mCallback = inCallback;
-			SCSMSCompositionJavaInterface::Present(inastrRecipientNumbers,instrContents);
+			SMSCompositionJavaInterface::Present(inastrRecipientNumbers,instrContents);
 		}
-		void CSMSCompositionActivity::Dismiss()
+		void SMSCompositionActivity::Dismiss()
 		{
 			//TODO: Should this be commented back in?
-			//SCEmailCompositionJavaInterface::Dismiss();
+			//EmailCompositionJavaInterface::Dismiss();
 		}
 
-		void CSMSCompositionActivity::OnSMSClosed()
+		void SMSCompositionActivity::OnSMSClosed()
 		{
 			if(mCallback)
 				mCallback(SMSCompositionActivity::SendResult::k_succeed);

@@ -15,15 +15,12 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CSMSCompositionActivity: public Social::SMSCompositionActivity
+		class SMSCompositionActivity: public Social::SMSCompositionActivity
 		{
 		public:
 			virtual bool IsA(Core::InterfaceIDType inID) const override;
 
 			static bool SupportedByDevice();
-
-			CSMSCompositionActivity();
-			~CSMSCompositionActivity();
 
 			void Present(const std::vector<Core::UTF8String> & inastrRecipientNumberss, //Vector of email addresses
 								const Core::UTF8String & instrContents, //Content as HTML

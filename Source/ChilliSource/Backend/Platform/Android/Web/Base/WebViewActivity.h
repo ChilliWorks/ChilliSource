@@ -20,10 +20,10 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CWebViewActivity: public Web::WebViewActivity
+		class WebViewActivity: public Web::WebViewActivity
 		{
 		public:
-			CWebViewActivity();
+			WebViewActivity();
 
 			//-----------------------------------------------
 			/// Present
@@ -97,7 +97,7 @@ namespace ChilliSource
 			static u32 msudwCurrentIndex;
 			u32 mudwIndex;
 
-			typedef std::unordered_map<u32, CWebViewActivity*> MapIndexToWebView;
+			typedef std::unordered_map<u32, WebViewActivity*> MapIndexToWebView;
 			typedef MapIndexToWebView::iterator MapIndexToWebViewItr;
 
 			static MapIndexToWebView mmapIndexToWebView;

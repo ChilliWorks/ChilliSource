@@ -16,22 +16,22 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		CTouchScreen::CTouchScreen()
+		TouchScreen::TouchScreen()
 		{
-			ChilliSource::Android::SCTouchInputJavaInterface::RegisterTouchScreen(this);
+			ChilliSource::Android::TouchInputJavaInterface::RegisterTouchScreen(this);
 		}
-		CTouchScreen::~CTouchScreen()
+		TouchScreen::~TouchScreen()
 		{
-			ChilliSource::Android::SCTouchInputJavaInterface::RegisterTouchScreen(NULL);
+			ChilliSource::Android::TouchInputJavaInterface::RegisterTouchScreen(NULL);
 		}
-		bool CTouchScreen::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool TouchScreen::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == Input::TouchScreen::InterfaceID;
 		}
 		//---------------------------------------------------------------------
 		/// On Touch Began
 		//---------------------------------------------------------------------
-		void CTouchScreen::OnTouchBegan(s32 indwID, f32 infX, f32 infY)
+		void TouchScreen::OnTouchBegan(s32 indwID, f32 infX, f32 infY)
 		{
 			//Grab the touch location from the OS
 			size_t InternalEventID = StartTouch(Core::Vector2(infX, infY), mffLastTimeStamp);
@@ -40,7 +40,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		/// On Touch Moved
 		//---------------------------------------------------------------------
-		void CTouchScreen::OnTouchMoved(s32 indwID, f32 infX, f32 infY)
+		void TouchScreen::OnTouchMoved(s32 indwID, f32 infX, f32 infY)
 		{
 			MapNativeTouchToID::iterator pKey =  mMapNativeTouchesToID.find(indwID);
 
@@ -52,7 +52,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------------
 		/// On Touch Ended
 		//---------------------------------------------------------------------
-		void CTouchScreen::OnTouchEnded(s32 indwID, f32 infX, f32 infY)
+		void TouchScreen::OnTouchEnded(s32 indwID, f32 infX, f32 infY)
 		{
 			MapNativeTouchToID::iterator pKey =  mMapNativeTouchesToID.find(indwID);
 

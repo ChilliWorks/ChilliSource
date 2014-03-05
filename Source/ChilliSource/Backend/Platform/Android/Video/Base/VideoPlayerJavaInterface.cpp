@@ -20,9 +20,9 @@
 //------------------------------------------
 extern "C"
 {
-	void Java_com_taggames_moflow_nativeinterface_CVideoPlayerNativeInterface_Dismissed(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_taggames_moflow_nativeinterface_CVideoPlayerNativeInterface_Stopped(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_taggames_moflow_nativeinterface_CVideoPlayerNativeInterface_UpdateSubtitles(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_video_VideoPlayerNativeInterface_Dismissed(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_video_VideoPlayerNativeInterface_Stopped(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_video_VideoPlayerNativeInterface_UpdateSubtitles(JNIEnv* inpEnv, jobject inThis);
 }
 //-------------------------------------------
 /// Dismissed
@@ -32,9 +32,9 @@ extern "C"
 /// @param The jni environment.
 /// @param The java object calling the function.
 //-------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CVideoPlayerNativeInterface_Dismissed(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_video_VideoPlayerNativeInterface_Dismissed(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Android::VideoPlayerJavaInterfacePtr pVideoPJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CVideoPlayerJavaInterface>();
+	ChilliSource::Android::VideoPlayerJavaInterfacePtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
 	if (pVideoPJI != NULL)
 		pVideoPJI->Dismissed();
 }
@@ -46,9 +46,9 @@ void Java_com_taggames_moflow_nativeinterface_CVideoPlayerNativeInterface_Dismis
 /// @param The jni environment.
 /// @param The java object calling the function.
 //-------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CVideoPlayerNativeInterface_Stopped(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_video_VideoPlayerNativeInterface_Stopped(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Android::VideoPlayerJavaInterfacePtr pVideoPJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CVideoPlayerJavaInterface>();
+	ChilliSource::Android::VideoPlayerJavaInterfacePtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
 	if (pVideoPJI != NULL)
 		pVideoPJI->Stopped();
 }
@@ -61,9 +61,9 @@ void Java_com_taggames_moflow_nativeinterface_CVideoPlayerNativeInterface_Stoppe
 /// @param The jni environment.
 /// @param The java object calling the function.
 //-------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CVideoPlayerNativeInterface_UpdateSubtitles(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_video_VideoPlayerNativeInterface_UpdateSubtitles(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Android::VideoPlayerJavaInterfacePtr pVideoPJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CVideoPlayerJavaInterface>();
+	ChilliSource::Android::VideoPlayerJavaInterfacePtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
 	if (pVideoPJI != NULL)
 		pVideoPJI->UpdateSubtitles();
 }
@@ -72,13 +72,13 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		CS_DEFINE_NAMEDTYPE(CVideoPlayerJavaInterface);
+		CS_DEFINE_NAMEDTYPE(VideoPlayerJavaInterface);
 		//--------------------------------------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------------------------------------
-		CVideoPlayerJavaInterface::CVideoPlayerJavaInterface()
+		VideoPlayerJavaInterface::VideoPlayerJavaInterface()
 		{
-			CreateNativeInterface("com/taggames/moflow/nativeinterface/CVideoPlayerNativeInterface");
+			CreateNativeInterface("com/chillisource/video/VideoPlayerNativeInterface");
 			CreateMethodReference("Present", "(ZLjava/lang/String;ZZFFFF)V");
 			CreateMethodReference("IsPlaying", "()Z");
 			CreateMethodReference("GetDuration", "()F");
@@ -91,21 +91,21 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		/// Is A
 		//--------------------------------------------------------------------------------------
-		bool CVideoPlayerJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool VideoPlayerJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == CVideoPlayerJavaInterface::InterfaceID);
+			return (inInterfaceID == VideoPlayerJavaInterface::InterfaceID);
 		}
 		//--------------------------------------------------------------
 		/// Set Update Subtitles Delegate
 		//--------------------------------------------------------------
-		void CVideoPlayerJavaInterface::SetUpdateSubtitlesDelegate(OnUpdateSubtitlesDelegate inDelegate)
+		void VideoPlayerJavaInterface::SetUpdateSubtitlesDelegate(OnUpdateSubtitlesDelegate inDelegate)
 		{
 			mUpdateSubtitlesDelegate = inDelegate;
 		}
 		//--------------------------------------------------------------
 		/// Present
 		//--------------------------------------------------------------
-		void CVideoPlayerJavaInterface::Present(bool inbInAPK, std::string instrFilename, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour,
+		void VideoPlayerJavaInterface::Present(bool inbInAPK, std::string instrFilename, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour,
 												const OnVideoDismissedDelegate& inDismissedDelegate, const OnVideoStoppedDelegate& inStoppedDelegate)
 		{
 			mVideoDismissedDelegate = inDismissedDelegate;
@@ -117,7 +117,7 @@ namespace ChilliSource
 				bHasSubtitles = true;
 			}
 
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrFilename = JavaInterfaceUtils::CreateJStringFromSTDString(instrFilename);
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("Present"), inbInAPK, jstrFilename, inbCanDismissWithTap, bHasSubtitles, inBackgroundColour.r, inBackgroundColour.g, inBackgroundColour.b, inBackgroundColour.a);
 			pEnv->DeleteLocalRef(jstrFilename);
@@ -125,39 +125,39 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Is Playing
 		//--------------------------------------------------------------
-		bool CVideoPlayerJavaInterface::IsPlaying()
+		bool VideoPlayerJavaInterface::IsPlaying()
 		{
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			return pEnv->CallBooleanMethod(GetJavaObject(), GetMethodID("IsPlaying"));
 		}
 		//--------------------------------------------------------------
 		/// Get Duration
 		//--------------------------------------------------------------
-		float CVideoPlayerJavaInterface::GetDuration()
+		float VideoPlayerJavaInterface::GetDuration()
 		{
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			return pEnv->CallFloatMethod(GetJavaObject(), GetMethodID("GetDuration"));
 		}
 		//--------------------------------------------------------------
 		/// Get Time
 		//--------------------------------------------------------------
-		float CVideoPlayerJavaInterface::GetTime()
+		float VideoPlayerJavaInterface::GetTime()
 		{
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			return pEnv->CallFloatMethod(GetJavaObject(), GetMethodID("GetTime"));
 		}
 		//--------------------------------------------------------------
 		/// Dismiss
 		//--------------------------------------------------------------
-		void CVideoPlayerJavaInterface::Dismiss()
+		void VideoPlayerJavaInterface::Dismiss()
 		{
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("Dismiss"));
 		}
 		//--------------------------------------------------------------
 		/// Dismissed
 		//--------------------------------------------------------------
-		void CVideoPlayerJavaInterface::Dismissed()
+		void VideoPlayerJavaInterface::Dismissed()
 		{
 			if (mVideoDismissedDelegate != NULL)
 			{
@@ -168,7 +168,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Stopped
 		//--------------------------------------------------------------
-		void CVideoPlayerJavaInterface::Stopped()
+		void VideoPlayerJavaInterface::Stopped()
 		{
 			if (mVideoStoppedDelegate != NULL)
 			{
@@ -181,9 +181,9 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Create Subtitle
 		//--------------------------------------------------------------
-		s64 CVideoPlayerJavaInterface::CreateSubtitle(const Core::UTF8String& inText, const std::string& instrFontName, u32 inudwFontSize, const std::string& instrAlignment, f32 infX, f32 infY, f32 infWidth, f32 infHeight)
+		s64 VideoPlayerJavaInterface::CreateSubtitle(const Core::UTF8String& inText, const std::string& instrFontName, u32 inudwFontSize, const std::string& instrAlignment, f32 infX, f32 infY, f32 infWidth, f32 infHeight)
 		{
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrText = JavaInterfaceUtils::CreateJStringFromUTF8String(inText);
 			jstring jstrFontName = JavaInterfaceUtils::CreateJStringFromSTDString(instrFontName);
 			jstring jstrAlignment = JavaInterfaceUtils::CreateJStringFromSTDString(instrAlignment);
@@ -196,23 +196,23 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Set Subtitle Colour
 		//--------------------------------------------------------------
-		void CVideoPlayerJavaInterface::SetSubtitleColour(s64 inlwSubtitleID, f32 infR, f32 infG, f32 infB, f32 infA)
+		void VideoPlayerJavaInterface::SetSubtitleColour(s64 inlwSubtitleID, f32 infR, f32 infG, f32 infB, f32 infA)
 		{
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("SetSubtitleColour"), inlwSubtitleID, infR, infG, infB, infA);
 		}
 		//--------------------------------------------------------------
 		/// Remove Subtitle
 		//--------------------------------------------------------------
-		void CVideoPlayerJavaInterface::RemoveSubtitle(s64 inlwSubtitleID)
+		void VideoPlayerJavaInterface::RemoveSubtitle(s64 inlwSubtitleID)
 		{
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("RemoveSubtitle"), inlwSubtitleID);
 		}
 		//--------------------------------------------------------------
 		/// Update Subtitles
 		//--------------------------------------------------------------
-		void CVideoPlayerJavaInterface::UpdateSubtitles()
+		void VideoPlayerJavaInterface::UpdateSubtitles()
 		{
 			if (mUpdateSubtitlesDelegate != NULL)
 			{

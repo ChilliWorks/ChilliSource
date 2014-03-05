@@ -46,7 +46,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// Constructor
         //---------------------------------------------------------------
-		CGooglePlayIAPSystem::CGooglePlayIAPSystem(const Core::ParamDictionary& inParams)
+		GooglePlayIAPSystem::GooglePlayIAPSystem(const Core::ParamDictionary& inParams)
 		{
 			std::string strPublicKey = "";
 			if (inParams.HasValue(kstrGooglePlayPublicKeyKey) == true)
@@ -54,62 +54,62 @@ namespace ChilliSource
 				strPublicKey = inParams.ValueForKey(kstrGooglePlayPublicKeyKey);
 			}
 
-    		mpJavaInterface = GooglePlayIAPJavaInterfacePtr(new CGooglePlayIAPJavaInterface(strPublicKey));
-	        ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
+    		mpJavaInterface = GooglePlayIAPJavaInterfacePtr(new GooglePlayIAPJavaInterface(strPublicKey));
+	        ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
 		}
         //---------------------------------------------------------------
         /// Register Products
         //---------------------------------------------------------------
-        void CGooglePlayIAPSystem::RegisterProducts(const std::vector<Networking::IAPProductRegInfo>& inaProducts)
+        void GooglePlayIAPSystem::RegisterProducts(const std::vector<Networking::IAPProductRegInfo>& inaProducts)
         {
             mProductRegInfos = inaProducts;
         }
         //---------------------------------------------------------------
 		/// Get Provider ID
         //---------------------------------------------------------------
-		std::string CGooglePlayIAPSystem::GetProviderID() const
+		std::string GooglePlayIAPSystem::GetProviderID() const
 		{
 			return "GooglePlayV3";
 		}
         //---------------------------------------------------------------
 		/// Get Provider Name
         //---------------------------------------------------------------
-		std::string CGooglePlayIAPSystem::GetProviderName() const
+		std::string GooglePlayIAPSystem::GetProviderName() const
 		{
 			return "PlayStoreV3";
 		}
         //---------------------------------------------------------------
 		/// Is Purchasing Enabled
         //---------------------------------------------------------------
-        bool CGooglePlayIAPSystem::IsPurchasingEnabled()
+        bool GooglePlayIAPSystem::IsPurchasingEnabled()
         {
         	return mpJavaInterface->IsPurchasingEnabled();
         }
         //---------------------------------------------------------------
 		/// Start Listening For Transaction Updates
         //---------------------------------------------------------------
-        void CGooglePlayIAPSystem::StartListeningForTransactionUpdates(const Networking::IAPTransactionDelegate& inRequestDelegate)
+        void GooglePlayIAPSystem::StartListeningForTransactionUpdates(const Networking::IAPTransactionDelegate& inRequestDelegate)
         {
         	mpJavaInterface->StartListeningForTransactionUpdates(inRequestDelegate);
         }
         //---------------------------------------------------------------
 		/// Stop Listening For Transaction Updates
         //---------------------------------------------------------------
-        void CGooglePlayIAPSystem::StopListeningForTransactionUpdates()
+        void GooglePlayIAPSystem::StopListeningForTransactionUpdates()
         {
         	mpJavaInterface->StopListeningForTransactionUpdates();
         }
         //---------------------------------------------------------------
 		/// Request Product Descriptions
         //---------------------------------------------------------------
-        void CGooglePlayIAPSystem::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void GooglePlayIAPSystem::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
         	mpJavaInterface->RequestProductDescriptions(inaProductIDs, inRequestDelegate);
         }
         //---------------------------------------------------------------
         /// Request All Product Descriptions
         //---------------------------------------------------------------
-        void CGooglePlayIAPSystem::RequestAllProductDescriptions(const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void GooglePlayIAPSystem::RequestAllProductDescriptions(const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
             std::vector<std::string> aIDs;
             aIDs.reserve(mProductRegInfos.size());
@@ -124,14 +124,14 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// Cancel Product Descriptions Request
         //---------------------------------------------------------------
-        void CGooglePlayIAPSystem::CancelProductDescriptionsRequest()
+        void GooglePlayIAPSystem::CancelProductDescriptionsRequest()
         {
         	mpJavaInterface->CancelProductDescriptionsRequest();
         }
         //---------------------------------------------------------------
 		/// Request Product Purchase
         //---------------------------------------------------------------
-        void CGooglePlayIAPSystem::RequestProductPurchase(const std::string& instrProductID)
+        void GooglePlayIAPSystem::RequestProductPurchase(const std::string& instrProductID)
         {
         	Networking::IAPProductRegInfo::Type eType;
         	if(!TryGetRegisteredProductType(mProductRegInfos, instrProductID, eType))
@@ -145,14 +145,14 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// Close Transactione
         //---------------------------------------------------------------
-        void CGooglePlayIAPSystem::CloseTransaction(const Networking::IAPTransactionPtr& inpTransaction, const Networking::IAPTransactionCloseDelegate& inDelegate)
+        void GooglePlayIAPSystem::CloseTransaction(const Networking::IAPTransactionPtr& inpTransaction, const Networking::IAPTransactionCloseDelegate& inDelegate)
         {
         	 mpJavaInterface->CloseTransaction(inpTransaction->strProductID, inpTransaction->strTransactionID, inDelegate);
         }
         //---------------------------------------------------------------
 		/// Restore Managed Purchases
         //---------------------------------------------------------------
-        void CGooglePlayIAPSystem::RestoreManagedPurchases()
+        void GooglePlayIAPSystem::RestoreManagedPurchases()
         {
         	mpJavaInterface->RestoreManagedPurchases();
         }

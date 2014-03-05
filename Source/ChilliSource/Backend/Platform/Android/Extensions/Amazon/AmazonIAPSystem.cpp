@@ -43,9 +43,9 @@ namespace ChilliSource
     	//---------------------------------------------------------------
     	/// Constructor
     	//---------------------------------------------------------------
-		CAmazonIAPSystem::CAmazonIAPSystem(const Core::ParamDictionary& inParams)
+		AmazonIAPSystem::AmazonIAPSystem(const Core::ParamDictionary& inParams)
 		{
-			mpJavaInterface = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CAmazonIAPJavaInterface>();
+			mpJavaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<AmazonIAPJavaInterface>();
 			if (mpJavaInterface == NULL)
 			{
 				std::string strPrivateKey = "";
@@ -54,35 +54,35 @@ namespace ChilliSource
 					strPrivateKey = inParams.ValueForKey(kstrAmazonPrivateKeyKey);
 				}
 
-				mpJavaInterface = AmazonIAPJavaInterfacePtr(new CAmazonIAPJavaInterface(strPrivateKey, Core::Device::GetUDID()));
-	        	ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
+				mpJavaInterface = AmazonIAPJavaInterfacePtr(new AmazonIAPJavaInterface(strPrivateKey, Core::Device::GetUDID()));
+	        	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
 			}
 		}
         //---------------------------------------------------------------
         /// Register Products
         //---------------------------------------------------------------
-        void CAmazonIAPSystem::RegisterProducts(const std::vector<Networking::IAPProductRegInfo>& inaProducts)
+        void AmazonIAPSystem::RegisterProducts(const std::vector<Networking::IAPProductRegInfo>& inaProducts)
         {
             maProductRegInfos = inaProducts;
         }
         //---------------------------------------------------------------
 		/// Get Provider ID
         //---------------------------------------------------------------
-		std::string CAmazonIAPSystem::GetProviderID() const
+		std::string AmazonIAPSystem::GetProviderID() const
 		{
 			return "Amazon";
 		}
         //---------------------------------------------------------------
 		/// Get Provider Name
         //---------------------------------------------------------------
-		std::string CAmazonIAPSystem::GetProviderName() const
+		std::string AmazonIAPSystem::GetProviderName() const
 		{
 			return "Amazon";
 		}
         //---------------------------------------------------------------
 		/// Is Purchasing Enabled
         //---------------------------------------------------------------
-        bool CAmazonIAPSystem::IsPurchasingEnabled()
+        bool AmazonIAPSystem::IsPurchasingEnabled()
         {
         	if (mpJavaInterface != NULL)
         	{
@@ -93,7 +93,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// Start Listening For Transaction Updates
         //---------------------------------------------------------------
-        void CAmazonIAPSystem::StartListeningForTransactionUpdates(const Networking::IAPTransactionDelegate& inRequestDelegate)
+        void AmazonIAPSystem::StartListeningForTransactionUpdates(const Networking::IAPTransactionDelegate& inRequestDelegate)
         {
         	if (mpJavaInterface != NULL)
         	{
@@ -103,7 +103,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// Stop Listening For Transaction Updates
         //---------------------------------------------------------------
-        void CAmazonIAPSystem::StopListeningForTransactionUpdates()
+        void AmazonIAPSystem::StopListeningForTransactionUpdates()
         {
         	if (mpJavaInterface != NULL)
         	{
@@ -113,7 +113,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// Request Product Descriptions
         //---------------------------------------------------------------
-        void CAmazonIAPSystem::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void AmazonIAPSystem::RequestProductDescriptions(const std::vector<std::string>& inaProductIDs, const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
         	if (mpJavaInterface != NULL)
         	{
@@ -123,7 +123,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// Request All Product Descriptions
         //---------------------------------------------------------------
-        void CAmazonIAPSystem::RequestAllProductDescriptions(const Networking::IAPProductDescDelegate& inRequestDelegate)
+        void AmazonIAPSystem::RequestAllProductDescriptions(const Networking::IAPProductDescDelegate& inRequestDelegate)
         {
             std::vector<std::string> aIDs;
             aIDs.reserve(maProductRegInfos.size());
@@ -138,7 +138,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// Cancel Product Descriptions Request
         //---------------------------------------------------------------
-        void CAmazonIAPSystem::CancelProductDescriptionsRequest()
+        void AmazonIAPSystem::CancelProductDescriptionsRequest()
         {
         	if (mpJavaInterface != NULL)
         	{
@@ -148,7 +148,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// Request Product Purchase
         //---------------------------------------------------------------
-        void CAmazonIAPSystem::RequestProductPurchase(const std::string& instrProductID)
+        void AmazonIAPSystem::RequestProductPurchase(const std::string& instrProductID)
         {
         	if (mpJavaInterface != NULL)
         	{
@@ -159,7 +159,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// Close Transactione
         //---------------------------------------------------------------
-        void CAmazonIAPSystem::CloseTransaction(const Networking::IAPTransactionPtr& inpTransaction, const Networking::IAPTransactionCloseDelegate& inDelegate)
+        void AmazonIAPSystem::CloseTransaction(const Networking::IAPTransactionPtr& inpTransaction, const Networking::IAPTransactionCloseDelegate& inDelegate)
         {
         	if (mpJavaInterface != NULL)
         	{
@@ -169,7 +169,7 @@ namespace ChilliSource
         //---------------------------------------------------------------
 		/// Restore Managed Purchases
         //---------------------------------------------------------------
-        void CAmazonIAPSystem::RestoreManagedPurchases()
+        void AmazonIAPSystem::RestoreManagedPurchases()
         {
         	if (mpJavaInterface != NULL)
         	{

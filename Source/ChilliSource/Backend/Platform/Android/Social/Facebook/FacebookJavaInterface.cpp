@@ -16,17 +16,17 @@
 
 #include <jni.h>
 
-ChilliSource::Android::CFacebookAuthenticationSystem* gpAndroidAuthSystem = NULL;
-ChilliSource::Android::CFacebookPostSystem* gpAndroidPostSystem = NULL;
+ChilliSource::Android::FacebookAuthenticationSystem* gpAndroidAuthSystem = NULL;
+ChilliSource::Android::FacebookPostSystem* gpAndroidPostSystem = NULL;
 
 //function definitions
 extern "C"
 {
-	void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnAuthenticationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
-	void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnReadAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
-	void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnWriteAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
-	void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnPostToFeedComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
-	void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnPostRequestComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
+	void Java_com_chillisource_social_FacebookNativeInterface_OnAuthenticationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
+	void Java_com_chillisource_social_FacebookNativeInterface_OnReadAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
+	void Java_com_chillisource_social_FacebookNativeInterface_OnWriteAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
+	void Java_com_chillisource_social_FacebookNativeInterface_OnPostToFeedComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
+	void Java_com_chillisource_social_FacebookNativeInterface_OnPostRequestComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
 }
 
 //------------------------------------------------------------
@@ -38,11 +38,11 @@ extern "C"
 // @param The java object calling the function
 // @param The success of the authentication
 //------------------------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnAuthenticationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
+void Java_com_chillisource_social_FacebookNativeInterface_OnAuthenticationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
 {
 	if(gpAndroidAuthSystem)
 	{
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidAuthSystem, &ChilliSource::Android::CFacebookAuthenticationSystem::OnAuthenticationComplete, inbSuccess));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidAuthSystem, &ChilliSource::Android::FacebookAuthenticationSystem::OnAuthenticationComplete, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -54,11 +54,11 @@ void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnAuthent
 // @param The java object calling the function
 // @param The success of the authorised
 //------------------------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnReadAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
+void Java_com_chillisource_social_FacebookNativeInterface_OnReadAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
 {
 	if(gpAndroidAuthSystem)
 	{
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidAuthSystem, &ChilliSource::Android::CFacebookAuthenticationSystem::OnAuthoriseReadPermissionsComplete, inbSuccess));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidAuthSystem, &ChilliSource::Android::FacebookAuthenticationSystem::OnAuthoriseReadPermissionsComplete, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -70,11 +70,11 @@ void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnReadAut
 // @param The java object calling the function
 // @param The success of the authorised
 //------------------------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnWriteAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
+void Java_com_chillisource_social_FacebookNativeInterface_OnWriteAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
 {
 	if(gpAndroidAuthSystem)
 	{
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidAuthSystem, &ChilliSource::Android::CFacebookAuthenticationSystem::OnAuthoriseWritePermissionsComplete, inbSuccess));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidAuthSystem, &ChilliSource::Android::FacebookAuthenticationSystem::OnAuthoriseWritePermissionsComplete, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -86,11 +86,11 @@ void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnWriteAu
 // @param The java object calling the function
 // @param The success of the authorised
 //------------------------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnPostToFeedComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
+void Java_com_chillisource_social_FacebookNativeInterface_OnPostToFeedComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
 {
 	if(gpAndroidPostSystem)
 	{
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidPostSystem, &ChilliSource::Android::CFacebookPostSystem::OnPostToFeedComplete, inbSuccess));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidPostSystem, &ChilliSource::Android::FacebookPostSystem::OnPostToFeedComplete, inbSuccess));
 	}
 }
 //------------------------------------------------------------
@@ -102,11 +102,11 @@ void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnPostToF
 // @param The java object calling the function
 // @param The success of the authorised
 //------------------------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CFacebookNativeInterface_OnPostRequestComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
+void Java_com_chillisource_social_FacebookNativeInterface_OnPostRequestComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
 {
 	if(gpAndroidPostSystem)
 	{
-		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidPostSystem, &ChilliSource::Android::CFacebookPostSystem::OnPostRequestComplete, inbSuccess));
+		CSCore::TaskScheduler::ScheduleMainThreadTask(CSCore::Task<bool>(gpAndroidPostSystem, &ChilliSource::Android::FacebookPostSystem::OnPostRequestComplete, inbSuccess));
 	}
 }
 
@@ -115,11 +115,11 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		CS_DEFINE_NAMEDTYPE(CFacebookJavaInterface);
+		CS_DEFINE_NAMEDTYPE(FacebookJavaInterface);
 
-		CFacebookJavaInterface::CFacebookJavaInterface()
+		FacebookJavaInterface::FacebookJavaInterface()
 		{
-			CreateNativeInterface("com/taggames/moflow/nativeinterface/CFacebookNativeInterface");
+			CreateNativeInterface("com/chillisource/social/FacebookNativeInterface");
 
 			CreateMethodReference("Authenticate", "([Ljava/lang/String;)V");
 			CreateMethodReference("IsSignedIn", "()Z");
@@ -133,9 +133,9 @@ namespace ChilliSource
 			CreateMethodReference("MakeRequestToUser", "([Ljava/lang/String;)V");
 		}
 
-		bool CFacebookJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool FacebookJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return inInterfaceID == CFacebookJavaInterface::InterfaceID;
+			return inInterfaceID == FacebookJavaInterface::InterfaceID;
 		}
 
 		//--------------------------------------------------------------------------------------
@@ -145,7 +145,7 @@ namespace ChilliSource
 		///
 		/// @param Auth system
 		//--------------------------------------------------------------------------------------
-		void CFacebookJavaInterface::SetAuthenticationSystem(CFacebookAuthenticationSystem* inpAuthSystem)
+		void FacebookJavaInterface::SetAuthenticationSystem(FacebookAuthenticationSystem* inpAuthSystem)
 		{
 			gpAndroidAuthSystem = inpAuthSystem;
 		}
@@ -156,7 +156,7 @@ namespace ChilliSource
 		///
 		/// @param Post system
 		//--------------------------------------------------------------------------------------
-		void CFacebookJavaInterface::SetPostSystem(CFacebookPostSystem* inpPostSystem)
+		void FacebookJavaInterface::SetPostSystem(FacebookPostSystem* inpPostSystem)
 		{
 			gpAndroidPostSystem = inpPostSystem;
 		}
@@ -166,9 +166,9 @@ namespace ChilliSource
 		/// Attempt to open an existing session or prompt the user to login if no
 		/// session exists
 		//--------------------------------------------------------------------------------------
-		void CFacebookJavaInterface::Authenticate(const std::vector<std::string>& inaReadPerms)
+		void FacebookJavaInterface::Authenticate(const std::vector<std::string>& inaReadPerms)
 		{
-			JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaPermissions = pEnv->NewObjectArray(inaReadPerms.size(), jStringClass, jstrEmptyString);
@@ -191,9 +191,9 @@ namespace ChilliSource
 		///
 		/// @return Whether a session exists and is open
 		//--------------------------------------------------------------------------------------
-		bool CFacebookJavaInterface::IsSignedIn()
+		bool FacebookJavaInterface::IsSignedIn()
 		{
-			JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			return pEnv->CallBooleanMethod(GetJavaObject(), GetMethodID("IsSignedIn"));
 		}
 		//--------------------------------------------------------------------------------------
@@ -201,9 +201,9 @@ namespace ChilliSource
 		///
 		/// @return The access token of the active session
 		//--------------------------------------------------------------------------------------
-		std::string CFacebookJavaInterface::GetActiveToken()
+		std::string FacebookJavaInterface::GetActiveToken()
 		{
-			JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrToken = (jstring)pEnv->CallObjectMethod(GetJavaObject(), GetMethodID("GetActiveToken"));
 			std::string strToken = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrToken);
 			pEnv->DeleteLocalRef(jstrToken);
@@ -215,9 +215,9 @@ namespace ChilliSource
 		/// @param Permission ID
 	    /// @return Whether the current session user has given the permission
 		//--------------------------------------------------------------------------------------
-	    bool CFacebookJavaInterface::HasPermission(const std::string& instrPermission)
+	    bool FacebookJavaInterface::HasPermission(const std::string& instrPermission)
 	    {
-			JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrPermission = ChilliSource::Android::JavaInterfaceUtils::CreateJStringFromSTDString(instrPermission);
 			bool bHasPermission = pEnv->CallBooleanMethod(GetJavaObject(), GetMethodID("HasPermission"), jstrPermission);
 			pEnv->DeleteLocalRef(jstrPermission);
@@ -231,9 +231,9 @@ namespace ChilliSource
 	    ///
 		/// @param List of read permissions IDs
 		//--------------------------------------------------------------------------------------
-	    void CFacebookJavaInterface::AuthoriseReadPermissions(const std::vector<std::string>& inaReadPerms)
+	    void FacebookJavaInterface::AuthoriseReadPermissions(const std::vector<std::string>& inaReadPerms)
 	    {
-	    	JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+	    	JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaPermissions = pEnv->NewObjectArray(inaReadPerms.size(), jStringClass, jstrEmptyString);
@@ -259,9 +259,9 @@ namespace ChilliSource
 	    ///
 		/// @param List of write permissions IDs
 		//--------------------------------------------------------------------------------------
-	    void CFacebookJavaInterface::AuthoriseWritePermissions(const std::vector<std::string>& inaWritePerms)
+	    void FacebookJavaInterface::AuthoriseWritePermissions(const std::vector<std::string>& inaWritePerms)
 	    {
-	    	JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+	    	JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaPermissions = pEnv->NewObjectArray(inaWritePerms.size(), jStringClass, jstrEmptyString);
@@ -284,9 +284,9 @@ namespace ChilliSource
 		///
 	    /// If a session exists log the user out and destroy any cached tokens
 		//--------------------------------------------------------------------------------------
-	    void CFacebookJavaInterface::SignOut()
+	    void FacebookJavaInterface::SignOut()
 	    {
-			JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("SignOut"));
 	    }
 		//--------------------------------------------------------------------------------------
@@ -295,9 +295,9 @@ namespace ChilliSource
 	    /// Attempt to make a Graph API request to post to feed with the following
 	    /// path and key value array
 		//--------------------------------------------------------------------------------------
-	    void CFacebookJavaInterface::TryPostToFeed(const std::string& instrGraphPath, const std::vector<std::string>& inaKeyValues)
+	    void FacebookJavaInterface::TryPostToFeed(const std::string& instrGraphPath, const std::vector<std::string>& inaKeyValues)
 	    {
-	    	JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+	    	JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaKeyValues = pEnv->NewObjectArray(inaKeyValues.size(), jStringClass, jstrEmptyString);
@@ -322,9 +322,9 @@ namespace ChilliSource
 	    /// Attempt to make a Graph API request to post to feed with the following
 	    /// path and key value array
 		//--------------------------------------------------------------------------------------
-	    void CFacebookJavaInterface::TryPostRequest(const std::vector<std::string>& inaKeyValues)
+	    void FacebookJavaInterface::TryPostRequest(const std::vector<std::string>& inaKeyValues)
 	    {
-	    	JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+	    	JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrEmptyString = pEnv->NewStringUTF("");
 			jclass jStringClass = pEnv->FindClass("java/lang/String");
 	    	jobjectArray jaKeyValues = pEnv->NewObjectArray(inaKeyValues.size(), jStringClass, jstrEmptyString);
@@ -346,9 +346,9 @@ namespace ChilliSource
 		///
 	    /// Inform FB about the app launch for the marketing SDK
 		//--------------------------------------------------------------------------------------
-	    void CFacebookJavaInterface::PublishInstall()
+	    void FacebookJavaInterface::PublishInstall()
 	    {
-			JNIEnv* pEnv = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("PublishInstall"));
 	    }
 	}

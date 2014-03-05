@@ -20,7 +20,7 @@
 //------------------------------------------
 extern "C"
 {
-	void Java_com_taggames_moflow_nativeinterface_CAccelerometerNativeInterface_UpdateAcceleration(JNIEnv* inpEnv, jobject inThis, f32 infAccelerationX, f32 infAccelerationY, f32 infAccelerationZ);
+	void Java_com_chillisource_input_AccelerometerNativeInterface_UpdateAcceleration(JNIEnv* inpEnv, jobject inThis, f32 infAccelerationX, f32 infAccelerationY, f32 infAccelerationZ);
 }
 //-------------------------------------------
 /// Update Acceleration
@@ -34,9 +34,9 @@ extern "C"
 /// @param The Y component of the acceleration.
 /// @param The Z component of the acceleration.
 //-------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CAccelerometerNativeInterface_UpdateAcceleration(JNIEnv* inpEnv, jobject inThis, f32 infAccelerationX, f32 infAccelerationY, f32 infAccelerationZ)
+void Java_com_chillisource_input_AccelerometerNativeInterface_UpdateAcceleration(JNIEnv* inpEnv, jobject inThis, f32 infAccelerationX, f32 infAccelerationY, f32 infAccelerationZ)
 {
-	ChilliSource::Android::AccelerometerJavaInterfacePtr pAccelerometerJI = ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::CAccelerometerJavaInterface>();
+	ChilliSource::Android::AccelerometerJavaInterfacePtr pAccelerometerJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AccelerometerJavaInterface>();
 	if (NULL != pAccelerometerJI)
 	{
 		pAccelerometerJI->UpdateAcceleration(infAccelerationX, infAccelerationY, infAccelerationZ);
@@ -47,14 +47,14 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		CS_DEFINE_NAMEDTYPE(CAccelerometerJavaInterface);
+		CS_DEFINE_NAMEDTYPE(AccelerometerJavaInterface);
 		//-----------------------------------------------
 		/// Constructor
 		//-----------------------------------------------
-		CAccelerometerJavaInterface::CAccelerometerJavaInterface()
+		AccelerometerJavaInterface::AccelerometerJavaInterface()
 			: mbListening(false)
 		{
-			CreateNativeInterface("com/taggames/moflow/nativeinterface/CAccelerometerNativeInterface");
+			CreateNativeInterface("com/chillisource/input/AccelerometerNativeInterface");
 			CreateMethodReference("IsAvailable", "()Z");
 			CreateMethodReference("StartListening", "()V");
 			CreateMethodReference("StopListening", "()V");
@@ -62,26 +62,26 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// Is A
 		//-----------------------------------------------
-		bool CAccelerometerJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool AccelerometerJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
 		{
-			return (inInterfaceID == CAccelerometerJavaInterface::InterfaceID);
+			return (inInterfaceID == AccelerometerJavaInterface::InterfaceID);
 		}
 		//------------------------------------------------
 		/// Is Available
 		//------------------------------------------------
-		bool CAccelerometerJavaInterface::IsAvailable()
+		bool AccelerometerJavaInterface::IsAvailable()
 		{
-			JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			return pEnv->CallBooleanMethod(GetJavaObject(), GetMethodID("IsAvailable"));
 		}
 		//------------------------------------------------
 		/// Start Listening
 		//------------------------------------------------
-		void CAccelerometerJavaInterface::StartListening(const AccelerationChangedDelegate& inAccelerationChangedDelegate)
+		void AccelerometerJavaInterface::StartListening(const AccelerationChangedDelegate& inAccelerationChangedDelegate)
 		{
 			if (true == IsAvailable() && false == mbListening)
 			{
-				JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 				pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("StartListening"));
 
 				mAccelerationChangedDelegate = inAccelerationChangedDelegate;
@@ -91,12 +91,12 @@ namespace ChilliSource
 		//------------------------------------------------
 		/// Stop Listening
 		//------------------------------------------------
-		void CAccelerometerJavaInterface::StopListening()
+		void AccelerometerJavaInterface::StopListening()
 		{
 			if (true == mbListening)
 			{
 				mAccelerationChangedDelegate = NULL;
-				JNIEnv* pEnv = CJavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+				JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 				pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("StopListening"));
 				mbListening = false;
 			}
@@ -104,7 +104,7 @@ namespace ChilliSource
 		//------------------------------------------------
 		/// Update Acceleration
 		//------------------------------------------------
-		void CAccelerometerJavaInterface::UpdateAcceleration(f32 infAccelerationX, f32 infAccelerationY, f32 infAccelerationZ)
+		void AccelerometerJavaInterface::UpdateAcceleration(f32 infAccelerationX, f32 infAccelerationY, f32 infAccelerationZ)
 		{
 			if (true == mbListening && NULL != mAccelerationChangedDelegate)
 			{

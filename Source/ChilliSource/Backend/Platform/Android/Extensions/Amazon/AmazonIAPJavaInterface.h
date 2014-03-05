@@ -22,17 +22,17 @@ namespace ChilliSource
 		/// A java interface for communicating with the java Amazon in-app purchasing
 		/// system.
 		//========================================================================
-		class CAmazonIAPJavaInterface : public IJavaInterface
+		class AmazonIAPJavaInterface : public IJavaInterface
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(CAmazonIAPJavaInterface);
+			CS_DECLARE_NAMEDTYPE(AmazonIAPJavaInterface);
 			//--------------------------------------------------------------
 			/// Constructor
 			///
 			/// @param The private key.
 			/// @param The UDID
 			//--------------------------------------------------------------
-			CAmazonIAPJavaInterface(const std::string& instrPrivateKey, const std::string& instrUDID);
+			AmazonIAPJavaInterface(const std::string& instrPrivateKey, const std::string& instrUDID);
 			//--------------------------------------------------------------
 			/// Is A
 			///
@@ -138,7 +138,7 @@ namespace ChilliSource
             Networking::IAPTransactionCloseDelegate mTransactionCloseDelegate;
 		};
 
-		typedef std::shared_ptr<CAmazonIAPJavaInterface> AmazonIAPJavaInterfacePtr;
+		typedef std::shared_ptr<AmazonIAPJavaInterface> AmazonIAPJavaInterfacePtr;
 	}
 }
 

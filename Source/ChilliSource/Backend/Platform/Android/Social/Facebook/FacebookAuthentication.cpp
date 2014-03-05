@@ -18,65 +18,65 @@ namespace ChilliSource
 
 	namespace Android
 	{
-		CS_DEFINE_NAMEDTYPE(CFacebookAuthenticationSystem);
+		CS_DEFINE_NAMEDTYPE(FacebookAuthenticationSystem);
 
-		CFacebookAuthenticationSystem::CFacebookAuthenticationSystem()
+		FacebookAuthenticationSystem::FacebookAuthenticationSystem()
 		: mAuthDelegate(NULL), mAuthReadDelegate(NULL), mAuthWriteDelegate(NULL)
 		{
-			mpJavaInterface = std::shared_ptr<CFacebookJavaInterface>(new CFacebookJavaInterface());
+			mpJavaInterface = std::shared_ptr<FacebookJavaInterface>(new FacebookJavaInterface());
 			mpJavaInterface->SetAuthenticationSystem(this);
-	        ChilliSource::Android::CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
+	        ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
 		}
 
-		bool CFacebookAuthenticationSystem::IsA(Core::InterfaceIDType inID) const
+		bool FacebookAuthenticationSystem::IsA(Core::InterfaceIDType inID) const
 		{
-			return (inID == CFacebookAuthenticationSystem::InterfaceID) || (inID == FacebookAuthenticationSystem::InterfaceID);
+			return (inID == FacebookAuthenticationSystem::InterfaceID) || (inID == Social::FacebookAuthenticationSystem::InterfaceID);
 		}
 
-		void CFacebookAuthenticationSystem::Authenticate(const std::vector<std::string>& inastrReadPermissions, const AuthenticationCompleteDelegate& inDelegate)
+		void FacebookAuthenticationSystem::Authenticate(const std::vector<std::string>& inastrReadPermissions, const AuthenticationCompleteDelegate& inDelegate)
 		{
 			mAuthDelegate = inDelegate;
 			mpJavaInterface->Authenticate(inastrReadPermissions);
 		}
 
-		bool CFacebookAuthenticationSystem::IsSignedIn() const
+		bool FacebookAuthenticationSystem::IsSignedIn() const
 		{
 			return mpJavaInterface->IsSignedIn();
 		}
 
-		std::string CFacebookAuthenticationSystem::GetActiveToken() const
+		std::string FacebookAuthenticationSystem::GetActiveToken() const
 		{
 			return mpJavaInterface->GetActiveToken();
 		}
 
-        void CFacebookAuthenticationSystem::AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const AuthenticationCompleteDelegate& inDelegate)
+        void FacebookAuthenticationSystem::AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const AuthenticationCompleteDelegate& inDelegate)
         {
         	mAuthWriteDelegate = inDelegate;
         	mpJavaInterface->AuthoriseWritePermissions(inaWritePerms);
         }
 
-        void CFacebookAuthenticationSystem::AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const AuthenticationCompleteDelegate& inDelegate)
+        void FacebookAuthenticationSystem::AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const AuthenticationCompleteDelegate& inDelegate)
         {
         	mAuthReadDelegate = inDelegate;
         	mpJavaInterface->AuthoriseReadPermissions(inaReadPerms);
         }
 
-        bool CFacebookAuthenticationSystem::HasPermission(const std::string& instrPermission) const
+        bool FacebookAuthenticationSystem::HasPermission(const std::string& instrPermission) const
         {
         	return mpJavaInterface->HasPermission(instrPermission);
         }
 
-		void CFacebookAuthenticationSystem::SignOut()
+		void FacebookAuthenticationSystem::SignOut()
 		{
 			mpJavaInterface->SignOut();
 		}
 
-		void CFacebookAuthenticationSystem::PublishInstall()
+		void FacebookAuthenticationSystem::PublishInstall()
 		{
 			mpJavaInterface->PublishInstall();
 		}
 
-		void CFacebookAuthenticationSystem::OnAuthenticationComplete(bool inbSuccess)
+		void FacebookAuthenticationSystem::OnAuthenticationComplete(bool inbSuccess)
 		{
 			if(mAuthDelegate)
 			{
@@ -96,7 +96,7 @@ namespace ChilliSource
 			}
 		}
 
-		void CFacebookAuthenticationSystem::OnAuthoriseReadPermissionsComplete(bool inbSuccess)
+		void FacebookAuthenticationSystem::OnAuthoriseReadPermissionsComplete(bool inbSuccess)
 		{
 			if(mAuthReadDelegate)
 			{
@@ -116,7 +116,7 @@ namespace ChilliSource
 			}
 		}
 
-		void CFacebookAuthenticationSystem::OnAuthoriseWritePermissionsComplete(bool inbSuccess)
+		void FacebookAuthenticationSystem::OnAuthoriseWritePermissionsComplete(bool inbSuccess)
 		{
 			if(mAuthWriteDelegate)
 			{
@@ -136,7 +136,7 @@ namespace ChilliSource
 			}
 		}
 
-		const std::shared_ptr<CFacebookJavaInterface>& CFacebookAuthenticationSystem::GetJavaInterface() const
+		const std::shared_ptr<FacebookJavaInterface>& FacebookAuthenticationSystem::GetJavaInterface() const
 		{
 			return mpJavaInterface;
 		}

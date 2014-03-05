@@ -16,7 +16,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class SCTwitterAuthenticationActivityJavaInterface : public _IJavaInterface
+		class TwitterAuthenticationActivityJavaInterface : public _IJavaInterface
 		{
 		public:
 			//--------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ namespace ChilliSource
 			///
 			/// @param The Activity we want to talk to
 			//-----------------------------------------------
-			static void RegisterActivity(ChilliSource::Android::CTwitterAuthenticationActivity* inpActivity);
+			static void RegisterActivity(ChilliSource::Android::TwitterAuthenticationActivity* inpActivity);
 			//-----------------------------------------------
 			/// Present
 			///
@@ -60,7 +60,7 @@ namespace ChilliSource
 			static void OnPINComplete(const std::string instrPIN);
 
 		private:
-			static ChilliSource::Android::CTwitterAuthenticationActivity*		mpActivity;
+			static ChilliSource::Android::TwitterAuthenticationActivity* mpActivity;
 		};
 	}
 }

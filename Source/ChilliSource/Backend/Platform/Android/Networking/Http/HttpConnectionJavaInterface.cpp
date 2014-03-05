@@ -19,19 +19,19 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		/// Setup Java Interface
 		//--------------------------------------------------------------------------------------
-		void SCHttpConnectionJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
+		void HttpConnectionJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
 		{
 			mspJavaVM = inpJavaVM;
 
 			//Setup Java calls
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CHttpConnectionNativeInterface","HttpRequest", "(Ljava/lang/String;ZLjava/lang/String;[I[Ljava/lang/String;[I[I)[B");
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CHttpConnectionNativeInterface","HttpRequestWithHeaders", "(Ljava/lang/String;Z[Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;[I[Ljava/lang/String;[I[IZ)[B");
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CHttpConnectionNativeInterface","IsConnected", "()Z");
+			InitCallableStaticMethod("com/chillisource/networking/HttpConnectionNativeInterface","HttpRequest", "(Ljava/lang/String;ZLjava/lang/String;[I[Ljava/lang/String;[I[I)[B");
+			InitCallableStaticMethod("com/chillisource/networking/HttpConnectionNativeInterface","HttpRequestWithHeaders", "(Ljava/lang/String;Z[Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;[I[Ljava/lang/String;[I[IZ)[B");
+			InitCallableStaticMethod("com/chillisource/networking/HttpConnectionNativeInterface","IsConnected", "()Z");
 		}
 		//--------------------------------------------------------------------------------------
 		/// Http Request
 		//--------------------------------------------------------------------------------------
-		HttpRequestResultCode SCHttpConnectionJavaInterface::HttpRequest(const std::string& instrUrl, HttpRequestType ineRequestType,
+		HttpRequestResultCode HttpConnectionJavaInterface::HttpRequest(const std::string& instrUrl, HttpRequestType ineRequestType,
 				const std::string& instrBody, std::string& outstrResponse, std::string& outstrRedirect, s32& outdwResponseCode)
 		{
 			return HttpRequest(instrUrl, ineRequestType, Core::ParamDictionary(), instrBody, outstrResponse,outstrRedirect, outdwResponseCode, false);
@@ -39,7 +39,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		/// Http Request
 		//--------------------------------------------------------------------------------------
-		HttpRequestResultCode SCHttpConnectionJavaInterface::HttpRequest(const std::string& instrUrl, HttpRequestType ineRequestType,
+		HttpRequestResultCode HttpConnectionJavaInterface::HttpRequest(const std::string& instrUrl, HttpRequestType ineRequestType,
 				Core::ParamDictionary insHeaders, const std::string& instrBody,
 				std::string& outstrResponse, std::string& outstrRedirect, s32& outdwResponseCode,
 				bool inbKeepAlive)
@@ -122,7 +122,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		/// Is Connected
 		//--------------------------------------------------------------------------------------
-		bool SCHttpConnectionJavaInterface::IsConnected()
+		bool HttpConnectionJavaInterface::IsConnected()
 		{
 			bool output = false;
 

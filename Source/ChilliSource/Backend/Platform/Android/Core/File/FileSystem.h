@@ -38,10 +38,10 @@ namespace ChilliSource
 		///
 		/// The Android Backend for the file system
 		//=========================================================================================
-		class CFileSystem : public Core::FileSystem
+		class FileSystem : public Core::FileSystem
 		{
 		public:
-			CFileSystem();
+			FileSystem();
 			//--------------------------------------------------------------
             /// Create File Stream
             ///

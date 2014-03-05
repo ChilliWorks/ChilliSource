@@ -27,13 +27,13 @@ namespace ChilliSource
 		//-----------------------------------------
 		/// Constructor
 		//-----------------------------------------
-		CUDIDManager::CUDIDManager() : mstrUDID("NoUDID"), mbInitialised(false)
+		UDIDManager::UDIDManager() : mstrUDID("NoUDID"), mbInitialised(false)
 		{
 		}
 		//-----------------------------------------
 		/// Get UDID
 		//-----------------------------------------
-		std::string CUDIDManager::GetUDID()
+		std::string UDIDManager::GetUDID()
 		{
 			if (mbInitialised == false)
 				Initialise();
@@ -43,7 +43,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		/// Initialise
 		//-----------------------------------------
-		void CUDIDManager::Initialise()
+		void UDIDManager::Initialise()
 		{
 			if (LoadUDID() == false)
 				CalculateUDID();
@@ -54,7 +54,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		/// Load UDID
 		//-----------------------------------------
-		bool CUDIDManager::LoadUDID()
+		bool UDIDManager::LoadUDID()
 		{
 			//load the UDID from the local data store
 			std::string strLDSUDID = "";
@@ -67,9 +67,9 @@ namespace ChilliSource
 			//load the UDID from the android data store
 			std::string strASPUDID = "";
 			bool bASPUDIDExists = false;
-			if (SCSharedPreferencesJavaInterface::KeyExists(kstrSharedPrefsDocName, kstrUDIDStorageKey) == true)
+			if (SharedPreferencesJavaInterface::KeyExists(kstrSharedPrefsDocName, kstrUDIDStorageKey) == true)
 			{
-				strASPUDID = SCSharedPreferencesJavaInterface::GetString(kstrSharedPrefsDocName, kstrUDIDStorageKey, "FailedToGetUDID");
+				strASPUDID = SharedPreferencesJavaInterface::GetString(kstrSharedPrefsDocName, kstrUDIDStorageKey, "FailedToGetUDID");
 				if (strASPUDID != "FailedToGetUDID")
 					bASPUDIDExists = true;
 			}
@@ -90,21 +90,21 @@ namespace ChilliSource
 		//-----------------------------------------
 		/// Save UDID
 		//-----------------------------------------
-		void CUDIDManager::SaveUDID()
+		void UDIDManager::SaveUDID()
 		{
 			//store in the local data store
 			Core::LocalDataStore::GetSingletonPtr()->SetValueForKey(kstrUDIDStorageKey, mstrUDID);
 			Core::LocalDataStore::GetSingletonPtr()->Synchronise();
 
 			//store in shared preferences
-			SCSharedPreferencesJavaInterface::SetString(kstrSharedPrefsDocName, kstrUDIDStorageKey, mstrUDID);
+			SharedPreferencesJavaInterface::SetString(kstrSharedPrefsDocName, kstrUDIDStorageKey, mstrUDID);
 		}
 		//-----------------------------------------
 		/// Calculate UDID
 		//-----------------------------------------
-		void CUDIDManager::CalculateUDID()
+		void UDIDManager::CalculateUDID()
 		{
-			CoreJavaInterfacePtr pCoreJI = CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>();
+			CoreJavaInterfacePtr pCoreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
 
 			//--try the mac address
 			std::string strMacAddress = pCoreJI->GetMacAddress();
@@ -154,7 +154,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		/// Deconstructor
 		//-----------------------------------------
-		CUDIDManager::~CUDIDManager()
+		UDIDManager::~UDIDManager()
 		{
 		}
 	}

@@ -14,7 +14,7 @@
 //function definitions
 extern "C"
 {
-void Java_com_taggames_moflow_nativeinterface_CWebViewNativeInterface_OnWebviewDismissed(JNIEnv* inpEnv, jobject thiz, u32 inudwIndex);
+	void Java_com_chillisource_web_WebViewNativeInterface_OnWebviewDismissed(JNIEnv* inpEnv, jobject thiz, u32 inudwIndex);
 }
 //--------------------------------------------------------------------------------------
 /// On Update Text
@@ -27,26 +27,26 @@ void Java_com_taggames_moflow_nativeinterface_CWebViewNativeInterface_OnWebviewD
 /// @param the updated keyboard text
 /// @return whether or not the text was accepted.
 //--------------------------------------------------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CWebViewNativeInterface_OnWebviewDismissed(JNIEnv* inpEnv, jobject thiz, u32 inudwIndex)
+void Java_com_chillisource_web_WebViewNativeInterface_OnWebviewDismissed(JNIEnv* inpEnv, jobject thiz, u32 inudwIndex)
 {
-	ChilliSource::Android::CWebViewActivity::OnWebViewDismissed(inudwIndex);
+	ChilliSource::Android::WebViewActivity::OnWebViewDismissed(inudwIndex);
 }
 
 namespace ChilliSource
 {
 	namespace Android
 	{
-		void SCWebViewJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
+		void WebViewJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
 		{
 			mspJavaVM = inpJavaVM;
 
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CWebViewNativeInterface","Present", "(ILjava/lang/String;II)V");
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CWebViewNativeInterface","PresentFromFile", "(ILjava/lang/String;IILjava/lang/String;Ljava/lang/String;)V");
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CWebViewNativeInterface","PresentInExternalBrowser", "(Ljava/lang/String;)V");
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CWebViewNativeInterface","Dismiss", "(I)V");
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CWebViewNativeInterface","AddDismissButton", "(IF)V");
+			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","Present", "(ILjava/lang/String;II)V");
+			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","PresentFromFile", "(ILjava/lang/String;IILjava/lang/String;Ljava/lang/String;)V");
+			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","PresentInExternalBrowser", "(Ljava/lang/String;)V");
+			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","Dismiss", "(I)V");
+			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","AddDismissButton", "(IF)V");
 		}
-		void SCWebViewJavaInterface::Present(u32 inudwIndex, const std::string& instrURL, const ChilliSource::Core::Vector2& invSize)
+		void WebViewJavaInterface::Present(u32 inudwIndex, const std::string& instrURL, const ChilliSource::Core::Vector2& invSize)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("Present");
 
@@ -63,7 +63,7 @@ namespace ChilliSource
 				env->DeleteLocalRef(jstrURL);
 			}
 		}
-		void SCWebViewJavaInterface::PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const ChilliSource::Core::Vector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor)
+		void WebViewJavaInterface::PresentFromFile(u32 inudwIndex, const std::string& instrHTMLContent, const ChilliSource::Core::Vector2& invSize, const std::string& instrBasePath, const std::string& instrAnchor)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("PresentFromFile");
 
@@ -84,9 +84,8 @@ namespace ChilliSource
 				env->DeleteLocalRef(jstrAnchor);
 			}
 		}
-		void SCWebViewJavaInterface::PresentInExternalBrowser(const std::string& instrURL)
+		void WebViewJavaInterface::PresentInExternalBrowser(const std::string& instrURL)
 		{
-
 			MethodReference sdMethodRef = GetStaticMethodReference("PresentInExternalBrowser");
 
 			if (sdMethodRef.mMethodID != 0 && sdMethodRef.mClassID != 0)
@@ -99,7 +98,7 @@ namespace ChilliSource
 				env->DeleteLocalRef(jstrContent);
 			}
 		}
-		void SCWebViewJavaInterface::Dismiss(u32 inudwIndex)
+		void WebViewJavaInterface::Dismiss(u32 inudwIndex)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("Dismiss");
 
@@ -110,7 +109,7 @@ namespace ChilliSource
 				env->CallStaticVoidMethod(sdMethodRef.mClassID, sdMethodRef.mMethodID, udwIndex);
 			}
 		}
-		void SCWebViewJavaInterface::AddDismissButton(u32 inudwIndex, f32 infSize)
+		void WebViewJavaInterface::AddDismissButton(u32 inudwIndex, f32 infSize)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("AddDismissButton");
 

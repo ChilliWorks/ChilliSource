@@ -15,19 +15,17 @@
 
 namespace ChilliSource
 {
-	using namespace ChilliSource::Social;
-
 	namespace Android
 	{
-		class CFacebookPostSystem : public Social::IFacebookPostSystem
+		class FacebookPostSystem : public Social::IFacebookPostSystem
 		{
 		public:
-			CFacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem);
+			FacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem);
 
 			bool IsA(Core::InterfaceIDType inID) const;
 
-			void TryPost(const Social::FacebookPostDesc& insDesc, const IFacebookPostSystem::PostResultDelegate& insResultCallback);
-			void TrySendRequest(const Social::FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends);
+			void TryPost(const Social::FacebookPostDesc& insDesc, const Social::IFacebookPostSystem::PostResultDelegate& insResultCallback);
+			void TrySendRequest(const Social::FacebookPostDesc& insDesc, const Social::IFacebookPostSystem::PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends);
 
 			void OnPostToFeedComplete(bool inbSuccess);
 			void OnPostRequestComplete(bool inbSuccess);
@@ -40,7 +38,7 @@ namespace ChilliSource
 
 		private:
 
-			std::shared_ptr<CFacebookJavaInterface> mpJavaInterface;
+			std::shared_ptr<FacebookJavaInterface> mpJavaInterface;
 
 			Social::FacebookAuthenticationSystem* mpAuthSystem;
 			Social::FacebookPostDesc msPostDesc;

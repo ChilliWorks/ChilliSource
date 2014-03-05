@@ -23,14 +23,14 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		/// Constructor
 		//-------------------------------------------------------
-		CEmailCompositionActivity::CEmailCompositionActivity()
+		EmailCompositionActivity::EmailCompositionActivity()
 		{
 			//get the email java interface or create it if it doesn't yet exist.
-			mpJavaInterface = CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CEmailCompositionJavaInterface>();
+			mpJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<EmailCompositionJavaInterface>();
 			if (mpJavaInterface == NULL)
 			{
-				mpJavaInterface = EmailCompositionJavaInterfacePtr(new CEmailCompositionJavaInterface());
-				CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
+				mpJavaInterface = EmailCompositionJavaInterfacePtr(new EmailCompositionJavaInterface());
+				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
 			}
 		}
 		//-------------------------------------------------------
@@ -39,21 +39,21 @@ namespace ChilliSource
         /// @return whether email is supported on the current
         /// device
         //-------------------------------------------------------
-        bool CEmailCompositionActivity::IsSupportedByDevice() const
+        bool EmailCompositionActivity::IsSupportedByDevice() const
         {
 			return true;
         }
         //-------------------------------------------------------
 		/// Is A
 		//-------------------------------------------------------
-		bool CEmailCompositionActivity::IsA(Core::InterfaceIDType inID) const
+		bool EmailCompositionActivity::IsA(Core::InterfaceIDType inID) const
 		{
-			return inID == CEmailCompositionActivity::InterfaceID;
+			return inID == EmailCompositionActivity::InterfaceID;
 		}
         //-------------------------------------------------------
         /// Present
         //-------------------------------------------------------
-		void CEmailCompositionActivity::Present(const std::vector<Core::UTF8String> & inastrRecipientAddresses, const Core::UTF8String & instrSubject, const Core::UTF8String & instrContents, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
+		void EmailCompositionActivity::Present(const std::vector<Core::UTF8String> & inastrRecipientAddresses, const Core::UTF8String & instrSubject, const Core::UTF8String & instrContents, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
 		{
 			Attachment emptyAttachment;
 			emptyAttachment.mstrFilename = "";
@@ -64,7 +64,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		/// Present With Attachment
 		//-------------------------------------------------------
-		void CEmailCompositionActivity::PresentWithAttachment(const std::vector<Core::UTF8String> & inastrRecipientAddresses, const Core::UTF8String & instrSubject, const Core::UTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
+		void EmailCompositionActivity::PresentWithAttachment(const std::vector<Core::UTF8String> & inastrRecipientAddresses, const Core::UTF8String & instrSubject, const Core::UTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
 		{
 			mCallback = inCallback;
 
@@ -83,28 +83,28 @@ namespace ChilliSource
 				}
 			}
 
-			mpJavaInterface->Present(inastrRecipientAddresses, instrSubject, instrContents, strFilename, inbFormatAsHtml, Core::MakeDelegate(this, &CEmailCompositionActivity::OnEmailClosed));
+			mpJavaInterface->Present(inastrRecipientAddresses, instrSubject, instrContents, strFilename, inbFormatAsHtml, Core::MakeDelegate(this, &EmailCompositionActivity::OnEmailClosed));
 		}
         //-------------------------------------------------------
         /// Dismiss
         //-------------------------------------------------------
-		void CEmailCompositionActivity::Dismiss()
+		void EmailCompositionActivity::Dismiss()
 		{
 			//We don't have any way of dismissing the activity on Android, so do nothing.
 		}
         //-------------------------------------------------------
         /// On Email Closed
         //-------------------------------------------------------
-		void CEmailCompositionActivity::OnEmailClosed(s32 indwResultCode)
+		void EmailCompositionActivity::OnEmailClosed(s32 indwResultCode)
 		{
 			if(mCallback != NULL)
 			{
 				switch (indwResultCode)
 				{
-					case CEmailCompositionJavaInterface::kdwResultSuccess:
+					case EmailCompositionJavaInterface::kdwResultSuccess:
 						mCallback(EmailCompositionActivity::SendResult::k_succeed);
 						break;
-					case CEmailCompositionJavaInterface::kdwResultCancelled:
+					case EmailCompositionJavaInterface::kdwResultCancelled:
 						mCallback(EmailCompositionActivity::SendResult::k_cancelled);
 						break;
 					default:
@@ -117,7 +117,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		/// Destructor
 		//-------------------------------------------------------
-		CEmailCompositionActivity::~CEmailCompositionActivity()
+		EmailCompositionActivity::~EmailCompositionActivity()
 		{
 			Core::Application::GetFileSystemPtr()->DeleteDirectory(Core::StorageLocation::k_cache, kstrTempAttachmentDirectory);
 		}

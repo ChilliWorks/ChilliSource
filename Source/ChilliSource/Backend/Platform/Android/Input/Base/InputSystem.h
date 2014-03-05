@@ -23,7 +23,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CInputSystem : public Input::InputSystem
+		class InputSystem : public Input::InputSystem
 		{
 		public:
 
@@ -42,9 +42,9 @@ namespace ChilliSource
 			
 		private:
 			
-			CTouchScreen mTouchScreen;
-			CAccelerometer mAccelerometer;
-			CVirtualKeyboard mVirtualKeyboard;
+			TouchScreen mTouchScreen;
+			Accelerometer mAccelerometer;
+			VirtualKeyboard mVirtualKeyboard;
 		};
 	}
 }

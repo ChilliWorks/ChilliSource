@@ -22,27 +22,27 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Constructor
 		//------------------------------------------------------------------------
-		CTwitterPostSystem::CTwitterPostSystem(Android::CHttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem)
+		TwitterPostSystem::TwitterPostSystem(Android::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem)
 		: Social::TwitterPostSystem(inpHttpConnectionSystem, inpOAuthSystem)
 		{
 		}
 		//------------------------------------------------------------------------
 		/// Destructor
 		//------------------------------------------------------------------------
-		CTwitterPostSystem::~CTwitterPostSystem()
+		TwitterPostSystem::~TwitterPostSystem()
 		{
 		}
 		//------------------------------------------------------------------------
         /// Is A
         //------------------------------------------------------------------------
-        bool CTwitterPostSystem::IsA(Core::InterfaceIDType inInterfaceID) const
+        bool TwitterPostSystem::IsA(Core::InterfaceIDType inInterfaceID) const
         {
             return inInterfaceID == Social::TwitterPostSystem::InterfaceID;
         }
 		//------------------------------------------------------------------------
 		/// Authenticate
 		//------------------------------------------------------------------------
-		bool CTwitterPostSystem::Authenticate()
+		bool TwitterPostSystem::Authenticate()
 		{
 			bool bResult = false;
 
@@ -59,8 +59,8 @@ namespace ChilliSource
 					if(Core::Application::GetPlatformSystemPtr()->CanCreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>())
 					{
 						mpAuthenticationView = Core::Application::GetPlatformSystemPtr()->CreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>();
-						mpAuthenticationView->SetAuthenticationPINResultDelegate(Core::MakeDelegate(this, &CTwitterPostSystem::OnPINComplete));
-						m_authorisationDismissedConnection = mpAuthenticationView->GetDismissedEvent().OpenConnection(Core::MakeDelegate(this, &CTwitterPostSystem::OnAuthorisationDismissed));
+						mpAuthenticationView->SetAuthenticationPINResultDelegate(Core::MakeDelegate(this, &TwitterPostSystem::OnPINComplete));
+						m_authorisationDismissedConnection = mpAuthenticationView->GetDismissedEvent().OpenConnection(Core::MakeDelegate(this, &TwitterPostSystem::OnAuthorisationDismissed));
 						mpAuthenticationView->Present();
 					}
 				}
@@ -83,14 +83,14 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Is Image Post Supported
 		//------------------------------------------------------------------------
-		bool CTwitterPostSystem::IsImagePostSupported() const
+		bool TwitterPostSystem::IsImagePostSupported() const
 		{
 			return false;
 		}
         //------------------------------------------------------------------------
 		/// Try Post
 		//------------------------------------------------------------------------
-		bool CTwitterPostSystem::TryPost(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback)
+		bool TwitterPostSystem::TryPost(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback)
 		{
 			bool bResult = false;
 
@@ -122,7 +122,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Delegate called when the user confirms entry of the PIN
 		//------------------------------------------------------------------------
-		void CTwitterPostSystem::OnPINComplete(const Social::TwitterAuthenticationActivity::AuthenticationPINResult &insResult)
+		void TwitterPostSystem::OnPINComplete(const Social::TwitterAuthenticationActivity::AuthenticationPINResult &insResult)
 		{
 			if(Social::TwitterPIN::kudwTwitterPINLength == insResult.strPIN.size())
 			{
@@ -133,7 +133,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Delegate called with the authorisation view is dismissed.
 		//------------------------------------------------------------------------
-		void CTwitterPostSystem::OnAuthorisationDismissed(Core::Activity* inpActivity)
+		void TwitterPostSystem::OnAuthorisationDismissed(Core::Activity* inpActivity)
 		{
 			// User has cancelled
 			if(mpAuthenticationView)

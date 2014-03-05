@@ -17,11 +17,11 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CVirtualKeyboard : public Input::VirtualKeyboard
+		class VirtualKeyboard : public Input::VirtualKeyboard
 		{
 		public:
-			CVirtualKeyboard();
-			virtual ~CVirtualKeyboard();
+			VirtualKeyboard();
+			virtual ~VirtualKeyboard();
 			//-------------------------------------------
 			/// Show
 			///

@@ -12,9 +12,9 @@
 //function definitions
 extern "C"
 {
-void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchDown(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY);
-void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchUp(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY);
-void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchMoved(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY);
+	void Java_com_chillisource_input_TouchInputNativeInterface_TouchDown(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY);
+	void Java_com_chillisource_input_TouchInputNativeInterface_TouchUp(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY);
+	void Java_com_chillisource_input_TouchInputNativeInterface_TouchMoved(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY);
 }
 
 //--------------------------------------------------------------------------------------
@@ -28,9 +28,9 @@ void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchMo
 /// @param the x coordinate
 /// @param the y coordinate
 //--------------------------------------------------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchDown(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY)
+void Java_com_chillisource_input_TouchInputNativeInterface_TouchDown(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY)
 {
-	ChilliSource::Android::CTouchScreen* touchScreen = ChilliSource::Android::SCTouchInputJavaInterface::GetTouchScreen();
+	ChilliSource::Android::TouchScreen* touchScreen = ChilliSource::Android::TouchInputJavaInterface::GetTouchScreen();
 	if (touchScreen != NULL)
 	{
 		touchScreen->OnTouchBegan(indwID, infX, infY);
@@ -47,9 +47,9 @@ void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchDo
 /// @param the x coordinate
 /// @param the y coordinate
 //--------------------------------------------------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchUp(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY)
+void Java_com_chillisource_input_TouchInputNativeInterface_TouchUp(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY)
 {
-	ChilliSource::Android::CTouchScreen* touchScreen = ChilliSource::Android::SCTouchInputJavaInterface::GetTouchScreen();
+	ChilliSource::Android::TouchScreen* touchScreen = ChilliSource::Android::TouchInputJavaInterface::GetTouchScreen();
 	if (touchScreen != NULL)
 	{
 		touchScreen->OnTouchEnded(indwID, infX, infY);
@@ -66,9 +66,9 @@ void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchUp
 /// @param the x coordinate
 /// @param the y coordinate
 //--------------------------------------------------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CTouchInputNativeInterface_TouchMoved(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY)
+void Java_com_chillisource_input_TouchInputNativeInterface_TouchMoved(JNIEnv* inpEnv, jobject inThis, s32 indwID, f32 infX, f32 infY)
 {
-	ChilliSource::Android::CTouchScreen* touchScreen = ChilliSource::Android::SCTouchInputJavaInterface::GetTouchScreen();
+	ChilliSource::Android::TouchScreen* touchScreen = ChilliSource::Android::TouchInputJavaInterface::GetTouchScreen();
 	if (touchScreen != NULL)
 	{
 		touchScreen->OnTouchMoved(indwID, infX, infY);
@@ -81,26 +81,26 @@ namespace ChilliSource
 	namespace Android
 	{
 		//create static member
-		ChilliSource::Android::CTouchScreen * SCTouchInputJavaInterface::mspTouchScreen = NULL;
+		ChilliSource::Android::TouchScreen * TouchInputJavaInterface::mspTouchScreen = NULL;
 
 		//--------------------------------------------------------------------------------------
 		/// Setup Java Interface
 		//--------------------------------------------------------------------------------------
-		void SCTouchInputJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
+		void TouchInputJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
 		{
 			mspJavaVM = inpJavaVM;
 		}
 		//--------------------------------------------------------------------------------------
 		/// Register Touch Screen
 		//--------------------------------------------------------------------------------------
-		void SCTouchInputJavaInterface::RegisterTouchScreen(ChilliSource::Android::CTouchScreen* inpTouchScreen)
+		void TouchInputJavaInterface::RegisterTouchScreen(ChilliSource::Android::TouchScreen* inpTouchScreen)
 		{
 			mspTouchScreen = inpTouchScreen;
 		}
 		//--------------------------------------------------------------------------------------
 		/// Get Touch Screen
 		//--------------------------------------------------------------------------------------
-		ChilliSource::Android::CTouchScreen* SCTouchInputJavaInterface::GetTouchScreen()
+		ChilliSource::Android::TouchScreen* TouchInputJavaInterface::GetTouchScreen()
 		{
 			return mspTouchScreen;
 		}

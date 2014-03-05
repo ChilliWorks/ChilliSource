@@ -31,11 +31,11 @@ namespace ChilliSource
 		///
 		/// Android platform system
 		//=============================================
-		class CPlatformSystem : public Core::PlatformSystem
+		class PlatformSystem : public Core::PlatformSystem
 		{
 		public:
-			CPlatformSystem();
-			virtual ~CPlatformSystem();
+			PlatformSystem();
+			virtual ~PlatformSystem();
 			
 			//-----------------------------------------
 			/// Init
@@ -349,7 +349,7 @@ namespace ChilliSource
 
 		private:
 			
-			CUDIDManager mUDIDManager;
+			UDIDManager mUDIDManager;
 
 			typedef std::unordered_map<Core::InterfaceIDType, SystemCreationFunction> MapInterfaceIDToSystemFunc;
 			MapInterfaceIDToSystemFunc mmapInterfaceIDToSystemFunc;

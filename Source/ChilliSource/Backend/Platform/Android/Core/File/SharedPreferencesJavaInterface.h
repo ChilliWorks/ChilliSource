@@ -17,7 +17,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class SCSharedPreferencesJavaInterface : public _IJavaInterface
+		class SharedPreferencesJavaInterface : public _IJavaInterface
 		{
 		public:
 			//--------------------------------------------------------------------------------------

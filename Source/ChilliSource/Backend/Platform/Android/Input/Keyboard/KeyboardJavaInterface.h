@@ -22,10 +22,10 @@ namespace ChilliSource
 		///
 		/// A Java Interface for Android keyboard input.
 		//======================================================
-		class CKeyboardJavaInterface : public IJavaInterface
+		class KeyboardJavaInterface : public IJavaInterface
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(CKeyboardJavaInterface);
+			CS_DECLARE_NAMEDTYPE(KeyboardJavaInterface);
 			//-----------------------------------------------
 			/// Events
 			//-----------------------------------------------
@@ -35,7 +35,7 @@ namespace ChilliSource
 			//-----------------------------------------------
 			/// Constructor
 			//-----------------------------------------------
-			CKeyboardJavaInterface();
+			KeyboardJavaInterface();
 			//-----------------------------------------------
 			/// Is A
 			///

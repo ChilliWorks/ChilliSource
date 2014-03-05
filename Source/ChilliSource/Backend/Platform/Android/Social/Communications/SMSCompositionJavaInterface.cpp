@@ -14,7 +14,7 @@
 //function definitions
 extern "C"
 {
-void Java_com_taggames_moflow_nativeinterface_CSMSCompositionNativeInterface_OnSMSClosed(JNIEnv* inpEnv, jobject thiz);
+	void Java_com_chillisource_social_SMSCompositionNativeInterface_OnSMSClosed(JNIEnv* inpEnv, jobject thiz);
 }
 //--------------------------------------------------------------------------------------
 /// On Update Text
@@ -27,22 +27,22 @@ void Java_com_taggames_moflow_nativeinterface_CSMSCompositionNativeInterface_OnS
 /// @param the updated keyboard text
 /// @return whether or not the text was accepted.
 //--------------------------------------------------------------------------------------
-void Java_com_taggames_moflow_nativeinterface_CSMSCompositionNativeInterface_OnSMSClosed(JNIEnv* inpEnv, jobject thiz)
+void Java_com_chillisource_social_SMSCompositionNativeInterface_OnSMSClosed(JNIEnv* inpEnv, jobject thiz)
 {
-	ChilliSource::Android::CSMSCompositionActivity::OnSMSClosed();
+	ChilliSource::Android::SMSCompositionActivity::OnSMSClosed();
 }
 namespace ChilliSource
 {
 	namespace Android
 	{
-		void SCSMSCompositionJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
+		void SMSCompositionJavaInterface::SetupJavaInterface(JavaVM* inpJavaVM)
 		{
 			mspJavaVM = inpJavaVM;
 
-			InitCallableStaticMethod("com/taggames/moflow/nativeinterface/CSMSCompositionNativeInterface","PresentSMS", "([Ljava/lang/String;Ljava/lang/String;)V");
+			InitCallableStaticMethod("com/chillisource/social/SMSCompositionNativeInterface","PresentSMS", "([Ljava/lang/String;Ljava/lang/String;)V");
 		}
 
-		void SCSMSCompositionJavaInterface::Present(const std::vector<Core::UTF8String> & inastrRecipientNumbers, //Vector of email addresses
+		void SMSCompositionJavaInterface::Present(const std::vector<Core::UTF8String> & inastrRecipientNumbers, //Vector of email addresses
 								const Core::UTF8String & instrContents)
 		{
 			MethodReference sdMethodRef = GetStaticMethodReference("PresentSMS");
@@ -67,7 +67,7 @@ namespace ChilliSource
 			}
 		}
 
-		void SCSMSCompositionJavaInterface::Dismiss()
+		void SMSCompositionJavaInterface::Dismiss()
 		{
 
 		}

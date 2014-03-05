@@ -14,7 +14,7 @@
 
 #include <ChilliSource/Audio/Base/AudioSystem.h>
 #include <ChilliSource/Audio/Base/AudioPlayer.h>
-#include <ChilliSource/Backend/Audio/FMOD/Base/FMODAudioLoader.h>
+#include <ChilliSource/Backend/Audio/FMOD/Base/AudioLoader.h>
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
 #include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Core/File/FileSystem.h>
@@ -55,50 +55,50 @@ namespace ChilliSource
 		//-----------------------------------------
 		/// Constructor
 		//-----------------------------------------
-		CPlatformSystem::CPlatformSystem()
+		PlatformSystem::PlatformSystem()
 		{
 			//add system creator functions
-			AddSystemFunc(Networking::HttpConnectionSystem::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateHttpConnectionSystem));
+			AddSystemFunc(Networking::HttpConnectionSystem::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateHttpConnectionSystem));
 
 			//add activity creator functions
-			AddActivityFunc(Video::VideoPlayerActivity::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateDefaultVideoPlayerActivity));
-			AddActivityFunc(Web::WebViewActivity::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateWebViewActivity));
-			AddActivityFunc(Social::EmailCompositionActivity::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateEmailCompositionActivity));
+			AddActivityFunc(Video::VideoPlayerActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateDefaultVideoPlayerActivity));
+			AddActivityFunc(Web::WebViewActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateWebViewActivity));
+			AddActivityFunc(Social::EmailCompositionActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateEmailCompositionActivity));
 
-			if (CSMSCompositionActivity::SupportedByDevice())
-				AddActivityFunc(Social::SMSCompositionActivity::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateSMSCompositionActivity));
+			if (SMSCompositionActivity::SupportedByDevice())
+				AddActivityFunc(Social::SMSCompositionActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateSMSCompositionActivity));
 
-			AddInfoProviderFunc(Social::ContactInformationProvider::InterfaceID, Core::MakeDelegate(this, &CPlatformSystem::CreateContactInformationProvider));
+			AddInfoProviderFunc(Social::ContactInformationProvider::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateContactInformationProvider));
 
-			Core::NotificationScheduler::Initialise(new CLocalNotificationScheduler());
-			Core::Application::SetFileSystem(new Android::CFileSystem());
+			Core::NotificationScheduler::Initialise(new LocalNotificationScheduler());
+			Core::Application::SetFileSystem(new FileSystem());
 			Core::Logging::Init();
 		}
 		//--------------------------------------------
 		/// Add System Function
 		//-------------------------------------------
-		void CPlatformSystem::AddSystemFunc(Core::InterfaceIDType inInterfaceID, SystemCreationFunction inFunction)
+		void PlatformSystem::AddSystemFunc(Core::InterfaceIDType inInterfaceID, SystemCreationFunction inFunction)
 		{
 			mmapInterfaceIDToSystemFunc.insert(std::make_pair(inInterfaceID,inFunction));
 		}
 		//--------------------------------------------
 		/// Add Activity Function
 		//-------------------------------------------
-		void CPlatformSystem::AddActivityFunc(Core::InterfaceIDType inInterfaceID, ActivityCreationFunction inFunction)
+		void PlatformSystem::AddActivityFunc(Core::InterfaceIDType inInterfaceID, ActivityCreationFunction inFunction)
 		{
 			mmapInterfaceIDToActivityFunc.insert(std::make_pair(inInterfaceID,inFunction));
 		}
 		//--------------------------------------------
 		/// Add Info Provider Function
 		//-------------------------------------------
-		void CPlatformSystem::AddInfoProviderFunc(Core::InterfaceIDType inInterfaceID, InfoProviderCreationFunction inFunction)
+		void PlatformSystem::AddInfoProviderFunc(Core::InterfaceIDType inInterfaceID, InfoProviderCreationFunction inFunction)
 		{
 			mmapInterfaceIDToInfoProviderFunc.insert(std::make_pair(inInterfaceID,inFunction));
 		}
 		//-------------------------------------------
 		/// Find System Implementing
 		//-------------------------------------------
-		Core::System* CPlatformSystem::FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemSPtr>& inSystems) const
+		Core::System* PlatformSystem::FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemSPtr>& inSystems) const
 		{
 			for(u32 nSystem = 0; nSystem < inSystems.size(); nSystem++)
 			{
@@ -113,7 +113,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		/// Init
 		//-----------------------------------------
-		void CPlatformSystem::Init()
+		void PlatformSystem::Init()
 		{
             //Initialise GUI factory
             GUI::GUIViewFactory::RegisterDefaults();
@@ -125,9 +125,9 @@ namespace ChilliSource
         /// to clamp to. This should be in multiples
         /// of 15 (15, 30, 60)
         //-----------------------------------------
-        void CPlatformSystem::SetMaxFPS(u32 inudwFPS)
+        void PlatformSystem::SetMaxFPS(u32 inudwFPS)
         {
-        	CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->SetMaxFPS(inudwFPS);
+        	JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->SetMaxFPS(inudwFPS);
         }
 		//-----------------------------------------
         /// Terminate Updater
@@ -135,27 +135,27 @@ namespace ChilliSource
         /// Stops the update loop causing
         /// the application to terminate
         //-----------------------------------------
-        void CPlatformSystem::TerminateUpdater()
+        void PlatformSystem::TerminateUpdater()
         {
-        	CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->ForceQuit();
+        	JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->ForceQuit();
         }
 		//-------------------------------------------------
 		/// Create Default Systems
 		//-------------------------------------------------
-		void CPlatformSystem::CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems)
+		void PlatformSystem::CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems)
 		{
 			//create the main systems
 			OpenGL::RenderSystem* pRenderSystem = new OpenGL::RenderSystem();
 			inaSystems.push_back(Core::SystemSPtr(pRenderSystem));
 			Core::Application::SetRenderSystem(pRenderSystem);
 
-			Input::InputSystem* pInputSystem = new Android::CInputSystem();
+			Input::InputSystem* pInputSystem = new Android::InputSystem();
 			inaSystems.push_back(Core::SystemSPtr(pInputSystem));
 			Core::Application::SetInputSystem(pInputSystem);
 
-			Audio::AudioSystem* pAudioSystem = new FMOD::CFMODSystem();
+			Audio::AudioSystem* pAudioSystem = new FMOD::FMODSystem();
 			inaSystems.push_back(Core::SystemSPtr(pAudioSystem));
-			inaSystems.push_back(Core::SystemSPtr(new FMOD::CFMODAudioLoader(pAudioSystem)));
+			inaSystems.push_back(Core::SystemSPtr(new FMOD::AudioLoader(pAudioSystem)));
 			Core::Application::SetAudioSystem(pAudioSystem);
 
 			//create other important systems
@@ -186,7 +186,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		/// Post Create Systems
 		//-------------------------------------------------
-		void CPlatformSystem::PostCreateSystems()
+		void PlatformSystem::PostCreateSystems()
 		{
 			if(Core::Application::GetAudioSystemPtr() != NULL)
 			{
@@ -196,7 +196,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		/// Can Create System With Interface
 		//----------------------------------------
-		bool CPlatformSystem::CanCreateSystemWithInterface(Core::InterfaceIDType inInterfaceID) const
+		bool PlatformSystem::CanCreateSystemWithInterface(Core::InterfaceIDType inInterfaceID) const
 		{
 			MapInterfaceIDToSystemFunc::const_iterator pFunc(mmapInterfaceIDToSystemFunc.find(inInterfaceID));
 			return pFunc != mmapInterfaceIDToSystemFunc.end();
@@ -204,7 +204,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		/// Create and Add System With Interface
 		//-----------------------------------------
-		Core::System* CPlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr> & inaExistingSystems) const
+		Core::System* PlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr> & inaExistingSystems) const
 		{
 			Core::System * pResult = NULL;
 
@@ -226,7 +226,7 @@ namespace ChilliSource
 		//--------------------------------------------
 		/// Can Create Activity With Interface
 		//--------------------------------------------
-		bool CPlatformSystem::CanCreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
+		bool PlatformSystem::CanCreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
 		{
 			MapInterfaceIDToActivityFunc::const_iterator pFunc(mmapInterfaceIDToActivityFunc.find(inInterfaceID));
 
@@ -235,7 +235,7 @@ namespace ChilliSource
 		//--------------------------------------------
 		/// Create Activity With Interface
 		//--------------------------------------------
-		Core::Activity* CPlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
+		Core::Activity* PlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
 		{
 			MapInterfaceIDToActivityFunc::const_iterator pFunc(mmapInterfaceIDToActivityFunc.find(inInterfaceID));
 
@@ -249,7 +249,7 @@ namespace ChilliSource
 		//--------------------------------------------
 		/// Can Create Information Provider With Interface
 		//--------------------------------------------
-		bool CPlatformSystem::CanCreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
+		bool PlatformSystem::CanCreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
 		{
 			MapInterfaceIDToInfoProviderFunc::const_iterator pFunc(mmapInterfaceIDToInfoProviderFunc.find(inInterfaceID));
 
@@ -258,7 +258,7 @@ namespace ChilliSource
 		//--------------------------------------------
 		/// Create Information Provider With Interface
 		//--------------------------------------------
-		Core::IInformationProvider* CPlatformSystem::CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
+		Core::IInformationProvider* PlatformSystem::CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
 		{
 			MapInterfaceIDToInfoProviderFunc::const_iterator pFunc(mmapInterfaceIDToInfoProviderFunc.find(inInterfaceID));
 			if (pFunc != mmapInterfaceIDToInfoProviderFunc.end())
@@ -270,9 +270,9 @@ namespace ChilliSource
 		//--------------------------------------------
 		/// Create Http Connection System
 		//--------------------------------------------
-		Core::System* CPlatformSystem::CreateHttpConnectionSystem(std::vector<Core::SystemSPtr>& inSystems) const
+		Core::System* PlatformSystem::CreateHttpConnectionSystem(std::vector<Core::SystemSPtr>& inSystems) const
 		{
-			return new Android::CHttpConnectionSystem();
+			return new Android::HttpConnectionSystem();
 		}
 		//--------------------------------------------
 		/// Create Activities
@@ -281,21 +281,21 @@ namespace ChilliSource
 		///
 		/// @return Ownership of the activity
 		//--------------------------------------------
-		Core::Activity* CPlatformSystem::CreateSMSCompositionActivity() const
+		Core::Activity* PlatformSystem::CreateSMSCompositionActivity() const
 		{
-			return new CSMSCompositionActivity();
+			return new SMSCompositionActivity();
 		}
-		Core::Activity * CPlatformSystem::CreateWebViewActivity() const
+		Core::Activity * PlatformSystem::CreateWebViewActivity() const
 		{
-			return new CWebViewActivity();
+			return new WebViewActivity();
 		}
-		Core::Activity* CPlatformSystem::CreateEmailCompositionActivity() const
+		Core::Activity* PlatformSystem::CreateEmailCompositionActivity() const
 		{
-			return new CEmailCompositionActivity();
+			return new EmailCompositionActivity();
 		}
-		Core::Activity * CPlatformSystem::CreateDefaultVideoPlayerActivity() const
+		Core::Activity * PlatformSystem::CreateDefaultVideoPlayerActivity() const
         {
-            return new CVideoPlayerActivity();
+            return new VideoPlayerActivity();
         }
 		//--------------------------------------------
 		/// Create Information Providers
@@ -304,24 +304,24 @@ namespace ChilliSource
 		///
 		/// @return Ownership of the info provider
 		//--------------------------------------------
-		Core::IInformationProvider* CPlatformSystem::CreateContactInformationProvider() const
+		Core::IInformationProvider* PlatformSystem::CreateContactInformationProvider() const
 		{
-			return new CContactInformationProvider();
+			return new ContactInformationProvider();
 		}
 		//---------------------------------------------
 		/// Get Screen Dimensions
 		//---------------------------------------------
-		Core::Vector2 CPlatformSystem::GetScreenDimensions() const
+		Core::Vector2 PlatformSystem::GetScreenDimensions() const
 		{
 			Core::Vector2 Result;
-			CoreJavaInterfacePtr pCoreJI = CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>();
+			CoreJavaInterfacePtr pCoreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
 			Result.x = pCoreJI->GetScreenWidth();
 			Result.y = pCoreJI->GetScreenHeight();
 
 			s32 dwOrientation = pCoreJI->GetOrientation();
 #ifdef DEBUG
 			if(dwOrientation < 0)
-				CS_LOG_ERROR("CPlatformSystem::GetScreenDimensions() - Could not get orientation of device!");
+				CS_LOG_ERROR("PlatformSystem::GetScreenDimensions() - Could not get orientation of device!");
 #endif
 			if(Core::ScreenOrientation::k_landscapeRight == (Core::ScreenOrientation)dwOrientation)
 			{
@@ -336,38 +336,38 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Get Device Model Name
 		//--------------------------------------------------------------
-        std::string CPlatformSystem::GetDeviceModelName() const
+        std::string PlatformSystem::GetDeviceModelName() const
 		{
-			return CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->GetDeviceModel();
+			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetDeviceModel();
 		}
 		//--------------------------------------------------------------
 		/// Get Device Model Type Name
 		//--------------------------------------------------------------
-        std::string CPlatformSystem::GetDeviceModelTypeName() const
+        std::string PlatformSystem::GetDeviceModelTypeName() const
 		{
-			return CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->GetDeviceModelType();
+			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetDeviceModelType();
 		}
 		//--------------------------------------------------------------
 		/// Get Device Manufacturer Name
 		//--------------------------------------------------------------
-        std::string CPlatformSystem::GetDeviceManufacturerName() const
+        std::string PlatformSystem::GetDeviceManufacturerName() const
 		{
-			return CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->GetDeviceManufacturer();
+			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetDeviceManufacturer();
 		}
 		//--------------------------------------------------------------
 		/// Get OS Version
 		//--------------------------------------------------------------
-		std::string CPlatformSystem::GetOSVersion() const
+		std::string PlatformSystem::GetOSVersion() const
 		{
-			return Core::ToString(CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->GetOSVersionCode());
+			return Core::ToString(JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetOSVersionCode());
 		}
 		//--------------------------------------------------------------
 		/// Get Locale
 		//--------------------------------------------------------------
-		Core::Locale CPlatformSystem::GetLocale() const
+		Core::Locale PlatformSystem::GetLocale() const
 		{
 			//get the locale from android
-			std::string strLocale = CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->GetDefaultLocaleCode();
+			std::string strLocale = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetDefaultLocaleCode();
 
 			//break this locale into parts(language/country code/extra)
 			std::vector<std::string> strLocaleBrokenUp = ChilliSource::Core::StringUtils::Split(strLocale, "_", 0);
@@ -386,16 +386,16 @@ namespace ChilliSource
 		//--------------------------------------------------------------
 		/// Get Language
 		//--------------------------------------------------------------
-		Core::Locale CPlatformSystem::GetLanguage() const
+		Core::Locale PlatformSystem::GetLanguage() const
 		{
 			return GetLocale();
 		}
 		//-------------------------------------------------
 		/// Get Screen Density
 		//-------------------------------------------------
-		f32 CPlatformSystem::GetScreenDensity() const
+		f32 PlatformSystem::GetScreenDensity() const
 		{
-			return CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->GetScreenDensity();
+			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetScreenDensity();
 		}
         //-------------------------------------------------
         /// Get App Version
@@ -403,63 +403,63 @@ namespace ChilliSource
         /// @return The version of the application as found
 		/// in the manifest
         //-------------------------------------------------
-        std::string CPlatformSystem::GetAppVersion() const
+        std::string PlatformSystem::GetAppVersion() const
 		{
-			return CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->GetApplicationVersionName();
+			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetApplicationVersionName();
 		}
 		//-------------------------------------------------
 		/// Get Device ID
 		//-------------------------------------------------
-		std::string CPlatformSystem::GetDeviceID()
+		std::string PlatformSystem::GetDeviceID()
 		{
 			return mUDIDManager.GetUDID();
 		}
 		//--------------------------------------------------------------
 		/// Get Number Of CPU Cores
 		//--------------------------------------------------------------
-		u32 CPlatformSystem::GetNumberOfCPUCores() const
+		u32 PlatformSystem::GetNumberOfCPUCores() const
 		{
-			return CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->GetNumberOfCores();
+			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetNumberOfCores();
 		}
 		//--------------------------------------------------------------
 		/// Get System Time
 		//--------------------------------------------------------------
-		TimeIntervalMs CPlatformSystem::GetSystemTimeMS() const
+		TimeIntervalMs PlatformSystem::GetSystemTimeMS() const
 		{
-			return CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->GetSystemTimeInMilliseconds();
+			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetSystemTimeInMilliseconds();
 		}
 		//-------------------------------------------------
 		/// Get Physical Screen Size
 		//-------------------------------------------------
-		f32 CPlatformSystem::GetPhysicalScreenSize()
+		f32 PlatformSystem::GetPhysicalScreenSize()
 		{
-			return CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->GetPhysicalScreenSize();
+			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetPhysicalScreenSize();
 		}
         //--------------------------------------------------------------------------------------------------
         /// Make Toast
         //--------------------------------------------------------------------------------------------------
-        void CPlatformSystem::MakeToast(const Core::UTF8String& instrText) const
+        void PlatformSystem::MakeToast(const Core::UTF8String& instrText) const
         {
-        	CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->MakeToast(instrText);
+        	JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->MakeToast(instrText);
         }
         //--------------------------------------------------------------------------------------------------
         /// Show System Confirm Dialog
         //--------------------------------------------------------------------------------------------------
-		void CPlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const
+		void PlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const
 		{
-			CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->ShowSystemConfirmDialog(inudwID, instrTitle, instrMessage, instrConfirm, instrCancel);
+			JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->ShowSystemConfirmDialog(inudwID, instrTitle, instrMessage, instrConfirm, instrCancel);
 		}
         //--------------------------------------------------------------------------------------------------
         /// Show System Dialog
         //--------------------------------------------------------------------------------------------------
-		void CPlatformSystem::ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const
+		void PlatformSystem::ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const
 		{
-			CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CCoreJavaInterface>()->ShowSystemDialog(inudwID, instrTitle, instrMessage, instrConfirm);
+			JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->ShowSystemDialog(inudwID, instrTitle, instrMessage, instrConfirm);
 		}
 		//-----------------------------------------
 		/// Destructor
 		//-----------------------------------------
-		CPlatformSystem::~CPlatformSystem()
+		PlatformSystem::~PlatformSystem()
 		{
 			
 		}

@@ -17,13 +17,13 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class CEmailCompositionActivity: public Social::EmailCompositionActivity
+		class EmailCompositionActivity: public Social::EmailCompositionActivity
 		{
 		public:
 			//-------------------------------------------------------
 			/// Constructor
 			//-------------------------------------------------------
-			CEmailCompositionActivity();
+			EmailCompositionActivity();
 			//-------------------------------------------------------
 	        /// Is Supported By Device
 	        ///
@@ -77,7 +77,7 @@ namespace ChilliSource
 			//-------------------------------------------------------
 			/// Destructor
 			//-------------------------------------------------------
-			virtual ~CEmailCompositionActivity();
+			virtual ~EmailCompositionActivity();
 		private:
             //-------------------------------------------------------
             /// On Email Closed

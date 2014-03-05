@@ -18,7 +18,7 @@ namespace ChilliSource
 {
     namespace Android
     {
-    	class CGooglePlayExpansionJavaInterface;
+    	class GooglePlayExpansionJavaInterface;
 
     	enum class DownloadStatus
     	{
@@ -31,15 +31,15 @@ namespace ChilliSource
     		k_failedInsufficientStorage
     	};
 
-        class CGooglePlayExpansionSystem : public Core::System
+        class GooglePlayExpansionSystem : public Core::System
         {
         public:
-        	CS_DECLARE_NAMEDTYPE(CGooglePlayExpansionSystem);
+        	CS_DECLARE_NAMEDTYPE(GooglePlayExpansionSystem);
 
         	typedef std::function<void(DownloadStatus)> DownloadStatusDelegate;
 
-        	CGooglePlayExpansionSystem();
-        	~CGooglePlayExpansionSystem();
+        	GooglePlayExpansionSystem();
+        	~GooglePlayExpansionSystem();
 
             //-------------------------------------------------------------
             /// Is A
@@ -208,16 +208,16 @@ namespace ChilliSource
             u32 mudwNumExpansions;
             f32 mfInstallProgress;
 
-            CGooglePlayExpansionJavaInterface* mpJavaInterface;
+            GooglePlayExpansionJavaInterface* mpJavaInterface;
         };
 
-        class CGooglePlayExpansionJavaInterface : public ChilliSource::Android::IJavaInterface
+        class GooglePlayExpansionJavaInterface : public ChilliSource::Android::IJavaInterface
         {
         public:
 
-        	CS_DECLARE_NAMEDTYPE(CGooglePlayExpansionJavaInterface);
+        	CS_DECLARE_NAMEDTYPE(GooglePlayExpansionJavaInterface);
 
-        	CGooglePlayExpansionJavaInterface();
+        	GooglePlayExpansionJavaInterface();
 
         	bool IsA(Core::InterfaceIDType inInterfaceID) const;
 

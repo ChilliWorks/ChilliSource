@@ -19,32 +19,32 @@ namespace ChilliSource
 	namespace Android
 	{
 		//forward declarations
-		class CJavaInterfaceManager;
+		class JavaInterfaceManager;
 		class IJavaInterface;
-		class CCoreJavaInterface;
-		class CVideoPlayerJavaInterface;
-		class CVideoPlayerActivity;
-		class CRemoteNotificationJavaInterface;
-		class CLocalNotificationJavaInterface;
-		class CRemoteNotificationScheduler;
-		class CEmailCompositionActivity;
-		class CEmailCompositionJavaInterface;
-		class CAccelerometerJavaInterface;
-		class CKeyboardJavaInterface;
+		class CoreJavaInterface;
+		class VideoPlayerJavaInterface;
+		class VideoPlayerActivity;
+		class RemoteNotificationJavaInterface;
+		class LocalNotificationJavaInterface;
+		class RemoteNotificationScheduler;
+		class EmailCompositionActivity;
+		class EmailCompositionJavaInterface;
+		class AccelerometerJavaInterface;
+		class KeyboardJavaInterface;
 
 		//shared pointer declarations
-		typedef std::shared_ptr<CJavaInterfaceManager> JavaInterfaceManagerPtr;
+		typedef std::shared_ptr<JavaInterfaceManager> JavaInterfaceManagerPtr;
 		typedef std::shared_ptr<IJavaInterface> JavaInterfacePtr;
-		typedef std::shared_ptr<CCoreJavaInterface> CoreJavaInterfacePtr;
-		typedef std::shared_ptr<CRemoteNotificationJavaInterface> RemoteNotificationJavaInterfacePtr;
-		typedef std::shared_ptr<CVideoPlayerJavaInterface> VideoPlayerJavaInterfacePtr;
-		typedef std::shared_ptr<CVideoPlayerActivity> VideoPlayerActivityPtr;
-		typedef std::shared_ptr<CLocalNotificationJavaInterface> LocalNotificationJavaInterfacePtr;
-		typedef std::shared_ptr<CRemoteNotificationScheduler> AndroidRemoteNotificationSchedulerPtr;
-		typedef std::shared_ptr<CEmailCompositionActivity> EmailCompositionActivityPtr;
-		typedef std::shared_ptr<CEmailCompositionJavaInterface> EmailCompositionJavaInterfacePtr;
-		typedef std::shared_ptr<CAccelerometerJavaInterface> AccelerometerJavaInterfacePtr;
-		typedef std::shared_ptr<CKeyboardJavaInterface> KeyboardJavaInterfacePtr;
+		typedef std::shared_ptr<CoreJavaInterface> CoreJavaInterfacePtr;
+		typedef std::shared_ptr<RemoteNotificationJavaInterface> RemoteNotificationJavaInterfacePtr;
+		typedef std::shared_ptr<VideoPlayerJavaInterface> VideoPlayerJavaInterfacePtr;
+		typedef std::shared_ptr<VideoPlayerActivity> VideoPlayerActivityPtr;
+		typedef std::shared_ptr<LocalNotificationJavaInterface> LocalNotificationJavaInterfacePtr;
+		typedef std::shared_ptr<RemoteNotificationScheduler> AndroidRemoteNotificationSchedulerPtr;
+		typedef std::shared_ptr<EmailCompositionActivity> EmailCompositionActivityPtr;
+		typedef std::shared_ptr<EmailCompositionJavaInterface> EmailCompositionJavaInterfacePtr;
+		typedef std::shared_ptr<AccelerometerJavaInterface> AccelerometerJavaInterfacePtr;
+		typedef std::shared_ptr<KeyboardJavaInterface> KeyboardJavaInterfacePtr;
 	}
 }
 

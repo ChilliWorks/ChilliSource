@@ -30,28 +30,28 @@ namespace ChilliSource
         //--------------------------------------------------------------
         /// Constructor
         //--------------------------------------------------------------
-        CVideoPlayerActivity::CVideoPlayerActivity()
+        VideoPlayerActivity::VideoPlayerActivity()
         	: mCurrentSubtitleTimeMS(0)
         {
         	//get the media player java interface or create it if it doesn't yet exist.
-        	mpVideoPlayerJavaInterface = CJavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CVideoPlayerJavaInterface>();
+        	mpVideoPlayerJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<VideoPlayerJavaInterface>();
         	if (mpVideoPlayerJavaInterface == NULL)
         	{
-        		mpVideoPlayerJavaInterface = VideoPlayerJavaInterfacePtr(new CVideoPlayerJavaInterface());
-        		CJavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpVideoPlayerJavaInterface);
+        		mpVideoPlayerJavaInterface = VideoPlayerJavaInterfacePtr(new VideoPlayerJavaInterface());
+        		JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpVideoPlayerJavaInterface);
         	}
         }
 		//--------------------------------------------------------------
 		/// Is A
 		//--------------------------------------------------------------
-		bool CVideoPlayerActivity::IsA(Core::InterfaceIDType inID) const
+		bool VideoPlayerActivity::IsA(Core::InterfaceIDType inID) const
 		{
 			return inID == Video::VideoPlayerActivity::InterfaceID;
 		}
         //--------------------------------------------------------------
         /// Present
         //--------------------------------------------------------------
-        void CVideoPlayerActivity::Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour)
+        void VideoPlayerActivity::Present(Core::StorageLocation ineLocation, const std::string& instrFileName, bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour)
         {
         	//calculate the storage location and full filename.
         	bool bIsPackage;
@@ -81,53 +81,53 @@ namespace ChilliSource
         	}
 
         	//start the video
-        	OnVideoDismissedDelegate dismissedDelegate(Core::MakeDelegate(this, &CVideoPlayerActivity::OnVideoDismissed));
-        	OnVideoStoppedDelegate stoppedDelegate(Core::MakeDelegate(this, &CVideoPlayerActivity::OnVideoStopped));
+        	OnVideoDismissedDelegate dismissedDelegate(Core::MakeDelegate(this, &VideoPlayerActivity::OnVideoDismissed));
+        	OnVideoStoppedDelegate stoppedDelegate(Core::MakeDelegate(this, &VideoPlayerActivity::OnVideoStopped));
         	mpVideoPlayerJavaInterface->Present(bIsPackage, strFilename, inbCanDismissWithTap, inBackgroundColour, dismissedDelegate, stoppedDelegate);
         }
         //--------------------------------------------------------------
 		/// Present
 		//--------------------------------------------------------------
-		void CVideoPlayerActivity::PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
+		void VideoPlayerActivity::PresentWithSubtitles(Core::StorageLocation ineVideoLocation, const std::string& instrVideoFilename,
 														Core::StorageLocation ineSubtitlesLocation, const std::string& instrSubtitlesFilename,
 														bool inbCanDismissWithTap, const Core::Colour& inBackgroundColour)
 		{
 			mpSubtitles = LOAD_RESOURCE(Video::Subtitles, ineSubtitlesLocation, instrSubtitlesFilename);
-			mpVideoPlayerJavaInterface->SetUpdateSubtitlesDelegate(Core::MakeDelegate(this, &CVideoPlayerActivity::OnUpdateSubtitles));
+			mpVideoPlayerJavaInterface->SetUpdateSubtitlesDelegate(Core::MakeDelegate(this, &VideoPlayerActivity::OnUpdateSubtitles));
 			Present(ineVideoLocation, instrVideoFilename, inbCanDismissWithTap, inBackgroundColour);
 		}
         //--------------------------------------------------------------
         /// Is Playing
         //--------------------------------------------------------------
-        bool CVideoPlayerActivity::IsPlaying() const
+        bool VideoPlayerActivity::IsPlaying() const
         {
         	return mpVideoPlayerJavaInterface->IsPlaying();
         }
         //--------------------------------------------------------------
         /// Get Duration
         //--------------------------------------------------------------
-        f32 CVideoPlayerActivity::GetDuration() const
+        f32 VideoPlayerActivity::GetDuration() const
         {
         	return mpVideoPlayerJavaInterface->GetDuration();
         }
         //--------------------------------------------------------------
         /// Get Time
         //--------------------------------------------------------------
-        f32 CVideoPlayerActivity::GetTime() const
+        f32 VideoPlayerActivity::GetTime() const
 		{
         	return mpVideoPlayerJavaInterface->GetTime();
 		}
         //--------------------------------------------------------------
         /// Dismiss
         //--------------------------------------------------------------
-        void CVideoPlayerActivity::Dismiss()
+        void VideoPlayerActivity::Dismiss()
         {
         	return mpVideoPlayerJavaInterface->Dismiss();
         }
 		//---------------------------------------------------------------
 		/// On Video Dismissed
 		//---------------------------------------------------------------
-		void CVideoPlayerActivity::OnVideoDismissed()
+		void VideoPlayerActivity::OnVideoDismissed()
 		{
 			//This is being called on either the video player UI thread or
 			//The video player surface thread. Its is also more than likely
@@ -136,13 +136,13 @@ namespace ChilliSource
 			//playback complete event occurs on a thread and at a time the
 			//user would expect.
 
-			Core::Task<> task(this, &CVideoPlayerActivity::VideoDismissedTask);
+			Core::Task<> task(this, &VideoPlayerActivity::VideoDismissedTask);
 			Core::TaskScheduler::ScheduleMainThreadTask(task);
 		}
         //---------------------------------------------------------------
         /// On Video Stopped
         //---------------------------------------------------------------
-        void CVideoPlayerActivity::OnVideoStopped()
+        void VideoPlayerActivity::OnVideoStopped()
         {
         	//This is being called on either the video player UI thread or
         	//The video player surface thread. Its is also more than likely
@@ -151,20 +151,20 @@ namespace ChilliSource
         	//playback complete event occurs on a thread and at a time the
         	//user would expect.
 
-        	Core::Task<> task(this, &CVideoPlayerActivity::VideoStoppedTask);
+        	Core::Task<> task(this, &VideoPlayerActivity::VideoStoppedTask);
 			Core::TaskScheduler::ScheduleMainThreadTask(task);
         }
 		//---------------------------------------------------------------
 		/// Video Dismissed Task
 		//---------------------------------------------------------------
-		void CVideoPlayerActivity::VideoDismissedTask()
+		void VideoPlayerActivity::VideoDismissedTask()
 		{
 			mOnDismissedEvent.NotifyConnections();
 		}
 		//---------------------------------------------------------------
 		/// Video Stopped Task
 		//---------------------------------------------------------------
-		void CVideoPlayerActivity::VideoStoppedTask()
+		void VideoPlayerActivity::VideoStoppedTask()
 		{
 			mOnPlaybackCompleteEvent.NotifyConnections();
 			mpSubtitles.reset();
@@ -172,7 +172,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------
 		/// Update Subtitles
 		//---------------------------------------------------------------
-		void CVideoPlayerActivity::OnUpdateSubtitles()
+		void VideoPlayerActivity::OnUpdateSubtitles()
 		{
 			//only update if the position in the video has changed.
 			f32 fPosition = GetTime();
@@ -220,7 +220,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------
 		/// Update Subtitle
 		//---------------------------------------------------------------
-		void CVideoPlayerActivity::UpdateSubtitle(const Video::Subtitles::SubtitlePtr& inpSubtitle, s64 inlwSubtitleID, TimeIntervalMs inTimeMS)
+		void VideoPlayerActivity::UpdateSubtitle(const Video::Subtitles::SubtitlePtr& inpSubtitle, s64 inlwSubtitleID, TimeIntervalMs inTimeMS)
 		{
 			Video::Subtitles::StylePtr pStyle = mpSubtitles->GetStyleWithName(inpSubtitle->strStyleName);
 

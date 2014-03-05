@@ -13,16 +13,16 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		CJavaInterfaceManager* CJavaInterfaceManager::mpJavaInterfaceManagerSingleton = NULL;
+		JavaInterfaceManager* JavaInterfaceManager::mpJavaInterfaceManagerSingleton = NULL;
 
 		//-------------------------------------------------------
 		/// Get Singleton Ptr
 		//-------------------------------------------------------
-		CJavaInterfaceManager* CJavaInterfaceManager::GetSingletonPtr()
+		JavaInterfaceManager* JavaInterfaceManager::GetSingletonPtr()
 		{
 			if (mpJavaInterfaceManagerSingleton == NULL)
 			{
-				mpJavaInterfaceManagerSingleton = new CJavaInterfaceManager();
+				mpJavaInterfaceManagerSingleton = new JavaInterfaceManager();
 			}
 
 			return mpJavaInterfaceManagerSingleton;
@@ -30,35 +30,35 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		/// Get Singleton
 		//--------------------------------------------------------
-		CJavaInterfaceManager& CJavaInterfaceManager::GetSingleton()
+		JavaInterfaceManager& JavaInterfaceManager::GetSingleton()
 		{
 			return *GetSingletonPtr();
 		}
 		//--------------------------------------------------------
 		/// Constructor
 		//--------------------------------------------------------
-		CJavaInterfaceManager::CJavaInterfaceManager()
+		JavaInterfaceManager::JavaInterfaceManager()
 		 : mpJavaVM(NULL)
 		{
 		}
 		//--------------------------------------------------------
 		/// Initialise
 		//--------------------------------------------------------
-		void CJavaInterfaceManager::Initialise(JavaVM* inpJavaVM)
+		void JavaInterfaceManager::Initialise(JavaVM* inpJavaVM)
 		{
 			mpJavaVM = inpJavaVM;
 		}
 		//--------------------------------------------------------
 		/// Get Java VM
 		//--------------------------------------------------------
-		JavaVM* CJavaInterfaceManager::GetJavaVM()
+		JavaVM* JavaInterfaceManager::GetJavaVM()
 		{
 			return mpJavaVM;
 		}
 		//--------------------------------------------------------
 		/// Get JNI Environment Ptr
 		//--------------------------------------------------------
-		JNIEnv* CJavaInterfaceManager::GetJNIEnvironmentPtr()
+		JNIEnv* JavaInterfaceManager::GetJNIEnvironmentPtr()
 		{
 			if (mpJavaVM != NULL)
 			{
@@ -72,14 +72,14 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		/// Add Java Interface
 		//--------------------------------------------------------
-		void CJavaInterfaceManager::AddJavaInterface(JavaInterfacePtr inpJavaInterface)
+		void JavaInterfaceManager::AddJavaInterface(JavaInterfacePtr inpJavaInterface)
 		{
 			mJavaInterfaces.push_back(inpJavaInterface);
 		}
 		//--------------------------------------------------------
 		/// Get Java Interface
 		//--------------------------------------------------------
-		JavaInterfacePtr CJavaInterfaceManager::GetJavaInterface(Core::InterfaceIDType inInterfaceID)
+		JavaInterfacePtr JavaInterfaceManager::GetJavaInterface(Core::InterfaceIDType inInterfaceID)
 		{
 			for (std::vector<JavaInterfacePtr>::const_iterator it = mJavaInterfaces.begin(); it != mJavaInterfaces.end(); ++it)
 			{
@@ -95,7 +95,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		/// Get Java Interfaces
 		//--------------------------------------------------------
-		void CJavaInterfaceManager::GetJavaInterfaces(Core::InterfaceIDType inInterfaceID, std::vector<JavaInterfacePtr>& outJavaInterfaces)
+		void JavaInterfaceManager::GetJavaInterfaces(Core::InterfaceIDType inInterfaceID, std::vector<JavaInterfacePtr>& outJavaInterfaces)
 		{
 			outJavaInterfaces.clear();
 			for (std::vector<JavaInterfacePtr>::const_iterator it = mJavaInterfaces.begin(); it != mJavaInterfaces.end(); ++it)
@@ -109,7 +109,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		/// Destructor
 		//--------------------------------------------------------
-		CJavaInterfaceManager::~CJavaInterfaceManager()
+		JavaInterfaceManager::~JavaInterfaceManager()
 		{
 			mJavaInterfaces.clear();
 		}

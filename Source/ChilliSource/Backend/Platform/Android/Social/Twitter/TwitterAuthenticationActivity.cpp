@@ -22,31 +22,31 @@ namespace ChilliSource
 		/// Constructor
 		///
 		//-----------------------------------------------
-		CTwitterAuthenticationActivity::CTwitterAuthenticationActivity() : mvUnifiedSize(1.0f,1.0f,0.0f,0.0f)
+		TwitterAuthenticationActivity::TwitterAuthenticationActivity() : mvUnifiedSize(1.0f,1.0f,0.0f,0.0f)
 		{
-			SCTwitterAuthenticationActivityJavaInterface::RegisterActivity(this);
+			TwitterAuthenticationActivityJavaInterface::RegisterActivity(this);
 		}
 		//-----------------------------------------------
 		/// Begin
 		//-----------------------------------------------
-		void CTwitterAuthenticationActivity::Present()
+		void TwitterAuthenticationActivity::Present()
 		{
-			SCTwitterAuthenticationActivityJavaInterface::Present();
+			TwitterAuthenticationActivityJavaInterface::Present();
 		}
 		//-----------------------------------------------
 		/// Presents the authorise URL
 		//-----------------------------------------------
-		void CTwitterAuthenticationActivity::PresentURL(const std::string& instrURL)
+		void TwitterAuthenticationActivity::PresentURL(const std::string& instrURL)
 		{
 			if(!instrURL.empty())
 			{
-				SCTwitterAuthenticationActivityJavaInterface::PresentURL(instrURL);
+				TwitterAuthenticationActivityJavaInterface::PresentURL(instrURL);
 			}
 		}
 		//-----------------------------------------------
 		/// Save PIN entered by user
 		//-----------------------------------------------
-		bool CTwitterAuthenticationActivity::SavePIN(const std::string& instrPIN)
+		bool TwitterAuthenticationActivity::SavePIN(const std::string& instrPIN)
 		{
 			bool bResult = false;
 			std::string strPIN;
@@ -71,13 +71,13 @@ namespace ChilliSource
 		//-----------------------------------------------
 		/// Dismiss
 		//-----------------------------------------------
-		void CTwitterAuthenticationActivity::Dismiss()
+		void TwitterAuthenticationActivity::Dismiss()
 		{
 		}
 		//-----------------------------------------------
         /// On PIN Complete
         //-----------------------------------------------
-		void CTwitterAuthenticationActivity::OnPINComplete()
+		void TwitterAuthenticationActivity::OnPINComplete()
 		{
 			if(mOnPINResultDelegate)
 			{

@@ -23,14 +23,14 @@ namespace ChilliSource
 		///
 		/// A Java Interface for calls to the Android MediaPlayer.
 		//=================================================================
-		class CLocalNotificationJavaInterface : public IJavaInterface
+		class LocalNotificationJavaInterface : public IJavaInterface
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE();
 			//--------------------------------------------------------------
 			/// Constructor
 			//--------------------------------------------------------------
-			CLocalNotificationJavaInterface();
+			LocalNotificationJavaInterface();
 			//--------------------------------------------------------------
 			/// Is A
 			///

@@ -31,14 +31,14 @@ namespace ChilliSource
 		/// A Java Interface for communicating with the Android media
 		/// player to play videos.
 		//=================================================================
-		class CVideoPlayerJavaInterface : public IJavaInterface
+		class VideoPlayerJavaInterface : public IJavaInterface
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE();
 			//--------------------------------------------------------------
 			/// Constructor
 			//--------------------------------------------------------------
-			CVideoPlayerJavaInterface();
+			VideoPlayerJavaInterface();
 			//--------------------------------------------------------------
 			/// Is A
 			///

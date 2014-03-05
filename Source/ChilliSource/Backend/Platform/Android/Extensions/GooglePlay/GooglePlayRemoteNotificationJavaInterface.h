@@ -15,14 +15,14 @@ namespace ChilliSource
 {
     namespace Android
     {
-        class CGooglePlayRemoteNotificationJavaInterface : public IJavaInterface
+        class GooglePlayRemoteNotificationJavaInterface : public IJavaInterface
         {
         public:
-        	CS_DECLARE_NAMEDTYPE(CGooglePlayRemoteNotificationJavaInterface);
+        	CS_DECLARE_NAMEDTYPE(GooglePlayRemoteNotificationJavaInterface);
         	//--------------------------------------------------------------
 			/// Constructor
 			//--------------------------------------------------------------
-        	CGooglePlayRemoteNotificationJavaInterface();
+        	GooglePlayRemoteNotificationJavaInterface();
         	//--------------------------------------------------------------
 			/// Is A
 			///
@@ -50,7 +50,7 @@ namespace ChilliSource
 			void OnRemoteNotificationReceived(const Core::ParamDictionary& insParams);
         };
 
-        typedef std::shared_ptr<CGooglePlayRemoteNotificationJavaInterface> GooglePlayRemoteNotificationJavaInterfacePtr;
+        typedef std::shared_ptr<GooglePlayRemoteNotificationJavaInterface> GooglePlayRemoteNotificationJavaInterfacePtr;
     }
 }
 

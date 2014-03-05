@@ -18,7 +18,7 @@ namespace ChilliSource
 {
 	namespace Android
 	{	
-		class CHttpConnectionSystem : public Networking::HttpConnectionSystem, public Core::IUpdateable
+		class HttpConnectionSystem : public Networking::HttpConnectionSystem, public Core::IUpdateable
 		{
 		public:
 			
@@ -64,10 +64,10 @@ namespace ChilliSource
 			
 		private:
 			
-			class CHttpRequest : public Networking::HttpRequest
+			class HttpRequest : public Networking::HttpRequest
             {
 			public:
-				CHttpRequest(const Networking::HttpRequestDetails & insDetails, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate);
+				HttpRequest(const Networking::HttpRequestDetails & insDetails, const Networking::HttpRequest::CompletionDelegate & inCompletionDelegate);
 
 				//------------------------------------------------------------------
 				/// Update
@@ -145,7 +145,7 @@ namespace ChilliSource
                 bool mbRequestCompleted;
 			};
 			
-			typedef std::vector<CHttpRequest*> RequestVector;
+			typedef std::vector<HttpRequest*> RequestVector;
 			RequestVector mapRequests;
 		};
 	}
