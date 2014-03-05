@@ -37,7 +37,7 @@ namespace ChilliSource
         	mpVideoPlayerJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<VideoPlayerJavaInterface>();
         	if (mpVideoPlayerJavaInterface == NULL)
         	{
-        		mpVideoPlayerJavaInterface = VideoPlayerJavaInterfacePtr(new VideoPlayerJavaInterface());
+        		mpVideoPlayerJavaInterface = VideoPlayerJavaInterfaceSPtr(new VideoPlayerJavaInterface());
         		JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpVideoPlayerJavaInterface);
         	}
         }

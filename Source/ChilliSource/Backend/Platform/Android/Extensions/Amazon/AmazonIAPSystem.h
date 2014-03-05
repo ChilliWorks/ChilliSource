@@ -135,7 +135,7 @@ namespace ChilliSource
             void RestoreManagedPurchases();
 		private:
             std::vector<Networking::IAPProductRegInfo> maProductRegInfos;
-            AmazonIAPJavaInterfacePtr mpJavaInterface;
+            AmazonIAPJavaInterfaceSPtr mpJavaInterface;
 		};
 	}
 }

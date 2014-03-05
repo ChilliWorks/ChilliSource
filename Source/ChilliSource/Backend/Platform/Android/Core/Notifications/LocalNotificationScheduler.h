@@ -65,7 +65,7 @@ namespace ChilliSource
 			static void ApplicationDidReceiveLocalNotification(const Core::NotificationSPtr& insNotification);
 
 		private:
-			LocalNotificationJavaInterfacePtr mpLocalNotificationJavaInterface;
+			LocalNotificationJavaInterfaceSPtr mpLocalNotificationJavaInterface;
 		};
 	}
 }

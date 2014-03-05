@@ -23,7 +23,7 @@ namespace ChilliSource
 		FacebookAuthenticationSystem::FacebookAuthenticationSystem()
 		: mAuthDelegate(NULL), mAuthReadDelegate(NULL), mAuthWriteDelegate(NULL)
 		{
-			mpJavaInterface = std::shared_ptr<FacebookJavaInterface>(new FacebookJavaInterface());
+			mpJavaInterface = FacebookJavaInterfaceSPtr(new FacebookJavaInterface());
 			mpJavaInterface->SetAuthenticationSystem(this);
 	        ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
 		}
@@ -136,7 +136,7 @@ namespace ChilliSource
 			}
 		}
 
-		const std::shared_ptr<FacebookJavaInterface>& FacebookAuthenticationSystem::GetJavaInterface() const
+		const FacebookJavaInterfaceSPtr& FacebookAuthenticationSystem::GetJavaInterface() const
 		{
 			return mpJavaInterface;
 		}

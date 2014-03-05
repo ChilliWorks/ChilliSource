@@ -74,7 +74,7 @@ namespace ChilliSource
 			void OnAccelerationChanged(const Core::Vector3& invAcceleration);
 
 			Core::Vector3 mvAcceleration;
-			AccelerometerJavaInterfacePtr mpAccelerometerJI;
+			AccelerometerJavaInterfaceSPtr mpAccelerometerJI;
 			bool mbIsUpdating;
 		};
 	}

@@ -72,7 +72,7 @@ namespace ChilliSource
 			///
 			/// @param The java interface.
 			//--------------------------------------------------------
-			void AddJavaInterface(JavaInterfacePtr inpJavaInterface);
+			void AddJavaInterface(IJavaInterfaceSPtr inpJavaInterface);
 			//--------------------------------------------------------
 			/// Get Java Interface
 			///
@@ -81,7 +81,7 @@ namespace ChilliSource
 			/// @param The type ID of the java interface you wish to implement
 			/// @return Java Interface that implements the given interface or NULL if none
 			//--------------------------------------------------------
-			JavaInterfacePtr GetJavaInterface(Core::InterfaceIDType inInterfaceID);
+			IJavaInterfaceSPtr GetJavaInterface(Core::InterfaceIDType inInterfaceID);
 			//--------------------------------------------------------
 			/// Get Java Interface
 			///
@@ -107,7 +107,7 @@ namespace ChilliSource
 			/// @param The type ID of the Java Interface you wish to implement
 			/// @param OUT: The array of java interfaces.
 			//--------------------------------------------------------
-			void GetJavaInterfaces(Core::InterfaceIDType inInterfaceID, std::vector<JavaInterfacePtr>& outJavaInterfaces);
+			void GetJavaInterfaces(Core::InterfaceIDType inInterfaceID, std::vector<IJavaInterfaceSPtr>& outJavaInterfaces);
 			//--------------------------------------------------------
 			/// Get Java Interfaces
 			///
@@ -128,7 +128,7 @@ namespace ChilliSource
 			JavaInterfaceManager();
 
 			static JavaInterfaceManager* mpJavaInterfaceManagerSingleton;
-			std::vector<JavaInterfacePtr> mJavaInterfaces;
+			std::vector<IJavaInterfaceSPtr> mJavaInterfaces;
 			JavaVM* mpJavaVM;
 		};
 		//========================================================
@@ -139,7 +139,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		template <typename T> std::shared_ptr<T> JavaInterfaceManager::GetJavaInterface()
 		{
-			JavaInterfacePtr pJavaInterface = GetJavaInterface(T::InterfaceID);
+			IJavaInterfaceSPtr pJavaInterface = GetJavaInterface(T::InterfaceID);
 
 			if (pJavaInterface != NULL)
 			{
@@ -153,7 +153,7 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		template <typename T, typename U> std::shared_ptr<T> JavaInterfaceManager::GetJavaInterface()
 		{
-			JavaInterfacePtr pJavaInterface = GetJavaInterface(U::InterfaceID);
+			IJavaInterfaceSPtr pJavaInterface = GetJavaInterface(U::InterfaceID);
 
 			if (pJavaInterface != NULL)
 			{

@@ -82,7 +82,7 @@ namespace ChilliSource
 			void OnKeyboardDismissed();
 
 			Core::UTF8String mstrText;
-			KeyboardJavaInterfacePtr mpKeyboardJavaInterface;
+			KeyboardJavaInterfaceSPtr mpKeyboardJavaInterface;
 		};
 	}
 }

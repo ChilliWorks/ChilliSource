@@ -310,7 +310,7 @@ namespace ChilliSource
 		Core::Vector2 PlatformSystem::GetScreenDimensions() const
 		{
 			Core::Vector2 Result;
-			CoreJavaInterfacePtr pCoreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
+			CoreJavaInterfaceSPtr pCoreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
 			Result.x = pCoreJI->GetScreenWidth();
 			Result.y = pCoreJI->GetScreenHeight();
 

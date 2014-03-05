@@ -63,7 +63,7 @@ void Java_com_chillisource_core_CoreNativeInterface_SetupCoreJavaNativeInterface
 	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->Initialise(pJavaVM);
 
 	//add the core native interface
-	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(ChilliSource::Android::JavaInterfacePtr(new ChilliSource::Android::CoreJavaInterface()));
+	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(ChilliSource::Android::IJavaInterfaceSPtr(new ChilliSource::Android::CoreJavaInterface()));
 }
 //--------------------------------------------------------------------------------------
 /// Initialise

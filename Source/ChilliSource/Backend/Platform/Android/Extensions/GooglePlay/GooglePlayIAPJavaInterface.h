@@ -134,8 +134,6 @@ namespace ChilliSource
             Networking::IAPTransactionDelegate mTransactionStatusDelegate;
             Networking::IAPTransactionCloseDelegate mTransactionCloseDelegate;
 		};
-
-		typedef std::shared_ptr<GooglePlayIAPJavaInterface> GooglePlayIAPJavaInterfacePtr;
 	}
 }
 

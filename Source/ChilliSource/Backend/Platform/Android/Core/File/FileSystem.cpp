@@ -10,7 +10,7 @@
 #include <ChilliSource/Backend/Platform/Android/Core/File/FileSystem.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
-#include <ChilliSource/Backend/Platform/Android/Core/File/FileStreamAndroidAPK.h>
+#include <ChilliSource/Backend/Platform/Android/Core/File/FileStreamAPK.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
@@ -37,7 +37,7 @@ namespace ChilliSource
 
 		FileSystem::FileSystem()
 		{
-			CoreJavaInterfacePtr pCoreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
+			CoreJavaInterfaceSPtr pCoreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
 
 			//get the path to the bundle dir
 			mstrPathToAPK = pCoreJI->GetAPKDirectory();
@@ -817,7 +817,7 @@ namespace ChilliSource
 		Core::FileStreamSPtr FileSystem::CreateAPKFileStream(const unz_file_pos& inPos, Core::FileMode ineFileMode) const
 		{
 			Core::FileStreamSPtr newFilestream = Core::FileStreamSPtr(new FileStreamAPK(&mMinizipMutex));
-			std::shared_ptr<FileStreamAPK> apkStream = std::static_pointer_cast<FileStreamAPK>(newFilestream);
+			FileStreamAPKSPtr apkStream = std::static_pointer_cast<FileStreamAPK>(newFilestream);
 			apkStream->OpenFromAPK(mstrPathToAPK, inPos, ineFileMode);
 
 			return newFilestream;

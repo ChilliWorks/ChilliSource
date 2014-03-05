@@ -140,7 +140,7 @@ namespace ChilliSource
 
             std::vector<Networking::IAPProductRegInfo> mProductRegInfos;
 
-            GooglePlayIAPJavaInterfacePtr mpJavaInterface;
+            GooglePlayIAPJavaInterfaceSPtr mpJavaInterface;
 		};
 	}
 }

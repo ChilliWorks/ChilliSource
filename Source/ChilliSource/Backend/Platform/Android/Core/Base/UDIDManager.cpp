@@ -104,7 +104,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		void UDIDManager::CalculateUDID()
 		{
-			CoreJavaInterfacePtr pCoreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
+			CoreJavaInterfaceSPtr pCoreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
 
 			//--try the mac address
 			std::string strMacAddress = pCoreJI->GetMacAddress();
