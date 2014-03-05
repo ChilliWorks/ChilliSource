@@ -240,7 +240,7 @@ namespace ChilliSource
             
 #ifdef CS_TARGETPLATFORM_WINDOWS
 			//Because windows by default is landscape, this needs to be flipped.
-			meDefaultOrientation = Core::ScreenOrientation::k_portraitUp;
+			m_defaultOrientation = Core::ScreenOrientation::k_portraitUp;
 #endif
             
 			//Initialise the platform specific API's
@@ -371,15 +371,20 @@ namespace ChilliSource
 		void Application::OnScreenResized(u32 in_width, u32 in_height)
 		{
 			Screen::SetRawDimensions(Core::Vector2((f32)in_width, (f32)in_height));
-            
-			if(m_renderSystem)
+
+			if (m_renderSystem)
 			{
 				m_renderSystem->OnScreenOrientationChanged(in_width, in_height);
 			}
-            
-            Input::TouchScreen * pTouchScreen = GetSystemImplementing(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreenPtr();
-            pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());
-            
+
+			if (m_inputSystem != nullptr)
+			{
+				Input::TouchScreen * pTouchScreen = m_inputSystem->GetTouchScreenPtr();
+				if (pTouchScreen != nullptr)
+				{
+					pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());
+				}
+			}
 			ApplicationEvents::GetScreenResizedEvent().NotifyConnections(in_width, in_height);
             
 			CS_LOG_DEBUG("Screen resized Notification");
@@ -430,13 +435,13 @@ namespace ChilliSource
         void Application::OnDestroy()
         {
             Destroy();
-            
+
             m_stateManager.DestroyAll();
-            
+
 			m_defaultFont.reset();
 			m_defaultMesh.reset();
 			m_defaultMaterial.reset();
-            
+
 			CS_SAFEDELETE(m_platformSystem);
             CS_SAFEDELETE(m_resourceManagerDispenser);
             CS_SAFEDELETE(m_componentFactoryDispenser);
@@ -459,7 +464,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-		System* Application::GetSystemImplementing(InterfaceIDType in_interfaceID)
+		System* Application::GetSystem(InterfaceIDType in_interfaceID)
 		{
 			for (std::vector<SystemSPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
 			{
@@ -609,7 +614,7 @@ namespace ChilliSource
 				m_renderer->GetActiveCameraPtr()->SetViewportOrientation(inOrientation);
 			}
             
-            Input::TouchScreen * pTouchScreen = GetSystemImplementing(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreenPtr();
+            Input::TouchScreen * pTouchScreen = GetSystem(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreenPtr();
             if (pTouchScreen != nullptr)
             {
                 pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());

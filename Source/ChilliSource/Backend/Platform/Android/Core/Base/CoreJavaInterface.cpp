@@ -207,7 +207,7 @@ void Java_com_chillisource_core_CoreNativeInterface_OnBackPressed(JNIEnv* inpEnv
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_OnDialogConfirmPressed(JNIEnv* inpEnv, jobject inThis, s32 indwID)
 {
-	ChilliSource::Android::DialogueBoxSystem* dialogueBoxSystem = ChilliSource::Core::Application::Get()->GetSystemImplementing<ChilliSource::Android::DialogueBoxSystem>();
+	ChilliSource::Android::DialogueBoxSystem* dialogueBoxSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::Android::DialogueBoxSystem>();
 	if (dialogueBoxSystem != nullptr)
 	{
 		dialogueBoxSystem->OnSystemConfirmDialogResult((u32)indwID, ChilliSource::Core::DialogueBoxSystem::DialogueResult::k_confirm);
@@ -225,7 +225,7 @@ void Java_com_chillisource_core_CoreNativeInterface_OnDialogConfirmPressed(JNIEn
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_OnDialogCancelPressed(JNIEnv* inpEnv, jobject inThis, s32 indwID)
 {
-	ChilliSource::Android::DialogueBoxSystem* dialogueBoxSystem = ChilliSource::Core::Application::Get()->GetSystemImplementing<ChilliSource::Android::DialogueBoxSystem>();
+	ChilliSource::Android::DialogueBoxSystem* dialogueBoxSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::Android::DialogueBoxSystem>();
 	if (dialogueBoxSystem != nullptr)
 	{
 		dialogueBoxSystem->OnSystemConfirmDialogResult((u32)indwID, ChilliSource::Core::DialogueBoxSystem::DialogueResult::k_cancel);

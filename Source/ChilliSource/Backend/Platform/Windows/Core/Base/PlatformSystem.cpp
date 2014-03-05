@@ -124,12 +124,13 @@ namespace ChilliSource
 			inaSystems.push_back(Core::SystemSPtr(new Rendering::FontLoader()));
 			inaSystems.push_back(Core::SystemSPtr(new Rendering::AnimatedMeshComponentUpdater()));
 			inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialFactory(pRenderSystem->GetTextureManager(), pRenderSystem->GetShaderManager(), pRenderSystem->GetCubemapManager(), pRenderCapabilities)));
+			inaSystems.push_back(Core::SystemSPtr(Core::DialogueBoxSystem::Create()));
 
 			//Initialise the render system
-			Core::Application::Get()->GetRenderSystemPtr()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
+			Core::Application::Get()->GetRenderSystem()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
             
 			//Create the renderer
-			Core::Application::Get()->SetRenderer(new Rendering::Renderer(Core::Application::Get()->GetRenderSystemPtr()));
+			Core::Application::Get()->SetRenderer(new Rendering::Renderer(Core::Application::Get()->GetRenderSystem()));
 		}
 		//-------------------------------------------------
 		/// Post Create Systems
@@ -141,7 +142,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::PostCreateSystems()
 		{
-			if (Core::Application::Get()->GetAudioSystemPtr() != NULL)
+			if (Core::Application::Get()->GetAudioSystem() != NULL)
 			{
 				Audio::AudioPlayer::Init();
 			}
@@ -165,7 +166,7 @@ namespace ChilliSource
 					u64 uddwAppRunningTime = ((u64)mffAppPreviousTime - muddwAppStartTime);
 
 					//Update event
-					Core::Application::Get()->OnFrameBegin(fDt, uddwAppRunningTime);
+					Core::Application::Get()->OnUpdate(fDt, uddwAppRunningTime);
 
 					mffAppPreviousTime = ffAppCurrentTime;
 				}
@@ -451,7 +452,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void PlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const
 		{
-			Windows::DialogueBoxSystem* dialogueSystem = ChilliSource::Core::Application::Get()->GetSystemImplementing<Windows::DialogueBoxSystem>();
+			Windows::DialogueBoxSystem* dialogueSystem = ChilliSource::Core::Application::Get()->GetSystem<Windows::DialogueBoxSystem>();
 			if (dialogueSystem != nullptr)
 			{
 				if (MessageBoxA(NULL, instrTitle.ToASCII().c_str(), instrMessage.ToASCII().c_str(), MB_OKCANCEL) == IDOK)

@@ -186,11 +186,36 @@ namespace ChilliSource
 				(*pMgr)->SetResourceProviders(UsefulResourceProviders);
 			}
         }
+        //----------------------------------------------------------------------
+        //----------------------------------------------------------------------
+        void ResourceManagerDispenser::ReleaseAll()
+        {
+        	//Cleanup all resource managers
+        	FreeResourceCaches();
+
+        	//check that there are no resources still in use
+#ifdef CS_ENABLE_DEBUG
+
+        	for (std::vector<ResourceManager*>::iterator pMgr = mResourceManagers.begin(); pMgr != mResourceManagers.end(); ++pMgr)
+			{
+        		std::vector<ResourceDesc> loadedResources = (*pMgr)->GetAllLoadedResources();
+        		if (loadedResources.size() != 0)
+        		{
+        			CS_LOG_ERROR("Could not release all resources from manager. The following resources are still in use:");
+        			for (const ResourceDesc& resourceDesc : loadedResources)
+        			{
+        				CS_LOG_ERROR("  " + resourceDesc.strFileName);
+        			}
+        		}
+			}
+#endif
+        }
         //--------------------------------------------------------------------
         /// Destructor
         //--------------------------------------------------------------------
         ResourceManagerDispenser::~ResourceManagerDispenser()
         {
+        	ReleaseAll();
             CS_SAFEDELETE(mpResourceGroupMgr);
         }
     }

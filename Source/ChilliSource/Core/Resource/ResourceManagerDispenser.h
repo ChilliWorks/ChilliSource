@@ -107,6 +107,14 @@ namespace ChilliSource
             void SetResourceProviders(const std::vector<ResourceProvider*> inProviders);
             
         private:
+            //----------------------------------------------------------------------
+            /// Tries to release all resources. If any resources are still in use
+            /// this will throw an error.
+            ///
+            /// @author I Copland
+            //----------------------------------------------------------------------
+            void ReleaseAll();
+
             std::vector<ResourceManager*> mResourceManagers;
             Application* mpApp;
             ResourceGroupManager* mpResourceGroupMgr;

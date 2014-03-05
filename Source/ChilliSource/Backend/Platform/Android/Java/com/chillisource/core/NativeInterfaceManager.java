@@ -153,7 +153,8 @@ public class NativeInterfaceManager implements IStartable, IResumeable, IPauseab
 			}
 		}
 		
-		((CoreNativeInterface)GetNativeInterface(CoreNativeInterface.InterfaceID)).DestroyApplication();
+		CoreNativeInterface coreNativeInterface = (CoreNativeInterface)GetNativeInterface(CoreNativeInterface.InterfaceID);
+		coreNativeInterface.DestroyApplication();
 	}
 	//------------------------------------------------------
 	/// On Activity Result

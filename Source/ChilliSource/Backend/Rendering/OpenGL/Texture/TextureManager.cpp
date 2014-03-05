@@ -191,6 +191,13 @@ namespace ChilliSource
 			}
 #endif
 		}
+		//----------------------------------------------------------------
+		/// Destructor
+		//----------------------------------------------------------------
+		TextureManager::~TextureManager()
+		{
+			mpDefaultTexture.reset();
+		}
 	}
 }
 

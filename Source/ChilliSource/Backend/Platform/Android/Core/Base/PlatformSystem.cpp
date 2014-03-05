@@ -17,6 +17,7 @@
 #include <ChilliSource/Backend/Audio/FMOD/Base/AudioLoader.h>
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
 #include <ChilliSource/Backend/Platform/Android/Core/Base/CoreJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Core/DialogueBox/DialogueBoxSystem.h>
 #include <ChilliSource/Backend/Platform/Android/Core/File/FileSystem.h>
 #include <ChilliSource/Backend/Platform/Android/Core/Image/ImageLoader.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
@@ -170,6 +171,7 @@ namespace ChilliSource
 			inaSystems.push_back(Core::SystemSPtr(new Rendering::FontLoader()));
 			inaSystems.push_back(Core::SystemSPtr(new Rendering::AnimatedMeshComponentUpdater()));
 			inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialFactory(pRenderSystem->GetTextureManager(), pRenderSystem->GetShaderManager(), pRenderSystem->GetCubemapManager(), pRenderCapabilities)));
+			inaSystems.push_back(Core::SystemSPtr(Core::DialogueBoxSystem::Create()));
 
 			//Initialise the render system
 			Core::Application::Get()->GetRenderSystem()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);

@@ -164,7 +164,7 @@ static mach_timebase_info_data_t gMachtimeBase;
 }
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex 
 {
-    ChilliSource::iOS::DialogueBoxSystem* dialogueSystem = ChilliSource::Core::Application::Get()->GetSystemImplementing<ChilliSource::iOS::DialogueBoxSystem>();
+    ChilliSource::iOS::DialogueBoxSystem* dialogueSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::iOS::DialogueBoxSystem>();
     if (dialogueSystem != nullptr)
     {
         // NO = 0, YES = 1

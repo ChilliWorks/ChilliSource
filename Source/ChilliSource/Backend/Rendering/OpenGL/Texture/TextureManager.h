@@ -21,6 +21,7 @@ namespace ChilliSource
 		class TextureManager : public ChilliSource::Rendering::TextureManager
 		{
 		public:
+
 			//----------------------------------------------------------------
 			/// Create Texture Resource
 			///
@@ -85,6 +86,10 @@ namespace ChilliSource
 			/// @param The texture pointer.
 			//----------------------------------------------------------------
 			void RemoveRestorableTexture(Texture* inpTexture);
+			//----------------------------------------------------------------
+			/// Destructor
+			//----------------------------------------------------------------
+			~TextureManager();
 		private:
 #ifdef CS_TARGETPLATFORM_ANDROID
 			std::vector<Rendering::TextureWPtr> mapTextureCache;

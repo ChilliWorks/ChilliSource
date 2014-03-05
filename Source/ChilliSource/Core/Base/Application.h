@@ -63,7 +63,7 @@ namespace ChilliSource
 			/// @return The first system found that implements
             /// the named interface.
 			//----------------------------------------------------
-			template <typename TNamedType> TNamedType* GetSystemImplementing();
+			template <typename TNamedType> TNamedType* GetSystem();
             //----------------------------------------------------
 			/// Looks for a system that implements the queryable
             /// interface provided as the first template parameter
@@ -74,7 +74,7 @@ namespace ChilliSource
 			/// @return The first system found that implements
             /// the named interface.
 			//----------------------------------------------------
-			template <typename TCastType, typename TNamedType> TCastType* GetSystemImplementing();
+			template <typename TCastType, typename TNamedType> TCastType* GetSystem();
 			//-----------------------------------------------------
 			/// Looks for a all systems that implement the given
             /// queryable interface provided as a template parameter.
@@ -84,7 +84,7 @@ namespace ChilliSource
 			/// @param [Out] The list of systems that implement the
             /// queryable interface.
 			//-----------------------------------------------------
-            template <typename TNamedType> void GetSystemsImplementing(std::vector<TNamedType*> & out_systems);
+            template <typename TNamedType> void GetSystems(std::vector<TNamedType*> & out_systems);
 			//-----------------------------------------------------
             /// Returns the version number of the application on
             /// the current platform as a string.
@@ -444,7 +444,7 @@ namespace ChilliSource
             /// @return The first system found that implements
             /// the named interface.
  			//----------------------------------------------------
-            System* GetSystemImplementing(InterfaceIDType in_interfaceID);
+            System* GetSystem(InterfaceIDType in_interfaceID);
             //------------------------------------------------------
 			/// Once the systems have been created they are then
             /// added to the pool and initialised.
@@ -529,9 +529,9 @@ namespace ChilliSource
 		};
         //----------------------------------------------------
         //----------------------------------------------------
-        template <typename TNamedType> TNamedType* Application::GetSystemImplementing()
+        template <typename TNamedType> TNamedType* Application::GetSystem()
         {
-            System* system = GetSystemImplementing(TNamedType::InterfaceID);
+            System* system = GetSystem(TNamedType::InterfaceID);
             
             if (system != nullptr)
             {
@@ -542,9 +542,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        template <typename TCastType, typename TNamedType> TCastType* Application::GetSystemImplementing()
+        template <typename TCastType, typename TNamedType> TCastType* Application::GetSystem()
         {
-            System* system = GetSystemImplementing(TNamedType::InterfaceID);
+            System* system = GetSystem(TNamedType::InterfaceID);
             
             if (system != nullptr)
             {
@@ -555,7 +555,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        template <typename TNamedType> void Application::GetSystemsImplementing(std::vector<TNamedType*> & out_systems)
+        template <typename TNamedType> void Application::GetSystems(std::vector<TNamedType*> & out_systems)
         {
             for (size_t systemIndex = 0; systemIndex < m_systems.size(); systemIndex++)
             {
