@@ -36,7 +36,7 @@ extern "C"
 //-------------------------------------------
 void Java_com_chillisource_input_AccelerometerNativeInterface_UpdateAcceleration(JNIEnv* inpEnv, jobject inThis, f32 infAccelerationX, f32 infAccelerationY, f32 infAccelerationZ)
 {
-	ChilliSource::Android::AccelerometerJavaInterfacePtr pAccelerometerJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AccelerometerJavaInterface>();
+	ChilliSource::Android::AccelerometerJavaInterfaceSPtr pAccelerometerJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AccelerometerJavaInterface>();
 	if (NULL != pAccelerometerJI)
 	{
 		pAccelerometerJI->UpdateAcceleration(infAccelerationX, infAccelerationY, infAccelerationZ);

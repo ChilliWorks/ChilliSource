@@ -39,7 +39,7 @@ extern "C"
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* inpEnv, jobject inThis, jobjectArray inaIDs, jobjectArray inaNames, jobjectArray inaDescs, jobjectArray inaPrices)
 {
-	ChilliSource::Android::GooglePlayIAPJavaInterfacePtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayIAPJavaInterface>();
+	ChilliSource::Android::GooglePlayIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
 		u32 udwNumProducts = inpEnv->GetArrayLength(inaIDs);
@@ -79,7 +79,7 @@ void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnProdu
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* inpEnv, jobject inThis, jint inudwResult, jstring instrProductID, jstring instrTransactionID, jstring instrReceipt)
 {
-	ChilliSource::Android::GooglePlayIAPJavaInterfacePtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayIAPJavaInterface>();
+	ChilliSource::Android::GooglePlayIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
 		CSNetworking::IAPTransaction sTransaction;
@@ -98,7 +98,7 @@ void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTrans
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID)
 {
-	ChilliSource::Android::GooglePlayIAPJavaInterfacePtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayIAPJavaInterface>();
+	ChilliSource::Android::GooglePlayIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
 		const std::string strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);

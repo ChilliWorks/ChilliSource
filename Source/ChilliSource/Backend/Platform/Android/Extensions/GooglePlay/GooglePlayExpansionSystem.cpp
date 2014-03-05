@@ -92,7 +92,7 @@ namespace ChilliSource
     		gpActiveExpansionSystem = this;
 
     		mpJavaInterface = new GooglePlayExpansionJavaInterface();
-	        ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(JavaInterfacePtr(mpJavaInterface));
+	        ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(IJavaInterfaceSPtr(mpJavaInterface));
 
 	        m_appResumeConnection = Core::ApplicationEvents::GetResumeEvent().OpenConnection(Core::MakeDelegate(this, &GooglePlayExpansionSystem::OnApplicationResume));
 	        m_appSuspendConnection = Core::ApplicationEvents::GetLateSuspendEvent().OpenConnection(Core::MakeDelegate(this, &GooglePlayExpansionSystem::OnApplicationSuspend));

@@ -72,16 +72,16 @@ namespace ChilliSource
 		//--------------------------------------------------------
 		/// Add Java Interface
 		//--------------------------------------------------------
-		void JavaInterfaceManager::AddJavaInterface(JavaInterfacePtr inpJavaInterface)
+		void JavaInterfaceManager::AddJavaInterface(IJavaInterfaceSPtr inpJavaInterface)
 		{
 			mJavaInterfaces.push_back(inpJavaInterface);
 		}
 		//--------------------------------------------------------
 		/// Get Java Interface
 		//--------------------------------------------------------
-		JavaInterfacePtr JavaInterfaceManager::GetJavaInterface(Core::InterfaceIDType inInterfaceID)
+		IJavaInterfaceSPtr JavaInterfaceManager::GetJavaInterface(Core::InterfaceIDType inInterfaceID)
 		{
-			for (std::vector<JavaInterfacePtr>::const_iterator it = mJavaInterfaces.begin(); it != mJavaInterfaces.end(); ++it)
+			for (std::vector<IJavaInterfaceSPtr>::const_iterator it = mJavaInterfaces.begin(); it != mJavaInterfaces.end(); ++it)
 			{
 				if ((*it)->IsA(inInterfaceID))
 				{
@@ -90,15 +90,15 @@ namespace ChilliSource
 			}
 
 			CS_LOG_WARNING("JavaInterfaceManager cannot find a JavaInterface with the requested interface.");
-			return JavaInterfacePtr();
+			return IJavaInterfaceSPtr();
 		}
 		//--------------------------------------------------------
 		/// Get Java Interfaces
 		//--------------------------------------------------------
-		void JavaInterfaceManager::GetJavaInterfaces(Core::InterfaceIDType inInterfaceID, std::vector<JavaInterfacePtr>& outJavaInterfaces)
+		void JavaInterfaceManager::GetJavaInterfaces(Core::InterfaceIDType inInterfaceID, std::vector<IJavaInterfaceSPtr>& outJavaInterfaces)
 		{
 			outJavaInterfaces.clear();
-			for (std::vector<JavaInterfacePtr>::const_iterator it = mJavaInterfaces.begin(); it != mJavaInterfaces.end(); ++it)
+			for (std::vector<IJavaInterfaceSPtr>::const_iterator it = mJavaInterfaces.begin(); it != mJavaInterfaces.end(); ++it)
 			{
 				if ((*it)->IsA(inInterfaceID))
 				{

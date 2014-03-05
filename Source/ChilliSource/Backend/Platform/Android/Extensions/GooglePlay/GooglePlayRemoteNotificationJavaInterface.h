@@ -49,8 +49,6 @@ namespace ChilliSource
 			//-------------------------------------------------------------------------
 			void OnRemoteNotificationReceived(const Core::ParamDictionary& insParams);
         };
-
-        typedef std::shared_ptr<GooglePlayRemoteNotificationJavaInterface> GooglePlayRemoteNotificationJavaInterfacePtr;
     }
 }
 

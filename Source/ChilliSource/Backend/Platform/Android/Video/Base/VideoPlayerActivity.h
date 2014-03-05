@@ -133,7 +133,7 @@ namespace ChilliSource
 			void UpdateSubtitle(const Video::Subtitles::SubtitlePtr& inpSubtitle, s64 inlwSubtitleID, TimeIntervalMs inTimeMS);
             
         private:
-            VideoPlayerJavaInterfacePtr mpVideoPlayerJavaInterface;
+            VideoPlayerJavaInterfaceSPtr mpVideoPlayerJavaInterface;
             Video::SubtitlesSPtr mpSubtitles;
             std::unordered_map<Video::Subtitles::SubtitlePtr, s64> maSubtitleMap;
             std::vector<Video::Subtitles::SubtitlePtr> maSubtitlesToRemove;

@@ -88,7 +88,7 @@ namespace ChilliSource
             //-------------------------------------------------------
 			void OnEmailClosed(s32 indwResultCode);
 
-			EmailCompositionJavaInterfacePtr mpJavaInterface;
+			EmailCompositionJavaInterfaceSPtr mpJavaInterface;
 			SendResultDelegate mCallback;
 		};
 

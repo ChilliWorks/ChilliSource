@@ -25,7 +25,7 @@ extern "C"
 
 void Java_com_chillisource_googleplay_GooglePlayRemoteNotificationNativeInterface_NativeOnRemoteTokenReceived(JNIEnv* inpEnv, jobject inThis, jstring instrToken)
 {
-	ChilliSource::Android::GooglePlayRemoteNotificationJavaInterfacePtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayRemoteNotificationJavaInterface>();
+	ChilliSource::Android::GooglePlayRemoteNotificationJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayRemoteNotificationJavaInterface>();
 	if(pInterface != NULL)
 	{
 		const std::string strToken = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrToken);
@@ -35,7 +35,7 @@ void Java_com_chillisource_googleplay_GooglePlayRemoteNotificationNativeInterfac
 
 void Java_com_chillisource_googleplay_GooglePlayRemoteNotificationNativeInterface_NativeOnRemoteNotificationReceived(JNIEnv* inpEnv, jobject inThis, jobjectArray inaKeys, jobjectArray inaValues)
 {
-	ChilliSource::Android::GooglePlayRemoteNotificationJavaInterfacePtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayRemoteNotificationJavaInterface>();
+	ChilliSource::Android::GooglePlayRemoteNotificationJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::GooglePlayRemoteNotificationJavaInterface>();
 	if(pInterface != NULL)
 	{
 		//Convert the incoming jarrays to a param dictionary

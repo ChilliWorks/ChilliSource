@@ -54,7 +54,7 @@ namespace ChilliSource
 					strPrivateKey = inParams.ValueForKey(kstrAmazonPrivateKeyKey);
 				}
 
-				mpJavaInterface = AmazonIAPJavaInterfacePtr(new AmazonIAPJavaInterface(strPrivateKey, Core::Device::GetUDID()));
+				mpJavaInterface = AmazonIAPJavaInterfaceSPtr(new AmazonIAPJavaInterface(strPrivateKey, Core::Device::GetUDID()));
 	        	ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
 			}
 		}

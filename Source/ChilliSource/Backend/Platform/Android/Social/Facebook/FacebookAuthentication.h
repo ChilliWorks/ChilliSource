@@ -44,11 +44,11 @@ namespace ChilliSource
 			void OnAuthoriseReadPermissionsComplete(bool inbSuccess);
 			void OnAuthoriseWritePermissionsComplete(bool inbSuccess);
 
-			const std::shared_ptr<FacebookJavaInterface>& GetJavaInterface() const;
+			const FacebookJavaInterfaceSPtr& GetJavaInterface() const;
 
 		private:
 
-			std::shared_ptr<FacebookJavaInterface> mpJavaInterface;
+			FacebookJavaInterfaceSPtr mpJavaInterface;
 
 			AuthenticationCompleteDelegate mAuthDelegate;
 			AuthenticationCompleteDelegate mAuthReadDelegate;

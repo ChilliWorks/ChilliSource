@@ -38,7 +38,7 @@ namespace ChilliSource
 
 		private:
 
-			std::shared_ptr<FacebookJavaInterface> mpJavaInterface;
+			FacebookJavaInterfaceSPtr mpJavaInterface;
 
 			Social::FacebookAuthenticationSystem* mpAuthSystem;
 			Social::FacebookPostDesc msPostDesc;

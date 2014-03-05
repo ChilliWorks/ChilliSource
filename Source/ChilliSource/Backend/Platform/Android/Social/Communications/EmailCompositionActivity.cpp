@@ -29,7 +29,7 @@ namespace ChilliSource
 			mpJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<EmailCompositionJavaInterface>();
 			if (mpJavaInterface == NULL)
 			{
-				mpJavaInterface = EmailCompositionJavaInterfacePtr(new EmailCompositionJavaInterface());
+				mpJavaInterface = EmailCompositionJavaInterfaceSPtr(new EmailCompositionJavaInterface());
 				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
 			}
 		}

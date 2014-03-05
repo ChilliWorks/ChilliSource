@@ -25,7 +25,7 @@ namespace ChilliSource
 			mpKeyboardJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<KeyboardJavaInterface>();
 			if (mpKeyboardJavaInterface == NULL)
 			{
-				mpKeyboardJavaInterface = KeyboardJavaInterfacePtr(new KeyboardJavaInterface());
+				mpKeyboardJavaInterface = KeyboardJavaInterfaceSPtr(new KeyboardJavaInterface());
 				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpKeyboardJavaInterface);
 			}
 

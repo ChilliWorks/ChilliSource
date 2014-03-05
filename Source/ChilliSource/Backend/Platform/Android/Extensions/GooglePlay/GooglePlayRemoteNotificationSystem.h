@@ -61,7 +61,7 @@ namespace ChilliSource
             void OnRemoteNotificationReceived(const Core::ParamDictionary& insParams);
 
         private:
-            GooglePlayRemoteNotificationJavaInterfacePtr	mpJavaInterface;
+            GooglePlayRemoteNotificationJavaInterfaceSPtr	mpJavaInterface;
             std::string										mstrToken;
             Core::RemoteTokenReceivedDelegate				mDelegate;
         };

@@ -18,33 +18,72 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		//forward declarations
-		class JavaInterfaceManager;
-		class IJavaInterface;
-		class CoreJavaInterface;
-		class VideoPlayerJavaInterface;
-		class VideoPlayerActivity;
-		class RemoteNotificationJavaInterface;
-		class LocalNotificationJavaInterface;
-		class RemoteNotificationScheduler;
-		class EmailCompositionActivity;
-		class EmailCompositionJavaInterface;
-		class AccelerometerJavaInterface;
-		class KeyboardJavaInterface;
-
-		//shared pointer declarations
-		typedef std::shared_ptr<JavaInterfaceManager> JavaInterfaceManagerPtr;
-		typedef std::shared_ptr<IJavaInterface> JavaInterfacePtr;
-		typedef std::shared_ptr<CoreJavaInterface> CoreJavaInterfacePtr;
-		typedef std::shared_ptr<RemoteNotificationJavaInterface> RemoteNotificationJavaInterfacePtr;
-		typedef std::shared_ptr<VideoPlayerJavaInterface> VideoPlayerJavaInterfacePtr;
-		typedef std::shared_ptr<VideoPlayerActivity> VideoPlayerActivityPtr;
-		typedef std::shared_ptr<LocalNotificationJavaInterface> LocalNotificationJavaInterfacePtr;
-		typedef std::shared_ptr<RemoteNotificationScheduler> AndroidRemoteNotificationSchedulerPtr;
-		typedef std::shared_ptr<EmailCompositionActivity> EmailCompositionActivityPtr;
-		typedef std::shared_ptr<EmailCompositionJavaInterface> EmailCompositionJavaInterfacePtr;
-		typedef std::shared_ptr<AccelerometerJavaInterface> AccelerometerJavaInterfacePtr;
-		typedef std::shared_ptr<KeyboardJavaInterface> KeyboardJavaInterfacePtr;
+		//------------------------------------------------------
+		/// Core
+		//------------------------------------------------------
+		CS_FORWARDDECLARE_CLASS(JavaInterfaceManager);
+		CS_FORWARDDECLARE_CLASS(IJavaInterface);
+		CS_FORWARDDECLARE_CLASS(CoreJavaInterface);
+		CS_FORWARDDECLARE_CLASS(UDIDManager);
+		CS_FORWARDDECLARE_CLASS(PlatformSystem);
+		CS_FORWARDDECLARE_CLASS(FileStream);
+		CS_FORWARDDECLARE_CLASS(FileStreamAPK);
+		CS_FORWARDDECLARE_CLASS(FileSystem);
+		CS_FORWARDDECLARE_CLASS(SharedPreferencesJavaInterface);
+		CS_FORWARDDECLARE_CLASS(PngImage);
+		CS_FORWARDDECLARE_CLASS(ImageLoader);
+		CS_FORWARDDECLARE_CLASS(LocalNotificationJavaInterface);
+		CS_FORWARDDECLARE_CLASS(LocalNotificationScheduler);
+		//------------------------------------------------------
+		/// Extensions
+		//------------------------------------------------------
+		CS_FORWARDDECLARE_CLASS(AmazonIAPJavaInterface);
+		CS_FORWARDDECLARE_CLASS(AmazonIAPSystem);
+		CS_FORWARDDECLARE_CLASS(GooglePlayExpansionSystem);
+		CS_FORWARDDECLARE_CLASS(GooglePlayIAPJavaInterface);
+		CS_FORWARDDECLARE_CLASS(GooglePlayIAPSystem);
+		CS_FORWARDDECLARE_CLASS(GooglePlayRemoteNotificationSystem);
+		CS_FORWARDDECLARE_CLASS(GooglePlayRemoteNotificationJavaInterface);
+		//------------------------------------------------------
+		/// Input
+		//------------------------------------------------------
+		CS_FORWARDDECLARE_CLASS(Accelerometer);
+		CS_FORWARDDECLARE_CLASS(AccelerometerJavaInterface);
+		CS_FORWARDDECLARE_CLASS(VirtualKeyboard);
+		CS_FORWARDDECLARE_CLASS(KeyboardJavaInterface);
+		CS_FORWARDDECLARE_CLASS(TouchScreen);
+		CS_FORWARDDECLARE_CLASS(TouchInputJavaInterface);
+		CS_FORWARDDECLARE_CLASS(InputSystem);
+		//------------------------------------------------------
+		/// Networking
+		//------------------------------------------------------
+		CS_FORWARDDECLARE_CLASS(HttpConnectionJavaInterface);
+		CS_FORWARDDECLARE_CLASS(HttpConnectionSystem);
+		//------------------------------------------------------
+		/// Social
+		//------------------------------------------------------
+		CS_FORWARDDECLARE_CLASS(ContactInformationProvider);
+		CS_FORWARDDECLARE_CLASS(ContactInformationProviderJavaInterface);
+		CS_FORWARDDECLARE_CLASS(EmailCompositionActivity);
+		CS_FORWARDDECLARE_CLASS(EmailCompositionJavaInterface);
+		CS_FORWARDDECLARE_CLASS(SMSCompositionActivity);
+		CS_FORWARDDECLARE_CLASS(SMSCompositionActivityJavaInterface);
+		CS_FORWARDDECLARE_CLASS(FacebookAuthentication);
+		CS_FORWARDDECLARE_CLASS(FacebookPostSystem);
+		CS_FORWARDDECLARE_CLASS(FacebookJavaInterface);
+		CS_FORWARDDECLARE_CLASS(TwitterAuthenticationActivity);
+		CS_FORWARDDECLARE_CLASS(TwitterPostSystem);
+		CS_FORWARDDECLARE_CLASS(TwitterAuthenticationActivityJavaInterface);
+		//------------------------------------------------------
+		/// Video
+		//------------------------------------------------------
+		CS_FORWARDDECLARE_CLASS(VideoPlayerJavaInterface);
+		CS_FORWARDDECLARE_CLASS(VideoPlayerActivity);
+		//------------------------------------------------------
+		/// Web
+		//------------------------------------------------------
+		CS_FORWARDDECLARE_CLASS(WebViewJavaInterface);
+		CS_FORWARDDECLARE_CLASS(WebViewActivity);
 	}
 }
 

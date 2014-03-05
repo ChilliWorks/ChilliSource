@@ -22,7 +22,7 @@ namespace ChilliSource
 			mpLocalNotificationJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<LocalNotificationJavaInterface>();
         	if (mpLocalNotificationJavaInterface == NULL)
         	{
-        		mpLocalNotificationJavaInterface = LocalNotificationJavaInterfacePtr(new LocalNotificationJavaInterface());
+        		mpLocalNotificationJavaInterface = LocalNotificationJavaInterfaceSPtr(new LocalNotificationJavaInterface());
         		JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpLocalNotificationJavaInterface);
         	}
 		}

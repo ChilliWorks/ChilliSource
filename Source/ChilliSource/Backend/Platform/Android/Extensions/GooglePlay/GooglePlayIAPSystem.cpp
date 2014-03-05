@@ -54,7 +54,7 @@ namespace ChilliSource
 				strPublicKey = inParams.ValueForKey(kstrGooglePlayPublicKeyKey);
 			}
 
-    		mpJavaInterface = GooglePlayIAPJavaInterfacePtr(new GooglePlayIAPJavaInterface(strPublicKey));
+    		mpJavaInterface = GooglePlayIAPJavaInterfaceSPtr(new GooglePlayIAPJavaInterface(strPublicKey));
 	        ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
 		}
         //---------------------------------------------------------------

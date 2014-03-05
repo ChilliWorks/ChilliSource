@@ -35,7 +35,7 @@ extern "C"
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* inpEnv, jobject inThis, jobjectArray inaIDs, jobjectArray inaNames, jobjectArray inaDescs, jobjectArray inaPrices)
 {
-	ChilliSource::Android::AmazonIAPJavaInterfacePtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
+	ChilliSource::Android::AmazonIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
 		u32 udwNumProducts = inpEnv->GetArrayLength(inaIDs);
@@ -75,7 +75,7 @@ void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnProductsDescr
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* inpEnv, jobject inThis, jint inudwResult, jstring instrProductID, jstring instrTransactionID, jstring instrReceipt)
 {
-	ChilliSource::Android::AmazonIAPJavaInterfacePtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
+	ChilliSource::Android::AmazonIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
 		CSNetworking::IAPTransaction sTransaction;
@@ -93,7 +93,7 @@ void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionSt
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_amazon_AmazonIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* inpEnv, jobject inThis, jstring instrProductID, jstring instrTransactionID)
 {
-	ChilliSource::Android::AmazonIAPJavaInterfacePtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
+	ChilliSource::Android::AmazonIAPJavaInterfaceSPtr pInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::AmazonIAPJavaInterface>();
 	if (pInterface != NULL)
 	{
 		std::string strProductID = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrProductID);

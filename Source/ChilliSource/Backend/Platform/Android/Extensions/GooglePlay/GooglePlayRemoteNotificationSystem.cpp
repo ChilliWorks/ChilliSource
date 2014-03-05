@@ -29,7 +29,7 @@ namespace ChilliSource
     	{
     		if(NULL == (mpJavaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<GooglePlayRemoteNotificationJavaInterface>()))
     		{
-    			mpJavaInterface = GooglePlayRemoteNotificationJavaInterfacePtr(new GooglePlayRemoteNotificationJavaInterface());
+    			mpJavaInterface = GooglePlayRemoteNotificationJavaInterfaceSPtr(new GooglePlayRemoteNotificationJavaInterface());
 				ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
     		}
     	}

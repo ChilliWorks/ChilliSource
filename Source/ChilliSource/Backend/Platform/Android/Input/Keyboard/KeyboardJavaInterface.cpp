@@ -35,7 +35,7 @@ extern "C"
 //-----------------------------------------------
 void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextAdded(JNIEnv* inpEnv, jobject inThis, jstring injstrText)
 {
-	ChilliSource::Android::KeyboardJavaInterfacePtr pKeyboardJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::KeyboardJavaInterface>();
+	ChilliSource::Android::KeyboardJavaInterfaceSPtr pKeyboardJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::KeyboardJavaInterface>();
 	if (pKeyboardJI != NULL)
 	{
 		CSCore::UTF8String strText = ChilliSource::Android::JavaInterfaceUtils::CreateUTF8StringFromJString(injstrText);
@@ -55,7 +55,7 @@ void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextAdded(JNIEn
 //-----------------------------------------------
 void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextDeleted(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Android::KeyboardJavaInterfacePtr pKeyboardJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::KeyboardJavaInterface>();
+	ChilliSource::Android::KeyboardJavaInterfaceSPtr pKeyboardJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::KeyboardJavaInterface>();
 	if (pKeyboardJI != NULL)
 	{
 		CSCore::Task<> task(pKeyboardJI.get(), &ChilliSource::Android::KeyboardJavaInterface::OnTextDeleted);
@@ -72,7 +72,7 @@ void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextDeleted(JNI
 //-----------------------------------------------
 void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnKeyboardDismissed(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Android::KeyboardJavaInterfacePtr pKeyboardJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::KeyboardJavaInterface>();
+	ChilliSource::Android::KeyboardJavaInterfaceSPtr pKeyboardJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::KeyboardJavaInterface>();
 	if (pKeyboardJI != NULL)
 	{
 		CSCore::Task<> task(pKeyboardJI.get(), &ChilliSource::Android::KeyboardJavaInterface::OnKeyboardDismissed);

@@ -7,7 +7,7 @@
  *
  */
 
-#include <ChilliSource/Backend/Platform/Android/Core/File/FileStreamAndroidAPK.h>
+#include <ChilliSource/Backend/Platform/Android/Core/File/FileStreamAPK.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/File/FileSystem.h>
 

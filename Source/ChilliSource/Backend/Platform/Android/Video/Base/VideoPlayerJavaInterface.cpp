@@ -34,7 +34,7 @@ extern "C"
 //-------------------------------------------
 void Java_com_chillisource_video_VideoPlayerNativeInterface_Dismissed(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Android::VideoPlayerJavaInterfacePtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
+	ChilliSource::Android::VideoPlayerJavaInterfaceSPtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
 	if (pVideoPJI != NULL)
 		pVideoPJI->Dismissed();
 }
@@ -48,7 +48,7 @@ void Java_com_chillisource_video_VideoPlayerNativeInterface_Dismissed(JNIEnv* in
 //-------------------------------------------
 void Java_com_chillisource_video_VideoPlayerNativeInterface_Stopped(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Android::VideoPlayerJavaInterfacePtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
+	ChilliSource::Android::VideoPlayerJavaInterfaceSPtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
 	if (pVideoPJI != NULL)
 		pVideoPJI->Stopped();
 }
@@ -63,7 +63,7 @@ void Java_com_chillisource_video_VideoPlayerNativeInterface_Stopped(JNIEnv* inpE
 //-------------------------------------------
 void Java_com_chillisource_video_VideoPlayerNativeInterface_UpdateSubtitles(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Android::VideoPlayerJavaInterfacePtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
+	ChilliSource::Android::VideoPlayerJavaInterfaceSPtr pVideoPJI = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<ChilliSource::Android::VideoPlayerJavaInterface>();
 	if (pVideoPJI != NULL)
 		pVideoPJI->UpdateSubtitles();
 }
