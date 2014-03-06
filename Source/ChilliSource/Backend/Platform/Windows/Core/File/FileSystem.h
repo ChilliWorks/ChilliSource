@@ -32,7 +32,6 @@ namespace ChilliSource
 		class FileSystem : public Core::FileSystem
 		{
 		public:
-			FileSystem();
 			//--------------------------------------------------------------------------------------------------
 			/// Description:
 			///
@@ -240,6 +239,15 @@ namespace ChilliSource
 			std::string GetDirectoryForPackageFile(const std::string& instrFilePath) const override;
             
 		private:
+			friend Core::FileSystemUPtr Core::FileSystem::Create();
+
+			//--------------------------------------------------------------
+			/// Private constructor to force use of the factory
+			/// method.
+			///
+			/// @author I Copland
+			//--------------------------------------------------------------
+			FileSystem();
             //--------------------------------------------------------------
 			/// Does Item Exist In DLC Cache
 			///

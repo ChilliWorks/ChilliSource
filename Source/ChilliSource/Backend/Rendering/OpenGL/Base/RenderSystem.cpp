@@ -63,6 +63,14 @@ namespace ChilliSource
                 CS_LOG_FATAL("Cannot Create OpenGL ES 2.0 Context");
             }
 #endif
+#ifdef CS_TARGETPLATFORM_WINDOWS
+			GLenum GlewError = glewInit();
+			if (GLEW_OK != GlewError)
+			{
+				//Problem: glewInit failed, something is seriously wrong.
+				CS_LOG_FATAL("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
+			}
+#endif
 		}
         //----------------------------------------------------------
 		/// Is A
@@ -77,14 +85,6 @@ namespace ChilliSource
         bool RenderSystem::Init(u32 inudwWidth, u32 inudwHeight)
 		{
             CS_ASSERT((inudwWidth > 0 && inudwHeight > 0), "Cannot create and OpenGL ES view with size ZERO");
-#ifdef CS_TARGETPLATFORM_WINDOWS
-			GLenum GlewError = glewInit();
-			if(GLEW_OK != GlewError)
-			{
-				//Problem: glewInit failed, something is seriously wrong.
-				CS_LOG_FATAL("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
-			}
-#endif
 #ifdef CS_TARGETPLATFORM_ANDROID
             //Check for map buffer support
             gbIsMapBufferAvailable = RenderSystem::CheckForOpenGLExtension("GL_OES_mapbuffer");

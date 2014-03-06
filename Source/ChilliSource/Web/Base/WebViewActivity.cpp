@@ -17,10 +17,6 @@
 #include <ChilliSource/Backend/Platform/Android/Web/Base/WebViewActivity.h>
 #endif
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Platform/Windows/Web/Base/WebViewActivity.h>
-#endif
-
 namespace ChilliSource
 {
     namespace Web
@@ -36,9 +32,6 @@ namespace ChilliSource
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
             return WebViewActivityUPtr(new Android::WebViewActivity());
-#endif
-#ifdef CS_TARGETPLATFORM_WINDOWS
-            return WebViewActivityUPtr(new Windows::WebViewActivity());
 #endif
             return nullptr;
         }

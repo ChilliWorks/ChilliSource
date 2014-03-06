@@ -25,12 +25,6 @@ namespace ChilliSource
 		{
 		public:
 			//--------------------------------------------------------------------------------------------------
-			/// Constructor
-			///
-			/// Creates a WinHTTP session
-			//--------------------------------------------------------------------------------------------------
-			HttpConnectionSystem();
-			//--------------------------------------------------------------------------------------------------
 			/// Destructor
 			///
 			/// Destroys WinHTTP session
@@ -77,7 +71,13 @@ namespace ChilliSource
 			void Update(f32 infDT) override;
 
 		private:
-
+			friend Networking::HttpConnectionSystemUPtr Networking::HttpConnectionSystem::Create();
+			//-------------------------------------------------------
+			/// Private constructor to fore use of factory method
+			///
+			/// @author I Copland
+			//-------------------------------------------------------
+			HttpConnectionSystem();
 			//--------------------------------------------------------------------------------------------------
 			/// Apply SSL Settings
 			///
@@ -163,7 +163,6 @@ namespace ChilliSource
                 const ConnectionInfo& GetConnectionInfo();
 				
 			private:
-				
 				//----------------------------------------------------------------------------------------
 				/// Poll Read Stream
 				///

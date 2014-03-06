@@ -16,10 +16,6 @@
 #include <ChilliSource/Backend/Platform/Android/Video/Base/VideoPlayerActivity.h>
 #endif
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Platform/Windows/Video/Base/VideoPlayerActivity.h>
-#endif
-
 namespace ChilliSource
 {
     namespace Video
@@ -34,9 +30,6 @@ namespace ChilliSource
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
             return VideoPlayerActivityUPtr(new Android::VideoPlayerActivity());
-#endif
-#ifdef CS_TARGETPLATFORM_WINDOWS
-            return VideoPlayerActivityUPtr(new Windows::VideoPlayerActivity());
 #endif
             return nullptr;
         }

@@ -1,14 +1,10 @@
-/*
-* File: WindowsPlatformSystem.cpp
-* Date: 24/11/2010 2010 
-* Description: 
-*/
-
-/*
-* Author: Scott Downie
-* Version: v 1.0
-* Copyright ©2010 Tag Games Limited - All rights reserved 
-*/
+//
+//  PlatformSystem.cpp
+//  Chilli Source
+//
+//  Created by Scott Downie on 24/11/2010.
+//  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
+//
 
 #define WIN32_LEAN_AND_MEAN
 

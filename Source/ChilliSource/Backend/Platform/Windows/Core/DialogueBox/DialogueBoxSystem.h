@@ -73,6 +73,8 @@ namespace ChilliSource
 			//----------------------------------------------------
             ~DialogueBoxSystem();
         private:
+			friend Core::DialogueBoxSystemUPtr Core::DialogueBoxSystem::Create();
+
 			//----------------------------------------------------
 			/// Constructor
 			///
@@ -80,7 +82,6 @@ namespace ChilliSource
 			//----------------------------------------------------
 			DialogueBoxSystem();
 
-			friend Core::DialogueBoxSystemUPtr Core::DialogueBoxSystem::Create();
 		};
 	}
 }
