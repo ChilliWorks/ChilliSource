@@ -23,10 +23,15 @@ namespace ChilliSource
         {
         public:
             CS_DECLARE_NAMEDTYPE(AnimatedMeshComponentUpdater);
-            //------------------------------------------------
-			/// Constructor
-			//------------------------------------------------
-            AnimatedMeshComponentUpdater();
+            
+            //-------------------------------------------------------
+            /// Factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend with ownership transferred
+            //-------------------------------------------------------
+            static AnimatedMeshComponentUpdaterUPtr Create();
             //------------------------------------------------
 			/// Is A
 			///
@@ -60,6 +65,15 @@ namespace ChilliSource
             /// @param The component.
 			//------------------------------------------------
 			void RemoveComponent(AnimatedMeshComponent* inpAnimatedMesh);
+            
+        private:
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            AnimatedMeshComponentUpdater(){}
+            
         private:
             std::vector<AnimatedMeshComponent*> mapComponentsToUpdate;
         };

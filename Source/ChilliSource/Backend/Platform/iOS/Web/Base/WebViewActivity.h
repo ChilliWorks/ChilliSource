@@ -32,8 +32,7 @@ namespace ChilliSource
 		class WebViewActivity : public Web::WebViewActivity
 		{
 		public:
-			WebViewActivity();
-			
+
 			//-----------------------------------------------
 			/// Present
 			/// 
@@ -118,8 +117,15 @@ namespace ChilliSource
             /// PresentFromFile
 			//-----------------------------------------------
             const std::string& GetAnchor() const;
-        private:
             
+        private:
+            friend Web::WebViewActivityUPtr Web::WebViewActivity::Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            WebViewActivity();
             //-----------------------------------------------
             /// Create Webview
             ///

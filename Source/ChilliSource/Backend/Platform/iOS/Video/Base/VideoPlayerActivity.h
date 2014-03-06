@@ -26,10 +26,6 @@ namespace ChilliSource
         class VideoPlayerActivity : public Video::VideoPlayerActivity
         {
         public:
-            //--------------------------------------------------------------
-            /// Constructor
-            //--------------------------------------------------------------
-            VideoPlayerActivity();
             ~VideoPlayerActivity();
 			//--------------------------------------------------------------
 			/// Is A
@@ -105,7 +101,17 @@ namespace ChilliSource
             /// @return the actual dimensions of the playing video.
             //--------------------------------------------------------------
             Core::Vector2 GetVideoDimensions();
+            
         private:
+            
+            friend Video::VideoPlayerActivityUPtr Video::VideoPlayerActivity::Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            VideoPlayerActivity();
+            
             //---------------------------------------------------------------
             /// On Tapped
             ///

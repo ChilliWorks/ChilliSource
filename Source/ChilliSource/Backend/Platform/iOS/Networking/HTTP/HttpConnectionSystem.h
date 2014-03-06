@@ -69,6 +69,13 @@ namespace ChilliSource
             
         private:
             
+            friend Networking::HttpConnectionSystemUPtr Networking::HttpConnectionSystem::Create();
+            //--------------------------------------------------------------------------------------------------
+            /// Private constructor to fore use of factory method
+            ///
+            /// @author S Downie
+            //--------------------------------------------------------------------------------------------------
+            HttpConnectionSystem(){}
             //--------------------------------------------------------------------------------------------------
             /// Apply SSL Settings
             ///

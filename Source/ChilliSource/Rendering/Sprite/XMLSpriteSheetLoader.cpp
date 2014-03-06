@@ -19,15 +19,12 @@ namespace ChilliSource
 	{
 		const std::string kstrTagXmlSpriteExtension("mosprites");
 	
-		//-------------------------------------------------------------------------
-		/// Constructor
-		///
-		/// @param Handle to moFlo App
-		//-------------------------------------------------------------------------
-		XMLSpriteSheetLoader::XMLSpriteSheetLoader() 
-		{
-			
-		}
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        XMLSpriteSheetLoaderUPtr XMLSpriteSheetLoader::Create()
+        {
+            return XMLSpriteSheetLoaderUPtr(new XMLSpriteSheetLoader());
+        }
 		//-------------------------------------------------------------------------
 		/// Is A
 		///

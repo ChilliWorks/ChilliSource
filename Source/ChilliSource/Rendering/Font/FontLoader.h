@@ -24,6 +24,15 @@ namespace ChilliSource
 		{
 		public:
 
+            //-------------------------------------------------------
+            /// Factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend with ownership transferred
+            //-------------------------------------------------------
+            static FontLoaderUPtr Create();
+            
 			virtual ~FontLoader();
 			
 			//-------------------------------------------------------------------------
@@ -50,7 +59,12 @@ namespace ChilliSource
 			bool CanCreateResourceFromFileWithExtension(const std::string& inExtension) const override;
 			
 		private:
-			
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            FontLoader(){}
 			//----------------------------------------------------------------------------
 			/// Create Resource From File
 			///

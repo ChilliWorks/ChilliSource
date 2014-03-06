@@ -89,24 +89,6 @@ namespace ChilliSource
             //-----------------------------------------
             void TerminateUpdater() override;
 			
-            //-----------------------------------------
-            /// Can Create System With Interface
-            ///
-            /// @param Interface ID
-            /// @return Whether system can be created
-            //----------------------------------------
-			bool CanCreateSystemWithInterface(Core::InterfaceIDType inInterfaceID) const override;
-			//-----------------------------------------
-            /// Create and Add System With Interface
-            ///
-			/// Tries to create a platform specific implementation with the given interface
-			///
-			/// @param InterfaceID to generate
-			/// @param Vector of existing systems. The return value is added to this vector if not nullptr.
-			/// @return A handle to the given system or nullptr if the platform cannot support it
-			//-----------------------------------------
-			Core::System* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr> & inaExistingSystems) const override;
-			
 			//==========================================
 			//--- Activity Creation
 			//==========================================
@@ -224,17 +206,6 @@ namespace ChilliSource
 			//--------------------------------------------------------------
 			TimeIntervalMs GetSystemTimeMS() const override;
 		private:
-
-            //--------------------------------------------
-            /// Create Systems
-            ///
-            /// Methods that create concrete systems 
-            /// for this platform
-            ///
-            /// @param System list
-            /// @return A pointer to the system
-            //--------------------------------------------
-			Core::System * CreateHttpConnectionSystem(std::vector<Core::SystemSPtr>& inSystems) const;
  
             //--------------------------------------------
 			/// Create Activities
@@ -245,8 +216,6 @@ namespace ChilliSource
 			//--------------------------------------------
 			Core::Activity* CreateSMSCompositionActivity() const;
 			Core::Activity* CreateEmailCompositionActivity() const;
-			Core::Activity * CreateDefaultVideoPlayerActivity() const;
-			Core::Activity * CreateWebViewActivity() const;
 			
             //--------------------------------------------
             /// Create Information Providers
@@ -256,31 +225,6 @@ namespace ChilliSource
             /// @return Ownership of the info provider
             //--------------------------------------------
 			Core::IInformationProvider* CreateContactInformationProvider() const;
-			
-            typedef std::function<Core::System*(std::vector<Core::SystemSPtr>&)> SystemCreationFunction;
-            
-            //--------------------------------------------
-            /// Add System Function
-            ///
-            /// Map the creation function with the
-            /// system type
-            ///
-            /// @param System interface ID
-            /// @param Creation delegate
-            //-------------------------------------------
-            void AddSystemFunc(Core::InterfaceIDType inInterfaceID, SystemCreationFunction inFunction);
-            //-------------------------------------------
-            /// Find System Implementing
-            ///
-            /// Identify if the system already exists
-            /// to prevent creation of duplicate 
-            /// systems
-            ///
-            /// @param Interface ID
-            /// @param Exisiting systems
-            /// @return Pointer to system
-            //-------------------------------------------
-			Core::System* FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemSPtr>& inSystems) const;
 			
             typedef std::function<Core::Activity*()> ActivityCreationFunction;
 			
@@ -316,9 +260,6 @@ namespace ChilliSource
     		f32 GetPhysicalScreenSize();
 			
 		private:
-			
-			typedef std::unordered_map<Core::InterfaceIDType, SystemCreationFunction> MapInterfaceIDToSystemFunc;
-			MapInterfaceIDToSystemFunc mmapInterfaceIDToSystemFunc;
         
 			typedef std::unordered_map<Core::InterfaceIDType, ActivityCreationFunction> MapInterfaceIDToActivityFunc;
 			MapInterfaceIDToActivityFunc mmapInterfaceIDToActivityFunc;

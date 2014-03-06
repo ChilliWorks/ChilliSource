@@ -25,6 +25,15 @@ namespace ChilliSource
         public:
             
             CS_DECLARE_NAMEDTYPE(WebViewActivity);
+            
+            //-------------------------------------------------------
+            /// Create the platform dependent backend
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend instance
+            //-------------------------------------------------------
+            static WebViewActivityUPtr Create();
             //--------------------------------------------------------------
             /// Is A
             ///
@@ -87,6 +96,16 @@ namespace ChilliSource
             /// return Unified Vector of size
             //-----------------------------------------------
             virtual Core::UnifiedVector2 GetSize() const = 0;
+            
+        protected:
+            
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            WebViewActivity(){}
+            
         protected:
             
             Core::Event<Core::ActivityDismissedEvent> mOnDismissedEvent;

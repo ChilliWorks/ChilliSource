@@ -71,14 +71,9 @@ namespace ChilliSource
         : mfPhysicalScreenSize(-1.0f)
 		{
             //---Systems
-			AddSystemFunc(Networking::HttpConnectionSystem::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateHttpConnectionSystem));
-
             AddActivityFunc(Social::EmailCompositionActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateEmailCompositionActivity));
  
             //---Activities
-            AddActivityFunc(Video::VideoPlayerActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateDefaultVideoPlayerActivity));
-			AddActivityFunc(Web::WebViewActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateWebViewActivity));
-			
 			if(SMSCompositionActivity::SupportedByDevice())
             {
 				AddActivityFunc(Social::SMSCompositionActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateSMSCompositionActivity));
@@ -90,19 +85,6 @@ namespace ChilliSource
 			Core::NotificationScheduler::Initialise(new LocalNotificationScheduler());
 
 			Core::Logging::Init();
-		}
-        //--------------------------------------------
-        /// Add System Function
-        ///
-        /// Map the creation function with the
-        /// system type
-        ///
-        /// @param System interface ID
-        /// @param Creation delegate
-        //-------------------------------------------
-		void PlatformSystem::AddSystemFunc(Core::InterfaceIDType inInterfaceID, SystemCreationFunction inFunction)
-        {
-			mmapInterfaceIDToSystemFunc.insert(std::make_pair(inInterfaceID,inFunction));
 		}
         //--------------------------------------------
         /// Add Activity Function
@@ -129,29 +111,6 @@ namespace ChilliSource
 		void PlatformSystem::AddInfoProviderFunc(Core::InterfaceIDType inInterfaceID, InfoProviderCreationFunction inFunction)
         {
 			mmapInterfaceIDToInfoProviderFunc.insert(std::make_pair(inInterfaceID,inFunction));
-		}
-        //-------------------------------------------
-        /// Find System Implementing
-        ///
-        /// Identify if the system already exists
-        /// to prevent creation of duplicate 
-        /// systems
-        ///
-        /// @param Interface ID
-        /// @param Exisiting systems
-        /// @return Pointer to system
-        //-------------------------------------------
-		Core::System* PlatformSystem::FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemSPtr>& inSystems) const
-        {
-			for(u32 nSystem = 0; nSystem < inSystems.size(); nSystem++)
-            {
-				if (inSystems[nSystem]->IsA(inInterfaceID))
-                {
-					return inSystems[nSystem].get();
-				}
-			}
-			
-			return nullptr;
 		}
 		//-----------------------------------------
 		/// Init
@@ -195,9 +154,9 @@ namespace ChilliSource
             in_application->AddSystem(Core::MoImageProvider::Create());
             
 			in_application->AddSystem(Rendering::SpriteSheetLoader::Create());
-			in_application->AddSystem(Core::SystemUPtr(new Rendering::XMLSpriteSheetLoader()));
-			in_application->AddSystem(Core::SystemUPtr(new Rendering::FontLoader()));
-            in_application->AddSystem(Core::SystemUPtr(new Rendering::AnimatedMeshComponentUpdater()));
+			in_application->AddSystem(Rendering::XMLSpriteSheetLoader::Create());
+			in_application->AddSystem(Rendering::FontLoader::Create());
+            in_application->AddSystem(Rendering::AnimatedMeshComponentUpdater::Create());
             
             Core::Application::Get()->SetRenderer(new Rendering::Renderer(renderSystem));
 		}
@@ -261,45 +220,6 @@ namespace ChilliSource
         {
             iOSInvalidateUpdater();
         }
-        //-----------------------------------------
-        /// Can Create System With Interface
-        ///
-        /// @param Interface ID
-        /// @return Whether system can be created
-        //----------------------------------------
-		bool PlatformSystem::CanCreateSystemWithInterface(Core::InterfaceIDType inInterfaceID) const
-        {
-			MapInterfaceIDToSystemFunc::const_iterator pFunc(mmapInterfaceIDToSystemFunc.find(inInterfaceID));
-
-			return pFunc != mmapInterfaceIDToSystemFunc.end();
-		}
-        //-----------------------------------------
-        /// Create and Add System With Interface
-        ///
-        /// Convenience template method of the above returning the needed interface type.
-        ///
-        /// @param InterfaceID to generate
-        /// @param Vector of existing systems
-        /// @return A handle to the given system or nullptr if the platform cannot support it
-        //-----------------------------------------
-		Core::System* PlatformSystem::CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr> & inaExistingSystems) const
-        {
-			Core::System * pResult = nullptr;
-			
-			MapInterfaceIDToSystemFunc::const_iterator pFunc(mmapInterfaceIDToSystemFunc.find(inInterfaceID));
-			
-			if (pFunc != mmapInterfaceIDToSystemFunc.end())
-            {
-				pResult = pFunc->second(inaExistingSystems);
-			}
-			
-			if (pResult)
-            {
-				inaExistingSystems.push_back(Core::SystemSPtr(pResult));
-			}
-			
-			return pResult;
-		}
 		//-----------------------------------------
         /// Can Create Activity With Interface
         ///
@@ -360,19 +280,6 @@ namespace ChilliSource
 			}
 			return nullptr;
 		}
-		//--------------------------------------------
-		/// Create Systems
-		///
-		/// Methods that create concrete systems 
-        /// for this platform
-		///
-        /// @param System list
-		/// @return A pointer to the system
-		//--------------------------------------------
-		Core::System * PlatformSystem::CreateHttpConnectionSystem(std::vector<Core::SystemSPtr>& inSystems) const
-        {
-			return new HttpConnectionSystem();
-		}
         //--------------------------------------------
         /// Create Activities
         ///
@@ -388,14 +295,6 @@ namespace ChilliSource
         {
 			return new EmailCompositionActivity();
 		}
-		Core::Activity * PlatformSystem::CreateDefaultVideoPlayerActivity() const
-        {
-            return new VideoPlayerActivity();
-        }
-		Core::Activity * PlatformSystem::CreateWebViewActivity() const
-        {
-            return new WebViewActivity();
-        }
         //--------------------------------------------
         /// Create Information Providers
         ///
