@@ -68,9 +68,9 @@ namespace ChilliSource
 				if(RequestOAuthToken(strAuthoiseURL))
 				{
 					// Show authentication view
-					if(Core::Application::Get()->GetPlatformSystem()->CanCreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>())
+                    mpAuthenticationView = ChilliSource::Social::TwitterAuthenticationActivity::Create();
+					if(mpAuthenticationView != nullptr)
 					{
-						mpAuthenticationView = Core::Application::Get()->GetPlatformSystem()->CreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>();
 						mpAuthenticationView->SetAuthenticationPINResultDelegate(Core::MakeDelegate(this, &TwitterPostSystem::OnPINComplete));
 						m_authorisationDismissedConnection = mpAuthenticationView->GetDismissedEvent().OpenConnection(Core::MakeDelegate(this, &TwitterPostSystem::OnAuthorisationDismissed));
 						mpAuthenticationView->Present();
@@ -257,7 +257,7 @@ namespace ChilliSource
 			// User has cancelled
 			if(mpAuthenticationView)
 			{
-				CS_SAFEDELETE(mpAuthenticationView);
+				mpAuthenticationView.reset();
 			}
 		}
     }

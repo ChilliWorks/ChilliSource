@@ -38,43 +38,6 @@ namespace ChilliSource
 		PlatformSystem::PlatformSystem()
         : mfPhysicalScreenSize(-1.0f)
 		{
-            //---Systems
-            AddActivityFunc(Social::EmailCompositionActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateEmailCompositionActivity));
- 
-            //---Activities
-			if(SMSCompositionActivity::SupportedByDevice())
-            {
-				AddActivityFunc(Social::SMSCompositionActivity::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateSMSCompositionActivity));
-            }
-			
-            //---Info providers
-			AddInfoProviderFunc(Social::ContactInformationProvider::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateContactInformationProvider));
-		}
-        //--------------------------------------------
-        /// Add Activity Function
-        ///
-        /// Map the creation function with the
-        /// activity type
-        ///
-        /// @param Activity interface ID
-        /// @param Creation delegate
-        //-------------------------------------------
-		void PlatformSystem::AddActivityFunc(Core::InterfaceIDType inInterfaceID, ActivityCreationFunction inFunction)
-        {
-			mmapInterfaceIDToActivityFunc.insert(std::make_pair(inInterfaceID,inFunction));
-		}
-        //--------------------------------------------
-        /// Add Info Provider Function
-        ///
-        /// Map the creation function with the
-        /// system type
-        ///
-        /// @param Info provider interface ID
-        /// @param Creation delegate
-        //-------------------------------------------
-		void PlatformSystem::AddInfoProviderFunc(Core::InterfaceIDType inInterfaceID, InfoProviderCreationFunction inFunction)
-        {
-			mmapInterfaceIDToInfoProviderFunc.insert(std::make_pair(inInterfaceID,inFunction));
 		}
 		//-----------------------------------------
 		/// Init
@@ -149,92 +112,6 @@ namespace ChilliSource
         {
             iOSInvalidateUpdater();
         }
-		//-----------------------------------------
-        /// Can Create Activity With Interface
-        ///
-		/// @param Interface ID
-		/// @return Whether activity can be created
-		//----------------------------------------
-		bool PlatformSystem::CanCreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
-        {
-			MapInterfaceIDToActivityFunc::const_iterator pFunc(mmapInterfaceIDToActivityFunc.find(inInterfaceID));
-			
-			return pFunc != mmapInterfaceIDToActivityFunc.end();
-		}
-		//-----------------------------------------
-        /// Create Activity With Interface
-        ///
-		/// Tries to create a platform specific implementation with the given interface
-		///
-		/// @param InterfaceID to generate
-		/// @return A handle to the given activity or nullptr if the platform cannot support it
-		//-----------------------------------------
-		Core::Activity* PlatformSystem::CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const
-        {
-			MapInterfaceIDToActivityFunc::const_iterator pFunc(mmapInterfaceIDToActivityFunc.find(inInterfaceID));
-			
-			if (pFunc != mmapInterfaceIDToActivityFunc.end())
-            {
-				return pFunc->second();
-			}
-			
-			return nullptr;
-		}
-		//-----------------------------------------
-        /// Can Create Information Provider With Interface
-        ///
-		/// @param Interface ID
-		/// @return Whether system can be created
-		//----------------------------------------
-		bool PlatformSystem::CanCreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
-        {
-			MapInterfaceIDToInfoProviderFunc::const_iterator pFunc(mmapInterfaceIDToInfoProviderFunc.find(inInterfaceID));
-			
-			return pFunc != mmapInterfaceIDToInfoProviderFunc.end();
-		}
-		//-----------------------------------------
-        /// Create Information Provider With Interface
-        ///
-		/// Tries to create a platform specific implementation with the given interface
-		///
-		/// @param InterfaceID to generate
-		/// @return A handle to the given system or nullptr if the platform cannot support it
-		//-----------------------------------------
-		Core::IInformationProvider* PlatformSystem::CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const
-        {
-			MapInterfaceIDToInfoProviderFunc::const_iterator pFunc(mmapInterfaceIDToInfoProviderFunc.find(inInterfaceID));
-			if (pFunc != mmapInterfaceIDToInfoProviderFunc.end())
-            {
-				return pFunc->second();
-			}
-			return nullptr;
-		}
-        //--------------------------------------------
-        /// Create Activities
-        ///
-        /// Creates an instance of the activity
-        ///
-        /// @return Ownership of the activity
-        //--------------------------------------------
-		Core::Activity* PlatformSystem::CreateSMSCompositionActivity() const
-        {
-			return new SMSCompositionActivity();
-		}
-		Core::Activity* PlatformSystem::CreateEmailCompositionActivity() const
-        {
-			return new EmailCompositionActivity();
-		}
-        //--------------------------------------------
-        /// Create Information Providers
-        ///
-        /// Creates an instance of the info provider
-        ///
-        /// @return Ownership of the info provider
-        //--------------------------------------------
-		Core::IInformationProvider* PlatformSystem::CreateContactInformationProvider() const
-        {
-			return new ContactInformationProvider();
-		}
 		//-----------------------------------------------------------------------------------------------------------
 		/// Get Screen Dimensions
 		///

@@ -21,14 +21,16 @@ namespace ChilliSource
     {
         CS_DEFINE_NAMEDTYPE(FacebookAuthenticationSystem);
         
-        FacebookAuthenticationSystem* FacebookAuthenticationSystem::Create()
+        //------------------------------------------------
+        //------------------------------------------------
+        FacebookAuthenticationSystemUPtr FacebookAuthenticationSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return new ChilliSource::iOS::FacebookAuthenticationSystem();
+            return FacebookAuthenticationSystemUPtr(new ChilliSource::iOS::FacebookAuthenticationSystem());
 #elif CS_TARGETPLATFORM_ANDROID
-            return new ChilliSource::Android::FacebookAuthenticationSystem();
+            return FacebookAuthenticationSystemUPtr(new ChilliSource::Android::FacebookAuthenticationSystem());
 #else
-			return nullptr;
+			return FacebookAuthenticationSystemUPtr();
 #endif
         }
     }

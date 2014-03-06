@@ -37,7 +37,6 @@ namespace ChilliSource
 		class TwitterAuthenticationActivity : public Social::TwitterAuthenticationActivity
 		{
 		public:
-			TwitterAuthenticationActivity();
 			//-----------------------------------------------
 			/// Present
 			/// 
@@ -125,6 +124,13 @@ namespace ChilliSource
 			void OnPINCancelled();
 		
 		private:
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            //----------------------------------------------------
+            TwitterAuthenticationActivity();
 			//-----------------------------------------------
             /// Display
             ///
@@ -139,6 +145,8 @@ namespace ChilliSource
 			//-----------------------------------------------
 			void ShowAuthoriseURL(const std::string& instrURL);
 			
+            friend Social::TwitterAuthenticationActivityUPtr Social::TwitterAuthenticationActivity::Create();
+            
 			UIView*									mpBaseView;
 			UILabel*								mpBusyMessage;
 			UIActivityIndicatorView*				mpBusyView;

@@ -87,47 +87,7 @@ namespace ChilliSource
             //-----------------------------------------
             void TerminateUpdater() override;
 			
-			//==========================================
-			//--- Activity Creation
-			//==========================================
-			//-----------------------------------------
-            /// Can Create Activity With Interface
-            ///
-            /// @param Interface ID
-            /// @return Whether system can be created
-            //----------------------------------------
-            bool CanCreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const override;
-			//-----------------------------------------
-            /// Create Activity With Interface
-            ///
-			/// Tries to create a platform specific implementation with the given interface
-			///
-			/// @param InterfaceID to generate
-			/// @return A handle to the given activity or nullptr if the platform cannot support it
-			//-----------------------------------------
-            Core::Activity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const override;
-			
-			//==========================================
-			//---InformationProvider Creation
-			//==========================================
-			//-----------------------------------------
-            /// Can Create Information Provider With Interface
-            ///
-			/// @param Interface ID
-			/// @return Whether system can be created
-			//----------------------------------------
-            bool CanCreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const override;
-			
-			//-----------------------------------------
-            /// Can Create Information Provider With Interface
-            ///
-			/// Tries to create a platform specific implementation with the given interface
-			///
-			/// @param InterfaceID to generate
-			/// @return A handle to the given system or nullptr if the platform cannot support it
-			//-----------------------------------------
-            Core::IInformationProvider* CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const override;
-			//-----------------------------------------------------------------------------------------------------------
+            //-----------------------------------------------------------------------------------------------------------
 			/// Get Screen Dimensions
 			///
 			/// Retrieves the screen dimensions. These dimensions are always in the default orientation for the device.
@@ -212,50 +172,6 @@ namespace ChilliSource
             /// @author S Downie
             //-------------------------------------------------------
             PlatformSystem();
-            //--------------------------------------------
-			/// Create Activities
-			///
-			/// Creates an instance of the activity
-			///
-			/// @return Ownership of the activity
-			//--------------------------------------------
-			Core::Activity* CreateSMSCompositionActivity() const;
-			Core::Activity* CreateEmailCompositionActivity() const;
-			
-            //--------------------------------------------
-            /// Create Information Providers
-            ///
-            /// Creates an instance of the info provider
-            ///
-            /// @return Ownership of the info provider
-            //--------------------------------------------
-			Core::IInformationProvider* CreateContactInformationProvider() const;
-			
-            typedef std::function<Core::Activity*()> ActivityCreationFunction;
-			
-			//--------------------------------------------
-            /// Add Activity Function
-            ///
-            /// Map the creation function with the
-            /// system type
-            ///
-            /// @param System interface ID
-            /// @param Creation delegate
-            //-------------------------------------------
-            void AddActivityFunc(Core::InterfaceIDType inInterfaceID, ActivityCreationFunction inFunction);
-			
-            typedef std::function<Core::IInformationProvider*()> InfoProviderCreationFunction;
-			
-            //--------------------------------------------
-            /// Add Info Provider Function
-            ///
-            /// Map the creation function with the
-            /// system type
-            ///
-            /// @param Info provider interface ID
-            /// @param Creation delegate
-            //-------------------------------------------
-            void AddInfoProviderFunc(Core::InterfaceIDType inInterfaceID, InfoProviderCreationFunction inFunction);
     		//-------------------------------------------------
     		/// Get Physical Screen Size
     		///
@@ -265,12 +181,6 @@ namespace ChilliSource
     		f32 GetPhysicalScreenSize();
 			
 		private:
-        
-			typedef std::unordered_map<Core::InterfaceIDType, ActivityCreationFunction> MapInterfaceIDToActivityFunc;
-			MapInterfaceIDToActivityFunc mmapInterfaceIDToActivityFunc;
-			
-			typedef std::unordered_map<Core::InterfaceIDType, InfoProviderCreationFunction> MapInterfaceIDToInfoProviderFunc;
-			MapInterfaceIDToInfoProviderFunc mmapInterfaceIDToInfoProviderFunc;
             
             f32 mfPhysicalScreenSize;
 		};

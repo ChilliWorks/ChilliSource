@@ -22,7 +22,7 @@ namespace ChilliSource
 		class FacebookPostSystem : public Social::FacebookPostSystem
 		{
 		public:
-			FacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem);
+			
 			
             bool IsA(Core::InterfaceIDType inID) const override;
 			
@@ -31,11 +31,23 @@ namespace ChilliSource
             void TrySendRequest(const Social::FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends) override;
 			
 		private:
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The facebook authentication system.
+            //----------------------------------------------------
+            FacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem);
+            
             void Post(const Social::FacebookPostDesc& insDesc);
             bool TryPostNative(const Social::FacebookPostDesc& insDesc);
             void PostWebBased(const Social::FacebookPostDesc& insDesc);
             void OnPublishPermissionAuthorised(const Social::FacebookAuthenticationSystem::AuthenticateResponse& insResponse);
 			
+            friend Social::FacebookPostSystemUPtr Social::FacebookPostSystem::Create(Social::FacebookAuthenticationSystem* in_authSystem);
+            
             Social::FacebookAuthenticationSystem* mpAuthSystem;
             Social::FacebookPostDesc msPostDesc;
 		};

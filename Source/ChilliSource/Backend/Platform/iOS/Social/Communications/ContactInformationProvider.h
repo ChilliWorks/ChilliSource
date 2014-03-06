@@ -30,6 +30,16 @@ namespace ChilliSource
 			virtual u32 GetNumberContacts() override;
 			virtual const Social::ContactRecord & GetContactAtIndex(u32 inudwIndex) override;
 		private:
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            //----------------------------------------------------
+            ContactInformationProvider(){};
+            
+            friend Social::ContactInformationProviderUPtr Social::ContactInformationProvider::Create();
+            
 			std::vector<Social::ContactRecord> masContacts;
 		};
 		

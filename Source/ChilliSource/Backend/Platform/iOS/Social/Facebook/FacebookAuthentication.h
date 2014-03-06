@@ -46,11 +46,21 @@ namespace ChilliSource
             void PublishInstall() override;
 			
 		private:
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            //----------------------------------------------------
+            FacebookAuthenticationSystem(){};
+            
             void CreateNewSession();
             bool TryResumeExisitingSession();
             bool OpenSession(bool bShowLogin);
             
             void OnSessionStateChanged(FBSession* inpSession, FBSessionState ineState);
+            
+            friend Social::FacebookAuthenticationSystemUPtr Social::FacebookAuthenticationSystem::Create();
             
             std::vector<std::string> mastrPermissions;
             

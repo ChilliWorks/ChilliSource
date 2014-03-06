@@ -44,6 +44,16 @@ namespace ChilliSource
             
 			CS_DECLARE_NAMEDTYPE(FacebookAuthenticationSystem);
 			
+            //------------------------------------------------
+            /// Creates a new instance of the facebook
+            /// authentication system.
+            ///
+            /// @author I Copland
+            ///
+            /// @return The new instance of the system.
+            //------------------------------------------------
+            static FacebookAuthenticationSystemUPtr Create();
+            
 			virtual void Authenticate(const std::vector<std::string>& inastrReadPermissions = std::vector<std::string>(), const AuthenticationCompleteDelegate& inDelegate = nullptr) = 0;
 			
 			virtual bool IsSignedIn() const = 0;
@@ -57,8 +67,6 @@ namespace ChilliSource
 			virtual void SignOut() = 0;
             
             virtual void PublishInstall() = 0;
-            
-            static FacebookAuthenticationSystem* Create();
             
             virtual ~FacebookAuthenticationSystem(){}
             

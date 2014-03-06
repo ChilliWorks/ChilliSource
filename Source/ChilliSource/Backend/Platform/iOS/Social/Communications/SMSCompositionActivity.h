@@ -28,14 +28,22 @@ namespace ChilliSource{
 			
 			static bool SupportedByDevice(); //You must always check this method before constructing an instance of the class or doom will ensue.
 			
-			SMSCompositionActivity();
 			~SMSCompositionActivity();
 			
 			virtual void Present(const std::vector<Core::UTF8String> & inastrRecipientNumbers, const Core::UTF8String & instrContents, const SMSCompositionActivity::SendResultDelegate & inCallback) override;
 
 			virtual void Dismiss() override;
 		private:
-			
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            //----------------------------------------------------
+            SMSCompositionActivity();
+            
+            friend Social::SMSCompositionActivityUPtr Social::SMSCompositionActivity::Create();
+            
 			SMSDelegate * mpDelegate;
 			MFMessageComposeViewController * mpVC;
 		};
