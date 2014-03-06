@@ -61,6 +61,15 @@ namespace ChilliSource
 			/// @param Time between frames
 			//--------------------------------------------------------------------------------------------------
             void Update(f32 infDT);
+
+		private:
+            friend Networking::HttpConnectionSystemUPtr Networking::HttpConnectionSystem::Create();
+            //--------------------------------------------------------------------------------------------------
+            /// Private constructor to fore use of factory method
+            ///
+            /// @author S Downie
+            //--------------------------------------------------------------------------------------------------
+            HttpConnectionSystem(){}
 			
 		private:
 			

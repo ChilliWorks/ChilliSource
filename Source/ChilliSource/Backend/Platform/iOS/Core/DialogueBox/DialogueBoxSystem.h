@@ -28,12 +28,6 @@ namespace ChilliSource
 		public:
             CS_DECLARE_NAMEDTYPE(DialogueBoxSystem);
             //----------------------------------------------------
-			/// Constructor
-            ///
-            /// @author I Copland
-			//----------------------------------------------------
-            DialogueBoxSystem();
-            //----------------------------------------------------
             /// Is A
             ///
             /// @return Whether this implements the passed in
@@ -89,6 +83,16 @@ namespace ChilliSource
             /// @author I Copland
 			//----------------------------------------------------
             ~DialogueBoxSystem();
+            
+        private:
+            
+            friend Core::DialogueBoxSystemUPtr Core::DialogueBoxSystem::Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author I Copland
+            //-------------------------------------------------------
+            DialogueBoxSystem();
         private:
             
 			Core::DialogueBoxSystem::DialogueDelegate m_activeSysConfirmDelegate;

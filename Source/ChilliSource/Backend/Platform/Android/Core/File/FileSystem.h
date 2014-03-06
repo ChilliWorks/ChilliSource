@@ -41,7 +41,7 @@ namespace ChilliSource
 		class FileSystem : public Core::FileSystem
 		{
 		public:
-			FileSystem();
+
 			//--------------------------------------------------------------
             /// Create File Stream
             ///
@@ -261,6 +261,13 @@ namespace ChilliSource
 			bool IsStorageAvailable() const;
 
 		private:
+            friend Core::FileSystemUPtr Core::FileSystem::Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            FileSystem();
 			//--------------------------------------------------------------
 			/// Create APK File Stream
 			///

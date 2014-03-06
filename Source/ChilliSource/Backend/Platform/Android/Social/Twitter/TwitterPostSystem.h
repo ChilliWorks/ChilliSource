@@ -31,20 +31,20 @@ namespace ChilliSource
             /// @param Interface ID
             /// @return Is of interface ID type
             //------------------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType inInterfaceID) const;
+            bool IsA(Core::InterfaceIDType inInterfaceID) const override;
             //------------------------------------------------------------------------
             /// Run the OAuth process and, if successful, leave the system in state
             /// ready to communicate with Twitter
             ///
             /// @return Returns true if successful, otherwise false
             //------------------------------------------------------------------------
-            bool Authenticate();
+            bool Authenticate() override;
 			//------------------------------------------------------------------------
 			/// Is Image Post Supported
             ///
             /// @return Whether or not posting images using twitter is supported.
 			//------------------------------------------------------------------------
-			bool IsImagePostSupported() const;
+			bool IsImagePostSupported() const override;
 			//------------------------------------------------------------------------
 			/// Try Post
 			///
@@ -56,7 +56,7 @@ namespace ChilliSource
             ///
             /// @return If the tweet exceeds the character limit imposed by Twitter
 			//------------------------------------------------------------------------
-			bool TryPost(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback);
+			bool TryPost(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback) override;
 
 		private:
 			//------------------------------------------------------------------------

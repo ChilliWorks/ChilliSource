@@ -41,6 +41,15 @@ namespace ChilliSource
 			void FlushBufferedInput() override;
 			
 		private:
+            friend Input::InputSystemUPtr Input::InputSystem::Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            InputSystem(){}
+
+		private:
 			
 			TouchScreen mTouchScreen;
 			Accelerometer mAccelerometer;

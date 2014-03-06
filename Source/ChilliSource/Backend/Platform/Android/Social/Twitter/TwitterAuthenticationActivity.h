@@ -27,7 +27,7 @@ namespace ChilliSource
 			/// Starts the activity by presenting a view with
 			/// a 'busy, please wait' message
 			//-----------------------------------------------
-			void Present();
+			void Present() override;
 			//-----------------------------------------------
 			/// Presents the authorise URL
 			/// 
@@ -36,7 +36,7 @@ namespace ChilliSource
 			///
 			/// @param URL
 			//-----------------------------------------------
-			void PresentURL(const std::string& instrURL);
+			void PresentURL(const std::string& instrURL) override;
 			//-----------------------------------------------
 			/// Save PIN
 			/// 
@@ -50,7 +50,7 @@ namespace ChilliSource
 			/// 
 			/// Dismiss the web view interface
 			//-----------------------------------------------
-			void Dismiss();
+			void Dismiss() override;
 			//-----------------------------------------------
 			/// On PIN Complete
 			///

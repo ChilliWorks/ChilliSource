@@ -22,10 +22,10 @@ namespace ChilliSource
 		public:
 			FacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem);
 
-			bool IsA(Core::InterfaceIDType inID) const;
+			bool IsA(Core::InterfaceIDType inID) const override;
 
-			void TryPost(const Social::FacebookPostDesc& insDesc, const Social::IFacebookPostSystem::PostResultDelegate& insResultCallback);
-			void TrySendRequest(const Social::FacebookPostDesc& insDesc, const Social::IFacebookPostSystem::PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends);
+			void TryPost(const Social::FacebookPostDesc& insDesc, const Social::IFacebookPostSystem::PostResultDelegate& insResultCallback) override;
+			void TrySendRequest(const Social::FacebookPostDesc& insDesc, const Social::IFacebookPostSystem::PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends) override;
 
 			void OnPostToFeedComplete(bool inbSuccess);
 			void OnPostRequestComplete(bool inbSuccess);

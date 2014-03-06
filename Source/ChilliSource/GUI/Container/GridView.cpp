@@ -15,7 +15,7 @@
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Base/Screen.h>
 
-#if DEBUG_DRAWING
+#if CS_ENABLE_DEBUGDRAWING
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureManager.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
@@ -482,7 +482,7 @@ namespace ChilliSource
                 //Arrange everything!
                 LayoutContent();
 				
-#if DEBUG_DRAWING
+#if CS_ENABLE_DEBUGDRAWING
 				if(GridView::mbDrawDebug)
 				{
 					Rendering::TextureManager* pMgr = (Rendering::TextureManager*)(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Rendering::Texture::InterfaceID));
@@ -503,7 +503,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void GridView::EnableDebugDrawing(bool inbValue)
 		{
-#if DEBUG_DRAWING
+#if CS_ENABLE_DEBUGDRAWING
 			GridView::mbDrawDebug = inbValue;
 #else
 			GridView::mbDrawDebug = false;

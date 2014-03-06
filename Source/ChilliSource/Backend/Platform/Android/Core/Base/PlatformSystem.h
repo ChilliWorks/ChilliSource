@@ -28,11 +28,11 @@ namespace ChilliSource
 		class PlatformSystem : public Core::PlatformSystem
 		{
 		public:
-			PlatformSystem();
-			virtual ~PlatformSystem();
-			
+
 			//-----------------------------------------
 			/// Init
+			///
+			/// @author S Downie
 			//-----------------------------------------
 			void Init();
 			//-------------------------------------------------
@@ -46,117 +46,116 @@ namespace ChilliSource
 			//-------------------------------------------------
 			void CreateDefaultSystems(Core::Application* in_application) override;
 			//-------------------------------------------------
-			/// Post Create Systems
-			///
 			/// Deals with anything that needs to be handled after
 			/// creating the systems.
 			///
-			/// @param the system list
+			/// @author S Downie
 			//-------------------------------------------------
 			void PostCreateSystems() override;
 			//-----------------------------------------
-			/// Run
-			///
             /// Begin the game loop
+			///
+			/// @author S Downie
 			//-----------------------------------------
 			void Run() override {}
             //-----------------------------------------
-            /// Set Max FPS
+            /// Lock the frame rate to the given FPS
+			///
+			/// @author S Downie
             ///
             /// @param The maximum frames per second
             /// to clamp to. This should be in multiples
             /// of 15 (15, 30, 60)
             //-----------------------------------------
-            void SetMaxFPS(u32 inudwFPS) override;
+            void SetMaxFPS(u32 in_fps) override;
 			//-----------------------------------------
-            /// Terminate Updater
-            ///
             /// Stops the update loop causing
             /// the application to terminate
+			///
+			/// @author S Downie
             //-----------------------------------------
             void TerminateUpdater() override;
 			//-----------------------------------------
-			/// Set Updater Active
-			///
 			/// Starts or stops the platforms 
 			/// update loop.
 			///
+			/// @author S Downie
+			///
 			/// @param Whether to end or begin
 			//-----------------------------------------
-			void SetUpdaterActive(bool inbIsActive) override {}
+			void SetUpdaterActive(bool in_isActive) override {}
 			//-----------------------------------------------------------------------------------------------------------
-			/// Get Screen Dimensions
-			///
 			/// Retrieves the screen dimensions. These dimensions are always in the default orientation for the device.
-			/// @return A Vector2 containing the screen size in its x + y components
+			///
+			/// @author S Downie
+			///
+			/// @return A Vector2 containing the screen size in its x, y components
 			//-----------------------------------------------------------------------------------------------------------
 			Core::Vector2 GetScreenDimensions() const override;
 			//--------------------------------------------------------------
-			/// Get Device Model Name
+			/// @author S Downie
 			///
-			/// @return The above information stringified
+			/// @return The device model name stringified
 			//--------------------------------------------------------------
             std::string GetDeviceModelName() const override;
 			//--------------------------------------------------------------
-			/// Get Device Model Type Name
+			/// @author S Downie
 			///
-			/// @return The above information stringified
+			/// @return The device model type stringified
 			//--------------------------------------------------------------
             std::string GetDeviceModelTypeName() const override;
 			//--------------------------------------------------------------
-			/// Get Device Manufacturer Name
+			/// @author S Downie
 			///
-			/// @return The above information stringified
+			/// @return The manufacturer stringified
 			//--------------------------------------------------------------
             std::string GetDeviceManufacturerName() const override;
             //--------------------------------------------------------------
-			/// Get OS Version
+			/// @author S Downie
 			///
-			/// @return  String containing the OS version of the device
+			/// @return String containing the OS version of the device
 			//--------------------------------------------------------------
 			std::string GetOSVersion() const override;
 			//--------------------------------------------------------------
-			/// Get Locale
+			/// @author S Downie
 			///
-			/// Get the active locale of the device
-			/// @return Locale ID
+			/// @return active locale of the device
 			//--------------------------------------------------------------
             Core::Locale GetLocale() const override;
 			//--------------------------------------------------------------
-			/// Get Langauge
+			/// @author S Downie
 			///
-			/// Get the active language of the device in locale format
-			/// @return Locale ID
+			/// @return active language of the device
 			//--------------------------------------------------------------
             Core::Locale GetLanguage() const override;
 			//-------------------------------------------------
-			/// Get Screen Density
-			///
+            /// @author S Downie
+            ///
 			/// @return The density scale factor of the screen
 			/// to convert from DIPS to physical pixels
 			//-------------------------------------------------
 			f32 GetScreenDensity() const override;
 			//-------------------------------------------------
-			/// Get Device ID
+			/// @author S Downie
 			///
 			/// @return The UDID of the device
 			//-------------------------------------------------
 			std::string GetDeviceID() override;
 	        //-------------------------------------------------
-	        /// Get App Version
+	        /// @author S Downie
 	        ///
 	        /// @return The version of the application as found
 			/// in the manifest
 	        //-------------------------------------------------
 	        std::string GetAppVersion() const override;
 			//--------------------------------------------------------------
-			/// Get Number Of CPU Cores
+			/// @author S Downie
 			///
 			/// @return The number of cores available
 			//--------------------------------------------------------------
 			u32 GetNumberOfCPUCores() const override;
 			//--------------------------------------------------------------
-			/// Get System Time
+			/// @author S Downie
 			///
 			/// @return The current time in milliseconds
 			//--------------------------------------------------------------
@@ -171,14 +170,14 @@ namespace ChilliSource
             //-------------------------------------------------------
             PlatformSystem(){}
 			//--------------------------------------------
-			/// Set Working Directory To Resource Folder
-			///
 			/// Sets the working directory for this application
 			/// to the root of the application directory
+            ///
+            /// @author S Downie
 			//--------------------------------------------
 			void SetWorkingDirectoryToResourceFolder();
 			//-------------------------------------------------
-			/// Get Physical Screen Size
+			/// @author S Downie
 			///
 			/// @return The physical size of the screen in
 			/// inches.

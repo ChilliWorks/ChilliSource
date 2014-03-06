@@ -32,10 +32,6 @@ namespace ChilliSource
         {
         public:
 			//--------------------------------------------------------------
-			/// Constructor
-			//--------------------------------------------------------------
-            VideoPlayerActivity();
-			//--------------------------------------------------------------
 			/// Is A
 			///
 			/// @param Interface ID
@@ -94,6 +90,13 @@ namespace ChilliSource
             //--------------------------------------------------------------
             f32 GetTime() const override;
         private:
+            friend Video::VideoPlayerActivityUPtr Video::VideoPlayerActivity::Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            VideoPlayerActivity();
 			//---------------------------------------------------------------
 			/// On Video Dismissed
 			///
