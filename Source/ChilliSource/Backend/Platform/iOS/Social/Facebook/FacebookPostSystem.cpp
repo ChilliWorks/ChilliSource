@@ -37,7 +37,7 @@ namespace ChilliSource
 		
 		bool FacebookPostSystem::IsA(Core::InterfaceIDType inID) const
 		{
-			return IFacebookPostSystem::InterfaceID == inID;
+			return FacebookPostSystem::InterfaceID == inID;
 		}
         
         NSDictionary* CreateNSDisctionaryFromPostDesc(const Social::FacebookPostDesc& insDesc)
@@ -125,18 +125,18 @@ namespace ChilliSource
                              if (![urlParams valueForKey:@"request"])
                              {
                                  // User clicked the Cancel button
-                                 mRequestCompleteDelegate(Social::IFacebookPostSystem::PostResult::k_cancelled);
+                                 mRequestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
                              }
                              else
                              {
                                  // User clicked the Share button
-                                 mRequestCompleteDelegate(Social::IFacebookPostSystem::PostResult::k_success);
+                                 mRequestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_success);
                              }
                          }
                          else
                          {
                              // User clicked the X button
-                             mRequestCompleteDelegate(Social::IFacebookPostSystem::PostResult::k_cancelled);
+                             mRequestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
                          }
                      }
                  }
@@ -146,7 +146,7 @@ namespace ChilliSource
                      NSLog(@"%@", error.description);
                      if(mRequestCompleteDelegate)
                      {
-                         mRequestCompleteDelegate(Social::IFacebookPostSystem::PostResult::k_failed);
+                         mRequestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_failed);
                      }
                  }
              }];
@@ -165,7 +165,7 @@ namespace ChilliSource
                 {
                     if(mCompletionDelegate)
                     {
-                        mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_failed);
+                        mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_failed);
                     }
                     break;
                 }
@@ -173,7 +173,7 @@ namespace ChilliSource
                 {
                     if(mCompletionDelegate)
                     {
-                        mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_cancelled);
+                        mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
                     }
                     break;  
                 }                    
@@ -211,7 +211,7 @@ namespace ChilliSource
                             NSLog(@"%@", error.localizedDescription);
                             if(mCompletionDelegate)
                             {
-                                mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_failed);
+                                mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_failed);
                             }
                         }
                         else
@@ -220,14 +220,14 @@ namespace ChilliSource
                             {
                                 if(mCompletionDelegate)
                                 {
-                                    mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_success);
+                                    mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_success);
                                 }
                             }
                             else
                             {
                                 if(mCompletionDelegate)
                                 {
-                                    mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_cancelled);
+                                    mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
                                 }
                             }
                         }
@@ -258,18 +258,18 @@ namespace ChilliSource
                             if (![urlParams valueForKey:@"post_id"])
                             {
                                 // User clicked the Cancel button
-                                mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_cancelled);
+                                mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
                             }
                             else
                             {
                                 // User clicked the Share button
-                                mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_success);
+                                mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_success);
                             }
                         }
                         else
                         {
                             // User clicked the X button
-                            mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_cancelled);
+                            mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
                         }
                     }
                 }
@@ -279,7 +279,7 @@ namespace ChilliSource
                     NSLog(@"%@", error.description);
                     if(mCompletionDelegate)
                     {
-                        mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_failed);
+                        mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_failed);
                     }
                 }
                 

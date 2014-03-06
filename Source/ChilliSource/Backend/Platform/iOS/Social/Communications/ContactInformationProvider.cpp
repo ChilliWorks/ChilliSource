@@ -77,15 +77,15 @@ namespace ChilliSource{
 				
 				Social::ContactRecord sPersonRecord;
 				
-				sPersonRecord.strName = Core::StringUtils::NSStringToUTF8String(pCombinedName);
-				sPersonRecord.bHasEmail = pEmail != nil;
-				if (sPersonRecord.bHasEmail){
-					sPersonRecord.strEmail = Core::StringUtils::NSStringToUTF8String(pEmail);
+				sPersonRecord.m_name = Core::StringUtils::NSStringToUTF8String(pCombinedName);
+				sPersonRecord.m_hasEmail = pEmail != nil;
+				if (sPersonRecord.m_hasEmail){
+					sPersonRecord.m_email = Core::StringUtils::NSStringToUTF8String(pEmail);
 				}
 				
-				sPersonRecord.bHasMobileNumber = pMobileNumber != nil;
-				if (sPersonRecord.bHasMobileNumber){
-					sPersonRecord.strMobileNumber = Core::StringUtils::NSStringToUTF8String(pMobileNumber);
+				sPersonRecord.m_hasMobileNumber = pMobileNumber != nil;
+				if (sPersonRecord.m_hasMobileNumber){
+					sPersonRecord.m_mobileNumber = Core::StringUtils::NSStringToUTF8String(pMobileNumber);
 				}				
 								
 				masContacts.push_back(sPersonRecord);

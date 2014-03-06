@@ -23,13 +23,23 @@ namespace ChilliSource
 		class ContactInformationProvider : public Social::ContactInformationProvider
 		{
 		public:
-			virtual bool IsA(Core::InterfaceIDType inID) const override;;
+			virtual bool IsA(Core::InterfaceIDType inID) const override;
 			
 			virtual void LoadInformation() override;
 			
 			virtual u32 GetNumberContacts() override;
 			virtual const Social::ContactRecord & GetContactAtIndex(u32 inudwIndex) override;
 		private:
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            //----------------------------------------------------
+            ContactInformationProvider(){};
+            
+            friend Social::ContactInformationProviderUPtr Social::ContactInformationProvider::Create();
+            
 			std::vector<Social::ContactRecord> masContacts;
 		};
 		

@@ -26,10 +26,6 @@ namespace ChilliSource
 		{
 		public:
             //-------------------------------------------------------
-            /// Constructor
-            //-------------------------------------------------------
-            EmailCompositionActivity();
-            //-------------------------------------------------------
             /// Supported By Device
             ///
             /// This checks whether or not the current iOS device
@@ -92,6 +88,16 @@ namespace ChilliSource
             //-------------------------------------------------------
             virtual ~EmailCompositionActivity();
 		private:
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            //----------------------------------------------------
+            EmailCompositionActivity();
+            
+            friend Social::EmailCompositionActivityUPtr Social::EmailCompositionActivity::Create();
+            
 			EmailDelegate* mpDelegate;
 			MFMailComposeViewController * mpVC;
 		};

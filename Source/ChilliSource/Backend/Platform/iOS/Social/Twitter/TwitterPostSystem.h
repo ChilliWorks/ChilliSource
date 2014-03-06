@@ -25,8 +25,7 @@ namespace ChilliSource
         class TwitterPostSystem : public ChilliSource::Social::TwitterPostSystem
         {
         public:
-			TwitterPostSystem(iOS::HttpConnectionSystem* inpHttpConnectionSystem,
-							   Core::OAuthSystem* inpOAuthSystem);
+			
 			~TwitterPostSystem();
 			//------------------------------------------------------------------------
             /// Is A
@@ -79,7 +78,16 @@ namespace ChilliSource
 			//------------------------------------------------------------------------
 			void OnAuthorisationDismissed(Core::Activity* inpActivity) override;
 		private:
-			
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The http connection system.
+            /// @param The OAuth system.
+            //----------------------------------------------------
+            TwitterPostSystem(iOS::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem);
 			//------------------------------------------------------------------------
 			/// Try Post Using iOS
 			///
@@ -105,6 +113,7 @@ namespace ChilliSource
 			//------------------------------------------------------------------------
 			bool TryPostUsingMoFlow(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback);
             
+            friend Social::TwitterPostSystemUPtr Social::TwitterPostSystem::Create(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem);
         private:
             
             Core::ConnectionUPtr m_authorisationDismissedConnection;

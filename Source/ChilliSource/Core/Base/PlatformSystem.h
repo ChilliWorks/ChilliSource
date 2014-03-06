@@ -75,10 +75,6 @@ namespace ChilliSource
             /// the application to terminate
             //-----------------------------------------
             virtual void TerminateUpdater() = 0;
-
-            //=========================================
-            //--- System Creation
-            //=========================================
             //-------------------------------------------------
             /// Adds default systems to the applications system
 			/// list.
@@ -98,90 +94,6 @@ namespace ChilliSource
             /// @param the system list
             //-------------------------------------------------
             virtual void PostCreateSystems() = 0;
-            //=========================================
-            //--- Activity Creation
-            //=========================================
-            //-----------------------------------------
-            /// Can Create Activity With Interface
-            ///
-            /// @param Interface ID
-            /// @return Whether activity can be created
-            //----------------------------------------
-            virtual bool CanCreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const = 0;
-            //-----------------------------------------
-            /// Can Create Activity With Interface
-            ///
-            /// @param Interface ID
-            /// @return Whether activity can be created
-            //----------------------------------------
-            template <typename T> bool CanCreateActivityWithInterface() const
-            {
-                return CanCreateActivityWithInterface(T::InterfaceID);
-            }
-            //-----------------------------------------
-            /// Tries to create a platform specific implementation with the given interface
-            ///
-            /// @param InterfaceID to generate
-            /// @return A handle to the given activity or nullptr if the platform cannot support it
-            //-----------------------------------------
-            virtual Activity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const = 0;
-            //-----------------------------------------
-            /// Create Activity With Interface
-            ///
-            /// Convenience template method of the above returning the needed interface type.
-            ///
-            /// @param InterfaceID to generate
-            /// @return A handle to the given activity or nullptr if the platform cannot support it
-            //-----------------------------------------
-            template <typename T> T* CreateActivityWithInterface() const
-            {
-                return static_cast<T*> (CreateActivityWithInterface(T::InterfaceID));
-                
-            }
-
-            //=========================================
-            //--- InformationProvider Creation
-            //=========================================
-            //-----------------------------------------
-            /// Can Create Information Provider With Interface
-            ///
-            /// @param Interface ID
-            /// @return Whether system can be created
-            //----------------------------------------
-            virtual bool CanCreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const = 0;
-            //-----------------------------------------
-            /// Can Create Information Provider With Interface
-            ///
-            /// @param Interface ID
-            /// @return Whether system can be created
-            //----------------------------------------
-            template <typename T> bool CanCreateInformationProviderWithInterface() const
-            {
-                return CanCreateInformationProviderWithInterface(T::InterfaceID);
-            }
-            //-----------------------------------------
-            /// Create and Add System With Interface
-            ///
-            /// Tries to create a platform specific implementation with the given interface
-            ///
-            /// @param InterfaceID to generate
-            /// @return A handle to the given system or nullptr if the platform cannot support it
-            //-----------------------------------------
-            virtual IInformationProvider* CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const = 0;
-            //-----------------------------------------
-            /// Create and Add System With Interface
-            ///
-            /// Convenience template method of the above returning the needed interface type.
-            ///
-            /// @param InterfaceID to generate
-            /// @param Vector of existing systems
-            /// @return A handle to the given system or nullptr if the platform cannot support it
-            //-----------------------------------------
-            template <typename T> T* CreateInformationProviderWithInterface() const
-            {
-                return static_cast<T*> (CreateInformationProviderWithInterface(T::InterfaceID));
-            }
-                
             //-----------------------------------------------------------------------------------------------------------
             /// Get Screen Dimensions
             ///

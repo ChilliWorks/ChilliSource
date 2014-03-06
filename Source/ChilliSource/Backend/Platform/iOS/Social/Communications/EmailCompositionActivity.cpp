@@ -63,9 +63,9 @@ namespace ChilliSource
 		void EmailCompositionActivity::Present(const std::vector<Core::UTF8String>& inastrRecipientAddresses, const Core::UTF8String& instrSubject, const Core::UTF8String& instrContents, const SendResultDelegate& inCallback, bool inbFormatAsHtml)
         {
             Attachment emptyAttachment;
-            emptyAttachment.mstrFilename = "";
-            emptyAttachment.meStorageLocation = Core::StorageLocation::k_none;
-            emptyAttachment.mstrMIMEType = "";
+            emptyAttachment.m_filename = "";
+            emptyAttachment.m_storageLocation = Core::StorageLocation::k_none;
+            emptyAttachment.m_mimeType = "";
 			PresentWithAttachment(inastrRecipientAddresses, instrSubject, instrContents, emptyAttachment, inCallback, inbFormatAsHtml);
 		}
         //-------------------------------------------------------
@@ -97,26 +97,26 @@ namespace ChilliSource
 			[mpVC setSubject: Core::StringUtils::UTF8StringToNSString(instrSubject)];
             
             //add the attachment if one is available.
-            if (inAttachment.mstrFilename.size() > 0)
+            if (inAttachment.m_filename.size() > 0)
             {
                 std::string strFilename;
-				if (inAttachment.meStorageLocation == Core::StorageLocation::k_package)
+				if (inAttachment.m_storageLocation == Core::StorageLocation::k_package)
 				{
-					strFilename = Core::Application::Get()->GetFileSystem()->GetDirectoryForPackageFile(inAttachment.mstrFilename);
+					strFilename = Core::Application::Get()->GetFileSystem()->GetDirectoryForPackageFile(inAttachment.m_filename);
 				}
-				else if (inAttachment.meStorageLocation == Core::StorageLocation::k_DLC && Core::Application::Get()->GetFileSystem()->DoesFileExistInCachedDLC(inAttachment.mstrFilename) == false)
+				else if (inAttachment.m_storageLocation == Core::StorageLocation::k_DLC && Core::Application::Get()->GetFileSystem()->DoesFileExistInCachedDLC(inAttachment.m_filename) == false)
                 {
-                    strFilename = Core::Application::Get()->GetFileSystem()->GetPackageDLCDirectory() + inAttachment.mstrFilename;
+                    strFilename = Core::Application::Get()->GetFileSystem()->GetPackageDLCDirectory() + inAttachment.m_filename;
                 }
                 else
 				{
-					strFilename = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(inAttachment.meStorageLocation) + inAttachment.mstrFilename;
+					strFilename = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(inAttachment.m_storageLocation) + inAttachment.m_filename;
 				}
                 
                 std::string strPath, strBasename;
-                Core::StringUtils::SplitFilename(inAttachment.mstrFilename, strBasename, strPath);
+                Core::StringUtils::SplitFilename(inAttachment.m_filename, strBasename, strPath);
                 NSData* pData = [NSData dataWithContentsOfFile: [NSString stringWithUTF8String:strFilename.c_str()]];
-                [mpVC addAttachmentData:pData mimeType:[NSString stringWithUTF8String:inAttachment.mstrMIMEType.c_str()] fileName:[NSString stringWithUTF8String:strBasename.c_str()]];
+                [mpVC addAttachmentData:pData mimeType:[NSString stringWithUTF8String:inAttachment.m_mimeType.c_str()] fileName:[NSString stringWithUTF8String:strBasename.c_str()]];
             }
              
 			[pRootVC presentModalViewController:mpVC animated:YES];

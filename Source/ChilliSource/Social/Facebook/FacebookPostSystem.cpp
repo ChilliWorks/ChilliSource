@@ -26,18 +26,20 @@ namespace ChilliSource
 {
 	namespace Social
 	{
-		CS_DEFINE_NAMEDTYPE(IFacebookPostSystem);
-        
-        IFacebookPostSystem* IFacebookPostSystem::CreatePostSystem(ChilliSource::Social::FacebookAuthenticationSystem* inpAuthSystem)
+		CS_DEFINE_NAMEDTYPE(FacebookPostSystem);
+        //---------------------------------------------------
+        //---------------------------------------------------
+        FacebookPostSystemUPtr FacebookPostSystem::Create(FacebookAuthenticationSystem* inpAuthSystem)
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return new ChilliSource::iOS::FacebookPostSystem(inpAuthSystem);
+            return FacebookPostSystemUPtr(new iOS::FacebookPostSystem(inpAuthSystem));
 #elif CS_TARGETPLATFORM_ANDROID
-            return new ChilliSource::Android::FacebookPostSystem(inpAuthSystem);
+            return FacebookPostSystemUPtr(new Android::FacebookPostSystem(inpAuthSystem));
+#else
+			return FacebookPostSystemUPtr();
 #endif
-			return nullptr;
         }
-        
+
 		void FacebookPostDesc::ToJSON(Json::Value & outsRoot) const
 		{
 			using namespace Json;
