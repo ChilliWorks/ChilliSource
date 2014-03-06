@@ -38,7 +38,7 @@ namespace ChilliSource
 			///
 			/// Create the GLFW window
 			//-----------------------------------------
-			void Init();
+			void Init() override;
 			//-------------------------------------------------
 			/// Create Default Systems
 			///
@@ -47,7 +47,7 @@ namespace ChilliSource
 			///
 			/// @param the system list
 			//-------------------------------------------------
-			void CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems);
+			void CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems) override;
 			//-------------------------------------------------
 			/// Post Create Systems
 			///
@@ -56,13 +56,13 @@ namespace ChilliSource
 			///
 			/// @param the system list
 			//-------------------------------------------------
-			void PostCreateSystems();
+			void PostCreateSystems() override;
 			//-----------------------------------------
 			/// Run
 			///
 			/// Begin the game loop
 			//-----------------------------------------
-			void Run();
+			void Run() override;
 			//-----------------------------------------
             /// Set Max FPS
             ///
@@ -70,7 +70,7 @@ namespace ChilliSource
             /// to clamp to. This should be in multiples
             /// of 15 (15, 30, 60)
             //-----------------------------------------
-            void SetMaxFPS(u32 inudwFPS){}
+			void SetMaxFPS(u32 inudwFPS) override {}
 			//-----------------------------------------
 			/// Set Updater Active
 			///
@@ -79,21 +79,21 @@ namespace ChilliSource
 			///
 			/// @param Whether to end or begin
 			//-----------------------------------------
-			void SetUpdaterActive(bool inbIsActive);
+			void SetUpdaterActive(bool inbIsActive) override;
 			//--------------------------------------------
 			/// Terminate Updater
 			///
 			/// Stops the update loop causing the 
 			/// application to terminate
 			//--------------------------------------------
-			void TerminateUpdater();
+			void TerminateUpdater() override;
 			//--------------------------------------------
 			/// Can Create System With Interface 
 			///
 			/// @param Interface ID
 			/// @param Whether system can be created
 			//--------------------------------------------
-			bool CanCreateSystemWithInterface(Core::InterfaceIDType inInterfaceID) const;
+			bool CanCreateSystemWithInterface(Core::InterfaceIDType inInterfaceID) const override;
 			//--------------------------------------------
 			/// Create and Add System With Interface
 			///
@@ -101,21 +101,21 @@ namespace ChilliSource
 			/// @param Vector of exisiting systems to append
 			/// @return Pointer to the given system or nullptr
 			//--------------------------------------------
-			Core::System* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr>& inaExisitingSystems) const;
+			Core::System* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr>& inaExisitingSystems) const override;
 			//--------------------------------------------
 			/// Can Create Activity With Interface
 			///
 			/// @param Interface ID
 			/// @return Whether activity can be created
 			//--------------------------------------------
-			bool CanCreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const;
+			bool CanCreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const override;
 			//--------------------------------------------
 			/// Create Activity With Interface
 			///
 			/// @param Interface ID
 			/// @return Ownership of activity instance or nullptr
 			//--------------------------------------------
-			Core::Activity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const;
+			Core::Activity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const override;
 			//--------------------------------------------
 			/// Can Create Information Provider With Interface
 			///
@@ -129,90 +129,90 @@ namespace ChilliSource
 			/// @param Interface ID
 			/// @return Ownership of provider instance or nullptr
 			//--------------------------------------------
-			Core::IInformationProvider* CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const;
+			Core::IInformationProvider* CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const override;
 			//-----------------------------------------------------------------------------------------------------------
 			/// Get Screen Dimensions
 			///
 			/// Retrieves the screen dimensions. These dimensions are always in the default orientation for the device.
 			/// @return A Vector2 containing the screen size in its x + y components
 			//-----------------------------------------------------------------------------------------------------------
-			Core::Vector2 GetScreenDimensions() const;
+			Core::Vector2 GetScreenDimensions() const override;
 			//--------------------------------------------------------------
 			/// Get Device Model Name
 			///
 			/// @return The above information stringified
 			//--------------------------------------------------------------
-            std::string GetDeviceModelName() const;
+			std::string GetDeviceModelName() const override;
 			//--------------------------------------------------------------
 			/// Get Device Model Type Name
 			///
 			/// @return The above information stringified
 			//--------------------------------------------------------------
-            std::string GetDeviceModelTypeName() const;
+			std::string GetDeviceModelTypeName() const override;
 			//--------------------------------------------------------------
 			/// Get Device Manufacturer Name
 			///
 			/// @return The above information stringified
 			//--------------------------------------------------------------
-            std::string GetDeviceManufacturerName() const;
+			std::string GetDeviceManufacturerName() const override;
             //--------------------------------------------------------------
 			/// Get OS Version
 			///
 			/// @return  String containing the OS version of the device
 			//--------------------------------------------------------------
-			std::string GetOSVersion() const;
+			std::string GetOSVersion() const override;
 			//--------------------------------------------------------------
 			/// Get Locale
 			///
 			/// Get the active language locale of the device
 			/// @return Locale ID
 			//--------------------------------------------------------------
-			Core::Locale GetLocale() const;
+			Core::Locale GetLocale() const override;
 			//--------------------------------------------------------------
 			/// Get Langauge
 			///
 			/// Get the active language of the device in locale format
 			/// @return Locale ID
 			//--------------------------------------------------------------
-            Core::Locale GetLanguage() const;
+			Core::Locale GetLanguage() const override;
 			//-------------------------------------------------
 			/// Get Screen Density
 			///
 			/// @return The density scale factor of the screen
 			/// to convert from DIPS to physical pixels
 			//-------------------------------------------------
-			f32 GetScreenDensity() const;
+			f32 GetScreenDensity() const override;
 			//-------------------------------------------------
 			/// Get Device ID
 			///
 			/// @return The UDID of the device
 			//-------------------------------------------------
-			std::string GetDeviceID();
+			std::string GetDeviceID() override;
 			//-------------------------------------------------
 	        /// Get App Version
 	        ///
 	        /// @return The version of the application
 	        //-------------------------------------------------
-	        std::string GetAppVersion() const {return "";}
+			std::string GetAppVersion() const override { return ""; }
 			//--------------------------------------------------------------
 			/// Get Number Of CPU Cores
 			///
 			/// @return The number of cores available
 			//--------------------------------------------------------------
-			u32 GetNumberOfCPUCores() const;
+			u32 GetNumberOfCPUCores() const override;
 			//--------------------------------------------------------------
 			/// Get System Time
 			///
 			/// @return the current time in milliseconds
 			//--------------------------------------------------------------
-			u64 GetSystemTimeMS() const;
+			u64 GetSystemTimeMS() const override;
 			//-------------------------------------------------
 			/// Get Physical Screen Size
 			///
 			/// @return The physical size of the screen in
 			/// inches.
 			//-------------------------------------------------
-			f32 GetPhysicalScreenSize();
+			f32 GetPhysicalScreenSize() override;
 		private:
 
 			//---GLFW Delegates

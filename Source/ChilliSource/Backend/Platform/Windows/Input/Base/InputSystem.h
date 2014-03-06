@@ -34,46 +34,46 @@ namespace ChilliSource
 			/// @param Interface type to compare
 			/// @return Whether the system is of the given type
 			//---------------------------------------------------------------
-			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//---------------------------------------------------------------
 			/// Can Create Device With Interface
 			///
 			/// @param Interface of input type to create
 			/// @return Whether the system can create input type
 			//---------------------------------------------------------------
-			virtual bool CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const;
+			virtual bool CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const override;
 			//---------------------------------------------------------------
 			/// Get Device With Interface
 			///
 			/// @param Interface of input type to retreive
 			/// @return Pointer to input type or nullptr
 			//---------------------------------------------------------------
-			virtual Input::InputDevice * GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID);
+			virtual Input::InputDevice * GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID) override;
 			//---------------------------------------------------------------
 			/// Update
 			///
 			/// @param Time between frames
 			//---------------------------------------------------------------
-			virtual void Update(float infDT);
+			virtual void Update(float infDT) override;
 			//-----------------------------------------------------------
 			/// Flush Buffered Input
 			///
 			/// Have the input elements notify listeners of each
 			/// buffered value then clear the buffered input
 			//-----------------------------------------------------------
-			void FlushBufferedInput();
+			void FlushBufferedInput() override;
 			//---------------------------------------------------------------
 			/// Get Mouse Pointer
 			///
 			/// @return Pointer to mouse device
 			//---------------------------------------------------------------
-			Input::Mouse * GetMousePtr();
+			Input::Mouse * GetMousePtr() override;
 			//---------------------------------------------------------------
 			/// Get Touch Screen Pointer
 			///
 			/// @return Pointer to touch screen device
 			//---------------------------------------------------------------
-			Input::TouchScreen * GetTouchScreenPtr();
+			Input::TouchScreen * GetTouchScreenPtr() override;
 
 		protected:
 
