@@ -253,14 +253,6 @@ namespace ChilliSource
 			/// @return Pointer to the file system
 			//-----------------------------------------------------
 			FileSystem* GetFileSystem();
-            //-----------------------------------------------------
-			/// Sets the renderer.
-            ///
-            /// @author I Copland
-			///
-			/// @param Handle application renderer
-			//-----------------------------------------------------
-			void SetRenderer(Rendering::Renderer* in_system);
             //----------------------------------------------------
 			/// Initialises the application and kicks off the update
             /// loop. This should not be called by a users application.
@@ -467,7 +459,7 @@ namespace ChilliSource
             std::vector<IUpdateable*> m_updateableSystems;
             
 			StateManager m_stateManager;
-			Rendering::Renderer* m_renderer;
+			Rendering::RendererUPtr m_renderer;
             Rendering::RenderSystem* m_renderSystem;
 			Input::InputSystem * m_inputSystem;
             PlatformSystemUPtr m_platformSystem;

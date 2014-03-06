@@ -32,9 +32,7 @@ namespace ChilliSource
 		class PlatformSystem : public Core::PlatformSystem
 		{
 		public:
-			PlatformSystem();
-			virtual ~PlatformSystem();
-			
+        
 			//-----------------------------------------
 			/// Init
 			//-----------------------------------------
@@ -206,7 +204,14 @@ namespace ChilliSource
 			//--------------------------------------------------------------
 			TimeIntervalMs GetSystemTimeMS() const override;
 		private:
- 
+            
+            friend Core::PlatformSystemUPtr Core::PlatformSystem::Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            PlatformSystem();
             //--------------------------------------------
 			/// Create Activities
 			///

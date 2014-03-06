@@ -37,10 +37,13 @@ namespace ChilliSource
         //------------------------------------------------
         void AudioPlayer::Init()
         {
-            mAudioComponentCache.reserve(mudwCapacity);
-            
             mpAudioComponentFactory = (AudioComponentFactory*)Core::ComponentFactoryDispenser::GetSingletonPtr()->GetFactoryProducing(AudioComponent::InterfaceID);
             
+            if(mpAudioComponentFactory == nullptr)
+                return;
+            
+            mAudioComponentCache.reserve(mudwCapacity);
+
             for(u32 udwComp = 0; udwComp < mudwCapacity; ++udwComp)
             {
                 mAudioComponentCache.push_back(mpAudioComponentFactory->CreateAudioComponent());

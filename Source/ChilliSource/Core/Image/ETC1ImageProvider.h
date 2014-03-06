@@ -26,6 +26,14 @@ namespace ChilliSource
         class ETC1ImageProvider : public Core::ImageResourceProvider
         {
         public:
+            //-------------------------------------------------------
+            /// Factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend with ownership transferred
+            //-------------------------------------------------------
+            static ETC1ImageProviderUPtr Create();
             //----------------------------------------------------------------
             /// Is A
             ///
@@ -67,7 +75,17 @@ namespace ChilliSource
             /// @return Whether the resource loaded
             //----------------------------------------------------------------
             bool CreateImageFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string & inFilePath, ChilliSource::Core::Image::Format ineFormat, ChilliSource::Core::ResourceSPtr& outpResource);
+            
         private:
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            ETC1ImageProvider(){}
+            
+        private:
+            
             struct ETC1Header
             {
                 u8 abyPKMTag[6];

@@ -21,7 +21,7 @@ namespace ChilliSource
         class IAPSystem : public Networking::IAPSystem
         {
         public:
-            IAPSystem();
+
             ~IAPSystem();
 
             //---------------------------------------------------------------
@@ -131,6 +131,13 @@ namespace ChilliSource
             
         private:
             
+            friend Networking::IAPSystemUPtr Networking::IAPSystem::Create(const Core::ParamDictionary&);
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            IAPSystem();
             //---------------------------------------------------------------
             /// On Product Description Request Complete
             ///

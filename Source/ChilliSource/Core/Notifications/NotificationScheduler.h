@@ -75,7 +75,7 @@ namespace ChilliSource
             ///
             /// @param local
             //------------------------------------------------------------------------------
-            static void Initialise(LocalNotificationScheduler* inLocalNS);
+            static void Initialise(LocalNotificationSchedulerUPtr inLocalNS);
             //------------------------------------------------------------------------------
             /// Schedule Notification
             ///
@@ -193,7 +193,7 @@ namespace ChilliSource
             static std::deque<NotificationSPtr> NotificationQueue;
             static std::vector<NotificationSPtr> TimedAppNotifications;
 
-            static LocalNotificationScheduler* mspLocalNotificationScheduler;
+            static LocalNotificationSchedulerUPtr mspLocalNotificationScheduler;
         };
     }
 }

@@ -26,15 +26,15 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// Create
         //---------------------------------------------------------------
-        IAPSystem* IAPSystem::Create(const Core::ParamDictionary& inParams)
+        IAPSystemUPtr IAPSystem::Create(const Core::ParamDictionary& inParams)
         {
 #ifdef CS_TARGETPLATFORM_IOS
-        	return new iOS::IAPSystem();
+        	return IAPSystemUPtr(new iOS::IAPSystem());
 #elif defined(CS_TARGETPLATFORM_ANDROID)
 #	ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
-        	return new Android::GooglePlayIAPSystem(inParams);
+        	return IAPSystemUPtr(new Android::GooglePlayIAPSystem(inParams));
 #	elif defined(CS_ANDROIDEXTENSION_AMAZON)
-        	return new Android::AmazonIAPSystem(inParams);
+        	return IAPSystemUPtr(new Android::AmazonIAPSystem(inParams));
 #	endif
 #endif
         	return nullptr;

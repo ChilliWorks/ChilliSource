@@ -82,7 +82,7 @@ namespace ChilliSource
             ///		AmazonPrivateKey		The private key used to encrypt
             ///								the on disk Amazon IAP cache.
             //---------------------------------------------------------------
-            static IAPSystem* Create(const Core::ParamDictionary& inParams);
+            static IAPSystemUPtr Create(const Core::ParamDictionary& inParams);
 
             //---------------------------------------------------------------
             /// Is A
@@ -194,6 +194,15 @@ namespace ChilliSource
             /// owned non-consumable items
             //---------------------------------------------------------------
             virtual void RestoreManagedPurchases() = 0;
+            
+        protected:
+            
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            IAPSystem(){}
         };
     }
 }

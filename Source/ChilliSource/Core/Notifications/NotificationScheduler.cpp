@@ -21,7 +21,7 @@ namespace ChilliSource
         std::deque<NotificationSPtr> NotificationScheduler::NotificationQueue;
         std::vector<NotificationSPtr> NotificationScheduler::TimedAppNotifications;
         
-        LocalNotificationScheduler* NotificationScheduler::mspLocalNotificationScheduler = nullptr;
+        LocalNotificationSchedulerUPtr NotificationScheduler::mspLocalNotificationScheduler = nullptr;
 
         const f32 kfMinTimeBetweenNotifications = 2.0f;
         f32 gfTimeBetweenNotifications = 0.0f;
@@ -33,9 +33,9 @@ namespace ChilliSource
         ///
         /// @param local
         //------------------------------------------------------------------------------
-        void NotificationScheduler::Initialise(LocalNotificationScheduler* inLocalNS)
+        void NotificationScheduler::Initialise(LocalNotificationSchedulerUPtr inLocalNS)
         {
-            mspLocalNotificationScheduler = inLocalNS;
+            mspLocalNotificationScheduler = std::move(inLocalNS);
         }
         //------------------------------------------------------------------------------
         /// Schedule Notification

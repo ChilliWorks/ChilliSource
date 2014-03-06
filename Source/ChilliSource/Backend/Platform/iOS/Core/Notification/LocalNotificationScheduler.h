@@ -25,7 +25,7 @@ namespace ChilliSource
         class LocalNotificationScheduler : public Core::LocalNotificationScheduler
         {
         public:
-            LocalNotificationScheduler(){};
+            
 			virtual ~LocalNotificationScheduler(){};
             //------------------------------------------------------------------------------
             /// Schedule Notification 
@@ -93,6 +93,13 @@ namespace ChilliSource
             
         private:
             
+            friend Core::LocalNotificationSchedulerUPtr Core::LocalNotificationScheduler::Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            LocalNotificationScheduler(){};
             //-------------------------------------------------------------------------
             /// Convert UILocalNotification to Notification
             ///

@@ -21,12 +21,6 @@ namespace ChilliSource
 	namespace Android
 	{
 		//=============================================
-		/// Delegates
-		//=============================================
-		typedef std::function<Core::Activity*()> ActivityCreationFunction;
-		typedef std::function<Core::System*(std::vector<Core::SystemSPtr>&)> SystemCreationFunction;
-		typedef std::function<Core::IInformationProvider*()> InfoProviderCreationFunction;
-		//=============================================
 		/// Platform System
 		///
 		/// Android platform system
@@ -42,14 +36,15 @@ namespace ChilliSource
 			//-----------------------------------------
 			void Init();
 			//-------------------------------------------------
-			/// Create Default Systems
-			///
 			/// Adds default systems to the applications system
 			/// list.
+            ///
+            /// @author S Downie
 			///
-			/// @param the system list
+			/// @param Application instance to add the default
+            /// platform systems to.
 			//-------------------------------------------------
-			void CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems) override;
+			void CreateDefaultSystems(Core::Application* in_application) override;
 			//-------------------------------------------------
 			/// Post Create Systems
 			///
@@ -89,61 +84,6 @@ namespace ChilliSource
 			/// @param Whether to end or begin
 			//-----------------------------------------
 			void SetUpdaterActive(bool inbIsActive) override {}
-			//-----------------------------------------
-            /// Can Create System With Interface
-            ///
-            /// @param Interface ID
-            /// @return Whether system can be created
-            //----------------------------------------
-			bool CanCreateSystemWithInterface(Core::InterfaceIDType inInterfaceID) const override;
-			//-----------------------------------------
-            /// Create and Add System With Interface
-            ///
-			/// Tries to create a platform specific implementation with the given interface
-			///
-			/// @param InterfaceID to generate
-			/// @param Vector of existing systems. The return value is added to this vector if not nullptr.
-			/// @return A handle to the given system or nullptr if the platform cannot support it
-			//-----------------------------------------
-			Core::System* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr> & inaExistingSystems) const override;
-			//==========================================
-			//--- Activity Creation
-			//==========================================
-			//-----------------------------------------
-            /// Can Create Activity With Interface
-            ///
-            /// @param Interface ID
-            /// @return Whether system can be created
-            //----------------------------------------
-			bool CanCreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const override;
-			//-----------------------------------------
-            /// Create Activity With Interface
-            ///
-			/// Tries to create a platform specific implementation with the given interface
-			///
-			/// @param InterfaceID to generate
-			/// @return A handle to the given activity or nullptr if the platform cannot support it
-			//-----------------------------------------
-			Core::Activity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const override;
-			//==========================================
-			//---InformationProvider Creation
-			//==========================================
-			//-----------------------------------------
-            /// Can Create Information Provider With Interface
-            ///
-			/// @param Interface ID
-			/// @return Whether system can be created
-			//----------------------------------------
-			bool CanCreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const override;
-			//-----------------------------------------
-            /// Can Create Information Provider With Interface
-            ///
-			/// Tries to create a platform specific implementation with the given interface
-			///
-			/// @param InterfaceID to generate
-			/// @return A handle to the given system or nullptr if the platform cannot support it
-			//-----------------------------------------
-			Core::IInformationProvider* CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const override;
 			//-----------------------------------------------------------------------------------------------------------
 			/// Get Screen Dimensions
 			///
@@ -189,15 +129,6 @@ namespace ChilliSource
 			/// @return Locale ID
 			//--------------------------------------------------------------
             Core::Locale GetLanguage() const override;
-			//--------------------------------------------
-			/// Create Default Image Loader
-			///
-			/// Creates a resource provider capable of 
-			/// loading images for the target platform
-			///
-			/// @return A pointer to the ResourceProvider
-			//--------------------------------------------
-			Core::ResourceProvider* CreateDefaultImageLoader(std::vector<Core::SystemSPtr>& inSystems) const;
 			//-------------------------------------------------
 			/// Get Screen Density
 			///
@@ -231,76 +162,14 @@ namespace ChilliSource
 			//--------------------------------------------------------------
 			TimeIntervalMs GetSystemTimeMS() const override;
 		private:
-			//--------------------------------------------
-			/// Create Http Connection System
-			///
-			/// Creates an http connection system for this
-			///	platform
-			///
-			/// @return A pointer to the system
-			//--------------------------------------------
-			Core::System* CreateHttpConnectionSystem(std::vector<Core::SystemSPtr>& inSystems) const;
-			//--------------------------------------------
-			/// Create Activities
-			///
-			/// Creates an instance of the activity
-			///
-			/// @return Ownership of the activity
-			//--------------------------------------------
-			Core::Activity* CreateSMSCompositionActivity() const;
-			Core::Activity* CreateWebViewActivity() const;
-			Core::Activity* CreateEmailCompositionActivity() const;
-			Core::Activity* CreateDefaultVideoPlayerActivity() const;
-			//--------------------------------------------
-			/// Create Information Providers
-			///
-			/// Creates an instance of the info provider
-			///
-			/// @return Ownership of the info provider
-			//--------------------------------------------
-			Core::IInformationProvider* CreateContactInformationProvider() const;
-			//--------------------------------------------
-			/// Add System Function
-			///
-			/// Map the creation function with the
-			/// system type
-			///
-			/// @param System interface ID
-			/// @param Creation delegate
-			//-------------------------------------------
-			void AddSystemFunc(Core::InterfaceIDType inInterfaceID, SystemCreationFunction inFunction);
-			//-------------------------------------------
-			/// Find System Implementing
-			///
-			/// Identify if the system already exists
-			/// to prevent creation of duplicate
-			/// systems
-			///
-			/// @param Interface ID
-			/// @param Exisiting systems
-			/// @return Pointer to system
-			//-------------------------------------------
-			Core::System* FindSystemImplementing(Core::InterfaceIDType inInterfaceID, const std::vector<Core::SystemSPtr>& inSystems) const;
-			//--------------------------------------------
-			/// Add Activity Function
-			///
-			/// Map the creation function with the
-			/// system type
-			///
-			/// @param System interface ID
-			/// @param Creation delegate
-			//-------------------------------------------
-			void AddActivityFunc(Core::InterfaceIDType inInterfaceID, ActivityCreationFunction inFunction);
-			//--------------------------------------------
-			/// Add Info Provider Function
-			///
-			/// Map the creation function with the
-			/// system type
-			///
-			/// @param Info provider interface ID
-			/// @param Creation delegate
-			//-------------------------------------------
-			void AddInfoProviderFunc(Core::InterfaceIDType inInterfaceID, InfoProviderCreationFunction inFunction);
+
+            friend Core::PlatformSystemUPtr Core::PlatformSystem::Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            PlatformSystem(){}
 			//--------------------------------------------
 			/// Set Working Directory To Resource Folder
 			///
@@ -319,15 +188,6 @@ namespace ChilliSource
 		private:
 			
 			UDIDManager mUDIDManager;
-
-			typedef std::unordered_map<Core::InterfaceIDType, SystemCreationFunction> MapInterfaceIDToSystemFunc;
-			MapInterfaceIDToSystemFunc mmapInterfaceIDToSystemFunc;
-
-			typedef std::unordered_map<Core::InterfaceIDType, ActivityCreationFunction> MapInterfaceIDToActivityFunc;
-			MapInterfaceIDToActivityFunc mmapInterfaceIDToActivityFunc;
-
-			typedef std::unordered_map<Core::InterfaceIDType, InfoProviderCreationFunction> MapInterfaceIDToInfoProviderFunc;
-			MapInterfaceIDToInfoProviderFunc mmapInterfaceIDToInfoProviderFunc;
 		};
 	}
 }
