@@ -43,8 +43,6 @@ extern "C"
 	void Java_com_chillisource_core_CoreNativeInterface_MemoryWarning(JNIEnv* inpEnv, jobject inThis);
 	void Java_com_chillisource_core_CoreNativeInterface_OrientationChanged(JNIEnv* inpEnv, jobject inThis, s32 indwOrientation);
 	void Java_com_chillisource_core_CoreNativeInterface_OnBackPressed(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_core_CoreNativeInterface_OnDialogConfirmPressed(JNIEnv* inpEnv, jobject inThis, s32 indwID);
-	void Java_com_chillisource_core_CoreNativeInterface_OnDialogCancelPressed(JNIEnv* inpEnv, jobject inThis, s32 indwID);
     void Java_com_chillisource_core_CoreNativeInterface_ApplicationDidReceiveLaunchingURL(JNIEnv* inpEnv, jobject inThis, jstring instrURL);
 }
 //--------------------------------------------------------------------------------------
@@ -196,42 +194,6 @@ void Java_com_chillisource_core_CoreNativeInterface_OnBackPressed(JNIEnv* inpEnv
 	ChilliSource::Core::Application::Get()->OnGoBack();
 }
 //--------------------------------------------------------------------------------------
-/// On Dialog Confirm Pressed
-///
-/// Interface function called from java. This is called when a system dialog has it's
-/// confirm option pressed
-///
-/// @param JNIEnv - The jni environment.
-/// @param jobject - the java object calling the function
-/// @param Dialog ID
-//--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_OnDialogConfirmPressed(JNIEnv* inpEnv, jobject inThis, s32 indwID)
-{
-	ChilliSource::Android::DialogueBoxSystem* dialogueBoxSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::Android::DialogueBoxSystem>();
-	if (dialogueBoxSystem != nullptr)
-	{
-		dialogueBoxSystem->OnSystemConfirmDialogResult((u32)indwID, ChilliSource::Core::DialogueBoxSystem::DialogueResult::k_confirm);
-	}
-}
-//--------------------------------------------------------------------------------------
-/// On Dialog Cancel Pressed
-///
-/// Interface function called from java. This is called when a system dialog has it's
-/// cancel option pressed
-///
-/// @param JNIEnv - The jni environment.
-/// @param jobject - the java object calling the function
-/// @param Dialog ID
-//--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_OnDialogCancelPressed(JNIEnv* inpEnv, jobject inThis, s32 indwID)
-{
-	ChilliSource::Android::DialogueBoxSystem* dialogueBoxSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::Android::DialogueBoxSystem>();
-	if (dialogueBoxSystem != nullptr)
-	{
-		dialogueBoxSystem->OnSystemConfirmDialogResult((u32)indwID, ChilliSource::Core::DialogueBoxSystem::DialogueResult::k_cancel);
-	}
-}
-//--------------------------------------------------------------------------------------
 /// Application Did Receive Launching URL
 ///
 ///
@@ -278,10 +240,7 @@ namespace ChilliSource
 			CreateMethodReference("GetTelephonyDeviceID", "()Ljava/lang/String;");
 			CreateMethodReference("GetMacAddress", "()Ljava/lang/String;");
 			CreateMethodReference("GetAndroidID", "()Ljava/lang/String;");
-			CreateMethodReference("MakeToast", "(Ljava/lang/String;)V");
 			CreateMethodReference("ForceQuit", "()V");
-			CreateMethodReference("ShowSystemConfirmDialog", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
-			CreateMethodReference("ShowSystemDialog", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
 			CreateMethodReference("GetSystemTimeInMilliseconds", "()J");
 			CreateMethodReference("GetPhysicalScreenSize", "()F");
 			CreateMethodReference("SetMaxFPS", "(I)V");
@@ -573,46 +532,6 @@ namespace ChilliSource
 			env->DeleteLocalRef(jstrAndroidID);
 			return strOutput;
 		}
-        //--------------------------------------------------------------------------------------------------
-        /// Make Toast
-        //--------------------------------------------------------------------------------------------------
-        void CoreJavaInterface::MakeToast(const Core::UTF8String& instrText)
-        {
-			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrMessage = JavaInterfaceUtils::CreateJStringFromUTF8String(instrText);
-			env->CallVoidMethod(GetJavaObject(), GetMethodID("MakeToast"), jstrMessage);
-			env->DeleteLocalRef(jstrMessage);
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// Show System Confirm Dialog
-        //--------------------------------------------------------------------------------------------------
-        void CoreJavaInterface::ShowSystemConfirmDialog(s32 indwDialogID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel)
-        {
-			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrTitle = JavaInterfaceUtils::CreateJStringFromUTF8String(instrTitle);
-			jstring jstrMessage = JavaInterfaceUtils::CreateJStringFromUTF8String(instrMessage);
-			jstring jstrConfirm = JavaInterfaceUtils::CreateJStringFromUTF8String(instrConfirm);
-			jstring jstrCancel = JavaInterfaceUtils::CreateJStringFromUTF8String(instrCancel);
-			env->CallVoidMethod(GetJavaObject(), GetMethodID("ShowSystemConfirmDialog"), indwDialogID, jstrTitle, jstrMessage, jstrConfirm, jstrCancel);
-			env->DeleteLocalRef(jstrTitle);
-			env->DeleteLocalRef(jstrMessage);
-			env->DeleteLocalRef(jstrConfirm);
-			env->DeleteLocalRef(jstrCancel);
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// Show System Dialog
-        //--------------------------------------------------------------------------------------------------
-        void CoreJavaInterface::ShowSystemDialog(s32 indwDialogID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm)
-        {
-			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrTitle = JavaInterfaceUtils::CreateJStringFromUTF8String(instrTitle);
-			jstring jstrMessage = JavaInterfaceUtils::CreateJStringFromUTF8String(instrMessage);
-			jstring jstrConfirm = JavaInterfaceUtils::CreateJStringFromUTF8String(instrConfirm);
-			env->CallVoidMethod(GetJavaObject(), GetMethodID("ShowSystemDialog"), indwDialogID, jstrTitle, jstrMessage, jstrConfirm);
-			env->DeleteLocalRef(jstrTitle);
-			env->DeleteLocalRef(jstrMessage);
-			env->DeleteLocalRef(jstrConfirm);
-        }
         //-----------------------------------------------------------------------------------------------------
         /// Force Quit
         //-----------------------------------------------------------------------------------------------------

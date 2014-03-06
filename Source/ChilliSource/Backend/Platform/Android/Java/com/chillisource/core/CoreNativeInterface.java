@@ -58,8 +58,6 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	public native void MemoryWarning();
 	public native void OrientationChanged(int indwOrientation);
 	public native void OnBackPressed();
-	public native void OnDialogConfirmPressed(int indwID);
-	public native void OnDialogCancelPressed(int indwID);
 	public native void ApplicationDidReceiveLaunchingURL(String instrURL);
 	//--------------------------------------------------------------
 	/// Constructor
@@ -410,68 +408,6 @@ public class CoreNativeInterface extends INativeInterface implements ILaunchInte
 	{
 		mActivity.SetMaxFPS(inMaxFPS);
 	}
-    //--------------------------------------------------------------------------------------------------
-    /// Make Toast
-    ///
-    /// Display a toast notification with the given text
-    ///
-    /// @param Text
-    //--------------------------------------------------------------------------------------------------
-    public void MakeToast(String instrText)
-    {
-        mActivity.MakeToast(instrText);
-    }
-    //--------------------------------------------------------------------------------------------------
-    /// Show System Confirm Dialog
-    ///
-    /// Display the systems confirmation dialog 
-    ///
-    /// @param ID that is returned in pressed delegate 
-    /// @param Title text
-    /// @param Message text
-    /// @param Confirm text
-    /// @param Cancel text
-    //--------------------------------------------------------------------------------------------------
-    public void ShowSystemConfirmDialog(final int indwDialogID, String instrTitle, String instrMessage, String instrConfirm, String instrCancel)		
-    {
-    	mActivity.ShowSystemConfirmDialog(indwDialogID, instrTitle, instrMessage, instrConfirm, instrCancel);
-    }
-    //--------------------------------------------------------------------------------------------------
-    /// Show System Dialog
-    ///
-    /// Display the systems dialog 
-    ///
-    /// @param ID that is returned in pressed delegate 
-    /// @param Title text
-    /// @param Message text
-    /// @param Confirm text
-    //--------------------------------------------------------------------------------------------------
-    public void ShowSystemDialog(final int indwDialogID, String instrTitle, String instrMessage, String instrConfirm)		
-    {
-    	mActivity.ShowSystemDialog(indwDialogID, instrTitle, instrMessage, instrConfirm);
-    }
-    //-----------------------------------------------------------------------------------------------------
-    /// On Dialog Confirmed
-    ///
-    /// Called when a user chooses confirm on a system confirm dialog
-    ///
-    /// @param Dialog ID
-    //-----------------------------------------------------------------------------------------------------
-    public void OnDialogConfirmed(int indwID)
-    {
-    	OnDialogConfirmPressed(indwID);
-    }
-    //-----------------------------------------------------------------------------------------------------
-    /// On Dialog Cancelled
-    ///
-    /// Called when a user chooses cancel on a system confirm dialog
-    ///
-    /// @param Dialog ID
-    //-----------------------------------------------------------------------------------------------------
-    public void OnDialogCancelled(int indwID)
-    {
-    	OnDialogCancelPressed(indwID);
-    }
     //-----------------------------------------------------------------------------------------------------
     /// Force Quit
     ///

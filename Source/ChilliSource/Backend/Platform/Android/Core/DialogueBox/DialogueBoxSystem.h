@@ -80,7 +80,7 @@ namespace ChilliSource
             /// @param ID
             /// @param Result
             //------------------------------------------------------
-            void OnSystemConfirmDialogResult(u32 in_id, Core::DialogueBoxSystem::DialogueResult in_result);
+            void OnSystemConfirmDialogueResult(u32 in_id, Core::DialogueBoxSystem::DialogueResult in_result);
             //----------------------------------------------------
 			/// Destructor.
             ///
@@ -89,6 +89,7 @@ namespace ChilliSource
             ~DialogueBoxSystem();
         private:
             
+            DialogueBoxJavaInterfaceSPtr m_dialogueBoxJI;
 			Core::DialogueBoxSystem::DialogueDelegate m_activeSysConfirmDelegate;
 		};
 	}

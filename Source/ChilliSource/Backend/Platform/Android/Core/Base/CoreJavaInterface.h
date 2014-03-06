@@ -241,37 +241,6 @@ namespace ChilliSource
 			/// @return the unique Android ID or an empty string.
 			//--------------------------------------------------------------
 			std::string GetAndroidID();
-            //--------------------------------------------------------------------------------------------------
-            /// Make Toast
-            ///
-            /// Display a toast notification with the given text
-            ///
-            /// @param Text
-            //--------------------------------------------------------------------------------------------------
-            void MakeToast(const Core::UTF8String& instrText);
-            //--------------------------------------------------------------------------------------------------
-            /// Show System Confirm Dialog
-            ///
-            /// Display the systems confirmation dialog
-            ///
-            /// @param ID that is returned in pressed delegate
-            /// @param Title text
-            /// @param Message text
-            /// @param Confirm text
-            /// @param Cancel text
-            //--------------------------------------------------------------------------------------------------
-            void ShowSystemConfirmDialog(s32 indwDialogID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel);
-            //--------------------------------------------------------------------------------------------------
-            /// Show System Dialog
-            ///
-            /// Display the systems confirmation dialog
-            ///
-            /// @param ID that is returned in pressed delegate
-            /// @param Title text
-            /// @param Message text
-            /// @param Confirm text
-            //--------------------------------------------------------------------------------------------------
-            void ShowSystemDialog(s32 indwDialogID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm);
             //-----------------------------------------------------------------------------------------------------
             /// Force Quit
             ///

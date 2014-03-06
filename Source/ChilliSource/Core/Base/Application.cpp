@@ -588,30 +588,30 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::Update(f32 in_detaTime)
+		void Application::Update(f32 in_deltaTime)
 		{
-            in_detaTime *= m_updateSpeed;
+            in_deltaTime *= m_updateSpeed;
             
-			CoreTimer::Update(in_detaTime);
+			CoreTimer::Update(in_deltaTime);
             
-            NotificationScheduler::Update(in_detaTime);
+            NotificationScheduler::Update(in_deltaTime);
             
 			//Update sub systems
             for(std::vector<IUpdateable*>::iterator it = m_updateableSystems.begin(); it != m_updateableSystems.end(); ++it)
             {
-                (*it)->Update(in_detaTime);
+                (*it)->Update(in_deltaTime);
             }
 			
 			//Tell the state manager to update the active state
-			m_stateManager.Update(in_detaTime);
+			m_stateManager.Update(in_deltaTime);
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::SetOrientation(ScreenOrientation inOrientation)
+		void Application::SetOrientation(ScreenOrientation in_orientation)
 		{
 			if(m_renderer->GetActiveCameraPtr())
 			{
-				m_renderer->GetActiveCameraPtr()->SetViewportOrientation(inOrientation);
+				m_renderer->GetActiveCameraPtr()->SetViewportOrientation(in_orientation);
 			}
             
             Input::TouchScreen * pTouchScreen = GetSystem(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreenPtr();
