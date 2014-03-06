@@ -22,7 +22,6 @@
 #include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
 #include <ChilliSource/Backend/Audio/FMOD/Base/AudioLoader.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/Notification/ToastNotification.h>
 #include <ChilliSource/Backend/Platform/iOS/Networking/IAP/IAPSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Web/Base/WebViewActivity.h>
 
@@ -615,52 +614,6 @@ namespace ChilliSource
 				return udwNumCores;
 			}
 		}
-        //--------------------------------------------------------------------------------------------------
-        /// Make Toast
-        ///
-        /// Display a toast notification with the given text
-        ///
-        /// @param Text
-        //--------------------------------------------------------------------------------------------------
-        void PlatformSystem::MakeToast(const Core::UTF8String& instrText) const
-        {
-            ToastNotification* pToast = [[ToastNotification alloc] initWithMessage:Core::StringUtils::UTF8StringToNSString(instrText)];
-            [[EAGLView sharedInstance] addSubview:pToast];
-            [pToast animateIn];
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// Show System Confirm Dialog
-        ///
-        /// Display a system confirmation dialog with the given ID and delegate
-        ///
-        /// @param ID
-        /// @param Title text
-        /// @param Message text
-        /// @param Confirm text
-        /// @param Cancel text
-        //--------------------------------------------------------------------------------------------------
-        void PlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const
-        {
-            iOSShowSystemConfirmDialog(inudwID, 
-                                       Core::StringUtils::UTF8StringToNSString(instrTitle), Core::StringUtils::UTF8StringToNSString(instrMessage), 
-                                       Core::StringUtils::UTF8StringToNSString(instrConfirm), Core::StringUtils::UTF8StringToNSString(instrCancel));
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// Show System Dialog
-        ///
-        /// Display a system dialog with the given ID and delegate
-        ///
-        /// @param ID
-        /// @param Title text
-        /// @param Message text
-        /// @param Confirm text
-        //--------------------------------------------------------------------------------------------------
-        void PlatformSystem::ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const
-        {
-            iOSShowSystemDialog(inudwID,
-                                Core::StringUtils::UTF8StringToNSString(instrTitle), Core::StringUtils::UTF8StringToNSString(instrMessage),
-                                Core::StringUtils::UTF8StringToNSString(instrConfirm));
-        }
 		//--------------------------------------------------------------
 		/// Get System Time
 		///

@@ -13,6 +13,8 @@
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
 
+@class DialogueBoxListener;
+
 namespace ChilliSource
 {
 	namespace iOS
@@ -90,6 +92,7 @@ namespace ChilliSource
         private:
             
 			Core::DialogueBoxSystem::DialogueDelegate m_activeSysConfirmDelegate;
+            DialogueBoxListener* m_listener;
 		};
 	}
 }

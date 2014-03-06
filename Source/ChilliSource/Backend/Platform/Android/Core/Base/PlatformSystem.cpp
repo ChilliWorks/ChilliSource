@@ -431,27 +431,6 @@ namespace ChilliSource
 		{
 			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetPhysicalScreenSize();
 		}
-        //--------------------------------------------------------------------------------------------------
-        /// Make Toast
-        //--------------------------------------------------------------------------------------------------
-        void PlatformSystem::MakeToast(const Core::UTF8String& instrText) const
-        {
-        	JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->MakeToast(instrText);
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// Show System Confirm Dialog
-        //--------------------------------------------------------------------------------------------------
-		void PlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const
-		{
-			JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->ShowSystemConfirmDialog(inudwID, instrTitle, instrMessage, instrConfirm, instrCancel);
-		}
-        //--------------------------------------------------------------------------------------------------
-        /// Show System Dialog
-        //--------------------------------------------------------------------------------------------------
-		void PlatformSystem::ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const
-		{
-			JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->ShowSystemDialog(inudwID, instrTitle, instrMessage, instrConfirm);
-		}
 		//-----------------------------------------
 		/// Destructor
 		//-----------------------------------------
