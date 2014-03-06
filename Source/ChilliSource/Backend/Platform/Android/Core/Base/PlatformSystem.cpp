@@ -1,14 +1,10 @@
-/*
- * File: Android/PlatformSystem.cpp
- * Date: 24/11/2010 2010 
- * Description: 
- */
-
-/*
- * Author: Scott Downie / Ian Copland
- * Version: v 1.0
- * Copyright ©2010 Tag Games Limited - All rights reserved 
- */
+//
+//  PlatformSystem.cpp
+//  Chilli Source
+//
+//  Created by Ian Copland on 24/11/2010.
+//  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
+//
 
 #include <ChilliSource/Backend/Platform/Android/Core/Base/PlatformSystem.h>
 

@@ -1,17 +1,12 @@
-/*
- * File: Android/PlatformSystem.h
- * Date: 23/03/2011
- * Description: 
- */
-
-/*
- * Author: Ian Copland
- * Version: v 1.0
- * Copyright ©2010 Tag Games Limited - All rights reserved 
- */
-
-#ifndef _MO_FLO_PLATFORM_ANDROID_PLATFORM_SYSTEM_H_
-#define _MO_FLO_PLATFORM_ANDROID_PLATFORM_SYSTEM_H_
+//
+//  PlatformSystem.h
+//  Chilli Source
+//
+//  Created by Ian Copland on 24/11/2010.
+//  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
+//
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_PLATFORMSYSTEM_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_BASE_PLATFORMSYSTEM_H_
 
 #include <ChilliSource/Backend/Platform/Android/Core/Base/UDIDManager.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
@@ -20,11 +15,10 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		//=============================================
-		/// Platform System
-		///
-		/// Android platform system
-		//=============================================
+		//---------------------------------------------
+		/// Allows generic access to platform
+		/// specific code via common function calls
+		//-------------------------------------------
 		class PlatformSystem : public Core::PlatformSystem
 		{
 		public:
@@ -169,13 +163,6 @@ namespace ChilliSource
             /// @author S Downie
             //-------------------------------------------------------
             PlatformSystem(){}
-			//--------------------------------------------
-			/// Sets the working directory for this application
-			/// to the root of the application directory
-            ///
-            /// @author S Downie
-			//--------------------------------------------
-			void SetWorkingDirectoryToResourceFolder();
 			//-------------------------------------------------
 			/// @author S Downie
 			///

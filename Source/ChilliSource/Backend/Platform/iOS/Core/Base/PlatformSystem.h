@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
-#ifndef _CHILLISOURCE_BACKEND_PLATFORM_CORE_BASE_PLATFORMSYSTEM_H_
-#define _CHILLISOURCE_BACKEND_PLATFORM_CORE_BASE_PLATFORMSYSTEM_H_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_IOS_CORE_BASE_PLATFORMSYSTEM_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_IOS_CORE_BASE_PLATFORMSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
@@ -145,7 +145,7 @@ namespace ChilliSource
             ///
             /// @return The UDID of the device
             //-----------------------------------------
-            std::string GetDeviceID();
+            std::string GetDeviceID() override;
             //-----------------------------------------
             /// @author S Downie
             ///
