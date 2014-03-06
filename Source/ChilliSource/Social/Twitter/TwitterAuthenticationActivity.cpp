@@ -9,6 +9,8 @@
 
 #include <ChilliSource/Social/Twitter/TwitterAuthenticationActivity.h>
 
+#include <ChilliSource/Core/Base/MakeDelegate.h>
+
 #ifdef CS_TARGETPLATFORM_IOS
 #include <ChilliSource/Backend/Platform/iOS/Social/Twitter/TwitterAuthenticationActivity.h>
 #elif CS_TARGETPLATFORM_ANDROID
@@ -21,16 +23,17 @@ namespace ChilliSource
 	{
 		CS_DEFINE_NAMEDTYPE(TwitterAuthenticationActivity);
         
-        Core::Activity* TwitterAuthenticationActivity::CreateTwitterAuthenticationActivity()
+        //-----------------------------------------------
+        //-----------------------------------------------
+        TwitterAuthenticationActivityUPtr TwitterAuthenticationActivity::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return new ChilliSource::iOS::TwitterAuthenticationActivity();
+            return TwitterAuthenticationActivityUPtr(new ChilliSource::iOS::TwitterAuthenticationActivity());
 #elif CS_TARGETPLATFORM_ANDROID
-            return new ChilliSource::Android::TwitterAuthenticationActivity();
+            return TwitterAuthenticationActivityUPtr(new ChilliSource::Android::TwitterAuthenticationActivity());
 #endif
-			return nullptr;
+			return TwitterAuthenticationActivityUPtr();
         }
-        
 		//--------------------------------------------------------------
 		/// Is A
 		///

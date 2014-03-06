@@ -24,19 +24,19 @@ namespace ChilliSource
 	{
 		CS_DEFINE_NAMEDTYPE(TwitterPostSystem);
 
-        TwitterPostSystem* TwitterPostSystem::CreateSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem)
+        //------------------------------------------------
+        //------------------------------------------------
+        TwitterPostSystemUPtr TwitterPostSystem::Create(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem)
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return new ChilliSource::iOS::TwitterPostSystem(static_cast<iOS::HttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
+            return TwitterPostSystemUPtr(new ChilliSource::iOS::TwitterPostSystem(static_cast<iOS::HttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem));
 #elif CS_TARGETPLATFORM_ANDROID
-            return new ChilliSource::Android::TwitterPostSystem(static_cast<Android::HttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem);
+            return TwitterPostSystemUPtr(new ChilliSource::Android::TwitterPostSystem(static_cast<Android::HttpConnectionSystem*>(inpHttpConnectionSystem), inpOAuthSystem));
 #endif
-			return nullptr;
+			return TwitterPostSystemUPtr();
         }
-        
-		//------------------------------------------------------------------------
-		/// Constructor
-		//------------------------------------------------------------------------
+		//---------------------------------------------------
+		//---------------------------------------------------
 		TwitterPostSystem::TwitterPostSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem,
 											   Core::OAuthSystem* inpOAuthSystem) : mstrCustomerKey(""),
 																						   mstrCustomerSecret(""),
@@ -45,12 +45,6 @@ namespace ChilliSource
 				mpHttpConnectionSystem = inpHttpConnectionSystem;
 				mpOAuthSystem = inpOAuthSystem;
 				CS_ASSERT(mpHttpConnectionSystem != nullptr && mpOAuthSystem != nullptr, "Twitter post system requires the http request system and oauth system.");
-		}
-		//------------------------------------------------------------------------
-		/// Destructor
-		//------------------------------------------------------------------------
-		TwitterPostSystem::~TwitterPostSystem()
-		{
 		}
 		//------------------------------------------------------------------------
         /// Init

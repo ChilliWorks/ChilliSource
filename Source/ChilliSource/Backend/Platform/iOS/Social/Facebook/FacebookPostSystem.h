@@ -19,7 +19,7 @@ namespace ChilliSource
 {
 	namespace iOS
 	{
-		class FacebookPostSystem : public Social::IFacebookPostSystem
+		class FacebookPostSystem : public Social::FacebookPostSystem
 		{
 		public:
 			FacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem);

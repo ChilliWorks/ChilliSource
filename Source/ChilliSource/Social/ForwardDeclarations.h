@@ -27,7 +27,7 @@ namespace ChilliSource
         /// Facebook
         //------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(FacebookAuthenticationSystem);
-        CS_FORWARDDECLARE_CLASS(IFacebookPostSystem);
+        CS_FORWARDDECLARE_CLASS(FacebookPostSystem);
         //------------------------------------------------------
         /// Twitter
         //------------------------------------------------------

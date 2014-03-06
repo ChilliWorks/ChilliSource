@@ -24,8 +24,6 @@ namespace ChilliSource
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(TwitterAuthenticationActivity);
-			
-            static Activity* CreateTwitterAuthenticationActivity();
             
 			struct AuthenticationPINResult
 			{
@@ -33,7 +31,16 @@ namespace ChilliSource
 			};
 			
 			typedef std::function<void(const AuthenticationPINResult&)> AuthenticationPINResultDelegate;
-			
+            
+            //-----------------------------------------------
+			/// Creates a new instance of the Twitter Authetication
+            /// activity.
+            ///
+            /// @author I Copland
+            ///
+            /// @return The new instance.
+			//-----------------------------------------------
+			static TwitterAuthenticationActivityUPtr Create();
 			//--------------------------------------------------------------
 			/// Is A
 			///
@@ -85,8 +92,21 @@ namespace ChilliSource
 			/// confirms PIN entry
 			//-----------------------------------------------
 			void SetAuthenticationPINResultDelegate(const ChilliSource::Social::TwitterAuthenticationActivity::AuthenticationPINResultDelegate inCallback);
-		
+            //-----------------------------------------------
+			/// Destructor
+            ///
+            /// @author I Copland
+			//-----------------------------------------------
+            virtual ~TwitterAuthenticationActivity(){};
 		protected:
+            //-----------------------------------------------
+			/// Protected constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+			//-----------------------------------------------
+            TwitterAuthenticationActivity(){};
+            
 			Core::Event<Core::ActivityDismissedEvent> mOnDismissedEvent;
 			TwitterAuthenticationActivity::AuthenticationPINResultDelegate mOnPINResultDelegate;
 			std::string	mstrURL;

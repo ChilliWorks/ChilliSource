@@ -26,8 +26,6 @@ namespace ChilliSource
 		public:
 			CS_DECLARE_NAMEDTYPE(EmailCompositionActivity);
 			//-------------------------------------------------------
-            /// Send Result
-            ///
             /// An enum describing the result of the email intent.
             //-------------------------------------------------------
 			enum class SendResult
@@ -38,20 +36,25 @@ namespace ChilliSource
 			};
 			typedef std::function<void(SendResult)> SendResultDelegate;
             //-------------------------------------------------------
-            /// Attachment
-            ///
             /// A container for information describing a single
             /// attachment file.
             //-------------------------------------------------------
             struct Attachment
             {
-                Core::StorageLocation meStorageLocation;
-                std::string mstrFilename;
-                std::string mstrMIMEType;
+                Core::StorageLocation m_storageLocation;
+                std::string m_filename;
+                std::string m_mimeType;
             };
-			//-------------------------------------------------------
-            /// Present
+            //-------------------------------------------------------
+            /// Creates a new instance of the email composition
+            /// activity.
             ///
+            /// @author I Copland
+            ///
+            /// @return the new activity instance.
+            //-------------------------------------------------------
+            static EmailCompositionActivityUPtr Create();
+			//-------------------------------------------------------
             /// Displays the email activity with the given recipients,
             /// subject and contents.
             ///
@@ -61,10 +64,8 @@ namespace ChilliSource
             /// @param The callback describing the result of the email.
             /// @param Whether or not to format as HTML.
             //-------------------------------------------------------
-			virtual void Present(const std::vector<Core::UTF8String> & inastrRecipientAddresses, const Core::UTF8String & instrSubject, const Core::UTF8String & instrContents, const SendResultDelegate & inCallback, bool inbFormatAsHtml) = 0;
+			virtual void Present(const std::vector<Core::UTF8String> & in_recipientAddresses, const Core::UTF8String & in_subject, const Core::UTF8String & in_contents, const SendResultDelegate & in_callback, bool in_formatAsHtml) = 0;
             //-------------------------------------------------------
-            /// Present With Attachment
-            ///
             /// Displays the email activity with the given recipients,
             /// subject and contents, and adds a list of attachments
             /// to the email.
@@ -76,16 +77,12 @@ namespace ChilliSource
             /// @param The callback describing the result of the email.
             /// @param Whether or not to format as HTML.
             //-------------------------------------------------------
-            virtual void PresentWithAttachment(const std::vector<Core::UTF8String> & inastrRecipientAddresses, const Core::UTF8String & instrSubject, const Core::UTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml) = 0;
+            virtual void PresentWithAttachment(const std::vector<Core::UTF8String> & in_recipientAddresses, const Core::UTF8String & in_subject, const Core::UTF8String & in_contents, const Attachment& in_attachment, const SendResultDelegate & in_callback, bool in_formatAsHtml) = 0;
             //-------------------------------------------------------
-			/// Dismiss
-			///
 			/// Dismisses the activity if it is currently displayed.
 			//-------------------------------------------------------
 			virtual void Dismiss() = 0;
             //-------------------------------------------------------
-            /// Is Supported By Device
-            ///
             /// @return whether email is supported on the current
             /// device
             //-------------------------------------------------------
@@ -94,6 +91,14 @@ namespace ChilliSource
 			/// Destructor
 			//-------------------------------------------------------
 			virtual ~EmailCompositionActivity(){};
+        protected:
+            //-------------------------------------------------------
+			/// Protected constructor to force use of the factory
+            /// method.
+            ///
+            /// @author I Copland.
+			//-------------------------------------------------------
+            EmailCompositionActivity(){};
 		};
 		
 	}

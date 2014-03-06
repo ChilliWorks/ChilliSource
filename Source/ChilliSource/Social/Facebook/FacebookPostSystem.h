@@ -35,11 +35,11 @@ namespace ChilliSource
 			void ToJSON(Json::Value& outsRoot) const;
 		};
 		
-		class IFacebookPostSystem : public ChilliSource::Core::System
+		class FacebookPostSystem : public ChilliSource::Core::System
 		{
 		public:
 			
-			CS_DECLARE_NAMEDTYPE(IFacebookPostSystem);
+			CS_DECLARE_NAMEDTYPE(FacebookPostSystem);
 			
 			enum class PostResult
 			{
@@ -50,7 +50,16 @@ namespace ChilliSource
 			
 			typedef std::function<void(const PostResult&)> PostResultDelegate;
             
-            static IFacebookPostSystem* CreatePostSystem(ChilliSource::Social::FacebookAuthenticationSystem* inpAuthSystem);
+            //---------------------------------------------------
+            /// Creates a new instance of the facebook post system.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The facebook authentication system.
+            ///
+            /// @return The new instance of the system.
+            //---------------------------------------------------
+            static FacebookPostSystemUPtr Create(FacebookAuthenticationSystem* inpAuthSystem);
             
 			virtual void TryPost(const FacebookPostDesc& insDesc, const PostResultDelegate& insResultCallback) = 0;
             
@@ -59,6 +68,20 @@ namespace ChilliSource
 			PostResultDelegate mCompletionDelegate;
             
             PostResultDelegate mRequestCompleteDelegate;
+            //---------------------------------------------------
+            /// Destructor
+            ///
+            /// @author I Copland
+            //---------------------------------------------------
+            virtual ~FacebookPostSystem(){};
+        protected:
+            //---------------------------------------------------
+            /// Protected constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            //---------------------------------------------------
+            FacebookPostSystem(){};
 		};
 	}
 }

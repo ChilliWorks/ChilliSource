@@ -105,15 +105,18 @@ namespace ChilliSource
 			
 			typedef std::function<void(const PostResult&)> PostResultDelegate;
 			
-            //Create platform specific system
-            static TwitterPostSystem* CreateSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem);
-            
-			TwitterPostSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem,
-							   Core::OAuthSystem* inpOAuthSystem);
-			//------------------------------------------------------------------------
-			/// Destructor
-			//------------------------------------------------------------------------
-			~TwitterPostSystem();
+            //------------------------------------------------
+			/// Create a new instance of the Twitter Post
+            /// system.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The http connection system.
+            /// @param The OAuth system.
+            ///
+            /// @return The new instance.
+			//------------------------------------------------
+            static TwitterPostSystemUPtr Create(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem);
 			//------------------------------------------------------------------------
             /// Init
             ///
@@ -159,8 +162,21 @@ namespace ChilliSource
 			/// @param Pointer to Activity that has been dismissed
 			//------------------------------------------------------------------------
 			virtual void OnAuthorisationDismissed(Core::Activity* inpActivity) = 0;
-
+			//------------------------------------------------------------------------
+			/// Destructor
+			//------------------------------------------------------------------------
+			virtual ~TwitterPostSystem(){};
         protected:
+            //-----------------------------------------------
+			/// Protected constructor to force the use of
+            /// the factory method.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The http connection system.
+            /// @param The OAuth system.
+			//-----------------------------------------------
+            TwitterPostSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem);
 			//------------------------------------------------------------------------
 			/// Post Using moFlow
 			///
