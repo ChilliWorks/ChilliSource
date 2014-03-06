@@ -561,7 +561,7 @@ namespace ChilliSource
             //Give the resource managers their providers
             m_resourceManagerDispenser->SetResourceProviders(m_resourceProviders);
 
-            GetRenderSystem()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
+            GetRenderSystem()->Init((u32)Screen::GetRawDimensions().x, (u32)Screen::GetRawDimensions().y);
             GetRenderer()->Init();
             Audio::AudioPlayer::Init();
     

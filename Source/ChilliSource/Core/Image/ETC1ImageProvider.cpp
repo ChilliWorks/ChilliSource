@@ -16,6 +16,12 @@ namespace ChilliSource
 {
     namespace Core
     {
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        ETC1ImageProviderUPtr ETC1ImageProvider::Create()
+        {
+            return ETC1ImageProviderUPtr(new ETC1ImageProvider());
+        }
         //----------------------------------------------------------------
         /// Is A
         //----------------------------------------------------------------
