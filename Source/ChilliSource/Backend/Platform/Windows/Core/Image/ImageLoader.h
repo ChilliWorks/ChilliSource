@@ -34,21 +34,21 @@ namespace ChilliSource
 			/// @param Interface type to query
 			/// @return Whether the object is of given type
 			//----------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//----------------------------------------------------------------
 			/// Can Create Resource Of Kind
 			///
 			/// @param Resource to compare against
 			/// @return Whether the object can load a resource of given type
 			//----------------------------------------------------------------
-			bool CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const;
+			bool CanCreateResourceOfKind(Core::InterfaceIDType inInterfaceID) const override;
 			//----------------------------------------------------------------
 			/// Can Create Resource From File With Extension
 			///
 			/// @param Extension to compare against
 			/// @return Whether the object can load a resource with that extension
 			//----------------------------------------------------------------
-			bool CanCreateResourceFromFileWithExtension(const std::string & inExtension) const;
+			bool CanCreateResourceFromFileWithExtension(const std::string & inExtension) const override;
 			//----------------------------------------------------------------
 			/// Create Resource From File
 			///
@@ -57,7 +57,7 @@ namespace ChilliSource
 			/// @param Out: Resource
 			/// @return Success
 			//----------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource);
+			bool CreateResourceFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource) override;
 			//----------------------------------------------------------------
 			/// Create Image From File
 			///
@@ -67,7 +67,7 @@ namespace ChilliSource
 			/// @param Out: Resource
 			/// @return Sucess
 			//----------------------------------------------------------------
-			bool CreateImageFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::ResourceSPtr& outpResource);
+			bool CreateImageFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::ResourceSPtr& outpResource) override;
 
 		private:
 			//----------------------------------------------------------------

@@ -42,7 +42,7 @@ namespace ChilliSource
 			/// @param Interace ID
 			/// @return Whether object if of argument type
 			//--------------------------------------------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//--------------------------------------------------------------------------------------------------
 			/// Make Request 
 			///
@@ -57,7 +57,7 @@ namespace ChilliSource
 			///
             /// Equivalent to calling the above on every incomplete request in progress.
             //--------------------------------------------------------------------------------------------------
-            void CancelAllRequests();
+			void CancelAllRequests() override;
             //--------------------------------------------------------------------------------------------------
             /// Check Reachability
             ///
@@ -65,7 +65,7 @@ namespace ChilliSource
             ///
             /// @return Success if URL is reachable
             //--------------------------------------------------------------------------------------------------
-            bool CheckReachability() const;
+			bool CheckReachability() const override;
 			//--------------------------------------------------------------------------------------------------
 			/// Update
 			///
@@ -74,7 +74,7 @@ namespace ChilliSource
 			///
 			/// @param Time between frames
 			//--------------------------------------------------------------------------------------------------
-			void Update(f32 infDT);
+			void Update(f32 infDT) override;
 
 		private:
 

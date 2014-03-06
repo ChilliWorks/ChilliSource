@@ -30,7 +30,7 @@ namespace ChilliSource
 			//-------------------------------------------------------
 			/// Is A
 			//-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 		};
 	}
 }

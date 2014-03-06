@@ -20,13 +20,13 @@ namespace ChilliSource
 			//-------------------------------------------------------
 			/// Is A
 			//-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//------------------------------------------------------
 			/// Get Position
 			/// 
 			/// @return Position of cursor on screen
 			//------------------------------------------------------
-			ChilliSource::Core::Vector2 GetPosition() const;
+			ChilliSource::Core::Vector2 GetPosition() const override;
 
 		private:
 
