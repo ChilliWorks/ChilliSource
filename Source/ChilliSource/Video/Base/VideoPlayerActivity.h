@@ -27,7 +27,15 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(VideoPlayerActivity);
 			
-            VideoPlayerActivity(){}
+            //-------------------------------------------------------
+            /// Create the platform dependent backend
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend instance
+            //-------------------------------------------------------
+            static VideoPlayerActivityUPtr Create();
+            
             virtual ~VideoPlayerActivity(){}
             //--------------------------------------------------------------
             /// Present
@@ -92,6 +100,15 @@ namespace ChilliSource
             /// @return The elapsed time of the video
             //--------------------------------------------------------------
             virtual f32 GetTime() const = 0;
+            
+        protected:
+            
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            VideoPlayerActivity(){}
             
         protected:
 

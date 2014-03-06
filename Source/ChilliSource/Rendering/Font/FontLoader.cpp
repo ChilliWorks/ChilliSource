@@ -23,6 +23,12 @@ namespace ChilliSource
 		const std::string kstrGlyphExtension("alphabet");
         const std::string kstrKerningExtension("kerninginfo");
 		
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        FontLoaderUPtr FontLoader::Create()
+        {
+            return FontLoaderUPtr(new FontLoader());
+        }
 		//-------------------------------------------------------------------------
 		/// Is A
 		///

@@ -108,6 +108,14 @@ namespace ChilliSource
 		public:
 			CS_DECLARE_NAMEDTYPE(HttpConnectionSystem);
             
+            //-------------------------------------------------------
+            /// Factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend with ownership transferred
+            //-------------------------------------------------------
+            static HttpConnectionSystemUPtr Create();
             //--------------------------------------------------------------------------------------------------
 			/// Make Request
 			///
@@ -143,6 +151,15 @@ namespace ChilliSource
             /// @param The number of bytes read before the buffer is flushed
             //--------------------------------------------------------------------------------------------------
             static void SetMaxBufferSize(u32 inudwSize);
+            
+        protected:
+            
+            //--------------------------------------------------------------------------------------------------
+            /// Private constructor to fore use of factory method
+            ///
+            /// @author S Downie
+            //--------------------------------------------------------------------------------------------------
+            HttpConnectionSystem(){}
             
         protected:
             

@@ -9,6 +9,18 @@
 
 #include <ChilliSource/Networking/Http/HttpConnectionSystem.h>
 
+#ifdef CS_TARGETPLATFORM_IOS
+#include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
+#endif
+
+#ifdef CS_TARGETPLATFORM_ANDROID
+#include <ChilliSource/Backend/Platform/Android/Networking/Http/HttpConnectionSystem.h>
+#endif
+
+#ifdef CS_TARGETPLATFORM_WINDOWS
+#include <ChilliSource/Backend/Platform/Windows/Networking/Http/HttpConnectionSystem.h>
+#endif
+
 namespace ChilliSource
 {
 	namespace Networking
@@ -17,6 +29,21 @@ namespace ChilliSource
         
         u32 HttpConnectionSystem::mudwMaxBufferSize = 0;
         
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        HttpConnectionSystemUPtr HttpConnectionSystem::Create()
+        {
+#ifdef CS_TARGETPLATFORM_IOS
+            return HttpConnectionSystemUPtr(new iOS::HttpConnectionSystem());
+#endif
+#ifdef CS_TARGETPLATFORM_ANDROID
+            return HttpConnectionSystemUPtr(new Android::HttpConnectionSystem());
+#endif
+#ifdef CS_TARGETPLATFORM_WINDOWS
+            return HttpConnectionSystemUPtr(new Windows::HttpConnectionSystem());
+#endif
+            return nullptr;
+        }
         //--------------------------------------------------------------------------------------------------
         /// Set Max Buffer Size
         ///

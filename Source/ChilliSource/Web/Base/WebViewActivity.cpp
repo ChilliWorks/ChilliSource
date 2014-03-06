@@ -9,11 +9,39 @@
 
 #include <ChilliSource/Web/Base/WebViewActivity.h>
 
+#ifdef CS_TARGETPLATFORM_IOS
+#include <ChilliSource/Backend/Platform/iOS/Web/Base/WebViewActivity.h>
+#endif
+
+#ifdef CS_TARGETPLATFORM_ANDROID
+#include <ChilliSource/Backend/Platform/Android/Web/Base/WebViewActivity.h>
+#endif
+
+#ifdef CS_TARGETPLATFORM_WINDOWS
+#include <ChilliSource/Backend/Platform/Windows/Web/Base/WebViewActivity.h>
+#endif
+
 namespace ChilliSource
 {
     namespace Web
     {
         CS_DEFINE_NAMEDTYPE(WebViewActivity);
+        
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        WebViewActivityUPtr WebViewActivity::Create()
+        {
+#ifdef CS_TARGETPLATFORM_IOS
+            return WebViewActivityUPtr(new iOS::WebViewActivity());
+#endif
+#ifdef CS_TARGETPLATFORM_ANDROID
+            return WebViewActivityUPtr(new Android::WebViewActivity());
+#endif
+#ifdef CS_TARGETPLATFORM_WINDOWS
+            return WebViewActivityUPtr(new Windows::WebViewActivity());
+#endif
+            return nullptr;
+        }
         //--------------------------------------------------------------
         /// Is A
         ///

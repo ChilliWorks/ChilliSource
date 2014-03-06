@@ -98,46 +98,6 @@ namespace ChilliSource
             /// @param the system list
             //-------------------------------------------------
             virtual void PostCreateSystems() = 0;
-            //-----------------------------------------
-            /// Can Create System With Interface
-            ///
-            /// @param Interface ID
-            /// @return Whether system can be created
-            //----------------------------------------
-            virtual bool CanCreateSystemWithInterface(Core::InterfaceIDType inInterfaceID) const = 0;
-            //-----------------------------------------
-            /// Can Create System With Interface
-            ///
-            /// @param Interface ID
-            /// @return Whether system can be created
-            //----------------------------------------
-            template <typename T> bool CanCreateSystemWithInterface() const
-            {
-                return CanCreateSystemWithInterface(T::InterfaceID);
-            }
-            //-----------------------------------------
-            /// Create and Add System With Interface
-            ///
-            /// Tries to create a platform specific implementation with the given interface
-            ///
-            /// @param InterfaceID to generate
-            /// @param Vector of existing systems. The return value is added to this vector if not nullptr.
-            /// @return A handle to the given system or nullptr if the platform cannot support it
-            //-----------------------------------------
-            virtual Core::System* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr> & inaExistingSystems) const = 0;
-            //-----------------------------------------
-            /// Create and Add System With Interface
-            ///
-            /// Convenience template method of the above returning the needed interface type.
-            ///
-            /// @param InterfaceID to generate
-            /// @param Vector of existing systems
-            /// @return A handle to the given system or nullptr if the platform cannot support it
-            //-----------------------------------------
-            template <typename T> T* CreateAndAddSystemWithInterface(std::vector<Core::SystemSPtr> & inaExistingSystems) const
-            {
-                return static_cast<T*> (CreateAndAddSystemWithInterface(T::InterfaceID, inaExistingSystems));
-            }
             //=========================================
             //--- Activity Creation
             //=========================================

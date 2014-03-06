@@ -14,11 +14,11 @@ namespace ChilliSource
     namespace Rendering
     {
         CS_DEFINE_NAMEDTYPE(AnimatedMeshComponentUpdater);
-        //------------------------------------------------
-        /// Constructor
-        //------------------------------------------------
-        AnimatedMeshComponentUpdater::AnimatedMeshComponentUpdater()
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        AnimatedMeshComponentUpdaterUPtr AnimatedMeshComponentUpdater::Create()
         {
+            return AnimatedMeshComponentUpdaterUPtr(new AnimatedMeshComponentUpdater());
         }
         //------------------------------------------------
         /// Is A

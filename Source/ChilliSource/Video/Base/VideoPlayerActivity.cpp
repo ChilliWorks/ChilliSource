@@ -8,12 +8,38 @@
 
 #include <ChilliSource/Video/Base/VideoPlayerActivity.h>
 
+#ifdef CS_TARGETPLATFORM_IOS
+#include <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerActivity.h>
+#endif
+
+#ifdef CS_TARGETPLATFORM_ANDROID
+#include <ChilliSource/Backend/Platform/Android/Video/Base/VideoPlayerActivity.h>
+#endif
+
+#ifdef CS_TARGETPLATFORM_WINDOWS
+#include <ChilliSource/Backend/Platform/Windows/Video/Base/VideoPlayerActivity.h>
+#endif
+
 namespace ChilliSource
 {
     namespace Video
     {
 		CS_DEFINE_NAMEDTYPE(VideoPlayerActivity);
-
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        VideoPlayerActivityUPtr VideoPlayerActivity::Create()
+        {
+#ifdef CS_TARGETPLATFORM_IOS
+            return VideoPlayerActivityUPtr(new iOS::VideoPlayerActivity());
+#endif
+#ifdef CS_TARGETPLATFORM_ANDROID
+            return VideoPlayerActivityUPtr(new Android::VideoPlayerActivity());
+#endif
+#ifdef CS_TARGETPLATFORM_WINDOWS
+            return VideoPlayerActivityUPtr(new Windows::VideoPlayerActivity());
+#endif
+            return nullptr;
+        }
         //--------------------------------------------------------------
         /// Get Dismissed Event
         ///
