@@ -37,10 +37,7 @@ namespace ChilliSource
         }
 		//---------------------------------------------------
 		//---------------------------------------------------
-		TwitterPostSystem::TwitterPostSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem,
-											   Core::OAuthSystem* inpOAuthSystem) : mstrCustomerKey(""),
-																						   mstrCustomerSecret(""),
-																						   mpAuthenticationView(nullptr)
+		TwitterPostSystem::TwitterPostSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem)
 		{
 				mpHttpConnectionSystem = inpHttpConnectionSystem;
 				mpOAuthSystem = inpOAuthSystem;
@@ -229,8 +226,10 @@ namespace ChilliSource
 
 				// OK, let's tell the authentication view our URL
 				// From here the user will be able to login to Twitter and enter the PIN
-				if(mpAuthenticationView)
-					mpAuthenticationView->PresentURL(outstrAuthoriseURL);
+				if(m_authenticationView)
+                {
+					m_authenticationView->PresentURL(outstrAuthoriseURL);
+                }
 			}
 		}
 		//------------------------------------------------------------------------

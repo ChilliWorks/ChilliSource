@@ -22,8 +22,6 @@ namespace ChilliSource
 
 			CS_DECLARE_NAMEDTYPE(FacebookAuthenticationSystem);
 
-			FacebookAuthenticationSystem();
-
 			bool IsA(Core::InterfaceIDType inID) const override;
 
 			void Authenticate(const std::vector<std::string>& inastrReadPermissions = std::vector<std::string>(), const AuthenticationCompleteDelegate& inDelegate = nullptr) override;
@@ -45,6 +43,16 @@ namespace ChilliSource
 			void OnAuthoriseWritePermissionsComplete(bool inbSuccess);
 
 			const FacebookJavaInterfaceSPtr& GetJavaInterface() const;
+
+		private:
+			friend Social::FacebookAuthenticationSystemUPtr Social::FacebookAuthenticationSystem::Create();
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            //----------------------------------------------------
+            FacebookAuthenticationSystem();
 
 		private:
 

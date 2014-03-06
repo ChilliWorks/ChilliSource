@@ -20,7 +20,7 @@ namespace ChilliSource
 		class TwitterAuthenticationActivity : public Social::TwitterAuthenticationActivity
 		{
 		public:
-			TwitterAuthenticationActivity();
+
 			//-----------------------------------------------
 			/// Present
 			/// 
@@ -58,6 +58,17 @@ namespace ChilliSource
 			//-----------------------------------------------
 			void OnPINComplete();
 			
+		private:
+			friend Social::TwitterAuthenticationActivityUPtr Social::TwitterAuthenticationActivity::Create();
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            //----------------------------------------------------
+            TwitterAuthenticationActivity();
+
+		private:
 			Core::UnifiedVector2			mvUnifiedSize;
 			Core::Vector2					mvAbsoluteSize;
 			Core::Vector2					mvAbsolutePositionTopLeft;

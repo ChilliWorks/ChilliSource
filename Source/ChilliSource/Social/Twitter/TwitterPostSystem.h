@@ -259,7 +259,7 @@ namespace ChilliSource
 			std::string											mstrSavedOAuthTokenSecret;
 
 			// View used during initial authorisation phase
-			ChilliSource::Social::TwitterAuthenticationActivityUPtr mpAuthenticationView;
+			ChilliSource::Social::TwitterAuthenticationActivityUPtr m_authenticationView;
 
 			// Post description
 			// This is used to store the Tweet to send if the

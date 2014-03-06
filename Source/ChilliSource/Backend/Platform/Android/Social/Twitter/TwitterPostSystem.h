@@ -23,7 +23,6 @@ namespace ChilliSource
 		class TwitterPostSystem: public Social::TwitterPostSystem
 		{
 		public:
-			TwitterPostSystem(Android::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem);
 			~TwitterPostSystem();
             //------------------------------------------------------------------------
             /// Is A
@@ -59,6 +58,17 @@ namespace ChilliSource
 			bool TryPost(const Social::TwitterPostDesc & insDesc, const Social::TwitterPostSystem::PostResultDelegate & inResultCallback) override;
 
 		private:
+			friend Social::TwitterPostSystemUPtr Social::TwitterPostSystem::Create(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem);
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The http connection system.
+            /// @param The OAuth system.
+            //----------------------------------------------------
+            TwitterPostSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem);
 			//------------------------------------------------------------------------
 			/// Delegate called when the user confirms entry of the PIN
 			///

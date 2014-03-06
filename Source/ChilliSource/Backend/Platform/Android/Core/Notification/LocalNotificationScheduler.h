@@ -72,7 +72,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            LocalNotificationScheduler(){};
+            LocalNotificationScheduler();
 
 		private:
 			LocalNotificationJavaInterfaceSPtr mpLocalNotificationJavaInterface;

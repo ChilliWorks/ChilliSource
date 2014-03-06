@@ -22,7 +22,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------
 		/// Constructor
 		//------------------------------------------------------------------------
-		TwitterPostSystem::TwitterPostSystem(Android::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem)
+		TwitterPostSystem::TwitterPostSystem(Networking::HttpConnectionSystem* inpHttpConnectionSystem, Core::OAuthSystem* inpOAuthSystem)
 		: Social::TwitterPostSystem(inpHttpConnectionSystem, inpOAuthSystem)
 		{
 		}
@@ -56,12 +56,12 @@ namespace ChilliSource
 				if(RequestOAuthToken(strAuthoiseURL))
 				{
 					// Show authentication view
-					if(Core::Application::Get()->GetPlatformSystem()->CanCreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>())
+					m_authenticationView = Social::TwitterAuthenticationActivity::Create();
+					if(m_authenticationView != nullptr)
 					{
-						mpAuthenticationView = Core::Application::Get()->GetPlatformSystem()->CreateActivityWithInterface<ChilliSource::Social::TwitterAuthenticationActivity>();
-						mpAuthenticationView->SetAuthenticationPINResultDelegate(Core::MakeDelegate(this, &TwitterPostSystem::OnPINComplete));
-						m_authorisationDismissedConnection = mpAuthenticationView->GetDismissedEvent().OpenConnection(Core::MakeDelegate(this, &TwitterPostSystem::OnAuthorisationDismissed));
-						mpAuthenticationView->Present();
+						m_authenticationView->SetAuthenticationPINResultDelegate(Core::MakeDelegate(this, &TwitterPostSystem::OnPINComplete));
+						m_authorisationDismissedConnection = m_authenticationView->GetDismissedEvent().OpenConnection(Core::MakeDelegate(this, &TwitterPostSystem::OnAuthorisationDismissed));
+						m_authenticationView->Present();
 					}
 				}
 				else
@@ -136,11 +136,8 @@ namespace ChilliSource
 		void TwitterPostSystem::OnAuthorisationDismissed(Core::Activity* inpActivity)
 		{
 			// User has cancelled
-			if(mpAuthenticationView)
-			{
-				m_authorisationDismissedConnection = nullptr;
-				CS_SAFEDELETE(mpAuthenticationView);
-			}
+			m_authorisationDismissedConnection = nullptr;
+			m_authenticationView = nullptr;
 		}
 	}
 }

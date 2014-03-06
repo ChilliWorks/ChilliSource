@@ -7,10 +7,10 @@
  *
  */
 
-#include <ChilliSource/Backend/Platform/Android/Core/Notifications/LocalNotificationScheduler.h>
+#include <ChilliSource/Backend/Platform/Android/Core/Notification/LocalNotificationScheduler.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
-#include <ChilliSource/Backend/Platform/Android/Core/Notifications/LocalNotificationJavaInterface.h>
+#include <ChilliSource/Backend/Platform/Android/Core/Notification/LocalNotificationJavaInterface.h>
 
 namespace ChilliSource
 {

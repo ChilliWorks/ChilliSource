@@ -53,7 +53,7 @@ namespace ChilliSource
 			dims.x = coreJI->GetScreenWidth();
 			dims.y = coreJI->GetScreenHeight();
 
-			s32 orientation = pCoreJI->GetOrientation();
+			s32 orientation = coreJI->GetOrientation();
 #ifdef CS_ENABLE_DEBUG
 			if(orientation < 0)
 				CS_LOG_ERROR("PlatformSystem::GetScreenDimensions() - Could not get orientation of device!");

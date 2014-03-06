@@ -17,20 +17,29 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		class FacebookPostSystem : public Social::IFacebookPostSystem
+		class FacebookPostSystem : public Social::FacebookPostSystem
 		{
 		public:
-			FacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem);
 
 			bool IsA(Core::InterfaceIDType inID) const override;
 
-			void TryPost(const Social::FacebookPostDesc& insDesc, const Social::IFacebookPostSystem::PostResultDelegate& insResultCallback) override;
-			void TrySendRequest(const Social::FacebookPostDesc& insDesc, const Social::IFacebookPostSystem::PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends) override;
+			void TryPost(const Social::FacebookPostDesc& insDesc, const Social::FacebookPostSystem::PostResultDelegate& insResultCallback) override;
+			void TrySendRequest(const Social::FacebookPostDesc& insDesc, const Social::FacebookPostSystem::PostResultDelegate& insResultCallback, std::vector<std::string>& inastrRecommendedFriends) override;
 
 			void OnPostToFeedComplete(bool inbSuccess);
 			void OnPostRequestComplete(bool inbSuccess);
 
 		private:
+			friend Social::FacebookPostSystemUPtr Social::FacebookPostSystem::Create(Social::FacebookAuthenticationSystem* in_authSystem);
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The facebook authentication system.
+            //----------------------------------------------------
+            FacebookPostSystem(Social::FacebookAuthenticationSystem* inpAuthSystem);
 
 			void Post(const Social::FacebookPostDesc& insDesc);
 			void PostRequest(const Social::FacebookPostDesc& insDesc);

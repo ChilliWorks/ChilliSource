@@ -32,8 +32,17 @@ namespace ChilliSource
 			void SetContacts(const std::vector<Social::ContactRecord>& inasContact);
 
 		private:
-			std::vector<Social::ContactRecord> masContacts;
+			friend Social::ContactInformationProviderUPtr Social::ContactInformationProvider::Create();
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            //----------------------------------------------------
+            ContactInformationProvider(){};
 
+		private:
+			std::vector<Social::ContactRecord> masContacts;
 		};
 
 	}

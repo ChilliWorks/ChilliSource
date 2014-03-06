@@ -21,16 +21,12 @@ namespace ChilliSource
 		{
 		public:
 			//-------------------------------------------------------
-			/// Constructor
-			//-------------------------------------------------------
-			EmailCompositionActivity();
-			//-------------------------------------------------------
 	        /// Is Supported By Device
 	        ///
 	        /// @return whether email is supported on the current
 	        /// device
 	        //-------------------------------------------------------
-	        bool IsSupportedByDevice() const;
+	        bool IsSupportedByDevice() const override;
             //-------------------------------------------------------
 			/// Is A
 			///
@@ -39,7 +35,7 @@ namespace ChilliSource
 			/// @param Interface type to query
 			/// @return Whether the object is of given type
 			//-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inID) const;
+			bool IsA(Core::InterfaceIDType inID) const override;
             //-------------------------------------------------------
             /// Present
             ///
@@ -52,7 +48,7 @@ namespace ChilliSource
             /// @param The callback describing the result of the email.
             /// @param Whether or not to format as HTML.
             //-------------------------------------------------------
-			void Present(const std::vector<Core::UTF8String> & inastrRecipientAddresses, const Core::UTF8String & instrSubject, const Core::UTF8String & instrContents, const SendResultDelegate & inCallback, bool inbFormatAsHtml);
+			void Present(const std::vector<Core::UTF8String> & inastrRecipientAddresses, const Core::UTF8String & instrSubject, const Core::UTF8String & instrContents, const SendResultDelegate & inCallback, bool inbFormatAsHtml) override;
 			//-------------------------------------------------------
 			/// Present With Attachment
 			///
@@ -67,18 +63,26 @@ namespace ChilliSource
 			/// @param The callback describing the result of the email.
 			/// @param Whether or not to format as HTML.
 			//-------------------------------------------------------
-			void PresentWithAttachment(const std::vector<Core::UTF8String> & inastrRecipientAddresses, const Core::UTF8String & instrSubject, const Core::UTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml);
+			void PresentWithAttachment(const std::vector<Core::UTF8String> & inastrRecipientAddresses, const Core::UTF8String & instrSubject, const Core::UTF8String & instrContents, const Attachment& inAttachment, const SendResultDelegate & inCallback, bool inbFormatAsHtml) override;
             //-------------------------------------------------------
             /// Dismiss
             ///
             /// Dismisses the activity if it is currently displayed.
             //-------------------------------------------------------
-			void Dismiss();
+			void Dismiss() override;
 			//-------------------------------------------------------
 			/// Destructor
 			//-------------------------------------------------------
 			virtual ~EmailCompositionActivity();
 		private:
+			friend Social::EmailCompositionActivityUPtr Social::EmailCompositionActivity::Create();
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            //----------------------------------------------------
+            EmailCompositionActivity();
             //-------------------------------------------------------
             /// On Email Closed
             ///

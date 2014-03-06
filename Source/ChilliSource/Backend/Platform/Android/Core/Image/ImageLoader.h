@@ -24,7 +24,7 @@ namespace ChilliSource
 		class ImageLoader : public Core::ImageResourceProvider
 		{
 		public:
-			ImageLoader();
+
 			virtual ~ImageLoader(){}
 			//----------------------------------------------------------------
 			/// Is A
@@ -72,7 +72,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            ImageLoader(){}
+            ImageLoader();
 			//----------------------------------------------------------------
 			/// Create Png Image From File
 			///
