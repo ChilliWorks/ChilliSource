@@ -33,8 +33,6 @@ namespace ChilliSource
 		{
 		public:
         
-			virtual ~PlatformSystem();
-			
 			//-----------------------------------------
 			/// Init
 			//-----------------------------------------

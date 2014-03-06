@@ -541,14 +541,5 @@ namespace ChilliSource
             
             return mfPhysicalScreenSize;
 		}
-		//-----------------------------------------
-		/// Destructor
-		///
-		/// 
-		//-----------------------------------------
-		PlatformSystem::~PlatformSystem()
-		{
-			
-		}
 	}
 }
