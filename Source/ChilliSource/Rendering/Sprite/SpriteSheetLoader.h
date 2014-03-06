@@ -24,7 +24,14 @@ namespace ChilliSource
 		class SpriteSheetLoader : public Core::ResourceProvider
 		{
 		public:
-	
+            //-------------------------------------------------------
+            /// Factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend with ownership transferred
+            //-------------------------------------------------------
+            static SpriteSheetLoaderUPtr Create();
 			//-------------------------------------------------------------------------
 			/// Is A
 			///
@@ -49,7 +56,12 @@ namespace ChilliSource
 			bool CanCreateResourceFromFileWithExtension(const std::string & inExtension) const override;
 			
 		private:
-			
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            SpriteSheetLoader(){}
 			//----------------------------------------------------------------------------
 			/// Create Resource From File
 			///

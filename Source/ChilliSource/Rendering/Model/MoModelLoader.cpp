@@ -212,7 +212,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool MoModelLoader::BuildMesh(MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource, bool inbNeedsPrepared)
 		{
-			bool bSuccess = MeshManager::BuildMesh(mpApp->GetRenderSystem(), inMeshDescriptor, outpResource, inbNeedsPrepared);
+			bool bSuccess = MeshManager::BuildMesh(mpApp->GetRenderSystem(), inMeshDescriptor, outpResource.get(), inbNeedsPrepared);
 			
 			//cleanup
 			for (std::vector<SubMeshDescriptor>::const_iterator it = inMeshDescriptor.mMeshes.begin(); it != inMeshDescriptor.mMeshes.end(); ++it)

@@ -22,14 +22,14 @@ namespace ChilliSource
     {
         //-----------------------------------------
         //-----------------------------------------
-        PlatformSystem* PlatformSystem::Create()
+        PlatformSystemUPtr PlatformSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return new iOS::PlatformSystem();
+            return PlatformSystemUPtr(new iOS::PlatformSystem());
 #elif defined CS_TARGETPLATFORM_ANDROID
-            return new Android::PlatformSystem();
+            return PlatformSystemUPtr(new Android::PlatformSystem());
 #elif defined CS_TARGETPLATFORM_WINDOWS
-			return new Windows::PlatformSystem();
+			return PlatformSystemUPtr(new Windows::PlatformSystem());
 #else
             return nullptr;
 #endif

@@ -71,8 +71,17 @@ namespace ChilliSource
 			/// @return Whether the resource loaded 
 			//----------------------------------------------------------------
 			bool CreateImageFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::ResourceSPtr& outpResource);
-			
-		private:
+            
+        private:
+            
+            friend Core::ImageResourceProviderUPtr Core::ImageResourceProvider::Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            ImageLoader(){}
+
             //----------------------------------------------------------------
             /// Create PNG Image From File
             ///

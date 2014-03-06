@@ -28,15 +28,15 @@ namespace ChilliSource
         ///
         /// @param Param dictionary
         //--------------------------------------------------------
-        template<typename T> GUIViewSPtr CreateGUI(const Core::ParamDictionary & insParams)
+        template<typename T> GUIViewUPtr CreateGUI(const Core::ParamDictionary & insParams)
         {
-            return GUIViewSPtr(new T(insParams));   
+            return GUIViewUPtr(new T(insParams));
         }
         
         class GUIViewFactory
         {
         public:  
-            typedef std::function<GUIViewSPtr(const Core::ParamDictionary&)> GUIViewCreateDelegate;
+            typedef std::function<GUIViewUPtr(const Core::ParamDictionary&)> GUIViewCreateDelegate;
             //--------------------------------------------------------
             /// Register Defaults
             ///
@@ -53,7 +53,7 @@ namespace ChilliSource
 			/// @param Optional dynamic array to which views will be pushed
             /// @return GUI View
             //--------------------------------------------------------
-            static GUIViewSPtr CreateGUIViewFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile, std::vector<GUIViewSPtr>* outpViews = nullptr);
+            static GUIViewUPtr CreateGUIViewFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile);
 			//--------------------------------------------------------
             /// Create GUI View 
             ///
@@ -61,7 +61,7 @@ namespace ChilliSource
             ///
             /// @return GUI View
             //--------------------------------------------------------
-            static GUIViewSPtr CreateGUIView(const std::string& instrTypeName, const Core::ParamDictionary& insParams);
+            static GUIViewUPtr CreateGUIView(const std::string& instrTypeName, const Core::ParamDictionary& insParams);
 			//--------------------------------------------------------
 			/// Register 
 			///
@@ -97,7 +97,7 @@ namespace ChilliSource
             /// @param View XML element
             /// @return Created view
             //--------------------------------------------------------
-            static GUIViewSPtr CreateView(rapidxml::xml_node<char> * ipViewElement, std::vector<GUIViewSPtr>* outpViews = nullptr);
+            static GUIViewUPtr CreateView(rapidxml::xml_node<char> * ipViewElement);
             
         private:
             

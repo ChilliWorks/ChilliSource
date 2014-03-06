@@ -47,9 +47,6 @@ namespace ChilliSource
 			
 			::FMOD::System* mpFMODSystem;
 		};
-		
-		typedef std::shared_ptr<AudioListener> FMODAudioListenerPtr;
-		typedef std::weak_ptr<AudioListener> FMODAudioListenerWeakPtr;
 	}
 }
 

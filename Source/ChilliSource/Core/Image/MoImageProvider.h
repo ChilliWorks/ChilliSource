@@ -19,6 +19,16 @@ namespace ChilliSource
         class MoImageProvider : public ImageResourceProvider
         {
         public:
+            
+            //-------------------------------------------------------
+            /// Factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend with ownership transferred
+            //-------------------------------------------------------
+            static MoImageProviderUPtr Create();
+            
             //----------------------------------------------------------------
             /// Is A
             ///
@@ -79,6 +89,12 @@ namespace ChilliSource
                 u32 udwOriginalDataSize;
                 u32 udwCompressedDataSize;
             };
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            MoImageProvider(){}
             //----------------------------------------------------------------
             /// Reads a version 2 formatted .moimage file
             ///

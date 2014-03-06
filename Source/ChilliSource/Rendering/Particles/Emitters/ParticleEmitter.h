@@ -32,7 +32,7 @@ namespace ChilliSource
         public:
             
             ParticleEmitter(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent);
-            virtual~ParticleEmitter();
+            virtual ~ParticleEmitter();
             //-----------------------------------------------------
             /// Update
             ///

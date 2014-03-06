@@ -25,8 +25,18 @@ namespace ChilliSource
 		class AudioLoader : public Core::ResourceProvider
 		{
 		public:
+            
+            //-------------------------------------------------------
+            /// Create the platform dependent backend
+            ///
+            /// @author S Downie
+            ///
+            /// @param Audio system
+            ///
+            /// @return New backend instance
+            //-------------------------------------------------------
+            static AudioLoaderUPtr Create(AudioSystem* in_system);
 			
-			AudioLoader(AudioSystem* inpAudioSystem);
 			virtual ~AudioLoader();
 			
 			//-------------------------------------------------------------------------
@@ -48,10 +58,16 @@ namespace ChilliSource
 			///
 			/// @return Audio listener
 			//----------------------------------------------------------------------------
-			virtual AudioListenerSPtr CreateAudioListener() = 0;
-		protected:
-			
-			const AudioManager& mAudioManager;
+			virtual AudioListenerUPtr CreateAudioListener() = 0;
+            
+        protected:
+            
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            AudioLoader(){}
 		};
 	}
 }

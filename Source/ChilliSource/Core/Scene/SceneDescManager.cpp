@@ -74,10 +74,12 @@ namespace ChilliSource
                 }
             }
             else
+            {
                 return std::static_pointer_cast<SceneDesc>(pExistingResource->second);
+            }
             
             CS_LOG_ERROR("Cannot find resource for Scene Description with path " + instrFilePath);
-            return SceneDescSPtr();
+            return nullptr;
         }
         
         SceneDescSPtr SceneDescManager::AsyncGetSceneDescFromFile(ChilliSource::Core::StorageLocation ineStorageLocation, const std::string &instrFilePath)
@@ -106,11 +108,12 @@ namespace ChilliSource
                 }
             }
             else
+            {
                 return std::static_pointer_cast<SceneDesc>(pExistingResource->second);
+            }
             
             CS_LOG_ERROR("Cannot find resource for Scene Description with path " + instrFilePath);
-            return SceneDescSPtr();
+            return nullptr;
         }
-        
     }
 }

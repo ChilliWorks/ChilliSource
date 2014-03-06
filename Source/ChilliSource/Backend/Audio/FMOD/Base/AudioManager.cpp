@@ -20,9 +20,9 @@ namespace ChilliSource
 		///
 		/// @return Concrete audio resource based on the audio system
 		//-----------------------------------------------------------------
-		Audio::AudioResourceSPtr AudioManager::CreateAudioResource() const
+		Audio::AudioResourceUPtr AudioManager::CreateAudioResource() const
 		{
-			return Audio::AudioResourceSPtr(new AudioResource());
+			return Audio::AudioResourceUPtr(new AudioResource());
 		}
 	}
 }

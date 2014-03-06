@@ -45,9 +45,9 @@ namespace ChilliSource
         /// @param Param dictionary
         /// @return Ownership of effector
         //-----------------------------------------------------
-        ParticleEffector* ColourChangerParticleEffector::Create(const Core::ParamDictionary& inParams)
+        ParticleEffectorUPtr ColourChangerParticleEffector::Create(const Core::ParamDictionary& inParams)
         {
-            return new ColourChangerParticleEffector(inParams);
+            return ParticleEffectorUPtr(new ColourChangerParticleEffector(inParams));
         }
         //-----------------------------------------------------
         /// Init

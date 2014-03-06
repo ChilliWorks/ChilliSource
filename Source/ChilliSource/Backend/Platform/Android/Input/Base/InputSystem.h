@@ -32,9 +32,9 @@ namespace ChilliSource
 			bool CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const override;
 			Input::InputDevice* GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID) override;
 
-			Input::TouchScreen* GetTouchScreenPtr() override;
-			Input::Accelerometer* GetAccelerometerPtr() override;
-			Input::VirtualKeyboard* GetVirtualKeyboardPtr() override;
+			Input::TouchScreen* GetTouchScreen() override;
+			Input::Accelerometer* GetAccelerometer() override;
+			Input::VirtualKeyboard* GetVirtualKeyboard() override;
 			
 			void Update(float infDT);
 			

@@ -44,9 +44,9 @@ namespace ChilliSource
         /// @param Param dictionary
         /// @return Ownership of effector
         //-----------------------------------------------------
-        ParticleEffector* LinearForceParticleEffector::Create(const Core::ParamDictionary& inParams)
+        ParticleEffectorUPtr LinearForceParticleEffector::Create(const Core::ParamDictionary& inParams)
         {
-            return new LinearForceParticleEffector(inParams);
+            return ParticleEffectorUPtr(new LinearForceParticleEffector(inParams));
         }
         //-----------------------------------------------------
         /// Init

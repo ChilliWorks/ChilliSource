@@ -27,7 +27,18 @@ namespace ChilliSource
 		class Renderer 
 		{
 		public:
-			Renderer(RenderSystem * inpRenderSystem);
+            //----------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author S Downie
+            ///
+            /// @param Render system
+            //----------------------------------------------------------
+			Renderer(RenderSystem* in_renderSystem);
+            //----------------------------------------------------------
+            /// @author S Downie
+            //----------------------------------------------------------
+            void Init();
 			//----------------------------------------------------------
 			/// Set Transparent Sort Predicate
 			///

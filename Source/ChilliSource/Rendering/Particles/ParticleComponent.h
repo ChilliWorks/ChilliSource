@@ -52,7 +52,7 @@ namespace ChilliSource
 			///
 			/// @param Emitter
 			//---------------------------------------------------
-			void AddEmitter(ParticleEmitter* inpEmitter);
+			void AddEmitter(ParticleEmitterUPtr inpEmitter);
 		
 
 			//---------------------------------------------------
@@ -74,7 +74,7 @@ namespace ChilliSource
             ///
             /// @param Effector
             //---------------------------------------------------
-            void AddEffector(ParticleEffector* inpEffector);
+            void AddEffector(ParticleEffectorUPtr inpEffector);
             //---------------------------------------------------
             /// Start Emitting
             ///
@@ -155,8 +155,8 @@ namespace ChilliSource
 			
 		private:
 			
-			std::vector<ParticleEmitter*> mEmitters;
-			std::vector<ParticleEffector*> mEffectors;
+			std::vector<ParticleEmitterUPtr> mEmitters;
+			std::vector<ParticleEffectorUPtr> mEffectors;
 			
 			ParticleSystem* mpOwningSystem;
             

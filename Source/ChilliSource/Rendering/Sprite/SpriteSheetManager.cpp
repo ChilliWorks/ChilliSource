@@ -141,7 +141,7 @@ namespace ChilliSource
 			
 			//Resource not found
 			CS_LOG_ERROR("Cannot find resource for sprite data with path " + inFilePath);
-			return SpriteSheetSPtr();
+			return nullptr;
 		}
 	}
 }

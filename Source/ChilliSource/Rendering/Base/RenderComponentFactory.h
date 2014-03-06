@@ -64,7 +64,7 @@ namespace ChilliSource
             /// @param Type Name
             /// @param Param Dictionary
             //--------------------------------------------------------
-            Core::ComponentSPtr CreateComponent(const std::string & insTypeName, const Core::ParamDictionary & insParamDictionary);
+            Core::ComponentUPtr CreateComponent(const std::string & insTypeName, const Core::ParamDictionary & insParamDictionary);
 			//--------------------------------------------------------
 			/// Get Owning Render System Pointer
 			///
@@ -77,51 +77,51 @@ namespace ChilliSource
 			///
 			/// A number of overloads 
 			//---------------------------------------------------------------------------
-			SpriteComponentSPtr CreateSpriteComponent(const Core::Vector2 &invDims, const MaterialSPtr& inMaterial);
-			SpriteComponentSPtr CreateSpriteComponent(const Core::Vector2 &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath);
-			SpriteComponentSPtr CreateSpriteComponent(const SpriteSheetSPtr& pSpriteSheet, u32 inTpageIndex, const MaterialSPtr& inpMaterial);
-			SpriteComponentSPtr CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheet, u32 inTpageIndex, const MaterialSPtr& inpMaterial);
-            SpriteComponentSPtr CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheet, const std::string& inTpageID, const MaterialSPtr& inpMaterial);
+			SpriteComponentUPtr CreateSpriteComponent(const Core::Vector2 &invDims, const MaterialSPtr& inMaterial);
+			SpriteComponentUPtr CreateSpriteComponent(const Core::Vector2 &invDims, Core::StorageLocation ineStorageLocation, const std::string& instrMaterialFilePath);
+			SpriteComponentUPtr CreateSpriteComponent(const SpriteSheetSPtr& pSpriteSheet, u32 inTpageIndex, const MaterialSPtr& inpMaterial);
+			SpriteComponentUPtr CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheet, u32 inTpageIndex, const MaterialSPtr& inpMaterial);
+            SpriteComponentUPtr CreateSpriteComponent(Core::StorageLocation ineStorageLocation, const std::string& instrSpriteSheet, const std::string& inTpageID, const MaterialSPtr& inpMaterial);
 
             //---------------------------------------------------------------------------
 			/// Create Static Mesh Component
 			///
 			/// A number of overloads 
 			//---------------------------------------------------------------------------
-            StaticMeshComponentSPtr CreateStaticMeshComponent(const MeshSPtr& inpModel);
-			StaticMeshComponentSPtr CreateStaticMeshComponent(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial);
-			StaticMeshComponentSPtr CreateStaticMeshComponent(const MeshSPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName);
-			StaticMeshComponentSPtr CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName);
-			StaticMeshComponentSPtr CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName, const MaterialSPtr& inpMaterial);
-			StaticMeshComponentSPtr CreateStaticMeshComponent(Core::StorageLocation ineModelStorageLocation, const std::string& instrModelFileName, Core::StorageLocation ineMaterialStorageLocation, const std::string& instrMaterialFileName);
+            StaticMeshComponentUPtr CreateStaticMeshComponent(const MeshSPtr& inpModel);
+			StaticMeshComponentUPtr CreateStaticMeshComponent(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial);
+			StaticMeshComponentUPtr CreateStaticMeshComponent(const MeshSPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName);
+			StaticMeshComponentUPtr CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName);
+			StaticMeshComponentUPtr CreateStaticMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName, const MaterialSPtr& inpMaterial);
+			StaticMeshComponentUPtr CreateStaticMeshComponent(Core::StorageLocation ineModelStorageLocation, const std::string& instrModelFileName, Core::StorageLocation ineMaterialStorageLocation, const std::string& instrMaterialFileName);
             
             //---------------------------------------------------------------------------
 			/// Create Animated Mesh Component
 			///
 			/// A number of overloads 
 			//---------------------------------------------------------------------------
-            AnimatedMeshComponentSPtr CreateAnimatedMeshComponent(const MeshSPtr& inpModel);
-			AnimatedMeshComponentSPtr CreateAnimatedMeshComponent(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial);
-			AnimatedMeshComponentSPtr CreateAnimatedMeshComponent(const MeshSPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName);
-			AnimatedMeshComponentSPtr CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName);
-			AnimatedMeshComponentSPtr CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName, const MaterialSPtr& inpMaterial);
-			AnimatedMeshComponentSPtr CreateAnimatedMeshComponent(Core::StorageLocation ineModelStorageLocation, const std::string& instrModelFileName, Core::StorageLocation ineMaterialStorageLocation, const std::string& instrMaterialFileName);
+            AnimatedMeshComponentUPtr CreateAnimatedMeshComponent(const MeshSPtr& inpModel);
+			AnimatedMeshComponentUPtr CreateAnimatedMeshComponent(const MeshSPtr& inpModel, const MaterialSPtr& inpMaterial);
+			AnimatedMeshComponentUPtr CreateAnimatedMeshComponent(const MeshSPtr& inpModel, Core::StorageLocation ineStorageLocation, const std::string & insMaterialName);
+			AnimatedMeshComponentUPtr CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName);
+			AnimatedMeshComponentUPtr CreateAnimatedMeshComponent(Core::StorageLocation ineStorageLocation, const std::string& instrModelFileName, const MaterialSPtr& inpMaterial);
+			AnimatedMeshComponentUPtr CreateAnimatedMeshComponent(Core::StorageLocation ineModelStorageLocation, const std::string& instrModelFileName, Core::StorageLocation ineMaterialStorageLocation, const std::string& instrMaterialFileName);
 			
 			//---------------------------------------------------------------------------
 			/// Create Camera Component
 			///
 			/// A number of overloads
 			//---------------------------------------------------------------------------
-			CameraComponentSPtr CreateCameraComponent(const f32 infFOV = 45.0f, const f32 infNear = 1.0f, const f32 infFar = 1000.0f, bool inbIsOrthographic = false);
+			CameraComponentUPtr CreateCameraComponent(const f32 infFOV = 45.0f, const f32 infNear = 1.0f, const f32 infFar = 1000.0f, bool inbIsOrthographic = false);
 			
 			//---------------------------------------------------------------------------
 			/// Create Light Component
 			///
 			/// A number of overloads
 			//---------------------------------------------------------------------------
-            AmbientLightComponentSPtr CreateAmbientLightComponent() const;
-			DirectionalLightComponentSPtr CreateDirectionalLightComponent(u32 inudwShadowMapRes = 0) const;
-            PointLightComponentSPtr CreatePointLightComponent() const;
+            AmbientLightComponentUPtr CreateAmbientLightComponent() const;
+			DirectionalLightComponentUPtr CreateDirectionalLightComponent(u32 inudwShadowMapRes = 0) const;
+            PointLightComponentUPtr CreatePointLightComponent() const;
 
 		protected:
 			

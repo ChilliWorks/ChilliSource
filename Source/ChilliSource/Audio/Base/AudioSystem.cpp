@@ -12,11 +12,28 @@
 
 #include <ChilliSource/Audio/Base/AudioSystem.h>
 
+#include <ChilliSource/Audio/Base/AudioSystem.h>
+
+#ifdef CS_TARGETAUDIO_FMOD
+#include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
+#endif
+
 namespace ChilliSource
 {
 	namespace Audio
 	{
         CS_DEFINE_NAMEDTYPE(AudioSystem);
+        
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        AudioSystemUPtr AudioSystem::Create()
+        {
+#ifdef CS_TARGETAUDIO_FMOD
+            return AudioSystemUPtr(new FMOD::FMODSystem());
+#endif
+            
+            return nullptr;
+        }
 		//-------------------------------------------------------
 		/// Constructor
 		///

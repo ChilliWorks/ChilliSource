@@ -54,11 +54,11 @@ namespace ChilliSource
 		//---------------------------------------------------
 		/// Add Emitter
 		//---------------------------------------------------
-		void ParticleComponent::AddEmitter(ParticleEmitter* inpEmitter)
+		void ParticleComponent::AddEmitter(ParticleEmitterUPtr inpEmitter)
 		{
             if(inpEmitter)
             {
-                mEmitters.push_back(inpEmitter);
+                mEmitters.push_back(std::move(inpEmitter));
             }
 		}
 		//---------------------------------------------------
@@ -71,29 +71,29 @@ namespace ChilliSource
 		//---------------------------------------------------
 		/// Returns the emitter at the given index or nullptr
 		//---------------------------------------------------
-		ParticleEmitter* ParticleComponent::GetEmitter(u32 inudwIndex){
-			
+		ParticleEmitter* ParticleComponent::GetEmitter(u32 inudwIndex)
+        {
 			if (inudwIndex < mEmitters.size())
-				return mEmitters[inudwIndex];
+				return mEmitters[inudwIndex].get();
 				
 			return nullptr;
 		}
         //---------------------------------------------------
 		/// Add Effector
 		//---------------------------------------------------
-		void ParticleComponent::AddEffector(ParticleEffector* inpEffector)
+		void ParticleComponent::AddEffector(ParticleEffectorUPtr inpEffector)
 		{
             if(!inpEffector)
             {
                 return;
             }
-            
-			mEffectors.push_back(inpEffector);
 			
-            for(std::vector<ParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
+            for(std::vector<ParticleEmitterUPtr>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
 			{
-				(*it)->AddEffector(inpEffector);
+				(*it)->AddEffector(inpEffector.get());
 			}
+            
+            mEffectors.push_back(std::move(inpEffector));
 		}
 		//-------------------------------------------------
 		/// Update
@@ -102,7 +102,7 @@ namespace ChilliSource
 		{
             bool bEmittingFinished = true;
             
-			for(std::vector<ParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
+			for(std::vector<ParticleEmitterUPtr>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
 			{
 				(*it)->Update(infDt * mfUpdateScaleFactor);
                 
@@ -124,7 +124,7 @@ namespace ChilliSource
         {
             if (ineShaderPass == ShaderPass::k_ambient)
             {
-                for(std::vector<ParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
+                for(std::vector<ParticleEmitterUPtr>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
                 {
                     (*it)->Render(inpRenderSystem, inpCam);
                 }
@@ -135,7 +135,7 @@ namespace ChilliSource
         //---------------------------------------------------
         void ParticleComponent::StartEmitting()
         {
-            for(std::vector<ParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
+            for(std::vector<ParticleEmitterUPtr>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
 			{
 				(*it)->StartEmitting();
 			}
@@ -145,7 +145,7 @@ namespace ChilliSource
 		//---------------------------------------------------
         void ParticleComponent::EmitBurst()
         {
-            for(std::vector<ParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
+            for(std::vector<ParticleEmitterUPtr>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
 			{
 				(*it)->EmitBurst();
 			}
@@ -155,7 +155,7 @@ namespace ChilliSource
         //---------------------------------------------------
         void ParticleComponent::StopEmitting()
         {
-            for(std::vector<ParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
+            for(std::vector<ParticleEmitterUPtr>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
 			{
 				(*it)->StopEmitting();
 			}
@@ -172,16 +172,6 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		ParticleComponent::~ParticleComponent()
 		{
-            for(std::vector<ParticleEmitter*>::iterator it = mEmitters.begin(); it != mEmitters.end(); ++it)
-			{
-				CS_SAFEDELETE(*it);
-			}
-			
-			for(std::vector<ParticleEffector*>::iterator itEffector = mEffectors.begin(); itEffector != mEffectors.end(); ++itEffector)
-            {
-                CS_SAFEDELETE(*itEffector);
-            }
-			
             RemoveFromWorldSystem();
 		}
 	}

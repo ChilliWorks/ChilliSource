@@ -28,8 +28,6 @@ namespace ChilliSource
 		{
 		public:
 			
-			AudioLoader(Audio::AudioSystem* inpFMODSystem);
-	
 			//----------------------------------------------------------------------------
 			/// Can Create Resource From File With Extension
 			///
@@ -47,7 +45,7 @@ namespace ChilliSource
 			/// @param Out: Resource object
 			/// @return Success
 			//----------------------------------------------------------------------------
-			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource);
+			bool CreateResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource) override;
 			
 			//----------------------------------------------------------------------------
 			/// Stream Resource From File
@@ -57,14 +55,26 @@ namespace ChilliSource
 			/// @param Out: Resource object
 			/// @return Success
 			//----------------------------------------------------------------------------
-			bool StreamResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource);
+			bool StreamResourceFromFile(Core::StorageLocation ineStorageLocation, const std::string & inFilePath, Core::ResourceSPtr& outpResource) override;
 			
 			//----------------------------------------------------------------------------
 			/// Create Audio Listener
 			///
 			/// @return Audio listener
 			//----------------------------------------------------------------------------
-			Audio::AudioListenerSPtr CreateAudioListener();
+			Audio::AudioListenerUPtr CreateAudioListener() override;
+            
+        private:
+            
+            friend Audio::AudioLoaderUPtr Audio::AudioLoader::Create(Audio::AudioSystem*);
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @param FMOD system
+            //-------------------------------------------------------
+            AudioLoader(FMOD::FMODSystem* in_system);
 			
 		private:
 #ifdef CS_TARGETPLATFORM_ANDROID

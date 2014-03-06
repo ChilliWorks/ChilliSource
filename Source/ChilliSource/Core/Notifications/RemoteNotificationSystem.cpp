@@ -26,15 +26,15 @@ namespace ChilliSource
         //---------------------------------------------------------------
         /// Create
         //---------------------------------------------------------------
-        RemoteNotificationSystem* RemoteNotificationSystem::Create()
+        RemoteNotificationSystemUPtr RemoteNotificationSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-        	return new iOS::RemoteNotificationSystem();
+        	return RemoteNotificationSystemUPtr(new iOS::RemoteNotificationSystem());
 #elif defined(CS_TARGETPLATFORM_ANDROID)
 #	ifdef MOFLOWSKU_REMOTENOTIFICATIONMETHOD_GOOGLEPLAY
-        	return new Android::CGooglePlayRemoteNotificationSystem();
+        	return RemoteNotificationSystemUPtr(new Android::CGooglePlayRemoteNotificationSystem());
 #	elif defined(MOFLOWSKU_REMOTENOTIFICATIONMETHOD_AMAZON)
-        	return new Android::CAmazonRemoteNotificationSystem();
+        	return RemoteNotificationSystemUPtr(new Android::CAmazonRemoteNotificationSystem());
 #	endif
 #endif
         	return nullptr;

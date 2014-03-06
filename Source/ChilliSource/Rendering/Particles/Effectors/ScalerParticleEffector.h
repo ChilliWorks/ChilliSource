@@ -31,7 +31,7 @@ namespace ChilliSource
             /// @param Param dictionary
             /// @return Ownership of effector
             //-----------------------------------------------------
-            static ParticleEffector* Create(const Core::ParamDictionary& inParams);
+            static ParticleEffectorUPtr Create(const Core::ParamDictionary& inParams);
             //-----------------------------------------------------
             /// Init
             ///

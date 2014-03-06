@@ -29,22 +29,28 @@ namespace ChilliSource
         {
             const f32 k_maxKernRatio = 0.25;
         }
-		//----------------------------------------------------------
-		/// Constructor
-		///
-		//----------------------------------------------------------
-		CanvasRenderer::CanvasRenderer(RenderSystem* inpRenderSystem) : mOverlayBatcher(inpRenderSystem), mpRenderSystem(inpRenderSystem), mfNearClippingDistance(0.0f)
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+		CanvasRenderer::CanvasRenderer(RenderSystem* inpRenderSystem)
+        : mOverlayBatcher(inpRenderSystem)
+        , mpRenderSystem(inpRenderSystem)
+        , mfNearClippingDistance(0.0f)
 		{
-            MaterialFactory* pMaterialFactory = Core::Application::Get()->GetSystem<MaterialFactory>();
-            if(pMaterialFactory != nullptr)
-            {
-                mpDistanceFont = pMaterialFactory->CreateGUIDistanceFont();
-                mpDistanceFontOutlined = pMaterialFactory->CreateGUIDistanceFontOutlined();
-                mpDefaultMaterial = pMaterialFactory->CreateGUI();
-            }
+
+		}
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void CanvasRenderer::Init()
+        {
+            MaterialFactory* materialFactory = Core::Application::Get()->GetSystem<MaterialFactory>();
+            CS_ASSERT(materialFactory != nullptr, "Must have a material factory");
+            
+            mpDistanceFont = materialFactory->CreateGUIDistanceFont();
+            mpDistanceFontOutlined = materialFactory->CreateGUIDistanceFontOutlined();
+            mpDefaultMaterial = materialFactory->CreateGUI();
             
             msCachedSprite.pMaterial = mpDefaultMaterial;
-		}
+        }
 		//----------------------------------------------------------
 		/// Render
 		///

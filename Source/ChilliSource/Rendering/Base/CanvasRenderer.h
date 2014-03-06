@@ -27,7 +27,18 @@ namespace ChilliSource
 		{
 		public:
 
-			CanvasRenderer(RenderSystem* inpRenderSystem);
+            //----------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author S Downie
+            ///
+            /// @param Render system
+            //----------------------------------------------------------
+			CanvasRenderer(RenderSystem* in_renderSystem);
+            //----------------------------------------------------------
+            /// @author S Downie
+            //----------------------------------------------------------
+            void Init();
 			//----------------------------------------------------------
 			/// Render
 			///

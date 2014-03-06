@@ -112,7 +112,7 @@ namespace ChilliSource
 			/// @return Concrete shader resource object based on the render
 			/// system
 			//----------------------------------------------------------------
-			virtual ShaderSPtr CreateShaderResource() const = 0;
+			virtual ShaderUPtr CreateShaderResource() const = 0;
 			//---------------------------------------------------------
 			/// Create Shader Program From File
 			///

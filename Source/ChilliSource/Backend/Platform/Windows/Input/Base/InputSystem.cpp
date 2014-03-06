@@ -67,7 +67,7 @@ namespace ChilliSource
 		///
 		/// @return Pointer to touch screen device
 		//---------------------------------------------------------------
-		Input::TouchScreen * InputSystem::GetTouchScreenPtr()
+		Input::TouchScreen * InputSystem::GetTouchScreen()
 		{
 			return &mTouchScreen;
 		}
@@ -76,7 +76,7 @@ namespace ChilliSource
 		///
 		/// @return Pointer to mouse device
 		//---------------------------------------------------------------
-		Input::Mouse * InputSystem::GetMousePtr()
+		Input::Mouse * InputSystem::GetMouse()
 		{
 			return &mMouse;
 		}
@@ -87,8 +87,8 @@ namespace ChilliSource
 		//---------------------------------------------------------------
 		void InputSystem::Update(f32 infDT)
 		{
-			mffTimeStamp += infDT;
-			mTouchScreen.SetCurrentAppTime(mffTimeStamp);
+			m_timeStamp += infDT;
+			mTouchScreen.SetCurrentAppTime(m_timeStamp);
 		}
 		//-----------------------------------------------------------
 		/// Flush Buffered Input

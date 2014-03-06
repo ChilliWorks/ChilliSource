@@ -78,7 +78,7 @@ namespace ChilliSource
 		///
 		/// @return GUI View
 		//--------------------------------------------------------
-		GUIViewSPtr GUIViewFactory::CreateGUIView(const std::string& instrTypeName, const Core::ParamDictionary& insParams)
+		GUIViewUPtr GUIViewFactory::CreateGUIView(const std::string& instrTypeName, const Core::ParamDictionary& insParams)
 		{
 			//Create the UI of the given type
 			MapDelegateToString::iterator it = mmapDelegateToType.find(instrTypeName);
@@ -87,7 +87,7 @@ namespace ChilliSource
 				return (it->second)(insParams);
 			}
 
-			return GUIViewSPtr();
+			return nullptr;
 		}
 		//--------------------------------------------------------
 		/// Create GUI View From Script
@@ -99,9 +99,9 @@ namespace ChilliSource
 		/// @param Optional dynamic array to which views will be pushed
 		/// @return GUI View
 		//--------------------------------------------------------
-		GUIViewSPtr GUIViewFactory::CreateGUIViewFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile, std::vector<GUIViewSPtr>* outpViews)
+		GUIViewUPtr GUIViewFactory::CreateGUIViewFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile)
 		{
-			GUIViewSPtr pRootView;
+			GUIViewUPtr pRootView;
 
             Core::FileStreamSPtr pFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrScriptFile, Core::FileMode::k_read);
             assert(pFile);
@@ -121,7 +121,7 @@ namespace ChilliSource
 				rapidxml::xml_node<> *  pViewElement = pDocRoot->first_node();
 				if(pViewElement)
 				{
-					pRootView = CreateView(pViewElement, outpViews);
+					pRootView = CreateView(pViewElement);
 				}
 			}
 
@@ -135,11 +135,11 @@ namespace ChilliSource
 		/// @param View XML element
 		/// @return Created view
 		//--------------------------------------------------------
-		GUIViewSPtr GUIViewFactory::CreateView(rapidxml::xml_node<>* inpViewElement, std::vector<GUIViewSPtr>* outpViews)
+		GUIViewUPtr GUIViewFactory::CreateView(rapidxml::xml_node<>* inpViewElement)
 		{
 			//Get the view type
 			//Get the param dictionary config values
-			GUIViewSPtr pView;
+			GUIViewUPtr pView;
             std::string strType;
             std::string strSource;
             bool bExtern = false;
@@ -177,17 +177,14 @@ namespace ChilliSource
                 {
                     pView->AddSubview(CreateGUIViewFromScript(eStorageLoc, strSource));
                 }
-
-				if(outpViews)
-				{
-					outpViews->push_back(pView);
-				}
                 
 				//Now we need to do some recursion and load any subviews
                 for(rapidxml::xml_node<> * pNode = inpViewElement->first_node(); pNode != nullptr; pNode = pNode->next_sibling())
 				{
                     if(pNode->type() == rapidxml::node_element)
-                        pView->AddSubview(CreateView(pNode, outpViews));
+                    {
+                        pView->AddSubview(CreateView(pNode));
+                    }
 				}
 
 				return pView;

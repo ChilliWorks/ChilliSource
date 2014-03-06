@@ -47,9 +47,9 @@ namespace ChilliSource
         /// @param Param dictionary
         /// @return Ownership of effector
         //-----------------------------------------------------
-        ParticleEffector* SpinnerParticleEffector::Create(const Core::ParamDictionary& inParams)
+        ParticleEffectorUPtr SpinnerParticleEffector::Create(const Core::ParamDictionary& inParams)
         {
-            return new SpinnerParticleEffector(inParams);
+            return ParticleEffectorUPtr(new SpinnerParticleEffector(inParams));
         }
         //-----------------------------------------------------
         /// Init

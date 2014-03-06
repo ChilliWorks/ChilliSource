@@ -21,6 +21,15 @@ namespace ChilliSource
         class ImageResourceProvider : public Core::ResourceProvider
         {
         public:
+            
+            //-------------------------------------------------------
+            /// Create the platform dependent backend
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend instance
+            //-------------------------------------------------------
+            static ImageResourceProviderUPtr Create();
 
             //----------------------------------------------------------------
             /// Create Image From File
@@ -37,6 +46,15 @@ namespace ChilliSource
             /// of specific
             //--------------------------------------------------
             static void SetDefaultFormat(Core::Image::Format ineFormat);
+            
+        protected:
+            
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            ImageResourceProvider(){}
             
         protected:
             

@@ -100,7 +100,7 @@ namespace ChilliSource
 			/// @param the buffer access flag. defaults to "READ".			
             /// @param the primitive type. defaults to "TRIS".
 			//-----------------------------------------------------------------
-			void Prepare(RenderSystem* inpRenderSystem, VertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes,
+			void Prepare(RenderSystem* inpRenderSystem, const VertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes,
 						 u32 inudwVertexCapacityInBytes, u32 inudwIndexCapacityInBytes, BufferAccess inAccessFlag = BufferAccess::k_read,
 						 PrimitiveType inPrimativeType = PrimitiveType::k_tri);
 			//-----------------------------------------------------------------
@@ -113,7 +113,7 @@ namespace ChilliSource
 			/// @param the new vertex declaration.
 			/// @param the new size of indices.
 			//-----------------------------------------------------------------
-			void AlterBufferDeclaration(VertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes);
+			void AlterBufferDeclaration(const VertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes);
 			//-----------------------------------------------------------------
 			/// Build
 			///

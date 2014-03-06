@@ -581,10 +581,7 @@ namespace ChilliSource
             {
                 return mStateHierarchy.back()->OnReceiveNotification(inpsNotification);
             }
-            else
-            {
-                 //   CS_LOG_DEBUG("StateManager state not accepting notifications. for notification "+ToString(inpsNotification->ID)+" priority "+ToString(inpsNotification->ePriority)+" type "+ToString(inpsNotification->eType));
-            }
+
 			return false;
         }
         

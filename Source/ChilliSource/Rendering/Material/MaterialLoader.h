@@ -20,12 +20,16 @@ namespace ChilliSource
 		class MaterialLoader : public Core::ResourceProvider
 		{
 		public:
-			//-------------------------------------------------------------------------
-			/// Constructor
+            //-------------------------------------------------------------------------
+            /// Factory method
+            ///
+            /// @author S Downie
 			///
 			/// @param The render capabilities.
+            ///
+            /// @return New instance with ownership transferred
 			//-------------------------------------------------------------------------
-			MaterialLoader(RenderCapabilities* inpRenderCapabilities);
+			static MaterialLoaderUPtr Create(RenderCapabilities* in_renderCapabilities);
 			//-------------------------------------------------------------------------
 			/// Is A
 			///
@@ -58,6 +62,14 @@ namespace ChilliSource
                 bool mbMipMapped;
             };
             
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            ///
+			/// @param The render capabilities.
+            //-------------------------------------------------------
+            MaterialLoader(RenderCapabilities* inpRenderCapabilities);
 			//----------------------------------------------------------------------------
 			/// Create Resource From File
 			///

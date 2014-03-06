@@ -30,7 +30,7 @@ namespace ChilliSource
 		class FMODSystem : public Audio::AudioSystem
 		{
 		public:
-			FMODSystem();
+
 			virtual ~FMODSystem();
 			
 			//-------------------------------------------------------
@@ -76,7 +76,7 @@ namespace ChilliSource
 			/// @param File path
 			/// @param Sound handle to be initialised with sound
 			//-------------------------------------------------------
-			void CreateSound(const std::string& instrFilePath, Audio::AudioResource* inpAudio);
+			void CreateSound(const std::string& instrFilePath, Audio::AudioResource* inpAudio) override;
 			//-------------------------------------------------------
 			/// Create 3D Sound
 			///
@@ -86,7 +86,7 @@ namespace ChilliSource
 			/// @param File path
 			/// @param Sound handle to be initialised with sound
 			//-------------------------------------------------------
-			void Create3DSound(const std::string& instrFilePath, Audio::AudioResource* inpAudio);
+			void Create3DSound(const std::string& instrFilePath, Audio::AudioResource* inpAudio) override;
 			//-------------------------------------------------------
 			/// Create Stream
 			///
@@ -95,7 +95,7 @@ namespace ChilliSource
 			/// @param File path
 			/// @param Stream handle
 			//-------------------------------------------------------
-			void CreateStream(const std::string& instrFilePath, Audio::AudioResource* inpAudio);
+			void CreateStream(const std::string& instrFilePath, Audio::AudioResource* inpAudio) override;
 			//-------------------------------------------------------
 			/// Create 3D Stream
 			///
@@ -104,7 +104,7 @@ namespace ChilliSource
 			/// @param File path
 			/// @param Stream handle
 			//-------------------------------------------------------
-			void Create3DStream(const std::string& instrFilePath, Audio::AudioResource* inpAudio);
+			void Create3DStream(const std::string& instrFilePath, Audio::AudioResource* inpAudio) override;
 			//-------------------------------------------------------
 			/// Play Sound
 			///
@@ -134,7 +134,7 @@ namespace ChilliSource
 			///
 			/// @return Audio listener
 			//-------------------------------------------------------
-			Audio::AudioListenerSPtr CreateAudioListener();
+			Audio::AudioListenerUPtr CreateAudioListener() override;
 			//-------------------------------------------------------
 			/// Destroy 
 			///
@@ -150,6 +150,14 @@ namespace ChilliSource
             ::FMOD::EventSystem* GetFMODEventSystem() { return mpFMODEventSystem; }
             
 		private:
+            friend Audio::AudioSystemUPtr Audio::AudioSystem::Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            FMODSystem();
+            
             //-------------------------------------------------------
             /// On Application Memory Warning
             ///

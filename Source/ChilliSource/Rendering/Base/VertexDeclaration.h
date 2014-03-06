@@ -59,7 +59,7 @@ namespace ChilliSource
 				};
 			}
 			
-			bool operator== (const VertexElement& inOther)
+			bool operator== (const VertexElement& inOther) const
 			{
 				if (eType == inOther.eType && eSemantic == inOther.eSemantic)
 					return true;
@@ -76,23 +76,23 @@ namespace ChilliSource
 		{
 		public:
 			VertexDeclaration();
-			VertexDeclaration(u16 nElements, const VertexElement* inpElements);
+			VertexDeclaration(u32 nElements, const VertexElement* inpElements);
 			
-			const u16 GetNumElements();
-			const VertexElement& GetElementAtIndex(const u16 inIndex);
-			const u16 GetSizeOfElement(VertexElement &inElement);
-			const u16 GetElementOffset(const VertexElement &inElement);
-			const u16 GetTotalSize();
-			const u32 GetTotalNumValues();
+			const u32 GetNumElements() const;
+			const VertexElement& GetElementAtIndex(const u32 inIndex) const;
+			const u32 GetSizeOfElement(const VertexElement &inElement) const;
+			const u32 GetElementOffset(const VertexElement &inElement) const;
+			const u32 GetTotalSize() const;
+			const u32 GetTotalNumValues() const;
             const std::vector<VertexElement>& GetElements() const;
 			
-			bool operator== (const VertexDeclaration& inOther);
+			bool operator== (const VertexDeclaration& inOther) const;
 			
 		private:
 			
 			std::vector<VertexElement> mElements;
 			
-			u16 mTotalSize;
+			u32 mTotalSize;
 			u32 mTotalNumValues;
 		};
 	}

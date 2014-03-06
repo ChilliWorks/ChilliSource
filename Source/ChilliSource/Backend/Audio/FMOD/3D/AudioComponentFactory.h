@@ -61,7 +61,7 @@ namespace ChilliSource
 			///
 			/// Instantiates a 2D audio component
 			//--------------------------------------------------------
-			Audio::AudioComponentSPtr CreateAudioComponent();
+			Audio::AudioComponentUPtr CreateAudioComponent();
 			//--------------------------------------------------------
 			/// Create Audio Component
 			///
@@ -70,7 +70,7 @@ namespace ChilliSource
 			/// @param Whether the sample loops or not
 			/// @return Audio Component
 			//--------------------------------------------------------
-			Audio::AudioComponentSPtr CreateAudioComponent(const Audio::AudioResourceSPtr& inpAudio, bool inbShouldLoop = false);
+			Audio::AudioComponentUPtr CreateAudioComponent(const Audio::AudioResourceSPtr& inpAudio, bool inbShouldLoop = false);
 			//--------------------------------------------------------
 			/// Create Audio Component
 			///
@@ -80,7 +80,7 @@ namespace ChilliSource
 			/// @param Whether the sample loops or not
 			/// @return Audio Component
 			//--------------------------------------------------------
-			Audio::AudioComponentSPtr CreateAudioComponent(Core::StorageLocation ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop = false);
+			Audio::AudioComponentUPtr CreateAudioComponent(Core::StorageLocation ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop = false);
 			//--------------------------------------------------------
 			/// Create 3D Audio Component
 			///
@@ -89,7 +89,7 @@ namespace ChilliSource
 			/// @param Whether the sample loops or not
 			/// @return Audio Component
 			//--------------------------------------------------------
-			Audio::AudioComponentSPtr Create3DAudioComponent(const Audio::AudioResourceSPtr& inpAudio, bool inbShouldLoop = false);
+			Audio::AudioComponentUPtr Create3DAudioComponent(const Audio::AudioResourceSPtr& inpAudio, bool inbShouldLoop = false);
 			//--------------------------------------------------------
 			/// Create 3D Audio Component
 			///
@@ -99,7 +99,7 @@ namespace ChilliSource
 			/// @param Whether the sample loops or not
 			/// @return Audio Component
 			//--------------------------------------------------------
-			Audio::AudioComponentSPtr Create3DAudioComponent(Core::StorageLocation ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop = false);
+			Audio::AudioComponentUPtr Create3DAudioComponent(Core::StorageLocation ineStorageLocation, const std::string& instrAudioFilePath, bool inbShouldStream, bool inbShouldLoop = false);
 			//--------------------------------------------------------
 			/// Create Listener Component
 			///
@@ -107,7 +107,7 @@ namespace ChilliSource
 			/// to the camera
 			/// @return Listener component
 			//--------------------------------------------------------
-			Audio::AudioListenerComponentSPtr CreateListenerComponent();
+			Audio::AudioListenerComponentUPtr CreateListenerComponent();
 		};
 	}
 }

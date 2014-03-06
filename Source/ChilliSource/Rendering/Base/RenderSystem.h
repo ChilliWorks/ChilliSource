@@ -35,7 +35,18 @@ namespace ChilliSource
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(RenderSystem);
-			RenderSystem();
+            
+            //-------------------------------------------------------
+            /// Create the platform dependent backend
+            ///
+            /// @author S Downie
+            ///
+            /// @param Render capabilities
+            ///
+            /// @return New backend instance
+            //-------------------------------------------------------
+            static RenderSystemUPtr Create(RenderCapabilities* in_renderCapabilities);
+			
 			virtual ~RenderSystem();
 			
 			virtual bool Init(u32 inudwWidth, u32 inudwHeight) = 0;
@@ -96,6 +107,15 @@ namespace ChilliSource
             /// @return Pointer to dynamic sprite batcher
             //----------------------------------------------------
             DynamicSpriteBatch* GetDynamicSpriteBatchPtr();
+            
+        protected:
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            RenderSystem();
+            
 		protected:
 			
 			//---Render Factories

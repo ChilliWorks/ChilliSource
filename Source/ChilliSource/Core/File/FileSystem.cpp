@@ -11,12 +11,26 @@
 #include <ChilliSource/Core/Cryptographic/HashMD5.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
+#ifdef CS_TARGETPLATFORM_IOS
+#include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
+#endif
+
+#ifdef CS_TARGETPLATFORM_ANDROID
+#include <ChilliSource/Backend/Platform/Android/Core/File/FileSystem.h>
+#endif
+
+#ifdef CS_TARGETPLATFORM_WINDOWS
+#include <ChilliSource/Backend/Platform/Windows/Core/File/FileSystem.h>
+#endif
+
 #include <algorithm>
 
 namespace ChilliSource
 {
     namespace Core
     {
+        CS_DEFINE_NAMEDTYPE(FileSystem);
+        
         std::string FileSystem::mastrResourceDirectory[3];
         f32 FileSystem::mfAssetsDensity = 1.0f;
         
@@ -29,16 +43,30 @@ namespace ChilliSource
             else if(instrStorage == "DLC")
                 return StorageLocation::k_DLC;
             else if(instrStorage == "SaveData")
-            	return StorageLocation::k_saveData;
+                return StorageLocation::k_saveData;
             else if(instrStorage == "Root")
-            	return StorageLocation::k_root;
+                return StorageLocation::k_root;
             else
                 return StorageLocation::k_none;
         }
         
-    	CS_DEFINE_NAMEDTYPE(FileSystem);
-
         const std::string kstrDefaultPackageDLCDirectory = "DLC/";
+        
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        FileSystemUPtr FileSystem::Create()
+        {
+#ifdef CS_TARGETPLATFORM_IOS
+            return FileSystemUPtr(new iOS::FileSystem());
+#endif
+#ifdef CS_TARGETPLATFORM_ANDROID
+            return FileSystemUPtr(new Android::FileSystem());
+#endif
+#ifdef CS_TARGETPLATFORM_WINDOWS
+            return FileSystemUPtr(new Windows::FileSystem());
+#endif
+            return nullptr;
+        }
         
         FileSystem::FileSystem() : mstrPackageDLCPath(kstrDefaultPackageDLCDirectory)
         {

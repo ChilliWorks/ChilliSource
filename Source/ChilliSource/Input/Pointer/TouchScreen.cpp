@@ -22,9 +22,7 @@ namespace ChilliSource
 {
 	namespace Input
 	{
-
 		CS_DEFINE_NAMEDTYPE(TouchScreen);
-		CS_DEFINE_NAMEDTYPE(InputSystem);
 
 		TouchScreen::TouchScreen()
 		:mLastTouchIndex(0), mffLastTimeStamp(0.0f), mudwOrientedScreenHeight(0), mbIsEnabled(true)

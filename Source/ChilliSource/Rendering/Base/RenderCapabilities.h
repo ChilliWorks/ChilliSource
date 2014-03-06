@@ -29,6 +29,15 @@ namespace ChilliSource
         {
         public:
             CS_DECLARE_NAMEDTYPE(RenderCapabilities);
+            
+            //-------------------------------------------------------
+            /// Create the platform dependent backend
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend instance
+            //-------------------------------------------------------
+            static RenderCapabilitiesUPtr Create();
             //-------------------------------------------------------
             /// Is Shadow Mapping Supported
             ///
@@ -59,6 +68,15 @@ namespace ChilliSource
             /// Destructor
             //-------------------------------------------------------
             virtual ~RenderCapabilities(){};
+            
+        protected:
+            
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            RenderCapabilities(){}
         };
     }
 }

@@ -162,7 +162,7 @@ namespace ChilliSource
 			}
 			
 			CS_LOG_ERROR("Cannot find resource for Cubemap with base path " + inFilePath);
-			return CubemapSPtr();
+			return nullptr;
 		}
 		//-----------------------------------------------------------------
 		/// Async Get Cubemap From File
@@ -273,7 +273,7 @@ namespace ChilliSource
             else
             {
                 CS_LOG_ERROR("Cannot create Cubemap from image " + inaImages[0]->GetName());
-                outpCubemap = CubemapSPtr();
+                outpCubemap = nullptr;
                 return;
             }
 

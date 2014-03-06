@@ -29,8 +29,7 @@ namespace ChilliSource
 		/// @param Num of semantics
 		/// @param Array of semantic names
 		//-------------------------------------------
-	
-		VertexDeclaration::VertexDeclaration(u16 nElements, const VertexElement* inpElements)
+		VertexDeclaration::VertexDeclaration(u32 nElements, const VertexElement* inpElements)
 		{
 			mTotalSize = 0;
 			mTotalNumValues = 0;
@@ -47,7 +46,7 @@ namespace ChilliSource
 		///
 		/// @return the number of elemets in the vertex layout
 		//-------------------------------------------------------
-		const u16 VertexDeclaration::GetNumElements()
+		const u32 VertexDeclaration::GetNumElements() const
 		{
 			return mElements.size();
 		}
@@ -56,7 +55,7 @@ namespace ChilliSource
 		///
 		/// @return the element 
 		//-------------------------------------------------------
-		const VertexElement& VertexDeclaration::GetElementAtIndex(const u16 inIndex)
+		const VertexElement& VertexDeclaration::GetElementAtIndex(const u32 inIndex) const
 		{
 			return mElements[inIndex];
 		}
@@ -74,7 +73,7 @@ namespace ChilliSource
 		///
 		/// @return the size of the vertex layout
 		//-------------------------------------------------------
-		const u16 VertexDeclaration::GetTotalSize()
+		const u32 VertexDeclaration::GetTotalSize() const
 		{
 			return mTotalSize;
 		}
@@ -83,7 +82,7 @@ namespace ChilliSource
 		///
 		/// @return the number of individual values in the layout
 		//-------------------------------------------------------
-		const u32 VertexDeclaration::GetTotalNumValues()
+		const u32 VertexDeclaration::GetTotalNumValues() const
 		{
 			return mTotalNumValues;
 		}
@@ -92,11 +91,11 @@ namespace ChilliSource
 		///
 		/// @return The offset of the element in the layout
 		//-------------------------------------------------------
-		const u16 VertexDeclaration::GetElementOffset(const VertexElement &inElement)
+		const u32 VertexDeclaration::GetElementOffset(const VertexElement &inElement) const
 		{
-			u16 Offset = 0;
+			u32 Offset = 0;
 
-			for(std::vector<VertexElement>::iterator it = mElements.begin(); it != mElements.end(); ++it)
+			for(std::vector<VertexElement>::const_iterator it = mElements.begin(); it != mElements.end(); ++it)
 			{
 				if((*it).eSemantic == inElement.eSemantic)
 				{
@@ -112,14 +111,14 @@ namespace ChilliSource
 		///
 		/// @return the size of the element type 
 		//-------------------------------------------------------
-		const u16 VertexDeclaration::GetSizeOfElement(VertexElement &inElement)
+		const u32 VertexDeclaration::GetSizeOfElement(const VertexElement &inElement) const
 		{
 			return inElement.Size();
 		}
 		//-------------------------------------------------------
 		/// Is Equals operator
 		//-------------------------------------------------------
-		bool VertexDeclaration::operator== (const VertexDeclaration& inOther)
+		bool VertexDeclaration::operator== (const VertexDeclaration& inOther) const
 		{
 			if (mTotalSize != inOther.mTotalSize)
 				return false;

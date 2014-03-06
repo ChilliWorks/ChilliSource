@@ -8,7 +8,11 @@
  */
 
 #include <ChilliSource/Core/Base/Application.h>
+
+#include <ChilliSource/Audio/Base/AudioSystem.h>
+
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
+#include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 #include <ChilliSource/Core/Entity/ComponentFactory.h>
@@ -72,9 +76,9 @@ namespace ChilliSource
         //----------------------------------------------------
         //----------------------------------------------------
 		Application::Application()
-        : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_inputSystem(nullptr), m_platformSystem(nullptr), m_audioSystem(nullptr),
+        : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_inputSystem(nullptr), m_audioSystem(nullptr),
         m_renderer(nullptr), m_fileSystem(nullptr), m_defaultOrientation(ScreenOrientation::k_landscapeRight), m_resourceManagerDispenser(nullptr), m_updateIntervalRemainder(0.0f),
-        m_shouldNotifyConnectionsResumeEvent(false), m_isFirstFrame(true), m_isSuspending(false)
+        m_shouldNotifyConnectionsResumeEvent(false), m_isFirstFrame(true), m_isSuspending(false), m_isSystemCreationAllowed(false)
 		{
 		}
         //----------------------------------------------------
@@ -171,7 +175,7 @@ namespace ChilliSource
         //-----------------------------------------------------
         PlatformSystem* Application::GetPlatformSystem()
         {
-            return m_platformSystem;
+            return m_platformSystem.get();
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
@@ -196,36 +200,6 @@ namespace ChilliSource
         void Application::SetRenderer(Rendering::Renderer* in_system)
         {
             m_renderer = in_system;
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        void Application::SetRenderSystem(Rendering::RenderSystem* in_system)
-        {
-            m_renderSystem = in_system;
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        void Application::SetPlatformSystem(PlatformSystem* in_system)
-        {
-            m_platformSystem = in_system;
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        void Application::SetInputSystem(Input::InputSystem* in_system)
-        {
-            m_inputSystem = in_system;
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        void Application::SetAudioSystem(Audio::AudioSystem* in_system)
-        {
-            m_audioSystem = in_system;
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        void Application::SetFileSystem(FileSystem* in_system)
-        {
-            m_fileSystem = in_system;
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -254,21 +228,24 @@ namespace ChilliSource
             
             DetermineResourceDirectories();
             
-            //init tweakable constants and local data store.
-			new TweakableConstants();
-			new LocalDataStore();
-            
             //Set up the device helper
-            Device::Init(m_platformSystem);
+            Device::Init(m_platformSystem.get());
             
 			//Set up the task scheduler
 			TaskScheduler::Init(Core::Device::GetNumCPUCores() * 2);
             
 			//System setup
-			m_platformSystem->CreateDefaultSystems(m_systems);
-            
+            m_isSystemCreationAllowed = true;
+            CreateDefaultSystems();
+			m_platformSystem->CreateDefaultSystems(this);
 			CreateSystems();
+            m_isSystemCreationAllowed = false;
 			PostCreateSystems();
+            
+            //init tweakable constants and local data store.
+			new TweakableConstants();
+			new LocalDataStore();
+            
             LoadDefaultResources();
 			OnScreenChangedOrientation(m_defaultOrientation);
             
@@ -379,7 +356,7 @@ namespace ChilliSource
 
 			if (m_inputSystem != nullptr)
 			{
-				Input::TouchScreen * pTouchScreen = m_inputSystem->GetTouchScreenPtr();
+				Input::TouchScreen * pTouchScreen = m_inputSystem->GetTouchScreen();
 				if (pTouchScreen != nullptr)
 				{
 					pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());
@@ -441,32 +418,31 @@ namespace ChilliSource
 			m_defaultFont.reset();
 			m_defaultMesh.reset();
 			m_defaultMaterial.reset();
-
-			CS_SAFEDELETE(m_platformSystem);
+            
+            m_platformSystem.reset();
             CS_SAFEDELETE(m_resourceManagerDispenser);
             CS_SAFEDELETE(m_componentFactoryDispenser);
             
 			//We have an issue with the order of destruction of systems.
 			while(m_systems.empty() == false)
 			{
-				SystemSPtr system = m_systems.back();
 				m_systems.pop_back();
-				system.reset();
 			}
             
             s_application = nullptr;
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void Application::AddSystem(const SystemSPtr& in_system)
+        void Application::AddSystem(SystemUPtr in_system)
         {
-            m_systems.push_back(in_system);
+            CS_ASSERT(m_isSystemCreationAllowed == true, "Application systems cannot be created outwith the creation phase");
+            m_systems.push_back(std::move(in_system));
         }
         //----------------------------------------------------
         //----------------------------------------------------
 		System* Application::GetSystem(InterfaceIDType in_interfaceID)
 		{
-			for (std::vector<SystemSPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
+			for (std::vector<SystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
 			{
 				if ((*it)->IsA(in_interfaceID))
 				{
@@ -477,20 +453,31 @@ namespace ChilliSource
 			CS_LOG_WARNING("Application cannot find implementing systems");
 			return nullptr;
 		}
+        //------------------------------------------------------
+        //------------------------------------------------------
+        void Application::CreateDefaultSystems()
+        {
+            AddSystem(DialogueBoxSystem::Create());
+        }
         //----------------------------------------------------
         //----------------------------------------------------
 		void Application::PostCreateSystems()
 		{
             //Loop round all the created systems and categorise them
-			for(std::vector<SystemSPtr>::iterator it = m_systems.begin(); it != m_systems.end(); ++it)
+			for(std::vector<SystemUPtr>::iterator it = m_systems.begin(); it != m_systems.end(); ++it)
 			{
-				if ((*it)->IsA(IUpdateable::InterfaceID))
+                System* pSystem = it->get();
+                
+                //Updateables
+				if(pSystem->IsA(IUpdateable::InterfaceID))
 				{
-					m_updateableSystems.push_back((*it)->GetInterface<IUpdateable>());
+					m_updateableSystems.push_back(pSystem->GetInterface<IUpdateable>());
 				}
-				if ((*it)->IsA(IComponentProducer::InterfaceID)) 
+                
+                //Component producers
+				if(pSystem->IsA(IComponentProducer::InterfaceID))
 				{
-                    IComponentProducer* pProducer = (*it)->GetInterface<IComponentProducer>();
+                    IComponentProducer* pProducer = pSystem->GetInterface<IComponentProducer>();
                     u32 udwNumFactoriesInSystem = pProducer->GetNumComponentFactories();
 
                     for(u32 i=0; i<udwNumFactoriesInSystem; ++i)
@@ -498,10 +485,30 @@ namespace ChilliSource
                         m_componentFactoryDispenser->RegisterComponentFactory(pProducer->GetComponentFactoryPtr(i));
                     }
 				}
-				if ((*it)->IsA(ResourceProvider::InterfaceID)) 
+                
+                //Resource providers
+				if(pSystem->IsA(ResourceProvider::InterfaceID))
 				{
-					m_resourceProviders.push_back((*it)->GetInterface<ResourceProvider>());
+					m_resourceProviders.push_back(pSystem->GetInterface<ResourceProvider>());
 				}
+                
+                //Common systems
+                if(pSystem->IsA(Audio::AudioSystem::InterfaceID))
+                {
+                    m_audioSystem = static_cast<Audio::AudioSystem*>(pSystem);
+                }
+                if(pSystem->IsA(Input::InputSystem::InterfaceID))
+                {
+                    m_inputSystem = static_cast<Input::InputSystem*>(pSystem);
+                }
+                if(pSystem->IsA(Rendering::RenderSystem::InterfaceID))
+                {
+                    m_renderSystem = static_cast<Rendering::RenderSystem*>(pSystem);
+                }
+                if(pSystem->IsA(FileSystem::InterfaceID))
+                {
+                    m_fileSystem = static_cast<FileSystem*>(pSystem);
+                }
 			}
 
             //Give the resource managers their providers
@@ -614,7 +621,7 @@ namespace ChilliSource
 				m_renderer->GetActiveCameraPtr()->SetViewportOrientation(inOrientation);
 			}
             
-            Input::TouchScreen * pTouchScreen = GetSystem(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreenPtr();
+            Input::TouchScreen * pTouchScreen = GetSystem(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreen();
             if (pTouchScreen != nullptr)
             {
                 pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());

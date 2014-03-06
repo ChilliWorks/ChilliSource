@@ -23,14 +23,14 @@ namespace ChilliSource
         CS_DEFINE_NAMEDTYPE(DialogueBoxSystem);
         //----------------------------------------------------
         //----------------------------------------------------
-        DialogueBoxSystem* DialogueBoxSystem::Create()
+        DialogueBoxSystemUPtr DialogueBoxSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return new iOS::DialogueBoxSystem();
+            return DialogueBoxSystemUPtr(new iOS::DialogueBoxSystem());
 #elif defined CS_TARGETPLATFORM_ANDROID
-            return new Android::DialogueBoxSystem();
+            return DialogueBoxSystemUPtr(new Android::DialogueBoxSystem());
 #elif defined CS_TARGETPLATFORM_WINDOWS
-            return new Windows::DialogueBoxSystem();
+            return DialogueBoxSystemUPtr(new Windows::DialogueBoxSystem());
 #else
             return nullptr;
 #endif

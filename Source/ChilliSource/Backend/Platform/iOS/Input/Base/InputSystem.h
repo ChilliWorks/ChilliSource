@@ -30,7 +30,6 @@ namespace ChilliSource
 		class InputSystem : public Input::InputSystem
 		{
 		public:
-            InputSystem();
 			virtual ~InputSystem();
 			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			
@@ -38,11 +37,10 @@ namespace ChilliSource
 			virtual Input::InputDevice * GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID) override;
 			
 			
-			virtual Input::TouchScreen * GetTouchScreenPtr() override;
-			virtual Input::Accelerometer * GetAccelerometerPtr() override;
+			virtual Input::TouchScreen * GetTouchScreen() override;
+			virtual Input::Accelerometer * GetAccelerometer() override;
+            virtual Input::VirtualKeyboard* GetVirtualKeyboard() override;
 			virtual void Update(f32 infDT) override;
-			
-			virtual Input::VirtualKeyboard* GetVirtualKeyboardPtr() override;
             
             //-----------------------------------------------------------
             /// Flush Buffered Input
@@ -51,6 +49,16 @@ namespace ChilliSource
             /// buffered value then clear the buffered input
             //-----------------------------------------------------------
             void FlushBufferedInput() override;
+            
+        private:
+            
+            friend Input::InputSystemUPtr Input::InputSystem::Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            InputSystem();
 			
 		protected:
 			TouchScreen mTouchScreen;

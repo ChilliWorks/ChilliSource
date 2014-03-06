@@ -37,9 +37,9 @@ namespace ChilliSource
         /// @param Owning system
         /// @return Ownership of point emitter
         //-----------------------------------------------------
-        ParticleEmitter* PointParticleEmitter::Create(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent)
+        ParticleEmitterUPtr PointParticleEmitter::Create(const Core::ParamDictionary& inParams, const MaterialSPtr &inpMaterial, ParticleComponent* inpComponent)
         {
-            return new PointParticleEmitter(inParams, inpMaterial, inpComponent);
+            return ParticleEmitterUPtr(new PointParticleEmitter(inParams, inpMaterial, inpComponent));
         }
 		//-----------------------------------------------------
 		/// Emit
