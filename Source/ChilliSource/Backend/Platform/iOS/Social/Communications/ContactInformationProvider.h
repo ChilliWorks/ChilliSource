@@ -23,7 +23,7 @@ namespace ChilliSource
 		class ContactInformationProvider : public Social::ContactInformationProvider
 		{
 		public:
-			virtual bool IsA(Core::InterfaceIDType inID) const override;;
+			virtual bool IsA(Core::InterfaceIDType inID) const override;
 			
 			virtual void LoadInformation() override;
 			
