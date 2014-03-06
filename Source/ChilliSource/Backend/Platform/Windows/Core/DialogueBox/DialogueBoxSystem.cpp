@@ -11,6 +11,8 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
+#include <windows.h>
+
 namespace ChilliSource
 {
 	namespace Windows
@@ -31,31 +33,36 @@ namespace ChilliSource
         //-----------------------------------------------------
         void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm)
         {
-            Core::Application::Get()->GetPlatformSystem()->ShowSystemDialog(in_id, in_title, in_message, in_confirm);
-            m_activeSysConfirmDelegate = in_delegate;
+			MessageBoxA(nullptr, in_title.ToASCII().c_str(), in_message.ToASCII().c_str(), MB_OK);
+			if (in_delegate)
+			{
+				in_delegate(in_id, DialogueResult::k_confirm);
+			}
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
         void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const Core::DialogueBoxSystem::DialogueDelegate& in_delegate, const Core::UTF8String& in_title, const Core::UTF8String& in_message, const Core::UTF8String& in_confirm, const Core::UTF8String& in_cancel)
         {
-            Core::Application::Get()->GetPlatformSystem()->ShowSystemConfirmDialog(in_id, in_title, in_message, in_confirm, in_cancel);
-            m_activeSysConfirmDelegate = in_delegate;
+			if (MessageBoxA(NULL, in_title.ToASCII().c_str(), in_message.ToASCII().c_str(), MB_OKCANCEL) == IDOK)
+			{
+				if (in_delegate)
+				{
+					in_delegate(in_id, DialogueResult::k_confirm);
+				}
+			}
+			else
+			{
+				if (in_delegate)
+				{
+					in_delegate(in_id, DialogueResult::k_cancel);
+				}
+			}
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
         void DialogueBoxSystem::MakeToast(const Core::UTF8String& in_text)
         {
-            Core::Application::Get()->GetPlatformSystem()->MakeToast(in_text);
-        }
-        //------------------------------------------------------
-        //------------------------------------------------------
-        void DialogueBoxSystem::OnSystemConfirmDialogResult(u32 in_id, Core::DialogueBoxSystem::DialogueResult in_result)
-        {
-            if(m_activeSysConfirmDelegate)
-        	{
-        		m_activeSysConfirmDelegate(in_id, in_result);
-        		m_activeSysConfirmDelegate = nullptr;
-        	}
+			CS_LOG_WARNING("Toast not available on Windows");
         }
         //-----------------------------------------------------
         //-----------------------------------------------------

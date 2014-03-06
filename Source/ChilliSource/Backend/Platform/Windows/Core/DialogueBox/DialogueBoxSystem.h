@@ -72,15 +72,6 @@ namespace ChilliSource
             /// @param The text to display.
             //-----------------------------------------------------
             void MakeToast(const Core::UTF8String& in_text) override;
-            //------------------------------------------------------
-            /// Triggered from a system dialog confirmation event
-            ///
-            /// @author I Copland
-            ///
-            /// @param ID
-            /// @param Result
-            //------------------------------------------------------
-            void OnSystemConfirmDialogResult(u32 in_id, Core::DialogueBoxSystem::DialogueResult in_result);
             //----------------------------------------------------
 			/// Destructor.
             ///
@@ -88,8 +79,6 @@ namespace ChilliSource
 			//----------------------------------------------------
             ~DialogueBoxSystem();
         private:
-            
-			Core::DialogueBoxSystem::DialogueDelegate m_activeSysConfirmDelegate;
 		};
 	}
 }

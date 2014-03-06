@@ -130,7 +130,7 @@ namespace ChilliSource
 			Core::Application::Get()->GetRenderSystem()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
             
 			//Create the renderer
-			Core::Application::SetRenderer(new Rendering::Renderer(Core::Application::GetRenderSystemPtr()));
+			Core::Application::Get()->SetRenderer(new Rendering::Renderer(Core::Application::Get()->GetRenderSystem()));
 		}
 		//-------------------------------------------------
 		/// Post Create Systems
@@ -142,7 +142,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::PostCreateSystems()
 		{
-			if(Core::Application::GetAudioSystemPtr() != NULL)
+			if(Core::Application::Get()->GetAudioSystem() != NULL)
 			{
 				Audio::AudioPlayer::Init();
 			}
@@ -427,53 +427,6 @@ namespace ChilliSource
 		{
 			CS_LOG_WARNING("GetPhysicalScreenSize() is not implemented on windows!");
 			return 0.0f;
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Make Toast
-		///
-		/// Display a toast notification with the given text
-		///
-		/// @param Text
-		//--------------------------------------------------------------------------------------------------
-		void PlatformSystem::MakeToast(const Core::UTF8String& instrText) const
-		{
-			CS_LOG_WARNING("Toast not available on Windows");
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Show System Confirm Dialog
-		///
-		/// Display a system confirmation dialog with the given ID and delegate
-		///
-		/// @param ID
-		/// @param Title text
-		/// @param Message text
-		/// @param Confirm text
-		/// @param Cancel text
-		//--------------------------------------------------------------------------------------------------
-		void PlatformSystem::ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const
-		{
-			if(MessageBoxA(NULL, instrTitle.ToASCII().c_str(), instrMessage.ToASCII().c_str(), MB_OKCANCEL) == IDOK)
-			{
-				Core::Application::OnSystemConfirmDialogResult(inudwID, Core::SystemConfirmDialog::Result::k_confirm);
-			}
-			else
-			{
-				Core::Application::OnSystemConfirmDialogResult(inudwID, Core::SystemConfirmDialog::Result::k_cancel);
-			} 
-		}
-		//--------------------------------------------------------------------------------------------------
-        /// Show System Dialog
-        ///
-        /// Display a system confirmation dialog with the given ID and delegate
-        ///
-        /// @param ID
-        /// @param Title text
-        /// @param Message text
-        /// @param Confirm text
-        //--------------------------------------------------------------------------------------------------
-		void PlatformSystem::ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const
-		{
-			MessageBoxA(nullptr, instrTitle.ToASCII().c_str(), instrMessage.ToASCII().c_str(), MB_OK);
 		}
 		//---GLFW Delegates
 		//-------------------------------------------------

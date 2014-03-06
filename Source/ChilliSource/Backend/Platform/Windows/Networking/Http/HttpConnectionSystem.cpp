@@ -307,7 +307,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------
 		void HttpConnectionSystem::CHttpRequest::PollReadStream(HINTERNET inRequestHandle, HINTERNET inConnectionHandle)
 		{
-			if(WinHttpSendRequest(inRequestHandle, 0, WINHTTP_NO_REQUEST_DATA, (LPVOID)msDetails.strBody.data(), msDetails.strBody.length(), msDetails.strBody.length(), nullptr))
+			if(WinHttpSendRequest(inRequestHandle, 0, WINHTTP_NO_REQUEST_DATA, (LPVOID)msDetails.strBody.data(), msDetails.strBody.length(), msDetails.strBody.length(), NULL))
 			{
 				if(WinHttpReceiveResponse(inRequestHandle, nullptr))
 				{

@@ -213,37 +213,6 @@ namespace ChilliSource
 			/// inches.
 			//-------------------------------------------------
 			f32 GetPhysicalScreenSize();
-			//--------------------------------------------------------------------------------------------------
-			/// Make Toast
-			///
-			/// Display a toast notification with the given text
-			///
-			/// @param Text
-			//--------------------------------------------------------------------------------------------------
-			void MakeToast(const Core::UTF8String& instrText) const;
-			//--------------------------------------------------------------------------------------------------
-			/// Show System Confirm Dialog
-			///
-			/// Display a system confirmation dialog with the given ID and delegate
-			///
-			/// @param ID
-			/// @param Title text
-			/// @param Message text
-			/// @param Confirm text
-			/// @param Cancel text
-			//--------------------------------------------------------------------------------------------------
-			void ShowSystemConfirmDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm, const Core::UTF8String& instrCancel) const;
-			//--------------------------------------------------------------------------------------------------
-            /// Show System Dialog
-            ///
-            /// Display a system confirmation dialog with the given ID and delegate
-            ///
-            /// @param ID
-            /// @param Title text
-            /// @param Message text
-            /// @param Confirm text
-            //--------------------------------------------------------------------------------------------------
-			void ShowSystemDialog(u32 inudwID, const Core::UTF8String& instrTitle, const Core::UTF8String& instrMessage, const Core::UTF8String& instrConfirm) const;
 		private:
 
 			//---GLFW Delegates
