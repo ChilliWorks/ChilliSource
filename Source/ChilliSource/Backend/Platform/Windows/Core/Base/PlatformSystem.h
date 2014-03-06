@@ -47,7 +47,7 @@ namespace ChilliSource
 			///
 			/// @param the system list
 			//-------------------------------------------------
-			void CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems) override;
+			void CreateDefaultSystems(Core::Application* in_application) override;
 			//-------------------------------------------------
 			/// Post Create Systems
 			///
@@ -87,49 +87,6 @@ namespace ChilliSource
 			/// application to terminate
 			//--------------------------------------------
 			void TerminateUpdater() override;
-			//--------------------------------------------
-			/// Can Create System With Interface 
-			///
-			/// @param Interface ID
-			/// @param Whether system can be created
-			//--------------------------------------------
-			bool CanCreateSystemWithInterface(Core::InterfaceIDType inInterfaceID) const override;
-			//--------------------------------------------
-			/// Create and Add System With Interface
-			///
-			/// @param Interface ID
-			/// @param Vector of exisiting systems to append
-			/// @return Pointer to the given system or nullptr
-			//--------------------------------------------
-			Core::System* CreateAndAddSystemWithInterface(Core::InterfaceIDType inInterfaceID, std::vector<Core::SystemSPtr>& inaExisitingSystems) const override;
-			//--------------------------------------------
-			/// Can Create Activity With Interface
-			///
-			/// @param Interface ID
-			/// @return Whether activity can be created
-			//--------------------------------------------
-			bool CanCreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const override;
-			//--------------------------------------------
-			/// Create Activity With Interface
-			///
-			/// @param Interface ID
-			/// @return Ownership of activity instance or nullptr
-			//--------------------------------------------
-			Core::Activity* CreateActivityWithInterface(Core::InterfaceIDType inInterfaceID) const override;
-			//--------------------------------------------
-			/// Can Create Information Provider With Interface
-			///
-			/// @param Interface ID
-			/// @return Whether provider can be created
-			//--------------------------------------------
-			bool CanCreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const;
-			//--------------------------------------------
-			/// Create Information Provider With Interface
-			///
-			/// @param Interface ID
-			/// @return Ownership of provider instance or nullptr
-			//--------------------------------------------
-			Core::IInformationProvider* CreateInformationProviderWithInterface(Core::InterfaceIDType inInterfaceID) const override;
 			//-----------------------------------------------------------------------------------------------------------
 			/// Get Screen Dimensions
 			///

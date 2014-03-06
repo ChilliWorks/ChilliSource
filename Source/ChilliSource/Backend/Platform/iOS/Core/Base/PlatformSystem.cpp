@@ -27,131 +27,84 @@ namespace ChilliSource
 	namespace iOS
 	{   
 		//-----------------------------------------
-		/// Constructor
-		///
-		/// Default
 		//-----------------------------------------
 		PlatformSystem::PlatformSystem()
-        : mfPhysicalScreenSize(-1.0f)
+        : m_physicalScreenSize(-1.0f)
 		{
 		}
 		//-----------------------------------------
-		/// Init
 		//-----------------------------------------
 		void PlatformSystem::Init()
 		{
 
 		}
 		//-------------------------------------------------
-		/// Create Default Systems
-		///
-		/// Adds default systems to the applications system
-		/// list.
-		///
-		/// @param the system list
 		//-------------------------------------------------
 		void PlatformSystem::CreateDefaultSystems(Core::Application* in_application)
 		{
 
 		}
 		//-------------------------------------------------
-		/// Post Create Systems
-		///
-		/// Deals with anything that needs to be handled after
-		/// creating the systems.
-		///
-		/// @param the system list
 		//-------------------------------------------------
 		void PlatformSystem::PostCreateSystems()
 		{
 
 		}
         //-----------------------------------------
-        /// Run
-        ///
-        /// Begin the game loop
         //-----------------------------------------
         void PlatformSystem::Run()
         {
             iOSInit();
         }
         //-----------------------------------------
-        /// Set Max FPS
-        ///
-        /// @param The maximum frames per second
-        /// to clamp to. This should be in multiples
-        /// of 15 (15, 30, 60)
         //-----------------------------------------
-        void PlatformSystem::SetMaxFPS(u32 inudwFPS)
+        void PlatformSystem::SetMaxFPS(u32 in_fps)
         {
-            iOSSetMaxFPS(inudwFPS);
+            iOSSetMaxFPS(in_fps);
         }
 		//-----------------------------------------
-		/// Set Updater Active
-		///
-		/// Starts or stops the platforms 
-		/// update loop.
-		///
-		/// @param Whether to end or begin
 		//-----------------------------------------
-		void PlatformSystem::SetUpdaterActive(bool inbIsActive)
+		void PlatformSystem::SetUpdaterActive(bool in_isActive)
 		{
-			iOSSetUpdaterActive(inbIsActive);
+			iOSSetUpdaterActive(in_isActive);
 		}
         //-----------------------------------------
-        /// Terminate Updater
-        ///
-        /// Stops the update loop causing
-        /// the application to terminate
         //-----------------------------------------
         void PlatformSystem::TerminateUpdater() 
         {
             iOSInvalidateUpdater();
         }
-		//-----------------------------------------------------------------------------------------------------------
-		/// Get Screen Dimensions
-		///
-		/// Retrieves the screen dimensions. These dimensions are always in the default orientation for the device.
-		/// @return A Vector2 containing the screen size in it's x + y components
-        ///
-        /// The dimensions are always for the base screen size and the density scale factor is use to scale the screen
-        /// to the correct resolution. i.e. the Retina screen will be 320x480 and a density of 2.0
-		//-----------------------------------------------------------------------------------------------------------
+		//------------------------------------------
+		//------------------------------------------
 		Core::Vector2 PlatformSystem::GetScreenDimensions() const
 		{
-			Core::Vector2 Result;
-			CGSize Size = [[UIScreen mainScreen] bounds].size;
+			Core::Vector2 result;
+			CGSize size = [[UIScreen mainScreen] bounds].size;
             
-            f32 fScale = 1.0f;
+            f32 scale = 1.0f;
             
-            bool bIsiOS4_0 = ([[[UIDevice currentDevice] systemVersion] floatValue] >= 4.0f);
+            bool isiOS4_0 = ([[[UIDevice currentDevice] systemVersion] floatValue] >= 4.0f);
             
-            if(bIsiOS4_0)
+            if(isiOS4_0)
             {
-                fScale = [UIScreen mainScreen].scale;
+                scale = [UIScreen mainScreen].scale;
             }
             
-			Result.x = Size.width * fScale;
-			Result.y = Size.height * fScale;
+			result.x = size.width * scale;
+			result.y = size.height * scale;
             
-			return Result;
+			return result;
 		}
-		//--------------------------------------------------------------
-		/// Get Device Model Name
-		///
-		/// @return The above information stringified
-		//--------------------------------------------------------------
+		//----------------------------------------------
+		//----------------------------------------------
 		std::string PlatformSystem::GetDeviceModelName() const
 		{
-			NSString * nsType = [[UIDevice currentDevice] model];
+			NSString * type = [[UIDevice currentDevice] model];
 
-			return (ChilliSource::Core::StringUtils::NSStringToString(nsType));
+			return (ChilliSource::Core::StringUtils::NSStringToString(type));
 		}
-		//--------------------------------------------------------------
-		/// Get Device Model Type Name
-		///
-		/// @return The above information stringified
-		//--------------------------------------------------------------
+		//----------------------------------------------
+		//----------------------------------------------
 		std::string PlatformSystem::GetDeviceModelTypeName() const
 		{
 			size_t size = 0;
@@ -161,108 +114,87 @@ namespace ChilliSource
 			NSString *platform = [NSString stringWithCString:machine encoding:NSASCIIStringEncoding];
 			free(machine);
 
-			std::string strOutput;
-			std::string strModelType = ChilliSource::Core::StringUtils::NSStringToString(platform);
-			bool bRecord = false;
-			for(std::string::const_iterator it = strModelType.begin(); it != strModelType.end(); ++it)
+			std::string output;
+			std::string modelType = ChilliSource::Core::StringUtils::NSStringToString(platform);
+			bool record = false;
+			for(std::string::const_iterator it = modelType.begin(); it != modelType.end(); ++it)
 			{
 				if(isdigit(*it))
 				{
-					bRecord = true;
+					record = true;
 				}
 				
-				if(bRecord)
+				if(record)
 				{
-					strOutput += (*it);
+					output += (*it);
 				}
 			}
-			return strOutput;
+			return output;
 		}
-		//--------------------------------------------------------------
-		/// Get Device Manufacturer Name
-		///
-		/// @return The above information stringified
-		//--------------------------------------------------------------
+		//---------------------------------------------
+		//---------------------------------------------
 		std::string PlatformSystem::GetDeviceManufacturerName() const
 		{
 			return std::string("Apple");
 		}
-        //--------------------------------------------------------------
-        /// Get OS Version
-        ///
-        /// @return String containing the OS version of the device
-        //--------------------------------------------------------------
+        //---------------------------------------------
+        //---------------------------------------------
         std::string PlatformSystem::GetOSVersion() const
         {
-            NSString* NSVersion = [[UIDevice currentDevice] systemVersion];
-			return ChilliSource::Core::StringUtils::NSStringToString(NSVersion);
+            NSString* version = [[UIDevice currentDevice] systemVersion];
+			return ChilliSource::Core::StringUtils::NSStringToString(version);
         }
-        //--------------------------------------------------------------
-		/// Get Locale
-		///
-		/// Get the active locale of the device
-		/// @return Locale ID
-		//--------------------------------------------------------------
+        //---------------------------------------------
+		//---------------------------------------------
 		Core::Locale PlatformSystem::GetLocale() const
 		{
-			NSLocale *pcLocale = [NSLocale currentLocale];
-			NSString *pcCountryCode = [pcLocale objectForKey:NSLocaleCountryCode];
-			std::string strCountryCode = [pcCountryCode UTF8String];
-			NSString *pcLanguageCode = [pcLocale objectForKey:NSLocaleLanguageCode];
-			std::string strLanguageCode = [pcLanguageCode UTF8String];
+			NSLocale *locale = [NSLocale currentLocale];
+			NSString *countryCodeObjc = [locale objectForKey:NSLocaleCountryCode];
+			std::string countryCode = [countryCodeObjc UTF8String];
+			NSString *languageCodeObjc = [locale objectForKey:NSLocaleLanguageCode];
+			std::string languageCode = [languageCodeObjc UTF8String];
 
 			//Just default to english
-			return ChilliSource::Core::Locale(strLanguageCode, strCountryCode);
+			return ChilliSource::Core::Locale(languageCode, countryCode);
 		}
-        //--------------------------------------------------------------
-		/// Get Language
-		///
-		/// Get the active language of the device in locale format
-		/// @return Locale ID
-		//--------------------------------------------------------------
+        //---------------------------------------------
+		//---------------------------------------------
 		Core::Locale PlatformSystem::GetLanguage() const
 		{
-			NSUserDefaults* UserDefaults = [NSUserDefaults standardUserDefaults];
-			NSArray* SupportedLanguages = [UserDefaults objectForKey:@"AppleLanguages"];
-			NSString* NSUserLocale = [SupportedLanguages objectAtIndex:0];
-			std::string strLocaleCode = [NSUserLocale UTF8String];
+			NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+			NSArray* supportedLanguages = [userDefaults objectForKey:@"AppleLanguages"];
+			NSString* userLocale = [supportedLanguages objectAtIndex:0];
+			std::string localeCode = [userLocale UTF8String];
 
 			//break this locale into parts(language/country code/extra)
-			std::vector<std::string> strLocaleBrokenUp = ChilliSource::Core::StringUtils::Split(strLocaleCode, "-", 0);
+			std::vector<std::string> localeBrokenUp = ChilliSource::Core::StringUtils::Split(localeCode, "-", 0);
 
-			if (strLocaleBrokenUp.size() > 1)
+			if (localeBrokenUp.size() > 1)
 			{
-				return Core::Locale(strLocaleBrokenUp[0],strLocaleBrokenUp[1]);
+				return Core::Locale(localeBrokenUp[0],localeBrokenUp[1]);
 			}
-			else if (strLocaleBrokenUp.size() == 1)
+			else if (localeBrokenUp.size() == 1)
 			{
-				return Core::Locale(strLocaleBrokenUp[0]);
+				return Core::Locale(localeBrokenUp[0]);
 			}
 			else
 				return Core::kUnknownLocale;
 		}
-        //-------------------------------------------------
-        /// Get Screen Density
-        ///
-        /// @return The density scale factor of the screen
-        /// to convert from DIPS to physical pixels
-        //-------------------------------------------------
+        //----------------------------------------------
+        //----------------------------------------------
         f32 PlatformSystem::GetScreenDensity() const
         {
             if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 4.0f) 
             {
-				CGFloat fScale = [UIScreen mainScreen].scale;
+				CGFloat scale = [UIScreen mainScreen].scale;
                 
-                return fScale;
+                return scale;
 			}
             
             return 1.0f;
         }
-        //-------------------------------------------------
-        /// Get Device ID
-        ///
-        /// @return The UDID of the device
-        //-------------------------------------------------
+        //-----------------------------------------------
+        //-----------------------------------------------
         std::string PlatformSystem::GetDeviceID()
         {
             if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0f)
@@ -282,57 +214,44 @@ namespace ChilliSource
             }
             else
             {
-                NSString* strUDID = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
-                return ChilliSource::Core::StringUtils::NSStringToString(strUDID);
+                NSString* udid = [[UIDevice currentDevice] uniqueGlobalDeviceIdentifier];
+                return ChilliSource::Core::StringUtils::NSStringToString(udid);
             }
         }
         //-------------------------------------------------
-        /// Get App Version
-        ///
-        /// @return The bundle version as found in the plist
         //-------------------------------------------------
         std::string PlatformSystem::GetAppVersion() const
         {
-            NSString* strVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
-            return ChilliSource::Core::StringUtils::NSStringToString(strVersion);
+            NSString* version = [[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+            return ChilliSource::Core::StringUtils::NSStringToString(version);
         }
-		//--------------------------------------------------------------
-		/// Get Number Of CPU Cores
-		///
-		/// @return The number of cores available
-		//--------------------------------------------------------------
+		//-------------------------------------------------
+		//-------------------------------------------------
 		u32 PlatformSystem::GetNumberOfCPUCores() const
 		{
-			u32 udwNumCores = 1;
-			size_t udwSize = sizeof(udwNumCores);
+			u32 numCores = 1;
+			size_t size = sizeof(numCores);
 			
-			if(sysctlbyname("hw.ncpu", &udwNumCores, &udwSize, nullptr, 0)) 
+			if(sysctlbyname("hw.ncpu", &numCores, &size, nullptr, 0))
 			{
 				return 1;
 			}
 			else
 			{
-				return udwNumCores;
+				return numCores;
 			}
 		}
-		//--------------------------------------------------------------
-		/// Get System Time
-		///
-		/// @return The current time in milliseconds
-		//--------------------------------------------------------------
+		//---------------------------------------------------
+		//---------------------------------------------------
 		TimeIntervalMs PlatformSystem::GetSystemTimeMS() const
 		{
 			return GetSystemTimeInNanoSeconds() / 1000000;
 		}
-		//-------------------------------------------------
-		/// Get Physical Screen Size
-		///
-		/// @return The physical size of the screen in
-		/// inches.
-		//-------------------------------------------------
+		//---------------------------------------------------
+		//---------------------------------------------------
 		f32 PlatformSystem::GetPhysicalScreenSize()
 		{
-            if (mfPhysicalScreenSize < 0.0f)
+            if (m_physicalScreenSize < 0.0f)
             {
                 size_t size = 0;
                 sysctlbyname("hw.machine", nullptr, &size, nullptr, 0);
@@ -341,78 +260,78 @@ namespace ChilliSource
                 NSString *platform = [NSString stringWithCString:machine encoding:NSASCIIStringEncoding];
                 free(machine);
                 
-                std::string strDeviceName = ChilliSource::Core::StringUtils::NSStringToString(platform);
+                std::string deviceName = ChilliSource::Core::StringUtils::NSStringToString(platform);
                 
                 //3.5 inch screens
-                if (strDeviceName == "iPhone1,1" || strDeviceName == "iPhone1,2" || strDeviceName == "iPhone2,1" || strDeviceName == "iPhone3,1" || strDeviceName == "iPhone3,2" ||
-                    strDeviceName == "iPhone3,3" || strDeviceName == "iPhone4,1" || strDeviceName == "iPod1,1" || strDeviceName == "iPod2,1" || strDeviceName == "iPod3,1" || strDeviceName == "iPod4,1")
+                if (deviceName == "iPhone1,1" || deviceName == "iPhone1,2" || deviceName == "iPhone2,1" || deviceName == "iPhone3,1" || deviceName == "iPhone3,2" ||
+                    deviceName == "iPhone3,3" || deviceName == "iPhone4,1" || deviceName == "iPod1,1" || deviceName == "iPod2,1" || deviceName == "iPod3,1" || deviceName == "iPod4,1")
                 {
-                    mfPhysicalScreenSize = 3.5f;
+                    m_physicalScreenSize = 3.5f;
                 }
                 
                 //4 inch screens
-                else if (strDeviceName == "iPhone5,1" || strDeviceName == "iPhone5,2" || strDeviceName == "iPod5,1")
+                else if (deviceName == "iPhone5,1" || deviceName == "iPhone5,2" || deviceName == "iPod5,1")
                 {
-                    mfPhysicalScreenSize = 4.0f;
+                    m_physicalScreenSize = 4.0f;
                 }
                 
                 //7.9 inch screens
-                else if (strDeviceName == "iPad2,5" || strDeviceName == "iPad2,6" || strDeviceName == "iPad2,7")
+                else if (deviceName == "iPad2,5" || deviceName == "iPad2,6" || deviceName == "iPad2,7")
                 {
-                    mfPhysicalScreenSize = 7.9f;
+                    m_physicalScreenSize = 7.9f;
                 }
                 
                 //9.7 inch screens
-                else if (strDeviceName == "iPad1,1" || strDeviceName == "iPad2,1" || strDeviceName == "iPad2,2" || strDeviceName == "iPad2,3" || strDeviceName == "iPad2,4" || strDeviceName == "iPad3,1" ||
-                         strDeviceName == "iPad3,2" || strDeviceName == "iPad3,3" || strDeviceName == "iPad3,4" || strDeviceName == "iPad3,5" || strDeviceName == "iPad3,6")
+                else if (deviceName == "iPad1,1" || deviceName == "iPad2,1" || deviceName == "iPad2,2" || deviceName == "iPad2,3" || deviceName == "iPad2,4" || deviceName == "iPad3,1" ||
+                         deviceName == "iPad3,2" || deviceName == "iPad3,3" || deviceName == "iPad3,4" || deviceName == "iPad3,5" || deviceName == "iPad3,6")
                 {
-                    mfPhysicalScreenSize = 9.7f;
+                    m_physicalScreenSize = 9.7f;
                 }
                 
                 //Simulator
-                else if (strDeviceName == "x86_64" || strDeviceName == "x86_32")
+                else if (deviceName == "x86_64" || deviceName == "x86_32")
                 {
-                    std::string strSimulatorName = GetDeviceModelName();
+                    std::string simulatorName = GetDeviceModelName();
                     
                     //iphone simulator
-                    if (strSimulatorName == "iPhone Simulator")
+                    if (simulatorName == "iPhone Simulator")
                     {
                         const u32 kudwIPhone5Width = 640;
                         
                         //3.5 inch screens
                         if (GetScreenDimensions().x < kudwIPhone5Width)
                         {
-                            mfPhysicalScreenSize = 3.5f;
+                            m_physicalScreenSize = 3.5f;
                         }
                         
                         //4.0 inch screens
                         else if (GetScreenDimensions().x >= kudwIPhone5Width)
                         {
-                            mfPhysicalScreenSize = 4.0f;
+                            m_physicalScreenSize = 4.0f;
                         }
                         
                         //unknown
                         else
                         {
-                            mfPhysicalScreenSize = 0.0f;
+                            m_physicalScreenSize = 0.0f;
                         }
                     }
                     
                     //iPad simulator
-                    else if (strSimulatorName == "iPad Simulator")
+                    else if (simulatorName == "iPad Simulator")
                     {
-                        mfPhysicalScreenSize = 9.7f;
+                        m_physicalScreenSize = 9.7f;
                     }
                 }
                 
                 //unknown
                 else
                 {
-                    mfPhysicalScreenSize = 0.0f;
+                    m_physicalScreenSize = 0.0f;
                 }
             }
             
-            return mfPhysicalScreenSize;
+            return m_physicalScreenSize;
 		}
 	}
 }
