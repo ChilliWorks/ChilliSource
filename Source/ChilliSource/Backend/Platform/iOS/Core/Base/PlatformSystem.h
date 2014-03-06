@@ -17,8 +17,6 @@
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
-#include <functional>
-
 namespace ChilliSource
 {
 	namespace iOS

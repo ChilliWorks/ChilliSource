@@ -15,10 +15,6 @@
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSString+MD5Addition.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/UIDevice+IdentifierAddition.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/NativeSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Social/Communications/SMSCompositionActivity.h>
-#include <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailCompositionActivity.h>
-#include <ChilliSource/Backend/Platform/iOS/Social/Communications/ContactInformationProvider.h>
-#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 #include <UIKit/UIKit.h>
