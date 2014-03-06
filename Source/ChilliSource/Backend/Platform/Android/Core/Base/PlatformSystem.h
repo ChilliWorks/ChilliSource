@@ -34,7 +34,7 @@ namespace ChilliSource
 			///
 			/// @author S Downie
 			//-----------------------------------------
-			void Init();
+			void Init() override;
 			//-------------------------------------------------
 			/// Adds default systems to the applications system
 			/// list.
