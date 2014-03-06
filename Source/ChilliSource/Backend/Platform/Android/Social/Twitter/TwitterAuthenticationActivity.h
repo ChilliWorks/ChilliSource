@@ -20,14 +20,14 @@ namespace ChilliSource
 		class TwitterAuthenticationActivity : public Social::TwitterAuthenticationActivity
 		{
 		public:
-			TwitterAuthenticationActivity();
+
 			//-----------------------------------------------
 			/// Present
 			/// 
 			/// Starts the activity by presenting a view with
 			/// a 'busy, please wait' message
 			//-----------------------------------------------
-			void Present();
+			void Present() override;
 			//-----------------------------------------------
 			/// Presents the authorise URL
 			/// 
@@ -36,7 +36,7 @@ namespace ChilliSource
 			///
 			/// @param URL
 			//-----------------------------------------------
-			void PresentURL(const std::string& instrURL);
+			void PresentURL(const std::string& instrURL) override;
 			//-----------------------------------------------
 			/// Save PIN
 			/// 
@@ -50,7 +50,7 @@ namespace ChilliSource
 			/// 
 			/// Dismiss the web view interface
 			//-----------------------------------------------
-			void Dismiss();
+			void Dismiss() override;
 			//-----------------------------------------------
 			/// On PIN Complete
 			///
@@ -58,6 +58,17 @@ namespace ChilliSource
 			//-----------------------------------------------
 			void OnPINComplete();
 			
+		private:
+			friend Social::TwitterAuthenticationActivityUPtr Social::TwitterAuthenticationActivity::Create();
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            //----------------------------------------------------
+            TwitterAuthenticationActivity();
+
+		private:
 			Core::UnifiedVector2			mvUnifiedSize;
 			Core::Vector2					mvAbsoluteSize;
 			Core::Vector2					mvAbsolutePositionTopLeft;

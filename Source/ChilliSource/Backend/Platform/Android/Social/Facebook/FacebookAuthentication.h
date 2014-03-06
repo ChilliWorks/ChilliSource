@@ -22,29 +22,37 @@ namespace ChilliSource
 
 			CS_DECLARE_NAMEDTYPE(FacebookAuthenticationSystem);
 
-			FacebookAuthenticationSystem();
+			bool IsA(Core::InterfaceIDType inID) const override;
 
-			bool IsA(Core::InterfaceIDType inID) const;
+			void Authenticate(const std::vector<std::string>& inastrReadPermissions = std::vector<std::string>(), const AuthenticationCompleteDelegate& inDelegate = nullptr) override;
 
-			void Authenticate(const std::vector<std::string>& inastrReadPermissions = std::vector<std::string>(), const AuthenticationCompleteDelegate& inDelegate = nullptr);
+			bool IsSignedIn() const override;
+            std::string GetActiveToken() const override;
 
-			bool IsSignedIn() const;
-            std::string GetActiveToken() const;
+            void AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const AuthenticationCompleteDelegate& inDelegate) override;
+            void AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const AuthenticationCompleteDelegate& inDelegate) override;
 
-            void AuthoriseWritePermissions(const std::vector<std::string> & inaWritePerms, const AuthenticationCompleteDelegate& inDelegate);
-            void AuthoriseReadPermissions(const std::vector<std::string> & inaReadPerms, const AuthenticationCompleteDelegate& inDelegate);
+            bool HasPermission(const std::string& instrPermission) const override;
 
-            bool HasPermission(const std::string& instrPermission) const;
+			void SignOut() override;
 
-			void SignOut();
-
-			void PublishInstall();
+			void PublishInstall() override;
 
 			void OnAuthenticationComplete(bool inbSuccess);
 			void OnAuthoriseReadPermissionsComplete(bool inbSuccess);
 			void OnAuthoriseWritePermissionsComplete(bool inbSuccess);
 
 			const FacebookJavaInterfaceSPtr& GetJavaInterface() const;
+
+		private:
+			friend Social::FacebookAuthenticationSystemUPtr Social::FacebookAuthenticationSystem::Create();
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            //----------------------------------------------------
+            FacebookAuthenticationSystem();
 
 		private:
 

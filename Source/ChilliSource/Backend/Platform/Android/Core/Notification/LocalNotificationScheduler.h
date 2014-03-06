@@ -20,8 +20,8 @@ namespace ChilliSource
 		class LocalNotificationScheduler : public Core::LocalNotificationScheduler
 		{
 		public:
-			LocalNotificationScheduler();
-			virtual ~LocalNotificationScheduler();
+
+			~LocalNotificationScheduler();
 			//------------------------------------------------------------------------------
 			/// Schedule Notification
 			///
@@ -63,6 +63,16 @@ namespace ChilliSource
 			/// Called when game receives a local notification
 			//-------------------------------------------------------------------------
 			static void ApplicationDidReceiveLocalNotification(const Core::NotificationSPtr& insNotification);
+
+		private:
+
+            friend Core::LocalNotificationSchedulerUPtr Core::LocalNotificationScheduler::Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            LocalNotificationScheduler();
 
 		private:
 			LocalNotificationJavaInterfaceSPtr mpLocalNotificationJavaInterface;

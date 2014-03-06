@@ -87,6 +87,15 @@ namespace ChilliSource
             /// @author I Copland
 			//----------------------------------------------------
             virtual ~DialogueBoxSystem();
+            
+        protected:
+            
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            DialogueBoxSystem(){}
 		};
 	}
 }

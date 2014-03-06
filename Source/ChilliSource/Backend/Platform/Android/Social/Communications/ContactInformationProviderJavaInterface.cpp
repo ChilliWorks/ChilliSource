@@ -114,11 +114,11 @@ namespace ChilliSource
 			for(u32 udwIndex = 0; udwIndex < mastrNames.size(); ++udwIndex)
 			{
 				Social::ContactRecord sContactRecord;
-				sContactRecord.strName = mastrNames[udwIndex];
-				sContactRecord.bHasMobileNumber = (mastrNumbers[udwIndex] != "") ? true : false;
-				sContactRecord.strMobileNumber = mastrNumbers[udwIndex];
-				sContactRecord.bHasEmail = (mastrEmails[udwIndex] != "") ? true : false;
-				sContactRecord.strEmail = mastrEmails[udwIndex];
+				sContactRecord.m_name = mastrNames[udwIndex];
+				sContactRecord.m_hasMobileNumber = (mastrNumbers[udwIndex] != "") ? true : false;
+				sContactRecord.m_mobileNumber = mastrNumbers[udwIndex];
+				sContactRecord.m_hasEmail = (mastrEmails[udwIndex] != "") ? true : false;
+				sContactRecord.m_email = mastrEmails[udwIndex];
 				asContactRecords.push_back(sContactRecord);
 			}
 			return asContactRecords;

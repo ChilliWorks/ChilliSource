@@ -56,9 +56,9 @@ namespace ChilliSource
 		void EmailCompositionActivity::Present(const std::vector<Core::UTF8String> & inastrRecipientAddresses, const Core::UTF8String & instrSubject, const Core::UTF8String & instrContents, const SendResultDelegate & inCallback, bool inbFormatAsHtml)
 		{
 			Attachment emptyAttachment;
-			emptyAttachment.mstrFilename = "";
-			emptyAttachment.mstrMIMEType = "";
-			emptyAttachment.meStorageLocation = Core::StorageLocation::k_none;
+			emptyAttachment.m_filename = "";
+			emptyAttachment.m_mimeType = "";
+			emptyAttachment.m_storageLocation = Core::StorageLocation::k_none;
 			PresentWithAttachment(inastrRecipientAddresses, instrSubject, instrContents, emptyAttachment, inCallback, inbFormatAsHtml);
 		}
 		//-------------------------------------------------------
@@ -69,17 +69,17 @@ namespace ChilliSource
 			mCallback = inCallback;
 
 			std::string strFilename;
-			if (inAttachment.mstrFilename.size() > 0)
+			if (inAttachment.m_filename.size() > 0)
 			{
-				if (inAttachment.meStorageLocation == Core::StorageLocation::k_package || (inAttachment.meStorageLocation == Core::StorageLocation::k_DLC && Core::Application::Get()->GetFileSystem()->DoesFileExistInCachedDLC(inAttachment.mstrFilename) == false))
+				if (inAttachment.m_storageLocation == Core::StorageLocation::k_package || (inAttachment.m_storageLocation == Core::StorageLocation::k_DLC && Core::Application::Get()->GetFileSystem()->DoesFileExistInCachedDLC(inAttachment.m_filename) == false))
 				{
 					Core::Application::Get()->GetFileSystem()->CreateDirectory(Core::StorageLocation::k_cache, kstrTempAttachmentDirectory);
-					Core::Application::Get()->GetFileSystem()->CopyFile(inAttachment.meStorageLocation, inAttachment.mstrFilename, Core::StorageLocation::k_cache, kstrTempAttachmentDirectory + inAttachment.mstrFilename);
-					strFilename = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(Core::StorageLocation::k_cache) + kstrTempAttachmentDirectory + inAttachment.mstrFilename;
+					Core::Application::Get()->GetFileSystem()->CopyFile(inAttachment.m_storageLocation, inAttachment.m_filename, Core::StorageLocation::k_cache, kstrTempAttachmentDirectory + inAttachment.m_filename);
+					strFilename = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(Core::StorageLocation::k_cache) + kstrTempAttachmentDirectory + inAttachment.m_filename;
 				}
 				else
 				{
-					strFilename = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(inAttachment.meStorageLocation) + inAttachment.mstrFilename;
+					strFilename = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(inAttachment.m_storageLocation) + inAttachment.m_filename;
 				}
 			}
 

@@ -23,7 +23,6 @@ namespace ChilliSource
 		class WebViewActivity: public Web::WebViewActivity
 		{
 		public:
-			WebViewActivity();
 
 			//-----------------------------------------------
 			/// Present
@@ -83,6 +82,13 @@ namespace ChilliSource
 			//-----------------------------------------------
 			static void OnWebViewDismissed(u32 inudwIndex);
 		private:
+            friend Web::WebViewActivityUPtr Web::WebViewActivity::Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            WebViewActivity();
 			//-----------------------------------------------
 			/// Add Dismiss Button
 			///

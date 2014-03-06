@@ -24,7 +24,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::CreateDefaultSystems(Core::Application* in_application)
 		{
-			inaSystems.push_back(Core::ETC1ImageProvider::Create());
+			in_application->AddSystem(Core::ETC1ImageProvider::Create());
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
@@ -34,75 +34,63 @@ namespace ChilliSource
 		}
         //-----------------------------------------
         //-----------------------------------------
-        void PlatformSystem::SetMaxFPS(u32 inudwFPS)
+        void PlatformSystem::SetMaxFPS(u32 in_fps)
         {
-        	JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->SetMaxFPS(inudwFPS);
+        	JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->SetMaxFPS(in_fps);
         }
 		//-----------------------------------------
-        /// Terminate Updater
-        ///
-        /// Stops the update loop causing
-        /// the application to terminate
         //-----------------------------------------
         void PlatformSystem::TerminateUpdater()
         {
         	JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->ForceQuit();
         }
 		//---------------------------------------------
-		/// Get Screen Dimensions
 		//---------------------------------------------
 		Core::Vector2 PlatformSystem::GetScreenDimensions() const
 		{
-			Core::Vector2 Result;
-			CoreJavaInterfaceSPtr pCoreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
-			Result.x = pCoreJI->GetScreenWidth();
-			Result.y = pCoreJI->GetScreenHeight();
+			Core::Vector2 dims;
+			CoreJavaInterfaceSPtr coreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
+			dims.x = coreJI->GetScreenWidth();
+			dims.y = coreJI->GetScreenHeight();
 
-			s32 dwOrientation = pCoreJI->GetOrientation();
-#ifdef DEBUG
-			if(dwOrientation < 0)
+			s32 orientation = coreJI->GetOrientation();
+#ifdef CS_ENABLE_DEBUG
+			if(orientation < 0)
 				CS_LOG_ERROR("PlatformSystem::GetScreenDimensions() - Could not get orientation of device!");
 #endif
-			if(Core::ScreenOrientation::k_landscapeRight == (Core::ScreenOrientation)dwOrientation)
+			if(Core::ScreenOrientation::k_landscapeRight == (Core::ScreenOrientation)orientation)
 			{
 				// Swap round as we want dimensions the other way
-				u32 udwSavedX = Result.x;
-				Result.x = Result.y;
-				Result.y = udwSavedX;
+				std::swap(dims.x, dims.y);
 			}
 
-			return Result;
+			return dims;
 		}
 		//--------------------------------------------------------------
-		/// Get Device Model Name
 		//--------------------------------------------------------------
         std::string PlatformSystem::GetDeviceModelName() const
 		{
 			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetDeviceModel();
 		}
 		//--------------------------------------------------------------
-		/// Get Device Model Type Name
 		//--------------------------------------------------------------
         std::string PlatformSystem::GetDeviceModelTypeName() const
 		{
 			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetDeviceModelType();
 		}
 		//--------------------------------------------------------------
-		/// Get Device Manufacturer Name
 		//--------------------------------------------------------------
         std::string PlatformSystem::GetDeviceManufacturerName() const
 		{
 			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetDeviceManufacturer();
 		}
 		//--------------------------------------------------------------
-		/// Get OS Version
 		//--------------------------------------------------------------
 		std::string PlatformSystem::GetOSVersion() const
 		{
 			return Core::ToString(JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetOSVersionCode());
 		}
 		//--------------------------------------------------------------
-		/// Get Locale
 		//--------------------------------------------------------------
 		Core::Locale PlatformSystem::GetLocale() const
 		{
@@ -121,66 +109,51 @@ namespace ChilliSource
 				return Core::Locale(strLocaleBrokenUp[0]);
 			}
 			else
+			{
 				return Core::kUnknownLocale;
+			}
 		}
 		//--------------------------------------------------------------
-		/// Get Language
 		//--------------------------------------------------------------
 		Core::Locale PlatformSystem::GetLanguage() const
 		{
 			return GetLocale();
 		}
 		//-------------------------------------------------
-		/// Get Screen Density
 		//-------------------------------------------------
 		f32 PlatformSystem::GetScreenDensity() const
 		{
 			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetScreenDensity();
 		}
         //-------------------------------------------------
-        /// Get App Version
-        ///
-        /// @return The version of the application as found
-		/// in the manifest
         //-------------------------------------------------
         std::string PlatformSystem::GetAppVersion() const
 		{
 			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetApplicationVersionName();
 		}
 		//-------------------------------------------------
-		/// Get Device ID
 		//-------------------------------------------------
 		std::string PlatformSystem::GetDeviceID()
 		{
 			return mUDIDManager.GetUDID();
 		}
 		//--------------------------------------------------------------
-		/// Get Number Of CPU Cores
 		//--------------------------------------------------------------
 		u32 PlatformSystem::GetNumberOfCPUCores() const
 		{
 			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetNumberOfCores();
 		}
 		//--------------------------------------------------------------
-		/// Get System Time
 		//--------------------------------------------------------------
 		TimeIntervalMs PlatformSystem::GetSystemTimeMS() const
 		{
 			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetSystemTimeInMilliseconds();
 		}
 		//-------------------------------------------------
-		/// Get Physical Screen Size
 		//-------------------------------------------------
 		f32 PlatformSystem::GetPhysicalScreenSize()
 		{
 			return JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>()->GetPhysicalScreenSize();
-		}
-		//-----------------------------------------
-		/// Destructor
-		//-----------------------------------------
-		PlatformSystem::~PlatformSystem()
-		{
-			
 		}
 	}
 }

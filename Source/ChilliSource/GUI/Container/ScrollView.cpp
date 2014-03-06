@@ -11,7 +11,7 @@
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
-#if DEBUG_DRAWING
+#if CS_ENABLE_DEBUGDRAWING
     #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
     #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
     #include <ChilliSource/Rendering/Texture/Texture.h>
@@ -366,7 +366,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         void ScrollView::Draw(Rendering::CanvasRenderer* inpCanvas)
         {
-#if DEBUG_DRAWING
+#if CS_ENABLE_DEBUGDRAWING
             if(mbDrawDebug)
             {
                 Rendering::TextureManager* pMgr = (Rendering::TextureManager*)(Core::ResourceManagerDispenser::GetSingletonPtr()->GetResourceManagerForType(Rendering::Texture::InterfaceID));
@@ -386,7 +386,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void ScrollView::EnableDebugDrawing(bool inbValue)
 		{
-#if DEBUG_DRAWING
+#if CS_ENABLE_DEBUGDRAWING
 			mbDrawDebug = inbValue;
 #else
 			mbDrawDebug = false;

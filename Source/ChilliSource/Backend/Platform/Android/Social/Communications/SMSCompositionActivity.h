@@ -32,6 +32,17 @@ namespace ChilliSource
 
 		private:
 
+			friend Social::SMSCompositionActivityUPtr Social::SMSCompositionActivity::Create();
+            //----------------------------------------------------
+            /// Private constructor to force the use of the
+            /// factory method.
+            ///
+            /// @author I Copland
+            //----------------------------------------------------
+            SMSCompositionActivity(){}
+
+		private:
+
 			static SendResultDelegate mCallback;
 		};
 	}

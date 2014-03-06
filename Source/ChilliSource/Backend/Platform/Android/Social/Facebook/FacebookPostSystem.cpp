@@ -24,10 +24,10 @@ namespace ChilliSource
 
 		bool FacebookPostSystem::IsA(Core::InterfaceIDType inID) const
 		{
-			return IFacebookPostSystem::InterfaceID == inID;
+			return Social::FacebookPostSystem::InterfaceID == inID || FacebookPostSystem::InterfaceID == inID;
 		}
 
-		void FacebookPostSystem::TryPost(const FacebookPostDesc& insDesc, const IFacebookPostSystem::PostResultDelegate& insResultCallback)
+		void FacebookPostSystem::TryPost(const FacebookPostDesc& insDesc, const FacebookPostSystem::PostResultDelegate& insResultCallback)
 		{
 			mCompletionDelegate = insResultCallback;
 
@@ -141,13 +141,13 @@ namespace ChilliSource
                 case FacebookAuthenticationSystem::AuthenticateResult::k_permissionMismatch:
                     if(mCompletionDelegate)
                     {
-                        mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_cancelled);
+                        mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_cancelled);
                     }
                 	break;
                 case FacebookAuthenticationSystem::AuthenticateResult::k_failed:
                     if(mCompletionDelegate)
                     {
-                        mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_failed);
+                        mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_failed);
                     }
                     break;
             }
@@ -162,11 +162,11 @@ namespace ChilliSource
 
 			if(inbSuccess)
 			{
-				mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_success);
+				mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_success);
 			}
 			else
 			{
-				mCompletionDelegate(Social::IFacebookPostSystem::PostResult::k_failed);
+				mCompletionDelegate(Social::FacebookPostSystem::PostResult::k_failed);
             }
 		}
 
@@ -179,11 +179,11 @@ namespace ChilliSource
 
 			if(inbSuccess)
 			{
-				mRequestCompleteDelegate(Social::IFacebookPostSystem::PostResult::k_success);
+				mRequestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_success);
 			}
 			else
 			{
-				mRequestCompleteDelegate(Social::IFacebookPostSystem::PostResult::k_failed);
+				mRequestCompleteDelegate(Social::FacebookPostSystem::PostResult::k_failed);
             }
 		}
 	}
