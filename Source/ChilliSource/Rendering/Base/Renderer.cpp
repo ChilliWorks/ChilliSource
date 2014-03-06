@@ -37,11 +37,17 @@ namespace ChilliSource
 		
 		typedef std::function<bool(RenderComponent*, RenderComponent*)> RenderSortDelegate;
 		
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        RendererUPtr Renderer::Create(RenderSystem* in_renderSystem)
+        {
+            return RendererUPtr(new Renderer(in_renderSystem));
+        }
 		//----------------------------------------------------------
 		//----------------------------------------------------------
-		Renderer::Renderer(RenderSystem* inpRenderSystem)
-        : mpRenderSystem(inpRenderSystem)
-        , mCanvas(inpRenderSystem)
+		Renderer::Renderer(RenderSystem* in_renderSystem)
+        : mpRenderSystem(in_renderSystem)
+        , mCanvas(in_renderSystem)
         , mpActiveCamera(nullptr)
 		{
 			mpTransparentSortPredicate = RendererSortPredicateSPtr(new BackToFrontSortPredicate());

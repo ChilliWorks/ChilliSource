@@ -27,14 +27,16 @@ namespace ChilliSource
 		class Renderer 
 		{
 		public:
-            //----------------------------------------------------------
-            /// Constructor
+            //-------------------------------------------------------
+            /// Factory method
             ///
             /// @author S Downie
             ///
             /// @param Render system
-            //----------------------------------------------------------
-			Renderer(RenderSystem* in_renderSystem);
+            ///
+            /// @return Ownership of new instance
+            //-------------------------------------------------------
+            static RendererUPtr Create(RenderSystem* in_renderSystem);
             //----------------------------------------------------------
             /// @author S Downie
             //----------------------------------------------------------
@@ -100,7 +102,14 @@ namespace ChilliSource
             static Core::Matrix4x4 matViewProjCache;
 			
 		private:
-			
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @param Render system
+            //-------------------------------------------------------
+			Renderer(RenderSystem* in_renderSystem);
             //----------------------------------------------------------
             /// Render Shadow Map
             ///

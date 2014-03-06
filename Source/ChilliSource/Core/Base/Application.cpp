@@ -10,41 +10,57 @@
 #include <ChilliSource/Core/Base/Application.h>
 
 #include <ChilliSource/Audio/Base/AudioSystem.h>
+#include <ChilliSource/Audio/Base/AudioLoader.h>
+#include <ChilliSource/Audio/Base/AudioPlayer.h>
 
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
-#include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
-#include <ChilliSource/Core/System/SystemConcepts.h>
-#include <ChilliSource/Core/Resource/ResourceProvider.h>
-#include <ChilliSource/Core/Entity/ComponentFactory.h>
-#include <ChilliSource/Core/Time/CoreTimer.h>
-#include <ChilliSource/Core/File/TweakableConstants.h>
-#include <ChilliSource/Core/File/LocalDataStore.h>
-#include <ChilliSource/Core/Localisation/LocalisedText.h>
-#include <ChilliSource/Core/State/StateManager.h>
-#include <ChilliSource/Core/Resource/ResourceGroupManager.h>
-#include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Base/Logging.h>
 #include <ChilliSource/Core/Base/Device.h>
-#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/Base/Logging.h>
+#include <ChilliSource/Core/Base/PlatformSystem.h>
+#include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
+#include <ChilliSource/Core/Entity/ComponentFactory.h>
+#include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
+#include <ChilliSource/Core/File/LocalDataStore.h>
+#include <ChilliSource/Core/File/TweakableConstants.h>
+#include <ChilliSource/Core/Image/MoImageProvider.h>
+#include <ChilliSource/Core/Localisation/LocalisedText.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
+#include <ChilliSource/Core/Notifications/LocalNotificationScheduler.h>
+#include <ChilliSource/Core/Resource/ResourceGroupManager.h>
 #include <ChilliSource/Core/Resource/ResourceManager.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
+#include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/State/StateManager.h>
+#include <ChilliSource/Core/System/System.h>
+#include <ChilliSource/Core/System/SystemConcepts.h>
+#include <ChilliSource/Core/Time/CoreTimer.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Core/Base/PlatformSystem.h>
-#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
-#include <ChilliSource/Core/Math/MathUtils.h>
 
-#include <ChilliSource/Rendering/Material/Material.h>
-#include <ChilliSource/Rendering/Font/Font.h>
-#include <ChilliSource/Rendering/Model/Mesh.h>
-#include <ChilliSource/Rendering/Base/Renderer.h>
-#include <ChilliSource/Rendering/Base/RenderSystem.h>
-#include <ChilliSource/Rendering/Camera/CameraComponent.h>
+#include <ChilliSource/GUI/Base/GUIViewFactory.h>
 
 #include <ChilliSource/Input/Base/InputSystem.h>
 
+#include <ChilliSource/Rendering/Base/Renderer.h>
+#include <ChilliSource/Rendering/Base/RenderCapabilities.h>
+#include <ChilliSource/Rendering/Base/RenderSystem.h>
+#include <ChilliSource/Rendering/Camera/CameraComponent.h>
+#include <ChilliSource/Rendering/Font/Font.h>
+#include <ChilliSource/Rendering/Font/FontLoader.h>
+#include <ChilliSource/Rendering/Material/Material.h>
+#include <ChilliSource/Rendering/Material/MaterialLoader.h>
+#include <ChilliSource/Rendering/Material/MaterialFactory.h>
+#include <ChilliSource/Rendering/Model/AnimatedMeshComponentUpdater.h>
+#include <ChilliSource/Rendering/Model/Mesh.h>
+#include <ChilliSource/Rendering/Sprite/SpriteSheetLoader.h>
+#include <ChilliSource/Rendering/Sprite/XMLSpriteSheetLoader.h>
+
 #include <ctime>
+
+//TODO: Remove
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
 
 namespace ChilliSource
 {
@@ -163,7 +179,7 @@ namespace ChilliSource
         //-----------------------------------------------------
         Rendering::Renderer* Application::GetRenderer()
         {
-            return m_renderer;
+            return m_renderer.get();
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
@@ -195,12 +211,6 @@ namespace ChilliSource
         {
             return m_fileSystem;
         }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        void Application::SetRenderer(Rendering::Renderer* in_system)
-        {
-            m_renderer = in_system;
-        }
         //----------------------------------------------------
         //----------------------------------------------------
 		void Application::OnInitialise()
@@ -216,6 +226,10 @@ namespace ChilliSource
 			//Because windows by default is landscape, this needs to be flipped.
 			m_defaultOrientation = Core::ScreenOrientation::k_portraitUp;
 #endif
+            
+			Core::Logging::Init();
+            
+            GUI::GUIViewFactory::RegisterDefaults();
             
 			//Initialise the platform specific API's
             m_platformSystem = PlatformSystem::Create();
@@ -457,7 +471,40 @@ namespace ChilliSource
         //------------------------------------------------------
         void Application::CreateDefaultSystems()
         {
+            //Audio
+            Audio::AudioSystemUPtr audioSystem(Audio::AudioSystem::Create());
+			AddSystem(Audio::AudioLoader::Create(audioSystem.get()));
+            AddSystem(std::move(audioSystem));
+            
+            //Core
+            AddSystem(FileSystem::Create());
+            //TODO: Change this to a PNG image provider.
+            AddSystem(ImageResourceProvider::Create());
+            AddSystem(MoImageProvider::Create());
             AddSystem(DialogueBoxSystem::Create());
+            
+            NotificationScheduler::Initialise(LocalNotificationScheduler::Create());
+            
+            //Input
+            AddSystem(Input::InputSystem::Create());
+            
+            //Rendering
+            Rendering::RenderCapabilitiesUPtr renderCapabilitiesUPtr(Rendering::RenderCapabilities::Create());
+            Rendering::RenderCapabilities* renderCapabilities(renderCapabilitiesUPtr.get());
+            AddSystem(std::move(renderCapabilitiesUPtr));
+            Rendering::RenderSystemUPtr renderSystemUPtr(Rendering::RenderSystem::Create(renderCapabilities));
+            //TODO: Don't assume this will be a GL render system. We only do this temporarily
+            //in order to access the managers. This will change.
+            OpenGL::RenderSystem* renderSystem((OpenGL::RenderSystem*)renderSystemUPtr.get());
+            AddSystem(std::move(renderSystemUPtr));
+            AddSystem(Rendering::MaterialFactory::Create(renderSystem->GetTextureManager(), renderSystem->GetShaderManager(), renderSystem->GetCubemapManager(), renderCapabilities));
+            AddSystem(Rendering::MaterialLoader::Create(renderCapabilities));
+			AddSystem(Rendering::SpriteSheetLoader::Create());
+			AddSystem(Rendering::XMLSpriteSheetLoader::Create());
+			AddSystem(Rendering::FontLoader::Create());
+            AddSystem(Rendering::AnimatedMeshComponentUpdater::Create());
+            
+            m_renderer = Rendering::Renderer::Create(renderSystem);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -514,6 +561,10 @@ namespace ChilliSource
             //Give the resource managers their providers
             m_resourceManagerDispenser->SetResourceProviders(m_resourceProviders);
 
+            GetRenderSystem()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
+            GetRenderer()->Init();
+            Audio::AudioPlayer::Init();
+    
             m_platformSystem->PostCreateSystems();
 		}
         //----------------------------------------------------

@@ -19,6 +19,16 @@ namespace ChilliSource
         class LocalNotificationScheduler
         {
         public:
+            
+            //-------------------------------------------------------
+            /// Create the platform dependent backend
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend instance
+            //-------------------------------------------------------
+            static LocalNotificationSchedulerUPtr Create();
+            
             virtual ~LocalNotificationScheduler(){};
             //------------------------------------------------------------------------------
             /// Schedule Notification
@@ -55,6 +65,14 @@ namespace ChilliSource
             /// Terminate all currently scheduled notifications
             //-------------------------------------------------------------------------
             virtual void CancelAll() = 0;
+            
+        protected:
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            LocalNotificationScheduler(){}
         };
     }
 }

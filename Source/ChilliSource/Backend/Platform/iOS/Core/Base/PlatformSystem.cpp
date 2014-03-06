@@ -12,46 +12,14 @@
 
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
 
-#include <ChilliSource/Core/Base/MakeDelegate.h>
-#include <ChilliSource/Core/File/FileSystem.h>
-
+#include <ChilliSource/Backend/Platform/iOS/Core/String/NSString+MD5Addition.h>
+#include <ChilliSource/Backend/Platform/iOS/Core/Base/UIDevice+IdentifierAddition.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/NativeSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/Image/ImageLoader.h>
-#include <ChilliSource/Backend/Platform/iOS/Input/Base/InputSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Video/Base/VideoPlayerActivity.h>
-#include <ChilliSource/Backend/Audio/FMOD/Base/FMODSystem.h>
-#include <ChilliSource/Backend/Audio/FMOD/Base/AudioLoader.h>
-#include <ChilliSource/Backend/Platform/iOS/Networking/Http/HttpConnectionSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Networking/IAP/IAPSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Web/Base/WebViewActivity.h>
-
 #include <ChilliSource/Backend/Platform/iOS/Social/Communications/SMSCompositionActivity.h>
 #include <ChilliSource/Backend/Platform/iOS/Social/Communications/EmailCompositionActivity.h>
 #include <ChilliSource/Backend/Platform/iOS/Social/Communications/ContactInformationProvider.h>
-
-#include <ChilliSource/Backend/Platform/iOS/Core/Notification/LocalNotificationScheduler.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/File/FileSystem.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/String/NSString+MD5Addition.h>
-#include <ChilliSource/Backend/Platform/iOS/Core/Base/UIDevice+IdentifierAddition.h>
-
-#include <ChilliSource/Rendering/Base/Renderer.h>
-#include <ChilliSource/Rendering/Font/FontLoader.h>
-#include <ChilliSource/Rendering/Sprite/SpriteSheetLoader.h>
-#include <ChilliSource/Rendering/Sprite/XMLSpriteSheetLoader.h>
-#include <ChilliSource/Rendering/Material/MaterialLoader.h>
-#include <ChilliSource/Rendering/Material/MaterialFactory.h>
-#include <ChilliSource/Rendering/Model/AnimatedMeshComponentUpdater.h>
-
-#include <ChilliSource/Audio/Base/AudioPlayer.h>
-#include <ChilliSource/Audio/Base/AudioLoader.h>
-
-#include <ChilliSource/GUI/Base/GUIViewFactory.h>
-
+#include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Core/Image/MoImageProvider.h>
-
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderCapabilities.h>
 
 #include <UIKit/UIKit.h>
 #include <sys/types.h>
@@ -81,10 +49,6 @@ namespace ChilliSource
 			
             //---Info providers
 			AddInfoProviderFunc(Social::ContactInformationProvider::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateContactInformationProvider));
-
-			Core::NotificationScheduler::Initialise(new LocalNotificationScheduler());
-
-			Core::Logging::Init();
 		}
         //--------------------------------------------
         /// Add Activity Function
@@ -117,8 +81,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		void PlatformSystem::Init()
 		{
-            //Initialise GUI factory
-            GUI::GUIViewFactory::RegisterDefaults();
+
 		}
 		//-------------------------------------------------
 		/// Create Default Systems
@@ -130,35 +93,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::CreateDefaultSystems(Core::Application* in_application)
 		{
-            Rendering::RenderCapabilitiesUPtr renderCapabilitiesUPtr(Rendering::RenderCapabilities::Create());
-            Rendering::RenderCapabilities* renderCapabilities(renderCapabilitiesUPtr.get());
-            in_application->AddSystem(std::move(renderCapabilitiesUPtr));
-            
-            Rendering::RenderSystemUPtr renderSystemUPtr(Rendering::RenderSystem::Create(renderCapabilities));
-            
-            //TODO: Don't assume this will be a GL render system. We only do this temporarily
-            //in order to access the managers. This will change.
-            OpenGL::RenderSystem* renderSystem((OpenGL::RenderSystem*)renderSystemUPtr.get());
-            in_application->AddSystem(std::move(renderSystemUPtr));
-            
-            Audio::AudioSystemUPtr audioSystem(Audio::AudioSystem::Create());
-			in_application->AddSystem(Audio::AudioLoader::Create(audioSystem.get()));
-            in_application->AddSystem(std::move(audioSystem));
-            
-            in_application->AddSystem(Rendering::MaterialFactory::Create(renderSystem->GetTextureManager(), renderSystem->GetShaderManager(), renderSystem->GetCubemapManager(), renderCapabilities));
-            in_application->AddSystem(Rendering::MaterialLoader::Create(renderCapabilities));
-            in_application->AddSystem(Input::InputSystem::Create());
-            in_application->AddSystem(Core::FileSystem::Create());
-            //TODO: Change this to a PNG image provider.
-            in_application->AddSystem(Core::ImageResourceProvider::Create());
-            in_application->AddSystem(Core::MoImageProvider::Create());
-            
-			in_application->AddSystem(Rendering::SpriteSheetLoader::Create());
-			in_application->AddSystem(Rendering::XMLSpriteSheetLoader::Create());
-			in_application->AddSystem(Rendering::FontLoader::Create());
-            in_application->AddSystem(Rendering::AnimatedMeshComponentUpdater::Create());
-            
-            Core::Application::Get()->SetRenderer(new Rendering::Renderer(renderSystem));
+
 		}
 		//-------------------------------------------------
 		/// Post Create Systems
@@ -170,13 +105,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::PostCreateSystems()
 		{
-            Core::Application::Get()->GetRenderSystem()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
-            Core::Application::Get()->GetRenderer()->Init();
-            
-            if(Core::Application::Get()->GetAudioSystem() != nullptr)
-			{
-				Audio::AudioPlayer::Init();
-			}
+
 		}
         //-----------------------------------------
         /// Run
