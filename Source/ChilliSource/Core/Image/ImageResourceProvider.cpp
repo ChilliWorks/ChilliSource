@@ -14,11 +14,11 @@
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <ChilliSource/Backend/Platform/Android/Input/Base/InputSystem.h>
+#include <ChilliSource/Backend/Platform/Android/Core/Image/ImageLoader.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#include <ChilliSource/Backend/Platform/Windows/Input/Base/InputSystem.h>
+#include <ChilliSource/Backend/Platform/Windows/Core/Image/ImageLoader.h>
 #endif
 
 namespace ChilliSource
