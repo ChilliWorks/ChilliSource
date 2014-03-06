@@ -34,7 +34,7 @@ namespace ChilliSource
             /// @author Ian Copland
             /// @return The new instance.
             //-----------------------------------------
-            static PlatformSystem* Create();
+            static PlatformSystemUPtr Create();
             //-----------------------------------------
             /// Destructor
             //-----------------------------------------
@@ -80,14 +80,15 @@ namespace ChilliSource
             //--- System Creation
             //=========================================
             //-------------------------------------------------
-            /// Add Default Systems
-            ///
             /// Adds default systems to the applications system
-            /// list.
+			/// list.
             ///
-            /// @param the system list
+            /// @author S Downie
+			///
+			/// @param Application instance to add the default
+            /// platform systems to.
             //-------------------------------------------------
-            virtual void CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems) = 0;
+            virtual void CreateDefaultSystems(Application* in_application) = 0;
             //-------------------------------------------------
             /// Post Create Systems
             ///

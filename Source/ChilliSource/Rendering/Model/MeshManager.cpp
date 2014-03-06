@@ -196,18 +196,18 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		/// Create Manual Mesh
 		//----------------------------------------------------------------
-		MeshSPtr MeshManager::CreateManualMesh(MeshDescriptor & inMeshDescriptor)
+		MeshUPtr MeshManager::CreateManualMesh(const MeshDescriptor & inMeshDescriptor)
 		{
-			MeshSPtr pMesh(new Mesh());
+			MeshUPtr pMesh(new Mesh());
 			
-			BuildMesh(mpApplicationOwner->GetRenderSystem(), inMeshDescriptor, pMesh);
+			BuildMesh(mpApplicationOwner->GetRenderSystem(), inMeshDescriptor, pMesh.get());
 			
 			return pMesh;
 		}
 		//----------------------------------------------------------------
 		/// Create Empty Model
 		//----------------------------------------------------------------
-		MeshSPtr MeshManager::CreateEmptyMesh(u32 indwNumSubMeshes, u32 inudwVertexDataSize, u32 indwIndexDataSize)
+		MeshUPtr MeshManager::CreateEmptyMesh(u32 indwNumSubMeshes, u32 inudwVertexDataSize, u32 indwIndexDataSize)
 		{
 			Mesh* pMesh = new Mesh();
 			
@@ -228,12 +228,12 @@ namespace ChilliSource
 			delete[] apVertElements;
 			
 			//return the model pointer
-			return MeshSPtr(pMesh);
+			return MeshUPtr(pMesh);
 		}
 		//----------------------------------------------------------------------------
 		/// BuildMesh
 		//----------------------------------------------------------------------------
-		bool MeshManager::BuildMesh(RenderSystem* inpRenderSystem, MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource, bool inbNeedsPrepared)
+		bool MeshManager::BuildMesh(RenderSystem* inpRenderSystem, const MeshDescriptor& inMeshDescriptor, Mesh* outpResource, bool inbNeedsPrepared)
 		{
 			bool bSuccess = true;
 			

@@ -101,14 +101,14 @@ namespace ChilliSource
 			/// Creates a new empty model which can be later populated with
 			/// data using PopulateModelFromFile
 			//----------------------------------------------------------------
-			MeshSPtr CreateEmptyMesh(u32 indwNumSubMeshes, u32 inudwVertexDataSize, u32 indwIndexDataSize);
+			MeshUPtr CreateEmptyMesh(u32 indwNumSubMeshes, u32 inudwVertexDataSize, u32 indwIndexDataSize);
             //----------------------------------------------------------------
             /// Create Manual Mesh
             ///
             /// @param Mesh descriptor containing the vertex data etx
             /// @return Mesh resource
             //----------------------------------------------------------------
-			MeshSPtr CreateManualMesh(MeshDescriptor& insMeshDescriptor);
+			MeshUPtr CreateManualMesh(const MeshDescriptor& insMeshDescriptor);
 			//----------------------------------------------------------------------------
 			/// BuildMesh
 			///
@@ -120,7 +120,7 @@ namespace ChilliSource
 			/// @param whether or not the mesh needs prepared. Defaults to true.
 			/// @return success or failure.
 			//----------------------------------------------------------------------------
-			static bool BuildMesh(RenderSystem* inpRenderSystem, MeshDescriptor& inMeshDescriptor, const MeshSPtr& outpResource, bool inbNeedsPrepared = true);
+			static bool BuildMesh(RenderSystem* inpRenderSystem, const MeshDescriptor& inMeshDescriptor, Mesh* outpResource, bool inbNeedsPrepared = true);
             //----------------------------------------------------------------------------
             /// Get Default Mesh
             ///

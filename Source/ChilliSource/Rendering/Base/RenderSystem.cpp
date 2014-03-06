@@ -16,11 +16,26 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
+#if defined CS_TARGETPLATFORM_IOS || defined CS_TARGETPLATFORM_ANDROID || defined CS_TARGETPLATFORM_WINDOWS
+#include <ChilliSource/Backend/Rendering/OpenGL/Base/RenderSystem.h>
+#endif
+
 namespace ChilliSource
 {
 	namespace Rendering
 	{
         CS_DEFINE_NAMEDTYPE(RenderSystem);
+        
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        RenderSystemUPtr RenderSystem::Create(RenderCapabilities* in_renderCapabilities)
+        {
+#if defined CS_TARGETPLATFORM_IOS || defined CS_TARGETPLATFORM_ANDROID || defined CS_TARGETPLATFORM_WINDOWS
+            return RenderSystemUPtr(new OpenGL::RenderSystem(in_renderCapabilities));
+#else
+            return nullptr;
+#endif
+        }
 		//-------------------------------------------------------
 		/// Constructor
 		///

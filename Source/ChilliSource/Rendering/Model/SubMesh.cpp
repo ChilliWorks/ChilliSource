@@ -89,7 +89,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Prepare
 		//-----------------------------------------------------------------
-		void SubMesh::Prepare(RenderSystem* inpRenderSystem, VertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes,
+		void SubMesh::Prepare(RenderSystem* inpRenderSystem, const VertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes,
 							   u32 inudwVertexCapacityInBytes, u32 inudwIndexCapacityInBytes, BufferAccess inAccessFlag, PrimitiveType inPrimativeType)
 		{
 			mpRenderSystem = inpRenderSystem;
@@ -110,7 +110,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		/// Alter Buffer Declaration
 		//-----------------------------------------------------------------
-		void SubMesh::AlterBufferDeclaration(VertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes)
+		void SubMesh::AlterBufferDeclaration(const VertexDeclaration& inVertexDeclaration, u32 inudwIndexSizeInBytes)
 		{
 			BufferDescription desc;
 			desc.eUsageFlag = BufferUsage::k_static;

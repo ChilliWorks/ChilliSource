@@ -47,21 +47,21 @@ namespace ChilliSource
             
             return nullptr;
         }
-        Input::Accelerometer * InputSystem::GetAccelerometerPtr()
+        Input::Accelerometer * InputSystem::GetAccelerometer()
         {
             return mpAccelerometer;
         }
 
-        Input::TouchScreen * InputSystem::GetTouchScreenPtr()
+        Input::TouchScreen * InputSystem::GetTouchScreen()
         {
             return &mTouchScreen;
         }
         void InputSystem::Update(f32 infDT)
         {
-            mffTimeStamp += infDT;
-            mTouchScreen.SetCurrentAppTime(mffTimeStamp);
+            m_timeStamp += infDT;
+            mTouchScreen.SetCurrentAppTime(m_timeStamp);
         }
-        Input::VirtualKeyboard* InputSystem::GetVirtualKeyboardPtr()
+        Input::VirtualKeyboard* InputSystem::GetVirtualKeyboard()
         {
             return &mVirtualKeyboard;
         }

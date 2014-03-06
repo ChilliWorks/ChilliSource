@@ -40,14 +40,15 @@ namespace ChilliSource
 			//-----------------------------------------
 			void Init();
 			//-------------------------------------------------
-			/// Create Default Systems
-			///
 			/// Adds default systems to the applications system
 			/// list.
+            ///
+            /// @author S Downie
 			///
-			/// @param the system list
+			/// @param Application instance to add the default
+            /// platform systems to.
 			//-------------------------------------------------
-			void CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems) override;
+			void CreateDefaultSystems(Core::Application* in_application) override;
 			//-------------------------------------------------
 			/// Post Create Systems
 			///

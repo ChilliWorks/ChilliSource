@@ -92,7 +92,7 @@ namespace ChilliSource
 			}
 			
 			CS_LOG_ERROR("Cannot find resource for Subtitles with path " + inFilePath);
-			return SubtitlesSPtr();
+			return nullptr;
 		}
 		//----------------------------------------------------------------
 		/// Async Get Subtitles From File
@@ -127,7 +127,7 @@ namespace ChilliSource
 			}
 			
 			CS_LOG_ERROR("Cannot find resource for Subtitles with path " + inFilePath);
-			return SubtitlesSPtr();
+			return nullptr;
 		}
 	}
 }

@@ -172,7 +172,7 @@ namespace ChilliSource
 			}
 			
 			CS_LOG_ERROR("Cannot find resource for Material with path " + inFilePath);
-			return MaterialSPtr();
+			return nullptr;
 		}
 	}
 }

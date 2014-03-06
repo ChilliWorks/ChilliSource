@@ -30,7 +30,7 @@ namespace ChilliSource
             /// Creates a new platform specfic instance of the remote
             /// notification system.
             //---------------------------------------------------------------
-            static RemoteNotificationSystem* Create();
+            static RemoteNotificationSystemUPtr Create();
             //---------------------------------------------------------------
             /// Is A
             ///

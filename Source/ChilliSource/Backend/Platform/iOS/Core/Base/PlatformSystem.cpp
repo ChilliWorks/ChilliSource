@@ -14,7 +14,6 @@
 
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/File/FileSystem.h>
-#include <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
 
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/NativeSystem.h>
 #include <ChilliSource/Backend/Platform/iOS/Core/Image/ImageLoader.h>
@@ -89,7 +88,6 @@ namespace ChilliSource
 			AddInfoProviderFunc(Social::ContactInformationProvider::InterfaceID, Core::MakeDelegate(this, &PlatformSystem::CreateContactInformationProvider));
 
 			Core::NotificationScheduler::Initialise(new LocalNotificationScheduler());
-			Core::Application::Get()->SetFileSystem(new iOS::FileSystem());
 
 			Core::Logging::Init();
 		}
@@ -171,40 +169,37 @@ namespace ChilliSource
 		///
 		/// @param the system list
 		//-------------------------------------------------
-		void PlatformSystem::CreateDefaultSystems(std::vector<Core::SystemSPtr> & inaSystems)
+		void PlatformSystem::CreateDefaultSystems(Core::Application* in_application)
 		{
-			//create the main systems
-            OpenGL::RenderSystem* pRenderSystem = new OpenGL::RenderSystem();
-            inaSystems.push_back(Core::SystemSPtr(pRenderSystem));
-			Core::Application::Get()->SetRenderSystem(pRenderSystem);
+            Rendering::RenderCapabilitiesUPtr renderCapabilitiesUPtr(Rendering::RenderCapabilities::Create());
+            Rendering::RenderCapabilities* renderCapabilities(renderCapabilitiesUPtr.get());
+            in_application->AddSystem(std::move(renderCapabilitiesUPtr));
             
-            Input::InputSystem* pInputSystem = new iOS::InputSystem();
-            inaSystems.push_back(Core::SystemSPtr(pInputSystem));
-            Core::Application::Get()->SetInputSystem(pInputSystem);
+            Rendering::RenderSystemUPtr renderSystemUPtr(Rendering::RenderSystem::Create(renderCapabilities));
             
-            Audio::AudioSystem * pAudioSystem = new FMOD::FMODSystem();
-			inaSystems.push_back(Core::SystemSPtr(pAudioSystem));
-			inaSystems.push_back(Core::SystemSPtr(new FMOD::AudioLoader(pAudioSystem)));
-			Core::Application::Get()->SetAudioSystem(pAudioSystem);
+            //TODO: Don't assume this will be a GL render system. We only do this temporarily
+            //in order to access the managers. This will change.
+            OpenGL::RenderSystem* renderSystem((OpenGL::RenderSystem*)renderSystemUPtr.get());
+            in_application->AddSystem(std::move(renderSystemUPtr));
             
-			//create other important systems
-			OpenGL::RenderCapabilities* pRenderCapabilities = new OpenGL::RenderCapabilities();
-            inaSystems.push_back(Core::SystemSPtr(pRenderCapabilities));
-            inaSystems.push_back(Core::SystemSPtr(new iOS::ImageLoader()));
-            inaSystems.push_back(Core::SystemSPtr(new Core::MoImageProvider()));
-			inaSystems.push_back(Core::SystemSPtr(new Rendering::SpriteSheetLoader()));
-			inaSystems.push_back(Core::SystemSPtr(new Rendering::XMLSpriteSheetLoader()));
-			inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialLoader(pRenderCapabilities)));
-			inaSystems.push_back(Core::SystemSPtr(new Rendering::FontLoader()));
-            inaSystems.push_back(Core::SystemSPtr(new Rendering::AnimatedMeshComponentUpdater()));
-            inaSystems.push_back(Core::SystemSPtr(new Rendering::MaterialFactory(pRenderSystem->GetTextureManager(), pRenderSystem->GetShaderManager(), pRenderSystem->GetCubemapManager(), pRenderCapabilities)));
-            inaSystems.push_back(Core::SystemSPtr(Core::DialogueBoxSystem::Create()));
+            Audio::AudioSystemUPtr audioSystem(Audio::AudioSystem::Create());
+			in_application->AddSystem(Audio::AudioLoader::Create(audioSystem.get()));
+            in_application->AddSystem(std::move(audioSystem));
             
-			//Initialise the render system
-			Core::Application::Get()->GetRenderSystem()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
+            in_application->AddSystem(Rendering::MaterialFactory::Create(renderSystem->GetTextureManager(), renderSystem->GetShaderManager(), renderSystem->GetCubemapManager(), renderCapabilities));
+            in_application->AddSystem(Rendering::MaterialLoader::Create(renderCapabilities));
+            in_application->AddSystem(Input::InputSystem::Create());
+            in_application->AddSystem(Core::FileSystem::Create());
+            //TODO: Change this to a PNG image provider.
+            in_application->AddSystem(Core::ImageResourceProvider::Create());
+            in_application->AddSystem(Core::MoImageProvider::Create());
             
-			//Create the renderer
-			Core::Application::Get()->SetRenderer(new Rendering::Renderer(Core::Application::Get()->GetRenderSystem()));
+			in_application->AddSystem(Rendering::SpriteSheetLoader::Create());
+			in_application->AddSystem(Core::SystemUPtr(new Rendering::XMLSpriteSheetLoader()));
+			in_application->AddSystem(Core::SystemUPtr(new Rendering::FontLoader()));
+            in_application->AddSystem(Core::SystemUPtr(new Rendering::AnimatedMeshComponentUpdater()));
+            
+            Core::Application::Get()->SetRenderer(new Rendering::Renderer(renderSystem));
 		}
 		//-------------------------------------------------
 		/// Post Create Systems
@@ -216,6 +211,9 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::PostCreateSystems()
 		{
+            Core::Application::Get()->GetRenderSystem()->Init((u32)Core::Screen::GetRawDimensions().x, (u32)Core::Screen::GetRawDimensions().y);
+            Core::Application::Get()->GetRenderer()->Init();
+            
             if(Core::Application::Get()->GetAudioSystem() != nullptr)
 			{
 				Audio::AudioPlayer::Init();

@@ -90,7 +90,7 @@ namespace ChilliSource
 			///
 			/// @return Concrete audio listener
 			//----------------------------------------------------------------
-			AudioListenerSPtr CreateListener();
+			AudioListenerUPtr CreateListener();
 			//-----------------------------------------------------------------
 			/// Destroy
 			///
@@ -110,7 +110,7 @@ namespace ChilliSource
 			///
 			/// @return Concrete audio resource based on the audio system
 			//-----------------------------------------------------------------
-			virtual AudioResourceSPtr CreateAudioResource() const = 0;
+			virtual AudioResourceUPtr CreateAudioResource() const = 0;
 			
 		private:
 

@@ -67,13 +67,13 @@ namespace ChilliSource
 			///
 			/// @return Pointer to mouse device
 			//---------------------------------------------------------------
-			Input::Mouse * GetMousePtr() override;
+			Input::Mouse * GetMouse() override;
 			//---------------------------------------------------------------
 			/// Get Touch Screen Pointer
 			///
 			/// @return Pointer to touch screen device
 			//---------------------------------------------------------------
-			Input::TouchScreen * GetTouchScreenPtr() override;
+			Input::TouchScreen * GetTouchScreen() override;
 
 		protected:
 

@@ -32,12 +32,26 @@ namespace ChilliSource
 		{
 			const std::string kstrMaterialExtension("momaterial");
 		}
+        
+        //-------------------------------------------------------------------------
+        /// Factory method
+        ///
+        /// @author S Downie
+        ///
+        /// @param The render capabilities.
+        ///
+        /// @return New instance with ownership transferred
+        //-------------------------------------------------------------------------
+        MaterialLoaderUPtr MaterialLoader::Create(RenderCapabilities* in_renderCapabilities)
+        {
+            return MaterialLoaderUPtr(new MaterialLoader(in_renderCapabilities));
+        }
 		
 		//-------------------------------------------------------------------------
 		/// Constructor
 		//-------------------------------------------------------------------------
 		MaterialLoader::MaterialLoader(RenderCapabilities* inpRenderCapabilities)
-			: mpRenderCapabilities(inpRenderCapabilities)
+        : mpRenderCapabilities(inpRenderCapabilities)
 		{
 			CS_ASSERT(mpRenderCapabilities, "Material loader is missing required system: Render Capabilities.");
 		}

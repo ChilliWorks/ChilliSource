@@ -27,7 +27,7 @@ namespace ChilliSource
 			///
 			/// @return Concrete audio resource based on the audio system
 			//-----------------------------------------------------------------
-			Audio::AudioResourceSPtr CreateAudioResource() const;
+			Audio::AudioResourceUPtr CreateAudioResource() const;
 		};
 	}
 }

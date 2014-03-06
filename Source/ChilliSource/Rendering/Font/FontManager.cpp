@@ -140,7 +140,7 @@ namespace ChilliSource
 			
 			//Resource not found
 			CS_LOG_ERROR("Cannot find resource for font with path " + inFilePath);
-			return FontSPtr();
+			return nullptr;
 		}
 	}
 }

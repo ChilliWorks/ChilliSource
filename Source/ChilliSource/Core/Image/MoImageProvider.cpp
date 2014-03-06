@@ -19,6 +19,12 @@ namespace ChilliSource
         {
             const std::string MoImageExtension("moimage");
         }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        MoImageProviderUPtr MoImageProvider::Create()
+        {
+            return MoImageProviderUPtr(new MoImageProvider());
+        }
         //----------------------------------------------------------------
         /// Is A
         //----------------------------------------------------------------

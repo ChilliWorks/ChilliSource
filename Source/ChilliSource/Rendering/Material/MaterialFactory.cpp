@@ -24,6 +24,13 @@ namespace ChilliSource
     {
         CS_DEFINE_NAMEDTYPE(MaterialFactory);
         
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        MaterialFactoryUPtr MaterialFactory::Create(TextureManager* in_texMgr, ShaderManager* in_shaderMgr, CubemapManager* in_cubemapMgr, RenderCapabilities* in_renderCapabilities)
+        {
+            return MaterialFactoryUPtr(new MaterialFactory(in_texMgr, in_shaderMgr, in_cubemapMgr, in_renderCapabilities));
+        }
+        
         //---------------------------------------------------
         /// Constructor
         //---------------------------------------------------
@@ -42,16 +49,16 @@ namespace ChilliSource
         //---------------------------------------------------
         /// Create Custom
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateCustom() const
+        MaterialUPtr MaterialFactory::CreateCustom() const
         {
             Material* pMaterial = new Material();
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         
         //---------------------------------------------------
         /// Create GUI
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateGUI() const
+        MaterialUPtr MaterialFactory::CreateGUI() const
         {
             Material* pMaterial = new Material();
             
@@ -61,12 +68,12 @@ namespace ChilliSource
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(false);
             
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create GUI Distance Font
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateGUIDistanceFont() const
+        MaterialUPtr MaterialFactory::CreateGUIDistanceFont() const
         {
             Material* pMaterial = new Material();
             
@@ -76,12 +83,12 @@ namespace ChilliSource
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(false);
             
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create GUI Distance Font Outlined
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateGUIDistanceFontOutlined() const
+        MaterialUPtr MaterialFactory::CreateGUIDistanceFontOutlined() const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/GUIDistanceFontOutlined"));
@@ -89,12 +96,12 @@ namespace ChilliSource
             pMaterial->SetTransparent(true);
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(false);
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create Sprite
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateSprite(const TextureSPtr& inpTex) const
+        MaterialUPtr MaterialFactory::CreateSprite(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/Sprite"));
@@ -103,12 +110,12 @@ namespace ChilliSource
             pMaterial->SetTransparent(false);
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(false);
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create Static
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateStatic(const TextureSPtr& inpTex) const
+        MaterialUPtr MaterialFactory::CreateStatic(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/Static"));
@@ -117,12 +124,12 @@ namespace ChilliSource
             pMaterial->SetTransparent(false);
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create Static
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateStaticAmbient(const TextureSPtr& inpTex) const
+        MaterialUPtr MaterialFactory::CreateStaticAmbient(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
@@ -131,12 +138,12 @@ namespace ChilliSource
             pMaterial->SetTransparent(false);
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create Static Blinn
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateStaticBlinn(const TextureSPtr& inpTex) const
+        MaterialUPtr MaterialFactory::CreateStaticBlinn(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
@@ -147,12 +154,12 @@ namespace ChilliSource
             pMaterial->SetTransparent(false);
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create Static Blinn Shadowed
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateStaticBlinnShadowed(const TextureSPtr& inpTex) const
+        MaterialUPtr MaterialFactory::CreateStaticBlinnShadowed(const TextureSPtr& inpTex) const
         {
         	if (GetRenderCapabilities()->IsShadowMappingSupported() == false)
 			{
@@ -168,12 +175,12 @@ namespace ChilliSource
             pMaterial->SetTransparent(false);
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create Static Blinn Per Vertex
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateStaticBlinnPerVertex(const TextureSPtr& inpTex) const
+        MaterialUPtr MaterialFactory::CreateStaticBlinnPerVertex(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticAmbient"));
@@ -184,12 +191,12 @@ namespace ChilliSource
             pMaterial->SetTransparent(false);
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create Static Blinn Per Vertex
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateStaticBlinnPerVertexShadowed(const TextureSPtr& inpTex) const
+        MaterialUPtr MaterialFactory::CreateStaticBlinnPerVertexShadowed(const TextureSPtr& inpTex) const
         {
         	if (GetRenderCapabilities()->IsShadowMappingSupported() == false)
 			{
@@ -205,12 +212,12 @@ namespace ChilliSource
             pMaterial->SetTransparent(false);
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create Static Directional Shadow Map
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateStaticDirectionalShadowMap() const
+        MaterialUPtr MaterialFactory::CreateStaticDirectionalShadowMap() const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/StaticDirectionalShadowMap"));
@@ -224,12 +231,12 @@ namespace ChilliSource
             pMaterial->SetColourWriteEnabled(false);
 #endif
             
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create Animated
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateAnimated(const TextureSPtr& inpTex) const
+        MaterialUPtr MaterialFactory::CreateAnimated(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/Animated"));
@@ -238,12 +245,12 @@ namespace ChilliSource
             pMaterial->SetTransparent(false);
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create Animated Ambient
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateAnimatedAmbient(const TextureSPtr& inpTex) const
+        MaterialUPtr MaterialFactory::CreateAnimatedAmbient(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
@@ -252,12 +259,12 @@ namespace ChilliSource
             pMaterial->SetTransparent(false);
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create Animated Blinn
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateAnimatedBlinn(const TextureSPtr& inpTex) const
+        MaterialUPtr MaterialFactory::CreateAnimatedBlinn(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
@@ -268,12 +275,12 @@ namespace ChilliSource
             pMaterial->SetTransparent(false);
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create Animated Blinn Shadowed
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateAnimatedBlinnShadowed(const TextureSPtr& inpTex) const
+        MaterialUPtr MaterialFactory::CreateAnimatedBlinnShadowed(const TextureSPtr& inpTex) const
         {
         	if (GetRenderCapabilities()->IsShadowMappingSupported() == false)
 			{
@@ -289,12 +296,12 @@ namespace ChilliSource
             pMaterial->SetTransparent(false);
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create Animated Blinn Per Vertex
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateAnimatedBlinnPerVertex(const TextureSPtr& inpTex) const
+        MaterialUPtr MaterialFactory::CreateAnimatedBlinnPerVertex(const TextureSPtr& inpTex) const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedAmbient"));
@@ -305,12 +312,12 @@ namespace ChilliSource
             pMaterial->SetTransparent(false);
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create Animated Blinn Per Vertex
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateAnimatedBlinnPerVertexShadowed(const TextureSPtr& inpTex) const
+        MaterialUPtr MaterialFactory::CreateAnimatedBlinnPerVertexShadowed(const TextureSPtr& inpTex) const
         {
         	if (GetRenderCapabilities()->IsShadowMappingSupported() == false)
         	{
@@ -326,12 +333,12 @@ namespace ChilliSource
             pMaterial->SetTransparent(false);
             pMaterial->SetCullFace(CullFace::k_front);
             pMaterial->SetCullingEnabled(true);
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Create Animated Directional Shadow Map
         //---------------------------------------------------
-        MaterialSPtr MaterialFactory::CreateAnimatedDirectionalShadowMap() const
+        MaterialUPtr MaterialFactory::CreateAnimatedDirectionalShadowMap() const
         {
             Material* pMaterial = new Material();
             pMaterial->SetShaderProgram(ShaderPass::k_ambient, GetShaderManager()->GetShaderFromFile(Core::StorageLocation::k_package, "Core/AnimatedDirectionalShadowMap"));
@@ -345,7 +352,7 @@ namespace ChilliSource
             pMaterial->SetColourWriteEnabled(false);
 #endif
             
-			return MaterialSPtr(pMaterial);
+			return MaterialUPtr(pMaterial);
         }
         //---------------------------------------------------
         /// Get Texture Manager

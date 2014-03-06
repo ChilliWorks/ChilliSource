@@ -14,6 +14,7 @@
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
 #include <functional>
+#include <unordered_map>
 
 namespace ChilliSource
 {
@@ -22,7 +23,7 @@ namespace ChilliSource
         class ParticleEffectorFactory
         {
         public:
-            typedef std::function<ParticleEffector*(const Core::ParamDictionary&)> EffectorCreateDelegate;
+            typedef std::function<ParticleEffectorUPtr(const Core::ParamDictionary&)> EffectorCreateDelegate;
             
             //------------------------------------------------------------------
             /// Register 
@@ -42,7 +43,7 @@ namespace ChilliSource
             /// @param Param dictionary
             /// @return Ownership of particle effector of that type
             //-------------------------------------------------------------------
-            ParticleEffector* CreateParticleEffector(const std::string& instrType, const Core::ParamDictionary& insParams);
+            ParticleEffectorUPtr CreateParticleEffector(const std::string& instrType, const Core::ParamDictionary& insParams) const;
             
         private:
             

@@ -42,11 +42,11 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		/// Constructor
 		//----------------------------------------------------------
-		RenderSystem::RenderSystem()
+		RenderSystem::RenderSystem(Rendering::RenderCapabilities* in_renderCapabilities)
 		: mpDefaultRenderTarget(nullptr), mpCurrentMaterial(nullptr), mbInvalidateAllCaches(true), mdwMaxVertAttribs(0), mpVertexAttribs(nullptr),
         mbEmissiveSet(false), mbAmbientSet(false), mbDiffuseSet(false), mbSpecularSet(false), mudwNumBoundTextures(0), mSrcBlendFunc(Rendering::AlphaBlend::k_unknown), mDstBlendFunc(Rendering::AlphaBlend::k_unknown),
         meCurrentCullFace(Rendering::CullFace::k_front), meDepthFunc(Rendering::DepthFunction::k_less), mpLightComponent(nullptr), mbBlendFunctionLocked(false), mpaTextureHandles(nullptr), mbInvalidateLigthingCache(true),
-        mpRenderCapabilities(nullptr)
+        mpRenderCapabilities(static_cast<RenderCapabilities*>(in_renderCapabilities))
 		{
 			//Register the GL texture and shader managers
             Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(&mTexManager);
@@ -90,7 +90,6 @@ namespace ChilliSource
             gbIsMapBufferAvailable = RenderSystem::CheckForOpenGLExtension("GL_OES_mapbuffer");
 #endif
             
-            mpRenderCapabilities = Core::Application::Get()->GetSystem<RenderCapabilities>();
             CS_ASSERT(mpRenderCapabilities, "Cannot find required system: Render Capabilities.");
             mpRenderCapabilities->CalculateCapabilities();
             

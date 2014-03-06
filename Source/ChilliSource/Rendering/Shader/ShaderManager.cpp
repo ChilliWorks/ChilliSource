@@ -122,7 +122,7 @@ namespace ChilliSource
                     return pShader;
                 }
             }
-			return ShaderSPtr();
+			return nullptr;
 		}
 		//----------------------------------------------------------------
 		/// Get Shader From File
@@ -155,7 +155,7 @@ namespace ChilliSource
                 }
             }
 
-			return ShaderSPtr();
+			return nullptr;
 		}
         //-----------------------------------------------------------------
         /// Set Render System

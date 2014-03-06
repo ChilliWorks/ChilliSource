@@ -34,9 +34,9 @@ namespace ChilliSource
         /// @param Param dictionary
         /// @return Ownership of particle effector of that type
         //-------------------------------------------------------------------
-        ParticleEffector* ParticleEffectorFactory::CreateParticleEffector(const std::string& instrType, const Core::ParamDictionary& insParams)
+        ParticleEffectorUPtr ParticleEffectorFactory::CreateParticleEffector(const std::string& instrType, const Core::ParamDictionary& insParams) const
         {
-            MapDelegateToString::iterator it = mmapDelegateToType.find(instrType);
+            MapDelegateToString::const_iterator it = mmapDelegateToType.find(instrType);
             
             if(it != mmapDelegateToType.end())
             {

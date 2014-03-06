@@ -67,11 +67,11 @@ namespace ChilliSource
         }
         void Window::ListenForTouches()
         {
-            if(mpInputSystem && mpInputSystem->GetTouchScreenPtr() && !mbListeningForTouches)
+            if(mpInputSystem && mpInputSystem->GetTouchScreen() && !mbListeningForTouches)
 			{
-				m_touchBeganConnection = mpInputSystem->GetTouchScreenPtr()->GetTouchBeganEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnTouchBegan));
-				m_touchMoveConnection = mpInputSystem->GetTouchScreenPtr()->GetTouchMovedEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnTouchMoved));
-				m_touchEndConnection = mpInputSystem->GetTouchScreenPtr()->GetTouchEndEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnTouchEnded));
+				m_touchBeganConnection = mpInputSystem->GetTouchScreen()->GetTouchBeganEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnTouchBegan));
+				m_touchMoveConnection = mpInputSystem->GetTouchScreen()->GetTouchMovedEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnTouchMoved));
+				m_touchEndConnection = mpInputSystem->GetTouchScreen()->GetTouchEndEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnTouchEnded));
                 mbListeningForTouches=true;
 			}
         }

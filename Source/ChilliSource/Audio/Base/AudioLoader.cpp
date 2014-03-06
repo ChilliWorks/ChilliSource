@@ -13,22 +13,25 @@
 #include <ChilliSource/Audio/Base/AudioLoader.h>
 #include <ChilliSource/Audio/Base/AudioResource.h>
 
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
+#ifdef CS_TARGETAUDIO_FMOD
+#include <ChilliSource/Backend/Audio/FMOD/Base/AudioLoader.h>
+#endif
 
 namespace ChilliSource
 {
 	namespace Audio
 	{
-		//-------------------------------------------------------------------------
-		/// Constructor
-		///
-		/// Register this object as a model provider
-		//-------------------------------------------------------------------------
-		AudioLoader::AudioLoader(AudioSystem* inpAudioSystem) : mAudioManager(inpAudioSystem->GetAudioManager())
-		{
-            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(const_cast<AudioManager*>(&mAudioManager));
-		}
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        AudioLoaderUPtr AudioLoader::Create(AudioSystem* in_system)
+        {
+#ifdef CS_TARGETAUDIO_FMOD
+            //TODO: Revert the dependencies so that the loader doesn't delegate the loading to the system
+            return AudioLoaderUPtr(new FMOD::AudioLoader(static_cast<FMOD::FMODSystem*>(in_system)));
+#endif
+            
+            return nullptr;
+        }
 		//-------------------------------------------------------------------------
 		/// Is A
 		///

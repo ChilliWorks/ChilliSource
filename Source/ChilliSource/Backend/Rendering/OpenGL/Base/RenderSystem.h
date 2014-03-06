@@ -35,11 +35,11 @@ namespace ChilliSource
 		/// Creates and manages the OpenGL ES context and
 		/// handles the rendering of scene objects
 		//=======================================================
-		class RenderSystem : public ChilliSource::Rendering::RenderSystem
+		class RenderSystem : public Rendering::RenderSystem
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(RenderSystem);
-			RenderSystem();
+            
             ~RenderSystem();
             //----------------------------------------------------------
 			/// Is A
@@ -48,7 +48,7 @@ namespace ChilliSource
 			/// @param Comparison Type
 			/// @return Whether the class matches the comparison type
 			//----------------------------------------------------------
-			bool IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const override;
+			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
 			//----------------------------------------------------------
 			/// Init
 			///
@@ -332,6 +332,16 @@ namespace ChilliSource
             inline ShaderManager* GetShaderManager() {return &mShaderManager;}
 			
 		private:
+            
+            friend Rendering::RenderSystemUPtr Rendering::RenderSystem::Create(Rendering::RenderCapabilities*);
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @param Render capabilities
+            //-------------------------------------------------------
+            RenderSystem(Rendering::RenderCapabilities* in_renderCapabilities);
             
             //----------------------------------------------------------
             /// Apply Render States

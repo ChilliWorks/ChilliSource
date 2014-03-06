@@ -38,10 +38,11 @@ namespace ChilliSource
 		typedef std::function<bool(RenderComponent*, RenderComponent*)> RenderSortDelegate;
 		
 		//----------------------------------------------------------
-		/// Constructor
 		//----------------------------------------------------------
-		Renderer::Renderer(RenderSystem * inpRenderSystem) 
-        : mpRenderSystem(inpRenderSystem), mCanvas(inpRenderSystem), mpActiveCamera(nullptr)
+		Renderer::Renderer(RenderSystem* inpRenderSystem)
+        : mpRenderSystem(inpRenderSystem)
+        , mCanvas(inpRenderSystem)
+        , mpActiveCamera(nullptr)
 		{
 			mpTransparentSortPredicate = RendererSortPredicateSPtr(new BackToFrontSortPredicate());
             mpOpaqueSortPredicate = RendererSortPredicateSPtr(new MaterialSortPredicate());
@@ -49,6 +50,12 @@ namespace ChilliSource
             mpPerspectiveCullPredicate = ICullingPredicateSPtr(new FrustumCullPredicate());
             mpOrthoCullPredicate = ICullingPredicateSPtr(new ViewportCullPredicate());
 		}
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Renderer::Init()
+        {
+            mCanvas.Init();
+        }
 		//----------------------------------------------------------
 		/// Set Transparent Sort Predicate
 		//----------------------------------------------------------

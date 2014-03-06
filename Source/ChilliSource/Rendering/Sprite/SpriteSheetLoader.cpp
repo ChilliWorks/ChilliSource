@@ -27,7 +27,12 @@ namespace ChilliSource
         // Specify for elements bin sprite versions
         const u32 kNumElementsPerSpriteV0 = 6;
         const u32 kNumElementsPerSpriteV1 = 8;
-		
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        SpriteSheetLoaderUPtr SpriteSheetLoader::Create()
+        {
+            return SpriteSheetLoaderUPtr(new SpriteSheetLoader());
+        }
 		//-------------------------------------------------------------------------
 		/// Is A
 		///

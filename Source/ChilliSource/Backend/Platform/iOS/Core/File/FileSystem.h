@@ -29,7 +29,6 @@ namespace ChilliSource
 		class FileSystem : public Core::FileSystem
 		{
 		public:
-			FileSystem();
             //--------------------------------------------------------------
             /// Create File Stream
             ///
@@ -236,6 +235,13 @@ namespace ChilliSource
 			std::string GetStorageLocationDirectory(Core::StorageLocation ineStorageLocation) const override;
 
 		private:
+            friend Core::FileSystemUPtr Core::FileSystem::Create();
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            FileSystem();
             //--------------------------------------------------------------
 			/// Does Item Exist In DLC Cache
 			///

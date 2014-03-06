@@ -54,6 +54,15 @@ namespace ChilliSource
 			/// Constructor
 			//----------------------------------------------------
 			Application();
+            //----------------------------------------------------
+            /// Adds a system to the application. This should only
+            /// be called inside the CreateSystem() method.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The new system to add to the application.
+ 			//----------------------------------------------------
+            void AddSystem(SystemUPtr in_system);
 			//----------------------------------------------------
 			/// Looks for a system that implements the queryable
             /// interface provided as a template parameter.
@@ -252,46 +261,6 @@ namespace ChilliSource
 			/// @param Handle application renderer
 			//-----------------------------------------------------
 			void SetRenderer(Rendering::Renderer* in_system);
-			//-----------------------------------------------------
-			/// Sets the render system.
-            ///
-            /// @author I Copland
-			///
-			/// @param Handle to platfrom specific render system
-			//-----------------------------------------------------
-			void SetRenderSystem(Rendering::RenderSystem* in_system);
-            //-----------------------------------------------------
-			/// Sets the platform system.
-            ///
-            /// @author I Copland
-			///
-            /// @param Pointer to the platform system
-            //-----------------------------------------------------
-			void SetPlatformSystem(PlatformSystem* in_system);
-			//-----------------------------------------------------
-			/// Sets the input system.
-            ///
-            /// @author I Copland
-			///
-			/// @param Pointer to the input system
-			//-----------------------------------------------------
-			void SetInputSystem(Input::InputSystem* in_system);
-			//-----------------------------------------------------
-			/// Sets the audio system.
-            ///
-            /// @author I Copland
-			///
-			/// @param Pointer to the input system
-			//-----------------------------------------------------
-			void SetAudioSystem(Audio::AudioSystem* in_system);
-			//-----------------------------------------------------
-			/// Sets the file system.
-            ///
-            /// @author I Copland
-			///
-			/// @return Pointer to the file system
-			//-----------------------------------------------------
-			void SetFileSystem(FileSystem* in_system);
             //----------------------------------------------------
 			/// Initialises the application and kicks off the update
             /// loop. This should not be called by a users application.
@@ -377,15 +346,6 @@ namespace ChilliSource
 			//------------------------------------------------------
             virtual ~Application();
 		protected:
-            //----------------------------------------------------
-            /// Adds a system to the application. This should only
-            /// be called inside the CreateSystem() method.
-            ///
-            /// @author I Copland
-            ///
-            /// @param The new system to add to the application.
- 			//----------------------------------------------------
-            void AddSystem(const SystemSPtr& in_system);
             //------------------------------------------------------
 			/// The users application should override this to add
             /// desired systems. Systems can only be added in this
@@ -446,6 +406,13 @@ namespace ChilliSource
  			//----------------------------------------------------
             System* GetSystem(InterfaceIDType in_interfaceID);
             //------------------------------------------------------
+            /// Systems that are required by CS are added in this
+            /// method
+            ///
+            /// @author S Downie
+			//------------------------------------------------------
+            void CreateDefaultSystems();
+            //------------------------------------------------------
 			/// Once the systems have been created they are then
             /// added to the pool and initialised.
             ///
@@ -496,14 +463,14 @@ namespace ChilliSource
             void ResumeApplication();
 
         private:
-            std::vector<SystemSPtr> m_systems;
+            std::vector<SystemUPtr> m_systems;
             std::vector<IUpdateable*> m_updateableSystems;
             
 			StateManager m_stateManager;
 			Rendering::Renderer* m_renderer;
             Rendering::RenderSystem* m_renderSystem;
 			Input::InputSystem * m_inputSystem;
-            PlatformSystem* m_platformSystem;
+            PlatformSystemUPtr m_platformSystem;
             Audio::AudioSystem* m_audioSystem;
             FileSystem* m_fileSystem;
 
@@ -524,6 +491,7 @@ namespace ChilliSource
             bool m_shouldNotifyConnectionsResumeEvent;
             bool m_isFirstFrame;
             bool m_isSuspending;
+            bool m_isSystemCreationAllowed;
             
             static Application* s_application;
 		};

@@ -13,6 +13,7 @@
 #include <ChilliSource/Rendering/Particles/ParticleComponent.h>
 #include <ChilliSource/Rendering/Particles/ParticleComponentFactory.h>
 #include <ChilliSource/Rendering/Particles/ParticleSystem.h>
+#include <ChilliSource/Rendering/Particles/Effectors/ParticleEffector.h>
 
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
@@ -98,9 +99,9 @@ namespace ChilliSource
         ///
         /// @return Particle Component
         //--------------------------------------------------------
-        ParticleComponentSPtr ParticleComponentFactory::CreateParticleComponent()
+        ParticleComponentUPtr ParticleComponentFactory::CreateParticleComponent()
 		{
-			ParticleComponentSPtr pParticleComp(new ParticleComponent());
+			ParticleComponentUPtr pParticleComp(new ParticleComponent());
 			mpParticleSystem->AddParticleComponent(pParticleComp.get());			
 			return pParticleComp;
 		}
@@ -113,9 +114,9 @@ namespace ChilliSource
         /// @param The filepath
         /// @return Particle Component
         //--------------------------------------------------------
-        ParticleComponentSPtr ParticleComponentFactory::CreateParticleComponentFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile)
+        ParticleComponentUPtr ParticleComponentFactory::CreateParticleComponentFromScript(Core::StorageLocation ineStorageLocation, const std::string& instrScriptFile)
 		{
-			ParticleComponentSPtr pParticleComp(new ParticleComponent());
+			ParticleComponentUPtr pParticleComp(new ParticleComponent());
             
             //Load script
             TiXmlDocument Doc(instrScriptFile);

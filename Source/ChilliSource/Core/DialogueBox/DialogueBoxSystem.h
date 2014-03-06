@@ -46,7 +46,7 @@ namespace ChilliSource
             ///
             /// @return The new instance.
 			//----------------------------------------------------
-            static DialogueBoxSystem* Create();
+            static DialogueBoxSystemUPtr Create();
             //-----------------------------------------------------
             /// Display a system dialog with the given ID and delegate
             ///

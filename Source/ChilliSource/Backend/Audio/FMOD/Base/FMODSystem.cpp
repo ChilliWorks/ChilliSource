@@ -17,10 +17,11 @@
 #include <ChilliSource/Backend/Audio/FMOD/3D/AudioComponent.h>
 #include <ChilliSource/Backend/Audio/FMOD/Base/AudioResource.h>
 #include <ChilliSource/Backend/Audio/FMOD/3D/AudioComponentFactory.h>
-#include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/ApplicationEvents.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
+#include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
 #include <fmodiphone.h>
@@ -39,6 +40,8 @@ namespace ChilliSource
 		{
 			mpAudioManager = new AudioManager();
             mpAudioComponentFactory = new AudioComponentFactory(this, mpAudioManager);
+            
+            Core::ResourceManagerDispenser::GetSingletonPtr()->RegisterResourceManager(mpAudioManager);
             
 			// Subscribe to memory warnings so we can clear FMOD's cache
             m_appLowMemoryConnection = Core::ApplicationEvents::GetLowMemoryEvent().OpenConnection(Core::MakeDelegate(this, &FMODSystem::OnApplicationMemoryWarning));
@@ -249,9 +252,9 @@ namespace ChilliSource
 		///
 		/// @return Audio listener
 		//----------------------------------------------------------------------------
-		Audio::AudioListenerSPtr FMODSystem::CreateAudioListener()
+		Audio::AudioListenerUPtr FMODSystem::CreateAudioListener()
 		{
-			return FMODAudioListenerPtr(new AudioListener(mpFMODSystem));
+			return Audio::AudioListenerUPtr(new AudioListener(mpFMODSystem));
 		}
 		//-------------------------------------------------------
 		/// Error Check

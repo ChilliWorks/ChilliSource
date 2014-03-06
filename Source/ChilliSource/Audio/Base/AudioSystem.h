@@ -35,10 +35,19 @@ namespace ChilliSource
 		class AudioSystem : public Core::System, public Core::IUpdateable, public Core::IComponentProducer
 		{
 		public:
-			AudioSystem();
-			virtual ~AudioSystem();
-			
+
 			CS_DECLARE_NAMEDTYPE(AudioSystem);
+            
+            //-------------------------------------------------------
+            /// Create the platform dependent backend
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend instance
+            //-------------------------------------------------------
+            static AudioSystemUPtr Create();
+            
+			virtual ~AudioSystem();
 
 			//-------------------------------------------------------
 			/// Is A
@@ -103,7 +112,7 @@ namespace ChilliSource
 			///
 			/// @return Audio listener
 			//-------------------------------------------------------
-			virtual AudioListenerSPtr CreateAudioListener() = 0;
+			virtual AudioListenerUPtr CreateAudioListener() = 0;
 			//-------------------------------------------------------
 			/// Set Master Effect Volume
 			///
@@ -178,6 +187,15 @@ namespace ChilliSource
 			/// @return Audio component factory
 			//-------------------------------------------------------
 			Core::ComponentFactory& GetComponentFactory(u32 inudwIndex) override;
+            
+        protected:
+            
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            AudioSystem();
 			
 		protected:
 			

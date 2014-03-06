@@ -31,9 +31,10 @@ namespace ChilliSource
 			virtual bool CanProduceComponentWithTypeName(const std::string & incName) const = 0;
 			
 			//This is the method used to create a component from a data-description of same.
-			virtual ComponentSPtr CreateComponent(const std::string & insTypeName, const ChilliSource::Core::ParamDictionary & insParamDictionary){
+			virtual ComponentUPtr CreateComponent(const std::string & insTypeName, const ChilliSource::Core::ParamDictionary & insParamDictionary)
+            {
 				CS_LOG_WARNING("Calling default ComponentFactory::CreateComponent with typename: " + insTypeName + ". Derived factories should override this method for their component classes.");
-				return ComponentSPtr();
+				return nullptr;
 			};  
 			
 		};

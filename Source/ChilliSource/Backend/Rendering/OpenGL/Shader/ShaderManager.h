@@ -31,7 +31,7 @@ namespace ChilliSource
 			/// @return Concrete shader resource object based on the render
 			/// system
 			//----------------------------------------------------------------
-			ChilliSource::Rendering::ShaderSPtr CreateShaderResource() const;
+			ChilliSource::Rendering::ShaderUPtr CreateShaderResource() const;
 			//----------------------------------------------------------------
 			/// Manages Resource With Extension
 			///

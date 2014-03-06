@@ -99,7 +99,7 @@ namespace ChilliSource
 		
 			//Resource not found
 			CS_LOG_ERROR("Cannot find resource for sound with path " + inFilePath);
-			return AudioResourceSPtr();
+			return nullptr;
 		}
 		//----------------------------------------------------------------
 		/// Get Sound From File
@@ -142,25 +142,25 @@ namespace ChilliSource
 			
 			//Resource not found
 			CS_LOG_ERROR("Cannot find resource for sound with path " + inFilePath);
-			return AudioResourceSPtr();
+			return nullptr;
 		}
 		//----------------------------------------------------------------
 		/// Create Listener
 		///
 		/// @return Concrete audio listener
 		//----------------------------------------------------------------
-		AudioListenerSPtr AudioManager::CreateListener()
+		AudioListenerUPtr AudioManager::CreateListener()
 		{
 			for(u32 nProvider = 0; nProvider < mResourceProviders.size(); nProvider++) 
 			{
-				AudioListenerSPtr pListener = static_cast<AudioLoader*>(mResourceProviders[nProvider])->CreateAudioListener();
+				AudioListenerUPtr pListener = static_cast<AudioLoader*>(mResourceProviders[nProvider])->CreateAudioListener();
 				if(pListener) 
 				{
 					return pListener;
 				}
 			}
 			
-			return AudioListenerSPtr();
+			return nullptr;
 		}
 		//-----------------------------------------------------------------
 		/// Destroy Sound Effect

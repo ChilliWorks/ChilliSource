@@ -30,8 +30,8 @@ namespace ChilliSource
 		///
 		/// Register this object as a model provider
 		//-------------------------------------------------------------------------
-		AudioLoader::AudioLoader(Audio::AudioSystem* inpFMODSystem) 
-		: Audio::AudioLoader(inpFMODSystem), mpFMODSystem(static_cast<FMODSystem*>(inpFMODSystem))
+		AudioLoader::AudioLoader(FMOD::FMODSystem* in_system)
+		: mpFMODSystem(in_system)
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
             m_cacheDirectory = Core::Application::Get()->GetFileSystem()->GetStorageLocationDirectory(Core::StorageLocation::k_cache);
@@ -151,7 +151,7 @@ namespace ChilliSource
 		///
 		/// @return Audio listener
 		//----------------------------------------------------------------------------
-		Audio::AudioListenerSPtr AudioLoader::CreateAudioListener()
+		Audio::AudioListenerUPtr AudioLoader::CreateAudioListener()
 		{
 			return mpFMODSystem->CreateAudioListener();
 		}

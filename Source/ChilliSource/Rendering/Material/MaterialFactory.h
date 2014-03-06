@@ -22,10 +22,21 @@ namespace ChilliSource
             
             CS_DECLARE_NAMEDTYPE(MaterialFactory);
             
-            //---------------------------------------------------
-            /// Constructor
-            //---------------------------------------------------
-            MaterialFactory(TextureManager* in_texMgr, ShaderManager* in_shaderMgr, CubemapManager* in_cubemapMgr, RenderCapabilities* in_renderCapabilities);
+            //-------------------------------------------------------
+            /// Factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @param Texture manager used to load material textures
+            /// @param Shader manager used to load material shaders
+            /// @param Cubemap manager used to load material cubemaps
+            /// @param Render capabilities used to determine which
+            /// materials can be used
+            ///
+            /// @return New instance with ownership transferred
+            //-------------------------------------------------------
+            static MaterialFactoryUPtr Create(TextureManager* in_texMgr, ShaderManager* in_shaderMgr, CubemapManager* in_cubemapMgr, RenderCapabilities* in_renderCapabilities);
+            
             //---------------------------------------------------
             /// Is A
             ///
@@ -42,21 +53,21 @@ namespace ChilliSource
             ///
             /// @param Empty new material
             //---------------------------------------------------
-            MaterialSPtr CreateCustom() const;
+            MaterialUPtr CreateCustom() const;
             //---------------------------------------------------
             /// Create GUI
             ///
             /// Create a material to render UI
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateGUI() const;
+            MaterialUPtr CreateGUI() const;
             //---------------------------------------------------
             /// Create GUI Distance Font
             ///
             /// Create a material to render UI distance fonts
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateGUIDistanceFont() const;
+            MaterialUPtr CreateGUIDistanceFont() const;
             //---------------------------------------------------
             /// Create GUI Distance Font Outlined
             ///
@@ -64,7 +75,7 @@ namespace ChilliSource
             /// outlines
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateGUIDistanceFontOutlined() const;
+            MaterialUPtr CreateGUIDistanceFontOutlined() const;
             //---------------------------------------------------
             /// Create Sprite
             ///
@@ -74,7 +85,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateSprite(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateSprite(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Static
             ///
@@ -84,7 +95,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateStatic(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateStatic(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Static
             ///
@@ -94,7 +105,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateStaticAmbient(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateStaticAmbient(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Static Blinn
             ///
@@ -105,7 +116,7 @@ namespace ChilliSource
             /// @param Texture file path
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateStaticBlinn(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateStaticBlinn(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Static Blinn Shadowed
             ///
@@ -117,7 +128,7 @@ namespace ChilliSource
             /// @param Texture file path
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateStaticBlinnShadowed(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateStaticBlinnShadowed(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Static Blinn Per Vertex
             ///
@@ -127,7 +138,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateStaticBlinnPerVertex(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateStaticBlinnPerVertex(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Static Blinn Per Vertex Shadowed
             ///
@@ -138,7 +149,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateStaticBlinnPerVertexShadowed(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateStaticBlinnPerVertexShadowed(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Static Directional Shadow Map
             ///
@@ -147,7 +158,7 @@ namespace ChilliSource
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateStaticDirectionalShadowMap() const;
+            MaterialUPtr CreateStaticDirectionalShadowMap() const;
             //---------------------------------------------------
             /// Create Animated
             ///
@@ -157,7 +168,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateAnimated(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateAnimated(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Animated Ambient
             ///
@@ -167,7 +178,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateAnimatedAmbient(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateAnimatedAmbient(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Animated Blinn
             ///
@@ -178,7 +189,7 @@ namespace ChilliSource
             /// @param Texture file path
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateAnimatedBlinn(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateAnimatedBlinn(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Animated Blinn Shadowed
             ///
@@ -190,7 +201,7 @@ namespace ChilliSource
             /// @param Texture file path
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateAnimatedBlinnShadowed(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateAnimatedBlinnShadowed(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Animated Blinn Per Vertex
             ///
@@ -200,7 +211,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateAnimatedBlinnPerVertex(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateAnimatedBlinnPerVertex(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Animated Blinn Per Vertex Shadowed
             ///
@@ -211,7 +222,7 @@ namespace ChilliSource
             /// @param Texture
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateAnimatedBlinnPerVertexShadowed(const TextureSPtr& inpTex) const;
+            MaterialUPtr CreateAnimatedBlinnPerVertexShadowed(const TextureSPtr& inpTex) const;
             //---------------------------------------------------
             /// Create Animated Directional Shadow Map
             ///
@@ -220,7 +231,22 @@ namespace ChilliSource
             ///
             /// @return New material
             //---------------------------------------------------
-            MaterialSPtr CreateAnimatedDirectionalShadowMap() const;
+            MaterialUPtr CreateAnimatedDirectionalShadowMap() const;
+            
+        private:
+            
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @param Texture manager used to load material textures
+            /// @param Shader manager used to load material shaders
+            /// @param Cubemap manager used to load material cubemaps
+            /// @param Render capabilities used to determine which
+            /// materials can be used
+            //-------------------------------------------------------
+            MaterialFactory(TextureManager* in_texMgr, ShaderManager* in_shaderMgr, CubemapManager* in_cubemapMgr, RenderCapabilities* in_renderCapabilities);
             
         private:
             

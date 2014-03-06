@@ -109,7 +109,7 @@ namespace ChilliSource
 			
 			//Resource not found
 			CS_LOG_ERROR("Cannot find resource for skinned animation with path " + instrFilePath);
-			return SkinnedAnimationSPtr();
+			return nullptr;
 		}
 		//-----------------------------------------------------------------
 		/// Async Get Skinned Animation From File
@@ -155,7 +155,7 @@ namespace ChilliSource
 			
 			//Resource not found
 			CS_LOG_ERROR("Cannot find resource for skinned animation with path " + instrFilePath);
-			return SkinnedAnimationSPtr();
+			return nullptr;
 		}
 		//-----------------------------------------------------------------
 		/// Destructor

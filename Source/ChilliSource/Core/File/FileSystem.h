@@ -62,9 +62,19 @@ namespace ChilliSource
 		//=========================================================================================
 		class FileSystem : public System
 		{
-			CS_DECLARE_NAMEDTYPE(FileSystem);
 		public:
-            FileSystem();
+            
+            CS_DECLARE_NAMEDTYPE(FileSystem);
+            
+            //-------------------------------------------------------
+            /// Create the platform dependent backend
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend instance
+            //-------------------------------------------------------
+            static FileSystemUPtr Create();
+            
 			virtual ~FileSystem(){}
 			//-------------------------------------------------------------------------
 			/// Is A
@@ -395,6 +405,15 @@ namespace ChilliSource
             /// given name. This argument is unchanged if file is not found
             //--------------------------------------------------------------
             void GetBestPathToFile(StorageLocation ineStorageLocation, const std::string& instrFileName, std::string& outFilePath) const;
+            
+        protected:
+            
+            //-------------------------------------------------------
+            /// Private constructor to force use of factory method
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            FileSystem();
 
         protected:
             
