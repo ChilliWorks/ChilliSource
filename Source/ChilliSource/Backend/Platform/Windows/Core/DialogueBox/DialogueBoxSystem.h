@@ -26,12 +26,6 @@ namespace ChilliSource
 		public:
             CS_DECLARE_NAMEDTYPE(DialogueBoxSystem);
             //----------------------------------------------------
-			/// Constructor
-            ///
-            /// @author I Copland
-			//----------------------------------------------------
-            DialogueBoxSystem();
-            //----------------------------------------------------
             /// Is A
             ///
             /// @return Whether this implements the passed in
@@ -79,6 +73,14 @@ namespace ChilliSource
 			//----------------------------------------------------
             ~DialogueBoxSystem();
         private:
+			//----------------------------------------------------
+			/// Constructor
+			///
+			/// @author I Copland
+			//----------------------------------------------------
+			DialogueBoxSystem();
+
+			friend Core::DialogueBoxSystemUPtr Core::DialogueBoxSystem::Create();
 		};
 	}
 }
