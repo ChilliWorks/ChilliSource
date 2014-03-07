@@ -230,8 +230,8 @@ namespace ChilliSource
 			Core::Logging::Init();
             
             GUI::GUIViewFactory::RegisterDefaults();
-            
-			//Initialise the platform specific API's
+
+            //Initialise the platform specific API's
             m_platformSystem = PlatformSystem::Create();
 			m_platformSystem->Init();
             
@@ -239,15 +239,14 @@ namespace ChilliSource
             Core::Screen::SetRawDimensions(m_platformSystem->GetScreenDimensions());
             Core::Screen::SetOrientation(m_defaultOrientation);
             Core::Screen::SetDensity(m_platformSystem->GetScreenDensity());
-            
+
             DetermineResourceDirectories();
-            
+
             //Set up the device helper
             Device::Init(m_platformSystem.get());
-            
+
 			//Set up the task scheduler
 			TaskScheduler::Init(Core::Device::GetNumCPUCores() * 2);
-            
 			//System setup
             m_isSystemCreationAllowed = true;
             CreateDefaultSystems();
@@ -255,24 +254,24 @@ namespace ChilliSource
 			CreateSystems();
             m_isSystemCreationAllowed = false;
 			PostCreateSystems();
-            
+
             //init tweakable constants and local data store.
 			new TweakableConstants();
 			new LocalDataStore();
-            
+
             LoadDefaultResources();
 			OnScreenChangedOrientation(m_defaultOrientation);
-            
+
             Initialise();
-            
+
 			if (m_stateManager.GetActiveScenePtr() == nullptr)
             {
 				PushInitialState();
             }
-            
+
 			//Register for update events
 			LocalDataStore::GetSingleton().SubscribeToApplicationSuspendEvent();
-            
+
 			//Begin the update loop
 			m_platformSystem->Run();
 		}
@@ -475,23 +474,24 @@ namespace ChilliSource
         //------------------------------------------------------
         void Application::CreateDefaultSystems()
         {
-            //Audio
-            Audio::AudioSystemUPtr audioSystem(Audio::AudioSystem::Create());
-			AddSystem(Audio::AudioLoader::Create(audioSystem.get()));
-            AddSystem(std::move(audioSystem));
-            
             //Core
             AddSystem(FileSystem::Create());
+
             //TODO: Change this to a PNG image provider.
             AddSystem(ImageResourceProvider::Create());
             AddSystem(MoImageProvider::Create());
             AddSystem(DialogueBoxSystem::Create());
             
             NotificationScheduler::Initialise(LocalNotificationScheduler::Create());
-            
+
+            //Audio
+            Audio::AudioSystemUPtr audioSystem(Audio::AudioSystem::Create());
+			AddSystem(Audio::AudioLoader::Create(audioSystem.get()));
+            AddSystem(std::move(audioSystem));
+
             //Input
             AddSystem(Input::InputSystem::Create());
-            
+
             //Rendering
             Rendering::RenderCapabilitiesUPtr renderCapabilitiesUPtr(Rendering::RenderCapabilities::Create());
             Rendering::RenderCapabilities* renderCapabilities(renderCapabilitiesUPtr.get());
@@ -568,7 +568,7 @@ namespace ChilliSource
             GetRenderSystem()->Init((u32)Screen::GetRawDimensions().x, (u32)Screen::GetRawDimensions().y);
             GetRenderer()->Init();
             Audio::AudioPlayer::Init();
-    
+
             m_platformSystem->PostCreateSystems();
 		}
         //----------------------------------------------------
