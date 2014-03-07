@@ -1,11 +1,10 @@
-/*
- *  moFloApplication.cpp
- *  moFlo
- *
- *  Created by Scott Downie on 23/09/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  Application.h
+//  Chilli Source
+//
+//  Created by Scott Downie on 23/09/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Core/Base/Application.h>
 
@@ -213,7 +212,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::OnInitialise()
+		void Application::Initialise()
 		{
             CS_ASSERT(s_application == nullptr, "Application already initialised!");
             s_application = this;
@@ -260,9 +259,9 @@ namespace ChilliSource
 			new LocalDataStore();
 
             LoadDefaultResources();
-			OnScreenChangedOrientation(m_defaultOrientation);
+			ScreenChangedOrientation(m_defaultOrientation);
 
-            Initialise();
+            OnInitialise();
 
 			if (m_stateManager.GetActiveScenePtr() == nullptr)
             {
@@ -277,7 +276,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::OnResume()
+		void Application::Resume()
 		{
             m_shouldNotifyConnectionsResumeEvent = true;
             
@@ -286,12 +285,12 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::OnUpdate(f32 in_deltaTime, TimeIntervalSecs in_timestamp)
+		void Application::Update(f32 in_deltaTime, TimeIntervalSecs in_timestamp)
 		{
             if(m_shouldNotifyConnectionsResumeEvent == true)
 			{
 				m_shouldNotifyConnectionsResumeEvent = false;
-				ResumeApplication();
+				OnResume();
 			}
             
             if(m_isSuspending)
@@ -330,7 +329,7 @@ namespace ChilliSource
             }
             
             //Tell the state manager to update the active state
-            Update(in_deltaTime);
+            OnUpdate(in_deltaTime);
             
             //Render the scene
             m_renderer->RenderToScreen(m_stateManager.GetActiveScenePtr());
@@ -341,7 +340,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::OnScreenChangedOrientation(ScreenOrientation in_orientation)
+		void Application::ScreenChangedOrientation(ScreenOrientation in_orientation)
 		{
 			Screen::SetOrientation(in_orientation);
             
@@ -358,7 +357,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::OnScreenResized(u32 in_width, u32 in_height)
+		void Application::ScreenResized(u32 in_width, u32 in_height)
 		{
 			Screen::SetRawDimensions(Core::Vector2((f32)in_width, (f32)in_height));
 
@@ -381,7 +380,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::OnApplicationMemoryWarning()
+		void Application::ApplicationMemoryWarning()
 		{
 			CS_LOG_DEBUG("Memory Warning. Clearing resource cache...");
 			ResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
@@ -389,7 +388,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::OnGoBack()
+		void Application::GoBack()
 		{
 			CS_LOG_DEBUG("Go back event.");
 			m_stateManager.GetActiveState()->OnGoBack();
@@ -397,7 +396,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::OnSuspend()
+		void Application::Suspend()
 		{
             CS_LOG_DEBUG("App Suspending...");
             
@@ -422,9 +421,9 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-        void Application::OnDestroy()
+        void Application::Destroy()
         {
-            Destroy();
+            OnDestroy();
 
             m_stateManager.DestroyAll();
 
@@ -650,7 +649,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::Update(f32 in_deltaTime)
+		void Application::OnUpdate(f32 in_deltaTime)
 		{
             in_deltaTime *= m_updateSpeed;
             
@@ -669,22 +668,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::SetOrientation(ScreenOrientation in_orientation)
-		{
-			if(m_renderer->GetActiveCameraPtr())
-			{
-				m_renderer->GetActiveCameraPtr()->SetViewportOrientation(in_orientation);
-			}
-            
-            Input::TouchScreen * pTouchScreen = GetSystem(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreen();
-            if (pTouchScreen != nullptr)
-            {
-                pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());
-            }
-		}
-        //----------------------------------------------------
-        //----------------------------------------------------
-		void Application::ResumeApplication()
+		void Application::OnResume()
 		{
 			CS_LOG_DEBUG("App Resuming...");
             
@@ -700,6 +684,21 @@ namespace ChilliSource
 			m_stateManager.Resume();
 			
 			CS_LOG_DEBUG("App Finished Resuming...");
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+		void Application::SetOrientation(ScreenOrientation in_orientation)
+		{
+			if(m_renderer->GetActiveCameraPtr())
+			{
+				m_renderer->GetActiveCameraPtr()->SetViewportOrientation(in_orientation);
+			}
+            
+            Input::TouchScreen * pTouchScreen = GetSystem(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreen();
+            if (pTouchScreen != nullptr)
+            {
+                pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());
+            }
 		}
         //----------------------------------------------------
         //----------------------------------------------------

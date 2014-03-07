@@ -79,7 +79,7 @@ namespace ChilliSource
 					u64 uddwAppRunningTime = ((u64)m_appPreviousTime - m_appStartTime);
 
 					//Update event
-					Core::Application::Get()->OnUpdate(deltaTime, uddwAppRunningTime);
+					Core::Application::Get()->Update(deltaTime, uddwAppRunningTime);
 
 					m_appPreviousTime = appCurrentTime;
 				}
@@ -217,13 +217,13 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::OnWindowResized(s32 indwWidth, s32 indwHeight)
 		{
-			Core::Application::Get()->OnScreenResized((u32)indwWidth, (u32)indwHeight);
+			Core::Application::Get()->ScreenResized((u32)indwWidth, (u32)indwHeight);
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
 		void PlatformSystem::OnWindowClosed()
 		{
-			Core::Application::Get()->OnSuspend();
+			Core::Application::Get()->Suspend();
 			Core::Application::Get()->Quit();
 			glfwTerminate();
 		}

@@ -259,14 +259,14 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			//----------------------------------------------------
-			void OnInitialise();
+			void Initialise();
             //----------------------------------------------------
 			/// Resumes application from suspended state. This should
             /// not be called by a users application.
             ///
             /// @author I Copland
 			//----------------------------------------------------
-			void OnResume();
+			void Resume();
             //----------------------------------------------------
 			/// Triggered by an update event. This will update
             /// the application, systems and states. This should
@@ -277,7 +277,7 @@ namespace ChilliSource
             /// @param The delta time.
             /// @param The frame timestamp.
 			//----------------------------------------------------
-			void OnUpdate(f32 in_deltaTime, TimeIntervalSecs in_timestamp);
+			void Update(f32 in_deltaTime, TimeIntervalSecs in_timestamp);
             //----------------------------------------------------
 			/// Triggered on receiving a "orientation changed"
             /// event. Used to tell the camera and input to rotate.
@@ -287,7 +287,7 @@ namespace ChilliSource
             ///
             /// @param The new orientation.
 			//----------------------------------------------------
-			void OnScreenChangedOrientation(ScreenOrientation in_orientation);
+			void ScreenChangedOrientation(ScreenOrientation in_orientation);
 			//----------------------------------------------------
 			/// Triggered on receiving a "screen resized" event.
             /// This should not be called by a users application.
@@ -297,7 +297,7 @@ namespace ChilliSource
             /// @param The new width.
             /// @param The new height.
 			//----------------------------------------------------
-			void OnScreenResized(u32 in_width, u32 in_height);
+			void ScreenResized(u32 in_width, u32 in_height);
 			//----------------------------------------------------
 			/// Triggered on receiving a "application memory warning"
             /// event. This will notify active resource managers to
@@ -306,7 +306,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			//----------------------------------------------------
-			void OnApplicationMemoryWarning();
+			void ApplicationMemoryWarning();
             //----------------------------------------------------
 			/// Triggered on receiving a "go back" event. This is
             /// typically caused by pressing a physical back button
@@ -315,7 +315,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			//----------------------------------------------------
-			void OnGoBack();
+			void GoBack();
             //----------------------------------------------------
             /// Triggered on receiving a "application will suspend"
             /// message. This will notify active states to pause
@@ -324,7 +324,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			//----------------------------------------------------
-			void OnSuspend();
+			void Suspend();
             //----------------------------------------------------
             /// Releases all systems and states and cleans up the
             /// application. This should not be called by a users
@@ -332,7 +332,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			//----------------------------------------------------
-			void OnDestroy();
+			void Destroy();
             //------------------------------------------------------
 			/// Destructor
 			//------------------------------------------------------
@@ -353,7 +353,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			//------------------------------------------------------
-			virtual void Initialise() = 0;
+			virtual void OnInitialise() = 0;
             //------------------------------------------------------
 			/// Give the state manager the initial state. This should
             /// be overriden by the users application to add initial
@@ -383,7 +383,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			//------------------------------------------------------
-			virtual void Destroy() = 0;
+			virtual void OnDestroy() = 0;
         private:
             //----------------------------------------------------
             /// Looks for a system that implements the given
@@ -434,7 +434,15 @@ namespace ChilliSource
             ///
             /// @param Time between frames
             //------------------------------------------------------
-			void Update(f32 in_deltaTime);
+			void OnUpdate(f32 in_deltaTime);
+            //---------------------------------------------------
+            /// Resumes the application. This will be called when
+            /// at the start of the next update following the On
+            /// Resume event.
+            ///
+            /// @author I Copland
+            //---------------------------------------------------
+            void OnResume();
             //------------------------------------------------------
 			/// Tell the active camera to roate its view and if we
             /// are using touch input we must rotate the input
@@ -445,14 +453,6 @@ namespace ChilliSource
 			/// @param Screen orientation flag
 			//------------------------------------------------------
 			void SetOrientation(ScreenOrientation inOrientation);
-            //---------------------------------------------------
-            /// Resumes the application. This will be called when
-            /// at the start of the next update following the On
-            /// Resume event.
-            ///
-            /// @author I Copland
-            //---------------------------------------------------
-            void ResumeApplication();
 
         private:
             std::vector<SystemUPtr> m_systems;
