@@ -66,7 +66,7 @@ namespace ChilliSource
 			}
 
 			//if neither succeed, or they are different, then return false, otherwise set the UDID.
-			if (bASPUDIDExists == true)
+			if (bASPUDIDExists == false)
 				return false;
 
 			mstrUDID = strASPUDID;
