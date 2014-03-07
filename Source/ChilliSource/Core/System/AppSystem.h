@@ -21,7 +21,7 @@ namespace ChilliSource
         /// when an application begins and exists through the
         /// entire life of the app.
         //-------------------------------------------------------
-        class AppSystem : QueryableInterface
+        class AppSystem : public QueryableInterface
         {
         public:
             //------------------------------------------------
@@ -71,7 +71,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
             //------------------------------------------------
-            virtual void OnFixedUpdate() {};
+            virtual void OnFixedUpdate(f32 in_deltaTime) {};
             //------------------------------------------------
             /// Called when the application transitions from
             /// being active app into the background. This
@@ -103,6 +103,14 @@ namespace ChilliSource
             /// @author I Copland
             //------------------------------------------------
             virtual void OnDestroy() {};
+            //------------------------------------------------
+            /// Called when the application receives a memory
+            /// warning. This should be used to clean up any
+            /// non-essensial memory.
+            ///
+            /// @author I Copland
+            //------------------------------------------------
+            virtual void OnMemoryWarning() {};
             //------------------------------------------------
             /// Destructor
             ///

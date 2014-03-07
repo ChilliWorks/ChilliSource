@@ -95,6 +95,26 @@ namespace ChilliSource
             /// queryable interface.
 			//-----------------------------------------------------
             template <typename TNamedType> void GetSystems_Old(std::vector<TNamedType*> & out_systems);
+            //----------------------------------------------------
+			/// Looks for a system that implements the queryable
+            /// interface provided as a template parameter.
+            ///
+            /// @author I Copland
+            ///
+			/// @return The first system found that implements
+            /// the named interface.
+			//----------------------------------------------------
+			template <typename TNamedType> TNamedType* GetSystem();
+			//-----------------------------------------------------
+			/// Looks for a all systems that implement the given
+            /// queryable interface provided as a template parameter.
+			///
+            /// @author I Copland
+            ///
+			/// @param [Out] The list of systems that implement the
+            /// queryable interface.
+			//-----------------------------------------------------
+            template <typename TNamedType> void GetSystems(std::vector<TNamedType*> & out_systems);
 			//-----------------------------------------------------
             /// Returns the version number of the application on
             /// the current platform as a string.
@@ -509,6 +529,33 @@ namespace ChilliSource
             for (size_t systemIndex = 0; systemIndex < m_systemsOld.size(); systemIndex++)
             {
                 if (m_systemsOld[systemIndex]->IsA(TNamedType::InterfaceID))
+                {
+                    out_systems.push_back(static_cast<TNamedType*>(m_systemsOld[systemIndex].get()));
+                }
+            }
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        template <typename TNamedType> TNamedType* Application::GetSystem()
+        {
+            for (std::vector<AppSystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
+			{
+				if ((*it)->IsA(TNamedType::InterfaceID))
+				{
+					return static_cast<TNamedType*>((*it).get());
+				}
+			}
+			
+			CS_LOG_WARNING("Application cannot find implementing systems");
+			return nullptr;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TNamedType> void Application::GetSystems(std::vector<TNamedType*> & out_systems)
+        {
+            for (size_t systemIndex = 0; systemIndex < m_systems.size(); systemIndex++)
+            {
+                if (m_systems[systemIndex]->IsA(TNamedType::InterfaceID))
                 {
                     out_systems.push_back(static_cast<TNamedType*>(m_systemsOld[systemIndex].get()));
                 }

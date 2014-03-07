@@ -261,6 +261,12 @@ namespace ChilliSource
             LoadDefaultResources();
 			ScreenChangedOrientation(m_defaultOrientation);
 
+            //initialise all of the application systems.
+            for (const AppSystemUPtr& system : m_systems)
+            {
+                system->OnInitialise();
+            }
+            
             OnInitialise();
 
 			if (m_stateManager.GetActiveScenePtr() == nullptr)
@@ -323,6 +329,13 @@ namespace ChilliSource
             while((m_updateIntervalRemainder >= Application::GetUpdateInterval()) || m_isFirstFrame)
             {
                 m_updateIntervalRemainder -=  Application::GetUpdateInterval();
+                
+                //update all of the application systems
+                for (const AppSystemUPtr& system : m_systems)
+                {
+                    system->OnFixedUpdate(Application::GetUpdateInterval());
+                }
+                
                 m_stateManager.FixedUpdate(Application::GetUpdateInterval());
                 
                 m_isFirstFrame = false;
@@ -385,6 +398,12 @@ namespace ChilliSource
 			CS_LOG_DEBUG("Memory Warning. Clearing resource cache...");
 			ResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
 			ApplicationEvents::GetLowMemoryEvent().NotifyConnections();
+            
+            //update all of the application systems
+            for (const AppSystemUPtr& system : m_systems)
+            {
+                system->OnMemoryWarning();
+            }
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -404,6 +423,12 @@ namespace ChilliSource
             
 			//Tell the active state to save it's data etc
 			m_stateManager.Pause();
+            
+            //suspend all application systems in reverse order.
+            for (std::vector<AppSystemUPtr>::const_reverse_iterator it = m_systems.rbegin(); it != m_systems.rend(); ++it)
+            {
+                (*it)->OnMemoryWarning();
+            }
             
 			//We must invalidate the application timer. This will stop sub-system updates
 			m_platformSystem->SetUpdaterActive(false);
@@ -426,7 +451,13 @@ namespace ChilliSource
             OnDestroy();
 
             m_stateManager.DestroyAll();
-
+            
+            //suspend all application systems in reverse order.
+            for (std::vector<AppSystemUPtr>::const_reverse_iterator it = m_systems.rbegin(); it != m_systems.rend(); ++it)
+            {
+                (*it)->OnDestroy();
+            }
+            
 			m_defaultFont.reset();
 			m_defaultMesh.reset();
 			m_defaultMaterial.reset();
@@ -647,6 +678,12 @@ namespace ChilliSource
             {
                 (*it)->Update(in_deltaTime);
             }
+            
+            //update all of the application systems
+            for (const AppSystemUPtr& system : m_systems)
+            {
+                system->OnUpdate(in_deltaTime);
+            }
 			
 			//Tell the state manager to update the active state
 			m_stateManager.Update(in_deltaTime);
@@ -664,6 +701,12 @@ namespace ChilliSource
             
 			m_isSuspending = false;
 			ApplicationEvents::GetResumeEvent().NotifyConnections();
+            
+            //resume all of the application systems
+            for (const AppSystemUPtr& system : m_systems)
+            {
+                system->OnResume();
+            }
             
 			//Tell the active state to continue
 			m_stateManager.Resume();
