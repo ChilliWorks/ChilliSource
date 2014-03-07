@@ -177,6 +177,16 @@ namespace ChilliSource
             /// inches.
             //-------------------------------------------------
             virtual f32 GetPhysicalScreenSize() = 0;
+            
+        protected:
+            
+            //-----------------------------------------
+            /// Private constructor to force use of
+            /// factory method
+            ///
+            /// @author S Downie
+            //-----------------------------------------
+            PlatformSystem(){}
         };
     }
 }
