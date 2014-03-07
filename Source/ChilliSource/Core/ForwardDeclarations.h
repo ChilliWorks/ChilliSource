@@ -156,6 +156,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// System
         //---------------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(AppSystem);
         CS_FORWARDDECLARE_CLASS(System);
         CS_FORWARDDECLARE_CLASS(IUpdateable);
         CS_FORWARDDECLARE_CLASS(IComponentProducer);

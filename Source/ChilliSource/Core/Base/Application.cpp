@@ -437,9 +437,9 @@ namespace ChilliSource
             CS_SAFEDELETE(m_componentFactoryDispenser);
             
 			//We have an issue with the order of destruction of systems.
-			while(m_systems.empty() == false)
+			while(m_systemsOld.empty() == false)
 			{
-				m_systems.pop_back();
+				m_systemsOld.pop_back();
 			}
             
             s_application = nullptr;
@@ -451,24 +451,9 @@ namespace ChilliSource
             CS_ASSERT(m_isSystemCreationAllowed == true, "Application systems cannot be created outwith the creation phase");
 			if (in_system != nullptr)
 			{
-				m_systems.push_back(std::move(in_system));
+				m_systemsOld.push_back(std::move(in_system));
 			}
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
-		System* Application::GetSystem(InterfaceIDType in_interfaceID)
-		{
-			for (std::vector<SystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
-			{
-				if ((*it)->IsA(in_interfaceID))
-				{
-					return (*it).get();
-				}
-			}
-			
-			CS_LOG_WARNING("Application cannot find implementing systems");
-			return nullptr;
-		}
         //------------------------------------------------------
         //------------------------------------------------------
         void Application::CreateDefaultSystems()
@@ -515,7 +500,7 @@ namespace ChilliSource
 		void Application::PostCreateSystems()
 		{
             //Loop round all the created systems and categorise them
-			for(std::vector<SystemUPtr>::iterator it = m_systems.begin(); it != m_systems.end(); ++it)
+			for(std::vector<SystemUPtr>::iterator it = m_systemsOld.begin(); it != m_systemsOld.end(); ++it)
 			{
                 System* pSystem = it->get();
                 
@@ -694,7 +679,7 @@ namespace ChilliSource
 				m_renderer->GetActiveCameraPtr()->SetViewportOrientation(in_orientation);
 			}
             
-            Input::TouchScreen * pTouchScreen = GetSystem(Input::InputSystem::InterfaceID)->GetInterface<Input::InputSystem>()->GetTouchScreen();
+            Input::TouchScreen * pTouchScreen = GetSystem_Old<Input::InputSystem>()->GetInterface<Input::InputSystem>()->GetTouchScreen();
             if (pTouchScreen != nullptr)
             {
                 pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());

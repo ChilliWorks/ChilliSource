@@ -34,7 +34,7 @@ namespace ChilliSource
 		: mpFMODSystem(in_system)
 		{
 #ifdef CS_TARGETPLATFORM_ANDROID
-			Core::FileSystem* fileSystem = Core::Application::Get()->GetSystem<Core::FileSystem>();
+			Core::FileSystem* fileSystem = Core::Application::Get()->GetSystem_Old<Core::FileSystem>();
             m_cacheDirectory = fileSystem->GetStorageLocationDirectory(Core::StorageLocation::k_cache);
 			m_DLCDirectory = fileSystem->GetStorageLocationDirectory(Core::StorageLocation::k_DLC);
 			m_saveDataDirectory = fileSystem->GetStorageLocationDirectory(Core::StorageLocation::k_saveData);

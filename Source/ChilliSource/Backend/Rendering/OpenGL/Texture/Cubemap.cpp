@@ -123,7 +123,7 @@ namespace ChilliSource
         mbHasMipMaps(false), mbHasTextureFilterModeChanged(true), meImageFormat(Core::Image::Format::k_RGBA8888),
         mpRenderCapabilities(nullptr)
         {
-            mpRenderCapabilities = Core::Application::Get()->GetSystem<Rendering::RenderCapabilities>();
+            mpRenderCapabilities = Core::Application::Get()->GetSystem_Old<Rendering::RenderCapabilities>();
         }
 		//--------------------------------------------------
 		/// Init
