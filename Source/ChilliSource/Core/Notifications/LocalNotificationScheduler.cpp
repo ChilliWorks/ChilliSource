@@ -7,6 +7,7 @@
 //
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Notifications/LocalNotificationScheduler.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
 #ifdef CS_TARGETPLATFORM_IOS

@@ -1,15 +1,10 @@
-/*
- * File: iOSPlatformSystem.cpp
- * Date: 24/11/2010 2010 
- * Description: 
- */
-
-/*
- * Author: Scott Downie
- * Version: v 1.0
- * Copyright ©2010 Tag Games Limited - All rights reserved 
- */
-
+//
+//  PlatformSystem.cpp
+//  Chilli Source
+//
+//  Created by Scott Downie on 24/11/2010.
+//  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
+//
 #include <ChilliSource/Backend/Platform/iOS/Core/Base/PlatformSystem.h>
 
 #include <ChilliSource/Backend/Platform/iOS/Core/String/NSString+MD5Addition.h>

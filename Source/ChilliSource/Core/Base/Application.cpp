@@ -450,7 +450,10 @@ namespace ChilliSource
         void Application::AddSystem(SystemUPtr in_system)
         {
             CS_ASSERT(m_isSystemCreationAllowed == true, "Application systems cannot be created outwith the creation phase");
-            m_systems.push_back(std::move(in_system));
+			if (in_system != nullptr)
+			{
+				m_systems.push_back(std::move(in_system));
+			}
         }
         //----------------------------------------------------
         //----------------------------------------------------

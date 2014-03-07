@@ -70,6 +70,13 @@ namespace ChilliSource
 			bool CreateImageFromFile(Core::StorageLocation ineLocation, const std::string & inFilePath, Core::Image::Format ineFormat, Core::ResourceSPtr& outpResource) override;
 
 		private:
+			friend Core::ImageResourceProviderUPtr Core::ImageResourceProvider::Create();
+			//-------------------------------------------------------
+			/// Private constructor to force use of factory method
+			///
+			/// @author I Copland
+			//-------------------------------------------------------
+			ImageLoader(){}
 			//----------------------------------------------------------------
 			/// Create UI Image From File
 			///

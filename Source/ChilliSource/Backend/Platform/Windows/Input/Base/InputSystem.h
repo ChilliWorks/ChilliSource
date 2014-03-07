@@ -26,7 +26,6 @@ namespace ChilliSource
 		class InputSystem : public Input::InputSystem
 		{
 		public:
-			InputSystem();
 			virtual ~InputSystem();
 			//---------------------------------------------------------------
 			/// Is A
@@ -75,7 +74,14 @@ namespace ChilliSource
 			//---------------------------------------------------------------
 			Input::TouchScreen * GetTouchScreen() override;
 
-		protected:
+		private:
+			friend Input::InputSystemUPtr Input::InputSystem::Create();
+			//-------------------------------------------------------
+			/// Private constructor to force use of factory method
+			///
+			/// @author S Downie
+			//-------------------------------------------------------
+			InputSystem();
 
 			TouchScreen mTouchScreen;
 			Mouse mMouse;
