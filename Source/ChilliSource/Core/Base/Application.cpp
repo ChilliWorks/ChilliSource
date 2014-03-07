@@ -446,7 +446,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void Application::AddSystem(SystemUPtr in_system)
+        void Application::AddSystem_Old(SystemUPtr in_system)
         {
             CS_ASSERT(m_isSystemCreationAllowed == true, "Application systems cannot be created outwith the creation phase");
 			if (in_system != nullptr)
@@ -459,39 +459,39 @@ namespace ChilliSource
         void Application::CreateDefaultSystems()
         {
             //Core
-            AddSystem(FileSystem::Create());
+            AddSystem_Old(FileSystem::Create());
 
             //TODO: Change this to a PNG image provider.
-            AddSystem(ImageResourceProvider::Create());
-            AddSystem(MoImageProvider::Create());
-            AddSystem(DialogueBoxSystem::Create());
+            AddSystem_Old(ImageResourceProvider::Create());
+            AddSystem_Old(MoImageProvider::Create());
+            AddSystem_Old(DialogueBoxSystem::Create());
             
             NotificationScheduler::Initialise(LocalNotificationScheduler::Create());
 
             //Audio
             Audio::AudioSystemUPtr audioSystem(Audio::AudioSystem::Create());
-			AddSystem(Audio::AudioLoader::Create(audioSystem.get()));
-            AddSystem(std::move(audioSystem));
+			AddSystem_Old(Audio::AudioLoader::Create(audioSystem.get()));
+            AddSystem_Old(std::move(audioSystem));
 
             //Input
-            AddSystem(Input::InputSystem::Create());
+            AddSystem_Old(Input::InputSystem::Create());
 
             //Rendering
             Rendering::RenderCapabilitiesUPtr renderCapabilitiesUPtr(Rendering::RenderCapabilities::Create());
             Rendering::RenderCapabilities* renderCapabilities(renderCapabilitiesUPtr.get());
-            AddSystem(std::move(renderCapabilitiesUPtr));
+            AddSystem_Old(std::move(renderCapabilitiesUPtr));
             Rendering::RenderSystemUPtr renderSystemUPtr(Rendering::RenderSystem::Create(renderCapabilities));
             //TODO: Don't assume this will be a GL render system. We only do this temporarily
             //in order to access the managers. This will change.
             OpenGL::RenderSystem* renderSystem((OpenGL::RenderSystem*)renderSystemUPtr.get());
             renderSystem->Init((u32)Screen::GetRawDimensions().x, (u32)Screen::GetRawDimensions().y);
-            AddSystem(std::move(renderSystemUPtr));
-            AddSystem(Rendering::MaterialFactory::Create(renderSystem->GetTextureManager(), renderSystem->GetShaderManager(), renderSystem->GetCubemapManager(), renderCapabilities));
-            AddSystem(Rendering::MaterialLoader::Create(renderCapabilities));
-			AddSystem(Rendering::SpriteSheetLoader::Create());
-			AddSystem(Rendering::XMLSpriteSheetLoader::Create());
-			AddSystem(Rendering::FontLoader::Create());
-            AddSystem(Rendering::AnimatedMeshComponentUpdater::Create());
+            AddSystem_Old(std::move(renderSystemUPtr));
+            AddSystem_Old(Rendering::MaterialFactory::Create(renderSystem->GetTextureManager(), renderSystem->GetShaderManager(), renderSystem->GetCubemapManager(), renderCapabilities));
+            AddSystem_Old(Rendering::MaterialLoader::Create(renderCapabilities));
+			AddSystem_Old(Rendering::SpriteSheetLoader::Create());
+			AddSystem_Old(Rendering::XMLSpriteSheetLoader::Create());
+			AddSystem_Old(Rendering::FontLoader::Create());
+            AddSystem_Old(Rendering::AnimatedMeshComponentUpdater::Create());
             
             m_renderer = Rendering::Renderer::Create(renderSystem);
         }

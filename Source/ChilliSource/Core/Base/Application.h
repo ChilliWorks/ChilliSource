@@ -63,7 +63,7 @@ namespace ChilliSource
             ///
             /// @param The new system to add to the application.
  			//----------------------------------------------------
-            void AddSystem(SystemUPtr in_system);
+            void AddSystem_Old(SystemUPtr in_system);
             //----------------------------------------------------
             /// Creates a new instance of the given system and
             /// adds it to the application.
