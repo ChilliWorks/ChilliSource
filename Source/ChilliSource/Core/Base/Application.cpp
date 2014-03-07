@@ -434,6 +434,7 @@ namespace ChilliSource
 			m_defaultMaterial.reset();
             
             m_platformSystem.reset();
+			m_renderer.reset();
             CS_SAFEDELETE(m_resourceManagerDispenser);
             CS_SAFEDELETE(m_componentFactoryDispenser);
             
