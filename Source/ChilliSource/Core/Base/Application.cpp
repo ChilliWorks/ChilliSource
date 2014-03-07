@@ -500,6 +500,7 @@ namespace ChilliSource
             //TODO: Don't assume this will be a GL render system. We only do this temporarily
             //in order to access the managers. This will change.
             OpenGL::RenderSystem* renderSystem((OpenGL::RenderSystem*)renderSystemUPtr.get());
+            renderSystem->Init((u32)Screen::GetRawDimensions().x, (u32)Screen::GetRawDimensions().y);
             AddSystem(std::move(renderSystemUPtr));
             AddSystem(Rendering::MaterialFactory::Create(renderSystem->GetTextureManager(), renderSystem->GetShaderManager(), renderSystem->GetCubemapManager(), renderCapabilities));
             AddSystem(Rendering::MaterialLoader::Create(renderCapabilities));
@@ -565,7 +566,6 @@ namespace ChilliSource
             //Give the resource managers their providers
             m_resourceManagerDispenser->SetResourceProviders(m_resourceProviders);
 
-            GetRenderSystem()->Init((u32)Screen::GetRawDimensions().x, (u32)Screen::GetRawDimensions().y);
             GetRenderer()->Init();
             Audio::AudioPlayer::Init();
 
