@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Resource/ResourceManager.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/State/State.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
@@ -268,11 +269,7 @@ namespace ChilliSource
             }
             
             OnInitialise();
-
-			if (m_stateManager.GetActiveScenePtr() == nullptr)
-            {
-				PushInitialState();
-            }
+            PushInitialState();
 
 			//Register for update events
 			LocalDataStore::GetSingleton().SubscribeToApplicationSuspendEvent();
@@ -345,7 +342,7 @@ namespace ChilliSource
             OnUpdate(in_deltaTime);
             
             //Render the scene
-            m_renderer->RenderToScreen(m_stateManager.GetActiveScenePtr());
+            m_renderer->RenderToScreen(m_stateManager.GetActiveState()->GetScene());
             
 #ifdef CS_ENABLE_DEBUGSTATS
 			DebugStats::Clear();

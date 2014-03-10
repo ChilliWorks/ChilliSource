@@ -1,176 +1,161 @@
-/*
- *  StateManager.cpp
- *  moFlo
- *
- *  Created by Scott Downie on 23/09/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  StateManager.cpp
+//  ChilliSource
+//
+//  Created by Scott Downie on 23/09/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Core/State/StateManager.h>
-#include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
-#include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
+
+#include <ChilliSource/Core/State/State.h>
 
 namespace ChilliSource
 {
 	namespace Core
 	{
-        static StateSPtr NullStatePtr;
+        namespace
+        {
+            const StateSPtr NullStatePtr;
+        }
         
 		//---------------------------------------------------------
-		/// Constructor
-		///
-		/// Default
 		//---------------------------------------------------------
 		StateManager::StateManager()
-        : mbStartState(false)
+        : m_isStartState(false)
 		{
 		}
 		//---------------------------------------------------------
-		/// Resume
-		///
-		/// Called by the application on receiving a resume
-		/// notification
 		//---------------------------------------------------------
 		void StateManager::Resume()
 		{
-			if(!mStateHierarchy.empty()) 
+			if(!m_states.empty())
 			{
-				mStateHierarchy.back().get()->Resume();
+				m_states.back().get()->Resume();
 			}
 		}
 		//---------------------------------------------------------
-		/// Pause
-		///
-		/// Called by the application on receiving a suspend
-		/// notification
 		//---------------------------------------------------------
 		void StateManager::Pause()
 		{
-			if(!mStateHierarchy.empty()) 
+			if(!m_states.empty())
 			{
-				mStateHierarchy.back().get()->Suspend();
+				m_states.back().get()->Suspend();
 			}
 		}
 		//---------------------------------------------------------
-		/// Update
-		///
-		/// Updates the current state with the time
-		/// since last update
-		///
-		/// @param Time since last update
 		//---------------------------------------------------------
 		void StateManager::Update(f32 dt)
 		{
-			while(!mStateOperationQueue.empty()) 
+			while(!m_operations.empty())
 			{
-				switch(mStateOperationQueue.front().eAction) 
+				switch(m_operations.front().m_action) 
 				{
 					case StateOperationAction::k_push:
                     {
-                        StateSPtr pPushed = mStateOperationQueue.front().pState;
-                        StateSPtr pTop;
+                        StateSPtr pushed = m_operations.front().m_state;
+                        StateSPtr top;
                         
-                        if(!mStateHierarchy.empty())
+                        if(!m_states.empty())
                         {
-                            pTop = mStateHierarchy.back();
-                            CS_ASSERT(pTop != pPushed, "You cannot push a copy of a state onto itself");
+                            top = m_states.back();
+                            CS_ASSERT(top != pushed, "You cannot push a copy of a state onto itself");
                         }
                         
                         //Only the top state will have been started so this
                         //is the only one we need to stop
-						if(!mbStartState && !mStateHierarchy.empty()) 
+						if(!m_isStartState && !m_states.empty()) 
 						{
-                            pTop->Stop();
+                            top->Stop();
 						}
                         
                         //Check that the state we have pushed is not already in the hierarchy
-                        bool bAlreadyInHierarchy = GetIsStateInHierarchy(pPushed.get());
+                        bool bAlreadyInHierarchy = DoesStateExist(pushed.get());
                         
-                        PushHierarchy(pPushed);
+                        PushHierarchy(pushed);
                         
                         if(!bAlreadyInHierarchy)
                         {
-                            pPushed->Init();
+                            pushed->Init();
                         }
                         
-                        mbStartState = true;
+                        m_isStartState = true;
 						break;
                     }
 					case StateOperationAction::k_popTo:
                     {
-						State * pTargetState = mStateOperationQueue.front().pRawState;
-						bool bTopStateStopped = false;
-						while (!mStateHierarchy.empty() && (mStateHierarchy.back().get() != pTargetState))
+						State * targetState = m_operations.front().m_rawState;
+						bool isTopStateStopped = false;
+						while (!m_states.empty() && (m_states.back().get() != targetState))
                         {
-                            StateSPtr pPopped = mStateHierarchy.back();
+                            StateSPtr popped = m_states.back();
 							
 							// Stop the top state only
-							if(!bTopStateStopped)
+							if(!isTopStateStopped)
 							{
-								bTopStateStopped = true;
-								pPopped->Stop();
+								isTopStateStopped = true;
+								popped->Stop();
 							}
 							
-                            if(GetNumInstancesOfStateInHierarchy(pPopped.get()) == 1)
+                            if(GetNumInstancesOfState(popped.get()) == 1)
                             {
-                                pPopped->Destroy();
+                                popped->Destroy();
                             }
                             
                             PopHierarchy();
                             
                             // Only start the state if something has been popped
-                            mbStartState = true;
+                            m_isStartState = true;
 						}
                         
                         break;
                     }
 					case StateOperationAction::k_popToUnique:
                     {
-						State * pTargetState = mStateOperationQueue.front().pRawState;
-						bool bTopStateStopped = false;
-						while (!mStateHierarchy.empty())
+						State * targetState = m_operations.front().m_rawState;
+						bool isTopStateStopped = false;
+						while (!m_states.empty())
                         {
 							// If top state is the target and is unique
-							if(mStateHierarchy.back().get() == pTargetState && GetNumInstancesOfStateInHierarchy(pTargetState) == 1)
+							if(m_states.back().get() == targetState && GetNumInstancesOfState(targetState) == 1)
 								break;
 							
-                            StateSPtr pPopped = mStateHierarchy.back();
+                            StateSPtr popped = m_states.back();
 							
 							// Stop the top state only
-							if(!bTopStateStopped)
+							if(!isTopStateStopped)
 							{
-								bTopStateStopped = true;
-								pPopped->Stop();
+								isTopStateStopped = true;
+								popped->Stop();
 							}
 							
-                            if(GetNumInstancesOfStateInHierarchy(pPopped.get()) == 1)
+                            if(GetNumInstancesOfState(popped.get()) == 1)
                             {
-                                pPopped->Destroy();
+                                popped->Destroy();
                             }
                             
                             PopHierarchy();
 						}
 						
-						mbStartState = true;
+						m_isStartState = true;
                         
                         break;
                     }
 					case StateOperationAction::k_clear:
                         
-                        if(!mStateHierarchy.empty())
+                        if(!m_states.empty())
                         {
-                            StateSPtr pTop = mStateHierarchy.back();
-                            pTop->Stop();
+                            StateSPtr top = m_states.back();
+                            top->Stop();
                         }
                         
-						while (!mStateHierarchy.empty())
+						while (!m_states.empty())
                         {
-                            StateSPtr pTop = mStateHierarchy.back();
+                            StateSPtr top = m_states.back();
                             
-                            if(GetNumInstancesOfStateInHierarchy(pTop.get()) == 1)
+                            if(GetNumInstancesOfState(top.get()) == 1)
                             {
-                                pTop->Destroy();
+                                top->Destroy();
                             }
                             
                             PopHierarchy();
@@ -178,208 +163,141 @@ namespace ChilliSource
 						break;
 					case StateOperationAction::k_pop:
                     {
-                        if(mStateHierarchy.empty())
+                        if(m_states.empty())
                         {
                             break;
                         }
                         
                         //Only the top state will have been started so this
                         //is the only one we need to stop
-                        StateSPtr pPopped = mStateHierarchy.back();
+                        StateSPtr popped = m_states.back();
                         
-						if(!mbStartState) 
+						if(!m_isStartState) 
 						{
-                            pPopped->Stop();
+                            popped->Stop();
 						}
                         
-                        if(GetNumInstancesOfStateInHierarchy(pPopped.get()) == 1)
+                        if(GetNumInstancesOfState(popped.get()) == 1)
                         {
-                            pPopped->Destroy();
+                            popped->Destroy();
                         }
                         
                         PopHierarchy();
 						
-                        mbStartState = true;
+                        m_isStartState = true;
 						break;
                     }
 					default:
 						break;
 				}
-				mStateOperationQueue.pop_front();
+				m_operations.pop_front();
 			}
             
-			if(!mStateHierarchy.empty()) 
+			if(!m_states.empty()) 
 			{
                 //We only want to start the state we intend to finish on (i.e. pushing 3 states in a single frame)
-                if(mbStartState)
+                if(m_isStartState)
                 {
-                    mbStartState = false;
-                    mStateHierarchy.back()->Start();
+                    m_isStartState = false;
+                    m_states.back()->Start();
                 }
                 
-				mStateHierarchy.back()->Update(dt);
+				m_states.back()->Update(dt);
 			}
 		}
         //---------------------------------------------------------
-        /// Pop Hierarchy
-        ///
-        /// Manages the hierarchy list and the setting of
-        /// the state as active or inactive
         //---------------------------------------------------------
         void StateManager::PopHierarchy()
         {
-            mStateHierarchy.pop_back();
+            m_states.pop_back();
         }
         //---------------------------------------------------------
-        /// Push Hierarchy
-        ///
-        /// Manages the hierarchy list and the setting of
-        /// the state as active or inactive
-        /// @param State to push
         //---------------------------------------------------------
         void StateManager::PushHierarchy(const StateSPtr& inpState)
         {
-            mStateHierarchy.push_back(inpState);
+            m_states.push_back(inpState);
         }
         //---------------------------------------------------------
-        /// Fixed Update
-        ///
-        /// Updates the current state with the time
-        /// since last update
-        ///
-        /// @param Time since last update
         //---------------------------------------------------------
         void StateManager::FixedUpdate(f32 dt)
         {
-            if(!mStateHierarchy.empty()) 
+            if(!m_states.empty()) 
 			{
-                mStateHierarchy.back()->FixedUpdate(dt);
+                m_states.back()->FixedUpdate(dt);
             }
         }
 		//---------------------------------------------------------
-		/// Destroy All
-		///
-		/// Remove all states from the stack and destroy each
 		//---------------------------------------------------------
 		void StateManager::DestroyAll()
 		{
-			while(!mStateHierarchy.empty())
+			while(!m_states.empty())
 			{
-                StateSPtr pState = mStateHierarchy.back();
-                mStateHierarchy.pop_back();
+                StateSPtr state = m_states.back();
+                m_states.pop_back();
                 
-                if(!GetIsStateInHierarchy(pState.get()))
+                if(!DoesStateExist(state.get()))
                 {
-                    pState->Stop();
-                    pState->Destroy();
+                    state->Stop();
+                    state->Destroy();
 				}
 			}
 		}
 		//---------------------------------------------------------
-		/// Push
-		///
-		/// Add this state to the hierarchy and make it the active
-		/// state.
-		///
-		/// @param New active state
 		//---------------------------------------------------------
-		void StateManager::Push(const StateSPtr &inpState)
+		void StateManager::Push(const StateSPtr &in_state)
 		{
-			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_push, inpState));
+			m_operations.push_back(StateOperation(StateOperationAction::k_push, in_state));
 		}
 		//---------------------------------------------------------
-		/// Pop
-		///
-		/// Remove the active state from the hierarchy
-		/// and resume the state beneath it. This
-		/// state will now be the active state
 		//---------------------------------------------------------
 		void StateManager::Pop()
 		{
-			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_pop));
+			m_operations.push_back(StateOperation(StateOperationAction::k_pop));
 		}
 		//---------------------------------------------------------
-		/// PopToState
-		///
-		/// Removes states from the hierarchy until the 
-		/// specified state is topmost. The given state
-		/// will become active. If the given state is now on the
-		/// stack the 
 		//---------------------------------------------------------
-		void StateManager::PopToState(State * inpTarget)
+		void StateManager::PopToState(State* in_target)
         {
-			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_popTo, inpTarget));
+			m_operations.push_back(StateOperation(StateOperationAction::k_popTo, in_target));
 		}
 		//---------------------------------------------------------
-		/// Pop To State Unique
-		///
-		/// Removes states from the hierarchy until the
-		/// specified state is topmost and is unique in the stack.
-		/// The given state will become active.
 		//---------------------------------------------------------
-		void StateManager::PopToStateUnique(State * inpTarget)
+		void StateManager::PopToStateUnique(State * in_target)
 		{
-			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_popToUnique, inpTarget));
+			m_operations.push_back(StateOperation(StateOperationAction::k_popToUnique, in_target));
 		}
 		//---------------------------------------------------------
-		/// ClearStack
-		///
-		/// Remove all states from the stack. ALL OF THEM!
 		//---------------------------------------------------------
-		void StateManager::ClearStack()
+		void StateManager::Clear()
 		{
-			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_clear));
+			m_operations.push_back(StateOperation(StateOperationAction::k_clear));
 		}
 		//---------------------------------------------------------
-		/// Get Stack Count
-		///
-		/// @return the number of states on the stack.
 		//---------------------------------------------------------
-		u32 StateManager::GetStackCount()
+		u32 StateManager::GetNumStates() const
 		{
-			return mStateHierarchy.size();
+			return m_states.size();
 		}
 		//---------------------------------------------------------
-		/// Change
-		///
-		/// Destroy the current state and set the given
-		/// state to active
-		///
-		/// @param State to become active
 		//---------------------------------------------------------
-		void StateManager::Change(const StateSPtr &inpState)
+		void StateManager::Change(const StateSPtr& in_state)
 		{
-			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_pop));
-            mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_push, inpState));
-		}
-		//------------------------------------------------------------------
-		/// Get Factory Producing
-		///
-		/// @return a handle to a factory that can create object of type ID
-		//------------------------------------------------------------------
-		ComponentFactory* StateManager::GetFactoryProducing(InterfaceIDType inInterfaceID)
-		{
-			return Core::ComponentFactoryDispenser::GetSingletonPtr()->GetFactoryProducing(inInterfaceID);
+			m_operations.push_back(StateOperation(StateOperationAction::k_pop));
+            m_operations.push_back(StateOperation(StateOperationAction::k_push, in_state));
 		}
         //---------------------------------------------------------
-        /// Get all States
-        ///
-        /// @return all States
         //---------------------------------------------------------
         const std::vector<StateSPtr>& StateManager::GetStates() const
         {
-            return mStateHierarchy;
+            return m_states;
         }
 		//---------------------------------------------------------
-		/// Get Active State
-		///
-		/// @return State on top of the hierarchy
 		//---------------------------------------------------------
 		const StateSPtr& StateManager::GetActiveState() const
 		{
-			if(!mStateHierarchy.empty())
+			if(!m_states.empty())
 			{
-				return mStateHierarchy.back();
+				return m_states.back();
 			}
 			else
 			{
@@ -387,156 +305,48 @@ namespace ChilliSource
 			}
 		}
         //---------------------------------------------------------
-        /// Get Num Instances of State In Hierarchy
-        ///
-        /// @return The number of times the state appears in the stack
         //---------------------------------------------------------
-        u32 StateManager::GetNumInstancesOfStateInHierarchy(State* inpState) const
+        u32 StateManager::GetNumInstancesOfState(State* in_state) const
         {
-            u32 udwCount = 0;
+            u32 numInstances = 0;
             
-            for (std::vector<StateSPtr>::const_iterator it = mStateHierarchy.begin(); it != mStateHierarchy.end(); ++it)
+            for (std::vector<StateSPtr>::const_iterator it = m_states.begin(); it != m_states.end(); ++it)
             {
-                if ((*it).get() == inpState)
+                if ((*it).get() == in_state)
                 {
-                    ++udwCount;
+                    ++numInstances;
                 }
             }
             
-            return udwCount;
+            return numInstances;
         }
         //---------------------------------------------------------
-        /// Get Is State In Hierarchy
-        ///
-        /// @return returns true if inpcState is in state stack, otherwise false
         //---------------------------------------------------------
-        bool StateManager::GetIsStateInHierarchy(State* inpState) const
+        bool StateManager::DoesStateExist(State* in_state) const
         {
-            bool bIsActive = false;
-            
-            for (std::vector<StateSPtr>::const_iterator it = mStateHierarchy.begin(); it != mStateHierarchy.end(); ++it)
+            for (std::vector<StateSPtr>::const_iterator it = m_states.begin(); it != m_states.end(); ++it)
             {
-                if ((*it).get() == inpState)
+                if ((*it).get() == in_state)
                 {
-                    bIsActive = true;
-                    break;
+                    return true;
                 }
             }
             
-            return bIsActive;
+            return false;
         }
         //---------------------------------------------------------
-        /// Get Is State Pending
-        ///
-        /// @return returns true if inpcState is in state stack, otherwise false
         //---------------------------------------------------------
-        bool StateManager::GetIsStatePending(State* inpState) const
+        bool StateManager::IsStatePending(State* in_state) const
         {
-            bool bIsPending = false;
-            
-            for (std::list<StateOperation>::const_iterator it = mStateOperationQueue.begin(); it != mStateOperationQueue.end(); ++it)
+            for (std::list<StateOperation>::const_iterator it = m_operations.begin(); it != m_operations.end(); ++it)
             {
-                if (((*it).eAction == StateOperationAction::k_push || (*it).eAction == StateOperationAction::k_popTo) && (*it).pState.get() == inpState)
+                if (((*it).m_action == StateOperationAction::k_push || (*it).m_action == StateOperationAction::k_popTo) && (*it).m_state.get() == in_state)
                 {
-                    bIsPending = true;
-                    break;
+                    return true;
                 }
             }
             
-            return bIsPending;
-        }
-        //---------------------------------------------------------
-        /// Get Parent State
-        ///
-        /// @return If this state exists within hierarchy then returns parent state, otherwise returns StateSPtr() (nullptr)
-        //---------------------------------------------------------
-        const StateSPtr& StateManager::GetParentState(State* inpState) const 
-        {
-            StateSPtr pcState = StateSPtr();
-            
-            for (s32 i = mStateHierarchy.size() - 1; i >= 0; --i)
-            {
-                if (mStateHierarchy[i].get() == inpState)
-                {
-                    if (i > 0)
-                    {
-                        return mStateHierarchy[i - 1];
-                    }
-                }
-            }
-			
-            return NullStatePtr;
-        }
-        //---------------------------------------------------------
-        /// Get Child State
-        ///
-        /// @return If this state exists within hierarchy then returns child state, otherwise returns StateSPtr() (nullptr)
-        //---------------------------------------------------------
-        const StateSPtr& StateManager::GetChildState(State* inpState) const
-        {
-            for (s32 i = mStateHierarchy.size() - 1; i >= 0; --i)
-            {
-                if (mStateHierarchy[i].get() == inpState)
-                {
-                    if (i < (s32)mStateHierarchy.size() - 1)
-                    {
-                        return mStateHierarchy[i + 1];
-                    }
-                }
-            }
-			
-            return NullStatePtr;
-        }
-        //---------------------------------------------------------
-        /// Find State With Pointer
-        ///
-        /// @param Raw pointer
-        /// @return Equivalent shared pointer if found in hierarchy
-        //---------------------------------------------------------
-        const StateSPtr& StateManager::FindStateWithPointer(State* inpState) const
-        {
-            for (s32 i = mStateHierarchy.size() - 1; i >= 0; --i)
-            {
-                if (mStateHierarchy[i].get() == inpState)
-                {
-                    return mStateHierarchy[i];
-                }
-            }
-            
-            return NullStatePtr;
-        }
-		//---------------------------------------------------------
-		/// Get Active Scene Ptr
-		///
-		/// @return State on top of the hierarchys scene
-		//---------------------------------------------------------
-		Scene* StateManager::GetActiveScenePtr()
-		{
-			if(!mStateHierarchy.empty())
-			{
-				return mStateHierarchy.back()->GetScene();
-			}
-			else
-			{
-				return nullptr;
-			}
-		}
-        //-------------------------------------------------------------------------
-        /// On Notification Received
-        ///
-        /// Called by the notification scheduler a new notice is triggered
-        /// The manager will then forward this to the state delegates
-        ///
-        /// @param Notification
-        //-------------------------------------------------------------------------
-        bool StateManager::OnNotificationReceived(Core::Notification* inpsNotification)
-        {
-//            if(mStateHierarchy.back()->ShouldReceiveNotifications())
-//            {
-//                return mStateHierarchy.back()->OnReceiveNotification(inpsNotification);
-//            }
-//
-			return false;
+            return false;
         }
 	}
 }

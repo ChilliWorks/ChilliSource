@@ -378,10 +378,10 @@ namespace ChilliSource
                 if(!NotificationQueue.empty() && !NotificationQueue.front()->bTriggered)
                 {
                     //Trigger the next one
-                    if(Core::Application::Get()->GetStateManager()->OnNotificationReceived(NotificationQueue.front().get()))
-                    {
-                        NotificationQueue.front()->bTriggered = true;
-                    }
+//                    if(Core::Application::Get()->GetStateManager()->OnNotificationReceived(NotificationQueue.front().get()))
+//                    {
+//                        NotificationQueue.front()->bTriggered = true;
+//                    }
 
                     gfTimeBetweenNotifications = 0.0f;
                 }
