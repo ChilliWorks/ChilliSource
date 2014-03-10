@@ -213,8 +213,6 @@ namespace ChilliSource
 			//---------------------------------------------------------
 			void Update(f32 dt);
             
-            void DebugPrint(std::string instrMessage);
-            
 		private:
 
 			//---------------------------------------------------------

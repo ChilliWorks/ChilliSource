@@ -63,7 +63,7 @@ namespace ChilliSource
 		{
 			if(!mStateHierarchy.empty()) 
 			{
-				mStateHierarchy.back().get()->OnResume();
+				mStateHierarchy.back().get()->Resume();
 			}
 		}
 		//---------------------------------------------------------
@@ -76,7 +76,7 @@ namespace ChilliSource
 		{
 			if(!mStateHierarchy.empty()) 
 			{
-				mStateHierarchy.back().get()->OnPause();
+				mStateHierarchy.back().get()->Suspend();
 			}
 		}
 		//---------------------------------------------------------
@@ -108,7 +108,7 @@ namespace ChilliSource
                         //is the only one we need to stop
 						if(!mbStartState && !mStateHierarchy.empty()) 
 						{
-                            pTop->OnStop();
+                            pTop->Stop();
 						}
                         
                         //Check that the state we have pushed is not already in the hierarchy
@@ -118,7 +118,7 @@ namespace ChilliSource
                         
                         if(!bAlreadyInHierarchy)
                         {
-                            pPushed->OnInit();
+                            pPushed->Init();
                         }
                         
                         mbStartState = true;
@@ -136,12 +136,12 @@ namespace ChilliSource
 							if(!bTopStateStopped)
 							{
 								bTopStateStopped = true;
-								pPopped->OnStop();
+								pPopped->Stop();
 							}
 							
                             if(GetNumInstancesOfStateInHierarchy(pPopped.get()) == 1)
                             {
-                                pPopped->OnDestroy();
+                                pPopped->Destroy();
                             }
                             
                             PopHierarchy();
@@ -168,12 +168,12 @@ namespace ChilliSource
 							if(!bTopStateStopped)
 							{
 								bTopStateStopped = true;
-								pPopped->OnStop();
+								pPopped->Stop();
 							}
 							
                             if(GetNumInstancesOfStateInHierarchy(pPopped.get()) == 1)
                             {
-                                pPopped->OnDestroy();
+                                pPopped->Destroy();
                             }
                             
                             PopHierarchy();
@@ -188,7 +188,7 @@ namespace ChilliSource
                         if(!mStateHierarchy.empty())
                         {
                             StateSPtr pTop = mStateHierarchy.back();
-                            pTop->OnStop();
+                            pTop->Stop();
                         }
                         
 						while (!mStateHierarchy.empty())
@@ -197,7 +197,7 @@ namespace ChilliSource
                             
                             if(GetNumInstancesOfStateInHierarchy(pTop.get()) == 1)
                             {
-                                pTop->OnDestroy();
+                                pTop->Destroy();
                             }
                             
                             PopHierarchy();
@@ -216,12 +216,12 @@ namespace ChilliSource
                         
 						if(!mbStartState) 
 						{
-                            pPopped->OnStop();
+                            pPopped->Stop();
 						}
                         
                         if(GetNumInstancesOfStateInHierarchy(pPopped.get()) == 1)
                         {
-                            pPopped->OnDestroy();
+                            pPopped->Destroy();
                         }
                         
                         PopHierarchy();
@@ -241,11 +241,11 @@ namespace ChilliSource
                 if(mbStartState)
                 {
                     mbStartState = false;
-                    mStateHierarchy.back()->OnStart();
+                    mStateHierarchy.back()->Start();
                 }
                 
-				mStateHierarchy.back()->OnUpdate(dt);
-				mStateHierarchy.back()->GetScenePtr()->OnUpdate(dt);
+				mStateHierarchy.back()->Update(dt);
+				mStateHierarchy.back()->GetScene()->OnUpdate(dt);
 			}
 		}
         //---------------------------------------------------------
@@ -256,19 +256,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         void StateManager::PopHierarchy()
         {
-            bool bOldStateOwnsScene = mStateHierarchy.back()->mbOwnsScene;
-            
-            if(mStateHierarchy.back()->mpScene && bOldStateOwnsScene)
-            {
-                mStateHierarchy.back()->mpScene->BecomeInactive();
-            }
-            
             mStateHierarchy.pop_back();
-            
-            if(!mStateHierarchy.empty() && mStateHierarchy.back()->mpScene && bOldStateOwnsScene)
-            {
-                mStateHierarchy.back()->mpScene->BecomeActive();
-            }
         }
         //---------------------------------------------------------
         /// Push Hierarchy
@@ -279,13 +267,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         void StateManager::PushHierarchy(const StateSPtr& inpState)
         {
-            if(!mStateHierarchy.empty() && mStateHierarchy.back()->mpScene && inpState->mbOwnsScene)
-                mStateHierarchy.back()->mpScene->BecomeInactive();
-            
             mStateHierarchy.push_back(inpState);
-            
-            if(mStateHierarchy.back()->mpScene && mStateHierarchy.back()->mbOwnsScene)
-                mStateHierarchy.back()->mpScene->BecomeActive();
         }
         //---------------------------------------------------------
         /// Fixed Update
@@ -299,8 +281,8 @@ namespace ChilliSource
         {
             if(!mStateHierarchy.empty()) 
 			{
-                mStateHierarchy.back()->OnFixedUpdate(dt);
-                mStateHierarchy.back()->GetScenePtr()->OnFixedUpdate(dt);
+                mStateHierarchy.back()->FixedUpdate(dt);
+                mStateHierarchy.back()->GetScene()->OnFixedUpdate(dt);
             }
         }
 		//---------------------------------------------------------
@@ -317,8 +299,8 @@ namespace ChilliSource
                 
                 if(!GetIsStateInHierarchy(pState.get()))
                 {
-                    pState->OnStop();
-                    pState->OnDestroy();
+                    pState->Stop();
+                    pState->Destroy();
 				}
 			}
 		}
@@ -561,7 +543,7 @@ namespace ChilliSource
 		{
 			if(!mStateHierarchy.empty())
 			{
-				return mStateHierarchy.back()->mpScene;
+				return mStateHierarchy.back()->GetScene();
 			}
 			else
 			{
@@ -578,37 +560,12 @@ namespace ChilliSource
         //-------------------------------------------------------------------------
         bool StateManager::OnNotificationReceived(Core::Notification* inpsNotification)
         {
-            if(mStateHierarchy.back()->ShouldReceiveNotifications())
-            {
-                return mStateHierarchy.back()->OnReceiveNotification(inpsNotification);
-            }
-
+//            if(mStateHierarchy.back()->ShouldReceiveNotifications())
+//            {
+//                return mStateHierarchy.back()->OnReceiveNotification(inpsNotification);
+//            }
+//
 			return false;
         }
-        
-        void StateManager::DebugPrint(std::string instrMessage){
-            CS_LOG_DEBUG("StateManager "+ToString((u32)this)+" - "+instrMessage);
-            CS_LOG_DEBUG("mpApp = "+ToString((u32)mpApp));
-            CS_LOG_DEBUG("mStateOperationQueue size:"+ToString(mStateOperationQueue.size()));
-    
-            
-            CS_LOG_DEBUG("mStateHierarchy size:"+ToString(mStateHierarchy.size()));
-
-            
-            for(u32 i=0;i<mStateHierarchy.size();i++){
-                CS_LOG_DEBUG("("+ToString(i)+") "+ToString((u32)mStateHierarchy[i].get())+" name:"+mStateHierarchy[i]->GetName());
-            }
-            
-            CS_LOG_DEBUG("mStateOperationQueue size:"+ToString(mStateOperationQueue.size()));
-
-            s32 udwCount=0;
-            std::list<StateOperation>::iterator it=mStateOperationQueue.begin();
-            while(it!=mStateOperationQueue.end()){
-                CS_LOG_DEBUG("("+ToString(udwCount)+") eAction:"+ToString((u32)(*it).eAction)+" pState:"+ToString((u32)(*it).pState.get())+" pRawState:"+ToString((u32)(*it).pRawState));
-                udwCount++;
-                it++;
-            }
-        }
-        
 	}
 }

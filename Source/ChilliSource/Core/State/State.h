@@ -1,183 +1,337 @@
-/*
- *  State.h
- *  moFlo
- *
- *  Created by Scott Downie on 21/09/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  State.h
+//  ChilliSource
+//
+//  Created by Scott Downie on 21/09/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
-#ifndef _MO_FLO_STATE_
-#define _MO_FLO_STATE_
+#ifndef _CHILLISOURCE_CORE_STATE_STATE_H_
+#define _CHILLISOURCE_CORE_STATE_STATE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
+#include <ChilliSource/Core/System/StateSystem.h>
+
+#include <vector>
 
 namespace ChilliSource
 {
 	namespace Core
 	{
-		//======================================================
-		/// Description:
-		///
-		/// Abstract state from which all other states derive.
-		/// Each application must have at least one state.
-		///
-		/// Holds the states handle to its scene manager
-		//======================================================
+        //----------------------------------------------------------------------
+        /// Manages the lifecycle of a user defined state. A state has its own
+        /// scene that is rendered while the state is at the top of the stack.
+        ///
+        /// Applications should inherit from states and override the lifecycle
+        /// delegates to load/display resources and manage game logic.
+        ///
+        /// States also have state systems thats lifecycles are governed by
+        /// the state.
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------------------
 		class State
 		{
 		public:
-			State(Scene* inpScene = nullptr);
-			virtual ~State();
-			
-			//-----------------------------------------
-			/// On Init
-			///
-			/// Called at the start of the application
-			/// and is first responder after a state
-			/// has been destroyed and recreated.
-			//-----------------------------------------
-			virtual void OnInit(){};
-			//-----------------------------------------
-			/// On Start
-			///
-			/// Called whenever the state becomes active
-			//-----------------------------------------
-			virtual void OnStart(){};
-			//-----------------------------------------
-			/// On Resume
-			///
-			/// Called whenever the state becomes active
-			/// from a system pause 
-			//-----------------------------------------
-			virtual void OnResume(){};
-			//-----------------------------------------
-			/// On Update
-			///
-			/// Called at the start of each frame is
-			/// the state is active. It passes the time
-			/// elapsed since the last frame.
-			//-----------------------------------------
-			virtual void OnUpdate(f32){};
-            //-----------------------------------------
-			/// On Fixed Update
-			///
-            /// Can be called multiple times per frame
-            /// depending on the update frequency
+            //--------------------------------------------
+            /// Constructor
             ///
-            /// @param Time since last update
-			//-----------------------------------------
-			virtual void OnFixedUpdate(f32){};
-			//-----------------------------------------
-			/// On Pause
-			///
-			/// Called whenever the state becomes 
-			/// inactive due to a system pause
-			//-----------------------------------------
-			virtual void OnPause(){};
-			//-----------------------------------------
-			/// On Stop
-			///
-			/// Called when a state becomes in-active
-			//-----------------------------------------
-			virtual void OnStop(){};
-			//-----------------------------------------
-			/// On Destroy
-			///
-			/// Final call to state to release all it's
-			/// assets.
-			//-----------------------------------------
-			virtual void OnDestroy(){};
-			//-----------------------------------------
-			/// On Go Back
-			///
-			/// Called when a state is told to go back.
-			//-----------------------------------------
-			virtual void OnGoBack(){};
-            //-----------------------------------------
-            /// Should Receive Notifications
+            /// @author S Downie
+            //--------------------------------------------
+			State();
+            //--------------------------------------------
+            /// Destructor
             ///
-            /// Delegate call used to decide whether
-            /// the state should be notified of any
-            /// notifications
-            ///
-            /// @return Whether to receive notices
-            //-----------------------------------------
-            virtual bool ShouldReceiveNotifications() const;
-            //---------------------------------------------------------------------
-            /// On Receive Notification
-            ///
-            /// Delegate call for when notification is triggered and the state has 
-            /// notifed the system it is prepared to receive notifications via the 
-            /// ShouldReceiveNotifications() delegate call
-            ///
-            /// @param Notification
-            //---------------------------------------------------------------------
-            virtual bool OnReceiveNotification(Notification* inpsNotification){return true;}
-            
-            //---------------------------------------------------------------------
-            /// Get Name
-            ///
-            /// Return a name for the state. (added for debug purposes)
-            ///
-            //---------------------------------------------------------------------            
-            virtual std::string GetName() {return std::string();}
-            
-            //---------------------------------------------------------------------
-            /// DebugPrint
-            ///
-            /// Print current state debug information to console with message
-            ///
-            //---------------------------------------------------------------------
-            virtual void DebugPrint(std::string instrMessage);
-            
-			//-----------------------------------------
-			/// Get Application
-			///
-			/// Handy accessors for the main application
-			/// @return Application handle
-			//-----------------------------------------
-			Application& GetApplication();
-			//-----------------------------------------
-			/// Get Application
-			///
-			/// Handy accessors for the main application
-			/// @return Application handle
-			//-----------------------------------------
-			Application* GetApplicationPtr();
-			//------------------------------------------
-			/// Get Scene
-			///
-			/// @return Scene to present modally
-			//------------------------------------------
-			Scene* GetScenePtr();
-			//------------------------------------------
-			/// Get State Manager
-			///
-			/// @return Pointer to state manager
-			//------------------------------------------
-			StateManager* GetStateManagerPtr() const;
+            /// @author S Downie
+            //--------------------------------------------
+			virtual ~State(){}
             //------------------------------------------
-            /// Is Active State
-            ///
-            /// @return Whether the state is the top of 
+			/// @author S Downie
+			///
+			/// @return States scene
+			//------------------------------------------
+			Scene* GetScene();
+            //------------------------------------------
+            /// @author S Downie
+			///
+            /// @return Whether the state is the top of
             /// the hierarchy
             //-----------------------------------------
 			bool IsActiveState() const;
             
+        protected:
             
-		protected:
+            //----------------------------------------------------
+            /// Factory method that ensures systems are created
+            /// and added at the same time to prevent ordering
+            /// issues
+            ///
+            /// @author S Downie
+            ///
+            /// @param System creation arguments
+            ///
+            /// @return New system owned by state
+            //----------------------------------------------------
+            template <typename TSystem, typename... TArgs> TSystem* CreateSystem(TArgs... in_args);
+            //----------------------------------------------------
+            /// Searches the state systems and returns the first
+            /// one that implements the named interface
+            ///
+            /// @author S Downie
+            ///
+            /// @return System of type TNamedType
+            //----------------------------------------------------
+            template <typename TNamedType> TNamedType* GetSystem();
+            
+        private:
+
+			//-----------------------------------------
+            /// Triggered whenever a state is added
+            /// to the state manager.
+            ///
+            /// (Pairs with Destroy)
+            ///
+            /// @author S Downie
+			//-----------------------------------------
+            void Init();
+			//-----------------------------------------
+            /// Triggered whenever a state becomes the
+            /// active state in the state manager.
+            ///
+            /// (Pairs with Stop)
+            ///
+            /// @author S Downie
+			//-----------------------------------------
+            void Start();
+			//-----------------------------------------
+            /// Triggered when a state is the
+            /// active state in the state manager and
+            /// the application resumes.
+            ///
+            /// (Pairs with Suspend)
+            ///
+            /// @author S Downie
+			//-----------------------------------------
+            void Resume();
+            //-----------------------------------------
+            /// Triggered when a state is the
+            /// active state in the state manager and
+            /// the application becomes the foreground
+            /// app.
+            ///
+            /// (Pairs with Background)
+            ///
+            /// @author S Downie
+			//-----------------------------------------
+            void Foreground();
+			//-----------------------------------------
+            /// Triggered each update loop while the
+            /// state is the active state.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Time since last update (Secs)
+			//-----------------------------------------
+            void Update(f32 in_timeSinceLastUpdate);
+            //-----------------------------------------
+            /// Triggered each update loop at a fixed
+            /// interval while the state is the active
+            /// state.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Fixed time since last update (Secs)
+			//-----------------------------------------
+            void FixedUpdate(f32 in_fixedTimeSinceLastUpdate);
+            //-----------------------------------------
+            /// Triggered when a state is the
+            /// active state in the state manager and
+            /// the application is no longer at the
+            /// foreground.
+            ///
+            /// (Pairs with OnForeground)
+            ///
+            /// @author S Downie
+			//-----------------------------------------
+            void Background();
+			//-----------------------------------------
+            /// Triggered when a state is the
+            /// active state in the state manager and
+            /// the application suspends.
+            ///
+            /// (Pairs with OnResume)
+            ///
+            /// @author S Downie
+			//-----------------------------------------
+            void Suspend();
+			//-----------------------------------------
+            /// Triggered whenever a state is no longer
+            /// the active state in the state manager.
+            ///
+            /// (Pairs with Start)
+            ///
+            /// @author S Downie
+			//-----------------------------------------
+            void Stop();
+			//-----------------------------------------
+            /// Triggered whenever a state is removed
+            /// from the state manager.
+            ///
+            /// (Pairs with Init)
+            ///
+            /// @author S Downie
+			//-----------------------------------------
+            void Destroy();
+            //------------------------------------------------
+            /// Called when the state receives a memory while
+            /// active
+            ///
+            /// @author S Downie
+            //------------------------------------------------
+            void MemoryWarning();
+            //------------------------------------------------------
+			/// The users state should override this to add
+            /// desired systems. Systems can only be added in this
+            /// method.
+            ///
+            /// @author S Downie
+			//------------------------------------------------------
+			virtual void CreateSystems(){};
+			//-----------------------------------------
+            /// Triggered whenever a state is added
+            /// to the state manager.
+            ///
+            /// (Pairs with OnDestroy)
+            ///
+            /// @author S Downie
+			//-----------------------------------------
+			virtual void OnInit(){};
+			//-----------------------------------------
+            /// Triggered whenever a state becomes the
+            /// active state in the state manager.
+            ///
+            /// (Pairs with OnStop)
+            ///
+            /// @author S Downie
+			//-----------------------------------------
+			virtual void OnStart(){};
+			//-----------------------------------------
+            /// Triggered when a state is the
+            /// active state in the state manager and
+            /// the application resumes.
+            ///
+            /// (Pairs with OnSuspend)
+            ///
+            /// @author S Downie
+			//-----------------------------------------
+			virtual void OnResume(){};
+            //-----------------------------------------
+            /// Triggered when a state is the
+            /// active state in the state manager and
+            /// the application becomes the foreground
+            /// app.
+            ///
+            /// (Pairs with OnBackground)
+            ///
+            /// @author S Downie
+			//-----------------------------------------
+			virtual void OnForeground(){};
+			//-----------------------------------------
+            /// Triggered each update loop while the
+            /// state is the active state.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Time since last update (Secs)
+			//-----------------------------------------
+			virtual void OnUpdate(f32){};
+            //-----------------------------------------
+            /// Triggered each update loop at a fixed
+            /// interval while the state is the active
+            /// state.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Fixed time since last update (Secs)
+			//-----------------------------------------
+			virtual void OnFixedUpdate(f32){};
+            //-----------------------------------------
+            /// Triggered when a state is the
+            /// active state in the state manager and
+            /// the application is no longer at the
+            /// foreground.
+            ///
+            /// (Pairs with OnForeground)
+            ///
+            /// @author S Downie
+			//-----------------------------------------
+			virtual void OnBackground(){};
+			//-----------------------------------------
+            /// Triggered when a state is the
+            /// active state in the state manager and
+            /// the application suspends.
+            ///
+            /// (Pairs with OnResume)
+            ///
+            /// @author S Downie
+			//-----------------------------------------
+			virtual void OnSuspend(){};
+			//-----------------------------------------
+            /// Triggered whenever a state is no longer
+            /// the active state in the state manager.
+            ///
+            /// (Pairs with OnStart)
+            ///
+            /// @author S Downie
+			//-----------------------------------------
+			virtual void OnStop(){};
+			//-----------------------------------------
+            /// Triggered whenever a state is removed
+            /// from the state manager.
+            ///
+            /// (Pairs with OnInit)
+            ///
+            /// @author S Downie
+			//-----------------------------------------
+			virtual void OnDestroy(){};
+            
+        private:
 			
-			StateManager* mpStateMgr;
-			Scene* mpScene;
+            std::vector<StateSystemUPtr> m_systems;
+            
+			Scene* m_scene;
 			
-			bool mbOwnsScene;
+            bool m_canAddSystems;
 			
 			friend class StateManager;
 		};
-		
-		typedef std::shared_ptr<State> StateSPtr;
+        
+        //----------------------------------------------------
+        //----------------------------------------------------
+        template <typename TSystem, typename... TArgs> TSystem* State::CreateSystem(TArgs... in_args)
+        {
+            CS_ASSERT(m_canAddSystems == true, "Cannot add systems outwith the creation phase");
+            
+            std::unique_ptr<TSystem> newSystem = TSystem::Create(in_args...);
+            TSystem* output = newSystem.get();
+            m_systems.push_back(std::move(newSystem));
+            return output;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        template <typename TNamedType> TNamedType* State::GetSystem()
+        {
+            for (std::vector<StateSystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
+            {
+                if ((*it)->IsA(TNamedType::InterfaceID))
+                {
+                    return static_cast<TNamedType*>(it->get());
+                }
+            }
+            
+            CS_LOG_WARNING("State cannot find implementing systems");
+            return nullptr;
+        }
 	}
 }
 
