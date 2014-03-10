@@ -10,15 +10,11 @@
 package com.chillisource.core;
 import android.app.Activity;
 import android.content.Intent;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
-
 import com.chillisource.input.KeyboardNativeInterface;
 import com.chillisource.social.ContactInformationProviderNativeInterface;
 import com.chillisource.core.CoreNativeInterface;

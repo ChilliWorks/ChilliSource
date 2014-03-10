@@ -13,7 +13,6 @@
 #include <ChilliSource/Backend/Platform/Android/Core/File/SharedPreferencesJavaInterface.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Core/Cryptographic/HashMD5.h>
-#include <ChilliSource/Core/File/LocalDataStore.h>
 
 #include <cstdlib>
 #include <ctime>
@@ -56,14 +55,6 @@ namespace ChilliSource
 		//-----------------------------------------
 		bool UDIDManager::LoadUDID()
 		{
-			//load the UDID from the local data store
-			std::string strLDSUDID = "";
-			bool bLDSUDIDExists = false;
-			if (Core::LocalDataStore::GetSingletonPtr()->HasValueForKey(kstrUDIDStorageKey) == true)
-			{
-				bLDSUDIDExists = Core::LocalDataStore::GetSingletonPtr()->TryGetValue(kstrUDIDStorageKey, strLDSUDID);
-			}
-
 			//load the UDID from the android data store
 			std::string strASPUDID = "";
 			bool bASPUDIDExists = false;
@@ -75,15 +66,10 @@ namespace ChilliSource
 			}
 
 			//if neither succeed, or they are different, then return false, otherwise set the UDID.
-			if ((bLDSUDIDExists == false && bASPUDIDExists == false) || (bLDSUDIDExists == true && bASPUDIDExists == true && strLDSUDID != strASPUDID))
+			if (bASPUDIDExists == false)
 				return false;
 
-			if (bLDSUDIDExists == true)
-				mstrUDID = strLDSUDID;
-			else if (bASPUDIDExists == true)
-				mstrUDID = strASPUDID;
-			else
-				CS_LOG_FATAL("Something has gone seriously wrong with the loading of UDIDs :S");
+			mstrUDID = strASPUDID;
 
 			return true;
 		}
@@ -92,10 +78,6 @@ namespace ChilliSource
 		//-----------------------------------------
 		void UDIDManager::SaveUDID()
 		{
-			//store in the local data store
-			Core::LocalDataStore::GetSingletonPtr()->SetValueForKey(kstrUDIDStorageKey, mstrUDID);
-			Core::LocalDataStore::GetSingletonPtr()->Synchronise();
-
 			//store in shared preferences
 			SharedPreferencesJavaInterface::SetString(kstrSharedPrefsDocName, kstrUDIDStorageKey, mstrUDID);
 		}

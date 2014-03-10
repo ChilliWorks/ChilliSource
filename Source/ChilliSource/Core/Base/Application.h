@@ -13,6 +13,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 
@@ -62,7 +63,18 @@ namespace ChilliSource
             ///
             /// @param The new system to add to the application.
  			//----------------------------------------------------
-            void AddSystem(SystemUPtr in_system);
+            void AddSystem_Old(SystemUPtr in_system);
+            //----------------------------------------------------
+            /// Creates a new instance of the given system and
+            /// adds it to the application.
+            ///
+            /// @author I Copland
+            ///
+            /// @param The arguments to the system constructor.
+            ///
+            /// @return A raw pointer to the new system.
+ 			//----------------------------------------------------
+            template <typename TSystem, typename... TArgs> AppSystem* CreateSystem(TArgs... in_args);
 			//----------------------------------------------------
 			/// Looks for a system that implements the queryable
             /// interface provided as a template parameter.
@@ -72,18 +84,27 @@ namespace ChilliSource
 			/// @return The first system found that implements
             /// the named interface.
 			//----------------------------------------------------
-			template <typename TNamedType> TNamedType* GetSystem();
+			template <typename TNamedType> TNamedType* GetSystem_Old();
+			//-----------------------------------------------------
+			/// Looks for a all systems that implement the given
+            /// queryable interface provided as a template parameter.
+			///
+            /// @author I Copland
+            ///
+			/// @param [Out] The list of systems that implement the
+            /// queryable interface.
+			//-----------------------------------------------------
+            template <typename TNamedType> void GetSystems_Old(std::vector<TNamedType*> & out_systems);
             //----------------------------------------------------
 			/// Looks for a system that implements the queryable
-            /// interface provided as the first template parameter
-            /// and casts it to the type provided in the second.
+            /// interface provided as a template parameter.
             ///
             /// @author I Copland
             ///
 			/// @return The first system found that implements
             /// the named interface.
 			//----------------------------------------------------
-			template <typename TCastType, typename TNamedType> TCastType* GetSystem();
+			template <typename TNamedType> TNamedType* GetSystem();
 			//-----------------------------------------------------
 			/// Looks for a all systems that implement the given
             /// queryable interface provided as a template parameter.
@@ -259,14 +280,14 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			//----------------------------------------------------
-			void OnInitialise();
+			void Initialise();
             //----------------------------------------------------
 			/// Resumes application from suspended state. This should
             /// not be called by a users application.
             ///
             /// @author I Copland
 			//----------------------------------------------------
-			void OnResume();
+			void Resume();
             //----------------------------------------------------
 			/// Triggered by an update event. This will update
             /// the application, systems and states. This should
@@ -277,7 +298,7 @@ namespace ChilliSource
             /// @param The delta time.
             /// @param The frame timestamp.
 			//----------------------------------------------------
-			void OnUpdate(f32 in_deltaTime, TimeIntervalSecs in_timestamp);
+			void Update(f32 in_deltaTime, TimeIntervalSecs in_timestamp);
             //----------------------------------------------------
 			/// Triggered on receiving a "orientation changed"
             /// event. Used to tell the camera and input to rotate.
@@ -287,7 +308,7 @@ namespace ChilliSource
             ///
             /// @param The new orientation.
 			//----------------------------------------------------
-			void OnScreenChangedOrientation(ScreenOrientation in_orientation);
+			void ScreenChangedOrientation(ScreenOrientation in_orientation);
 			//----------------------------------------------------
 			/// Triggered on receiving a "screen resized" event.
             /// This should not be called by a users application.
@@ -297,7 +318,7 @@ namespace ChilliSource
             /// @param The new width.
             /// @param The new height.
 			//----------------------------------------------------
-			void OnScreenResized(u32 in_width, u32 in_height);
+			void ScreenResized(u32 in_width, u32 in_height);
 			//----------------------------------------------------
 			/// Triggered on receiving a "application memory warning"
             /// event. This will notify active resource managers to
@@ -306,7 +327,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			//----------------------------------------------------
-			void OnApplicationMemoryWarning();
+			void ApplicationMemoryWarning();
             //----------------------------------------------------
 			/// Triggered on receiving a "go back" event. This is
             /// typically caused by pressing a physical back button
@@ -315,7 +336,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			//----------------------------------------------------
-			void OnGoBack();
+			void GoBack();
             //----------------------------------------------------
             /// Triggered on receiving a "application will suspend"
             /// message. This will notify active states to pause
@@ -324,7 +345,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			//----------------------------------------------------
-			void OnSuspend();
+			void Suspend();
             //----------------------------------------------------
             /// Releases all systems and states and cleans up the
             /// application. This should not be called by a users
@@ -332,7 +353,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			//----------------------------------------------------
-			void OnDestroy();
+			void Destroy();
             //------------------------------------------------------
 			/// Destructor
 			//------------------------------------------------------
@@ -353,7 +374,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			//------------------------------------------------------
-			virtual void Initialise() = 0;
+			virtual void OnInitialise() = 0;
             //------------------------------------------------------
 			/// Give the state manager the initial state. This should
             /// be overriden by the users application to add initial
@@ -383,20 +404,8 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			//------------------------------------------------------
-			virtual void Destroy() = 0;
+			virtual void OnDestroy() = 0;
         private:
-            //----------------------------------------------------
-            /// Looks for a system that implements the given
-            /// queryable interface.
-            ///
-            /// @author I Copland
-            ///
-            /// @param The interface ID for the requested named
-            /// interface.
-            /// @return The first system found that implements
-            /// the named interface.
- 			//----------------------------------------------------
-            System* GetSystem(InterfaceIDType in_interfaceID);
             //------------------------------------------------------
             /// Systems that are required by CS are added in this
             /// method
@@ -434,7 +443,15 @@ namespace ChilliSource
             ///
             /// @param Time between frames
             //------------------------------------------------------
-			void Update(f32 in_deltaTime);
+			void OnUpdate(f32 in_deltaTime);
+            //---------------------------------------------------
+            /// Resumes the application. This will be called when
+            /// at the start of the next update following the On
+            /// Resume event.
+            ///
+            /// @author I Copland
+            //---------------------------------------------------
+            void OnResume();
             //------------------------------------------------------
 			/// Tell the active camera to roate its view and if we
             /// are using touch input we must rotate the input
@@ -445,17 +462,11 @@ namespace ChilliSource
 			/// @param Screen orientation flag
 			//------------------------------------------------------
 			void SetOrientation(ScreenOrientation inOrientation);
-            //---------------------------------------------------
-            /// Resumes the application. This will be called when
-            /// at the start of the next update following the On
-            /// Resume event.
-            ///
-            /// @author I Copland
-            //---------------------------------------------------
-            void ResumeApplication();
 
         private:
-            std::vector<SystemUPtr> m_systems;
+            std::vector<AppSystemUPtr> m_systems;
+            
+            std::vector<SystemUPtr> m_systemsOld;
             std::vector<IUpdateable*> m_updateableSystems;
             
 			StateManager m_stateManager;
@@ -489,26 +500,64 @@ namespace ChilliSource
 		};
         //----------------------------------------------------
         //----------------------------------------------------
-        template <typename TNamedType> TNamedType* Application::GetSystem()
+        template <typename TSystem, typename... TArgs> AppSystem* Application::CreateSystem(TArgs... in_args)
         {
-            System* system = GetSystem(TNamedType::InterfaceID);
-            
-            if (system != nullptr)
-            {
-                return static_cast<TNamedType*>(system);
-            }
-            
-            return nullptr;
+            std::unique_ptr<TSystem> newSystem = TSystem::Create(in_args...);
+            TSystem* output = newSystem.get();
+            m_systems.push_back(std::move(newSystem));
+            return output;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        template <typename TNamedType> TNamedType* Application::GetSystem_Old()
+        {
+            for (std::vector<SystemUPtr>::const_iterator it = m_systemsOld.begin(); it != m_systemsOld.end(); ++it)
+			{
+				if ((*it)->IsA(TNamedType::InterfaceID))
+				{
+					return static_cast<TNamedType*>((*it).get());
+				}
+			}
+			
+			CS_LOG_WARNING("Application cannot find implementing systems");
+			return nullptr;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        template <typename TNamedType> void Application::GetSystems(std::vector<TNamedType*> & out_systems)
+        template <typename TNamedType> void Application::GetSystems_Old(std::vector<TNamedType*>& out_systems)
+        {
+            for (size_t systemIndex = 0; systemIndex < m_systemsOld.size(); systemIndex++)
+            {
+                if (m_systemsOld[systemIndex]->IsA(TNamedType::InterfaceID))
+                {
+                    out_systems.push_back(static_cast<TNamedType*>(m_systemsOld[systemIndex].get()));
+                }
+            }
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        template <typename TNamedType> TNamedType* Application::GetSystem()
+        {
+            for (std::vector<AppSystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
+			{
+				if ((*it)->IsA(TNamedType::InterfaceID))
+				{
+					return static_cast<TNamedType*>((*it).get());
+				}
+			}
+			
+			CS_LOG_WARNING("Application cannot find implementing systems");
+			return nullptr;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TNamedType> void Application::GetSystems(std::vector<TNamedType*>& out_systems)
         {
             for (size_t systemIndex = 0; systemIndex < m_systems.size(); systemIndex++)
             {
                 if (m_systems[systemIndex]->IsA(TNamedType::InterfaceID))
                 {
-                    out_systems.push_back(static_cast<TNamedType*>(m_systems[systemIndex].get()));
+                    out_systems.push_back(static_cast<TNamedType*>(m_systemsOld[systemIndex].get()));
                 }
             }
         }

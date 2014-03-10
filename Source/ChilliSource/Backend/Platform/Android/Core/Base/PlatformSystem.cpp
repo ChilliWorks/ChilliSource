@@ -16,6 +16,12 @@ namespace ChilliSource
 {
 	namespace Android
 	{
+		//-----------------------------------------
+		//-----------------------------------------
+		void PlatformSystem::Init()
+		{
+
+		}
 		//-------------------------------------------------
 		//-------------------------------------------------
 		void PlatformSystem::CreateDefaultSystems(Core::Application* in_application)

@@ -42,7 +42,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void CanvasRenderer::Init()
         {
-            MaterialFactory* materialFactory = Core::Application::Get()->GetSystem<MaterialFactory>();
+            MaterialFactory* materialFactory = Core::Application::Get()->GetSystem_Old<MaterialFactory>();
             CS_ASSERT(materialFactory != nullptr, "Must have a material factory");
             
             mpDistanceFont = materialFactory->CreateGUIDistanceFont();

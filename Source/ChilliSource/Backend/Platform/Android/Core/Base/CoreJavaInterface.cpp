@@ -89,7 +89,7 @@ void Java_com_chillisource_core_CoreNativeInterface_Initialise(JNIEnv* inpEnv, j
 	ChilliSource::Android::TwitterAuthenticationActivityJavaInterface::SetupJavaInterface(pJavaVM);
     
 	//run the application
-    pApplication->OnInitialise();
+    pApplication->Initialise();
 }
 
 //--------------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ void Java_com_chillisource_core_CoreNativeInterface_Initialise(JNIEnv* inpEnv, j
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_Resume(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Core::Application::Get()->OnResume();
+	ChilliSource::Core::Application::Get()->Resume();
 }
 //--------------------------------------------------------------------------------------
 /// Suspend
@@ -114,7 +114,7 @@ void Java_com_chillisource_core_CoreNativeInterface_Resume(JNIEnv* inpEnv, jobje
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_Suspend(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Core::Application::Get()->OnSuspend();
+	ChilliSource::Core::Application::Get()->Suspend();
 }
 //--------------------------------------------------------------------------------------
 /// Destroy
@@ -139,7 +139,7 @@ void Java_com_chillisource_core_CoreNativeInterface_DestroyApplication(JNIEnv* i
 void Java_com_chillisource_core_CoreNativeInterface_FrameBegin(JNIEnv* inpEnv, jobject inThis, f32 infDeltaTime, s64 inddwTimestamp)
 {
 	//Create the message with the time between frames
-	ChilliSource::Core::Application::Get()->OnUpdate((f32)infDeltaTime, (u64)inddwTimestamp);
+	ChilliSource::Core::Application::Get()->Update((f32)infDeltaTime, (u64)inddwTimestamp);
 }
 //--------------------------------------------------------------------------------------
 /// Memory Warning
@@ -152,7 +152,7 @@ void Java_com_chillisource_core_CoreNativeInterface_FrameBegin(JNIEnv* inpEnv, j
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_MemoryWarning(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Core::Application::Get()->OnApplicationMemoryWarning();
+	ChilliSource::Core::Application::Get()->ApplicationMemoryWarning();
 }
 //--------------------------------------------------------------------------------------
 /// Orientation Changed
@@ -178,7 +178,7 @@ void Java_com_chillisource_core_CoreNativeInterface_OrientationChanged(JNIEnv* i
 		CS_LOG_DEBUG("Changing orientation to landscape");
 	}
 
-	ChilliSource::Core::Application::Get()->OnScreenChangedOrientation(eScreenOrientation);
+	ChilliSource::Core::Application::Get()->ScreenChangedOrientation(eScreenOrientation);
 }
 //--------------------------------------------------------------------------------------
 /// On Back Pressed
@@ -191,7 +191,7 @@ void Java_com_chillisource_core_CoreNativeInterface_OrientationChanged(JNIEnv* i
 //--------------------------------------------------------------------------------------
 void Java_com_chillisource_core_CoreNativeInterface_OnBackPressed(JNIEnv* inpEnv, jobject inThis)
 {
-	ChilliSource::Core::Application::Get()->OnGoBack();
+	ChilliSource::Core::Application::Get()->GoBack();
 }
 //--------------------------------------------------------------------------------------
 /// Application Did Receive Launching URL
@@ -264,7 +264,7 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------
 		void CoreJavaInterface::DestroyApplication()
 		{
-			mApplication->OnDestroy();
+			mApplication->Destroy();
 			CS_SAFEDELETE(mApplication);
 		}
 		//--------------------------------------------------------------------------------------

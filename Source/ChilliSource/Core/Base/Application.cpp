@@ -1,11 +1,10 @@
-/*
- *  moFloApplication.cpp
- *  moFlo
- *
- *  Created by Scott Downie on 23/09/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  Application.h
+//  Chilli Source
+//
+//  Created by Scott Downie on 23/09/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Core/Base/Application.h>
 
@@ -213,7 +212,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::OnInitialise()
+		void Application::Initialise()
 		{
             CS_ASSERT(s_application == nullptr, "Application already initialised!");
             s_application = this;
@@ -230,8 +229,8 @@ namespace ChilliSource
 			Core::Logging::Init();
             
             GUI::GUIViewFactory::RegisterDefaults();
-            
-			//Initialise the platform specific API's
+
+            //Initialise the platform specific API's
             m_platformSystem = PlatformSystem::Create();
 			m_platformSystem->Init();
             
@@ -239,15 +238,14 @@ namespace ChilliSource
             Core::Screen::SetRawDimensions(m_platformSystem->GetScreenDimensions());
             Core::Screen::SetOrientation(m_defaultOrientation);
             Core::Screen::SetDensity(m_platformSystem->GetScreenDensity());
-            
+
             DetermineResourceDirectories();
-            
+
             //Set up the device helper
             Device::Init(m_platformSystem.get());
-            
+
 			//Set up the task scheduler
 			TaskScheduler::Init(Core::Device::GetNumCPUCores() * 2);
-            
 			//System setup
             m_isSystemCreationAllowed = true;
             CreateDefaultSystems();
@@ -255,30 +253,36 @@ namespace ChilliSource
 			CreateSystems();
             m_isSystemCreationAllowed = false;
 			PostCreateSystems();
-            
+
             //init tweakable constants and local data store.
 			new TweakableConstants();
 			new LocalDataStore();
-            
+
             LoadDefaultResources();
-			OnScreenChangedOrientation(m_defaultOrientation);
+			ScreenChangedOrientation(m_defaultOrientation);
+
+            //initialise all of the application systems.
+            for (const AppSystemUPtr& system : m_systems)
+            {
+                system->OnInitialise();
+            }
             
-            Initialise();
-            
+            OnInitialise();
+
 			if (m_stateManager.GetActiveScenePtr() == nullptr)
             {
 				PushInitialState();
             }
-            
+
 			//Register for update events
 			LocalDataStore::GetSingleton().SubscribeToApplicationSuspendEvent();
-            
+
 			//Begin the update loop
 			m_platformSystem->Run();
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::OnResume()
+		void Application::Resume()
 		{
             m_shouldNotifyConnectionsResumeEvent = true;
             
@@ -287,12 +291,12 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::OnUpdate(f32 in_deltaTime, TimeIntervalSecs in_timestamp)
+		void Application::Update(f32 in_deltaTime, TimeIntervalSecs in_timestamp)
 		{
             if(m_shouldNotifyConnectionsResumeEvent == true)
 			{
 				m_shouldNotifyConnectionsResumeEvent = false;
-				ResumeApplication();
+				OnResume();
 			}
             
             if(m_isSuspending)
@@ -325,13 +329,20 @@ namespace ChilliSource
             while((m_updateIntervalRemainder >= Application::GetUpdateInterval()) || m_isFirstFrame)
             {
                 m_updateIntervalRemainder -=  Application::GetUpdateInterval();
+                
+                //update all of the application systems
+                for (const AppSystemUPtr& system : m_systems)
+                {
+                    system->OnFixedUpdate(Application::GetUpdateInterval());
+                }
+                
                 m_stateManager.FixedUpdate(Application::GetUpdateInterval());
                 
                 m_isFirstFrame = false;
             }
             
             //Tell the state manager to update the active state
-            Update(in_deltaTime);
+            OnUpdate(in_deltaTime);
             
             //Render the scene
             m_renderer->RenderToScreen(m_stateManager.GetActiveScenePtr());
@@ -342,7 +353,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::OnScreenChangedOrientation(ScreenOrientation in_orientation)
+		void Application::ScreenChangedOrientation(ScreenOrientation in_orientation)
 		{
 			Screen::SetOrientation(in_orientation);
             
@@ -359,7 +370,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::OnScreenResized(u32 in_width, u32 in_height)
+		void Application::ScreenResized(u32 in_width, u32 in_height)
 		{
 			Screen::SetRawDimensions(Core::Vector2((f32)in_width, (f32)in_height));
 
@@ -382,15 +393,21 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::OnApplicationMemoryWarning()
+		void Application::ApplicationMemoryWarning()
 		{
 			CS_LOG_DEBUG("Memory Warning. Clearing resource cache...");
 			ResourceManagerDispenser::GetSingletonPtr()->FreeResourceCaches();
 			ApplicationEvents::GetLowMemoryEvent().NotifyConnections();
+            
+            //update all of the application systems
+            for (const AppSystemUPtr& system : m_systems)
+            {
+                system->OnMemoryWarning();
+            }
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::OnGoBack()
+		void Application::GoBack()
 		{
 			CS_LOG_DEBUG("Go back event.");
 			m_stateManager.GetActiveState()->OnGoBack();
@@ -398,7 +415,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::OnSuspend()
+		void Application::Suspend()
 		{
             CS_LOG_DEBUG("App Suspending...");
             
@@ -406,6 +423,12 @@ namespace ChilliSource
             
 			//Tell the active state to save it's data etc
 			m_stateManager.Pause();
+            
+            //suspend all application systems in reverse order.
+            for (std::vector<AppSystemUPtr>::const_reverse_iterator it = m_systems.rbegin(); it != m_systems.rend(); ++it)
+            {
+                (*it)->OnMemoryWarning();
+            }
             
 			//We must invalidate the application timer. This will stop sub-system updates
 			m_platformSystem->SetUpdaterActive(false);
@@ -423,12 +446,18 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-        void Application::OnDestroy()
+        void Application::Destroy()
         {
-            Destroy();
+            OnDestroy();
 
             m_stateManager.DestroyAll();
-
+            
+            //suspend all application systems in reverse order.
+            for (std::vector<AppSystemUPtr>::const_reverse_iterator it = m_systems.rbegin(); it != m_systems.rend(); ++it)
+            {
+                (*it)->OnDestroy();
+            }
+            
 			m_defaultFont.reset();
 			m_defaultMesh.reset();
 			m_defaultMaterial.reset();
@@ -439,74 +468,61 @@ namespace ChilliSource
             CS_SAFEDELETE(m_componentFactoryDispenser);
             
 			//We have an issue with the order of destruction of systems.
-			while(m_systems.empty() == false)
+			while(m_systemsOld.empty() == false)
 			{
-				m_systems.pop_back();
+				m_systemsOld.pop_back();
 			}
             
             s_application = nullptr;
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void Application::AddSystem(SystemUPtr in_system)
+        void Application::AddSystem_Old(SystemUPtr in_system)
         {
             CS_ASSERT(m_isSystemCreationAllowed == true, "Application systems cannot be created outwith the creation phase");
 			if (in_system != nullptr)
 			{
-				m_systems.push_back(std::move(in_system));
+				m_systemsOld.push_back(std::move(in_system));
 			}
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
-		System* Application::GetSystem(InterfaceIDType in_interfaceID)
-		{
-			for (std::vector<SystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
-			{
-				if ((*it)->IsA(in_interfaceID))
-				{
-					return (*it).get();
-				}
-			}
-			
-			CS_LOG_WARNING("Application cannot find implementing systems");
-			return nullptr;
-		}
         //------------------------------------------------------
         //------------------------------------------------------
         void Application::CreateDefaultSystems()
         {
-            //Audio
-            Audio::AudioSystemUPtr audioSystem(Audio::AudioSystem::Create());
-			AddSystem(Audio::AudioLoader::Create(audioSystem.get()));
-            AddSystem(std::move(audioSystem));
-            
             //Core
-            AddSystem(FileSystem::Create());
+            AddSystem_Old(FileSystem::Create());
+
             //TODO: Change this to a PNG image provider.
-            AddSystem(ImageResourceProvider::Create());
-            AddSystem(MoImageProvider::Create());
-            AddSystem(DialogueBoxSystem::Create());
+            AddSystem_Old(ImageResourceProvider::Create());
+            AddSystem_Old(MoImageProvider::Create());
+            AddSystem_Old(DialogueBoxSystem::Create());
             
             NotificationScheduler::Initialise(LocalNotificationScheduler::Create());
-            
+
+            //Audio
+            Audio::AudioSystemUPtr audioSystem(Audio::AudioSystem::Create());
+			AddSystem_Old(Audio::AudioLoader::Create(audioSystem.get()));
+            AddSystem_Old(std::move(audioSystem));
+
             //Input
-            AddSystem(Input::InputSystem::Create());
-            
+            AddSystem_Old(Input::InputSystem::Create());
+
             //Rendering
             Rendering::RenderCapabilitiesUPtr renderCapabilitiesUPtr(Rendering::RenderCapabilities::Create());
             Rendering::RenderCapabilities* renderCapabilities(renderCapabilitiesUPtr.get());
-            AddSystem(std::move(renderCapabilitiesUPtr));
+            AddSystem_Old(std::move(renderCapabilitiesUPtr));
             Rendering::RenderSystemUPtr renderSystemUPtr(Rendering::RenderSystem::Create(renderCapabilities));
             //TODO: Don't assume this will be a GL render system. We only do this temporarily
             //in order to access the managers. This will change.
             OpenGL::RenderSystem* renderSystem((OpenGL::RenderSystem*)renderSystemUPtr.get());
-            AddSystem(std::move(renderSystemUPtr));
-            AddSystem(Rendering::MaterialFactory::Create(renderSystem->GetTextureManager(), renderSystem->GetShaderManager(), renderSystem->GetCubemapManager(), renderCapabilities));
-            AddSystem(Rendering::MaterialLoader::Create(renderCapabilities));
-			AddSystem(Rendering::SpriteSheetLoader::Create());
-			AddSystem(Rendering::XMLSpriteSheetLoader::Create());
-			AddSystem(Rendering::FontLoader::Create());
-            AddSystem(Rendering::AnimatedMeshComponentUpdater::Create());
+            renderSystem->Init((u32)Screen::GetRawDimensions().x, (u32)Screen::GetRawDimensions().y);
+            AddSystem_Old(std::move(renderSystemUPtr));
+            AddSystem_Old(Rendering::MaterialFactory::Create(renderSystem->GetTextureManager(), renderSystem->GetShaderManager(), renderSystem->GetCubemapManager(), renderCapabilities));
+            AddSystem_Old(Rendering::MaterialLoader::Create(renderCapabilities));
+			AddSystem_Old(Rendering::SpriteSheetLoader::Create());
+			AddSystem_Old(Rendering::XMLSpriteSheetLoader::Create());
+			AddSystem_Old(Rendering::FontLoader::Create());
+            AddSystem_Old(Rendering::AnimatedMeshComponentUpdater::Create());
             
             m_renderer = Rendering::Renderer::Create(renderSystem);
         }
@@ -515,7 +531,7 @@ namespace ChilliSource
 		void Application::PostCreateSystems()
 		{
             //Loop round all the created systems and categorise them
-			for(std::vector<SystemUPtr>::iterator it = m_systems.begin(); it != m_systems.end(); ++it)
+			for(std::vector<SystemUPtr>::iterator it = m_systemsOld.begin(); it != m_systemsOld.end(); ++it)
 			{
                 System* pSystem = it->get();
                 
@@ -565,10 +581,9 @@ namespace ChilliSource
             //Give the resource managers their providers
             m_resourceManagerDispenser->SetResourceProviders(m_resourceProviders);
 
-            GetRenderSystem()->Init((u32)Screen::GetRawDimensions().x, (u32)Screen::GetRawDimensions().y);
             GetRenderer()->Init();
             Audio::AudioPlayer::Init();
-    
+
             m_platformSystem->PostCreateSystems();
 		}
         //----------------------------------------------------
@@ -650,7 +665,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::Update(f32 in_deltaTime)
+		void Application::OnUpdate(f32 in_deltaTime)
 		{
             in_deltaTime *= m_updateSpeed;
             
@@ -663,9 +678,40 @@ namespace ChilliSource
             {
                 (*it)->Update(in_deltaTime);
             }
+            
+            //update all of the application systems
+            for (const AppSystemUPtr& system : m_systems)
+            {
+                system->OnUpdate(in_deltaTime);
+            }
 			
 			//Tell the state manager to update the active state
 			m_stateManager.Update(in_deltaTime);
+		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+		void Application::OnResume()
+		{
+			CS_LOG_DEBUG("App Resuming...");
+            
+			if(m_renderSystem != nullptr)
+			{
+				m_renderSystem->Resume();
+			}
+            
+			m_isSuspending = false;
+			ApplicationEvents::GetResumeEvent().NotifyConnections();
+            
+            //resume all of the application systems
+            for (const AppSystemUPtr& system : m_systems)
+            {
+                system->OnResume();
+            }
+            
+			//Tell the active state to continue
+			m_stateManager.Resume();
+			
+			CS_LOG_DEBUG("App Finished Resuming...");
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -681,25 +727,6 @@ namespace ChilliSource
             {
                 pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());
             }
-		}
-        //----------------------------------------------------
-        //----------------------------------------------------
-		void Application::ResumeApplication()
-		{
-			CS_LOG_DEBUG("App Resuming...");
-            
-			if(m_renderSystem != nullptr)
-			{
-				m_renderSystem->Resume();
-			}
-            
-			m_isSuspending = false;
-			ApplicationEvents::GetResumeEvent().NotifyConnections();
-            
-			//Tell the active state to continue
-			m_stateManager.Resume();
-			
-			CS_LOG_DEBUG("App Finished Resuming...");
 		}
         //----------------------------------------------------
         //----------------------------------------------------
