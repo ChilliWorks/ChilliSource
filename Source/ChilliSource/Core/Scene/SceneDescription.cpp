@@ -95,7 +95,7 @@ namespace ChilliSource
                 {
                     ComponentSPtr pComponent = CreateComponent(insEntDesc.aComponents[nComponent]);
                     if(pComponent)
-                        pResult->Attach(pComponent);
+                        pResult->Add(pComponent);
                 }
             }
             
@@ -112,7 +112,7 @@ namespace ChilliSource
 			{
 				EntitySPtr pEnt = CreateEntity(insEntDesc.aChildEntities[nEntity], inCustomEntityDelegate);
 				if (pEnt)
-					insEntity.AddChild(pEnt);
+					insEntity.Add(pEnt);
 			}
             
             insEntity.GetTransform().SetPositionScaleOrientation(insEntDesc.sTransform.vTranslation, insEntDesc.sTransform.vScale, insEntDesc.sTransform.qOrientation);

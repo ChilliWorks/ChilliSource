@@ -115,19 +115,19 @@ namespace ChilliSource
             //----------------------------------------------------------
             const Core::Matrix4x4& GetLightMatrix() const override;
             //----------------------------------------------------
-			/// On Attached To Entity
-			///
 			/// Triggered when the component is attached to
-			/// an entity
+			/// an entity on the scene
+            ///
+            /// @author S Downie
 			//----------------------------------------------------
-            void OnAttachedToEntity();
+            void OnAddedToScene() override;
 			//----------------------------------------------------
-			/// On Detached From Entity
-			///
 			/// Triggered when the component is removed from
-			/// an entity
+			/// an entity on the scene
+            ///
+            /// @author S Downie
 			//----------------------------------------------------
-            void OnDetachedFromEntity();
+            void OnRemovedFromScene() override;
             //----------------------------------------------------
             /// On Entity Transform Changed
             ///

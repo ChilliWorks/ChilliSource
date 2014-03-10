@@ -1,13 +1,13 @@
-/*
- *  Scene.cpp
- *  moFlo
- *
- *  Created by Scott Downie on 21/09/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+// Scene.cpp
+// ChilliSource
+//
+// Created by Scott Downie on 21/09/2010.
+// Copyright 2010 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Core/Scene/Scene.h>
+
 #include <ChilliSource/GUI/Base/Window.h>
 
 #include <algorithm>
@@ -16,189 +16,134 @@ namespace ChilliSource
 {
 	namespace Core
 	{
-        //--------------------------------------------------------------------------------------------------
-		/// Query Sort Comparator
-		///
-		/// Sorts scene intersection tests by depth
-		/// @return Whether the lhs is closer to the ray origin than the rhs
 		//--------------------------------------------------------------------------------------------------
-        struct QuerySortPredicate
-        {
-            bool operator()(const VolumeComponent* lhs, const VolumeComponent* rhs) const
-            {
-                return (lhs->mfQueryIntersectionValue < rhs->mfQueryIntersectionValue);
-            }
-        };
-        
 		//--------------------------------------------------------------------------------------------------
-		/// Constructor
-		///
-		/// Create the scene graph object 
-		//--------------------------------------------------------------------------------------------------
-		Scene::Scene(Input::InputSystem* inpInputSystem, f32 infWorldHalfSize) 
-        : mpRootWindow(nullptr)
+		Scene::Scene(Input::InputSystem* inpInputSystem) 
+        : m_rootWindow(new GUI::Window())
 		{
-			mpRootWindow = new GUI::Window();
-			mpRootWindow->SetInputSystem(inpInputSystem);
+			m_rootWindow->SetInputSystem(inpInputSystem);
 		}
 		//-------------------------------------------------------
-		/// Become Active
-		///
-		/// Force the scene to become the active one and to
-		/// receive user interaction
 		//-------------------------------------------------------
 		void Scene::BecomeActive()
 		{
-            mpRootWindow->ListenForTouches();
+            m_rootWindow->ListenForTouches();
             
 		}
 		//-------------------------------------------------------
-		/// Become Inactive
-		///
-		/// Set this scene to be inactive. It will no longer
-		/// be interactable for the user
 		//-------------------------------------------------------
 		void Scene::BecomeInactive()
 		{
-			Input::TouchInfo sInfo;
-			sInfo.eType = Input::TouchInputType::k_ended;
-			mpRootWindow->_OnTouchEnded(sInfo);
-			//((ISurface*)mpRootWindow)->EnableUserInteraction(false);
-            mpRootWindow->UnlistenFromTouches();
+			Input::TouchInfo info;
+			info.eType = Input::TouchInputType::k_ended;
+			m_rootWindow->_OnTouchEnded(info);
+            m_rootWindow->UnlistenFromTouches();
 		}
 		//-------------------------------------------------------
-		/// Add Entity
-		///
-		/// Add the entity to the scene
-		///
-		/// @param Entity pointer
 		//-------------------------------------------------------
-		void Scene::AddEntity(const EntitySPtr& inpEntity)
+		void Scene::Add(const EntitySPtr& in_entity)
 		{
-			mEntities.push_back(inpEntity);
+            CS_ASSERT(in_entity != nullptr, "Cannot add a null entity");
+            CS_ASSERT(in_entity->GetScene() == nullptr, "Cannot add an entity with pre-exisitng scene");
+            
+			m_entities.push_back(in_entity);
 
-			if (inpEntity->GetOwningScene() && inpEntity->GetOwningScene() != this)
-				inpEntity->RemoveFromScene();
-				
-			inpEntity->SetOwningScene(this);
+			in_entity->SetScene(this);
+            in_entity->OnAddedToScene();
 		}
 		//-------------------------------------------------------
-		/// Remove Entity
-		///
-		/// Remove the entity from the scene
-		///
-		/// @param Entity pointer
 		//-------------------------------------------------------
-		void Scene::RemoveEntity(const EntitySPtr& inpEntity)
+		void Scene::Remove(Entity* in_entity)
 		{
-			SharedEntityList::iterator it = std::find(mEntities.begin(), mEntities.end(), inpEntity);
-			if(it != mEntities.end())
+            CS_ASSERT(in_entity != nullptr, "Cannot remove a null entity");
+            CS_ASSERT(in_entity->GetScene() == this, "Cannot add an entity without a pre-exisitng scene");
+
+            SharedEntityList::iterator it = std::find_if(m_entities.begin(), m_entities.end(), [in_entity](const EntitySPtr& in_entityInList)
+            {
+                return in_entityInList.get() == in_entity;
+            });
+            
+			if(it != m_entities.end())
 			{
-				(*it)->SetOwningScene(nullptr);
-                it->swap(mEntities.back());
-                mEntities.pop_back();
+                in_entity->OnRemovedFromScene();
+                in_entity->SetScene(nullptr);
+                
+                it->swap(m_entities.back());
+                m_entities.pop_back();
 			}
 		}
 		//-------------------------------------------------------
-		/// Remove All Entities
-		///
-		/// Remove all the entities from the scene
 		//-------------------------------------------------------
 		void Scene::RemoveAllEntities()
 		{
-			while(!mEntities.empty())
+			for(u32 i=0; i<m_entities.size(); ++i)
 			{
-				RemoveEntity(mEntities.front());
+                m_entities[i]->OnRemovedFromScene();
+                m_entities[i]->SetScene(nullptr);
 			}
+            
+            m_entities.clear();
 		}
 		//-------------------------------------------------------
-		/// Get Entity List
-		///
-		/// @return the list of all the entities in the scene.
 		//-------------------------------------------------------
-		const SharedEntityList& Scene::GetEntityList()
+		const SharedEntityList& Scene::GetEntities() const
 		{
-			return mEntities;
+			return m_entities;
 		}
 		//--------------------------------------------------------------------------------------------------
-		/// Get Spatial Graph
-		///
-		/// @return A reference to the octree that manages the spatial relationship of the scene nodes
 		//--------------------------------------------------------------------------------------------------
-//		const Octree& Scene::GetSpatialGraph() const
-//		{
-//			return mSpatialGraph;
-//		}
-		//--------------------------------------------------------------------------------------------------
-		/// Query Scene For Intersection
-		///
-		/// Traverses the contents of the scene and adds any objects that intersect with the ray to the
-		/// list.
-		/// @param Ray to check intersection
-		/// @param A handle to a container to fill with intersecting components (Render components)
-		//--------------------------------------------------------------------------------------------------
-		void Scene::QuerySceneForIntersection(const Core::Ray &inRay, std::vector<VolumeComponent*> &outIntersectComponents, bool inbIsDepthSorted, u32 inudwQueryMask)
+		void Scene::QuerySceneForIntersection(const Ray &in_ray, std::vector<VolumeComponent*>& out_volumeComponents)
 		{
-			//Only render components can be checked for ray intersection as they have AABB's
-			std::vector<VolumeComponent*> IntersectableComponents;
-			QuerySceneForComponents<VolumeComponent>(IntersectableComponents, inudwQueryMask);
+			std::vector<VolumeComponent*> intersectableComponents;
+			QuerySceneForComponents(intersectableComponents);
 			
 			//Loop through the render components and check for intersection
 			//If any intersect then add them to the intersect list
-			for(std::vector<VolumeComponent*>::iterator it = IntersectableComponents.begin(); it != IntersectableComponents.end(); ++it)
+			for(std::vector<VolumeComponent*>::iterator it = intersectableComponents.begin(); it != intersectableComponents.end(); ++it)
 			{
-				VolumeComponent* pComponent = (VolumeComponent*)(*it);
+				VolumeComponent* component = (*it);
 				
-				f32 fNearIntersection, fFarIntersection = 0.0f;
+				f32 nearIntersection, farIntersection = 0.0f;
 				
-				//Don't check for intersection against the UI elements. Make sure we filter out based on the collision mask
-				u32 udwMaskComponent = pComponent->GetQueryMask();
-				if(inudwQueryMask == 0 || (inudwQueryMask & udwMaskComponent))
-				{
-					if(pComponent->GetOOBB().Contains(inRay, fNearIntersection, fFarIntersection))
-					{
-						//We use this to sort by
-						pComponent->mfQueryIntersectionValue = fNearIntersection;
-						outIntersectComponents.push_back(pComponent);
-					}
-				}
-				
-				//Sort this list by intersection depth if necessary
-				if(inbIsDepthSorted)
-				{
-					std::sort(outIntersectComponents.begin(), outIntersectComponents.end(), QuerySortPredicate());
-				}
+                if(component->GetOOBB().Contains(in_ray, nearIntersection, farIntersection))
+                {
+                    //We use this to sort by
+                    component->mfQueryIntersectionValue = nearIntersection;
+                    out_volumeComponents.push_back(component);
+                }
 			}
 		}
         //--------------------------------------------------------------------------------------------------
-        /// Get Window Pointer
-        ///
-        /// @return The main window that all the scene's UI is attached to.
         //--------------------------------------------------------------------------------------------------
-        GUI::Window* Scene::GetWindowPtr()
+        GUI::Window* Scene::GetWindow()
         {
-            return mpRootWindow;
+            return m_rootWindow.get();
         }
         //--------------------------------------------------------------------------------------------------
-        /// Update
-        ///
-        /// Updates anything in the scene graph which needs to be updated (e.g. NodeAnimations)
-        ///
-        /// @param delta time in seconds
         //--------------------------------------------------------------------------------------------------		   
-		void Scene::Update(f32 infDT)
+		void Scene::OnUpdate(f32 in_timeSinceLastUpdate)
 		{
-			mpRootWindow->Update(infDT);
+			m_rootWindow->Update(in_timeSinceLastUpdate);
+            
+            for(u32 i=0; i<m_entities.size(); ++i)
+			{
+                m_entities[i]->OnUpdate(in_timeSinceLastUpdate);
+            }
 		}
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
+        void Scene::OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate)
+        {
+            for(u32 i=0; i<m_entities.size(); ++i)
+			{
+                m_entities[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
+            }
+        }
 		//--------------------------------------------------------------------------------------------------
-		/// Destructor
-		///
-		/// 
 		//--------------------------------------------------------------------------------------------------
 		Scene::~Scene()
 		{
 			RemoveAllEntities();
-            delete mpRootWindow;
 		}
 	}
 }

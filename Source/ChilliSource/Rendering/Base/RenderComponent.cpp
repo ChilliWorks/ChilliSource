@@ -30,7 +30,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		bool RenderComponent::IsVisible() const
 		{
-            return mpEntityOwner ? mbVisible && (mpEntityOwner->IsVisible() && mpEntityOwner->GetTransform().GetWorldOpacity() != 0) : mbVisible;
+            return GetEntity() ? mbVisible && (GetEntity()->IsVisible() && GetEntity()->GetTransform().GetWorldOpacity() != 0) : mbVisible;
 		}
         //----------------------------------------------------
         /// Should Cull
@@ -58,7 +58,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		const Core::Matrix4x4& RenderComponent::GetTransformationMatrix()
 		{
-			return mpEntityOwner->GetTransform().GetWorldTransform();
+			return GetEntity()->GetTransform().GetWorldTransform();
 		}
 		//-----------------------------------------------------------
 		/// Set Material

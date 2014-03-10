@@ -51,13 +51,13 @@ namespace ChilliSource
 		//----------------------------------------------------
 		const Core::AABB& StaticMeshComponent::GetAABB()
 		{
-			if(mpEntityOwner && !mbAABBValid)
+			if(GetEntity() && !mbAABBValid)
 			{
                 mbAABBValid = true;
                 
 				//Rebuild the box
                 const Core::AABB& cAABB = mpModel->GetAABB();
-                const Core::Matrix4x4& matWorld = mpEntityOwner->GetTransform().GetWorldTransform();
+                const Core::Matrix4x4& matWorld = GetEntity()->GetTransform().GetWorldTransform();
                 Core::Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
                 Core::Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
                 Core::Vector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
@@ -134,11 +134,11 @@ namespace ChilliSource
 		//----------------------------------------------------
 		const Core::OOBB& StaticMeshComponent::GetOOBB()
 		{
-			if(mpEntityOwner && !mbOOBBValid)
+			if(GetEntity() && !mbOOBBValid)
 			{
                 mbOOBBValid = true;
                 
-				mOBBoundingBox.SetTransform(mpEntityOwner->GetTransform().GetWorldTransform());
+				mOBBoundingBox.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
                 // Origin and Size updated in AttachMesh
 			}
 			return mOBBoundingBox;
@@ -148,7 +148,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		const Core::Sphere& StaticMeshComponent::GetBoundingSphere()
 		{
-			if(mpEntityOwner && !mbBoundingSphereValid)
+			if(GetEntity() && !mbBoundingSphereValid)
 			{
                 mbBoundingSphereValid = true;
                 
@@ -319,7 +319,7 @@ namespace ChilliSource
                 mMaterials[i]->SetActiveShaderProgram(ineShaderPass);
             }
 
-			mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), mMaterials);
+			mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), mMaterials);
 		}
         //----------------------------------------------------------
         /// Render Shadow Map
@@ -335,14 +335,13 @@ namespace ChilliSource
             mspShadowMapMaterial->SetActiveShaderProgram(ShaderPass::k_ambient);
             aMaterials.push_back(mspShadowMapMaterial);
             
-			mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), aMaterials);
+			mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), aMaterials);
 		}
         //----------------------------------------------------
-        /// On Attached To Entity
         //----------------------------------------------------
-        void StaticMeshComponent::OnAttachedToEntity()
+        void StaticMeshComponent::OnAddedToScene()
         {
-            m_transformChangedConnection = mpEntityOwner->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &StaticMeshComponent::OnEntityTransformChanged));
+            m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &StaticMeshComponent::OnEntityTransformChanged));
             
             OnEntityTransformChanged();
         }
@@ -356,9 +355,8 @@ namespace ChilliSource
             mbOOBBValid = false;
         }
         //----------------------------------------------------
-        /// On Detached From Entity
         //----------------------------------------------------
-        void StaticMeshComponent::OnDetachedFromEntity()
+        void StaticMeshComponent::OnRemovedFromScene()
         {
             m_transformChangedConnection = nullptr;
         }

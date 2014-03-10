@@ -538,13 +538,13 @@ namespace ChilliSource
                 //Updateables
 				if(pSystem->IsA(IUpdateable::InterfaceID))
 				{
-					m_updateableSystems.push_back(pSystem->GetInterface<IUpdateable>());
+					m_updateableSystems.push_back(dynamic_cast<IUpdateable*>(pSystem));
 				}
                 
                 //Component producers
 				if(pSystem->IsA(IComponentProducer::InterfaceID))
 				{
-                    IComponentProducer* pProducer = pSystem->GetInterface<IComponentProducer>();
+                    IComponentProducer* pProducer = dynamic_cast<IComponentProducer*>(pSystem);
                     u32 udwNumFactoriesInSystem = pProducer->GetNumComponentFactories();
 
                     for(u32 i=0; i<udwNumFactoriesInSystem; ++i)
@@ -556,7 +556,7 @@ namespace ChilliSource
                 //Resource providers
 				if(pSystem->IsA(ResourceProvider::InterfaceID))
 				{
-					m_resourceProviders.push_back(pSystem->GetInterface<ResourceProvider>());
+					m_resourceProviders.push_back(dynamic_cast<ResourceProvider*>(pSystem));
 				}
                 
                 //Common systems
@@ -722,7 +722,7 @@ namespace ChilliSource
 				m_renderer->GetActiveCameraPtr()->SetViewportOrientation(in_orientation);
 			}
             
-            Input::TouchScreen * pTouchScreen = GetSystem_Old<Input::InputSystem>()->GetInterface<Input::InputSystem>()->GetTouchScreen();
+            Input::TouchScreen * pTouchScreen = GetInputSystem()->GetTouchScreen();
             if (pTouchScreen != nullptr)
             {
                 pTouchScreen->SetScreenHeight(Screen::GetOrientedHeight());

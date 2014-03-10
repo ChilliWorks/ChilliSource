@@ -55,11 +55,11 @@ namespace ChilliSource
 		//----------------------------------------------------
 		const Core::AABB& AnimatedMeshComponent::GetAABB()
 		{
-			if(mpEntityOwner)
+			if(GetEntity())
 			{
 				//Rebuild the box
                 const Core::AABB& cAABB = mpModel->GetAABB();
-                const Core::Matrix4x4& matWorld = mpEntityOwner->GetTransform().GetWorldTransform();
+                const Core::Matrix4x4& matWorld = GetEntity()->GetTransform().GetWorldTransform();
                 Core::Vector3 vBackBottomLeft(cAABB.BackBottomLeft() * matWorld);
                 Core::Vector3 vBackBottomRight(cAABB.BackBottomRight() * matWorld);
                 Core::Vector3 vBackTopLeft(cAABB.BackTopLeft() * matWorld);
@@ -137,9 +137,9 @@ namespace ChilliSource
 		//----------------------------------------------------
 		const Core::OOBB& AnimatedMeshComponent::GetOOBB()
 		{
-			if(mpEntityOwner)
+			if(GetEntity())
 			{
-				mOBBoundingBox.SetTransform(mpEntityOwner->GetTransform().GetWorldTransform());
+				mOBBoundingBox.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
 			}
 			return mOBBoundingBox;
 		}
@@ -148,7 +148,7 @@ namespace ChilliSource
 		//----------------------------------------------------
 		const Core::Sphere& AnimatedMeshComponent::GetBoundingSphere()
 		{
-			if(mpEntityOwner)
+			if(GetEntity())
 			{
                 const Core::AABB& sAABB = GetAABB();
                 Core::Vector3 vSize = sAABB.GetSize();
@@ -387,13 +387,13 @@ namespace ChilliSource
         //----------------------------------------------------------
         void AnimatedMeshComponent::AttachEntity(const Core::EntitySPtr& inpEntity, const std::string& instrNodeName)
         {
-            if (nullptr == mpEntityOwner)
+            if (nullptr == GetEntity())
             {
                 CS_LOG_ERROR("Could not attach entity to animated mesh becuase the mesh is not yet attached to an entity.");
                 return;
             }
             
-            if (nullptr != inpEntity->GetParent() || nullptr != inpEntity->GetOwningScene())
+            if (nullptr != inpEntity->GetParent() || nullptr != inpEntity->GetScene())
             {
                 CS_LOG_ERROR("Could not attach entity to animated mesh becuase the entity already has a parent.");
                 return;
@@ -418,7 +418,7 @@ namespace ChilliSource
                 return;
             }
             
-            mpEntityOwner->AddChild(inpEntity);
+            GetEntity()->Add(inpEntity);
             maAttachedEntities.push_back(std::pair<Core::EntityWPtr, s32>(Core::EntityWPtr(inpEntity), dwNodeIndex));
         }
         //----------------------------------------------------------
@@ -591,10 +591,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void AnimatedMeshComponent::Update(f32 infDeltaTime)
         {
-            if (nullptr != mpEntityOwner && nullptr != mpEntityOwner->GetOwningScene())
-            {
-                UpdateAnimation(infDeltaTime);
-            }
+            UpdateAnimation(infDeltaTime);
         }
         //----------------------------------------------------------
 		/// Destructor
@@ -603,17 +600,15 @@ namespace ChilliSource
 		{
 		}
 		//----------------------------------------------------
-		/// On Attached To Entity
 		//----------------------------------------------------
-		void AnimatedMeshComponent::OnAttachedToEntity()
+		void AnimatedMeshComponent::OnAddedToScene()
 		{
             SetPlaybackPosition(0.0f);
             Core::Application::Get()->GetSystem_Old<AnimatedMeshComponentUpdater>()->AddComponent(this);
 		}
         //----------------------------------------------------
-        /// On Detached From Entity
         //----------------------------------------------------
-        void AnimatedMeshComponent::OnDetachedFromEntity()
+        void AnimatedMeshComponent::OnRemovedFromScene()
         {
             DetatchAllEntities();
             Core::Application::Get()->GetSystem_Old<AnimatedMeshComponentUpdater>()->RemoveComponent(this);
@@ -645,11 +640,11 @@ namespace ChilliSource
                 //render the model with the animation data.
                 if (mActiveAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), mMaterials, mActiveAnimationGroup);
+                    mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), mMaterials, mActiveAnimationGroup);
                 }
                 else if (mFadingAnimationGroup != nullptr && mFadingAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), mMaterials, mFadingAnimationGroup);
+                    mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), mMaterials, mFadingAnimationGroup);
                 }
             }
 		}
@@ -677,11 +672,11 @@ namespace ChilliSource
                 //render the model with the animation data.
                 if (mActiveAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), aMaterials, mActiveAnimationGroup);
+                    mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), aMaterials, mActiveAnimationGroup);
                 }
                 else if (mFadingAnimationGroup != nullptr && mFadingAnimationGroup->IsPrepared() == true)
                 {
-                    mpModel->Render(inpRenderSystem, mpEntityOwner->GetTransform().GetWorldTransform(), aMaterials, mFadingAnimationGroup);
+                    mpModel->Render(inpRenderSystem, GetEntity()->GetTransform().GetWorldTransform(), aMaterials, mFadingAnimationGroup);
                 }
             }
         }
@@ -690,7 +685,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         void AnimatedMeshComponent::UpdateAnimation(f32 infDeltaTime)
         {
-            if (nullptr != mpEntityOwner && nullptr != mpEntityOwner->GetOwningScene() && nullptr != mActiveAnimationGroup && mActiveAnimationGroup->GetAnimationCount() != 0)
+            if (nullptr != GetEntity() && nullptr != GetEntity()->GetScene() && nullptr != mActiveAnimationGroup && mActiveAnimationGroup->GetAnimationCount() != 0)
             {
                 //update the animation timer.
                 UpdateAnimationTimer(infDeltaTime);

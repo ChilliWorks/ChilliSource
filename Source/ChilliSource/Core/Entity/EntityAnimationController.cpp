@@ -149,8 +149,8 @@ namespace ChilliSource
 			for (u32 nAnim = 0; nAnim < insSceneAnimDesc.asEntityAnimations.size(); nAnim++) 
 			{
                 const SceneAnimationDesc::EntityAnimationDesc & sCurrentAnimation(insSceneAnimDesc.asEntityAnimations[nAnim]);
-//				string strName = sCurrentAnimation.strTargetPath;
-				Entity* pEntity = inpcEntity->FindChildEntityWithName(sCurrentAnimation.strTargetPath);
+
+				Entity* pEntity = inpcEntity->GetChildEntityWithNameRecursive(sCurrentAnimation.strTargetPath).get();
 				if(pEntity)
                 {
 					CreateAndPlayAnimation(sCurrentAnimation.strName, pEntity, inePlayMode);

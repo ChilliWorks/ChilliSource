@@ -245,7 +245,7 @@ namespace ChilliSource
                 }
                 
 				mStateHierarchy.back()->OnUpdate(dt);
-				mStateHierarchy.back()->GetScenePtr()->Update(dt);
+				mStateHierarchy.back()->GetScenePtr()->OnUpdate(dt);
 			}
 		}
         //---------------------------------------------------------
@@ -300,6 +300,7 @@ namespace ChilliSource
             if(!mStateHierarchy.empty()) 
 			{
                 mStateHierarchy.back()->OnFixedUpdate(dt);
+                mStateHierarchy.back()->GetScenePtr()->OnFixedUpdate(dt);
             }
         }
 		//---------------------------------------------------------

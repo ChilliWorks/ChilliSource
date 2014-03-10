@@ -53,7 +53,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		void CameraComponent::SetLookAt(const Core::Vector3& invPos, const Core::Vector3& invTarget, const Core::Vector3& invUp)
 		{
-            Core::Entity * pParent(GetEntityOwner());
+            Core::Entity * pParent(GetEntity());
 
             CS_ASSERT((pParent!=nullptr), "CameraComponent has no parent entity");
             
@@ -267,9 +267,9 @@ namespace ChilliSource
 		//------------------------------------------------------
 		const Core::Matrix4x4& CameraComponent::GetView()
 		{
-			if(mpEntityOwner)
+			if(GetEntity())
 			{
-				mmatView = mpEntityOwner->GetTransform().GetWorldTransform().Inverse();
+				mmatView = GetEntity()->GetTransform().GetWorldTransform().Inverse();
 			}
 
 			return mmatView;

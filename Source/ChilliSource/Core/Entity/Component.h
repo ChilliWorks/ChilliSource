@@ -1,18 +1,13 @@
-/** 
- * File: Component.h
- * Date: 28 Sept 2010
- * Description: Defines the base Component class for moFlo
- */
+//
+//  Component.h
+//  ChilliSource
+//
+//  Created by Stuart McGaw on 28/09/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
-/** 
- *
- * Author Stuart McGaw
- * Version 1.0 - moFlo
- * Copyright ©2010 Tag Games Limited - All rights reserved 
- */
-
-#ifndef _MOFLO_CORE_COMPONENT_H
-#define _MOFLO_CORE_COMPONENT_H
+#ifndef _CHILLISOURCE_CORE_ENTITY_COMPONENT_H_
+#define _CHILLISOURCE_CORE_ENTITY_COMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
@@ -24,72 +19,104 @@ namespace ChilliSource
 		class Component : public QueryableInterface
 		{
 		public:
+            
+            //----------------------------------------------------
+            /// Constructor
+            ///
+            /// @author S McGaw
+            //----------------------------------------------------
 			Component();
-			virtual ~Component();
-			//----------------------------------------------------
-			/// Get Entity Owner
-			///
-			/// @return Entity to which component is attached
-			//----------------------------------------------------
-			Entity * GetEntityOwner();
-			//----------------------------------------------------
-			/// Get Entity Owner (Const)
-			///
-			/// @return Entity to which component is attached
-			//----------------------------------------------------
-			const Entity * GetEntityOwner() const;
-			//----------------------------------------------------
-			/// Set Entity Owner (Const)
-			///
-			/// @param Entity to which component is attached
-			//----------------------------------------------------
-			virtual void SetEntityOwner(Entity* inpOwner);
-			//----------------------------------------------------
-			/// Get Query Mask
-			///
-			/// @return Query mask for filtering
-			//----------------------------------------------------
-			u32 GetQueryMask() const;
-			//----------------------------------------------------
-			/// Set Query Mask
-			///
-			/// @param Filter mask
-			//----------------------------------------------------
-			void SetQueryMask(u32 inudwQueryMask);
             //----------------------------------------------------
-            /// Get Interface ID
+            /// Destructor
             ///
-            /// @return Interface ID of the class
+            /// @author S McGaw
             //----------------------------------------------------
-            virtual InterfaceIDType GetInterfaceID() const = 0;
+			virtual ~Component(){}
+			//----------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return Entity to which component is attached or
+            /// null.
+			//----------------------------------------------------
+			Entity * GetEntity();
+			//----------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return Const entity to which component is attached
+            /// or null.
+			//----------------------------------------------------
+			const Entity * GetEntity() const;
             //----------------------------------------------------
-            /// Get Interface Type Name
+            /// Remove the component from its owning entity
             ///
-            /// @return String representation of interface ID of the class
+            /// @author S Downie
             //----------------------------------------------------
-            virtual const std::string& GetInterfaceTypeName() const = 0;
+            void RemoveFromEntity();
 			
 		protected:
 		
+            //----------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Time since last update in seconds
+            //----------------------------------------------------
+            virtual void OnUpdate(f32 in_timeSinceLastUpdate){}
+            //----------------------------------------------------
+            /// Fixed update is triggered at fixed time periods
+            ///
+            /// @author S Downie
+            ///
+            /// @param Time since last fixed update in seconds
+            //----------------------------------------------------
+            virtual void OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate){}
 			//----------------------------------------------------
-			/// On Attached To Entity
-			///
 			/// Triggered when the component is attached to
-			/// an entity
+			/// an entity. Custom components should override this
+            /// as they see fit
+            ///
+            /// @author S McGaw
 			//----------------------------------------------------
-			virtual void OnAttachedToEntity(){}
+			virtual void OnAddedToEntity(){}
 			//----------------------------------------------------
-			/// On Detached From Entity
-			///
 			/// Triggered when the component is removed from
-			/// an entity
+			/// an entity. Custom components should override this
+            /// as they see fit
+            ///
+            /// @author S McGaw
 			//----------------------------------------------------
-			virtual void OnDetachedFromEntity(){}
+			virtual void OnRemovedFromEntity(){}
+            //----------------------------------------------------
+			/// Triggered when the component is attached to
+			/// an entity and that entity is on a scene.
+            /// Custom components should override this as they see
+            /// fit
+            ///
+            /// @author S Downie
+			//----------------------------------------------------
+			virtual void OnAddedToScene(){}
+			//----------------------------------------------------
+			/// Triggered when the component is removed from
+			/// an entity or when the entity is removed from the
+            /// scene. Custom components should override this as
+            /// they see fit
+            ///
+            /// @author S Downie
+			//----------------------------------------------------
+			virtual void OnRemovedFromScene(){}
+            
+        private:
+            
+            friend class Entity;
+            //----------------------------------------------------
+			/// @author S Downie
+            ///
+			/// @param Entity to which component is attached
+			//----------------------------------------------------
+            void SetEntity(Entity* in_newOwner);
 
-		protected:
-			Entity * mpEntityOwner;
-			
-			u32 mudwQueryMask;
+		private:
+            
+			Entity * m_entity;
 		};
 	}
 }

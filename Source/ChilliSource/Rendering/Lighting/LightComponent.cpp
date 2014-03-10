@@ -49,9 +49,9 @@ namespace ChilliSource
         //----------------------------------------------------------
         const Core::Vector3& LightComponent::GetWorldPosition() const
         {
-            if(GetEntityOwner() != nullptr)
+            if(GetEntity() != nullptr)
             {
-                return GetEntityOwner()->GetTransform().GetWorldPosition();
+                return GetEntity()->GetTransform().GetWorldPosition();
             }
             
             return Core::Vector3::ZERO;

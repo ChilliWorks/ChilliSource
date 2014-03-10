@@ -16,8 +16,9 @@
 #include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
-#include <vector>
+#include <list>
 #include <queue>
+#include <vector>
 
 namespace ChilliSource
 {

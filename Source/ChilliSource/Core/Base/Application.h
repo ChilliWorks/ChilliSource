@@ -524,7 +524,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        template <typename TNamedType> void Application::GetSystems_Old(std::vector<TNamedType*> & out_systems)
+        template <typename TNamedType> void Application::GetSystems_Old(std::vector<TNamedType*>& out_systems)
         {
             for (size_t systemIndex = 0; systemIndex < m_systemsOld.size(); systemIndex++)
             {
@@ -551,7 +551,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        template <typename TNamedType> void Application::GetSystems(std::vector<TNamedType*> & out_systems)
+        template <typename TNamedType> void Application::GetSystems(std::vector<TNamedType*>& out_systems)
         {
             for (size_t systemIndex = 0; systemIndex < m_systems.size(); systemIndex++)
             {

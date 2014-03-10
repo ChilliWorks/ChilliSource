@@ -146,7 +146,7 @@ namespace ChilliSource
             if(mpActiveCamera)
             {
                 //Apply the world view projection matrix
-                mpRenderSystem->ApplyCamera(mpActiveCamera->GetEntityOwner()->GetTransform().GetWorldPosition(), mpActiveCamera->GetView(), mpActiveCamera->GetProjection(), mpActiveCamera->GetClearColour());
+                mpRenderSystem->ApplyCamera(mpActiveCamera->GetEntity()->GetTransform().GetWorldPosition(), mpActiveCamera->GetView(), mpActiveCamera->GetProjection(), mpActiveCamera->GetClearColour());
                 //Calculate the view-projection matrix as we will need it for sorting
                 Core::Matrix4x4::Multiply(&mpActiveCamera->GetView(), &mpActiveCamera->GetProjection(), &matViewProjCache);
                 
@@ -203,7 +203,7 @@ namespace ChilliSource
                 Render(mpActiveCamera, ShaderPass::k_ambient, aCameraTransparentCache);
                 
                 mpRenderSystem->SetLight(nullptr);
-                RenderUI(inpScene->GetWindowPtr());
+                RenderUI(inpScene->GetWindow());
                 
                 //Present contents of buffer to screen
                 if (inpRenderTarget != nullptr)
@@ -219,7 +219,7 @@ namespace ChilliSource
                 mpRenderSystem->BeginFrame(inpRenderTarget);
                 
                 mpRenderSystem->SetLight(nullptr);
-                RenderUI(inpScene->GetWindowPtr());
+                RenderUI(inpScene->GetWindow());
                 
                 //Present contents of buffer to screen
                 if (inpRenderTarget != nullptr)
@@ -243,7 +243,7 @@ namespace ChilliSource
             //Split the lights
             for(u32 i=0; i<aLightComponentCache.size(); ++i)
             {
-                if(aLightComponentCache[i]->GetEntityOwner()->IsVisible() == false)
+                if(aLightComponentCache[i]->GetEntity()->IsVisible() == false)
                     continue;
                 
                 if(aLightComponentCache[i]->IsA(DirectionalLightComponent::InterfaceID))

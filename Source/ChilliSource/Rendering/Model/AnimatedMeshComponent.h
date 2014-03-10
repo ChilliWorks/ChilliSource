@@ -382,19 +382,19 @@ namespace ChilliSource
 			void Update(f32 infDeltaTime);
 		private:
 			//----------------------------------------------------
-			/// On Attached To Entity
+			/// On Added To Entity
 			///
 			/// Triggered when the component is attached to
-			/// an entity
+			/// an entity on the scene
 			//----------------------------------------------------
-			void OnAttachedToEntity() override;;
+			void OnAddedToScene() override;
             //----------------------------------------------------
-			/// On Detached From Entity
+			/// On Removed From Entity
 			///
 			/// Triggered when the component is detached from
-			/// an entity
+			/// an entity on the scene
 			//----------------------------------------------------
-			void OnDetachedFromEntity() override;;
+			void OnRemovedFromScene() override;
 			//----------------------------------------------------------
 			/// Render
 			///

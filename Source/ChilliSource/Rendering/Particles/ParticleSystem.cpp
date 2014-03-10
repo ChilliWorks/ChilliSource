@@ -95,7 +95,7 @@ namespace ChilliSource
             
 			for(std::vector<ParticleComponent*>::iterator it = mParticleComponents.begin(); it != mParticleComponents.end(); ++it)
 			{
-                if((*it)->GetEntityOwner())
+                if((*it)->GetEntity())
                     (*it)->Update(infDT);
 			}
             

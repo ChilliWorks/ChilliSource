@@ -26,7 +26,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::CreateDefaultSystems(Core::Application* in_application)
 		{
-			in_application->AddSystem(Core::ETC1ImageProvider::Create());
+			in_application->AddSystem_Old(Core::ETC1ImageProvider::Create());
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
