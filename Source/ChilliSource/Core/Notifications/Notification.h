@@ -1,5 +1,5 @@
 //
-//  AppNotification.h
+//  Notification.h
 //  Chilli Source
 //
 //  Created by I Copland on 10/03/2014.

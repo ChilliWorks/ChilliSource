@@ -52,7 +52,8 @@ namespace ChilliSource
                 NotificationContainerSPtr notificationContainer = std::make_shared<NotificationContainer>();
                 notificationContainer->m_notification = std::make_shared<Notification>(in_id, in_params, in_priority);
                 notificationContainer->m_triggerTime = 0;
-                m_timedAppNotifications.push_back(notificationContainer);
+                notificationContainer->m_cancelled = false;
+                m_notifications.push_back(notificationContainer);
             }
         }
         //---------------------------------------------------
@@ -64,7 +65,8 @@ namespace ChilliSource
                 NotificationContainerSPtr notificationContainer = std::make_shared<NotificationContainer>();
                 notificationContainer->m_notification = std::make_shared<Notification>(in_id, in_params, in_priority);
                 notificationContainer->m_triggerTime = in_time;
-                m_timedAppNotifications.push_back(notificationContainer);
+                notificationContainer->m_cancelled = false;
+                m_notifications.push_back(notificationContainer);
             }
         }
         //---------------------------------------------------
@@ -76,21 +78,31 @@ namespace ChilliSource
                 NotificationContainerSPtr notificationContainer = std::make_shared<NotificationContainer>();
                 notificationContainer->m_notification = std::make_shared<Notification>(in_id, in_params, in_priority);
                 notificationContainer->m_triggerTime = Application::Get()->GetSystemTime() + in_time;
-                m_timedAppNotifications.push_back(notificationContainer);
+                notificationContainer->m_cancelled = false;
+                m_notifications.push_back(notificationContainer);
             }
         }
-        //--------------------------------------------------
-        //--------------------------------------------------
-        void AppNotificationSystem::OnUpdate(f32 in_deltaTime)
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        void AppNotificationSystem::GetScheduledNotifications(std::vector<NotificationSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_peroid)
         {
-            TimeIntervalSecs currentTime = Core::Application::Get()->GetSystemTime();
-            
-            for(auto it = m_timedAppNotifications.begin(); it != m_timedAppNotifications.end();)
+            for (const NotificationContainerSPtr& notificationContainer : m_notifications)
             {
-                if(currentTime >= (*it)->m_triggerTime)
+                if (notificationContainer->m_triggerTime > in_time && notificationContainer->m_triggerTime < in_time - in_peroid)
                 {
-                    m_recievedEvent.NotifyConnections((*it)->m_notification);
-                    it = m_timedAppNotifications.erase(it);
+                    out_notifications.push_back(notificationContainer->m_notification);
+                }
+            }
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        void AppNotificationSystem::CancelByID(Notification::ID in_id)
+        {
+            for(auto it = m_notifications.begin(); it != m_notifications.end();)
+            {
+                if(in_id == (*it)->m_notification->GetID())
+                {
+                    it = m_notifications.erase(it);
                 }
                 else
                 {
@@ -98,11 +110,34 @@ namespace ChilliSource
                 }
             }
         }
-        //--------------------------------------------------
-        //--------------------------------------------------
+        //--------------------------------------------------------
+        //--------------------------------------------------------
         void AppNotificationSystem::CancelAll()
         {
-            m_timedAppNotifications.clear();
+            m_notifications.clear();
+        }
+        //--------------------------------------------------
+        //--------------------------------------------------
+        void AppNotificationSystem::OnUpdate(f32 in_deltaTime)
+        {
+            TimeIntervalSecs currentTime = Core::Application::Get()->GetSystemTime();
+            
+            for(auto it = m_notifications.begin(); it != m_notifications.end();)
+            {
+                if ((*it)->m_cancelled == true)
+                {
+                    it = m_notifications.erase(it);
+                }
+                else if(currentTime >= (*it)->m_triggerTime)
+                {
+                    m_recievedEvent.NotifyConnections((*it)->m_notification);
+                    it = m_notifications.erase(it);
+                }
+                else
+                {
+                    ++it;
+                }
+            }
         }
     }
 }

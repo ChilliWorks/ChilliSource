@@ -14,21 +14,9 @@ namespace ChilliSource
     {
         //----------------------------------------------------
         //----------------------------------------------------
-        Notification::Notification(ID in_id, const ParamDictionary& in_params)
-            : m_id(in_id), m_params(in_params)
+        Notification::Notification(ID in_id, const ParamDictionary& in_params, Priority in_priority)
+            : m_id(in_id), m_params(in_params), m_priority(in_priority)
         {
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        IConnectableEvent<Notification::PresentedDelegate>& Notification::GetPresentedEvent()
-        {
-            return m_presentedEvent;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        IConnectableEvent<Notification::DismissedDelegate>& Notification::GetDismissedEvent()
-        {
-            return m_dismissedEvent;
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -44,12 +32,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void Notification::Dismiss()
+        Notification::Priority Notification::GetPriority() const
         {
-            m_dismissed = true;
-            
-            m_dismissedEvent.NotifyConnections();
-            m_dismissedEvent.CloseAllConnections();
+            return m_priority;
         }
     }
 }

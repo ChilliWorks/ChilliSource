@@ -1,8 +1,8 @@
 //
 //  AppNotificationSystem.h
-//  MoFlowSkeleton
+//  Chilli Source
 //
-//  Created by Tag Games on 10/03/2014.
+//  Created by I Copland on 10/03/2014.
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
@@ -13,7 +13,6 @@
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Core/Notifications/Notification.h>
 
-#include <queue>
 #include <vector>
 
 namespace ChilliSource
@@ -41,7 +40,7 @@ namespace ChilliSource
             //--------------------------------------------------
             static AppNotificationSystemUPtr Create();
             //--------------------------------------------------
-            /// Is A
+            /// @author I Copland
             ///
             /// @return Whether this implements the passed in
             /// interface id.
@@ -98,6 +97,32 @@ namespace ChilliSource
             /// to standard priority.
             //----------------------------------------------------
             void ScheduleNotificationAfterTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority = Notification::Priority::k_standard);
+            //--------------------------------------------------------
+            /// Builds a list of all notifications currently scheduled
+            /// within the given time peroid.
+            ///
+            /// @author I Copland
+            ///
+            /// @param [Out] The list of notifications.
+            /// @param [Optional] The start time.
+            /// @param [Optional] The end time.
+            //--------------------------------------------------------
+            void GetScheduledNotifications(std::vector<NotificationSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_peroid = std::numeric_limits<TimeIntervalSecs>::max());
+            //--------------------------------------------------------
+            /// Prevent any notifications with given ID type from
+            /// firing.
+            ///
+            /// @author I Copland
+            ///
+            /// @param ID type
+            //--------------------------------------------------------
+            void CancelByID(Notification::ID in_id);
+            //--------------------------------------------------------
+            /// Terminate all currently scheduled notifications.
+            ///
+            /// @author I Copland
+            //--------------------------------------------------------
+            void CancelAll();
             //--------------------------------------------------
             /// @author I Copland
             ///
@@ -116,6 +141,7 @@ namespace ChilliSource
             {
                 NotificationSPtr m_notification;
                 TimeIntervalSecs m_triggerTime;
+                bool m_cancelled;
             };
             using NotificationContainerSPtr = std::shared_ptr<NotificationContainer>;
             //--------------------------------------------------
@@ -134,15 +160,9 @@ namespace ChilliSource
             /// @param The delta time.
             //--------------------------------------------------
             void OnUpdate(f32 in_deltaTime) override;
-            //--------------------------------------------------
-            /// Cancels all existing notificatations.
-            ///
-            /// @author I Copland
-            //--------------------------------------------------
-            void CancelAll();
             
             bool m_enabled;
-            std::vector<NotificationContainerSPtr> m_timedAppNotifications;
+            std::vector<NotificationContainerSPtr> m_notifications;
             Event<RecievedDelegate> m_recievedEvent;
         };
     }

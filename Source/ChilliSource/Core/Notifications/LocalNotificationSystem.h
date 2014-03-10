@@ -1,25 +1,36 @@
 //
-//  CNotificationFactory.h
-//  MoFlow
+//  LocalNotificationSystem.h
+//  Chilli Source
 //
 //  Created by Ian Copland on 12/01/2012.
 //  Copyright 202 Tag Games. All rights reserved.
 //
 
-#ifndef _MOFLOW_CORE_LOCALNOTIFICATIONSCHEDULER_H_
-#define _MOFLOW_CORE_LOCALNOTIFICATIONSCHEDULER_H_
+#ifndef _CHILLISOURCE_CORE_NOTIFICATIONS_LOCALNOTIFICATIONSYSTEM_H_
+#define _CHILLISOURCE_CORE_NOTIFICATIONS_LOCALNOTIFICATIONSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
+#include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Core/Notifications/Notification.h>
 
 namespace ChilliSource
 {
     namespace Core
     {
-        class LocalNotificationScheduler
+        //-------------------------------------------------------
+        /// Schedules notifications using the platform specific
+        /// notification alaram. Notifications scheduled using
+        /// this can still be received even if the Application
+        /// is restarted.
+        //-------------------------------------------------------
+        class LocalNotificationSystem : public AppSystem
         {
         public:
-            
+            CS_DECLARE_NAMEDTYPE(LocalNotificationSystem);
+            //--------------------------------------------------
+            /// Delegates
+            //--------------------------------------------------
+            using RecievedDelegate = std::function<void(const NotificationSPtr&)>;
             //-------------------------------------------------------
             /// Create the platform dependent backend
             ///
@@ -27,52 +38,90 @@ namespace ChilliSource
             ///
             /// @return New backend instance
             //-------------------------------------------------------
-            static LocalNotificationSchedulerUPtr Create();
-            
-            virtual ~LocalNotificationScheduler(){};
-            //------------------------------------------------------------------------------
-            /// Schedule Notification
+            static LocalNotificationSystemUPtr Create();
+            //---------------------------------------------------
+            /// Schedules a Local Notifcation which should fire
+            /// at the given time. A Local Notification uses
+            /// the system specfic notification alarms and can
+            /// be received even if it was scheduled during a
+            /// previous instance of the application.
             ///
-            /// Once the time is reached the notification will be inserted into the queue.
-            /// Upon reaching the head of the queue it will trigger.
+            /// @author I Copland
             ///
-            /// @param Notification
-            //------------------------------------------------------------------------------
-            virtual void ScheduleNotification(const NotificationSPtr& insNotification) = 0;
-            //-------------------------------------------------------------------------
-            /// Try Get Notifications Scheduled Within Time Period
+            /// @param The notification id
+            /// @param The notification params.
+            /// @param Time in seconds at which it should trigger.
+            /// @param [Optional] The notification priority. Defaults
+            /// to standard priority.
+            //---------------------------------------------------
+            void ScheduleNotificationForTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority = Notification::Priority::k_standard);
+            //---------------------------------------------------
+            /// Schedules a Local Notifcation which should fire
+            /// after the given time. A Local Notification uses
+            /// the system specfic notification alarms and can
+            /// be received even if it was scheduled during a
+            /// previous instance of the application.
             ///
-            /// Checks if any notifications have been scheduled to trigger
-            /// within the given window of the given time
+            /// @author I Copland
             ///
-            /// @param Time
-            /// @param Timeframe
-            /// @param Out: Notifications that meet criteria
-            /// @return Whether any notifications exist within that time period
-            //-------------------------------------------------------------------------
-            virtual bool TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<NotificationSPtr>& outaNotifications) = 0;
-            //-------------------------------------------------------------------------
+            /// @param The notification id
+            /// @param The notification params.
+            /// @param Time in seconds at which it should trigger.
+            /// @param [Optional] The notification priority. Defaults
+            /// to standard priority.
+            //----------------------------------------------------
+            void ScheduleNotificationAfterTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority = Notification::Priority::k_standard);
+            //--------------------------------------------------------
+            /// Builds a list of all notifications currently scheduled
+            /// within the given time peroid.
+            ///
+            /// @author I Copland
+            ///
+            /// @param [Out] The list of notifications.
+            /// @param [Optional] The start time.
+            /// @param [Optional] The end time.
+            //--------------------------------------------------------
+            virtual void GetScheduledNotifications(std::vector<NotificationSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_peroid = std::numeric_limits<TimeIntervalSecs>::max()) = 0;
+            //--------------------------------------------------------
             /// Cancel By ID
             ///
             /// Prevent any notifications with given ID type from firing
             ///
             /// @param ID type
-            //-------------------------------------------------------------------------
-            virtual void CancelByID(NotificationID inID) = 0;
-            //-------------------------------------------------------------------------
+            //--------------------------------------------------------
+            virtual void CancelByID(Notification::ID inID) = 0;
+            //--------------------------------------------------------
             /// Cancel All
             ///
             /// Terminate all currently scheduled notifications
-            //-------------------------------------------------------------------------
+            //--------------------------------------------------------
             virtual void CancelAll() = 0;
-            
+            //--------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @return An event that can be used to listen for
+            /// new notifications being recieved.
+            //---------------------------------------------------
+            virtual IConnectableEvent<RecievedDelegate>& GetRecievedEvent() = 0;
+            //--------------------------------------------------------
+            /// Destructor
+            //--------------------------------------------------------
+            virtual ~LocalNotificationSystem(){};
         protected:
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            LocalNotificationScheduler(){}
+            LocalNotificationSystem(){}
+            //-------------------------------------------------------
+            /// Schedules the notification using the platform specfic
+            /// backend
+            ///
+            /// @param The notification
+            /// @param The time to schedule the notification for.
+            //--------------------------------------------------------
+            virtual void ScheduleNotification(const NotificationSPtr& in_notification, TimeIntervalSecs in_time) = 0;
         };
     }
 }

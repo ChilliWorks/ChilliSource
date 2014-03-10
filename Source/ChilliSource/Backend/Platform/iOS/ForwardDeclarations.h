@@ -20,7 +20,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(DialogueBoxSystem);
         CS_FORWARDDECLARE_CLASS(FileSystem);
         CS_FORWARDDECLARE_CLASS(ImageLoader);
-        CS_FORWARDDECLARE_CLASS(LocalNotificationScheduler);
+        CS_FORWARDDECLARE_CLASS(LocalNotificationSystem);
         CS_FORWARDDECLARE_CLASS(RemoteNotificationSystem);
         //------------------------------------------------------
 		/// Input

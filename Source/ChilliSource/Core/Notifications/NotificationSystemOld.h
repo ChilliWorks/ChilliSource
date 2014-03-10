@@ -6,6 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
+/*
+
 #ifndef _MO_FLO_CORE_NOTIFICATION_SCHEDULER_H_
 #define _MO_FLO_CORE_NOTIFICATION_SCHEDULER_H_
 
@@ -131,3 +133,5 @@ namespace ChilliSource
 }
 
 #endif
+ 
+ */

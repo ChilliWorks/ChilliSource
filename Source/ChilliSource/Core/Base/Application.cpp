@@ -489,6 +489,11 @@ namespace ChilliSource
         //------------------------------------------------------
         void Application::CreateDefaultSystems()
         {
+            //NEW
+            CreateSystem<AppNotificationSystem>();
+            CreateSystem<NotificationManager>();
+            
+            //OLD
             //Core
             AddSystem_Old(FileSystem::Create());
 
@@ -496,8 +501,6 @@ namespace ChilliSource
             AddSystem_Old(ImageResourceProvider::Create());
             AddSystem_Old(MoImageProvider::Create());
             AddSystem_Old(DialogueBoxSystem::Create());
-            
-            NotificationScheduler::Initialise(LocalNotificationScheduler::Create());
 
             //Audio
             Audio::AudioSystemUPtr audioSystem(Audio::AudioSystem::Create());

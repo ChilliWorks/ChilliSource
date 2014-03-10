@@ -6,6 +6,8 @@
 //  Copyright 2011 Tag Games. All rights reserved.
 //
 
+/*
+
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 #include <ChilliSource/Core/Notifications/LocalNotificationScheduler.h>
 #include <ChilliSource/Core/Base/Application.h>
@@ -215,7 +217,7 @@ namespace ChilliSource
             switch(ineType)
             {
                 case NotificationType::k_app:
-                    for(std::vector<NotificationSPtr>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end(); /*No Increment*/)
+                    for(std::vector<NotificationSPtr>::iterator it = TimedAppNotifications.begin(); it != TimedAppNotifications.end();)
                     {  
                         if(inID == (*it)->ID)
                         {
@@ -372,3 +374,5 @@ namespace ChilliSource
         }
     }
 }
+
+*/
