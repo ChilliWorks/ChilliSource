@@ -50,12 +50,6 @@ namespace ChilliSource
             static EntityUPtr Create();
             
             //----------------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------
-			Entity();
-            //----------------------------------------------------------------
             /// Destructor
             ///
             /// @author S Downie
@@ -384,7 +378,12 @@ namespace ChilliSource
 		private:
             
             friend class Scene;
-            
+            //----------------------------------------------------------------
+            /// Private to enforce the use of the factory method
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------
+			Entity();
             //----------------------------------------------------
             /// @author S Downie
             ///
