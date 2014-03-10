@@ -8,7 +8,6 @@
  */
 
 #include <ChilliSource/Core/State/StateManager.h>
-#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 
@@ -23,36 +22,10 @@ namespace ChilliSource
 		///
 		/// Default
 		//---------------------------------------------------------
-		StateManager::StateManager() : mpApp(nullptr), mbStartState(false)
+		StateManager::StateManager()
+        : mbStartState(false)
 		{
 		}
-        //---------------------------------------------------------
-		/// Set Owning Application
-		///
-        /// @param Moflow application
-		//---------------------------------------------------------
-        void StateManager::SetOwningApplication(Application* inpApp)
-        {
-            mpApp = inpApp;
-        }
-        //---------------------------------------------------------
-        /// Get Application
-        ///
-        /// @return Moflow application
-        //---------------------------------------------------------
-        Application& StateManager::GetApplication()
-        {
-            return *mpApp;
-        }
-        //---------------------------------------------------------
-        /// Get Application Pointer
-        ///
-        /// @return Moflow application pointer
-        //---------------------------------------------------------
-        Application* StateManager::GetApplicationPtr()
-        {
-            return mpApp;
-        }
 		//---------------------------------------------------------
 		/// Resume
 		///

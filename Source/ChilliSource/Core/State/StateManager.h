@@ -11,11 +11,9 @@
 #define _MO_FLO_STATE_MANAGER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Core/State/State.h>
 
 #include <list>
-#include <queue>
 #include <vector>
 
 namespace ChilliSource
@@ -35,24 +33,6 @@ namespace ChilliSource
 		public:
 			StateManager();
 			
-            //---------------------------------------------------------
-            /// Set Owning Application
-            ///
-            /// @param Moflow application
-            //---------------------------------------------------------
-            void SetOwningApplication(Application* inpApp);
-            //---------------------------------------------------------
-            /// Get Application
-            ///
-            /// @return Moflow application
-            //---------------------------------------------------------
-			Application& GetApplication();
-            //---------------------------------------------------------
-            /// Get Application Pointer
-            ///
-            /// @return Moflow application pointer
-            //---------------------------------------------------------
-			Application* GetApplicationPtr();
 			//---------------------------------------------------------
 			/// Get all States
 			///
@@ -271,15 +251,12 @@ namespace ChilliSource
 			
 		private:
 		
-			Application* mpApp;
-			
 			std::vector<StateSPtr> mStateHierarchy;              //The alive states. A state can be pushed onto the stack to become the active state. Yet the other states will not be destroyed. Hierarchy is now a vector, so that states within can be inspected, since std::stack is a little opaque
 			std::list<StateOperation> mStateOperationQueue;
             
             bool mbStartState;
 			
 			friend class Application;
-			friend class IApplicationDelegates;
 		};
 	}
 }

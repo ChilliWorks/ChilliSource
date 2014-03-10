@@ -220,7 +220,6 @@ namespace ChilliSource
             
             m_resourceManagerDispenser = new ResourceManagerDispenser(this);
             m_componentFactoryDispenser = new ComponentFactoryDispenser(this);
-            m_stateManager.SetOwningApplication(this);
             
 #ifdef CS_TARGETPLATFORM_WINDOWS
 			//Because windows by default is landscape, this needs to be flipped.
