@@ -509,9 +509,17 @@ namespace ChilliSource
             //----------------------------------------------------
             /// @author S Downie
             ///
-            /// @param Time since last frame in seconds
+            /// @param Time since last update in seconds
             //----------------------------------------------------
-            void OnUpdate(f32 in_timeSinceLastFrame);
+            void OnUpdate(f32 in_timeSinceLastUpdate);
+            //----------------------------------------------------
+            /// Fixed update is triggered at fixed time periods
+            ///
+            /// @author S Downie
+            ///
+            /// @param Time since last fixed update in seconds
+            //----------------------------------------------------
+            void OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate);
             //-------------------------------------------------------------
 			/// @author S Downie
 			///

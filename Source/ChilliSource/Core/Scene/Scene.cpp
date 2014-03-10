@@ -92,7 +92,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
-		void Scene::QuerySceneForIntersection(const Core::Ray &in_ray, std::vector<VolumeComponent*>& out_volumeComponents)
+		void Scene::QuerySceneForIntersection(const Ray &in_ray, std::vector<VolumeComponent*>& out_volumeComponents)
 		{
 			std::vector<VolumeComponent*> intersectableComponents;
 			QuerySceneForComponents(intersectableComponents);
@@ -121,15 +121,24 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------		   
-		void Scene::Update(f32 infDT)
+		void Scene::OnUpdate(f32 in_timeSinceLastUpdate)
 		{
-			m_rootWindow->Update(infDT);
+			m_rootWindow->Update(in_timeSinceLastUpdate);
             
             for(u32 i=0; i<m_entities.size(); ++i)
 			{
-                m_entities[i]->OnUpdate(infDT);
+                m_entities[i]->OnUpdate(in_timeSinceLastUpdate);
             }
 		}
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
+        void Scene::OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate)
+        {
+            for(u32 i=0; i<m_entities.size(); ++i)
+			{
+                m_entities[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
+            }
+        }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
 		Scene::~Scene()

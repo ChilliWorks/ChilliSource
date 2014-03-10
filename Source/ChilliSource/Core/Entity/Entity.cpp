@@ -409,16 +409,30 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void Entity::OnUpdate(f32 in_timeSinceLastFrame)
+        void Entity::OnUpdate(f32 in_timeSinceLastUpdate)
         {
             for(u32 i=0; i<m_components.size(); ++i)
 			{
-                m_components[i]->OnUpdate(in_timeSinceLastFrame);
+                m_components[i]->OnUpdate(in_timeSinceLastUpdate);
 			}
             
             for(u32 i=0; i<m_children.size(); ++i)
             {
-                m_children[i]->OnUpdate(in_timeSinceLastFrame);
+                m_children[i]->OnUpdate(in_timeSinceLastUpdate);
+            }
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void Entity::OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate)
+        {
+            for(u32 i=0; i<m_components.size(); ++i)
+			{
+                m_components[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
+			}
+            
+            for(u32 i=0; i<m_children.size(); ++i)
+            {
+                m_children[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
             }
         }
         //------------------------------------------------------------------

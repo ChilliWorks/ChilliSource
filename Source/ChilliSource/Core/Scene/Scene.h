@@ -97,7 +97,7 @@ namespace ChilliSource
 			/// @param Ray to check intersection
 			/// @param [Out] Container to fill with intersecting components
 			//--------------------------------------------------------------------------------------------------
-			void QuerySceneForIntersection(const Core::Ray &in_ray, std::vector<VolumeComponent*>& out_volumeComponents);
+			void QuerySceneForIntersection(const Ray &in_ray, std::vector<VolumeComponent*>& out_volumeComponents);
             //--------------------------------------------------------------------------------------------------
 			/// Traverse the scene for the given component type and fill the list with those components
             ///
@@ -159,7 +159,15 @@ namespace ChilliSource
 			///
 			/// @param Time since last update in seconds
 			//--------------------------------------------------------------------------------------------------
-			void Update(f32 in_timeSinceLastUpdate);
+			void OnUpdate(f32 in_timeSinceLastUpdate);
+            //--------------------------------------------------------------------------------------------------
+			/// Updates the root window and the entities at a fixed timestep
+            ///
+            /// @author S Downie
+			///
+			/// @param Time since last update in seconds
+			//--------------------------------------------------------------------------------------------------
+			void OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate);
             
 		private:
 			
