@@ -110,9 +110,9 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void AudioComponent::Update(f32 dt)
 		{
-			if(mpEntityOwner)
+			if(GetEntity())
 			{
-				Core::Vector3 vCurrentPos = mpEntityOwner->GetTransform().GetWorldPosition();
+				Core::Vector3 vCurrentPos = GetEntity()->GetTransform().GetWorldPosition();
 				Core::Vector3 vCurrentVel = Core::Vector3::ZERO;
 				Set3DLocation(vCurrentPos, vCurrentVel);
 			}

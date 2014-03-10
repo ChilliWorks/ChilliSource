@@ -106,13 +106,13 @@ namespace ChilliSource
             }
             
             
-            EntityAnimationControllerSPtr pAnimController = inpRootNode->GetEntityAnimationControllerPtr();
+            EntityAnimationControllerSPtr pAnimController = inpRootNode->GetEntityAnimationController();
             
             //If we don't already have an animation controller set up, let's set one up now
             if(!pAnimController)
             {
                 inpRootNode->GetEntityAnimationController() = EntityAnimationControllerSPtr(new EntityAnimationController());
-                pAnimController = inpRootNode->GetEntityAnimationControllerPtr();
+                pAnimController = inpRootNode->GetEntityAnimationController();
             }
             
             pAnimController->LoadDataFromSceneAnimDesc(msAnimation);
@@ -121,7 +121,7 @@ namespace ChilliSource
             for (u32 nAnim = 0; nAnim < msAnimation.asEntityAnimations.size(); nAnim++) 
 			{				
                 const SceneAnimationDesc::EntityAnimationDesc& sCurrentAnim(msAnimation.asEntityAnimations[nAnim]);                         
-				Entity* pAnimEntity =  inpRootNode->FindChildEntityWithName(sCurrentAnim.strTargetPath);
+				Entity* pAnimEntity =  inpRootNode->GetChildEntityWithNameRecursive(sCurrentAnim.strTargetPath).get();
 				
 				if (pAnimEntity)
 					outEntityAnimList.push_back(pAnimController->CreateAnimation(sCurrentAnim.strName, pAnimEntity));

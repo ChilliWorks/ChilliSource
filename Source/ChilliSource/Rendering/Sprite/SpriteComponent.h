@@ -297,19 +297,19 @@ namespace ChilliSource
             //-----------------------------------------------------
             void RenderShadowMap(RenderSystem* inpRenderSystem, CameraComponent* inpCam) override {};
 			//----------------------------------------------------
-			/// On Attached To Entity
-			///
 			/// Triggered when the component is attached to
-			/// an entity
+			/// an entity on the scene
+            ///
+            /// @author S Downie
 			//----------------------------------------------------
-			void OnAttachedToEntity() override;
+			void OnAddedToScene() override;
 			//----------------------------------------------------
-			/// On Detached From Entity
-			///
 			/// Triggered when the component is removed from
-			/// an entity
+			/// an entity on the scene
+            ///
+            /// @author S Downie
 			//----------------------------------------------------
-			void OnDetachedFromEntity() override;
+			void OnRemovedFromScene() override;
             
 		protected:	
             //------------------------------------------------------------

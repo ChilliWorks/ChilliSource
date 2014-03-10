@@ -46,12 +46,12 @@ namespace ChilliSource
 		//----------------------------------------------------
 		const Core::AABB& SpriteComponent::GetAABB()
 		{
-			if(mpEntityOwner && !mbAABBValid)
+			if(GetEntity() && !mbAABBValid)
 			{
                 mbAABBValid = true;
                 
 				//Rebuild the box
-				mBoundingBox.SetOrigin(mpEntityOwner->GetTransform().GetWorldPosition());
+				mBoundingBox.SetOrigin(GetEntity()->GetTransform().GetWorldPosition());
 				mBoundingBox.SetSize(mvDimensions);
 			}
 			return mBoundingBox;
@@ -61,12 +61,12 @@ namespace ChilliSource
 		//----------------------------------------------------
 		const Core::OOBB& SpriteComponent::GetOOBB()
 		{
-			if(mpEntityOwner && !mbOOBBValid)
+			if(GetEntity() && !mbOOBBValid)
 			{
                 mbOOBBValid = true;
                 
 				mOBBoundingBox.SetSize(mvDimensions);
-				mOBBoundingBox.SetTransform(mpEntityOwner->GetTransform().GetWorldTransform());
+				mOBBoundingBox.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
 			}
 			return mOBBoundingBox;
 		}
@@ -75,11 +75,11 @@ namespace ChilliSource
 		//----------------------------------------------------
 		const Core::Sphere& SpriteComponent::GetBoundingSphere()
 		{
-			if(mpEntityOwner && !mbBoundingSphereValid)
+			if(GetEntity() && !mbBoundingSphereValid)
 			{
                 mbBoundingSphereValid = true;
                 
-				mBoundingSphere.vOrigin = mpEntityOwner->GetTransform().GetWorldPosition();
+				mBoundingSphere.vOrigin = GetEntity()->GetTransform().GetWorldPosition();
 				mBoundingSphere.fRadius = std::max(mvDimensions.x, mvDimensions.y) * 0.5f;
 			}
 			return mBoundingSphere;
@@ -372,18 +372,16 @@ namespace ChilliSource
 			return mavVertexPos[(u32)Verts::k_bottomRight];
 		}
 		//----------------------------------------------------
-		/// On Attached To Entity
 		//----------------------------------------------------
-		void SpriteComponent::OnAttachedToEntity()
+		void SpriteComponent::OnAddedToScene()
 		{
-			m_transformChangedConnection = mpEntityOwner->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &SpriteComponent::OnTransformChanged));
+			m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &SpriteComponent::OnTransformChanged));
             
             OnTransformChanged();
 		}
 		//----------------------------------------------------
-		/// On Detached From Entity
 		//----------------------------------------------------
-		void SpriteComponent::OnDetachedFromEntity()
+		void SpriteComponent::OnRemovedFromScene()
 		{
             m_transformChangedConnection = nullptr;
 		}
@@ -392,7 +390,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
 		void SpriteComponent::CalculateCornerPositions()
         {
-            mmatTransformCache = mpEntityOwner->GetTransform().GetWorldTransform();
+            mmatTransformCache = GetEntity()->GetTransform().GetWorldTransform();
             
 			Core::Vector2 vHalfSize(mvDimensions.x * 0.5f, mvDimensions.y * 0.5f);
 			Core::Vector2 vAlignedPos;
@@ -425,7 +423,7 @@ namespace ChilliSource
             
             Core::Colour pCurrentColour = GetColour();
             
-            f32 fOpacity = mpEntityOwner->GetTransform().GetWorldOpacity();
+            f32 fOpacity = GetEntity()->GetTransform().GetWorldOpacity();
             
             SetColourWithOpacity(Core::Colour(pCurrentColour.r * fOpacity,
                                                pCurrentColour.g * fOpacity,

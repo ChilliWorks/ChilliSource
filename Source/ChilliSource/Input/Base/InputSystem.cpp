@@ -4,7 +4,7 @@
 //
 //  Created by Stuart McGaw on 22/11/2010.
 //  Copyright 2010 Tag Games. All rights reserved.
-///
+//
 
 #include <ChilliSource/Input/Base/InputSystem.h>
 

@@ -500,19 +500,6 @@ namespace ChilliSource
             
             return nullptr;
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        template <typename TCastType, typename TNamedType> TCastType* Application::GetSystem()
-        {
-            System* system = GetSystem(TNamedType::InterfaceID);
-            
-            if (system != nullptr)
-            {
-                return system->GetInterface<TCastType>();
-            }
-            
-            return nullptr;
-        }
         //-----------------------------------------------------
         //-----------------------------------------------------
         template <typename TNamedType> void Application::GetSystems(std::vector<TNamedType*> & out_systems)

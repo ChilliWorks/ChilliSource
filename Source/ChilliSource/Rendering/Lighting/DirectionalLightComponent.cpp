@@ -49,9 +49,9 @@ namespace ChilliSource
         //----------------------------------------------------------
         Core::Vector3 DirectionalLightComponent::GetDirection() const
         {
-            if(GetEntityOwner() != nullptr)
+            if(GetEntity() != nullptr)
             {
-                return GetEntityOwner()->GetTransform().GetWorldOrientation() * Core::Vector3::Z_UNIT_NEGATIVE;
+                return GetEntity()->GetTransform().GetWorldOrientation() * Core::Vector3::Z_UNIT_NEGATIVE;
             }
             else
             {
@@ -64,9 +64,9 @@ namespace ChilliSource
         const Core::Matrix4x4& DirectionalLightComponent::GetLightMatrix() const
         {
             //The matrix is a view projection
-            if(mbMatrixCacheValid == false && GetEntityOwner() != nullptr)
+            if(mbMatrixCacheValid == false && GetEntity() != nullptr)
             {
-                Core::Matrix4x4 matView = GetEntityOwner()->GetTransform().GetWorldTransform().Inverse();
+                Core::Matrix4x4 matView = GetEntity()->GetTransform().GetWorldTransform().Inverse();
                 Core::Matrix4x4::Multiply(&matView, &mmatProj, &mmatLight);
                 mbMatrixCacheValid = true;
             }
@@ -104,16 +104,14 @@ namespace ChilliSource
             return mpShadowMapDebug;
         }
         //----------------------------------------------------
-        /// On Attached To Entity
         //----------------------------------------------------
-        void DirectionalLightComponent::OnAttachedToEntity()
+        void DirectionalLightComponent::OnAddedToScene()
         {
-            m_transformChangedConnection = GetEntityOwner()->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged));
+            m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &DirectionalLightComponent::OnEntityTransformChanged));
         }
         //----------------------------------------------------
-        /// On Detached From Entity
         //----------------------------------------------------
-        void DirectionalLightComponent::OnDetachedFromEntity()
+        void DirectionalLightComponent::OnRemovedFromScene()
         {
             m_transformChangedConnection = nullptr;
         }

@@ -1,21 +1,24 @@
-/*
- *  Entity.h
- *  moFlo
- *
- *  Created by Scott Downie on 21/09/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  Entity.h
+//  ChilliSource
+//
+//  Created by Scott Downie on 21/09/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
-#ifndef _MO_FLO_CORE_ENTITY_H_
-#define _MO_FLO_CORE_ENTITY_H_
+#ifndef _CHILLISOURCE_CORE_ENTITY_ENTITY_H_
+#define _CHILLISOURCE_CORE_ENTITY_ENTITY_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Entity/Transform.h>
 #include <ChilliSource/Core/JSON/json.h>
 
+#ifdef CS_ENABLE_ENTITYLINKEDLIST
 #include <list>
+#else
+#include <vector>
+#endif
 
 namespace ChilliSource
 {
@@ -32,742 +35,555 @@ namespace ChilliSource
 #endif
 		
 		//--------------------------------------------------------------------------------------------------
-		/// Description:
-		///
-		/// Entity type. This represents any scene object as a series
-		/// of aggregated components. These components could be
-		/// materials or physics etc.
+		/// A game object that's behaviour is defined by its components
 		//--------------------------------------------------------------------------------------------------
 		class Entity final : public std::enable_shared_from_this<Entity>
 		{	
 		public:
+            
+            //----------------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------
 			Entity();
+            //----------------------------------------------------------------
+            /// Destructor
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------
             ~Entity();
+            //----------------------------------------------------------------
+            /// Direct copying of Entity is undefined and forbidden
+            ///
+            /// @author A Glass
+            //----------------------------------------------------------------
+            Entity(const Entity&) = delete;
+            //----------------------------------------------------------------
+            /// Direct copying of Entity is undefined and forbidden
+            ///
+            /// @author A Glass
+            //----------------------------------------------------------------
+			Entity& operator= (const Entity&) = delete;
         
             //----------------------------------------------------------------
-            /// Get Transform
+            /// @author S Downie
             ///
             /// @return Transform object to allow for spatial manipulation
             //----------------------------------------------------------------
             Transform& GetTransform();
             //----------------------------------------------------------------
-            /// Get Transform
+            /// @author S Downie
             ///
             /// @return Transform object to allow for spatial manipulation
             //----------------------------------------------------------------
             const Transform& GetTransform() const;
             //-------------------------------------------------------------
-            /// Set Visible
+            /// @author S Downie
             ///
             /// @param Whether any renderable components should be shown
             //-------------------------------------------------------------
-            void SetVisible(bool inbVisible);
+            void SetVisible(bool in_isVisible);
             //-------------------------------------------------------------
-            /// Is Visible
+            /// @author S Downie
             ///
             /// @return Whether any renderable components should be shown
             //-------------------------------------------------------------
             bool IsVisible() const;
 			//-------------------------------------------------------------
-			/// Set Owning Scene
-			///
-			/// @param Scene owner
-			//-------------------------------------------------------------
-			void SetOwningScene(Scene* inpScene);
-			//-------------------------------------------------------------
-			/// Get Owning Scene
+			/// Get Scene
 			///
 			/// @return Scene owner
 			//-------------------------------------------------------------
-			Scene* GetOwningScene();
+			Scene* GetScene();
             //-------------------------------------------------------------
-            /// Has A
+            /// @author S Downie
             ///
-            /// @return Whether the entity has a component of type T
+            /// @return Whether the entity has component of type
             //-------------------------------------------------------------
-            template <typename T> bool HasA() const
+            template <typename TComponentType>
+            bool HasA() const
             {
-                return GetComponent(T::InterfaceID) != nullptr;
+                return GetComponent<TComponentType>() != nullptr;
             }
 			//-------------------------------------------------------------
-			/// Get Component  (Managed)
+			/// @author S Downie
 			///
-            /// @param Component ID
-            /// @param Query mask used to filter the results
-			/// @return the first component of the given type
+			/// @return The first component of type
 			//-------------------------------------------------------------
-			ComponentSPtr GetManagedComponent(InterfaceIDType inInterfaceID, u32 inudwQueryMask = 0) const;
-			//-------------------------------------------------------------
-			/// Get Component  (Managed)
-			///
-            /// @param Query mask used to filter the results
-			/// @return the first component of the given type
-			//-------------------------------------------------------------
-			template <typename T> std::shared_ptr<T> GetManagedComponent(u32 inudwQueryMask = 0)
+			template <typename TComponentType>
+            std::shared_ptr<TComponentType>& GetComponent()
 			{
-				return std::static_pointer_cast<T>(GetManagedComponent(T::InterfaceID, inudwQueryMask));
+				return std::static_pointer_cast<TComponentType>(GetComponent(TComponentType::InterfaceID));
 			}
             //-------------------------------------------------------------
-			/// Get Component  (Managed)
+			/// @author S Downie
 			///
-            /// @param Query mask used to filter the results
-			/// @return the first component of the given type
+			/// @return The first component of type
 			//-------------------------------------------------------------
-			template <typename T> std::shared_ptr<const T> GetManagedComponent(u32 inudwQueryMask = 0) const
+			template <typename TComponentType>
+            const std::shared_ptr<const TComponentType>& GetComponent() const
 			{
-				return std::static_pointer_cast<T>(GetManagedComponent(T::InterfaceID, inudwQueryMask));
+				return std::static_pointer_cast<const TComponentType>(GetComponent(TComponentType::InterfaceID));
 			}
 			//-------------------------------------------------------------
-			/// Get Components  (Managed)
-			///
 			/// Search the list of components and add ones to the list
 			/// that are of given interface type
+            ///
+            /// @author S Downie
 			///
-			/// @param Interface ID
-			/// @param Out - Vector to populate with components
-            /// @param Query mask used to filter the results
-			/// @param Whether to clear the vector before populating
+			/// @param [Out] Vector to populate with components
 			//-------------------------------------------------------------
-			void GetManagedComponents(InterfaceIDType inInterfaceID, std::vector<ComponentSPtr> & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true) const;
-			//-------------------------------------------------------------
-			/// Get Components  (Managed)
-			///
-			/// Search the list of components and add ones to the list
-			/// that are of given interface type
-			///
-			/// @param Out - Vector to populate with components
-            /// @param Query mask used to filter the results
-			/// @param Whether to clear the vector before populating
-			//-------------------------------------------------------------
-			template <typename T> void GetManagedComponents(std::vector<std::shared_ptr<T> > & outComponents, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
+			template <typename TComponentType>
+            void GetComponents(std::vector<std::shared_ptr<TComponentType> >& out_components) const
 			{
-				if(inbClearVectorBeforeUsing) 
-				{
-					outComponents.clear();
-				}
-                
-                for (ComponentList::const_iterator pItr = mComponents.begin(); pItr != mComponents.end(); ++pItr)
+                for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
                 {
-                    if(inudwQueryMask != 0)
+                    if((*it)->IsA(TComponentType::InterfaceID))
                     {
-                        u32 udwMaskComponent = (*pItr)->GetQueryMask();
-                        
-                        if((inudwQueryMask & udwMaskComponent) == 0)
-                        {
-                            continue;
-                        }
-                    }
-                    
-                    if( (*pItr)->IsA(T::InterfaceID))
-                    {
-                        outComponents.push_back(std::static_pointer_cast<T>(*pItr));
+                        out_components.push_back(std::static_pointer_cast<TComponentType>(*it));
                     }
                 }
 			}
             //-------------------------------------------------------------
-			/// Get Components  (Managed)
-			///
 			/// Search the list of components and add ones to the list
 			/// that are of given interface type
+            ///
+            /// @author S Downie
 			///
-			/// @param Out - Vector to populate with components T1
-            /// @param Out - Vector to populate with components T2
-            /// @param Query mask used to filter the results
-			/// @param Whether to clear the vector before populating
+			/// @param [Out] Vector to populate with components
 			//-------------------------------------------------------------
-			template <typename T1, typename T2> void GetManagedComponents(std::vector<std::shared_ptr<T1> > & outComponents1, std::vector<std::shared_ptr<T2> > & outComponents2,
-                                                                          u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
+			template <typename TComponentType>
+            void GetComponents(std::vector<TComponentType*>& out_components) const
 			{
-				if(inbClearVectorBeforeUsing)
-				{
-                    outComponents1.clear();
-                    outComponents2.clear();
-				}
-                
-                for (ComponentList::const_iterator pItr = mComponents.begin(); pItr != mComponents.end(); ++pItr)
+                for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
                 {
-                    if(inudwQueryMask != 0)
+                    if((*it)->IsA(TComponentType::InterfaceID))
                     {
-                        u32 udwMaskComponent = (*pItr)->GetQueryMask();
-                        
-                        if((inudwQueryMask & udwMaskComponent) == 0)
-                        {
-                            continue;
-                        }
-                    }
-                    
-                    if((*pItr)->IsA(T1::InterfaceID))
-                    {
-                        outComponents1.push_back(std::static_pointer_cast<T1>(*pItr));
-                    }
-                    if((*pItr)->IsA(T2::InterfaceID))
-                    {
-                        outComponents2.push_back(std::static_pointer_cast<T2>(*pItr));
-                    }
-                }
-			}
-            //-------------------------------------------------------------
-			/// Get Components  (Managed)
-			///
-			/// Search the list of components and add ones to the list
-			/// that are of given interface type
-			///
-			/// @param Out - Vector to populate with components T1
-            /// @param Out - Vector to populate with components T2
-            /// @param Out - Vector to populate with components T3
-            /// @param Query mask used to filter the results
-			/// @param Whether to clear the vector before populating
-			//-------------------------------------------------------------
-			template <typename T1, typename T2, typename T3> void GetManagedComponents(std::vector<std::shared_ptr<T1> > & outComponents1, std::vector<std::shared_ptr<T2> > & outComponents2, std::vector<std::shared_ptr<T3> > & outComponents3,
-                                                                                       u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
-			{
-				if(inbClearVectorBeforeUsing)
-				{
-                    outComponents1.clear();
-                    outComponents2.clear();
-                    outComponents3.clear();
-				}
-                
-                for (ComponentList::const_iterator pItr = mComponents.begin(); pItr != mComponents.end(); ++pItr)
-                {
-                    if(inudwQueryMask != 0)
-                    {
-                        u32 udwMaskComponent = (*pItr)->GetQueryMask();
-                        
-                        if((inudwQueryMask & udwMaskComponent) == 0)
-                        {
-                            continue;
-                        }
-                    }
-                    
-                    if((*pItr)->IsA(T1::InterfaceID))
-                    {
-                        outComponents1.push_back(std::static_pointer_cast<T1>(*pItr));
-                    }
-                    if((*pItr)->IsA(T2::InterfaceID))
-                    {
-                        outComponents2.push_back(std::static_pointer_cast<T2>(*pItr));
-                    }
-                    if((*pItr)->IsA(T3::InterfaceID))
-                    {
-                        outComponents3.push_back(std::static_pointer_cast<T3>(*pItr));
+                        out_components.push_back(static_cast<TComponentType*>(it->get()));
                     }
                 }
 			}
 			//-------------------------------------------------------------
-			/// Get Component  (Non managed)
+			/// Search the list of components and add ones to the lists
+			/// that are of given interface types
+            ///
+            /// @author S Downie
 			///
-            /// @param Component type to find
-            /// @param Query mask used to filter the results
-			/// @return the first component of the given type
+			/// @param [Out] Vector to populate with components type 1
+            /// @param [Out] Vector to populate with components type 2
 			//-------------------------------------------------------------
-			Component* GetComponent(InterfaceIDType inInterfaceID, u32 inudwQueryMask = 0) const;
-			//-------------------------------------------------------------
-			/// Get Component  (Non managed)
-			///
-            /// @param Query mask used to filter the results
-			/// @return the first component of the given type
-			//-------------------------------------------------------------
-			template <typename T> T* GetComponent(u32 inudwQueryMask = 0)
+			template <typename TComponentType1, typename TComponentType2>
+            void GetComponents(std::vector<std::shared_ptr<TComponentType1> >& out_components1, std::vector<std::shared_ptr<TComponentType2> >& out_components2) const
 			{
-				return static_cast<T*>(GetComponent(T::InterfaceID, inudwQueryMask));
-			}
-            //-------------------------------------------------------------
-			/// Get Component  (Non managed)
-			///
-            /// @param Query mask used to filter the results
-			/// @return the first component of the given type
-			//-------------------------------------------------------------
-			template <typename T> const T* GetComponent(u32 inudwQueryMask = 0) const
-			{
-				return static_cast<T*>(GetComponent(T::InterfaceID, inudwQueryMask));
-			}
-			//-------------------------------------------------------------
-			/// Get Components  (Non managed)
-			///
-			/// Search the list of components and add ones to the list
-			/// that are of given interface type
-			///
-			/// @param Interface ID
-			/// @param Out - Vector to populate with components
-            /// @param Query mask used to filter the results
-			/// @param Whether to clear the vector before populating
-			//-------------------------------------------------------------
-			void GetComponents(InterfaceIDType inInterfaceID, std::vector<Component*> & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true) const;
-			//-------------------------------------------------------------
-			/// Get Components  (Non managed)
-			///
-			/// Search the list of components and add ones to the list
-			/// that are of given interface type
-			///
-			/// @param Out - Vector to populate with components
-            /// @param Query mask used to filter the results
-			/// @param Whether to clear the vector before populating
-			//-------------------------------------------------------------
-			template <typename T> void GetComponents(std::vector<T*> & outComponents, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
-			{
-				if(inbClearVectorBeforeUsing) 
-				{
-					outComponents.clear();
-				}
-                
-                for (ComponentList::const_iterator pItr = mComponents.begin(); pItr != mComponents.end(); ++pItr)
+                for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
                 {
-                    if(inudwQueryMask != 0)
+                    if((*it)->IsA(TComponentType1::InterfaceID))
                     {
-                        u32 udwMaskComponent = (*pItr)->GetQueryMask();
-                        
-                        if((inudwQueryMask & udwMaskComponent) == 0)
-                        {
-                            continue;
-                        }
+                        out_components1.push_back(std::static_pointer_cast<TComponentType1>(*it));
                     }
-                    
-                    if( (*pItr)->IsA(T::InterfaceID))
+                    if((*it)->IsA(TComponentType2::InterfaceID))
                     {
-                        outComponents.push_back(static_cast<T*>(pItr->get()));
+                        out_components2.push_back(std::static_pointer_cast<TComponentType2>(*it));
                     }
                 }
 			}
             //-------------------------------------------------------------
-			/// Get Components  (Non managed)
+			/// Search the list of components and add ones to the lists
+			/// that are of given interface types
+            ///
+            /// @author S Downie
 			///
-			/// Search the list of components and add ones to the list
-			/// that are of given interface type
-			///
-			/// @param Out - Vector to populate with components T1
-            /// @param Out - Vector to populate with components T2
-            /// @param Query mask used to filter the results
-			/// @param Whether to clear the vector before populating
+			/// @param [Out] Vector to populate with components type 1
+            /// @param [Out] Vector to populate with components type 2
 			//-------------------------------------------------------------
-			template <typename T1, typename T2> void GetComponents(std::vector<T1*> & outComponents1, std::vector<T2*> & outComponents2,
-                                                                   u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
+			template <typename TComponentType1, typename TComponentType2>
+            void GetComponents(std::vector<TComponentType1*>& out_components1, std::vector<TComponentType2*>& out_components2) const
 			{
-				if(inbClearVectorBeforeUsing)
-				{
-					outComponents1.clear();
-                    outComponents2.clear();
-				}
-
-                for (ComponentList::const_iterator pItr = mComponents.begin(); pItr != mComponents.end(); ++pItr)
+                for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
                 {
-                    if(inudwQueryMask != 0)
+                    if((*it)->IsA(TComponentType1::InterfaceID))
                     {
-                        u32 udwMaskComponent = (*pItr)->GetQueryMask();
-                    
-                        if((inudwQueryMask & udwMaskComponent) == 0)
-                        {
-                            continue;
-                        }
+                        out_components1.push_back(static_cast<TComponentType1*>(it->get()));
                     }
-                    
-                    if((*pItr)->IsA(T1::InterfaceID))
+                    if((*it)->IsA(TComponentType2::InterfaceID))
                     {
-                        outComponents1.push_back(static_cast<T1*>(pItr->get()));
-                    }
-                    if((*pItr)->IsA(T2::InterfaceID))
-                    {
-                        outComponents2.push_back(static_cast<T2*>(pItr->get()));
+                        out_components2.push_back(static_cast<TComponentType2*>(it->get()));
                     }
                 }
 			}
             //-------------------------------------------------------------
-			/// Get Components  (Non managed)
+			/// Search the list of components and add ones to the lists
+			/// that are of given interface types
+            ///
+            /// @author S Downie
 			///
-			/// Search the list of components and add ones to the list
-			/// that are of given interface type
-			///
-			/// @param Out - Vector to populate with components T1
-            /// @param Out - Vector to populate with components T2
-            /// @param Out - Vector to populate with components T3
-            /// @param Query mask used to filter the results
-			/// @param Whether to clear the vector before populating
+			/// @param [Out] Vector to populate with components type 1
+            /// @param [Out] Vector to populate with components type 2
+            /// @param [Out] Vector to populate with components type 3
 			//-------------------------------------------------------------
-			template <typename T1, typename T2, typename T3> void GetComponents(std::vector<T1*> & outComponents1, std::vector<T2*> & outComponents2, std::vector<T3*> & outComponents3,
-                                                                                u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
+			template <typename TComponentType1, typename TComponentType2, typename TComponentType3>
+            void GetComponents(std::vector<std::shared_ptr<TComponentType1> >& out_components1, std::vector<std::shared_ptr<TComponentType2> >& out_components2, std::vector<std::shared_ptr<TComponentType3> >& out_components3) const
 			{
-				if(inbClearVectorBeforeUsing)
-				{
-                    outComponents1.clear();
-                    outComponents2.clear();
-                    outComponents3.clear();
-				}
-                
-                for (ComponentList::const_iterator pItr = mComponents.begin(); pItr != mComponents.end(); ++pItr)
+                for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
                 {
-                    if(inudwQueryMask != 0)
+                    if((*it)->IsA(TComponentType1::InterfaceID))
                     {
-                        u32 udwMaskComponent = (*pItr)->GetQueryMask();
-                        
-                        if((inudwQueryMask & udwMaskComponent) == 0)
-                        {
-                            continue;
-                        }
+                        out_components1.push_back(std::static_pointer_cast<TComponentType1>(*it));
                     }
-                    
-                    if((*pItr)->IsA(T1::InterfaceID))
+                    if((*it)->IsA(TComponentType2::InterfaceID))
                     {
-                        outComponents1.push_back(static_cast<T1*>(pItr->get()));
+                        out_components2.push_back(std::static_pointer_cast<TComponentType2>(*it));
                     }
-                    if((*pItr)->IsA(T2::InterfaceID))
+                    if((*it)->IsA(TComponentType3::InterfaceID))
                     {
-                        outComponents2.push_back(static_cast<T2*>(pItr->get()));
-                    }
-                    if((*pItr)->IsA(T3::InterfaceID))
-                    {
-                        outComponents3.push_back(static_cast<T3*>(pItr->get()));
+                        out_components3.push_back(std::static_pointer_cast<TComponentType3>(*it));
                     }
                 }
 			}
             //-------------------------------------------------------------
-			/// Get Component  (Managed Recursive)
+			/// Search the list of components and add ones to the lists
+			/// that are of given interface types
+            ///
+            /// @author S Downie
 			///
-			/// @return the first component of the given type within
-            /// entity or children
+			/// @param [Out] Vector to populate with components type 1
+            /// @param [Out] Vector to populate with components type 2
+            /// @param [Out] Vector to populate with components type 3
 			//-------------------------------------------------------------
-			ComponentSPtr GetManagedComponentRecursive(InterfaceIDType inInterfaceID, u32 inudwQueryMask = 0) const;
-			//-------------------------------------------------------------
-			/// Get Component  (Managed Recursive)
-			///
-			/// @return the first component of the given type within
-            /// entity or children
-			//-------------------------------------------------------------
-			template <typename T> std::shared_ptr<T> GetManagedComponentRecursive(u32 inudwQueryMask = 0)
+			template <typename TComponentType1, typename TComponentType2, typename TComponentType3>
+            void GetComponents(std::vector<TComponentType1*>& out_components1, std::vector<TComponentType2*>& out_components2, std::vector<TComponentType3*>& out_components3) const
 			{
-				return std::static_pointer_cast<T>(GetManagedComponentRecursive(T::InterfaceID, inudwQueryMask));
-			}
-            //-------------------------------------------------------------
-			/// Get Component  (Managed Recursive)
-			///
-			/// @return the first component of the given type within
-            /// entity or children
-			//-------------------------------------------------------------
-			template <typename T> std::shared_ptr<const T> GetManagedComponentRecursive(u32 inudwQueryMask = 0) const
-			{
-				return std::static_pointer_cast<T>(GetManagedComponentRecursive(T::InterfaceID, inudwQueryMask));
-			}
-			//-------------------------------------------------------------
-			/// Get Components  (Managed Recursive)
-			///
-			/// Search the list of components and add ones to the list
-			/// that are of given interface type. This will recurse
-            /// into child entities
-			///
-			/// @param Interface ID
-			/// @param Out - Vector to populate with components
-			/// @param Whether to clear the vector before populating
-			//-------------------------------------------------------------
-			void GetManagedComponentsRecursive(InterfaceIDType inInterfaceID, std::vector<ComponentSPtr> & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true) const;
-			//-------------------------------------------------------------
-			/// Get Components  (Managed Recursive)
-			///
-			/// Search the list of components and add ones to the list
-			/// that are of given interface type. This will recurse
-            /// into child entities
-			///
-			/// @param Interface ID
-			/// @param Out - Vector to populate with components
-			/// @param Whether to clear the vector before populating
-			//-------------------------------------------------------------
-			template <typename T> void GetManagedComponentsRecursive(std::vector<std::shared_ptr<T> > & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
-			{
-				if(inbClearVectorBeforeUsing) 
-				{
-					outComponentsWithInterface.clear();
-				}
-				for (ComponentList::const_iterator pItr = mComponents.begin(); pItr != mComponents.end(); ++pItr)
-				{
-					u32 udwMaskComponent = (*pItr)->GetQueryMask();
-					if(inudwQueryMask == 0 || inudwQueryMask & udwMaskComponent)
-					{
-						if((*pItr)->IsA(T::InterfaceID)) 
-						{
-							outComponentsWithInterface.push_back(std::static_pointer_cast<T>(*pItr));
-						}
-					}
-				}
-                
-                for(SharedEntityList::const_iterator it = mEntities.begin(); it != mEntities.end(); ++it)
+                for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
                 {
-                    (*it)->GetManagedComponentsRecursive(outComponentsWithInterface, inudwQueryMask, false);
+                    if((*it)->IsA(TComponentType1::InterfaceID))
+                    {
+                        out_components1.push_back(static_cast<TComponentType1*>(it->get()));
+                    }
+                    if((*it)->IsA(TComponentType2::InterfaceID))
+                    {
+                        out_components2.push_back(static_cast<TComponentType2*>(it->get()));
+                    }
+                    if((*it)->IsA(TComponentType3::InterfaceID))
+                    {
+                        out_components3.push_back(static_cast<TComponentType3*>(it->get()));
+                    }
                 }
 			}
 			//-------------------------------------------------------------
-			/// Get Component  (Non managed Recursive)
+			/// Recursively descend from the entity through its children
+            /// searching for components with given interface ID
+            ///
+            /// @author A Mackie
 			///
 			/// @return the first component of the given type. This will recurse
             /// into child entities
 			//-------------------------------------------------------------
-			Component* GetComponentRecursive(InterfaceIDType inInterfaceID, u32 inudwQueryMask = 0) const;
-			//-------------------------------------------------------------
-			/// Get Component  (Non managed Recursive)
-			///
-			/// @return the first component of the given type. This will recurse
-            /// into child entities
-			//-------------------------------------------------------------
-			template <typename T> T* GetComponentRecursive(u32 inudwQueryMask = 0)
+			template <typename TComponentType>
+            std::shared_ptr<TComponentType>& GetComponentRecursive()
 			{
-				return static_cast<T*>(GetComponentRecursive(T::InterfaceID, inudwQueryMask));
+				return std::static_pointer_cast<TComponentType>(GetComponentRecursive(TComponentType::InterfaceID));
 			}
             //-------------------------------------------------------------
-			/// Get Component  (Non managed Recursive)
+			/// Recursively descend from the entity through its children
+            /// searching for components with given interface ID
+            ///
+            /// @author A Mackie
 			///
 			/// @return the first component of the given type. This will recurse
             /// into child entities
 			//-------------------------------------------------------------
-			template <typename T> const T* GetComponentRecursive(u32 inudwQueryMask = 0) const
+			template <typename TComponentType>
+            const std::shared_ptr<const TComponentType>& GetComponentRecursive() const
 			{
-				return static_cast<T*>(GetComponentRecursive(T::InterfaceID, inudwQueryMask));
+				return std::static_pointer_cast<const TComponentType>(GetComponentRecursive(TComponentType::InterfaceID));
 			}
 			//-------------------------------------------------------------
-			/// Get Components  (Non managed Recursive)
+			/// Recursively descend from the entity through its children
+            /// searching for components with given interface ID
+            ///
+            /// @author A Mackie
 			///
-			/// Search the list of components and add ones to the list
-			/// that are of given interface type. This will recurse
+			/// @return the first component of the given type. This will recurse
             /// into child entities
-			///
-			/// @param Interface ID
-			/// @param Out - Vector to populate with components
-			/// @param Whether to clear the vector before populating
 			//-------------------------------------------------------------
-			void GetComponentsRecursive(InterfaceIDType inInterfaceID, std::vector<Component*> & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true) const;
-			//-------------------------------------------------------------
-			/// Get Components  (Non managed Recursive)
-			///
-			/// Search the list of components and add ones to the list
-			/// that are of given interface type. This will recurse
-            /// into child entities
-			///
-			/// @param Interface ID
-			/// @param Out - Vector to populate with components
-			/// @param Whether to clear the vector before populating
-			//-------------------------------------------------------------
-			template <typename T> void GetComponentsRecursive(std::vector<T*> & outComponentsWithInterface, u32 inudwQueryMask = 0, bool inbClearVectorBeforeUsing = true)
+			template <typename TComponentType>
+            void GetComponentsRecursive(std::vector<std::shared_ptr<TComponentType> >& out_components) const
 			{
-				if(inbClearVectorBeforeUsing) 
-				{
-					outComponentsWithInterface.clear();
-				}
-				for (ComponentList::const_iterator pItr = mComponents.begin(); pItr != mComponents.end(); ++pItr)
-				{
-					u32 udwMaskComponent = (*pItr)->GetQueryMask();
-					if(inudwQueryMask == 0 || inudwQueryMask & udwMaskComponent)
-					{
-						if((*pItr)->IsA(T::InterfaceID)) 
-						{
-							outComponentsWithInterface.push_back(static_cast<T*>(pItr->get()));
-						}
-					}
-				}
-                
-                for(SharedEntityList::const_iterator it = mEntities.begin(); it != mEntities.end(); ++it)
+                for (ComponentList::const_iterator itr = m_components.begin(); itr != m_components.end(); ++itr)
                 {
-                    (*it)->GetComponentsRecursive<T>(outComponentsWithInterface, inudwQueryMask, false);
+                    if ((*itr)->IsA(TComponentType::InterfaceID))
+                    {
+                        out_components.push_back(std::static_pointer_cast<TComponentType>(*itr));
+                    }
+                }
+                
+                for(SharedEntityList::const_iterator it = m_children.begin(); it != m_children.end(); ++it)
+                {
+                    (*it)->GetComponentsRecursive<TComponentType>(out_components);
                 }
 			}
+            //-------------------------------------------------------------
+			/// Recursively descend from the entity through its children
+            /// searching for components with given interface ID
+            ///
+            /// @author A Mackie
+			///
+			/// @return the first component of the given type. This will recurse
+            /// into child entities
 			//-------------------------------------------------------------
-			/// Attach
+			template <typename TComponentType>
+            void GetComponentsRecursive(std::vector<TComponentType*>& out_components)
+			{
+                for (ComponentList::const_iterator itr = m_components.begin(); itr != m_components.end(); ++itr)
+                {
+                    if ((*itr)->IsA(TComponentType::InterfaceID))
+                    {
+                        out_components.push_back(static_cast<TComponentType*>(itr->get()));
+                    }
+                }
+                
+                for(SharedEntityList::const_iterator it = m_children.begin(); it != m_children.end(); ++it)
+                {
+                    (*it)->GetComponentsRecursive<TComponentType>(out_components);
+                }
+			}
+            //------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Array of components
+            //------------------------------------------------------------------
+            const ComponentList& GetComponents() const;
+			//-------------------------------------------------------------
+			/// Add a component to the entity. It will now receieve
+            /// entity lifecycle events. The entity will have shared
+            /// ownership of the component
+            ///
+            /// @author S Downie
 			///
 			/// @param Component to attach to the entity
 			//-------------------------------------------------------------
-			void Attach(const ComponentSPtr & inpComponent);
+			void Add(const ComponentSPtr& in_component);
 			//-------------------------------------------------------------
-			/// Detach
+			/// Remove a component from the entity. The component will no
+            /// longer be owned by the entity and will no longer receieve
+            /// entity lifecycle events.
+            ///
+            /// @author S Downie
 			///
 			/// @param Component to remove from the entity
 			//-------------------------------------------------------------
-			void Detach(const ComponentSPtr & inpComponent);
+			void Remove(Component* in_component);
             //-------------------------------------------------------------
-            /// Detach All
-            ///
             /// Removes all components
+            ///
+            /// @author S Downie
             //-------------------------------------------------------------
-            void DetachAll();
+            void RemoveAllComponents();
 			//-------------------------------------------------------------
-			/// Add Child
+			/// Add an entity as a child. This will link the transforms
+            /// in a hierarchy and will link lifecycle and scene events
+            ///
+            /// @author S Downie
 			///
-			/// @param Entity to derive transform from
+			/// @param Entity
 			//-------------------------------------------------------------
-			void AddChild(const EntitySPtr& inpEntity);
+			void Add(const EntitySPtr& in_child);
 			//-------------------------------------------------------------
-			/// Remove Child
+			/// Remove an entity as a child. This will unlink the transforms
+            /// in a hierarchy and will unlink lifecycle and scene events
 			///
-			/// @param Entity no longer with hierarchical relationship
+			/// @param Entity
 			//-------------------------------------------------------------
-			void RemoveChild(const EntitySPtr& inpEntity);
+			void Remove(Entity* in_child);
 			//-------------------------------------------------------------
-			/// Remove From Parent
-			///
 			/// Detach the entity from its parent. If it has no parent
             /// then remove it from the scene
+            ///
+            /// @author S Downie
 			//-------------------------------------------------------------
 			void RemoveFromParent();
 			//-------------------------------------------------------------
 			/// Remove All Children
 			///
+            /// @author S Downie
 			//-------------------------------------------------------------
 			void RemoveAllChildren();
 			//-------------------------------------------------------------
-			/// Has Name
+			/// @author I Copland
 			///
 			/// @return Whether this entity is named
 			//-------------------------------------------------------------
-			bool HasName();
+            bool HasName() const;
 			//-------------------------------------------------------------
-			/// Set Name
+			/// @author S Downie
 			///
-			/// @param Give this entity a name
+			/// @param Name
 			//-------------------------------------------------------------
-			void SetName(const std::string & incName);
+			void SetName(const std::string& in_name);
 			//-------------------------------------------------------------
-			/// Get Name
+			/// @author S Downie
 			///
 			/// @return Entity name
 			//-------------------------------------------------------------
 			const std::string & GetName() const;
-			//-------------------------------------------------------------
-			/// Remove From Scene
-			///
-			/// Will remove all children from the scene
-			///
-			/// @param Scene
-			//-------------------------------------------------------------
-			void RemoveFromScene();			
 			//------------------------------------------------------------------
-			/// GetParent
-			/// 
-			/// Return the parent entity of this entity. nullptr is returned naturally if
+			/// Return the parent entity of this entity. nullptr is returned if
 			/// there is no parent.
 			///
-			/// @return Pointer to the parent entity of this
+            /// @author T Kane
+            ///
+			/// @return Pointer to the parent entity or null
 			//------------------------------------------------------------------
 			Entity* GetParent();
 			
+            //------------------------------------------------------------------
+			/// Search only immediate children to find an entity and return a pointer
+			/// to the first entity it finds with the name matching that given,
+            /// or nullptr if no match found.
+			///
+			/// @return An entity with the specified name or null
 			//------------------------------------------------------------------
-			/// FindChildEntityWithName
-			/// 
+            const EntitySPtr&  GetChildEntityWithName(const std::string& in_name) const;
+			//------------------------------------------------------------------
 			/// Recursively search the entity hierarchy in a depth-first manner
 			/// and return a pointer to the first entity it finds with the name matching
-			/// parameter instrName, or nullptr if no match found.
+			/// given, or nullptr if no match found.
 			///
-			/// @return A child entity with the specified name
+            /// @author A Mackie
+            ///
+			/// @return An entity with the specified name or null
 			//------------------------------------------------------------------
-			Entity* FindChildEntityWithName(const std::string& instrName);
-            
+			const EntitySPtr& GetChildEntityWithNameRecursive(const std::string& in_name) const;
             //------------------------------------------------------------------
-			/// GetNumberOfChildEntities
-			/// 
-			/// Return the number of child entities
+            /// @author A Mackie
 			///
 			/// @return the number of child entities
 			//------------------------------------------------------------------
-            u32 GetNumberOfChildEntities() const;
+            u32 GetNumEntities() const;
             //------------------------------------------------------------------
-			/// GetImmediateChildWithName
-			/// 
-			/// Search only immediate children to an entity and return a pointer
-			/// to the first entity it finds with the name matching parameter 
-			/// instrName, or nullptr if no match found.
+            /// @author A Mackie
 			///
-			/// @return A child entity with the specified name
+			/// @return the number of components
 			//------------------------------------------------------------------
-            EntitySPtr GetImmediateChildWithName(const std::string& instrName);
+            u32 GetNumComponents() const;
+
 			//------------------------------------------------------------------
-			/// Get Entity AnimationC ontroller Ptr
-			/// 
-			/// Return the entity animation controller pointer for this entity
+			/// @param A Glass
 			///
 			/// @return Anim controller
 			//------------------------------------------------------------------
-			EntityAnimationControllerSPtr GetEntityAnimationControllerPtr();
+			const EntityAnimationControllerSPtr& GetEntityAnimationController() const;
             //------------------------------------------------------------------
-			/// Get Entity Animation Controller
-			/// 
-			/// Return the entity animation controller pointer for this entity
-			///
+            /// @param A Glass
+            ///
 			/// @return Anim controller
 			//------------------------------------------------------------------
 			EntityAnimationControllerSPtr& GetEntityAnimationController();
             //------------------------------------------------------------------
-			/// Get Child Entites
+			/// @author S Downie
 			/// 
             /// @return List of child entities
 			//------------------------------------------------------------------
-            SharedEntityList& GetChildEntities();
+            const SharedEntityList& GetEntities() const;
             //------------------------------------------------------------------
-            /// To JSON
+            /// Serialise the entity tree to JSON
+            ///
+            /// @author S Downie
             /// 
             /// @return A JSON object of the hierarchy of entities and components
             //------------------------------------------------------------------
             Json::Value ToJSON() const;
-            
             //------------------------------------------------------------------
-            /// Reset
-            ///
             /// Utility function to reset an entity to blank slate
             /// useful for pooling
             ///
+            /// @author A Glass
             //------------------------------------------------------------------
             void Reset();
-            //------------------------------------------------------------------
-            /// Get All Managed Components
-            ///
-            /// @return Array of components
-            //------------------------------------------------------------------
-            const ComponentList& GetAllManagedComponents() const;
             
 		private:
             
-            // Direct copying of Entity is undefined and forbidden
-            Entity(const Entity& inCopy) { *this= inCopy; }
-			Entity& operator= (const Entity& inRHS) { return *this; }
+            friend class Scene;
             
+            //----------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Time since last frame in seconds
+            //----------------------------------------------------
+            void OnUpdate(f32 in_timeSinceLastFrame);
+            //-------------------------------------------------------------
+			/// @author S Downie
+			///
+            /// @param Component type to find
+            ///
+			/// @return the first component of the given type
 			//-------------------------------------------------------------
-			/// Add To Scene
+			const ComponentSPtr& GetComponent(InterfaceIDType in_interfaceID) const;
+            //-------------------------------------------------------------
+			/// Search the list of components and add ones to the list
+			/// that are of given interface type
+            ///
+            /// @author S Downie
+			///
+			/// @param Component type to find
+			/// @param [Out] Vector to populate with components
+			//-------------------------------------------------------------
+			void GetComponents(InterfaceIDType in_interfaceID, std::vector<ComponentSPtr>& out_components) const;
+            //-------------------------------------------------------------
+			/// Recursively descend from the entity through its children
+            /// searching for components with given interface ID
+            ///
+            /// @author A Mackie
+			///
+			/// @return the first component of the given type. This will recurse
+            /// into child entities
+			//-------------------------------------------------------------
+			const ComponentSPtr& GetComponentRecursive(InterfaceIDType in_interfaceID) const;
+            //-------------------------------------------------------------
+			/// @author S Downie
 			///
 			/// @param Scene
 			//-------------------------------------------------------------
-			void AddToScene(Scene* inpScene);
+			void SetScene(Scene* inpScene);
 			//-------------------------------------------------------------
-			/// Remove From Scene
-			///
-			/// @param Scene
+			/// Called when the entity is added to the scene
+            ///
+            /// @author S Downie
 			//-------------------------------------------------------------
-			void RemoveFromScene(Scene* inpScene);
+			void OnAddedToScene();
+			//-------------------------------------------------------------
+			/// Called when the entity is removed from the scene
+            ///
+            /// @author S Downie
+			//-------------------------------------------------------------
+			void OnRemovedFromScene();
 			
-		protected:
+		private:
 			
-			ComponentList mComponents;
-			SharedEntityList mEntities;	
+			ComponentList m_components;
+			SharedEntityList m_children;
             
-            Transform mLocalTransform;
+            Transform m_transform;
 			
-			std::string mstrName;
+			std::string m_name;
 			
-			Entity* mpParent;
-			Scene* mpOwningScene;
+			Entity* m_parent;
+			Scene* m_scene;
             
-            bool mbVisible;
-			EntityAnimationControllerSPtr mpEntityAnimationController;
-			
+            bool m_isVisible;
+            
+			EntityAnimationControllerSPtr m_entityAnimController;
 		};
 		
 		//------------------------------------------------------------------
-		/// Create Entity
-		/// 
 		/// Convienience method to create an empty entity
+        ///
+        /// @author S Downie
 		///
 		/// @return Entity
 		//------------------------------------------------------------------
 		EntitySPtr CreateEntity();
-		//------------------------------------------------------------------
-		/// Create Entity
-		/// 
-		/// Convienience method to create an entity and attach component
-		///
-		/// @return Entity
-		//------------------------------------------------------------------
-		EntitySPtr CreateEntity(const ComponentSPtr & inpComponent);
 	}
 }
 

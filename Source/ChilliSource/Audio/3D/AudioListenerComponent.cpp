@@ -65,17 +65,17 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void AudioListenerComponent::Update(f32 dt)
 		{
-			if(mpEntityOwner)
+			if(GetEntity())
 			{
-				Core::Vector3 vCurrentPos = mpEntityOwner->GetTransform().GetWorldPosition();
+				Core::Vector3 vCurrentPos = GetEntity()->GetTransform().GetWorldPosition();
 				
 				Core::Vector3 vCurrentVel = Core::Vector3::ZERO;
 				
 				Core::Vector3 vForward;
-				Core::Matrix4x4::Multiply(&Core::Vector3::Z_UNIT_POSITIVE, &mpEntityOwner->GetTransform().GetWorldTransform(), &vForward);
+				Core::Matrix4x4::Multiply(&Core::Vector3::Z_UNIT_POSITIVE, &GetEntity()->GetTransform().GetWorldTransform(), &vForward);
 				
 				Core::Vector3 vUp;
-				Core::Matrix4x4::Multiply(&Core::Vector3::Y_UNIT_POSITIVE, &mpEntityOwner->GetTransform().GetWorldTransform(), &vUp);
+				Core::Matrix4x4::Multiply(&Core::Vector3::Y_UNIT_POSITIVE, &GetEntity()->GetTransform().GetWorldTransform(), &vUp);
 				
 				mpAudioListener->Set3DLocation(vCurrentPos, vCurrentVel, vForward, vUp);
 			}

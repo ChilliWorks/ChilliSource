@@ -1,83 +1,50 @@
-/*
- *  Component.cpp
- *  MoFlow
- *
- *  Created by Tag Games on 28/09/2010.
- *  Copyright 2010 Tag Games. All rights reserved.
- *
- */
+//
+//  Component.cpp
+//  ChilliSource
+//
+//  Created by Stuart McGaw on 28/09/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Core/Entity/Component.h>
 
+#include <ChilliSource/Core/Entity/Entity.h>
+
 namespace ChilliSource
 {
-
 	namespace Core
 	{
+        //----------------------------------------------------
+        //----------------------------------------------------
 		Component::Component()
-		:mpEntityOwner(nullptr), mudwQueryMask(0)
+		: m_entity(nullptr)
 		{
 			
 		}
-		Component::~Component()
+		//----------------------------------------------------
+		//----------------------------------------------------
+		Entity * Component::GetEntity()
 		{
-
+			return m_entity;
 		}
 		//----------------------------------------------------
-		/// Get Entity Owner
-		///
-		/// @return Entity to which component is attached
 		//----------------------------------------------------
-		Entity * Component::GetEntityOwner()
+		const Entity * Component::GetEntity() const
 		{
-			return mpEntityOwner;
+			return m_entity;
 		}
 		//----------------------------------------------------
-		/// Get Entity Owner (Const)
-		///
-		/// @return Entity to which component is attached
 		//----------------------------------------------------
-		const Entity * Component::GetEntityOwner() const
+		void Component::SetEntity(Entity* in_newOwner)
 		{
-			return mpEntityOwner;
+			m_entity = in_newOwner;
 		}
-		//----------------------------------------------------
-		/// Set Entity Owner (Const)
-		///
-		/// @param Entity to which component is attached
-		//----------------------------------------------------
-		void Component::SetEntityOwner(Entity* inpOwner)
-		{
-			if(mpEntityOwner != nullptr)
-			{
-				OnDetachedFromEntity();
-			}
-			
-			mpEntityOwner = inpOwner;
-			
-			if (inpOwner != nullptr) 
-			{
-				OnAttachedToEntity();
-			}
-		}
-		//----------------------------------------------------
-		/// Get Query Mask
-		///
-		/// @return Query mask for filtering
-		//----------------------------------------------------
-		u32 Component::GetQueryMask() const
-		{
-			return mudwQueryMask;
-		}
-		//----------------------------------------------------
-		/// Set Query Mask
-		///
-		/// @param Filter mask
-		//----------------------------------------------------
-		void Component::SetQueryMask(u32 inudwQueryMask)
-		{
-			mudwQueryMask = inudwQueryMask;
-		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void Component::RemoveFromEntity()
+        {
+            CS_ASSERT(m_entity != nullptr, "Must have an entity to remove from");
+            m_entity->Remove(this);
+        }
 	}
-	
 }

@@ -101,25 +101,23 @@ namespace ChilliSource
         {
             //The point light matrix is simply a light view matrix
             //as the projection is done in the shader
-            if(mbMatrixCacheValid == false && GetEntityOwner() != nullptr)
+            if(mbMatrixCacheValid == false && GetEntity() != nullptr)
             {
-                mmatLight = GetEntityOwner()->GetTransform().GetWorldTransform().Inverse();
+                mmatLight = GetEntity()->GetTransform().GetWorldTransform().Inverse();
                 mbMatrixCacheValid = true;
             }
             
             return mmatLight;
         }
         //----------------------------------------------------
-        /// On Attached To Entity
         //----------------------------------------------------
-        void PointLightComponent::OnAttachedToEntity()
+        void PointLightComponent::OnAddedToScene()
         {
-            m_transformChangedConnection = GetEntityOwner()->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &PointLightComponent::OnEntityTransformChanged));
+            m_transformChangedConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &PointLightComponent::OnEntityTransformChanged));
         }
         //----------------------------------------------------
-        /// On Detached From Entity
         //----------------------------------------------------
-        void PointLightComponent::OnDetachedFromEntity()
+        void PointLightComponent::OnRemovedFromScene()
         {
             m_transformChangedConnection = nullptr;
         }
