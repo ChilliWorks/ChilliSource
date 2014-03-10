@@ -265,7 +265,7 @@ namespace ChilliSource
             //initialise all of the application systems.
             for (const AppSystemUPtr& system : m_systems)
             {
-                system->OnInitialise();
+                system->OnInit();
             }
             
             OnInitialise();
@@ -411,7 +411,7 @@ namespace ChilliSource
 		void Application::GoBack()
 		{
 			CS_LOG_DEBUG("Go back event.");
-			m_stateManager.GetActiveState()->OnGoBack();
+			//TODO: Feed this to the application another way. m_stateManager.GetActiveState()->OnGoBack();
 			ApplicationEvents::GetGoBackEvent().NotifyConnections();
 		}
         //----------------------------------------------------

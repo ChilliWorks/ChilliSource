@@ -74,7 +74,7 @@ namespace ChilliSource
             ///
             /// @return A raw pointer to the new system.
  			//----------------------------------------------------
-            template <typename TSystem, typename... TArgs> AppSystem* CreateSystem(TArgs... in_args);
+            template <typename TSystem, typename... TArgs> TSystem* CreateSystem(TArgs... in_args);
 			//----------------------------------------------------
 			/// Looks for a system that implements the queryable
             /// interface provided as a template parameter.
@@ -500,8 +500,10 @@ namespace ChilliSource
 		};
         //----------------------------------------------------
         //----------------------------------------------------
-        template <typename TSystem, typename... TArgs> AppSystem* Application::CreateSystem(TArgs... in_args)
+        template <typename TSystem, typename... TArgs> TSystem* Application::CreateSystem(TArgs... in_args)
         {
+            CS_ASSERT(m_isSystemCreationAllowed == true, "Cannot add systems outwith the creation phase");
+            
             std::unique_ptr<TSystem> newSystem = TSystem::Create(in_args...);
             TSystem* output = newSystem.get();
             m_systems.push_back(std::move(newSystem));
