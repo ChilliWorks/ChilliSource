@@ -24,9 +24,9 @@ namespace ChilliSource
         
         //------------------------------------------------------------------
 		//------------------------------------------------------------------
-		EntitySPtr CreateEntity()
+		EntityUPtr Entity::Create()
 		{
-			return EntitySPtr(new Entity());
+			return EntityUPtr(new Entity());
 		}
         
 		//-------------------------------------------------------------
@@ -60,7 +60,7 @@ namespace ChilliSource
 		void Entity::Remove(Entity* in_child)
 		{
             CS_ASSERT(in_child != nullptr, "Cannot remove null child");
-            CS_ASSERT(in_child->GetParent() == this, "Cannot remove child with existing parent");
+            CS_ASSERT(in_child->GetParent() == this, "Cannot remove entity that is not a child of this");
             
 			SharedEntityList::iterator it = std::find_if(m_children.begin(), m_children.end(), [in_child](const EntitySPtr& in_entity)
             {
@@ -184,29 +184,6 @@ namespace ChilliSource
 		}
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        Json::Value Entity::ToJSON() const
-        {
-            Json::Value jResult;
-            Json::Value jComponents(Json::arrayValue), jEntities(Json::arrayValue);
-            
-            for(ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
-            {
-                jComponents.append((*it)->GetInterfaceTypeName());
-            }
-            
-            for(SharedEntityList::const_iterator it = m_children.begin(); it != m_children.end(); ++it)
-            {
-                Json::Value jEntity = (*it)->ToJSON();
-                jEntities.append(jEntity);
-            }
-            
-            jResult[m_name]["Components"] = jComponents;
-            jResult[m_name]["Entities"] = jEntities;
-            
-            return jResult;
-        }
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
         u32 Entity::GetNumEntities() const
         {
             return m_children.size();
@@ -264,7 +241,7 @@ namespace ChilliSource
 		void Entity::Remove(Component* in_component)
 		{
             CS_ASSERT(in_component != nullptr, "Cannot remove a null component");
-            CS_ASSERT(in_component->GetEntity() == this, "Component must have an owner in order to be removed.");
+            CS_ASSERT(in_component->GetEntity() == this, "Cannot remove component that is not attached to this.");
             
             for(ComponentList::iterator it = m_components.begin(); it != m_components.end(); ++it)
             {
@@ -367,7 +344,7 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------------
 		//-------------------------------------------------------------
-		void Entity::SetName(const std::string & in_name)
+		void Entity::SetName(const std::string& in_name)
 		{
 			m_name = in_name;
 		}

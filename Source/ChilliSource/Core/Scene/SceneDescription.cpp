@@ -89,7 +89,7 @@ namespace ChilliSource
             }
             else
             {
-                pResult = ChilliSource::Core::CreateEntity();
+                pResult = Entity::Create();
                 
                 for(u32 nComponent = 0; nComponent <insEntDesc.aComponents.size(); nComponent++)
                 {

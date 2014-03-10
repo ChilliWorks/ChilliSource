@@ -24,6 +24,7 @@
 #include <ChilliSource/Core/File/LocalDataStore.h>
 #include <ChilliSource/Core/File/TweakableConstants.h>
 #include <ChilliSource/Core/Image/MoImageProvider.h>
+#include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Notifications/NotificationScheduler.h>

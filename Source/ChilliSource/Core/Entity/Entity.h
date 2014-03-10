@@ -12,7 +12,6 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Entity/Transform.h>
-#include <ChilliSource/Core/JSON/json.h>
 
 #ifdef CS_ENABLE_ENTITYLINKEDLIST
 #include <list>
@@ -40,6 +39,15 @@ namespace ChilliSource
 		class Entity final : public std::enable_shared_from_this<Entity>
 		{	
 		public:
+            
+            //------------------------------------------------------------------
+            /// Factory method to create an empty entity
+            ///
+            /// @author S Downie
+            ///
+            /// @return Entity
+            //------------------------------------------------------------------
+            static EntityUPtr Create();
             
             //----------------------------------------------------------------
             /// Constructor
@@ -102,30 +110,21 @@ namespace ChilliSource
             /// @return Whether the entity has component of type
             //-------------------------------------------------------------
             template <typename TComponentType>
-            bool HasA() const
-            {
-                return GetComponent<TComponentType>() != nullptr;
-            }
+            bool HasA() const;
 			//-------------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return The first component of type
 			//-------------------------------------------------------------
 			template <typename TComponentType>
-            std::shared_ptr<TComponentType>& GetComponent()
-			{
-				return std::static_pointer_cast<TComponentType>(GetComponent(TComponentType::InterfaceID));
-			}
+            std::shared_ptr<TComponentType>& GetComponent();
             //-------------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return The first component of type
 			//-------------------------------------------------------------
 			template <typename TComponentType>
-            const std::shared_ptr<const TComponentType>& GetComponent() const
-			{
-				return std::static_pointer_cast<const TComponentType>(GetComponent(TComponentType::InterfaceID));
-			}
+            const std::shared_ptr<const TComponentType>& GetComponent() const;
 			//-------------------------------------------------------------
 			/// Search the list of components and add ones to the list
 			/// that are of given interface type
@@ -135,16 +134,7 @@ namespace ChilliSource
 			/// @param [Out] Vector to populate with components
 			//-------------------------------------------------------------
 			template <typename TComponentType>
-            void GetComponents(std::vector<std::shared_ptr<TComponentType> >& out_components) const
-			{
-                for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
-                {
-                    if((*it)->IsA(TComponentType::InterfaceID))
-                    {
-                        out_components.push_back(std::static_pointer_cast<TComponentType>(*it));
-                    }
-                }
-			}
+            void GetComponents(std::vector<std::shared_ptr<TComponentType> >& out_components) const;
             //-------------------------------------------------------------
 			/// Search the list of components and add ones to the list
 			/// that are of given interface type
@@ -154,16 +144,7 @@ namespace ChilliSource
 			/// @param [Out] Vector to populate with components
 			//-------------------------------------------------------------
 			template <typename TComponentType>
-            void GetComponents(std::vector<TComponentType*>& out_components) const
-			{
-                for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
-                {
-                    if((*it)->IsA(TComponentType::InterfaceID))
-                    {
-                        out_components.push_back(static_cast<TComponentType*>(it->get()));
-                    }
-                }
-			}
+            void GetComponents(std::vector<TComponentType*>& out_components) const;
 			//-------------------------------------------------------------
 			/// Search the list of components and add ones to the lists
 			/// that are of given interface types
@@ -174,20 +155,7 @@ namespace ChilliSource
             /// @param [Out] Vector to populate with components type 2
 			//-------------------------------------------------------------
 			template <typename TComponentType1, typename TComponentType2>
-            void GetComponents(std::vector<std::shared_ptr<TComponentType1> >& out_components1, std::vector<std::shared_ptr<TComponentType2> >& out_components2) const
-			{
-                for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
-                {
-                    if((*it)->IsA(TComponentType1::InterfaceID))
-                    {
-                        out_components1.push_back(std::static_pointer_cast<TComponentType1>(*it));
-                    }
-                    if((*it)->IsA(TComponentType2::InterfaceID))
-                    {
-                        out_components2.push_back(std::static_pointer_cast<TComponentType2>(*it));
-                    }
-                }
-			}
+            void GetComponents(std::vector<std::shared_ptr<TComponentType1> >& out_components1, std::vector<std::shared_ptr<TComponentType2> >& out_components2) const;
             //-------------------------------------------------------------
 			/// Search the list of components and add ones to the lists
 			/// that are of given interface types
@@ -198,20 +166,7 @@ namespace ChilliSource
             /// @param [Out] Vector to populate with components type 2
 			//-------------------------------------------------------------
 			template <typename TComponentType1, typename TComponentType2>
-            void GetComponents(std::vector<TComponentType1*>& out_components1, std::vector<TComponentType2*>& out_components2) const
-			{
-                for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
-                {
-                    if((*it)->IsA(TComponentType1::InterfaceID))
-                    {
-                        out_components1.push_back(static_cast<TComponentType1*>(it->get()));
-                    }
-                    if((*it)->IsA(TComponentType2::InterfaceID))
-                    {
-                        out_components2.push_back(static_cast<TComponentType2*>(it->get()));
-                    }
-                }
-			}
+            void GetComponents(std::vector<TComponentType1*>& out_components1, std::vector<TComponentType2*>& out_components2) const;
             //-------------------------------------------------------------
 			/// Search the list of components and add ones to the lists
 			/// that are of given interface types
@@ -223,24 +178,7 @@ namespace ChilliSource
             /// @param [Out] Vector to populate with components type 3
 			//-------------------------------------------------------------
 			template <typename TComponentType1, typename TComponentType2, typename TComponentType3>
-            void GetComponents(std::vector<std::shared_ptr<TComponentType1> >& out_components1, std::vector<std::shared_ptr<TComponentType2> >& out_components2, std::vector<std::shared_ptr<TComponentType3> >& out_components3) const
-			{
-                for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
-                {
-                    if((*it)->IsA(TComponentType1::InterfaceID))
-                    {
-                        out_components1.push_back(std::static_pointer_cast<TComponentType1>(*it));
-                    }
-                    if((*it)->IsA(TComponentType2::InterfaceID))
-                    {
-                        out_components2.push_back(std::static_pointer_cast<TComponentType2>(*it));
-                    }
-                    if((*it)->IsA(TComponentType3::InterfaceID))
-                    {
-                        out_components3.push_back(std::static_pointer_cast<TComponentType3>(*it));
-                    }
-                }
-			}
+            void GetComponents(std::vector<std::shared_ptr<TComponentType1> >& out_components1, std::vector<std::shared_ptr<TComponentType2> >& out_components2, std::vector<std::shared_ptr<TComponentType3> >& out_components3) const;
             //-------------------------------------------------------------
 			/// Search the list of components and add ones to the lists
 			/// that are of given interface types
@@ -252,24 +190,7 @@ namespace ChilliSource
             /// @param [Out] Vector to populate with components type 3
 			//-------------------------------------------------------------
 			template <typename TComponentType1, typename TComponentType2, typename TComponentType3>
-            void GetComponents(std::vector<TComponentType1*>& out_components1, std::vector<TComponentType2*>& out_components2, std::vector<TComponentType3*>& out_components3) const
-			{
-                for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
-                {
-                    if((*it)->IsA(TComponentType1::InterfaceID))
-                    {
-                        out_components1.push_back(static_cast<TComponentType1*>(it->get()));
-                    }
-                    if((*it)->IsA(TComponentType2::InterfaceID))
-                    {
-                        out_components2.push_back(static_cast<TComponentType2*>(it->get()));
-                    }
-                    if((*it)->IsA(TComponentType3::InterfaceID))
-                    {
-                        out_components3.push_back(static_cast<TComponentType3*>(it->get()));
-                    }
-                }
-			}
+            void GetComponents(std::vector<TComponentType1*>& out_components1, std::vector<TComponentType2*>& out_components2, std::vector<TComponentType3*>& out_components3) const;
 			//-------------------------------------------------------------
 			/// Recursively descend from the entity through its children
             /// searching for components with given interface ID
@@ -280,10 +201,7 @@ namespace ChilliSource
             /// into child entities
 			//-------------------------------------------------------------
 			template <typename TComponentType>
-            std::shared_ptr<TComponentType>& GetComponentRecursive()
-			{
-				return std::static_pointer_cast<TComponentType>(GetComponentRecursive(TComponentType::InterfaceID));
-			}
+            std::shared_ptr<TComponentType>& GetComponentRecursive();
             //-------------------------------------------------------------
 			/// Recursively descend from the entity through its children
             /// searching for components with given interface ID
@@ -294,10 +212,7 @@ namespace ChilliSource
             /// into child entities
 			//-------------------------------------------------------------
 			template <typename TComponentType>
-            const std::shared_ptr<const TComponentType>& GetComponentRecursive() const
-			{
-				return std::static_pointer_cast<const TComponentType>(GetComponentRecursive(TComponentType::InterfaceID));
-			}
+            const std::shared_ptr<const TComponentType>& GetComponentRecursive() const;
 			//-------------------------------------------------------------
 			/// Recursively descend from the entity through its children
             /// searching for components with given interface ID
@@ -308,21 +223,7 @@ namespace ChilliSource
             /// into child entities
 			//-------------------------------------------------------------
 			template <typename TComponentType>
-            void GetComponentsRecursive(std::vector<std::shared_ptr<TComponentType> >& out_components) const
-			{
-                for (ComponentList::const_iterator itr = m_components.begin(); itr != m_components.end(); ++itr)
-                {
-                    if ((*itr)->IsA(TComponentType::InterfaceID))
-                    {
-                        out_components.push_back(std::static_pointer_cast<TComponentType>(*itr));
-                    }
-                }
-                
-                for(SharedEntityList::const_iterator it = m_children.begin(); it != m_children.end(); ++it)
-                {
-                    (*it)->GetComponentsRecursive<TComponentType>(out_components);
-                }
-			}
+            void GetComponentsRecursive(std::vector<std::shared_ptr<TComponentType> >& out_components) const;
             //-------------------------------------------------------------
 			/// Recursively descend from the entity through its children
             /// searching for components with given interface ID
@@ -333,21 +234,7 @@ namespace ChilliSource
             /// into child entities
 			//-------------------------------------------------------------
 			template <typename TComponentType>
-            void GetComponentsRecursive(std::vector<TComponentType*>& out_components)
-			{
-                for (ComponentList::const_iterator itr = m_components.begin(); itr != m_components.end(); ++itr)
-                {
-                    if ((*itr)->IsA(TComponentType::InterfaceID))
-                    {
-                        out_components.push_back(static_cast<TComponentType*>(itr->get()));
-                    }
-                }
-                
-                for(SharedEntityList::const_iterator it = m_children.begin(); it != m_children.end(); ++it)
-                {
-                    (*it)->GetComponentsRecursive<TComponentType>(out_components);
-                }
-			}
+            void GetComponentsRecursive(std::vector<TComponentType*>& out_components);
             //------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -487,14 +374,6 @@ namespace ChilliSource
 			//------------------------------------------------------------------
             const SharedEntityList& GetEntities() const;
             //------------------------------------------------------------------
-            /// Serialise the entity tree to JSON
-            ///
-            /// @author S Downie
-            /// 
-            /// @return A JSON object of the hierarchy of entities and components
-            //------------------------------------------------------------------
-            Json::Value ToJSON() const;
-            //------------------------------------------------------------------
             /// Utility function to reset an entity to blank slate
             /// useful for pooling
             ///
@@ -583,15 +462,180 @@ namespace ChilliSource
             
 			EntityAnimationControllerSPtr m_entityAnimController;
 		};
-		
-		//------------------------------------------------------------------
-		/// Convienience method to create an empty entity
-        ///
-        /// @author S Downie
-		///
-		/// @return Entity
-		//------------------------------------------------------------------
-		EntitySPtr CreateEntity();
+        
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        template <typename TComponentType>
+        bool Entity::HasA() const
+        {
+            return GetComponent<TComponentType>() != nullptr;
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        template <typename TComponentType>
+        std::shared_ptr<TComponentType>& Entity::GetComponent()
+        {
+            return std::static_pointer_cast<TComponentType>(GetComponent(TComponentType::InterfaceID));
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        template <typename TComponentType>
+        const std::shared_ptr<const TComponentType>& Entity::GetComponent() const
+        {
+            return std::static_pointer_cast<const TComponentType>(GetComponent(TComponentType::InterfaceID));
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        template <typename TComponentType>
+        void Entity::GetComponents(std::vector<std::shared_ptr<TComponentType> >& out_components) const
+        {
+            for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
+            {
+                if((*it)->IsA(TComponentType::InterfaceID))
+                {
+                    out_components.push_back(std::static_pointer_cast<TComponentType>(*it));
+                }
+            }
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        template <typename TComponentType>
+        void Entity::GetComponents(std::vector<TComponentType*>& out_components) const
+        {
+            for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
+            {
+                if((*it)->IsA(TComponentType::InterfaceID))
+                {
+                    out_components.push_back(static_cast<TComponentType*>(it->get()));
+                }
+            }
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        template <typename TComponentType1, typename TComponentType2>
+        void Entity::GetComponents(std::vector<std::shared_ptr<TComponentType1> >& out_components1, std::vector<std::shared_ptr<TComponentType2> >& out_components2) const
+        {
+            for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
+            {
+                if((*it)->IsA(TComponentType1::InterfaceID))
+                {
+                    out_components1.push_back(std::static_pointer_cast<TComponentType1>(*it));
+                }
+                if((*it)->IsA(TComponentType2::InterfaceID))
+                {
+                    out_components2.push_back(std::static_pointer_cast<TComponentType2>(*it));
+                }
+            }
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        template <typename TComponentType1, typename TComponentType2>
+        void Entity::GetComponents(std::vector<TComponentType1*>& out_components1, std::vector<TComponentType2*>& out_components2) const
+        {
+            for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
+            {
+                if((*it)->IsA(TComponentType1::InterfaceID))
+                {
+                    out_components1.push_back(static_cast<TComponentType1*>(it->get()));
+                }
+                if((*it)->IsA(TComponentType2::InterfaceID))
+                {
+                    out_components2.push_back(static_cast<TComponentType2*>(it->get()));
+                }
+            }
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        template <typename TComponentType1, typename TComponentType2, typename TComponentType3>
+        void Entity::GetComponents(std::vector<std::shared_ptr<TComponentType1> >& out_components1, std::vector<std::shared_ptr<TComponentType2> >& out_components2, std::vector<std::shared_ptr<TComponentType3> >& out_components3) const
+        {
+            for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
+            {
+                if((*it)->IsA(TComponentType1::InterfaceID))
+                {
+                    out_components1.push_back(std::static_pointer_cast<TComponentType1>(*it));
+                }
+                if((*it)->IsA(TComponentType2::InterfaceID))
+                {
+                    out_components2.push_back(std::static_pointer_cast<TComponentType2>(*it));
+                }
+                if((*it)->IsA(TComponentType3::InterfaceID))
+                {
+                    out_components3.push_back(std::static_pointer_cast<TComponentType3>(*it));
+                }
+            }
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        template <typename TComponentType1, typename TComponentType2, typename TComponentType3>
+        void Entity::GetComponents(std::vector<TComponentType1*>& out_components1, std::vector<TComponentType2*>& out_components2, std::vector<TComponentType3*>& out_components3) const
+        {
+            for (ComponentList::const_iterator it = m_components.begin(); it != m_components.end(); ++it)
+            {
+                if((*it)->IsA(TComponentType1::InterfaceID))
+                {
+                    out_components1.push_back(static_cast<TComponentType1*>(it->get()));
+                }
+                if((*it)->IsA(TComponentType2::InterfaceID))
+                {
+                    out_components2.push_back(static_cast<TComponentType2*>(it->get()));
+                }
+                if((*it)->IsA(TComponentType3::InterfaceID))
+                {
+                    out_components3.push_back(static_cast<TComponentType3*>(it->get()));
+                }
+            }
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        template <typename TComponentType>
+        std::shared_ptr<TComponentType>& Entity::GetComponentRecursive()
+        {
+            return std::static_pointer_cast<TComponentType>(GetComponentRecursive(TComponentType::InterfaceID));
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        template <typename TComponentType>
+        const std::shared_ptr<const TComponentType>& Entity::GetComponentRecursive() const
+        {
+            return std::static_pointer_cast<const TComponentType>(GetComponentRecursive(TComponentType::InterfaceID));
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        template <typename TComponentType>
+        void Entity::GetComponentsRecursive(std::vector<std::shared_ptr<TComponentType> >& out_components) const
+        {
+            for (ComponentList::const_iterator itr = m_components.begin(); itr != m_components.end(); ++itr)
+            {
+                if ((*itr)->IsA(TComponentType::InterfaceID))
+                {
+                    out_components.push_back(std::static_pointer_cast<TComponentType>(*itr));
+                }
+            }
+            
+            for(SharedEntityList::const_iterator it = m_children.begin(); it != m_children.end(); ++it)
+            {
+                (*it)->GetComponentsRecursive<TComponentType>(out_components);
+            }
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        template <typename TComponentType>
+        void Entity::GetComponentsRecursive(std::vector<TComponentType*>& out_components)
+        {
+            for (ComponentList::const_iterator itr = m_components.begin(); itr != m_components.end(); ++itr)
+            {
+                if ((*itr)->IsA(TComponentType::InterfaceID))
+                {
+                    out_components.push_back(static_cast<TComponentType*>(itr->get()));
+                }
+            }
+            
+            for(SharedEntityList::const_iterator it = m_children.begin(); it != m_children.end(); ++it)
+            {
+                (*it)->GetComponentsRecursive<TComponentType>(out_components);
+            }
+        }
 	}
 }
 
