@@ -21,61 +21,12 @@ namespace ChilliSource
 {
     namespace Core
     {
-        class LocalNotificationScheduler;
-        
-        enum class NotificationType
-        {
-            k_system,
-            k_app,
-            k_push
-        };
-        
-        enum class NotificationPriority
-        {
-            k_standard,
-            k_high
-        };
-        
-        typedef u32 NotificationID;
-        
-        struct Notification
-        {
-            typedef std::function<void()> NotificationDismissedDelegate;
-            typedef std::function<void(const void*)> NotificationPresentedDelegate;
-            
-            Core::ParamDictionary sParams;
-            NotificationID ID;
-            
-            NotificationPriority ePriority;
-            NotificationType eType;
-            TimeIntervalSecs TriggerTime;
-            
-            void Dismiss()
-            {
-                bDismissed = true;
-                
-                m_notificationDismissedEvent.NotifyConnections();
-                m_notificationDismissedEvent.CloseAllConnections();
-            }
-                  
-            bool bDismissed;
-            bool bTriggered;
-            
-            Event<NotificationDismissedDelegate> m_notificationDismissedEvent;
-            Event<NotificationPresentedDelegate> m_notificationPresentedEvent;
-        };
-        
-        class NotificationScheduler
+        //-------------------------------------------------------------------
+        /// A base class for any systems that schedule notifications.
+        //-------------------------------------------------------------------
+        class NotificationScheduler : public AppSystem
         {
         public:
-            //------------------------------------------------------------------------------
-            /// Initialise
-            ///
-            /// Provides this with a local and remote notification scheduler
-            ///
-            /// @param local
-            //------------------------------------------------------------------------------
-            static void Initialise(LocalNotificationSchedulerUPtr inLocalNS);
             //------------------------------------------------------------------------------
             /// Schedule Notification
             ///
@@ -175,25 +126,6 @@ namespace ChilliSource
             //-------------------------------------------------------------------------
             static void Update(f32 infDt);
             
-        private:
-            //-------------------------------------------------------------------------
-            /// Is Type Enabled
-            ///
-            /// @param Notification type
-            /// @return Is notification type enabled
-            //-------------------------------------------------------------------------
-            static bool IsTypeEnabled(NotificationType ineType);
-            
-        private:
-            
-            static bool bSystemNotificationsEnabled;
-            static bool bAppNotificationsEnabled;
-            static bool bPushNotificationsEnabled;
-            
-            static std::deque<NotificationSPtr> NotificationQueue;
-            static std::vector<NotificationSPtr> TimedAppNotifications;
-
-            static LocalNotificationSchedulerUPtr mspLocalNotificationScheduler;
         };
     }
 }

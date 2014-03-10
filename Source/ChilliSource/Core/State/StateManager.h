@@ -1,14 +1,14 @@
 /*
  *  StateManager.h
- *  moFlo
+ *  Chilli Source
  *
  *  Created by Scott Downie on 23/09/2010.
  *  Copyright 2010 Tag Games. All rights reserved.
  *
  */
 
-#ifndef _MO_FLO_STATE_MANAGER_H_
-#define _MO_FLO_STATE_MANAGER_H_
+#ifndef _CHILLISOURCE_CORE_STATE_STATEMANAGER_H_
+#define _CHILLISOURCE_CORE_STATE_STATEMANAGER_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/State/State.h>
@@ -24,56 +24,42 @@ namespace ChilliSource
 	namespace Core
 	{
 		//---------------------------------------------------------
-		/// Description:
-		///
 		/// Handles the calling of active state functions
 		/// and the changes or layering of states.
-		///
-		/// Also creates and owns the scene graph for the app.
 		//---------------------------------------------------------
 		class StateManager
 		{
 		public:
 			StateManager();
 			
-            //---------------------------------------------------------
-            /// Set Owning Application
-            ///
-            /// @param Moflow application
-            //---------------------------------------------------------
-            void SetOwningApplication(Application* inpApp);
-            //---------------------------------------------------------
-            /// Get Application
-            ///
-            /// @return Moflow application
-            //---------------------------------------------------------
-			Application& GetApplication();
-            //---------------------------------------------------------
-            /// Get Application Pointer
-            ///
-            /// @return Moflow application pointer
-            //---------------------------------------------------------
-			Application* GetApplicationPtr();
 			//---------------------------------------------------------
 			/// Get all States
 			///
+            /// @author S Downie
+            ///
 			/// @return all States
 			//---------------------------------------------------------
             const std::vector<StateSPtr>& GetStates() const;
 			//---------------------------------------------------------
 			/// Get Active State
 			///
+            /// @author S Downie
+            ///
 			/// @return State on top of the hierarchy
 			//---------------------------------------------------------
 			const StateSPtr& GetActiveState() const;
 			//---------------------------------------------------------
             /// Get Is State In Hierarchy
 			///
+            /// @author S Downie
+            ///
 			/// @return returns true if inpcState is in state stack, otherwise false
 			//---------------------------------------------------------
             bool GetIsStateInHierarchy(State* inpState) const;
             //---------------------------------------------------------
             /// Get Num Instances of State In Hierarchy
+            ///
+            /// @author S Downie
             ///
             /// @return The number of times the state appears in the stack
             //---------------------------------------------------------
@@ -87,17 +73,23 @@ namespace ChilliSource
 			//---------------------------------------------------------
             /// Get Child State
 			///
+            /// @author S Downie
+            ///
 			/// @return If this state exists within hierarchy then returns child state, otherwise returns StateSPtr() (nullptr)
 			//---------------------------------------------------------
             const StateSPtr& GetChildState(State* inpState) const;
 			//---------------------------------------------------------
             /// Get Parent State
 			///
+            /// @author S Downie
+            ///
 			/// @return If this state exists within hierarchy then returns parent state, otherwise returns StateSPtr() (nullptr)
 			//---------------------------------------------------------
             const StateSPtr& GetParentState(State* inpState) const;
             //---------------------------------------------------------
             /// Find State With Pointer
+            ///
+            /// @author S Downie
             ///
             /// @param Raw pointer
             /// @return Equivalent shared pointer if found in hierarchy
@@ -106,6 +98,8 @@ namespace ChilliSource
 			//---------------------------------------------------------
 			/// Get Active Scene Ptr
 			///
+            /// @author S Downie
+            ///
 			/// @return State on top of the hierarchys scene
 			//---------------------------------------------------------
 			Scene* GetActiveScenePtr();
@@ -115,6 +109,8 @@ namespace ChilliSource
 			/// Add this state to the hierarchy and make it the active
 			/// state.
 			///
+            /// @author S Downie
+            ///
 			/// @param New active state
 			//---------------------------------------------------------
 			void Push(const StateSPtr &inpState);
@@ -124,6 +120,8 @@ namespace ChilliSource
 			/// Remove the active state from the hierarchy
 			/// and resume the state beneath it. This
 			/// state will now be the active state
+            ///
+            /// @author S Downie
 			//---------------------------------------------------------
 			void Pop();
 			//---------------------------------------------------------
@@ -133,6 +131,8 @@ namespace ChilliSource
 			/// specified state is topmost. The given state
 			/// will become active. If the given state is now on the
 			/// stack the
+            ///
+            /// @author S Downie
 			//---------------------------------------------------------
 			void PopToState(State * inpTarget);
 			//---------------------------------------------------------
@@ -141,17 +141,23 @@ namespace ChilliSource
 			/// Removes states from the hierarchy until the
 			/// specified state is topmost and is unique in the stack.
 			/// The given state will become active.
+            ///
+            /// @author S Downie
 			//---------------------------------------------------------
 			void PopToStateUnique(State * inpTarget);
 			//---------------------------------------------------------
 			/// ClearStack
 			///
 			/// Remove all states from the stack. ALL OF THEM!
+            ///
+            /// @author S Downie
 			//---------------------------------------------------------
 			void ClearStack();
 			//---------------------------------------------------------
 			/// Get Stack Count
 			///
+            /// @author S Downie
+            ///
 			/// @return the number of states on the stack.
 			//---------------------------------------------------------
 			u32 GetStackCount();
@@ -160,16 +166,12 @@ namespace ChilliSource
 			///
 			/// Destroy the current state and set the given
 			/// state to active
+            ///
+            /// @author S Downie
 			///
 			/// @param State to become active
 			//---------------------------------------------------------
 			void Change(const StateSPtr &inpState);
-			//------------------------------------------------------------------
-			/// Get Factory Producing
-			///
-			/// @return a handle to a factory that can create object of type ID
-			//------------------------------------------------------------------
-			ComponentFactory* GetFactoryProducing(InterfaceIDType inInterfaceID);
 			//-------------------------------------------------------------------------
 			/// On Notification Received
 			///
