@@ -9,6 +9,7 @@
 
 #include <ChilliSource/Core/State/State.h>
 
+#include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/Base/Application.h>
 
