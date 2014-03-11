@@ -675,7 +675,7 @@ namespace ChilliSource
             glViewport(0, 0, mudwViewWidth, mudwViewHeight);
 #endif
 #ifdef CS_TARGETPLATFORM_WINDOWS
-			glfwSwapBuffers();
+			Windows::GLFWManager::Get()->SwapBuffers();
 #endif
 		}
 		//----------------------------------------------------------

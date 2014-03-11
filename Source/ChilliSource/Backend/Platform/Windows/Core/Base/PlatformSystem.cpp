@@ -13,7 +13,7 @@
 #include <windows.h>
 
 //As the opengl classes need to include glfw.h, they need to be included after windows.h to avoid macro redefinitions.
-#include <ChilliSource/Backend/Rendering/OpenGL/Base/GLIncludes.h>
+#include <ChilliSource/Backend/Platform/Windows/GLFW/Base/GLFWManager.h>
 
 namespace ChilliSource 
 {
@@ -26,7 +26,7 @@ namespace ChilliSource
 		//-----------------------------------------
 		//-----------------------------------------
 		PlatformSystem::PlatformSystem() 
-			: m_isRunning(true), m_isSuspended(false), m_appStartTime(0), m_appPreviousTime(0.0)
+		: m_isRunning(true), m_isSuspended(false), m_appStartTime(0), m_appPreviousTime(0.0)
 		{
 		}
 		//-----------------------------------------
@@ -35,23 +35,17 @@ namespace ChilliSource
 		{
 			QueryPerformanceFrequency(&gFrequency);
 
-			if(!glfwInit())
-			{
-				CS_LOG_FATAL("Cannot initialise GLFW");
-			}
+			GLFWManager::Create();
 
-			//Set the window based on the retina resolution
-			if(glfwOpenWindow(960, 640, 8, 8, 8, 8, 8, 0, GLFW_WINDOW) != GL_TRUE)
-			{
-				glfwTerminate();
-				CS_LOG_FATAL("Cannot create GLFW window");
-			}
-
-			glfwSetWindowTitle("MoFlow");
+			GLFWManager::Get()->Init(960, 640, "ChilliSource");
 
 			//Register callbacks
-			glfwSetWindowSizeCallback((GLFWwindowsizefun)&PlatformSystem::OnWindowResized);
-			glfwSetWindowCloseCallback((GLFWwindowclosefun)&PlatformSystem::OnWindowClosed);
+			GLFWManager::Get()->SetWindowFocusDelegate((GLFWwindowfocusfun)&PlatformSystem::OnWindowFocusChanged);
+			GLFWManager::Get()->SetWindowSizeDelegate((GLFWwindowsizefun)&PlatformSystem::OnWindowResized);
+			GLFWManager::Get()->SetWindowCloseDelegate((GLFWwindowclosefun)&PlatformSystem::OnWindowClosed);
+
+			Core::Application::Get()->Resume();
+			Core::Application::Get()->Foreground();
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
@@ -62,23 +56,24 @@ namespace ChilliSource
 		//-------------------------------------------------
 		void PlatformSystem::PostCreateSystems()
 		{
+
 		}
 		//-----------------------------------------
 		//-----------------------------------------
 		void PlatformSystem::Run()
 		{
-			m_appStartTime = (u64)glfwGetTime();
+			m_appStartTime = (u64)GLFWManager::Get()->GetTime();
 
 			while (m_isRunning)
 			{
 				if(!m_isSuspended)
 				{
-					f64 appCurrentTime = glfwGetTime();
+					f64 appCurrentTime = GLFWManager::Get()->GetTime();
 
 					f32 deltaTime = (f32)(appCurrentTime - m_appPreviousTime);
 					u64 uddwAppRunningTime = ((u64)m_appPreviousTime - m_appStartTime);
 
-					//Update event
+					GLFWManager::Get()->PollEvents();
 					Core::Application::Get()->Update(deltaTime, uddwAppRunningTime);
 
 					m_appPreviousTime = appCurrentTime;
@@ -104,7 +99,7 @@ namespace ChilliSource
 			Core::Vector2 result;
 
 			s32 width, height = 0;
-			glfwGetWindowSize(&width, &height);
+			GLFWManager::Get()->GetWindowSize(&width, &height);
 
 			result.x = (f32)width;
 			result.y = (f32)height;
@@ -215,23 +210,36 @@ namespace ChilliSource
 		//---GLFW Delegates
 		//-------------------------------------------------
 		//-------------------------------------------------
-		void PlatformSystem::OnWindowResized(s32 indwWidth, s32 indwHeight)
+		void PlatformSystem::OnWindowResized(GLFWwindow* in_window, s32 in_width, s32 in_height)
 		{
-			Core::Application::Get()->ScreenResized((u32)indwWidth, (u32)indwHeight);
+			Core::Application::Get()->ScreenResized((u32)in_width, (u32)in_height);
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		void PlatformSystem::OnWindowClosed()
+		void PlatformSystem::OnWindowClosed(GLFWwindow* in_window)
 		{
+			Core::Application::Get()->Background();
 			Core::Application::Get()->Suspend();
 			Core::Application::Get()->Quit();
-			glfwTerminate();
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		void PlatformSystem::OnWindowFocusChanged(GLFWwindow* in_window, s32 in_isFocused)
+		{
+			if (in_isFocused)
+			{
+				Core::Application::Get()->Foreground();
+			}
+			else
+			{
+				Core::Application::Get()->Background();
+			}
 		}
 		//-----------------------------------------
 		//-----------------------------------------
 		PlatformSystem::~PlatformSystem()
 		{
-			glfwTerminate();
+			GLFWManager::Destroy();
 		}
 	}
 }

@@ -1,78 +1,74 @@
-/** 
-* File: InputSystem.h
-* Date: 5 Oct 2010
-* Description: Concrete iOS3_x implementation of ChilliSource::Input::IInputSystem;
-*/
+//
+//  InputSystem.h
+//  Chilli Source
+//
+//  Created by Scott Downie on 05/10/2010.
+//  Copyright (c) 2010 Tag Games Ltd. All rights reserved.
+//
 
-/** 
-*
-* Author Stuart 
-* Version 1.0 - moFlo
-* Copyright ©2010 Tag Games Limited - All rights reserved 
-*/
-
-#ifndef _MOFLO_PLATFORM_WINDOWS_INPUTSYSTEM_H_
-#define _MOFLO_PLATFORM_WINDOWS_INPUTSYSTEM_H_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_INPUT_BASE_INPUTSYSTEM_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_INPUT_BASE_INPUTSYSTEM_H_
 
 #include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
+#include <ChilliSource/Input/Base/InputSystem.h>
 #include <ChilliSource/Backend/Platform/Windows/Input/Pointer/Mouse.h>
 #include <ChilliSource/Backend/Platform/Windows/Input/Pointer/Touchscreen.h>
-#include <ChilliSource/Input/Base/InputSystem.h>
 
 namespace ChilliSource
 {
 	namespace Windows
 	{
-		class InputSystem : public Input::InputSystem
+		class InputSystem final : public Input::InputSystem
 		{
 		public:
-			virtual ~InputSystem();
 			//---------------------------------------------------------------
-			/// Is A
+			/// @author S Downie
 			///
 			/// @param Interface type to compare
+			///
 			/// @return Whether the system is of the given type
 			//---------------------------------------------------------------
-			virtual bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+			bool IsA(Core::InterfaceIDType in_interfaceID) const override;
 			//---------------------------------------------------------------
-			/// Can Create Device With Interface
+			/// @author S Downie
 			///
 			/// @param Interface of input type to create
+			///
 			/// @return Whether the system can create input type
 			//---------------------------------------------------------------
-			virtual bool CanCreateDeviceWithInterface(Core::InterfaceIDType inInterfaceID) const override;
+			bool CanCreateDeviceWithInterface(Core::InterfaceIDType in_interfaceID) const override;
 			//---------------------------------------------------------------
-			/// Get Device With Interface
+			/// @author S Downie
 			///
 			/// @param Interface of input type to retreive
+			///
 			/// @return Pointer to input type or nullptr
 			//---------------------------------------------------------------
-			virtual Input::InputDevice * GetDeviceWithInterface(Core::InterfaceIDType inInterfaceID) override;
+			Input::InputDevice* GetDeviceWithInterface(Core::InterfaceIDType in_interfaceID) override;
 			//---------------------------------------------------------------
-			/// Update
+			/// @author S Downie
 			///
-			/// @param Time between frames
+			/// @param Time since last update in seconds
 			//---------------------------------------------------------------
-			virtual void Update(float infDT) override;
+			void Update(f32 in_timeSinceLastUpdate) override;
 			//-----------------------------------------------------------
-			/// Flush Buffered Input
+			/// Any buffered input is flushed to application listeners
 			///
-			/// Have the input elements notify listeners of each
-			/// buffered value then clear the buffered input
+			/// @author S Downie
 			//-----------------------------------------------------------
 			void FlushBufferedInput() override;
 			//---------------------------------------------------------------
-			/// Get Mouse Pointer
+			/// @author S Downie
 			///
 			/// @return Pointer to mouse device
 			//---------------------------------------------------------------
-			Input::Mouse * GetMouse() override;
+			Input::Mouse* GetMouse() override;
 			//---------------------------------------------------------------
-			/// Get Touch Screen Pointer
+			/// @author S Downie
 			///
 			/// @return Pointer to touch screen device
 			//---------------------------------------------------------------
-			Input::TouchScreen * GetTouchScreen() override;
+			Input::TouchScreen* GetTouchScreen() override;
 
 		private:
 			friend Input::InputSystemUPtr Input::InputSystem::Create();
@@ -83,8 +79,8 @@ namespace ChilliSource
 			//-------------------------------------------------------
 			InputSystem();
 
-			TouchScreen mTouchScreen;
-			Mouse mMouse;
+			TouchScreen m_touchScreen;
+			Mouse m_mouse;
 		};
 	}
 }

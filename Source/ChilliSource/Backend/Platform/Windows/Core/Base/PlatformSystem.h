@@ -17,6 +17,8 @@ namespace ChilliSource
 {
 	namespace Windows
 	{
+		struct GLFWwindow;
+
 		//---------------------------------------------------------
 		/// Allows generic access to platform specific code via 
 		/// common function calls
@@ -171,14 +173,27 @@ namespace ChilliSource
 			///
 			/// @param Window width
 			/// @param Window Height
+			/// @param Window that resized
 			//-------------------------------------------------
-			static void OnWindowResized(s32 in_width, s32 in_height);
+			static void OnWindowResized(GLFWwindow* in_window, s32 in_width, s32 in_height);
 			//-------------------------------------------------
 			/// Triggered when glfw exits the window
 			///
 			/// @author S Downie
+			///
+			/// @param Window that closed
 			//-------------------------------------------------
-			static void OnWindowClosed();
+			static void OnWindowClosed(GLFWwindow* in_window);
+			//-------------------------------------------------
+			/// Triggered when glfw window gains or loses
+			/// focus
+			///
+			/// @author S Downie
+			///
+			/// @param Window
+			/// @param Int representing focused or not
+			//-------------------------------------------------
+			static void OnWindowFocusChanged(GLFWwindow* in_window, s32 in_isFocused);
 
 		private:
 			bool m_isRunning;
