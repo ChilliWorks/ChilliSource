@@ -16,6 +16,14 @@ namespace ChilliSource
 {
 	namespace Core
 	{
+        CS_DEFINE_NAMEDTYPE(Scene);
+        
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        SceneUPtr Scene::Create(Input::InputSystem* in_inputSystem )
+        {
+            return SceneUPtr(new Scene(in_inputSystem));
+        }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
 		Scene::Scene(Input::InputSystem* inpInputSystem) 
@@ -23,16 +31,41 @@ namespace ChilliSource
 		{
 			m_rootWindow->SetInputSystem(inpInputSystem);
 		}
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        bool Scene::IsA(InterfaceIDType in_interfaceID) const
+        {
+            return Scene::InterfaceID == in_interfaceID;
+        }
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void Scene::BecomeActive()
+		void Scene::OnForeground()
 		{
             m_rootWindow->ListenForTouches();
-            
 		}
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
+		void Scene::OnUpdate(f32 in_timeSinceLastUpdate)
+		{
+			m_rootWindow->Update(in_timeSinceLastUpdate);
+            
+            for(u32 i=0; i<m_entities.size(); ++i)
+			{
+                m_entities[i]->OnUpdate(in_timeSinceLastUpdate);
+            }
+		}
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
+        void Scene::OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate)
+        {
+            for(u32 i=0; i<m_entities.size(); ++i)
+			{
+                m_entities[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
+            }
+        }
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void Scene::BecomeInactive()
+		void Scene::OnBackground()
 		{
 			Input::TouchInfo info;
 			info.eType = Input::TouchInputType::k_ended;
@@ -118,26 +151,6 @@ namespace ChilliSource
         GUI::Window* Scene::GetWindow()
         {
             return m_rootWindow.get();
-        }
-        //--------------------------------------------------------------------------------------------------
-        //--------------------------------------------------------------------------------------------------		   
-		void Scene::OnUpdate(f32 in_timeSinceLastUpdate)
-		{
-			m_rootWindow->Update(in_timeSinceLastUpdate);
-            
-            for(u32 i=0; i<m_entities.size(); ++i)
-			{
-                m_entities[i]->OnUpdate(in_timeSinceLastUpdate);
-            }
-		}
-        //--------------------------------------------------------------------------------------------------
-        //--------------------------------------------------------------------------------------------------
-        void Scene::OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate)
-        {
-            for(u32 i=0; i<m_entities.size(); ++i)
-			{
-                m_entities[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
-            }
         }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------

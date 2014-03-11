@@ -32,7 +32,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
             //------------------------------------------------
-            virtual void OnInitialise() {};
+            virtual void OnInit() {};
             //------------------------------------------------
             /// Called when the application is resumed after
             /// having been suspended. This is also called
@@ -52,7 +52,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
             //------------------------------------------------
-            virtual void OnForgrounded() {};
+            virtual void OnForeground() {};
             //------------------------------------------------
             /// Update method. This is called once for every
             /// update frame. Systems update is called in the
@@ -84,7 +84,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
             //------------------------------------------------
-            virtual void OnBackgrounded() {};
+            virtual void OnBackground() {};
             //------------------------------------------------
             /// Called when the application is suspended. This
             /// is also called when the application is exiting

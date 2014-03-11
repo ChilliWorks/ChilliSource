@@ -89,7 +89,7 @@ void Java_com_chillisource_core_CoreNativeInterface_Initialise(JNIEnv* inpEnv, j
 	ChilliSource::Android::TwitterAuthenticationActivityJavaInterface::SetupJavaInterface(pJavaVM);
     
 	//run the application
-    pApplication->Initialise();
+    pApplication->Init();
 }
 
 //--------------------------------------------------------------------------------------

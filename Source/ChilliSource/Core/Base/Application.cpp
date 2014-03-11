@@ -31,6 +31,7 @@
 #include <ChilliSource/Core/Resource/ResourceManager.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Core/State/State.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/System/System.h>
 #include <ChilliSource/Core/System/SystemConcepts.h>
@@ -91,8 +92,8 @@ namespace ChilliSource
         //----------------------------------------------------
 		Application::Application()
         : m_currentAppTime(0), m_updateInterval(k_defaultUpdateInterval), m_updateSpeed(1.0f), m_renderSystem(nullptr), m_inputSystem(nullptr), m_audioSystem(nullptr),
-        m_renderer(nullptr), m_fileSystem(nullptr), m_defaultOrientation(ScreenOrientation::k_landscapeRight), m_resourceManagerDispenser(nullptr), m_updateIntervalRemainder(0.0f),
-        m_shouldNotifyConnectionsResumeEvent(false), m_isFirstFrame(true), m_isSuspending(false), m_isSystemCreationAllowed(false)
+        m_renderer(nullptr), m_fileSystem(nullptr), m_stateManager(nullptr), m_defaultOrientation(ScreenOrientation::k_landscapeRight), m_resourceManagerDispenser(nullptr), m_updateIntervalRemainder(0.0f),
+        m_shouldNotifyConnectionsResumeEvent(false), m_shouldNotifyConnectionsForegroundEvent(false), m_isFirstFrame(true), m_isSuspending(false), m_isSystemCreationAllowed(false)
 		{
 		}
         //----------------------------------------------------
@@ -171,7 +172,7 @@ namespace ChilliSource
         //----------------------------------------------------
         StateManager* Application::GetStateManager()
         {
-            return &m_stateManager;
+            return m_stateManager;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
@@ -211,7 +212,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-		void Application::Initialise()
+		void Application::Init()
 		{
             CS_ASSERT(s_application == nullptr, "Application already initialised!");
             s_application = this;
@@ -262,15 +263,11 @@ namespace ChilliSource
             //initialise all of the application systems.
             for (const AppSystemUPtr& system : m_systems)
             {
-                system->OnInitialise();
+                system->OnInit();
             }
             
-            OnInitialise();
-
-			if (m_stateManager.GetActiveScenePtr() == nullptr)
-            {
-				PushInitialState();
-            }
+            OnInit();
+            PushInitialState();
 
 			//Register for update events
 			LocalDataStore::GetSingleton().SubscribeToApplicationSuspendEvent();
@@ -289,12 +286,24 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
+        void Application::Foreground()
+        {
+            m_shouldNotifyConnectionsForegroundEvent = true;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
 		void Application::Update(f32 in_deltaTime, TimeIntervalSecs in_timestamp)
 		{
             if(m_shouldNotifyConnectionsResumeEvent == true)
 			{
 				m_shouldNotifyConnectionsResumeEvent = false;
 				OnResume();
+			}
+            
+            if(m_shouldNotifyConnectionsForegroundEvent == true)
+			{
+				m_shouldNotifyConnectionsForegroundEvent = false;
+				OnForeground();
 			}
             
             if(m_isSuspending)
@@ -334,8 +343,6 @@ namespace ChilliSource
                     system->OnFixedUpdate(Application::GetUpdateInterval());
                 }
                 
-                m_stateManager.FixedUpdate(Application::GetUpdateInterval());
-                
                 m_isFirstFrame = false;
             }
             
@@ -343,7 +350,7 @@ namespace ChilliSource
             OnUpdate(in_deltaTime);
             
             //Render the scene
-            m_renderer->RenderToScreen(m_stateManager.GetActiveScenePtr());
+            m_renderer->RenderToScreen(m_stateManager->GetActiveState()->GetScene());
             
 #ifdef CS_ENABLE_DEBUGSTATS
 			DebugStats::Clear();
@@ -408,9 +415,18 @@ namespace ChilliSource
 		void Application::GoBack()
 		{
 			CS_LOG_DEBUG("Go back event.");
-			m_stateManager.GetActiveState()->OnGoBack();
+			//TODO: Feed this to the application another way. m_stateManager.GetActiveState()->OnGoBack();
 			ApplicationEvents::GetGoBackEvent().NotifyConnections();
 		}
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void Application::Background()
+        {
+            for (const AppSystemUPtr& system : m_systems)
+            {
+                system->OnBackground();
+            }
+        }
         //----------------------------------------------------
         //----------------------------------------------------
 		void Application::Suspend()
@@ -419,13 +435,10 @@ namespace ChilliSource
             
 			m_isSuspending = true;
             
-			//Tell the active state to save it's data etc
-			m_stateManager.Pause();
-            
             //suspend all application systems in reverse order.
             for (std::vector<AppSystemUPtr>::const_reverse_iterator it = m_systems.rbegin(); it != m_systems.rend(); ++it)
             {
-                (*it)->OnMemoryWarning();
+                (*it)->OnSuspend();
             }
             
 			//We must invalidate the application timer. This will stop sub-system updates
@@ -446,10 +459,10 @@ namespace ChilliSource
         //----------------------------------------------------
         void Application::Destroy()
         {
+            m_stateManager->DestroyStates();
+            
             OnDestroy();
 
-            m_stateManager.DestroyAll();
-            
             //suspend all application systems in reverse order.
             for (std::vector<AppSystemUPtr>::const_reverse_iterator it = m_systems.rbegin(); it != m_systems.rend(); ++it)
             {
@@ -489,6 +502,7 @@ namespace ChilliSource
         {
             //Core
             AddSystem_Old(FileSystem::Create());
+            m_stateManager = CreateSystem<StateManager>();
 
             //TODO: Change this to a PNG image provider.
             AddSystem_Old(ImageResourceProvider::Create());
@@ -678,9 +692,6 @@ namespace ChilliSource
             {
                 system->OnUpdate(in_deltaTime);
             }
-			
-			//Tell the state manager to update the active state
-			m_stateManager.Update(in_deltaTime);
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -701,12 +712,18 @@ namespace ChilliSource
             {
                 system->OnResume();
             }
-            
-			//Tell the active state to continue
-			m_stateManager.Resume();
 			
 			CS_LOG_DEBUG("App Finished Resuming...");
 		}
+        //---------------------------------------------------
+        //---------------------------------------------------
+        void Application::OnForeground()
+        {
+            for (const AppSystemUPtr& system : m_systems)
+            {
+                system->OnForeground();
+            }
+        }
         //----------------------------------------------------
         //----------------------------------------------------
 		void Application::SetOrientation(ScreenOrientation in_orientation)

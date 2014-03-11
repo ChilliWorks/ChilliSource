@@ -32,19 +32,19 @@ namespace ChilliSource
             ///
             /// @author I Copland
             //------------------------------------------------
-            virtual void OnInitialise() {};
+            virtual void OnInit() {};
             //------------------------------------------------
-            /// Called when the application is resumed after
+            /// Called when the state is resumed after
             /// having been suspended. This is also called when
             /// the owning state is initialised immediately after
-            /// On Initialise(). System resume is called in the
+            /// On Start(). System resume is called in the
             /// order that the systems were created.
             ///
             /// @author I Copland
             //------------------------------------------------
             virtual void OnResume() {};
             //------------------------------------------------
-            /// Called when the application becomes the active
+            /// Called when the state becomes the active
             /// application. This is also called on when the
             /// owning state is initialised, immediately following
             /// On Resume. System foregrounded is called in the
@@ -52,7 +52,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
             //------------------------------------------------
-            virtual void OnForgrounded() {};
+            virtual void OnForeground() {};
             //------------------------------------------------
             /// Update method. This is called once for every
             /// update frame that the owning state is active.
@@ -75,7 +75,7 @@ namespace ChilliSource
             //------------------------------------------------
             virtual void OnFixedUpdate(f32 in_deltaTime) {};
             //------------------------------------------------
-            /// Called when the application transitions from
+            /// Called when the state transitions from
             /// being active app into the background. This
             /// is also called when the state is destroyed,
             /// just prior to calling On Suspend. System
@@ -84,11 +84,11 @@ namespace ChilliSource
             ///
             /// @author I Copland
             //------------------------------------------------
-            virtual void OnBackgrounded() {};
+            virtual void OnBackground() {};
             //------------------------------------------------
-            /// Called when the application is suspended. This
+            /// Called when the state is suspended. This
             /// is also called when the owning state is destroyed,
-            /// just prior to calling On Destroy. System
+            /// just prior to calling On Suspend. System
             /// suspend is called in the reverse order to
             /// which they were created.
             ///
@@ -106,7 +106,7 @@ namespace ChilliSource
             //------------------------------------------------
             virtual void OnDestroy() {};
             //------------------------------------------------
-            /// Called when the application receives a memory
+            /// Called when the state receives a memory
             /// warning while the owning state is active. This
             /// should be used to clean up any non-essensial
             /// memory.
@@ -119,7 +119,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
             //------------------------------------------------
-            virtual ~AppSystem() {};
+            virtual ~StateSystem() {};
         };
     }
 }

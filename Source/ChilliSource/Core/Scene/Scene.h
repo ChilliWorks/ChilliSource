@@ -12,6 +12,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Core/System/StateSystem.h>
 #include <ChilliSource/Core/Volume/VolumeComponent.h>
 
 namespace ChilliSource
@@ -24,25 +25,39 @@ namespace ChilliSource
         ///
         /// @author S Downie
 		//--------------------------------------------------------------------------------------------------
-		class Scene final
+		class Scene final : public StateSystem
 		{
 		public:
+            
+            CS_DECLARE_NAMEDTYPE(Scene);
+            
             //-------------------------------------------------------
-            /// Constructor
+            /// Factory method
             ///
             /// @author S Downie
             ///
             /// @param Input system used by the window to listen
             /// for input events
             //-------------------------------------------------------
-			Scene(Input::InputSystem* in_inputSystem = nullptr);
+			static SceneUPtr Create(Input::InputSystem* in_inputSystem = nullptr);
+            
             //-------------------------------------------------------
             /// Destructor
             ///
             /// @author S Downie
             //-------------------------------------------------------
 			~Scene();
-
+            //-------------------------------------------------------
+            /// Query interface to determine if the object implements
+            /// the interface with the given ID
+            ///
+            /// @author S Downie
+            ///
+            /// @param Interface ID
+            ///
+            /// @return Whether the system has the given interface
+            //-------------------------------------------------------
+            bool IsA(InterfaceIDType in_interfaceID) const;
 			//-------------------------------------------------------
 			/// Add an entity to the scene. This entity cannot
             /// exist on another scene prior to adding. The entity
@@ -74,19 +89,35 @@ namespace ChilliSource
 			//-------------------------------------------------------
 			const SharedEntityList& GetEntities() const;
 			//-------------------------------------------------------
-			/// Force the scene to become the active one and to
-			/// receive user interaction
+            /// The scene is now at the forefront and the window
+            /// should listen for input
             ///
-            /// @author J Dixon
+            /// @author S Downie
 			//-------------------------------------------------------
-			void BecomeActive();
-			//-------------------------------------------------------
-			/// Set this scene to be inactive. It will no longer
-			/// be interactable for the user
+			void OnForeground() override;
+            //--------------------------------------------------------------------------------------------------
+			/// Updates the root window and the entities
             ///
-            /// @author J Dixon
+            /// @author S Downie
+			///
+			/// @param Time since last update in seconds
+			//--------------------------------------------------------------------------------------------------
+			void OnUpdate(f32 in_timeSinceLastUpdate) override;
+            //--------------------------------------------------------------------------------------------------
+			/// Updates the root window and the entities at a fixed timestep
+            ///
+            /// @author S Downie
+			///
+			/// @param Time since last update in seconds
+			//--------------------------------------------------------------------------------------------------
+			void OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate) override;
 			//-------------------------------------------------------
-			void BecomeInactive();
+            /// The scene is no longer at the forefront and the window
+            /// should not listen for input
+            ///
+            /// @author S Downie
+			//-------------------------------------------------------
+			void OnBackground() override;
 			//--------------------------------------------------------------------------------------------------
 			/// Traverses the contents of the scene and adds any objects that intersect with the ray to the
 			/// list. The list order is undefined. Use the query intersection value on the volume component
@@ -152,22 +183,18 @@ namespace ChilliSource
 			/// @return The main window that all the scene's UI is attached to.
 			//--------------------------------------------------------------------------------------------------
 			GUI::Window* GetWindow();
-			//--------------------------------------------------------------------------------------------------
-			/// Updates the root window and the entities
+            
+        private:
+            
+            //-------------------------------------------------------
+            /// Private to enforce use of factory method
             ///
             /// @author S Downie
-			///
-			/// @param Time since last update in seconds
-			//--------------------------------------------------------------------------------------------------
-			void OnUpdate(f32 in_timeSinceLastUpdate);
-            //--------------------------------------------------------------------------------------------------
-			/// Updates the root window and the entities at a fixed timestep
             ///
-            /// @author S Downie
-			///
-			/// @param Time since last update in seconds
-			//--------------------------------------------------------------------------------------------------
-			void OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate);
+            /// @param Input system used by the window to listen
+            /// for input events
+            //-------------------------------------------------------
+			Scene(Input::InputSystem* in_inputSystem);
             
 		private:
 			

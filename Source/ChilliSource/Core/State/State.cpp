@@ -1,14 +1,15 @@
-/*
- *  State.cpp
- *  moFlo
- *
- *  Created by Stuart McGaw on 07/01/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  State.cpp
+//  ChilliSource
+//
+//  Created by Scott Downie on 21/09/2010.
+//  Copyright 2010 Tag Games. All rights reserved.
+//
 
 
 #include <ChilliSource/Core/State/State.h>
+
+#include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/Base/Application.h>
 
@@ -17,84 +18,136 @@ namespace ChilliSource
 	namespace Core 
 	{
 		//-----------------------------------------
-		/// Constructor
-		///
-		/// Create a new scene for this state
 		//-----------------------------------------
-		State::State(Scene* inpScene) : mbOwnsScene(true)
+		State::State()
+        : m_canAddSystems(false)
+        , m_scene(nullptr)
 		{
-            mpStateMgr = Application::Get()->GetStateManager();
+
+		}
+        //-----------------------------------------
+        //-----------------------------------------
+        void State::Init()
+        {
+            m_canAddSystems = true;
+            //States will always have a scene by default
+            m_scene = CreateSystem<Scene>(Application::Get()->GetInputSystem());
+            CreateSystems();
+            m_canAddSystems = false;
             
-			if(!inpScene)
-			{
-				mpScene = new Scene(Application::Get()->GetInputSystem());
-			}
-			else
-			{
-				mbOwnsScene = false;
-				mpScene = inpScene;
-			}
-		}
+            u32 numSystems = m_systems.size();
+            for(u32 i=0; i<numSystems; ++i)
+            {
+                m_systems[i]->OnInit();
+            }
+            
+            OnInit();
+        }
+        //-----------------------------------------
+        //-----------------------------------------
+        void State::Resume()
+        {
+            u32 numSystems = m_systems.size();
+            for(u32 i=0; i<numSystems; ++i)
+            {
+                m_systems[i]->OnResume();
+            }
+            
+            OnResume();
+        }
+        //-----------------------------------------
+        //-----------------------------------------
+        void State::Foreground()
+        {
+            u32 numSystems = m_systems.size();
+            for(u32 i=0; i<numSystems; ++i)
+            {
+                m_systems[i]->OnForeground();
+            }
+            
+            OnForeground();
+        }
+        //-----------------------------------------
+        //-----------------------------------------
+        void State::Update(f32 in_timeSinceLastUpdate)
+        {
+            u32 numSystems = m_systems.size();
+            for(u32 i=0; i<numSystems; ++i)
+            {
+                m_systems[i]->OnUpdate(in_timeSinceLastUpdate);
+            }
+            
+            OnUpdate(in_timeSinceLastUpdate);
+        }
+        //-----------------------------------------
+        //-----------------------------------------
+        void State::FixedUpdate(f32 in_fixedTimeSinceLastUpdate)
+        {
+            u32 numSystems = m_systems.size();
+            for(u32 i=0; i<numSystems; ++i)
+            {
+                m_systems[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
+            }
+            
+            OnFixedUpdate(in_fixedTimeSinceLastUpdate);
+        }
+        //-----------------------------------------
+        //-----------------------------------------
+        void State::Background()
+        {
+            OnBackground();
+            
+            s32 numSystems = m_systems.size();
+            for(s32 i=numSystems-1; i>=0; --i)
+            {
+                m_systems[i]->OnBackground();
+            }
+        }
+        //-----------------------------------------
+        //-----------------------------------------
+        void State::Suspend()
+        {
+            OnSuspend();
+            
+            s32 numSystems = m_systems.size();
+            for(s32 i=numSystems-1; i>=0; --i)
+            {
+                m_systems[i]->OnSuspend();
+            }
+        }
+        //-----------------------------------------
+        //-----------------------------------------
+        void State::Destroy()
+        {
+            OnDestroy();
+            
+            s32 numSystems = m_systems.size();
+            for(s32 i=numSystems-1; i>=0; --i)
+            {
+                m_systems[i]->OnDestroy();
+            }
+        }
+        //------------------------------------------------
+        //------------------------------------------------
+        void State::MemoryWarning()
+        {
+            u32 numSystems = m_systems.size();
+            for(u32 i=0; i<numSystems; ++i)
+            {
+                m_systems[i]->OnMemoryWarning();
+            }
+        }
 		//------------------------------------------
-		/// Get Scene
-		///
-		/// @return Scene to present modally
 		//------------------------------------------
-		Scene* State::GetScenePtr()
+		Scene* State::GetScene()
 		{
-			return mpScene;
-		}
-		//------------------------------------------
-		/// Get State Manager
-		///
-		/// @return Pointer to state manager
-		//------------------------------------------
-		StateManager* State::GetStateManagerPtr() const 
-		{ 
-			return mpStateMgr; 
+			return m_scene;
 		}
         //------------------------------------------
-        /// Is Active State
-        ///
-        /// @return Whether the state is the top of 
-        /// the hierarchy
         //------------------------------------------
 		bool State::IsActiveState() const 
         { 
-			return mpStateMgr->GetActiveState().get() == this;
+			return Application::Get()->GetStateManager()->GetActiveState().get() == this;
 		}
-        //-----------------------------------------
-        /// Should Receive Notifications
-        ///
-        /// Delegate call used to decide whether
-        /// the state should be notified of any
-        /// notifications
-        ///
-        /// @return Whether to receive notices
-        //-----------------------------------------
-        bool State::ShouldReceiveNotifications() const
-        {
-            return false;
-        }
-		//-----------------------------------------
-		/// Destructor
-		//-----------------------------------------
-		State::~State() 
-		{
-			if(mbOwnsScene)
-			{
-				CS_SAFEDELETE(mpScene);
-			}
-		}
-        
-        void State::DebugPrint(std::string instrMessage)
-        {
-            CS_LOG_DEBUG("State "+ToString((u32)this)+" - "+instrMessage);
-            CS_LOG_DEBUG("name = "+GetName());
-            CS_LOG_DEBUG("mpScene = "+ToString((u32)mpScene));
-            CS_LOG_DEBUG("mbOwnsScene = "+ToString(mbOwnsScene));
-            CS_LOG_DEBUG("mpStateMgr = "+ToString((u32)mpStateMgr));
-        }
-        
 	}
 }

@@ -13,6 +13,7 @@
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/Entity/ComponentFactoryDispenser.h>
 #include <ChilliSource/Core/Entity/ComponentFactory.h>
+#include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
 namespace ChilliSource
