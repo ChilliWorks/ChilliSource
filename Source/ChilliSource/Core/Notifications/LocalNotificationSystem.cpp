@@ -35,20 +35,6 @@ namespace ChilliSource
 #endif
             return nullptr;
         }
-        //---------------------------------------------------
-        //---------------------------------------------------
-        void LocalNotificationSystem::ScheduleNotificationForTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority)
-        {
-            NotificationSPtr notification = std::make_shared<Notification>(in_id, in_params, in_priority);
-            ScheduleNotification(notification, in_time);
-        }
-        //---------------------------------------------------
-        //----------------------------------------------------
-        void LocalNotificationSystem::ScheduleNotificationAfterTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority)
-        {
-            NotificationSPtr notification = std::make_shared<Notification>(in_id, in_params, in_priority);
-            ScheduleNotification(notification, Application::Get()->GetSystemTime() + in_time);
-        }
     }
 }
 

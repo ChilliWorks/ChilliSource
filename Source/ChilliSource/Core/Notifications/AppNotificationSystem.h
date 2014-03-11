@@ -83,20 +83,6 @@ namespace ChilliSource
             /// to standard priority.
             //---------------------------------------------------
             void ScheduleNotificationForTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority = Notification::Priority::k_standard);
-            //---------------------------------------------------
-            /// After the given number of second the notification
-            /// will be inserted into the queue. Upon reaching
-            /// the head of the queue it will trigger.
-            ///
-            /// @author I Copland
-            ///
-            /// @param The notification id
-            /// @param The notification params.
-            /// @param Time in seconds at which it should trigger.
-            /// @param [Optional] The notification priority. Defaults
-            /// to standard priority.
-            //----------------------------------------------------
-            void ScheduleNotificationAfterTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority = Notification::Priority::k_standard);
             //--------------------------------------------------------
             /// Builds a list of all notifications currently scheduled
             /// within the given time peroid.

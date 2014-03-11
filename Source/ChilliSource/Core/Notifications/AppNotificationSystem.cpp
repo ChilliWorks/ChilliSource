@@ -69,19 +69,6 @@ namespace ChilliSource
                 m_notifications.push_back(notificationContainer);
             }
         }
-        //---------------------------------------------------
-        //----------------------------------------------------
-        void AppNotificationSystem::ScheduleNotificationAfterTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority)
-        {
-            if (m_enabled == true)
-            {
-                NotificationContainerSPtr notificationContainer = std::make_shared<NotificationContainer>();
-                notificationContainer->m_notification = std::make_shared<Notification>(in_id, in_params, in_priority);
-                notificationContainer->m_triggerTime = Application::Get()->GetSystemTime() + in_time;
-                notificationContainer->m_cancelled = false;
-                m_notifications.push_back(notificationContainer);
-            }
-        }
         //--------------------------------------------------------
         //--------------------------------------------------------
         void AppNotificationSystem::GetScheduledNotifications(std::vector<NotificationSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_peroid)
@@ -115,6 +102,12 @@ namespace ChilliSource
         void AppNotificationSystem::CancelAll()
         {
             m_notifications.clear();
+        }
+        //--------------------------------------------------
+        //---------------------------------------------------
+        IConnectableEvent<AppNotificationSystem::RecievedDelegate>& AppNotificationSystem::GetRecievedEvent()
+        {
+            return m_recievedEvent;
         }
         //--------------------------------------------------
         //--------------------------------------------------

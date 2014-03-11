@@ -232,6 +232,7 @@ namespace ChilliSource
             Event<DismissedDelegate> m_dismissedEvent;
             ConnectionUPtr m_appRecievedConnection;
             ConnectionUPtr m_localRecievedConnection;
+            ConnectionUPtr m_remoteRecievedConnection;
             f32 m_timeSinceNotification;
         };
     }

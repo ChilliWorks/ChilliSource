@@ -45,6 +45,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         //----------------------------------------------------------
         LocalNotificationSystem::LocalNotificationSystem()
+        : m_enabled(true)
         {
         }
         //--------------------------------------------------------
@@ -53,50 +54,64 @@ namespace ChilliSource
         {
             return (Core::LocalNotificationSystem::InterfaceID == in_interfaceID || LocalNotificationSystem::InterfaceID == in_interfaceID);
         }
-        //-----------------------------------------------------------
-        //-----------------------------------------------------------
-        void LocalNotificationSystem::ScheduleNotification(const Core::NotificationSPtr& in_notification, TimeIntervalSecs in_time)
+        //--------------------------------------------------
+        //---------------------------------------------------
+        void LocalNotificationSystem::SetEnabled(bool in_enabled)
+        {
+            m_enabled = in_enabled;
+            
+            if (m_enabled == false)
+            {
+                CancelAll();
+            }
+        }
+        //---------------------------------------------------
+        //---------------------------------------------------
+        void LocalNotificationSystem::ScheduleNotificationForTime(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, TimeIntervalSecs in_time, Core::Notification::Priority in_priority)
         {
             @autoreleasepool
             {
-                //Create the notifications
-                UILocalNotification* nsNotification = [[[UILocalNotification alloc] init] autorelease];
-                nsNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)in_time];
-                nsNotification.timeZone = [NSTimeZone defaultTimeZone];
-                nsNotification.alertAction = @"View";
-                nsNotification.alertBody = Core::StringUtils::StringToNSString(in_notification->GetParams().ValueForKey("Body"));
-                
-                if(in_notification->GetParams().HasValue("Sound") == true)
+                if (m_enabled == true)
                 {
-                    nsNotification.soundName = Core::StringUtils::StringToNSString(in_notification->GetParams().ValueForKey("Sound"));
+                    //Create the notifications
+                    UILocalNotification* nsNotification = [[[UILocalNotification alloc] init] autorelease];
+                    nsNotification.fireDate = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)in_time];
+                    nsNotification.timeZone = [NSTimeZone defaultTimeZone];
+                    nsNotification.alertAction = @"View";
+                    nsNotification.alertBody = Core::StringUtils::StringToNSString(in_params.ValueForKey("Body"));
+                    
+                    if(in_params.HasValue("Sound") == true)
+                    {
+                        nsNotification.soundName = Core::StringUtils::StringToNSString(in_params.ValueForKey("Sound"));
+                    }
+                    else
+                    {
+                        nsNotification.soundName = UILocalNotificationDefaultSoundName;
+                    }
+                    
+                    nsNotification.applicationIconBadgeNumber = 1;
+                    
+                    NSMutableDictionary* nsParams = [[NSMutableDictionary alloc] init];
+                    for(Core::StringToStringMap::const_iterator it = in_params.begin(); it != in_params.end(); ++it)
+                    {
+                        [nsParams setObject:Core::StringUtils::StringToNSString(it->first) forKey:Core::StringUtils::StringToNSString(it->second)];
+                    }
+                    
+                    //Encode the type ID into the notification so we can retrieve it at the other end
+                    NSDictionary* pInfo = [NSDictionary dictionaryWithObjectsAndKeys:
+                                           [NSNumber numberWithUnsignedInt:(u32)in_id], @"ID",
+                                           [NSNumber numberWithUnsignedInt:(u32)in_priority], @"Priority",
+                                           nsParams, @"Params",
+                                           nil];
+                    
+                    nsNotification.userInfo = pInfo;
+                    
+                    // pInfo dictionary retains the pParams dictionary on insertion so we need to release
+                    [nsParams release];
+                    
+                    //Schedule this baby
+                    [[UIApplication sharedApplication] scheduleLocalNotification:nsNotification];
                 }
-                else
-                {
-                    nsNotification.soundName = UILocalNotificationDefaultSoundName;
-                }
-                
-                nsNotification.applicationIconBadgeNumber = 1;
-                
-                NSMutableDictionary* nsParams = [[NSMutableDictionary alloc] init];
-                for(Core::StringToStringMap::const_iterator it = in_notification->GetParams().begin(); it != in_notification->GetParams().end(); ++it)
-                {
-                    [nsParams setObject:Core::StringUtils::StringToNSString(it->first) forKey:Core::StringUtils::StringToNSString(it->second)];
-                }
-                
-                //Encode the type ID into the notification so we can retrieve it at the other end
-                NSDictionary* pInfo = [NSDictionary dictionaryWithObjectsAndKeys:
-                                       [NSNumber numberWithUnsignedInt:(u32)in_notification->GetID()], @"ID",
-                                       [NSNumber numberWithUnsignedInt:(u32)in_notification->GetPriority()], @"Priority",
-                                       nsParams, @"Params",
-                                       nil];
-                
-                nsNotification.userInfo = pInfo;
-                
-                // pInfo dictionary retains the pParams dictionary on insertion so we need to release
-                [nsParams release];
-                
-                //Schedule this baby
-                [[UIApplication sharedApplication] scheduleLocalNotification:nsNotification];
             }
         }
         //--------------------------------------------------------

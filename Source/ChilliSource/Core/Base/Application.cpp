@@ -27,8 +27,6 @@
 #include <ChilliSource/Core/JSON/json.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
-#include <ChilliSource/Core/Notifications/LocalNotificationScheduler.h>
 #include <ChilliSource/Core/Resource/ResourceGroupManager.h>
 #include <ChilliSource/Core/Resource/ResourceManager.h>
 #include <ChilliSource/Core/Resource/ResourceManagerDispenser.h>
@@ -220,7 +218,6 @@ namespace ChilliSource
             
             m_resourceManagerDispenser = new ResourceManagerDispenser(this);
             m_componentFactoryDispenser = new ComponentFactoryDispenser(this);
-            m_stateManager.SetOwningApplication(this);
             
 #ifdef CS_TARGETPLATFORM_WINDOWS
 			//Because windows by default is landscape, this needs to be flipped.
@@ -490,11 +487,6 @@ namespace ChilliSource
         //------------------------------------------------------
         void Application::CreateDefaultSystems()
         {
-            //NEW
-            CreateSystem<AppNotificationSystem>();
-            CreateSystem<NotificationManager>();
-            
-            //OLD
             //Core
             AddSystem_Old(FileSystem::Create());
 
@@ -674,8 +666,6 @@ namespace ChilliSource
             in_deltaTime *= m_updateSpeed;
             
 			CoreTimer::Update(in_deltaTime);
-            
-            NotificationScheduler::Update(in_deltaTime);
             
 			//Update sub systems
             for(std::vector<IUpdateable*>::iterator it = m_updateableSystems.begin(); it != m_updateableSystems.end(); ++it)

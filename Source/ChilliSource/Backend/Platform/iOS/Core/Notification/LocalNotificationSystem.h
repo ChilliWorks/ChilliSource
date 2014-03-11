@@ -21,7 +21,7 @@ namespace ChilliSource
 {
     namespace iOS
     {
-        class LocalNotificationSystem : public Core::LocalNotificationSystem
+        class LocalNotificationSystem final : public Core::LocalNotificationSystem
         {
         public:
             CS_DECLARE_NAMEDTYPE(LocalNotificationSystem);
@@ -32,18 +32,33 @@ namespace ChilliSource
             /// id.
             //-------------------------------------------------------
             bool IsA(Core::InterfaceIDType in_interfaceID) const override;
-            //------------------------------------------------------
-            /// Schedule Notification
+            //--------------------------------------------------
+            /// Enables and disables addition of local notifications.
+            /// All existing notifications will be cancelled
+            /// when this is disabled. This is enabled by default.
             ///
-            /// Once the time is reached the notification will be
-            /// inserted into the queue. Upon reaching the head of
-            /// the queue it will trigger.
+            /// @author I Copland
             ///
-            /// @author Scott Downie
+            /// @param Whether or not to enable the scheduling
+            /// of app notifications.
+            //---------------------------------------------------
+            void SetEnabled(bool in_enabled);
+            //---------------------------------------------------
+            /// Schedules a Local Notifcation which should fire
+            /// at the given time. A Local Notification uses
+            /// the system specfic notification alarms and can
+            /// be received even if it was scheduled during a
+            /// previous instance of the application.
             ///
-            /// @param Notification
-            //-------------------------------------------------------
-            void ScheduleNotification(const Core::NotificationSPtr& in_notification, TimeIntervalSecs in_time) override;
+            /// @author I Copland
+            ///
+            /// @param The notification id
+            /// @param The notification params.
+            /// @param Time in seconds at which it should trigger.
+            /// @param [Optional] The notification priority. Defaults
+            /// to standard priority.
+            //---------------------------------------------------
+            void ScheduleNotificationForTime(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, TimeIntervalSecs in_time, Core::Notification::Priority in_priority = Core::Notification::Priority::k_standard) override;
             //--------------------------------------------------------
             /// Builds a list of all notifications currently scheduled
             /// within the given time peroid.
@@ -139,6 +154,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             void OnDestroy() override;
             
+            bool m_enabled;
             Core::Event<Core::LocalNotificationSystem::RecievedDelegate> m_receivedEvent;
         };
     }

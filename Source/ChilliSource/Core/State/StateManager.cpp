@@ -26,33 +26,6 @@ namespace ChilliSource
 		StateManager::StateManager() : mpApp(nullptr), mbStartState(false)
 		{
 		}
-        //---------------------------------------------------------
-		/// Set Owning Application
-		///
-        /// @param Moflow application
-		//---------------------------------------------------------
-        void StateManager::SetOwningApplication(Application* inpApp)
-        {
-            mpApp = inpApp;
-        }
-        //---------------------------------------------------------
-        /// Get Application
-        ///
-        /// @return Moflow application
-        //---------------------------------------------------------
-        Application& StateManager::GetApplication()
-        {
-            return *mpApp;
-        }
-        //---------------------------------------------------------
-        /// Get Application Pointer
-        ///
-        /// @return Moflow application pointer
-        //---------------------------------------------------------
-        Application* StateManager::GetApplicationPtr()
-        {
-            return mpApp;
-        }
 		//---------------------------------------------------------
 		/// Resume
 		///
@@ -398,15 +371,6 @@ namespace ChilliSource
 		{
 			mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_pop));
             mStateOperationQueue.push_back(StateOperation(StateOperationAction::k_push, inpState));
-		}
-		//------------------------------------------------------------------
-		/// Get Factory Producing
-		///
-		/// @return a handle to a factory that can create object of type ID
-		//------------------------------------------------------------------
-		ComponentFactory* StateManager::GetFactoryProducing(InterfaceIDType inInterfaceID)
-		{
-			return Core::ComponentFactoryDispenser::GetSingletonPtr()->GetFactoryProducing(inInterfaceID);
 		}
         //---------------------------------------------------------
         /// Get all States

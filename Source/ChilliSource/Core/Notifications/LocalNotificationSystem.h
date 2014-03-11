@@ -39,6 +39,17 @@ namespace ChilliSource
             /// @return New backend instance
             //-------------------------------------------------------
             static LocalNotificationSystemUPtr Create();
+            //--------------------------------------------------
+            /// Enables and disables addition of local notifications.
+            /// All existing notifications will be cancelled
+            /// when this is disabled. This is enabled by default.
+            ///
+            /// @author I Copland
+            ///
+            /// @param Whether or not to enable the scheduling
+            /// of app notifications.
+            //---------------------------------------------------
+            virtual void SetEnabled(bool in_enabled) = 0;
             //---------------------------------------------------
             /// Schedules a Local Notifcation which should fire
             /// at the given time. A Local Notification uses
@@ -54,23 +65,7 @@ namespace ChilliSource
             /// @param [Optional] The notification priority. Defaults
             /// to standard priority.
             //---------------------------------------------------
-            void ScheduleNotificationForTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority = Notification::Priority::k_standard);
-            //---------------------------------------------------
-            /// Schedules a Local Notifcation which should fire
-            /// after the given time. A Local Notification uses
-            /// the system specfic notification alarms and can
-            /// be received even if it was scheduled during a
-            /// previous instance of the application.
-            ///
-            /// @author I Copland
-            ///
-            /// @param The notification id
-            /// @param The notification params.
-            /// @param Time in seconds at which it should trigger.
-            /// @param [Optional] The notification priority. Defaults
-            /// to standard priority.
-            //----------------------------------------------------
-            void ScheduleNotificationAfterTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority = Notification::Priority::k_standard);
+            virtual void ScheduleNotificationForTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority = Notification::Priority::k_standard) = 0;
             //--------------------------------------------------------
             /// Builds a list of all notifications currently scheduled
             /// within the given time peroid.
@@ -114,14 +109,6 @@ namespace ChilliSource
             /// @author S Downie
             //-------------------------------------------------------
             LocalNotificationSystem(){}
-            //-------------------------------------------------------
-            /// Schedules the notification using the platform specfic
-            /// backend
-            ///
-            /// @param The notification
-            /// @param The time to schedule the notification for.
-            //--------------------------------------------------------
-            virtual void ScheduleNotification(const NotificationSPtr& in_notification, TimeIntervalSecs in_time) = 0;
         };
     }
 }

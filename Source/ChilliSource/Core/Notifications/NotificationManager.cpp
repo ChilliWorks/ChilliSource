@@ -12,6 +12,7 @@
 #include <ChilliSource/Core/Base/MakeDelegate.h>
 #include <ChilliSource/Core/Notifications/AppNotificationSystem.h>
 #include <ChilliSource/Core/Notifications/LocalNotificationSystem.h>
+#include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
 
 namespace ChilliSource
 {
@@ -63,10 +64,7 @@ namespace ChilliSource
         //----------------------------------------------------
         void NotificationManager::ScheduleAppNotificationAfterTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority)
         {
-            if (m_appNotificationSystem != nullptr)
-            {
-                m_appNotificationSystem->ScheduleNotificationAfterTime(in_id, in_params, in_time, in_priority);
-            }
+            ScheduleAppNotificationForTime(in_id, in_params, Application::Get()->GetSystemTime() + in_time, in_priority);
         }
         //---------------------------------------------------
         //---------------------------------------------------
@@ -81,10 +79,7 @@ namespace ChilliSource
         //----------------------------------------------------
         void NotificationManager::ScheduleLocalNotificationAfterTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority)
         {
-            if (m_localNotificationSystem != nullptr)
-            {
-                m_localNotificationSystem->ScheduleNotificationAfterTime(in_id, in_params, in_time, in_priority);
-            }
+            ScheduleLocalNotificationForTime(in_id, in_params, Application::Get()->GetSystemTime() + in_time, in_priority);
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
@@ -167,7 +162,12 @@ namespace ChilliSource
                 m_localRecievedConnection = m_localNotificationSystem->GetRecievedEvent().OpenConnection(MakeDelegate(this, &NotificationManager::OnNotificationRecieved));
             }
             
-            //TODO: Listen for remote notifications.
+            //setup the remote notification system
+            m_remoteNotificationSystem = Application::Get()->GetSystem<RemoteNotificationSystem>();
+            if (m_remoteNotificationSystem != nullptr)
+            {
+                m_remoteRecievedConnection = m_remoteNotificationSystem->GetRecievedEvent().OpenConnection(MakeDelegate(this, &NotificationManager::OnNotificationRecieved));
+            }
         }
         //------------------------------------------------
         //------------------------------------------------
@@ -203,7 +203,7 @@ namespace ChilliSource
                     m_notificationQueue.pop_front();
                 }
                 
-                if(m_notificationQueue.empty() == false && !m_notificationQueue.front()->m_triggered == false)
+                if(m_notificationQueue.empty() == false && m_notificationQueue.front()->m_triggered == false)
                 {
                     m_recievedEvent.NotifyConnections(m_notificationQueue.front()->m_notification);
                     m_notificationQueue.front()->m_triggered = true;
@@ -223,7 +223,9 @@ namespace ChilliSource
             m_localRecievedConnection.reset();
             m_localNotificationSystem = nullptr;
             
-            //TODO: cleanup remote notifications.
+            //cleanup the remote notification system
+            m_remoteRecievedConnection.reset();
+            m_remoteNotificationSystem = nullptr;
         }
     }
 }

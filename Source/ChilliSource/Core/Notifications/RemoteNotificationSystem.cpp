@@ -1,6 +1,6 @@
 //
 //  RemoteNotificationSystem.cpp
-//  MoFlow
+//  Chilli Source
 //
 //  Created by Robert Henning on 22/01/2014.
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
@@ -23,9 +23,8 @@ namespace ChilliSource
 	namespace Core
     {
         CS_DEFINE_NAMEDTYPE(RemoteNotificationSystem);
-        //---------------------------------------------------------------
-        /// Create
-        //---------------------------------------------------------------
+        //----------------------------------------------------
+        //----------------------------------------------------
         RemoteNotificationSystemUPtr RemoteNotificationSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
@@ -38,13 +37,6 @@ namespace ChilliSource
 #	endif
 #endif
         	return nullptr;
-        }
-        //---------------------------------------------------------------
-        /// Is A
-        //---------------------------------------------------------------
-        bool RemoteNotificationSystem::IsA(Core::InterfaceIDType inInterfaceID) const
-        {
-            return inInterfaceID == RemoteNotificationSystem::InterfaceID;
         }
     }
 }
