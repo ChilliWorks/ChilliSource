@@ -34,16 +34,6 @@ namespace ChilliSource
             //------------------------------------------------
             virtual void OnInit() {};
             //------------------------------------------------
-            /// Called when the state is started after
-            /// having been stopped. This is also called when
-            /// the owning state is initialised immediately after
-            /// On Initialise(). System resume is called in the
-            /// order that the systems were created.
-            ///
-            /// @author I Copland
-            //------------------------------------------------
-            virtual void OnStart() {};
-            //------------------------------------------------
             /// Called when the state is resumed after
             /// having been suspended. This is also called when
             /// the owning state is initialised immediately after
@@ -105,16 +95,6 @@ namespace ChilliSource
             /// @author I Copland
             //------------------------------------------------
             virtual void OnSuspend() {};
-            //------------------------------------------------
-            /// Called when the state is stopped. This
-            /// is also called when the owning state is destroyed,
-            /// just prior to calling On Destroy. System
-            /// suspend is called in the reverse order to
-            /// which they were created.
-            ///
-            /// @author I Copland
-            //------------------------------------------------
-            virtual void OnStop() {};
             //------------------------------------------------
             /// Called when the owning state is being destroyed.
             /// This should be used to cleanup memory and

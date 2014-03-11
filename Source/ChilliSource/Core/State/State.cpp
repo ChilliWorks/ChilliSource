@@ -45,18 +45,6 @@ namespace ChilliSource
         }
         //-----------------------------------------
         //-----------------------------------------
-        void State::Start()
-        {
-            u32 numSystems = m_systems.size();
-            for(u32 i=0; i<numSystems; ++i)
-            {
-                m_systems[i]->OnStart();
-            }
-            
-            OnStart();
-        }
-        //-----------------------------------------
-        //-----------------------------------------
         void State::Resume()
         {
             u32 numSystems = m_systems.size();
@@ -109,8 +97,8 @@ namespace ChilliSource
         {
             OnBackground();
             
-            u32 numSystems = m_systems.size();
-            for(u32 i=0; i<numSystems; ++i)
+            s32 numSystems = m_systems.size();
+            for(s32 i=numSystems-1; i>=0; --i)
             {
                 m_systems[i]->OnBackground();
             }
@@ -121,22 +109,10 @@ namespace ChilliSource
         {
             OnSuspend();
             
-            u32 numSystems = m_systems.size();
-            for(u32 i=0; i<numSystems; ++i)
+            s32 numSystems = m_systems.size();
+            for(s32 i=numSystems-1; i>=0; --i)
             {
                 m_systems[i]->OnSuspend();
-            }
-        }
-        //-----------------------------------------
-        //-----------------------------------------
-        void State::Stop()
-        {
-            OnStop();
-            
-            u32 numSystems = m_systems.size();
-            for(u32 i=0; i<numSystems; ++i)
-            {
-                m_systems[i]->OnStop();
             }
         }
         //-----------------------------------------
@@ -145,8 +121,8 @@ namespace ChilliSource
         {
             OnDestroy();
             
-            u32 numSystems = m_systems.size();
-            for(u32 i=0; i<numSystems; ++i)
+            s32 numSystems = m_systems.size();
+            for(s32 i=numSystems-1; i>=0; --i)
             {
                 m_systems[i]->OnDestroy();
             }

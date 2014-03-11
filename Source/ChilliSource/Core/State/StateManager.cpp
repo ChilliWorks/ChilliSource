@@ -19,37 +19,63 @@ namespace ChilliSource
             const StateSPtr NullStatePtr;
         }
         
+        CS_DEFINE_NAMEDTYPE(StateManager);
+        
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        StateManagerUPtr StateManager::Create()
+        {
+            return StateManagerUPtr(new StateManager());
+        }
 		//---------------------------------------------------------
 		//---------------------------------------------------------
 		StateManager::StateManager()
         : m_isStartState(false)
 		{
 		}
-		//---------------------------------------------------------
-		//---------------------------------------------------------
-		void StateManager::Resume()
-		{
-			if(!m_states.empty())
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        bool StateManager::IsA(InterfaceIDType in_interfaceID) const
+        {
+            return in_interfaceID == StateManager::InterfaceID;
+        }
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        void StateManager::PopHierarchy()
+        {
+            m_states.pop_back();
+        }
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        void StateManager::PushHierarchy(const StateSPtr& in_state)
+        {
+            m_states.push_back(in_state);
+        }
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        void StateManager::OnResume()
+        {
+            if(!m_states.empty())
 			{
-				m_states.back().get()->Resume();
+				m_states.back()->Resume();
 			}
-		}
-		//---------------------------------------------------------
-		//---------------------------------------------------------
-		void StateManager::Pause()
-		{
-			if(!m_states.empty())
+        }
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        void StateManager::OnForeground()
+        {
+            if(!m_states.empty())
 			{
-				m_states.back().get()->Suspend();
+				m_states.back()->Foreground();
 			}
-		}
-		//---------------------------------------------------------
-		//---------------------------------------------------------
-		void StateManager::Update(f32 dt)
-		{
-			while(!m_operations.empty())
+        }
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        void StateManager::OnUpdate(f32 in_timeSinceLastUpdate)
+        {
+            while(!m_operations.empty())
 			{
-				switch(m_operations.front().m_action) 
+				switch(m_operations.front().m_action)
 				{
 					case StateOperationAction::k_push:
                     {
@@ -64,9 +90,10 @@ namespace ChilliSource
                         
                         //Only the top state will have been started so this
                         //is the only one we need to stop
-						if(!m_isStartState && !m_states.empty()) 
+						if(!m_isStartState && !m_states.empty())
 						{
-                            top->Stop();
+                            top->Background();
+                            top->Suspend();
 						}
                         
                         //Check that the state we have pushed is not already in the hierarchy
@@ -94,7 +121,8 @@ namespace ChilliSource
 							if(!isTopStateStopped)
 							{
 								isTopStateStopped = true;
-								popped->Stop();
+                                popped->Background();
+                                popped->Suspend();
 							}
 							
                             if(GetNumInstancesOfState(popped.get()) == 1)
@@ -126,7 +154,8 @@ namespace ChilliSource
 							if(!isTopStateStopped)
 							{
 								isTopStateStopped = true;
-								popped->Stop();
+                                popped->Background();
+                                popped->Suspend();
 							}
 							
                             if(GetNumInstancesOfState(popped.get()) == 1)
@@ -146,7 +175,8 @@ namespace ChilliSource
                         if(!m_states.empty())
                         {
                             StateSPtr top = m_states.back();
-                            top->Stop();
+                            top->Background();
+                            top->Suspend();
                         }
                         
 						while (!m_states.empty())
@@ -172,9 +202,10 @@ namespace ChilliSource
                         //is the only one we need to stop
                         StateSPtr popped = m_states.back();
                         
-						if(!m_isStartState) 
+						if(!m_isStartState)
 						{
-                            popped->Stop();
+                            popped->Background();
+                            popped->Suspend();
 						}
                         
                         if(GetNumInstancesOfState(popped.get()) == 1)
@@ -193,55 +224,71 @@ namespace ChilliSource
 				m_operations.pop_front();
 			}
             
-			if(!m_states.empty()) 
+			if(!m_states.empty())
 			{
                 //We only want to start the state we intend to finish on (i.e. pushing 3 states in a single frame)
                 if(m_isStartState)
                 {
                     m_isStartState = false;
-                    m_states.back()->Start();
+                    m_states.back()->Resume();
+                    m_states.back()->Foreground();
                 }
                 
-				m_states.back()->Update(dt);
+				m_states.back()->Update(in_timeSinceLastUpdate);
 			}
-		}
-        //---------------------------------------------------------
-        //---------------------------------------------------------
-        void StateManager::PopHierarchy()
-        {
-            m_states.pop_back();
+
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        void StateManager::PushHierarchy(const StateSPtr& inpState)
+        void StateManager::OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate)
         {
-            m_states.push_back(inpState);
-        }
-        //---------------------------------------------------------
-        //---------------------------------------------------------
-        void StateManager::FixedUpdate(f32 dt)
-        {
-            if(!m_states.empty()) 
+            if(!m_states.empty())
 			{
-                m_states.back()->FixedUpdate(dt);
+                m_states.back()->FixedUpdate(in_fixedTimeSinceLastUpdate);
             }
         }
-		//---------------------------------------------------------
-		//---------------------------------------------------------
-		void StateManager::DestroyAll()
-		{
-			while(!m_states.empty())
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        void StateManager::OnBackground()
+        {
+            if(!m_states.empty())
+			{
+				m_states.back()->Background();
+			}
+        }
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        void StateManager::OnSuspend()
+        {
+            if(!m_states.empty())
+			{
+				m_states.back()->OnSuspend();
+			}
+        }
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        void StateManager::DestroyStates()
+        {
+            while(!m_states.empty())
 			{
                 StateSPtr state = m_states.back();
                 m_states.pop_back();
                 
                 if(!DoesStateExist(state.get()))
                 {
-                    state->Stop();
                     state->Destroy();
 				}
 			}
-		}
+        }
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        void StateManager::OnMemoryWarning()
+        {
+            for(std::vector<StateSPtr>::const_iterator it = m_states.begin(); it != m_states.end(); ++it)
+            {
+                (*it)->MemoryWarning();
+            }
+        }
 		//---------------------------------------------------------
 		//---------------------------------------------------------
 		void StateManager::Push(const StateSPtr &in_state)

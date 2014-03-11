@@ -280,7 +280,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			//----------------------------------------------------
-			void Initialise();
+			void Init();
             //----------------------------------------------------
 			/// Resumes application from suspended state. This should
             /// not be called by a users application.
@@ -288,6 +288,14 @@ namespace ChilliSource
             /// @author I Copland
 			//----------------------------------------------------
 			void Resume();
+            //----------------------------------------------------
+			/// Triggered when the application is pushed
+            /// to the front of the view stack. This should
+            /// not be called by a users application.
+            ///
+            /// @author S Downie
+			//----------------------------------------------------
+			void Foreground();
             //----------------------------------------------------
 			/// Triggered by an update event. This will update
             /// the application, systems and states. This should
@@ -338,6 +346,14 @@ namespace ChilliSource
 			//----------------------------------------------------
 			void GoBack();
             //----------------------------------------------------
+			/// Triggered when the application is pushed back from
+            /// the front of the view stack. This should
+            /// not be called by a users application.
+            ///
+            /// @author S Downie
+			//----------------------------------------------------
+			void Background();
+            //----------------------------------------------------
             /// Triggered on receiving a "application will suspend"
             /// message. This will notify active states to pause
             /// and tell the sub systems to stop. This should not
@@ -374,7 +390,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
 			//------------------------------------------------------
-			virtual void OnInitialise() = 0;
+			virtual void OnInit() = 0;
             //------------------------------------------------------
 			/// Give the state manager the initial state. This should
             /// be overriden by the users application to add initial
@@ -452,6 +468,14 @@ namespace ChilliSource
             /// @author I Copland
             //---------------------------------------------------
             void OnResume();
+            //---------------------------------------------------
+            /// Foregrounds the application. This will be called when
+            /// at the start of the next update following the On
+            /// Foreground event.
+            ///
+            /// @author S Downie
+            //---------------------------------------------------
+            void OnForeground();
             //------------------------------------------------------
 			/// Tell the active camera to roate its view and if we
             /// are using touch input we must rotate the input
@@ -469,7 +493,7 @@ namespace ChilliSource
             std::vector<SystemUPtr> m_systemsOld;
             std::vector<IUpdateable*> m_updateableSystems;
             
-			StateManager m_stateManager;
+			StateManager* m_stateManager;
 			Rendering::RendererUPtr m_renderer;
             Rendering::RenderSystem* m_renderSystem;
 			Input::InputSystem * m_inputSystem;
@@ -492,6 +516,7 @@ namespace ChilliSource
             
             f32 m_updateIntervalRemainder;
             bool m_shouldNotifyConnectionsResumeEvent;
+            bool m_shouldNotifyConnectionsForegroundEvent;
             bool m_isFirstFrame;
             bool m_isSuspending;
             bool m_isSystemCreationAllowed;

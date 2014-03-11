@@ -10,6 +10,7 @@
 #define _CHILLISOURCE_CORE_STATE_STATEMANAGER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 
 #include <list>
 #include <vector>
@@ -25,11 +26,28 @@ namespace ChilliSource
         ///
         /// @author S Downie
 		//---------------------------------------------------------
-		class StateManager
+		class StateManager : public AppSystem
 		{
 		public:
-			StateManager();
-			
+            
+            CS_DECLARE_NAMEDTYPE(StateManager);
+            
+            //---------------------------------------------------------
+            /// Factory method
+            ///
+            /// @author S Downie
+            ///
+            /// @return New state manager instance
+            //---------------------------------------------------------
+            static StateManagerUPtr Create();
+			//---------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Interface ID
+            ///
+            /// @return Whether the system implements the given interface
+            //---------------------------------------------------------
+            bool IsA(InterfaceIDType in_interfaceID) const;
 			//---------------------------------------------------------
             /// @author T Kane
             ///
@@ -122,60 +140,76 @@ namespace ChilliSource
 			/// @param State to become active
 			//---------------------------------------------------------
 			void Change(const StateSPtr& in_state);
-			//---------------------------------------------------------
-			/// Resume
-			///
-			/// Called by the application on receiving a resume
-			/// notification
-			//---------------------------------------------------------
-			void Resume();
-            //---------------------------------------------------------
-			/// Fixed Update
-			///
-			/// Updates the current state with the time
-			/// since last update
-			///
-			/// @param Time since last update
-			//---------------------------------------------------------
-			void FixedUpdate(f32 dt);
-			//---------------------------------------------------------
-			/// Pause
-			///
-			/// Called by the application on receiving a suspend
-			/// notification
-			//---------------------------------------------------------
-			void Pause();
-            //---------------------------------------------------------
-			/// Update
-			///
-			/// Updates the current state with the time
-			/// since last update
-			///
-			/// @param Time since last update
-			//---------------------------------------------------------
-			void Update(f32 dt);
             
 		private:
 
+            //---------------------------------------------------------
+            /// Private to enforce use of factory method
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------
+			StateManager();
+            //---------------------------------------------------------
+            /// Triggered by the application when the system is
+            /// resumed. Forwards to states.
+            ///
+            /// @author S Downie
 			//---------------------------------------------------------
-			/// Init
+			void OnResume() override;
+            //---------------------------------------------------------
+            /// Triggered by the application when the system is
+            /// pushed to the foreground. Forwards to states.
+            ///
+            /// @author S Downie
+			//---------------------------------------------------------
+			void OnForeground() override;
+            //---------------------------------------------------------
+			/// Updates the current state with the time
+			/// since last update
+            ///
+            /// @author S Downie
 			///
-			/// Initialises the current state
+			/// @param Time since last update in seconds
 			//---------------------------------------------------------
-			void Init();
-			//---------------------------------------------------------
-			/// Destroy
+			void OnUpdate(f32 in_timeSinceLastUpdate) override;
+            //---------------------------------------------------------
+			/// Updates the current state with the time
+			/// since last update. This is called at a fixed interval
+            ///
+            /// @author S Downie
 			///
-			/// Calls destroy on the current state
-			/// and removes it from the state hierarchy
+			/// @param Fixed time since last update in seconds
 			//---------------------------------------------------------
-			void Destroy();
+			void OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate) override;
+            //---------------------------------------------------------
+            /// Triggered by the application when the system is
+            /// pushed to the background. Forwards to states.
+            ///
+            /// @author S Downie
 			//---------------------------------------------------------
-			/// Destroy All
-			///
-			/// Remove all states from the stack and destroy each
+			void OnBackground() override;
+            //---------------------------------------------------------
+            /// Triggered by the application when the app is suspended.
+            /// Forwards to states.
+            ///
+            /// @author S Downie
 			//---------------------------------------------------------
-			void DestroyAll();
+			void OnSuspend() override;
+            //---------------------------------------------------------
+            /// Triggered by the application when the system is
+            /// about to be destroyed to ensure systems exist when
+            /// states are destroyed.
+            ///
+            /// @author S Downie
+			//---------------------------------------------------------
+			void DestroyStates();
+            //---------------------------------------------------------
+            /// Triggered by the application when it receives
+            /// a low memory warning. Forwards to states.
+            ///
+            /// @author S Downie
+			//---------------------------------------------------------
+			void OnMemoryWarning() override;
             //---------------------------------------------------------
             /// Pop Hierarchy
             ///

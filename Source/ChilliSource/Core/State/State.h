@@ -95,18 +95,9 @@ namespace ChilliSource
 			//-----------------------------------------
             void Init();
 			//-----------------------------------------
-            /// Triggered whenever a state becomes the
-            /// active state in the state manager.
-            ///
-            /// (Pairs with Stop)
-            ///
-            /// @author S Downie
-			//-----------------------------------------
-            void Start();
-			//-----------------------------------------
             /// Triggered when a state is the
             /// active state in the state manager and
-            /// the application resumes.
+            /// the application/state resumes.
             ///
             /// (Pairs with Suspend)
             ///
@@ -157,22 +148,13 @@ namespace ChilliSource
 			//-----------------------------------------
             /// Triggered when a state is the
             /// active state in the state manager and
-            /// the application suspends.
+            /// the application/state suspends.
             ///
             /// (Pairs with OnResume)
             ///
             /// @author S Downie
 			//-----------------------------------------
             void Suspend();
-			//-----------------------------------------
-            /// Triggered whenever a state is no longer
-            /// the active state in the state manager.
-            ///
-            /// (Pairs with Start)
-            ///
-            /// @author S Downie
-			//-----------------------------------------
-            void Stop();
 			//-----------------------------------------
             /// Triggered whenever a state is removed
             /// from the state manager.
@@ -183,8 +165,8 @@ namespace ChilliSource
 			//-----------------------------------------
             void Destroy();
             //------------------------------------------------
-            /// Called when the state receives a memory while
-            /// active
+            /// Called when the application receives a memory
+            /// warning. This is filtered to all states
             ///
             /// @author S Downie
             //------------------------------------------------
@@ -207,18 +189,9 @@ namespace ChilliSource
 			//-----------------------------------------
 			virtual void OnInit(){};
 			//-----------------------------------------
-            /// Triggered whenever a state becomes the
-            /// active state in the state manager.
-            ///
-            /// (Pairs with OnStop)
-            ///
-            /// @author S Downie
-			//-----------------------------------------
-			virtual void OnStart(){};
-			//-----------------------------------------
             /// Triggered when a state is the
             /// active state in the state manager and
-            /// the application resumes.
+            /// the application/state resumes.
             ///
             /// (Pairs with OnSuspend)
             ///
@@ -269,22 +242,13 @@ namespace ChilliSource
 			//-----------------------------------------
             /// Triggered when a state is the
             /// active state in the state manager and
-            /// the application suspends.
+            /// the application/state suspends.
             ///
             /// (Pairs with OnResume)
             ///
             /// @author S Downie
 			//-----------------------------------------
 			virtual void OnSuspend(){};
-			//-----------------------------------------
-            /// Triggered whenever a state is no longer
-            /// the active state in the state manager.
-            ///
-            /// (Pairs with OnStart)
-            ///
-            /// @author S Downie
-			//-----------------------------------------
-			virtual void OnStop(){};
 			//-----------------------------------------
             /// Triggered whenever a state is removed
             /// from the state manager.
