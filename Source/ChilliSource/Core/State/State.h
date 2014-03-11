@@ -11,7 +11,6 @@
 #define _MO_FLO_STATE_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
 namespace ChilliSource
 {
@@ -132,20 +131,6 @@ namespace ChilliSource
             //---------------------------------------------------------------------
             virtual void DebugPrint(std::string instrMessage);
             
-			//-----------------------------------------
-			/// Get Application
-			///
-			/// Handy accessors for the main application
-			/// @return Application handle
-			//-----------------------------------------
-			Application& GetApplication();
-			//-----------------------------------------
-			/// Get Application
-			///
-			/// Handy accessors for the main application
-			/// @return Application handle
-			//-----------------------------------------
-			Application* GetApplicationPtr();
 			//------------------------------------------
 			/// Get Scene
 			///

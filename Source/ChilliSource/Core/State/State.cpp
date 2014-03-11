@@ -27,33 +27,13 @@ namespace ChilliSource
             
 			if(!inpScene)
 			{
-				mpScene = new Scene(mpStateMgr->GetApplicationPtr()->GetInputSystem());
+				mpScene = new Scene(Application::Get()->GetInputSystem());
 			}
 			else
 			{
 				mbOwnsScene = false;
 				mpScene = inpScene;
 			}
-		}
-		//-----------------------------------------
-		/// Get Application
-		///
-		/// Handy accessors for the main application
-		/// @return Application handle
-		//-----------------------------------------
-		Application& State::GetApplication()
-		{
-			return mpStateMgr->GetApplication();
-		}
-		//-----------------------------------------
-		/// Get Application
-		///
-		/// Handy accessors for the main application
-		/// @return Application handle
-		//-----------------------------------------
-		Application* State::GetApplicationPtr()
-		{
-			return mpStateMgr->GetApplicationPtr();
 		}
 		//------------------------------------------
 		/// Get Scene

@@ -14,7 +14,6 @@
 #include <ChilliSource/Core/State/State.h>
 #include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
-#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
 
 #include <list>
 #include <queue>
