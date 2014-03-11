@@ -1,73 +1,65 @@
+//
+//  Mouse.cpp
+//  Chilli Source
+//
+//  Created by Scott Downie on 24/11/2011.
+//  Copyright (c) 2011 Tag Games Ltd. All rights reserved.
+//
 
 #include <ChilliSource/Backend/Platform/Windows/Input/Pointer/Mouse.h>
 
+#include <ChilliSource/Backend/Platform/Windows/GLFW/Base/GLFWManager.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Input/Pointer/TouchScreen.h>
-
-//This needs to be included after windows.h
-#include <Platform/Windows/glfw.h>
 
 namespace ChilliSource
 {
 	namespace Windows
 	{
 		Mouse* gpMouseInstance = nullptr;
-		//----------------------------------------------------
-		/// Constructor
-		///
-		/// Default
-		//----------------------------------------------------
-		Mouse::Mouse() : mudwCurrentTouchID(0)
-		{
-			//Register for glfw mouse callbacks
-			glfwSetMousePosCallback((GLFWmouseposfun)&Mouse::OnMouseMoved);
-			glfwSetMouseButtonCallback((GLFWmousebuttonfun)&Mouse::OnMouseButtonPressed);
 
+		//----------------------------------------------------
+		//----------------------------------------------------
+		Mouse::Mouse()
+		: m_currentTouchID(0)
+		{
 			gpMouseInstance = this;
+
+			//Register for glfw mouse callbacks
+			GLFWManager::Get()->SetCursorPosDelegate(&Mouse::OnMouseMoved);
+			GLFWManager::Get()->SetMouseButtonDelegate(&Mouse::OnMouseButtonPressed);
 		}
 		//------------------------------------------------------
-		/// Constructor
-		///
-		/// Takes a touch screen proxy to fake touch input
-		///
-		/// @param Touch screen proxy
 		//------------------------------------------------------
-		Mouse::Mouse(Input::TouchScreen* inpTouchProxy) : Input::Mouse(inpTouchProxy), mudwCurrentTouchID(0)
+		Mouse::Mouse(Input::TouchScreen* in_touchProxy)
+		: Input::Mouse(in_touchProxy)
+		, m_currentTouchID(0)
 		{
-			//Register for glfw mouse callbacks
-			glfwSetMousePosCallback((GLFWmouseposfun)&Mouse::OnMouseMoved);
-			glfwSetMouseButtonCallback((GLFWmousebuttonfun)&Mouse::OnMouseButtonPressed);
-
 			gpMouseInstance = this;
+
+			//Register for glfw mouse callbacks
+			GLFWManager::Get()->SetCursorPosDelegate(&Mouse::OnMouseMoved);
+			GLFWManager::Get()->SetMouseButtonDelegate(&Mouse::OnMouseButtonPressed);
 		}
 		//-------------------------------------------------------
-		/// Is A
 		//-------------------------------------------------------
-		bool Mouse::IsA(Core::InterfaceIDType inInterfaceID) const
+		bool Mouse::IsA(Core::InterfaceIDType in_interfaceID) const
 		{
-			return inInterfaceID == Input::Mouse::InterfaceID;
+			return in_interfaceID == Input::Mouse::InterfaceID;
 		}
 		//------------------------------------------------------
-		/// Get Position
-		/// 
-		/// @return Position of cursor on screen
 		//------------------------------------------------------
-		ChilliSource::Core::Vector2 Mouse::GetPosition() const
+		Core::Vector2 Mouse::GetPosition() const
 		{
-			s32 dwX, dwY = 0;
-			glfwGetMousePos(&dwX, &dwY);
+			f64 xPos, yPos = 0.0;
+			GLFWManager::Get()->GetCursorPos(&xPos, &yPos);
 
-			dwY = Core::Screen::GetOrientedHeight() - dwY; 
-			return ChilliSource::Core::Vector2((f32)dwX, (f32)dwY);
+			yPos = Core::Screen::GetOrientedHeight() - yPos;
+			return Core::Vector2((f32)xPos, (f32)yPos);
 		}
-		//---GLFW Mouse Delegates
 		//----------------------------------------------
-		/// On Mouse Moved (GLFW)
-		///
-		/// @param Cursor X Pos
-		/// @param Cursor Y Pos
 		//----------------------------------------------
-		void Mouse::OnMouseMoved(s32 indwPosX, s32 indwPosY)
+		void Mouse::OnMouseMoved(GLFWwindow* in_window, f64 in_xPos, f64 in_yPos)
 		{
 			if(gpMouseInstance)
 			{
@@ -76,42 +68,38 @@ namespace ChilliSource
 				//We may want to fake touch input
 				if(gpMouseInstance->mpTouchProxy && gpMouseInstance->mbaButtonsDown[(s32)Input::MouseInputType::k_leftButton])
 				{
-					gpMouseInstance->mpTouchProxy->MoveTouch(gpMouseInstance->mudwCurrentTouchID, Core::Vector2((f32)indwPosX, (f32)indwPosY), gpMouseInstance->mpTouchProxy->GetLastTimeStamp());
+					gpMouseInstance->mpTouchProxy->MoveTouch(gpMouseInstance->m_currentTouchID, Core::Vector2((f32)in_xPos, (f32)in_yPos), gpMouseInstance->mpTouchProxy->GetLastTimeStamp());
 				}
 			}
 		}
 		//----------------------------------------------
-		/// On Mouse Button Pressed (GLFW)
-		///
-		/// @param Button ID
-		/// @param Button status
 		//----------------------------------------------
-		void Mouse::OnMouseButtonPressed(s32 indwButtonID, s32 indwMouseButtonState)
+		void Mouse::OnMouseButtonPressed(GLFWwindow* in_window, s32 in_buttonID, s32 in_buttonAction, s32 in_modifierKeys)
 		{
 			if(gpMouseInstance)
 			{
-				switch(indwMouseButtonState)
+				switch (GLFWManager::MouseButtonAction(in_buttonAction))
 				{
-				case GLFW_PRESS:
-					gpMouseInstance->mbaButtonsDown[indwButtonID] = true;
+				case GLFWManager::MouseButtonAction::k_press :
+					gpMouseInstance->mbaButtonsDown[in_buttonID] = true;
 					gpMouseInstance->mOnMousePressedEvent.NotifyConnections(gpMouseInstance);
 					
 					//We may want to fake touch input
 					if(gpMouseInstance->mpTouchProxy)
 					{
-						s32 dwXPos, dwYPos = 0;
-						glfwGetMousePos(&dwXPos, &dwYPos);
-						gpMouseInstance->mudwCurrentTouchID = gpMouseInstance->mpTouchProxy->StartTouch(Core::Vector2((f32)dwXPos, (f32)dwYPos), gpMouseInstance->mpTouchProxy->GetLastTimeStamp());
+						f64 xPos, yPos = 0.0;
+						GLFWManager::Get()->GetCursorPos(&xPos, &yPos);
+						gpMouseInstance->m_currentTouchID = gpMouseInstance->mpTouchProxy->StartTouch(Core::Vector2((f32)xPos, (f32)yPos), gpMouseInstance->mpTouchProxy->GetLastTimeStamp());
 					}
 					break;
-				case GLFW_RELEASE:
-					gpMouseInstance->mbaButtonsDown[indwButtonID] = false;
+				case GLFWManager::MouseButtonAction::k_release:
+					gpMouseInstance->mbaButtonsDown[in_buttonID] = false;
 					gpMouseInstance->mOnMouseReleasedEvent.NotifyConnections(gpMouseInstance);
 
 					//We may want to fake touch input
 					if(gpMouseInstance->mpTouchProxy)
 					{
-						gpMouseInstance->mpTouchProxy->EndTouch(gpMouseInstance->mudwCurrentTouchID, gpMouseInstance->mpTouchProxy->GetLastTimeStamp());
+						gpMouseInstance->mpTouchProxy->EndTouch(gpMouseInstance->m_currentTouchID, gpMouseInstance->mpTouchProxy->GetLastTimeStamp());
 					}
 					break;
 				default:
@@ -120,13 +108,12 @@ namespace ChilliSource
 			}
 		}
 		//----------------------------------------------------
-		/// Destructor
 		//----------------------------------------------------
 		Mouse::~Mouse()
 		{
 			//Remove as listener
-			glfwSetMousePosCallback(nullptr);
-			glfwSetMouseButtonCallback(nullptr);
+			GLFWManager::Get()->SetCursorPosDelegate(nullptr);
+			GLFWManager::Get()->SetMouseButtonDelegate(nullptr);
 
 			if(gpMouseInstance ==  this)
 			{

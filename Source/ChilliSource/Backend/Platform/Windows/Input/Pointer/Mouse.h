@@ -1,10 +1,19 @@
+//
+//  Mouse.h
+//  Chilli Source
+//
+//  Created by Scott Downie on 24/11/2011.
+//  Copyright (c) 2011 Tag Games Ltd. All rights reserved.
+//
 
-#ifndef _MO_FLO_WINDOWSPLATFORM_INPUT_MOUSE_H_
-#define _MO_FLO_WINDOWSPLATFORM_INPUT_MOUSE_H_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_INPUT_POINTER_MOUSE_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_WINDOWS_INPUT_POINTER_MOUSE_H_
 
 #include <ChilliSource/Backend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Input/ForwardDeclarations.h>
 #include <ChilliSource/Input/Pointer/Mouse.h>
+
+struct GLFWwindow;
 
 namespace ChilliSource
 {
@@ -13,42 +22,72 @@ namespace ChilliSource
 		class Mouse : public Input::Mouse
 		{
 		public:
+			//-------------------------------------------------------
+			/// Constructor
+			///
+			/// @author S Downie
+			//-------------------------------------------------------
 			Mouse();
-			Mouse(Input::TouchScreen* inpTouchProxy);
-			virtual ~Mouse();
-
 			//-------------------------------------------------------
-			/// Is A
+			/// Constructor
+			///
+			/// @author S Downie
+			///
+			/// @param Touch screen to proxy mouse touches to
 			//-------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+			Mouse(Input::TouchScreen* in_touchProxy);
+			//-------------------------------------------------------
+			/// Destructor
+			///
+			/// @author S Downie
+			//-------------------------------------------------------
+			~Mouse();
+			//-------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @param Interface ID
+			///
+			/// @return Whether class implements interface with ID
+			//-------------------------------------------------------
+			bool IsA(Core::InterfaceIDType in_interfaceID) const override;
 			//------------------------------------------------------
 			/// Get Position
-			/// 
+			///
+			/// @author S Downie
+			///
 			/// @return Position of cursor on screen
 			//------------------------------------------------------
-			ChilliSource::Core::Vector2 GetPosition() const override;
+			Core::Vector2 GetPosition() const override;
 
 		private:
 
 			//---GLFW Mouse Delegates
 			//----------------------------------------------
-			/// On Mouse Moved (GLFW)
+			/// Triggered by GLFW when the cursor moves
 			///
+			/// @author S Downie
+			///
+			/// @param Window that received input
 			/// @param Cursor X Pos
 			/// @param Cursor Y Pos
 			//----------------------------------------------
-			static void OnMouseMoved(s32 indwPosX, s32 indwPosY);
+			static void OnMouseMoved(GLFWwindow* in_window, f64 in_xPos, f64 in_yPos);
 			//----------------------------------------------
-			/// On Mouse Button Pressed (GLFW)
+			/// Triggered by GLFW when a mouse button is 
+			/// pressed
 			///
+			/// @author S Downie
+			///
+			/// @param Window that received input
 			/// @param Button ID
-			/// @param Button status
+			/// @param Button action (Press/Release)
+			/// @param Bit field describing modifier keys
 			//----------------------------------------------
-			static void OnMouseButtonPressed(s32 indwButtonID, s32 indwMouseButtonState);
+			static void OnMouseButtonPressed(GLFWwindow* in_window, s32 in_buttonID, s32 in_buttonAction, s32 in_modifierKeys);
 
 		private:
 
-			u32 mudwCurrentTouchID;
+			u32 m_currentTouchID;
 		};
 	}
 }

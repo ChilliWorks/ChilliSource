@@ -1,104 +1,74 @@
-/*
-*  InputSystem.cpp
-*  FatherTed
-*
-*  Created by Tag Games on 05/10/2010.
-*  Copyright 2010 Tag Games. All rights reserved.
-*
-*/
+//
+//  InputSystem.cpp
+//  Chilli Source
+//
+//  Created by Scott Downie on 05/10/2010.
+//  Copyright (c) 2010 Tag Games Ltd. All rights reserved.
+//
 
 #include <ChilliSource/Backend/Platform/Windows/Input/Base/InputSystem.h>
-
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Time/Timer.h>
 
 namespace ChilliSource
 {
 	namespace Windows
 	{
-		InputSystem::InputSystem() : mMouse(&mTouchScreen)
+		//---------------------------------------------------------------
+		//---------------------------------------------------------------
+		InputSystem::InputSystem() 
+		: m_mouse(&m_touchScreen)
 		{
 		}
-		InputSystem::~InputSystem()
+		//---------------------------------------------------------------
+		//---------------------------------------------------------------
+		bool InputSystem::IsA(ChilliSource::Core::InterfaceIDType in_interfaceID) const
 		{
-
+			return in_interfaceID == Input::InputSystem::InterfaceID || in_interfaceID == IUpdateable::InterfaceID;
 		}
 		//---------------------------------------------------------------
-		/// Is A
-		///
-		/// @param Interface type to compare
-		/// @return Whether the system is of the given type
 		//---------------------------------------------------------------
-		bool InputSystem::IsA(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		bool InputSystem::CanCreateDeviceWithInterface(Core::InterfaceIDType in_interfaceID) const
 		{
-			return inInterfaceID == Input::InputSystem::InterfaceID || inInterfaceID == IUpdateable::InterfaceID;
+			return in_interfaceID == TouchScreen::InterfaceID || in_interfaceID == Mouse::InterfaceID;
 		}
 		//---------------------------------------------------------------
-		/// Can Create Device With Interface
-		///
-		/// @param Interface of input type to create
-		/// @return Whether the system can create input type
 		//---------------------------------------------------------------
-		bool InputSystem::CanCreateDeviceWithInterface(ChilliSource::Core::InterfaceIDType inInterfaceID) const
+		Input::InputDevice* InputSystem::GetDeviceWithInterface(ChilliSource::Core::InterfaceIDType in_interfaceID)
 		{
-			return inInterfaceID == TouchScreen::InterfaceID || inInterfaceID == Mouse::InterfaceID;
-		}
-		//---------------------------------------------------------------
-		/// Get Device With Interface
-		///
-		/// @param Interface of input type to retreive
-		/// @return Pointer to input type or nullptr
-		//---------------------------------------------------------------
-		Input::InputDevice * InputSystem::GetDeviceWithInterface(ChilliSource::Core::InterfaceIDType inInterfaceID)
-		{
-			if (inInterfaceID == TouchScreen::InterfaceID)
+			if (in_interfaceID == TouchScreen::InterfaceID)
 			{
-				return &mTouchScreen;
+				return &m_touchScreen;
 			}
-			else if (inInterfaceID == Mouse::InterfaceID)
+			else if (in_interfaceID == Mouse::InterfaceID)
 			{
-				return &mMouse;
+				return &m_mouse;
 			}
 
 			return nullptr;
 		}
 		//---------------------------------------------------------------
-		/// Get Touch Screen Pointer
-		///
-		/// @return Pointer to touch screen device
 		//---------------------------------------------------------------
-		Input::TouchScreen * InputSystem::GetTouchScreen()
+		Input::TouchScreen* InputSystem::GetTouchScreen()
 		{
-			return &mTouchScreen;
+			return &m_touchScreen;
 		}
 		//---------------------------------------------------------------
-		/// Get Mouse Pointer
-		///
-		/// @return Pointer to mouse device
 		//---------------------------------------------------------------
-		Input::Mouse * InputSystem::GetMouse()
+		Input::Mouse* InputSystem::GetMouse()
 		{
-			return &mMouse;
+			return &m_mouse;
 		}
 		//---------------------------------------------------------------
-		/// Update
-		///
-		/// @param Time between frames
 		//---------------------------------------------------------------
-		void InputSystem::Update(f32 infDT)
+		void InputSystem::Update(f32 in_timeSinceLastUpdate)
 		{
-			m_timeStamp += infDT;
-			mTouchScreen.SetCurrentAppTime(m_timeStamp);
+			m_timeStamp += in_timeSinceLastUpdate;
+			m_touchScreen.SetCurrentAppTime(m_timeStamp);
 		}
 		//-----------------------------------------------------------
-		/// Flush Buffered Input
-		///
-		/// Have the input elements notify listeners of each
-		/// buffered value then clear the buffered input
 		//-----------------------------------------------------------
 		void InputSystem::FlushBufferedInput()
 		{
-			mTouchScreen.FlushBufferedInput();
+			m_touchScreen.FlushBufferedInput();
 		}
 	}
 }
