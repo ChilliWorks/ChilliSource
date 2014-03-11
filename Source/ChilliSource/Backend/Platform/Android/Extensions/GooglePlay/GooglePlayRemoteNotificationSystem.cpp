@@ -12,7 +12,7 @@
 #include <ChilliSource/Backend/Platform/Android/Extensions/GooglePlay/GooglePlayRemoteNotificationJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
-#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
+#include <ChilliSource/Core/Notification/Notification.h>
 
 namespace ChilliSource
 {
@@ -20,68 +20,78 @@ namespace ChilliSource
     {
 		namespace
 		{
-			const std::string kstrProviderID = "Google";
+			const std::string k_providerID = "Google";
 		}
-		//---------------------------------------------------------------
-		/// Constructor
-		//---------------------------------------------------------------
+
+		CS_DEFINE_NAMEDTYPE(GooglePlayRemoteNotificationSystem);
+        //--------------------------------------------------
+        //--------------------------------------------------
     	GooglePlayRemoteNotificationSystem::GooglePlayRemoteNotificationSystem()
     	{
-    		if(nullptr == (mpJavaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<GooglePlayRemoteNotificationJavaInterface>()))
+    		m_javaInterface = ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<GooglePlayRemoteNotificationJavaInterface>();
+    		if(nullptr == m_javaInterface)
     		{
-    			mpJavaInterface = GooglePlayRemoteNotificationJavaInterfaceSPtr(new GooglePlayRemoteNotificationJavaInterface());
-				ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpJavaInterface);
+    			m_javaInterface = GooglePlayRemoteNotificationJavaInterfaceSPtr(new GooglePlayRemoteNotificationJavaInterface());
+				ChilliSource::Android::JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_javaInterface);
     		}
     	}
-		//-------------------------------------------------------------------------
-		/// Request Remote Token
-		//-------------------------------------------------------------------------
-		void GooglePlayRemoteNotificationSystem::RequestRemoteToken(const Core::RemoteTokenReceivedDelegate& inDelegate)
+        //--------------------------------------------------
+        //--------------------------------------------------
+        bool GooglePlayRemoteNotificationSystem::IsA(Core::InterfaceIDType in_interfaceID) const
+        {
+            return (GooglePlayRemoteNotificationSystem::InterfaceID == in_interfaceID || Core::RemoteNotificationSystem::InterfaceID == in_interfaceID);
+        }
+        //--------------------------------------------------
+        //--------------------------------------------------
+        void GooglePlayRemoteNotificationSystem::SetEnabled(bool in_enabled)
+        {
+            m_enabled = in_enabled;
+        }
+        //--------------------------------------------------
+        //--------------------------------------------------
+		void GooglePlayRemoteNotificationSystem::RequestRemoteToken(const TokenReceivedDelegate& in_delegate)
 		{
-			mDelegate = inDelegate;
-			mpJavaInterface->RequestRemoteToken();
+			m_delegate = in_delegate;
+			m_javaInterface->RequestRemoteToken();
 		}
-		//-------------------------------------------------------------------------
-		/// Get Remote Token
-		//-------------------------------------------------------------------------
+        //--------------------------------------------------
+        //--------------------------------------------------
 		const std::string& GooglePlayRemoteNotificationSystem::GetRemoteToken() const
 		{
-			return mstrToken;
+			return m_token;
 		}
-		//-------------------------------------------------------------------------
-		/// Get Provider ID
-		//-------------------------------------------------------------------------
+        //--------------------------------------------------
+        //--------------------------------------------------
 		const std::string& GooglePlayRemoteNotificationSystem::GetProviderID() const
 		{
-			return kstrProviderID;
+			return k_providerID;
 		}
-		//-------------------------------------------------------------------------
-		/// On Remote Token Received
-		//-------------------------------------------------------------------------
-		void GooglePlayRemoteNotificationSystem::OnRemoteTokenReceived(const std::string& instrToken)
+        //--------------------------------------------------
+        //---------------------------------------------------
+        Core::IConnectableEvent<Core::RemoteNotificationSystem::NotificationReceivedDelegate>& GooglePlayRemoteNotificationSystem::GetRecievedEvent()
 		{
-			mstrToken = Core::BaseEncoding::Base64Encode(instrToken);
-			if(mDelegate != nullptr)
+        	return m_receivedEvent;
+		}
+        //--------------------------------------------------
+        //--------------------------------------------------
+		void GooglePlayRemoteNotificationSystem::OnRemoteTokenReceived(const std::string& in_token)
+		{
+			m_token = Core::BaseEncoding::Base64Encode(in_token);
+			if(m_delegate != nullptr)
 			{
-				mDelegate(mstrToken);
-				mDelegate = nullptr;
+				m_delegate(m_token);
+				m_delegate = nullptr;
 			}
 		}
-		//-------------------------------------------------------------------------
-		/// On Remote Notification Received
-		//-------------------------------------------------------------------------
-		void GooglePlayRemoteNotificationSystem::OnRemoteNotificationReceived(const Core::ParamDictionary& insParams)
+        //--------------------------------------------------
+        //--------------------------------------------------
+		void GooglePlayRemoteNotificationSystem::OnRemoteNotificationReceived(const Core::ParamDictionary& in_params)
 		{
-			Core::NotificationSPtr notification(std::make_shared<CSCore::Notification>());
-
-			notification->bDismissed = false;
-			notification->eType = Core::NotificationType::k_push;
-			notification->TriggerTime = Core::Application::Get()->GetSystemTime();
-			notification->ID = 0;
-			notification->ePriority = Core::NotificationPriority::k_standard;
-			notification->sParams = insParams;
-
-			Core::NotificationScheduler::OnNotificationReceived(notification);
+			if (m_enabled == true)
+			{
+				Core::NotificationSPtr notification(std::make_shared<CSCore::Notification>(0, in_params, Core::Notification::Priority::k_standard));
+				m_receivedEvent.NotifyConnections(notification);
+			}
 		}
     }
 }

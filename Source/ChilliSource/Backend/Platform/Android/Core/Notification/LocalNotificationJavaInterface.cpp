@@ -1,72 +1,50 @@
-/*
- *  LocalNotificationJavaInterface.cpp
- *  moFlow
- *
- *  Created by Steven Hendrie on 28/09/2012.
- *  Copyright 2012 Tag Games. All rights reserved.
- *
- */
+//
+//  LocalNotificationJavaInterface.h
+//  Chilli Source
+//
+//  Created by Steven Hendrie on 28/09/2012.
+//  Copyright 2011 Tag Games. All rights reserved.
+//
 
 #include <ChilliSource/Backend/Platform/Android/Core/Notification/LocalNotificationJavaInterface.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
-#include <ChilliSource/Backend/Platform/Android/Core/Notification/LocalNotificationScheduler.h>
+#include <ChilliSource/Backend/Platform/Android/Core/Notification/LocalNotificationSystem.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
 #include <jni.h>
 
 extern "C"
 {
-	void Java_com_chillisource_core_LocalNotificationNativeInterface_ApplicationDidReceiveLocalNotification(JNIEnv* inpEnv, jobject thiz, jobjectArray inastrKeys, jobjectArray inastrValues);
+	void Java_com_chillisource_core_LocalNotificationNativeInterface_nativeOnNotificationReceived(JNIEnv* in_environment, jobject in_this, s32 in_id, jobjectArray in_keys, jobjectArray in_values, s32 in_priority);
 }
 
-void Java_com_chillisource_core_LocalNotificationNativeInterface_ApplicationDidReceiveLocalNotification(JNIEnv* inpEnv, jobject thiz, jobjectArray inastrKeys, jobjectArray inastrValues)
+void Java_com_chillisource_core_LocalNotificationNativeInterface_nativeOnNotificationReceived(JNIEnv* in_environment, jobject in_this, s32 in_id, jobjectArray in_keys, jobjectArray in_values, s32 in_priority)
 {
-	CSCore::NotificationSPtr notification(std::make_shared<CSCore::Notification>());
-	notification->bDismissed = false;
-	notification->eType = CSCore::NotificationType::k_system;
+	ChilliSource::Core::ParamDictionary params;
 
-	u32 udwNumberOfParams = inpEnv->GetArrayLength(inastrKeys);
-	for(u32 udwKey = 0; udwKey < udwNumberOfParams; ++udwKey)
+	u32 numParams = in_environment->GetArrayLength(in_keys);
+	for(u32 keyIndex = 0; keyIndex < numParams; ++keyIndex)
 	{
-		jstring jstrKey = (jstring)inpEnv->GetObjectArrayElement(inastrKeys,udwKey);
-		jstring jstrValue =  (jstring)inpEnv->GetObjectArrayElement(inastrValues,udwKey);
+		jstring keyJava = (jstring)in_environment->GetObjectArrayElement(in_keys, keyIndex);
+		jstring valueJava =  (jstring)in_environment->GetObjectArrayElement(in_values, keyIndex);
 
-		//Convert this myself because json to stdstring method requires being on same thread as game
-		std::string strKey;
-		{
-			const char * cString = inpEnv->GetStringUTFChars(jstrKey, JNI_FALSE);
-			std::string stdString = std::string(cString);
-			inpEnv->ReleaseStringUTFChars(jstrKey, cString);
-			strKey =  stdString;
-		}
-		std::string strValue;
-		{
-			const char * cString = inpEnv->GetStringUTFChars(jstrValue, JNI_FALSE);
-			std::string stdString = std::string(cString);
-			inpEnv->ReleaseStringUTFChars(jstrValue, cString);
-			strValue =  stdString;
-		}
-		CS_LOG_DEBUG(strKey + " - " + strValue);
-		if(strKey == "NotificationID")
-		{
-			notification->ID = CSCore::ParseS32(strValue);
-			continue;
-		}
-		if(strKey == "TriggerTime")
-		{
-			notification->TriggerTime = CSCore::ParseU64(strValue);
-			continue;
-		}
-		if(strKey == "Priority")
-		{
-			notification->ePriority = (CSCore::NotificationPriority)CSCore::ParseS32(strValue);
-			continue;
-		}
-		notification->sParams.SetValueForKey(strKey,strValue);
+		std::string key = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(keyJava);
+		std::string value = ChilliSource::Android::JavaInterfaceUtils::CreateSTDStringFromJString(valueJava);
+
+		params.SetValueForKey(key, value);
+
+		in_environment->DeleteLocalRef(keyJava);
+		in_environment->DeleteLocalRef(valueJava);
 	}
-	ChilliSource::Android::LocalNotificationScheduler::ApplicationDidReceiveLocalNotification(notification);
+
+	ChilliSource::Android::LocalNotificationSystem* localNotificationSystem = ChilliSource::Core::Application::Get()->GetSystem<ChilliSource::Android::LocalNotificationSystem>();
+	if (localNotificationSystem != nullptr)
+	{
+		localNotificationSystem->OnNotificationReceived((ChilliSource::Core::Notification::ID)in_id, params, (ChilliSource::Core::Notification::Priority)in_priority);
+	}
 }
 
 namespace ChilliSource
@@ -74,75 +52,72 @@ namespace ChilliSource
 	namespace Android
 	{
 		CS_DEFINE_NAMEDTYPE(LocalNotificationJavaInterface);
-		//--------------------------------------------------------------------------------------
-		/// Constructor
-		//--------------------------------------------------------------------------------------
+		//--------------------------------------------------------
+		//--------------------------------------------------------
 		LocalNotificationJavaInterface::LocalNotificationJavaInterface()
 		{
 			CreateNativeInterface("com/chillisource/core/LocalNotificationNativeInterface");
-			CreateMethodReference("ScheduleNotification", "(JLjava/lang/String;II[Ljava/lang/String;[Ljava/lang/String;)V");
-			CreateMethodReference("CancelByID","(I)V");
-			CreateMethodReference("CancelAll","()V");
+			CreateMethodReference("scheduleNotificationForTime", "(I[Ljava/lang/String;[Ljava/lang/String;JI)V");
+			CreateMethodReference("cancelByID","(I)V");
+			CreateMethodReference("cancelAll","()V");
 		}
-		//--------------------------------------------------------------------------------------
-		/// Is A
-		//--------------------------------------------------------------------------------------
-		bool LocalNotificationJavaInterface::IsA(Core::InterfaceIDType inInterfaceID) const
+		//--------------------------------------------------------
+		//--------------------------------------------------------
+		bool LocalNotificationJavaInterface::IsA(Core::InterfaceIDType in_interfaceID) const
 		{
-			return (inInterfaceID == LocalNotificationJavaInterface::InterfaceID);
+			return (in_interfaceID == LocalNotificationJavaInterface::InterfaceID);
 		}
-		//-------------------------------------------------------------------------
-		/// Schedule Notification
-		//-------------------------------------------------------------------------
-		void LocalNotificationJavaInterface::ScheduleNotification(const Core::NotificationSPtr& insNotification)
+		//--------------------------------------------------------
+		//--------------------------------------------------------
+		void LocalNotificationJavaInterface::ScheduleNotificationForTime(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, TimeIntervalSecs in_time, Core::Notification::Priority in_priority)
 		{
-			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			JNIEnv* environment = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 
 			//Convert Trigger time from seconds to milliseconds as this is what will be used on the Android end;
-			u64 uqwFireDate = insNotification->TriggerTime * 1000;
+			u64 triggerTime = in_time * 1000;
 
-			jstring jstrAlertBody = JavaInterfaceUtils::CreateJStringFromSTDString(insNotification->sParams.ValueForKey("Body"));
-			u32 udwID = insNotification->ID;
-			u32 udwPriority = (u32)insNotification->ePriority;
+			u32 id = (u32)in_id;
+			u32 priority = (u32)in_priority;
 
 			//Create 2 arrays from ParamDictionary as this is easier to pass to Java
-			jobjectArray ajstrKey = pEnv->NewObjectArray(insNotification->sParams.size(), pEnv->FindClass("java/lang/String"), pEnv->NewStringUTF(""));
-			jobjectArray ajstrValue = pEnv->NewObjectArray(insNotification->sParams.size(), pEnv->FindClass("java/lang/String"), pEnv->NewStringUTF(""));;
+			jclass stringClass = environment->FindClass("java/lang/String");
+			jstring emptyString = environment->NewStringUTF("");
+			jobjectArray keys = environment->NewObjectArray(in_params.size(), stringClass, emptyString);
+			jobjectArray values = environment->NewObjectArray(in_params.size(), stringClass, emptyString);
 
-			u32 udwParamCount = 0;
-			for(Core::StringToStringMap::const_iterator it = insNotification->sParams.begin(); it != insNotification->sParams.end(); ++it)
+			u32 paramCount = 0;
+			for(Core::StringToStringMap::const_iterator it = in_params.begin(); it != in_params.end(); ++it)
 			{
-				jstring jstrFirst = JavaInterfaceUtils::CreateJStringFromSTDString(it->first);
-				jstring jstrSecond = JavaInterfaceUtils::CreateJStringFromSTDString(it->second);
-				pEnv->SetObjectArrayElement(ajstrKey, udwParamCount, jstrFirst);
-				pEnv->SetObjectArrayElement(ajstrValue, udwParamCount, jstrSecond);
-				pEnv->DeleteLocalRef(jstrFirst);
-				pEnv->DeleteLocalRef(jstrSecond);
-				udwParamCount++;
+				jstring key = JavaInterfaceUtils::CreateJStringFromSTDString(it->first);
+				jstring value = JavaInterfaceUtils::CreateJStringFromSTDString(it->second);
+				environment->SetObjectArrayElement(keys, paramCount, key);
+				environment->SetObjectArrayElement(values, paramCount, value);
+				environment->DeleteLocalRef(key);
+				environment->DeleteLocalRef(value);
+				paramCount++;
 			}
 
-			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("ScheduleNotification"), uqwFireDate,jstrAlertBody,udwID,udwPriority,ajstrKey,ajstrValue);
+			environment->CallVoidMethod(GetJavaObject(), GetMethodID("scheduleNotificationForTime"), id, keys, values, triggerTime, priority);
 
 			//delete local references
-			pEnv->DeleteLocalRef(jstrAlertBody);
-			pEnv->DeleteLocalRef(ajstrKey);
-			pEnv->DeleteLocalRef(ajstrValue);
+			environment->DeleteLocalRef(stringClass);
+			environment->DeleteLocalRef(emptyString);
+			environment->DeleteLocalRef(keys);
+			environment->DeleteLocalRef(values);
 		}
-		//-------------------------------------------------------------------------
-		/// Cancel By ID
-		//-------------------------------------------------------------------------
-		void LocalNotificationJavaInterface::CancelByID(u32 inID)
+		//--------------------------------------------------------
+		//--------------------------------------------------------
+		void LocalNotificationJavaInterface::CancelByID(u32 in_id)
 		{
-			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			return pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("CancelByID"),inID);
+			JNIEnv* environment = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			return environment->CallVoidMethod(GetJavaObject(), GetMethodID("cancelByID"), in_id);
 		}
-		//-------------------------------------------------------------------------
-		/// Cancel All
-		//-------------------------------------------------------------------------
+		//--------------------------------------------------------
+		//--------------------------------------------------------
 		void LocalNotificationJavaInterface::CancelAll()
 		{
-			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			return pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("CancelAll"));
+			JNIEnv* environment = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			return environment->CallVoidMethod(GetJavaObject(), GetMethodID("cancelAll"));
 		}
 	}
 }

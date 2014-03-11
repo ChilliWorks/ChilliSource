@@ -5,77 +5,116 @@
 //  Created by Steven Hendrie on 13/12/2011.
 //  Copyright 2011 Tag Games. All rights reserved.
 //
-//
 
 #ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_NOTIFICATION_LOCALNOTIFICATIONSYSTEM_H_
 #define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_NOTIFICATION_LOCALNOTIFICATIONSYSTEM_H_
 
-#include <ChilliSource/Core/Notifications/LocalNotificationSystem.h>
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Notification/LocalNotificationSystem.h>
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 
 namespace ChilliSource
 {
 	namespace Android
 	{
-		class LocalNotificationScheduler : public Core::LocalNotificationScheduler
+		//--------------------------------------------------------
+		/// Android backend for the local notification system
+		///
+		/// @author Steven Hendrie
+		//--------------------------------------------------------
+		class LocalNotificationSystem : public Core::LocalNotificationSystem
 		{
 		public:
-
-			~LocalNotificationScheduler();
-			//------------------------------------------------------------------------------
-			/// Schedule Notification
+			CS_DECLARE_NAMEDTYPE(LocalNotificationSystem);
+            //---------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @return Whether this implements the passed in
+			/// interfac id.
+            //--------------------------------------------------
+            bool IsA(Core::InterfaceIDType in_interfaceID) const override;
+			//--------------------------------------------------
+			/// Enables and disables addition of local notifications.
+			/// All existing notifications will be cancelled
+			/// when this is disabled. This is enabled by default.
 			///
-			/// Once the time is reached the notification will be inserted into the queue.
-			/// Upon reaching the head of the queue it will trigger.
+			/// @author I Copland
 			///
-			/// @param Notification
-			//------------------------------------------------------------------------------
-			void ScheduleNotification(const Core::NotificationSPtr& insNotification) override;
-	        //-------------------------------------------------------------------------
-	        /// Try Get Notifications Scheduled Within Time Period
-	        ///
-	        /// Checks if any notifications have been scheduled to trigger
-	        /// within the given window of the given time
-	        ///
-	        /// @param Time
-	        /// @param Timeframe
-	        /// @param Out: Notifications that meet criteria
-	        /// @return Whether any notifications exist within that time period
-	        //-------------------------------------------------------------------------
-	        bool TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Core::NotificationSPtr>& outaNotifications) override;
-			//-------------------------------------------------------------------------
-			/// Cancel By ID
+			/// @param Whether or not to enable the scheduling
+			/// of app notifications.
+			//---------------------------------------------------
+			void SetEnabled(bool in_enabled);
+			//---------------------------------------------------
+			/// Schedules a Local Notifcation which should fire
+			/// at the given time. A Local Notification uses
+			/// the system specfic notification alarms and can
+			/// be received even if it was scheduled during a
+			/// previous instance of the application.
 			///
+			/// @author I Copland
+			///
+			/// @param The notification id
+			/// @param The notification params.
+			/// @param Time in seconds at which it should trigger.
+			/// @param [Optional] The notification priority. Defaults
+			/// to standard priority.
+			//---------------------------------------------------
+			void ScheduleNotificationForTime(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, TimeIntervalSecs in_time, Core::Notification::Priority in_priority = Core::Notification::Priority::k_standard);
+			//--------------------------------------------------------
+			/// Builds a list of all notifications currently scheduled
+			/// within the given time peroid.
+			///
+			/// @author I Copland
+			///
+			/// @param [Out] The list of notifications.
+			/// @param [Optional] The start time.
+			/// @param [Optional] The end time.
+			//--------------------------------------------------------
+			void GetScheduledNotifications(std::vector<Core::NotificationSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_peroid = std::numeric_limits<TimeIntervalSecs>::max());
+			//-------------------------------------------------------
 			/// Prevent any notifications with given ID type from firing
 			///
+			/// @author Steven Hendrie
+			///
 			/// @param ID type
-			//-------------------------------------------------------------------------
-			void CancelByID(Core::NotificationID inID) override;
-			//-------------------------------------------------------------------------
-			/// Cancel All
+			//------------------------------------------------------
+			void CancelByID(Core::Notification::ID in_id) override;
+			//------------------------------------------------------
+			/// @author Steven Hendrie
 			///
 			/// Terminate all currently scheduled notifications
-			//-------------------------------------------------------------------------
+			//-----------------------------------------------------
 			void CancelAll() override;
-			//-------------------------------------------------------------------------
-			/// Application Did Receive Local Notification
+            //--------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @return An event that can be used to listen for
+            /// new notifications being recieved.
+            //---------------------------------------------------
+            Core::IConnectableEvent<RecievedDelegate>& GetRecievedEvent();
+			//-----------------------------------------------------
+			/// Called when game receives a local notification.
 			///
-			/// Called when game receives a local notification
-			//-------------------------------------------------------------------------
-			static void ApplicationDidReceiveLocalNotification(const Core::NotificationSPtr& insNotification);
-
+			/// @author Steven Hendrie
+            ///
+            /// @param The notification ID
+            /// @param The notification params.
+            /// @param The notification priority.
+			//----------------------------------------------------
+			void OnNotificationReceived(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, Core::Notification::Priority in_priority);
 		private:
-
-            friend Core::LocalNotificationSchedulerUPtr Core::LocalNotificationScheduler::Create();
+            friend Core::LocalNotificationSystemUPtr Core::LocalNotificationSystem::Create();
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            LocalNotificationScheduler();
+            LocalNotificationSystem();
 
 		private:
-			LocalNotificationJavaInterfaceSPtr mpLocalNotificationJavaInterface;
+            bool m_enabled;
+            Core::Event<RecievedDelegate> m_recievedEvent;
+			LocalNotificationJavaInterfaceSPtr m_localNotificationJI;
 		};
 	}
 }

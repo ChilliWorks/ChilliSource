@@ -1,66 +1,71 @@
-/*
- *  LocalNotificationJavaInterface.h
- *  moFlow
- *
- *  Created by Steven Hendrie on 28/09/2012.
- *  Copyright 2012 Tag Games. All rights reserved.
- *
- */
+//
+//  LocalNotificationJavaInterface.h
+//  Chilli Source
+//
+//  Created by Steven Hendrie on 28/09/2012.
+//  Copyright 2011 Tag Games. All rights reserved.
+//
 
-#ifndef _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_LOCALNOTIFCATIONSJAVAINTERFACE_H_
-#define _MOFLOW_PLATFORM_ANDROID_JAVAINTERFACE_LOCALNOTIFCATIONSJAVAINTERFACE_H_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_NOTIFICATION_LOCALNOTIFCATIONSJAVAINTERFACE_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_NOTIFICATION_LOCALNOTIFCATIONSJAVAINTERFACE_H_
 
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterface.h>
-#include <ChilliSource/Core/Notifications/NotificationScheduler.h>
+#include <ChilliSource/Core/Notification/Notification.h>
 
 namespace ChilliSource
 {
 	namespace Android
 	{
-		//=================================================================
-		/// Media Player Java Interface
+		//---------------------------------------------------------
+		/// A Java Interface for calls to the Alarm Manager.
 		///
-		/// A Java Interface for calls to the Android MediaPlayer.
-		//=================================================================
+		/// @author Steven Hendrie
+		//---------------------------------------------------------
 		class LocalNotificationJavaInterface : public IJavaInterface
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE();
-			//--------------------------------------------------------------
+			CS_DECLARE_NAMEDTYPE(LocalNotificationJavaInterface);
+			//---------------------------------------------------
 			/// Constructor
-			//--------------------------------------------------------------
+			///
+			/// @author Steven Hendrie
+			//---------------------------------------------------
 			LocalNotificationJavaInterface();
-			//--------------------------------------------------------------
-			/// Is A
+			//---------------------------------------------------
+			/// @author Steven Hendrie
 			///
 			/// @return whether or not this object implements the given interface.
-			//--------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const;
-			//--------------------------------------------------------------------------------------
-			/// Schedule Notification
-			///
+			//---------------------------------------------------
+			bool IsA(Core::InterfaceIDType in_interfaceID) const;
+			//---------------------------------------------------
 			/// Schedules a notification to be displayed to the user
 			///
-			/// @param a reference to the notification to be sent
-			//--------------------------------------------------------------------------------------
-			void ScheduleNotification(const Core::NotificationSPtr& insNotification);
-			//-------------------------------------------------------------------------
-			/// Cancel By ID
+			/// @author Steven Hendrie
 			///
-			/// Prevent any notifications with given ID type from firing
+			/// @param The notification id
+			/// @param The notification params.
+			/// @param Time in seconds at which it should trigger.
+			/// @param [Optional] The notification priority. Defaults
+			/// to standard priority.
+			//---------------------------------------------------
+			void ScheduleNotificationForTime(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, TimeIntervalSecs in_time, Core::Notification::Priority in_priority);
+			//---------------------------------------------------
+			/// Prevent any notifications with given ID type from
+			/// firing
+			///
+			/// @author Steven Hendrie
 			///
 			/// @param ID type
-			//-------------------------------------------------------------------------
-			void CancelByID(Core::NotificationID inID);
-			//-------------------------------------------------------------------------
-			/// Cancel All
+			//---------------------------------------------------
+			void CancelByID(Core::Notification::ID in_id);
+			//---------------------------------------------------
+			/// Terminate all currently scheduled notifications.
 			///
-			/// Terminate all currently scheduled notifications
-			//-------------------------------------------------------------------------
+			/// @author Steven Hendrie
+			//---------------------------------------------------
 			void CancelAll();
-		private:
-
 		};
 	}
 }

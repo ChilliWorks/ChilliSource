@@ -13,6 +13,7 @@
 #include <ChilliSource/Core/Notification/Notification.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
+#include <limits>
 #include <queue>
 
 namespace ChilliSource

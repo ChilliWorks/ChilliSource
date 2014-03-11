@@ -1,73 +1,59 @@
-/*
- *  CLocalNotificationService.java
- *  moFlow
- *
- *  Created by Steven Hendrie on 24/10/2012.
- *  Copyright 2012 Tag Games. All rights reserved.
- *
+/**
+ * LocalNotificationService.java
+ * Chilli Source
+ * 
+ * Created by Steven Hendrie on 24/10/2012.
+ * Copyright 2012 Tag Games. All rights reserved.
  */
 
 package com.chillisource.core;
 
-import java.util.Iterator;
-
 import com.chillisource.core.LocalNotificationNativeInterface;
+
 import android.app.Service;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.IBinder;
 
-//=============================================================
-/// Local Notification Service
-///
-/// Handles received local notifications and passes them on
-/// to moFlow.
-//=============================================================
+/**
+ * Handles received local notifications and passes them on to
+ * the native side of the engine.
+ * 
+ * @author Steven Hendrie
+ */
 public class LocalNotificationService extends Service
 {	
-	//---------------------------------------------------------
-	/// On Bind
-	///
-	/// This isn't used.
-	//---------------------------------------------------------
+	/**
+	 * Processes the given intent that has been passed from the 
+	 * Local Notification Receiver. The intent describes a local 
+	 * notification that can be passed on to moFlow.
+	 * 
+	 * @author Steven Hendrie
+	 * 
+	 * @param The intent.
+	 * @param The flags.
+	 * The start ID.
+	 */
+	@Override public int onStartCommand(Intent in_intent, int in_flags, int in_startId) 
+	{
+		if(in_intent != null)
+		{
+			LocalNotificationNativeInterface localNotificationNI = (LocalNotificationNativeInterface)NativeInterfaceManager.GetSingleton().GetNativeInterface(LocalNotificationNativeInterface.InterfaceID);
+    		if (localNotificationNI != null)
+    		{
+    			localNotificationNI.onNotificationReceived(in_intent);
+    		}     
+		}
+		
+		return super.onStartCommand(in_intent, in_flags, in_flags);
+	}
+	
+	/**
+	 * This isn't used.
+	 * 
+	 * @author Steven Hendrie
+	 */
 	@Override public IBinder onBind(Intent arg0) 
 	{
 		return null;
-	}
-	//---------------------------------------------------------
-	/// On Start Command
-	///
-	/// Processes the given intent that has been passed from
-	/// the Local Notification Receiver. The intent describes
-	/// a local notification that can be passed on to moFlow.
-	///
-	/// @param The intent.
-	/// @param The flags.
-	/// @param The start ID.
-	//---------------------------------------------------------
-	@Override public int onStartCommand(Intent inIntent, int flags, int startId) 
-	{
-		if(inIntent != null)
-		{
-			Bundle mapParams = inIntent.getExtras();
-
-			mapParams.remove("IntentID");
-			int dwParamSize = mapParams.size();
-
-			String[] astrKeys = new String[dwParamSize];
-			String[] astrValues = new String[dwParamSize];
-
-			Iterator<String> iter = mapParams.keySet().iterator();
-			int udwParamNumber = 0;
-			while(iter.hasNext())
-			{
-				astrKeys[udwParamNumber] = iter.next();			
-				astrValues[udwParamNumber] = mapParams.get(astrKeys[udwParamNumber]).toString();
-				++udwParamNumber;
-			}	
-
-			LocalNotificationNativeInterface.ApplicationDidReceiveLocalNotification(astrKeys, astrValues);        
-		}
-		return super.onStartCommand(inIntent, flags, startId);
 	}
 }

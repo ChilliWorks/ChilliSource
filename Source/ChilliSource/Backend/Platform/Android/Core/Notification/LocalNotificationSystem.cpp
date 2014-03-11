@@ -1,13 +1,12 @@
-/*
- *  LocalNotificationScheduler.cpp
- *  Funpark Friends
- *
- *  Created by Steven Hendrie on 13/12/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  LocalNotificationSystem.cpp
+//  Chilli Source
+//
+//  Created by Steven Hendrie on 13/12/2011.
+//  Copyright 2011 Tag Games. All rights reserved.
+//
 
-#include <ChilliSource/Backend/Platform/Android/Core/Notification/LocalNotificationScheduler.h>
+#include <ChilliSource/Backend/Platform/Android/Core/Notification/LocalNotificationSystem.h>
 
 #include <ChilliSource/Backend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Backend/Platform/Android/Core/Notification/LocalNotificationJavaInterface.h>
@@ -16,76 +15,76 @@ namespace ChilliSource
 {
 	namespace Android
 	{
-		LocalNotificationScheduler::LocalNotificationScheduler()
+		CS_DEFINE_NAMEDTYPE(LocalNotificationSystem);
+        //--------------------------------------------------
+        //--------------------------------------------------
+		LocalNotificationSystem::LocalNotificationSystem()
+		: m_enabled(true)
 		{
         	//get the media player java interface or create it if it doesn't yet exist.
-			mpLocalNotificationJavaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<LocalNotificationJavaInterface>();
-        	if (mpLocalNotificationJavaInterface == nullptr)
+			m_localNotificationJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<LocalNotificationJavaInterface>();
+        	if (m_localNotificationJI == nullptr)
         	{
-        		mpLocalNotificationJavaInterface = LocalNotificationJavaInterfaceSPtr(new LocalNotificationJavaInterface());
-        		JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(mpLocalNotificationJavaInterface);
+        		m_localNotificationJI = LocalNotificationJavaInterfaceSPtr(new LocalNotificationJavaInterface());
+        		JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_localNotificationJI);
         	}
 		}
-		LocalNotificationScheduler::~LocalNotificationScheduler()
-		{
-
-		}
-        //-------------------------------------------------------------------------
-        /// Try Get Notifications Scheduled Within Time Period
-        ///
-        /// Checks if any notifications have been scheduled to trigger
-        /// within the given window of the given time
-        ///
-        /// @param Time
-        /// @param Timeframe
-        /// @param Out: Notifications that meet criteria
-        /// @return Whether any notifications exist within that time period
-        //-------------------------------------------------------------------------
-        bool LocalNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod(TimeIntervalSecs inTime, TimeIntervalSecs inPeriod, std::vector<Core::NotificationSPtr>& outaNotifications)
+        //--------------------------------------------------
+        //--------------------------------------------------
+        bool LocalNotificationSystem::IsA(Core::InterfaceIDType in_interfaceID) const
         {
-        	CS_LOG_WARNING("Unimplemented method: CLocalNotificationScheduler::TryGetNotificationsScheduledWithinTimePeriod");
-        	return false;
+        	return (LocalNotificationSystem::InterfaceID == in_interfaceID || Core::LocalNotificationSystem::InterfaceID == in_interfaceID);
         }
-		//------------------------------------------------------------------------------
-		/// Schedule Notification
-		///
-		/// Calls java interface schedule method. This is done so that all java interface
-		///	functions are held within JavaInterface.
-		///
-		/// @param Notification
-		//------------------------------------------------------------------------------
-		void LocalNotificationScheduler::ScheduleNotification(const Core::NotificationSPtr& insNotification)
+		//--------------------------------------------------
+		//--------------------------------------------------
+		void LocalNotificationSystem::SetEnabled(bool in_enabled)
+        {
+			m_enabled = in_enabled;
+
+			if (m_enabled == false)
+			{
+				CancelAll();
+			}
+        }
+		//--------------------------------------------------
+		//--------------------------------------------------
+		void LocalNotificationSystem::ScheduleNotificationForTime(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, TimeIntervalSecs in_time, Core::Notification::Priority in_priority)
+        {
+			if (m_enabled == true)
+			{
+				m_localNotificationJI->ScheduleNotificationForTime(in_id, in_params, in_time, in_priority);
+			}
+        }
+		//--------------------------------------------------
+		//--------------------------------------------------
+		void LocalNotificationSystem::GetScheduledNotifications(std::vector<Core::NotificationSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_peroid)
 		{
-			mpLocalNotificationJavaInterface->ScheduleNotification(insNotification);
+			CS_LOG_WARNING("LocalNotificationScheduler::GetScheduledNotifications() is unimplemented on Android!");
 		}
-		//-------------------------------------------------------------------------
-		/// Cancel By ID
-		///
-		/// Prevent any notifications with given ID type from firing
-		///
-		/// @param ID type
-		//-------------------------------------------------------------------------
-		void LocalNotificationScheduler::CancelByID(Core::NotificationID inID)
+		//--------------------------------------------------
+		//--------------------------------------------------
+		void LocalNotificationSystem::CancelByID(Core::Notification::ID in_id)
 		{
-			mpLocalNotificationJavaInterface->CancelByID(inID);
+			m_localNotificationJI->CancelByID(in_id);
 		}
-		//-------------------------------------------------------------------------
-		/// Cancel All
-		///
-		/// Terminate all currently scheduled notifications
-		//-------------------------------------------------------------------------
-		void LocalNotificationScheduler::CancelAll()
+		//--------------------------------------------------
+		//--------------------------------------------------
+		void LocalNotificationSystem::CancelAll()
 		{
-			mpLocalNotificationJavaInterface->CancelAll();
+			m_localNotificationJI->CancelAll();
 		}
-		//-------------------------------------------------------------------------
-		/// Application Did Receive Local Notification
-		///
-		/// Called when game receives a local notification
-		//-------------------------------------------------------------------------
-		void LocalNotificationScheduler::ApplicationDidReceiveLocalNotification(const Core::NotificationSPtr& insNotification)
+        //--------------------------------------------------
+        //--------------------------------------------------
+		Core::IConnectableEvent<Core::LocalNotificationSystem::RecievedDelegate>& LocalNotificationSystem::GetRecievedEvent()
 		{
-			Core::NotificationScheduler::OnNotificationReceived(insNotification);
+        	return m_recievedEvent;
+		}
+		//--------------------------------------------------
+		//--------------------------------------------------
+		void LocalNotificationSystem::OnNotificationReceived(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, Core::Notification::Priority in_priority)
+		{
+			Core::NotificationSPtr notification = std::make_shared<Core::Notification>(in_id, in_params, in_priority);
+			m_recievedEvent.NotifyConnections(notification);
 		}
 	}
 }

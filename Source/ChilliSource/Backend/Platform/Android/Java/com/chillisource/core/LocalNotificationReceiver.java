@@ -1,10 +1,9 @@
-/*
- *  CLocalNotificationReceiver.java
- *  moFlow
- *
- *  Created by Steven Hendrie on 24/10/2012.
- *  Copyright 2012 Tag Games. All rights reserved.
- *
+/**
+ * CLocalNotificationReceiver.java
+ * Chilli Source
+ * 
+ * Created by Steven Hendrie on 24/10/2012.
+ * Copyright 2012 Tag Games. All rights reserved.
  */
 
 package com.chillisource.core;
@@ -27,112 +26,119 @@ import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
-//=============================================================
-/// Local Notification Receiver
-///
-/// Receives all local notifications.
-//=============================================================
+/**
+ * Receives all local notifications.
+ * 
+ * @author Steven Hendrie
+ */
 public class LocalNotificationReceiver extends BroadcastReceiver 
 {
-	//---------------------------------------------------------
-	/// Constants
-	//---------------------------------------------------------
-	private final static String kstrAppOpenedFromNotification = "AppOpenedFromNotification";
-	private final static String kstrArrayOfKeysName = "kstrArrayOfKeysName";
-	private final static String kstrArrayOfValuesName = "kstrArrayOfValuesName";
-	//---------------------------------------------------------
-	/// Static Member data
-	//---------------------------------------------------------
-	private static PowerManager.WakeLock sWakeLock;
-	//---------------------------------------------------------
-	/// On Receive
-	///
-	/// Called when a local notification broad cast is recieved.
-	///
-	/// @param The context.
-	/// @param The intent.
-	//---------------------------------------------------------
-	@Override public void onReceive(Context inContext, Intent inIntent)
+	/**
+	 * Constants
+	 */
+	private final static String k_appOpenedFromNotification = "AppOpenedFromNotification";
+	private final static String k_arrayOfKeysName = "kstrArrayOfKeysName";
+	private final static String k_arrayOfValuesName = "kstrArrayOfValuesName";
+	private final static String k_paramNameTitle = "Title";
+	private final static String k_paramNameBody = "Body";
+	
+	/**
+	 * Member Data
+	 */
+	private static PowerManager.WakeLock s_wakeLock;
+	
+	/**
+	 * Called when a local notification broad cast is received.
+	 * 
+	 * @author Steven Hendrie
+	 * 
+	 * @param The context.
+	 * @param The intent.
+	 */
+	@Override public void onReceive(Context in_context, Intent in_intent)
 	{
-		boolean bAppInForeground = false;
-		
-        ChilliSourceActivity moFlowActivity = ChilliSourceActivity.GetActivity();
-        if (moFlowActivity != null && moFlowActivity.IsActive() == true)
+		//evaluate whether or not the main engine activity is in the foreground
+		boolean isAppInForeground = false;
+        ChilliSourceActivity engineActivity = ChilliSourceActivity.GetActivity();
+        if (engineActivity != null && engineActivity.IsActive() == true)
         {
-        	bAppInForeground = true;
+        	isAppInForeground = true;
         }
         
-		if(bAppInForeground)
+        //if the main engine activity is in the foreground, simply pass the
+        //notification into it. Otherwise display a notification.
+		if(isAppInForeground == true)
 		{
-			Intent intent = new Intent(inIntent.getAction());
-	        intent.setClass(inContext, LocalNotificationService.class);
-	        Bundle mapParams = inIntent.getExtras();
+			Intent intent = new Intent(in_intent.getAction());
+	        intent.setClass(in_context, LocalNotificationService.class);
+	        Bundle mapParams = in_intent.getExtras();
 	        Iterator<String> iter = mapParams.keySet().iterator();
+	        
 	        while(iter.hasNext())
 	        {
 	        	String strKey =  iter.next();
 	        	intent.putExtra(strKey, mapParams.get(strKey).toString());
 	        }
-	        inContext.startService(intent);
+	        
+	        in_context.startService(intent);
 		}
 		else
 		{
-			if(sWakeLock != null)sWakeLock.release();
-			
-			PowerManager pm = (PowerManager) inContext.getSystemService(Context.POWER_SERVICE);
-			sWakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK |
-	                PowerManager.ACQUIRE_CAUSES_WAKEUP |
-	                PowerManager.ON_AFTER_RELEASE, "NotificationWakeLock");
-			sWakeLock.acquire();
-			
-			Bundle mapParams = inIntent.getExtras();
-			CharSequence strContentTitle = mapParams.getString("Title");
-			CharSequence strContextText =  mapParams.getString("Body");		
-			
-			int dwIntentID = mapParams.getInt("IntentID");
-			//This has been added by me and isn't part of the original notification therefore it doesn't get sent back down to client
-			mapParams.remove("IntentID");
-			int dwParamSize = mapParams.size();
-			
-			String[] astrKeys = new String[dwParamSize];
-			String[] astrValues = new String[dwParamSize];
-			
-			Iterator<String> iter = mapParams.keySet().iterator();
-			int udwParamNumber = 0;
-			while(iter.hasNext())
+			//aquire a wake lock
+			if(s_wakeLock != null)
 			{
-				astrKeys[udwParamNumber] = iter.next();			
-				astrValues[udwParamNumber] = mapParams.get(astrKeys[udwParamNumber]).toString();
-				++udwParamNumber;
-			}	
-	
-			Intent sOpenAppIntent = new Intent(inContext,ChilliSourceActivity.class);
-			sOpenAppIntent.setAction("android.intent.action.MAIN");
-			sOpenAppIntent.addCategory("android.intent.category.LAUNCHER");
-			sOpenAppIntent.putExtra(kstrAppOpenedFromNotification, true);
-			sOpenAppIntent.putExtra(kstrArrayOfKeysName, astrKeys);
-			sOpenAppIntent.putExtra(kstrArrayOfValuesName, astrValues);
-			sOpenAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			PendingIntent sContentIntent = PendingIntent.getActivity(inContext, dwIntentID, sOpenAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			
-			Bitmap largeIconBitmap = null;
-			int LargeIconID = ResourceHelper.GetDynamicResourceIDForField(inContext, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmiconlarge");
-			if(LargeIconID > 0)
-			{
-				largeIconBitmap = BitmapFactory.decodeResource(inContext.getResources(), LargeIconID);
+				s_wakeLock.release();
 			}
 			
-			Notification sNotification = new NotificationCompat.Builder(inContext)
-			.setContentTitle(strContentTitle)
-			.setContentText(strContextText)
-			.setSmallIcon(ResourceHelper.GetDynamicResourceIDForField(inContext, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmicon"))
-			.setLargeIcon(largeIconBitmap)
-			.setContentIntent(sContentIntent)
-			.build();
+			PowerManager pm = (PowerManager) in_context.getSystemService(Context.POWER_SERVICE);
+			s_wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "NotificationWakeLock");
+			s_wakeLock.acquire();
 			
-			NotificationManager sNotificationManager = (NotificationManager) inContext.getSystemService(Context.NOTIFICATION_SERVICE);
-			sNotificationManager.notify(dwIntentID, sNotification);
-			Toast.makeText(inContext,strContextText, Toast.LENGTH_LONG).show();	 
+			//pull out the information from the intent
+			Bundle params = in_intent.getExtras();
+			CharSequence title = params.getString(k_paramNameTitle);
+			CharSequence text =  params.getString(k_paramNameBody);		
+			int intentId = params.getInt(LocalNotificationNativeInterface.k_paramNameNotificationId);
+
+			int paramSize = params.size();
+			String[] keys = new String[paramSize];
+			String[] values = new String[paramSize];
+			Iterator<String> iter = params.keySet().iterator();
+			int paramNumber = 0;
+			while(iter.hasNext())
+			{
+				keys[paramNumber] = iter.next();			
+				values[paramNumber] = params.get(keys[paramNumber]).toString();
+				++paramNumber;
+			}	
+	
+			Intent sOpenAppIntent = new Intent(in_context, ChilliSourceActivity.class);
+			sOpenAppIntent.setAction("android.intent.action.MAIN");
+			sOpenAppIntent.addCategory("android.intent.category.LAUNCHER");
+			sOpenAppIntent.putExtra(k_appOpenedFromNotification, true);
+			sOpenAppIntent.putExtra(k_arrayOfKeysName, keys);
+			sOpenAppIntent.putExtra(k_arrayOfValuesName, values);
+			sOpenAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			PendingIntent sContentIntent = PendingIntent.getActivity(in_context, intentId, sOpenAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			
+			Bitmap largeIconBitmap = null;
+			int LargeIconID = ResourceHelper.GetDynamicResourceIDForField(in_context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmiconlarge");
+			if(LargeIconID > 0)
+			{
+				largeIconBitmap = BitmapFactory.decodeResource(in_context.getResources(), LargeIconID);
+			}
+			
+			Notification sNotification = new NotificationCompat.Builder(in_context)
+				.setContentTitle(title)
+				.setContentText(text)
+				.setSmallIcon(ResourceHelper.GetDynamicResourceIDForField(in_context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmicon"))
+				.setLargeIcon(largeIconBitmap)
+				.setContentIntent(sContentIntent)
+				.build();
+			
+			NotificationManager sNotificationManager = (NotificationManager) in_context.getSystemService(Context.NOTIFICATION_SERVICE);
+			sNotificationManager.notify(intentId, sNotification);
+			Toast.makeText(in_context, text, Toast.LENGTH_LONG).show();	 
 		}
 	}
 }
