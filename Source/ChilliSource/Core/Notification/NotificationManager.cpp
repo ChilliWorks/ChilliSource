@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
-#include <ChilliSource/Core/Notifications/NotificationManager.h>
+#include <ChilliSource/Core/Notification/NotificationManager.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/MakeDelegate.h>
-#include <ChilliSource/Core/Notifications/AppNotificationSystem.h>
-#include <ChilliSource/Core/Notifications/LocalNotificationSystem.h>
-#include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
+#include <ChilliSource/Core/Notification/AppNotificationSystem.h>
+#include <ChilliSource/Core/Notification/LocalNotificationSystem.h>
+#include <ChilliSource/Core/Notification/RemoteNotificationSystem.h>
 
 namespace ChilliSource
 {

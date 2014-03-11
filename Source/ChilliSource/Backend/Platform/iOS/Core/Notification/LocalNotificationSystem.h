@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Core/Notifications/LocalNotificationSystem.h>
+#include <ChilliSource/Core/Notification/LocalNotificationSystem.h>
 
 @class UIApplication;
 @class UILocalNotification;

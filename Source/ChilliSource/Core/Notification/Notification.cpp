@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
-#include <ChilliSource/Core/Notifications/Notification.h>
+#include <ChilliSource/Core/Notification/Notification.h>
 
 namespace ChilliSource
 {

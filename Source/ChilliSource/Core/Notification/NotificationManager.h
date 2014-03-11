@@ -10,7 +10,7 @@
 #define _CHILLISOURCE_CORE_NOTIFICATIONS_NOTIFICATIONMANAGER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Notifications/Notification.h>
+#include <ChilliSource/Core/Notification/Notification.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
 #include <queue>

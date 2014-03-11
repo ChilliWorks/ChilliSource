@@ -12,7 +12,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Backend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Core/Event/Event.h>
-#include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
+#include <ChilliSource/Core/Notification/RemoteNotificationSystem.h>
 
 #include <UIKit/UIKit.h>
 

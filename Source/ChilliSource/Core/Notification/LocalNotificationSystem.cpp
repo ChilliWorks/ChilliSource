@@ -6,7 +6,7 @@
 //  Copyright 2014 Tag Games. All rights reserved.
 //
 
-#include <ChilliSource/Core/Notifications/LocalNotificationSystem.h>
+#include <ChilliSource/Core/Notification/LocalNotificationSystem.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 

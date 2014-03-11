@@ -10,7 +10,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
-#include <ChilliSource/Core/Notifications/Notification.h>
+#include <ChilliSource/Core/Notification/Notification.h>
 
 #include <UIKit/UIKit.h>
 

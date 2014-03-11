@@ -1,16 +1,16 @@
-/*
- *  LocalNotificationScheduler.h
- *  Funpark Friends
- *
- *  Created by Steven Hendrie on 13/12/2011.
- *  Copyright 2011 Tag Games. All rights reserved.
- *
- */
+//
+//  LocalNotificationSystem.h
+//  Chilli Source
+//
+//  Created by Steven Hendrie on 13/12/2011.
+//  Copyright 2011 Tag Games. All rights reserved.
+//
+//
 
-#ifndef _MOFLOW_ANDROID_LOCAL_NOTIFICATION_SCHEDULER_H_
-#define _MOFLOW_ANDROID_LOCAL_NOTIFICATION_SCHEDULER_H_
+#ifndef _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_NOTIFICATION_LOCALNOTIFICATIONSYSTEM_H_
+#define _CHILLISOURCE_BACKEND_PLATFORM_ANDROID_CORE_NOTIFICATION_LOCALNOTIFICATIONSYSTEM_H_
 
-#include <ChilliSource/Core/Notifications/LocalNotificationScheduler.h>
+#include <ChilliSource/Core/Notifications/LocalNotificationSystem.h>
 #include <ChilliSource/Backend/Platform/Android/ForwardDeclarations.h>
 
 namespace ChilliSource

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Tag Games Ltd. All rights reserved.
 //
 
-#include <ChilliSource/Core/Notifications/RemoteNotificationSystem.h>
+#include <ChilliSource/Core/Notification/RemoteNotificationSystem.h>
 
 #ifdef CS_TARGETPLATFORM_IOS
 #	include <ChilliSource/Backend/Platform/iOS/Core/Notification/RemoteNotificationSystem.h>

@@ -11,7 +11,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
-#include <ChilliSource/Core/Notifications/Notification.h>
+#include <ChilliSource/Core/Notification/Notification.h>
 
 #include <vector>
 
