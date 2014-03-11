@@ -207,9 +207,9 @@ namespace ChilliSource
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void LocalNotificationSystem::OnInitialise()
+        void LocalNotificationSystem::OnInit()
         {
-            Core::LocalNotificationSystem::OnInitialise();
+            Core::LocalNotificationSystem::OnInit();
             
             CS_ASSERT(g_localNotificationSystem == false, "Cannot create more than 1 Local Notification System!");
             g_localNotificationSystem = this;

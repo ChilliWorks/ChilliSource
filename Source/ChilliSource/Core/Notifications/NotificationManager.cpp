@@ -146,7 +146,7 @@ namespace ChilliSource
         }
         //------------------------------------------------
         //------------------------------------------------
-        void NotificationManager::OnInitialise()
+        void NotificationManager::OnInit()
         {
             //setup the app notification system
             m_appNotificationSystem = Application::Get()->GetSystem<AppNotificationSystem>();

@@ -199,7 +199,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
             //------------------------------------------------
-            void OnInitialise() override;
+            void OnInit() override;
             //------------------------------------------------
             /// Called when a notification is received from
             /// any of the notification systems.
