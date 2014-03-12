@@ -130,7 +130,7 @@ namespace ChilliSource
             void ScheduleLocalNotificationAfterTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority = Notification::Priority::k_standard);
             //--------------------------------------------------------
             /// Builds a list of all notifications currently scheduled
-            /// within the given time peroid.
+            /// within the given time period.
             ///
             /// @author I Copland
             ///
@@ -138,7 +138,7 @@ namespace ChilliSource
             /// @param [Optional] The start time.
             /// @param [Optional] The end time.
             //--------------------------------------------------------
-            void GetScheduledNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_peroid = std::numeric_limits<TimeIntervalSecs>::max()) const;
+            void GetScheduledNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const;
             //---------------------------------------------------
             /// Prevent any notifications with given ID type from
             /// firing.

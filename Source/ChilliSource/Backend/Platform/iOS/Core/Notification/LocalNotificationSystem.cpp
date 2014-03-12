@@ -117,14 +117,14 @@ namespace ChilliSource
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void LocalNotificationSystem::GetScheduledNotifications(std::vector<Core::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_peroid) const
+        void LocalNotificationSystem::GetScheduledNotifications(std::vector<Core::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
         {
             for(UILocalNotification* nsNotification in [[UIApplication sharedApplication] scheduledLocalNotifications])
 			{
                 TimeIntervalSecs triggerTime = (TimeIntervalSecs)[nsNotification.fireDate timeIntervalSince1970];
                 s32 dwDeltaSecs = in_time - triggerTime;
                 
-				if(std::abs(dwDeltaSecs) <= in_peroid)
+				if(std::abs(dwDeltaSecs) <= in_period)
 				{
                     Core::NotificationSPtr notification = ConvertUILocalNotificationToNotification(nsNotification);
 					out_notifications.push_back(notification);
@@ -152,7 +152,6 @@ namespace ChilliSource
             [[UIApplication sharedApplication] cancelAllLocalNotifications];
         }
         //--------------------------------------------------
-        /// @author I Copland
         //---------------------------------------------------
         Core::IConnectableEvent<Core::LocalNotificationSystem::RecievedDelegate>& LocalNotificationSystem::GetRecievedEvent()
         {

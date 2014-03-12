@@ -30,6 +30,7 @@ namespace ChilliSource
             //--------------------------------------------------
             /// @author Ian Copland
             ///
+        	/// @param The interface ID to check against.
             /// @return Whether this implements the passed in
             /// interface id.
             //--------------------------------------------------

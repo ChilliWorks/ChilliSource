@@ -112,14 +112,14 @@ public class LocalNotificationReceiver extends BroadcastReceiver
 				++paramNumber;
 			}	
 	
-			Intent sOpenAppIntent = new Intent(in_context, ChilliSourceActivity.class);
-			sOpenAppIntent.setAction("android.intent.action.MAIN");
-			sOpenAppIntent.addCategory("android.intent.category.LAUNCHER");
-			sOpenAppIntent.putExtra(k_appOpenedFromNotification, true);
-			sOpenAppIntent.putExtra(k_arrayOfKeysName, keys);
-			sOpenAppIntent.putExtra(k_arrayOfValuesName, values);
-			sOpenAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			PendingIntent sContentIntent = PendingIntent.getActivity(in_context, intentId, sOpenAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			Intent openAppIntent = new Intent(in_context, ChilliSourceActivity.class);
+			openAppIntent.setAction("android.intent.action.MAIN");
+			openAppIntent.addCategory("android.intent.category.LAUNCHER");
+			openAppIntent.putExtra(k_appOpenedFromNotification, true);
+			openAppIntent.putExtra(k_arrayOfKeysName, keys);
+			openAppIntent.putExtra(k_arrayOfValuesName, values);
+			openAppIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			PendingIntent sContentIntent = PendingIntent.getActivity(in_context, intentId, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			
 			Bitmap largeIconBitmap = null;
 			int LargeIconID = ResourceHelper.GetDynamicResourceIDForField(in_context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmiconlarge");
@@ -128,7 +128,7 @@ public class LocalNotificationReceiver extends BroadcastReceiver
 				largeIconBitmap = BitmapFactory.decodeResource(in_context.getResources(), LargeIconID);
 			}
 			
-			Notification sNotification = new NotificationCompat.Builder(in_context)
+			Notification notification = new NotificationCompat.Builder(in_context)
 				.setContentTitle(title)
 				.setContentText(text)
 				.setSmallIcon(ResourceHelper.GetDynamicResourceIDForField(in_context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "gcmicon"))
@@ -136,8 +136,8 @@ public class LocalNotificationReceiver extends BroadcastReceiver
 				.setContentIntent(sContentIntent)
 				.build();
 			
-			NotificationManager sNotificationManager = (NotificationManager) in_context.getSystemService(Context.NOTIFICATION_SERVICE);
-			sNotificationManager.notify(intentId, sNotification);
+			NotificationManager notificationManager = (NotificationManager) in_context.getSystemService(Context.NOTIFICATION_SERVICE);
+			notificationManager.notify(intentId, notification);
 			Toast.makeText(in_context, text, Toast.LENGTH_LONG).show();	 
 		}
 	}

@@ -70,7 +70,7 @@ namespace ChilliSource
             virtual void ScheduleNotificationForTime(Notification::ID in_id, const ParamDictionary& in_params, TimeIntervalSecs in_time, Notification::Priority in_priority = Notification::Priority::k_standard) = 0;
             //--------------------------------------------------------
             /// Builds a list of all notifications currently scheduled
-            /// within the given time peroid.
+            /// within the given time period.
             ///
             /// @author I Copland
             ///
@@ -78,7 +78,7 @@ namespace ChilliSource
             /// @param [Optional] The start time.
             /// @param [Optional] The end time.
             //--------------------------------------------------------
-            virtual void GetScheduledNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_peroid = std::numeric_limits<TimeIntervalSecs>::max()) const = 0;
+            virtual void GetScheduledNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const = 0;
             //--------------------------------------------------------
             /// Cancel By ID
             ///

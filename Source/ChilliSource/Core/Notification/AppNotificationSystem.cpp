@@ -60,11 +60,11 @@ namespace ChilliSource
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void AppNotificationSystem::GetScheduledNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_peroid) const
+        void AppNotificationSystem::GetScheduledNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
         {
             for (const NotificationContainer& notificationContainer : m_notifications)
             {
-                if (notificationContainer.m_triggerTime > in_time && notificationContainer.m_triggerTime <= in_time + in_peroid)
+                if (notificationContainer.m_triggerTime > in_time && notificationContainer.m_triggerTime <= in_time + in_period)
                 {
                     out_notifications.push_back(notificationContainer.m_notification);
                 }

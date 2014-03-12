@@ -28,6 +28,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             /// @author I Copland
             ///
+            /// @param The interface ID to check against.
             /// @return Whether this implements the passed in interface
             /// id.
             //-------------------------------------------------------
@@ -42,7 +43,7 @@ namespace ChilliSource
             /// @param Whether or not to enable the scheduling
             /// of app notifications.
             //---------------------------------------------------
-            void SetEnabled(bool in_enabled);
+            void SetEnabled(bool in_enabled) override;
             //---------------------------------------------------
             /// Schedules a Local Notifcation which should fire
             /// at the given time. A Local Notification uses
@@ -61,7 +62,7 @@ namespace ChilliSource
             void ScheduleNotificationForTime(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, TimeIntervalSecs in_time, Core::Notification::Priority in_priority = Core::Notification::Priority::k_standard) override;
             //--------------------------------------------------------
             /// Builds a list of all notifications currently scheduled
-            /// within the given time peroid.
+            /// within the given time period.
             ///
             /// @author I Copland
             ///
@@ -69,7 +70,7 @@ namespace ChilliSource
             /// @param [Optional] The start time.
             /// @param [Optional] The end time.
             //--------------------------------------------------------
-            void GetScheduledNotifications(std::vector<Core::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_peroid = std::numeric_limits<TimeIntervalSecs>::max()) const override;
+            void GetScheduledNotifications(std::vector<Core::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_period = std::numeric_limits<TimeIntervalSecs>::max()) const override;
             //--------------------------------------------------------
             /// Prevent any notifications with given ID type from firing
             ///

@@ -36,9 +36,11 @@ namespace ChilliSource
 			//---------------------------------------------------
 			/// @author Steven Hendrie
 			///
-			/// @return whether or not this object implements the given interface.
+			/// @param The interface ID to check against.
+			/// @return whether or not this object implements the
+			/// given interface.
 			//---------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceID) const;
+			bool IsA(Core::InterfaceIDType in_interfaceID) const override;
 			//---------------------------------------------------
 			/// Schedules a notification to be displayed to the user
 			///
