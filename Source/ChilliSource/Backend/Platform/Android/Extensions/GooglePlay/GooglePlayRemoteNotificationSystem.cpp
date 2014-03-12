@@ -89,7 +89,10 @@ namespace ChilliSource
 		{
 			if (m_enabled == true)
 			{
-				Core::NotificationSPtr notification(std::make_shared<CSCore::Notification>(0, in_params, Core::Notification::Priority::k_standard));
+				Core::NotificationSPtr notification(std::make_shared<CSCore::Notification>());
+				notification->m_id = 0;
+				notification->m_params = in_params;
+				notification->m_priority = Core::Notification::Priority::k_standard;
 				m_receivedEvent.NotifyConnections(notification);
 			}
 		}

@@ -46,10 +46,7 @@ namespace ChilliSource
         //---------------------------------------------------
         void NotificationManager::ScheduleAppNotification(Notification::ID in_id, const ParamDictionary& in_params, Notification::Priority in_priority)
         {
-            if (m_appNotificationSystem != nullptr)
-            {
-                m_appNotificationSystem->ScheduleNotification(in_id, in_params, in_priority);
-            }
+            ScheduleAppNotificationForTime(in_id, in_params, 0, in_priority);
         }
         //---------------------------------------------------
         //---------------------------------------------------
@@ -83,7 +80,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void NotificationManager::GetScheduledNotifications(std::vector<NotificationSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_peroid)
+        void NotificationManager::GetScheduledNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_peroid) const
         {
             if (m_appNotificationSystem != nullptr)
             {
@@ -125,11 +122,14 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //----------------------------------------------------
-        void NotificationManager::Dismiss(const NotificationSPtr& in_notification)
+        void NotificationManager::Dismiss(const NotificationCSPtr& in_notification)
         {
-            if (m_notificationQueue.empty() == false && m_notificationQueue.front()->m_notification == in_notification)
+            CS_ASSERT(m_notificationQueue.empty() == false, "Cannot dismiss from an empty notification queue!");
+            CS_ASSERT(m_notificationQueue.front().m_notification == in_notification, "Trying to dismiss notification that is not the active notification!");
+            
+            if (m_notificationQueue.empty() == false && m_notificationQueue.front().m_notification == in_notification)
             {
-                m_notificationQueue.front()->m_dismissed = true;
+                m_notificationQueue.front().m_dismissed = true;
             }
         }
         //---------------------------------------------------
@@ -171,14 +171,17 @@ namespace ChilliSource
         }
         //------------------------------------------------
         //------------------------------------------------
-        void NotificationManager::OnNotificationRecieved(const NotificationSPtr& in_notification)
+        void NotificationManager::OnNotificationRecieved(const NotificationCSPtr& in_notification)
         {
-            NotificationContainerSPtr notificationContainer = std::make_shared<NotificationContainer>();
-            notificationContainer->m_notification = in_notification;
-            notificationContainer->m_dismissed = false;
-            notificationContainer->m_triggered = false;
+            NotificationContainer notificationContainer;
+            notificationContainer.m_notification = std::make_shared<Notification>();
+            notificationContainer.m_notification->m_id = in_notification->m_id;
+            notificationContainer.m_notification->m_params = in_notification->m_params;
+            notificationContainer.m_notification->m_priority = in_notification->m_priority;
+            notificationContainer.m_dismissed = false;
+            notificationContainer.m_triggered = false;
             
-            switch (in_notification->GetPriority())
+            switch (notificationContainer.m_notification->m_priority)
             {
                 case Notification::Priority::k_standard:
                     m_notificationQueue.push_back(notificationContainer);
@@ -198,15 +201,16 @@ namespace ChilliSource
             
             if(m_notificationQueue.empty() == false && m_timeSinceNotification >= k_minTimeBetweenNotifications)
             {
-                if (m_notificationQueue.front()->m_dismissed == true)
+                if (m_notificationQueue.front().m_dismissed == true)
                 {
+                    m_dismissedEvent.NotifyConnections(m_notificationQueue.front().m_notification);
                     m_notificationQueue.pop_front();
                 }
                 
-                if(m_notificationQueue.empty() == false && m_notificationQueue.front()->m_triggered == false)
+                if(m_notificationQueue.empty() == false && m_notificationQueue.front().m_triggered == false)
                 {
-                    m_recievedEvent.NotifyConnections(m_notificationQueue.front()->m_notification);
-                    m_notificationQueue.front()->m_triggered = true;
+                    m_recievedEvent.NotifyConnections(this, m_notificationQueue.front().m_notification);
+                    m_notificationQueue.front().m_triggered = true;
                     m_timeSinceNotification = 0.0f;
                 }
             }

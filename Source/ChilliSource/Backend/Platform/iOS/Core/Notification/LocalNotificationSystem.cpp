@@ -29,16 +29,17 @@ namespace ChilliSource
             //---------------------------------------------------------------
             Core::NotificationUPtr ConvertUILocalNotificationToNotification(UILocalNotification* in_uiLocal)
             {
-                Core::Notification::ID notificationId = (Core::Notification::ID)[[in_uiLocal.userInfo objectForKey:@"ID"] unsignedIntValue];
-                Core::Notification::Priority notificationPriority = (Core::Notification::Priority)[[in_uiLocal.userInfo objectForKey:@"Priority"] unsignedIntValue];
-                Core::ParamDictionary params;
+                Core::NotificationUPtr notification = Core::NotificationUPtr(new Core::Notification());
+                notification->m_id = (Core::Notification::ID)[[in_uiLocal.userInfo objectForKey:@"ID"] unsignedIntValue];
+                notification->m_priority = (Core::Notification::Priority)[[in_uiLocal.userInfo objectForKey:@"Priority"] unsignedIntValue];
+                
                 NSDictionary* nsParams = (NSDictionary*)[in_uiLocal.userInfo objectForKey:@"Params"];
                 for(id key in nsParams)
                 {
-                    params.SetValueForKey(Core::StringUtils::NSStringToString([nsParams objectForKey:key]), Core::StringUtils::NSStringToString(key));
+                    notification->m_params.SetValueForKey(Core::StringUtils::NSStringToString([nsParams objectForKey:key]), Core::StringUtils::NSStringToString(key));
                 }
                 
-                return Core::NotificationUPtr(new Core::Notification(notificationId, params, notificationPriority));
+                return notification;
             }
         }
         CS_DEFINE_NAMEDTYPE(LocalNotificationSystem);
@@ -116,7 +117,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void LocalNotificationSystem::GetScheduledNotifications(std::vector<Core::NotificationSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_peroid)
+        void LocalNotificationSystem::GetScheduledNotifications(std::vector<Core::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_peroid) const
         {
             for(UILocalNotification* nsNotification in [[UIApplication sharedApplication] scheduledLocalNotifications])
 			{

@@ -32,7 +32,7 @@ namespace ChilliSource
             //--------------------------------------------------
             /// Delegates
             //--------------------------------------------------
-            using RecievedDelegate = std::function<void(const NotificationSPtr&)>;
+            using RecievedDelegate = std::function<void(const NotificationCSPtr&)>;
             //-------------------------------------------------------
             /// Create the platform dependent backend
             ///
@@ -78,7 +78,7 @@ namespace ChilliSource
             /// @param [Optional] The start time.
             /// @param [Optional] The end time.
             //--------------------------------------------------------
-            virtual void GetScheduledNotifications(std::vector<NotificationSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_peroid = std::numeric_limits<TimeIntervalSecs>::max()) = 0;
+            virtual void GetScheduledNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_peroid = std::numeric_limits<TimeIntervalSecs>::max()) const = 0;
             //--------------------------------------------------------
             /// Cancel By ID
             ///

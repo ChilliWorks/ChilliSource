@@ -57,7 +57,7 @@ namespace ChilliSource
         }
 		//--------------------------------------------------
 		//--------------------------------------------------
-		void LocalNotificationSystem::GetScheduledNotifications(std::vector<Core::NotificationSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_peroid)
+		void LocalNotificationSystem::GetScheduledNotifications(std::vector<Core::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_peroid) const
 		{
 			CS_LOG_WARNING("LocalNotificationScheduler::GetScheduledNotifications() is unimplemented on Android!");
 		}
@@ -83,7 +83,10 @@ namespace ChilliSource
 		//--------------------------------------------------
 		void LocalNotificationSystem::OnNotificationReceived(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, Core::Notification::Priority in_priority)
 		{
-			Core::NotificationSPtr notification = std::make_shared<Core::Notification>(in_id, in_params, in_priority);
+			Core::NotificationSPtr notification = std::make_shared<Core::Notification>();
+			notification->m_id = in_id;
+			notification->m_params = in_params;
+			notification->m_priority = in_priority;
 			m_recievedEvent.NotifyConnections(notification);
 		}
 	}

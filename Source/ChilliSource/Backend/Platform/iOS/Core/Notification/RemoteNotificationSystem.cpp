@@ -22,6 +22,7 @@ namespace ChilliSource
         {
             const std::string k_providerID = "Apple";
         }
+        
         CS_DEFINE_NAMEDTYPE(RemoteNotificationSystem);
         //--------------------------------------------------
         //--------------------------------------------------
@@ -83,22 +84,24 @@ namespace ChilliSource
                 {
                     in_application.applicationIconBadgeNumber = 0;
                     
-                    Core::ParamDictionary params;
+                    Core::NotificationSPtr notification = std::make_shared<Core::Notification>();
+                    notification->m_id = 0;
+                    notification->m_priority = Core::Notification::Priority::k_standard;
                     
                     // Add the message
-                    NSObject* pApsObject = [in_payload objectForKey:@"aps"];
-                    if(pApsObject != nil && [pApsObject isKindOfClass:[NSDictionary class]])
+                    NSObject* apsObject = [in_payload objectForKey:@"aps"];
+                    if(apsObject != nil && [apsObject isKindOfClass:[NSDictionary class]])
                     {
-                        NSDictionary* pApsDictionary = (NSDictionary*)pApsObject;
-                        NSObject* pAlertObject = [pApsDictionary objectForKey:@"alert"];
-                        if(pAlertObject != nil && [pAlertObject isKindOfClass:[NSDictionary class]])
+                        NSDictionary* apsDictionary = (NSDictionary*)apsObject;
+                        NSObject* alertObject = [apsDictionary objectForKey:@"alert"];
+                        if(alertObject != nil && [alertObject isKindOfClass:[NSDictionary class]])
                         {
-                            NSDictionary* pAlertDictionary = (NSDictionary*)pAlertObject;
-                            NSObject* pBodyObject = [pAlertDictionary objectForKey:@"body"];
-                            if(pBodyObject != nil && [pBodyObject isKindOfClass:[NSString class]])
+                            NSDictionary* alertDictionary = (NSDictionary*)alertObject;
+                            NSObject* bodyObject = [alertDictionary objectForKey:@"body"];
+                            if(bodyObject != nil && [bodyObject isKindOfClass:[NSString class]])
                             {
-                                NSString* pstrBody = (NSString*) pBodyObject;
-                                params.SetValueForKey("message", Core::StringUtils::NSStringToString(pstrBody));
+                                NSString* body = (NSString*) bodyObject;
+                                notification->m_params.SetValueForKey("message", Core::StringUtils::NSStringToString(body));
                             }
                         }
                     }
@@ -108,17 +111,16 @@ namespace ChilliSource
                     {
                         if([key isKindOfClass:[NSString class]])
                         {
-                            NSObject* pPayloadObject = [in_payload objectForKey:key];
-                            if([pPayloadObject isKindOfClass:[NSString class]])
+                            NSObject* payloadObject = [in_payload objectForKey:key];
+                            if([payloadObject isKindOfClass:[NSString class]])
                             {
-                                NSString* pstrPayloadString = (NSString*)pPayloadObject;
-                                params.SetValueForKey(Core::StringUtils::NSStringToString(key),
-                                                                     Core::StringUtils::NSStringToString(pstrPayloadString));
+                                NSString* payloadString = (NSString*)payloadObject;
+                                notification->m_params.SetValueForKey(Core::StringUtils::NSStringToString(key), Core::StringUtils::NSStringToString(payloadString));
                             }
                         }
                     }
                     
-                    Core::NotificationSPtr notification(std::make_shared<Core::Notification>(0, params, Core::Notification::Priority::k_standard));
+                    
                     m_receivedEvent.NotifyConnections(notification);
                 }
             }

@@ -59,7 +59,7 @@ namespace ChilliSource
 			/// @param [Optional] The notification priority. Defaults
 			/// to standard priority.
 			//---------------------------------------------------
-			void ScheduleNotificationForTime(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, TimeIntervalSecs in_time, Core::Notification::Priority in_priority = Core::Notification::Priority::k_standard);
+			void ScheduleNotificationForTime(Core::Notification::ID in_id, const Core::ParamDictionary& in_params, TimeIntervalSecs in_time, Core::Notification::Priority in_priority = Core::Notification::Priority::k_standard) override;
 			//--------------------------------------------------------
 			/// Builds a list of all notifications currently scheduled
 			/// within the given time peroid.
@@ -70,7 +70,7 @@ namespace ChilliSource
 			/// @param [Optional] The start time.
 			/// @param [Optional] The end time.
 			//--------------------------------------------------------
-			void GetScheduledNotifications(std::vector<Core::NotificationSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_peroid = std::numeric_limits<TimeIntervalSecs>::max());
+			void GetScheduledNotifications(std::vector<Core::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_peroid = std::numeric_limits<TimeIntervalSecs>::max()) const override;
 			//-------------------------------------------------------
 			/// Prevent any notifications with given ID type from firing
 			///
@@ -91,7 +91,7 @@ namespace ChilliSource
             /// @return An event that can be used to listen for
             /// new notifications being recieved.
             //---------------------------------------------------
-            Core::IConnectableEvent<RecievedDelegate>& GetRecievedEvent();
+            Core::IConnectableEvent<RecievedDelegate>& GetRecievedEvent() override;
 			//-----------------------------------------------------
 			/// Called when game receives a local notification.
 			///

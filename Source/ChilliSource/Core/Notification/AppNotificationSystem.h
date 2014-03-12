@@ -31,7 +31,7 @@ namespace ChilliSource
             //--------------------------------------------------
             /// Delegates
             //--------------------------------------------------
-            using RecievedDelegate = std::function<void(const NotificationSPtr&)>;
+            using RecievedDelegate = std::function<void(const NotificationCSPtr&)>;
             //--------------------------------------------------
             /// Creates a new instance of the system.
             ///
@@ -43,6 +43,7 @@ namespace ChilliSource
             //--------------------------------------------------
             /// @author I Copland
             ///
+            /// @param The interface ID to check against.
             /// @return Whether this implements the passed in
             /// interface id.
             //--------------------------------------------------
@@ -58,18 +59,6 @@ namespace ChilliSource
             /// of app notifications.
             //---------------------------------------------------
             void SetEnabled(bool in_enabled);
-            //--------------------------------------------------
-            /// Immediately queue a notification. This will
-            /// trigger when it reaches the front of the queue.
-            ///
-            /// @author I Copland
-            ///
-            /// @param The notification id
-            /// @param The notification params.
-            /// @param [Optional] The notification priority. Defaults
-            /// to standard priority.
-            //---------------------------------------------------
-            void ScheduleNotification(Notification::ID in_id, const ParamDictionary& in_params, Notification::Priority in_priority = Notification::Priority::k_standard);
             //---------------------------------------------------
             /// Once the time is reached the notification will
             /// be inserted into the queue. Upon reaching the head
@@ -94,7 +83,7 @@ namespace ChilliSource
             /// @param [Optional] The start time.
             /// @param [Optional] The end time.
             //--------------------------------------------------------
-            void GetScheduledNotifications(std::vector<NotificationSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_peroid = std::numeric_limits<TimeIntervalSecs>::max());
+            void GetScheduledNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_peroid = std::numeric_limits<TimeIntervalSecs>::max()) const;
             //--------------------------------------------------------
             /// Prevent any notifications with given ID type from
             /// firing.
@@ -128,9 +117,7 @@ namespace ChilliSource
             {
                 NotificationSPtr m_notification;
                 TimeIntervalSecs m_triggerTime;
-                bool m_cancelled;
             };
-            using NotificationContainerSPtr = std::shared_ptr<NotificationContainer>;
             //--------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.
@@ -149,7 +136,7 @@ namespace ChilliSource
             void OnUpdate(f32 in_deltaTime) override;
             
             bool m_enabled;
-            std::vector<NotificationContainerSPtr> m_notifications;
+            std::vector<NotificationContainer> m_notifications;
             Event<RecievedDelegate> m_recievedEvent;
         };
     }

@@ -69,7 +69,7 @@ namespace ChilliSource
             /// @param [Optional] The start time.
             /// @param [Optional] The end time.
             //--------------------------------------------------------
-            void GetScheduledNotifications(std::vector<Core::NotificationSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_peroid = std::numeric_limits<TimeIntervalSecs>::max()) override;
+            void GetScheduledNotifications(std::vector<Core::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_peroid = std::numeric_limits<TimeIntervalSecs>::max()) const override;
             //--------------------------------------------------------
             /// Prevent any notifications with given ID type from firing
             ///

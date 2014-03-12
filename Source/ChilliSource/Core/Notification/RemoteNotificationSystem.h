@@ -30,8 +30,8 @@ namespace ChilliSource
             //---------------------------------------------------
             /// Typedefs
             //---------------------------------------------------
-            typedef std::function<void(const std::string&)> TokenReceivedDelegate;
-            typedef std::function<void(const NotificationSPtr&)> NotificationReceivedDelegate;
+            using TokenReceivedDelegate = std::function<void(const std::string&)>;
+            using NotificationReceivedDelegate = std::function<void(const NotificationCSPtr&)>;
             //---------------------------------------------------
             /// Creates a new platform specfic instance of the remote
             /// notification system.

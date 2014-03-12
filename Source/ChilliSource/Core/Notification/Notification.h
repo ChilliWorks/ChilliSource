@@ -21,9 +21,8 @@ namespace ChilliSource
         /// A notification that can be used by any of the notification
         /// systems.
         //------------------------------------------------------------
-        class Notification
+        struct Notification
         {
-        public:
             //----------------------------------------------------
             /// An enum describing the priority of a notification.
             //----------------------------------------------------
@@ -36,35 +35,7 @@ namespace ChilliSource
             /// Typedefs
             //----------------------------------------------------
             typedef u32 ID;
-            //----------------------------------------------------
-            /// Constructor
-            ///
-            /// @author I Copland
-            ///
-            /// @param The ID.
-            /// @param The param dictionary.
-            /// @param The notification priority.
-            //----------------------------------------------------
-            Notification(ID in_id, const ParamDictionary& in_params, Priority in_priority);
-            //----------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return The notifications ID.
-            //----------------------------------------------------
-            ID GetID() const;
-            //----------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return The params associated with this notification.
-            //----------------------------------------------------
-            const ParamDictionary& GetParams() const;
-            //----------------------------------------------------
-            /// @author I Copland
-            ///
-            /// @return The priority of the notification.
-            //----------------------------------------------------
-            Priority GetPriority() const;
-        private:
+
             ID m_id;
             ParamDictionary m_params;
             Priority m_priority;

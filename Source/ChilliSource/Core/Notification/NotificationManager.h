@@ -34,8 +34,8 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Typedefs
             //-----------------------------------------------------
-            using RecievedDelegate = std::function<void(const NotificationSPtr&)>;
-            using DismissedDelegate = std::function<void(const NotificationSPtr&)>;
+            using RecievedDelegate = std::function<void(NotificationManager*, const NotificationCSPtr&)>;
+            using DismissedDelegate = std::function<void(const NotificationCSPtr&)>;
             //-----------------------------------------------------
             /// Creates a new instance of the system.
             ///
@@ -47,6 +47,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// @author I Copland
             ///
+            /// @param The interface Id to check against.
             /// @return Whether this implements the passed in
             /// interface id.
             //-----------------------------------------------------
@@ -137,7 +138,7 @@ namespace ChilliSource
             /// @param [Optional] The start time.
             /// @param [Optional] The end time.
             //--------------------------------------------------------
-            void GetScheduledNotifications(std::vector<NotificationSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_peroid = std::numeric_limits<TimeIntervalSecs>::max());
+            void GetScheduledNotifications(std::vector<NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time = 0, TimeIntervalSecs in_peroid = std::numeric_limits<TimeIntervalSecs>::max()) const;
             //---------------------------------------------------
             /// Prevent any notifications with given ID type from
             /// firing.
@@ -159,7 +160,7 @@ namespace ChilliSource
             ///
             /// @author
             //----------------------------------------------------
-            void Dismiss(const NotificationSPtr& in_notification);
+            void Dismiss(const NotificationCSPtr& in_notification);
             //---------------------------------------------------
             /// @author I Copland
             ///
@@ -186,7 +187,6 @@ namespace ChilliSource
                 bool m_dismissed;
                 bool m_triggered;
             };
-            using NotificationContainerSPtr = std::shared_ptr<NotificationContainer>;
             //--------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.
@@ -207,7 +207,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
             //------------------------------------------------
-            void OnNotificationRecieved(const NotificationSPtr& in_notification);
+            void OnNotificationRecieved(const NotificationCSPtr& in_notification);
             //------------------------------------------------
             /// Updates the notification queue and fires any
             /// notifications that are ready.
@@ -228,7 +228,7 @@ namespace ChilliSource
             AppNotificationSystem* m_appNotificationSystem;
             LocalNotificationSystem* m_localNotificationSystem;
             RemoteNotificationSystem* m_remoteNotificationSystem;
-            std::deque<NotificationContainerSPtr> m_notificationQueue;
+            std::deque<NotificationContainer> m_notificationQueue;
             Event<RecievedDelegate> m_recievedEvent;
             Event<DismissedDelegate> m_dismissedEvent;
             ConnectionUPtr m_appRecievedConnection;
